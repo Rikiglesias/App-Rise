@@ -1,29 +1,53 @@
 {
   "expo": {
-    "name": "RiseAgainstHungerItalia",
-    "slug": "RiseAgainstHungerItalia",
+    "name": "Rise Against Hunger Italia",
+    "slug": "rise-against-hunger-italia",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "primaryColor": "#FF6B35",
+    "description": "App ufficiale di Rise Against Hunger Italia - Unisciti alla lotta contro la fame nel mondo",
+    "privacy": "public",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FF6B35"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "org.riseagainsthunger.italia",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Questa app utilizza la fotocamera per scansionare QR code per donazioni e eventi.",
+        "NSLocationWhenInUseUsageDescription": "Questa app utilizza la posizione per trovare eventi locali di Rise Against Hunger."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#FF6B35"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "org.riseagainsthunger.italia",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-will-be-generated"
+      }
     }
   }
 }
