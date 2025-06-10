@@ -57,3 +57,11 @@ google-play-service-account.json
 # Bundler
 vendor/bundle/
 .bundle/
+
+# Testing
+coverage/
+*.log
+
+# IDE
+.vscode/settings.json
+.idea/

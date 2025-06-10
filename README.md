@@ -57,6 +57,14 @@ App ufficiale di Rise Against Hunger Italia per iOS e Android, costruita con Rea
 - ✅ **Live reload** con Expo Go
 - ✅ **Colori brandizzati** (#FF6B35 colore principale)
 
+### Quality & Testing
+
+- ✅ **Jest Testing** framework configurato
+- ✅ **Pre-commit Hooks** con Husky
+- ✅ **Lint-staged** per controlli automatici
+- ✅ **ESLint + Prettier** per code quality
+- ✅ **Markdown Linting** per documentazione
+
 ## 🏗️ Sistema di Deployment
 
 ### 🎯 **Strategia Ibrida Ottimizzata**
@@ -83,9 +91,13 @@ App ufficiale di Rise Against Hunger Italia per iOS e Android, costruita con Rea
 ├── android/fastlane/
 │   ├── Fastfile                # Android build script
 │   └── Gemfile                 # Dependencies
-├── setup-deployment.ps1        # Setup script Windows
-├── setup-deployment.sh         # Setup script macOS/Linux
-└── DEPLOYMENT_GUIDE.md         # Guida completa
+├── scripts/
+│   ├── setup-deployment.ps1    # Setup script Windows
+│   ├── setup-deployment.sh     # Setup script macOS/Linux
+│   ├── deploy-ios.ps1          # Deploy iOS locale
+│   └── deploy-android.ps1      # Deploy Android locale
+└── docs/
+    └── DEPLOYMENT_GUIDE.md     # Guida completa
 ```
 
 ## 🛠️ Tecnologie Utilizzate
@@ -96,6 +108,8 @@ App ufficiale di Rise Against Hunger Italia per iOS e Android, costruita con Rea
 - **React Navigation** - Libreria di navigazione
 - **GitHub Actions** - CI/CD gratuito
 - **Fastlane** - Automazione build e deploy
+- **Jest** - Testing framework
+- **Husky** - Pre-commit hooks per qualità codice
 
 ## 📂 Struttura del Progetto
 
@@ -105,16 +119,29 @@ App Rise/
 │   ├── navigation/
 │   │   ├── AppNavigator.tsx     # Navigator principale
 │   │   └── types.ts             # Tipi TypeScript per navigazione
-│   └── screens/
-│       ├── HomeScreen.tsx       # Schermata homepage
-│       └── PlaceholderScreen.tsx # Componente per schermate future
-├── .github/workflows/           # GitHub Actions CI/CD
-├── ios/fastlane/               # iOS deployment config
-├── android/fastlane/           # Android deployment config
-├── assets/                     # Immagini e risorse
-├── App.tsx                     # Entry point dell'app
-├── app.json                    # Configurazione Expo
-└── package.json                # Dipendenze del progetto
+│   ├── screens/
+│   │   ├── HomeScreen.tsx       # Schermata homepage
+│   │   └── PlaceholderScreen.tsx # Componente per schermate future
+│   └── __tests__/              # Test files
+│       └── App.test.tsx        # Test di esempio
+├── docs/                       # Documentazione
+│   ├── DEPLOYMENT_GUIDE.md     # Guida deployment
+│   ├── GITHUB_ACTIONS_SETUP.md # Setup CI/CD
+│   ├── MIGRATION_TO_NATIVE.md  # Migrazione React Native
+│   └── PUBLISHING_CHECKLIST.md # Checklist pubblicazione
+├── scripts/                    # Script di automazione
+│   ├── setup-deployment.ps1    # Setup Windows
+│   ├── setup-deployment.sh     # Setup macOS/Linux
+│   ├── deploy-ios.ps1          # Deploy iOS
+│   └── deploy-android.ps1      # Deploy Android
+├── .github/workflows/          # GitHub Actions CI/CD
+├── ios/fastlane/              # iOS deployment config
+├── android/fastlane/          # Android deployment config
+├── assets/                    # Immagini e risorse
+├── App.tsx                    # Entry point dell'app
+├── app.json                   # Configurazione Expo
+├── jest.config.js             # Configurazione testing
+└── package.json               # Dipendenze del progetto
 ```
 
 ## 🎨 Design System
@@ -142,6 +169,12 @@ npx expo start
 
 # Test su dispositivo reale con Expo Go
 # Scannerizza QR code e sviluppa in tempo reale
+
+# Quality checks
+npm run test              # Esegui test
+npm run test:watch        # Test in modalità watch
+npm run quality-check     # TypeScript + ESLint + Markdown
+npm run quality-fix       # Fix automatico problemi
 ```
 
 ### Production Release
@@ -181,10 +214,10 @@ git push origin main --tags
 
 ```bash
 # Windows
-.\setup-deployment.ps1
+.\scripts\setup-deployment.ps1
 
 # macOS/Linux
-./setup-deployment.sh
+./scripts/setup-deployment.sh
 ```
 
 ### Prossimi Passi
@@ -194,7 +227,7 @@ git push origin main --tags
 3. **GitHub Secrets**: Configura API keys
 4. **Deploy**: `git tag v1.0.0 && git push --tags`
 
-📖 **Guida completa**: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+📖 **Guida completa**: [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
 
 ## 📱 Compatibilità
 

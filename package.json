@@ -12,24 +12,45 @@
     "lint:md": "markdownlint **/*.md",
     "lint:md:fix": "markdownlint **/*.md --fix",
     "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
+    "check": "npm run type-check && npm run lint",
+    "check:quick": "tsc --noEmit --skipLibCheck && eslint src --ext .ts,.tsx --max-warnings 0",
+    "check:errors-only": "tsc --noEmit --skipLibCheck && eslint src --ext .ts,.tsx --quiet",
+    "check:warnings-only": "eslint src --ext .ts,.tsx",
+    "check:with-warnings": "tsc --noEmit --skipLibCheck && eslint src --ext .ts,.tsx",
+    "check:strict": "tsc --noEmit && eslint src --ext .ts,.tsx --max-warnings 0",
+    "check:summary": "echo '=== CONTROLLO ERRORI ===' && npm run check:errors-only && echo '=== CONTROLLO WARNINGS ===' && npm run check:warnings-only",
+    "fix": "npm run lint:fix && npm run type-check",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "quality-check": "npm run type-check && npm run lint && npm run lint:md",
+    "quality-check:strict": "npm run check:strict && npm run lint:md",
+    "quality-check:summary": "npm run check:summary && npm run lint:md",
     "quality-fix": "npm run lint:fix && npm run lint:md:fix",
-    "prebuild": "npm run quality-check",
+    "dev:start": "echo '=== CONTROLLO PRE-SVILUPPO ===' && npm run check:errors-only && echo '✅ Nessun errore, puoi iniziare!' && npm start",
+    "dev:finish": "echo '=== CONTROLLO POST-IMPLEMENTAZIONE ===' && npm run check:errors-only && npm run check:warnings-only && echo '✅ Controllo errori + warnings completato!'",
+    "dev:quick-check": "npm run check:errors-only && echo '✅ Errori OK'",
+    "dev:pre-commit": "echo '=== VERIFICA PRE-COMMIT ===' && npm run check:strict && echo '✅ Pronto per commit!'",
+    "prebuild": "npm run quality-check:strict",
     "prepare": "husky"
   },
   "dependencies": {
     "@react-navigation/native": "^7.1.10",
     "@react-navigation/stack": "^7.3.3",
     "expo": "~53.0.10",
+    "expo-blur": "^14.1.5",
+    "expo-haptics": "~14.1.4",
+    "expo-linear-gradient": "~14.1.5",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.3",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-pager-view": "^6.8.1",
+    "react-native-paper": "^5.14.5",
     "react-native-safe-area-context": "^5.4.1",
-    "react-native-screens": "^4.11.1"
+    "react-native-screens": "^4.11.1",
+    "react-native-svg": "15.11.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -37,8 +58,8 @@
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.0.10",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
     "eslint": "^8.57.0",
     "eslint-config-expo": "^7.0.0",
     "eslint-plugin-react": "^7.33.0",
@@ -51,11 +72,12 @@
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.1.0",
     "react-test-renderer": "^19.0.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.6.3"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "eslint --fix",
+      "tsc --noEmit --skipLibCheck",
+      "eslint --fix --max-warnings 0",
       "prettier --write"
     ],
     "*.md": [

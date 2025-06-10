@@ -3,6 +3,9 @@ node_modules/
 web-build/
 android/
 ios/
-*.js
 .github/
-**/*.md 
+**/*.md
+# Allow specific JS config files
+!jest.config.js
+!jest.setup.js
+!.eslintrc.js 
