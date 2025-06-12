@@ -1,6 +1,8 @@
-import { StackNavigationProp } from '@react-navigation/stack';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback } from 'react';
-import { RootStackParamList } from '../navigation/types';
+
+import type { RootStackParamList } from '../navigation/types';
+
 import { useHapticFeedback } from './useHapticFeedback';
 
 interface UseNavigationHookOptions {
@@ -25,7 +27,7 @@ export const useNavigationHook = (
   // Haptic feedback function using the existing hook
   const triggerHaptic = useCallback(() => {
     if (enableHaptics) {
-      selectionFeedback();
+      void selectionFeedback();
     }
   }, [enableHaptics, selectionFeedback]);
 
@@ -37,17 +39,17 @@ export const useNavigationHook = (
 
   const navigateToProgetti = useCallback(() => {
     triggerHaptic();
-    navigation.navigate('Progetti');
+    void navigation.navigate('Progetti');
   }, [navigation, triggerHaptic]);
 
   const navigateToSeguici = useCallback(() => {
     triggerHaptic();
-    navigation.navigate('Seguici');
+    void navigation.navigate('Seguici');
   }, [navigation, triggerHaptic]);
 
   const navigateToChiSiamo = useCallback(() => {
     triggerHaptic();
-    navigation.navigate('ChiSiamo');
+    void navigation.navigate('ChiSiamo');
   }, [navigation, triggerHaptic]);
 
   return {

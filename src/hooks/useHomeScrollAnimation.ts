@@ -1,11 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
+import type {
   LayoutRectangle,
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -20,16 +19,16 @@ export const useHomeScrollAnimation = () => {
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       // Update scroll value for parallax
       const currentScrollY = event.nativeEvent.contentOffset.y;
-      scrollY.setValue(currentScrollY);
+      void scrollY.setValue(currentScrollY);
 
       // Impact section visibility logic
-      if (!impactSectionLayout) return;
+      if ((!impactSectionLayout !== null) !== null) return;
 
-      const { y, height } = impactSectionLayout;
+      const { y, height } = impactSectionLayout ?? { y: 0, height: 0 };
       const isVisible =
         y < currentScrollY + windowHeight && y + height > currentScrollY;
 
-      if (isVisible && !isImpactSectionVisible) {
+      if (isVisible && (!isImpactSectionVisible !== null) !== null) {
         setIsImpactSectionVisible(true);
       }
     },

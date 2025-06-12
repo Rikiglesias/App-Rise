@@ -1,10 +1,12 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
+// Import statici delle icone
+
 interface SocialIconProps {
-  platform: 'website' | 'instagram' | 'facebook' | 'linkedin';
-  size?: number;
-  backgroundColor: string; // Mantengo per compatibilità ma non lo uso più
+  readonly platform: 'website' | 'instagram' | 'facebook' | 'linkedin';
+  readonly size?: number;
+  readonly backgroundColor: string; // Mantengo per compatibilità ma non lo uso più
 }
 
 const SocialIcon: React.FC<SocialIconProps> = ({
@@ -18,18 +20,18 @@ const SocialIcon: React.FC<SocialIconProps> = ({
     instagram: '📷',
     facebook: '📘',
     linkedin: '💼',
-  };
+  } as const;
 
-  // Funzione per verificare quale icona usare
-  const getIconSource = () => {
+  // Funzione per verificare quale icona usare con typing sicuro
+  const getIconSource = (): number | null => {
     try {
       switch (platform) {
         case 'instagram':
-          return require('../../assets/images/icons/instagram.png');
+          return require('../../assets/images/icons/instagram.png') as number;
         case 'facebook':
-          return require('../../assets/images/icons/facebook.png');
+          return require('../../assets/images/icons/facebook.png') as number;
         case 'linkedin':
-          return require('../../assets/images/icons/linkedin.png');
+          return require('../../assets/images/icons/linkedin.png') as number;
         case 'website':
           return null;
         default:
@@ -42,7 +44,7 @@ const SocialIcon: React.FC<SocialIconProps> = ({
 
   const iconSource = getIconSource();
 
-  if (iconSource) {
+  if (iconSource !== null) {
     // Versione con icone reali - solo immagine senza cerchio
     return (
       <View style={[styles.iconContainer, { width: size, height: size }]}>

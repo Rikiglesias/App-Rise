@@ -1,0 +1,66 @@
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\ActionCardEnhanced.tsx
+  17:70  warning  Arrow function has too many lines (151). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\AnimatedTransition.tsx
+   25:70  warning  Arrow function has too many lines (143). Maximum allowed is 100  max-lines-per-function
+  189:16  warning  Do not use Array index in keys                                   react/no-array-index-key
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\EnhancedCard.tsx
+  37:58  warning  Arrow function has too many lines (143). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\EnhancedTouchable.tsx
+  18:68  warning  Arrow function has too many lines (257). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\FilterTabs.tsx
+  22:54  warning  Arrow function has too many lines (177). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\HeroStoriesCarousel.tsx
+   37:72  warning  Arrow function has too many lines (168). Maximum allowed is 100  max-lines-per-function
+  138:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\HomeHeaderSection.tsx
+  101:68  warning  Arrow function has too many lines (256). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\HomeImpactSection.tsx
+  19:3  warning  Arrow function has too many lines (144). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\HomeInfoSection.tsx
+  29:26  warning  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  89:57  warning  Arrow function has too many lines (165). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\ImpactCard.tsx
+  25:3  warning  Arrow function has too many lines (167). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\ModernCTA.tsx
+  406:45  warning  Arrow function has too many lines (123). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\ModernHomeActions.tsx
+   39:26  warning  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  108:61  warning  Arrow function has too many lines (245). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\ModernHomeImpact.tsx
+  14:59  warning  Arrow function has too many lines (227). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\PremiumFloatingButton.tsx
+  29:76  warning  Arrow function has too many lines (190). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\components\SectionContainer.tsx
+  17:66  warning  Arrow function has too many lines (153). Maximum allowed is 100  max-lines-per-function
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\hooks\useLinkHandler.ts
+  46:7  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\screens\ImpactTabScreen.tsx
+   70:7   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  102:42  warning  Arrow function has too many lines (252). Maximum allowed is 200  max-lines-per-function
+  335:15  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  344:13  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+
+C:\Users\albie\OneDrive\Desktop\App Rise\src\screens\ProjectsScreen.tsx
+   30:41  warning  Arrow function has too many lines (271). Maximum allowed is 200  max-lines-per-function
+  223:13  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  283:17  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+
+✖ 27 problems (0 errors, 27 warnings)
+

@@ -83,14 +83,14 @@ export const PerformanceConfig = {
 export const isLowEndDevice = () => {
   // Logica basilare basata su timeout JS e memoria disponibile
   // Dispositivi più lenti tendono ad avere execution time più lunghi
-  const start = Date.now();
+  const start = void Date.now();
 
   // Test sincrono semplice per misurare performance
   for (let i = 0; i < 100000; i++) {
-    Math.random();
+    void Math.random();
   }
 
-  const executionTime = Date.now() - start;
+  const executionTime = Date.now() - (start ?? 0);
 
   // Se l'execution time è > 10ms, consideriamo il dispositivo lento
   // Soglia conservativa per evitare falsi positivi

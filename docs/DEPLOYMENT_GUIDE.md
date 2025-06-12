@@ -148,14 +148,14 @@ git push origin main --tags
 
 ## 💰 Costi Finali
 
-| Servizio | Costo | Frequenza |
-|----------|-------|-----------|
-| **Apple Developer** | $99 | Annuale |
-| **Google Play** | $25 | Una tantum |
-| **GitHub Actions** | $0 | Gratuito (2000 min/mese) |
-| **Fastlane** | $0 | Gratuito |
-| **Total Year 1** | **$124** | vs $472-1312 con Expo EAS |
-| **Total Year 2+** | **$99** | vs $348-1188 con Expo EAS |
+| Servizio            | Costo    | Frequenza                 |
+| ------------------- | -------- | ------------------------- |
+| **Apple Developer** | $99      | Annuale                   |
+| **Google Play**     | $25      | Una tantum                |
+| **GitHub Actions**  | $0       | Gratuito (2000 min/mese)  |
+| **Fastlane**        | $0       | Gratuito                  |
+| **Total Year 1**    | **$124** | vs $472-1312 con Expo EAS |
+| **Total Year 2+**   | **$99**  | vs $348-1188 con Expo EAS |
 
 ### 💡 Risparmio per Rise Against Hunger
 

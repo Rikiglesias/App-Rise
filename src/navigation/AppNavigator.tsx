@@ -1,16 +1,20 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
+
 import 'react-native-gesture-handler';
-import { RootStackParamList } from './types';
+
+// Navigators
 
 // Screens
 import ChiSiamoScreen from '../screens/ChiSiamoScreen';
-import HomeScreen from '../screens/HomeScreen';
 import Impatto2024Screen from '../screens/Impatto2024Screen';
 import ProjectsScreen from '../screens/ProjectsScreen';
 import SeguiciScreen from '../screens/SeguiciScreen';
 import SimplePlaceholderScreen from '../screens/SimplePlaceholderScreen';
+
+import BottomTabNavigator from './BottomTabNavigator';
+import type { RootStackParamList } from './types';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -37,14 +41,16 @@ const AppNavigator: React.FC = () => {
           },
         }}
       >
+        {/* Main App with Bottom Tabs */}
         <Stack.Screen
           name="Home"
-          component={HomeScreen}
+          component={BottomTabNavigator}
           options={{
             headerShown: false,
           }}
         />
 
+        {/* Stack Screens for detailed views */}
         <Stack.Screen
           name="Progetti"
           component={ProjectsScreen}
@@ -65,7 +71,6 @@ const AppNavigator: React.FC = () => {
           component={SimplePlaceholderScreen}
           options={{
             title: 'Charity Shop',
-            // Passiamo i parametri tramite initialParams o tramite navigation
           }}
           initialParams={{
             title: 'Charity Shop',

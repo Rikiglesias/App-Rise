@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Surface } from 'react-native-paper';
 import {
   BorderRadius,
@@ -15,52 +22,157 @@ interface HomeInfoSectionProps {
   onNavigateToChiSiamo: () => void;
 }
 
-const HomeInfoSection: React.FC<HomeInfoSectionProps> = ({
-  onNavigateToSeguici,
-  onNavigateToChiSiamo,
-}) => {
-  const { colors } = useTheme();
+// 🎨 BENTO CARD COMPONENT - Extracted to avoid unstable nested component
+interface BentoCardProps {
+  card: {
+    id: string;
+    icon: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    accentColor: string;
+    onPress: () => void;
+  };
+  styles: Record<string, ViewStyle | TextStyle>;
+}
 
-  // 🎯 CARD DATA - Configurazione ottimizzata per Bento Layout
-  const cards = [
-    {
-      id: 'social',
-      title: 'Social',
-      subtitle: 'Seguici',
-      description: 'Unisciti alla nostra community',
-      icon: '📱',
-      onPress: onNavigateToSeguici,
-      gradient: [colors.primary[500], colors.primary[600]],
-      accentColor: colors.primary[400],
-    },
-    {
-      id: 'about',
-      title: 'Chi Siamo',
-      subtitle: 'Scopri',
-      description: 'La nostra storia e missione',
-      icon: '🌍',
-      onPress: onNavigateToChiSiamo,
-      gradient: [colors.semantic.info.main, colors.primary[600]],
-      accentColor: colors.semantic.info.main,
-    },
-  ];
+const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
+  const { animatedStyle, handlePressIn, handlePressOut } = useAnimatedPress({
+    scaleValue: 0.98,
+    minOpacity: 0.9,
+  });
 
-  const styles = StyleSheet.create({
-    // 🏗️ BENTO CONTAINER PRINCIPALE
+  return (
+    <TouchableOpacity
+      style={styles.bentoCard}
+      onPress={card.onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      activeOpacity={1}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`${card.title}: ${card.description}`}
+    >
+      <Surface style={[styles.cardSurface, animatedStyle]} elevation={3}>
+        <View style={styles.cardContentWrapper}>
+          {/* 🌈 Gradient Background */}
+          <View
+            style={[
+              styles.gradientOverlay,
+              { backgroundColor: card.accentColor },
+            ]}
+          />
+
+          {/* 🎨 Accent Border */}
+          <View
+            style={[styles.accentBorder, { backgroundColor: card.accentColor }]}
+          />
+
+          {/* 📦 Content */}
+          <View style={styles.cardContent}>
+            <View style={styles.cardHeader}>
+              {/* 📍 Icon */}
+              <View style={styles.iconContainer}>
+                <Text style={styles.iconText}>{card.icon}</Text>
+              </View>
+
+              {/* 🏷️ Titles */}
+              <Text style={styles.cardSubtitle}>{card.subtitle}</Text>
+              <Text style={styles.cardTitle}>{card.title}</Text>
+            </View>
+
+            {/* 📝 Description */}
+            <Text style={styles.cardDescription}>{card.description}</Text>
+          </View>
+
+          {/* 🌟 Press Overlay */}
+          <View style={styles.pressOverlay} />
+        </View>
+      </Surface>
+    </TouchableOpacity>
+  );
+};
+
+// 🎯 CARD DATA FACTORY - Extracted for max-lines-per-function compliance
+const createCardsData = (
+  colors: ReturnType<typeof useTheme>['colors'],
+  onNavigateToSeguici: () => void,
+  onNavigateToChiSiamo: () => void
+) => [
+  {
+    id: 'social',
+    title: 'Social',
+    subtitle: 'Seguici',
+    description: 'Unisciti alla nostra community',
+    icon: '📱',
+    onPress: onNavigateToSeguici,
+    gradient: [colors.primary[500], colors.primary[600]],
+    accentColor: colors.primary[400],
+  },
+  {
+    id: 'about',
+    title: 'Chi Siamo',
+    subtitle: 'Scopri',
+    description: 'La nostra storia e missione',
+    icon: '🌍',
+    onPress: onNavigateToChiSiamo,
+    gradient: [colors.semantic.info.main, colors.primary[600]],
+    accentColor: colors.semantic.info.main,
+  },
+];
+
+// 📍 ICON AND TEXT STYLES - Extracted as constants for max-lines-per-function compliance
+const ICON_STYLES = {
+  iconText: {
+    fontSize: 18,
+    lineHeight: 20,
+  },
+};
+
+// 🏷️ TYPOGRAPHY STYLES - Extracted as constants for max-lines-per-function compliance
+const TYPOGRAPHY_STYLES = {
+  cardTitle: {
+    fontSize: Typography.sizes.lg,
+    fontWeight: Typography.weights.bold,
+    marginBottom: 2,
+    letterSpacing: Typography.letterSpacing.tight,
+    lineHeight: Typography.lineHeights.tight * Typography.sizes.lg,
+  },
+
+  cardSubtitle: {
+    fontSize: Typography.sizes.sm,
+    fontWeight: Typography.weights.semibold,
+    textTransform: 'uppercase',
+    letterSpacing: Typography.letterSpacing.wide,
+    marginBottom: Spacing[1],
+  },
+
+  cardDescription: {
+    fontSize: Typography.sizes.sm,
+    fontWeight: Typography.weights.regular,
+    lineHeight: Typography.lineHeights.normal * Typography.sizes.sm,
+    letterSpacing: Typography.letterSpacing.normal,
+  },
+};
+
+/* eslint-disable react-native/no-unused-styles */
+// 🎨 STYLES FACTORY - Extracted for max-lines-per-function compliance
+const createHomeInfoStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
+  StyleSheet.create({
+    // Tutti questi stili sono utilizzati nel componente BentoCard
+    // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
     bentoContainer: {
-      gap: Spacing[3], // Gap uniforme per fluidità
+      gap: Spacing[3],
     },
 
-    // 📱 BENTO ROW - Layout orizzontale
     bentoRow: {
       flexDirection: 'row',
       gap: Spacing[3],
     },
 
-    // 🎨 BENTO CARD - Design premium per ogni card
     bentoCard: {
-      flex: 1, // Distribuisce spazio equamente
-      minHeight: 140, // Altezza ottimizzata
+      flex: 1,
+      minHeight: 140,
     },
 
     cardSurface: {
@@ -70,24 +182,21 @@ const HomeInfoSection: React.FC<HomeInfoSectionProps> = ({
       ...Shadows.primary,
     },
 
-    // 🔧 CONTENT WRAPPER - Separato per overflow corretto
     cardContentWrapper: {
       flex: 1,
       borderRadius: BorderRadius['2xl'],
       overflow: 'hidden',
     },
 
-    // 🌈 GRADIENT OVERLAY
     gradientOverlay: {
       position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      opacity: 0.03, // Overlay molto sottile
+      opacity: 0.03,
     },
 
-    // 📦 CARD CONTENT CONTAINER
     cardContent: {
       flex: 1,
       padding: Spacing[4],
@@ -95,12 +204,10 @@ const HomeInfoSection: React.FC<HomeInfoSectionProps> = ({
       zIndex: 2,
     },
 
-    // 🎯 CARD HEADER
     cardHeader: {
       marginBottom: Spacing[2],
     },
 
-    // 📍 ICON CONTAINER - Ottimizzato per Bento
     iconContainer: {
       width: 42,
       height: 42,
@@ -114,39 +221,21 @@ const HomeInfoSection: React.FC<HomeInfoSectionProps> = ({
       ...Shadows.sm,
     },
 
-    iconText: {
-      fontSize: 18,
-      lineHeight: 20,
-    },
-
-    // 🏷️ TYPOGRAPHY SYSTEM
     cardTitle: {
-      fontSize: Typography.sizes.lg,
-      fontWeight: Typography.weights.bold,
+      ...TYPOGRAPHY_STYLES.cardTitle,
       color: colors.neutral[900],
-      marginBottom: 2,
-      letterSpacing: Typography.letterSpacing.tight,
-      lineHeight: Typography.lineHeights.tight * Typography.sizes.lg,
     },
 
     cardSubtitle: {
-      fontSize: Typography.sizes.sm,
-      fontWeight: Typography.weights.semibold,
+      ...TYPOGRAPHY_STYLES.cardSubtitle,
       color: colors.neutral[600],
-      textTransform: 'uppercase',
-      letterSpacing: Typography.letterSpacing.wide,
-      marginBottom: Spacing[1],
     },
 
     cardDescription: {
-      fontSize: Typography.sizes.sm,
-      fontWeight: Typography.weights.regular,
+      ...TYPOGRAPHY_STYLES.cardDescription,
       color: colors.neutral[700],
-      lineHeight: Typography.lineHeights.normal * Typography.sizes.sm,
-      letterSpacing: Typography.letterSpacing.normal,
     },
 
-    // 🎨 ACCENT BORDER - Design distintivo
     accentBorder: {
       position: 'absolute',
       top: 0,
@@ -156,88 +245,41 @@ const HomeInfoSection: React.FC<HomeInfoSectionProps> = ({
       zIndex: 3,
     },
 
-    // 🌟 PRESS STATE OVERLAY
     pressOverlay: {
       position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: colors.neutral[900],
-      opacity: 0,
-      zIndex: 1,
+      backgroundColor: colors.neutral[0],
+      opacity: 0.1,
+      borderRadius: BorderRadius['2xl'],
     },
+
+    ...ICON_STYLES,
   });
+/* eslint-enable react-native/no-unused-styles */
 
-  // 🎨 BENTO CARD COMPONENT
-  const BentoCard: React.FC<{
-    card: (typeof cards)[0];
-  }> = ({ card }) => {
-    const { animatedStyle, handlePressIn, handlePressOut } = useAnimatedPress({
-      scaleValue: 0.98,
-      minOpacity: 0.9,
-    });
+const HomeInfoSection: React.FC<HomeInfoSectionProps> = ({
+  onNavigateToSeguici,
+  onNavigateToChiSiamo,
+}) => {
+  const { colors } = useTheme();
 
-    return (
-      <TouchableOpacity
-        style={styles.bentoCard}
-        onPress={card.onPress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        activeOpacity={1}
-        accessible={true}
-        accessibilityRole="button"
-        accessibilityLabel={`${card.title}: ${card.description}`}
-      >
-        <Surface style={[styles.cardSurface, animatedStyle]} elevation={3}>
-          <View style={styles.cardContentWrapper}>
-            {/* 🌈 Gradient Background */}
-            <View
-              style={[
-                styles.gradientOverlay,
-                { backgroundColor: card.accentColor },
-              ]}
-            />
-
-            {/* 🎨 Accent Border */}
-            <View
-              style={[
-                styles.accentBorder,
-                { backgroundColor: card.accentColor },
-              ]}
-            />
-
-            {/* 📦 Content */}
-            <View style={styles.cardContent}>
-              <View style={styles.cardHeader}>
-                {/* 📍 Icon */}
-                <View style={styles.iconContainer}>
-                  <Text style={styles.iconText}>{card.icon}</Text>
-                </View>
-
-                {/* 🏷️ Titles */}
-                <Text style={styles.cardSubtitle}>{card.subtitle}</Text>
-                <Text style={styles.cardTitle}>{card.title}</Text>
-              </View>
-
-              {/* 📝 Description */}
-              <Text style={styles.cardDescription}>{card.description}</Text>
-            </View>
-
-            {/* 🌟 Press Overlay */}
-            <View style={styles.pressOverlay} />
-          </View>
-        </Surface>
-      </TouchableOpacity>
-    );
-  };
+  // 🎯 CARD DATA - Configurazione ottimizzata per Bento Layout
+  const cards = createCardsData(
+    colors,
+    onNavigateToSeguici,
+    onNavigateToChiSiamo
+  );
+  const styles = createHomeInfoStyles(colors);
 
   // 🚀 BENTO BOX LAYOUT RENDER
   return (
     <View style={styles.bentoContainer}>
       <View style={styles.bentoRow}>
         {cards.map(card => (
-          <BentoCard key={card.id} card={card} />
+          <BentoCard key={card.id} card={card} styles={styles} />
         ))}
       </View>
     </View>

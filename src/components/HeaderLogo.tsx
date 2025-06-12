@@ -1,4 +1,5 @@
 import { Image, StyleSheet, View } from 'react-native';
+
 import { BorderRadius, Spacing } from '../constants/designTokens';
 import { useTheme } from '../hooks/useTheme';
 
@@ -8,7 +9,8 @@ const HeaderLogo = () => {
   return (
     <View style={[styles.container, { backgroundColor: colors.glass.medium }]}>
       <Image
-        source={require('../../assets/images/logo.png')}
+        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
+        source={require('../../assets/images/logo.png') as number}
         style={styles.logo}
         resizeMode="contain"
       />

@@ -1,7 +1,9 @@
 // BlurView removed - will implement fallback glassmorphism
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
 import {
   BorderRadius,
   Glassmorphism,
@@ -10,11 +12,11 @@ import {
 import { useThemeStyles } from '../hooks/useTheme';
 
 interface GlassmorphismCardProps {
-  children: React.ReactNode;
-  style?: ViewStyle;
-  variant?: 'light' | 'medium' | 'dark' | 'primary';
-  intensity?: 'subtle' | 'normal' | 'strong';
-  gradient?: boolean;
+  readonly children: React.ReactNode;
+  readonly style?: ViewStyle;
+  readonly variant?: 'light' | 'medium' | 'dark' | 'primary';
+  readonly intensity?: 'subtle' | 'normal' | 'strong';
+  readonly gradient?: boolean;
 }
 
 export const GlassmorphismCard: React.FC<GlassmorphismCardProps> = ({
@@ -28,7 +30,7 @@ export const GlassmorphismCard: React.FC<GlassmorphismCardProps> = ({
 
   // Get glassmorphism style based on variant
   const getGlassStyle = () => {
-    const baseStyle = Glassmorphism[variant] || Glassmorphism.light;
+    const baseStyle = Glassmorphism[variant];
 
     // Adjust intensity
     const intensityMultiplier = {
@@ -48,7 +50,7 @@ export const GlassmorphismCard: React.FC<GlassmorphismCardProps> = ({
 
   // Gradient colors based on variant and theme
   const getGradientColors = (): [string, string] => {
-    if (themeStyles.isDark) {
+    if ((themeStyles.isDark !== null) !== null) {
       switch (variant) {
         case 'primary':
           return ['rgba(220, 38, 38, 0.2)', 'rgba(220, 38, 38, 0.05)'];

@@ -36,7 +36,7 @@ gem install fastlane
 # Setup per iOS
 cd ios && fastlane init
 
-# Setup per Android  
+# Setup per Android
 cd android && fastlane init
 ```
 
@@ -51,31 +51,31 @@ platform :ios do
   lane :release do
     # Increment build number
     increment_build_number(xcodeproj: "RiseAgainstHungerItalia.xcodeproj")
-    
+
     # Build app
     build_app(
       workspace: "RiseAgainstHungerItalia.xcworkspace",
       scheme: "RiseAgainstHungerItalia",
       export_method: "app-store"
     )
-    
+
     # Upload to App Store Connect
     upload_to_app_store(
       skip_waiting_for_build_processing: true,
       skip_screenshots: true
     )
-    
+
     # Send notification
     slack(
       message: "🍎 iOS build uploaded to App Store Connect!",
       channel: "#development"
     )
   end
-  
+
   desc "Build for TestFlight"
   lane :beta do
     build_app(
-      workspace: "RiseAgainstHungerItalia.xcworkspace", 
+      workspace: "RiseAgainstHungerItalia.xcworkspace",
       scheme: "RiseAgainstHungerItalia"
     )
     upload_to_testflight
@@ -96,26 +96,26 @@ platform :android do
     increment_version_code(
       gradle_file_path: "app/build.gradle"
     )
-    
+
     # Build AAB
     gradle(
       task: "bundle",
       build_type: "release"
     )
-    
+
     # Upload to Play Store
     upload_to_play_store(
       track: "production",
       aab: "app/build/outputs/bundle/release/app-release.aab"
     )
-    
+
     # Send notification
     slack(
       message: "🤖 Android build uploaded to Play Store!",
       channel: "#development"
     )
   end
-  
+
   desc "Build for internal testing"
   lane :internal do
     gradle(task: "bundle", build_type: "release")
@@ -143,32 +143,32 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.0
-        
-    - name: Install Fastlane
-      run: gem install fastlane
-      
-    - name: Build and upload to App Store
-      run: |
-        cd ios
-        fastlane release
-      env:
-        APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      - name: Build and upload to App Store
+        run: |
+          cd ios
+          fastlane release
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
 ```
 
 ### Workflow Android
@@ -185,35 +185,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        
-    - name: Setup Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '11'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.0
-        
-    - name: Build and upload to Play Store
-      run: |
-        cd android
-        fastlane release
-      env:
-        GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+
+      - name: Build and upload to Play Store
+        run: |
+          cd android
+          fastlane release
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
 ```
 
 ## 📱 Comandi Semplificati
@@ -231,7 +231,7 @@ npm start  # o npx expo start
 # iOS App Store
 cd ios && fastlane release
 
-# Android Play Store  
+# Android Play Store
 cd android && fastlane release
 
 # TestFlight Beta
@@ -246,7 +246,7 @@ cd android && fastlane internal
 ### Expo EAS (Annuale)
 
 - **Team Plan**: $348/anno
-- **Production Plan**: $1188/anno  
+- **Production Plan**: $1188/anno
 - **Store Fees**: $124/anno
 - **TOTALE**: $472-1312/anno
 

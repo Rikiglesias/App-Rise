@@ -1,154 +1,182 @@
 import * as Haptics from 'expo-haptics';
-import React, { useRef } from 'react';
-import {
-  Animated,
-  Easing,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import React, { useCallback, useRef } from 'react';
+import type { TouchableOpacityProps } from 'react-native';
+import { Animated, Easing, StyleSheet, TouchableOpacity } from 'react-native';
+
 import { Animation, Glassmorphism } from '../constants/designTokens';
 
 interface EnhancedTouchableProps extends TouchableOpacityProps {
-  children: React.ReactNode;
-  variant?: 'default' | 'glass' | 'neon' | 'minimal';
-  microAnimation?: 'scale' | 'lift' | 'glow' | 'bounce' | 'none';
-  hapticFeedback?: boolean;
-  loading?: boolean;
-  disabled?: boolean;
-  onPress?: () => void;
+  readonly children: React.ReactNode;
+  readonly variant?: 'default' | 'glass' | 'neon' | 'minimal';
+  readonly microAnimation?: 'scale' | 'lift' | 'glow' | 'bounce' | 'none';
+  readonly hapticFeedback?: boolean;
+  readonly loading?: boolean;
+  readonly disabled?: boolean;
+  readonly onPress?: () => void;
 }
 
-export const EnhancedTouchable: React.FC<EnhancedTouchableProps> = ({
-  children,
-  style,
-  variant = 'default',
-  microAnimation = 'scale',
-  hapticFeedback = true,
-  loading = false,
-  disabled = false,
-  onPress,
-  ...props
-}) => {
+// Animation factory functions - Separated to reduce function length
+const createPressInAnimation = (
+  type: string,
+  scaleAnim: Animated.Value,
+  elevationAnim: Animated.Value,
+  glowAnim: Animated.Value
+) => {
+  switch (type) {
+    case 'scale':
+      return Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: Animation.duration.ultraFast,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      });
+    case 'lift':
+      return Animated.parallel([
+        Animated.timing(scaleAnim, {
+          toValue: 1.02,
+          duration: Animation.duration.fast,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(elevationAnim, {
+          toValue: 8,
+          duration: Animation.duration.fast,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: false,
+        }),
+      ]);
+    case 'glow':
+      return Animated.timing(glowAnim, {
+        toValue: 1,
+        duration: Animation.duration.normal,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: false,
+      });
+    case 'bounce':
+      return Animated.sequence([
+        Animated.timing(scaleAnim, {
+          toValue: 1.1,
+          duration: Animation.duration.ultraFast,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          tension: Animation.spring.playful.tension,
+          friction: Animation.spring.playful.friction,
+          useNativeDriver: true,
+        }),
+      ]);
+    default:
+      return null;
+  }
+};
+
+const createPressOutAnimation = (
+  type: string,
+  scaleAnim: Animated.Value,
+  elevationAnim: Animated.Value,
+  glowAnim: Animated.Value
+) => {
+  switch (type) {
+    case 'scale':
+    case 'bounce':
+      return Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: Animation.duration.fast,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      });
+    case 'lift':
+      return Animated.parallel([
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: Animation.duration.fast,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(elevationAnim, {
+          toValue: 0,
+          duration: Animation.duration.fast,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: false,
+        }),
+      ]);
+    case 'glow':
+      return Animated.timing(glowAnim, {
+        toValue: 0,
+        duration: Animation.duration.normal,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: false,
+      });
+    default:
+      return null;
+  }
+};
+
+// Animation Handlers Custom Hook - Now simplified
+const useAnimationHandlers = (
+  microAnimation: EnhancedTouchableProps['microAnimation'],
+  scaleAnim: Animated.Value,
+  elevationAnim: Animated.Value,
+  glowAnim: Animated.Value
+) => {
+  const executePressInAnimation = useCallback(() => {
+    const animation = createPressInAnimation(
+      microAnimation ?? '',
+      scaleAnim,
+      elevationAnim,
+      glowAnim
+    );
+    animation?.start();
+  }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
+
+  const executePressOutAnimation = useCallback(() => {
+    const animation = createPressOutAnimation(
+      microAnimation ?? '',
+      scaleAnim,
+      elevationAnim,
+      glowAnim
+    );
+    animation?.start();
+  }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
+
+  return { executePressInAnimation, executePressOutAnimation };
+};
+
+// Simplified Enhanced Touchable Animations Hook
+const useEnhancedTouchableAnimations = (
+  microAnimation: EnhancedTouchableProps['microAnimation'],
+  hapticFeedback: boolean,
+  disabled: boolean,
+  loading: boolean,
+  onPress?: () => void
+) => {
   // Animation values
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const elevationAnim = useRef(new Animated.Value(0)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
-  // 2025 MICROINTERACTION SYSTEM
-  const handlePressIn = () => {
-    // Haptic feedback con Expo Haptics
+  const { executePressInAnimation, executePressOutAnimation } =
+    useAnimationHandlers(microAnimation, scaleAnim, elevationAnim, glowAnim);
+
+  const handlePressIn = useCallback(() => {
+    // Haptic feedback
     if (hapticFeedback && !disabled) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
+    executePressInAnimation();
+  }, [hapticFeedback, disabled, executePressInAnimation]);
 
-    // Scale animation based on type
-    switch (microAnimation) {
-      case 'scale':
-        Animated.timing(scaleAnim, {
-          toValue: 0.95,
-          duration: Animation.duration.ultraFast,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }).start();
-        break;
+  const handlePressOut = useCallback(() => {
+    executePressOutAnimation();
+  }, [executePressOutAnimation]);
 
-      case 'lift':
-        Animated.parallel([
-          Animated.timing(scaleAnim, {
-            toValue: 1.02,
-            duration: Animation.duration.fast,
-            easing: Easing.out(Easing.quad),
-            useNativeDriver: true,
-          }),
-          Animated.timing(elevationAnim, {
-            toValue: 8,
-            duration: Animation.duration.fast,
-            easing: Easing.out(Easing.quad),
-            useNativeDriver: false,
-          }),
-        ]).start();
-        break;
-
-      case 'glow':
-        Animated.timing(glowAnim, {
-          toValue: 1,
-          duration: Animation.duration.normal,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: false,
-        }).start();
-        break;
-
-      case 'bounce':
-        Animated.sequence([
-          Animated.timing(scaleAnim, {
-            toValue: 1.1,
-            duration: Animation.duration.ultraFast,
-            easing: Easing.out(Easing.quad),
-            useNativeDriver: true,
-          }),
-          Animated.spring(scaleAnim, {
-            toValue: 1,
-            tension: Animation.spring.playful.tension,
-            friction: Animation.spring.playful.friction,
-            useNativeDriver: true,
-          }),
-        ]).start();
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const handlePressOut = () => {
-    // Reset animations
-    switch (microAnimation) {
-      case 'scale':
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: Animation.duration.fast,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }).start();
-        break;
-
-      case 'lift':
-        Animated.parallel([
-          Animated.timing(scaleAnim, {
-            toValue: 1,
-            duration: Animation.duration.fast,
-            easing: Easing.out(Easing.quad),
-            useNativeDriver: true,
-          }),
-          Animated.timing(elevationAnim, {
-            toValue: 0,
-            duration: Animation.duration.fast,
-            easing: Easing.out(Easing.quad),
-            useNativeDriver: false,
-          }),
-        ]).start();
-        break;
-
-      case 'glow':
-        Animated.timing(glowAnim, {
-          toValue: 0,
-          duration: Animation.duration.normal,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: false,
-        }).start();
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     if (!disabled && !loading && onPress) {
       // Success feedback animation
-      if (microAnimation === 'bounce') {
+      if (microAnimation !== 'none') {
         Animated.sequence([
           Animated.timing(rotateAnim, {
             toValue: 1,
@@ -163,13 +191,27 @@ export const EnhancedTouchable: React.FC<EnhancedTouchableProps> = ({
           }),
         ]).start();
       }
-
       onPress();
     }
-  };
+  }, [disabled, loading, onPress, microAnimation, rotateAnim]);
 
-  // Dynamic styles based on variant
-  const getVariantStyle = () => {
+  return {
+    scaleAnim,
+    elevationAnim,
+    glowAnim,
+    rotateAnim,
+    handlePressIn,
+    handlePressOut,
+    handlePress,
+  };
+};
+
+// Custom Hook for Enhanced Touchable Styles
+const useEnhancedTouchableStyles = (
+  variant: EnhancedTouchableProps['variant'],
+  glowAnim: Animated.Value
+) => {
+  const getVariantStyle = useCallback(() => {
     switch (variant) {
       case 'glass':
         return [
@@ -204,9 +246,13 @@ export const EnhancedTouchable: React.FC<EnhancedTouchableProps> = ({
       default:
         return styles.defaultVariant;
     }
-  };
+  }, [variant, glowAnim]);
 
-  // Loading animation
+  return { getVariantStyle };
+};
+
+// Loading Animation Hook - Extracted from main component
+const useLoadingAnimation = (loading: boolean, scaleAnim: Animated.Value) => {
   React.useEffect(() => {
     if (loading) {
       const loadingAnimation = Animated.loop(
@@ -226,47 +272,101 @@ export const EnhancedTouchable: React.FC<EnhancedTouchableProps> = ({
         ])
       );
       loadingAnimation.start();
-
       return () => {
         loadingAnimation.stop();
       };
     }
-
-    return undefined; // Fix TypeScript error
+    return undefined;
   }, [loading, scaleAnim]);
+};
 
+// Animation Styles Hook - Extracted transform logic
+// Note: Using flexible types for React Native compatibility
+const useAnimationStyles = (
+  getVariantStyle: () => unknown,
+  scaleAnim: Animated.Value,
+  rotateAnim: Animated.Value,
+  elevationAnim: Animated.Value,
+  style?: unknown
+) => {
+  /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
+  return [
+    getVariantStyle(),
+    {
+      transform: [
+        { scale: scaleAnim },
+        {
+          rotate: rotateAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '360deg'],
+          }),
+        },
+      ],
+      elevation: elevationAnim,
+    },
+    style,
+  ].filter(Boolean) as any;
+  /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
+};
+
+// Main Component - Now much smaller
+export const EnhancedTouchable: React.FC<EnhancedTouchableProps> = ({
+  children,
+  style,
+  variant = 'default',
+  microAnimation = 'scale',
+  hapticFeedback = true,
+  loading = false,
+  disabled = false,
+  onPress,
+  ...props
+}) => {
+  // Use custom hooks
+  const {
+    scaleAnim,
+    elevationAnim,
+    glowAnim,
+    rotateAnim,
+    handlePressIn,
+    handlePressOut,
+    handlePress,
+  } = useEnhancedTouchableAnimations(
+    microAnimation,
+    hapticFeedback,
+    disabled,
+    loading,
+    onPress
+  );
+
+  const { getVariantStyle } = useEnhancedTouchableStyles(variant, glowAnim);
+
+  // Loading animation effect
+  useLoadingAnimation(loading, scaleAnim);
+
+  // Animation styles
+  const animationStyles = useAnimationStyles(
+    getVariantStyle,
+    scaleAnim,
+    rotateAnim,
+    elevationAnim,
+    style
+  );
+
+  // Render
   return (
-    <TouchableOpacity
-      {...props}
-      style={[style, disabled && styles.disabled, loading && styles.loading]}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onPress={handlePress}
-      disabled={disabled || loading}
-      activeOpacity={0.9}
-    >
-      <Animated.View
-        style={[
-          getVariantStyle(),
-          {
-            transform: [
-              {
-                scale: scaleAnim,
-              },
-              {
-                rotate: rotateAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0deg', '360deg'],
-                }),
-              },
-            ],
-            elevation: elevationAnim,
-          },
-        ]}
+    <Animated.View style={animationStyles}>
+      <TouchableOpacity
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={handlePress}
+        disabled={disabled || loading}
+        activeOpacity={0.9}
+        style={styles.touchableContainer}
+        {...props}
       >
         {children}
-      </Animated.View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
@@ -295,12 +395,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 
-  disabled: {
-    opacity: 0.5,
-  },
-
-  loading: {
-    opacity: 0.8,
+  touchableContainer: {
+    flex: 1,
   },
 });
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { StackNavigationProp } from '@react-navigation/stack';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -10,7 +10,7 @@ import {
   Spacing,
   Typography,
 } from '../constants/designTokens';
-import { RootStackParamList } from '../navigation/types';
+import type { RootStackParamList } from '../navigation/types';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -18,7 +18,7 @@ type Impatto2024ScreenNavigationProp = StackNavigationProp<
 >;
 
 interface Props {
-  navigation: Impatto2024ScreenNavigationProp;
+  readonly navigation: Impatto2024ScreenNavigationProp;
 }
 
 const Impatto2024Screen: React.FC<Props> = ({ navigation: _navigation }) => {

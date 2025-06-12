@@ -1,33 +1,35 @@
 import * as Haptics from 'expo-haptics';
-import React, { useRef } from 'react';
-import { Animated, Pressable, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
+import React, { useCallback, useRef } from 'react';
+import { Animated, Pressable, StyleSheet, Text } from 'react-native';
+
 import { BorderRadius, Spacing, Typography } from '../constants/designTokens';
 import { useTheme } from '../hooks/useTheme';
 
 interface ActionCardEnhancedProps {
-  title: string;
-  description: string;
-  icon: string;
-  onPress: () => void;
-  variant: 'info' | 'success' | 'warning' | 'brand';
+  readonly title: string;
+  readonly description: string;
+  readonly icon: string;
+  readonly onPress: () => void;
+  readonly variant: 'info' | 'success' | 'warning' | 'brand';
 }
 
-export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
-  title,
-  description,
-  icon,
-  onPress,
-  variant,
-}) => {
-  const { colors } = useTheme();
+// Type for variant styles
+interface VariantStyles {
+  backgroundColor: string;
+  iconBg: string;
+  iconBorder: string;
+  shadowColor: string;
+}
+
+// Hook for animations - Separated to reduce function length
+const useActionCardAnimations = () => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const iconScaleAnim = useRef(new Animated.Value(1)).current;
 
-  const handlePressIn = () => {
+  const handlePressIn = useCallback(() => {
     // Light haptic feedback on press
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     Animated.parallel([
       Animated.spring(scaleAnim, {
@@ -49,9 +51,9 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
         friction: 6,
       }),
     ]).start();
-  };
+  }, [scaleAnim, opacityAnim, iconScaleAnim]);
 
-  const handlePressOut = () => {
+  const handlePressOut = useCallback(() => {
     Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 1,
@@ -71,15 +73,27 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
         friction: 6,
       }),
     ]).start();
-  };
+  }, [scaleAnim, opacityAnim, iconScaleAnim]);
 
-  const handlePress = () => {
-    // Success haptic feedback on successful action
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    onPress();
+  return {
+    scaleAnim,
+    opacityAnim,
+    iconScaleAnim,
+    handlePressIn,
+    handlePressOut,
   };
+};
 
-  const variantStyles = {
+// Hook for variant styles - Separated to reduce function length
+const useVariantStyles = (
+  variant: ActionCardEnhancedProps['variant']
+): VariantStyles => {
+  const { colors } = useTheme();
+
+  const variantConfig: Record<
+    ActionCardEnhancedProps['variant'],
+    VariantStyles
+  > = {
     info: {
       backgroundColor: colors.semantic.info.light + '40',
       iconBg: colors.semantic.info.main + '15',
@@ -106,6 +120,78 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
     },
   };
 
+  return variantConfig[variant];
+};
+
+// Icon Container Component - Extracted from main component
+const ActionCardIcon: React.FC<{
+  iconScaleAnim: Animated.Value;
+  variantStyles: VariantStyles;
+  icon: string;
+}> = ({ iconScaleAnim, variantStyles, icon }) => (
+  <Animated.View
+    style={[
+      styles.iconContainer,
+      {
+        backgroundColor: variantStyles.iconBg,
+        borderColor: variantStyles.iconBorder,
+        transform: [{ scale: iconScaleAnim }],
+      },
+    ]}
+  >
+    <Text
+      style={styles.icon}
+      accessible={false} // Icon is decorative, description is in accessibilityLabel
+    >
+      {icon}
+    </Text>
+  </Animated.View>
+);
+
+// Content Text Component - Extracted from main component
+const ActionCardContent: React.FC<{
+  title: string;
+  description: string;
+}> = ({ title, description }) => (
+  <>
+    <Text
+      style={styles.title}
+      accessible={false} // Combined in parent accessibilityLabel
+    >
+      {title}
+    </Text>
+    <Text
+      style={styles.description}
+      accessible={false} // Combined in parent accessibilityLabel
+    >
+      {description}
+    </Text>
+  </>
+);
+
+export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
+  title,
+  description,
+  icon,
+  onPress,
+  variant,
+}) => {
+  const {
+    scaleAnim,
+    opacityAnim,
+    iconScaleAnim,
+    handlePressIn,
+    handlePressOut,
+  } = useActionCardAnimations();
+
+  const variantStyles = useVariantStyles(variant);
+
+  const handlePress = useCallback(() => {
+    // Success haptic feedback on successful action
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    onPress();
+  }, [onPress]);
+
   return (
     <Animated.View
       style={[
@@ -113,7 +199,7 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
         {
           transform: [{ scale: scaleAnim }],
           opacity: opacityAnim,
-          shadowColor: variantStyles[variant].shadowColor,
+          shadowColor: variantStyles.shadowColor,
         },
       ]}
     >
@@ -123,43 +209,19 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
         onPress={handlePress}
         style={[
           styles.content,
-          { backgroundColor: variantStyles[variant].backgroundColor },
+          { backgroundColor: variantStyles.backgroundColor },
         ]}
-        accessible={true}
+        accessible
         accessibilityRole="button"
         accessibilityLabel={`${title}: ${description}`}
         accessibilityHint="Tocca per accedere a questa funzionalità"
       >
-        <Animated.View
-          style={[
-            styles.iconContainer,
-            {
-              backgroundColor: variantStyles[variant].iconBg,
-              borderColor: variantStyles[variant].iconBorder,
-              transform: [{ scale: iconScaleAnim }],
-            },
-          ]}
-        >
-          <Text
-            style={styles.icon}
-            accessible={false} // Icon is decorative, description is in accessibilityLabel
-          >
-            {icon}
-          </Text>
-        </Animated.View>
-        <Text
-          variant="titleMedium"
-          style={styles.title}
-          accessible={false} // Combined in parent accessibilityLabel
-        >
-          {title}
-        </Text>
-        <Text
-          style={styles.description}
-          accessible={false} // Combined in parent accessibilityLabel
-        >
-          {description}
-        </Text>
+        <ActionCardIcon
+          iconScaleAnim={iconScaleAnim}
+          variantStyles={variantStyles}
+          icon={icon}
+        />
+        <ActionCardContent title={title} description={description} />
       </Pressable>
     </Animated.View>
   );

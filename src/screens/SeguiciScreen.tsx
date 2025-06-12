@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import {
   BorderRadius,
   Colors,
@@ -18,7 +19,8 @@ import {
   Typography,
 } from '../constants/designTokens';
 import { useLinkHandler } from '../hooks/useLinkHandler';
-import { RootStackParamList } from '../navigation/types';
+import type { RootStackParamList } from '../navigation/types';
+import { isSuccess } from '../utils/result';
 
 type SeguiciScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -26,43 +28,63 @@ type SeguiciScreenNavigationProp = StackNavigationProp<
 >;
 
 interface Props {
-  navigation: SeguiciScreenNavigationProp;
+  readonly navigation: SeguiciScreenNavigationProp;
 }
 
 const SeguiciScreen: React.FC<Props> = ({ navigation: _navigation }) => {
   const { openLink } = useLinkHandler();
 
-  const handleWebsitePress = () => {
-    openLink(
+  const handleWebsitePress = useCallback(async () => {
+    const result = await openLink(
       'https://italy.riseagainsthunger.org/',
       'website',
       'Impossibile aprire il sito web.'
     );
-  };
 
-  const handleInstagramPress = () => {
-    openLink(
+    if (!isSuccess(result) && __DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('[SeguiciScreen] Failed to open website:', result.error);
+    }
+  }, [openLink]);
+
+  const handleInstagramPress = useCallback(async () => {
+    const result = await openLink(
       'https://www.instagram.com/riseagainsthungeritalia/',
       'instagram',
       'Impossibile aprire Instagram.'
     );
-  };
 
-  const handleFacebookPress = () => {
-    openLink(
+    if (!isSuccess(result) && __DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('[SeguiciScreen] Failed to open Instagram:', result.error);
+    }
+  }, [openLink]);
+
+  const handleFacebookPress = useCallback(async () => {
+    const result = await openLink(
       'https://www.facebook.com/RiseAgainstHungerItalia',
       'facebook',
       'Impossibile aprire Facebook.'
     );
-  };
 
-  const handleLinkedInPress = () => {
-    openLink(
+    if (!isSuccess(result) && __DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('[SeguiciScreen] Failed to open Facebook:', result.error);
+    }
+  }, [openLink]);
+
+  const handleLinkedInPress = useCallback(async () => {
+    const result = await openLink(
       'https://www.linkedin.com/company/rise-against-hunger-italia/mycompany/',
       'linkedin',
       'Impossibile aprire LinkedIn.'
     );
-  };
+
+    if (!isSuccess(result) && __DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('[SeguiciScreen] Failed to open LinkedIn:', result.error);
+    }
+  }, [openLink]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,7 +116,10 @@ const SeguiciScreen: React.FC<Props> = ({ navigation: _navigation }) => {
             onPress={handleInstagramPress}
           >
             <Image
-              source={require('../../assets/images/icons/instagram.png')}
+              // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
+              source={
+                require('../../assets/images/icons/instagram.png') as number
+              }
               style={styles.platformIcon}
             />
             <View style={styles.socialInfo}>
@@ -108,7 +133,10 @@ const SeguiciScreen: React.FC<Props> = ({ navigation: _navigation }) => {
             onPress={handleFacebookPress}
           >
             <Image
-              source={require('../../assets/images/icons/facebook.png')}
+              // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
+              source={
+                require('../../assets/images/icons/facebook.png') as number
+              }
               style={styles.platformIcon}
             />
             <View style={styles.socialInfo}>
@@ -122,7 +150,10 @@ const SeguiciScreen: React.FC<Props> = ({ navigation: _navigation }) => {
             onPress={handleLinkedInPress}
           >
             <Image
-              source={require('../../assets/images/icons/linkedin.png')}
+              // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
+              source={
+                require('../../assets/images/icons/linkedin.png') as number
+              }
               style={styles.platformIcon}
             />
             <View style={styles.socialInfo}>

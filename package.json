@@ -7,36 +7,24 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
-    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
-    "lint:md": "markdownlint **/*.md",
-    "lint:md:fix": "markdownlint **/*.md --fix",
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch",
-    "check": "npm run type-check && npm run lint",
-    "check:quick": "tsc --noEmit --skipLibCheck && eslint src --ext .ts,.tsx --max-warnings 0",
-    "check:errors-only": "tsc --noEmit --skipLibCheck && eslint src --ext .ts,.tsx --quiet",
-    "check:warnings-only": "eslint src --ext .ts,.tsx",
-    "check:with-warnings": "tsc --noEmit --skipLibCheck && eslint src --ext .ts,.tsx",
-    "check:strict": "tsc --noEmit && eslint src --ext .ts,.tsx --max-warnings 0",
-    "check:summary": "echo '=== CONTROLLO ERRORI ===' && npm run check:errors-only && echo '=== CONTROLLO WARNINGS ===' && npm run check:warnings-only",
-    "fix": "npm run lint:fix && npm run type-check",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "quality-check": "npm run type-check && npm run lint && npm run lint:md",
-    "quality-check:strict": "npm run check:strict && npm run lint:md",
-    "quality-check:summary": "npm run check:summary && npm run lint:md",
-    "quality-fix": "npm run lint:fix && npm run lint:md:fix",
-    "dev:start": "echo '=== CONTROLLO PRE-SVILUPPO ===' && npm run check:errors-only && echo '✅ Nessun errore, puoi iniziare!' && npm start",
-    "dev:finish": "echo '=== CONTROLLO POST-IMPLEMENTAZIONE ===' && npm run check:errors-only && npm run check:warnings-only && echo '✅ Controllo errori + warnings completato!'",
-    "dev:quick-check": "npm run check:errors-only && echo '✅ Errori OK'",
-    "dev:pre-commit": "echo '=== VERIFICA PRE-COMMIT ===' && npm run check:strict && echo '✅ Pronto per commit!'",
-    "prebuild": "npm run quality-check:strict",
-    "prepare": "husky"
+    "check:strict": "npm run conta-problemi",
+    "quality-check:summary": "npm run conta-problemi",
+    "analisi-completa": "npm run conta-problemi",
+    "fix-manuale": "echo '🚫 CORREZIONI AUTOMATICHE DISABILITATE' && echo '💡 Usa editor per correzioni manuali controllate'",
+    "helper-manuali": "node scripts/correzioni-manuali-helper.js",
+    "conta-problemi": "node scripts/conta-problemi.js",
+    "pre-modifiche": "node scripts/workflow-pre-modifiche.js",
+    "post-modifiche": "node scripts/workflow-post-modifiche.js",
+    "workflow-completo": "npm run pre-modifiche && echo '\\n✅ PRONTO PER SVILUPPO! Procedi con le modifiche, poi esegui: npm run post-modifiche"
   },
   "dependencies": {
+    "@expo/vector-icons": "^14.1.0",
+    "@react-navigation/bottom-tabs": "^7.3.14",
     "@react-navigation/native": "^7.1.10",
+    "@react-navigation/native-stack": "^7.3.14",
     "@react-navigation/stack": "^7.3.3",
     "expo": "~53.0.10",
     "expo-blur": "^14.1.5",
@@ -46,14 +34,18 @@
     "react": "19.0.0",
     "react-native": "0.79.3",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-maps": "1.20.1",
     "react-native-pager-view": "^6.8.1",
     "react-native-paper": "^5.14.5",
+    "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "^5.4.1",
     "react-native-screens": "^4.11.1",
-    "react-native-svg": "15.11.2"
+    "react-native-svg": "15.11.2",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@react-native-community/eslint-config": "^3.2.0",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.14",
@@ -62,9 +54,14 @@
     "@typescript-eslint/parser": "^7.4.0",
     "eslint": "^8.57.0",
     "eslint-config-expo": "^7.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.13.3",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.1.0",
+    "eslint-plugin-unused-imports": "^3.2.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-expo": "^53.0.7",
@@ -77,11 +74,11 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
       "tsc --noEmit --skipLibCheck",
-      "eslint --fix --max-warnings 0",
-      "prettier --write"
+      "eslint --max-warnings 0",
+      "prettier --check"
     ],
     "*.md": [
-      "markdownlint --fix"
+      "markdownlint"
     ]
   },
   "private": true

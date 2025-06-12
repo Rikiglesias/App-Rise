@@ -5,6 +5,7 @@ import BeneficiariesScreen from '../screens/Impact/BeneficiariesScreen';
 import PartnersScreen from '../screens/Impact/PartnersScreen';
 import VolunteersScreen from '../screens/Impact/VolunteersScreen';
 import ImpactTabScreen from '../screens/ImpactTabScreen';
+import MapModalScreen from '../screens/MapModalScreen';
 
 import type { ImpactStackParamList } from './types';
 
@@ -24,6 +25,11 @@ const ImpactStackNavigator: React.FC = () => {
       />
       <ImpactStack.Screen name="Volunteers" component={VolunteersScreen} />
       <ImpactStack.Screen name="Partners" component={PartnersScreen} />
+      <ImpactStack.Screen
+        name="MapModal"
+        component={MapModalScreen}
+        options={{ presentation: 'modal' }}
+      />
     </ImpactStack.Navigator>
   );
 };

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import {
   BorderRadius,
   Colors,
@@ -17,7 +18,8 @@ import {
   Typography,
 } from '../constants/designTokens';
 import { useLinkHandler } from '../hooks/useLinkHandler';
-import { RootStackParamList } from '../navigation/types';
+import type { RootStackParamList } from '../navigation/types';
+import { isSuccess } from '../utils/result';
 
 type ChiSiamoScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -25,29 +27,48 @@ type ChiSiamoScreenNavigationProp = StackNavigationProp<
 >;
 
 interface Props {
-  navigation: ChiSiamoScreenNavigationProp;
+  readonly navigation: ChiSiamoScreenNavigationProp;
 }
 
 const ChiSiamoScreen: React.FC<Props> = ({ navigation: _navigation }) => {
   const { openLink } = useLinkHandler();
 
-  const handleLocationPress = () => {
+  const handleLocationPress = useCallback(async () => {
     const address = 'Via dei Fornaciai, 17, 40129 Bologna, BO, Italia';
     const url = `https://maps.google.com/?q=${encodeURIComponent(address)}`;
-    openLink(url, 'maps', 'Impossibile aprire la mappa.');
-  };
+    const result = await openLink(url, 'maps', 'Impossibile aprire la mappa.');
 
-  const handlePhonePress = () => {
-    openLink('tel:051704070', 'phone', 'Impossibile aprire il dialer.');
-  };
+    if (!isSuccess(result) && __DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('[ChiSiamoScreen] Failed to open maps:', result.error);
+    }
+  }, [openLink]);
 
-  const handleEmailPress = () => {
-    openLink(
+  const handlePhonePress = useCallback(async () => {
+    const result = await openLink(
+      'tel:051704070',
+      'phone',
+      'Impossibile aprire il dialer.'
+    );
+
+    if (!isSuccess(result) && __DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('[ChiSiamoScreen] Failed to open dialer:', result.error);
+    }
+  }, [openLink]);
+
+  const handleEmailPress = useCallback(async () => {
+    const result = await openLink(
       'mailto:info@riseagainsthunger.it',
       'email',
       "Impossibile aprire l'app email."
     );
-  };
+
+    if (!isSuccess(result) && __DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('[ChiSiamoScreen] Failed to open email:', result.error);
+    }
+  }, [openLink]);
 
   return (
     <SafeAreaView style={styles.container}>

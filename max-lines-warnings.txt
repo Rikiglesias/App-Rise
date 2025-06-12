@@ -1,0 +1,17 @@
+  17:70  warning  Arrow function has too many lines (151). Maximum allowed is 100  max-lines-per-function
+  25:70  warning  Arrow function has too many lines (143). Maximum allowed is 100  max-lines-per-function
+  37:58  warning  Arrow function has too many lines (143). Maximum allowed is 100  max-lines-per-function
+  18:68  warning  Arrow function has too many lines (257). Maximum allowed is 100  max-lines-per-function
+  22:54  warning  Arrow function has too many lines (177). Maximum allowed is 100  max-lines-per-function
+  37:72  warning  Arrow function has too many lines (168). Maximum allowed is 100  max-lines-per-function
+  101:68  warning  Arrow function has too many lines (256). Maximum allowed is 100  max-lines-per-function
+  19:3  warning  Arrow function has too many lines (144). Maximum allowed is 100  max-lines-per-function
+  96:57  warning  Arrow function has too many lines (165). Maximum allowed is 100  max-lines-per-function
+  25:3  warning  Arrow function has too many lines (167). Maximum allowed is 100  max-lines-per-function
+  406:45  warning  Arrow function has too many lines (123). Maximum allowed is 100  max-lines-per-function
+  110:61  warning  Arrow function has too many lines (245). Maximum allowed is 100  max-lines-per-function
+  14:59  warning  Arrow function has too many lines (227). Maximum allowed is 100  max-lines-per-function
+  29:76  warning  Arrow function has too many lines (190). Maximum allowed is 100  max-lines-per-function
+  17:66  warning  Arrow function has too many lines (153). Maximum allowed is 100  max-lines-per-function
+  94:42  warning  Arrow function has too many lines (265). Maximum allowed is 200  max-lines-per-function
+  29:41  warning  Arrow function has too many lines (271). Maximum allowed is 200  max-lines-per-function

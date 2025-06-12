@@ -1,11 +1,21 @@
 import { useCallback, useState } from 'react';
 import { Alert, Linking } from 'react-native';
+
+import {
+  isSuccess,
+  retry,
+  safeAsync,
+  withTimeout,
+  type AsyncResult,
+} from '../utils/result';
 import { useHapticFeedback } from './useHapticFeedback';
 
 interface UseLinkHandlerOptions {
   defaultErrorMessage?: string;
   loadingDelay?: number;
   enableHaptics?: boolean;
+  timeout?: number;
+  retryAttempts?: number;
 }
 
 interface UseLinkHandlerReturn {
@@ -14,12 +24,17 @@ interface UseLinkHandlerReturn {
     url: string,
     loadingKey: string,
     errorMessage?: string
-  ) => Promise<void>;
-  openDonationLink: () => Promise<void>;
-  openShopLink: () => Promise<void>;
-  openGiftCardLink: () => Promise<void>;
-  openEventsLink: () => Promise<void>;
-  openProjectsLink: () => Promise<void>;
+  ) => AsyncResult<void>;
+  openDonationLink: () => AsyncResult<void>;
+  openShopLink: () => AsyncResult<void>;
+  openGiftCardLink: () => AsyncResult<void>;
+  openEventsLink: () => AsyncResult<void>;
+  openProjectsLink: () => AsyncResult<void>;
+  openFacebookLink: () => AsyncResult<void>;
+  openInstagramLink: () => AsyncResult<void>;
+  openYouTubeLink: () => AsyncResult<void>;
+  openLinkedInLink: () => AsyncResult<void>;
+  openWebsiteLink: () => AsyncResult<void>;
 }
 
 export const useLinkHandler = (
@@ -29,6 +44,8 @@ export const useLinkHandler = (
     defaultErrorMessage = 'Impossibile aprire il link. Riprova più tardi.',
     loadingDelay = 150,
     enableHaptics = true,
+    timeout = 10000,
+    retryAttempts = 1,
   } = options;
 
   const [isLoading, setIsLoading] = useState<string | null>(null);
@@ -36,44 +53,97 @@ export const useLinkHandler = (
 
   // Haptic feedback function using the existing hook
   const triggerHaptic = useCallback(() => {
-    if (enableHaptics) {
-      lightTap();
+    if (!enableHaptics) {
+      return Promise.resolve({
+        success: true as const,
+        data: undefined as void,
+      });
     }
+
+    return safeAsync(async () => {
+      await lightTap();
+    });
   }, [enableHaptics, lightTap]);
 
-  // Generic link opener with loading states and error handling
+  // Core link opening operation
+  const performLinkOpen = useCallback(
+    (url: string) => {
+      return withTimeout(
+        async () => {
+          const supported = await Linking.canOpenURL(url);
+          if (!supported) {
+            throw new Error(`URL non supportato: ${url}`);
+          }
+          await Linking.openURL(url);
+        },
+        timeout,
+        `Timeout nell'apertura del link: ${url}`
+      );
+    },
+    [timeout]
+  );
+
+  // Generic link opener with Result pattern
   const openLink = useCallback(
     async (url: string, loadingKey: string, errorMessage?: string) => {
-      try {
-        setIsLoading(loadingKey);
-        triggerHaptic();
+      setIsLoading(loadingKey);
 
-        // Small delay for visual feedback
+      try {
+        // Step 1: Trigger haptic feedback
+        const hapticResult = await triggerHaptic();
+        if (!isSuccess(hapticResult)) {
+          // Haptic failure is non-critical, log and continue
+          if (__DEV__) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              '[LinkHandler] Haptic feedback failed:',
+              hapticResult.error
+            );
+          }
+        }
+
+        // Step 2: Loading delay for visual feedback
         if (loadingDelay > 0) {
           await new Promise(resolve => setTimeout(resolve, loadingDelay));
         }
 
-        const supported = await Linking.canOpenURL(url);
-        if (supported) {
-          await Linking.openURL(url);
-        } else {
-          throw new Error('URL non supportato');
+        // Step 3: Attempt to open link with retry
+        const linkResult = await retry(
+          () => performLinkOpen(url),
+          retryAttempts,
+          1000
+        );
+
+        if (!isSuccess(linkResult)) {
+          // Show user-friendly error
+          Alert.alert('Errore', errorMessage ?? defaultErrorMessage);
+
+          // Log detailed error for debugging
+          if (__DEV__) {
+            // eslint-disable-next-line no-console
+            console.error(`[LinkHandler] Failed to open URL: ${url}`, {
+              error: linkResult.error,
+              loadingKey,
+              retryAttempts,
+              timestamp: new Date().toISOString(),
+            });
+          }
+
+          return linkResult;
         }
-      } catch (err) {
-        if (__DEV__) {
-          // eslint-disable-next-line no-console
-          console.error(`[LinkHandler] Failed to open URL: ${url}`, {
-            error: err,
-            loadingKey,
-            timestamp: new Date().toISOString(),
-          });
-        }
-        Alert.alert('Errore', errorMessage || defaultErrorMessage);
+
+        return linkResult;
       } finally {
         setIsLoading(null);
       }
     },
-    [triggerHaptic, loadingDelay, defaultErrorMessage]
+    [
+      triggerHaptic,
+      loadingDelay,
+      performLinkOpen,
+      retryAttempts,
+      defaultErrorMessage,
+    ]
   );
 
   // Predefined link handlers for common actions
@@ -117,6 +187,46 @@ export const useLinkHandler = (
     );
   }, [openLink]);
 
+  const openFacebookLink = useCallback(() => {
+    return openLink(
+      'https://www.facebook.com/RAHItalia/',
+      'facebook',
+      'Impossibile aprire Facebook. Riprova più tardi.'
+    );
+  }, [openLink]);
+
+  const openInstagramLink = useCallback(() => {
+    return openLink(
+      'https://www.instagram.com/riseagainsthunger_italia/',
+      'instagram',
+      'Impossibile aprire Instagram. Riprova più tardi.'
+    );
+  }, [openLink]);
+
+  const openYouTubeLink = useCallback(() => {
+    return openLink(
+      'https://www.youtube.com/@RiseAgainstHungerItalia',
+      'youtube',
+      'Impossibile aprire YouTube. Riprova più tardi.'
+    );
+  }, [openLink]);
+
+  const openLinkedInLink = useCallback(() => {
+    return openLink(
+      'https://www.linkedin.com/company/rise-against-hunger-italia/',
+      'linkedin',
+      'Impossibile aprire LinkedIn. Riprova più tardi.'
+    );
+  }, [openLink]);
+
+  const openWebsiteLink = useCallback(() => {
+    return openLink(
+      'https://www.riseagainsthunger.it/',
+      'website',
+      'Impossibile aprire il sito web. Riprova più tardi.'
+    );
+  }, [openLink]);
+
   return {
     isLoading,
     openLink,
@@ -125,5 +235,10 @@ export const useLinkHandler = (
     openGiftCardLink,
     openEventsLink,
     openProjectsLink,
+    openFacebookLink,
+    openInstagramLink,
+    openYouTubeLink,
+    openLinkedInLink,
+    openWebsiteLink,
   };
 };

@@ -23,34 +23,45 @@ interface Props {
   locations: Location[];
   onMarkerPress: (location: Location) => void;
   style?: object;
+  isFullScreen?: boolean;
 }
 
 const InteractiveMap: React.FC<Props> = ({
   locations,
   onMarkerPress,
   style,
+  isFullScreen = false,
 }) => {
   const createMarkerPressHandler = useCallback(
     (location: Location) => () => onMarkerPress(location),
     [onMarkerPress]
   );
 
-  return (
-    <MapView
-      style={[styles.map, style]}
-      provider={PROVIDER_GOOGLE}
-      initialRegion={{
+  const initialRegion = isFullScreen
+    ? {
+        latitude: 25,
+        longitude: 15,
+        latitudeDelta: 80,
+        longitudeDelta: 80,
+      }
+    : {
         latitude: 20,
         longitude: 0,
         latitudeDelta: 100,
         longitudeDelta: 100,
-      }}
+      };
+
+  return (
+    <MapView
+      style={[styles.map, style]}
+      provider={PROVIDER_GOOGLE}
+      initialRegion={initialRegion}
       showsUserLocation={false}
-      showsMyLocationButton={false}
-      scrollEnabled={true}
-      zoomEnabled={true}
-      pitchEnabled={false}
-      rotateEnabled={false}
+      showsMyLocationButton={isFullScreen}
+      scrollEnabled={isFullScreen}
+      zoomEnabled={isFullScreen}
+      pitchEnabled={isFullScreen}
+      rotateEnabled={isFullScreen}
       mapType="standard"
     >
       {locations.map(location => (

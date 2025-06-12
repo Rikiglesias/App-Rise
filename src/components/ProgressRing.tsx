@@ -1,18 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
+
 import { Colors } from '../constants/designTokens';
 
 interface ProgressRingProps {
-  progress: number; // 0 to 1
-  size?: number;
-  strokeWidth?: number;
-  color?: string;
-  backgroundColor?: string;
-  children?: React.ReactNode;
-  animateOnMount?: boolean;
-  duration?: number;
-  startAnimation?: boolean;
+  readonly progress: number; // 0 to 1
+  readonly size?: number;
+  readonly strokeWidth?: number;
+  readonly color?: string;
+  readonly backgroundColor?: string;
+  readonly children?: React.ReactNode;
+  readonly animateOnMount?: boolean;
+  readonly duration?: number;
+  readonly startAnimation?: boolean;
 }
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -81,7 +82,9 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
       </Svg>
 
       {/* Content in center */}
-      {children && <View style={styles.centerContent}>{children}</View>}
+      {children !== undefined && children !== null && (
+        <View style={styles.centerContent}>{children}</View>
+      )}
     </View>
   );
 };

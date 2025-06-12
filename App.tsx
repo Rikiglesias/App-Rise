@@ -40,7 +40,7 @@ const fontConfig = {
 };
 
 // The new Main component that bridges the two theme systems
-const Main = () => {
+const Main: React.FC = () => {
   const { isDark, colors } = useTheme();
 
   // Define base theme from React Native Paper
@@ -72,7 +72,7 @@ const Main = () => {
   );
 };
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
@@ -80,4 +80,6 @@ export default function App() {
       </ThemeProvider>
     </SafeAreaProvider>
   );
-}
+};
+
+export default App;

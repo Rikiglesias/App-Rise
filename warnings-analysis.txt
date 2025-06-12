@@ -1,0 +1,55 @@
+  17:70  warning  Arrow function has too many lines (151). Maximum allowed is 100  max-lines-per-function
+   25:70  warning  Arrow function has too many lines (143). Maximum allowed is 100  max-lines-per-function
+  189:16  warning  Do not use Array index in keys                                   react/no-array-index-key
+  37:58  warning  Arrow function has too many lines (143). Maximum allowed is 100  max-lines-per-function
+  18:68  warning  Arrow function has too many lines (257). Maximum allowed is 100  max-lines-per-function
+   22:54  warning  Arrow function has too many lines (171). Maximum allowed is 100  max-lines-per-function
+  131:17  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+   37:72  warning  Arrow function has too many lines (168). Maximum allowed is 100  max-lines-per-function
+  138:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  189:24  warning  Do not use Array index in keys                                   react/no-array-index-key
+  101:68  warning  Arrow function has too many lines (256). Maximum allowed is 100  max-lines-per-function
+  19:3   warning  Arrow function has too many lines (136). Maximum allowed is 100  max-lines-per-function
+  96:11  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+   18:57  warning  Arrow function has too many lines (228). Maximum allowed is 100                                                                                                                                                                                                                                                                            max-lines-per-function
+  175:8   warning  Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component “HomeInfoSection” and pass data as props  react/no-unstable-nested-components
+  25:3  warning  Arrow function has too many lines (167). Maximum allowed is 100  max-lines-per-function
+  406:45  warning  Arrow function has too many lines (123). Maximum allowed is 100  max-lines-per-function
+   28:61  warning  Arrow function has too many lines (300). Maximum allowed is 100                                                                                                                                                                                                                                                                              max-lines-per-function
+  243:8   warning  Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component “ModernHomeActions” and pass data as props  react/no-unstable-nested-components
+  14:59  warning  Arrow function has too many lines (227). Maximum allowed is 100  max-lines-per-function
+   29:76  warning  Arrow function has too many lines (190). Maximum allowed is 100  max-lines-per-function
+  199:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  200:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  201:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  17:66  warning  Arrow function has too many lines (153). Maximum allowed is 100  max-lines-per-function
+  46:7  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  30:7  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  70:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+  80:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+  88:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+  44:5  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  52:5  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  60:5  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  68:5  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  73:5  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  78:5  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  83:5  warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+   29:34  warning  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   69:7   warning  JSX props should not use arrow functions                                                                                                                            react/jsx-no-bind
+  101:42  warning  Arrow function has too many lines (252). Maximum allowed is 200                                                                                                     max-lines-per-function
+  167:5   warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  172:5   warning  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  334:15  warning  JSX props should not use arrow functions                                                                                                                            react/jsx-no-bind
+  343:13  warning  JSX props should not use arrow functions                                                                                                                            react/jsx-no-bind
+   30:41  warning  Arrow function has too many lines (271). Maximum allowed is 200                                            max-lines-per-function
+  223:13  warning  JSX props should not use arrow functions                                                                   react/jsx-no-bind
+  282:44  warning  Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator  @typescript-eslint/prefer-nullish-coalescing
+  283:17  warning  JSX props should not use arrow functions                                                                   react/jsx-no-bind
+   82:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+   95:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+  112:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+  129:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+  74:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+  79:13  warning  JSX props should not use arrow functions  react/jsx-no-bind
+✖ 54 problems (0 errors, 54 warnings)

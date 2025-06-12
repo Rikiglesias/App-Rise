@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Animated } from 'react-native';
+import type { Animated } from 'react-native';
 
 /**
  * Hook per gestire il cleanup automatico delle animazioni
@@ -33,7 +33,7 @@ export const useAnimationCleanup = () => {
 
       // Ferma tutte le animazioni registrate
       animationsRef.current.forEach(animation => {
-        animation.stop();
+        void animation.stop();
       });
 
       // Pulisce tutti i timeout registrati

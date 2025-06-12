@@ -108,9 +108,15 @@ export const useProjectsData = () => {
     return projects.filter(project => project.category === category);
   };
 
-  const getActiveProjects = () => getProjectsByStatus('active');
-  const getCompletedProjects = () => getProjectsByStatus('completed');
-  const getUpcomingProjects = () => getProjectsByStatus('upcoming');
+  const getActiveProjects = () => {
+    return getProjectsByStatus('active');
+  };
+  const getCompletedProjects = () => {
+    return getProjectsByStatus('completed');
+  };
+  const getUpcomingProjects = () => {
+    return getProjectsByStatus('upcoming');
+  };
 
   const getTotalBeneficiaries = () => {
     return projects.reduce(

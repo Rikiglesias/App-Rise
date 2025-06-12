@@ -1,23 +1,23 @@
-import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useState } from 'react';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
 // Components Premium - Versione Modernizzata
 import { HomeHeaderSection } from '../components/HomeHeaderSection';
 import ModernHomeActions from '../components/ModernHomeActions';
 import ModernHomeImpact from '../components/ModernHomeImpact';
-
 // Hooks & Utils
 import { Spacing } from '../constants/designTokens';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 import { useHomeScrollAnimation } from '../hooks/useHomeScrollAnimation';
 import { useTheme } from '../hooks/useTheme';
-import { RootStackParamList } from '../navigation/types';
+import type { RootStackParamList } from '../navigation/types';
+import { isSuccess, safeAsync } from '../utils/result';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 interface Props {
-  navigation: HomeScreenNavigationProp;
+  readonly navigation: HomeScreenNavigationProp;
 }
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
@@ -32,44 +32,71 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     // Simulate component mount completion
-    const timer = setTimeout(() => setIsLoaded(true), 100);
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
-  // Navigation handlers with haptic feedback
-  const handleShopPress = () => {
-    triggerHaptic('medium');
+  // Helper per haptic feedback sicuro (non-blocking)
+  const safeHapticFeedback = useCallback(
+    async (feedbackType: Parameters<typeof triggerHaptic>[0]) => {
+      const result = await safeAsync(() => triggerHaptic(feedbackType));
+
+      if (!isSuccess(result) && __DEV__) {
+        // eslint-disable-next-line no-console
+        console.warn('[HomeScreen] Haptic feedback failed:', result.error);
+      }
+    },
+    [triggerHaptic]
+  );
+
+  // Navigation handlers with safe haptic feedback
+  const handleShopPress = useCallback(async () => {
+    await safeHapticFeedback('medium');
     navigation.navigate('CharityShop', {
       title: 'Shop Solidale',
       subtitle: 'Acquista con impatto',
     });
-  };
+  }, [safeHapticFeedback, navigation]);
 
-  const handleGiftCardPress = () => {
-    triggerHaptic('medium');
+  const handleGiftCardPress = useCallback(async () => {
+    await safeHapticFeedback('medium');
     navigation.navigate('CharityGiftCard', {
       title: 'Gift Card',
       subtitle: 'Regala solidarietà',
     });
-  };
+  }, [safeHapticFeedback, navigation]);
 
-  const handleEventsPress = () => {
-    triggerHaptic('medium');
+  const handleEventsPress = useCallback(async () => {
+    await safeHapticFeedback('medium');
     navigation.navigate('Calendario', {
       title: 'Eventi',
       subtitle: 'Unisciti alle nostre iniziative',
     });
-  };
+  }, [safeHapticFeedback, navigation]);
 
-  const handleProjectsPress = () => {
-    triggerHaptic('medium');
+  const handleProjectsPress = useCallback(async () => {
+    await safeHapticFeedback('medium');
     navigation.navigate('Progetti');
-  };
+  }, [safeHapticFeedback, navigation]);
 
-  const handleImpactPress = () => {
-    triggerHaptic('medium');
+  const handleImpactPress = useCallback(async () => {
+    await safeHapticFeedback('medium');
     navigation.navigate('Impatto2024');
-  };
+  }, [safeHapticFeedback, navigation]);
+
+  const handleSocialPress = useCallback(async () => {
+    await safeHapticFeedback('medium');
+    navigation.navigate('Seguici');
+  }, [safeHapticFeedback, navigation]);
+
+  const handleChiSiamoPress = useCallback(async () => {
+    await safeHapticFeedback('medium');
+    navigation.navigate('ChiSiamo');
+  }, [safeHapticFeedback, navigation]);
 
   // Modern minimalist styles
   const styles = StyleSheet.create({
@@ -116,7 +143,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        accessible={true}
+        accessible
         accessibilityLabel="Schermata principale Rise Against Hunger Italia"
       >
         <View style={styles.content}>
@@ -134,6 +161,8 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 onGiftCardPress={handleGiftCardPress}
                 onEventsPress={handleEventsPress}
                 onProjectsPress={handleProjectsPress}
+                onSocialPress={handleSocialPress}
+                onChiSiamoPress={handleChiSiamoPress}
                 isLoaded={isLoaded}
               />
             </View>

@@ -1,22 +1,108 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { Colors, Spacing, Typography } from '../constants/designTokens';
+
 import AnimatedNumber from './AnimatedNumber';
 import { ProgressRing } from './ProgressRing';
 
 interface ProgressStatProps {
-  current: number;
-  target: number;
-  label: string;
-  sublabel?: string;
-  color: string;
-  size?: 'compact' | 'standard';
-  startAnimation?: boolean;
-  formatter?: (value: number) => string;
-  accessibilityLabel?: string;
+  readonly current: number;
+  readonly target: number;
+  readonly label: string;
+  readonly sublabel?: string;
+  readonly color: string;
+  readonly size?: 'compact' | 'standard';
+  readonly startAnimation?: boolean;
+  readonly formatter?: (value: number) => string;
+  readonly accessibilityLabel?: string;
 }
 
+// Sub-components for max-lines-per-function compliance
+interface ProgressRingSectionProps {
+  readonly progress: number;
+  readonly ringSize: number;
+  readonly color: string;
+  readonly startAnimation: boolean;
+  readonly progressPercentage: number;
+  readonly textSize: number;
+}
+
+const ProgressRingSection: React.FC<ProgressRingSectionProps> = React.memo(
+  ({
+    progress,
+    ringSize,
+    color,
+    startAnimation,
+    progressPercentage,
+    textSize,
+  }) => (
+    <ProgressRing
+      progress={progress}
+      size={ringSize}
+      color={color}
+      startAnimation={startAnimation}
+    >
+      <View style={styles.centerContent}>
+        <Text
+          style={[styles.percentage, { fontSize: textSize, color }]}
+          accessible
+          accessibilityLabel={`Progresso: ${progressPercentage} percento`}
+        >
+          {progressPercentage}%
+        </Text>
+      </View>
+    </ProgressRing>
+  )
+);
+
+ProgressRingSection.displayName = 'ProgressRingSection';
+
+interface ProgressTextSectionProps {
+  readonly current: number;
+  readonly target: number;
+  readonly label: string;
+  readonly sublabel: string | undefined;
+  readonly color: string;
+  readonly startAnimation: boolean;
+  readonly formatter: (value: number) => string;
+}
+
+const ProgressTextSection: React.FC<ProgressTextSectionProps> = React.memo(
+  ({ current, target, label, sublabel, color, startAnimation, formatter }) => (
+    <View style={styles.textSection}>
+      <View
+        style={styles.currentValueRow}
+        accessible
+        accessibilityLabel={`Valore attuale: ${formatter(
+          current
+        )} su ${formatter(target)}`}
+      >
+        <AnimatedNumber
+          value={current}
+          style={[styles.currentValue, { color }]}
+          startAnimation={startAnimation}
+        />
+        <Text style={styles.targetValue}>/ {formatter(target)}</Text>
+      </View>
+
+      <Text style={styles.label} accessible accessibilityRole="text">
+        {label}
+      </Text>
+
+      {sublabel !== undefined && sublabel !== null && sublabel !== '' && (
+        <Text style={styles.sublabel} accessible accessibilityRole="text">
+          {sublabel}
+        </Text>
+      )}
+    </View>
+  )
+);
+
+ProgressTextSection.displayName = 'ProgressTextSection';
+
+// Main component - Now under 60 lines
 export const ProgressStat: React.FC<ProgressStatProps> = ({
   current,
   target,
@@ -46,62 +132,33 @@ export const ProgressStat: React.FC<ProgressStatProps> = ({
   return (
     <View
       style={styles.container}
-      accessible={true}
+      accessible
       accessibilityRole="progressbar"
-      accessibilityLabel={accessibilityLabel || defaultAccessibilityLabel}
+      accessibilityLabel={accessibilityLabel ?? defaultAccessibilityLabel}
       accessibilityValue={{
         min: 0,
         max: target,
         now: current,
       }}
     >
-      <ProgressRing
+      <ProgressRingSection
         progress={progress}
-        size={ringSize}
+        ringSize={ringSize}
         color={color}
         startAnimation={startAnimation}
-      >
-        <View style={styles.centerContent}>
-          <Text
-            style={[styles.percentage, { fontSize: textSize, color }]}
-            accessible={true}
-            accessibilityLabel={`Progresso: ${progressPercentage} percento`}
-          >
-            {progressPercentage}%
-          </Text>
-        </View>
-      </ProgressRing>
+        progressPercentage={progressPercentage}
+        textSize={textSize}
+      />
 
-      <View style={styles.textSection}>
-        <View
-          style={styles.currentValueRow}
-          accessible={true}
-          accessibilityLabel={`Valore attuale: ${formatter(
-            current
-          )} su ${formatter(target)}`}
-        >
-          <AnimatedNumber
-            value={current}
-            style={[styles.currentValue, { color }]}
-            startAnimation={startAnimation}
-          />
-          <Text style={styles.targetValue}>/ {formatter(target)}</Text>
-        </View>
-
-        <Text style={styles.label} accessible={true} accessibilityRole="text">
-          {label}
-        </Text>
-
-        {sublabel && (
-          <Text
-            style={styles.sublabel}
-            accessible={true}
-            accessibilityRole="text"
-          >
-            {sublabel}
-          </Text>
-        )}
-      </View>
+      <ProgressTextSection
+        current={current}
+        target={target}
+        label={label}
+        sublabel={sublabel}
+        color={color}
+        startAnimation={startAnimation}
+        formatter={formatter}
+      />
     </View>
   );
 };

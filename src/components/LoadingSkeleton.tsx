@@ -1,14 +1,15 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+
 import { BorderRadius, Spacing } from '../constants/designTokens';
 import { useTheme } from '../hooks/useTheme';
 
 interface LoadingSkeletonProps {
-  width?: number | `${number}%`;
-  height?: number;
-  borderRadius?: number;
-  style?: object;
+  readonly width?: number | `${number}%`;
+  readonly height?: number;
+  readonly borderRadius?: number;
+  readonly style?: object;
 }
 
 const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
@@ -129,10 +130,12 @@ export const HeaderSkeleton: React.FC = () => {
 };
 
 export const ActionsSkeleton: React.FC = () => {
+  const { colors } = useTheme();
+
   const styles = StyleSheet.create({
     container: {
       padding: Spacing[4],
-      backgroundColor: 'white',
+      backgroundColor: colors.neutral[0],
       margin: Spacing[4],
       borderRadius: BorderRadius.xl,
     },

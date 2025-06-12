@@ -1,6 +1,7 @@
-import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+
 import Logo from '../components/Logo';
 import ModernCTA from '../components/ModernCTA';
 import {
@@ -10,7 +11,7 @@ import {
   Spacing,
   Typography,
 } from '../constants/designTokens';
-import { RootStackParamList } from '../navigation/types';
+import type { RootStackParamList } from '../navigation/types';
 
 type SimplePlaceholderScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -18,8 +19,8 @@ type SimplePlaceholderScreenNavigationProp = StackNavigationProp<
 >;
 
 interface Props {
-  navigation: SimplePlaceholderScreenNavigationProp;
-  route: {
+  readonly navigation: SimplePlaceholderScreenNavigationProp;
+  readonly route: {
     params: {
       title: string;
       subtitle?: string;
@@ -31,8 +32,13 @@ interface Props {
 const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
   const { title, subtitle } = route.params;
 
-  const handleGoBack = () => navigation.goBack();
-  const handleGoHome = () => navigation.navigate('Home');
+  const handleGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const handleGoHome = useCallback(() => {
+    navigation.navigate('Home');
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.container}>

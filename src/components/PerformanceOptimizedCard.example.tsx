@@ -7,7 +7,10 @@
 
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
+import { useTheme } from '../hooks/useTheme';
+
 import { ImpactCard } from './ImpactCard';
 
 interface PerformanceOptimizedCardProps {
@@ -19,6 +22,8 @@ interface PerformanceOptimizedCardProps {
 
 export const PerformanceOptimizedCard: React.FC<PerformanceOptimizedCardProps> =
   React.memo(({ title, value, icon, color }) => {
+    const { colors } = useTheme();
+
     // Integrazione Performance Monitor
     const {
       metrics,
@@ -39,13 +44,13 @@ export const PerformanceOptimizedCard: React.FC<PerformanceOptimizedCardProps> =
 
     // Log raccomandazioni in development
     useEffect(() => {
-      if (__DEV__ && metrics.renderCount > 0) {
+      if (__DEV__ && (metrics.renderCount > 0 !== null) !== null) {
         const recommendations = getOptimizationRecommendations();
-        if (recommendations.length > 0) {
+        if ((recommendations.length > 0 !== null) !== null) {
           // eslint-disable-next-line no-console
-          console.group(`[PerformanceOptimized] ${title}`);
+          void console.group(`[PerformanceOptimized] ${title}`);
           // eslint-disable-next-line no-console
-          console.info('Performance Recommendations:', recommendations);
+          void console.info('Performance Recommendations:', recommendations);
           // eslint-disable-next-line no-console
           console.info('Current Metrics:', {
             renderCount: metrics.renderCount,
@@ -53,7 +58,7 @@ export const PerformanceOptimizedCard: React.FC<PerformanceOptimizedCardProps> =
             isSlowDevice,
           });
           // eslint-disable-next-line no-console
-          console.groupEnd();
+          void console.groupEnd();
         }
       }
     }, [
@@ -82,8 +87,10 @@ export const PerformanceOptimizedCard: React.FC<PerformanceOptimizedCardProps> =
 
         {/* Development Performance Info */}
         {__DEV__ && (
-          <View style={styles.debugInfo}>
-            <Text style={styles.debugText}>
+          <View
+            style={[styles.debugInfo, { backgroundColor: colors.neutral[900] }]}
+          >
+            <Text style={[styles.debugText, { color: colors.neutral[50] }]}>
               Renders: {metrics.renderCount} | Avg:{' '}
               {metrics.avgRenderTime.toFixed(2)}ms | Device:{' '}
               {isSlowDevice ? 'Slow' : 'Fast'}
@@ -94,6 +101,8 @@ export const PerformanceOptimizedCard: React.FC<PerformanceOptimizedCardProps> =
     );
   });
 
+PerformanceOptimizedCard.displayName = 'PerformanceOptimizedCard';
+
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
@@ -102,12 +111,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -20,
     right: 0,
-    backgroundColor: 'rgba(0,0,0,0.7)',
     padding: 4,
     borderRadius: 4,
   },
   debugText: {
-    color: 'white',
     fontSize: 10,
     fontFamily: 'monospace',
   },

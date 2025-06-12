@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated } from 'react-native';
-import { Text, TextProps } from 'react-native-paper';
+import type { TextProps } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
 interface AnimatedNumberProps {
-  value: number;
-  style?: TextProps<never>['style'];
-  duration?: number;
-  startAnimation?: boolean;
-  _formatter?: (value: number) => string;
+  readonly value: number;
+  readonly style?: TextProps<never>['style'];
+  readonly duration?: number;
+  readonly startAnimation?: boolean;
+  readonly _formatter?: (value: number) => string;
 }
 
 const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
@@ -23,7 +24,7 @@ const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
   useEffect(() => {
     if (!startAnimation) {
       setRenderedValue('0'); // Reset to 0 if not visible
-      return;
+      return; // Early return, no cleanup needed
     }
 
     // Reset state for new value
@@ -31,13 +32,14 @@ const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
 
     // Parse the value to get the number, suffix, and decimal precision
     const numericTarget = parseFloat(value.toString().replace(',', '.'));
-    const suffix = value.toString().match(/[a-zA-Z+]+$/)?.[0] || '';
+    const suffixMatch = /[a-zA-Z+]+$/.exec(value.toString());
+    const suffix = suffixMatch?.[0] ?? '';
 
     // Safely handle cases with no decimal part
-    const decimalPart = (value.toString().split(',')[1] || '').split(
-      /[a-zA-Z+]/
-    )[0];
-    const decimalPlaces = decimalPart ? decimalPart.length : 0;
+    const valueStr = value.toString();
+    const parts = valueStr.split(',');
+    const decimalPart = parts[1]?.split(/[a-zA-Z+]/)[0] ?? '';
+    const decimalPlaces = decimalPart.length > 0 ? decimalPart.length : 0;
 
     const listener = animatedValue.addListener(v => {
       const formattedValue = v.value.toFixed(decimalPlaces).replace('.', ',');

@@ -1,6 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import Logo from '../components/Logo';
 import {
   BorderRadius,
@@ -12,7 +13,7 @@ import {
 import { useThemeStyles } from '../hooks/useTheme';
 
 interface HeroSectionProps {
-  accessibilityLabel?: string;
+  readonly accessibilityLabel?: string;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -41,7 +42,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       <View style={styles.content} accessibilityLabel={accessibilityLabel}>
         <View style={styles.logoContainer}>
-          <Logo size={80} showBackground={true} />
+          <Logo size={80} showBackground />
 
           {/* Solid badge without glassmorphism */}
           <View style={styles.logoBadge}>
@@ -84,7 +85,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <Text
                 style={styles.missionEmoji}
                 accessibilityLabel="Icona del mondo"
-                accessibilityElementsHidden={true}
+                accessibilityElementsHidden
               >
                 🌍
               </Text>

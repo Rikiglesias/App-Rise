@@ -1,9 +1,12 @@
 import React from 'react';
-import { ImageSourcePropType, StyleSheet } from 'react-native';
+import type { ImageSourcePropType } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { Spacing, Typography } from '../constants/designTokens';
 import { useTheme } from '../hooks/useTheme';
-import HeroStoriesCarousel from './HeroStoriesCarousel';
+
+import { HeroStoriesCarousel } from './HeroStoriesCarousel';
 import SectionContainer from './SectionContainer';
 
 interface Story {
@@ -17,8 +20,8 @@ interface Story {
 }
 
 interface HomeHeroStoriesSectionProps {
-  stories: Story[];
-  onStoryPress?: (story: Story) => void;
+  readonly stories: Story[];
+  readonly onStoryPress?: (story: Story) => void;
 }
 
 export const HomeHeroStoriesSection: React.FC<HomeHeroStoriesSectionProps> = ({
@@ -58,7 +61,7 @@ export const HomeHeroStoriesSection: React.FC<HomeHeroStoriesSectionProps> = ({
       </Text>
       <HeroStoriesCarousel
         stories={stories}
-        autoRotate={true}
+        autoRotate
         rotateInterval={6000}
         {...(onStoryPress && { onStoryPress })}
       />

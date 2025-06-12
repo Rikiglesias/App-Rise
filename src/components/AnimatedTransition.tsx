@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { Animated } from 'react-native';
 
 export type TransitionType =
   | 'fadeIn'
@@ -12,36 +13,37 @@ export type TransitionType =
   | 'elastic';
 
 interface AnimatedTransitionProps {
-  children: React.ReactNode;
-  type?: TransitionType;
-  duration?: number;
-  delay?: number;
-  style?: ViewStyle;
-  onComplete?: () => void;
-  trigger?: boolean; // Per ri-attivare l'animazione
+  readonly children: React.ReactNode;
+  readonly type?: TransitionType;
+  readonly duration?: number;
+  readonly delay?: number;
+  readonly style?: ViewStyle;
+  readonly onComplete?: () => void;
+  readonly trigger?: boolean; // Per ri-attivare l'animazione
 }
 
-export const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
-  children,
-  type = 'fadeIn',
-  duration = 600,
-  delay = 0,
-  style,
-  onComplete,
-  trigger = true,
-}) => {
+// Hook for animation logic - Separated to reduce function length
+const useAnimationValue = (
+  type: TransitionType,
+  duration: number,
+  delay: number,
+  trigger: boolean,
+  onComplete?: () => void
+) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (trigger) {
-      const startAnimation = () => {
-        animatedValue.setValue(0);
+    if (trigger !== null) {
+      animatedValue.setValue(0);
 
+      const startAnimation = () => {
         const animation = getAnimation(type, animatedValue, duration);
 
-        animation.start(() => {
-          onComplete?.();
-        });
+        if (animation) {
+          animation.start(() => {
+            onComplete?.();
+          });
+        }
       };
 
       if (delay > 0) {
@@ -52,112 +54,148 @@ export const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
     }
   }, [trigger, type, duration, delay, animatedValue, onComplete]);
 
-  const getAnimation = (
-    animationType: TransitionType,
-    value: Animated.Value,
-    animationDuration: number
-  ) => {
-    switch (animationType) {
-      case 'bounce':
-        return Animated.spring(value, {
-          toValue: 1,
-          tension: 100,
-          friction: 8,
-          useNativeDriver: true,
-        });
-      case 'elastic':
-        return Animated.spring(value, {
-          toValue: 1,
-          tension: 120,
-          friction: 6,
-          useNativeDriver: true,
-        });
-      default:
-        return Animated.timing(value, {
-          toValue: 1,
-          duration: animationDuration,
-          useNativeDriver: true,
-        });
-    }
-  };
+  return animatedValue;
+};
 
-  const getAnimatedStyle = () => {
-    switch (type) {
-      case 'fadeIn':
-        return {
-          opacity: animatedValue,
-        };
-      case 'slideUp':
-        return {
-          opacity: animatedValue,
-          transform: [
-            {
-              translateY: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [50, 0],
-              }),
-            },
-          ],
-        };
-      case 'slideDown':
-        return {
-          opacity: animatedValue,
-          transform: [
-            {
-              translateY: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [-50, 0],
-              }),
-            },
-          ],
-        };
-      case 'slideLeft':
-        return {
-          opacity: animatedValue,
-          transform: [
-            {
-              translateX: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [50, 0],
-              }),
-            },
-          ],
-        };
-      case 'slideRight':
-        return {
-          opacity: animatedValue,
-          transform: [
-            {
-              translateX: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [-50, 0],
-              }),
-            },
-          ],
-        };
-      case 'scale':
-      case 'bounce':
-      case 'elastic':
-        return {
-          opacity: animatedValue,
-          transform: [
-            {
-              scale: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0.3, 1],
-              }),
-            },
-          ],
-        };
-      default:
-        return {
-          opacity: animatedValue,
-        };
-    }
-  };
+// Animation factory - Separated to reduce function length
+const getAnimation = (
+  animationType: TransitionType,
+  value: Animated.Value,
+  animationDuration: number
+) => {
+  switch (animationType) {
+    case 'bounce':
+      return Animated.spring(value, {
+        toValue: 1,
+        tension: 100,
+        friction: 8,
+        useNativeDriver: true,
+      });
+    case 'elastic':
+      return Animated.spring(value, {
+        toValue: 1,
+        tension: 120,
+        friction: 6,
+        useNativeDriver: true,
+      });
+    default:
+      return Animated.timing(value, {
+        toValue: 1,
+        duration: animationDuration,
+        useNativeDriver: true,
+      });
+  }
+};
+
+// Individual animation style generators - Extracted to reduce function length
+const getFadeInStyle = (animatedValue: Animated.Value) => ({
+  opacity: animatedValue,
+});
+
+const getSlideUpStyle = (animatedValue: Animated.Value) => ({
+  opacity: animatedValue,
+  transform: [
+    {
+      translateY: animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [50, 0],
+      }),
+    },
+  ],
+});
+
+const getSlideDownStyle = (animatedValue: Animated.Value) => ({
+  opacity: animatedValue,
+  transform: [
+    {
+      translateY: animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-50, 0],
+      }),
+    },
+  ],
+});
+
+const getSlideLeftStyle = (animatedValue: Animated.Value) => ({
+  opacity: animatedValue,
+  transform: [
+    {
+      translateX: animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [50, 0],
+      }),
+    },
+  ],
+});
+
+const getSlideRightStyle = (animatedValue: Animated.Value) => ({
+  opacity: animatedValue,
+  transform: [
+    {
+      translateX: animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-50, 0],
+      }),
+    },
+  ],
+});
+
+const getScaleStyle = (animatedValue: Animated.Value) => ({
+  opacity: animatedValue,
+  transform: [
+    {
+      scale: animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0.3, 1],
+      }),
+    },
+  ],
+});
+
+// Style generator - Now simplified with extracted functions
+const getAnimatedStyle = (
+  type: TransitionType,
+  animatedValue: Animated.Value
+) => {
+  switch (type) {
+    case 'fadeIn':
+      return getFadeInStyle(animatedValue);
+    case 'slideUp':
+      return getSlideUpStyle(animatedValue);
+    case 'slideDown':
+      return getSlideDownStyle(animatedValue);
+    case 'slideLeft':
+      return getSlideLeftStyle(animatedValue);
+    case 'slideRight':
+      return getSlideRightStyle(animatedValue);
+    case 'scale':
+    case 'bounce':
+    case 'elastic':
+      return getScaleStyle(animatedValue);
+    default:
+      return getFadeInStyle(animatedValue);
+  }
+};
+
+export const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
+  children,
+  type = 'fadeIn',
+  duration = 600,
+  delay = 0,
+  style,
+  onComplete,
+  trigger = true,
+}) => {
+  const animatedValue = useAnimationValue(
+    type,
+    duration,
+    delay,
+    trigger,
+    onComplete
+  );
 
   return (
-    <Animated.View style={[getAnimatedStyle(), style]}>
+    <Animated.View style={[getAnimatedStyle(type, animatedValue), style]}>
       {children}
     </Animated.View>
   );
@@ -165,11 +203,11 @@ export const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
 
 // Componente per liste animate
 interface AnimatedListProps {
-  children: React.ReactNode[];
-  itemDelay?: number;
-  type?: TransitionType;
-  duration?: number;
-  startDelay?: number;
+  readonly children: React.ReactNode[];
+  readonly itemDelay?: number;
+  readonly type?: TransitionType;
+  readonly duration?: number;
+  readonly startDelay?: number;
 }
 
 export const AnimatedList: React.FC<AnimatedListProps> = ({
@@ -181,16 +219,21 @@ export const AnimatedList: React.FC<AnimatedListProps> = ({
 }) => {
   return (
     <>
-      {React.Children.map(children, (child, index) => (
-        <AnimatedTransition
-          key={index}
-          type={type}
-          duration={duration}
-          delay={startDelay + index * itemDelay}
-        >
-          {child}
-        </AnimatedTransition>
-      ))}
+      {React.Children.map(children, (child, index) => {
+        const uniqueKey = `animated-${Date.now()}-${Math.random()
+          .toString(36)
+          .substr(2, 9)}-${index}`;
+        return (
+          <AnimatedTransition
+            key={uniqueKey}
+            type={type}
+            duration={duration}
+            delay={startDelay + index * itemDelay}
+          >
+            {child}
+          </AnimatedTransition>
+        );
+      })}
     </>
   );
 };
@@ -201,8 +244,8 @@ export const useAnimatedValue = (initialValue = 0) => {
 
   const animateTo = (
     toValue: number,
-    duration = 300,
-    callback?: () => void
+    callback?: () => void,
+    duration = 300
   ) => {
     Animated.timing(animatedValue, {
       toValue,
@@ -213,8 +256,8 @@ export const useAnimatedValue = (initialValue = 0) => {
 
   const springTo = (
     toValue: number,
-    config = { tension: 100, friction: 8 },
-    callback?: () => void
+    callback?: () => void,
+    config = { tension: 100, friction: 8 }
   ) => {
     Animated.spring(animatedValue, {
       toValue,
@@ -223,7 +266,7 @@ export const useAnimatedValue = (initialValue = 0) => {
     }).start(callback);
   };
 
-  const pulse = (scale = 1.1, duration = 150, callback?: () => void) => {
+  const pulse = (callback?: () => void, scale = 1.1, duration = 150) => {
     Animated.sequence([
       Animated.timing(animatedValue, {
         toValue: scale,

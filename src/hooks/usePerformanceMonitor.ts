@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { PerformanceConfig } from '../constants/performance';
 
 interface PerformanceMetrics {
@@ -56,7 +57,7 @@ export const usePerformanceMonitor = (
     frameRequestId.current = requestAnimationFrame(checkFrame);
 
     return () => {
-      if (frameRequestId.current) {
+      if (frameRequestId.current !== undefined) {
         cancelAnimationFrame(frameRequestId.current);
       }
       setMetrics(prev => ({ ...prev, frameDrops }));
@@ -65,44 +66,46 @@ export const usePerformanceMonitor = (
 
   // Hook per misurare tempo di render
   const measureRenderTime = useCallback(() => {
-    if (!enableMetrics) return;
+    if (!enableMetrics) return undefined;
 
     renderStartTime.current = performance.now();
 
     return () => {
-      if (renderStartTime.current) {
-        const renderTime = performance.now() - renderStartTime.current;
-        renderTimes.current.push(renderTime);
+      if (renderStartTime.current === undefined) {
+        return;
+      }
 
-        // Mantieni solo ultimi 10 render times
-        if (renderTimes.current.length > 10) {
-          renderTimes.current.shift();
-        }
+      const renderTime = performance.now() - renderStartTime.current;
+      renderTimes.current.push(renderTime);
 
-        const avgRenderTime =
-          renderTimes.current.reduce((sum, time) => sum + time, 0) /
-          renderTimes.current.length;
+      // Mantieni solo ultimi 10 render times
+      if (renderTimes.current.length > 10) {
+        renderTimes.current.shift();
+      }
 
-        setMetrics(prev => ({
-          ...prev,
-          renderCount: prev.renderCount + 1,
-          avgRenderTime,
-        }));
+      const avgRenderTime =
+        renderTimes.current.reduce((sum, time) => sum + time, 0) /
+        renderTimes.current.length;
 
-        // Warning per render lenti
-        if (
-          renderTime > warningThreshold &&
-          PerformanceConfig.debug.enableSlowOperationWarnings
-        ) {
-          if (__DEV__) {
-            // Dev-only performance logging
-            // eslint-disable-next-line no-console
-            console.warn(
-              `[Performance Warning] Slow render in ${componentName}: ${renderTime.toFixed(
-                2
-              )}ms (threshold: ${warningThreshold}ms)`
-            );
-          }
+      setMetrics(prev => ({
+        ...prev,
+        renderCount: prev.renderCount + 1,
+        avgRenderTime,
+      }));
+
+      // Warning per render lenti
+      if (
+        renderTime > warningThreshold &&
+        PerformanceConfig.debug.enableSlowOperationWarnings
+      ) {
+        if (__DEV__) {
+          // Dev-only performance logging
+          // eslint-disable-next-line no-console
+          console.warn(
+            `[Performance Warning] Slow render in ${componentName}: ${renderTime.toFixed(
+              2
+            )}ms (threshold: ${warningThreshold}ms)`
+          );
         }
       }
     };
@@ -145,7 +148,7 @@ export const usePerformanceMonitor = (
 
   // Device performance detection
   useEffect(() => {
-    const detectSlowDevice = async () => {
+    const detectSlowDevice = () => {
       const startTime = performance.now();
 
       // Simulazione operazione computazionale

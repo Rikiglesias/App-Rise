@@ -1,0 +1,11 @@
+  131:17  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  138:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  96:11  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  199:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  200:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  201:9   warning  JSX props should not use arrow functions                         react/jsx-no-bind
+   70:7   warning  JSX props should not use arrow functions                                                                                                                            react/jsx-no-bind
+  335:15  warning  JSX props should not use arrow functions                                                                                                                            react/jsx-no-bind
+  344:13  warning  JSX props should not use arrow functions                                                                                                                            react/jsx-no-bind
+  223:13  warning  JSX props should not use arrow functions                         react/jsx-no-bind
+  283:17  warning  JSX props should not use arrow functions                         react/jsx-no-bind

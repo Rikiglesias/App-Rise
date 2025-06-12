@@ -6,7 +6,7 @@
 
 - [ ] Nome app corretto in `app.json`
 - [ ] Bundle identifier iOS configurato
-- [ ] Package name Android configurato  
+- [ ] Package name Android configurato
 - [ ] Versione e build number aggiornati
 - [ ] Descrizione app completata
 - [ ] Permessi necessari dichiarati

@@ -17,6 +17,69 @@ export interface HapticOptions {
   interval?: number;
 }
 
+// Utilità per eseguire haptic basato sul tipo
+const executeHapticByType = async (type: HapticType): Promise<void> => {
+  try {
+    switch (type) {
+      case 'light':
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        break;
+      case 'medium':
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        break;
+      case 'heavy':
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        break;
+      case 'success':
+        await Haptics.notificationAsync(
+          Haptics.NotificationFeedbackType.Success
+        );
+        break;
+      case 'warning':
+        await Haptics.notificationAsync(
+          Haptics.NotificationFeedbackType.Warning
+        );
+        break;
+      case 'error':
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        break;
+      case 'selection':
+        await Haptics.selectionAsync();
+        break;
+      case 'impact':
+      default:
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        break;
+    }
+  } catch {
+    // Fail silently on unsupported devices
+  }
+};
+
+// Gestione ripetizioni e delay
+const executeWithOptions = async (
+  type: HapticType,
+  options: HapticOptions
+): Promise<void> => {
+  const { delay = 0, repeat = 1, interval = 100 } = options;
+
+  const execute = () => executeHapticByType(type);
+
+  if (delay > 0) {
+    setTimeout(async () => {
+      await execute();
+      for (let i = 1; i < repeat; i++) {
+        setTimeout(() => void execute(), interval * i);
+      }
+    }, delay);
+  } else {
+    await execute();
+    for (let i = 1; i < repeat; i++) {
+      setTimeout(() => void execute(), interval * i);
+    }
+  }
+};
+
 export const useHapticFeedback = () => {
   const triggerHaptic = async (
     type: HapticType,
@@ -25,101 +88,25 @@ export const useHapticFeedback = () => {
     if (Platform.OS !== 'ios' && Platform.OS !== 'android') {
       return;
     }
-
-    const { delay = 0, repeat = 1, interval = 100 } = options;
-
-    const executeHaptic = async () => {
-      try {
-        switch (type) {
-          case 'light':
-            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            break;
-          case 'medium':
-            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            break;
-          case 'heavy':
-            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-            break;
-          case 'success':
-            await Haptics.notificationAsync(
-              Haptics.NotificationFeedbackType.Success
-            );
-            break;
-          case 'warning':
-            await Haptics.notificationAsync(
-              Haptics.NotificationFeedbackType.Warning
-            );
-            break;
-          case 'error':
-            await Haptics.notificationAsync(
-              Haptics.NotificationFeedbackType.Error
-            );
-            break;
-          case 'selection':
-            await Haptics.selectionAsync();
-            break;
-          case 'impact':
-          default:
-            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            break;
-        }
-      } catch {
-        // Fail silently on unsupported devices
-        // Haptic feedback not supported on this device
-      }
-    };
-
-    // Delay iniziale
-    if (delay > 0) {
-      setTimeout(async () => {
-        await executeHaptic();
-
-        // Ripetizioni aggiuntive
-        for (let i = 1; i < repeat; i++) {
-          setTimeout(executeHaptic, interval * i);
-        }
-      }, delay);
-    } else {
-      await executeHaptic();
-
-      // Ripetizioni aggiuntive
-      for (let i = 1; i < repeat; i++) {
-        setTimeout(executeHaptic, interval * i);
-      }
-    }
+    await executeWithOptions(type, options);
   };
-
-  // Shortcuts per i tipi più comuni
-  const lightTap = () => triggerHaptic('light');
-  const mediumTap = () => triggerHaptic('medium');
-  const heavyTap = () => triggerHaptic('heavy');
-  const successFeedback = () => triggerHaptic('success');
-  const errorFeedback = () => triggerHaptic('error');
-  const selectionFeedback = () => triggerHaptic('selection');
-
-  // Patterns complessi
-  const buttonPress = () => triggerHaptic('medium');
-  const cardTap = () => triggerHaptic('light');
-  const swipeGesture = () => triggerHaptic('selection');
-  const longPress = () => triggerHaptic('heavy', { delay: 50 });
-  const doubleVibration = () =>
-    triggerHaptic('medium', { repeat: 2, interval: 100 });
-  const pulsePattern = () =>
-    triggerHaptic('light', { repeat: 3, interval: 150 });
 
   return {
     triggerHaptic,
-    lightTap,
-    mediumTap,
-    heavyTap,
-    successFeedback,
-    errorFeedback,
-    selectionFeedback,
-    buttonPress,
-    cardTap,
-    swipeGesture,
-    longPress,
-    doubleVibration,
-    pulsePattern,
+    // Shortcuts
+    lightTap: () => triggerHaptic('light'),
+    mediumTap: () => triggerHaptic('medium'),
+    heavyTap: () => triggerHaptic('heavy'),
+    successFeedback: () => triggerHaptic('success'),
+    errorFeedback: () => triggerHaptic('error'),
+    selectionFeedback: () => triggerHaptic('selection'),
+    // Patterns
+    buttonPress: () => triggerHaptic('medium'),
+    cardTap: () => triggerHaptic('light'),
+    swipeGesture: () => triggerHaptic('selection'),
+    longPress: () => triggerHaptic('heavy', { delay: 50 }),
+    doubleVibration: () =>
+      triggerHaptic('medium', { repeat: 2, interval: 100 }),
+    pulsePattern: () => triggerHaptic('light', { repeat: 3, interval: 150 }),
   };
 };

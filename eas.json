@@ -14,9 +14,6 @@
       }
     },
     "production": {
-      "ios": {
-        "bundleIdentifier": "org.riseagainsthunger.italia"
-      },
       "android": {
         "buildType": "apk"
       }
@@ -24,7 +21,7 @@
     "production-store": {
       "extends": "production",
       "android": {
-        "buildType": "aab"
+        "buildType": "app-bundle"
       }
     }
   },
@@ -41,4 +38,4 @@
       }
     }
   }
-} 
+}

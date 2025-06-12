@@ -269,3 +269,80 @@ git push origin main --tags
 ✅ **Costi**: $124/anno (risparmio significativo)
 
 🚀 **Perfetto per un'associazione no-profit!**
+
+## Quality Assurance Pragmatico-Professionale
+
+### 🎯 **FILOSOFIA** - Qualità senza paralisi, pragmatismo senza compromessi
+
+### **PRE-MODIFICA**
+
+- Sempre `npm run pre-modifiche` prima di sviluppare
+- **Verifica**: solo errori bloccanti devono essere zero
+
+### **POST-MODIFICA**
+
+- `npm run post-modifiche` dopo ogni implementazione significativa
+- **Verifica**: nessun nuovo errore introdotto
+
+### **COMMIT POLICY AGGIORNATA**
+
+- `npm run conta-problemi` DEVE restituire **ZERO ERRORI ESLint**
+- **Warnings sono accettabili** (max 1000 warnings)
+- **Zero errori TypeScript bloccanti**
+
+### **ZERO ERRORI CRITICI**
+
+- Mai procedere con errori ESLint **ERROR level**
+- Mai procedere con errori TypeScript che impediscono build
+- **Warnings sono informativi**, non bloccanti
+
+### **CONTROLLO POST-FEATURE**
+
+- `npm run analisi-completa` per panoramica completa dettagliata
+- Focus su trend: errori in aumento/diminuzione
+
+### **SISTEMA INTELLIGENTE**
+
+- Controlli che si fermano (exit code 1) solo per **errori critici**
+- **Warnings non bloccano** il workflow
+- Distinzione netta: ERROR vs WARNING
+
+### **CORREZIONE MANUALE CONTROLLATA**
+
+- `npm run helper-manuali` per guida correzioni manuali
+- `npm run fix-manuale` per promemoria (nessun automatismo)
+- Priorità: controllo totale > velocità
+
+### **WORKFLOW MANUALE CONTROLLATO**
+
+```bash
+npm run pre-modifiche (SOLO verifica)
+→ Correggi problemi MANUALMENTE nell'editor
+→ npm run post-modifiche (SOLO verifica)
+→ Commit se ZERO ERRORI (warnings OK)
+```
+
+### 📊 **SOGLIE ACCETTABILI**
+
+- ✅ **0 errori ESLint** (bloccanti)
+- ✅ **0 errori TypeScript** (bloccanti)
+- ⚠️ **< 1000 warnings ESLint** (informativi)
+- 📈 **Trend warnings in miglioramento** nel tempo
+
+### 🚨 **STATI BLOCCANTI** (exit code 1)
+
+- Errori ESLint di livello ERROR
+- Errori TypeScript che impediscono build
+- Build fallito
+- Test falliti
+
+### ✅ **STATI NON BLOCCANTI**
+
+- Warnings ESLint (qualsiasi numero ragionevole)
+- Suggestions di miglioramento
+- Style inconsistencies minori
+- Performance hints
+
+---
+
+Aggiornato per approccio pragmatico-professionale

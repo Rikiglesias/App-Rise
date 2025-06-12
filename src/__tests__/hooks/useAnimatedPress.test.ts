@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react-native';
+
 import { useAnimatedPress } from '../../hooks/useAnimatedPress';
 
 describe('useAnimatedPress', () => {
