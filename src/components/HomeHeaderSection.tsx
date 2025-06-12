@@ -1,95 +1,67 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, StyleSheet, View } from 'react-native';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Animated, Dimensions, Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
+
 import { BorderRadius, Spacing, Typography } from '../constants/designTokens';
 import { useTheme } from '../hooks/useTheme';
 
 const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
 
-// 🚀 CONFIGURAZIONE AVANZATA E INTELLIGENTE
+// Configuration inline
 const ADVANCED_CONFIG = {
-  // Sezione Header - Design moderno con gradient
   headerSection: {
-    paddingVertical: Spacing[6], // Ridotto per più spazio immagine
-    paddingHorizontal: Spacing[6],
-    minHeight: 80, // Ridotto
-  },
-
-  // Sezione Immagine - Ottimizzata per ogni device
-  imageSection: {
-    height:
-      windowWidth < 375
-        ? windowHeight * 0.45 // Ridotto per più spazio al testo
-        : windowWidth < 414
-          ? windowHeight * 0.48
-          : windowWidth < 768
-            ? windowHeight * 0.52
-            : windowHeight * 0.45,
-    minHeight: 320, // Ridotto ma mantenuto impact
-    maxHeight: 500, // Controllato per UX
-  },
-
-  // Sezione Call-to-Action - Nuova sezione
-  ctaSection: {
     paddingVertical: Spacing[6],
-    paddingHorizontal: Spacing[6],
-    minHeight: 80,
+    paddingHorizontal: Spacing[4],
+    minHeight: 120,
   },
-
-  // Typography Avanzata - Responsive e moderna
+  imageSection: {
+    height: windowHeight * 0.5,
+  },
   typography: {
-    title:
-      windowWidth < 375
-        ? 24 // Ridotto
-        : windowWidth < 414
-          ? 28
-          : windowWidth < 768
-            ? 32
-            : 36,
-    lineHeight:
-      windowWidth < 375
-        ? 28 // Ridotto
-        : windowWidth < 414
-          ? 32
-          : windowWidth < 768
-            ? 36
-            : 40,
+    title: windowWidth < 375 ? 28 : 32,
+    lineHeight: windowWidth < 375 ? 32 : 36,
   },
-
-  // Animazioni Premium - Fluide e performanti
   animations: {
-    staggerDelay: 150,
-    fadeInDuration: 900,
-    parallaxFactor: 0.5,
+    staggerDelay: 200,
+    fadeInDuration: 1200,
   },
-
-  // Scroll Effects - Sofisticati ma non eccessivi
   scrollEffects: {
     fadeRange: [0, 150],
     translateRange: [0, 80],
     parallaxRange: [0, 350],
-    scaleRange: [1, 1.08],
+    scaleRange: [1, 1.05],
   },
 };
 
-interface HomeHeaderSectionProps {
-  scrollY: Animated.Value;
-  onJoinPress?: () => void;
-}
-
-export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
-  scrollY,
-}) => {
-  const { colors } = useTheme();
-
-  // Animazioni Premium con stagger
+// Hook for animations
+const useHomeHeaderAnimations = (): {
+  titleAnim: Animated.Value;
+  imageAnim: Animated.Value;
+  containerAnim: Animated.Value;
+  pulseAnim: Animated.Value;
+} => {
   const titleAnim = useRef(new Animated.Value(0)).current;
   const imageAnim = useRef(new Animated.Value(0)).current;
   const containerAnim = useRef(new Animated.Value(0)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Sequenza animazione orchestrata
+    // Pulse animation for hero banner
+    const pulseAnimation = Animated.sequence([
+      Animated.timing(pulseAnim, {
+        toValue: 1.02,
+        duration: 2000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(pulseAnim, {
+        toValue: 1,
+        duration: 2000,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    // Main entrance animation
     Animated.sequence([
       Animated.timing(containerAnim, {
         toValue: 1,
@@ -100,7 +72,7 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
         Animated.spring(titleAnim, {
           toValue: 1,
           useNativeDriver: true,
-          tension: 100,
+          tension: 120,
           friction: 8,
         }),
         Animated.timing(imageAnim, {
@@ -110,10 +82,24 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
         }),
       ]),
     ]).start();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  // 🔥 EFFETTI SCROLL AVANZATI
+    // Start continuous pulse animation
+    Animated.loop(pulseAnimation).start();
+  }, [containerAnim, titleAnim, imageAnim, pulseAnim]);
+
+  return { titleAnim, imageAnim, containerAnim, pulseAnim };
+};
+
+// Hook for scroll interpolations
+const useScrollInterpolations = (
+  scrollY: Animated.Value
+): {
+  titleOpacity: Animated.AnimatedInterpolation<number>;
+  titleTransform: Animated.AnimatedInterpolation<number>;
+  imageParallax: Animated.AnimatedInterpolation<number>;
+  imageScale: Animated.AnimatedInterpolation<number>;
+  gradientOpacity: Animated.AnimatedInterpolation<number>;
+} => {
   const titleOpacity = scrollY.interpolate({
     inputRange: ADVANCED_CONFIG.scrollEffects.fadeRange,
     outputRange: [1, 0],
@@ -138,20 +124,28 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
     extrapolate: 'clamp',
   });
 
-  // Gradient overlay dinamico basato su scroll
   const gradientOpacity = scrollY.interpolate({
     inputRange: [0, 200],
     outputRange: [0.1, 0.3],
     extrapolate: 'clamp',
   });
 
-  const styles = StyleSheet.create({
+  return {
+    titleOpacity,
+    titleTransform,
+    imageParallax,
+    imageScale,
+    gradientOpacity,
+  };
+};
+
+// Style factories split for max-lines-per-function compliance
+const createContainerStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
+  StyleSheet.create({
     container: {
       backgroundColor: colors.neutral[50],
       overflow: 'hidden',
     },
-
-    // 🎨 HEADER SECTION MODERNA
     headerSection: {
       paddingVertical: ADVANCED_CONFIG.headerSection.paddingVertical,
       paddingHorizontal: ADVANCED_CONFIG.headerSection.paddingHorizontal,
@@ -160,8 +154,6 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
       justifyContent: 'center',
       position: 'relative',
     },
-
-    // Gradient Background per profondità
     gradientBackground: {
       position: 'absolute',
       top: 0,
@@ -170,29 +162,40 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
       bottom: 0,
       opacity: 0.05,
     },
-
-    // Container testo con animazione orchestrata
     textContainer: {
       alignItems: 'center',
       zIndex: 2,
     },
+  });
 
-    // 🔥 TITOLO PREMIUM
+const createTextStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
+  StyleSheet.create({
     title: {
-      color: colors.primary[800],
-      fontSize: ADVANCED_CONFIG.typography.title,
-      fontWeight: Typography.weights.black,
+      color: colors.neutral[900],
+      fontSize: windowWidth < 375 ? 32 : 36,
+      fontWeight: Typography.weights.bold,
       fontFamily: Typography.families.heading,
       textAlign: 'center',
-      lineHeight: ADVANCED_CONFIG.typography.lineHeight,
-      letterSpacing: -1,
-      // Micro shadow per depth
-      textShadowColor: colors.primary[200],
-      textShadowOffset: { width: 0, height: 1 },
-      textShadowRadius: 2,
+      lineHeight: windowWidth < 375 ? 38 : 42,
+      letterSpacing: -0.8,
+      marginBottom: Spacing[4],
     },
+    subtitle: {
+      color: colors.neutral[600],
+      fontSize: Typography.sizes.lg,
+      fontWeight: Typography.weights.regular,
+      textAlign: 'center',
+      lineHeight: Typography.lineHeights.relaxed * Typography.sizes.lg,
+      letterSpacing: 0.2,
+      paddingHorizontal: Spacing[6],
+    },
+  });
 
-    // 🖼️ SEZIONE IMMAGINE AVANZATA
+const createImageStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
+  /* eslint-disable react-native/no-unused-styles */
+  StyleSheet.create({
+    // Tutti questi stili sono utilizzati nel componente HeaderImageSection
+    // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
     imageSection: {
       height: ADVANCED_CONFIG.imageSection.height,
       width: '100%',
@@ -200,62 +203,260 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      marginVertical: Spacing[4], // Spazio tra titolo e CTA
+      marginVertical: Spacing[4],
     },
-
-    // Container immagine con trasformazioni
     imageContainer: {
       width: '100%',
       height: '100%',
-      borderRadius: BorderRadius.xl,
+      borderRadius: BorderRadius.lg,
       overflow: 'hidden',
-      shadowColor: colors.primary[300],
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.15,
-      shadowRadius: 20,
-      elevation: 8,
+      shadowColor: colors.neutral[400],
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.08,
+      shadowRadius: 12,
+      elevation: 4,
     },
-
-    // Immagine ottimizzata
     image: {
       width: '100%',
       height: '100%',
       resizeMode: 'cover',
     },
-
-    // Overlay gradiente dinamico
     imageGradientOverlay: {
       position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      borderRadius: BorderRadius.xl,
     },
-
-    // Badge decorativo moderno
-    decorativeBadge: {
-      position: 'absolute',
-      top: Spacing[4],
-      right: Spacing[4],
-      backgroundColor: colors.primary[500],
-      paddingHorizontal: Spacing[3],
-      paddingVertical: Spacing[1],
-      borderRadius: BorderRadius.full,
-      shadowColor: colors.primary[500],
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 8,
-      elevation: 6,
-    },
-
-    badgeText: {
-      color: colors.neutral[0],
-      fontSize: Typography.sizes.xs,
-      fontWeight: Typography.weights.bold,
-      letterSpacing: 0.5,
+    // Stile estratto per evitare inline style warning
+    flexOne: {
+      flex: 1,
     },
   });
+/* eslint-enable react-native/no-unused-styles */
+
+const createMissionStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
+  /* eslint-disable react-native/no-unused-styles */
+  StyleSheet.create({
+    // Tutti questi stili sono utilizzati nel componente HeaderMissionSection
+    // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
+    missionSection: {
+      paddingHorizontal: Spacing[4],
+      paddingVertical: Spacing[6],
+    },
+    missionCard: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.lg,
+      padding: Spacing[4],
+      shadowColor: colors.neutral[400],
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
+      elevation: 3,
+      borderWidth: 1,
+      borderColor: colors.neutral[100],
+    },
+    missionTitle: {
+      fontSize: Typography.sizes.xl,
+      fontWeight: Typography.weights.bold,
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginBottom: Spacing[3],
+    },
+    missionDescription: {
+      fontSize: Typography.sizes.base,
+      fontWeight: Typography.weights.regular,
+      color: colors.neutral[700],
+      textAlign: 'center',
+      lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+      marginBottom: Spacing[4],
+    },
+    missionStats: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+    },
+    statItem: {
+      alignItems: 'center',
+    },
+    statNumber: {
+      fontSize: Typography.sizes['2xl'],
+      fontWeight: Typography.weights.bold,
+      color: colors.primary[600],
+      marginBottom: Spacing[1],
+    },
+    statLabel: {
+      fontSize: Typography.sizes.sm,
+      fontWeight: Typography.weights.medium,
+      color: colors.neutral[600],
+      textAlign: 'center',
+    },
+  });
+/* eslint-enable react-native/no-unused-styles */
+
+// Hook for styles - now under 60 lines
+const useHomeHeaderStyles = () => {
+  const { colors } = useTheme();
+
+  return useMemo(
+    () => ({
+      ...createContainerStyles(colors),
+      ...createTextStyles(colors),
+      ...createImageStyles(colors),
+      ...createMissionStyles(colors),
+    }),
+    [colors]
+  );
+};
+
+interface HomeHeaderSectionProps {
+  readonly scrollY: Animated.Value;
+  readonly onJoinPress?: () => void;
+}
+
+// Sub-components for max-lines-per-function compliance
+interface HeaderTextSectionProps {
+  readonly colors: ReturnType<typeof useTheme>['colors'];
+  readonly titleAnim: Animated.Value;
+  readonly titleOpacity: Animated.AnimatedInterpolation<number>;
+  readonly titleTransform: Animated.AnimatedInterpolation<number>;
+  readonly styles: ReturnType<typeof useHomeHeaderStyles>;
+}
+
+const HeaderTextSection: React.FC<HeaderTextSectionProps> = React.memo(
+  ({ colors, titleAnim, titleOpacity, titleTransform, styles }) => (
+    <View style={styles.headerSection}>
+      <LinearGradient
+        colors={[colors.primary[100], colors.primary[50], colors.neutral[50]]}
+        style={styles.gradientBackground}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      />
+
+      <View style={styles.textContainer}>
+        <Animated.View
+          style={{
+            opacity: Animated.multiply(titleAnim, titleOpacity),
+            transform: [
+              {
+                translateY: Animated.add(
+                  titleAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [30, 0],
+                  }),
+                  titleTransform
+                ),
+              },
+              { scale: titleAnim },
+            ],
+          }}
+        >
+          <Text style={styles.title}>Rise Against Hunger Italia</Text>
+        </Animated.View>
+      </View>
+    </View>
+  )
+);
+
+HeaderTextSection.displayName = 'HeaderTextSection';
+
+interface HeaderImageSectionProps {
+  readonly imageAnim: Animated.Value;
+  readonly imageParallax: Animated.AnimatedInterpolation<number>;
+  readonly imageScale: Animated.AnimatedInterpolation<number>;
+  readonly gradientOpacity: Animated.AnimatedInterpolation<number>;
+  readonly pulseAnim: Animated.Value;
+  readonly styles: ReturnType<typeof useHomeHeaderStyles>;
+}
+
+const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
+  ({
+    imageAnim,
+    imageParallax,
+    imageScale,
+    gradientOpacity,
+    pulseAnim,
+    styles,
+  }) => (
+    <View style={styles.imageSection}>
+      <Animated.View
+        style={[
+          styles.imageContainer,
+          {
+            opacity: imageAnim,
+            transform: [
+              { translateY: imageParallax },
+              { scale: Animated.multiply(imageScale, pulseAnim) },
+            ],
+          },
+        ]}
+      >
+        <Image
+          source={require('../../assets/images/hero-banner.png')}
+          style={styles.image}
+        />
+
+        <Animated.View
+          style={[styles.imageGradientOverlay, { opacity: gradientOpacity }]}
+        >
+          <LinearGradient
+            colors={['transparent', 'rgba(0,0,0,0.1)']}
+            style={styles.flexOne}
+          />
+        </Animated.View>
+      </Animated.View>
+    </View>
+  )
+);
+
+HeaderImageSection.displayName = 'HeaderImageSection';
+
+interface HeaderMissionSectionProps {
+  readonly styles: ReturnType<typeof useHomeHeaderStyles>;
+}
+
+const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = React.memo(
+  ({ styles }) => (
+    <View style={styles.missionSection}>
+      <View style={styles.missionCard}>
+        <Text style={styles.missionTitle}>🌍 La nostra missione</Text>
+        <Text style={styles.missionDescription}>
+          Combattiamo la fame nel mondo attraverso programmi alimentari
+          concreti, coinvolgendo comunità locali e volontari per creare un
+          impatto duraturo.
+        </Text>
+        <View style={styles.missionStats}>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumber}>3.1M</Text>
+            <Text style={styles.statLabel}>Pasti distribuiti</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumber}>13K</Text>
+            <Text style={styles.statLabel}>Volontari attivi</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+);
+
+HeaderMissionSection.displayName = 'HeaderMissionSection';
+
+// Main Component - Now under 60 lines
+export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
+  scrollY,
+}) => {
+  const { colors } = useTheme();
+  const { titleAnim, imageAnim, containerAnim, pulseAnim } =
+    useHomeHeaderAnimations();
+  const {
+    titleOpacity,
+    titleTransform,
+    imageParallax,
+    imageScale,
+    gradientOpacity,
+  } = useScrollInterpolations(scrollY);
+  const styles = useHomeHeaderStyles();
 
   return (
     <Animated.View
@@ -267,88 +468,24 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
         },
       ]}
     >
-      {/* 🎨 HEADER SECTION PREMIUM */}
-      <View style={styles.headerSection}>
-        {/* Gradient Background */}
-        <LinearGradient
-          colors={[colors.primary[100], colors.primary[50], colors.neutral[50]]}
-          style={styles.gradientBackground}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        />
+      <HeaderTextSection
+        colors={colors}
+        titleAnim={titleAnim}
+        titleOpacity={titleOpacity}
+        titleTransform={titleTransform}
+        styles={styles}
+      />
 
-        <View style={styles.textContainer}>
-          {/* Titolo Premium con animazioni */}
-          <Animated.View
-            style={{
-              opacity: Animated.multiply(titleAnim, titleOpacity),
-              transform: [
-                {
-                  translateY: Animated.add(
-                    titleAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [30, 0],
-                    }),
-                    titleTransform
-                  ),
-                },
-                { scale: titleAnim },
-              ],
-            }}
-          >
-            <Text style={styles.title}>Rise Against Hunger Italia</Text>
-          </Animated.View>
-        </View>
-      </View>
+      <HeaderImageSection
+        imageAnim={imageAnim}
+        imageParallax={imageParallax}
+        imageScale={imageScale}
+        gradientOpacity={gradientOpacity}
+        pulseAnim={pulseAnim}
+        styles={styles}
+      />
 
-      {/* 🖼️ SEZIONE IMMAGINE AVANZATA */}
-      <View style={styles.imageSection}>
-        <Animated.View
-          style={[
-            styles.imageContainer,
-            {
-              opacity: imageAnim,
-              transform: [
-                {
-                  translateY: Animated.add(
-                    imageAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [50, 0],
-                    }),
-                    imageParallax
-                  ),
-                },
-                { scale: Animated.multiply(imageAnim, imageScale) },
-              ],
-            },
-          ]}
-        >
-          {/* Immagine Hero */}
-          <Animated.Image
-            source={require('../../assets/images/hero-banner.png')}
-            style={styles.image}
-          />
-
-          {/* Overlay Gradiente Dinamico */}
-          <Animated.View style={{ opacity: gradientOpacity }}>
-            <LinearGradient
-              colors={[
-                'transparent',
-                colors.primary[500] + '10',
-                colors.primary[600] + '20',
-              ]}
-              style={styles.imageGradientOverlay}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            />
-          </Animated.View>
-
-          {/* Badge Decorativo */}
-          <View style={styles.decorativeBadge}>
-            <Text style={styles.badgeText}>2024</Text>
-          </View>
-        </Animated.View>
-      </View>
+      <HeaderMissionSection styles={styles} />
     </Animated.View>
   );
 };
