@@ -19,8 +19,8 @@ import {
   Colors,
   Spacing,
   Typography,
-} from '../constants/designTokens';
-import { useTheme } from '../hooks/useTheme';
+} from '../shared/constants/designTokens';
+import { useTheme } from '../shared/hooks/useTheme';
 
 // ===================================================================
 // COMPONENTE PRINCIPALE

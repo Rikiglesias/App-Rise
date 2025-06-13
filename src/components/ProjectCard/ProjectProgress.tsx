@@ -5,8 +5,8 @@ import {
   BorderRadius,
   Spacing,
   Typography,
-} from '../../constants/designTokens';
-import { useTheme } from '../../hooks/useTheme';
+} from '../../shared/constants/designTokens';
+import { useTheme } from '../../shared/hooks/useTheme';
 
 import type { ProjectProgressProps } from './types';
 

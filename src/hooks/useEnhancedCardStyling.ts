@@ -1,5 +1,5 @@
 import type { GestureResponderEvent, ViewStyle } from 'react-native';
-import { Accessibility } from '../constants/designTokens';
+import { Accessibility } from '../shared/constants/designTokens';
 import { enhancedCardStyles } from '../styles/EnhancedCardStyles';
 import type { EnhancedCardProps } from '../types/EnhancedCardTypes';
 

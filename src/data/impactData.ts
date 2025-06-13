@@ -1,4 +1,4 @@
-import type { Location } from '../components/InteractiveMap';
+import type { Location } from '../components/layout/InteractiveMap';
 import type { ImpactDataType } from '../types/ImpactScreenTypes';
 
 // Dati reali da Rise Against Hunger Italia (Report 2024)

@@ -9,7 +9,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 import type { RootStackParamList } from '../navigation/types';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<

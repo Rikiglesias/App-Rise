@@ -16,7 +16,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 import { useLinkHandler } from '../hooks/useLinkHandler';
 import type { RootStackParamList } from '../navigation/types';
 import { isSuccess } from '../utils/result';

@@ -52,7 +52,7 @@ export const MicroInteractionPresets: Record<string, MicroInteractionConfig> = {
     scale: [1, 1.02],
     translate: { y: [0, -2] },
     duration: 200,
-    haptic: { enabled: false, intensity: 'light' },
+    haptic: { enabled: true, intensity: 'light' },
     useNativeDriver: true,
   },
 

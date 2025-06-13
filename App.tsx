@@ -6,9 +6,9 @@ import {
   configureFonts,
 } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Typography } from './src/constants/designTokens';
-import { ThemeProvider, useTheme } from './src/hooks/useTheme';
 import AppNavigator from './src/navigation/AppNavigator';
+import { Typography } from './src/shared/constants/designTokens';
+import { ThemeProvider, useTheme } from './src/shared/hooks/useTheme';
 
 // Define the font config based on our design tokens
 const fontConfig = {

@@ -2,15 +2,15 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import Logo from '../components/Logo';
-import ModernCTA from '../components/ModernCTA';
+import Logo from '../components/ui/Logo';
+import ModernCTA from '../components/domain/ModernCTA';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 import type { RootStackParamList } from '../navigation/types';
 
 type SimplePlaceholderScreenNavigationProp = StackNavigationProp<

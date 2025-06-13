@@ -1,6 +1,10 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import { BorderRadius, Spacing, Typography } from '../constants/designTokens';
-import { useTheme } from '../hooks/useTheme';
+import {
+  BorderRadius,
+  Spacing,
+  Typography,
+} from '../shared/constants/designTokens';
+import { useTheme } from '../shared/hooks/useTheme';
 import { ADVANCED_CONFIG } from '../types/HomeHeaderTypes';
 
 const { width: windowWidth } = Dimensions.get('window');

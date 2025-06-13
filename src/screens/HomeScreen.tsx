@@ -3,15 +3,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
 // Components Premium - Versione Modernizzata
-import { HomeHeaderSection } from '../components/HomeHeaderSection';
-import ModernHomeActions from '../components/ModernHomeActions';
-import ModernHomeImpact from '../components/ModernHomeImpact';
+import { HomeHeaderSection } from '../components/domain/HomeHeaderSection';
+import ModernHomeActions from '../components/domain/ModernHomeActions';
+import ModernHomeImpact from '../components/domain/ModernHomeImpact';
 // Hooks & Utils
-import { Spacing } from '../constants/designTokens';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 import { useHomeScrollAnimation } from '../hooks/useHomeScrollAnimation';
-import { useTheme } from '../hooks/useTheme';
 import type { RootStackParamList } from '../navigation/types';
+import { Spacing } from '../shared/constants/designTokens';
+import { useTheme } from '../shared/hooks/useTheme';
 import { isSuccess, safeAsync } from '../utils/result';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;

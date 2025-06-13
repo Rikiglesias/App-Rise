@@ -7,15 +7,15 @@ import {
   View,
 } from 'react-native';
 
-import FilterTabs from '../components/FilterTabs';
+import FilterTabs from '../components/ui/FilterTabs';
 import ProjectCard from '../components/ProjectCard';
 import {
   ProjectsEmptyState,
   ProjectsHeader,
   ProjectsStats,
-} from '../components/ProjectsScreenSections';
+} from '../components/domain/ProjectsScreenSections';
 import { useProjectsScreenLogic } from '../hooks/useProjectsScreenLogic';
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../shared/hooks/useTheme';
 import { useProjectsScreenStyles } from '../styles/ProjectsScreenStyles';
 import type {
   Project,

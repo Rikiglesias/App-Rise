@@ -26,7 +26,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 
 import type { BottomTabParamList } from './types';
 

@@ -6,7 +6,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../../constants/designTokens';
+} from '../../../shared/constants/designTokens';
 
 // ===================================================================
 // CONTAINER STYLES

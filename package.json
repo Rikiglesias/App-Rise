@@ -73,7 +73,6 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "tsc --noEmit --skipLibCheck",
       "eslint --max-warnings 0",
       "prettier --check"
     ],

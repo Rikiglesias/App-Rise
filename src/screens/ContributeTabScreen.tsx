@@ -3,11 +3,11 @@ import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { Animated, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import { DonationInfoModal } from '../components/DonationInfoModal';
-import { ProfessionalSectionsRenderer } from '../components/ProfessionalSectionsRenderer';
+import { DonationInfoModal } from '../components/layout/DonationInfoModal';
+import { ProfessionalSectionsRenderer } from '../components/domain/ProfessionalSectionsRenderer';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 import { useProfessionalAnimations } from '../hooks/useProfessionalAnimations';
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../shared/hooks/useTheme';
 import {
   useProfessionalLayoutStyles,
   useProfessionalUtilityStyles,

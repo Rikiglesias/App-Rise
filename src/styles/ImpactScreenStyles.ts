@@ -5,7 +5,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 
 export const impactScreenStyles = StyleSheet.create({
   container: {

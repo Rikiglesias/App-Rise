@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, Easing } from 'react-native';
 
-import { Animation, Colors } from '../../../constants/designTokens';
+import { Animation, Colors } from '../../../shared/constants/designTokens';
 
 import {
   createButtonStyles,

@@ -1,9 +1,9 @@
 import { Dimensions } from 'react-native';
+import { useTheme } from '../shared/hooks/useTheme';
 import type {
   ProfessionalColors,
   ProfessionalTypography,
 } from '../types/ContributeScreenTypes';
-import { useTheme } from './useTheme';
 
 const { width: screenWidth } = Dimensions.get('window');
 

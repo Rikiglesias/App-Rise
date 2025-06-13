@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 
-import { Colors, Spacing, Typography } from '../constants/designTokens';
+import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 

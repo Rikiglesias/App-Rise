@@ -15,10 +15,10 @@ import {
   MilestoneCard,
   StatButton,
   StoryCard,
-} from '../components/ImpactStatComponents';
-import { Colors } from '../constants/designTokens';
+} from '../components/domain/ImpactStatComponents';
 import { formatNumber, IMPACT_DATA, MAP_LOCATIONS } from '../data/impactData';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
+import { Colors } from '../shared/constants/designTokens';
 import { impactScreenStyles } from '../styles/ImpactScreenStyles';
 import type {
   ImpactNavigationProp,

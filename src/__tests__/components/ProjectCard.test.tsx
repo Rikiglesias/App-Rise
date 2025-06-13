@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react-native';
 
 import { ProjectCard } from '../../components/ProjectCard';
 import type { ProjectCardProps } from '../../components/ProjectCard/types';
-import { ThemeProvider } from '../../hooks/useTheme';
+import { ThemeProvider } from '../../shared/hooks/useTheme';
 
 const mockProject: ProjectCardProps = {
   title: 'Test Project',

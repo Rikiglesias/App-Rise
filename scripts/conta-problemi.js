@@ -16,11 +16,13 @@ let typescriptErrors = 0;
 let eslintErrors = 0;
 let eslintWarnings = 0;
 let jestFailures = 0;
+let markdownlintErrors = 0;
+let prettierErrors = 0;
 
 // 1. Conta errori TypeScript
 console.log('\n🔥 ERRORI TYPESCRIPT:');
 try {
-  execSync('tsc --noEmit --skipLibCheck', { stdio: 'pipe' });
+  execSync('npx tsc --noEmit --skipLibCheck', { stdio: 'pipe' });
   console.log('✅ Nessun errore TypeScript!');
 } catch (error) {
   const output = error.stdout
@@ -95,7 +97,41 @@ try {
   console.log(`📊 ${eslintErrors + eslintWarnings} problemi ESLint totali`);
 }
 
-// 3. Conta test Jest falliti
+// 3. Conta errori Markdownlint
+console.log('\n📝 MARKDOWNLINT:');
+try {
+  execSync('npx markdownlint "**/*.md" --ignore node_modules', {
+    stdio: 'pipe',
+  });
+  console.log('✅ Nessun problema Markdownlint!');
+} catch (error) {
+  const output = error.stdout
+    ? error.stdout.toString()
+    : error.stderr.toString();
+  const lines = output.split('\n').filter(line => line.includes('MD0'));
+  markdownlintErrors = lines.length;
+  console.log(
+    `❌ ${markdownlintErrors} errori Markdownlint trovati (BLOCCANTI)`
+  );
+  criticalErrors += markdownlintErrors;
+}
+
+// 4. Conta errori Prettier
+console.log('\n🎨 PRETTIER:');
+try {
+  execSync('npx prettier --check .', { stdio: 'pipe' });
+  console.log('✅ Nessun problema Prettier!');
+} catch (error) {
+  const output = error.stdout
+    ? error.stdout.toString()
+    : error.stderr.toString();
+  const lines = output.split('\n').filter(line => line.includes('[warn]'));
+  prettierErrors = lines.length;
+  console.log(`❌ ${prettierErrors} errori Prettier trovati (BLOCCANTI)`);
+  criticalErrors += prettierErrors;
+}
+
+// 5. Conta test Jest falliti
 console.log('\n🧪 TEST JEST:');
 try {
   execSync('npm test -- --passWithNoTests --silent', { stdio: 'pipe' });
@@ -114,20 +150,22 @@ try {
   criticalErrors += jestFailures;
 }
 
-// 4. Riepilogo finale RIGOROSO
+// 6. Riepilogo finale RIGOROSO
 console.log('\n' + '='.repeat(60));
 console.log('🚨 RIEPILOGO RIGOROSO - ZERO TOLLERANZA:');
 console.log('='.repeat(60));
 console.log(`❌ ERRORI CRITICI: ${criticalErrors}`);
 console.log(`  └─ TypeScript: ${typescriptErrors}`);
 console.log(`  └─ ESLint: ${eslintErrors}`);
+console.log(`  └─ Markdownlint: ${markdownlintErrors}`);
+console.log(`  └─ Prettier: ${prettierErrors}`);
 console.log(`  └─ Jest: ${jestFailures}`);
 console.log(`🚫 WARNINGS BLOCCANTI: ${acceptableWarnings}`);
 console.log('―'.repeat(30));
 const totalProblems = criticalErrors + acceptableWarnings;
 console.log(`🚨 PROBLEMI TOTALI: ${totalProblems}`);
 
-// 5. Status finale
+// 7. Status finale
 if (totalProblems === 0) {
   console.log('✅ STATO: PERFETTO - COMMIT E DEPLOY PERMESSI!');
   console.log('🎯 Qualità: STANDARD MASSIMO RAGGIUNTO');
@@ -138,7 +176,7 @@ if (totalProblems === 0) {
 
 console.log('='.repeat(60));
 
-// 6. ZERO TOLLERANZA ASSOLUTA - Nessun warning accettabile
+// 8. ZERO TOLLERANZA ASSOLUTA - Nessun warning accettabile
 console.log('\n📊 VERIFICA SOGLIE:');
 if (acceptableWarnings === 0) {
   console.log('✅ ZERO WARNINGS - Standard di eccellenza raggiunto!');
@@ -151,7 +189,7 @@ if (acceptableWarnings === 0) {
 // const warningLimit = ADVANCED_CONFIG.quality.maxAcceptableWarnings; // eslint-disable-line @typescript-eslint/no-unused-vars
 const isWithinAcceptableRange = acceptableWarnings === 0;
 
-// 7. Piano d'azione ZERO TOLLERANZA
+// 9. Piano d'azione ZERO TOLLERANZA
 console.log("\n📋 PIANO D'AZIONE:");
 if (criticalErrors > 0) {
   console.log('🔥 PRIORITÀ CRITICA - ERRORI BLOCCANTI:');

@@ -5,7 +5,7 @@ import {
   Colors,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 import { getLayoutConfig } from '../types/HomeActionsTypes';
 
 // ===================================================================

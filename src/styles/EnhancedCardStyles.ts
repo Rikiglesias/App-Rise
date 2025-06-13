@@ -6,7 +6,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 
 /* eslint-disable react-native/no-unused-styles */
 export const enhancedCardStyles = StyleSheet.create({

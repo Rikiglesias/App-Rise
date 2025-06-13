@@ -1,4 +1,4 @@
-import { Colors } from '../constants/designTokens';
+import { Colors } from '../shared/constants/designTokens';
 import type { ActionData, ActionHandlers } from '../types/HomeActionsTypes';
 
 // ===================================================================

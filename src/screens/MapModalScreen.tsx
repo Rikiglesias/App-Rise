@@ -3,13 +3,15 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import InteractiveMap, { type Location } from '../components/InteractiveMap';
+import InteractiveMap, {
+  type Location,
+} from '../components/layout/InteractiveMap';
 import {
   BorderRadius,
   Colors,
   Spacing,
   Typography,
-} from '../constants/designTokens';
+} from '../shared/constants/designTokens';
 import type { ImpactStackParamList } from '../navigation/types';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;

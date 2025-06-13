@@ -1,12 +1,12 @@
 import React from 'react';
 import { createActionsData } from '../data/HomeActionsData';
+import { useTheme } from '../shared/hooks/useTheme';
 import {
   createCardStyles,
   createContainerStyles,
   createTypographyStyles,
 } from '../styles/HomeActionsStyles';
 import type { ActionHandlers } from '../types/HomeActionsTypes';
-import { useTheme } from './useTheme';
 
 // ===================================================================
 // STYLES HOOK - Extracted styles logic

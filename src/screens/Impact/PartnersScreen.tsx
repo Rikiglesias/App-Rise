@@ -3,15 +3,15 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import FormattedText from '../../components/FormattedText';
-import ImpactInfoPage from '../../components/ImpactInfoPage';
+import FormattedText from '../../components/ui/FormattedText';
+import ImpactInfoPage from '../../components/domain/ImpactInfoPage';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../constants/designTokens';
+} from '../../shared/constants/designTokens';
 
 const PARTNERS_DATA = {
   title: 'La Nostra Rete di Partner',

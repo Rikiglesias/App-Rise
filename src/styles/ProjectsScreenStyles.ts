@@ -1,7 +1,11 @@
 import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { BorderRadius, Spacing, Typography } from '../constants/designTokens';
-import { useTheme } from '../hooks/useTheme';
+import {
+  BorderRadius,
+  Spacing,
+  Typography,
+} from '../shared/constants/designTokens';
+import { useTheme } from '../shared/hooks/useTheme';
 
 // Custom Hook for Projects Screen Styles
 export const useProjectsScreenStyles = () => {

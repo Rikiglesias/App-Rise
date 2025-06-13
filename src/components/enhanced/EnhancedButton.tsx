@@ -18,7 +18,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../constants/designTokens';
+} from '../../shared/constants/designTokens';
 import { useMicroInteraction } from '../../systems/MicroInteractionEngine';
 
 // ===================================================================

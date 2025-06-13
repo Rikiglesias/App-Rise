@@ -1,6 +1,6 @@
 import { Animated, StyleProp, ViewStyle } from 'react-native';
 
-import { Colors } from '../../../constants/designTokens';
+import { Colors } from '../../../shared/constants/designTokens';
 import {
   createButtonStyles,
   createContainerStyles,

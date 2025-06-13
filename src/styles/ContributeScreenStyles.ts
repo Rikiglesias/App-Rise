@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { BorderRadius, Spacing } from '../constants/designTokens';
+import { BorderRadius, Spacing } from '../shared/constants/designTokens';
 import { useProfessionalTokens } from '../hooks/useProfessionalTokens';
 
 export const useProfessionalLayoutStyles = () => {

@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import { useTheme } from '../../hooks/useTheme';
+import { useTheme } from '../../shared/hooks/useTheme';
 import { GradientCTAButton, StandardCTAButton } from './components';
 import {
   useModernCTAAnimations,

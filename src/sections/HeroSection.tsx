@@ -2,15 +2,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Logo from '../components/Logo';
+import Logo from '../components/ui/Logo';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../constants/designTokens';
-import { useThemeStyles } from '../hooks/useTheme';
+} from '../shared/constants/designTokens';
+import { useThemeStyles } from '../shared/hooks/useTheme';
 
 interface HeroSectionProps {
   readonly accessibilityLabel?: string;

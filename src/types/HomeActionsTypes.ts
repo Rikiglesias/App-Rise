@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native';
-import { Spacing } from '../constants/designTokens';
+import { Spacing } from '../shared/constants/designTokens';
 
 const { width: screenWidth } = Dimensions.get('window');
 

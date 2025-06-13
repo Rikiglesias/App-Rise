@@ -1,6 +1,6 @@
 import { Animated, Dimensions } from 'react-native';
-import { Spacing } from '../constants/designTokens';
-import { useTheme } from '../hooks/useTheme';
+import { Spacing } from '../shared/constants/designTokens';
+import { useTheme } from '../shared/hooks/useTheme';
 
 const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
 
