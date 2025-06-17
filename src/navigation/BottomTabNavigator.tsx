@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Screens
 import { ContributeTabScreen } from '../screens/ContributeTabScreen';
-import { HomeTabScreen } from '../screens/HomeTabScreen';
+import HomeScreen from '../screens/HomeScreen';
 import ImpactStackNavigator from './ImpactStackNavigator';
 
 // Design Tokens & Hooks
@@ -140,7 +140,6 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
       {
         translateY: withSpring(isCentral && isFocused ? -22 : 0, {
           damping: 15,
-          stiffness: 120,
         }),
       },
     ],
@@ -223,7 +222,7 @@ const BottomTabNavigator: React.FC = () => (
     />
     <Tab.Screen
       name="HomeTab"
-      component={HomeTabScreen}
+      component={HomeScreen}
       options={{
         tabBarAccessibilityLabel: 'Home Principale',
       }}

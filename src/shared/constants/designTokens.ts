@@ -261,20 +261,14 @@ export const Animations = {
     damping: 15,
     stiffness: 150,
     gentle: {
-      damping: 20,
-      stiffness: 100,
       tension: 100,
       friction: 8,
     },
     snappy: {
-      damping: 12,
-      stiffness: 200,
       tension: 180,
       friction: 6,
     },
     playful: {
-      damping: 10,
-      stiffness: 250,
       tension: 200,
       friction: 5,
     },
