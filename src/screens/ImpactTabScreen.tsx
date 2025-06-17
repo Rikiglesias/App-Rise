@@ -17,8 +17,8 @@ import {
   StoryCard,
 } from '../components/domain/ImpactStatComponents';
 import { formatNumber, IMPACT_DATA, MAP_LOCATIONS } from '../data/impactData';
-import { useHapticFeedback } from '../hooks/useHapticFeedback';
 import { Colors } from '../shared/constants/designTokens';
+import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 import { impactScreenStyles } from '../styles/ImpactScreenStyles';
 import type {
   ImpactNavigationProp,

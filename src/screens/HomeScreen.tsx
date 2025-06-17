@@ -1,16 +1,22 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
-import React, { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 // Components Premium - Versione Modernizzata
 import { HomeHeaderSection } from '../components/domain/HomeHeaderSection';
 import ModernHomeActions from '../components/domain/ModernHomeActions';
 import ModernHomeImpact from '../components/domain/ModernHomeImpact';
 // Hooks & Utils
-import { useHapticFeedback } from '../hooks/useHapticFeedback';
-import { useHomeScrollAnimation } from '../hooks/useHomeScrollAnimation';
+// import { useHomeScrollAnimation } from '../hooks/useHomeScrollAnimation'; // TODO: Hook rimosso, implementare alternativa
 import type { RootStackParamList } from '../navigation/types';
 import { Spacing } from '../shared/constants/designTokens';
+import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 import { useTheme } from '../shared/hooks/useTheme';
 import { isSuccess, safeAsync } from '../utils/result';
 
@@ -24,8 +30,8 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const { colors } = useTheme();
   const { triggerHaptic } = useHapticFeedback();
 
-  // Enhanced scroll animation hook
-  const { scrollY, handleScroll } = useHomeScrollAnimation();
+  // TODO: Riimplementare scroll animation hook - Valore temporaneo
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   // Loading states for progressive enhancement
   const [isLoaded, setIsLoaded] = useState(false);
@@ -141,7 +147,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
+        // onScroll={handleScroll} // TODO: Riattivare con nuovo hook
         scrollEventThrottle={16}
         accessible
         accessibilityLabel="Schermata principale Rise Against Hunger Italia"

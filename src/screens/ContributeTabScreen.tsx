@@ -3,10 +3,10 @@ import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { Animated, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import { DonationInfoModal } from '../components/layout/DonationInfoModal';
 import { ProfessionalSectionsRenderer } from '../components/domain/ProfessionalSectionsRenderer';
-import { useHapticFeedback } from '../hooks/useHapticFeedback';
-import { useProfessionalAnimations } from '../hooks/useProfessionalAnimations';
+import { DonationInfoModal } from '../components/layout/DonationInfoModal';
+// import { useProfessionalAnimations } from '../hooks/useProfessionalAnimations'; // TODO: Hook rimosso
+import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 import { useTheme } from '../shared/hooks/useTheme';
 import {
   useProfessionalLayoutStyles,
@@ -23,7 +23,12 @@ export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   const { colors } = useTheme();
-  const animations = useProfessionalAnimations();
+  // const animations = useProfessionalAnimations(); // TODO: Hook rimosso
+  const animations = {
+    headerFade: new Animated.Value(1),
+    statsAnimation: new Animated.Value(1),
+    contentReveal: new Animated.Value(1),
+  }; // Valori temporanei
   const layoutStyles = useProfessionalLayoutStyles();
   const utilityStyles = useProfessionalUtilityStyles();
 

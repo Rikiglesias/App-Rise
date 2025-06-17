@@ -13,7 +13,7 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
-import { useHapticFeedback } from '../../hooks/useHapticFeedback';
+import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 const { width } = Dimensions.get('window');

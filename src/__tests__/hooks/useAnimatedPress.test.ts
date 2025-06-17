@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-native';
 
-import { useAnimatedPress } from '../../hooks/useAnimatedPress';
+import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 
 describe('useAnimatedPress', () => {
   it('should initialize with default values', () => {

@@ -1,0 +1,45 @@
+# File che bloccano l'indicizzazione
+package-lock.json
+node_modules/
+.git/
+.expo/
+coverage/
+android/
+ios/
+
+# File temporanei e log
+*.log
+*.tmp
+temp_files.txt
+unstable-warnings.txt
+specific-warnings.txt
+remaining-major-warnings.txt
+array-warnings.txt
+jsx-remaining.txt
+
+# Build artifacts
+dist/
+build/
+.next/
+.nuxt/
+
+# Cache e file generati
+*.tsbuildinfo
+.eslintcache
+.jest-cache
+
+# IDE e OS
+.vscode/settings.json
+.DS_Store
+Thumbs.db
+
+# Deployment e secrets
+*.keystore
+*.mobileprovision
+*.p12
+google-play-service-key.json
+
+# Documentazione estesa (opzionale - rimuovi se vuoi includere)
+docs/DEPLOYMENT_GUIDE.md
+docs/MIGRATION_TO_NATIVE.md
+docs/GITHUB_ACTIONS_SETUP.md 

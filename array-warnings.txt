@@ -1,2 +1,0 @@
-  189:16  warning  Do not use Array index in keys                                   react/no-array-index-key
-  189:24  warning  Do not use Array index in keys                                   react/no-array-index-key

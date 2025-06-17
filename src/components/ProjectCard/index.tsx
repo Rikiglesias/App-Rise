@@ -3,7 +3,7 @@ import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { Surface } from 'react-native-paper';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
-import { useAnimatedPress } from '../../hooks/useAnimatedPress';
+import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 import { ProjectContent } from './ProjectContent';

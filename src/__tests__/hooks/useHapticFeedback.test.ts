@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-native';
 import { Platform } from 'react-native';
 
-import { useHapticFeedback } from '../../hooks/useHapticFeedback';
+import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 
 // Mock Platform esplicitamente
 const mockPlatform = {

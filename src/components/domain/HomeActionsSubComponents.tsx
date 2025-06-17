@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Surface } from 'react-native-paper';
-import { useAnimatedPress } from '../../hooks/useAnimatedPress';
+import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import type {
   BentoActionCardProps,
   CardHeaderProps,

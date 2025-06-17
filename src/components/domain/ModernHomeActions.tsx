@@ -13,12 +13,12 @@ import {
 } from 'react-native';
 import { Surface } from 'react-native-paper';
 
-import { useHapticFeedback } from '../../hooks/useHapticFeedback';
 import {
   BorderRadius,
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 import EnhancedTouchable from '../ui/EnhancedTouchable';
 
