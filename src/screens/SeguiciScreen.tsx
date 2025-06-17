@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 
+import type { RootStackParamList } from '../navigation/types';
 import {
   BorderRadius,
   Colors,
@@ -18,8 +19,7 @@ import {
   Spacing,
   Typography,
 } from '../shared/constants/designTokens';
-import { useLinkHandler } from '../hooks/useLinkHandler';
-import type { RootStackParamList } from '../navigation/types';
+import { useLinkHandler } from '../shared/hooks/useLinkHandler';
 import { isSuccess } from '../utils/result';
 
 type SeguiciScreenNavigationProp = StackNavigationProp<

@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 
 import type { RootStackParamList } from '../navigation/types';
 
-import { useHapticFeedback } from './useHapticFeedback';
+import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 
 interface UseNavigationHookOptions {
   enableHaptics?: boolean;
