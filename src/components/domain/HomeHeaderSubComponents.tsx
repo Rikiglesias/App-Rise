@@ -69,7 +69,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
         ]}
       >
         <Image
-          source={require('../../assets/images/hero-banner.png')}
+          source={require('../../../assets/images/hero-banner.png')}
           style={styles.image}
         />
 

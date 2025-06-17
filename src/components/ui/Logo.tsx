@@ -6,7 +6,7 @@ import { Colors } from '../../shared/constants/designTokens';
 
 // Immagine logo importata correttamente
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const logoImage = require('../../assets/images/logo.png') as number;
+const logoImage = require('../../../assets/images/logo.png') as number;
 
 interface LogoProps {
   readonly size?: number;
