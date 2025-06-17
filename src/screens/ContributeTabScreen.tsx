@@ -5,8 +5,8 @@ import { Animated, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { ProfessionalSectionsRenderer } from '../components/domain/ProfessionalSectionsRenderer';
 import { DonationInfoModal } from '../components/layout/DonationInfoModal';
-// import { useProfessionalAnimations } from '../hooks/useProfessionalAnimations'; // TODO: Hook rimosso
 import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
+import { useProfessionalAnimations } from '../shared/hooks/useProfessionalAnimations';
 import { useTheme } from '../shared/hooks/useTheme';
 import {
   useProfessionalLayoutStyles,
@@ -23,12 +23,7 @@ export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   const { colors } = useTheme();
-  // const animations = useProfessionalAnimations(); // TODO: Hook rimosso
-  const animations = {
-    headerFade: new Animated.Value(1),
-    statsAnimation: new Animated.Value(1),
-    contentReveal: new Animated.Value(1),
-  }; // Valori temporanei
+  const animations = useProfessionalAnimations();
   const layoutStyles = useProfessionalLayoutStyles();
   const utilityStyles = useProfessionalUtilityStyles();
 
