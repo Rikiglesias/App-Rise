@@ -21,10 +21,6 @@ import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 import { useHomeScrollAnimation } from '../shared/hooks/useHomeScrollAnimation';
 import { useTheme } from '../shared/hooks/useTheme';
 
-interface Props {
-  // Non più necessario il navigation prop, uso useNavigation hook
-}
-
 // 🚀 PREMIUM CTA BUTTONS - DESIGN ULTRAMODERNO 2025
 const ModernCTAButtons: React.FC = () => {
   const { triggerHaptic } = useHapticFeedback();
@@ -100,7 +96,7 @@ const ModernCTAButtons: React.FC = () => {
   );
 };
 
-const HomeScreen: React.FC<Props> = () => {
+const HomeScreen: React.FC = () => {
   const { colors } = useTheme();
 
   // Enhanced scroll animation hook - RIPRISTINATO
@@ -142,21 +138,21 @@ const HomeScreen: React.FC<Props> = () => {
       marginBottom: Spacing[6], // Spazio maggiore per respirazione
     },
 
-    ctaTitleGradient: {
-      borderRadius: 24,
-      padding: 3,
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.25,
-      shadowRadius: 12,
-      elevation: 8,
-    },
-
+    // CORREZIONE UX: Stile titolo NON cliccabile - Design System
     ctaTitleContainer: {
-      backgroundColor: Colors.neutral[0],
-      borderRadius: 21,
+      backgroundColor: 'transparent', // Sfondo trasparente per titoli
+      borderRadius: 16,
+      borderWidth: 1, // Bordo sottile per separazione
+      borderColor: 'rgba(220, 38, 38, 0.2)', // Bordo rosso sottile
       paddingHorizontal: Spacing[8],
       paddingVertical: Spacing[4],
+      alignItems: 'center',
+      // Elevation bassa per titoli
+      shadowColor: '#DC2626',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1, // Ombra leggera
+      shadowRadius: 4,
+      elevation: 2, // Elevation bassa
     },
 
     ctaTitleText: {
@@ -282,18 +278,9 @@ const HomeScreen: React.FC<Props> = () => {
               <View style={styles.ctaSectionContainer}>
                 {/* Titolo moderno per i CTA */}
                 <View style={styles.ctaTitleSection}>
-                  <LinearGradient
-                    colors={['#DC2626', '#B91C1C', '#991B1B']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.ctaTitleGradient}
-                  >
-                    <View style={styles.ctaTitleContainer}>
-                      <Text style={styles.ctaTitleText}>
-                        🤝 Entra in Azione
-                      </Text>
-                    </View>
-                  </LinearGradient>
+                  <View style={styles.ctaTitleContainer}>
+                    <Text style={styles.ctaTitleText}>🤝 Entra in Azione</Text>
+                  </View>
                   {/* Descrizione con design system premium */}
                   <View style={styles.ctaDescriptionContainer}>
                     <LinearGradient

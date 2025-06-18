@@ -21,87 +21,72 @@ import {
   type HeaderTextSectionProps,
 } from '../../types/HomeHeaderTypes';
 
-// Modern Smart Title Styles
+// ✨ CLEAN & PROFESSIONAL TITLE STYLES - MODERN 2025
 const modernTitleStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
     paddingHorizontal: Spacing[4],
-  },
-  gradientContainer: {
-    borderRadius: 24, // Radius equilibrato
-    padding: 3, // Effetto bordo sottile
-    shadowColor: '#DC2626', // RITORNO al rosso del brand - più impattante
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 12,
-  },
-  titleContainer: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: 21, // Coordinato con il container esterno
-    paddingVertical: Spacing[4], // Padding ottimizzato
-    paddingHorizontal: Spacing[6], // Padding laterale generoso
-    alignItems: 'center',
+    paddingVertical: Spacing[5],
   },
 
-  // TITOLO SEMPLICE MA ULTRA IMPATTANTE
-  titleTextImpact: {
-    fontSize: Typography.sizes['4xl'], // Dimensione MASSIMA per impatto
-    fontWeight: Typography.weights.black, // Peso MASSIMO per autorevolezza
-    color: '#DC2626', // ROSSO VIBRANTE del brand
+  // Background pulito e professionale
+  titleContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(220, 38, 38, 0.12)',
+    paddingVertical: Spacing[6],
+    paddingHorizontal: Spacing[8],
+    alignItems: 'center',
+    // Ombra sottile ma professionale
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+
+  // Typography moderna e impattante
+  titleText: {
+    fontSize: Typography.sizes['4xl'],
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
     textAlign: 'center',
-    letterSpacing: -1.2, // Letter spacing serrato per impatto
-    lineHeight: Typography.sizes['4xl'] * 1.0, // Line height compatto per due righe
-    textShadowColor: 'rgba(220, 38, 38, 0.25)', // Ombra rossa coordinata
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 8,
+    letterSpacing: -0.8,
+    lineHeight: Typography.sizes['4xl'] * 1.1,
+    marginBottom: Spacing[2],
+  },
+
+  // Separatore sottile ed elegante
+  separator: {
+    height: 1,
+    width: 60,
+    backgroundColor: 'rgba(220, 38, 38, 0.3)',
+    marginTop: Spacing[3],
   },
 });
 
-// ✨ MODERN SMART TITLE COMPONENT - 2025 DESIGN
+// ✨ CLEAN & MODERN TITLE COMPONENT
 const ModernSmartTitle: React.FC<{
   titleAnim: Animated.Value;
   titleOpacity: Animated.AnimatedNode;
   titleTransform: Animated.AnimatedNode;
 }> = React.memo(({ titleAnim, titleOpacity, titleTransform }) => {
-  // Single animation for the main title
+  // Animazione semplice e professionale
   const mainTitleDelay = React.useRef(new Animated.Value(0)).current;
-  const glowPulse = React.useRef(new Animated.Value(1)).current;
 
   React.useEffect(() => {
     const titleAnimation = Animated.timing(mainTitleDelay, {
       toValue: 1,
-      duration: 1000,
+      duration: 800,
       useNativeDriver: true,
     });
 
-    // Animazione pulsante per l'effetto glow
-    const glowAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(glowPulse, {
-          toValue: 1.03,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(glowPulse, {
-          toValue: 1,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
     titleAnimation.start();
-    glowAnimation.start();
-
-    return () => {
-      glowAnimation.stop();
-    };
-  }, [mainTitleDelay, glowPulse]);
+  }, [mainTitleDelay]);
 
   return (
     <View style={modernTitleStyles.container}>
-      {/* Main Title with Gradient - SLOGAN RIMOSSO */}
       <Animated.View
         style={{
           opacity: Animated.multiply(
@@ -113,36 +98,23 @@ const ModernSmartTitle: React.FC<{
               translateY: Animated.add(
                 titleAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [50, 0],
+                  outputRange: [30, 0],
                 }),
                 titleTransform as Animated.Value
-              ),
-            },
-            {
-              scale: Animated.multiply(
-                titleAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.85, 1],
-                }),
-                glowPulse
               ),
             },
           ],
         }}
       >
-        <LinearGradient
-          colors={['#DC2626', '#B91C1C', '#991B1B']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={modernTitleStyles.gradientContainer}
-        >
-          <View style={modernTitleStyles.titleContainer}>
-            {/* Titolo principale SEMPLIFICATO e IMPATTANTE */}
-            <Text style={modernTitleStyles.titleTextImpact}>
-              Rise Against{'\n'}Hunger Italia
-            </Text>
-          </View>
-        </LinearGradient>
+        <View style={modernTitleStyles.titleContainer}>
+          {/* Titolo completo come nome unico dell'organizzazione */}
+          <Text style={modernTitleStyles.titleText}>
+            Rise Against{'\n'}Hunger Italia
+          </Text>
+
+          {/* Separatore elegante */}
+          <View style={modernTitleStyles.separator} />
+        </View>
       </Animated.View>
     </View>
   );
@@ -248,20 +220,33 @@ const baseMissionStyles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Spacing[3],
   },
-  titleGradientBorder: {
-    borderRadius: 20,
-    padding: 2.5, // Effetto bordo gradient
-    shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 8,
-  },
+  // CORREZIONE UX: Stile titolo NON cliccabile - Design System
   titleContent: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: 17.5,
+    backgroundColor: 'transparent', // Sfondo trasparente per titoli
+    borderRadius: 16,
+    borderWidth: 1, // Bordo sottile per separazione
+    borderColor: 'rgba(220, 38, 38, 0.2)', // Bordo rosso sottile
     paddingHorizontal: Spacing[4],
     paddingVertical: Spacing[2] + 2,
+    alignItems: 'center',
+    // Elevation bassa per titoli
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1, // Ombra leggera
+    shadowRadius: 4,
+    elevation: 2, // Elevation bassa
+  },
+  // Underline decorativo per separazione - DESIGN SYSTEM
+  titleUnderline: {
+    marginTop: Spacing[2],
+    height: 3,
+    width: 80,
+    backgroundColor: '#DC2626',
+    borderRadius: 2,
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
   },
   impactTitleGradient: {
     fontSize: Typography.sizes['2xl'],
@@ -454,20 +439,15 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
           style={baseMissionStyles.gradientBorder}
         >
           <View style={baseMissionStyles.missionContainer}>
-            {/* Titolo principale con GRADIENT */}
+            {/* CORREZIONE UX: Titolo principale SENZA GRADIENT - NON CLICCABILE */}
             <View style={baseMissionStyles.titleGradientContainer}>
-              <LinearGradient
-                colors={['#DC2626', '#B91C1C', '#991B1B']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={baseMissionStyles.titleGradientBorder}
-              >
-                <View style={baseMissionStyles.titleContent}>
-                  <Text style={baseMissionStyles.impactTitleGradient}>
-                    Il nostro impatto sul mondo
-                  </Text>
-                </View>
-              </LinearGradient>
+              <View style={baseMissionStyles.titleContent}>
+                <Text style={baseMissionStyles.impactTitleGradient}>
+                  Il nostro impatto sul mondo
+                </Text>
+                {/* Underline decorativo per separazione - DESIGN SYSTEM */}
+                <View style={baseMissionStyles.titleUnderline} />
+              </View>
             </View>
 
             {/* Testo descrittivo con Typography Smart */}
