@@ -22,13 +22,13 @@ export const useHomeScrollAnimation = () => {
       void scrollY.setValue(currentScrollY);
 
       // Impact section visibility logic
-      if ((!impactSectionLayout !== null) !== null) return;
+      if (impactSectionLayout === null) return;
 
-      const { y, height } = impactSectionLayout ?? { y: 0, height: 0 };
+      const { y, height } = impactSectionLayout;
       const isVisible =
         y < currentScrollY + windowHeight && y + height > currentScrollY;
 
-      if (isVisible && (!isImpactSectionVisible !== null) !== null) {
+      if (isVisible && !isImpactSectionVisible) {
         setIsImpactSectionVisible(true);
       }
     },

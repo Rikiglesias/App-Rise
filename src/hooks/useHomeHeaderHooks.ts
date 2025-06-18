@@ -14,16 +14,16 @@ export const useHomeHeaderAnimations = (): UseHomeHeaderAnimationsReturn => {
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Pulse animation for hero banner
-    const pulseAnimation = Animated.sequence([
+    // Subtle breathing animation for hero banner - più professionale
+    const breathingAnimation = Animated.sequence([
       Animated.timing(pulseAnim, {
-        toValue: 1.02,
-        duration: 2000,
+        toValue: 1.008, // Molto più sottile
+        duration: 3000, // Più lento e rilassante
         useNativeDriver: true,
       }),
       Animated.timing(pulseAnim, {
         toValue: 1,
-        duration: 2000,
+        duration: 3000,
         useNativeDriver: true,
       }),
     ]);
@@ -50,8 +50,8 @@ export const useHomeHeaderAnimations = (): UseHomeHeaderAnimationsReturn => {
       ]),
     ]).start();
 
-    // Start continuous pulse animation
-    Animated.loop(pulseAnimation).start();
+    // Start continuous breathing animation
+    Animated.loop(breathingAnimation).start();
   }, [containerAnim, titleAnim, imageAnim, pulseAnim]);
 
   return { titleAnim, imageAnim, containerAnim, pulseAnim };
@@ -73,21 +73,31 @@ export const useScrollInterpolations = (
     extrapolate: 'clamp',
   });
 
+  // Animazione parallasse più naturale e meno aggressiva
   const imageParallax = scrollY.interpolate({
-    inputRange: ADVANCED_CONFIG.scrollEffects.parallaxRange,
-    outputRange: [0, -100],
+    inputRange: [0, 200, 400],
+    outputRange: [0, -15, -30], // Movimento ridotto per evitare overlapping
     extrapolate: 'clamp',
   });
 
+  // Scale molto più sottile per evitare distorsioni
   const imageScale = scrollY.interpolate({
-    inputRange: [0, 300],
-    outputRange: ADVANCED_CONFIG.scrollEffects.scaleRange,
+    inputRange: [0, 150, 300],
+    outputRange: [1, 1.02, 0.98], // Scale molto più delicato
     extrapolate: 'clamp',
   });
 
+  // Gradient overlay più graduale
   const gradientOpacity = scrollY.interpolate({
-    inputRange: [0, 200],
-    outputRange: [0.1, 0.3],
+    inputRange: [0, 100, 200, 400],
+    outputRange: [0.02, 0.08, 0.15, 0.25], // Transizione più delicata
+    extrapolate: 'clamp',
+  });
+
+  // Rotazione quasi impercettibile
+  const imageRotation = scrollY.interpolate({
+    inputRange: [0, 600],
+    outputRange: ['0deg', '0.5deg'], // Rotazione minima per naturalezza
     extrapolate: 'clamp',
   });
 
@@ -97,5 +107,6 @@ export const useScrollInterpolations = (
     imageParallax,
     imageScale,
     gradientOpacity,
+    imageRotation,
   };
 };

@@ -4,16 +4,18 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import {
   Animated,
   Dimensions,
-  Image,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import { Surface } from 'react-native-paper';
 
 import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
+import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 interface HomeTabScreenProps {
   navigation: StackNavigationProp<Record<string, object | undefined>>;
@@ -24,38 +26,55 @@ export type { HomeTabScreenProps };
 // Modern Animation Hook
 const useModernAnimations = () => {
   const titleFade = useRef(new Animated.Value(0)).current;
-  const titleSlide = useRef(new Animated.Value(-20)).current;
-  const imageFade = useRef(new Animated.Value(0)).current;
-  const imageSlide = useRef(new Animated.Value(30)).current;
+  const titleSlide = useRef(new Animated.Value(-30)).current;
+  const descriptionFade = useRef(new Animated.Value(0)).current;
+  const descriptionSlide = useRef(new Animated.Value(20)).current;
+  const buttonsFade = useRef(new Animated.Value(0)).current;
+  const buttonsSlide = useRef(new Animated.Value(30)).current;
 
   useEffect(() => {
     const sequence = Animated.sequence([
-      // Prima il titolo
+      // Prima il titolo con effetto drammatico
       Animated.parallel([
         Animated.timing(titleFade, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.spring(titleSlide, {
+          toValue: 0,
+          useNativeDriver: true,
+          tension: 40,
+          friction: 8,
+        }),
+      ]),
+      // Poi la descrizione
+      Animated.delay(300),
+      Animated.parallel([
+        Animated.timing(descriptionFade, {
           toValue: 1,
           duration: 800,
           useNativeDriver: true,
         }),
-        Animated.spring(titleSlide, {
+        Animated.spring(descriptionSlide, {
           toValue: 0,
           useNativeDriver: true,
           tension: 50,
           friction: 8,
         }),
       ]),
-      // Poi l'immagine con un piccolo delay
+      // Infine i bottoni
       Animated.delay(200),
       Animated.parallel([
-        Animated.timing(imageFade, {
+        Animated.timing(buttonsFade, {
           toValue: 1,
-          duration: 1000,
+          duration: 600,
           useNativeDriver: true,
         }),
-        Animated.spring(imageSlide, {
+        Animated.spring(buttonsSlide, {
           toValue: 0,
           useNativeDriver: true,
-          tension: 40,
+          tension: 60,
           friction: 8,
         }),
       ]),
@@ -66,12 +85,26 @@ const useModernAnimations = () => {
     return () => {
       sequence.stop();
     };
-  }, [titleFade, titleSlide, imageFade, imageSlide]);
+  }, [
+    titleFade,
+    titleSlide,
+    descriptionFade,
+    descriptionSlide,
+    buttonsFade,
+    buttonsSlide,
+  ]);
 
-  return { titleFade, titleSlide, imageFade, imageSlide };
+  return {
+    titleFade,
+    titleSlide,
+    descriptionFade,
+    descriptionSlide,
+    buttonsFade,
+    buttonsSlide,
+  };
 };
 
-// Modern Header Section
+// Modern Header Section con titolo avanzato
 const ModernHeaderSection: React.FC<{
   animations: ReturnType<typeof useModernAnimations>;
 }> = ({ animations }) => {
@@ -79,18 +112,35 @@ const ModernHeaderSection: React.FC<{
     () =>
       StyleSheet.create({
         headerContainer: {
-          paddingTop: Spacing[8],
+          paddingTop: Spacing[16],
           paddingHorizontal: Spacing[6],
-          paddingBottom: Spacing[6],
+          paddingBottom: Spacing[8],
           backgroundColor: Colors.neutral[0],
+          alignItems: 'center',
+        },
+        titleContainer: {
+          alignItems: 'center',
+          marginBottom: Spacing[6],
         },
         titleText: {
-          fontSize: screenWidth > 375 ? 42 : 36,
+          fontSize: screenWidth > 375 ? 48 : 42,
           fontWeight: Typography.weights.black,
-          color: '#DC2626', // Rosso moderno
+          color: '#DC2626',
           textAlign: 'center',
-          letterSpacing: -0.8,
-          lineHeight: screenWidth > 375 ? 48 : 42,
+          letterSpacing: -1.2,
+          lineHeight: screenWidth > 375 ? 52 : 46,
+          textShadowColor: 'rgba(220, 38, 38, 0.1)',
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 4,
+        },
+
+        subtitleText: {
+          fontSize: Typography.sizes.lg,
+          fontWeight: Typography.weights.medium,
+          color: Colors.neutral[600],
+          textAlign: 'center',
+          marginTop: Spacing[2],
+          letterSpacing: 0.3,
         },
       }),
     []
@@ -98,35 +148,62 @@ const ModernHeaderSection: React.FC<{
 
   return (
     <View style={styles.headerContainer}>
-      <Animated.Text
+      <Animated.View
         style={[
-          styles.titleText,
+          styles.titleContainer,
           {
             opacity: animations.titleFade,
             transform: [{ translateY: animations.titleSlide }],
           },
         ]}
       >
-        Rise Against Hunger Italia
-      </Animated.Text>
+        <Text style={styles.titleText}>Rise Against{'\n'}Hunger Italia</Text>
+      </Animated.View>
     </View>
   );
 };
 
-// Clean Image Section
-const CleanImageSection: React.FC<{
+// Sezione descrizione dell'app
+const AppDescriptionSection: React.FC<{
   animations: ReturnType<typeof useModernAnimations>;
 }> = ({ animations }) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
-        imageContainer: {
-          flex: 1,
+        descriptionContainer: {
+          paddingHorizontal: Spacing[6],
+          paddingVertical: Spacing[8],
+          backgroundColor: Colors.neutral[50],
+          marginHorizontal: Spacing[4],
+          borderRadius: 24,
+          shadowColor: Colors.neutral[400],
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 12,
+          elevation: 3,
         },
-        heroImage: {
-          width: '100%',
-          height: screenHeight * 0.7,
-          resizeMode: 'cover',
+        descriptionTitle: {
+          fontSize: Typography.sizes.xl,
+          fontWeight: Typography.weights.bold,
+          color: Colors.neutral[900],
+          textAlign: 'center',
+          marginBottom: Spacing[4],
+          letterSpacing: -0.5,
+        },
+        descriptionText: {
+          fontSize: Typography.sizes.base,
+          fontWeight: Typography.weights.regular,
+          color: Colors.neutral[700],
+          textAlign: 'center',
+          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+          marginBottom: Spacing[4],
+        },
+        navigationHint: {
+          fontSize: Typography.sizes.sm,
+          fontWeight: Typography.weights.medium,
+          color: Colors.primary[600],
+          textAlign: 'center',
+          fontStyle: 'italic',
         },
       }),
     []
@@ -135,26 +212,159 @@ const CleanImageSection: React.FC<{
   return (
     <Animated.View
       style={[
-        styles.imageContainer,
+        styles.descriptionContainer,
         {
-          opacity: animations.imageFade,
-          transform: [{ translateY: animations.imageSlide }],
+          opacity: animations.descriptionFade,
+          transform: [{ translateY: animations.descriptionSlide }],
         },
       ]}
     >
-      <Image
-        source={require('../../assets/images/hero-banner.png')}
-        style={styles.heroImage}
-      />
+      <Text style={styles.descriptionTitle}>Come funziona l&apos;app</Text>
+      <Text style={styles.descriptionText}>
+        Scopri il nostro impatto nella lotta contro la fame mondiale e unisciti
+        alle nostre azioni concrete per fare la differenza.
+      </Text>
+      <Text style={styles.navigationHint}>
+        Naviga tra le sezioni per esplorare tutte le funzionalità
+      </Text>
+    </Animated.View>
+  );
+};
+
+// Sezione bottoni di navigazione
+const NavigationButtonsSection: React.FC<{
+  animations: ReturnType<typeof useModernAnimations>;
+  onImpactPress: () => void;
+  onActionsPress: () => void;
+}> = ({ animations, onImpactPress, onActionsPress }) => {
+  const { triggerHaptic } = useHapticFeedback();
+
+  const handleImpactPress = async () => {
+    await triggerHaptic('medium');
+    onImpactPress();
+  };
+
+  const handleActionsPress = async () => {
+    await triggerHaptic('medium');
+    onActionsPress();
+  };
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        buttonsContainer: {
+          paddingHorizontal: Spacing[4],
+          paddingVertical: Spacing[8],
+          gap: Spacing[4],
+        },
+        buttonRow: {
+          flexDirection: 'row',
+          gap: Spacing[4],
+        },
+        button: {
+          flex: 1,
+        },
+        impactButton: {
+          backgroundColor: '#059669', // Green per impatto
+          borderRadius: 20,
+          shadowColor: '#059669',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          elevation: 4,
+        },
+        actionsButton: {
+          backgroundColor: '#DC2626', // Rosso per azioni
+          borderRadius: 20,
+          shadowColor: '#DC2626',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          elevation: 4,
+        },
+        buttonContent: {
+          paddingVertical: Spacing[6],
+          paddingHorizontal: Spacing[4],
+          alignItems: 'center',
+        },
+        buttonIcon: {
+          fontSize: 32,
+          marginBottom: Spacing[2],
+        },
+        buttonTitle: {
+          fontSize: Typography.sizes.lg,
+          fontWeight: Typography.weights.bold,
+          color: Colors.neutral[0],
+          textAlign: 'center',
+          marginBottom: Spacing[1],
+        },
+        buttonSubtitle: {
+          fontSize: Typography.sizes.sm,
+          fontWeight: Typography.weights.medium,
+          color: Colors.neutral[100],
+          textAlign: 'center',
+          opacity: 0.9,
+        },
+      }),
+    []
+  );
+
+  return (
+    <Animated.View
+      style={[
+        styles.buttonsContainer,
+        {
+          opacity: animations.buttonsFade,
+          transform: [{ translateY: animations.buttonsSlide }],
+        },
+      ]}
+    >
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={styles.button}
+          // eslint-disable-next-line react/jsx-no-bind
+          onPress={handleImpactPress}
+          activeOpacity={0.8}
+        >
+          <Surface style={[styles.impactButton]}>
+            <View style={styles.buttonContent}>
+              <Text style={styles.buttonIcon}>📊</Text>
+              <Text style={styles.buttonTitle}>Impatto</Text>
+              <Text style={styles.buttonSubtitle}>I nostri risultati</Text>
+            </View>
+          </Surface>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          // eslint-disable-next-line react/jsx-no-bind
+          onPress={handleActionsPress}
+          activeOpacity={0.8}
+        >
+          <Surface style={[styles.actionsButton]}>
+            <View style={styles.buttonContent}>
+              <Text style={styles.buttonIcon}>🚀</Text>
+              <Text style={styles.buttonTitle}>Azioni</Text>
+              <Text style={styles.buttonSubtitle}>Cosa puoi fare</Text>
+            </View>
+          </Surface>
+        </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 };
 
 // Main Component
-export const HomeTabScreen: React.FC<HomeTabScreenProps> = ({
-  navigation: _,
-}) => {
+export const HomeTabScreen: React.FC<HomeTabScreenProps> = ({ navigation }) => {
   const animations = useModernAnimations();
+
+  const handleImpactPress = () => {
+    navigation.navigate('Impact');
+  };
+
+  const handleActionsPress = () => {
+    navigation.navigate('Contribute');
+  };
 
   const styles = useMemo(
     () =>
@@ -163,11 +373,9 @@ export const HomeTabScreen: React.FC<HomeTabScreenProps> = ({
           flex: 1,
           backgroundColor: Colors.neutral[0],
         },
-        scrollView: {
-          flex: 1,
-        },
         content: {
           flex: 1,
+          justifyContent: 'space-between',
         },
       }),
     []
@@ -175,17 +383,17 @@ export const HomeTabScreen: React.FC<HomeTabScreenProps> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-        bounces={false}
-      >
-        <View style={styles.content}>
-          <ModernHeaderSection animations={animations} />
-          <CleanImageSection animations={animations} />
-        </View>
-      </ScrollView>
+      <View style={styles.content}>
+        <ModernHeaderSection animations={animations} />
+        <AppDescriptionSection animations={animations} />
+        <NavigationButtonsSection
+          animations={animations}
+          // eslint-disable-next-line react/jsx-no-bind
+          onImpactPress={handleImpactPress}
+          // eslint-disable-next-line react/jsx-no-bind
+          onActionsPress={handleActionsPress}
+        />
+      </View>
     </SafeAreaView>
   );
 };

@@ -11,7 +11,7 @@ export {
 } from './HomeActionsSubComponents';
 export { default as HomeHeaderSection } from './HomeHeaderSection';
 export { default as HomeHeroStoriesSection } from './HomeHeroStoriesSection';
-export { default as HomeImpactSection } from './HomeImpactSection';
+
 export { default as HomeInfoSection } from './HomeInfoSection';
 
 // Modern Components

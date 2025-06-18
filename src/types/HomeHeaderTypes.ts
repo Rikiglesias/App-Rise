@@ -12,7 +12,7 @@ export const ADVANCED_CONFIG = {
     minHeight: 120,
   },
   imageSection: {
-    height: windowHeight * 0.5,
+    height: windowHeight * 0.58,
   },
   typography: {
     title: windowWidth < 375 ? 28 : 32,
@@ -25,8 +25,8 @@ export const ADVANCED_CONFIG = {
   scrollEffects: {
     fadeRange: [0, 150],
     translateRange: [0, 80],
-    parallaxRange: [0, 350],
-    scaleRange: [1, 1.05],
+    parallaxRange: [0, 200], // Ridotto l'effetto parallasse
+    scaleRange: [1, 1.02], // Ridotto l'effetto scale
   },
 };
 
@@ -48,6 +48,7 @@ export interface UseScrollInterpolationsReturn {
   imageParallax: Animated.AnimatedInterpolation<number>;
   imageScale: Animated.AnimatedInterpolation<number>;
   gradientOpacity: Animated.AnimatedInterpolation<number>;
+  imageRotation: Animated.AnimatedInterpolation<string>;
 }
 
 // Type for styles to avoid circular imports
@@ -66,10 +67,12 @@ export interface HeaderImageSectionProps {
   readonly imageParallax: Animated.AnimatedInterpolation<number>;
   readonly imageScale: Animated.AnimatedInterpolation<number>;
   readonly gradientOpacity: Animated.AnimatedInterpolation<number>;
+  readonly imageRotation: Animated.AnimatedInterpolation<string>;
   readonly pulseAnim: Animated.Value;
   readonly styles: HomeHeaderStyles;
 }
 
 export interface HeaderMissionSectionProps {
   readonly styles: HomeHeaderStyles;
+  readonly scrollY?: Animated.Value;
 }

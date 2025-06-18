@@ -10,7 +10,6 @@ import { useTheme } from '../../shared/hooks/useTheme';
 import { type HomeHeaderSectionProps } from '../../types/HomeHeaderTypes';
 import {
   HeaderImageSection,
-  HeaderMissionSection,
   HeaderTextSection,
 } from './HomeHeaderSubComponents';
 
@@ -27,6 +26,7 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
     imageParallax,
     imageScale,
     gradientOpacity,
+    imageRotation,
   } = useScrollInterpolations(scrollY);
   const styles = useHomeHeaderStyles();
 
@@ -53,11 +53,12 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
         imageParallax={imageParallax}
         imageScale={imageScale}
         gradientOpacity={gradientOpacity}
+        imageRotation={imageRotation}
         pulseAnim={pulseAnim}
         styles={styles}
       />
 
-      <HeaderMissionSection styles={styles} />
+      {/* HeaderMissionSection rimossa - spostata nella pagina impatto */}
     </Animated.View>
   );
 };

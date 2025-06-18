@@ -122,7 +122,7 @@ const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
 // =================================================================
 
 const ICON_MAP: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
-  ImpactTab: 'chart-donut',
+  ImpactTab: 'chart-line', // CAMBIATO: da 'chart-donut' a 'chart-line' - stessa icona del bottone impatto
   HomeTab: 'home',
   InfoTab: 'hand-heart',
 };

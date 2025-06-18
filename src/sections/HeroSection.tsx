@@ -64,7 +64,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               },
             ]}
           >
-            Rise Against Hunger
+            Rise Against Hunger Italia
           </Text>
 
           <Text

@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import {
   BorderRadius,
+  Colors,
   Spacing,
   Typography,
 } from '../shared/constants/designTokens';
@@ -15,11 +16,11 @@ export const createContainerStyles = (
 ) =>
   StyleSheet.create({
     container: {
-      backgroundColor: colors.neutral[50],
+      backgroundColor: colors.neutral[0], // Sfondo bianco per continuità
       overflow: 'hidden',
     },
     headerSection: {
-      paddingVertical: ADVANCED_CONFIG.headerSection.paddingVertical,
+      paddingVertical: Spacing[3], // Ridotto da Spacing[6] per meno spazio
       paddingHorizontal: ADVANCED_CONFIG.headerSection.paddingHorizontal,
       minHeight: ADVANCED_CONFIG.headerSection.minHeight,
       alignItems: 'center',
@@ -73,13 +74,20 @@ export const createImageStyles = (
     // Tutti questi stili sono utilizzati nel componente HeaderImageSection
     // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
     imageSection: {
-      height: ADVANCED_CONFIG.imageSection.height,
+      height: ADVANCED_CONFIG.imageSection.height * 1.1, // AUMENTATA: da 0.75 a 1.1 - più spazio verticale per evitare ritagli
       width: '100%',
       position: 'relative',
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      marginVertical: Spacing[4],
+      marginTop: Spacing[4], // Spazio adeguato per separazione
+      marginBottom: Spacing[4], // Spazio maggiore per evitare overlap
+      borderRadius: 24, // Bordi arrotondati per eleganza
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.15,
+      shadowRadius: 16,
+      elevation: 8,
     },
     imageContainer: {
       width: '100%',
@@ -94,8 +102,8 @@ export const createImageStyles = (
     },
     image: {
       width: '100%',
-      height: '100%',
-      resizeMode: 'cover',
+      height: '100%', // Mantiene l'altezza completa
+      resizeMode: 'cover', // RIPRISTINATO: da 'contain' a 'cover' - riempie tutto lo spazio senza bande vuote
     },
     imageGradientOverlay: {
       position: 'absolute',
@@ -120,7 +128,8 @@ export const createMissionStyles = (
     // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
     missionSection: {
       paddingHorizontal: Spacing[4],
-      paddingVertical: Spacing[6],
+      paddingTop: Spacing[1], // Minimo spazio sopra per continuità
+      paddingBottom: Spacing[2], // Ridotto spazio sotto
     },
     missionCard: {
       backgroundColor: colors.neutral[0],
@@ -171,3 +180,163 @@ export const createMissionStyles = (
     },
   });
 /* eslint-enable react-native/no-unused-styles */
+
+// Stili per la missione con stats containers affiancati
+export const baseMissionStyles = StyleSheet.create({
+  missionContainer: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 16,
+    padding: Spacing[4],
+    marginTop: Spacing[4],
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  missionText: {
+    fontSize: Typography.sizes.base,
+    color: Colors.neutral[700],
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: Spacing[4],
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    gap: Spacing[3],
+  },
+  statsBox: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 16,
+    borderWidth: 2,
+    padding: Spacing[3],
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  mealsBox: {
+    borderColor: '#DC2626',
+    shadowColor: '#DC2626',
+  },
+  volunteersBox: {
+    borderColor: '#1F2937',
+    shadowColor: '#1F2937',
+  },
+  statNumber: {
+    fontSize: Typography.sizes['2xl'],
+    fontWeight: Typography.weights.black,
+    color: Colors.neutral[900],
+    marginBottom: Spacing[1],
+  },
+  statLabel: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.neutral[700],
+    textAlign: 'center',
+  },
+  infoIcon: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+  },
+
+  // Stili per il modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Spacing[4],
+  },
+  modalContainer: {
+    width: '100%',
+    maxWidth: 340,
+    borderRadius: 24,
+    overflow: 'hidden',
+  },
+  modalGradient: {
+    padding: 3,
+  },
+  modalContent: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 21,
+    padding: Spacing[5],
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing[4],
+  },
+  modalTitle: {
+    fontSize: Typography.sizes.xl,
+    fontWeight: Typography.weights.bold,
+    color: Colors.neutral[900],
+  },
+  closeButton: {
+    padding: Spacing[1],
+  },
+  breakdownContainer: {
+    gap: Spacing[3],
+    marginBottom: Spacing[4],
+  },
+  breakdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing[3],
+  },
+  breakdownBadge: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.neutral[50],
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#DC2626',
+  },
+  breakdownText: {
+    flex: 1,
+  },
+  breakdownNumber: {
+    fontSize: Typography.sizes.lg,
+    fontWeight: Typography.weights.bold,
+    color: Colors.neutral[900],
+  },
+  breakdownLabel: {
+    fontSize: Typography.sizes.base,
+    color: Colors.neutral[700],
+    marginTop: 2,
+  },
+  breakdownDescription: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.neutral[500],
+    marginTop: 1,
+  },
+  totalContainer: {
+    paddingTop: Spacing[3],
+  },
+  totalLine: {
+    height: 1,
+    backgroundColor: Colors.neutral[200],
+    marginBottom: Spacing[3],
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  totalLabel: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.semibold,
+    color: Colors.neutral[700],
+  },
+  totalNumber: {
+    fontSize: Typography.sizes.xl,
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+  },
+});
