@@ -30,4 +30,3 @@ export { StatButton } from './ImpactStatComponents';
 export { default as ActionCardEnhanced } from './ActionCardEnhanced';
 
 // Legacy Components
-export { default as ProjectCardOld } from './ProjectCard.old';

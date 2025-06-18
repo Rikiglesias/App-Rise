@@ -19,7 +19,7 @@ import {
   Typography,
 } from '../shared/constants/designTokens';
 import { useLinkHandler } from '../shared/hooks/useLinkHandler';
-import { isSuccess } from '../utils/result';
+import { isSuccess } from '../shared/utils/result';
 
 type ChiSiamoScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
