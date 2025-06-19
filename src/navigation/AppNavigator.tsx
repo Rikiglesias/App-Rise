@@ -7,7 +7,7 @@ import 'react-native-gesture-handler';
 // Navigators
 
 // Screens
-import ChiSiamoScreen from '../screens/ChiSiamoScreen';
+import ChiSiamoScreen from '../screens/ChiSiamo';
 import Impatto2024Screen from '../screens/Impatto2024Screen';
 import ProjectsScreen from '../screens/ProjectsScreen';
 import SeguiciScreen from '../screens/SeguiciScreen';
@@ -117,7 +117,7 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="ChiSiamo"
           component={ChiSiamoScreen}
-          options={{ title: 'La Nostra Storia' }}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

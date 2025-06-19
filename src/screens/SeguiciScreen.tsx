@@ -164,23 +164,6 @@ const SeguiciScreen: React.FC<Props> = ({ navigation: _navigation }) => {
             </View>
           </TouchableOpacity>
         </View>
-
-        <View style={styles.statsSection}>
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>3.1M</Text>
-              <Text style={styles.statLabel}>Pasti 2024</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>13K</Text>
-              <Text style={styles.statLabel}>Volontari</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>16K</Text>
-              <Text style={styles.statLabel}>Kit</Text>
-            </View>
-          </View>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -261,38 +244,6 @@ const styles = StyleSheet.create({
   socialHandle: {
     fontSize: Typography.sizes.sm,
     fontWeight: '400',
-    color: Colors.neutral[600],
-    marginTop: Spacing[1],
-  },
-
-  statsSection: {
-    backgroundColor: Colors.neutral[0],
-    marginHorizontal: Spacing[4],
-    marginTop: Spacing[6],
-    marginBottom: Spacing[8],
-    borderRadius: BorderRadius.lg,
-    padding: Spacing[6],
-    ...Shadows.sm,
-  },
-
-  statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-
-  statItem: {
-    alignItems: 'center',
-  },
-
-  statNumber: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: '800',
-    color: Colors.primary[600],
-  },
-
-  statLabel: {
-    fontSize: Typography.sizes.sm,
-    fontWeight: '500',
     color: Colors.neutral[600],
     marginTop: Spacing[1],
   },

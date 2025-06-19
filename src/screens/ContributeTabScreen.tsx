@@ -2,10 +2,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
+  Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,25 +14,55 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Surface } from 'react-native-paper';
 
-import {
-  BorderRadius,
-  Colors,
-  Spacing,
-  Typography,
-} from '../shared/constants/designTokens';
+import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
 import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 import type { ContributeTabScreenProps } from '../types/ContributeScreenTypes';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-// Modern Animation Hook
-const useActionsAnimations = () => {
+// Types
+interface ButtonData {
+  id: string;
+  title: string;
+  icon: string;
+  gradient: readonly [string, string, string];
+  onPress: () => void;
+}
+
+interface ButtonStyles {
+  container: object;
+  categoryContainer: object;
+  categoryHeader: object;
+  categoryTitle: object;
+  categorySubtitle: object;
+  categoryDivider: object;
+  donateSubtitle: object;
+  exploreSubtitle: object;
+  titleSeparator: object;
+  separatorLine: object;
+  separatorIcon: object;
+  buttonsGrid: object;
+  buttonRow: object;
+  buttonContainer: object;
+  gradientBorder: object;
+  whiteContainer: object;
+  buttonContent: object;
+  buttonIcon: object;
+  buttonTitle: object;
+  infoButton: object;
+}
+
+// Animation Hook
+const useNewActionsAnimations = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  const cardAnimations = useRef([
+  const buttonAnimations = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
     new Animated.Value(0),
     new Animated.Value(0),
     new Animated.Value(0),
@@ -59,11 +90,11 @@ const useActionsAnimations = () => {
           friction: 8,
         }),
       ]),
-      // Cards animations staggered
+      // Buttons animations staggered
       Animated.delay(300),
       Animated.stagger(
         200,
-        cardAnimations.map(anim =>
+        buttonAnimations.map(anim =>
           Animated.timing(anim, {
             toValue: 1,
             duration: 800,
@@ -78,22 +109,253 @@ const useActionsAnimations = () => {
     return () => {
       sequence.stop();
     };
-  }, [fadeAnim, slideAnim, scaleAnim, cardAnimations]);
+  }, [fadeAnim, slideAnim, scaleAnim, buttonAnimations]);
 
-  return { fadeAnim, slideAnim, scaleAnim, cardAnimations };
+  return { fadeAnim, slideAnim, scaleAnim, buttonAnimations };
 };
 
-// Modern Header Section
-const ModernActionsHeader: React.FC<{
-  animations: ReturnType<typeof useActionsAnimations>;
+// Modern Info Modal Component
+const DonationInfoModal: React.FC<{
+  visible: boolean;
+  onClose: () => void;
+}> = ({ visible, onClose }) => {
+  const { triggerHaptic } = useHapticFeedback();
+  const modalAnim = useRef(new Animated.Value(0)).current;
+  const backdropAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (visible) {
+      Animated.parallel([
+        Animated.timing(backdropAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.spring(modalAnim, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 50,
+          friction: 8,
+        }),
+      ]).start();
+    } else {
+      Animated.parallel([
+        Animated.timing(backdropAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(modalAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [visible, modalAnim, backdropAnim]);
+
+  const handleClose = useCallback(async () => {
+    await triggerHaptic('light');
+    onClose();
+  }, [onClose, triggerHaptic]);
+
+  const modalStyles = StyleSheet.create({
+    overlay: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: Spacing[4],
+    },
+    backdrop: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    },
+    // GRADIENT CONTAINER PATTERN per modal (elemento importante)
+    modalGradientBorder: {
+      borderRadius: 24,
+      padding: 3,
+      shadowColor: '#DC2626',
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.3,
+      shadowRadius: 20,
+      elevation: 12,
+      maxWidth: screenWidth * 0.9,
+      width: '100%',
+    },
+    modalWhiteContainer: {
+      backgroundColor: Colors.neutral[0],
+      borderRadius: 21,
+      overflow: 'hidden',
+    },
+    modalContent: {
+      padding: Spacing[6],
+    },
+    modalHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: Spacing[5],
+    },
+    modalTitle: {
+      fontSize: Typography.sizes['2xl'],
+      fontWeight: Typography.weights.black,
+      color: '#DC2626',
+      flex: 1,
+      letterSpacing: -0.5,
+      textShadowColor: 'rgba(220, 38, 38, 0.15)',
+      textShadowOffset: { width: 0, height: 2 },
+      textShadowRadius: 6,
+    },
+    closeButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: Colors.neutral[100],
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: Colors.neutral[400],
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    modalText: {
+      fontSize: Typography.sizes.base,
+      fontWeight: Typography.weights.medium,
+      color: Colors.neutral[700],
+      lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+      marginBottom: Spacing[4],
+    },
+    highlightText: {
+      fontSize: Typography.sizes.lg,
+      fontWeight: Typography.weights.bold,
+      color: '#DC2626',
+      textAlign: 'center',
+      marginTop: Spacing[3],
+      paddingVertical: Spacing[3],
+      paddingHorizontal: Spacing[4],
+      backgroundColor: 'rgba(220, 38, 38, 0.05)',
+      borderRadius: 12,
+      letterSpacing: -0.3,
+      textShadowColor: 'rgba(220, 38, 38, 0.1)',
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: 3,
+    },
+  });
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="none"
+      statusBarTranslucent
+    >
+      <View style={modalStyles.overlay}>
+        <Animated.View
+          style={[
+            modalStyles.backdrop,
+            {
+              opacity: backdropAnim,
+            },
+          ]}
+        />
+        <Animated.View
+          style={[
+            {
+              opacity: modalAnim,
+              transform: [
+                {
+                  scale: modalAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.8, 1],
+                  }),
+                },
+                {
+                  translateY: modalAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [50, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <LinearGradient
+            colors={['#DC2626', '#B91C1C', '#991B1B']}
+            style={modalStyles.modalGradientBorder}
+          >
+            <View style={modalStyles.modalWhiteContainer}>
+              <View style={modalStyles.modalContent}>
+                <View style={modalStyles.modalHeader}>
+                  <Text style={modalStyles.modalTitle}>💝 Come Donare</Text>
+                  <TouchableOpacity
+                    style={modalStyles.closeButton}
+                    onPress={handleClose}
+                    activeOpacity={0.7}
+                  >
+                    <MaterialCommunityIcons
+                      name="close"
+                      size={20}
+                      color={Colors.neutral[600]}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={modalStyles.modalText}>
+                  <Text style={{ fontWeight: Typography.weights.bold }}>
+                    🕐 Dona il tuo tempo:{' '}
+                  </Text>
+                  Partecipa gratuitamente ai nostri eventi di impacchettamento
+                  pasti. È un&apos;esperienza formativa e divertente che non
+                  richiede alcun costo economico.
+                </Text>
+
+                <Text style={modalStyles.modalText}>
+                  <Text style={{ fontWeight: Typography.weights.bold }}>
+                    🛍️ Charity Shop:{' '}
+                  </Text>
+                  Fai i tuoi acquisti abituali tramite il nostro sito partner.
+                  Non pagherai nulla in più, ma una percentuale
+                  dell&apos;importo speso verrà automaticamente destinata ai
+                  nostri progetti.
+                </Text>
+
+                <Text style={modalStyles.modalText}>
+                  <Text style={{ fontWeight: Typography.weights.bold }}>
+                    🎁 Charity Gift Card:{' '}
+                  </Text>
+                  Acquista gift card per te o da regalare. Anche qui una
+                  percentuale dell&apos;importo speso viene destinata alla lotta
+                  contro la fame mondiale.
+                </Text>
+
+                <Text style={modalStyles.highlightText}>
+                  ✨ Il tuo contributo più prezioso è il TEMPO, non il denaro!
+                </Text>
+              </View>
+            </View>
+          </LinearGradient>
+        </Animated.View>
+      </View>
+    </Modal>
+  );
+};
+
+// Header Section con descrizione aggiunta
+const NewActionsHeader: React.FC<{
+  animations: ReturnType<typeof useNewActionsAnimations>;
 }> = ({ animations }) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
         headerContainer: {
-          paddingTop: Spacing[12],
+          paddingTop: Spacing[8], // Ridotto da 12
           paddingHorizontal: Spacing[6],
-          paddingBottom: Spacing[8],
+          paddingBottom: Spacing[4], // Ridotto da 8
           alignItems: 'center',
           position: 'relative',
         },
@@ -106,40 +368,58 @@ const ModernActionsHeader: React.FC<{
           opacity: 0.05,
         },
         titleText: {
-          fontSize: screenWidth > 375 ? 36 : 32,
+          fontSize: screenWidth > 375 ? 32 : 28, // Ridotto da 42/36
           fontWeight: Typography.weights.black,
-          color: Colors.primary[700],
+          color: '#DC2626',
           textAlign: 'center',
-          letterSpacing: -0.8,
-          marginBottom: Spacing[3],
+          letterSpacing: -1.0, // Ridotto da -1.2
+          marginBottom: Spacing[1], // Ridotto da 2
+          // Text shadow più pronunciato per eleganza
+          textShadowColor: 'rgba(220, 38, 38, 0.2)',
+          textShadowOffset: { width: 0, height: 3 },
+          textShadowRadius: 12,
         },
-        subtitleText: {
-          fontSize: Typography.sizes.lg,
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[600],
-          textAlign: 'center',
-          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.lg,
-          paddingHorizontal: Spacing[4],
-          marginBottom: Spacing[6],
-        },
-        statsRow: {
+        // Separatore decorativo per titolo principale
+        titleSeparator: {
           flexDirection: 'row',
           alignItems: 'center',
-          gap: Spacing[8],
+          marginVertical: Spacing[2], // Ridotto da 3
+          paddingHorizontal: Spacing[6],
         },
-        statItem: {
-          alignItems: 'center',
+        separatorLine: {
+          flex: 1,
+          height: 2,
+          backgroundColor: Colors.neutral[300],
+          opacity: 0.6,
+          borderRadius: 1,
         },
-        statNumber: {
-          fontSize: Typography.sizes.xl,
+        separatorIcon: {
+          fontSize: 16, // Ridotto da 20
+          marginHorizontal: Spacing[3], // Ridotto da 4
+          opacity: 0.7,
+          color: Colors.neutral[600],
           fontWeight: Typography.weights.bold,
-          color: Colors.primary[600],
-          marginBottom: Spacing[1],
         },
-        statLabel: {
-          fontSize: Typography.sizes.sm,
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[500],
+        descriptionText: {
+          fontSize: Typography.sizes.sm, // Ridotto da base
+          fontWeight: Typography.weights.medium, // Ridotto da semibold
+          color: Colors.neutral[600],
+          textAlign: 'center',
+          lineHeight: 20, // Ridotto
+          marginBottom: Spacing[2], // Ridotto da 4
+          fontStyle: 'italic',
+          backgroundColor: 'rgba(59, 130, 246, 0.06)', // Ridotto opacità
+          paddingVertical: Spacing[2], // Ridotto da 4
+          paddingHorizontal: Spacing[4], // Ridotto da 5
+          borderRadius: 16, // Ridotto da 20
+          borderWidth: 1,
+          borderColor: 'rgba(59, 130, 246, 0.12)', // Ridotto opacità
+          // Ombra sottile per distinguerla
+          shadowColor: '#3B82F6',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08, // Ridotto da 0.1
+          shadowRadius: 4, // Ridotto da 6
+          elevation: 1, // Ridotto da 2
         },
       }),
     []
@@ -163,281 +443,577 @@ const ModernActionsHeader: React.FC<{
         style={styles.backgroundPattern}
       />
       <Text style={styles.titleText}>Come Puoi Aiutare</Text>
-      <Text style={styles.subtitleText}>
-        Scegli il modo migliore per contribuire alla lotta contro la fame
-        mondiale
-      </Text>
-      <View style={styles.statsRow}>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>€25</Text>
-          <Text style={styles.statLabel}>100 pasti</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>€50</Text>
-          <Text style={styles.statLabel}>200 pasti</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>€100</Text>
-          <Text style={styles.statLabel}>400 pasti</Text>
-        </View>
+      {/* Separatore decorativo */}
+      <View style={styles.titleSeparator}>
+        <View style={styles.separatorLine} />
+        <Text style={styles.separatorIcon}>◆</Text>
+        <View style={styles.separatorLine} />
       </View>
+      <Text style={styles.descriptionText}>
+        Ogni azione conta nella lotta contro la fame
+      </Text>
     </Animated.View>
   );
 };
 
-// Action Cards Section
-const ActionsCardsSection: React.FC<{
-  animations: ReturnType<typeof useActionsAnimations>;
+// Nuova sezione bottoni con categorie
+const NewActionButtonsSection: React.FC<{
+  animations: ReturnType<typeof useNewActionsAnimations>;
   navigation: ContributeTabScreenProps['navigation'];
 }> = ({ animations, navigation }) => {
   const { triggerHaptic } = useHapticFeedback();
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
-  const actionCards = useMemo(
+  const donateButtons = useMemo(
     () => [
       {
-        id: 'donate',
-        title: 'Dona Ora',
-        subtitle: 'Contribuisci direttamente ai nostri progetti',
-        description:
-          'Ogni donazione viene convertita direttamente in pasti nutritivi per chi ne ha bisogno',
-        icon: 'heart',
-        gradient: ['#DC2626', '#EF4444'] as const,
-        onPress: () => navigation.navigate('Progetti'),
+        id: 'calendario',
+        title: 'Calendario',
+        icon: 'calendar',
+        gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
+        onPress: () => navigation.navigate('Calendario', { title: 'Eventi' }),
       },
       {
-        id: 'volunteer',
-        title: 'Diventa Volontario',
-        subtitle: 'Unisciti agli eventi di confezionamento',
-        description:
-          'Partecipa agli eventi locali di confezionamento pasti e sensibilizzazione',
-        icon: 'account-group',
-        gradient: ['#059669', '#10B981'] as const,
+        id: 'charity-shop',
+        title: 'Charity Shop',
+        icon: 'shopping',
+        gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
         onPress: () =>
-          navigation.navigate('Calendario', {
-            title: 'Eventi Volontariato',
-            subtitle: 'Unisciti a noi negli eventi',
-          }),
+          navigation.navigate('CharityShop', { title: 'Charity Shop' }),
       },
       {
-        id: 'spread',
-        title: 'Diffondi la Missione',
-        subtitle: 'Condividi la nostra causa',
-        description:
-          'Aiutaci a sensibilizzare più persone possibili sulla fame nel mondo',
-        icon: 'share-variant',
-        gradient: ['#3B82F6', '#60A5FA'] as const,
-        onPress: () => navigation.navigate('Seguici'),
+        id: 'gift-card',
+        title: 'Charity Gift Card',
+        icon: 'gift',
+        gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
+        onPress: () =>
+          navigation.navigate('CharityGiftCard', {
+            title: 'Charity Gift Card',
+          }),
       },
     ],
     [navigation]
   );
 
-  const handleCardPress = useCallback(
-    async (action: (typeof actionCards)[0]) => {
+  const otherButtons = useMemo(
+    () => [
+      {
+        id: 'progetti',
+        title: 'Progetti',
+        icon: 'charity',
+        gradient: ['#1F2937', '#374151', '#111827'] as const,
+        onPress: () => navigation.navigate('Progetti'),
+      },
+      {
+        id: 'seguici',
+        title: 'Seguici',
+        icon: 'share-variant',
+        gradient: ['#1F2937', '#374151', '#111827'] as const,
+        onPress: () => navigation.navigate('Seguici'),
+      },
+      {
+        id: 'tracciabilita',
+        title: 'Tracciabilità',
+        icon: 'map-marker-path',
+        gradient: ['#1F2937', '#374151', '#111827'] as const,
+        onPress: () =>
+          navigation.navigate('Tracciabilita', { title: 'Tracciabilità' }),
+      },
+      {
+        id: 'chi-siamo',
+        title: 'Chi Siamo',
+        icon: 'information',
+        gradient: ['#1F2937', '#374151', '#111827'] as const,
+        onPress: () => navigation.navigate('ChiSiamo'),
+      },
+    ],
+    [navigation]
+  );
+
+  const handleButtonPress = useCallback(
+    async (button: ButtonData) => {
       await triggerHaptic('medium');
-      action.onPress();
+      button.onPress();
     },
     [triggerHaptic]
   );
 
+  const handleInfoPress = useCallback(async () => {
+    await triggerHaptic('light');
+    setShowInfoModal(true);
+  }, [triggerHaptic]);
+
+  const handleCloseModal = useCallback(() => {
+    setShowInfoModal(false);
+  }, []);
+
+  return (
+    <>
+      <ActionButtonsContent
+        animations={animations}
+        donateButtons={donateButtons}
+        otherButtons={otherButtons}
+        onButtonPress={handleButtonPress}
+        onInfoPress={handleInfoPress}
+      />
+      <DonationInfoModal visible={showInfoModal} onClose={handleCloseModal} />
+    </>
+  );
+};
+
+// Componente separato per il contenuto dei bottoni
+const ActionButtonsContent: React.FC<{
+  animations: ReturnType<typeof useNewActionsAnimations>;
+  donateButtons: ButtonData[];
+  otherButtons: ButtonData[];
+  onButtonPress: (button: ButtonData) => void;
+  onInfoPress: () => void;
+}> = ({
+  animations,
+  donateButtons,
+  otherButtons,
+  onButtonPress,
+  onInfoPress,
+}) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
-        cardsContainer: {
+        container: {
           paddingHorizontal: Spacing[4],
-          gap: Spacing[6],
+          gap: Spacing[8],
+          paddingTop: Spacing[4],
+          paddingBottom: Spacing[12],
         },
-        actionCard: {
-          borderRadius: BorderRadius.xl,
-          shadowColor: Colors.neutral[900],
+        categoryContainer: {
+          marginBottom: Spacing[6],
+        },
+        categoryHeader: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: Spacing[2],
+          position: 'relative',
+        },
+        categoryTitle: {
+          fontSize: Typography.sizes['3xl'],
+          fontWeight: Typography.weights.black,
+          color: Colors.neutral[900],
+          textAlign: 'center',
+          letterSpacing: -0.8,
+          marginBottom: Spacing[2],
+          // Text shadow per profondità
+          textShadowColor: 'rgba(31, 41, 55, 0.15)',
+          textShadowOffset: { width: 0, height: 3 },
+          textShadowRadius: 8,
+        },
+        categorySubtitle: {
+          fontSize: Typography.sizes.base,
+          fontWeight: Typography.weights.medium,
+          textAlign: 'center',
+          letterSpacing: 0.3,
+          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+          marginBottom: Spacing[3],
+          paddingHorizontal: Spacing[4],
+          // Styling elegante per descrizione
+          fontStyle: 'italic',
+        },
+        donateSubtitle: {
+          color: '#B91C1C',
+          backgroundColor: 'rgba(220, 38, 38, 0.08)',
+          paddingVertical: Spacing[2],
+          paddingHorizontal: Spacing[4],
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: 'rgba(220, 38, 38, 0.15)',
+          // Ombra sottile per elevazione
+          shadowColor: '#DC2626',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 2,
+        },
+        exploreSubtitle: {
+          color: '#374151',
+          backgroundColor: 'rgba(55, 65, 81, 0.06)',
+          paddingVertical: Spacing[2],
+          paddingHorizontal: Spacing[4],
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: 'rgba(55, 65, 81, 0.12)',
+          // Ombra sottile per elevazione
+          shadowColor: '#374151',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 4,
+          elevation: 2,
+        },
+        // Separatore decorativo tra titolo e descrizione
+        titleSeparator: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginVertical: Spacing[2],
+          paddingHorizontal: Spacing[6],
+        },
+        separatorLine: {
+          flex: 1,
+          height: 1,
+          backgroundColor: Colors.neutral[300],
+          opacity: 0.4,
+        },
+        separatorIcon: {
+          fontSize: 16,
+          marginHorizontal: Spacing[3],
+          opacity: 0.5,
+          color: Colors.neutral[500],
+        },
+        infoButton: {
+          position: 'absolute',
+          right: 55,
+          top: 0,
+          width: 22,
+          height: 22,
+          borderRadius: 11,
+          backgroundColor: '#DC2626',
+          justifyContent: 'center',
+          alignItems: 'center',
+          shadowColor: '#DC2626',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
+          elevation: 4,
+        },
+        categoryDivider: {
+          height: 1,
+          backgroundColor: Colors.neutral[200],
+          marginHorizontal: Spacing[8],
+          marginBottom: Spacing[6],
+        },
+        buttonsGrid: {
+          gap: Spacing[4],
+        },
+        buttonRow: {
+          flexDirection: 'row',
+          gap: Spacing[4],
+        },
+        buttonContainer: {
+          flex: 1,
+        },
+        // GRADIENT CONTAINER PATTERN per bottoni (clickabili)
+        gradientBorder: {
+          borderRadius: 24,
+          padding: 3, // Bordo gradient
+          shadowColor: '#000',
           shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.15,
+          shadowOpacity: 0.25,
           shadowRadius: 16,
           elevation: 8,
         },
-        actionCardGradient: {
-          borderRadius: BorderRadius.xl,
+        whiteContainer: {
+          backgroundColor: Colors.neutral[0],
+          borderRadius: 21, // 24-3 per effetto bordo
           overflow: 'hidden',
         },
-        cardContent: {
-          padding: Spacing[6],
-        },
-        cardHeader: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: Spacing[4],
-        },
-        cardIcon: {
-          marginRight: Spacing[4],
-        },
-        cardTitleContainer: {
-          flex: 1,
-        },
-        cardTitle: {
-          fontSize: Typography.sizes.xl,
-          fontWeight: Typography.weights.bold,
-          color: Colors.neutral[0],
-          marginBottom: Spacing[1],
-        },
-        cardSubtitle: {
-          fontSize: Typography.sizes.base,
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[100],
-          opacity: 0.9,
-        },
-        cardDescription: {
-          fontSize: Typography.sizes.base,
-          fontWeight: Typography.weights.regular,
-          color: Colors.neutral[100],
-          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
-          opacity: 0.8,
-        },
-        actionArrow: {
-          opacity: 0.7,
-        },
-      }),
-    []
-  );
-
-  return (
-    <View style={styles.cardsContainer}>
-      {actionCards.map((card, index) => (
-        <Animated.View
-          key={card.id}
-          style={[
-            {
-              opacity: animations.cardAnimations[index] ?? 0,
-              transform: [
-                {
-                  translateY:
-                    animations.cardAnimations[index]?.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [50, 0],
-                    }) ?? 0,
-                },
-                {
-                  scale:
-                    animations.cardAnimations[index]?.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.95, 1],
-                    }) ?? 1,
-                },
-              ],
-            },
-          ]}
-        >
-          <TouchableOpacity
-            activeOpacity={0.8}
-            // eslint-disable-next-line react/jsx-no-bind
-            onPress={() => handleCardPress(card)}
-          >
-            <View style={styles.actionCard}>
-              <LinearGradient
-                colors={card.gradient}
-                style={styles.actionCardGradient}
-              >
-                <View style={styles.cardContent}>
-                  <View style={styles.cardHeader}>
-                    <MaterialCommunityIcons
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      name={card.icon as any}
-                      size={32}
-                      color={Colors.neutral[0]}
-                      style={styles.cardIcon}
-                    />
-                    <View style={styles.cardTitleContainer}>
-                      <Text style={styles.cardTitle}>{card.title}</Text>
-                      <Text style={styles.cardSubtitle}>{card.subtitle}</Text>
-                    </View>
-                    <MaterialCommunityIcons
-                      name="chevron-right"
-                      size={24}
-                      color={Colors.neutral[0]}
-                      style={styles.actionArrow}
-                    />
-                  </View>
-                  <Text style={styles.cardDescription}>{card.description}</Text>
-                </View>
-              </LinearGradient>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-      ))}
-    </View>
-  );
-};
-
-// CTA Section
-const CallToActionSection: React.FC = () => {
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        ctaContainer: {
+        buttonContent: {
+          paddingVertical: Spacing[6],
           paddingHorizontal: Spacing[4],
-          paddingTop: Spacing[8],
-          paddingBottom: Spacing[8],
-        },
-        ctaCard: {
-          borderRadius: BorderRadius.xl,
-          backgroundColor: Colors.neutral[0],
-          shadowColor: Colors.neutral[400],
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 12,
-          elevation: 3,
-        },
-        ctaContent: {
-          padding: Spacing[6],
           alignItems: 'center',
+          minHeight: 120,
+          justifyContent: 'center',
         },
-        ctaIcon: {
-          marginBottom: Spacing[4],
+        buttonIcon: {
+          marginBottom: Spacing[3],
         },
-        ctaTitle: {
-          fontSize: Typography.sizes['2xl'],
+        buttonTitle: {
+          fontSize: Typography.sizes.lg,
           fontWeight: Typography.weights.bold,
           color: Colors.neutral[900],
           textAlign: 'center',
-          marginBottom: Spacing[3],
-          letterSpacing: -0.5,
-        },
-        ctaText: {
-          fontSize: Typography.sizes.base,
-          fontWeight: Typography.weights.regular,
-          color: Colors.neutral[600],
-          textAlign: 'center',
-          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+          letterSpacing: -0.3,
+          // Text shadow per profondità
+          textShadowColor: 'rgba(0, 0, 0, 0.05)',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: 3,
         },
       }),
     []
   );
 
   return (
-    <View style={styles.ctaContainer}>
-      <Surface style={styles.ctaCard}>
-        <View style={styles.ctaContent}>
-          <MaterialCommunityIcons
-            name="earth"
-            size={48}
-            color={Colors.primary[600]}
-            style={styles.ctaIcon}
-          />
-          <Text style={styles.ctaTitle}>Insieme Possiamo Farcela</Text>
-          <Text style={styles.ctaText}>
-            Ogni piccolo gesto conta nella lotta contro la fame mondiale.
-            Unisciti a migliaia di persone che stanno già facendo la differenza.
-          </Text>
-        </View>
-      </Surface>
+    <View style={styles.container}>
+      {/* CATEGORIA DONA ORA con Info Button */}
+      <DonateButtonsSection
+        styles={styles}
+        animations={animations}
+        donateButtons={donateButtons}
+        onButtonPress={onButtonPress}
+        onInfoPress={onInfoPress}
+      />
+
+      {/* CATEGORIA ESPLORA */}
+      <ExploreButtonsSection
+        styles={styles}
+        animations={animations}
+        otherButtons={otherButtons}
+        onButtonPress={onButtonPress}
+      />
     </View>
   );
 };
+
+// Sezione bottoni Dona Ora con Info Button
+const DonateButtonsSection: React.FC<{
+  styles: ButtonStyles;
+  animations: ReturnType<typeof useNewActionsAnimations>;
+  donateButtons: ButtonData[];
+  onButtonPress: (button: ButtonData) => void;
+  onInfoPress: () => void;
+}> = ({ styles, animations, donateButtons, onButtonPress, onInfoPress }) => {
+  const handleFirstButtonPress = useCallback(() => {
+    const button = donateButtons[0];
+    if (button) onButtonPress(button);
+  }, [onButtonPress, donateButtons]);
+
+  const handleSecondButtonPress = useCallback(() => {
+    const button = donateButtons[1];
+    if (button) onButtonPress(button);
+  }, [onButtonPress, donateButtons]);
+
+  const handleGiftCardPress = useCallback(() => {
+    const button = donateButtons[2];
+    if (button) onButtonPress(button);
+  }, [onButtonPress, donateButtons]);
+
+  return (
+    <View style={styles.categoryContainer}>
+      <View style={styles.categoryHeader}>
+        <Text style={styles.categoryTitle}>❤️ Dona Ora</Text>
+        <TouchableOpacity
+          style={styles.infoButton}
+          onPress={onInfoPress}
+          activeOpacity={0.7}
+        >
+          <MaterialCommunityIcons name="information" size={14} color="white" />
+        </TouchableOpacity>
+      </View>
+      {/* Separatore decorativo */}
+      <View style={styles.titleSeparator}>
+        <View style={styles.separatorLine} />
+        <Text style={styles.separatorIcon}>•</Text>
+        <View style={styles.separatorLine} />
+      </View>
+      <Text style={[styles.categorySubtitle, styles.donateSubtitle]}>
+        Supporta la nostra missione
+      </Text>
+      <View style={styles.categoryDivider} />
+      <View style={styles.buttonsGrid}>
+        <View style={styles.buttonRow}>
+          {donateButtons[0] && (
+            <AnimatedButton
+              key={donateButtons[0].id}
+              button={donateButtons[0]}
+              animationValue={
+                animations.buttonAnimations[0] ?? new Animated.Value(0)
+              }
+              styles={styles}
+              onPress={handleFirstButtonPress}
+              iconColor="#DC2626"
+            />
+          )}
+          {donateButtons[1] && (
+            <AnimatedButton
+              key={donateButtons[1].id}
+              button={donateButtons[1]}
+              animationValue={
+                animations.buttonAnimations[1] ?? new Animated.Value(0)
+              }
+              styles={styles}
+              onPress={handleSecondButtonPress}
+              iconColor="#DC2626"
+            />
+          )}
+        </View>
+        {/* Gift Card a tutta larghezza */}
+        {donateButtons[2] && (
+          <AnimatedButton
+            button={donateButtons[2]}
+            animationValue={
+              animations.buttonAnimations[2] ?? new Animated.Value(0)
+            }
+            styles={styles}
+            onPress={handleGiftCardPress}
+            iconColor="#DC2626"
+            fullWidth
+          />
+        )}
+      </View>
+    </View>
+  );
+};
+
+// Sezione bottoni Esplora (rimane uguale)
+const ExploreButtonsSection: React.FC<{
+  styles: ButtonStyles;
+  animations: ReturnType<typeof useNewActionsAnimations>;
+  otherButtons: ButtonData[];
+  onButtonPress: (button: ButtonData) => void;
+}> = ({ styles, animations, otherButtons, onButtonPress }) => {
+  const handleFirstRowButtons = useMemo(
+    () => [
+      () => {
+        const button = otherButtons[0];
+        if (button) onButtonPress(button);
+      },
+      () => {
+        const button = otherButtons[1];
+        if (button) onButtonPress(button);
+      },
+    ],
+    [onButtonPress, otherButtons]
+  );
+
+  const handleSecondRowButtons = useMemo(
+    () => [
+      () => {
+        const button = otherButtons[2];
+        if (button) onButtonPress(button);
+      },
+      () => {
+        const button = otherButtons[3];
+        if (button) onButtonPress(button);
+      },
+    ],
+    [onButtonPress, otherButtons]
+  );
+
+  return (
+    <View style={styles.categoryContainer}>
+      <Text style={styles.categoryTitle}>🔍 Scopri</Text>
+      {/* Separatore decorativo */}
+      <View style={styles.titleSeparator}>
+        <View style={styles.separatorLine} />
+        <Text style={styles.separatorIcon}>•</Text>
+        <View style={styles.separatorLine} />
+      </View>
+      <Text style={[styles.categorySubtitle, styles.exploreSubtitle]}>
+        Progetti e iniziative
+      </Text>
+      <View style={styles.categoryDivider} />
+      <View style={styles.buttonsGrid}>
+        {/* Prima riga: Progetti, Seguici */}
+        <View style={styles.buttonRow}>
+          {otherButtons.slice(0, 2).map((button, index) => {
+            const animationValue = animations.buttonAnimations[index + 3];
+            const onPress = handleFirstRowButtons[index];
+            if (animationValue && onPress) {
+              return (
+                <AnimatedButton
+                  key={button.id}
+                  button={button}
+                  animationValue={animationValue}
+                  styles={styles}
+                  onPress={onPress}
+                  iconColor="#1F2937"
+                />
+              );
+            }
+            return null;
+          })}
+        </View>
+        {/* Seconda riga: Tracciabilità, Chi Siamo */}
+        <View style={styles.buttonRow}>
+          {otherButtons.slice(2, 4).map((button, index) => {
+            const animationValue = animations.buttonAnimations[index + 5];
+            const onPress = handleSecondRowButtons[index];
+            if (animationValue && onPress) {
+              return (
+                <AnimatedButton
+                  key={button.id}
+                  button={button}
+                  animationValue={animationValue}
+                  styles={styles}
+                  onPress={onPress}
+                  iconColor="#1F2937"
+                />
+              );
+            }
+            return null;
+          })}
+        </View>
+      </View>
+    </View>
+  );
+};
+
+// Componente bottone animato riutilizzabile (rimane uguale)
+const AnimatedButton: React.FC<{
+  button: ButtonData;
+  animationValue: Animated.Value;
+  styles: ButtonStyles;
+  onPress: () => void;
+  iconColor: string;
+  fullWidth?: boolean;
+}> = ({
+  button,
+  animationValue,
+  styles,
+  onPress,
+  iconColor,
+  fullWidth = false,
+}) => (
+  <Animated.View
+    style={[
+      fullWidth ? {} : styles.buttonContainer,
+      {
+        opacity: animationValue,
+        transform: [
+          {
+            translateY: animationValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [50, 0],
+            }),
+          },
+          {
+            scale: animationValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0.9, 1],
+            }),
+          },
+        ],
+      },
+    ]}
+  >
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
+      <LinearGradient colors={button.gradient} style={styles.gradientBorder}>
+        <View style={styles.whiteContainer}>
+          <View style={styles.buttonContent}>
+            <MaterialCommunityIcons
+              name={
+                button.icon as
+                  | 'charity'
+                  | 'shopping'
+                  | 'gift'
+                  | 'calendar'
+                  | 'share-variant'
+                  | 'map-marker-path'
+                  | 'information'
+              }
+              size={36}
+              color={iconColor}
+              style={styles.buttonIcon}
+            />
+            <Text style={styles.buttonTitle}>{button.title}</Text>
+          </View>
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
+  </Animated.View>
+);
 
 // Main Component
 export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
   navigation,
 }) => {
-  const animations = useActionsAnimations();
+  const animations = useNewActionsAnimations();
 
   const styles = useMemo(
     () =>
@@ -456,9 +1032,11 @@ export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: Spacing[8] }}
       >
-        <ModernActionsHeader animations={animations} />
-        <ActionsCardsSection animations={animations} navigation={navigation} />
-        <CallToActionSection />
+        <NewActionsHeader animations={animations} />
+        <NewActionButtonsSection
+          animations={animations}
+          navigation={navigation}
+        />
       </ScrollView>
     </SafeAreaView>
   );
