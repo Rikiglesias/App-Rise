@@ -98,7 +98,7 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
     <SafeAreaView style={mainStyles.container}>
       {/* FRECCIA STACCATA */}
       <TouchableOpacity onPress={handleBackPress} style={mainStyles.backButton}>
-        <MaterialCommunityIcons name="arrow-left" size={24} color="#DC2626" />
+        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
       </TouchableOpacity>
 
       <ScrollView

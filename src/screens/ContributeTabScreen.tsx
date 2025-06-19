@@ -17,6 +17,7 @@ import {
 
 import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
 import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
+import { useLinkHandler } from '../shared/hooks/useLinkHandler';
 import type { ContributeTabScreenProps } from '../types/ContributeScreenTypes';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -354,27 +355,13 @@ const NewActionsHeader: React.FC<{
     () =>
       StyleSheet.create({
         headerContainer: {
-          paddingTop: Spacing[6], // RIDOTTO per compattezza
-          paddingHorizontal: Spacing[6],
-          paddingBottom: Spacing[2], // RIDOTTO drasticamente
+          paddingTop: Spacing[3], // RIDOTTO drasticamente
+          paddingHorizontal: Spacing[4],
+          paddingBottom: Spacing[1], // MINIMO
           alignItems: 'center',
           position: 'relative',
         },
-        // NUOVO: Card allargata per il titolo principale
-        titleCard: {
-          backgroundColor: Colors.neutral[0],
-          borderRadius: 20, // Arrotondato ma non eccessivo
-          paddingVertical: Spacing[6], // AUMENTATO per bilanciare contenuto più grande
-          paddingHorizontal: Spacing[10], // ALLARGATO ulteriormente
-          marginHorizontal: Spacing[3], // RIDOTTO ancora per più larghezza
-          marginBottom: Spacing[2], // RIDOTTO per avvicinare ai bottoni
-          // Ombra sottile
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.06, // Leggermente più visibile
-          shadowRadius: 10, // Più morbida
-          elevation: 2, // Leggermente più elevata
-        },
+
         backgroundPattern: {
           position: 'absolute',
           top: 0,
@@ -384,23 +371,23 @@ const NewActionsHeader: React.FC<{
           opacity: 0.05,
         },
         titleText: {
-          fontSize: screenWidth > 375 ? 40 : 36, // INGRANDITO ulteriormente
+          fontSize: screenWidth > 375 ? 38 : 32, // LEGGERMENTE RIDOTTO
           fontWeight: Typography.weights.black,
           color: Colors.neutral[900], // NERO per neutralità e professionalità
           textAlign: 'center',
-          letterSpacing: -1.3, // Più stretto per impatto
-          marginBottom: Spacing[2], // Leggermente aumentato
+          letterSpacing: -1.0, // LEGGERMENTE RIDOTTO
+          marginBottom: Spacing[2], // Leggermente più spazio
           // Text shadow neutro per eleganza
-          textShadowColor: 'rgba(0, 0, 0, 0.12)',
+          textShadowColor: 'rgba(0, 0, 0, 0.15)',
           textShadowOffset: { width: 0, height: 3 },
-          textShadowRadius: 12,
+          textShadowRadius: 10,
         },
         // Separatore decorativo per titolo principale
         titleSeparator: {
           flexDirection: 'row',
           alignItems: 'center',
-          marginVertical: Spacing[1], // RIDOTTO per compattezza
-          paddingHorizontal: Spacing[8], // Più stretto
+          marginVertical: 2, // MINIMO
+          paddingHorizontal: Spacing[6], // RIDOTTO
         },
         separatorLine: {
           flex: 1,
@@ -417,25 +404,25 @@ const NewActionsHeader: React.FC<{
           fontWeight: Typography.weights.bold,
         },
         descriptionText: {
-          fontSize: Typography.sizes.sm, // INGRANDITO per leggibilità
+          fontSize: Typography.sizes.base, // INGRANDITO per migliore leggibilità
           fontWeight: Typography.weights.medium,
           color: Colors.neutral[600],
           textAlign: 'center',
-          lineHeight: 20, // AUMENTATO per leggibilità
-          marginBottom: 0, // RIMOSSO margine
+          lineHeight: 22, // INGRANDITO per più respiro
+          marginBottom: Spacing[4], // AGGIUNTO margine per stacco visivo
           fontStyle: 'italic',
           backgroundColor: 'rgba(59, 130, 246, 0.06)', // Leggermente più visibile
-          paddingVertical: Spacing[2], // AUMENTATO per più respiro
-          paddingHorizontal: Spacing[4], // AUMENTATO
-          borderRadius: 14, // Leggermente più grande
+          paddingVertical: Spacing[3], // INGRANDITO per bilanciare font
+          paddingHorizontal: Spacing[4], // INGRANDITO
+          borderRadius: 14, // INGRANDITO
           borderWidth: 1,
           borderColor: 'rgba(59, 130, 246, 0.12)', // Più visibile
           // Ombra leggera
           shadowColor: '#3B82F6',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.06, // Più visibile
-          shadowRadius: 4, // Più morbida
-          elevation: 1, // Leggera elevazione
+          shadowOpacity: 0.08, // Leggermente più visibile
+          shadowRadius: 6, // INGRANDITO
+          elevation: 2, // Leggermente più elevata
         },
       }),
     []
@@ -459,19 +446,19 @@ const NewActionsHeader: React.FC<{
         style={styles.backgroundPattern}
       />
 
-      {/* CARD PROFESSIONALE per il titolo principale */}
-      <View style={styles.titleCard}>
-        <Text style={styles.titleText}>Come Puoi Aiutare</Text>
-        {/* Separatore decorativo */}
-        <View style={styles.titleSeparator}>
-          <View style={styles.separatorLine} />
-          <Text style={styles.separatorIcon}>◆</Text>
-          <View style={styles.separatorLine} />
-        </View>
-        <Text style={styles.descriptionText}>
-          Ogni azione conta nella lotta contro la fame
-        </Text>
+      {/* TITOLO DIRETTO SENZA CONTAINER */}
+      <Text style={styles.titleText}>Come Puoi{'\n'}Aiutare</Text>
+
+      {/* Separatore decorativo */}
+      <View style={styles.titleSeparator}>
+        <View style={styles.separatorLine} />
+        <Text style={styles.separatorIcon}>◆</Text>
+        <View style={styles.separatorLine} />
       </View>
+
+      <Text style={styles.descriptionText}>
+        Ogni azione conta nella lotta contro la fame
+      </Text>
     </Animated.View>
   );
 };
@@ -482,6 +469,13 @@ const NewActionButtonsSection: React.FC<{
   navigation: ContributeTabScreenProps['navigation'];
 }> = ({ animations, navigation }) => {
   const { triggerHaptic } = useHapticFeedback();
+  const {
+    openEventsLink,
+    openShopLink,
+    openGiftCardLink,
+    openProjectsLink,
+    openTracciabilitaLink,
+  } = useLinkHandler();
   const [showInfoModal, setShowInfoModal] = useState(false);
 
   const donateButtons = useMemo(
@@ -491,28 +485,24 @@ const NewActionButtonsSection: React.FC<{
         title: 'Calendario',
         icon: 'calendar',
         gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
-        onPress: () => navigation.navigate('Calendario', { title: 'Eventi' }),
+        onPress: () => openEventsLink(),
       },
       {
         id: 'charity-shop',
         title: 'Charity Shop',
         icon: 'shopping',
         gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
-        onPress: () =>
-          navigation.navigate('CharityShop', { title: 'Charity Shop' }),
+        onPress: () => openShopLink(),
       },
       {
         id: 'gift-card',
         title: 'Charity Gift Card',
         icon: 'gift',
         gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
-        onPress: () =>
-          navigation.navigate('CharityGiftCard', {
-            title: 'Charity Gift Card',
-          }),
+        onPress: () => openGiftCardLink(),
       },
     ],
-    [navigation]
+    [openEventsLink, openShopLink, openGiftCardLink]
   );
 
   const otherButtons = useMemo(
@@ -522,7 +512,7 @@ const NewActionButtonsSection: React.FC<{
         title: 'Progetti',
         icon: 'charity',
         gradient: ['#1F2937', '#374151', '#111827'] as const,
-        onPress: () => navigation.navigate('Progetti'),
+        onPress: () => openProjectsLink(),
       },
       {
         id: 'seguici',
@@ -536,8 +526,7 @@ const NewActionButtonsSection: React.FC<{
         title: 'Tracciabilità',
         icon: 'map-marker-path',
         gradient: ['#1F2937', '#374151', '#111827'] as const,
-        onPress: () =>
-          navigation.navigate('Tracciabilita', { title: 'Tracciabilità' }),
+        onPress: () => openTracciabilitaLink(),
       },
       {
         id: 'chi-siamo',
@@ -547,7 +536,7 @@ const NewActionButtonsSection: React.FC<{
         onPress: () => navigation.navigate('ChiSiamo'),
       },
     ],
-    [navigation]
+    [navigation, openProjectsLink, openTracciabilitaLink]
   );
 
   const handleButtonPress = useCallback(
@@ -600,9 +589,9 @@ const ActionButtonsContent: React.FC<{
       StyleSheet.create({
         container: {
           paddingHorizontal: Spacing[4],
-          gap: Spacing[8],
-          paddingTop: Spacing[4],
-          paddingBottom: Spacing[12],
+          gap: Spacing[6],
+          paddingTop: Spacing[8], // DRASTICAMENTE AUMENTATO per stacco visivo
+          paddingBottom: Spacing[8],
         },
         categoryContainer: {
           marginBottom: Spacing[6],
@@ -633,7 +622,7 @@ const ActionButtonsContent: React.FC<{
           color: '#DC2626', // ROSSO per collegamento visivo con bottoni
           textAlign: 'center',
           letterSpacing: -0.8, // Come categoryTitle aggiornato
-          marginBottom: Spacing[3], // Come categoryTitle aggiornato
+          marginBottom: Spacing[1], // RIDOTTO per avvicinare alla descrizione
           // Text shadow rosso coordinato con i bottoni
           textShadowColor: 'rgba(220, 38, 38, 0.2)',
           textShadowOffset: { width: 0, height: 3 },
@@ -684,7 +673,7 @@ const ActionButtonsContent: React.FC<{
         titleSeparator: {
           flexDirection: 'row',
           alignItems: 'center',
-          marginVertical: Spacing[2],
+          marginVertical: Spacing[1], // RIDOTTO per avvicinare "Dona Ora" alla descrizione
           paddingHorizontal: Spacing[6],
         },
         separatorLine: {
@@ -928,7 +917,7 @@ const ExploreButtonsSection: React.FC<{
         <View style={styles.separatorLine} />
       </View>
       <Text style={[styles.categorySubtitle, styles.exploreSubtitle]}>
-        Progetti e iniziative
+        Organizzazione e iniziative
       </Text>
       <View style={styles.categoryDivider} />
       <View style={styles.buttonsGrid}>
@@ -1050,8 +1039,8 @@ const HeaderDivider: React.FC<{
     () =>
       StyleSheet.create({
         dividerContainer: {
-          paddingHorizontal: Spacing[6],
-          paddingVertical: Spacing[3], // Minimale
+          paddingHorizontal: Spacing[4],
+          paddingVertical: Spacing[1], // MINIMO
           alignItems: 'center',
         },
         mainDivider: {

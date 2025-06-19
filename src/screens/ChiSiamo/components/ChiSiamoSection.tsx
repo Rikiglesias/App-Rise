@@ -58,7 +58,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
         <Text style={chiSiamoSectionStyles.categorySubtitle}>
           Dal cuore di Bologna, oltre 3,1 milioni di pasti distribuiti nel mondo
           grazie ai nostri volontari.{'\n\n'}
-          Scopri la nostra storia completa toccando l&apos;icona ℹ️
+          Tocca l&apos;icona ℹ️ per saperne di più
         </Text>
         <View style={chiSiamoSectionStyles.categoryDivider} />
       </Animated.View>

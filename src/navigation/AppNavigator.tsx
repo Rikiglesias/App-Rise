@@ -101,7 +101,7 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="Seguici"
           component={SeguiciScreen}
-          options={{ title: 'Seguici Ovunque' }}
+          options={{ headerShown: false }}
         />
 
         <Stack.Screen

@@ -30,6 +30,7 @@ interface UseLinkHandlerReturn {
   openGiftCardLink: () => AsyncResult<void>;
   openEventsLink: () => AsyncResult<void>;
   openProjectsLink: () => AsyncResult<void>;
+  openTracciabilitaLink: () => AsyncResult<void>;
   openFacebookLink: () => AsyncResult<void>;
   openInstagramLink: () => AsyncResult<void>;
   openYouTubeLink: () => AsyncResult<void>;
@@ -181,7 +182,7 @@ export const useLinkHandler = (
 
   const openProjectsLink = useCallback(() => {
     return openLink(
-      'https://riseagainsthunger.welfare4charity.com/crowdfunding',
+      'https://riseagainsthunger.org.welfare4charity.com/org/projects',
       'projects',
       'Impossibile aprire la pagina progetti. Riprova più tardi.'
     );
@@ -227,6 +228,14 @@ export const useLinkHandler = (
     );
   }, [openLink]);
 
+  const openTracciabilitaLink = useCallback(() => {
+    return openLink(
+      'https://italy.riseagainsthunger.org/chi-siamo/tracciabilita/',
+      'tracciabilita',
+      'Impossibile aprire la pagina tracciabilità. Riprova più tardi.'
+    );
+  }, [openLink]);
+
   return {
     isLoading,
     openLink,
@@ -235,6 +244,7 @@ export const useLinkHandler = (
     openGiftCardLink,
     openEventsLink,
     openProjectsLink,
+    openTracciabilitaLink,
     openFacebookLink,
     openInstagramLink,
     openYouTubeLink,

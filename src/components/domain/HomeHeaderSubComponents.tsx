@@ -21,48 +21,70 @@ import {
   type HeaderTextSectionProps,
 } from '../../types/HomeHeaderTypes';
 
-// ✨ CLEAN & PROFESSIONAL TITLE STYLES - MODERN 2025
+// ✨ TITLE STYLES ELEGANTI - MIGLIORAMENTO SOTTILE
 const modernTitleStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
     paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[5],
+    paddingVertical: Spacing[2], // Ridotto per avvicinare tutto
   },
 
-  // Background pulito e professionale
+  // Titolo con design compatto
   titleContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(220, 38, 38, 0.12)',
-    paddingVertical: Spacing[6],
-    paddingHorizontal: Spacing[8],
     alignItems: 'center',
-    // Ombra sottile ma professionale
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    paddingVertical: Spacing[1], // Drasticamente ridotto
+    paddingHorizontal: Spacing[4],
+    position: 'relative',
   },
 
-  // Typography moderna e impattante
+  // Typography pulita e moderna
   titleText: {
-    fontSize: Typography.sizes['4xl'],
+    fontSize: 46,
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center',
-    letterSpacing: -0.8,
-    lineHeight: Typography.sizes['4xl'] * 1.1,
-    marginBottom: Spacing[2],
+    letterSpacing: -1.3,
+    lineHeight: 50,
+    // Nessuna ombra per look pulito
+    includeFontPadding: false,
+    marginBottom: Spacing[1] / 2, // Spazio ultra-minimo per il separatore
   },
 
-  // Separatore sottile ed elegante
-  separator: {
+  // Stile per "Italia" in nero
+  titleTextItalia: {
+    fontSize: 46,
+    fontWeight: Typography.weights.black,
+    color: '#1F2937', // Nero elegante
+    textAlign: 'center',
+    letterSpacing: -1.3,
+    lineHeight: 50,
+    includeFontPadding: false,
+  },
+
+  // Separatore elegante con logo centrale
+  titleSeparator: {
+    alignItems: 'center',
+    marginTop: 0,
+    marginBottom: 0, // Nessuno spazio per avvicinare l'immagine
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+
+  // Logo separatore tondo senza container
+  separatorLogo: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5, // Perfettamente tondo
+    opacity: 1,
+    backgroundColor: 'transparent',
+  },
+
+  // Linee decorative ai lati
+  separatorLine: {
     height: 1,
-    width: 60,
+    width: 40,
     backgroundColor: 'rgba(220, 38, 38, 0.3)',
-    marginTop: Spacing[3],
+    marginHorizontal: Spacing[3],
   },
 });
 
@@ -107,13 +129,24 @@ const ModernSmartTitle: React.FC<{
         }}
       >
         <View style={modernTitleStyles.titleContainer}>
-          {/* Titolo completo come nome unico dell'organizzazione */}
-          <Text style={modernTitleStyles.titleText}>
-            Rise Against{'\n'}Hunger Italia
-          </Text>
+          {/* Titolo con colori differenziati */}
+          <View>
+            <Text style={modernTitleStyles.titleText}>
+              Rise Against{'\n'}Hunger{' '}
+              <Text style={modernTitleStyles.titleTextItalia}>Italia</Text>
+            </Text>
+          </View>
 
-          {/* Separatore elegante */}
-          <View style={modernTitleStyles.separator} />
+          {/* Separatore elegante con logo centrale */}
+          <View style={modernTitleStyles.titleSeparator}>
+            <View style={modernTitleStyles.separatorLine} />
+            <Image
+              source={require('../../../assets/images/logo.png')}
+              style={modernTitleStyles.separatorLogo}
+              resizeMode="contain"
+            />
+            <View style={modernTitleStyles.separatorLine} />
+          </View>
         </View>
       </Animated.View>
     </View>

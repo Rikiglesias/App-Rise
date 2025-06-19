@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-unused-styles */
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useMemo, useRef } from 'react';
 import {
   Animated,
@@ -113,7 +114,7 @@ const ModernHeaderSection: React.FC<{
       StyleSheet.create({
         headerContainer: {
           paddingTop: Spacing[16],
-          paddingHorizontal: Spacing[6],
+          paddingHorizontal: Spacing[2], // Ridotto per più spazio al titolo
           paddingBottom: Spacing[8],
           backgroundColor: Colors.neutral[0],
           alignItems: 'center',
@@ -121,17 +122,72 @@ const ModernHeaderSection: React.FC<{
         titleContainer: {
           alignItems: 'center',
           marginBottom: Spacing[6],
+          position: 'relative',
+          width: '100%',
+          paddingHorizontal: Spacing[2],
+        },
+        // Effetto glow MASSIVO e ultra-visibile
+        titleGlowContainer: {
+          position: 'absolute',
+          top: -40, // MOLTO più ampio
+          left: -60, // Estende molto di più
+          right: -60,
+          bottom: -40,
+          borderRadius: 80, // Super morbido
+          backgroundColor: 'rgba(220, 38, 38, 0.15)', // MOLTO più visibile
+          shadowColor: '#DC2626',
+          shadowOffset: { width: 0, height: 12 },
+          shadowOpacity: 0.4, // Shadow molto pronunciata
+          shadowRadius: 32, // Alone gigante
+          elevation: 16,
+          // Bordo più visibile
+          borderWidth: 2,
+          borderColor: 'rgba(220, 38, 38, 0.2)',
         },
         titleText: {
-          fontSize: screenWidth > 375 ? 48 : 42,
+          fontSize: screenWidth > 375 ? 64 : 56, // MOLTO più grande!
           fontWeight: Typography.weights.black,
           color: '#DC2626',
           textAlign: 'center',
-          letterSpacing: -1.2,
-          lineHeight: screenWidth > 375 ? 52 : 46,
-          textShadowColor: 'rgba(220, 38, 38, 0.1)',
-          textShadowOffset: { width: 0, height: 2 },
-          textShadowRadius: 4,
+          letterSpacing: -2.0, // Ultra-compresso per modernità
+          lineHeight: screenWidth > 375 ? 68 : 60,
+          // Text shadow DRASTICAMENTE potenziato
+          textShadowColor: 'rgba(220, 38, 38, 0.4)',
+          textShadowOffset: { width: 0, height: 6 },
+          textShadowRadius: 16,
+          // Aggiunta di profondità tipografica
+          includeFontPadding: false,
+          textAlignVertical: 'center',
+          // Padding per respirazione
+          paddingHorizontal: Spacing[2],
+        },
+        // Separatore decorativo AMPIO e morbido
+        titleSeparator: {
+          marginTop: Spacing[4],
+          alignItems: 'center',
+          width: '100%',
+        },
+        separatorLine: {
+          width: 200, // MASSIMO larghezza
+          height: 6, // Molto più spesso
+          backgroundColor: '#DC2626',
+          borderRadius: 12, // Super morbido
+          shadowColor: '#DC2626',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.6, // Shadow molto pronunciata
+          shadowRadius: 12,
+          elevation: 8,
+          // Effetto glow anche per il separatore
+          marginHorizontal: 'auto',
+        },
+        // Separatore glow MOLTO più ampio
+        separatorGlow: {
+          position: 'absolute',
+          width: 240, // Ancora più largo
+          height: 12, // Più spesso
+          backgroundColor: 'rgba(220, 38, 38, 0.2)', // Più visibile
+          borderRadius: 16,
+          top: -3,
         },
 
         subtitleText: {
@@ -157,7 +213,40 @@ const ModernHeaderSection: React.FC<{
           },
         ]}
       >
+        {/* Effetto glow MASSIVO con LinearGradient */}
+        <LinearGradient
+          colors={[
+            'rgba(220, 38, 38, 0.25)', // MOLTO più visibile
+            'rgba(220, 38, 38, 0.20)',
+            'rgba(220, 38, 38, 0.15)',
+            'rgba(220, 38, 38, 0.08)',
+            'transparent',
+          ]}
+          style={styles.titleGlowContainer}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+        />
+
+        {/* Titolo principale potenziato */}
         <Text style={styles.titleText}>Rise Against{'\n'}Hunger Italia</Text>
+
+        {/* Separatore decorativo AMPIO con effetto glow */}
+        <View style={styles.titleSeparator}>
+          <LinearGradient
+            colors={[
+              'transparent',
+              'rgba(220, 38, 38, 0.30)', // MOLTO più visibile
+              'rgba(220, 38, 38, 0.25)',
+              'rgba(220, 38, 38, 0.20)',
+              'rgba(220, 38, 38, 0.15)',
+              'transparent',
+            ]}
+            style={styles.separatorGlow}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+          />
+          <View style={styles.separatorLine} />
+        </View>
       </Animated.View>
     </View>
   );
