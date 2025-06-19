@@ -214,48 +214,48 @@ export const chiSiamoSectionStyles = StyleSheet.create({
   categoryTitle: {
     fontSize: Typography.sizes['3xl'],
     fontWeight: Typography.weights.black,
-    color: '#DC2626', // Rosso per titolo principale
+    color: '#374151', // Grigio scuro elegante invece del nero
     textAlign: 'center',
     letterSpacing: -0.8,
     marginBottom: Spacing[1], // Ridotto per avvicinare icona
     // Text shadow per profondità
-    textShadowColor: 'rgba(220, 38, 38, 0.15)',
+    textShadowColor: 'rgba(55, 65, 81, 0.15)', // Shadow coordinato al nuovo colore
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 8,
   },
   infoIcon: {
     position: 'absolute',
-    right: 80, // Avvicinato al titolo come richiesto
-    top: 8,
+    right: 105, // Ancora un pochino più a destra
+    top: 38, // Leggermente più in basso
     padding: Spacing[1],
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.full,
-    shadowColor: '#DC2626',
+    shadowColor: '#374151', // Shadow coordinato al nuovo colore grigio
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   categorySubtitle: {
-    fontSize: Typography.sizes.base,
-    fontWeight: Typography.weights.medium,
+    fontSize: Typography.sizes.base, // Riportato a base da lg
+    fontWeight: Typography.weights.bold, // Manteniamo bold per distinguere
     textAlign: 'center',
-    letterSpacing: 0.3,
-    lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
-    marginBottom: Spacing[3],
-    paddingHorizontal: Spacing[4],
-    fontStyle: 'italic',
-    color: '#374151',
-    backgroundColor: 'rgba(55, 65, 81, 0.06)',
-    paddingVertical: Spacing[2],
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(55, 65, 81, 0.12)',
-    shadowColor: '#374151',
-    shadowOffset: { width: 0, height: 2 },
+    letterSpacing: 0.3, // Ridotto spacing
+    lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base, // Aggiustato per base
+    marginBottom: Spacing[3], // Ridotto da 4 a 3
+    paddingHorizontal: Spacing[4], // Ridotto padding laterale
+    fontStyle: 'normal', // Manteniamo normal
+    color: '#DC2626', // Manteniamo rosso per distinguere
+    backgroundColor: 'rgba(220, 38, 38, 0.04)', // Manteniamo sfondo rosso tenue
+    paddingVertical: Spacing[3], // Ridotto padding verticale
+    borderRadius: 12, // Ridotto border radius
+    borderWidth: 1, // Ridotto border width
+    borderColor: 'rgba(220, 38, 38, 0.15)', // Manteniamo bordo rosso
+    shadowColor: '#DC2626', // Manteniamo shadow rosso
+    shadowOffset: { width: 0, height: 2 }, // Shadow più leggero
     shadowOpacity: 0.08,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 2, // Elevation ridotto
   },
   titleSeparator: {
     flexDirection: 'row',

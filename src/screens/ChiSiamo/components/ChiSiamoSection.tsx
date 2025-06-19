@@ -38,7 +38,6 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           <Text style={chiSiamoSectionStyles.categoryTitle}>
             Rise Against Hunger Italia
           </Text>
-          {/* Icona info posizionata come richiesto */}
           <TouchableOpacity
             onPress={handleInfoPress}
             style={chiSiamoSectionStyles.infoIcon}
@@ -46,7 +45,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             <MaterialCommunityIcons
               name="information-outline"
               size={24}
-              color="#DC2626"
+              color="#374151"
             />
           </TouchableOpacity>
         </View>
@@ -57,8 +56,9 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           <View style={chiSiamoSectionStyles.separatorLine} />
         </View>
         <Text style={chiSiamoSectionStyles.categorySubtitle}>
-          Organizzazione internazionale che distribuisce pasti e combatte la
-          fame nel mondo
+          Dal cuore di Bologna, oltre 3,1 milioni di pasti distribuiti nel mondo
+          grazie ai nostri volontari.{'\n\n'}
+          Scopri la nostra storia completa toccando l&apos;icona ℹ️
         </Text>
         <View style={chiSiamoSectionStyles.categoryDivider} />
       </Animated.View>

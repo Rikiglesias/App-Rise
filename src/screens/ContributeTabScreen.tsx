@@ -35,6 +35,7 @@ interface ButtonStyles {
   categoryContainer: object;
   categoryHeader: object;
   categoryTitle: object;
+  donateCategoryTitle: object; // NUOVO: stile per titolo "Dona Ora"
   categorySubtitle: object;
   categoryDivider: object;
   donateSubtitle: object;
@@ -353,11 +354,26 @@ const NewActionsHeader: React.FC<{
     () =>
       StyleSheet.create({
         headerContainer: {
-          paddingTop: Spacing[8], // Ridotto da 12
+          paddingTop: Spacing[6], // RIDOTTO per compattezza
           paddingHorizontal: Spacing[6],
-          paddingBottom: Spacing[4], // Ridotto da 8
+          paddingBottom: Spacing[2], // RIDOTTO drasticamente
           alignItems: 'center',
           position: 'relative',
+        },
+        // NUOVO: Card allargata per il titolo principale
+        titleCard: {
+          backgroundColor: Colors.neutral[0],
+          borderRadius: 20, // Arrotondato ma non eccessivo
+          paddingVertical: Spacing[6], // AUMENTATO per bilanciare contenuto più grande
+          paddingHorizontal: Spacing[10], // ALLARGATO ulteriormente
+          marginHorizontal: Spacing[3], // RIDOTTO ancora per più larghezza
+          marginBottom: Spacing[2], // RIDOTTO per avvicinare ai bottoni
+          // Ombra sottile
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.06, // Leggermente più visibile
+          shadowRadius: 10, // Più morbida
+          elevation: 2, // Leggermente più elevata
         },
         backgroundPattern: {
           position: 'absolute',
@@ -368,14 +384,14 @@ const NewActionsHeader: React.FC<{
           opacity: 0.05,
         },
         titleText: {
-          fontSize: screenWidth > 375 ? 32 : 28, // Ridotto da 42/36
+          fontSize: screenWidth > 375 ? 40 : 36, // INGRANDITO ulteriormente
           fontWeight: Typography.weights.black,
-          color: '#DC2626',
+          color: Colors.neutral[900], // NERO per neutralità e professionalità
           textAlign: 'center',
-          letterSpacing: -1.0, // Ridotto da -1.2
-          marginBottom: Spacing[1], // Ridotto da 2
-          // Text shadow più pronunciato per eleganza
-          textShadowColor: 'rgba(220, 38, 38, 0.2)',
+          letterSpacing: -1.3, // Più stretto per impatto
+          marginBottom: Spacing[2], // Leggermente aumentato
+          // Text shadow neutro per eleganza
+          textShadowColor: 'rgba(0, 0, 0, 0.12)',
           textShadowOffset: { width: 0, height: 3 },
           textShadowRadius: 12,
         },
@@ -383,8 +399,8 @@ const NewActionsHeader: React.FC<{
         titleSeparator: {
           flexDirection: 'row',
           alignItems: 'center',
-          marginVertical: Spacing[2], // Ridotto da 3
-          paddingHorizontal: Spacing[6],
+          marginVertical: Spacing[1], // RIDOTTO per compattezza
+          paddingHorizontal: Spacing[8], // Più stretto
         },
         separatorLine: {
           flex: 1,
@@ -401,25 +417,25 @@ const NewActionsHeader: React.FC<{
           fontWeight: Typography.weights.bold,
         },
         descriptionText: {
-          fontSize: Typography.sizes.sm, // Ridotto da base
-          fontWeight: Typography.weights.medium, // Ridotto da semibold
+          fontSize: Typography.sizes.sm, // INGRANDITO per leggibilità
+          fontWeight: Typography.weights.medium,
           color: Colors.neutral[600],
           textAlign: 'center',
-          lineHeight: 20, // Ridotto
-          marginBottom: Spacing[2], // Ridotto da 4
+          lineHeight: 20, // AUMENTATO per leggibilità
+          marginBottom: 0, // RIMOSSO margine
           fontStyle: 'italic',
-          backgroundColor: 'rgba(59, 130, 246, 0.06)', // Ridotto opacità
-          paddingVertical: Spacing[2], // Ridotto da 4
-          paddingHorizontal: Spacing[4], // Ridotto da 5
-          borderRadius: 16, // Ridotto da 20
+          backgroundColor: 'rgba(59, 130, 246, 0.06)', // Leggermente più visibile
+          paddingVertical: Spacing[2], // AUMENTATO per più respiro
+          paddingHorizontal: Spacing[4], // AUMENTATO
+          borderRadius: 14, // Leggermente più grande
           borderWidth: 1,
-          borderColor: 'rgba(59, 130, 246, 0.12)', // Ridotto opacità
-          // Ombra sottile per distinguerla
+          borderColor: 'rgba(59, 130, 246, 0.12)', // Più visibile
+          // Ombra leggera
           shadowColor: '#3B82F6',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08, // Ridotto da 0.1
-          shadowRadius: 4, // Ridotto da 6
-          elevation: 1, // Ridotto da 2
+          shadowOpacity: 0.06, // Più visibile
+          shadowRadius: 4, // Più morbida
+          elevation: 1, // Leggera elevazione
         },
       }),
     []
@@ -442,16 +458,20 @@ const NewActionsHeader: React.FC<{
         colors={['rgba(220, 38, 38, 0.05)', 'transparent']}
         style={styles.backgroundPattern}
       />
-      <Text style={styles.titleText}>Come Puoi Aiutare</Text>
-      {/* Separatore decorativo */}
-      <View style={styles.titleSeparator}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorIcon}>◆</Text>
-        <View style={styles.separatorLine} />
+
+      {/* CARD PROFESSIONALE per il titolo principale */}
+      <View style={styles.titleCard}>
+        <Text style={styles.titleText}>Come Puoi Aiutare</Text>
+        {/* Separatore decorativo */}
+        <View style={styles.titleSeparator}>
+          <View style={styles.separatorLine} />
+          <Text style={styles.separatorIcon}>◆</Text>
+          <View style={styles.separatorLine} />
+        </View>
+        <Text style={styles.descriptionText}>
+          Ogni azione conta nella lotta contro la fame
+        </Text>
       </View>
-      <Text style={styles.descriptionText}>
-        Ogni azione conta nella lotta contro la fame
-      </Text>
     </Animated.View>
   );
 };
@@ -595,16 +615,29 @@ const ActionButtonsContent: React.FC<{
           position: 'relative',
         },
         categoryTitle: {
-          fontSize: Typography.sizes['3xl'],
-          fontWeight: Typography.weights.black,
-          color: Colors.neutral[900],
+          fontSize: Typography.sizes['3xl'], // INGRANDITO per maggiore presenza
+          fontWeight: Typography.weights.black, // AUMENTATO per più impatto
+          color: Colors.neutral[800], // MIGLIORATO: più scuro per presenza
           textAlign: 'center',
-          letterSpacing: -0.8,
-          marginBottom: Spacing[2],
-          // Text shadow per profondità
+          letterSpacing: -0.8, // Più stretto per impatto
+          marginBottom: Spacing[3], // Più spazio per respirazione
+          // Text shadow migliorato per presenza
           textShadowColor: 'rgba(31, 41, 55, 0.15)',
           textShadowOffset: { width: 0, height: 3 },
           textShadowRadius: 8,
+        },
+        // NUOVO: Stile specifico per titolo "Dona Ora" - SEMPLICE ROSSO
+        donateCategoryTitle: {
+          fontSize: Typography.sizes['3xl'], // INGRANDITO come categoryTitle
+          fontWeight: Typography.weights.black, // AUMENTATO come categoryTitle
+          color: '#DC2626', // ROSSO per collegamento visivo con bottoni
+          textAlign: 'center',
+          letterSpacing: -0.8, // Come categoryTitle aggiornato
+          marginBottom: Spacing[3], // Come categoryTitle aggiornato
+          // Text shadow rosso coordinato con i bottoni
+          textShadowColor: 'rgba(220, 38, 38, 0.2)',
+          textShadowOffset: { width: 0, height: 3 },
+          textShadowRadius: 10,
         },
         categorySubtitle: {
           fontSize: Typography.sizes.base,
@@ -625,12 +658,12 @@ const ActionButtonsContent: React.FC<{
           borderRadius: 12,
           borderWidth: 1,
           borderColor: 'rgba(220, 38, 38, 0.15)',
-          // Ombra sottile per elevazione
+          // Ombra sottile per elevazione coordinata
           shadowColor: '#DC2626',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 2,
+          shadowOpacity: 0.12, // Leggermente più prominente per collegamento
+          shadowRadius: 6, // Più morbida
+          elevation: 3, // Più elevata per coerenza
         },
         exploreSubtitle: {
           color: '#374151',
@@ -786,7 +819,7 @@ const DonateButtonsSection: React.FC<{
   return (
     <View style={styles.categoryContainer}>
       <View style={styles.categoryHeader}>
-        <Text style={styles.categoryTitle}>❤️ Dona Ora</Text>
+        <Text style={styles.donateCategoryTitle}>❤️ Dona Ora</Text>
         <TouchableOpacity
           style={styles.infoButton}
           onPress={onInfoPress}
@@ -1009,6 +1042,43 @@ const AnimatedButton: React.FC<{
   </Animated.View>
 );
 
+// NUOVO: Divisore elegante tra header e contenuto
+const HeaderDivider: React.FC<{
+  animations: ReturnType<typeof useNewActionsAnimations>;
+}> = ({ animations }) => {
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        dividerContainer: {
+          paddingHorizontal: Spacing[6],
+          paddingVertical: Spacing[3], // Minimale
+          alignItems: 'center',
+        },
+        mainDivider: {
+          height: 1,
+          backgroundColor: Colors.neutral[200], // Colore valido
+          width: '40%', // Ancora più corto
+          borderRadius: 1,
+        },
+      }),
+    []
+  );
+
+  return (
+    <Animated.View
+      style={[
+        styles.dividerContainer,
+        {
+          opacity: animations.fadeAnim,
+          transform: [{ translateY: animations.slideAnim }],
+        },
+      ]}
+    >
+      <View style={styles.mainDivider} />
+    </Animated.View>
+  );
+};
+
 // Main Component
 export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
   navigation,
@@ -1033,6 +1103,7 @@ export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
         contentContainerStyle={{ paddingBottom: Spacing[8] }}
       >
         <NewActionsHeader animations={animations} />
+        <HeaderDivider animations={animations} />
         <NewActionButtonsSection
           animations={animations}
           navigation={navigation}
