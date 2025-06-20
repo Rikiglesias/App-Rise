@@ -145,23 +145,51 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
     ],
   }));
 
+  // COLORI PERSONALIZZATI PER OGNI TAB
+  const getTabColors = (route: string, focused: boolean) => {
+    switch (route) {
+      case 'ImpactTab':
+        return {
+          backgroundColor: '#DC2626', // ROSSO FISSO sempre
+          shadowColor: '#DC2626',
+          iconColor: Colors.neutral[0], // Bianco sempre
+          labelColor: '#DC2626',
+        };
+      case 'InfoTab':
+        return {
+          backgroundColor: '#059669', // VERDE FISSO sempre
+          shadowColor: '#059669',
+          iconColor: Colors.neutral[0], // Bianco sempre
+          labelColor: '#059669',
+        };
+      case 'HomeTab':
+      default:
+        return {
+          backgroundColor: focused ? '#6B7280' : Colors.neutral[100] + '80', // GRIGIO quando attivo
+          shadowColor: '#6B7280',
+          iconColor: focused ? Colors.neutral[0] : Colors.neutral[700],
+          labelColor: '#6B7280',
+        };
+    }
+  };
+
+  const tabColors = getTabColors(routeName, isFocused);
+
   const iconContainerStyle = useAnimatedStyle(() => ({
     transform: [{ scale: withSpring(isFocused ? 1 : 0.9, { mass: 0.5 }) }],
-    backgroundColor: isFocused
-      ? Colors.primary[600]
-      : Colors.neutral[100] + '80',
-    shadowColor: isFocused ? Colors.primary[500] : Colors.neutral[900],
+    backgroundColor: tabColors.backgroundColor,
+    shadowColor: tabColors.shadowColor,
     shadowOpacity: withTiming(isFocused ? 0.3 : 0.05),
   }));
 
   const labelStyle = useAnimatedStyle(() => ({
     opacity: withTiming(isFocused ? 1 : 0),
     transform: [{ translateY: withTiming(isFocused ? 0 : 5) }],
-    color: Colors.primary[700],
+    color: tabColors.labelColor,
   }));
 
   const iconName = ICON_MAP[routeName] ?? 'circle';
-  const iconColor = isFocused ? Colors.neutral[0] : Colors.neutral[700];
+  const iconColor = tabColors.iconColor;
   const iconSize = isCentral ? 32 : 26;
 
   return (

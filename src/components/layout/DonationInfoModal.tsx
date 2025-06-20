@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Animated,
   Modal,
@@ -23,6 +23,13 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
   onDonate,
 }) => {
   const { colors } = useTheme();
+
+  const handleStopPropagation = useCallback(
+    (e: { stopPropagation: () => void }) => {
+      e.stopPropagation();
+    },
+    []
+  );
 
   const styles = StyleSheet.create({
     modalOverlay: {
@@ -152,7 +159,7 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
         activeOpacity={1}
         onPress={onClose}
       >
-        <TouchableOpacity activeOpacity={1} onPress={e => e.stopPropagation()}>
+        <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
           <Animated.View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>

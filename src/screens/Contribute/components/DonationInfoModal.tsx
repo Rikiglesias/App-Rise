@@ -69,6 +69,13 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     onClose();
   }, [onClose, triggerHaptic]);
 
+  const handleStopPropagation = useCallback(
+    (e: { stopPropagation: () => void }) => {
+      e.stopPropagation();
+    },
+    []
+  );
+
   const modalStyles = StyleSheet.create({
     overlay: {
       flex: 1,
@@ -111,12 +118,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       marginBottom: Spacing[2],
       position: 'relative',
     },
-    modalTitle: {
-      fontSize: Typography.sizes.xl,
-      fontWeight: Typography.weights.bold,
-      color: Colors.neutral[900],
-      flex: 1,
-    },
+
     closeButton: {
       position: 'absolute',
       top: Spacing[2], // ABBASSATA: da -Spacing[2] a Spacing[2]
@@ -204,7 +206,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
             },
           ]}
         />
-        <TouchableOpacity activeOpacity={1} onPress={e => e.stopPropagation()}>
+        <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
           <Animated.View
             style={[
               {

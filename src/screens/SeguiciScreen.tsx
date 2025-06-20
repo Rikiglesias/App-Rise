@@ -48,6 +48,9 @@ interface SocialPlatform {
 
 const { width: screenWidth } = Dimensions.get('window');
 
+// CONTROLLO GLOBALE PRIMA VOLTA - PERSISTE TUTTA LA SESSIONE
+let seguiciHasAnimated = false;
+
 const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { openLink } = useLinkHandler();
   const { triggerHaptic } = useHapticFeedback();
@@ -66,35 +69,47 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   ] as const).current;
 
   useEffect(() => {
+    // ANIMAZIONI SOLO ALLA PRIMA VISUALIZZAZIONE
+    if (seguiciHasAnimated) {
+      // Imposta immediatamente i valori finali se già animato
+      fadeAnim.setValue(1);
+      slideAnim.setValue(0);
+      scaleAnim.setValue(1);
+      socialAnimations.forEach(anim => anim.setValue(1));
+      return;
+    }
+
+    // Marca come già animato
+    seguiciHasAnimated = true;
     const sequence = Animated.sequence([
-      // Header animation - COME PAGINA AZIONI
+      // Header animation - VELOCE
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 800, // NORMALE: come timing originale per header
+          duration: 300, // VELOCE: ridotto da 800 a 300
           useNativeDriver: true,
         }),
         Animated.spring(slideAnim, {
           toValue: 0,
           useNativeDriver: true,
-          tension: 50, // NORMALE: timing più rilassato per header
-          friction: 8, // MORBIDO per header
+          tension: 120, // VELOCE: aumentato da 50 a 120
+          friction: 10, // OTTIMIZZATO per velocità
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
           useNativeDriver: true,
-          tension: 60, // NORMALE: coordinato
-          friction: 8, // MORBIDO per header
+          tension: 140, // VELOCE: aumentato da 60 a 140
+          friction: 10, // OTTIMIZZATO per velocità
         }),
       ]),
-      // Social animations staggered DOPO - COME PAGINA AZIONI
-      Animated.delay(300), // DELAY NORMALE: i bottoni appaiono DOPO il titolo
+      // Social animations staggered VELOCE
+      Animated.delay(100), // VELOCE: ridotto da 300 a 100
       Animated.stagger(
-        200, // STAGGER NORMALE: sequenza visibile e piacevole
+        80, // VELOCE: ridotto da 200 a 80
         socialAnimations.map(anim =>
           Animated.timing(anim, {
             toValue: 1,
-            duration: 600, // DURATA NORMALE: animazione fluida
+            duration: 250, // VELOCE: ridotto da 600 a 250
             useNativeDriver: true,
           })
         )
@@ -213,16 +228,16 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
       key={platform.id}
       style={[
         {
-          opacity: socialAnimations[index] || fadeAnim, // USA ANIMAZIONE STAGGERED INDIVIDUALE
+          opacity: socialAnimations[index] ?? fadeAnim, // USA ANIMAZIONE STAGGERED INDIVIDUALE
           transform: [
             {
-              translateY: (socialAnimations[index] || fadeAnim).interpolate({
+              translateY: (socialAnimations[index] ?? fadeAnim).interpolate({
                 inputRange: [0, 1],
                 outputRange: [30, 0], // MOVIMENTO COORDINATO
               }),
             },
             {
-              scale: (socialAnimations[index] || fadeAnim).interpolate({
+              scale: (socialAnimations[index] ?? fadeAnim).interpolate({
                 inputRange: [0, 1],
                 outputRange: [0.9, 1], // SCALING COORDINATO
               }),
@@ -342,10 +357,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
   },
 
-  // Back Button - Pattern da Chi Siamo
+  // Back Button - SOPRA AL TITOLO
   backButton: {
     position: 'absolute' as const,
-    top: 50,
+    top: 30, // SPOSTATO PIÙ SOPRA: da 50 a 30
     left: Spacing[4],
     padding: Spacing[2],
     borderRadius: BorderRadius.full,
@@ -355,7 +370,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 6,
-    zIndex: 10,
+    zIndex: 20, // AUMENTATO z-index per essere sicuri che stia sopra
   },
 
   scrollView: {
@@ -422,32 +437,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     marginTop: Spacing[1],
     opacity: 0.8,
-  },
-
-  categorySubtitle: {
-    fontSize: Typography.sizes.base,
-    fontWeight: Typography.weights.medium, // IDENTICO CHI SIAMO: medium invece di bold
-    textAlign: 'center' as const,
-    letterSpacing: 0.3,
-    lineHeight: 24, // IDENTICO CHI SIAMO: aumentato per migliore leggibilità
-    marginBottom: 0, // RIMOSSO: spacing gestito dal separatore
-    paddingHorizontal: Spacing[4],
-    fontStyle: 'italic' as const, // IDENTICO CHI SIAMO: italic per eleganza
-    color: Colors.neutral[700], // IDENTICO CHI SIAMO: colore coordinato
-    backgroundColor: 'rgba(55, 65, 81, 0.06)',
-    paddingVertical: Spacing[3],
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(55, 65, 81, 0.12)',
-    // SUBTLE TEXT SHADOW IDENTICO CHI SIAMO
-    textShadowColor: 'rgba(0, 0, 0, 0.06)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
-    shadowColor: '#374151',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
   },
 
   // Social Section - Pattern da Chi Siamo IDENTICO
