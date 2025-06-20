@@ -355,11 +355,25 @@ const NewActionsHeader: React.FC<{
     () =>
       StyleSheet.create({
         headerContainer: {
-          paddingTop: Spacing[3], // RIDOTTO drasticamente
+          paddingTop: Spacing[4], // AUMENTATO per più presenza
           paddingHorizontal: Spacing[4],
-          paddingBottom: Spacing[1], // MINIMO
+          paddingBottom: Spacing[3], // AUMENTATO per stacco visivo
           alignItems: 'center',
           position: 'relative',
+        },
+
+        // NUOVO: Container per effetto alone come homepage
+        titleGlowContainer: {
+          backgroundColor: 'rgba(220, 38, 38, 0.03)',
+          paddingVertical: Spacing[4],
+          paddingHorizontal: Spacing[6],
+          borderRadius: 20,
+          shadowColor: '#DC2626',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.08,
+          shadowRadius: 16,
+          elevation: 4,
+          marginBottom: Spacing[4],
         },
 
         backgroundPattern: {
@@ -368,61 +382,61 @@ const NewActionsHeader: React.FC<{
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.05,
+          opacity: 0.03, // Leggermente più visibile
         },
+
+        // TITOLO HOMEPAGE POTENZIATO applicato
         titleText: {
-          fontSize: screenWidth > 375 ? 38 : 32, // LEGGERMENTE RIDOTTO
+          fontSize: screenWidth > 375 ? 52 : 46, // DRASTICAMENTE AUMENTATO per impatto massimo
           fontWeight: Typography.weights.black,
-          color: Colors.neutral[900], // NERO per neutralità e professionalità
+          color: '#DC2626', // ROSSO per coerenza con brand
           textAlign: 'center',
-          letterSpacing: -1.0, // LEGGERMENTE RIDOTTO
-          marginBottom: Spacing[2], // Leggermente più spazio
-          // Text shadow neutro per eleganza
-          textShadowColor: 'rgba(0, 0, 0, 0.15)',
+          letterSpacing: -1.5, // ULTRA-COMPRESSO per modernità
+          marginBottom: Spacing[3], // AUMENTATO per separazione netta
+          includeFontPadding: false, // Per precisione tipografica
+          // TEXT SHADOW POTENZIATO per profondità avanzata
+          textShadowColor: 'rgba(220, 38, 38, 0.2)',
           textShadowOffset: { width: 0, height: 3 },
-          textShadowRadius: 10,
+          textShadowRadius: 8,
         },
-        // Separatore decorativo per titolo principale
+
+        // SEPARATORE DECORATIVO POTENZIATO (pattern homepage)
         titleSeparator: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginVertical: 2, // MINIMO
-          paddingHorizontal: Spacing[6], // RIDOTTO
-        },
-        separatorLine: {
-          flex: 1,
-          height: 2,
-          backgroundColor: Colors.neutral[300],
-          opacity: 0.6,
-          borderRadius: 1,
-        },
-        separatorIcon: {
-          fontSize: 16, // Ridotto da 20
-          marginHorizontal: Spacing[3], // Ridotto da 4
-          opacity: 0.7,
-          color: Colors.neutral[600],
-          fontWeight: Typography.weights.bold,
-        },
-        descriptionText: {
-          fontSize: Typography.sizes.base, // INGRANDITO per migliore leggibilità
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[600],
-          textAlign: 'center',
-          lineHeight: 22, // INGRANDITO per più respiro
-          marginBottom: Spacing[4], // AGGIUNTO margine per stacco visivo
-          fontStyle: 'italic',
-          backgroundColor: 'rgba(59, 130, 246, 0.06)', // Leggermente più visibile
-          paddingVertical: Spacing[3], // INGRANDITO per bilanciare font
-          paddingHorizontal: Spacing[4], // INGRANDITO
-          borderRadius: 14, // INGRANDITO
-          borderWidth: 1,
-          borderColor: 'rgba(59, 130, 246, 0.12)', // Più visibile
-          // Ombra leggera
-          shadowColor: '#3B82F6',
+          width: 80, // DIMENSIONE FISSA per impatto
+          height: 3, // SPESSORE AUMENTATO
+          backgroundColor: '#DC2626',
+          borderRadius: 2,
+          alignSelf: 'center',
+          marginTop: Spacing[3], // POSIZIONATO sotto il titolo
+          marginBottom: Spacing[4], // SPAZIO per la descrizione
+          // SHADOW COORDINATO con il titolo
+          shadowColor: '#DC2626',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08, // Leggermente più visibile
-          shadowRadius: 6, // INGRANDITO
-          elevation: 2, // Leggermente più elevata
+          shadowOpacity: 0.3,
+          shadowRadius: 6,
+          elevation: 3,
+        },
+
+        descriptionText: {
+          fontSize: Typography.sizes.lg, // AUMENTATO per migliore leggibilità
+          fontWeight: Typography.weights.semibold, // AUMENTATO da medium
+          color: Colors.neutral[700], // PIÙ SCURO per contrasto
+          textAlign: 'center',
+          lineHeight: 26, // AUMENTATO per respiro
+          marginBottom: Spacing[2], // RIDOTTO per compattezza
+          fontStyle: 'italic',
+          backgroundColor: 'rgba(220, 38, 38, 0.05)', // COORDINATO con brand
+          paddingVertical: Spacing[3],
+          paddingHorizontal: Spacing[5], // AUMENTATO
+          borderRadius: 16, // AUMENTATO per modernità
+          borderWidth: 1,
+          borderColor: 'rgba(220, 38, 38, 0.12)', // COORDINATO
+          // OMBRA COORDINATA con brand
+          shadowColor: '#DC2626',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 8, // AUMENTATO
+          elevation: 2,
         },
       }),
     []
@@ -442,19 +456,17 @@ const NewActionsHeader: React.FC<{
       ]}
     >
       <LinearGradient
-        colors={['rgba(220, 38, 38, 0.05)', 'transparent']}
+        colors={['rgba(220, 38, 38, 0.08)', 'transparent']} // PIÙ VISIBILE per brand consistency
         style={styles.backgroundPattern}
       />
 
-      {/* TITOLO DIRETTO SENZA CONTAINER */}
-      <Text style={styles.titleText}>Come Puoi{'\n'}Aiutare</Text>
-
-      {/* Separatore decorativo */}
-      <View style={styles.titleSeparator}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorIcon}>◆</Text>
-        <View style={styles.separatorLine} />
+      {/* TITOLO CON EFFETTO ALONE (pattern homepage) */}
+      <View style={styles.titleGlowContainer}>
+        <Text style={styles.titleText}>Come Puoi{'\n'}Aiutare</Text>
       </View>
+
+      {/* SEPARATORE DECORATIVO POTENZIATO */}
+      <View style={styles.titleSeparator} />
 
       <Text style={styles.descriptionText}>
         Ogni azione conta nella lotta contro la fame
@@ -590,76 +602,80 @@ const ActionButtonsContent: React.FC<{
         container: {
           paddingHorizontal: Spacing[4],
           gap: Spacing[6],
-          paddingTop: Spacing[8], // DRASTICAMENTE AUMENTATO per stacco visivo
+          paddingTop: Spacing[10], // ULTERIORMENTE AUMENTATO per stacco visivo drammatico
           paddingBottom: Spacing[8],
         },
         categoryContainer: {
-          marginBottom: Spacing[6],
+          marginBottom: Spacing[8], // AUMENTATO per maggiore separazione tra categorie
         },
         categoryHeader: {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: Spacing[2],
+          marginBottom: Spacing[3], // AUMENTATO per più respiro
           position: 'relative',
         },
-        categoryTitle: {
-          fontSize: Typography.sizes['3xl'], // INGRANDITO per maggiore presenza
-          fontWeight: Typography.weights.black, // AUMENTATO per più impatto
-          color: Colors.neutral[800], // MIGLIORATO: più scuro per presenza
+
+        // NUOVO: Stile specifico per titolo "Dona Ora" - PATTERN CONSOLIDATO
+        donateCategoryTitle: {
+          fontSize: Typography.sizes['3xl'], // CONFORME alle regole
+          fontWeight: Typography.weights.black,
+          color: '#DC2626', // ROSSO per collegamento visivo con bottoni
           textAlign: 'center',
-          letterSpacing: -0.8, // Più stretto per impatto
-          marginBottom: Spacing[3], // Più spazio per respirazione
+          letterSpacing: -0.8, // CONFORME alle regole aggiornate
+          marginBottom: Spacing[1], // RIDOTTO per avvicinare alla descrizione (regola #11)
+          // TEXT SHADOW ROSSO coordinato con i bottoni
+          textShadowColor: 'rgba(220, 38, 38, 0.15)', // PATTERN CONSOLIDATO
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 6,
+        },
+
+        categoryTitle: {
+          fontSize: Typography.sizes['3xl'], // CONFORME alle regole
+          fontWeight: Typography.weights.black,
+          color: Colors.neutral[800],
+          textAlign: 'center',
+          letterSpacing: -0.8,
+          marginBottom: Spacing[1], // RIDOTTO per coerenza con dona ora
           // Text shadow migliorato per presenza
           textShadowColor: 'rgba(31, 41, 55, 0.15)',
           textShadowOffset: { width: 0, height: 3 },
           textShadowRadius: 8,
         },
-        // NUOVO: Stile specifico per titolo "Dona Ora" - SEMPLICE ROSSO
-        donateCategoryTitle: {
-          fontSize: Typography.sizes['3xl'], // INGRANDITO come categoryTitle
-          fontWeight: Typography.weights.black, // AUMENTATO come categoryTitle
-          color: '#DC2626', // ROSSO per collegamento visivo con bottoni
-          textAlign: 'center',
-          letterSpacing: -0.8, // Come categoryTitle aggiornato
-          marginBottom: Spacing[1], // RIDOTTO per avvicinare alla descrizione
-          // Text shadow rosso coordinato con i bottoni
-          textShadowColor: 'rgba(220, 38, 38, 0.2)',
-          textShadowOffset: { width: 0, height: 3 },
-          textShadowRadius: 10,
-        },
+
         categorySubtitle: {
           fontSize: Typography.sizes.base,
           fontWeight: Typography.weights.medium,
           textAlign: 'center',
           letterSpacing: 0.3,
           lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
-          marginBottom: Spacing[3],
+          marginBottom: Spacing[4], // AUMENTATO per maggiore separazione
           paddingHorizontal: Spacing[4],
-          // Styling elegante per descrizione
           fontStyle: 'italic',
         },
+
         donateSubtitle: {
           color: '#B91C1C',
           backgroundColor: 'rgba(220, 38, 38, 0.08)',
-          paddingVertical: Spacing[2],
-          paddingHorizontal: Spacing[4],
-          borderRadius: 12,
+          paddingVertical: Spacing[3], // AUMENTATO per bilanciamento
+          paddingHorizontal: Spacing[5], // AUMENTATO per respiro
+          borderRadius: 14, // AUMENTATO per modernità
           borderWidth: 1,
           borderColor: 'rgba(220, 38, 38, 0.15)',
-          // Ombra sottile per elevazione coordinata
+          // OMBRA POTENZIATA per elevazione coordinata
           shadowColor: '#DC2626',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.12, // Leggermente più prominente per collegamento
-          shadowRadius: 6, // Più morbida
-          elevation: 3, // Più elevata per coerenza
+          shadowOffset: { width: 0, height: 3 }, // AUMENTATO
+          shadowOpacity: 0.15, // AUMENTATO per più presenza
+          shadowRadius: 8, // AUMENTATO per morbidezza
+          elevation: 4, // AUMENTATO per coerenza
         },
+
         exploreSubtitle: {
           color: '#374151',
           backgroundColor: 'rgba(55, 65, 81, 0.06)',
-          paddingVertical: Spacing[2],
-          paddingHorizontal: Spacing[4],
-          borderRadius: 12,
+          paddingVertical: Spacing[3], // AUMENTATO per coerenza
+          paddingHorizontal: Spacing[5], // AUMENTATO per coerenza
+          borderRadius: 14, // AUMENTATO per coerenza
           borderWidth: 1,
           borderColor: 'rgba(55, 65, 81, 0.12)',
           // Ombra sottile per elevazione
@@ -669,19 +685,22 @@ const ActionButtonsContent: React.FC<{
           shadowRadius: 4,
           elevation: 2,
         },
-        // Separatore decorativo tra titolo e descrizione
+
+        // SEPARATORE DECORATIVO OTTIMIZZATO per categorie
         titleSeparator: {
           flexDirection: 'row',
           alignItems: 'center',
-          marginVertical: Spacing[1], // RIDOTTO per avvicinare "Dona Ora" alla descrizione
+          marginVertical: Spacing[1], // CONFORME alla regola #11
           paddingHorizontal: Spacing[6],
         },
+
         separatorLine: {
           flex: 1,
           height: 1,
           backgroundColor: Colors.neutral[300],
           opacity: 0.4,
         },
+
         separatorIcon: {
           fontSize: 16,
           marginHorizontal: Spacing[3],

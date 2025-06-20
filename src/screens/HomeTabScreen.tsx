@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-unused-styles */
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   Animated,
   Dimensions,
@@ -328,15 +328,15 @@ const NavigationButtonsSection: React.FC<{
 }> = ({ animations, onImpactPress, onActionsPress }) => {
   const { triggerHaptic } = useHapticFeedback();
 
-  const handleImpactPress = async () => {
+  const handleImpactPress = useCallback(async () => {
     await triggerHaptic('medium');
     onImpactPress();
-  };
+  }, [triggerHaptic, onImpactPress]);
 
-  const handleActionsPress = async () => {
+  const handleActionsPress = useCallback(async () => {
     await triggerHaptic('medium');
     onActionsPress();
-  };
+  }, [triggerHaptic, onActionsPress]);
 
   const styles = useMemo(
     () =>
@@ -411,7 +411,6 @@ const NavigationButtonsSection: React.FC<{
       <View style={styles.buttonRow}>
         <TouchableOpacity
           style={styles.button}
-          // eslint-disable-next-line react/jsx-no-bind
           onPress={handleImpactPress}
           activeOpacity={0.8}
         >
@@ -426,7 +425,6 @@ const NavigationButtonsSection: React.FC<{
 
         <TouchableOpacity
           style={styles.button}
-          // eslint-disable-next-line react/jsx-no-bind
           onPress={handleActionsPress}
           activeOpacity={0.8}
         >
@@ -447,13 +445,13 @@ const NavigationButtonsSection: React.FC<{
 export const HomeTabScreen: React.FC<HomeTabScreenProps> = ({ navigation }) => {
   const animations = useModernAnimations();
 
-  const handleImpactPress = () => {
+  const handleImpactPress = useCallback(() => {
     navigation.navigate('Impact');
-  };
+  }, [navigation]);
 
-  const handleActionsPress = () => {
+  const handleActionsPress = useCallback(() => {
     navigation.navigate('Contribute');
-  };
+  }, [navigation]);
 
   const styles = useMemo(
     () =>
@@ -477,9 +475,7 @@ export const HomeTabScreen: React.FC<HomeTabScreenProps> = ({ navigation }) => {
         <AppDescriptionSection animations={animations} />
         <NavigationButtonsSection
           animations={animations}
-          // eslint-disable-next-line react/jsx-no-bind
           onImpactPress={handleImpactPress}
-          // eslint-disable-next-line react/jsx-no-bind
           onActionsPress={handleActionsPress}
         />
       </View>

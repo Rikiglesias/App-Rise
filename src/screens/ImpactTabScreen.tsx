@@ -1,30 +1,29 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
-import { Surface } from 'react-native-paper';
 
+import type { Location as MapLocation } from '../components/layout/InteractiveMap';
+import InteractiveMap from '../components/layout/InteractiveMap';
 import { formatNumber, IMPACT_DATA, MAP_LOCATIONS } from '../data/impactData';
-import {
-  BorderRadius,
-  Colors,
-  Spacing,
-  Typography,
-} from '../shared/constants/designTokens';
-import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
+import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
 import type {
   ImpactNavigationProp,
   ImpactScreenName,
+  ImpactStory,
 } from '../types/ImpactScreenTypes';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -35,6 +34,8 @@ const useImpactAnimations = () => {
   const slideAnim = useRef(new Animated.Value(50)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
   const statsAnimations = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
     new Animated.Value(0),
     new Animated.Value(0),
     new Animated.Value(0),
@@ -86,52 +87,73 @@ const useImpactAnimations = () => {
   return { fadeAnim, slideAnim, scaleAnim, statsAnimations };
 };
 
-// Modern Header Section
+// 🎨 HEADER SECTION - DESIGN SYSTEM COMPLIANT
+// 🎨 MODERN IMPACT HEADER STYLES - Estratti per evitare falsi positivi ESLint
+const modernImpactHeaderStyles = StyleSheet.create({
+  headerContainer: {
+    paddingTop: Spacing[8],
+    paddingHorizontal: Spacing[4],
+    paddingBottom: Spacing[6],
+    alignItems: 'center',
+  },
+  titleGradientContainer: {
+    alignSelf: 'stretch',
+    marginHorizontal: Spacing[2],
+    marginBottom: Spacing[4],
+  },
+  titleGradientBorder: {
+    borderRadius: 24,
+    padding: 3,
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  titleContent: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 21,
+    paddingHorizontal: Spacing[4],
+    paddingVertical: Spacing[4],
+    alignItems: 'center',
+  },
+  titleText: {
+    fontSize: screenWidth > 375 ? 36 : 30,
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    letterSpacing: -0.8,
+    textShadowColor: 'rgba(220, 38, 38, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
+    includeFontPadding: false,
+  },
+  subtitleContainer: {
+    marginHorizontal: Spacing[3],
+    backgroundColor: 'rgba(31, 41, 55, 0.05)',
+    borderRadius: 18,
+    paddingHorizontal: Spacing[4],
+    paddingVertical: Spacing[3],
+    borderWidth: 1,
+    borderColor: 'rgba(31, 41, 55, 0.1)',
+  },
+  subtitleText: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.medium,
+    color: '#374151',
+    textAlign: 'center',
+    lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+    letterSpacing: 0.2,
+  },
+});
+
 const ModernImpactHeader: React.FC<{
   animations: ReturnType<typeof useImpactAnimations>;
 }> = ({ animations }) => {
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        headerContainer: {
-          paddingTop: Spacing[12],
-          paddingHorizontal: Spacing[6],
-          paddingBottom: Spacing[8],
-          alignItems: 'center',
-        },
-        titleText: {
-          fontSize: screenWidth > 375 ? 36 : 32,
-          fontWeight: Typography.weights.black,
-          color: Colors.primary[700],
-          textAlign: 'center',
-          letterSpacing: -0.8,
-          marginBottom: Spacing[3],
-        },
-        subtitleText: {
-          fontSize: Typography.sizes.lg,
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[600],
-          textAlign: 'center',
-          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.lg,
-          paddingHorizontal: Spacing[4],
-        },
-        glowEffect: {
-          position: 'absolute',
-          top: -10,
-          left: -10,
-          right: -10,
-          bottom: -10,
-          borderRadius: 30,
-          opacity: 0.1,
-        },
-      }),
-    []
-  );
-
   return (
     <Animated.View
       style={[
-        styles.headerContainer,
+        modernImpactHeaderStyles.headerContainer,
         {
           opacity: animations.fadeAnim,
           transform: [
@@ -141,509 +163,924 @@ const ModernImpactHeader: React.FC<{
         },
       ]}
     >
-      <LinearGradient
-        colors={['rgba(220, 38, 38, 0.1)', 'transparent']}
-        style={styles.glowEffect}
-      />
-      <Text style={styles.titleText}>Il Nostro Impatto</Text>
-      <Text style={styles.subtitleText}>
-        Risultati concreti nella lotta contro la fame mondiale grazie al tuo
-        supporto
-      </Text>
-    </Animated.View>
-  );
-};
-
-// Impact Mission Section - SPOSTATA DALLA HOME
-const ImpactMissionSection: React.FC<{
-  animations: ReturnType<typeof useImpactAnimations>;
-}> = ({ animations }) => {
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        // Gradient Container Pattern del Design System
-        outerGradientContainer: {
-          marginTop: Spacing[4],
-          marginHorizontal: Spacing[4],
-          borderRadius: 24,
-          shadowColor: '#1F2937',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.25,
-          shadowRadius: 16,
-          elevation: 8,
-        },
-        gradientBorder: {
-          borderRadius: 24,
-          padding: 3,
-        },
-        missionContainer: {
-          backgroundColor: Colors.neutral[0],
-          borderRadius: 21,
-          padding: Spacing[5],
-        },
-        // 🎨 NUOVI STILI GRADIENT TITLE - DESIGN SYSTEM 2025
-        titleGradientContainer: {
-          alignItems: 'center',
-          marginBottom: Spacing[3],
-        },
-        titleGradientBorder: {
-          borderRadius: 20,
-          padding: 2.5, // Effetto bordo gradient
-          shadowColor: '#DC2626',
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.3,
-          shadowRadius: 10,
-          elevation: 8,
-        },
-        titleContent: {
-          backgroundColor: Colors.neutral[0],
-          borderRadius: 17.5,
-          paddingHorizontal: Spacing[4],
-          paddingVertical: Spacing[2] + 2,
-        },
-        impactTitleGradient: {
-          fontSize: Typography.sizes['2xl'],
-          fontWeight: Typography.weights.black,
-          color: '#DC2626',
-          textAlign: 'center',
-          letterSpacing: -0.8,
-          textShadowColor: 'rgba(220, 38, 38, 0.25)',
-          textShadowOffset: { width: 0, height: 3 },
-          textShadowRadius: 8,
-        },
-        // Typography Smart per il testo descrittivo - MIGLIORATO
-        missionText: {
-          fontSize: Typography.sizes.lg,
-          fontWeight: Typography.weights.bold,
-          color: '#1F2937', // Grigio scuro più elegante
-          textAlign: 'center',
-          letterSpacing: 0.4,
-          lineHeight: Typography.sizes.lg * 1.3,
-          marginBottom: Spacing[2],
-          textShadowColor: 'rgba(31, 41, 55, 0.2)',
-          textShadowOffset: { width: 0, height: 2 },
-          textShadowRadius: 6,
-        },
-      }),
-    []
-  );
-
-  return (
-    <Animated.View
-      style={{
-        opacity: animations.fadeAnim,
-        transform: [{ translateY: animations.slideAnim }],
-      }}
-    >
-      <View style={styles.outerGradientContainer}>
+      <View style={modernImpactHeaderStyles.titleGradientContainer}>
         <LinearGradient
-          colors={['#1F2937', '#374151', '#111827']}
+          colors={['#DC2626', '#B91C1C', '#991B1B']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.gradientBorder}
+          style={modernImpactHeaderStyles.titleGradientBorder}
         >
-          <View style={styles.missionContainer}>
-            {/* Titolo principale con GRADIENT */}
-            <View style={styles.titleGradientContainer}>
-              <LinearGradient
-                colors={['#DC2626', '#B91C1C', '#991B1B']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.titleGradientBorder}
-              >
-                <View style={styles.titleContent}>
-                  <Text style={styles.impactTitleGradient}>
-                    Il nostro impatto sul mondo
-                  </Text>
-                </View>
-              </LinearGradient>
-            </View>
-
-            {/* Testo descrittivo con Typography Smart */}
-            <Text style={styles.missionText}>
-              Ogni pasto confezionato rappresenta una speranza, ogni volontario
-              una forza per il cambiamento. Insieme stiamo costruendo un mondo
-              dove nessuno deve soffrire la fame.
+          <View style={modernImpactHeaderStyles.titleContent}>
+            <Text style={modernImpactHeaderStyles.titleText}>
+              Il Nostro Impatto
             </Text>
           </View>
         </LinearGradient>
       </View>
+
+      <View style={modernImpactHeaderStyles.subtitleContainer}>
+        <Text style={modernImpactHeaderStyles.subtitleText}>
+          Risultati concreti nella lotta contro la fame mondiale grazie al
+          supporto di volontari, aziende e cittadini
+        </Text>
+      </View>
     </Animated.View>
   );
 };
 
-// Enhanced Stats Cards
+// 🎨 IMPACT STATS SECTION STYLES - Estratti per evitare falsi positivi ESLint
+const impactStatsStyles = StyleSheet.create({
+  statsSection: {
+    marginHorizontal: Spacing[4],
+    marginBottom: Spacing[6],
+  },
+  sectionTitle: {
+    fontSize: Typography.sizes['3xl'],
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: Spacing[4],
+    letterSpacing: -0.8,
+    textShadowColor: 'rgba(220, 38, 38, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+  },
+  statsGrid: {
+    gap: Spacing[4],
+  },
+});
+
+// 📊 STATISTICHE PRINCIPALI - MEALS E KIT SEPARATI
 const ImpactStatsSection: React.FC<{
   animations: ReturnType<typeof useImpactAnimations>;
   onNavigate: (screen: ImpactScreenName) => void;
 }> = ({ animations, onNavigate }) => {
-  const stats = useMemo(
-    () => [
-      {
-        id: 'meals',
-        icon: 'silverware-fork-knife',
-        value: formatNumber(IMPACT_DATA.mealsDistributed),
-        label: 'Pasti Distribuiti',
-        subtitle: 'Nutrizione garantita',
-        gradient: ['#059669', '#10B981'] as const,
-        screen: null,
-      },
-      {
-        id: 'beneficiaries',
-        icon: 'account-group',
-        value: formatNumber(IMPACT_DATA.livesImpacted),
-        label: 'Vite Toccate',
-        subtitle: 'Persone aiutate',
-        gradient: ['#3B82F6', '#60A5FA'] as const,
-        screen: 'Beneficiaries' as ImpactScreenName,
-      },
-      {
-        id: 'volunteers',
-        icon: 'heart-multiple',
-        value: formatNumber(IMPACT_DATA.volunteers),
-        label: 'Volontari Attivi',
-        subtitle: 'Forza della comunità',
-        gradient: ['#F59E0B', '#FCD34D'] as const,
-        screen: 'Volunteers' as ImpactScreenName,
-      },
-    ],
-    []
+  const handleStatPress = useCallback(
+    (screen: ImpactScreenName) => {
+      onNavigate(screen);
+    },
+    [onNavigate]
   );
 
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        statsContainer: {
-          paddingHorizontal: Spacing[4],
-          gap: Spacing[4],
-        },
-        statCard: {
-          borderRadius: BorderRadius.xl,
-          shadowColor: Colors.neutral[900],
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.15,
-          shadowRadius: 16,
-          elevation: 8,
-        },
-        statCardGradient: {
-          borderRadius: BorderRadius.xl,
-          overflow: 'hidden',
-        },
-        statContent: {
-          padding: Spacing[6],
-          alignItems: 'center',
-          minHeight: 160,
-          justifyContent: 'center',
-        },
-        statIcon: {
-          marginBottom: Spacing[3],
-        },
-        statValue: {
-          fontSize: screenWidth > 375 ? 32 : 28,
-          fontWeight: Typography.weights.black,
-          color: Colors.neutral[0],
-          textAlign: 'center',
-          marginBottom: Spacing[1],
-          textShadowColor: 'rgba(0,0,0,0.3)',
-          textShadowOffset: { width: 0, height: 1 },
-          textShadowRadius: 2,
-        },
-        statLabel: {
-          fontSize: Typography.sizes.lg,
-          fontWeight: Typography.weights.bold,
-          color: Colors.neutral[0],
-          textAlign: 'center',
-          marginBottom: Spacing[1],
-        },
-        statSubtitle: {
-          fontSize: Typography.sizes.sm,
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[100],
-          textAlign: 'center',
-          opacity: 0.9,
-        },
-      }),
-    []
-  );
+  // Handlers specifici per ogni sezione - risolve jsx-no-bind
+  const handleBeneficiariesPress = useCallback(() => {
+    handleStatPress('Beneficiaries');
+  }, [handleStatPress]);
+
+  const handlePartnersPress = useCallback(() => {
+    handleStatPress('Partners');
+  }, [handleStatPress]);
+
+  const handleVolunteersPress = useCallback(() => {
+    handleStatPress('Volunteers');
+  }, [handleStatPress]);
 
   return (
-    <View style={styles.statsContainer}>
-      {stats.map((stat, index) => (
-        <Animated.View
-          key={stat.id}
-          style={[
-            {
-              opacity: animations.statsAnimations[index] ?? 0,
-              transform: [
-                {
-                  translateY:
-                    animations.statsAnimations[index]?.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [30, 0],
-                    }) ?? 0,
-                },
-              ],
-            },
-          ]}
-        >
-          <TouchableOpacity
-            activeOpacity={stat.screen ? 0.8 : 1}
-            // eslint-disable-next-line react/jsx-no-bind
-            onPress={
-              stat.screen
-                ? () => onNavigate(stat.screen as ImpactScreenName)
-                : undefined
-            }
-            disabled={!stat.screen}
-          >
-            <View style={styles.statCard}>
-              <LinearGradient
-                colors={stat.gradient}
-                style={styles.statCardGradient}
-              >
-                <View style={styles.statContent}>
-                  <MaterialCommunityIcons
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    name={stat.icon as any}
-                    size={48}
-                    color={Colors.neutral[0]}
-                    style={styles.statIcon}
-                  />
-                  <Text style={styles.statValue}>{stat.value}</Text>
-                  <Text style={styles.statLabel}>{stat.label}</Text>
-                  <Text style={styles.statSubtitle}>{stat.subtitle}</Text>
-                </View>
-              </LinearGradient>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-      ))}
-    </View>
-  );
-};
-
-// Stories Section Enhanced
-const StoriesSection: React.FC = () => {
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        storiesContainer: {
-          paddingTop: Spacing[8],
-          paddingHorizontal: Spacing[4],
-        },
-        sectionTitle: {
-          fontSize: Typography.sizes['2xl'],
-          fontWeight: Typography.weights.bold,
-          color: Colors.neutral[900],
-          textAlign: 'center',
-          marginBottom: Spacing[6],
-          letterSpacing: -0.5,
-        },
-        storiesGrid: {
-          gap: Spacing[4],
-        },
-        storyCard: {
-          borderRadius: BorderRadius.xl,
-          backgroundColor: Colors.neutral[0],
-          shadowColor: Colors.neutral[400],
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 12,
-          elevation: 3,
-        },
-        storyContentWrapper: {
-          borderRadius: BorderRadius.xl,
-          overflow: 'hidden',
-        },
-        storyContent: {
-          padding: Spacing[5],
-        },
-        storyHeader: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: Spacing[3],
-        },
-        storyIcon: {
-          marginRight: Spacing[2],
-        },
-        storyTitle: {
-          fontSize: Typography.sizes.lg,
-          fontWeight: Typography.weights.bold,
-          color: Colors.neutral[900],
-          flex: 1,
-        },
-        storyLocation: {
-          fontSize: Typography.sizes.sm,
-          fontWeight: Typography.weights.medium,
-          color: Colors.primary[600],
-        },
-        storyText: {
-          fontSize: Typography.sizes.base,
-          fontWeight: Typography.weights.regular,
-          color: Colors.neutral[700],
-          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
-        },
-      }),
-    []
-  );
-
-  return (
-    <View style={styles.storiesContainer}>
-      <Text style={styles.sectionTitle}>Storie di Impatto</Text>
-      <View style={styles.storiesGrid}>
-        {IMPACT_DATA.stories.map(story => (
-          <Surface key={story.id} style={styles.storyCard}>
-            <View style={styles.storyContentWrapper}>
-              <View style={styles.storyContent}>
-                <View style={styles.storyHeader}>
-                  <MaterialCommunityIcons
-                    name="book-open-variant"
-                    size={24}
-                    color={Colors.primary[600]}
-                    style={styles.storyIcon}
-                  />
-                  <Text style={styles.storyTitle}>{story.title}</Text>
-                  <Text style={styles.storyLocation}>{story.location}</Text>
-                </View>
-                <Text style={styles.storyText}>{story.text}</Text>
-              </View>
-            </View>
-          </Surface>
-        ))}
+    <View style={impactStatsStyles.statsSection}>
+      <Text style={impactStatsStyles.sectionTitle}>
+        2024: Un Anno d&apos;Impatto
+      </Text>
+      <View style={impactStatsStyles.statsGrid}>
+        <MealsKitsRow
+          animations={animations}
+          onBeneficiariesPress={handleBeneficiariesPress}
+          onPartnersPress={handlePartnersPress}
+        />
+        <HistoricalCard
+          animations={animations}
+          onPress={handleBeneficiariesPress}
+        />
+        <SocialImpactSection
+          animations={animations}
+          onVolunteersPress={handleVolunteersPress}
+          onBeneficiariesPress={handleBeneficiariesPress}
+        />
       </View>
     </View>
   );
 };
 
-// Map Section
-const MapSection: React.FC<{
-  onMapPress: () => void;
-}> = ({ onMapPress }) => {
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        mapContainer: {
-          paddingTop: Spacing[8],
-          paddingHorizontal: Spacing[4],
-          paddingBottom: Spacing[8],
-        },
-        sectionTitle: {
-          fontSize: Typography.sizes['2xl'],
-          fontWeight: Typography.weights.bold,
-          color: Colors.neutral[900],
-          textAlign: 'center',
-          marginBottom: Spacing[6],
-          letterSpacing: -0.5,
-        },
-        mapButton: {
-          borderRadius: BorderRadius.xl,
-          shadowColor: Colors.primary[600],
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.2,
-          shadowRadius: 16,
-          elevation: 8,
-        },
-        mapGradient: {
-          borderRadius: BorderRadius.xl,
-          overflow: 'hidden',
-        },
-        mapButtonContent: {
-          padding: Spacing[8],
-          alignItems: 'center',
-          minHeight: 120,
-          justifyContent: 'center',
-        },
-        mapIcon: {
-          marginBottom: Spacing[3],
-        },
-        mapTitle: {
-          fontSize: Typography.sizes.xl,
-          fontWeight: Typography.weights.bold,
-          color: Colors.neutral[0],
-          textAlign: 'center',
-          marginBottom: Spacing[2],
-        },
-        mapSubtitle: {
-          fontSize: Typography.sizes.base,
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[100],
-          textAlign: 'center',
-          opacity: 0.9,
-        },
-      }),
-    []
-  );
+// 🎨 MEALS KITS ROW STYLES - Estratti per evitare falsi positivi ESLint
+const mealsKitsRowStyles = StyleSheet.create({
+  mealsKitsRow: {
+    flexDirection: 'row',
+    gap: Spacing[3],
+    marginBottom: Spacing[4],
+  },
+  mealsKitsCard: {
+    flex: 1,
+  },
+  mainGradientContainer: {
+    borderRadius: 22,
+    padding: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  mainCardContent: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 19,
+    padding: Spacing[5],
+    alignItems: 'center',
+    minHeight: 200,
+    justifyContent: 'center',
+  },
+  cardIcon: {
+    marginBottom: Spacing[3],
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+  },
+  mainCardValue: {
+    fontSize: screenWidth > 375 ? 42 : 36,
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: Spacing[2],
+    letterSpacing: -1.0,
+    textShadowColor: 'rgba(220, 38, 38, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+  },
+  mainCardValueGray: {
+    fontSize: screenWidth > 375 ? 42 : 36,
+    fontWeight: Typography.weights.black,
+    color: '#1F2937',
+    textAlign: 'center',
+    marginBottom: Spacing[2],
+    letterSpacing: -1.0,
+    textShadowColor: 'rgba(31, 41, 55, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+  },
+  mainCardLabel: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.black,
+    color: Colors.neutral[800],
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    marginBottom: Spacing[2],
+  },
+  mainCardSubtitle: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.neutral[600],
+    textAlign: 'center',
+    fontWeight: Typography.weights.semibold,
+    marginBottom: Spacing[1],
+  },
+  mainCardExplanation: {
+    fontSize: Typography.sizes.xs,
+    color: Colors.neutral[500],
+    textAlign: 'center',
+    fontWeight: Typography.weights.medium,
+    fontStyle: 'italic',
+    paddingHorizontal: Spacing[2],
+  },
+});
 
+// 🍽️ ROW PASTI E KIT - Sottofunzione estratta
+const MealsKitsRow: React.FC<{
+  animations: ReturnType<typeof useImpactAnimations>;
+  onBeneficiariesPress: () => void;
+  onPartnersPress: () => void;
+}> = ({ animations, onBeneficiariesPress, onPartnersPress }) => {
   return (
-    <View style={styles.mapContainer}>
-      <Text style={styles.sectionTitle}>Dove Operiamo</Text>
-      <TouchableOpacity onPress={onMapPress} activeOpacity={0.8}>
-        <View style={styles.mapButton}>
+    <View style={mealsKitsRowStyles.mealsKitsRow}>
+      {/* PASTI 2024 */}
+      <Animated.View
+        style={[
+          mealsKitsRowStyles.mealsKitsCard,
+          {
+            opacity: animations.statsAnimations[0],
+            transform: [{ scale: animations.statsAnimations[0] }],
+          },
+        ]}
+      >
+        <TouchableOpacity onPress={onBeneficiariesPress} activeOpacity={0.9}>
           <LinearGradient
-            colors={['#DC2626', '#EF4444']}
-            style={styles.mapGradient}
+            colors={['#DC2626', '#B91C1C', '#991B1B']}
+            style={mealsKitsRowStyles.mainGradientContainer}
           >
-            <View style={styles.mapButtonContent}>
+            <View style={mealsKitsRowStyles.mainCardContent}>
               <MaterialCommunityIcons
-                name="earth"
-                size={48}
-                color={Colors.neutral[0]}
-                style={styles.mapIcon}
+                name="food"
+                size={32}
+                color="#DC2626"
+                style={mealsKitsRowStyles.cardIcon}
               />
-              <Text style={styles.mapTitle}>Esplora la Mappa</Text>
-              <Text style={styles.mapSubtitle}>
-                Scopri i nostri progetti nel mondo
+              <Text style={mealsKitsRowStyles.mainCardValue}>
+                {formatNumber(IMPACT_DATA.mealsDistributed)}
+              </Text>
+              <Text style={mealsKitsRowStyles.mainCardLabel}>PASTI 2024</Text>
+              <Text style={mealsKitsRowStyles.mainCardSubtitle}>
+                {formatNumber(IMPACT_DATA.livesImpactedMeals)} persone servite
+              </Text>
+              <Text style={mealsKitsRowStyles.mainCardExplanation}>
+                Pasti nutrienti confezionati da volontari
               </Text>
             </View>
           </LinearGradient>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </Animated.View>
+
+      {/* KIT 2024 */}
+      <Animated.View
+        style={[
+          mealsKitsRowStyles.mealsKitsCard,
+          {
+            opacity: animations.statsAnimations[1],
+            transform: [{ scale: animations.statsAnimations[1] }],
+          },
+        ]}
+      >
+        <TouchableOpacity onPress={onPartnersPress} activeOpacity={0.9}>
+          <LinearGradient
+            colors={['#1F2937', '#374151', '#111827']}
+            style={mealsKitsRowStyles.mainGradientContainer}
+          >
+            <View style={mealsKitsRowStyles.mainCardContent}>
+              <MaterialCommunityIcons
+                name="package-variant"
+                size={32}
+                color="#1F2937"
+                style={mealsKitsRowStyles.cardIcon}
+              />
+              <Text style={mealsKitsRowStyles.mainCardValueGray}>
+                {formatNumber(IMPACT_DATA.kitPackages)}
+              </Text>
+              <Text style={mealsKitsRowStyles.mainCardLabel}>KIT 2024</Text>
+              <Text style={mealsKitsRowStyles.mainCardSubtitle}>
+                {formatNumber(IMPACT_DATA.livesImpactedKits)} persone aiutate
+              </Text>
+              <Text style={mealsKitsRowStyles.mainCardExplanation}>
+                Kit di emergenza per situazioni critiche
+              </Text>
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 };
 
-// Main Component
-const ImpactTabScreen: React.FC = () => {
-  const navigation = useNavigation<ImpactNavigationProp>();
-  const { triggerHaptic } = useHapticFeedback();
-  const animations = useImpactAnimations();
+// 🎨 HISTORICAL CARD STYLES - Estratti per evitare falsi positivi ESLint
+const historicalCardStyles = StyleSheet.create({
+  historicalCard: {
+    alignSelf: 'stretch',
+    marginBottom: Spacing[4],
+  },
+  historicalGradientContainer: {
+    borderRadius: 22,
+    padding: 3,
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  historicalCardContent: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 19,
+    padding: Spacing[5],
+    alignItems: 'center',
+    minHeight: 140,
+    justifyContent: 'center',
+  },
+  historicalValue: {
+    fontSize: screenWidth > 375 ? 48 : 42,
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: Spacing[2],
+    letterSpacing: -1.2,
+    textShadowColor: 'rgba(220, 38, 38, 0.2)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 8,
+  },
+  historicalLabel: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.black,
+    color: Colors.neutral[800],
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    marginBottom: Spacing[1],
+  },
+  historicalSubtitle: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.neutral[600],
+    textAlign: 'center',
+    fontWeight: Typography.weights.semibold,
+    fontStyle: 'italic',
+  },
+  cardIcon: {
+    marginBottom: Spacing[3],
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+  },
+});
 
-  const handleNavigationPress = useCallback(
-    (screen: ImpactScreenName) => {
-      triggerHaptic('medium');
-      navigation.navigate({ name: screen, params: undefined });
-    },
-    [navigation, triggerHaptic]
-  );
-
-  const handleMapPress = useCallback(() => {
-    triggerHaptic('medium');
-    navigation.navigate('MapModal', { locations: MAP_LOCATIONS });
-  }, [navigation, triggerHaptic]);
-
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        // eslint-disable-next-line react-native/no-unused-styles
-        container: {
-          flex: 1,
-          backgroundColor: Colors.neutral[0],
+// 🏆 CARD STORICA - Sottofunzione estratta
+const HistoricalCard: React.FC<{
+  animations: ReturnType<typeof useImpactAnimations>;
+  onPress: () => void;
+}> = ({ animations, onPress }) => {
+  return (
+    <Animated.View
+      style={[
+        historicalCardStyles.historicalCard,
+        {
+          opacity: animations.statsAnimations[4],
+          transform: [{ scale: animations.statsAnimations[4] }],
         },
-      }),
+      ]}
+    >
+      <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
+        <LinearGradient
+          colors={['#DC2626', '#B91C1C', '#991B1B']}
+          style={historicalCardStyles.historicalGradientContainer}
+        >
+          <View style={historicalCardStyles.historicalCardContent}>
+            <MaterialCommunityIcons
+              name="trophy"
+              size={24}
+              color="#DC2626"
+              style={historicalCardStyles.cardIcon}
+            />
+            <Text style={historicalCardStyles.historicalValue}>22,3M</Text>
+            <Text style={historicalCardStyles.historicalLabel}>
+              Pasti Totali dal 2005
+            </Text>
+            <Text style={historicalCardStyles.historicalSubtitle}>
+              19 anni di lotta contro la fame
+            </Text>
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
+// 🎨 SOCIAL IMPACT STYLES - Estratti per evitare falsi positivi ESLint
+const socialImpactStyles = StyleSheet.create({
+  socialImpactSection: {
+    marginTop: Spacing[2],
+    marginBottom: Spacing[6],
+  },
+  socialSectionTitle: {
+    fontSize: Typography.sizes['3xl'],
+    fontWeight: Typography.weights.black,
+    color: '#1F2937',
+    textAlign: 'center',
+    marginBottom: Spacing[4],
+    letterSpacing: -0.8,
+    textShadowColor: 'rgba(31, 41, 55, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+  },
+  socialStatsRow: {
+    flexDirection: 'row',
+    gap: Spacing[3],
+    marginBottom: Spacing[4],
+  },
+  socialStatCard: {
+    flex: 1,
+  },
+  socialGradientContainer: {
+    borderRadius: 22,
+    padding: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  socialCardContent: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 19,
+    padding: Spacing[5],
+    alignItems: 'center',
+    minHeight: 160,
+    justifyContent: 'center',
+  },
+  socialStatValue: {
+    fontSize: screenWidth > 375 ? 38 : 32,
+    fontWeight: Typography.weights.black,
+    color: '#1F2937',
+    textAlign: 'center',
+    marginBottom: Spacing[2],
+    letterSpacing: -0.8,
+    textShadowColor: 'rgba(31, 41, 55, 0.1)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  socialStatValueRed: {
+    fontSize: screenWidth > 375 ? 38 : 32,
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: Spacing[2],
+    letterSpacing: -0.8,
+    textShadowColor: 'rgba(220, 38, 38, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+  },
+  socialStatLabel: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.black,
+    color: Colors.neutral[700],
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 1.0,
+  },
+  cardIcon: {
+    marginBottom: Spacing[3],
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+  },
+});
+
+// 👥 SEZIONE COMUNITÀ - Sottofunzione estratta
+const SocialImpactSection: React.FC<{
+  animations: ReturnType<typeof useImpactAnimations>;
+  onVolunteersPress: () => void;
+  onBeneficiariesPress: () => void;
+}> = ({ animations, onVolunteersPress, onBeneficiariesPress }) => {
+  return (
+    <View style={socialImpactStyles.socialImpactSection}>
+      <Text style={socialImpactStyles.socialSectionTitle}>
+        La Nostra Comunità
+      </Text>
+
+      <View style={socialImpactStyles.socialStatsRow}>
+        {/* VOLONTARI 2024 */}
+        <Animated.View
+          style={[
+            socialImpactStyles.socialStatCard,
+            {
+              opacity: animations.statsAnimations[2],
+              transform: [{ scale: animations.statsAnimations[2] }],
+            },
+          ]}
+        >
+          <TouchableOpacity onPress={onVolunteersPress} activeOpacity={0.9}>
+            <LinearGradient
+              colors={['#1F2937', '#374151', '#111827']}
+              style={socialImpactStyles.socialGradientContainer}
+            >
+              <View style={socialImpactStyles.socialCardContent}>
+                <MaterialCommunityIcons
+                  name="account-group"
+                  size={28}
+                  color="#1F2937"
+                  style={socialImpactStyles.cardIcon}
+                />
+                <Text style={socialImpactStyles.socialStatValue}>
+                  {formatNumber(IMPACT_DATA.volunteers)}
+                </Text>
+                <Text style={socialImpactStyles.socialStatLabel}>
+                  Volontari 2024
+                </Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* VITE TOTALI IMPATTATE */}
+        <Animated.View
+          style={[
+            socialImpactStyles.socialStatCard,
+            {
+              opacity: animations.statsAnimations[3],
+              transform: [{ scale: animations.statsAnimations[3] }],
+            },
+          ]}
+        >
+          <TouchableOpacity onPress={onBeneficiariesPress} activeOpacity={0.9}>
+            <LinearGradient
+              colors={['#DC2626', '#B91C1C', '#991B1B']}
+              style={socialImpactStyles.socialGradientContainer}
+            >
+              <View style={socialImpactStyles.socialCardContent}>
+                <MaterialCommunityIcons
+                  name="heart-multiple"
+                  size={28}
+                  color="#DC2626"
+                  style={socialImpactStyles.cardIcon}
+                />
+                <Text style={socialImpactStyles.socialStatValueRed}>
+                  {formatNumber(IMPACT_DATA.livesImpacted)}
+                </Text>
+                <Text style={socialImpactStyles.socialStatLabel}>
+                  Vite Impattate 2024
+                </Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+    </View>
+  );
+};
+
+// 📖 SEZIONE STORIE REALI
+const StoriesSection: React.FC = () => {
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [currentStoryIndex, setCurrentStoryIndex] = React.useState(0);
+
+  // Auto-scroll delle storie
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentStoryIndex(prev =>
+        prev === IMPACT_DATA.stories.length - 1 ? 0 : prev + 1
+      );
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Handler per lo scroll - risolve jsx-no-bind
+  const handleMomentumScrollEnd = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const contentOffset = event.nativeEvent.contentOffset.x;
+      const index = Math.round(contentOffset / (screenWidth - Spacing[4]));
+      setCurrentStoryIndex(index);
+    },
     []
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={storiesStyles.storiesSection}>
+      <StoriesSectionHeader />
+      <StoriesScrollView
+        scrollViewRef={scrollViewRef}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
+      />
+      <StoriesIndicators currentStoryIndex={currentStoryIndex} />
+    </View>
+  );
+};
+
+// 📝 HEADER STORIE - Sottofunzione estratta
+const StoriesSectionHeader: React.FC = () => (
+  <>
+    <Text style={storiesStyles.sectionTitle}>Storie di Impatto</Text>
+    <Text style={storiesStyles.sectionSubtitle}>
+      Testimonianze reali dalle persone che abbiamo aiutato nel 2024
+    </Text>
+  </>
+);
+
+// 📱 SCROLL VIEW STORIE - Sottofunzione estratta
+const StoriesScrollView: React.FC<{
+  scrollViewRef: React.RefObject<ScrollView | null>;
+  onMomentumScrollEnd: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+}> = ({ scrollViewRef, onMomentumScrollEnd }) => (
+  <ScrollView
+    ref={scrollViewRef}
+    horizontal
+    showsHorizontalScrollIndicator={false}
+    style={storiesStyles.storiesScrollView}
+    decelerationRate="fast"
+    snapToInterval={screenWidth - Spacing[4]}
+    snapToAlignment="start"
+    onMomentumScrollEnd={onMomentumScrollEnd}
+  >
+    {IMPACT_DATA.stories.map(story => (
+      <StoryCard key={story.id} story={story} />
+    ))}
+  </ScrollView>
+);
+
+// Helper function per evitare nested ternary
+const getCategoryLabel = (category: ImpactStory['category']): string => {
+  if (category === 'meals') return 'Pasti';
+  if (category === 'kits') return 'Kit';
+  return 'Sociale';
+};
+
+// 🎯 STORY CARD - Sottofunzione estratta
+const StoryCard: React.FC<{ story: ImpactStory }> = ({ story }) => (
+  <View style={storiesStyles.storyCard}>
+    <Image
+      source={{ uri: story.image }}
+      style={storiesStyles.storyImage}
+      resizeMode="cover"
+    />
+    <View style={storiesStyles.storyContent}>
+      <Text style={storiesStyles.storyLocation}>📍 {story.location}</Text>
+      <Text style={storiesStyles.storyTitle}>{story.title}</Text>
+      <Text style={storiesStyles.storyText}>{story.text}</Text>
+      <View style={storiesStyles.categoryBadge}>
+        <Text style={storiesStyles.categoryText}>
+          {getCategoryLabel(story.category)}
+        </Text>
+      </View>
+    </View>
+  </View>
+);
+
+// 🔘 INDICATORI - Sottofunzione estratta
+const StoriesIndicators: React.FC<{ currentStoryIndex: number }> = ({
+  currentStoryIndex,
+}) => (
+  <View style={storiesStyles.indicatorsContainer}>
+    {IMPACT_DATA.stories.map((story, index) => (
+      <View
+        key={story.id}
+        style={[
+          storiesStyles.indicator,
+          index === currentStoryIndex && storiesStyles.indicatorActive,
+        ]}
+      />
+    ))}
+  </View>
+);
+
+// 🎨 STYLES STORIES - Estratti per riutilizzo
+const storiesStyles = StyleSheet.create({
+  storiesSection: {
+    marginVertical: Spacing[6],
+  },
+  sectionTitle: {
+    fontSize: Typography.sizes['3xl'],
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: Spacing[1],
+    marginHorizontal: Spacing[4],
+    letterSpacing: -0.8,
+  },
+  sectionSubtitle: {
+    fontSize: Typography.sizes.base,
+    color: '#374151',
+    textAlign: 'center',
+    marginBottom: Spacing[4],
+    marginHorizontal: Spacing[4],
+    backgroundColor: 'rgba(55, 65, 81, 0.06)',
+    borderRadius: 12,
+    paddingHorizontal: Spacing[3],
+    paddingVertical: Spacing[2],
+  },
+  storiesScrollView: {
+    paddingLeft: Spacing[4],
+  },
+  storyCard: {
+    width: screenWidth - Spacing[8],
+    marginRight: Spacing[4],
+    borderRadius: 20,
+    overflow: 'hidden',
+    backgroundColor: Colors.neutral[0],
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  storyImage: {
+    width: '100%',
+    height: 200,
+    backgroundColor: Colors.neutral[100],
+  },
+  storyContent: {
+    padding: Spacing[4],
+  },
+  storyLocation: {
+    fontSize: Typography.sizes.sm,
+    fontWeight: Typography.weights.semibold,
+    color: '#DC2626',
+    marginBottom: Spacing[1],
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  storyTitle: {
+    fontSize: Typography.sizes.xl,
+    fontWeight: Typography.weights.bold,
+    color: Colors.neutral[900],
+    marginBottom: Spacing[2],
+    letterSpacing: -0.3,
+  },
+  storyText: {
+    fontSize: Typography.sizes.base,
+    color: Colors.neutral[700],
+    lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+  },
+  categoryBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#DC2626',
+    borderRadius: 12,
+    paddingHorizontal: Spacing[2],
+    paddingVertical: Spacing[1],
+    marginTop: Spacing[3],
+  },
+  categoryText: {
+    fontSize: Typography.sizes.xs,
+    fontWeight: Typography.weights.semibold,
+    color: Colors.neutral[0],
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  // Indicatori
+  indicatorsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: Spacing[4],
+    gap: Spacing[2],
+  },
+  indicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.neutral[300],
+  },
+  indicatorActive: {
+    backgroundColor: '#DC2626',
+    width: 24,
+  },
+});
+
+// 🗺️ SEZIONE MAPPA
+const MapSection: React.FC<{
+  onMapPress: () => void;
+}> = ({ onMapPress }) => {
+  const handleMapPress = useCallback(() => {
+    onMapPress();
+  }, [onMapPress]);
+
+  const handleLocationPress = useCallback((_location: MapLocation) => {
+    // Removed console.log for production - use proper logging if needed
+    // TODO: Implement proper analytics tracking for location press
+  }, []);
+
+  return (
+    <View style={mapStyles.mapSection}>
+      <MapSectionHeader />
+      <MapContainer onLocationPress={handleLocationPress} />
+      <MapExpandButton onPress={handleMapPress} />
+    </View>
+  );
+};
+
+// 📝 HEADER MAPPA - Sottofunzione estratta
+const MapSectionHeader: React.FC = () => (
+  <>
+    <Text style={mapStyles.sectionTitle}>Dove Operiamo</Text>
+    <Text style={mapStyles.sectionSubtitle}>
+      I nostri progetti nel mondo per combattere fame e povertà
+    </Text>
+  </>
+);
+
+// 🌍 CONTAINER MAPPA - Sottofunzione estratta
+const MapContainer: React.FC<{
+  onLocationPress: (location: MapLocation) => void;
+}> = ({ onLocationPress }) => (
+  <View style={mapStyles.mapContainer}>
+    <InteractiveMap
+      locations={MAP_LOCATIONS}
+      onMarkerPress={onLocationPress}
+      isFullScreen={false}
+    />
+  </View>
+);
+
+// 🔄 BOTTONE ESPANSIONE - Sottofunzione estratta
+const MapExpandButton: React.FC<{
+  onPress: () => void;
+}> = ({ onPress }) => (
+  <TouchableOpacity
+    style={mapStyles.expandButton}
+    onPress={onPress}
+    activeOpacity={0.9}
+  >
+    <LinearGradient
+      colors={['#DC2626', '#B91C1C', '#991B1B']}
+      style={mapStyles.expandGradientContainer}
+    >
+      <View style={mapStyles.expandButtonContent}>
+        <MaterialCommunityIcons name="map-search" size={20} color="#DC2626" />
+        <Text style={mapStyles.expandButtonText}>Esplora Mappa Completa</Text>
+      </View>
+    </LinearGradient>
+  </TouchableOpacity>
+);
+
+// 🎨 STYLES MAPPA - Estratti per riutilizzo
+const mapStyles = StyleSheet.create({
+  mapSection: {
+    marginHorizontal: Spacing[4],
+    marginBottom: Spacing[8],
+  },
+  sectionTitle: {
+    fontSize: Typography.sizes['3xl'],
+    fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: Spacing[1],
+    letterSpacing: -0.8,
+  },
+  sectionSubtitle: {
+    fontSize: Typography.sizes.base,
+    color: '#374151',
+    textAlign: 'center',
+    marginBottom: Spacing[4],
+    backgroundColor: 'rgba(55, 65, 81, 0.06)',
+    borderRadius: 12,
+    paddingHorizontal: Spacing[3],
+    paddingVertical: Spacing[2],
+  },
+  mapContainer: {
+    height: 300,
+    borderRadius: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  expandButton: {
+    marginTop: Spacing[3],
+    alignSelf: 'center',
+  },
+  // GRADIENT CONTAINER PATTERN PER EXPAND BUTTON
+  expandGradientContainer: {
+    borderRadius: 16,
+    padding: 3,
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  expandButtonContent: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 14,
+    paddingHorizontal: Spacing[4],
+    paddingVertical: Spacing[3],
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing[2],
+  },
+  expandButtonText: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.semibold,
+    color: '#DC2626',
+  },
+});
+
+// 🎨 STYLES PRINCIPALI - Estratti per evitare falsi positivi ESLint
+const mainStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[0],
+  },
+  scrollView: {
+    flex: 1,
+  },
+  contentContainer: {
+    paddingBottom: Spacing[12], // Extra space per bottom tab
+  },
+});
+
+// 🎯 COMPONENTE PRINCIPALE
+const ImpactTabScreen: React.FC = () => {
+  const navigation = useNavigation<ImpactNavigationProp>();
+  const animations = useImpactAnimations();
+
+  const handleNavigate = useCallback(
+    (screen: ImpactScreenName) => {
+      navigation.navigate(screen);
+    },
+    [navigation]
+  );
+
+  const handleMapPress = useCallback(() => {
+    // TODO: Implement full map modal opening
+    // navigation.navigate('MapModal');
+  }, []);
+
+  return (
+    <SafeAreaView style={mainStyles.container}>
       <ScrollView
+        style={mainStyles.scrollView}
+        contentContainerStyle={mainStyles.contentContainer}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: Spacing[8] }}
+        bounces={true}
       >
         <ModernImpactHeader animations={animations} />
-        <ImpactMissionSection animations={animations} />
         <ImpactStatsSection
           animations={animations}
-          onNavigate={handleNavigationPress}
+          onNavigate={handleNavigate}
         />
         <StoriesSection />
         <MapSection onMapPress={handleMapPress} />

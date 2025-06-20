@@ -27,6 +27,8 @@ export interface ImpactStory {
   location: string;
   text: string;
   image: string;
+  category: 'meals' | 'kits' | 'social';
+  year: number;
 }
 
 export interface ImpactMilestone {
@@ -34,12 +36,33 @@ export interface ImpactMilestone {
   title: string;
   value: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  description: string;
 }
 
 export interface ImpactDataType {
+  // Dati principali 2024
   mealsDistributed: number;
+  mealsProduced: number;
+  mealsDistributedTotal: number;
+
+  // Kit packages
+  kitPackages: number;
+  kitDistributed: number;
+  kitProducedTotal: number;
+
+  // Volontari
   volunteers: number;
+  volunteersTotal: number;
+
+  // Persone aiutate
+  livesImpactedMeals: number;
+  livesImpactedKits: number;
   livesImpacted: number;
+
+  // Dati storici
+  mealsProducedLifetime: number;
+
+  // Contenuti
   stories: readonly ImpactStory[];
   milestones: readonly ImpactMilestone[];
 }

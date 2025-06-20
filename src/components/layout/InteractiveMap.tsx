@@ -21,6 +21,9 @@ export interface Location {
   status: string;
   description: string;
   image: string;
+  meals?: number;
+  kits?: number;
+  volunteers?: number;
 }
 
 interface Props {
