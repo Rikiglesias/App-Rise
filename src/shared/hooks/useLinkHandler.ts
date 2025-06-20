@@ -43,7 +43,7 @@ export const useLinkHandler = (
 ): UseLinkHandlerReturn => {
   const {
     defaultErrorMessage = 'Impossibile aprire il link. Riprova più tardi.',
-    loadingDelay = 150,
+    loadingDelay = 0, // AZZERATO: apertura istantanea dei link
     enableHaptics = true,
     timeout = 10000,
     retryAttempts = 1,
@@ -150,7 +150,7 @@ export const useLinkHandler = (
   // Predefined link handlers for common actions
   const openDonationLink = useCallback(() => {
     return openLink(
-      'https://riseagainsthunger.welfare4charity.com/crowdfunding',
+      'https://italy.riseagainsthunger.org/donaora/',
       'donation',
       'Impossibile aprire il link di donazione. Riprova più tardi.'
     );

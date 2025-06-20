@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback, useState } from 'react';
-import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
 
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../shared/hooks/useLinkHandler';
@@ -109,6 +109,12 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
           animations={animations}
           onInfoPress={handleShowStoria}
         />
+
+        {/* SEPARATORE TRA SEZIONI - IDENTICO ALLA PAGINA AZIONI */}
+        <View style={mainStyles.sectionDividerContainer}>
+          <View style={mainStyles.sectionDivider} />
+        </View>
+
         <ContactSection animations={animations} contacts={contacts} />
       </ScrollView>
 

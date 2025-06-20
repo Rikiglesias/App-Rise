@@ -11,17 +11,35 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 }) => {
   return (
     <View style={contactSectionStyles.categoryContainer}>
-      <Text style={contactSectionStyles.categoryTitle}>Contatti</Text>
-      {/* Separatore decorativo */}
-      <View style={contactSectionStyles.titleSeparator}>
-        <View style={contactSectionStyles.separatorLine} />
-        <Text style={contactSectionStyles.separatorIcon}>•</Text>
-        <View style={contactSectionStyles.separatorLine} />
-      </View>
-      <Text style={contactSectionStyles.categorySubtitle}>
-        Contattaci rapidamente
-      </Text>
-      <View style={contactSectionStyles.categoryDivider} />
+      {/* HEADER IDENTICO SEZIONE "SCOPRI" - ORA CON ANIMAZIONI */}
+      <Animated.View
+        style={[
+          contactSectionStyles.categoryHeader,
+          {
+            opacity: animations.fadeAnim,
+            transform: [
+              {
+                translateY: animations.slideAnim.interpolate({
+                  inputRange: [0, 50],
+                  outputRange: [20, 0],
+                }),
+              },
+              {
+                scale: animations.scaleAnim,
+              },
+            ],
+          },
+        ]}
+      >
+        <View style={contactSectionStyles.exploreHeaderContainer}>
+          <Text style={contactSectionStyles.categoryTitle}>
+            I Nostri Contatti
+          </Text>
+          <Text style={contactSectionStyles.exploreSubtitleInline}>
+            Sede di Bologna e recapiti ufficiali
+          </Text>
+        </View>
+      </Animated.View>
       <View style={contactSectionStyles.contactsGrid}>
         {contacts.map((contact, index) => {
           const animationValue = animations.contactAnimations[index];

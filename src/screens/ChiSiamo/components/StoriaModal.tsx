@@ -115,7 +115,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="close"
-                      size={24}
+                      size={20} // DIMENSIONE COORDINATA con modal Contribuisci
                       color="#DC2626"
                     />
                   </TouchableOpacity>

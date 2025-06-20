@@ -138,29 +138,20 @@ const HomeScreen: React.FC = () => {
       marginBottom: Spacing[6], // Spazio maggiore per respirazione
     },
 
-    // CORREZIONE UX: Stile titolo NON cliccabile - Design System
+    // CORREZIONE UX: Stile titolo NON cliccabile - PULITO SENZA BORDI
     ctaTitleContainer: {
       backgroundColor: 'transparent', // Sfondo trasparente per titoli
-      borderRadius: 16,
-      borderWidth: 1, // Bordo sottile per separazione
-      borderColor: 'rgba(220, 38, 38, 0.2)', // Bordo rosso sottile
-      paddingHorizontal: Spacing[8],
-      paddingVertical: Spacing[4],
+      paddingHorizontal: Spacing[4],
+      paddingVertical: Spacing[2],
       alignItems: 'center',
-      // Elevation bassa per titoli
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1, // Ombra leggera
-      shadowRadius: 4,
-      elevation: 2, // Elevation bassa
     },
 
     ctaTitleText: {
-      fontSize: Typography.sizes['2xl'],
+      fontSize: Typography.sizes['4xl'], // INGRANDITO: da '2xl' a '4xl' per maggiore impatto
       fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',
-      letterSpacing: -0.8,
+      letterSpacing: -1.2, // AUMENTATO per bilanciare la dimensione maggiore
       textShadowColor: 'rgba(220, 38, 38, 0.15)',
       textShadowOffset: { width: 0, height: 2 },
       textShadowRadius: 6,
@@ -279,7 +270,7 @@ const HomeScreen: React.FC = () => {
                 {/* Titolo moderno per i CTA */}
                 <View style={styles.ctaTitleSection}>
                   <View style={styles.ctaTitleContainer}>
-                    <Text style={styles.ctaTitleText}>🤝 Entra in Azione</Text>
+                    <Text style={styles.ctaTitleText}>Entra in Azione</Text>
                   </View>
                   {/* Descrizione con design system premium */}
                   <View style={styles.ctaDescriptionContainer}>

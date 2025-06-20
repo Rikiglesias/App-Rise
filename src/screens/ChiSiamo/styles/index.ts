@@ -31,9 +31,29 @@ export const mainStyles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: Spacing[4],
-    gap: Spacing[4], // Ridotto da 8 a 4
-    paddingTop: Spacing[12], // Ridotto da 20 a 12
+    gap: Spacing[0], // IDENTICO PAGINA AZIONI: paddingTop: Spacing[0] per "Dona Ora" attaccato alla linea
+    paddingTop: Spacing[8], // Stacco corretto da header
     paddingBottom: Spacing[12],
+  },
+  // SEPARATORE TRA SEZIONI - IDENTICO PAGINA AZIONI
+  sectionDividerContainer: {
+    paddingHorizontal: Spacing[4],
+    paddingVertical: Spacing[4], // IDENTICO PAGINA AZIONI: spazio equilibrato per separazione
+    alignItems: 'center',
+  },
+  // LINEA SEPARATRICE - IDENTICA PAGINA AZIONI
+  sectionDivider: {
+    height: 2, // IDENTICO PAGINA AZIONI: altezza bilanciata
+    backgroundColor: Colors.neutral[300], // IDENTICO PAGINA AZIONI: più soft per eleganza
+    width: '60%', // IDENTICO PAGINA AZIONI: bilanciato per proporzioni migliori
+    borderRadius: 1, // IDENTICO PAGINA AZIONI
+    opacity: 0.8, // IDENTICO PAGINA AZIONI: sottile trasparenza per delicatezza
+    // OMBRA ELEGANTE IDENTICA PAGINA AZIONI
+    shadowColor: Colors.neutral[400],
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 2,
   },
 });
 
@@ -88,6 +108,7 @@ export const modalStyles = StyleSheet.create({
     padding: Spacing[4],
     borderBottomWidth: 1,
     borderBottomColor: Colors.neutral[200],
+    position: 'relative',
   },
 
   modalTitle: {
@@ -95,10 +116,28 @@ export const modalStyles = StyleSheet.create({
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     letterSpacing: -0.8,
+    flex: 1,
+    textAlign: 'center',
+    paddingRight: Spacing[8], // SPAZIO per icona posizionata assolutamente
   },
 
   closeButton: {
-    padding: Spacing[1],
+    position: 'absolute',
+    top: Spacing[5], // ULTERIORMENTE IN BASSO: da Spacing[4] a Spacing[5]
+    right: -Spacing[1], // PIÙ A SINISTRA: da Spacing[2] a -Spacing[1]
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(220, 38, 38, 0.2)',
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
   },
 
   storyScroll: {
@@ -206,147 +245,245 @@ export const modalStyles = StyleSheet.create({
 // ChiSiamo Section Styles
 export const chiSiamoSectionStyles = StyleSheet.create({
   categoryContainer: {
-    marginBottom: Spacing[3], // Ridotto da 6 a 3
+    marginBottom: Spacing[2], // SPACING COMPATTO ma armonioso
   },
-  titleContainer: {
+
+  // HEADER CON SPACING OTTIMIZZATO
+  headerContainer: {
+    paddingTop: Spacing[3],
+    paddingHorizontal: Spacing[4],
+    paddingBottom: Spacing[2], // RIDOTTO: spazio compatto dopo la descrizione
+    alignItems: 'center',
     position: 'relative',
   },
-  categoryTitle: {
-    fontSize: Typography.sizes['3xl'],
-    fontWeight: Typography.weights.black,
-    color: '#374151', // Grigio scuro elegante invece del nero
-    textAlign: 'center',
-    letterSpacing: -0.8,
-    marginBottom: Spacing[1], // Ridotto per avvicinare icona
-    // Text shadow per profondità
-    textShadowColor: 'rgba(55, 65, 81, 0.15)', // Shadow coordinato al nuovo colore
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 8,
-  },
-  infoIcon: {
-    position: 'absolute',
-    right: 105, // Ancora un pochino più a destra
-    top: 38, // Leggermente più in basso
-    padding: Spacing[1],
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.full,
-    shadowColor: '#374151', // Shadow coordinato al nuovo colore grigio
+
+  // CONTAINER PRINCIPALE ELEGANTE COME PAGINA AZIONI
+  titleHeaderContainer: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(220, 38, 38, 0.03)', // BACKGROUND COLORATO ELEGANTE
+    paddingVertical: Spacing[3], // RIDOTTO per eleganza
+    paddingHorizontal: Spacing[5], // RIDOTTO per coerenza
+    borderRadius: 16, // MODERNO
+    borderWidth: 1,
+    borderColor: 'rgba(220, 38, 38, 0.12)', // BORDO ROSSO SOTTILE
+    shadowColor: '#DC2626', // OMBRA ROSSA COORDINATA
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  categorySubtitle: {
-    fontSize: Typography.sizes.base, // Riportato a base da lg
-    fontWeight: Typography.weights.bold, // Manteniamo bold per distinguere
-    textAlign: 'center',
-    letterSpacing: 0.3, // Ridotto spacing
-    lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base, // Aggiustato per base
-    marginBottom: Spacing[3], // Ridotto da 4 a 3
-    paddingHorizontal: Spacing[4], // Ridotto padding laterale
-    fontStyle: 'normal', // Manteniamo normal
-    color: '#DC2626', // Manteniamo rosso per distinguere
-    backgroundColor: 'rgba(220, 38, 38, 0.04)', // Manteniamo sfondo rosso tenue
-    paddingVertical: Spacing[3], // Ridotto padding verticale
-    borderRadius: 12, // Ridotto border radius
-    borderWidth: 1, // Ridotto border width
-    borderColor: 'rgba(220, 38, 38, 0.15)', // Manteniamo bordo rosso
-    shadowColor: '#DC2626', // Manteniamo shadow rosso
-    shadowOffset: { width: 0, height: 2 }, // Shadow più leggero
     shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2, // Elevation ridotto
+    shadowRadius: 8,
+    elevation: 3,
+    width: '100%',
   },
-  titleSeparator: {
+
+  // CONTAINER TITOLO E ICONA - SPACING OTTIMIZZATO
+  titleWithInfoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: Spacing[2],
-    paddingHorizontal: Spacing[6],
+    justifyContent: 'center',
+    width: '100%',
+    position: 'relative',
+    marginBottom: Spacing[4], // AUMENTATO: spazio armonioso prima della descrizione
   },
-  separatorLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: Colors.neutral[300],
-    opacity: 0.4,
-  },
-  separatorIcon: {
-    fontSize: 16,
-    marginHorizontal: Spacing[3],
-    opacity: 0.5,
-    color: Colors.neutral[500],
-  },
-  categoryDivider: {
-    height: 1,
-    backgroundColor: Colors.neutral[200],
-    marginHorizontal: Spacing[8],
-    marginBottom: Spacing[2], // Ridotto da 6 a 2
-  },
-});
 
-// Contact Section Styles
-export const contactSectionStyles = StyleSheet.create({
-  categoryContainer: {
-    marginBottom: Spacing[3], // Ridotto da 6 a 3
+  // AREA CLICCABILE PER IL TITOLO - NUOVA
+  titleTouchableArea: {
+    // Nessun background o bordi - solo area cliccabile
+    paddingHorizontal: Spacing[2], // Piccolo padding per area touch più ampia
+    paddingVertical: Spacing[1],
   },
+
+  titleContainer: {
+    position: 'relative',
+    alignItems: 'center',
+  },
+
+  // TITOLO PRINCIPALE - DIMENSIONI BILANCIATE
   categoryTitle: {
-    fontSize: Typography.sizes['3xl'],
+    fontSize: screenWidth > 375 ? 36 : 30, // RIDOTTO per migliore proporzione
     fontWeight: Typography.weights.black,
-    color: '#1F2937', // Grigio scuro per "Contatti"
+    color: Colors.neutral[900],
     textAlign: 'center',
-    letterSpacing: -0.8,
-    marginBottom: Spacing[2],
-    // Text shadow per profondità
-    textShadowColor: 'rgba(31, 41, 55, 0.15)',
+    letterSpacing: -1.0, // BILANCIATO per leggibilità
+    includeFontPadding: false,
+    // TEXT SHADOW ELEGANTE
+    textShadowColor: 'rgba(0, 0, 0, 0.10)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+  },
+
+  // ACCENTO ROSSO POTENZIATO
+  titleAccent: {
+    color: '#DC2626',
+    // TEXT SHADOW ROSSO coordinato
+    textShadowColor: 'rgba(220, 38, 38, 0.25)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 8,
   },
-  categorySubtitle: {
+
+  // CONTAINER PER SUBTITLE CON ICONA INFO
+  subtitleWithInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+
+  // CONTAINER CLICCABILE ELEGANTE COME PAGINA AZIONI
+  titleClickableContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+
+  // SUBTITLE INLINE INGRANDITO E ELEGANTE
+  mainSubtitleInline: {
+    fontSize: Typography.sizes.base, // INGRANDITO: da sm a base per maggiore leggibilità
+    fontWeight: Typography.weights.medium,
+    color: '#B91C1C', // ROSSO PIÙ SCURO COORDINATO
+    textAlign: 'center',
+    letterSpacing: 0.2,
+    marginTop: Spacing[1],
+    opacity: 0.8,
+  },
+
+  // SUBTITLE - SPACING E STILE OTTIMIZZATI (LEGACY)
+  mainSubtitle: {
     fontSize: Typography.sizes.base,
     fontWeight: Typography.weights.medium,
+    color: Colors.neutral[700],
+    textAlign: 'center',
+    letterSpacing: 0.3,
+    fontStyle: 'italic',
+    lineHeight: 24, // AUMENTATO per migliore leggibilità
+    // SUBTLE TEXT SHADOW
+    textShadowColor: 'rgba(0, 0, 0, 0.06)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+
+  // ICONA INFO PER SUBTITLE
+  infoIconSubtitle: {
+    marginLeft: Spacing[2],
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#DC2626',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(220, 38, 38, 0.8)',
+  },
+
+  // ICONA INFO - ULTERIORMENTE ALZATA E SPOSTATA A SINISTRA
+  infoIconImproved: {
+    position: 'absolute',
+    right: Spacing[1], // ULTERIORMENTE A SINISTRA: da Spacing[2] a Spacing[1]
+    top: Spacing[1], // ULTERIORMENTE ALZATA: da Spacing[2] a Spacing[1]
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#DC2626',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // OMBRA ELEGANTE
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+    // BORDO PULITO
+    borderWidth: 2,
+    borderColor: Colors.neutral[0],
+  },
+
+  categorySubtitle: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.bold,
     textAlign: 'center',
     letterSpacing: 0.3,
     lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
     marginBottom: Spacing[3],
     paddingHorizontal: Spacing[4],
-    fontStyle: 'italic',
-    color: '#374151',
-    backgroundColor: 'rgba(55, 65, 81, 0.06)',
-    paddingVertical: Spacing[2],
+    fontStyle: 'normal',
+    color: '#DC2626',
+    backgroundColor: 'rgba(220, 38, 38, 0.04)',
+    paddingVertical: Spacing[3],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(55, 65, 81, 0.12)',
-    shadowColor: '#374151',
+    borderColor: 'rgba(220, 38, 38, 0.15)',
+    shadowColor: '#DC2626',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 2,
   },
-  titleSeparator: {
+});
+
+// Contact Section Styles - SPACING IDENTICO PAGINA AZIONI
+export const contactSectionStyles = StyleSheet.create({
+  categoryContainer: {
+    marginBottom: Spacing[1], // IDENTICO PAGINA AZIONI: ultra avvicinato come "Scopri"
+  },
+
+  categoryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: Spacing[2],
-    paddingHorizontal: Spacing[6],
+    justifyContent: 'center',
+    marginBottom: Spacing[12], // IDENTICO PAGINA AZIONI: molto aumentato come "Dona Ora" - ampio spazio tra titolo e bottoni
+    position: 'relative',
   },
-  separatorLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: Colors.neutral[300],
-    opacity: 0.4,
+
+  // CONTAINER HEADER SEMPLICE SENZA BACKGROUND - COME ESPLORA E COMMUNITY
+  exploreHeaderContainer: {
+    alignItems: 'center',
+    paddingVertical: Spacing[2], // RIDOTTO per semplicità
+    paddingHorizontal: Spacing[3], // RIDOTTO per semplicità
   },
-  separatorIcon: {
-    fontSize: 16,
-    marginHorizontal: Spacing[3],
-    opacity: 0.5,
-    color: Colors.neutral[500],
+
+  categoryTitle: {
+    fontSize: Typography.sizes['3xl'],
+    fontWeight: Typography.weights.black,
+    color: Colors.neutral[800],
+    textAlign: 'center',
+    letterSpacing: -0.8,
+    marginBottom: Spacing[1], // IDENTICO PAGINA AZIONI: ridotto per coerenza
+    // Text shadow elegante identico pagina azioni
+    textShadowColor: 'rgba(31, 41, 55, 0.15)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 8,
   },
-  categoryDivider: {
-    height: 1,
-    backgroundColor: Colors.neutral[200],
-    marginHorizontal: Spacing[8],
-    marginBottom: Spacing[2], // Ridotto da 6 a 2
+
+  // SUBTITLE INLINE INGRANDITA
+  exploreSubtitleInline: {
+    fontSize: Typography.sizes.base, // INGRANDITO: da sm a base per I nostri contatti
+    fontWeight: Typography.weights.medium,
+    color: '#374151',
+    textAlign: 'center',
+    letterSpacing: 0.3,
+    fontStyle: 'italic',
+    lineHeight: 24, // AUMENTATO per proportional spacing
   },
+
+  // SEPARATORE HEADER - NON UTILIZZATO MA MANTENGO PER COMPATIBILITÀ
+  headerDivider: {
+    width: '70%',
+    height: 3,
+    backgroundColor: '#1F2937',
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginTop: Spacing[3],
+    shadowColor: '#1F2937',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+
   contactsGrid: {
-    gap: Spacing[4],
+    gap: Spacing[4], // IDENTICO PAGINA AZIONI: spacing bilanciato
   },
 });
 
@@ -358,26 +495,26 @@ export const animatedContactStyles = StyleSheet.create({
   contactTouchable: {
     width: '100%',
   },
-  // GRADIENT CONTAINER PATTERN per bottoni (clickabili)
+  // GRADIENT CONTAINER PATTERN POTENZIATO per bottoni contatti
   gradientBorder: {
-    borderRadius: 24,
+    borderRadius: 26, // AUMENTATO per più eleganza
     padding: 3, // Bordo gradient
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowColor: '#1F2937', // SHADOW GRIGIO coordinato con sezione
+    shadowOffset: { width: 0, height: 10 }, // SHADOW PIÙ PROFONDO
+    shadowOpacity: 0.3, // PIÙ INTENSO
+    shadowRadius: 20, // PIÙ MORBIDO
+    elevation: 10, // PIÙ ALTO per presenza
   },
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 21, // 24-3 per effetto bordo
+    borderRadius: 23, // 26-3 per effetto bordo
     overflow: 'hidden',
   },
   contactContent: {
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[4],
+    paddingVertical: Spacing[4], // RIMPICCIOLITO: da Spacing[5] a Spacing[4]
+    paddingHorizontal: Spacing[4], // RIMPICCIOLITO: da Spacing[5] a Spacing[4]
     alignItems: 'center',
-    minHeight: 80,
+    minHeight: 80, // RIMPICCIOLITO: da 90 a 80
     justifyContent: 'center',
     flexDirection: 'row',
   },
@@ -388,17 +525,19 @@ export const animatedContactStyles = StyleSheet.create({
     flex: 1,
   },
   contactButtonTitle: {
-    fontSize: Typography.sizes.base,
-    fontWeight: Typography.weights.bold,
+    fontSize: Typography.sizes.base, // RIMPICCIOLITO: da lg a base
+    fontWeight: Typography.weights.bold, // RIDOTTO: da black a bold
     color: Colors.neutral[900],
-    marginBottom: 2,
-    textShadowColor: 'rgba(0, 0, 0, 0.05)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    marginBottom: 2, // RIDOTTO: da 3 a 2
+    textShadowColor: 'rgba(0, 0, 0, 0.08)', // RIDOTTO: opacità più leggera
+    textShadowOffset: { width: 0, height: 1 }, // RIDOTTO: più sottile
+    textShadowRadius: 3, // RIDOTTO: meno morbido
+    letterSpacing: -0.2, // RIDOTTO: meno compresso
   },
   contactButtonSubtitle: {
-    fontSize: Typography.sizes.sm,
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[600],
+    fontSize: Typography.sizes.sm, // RIMPICCIOLITO: da base a sm
+    fontWeight: Typography.weights.medium, // RIDOTTO: da semibold a medium
+    color: Colors.neutral[600], // PIÙ CHIARO: da 700 a 600
+    letterSpacing: 0.2, // RIDOTTO: meno spaziato
   },
 });

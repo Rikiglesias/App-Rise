@@ -147,54 +147,68 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
-        <Animated.View style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>
-            <TouchableOpacity onPress={onClose} style={styles.modalCloseButton}>
-              <Text style={styles.modalCloseIcon}>×</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>
-              Attraverso la nostra piattaforma digitale innovativa puoi
-              contribuire senza costi diretti.
-            </Text>
-            <Text style={styles.modalText}>
-              Grazie agli accordi strategici con i nostri partner commerciali,
-              una percentuale degli acquisti effettuati tramite i nostri canali
-              viene automaticamente destinata ai progetti di Rise Against Hunger
-              Italia.
-            </Text>
-            <Text style={styles.modalSubtitle}>
-              Il tuo contributo si trasforma in:
-            </Text>
-            <View style={styles.modalBullets}>
-              <Text style={styles.modalBullet}>
-                • Pasti nutrienti per bambini
-              </Text>
-              <Text style={styles.modalBullet}>• Supporto educativo</Text>
-              <Text style={styles.modalBullet}>• Sviluppo sostenibile</Text>
+      <TouchableOpacity
+        style={styles.modalOverlay}
+        activeOpacity={1}
+        onPress={onClose}
+      >
+        <TouchableOpacity activeOpacity={1} onPress={e => e.stopPropagation()}>
+          <Animated.View style={styles.modalContainer}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>
+              <TouchableOpacity
+                onPress={onClose}
+                style={styles.modalCloseButton}
+              >
+                <Text style={styles.modalCloseIcon}>×</Text>
+              </TouchableOpacity>
             </View>
-          </View>
 
-          <View style={styles.modalActions}>
-            <TouchableOpacity
-              onPress={onClose}
-              style={styles.modalButtonSecondary}
-            >
-              <Text style={styles.modalButtonSecondaryText}>Ho Capito</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={onDonate}
-              style={styles.modalButtonPrimary}
-            >
-              <Text style={styles.modalButtonPrimaryText}>Dona Subito</Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      </View>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>
+                Puoi contribuire alla nostra missione in diversi modi:
+                attraverso acquisti solidali oppure con donazioni monetarie
+                dirette.
+              </Text>
+              <Text style={styles.modalText}>
+                Grazie agli accordi strategici con i nostri partner commerciali,
+                una percentuale degli acquisti effettuati tramite i nostri
+                canali viene automaticamente destinata ai progetti di Rise
+                Against Hunger Italia.
+              </Text>
+              <Text style={styles.modalSubtitle}>
+                Se vuoi fare una donazione monetaria:
+              </Text>
+              <View style={styles.modalBullets}>
+                <Text style={styles.modalBullet}>
+                  • Clicca su &quot;Dona Ora&quot; per donazioni dirette
+                </Text>
+                <Text style={styles.modalBullet}>
+                  • Ogni euro dona pasti nutritivi ai bambini
+                </Text>
+                <Text style={styles.modalBullet}>
+                  • Sostieni progetti educativi e sviluppo sostenibile
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                onPress={onClose}
+                style={styles.modalButtonSecondary}
+              >
+                <Text style={styles.modalButtonSecondaryText}>Ho Capito</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={onDonate}
+                style={styles.modalButtonPrimary}
+              >
+                <Text style={styles.modalButtonPrimaryText}>Dona Subito</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </Modal>
   );
 };

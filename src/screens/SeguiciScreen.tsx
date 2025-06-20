@@ -52,37 +52,61 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { openLink } = useLinkHandler();
   const { triggerHaptic } = useHapticFeedback();
 
-  // Animazioni professionali
+  // Animazioni veloci come altre pagine
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
+  const slideAnim = useRef(new Animated.Value(50)).current; // AUMENTATO per coerenza
+  const scaleAnim = useRef(new Animated.Value(0.95)).current; // REGOLATO per coerenza
+
+  // ANIMAZIONI STAGGERED PER BOTTONI SOCIAL
+  const socialAnimations = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ] as const).current;
 
   useEffect(() => {
-    const animateEntry = () => {
-      Animated.stagger(200, [
-        Animated.parallel([
-          Animated.timing(fadeAnim, {
+    const sequence = Animated.sequence([
+      // Header animation - COME PAGINA AZIONI
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 800, // NORMALE: come timing originale per header
+          useNativeDriver: true,
+        }),
+        Animated.spring(slideAnim, {
+          toValue: 0,
+          useNativeDriver: true,
+          tension: 50, // NORMALE: timing più rilassato per header
+          friction: 8, // MORBIDO per header
+        }),
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 60, // NORMALE: coordinato
+          friction: 8, // MORBIDO per header
+        }),
+      ]),
+      // Social animations staggered DOPO - COME PAGINA AZIONI
+      Animated.delay(300), // DELAY NORMALE: i bottoni appaiono DOPO il titolo
+      Animated.stagger(
+        200, // STAGGER NORMALE: sequenza visibile e piacevole
+        socialAnimations.map(anim =>
+          Animated.timing(anim, {
             toValue: 1,
-            duration: 600,
+            duration: 600, // DURATA NORMALE: animazione fluida
             useNativeDriver: true,
-          }),
-          Animated.timing(slideAnim, {
-            toValue: 0,
-            duration: 600,
-            useNativeDriver: true,
-          }),
-          Animated.spring(scaleAnim, {
-            toValue: 1,
-            tension: 50,
-            friction: 7,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]).start();
-    };
+          })
+        )
+      ),
+    ]);
 
-    animateEntry();
-  }, [fadeAnim, slideAnim, scaleAnim]);
+    sequence.start();
+
+    return () => {
+      sequence.stop();
+    };
+  }, [fadeAnim, slideAnim, scaleAnim, socialAnimations]);
 
   const handleBackPress = useCallback(async () => {
     await triggerHaptic('medium');
@@ -184,13 +208,26 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
     },
   ];
 
-  const renderSocialCard = (platform: SocialPlatform, _index: number) => (
+  const renderSocialCard = (platform: SocialPlatform, index: number) => (
     <Animated.View
       key={platform.id}
       style={[
         {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }, { scale: scaleAnim }],
+          opacity: socialAnimations[index] || fadeAnim, // USA ANIMAZIONE STAGGERED INDIVIDUALE
+          transform: [
+            {
+              translateY: (socialAnimations[index] || fadeAnim).interpolate({
+                inputRange: [0, 1],
+                outputRange: [30, 0], // MOVIMENTO COORDINATO
+              }),
+            },
+            {
+              scale: (socialAnimations[index] || fadeAnim).interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.9, 1], // SCALING COORDINATO
+              }),
+            },
+          ],
         },
       ]}
     >
@@ -274,11 +311,10 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.categoryTitle}>
               <Text style={styles.titleAccent}>Seguici Ovunque</Text>
             </Text>
+            <Text style={styles.categorySubtitleInline}>
+              Resta connesso e scopri come fare la differenza
+            </Text>
           </View>
-
-          <Text style={styles.categorySubtitle}>
-            • Resta connesso e scopri come fare la differenza
-          </Text>
         </Animated.View>
 
         {/* SEPARATORE TRA SEZIONI - IDENTICO CHI SIAMO */}
@@ -338,9 +374,21 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[2], // IDENTICO CHI SIAMO: chiSiamoSectionStyles.categoryContainer
   },
 
+  // CONTAINER ELEGANTE COLORATO COME ALTRE PAGINE
   titleContainer: {
     alignItems: 'center' as const,
-    marginBottom: Spacing[4], // IDENTICO a Chi Siamo: spacing coordinato
+    backgroundColor: 'rgba(220, 38, 38, 0.03)', // BACKGROUND COLORATO ELEGANTE
+    paddingVertical: Spacing[3], // COME PAGINE AZIONI
+    paddingHorizontal: Spacing[5], // COME PAGINE AZIONI
+    borderRadius: 16, // MODERNO COME PAGINE AZIONI
+    borderWidth: 1,
+    borderColor: 'rgba(220, 38, 38, 0.12)', // BORDO ROSSO SOTTILE
+    shadowColor: '#DC2626', // OMBRA ROSSA COORDINATA
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+    marginBottom: Spacing[2], // RIDOTTO: da Spacing[4] a Spacing[2] per avvicinare alla linea
   },
 
   categoryTitle: {
@@ -363,6 +411,17 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(220, 38, 38, 0.25)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 8,
+  },
+
+  // SUBTITLE INLINE ELEGANTE COME PAGINE AZIONI
+  categorySubtitleInline: {
+    fontSize: Typography.sizes.base, // INGRANDITO COME ALTRE PAGINE
+    fontWeight: Typography.weights.medium,
+    color: '#B91C1C', // ROSSO PIÙ SCURO COORDINATO
+    textAlign: 'center' as const,
+    letterSpacing: 0.2,
+    marginTop: Spacing[1],
+    opacity: 0.8,
   },
 
   categorySubtitle: {
@@ -393,6 +452,7 @@ const styles = StyleSheet.create({
 
   // Social Section - Pattern da Chi Siamo IDENTICO
   socialSection: {
+    marginTop: Spacing[6], // AGGIUNTO: spazio tra linea e bottoni
     marginBottom: Spacing[1], // IDENTICO CHI SIAMO: contactSectionStyles.categoryContainer
     gap: Spacing[4], // IDENTICO CHI SIAMO: contactsGrid spacing bilanciato
   },
