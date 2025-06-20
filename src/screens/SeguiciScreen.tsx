@@ -5,9 +5,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Animated,
+  Dimensions,
   Image,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -43,6 +45,8 @@ interface SocialPlatform {
   readonly gradient: readonly string[];
   readonly onPress: () => Promise<void>;
 }
+
+const { width: screenWidth } = Dimensions.get('window');
 
 const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { openLink } = useLinkHandler();
@@ -174,7 +178,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
       name: 'LinkedIn',
       handle: 'Rise Against Hunger Italia',
       description: 'Partnership e collaborazioni',
-      icon: require('../../assets/images/icons/linkedin.png') as number,
+      icon: require('../../assets/images/icons/linkedin.png'),
       gradient: ['#1F2937', '#374151', '#111827'],
       onPress: handleLinkedInPress,
     },
@@ -209,7 +213,10 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                 {platform.icon ? (
                   <Image
                     source={platform.icon}
-                    style={styles.platformIcon}
+                    style={[
+                      styles.platformIcon,
+                      platform.id === 'linkedin' && styles.linkedinIcon, // Stilie speciale per LinkedIn
+                    ]}
                     resizeMode="contain"
                   />
                 ) : (
@@ -264,22 +271,23 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
           ]}
         >
           <View style={styles.titleContainer}>
-            <Text style={styles.categoryTitle}>Seguici Ovunque</Text>
-          </View>
-
-          {/* Separatore decorativo - Pattern da Chi Siamo */}
-          <View style={styles.titleSeparator}>
-            <View style={styles.separatorLine} />
-            <Text style={styles.separatorIcon}>📱</Text>
-            <View style={styles.separatorLine} />
+            <Text style={styles.categoryTitle}>
+              <Text style={styles.titleAccent}>Seguici Ovunque</Text>
+            </Text>
           </View>
 
           <Text style={styles.categorySubtitle}>
-            Resta connesso e scopri come fare la differenza
+            • Resta connesso e scopri come fare la differenza
           </Text>
-
-          <View style={styles.categoryDivider} />
         </Animated.View>
+
+        {/* SEPARATORE TRA SEZIONI - IDENTICO CHI SIAMO */}
+        <View style={styles.sectionDividerContainer}>
+          <View style={styles.sectionDivider} />
+          <View style={styles.dividerEmojiContainer}>
+            <Text style={styles.dividerEmoji}>📱</Text>
+          </View>
+        </View>
 
         {/* SOCIAL PLATFORMS SECTION */}
         <View style={styles.socialSection}>
@@ -292,7 +300,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.neutral[0],
@@ -320,67 +328,62 @@ const styles = {
 
   contentContainer: {
     paddingHorizontal: Spacing[4],
-    gap: Spacing[3],
+    gap: Spacing[0], // IDENTICO a Chi Siamo: gap zero per spacing controllato
     paddingTop: Spacing[8],
-    paddingBottom: Spacing[8],
+    paddingBottom: Spacing[16], // IDENTICO a pagina azioni: più spazio dalla navigation
   },
 
-  // Header Section - Pattern da Chi Siamo
+  // Header Section - Pattern da Chi Siamo IDENTICO
   headerSection: {
-    marginBottom: Spacing[3],
+    marginBottom: Spacing[2], // IDENTICO CHI SIAMO: chiSiamoSectionStyles.categoryContainer
   },
 
   titleContainer: {
     alignItems: 'center' as const,
-    marginBottom: Spacing[2],
+    marginBottom: Spacing[4], // IDENTICO a Chi Siamo: spacing coordinato
   },
 
   categoryTitle: {
-    fontSize: Typography.sizes['3xl'],
+    fontSize: screenWidth > 375 ? 36 : 30, // IDENTICO CHI SIAMO: responsive sizing
     fontWeight: Typography.weights.black,
-    color: '#DC2626',
+    color: Colors.neutral[900], // IDENTICO CHI SIAMO: titolo base nero
     textAlign: 'center' as const,
-    letterSpacing: -1.5,
-    // Typography Smart - Text Shadow
-    textShadowColor: 'rgba(220, 38, 38, 0.15)',
+    letterSpacing: -1.0, // IDENTICO CHI SIAMO: bilanciato per leggibilità
+    includeFontPadding: false,
+    // TEXT SHADOW ELEGANTE IDENTICO CHI SIAMO
+    textShadowColor: 'rgba(0, 0, 0, 0.10)',
     textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+  },
+
+  // ACCENTO ROSSO IDENTICO CHI SIAMO
+  titleAccent: {
+    color: '#DC2626',
+    // TEXT SHADOW ROSSO coordinato IDENTICO CHI SIAMO
+    textShadowColor: 'rgba(220, 38, 38, 0.25)',
+    textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 8,
-  },
-
-  // Separatore decorativo - Pattern da Chi Siamo
-  titleSeparator: {
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    marginVertical: Spacing[4],
-  },
-
-  separatorLine: {
-    width: 60,
-    height: 1,
-    backgroundColor: '#DC2626',
-  },
-
-  separatorIcon: {
-    fontSize: Typography.sizes.xl,
-    marginHorizontal: Spacing[3],
   },
 
   categorySubtitle: {
     fontSize: Typography.sizes.base,
-    fontWeight: Typography.weights.bold,
+    fontWeight: Typography.weights.medium, // IDENTICO CHI SIAMO: medium invece di bold
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    lineHeight: 24,
-    marginBottom: Spacing[3],
+    lineHeight: 24, // IDENTICO CHI SIAMO: aumentato per migliore leggibilità
+    marginBottom: 0, // RIMOSSO: spacing gestito dal separatore
     paddingHorizontal: Spacing[4],
-    fontStyle: 'normal' as const,
-    color: '#374151',
+    fontStyle: 'italic' as const, // IDENTICO CHI SIAMO: italic per eleganza
+    color: Colors.neutral[700], // IDENTICO CHI SIAMO: colore coordinato
     backgroundColor: 'rgba(55, 65, 81, 0.06)',
     paddingVertical: Spacing[3],
     borderRadius: 12,
     borderWidth: 1,
     borderColor: 'rgba(55, 65, 81, 0.12)',
+    // SUBTLE TEXT SHADOW IDENTICO CHI SIAMO
+    textShadowColor: 'rgba(0, 0, 0, 0.06)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
     shadowColor: '#374151',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
@@ -388,15 +391,10 @@ const styles = {
     elevation: 2,
   },
 
-  categoryDivider: {
-    height: 1,
-    backgroundColor: Colors.neutral[200],
-    marginTop: Spacing[3],
-  },
-
-  // Social Section
+  // Social Section - Pattern da Chi Siamo IDENTICO
   socialSection: {
-    gap: Spacing[3],
+    marginBottom: Spacing[1], // IDENTICO CHI SIAMO: contactSectionStyles.categoryContainer
+    gap: Spacing[4], // IDENTICO CHI SIAMO: contactsGrid spacing bilanciato
   },
 
   socialCardWrapper: {
@@ -428,24 +426,38 @@ const styles = {
   },
 
   socialIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: Colors.neutral[50],
-    borderWidth: 2,
+    width: 56, // AUMENTATO: più presenza e spazio per icone
+    height: 56, // AUMENTATO: proporzioni migliori
+    borderRadius: 28, // AGGIORNATO: mantiene forma circolare perfetta
+    backgroundColor: Colors.neutral[0], // MIGLIORATO: bianco puro per più contrasto
+    borderWidth: 3, // AUMENTATO: bordo più definito
     borderColor: '#DC2626',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginRight: Spacing[4],
+    // SHADOW POTENZIATO per più eleganza
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
 
   platformIcon: {
-    width: 28,
-    height: 28,
+    width: 34, // OTTIMIZZATO: perfetto per container 56x56 con bordo 3px
+    height: 34, // OTTIMIZZATO: lascia spazio adeguato dai bordi
+    resizeMode: 'contain' as const, // Mantiene proporzioni senza distorsione
+  },
+
+  // Stile specifico per LinkedIn che è più piccola
+  linkedinIcon: {
+    width: 35, // PERFETTO: pochissimo più piccolo per non toccare i bordi
+    height: 35, // PERFETTO: margine sicuro dal container
   },
 
   socialIconEmoji: {
-    fontSize: 24,
+    fontSize: 28, // AUMENTATO: più grande e visibile nel container più ampio
+    textAlign: 'center' as const,
   },
 
   socialInfoContainer: {
@@ -478,6 +490,50 @@ const styles = {
   arrowContainer: {
     padding: Spacing[1],
   },
-};
+
+  // SEPARATORE TRA SEZIONI - IDENTICO CHI SIAMO
+  sectionDividerContainer: {
+    paddingHorizontal: Spacing[4],
+    paddingVertical: Spacing[4], // IDENTICO CHI SIAMO: spazio equilibrato per separazione
+    alignItems: 'center' as const,
+    flexDirection: 'row' as const,
+    justifyContent: 'center' as const,
+  },
+
+  // LINEA SEPARATRICE - IDENTICA CHI SIAMO
+  sectionDivider: {
+    height: 2, // IDENTICO CHI SIAMO: altezza bilanciata
+    backgroundColor: Colors.neutral[300], // IDENTICO CHI SIAMO: più soft per eleganza
+    width: '60%', // IDENTICO CHI SIAMO: bilanciato per proporzioni migliori
+    borderRadius: 1, // IDENTICO CHI SIAMO
+    opacity: 0.8, // IDENTICO CHI SIAMO: sottile trasparenza per delicatezza
+    // OMBRA ELEGANTE IDENTICA CHI SIAMO
+    shadowColor: Colors.neutral[400],
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 2,
+    position: 'absolute' as const,
+  },
+
+  dividerEmojiContainer: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: BorderRadius.full,
+    paddingHorizontal: Spacing[2],
+    paddingVertical: Spacing[1],
+    // Shadow elegante
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    zIndex: 1,
+  },
+
+  dividerEmoji: {
+    fontSize: 20,
+    textAlign: 'center' as const,
+  },
+});
 
 export default SeguiciScreen;
