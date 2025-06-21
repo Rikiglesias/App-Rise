@@ -26,6 +26,3 @@ export { default as SocialIcon } from './SocialIcon';
 // Progress Components
 export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';
-
-// Examples & Demos
-export { default as PerformanceOptimizedCard } from './PerformanceOptimizedCard.example';

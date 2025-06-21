@@ -2,7 +2,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import ModernCTA from '../components/domain/ModernCTA';
+import { ModernCTA } from '../components/ModernCTARefactored';
 import Logo from '../components/ui/Logo';
 import type { RootStackParamList } from '../navigation/types';
 import {

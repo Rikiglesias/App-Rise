@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Dimensions,
   Image,
   Modal,
   ScrollView,
@@ -18,9 +17,6 @@ import {
   Typography,
 } from '../../shared/constants/designTokens';
 import EnhancedTouchable from '../ui/EnhancedTouchable';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { width, height } = Dimensions.get('window');
 
 interface Location {
   id: string;
