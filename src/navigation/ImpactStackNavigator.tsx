@@ -2,6 +2,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
 import BeneficiariesScreen from '../screens/Impact/BeneficiariesScreen';
+import KitsScreen from '../screens/Impact/KitsScreen';
+import MealsScreen from '../screens/Impact/MealsScreen';
 import PartnersScreen from '../screens/Impact/PartnersScreen';
 import VolunteersScreen from '../screens/Impact/VolunteersScreen';
 import ImpactTabScreen from '../screens/ImpactTabScreen';
@@ -29,6 +31,22 @@ const ImpactStackNavigator: React.FC = () => {
         name="MapModal"
         component={MapModalScreen}
         options={{ presentation: 'modal' }}
+      />
+      <ImpactStack.Screen
+        name="Meals"
+        component={MealsScreen}
+        options={{
+          title: 'Meal Packing',
+          headerShown: false,
+        }}
+      />
+      <ImpactStack.Screen
+        name="Kits"
+        component={KitsScreen}
+        options={{
+          title: 'Kit Packing',
+          headerShown: false,
+        }}
       />
     </ImpactStack.Navigator>
   );

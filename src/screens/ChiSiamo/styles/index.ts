@@ -17,7 +17,7 @@ export const mainStyles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 50,
+    top: 60, // AUMENTATO: da 50 a 60 per evitare overlap con notch/fotocamera
     left: Spacing[4],
     padding: Spacing[2],
     borderRadius: BorderRadius.full,
@@ -31,8 +31,8 @@ export const mainStyles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: Spacing[4],
-    gap: Spacing[0], // IDENTICO PAGINA AZIONI: paddingTop: Spacing[0] per "Dona Ora" attaccato alla linea
-    paddingTop: Spacing[8], // Stacco corretto da header
+    gap: Spacing[0],
+    paddingTop: Spacing[12], // AUMENTATO: da 8 a 12 per safe area Android
     paddingBottom: Spacing[12],
   },
   // SEPARATORE TRA SEZIONI - IDENTICO PAGINA AZIONI
@@ -495,19 +495,19 @@ export const animatedContactStyles = StyleSheet.create({
   contactTouchable: {
     width: '100%',
   },
-  // GRADIENT CONTAINER PATTERN POTENZIATO per bottoni contatti
+  // GRADIENT CONTAINER PATTERN OTTIMIZZATO per Android
   gradientBorder: {
-    borderRadius: 26, // AUMENTATO per più eleganza
-    padding: 3, // Bordo gradient
-    shadowColor: '#1F2937', // SHADOW GRIGIO coordinato con sezione
-    shadowOffset: { width: 0, height: 10 }, // SHADOW PIÙ PROFONDO
-    shadowOpacity: 0.3, // PIÙ INTENSO
-    shadowRadius: 20, // PIÙ MORBIDO
-    elevation: 10, // PIÙ ALTO per presenza
+    borderRadius: 20, // RIDOTTO per migliore rendering Android
+    padding: 2, // RIDOTTO per evitare artefatti
+    shadowColor: '#1F2937',
+    shadowOffset: { width: 0, height: 6 }, // RIDOTTO
+    shadowOpacity: 0.2, // RIDOTTO
+    shadowRadius: 12, // RIDOTTO
+    elevation: 6, // RIDOTTO per Android
   },
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 23, // 26-3 per effetto bordo
+    borderRadius: 18, // 20-2 per effetto bordo
     overflow: 'hidden',
   },
   contactContent: {

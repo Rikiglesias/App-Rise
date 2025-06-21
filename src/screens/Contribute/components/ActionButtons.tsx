@@ -59,6 +59,7 @@ interface ButtonStyles {
   sectionDividerText: object;
   centeredRow: object;
   singleButtonContainer: object;
+  chevronPosition: object;
 }
 
 interface NewActionButtonsSectionProps {
@@ -347,19 +348,19 @@ const ActionButtonsContent: React.FC<{
         buttonContainer: {
           flex: 1,
         },
-        // GRADIENT CONTAINER PATTERN per bottoni (clickabili)
+        // GRADIENT CONTAINER PATTERN per bottoni (clickabili) - ANDROID OTTIMIZZATO
         gradientBorder: {
-          borderRadius: 24,
-          padding: 3, // Bordo gradient
+          borderRadius: 20, // RIDOTTO per Android
+          padding: 2, // RIDOTTO per evitare artefatti
           shadowColor: '#000',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.25,
-          shadowRadius: 16,
-          elevation: 8,
+          shadowOffset: { width: 0, height: 6 }, // RIDOTTO
+          shadowOpacity: 0.2, // RIDOTTO
+          shadowRadius: 12, // RIDOTTO
+          elevation: 6, // RIDOTTO
         },
         whiteContainer: {
           backgroundColor: Colors.neutral[0],
-          borderRadius: 21, // 24-3 per effetto bordo
+          borderRadius: 18, // 20-2 per effetto bordo
           overflow: 'hidden',
         },
         buttonContent: {
@@ -433,6 +434,11 @@ const ActionButtonsContent: React.FC<{
         singleButtonContainer: {
           flex: 0,
           width: '80%', // ANCORA PIÙ LARGO: dominante nella sezione
+        },
+        chevronPosition: {
+          position: 'absolute',
+          top: 8,
+          right: 8,
         },
       }),
     []
@@ -824,6 +830,12 @@ const AnimatedButton: React.FC<{
               style={styles.buttonIcon}
             />
             <Text style={styles.buttonTitle}>{button.title}</Text>
+            <MaterialCommunityIcons
+              name="chevron-right"
+              size={20}
+              color={iconColor}
+              style={styles.chevronPosition}
+            />
           </View>
         </View>
       </LinearGradient>

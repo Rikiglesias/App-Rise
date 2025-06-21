@@ -30,17 +30,22 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FF6B35"
       },
-      "edgeToEdgeEnabled": true,
+      "edgeToEdgeEnabled": false,
       "package": "org.riseagainsthunger.italia",
       "versionCode": 1,
-      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"]
+      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"],
+      "statusBarStyle": "dark",
+      "statusBarTranslucent": false,
+      "statusBarBackgroundColor": "#FFFFFF"
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
     "extra": {
-      "eas": {}
+      "eas": {
+        "projectId": "52a33b0f-dec1-4674-812b-de5b888c911a"
+      }
     }
   }
 }

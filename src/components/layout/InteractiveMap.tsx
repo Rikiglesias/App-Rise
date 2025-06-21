@@ -6,6 +6,8 @@ import {
   BorderRadius,
   Colors,
   Shadows,
+  Spacing,
+  Typography,
 } from '../../shared/constants/designTokens';
 
 export interface Location {
@@ -33,6 +35,46 @@ interface Props {
   isFullScreen?: boolean;
 }
 
+// Funzione per determinare il colore del marker in base al tipo di progetto
+const getMarkerColor = (location: Location) => {
+  if (location.status === 'emergency') {
+    return '#DC2626'; // Rosso per emergenze
+  }
+
+  if (location.volunteers && location.volunteers > 0) {
+    return '#10B981'; // Verde per volontari
+  }
+
+  if (location.meals && location.meals > 0) {
+    return '#F59E0B'; // Arancione per pasti
+  }
+
+  if (location.kits && location.kits > 0) {
+    return '#8B5CF6'; // Viola per kit
+  }
+
+  return '#6B7280'; // Grigio default
+};
+
+// Componente per il marker semplice ma bello
+const SimpleMarker: React.FC<{ location: Location }> = ({ location }) => {
+  const markerColor = getMarkerColor(location);
+
+  return (
+    <View style={styles.markerContainer}>
+      {/* Pin principale semplice */}
+      <View style={[styles.simpleMarker, { backgroundColor: markerColor }]}>
+        <View style={styles.markerInner} />
+      </View>
+
+      {/* Etichetta del paese */}
+      <View style={styles.countryLabel}>
+        <Text style={styles.countryText}>{location.country}</Text>
+      </View>
+    </View>
+  );
+};
+
 const InteractiveMap: React.FC<Props> = ({
   locations,
   onMarkerPress,
@@ -40,7 +82,9 @@ const InteractiveMap: React.FC<Props> = ({
   isFullScreen = false,
 }) => {
   const createMarkerPressHandler = useCallback(
-    (location: Location) => () => onMarkerPress(location),
+    (location: Location) => () => {
+      onMarkerPress(location);
+    },
     [onMarkerPress]
   );
 
@@ -58,6 +102,36 @@ const InteractiveMap: React.FC<Props> = ({
         longitudeDelta: 100,
       };
 
+  const generateTitle = (location: Location) => {
+    return `${location.name} - ${location.country}`;
+  };
+
+  const generateDescription = (location: Location) => {
+    const parts = [];
+
+    if (location.meals && location.meals > 0) {
+      parts.push(`${location.meals.toLocaleString()} pasti distribuiti`);
+    }
+
+    if (location.kits && location.kits > 0) {
+      parts.push(`${location.kits.toLocaleString()} kit forniti`);
+    }
+
+    if (location.volunteers && location.volunteers > 0) {
+      parts.push(`${location.volunteers.toLocaleString()} volontari attivi`);
+    }
+
+    if (parts.length === 0) {
+      parts.push(`${location.projects} progetti attivi`);
+    }
+
+    if (location.status === 'emergency') {
+      parts.unshift('🚨 EMERGENZA');
+    }
+
+    return parts.join('\n');
+  };
+
   return (
     <MapView
       style={[styles.map, style]}
@@ -70,18 +144,18 @@ const InteractiveMap: React.FC<Props> = ({
       pitchEnabled={isFullScreen}
       rotateEnabled={isFullScreen}
       mapType="standard"
+      toolbarEnabled={isFullScreen}
+      moveOnMarkerPress={false}
     >
       {locations.map(location => (
         <Marker
           key={location.id}
           coordinate={location.coordinates}
-          title={location.name}
-          description={`${location.projects} progetti • ${location.beneficiaries} beneficiari`}
+          title={generateTitle(location)}
+          description={generateDescription(location)}
           onPress={createMarkerPressHandler(location)}
         >
-          <View style={styles.customMarker}>
-            <Text style={styles.markerText}>📍</Text>
-          </View>
+          <SimpleMarker location={location} />
         </Marker>
       ))}
     </MapView>
@@ -92,20 +166,41 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  customMarker: {
-    backgroundColor: Colors.primary[600],
-    borderRadius: BorderRadius.full,
-    width: 30,
-    height: 30,
+  markerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  simpleMarker: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
     borderColor: Colors.neutral[0],
     ...Shadows.md,
   },
-  markerText: {
-    fontSize: 16,
-    color: Colors.neutral[0],
+  markerInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: Colors.neutral[0],
+  },
+  countryLabel: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: BorderRadius.sm,
+    paddingHorizontal: Spacing[2],
+    paddingVertical: Spacing[1],
+    marginTop: Spacing[1],
+    borderWidth: 1,
+    borderColor: Colors.neutral[200],
+    ...Shadows.sm,
+  },
+  countryText: {
+    fontSize: Typography.sizes.xs,
+    fontWeight: Typography.weights.bold,
+    color: '#374151',
+    textAlign: 'center',
   },
 });
 

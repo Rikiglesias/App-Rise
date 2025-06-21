@@ -11,7 +11,9 @@ export type ImpactScreenName =
   | 'Impact'
   | 'Beneficiaries'
   | 'Volunteers'
-  | 'Partners';
+  | 'Partners'
+  | 'Meals'
+  | 'Kits';
 
 export interface StatButtonProps {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;

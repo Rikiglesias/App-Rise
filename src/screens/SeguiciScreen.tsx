@@ -357,10 +357,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
   },
 
-  // Back Button - SOPRA AL TITOLO
+  // Back Button - SAFE AREA ANDROID
   backButton: {
     position: 'absolute' as const,
-    top: 30, // SPOSTATO PIÙ SOPRA: da 50 a 30
+    top: 60, // AUMENTATO: per evitare overlap con notch/fotocamera Android
     left: Spacing[4],
     padding: Spacing[2],
     borderRadius: BorderRadius.full,
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 6,
-    zIndex: 20, // AUMENTATO z-index per essere sicuri che stia sopra
+    zIndex: 20,
   },
 
   scrollView: {
@@ -379,9 +379,9 @@ const styles = StyleSheet.create({
 
   contentContainer: {
     paddingHorizontal: Spacing[4],
-    gap: Spacing[0], // IDENTICO a Chi Siamo: gap zero per spacing controllato
-    paddingTop: Spacing[8],
-    paddingBottom: Spacing[16], // IDENTICO a pagina azioni: più spazio dalla navigation
+    gap: Spacing[0],
+    paddingTop: Spacing[12], // AUMENTATO: per safe area Android
+    paddingBottom: Spacing[16],
   },
 
   // Header Section - Pattern da Chi Siamo IDENTICO
@@ -450,21 +450,21 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
 
-  // GRADIENT CONTAINER PATTERN - Design System Ufficiale
+  // GRADIENT CONTAINER PATTERN - ANDROID OTTIMIZZATO
   socialCardGradientBorder: {
-    borderRadius: 24,
-    padding: 3, // Border effect
+    borderRadius: 20, // RIDOTTO per Android
+    padding: 2, // RIDOTTO per evitare artefatti
     // Shadow System Professionale
     shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 6 }, // RIDOTTO
+    shadowOpacity: 0.15, // RIDOTTO
+    shadowRadius: 10, // RIDOTTO
+    elevation: 6, // RIDOTTO
   },
 
   socialCardWhiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 21, // 24-3 per border effect
+    borderRadius: 18, // 20-2 per border effect
     overflow: 'hidden' as const,
   },
 

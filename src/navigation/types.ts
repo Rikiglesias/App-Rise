@@ -50,8 +50,9 @@ export type ImpactStackParamList = {
   Beneficiaries: undefined;
   Volunteers: undefined;
   Partners: undefined;
+  Meals: undefined;
+  Kits: undefined;
   MapModal: { locations: Location[] };
-  [key: string]: undefined | object;
 };
 
 export type ImpactStackNavigationProp = StackNavigationProp<

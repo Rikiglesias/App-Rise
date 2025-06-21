@@ -3,6 +3,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import type { RootStackParamList } from '../navigation/types';
 import {
   BorderRadius,
   Colors,
@@ -10,7 +11,6 @@ import {
   Spacing,
   Typography,
 } from '../shared/constants/designTokens';
-import type { RootStackParamList } from '../navigation/types';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

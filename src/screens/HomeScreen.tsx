@@ -221,21 +221,21 @@ const HomeScreen: React.FC = () => {
 
     // NUOVO: Gradient border per delimitare la sezione CTA - Design System Pattern
     ctaSectionGradientBorder: {
-      borderRadius: 24, // Radius allineato con la sezione impatto
-      padding: 3, // Padding per effetto bordo gradient
+      borderRadius: 20, // RIDOTTO: per migliore rendering Android
+      padding: 2, // RIDOTTO: per evitare artefatti
       shadowColor: '#1F2937',
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.25,
-      shadowRadius: 16,
-      elevation: 8,
+      shadowOffset: { width: 0, height: 6 }, // RIDOTTO
+      shadowOpacity: 0.15, // RIDOTTO
+      shadowRadius: 12, // RIDOTTO
+      elevation: 6, // RIDOTTO
     },
 
     // NUOVO: Container interno bianco per la sezione CTA
     ctaSectionContainer: {
       backgroundColor: Colors.neutral[0],
-      borderRadius: 21, // Radius coordinato con il bordo (24-3=21)
-      paddingVertical: Spacing[6], // Padding verticale generoso
-      paddingHorizontal: Spacing[4], // Padding laterale
+      borderRadius: 18, // AGGIORNATO: 20-2 per coordinamento
+      paddingVertical: Spacing[6],
+      paddingHorizontal: Spacing[4],
     },
   });
 
@@ -318,26 +318,24 @@ const ctaStyles = StyleSheet.create({
 
   // Gradient Border Pattern ULTRA PROFESSIONALE - Design System Ufficiale
   gradientBorder: {
-    borderRadius: 24, // Radius aumentato per modernità
-    padding: 3, // Padding aumentato per effetto bordo più marcato
+    borderRadius: 20, // RIDOTTO: da 24 a 20 per migliore rendering Android
+    padding: 2, // RIDOTTO: da 3 a 2 per evitare artefatti
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 }, // Ombra più profonda
-    shadowOpacity: 0.3, // Opacità aumentata per maggiore impatto
-    shadowRadius: 16, // Radius aumentato per ombra più diffusa
-    elevation: 10, // Elevation maggiore per Android
+    shadowOffset: { width: 0, height: 6 }, // RIDOTTO: da 8 a 6
+    shadowOpacity: 0.2, // RIDOTTO: da 0.3 a 0.2
+    shadowRadius: 12, // RIDOTTO: da 16 a 12
+    elevation: 6, // RIDOTTO: da 10 a 6 per Android
   },
 
   // Container bianco interno OTTIMIZZATO per allineamento - Design System Pattern
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 21, // Radius aggiornato per coordinamento
-    paddingVertical: Spacing[3], // RIDOTTO: da Spacing[5] a Spacing[3] - meno spazio vuoto
-    paddingHorizontal: Spacing[4], // Padding laterale standardizzato
+    borderRadius: 18, // AGGIORNATO: 20-2 per coordinamento
+    paddingVertical: Spacing[3],
+    paddingHorizontal: Spacing[4],
     justifyContent: 'center',
-    flex: 1, // Forza dimensioni identiche
-    // Aggiunta ombra interna sottile per profondità
-    borderWidth: 0.5,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    flex: 1,
+    // RIMOSSE: bordature complesse che causano problemi su Android
   },
 
   buttonContent: {
