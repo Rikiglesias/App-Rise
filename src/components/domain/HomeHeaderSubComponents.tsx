@@ -26,13 +26,13 @@ const modernTitleStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
     paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[2], // Ridotto per avvicinare tutto
+    paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[2] a Spacing[0] - compattezza massima
   },
 
   // Titolo con design compatto
   titleContainer: {
     alignItems: 'center',
-    paddingVertical: Spacing[1], // Drasticamente ridotto
+    paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - ulteriore compattezza
     paddingHorizontal: Spacing[4],
     position: 'relative',
   },
@@ -47,7 +47,7 @@ const modernTitleStyles = StyleSheet.create({
     lineHeight: 50,
     // Nessuna ombra per look pulito
     includeFontPadding: false,
-    marginBottom: Spacing[1] / 2, // Spazio ultra-minimo per il separatore
+    marginBottom: 0, // AZZERA MARGINE: da Spacing[1]/2 a 0 - immagine attaccata al titolo
   },
 
   // Stile per "Italia" in nero
@@ -64,7 +64,7 @@ const modernTitleStyles = StyleSheet.create({
   // Separatore elegante con logo centrale
   titleSeparator: {
     alignItems: 'center',
-    marginTop: 0,
+    marginTop: Spacing[2], // ABBASSA LINEA: da 0 a Spacing[2] - separatore più in basso
     marginBottom: 0, // Nessuno spazio per avvicinare l'immagine
     justifyContent: 'center',
     flexDirection: 'row',

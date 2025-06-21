@@ -138,14 +138,6 @@ const HomeScreen: React.FC = () => {
       marginBottom: Spacing[6], // Spazio maggiore per respirazione
     },
 
-    // CORREZIONE UX: Stile titolo NON cliccabile - PULITO SENZA BORDI
-    ctaTitleContainer: {
-      backgroundColor: 'transparent', // Sfondo trasparente per titoli
-      paddingHorizontal: Spacing[4],
-      paddingVertical: Spacing[2],
-      alignItems: 'center',
-    },
-
     ctaTitleText: {
       fontSize: Typography.sizes['4xl'], // INGRANDITO: da '2xl' a '4xl' per maggiore impatto
       fontWeight: Typography.weights.black,
@@ -218,25 +210,6 @@ const HomeScreen: React.FC = () => {
       textShadowOffset: { width: 0, height: 1 },
       textShadowRadius: 2,
     },
-
-    // NUOVO: Gradient border per delimitare la sezione CTA - Design System Pattern
-    ctaSectionGradientBorder: {
-      borderRadius: 20, // RIDOTTO: per migliore rendering Android
-      padding: 2, // RIDOTTO: per evitare artefatti
-      shadowColor: '#1F2937',
-      shadowOffset: { width: 0, height: 6 }, // RIDOTTO
-      shadowOpacity: 0.15, // RIDOTTO
-      shadowRadius: 12, // RIDOTTO
-      elevation: 6, // RIDOTTO
-    },
-
-    // NUOVO: Container interno bianco per la sezione CTA
-    ctaSectionContainer: {
-      backgroundColor: Colors.neutral[0],
-      borderRadius: 18, // AGGIORNATO: 20-2 per coordinamento
-      paddingVertical: Spacing[6],
-      paddingHorizontal: Spacing[4],
-    },
   });
 
   return (
@@ -257,44 +230,32 @@ const HomeScreen: React.FC = () => {
 
           {/* Separatore rimosso - transizione fluida tra immagine e azioni */}
 
-          {/* 🚀 MODERN CTA SECTION - DESIGN SYSTEM DELIMITATO */}
+          {/* 🚀 MODERN CTA SECTION - SENZA CONTAINER SCURO */}
           <View style={styles.ctaSection}>
-            {/* Container delimitato con gradient border pattern */}
-            <LinearGradient
-              colors={['#1F2937', '#374151', '#111827']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.ctaSectionGradientBorder}
-            >
-              <View style={styles.ctaSectionContainer}>
-                {/* Titolo moderno per i CTA */}
-                <View style={styles.ctaTitleSection}>
-                  <View style={styles.ctaTitleContainer}>
-                    <Text style={styles.ctaTitleText}>Entra in Azione</Text>
+            {/* Titolo moderno per i CTA */}
+            <View style={styles.ctaTitleSection}>
+              <Text style={styles.ctaTitleText}>Entra in Azione</Text>
+              {/* Descrizione con design system premium */}
+              <View style={styles.ctaDescriptionContainer}>
+                <LinearGradient
+                  colors={['#F3F4F6', '#E5E7EB', '#F9FAFB']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.ctaDescriptionGradient}
+                >
+                  <View style={styles.ctaDescriptionContent}>
+                    <Text style={styles.ctaDescriptionMain}>
+                      Unisciti a noi nella lotta contro la fame nel mondo
+                    </Text>
+                    <View style={styles.ctaDescriptionDivider} />
+                    <Text style={styles.ctaDescriptionSecondary}>
+                      Ogni azione conta per cambiare vite
+                    </Text>
                   </View>
-                  {/* Descrizione con design system premium */}
-                  <View style={styles.ctaDescriptionContainer}>
-                    <LinearGradient
-                      colors={['#F3F4F6', '#E5E7EB', '#F9FAFB']}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.ctaDescriptionGradient}
-                    >
-                      <View style={styles.ctaDescriptionContent}>
-                        <Text style={styles.ctaDescriptionMain}>
-                          Unisciti a noi nella lotta contro la fame nel mondo
-                        </Text>
-                        <View style={styles.ctaDescriptionDivider} />
-                        <Text style={styles.ctaDescriptionSecondary}>
-                          Ogni azione conta per cambiare vite
-                        </Text>
-                      </View>
-                    </LinearGradient>
-                  </View>
-                </View>
-                <ModernCTAButtons />
+                </LinearGradient>
               </View>
-            </LinearGradient>
+            </View>
+            <ModernCTAButtons />
           </View>
         </View>
       </ScrollView>

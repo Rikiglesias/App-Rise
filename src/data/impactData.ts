@@ -1,4 +1,3 @@
-import type { Location } from '../components/layout/InteractiveMap';
 import type { ImpactDataType } from '../types/ImpactScreenTypes';
 
 // Dati reali 2024 da Rise Against Hunger Italia Annual Report
@@ -110,74 +109,142 @@ export const IMPACT_DATA: ImpactDataType = {
 } as const;
 
 // Dati geografici aggiornati per la mappa interattiva
-export const MAP_LOCATIONS: Location[] = [
+export const MAP_LOCATIONS = [
   {
     id: 'zimbabwe',
-    name: 'Emergenza Siccità Zimbabwe',
+    name: 'Gokwe North',
     country: 'Zimbabwe',
-    coordinates: { latitude: -19.0154, longitude: 29.1549 },
-    projects: 1,
-    beneficiaries: '13.996 bambini',
-    status: 'emergency',
+    latitude: -18.2871,
+    longitude: 28.9378,
+    flag: '🇿🇼',
+    stats: {
+      meals: 850000,
+      beneficiaries: 3200,
+      schools: 5,
+    },
     description:
-      "3.023.136 pasti confezionati per l'emergenza siccità. 13.996 bambini ricevono almeno un pasto al giorno per proseguire il percorso scolastico.",
-    image:
-      'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    meals: 2664792,
+      'Programma "Planting Seeds for Strong Communities" per la sicurezza alimentare a lungo termine e crescita economica agricola.',
+    program: 'Meal Packing + Agricoltura Sostenibile',
+    partner: 'ADRA Zimbabwe',
+    achievements: [
+      'Aumento del 35% della frequenza scolastica',
+      'Pasti serviti 5 volte a settimana',
+      'Giardini scolastici autosufficienti',
+      '32% delle famiglie ora soddisfa i propri bisogni alimentari',
+    ],
+    year: 2024,
   },
   {
-    id: 'ukraine',
-    name: 'Aiuti Ucraina',
-    country: 'Ucraina',
-    coordinates: { latitude: 48.3794, longitude: 31.1656 },
-    projects: 3,
-    beneficiaries: 'Famiglie colpite dalla guerra',
-    status: 'emergency',
+    id: 'south-africa',
+    name: 'Johannesburg',
+    country: 'Sud Africa',
+    latitude: -26.2041,
+    longitude: 28.0473,
+    flag: '🇿🇦',
+    stats: {
+      meals: 57400000,
+      beneficiaries: 3600000,
+    },
     description:
-      'Kit alimentari di emergenza per le famiglie sfollate dalla guerra. Ogni kit copre il fabbisogno alimentare per circa due settimane.',
-    image:
-      'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    kits: 264568,
-  },
-  {
-    id: 'turkey',
-    name: 'Supporto Turchia',
-    country: 'Turchia',
-    coordinates: { latitude: 39.9334, longitude: 32.8597 },
-    projects: 2,
-    beneficiaries: 'Comunità locali',
-    status: 'active',
-    description: 'Programmi di supporto alimentare per le comunità locali.',
-    image:
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    meals: 50112,
-  },
-  {
-    id: 'somalia',
-    name: 'Progetti Somalia',
-    country: 'Somalia',
-    coordinates: { latitude: 5.1521, longitude: 46.1996 },
-    projects: 2,
-    beneficiaries: 'Comunità vulnerabili',
-    status: 'active',
-    description: 'Supporto alimentare per le comunità più vulnerabili.',
-    image:
-      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    meals: 32664,
+      'Sede regionale africana. Supporto a centri per lo sviluppo della prima infanzia e progetti di agricoltura sostenibile.',
+    program: 'Early Childhood Development + Farming',
+    achievements: [
+      '57,4M+ pasti confezionati nel 2023',
+      '3,6M+ vite impattate',
+      'Centri per sviluppo prima infanzia',
+      'Progetti di agricoltura sostenibile',
+    ],
+    year: 2023,
   },
   {
     id: 'italy',
-    name: 'Eventi e Progetti Italia',
+    name: 'Bologna',
     country: 'Italia',
-    coordinates: { latitude: 44.4949, longitude: 11.3426 }, // Bologna
-    projects: 15,
-    beneficiaries: '13.323 volontari attivi',
-    status: 'events',
+    latitude: 44.4949,
+    longitude: 11.3426,
+    flag: '🇮🇹',
+    stats: {
+      meals: 3136968,
+      kits: 16321,
+      beneficiaries: 13323,
+    },
     description:
-      'Eventi di confezionamento pasti, progetto Pasto Sospeso e collaborazioni con enti locali in tutta Italia.',
-    image:
-      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-    volunteers: 13323,
+      'Sede europea di Rise Against Hunger. Coordina le attività in Europa con programmi di Kit Packing e Pasto Sospeso.',
+    program: 'Kit Packing + Pasto Sospeso',
+    achievements: [
+      '3.136.968 pasti confezionati nel 2024',
+      '16.321 kit prodotti',
+      '13.323 volontari coinvolti',
+      'Referente per tutta Europa',
+    ],
+    year: 2024,
+  },
+  {
+    id: 'usa',
+    name: 'Raleigh',
+    country: 'Stati Uniti',
+    latitude: 35.7796,
+    longitude: -78.6382,
+    flag: '🇺🇸',
+    stats: {
+      meals: 365000000,
+      beneficiaries: 74,
+    },
+    description:
+      'Sede globale di Rise Against Hunger. Coordina le operazioni in 74 paesi del mondo dal 1998.',
+    program: 'Coordinamento Globale',
+    achievements: [
+      '365+ milioni di pasti distribuiti dal 2005',
+      'Presente in 74 paesi nel mondo',
+      '25+ anni di storia nella lotta alla fame',
+      'Sede globale del movimento',
+    ],
+    year: 2024,
+  },
+  {
+    id: 'ukraine',
+    name: 'Kiev',
+    country: 'Ucraina',
+    latitude: 50.4501,
+    longitude: 30.5234,
+    flag: '🇺🇦',
+    stats: {
+      meals: 250000,
+      kits: 5000,
+      beneficiaries: 15000,
+    },
+    description:
+      'Risposta di emergenza umanitaria per supportare le famiglie colpite dal conflitto attraverso kit alimentari.',
+    program: 'Emergenza Umanitaria',
+    achievements: [
+      'Supporto alle famiglie sfollate',
+      'Kit alimentari di emergenza',
+      'Partnership con organizzazioni locali',
+      'Risposta rapida alla crisi',
+    ],
+    year: 2024,
+  },
+  {
+    id: 'somalia',
+    name: 'Mogadiscio',
+    country: 'Somalia',
+    latitude: 2.0469,
+    longitude: 45.3182,
+    flag: '🇸🇴',
+    stats: {
+      meals: 180000,
+      beneficiaries: 8500,
+    },
+    description:
+      "Programmi di alimentazione scolastica per combattere la malnutrizione infantile e supportare l'istruzione.",
+    program: 'School Feeding Program',
+    achievements: [
+      'Alimentazione nelle scuole primarie',
+      'Riduzione della malnutrizione infantile',
+      'Aumento della frequenza scolastica',
+      'Supporto alle comunità vulnerabili',
+    ],
+    year: 2024,
   },
 ];
 

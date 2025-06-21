@@ -20,7 +20,7 @@ export const createContainerStyles = (
       overflow: 'hidden',
     },
     headerSection: {
-      paddingVertical: Spacing[3], // Ridotto da Spacing[6] per meno spazio
+      paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - compattezza estrema
       paddingHorizontal: ADVANCED_CONFIG.headerSection.paddingHorizontal,
       minHeight: ADVANCED_CONFIG.headerSection.minHeight,
       alignItems: 'center',
@@ -80,7 +80,7 @@ export const createImageStyles = (
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      marginTop: Spacing[4], // Spazio adeguato per separazione
+      marginTop: Spacing[0], // AZZERA MARGINE: da Spacing[2] a Spacing[0] - massima vicinanza immagine-titolo
       marginBottom: Spacing[4], // Spazio maggiore per evitare overlap
       borderRadius: 24, // Bordi arrotondati per eleganza
       shadowColor: '#000',

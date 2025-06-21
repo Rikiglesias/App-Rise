@@ -1,10 +1,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,10 +14,11 @@ import {
   View,
 } from 'react-native';
 
-import InteractiveMap, {
-  type Location,
-} from '../components/layout/InteractiveMap';
+import type { Location } from '../components/layout/InteractiveMap';
+import MapLocationModal from '../components/layout/MapLocationModal';
 import { MAP_LOCATIONS } from '../data/impactData';
+import type { MapModalData } from '../data/mapModalData';
+import { getModalData } from '../data/mapModalData';
 import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
 import type {
   ImpactNavigationProp,
@@ -25,59 +27,21 @@ import type {
 
 const { width: screenWidth } = Dimensions.get('window');
 
-// Animation Hook
+// Animation Hook - OTTIMIZZATO PERFORMANCE
 const useImpactAnimations = () => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
+  const fadeAnim = useRef(new Animated.Value(1)).current; // Start visible
+  const slideAnim = useRef(new Animated.Value(0)).current; // Start in position
+  const scaleAnim = useRef(new Animated.Value(1)).current; // Start at full scale
   const statsAnimations = useRef([
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
+    new Animated.Value(1), // SIMPLIFIED: Start all visible
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
   ] as const).current;
 
-  useEffect(() => {
-    const sequence = Animated.sequence([
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          useNativeDriver: true,
-          tension: 50,
-          friction: 8,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 60,
-          friction: 8,
-        }),
-      ]),
-      Animated.delay(300),
-      Animated.stagger(
-        150,
-        statsAnimations.map(anim =>
-          Animated.timing(anim, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-          })
-        )
-      ),
-    ]);
-
-    sequence.start();
-
-    return () => {
-      sequence.stop();
-    };
-  }, [fadeAnim, slideAnim, scaleAnim, statsAnimations]);
+  // REMOVED COMPLEX ANIMATIONS FOR PERFORMANCE
+  // Simply return static values for maximum performance
 
   return { fadeAnim, slideAnim, scaleAnim, statsAnimations };
 };
@@ -379,13 +343,13 @@ const CommunitySection: React.FC<{
   );
 };
 
-// Map Section
+// Map Section - OTTIMIZZATA PERFORMANCE
 const MapSection: React.FC<{
   onMapPress: () => void;
-}> = ({ onMapPress }) => {
-  const handleMarkerPress = useCallback((_location: Location) => {
-    // Analytics tracking
-  }, []);
+}> = React.memo(({ onMapPress }) => {
+  const handleMapImagePress = useCallback(() => {
+    onMapPress(); // Apre la mappa completa con tutti i pin
+  }, [onMapPress]);
 
   return (
     <View style={styles.mapSection}>
@@ -394,34 +358,83 @@ const MapSection: React.FC<{
         La nostra rete globale per la lotta contro la fame
       </Text>
 
-      <View style={styles.mapContainer}>
-        <InteractiveMap
-          locations={MAP_LOCATIONS}
-          onMarkerPress={handleMarkerPress}
-          style={styles.map}
+      {/* CONTAINER MAPPA CLICCABILE - RIEMPIE TUTTO */}
+      <TouchableOpacity
+        style={styles.mapImageContainer}
+        onPress={handleMapImagePress} // Mostra i dettagli dell'Italia per default
+        activeOpacity={0.95}
+      >
+        <Image
+          source={require('../../assets/images/mappa.png')}
+          style={styles.mapImage}
+          resizeMode="cover"
         />
 
-        <TouchableOpacity
-          style={styles.mapExpandButton}
-          onPress={onMapPress}
-          activeOpacity={0.8}
-        >
+        {/* INDICATORE CLICCABILE */}
+        <View style={styles.mapClickIndicator}>
           <MaterialCommunityIcons
             name="fullscreen"
-            size={24}
-            color={Colors.neutral[0]}
+            size={20}
+            color={Colors.neutral[600]}
           />
-          <Text style={styles.mapExpandText}>Visualizza Mappa Completa</Text>
-        </TouchableOpacity>
-      </View>
+          <Text style={styles.mapClickText}>Tocca per mappa completa</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
+});
+
+MapSection.displayName = 'MapSection';
+
+// Funzione per convertire MAP_LOCATIONS nel formato per InteractiveMap
+const convertToMapLocations = (locations: typeof MAP_LOCATIONS): Location[] => {
+  return locations.map(location => ({
+    id: location.id,
+    name: location.name,
+    country: location.country,
+    coordinates: {
+      latitude: location.latitude,
+      longitude: location.longitude,
+    },
+    projects: 1, // Ogni location ha almeno un progetto
+    beneficiaries: location.stats.beneficiaries.toLocaleString(),
+    status: location.id === 'ukraine' ? 'emergency' : 'active',
+    description: location.description,
+    image: `https://picsum.photos/400/200?random=${location.id}`, // Placeholder image
+    ...(location.stats.meals && { meals: location.stats.meals }),
+    ...(location.stats.kits && { kits: location.stats.kits }),
+    ...(location.id === 'italy' &&
+      location.stats.beneficiaries && {
+        volunteers: location.stats.beneficiaries,
+      }),
+  }));
 };
 
 // Main Component
 const ImpactTabScreen: React.FC = () => {
   const navigation = useNavigation<ImpactNavigationProp>();
+
+  // State per il modal della mappa
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<MapModalData | null>(
+    null
+  );
   const animations = useImpactAnimations();
+
+  // Handler per aprire il modal con i dettagli della location (utilizzato dalla mappa)
+  const _handleLocationPress = useCallback((locationId: string) => {
+    const modalData = getModalData(locationId);
+    if (modalData) {
+      setSelectedLocation(modalData);
+      setModalVisible(true);
+    }
+  }, []);
+
+  // Handler per chiudere il modal
+  const handleModalClose = useCallback(() => {
+    setModalVisible(false);
+    setSelectedLocation(null);
+  }, []);
 
   const handleNavigate = useCallback(
     (screen: ImpactScreenName) => {
@@ -447,7 +460,8 @@ const ImpactTabScreen: React.FC = () => {
   }, [handleNavigate]);
 
   const handleMapPress = useCallback(() => {
-    navigation.navigate('MapModal', { locations: MAP_LOCATIONS });
+    const convertedLocations = convertToMapLocations(MAP_LOCATIONS);
+    navigation.navigate('MapModal', { locations: convertedLocations });
   }, [navigation]);
 
   return (
@@ -484,6 +498,13 @@ const ImpactTabScreen: React.FC = () => {
 
         <MapSection onMapPress={handleMapPress} />
       </ScrollView>
+
+      {/* Modal per i dettagli delle location */}
+      <MapLocationModal
+        visible={modalVisible}
+        data={selectedLocation}
+        onClose={handleModalClose}
+      />
     </SafeAreaView>
   );
 };
@@ -718,46 +739,53 @@ const styles = StyleSheet.create({
     right: Spacing[2],
   },
 
-  // Map Section
+  // Map Section - SENZA CONTAINER GRIGIO
   mapSection: {
     paddingHorizontal: Spacing[4],
   },
-  mapContainer: {
-    height: 300,
+
+  // MAP CONTAINER CLICCABILE - RIEMPIE TUTTO SENZA BORDI
+  mapImageContainer: {
+    backgroundColor: Colors.neutral[0],
     borderRadius: 20,
-    overflow: 'hidden',
-    position: 'relative',
-    backgroundColor: Colors.neutral[100],
+    marginTop: Spacing[4],
+    marginHorizontal: 0, // RIMOSSO: margini laterali per riempire tutto
+    padding: 0, // RIMOSSO: padding per eliminare bordi vuoti
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 6,
+    position: 'relative',
+    overflow: 'hidden',
+    height: 280, // ALTEZZA FISSA: per container stabile
+    // FEEDBACK VISIVO CLICCABILE
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
-  map: {
-    flex: 1,
+  mapImage: {
+    width: '100%',
+    height: '100%', // RIEMPIE TUTTO: il container senza bordi
+    borderRadius: 20, // UGUALE AL CONTAINER: per bordi perfetti
+    marginTop: -30, // OTTIMIZZATO: per mostrare parte inferiore
   },
-  mapExpandButton: {
+  // INDICATORE CLICCABILE
+  mapClickIndicator: {
     position: 'absolute',
-    bottom: Spacing[6],
-    right: Spacing[6],
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    borderRadius: 16,
-    paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[3],
+    top: Spacing[2],
+    right: Spacing[2],
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing[2],
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingHorizontal: Spacing[2],
+    paddingVertical: Spacing[1],
+    borderRadius: 12,
+    gap: Spacing[1],
   },
-  mapExpandText: {
-    color: Colors.neutral[0],
-    fontSize: Typography.sizes.base,
-    fontWeight: Typography.weights.bold,
+  mapClickText: {
+    fontSize: Typography.sizes.xs,
+    fontWeight: Typography.weights.medium,
+    color: Colors.neutral[600],
   },
 
   // Record 2024 Section - INGRANDITA

@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
@@ -35,11 +35,6 @@ const MEALS_DATA = {
   title: 'Meal Packing',
   subtitle: "Pasti nutrienti per sostenere l'istruzione in Africa Subsahariana",
   icon: 'food-apple' as keyof typeof MaterialCommunityIcons.glyphMap,
-  stats: [
-    { value: '3.14M', label: 'Pasti 2024', color: MEALS_COLORS.primary },
-    { value: '365M+', label: 'Pasti Globali', color: MEALS_COLORS.accent1 },
-    { value: '74', label: 'Paesi Raggiunti', color: MEALS_COLORS.accent2 },
-  ],
   mainCards: [
     {
       icon: 'school',
@@ -53,8 +48,8 @@ const MEALS_DATA = {
       icon: 'nutrition',
       title: 'Composizione Nutrizionale',
       description:
-        'Ogni meal pack contiene riso, soia, verdure disidratate e un pacchetto di 20 vitamine e minerali. Una combinazione bilanciata per il fabbisogno nutrizionale.',
-      highlight: '20 Vitamine e Minerali',
+        'Ogni meal pack contiene riso, soia, verdure disidratate e un pacchetto di micronutrienti con 20 vitamine e minerali essenziali. Una combinazione scientificamente bilanciata.',
+      highlight: '20 Vitamine e Minerali Essenziali',
       color: MEALS_COLORS.accent3,
     },
     {
@@ -81,7 +76,7 @@ const MEALS_DATA = {
       icon: 'scale-balance',
       title: 'Misurazione Precisa',
       description:
-        'Riso, soia, verdure disidratate e vitamine vengono pesati con precisione scientifica',
+        'Riso, soia, verdure disidratate e micronutrienti vengono pesati con precisione scientifica',
       color: MEALS_COLORS.accent3,
       side: 'right',
     },
@@ -105,7 +100,7 @@ const MEALS_DATA = {
     },
     {
       step: 5,
-      icon: 'ship',
+      icon: 'truck-delivery',
       title: "Spedizione verso l'Africa",
       description:
         "I pasti partono dall'Italia verso l'Africa Subsahariana attraverso la rete logistica",
@@ -133,52 +128,103 @@ const MEALS_DATA = {
   ],
 };
 
-const StatCard: React.FC<{
-  value: string;
-  label: string;
-  color: string;
-  delay: number;
-}> = ({ value, label, color, delay }) => (
-  <Animated.View
-    style={[styles.statCard, { borderColor: color + '40' }]}
-    entering={FadeInUp.delay(delay).duration(600)}
-  >
-    <Text style={[styles.statValue, { color }]}>{value}</Text>
-    <Text style={styles.statLabel}>{label}</Text>
-  </Animated.View>
-);
-
 const CompactCard: React.FC<{
   card: (typeof MEALS_DATA.mainCards)[0];
   delay: number;
 }> = ({ card, delay }) => (
   <Animated.View
-    style={styles.compactCard}
+    style={styles.modernCard}
     entering={FadeInUp.duration(600).delay(delay)}
   >
-    <LinearGradient
-      colors={[card.color + '20', card.color + '10', 'transparent']}
-      style={styles.compactGradient}
-    >
-      <View style={styles.compactContent}>
-        <View style={[styles.compactIcon, { backgroundColor: card.color }]}>
-          <MaterialCommunityIcons
-            name={card.icon as keyof typeof MaterialCommunityIcons.glyphMap}
-            size={28}
-            color={Colors.neutral[0]}
-          />
-        </View>
-        <Text style={styles.compactTitle}>{card.title}</Text>
-        <Text style={[styles.compactHighlight, { color: card.color }]}>
-          {card.highlight}
-        </Text>
-        <Text style={styles.compactDescription} numberOfLines={3}>
-          {card.description}
-        </Text>
+    <View style={styles.modernCardContent}>
+      {/* Header superiore con icona e colore */}
+      <View style={[styles.modernCardHeader, { backgroundColor: card.color }]}>
+        <MaterialCommunityIcons
+          name={card.icon as keyof typeof MaterialCommunityIcons.glyphMap}
+          size={36}
+          color={Colors.neutral[0]}
+        />
       </View>
-    </LinearGradient>
+
+      {/* Contenuto principale */}
+      <View style={styles.modernCardBody}>
+        <Text style={styles.modernCardTitle}>{card.title}</Text>
+
+        <View style={styles.modernCardHighlight}>
+          <Text style={[styles.modernCardHighlightText, { color: card.color }]}>
+            {card.highlight}
+          </Text>
+        </View>
+
+        <Text style={styles.modernCardDescription}>{card.description}</Text>
+      </View>
+
+      {/* Footer con indicatore colore */}
+      <View style={styles.modernCardFooter}>
+        <View
+          style={[styles.modernCardIndicator, { backgroundColor: card.color }]}
+        />
+      </View>
+    </View>
   </Animated.View>
 );
+
+// Componente per un singolo dot animato
+const AnimatedDot: React.FC<{
+  isActive: boolean;
+}> = ({ isActive }) => {
+  const scaleAnim = useSharedValue(isActive ? 1.3 : 1);
+  const opacityAnim = useSharedValue(isActive ? 1 : 0.3);
+
+  React.useEffect(() => {
+    scaleAnim.value = withTiming(isActive ? 1.3 : 1, {
+      duration: 300,
+      easing: Easing.out(Easing.quad),
+    });
+    opacityAnim.value = withTiming(isActive ? 1 : 0.3, {
+      duration: 300,
+      easing: Easing.out(Easing.quad),
+    });
+  }, [isActive, scaleAnim, opacityAnim]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleAnim.value }],
+    opacity: opacityAnim.value,
+  }));
+
+  return (
+    <Animated.View
+      style={[
+        styles.scrollDot,
+        animatedStyle,
+        {
+          backgroundColor: isActive
+            ? MEALS_COLORS.primary
+            : MEALS_COLORS.primary + '40',
+        },
+      ]}
+    />
+  );
+};
+
+// Componente per gli indicatori di scroll animati e funzionali
+const AnimatedScrollIndicators: React.FC<{
+  currentIndex: number;
+  totalCards: number;
+}> = ({ currentIndex, totalCards }) => {
+  return (
+    <View style={styles.scrollIndicators}>
+      <View style={styles.scrollDots}>
+        {Array.from({ length: totalCards }, (_, index) => ({
+          id: `indicator-${index}`,
+          index,
+        })).map(({ id, index }) => (
+          <AnimatedDot key={id} isActive={index === currentIndex} />
+        ))}
+      </View>
+    </View>
+  );
+};
 
 const ProcessStepCompact: React.FC<{
   step: (typeof MEALS_DATA.process)[0];
@@ -307,243 +353,285 @@ const ProcessStepCompact: React.FC<{
 };
 
 const MealsScreen: React.FC = () => {
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const handleScroll = useCallback(
+    (event: { nativeEvent: { contentOffset: { x: number } } }) => {
+      const contentOffset = event.nativeEvent.contentOffset.x;
+      const index = Math.round(contentOffset / 340); // AGGIORNATO: 340 per card più larghe
+      setCurrentCardIndex(index);
+    },
+    []
+  );
+
   return (
-    <ImpactInfoPage
-      icon={MEALS_DATA.icon}
-      title={MEALS_DATA.title}
-      subtitle={MEALS_DATA.subtitle}
-    >
-      {/* Statistiche Veloci */}
-      <Animated.View
-        style={styles.statsContainer}
-        entering={FadeInUp.delay(200).duration(600)}
+    <View style={styles.screenContainer}>
+      <ImpactInfoPage
+        icon={MEALS_DATA.icon}
+        title={MEALS_DATA.title}
+        subtitle={MEALS_DATA.subtitle}
       >
-        {MEALS_DATA.stats.map((stat, index) => (
-          <StatCard
-            key={stat.label}
-            value={stat.value}
-            label={stat.label}
-            color={stat.color}
-            delay={(index + 1) * 150}
-          />
-        ))}
-      </Animated.View>
-
-      {/* Carousel Orizzontale delle Schede */}
-      <Animated.View
-        style={styles.carouselContainer}
-        entering={FadeInUp.delay(600).duration(600)}
-      >
-        <Text style={styles.carouselTitle}>💡 Scopri di Più</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.carouselContent}
-          snapToInterval={340}
-          decelerationRate="fast"
-        >
-          {MEALS_DATA.mainCards.map((card, index) => (
-            <CompactCard
-              key={card.title}
-              card={card}
-              delay={800 + index * 100}
-            />
-          ))}
-        </ScrollView>
-      </Animated.View>
-
-      {/* Processo Timeline Verticale */}
-      <Animated.View
-        style={styles.processContainer}
-        entering={FadeInUp.delay(1400).duration(600)}
-      >
-        <Text style={styles.processTitle}>✨ Il Viaggio di un Pasto</Text>
-        <Text style={styles.processSubtitle}>
-          Dal confezionamento in Italia all&apos;impatto educativo in Africa
-        </Text>
-
-        {/* Timeline Container */}
-        <View style={styles.timelineContainer}>
-          {MEALS_DATA.process.map((step, index) => (
-            <ProcessStepCompact
-              key={step.step}
-              step={step}
-              delay={1600 + index * 150}
-              isLastStep={index === MEALS_DATA.process.length - 1}
-            />
-          ))}
-        </View>
-
-        {/* Call to Action finale */}
+        {/* Carousel Orizzontale delle Schede - COMPLETAMENTE RIDISEGNATO */}
         <Animated.View
-          style={styles.processCTA}
-          entering={FadeInUp.delay(3200).duration(600)}
+          style={styles.carouselContainer}
+          entering={FadeInUp.delay(200).duration(600)}
         >
-          <LinearGradient
-            colors={[MEALS_COLORS.primary + '10', MEALS_COLORS.primary + '05']}
-            style={styles.processCTAGradient}
-          >
-            <MaterialCommunityIcons
-              name="hand-heart"
-              size={32}
-              color={MEALS_COLORS.primary}
-            />
-            <Text style={styles.processCTAText}>
-              Ogni pasto confezionato è un passo verso un futuro migliore
-            </Text>
-          </LinearGradient>
-        </Animated.View>
-      </Animated.View>
-
-      {/* Impatto Finale */}
-      <Animated.View
-        style={styles.impactContainer}
-        entering={FadeInUp.delay(3000).duration(600)}
-      >
-        <LinearGradient
-          colors={[
-            MEALS_COLORS.primary,
-            MEALS_COLORS.primary + 'DD',
-            MEALS_COLORS.primary + 'BB',
-          ]}
-          style={styles.impactGradient}
-        >
-          <View style={styles.impactContent}>
-            <MaterialCommunityIcons
-              name="heart-multiple"
-              size={36}
-              color={MEALS_COLORS.primary}
-              style={styles.impactIcon}
-            />
-            <Text style={styles.impactTitle}>🎓 Educazione + Nutrizione</Text>
-            <Text style={styles.impactHighlight}>
-              Ogni pasto è un ponte verso l&apos;istruzione
-            </Text>
-            <Text style={styles.impactDescription}>
-              Dal 2012, Rise Against Hunger Italia confeziona pasti nutrienti
-              che supportano programmi di scolarizzazione in Africa
-              Subsahariana. Ogni meal pack rappresenta una possibilità di
-              apprendimento e crescita per i bambini più vulnerabili.
+          <View style={styles.carouselHeader}>
+            <Text style={styles.carouselTitle}>🎯 Scopri i Nostri Pasti</Text>
+            <Text style={styles.carouselSubtitle}>
+              Le informazioni essenziali sui nostri meal pack
             </Text>
           </View>
-        </LinearGradient>
-      </Animated.View>
-    </ImpactInfoPage>
+
+          <ScrollView
+            ref={scrollViewRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.carouselContent}
+            snapToInterval={340}
+            decelerationRate="fast"
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+          >
+            {MEALS_DATA.mainCards.map((card, index) => (
+              <CompactCard
+                key={card.title}
+                card={card}
+                delay={400 + index * 100}
+              />
+            ))}
+          </ScrollView>
+
+          <AnimatedScrollIndicators
+            currentIndex={currentCardIndex}
+            totalCards={MEALS_DATA.mainCards.length}
+          />
+        </Animated.View>
+
+        {/* Divisore tra Approfondimenti e Timeline - IDENTICO PAGINA IMPATTO */}
+        <View style={styles.sectionDividerContainer}>
+          <View style={styles.sectionDivider} />
+        </View>
+
+        {/* Processo Timeline Verticale - MIGLIORATO */}
+        <Animated.View
+          style={styles.processContainer}
+          entering={FadeInUp.delay(800).duration(600)}
+        >
+          <View style={styles.processHeader}>
+            <Text style={styles.processTitle}>
+              🌍 Dal Volontario al Bambino
+            </Text>
+            <Text style={styles.processSubtitle}>
+              Il percorso completo di ogni pasto: dalla produzione in Italia
+              all&apos;impatto educativo nelle scuole africane
+            </Text>
+          </View>
+
+          {/* Timeline Container */}
+          <View style={styles.timelineContainer}>
+            {MEALS_DATA.process.map((step, index) => (
+              <ProcessStepCompact
+                key={step.step}
+                step={step}
+                delay={1000 + index * 150}
+                isLastStep={index === MEALS_DATA.process.length - 1}
+              />
+            ))}
+          </View>
+
+          {/* Call to Action finale */}
+          <Animated.View
+            style={styles.processCTA}
+            entering={FadeInUp.delay(2600).duration(600)}
+          >
+            <LinearGradient
+              colors={[
+                MEALS_COLORS.primary + '10',
+                MEALS_COLORS.primary + '05',
+              ]}
+              style={styles.processCTAGradient}
+            >
+              <MaterialCommunityIcons
+                name="hand-heart"
+                size={32}
+                color={MEALS_COLORS.primary}
+              />
+              <Text style={styles.processCTAText}>
+                Ogni pasto confezionato è un passo verso un futuro migliore
+              </Text>
+            </LinearGradient>
+          </Animated.View>
+        </Animated.View>
+      </ImpactInfoPage>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  // Statistiche
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: Spacing[6],
-    gap: Spacing[3],
-  },
-  statCard: {
+  // Container principale per gestire padding - AUMENTATO
+  screenContainer: {
     flex: 1,
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.lg,
-    padding: Spacing[3],
-    alignItems: 'center',
-    borderWidth: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statValue: {
-    fontSize: Typography.sizes.xl,
-    fontWeight: Typography.weights.bold,
-    marginBottom: Spacing[1],
-  },
-  statLabel: {
-    fontSize: Typography.sizes.sm,
-    color: Colors.neutral[600],
-    textAlign: 'center',
+    paddingTop: Spacing[8], // AUMENTATO da 4 a 8 per evitare taglio icona
+    paddingBottom: Spacing[20], // AUMENTATO per evitare sovrapposizione barra navigazione
   },
 
-  // Carousel Mobile Orizzontale
+  // Carousel Mobile Orizzontale - HEADER AGGIORNATO
   carouselContainer: {
+    marginBottom: Spacing[8],
+  },
+  carouselHeader: {
+    alignItems: 'center',
     marginBottom: Spacing[6],
+    paddingHorizontal: Spacing[4],
   },
   carouselTitle: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-    color: MEALS_COLORS.secondary,
-    textAlign: 'center',
-    marginBottom: Spacing[4],
-  },
-  carouselContent: {
-    paddingHorizontal: Spacing[4],
-    gap: Spacing[3],
-  },
-  compactCard: {
-    width: 320,
-    height: 220,
-    marginRight: Spacing[3],
-    borderRadius: BorderRadius.xl,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  compactGradient: {
-    flex: 1,
-    borderRadius: BorderRadius.xl,
-    padding: 3,
-  },
-  compactContent: {
-    flex: 1,
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl - 3,
-    padding: Spacing[5],
-    justifyContent: 'space-between',
-  },
-  compactIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    marginBottom: Spacing[3],
-  },
-  compactTitle: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-    color: Colors.neutral[900],
-    marginBottom: Spacing[2],
-  },
-  compactHighlight: {
-    fontSize: Typography.sizes.base,
-    fontWeight: Typography.weights.bold,
-    marginBottom: Spacing[3],
-  },
-  compactDescription: {
-    fontSize: Typography.sizes.base,
-    color: Colors.neutral[600],
-    lineHeight: 22,
-  },
-
-  // Processo Timeline
-  processContainer: {
-    marginBottom: Spacing[6],
-  },
-  processTitle: {
     fontSize: Typography.sizes['2xl'],
     fontWeight: Typography.weights.bold,
     color: MEALS_COLORS.primary,
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
+  carouselSubtitle: {
+    fontSize: Typography.sizes.base,
+    color: MEALS_COLORS.secondary,
+    textAlign: 'center',
+    lineHeight: 22,
+    opacity: 0.8,
+  },
+  carouselContent: {
+    paddingHorizontal: Spacing[4],
+    gap: Spacing[4],
+  },
+
+  // Cards COMPLETAMENTE RIDISEGNATE - DESIGN MODERNO E PULITO
+  modernCard: {
+    width: 320, // AUMENTATO: da 300 a 320px
+    height: 360, // AUMENTATO: da 280 a 360px per più spazio descrizione
+    marginRight: Spacing[4],
+    backgroundColor: Colors.neutral[0],
+    borderRadius: BorderRadius.xl,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 6,
+    overflow: 'hidden',
+  },
+  modernCardContent: {
+    flex: 1,
+  },
+  modernCardHeader: {
+    height: 70, // RIDOTTO: da 80 a 70px per dare più spazio al contenuto
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: BorderRadius.xl,
+    borderTopRightRadius: BorderRadius.xl,
+  },
+  modernCardBody: {
+    flex: 1,
+    padding: Spacing[5],
+    paddingTop: Spacing[4],
+    justifyContent: 'space-between', // AGGIUNTO: per distribuire meglio lo spazio
+  },
+  modernCardTitle: {
+    fontSize: Typography.sizes.lg, // RIDOTTO: da xl a lg per dare più spazio alla descrizione
+    fontWeight: Typography.weights.bold,
+    color: Colors.neutral[900],
+    textAlign: 'center',
+    marginBottom: Spacing[3],
+    lineHeight: 24, // RIDOTTO: da 26 a 24
+  },
+  modernCardHighlight: {
+    backgroundColor: Colors.neutral[50],
+    borderRadius: BorderRadius.md,
+    paddingHorizontal: Spacing[3],
+    paddingVertical: Spacing[2],
+    marginBottom: Spacing[4],
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.neutral[200],
+  },
+  modernCardHighlightText: {
+    fontSize: Typography.sizes.sm, // RIDOTTO: da base a sm per dare più spazio alla descrizione
+    fontWeight: Typography.weights.bold,
+    textAlign: 'center',
+  },
+  modernCardDescription: {
+    fontSize: Typography.sizes.base, // AUMENTATO: da sm a base per migliore leggibilità
+    color: Colors.neutral[700], // SCURITO: da neutral[600] a neutral[700] per migliore contrasto
+    lineHeight: 22, // AUMENTATO: da 20 a 22 per migliore leggibilità
+    textAlign: 'center',
+    flex: 1, // AGGIUNTO: per occupare tutto lo spazio disponibile
+  },
+  modernCardFooter: {
+    height: 8, // AUMENTATO: da 6 a 8px
+    paddingHorizontal: Spacing[5],
+    paddingBottom: Spacing[3],
+  },
+  modernCardIndicator: {
+    height: 4, // AUMENTATO: da 3 a 4px per più presenza
+    borderRadius: 2,
+    width: '100%',
+  },
+
+  // Indicatori di scroll - MIGLIORATI CON ANIMAZIONI
+  scrollIndicators: {
+    alignItems: 'center',
+    marginTop: Spacing[6],
+  },
+  scrollDots: {
+    flexDirection: 'row',
+    gap: Spacing[3],
+  },
+  scrollDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: MEALS_COLORS.primary + '40',
+  },
+
+  // Divisori tra sezioni - IDENTICI PAGINA IMPATTO
+  sectionDividerContainer: {
+    paddingHorizontal: Spacing[4],
+    paddingVertical: Spacing[6],
+  },
+  sectionDivider: {
+    height: 2,
+    backgroundColor: Colors.neutral[300],
+    width: '60%',
+    borderRadius: 1,
+    opacity: 0.8,
+    alignSelf: 'center',
+    shadowColor: Colors.neutral[400],
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+
+  // Processo Timeline - MIGLIORATO
+  processContainer: {
+    marginBottom: Spacing[8],
+  },
+  processHeader: {
+    alignItems: 'center',
+    marginBottom: Spacing[6],
+    paddingHorizontal: Spacing[4],
+  },
+  processTitle: {
+    fontSize: Typography.sizes['2xl'],
+    fontWeight: Typography.weights.bold,
+    color: MEALS_COLORS.accent2,
+    textAlign: 'center',
+    marginBottom: Spacing[3],
+  },
   processSubtitle: {
     fontSize: Typography.sizes.base,
     color: Colors.neutral[600],
     textAlign: 'center',
-    marginBottom: Spacing[6],
+    lineHeight: 24,
   },
 
   // Timeline Layout
@@ -639,46 +727,6 @@ const styles = StyleSheet.create({
     width: 2,
     height: 60,
     overflow: 'hidden',
-  },
-
-  // Impatto Finale
-  impactContainer: {
-    marginTop: Spacing[6],
-    marginBottom: Spacing[8],
-    paddingHorizontal: Spacing[3],
-  },
-  impactGradient: {
-    padding: Spacing[6],
-    alignItems: 'center',
-  },
-  impactContent: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl - 2,
-    padding: Spacing[5],
-    alignItems: 'center',
-  },
-  impactIcon: {
-    marginBottom: Spacing[3],
-  },
-  impactTitle: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: Typography.weights.bold,
-    color: MEALS_COLORS.secondary,
-    marginBottom: Spacing[2],
-    textAlign: 'center',
-  },
-  impactHighlight: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.bold,
-    color: MEALS_COLORS.primary,
-    textAlign: 'center',
-    marginBottom: Spacing[3],
-  },
-  impactDescription: {
-    fontSize: Typography.sizes.base,
-    color: Colors.neutral[700],
-    textAlign: 'center',
-    lineHeight: 24,
   },
 
   // Process Call to Action

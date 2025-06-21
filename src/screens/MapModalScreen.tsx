@@ -1,11 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import InteractiveMap, {
   type Location,
 } from '../components/layout/InteractiveMap';
+import MapLocationModal from '../components/layout/MapLocationModal';
+import type { MapModalData } from '../data/mapModalData';
+import { getModalData } from '../data/mapModalData';
 import type { ImpactStackParamList } from '../navigation/types';
 import {
   BorderRadius,
@@ -21,10 +24,22 @@ const MapModalScreen: React.FC = () => {
   const route = useRoute<MapModalScreenRouteProp>();
   const locations = route.params?.locations;
 
+  // State per il modal della location specifica
+  const [locationModalVisible, setLocationModalVisible] = useState(false);
+  const [selectedLocationData, setSelectedLocationData] =
+    useState<MapModalData | null>(null);
+
   const handleMarkerPress = useCallback((location: Location) => {
-    // eslint-disable-next-line no-console
-    console.log('Marker pressed:', location.name);
-    // Future enhancement: show location details in a bottom sheet
+    const modalData = getModalData(location.id);
+    if (modalData) {
+      setSelectedLocationData(modalData);
+      setLocationModalVisible(true);
+    }
+  }, []);
+
+  const handleLocationModalClose = useCallback(() => {
+    setLocationModalVisible(false);
+    setSelectedLocationData(null);
   }, []);
 
   const handleClosePress = useCallback(() => {
@@ -60,8 +75,15 @@ const MapModalScreen: React.FC = () => {
       </TouchableOpacity>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Mappa Interattiva</Text>
-        <Text style={styles.subtitle}>Esplora il nostro impatto nel mondo</Text>
+        <Text style={styles.subtitle}>Tocca i pin per maggiori dettagli</Text>
       </View>
+
+      {/* Modal per le location specifiche */}
+      <MapLocationModal
+        visible={locationModalVisible}
+        data={selectedLocationData}
+        onClose={handleLocationModalClose}
+      />
     </View>
   );
 };

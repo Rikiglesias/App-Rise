@@ -146,6 +146,18 @@ const InteractiveMap: React.FC<Props> = ({
       mapType="standard"
       toolbarEnabled={isFullScreen}
       moveOnMarkerPress={false}
+      // OTTIMIZZAZIONI PERFORMANCE
+      maxZoomLevel={isFullScreen ? 20 : 8} // Limita zoom su preview mappa
+      minZoomLevel={isFullScreen ? 2 : 3} // Limita zoom minimo
+      loadingEnabled={false} // Rimuove loading spinner
+      loadingIndicatorColor="transparent" // Nasconde indicatori
+      loadingBackgroundColor="transparent" // Sfondo trasparente
+      showsBuildings={isFullScreen} // 3D buildings solo fullscreen
+      showsTraffic={false} // Disabilita traffico
+      showsIndoors={false} // Disabilita mappe indoor
+      showsPointsOfInterest={false} // Disabilita POI
+      showsCompass={isFullScreen} // Bussola solo fullscreen
+      showsScale={false} // Disabilita scala
     >
       {locations.map(location => (
         <Marker
