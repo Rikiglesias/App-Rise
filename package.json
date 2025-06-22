@@ -99,7 +99,7 @@
       "eslint --max-warnings 0",
       "prettier --check"
     ],
-    "scripts/*.js": [
+    "scripts/**/*.{js,jsx}": [
       "eslint --max-warnings 0",
       "prettier --check"
     ],

@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   expo: {
     name: 'Rise Against Hunger Italia',
