@@ -1,36 +1,11 @@
 import 'react-native-gesture-handler/jestSetup';
 
-// Mock React Navigation
-jest.mock('@react-navigation/native', () => {
-  return {
-    ...jest.requireActual('@react-navigation/native'),
-    useNavigation: () => ({
-      navigate: jest.fn(),
-      goBack: jest.fn(),
-    }),
-    useRoute: () => ({
-      params: {},
-    }),
-  };
-});
+// React Navigation mock removed for 100% pure component testing
+// Components requiring navigation should be tested with NavigationContainer
 
-// Mock Expo modules
-jest.mock('expo-status-bar', () => ({
-  StatusBar: 'StatusBar',
-}));
+// Expo Status Bar mock removed - not needed for UI component testing
 
-// Silence the warning about deprecated prop-types
-jest.mock('prop-types', () => {
-  const PropTypes = jest.requireActual('prop-types');
-  return {
-    ...PropTypes,
-    // Add any specific mock you might need
-  };
-});
+// prop-types mock removed - deprecated and not needed for modern React testing
 
-// Mock console warnings in tests
-global.console = {
-  ...console,
-  warn: jest.fn(),
-  error: jest.fn(),
-};
+// Console mock removed - using real console for better Logger integration
+// Our Logger system handles console output properly

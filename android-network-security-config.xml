@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+  <!-- Configurazione domini aziendali sicuri -->
+  <domain-config>
+    <!-- Domini principali Rise Against Hunger Italia -->
+    <domain includeSubdomains="true">riseagainsthunger.italia</domain>
+    <domain includeSubdomains="true">api.riseagainsthunger.italia</domain>
+    <domain includeSubdomains="true">cdn.riseagainsthunger.italia</domain>
+    
+    <!-- Certificate Pinning per sicurezza massima -->
+    <pin-set expiration="2025-12-31">
+      <!-- Certificato principale (da sostituire con quello reale) -->
+      <pin digest="SHA-256">YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2fuihg=</pin>
+      <!-- Certificato backup per continuità servizio -->
+      <pin digest="SHA-256">C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=</pin>
+    </pin-set>
+    
+    <!-- Trust anchors sicuri -->
+    <trust-anchors>
+      <certificates src="system"/>
+    </trust-anchors>
+  </domain-config>
+  
+  <!-- Domini di sviluppo e staging -->
+  <domain-config>
+    <domain includeSubdomains="true">api.riseagainsthunger.italia.dev</domain>
+    <domain includeSubdomains="true">api.riseagainsthunger.italia.staging</domain>
+    
+    <!-- Per sviluppo e staging, certificati meno restrittivi -->
+    <trust-anchors>
+      <certificates src="system"/>
+      <certificates src="user"/>
+    </trust-anchors>
+  </domain-config>
+  
+  <!-- Configurazione globale sicura -->
+  <base-config cleartextTrafficPermitted="false">
+    <!-- Solo HTTPS permesso per tutto il traffico -->
+    <trust-anchors>
+      <certificates src="system"/>
+    </trust-anchors>
+  </base-config>
+  
+  <!-- Override per debug in sviluppo -->
+  <debug-overrides>
+    <!-- In modalità debug permetti certificati utente per testing -->
+    <trust-anchors>
+      <certificates src="system"/>
+      <certificates src="user"/>
+    </trust-anchors>
+  </debug-overrides>
+</network-security-config> 

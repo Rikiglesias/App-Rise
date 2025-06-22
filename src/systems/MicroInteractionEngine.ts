@@ -7,6 +7,8 @@ import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Easing } from 'react-native';
 
+import { logWarn } from '../shared/utils/logger';
+
 // ===================================================================
 // TIPI E CONFIGURAZIONI
 // ===================================================================
@@ -98,7 +100,7 @@ export class HapticEngine {
     } catch (error) {
       if (__DEV__) {
         // eslint-disable-next-line no-console
-        console.warn('[HapticEngine] Feedback failed:', error);
+        logWarn('HapticEngine', 'Feedback failed', error);
       }
     }
   }

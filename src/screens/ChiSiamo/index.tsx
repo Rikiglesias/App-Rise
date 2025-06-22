@@ -5,6 +5,7 @@ import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../shared/hooks/useLinkHandler';
 import { isSuccess } from '../../shared/utils/result';
+import { logWarn } from '../../shared/utils/logger';
 import { ChiSiamoSection, ContactSection, StoriaModal } from './components';
 import { useChiSiamoAnimations } from './hooks/useChiSiamoAnimations';
 import { mainStyles } from './styles';
@@ -26,8 +27,7 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
     const result = await openLink(url, 'maps', 'Impossibile aprire la mappa.');
 
     if (!isSuccess(result) && __DEV__) {
-      // eslint-disable-next-line no-console
-      console.warn('[ChiSiamoScreen] Failed to open maps:', result.error);
+      logWarn('ChiSiamoScreen', 'Failed to open maps', result.error);
     }
   }, [openLink]);
 
@@ -39,8 +39,7 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
     );
 
     if (!isSuccess(result) && __DEV__) {
-      // eslint-disable-next-line no-console
-      console.warn('[ChiSiamoScreen] Failed to open dialer:', result.error);
+      logWarn('ChiSiamoScreen', 'Failed to open dialer', result.error);
     }
   }, [openLink]);
 
@@ -52,8 +51,7 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
     );
 
     if (!isSuccess(result) && __DEV__) {
-      // eslint-disable-next-line no-console
-      console.warn('[ChiSiamoScreen] Failed to open email:', result.error);
+      logWarn('ChiSiamoScreen', 'Failed to open email', result.error);
     }
   }, [openLink]);
 

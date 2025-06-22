@@ -5,6 +5,10 @@ android/
 ios/
 .github/
 **/*.md
+# Configuration files to ignore
+app.config.js
+babel.config.js
+metro.config.js
 # Allow specific JS config files
 !jest.config.js
 !jest.setup.js

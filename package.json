@@ -18,7 +18,22 @@
     "conta-problemi": "node scripts/conta-problemi.js",
     "pre-modifiche": "node scripts/workflow-pre-modifiche.js",
     "post-modifiche": "node scripts/workflow-post-modifiche.js",
-    "workflow-completo": "npm run pre-modifiche && echo '\\n✅ PRONTO PER SVILUPPO! Procedi con le modifiche, poi esegui: npm run post-modifiche"
+    "workflow-completo": "npm run pre-modifiche && echo '\\n✅ PRONTO PER SVILUPPO! Procedi con le modifiche, poi esegui: npm run post-modifiche",
+    "build:ios": "eas build --platform ios",
+    "build:android": "eas build --platform android",
+    "build:all": "eas build --platform all",
+    "submit:ios": "eas submit --platform ios",
+    "submit:android": "eas submit --platform android",
+    "submit:all": "eas submit --platform all",
+    "preview": "eas build --profile preview",
+    "update": "eas update",
+    "doctor": "expo doctor",
+    "install:clean": "rm -rf node_modules package-lock.json && npm install",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint:fix": "eslint src/ --ext .ts,.tsx --fix",
+    "format": "prettier --write src/",
+    "quality:full": "npm run typecheck && npm run lint && npm run test && npm run format"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",

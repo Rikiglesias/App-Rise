@@ -7,6 +7,7 @@ import {
   withTimeout,
   type AsyncResult,
 } from '../utils/result';
+import { logDebug, logError } from '../utils/logger';
 
 // ===================================================================
 // ASYNC OPERATION HOOK
@@ -113,9 +114,9 @@ export const useAsyncOperation = <T, TArgs extends unknown[] = []>(
           });
 
           if (enableDebugLogging) {
-            // eslint-disable-next-line no-console
-            console.log(
-              `[AsyncOperation] Success in ${Date.now() - startTime}ms`,
+            logDebug(
+              'AsyncOperation',
+              `Success in ${Date.now() - startTime}ms`,
               {
                 data: result.data,
                 args,
@@ -134,14 +135,10 @@ export const useAsyncOperation = <T, TArgs extends unknown[] = []>(
           }));
 
           if (enableDebugLogging) {
-            // eslint-disable-next-line no-console
-            console.error(
-              `[AsyncOperation] Failed in ${Date.now() - startTime}ms`,
-              {
-                error: result.error,
-                args,
-                retryAttempts,
-              }
+            logError(
+              'AsyncOperation',
+              `Failed in ${Date.now() - startTime}ms`,
+              result.error
             );
           }
 
@@ -158,13 +155,10 @@ export const useAsyncOperation = <T, TArgs extends unknown[] = []>(
         }));
 
         if (enableDebugLogging) {
-          // eslint-disable-next-line no-console
-          console.error(
-            `[AsyncOperation] Exception in ${Date.now() - startTime}ms`,
-            {
-              error: err,
-              args,
-            }
+          logError(
+            'AsyncOperation',
+            `Exception in ${Date.now() - startTime}ms`,
+            err
           );
         }
 

@@ -9,6 +9,7 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { logDebug } from '../../shared/utils/logger';
 
 interface MapLocationModalProps {
   visible: boolean;
@@ -26,8 +27,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
 }) => {
   const handleCTAPress = useCallback(() => {
     // TODO: Aprire link esterno quando fornito dall'utente
-    // eslint-disable-next-line no-console
-    console.log('CTA pressed for:', data?.title);
+    logDebug('MapLocationModal', 'CTA pressed', { title: data?.title });
   }, [data?.title]);
 
   if (!data) return null;

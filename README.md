@@ -1,6 +1,6 @@
 # Rise Against Hunger Italia - App Mobile
 
-App ufficiale di Rise Against Hunger Italia per iOS e Android, costruita con React Native ed Expo.
+App ufficiale di Rise Against Hunger Italia per iOS e Android, costruita con **Expo** e React Native.
 
 ## 🚀 Quick Start
 
@@ -67,47 +67,39 @@ App ufficiale di Rise Against Hunger Italia per iOS e Android, costruita con Rea
 
 ## 🏗️ Sistema di Deployment
 
-### 🎯 **Strategia Ibrida Ottimizzata**
+### 🎯 **Deployment con Expo EAS**
 
 **Development**: Expo (veloce, live reload)  
-**Production**: GitHub Actions + Fastlane (gratuito, professionale)
+**Production**: Expo EAS Build (ufficiale, ottimizzato)
 
-### ✅ **Deployment Automatico Configurato**
+### ✅ **Deployment Configurato**
 
-- **GitHub Actions** workflows per iOS e Android
-- **Fastlane** scripts per build e upload automatici
-- **Deploy automatico** su git tag (es. `v1.0.0`)
-- **Costo totale**: $124/anno (vs $348-1188 con Expo EAS)
+- **EAS Build** per iOS e Android
+- **EAS Submit** per invio automatico agli store
+- **Script PowerShell** per Windows
+- **Script Bash** per macOS/Linux
 
 ### 📋 **File di Deployment**
 
 ```text
-├── .github/workflows/
-│   ├── ios-deploy.yml          # Auto-deploy iOS
-│   └── android-deploy.yml      # Auto-deploy Android
-├── ios/fastlane/
-│   ├── Fastfile                # iOS build script
-│   └── Gemfile                 # Dependencies
-├── android/fastlane/
-│   ├── Fastfile                # Android build script
-│   └── Gemfile                 # Dependencies
 ├── scripts/
 │   ├── setup-deployment.ps1    # Setup script Windows
 │   ├── setup-deployment.sh     # Setup script macOS/Linux
-│   ├── deploy-ios.ps1          # Deploy iOS locale
-│   └── deploy-android.ps1      # Deploy Android locale
+│   ├── deploy-ios.ps1          # Deploy iOS
+│   ├── deploy-android.ps1      # Deploy Android
+│   └── publish.sh              # Script deploy interattivo
+├── eas.json                    # Configurazione EAS Build
 └── docs/
-    └── DEPLOYMENT_GUIDE.md     # Guida completa
+    └── PUBLISHING_CHECKLIST.md # Guida pubblicazione
 ```
 
 ## 🛠️ Tecnologie Utilizzate
 
+- **Expo** - Piattaforma di sviluppo e build React Native
 - **React Native** - Framework mobile cross-platform
-- **Expo** - Piattaforma di sviluppo (solo development)
 - **TypeScript** - Superset tipizzato di JavaScript
 - **React Navigation** - Libreria di navigazione
-- **GitHub Actions** - CI/CD gratuito
-- **Fastlane** - Automazione build e deploy
+- **EAS Build** - Servizio di build Expo
 - **Jest** - Testing framework
 - **Husky** - Pre-commit hooks per qualità codice
 
@@ -173,40 +165,36 @@ npx expo start
 # Quality checks
 npm run test              # Esegui test
 npm run test:watch        # Test in modalità watch
-npm run quality-check     # TypeScript + ESLint + Markdown
-npm run quality-fix       # Fix automatico problemi
+npm run pre-modifiche     # TypeScript + ESLint + controlli qualità
+npm run post-modifiche    # Verifica post-sviluppo
 ```
 
 ### Production Release
 
 ```bash
 # Aggiorna versione in app.json
-# Commit e crea tag
+# Commit delle modifiche
 git add .
 git commit -m "✨ New features ready"
-git tag v1.0.1
-git push origin main --tags
+git push origin main
 
-# GitHub Actions automaticamente:
-# 1. Build iOS → App Store Connect
-# 2. Build Android → Google Play Console
+# Build e deploy con EAS
+eas build --platform all --profile production-store
+eas submit --platform all --profile production
 ```
 
-## 💰 Costi e Risparmio
+## 💰 Costi
 
-| Servizio             | Costo          | Nota                  |
-| -------------------- | -------------- | --------------------- |
-| **Apple Developer**  | $99/anno       | Richiesto per iOS     |
-| **Google Play**      | $25 una tantum | Richiesto per Android |
-| **GitHub Actions**   | **Gratuito**   | 2000 min/mese gratis  |
-| **Fastlane**         | **Gratuito**   | Open source           |
-| **Expo Development** | **Gratuito**   | Solo per development  |
+| Servizio            | Costo          | Nota                  |
+| ------------------- | -------------- | --------------------- |
+| **Apple Developer** | $99/anno       | Richiesto per iOS     |
+| **Google Play**     | $25 una tantum | Richiesto per Android |
+| **Expo Account**    | **Gratuito**   | Account base          |
+| **EAS Build**       | **Gratuito**   | Tier gratuito         |
 
-### 💡 **Risparmio vs Expo EAS**
+### 💡 **Totale: $124 primo anno, $99/anno successivi**
 
-- **Anno 1**: $348-1064 risparmiati
-- **5 anni**: $1740-5320 risparmiati
-- **Budget extra per la beneficenza**: 🎯
+Perfetto per un'organizzazione no-profit come Rise Against Hunger Italia!
 
 ## 📋 Setup Publishing
 
@@ -222,12 +210,12 @@ git push origin main --tags
 
 ### Prossimi Passi
 
-1. **Accounts**: Apple Developer ($99) + Google Play ($25)
-2. **Certificati**: iOS signing + Android keystore
-3. **GitHub Secrets**: Configura API keys
-4. **Deploy**: `git tag v1.0.0 && git push --tags`
+1. **Account Expo**: Gratuito su expo.dev
+2. **Apple Developer**: $99/anno per iOS
+3. **Google Play Console**: $25 una tantum per Android
+4. **Deploy**: `eas build --platform all`
 
-📖 **Guida completa**: [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
+📖 **Guida completa**: [PUBLISHING_CHECKLIST.md](docs/PUBLISHING_CHECKLIST.md)
 
 ## 📱 Compatibilità
 
@@ -243,106 +231,30 @@ git push origin main --tags
 2. Usa TypeScript per tutti i componenti
 3. Mantieni il design system coerente
 4. Testa su dispositivi reali con Expo Go
+5. Esegui `npm run pre-modifiche` prima di ogni commit
 
 ### Architettura
 
-- **Development**: Expo managed workflow (veloce)
-- **Production**: Expo bare workflow (controllo completo)
-- **CI/CD**: GitHub Actions (gratuito e potente)
+- **Development**: Expo managed workflow con live reload
+- **Production**: EAS Build per generazione APK/IPA ottimizzati
+- **Testing**: Jest + React Native Testing Library
 
 ## 📞 Support
 
-- **Deployment**: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-- **GitHub Actions**: [docs.github.com/actions](https://docs.github.com/actions)
-- **Fastlane**: [docs.fastlane.tools](https://docs.fastlane.tools)
-- **Expo**: [docs.expo.dev](https://docs.expo.dev)
+- **Expo Documentation**: [docs.expo.dev](https://docs.expo.dev)
+- **EAS Build**: [docs.expo.dev/build](https://docs.expo.dev/build)
+- **Publishing Guide**: [PUBLISHING_CHECKLIST.md](docs/PUBLISHING_CHECKLIST.md)
+- **React Native**: [reactnative.dev](https://reactnative.dev)
 
 ---
 
 **Rise Against Hunger Italia** - Insieme possiamo fare la differenza! 🍽️❤️
 
-### 🎉 **Sistema Pronto!**
+### 🎉 **Progetto Expo Ready!**
 
-✅ **Development**: Expo (veloce)  
-✅ **Production**: GitHub Actions (gratuito)  
-✅ **Deployment**: Automatico con git tag  
-✅ **Costi**: $124/anno (risparmio significativo)
+✅ **Development**: Expo con live reload  
+✅ **Production**: EAS Build per iOS e Android  
+✅ **Deployment**: Scripts configurati  
+✅ **Costi**: $124/anno per associazione no-profit
 
-🚀 **Perfetto per un'associazione no-profit!**
-
-## Quality Assurance Pragmatico-Professionale
-
-### 🎯 **FILOSOFIA** - Qualità senza paralisi, pragmatismo senza compromessi
-
-### **PRE-MODIFICA**
-
-- Sempre `npm run pre-modifiche` prima di sviluppare
-- **Verifica**: solo errori bloccanti devono essere zero
-
-### **POST-MODIFICA**
-
-- `npm run post-modifiche` dopo ogni implementazione significativa
-- **Verifica**: nessun nuovo errore introdotto
-
-### **COMMIT POLICY AGGIORNATA**
-
-- `npm run conta-problemi` DEVE restituire **ZERO ERRORI ESLint**
-- **Warnings sono accettabili** (max 1000 warnings)
-- **Zero errori TypeScript bloccanti**
-
-### **ZERO ERRORI CRITICI**
-
-- Mai procedere con errori ESLint **ERROR level**
-- Mai procedere con errori TypeScript che impediscono build
-- **Warnings sono informativi**, non bloccanti
-
-### **CONTROLLO POST-FEATURE**
-
-- `npm run analisi-completa` per panoramica completa dettagliata
-- Focus su trend: errori in aumento/diminuzione
-
-### **SISTEMA INTELLIGENTE**
-
-- Controlli che si fermano (exit code 1) solo per **errori critici**
-- **Warnings non bloccano** il workflow
-- Distinzione netta: ERROR vs WARNING
-
-### **CORREZIONE MANUALE CONTROLLATA**
-
-- `npm run helper-manuali` per guida correzioni manuali
-- `npm run fix-manuale` per promemoria (nessun automatismo)
-- Priorità: controllo totale > velocità
-
-### **WORKFLOW MANUALE CONTROLLATO**
-
-```bash
-npm run pre-modifiche (SOLO verifica)
-→ Correggi problemi MANUALMENTE nell'editor
-→ npm run post-modifiche (SOLO verifica)
-→ Commit se ZERO ERRORI (warnings OK)
-```
-
-### 📊 **SOGLIE ACCETTABILI**
-
-- ✅ **0 errori ESLint** (bloccanti)
-- ✅ **0 errori TypeScript** (bloccanti)
-- ⚠️ **< 1000 warnings ESLint** (informativi)
-- 📈 **Trend warnings in miglioramento** nel tempo
-
-### 🚨 **STATI BLOCCANTI** (exit code 1)
-
-- Errori ESLint di livello ERROR
-- Errori TypeScript che impediscono build
-- Build fallito
-- Test falliti
-
-### ✅ **STATI NON BLOCCANTI**
-
-- Warnings ESLint (qualsiasi numero ragionevole)
-- Suggestions di miglioramento
-- Style inconsistencies minori
-- Performance hints
-
----
-
-Aggiornato per approccio pragmatico-professionale
+🚀 **Perfetto per un'organizzazione benefica!**

@@ -25,6 +25,7 @@ import {
 import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../shared/hooks/useLinkHandler';
 import { isSuccess } from '../shared/utils/result';
+import { logWarn } from '../shared/utils/logger';
 
 type SeguiciScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -138,7 +139,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
 
     if (!isSuccess(result) && __DEV__) {
       // eslint-disable-next-line no-console
-      console.warn('[SeguiciScreen] Failed to open website:', result.error);
+      logWarn('SeguiciScreen', 'Failed to open website', result.error);
     }
   }, [openLink, triggerHaptic]);
 
@@ -152,7 +153,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
 
     if (!isSuccess(result) && __DEV__) {
       // eslint-disable-next-line no-console
-      console.warn('[SeguiciScreen] Failed to open Instagram:', result.error);
+      logWarn('SeguiciScreen', 'Failed to open Instagram', result.error);
     }
   }, [openLink, triggerHaptic]);
 
@@ -166,7 +167,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
 
     if (!isSuccess(result) && __DEV__) {
       // eslint-disable-next-line no-console
-      console.warn('[SeguiciScreen] Failed to open Facebook:', result.error);
+      logWarn('SeguiciScreen', 'Failed to open Facebook', result.error);
     }
   }, [openLink, triggerHaptic]);
 
@@ -180,7 +181,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
 
     if (!isSuccess(result) && __DEV__) {
       // eslint-disable-next-line no-console
-      console.warn('[SeguiciScreen] Failed to open LinkedIn:', result.error);
+      logWarn('SeguiciScreen', 'Failed to open LinkedIn', result.error);
     }
   }, [openLink, triggerHaptic]);
 

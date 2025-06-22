@@ -9,6 +9,7 @@ import {
   type AsyncResult,
 } from '../utils/result';
 import { useHapticFeedback } from './useHapticFeedback';
+import { logWarn, logError } from '../utils/logger';
 
 interface UseLinkHandlerOptions {
   defaultErrorMessage?: string;
@@ -96,8 +97,9 @@ export const useLinkHandler = (
           // Haptic failure is non-critical, log and continue
           if (__DEV__) {
             // eslint-disable-next-line no-console
-            console.warn(
-              '[LinkHandler] Haptic feedback failed:',
+            logWarn(
+              'LinkHandler',
+              'Haptic feedback failed',
               hapticResult.error
             );
           }
@@ -121,13 +123,11 @@ export const useLinkHandler = (
 
           // Log detailed error for debugging
           if (__DEV__) {
-            // eslint-disable-next-line no-console
-            console.error(`[LinkHandler] Failed to open URL: ${url}`, {
-              error: linkResult.error,
-              loadingKey,
-              retryAttempts,
-              timestamp: new Date().toISOString(),
-            });
+            logError(
+              'LinkHandler',
+              `Failed to open URL: ${url}`,
+              linkResult.error
+            );
           }
 
           return linkResult;

@@ -1,6 +1,7 @@
 /* eslint-disable require-await */
 /* eslint-disable no-await-in-loop */
 import { useCallback, useState } from 'react';
+import { logDebug, logError } from './logger';
 
 /**
  * RESULT PATTERN - Type-Safe Async Operations
@@ -257,11 +258,15 @@ export const logResult = <T, E>(
     const prefix = context ? `[${context}]` : '[Result]';
 
     if (result.success) {
-      // eslint-disable-next-line no-console
-      console.log(`${prefix} Success:`, result.data);
+      logDebug('ResultPattern', `${prefix} Success`, result.data);
     } else {
-      // eslint-disable-next-line no-console
-      console.error(`${prefix} Error:`, result.error);
+      logError(
+        'ResultPattern',
+        `${prefix} Error`,
+        result.error instanceof Error
+          ? result.error
+          : new Error(String(result.error))
+      );
     }
   }
 

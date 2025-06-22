@@ -38,70 +38,60 @@ if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
 
 Write-Success "Node.js and npm are installed"
 
-# Step 2: Install Expo CLI
-Write-Step "Installing/updating Expo CLI..."
-npm install -g @expo/cli
-Write-Success "Expo CLI ready"
+# Step 2: Install EAS CLI
+Write-Step "Installing/updating EAS CLI..."
+npm install -g @expo/eas-cli
+Write-Success "EAS CLI ready"
 
-# Step 3: Update .gitignore
-Write-Step "Updating .gitignore..."
+# Step 3: Login to Expo
+Write-Step "Logging into Expo..."
+eas login
 
-# Create gitignore content separately
-$gitignoreLines = @(
-    "",
-    "# Native projects",
-    "/ios/",
-    "/android/",
-    "",
-    "# Fastlane",
-    "ios/fastlane/report.xml",
-    "ios/fastlane/Preview.html", 
-    "ios/fastlane/screenshots",
-    "ios/fastlane/test_output",
-    "android/fastlane/report.xml",
-    "android/fastlane/Preview.html",
-    "android/fastlane/screenshots", 
-    "android/fastlane/test_output",
-    "",
-    "# Signing",
-    "*.keystore",
-    "*.p12",
-    "*.mobileprovision",
-    "google-play-service-account.json",
-    "",
-    "# Bundler",
-    "vendor/bundle/",
-    ".bundle/"
-)
-
-foreach ($line in $gitignoreLines) {
-    Add-Content -Path ".gitignore" -Value $line
+# Step 4: Configure EAS Build
+Write-Step "Configuring EAS Build..."
+if (-not (Test-Path "eas.json")) {
+    eas build:configure
+    Write-Success "EAS Build configured"
+} else {
+    Write-Success "EAS Build already configured"
 }
 
-Write-Success ".gitignore updated"
-
-# Step 4: Create PowerShell deploy scripts
-Write-Step "Creating deploy scripts..."
+# Step 5: Update deploy scripts
+Write-Step "Creating EAS deploy scripts..."
 
 # Create iOS deploy script
 @"
-# Deploy iOS to App Store
-Write-Host "🍎 Deploying iOS to App Store..." -ForegroundColor Blue
-Set-Location ios
-bundle exec fastlane release
-Set-Location ..
+# Deploy iOS con EAS Build (Expo)
+Write-Host "🍎 Building iOS with EAS..." -ForegroundColor Blue
+
+# Check if EAS is installed
+if (-not (Get-Command eas -ErrorAction SilentlyContinue)) {
+    Write-Host "📦 Installing EAS CLI..." -ForegroundColor Yellow
+    npm install -g @expo/eas-cli
+}
+
+# Login and build
+eas login
+eas build --platform ios --profile production-store
 "@ | Out-File -FilePath "deploy-ios.ps1" -Encoding UTF8
 
 # Create Android deploy script  
 @"
-# Deploy Android to Play Store
-Write-Host "🤖 Deploying Android to Play Store..." -ForegroundColor Blue
-Set-Location android
-bundle exec fastlane release
-Set-Location ..
+# Deploy Android con EAS Build (Expo)
+Write-Host "🤖 Building Android with EAS..." -ForegroundColor Blue
+
+# Check if EAS is installed
+if (-not (Get-Command eas -ErrorAction SilentlyContinue)) {
+    Write-Host "📦 Installing EAS CLI..." -ForegroundColor Yellow
+    npm install -g @expo/eas-cli
+}
+
+# Login and build
+eas login
+eas build --platform android --profile production-store
 "@ | Out-File -FilePath "deploy-android.ps1" -Encoding UTF8
 
-Write-Success "Deploy scripts created"
+Write-Success "EAS deploy scripts created"
 
 # Final instructions
 Write-Host ""
@@ -109,26 +99,20 @@ Write-Host "🎉 Setup Complete!" -ForegroundColor Green
 Write-Host "=================="
 Write-Host ""
 Write-Host "📋 Next Steps:" -ForegroundColor Yellow
-Write-Host "1. 🔑 Setup GitHub Secrets:"
-Write-Host "   - APP_STORE_CONNECT_API_KEY"
-Write-Host "   - APP_STORE_CONNECT_API_KEY_ID"
-Write-Host "   - APP_STORE_CONNECT_ISSUER_ID"
-Write-Host "   - GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"
-Write-Host "   - ANDROID_KEYSTORE_FILE"
-Write-Host "   - ANDROID_KEYSTORE_PASSWORD"
-Write-Host "   - ANDROID_KEY_ALIAS"
-Write-Host "   - ANDROID_KEY_PASSWORD"
-Write-Host ""
-Write-Host "2. 🏗️ Create Apple Developer Account (99 USD/year)"
-Write-Host "3. 🤖 Create Google Play Developer Account (25 USD one-time)"
-Write-Host "4. 📱 Generate signing certificates"
+Write-Host "1. 🔑 Create Expo account (free)"
+Write-Host "2. 🏗️ Create Apple Developer Account (99 USD/year) for iOS"
+Write-Host "3. 🤖 Create Google Play Developer Account (25 USD one-time) for Android"
+Write-Host "4. 📱 Configure app store listings"
 Write-Host ""
 Write-Host "🚀 Deploy Commands:" -ForegroundColor Cyan
-Write-Host "   git tag v1.0.0; git push --tags  # Auto-deploy via GitHub Actions"
-Write-Host "   .\deploy-ios.ps1                 # Local iOS deploy"
-Write-Host "   .\deploy-android.ps1             # Local Android deploy"
+Write-Host "   .\publish.sh                     # Interactive deploy (recommended)"
+Write-Host "   .\deploy-ios.ps1                 # iOS only"
+Write-Host "   .\deploy-android.ps1             # Android only"
+Write-Host "   eas build --platform all         # Build both platforms"
+Write-Host "   eas submit --platform all        # Submit to stores"
 Write-Host ""
-Write-Host "💡 Development (unchanged):" -ForegroundColor Green
-Write-Host "   npx expo start                   # Continue using Expo for development"
+Write-Host "💡 Development:" -ForegroundColor Green
+Write-Host "   npx expo start                   # Start development server"
+Write-Host "   npx expo start --tunnel          # External network access"
 Write-Host ""
-Write-Success "You're ready to deploy! 🎯" 
+Write-Success "You're ready to deploy with Expo EAS! 🎯" 

@@ -1,0 +1,50 @@
+[
+  {
+    "filePath": "C:\\Users\\albie\\OneDrive\\Desktop\\App Rise\\src\\__tests__\\components\\ui\\EnhancedTouchable.test.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-require-imports",
+        "severity": 1,
+        "message": "A `require()` style import is forbidden.",
+        "line": 171,
+        "column": 23,
+        "nodeType": "CallExpression",
+        "messageId": "noRequireImports",
+        "endLine": 171,
+        "endColumn": 46
+      },
+      {
+        "ruleId": "@typescript-eslint/no-require-imports",
+        "severity": 1,
+        "message": "A `require()` style import is forbidden.",
+        "line": 188,
+        "column": 23,
+        "nodeType": "CallExpression",
+        "messageId": "noRequireImports",
+        "endLine": 188,
+        "endColumn": 46
+      }
+    ],
+    "suppressedMessages": [
+      {
+        "ruleId": "max-lines-per-function",
+        "severity": 2,
+        "message": "Arrow function has too many lines (208). Maximum allowed is 100.",
+        "line": 18,
+        "column": 31,
+        "nodeType": "ArrowFunctionExpression",
+        "messageId": "exceed",
+        "endLine": 275,
+        "endColumn": 2,
+        "suppressions": [{ "kind": "directive", "justification": "" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 2,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/* eslint-disable max-lines-per-function */\r\nimport React from 'react';\r\nimport { render, fireEvent } from '@testing-library/react-native';\r\nimport { Text } from 'react-native';\r\n\r\nimport EnhancedTouchable from '../../../components/ui/EnhancedTouchable';\r\n\r\n// Mock Expo modules\r\njest.mock('expo-haptics', () => ({\r\n  impactAsync: jest.fn().mockResolvedValue(undefined),\r\n  ImpactFeedbackStyle: {\r\n    Light: 'Light',\r\n    Medium: 'Medium',\r\n    Heavy: 'Heavy',\r\n  },\r\n}));\r\n\r\ndescribe('EnhancedTouchable', () => {\r\n  const mockOnPress = jest.fn();\r\n\r\n  beforeEach(() => {\r\n    jest.clearAllMocks();\r\n  });\r\n\r\n  describe('Basic Rendering', () => {\r\n    it('should render children correctly', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Test Button</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByText('Test Button')).toBeTruthy();\r\n    });\r\n\r\n    it('should render without crashing', () => {\r\n      const { toJSON } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Test</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(toJSON()).toBeDefined();\r\n    });\r\n  });\r\n\r\n  describe('Press Interactions', () => {\r\n    it('should call onPress when pressed', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Press me</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      fireEvent.press(getByText('Press me'));\r\n      expect(mockOnPress).toHaveBeenCalledTimes(1);\r\n    });\r\n\r\n    it('should not call onPress when disabled', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} disabled>\r\n          <Text>Disabled Button</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      fireEvent.press(getByText('Disabled Button'));\r\n      expect(mockOnPress).not.toHaveBeenCalled();\r\n    });\r\n\r\n    it('should handle multiple presses', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Multi Press</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      const button = getByText('Multi Press');\r\n      fireEvent.press(button);\r\n      fireEvent.press(button);\r\n      fireEvent.press(button);\r\n\r\n      expect(mockOnPress).toHaveBeenCalledTimes(3);\r\n    });\r\n  });\r\n\r\n  describe('Accessibility', () => {\r\n    it('should support accessibility label', () => {\r\n      const { getByLabelText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} accessibilityLabel=\"Custom Button\">\r\n          <Text>Button</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByLabelText('Custom Button')).toBeTruthy();\r\n    });\r\n\r\n    it('should support accessibility role', () => {\r\n      const { getByRole } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} accessibilityRole=\"button\">\r\n          <Text>Button</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByRole('button')).toBeTruthy();\r\n    });\r\n\r\n    it('should handle disabled state accessibility', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} disabled>\r\n          <Text>Disabled</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      const button = getByText('Disabled');\r\n      expect(button).toBeTruthy();\r\n    });\r\n  });\r\n\r\n  describe('Styling', () => {\r\n    it('should apply custom styles', () => {\r\n      const customStyle = { backgroundColor: 'red' };\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} style={customStyle}>\r\n          <Text>Styled Button</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByText('Styled Button')).toBeTruthy();\r\n    });\r\n\r\n    it('should handle style arrays', () => {\r\n      const styles = [{ backgroundColor: 'red' }, { padding: 10 }];\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} style={styles}>\r\n          <Text>Multi Style</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByText('Multi Style')).toBeTruthy();\r\n    });\r\n  });\r\n\r\n  describe('Animation States', () => {\r\n    it('should handle press animation', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Animated Button</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      const button = getByText('Animated Button');\r\n      fireEvent(button, 'pressIn');\r\n      fireEvent(button, 'pressOut');\r\n\r\n      expect(mockOnPress).not.toHaveBeenCalled(); // Only on press, not pressIn/Out\r\n    });\r\n\r\n    it('should support animations', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Opacity Animation</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByText('Opacity Animation')).toBeTruthy();\r\n    });\r\n  });\r\n\r\n  describe('Haptic Feedback', () => {\r\n    it('should trigger haptic feedback on press', () => {\r\n      const haptics = require('expo-haptics');\r\n      \r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} hapticFeedback>\r\n          <Text>Haptic Button</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      const button = getByText('Haptic Button');\r\n      \r\n      // First trigger pressIn to activate haptic feedback\r\n      fireEvent(button, 'pressIn');\r\n      \r\n      expect(haptics.impactAsync).toHaveBeenCalled();\r\n    });\r\n\r\n    it('should not trigger haptic feedback when disabled', () => {\r\n      const haptics = require('expo-haptics');\r\n      \r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} hapticFeedback={false}>\r\n          <Text>No Haptic</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      fireEvent.press(getByText('No Haptic'));\r\n      \r\n      expect(haptics.impactAsync).not.toHaveBeenCalled();\r\n    });\r\n  });\r\n\r\n  describe('Edge Cases', () => {\r\n    it('should handle undefined onPress gracefully', () => {\r\n      expect(() => {\r\n        render(\r\n          <EnhancedTouchable>\r\n            <Text>No Handler</Text>\r\n          </EnhancedTouchable>\r\n        );\r\n      }).not.toThrow();\r\n    });\r\n\r\n    it('should handle single child', () => {\r\n      const { toJSON } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Single Child</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(toJSON()).toBeDefined();\r\n    });\r\n\r\n    it('should handle complex children structure', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Parent</Text>\r\n          <Text>Child</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByText('Parent')).toBeTruthy();\r\n      expect(getByText('Child')).toBeTruthy();\r\n    });\r\n  });\r\n\r\n  describe('Performance', () => {\r\n    it('should handle rapid presses', () => {\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress}>\r\n          <Text>Rapid Press</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      const button = getByText('Rapid Press');\r\n      \r\n      // Simulate rapid presses\r\n      for (let i = 0; i < 10; i++) {\r\n        fireEvent.press(button);\r\n      }\r\n\r\n      expect(mockOnPress).toHaveBeenCalledTimes(10);\r\n    });\r\n\r\n    it('should maintain performance with complex styles', () => {\r\n      const complexStyle = {\r\n        backgroundColor: 'blue',\r\n        borderRadius: 10,\r\n        padding: 20,\r\n        margin: 5,\r\n        shadowColor: '#000',\r\n        shadowOffset: { width: 0, height: 2 },\r\n        shadowOpacity: 0.25,\r\n        elevation: 5,\r\n      };\r\n\r\n      const { getByText } = render(\r\n        <EnhancedTouchable onPress={mockOnPress} style={complexStyle}>\r\n          <Text>Complex Style</Text>\r\n        </EnhancedTouchable>\r\n      );\r\n\r\n      expect(getByText('Complex Style')).toBeTruthy();\r\n    });\r\n  });\r\n}); ",
+    "usedDeprecatedRules": []
+  }
+]
