@@ -30,13 +30,15 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FF6B35"
       },
-      "edgeToEdgeEnabled": false,
+      "edgeToEdgeEnabled": true,
       "package": "org.riseagainsthunger.italia",
       "versionCode": 1,
       "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"],
       "statusBarStyle": "dark",
-      "statusBarTranslucent": false,
-      "statusBarBackgroundColor": "#FFFFFF"
+      "statusBarTranslucent": true,
+      "statusBarBackgroundColor": "#00000000",
+      "softwareKeyboardLayoutMode": "resize",
+      "userInterfaceStyle": "light"
     },
     "web": {
       "favicon": "./assets/favicon.png",

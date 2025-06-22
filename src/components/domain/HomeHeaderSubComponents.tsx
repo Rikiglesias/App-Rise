@@ -1,14 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
-import {
-  Animated,
-  Image,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, Image, Modal, StyleSheet, View } from 'react-native';
+import { PlatformTouchable } from '../ui';
 import { Text } from 'react-native-paper';
 import {
   Colors,
@@ -489,10 +483,11 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
             {/* Statistiche container */}
             <View style={baseMissionStyles.statsContainer}>
               {/* Container pasti - CLICKABLE */}
-              <TouchableOpacity
+              <PlatformTouchable
                 style={[baseMissionStyles.statsBox, baseMissionStyles.mealsBox]}
                 onPress={handleMealsPress}
                 activeOpacity={0.8}
+                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={baseMissionStyles.statNumber}>3.1M</Text>
                 <Text style={baseMissionStyles.statLabel}>
@@ -504,7 +499,7 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                   color="#DC2626"
                   style={baseMissionStyles.infoIcon}
                 />
-              </TouchableOpacity>
+              </PlatformTouchable>
 
               {/* Container volontari - STATICO */}
               <View
@@ -542,16 +537,17 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                   <Text style={baseMissionStyles.modalTitle}>
                     Pasti Distribuiti
                   </Text>
-                  <TouchableOpacity
+                  <PlatformTouchable
                     onPress={closeModal}
                     style={baseMissionStyles.closeButton}
+                    rippleColor="rgba(220, 38, 38, 0.2)"
                   >
                     <MaterialCommunityIcons
                       name="close"
                       size={24}
                       color={Colors.neutral[700]}
                     />
-                  </TouchableOpacity>
+                  </PlatformTouchable>
                 </View>
 
                 {/* Breakdown dei pasti */}

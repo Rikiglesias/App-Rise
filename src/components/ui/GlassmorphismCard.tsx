@@ -92,11 +92,14 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     padding: Spacing[6],
     overflow: 'hidden',
+    backgroundColor: 'transparent',
   },
 
   content: {
     position: 'relative',
     zIndex: 1,
+    borderRadius: BorderRadius.xl,
+    overflow: 'hidden',
   },
 });
 

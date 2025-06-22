@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../../components/ui';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import ImpactInfoPage from '../../components/domain/ImpactInfoPage';
@@ -173,7 +174,10 @@ const PartnersScreen: React.FC = () => {
           (PARTNERS_DATA.categories.length + 5) * 200
         ).duration(600)}
       >
-        <TouchableOpacity activeOpacity={0.9}>
+        <PlatformTouchable
+          activeOpacity={0.9}
+          rippleColor="rgba(220, 38, 38, 0.2)"
+        >
           <LinearGradient
             colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
             style={styles.ctaGradient}
@@ -197,7 +201,7 @@ const PartnersScreen: React.FC = () => {
               />
             </View>
           </LinearGradient>
-        </TouchableOpacity>
+        </PlatformTouchable>
       </Animated.View>
 
       {/* Benefici Partnership */}

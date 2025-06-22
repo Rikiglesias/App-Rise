@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../components/ui';
 
 import InteractiveMap, {
   type Location,
@@ -62,17 +63,18 @@ const MapModalScreen: React.FC = () => {
         onMarkerPress={handleMarkerPress}
         isFullScreen
       />
-      <TouchableOpacity
+      <PlatformTouchable
         style={styles.closeButton}
         onPress={handleClosePress}
-        activeOpacity={0.8}
+        activeOpacity={0.7}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <MaterialCommunityIcons
           name="close"
           size={28}
           color={Colors.neutral[800]}
         />
-      </TouchableOpacity>
+      </PlatformTouchable>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Mappa Interattiva</Text>
         <Text style={styles.subtitle}>Tocca i pin per maggiori dettagli</Text>

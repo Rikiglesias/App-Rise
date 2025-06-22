@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   expo: {
     name: 'Rise Against Hunger Italia',
@@ -47,6 +48,27 @@ export default {
               NSExceptionMinimumTLSVersion: '1.2',
               NSExceptionRequiresForwardSecrecy: true,
             },
+            'riseagainsthunger.org': {
+              NSExceptionAllowsInsecureHTTPLoads: false,
+              NSExceptionMinimumTLSVersion: '1.2',
+              NSExceptionRequiresForwardSecrecy: true,
+              NSPinnedDomains: {
+                'api.riseagainsthunger.org': {
+                  NSIncludesSubdomains: true,
+                  NSPinnedCAIdentities: [
+                    'Let\'s Encrypt R3',
+                    'ISRG Root X1'
+                  ]
+                },
+                'cdn.riseagainsthunger.org': {
+                  NSIncludesSubdomains: true,
+                  NSPinnedCAIdentities: [
+                    'Let\'s Encrypt R3',
+                    'ISRG Root X1'
+                  ]
+                }
+              }
+            },
           },
         },
       },
@@ -63,6 +85,14 @@ export default {
       permissions: ['CAMERA', 'ACCESS_FINE_LOCATION'],
       usesCleartextTraffic: false,
       networkSecurityConfig: './android-network-security-config.xml',
+      edgeToEdgeEnabled: true,
+      statusBarStyle: 'dark',
+      statusBarTranslucent: true,
+      statusBarBackgroundColor: '#00000000',
+      systemNavigationBarBackgroundColor: '#00000000',
+      systemNavigationBarStyle: 'light',
+      // Abilita overscroll effect
+      androidRenderingAPI: 'auto',
     },
 
     // Configurazioni aggiuntive

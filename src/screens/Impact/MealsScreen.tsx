@@ -1,7 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { PlatformScrollView } from '../../components/ui';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   Easing,
   FadeInUp,
@@ -353,20 +355,12 @@ const ProcessStepCompact: React.FC<{
 };
 
 const MealsScreen: React.FC = () => {
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const scrollViewRef = useRef<ScrollView>(null);
-
-  const handleScroll = useCallback(
-    (event: { nativeEvent: { contentOffset: { x: number } } }) => {
-      const contentOffset = event.nativeEvent.contentOffset.x;
-      const index = Math.round(contentOffset / 340); // AGGIORNATO: 340 per card più larghe
-      setCurrentCardIndex(index);
-    },
-    []
-  );
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.screenContainer}>
+    <View
+      style={[styles.screenContainer, { paddingTop: insets.top + Spacing[2] }]}
+    >
       <ImpactInfoPage
         icon={MEALS_DATA.icon}
         title={MEALS_DATA.title}
@@ -384,16 +378,7 @@ const MealsScreen: React.FC = () => {
             </Text>
           </View>
 
-          <ScrollView
-            ref={scrollViewRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.carouselContent}
-            snapToInterval={340}
-            decelerationRate="fast"
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-          >
+          <PlatformScrollView>
             {MEALS_DATA.mainCards.map((card, index) => (
               <CompactCard
                 key={card.title}
@@ -401,10 +386,10 @@ const MealsScreen: React.FC = () => {
                 delay={400 + index * 100}
               />
             ))}
-          </ScrollView>
+          </PlatformScrollView>
 
           <AnimatedScrollIndicators
-            currentIndex={currentCardIndex}
+            currentIndex={0}
             totalCards={MEALS_DATA.mainCards.length}
           />
         </Animated.View>
@@ -470,10 +455,9 @@ const MealsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  // Container principale per gestire padding - AUMENTATO
+  // Container principale per gestire padding - SafeArea dinamico
   screenContainer: {
     flex: 1,
-    paddingTop: Spacing[8], // AUMENTATO da 4 a 8 per evitare taglio icona
     paddingBottom: Spacing[20], // AUMENTATO per evitare sovrapposizione barra navigazione
   },
 
@@ -499,10 +483,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     opacity: 0.8,
-  },
-  carouselContent: {
-    paddingHorizontal: Spacing[4],
-    gap: Spacing[4],
   },
 
   // Cards COMPLETAMENTE RIDISEGNATE - DESIGN MODERNO E PULITO

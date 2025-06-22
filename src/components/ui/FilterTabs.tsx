@@ -1,6 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { PlatformScrollView } from './PlatformComponents';
 import { Text, TouchableRipple } from 'react-native-paper';
 import {
   BorderRadius,
@@ -193,12 +194,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-      >
+      <PlatformScrollView>
         {tabs.map(tab => (
           <TabItem
             key={tab.id}
@@ -209,7 +205,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
             styles={styles}
           />
         ))}
-      </ScrollView>
+      </PlatformScrollView>
     </View>
   );
 };

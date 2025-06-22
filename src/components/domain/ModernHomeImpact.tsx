@@ -1,11 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import {
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../ui';
 import { Surface } from 'react-native-paper';
 
 import {
@@ -309,7 +304,7 @@ const ModernHomeImpact: React.FC<ModernHomeImpactProps> = ({
         },
       ]}
     >
-      <TouchableOpacity
+      <PlatformTouchable
         onPress={onImpactPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
@@ -317,6 +312,7 @@ const ModernHomeImpact: React.FC<ModernHomeImpactProps> = ({
         accessible
         accessibilityRole="button"
         accessibilityLabel="Vedi dettagli impatto 2024"
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <Surface style={[styles.impactCard, animatedStyle]} elevation={3}>
           <View style={styles.cardContentWrapper}>
@@ -327,7 +323,7 @@ const ModernHomeImpact: React.FC<ModernHomeImpactProps> = ({
             </View>
           </View>
         </Surface>
-      </TouchableOpacity>
+      </PlatformTouchable>
     </Animated.View>
   );
 };

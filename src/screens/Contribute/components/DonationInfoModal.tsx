@@ -7,9 +7,9 @@ import {
   Modal,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import { PlatformTouchable } from '../../../components/ui';
 
 import {
   Colors,
@@ -193,10 +193,11 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       animationType="none"
       statusBarTranslucent
     >
-      <TouchableOpacity
+      <PlatformTouchable
         style={modalStyles.overlay}
         activeOpacity={1}
         onPress={handleClose}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <Animated.View
           style={[
@@ -206,7 +207,11 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
             },
           ]}
         />
-        <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
+        <PlatformTouchable
+          activeOpacity={1}
+          onPress={handleStopPropagation}
+          rippleColor="rgba(220, 38, 38, 0.2)"
+        >
           <Animated.View
             style={[
               {
@@ -235,17 +240,18 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
               <View style={modalStyles.modalWhiteContainer}>
                 <View style={modalStyles.modalContent}>
                   <View style={modalStyles.modalHeader}>
-                    <TouchableOpacity
+                    <PlatformTouchable
                       style={modalStyles.closeButton}
                       onPress={handleClose}
                       activeOpacity={0.7}
+                      rippleColor="rgba(220, 38, 38, 0.2)"
                     >
                       <MaterialCommunityIcons
                         name="close"
                         size={20}
                         color="#DC2626" // ROSSO COORDINATO per maggiore visibilità
                       />
-                    </TouchableOpacity>
+                    </PlatformTouchable>
                   </View>
 
                   {/* TITOLO CENTRATO E CARINO */}
@@ -288,8 +294,8 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
               </View>
             </LinearGradient>
           </Animated.View>
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </PlatformTouchable>
+      </PlatformTouchable>
     </Modal>
   );
 };

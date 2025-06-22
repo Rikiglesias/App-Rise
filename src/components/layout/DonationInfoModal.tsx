@@ -1,12 +1,6 @@
 import React, { useCallback } from 'react';
-import {
-  Animated,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, Modal, StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../ui';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
@@ -154,21 +148,27 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <TouchableOpacity
+      <PlatformTouchable
         style={styles.modalOverlay}
         activeOpacity={1}
         onPress={onClose}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
-        <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
+        <PlatformTouchable
+          activeOpacity={1}
+          onPress={handleStopPropagation}
+          rippleColor="rgba(220, 38, 38, 0.2)"
+        >
           <Animated.View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>
-              <TouchableOpacity
+              <PlatformTouchable
                 onPress={onClose}
                 style={styles.modalCloseButton}
+                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.modalCloseIcon}>×</Text>
-              </TouchableOpacity>
+              </PlatformTouchable>
             </View>
 
             <View style={styles.modalContent}>
@@ -200,22 +200,24 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
             </View>
 
             <View style={styles.modalActions}>
-              <TouchableOpacity
+              <PlatformTouchable
                 onPress={onClose}
                 style={styles.modalButtonSecondary}
+                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.modalButtonSecondaryText}>Ho Capito</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </PlatformTouchable>
+              <PlatformTouchable
                 onPress={onDonate}
                 style={styles.modalButtonPrimary}
+                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.modalButtonPrimaryText}>Dona Subito</Text>
-              </TouchableOpacity>
+              </PlatformTouchable>
             </View>
           </Animated.View>
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </PlatformTouchable>
+      </PlatformTouchable>
     </Modal>
   );
 };

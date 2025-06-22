@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
 import {
@@ -56,17 +57,18 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               </View>
             </View>
 
-            <TouchableOpacity
+            <PlatformTouchable
               style={styles.closeButton}
               onPress={onClose}
               activeOpacity={0.8}
+              rippleColor="rgba(220, 38, 38, 0.2)"
             >
               <MaterialCommunityIcons
                 name="close"
                 size={24}
                 color={Colors.neutral[0]}
               />
-            </TouchableOpacity>
+            </PlatformTouchable>
           </View>
         </LinearGradient>
 
@@ -79,10 +81,11 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           </Text>
 
           {/* Call to Action per link esterno */}
-          <TouchableOpacity
+          <PlatformTouchable
             style={styles.ctaButton}
             activeOpacity={0.8}
             onPress={handleCTAPress}
+            rippleColor="rgba(220, 38, 38, 0.2)"
           >
             <MaterialCommunityIcons
               name="open-in-new"
@@ -91,7 +94,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               style={styles.ctaIcon}
             />
             <Text style={styles.ctaText}>Clicca qui per saperne di più</Text>
-          </TouchableOpacity>
+          </PlatformTouchable>
         </View>
       </View>
     </Modal>

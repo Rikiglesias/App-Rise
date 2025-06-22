@@ -1,6 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback, useState } from 'react';
-import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
+import { PlatformScrollView, PlatformTouchable } from '../../components/ui';
 
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../shared/hooks/useLinkHandler';
@@ -95,14 +96,15 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={mainStyles.container}>
       {/* FRECCIA STACCATA */}
-      <TouchableOpacity onPress={handleBackPress} style={mainStyles.backButton}>
-        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
-      </TouchableOpacity>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={mainStyles.contentContainer}
+      <PlatformTouchable
+        onPress={handleBackPress}
+        style={mainStyles.backButton}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
+        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
+      </PlatformTouchable>
+
+      <PlatformScrollView>
         <ChiSiamoSection
           animations={animations}
           onInfoPress={handleShowStoria}
@@ -114,7 +116,7 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
         </View>
 
         <ContactSection animations={animations} contacts={contacts} />
-      </ScrollView>
+      </PlatformScrollView>
 
       {/* Storia Modal */}
       <StoriaModal visible={isStoriaModalVisible} onClose={handleCloseStoria} />

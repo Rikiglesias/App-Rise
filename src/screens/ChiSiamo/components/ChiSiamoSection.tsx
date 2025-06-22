@@ -1,6 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
-import { Animated, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Text, View } from 'react-native';
+import { PlatformTouchable } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { chiSiamoSectionStyles } from '../styles';
@@ -38,10 +39,11 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
         <View style={chiSiamoSectionStyles.headerContainer}>
           <View style={chiSiamoSectionStyles.titleHeaderContainer}>
             {/* TITOLO E SOTTOTITOLO ELEGANTI COME PAGINA AZIONI */}
-            <TouchableOpacity
+            <PlatformTouchable
               onPress={handleInfoPress}
               activeOpacity={0.7}
               style={chiSiamoSectionStyles.titleClickableContainer}
+              rippleColor="rgba(220, 38, 38, 0.2)"
             >
               <Text style={chiSiamoSectionStyles.categoryTitle}>
                 <Text style={chiSiamoSectionStyles.titleAccent}>Chi Siamo</Text>
@@ -49,17 +51,18 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               <Text style={chiSiamoSectionStyles.mainSubtitleInline}>
                 Non profit contro la fame - premi (i) per saperne di più
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </PlatformTouchable>
+            <PlatformTouchable
               onPress={handleInfoPress}
               style={chiSiamoSectionStyles.infoIconImproved}
+              rippleColor="rgba(220, 38, 38, 0.2)"
             >
               <MaterialCommunityIcons
                 name="information"
                 size={20}
                 color="white"
               />
-            </TouchableOpacity>
+            </PlatformTouchable>
           </View>
         </View>
       </Animated.View>

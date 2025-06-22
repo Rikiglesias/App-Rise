@@ -2,13 +2,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo, useState } from 'react';
-import {
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../../../components/ui';
 
 import {
   Colors,
@@ -528,23 +523,25 @@ const DonateButtonsSection: React.FC<{
           },
         ]}
       >
-        <TouchableOpacity
+        <PlatformTouchable
           style={styles.donateTitleContainer}
           onPress={onInfoPress}
           activeOpacity={0.7}
+          rippleColor="rgba(220, 38, 38, 0.2)"
         >
           <Text style={styles.donateCategoryTitle}>❤️ Contribuisci</Text>
           <Text style={styles.donateInlineSubtitle}>
             Supporta la lotta contro la fame
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </PlatformTouchable>
+        <PlatformTouchable
           style={styles.infoButton}
           onPress={onInfoPress}
           activeOpacity={0.7}
+          rippleColor="rgba(220, 38, 38, 0.2)"
         >
           <MaterialCommunityIcons name="information" size={16} color="white" />
-        </TouchableOpacity>
+        </PlatformTouchable>
       </Animated.View>
       <View style={styles.buttonsGrid}>
         {/* Prima riga: Charity Shop, Gift Cards */}
@@ -809,7 +806,11 @@ const AnimatedButton: React.FC<{
       },
     ]}
   >
-    <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
+    <PlatformTouchable
+      activeOpacity={0.6}
+      onPress={onPress}
+      rippleColor="rgba(220, 38, 38, 0.2)"
+    >
       <LinearGradient colors={button.gradient} style={styles.gradientBorder}>
         <View style={styles.whiteContainer}>
           <View style={styles.buttonContent}>
@@ -839,7 +840,7 @@ const AnimatedButton: React.FC<{
           </View>
         </View>
       </LinearGradient>
-    </TouchableOpacity>
+    </PlatformTouchable>
   </Animated.View>
 );
 

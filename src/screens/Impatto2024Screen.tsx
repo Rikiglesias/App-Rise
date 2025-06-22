@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { PlatformScrollView } from '../components/ui';
 
 import type { RootStackParamList } from '../navigation/types';
 import {
@@ -24,10 +25,7 @@ interface Props {
 const Impatto2024Screen: React.FC<Props> = ({ navigation: _navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
+      <PlatformScrollView>
         <View style={styles.header}>
           <Text style={styles.year}>2024</Text>
           <Text style={styles.title}>Il Nostro Impatto</Text>
@@ -91,7 +89,7 @@ const Impatto2024Screen: React.FC<Props> = ({ navigation: _navigation }) => {
             Superare i 4 milioni di pasti confezionati
           </Text>
         </View>
-      </ScrollView>
+      </PlatformScrollView>
     </SafeAreaView>
   );
 };
@@ -100,10 +98,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.neutral[50],
-  },
-
-  scrollView: {
-    flex: 1,
   },
 
   header: {

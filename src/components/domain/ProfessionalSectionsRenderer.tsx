@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../ui';
 import { useProfessionalTokens } from '../../hooks/useProfessionalTokens';
 import {
   BorderRadius,
@@ -177,11 +172,12 @@ export const ProfessionalSectionsRenderer: React.FC<
 
           <View style={styles.actionsGrid}>
             {section.actions.map(action => (
-              <TouchableOpacity
+              <PlatformTouchable
                 key={action.id}
                 style={styles.actionCard}
                 onPress={handleActionPress(action)}
                 activeOpacity={0.7}
+                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <View style={styles.actionCardContent}>
                   <View style={styles.actionIconContainer}>
@@ -195,7 +191,7 @@ export const ProfessionalSectionsRenderer: React.FC<
                     <Text style={styles.arrowIcon}>→</Text>
                   </View>
                 </View>
-              </TouchableOpacity>
+              </PlatformTouchable>
             ))}
           </View>
         </Animated.View>

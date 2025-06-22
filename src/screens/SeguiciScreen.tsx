@@ -8,12 +8,12 @@ import {
   Dimensions,
   Image,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import { PlatformScrollView, PlatformTouchable } from '../components/ui';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { RootStackParamList } from '../navigation/types';
 import {
@@ -55,6 +55,7 @@ let seguiciHasAnimated = false;
 const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { openLink } = useLinkHandler();
   const { triggerHaptic } = useHapticFeedback();
+  const insets = useSafeAreaInsets();
 
   // Animazioni veloci come altre pagine
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -247,10 +248,11 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         },
       ]}
     >
-      <TouchableOpacity
+      <PlatformTouchable
         style={styles.socialCardWrapper}
         onPress={platform.onPress}
         activeOpacity={0.92}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         {/* GRADIENT CONTAINER PATTERN - Design System Ufficiale */}
         <LinearGradient
@@ -297,22 +299,22 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
             </View>
           </View>
         </LinearGradient>
-      </TouchableOpacity>
+      </PlatformTouchable>
     </Animated.View>
   );
 
   return (
     <SafeAreaView style={styles.container}>
       {/* FRECCIA STACCATA - Pattern da Chi Siamo */}
-      <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
-        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
-      </TouchableOpacity>
-
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.contentContainer}
+      <PlatformTouchable
+        onPress={handleBackPress}
+        style={[styles.backButton, { top: insets.top + Spacing[2] }]}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
+        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
+      </PlatformTouchable>
+
+      <PlatformScrollView>
         {/* HEADER SECTION - Pattern da Chi Siamo */}
         <Animated.View
           style={[
@@ -347,7 +349,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
             renderSocialCard(platform, index)
           )}
         </View>
-      </ScrollView>
+      </PlatformScrollView>
     </SafeAreaView>
   );
 };
@@ -358,10 +360,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
   },
 
-  // Back Button - SAFE AREA ANDROID
+  // Back Button - SAFE AREA DINAMICO
   backButton: {
     position: 'absolute' as const,
-    top: 60, // AUMENTATO: per evitare overlap con notch/fotocamera Android
     left: Spacing[4],
     padding: Spacing[2],
     borderRadius: BorderRadius.full,
@@ -372,17 +373,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 6,
     zIndex: 20,
-  },
-
-  scrollView: {
-    flex: 1,
-  },
-
-  contentContainer: {
-    paddingHorizontal: Spacing[4],
-    gap: Spacing[0],
-    paddingTop: Spacing[12], // AUMENTATO: per safe area Android
-    paddingBottom: Spacing[16],
   },
 
   // Header Section - Pattern da Chi Siamo IDENTICO

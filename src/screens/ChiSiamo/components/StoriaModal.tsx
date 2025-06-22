@@ -1,14 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
-import {
-  Animated,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, Modal, Text, View } from 'react-native';
+import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { modalStyles } from '../styles';
@@ -109,24 +103,21 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                 {/* Header */}
                 <View style={modalStyles.modalHeader}>
                   <Text style={modalStyles.modalTitle}>La Nostra Storia</Text>
-                  <TouchableOpacity
+                  <PlatformTouchable
                     onPress={handleClose}
                     style={modalStyles.closeButton}
+                    rippleColor="rgba(220, 38, 38, 0.2)"
                   >
                     <MaterialCommunityIcons
                       name="close"
                       size={20} // DIMENSIONE COORDINATA con modal Contribuisci
                       color="#DC2626"
                     />
-                  </TouchableOpacity>
+                  </PlatformTouchable>
                 </View>
 
                 {/* Story Content */}
-                <ScrollView
-                  style={modalStyles.storyScroll}
-                  showsVerticalScrollIndicator={false}
-                  contentContainerStyle={modalStyles.storyContainer}
-                >
+                <PlatformScrollView>
                   <Text style={modalStyles.introText}>
                     Dal 1998, un movimento globale contro la fame
                   </Text>
@@ -225,7 +216,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                       </Text>
                     </Text>
                   </View>
-                </ScrollView>
+                </PlatformScrollView>
               </View>
             </View>
           </LinearGradient>

@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-  Image,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, Modal, StyleSheet, Text, View } from 'react-native';
+import { PlatformScrollView, PlatformTouchable } from '../ui';
 
 import {
   BorderRadius,
@@ -16,7 +9,6 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
-import EnhancedTouchable from '../ui/EnhancedTouchable';
 
 interface Location {
   id: string;
@@ -64,13 +56,17 @@ const ProjectDetailModal: React.FC<Props> = ({
             <View style={styles.statusBadge}>
               <Text style={styles.statusText}>{location.status}</Text>
             </View>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <PlatformTouchable
+              style={styles.closeButton}
+              onPress={onClose}
+              rippleColor="rgba(220, 38, 38, 0.2)"
+            >
               <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
+            </PlatformTouchable>
           </View>
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <PlatformScrollView>
           {/* Hero Image */}
           <View style={styles.imageContainer}>
             <Image
@@ -137,7 +133,7 @@ const ProjectDetailModal: React.FC<Props> = ({
           <View style={styles.actionsContainer}>
             <Text style={styles.sectionTitle}>🚀 Sostieni Questo Progetto</Text>
             <View style={styles.buttonGrid}>
-              <EnhancedTouchable
+              <PlatformTouchable
                 style={styles.primaryButton}
                 onPress={
                   onDonate ??
@@ -145,10 +141,11 @@ const ProjectDetailModal: React.FC<Props> = ({
                     /* Empty handler */
                   })
                 }
+                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.primaryButtonText}>💝 Dona Ora</Text>
-              </EnhancedTouchable>
-              <EnhancedTouchable
+              </PlatformTouchable>
+              <PlatformTouchable
                 style={styles.secondaryButton}
                 onPress={
                   onVolunteer ??
@@ -156,17 +153,18 @@ const ProjectDetailModal: React.FC<Props> = ({
                     /* Empty handler */
                   })
                 }
+                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.secondaryButtonText}>
                   🤝 Diventa Volontario
                 </Text>
-              </EnhancedTouchable>
+              </PlatformTouchable>
             </View>
           </View>
 
           {/* Bottom Spacing */}
           <View style={styles.bottomSpacing} />
-        </ScrollView>
+        </PlatformScrollView>
       </View>
     </Modal>
   );
@@ -211,9 +209,6 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: Typography.sizes.lg,
     color: Colors.neutral[600],
-  },
-  content: {
-    flex: 1,
   },
   imageContainer: {
     position: 'relative',

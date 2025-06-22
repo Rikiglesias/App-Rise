@@ -69,7 +69,9 @@ const SimpleMarker: React.FC<{ location: Location }> = ({ location }) => {
 
       {/* Etichetta del paese */}
       <View style={styles.countryLabel}>
-        <Text style={styles.countryText}>{location.country}</Text>
+        <Text style={styles.countryText} numberOfLines={1} ellipsizeMode="tail">
+          {location.country}
+        </Text>
       </View>
     </View>
   );
@@ -213,6 +215,7 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.bold,
     color: '#374151',
     textAlign: 'center',
+    maxWidth: 80,
   },
 });
 

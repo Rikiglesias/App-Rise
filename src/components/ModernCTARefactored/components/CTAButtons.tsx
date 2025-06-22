@@ -1,6 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, StyleSheet, TouchableOpacity } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
+import { PlatformTouchable } from '../../ui';
 
 import { GradientButtonProps, StandardButtonProps } from '../types';
 import { CTAContent } from './CTAContent';
@@ -36,7 +37,7 @@ export const GradientCTAButton: React.FC<GradientButtonProps> = ({
   <Animated.View
     style={[containerStyle, { transform: [{ scale: scaleValue }] }]}
   >
-    <TouchableOpacity
+    <PlatformTouchable
       style={buttonStyle}
       onPress={onPress}
       onPressIn={handlePressIn}
@@ -44,6 +45,7 @@ export const GradientCTAButton: React.FC<GradientButtonProps> = ({
       disabled={disabled}
       activeOpacity={0.9}
       {...accessibilityConfig}
+      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <LinearGradient
         colors={colors.gradients.primary}
@@ -52,7 +54,7 @@ export const GradientCTAButton: React.FC<GradientButtonProps> = ({
         style={localStyles.gradientOverlay}
       />
       <CTAContent {...contentProps} />
-    </TouchableOpacity>
+    </PlatformTouchable>
   </Animated.View>
 );
 
@@ -73,7 +75,7 @@ export const StandardCTAButton: React.FC<StandardButtonProps> = ({
   <Animated.View
     style={[containerStyle, { transform: [{ scale: scaleValue }] }]}
   >
-    <TouchableOpacity
+    <PlatformTouchable
       style={buttonStyle}
       onPress={onPress}
       onPressIn={handlePressIn}
@@ -81,8 +83,9 @@ export const StandardCTAButton: React.FC<StandardButtonProps> = ({
       disabled={disabled}
       activeOpacity={0.8}
       {...accessibilityConfig}
+      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <CTAContent {...contentProps} />
-    </TouchableOpacity>
+    </PlatformTouchable>
   </Animated.View>
 );

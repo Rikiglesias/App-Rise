@@ -3,14 +3,8 @@ import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { PlatformScrollView, PlatformTouchable } from '../components/ui';
 
 // Components Premium - Versione Modernizzata
 import { HomeHeaderSection } from '../components/domain/HomeHeaderSection';
@@ -40,10 +34,11 @@ const ModernCTAButtons: React.FC = () => {
   return (
     <View style={ctaStyles.container}>
       {/* SCOPRI IL NOSTRO IMPATTO - DESIGN SYSTEM PATTERN */}
-      <TouchableOpacity
+      <PlatformTouchable
         style={ctaStyles.buttonWrapper}
         onPress={handleImpactPress}
         activeOpacity={0.92}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <LinearGradient
           colors={['#DC2626', '#B91C1C', '#991B1B']}
@@ -64,13 +59,14 @@ const ModernCTAButtons: React.FC = () => {
             </View>
           </View>
         </LinearGradient>
-      </TouchableOpacity>
+      </PlatformTouchable>
 
       {/* AZIONI CONCRETE - DESIGN SYSTEM PATTERN */}
-      <TouchableOpacity
+      <PlatformTouchable
         style={ctaStyles.buttonWrapper}
         onPress={handleActionsPress}
         activeOpacity={0.92}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <LinearGradient
           colors={['#059669', '#10B981', '#047857']}
@@ -91,7 +87,7 @@ const ModernCTAButtons: React.FC = () => {
             </View>
           </View>
         </LinearGradient>
-      </TouchableOpacity>
+      </PlatformTouchable>
     </View>
   );
 };
@@ -100,17 +96,13 @@ const HomeScreen: React.FC = () => {
   const { colors } = useTheme();
 
   // Enhanced scroll animation hook - RIPRISTINATO
-  const { scrollY, handleScroll } = useHomeScrollAnimation();
+  const { scrollY } = useHomeScrollAnimation();
 
   // Styles ottimizzati per impaginazione e spazi
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.neutral[0], // Sfondo bianco pulito
-    },
-
-    scrollView: {
-      flex: 1,
     },
 
     content: {
@@ -214,14 +206,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        accessible
-        accessibilityLabel="Schermata principale Rise Against Hunger Italia"
-      >
+      <PlatformScrollView>
         <View style={styles.content}>
           {/* 🎨 MODERN HERO SECTION */}
           <View style={styles.heroSection}>
@@ -258,7 +243,7 @@ const HomeScreen: React.FC = () => {
             <ModernCTAButtons />
           </View>
         </View>
-      </ScrollView>
+      </PlatformScrollView>
     </SafeAreaView>
   );
 };

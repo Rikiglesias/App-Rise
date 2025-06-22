@@ -1,5 +1,6 @@
 import React from 'react';
-import { Animated, TouchableOpacity, View } from 'react-native';
+import { Animated, View } from 'react-native';
+import PlatformTouchable from './PlatformTouchable';
 
 import {
   useAccessibilityConfig,
@@ -43,7 +44,7 @@ export const EnhancedCard: React.FC<EnhancedCardProps> = ({
 
   return (
     <Animated.View style={[animatedStyle]}>
-      <TouchableOpacity
+      <PlatformTouchable
         style={getCardStyle()}
         onPress={onPress}
         onPressIn={handlePressIn}
@@ -51,6 +52,7 @@ export const EnhancedCard: React.FC<EnhancedCardProps> = ({
         disabled={disabled}
         activeOpacity={1}
         {...accessibilityConfig}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <View style={enhancedCardStyles.cardContent}>
           <IconSection icon={icon} variant={variant} size={size} />
@@ -70,7 +72,7 @@ export const EnhancedCard: React.FC<EnhancedCardProps> = ({
             shadowValue={shadowValue}
           />
         </View>
-      </TouchableOpacity>
+      </PlatformTouchable>
     </Animated.View>
   );
 };

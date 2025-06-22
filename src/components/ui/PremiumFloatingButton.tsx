@@ -1,11 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import {
-  Animated,
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
+import PlatformTouchable from './PlatformTouchable';
 
 import {
   BorderRadius,
@@ -224,7 +219,7 @@ const PremiumFloatingButtonContent: React.FC<{
 }) => (
   <Animated.View style={[styles.container, animatedStyle]}>
     <Animated.View style={[styles.glow, glowStyle]} />
-    <TouchableOpacity
+    <PlatformTouchable
       style={[
         styles.button,
         variant === 'glass' ? styles.glassButton : styles.primaryButton,
@@ -236,6 +231,7 @@ const PremiumFloatingButtonContent: React.FC<{
       accessible
       accessibilityRole="button"
       accessibilityLabel={`${title} - Pulsante di azione rapida`}
+      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <Animated.View style={styles.content}>
         <Text style={styles.icon}>{icon}</Text>
@@ -243,7 +239,7 @@ const PremiumFloatingButtonContent: React.FC<{
           {title}
         </Text>
       </Animated.View>
-    </TouchableOpacity>
+    </PlatformTouchable>
   </Animated.View>
 );
 

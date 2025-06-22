@@ -7,12 +7,11 @@ import {
   Dimensions,
   Image,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import { PlatformScrollView, PlatformTouchable } from '../components/ui';
 
 import type { Location } from '../components/layout/InteractiveMap';
 import MapLocationModal from '../components/layout/MapLocationModal';
@@ -122,7 +121,11 @@ const TotalMealsSection: React.FC<{
             },
           ]}
         >
-          <TouchableOpacity onPress={onMealsPress} activeOpacity={0.9}>
+          <PlatformTouchable
+            onPress={onMealsPress}
+            activeOpacity={0.9}
+            rippleColor="rgba(220, 38, 38, 0.2)"
+          >
             <LinearGradient
               colors={['#DC2626', '#B91C1C', '#991B1B']}
               style={styles.totalGradientContainer}
@@ -145,7 +148,7 @@ const TotalMealsSection: React.FC<{
                 />
               </View>
             </LinearGradient>
-          </TouchableOpacity>
+          </PlatformTouchable>
         </Animated.View>
 
         <Animated.View
@@ -157,7 +160,11 @@ const TotalMealsSection: React.FC<{
             },
           ]}
         >
-          <TouchableOpacity onPress={onKitsPress} activeOpacity={0.9}>
+          <PlatformTouchable
+            onPress={onKitsPress}
+            activeOpacity={0.9}
+            rippleColor="rgba(220, 38, 38, 0.2)"
+          >
             <LinearGradient
               colors={['#1F2937', '#374151', '#111827']}
               style={styles.totalGradientContainer}
@@ -180,7 +187,7 @@ const TotalMealsSection: React.FC<{
                 />
               </View>
             </LinearGradient>
-          </TouchableOpacity>
+          </PlatformTouchable>
         </Animated.View>
       </View>
     </View>
@@ -248,7 +255,7 @@ const Results2024Section: React.FC<{
               color="#1F2937"
             />
             <Text style={styles.record2024Value}>16.3K</Text>
-            <Text style={styles.record2024Label}>Kit Realizzati</Text>
+            <Text style={styles.record2024Label}>Kit Confezionati</Text>
             <Text style={styles.record2024Description}>Creati nel 2024</Text>
           </View>
         </Animated.View>
@@ -280,7 +287,11 @@ const CommunitySection: React.FC<{
             },
           ]}
         >
-          <TouchableOpacity onPress={onVolunteersPress} activeOpacity={0.9}>
+          <PlatformTouchable
+            onPress={onVolunteersPress}
+            activeOpacity={0.9}
+            rippleColor="rgba(220, 38, 38, 0.2)"
+          >
             <LinearGradient
               colors={['#10B981', '#059669', '#047857']}
               style={styles.communityGradientContainer}
@@ -302,7 +313,7 @@ const CommunitySection: React.FC<{
                 />
               </View>
             </LinearGradient>
-          </TouchableOpacity>
+          </PlatformTouchable>
         </Animated.View>
 
         <Animated.View
@@ -314,7 +325,11 @@ const CommunitySection: React.FC<{
             },
           ]}
         >
-          <TouchableOpacity onPress={onPartnersPress} activeOpacity={0.9}>
+          <PlatformTouchable
+            onPress={onPartnersPress}
+            activeOpacity={0.9}
+            rippleColor="rgba(220, 38, 38, 0.2)"
+          >
             <LinearGradient
               colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
               style={styles.communityGradientContainer}
@@ -336,7 +351,7 @@ const CommunitySection: React.FC<{
                 />
               </View>
             </LinearGradient>
-          </TouchableOpacity>
+          </PlatformTouchable>
         </Animated.View>
       </View>
     </View>
@@ -359,10 +374,11 @@ const MapSection: React.FC<{
       </Text>
 
       {/* CONTAINER MAPPA CLICCABILE - RIEMPIE TUTTO */}
-      <TouchableOpacity
+      <PlatformTouchable
         style={styles.mapImageContainer}
         onPress={handleMapImagePress} // Mostra i dettagli dell'Italia per default
-        activeOpacity={0.95}
+        activeOpacity={0.85}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <Image
           source={require('../../assets/images/mappa.png')}
@@ -379,7 +395,7 @@ const MapSection: React.FC<{
           />
           <Text style={styles.mapClickText}>Tocca per mappa completa</Text>
         </View>
-      </TouchableOpacity>
+      </PlatformTouchable>
     </View>
   );
 });
@@ -466,12 +482,7 @@ const ImpactTabScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}
-        bounces={true}
-      >
+      <PlatformScrollView>
         <ImpactHeader animations={animations} />
         <TotalMealsSection
           animations={animations}
@@ -497,7 +508,7 @@ const ImpactTabScreen: React.FC = () => {
         </View>
 
         <MapSection onMapPress={handleMapPress} />
-      </ScrollView>
+      </PlatformScrollView>
 
       {/* Modal per i dettagli delle location */}
       <MapLocationModal
@@ -515,16 +526,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.neutral[50],
   },
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    paddingBottom: Spacing[20],
-  },
-
   // Header - IDENTICO PAGINA AZIONI
   headerContainer: {
-    paddingTop: Spacing[3], // COMPATTO per header azioni
     paddingHorizontal: Spacing[4],
     paddingBottom: Spacing[6], // AUMENTATO: più spazio sotto il titolo principale
     alignItems: 'center',

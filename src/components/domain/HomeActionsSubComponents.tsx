@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { PlatformTouchable } from '../ui';
 import { Surface } from 'react-native-paper';
 import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import type {
@@ -62,7 +63,7 @@ export const BentoActionCard: React.FC<BentoActionCardProps> = React.memo(
     });
 
     return (
-      <TouchableOpacity
+      <PlatformTouchable
         style={cardStyles.bentoCard}
         onPress={action.handlePress}
         onPressIn={handlePressIn}
@@ -71,6 +72,7 @@ export const BentoActionCard: React.FC<BentoActionCardProps> = React.memo(
         accessible
         accessibilityRole="button"
         accessibilityLabel={`${action.title}: ${action.description}`}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <Surface style={[cardStyles.cardSurface, animatedStyle]} elevation={2}>
           <View style={cardStyles.cardContentWrapper}>
@@ -90,7 +92,7 @@ export const BentoActionCard: React.FC<BentoActionCardProps> = React.memo(
             </View>
           </View>
         </Surface>
-      </TouchableOpacity>
+      </PlatformTouchable>
     );
   }
 );

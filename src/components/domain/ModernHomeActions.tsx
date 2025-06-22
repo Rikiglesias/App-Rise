@@ -20,7 +20,7 @@ import {
 } from '../../shared/constants/designTokens';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
-import EnhancedTouchable from '../ui/EnhancedTouchable';
+import { PlatformTouchable } from '../ui';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -178,12 +178,16 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
       onPress: () => void;
     }) => (
       <View key={action.id} style={styles.cardContainer}>
-        <EnhancedTouchable onPress={action.onPress} style={styles.touchable}>
+        <PlatformTouchable
+          onPress={action.onPress}
+          style={styles.touchable}
+          rippleColor="rgba(220, 38, 38, 0.2)"
+        >
           <Surface style={styles.card}>
             <Text style={styles.icon}>{action.icon}</Text>
             <Text style={styles.title}>{action.title}</Text>
           </Surface>
-        </EnhancedTouchable>
+        </PlatformTouchable>
       </View>
     ),
     [styles]

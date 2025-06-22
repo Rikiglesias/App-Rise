@@ -3,16 +3,18 @@ import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import React, { useMemo } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+// Platform-specific components
+import { PlatformBlur, PlatformTouchable } from '../components/ui';
 
 // Screens
 import { ContributeTabScreen } from '../screens/ContributeTabScreen';
@@ -62,7 +64,7 @@ const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
     () => [
       styles.tabBarContainer,
       {
-        bottom: insets.bottom > 0 ? insets.bottom - Spacing[2] : Spacing[4],
+        bottom: Math.max(insets.bottom, Spacing[4]),
       },
     ],
     [insets.bottom]
@@ -70,7 +72,7 @@ const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
 
   return (
     <View style={tabContainerStyle}>
-      <BlurView intensity={90} tint="light" style={styles.blurView} />
+      <PlatformBlur intensity={90} tint="light" style={styles.blurView} />
       <View style={styles.tabBarContent}>
         {state.routes.map((route, index: number) => {
           const descriptor = descriptors[route.key];
@@ -138,7 +140,7 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
   const buttonContainerStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateY: withSpring(isCentral && isFocused ? -22 : 0, {
+        translateY: withSpring(isCentral && isFocused ? -18 : 0, {
           damping: 15,
         }),
       },
@@ -194,8 +196,9 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
 
   return (
     <Animated.View style={[styles.buttonContainer, buttonContainerStyle]}>
-      <TouchableOpacity
+      <PlatformTouchable
         activeOpacity={0.7}
+        rippleColor="rgba(220, 38, 38, 0.3)"
         accessibilityRole="button"
         accessibilityState={isFocused ? { selected: true } : {}}
         accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -203,26 +206,28 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
         onLongPress={onLongPress}
         style={styles.touchable}
       >
-        <Animated.View
-          style={[
-            isCentral ? styles.centralIconContainer : styles.iconContainer,
-            iconContainerStyle,
-          ]}
-        >
-          <MaterialCommunityIcons
-            name={iconName}
-            size={iconSize}
-            color={iconColor}
-          />
-        </Animated.View>
-        <Animated.Text
-          style={[styles.labelText, labelStyle]}
-          numberOfLines={1}
-          ellipsizeMode="tail"
-        >
-          {options.tabBarAccessibilityLabel?.split(' ')[0]}
-        </Animated.Text>
-      </TouchableOpacity>
+        <View style={styles.touchableContent}>
+          <Animated.View
+            style={[
+              isCentral ? styles.centralIconContainer : styles.iconContainer,
+              iconContainerStyle,
+            ]}
+          >
+            <MaterialCommunityIcons
+              name={iconName}
+              size={iconSize}
+              color={iconColor}
+            />
+          </Animated.View>
+          <Animated.Text
+            style={[styles.labelText, labelStyle]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {options.tabBarAccessibilityLabel?.split(' ')[0]}
+          </Animated.Text>
+        </View>
+      </PlatformTouchable>
     </Animated.View>
   );
 };
@@ -275,7 +280,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: Spacing[6],
     right: Spacing[6],
-    height: 85,
+    height: 95, // AUMENTATO: da 85 a 95 per spazio animazione icona Home
     borderRadius: BorderRadius['3xl'],
     ...Shadows.lg,
     shadowColor: Colors.neutral[900],
@@ -300,14 +305,19 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     alignItems: 'center',
-    minHeight: 70,
+    minHeight: 80, // AUMENTATO: da 70 a 80 per spazio animazione
   },
   touchable: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: Spacing[2],
     width: '100%',
-    minHeight: 70,
+    minHeight: 80, // AUMENTATO: da 70 a 80 per spazio animazione
+  },
+  touchableContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   // --- Icon ---
   iconContainer: {

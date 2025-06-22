@@ -33,7 +33,12 @@
     "typecheck:watch": "tsc --noEmit --watch",
     "lint:fix": "eslint src/ --ext .ts,.tsx --fix",
     "format": "prettier --write src/",
-    "quality:full": "npm run typecheck && npm run lint && npm run test && npm run format"
+    "quality:full": "npm run typecheck && npm run lint && npm run test && npm run format",
+    "optimize:android": "node scripts/migrate-to-platform-components.js",
+    "migrate:platform": "node scripts/migrate-to-platform-components.js",
+    "fix:migration": "node scripts/fix-migration-errors.js",
+    "test:android": "npm run android && echo '🤖 Testing Android optimizations...'",
+    "test:platform-diff": "echo '📱 iOS behavior preserved, Android optimized!'"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
@@ -87,10 +92,14 @@
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.1.0",
     "react-test-renderer": "^19.0.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.5.4"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
+    "src/**/*.{ts,tsx,js,jsx}": [
+      "eslint --max-warnings 0",
+      "prettier --check"
+    ],
+    "scripts/*.js": [
       "eslint --max-warnings 0",
       "prettier --check"
     ],

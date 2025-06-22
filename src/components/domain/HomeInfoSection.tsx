@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { PlatformTouchable } from '../ui';
 import { Surface } from 'react-native-paper';
 import {
   BorderRadius,
@@ -43,7 +37,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
   });
 
   return (
-    <TouchableOpacity
+    <PlatformTouchable
       style={styles.bentoCard}
       onPress={card.onPress}
       onPressIn={handlePressIn}
@@ -52,6 +46,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
       accessible={true}
       accessibilityRole="button"
       accessibilityLabel={`${card.title}: ${card.description}`}
+      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <Surface style={[styles.cardSurface, animatedStyle]} elevation={3}>
         <View style={styles.cardContentWrapper}>
@@ -89,7 +84,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
           <View style={styles.pressOverlay} />
         </View>
       </Surface>
-    </TouchableOpacity>
+    </PlatformTouchable>
   );
 };
 

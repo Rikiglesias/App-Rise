@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../ui';
 
 import { IMPACT_DATA } from '../../data/impactData';
 import {
@@ -21,10 +22,11 @@ export const StatButton: React.FC<StatButtonProps> = ({
   onPress,
   color,
 }) => (
-  <TouchableOpacity
+  <PlatformTouchable
     onPress={onPress}
     style={styles.statButton}
     activeOpacity={0.8}
+    rippleColor="rgba(220, 38, 38, 0.2)"
   >
     <View style={styles.statButtonContent}>
       <View style={[styles.iconContainer, { backgroundColor: color }]}>
@@ -44,7 +46,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
         color={Colors.neutral[400]}
       />
     </View>
-  </TouchableOpacity>
+  </PlatformTouchable>
 );
 
 export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({

@@ -66,7 +66,7 @@ const Main: React.FC = () => {
       <AppNavigator />
       <StatusBar
         style={isDark ? 'light' : 'dark'}
-        backgroundColor={colors.neutral[50]}
+        translucent={true}
       />
     </PaperProvider>
   );

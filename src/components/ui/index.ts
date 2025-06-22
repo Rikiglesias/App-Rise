@@ -16,6 +16,15 @@ export { default as EnhancedTouchable } from './EnhancedTouchable';
 export { default as FilterTabs } from './FilterTabs';
 export { default as PremiumFloatingButton } from './PremiumFloatingButton';
 
+// Platform-Specific Components
+export {
+  default as PlatformAnimations,
+  usePlatformAnimations,
+} from './PlatformAnimations';
+export { default as PlatformBlur } from './PlatformBlur';
+export { default as PlatformTouchable } from './PlatformTouchable';
+export { PlatformScrollView, PlatformSurface } from './PlatformComponents';
+
 // Display Components
 export { default as FormattedText } from './FormattedText';
 export { default as HeaderLogo } from './HeaderLogo';

@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PlatformTouchable } from '../../components/ui';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import ImpactInfoPage from '../../components/domain/ImpactInfoPage';
@@ -128,7 +129,10 @@ const VolunteersScreen: React.FC = () => {
           (VOLUNTEERS_DATA.sections.length + 4) * 200
         ).duration(600)}
       >
-        <TouchableOpacity activeOpacity={0.9}>
+        <PlatformTouchable
+          activeOpacity={0.9}
+          rippleColor="rgba(220, 38, 38, 0.2)"
+        >
           <LinearGradient
             colors={['#10B981', '#059669', '#047857']}
             style={styles.ctaGradient}
@@ -152,7 +156,7 @@ const VolunteersScreen: React.FC = () => {
               />
             </View>
           </LinearGradient>
-        </TouchableOpacity>
+        </PlatformTouchable>
       </Animated.View>
     </ImpactInfoPage>
   );

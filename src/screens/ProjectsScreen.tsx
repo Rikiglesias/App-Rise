@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  RefreshControl,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import { RefreshControl, SafeAreaView, Text, View } from 'react-native';
+import { PlatformScrollView } from '../components/ui';
 
 import FilterTabs from '../components/ui/FilterTabs';
 import ProjectCard from '../components/ProjectCard';
@@ -15,7 +10,6 @@ import {
   ProjectsStats,
 } from '../components/domain/ProjectsScreenSections';
 import { useProjectsScreenLogic } from '../hooks/useProjectsScreenLogic';
-import { useTheme } from '../shared/hooks/useTheme';
 import { useProjectsScreenStyles } from '../styles/ProjectsScreenStyles';
 import type {
   Project,
@@ -24,8 +18,6 @@ import type {
 
 // Main Component - Now much smaller
 const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
-  const { colors } = useTheme();
-
   const {
     activeTab,
     setActiveTab,
@@ -42,15 +34,14 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
+      <PlatformScrollView
         style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={[colors.primary[500]]}
-            tintColor={colors.primary[500]}
+            colors={['#DC2626']}
+            tintColor="#DC2626"
           />
         }
       >
@@ -89,7 +80,7 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
             <ProjectsEmptyState styles={styles} />
           )}
         </View>
-      </ScrollView>
+      </PlatformScrollView>
     </SafeAreaView>
   );
 };

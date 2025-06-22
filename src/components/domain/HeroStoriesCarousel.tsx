@@ -5,9 +5,9 @@ import {
   Image,
   ImageSourcePropType,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import { PlatformTouchable } from '../ui';
 import { Surface, Text } from 'react-native-paper';
 
 import {
@@ -133,10 +133,11 @@ const StoryCard: React.FC<{
   stories: Story[];
   currentIndex: number;
 }> = ({ story, fadeAnim, scaleAnim, onPress, stories, currentIndex }) => (
-  <TouchableOpacity
+  <PlatformTouchable
     style={styles.touchableContainer}
     onPress={onPress}
     activeOpacity={0.95}
+    rippleColor="rgba(220, 38, 38, 0.2)"
   >
     <View style={styles.overflowContainer}>
       <Animated.View
@@ -160,7 +161,7 @@ const StoryCard: React.FC<{
         <StoryIndicators stories={stories} currentIndex={currentIndex} />
       </Animated.View>
     </View>
-  </TouchableOpacity>
+  </PlatformTouchable>
 );
 
 export const HeroStoriesCarousel: React.FC<HeroStoriesCarouselProps> = ({

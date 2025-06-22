@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Animated, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Text, View } from 'react-native';
+import { PlatformTouchable } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { animatedContactStyles } from '../styles';
@@ -34,10 +35,11 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
         },
       ]}
     >
-      <TouchableOpacity
+      <PlatformTouchable
         style={animatedContactStyles.contactTouchable}
         onPress={handlePress}
         activeOpacity={0.8}
+        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         {/* GRADIENT CONTAINER PATTERN per bottoni */}
         <LinearGradient
@@ -65,7 +67,7 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
             </View>
           </View>
         </LinearGradient>
-      </TouchableOpacity>
+      </PlatformTouchable>
     </Animated.View>
   );
 };
