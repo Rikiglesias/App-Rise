@@ -1,50 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-  <!-- Configurazione domini aziendali sicuri -->
+  <!-- Configurazione per domini aziendali Rise Against Hunger Italia -->
   <domain-config>
-    <!-- Domini principali Rise Against Hunger Italia -->
-    <domain includeSubdomains="true">riseagainsthunger.italia</domain>
-    <domain includeSubdomains="true">api.riseagainsthunger.italia</domain>
-    <domain includeSubdomains="true">cdn.riseagainsthunger.italia</domain>
+    <domain includeSubdomains="true">riseagainsthunger.org</domain>
+    <domain includeSubdomains="true">api.riseagainsthunger.org</domain>
+    <domain includeSubdomains="true">cdn.riseagainsthunger.org</domain>
     
-    <!-- Certificate Pinning per sicurezza massima -->
+    <!-- Certificate Pinning per domini principali -->
     <pin-set expiration="2025-12-31">
-      <!-- Certificato principale (da sostituire con quello reale) -->
-      <pin digest="SHA-256">YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2fuihg=</pin>
-      <!-- Certificato backup per continuità servizio -->
+      <!-- Let's Encrypt R3 intermediate certificate -->
+      <pin digest="SHA-256">jQJTbIh0grw0/1TkHSumWb+Fs0Ggogr621gT3PvPKG0=</pin>
+      <!-- Let's Encrypt ISRG Root X1 -->
       <pin digest="SHA-256">C5+lpZ7tcVwmwQIMcRtPbsQtWLABXhQzejna0wHFr8M=</pin>
+      <!-- Backup certificate pin -->
+      <pin digest="SHA-256">YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2fuihg=</pin>
     </pin-set>
     
-    <!-- Trust anchors sicuri -->
+    <!-- Forza l'uso di HTTPS e certificati validi -->
     <trust-anchors>
       <certificates src="system"/>
     </trust-anchors>
   </domain-config>
-  
-  <!-- Domini di sviluppo e staging -->
+
+  <!-- Configurazione per servizi CDN e analytics sicuri -->
   <domain-config>
-    <domain includeSubdomains="true">api.riseagainsthunger.italia.dev</domain>
-    <domain includeSubdomains="true">api.riseagainsthunger.italia.staging</domain>
+    <domain includeSubdomains="true">googleapis.com</domain>
+    <domain includeSubdomains="true">gstatic.com</domain>
+    <domain includeSubdomains="true">crashlytics.com</domain>
+    <domain includeSubdomains="true">firebase.googleapis.com</domain>
     
-    <!-- Per sviluppo e staging, certificati meno restrittivi -->
+    <!-- Trust system certificates per servizi Google -->
     <trust-anchors>
       <certificates src="system"/>
-      <certificates src="user"/>
     </trust-anchors>
   </domain-config>
-  
+
   <!-- Configurazione globale sicura -->
   <base-config cleartextTrafficPermitted="false">
-    <!-- Solo HTTPS permesso per tutto il traffico -->
     <trust-anchors>
+      <!-- Solo certificati di sistema fidati -->
       <certificates src="system"/>
     </trust-anchors>
   </base-config>
   
-  <!-- Override per debug in sviluppo -->
+  <!-- Configurazione sviluppo (solo in debug builds) -->
   <debug-overrides>
-    <!-- In modalità debug permetti certificati utente per testing -->
     <trust-anchors>
+      <!-- In debug, permetti anche certificati utente per testing -->
       <certificates src="system"/>
       <certificates src="user"/>
     </trust-anchors>
