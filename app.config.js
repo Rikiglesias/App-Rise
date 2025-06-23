@@ -2,9 +2,9 @@ export default {
   expo: {
     name: 'Rise Against Hunger Italia',
     slug: 'rise-against-hunger-italia',
-    version: '1.0.0',
+    version: '1.2.0',
     orientation: 'portrait',
-    icon: './assets/icon.png',
+    icon: './assets/images/logo.png',
     userInterfaceStyle: 'light',
     newArchEnabled: true,
     primaryColor: '#FF6B35',
@@ -32,9 +32,10 @@ export default {
     // Configurazioni sicurezza iOS
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'org.riseagainsthunger.italia',
+      bundleIdentifier: 'it.creareunapp.editor.ios63da226b4447c',
       buildNumber: '1',
       infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
         NSCameraUsageDescription:
           'Questa app utilizza la fotocamera per scansionare QR code per donazioni e eventi.',
         NSLocationWhenInUseUsageDescription:
@@ -99,6 +100,9 @@ export default {
     web: {
       favicon: './assets/favicon.png',
     },
+
+    // Plugin richiesti per iOS
+    plugins: ['expo-secure-store'],
 
     // Aggiornamenti OTA
     updates: {
