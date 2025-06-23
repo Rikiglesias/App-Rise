@@ -26,6 +26,7 @@
 
 - **[PROCESSI_SVILUPPO.md](./PROCESSI_SVILUPPO.md)** - Metodologie e best practices
 - **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Riferimento rapido comandi
+- **[GITHUB_ACTIONS_REFERENCE.md](./GITHUB_ACTIONS_REFERENCE.md)** - 🚀 **Build automatiche** - Sistema GitHub Actions
 
 ---
 
@@ -34,6 +35,8 @@
 ### **📦 Publishing**
 
 - **[PUBLISHING_CHECKLIST.md](./PUBLISHING_CHECKLIST.md)** - Checklist completa per App Store/Play Store
+- **[LEGAL_COMPLIANCE_CHECKLIST.md](./LEGAL_COMPLIANCE_CHECKLIST.md)** - 🚨 **COMPLIANCE LEGALE** -
+  Privacy Policy, GDPR, Terms
 
 ---
 
@@ -81,6 +84,10 @@ npm run conta-problemi
 
 # Workflow completo
 npm run workflow-completo
+
+# Build automatiche (GitHub Actions)
+git commit -m "release: ready [build android]"  # Trigger build
+git commit -m "feat: normale"  # No build
 ```
 
 ---
