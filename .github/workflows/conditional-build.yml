@@ -57,7 +57,7 @@ jobs:
         with:
           expo-version: latest
           eas-version: latest
-          token: "PbFzYNYrEEzTFK2d3vyJHSkXkYTB6OzHr4DGkSRv"
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 🏗️ Run EAS Build
         run: |
