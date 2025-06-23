@@ -21,11 +21,14 @@ export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
       flex: 1,
       backgroundColor: Colors.neutral[0],
     },
+    scrollContent: {
+      paddingBottom: 120, // AGGIUNTO: spazio più ampio per evitare sovrapposizione bottom navigation
+    },
   });
 
   return (
     <SafeAreaView style={styles.container}>
-      <PlatformScrollView>
+      <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         <NewActionsHeader animations={animations} />
         <HeaderDivider animations={animations} />
         <NewActionButtonsSection

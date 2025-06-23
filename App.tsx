@@ -64,10 +64,7 @@ const Main: React.FC = () => {
   return (
     <PaperProvider theme={paperTheme}>
       <AppNavigator />
-      <StatusBar
-        style={isDark ? 'light' : 'dark'}
-        translucent={true}
-      />
+      <StatusBar style={isDark ? 'light' : 'dark'} translucent={true} />
     </PaperProvider>
   );
 };

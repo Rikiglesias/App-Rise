@@ -1,153 +1,124 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
-
-import FormattedText from '../../components/ui/FormattedText';
-import ImpactInfoPage from '../../components/domain/ImpactInfoPage';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { PlatformTouchable } from '../../components/ui';
 import {
-  BorderRadius,
   Colors,
-  Shadows,
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
-
-const BENEFICIARIES_DATA = {
-  title: 'I Nostri Beneficiari',
-  subtitle:
-    'Ogni pasto donato raggiunge chi ne ha più bisogno, sostenendo istruzione, salute e sviluppo.',
-  icon: 'account-group-outline' as keyof typeof MaterialCommunityIcons.glyphMap,
-  sections: [
-    {
-      icon: 'school-outline' as keyof typeof MaterialCommunityIcons.glyphMap,
-      title: "Supporto all'Istruzione",
-      description:
-        "I pasti distribuiti nelle scuole incentivano le famiglie a mandare i figli a scuola, garantendo loro un'istruzione e un futuro migliore.\n\nUn bambino nutrito è un bambino che può imparare.",
-      color: Colors.semantic.info.main,
-      stat: {
-        value: '13.996',
-        label: 'Bambini supportati in Zimbabwe nel 2024',
-        color: Colors.semantic.info.dark,
-      },
-    },
-    {
-      icon: 'food-apple-outline' as keyof typeof MaterialCommunityIcons.glyphMap,
-      title: 'Sicurezza Alimentare',
-      description:
-        'In contesti di emergenza come siccità o conflitti, i nostri interventi garantiscono cibo nutriente a intere comunità, migliorando la salute e costruendo resilienza per il futuro.',
-      color: Colors.semantic.success.main,
-    },
-    {
-      icon: 'home-heart' as keyof typeof MaterialCommunityIcons.glyphMap,
-      title: 'Comunità Locali in Italia',
-      description:
-        'Grazie al programma Kit Packing, supportiamo famiglie e individui in difficoltà anche sul territorio italiano.\n\nCollaboriamo con empori solidali e associazioni locali per contrastare la povertà.',
-      color: Colors.semantic.warning.main,
-    },
-  ],
-};
+import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
+import { useNavigation } from '@react-navigation/native';
 
 const BeneficiariesScreen: React.FC = () => {
+  const navigation = useNavigation();
+  const { triggerHaptic } = useHapticFeedback();
+
+  const handleBackPress = useCallback(async () => {
+    await triggerHaptic('medium');
+    navigation.goBack();
+  }, [triggerHaptic, navigation]);
+
   return (
-    <ImpactInfoPage
-      icon={BENEFICIARIES_DATA.icon}
-      title={BENEFICIARIES_DATA.title}
-      subtitle={BENEFICIARIES_DATA.subtitle}
-    >
-      {BENEFICIARIES_DATA.sections.map((section, index) => (
-        <Animated.View
-          key={section.title}
-          entering={FadeInUp.delay(index * 200 + 200).duration(600)}
-        >
-          <InfoCard
-            icon={section.icon}
-            title={section.title}
-            description={section.description}
-            color={section.color}
+    <SafeAreaView style={styles.container}>
+      {/* Back Button */}
+      <PlatformTouchable
+        onPress={handleBackPress}
+        style={styles.backButton}
+        rippleColor="rgba(220, 38, 38, 0.2)"
+      >
+        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
+      </PlatformTouchable>
+
+      {/* Work in Progress Content */}
+      <View style={styles.content}>
+        <View style={styles.iconContainer}>
+          <MaterialCommunityIcons
+            name="account-group"
+            size={64}
+            color="#DC2626"
           />
-          {section.stat && (
-            <StatHighlight
-              value={section.stat.value}
-              label={section.stat.label}
-              color={section.stat.color}
-            />
-          )}
-        </Animated.View>
-      ))}
-    </ImpactInfoPage>
+        </View>
+
+        <Text style={styles.title}>Beneficiari</Text>
+
+        <View style={styles.workInProgressContainer}>
+          <MaterialCommunityIcons name="wrench" size={48} color="#6B7280" />
+          <Text style={styles.workInProgressTitle}>Work in Progress</Text>
+          <Text style={styles.workInProgressSubtitle}>
+            Questa sezione è in fase di sviluppo.{'\n'}
+            Torneremo presto con contenuti dettagliati!
+          </Text>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
-const InfoCard: React.FC<{
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  title: string;
-  description: string;
-  color: string;
-}> = ({ icon, title, description, color }) => (
-  <View style={[styles.card, { borderLeftColor: color }]}>
-    <View style={[styles.iconContainer, { backgroundColor: color }]}>
-      <MaterialCommunityIcons name={icon} size={32} color={Colors.neutral[0]} />
-    </View>
-    <View style={styles.cardContent}>
-      <Text style={styles.cardTitle}>{title}</Text>
-      <FormattedText text={description} />
-    </View>
-  </View>
-);
-
-const StatHighlight: React.FC<{
-  value: string;
-  label: string;
-  color: string;
-}> = ({ value, label, color }) => (
-  <View style={[styles.statContainer, { backgroundColor: color + '20' }]}>
-    <Text style={[styles.statValue, { color }]}>{value}</Text>
-    <Text style={styles.statLabel}>{label}</Text>
-  </View>
-);
-
 const styles = StyleSheet.create({
-  card: {
+  container: {
+    flex: 1,
     backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl,
-    padding: Spacing[5],
-    ...Shadows.md,
-    marginBottom: Spacing[2],
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderLeftWidth: 5,
   },
-  iconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: BorderRadius.lg,
+  backButton: {
+    position: 'absolute',
+    top: 60,
+    left: Spacing[4],
+    padding: Spacing[2],
+    borderRadius: 50,
+    backgroundColor: Colors.neutral[0],
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
+    zIndex: 10,
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing[4],
+    paddingHorizontal: Spacing[6],
+    paddingTop: Spacing[20],
   },
-  cardContent: { flex: 1 },
-  cardTitle: {
-    fontSize: Typography.sizes.xl,
-    fontWeight: Typography.weights.bold,
-    color: Colors.neutral[800],
-    marginBottom: Spacing[1],
-  },
-  statContainer: {
-    padding: Spacing[4],
-    borderRadius: BorderRadius.lg,
-    alignItems: 'center',
+  iconContainer: {
     marginBottom: Spacing[6],
-    marginTop: Spacing[2],
+    padding: Spacing[4],
+    borderRadius: 50,
+    backgroundColor: 'rgba(220, 38, 38, 0.1)',
   },
-  statValue: {
+  title: {
     fontSize: Typography.sizes['3xl'],
     fontWeight: Typography.weights.black,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: Spacing[8],
+    letterSpacing: -0.8,
   },
-  statLabel: {
-    fontSize: Typography.sizes.sm,
-    color: Colors.neutral[700],
-    marginTop: Spacing[1],
+  workInProgressContainer: {
+    alignItems: 'center',
+    padding: Spacing[6],
+    borderRadius: 20,
+    backgroundColor: Colors.neutral[50],
+    borderWidth: 2,
+    borderColor: Colors.neutral[200],
+    borderStyle: 'dashed',
+  },
+  workInProgressTitle: {
+    fontSize: Typography.sizes['2xl'],
+    fontWeight: Typography.weights.bold,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: Spacing[3],
+    marginBottom: Spacing[2],
+  },
+  workInProgressSubtitle: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.medium,
+    color: '#9CA3AF',
+    textAlign: 'center',
+    lineHeight: 24,
   },
 });
 

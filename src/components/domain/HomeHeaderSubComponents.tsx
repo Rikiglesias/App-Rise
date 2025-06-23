@@ -28,6 +28,7 @@ const modernTitleStyles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - ulteriore compattezza
     paddingHorizontal: Spacing[4],
+    paddingTop: Spacing[6], // AGGIUNTO: titolo più in basso
     position: 'relative',
   },
 
@@ -66,9 +67,9 @@ const modernTitleStyles = StyleSheet.create({
 
   // Logo separatore tondo senza container
   separatorLogo: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5, // Perfettamente tondo
+    width: 60, // INGRANDITO: da 45 a 60
+    height: 60, // INGRANDITO: da 45 a 60
+    borderRadius: 30, // AGGIORNATO: perfettamente tondo per 60px
     opacity: 1,
     backgroundColor: 'transparent',
   },

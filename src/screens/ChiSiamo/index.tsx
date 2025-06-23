@@ -104,7 +104,7 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
         <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
       </PlatformTouchable>
 
-      <PlatformScrollView>
+      <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
         <ChiSiamoSection
           animations={animations}
           onInfoPress={handleShowStoria}

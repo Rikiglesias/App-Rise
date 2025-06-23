@@ -112,7 +112,7 @@ const HomeScreen: React.FC = () => {
 
     // Hero section con spazi ottimizzati
     heroSection: {
-      marginBottom: Spacing[4], // Spazio ridotto prima del separatore
+      marginBottom: Spacing[3], // RIPRISTINATO: spazio equilibrato sotto hero (12px)
     },
 
     // Stile separatore rimosso - ora la transizione è fluida
@@ -120,31 +120,33 @@ const HomeScreen: React.FC = () => {
     // CTA section allineata con sezione impatto
     ctaSection: {
       marginHorizontal: Spacing[4], // Margini laterali allineati con sezione impatto
-      paddingTop: Spacing[2], // Padding sopra per continuità
+      paddingTop: 0, // ELIMINATO: nessun padding sopra per posizione più alta
       paddingBottom: Spacing[6], // Spazio generoso sotto i bottoni
+      marginTop: 0, // RIPRISTINATO: nessun margine negativo per spazio naturale
     },
 
     // Stili per il titolo CTA moderno
     ctaTitleSection: {
       alignItems: 'center',
-      marginBottom: Spacing[6], // Spazio maggiore per respirazione
+      marginBottom: Spacing[4], // RIDOTTO: da Spacing[6] a Spacing[4] - meno spazio sotto titolo
     },
 
     ctaTitleText: {
-      fontSize: Typography.sizes['4xl'], // INGRANDITO: da '2xl' a '4xl' per maggiore impatto
-      fontWeight: Typography.weights.black,
-      color: '#DC2626',
+      fontSize: Typography.sizes['4xl'], // MASSIMO IMPATTO!
+      fontWeight: Typography.weights.bold, // BOLD normale
+      color: '#DC2626', // ROSSO ORIGINALE
       textAlign: 'center',
-      letterSpacing: -1.2, // AUMENTATO per bilanciare la dimensione maggiore
+      letterSpacing: -0.4,
+      includeFontPadding: false,
       textShadowColor: 'rgba(220, 38, 38, 0.15)',
       textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 6,
+      textShadowRadius: 4,
     },
 
     // DESIGN SYSTEM PREMIUM per la descrizione CTA - ULTRA PROFESSIONALE
     ctaDescriptionContainer: {
-      marginTop: Spacing[5], // AUMENTATO: da Spacing[4] a Spacing[5] - più respiro sopra
-      marginBottom: Spacing[3], // RIDOTTO: da Spacing[6] a Spacing[3] - meno spazio sotto per compensare il marginTop dei bottoni
+      marginTop: Spacing[5], // AUMENTATO: da Spacing[2] a Spacing[5] - più spazio tra titolo e descrizione
+      marginBottom: Spacing[3], // AUMENTATO: da Spacing[1] a Spacing[3] - più spazio sotto descrizione
       marginHorizontal: Spacing[3], // Margini laterali per respirazione
     },
 
@@ -219,7 +221,7 @@ const HomeScreen: React.FC = () => {
           <View style={styles.ctaSection}>
             {/* Titolo moderno per i CTA */}
             <View style={styles.ctaTitleSection}>
-              <Text style={styles.ctaTitleText}>Entra in Azione</Text>
+              <Text style={styles.ctaTitleText}>⚡ Entra in Azione</Text>
               {/* Descrizione con design system premium */}
               <View style={styles.ctaDescriptionContainer}>
                 <LinearGradient
@@ -254,7 +256,7 @@ const ctaStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing[4], // AUMENTATO: da Spacing[3] a Spacing[4] - più respiro tra bottoni
     marginHorizontal: Spacing[2],
-    marginTop: Spacing[4], // AGGIUNTO: spazio sopra i bottoni per respiro
+    marginTop: Spacing[2], // RIDOTTO: da Spacing[4] a Spacing[2] - meno spazio sopra i bottoni
     marginBottom: Spacing[6],
   },
 

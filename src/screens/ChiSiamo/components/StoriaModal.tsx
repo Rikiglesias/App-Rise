@@ -117,7 +117,9 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                 </View>
 
                 {/* Story Content */}
-                <PlatformScrollView>
+                <PlatformScrollView
+                  contentContainerStyle={modalStyles.storyContainer}
+                >
                   <Text style={modalStyles.introText}>
                     Dal 1998, un movimento globale contro la fame
                   </Text>

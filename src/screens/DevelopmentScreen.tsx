@@ -20,8 +20,6 @@ import {
 } from '../shared/constants/designTokens';
 import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
 
-// Import dimensioni se necessario in futuro
-
 interface DevelopmentScreenProps {
   navigation: {
     goBack: () => void;
@@ -241,21 +239,6 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             </View>
           </LinearGradient>
         </Animated.View>
-
-        {/* Call to Action */}
-        <Animated.View
-          style={[
-            styles.ctaContainer,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
-          ]}
-        >
-          <Text style={styles.ctaText}>
-            💡 Torna presto per scoprire le novità!
-          </Text>
-        </Animated.View>
       </Animated.View>
     </SafeAreaView>
   );
@@ -296,7 +279,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing[6],
     paddingTop: Platform.OS === 'ios' ? Spacing[12] : Spacing[8], // Spazio normale sopra
-    paddingBottom: Platform.OS === 'ios' ? Spacing[16] : Spacing[12], // Spazio normale sotto
+    paddingBottom: 120, // Spazio per evitare sovrapposizione bottom navigation
   },
   iconContainer: {
     position: 'relative',
@@ -410,21 +393,6 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.base,
     color: '#374151',
     fontWeight: Typography.weights.medium,
-  },
-  ctaContainer: {
-    backgroundColor: 'rgba(220, 38, 38, 0.05)',
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[6],
-    borderRadius: BorderRadius.xl,
-    borderWidth: 1,
-    borderColor: 'rgba(220, 38, 38, 0.1)',
-    marginBottom: Platform.OS === 'ios' ? Spacing[12] : Spacing[8], // Spazio bilanciato dopo "Torna presto"
-  },
-  ctaText: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.semibold,
-    color: '#DC2626',
-    textAlign: 'center',
   },
 });
 

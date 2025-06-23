@@ -17,7 +17,7 @@ export const mainStyles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 60, // AUMENTATO: da 50 a 60 per evitare overlap con notch/fotocamera
+    top: 80, // ULTERIORMENTE AUMENTATO: da 60 a 80 per evitare overlap completo
     left: Spacing[4],
     padding: Spacing[2],
     borderRadius: BorderRadius.full,
@@ -32,7 +32,7 @@ export const mainStyles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: Spacing[4],
     gap: Spacing[0],
-    paddingTop: Spacing[12], // AUMENTATO: da 8 a 12 per safe area Android
+    paddingTop: Spacing[16], // IDENTICO PAGINA SEGUICI: stessa altezza (64px)
     paddingBottom: Spacing[12],
   },
   // SEPARATORE TRA SEZIONI - IDENTICO PAGINA AZIONI
@@ -484,6 +484,7 @@ export const contactSectionStyles = StyleSheet.create({
 
   contactsGrid: {
     gap: Spacing[4], // IDENTICO PAGINA AZIONI: spacing bilanciato
+    paddingHorizontal: Spacing[2], // AGGIUNTO: padding laterale per evitare schiacciamento ai bordi
   },
 });
 

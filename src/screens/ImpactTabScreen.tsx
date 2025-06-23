@@ -93,19 +93,19 @@ const TotalMealsSection: React.FC<{
         <View style={styles.titleSeparator} />
       </View>
 
-      {/* Header IDENTICO SEZIONE ESPLORA con descrizione INGRANDITA */}
+      {/* Header POTENZIATO con decorazioni eleganti */}
       <Animated.View
         style={[
-          styles.exploreHeaderContainer,
+          styles.numbersHeaderContainer,
           {
             opacity: animations.statsAnimations[0],
             transform: [{ scale: animations.statsAnimations[0] }],
           },
         ]}
       >
-        <View>
-          <Text style={styles.sectionTitle}>📊 Dal 2012</Text>
-          <Text style={styles.exploreSubtitleEnhanced}>
+        <View style={styles.numbersHeaderBackground}>
+          <Text style={styles.numbersTitle}>📊 I Nostri Numeri</Text>
+          <Text style={styles.numbersSubtitle}>
             Milioni di vite cambiate, un pasto alla volta
           </Text>
         </View>
@@ -200,20 +200,22 @@ const Results2024Section: React.FC<{
 }> = ({ animations }) => {
   return (
     <View style={styles.record2024Section}>
-      {/* Header riprogettato */}
+      {/* Header DRAMATICALLY ENHANCED */}
       <Animated.View
         style={[
-          styles.record2024Header,
+          styles.results2024HeaderContainer,
           {
             opacity: animations.statsAnimations[1],
             transform: [{ scale: animations.statsAnimations[1] }],
           },
         ]}
       >
-        <Text style={styles.record2024Title}>🎯 Risultati 2024</Text>
-        <Text style={styles.record2024Subtitle}>
-          I numeri che raccontano il nostro impegno annuale
-        </Text>
+        <View style={styles.results2024HeaderBackground}>
+          <Text style={styles.results2024Title}>🎯 Risultati Raggiunti</Text>
+          <Text style={styles.results2024Subtitle}>
+            I numeri che raccontano il nostro impegno annuale
+          </Text>
+        </View>
       </Animated.View>
 
       {/* Cards informative senza "superato" */}
@@ -272,10 +274,23 @@ const CommunitySection: React.FC<{
 }> = ({ animations, onVolunteersPress, onPartnersPress }) => {
   return (
     <View style={styles.communitySection}>
-      <Text style={styles.sectionTitle}>La Nostra Community</Text>
-      <Text style={styles.sectionSubtitle}>
-        Volontari e partner uniti nella missione #famezero
-      </Text>
+      {/* Header RIVOLUZIONATO con elementi community */}
+      <Animated.View
+        style={[
+          styles.communityHeaderContainer,
+          {
+            opacity: animations.statsAnimations[2],
+            transform: [{ scale: animations.statsAnimations[2] }],
+          },
+        ]}
+      >
+        <View style={styles.communityHeaderBackground}>
+          <Text style={styles.communityTitle}>🤝 La Nostra Community</Text>
+          <Text style={styles.communitySubtitle}>
+            Volontari e partner uniti nella missione #famezero
+          </Text>
+        </View>
+      </Animated.View>
 
       <View style={styles.communityRow}>
         <Animated.View
@@ -368,10 +383,13 @@ const MapSection: React.FC<{
 
   return (
     <View style={styles.mapSection}>
-      <Text style={styles.sectionTitle}>Dove Operiamo</Text>
-      <Text style={styles.sectionSubtitle}>
-        La nostra rete globale per la lotta contro la fame
-      </Text>
+      {/* Header GEOGRAFICO con elementi di location */}
+      <View style={styles.mapHeaderContainer}>
+        <View style={styles.mapHeaderBackground}>
+          <Text style={styles.mapTitle}>🌍 Dove Operiamo</Text>
+          <Text style={styles.mapSubtitle}>Le nostre operazioni nel mondo</Text>
+        </View>
+      </View>
 
       {/* CONTAINER MAPPA CLICCABILE - RIEMPIE TUTTO */}
       <PlatformTouchable
@@ -482,7 +500,7 @@ const ImpactTabScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <PlatformScrollView>
+      <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         <ImpactHeader animations={animations} />
         <TotalMealsSection
           animations={animations}
@@ -528,6 +546,7 @@ const styles = StyleSheet.create({
   },
   // Header - IDENTICO PAGINA AZIONI
   headerContainer: {
+    paddingTop: Spacing[3], // AGGIUNTO: stessa altezza di "Fai la differenza"
     paddingHorizontal: Spacing[4],
     paddingBottom: Spacing[6], // AUMENTATO: più spazio sotto il titolo principale
     alignItems: 'center',
@@ -587,15 +606,15 @@ const styles = StyleSheet.create({
     marginTop: Spacing[1], // SPACING COORDINATO
     opacity: 0.8, // TRASPARENZA ELEGANTE
   },
-  // Linea divisoria IDENTICA PAGINA AZIONI
+  // Header Divider - ALLARGATO PER COMPENSARE
   titleSeparator: {
-    height: 2, // ELEGANTE: altezza bilanciata
-    backgroundColor: Colors.neutral[300], // PIÙ SOFT per eleganza
-    width: '60%', // BILANCIATO per proporzioni migliori
-    borderRadius: 1,
-    opacity: 0.8, // SOTTILE trasparenza per delicatezza
+    height: 3, // PIÙ GROSSA: prima linea più prominente (IDENTICO PAGINA AZIONI)
+    backgroundColor: Colors.neutral[300], // PIÙ SOFT per eleganza (IDENTICO PAGINA AZIONI)
+    width: '90%', // ALLARGATO: da 80% a 90% per compensare eventuali padding extra
+    borderRadius: 1, // IDENTICO PAGINA AZIONI
+    opacity: 0.8, // SOTTILE trasparenza per delicatezza (IDENTICO PAGINA AZIONI)
     alignSelf: 'center',
-    // OMBRA ELEGANTE per profondità sottile
+    // OMBRA ELEGANTE per profondità sottile (IDENTICA PAGINA AZIONI)
     shadowColor: Colors.neutral[400],
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
@@ -604,9 +623,9 @@ const styles = StyleSheet.create({
   },
   // Container divisorio IDENTICO PAGINA AZIONI
   titleSeparatorContainer: {
-    paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[4], // BILANCIATO: spazio equilibrato per separazione
-    alignItems: 'center',
+    paddingHorizontal: Spacing[4], // IDENTICO PAGINA AZIONI
+    paddingVertical: Spacing[4], // IDENTICO PAGINA AZIONI: stesso spacing del HeaderDivider (16px)
+    alignItems: 'center', // IDENTICO PAGINA AZIONI
   },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
@@ -614,41 +633,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing[4],
     marginBottom: Spacing[2], // RIDOTTO: sezioni più compatte IDENTICO PAGINA AZIONI
   },
-  // CONTAINER ELEGANTE IDENTICO ESPLORA
-  exploreHeaderContainer: {
-    alignItems: 'center',
-    marginBottom: Spacing[10], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
-  },
-  // TITOLO CATEGORIA ELEGANTE IDENTICO ESPLORA
-  sectionTitle: {
-    fontSize: Typography.sizes['3xl'], // INGRANDITO: da 2xl a 3xl per Esplora e Community IDENTICO PAGINA AZIONI
-    fontWeight: Typography.weights.bold, // IDENTICO PAGINA AZIONI
-    color: '#1F2937', // IDENTICO PAGINA AZIONI
-    textAlign: 'center',
-    letterSpacing: -0.4, // IDENTICO PAGINA AZIONI
-    includeFontPadding: false,
-  },
-  // SUBTITLE ENHANCED PER "DAL 2012" - SEMPLIFICATA
-  exploreSubtitleEnhanced: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.medium,
-    color: '#374151',
-    textAlign: 'center',
-    letterSpacing: 0.1,
-    marginTop: Spacing[2],
-    opacity: 0.8,
-  },
-  // BACKWARD COMPATIBILITY per MapSection
-  sectionSubtitle: {
-    fontSize: Typography.sizes.base,
-    color: '#374151',
-    textAlign: 'center',
-    marginBottom: Spacing[4],
-    backgroundColor: 'rgba(55, 65, 81, 0.06)',
-    borderRadius: 12,
-    paddingHorizontal: Spacing[3],
-    paddingVertical: Spacing[2],
-  },
+
   totalStatsRow: {
     flexDirection: 'row',
     gap: Spacing[4],
@@ -694,6 +679,7 @@ const styles = StyleSheet.create({
   // Community Section
   communitySection: {
     paddingHorizontal: Spacing[4],
+    marginTop: Spacing[6], // AGGIUNTO: spazio generoso tra linea e titolo "La Nostra Community"
     marginBottom: Spacing[6],
   },
 
@@ -745,6 +731,7 @@ const styles = StyleSheet.create({
   // Map Section - SENZA CONTAINER GRIGIO
   mapSection: {
     paddingHorizontal: Spacing[4],
+    marginTop: Spacing[6], // AGGIUNTO: spazio generoso tra linea e titolo "Dove Operiamo"
   },
 
   // MAP CONTAINER CLICCABILE - RIEMPIE TUTTO SENZA BORDI
@@ -797,29 +784,6 @@ const styles = StyleSheet.create({
     marginTop: Spacing[6],
     marginBottom: Spacing[8],
   },
-  record2024Header: {
-    alignItems: 'center',
-    marginBottom: Spacing[6],
-  },
-  record2024Title: {
-    fontSize: Typography.sizes['2xl'],
-    fontWeight: Typography.weights.bold,
-    color: '#1F2937',
-    textAlign: 'center',
-    letterSpacing: -0.6,
-    marginBottom: Spacing[2],
-  },
-  record2024Subtitle: {
-    fontSize: Typography.sizes.lg,
-    fontWeight: Typography.weights.medium,
-    color: '#374151',
-    textAlign: 'center',
-    lineHeight: 28,
-    backgroundColor: 'rgba(55, 65, 81, 0.06)',
-    borderRadius: 12,
-    paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[3],
-  },
   record2024Grid: {
     flexDirection: 'row',
     gap: Spacing[4],
@@ -862,23 +826,177 @@ const styles = StyleSheet.create({
     marginTop: Spacing[1],
   },
 
-  // Section Dividers - LINEE TRA SEZIONI
+  // Scroll Content - PADDING BOTTOM PER NAVIGATION
+  scrollContent: {
+    paddingBottom: 120, // AGGIUNTO: spazio più ampio per evitare sovrapposizione bottom navigation
+  },
+
+  // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
   sectionDividerContainer: {
-    paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[6],
+    paddingTop: Spacing[8], // AUMENTATO: da Spacing[6] a Spacing[8] - maggiore respiro tra titoli sezioni e linee
+    paddingBottom: Spacing[4], // AUMENTATO: da Spacing[2] a Spacing[4] - spazio equilibrato sotto
   },
   sectionDivider: {
-    height: 2,
-    backgroundColor: Colors.neutral[300],
-    width: '60%',
-    borderRadius: 1,
-    opacity: 0.8,
-    alignSelf: 'center',
-    shadowColor: Colors.neutral[400],
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
+    height: 2, // STANDARD: spessore normale per separazioni
+    backgroundColor: Colors.neutral[200], // CORRETTO: stesso colore delle linee tra sezioni nella pagina Azioni
+    marginHorizontal: Spacing[10], // CORRETTO: 40px = 16px (container Azioni) + 24px (margine Azioni)
+  },
+
+  // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
+  numbersHeaderContainer: {
+    alignItems: 'center',
+    marginTop: Spacing[6], // AGGIUNTO: spazio generoso tra linea principale e titolo "I Nostri Numeri"
+    marginBottom: Spacing[10], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
+  },
+  numbersHeaderBackground: {
+    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    borderRadius: 20,
+    paddingVertical: Spacing[4],
+    paddingHorizontal: Spacing[6],
+    borderWidth: 1,
+    borderColor: 'rgba(55, 65, 81, 0.08)',
+    shadowColor: '#374151',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
     elevation: 2,
+  },
+  numbersTitle: {
+    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    fontWeight: Typography.weights.bold, // BOLD normale
+    color: '#374151', // GRIGIO ELEGANTE
+    textAlign: 'center',
+    letterSpacing: -0.4,
+    includeFontPadding: false,
+    textShadowColor: 'rgba(55, 65, 81, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  numbersSubtitle: {
+    fontSize: Typography.sizes.base,
+    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    textAlign: 'center',
+    marginTop: Spacing[3],
+    opacity: 0.9,
+    letterSpacing: 0.1,
+  },
+
+  // Community Section - RIVOLUZIONATO
+  communityHeaderContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing[6],
+  },
+  communityHeaderBackground: {
+    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    borderRadius: 20,
+    paddingVertical: Spacing[4],
+    paddingHorizontal: Spacing[6],
+    borderWidth: 1,
+    borderColor: 'rgba(55, 65, 81, 0.08)',
+    shadowColor: '#374151',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  communityTitle: {
+    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    fontWeight: Typography.weights.bold, // BOLD normale
+    color: '#374151', // GRIGIO ELEGANTE
+    textAlign: 'center',
+    letterSpacing: -0.4,
+    includeFontPadding: false,
+    textShadowColor: 'rgba(55, 65, 81, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  communitySubtitle: {
+    fontSize: Typography.sizes.base,
+    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    textAlign: 'center',
+    marginTop: Spacing[3],
+    opacity: 0.9,
+    letterSpacing: 0.1,
+  },
+
+  // Map Section - GEOGRAFICO
+  mapHeaderContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing[6],
+  },
+
+  mapHeaderBackground: {
+    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    borderRadius: 20,
+    paddingVertical: Spacing[4],
+    paddingHorizontal: Spacing[6],
+    borderWidth: 1,
+    borderColor: 'rgba(55, 65, 81, 0.08)',
+    shadowColor: '#374151',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  mapTitle: {
+    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    fontWeight: Typography.weights.bold, // BOLD normale
+    color: '#374151', // GRIGIO ELEGANTE
+    textAlign: 'center',
+    letterSpacing: -0.4,
+    includeFontPadding: false,
+    textShadowColor: 'rgba(55, 65, 81, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  mapSubtitle: {
+    fontSize: Typography.sizes.base,
+    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    textAlign: 'center',
+    marginTop: Spacing[3],
+    opacity: 0.9,
+    letterSpacing: 0.1,
+  },
+
+  // Results 2024 Section - DRAMATICALLY ENHANCED
+  results2024HeaderContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing[6],
+  },
+
+  results2024HeaderBackground: {
+    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    borderRadius: 20,
+    paddingVertical: Spacing[4],
+    paddingHorizontal: Spacing[6],
+    borderWidth: 1,
+    borderColor: 'rgba(55, 65, 81, 0.08)',
+    shadowColor: '#374151',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  results2024Title: {
+    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    fontWeight: Typography.weights.bold, // BOLD normale
+    color: '#374151', // GRIGIO ELEGANTE
+    textAlign: 'center',
+    letterSpacing: -0.4,
+    includeFontPadding: false,
+    textShadowColor: 'rgba(55, 65, 81, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+
+  results2024Subtitle: {
+    fontSize: Typography.sizes.base,
+    fontWeight: Typography.weights.medium,
+    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    textAlign: 'center',
+    marginTop: Spacing[3],
+    opacity: 0.9,
+    letterSpacing: 0.1,
   },
 });
 

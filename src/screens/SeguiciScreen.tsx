@@ -314,7 +314,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
       </PlatformTouchable>
 
-      <PlatformScrollView>
+      <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         {/* HEADER SECTION - Pattern da Chi Siamo */}
         <Animated.View
           style={[
@@ -373,6 +373,13 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 6,
     zIndex: 20,
+  },
+
+  // Scroll Content - PADDING PER FRECCIA
+  scrollContent: {
+    paddingTop: Spacing[16], // AGGIUNTO: spazio sufficiente per evitare sovrapposizione freccia
+    paddingHorizontal: Spacing[4], // AGGIUNTO: margini laterali per non schiacciare contro i bordi
+    paddingBottom: Spacing[8], // AGGIUNTO: spazio bottom per navigazione
   },
 
   // Header Section - Pattern da Chi Siamo IDENTICO
@@ -435,6 +442,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing[6], // AGGIUNTO: spazio tra linea e bottoni
     marginBottom: Spacing[1], // IDENTICO CHI SIAMO: contactSectionStyles.categoryContainer
     gap: Spacing[4], // IDENTICO CHI SIAMO: contactsGrid spacing bilanciato
+    paddingHorizontal: 0, // RIMOSSO: margini laterali per usare quelli del scrollContent
   },
 
   socialCardWrapper: {

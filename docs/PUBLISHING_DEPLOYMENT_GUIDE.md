@@ -22,7 +22,7 @@ utilizzando **Expo EAS Build**.
 ### **📱 RISULTATO FINALE**
 
 - **Android**: File `.aab` (Android App Bundle) per Google Play Store
-- **iOS**: File `.ipa` (iOS App Archive) per Apple App Store  
+- **iOS**: File `.ipa` (iOS App Archive) per Apple App Store
 - **Deployment automatizzato** con pipeline CI/CD
 - **App live** su entrambi gli store
 
@@ -126,9 +126,7 @@ Assicurati che la configurazione dell'app sia production-ready:
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "org.riseagainsthunger.italia",
       "versionCode": 1,
@@ -163,9 +161,7 @@ Assicurati che la configurazione dell'app sia production-ready:
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-secure-store"
-    ],
+    "plugins": ["expo-secure-store"],
     "extra": {
       "eas": {
         "projectId": "your-eas-project-id"
@@ -239,7 +235,7 @@ Rise Against Hunger Italia è l'app ufficiale dell'organizzazione no-profit che 
 
 🌟 CARATTERISTICHE PRINCIPALI:
 • Donazioni sicure e trasparenti
-• Tracking dell'impatto delle tue contribuzioni  
+• Tracking dell'impatto delle tue contribuzioni
 • Mappa interattiva dei progetti globali
 • Opportunità di volontariato locale
 • Statistiche in tempo reale sui progressi
@@ -335,7 +331,7 @@ npm run conta-problemi
 
 # Risultato atteso:
 # ✅ 0 errori TypeScript
-# ✅ 0 problemi ESLint  
+# ✅ 0 problemi ESLint
 # ✅ 0 errori Prettier
 # ✅ 214 test passanti
 # ✅ 0 problemi totali
@@ -362,7 +358,7 @@ npx expo start --tunnel
 # Test build Android (APK)
 npx eas build --platform android --profile preview
 
-# Test build iOS (Simulator)  
+# Test build iOS (Simulator)
 npx eas build --platform ios --profile preview
 ```
 
@@ -373,7 +369,7 @@ npx eas build --platform ios --profile preview
 npx eas build --platform android --profile production
 
 # Build iOS per App Store (IPA)
-npx eas build --platform ios --profile production  
+npx eas build --platform ios --profile production
 
 # Build entrambe le piattaforme
 npx eas build --platform all --profile production
@@ -466,7 +462,7 @@ npx eas submit --platform android --latest
 npx eas submit --platform ios --latest
 
 # Alternative: Transporter app
-# Download .ipa da EAS dashboard  
+# Download .ipa da EAS dashboard
 # Upload con Apple Transporter
 ```
 
@@ -493,7 +489,7 @@ Phone: +39 [numero]
 URL: https://riseagainsthunger.org
 
 Notes for Review:
-Questa app è per un'organizzazione no-profit che combatte la fame nel mondo. 
+Questa app è per un'organizzazione no-profit che combatte la fame nel mondo.
 L'app permette donazioni sicure e visualizzazione dell'impatto dei progetti.
 Non sono richiesti account speciali per il testing.
 
@@ -653,7 +649,7 @@ npx expo install --fix
 ```bash
 # Verifica accounts
 - Crea Google Play Console account
-- Registra Apple Developer Program  
+- Registra Apple Developer Program
 - Setup Expo account (gratuito)
 
 # Prepara assets

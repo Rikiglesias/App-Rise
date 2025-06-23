@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
   },
   // --- Label ---
   labelText: {
-    fontSize: Typography.sizes.xs,
+    fontSize: Typography.sizes.sm, // INGRANDITO: da xs a sm per maggiore leggibilità
     fontWeight: Typography.weights.semibold,
     marginTop: Spacing[1],
     textAlign: 'center',

@@ -38,6 +38,7 @@ interface ButtonStyles {
   categorySubtitle: object;
   donateSubtitle: object;
   exploreSubtitle: object;
+  sectionSubtitle: object;
   buttonsGrid: object;
   buttonRow: object;
   buttonContainer: object;
@@ -49,12 +50,18 @@ interface ButtonStyles {
   infoButton: object;
   categoryDivider: object;
   sectionDivider: object;
+  firstSectionDivider: object;
   sectionDividerLine: object;
   sectionDividerIcon: object;
   sectionDividerText: object;
   centeredRow: object;
   singleButtonContainer: object;
   chevronPosition: object;
+  exploreTitle: object;
+  communityTitle: object;
+  exploreHeaderBackground: object;
+  communityHeaderBackground: object;
+  communitySubtitle: object;
 }
 
 interface NewActionButtonsSectionProps {
@@ -191,6 +198,11 @@ const SectionDivider: React.FC<{ styles: ButtonStyles }> = ({ styles }) => (
   <View style={styles.sectionDivider} />
 );
 
+// Componente prima linea più grossa
+const FirstSectionDivider: React.FC<{ styles: ButtonStyles }> = ({
+  styles,
+}) => <View style={styles.firstSectionDivider} />;
+
 // Componente separato per il contenuto dei bottoni
 const ActionButtonsContent: React.FC<{
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -259,7 +271,7 @@ const ActionButtonsContent: React.FC<{
           color: '#B91C1C',
           textAlign: 'center',
           letterSpacing: 0.2,
-          marginTop: Spacing[1],
+          marginTop: Spacing[1], // MANTENUTO: spazio dal titolo anche senza container
           opacity: 0.8,
         },
 
@@ -271,6 +283,32 @@ const ActionButtonsContent: React.FC<{
           textAlign: 'center',
           letterSpacing: -0.4,
           includeFontPadding: false,
+        },
+
+        // TITOLO ESPLORA DISTINTIVO
+        exploreTitle: {
+          fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+          fontWeight: Typography.weights.bold, // BOLD normale
+          color: '#374151', // GRIGIO SCURO ELEGANTE per Esplora
+          textAlign: 'center',
+          letterSpacing: -0.4,
+          includeFontPadding: false,
+          textShadowColor: 'rgba(55, 65, 81, 0.15)',
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 4,
+        },
+
+        // TITOLO COMMUNITY DISTINTIVO
+        communityTitle: {
+          fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+          fontWeight: Typography.weights.bold, // BOLD normale
+          color: '#1F2937', // NERO per Community
+          textAlign: 'center',
+          letterSpacing: -0.4,
+          includeFontPadding: false,
+          textShadowColor: 'rgba(31, 41, 55, 0.15)',
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 4,
         },
 
         categorySubtitle: {
@@ -292,19 +330,13 @@ const ActionButtonsContent: React.FC<{
         },
 
         exploreSubtitle: {
-          color: '#374151',
-          backgroundColor: 'rgba(55, 65, 81, 0.06)',
-          paddingVertical: Spacing[3], // AUMENTATO per coerenza
-          paddingHorizontal: Spacing[5], // AUMENTATO per coerenza
-          borderRadius: 14, // AUMENTATO per coerenza
-          borderWidth: 1,
-          borderColor: 'rgba(55, 65, 81, 0.12)',
-          // Ombra sottile per elevazione
-          shadowColor: '#374151',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08,
-          shadowRadius: 4,
-          elevation: 2,
+          fontSize: Typography.sizes.base, // DIMENSIONE NORMALE
+          fontWeight: Typography.weights.medium,
+          color: '#4B5563', // GRIGIO MEDIO per leggibilità
+          textAlign: 'center',
+          marginTop: Spacing[3],
+          opacity: 0.9,
+          letterSpacing: 0.1,
         },
 
         infoButton: {
@@ -328,9 +360,9 @@ const ActionButtonsContent: React.FC<{
           borderColor: 'rgba(220, 38, 38, 0.8)',
         },
         categoryDivider: {
-          height: 1,
+          height: 3, // PIÙ GROSSA: prima linea sotto il titolo più prominente
           backgroundColor: Colors.neutral[200],
-          marginHorizontal: Spacing[8],
+          marginHorizontal: Spacing[4], // ALLUNGATA: margine più piccolo = linea più lunga
           marginBottom: Spacing[6],
         },
         buttonsGrid: {
@@ -383,13 +415,13 @@ const ActionButtonsContent: React.FC<{
         // CONTAINER ELEGANTE PER ALTRE SEZIONI
         exploreHeaderContainer: {
           alignItems: 'center',
-          backgroundColor: 'rgba(31, 41, 55, 0.03)',
+          backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
           paddingVertical: Spacing[3],
           paddingHorizontal: Spacing[5],
           borderRadius: 16,
           borderWidth: 1,
-          borderColor: 'rgba(31, 41, 55, 0.08)',
-          shadowColor: '#1F2937',
+          borderColor: 'rgba(55, 65, 81, 0.08)',
+          shadowColor: '#374151',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.06,
           shadowRadius: 6,
@@ -406,12 +438,44 @@ const ActionButtonsContent: React.FC<{
           opacity: 0.8,
         },
 
+        // CONTAINER STANDARD PER DESCRIZIONI - PATTERN DOVE OPERIAMO
+        sectionSubtitle: {
+          fontSize: Typography.sizes.base,
+          color: '#374151',
+          textAlign: 'center',
+          marginTop: Spacing[4], // AGGIUNTO: spazio tra titolo e descrizione
+          marginBottom: Spacing[4],
+          backgroundColor: 'rgba(55, 65, 81, 0.06)',
+          borderRadius: 12,
+          paddingHorizontal: Spacing[3],
+          paddingVertical: Spacing[2],
+        },
+
+        // SUBTITLE POTENZIATO COMMUNITY
+        communitySubtitle: {
+          fontSize: Typography.sizes.base, // DIMENSIONE NORMALE
+          fontWeight: Typography.weights.medium,
+          color: '#374151', // GRIGIO SCURO per leggibilità
+          textAlign: 'center',
+          marginTop: Spacing[3],
+          opacity: 0.9,
+          letterSpacing: 0.1,
+        },
+
         // DIVISORE ULTRA COMPATTO TRA SEZIONI
         sectionDivider: {
-          height: 1,
-          backgroundColor: Colors.neutral[100],
+          height: 2, // SPESSORE STANDARD
+          backgroundColor: Colors.neutral[200], // SCURITO: da neutral[100] a [200] per maggiore visibilità
           marginVertical: Spacing[2], // RIDOTTO ulteriormente
-          marginHorizontal: Spacing[8],
+          marginHorizontal: Spacing[6], // LUNGHEZZA STANDARD
+        },
+
+        // LINEA TRA SEZIONI - IDENTICA A SECTIONDIVIDER
+        firstSectionDivider: {
+          height: 2, // STESSO SPESSORE di sectionDivider
+          backgroundColor: Colors.neutral[200],
+          marginVertical: Spacing[2],
+          marginHorizontal: Spacing[6], // STESSA LUNGHEZZA di sectionDivider
         },
         sectionDividerLine: {
           display: 'none', // Non usato nel design semplificato
@@ -435,6 +499,36 @@ const ActionButtonsContent: React.FC<{
           top: 8,
           right: 8,
         },
+
+        // CONTAINER BACKGROUND ESPLORA
+        exploreHeaderBackground: {
+          backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+          borderRadius: 20,
+          paddingVertical: Spacing[4],
+          paddingHorizontal: Spacing[6],
+          borderWidth: 1,
+          borderColor: 'rgba(55, 65, 81, 0.08)',
+          shadowColor: '#374151',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.05,
+          shadowRadius: 8,
+          elevation: 2,
+        },
+
+        // CONTAINER BACKGROUND COMMUNITY
+        communityHeaderBackground: {
+          backgroundColor: 'rgba(31, 41, 55, 0.03)', // NERO MOLTO SOTTILE
+          borderRadius: 20,
+          paddingVertical: Spacing[4],
+          paddingHorizontal: Spacing[6],
+          borderWidth: 1,
+          borderColor: 'rgba(31, 41, 55, 0.08)',
+          shadowColor: '#1F2937',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.05,
+          shadowRadius: 8,
+          elevation: 2,
+        },
       }),
     []
   );
@@ -450,7 +544,7 @@ const ActionButtonsContent: React.FC<{
         onInfoPress={onInfoPress}
       />
 
-      <SectionDivider styles={styles} />
+      <FirstSectionDivider styles={styles} />
 
       {/* CATEGORIA ESPLORA */}
       <ExploreButtonsSection
@@ -526,8 +620,8 @@ const DonateButtonsSection: React.FC<{
         <PlatformTouchable
           style={styles.donateTitleContainer}
           onPress={onInfoPress}
-          activeOpacity={0.7}
-          rippleColor="rgba(220, 38, 38, 0.2)"
+          activeOpacity={0.8}
+          rippleColor="rgba(220, 38, 38, 0.1)"
         >
           <Text style={styles.donateCategoryTitle}>❤️ Contribuisci</Text>
           <Text style={styles.donateInlineSubtitle}>
@@ -624,7 +718,7 @@ const ExploreButtonsSection: React.FC<{
   );
 
   return (
-    <View style={styles.categoryContainer}>
+    <View style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
       <Animated.View
         style={[
           styles.categoryHeader,
@@ -644,9 +738,9 @@ const ExploreButtonsSection: React.FC<{
           },
         ]}
       >
-        <View>
-          <Text style={styles.categoryTitle}>🔍 Esplora</Text>
-          <Text style={styles.exploreSubtitleInline}>
+        <View style={styles.exploreHeaderBackground}>
+          <Text style={styles.exploreTitle}>🔍 Esplora</Text>
+          <Text style={styles.exploreSubtitle}>
             Progetti e iniziative umanitarie
           </Text>
         </View>
@@ -715,7 +809,7 @@ const CommunityButtonsSection: React.FC<{
   );
 
   return (
-    <View style={styles.categoryContainer}>
+    <View style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
       <Animated.View
         style={[
           styles.categoryHeader,
@@ -735,9 +829,9 @@ const CommunityButtonsSection: React.FC<{
           },
         ]}
       >
-        <View>
-          <Text style={styles.categoryTitle}>🤝 Community</Text>
-          <Text style={styles.exploreSubtitleInline}>
+        <View style={styles.communityHeaderBackground}>
+          <Text style={styles.communityTitle}>🤝 Community</Text>
+          <Text style={styles.communitySubtitle}>
             Unisciti alla nostra comunità
           </Text>
         </View>

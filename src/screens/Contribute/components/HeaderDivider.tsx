@@ -19,9 +19,9 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
           alignItems: 'center',
         },
         mainDivider: {
-          height: 2, // ELEGANTE: altezza bilanciata
+          height: 3, // PIÙ GROSSA: prima linea più prominente
           backgroundColor: Colors.neutral[300], // PIÙ SOFT per eleganza
-          width: '60%', // BILANCIATO per proporzioni migliori
+          width: '80%', // PIÙ LUNGA: più estesa per maggiore presenza
           borderRadius: 1,
           opacity: 0.8, // SOTTILE trasparenza per delicatezza
           // OMBRA ELEGANTE per profondità sottile

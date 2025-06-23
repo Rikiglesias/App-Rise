@@ -55,19 +55,13 @@ export default {
               NSPinnedDomains: {
                 'api.riseagainsthunger.org': {
                   NSIncludesSubdomains: true,
-                  NSPinnedCAIdentities: [
-                    'Let\'s Encrypt R3',
-                    'ISRG Root X1'
-                  ]
+                  NSPinnedCAIdentities: ["Let's Encrypt R3", 'ISRG Root X1'],
                 },
                 'cdn.riseagainsthunger.org': {
                   NSIncludesSubdomains: true,
-                  NSPinnedCAIdentities: [
-                    'Let\'s Encrypt R3',
-                    'ISRG Root X1'
-                  ]
-                }
-              }
+                  NSPinnedCAIdentities: ["Let's Encrypt R3", 'ISRG Root X1'],
+                },
+              },
             },
           },
         },
