@@ -5,7 +5,7 @@ on:
     branches: [master, main]
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
   issues: write
 
@@ -69,8 +69,14 @@ jobs:
       - name: 🍎 Build iOS
         run: |
           echo "Building iOS for production..."
-          eas build --platform ios --profile production-store --non-interactive --no-wait
-          echo "✅ iOS build submitted to EAS"
+          eas build --platform ios --profile production-store --non-interactive
+          echo "✅ iOS build completed"
+
+      - name: 📤 Submit to App Store Connect
+        run: |
+          echo "Submitting to App Store Connect..."
+          eas submit --platform ios --latest --non-interactive
+          echo "✅ Submitted to App Store Connect"
 
       - name: 💬 Comment on commit
         uses: actions/github-script@v7
@@ -80,5 +86,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               commit_sha: context.sha,
-              body: '🍎 **iOS Build Started!**\n\n✅ Build submitted to EAS\n🔗 Check progress: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia/builds'
+              body: '🍎 **iOS Build & Submit Completed!**\n\n✅ Build completed on EAS\n✅ Submitted to App Store Connect\n📱 Check TestFlight: Available within 10-30 minutes\n🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia'
             }) 
