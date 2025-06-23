@@ -22,6 +22,11 @@
 - **[QUALITY_SYSTEM.md](./QUALITY_SYSTEM.md)** - Sistema qualità zero-tolleranza
 - **[quality-workflow.md](./quality-workflow.md)** - Workflow controllo qualità automatico
 
+### **🔒 Sicurezza**
+
+- **[SECURITY_AGAINST_HACKERS.md](./SECURITY_AGAINST_HACKERS.md)** - 🛡️ **Protezione Anti-Hacker** -
+  Analisi sicurezza, difese implementate, scenari attacco
+
 ### **📋 Processi di Sviluppo**
 
 - **[PROCESSI_SVILUPPO.md](./PROCESSI_SVILUPPO.md)** - Metodologie e best practices
@@ -37,6 +42,10 @@
 - **[PUBLISHING_CHECKLIST.md](./PUBLISHING_CHECKLIST.md)** - Checklist completa per App Store/Play Store
 - **[LEGAL_COMPLIANCE_CHECKLIST.md](./LEGAL_COMPLIANCE_CHECKLIST.md)** - 🚨 **COMPLIANCE LEGALE** -
   Privacy Policy, GDPR, Terms
+- **[LEGAL_COMPLIANCE_SIMPLIFIED.md](./LEGAL_COMPLIANCE_SIMPLIFIED.md)** - 🎉 **SITUAZIONE SEMPLIFICATA** -
+  Analisi per app senza registrazioni/pagamenti
+- **[PRIVACY_POLICY_SIMPLIFIED.md](./PRIVACY_POLICY_SIMPLIFIED.md)** - 📄 **Privacy Policy LIGHT** -
+  Versione user-friendly per dati minimi
 
 ---
 
