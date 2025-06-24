@@ -59,6 +59,17 @@
         "serviceAccountKeyPath": "./google-service-account.json",
         "track": "production"
       }
+    },
+    "production-store": {
+      "ios": {
+        "appleId": "salbieri@riseagainsthunger.it",
+        "ascAppId": "6447248221",
+        "appleTeamId": "7U2FBGZ8S6"
+      },
+      "android": {
+        "serviceAccountKeyPath": "./google-service-account.json",
+        "track": "production"
+      }
     }
   }
 }
