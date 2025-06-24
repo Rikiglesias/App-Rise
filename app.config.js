@@ -32,8 +32,8 @@ export default {
     // Configurazioni sicurezza iOS
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'org.riseagainsthunger.italia',
-      buildNumber: '4',
+      bundleIdentifier: 'it.creareunapp.editor.ios63da226b4447c',
+      buildNumber: '5',
       icon: './assets/icons/app/ios-icon-1024.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
@@ -75,7 +75,7 @@ export default {
         foregroundImage: './assets/icons/app/logo.png',
         backgroundColor: '#FFFFFF',
       },
-      package: 'org.riseagainsthunger.italia',
+      package: 'it.creareunapp.editor.ios63da226b4447c',
       versionCode: 3,
       permissions: ['CAMERA', 'ACCESS_FINE_LOCATION'],
     },
