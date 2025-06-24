@@ -2,7 +2,7 @@ export default {
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
-    version: '1.2.2',
+    version: '1.2.1',
     orientation: 'portrait',
     icon: './assets/icons/app/logo.png',
     userInterfaceStyle: 'light',
@@ -33,7 +33,7 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'org.riseagainsthunger.italia',
-      buildNumber: '3',
+      buildNumber: '4',
       icon: './assets/icons/app/ios-icon-1024.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
