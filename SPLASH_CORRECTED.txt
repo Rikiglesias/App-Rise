@@ -1,0 +1,21 @@
+🔧 CORREZIONE SPLASH SCREEN - Rise Against Hunger Italia
+
+❌ MIA INTERPRETAZIONE SBAGLIATA:
+- logo.png (5KB) = pensavo fosse 'scritta'
+- ios-icon-1024.png (182KB) = pensavo fosse 'spiga'
+
+✅ REALTÀ CORRETTA:
+- logo.png (5KB) = LA SPIGA 🌾
+- ios-icon-1024.png (182KB) = LA SCRITTA ✍️
+
+🎯 CONFIGURAZIONE CORRETTA:
+- Splash screen: ios-icon-1024.png (SCRITTA)
+- iOS icons: ios-icon-1024.png (SCRITTA)  
+- Android: logo.png (SPIGA)
+- Fallback: logo.png (SPIGA)
+
+📱 NUOVA ESPERIENZA:
+1. 🚀 Splash → SCRITTA (ios-icon-1024.png)
+2. 📱 iOS home → SCRITTA (ios-icon-1024.png) 
+3. 🤖 Android → SPIGA (logo.png)
+4. 🔍 iOS search → SCRITTA (consistente!)

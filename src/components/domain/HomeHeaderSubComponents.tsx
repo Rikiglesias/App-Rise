@@ -65,21 +65,27 @@ const modernTitleStyles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-  // Logo separatore tondo senza container
+  // Logo simbolico MOLTO PROMINENTE per il separatore
   separatorLogo: {
-    width: 60, // INGRANDITO: da 45 a 60
-    height: 60, // INGRANDITO: da 45 a 60
-    borderRadius: 30, // AGGIORNATO: perfettamente tondo per 60px
-    opacity: 1,
-    backgroundColor: 'transparent',
+    width: 56, // ANCORA PIÙ GRANDE: da 48 a 56 per massima visibilità
+    height: 56, // ANCORA PIÙ GRANDE: da 48 a 56 per massima visibilità
+    marginHorizontal: Spacing[4], // SPAZIO MANTENUTO per equilibrio perfetto
+    opacity: 1, // COMPLETAMENTE VISIBILE
+    // tintColor: '#DC2626', // RIMOSSO: usiamo colori originali del logo
   },
 
-  // Linee decorative ai lati
+  // Linee decorative BILANCIATE con logo 56px
   separatorLine: {
-    height: 1,
-    width: 40,
-    backgroundColor: 'rgba(220, 38, 38, 0.3)',
-    marginHorizontal: Spacing[3],
+    height: 2, // EQUILIBRATA per non competere col logo
+    width: 110, // AUMENTATA: da 100 a 110 per bilanciare logo 56px
+    backgroundColor: 'rgba(220, 38, 38, 0.6)', // COORDINATA al logo rosso
+    marginHorizontal: 0, // NESSUN MARGINE - gestito dal logo
+    borderRadius: 1, // SOTTILE ed elegante
+    shadowColor: '#DC2626', // OMBRA COORDINATA
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 
@@ -132,11 +138,11 @@ const ModernSmartTitle: React.FC<{
             </Text>
           </View>
 
-          {/* Separatore elegante con logo centrale */}
+          {/* Separatore elegante con logo simbolico centrale */}
           <View style={modernTitleStyles.titleSeparator}>
             <View style={modernTitleStyles.separatorLine} />
             <Image
-              source={require('../../../assets/images/logo.png')}
+              source={require('../../../assets/icons/app/logo.png')}
               style={modernTitleStyles.separatorLogo}
               resizeMode="contain"
             />

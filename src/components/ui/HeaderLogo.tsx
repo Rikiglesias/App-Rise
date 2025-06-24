@@ -10,7 +10,7 @@ const HeaderLogo = () => {
     <View style={[styles.container, { backgroundColor: colors.glass.medium }]}>
       <Image
         // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
-        source={require('../../../assets/images/logo.png') as number}
+        source={require('../../../assets/icons/app/logo.png') as number}
         style={styles.logo}
         resizeMode="contain"
       />

@@ -27,11 +27,11 @@ const SocialIcon: React.FC<SocialIconProps> = ({
     try {
       switch (platform) {
         case 'instagram':
-          return require('../../../assets/images/icons/instagram.png') as number;
+          return require('../../../assets/icons/social/instagram.png') as number;
         case 'facebook':
-          return require('../../../assets/images/icons/facebook.png') as number;
+          return require('../../../assets/icons/social/facebook.png') as number;
         case 'linkedin':
-          return require('../../../assets/images/icons/linkedin.png') as number;
+          return require('../../../assets/icons/social/linkedin.png') as number;
         case 'website':
           return null;
         default:

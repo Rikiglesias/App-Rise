@@ -1,0 +1,16 @@
+🎯 SOLUZIONE PROBLEMA ICONE iOS
+
+🚨 PROBLEMA TROVATO:
+- File ios-icon-1024.png NON ESISTE
+- iOS usa icone diverse: logo.png (con nome) vs adaptive-icon.png (spiga)
+
+✅ CORREZIONE IMMEDIATA:
+1. app.config.js → usa adaptive-icon.png per iOS (temporaneo)
+2. Risultato: STESSA icona (spiga) in ricerca E home screen
+
+🚀 STEP DEFINITIVO:
+1. Copia adaptive-icon.png → ios-icon-1024.png
+2. app.config.js → riporta ios-icon-1024.png  
+3. Build iOS → icona consistente ovunque!
+
+📱 RISULTATO: Solo 'la spiga' in tutti i contesti iOS ✅

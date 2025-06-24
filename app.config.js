@@ -1,19 +1,19 @@
 export default {
   expo: {
-    name: 'Rise Against Hunger Italia',
+    name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
-    version: '1.2.0',
+    version: '1.2.2',
     orientation: 'portrait',
-    icon: './assets/images/logo.png',
+    icon: './assets/icons/app/logo.png',
     userInterfaceStyle: 'light',
     newArchEnabled: true,
-    primaryColor: '#FF6B35',
+    primaryColor: '#DC2626',
 
     // Configurazioni splash screen
     splash: {
-      image: './assets/splash-icon.png',
+      image: './assets/icons/app/ios-icon-1024.png',
       resizeMode: 'contain',
-      backgroundColor: '#FF6B35',
+      backgroundColor: '#FFFFFF',
     },
 
     // Configurazioni sicurezza e ambiente
@@ -33,7 +33,8 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'org.riseagainsthunger.italia',
-      buildNumber: '1',
+      buildNumber: '3',
+      icon: './assets/icons/app/ios-icon-1024.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSCameraUsageDescription:
@@ -71,22 +72,22 @@ export default {
     // Configurazioni sicurezza Android
     android: {
       adaptiveIcon: {
-        foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#FF6B35',
+        foregroundImage: './assets/icons/app/logo.png',
+        backgroundColor: '#FFFFFF',
       },
       package: 'org.riseagainsthunger.italia',
-      versionCode: 1,
+      versionCode: 3,
       permissions: ['CAMERA', 'ACCESS_FINE_LOCATION'],
     },
 
     // Configurazioni aggiuntive
     assetBundlePatterns: ['**/*'],
     web: {
-      favicon: './assets/favicon.png',
+      favicon: './assets/icons/app/favicon.png',
     },
 
-    // Plugin richiesti per iOS
-    plugins: ['expo-secure-store'],
+    // Plugin richiesti
+    plugins: ['expo-secure-store', 'expo-updates'],
 
     // Aggiornamenti OTA
     updates: {

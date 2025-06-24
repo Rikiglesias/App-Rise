@@ -6,7 +6,7 @@ import { Colors } from '../../shared/constants/designTokens';
 
 // Immagine logo importata correttamente
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const logoImage = require('../../../assets/images/logo.png') as number;
+const logoImage = require('../../../assets/icons/app/logo.png') as number;
 
 interface LogoProps {
   readonly size?: number;
@@ -20,7 +20,7 @@ const Logo: React.FC<LogoProps> = ({
   showBackground = true,
 }) => {
   // Asset immagine - deve essere require per React Native
-  // import logoImage from '../../assets/images/logo.png'; // Asset corretto
+  // import logoImage from '../../assets/icons/app/logo.png'; // Asset corretto
 
   const containerStyle: ViewStyle = {
     ...styles.logoContainer,
