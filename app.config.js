@@ -32,7 +32,7 @@ export default {
     // Configurazioni sicurezza iOS
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'it.creareunapp.editor.ios63da226b4447c',
+      bundleIdentifier: 'org.riseagainsthunger.italia',
       buildNumber: '1',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
@@ -77,16 +77,6 @@ export default {
       package: 'org.riseagainsthunger.italia',
       versionCode: 1,
       permissions: ['CAMERA', 'ACCESS_FINE_LOCATION'],
-      usesCleartextTraffic: false,
-      networkSecurityConfig: './android-network-security-config.xml',
-      edgeToEdgeEnabled: true,
-      statusBarStyle: 'dark',
-      statusBarTranslucent: true,
-      statusBarBackgroundColor: '#00000000',
-      systemNavigationBarBackgroundColor: '#00000000',
-      systemNavigationBarStyle: 'light',
-      // Abilita overscroll effect
-      androidRenderingAPI: 'auto',
     },
 
     // Configurazioni aggiuntive
