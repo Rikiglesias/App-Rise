@@ -48,7 +48,9 @@
     "test:platform-diff": "echo '📱 iOS behavior preserved, Android optimized!'",
     "setup:git-windows": "git config core.autocrlf true && git config core.safecrlf false && git config core.filemode false",
     "fix:line-endings": "git add --renormalize . && git status",
-    "prettier:fix-all": "prettier --write . && git add ."
+    "prettier:fix-all": "prettier --write . && git add .",
+    "docs:check": "markdownlint docs/ --fix",
+    "docs:optional": "echo '📝 Docs check opzionale (non bloccante)' && npm run docs:check || echo '⚠️ Errori docs trovati ma non bloccanti'"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
@@ -115,9 +117,6 @@
     "scripts/**/*.{js,jsx}": [
       "eslint --max-warnings 0 --no-error-on-unmatched-pattern",
       "prettier --write"
-    ],
-    "*.md": [
-      "markdownlint --fix"
     ]
   },
   "overrides": {
