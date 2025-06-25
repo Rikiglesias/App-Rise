@@ -45,7 +45,10 @@
     "migrate:platform": "node scripts/migrate-to-platform-components.js",
     "fix:migration": "node scripts/fix-migration-errors.js",
     "test:android": "npm run android && echo '🤖 Testing Android optimizations...'",
-    "test:platform-diff": "echo '📱 iOS behavior preserved, Android optimized!'"
+    "test:platform-diff": "echo '📱 iOS behavior preserved, Android optimized!'",
+    "setup:git-windows": "git config core.autocrlf true && git config core.safecrlf false && git config core.filemode false",
+    "fix:line-endings": "git add --renormalize . && git status",
+    "prettier:fix-all": "prettier --write . && git add ."
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
@@ -106,15 +109,17 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [
-      "eslint --max-warnings 0",
-      "prettier --check"
+      "eslint --max-warnings 0 --no-error-on-unmatched-pattern",
+      "prettier --write",
+      "git add"
     ],
     "scripts/**/*.{js,jsx}": [
-      "eslint --max-warnings 0",
-      "prettier --check"
+      "eslint --max-warnings 0 --no-error-on-unmatched-pattern",
+      "prettier --write",
+      "git add"
     ],
     "*.md": [
-      "markdownlint"
+      "markdownlint --fix"
     ]
   },
   "overrides": {
