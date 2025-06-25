@@ -25,7 +25,7 @@ describe('useImpactStore', () => {
           sublabel: 'Target 25K kit',
         },
       },
-      heroStories: [],
+
       isLoading: false,
       error: null,
     });
@@ -39,7 +39,7 @@ describe('useImpactStore', () => {
       expect(state.stats.meals).toBeDefined();
       expect(state.stats.volunteers).toBeDefined();
       expect(state.stats.kits).toBeDefined();
-      expect(state.heroStories).toBeDefined();
+
       expect(state.isLoading).toBe(false);
       expect(state.error).toBe(null);
     });
@@ -107,34 +107,6 @@ describe('useImpactStore', () => {
     });
   });
 
-  describe('setHeroStories', () => {
-    it('should update hero stories', () => {
-      const stories = [
-        {
-          id: '1',
-          title: 'Test Story',
-          location: 'Test Location',
-          impact: 'Test Impact',
-          image: 123,
-          accessibilityLabel: 'Test Label',
-          color: '#FF0000',
-        },
-      ];
-
-      useImpactStore.getState().setHeroStories(stories);
-      const state = useImpactStore.getState();
-
-      expect(state.heroStories).toEqual(stories);
-    });
-
-    it('should handle empty stories array', () => {
-      useImpactStore.getState().setHeroStories([]);
-      const state = useImpactStore.getState();
-
-      expect(state.heroStories).toEqual([]);
-    });
-  });
-
   describe('Loading State', () => {
     it('should set loading state', () => {
       useImpactStore.getState().setLoading(true);
@@ -186,7 +158,7 @@ describe('useImpactStore', () => {
       const state = useImpactStore.getState();
 
       expect(typeof state.setStats).toBe('function');
-      expect(typeof state.setHeroStories).toBe('function');
+
       expect(typeof state.updateStat).toBe('function');
       expect(typeof state.setLoading).toBe('function');
       expect(typeof state.setError).toBe('function');

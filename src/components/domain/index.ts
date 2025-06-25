@@ -10,7 +10,6 @@ export {
   CardOverlays,
 } from './HomeActionsSubComponents';
 export { default as HomeHeaderSection } from './HomeHeaderSection';
-export { default as HomeHeroStoriesSection } from './HomeHeroStoriesSection';
 
 export { default as HomeInfoSection } from './HomeInfoSection';
 

@@ -2,7 +2,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
 
 import {
@@ -224,29 +224,31 @@ const ActionButtonsContent: React.FC<{
       StyleSheet.create({
         container: {
           paddingHorizontal: Spacing[4],
-          gap: Spacing[4], // AVVICINATO: sezioni più unite
-          paddingTop: Spacing[0],
-          paddingBottom: Spacing[2],
+          gap: Spacing[2], // RIDOTTO: sezioni più unite, compensa l'aumento marginBottom categoryContainer
+          paddingTop: Spacing[2], // AUMENTATO: più spazio sopra per respirazione
+          paddingBottom: Spacing[4], // AUMENTATO: più spazio sotto per equilibrio
         },
         categoryContainer: {
-          marginBottom: Spacing[2], // RIDOTTO: sezioni più compatte
+          marginBottom: Spacing[6], // AUMENTATO: da Spacing[3] a Spacing[6] per maggiore separazione tra sezioni
         },
         categoryHeader: {
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: Spacing[10], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni
+          marginBottom: Spacing[12], // ULTERIORMENTE AUMENTATO: da Spacing[8] a Spacing[12] per respirazione ottimale
           position: 'relative',
         },
 
-        // CONTAINER ELEGANTE PER TITOLO DONA
+        // CONTAINER ELEGANTE PER TITOLO DONA - COLORI SOLIDI PER ANDROID
         donateTitleContainer: {
           alignItems: 'center',
-          backgroundColor: 'rgba(220, 38, 38, 0.03)',
+          backgroundColor:
+            Platform.OS === 'android' ? '#FEF2F2' : 'rgba(220, 38, 38, 0.03)', // ANDROID: rosso solido molto chiaro
           paddingVertical: Spacing[3],
           paddingHorizontal: Spacing[5],
           borderRadius: 16,
           borderWidth: 1,
-          borderColor: 'rgba(220, 38, 38, 0.12)',
+          borderColor:
+            Platform.OS === 'android' ? '#FECACA' : 'rgba(220, 38, 38, 0.12)', // ANDROID: rosso solido leggero
           shadowColor: '#DC2626',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.08,
@@ -412,7 +414,7 @@ const ActionButtonsContent: React.FC<{
           textShadowRadius: 3,
         },
 
-        // CONTAINER ELEGANTE PER ALTRE SEZIONI
+        // CONTAINER ELEGANTE PER ALTRE SEZIONI - STESSI COLORI IPHONE
         exploreHeaderContainer: {
           alignItems: 'center',
           backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
@@ -500,14 +502,16 @@ const ActionButtonsContent: React.FC<{
           right: 8,
         },
 
-        // CONTAINER BACKGROUND ESPLORA
+        // CONTAINER BACKGROUND ESPLORA - COLORI SOLIDI PER ANDROID
         exploreHeaderBackground: {
-          backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+          backgroundColor:
+            Platform.OS === 'android' ? '#F8F9FA' : 'rgba(55, 65, 81, 0.03)', // ANDROID: grigio solido molto chiaro
           borderRadius: 20,
           paddingVertical: Spacing[4],
           paddingHorizontal: Spacing[6],
           borderWidth: 1,
-          borderColor: 'rgba(55, 65, 81, 0.08)',
+          borderColor:
+            Platform.OS === 'android' ? '#E9ECEF' : 'rgba(55, 65, 81, 0.08)', // ANDROID: grigio solido leggero
           shadowColor: '#374151',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
@@ -515,14 +519,16 @@ const ActionButtonsContent: React.FC<{
           elevation: 2,
         },
 
-        // CONTAINER BACKGROUND COMMUNITY
+        // CONTAINER BACKGROUND COMMUNITY - COLORI SOLIDI PER ANDROID
         communityHeaderBackground: {
-          backgroundColor: 'rgba(31, 41, 55, 0.03)', // NERO MOLTO SOTTILE
+          backgroundColor:
+            Platform.OS === 'android' ? '#F8F9FA' : 'rgba(31, 41, 55, 0.03)', // ANDROID: grigio solido molto chiaro
           borderRadius: 20,
           paddingVertical: Spacing[4],
           paddingHorizontal: Spacing[6],
           borderWidth: 1,
-          borderColor: 'rgba(31, 41, 55, 0.08)',
+          borderColor:
+            Platform.OS === 'android' ? '#E9ECEF' : 'rgba(31, 41, 55, 0.08)', // ANDROID: grigio solido leggero
           shadowColor: '#1F2937',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
@@ -621,7 +627,6 @@ const DonateButtonsSection: React.FC<{
           style={styles.donateTitleContainer}
           onPress={onInfoPress}
           activeOpacity={0.8}
-          rippleColor="rgba(220, 38, 38, 0.1)"
         >
           <Text style={styles.donateCategoryTitle}>❤️ Contribuisci</Text>
           <Text style={styles.donateInlineSubtitle}>
@@ -632,7 +637,6 @@ const DonateButtonsSection: React.FC<{
           style={styles.infoButton}
           onPress={onInfoPress}
           activeOpacity={0.7}
-          rippleColor="rgba(220, 38, 38, 0.2)"
         >
           <MaterialCommunityIcons name="information" size={16} color="white" />
         </PlatformTouchable>
@@ -900,11 +904,7 @@ const AnimatedButton: React.FC<{
       },
     ]}
   >
-    <PlatformTouchable
-      activeOpacity={0.6}
-      onPress={onPress}
-      rippleColor="rgba(220, 38, 38, 0.2)"
-    >
+    <PlatformTouchable activeOpacity={0.6} onPress={onPress}>
       <LinearGradient colors={button.gradient} style={styles.gradientBorder}>
         <View style={styles.whiteContainer}>
           <View style={styles.buttonContent}>

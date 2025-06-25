@@ -67,7 +67,6 @@ const MapModalScreen: React.FC = () => {
         style={styles.closeButton}
         onPress={handleClosePress}
         activeOpacity={0.7}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <MaterialCommunityIcons
           name="close"

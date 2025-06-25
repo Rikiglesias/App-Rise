@@ -11,24 +11,10 @@ export const useHomeHeaderAnimations = (): UseHomeHeaderAnimationsReturn => {
   const titleAnim = useRef(new Animated.Value(0)).current;
   const imageAnim = useRef(new Animated.Value(0)).current;
   const containerAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  // pulseAnim removed - no more breathing animation
 
   useEffect(() => {
-    // Subtle breathing animation for hero banner - più professionale
-    const breathingAnimation = Animated.sequence([
-      Animated.timing(pulseAnim, {
-        toValue: 1.008, // Molto più sottile
-        duration: 3000, // Più lento e rilassante
-        useNativeDriver: true,
-      }),
-      Animated.timing(pulseAnim, {
-        toValue: 1,
-        duration: 3000,
-        useNativeDriver: true,
-      }),
-    ]);
-
-    // Main entrance animation
+    // Main entrance animation only - no breathing, no continuous loops
     Animated.sequence([
       Animated.timing(containerAnim, {
         toValue: 1,
@@ -49,12 +35,9 @@ export const useHomeHeaderAnimations = (): UseHomeHeaderAnimationsReturn => {
         }),
       ]),
     ]).start();
+  }, [containerAnim, titleAnim, imageAnim]);
 
-    // Start continuous breathing animation
-    Animated.loop(breathingAnimation).start();
-  }, [containerAnim, titleAnim, imageAnim, pulseAnim]);
-
-  return { titleAnim, imageAnim, containerAnim, pulseAnim };
+  return { titleAnim, imageAnim, containerAnim };
 };
 
 // Hook for scroll interpolations
@@ -62,42 +45,39 @@ export const useScrollInterpolations = (
   scrollY: Animated.Value
 ): UseScrollInterpolationsReturn => {
   const titleOpacity = scrollY.interpolate({
-    inputRange: ADVANCED_CONFIG.scrollEffects.fadeRange,
-    outputRange: [1, 0],
+    inputRange: [0, 1],
+    outputRange: [1, 1], // No opacity changes
     extrapolate: 'clamp',
   });
 
   const titleTransform = scrollY.interpolate({
-    inputRange: ADVANCED_CONFIG.scrollEffects.translateRange,
-    outputRange: [0, -40],
+    inputRange: [0, 1],
+    outputRange: [0, 0], // No movement
     extrapolate: 'clamp',
   });
 
-  // Animazione parallasse più naturale e meno aggressiva
+  // All parallax effects removed - static image positioning
   const imageParallax = scrollY.interpolate({
-    inputRange: [0, 200, 400],
-    outputRange: [0, -15, -30], // Movimento ridotto per evitare overlapping
+    inputRange: [0, 1],
+    outputRange: [0, 0], // No movement
     extrapolate: 'clamp',
   });
 
-  // Scale molto più sottile per evitare distorsioni
   const imageScale = scrollY.interpolate({
-    inputRange: [0, 150, 300],
-    outputRange: [1, 1.02, 0.98], // Scale molto più delicato
+    inputRange: [0, 1],
+    outputRange: [1, 1], // No scaling
     extrapolate: 'clamp',
   });
 
-  // Gradient overlay più graduale
   const gradientOpacity = scrollY.interpolate({
-    inputRange: [0, 100, 200, 400],
-    outputRange: [0.02, 0.08, 0.15, 0.25], // Transizione più delicata
+    inputRange: [0, 1],
+    outputRange: [0, 0], // No gradient changes
     extrapolate: 'clamp',
   });
 
-  // Rotazione quasi impercettibile
   const imageRotation = scrollY.interpolate({
-    inputRange: [0, 600],
-    outputRange: ['0deg', '0.5deg'], // Rotazione minima per naturalezza
+    inputRange: [0, 1],
+    outputRange: ['0deg', '0deg'], // No rotation
     extrapolate: 'clamp',
   });
 

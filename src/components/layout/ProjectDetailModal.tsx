@@ -56,11 +56,7 @@ const ProjectDetailModal: React.FC<Props> = ({
             <View style={styles.statusBadge}>
               <Text style={styles.statusText}>{location.status}</Text>
             </View>
-            <PlatformTouchable
-              style={styles.closeButton}
-              onPress={onClose}
-              rippleColor="rgba(220, 38, 38, 0.2)"
-            >
+            <PlatformTouchable style={styles.closeButton} onPress={onClose}>
               <Text style={styles.closeButtonText}>✕</Text>
             </PlatformTouchable>
           </View>
@@ -141,7 +137,6 @@ const ProjectDetailModal: React.FC<Props> = ({
                     /* Empty handler */
                   })
                 }
-                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.primaryButtonText}>💝 Dona Ora</Text>
               </PlatformTouchable>
@@ -153,7 +148,6 @@ const ProjectDetailModal: React.FC<Props> = ({
                     /* Empty handler */
                   })
                 }
-                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.secondaryButtonText}>
                   🤝 Diventa Volontario

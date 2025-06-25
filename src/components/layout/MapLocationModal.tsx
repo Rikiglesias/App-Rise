@@ -61,7 +61,6 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               style={styles.closeButton}
               onPress={onClose}
               activeOpacity={0.8}
-              rippleColor="rgba(220, 38, 38, 0.2)"
             >
               <MaterialCommunityIcons
                 name="close"
@@ -85,7 +84,6 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
             style={styles.ctaButton}
             activeOpacity={0.8}
             onPress={handleCTAPress}
-            rippleColor="rgba(220, 38, 38, 0.2)"
           >
             <MaterialCommunityIcons
               name="open-in-new"

@@ -35,16 +35,6 @@ export interface ImpactStats {
   };
 }
 
-export interface HeroStory {
-  id: string;
-  title: string;
-  location: string;
-  impact: string;
-  image: number;
-  accessibilityLabel: string;
-  color: string;
-}
-
 // ===================================================================
 // STATE INTERFACES
 // ===================================================================
@@ -77,12 +67,10 @@ export interface ProjectsState {
 
 export interface ImpactState {
   stats: ImpactStats;
-  heroStories: HeroStory[];
   isLoading: boolean;
   error: string | null;
   // Actions
   setStats: (stats: ImpactStats) => void;
-  setHeroStories: (stories: HeroStory[]) => void;
   updateStat: (
     category: keyof ImpactStats,
     updates: Partial<ImpactStats[keyof ImpactStats]>

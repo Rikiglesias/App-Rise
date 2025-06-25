@@ -43,7 +43,6 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               onPress={handleInfoPress}
               activeOpacity={0.7}
               style={chiSiamoSectionStyles.titleClickableContainer}
-              rippleColor="rgba(220, 38, 38, 0.2)"
             >
               <Text style={chiSiamoSectionStyles.categoryTitle}>
                 <Text style={chiSiamoSectionStyles.titleAccent}>Chi Siamo</Text>
@@ -55,7 +54,6 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             <PlatformTouchable
               onPress={handleInfoPress}
               style={chiSiamoSectionStyles.infoIconImproved}
-              rippleColor="rgba(220, 38, 38, 0.2)"
             >
               <MaterialCommunityIcons
                 name="information"

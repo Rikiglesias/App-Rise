@@ -252,7 +252,6 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         style={styles.socialCardWrapper}
         onPress={platform.onPress}
         activeOpacity={0.92}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         {/* GRADIENT CONTAINER PATTERN - Design System Ufficiale */}
         <LinearGradient
@@ -309,7 +308,6 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
       <PlatformTouchable
         onPress={handleBackPress}
         style={[styles.backButton, { top: insets.top + Spacing[2] }]}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
       </PlatformTouchable>

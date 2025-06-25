@@ -51,7 +51,7 @@ src / __tests__ / components / ui / EnhancedTouchable.test.tsx; // UI fundamenta
 ### **⚡ ALTO - Screens Principali (Settimana 2)**
 
 ```typescript
-src / __tests__ / screens / HomeTabScreen.test.tsx; // Home screen
+src / __tests__ / screens / HomeScreen.test.tsx; // Home screen
 src / __tests__ / screens / ImpactTabScreen.test.tsx; // Impact screen
 src / __tests__ / screens / SeguiciScreen.test.tsx; // Social screen
 src / __tests__ / screens / ChiSiamo / index.test.tsx; // Chi Siamo screen

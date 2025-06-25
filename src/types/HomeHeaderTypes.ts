@@ -39,7 +39,6 @@ export interface UseHomeHeaderAnimationsReturn {
   titleAnim: Animated.Value;
   imageAnim: Animated.Value;
   containerAnim: Animated.Value;
-  pulseAnim: Animated.Value;
 }
 
 export interface UseScrollInterpolationsReturn {
@@ -68,7 +67,6 @@ export interface HeaderImageSectionProps {
   readonly imageScale: Animated.AnimatedInterpolation<number>;
   readonly gradientOpacity: Animated.AnimatedInterpolation<number>;
   readonly imageRotation: Animated.AnimatedInterpolation<string>;
-  readonly pulseAnim: Animated.Value;
   readonly styles: HomeHeaderStyles;
 }
 

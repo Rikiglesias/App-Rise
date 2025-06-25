@@ -312,7 +312,6 @@ const ModernHomeImpact: React.FC<ModernHomeImpactProps> = ({
         accessible
         accessibilityRole="button"
         accessibilityLabel="Vedi dettagli impatto 2024"
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <Surface style={[styles.impactCard, animatedStyle]} elevation={3}>
           <View style={styles.cardContentWrapper}>

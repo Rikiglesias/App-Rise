@@ -52,7 +52,6 @@ export const EnhancedCard: React.FC<EnhancedCardProps> = ({
         disabled={disabled}
         activeOpacity={1}
         {...accessibilityConfig}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <View style={enhancedCardStyles.cardContent}>
           <IconSection icon={icon} variant={variant} size={size} />

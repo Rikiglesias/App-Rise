@@ -177,7 +177,6 @@ export const ProfessionalSectionsRenderer: React.FC<
                 style={styles.actionCard}
                 onPress={handleActionPress(action)}
                 activeOpacity={0.7}
-                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <View style={styles.actionCardContent}>
                   <View style={styles.actionIconContainer}>

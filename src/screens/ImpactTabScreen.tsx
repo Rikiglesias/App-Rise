@@ -121,11 +121,7 @@ const TotalMealsSection: React.FC<{
             },
           ]}
         >
-          <PlatformTouchable
-            onPress={onMealsPress}
-            activeOpacity={0.9}
-            rippleColor="rgba(220, 38, 38, 0.2)"
-          >
+          <PlatformTouchable onPress={onMealsPress} activeOpacity={0.9}>
             <LinearGradient
               colors={['#DC2626', '#B91C1C', '#991B1B']}
               style={styles.totalGradientContainer}
@@ -160,11 +156,7 @@ const TotalMealsSection: React.FC<{
             },
           ]}
         >
-          <PlatformTouchable
-            onPress={onKitsPress}
-            activeOpacity={0.9}
-            rippleColor="rgba(220, 38, 38, 0.2)"
-          >
+          <PlatformTouchable onPress={onKitsPress} activeOpacity={0.9}>
             <LinearGradient
               colors={['#1F2937', '#374151', '#111827']}
               style={styles.totalGradientContainer}
@@ -302,11 +294,7 @@ const CommunitySection: React.FC<{
             },
           ]}
         >
-          <PlatformTouchable
-            onPress={onVolunteersPress}
-            activeOpacity={0.9}
-            rippleColor="rgba(220, 38, 38, 0.2)"
-          >
+          <PlatformTouchable onPress={onVolunteersPress} activeOpacity={0.9}>
             <LinearGradient
               colors={['#10B981', '#059669', '#047857']}
               style={styles.communityGradientContainer}
@@ -340,11 +328,7 @@ const CommunitySection: React.FC<{
             },
           ]}
         >
-          <PlatformTouchable
-            onPress={onPartnersPress}
-            activeOpacity={0.9}
-            rippleColor="rgba(220, 38, 38, 0.2)"
-          >
+          <PlatformTouchable onPress={onPartnersPress} activeOpacity={0.9}>
             <LinearGradient
               colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
               style={styles.communityGradientContainer}
@@ -396,7 +380,6 @@ const MapSection: React.FC<{
         style={styles.mapImageContainer}
         onPress={handleMapImagePress} // Mostra i dettagli dell'Italia per default
         activeOpacity={0.85}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <Image
           source={require('../../assets/images/mappa.png')}

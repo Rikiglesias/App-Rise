@@ -197,7 +197,6 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
         style={modalStyles.overlay}
         activeOpacity={1}
         onPress={handleClose}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <Animated.View
           style={[
@@ -207,11 +206,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
             },
           ]}
         />
-        <PlatformTouchable
-          activeOpacity={1}
-          onPress={handleStopPropagation}
-          rippleColor="rgba(220, 38, 38, 0.2)"
-        >
+        <PlatformTouchable activeOpacity={1} onPress={handleStopPropagation}>
           <Animated.View
             style={[
               {
@@ -244,7 +239,6 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       style={modalStyles.closeButton}
                       onPress={handleClose}
                       activeOpacity={0.7}
-                      rippleColor="rgba(220, 38, 38, 0.2)"
                     >
                       <MaterialCommunityIcons
                         name="close"

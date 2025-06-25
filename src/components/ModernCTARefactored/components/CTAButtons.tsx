@@ -45,7 +45,6 @@ export const GradientCTAButton: React.FC<GradientButtonProps> = ({
       disabled={disabled}
       activeOpacity={0.9}
       {...accessibilityConfig}
-      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <LinearGradient
         colors={colors.gradients.primary}
@@ -83,7 +82,6 @@ export const StandardCTAButton: React.FC<StandardButtonProps> = ({
       disabled={disabled}
       activeOpacity={0.8}
       {...accessibilityConfig}
-      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <CTAContent {...contentProps} />
     </PlatformTouchable>

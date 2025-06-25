@@ -1,7 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
-import { Animated, Image, Modal, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  Image,
+  Modal,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { PlatformTouchable } from '../ui';
 import { Text } from 'react-native-paper';
 import {
@@ -21,14 +28,15 @@ const modernTitleStyles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing[4],
     paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[2] a Spacing[0] - compattezza massima
+    paddingTop: Platform.OS === 'android' ? Spacing[8] : Spacing[0], // ANDROID: padding extra container
   },
 
-  // Titolo con design compatto
+  // Titolo con design compatto - ANDROID SAFE AREA FIX
   titleContainer: {
     alignItems: 'center',
     paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - ulteriore compattezza
     paddingHorizontal: Spacing[4],
-    paddingTop: Spacing[6], // AGGIUNTO: titolo più in basso
+    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[6], // ANDROID: molto più spazio per evitare status bar
     position: 'relative',
   },
 
@@ -60,7 +68,7 @@ const modernTitleStyles = StyleSheet.create({
   titleSeparator: {
     alignItems: 'center',
     marginTop: Spacing[2], // ABBASSA LINEA: da 0 a Spacing[2] - separatore più in basso
-    marginBottom: 0, // Nessuno spazio per avvicinare l'immagine
+    marginBottom: Spacing[1], // MINIMO: da Spacing[2] a Spacing[1] - immagine quasi attaccata al separatore
     justifyContent: 'center',
     flexDirection: 'row',
   },
@@ -187,40 +195,57 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
     imageScale,
     gradientOpacity,
     imageRotation,
-    pulseAnim,
     styles,
-  }) => (
-    <View style={styles.imageSection}>
-      <Animated.View
-        style={[
-          styles.imageContainer,
-          {
-            opacity: imageAnim,
-            transform: [
-              { translateY: imageParallax },
-              { scale: Animated.multiply(imageScale, pulseAnim) },
-              { rotate: imageRotation },
-            ],
-          },
-        ]}
-      >
-        <Image
-          source={require('../../../assets/images/hero-banner.png')}
-          style={styles.image}
-          resizeMode="cover"
-        />
+  }) => {
+    // Android: Rendering completamente statico per evitare artefatti
+    if (Platform.OS === 'android') {
+      return (
+        <View style={styles.imageSection}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require('../../../assets/images/hero-banner.png')}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+      );
+    }
 
+    // iOS: Mantiene tutte le animazioni
+    return (
+      <View style={styles.imageSection}>
         <Animated.View
-          style={[styles.imageGradientOverlay, { opacity: gradientOpacity }]}
+          style={[
+            styles.imageContainer,
+            {
+              opacity: imageAnim,
+              transform: [
+                { translateY: imageParallax },
+                { scale: imageScale },
+                { rotate: imageRotation },
+              ],
+            },
+          ]}
         >
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.1)']}
-            style={styles.flexOne}
+          <Image
+            source={require('../../../assets/images/hero-banner.png')}
+            style={styles.image}
+            resizeMode="cover"
           />
+
+          <Animated.View
+            style={[styles.imageGradientOverlay, { opacity: gradientOpacity }]}
+          >
+            <LinearGradient
+              colors={['transparent', 'rgba(0,0,0,0.1)']}
+              style={styles.flexOne}
+            />
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
-    </View>
-  )
+      </View>
+    );
+  }
 );
 
 HeaderImageSection.displayName = 'HeaderImageSection';
@@ -494,7 +519,6 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 style={[baseMissionStyles.statsBox, baseMissionStyles.mealsBox]}
                 onPress={handleMealsPress}
                 activeOpacity={0.8}
-                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={baseMissionStyles.statNumber}>3.1M</Text>
                 <Text style={baseMissionStyles.statLabel}>
@@ -547,7 +571,6 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                   <PlatformTouchable
                     onPress={closeModal}
                     style={baseMissionStyles.closeButton}
-                    rippleColor="rgba(220, 38, 38, 0.2)"
                   >
                     <MaterialCommunityIcons
                       name="close"

@@ -99,7 +99,6 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
       <PlatformTouchable
         onPress={handleBackPress}
         style={mainStyles.backButton}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
       </PlatformTouchable>

@@ -23,11 +23,7 @@ const VolunteersScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       {/* Back Button */}
-      <PlatformTouchable
-        onPress={handleBackPress}
-        style={styles.backButton}
-        rippleColor="rgba(220, 38, 38, 0.2)"
-      >
+      <PlatformTouchable onPress={handleBackPress} style={styles.backButton}>
         <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
       </PlatformTouchable>
 

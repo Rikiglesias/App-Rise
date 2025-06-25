@@ -131,6 +131,7 @@ const TabItem: React.FC<TabItemProps> = ({
     <TouchableRipple
       onPress={onPress}
       borderless
+      rippleColor="transparent"
       style={[
         styles.tab,
         isActive ? styles.activeTab : styles.inactiveTab,

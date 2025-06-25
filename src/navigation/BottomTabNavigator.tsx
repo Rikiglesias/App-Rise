@@ -147,9 +147,9 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
     ],
   }));
 
-  // COLORI PERSONALIZZATI PER OGNI TAB
-  const getTabColors = (route: string, focused: boolean) => {
-    switch (route) {
+  // COLORI STATICI - CALCOLO DIRETTO SENZA ANIMAZIONI (risolve bug timing)
+  const getTabColors = () => {
+    switch (routeName) {
       case 'ImpactTab':
         return {
           backgroundColor: '#DC2626', // ROSSO FISSO sempre
@@ -167,38 +167,35 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
       case 'HomeTab':
       default:
         return {
-          backgroundColor: focused ? '#6B7280' : Colors.neutral[100] + '80', // GRIGIO quando attivo
+          backgroundColor: isFocused ? '#6B7280' : '#FFFFFF', // GRIGIO quando attivo, BIANCO quando inattivo
           shadowColor: '#6B7280',
-          iconColor: focused ? Colors.neutral[0] : Colors.neutral[700],
+          iconColor: isFocused ? Colors.neutral[0] : Colors.neutral[700],
           labelColor: '#6B7280',
         };
     }
   };
 
-  const tabColors = getTabColors(routeName, isFocused);
+  const tabColors = getTabColors();
 
+  // ANIMAZIONI SOLO PER SCALA E OPACITY (non per colori)
   const iconContainerStyle = useAnimatedStyle(() => ({
     transform: [{ scale: withSpring(isFocused ? 1 : 0.9, { mass: 0.5 }) }],
-    backgroundColor: tabColors.backgroundColor,
-    shadowColor: tabColors.shadowColor,
     shadowOpacity: withTiming(isFocused ? 0.3 : 0.05),
   }));
 
   const labelStyle = useAnimatedStyle(() => ({
     opacity: withTiming(isFocused ? 1 : 0),
     transform: [{ translateY: withTiming(isFocused ? 0 : 5) }],
-    color: tabColors.labelColor,
   }));
 
   const iconName = ICON_MAP[routeName] ?? 'circle';
-  const iconColor = tabColors.iconColor;
   const iconSize = isCentral ? 32 : 26;
 
   return (
     <Animated.View style={[styles.buttonContainer, buttonContainerStyle]}>
       <PlatformTouchable
         activeOpacity={0.7}
-        rippleColor="rgba(220, 38, 38, 0.3)"
+        rippleColor="transparent"
         accessibilityRole="button"
         accessibilityState={isFocused ? { selected: true } : {}}
         accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -211,16 +208,24 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
             style={[
               isCentral ? styles.centralIconContainer : styles.iconContainer,
               iconContainerStyle,
+              {
+                backgroundColor: tabColors.backgroundColor,
+                shadowColor: tabColors.shadowColor,
+              },
             ]}
           >
             <MaterialCommunityIcons
               name={iconName}
               size={iconSize}
-              color={iconColor}
+              color={tabColors.iconColor}
             />
           </Animated.View>
           <Animated.Text
-            style={[styles.labelText, labelStyle]}
+            style={[
+              styles.labelText,
+              labelStyle,
+              { color: tabColors.labelColor },
+            ]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
@@ -292,6 +297,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     borderRadius: BorderRadius['3xl'],
     overflow: 'hidden',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)', // AGGIUNTO: leggero tint per evitare artefatti
   },
   tabBarContent: {
     flex: 1,
@@ -336,8 +342,8 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 4,
-    borderColor: Colors.neutral[0],
+    borderWidth: 2, // RIDOTTO: da 4 a 2 per bordo più sottile
+    borderColor: 'rgba(255, 255, 255, 0.9)', // SEMI-TRASPARENTE: meno visibile ma presente
     ...Shadows.xl,
     shadowOffset: { width: 0, height: 6 },
     elevation: 12,

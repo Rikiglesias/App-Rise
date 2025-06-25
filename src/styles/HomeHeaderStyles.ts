@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import {
   BorderRadius,
   Colors,
@@ -83,22 +83,36 @@ export const createImageStyles = (
       marginTop: Spacing[0], // AZZERA MARGINE: da Spacing[2] a Spacing[0] - massima vicinanza immagine-titolo
       marginBottom: Spacing[4], // Spazio maggiore per evitare overlap
       borderRadius: 24, // Bordi arrotondati per eleganza
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.15,
-      shadowRadius: 16,
-      elevation: 8,
+      // iOS: Shadows complete per effetto premium
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.15,
+          shadowRadius: 16,
+        },
+        android: {
+          // Android: ZERO shadows per evitare bordi scuri
+        },
+      }),
     },
     imageContainer: {
       width: '100%',
       height: '100%',
       borderRadius: BorderRadius.lg,
       overflow: 'hidden',
-      shadowColor: colors.neutral[400],
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.08,
-      shadowRadius: 12,
-      elevation: 4,
+      // iOS: Shadows sottili per profondità
+      ...Platform.select({
+        ios: {
+          shadowColor: colors.neutral[400],
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.08,
+          shadowRadius: 12,
+        },
+        android: {
+          // Android: Rendering pulito senza shadows
+        },
+      }),
     },
     image: {
       width: '100%',

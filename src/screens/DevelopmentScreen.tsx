@@ -108,7 +108,6 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
         style={[styles.backButton, { top: insets.top + Spacing[2] }]}
         onPress={handleGoBack}
         activeOpacity={0.7}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <LinearGradient
           colors={['#DC2626', '#B91C1C']}

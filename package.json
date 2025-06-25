@@ -28,7 +28,7 @@
     "preview": "eas build --profile preview",
     "update": "eas update",
     "update:dev": "eas update --branch development --message",
-    "update:preview": "eas update --branch preview --message", 
+    "update:preview": "eas update --branch preview --message",
     "update:production": "eas update --branch production --message",
     "update:hotfix": "eas update --branch production --message",
     "update:auto": "eas update --auto",

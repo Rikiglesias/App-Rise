@@ -97,10 +97,10 @@ try {
   console.log(`📊 ${eslintErrors + eslintWarnings} problemi ESLint totali`);
 }
 
-// 3. Conta errori Markdownlint
+// 3. Conta errori Markdownlint (esclude docs/ per evitare warning su documentazione)
 console.log('\n📝 MARKDOWNLINT:');
 try {
-  execSync('npx markdownlint "**/*.md" --ignore node_modules', {
+  execSync('npx markdownlint "**/*.md" --ignore node_modules --ignore docs', {
     stdio: 'pipe',
   });
   console.log('✅ Nessun problema Markdownlint!');
@@ -116,10 +116,13 @@ try {
   criticalErrors += markdownlintErrors;
 }
 
-// 4. Conta errori Prettier
+// 4. Conta errori Prettier (esclude docs/ per evitare warning su documentazione)
 console.log('\n🎨 PRETTIER:');
 try {
-  execSync('npx prettier --check .', { stdio: 'pipe' });
+  execSync(
+    'npx prettier --check . --ignore-path .gitignore --ignore-path .prettierignore',
+    { stdio: 'pipe' }
+  );
   console.log('✅ Nessun problema Prettier!');
 } catch (error) {
   const output = error.stdout

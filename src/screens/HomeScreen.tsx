@@ -3,7 +3,7 @@ import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Animated } from 'react-native';
 import { PlatformScrollView, PlatformTouchable } from '../components/ui';
 
 // Components Premium - Versione Modernizzata
@@ -12,7 +12,6 @@ import { HomeHeaderSection } from '../components/domain/HomeHeaderSection';
 import type { BottomTabParamList } from '../navigation/types';
 import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
 import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
-import { useHomeScrollAnimation } from '../shared/hooks/useHomeScrollAnimation';
 import { useTheme } from '../shared/hooks/useTheme';
 
 // 🚀 PREMIUM CTA BUTTONS - DESIGN ULTRAMODERNO 2025
@@ -38,7 +37,6 @@ const ModernCTAButtons: React.FC = () => {
         style={ctaStyles.buttonWrapper}
         onPress={handleImpactPress}
         activeOpacity={0.92}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <LinearGradient
           colors={['#DC2626', '#B91C1C', '#991B1B']}
@@ -66,7 +64,6 @@ const ModernCTAButtons: React.FC = () => {
         style={ctaStyles.buttonWrapper}
         onPress={handleActionsPress}
         activeOpacity={0.92}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         <LinearGradient
           colors={['#059669', '#10B981', '#047857']}
@@ -95,8 +92,8 @@ const ModernCTAButtons: React.FC = () => {
 const HomeScreen: React.FC = () => {
   const { colors } = useTheme();
 
-  // Enhanced scroll animation hook - RIPRISTINATO
-  const { scrollY } = useHomeScrollAnimation();
+  // Static scrollY value - no scroll effects needed
+  const scrollY = React.useRef(new Animated.Value(0)).current;
 
   // Styles ottimizzati per impaginazione e spazi
   const styles = StyleSheet.create({

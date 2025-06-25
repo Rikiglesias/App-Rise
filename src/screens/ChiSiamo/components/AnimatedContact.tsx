@@ -39,7 +39,6 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
         style={animatedContactStyles.contactTouchable}
         onPress={handlePress}
         activeOpacity={0.8}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
         {/* GRADIENT CONTAINER PATTERN per bottoni */}
         <LinearGradient

@@ -1,13 +1,14 @@
 /* eslint-disable react-native/no-unused-styles */
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useMemo } from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import {
   Colors,
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
+
 import type { useNewActionsAnimations } from './ContributeAnimations';
 
 interface NewActionsHeaderProps {
@@ -18,11 +19,11 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
-        // HEADER CON SPAZIO GESTITO - PATTERN UFFICIALE PAGINA AZIONI (#11)
+        // HEADER CON SPAZIO ANDROID OTTIMIZZATO
         headerContainer: {
-          paddingTop: Spacing[3], // COMPATTO per header azioni
+          paddingTop: Platform.OS === 'android' ? Spacing[12] : Spacing[1], // AUMENTATO: più spazio da status bar Android
           paddingHorizontal: Spacing[4],
-          paddingBottom: Spacing[6], // AUMENTATO: più spazio sotto il titolo principale
+          paddingBottom: Spacing[4], // AUMENTATO: più equilibrio generale
           alignItems: 'center',
           position: 'relative',
         },
@@ -36,32 +37,35 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           opacity: 0.02, // RIDOTTO per sottilità
         },
 
-        // CONTAINER ELEGANTE COLORATO COME PAGINA AZIONI
+        // CONTAINER ELEGANTE - DIMENSIONI OTTIMIZZATE
         mainHeaderContainer: {
           alignItems: 'center',
-          backgroundColor: 'rgba(31, 41, 55, 0.03)', // BACKGROUND COLORATO ELEGANTE
-          paddingVertical: Spacing[3], // COME PAGINA AZIONI
-          paddingHorizontal: Spacing[5], // COME PAGINA AZIONI
-          borderRadius: 16, // MODERNO COME PAGINA AZIONI
+          backgroundColor:
+            Platform.OS === 'android' ? '#F8F9FA' : 'rgba(31, 41, 55, 0.03)',
+          paddingHorizontal: Spacing[4], // RIDOTTO: spazio laterale più contenuto
+          paddingTop: Platform.OS === 'android' ? Spacing[4] : Spacing[2], // DRASTICAMENTE RIDOTTO: contenuto su entrambe le piattaforme
+          paddingBottom: Spacing[3], // AUMENTATO: equilibrio tra sopra e sotto
+          borderRadius: 16,
           borderWidth: 1,
-          borderColor: 'rgba(31, 41, 55, 0.08)', // BORDO GRIGIO SOTTILE
-          shadowColor: '#1F2937', // OMBRA GRIGIA COORDINATA
+          borderColor:
+            Platform.OS === 'android' ? '#E9ECEF' : 'rgba(31, 41, 55, 0.08)',
+          shadowColor: '#1F2937',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.06,
           shadowRadius: 6,
           elevation: 2,
         },
 
-        // TIPOGRAFIA POTENTE E MODERNA - INGRANDITA
+        // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
         titleText: {
-          fontSize: Typography.sizes['4xl'], // INGRANDITO: da 3xl a 4xl per maggiore impatto
-          fontWeight: Typography.weights.black, // MASSIMO peso per autorità
-          color: '#1F2937', // NERO per contrasto
+          fontSize: Typography.sizes['3xl'], // RIDIMENSIONATO: da 4xl a 3xl per migliore proporzione
+          fontWeight: Typography.weights.bold, // RIDOTTO: da black a bold per migliore leggibilità
+          color: '#1F2937',
           textAlign: 'center',
-          letterSpacing: -1.2, // LEGGERMENTE AUMENTATO per bilanciare la dimensione
-          lineHeight: 42, // AUMENTATO per proporzioni
-          marginBottom: Spacing[2], // SPAZIO per separazione
-          textShadowColor: 'rgba(31, 41, 55, 0.15)', // OMBRA SOTTILE
+          letterSpacing: -0.8, // RIDOTTO: spacing più naturale
+          lineHeight: 42, // AUMENTATO: da 30 a 42 per respirare meglio
+          marginBottom: Spacing[1], // AGGIUNTO: piccolo spazio sotto per equilibrio
+          textShadowColor: 'rgba(31, 41, 55, 0.15)',
           textShadowOffset: { width: 0, height: 2 },
           textShadowRadius: 6,
           includeFontPadding: false,
@@ -82,7 +86,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           color: '#374151', // GRIGIO COORDINATO COME PAGINA AZIONI
           textAlign: 'center',
           letterSpacing: 0.2, // RIDOTTO PER ELEGANZA
-          marginTop: Spacing[1], // SPACING COORDINATO
+          marginTop: 0, // ZERO: attaccato al titolo
           opacity: 0.8, // TRASPARENZA ELEGANTE
         },
 
@@ -111,6 +115,19 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
     []
   );
 
+  // CONTENUTO TITOLO
+  const titleContent = (
+    <>
+      <Text style={styles.titleText}>
+        Fai la{'\n'}
+        <Text style={styles.titleAccent}>Differenza</Text>
+      </Text>
+      <Text style={styles.mainSubtitle}>
+        Ogni azione conta nella lotta contro la fame
+      </Text>
+    </>
+  );
+
   return (
     <Animated.View
       style={[
@@ -129,16 +146,8 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         style={styles.backgroundPattern}
       />
 
-      {/* HEADER INTEGRATO PRINCIPALE */}
-      <View style={styles.mainHeaderContainer}>
-        <Text style={styles.titleText}>
-          Fai la{'\n'}
-          <Text style={styles.titleAccent}>Differenza</Text>
-        </Text>
-        <Text style={styles.mainSubtitle}>
-          Ogni azione conta nella lotta contro la fame
-        </Text>
-      </View>
+      {/* HEADER INTEGRATO PRINCIPALE - STESSI COLORI IPHONE */}
+      <View style={styles.mainHeaderContainer}>{titleContent}</View>
     </Animated.View>
   );
 };

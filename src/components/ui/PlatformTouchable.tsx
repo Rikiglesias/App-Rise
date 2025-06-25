@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
-import { Colors } from '../../shared/constants/designTokens';
 
 interface PlatformTouchableProps extends TouchableOpacityProps {
   rippleColor?: string;
@@ -28,7 +27,7 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
   onPress,
   children,
   style,
-  rippleColor = `rgba(${Colors.primary[500]}, 0.2)`,
+  rippleColor = 'transparent',
   borderless = false,
   disabled = false,
   ...props

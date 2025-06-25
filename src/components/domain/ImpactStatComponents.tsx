@@ -26,7 +26,6 @@ export const StatButton: React.FC<StatButtonProps> = ({
     onPress={onPress}
     style={styles.statButton}
     activeOpacity={0.8}
-    rippleColor="rgba(220, 38, 38, 0.2)"
   >
     <View style={styles.statButtonContent}>
       <View style={[styles.iconContainer, { backgroundColor: color }]}>

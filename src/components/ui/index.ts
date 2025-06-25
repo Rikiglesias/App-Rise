@@ -21,6 +21,11 @@ export {
   default as PlatformAnimations,
   usePlatformAnimations,
 } from './PlatformAnimations';
+
+// Material Design 3 Components (Android-specific)
+export { MaterialFAB } from './MaterialFAB';
+export { MaterialCard, MaterialActionCard } from './MaterialCard';
+export { MaterialBottomNavigation } from './MaterialBottomNavigation';
 export { default as PlatformBlur } from './PlatformBlur';
 export { default as PlatformTouchable } from './PlatformTouchable';
 export { PlatformScrollView, PlatformSurface } from './PlatformComponents';

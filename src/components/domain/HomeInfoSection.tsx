@@ -46,7 +46,6 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
       accessible={true}
       accessibilityRole="button"
       accessibilityLabel={`${card.title}: ${card.description}`}
-      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <Surface style={[styles.cardSurface, animatedStyle]} elevation={3}>
         <View style={styles.cardContentWrapper}>

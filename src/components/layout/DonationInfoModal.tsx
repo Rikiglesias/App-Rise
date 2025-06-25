@@ -152,20 +152,14 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
         style={styles.modalOverlay}
         activeOpacity={1}
         onPress={onClose}
-        rippleColor="rgba(220, 38, 38, 0.2)"
       >
-        <PlatformTouchable
-          activeOpacity={1}
-          onPress={handleStopPropagation}
-          rippleColor="rgba(220, 38, 38, 0.2)"
-        >
+        <PlatformTouchable activeOpacity={1} onPress={handleStopPropagation}>
           <Animated.View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>
               <PlatformTouchable
                 onPress={onClose}
                 style={styles.modalCloseButton}
-                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.modalCloseIcon}>×</Text>
               </PlatformTouchable>
@@ -203,14 +197,12 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
               <PlatformTouchable
                 onPress={onClose}
                 style={styles.modalButtonSecondary}
-                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.modalButtonSecondaryText}>Ho Capito</Text>
               </PlatformTouchable>
               <PlatformTouchable
                 onPress={onDonate}
                 style={styles.modalButtonPrimary}
-                rippleColor="rgba(220, 38, 38, 0.2)"
               >
                 <Text style={styles.modalButtonPrimaryText}>Dona Subito</Text>
               </PlatformTouchable>

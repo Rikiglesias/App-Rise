@@ -178,11 +178,7 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
       onPress: () => void;
     }) => (
       <View key={action.id} style={styles.cardContainer}>
-        <PlatformTouchable
-          onPress={action.onPress}
-          style={styles.touchable}
-          rippleColor="rgba(220, 38, 38, 0.2)"
-        >
+        <PlatformTouchable onPress={action.onPress} style={styles.touchable}>
           <Surface style={styles.card}>
             <Text style={styles.icon}>{action.icon}</Text>
             <Text style={styles.title}>{action.title}</Text>

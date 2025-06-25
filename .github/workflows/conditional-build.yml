@@ -21,7 +21,7 @@ jobs:
         run: |
           COMMIT_MSG="${{ github.event.head_commit.message }}"
           echo "Commit message: $COMMIT_MSG"
-          
+
           # Check for build keywords - iOS only for now
           if [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\]|build: ]]; then
             echo "should-build=true" >> $GITHUB_OUTPUT
@@ -87,4 +87,4 @@ jobs:
               repo: context.repo.repo,
               commit_sha: context.sha,
               body: '🍎 **iOS Build & Submit Completed!**\n\n✅ Build completed on EAS\n✅ Submitted to App Store Connect\n📱 Check TestFlight: Available within 10-30 minutes\n🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia'
-            }) 
+            })

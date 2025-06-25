@@ -1,12 +1,20 @@
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useRef } from 'react';
-import { Animated, Pressable, StyleSheet, Text } from 'react-native';
+import {
+  Animated,
+  Pressable,
+  StyleSheet,
+  Text,
+  Platform,
+  View,
+} from 'react-native';
 
 import {
   BorderRadius,
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { MaterialActionCard } from '../ui';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 interface ActionCardEnhancedProps {
@@ -196,6 +204,40 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
     onPress();
   }, [onPress]);
 
+  // Contenuto comune per iOS e Android
+  const cardContent = (
+    <>
+      <ActionCardIcon
+        iconScaleAnim={iconScaleAnim}
+        variantStyles={variantStyles}
+        icon={icon}
+      />
+      <ActionCardContent title={title} description={description} />
+    </>
+  );
+
+  // Android: usa MaterialActionCard con Material Design 3
+  if (Platform.OS === 'android') {
+    return (
+      <MaterialActionCard
+        variant="elevated"
+        elevation="level2"
+        onPress={handlePress}
+        style={styles.materialCard}
+      >
+        <View
+          style={[
+            styles.materialContent,
+            { backgroundColor: variantStyles.backgroundColor },
+          ]}
+        >
+          {cardContent}
+        </View>
+      </MaterialActionCard>
+    );
+  }
+
+  // iOS: mantiene comportamento esistente (animazioni complete)
   return (
     <Animated.View
       style={[
@@ -220,12 +262,7 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
         accessibilityLabel={`${title}: ${description}`}
         accessibilityHint="Tocca per accedere a questa funzionalità"
       >
-        <ActionCardIcon
-          iconScaleAnim={iconScaleAnim}
-          variantStyles={variantStyles}
-          icon={icon}
-        />
-        <ActionCardContent title={title} description={description} />
+        {cardContent}
       </Pressable>
     </Animated.View>
   );
@@ -246,6 +283,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: Spacing[4],
     borderRadius: BorderRadius.xl,
+    minHeight: 120,
+  },
+  // Android Material Design styles
+  materialCard: {
+    width: '100%',
+    marginBottom: Spacing[4],
+  },
+  materialContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing[4],
     minHeight: 120,
   },
   iconContainer: {

@@ -106,7 +106,6 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <PlatformTouchable
                     onPress={handleClose}
                     style={modalStyles.closeButton}
-                    rippleColor="rgba(220, 38, 38, 0.2)"
                   >
                     <MaterialCommunityIcons
                       name="close"

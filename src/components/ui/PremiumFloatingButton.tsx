@@ -231,7 +231,6 @@ const PremiumFloatingButtonContent: React.FC<{
       accessible
       accessibilityRole="button"
       accessibilityLabel={`${title} - Pulsante di azione rapida`}
-      rippleColor="rgba(220, 38, 38, 0.2)"
     >
       <Animated.View style={styles.content}>
         <Text style={styles.icon}>{icon}</Text>
