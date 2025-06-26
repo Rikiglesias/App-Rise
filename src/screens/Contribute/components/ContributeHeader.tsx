@@ -1,13 +1,12 @@
 /* eslint-disable react-native/no-unused-styles */
+// ↑ ESLint non riesce a tracciare gli stili quando sono dentro useMemo.
+// Tutti gli stili in questo file sono verificati manualmente come utilizzati.
+
 import React, { useMemo } from 'react';
 import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '../../../shared/constants/designTokens';
+import { Spacing, Typography } from '../../../shared/constants/designTokens';
 
 import type { useNewActionsAnimations } from './ContributeAnimations';
 
@@ -88,28 +87,6 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           letterSpacing: 0.2, // RIDOTTO PER ELEGANZA
           marginTop: 0, // ZERO: attaccato al titolo
           opacity: 0.8, // TRASPARENZA ELEGANTE
-        },
-
-        descriptionText: {
-          fontSize: Typography.sizes.base, // BASE per leggibilità
-          fontWeight: Typography.weights.medium, // MEDIUM per equilibrio
-          color: Colors.neutral[600], // GRIGIO PIÙ CHIARO per gerarchia
-          textAlign: 'center',
-          lineHeight: 24, // RESPIRO per leggibilità
-          marginBottom: Spacing[5], // MAGGIORE STACCO per separazione
-          fontStyle: 'normal', // PULITO senza italic
-          backgroundColor: Colors.neutral[50], // GRIGIO NEUTRO per card
-          paddingVertical: Spacing[3], // RESPIRO per comfort
-          paddingHorizontal: Spacing[5], // AMPIO per eleganza
-          borderRadius: 16, // MODERNO per armonia
-          borderWidth: 1,
-          borderColor: Colors.neutral[200], // BORDO NEUTRO
-          // OMBRA NEUTRA E SOTTILE
-          shadowColor: Colors.neutral[400],
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08,
-          shadowRadius: 6,
-          elevation: 2,
         },
       }),
     []

@@ -1,4 +1,7 @@
 /* eslint-disable react-native/no-unused-styles */
+// ↑ ESLint non riesce a tracciare gli stili quando sono passati tramite props a componenti figli.
+// Tutti gli stili in questo file sono verificati manualmente come utilizzati.
+
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -29,16 +32,12 @@ interface ButtonStyles {
   container: object;
   categoryContainer: object;
   categoryHeader: object;
-  categoryTitle: object;
+
   donateTitleContainer: object;
   donateCategoryTitle: object;
   donateInlineSubtitle: object;
-  exploreHeaderContainer: object;
-  exploreSubtitleInline: object;
-  categorySubtitle: object;
-  donateSubtitle: object;
+
   exploreSubtitle: object;
-  sectionSubtitle: object;
   buttonsGrid: object;
   buttonRow: object;
   buttonContainer: object;
@@ -48,12 +47,10 @@ interface ButtonStyles {
   buttonIcon: object;
   buttonTitle: object;
   infoButton: object;
-  categoryDivider: object;
+
   sectionDivider: object;
   firstSectionDivider: object;
-  sectionDividerLine: object;
-  sectionDividerIcon: object;
-  sectionDividerText: object;
+
   centeredRow: object;
   singleButtonContainer: object;
   chevronPosition: object;
@@ -277,16 +274,6 @@ const ActionButtonsContent: React.FC<{
           opacity: 0.8,
         },
 
-        // TITOLO CATEGORIA ELEGANTE - INGRANDITO
-        categoryTitle: {
-          fontSize: Typography.sizes['3xl'], // INGRANDITO: da 2xl a 3xl per Esplora e Community
-          fontWeight: Typography.weights.bold,
-          color: '#1F2937',
-          textAlign: 'center',
-          letterSpacing: -0.4,
-          includeFontPadding: false,
-        },
-
         // TITOLO ESPLORA DISTINTIVO
         exploreTitle: {
           fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
@@ -311,24 +298,6 @@ const ActionButtonsContent: React.FC<{
           textShadowColor: 'rgba(31, 41, 55, 0.15)',
           textShadowOffset: { width: 0, height: 2 },
           textShadowRadius: 4,
-        },
-
-        categorySubtitle: {
-          fontSize: Typography.sizes.base,
-          fontWeight: Typography.weights.medium,
-          color: Colors.neutral[600],
-          textAlign: 'center',
-          letterSpacing: 0.3,
-          fontStyle: 'italic',
-        },
-
-        donateSubtitle: {
-          fontSize: Typography.sizes.base,
-          fontWeight: Typography.weights.medium,
-          color: '#B91C1C',
-          textAlign: 'center',
-          fontStyle: 'italic',
-          letterSpacing: 0.3,
         },
 
         exploreSubtitle: {
@@ -361,12 +330,7 @@ const ActionButtonsContent: React.FC<{
           borderWidth: 1,
           borderColor: 'rgba(220, 38, 38, 0.8)',
         },
-        categoryDivider: {
-          height: 3, // PIÙ GROSSA: prima linea sotto il titolo più prominente
-          backgroundColor: Colors.neutral[200],
-          marginHorizontal: Spacing[4], // ALLUNGATA: margine più piccolo = linea più lunga
-          marginBottom: Spacing[6],
-        },
+
         buttonsGrid: {
           gap: Spacing[4],
         },
@@ -414,45 +378,6 @@ const ActionButtonsContent: React.FC<{
           textShadowRadius: 3,
         },
 
-        // CONTAINER ELEGANTE PER ALTRE SEZIONI - STESSI COLORI IPHONE
-        exploreHeaderContainer: {
-          alignItems: 'center',
-          backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
-          paddingVertical: Spacing[3],
-          paddingHorizontal: Spacing[5],
-          borderRadius: 16,
-          borderWidth: 1,
-          borderColor: 'rgba(55, 65, 81, 0.08)',
-          shadowColor: '#374151',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.06,
-          shadowRadius: 6,
-          elevation: 2,
-        },
-
-        exploreSubtitleInline: {
-          fontSize: Typography.sizes.base, // INGRANDITO: da sm a base per Esplora e Community
-          fontWeight: Typography.weights.medium,
-          color: '#374151',
-          textAlign: 'center',
-          letterSpacing: 0.2,
-          marginTop: Spacing[1],
-          opacity: 0.8,
-        },
-
-        // CONTAINER STANDARD PER DESCRIZIONI - PATTERN DOVE OPERIAMO
-        sectionSubtitle: {
-          fontSize: Typography.sizes.base,
-          color: '#374151',
-          textAlign: 'center',
-          marginTop: Spacing[4], // AGGIUNTO: spazio tra titolo e descrizione
-          marginBottom: Spacing[4],
-          backgroundColor: 'rgba(55, 65, 81, 0.06)',
-          borderRadius: 12,
-          paddingHorizontal: Spacing[3],
-          paddingVertical: Spacing[2],
-        },
-
         // SUBTITLE POTENZIATO COMMUNITY
         communitySubtitle: {
           fontSize: Typography.sizes.base, // DIMENSIONE NORMALE
@@ -479,15 +404,7 @@ const ActionButtonsContent: React.FC<{
           marginVertical: Spacing[2],
           marginHorizontal: Spacing[6], // STESSA LUNGHEZZA di sectionDivider
         },
-        sectionDividerLine: {
-          display: 'none', // Non usato nel design semplificato
-        },
-        sectionDividerIcon: {
-          display: 'none', // Non usato nel design semplificato
-        },
-        sectionDividerText: {
-          display: 'none', // Non usato nel design semplificato
-        },
+
         // STILI PER INLINE STYLES
         centeredRow: {
           justifyContent: 'center',

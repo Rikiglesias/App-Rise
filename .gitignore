@@ -65,3 +65,32 @@ coverage/
 # IDE
 .vscode/settings.json
 .idea/
+
+# AGGIUNTE: Report temporanei e file di lavoro
+# Report ESLint temporanei
+eslint-*.json
+eslint-*.txt
+
+# File di analisi temporanei
+*_ANALYSIS.txt
+*_CORRECTED.txt
+*_UPDATED.txt
+*_EXPLANATION.txt
+*_STEPS.txt
+*_SOLUTION.txt
+*_FIXED.txt
+
+# File backup temporanei
+*.backup
+unused-imports.json
+
+# Cartella temporanea (se la crei)
+.temp/
+temp/
+
+# IDE - Configurazioni personali complete
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws

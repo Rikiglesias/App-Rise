@@ -1,4 +1,7 @@
 /* eslint-disable react-native/no-unused-styles */
+// ↑ ESLint non riesce a tracciare gli stili quando sono dentro useMemo.
+// Tutti gli stili in questo file sono verificati manualmente come utilizzati.
+
 import React, { useMemo } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
