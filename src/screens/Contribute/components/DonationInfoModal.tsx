@@ -267,18 +267,22 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
 
                   <Text style={modalStyles.modalText}>
                     <Text style={{ fontWeight: Typography.weights.bold }}>
-                      💝 Donazioni materiali:{' '}
+                      🛍️ Acquisti solidali:{' '}
                     </Text>
-                    Attraverso il nostro Charity Shop, ogni acquisto dei nostri
-                    partner dona una percentuale per i nostri programmi.
+                    Attraverso il nostro Charity Shop, ogni acquisto dai nostri
+                    partner dona automaticamente una percentuale per i nostri
+                    programmi. Tu spendi lo stesso prezzo, ma aiuti a combattere
+                    la fame!
                   </Text>
 
                   <Text style={modalStyles.modalText}>
                     <Text style={{ fontWeight: Typography.weights.bold }}>
-                      🎁 Gift Card solidali:{' '}
+                      🎁 Gift Cards:{' '}
                     </Text>
-                    Regala una Gift Card che contribuisce direttamente alla
-                    distribuzione di pasti nel mondo.
+                    Funzionano come gli acquisti: compri una Gift Card a prezzo
+                    normale (per te o come regalo), ma una percentuale viene
+                    automaticamente donata per la distribuzione di pasti. Aiuti
+                    senza costi extra!
                   </Text>
 
                   <Text style={modalStyles.highlightText}>

@@ -175,7 +175,8 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                 Grazie agli accordi strategici con i nostri partner commerciali,
                 una percentuale degli acquisti effettuati tramite i nostri
                 canali viene automaticamente destinata ai progetti di Rise
-                Against Hunger Italia.
+                Against Hunger Italia. Tu spendi lo stesso prezzo, ma aiuti a
+                combattere la fame!
               </Text>
               <Text style={styles.modalSubtitle}>
                 Se vuoi fare una donazione monetaria:

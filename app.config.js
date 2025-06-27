@@ -1,17 +1,17 @@
 export default {
   expo: {
-    name: 'RAH Italia',
+    name: 'Rise Against Hunger Italia',
     slug: 'rise-against-hunger-italia',
     version: '1.2.1',
     orientation: 'portrait',
-    icon: './assets/icons/app/logo.png',
+    icon: './assets/icons/app/app-icon.jpg',
     userInterfaceStyle: 'light',
     newArchEnabled: true,
     primaryColor: '#DC2626',
 
     // Configurazioni splash screen
     splash: {
-      image: './assets/icons/app/ios-icon-1024.png',
+      image: './assets/icons/app/splash-screen.png',
       resizeMode: 'contain',
       backgroundColor: '#FFFFFF',
     },
@@ -31,10 +31,11 @@ export default {
 
     // Configurazioni sicurezza iOS
     ios: {
+      displayName: 'RAH Italia',
       supportsTablet: true,
       bundleIdentifier: 'it.creareunapp.editor.ios63da226b4447c',
       buildNumber: '5',
-      icon: './assets/icons/app/ios-icon-1024.png',
+      icon: './assets/icons/app/app-icon.jpg',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSCameraUsageDescription:
@@ -71,9 +72,10 @@ export default {
 
     // Configurazioni sicurezza Android
     android: {
+      displayName: 'RAH Italia',
       adaptiveIcon: {
-        foregroundImage: './assets/icons/app/logo.png',
-        backgroundColor: '#FFFFFF',
+        foregroundImage: './assets/icons/app/app-icon.jpg',
+        backgroundColor: '#F8F8F8',
       },
       package: 'it.creareunapp.editor.ios63da226b4447c',
       versionCode: 3,
@@ -83,7 +85,7 @@ export default {
     // Configurazioni aggiuntive
     assetBundlePatterns: ['**/*'],
     web: {
-      favicon: './assets/icons/app/favicon.png',
+      favicon: './assets/icons/app/app-icon.jpg',
     },
 
     // Plugin richiesti

@@ -27,6 +27,16 @@ config.transformer.minifierConfig = {
   },
 };
 
+// Cache migliorata
+config.cacheStores = [
+  {
+    name: 'filesystem',
+    options: {
+      directory: '.metro-cache',
+    },
+  },
+];
+
 // Asset resolution ottimizzata
 config.resolver.assetExts.push('bin', 'txt', 'jpg', 'png', 'json', 'svg');
 

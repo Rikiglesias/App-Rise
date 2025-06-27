@@ -74,17 +74,17 @@ const AppNavigator: React.FC = () => {
           }}
           initialParams={{
             title: 'Charity Shop',
-            subtitle: 'Acquista prodotti solidali',
+            subtitle: 'Acquisti che aiutano, stesso prezzo',
           }}
         />
 
         <Stack.Screen
           name="CharityGiftCard"
           component={SimplePlaceholderScreen}
-          options={{ title: 'Gift Card Solidali' }}
+          options={{ title: 'Gift Cards' }}
           initialParams={{
-            title: 'Gift Card Solidali',
-            subtitle: 'Regala solidarietà',
+            title: 'Gift Cards',
+            subtitle: 'Per te o regalo, donazione automatica',
           }}
         />
 
