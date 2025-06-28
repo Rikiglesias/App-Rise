@@ -1,14 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { PlatformScrollView } from '../ui';
+import { PlatformScrollView } from '../../../components/ui';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import {
   Colors,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
+} from '../../../shared/constants/designTokens';
 
 interface ImpactInfoPageProps {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;

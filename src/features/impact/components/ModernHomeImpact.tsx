@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
-import { PlatformTouchable } from '../ui';
+import { PlatformTouchable } from '../../../components/ui';
 import { Surface } from 'react-native-paper';
 
 import {
   BorderRadius,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
-import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
-import { useTheme } from '../../shared/hooks/useTheme';
+} from '../../../shared/constants/designTokens';
+import { useAnimatedPress } from '../../../shared/hooks/useAnimatedPress';
+import { useTheme } from '../../../shared/hooks/useTheme';
 
 interface ModernHomeImpactProps {
   readonly onImpactPress: () => void;

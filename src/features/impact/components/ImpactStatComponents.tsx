@@ -2,18 +2,18 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { PlatformTouchable } from '../ui';
+import { PlatformTouchable } from '../../../components/ui';
 
-import { IMPACT_DATA } from '../../data/impactData';
+import { IMPACT_DATA } from '../../../data/impactData';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
-import type { StatButtonProps } from '../../types/ImpactScreenTypes';
-import FormattedText from '../ui/FormattedText';
+} from '../../../shared/constants/designTokens';
+import type { StatButtonProps } from '../../../types/ImpactScreenTypes';
+import FormattedText from '../../../components/ui/FormattedText';
 
 export const StatButton: React.FC<StatButtonProps> = ({
   icon,

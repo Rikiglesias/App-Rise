@@ -8,7 +8,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
+} from '../../../shared/constants/designTokens';
 
 interface ImpactCardProps {
   title: string;

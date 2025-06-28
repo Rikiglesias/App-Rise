@@ -16,14 +16,10 @@ export { default as HomeInfoSection } from './HomeInfoSection';
 // Modern Components
 
 export { default as ModernHomeActions } from './ModernHomeActions';
-export { default as ModernHomeImpact } from './ModernHomeImpact';
+// ModernHomeImpact - MIGRATED TO src/features/impact/components/
 
-// Impact Related Components
-export { ImpactCard } from './ImpactCard';
-export { default as ImpactHeroSection } from './ImpactHeroSection';
-export { default as ImpactInfoPage } from './ImpactInfoPage';
-export { default as ImpactQuickStats } from './ImpactQuickStats';
-export { StatButton } from './ImpactStatComponents';
+// Impact Related Components - MIGRATED TO FEATURES
+// Components moved to src/features/impact/components/
 
 // Project Related Components
 export { default as ActionCardEnhanced } from './ActionCardEnhanced';
