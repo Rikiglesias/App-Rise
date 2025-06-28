@@ -18,7 +18,7 @@ import { PlatformBlur, PlatformTouchable } from '../components/ui';
 
 // Screens
 import { ContributeTabScreen } from '../screens/ContributeTabScreen';
-import HomeScreen from '../screens/HomeScreen';
+import { HomeScreen } from '../features/home';
 import ImpactStackNavigator from './ImpactStackNavigator';
 
 // Design Tokens & Hooks
