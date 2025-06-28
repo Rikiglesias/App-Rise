@@ -1,5 +1,5 @@
 // Feature Projects Barrel Export
-export { default as ProjectsScreen } from './screens/ProjectsScreen';
+export { ProjectsScreen } from './screens/ProjectsScreen';
 
 // Hooks
 export { useProjectsScreenLogic } from './hooks/useProjectsScreenLogic';

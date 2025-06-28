@@ -86,3 +86,6 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
 };
 
 export default ProjectsScreen;
+
+// Named export per compatibilità barrel exports
+export { ProjectsScreen };

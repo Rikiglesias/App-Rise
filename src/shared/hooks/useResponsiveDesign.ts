@@ -81,14 +81,9 @@ export interface UniversalResponsiveData {
 // ===================================================================
 // DEVICE TYPE DETECTION
 // ===================================================================
-const detectDeviceType = ():
-  | 'iPhone'
-  | 'Android'
-  | 'Tablet'
-  | 'Desktop'
-  | 'Unknown' => {
-  const { width } = Dimensions.get('window');
-
+const detectDeviceType = (
+  width: number
+): 'iPhone' | 'Android' | 'Tablet' | 'Desktop' | 'Unknown' => {
   if (width >= UniversalBreakpoints.desktop) return 'Desktop';
   if (width >= UniversalBreakpoints.tablet) return 'Tablet';
 
@@ -111,7 +106,7 @@ export const useUniversalResponsiveDesign = (): UniversalResponsiveData => {
     const sectionPaddingConfig =
       UniversalResponsiveLayouts.sectionPadding[category];
 
-    const deviceType = detectDeviceType();
+    const deviceType = detectDeviceType(width);
 
     // Device information
     const device = {
