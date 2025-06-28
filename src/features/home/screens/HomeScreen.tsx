@@ -1,17 +1,18 @@
 import React, { useRef } from 'react';
 import { SafeAreaView, StyleSheet, View, Animated } from 'react-native';
 import { PlatformScrollView } from '../../../components/ui';
-import { HeaderSection, HeroImage, EntraInAzione } from '../components';
+import { HeroImage, EntraInAzione } from '../components';
 import { useHomeAnimations } from '../hooks';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { Spacing } from '../../../shared/constants/designTokens';
+import { HomeHeaderSection } from '../../../components/domain/HomeHeaderSection';
 import type { HomeScreenProps } from '../types';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { colors } = useTheme();
   const scrollY = useRef(new Animated.Value(0)).current;
   const {
-    titleAnim,
+    titleAnim: _titleAnim,
     imageAnim,
     containerAnim: _containerAnim,
   } = useHomeAnimations();
@@ -44,12 +45,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         <View style={styles.content}>
           {/* Header Section con titolo e logo */}
           <View style={styles.heroSection}>
-            <HeaderSection
-              scrollY={scrollY}
-              titleAnim={titleAnim}
-              titleOpacity={new Animated.Value(1)}
-              titleTransform={new Animated.Value(0)}
-            />
+            <HomeHeaderSection scrollY={scrollY} />
 
             {/* Hero Image */}
             <HeroImage

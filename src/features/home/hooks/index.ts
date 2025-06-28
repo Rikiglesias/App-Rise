@@ -2,4 +2,4 @@ export {
   useHomeAnimations,
   useScrollInterpolations,
 } from './useHomeAnimations';
-export { useHeaderSectionStyles } from './useHeaderSectionStyles';
+// useHeaderSectionStyles removed - using domain version
