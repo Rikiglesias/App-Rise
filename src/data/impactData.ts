@@ -1,4 +1,4 @@
-import type { ImpactDataType } from '../types/ImpactScreenTypes';
+import type { ImpactDataType } from '../features/impact/types/ImpactScreenTypes';
 
 // Dati reali 2024 da Rise Against Hunger Italia Annual Report
 export const IMPACT_DATA: ImpactDataType = {

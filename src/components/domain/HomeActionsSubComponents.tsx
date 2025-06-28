@@ -7,7 +7,7 @@ import type {
   BentoActionCardProps,
   CardHeaderProps,
   CardOverlaysProps,
-} from '../../types/HomeActionsTypes';
+} from '../../features/actions/types/HomeActionsTypes';
 
 // ===================================================================
 // CARD CONTENT COMPONENTS - Extracted for max-lines-per-function compliance

@@ -4,10 +4,10 @@ import { Animated, Platform, View } from 'react-native';
 import {
   useHomeHeaderAnimations,
   useScrollInterpolations,
-} from '../../hooks/useHomeHeaderHooks';
-import { useHomeHeaderStyles } from '../../hooks/useHomeHeaderStyles';
+} from '../../features/home/hooks/useHomeHeaderHooks';
+import { useHomeHeaderStyles } from '../../features/home/hooks/useHomeHeaderStyles';
 import { useTheme } from '../../shared/hooks/useTheme';
-import { type HomeHeaderSectionProps } from '../../types/HomeHeaderTypes';
+import { type HomeHeaderSectionProps } from '../../features/home/types/HomeHeaderTypes';
 import {
   HeaderImageSection,
   HeaderTextSection,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { PlatformTouchable } from '../ui';
-import { useProfessionalTokens } from '../../hooks/useProfessionalTokens';
+import { useProfessionalTokens } from '../../features/actions/hooks/useProfessionalTokens';
 import {
   BorderRadius,
   Shadows,
@@ -10,7 +10,7 @@ import {
 import type {
   CategorySection,
   InfoAction,
-} from '../../types/ContributeScreenTypes';
+} from '../../features/actions/types/ContributeScreenTypes';
 
 interface ProfessionalSectionsRendererProps {
   sections: CategorySection[];

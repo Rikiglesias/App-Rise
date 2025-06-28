@@ -1,5 +1,8 @@
 import { Colors } from '../shared/constants/designTokens';
-import type { ActionData, ActionHandlers } from '../types/HomeActionsTypes';
+import type {
+  ActionData,
+  ActionHandlers,
+} from '../features/actions/types/HomeActionsTypes';
 
 // ===================================================================
 // ACTIONS DATA FACTORY - Extracted logic

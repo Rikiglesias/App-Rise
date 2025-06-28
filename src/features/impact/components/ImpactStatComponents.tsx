@@ -12,7 +12,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
-import type { StatButtonProps } from '../../../types/ImpactScreenTypes';
+import type { StatButtonProps } from '../types/ImpactScreenTypes';
 import FormattedText from '../../../components/ui/FormattedText';
 
 export const StatButton: React.FC<StatButtonProps> = ({

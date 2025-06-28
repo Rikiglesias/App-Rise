@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
-import DevelopmentScreen from '../screens/DevelopmentScreen';
+import { DevelopmentScreen } from '../shared/screens';
 import { ImpactTabScreen } from '../features/impact';
 
 import type { ImpactStackParamList } from './types';

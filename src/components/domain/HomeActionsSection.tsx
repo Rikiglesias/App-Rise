@@ -1,8 +1,11 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { useHomeActionsLogic } from '../../hooks/useHomeActionsHooks';
-import type { HomeActionsSectionProps } from '../../types/HomeActionsTypes';
+import { useHomeActionsLogic } from '../../features/actions/hooks/useHomeActionsHooks';
+import type {
+  HomeActionsSectionProps,
+  ActionData,
+} from '../../features/actions/types/HomeActionsTypes';
 import { BentoActionCard } from './HomeActionsSubComponents';
 
 // ===================================================================
@@ -34,7 +37,7 @@ export const HomeActionsSection: React.FC<HomeActionsSectionProps> = ({
 
       {/* 🏗️ Bento Grid */}
       <View style={containerStyles.bentoGrid}>
-        {actions.map(action => (
+        {actions.map((action: ActionData) => (
           <BentoActionCard
             key={action.id}
             action={action}

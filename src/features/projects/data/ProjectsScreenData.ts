@@ -1,7 +1,4 @@
-import type {
-  ProjectStats,
-  ProjectTab,
-} from '../features/projects/types/ProjectsScreenTypes';
+import type { ProjectStats, ProjectTab } from '../types/ProjectsScreenTypes';
 
 // Factory function for creating tabs based on stats
 export const createProjectTabs = (stats: ProjectStats): ProjectTab[] => [

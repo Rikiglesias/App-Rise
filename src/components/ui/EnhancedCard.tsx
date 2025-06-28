@@ -5,26 +5,28 @@ import PlatformTouchable from './PlatformTouchable';
 import {
   useAccessibilityConfig,
   useCardStyling,
-} from '../../hooks/useEnhancedCardStyling';
+} from './hooks/useEnhancedCardStyling';
 import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
-import { enhancedCardStyles } from '../../styles/EnhancedCardStyles';
-import type { EnhancedCardProps } from '../../types/EnhancedCardTypes';
+import { enhancedCardStyles } from './styles/EnhancedCardStyles';
+import type { EnhancedCardProps } from './types/EnhancedCardTypes';
 import { ArrowSection, IconSection, TextSection } from './EnhancedCardSections';
 
-export const EnhancedCard: React.FC<EnhancedCardProps> = ({
-  title,
-  subtitle,
-  icon,
-  onPress,
-  variant = 'default',
-  size = 'standard',
-  disabled = false,
-  showArrow = true,
-  customStyle,
-  children,
-  accessibilityLabel,
-  accessibilityHint,
-}) => {
+export const EnhancedCard: React.FC<EnhancedCardProps> = props => {
+  const {
+    title,
+    subtitle,
+    icon,
+    onPress,
+    variant = 'default',
+    size = 'standard',
+    disabled = false,
+    showArrow = true,
+    customStyle,
+    children,
+    accessibilityLabel,
+    accessibilityHint,
+  } = props;
+
   // Use custom hook for animations - eliminates 40+ lines of duplicate code
   const { shadowValue, handlePressIn, handlePressOut, animatedStyle } =
     useAnimatedPress({ scaleValue: 0.98, minOpacity: 0.85 });

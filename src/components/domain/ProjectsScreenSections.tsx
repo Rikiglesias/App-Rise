@@ -5,7 +5,7 @@ import type {
   ProjectsEmptyStateProps,
   ProjectsHeaderProps,
   ProjectsStatsProps,
-} from '../../types/ProjectsScreenTypes';
+} from '../../features/projects/types/ProjectsScreenTypes';
 import SectionContainer from '../layout/SectionContainer';
 
 // Header Component

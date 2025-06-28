@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import {
   Animated,
   Image,
+  ImageStyle,
   Modal,
   Platform,
   StyleSheet,
@@ -20,7 +21,7 @@ import {
   type HeaderImageSectionProps,
   type HeaderMissionSectionProps,
   type HeaderTextSectionProps,
-} from '../../types/HomeHeaderTypes';
+} from '../../features/home/types/HomeHeaderTypes';
 
 // ✨ TITLE STYLES ELEGANTI - MIGLIORAMENTO SOTTILE
 const modernTitleStyles = StyleSheet.create({
@@ -204,7 +205,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
           <View style={styles.imageContainer}>
             <Image
               source={require('../../../assets/images/hero-banner.png')}
-              style={styles.image}
+              style={styles.image as ImageStyle}
               resizeMode="cover"
             />
           </View>
@@ -230,7 +231,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
         >
           <Image
             source={require('../../../assets/images/hero-banner.png')}
-            style={styles.image}
+            style={styles.image as ImageStyle}
             resizeMode="cover"
           />
 

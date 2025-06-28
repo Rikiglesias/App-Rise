@@ -1,11 +1,11 @@
 import React from 'react';
 import { Animated, Text, View } from 'react-native';
-import { enhancedCardStyles } from '../../styles/EnhancedCardStyles';
+import { enhancedCardStyles } from './styles/EnhancedCardStyles';
 import type {
   ArrowSectionProps,
   IconSectionProps,
   TextSectionProps,
-} from '../../types/EnhancedCardTypes';
+} from './types/EnhancedCardTypes';
 
 // Icon section component - Separated to reduce function length
 export const IconSection: React.FC<IconSectionProps> = ({

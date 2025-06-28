@@ -26,7 +26,7 @@ import {
 import type {
   ImpactNavigationProp,
   ImpactScreenName,
-} from '../../../types/ImpactScreenTypes';
+} from '../types/ImpactScreenTypes';
 
 const { width: screenWidth } = Dimensions.get('window');
 

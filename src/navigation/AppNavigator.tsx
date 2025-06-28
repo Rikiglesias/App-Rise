@@ -7,11 +7,11 @@ import 'react-native-gesture-handler';
 // Navigators
 
 // Screens
-import ChiSiamoScreen from '../screens/ChiSiamo';
+import { ChiSiamoScreen } from '../features/about';
 import { Impatto2024Screen } from '../features/impact';
-import ProjectsScreen from '../screens/ProjectsScreen';
+import { ProjectsScreen } from '../features/projects';
 import { SeguiciScreen } from '../features/social';
-import SimplePlaceholderScreen from '../screens/SimplePlaceholderScreen';
+import { SimplePlaceholderScreen } from '../shared/screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import type { RootStackParamList } from './types';
