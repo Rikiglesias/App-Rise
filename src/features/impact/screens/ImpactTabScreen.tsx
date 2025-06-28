@@ -386,7 +386,7 @@ const MapSection: React.FC<{
         activeOpacity={0.85}
       >
         <Image
-          source={require('../../assets/images/mappa.png')}
+          source={require('../../../../assets/images/mappa.png')}
           style={styles.mapImage}
           resizeMode="cover"
         />
