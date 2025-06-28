@@ -6,7 +6,7 @@ import React, { useMemo } from 'react';
 import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { Spacing, Typography } from '../../../shared/constants/designTokens';
+import { Spacing, Typography } from '../../../../shared/constants/designTokens';
 
 import type { useNewActionsAnimations } from './ContributeAnimations';
 

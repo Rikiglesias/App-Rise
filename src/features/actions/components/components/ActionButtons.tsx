@@ -6,16 +6,16 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
-import { PlatformTouchable } from '../../../components/ui';
+import { PlatformTouchable } from '../../../../components/ui';
 
 import {
   Colors,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
-import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
-import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
-import type { ContributeTabScreenProps } from '../../../types/ContributeScreenTypes';
+} from '../../../../shared/constants/designTokens';
+import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
+import { useLinkHandler } from '../../../../shared/hooks/useLinkHandler';
+import type { ContributeTabScreenProps } from '../../../../types/ContributeScreenTypes';
 import type { useNewActionsAnimations } from './ContributeAnimations';
 import DonationInfoModal from './DonationInfoModal';
 

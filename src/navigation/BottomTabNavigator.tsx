@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PlatformBlur, PlatformTouchable } from '../components/ui';
 
 // Screens
-import { ContributeTabScreen } from '../screens/ContributeTabScreen';
+import { ContributeTabScreen } from '../features/actions';
 import { HomeScreen } from '../features/home';
 import ImpactStackNavigator from './ImpactStackNavigator';
 

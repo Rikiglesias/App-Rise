@@ -11,18 +11,22 @@ import {
   Text,
   View,
 } from 'react-native';
-import { PlatformScrollView, PlatformTouchable } from '../components/ui';
+import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
 
-import type { Location } from '../components/layout/InteractiveMap';
-import MapLocationModal from '../components/layout/MapLocationModal';
-import { MAP_LOCATIONS } from '../data/impactData';
-import type { MapModalData } from '../data/mapModalData';
-import { getModalData } from '../data/mapModalData';
-import { Colors, Spacing, Typography } from '../shared/constants/designTokens';
+import type { Location } from '../../../components/layout/InteractiveMap';
+import MapLocationModal from '../../../components/layout/MapLocationModal';
+import { MAP_LOCATIONS } from '../../../data/impactData';
+import type { MapModalData } from '../../../data/mapModalData';
+import { getModalData } from '../../../data/mapModalData';
+import {
+  Colors,
+  Spacing,
+  Typography,
+} from '../../../shared/constants/designTokens';
 import type {
   ImpactNavigationProp,
   ImpactScreenName,
-} from '../types/ImpactScreenTypes';
+} from '../../../types/ImpactScreenTypes';
 
 const { width: screenWidth } = Dimensions.get('window');
 

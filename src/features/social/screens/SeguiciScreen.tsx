@@ -12,20 +12,20 @@ import {
   Text,
   View,
 } from 'react-native';
-import { PlatformScrollView, PlatformTouchable } from '../components/ui';
+import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import type { RootStackParamList } from '../navigation/types';
+import type { RootStackParamList } from '../../../navigation/types';
 import {
   BorderRadius,
   Colors,
   Spacing,
   Typography,
-} from '../shared/constants/designTokens';
-import { useHapticFeedback } from '../shared/hooks/useHapticFeedback';
-import { useLinkHandler } from '../shared/hooks/useLinkHandler';
-import { isSuccess } from '../shared/utils/result';
-import { logWarn } from '../shared/utils/logger';
+} from '../../../shared/constants/designTokens';
+import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
+import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
+import { isSuccess } from '../../../shared/utils/result';
+import { logWarn } from '../../../shared/utils/logger';
 
 type SeguiciScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

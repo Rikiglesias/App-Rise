@@ -9,14 +9,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import { PlatformTouchable } from '../../../components/ui';
+import { PlatformTouchable } from '../../../../components/ui';
 
 import {
   Colors,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
-import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
+} from '../../../../shared/constants/designTokens';
+import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 
 const { width: screenWidth } = Dimensions.get('window');
 

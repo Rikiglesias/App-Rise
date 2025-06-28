@@ -7,5 +7,4 @@ export * from './components';
 // export * from './types'; // TODO: Create types folder
 
 // Export screens
-export { default as ImpactTabScreen } from '../../screens/ImpactTabScreen';
-export { default as Impatto2024Screen } from '../../screens/Impatto2024Screen';
+export * from './screens';

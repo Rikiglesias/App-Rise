@@ -5,7 +5,7 @@
 import React, { useMemo } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
-import { Colors, Spacing } from '../../../shared/constants/designTokens';
+import { Colors, Spacing } from '../../../../shared/constants/designTokens';
 import type { useNewActionsAnimations } from './ContributeAnimations';
 
 interface HeaderDividerProps {

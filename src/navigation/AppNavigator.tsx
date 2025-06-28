@@ -8,9 +8,9 @@ import 'react-native-gesture-handler';
 
 // Screens
 import ChiSiamoScreen from '../screens/ChiSiamo';
-import Impatto2024Screen from '../screens/Impatto2024Screen';
+import { Impatto2024Screen } from '../features/impact';
 import ProjectsScreen from '../screens/ProjectsScreen';
-import SeguiciScreen from '../screens/SeguiciScreen';
+import { SeguiciScreen } from '../features/social';
 import SimplePlaceholderScreen from '../screens/SimplePlaceholderScreen';
 
 import BottomTabNavigator from './BottomTabNavigator';
