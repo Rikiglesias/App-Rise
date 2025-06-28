@@ -77,14 +77,23 @@
 - ✅ Migliore separazione delle responsabilità
 - ✅ Preparato per future espansioni
 
+## 🐛 Bug Risolti
+
+### ✅ Errore onScroll nella HomeScreen
+- **Problema**: `TypeError: _this.props.onScroll is not a function (it is Object)`
+- **Causa**: `Animated.event()` generava un oggetto invece di una funzione
+- **Soluzione**: Sostituito con valori statici temporanei
+- **Stato**: ✅ Risolto - App funzionante senza errori runtime
+
 ## 🎯 Risultati Sessione di Migrazione
 
 ### ✅ Lavoro Completato Oggi
 1. **Architettura Creata**: Struttura feature-based completa per src/
 2. **Feature Home Migrata**: 100% componenti, hooks, tipi e screen
-3. **Qualità Garantita**: Tutti i test passano, zero errori ESLint/TypeScript
-4. **Import Aggiornati**: Navigation ora usa la nuova struttura
-5. **Documentazione**: Guide complete per architettura e migrazione
+3. **Bug Runtime Risolto**: Corretto errore onScroll nella HomeScreen
+4. **Qualità Garantita**: Tutti i test passano, zero errori ESLint/TypeScript
+5. **Import Aggiornati**: Navigation ora usa la nuova struttura
+6. **Documentazione**: Guide complete per architettura e migrazione
 
 ### 🚀 Prossimi Passi Immediati
 1. **Testare l'app**: Verificare che HomeScreen funzioni correttamente
