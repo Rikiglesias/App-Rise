@@ -1,6 +1,6 @@
 export default {
   expo: {
-    name: 'Rise Against Hunger Italia',
+    name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
     version: '1.2.2',
     orientation: 'portrait',

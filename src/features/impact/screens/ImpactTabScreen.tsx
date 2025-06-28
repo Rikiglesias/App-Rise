@@ -133,7 +133,7 @@ const TotalMealsSection: React.FC<{
               <View style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="food-apple"
-                  size={32}
+                  size={28} // RIDOTTO: da 32 a 28 per proporzioni migliori
                   color="#DC2626"
                   style={styles.totalCardIcon}
                 />
@@ -168,7 +168,7 @@ const TotalMealsSection: React.FC<{
               <View style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="package-variant"
-                  size={32}
+                  size={28} // RIDOTTO: da 32 a 28 per proporzioni migliori
                   color="#1F2937"
                   style={styles.totalCardIcon}
                 />
@@ -640,14 +640,14 @@ const styles = StyleSheet.create({
   totalCardContent: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 21,
-    paddingVertical: Spacing[5],
+    paddingVertical: Spacing[3], // RIDOTTO: da Spacing[5] a Spacing[3] per bottoni più compatti
     alignItems: 'center',
   },
   totalCardIcon: {
     marginBottom: Spacing[3],
   },
   totalStatValue: {
-    fontSize: screenWidth > 375 ? 32 : 28,
+    fontSize: screenWidth > 375 ? 28 : 24, // RIDOTTO: da 32/28 a 28/24 per proporzioni più bilanciate
     fontWeight: Typography.weights.black,
     color: '#1F2937', // NERO invece che rosso
     marginBottom: Spacing[1],

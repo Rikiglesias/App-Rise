@@ -59,6 +59,7 @@ interface ButtonStyles {
   exploreHeaderBackground: object;
   communityHeaderBackground: object;
   communitySubtitle: object;
+  communityChevron: object;
 }
 
 interface NewActionButtonsSectionProps {
@@ -72,6 +73,7 @@ const NewActionButtonsSection: React.FC<NewActionButtonsSectionProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   const {
+    openLink,
     openDonationLink,
     openEventsLink,
     openShopLink,
@@ -135,6 +137,14 @@ const NewActionButtonsSection: React.FC<NewActionButtonsSectionProps> = ({
     [openProjectsLink, openEventsLink, openTracciabilitaLink]
   );
 
+  const openCommunityRegistration = useCallback(() => {
+    return openLink(
+      'https://riseagainsthunger.org.welfare4charity.com/register?redirect=https%3A%2F%2Friseagainsthunger.org.welfare4charity.com%2Fcharity%2Fecommerce',
+      'community-registration',
+      'Impossibile aprire la pagina di registrazione. Riprova più tardi.'
+    );
+  }, [openLink]);
+
   const communityButtons = useMemo(
     () => [
       {
@@ -181,6 +191,7 @@ const NewActionButtonsSection: React.FC<NewActionButtonsSectionProps> = ({
         communityButtons={communityButtons}
         onButtonPress={handleButtonPress}
         onInfoPress={handleInfoPress}
+        onCommunityTitlePress={openCommunityRegistration}
       />
       <DonationInfoModal
         visible={showInfoModal}
@@ -208,6 +219,7 @@ const ActionButtonsContent: React.FC<{
   communityButtons: ButtonData[];
   onButtonPress: (button: ButtonData) => void;
   onInfoPress: () => void;
+  onCommunityTitlePress: () => void;
 }> = ({
   animations,
   donateButtons,
@@ -215,6 +227,7 @@ const ActionButtonsContent: React.FC<{
   communityButtons,
   onButtonPress,
   onInfoPress,
+  onCommunityTitlePress,
 }) => {
   const styles = useMemo(
     () =>
@@ -451,6 +464,15 @@ const ActionButtonsContent: React.FC<{
           shadowOpacity: 0.05,
           shadowRadius: 8,
           elevation: 2,
+          position: 'relative', // AGGIUNTO: per posizionamento assoluto della freccia
+        },
+
+        // FRECCIA COMMUNITY - STILE COME SUI BOTTONI
+        communityChevron: {
+          position: 'absolute',
+          top: Spacing[3], // POSIZIONATA IN ALTO A DESTRA
+          right: Spacing[3],
+          opacity: 0.7, // SEMI-TRASPARENTE per essere discreta
         },
       }),
     []
@@ -485,6 +507,7 @@ const ActionButtonsContent: React.FC<{
         animations={animations}
         communityButtons={communityButtons}
         onButtonPress={onButtonPress}
+        onCommunityTitlePress={onCommunityTitlePress}
       />
     </View>
   );
@@ -714,7 +737,14 @@ const CommunityButtonsSection: React.FC<{
   animations: ReturnType<typeof useNewActionsAnimations>;
   communityButtons: ButtonData[];
   onButtonPress: (button: ButtonData) => void;
-}> = ({ styles, animations, communityButtons, onButtonPress }) => {
+  onCommunityTitlePress: () => void;
+}> = ({
+  styles,
+  animations,
+  communityButtons,
+  onButtonPress,
+  onCommunityTitlePress,
+}) => {
   const handleCommunityButtons = useMemo(
     () => [
       () => {
@@ -750,12 +780,23 @@ const CommunityButtonsSection: React.FC<{
           },
         ]}
       >
-        <View style={styles.communityHeaderBackground}>
+        <PlatformTouchable
+          style={styles.communityHeaderBackground}
+          onPress={onCommunityTitlePress}
+          activeOpacity={0.8}
+        >
           <Text style={styles.communityTitle}>🤝 Community</Text>
           <Text style={styles.communitySubtitle}>
             Unisciti alla nostra comunità
           </Text>
-        </View>
+          {/* Icona link esterno per indicare che apre una pagina esterna */}
+          <MaterialCommunityIcons
+            name="open-in-new"
+            size={16}
+            color="#1F2937"
+            style={styles.communityChevron}
+          />
+        </PlatformTouchable>
       </Animated.View>
       <View style={styles.buttonsGrid}>
         {/* Riga unica: Seguici, Chi Siamo */}

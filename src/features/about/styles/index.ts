@@ -66,6 +66,14 @@ export const modalStyles = StyleSheet.create({
     paddingHorizontal: Spacing[4],
   },
 
+  backdropTouchable: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+
   backdrop: {
     position: 'absolute',
     top: 0,
@@ -78,7 +86,7 @@ export const modalStyles = StyleSheet.create({
   modalContainer: {
     maxWidth: screenWidth * 0.9,
     width: '100%',
-    maxHeight: '80%',
+    maxHeight: '85%', // ALLUNGATO: da 80% a 85% per più spazio
   },
 
   modalGradientBorder: {
@@ -95,10 +103,13 @@ export const modalStyles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
     borderRadius: 21,
     overflow: 'hidden',
+    flex: 1, // AGGIUNTO: per occupare tutto lo spazio del gradient container
   },
 
   modalContent: {
-    maxHeight: '100%',
+    flex: 1, // CORRETTO: flex per dividere lo spazio tra header e contenuto scrollabile
+    display: 'flex',
+    flexDirection: 'column',
   },
 
   modalHeader: {
@@ -118,30 +129,28 @@ export const modalStyles = StyleSheet.create({
     letterSpacing: -0.8,
     flex: 1,
     textAlign: 'center',
-    paddingRight: Spacing[8], // SPAZIO per icona posizionata assolutamente
+    paddingRight: Spacing[8], // RIDOTTO: spazio appropriato per la X più piccola
   },
 
   closeButton: {
     position: 'absolute',
-    top: Spacing[5], // ULTERIORMENTE IN BASSO: da Spacing[4] a Spacing[5]
-    right: -Spacing[1], // PIÙ A SINISTRA: da Spacing[2] a -Spacing[1]
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+    top: Spacing[3], // RIAVVICINATO: più in alto ma non troppo
+    right: Spacing[3], // RIAVVICINATO: più a destra ma equilibrato
+    width: 32, // RIDOTTO: dimensione più discreta
+    height: 32, // RIDOTTO: dimensione più discreta
+    borderRadius: 16, // AGGIORNATO: per mantenere la forma circolare
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // SEMPLIFICATO: sfondo scuro minimale
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(220, 38, 38, 0.2)',
-    shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowColor: '#000000', // MANTENUTO: ombra pulita
+    shadowOffset: { width: 0, height: 2 }, // RIDOTTO: ombra più sottile
+    shadowOpacity: 0.3, // BILANCIATO: ombra discreta
+    shadowRadius: 4, // RIDOTTO: ombra più contenuta
+    elevation: 4, // RIDOTTO: elevazione più naturale
   },
 
   storyScroll: {
-    maxHeight: '85%',
+    flex: 1, // RIPRISTINATO: permette allo scroll di occupare tutto lo spazio rimanente
   },
 
   storyContainer: {

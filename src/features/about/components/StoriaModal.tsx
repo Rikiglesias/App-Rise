@@ -60,15 +60,21 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
       animationType="none"
     >
       <View style={modalStyles.overlay}>
-        {/* Backdrop */}
-        <Animated.View
-          style={[
-            modalStyles.backdrop,
-            {
-              opacity: backdropAnim,
-            },
-          ]}
-        />
+        {/* Backdrop - cliccabile per chiudere */}
+        <PlatformTouchable
+          style={modalStyles.backdropTouchable}
+          onPress={handleClose}
+          activeOpacity={1}
+        >
+          <Animated.View
+            style={[
+              modalStyles.backdrop,
+              {
+                opacity: backdropAnim,
+              },
+            ]}
+          />
+        </PlatformTouchable>
 
         {/* Modal Content */}
         <Animated.View
@@ -106,18 +112,21 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <PlatformTouchable
                     onPress={handleClose}
                     style={modalStyles.closeButton}
+                    activeOpacity={0.8}
                   >
                     <MaterialCommunityIcons
                       name="close"
-                      size={20} // DIMENSIONE COORDINATA con modal Contribuisci
-                      color="#DC2626"
+                      size={20} // RIDOTTO: da 24 a 20 per coordinare con il pulsante più piccolo
+                      color="#FFFFFF" // CAMBIATO: da rosso a bianco per contrasto con sfondo scuro
                     />
                   </PlatformTouchable>
                 </View>
 
                 {/* Story Content */}
                 <PlatformScrollView
+                  style={modalStyles.storyScroll}
                   contentContainerStyle={modalStyles.storyContainer}
+                  showsVerticalScrollIndicator={true}
                 >
                   <Text style={modalStyles.introText}>
                     Dal 1998, un movimento globale contro la fame
