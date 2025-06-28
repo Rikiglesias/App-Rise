@@ -68,15 +68,14 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[0],
-    paddingTop: Platform.OS === 'android' ? Spacing[8] : Spacing[0],
+    paddingVertical: Spacing[2], // Aggiunto padding verticale minimo
   },
 
   titleContainer: {
     alignItems: 'center',
-    paddingVertical: Spacing[0],
-    paddingHorizontal: Spacing[4],
-    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[6],
+    paddingVertical: Spacing[2], // Ridotto da 0 a padding equilibrato
+    paddingHorizontal: Spacing[2], // Ridotto da 4 a 2
+    paddingTop: Platform.OS === 'android' ? Spacing[4] : Spacing[2], // Drasticamente ridotto
     position: 'relative',
   },
 
