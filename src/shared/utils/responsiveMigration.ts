@@ -10,6 +10,7 @@ import {
   getUniversalDeviceCategory,
   UniversalDeviceCategories,
 } from '../constants/responsiveBreakpoints';
+import { logDebug } from './logger';
 
 // ===================================================================
 // MIGRATION TYPES
@@ -52,8 +53,7 @@ export const setMigrationConfig = (
 ) => {
   globalConfig = { ...globalConfig, ...config };
   if (globalConfig.debugMode && __DEV__) {
-    // eslint-disable-next-line no-console
-    console.log('🔄 ResponsiveMigration: Config updated', globalConfig);
+    logDebug('ResponsiveMigration', 'Config updated', globalConfig);
   }
 };
 
@@ -107,10 +107,7 @@ const createResponsiveValue = <T>(
   const device = getUniversalDeviceCategory(width);
 
   if (globalConfig.debugMode && migrationApplied && __DEV__) {
-    // eslint-disable-next-line no-console
-    console.log(
-      `📱 ResponsiveMigration: ${device} ${original} → ${responsive}`
-    );
+    logDebug('ResponsiveMigration', `${device} ${original} → ${responsive}`);
   }
 
   return {

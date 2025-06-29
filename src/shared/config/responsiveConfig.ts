@@ -4,6 +4,7 @@
 // ===================================================================
 
 import { setMigrationConfig } from '../utils/responsiveMigration';
+import { logDebug } from '../utils/logger';
 
 // ===================================================================
 // GLOBAL RESPONSIVE CONFIGURATION
@@ -125,8 +126,7 @@ export const updateGlobalResponsiveConfig = (
   });
 
   if (currentGlobalConfig.enableDeviceInfoLogging && __DEV__) {
-    // eslint-disable-next-line no-console
-    console.log('🔄 GlobalResponsiveConfig updated:', currentGlobalConfig);
+    logDebug('GlobalResponsiveConfig', 'Config updated', currentGlobalConfig);
   }
 };
 
@@ -257,9 +257,9 @@ export const initializeResponsiveSystem = (): void => {
   }
 
   if (__DEV__) {
-    // eslint-disable-next-line no-console
-    console.log(
-      '🚀 Responsive System initialized with config:',
+    logDebug(
+      'ResponsiveSystem',
+      'Initialized with config',
       currentGlobalConfig
     );
   }

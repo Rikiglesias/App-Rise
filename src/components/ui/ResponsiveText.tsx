@@ -10,6 +10,7 @@ import {
   getResponsiveValue,
 } from '../../shared/utils/responsiveMigration';
 import { Typography } from '../../shared/constants/designTokens';
+import { logDebug } from '../../shared/utils/logger';
 
 // ===================================================================
 // RESPONSIVE TEXT INTERFACE
@@ -71,9 +72,9 @@ export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
         processedStyle.fontSize = getResponsiveValue(migratedFontSize);
 
         if (debugMode && __DEV__) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `📱 ResponsiveText: fontSize ${originalFontSize} → ${processedStyle.fontSize}`
+          logDebug(
+            'ResponsiveText',
+            `fontSize ${originalFontSize} → ${processedStyle.fontSize}`
           );
         }
       }
@@ -88,9 +89,9 @@ export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
         processedStyle.lineHeight = getResponsiveValue(migratedLineHeight);
 
         if (debugMode && __DEV__) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `📱 ResponsiveText: lineHeight ${originalLineHeight} → ${processedStyle.lineHeight}`
+          logDebug(
+            'ResponsiveText',
+            `lineHeight ${originalLineHeight} → ${processedStyle.lineHeight}`
           );
         }
       }
@@ -146,9 +147,9 @@ export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
         baseStyle.fontSize = getResponsiveValue(migratedSize);
 
         if (debugMode && __DEV__) {
-          // eslint-disable-next-line no-console
-          console.log(
-            `📱 ResponsiveText: responsiveFontSize ${responsiveFontSize} → ${baseStyle.fontSize}`
+          logDebug(
+            'ResponsiveText',
+            `responsiveFontSize ${responsiveFontSize} → ${baseStyle.fontSize}`
           );
         }
       }

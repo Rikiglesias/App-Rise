@@ -33,7 +33,7 @@ class SecureStorageManager {
   async setSecure(key: string, value: string): Promise<void> {
     try {
       await SecureStore.setItemAsync(key, value, {
-        keychainService: 'org.riseagainsthunger.italia',
+        keychainService: 'it.creareunapp.editor.ios63da226b4447c',
       });
 
       logger.debug('SecureStorage', `Successfully stored key: ${key}`);
@@ -53,7 +53,7 @@ class SecureStorageManager {
   async getSecure(key: string): Promise<string | null> {
     try {
       const value = await SecureStore.getItemAsync(key, {
-        keychainService: 'org.riseagainsthunger.italia',
+        keychainService: 'it.creareunapp.editor.ios63da226b4447c',
       });
 
       if (value) {
@@ -77,7 +77,7 @@ class SecureStorageManager {
   async removeSecure(key: string): Promise<void> {
     try {
       await SecureStore.deleteItemAsync(key, {
-        keychainService: 'org.riseagainsthunger.italia',
+        keychainService: 'it.creareunapp.editor.ios63da226b4447c',
       });
 
       logger.debug('SecureStorage', `Successfully removed key: ${key}`);

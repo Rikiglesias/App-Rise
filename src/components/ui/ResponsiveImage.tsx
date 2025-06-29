@@ -6,6 +6,7 @@
 import React from 'react';
 import { Image, ImageProps, ImageStyle, Dimensions } from 'react-native';
 import { getUniversalDeviceCategory } from '../../shared/constants/responsiveBreakpoints';
+import { logDebug } from '../../shared/utils/logger';
 
 // ===================================================================
 // RESPONSIVE IMAGE INTERFACE
@@ -91,8 +92,7 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
     }
 
     if (debugMode && __DEV__) {
-      // eslint-disable-next-line no-console
-      console.log(`📸 ResponsiveImage: ${device} scale=${scaleFactor}`, {
+      logDebug('ResponsiveImage', `${device} scale=${scaleFactor}`, {
         original: { width: mergedStyle.width, height: mergedStyle.height },
         responsive: {
           width: responsiveStyleObj.width,

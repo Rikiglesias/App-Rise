@@ -10,6 +10,7 @@ import {
   migrateSpacing,
   getResponsiveValue,
 } from '../../shared/utils/responsiveMigration';
+import { logDebug } from '../../shared/utils/logger';
 
 // ===================================================================
 // RESPONSIVE WRAPPER INTERFACE
@@ -180,10 +181,7 @@ export const ResponsiveWrapper: React.FC<ResponsiveWrapperProps> = ({
           (processedStyle as Record<string, unknown>)[typedKey] = newValue;
 
           if (debugMode && __DEV__) {
-            // eslint-disable-next-line no-console
-            console.log(
-              `📱 ${debugLabel}: ${typedKey} ${originalValue} → ${newValue}`
-            );
+            logDebug(debugLabel, `${typedKey} ${originalValue} → ${newValue}`);
           }
         }
       });

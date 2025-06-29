@@ -10,6 +10,7 @@ import {
   migrateSpacing,
   getResponsiveValue,
 } from '../../shared/utils/responsiveMigration';
+import { logDebug } from '../../shared/utils/logger';
 
 // ===================================================================
 // RESPONSIVE MODAL INTERFACE
@@ -94,8 +95,7 @@ export const ResponsiveModal: React.FC<ResponsiveModalProps> = ({
     );
 
     if (debugMode && __DEV__) {
-      // eslint-disable-next-line no-console
-      console.log(`🔄 ResponsiveModal: ${device} ${sizeVariant}`, {
+      logDebug('ResponsiveModal', `${device} ${sizeVariant}`, {
         screenSize: { width: screenWidth, height: screenHeight },
         modalSize: { width: finalWidth, maxHeight: finalMaxHeight },
         padding: responsivePadding,

@@ -34,7 +34,7 @@ export default {
       displayName: 'RAH Italia',
       supportsTablet: true,
       bundleIdentifier: 'it.creareunapp.editor.ios63da226b4447c',
-      buildNumber: '7',
+      buildNumber: '19',
       icon: './assets/icons/app/app-icon.jpg',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
