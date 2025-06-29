@@ -3,7 +3,8 @@
 // Tutti gli stili in questo file sono verificati manualmente come utilizzati.
 
 import React, { useMemo } from 'react';
-import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Spacing, Typography } from '../../../../shared/constants/designTokens';
@@ -57,11 +58,11 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
 
         // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
         titleText: {
-          fontSize: Typography.sizes['3xl'], // RIDIMENSIONATO: da 4xl a 3xl per migliore proporzione
-          fontWeight: Typography.weights.bold, // RIDOTTO: da black a bold per migliore leggibilità
+          // fontSize rimosso - ora gestito da ResponsiveText
+          fontWeight: Typography.weights.black, // MASSIMO peso per autorità - IDENTICO A IMPATTO
           color: '#1F2937',
           textAlign: 'center',
-          letterSpacing: -0.8, // RIDOTTO: spacing più naturale
+          letterSpacing: -1.2, // IDENTICO A IMPATTO per coerenza
           lineHeight: 42, // AUMENTATO: da 30 a 42 per respirare meglio
           marginBottom: Spacing[1], // AGGIUNTO: piccolo spazio sotto per equilibrio
           textShadowColor: 'rgba(31, 41, 55, 0.15)',
@@ -95,13 +96,15 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   // CONTENUTO TITOLO
   const titleContent = (
     <>
-      <Text style={styles.titleText}>
+      <ResponsiveText style={[{ fontSize: 40 }, styles.titleText]}>
         Fai la{'\n'}
-        <Text style={styles.titleAccent}>Differenza</Text>
-      </Text>
-      <Text style={styles.mainSubtitle}>
+        <ResponsiveText style={[{ fontSize: 40 }, styles.titleAccent]}>
+          Differenza
+        </ResponsiveText>
+      </ResponsiveText>
+      <ResponsiveText style={styles.mainSubtitle}>
         Ogni azione conta nella lotta contro la fame
-      </Text>
+      </ResponsiveText>
     </>
   );
 

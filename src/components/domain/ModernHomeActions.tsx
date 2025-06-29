@@ -11,6 +11,7 @@ import {
   View,
   type DimensionValue,
 } from 'react-native';
+import { ResponsiveText } from '../ui/ResponsiveText';
 import { Surface } from 'react-native-paper';
 
 import {
@@ -157,7 +158,6 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
         alignItems: 'center' as const,
       },
       icon: {
-        fontSize: 24,
         marginBottom: Spacing[1],
       },
       title: {
@@ -180,7 +180,9 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
       <View key={action.id} style={styles.cardContainer}>
         <PlatformTouchable onPress={action.onPress} style={styles.touchable}>
           <Surface style={styles.card}>
-            <Text style={styles.icon}>{action.icon}</Text>
+            <ResponsiveText style={styles.icon} responsiveFontSize={24}>
+              {action.icon}
+            </ResponsiveText>
             <Text style={styles.title}>{action.title}</Text>
           </Surface>
         </PlatformTouchable>

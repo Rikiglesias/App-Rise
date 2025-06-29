@@ -29,7 +29,7 @@ module.exports = {
     // =================== REACT NATIVE SPECIFICHE ===================
     'react-native/no-unused-styles': 'warn', // Importante ma non bloccante
     'react-native/split-platform-components': 'error', // Architettura corretta
-    'react-native/no-inline-styles': 'warn', // Performance
+    'react-native/no-inline-styles': 'off', // DISABILITATO: Sistema responsive intenzionale con { fontSize: X }
     'react-native/no-color-literals': 'off', // Troppo restrittivo per sviluppo rapido
     'react-native/no-raw-text': 'off', // Normale in React Native
 

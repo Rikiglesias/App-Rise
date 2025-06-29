@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+import { ResponsiveText } from '../../../components/ui/ResponsiveText';
 
 import {
   Animation,
@@ -102,14 +103,15 @@ const AnimatedIcon: React.FC<{
       { backgroundColor: color, transform: [{ scale: pulseValue }] },
     ]}
   >
-    <Text
+    <ResponsiveText
       style={[
         styles.icon,
         size === 'compact' ? styles.compactIcon : styles.standardIcon,
       ]}
+      responsiveFontSize={size === 'compact' ? 16 : 20}
     >
       {icon}
-    </Text>
+    </ResponsiveText>
   </Animated.View>
 );
 
@@ -320,13 +322,9 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
 
-  compactIcon: {
-    fontSize: 16,
-  },
+  compactIcon: {},
 
-  standardIcon: {
-    fontSize: 20,
-  },
+  standardIcon: {},
 
   // Value Styles
   value: {

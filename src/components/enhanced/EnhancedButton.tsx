@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { ResponsiveText } from '../ui/ResponsiveText';
 
 import {
   BorderRadius,
@@ -139,7 +140,11 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     >
       <Animated.View style={[buttonStyle, microInteraction.animatedStyle]}>
         <View style={styles.content}>
-          {icon && <Text style={styles.icon}>{icon}</Text>}
+          {icon && (
+            <ResponsiveText style={styles.icon} responsiveFontSize={16}>
+              {icon}
+            </ResponsiveText>
+          )}
           <Text style={textStyle}>{title}</Text>
         </View>
       </Animated.View>
@@ -174,9 +179,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  icon: {
-    fontSize: 16,
-  },
+  icon: {},
 });
 
 export default EnhancedButton;

@@ -1,5 +1,6 @@
 import React, { useRef, useCallback } from 'react';
-import { Platform, View, Text, StyleSheet, Animated } from 'react-native';
+import { Platform, View, StyleSheet, Animated } from 'react-native';
+import { ResponsiveText } from './ResponsiveText';
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -215,25 +216,29 @@ const MaterialNavigationItem: React.FC<MaterialNavigationItemProps> = ({
             />
             {item.badge && item.badge > 0 && (
               <View style={styles.badge}>
-                <Text style={styles.badgeText}>
+                <ResponsiveText
+                  style={styles.badgeText}
+                  responsiveFontSize={10}
+                >
                   {item.badge > 99 ? '99+' : item.badge.toString()}
-                </Text>
+                </ResponsiveText>
               </View>
             )}
           </View>
 
           {/* Label */}
           {showLabel && (
-            <Text
+            <ResponsiveText
               style={[
                 styles.label,
                 isActive ? styles.activeLabel : styles.inactiveLabel,
                 { color: isActive ? colors.activeLabel : colors.inactiveLabel },
               ]}
+              responsiveFontSize={12}
               numberOfLines={1}
             >
               {item.title}
-            </Text>
+            </ResponsiveText>
           )}
         </View>
       </TouchableRipple>
@@ -294,12 +299,10 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: '#FFFFFF',
-    fontSize: 10,
     fontWeight: '600',
     textAlign: 'center',
   },
   label: {
-    fontSize: 12,
     fontWeight: '500',
     textAlign: 'center',
     marginTop: 2,

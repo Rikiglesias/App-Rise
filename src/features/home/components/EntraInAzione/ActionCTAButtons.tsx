@@ -2,7 +2,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
 import { PlatformTouchable } from '../../../../components/ui';
 import {
   Colors,
@@ -54,8 +55,18 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
-              <Text style={styles.buttonTitle}>Scopri{'\n'}Impatto</Text>
-              <Text style={styles.buttonDirectionRed}>← Risultati</Text>
+              <ResponsiveText
+                style={styles.buttonTitle}
+                responsiveFontSize={Typography.sizes.lg}
+              >
+                Scopri{'\n'}Impatto
+              </ResponsiveText>
+              <ResponsiveText
+                style={styles.buttonDirectionRed}
+                responsiveFontSize={Typography.sizes.lg}
+              >
+                ← Risultati
+              </ResponsiveText>
             </View>
           </View>
         </LinearGradient>
@@ -81,8 +92,18 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 color="#059669"
                 style={styles.buttonIcon}
               />
-              <Text style={styles.buttonTitleGreen}>Dona e{'\n'}Aiuta</Text>
-              <Text style={styles.buttonDirection}>Supporta →</Text>
+              <ResponsiveText
+                style={styles.buttonTitleGreen}
+                responsiveFontSize={Typography.sizes.lg}
+              >
+                Dona e{'\n'}Aiuta
+              </ResponsiveText>
+              <ResponsiveText
+                style={styles.buttonDirection}
+                responsiveFontSize={Typography.sizes.lg}
+              >
+                Supporta →
+              </ResponsiveText>
             </View>
           </View>
         </LinearGradient>
@@ -136,7 +157,6 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
-    fontSize: Typography.sizes.lg,
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center' as const,
@@ -145,18 +165,15 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(220, 38, 38, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
-    lineHeight: Typography.sizes.lg * 1.1,
     textAlignVertical: 'center' as const,
   },
 
   buttonDirection: {
-    fontSize: Typography.sizes.lg,
     fontWeight: Typography.weights.bold,
     color: '#10B981',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
     marginVertical: Spacing[1],
-    lineHeight: Typography.sizes.lg * 1.2,
     textShadowColor: 'rgba(16, 185, 129, 0.12)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
@@ -164,13 +181,11 @@ const styles = StyleSheet.create({
   },
 
   buttonDirectionRed: {
-    fontSize: Typography.sizes.lg,
     fontWeight: Typography.weights.bold,
     color: '#EF4444',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
     marginVertical: Spacing[1],
-    lineHeight: Typography.sizes.lg * 1.2,
     textShadowColor: 'rgba(239, 68, 68, 0.12)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
@@ -178,7 +193,6 @@ const styles = StyleSheet.create({
   },
 
   buttonTitleGreen: {
-    fontSize: Typography.sizes.lg,
     fontWeight: Typography.weights.black,
     color: '#059669',
     textAlign: 'center' as const,
@@ -187,7 +201,6 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(5, 150, 105, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
-    lineHeight: Typography.sizes.lg * 1.1,
     textAlignVertical: 'center' as const,
   },
 });

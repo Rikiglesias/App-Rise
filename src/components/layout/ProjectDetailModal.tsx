@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, Modal, StyleSheet, Text, View } from 'react-native';
+import { ResponsiveText } from '../ui/ResponsiveText';
 import { PlatformScrollView, PlatformTouchable } from '../ui';
 
 import {
@@ -82,14 +83,18 @@ const ProjectDetailModal: React.FC<Props> = ({
               <Text style={styles.statNumber}>{location.projects}</Text>
               <Text style={styles.statLabel}>Progetti Attivi</Text>
               <View style={styles.statIcon}>
-                <Text style={styles.statEmoji}>🎯</Text>
+                <ResponsiveText style={[{ fontSize: 20 }, styles.statEmoji]}>
+                  🎯
+                </ResponsiveText>
               </View>
             </View>
             <View style={styles.statCard}>
               <Text style={styles.statNumber}>{location.beneficiaries}</Text>
               <Text style={styles.statLabel}>Beneficiari</Text>
               <View style={styles.statIcon}>
-                <Text style={styles.statEmoji}>👥</Text>
+                <ResponsiveText style={[{ fontSize: 20 }, styles.statEmoji]}>
+                  👥
+                </ResponsiveText>
               </View>
             </View>
           </View>
@@ -105,19 +110,31 @@ const ProjectDetailModal: React.FC<Props> = ({
             <Text style={styles.sectionTitle}>🏆 Risultati Raggiunti</Text>
             <View style={styles.achievementsList}>
               <View style={styles.achievementItem}>
-                <Text style={styles.achievementIcon}>🍽️</Text>
+                <ResponsiveText
+                  style={[{ fontSize: 24 }, styles.achievementIcon]}
+                >
+                  🍽️
+                </ResponsiveText>
                 <Text style={styles.achievementText}>
                   Pasti distribuiti regolarmente
                 </Text>
               </View>
               <View style={styles.achievementItem}>
-                <Text style={styles.achievementIcon}>🏫</Text>
+                <ResponsiveText
+                  style={[{ fontSize: 24 }, styles.achievementIcon]}
+                >
+                  🏫
+                </ResponsiveText>
                 <Text style={styles.achievementText}>
                   Partnership con scuole locali
                 </Text>
               </View>
               <View style={styles.achievementItem}>
-                <Text style={styles.achievementIcon}>🌱</Text>
+                <ResponsiveText
+                  style={[{ fontSize: 24 }, styles.achievementIcon]}
+                >
+                  🌱
+                </ResponsiveText>
                 <Text style={styles.achievementText}>
                   Programmi sostenibilità
                 </Text>
@@ -265,9 +282,7 @@ const styles = StyleSheet.create({
     top: Spacing[2],
     right: Spacing[2],
   },
-  statEmoji: {
-    fontSize: 20,
-  },
+  statEmoji: {},
   descriptionContainer: {
     paddingHorizontal: Spacing[4],
     marginBottom: Spacing[6],
@@ -299,7 +314,6 @@ const styles = StyleSheet.create({
     ...Shadows.sm,
   },
   achievementIcon: {
-    fontSize: 24,
     marginRight: Spacing[3],
   },
   achievementText: {

@@ -2,16 +2,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Animated, Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
+import { ResponsiveText } from '../../../components/ui/ResponsiveText';
 
 import type { Location } from '../../../components/layout/InteractiveMap';
 import MapLocationModal from '../../../components/layout/MapLocationModal';
@@ -28,7 +21,7 @@ import type {
   ImpactScreenName,
 } from '../types/ImpactScreenTypes';
 
-const { width: screenWidth } = Dimensions.get('window');
+// const { width: screenWidth } = Dimensions.get('window'); // Rimosso - non più utilizzato
 
 // Animation Hook - OTTIMIZZATO PERFORMANCE
 const useImpactAnimations = () => {
@@ -72,13 +65,15 @@ const ImpactHeader: React.FC<{
       />
 
       <View style={styles.mainHeaderContainer}>
-        <Text style={styles.titleText}>
+        <ResponsiveText style={[{ fontSize: 40 }, styles.titleText]}>
           Il Nostro{'\n'}
-          <Text style={styles.titleAccent}>Impatto</Text>
-        </Text>
-        <Text style={styles.mainSubtitle}>
+          <ResponsiveText style={[{ fontSize: 40 }, styles.titleAccent]}>
+            Impatto
+          </ResponsiveText>
+        </ResponsiveText>
+        <ResponsiveText style={[{ fontSize: 16 }, styles.mainSubtitle]}>
           Risultati concreti nella lotta contro la fame mondiale
-        </Text>
+        </ResponsiveText>
       </View>
     </Animated.View>
   );
@@ -108,10 +103,13 @@ const TotalMealsSection: React.FC<{
         ]}
       >
         <View style={styles.numbersHeaderBackground}>
-          <Text style={styles.numbersTitle}>📊 I Nostri Numeri</Text>
-          <Text style={styles.numbersSubtitle}>
+          <ResponsiveText style={[{ fontSize: 24 }, styles.numbersTitle]}>
+            <ResponsiveText style={{ fontSize: 22 }}>📊</ResponsiveText> I
+            Nostri Numeri
+          </ResponsiveText>
+          <ResponsiveText style={[{ fontSize: 16 }, styles.numbersSubtitle]}>
             Milioni di vite cambiate, un pasto alla volta
-          </Text>
+          </ResponsiveText>
         </View>
       </Animated.View>
 
@@ -137,9 +135,21 @@ const TotalMealsSection: React.FC<{
                   color="#DC2626"
                   style={styles.totalCardIcon}
                 />
-                <Text style={styles.totalStatValue}>15.8M</Text>
-                <Text style={styles.totalStatLabel}>Pasti Totali</Text>
-                <Text style={styles.totalStatSubtitle}>Dal 2012 - Meals</Text>
+                <ResponsiveText
+                  style={[{ fontSize: 26 }, styles.totalStatValue]}
+                >
+                  15.8M
+                </ResponsiveText>
+                <ResponsiveText
+                  style={[{ fontSize: 16 }, styles.totalStatLabel]}
+                >
+                  Pasti Totali
+                </ResponsiveText>
+                <ResponsiveText
+                  style={[{ fontSize: 14 }, styles.totalStatSubtitle]}
+                >
+                  Dal 2012 - Meals
+                </ResponsiveText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -172,9 +182,21 @@ const TotalMealsSection: React.FC<{
                   color="#1F2937"
                   style={styles.totalCardIcon}
                 />
-                <Text style={styles.totalStatValue}>142K</Text>
-                <Text style={styles.totalStatLabel}>Kit Totali</Text>
-                <Text style={styles.totalStatSubtitle}>Dal 2020 - Kits</Text>
+                <ResponsiveText
+                  style={[{ fontSize: 26 }, styles.totalStatValue]}
+                >
+                  142K
+                </ResponsiveText>
+                <ResponsiveText
+                  style={[{ fontSize: 16 }, styles.totalStatLabel]}
+                >
+                  Kit Totali
+                </ResponsiveText>
+                <ResponsiveText
+                  style={[{ fontSize: 14 }, styles.totalStatSubtitle]}
+                >
+                  Dal 2020 - Kits
+                </ResponsiveText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -207,10 +229,15 @@ const Results2024Section: React.FC<{
         ]}
       >
         <View style={styles.results2024HeaderBackground}>
-          <Text style={styles.results2024Title}>🎯 Risultati Raggiunti</Text>
-          <Text style={styles.results2024Subtitle}>
+          <ResponsiveText style={[{ fontSize: 24 }, styles.results2024Title]}>
+            <ResponsiveText style={{ fontSize: 22 }}>🎯</ResponsiveText>{' '}
+            Risultati Raggiunti
+          </ResponsiveText>
+          <ResponsiveText
+            style={[{ fontSize: 16 }, styles.results2024Subtitle]}
+          >
             I numeri che raccontano il nostro impegno annuale
-          </Text>
+          </ResponsiveText>
         </View>
       </Animated.View>
 
@@ -231,9 +258,21 @@ const Results2024Section: React.FC<{
               size={28}
               color="#DC2626"
             />
-            <Text style={styles.record2024Value}>3.14M</Text>
-            <Text style={styles.record2024Label}>Pasti Confezionati</Text>
-            <Text style={styles.record2024Description}>Prodotti nel 2024</Text>
+            <ResponsiveText style={[{ fontSize: 24 }, styles.record2024Value]}>
+              3.14M
+            </ResponsiveText>
+            <ResponsiveText
+              style={[{ fontSize: 18 }, styles.record2024Label]}
+              numberOfLines={1}
+              adjustsFontSizeToFit={true}
+            >
+              Pasti Confezionati
+            </ResponsiveText>
+            <ResponsiveText
+              style={[{ fontSize: 14 }, styles.record2024Description]}
+            >
+              Prodotti nel 2024
+            </ResponsiveText>
           </View>
         </Animated.View>
 
@@ -252,9 +291,21 @@ const Results2024Section: React.FC<{
               size={28}
               color="#1F2937"
             />
-            <Text style={styles.record2024Value}>16.3K</Text>
-            <Text style={styles.record2024Label}>Kit Confezionati</Text>
-            <Text style={styles.record2024Description}>Creati nel 2024</Text>
+            <ResponsiveText style={[{ fontSize: 24 }, styles.record2024Value]}>
+              16.3K
+            </ResponsiveText>
+            <ResponsiveText
+              style={[{ fontSize: 18 }, styles.record2024Label]}
+              numberOfLines={1}
+              adjustsFontSizeToFit={true}
+            >
+              Kit Confezionati
+            </ResponsiveText>
+            <ResponsiveText
+              style={[{ fontSize: 14 }, styles.record2024Description]}
+            >
+              Creati nel 2024
+            </ResponsiveText>
           </View>
         </Animated.View>
       </View>
@@ -281,10 +332,13 @@ const CommunitySection: React.FC<{
         ]}
       >
         <View style={styles.communityHeaderBackground}>
-          <Text style={styles.communityTitle}>🤝 La Nostra Community</Text>
-          <Text style={styles.communitySubtitle}>
+          <ResponsiveText style={[{ fontSize: 24 }, styles.communityTitle]}>
+            <ResponsiveText style={{ fontSize: 22 }}>🤝</ResponsiveText> La
+            Nostra Community
+          </ResponsiveText>
+          <ResponsiveText style={[{ fontSize: 16 }, styles.communitySubtitle]}>
             Volontari e partner uniti nella missione #famezero
-          </Text>
+          </ResponsiveText>
         </View>
       </Animated.View>
 
@@ -310,8 +364,16 @@ const CommunitySection: React.FC<{
                   color="#10B981"
                   style={styles.communityCardIcon}
                 />
-                <Text style={styles.communityStatValue}>13.323</Text>
-                <Text style={styles.communityStatLabel}>Volontari 2024</Text>
+                <ResponsiveText
+                  style={[{ fontSize: 24 }, styles.communityStatValue]}
+                >
+                  13.323
+                </ResponsiveText>
+                <ResponsiveText
+                  style={[{ fontSize: 16 }, styles.communityStatLabel]}
+                >
+                  Volontari 2024
+                </ResponsiveText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -344,8 +406,16 @@ const CommunitySection: React.FC<{
                   color="#8B5CF6"
                   style={styles.communityCardIcon}
                 />
-                <Text style={styles.communityStatValue}>150+</Text>
-                <Text style={styles.communityStatLabel}>Partner Attivi</Text>
+                <ResponsiveText
+                  style={[{ fontSize: 24 }, styles.communityStatValue]}
+                >
+                  150+
+                </ResponsiveText>
+                <ResponsiveText
+                  style={[{ fontSize: 16 }, styles.communityStatLabel]}
+                >
+                  Partner Attivi
+                </ResponsiveText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -374,8 +444,13 @@ const MapSection: React.FC<{
       {/* Header GEOGRAFICO con elementi di location */}
       <View style={styles.mapHeaderContainer}>
         <View style={styles.mapHeaderBackground}>
-          <Text style={styles.mapTitle}>🌍 Dove Operiamo</Text>
-          <Text style={styles.mapSubtitle}>Le nostre operazioni nel mondo</Text>
+          <ResponsiveText style={[{ fontSize: 24 }, styles.mapTitle]}>
+            <ResponsiveText style={{ fontSize: 22 }}>🌍</ResponsiveText> Dove
+            Operiamo
+          </ResponsiveText>
+          <ResponsiveText style={[{ fontSize: 16 }, styles.mapSubtitle]}>
+            Le nostre operazioni nel mondo
+          </ResponsiveText>
         </View>
       </View>
 
@@ -398,7 +473,9 @@ const MapSection: React.FC<{
             size={20}
             color={Colors.neutral[600]}
           />
-          <Text style={styles.mapClickText}>Tocca per mappa completa</Text>
+          <ResponsiveText style={[{ fontSize: 12 }, styles.mapClickText]}>
+            Tocca per mappa completa
+          </ResponsiveText>
         </View>
       </PlatformTouchable>
     </View>
@@ -564,7 +641,7 @@ const styles = StyleSheet.create({
   },
   // TIPOGRAFIA POTENTE E MODERNA - INGRANDITA
   titleText: {
-    fontSize: Typography.sizes['4xl'], // INGRANDITO: da 3xl a 4xl per maggiore impatto
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.black, // MASSIMO peso per autorità
     color: '#1F2937', // NERO per contrasto come richiesto
     textAlign: 'center',
@@ -585,7 +662,7 @@ const styles = StyleSheet.create({
   },
   // SUBTITLE INLINE INGRANDITO E ELEGANTE
   mainSubtitle: {
-    fontSize: Typography.sizes.base, // INGRANDITO: da sm a base per maggiore leggibilità
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.medium, // MEDIUM COME PAGINA AZIONI
     color: '#374151', // GRIGIO COORDINATO COME PAGINA AZIONI
     textAlign: 'center',
@@ -647,19 +724,19 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[3],
   },
   totalStatValue: {
-    fontSize: screenWidth > 375 ? 28 : 24, // RIDOTTO: da 32/28 a 28/24 per proporzioni più bilanciate
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.black,
     color: '#1F2937', // NERO invece che rosso
     marginBottom: Spacing[1],
   },
   totalStatLabel: {
-    fontSize: Typography.sizes.base,
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.bold,
     color: '#374151',
     marginBottom: Spacing[1],
   },
   totalStatSubtitle: {
-    fontSize: Typography.sizes.sm,
+    // fontSize rimosso - ora gestito da ResponsiveText
     color: '#6B7280',
   },
 
@@ -698,13 +775,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[3],
   },
   communityStatValue: {
-    fontSize: Typography.sizes['2xl'],
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     marginBottom: Spacing[1],
   },
   communityStatLabel: {
-    fontSize: Typography.sizes.base,
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.semibold,
     color: '#374151',
     textAlign: 'center',
@@ -760,7 +837,7 @@ const styles = StyleSheet.create({
     gap: Spacing[1],
   },
   mapClickText: {
-    fontSize: Typography.sizes.xs,
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
   },
@@ -793,20 +870,22 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   record2024Value: {
-    fontSize: Typography.sizes['2xl'],
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     marginTop: Spacing[2],
     marginBottom: Spacing[1],
   },
+
   record2024Label: {
-    fontSize: Typography.sizes.base,
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.semibold,
     color: '#374151',
     marginBottom: Spacing[1],
+    textAlign: 'center',
   },
   record2024Description: {
-    fontSize: Typography.sizes.xs,
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center',
@@ -849,7 +928,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   numbersTitle: {
-    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.bold, // BOLD normale
     color: '#374151', // GRIGIO ELEGANTE
     textAlign: 'center',
@@ -860,7 +939,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   numbersSubtitle: {
-    fontSize: Typography.sizes.base,
+    // fontSize rimosso - ora gestito da ResponsiveText
     color: '#4B5563', // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
     marginTop: Spacing[3],
@@ -887,7 +966,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   communityTitle: {
-    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.bold, // BOLD normale
     color: '#374151', // GRIGIO ELEGANTE
     textAlign: 'center',
@@ -898,7 +977,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   communitySubtitle: {
-    fontSize: Typography.sizes.base,
+    // fontSize rimosso - ora gestito da ResponsiveText
     color: '#4B5563', // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
     marginTop: Spacing[3],
@@ -926,7 +1005,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   mapTitle: {
-    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.bold, // BOLD normale
     color: '#374151', // GRIGIO ELEGANTE
     textAlign: 'center',
@@ -937,7 +1016,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   mapSubtitle: {
-    fontSize: Typography.sizes.base,
+    // fontSize rimosso - ora gestito da ResponsiveText
     color: '#4B5563', // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
     marginTop: Spacing[3],
@@ -965,7 +1044,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   results2024Title: {
-    fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.bold, // BOLD normale
     color: '#374151', // GRIGIO ELEGANTE
     textAlign: 'center',
@@ -977,7 +1056,7 @@ const styles = StyleSheet.create({
   },
 
   results2024Subtitle: {
-    fontSize: Typography.sizes.base,
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.medium,
     color: '#4B5563', // GRIGIO MEDIO per leggibilità
     textAlign: 'center',

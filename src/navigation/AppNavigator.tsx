@@ -36,7 +36,6 @@ const AppNavigator: React.FC = () => {
           headerTintColor: '#FFFFFF',
           headerTitleStyle: {
             fontWeight: '700',
-            fontSize: 18,
             letterSpacing: 0.5,
           },
         }}

@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { Animated, Modal, StyleSheet, Text, View } from 'react-native';
+import { Animated, Modal, StyleSheet, View } from 'react-native';
+import { ResponsiveText } from '../ui/ResponsiveText';
 import { PlatformTouchable } from '../ui';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
@@ -54,7 +55,6 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     },
 
     modalTitle: {
-      fontSize: 20,
       fontWeight: '700',
       color: '#1F2937',
       flex: 1,
@@ -67,7 +67,6 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     },
 
     modalCloseIcon: {
-      fontSize: 18,
       fontWeight: '800',
       color: '#6B7280',
     },
@@ -77,7 +76,6 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     },
 
     modalText: {
-      fontSize: 16,
       fontWeight: '400',
       color: '#374151',
       lineHeight: 24,
@@ -85,7 +83,6 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     },
 
     modalSubtitle: {
-      fontSize: 18,
       fontWeight: '600',
       color: '#1F2937',
       marginTop: Spacing[2],
@@ -97,7 +94,6 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     },
 
     modalBullet: {
-      fontSize: 16,
       fontWeight: '400',
       color: '#374151',
       lineHeight: 24,
@@ -120,7 +116,6 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     },
 
     modalButtonSecondaryText: {
-      fontSize: 16,
       fontWeight: '600',
       color: '#374151',
     },
@@ -135,7 +130,6 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
     },
 
     modalButtonPrimaryText: {
-      fontSize: 16,
       fontWeight: '600',
       color: 'white',
     },
@@ -156,41 +150,60 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
         <PlatformTouchable activeOpacity={1} onPress={handleStopPropagation}>
           <Animated.View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>
+              <ResponsiveText style={styles.modalTitle} responsiveFontSize={20}>
+                Come Funziona la Donazione
+              </ResponsiveText>
               <PlatformTouchable
                 onPress={onClose}
                 style={styles.modalCloseButton}
               >
-                <Text style={styles.modalCloseIcon}>×</Text>
+                <ResponsiveText
+                  style={styles.modalCloseIcon}
+                  responsiveFontSize={18}
+                >
+                  ×
+                </ResponsiveText>
               </PlatformTouchable>
             </View>
 
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>
+              <ResponsiveText style={styles.modalText} responsiveFontSize={16}>
                 Puoi contribuire alla nostra missione in diversi modi:
                 attraverso acquisti solidali oppure con donazioni monetarie
                 dirette.
-              </Text>
-              <Text style={styles.modalText}>
+              </ResponsiveText>
+              <ResponsiveText style={styles.modalText} responsiveFontSize={16}>
                 Grazie agli accordi strategici con i nostri partner commerciali,
                 una percentuale degli acquisti effettuati tramite i nostri
                 canali viene automaticamente destinata ai progetti di Rise
                 Against Hunger Italia. Tu spendi lo stesso prezzo, ma aiuti a
                 combattere la fame!
-              </Text>
-              <Text style={styles.modalSubtitle}>
+              </ResponsiveText>
+              <ResponsiveText
+                style={styles.modalSubtitle}
+                responsiveFontSize={18}
+              >
                 Se vuoi fare una donazione monetaria:
-              </Text>
+              </ResponsiveText>
               <View style={styles.modalBullets}>
-                <Text style={styles.modalBullet}>
+                <ResponsiveText
+                  style={styles.modalBullet}
+                  responsiveFontSize={16}
+                >
                   • Clicca su &quot;Dona Ora&quot; per donazioni dirette
-                </Text>
-                <Text style={styles.modalBullet}>
+                </ResponsiveText>
+                <ResponsiveText
+                  style={styles.modalBullet}
+                  responsiveFontSize={16}
+                >
                   • Ogni euro dona pasti nutritivi ai bambini
-                </Text>
-                <Text style={styles.modalBullet}>
+                </ResponsiveText>
+                <ResponsiveText
+                  style={styles.modalBullet}
+                  responsiveFontSize={16}
+                >
                   • Sostieni progetti educativi e sviluppo sostenibile
-                </Text>
+                </ResponsiveText>
               </View>
             </View>
 
@@ -199,13 +212,23 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                 onPress={onClose}
                 style={styles.modalButtonSecondary}
               >
-                <Text style={styles.modalButtonSecondaryText}>Ho Capito</Text>
+                <ResponsiveText
+                  style={styles.modalButtonSecondaryText}
+                  responsiveFontSize={16}
+                >
+                  Ho Capito
+                </ResponsiveText>
               </PlatformTouchable>
               <PlatformTouchable
                 onPress={onDonate}
                 style={styles.modalButtonPrimary}
               >
-                <Text style={styles.modalButtonPrimaryText}>Dona Subito</Text>
+                <ResponsiveText
+                  style={styles.modalButtonPrimaryText}
+                  responsiveFontSize={16}
+                >
+                  Dona Subito
+                </ResponsiveText>
               </PlatformTouchable>
             </View>
           </Animated.View>

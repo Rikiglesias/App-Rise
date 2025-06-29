@@ -3,6 +3,7 @@ import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
+import { ResponsiveText } from '../components/ui/ResponsiveText';
 import * as Haptics from 'expo-haptics';
 import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -220,17 +221,19 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
               color={tabColors.iconColor}
             />
           </Animated.View>
-          <Animated.Text
-            style={[
-              styles.labelText,
-              labelStyle,
-              { color: tabColors.labelColor },
-            ]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {options.tabBarAccessibilityLabel?.split(' ')[0]}
-          </Animated.Text>
+          <Animated.View style={labelStyle}>
+            <ResponsiveText
+              style={[
+                { fontSize: 16 }, // AUMENTATO: da 14 a 16 per leggibilità migliore
+                styles.labelText,
+                { color: tabColors.labelColor },
+              ]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {options.tabBarAccessibilityLabel?.split(' ')[0]}
+            </ResponsiveText>
+          </Animated.View>
         </View>
       </PlatformTouchable>
     </Animated.View>
@@ -350,11 +353,11 @@ const styles = StyleSheet.create({
   },
   // --- Label ---
   labelText: {
-    fontSize: Typography.sizes.sm, // INGRANDITO: da xs a sm per maggiore leggibilità
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.semibold,
     marginTop: Spacing[1],
     textAlign: 'center',
-    maxWidth: 60,
+    maxWidth: 80, // AUMENTATO: da 60 a 80 per contenere "Impatto" completo
   },
 });
 

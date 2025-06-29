@@ -5,7 +5,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
 import { PlatformTouchable } from '../../../../components/ui';
 
 import {
@@ -268,7 +269,7 @@ const ActionButtonsContent: React.FC<{
 
         // TITOLO CATEGORIA DONA ELEGANTE - PIÙ GRASSETTO
         donateCategoryTitle: {
-          fontSize: Typography.sizes['2xl'],
+          // fontSize rimosso - ora gestito da ResponsiveText
           fontWeight: Typography.weights.black, // PIÙ GRASSETTO: da bold a black
           color: '#DC2626',
           textAlign: 'center',
@@ -289,7 +290,7 @@ const ActionButtonsContent: React.FC<{
 
         // TITOLO ESPLORA DISTINTIVO
         exploreTitle: {
-          fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+          // fontSize rimosso - ora gestito da ResponsiveText
           fontWeight: Typography.weights.bold, // BOLD normale
           color: '#374151', // GRIGIO SCURO ELEGANTE per Esplora
           textAlign: 'center',
@@ -302,7 +303,7 @@ const ActionButtonsContent: React.FC<{
 
         // TITOLO COMMUNITY DISTINTIVO
         communityTitle: {
-          fontSize: Typography.sizes['2xl'], // DIMENSIONE APPROPRIATA
+          // fontSize rimosso - ora gestito da ResponsiveText
           fontWeight: Typography.weights.bold, // BOLD normale
           color: '#1F2937', // NERO per Community
           textAlign: 'center',
@@ -568,10 +569,14 @@ const DonateButtonsSection: React.FC<{
           onPress={onInfoPress}
           activeOpacity={0.8}
         >
-          <Text style={styles.donateCategoryTitle}>❤️ Contribuisci</Text>
-          <Text style={styles.donateInlineSubtitle}>
+          <ResponsiveText
+            style={[{ fontSize: 24 }, styles.donateCategoryTitle]}
+          >
+            ❤️ Contribuisci
+          </ResponsiveText>
+          <ResponsiveText style={styles.donateInlineSubtitle}>
             Supporta la lotta contro la fame
-          </Text>
+          </ResponsiveText>
         </PlatformTouchable>
         <PlatformTouchable
           style={styles.infoButton}
@@ -683,10 +688,12 @@ const ExploreButtonsSection: React.FC<{
         ]}
       >
         <View style={styles.exploreHeaderBackground}>
-          <Text style={styles.exploreTitle}>🔍 Esplora</Text>
-          <Text style={styles.exploreSubtitle}>
+          <ResponsiveText style={[{ fontSize: 24 }, styles.exploreTitle]}>
+            🔍 Esplora
+          </ResponsiveText>
+          <ResponsiveText style={styles.exploreSubtitle}>
             Progetti e iniziative umanitarie
-          </Text>
+          </ResponsiveText>
         </View>
       </Animated.View>
       <View style={styles.buttonsGrid}>
@@ -785,10 +792,12 @@ const CommunityButtonsSection: React.FC<{
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
         >
-          <Text style={styles.communityTitle}>🤝 Community</Text>
-          <Text style={styles.communitySubtitle}>
+          <ResponsiveText style={[{ fontSize: 24 }, styles.communityTitle]}>
+            🤝 Community
+          </ResponsiveText>
+          <ResponsiveText style={styles.communitySubtitle}>
             Unisciti alla nostra comunità
-          </Text>
+          </ResponsiveText>
           {/* Icona link esterno per indicare che apre una pagina esterna */}
           <MaterialCommunityIcons
             name="open-in-new"
@@ -882,7 +891,9 @@ const AnimatedButton: React.FC<{
               color={iconColor}
               style={styles.buttonIcon}
             />
-            <Text style={styles.buttonTitle}>{button.title}</Text>
+            <ResponsiveText style={styles.buttonTitle}>
+              {button.title}
+            </ResponsiveText>
             <MaterialCommunityIcons
               name="chevron-right"
               size={20}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { ResponsiveText } from '../ui/ResponsiveText';
 import { PlatformTouchable } from '../ui';
 import { Surface } from 'react-native-paper';
 import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
@@ -38,13 +39,19 @@ export const CardHeader: React.FC<CardHeaderProps> = React.memo(
     <View style={cardStyles.cardHeader}>
       {/* 📍 Icon */}
       <View style={cardStyles.iconContainer}>
-        <Text style={cardStyles.iconText}>{action.icon}</Text>
+        <ResponsiveText style={cardStyles.iconText}>
+          {action.icon}
+        </ResponsiveText>
       </View>
 
       {/* 📝 Text Container */}
       <View style={cardStyles.textContainer}>
-        <Text style={cardStyles.cardSubtitle}>{action.subtitle}</Text>
-        <Text style={cardStyles.cardTitle}>{action.title}</Text>
+        <ResponsiveText style={cardStyles.cardSubtitle}>
+          {action.subtitle}
+        </ResponsiveText>
+        <ResponsiveText style={cardStyles.cardTitle}>
+          {action.title}
+        </ResponsiveText>
       </View>
     </View>
   )
@@ -85,9 +92,9 @@ export const BentoActionCard: React.FC<BentoActionCardProps> = React.memo(
               <CardHeader action={action} cardStyles={cardStyles} />
 
               {/* 📝 Description */}
-              <Text style={cardStyles.cardDescription}>
+              <ResponsiveText style={cardStyles.cardDescription}>
                 {action.description}
-              </Text>
+              </ResponsiveText>
             </View>
           </View>
         </Surface>

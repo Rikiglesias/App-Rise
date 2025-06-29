@@ -1,6 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { ResponsiveText } from './ResponsiveText';
 import { PlatformScrollView } from './PlatformComponents';
 import { Text, TouchableRipple } from 'react-native-paper';
 import {
@@ -63,7 +64,6 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       borderColor: colors.border,
     },
     tabIcon: {
-      fontSize: 16,
       marginRight: Spacing[2],
     },
     tabLabel: {
@@ -146,14 +146,15 @@ const TabItem: React.FC<TabItemProps> = ({
     >
       <View style={styles.tabContent}>
         {tab.icon && (
-          <Text
+          <ResponsiveText
             style={[
               styles.tabIcon,
               isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
             ]}
+            responsiveFontSize={16}
           >
             {tab.icon}
-          </Text>
+          </ResponsiveText>
         )}
 
         <Text

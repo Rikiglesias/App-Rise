@@ -151,20 +151,20 @@ export const UniversalDeviceCategories = {
 // RESPONSIVE SPACING SYSTEM - UNIVERSALE
 // ===================================================================
 export const UniversalResponsiveSpacing = {
-  // Moltiplicatori COMPLETAMENTE UNIFORMI - ESPERIENZA IDENTICA SU TUTTI I MOBILE
+  // Moltiplicatori OTTIMIZZATI PER OGNI DISPOSITIVO - RIDOTTI PER EVITARE ZOOM
   multipliers: {
-    extraSmall: 1.0, // iPhone SE 1st - identico a tutti gli altri mobile
-    small: 1.0, // Galaxy S24, Android standard - identico
-    mediumSmall: 1.0, // iPhone SE 2nd/3rd, mini - identico
+    extraSmall: 1.0, // iPhone SE 1st - baseline
+    small: 1.0, // Galaxy S24, Android standard - baseline
+    mediumSmall: 1.0, // iPhone SE 2nd/3rd, mini - baseline
     medium: 1.0, // iPhone 14/13/12 - baseline perfetto
-    mediumLarge: 1.0, // iPhone 16 Pro - identico
-    large: 1.0, // iPhone 11/XR - identico
-    extraLarge: 1.0, // iPhone Pro Max - identico
-    huge: 1.0, // iPhone 16 Pro Max - identico
-    premium: 1.0, // Pixel Pro, Galaxy Ultra - identico
-    tabletSmall: 1.15, // Tablet piccoli - incremento solo per tablet
-    tablet: 1.25, // Tablet standard - incremento significativo per tablet
-    desktop: 1.4, // Desktop - incremento solo per desktop
+    mediumLarge: 1.0, // iPhone 16 Pro - baseline
+    large: 0.85, // iPhone 11/XR - RIDOTTO per evitare effetto zoom
+    extraLarge: 1.0, // iPhone Pro Max - baseline
+    huge: 1.0, // iPhone 16 Pro Max - baseline
+    premium: 1.0, // Pixel Pro, Galaxy Ultra - baseline
+    tabletSmall: 1.05, // Tablet piccoli - incremento RIDOTTO per evitare zoom
+    tablet: 1.1, // Tablet standard - incremento RIDOTTO per evitare zoom
+    desktop: 1.15, // Desktop - incremento RIDOTTO per evitare zoom
   },
 
   getSpacing: (baseSpacing: number, screenWidth: number): number => {
@@ -178,20 +178,20 @@ export const UniversalResponsiveSpacing = {
 // RESPONSIVE TYPOGRAPHY SYSTEM - UNIVERSALE
 // ===================================================================
 export const UniversalResponsiveTypography = {
-  // Moltiplicatori font COMPLETAMENTE UNIFORMI - ZERO DIFFERENZE TRA TUTTI I MOBILE
+  // Moltiplicatori font OTTIMIZZATI PER OGNI DISPOSITIVO - RIDOTTI PER EVITARE ZOOM
   fontSizeMultipliers: {
-    extraSmall: 1.0, // iPhone SE 1st - identico a tutti gli altri mobile
-    small: 1.0, // Galaxy S24, Android standard - identico
-    mediumSmall: 1.0, // iPhone SE 2nd/3rd, mini - identico
+    extraSmall: 1.0, // iPhone SE 1st - baseline
+    small: 1.0, // Galaxy S24, Android standard - baseline
+    mediumSmall: 1.0, // iPhone SE 2nd/3rd, mini - baseline
     medium: 1.0, // iPhone 14/13/12 - baseline perfetto
-    mediumLarge: 1.0, // iPhone 16 Pro, iPhone 15 - identico
-    large: 1.0, // iPhone 11/XR - identico (CORRETTO da 1.06)
-    extraLarge: 1.0, // iPhone Pro Max - identico
-    huge: 1.0, // iPhone 16 Pro Max - identico
-    premium: 1.0, // Pixel Pro, Galaxy Ultra - identico
-    tabletSmall: 1.15, // Tablet piccoli - scaling solo per tablet
-    tablet: 1.25, // Tablet standard - scaling significativo per tablet
-    desktop: 1.4, // Desktop - scaling per desktop
+    mediumLarge: 1.0, // iPhone 16 Pro, iPhone 15 - baseline
+    large: 0.85, // iPhone 11/XR - RIDOTTO per evitare effetto zoom
+    extraLarge: 1.0, // iPhone Pro Max - baseline
+    huge: 1.0, // iPhone 16 Pro Max - baseline
+    premium: 1.0, // Pixel Pro, Galaxy Ultra - baseline
+    tabletSmall: 1.05, // Tablet piccoli - scaling RIDOTTO per evitare zoom
+    tablet: 1.1, // Tablet standard - scaling RIDOTTO per evitare zoom
+    desktop: 1.15, // Desktop - scaling RIDOTTO per evitare zoom
   },
 
   getFontSize: (baseFontSize: number, screenWidth: number): number => {

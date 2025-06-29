@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { ResponsiveText } from './ResponsiveText';
 
 // Import statici delle icone
 
@@ -66,9 +67,9 @@ const SocialIcon: React.FC<SocialIconProps> = ({
   // Versione con emoji (fallback per website) - anche senza cerchio
   return (
     <View style={[styles.iconContainer, { width: size, height: size }]}>
-      <Text style={[styles.iconEmoji, { fontSize: size * 0.6 }]}>
+      <ResponsiveText style={[{ fontSize: size * 0.6 }, styles.iconEmoji]}>
         {emojiMap[platform]}
-      </Text>
+      </ResponsiveText>
     </View>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Typography,
@@ -17,13 +18,19 @@ export const ActionDescription: React.FC = () => {
         style={styles.descriptionGradient}
       >
         <View style={styles.descriptionContent}>
-          <Text style={styles.descriptionMain}>
+          <ResponsiveText
+            style={styles.descriptionMain}
+            responsiveFontSize={Typography.sizes.xl}
+          >
             Unisciti a noi nella lotta contro la fame nel mondo
-          </Text>
+          </ResponsiveText>
           <View style={styles.descriptionDivider} />
-          <Text style={styles.descriptionSecondary}>
+          <ResponsiveText
+            style={styles.descriptionSecondary}
+            responsiveFontSize={Typography.sizes.lg}
+          >
             Ogni azione conta per cambiare vite
-          </Text>
+          </ResponsiveText>
         </View>
       </LinearGradient>
     </View>
@@ -56,12 +63,10 @@ const styles = StyleSheet.create({
   },
 
   descriptionMain: {
-    fontSize: Typography.sizes.xl,
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     textAlign: 'center' as const,
     letterSpacing: -0.3,
-    lineHeight: Typography.sizes.xl * 1.3,
     textShadowColor: 'rgba(31, 41, 55, 0.1)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
@@ -80,12 +85,10 @@ const styles = StyleSheet.create({
   },
 
   descriptionSecondary: {
-    fontSize: Typography.sizes.lg,
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    lineHeight: Typography.sizes.lg * 1.4,
     fontStyle: 'italic' as const,
     textShadowColor: 'rgba(107, 114, 128, 0.1)',
     textShadowOffset: { width: 0, height: 1 },

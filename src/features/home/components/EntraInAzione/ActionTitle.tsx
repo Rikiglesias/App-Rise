@@ -1,11 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
 import { Typography, Spacing } from '../../../../shared/constants/designTokens';
 
 export const ActionTitle: React.FC = () => {
   return (
     <View style={styles.titleSection}>
-      <Text style={styles.titleText}>⚡ Entra in Azione</Text>
+      <ResponsiveText
+        style={styles.titleText}
+        responsiveFontSize={Typography.sizes['4xl']}
+      >
+        ⚡ Entra in Azione
+      </ResponsiveText>
     </View>
   );
 };
@@ -17,7 +23,6 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    fontSize: Typography.sizes['4xl'],
     fontWeight: Typography.weights.bold,
     color: '#DC2626',
     textAlign: 'center' as const,
