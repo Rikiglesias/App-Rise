@@ -86,7 +86,9 @@ export const modalStyles = StyleSheet.create({
   modalContainer: {
     maxWidth: screenWidth * 0.9,
     width: '100%',
-    maxHeight: '85%', // ALLUNGATO: da 80% a 85% per più spazio
+    maxHeight: '90%', // ULTERIORMENTE ALLUNGATO: da 85% a 90% per molto più spazio
+    minHeight: 700, // AUMENTATO: da 500 a 700px per garantire altezza significativa
+    height: '85%', // AUMENTATO: da 75% a 85% per modal molto più alto
   },
 
   modalGradientBorder: {
@@ -97,19 +99,22 @@ export const modalStyles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 20,
     elevation: 12,
+    height: '100%', // AGGIUNTO: altezza piena per evitare collasso del gradient
+    minHeight: 700, // AGGIUNTO: altezza minima garantita
   },
 
   modalWhiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 21,
     overflow: 'hidden',
-    flex: 1, // AGGIUNTO: per occupare tutto lo spazio del gradient container
+    height: '100%', // CAMBIATO: da flex: 1 a height fisso per evitare collasso
+    minHeight: 650, // AGGIUNTO: altezza minima garantita
   },
 
   modalContent: {
-    flex: 1, // CORRETTO: flex per dividere lo spazio tra header e contenuto scrollabile
-    display: 'flex',
+    height: '100%', // CAMBIATO: da flex a height fisso per evitare collasso
     flexDirection: 'column',
+    minHeight: 600, // AUMENTATO: da 400 a 600px per contenuto molto più alto
   },
 
   modalHeader: {
@@ -120,6 +125,9 @@ export const modalStyles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.neutral[200],
     position: 'relative',
+    height: 70, // AGGIUNTO: altezza fissa per l'header per evitare collasso
+    minHeight: 70, // AGGIUNTO: altezza minima garantita
+    flexShrink: 0, // AGGIUNTO: impedisce al header di rimpicciolirsi
   },
 
   modalTitle: {
@@ -150,12 +158,16 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyScroll: {
-    flex: 1, // RIPRISTINATO: permette allo scroll di occupare tutto lo spazio rimanente
+    height: 500, // CAMBIATO: da flex a height fisso per evitare collasso dell'area scroll
+    minHeight: 500, // AUMENTATO: da 300 a 500px per area scrollabile molto più alta
   },
 
   storyContainer: {
     padding: Spacing[6],
     gap: Spacing[4],
+    minHeight: 800, // AUMENTATO: da 600 a 800px per contenuto molto più alto
+    flexGrow: 1, // AGGIUNTO: permette al contenuto di crescere se necessario
+    paddingBottom: Spacing[12], // AGGIUNTO: padding extra in basso per respiro
   },
 
   storyTitle: {
@@ -307,7 +319,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   // TITOLO PRINCIPALE - DIMENSIONI BILANCIATE
   categoryTitle: {
-    fontSize: screenWidth > 375 ? 36 : 30, // RIDOTTO per migliore proporzione
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -453,7 +465,7 @@ export const contactSectionStyles = StyleSheet.create({
   },
 
   categoryTitle: {
-    fontSize: Typography.sizes['3xl'],
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.black,
     color: Colors.neutral[800],
     textAlign: 'center',

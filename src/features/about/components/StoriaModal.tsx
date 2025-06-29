@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Modal, Text, View } from 'react-native';
 import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
+import { ResponsiveText } from '../../../components/ui/ResponsiveText';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { modalStyles } from '../styles';
@@ -145,7 +146,10 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
 
                   <View style={modalStyles.sectionDivider} />
 
-                  <Text style={modalStyles.sectionTitle}>🇮🇹 In Italia</Text>
+                  <Text style={modalStyles.sectionTitle}>
+                    <ResponsiveText style={{ fontSize: 20 }}>🇮🇹</ResponsiveText>{' '}
+                    In Italia
+                  </Text>
                   <Text style={modalStyles.storyText}>
                     La organizzazione arriva in{' '}
                     <Text style={modalStyles.highlightText}>Italia</Text> con lo
@@ -159,11 +163,16 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <View style={modalStyles.sectionDivider} />
 
                   <Text style={modalStyles.sectionTitle}>
-                    🌟 I Nostri Pilastri
+                    <ResponsiveText style={{ fontSize: 20 }}>🌟</ResponsiveText>{' '}
+                    I Nostri Pilastri
                   </Text>
                   <View style={modalStyles.pillarsContainer}>
                     <View style={modalStyles.pillarItem}>
-                      <Text style={modalStyles.pillarIcon}>🍽️</Text>
+                      <ResponsiveText
+                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
+                      >
+                        🍽️
+                      </ResponsiveText>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>
                           Distribuzione Pasti
@@ -176,7 +185,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text style={modalStyles.pillarIcon}>🤝</Text>
+                      <ResponsiveText
+                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
+                      >
+                        🤝
+                      </ResponsiveText>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>
                           Coinvolgimento Comunitario
@@ -189,7 +202,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text style={modalStyles.pillarIcon}>🌍</Text>
+                      <ResponsiveText
+                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
+                      >
+                        🌍
+                      </ResponsiveText>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>
                           Impatto Globale
@@ -202,7 +219,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text style={modalStyles.pillarIcon}>📚</Text>
+                      <ResponsiveText
+                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
+                      >
+                        📚
+                      </ResponsiveText>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>Educazione</Text>
                         <Text style={modalStyles.pillarText}>

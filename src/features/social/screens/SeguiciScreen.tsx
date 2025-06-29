@@ -3,16 +3,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Animated, Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
+import { ResponsiveText } from '../../../components/ui/ResponsiveText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { RootStackParamList } from '../../../navigation/types';
@@ -46,8 +39,6 @@ interface SocialPlatform {
   readonly gradient: readonly string[];
   readonly onPress: () => Promise<void>;
 }
-
-const { width: screenWidth } = Dimensions.get('window');
 
 // CONTROLLO GLOBALE PRIMA VOLTA - PERSISTE TUTTA LA SESSIONE
 let seguiciHasAnimated = false;
@@ -274,17 +265,25 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                     resizeMode="contain"
                   />
                 ) : (
-                  <Text style={styles.socialIconEmoji}>{platform.emoji}</Text>
+                  <ResponsiveText
+                    style={[{ fontSize: 28 }, styles.socialIconEmoji]}
+                  >
+                    {platform.emoji}
+                  </ResponsiveText>
                 )}
               </View>
 
               {/* Content Section */}
               <View style={styles.socialInfoContainer}>
-                <Text style={styles.socialName}>{platform.name}</Text>
-                <Text style={styles.socialHandle}>{platform.handle}</Text>
-                <Text style={styles.socialDescription}>
+                <ResponsiveText style={styles.socialName}>
+                  {platform.name}
+                </ResponsiveText>
+                <ResponsiveText style={styles.socialHandle}>
+                  {platform.handle}
+                </ResponsiveText>
+                <ResponsiveText style={styles.socialDescription}>
                   {platform.description}
-                </Text>
+                </ResponsiveText>
               </View>
 
               {/* Arrow Icon */}
@@ -324,12 +323,14 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
           ]}
         >
           <View style={styles.titleContainer}>
-            <Text style={styles.categoryTitle}>
-              <Text style={styles.titleAccent}>Seguici Ovunque</Text>
-            </Text>
-            <Text style={styles.categorySubtitleInline}>
+            <ResponsiveText style={[{ fontSize: 32 }, styles.categoryTitle]}>
+              <ResponsiveText style={[{ fontSize: 32 }, styles.titleAccent]}>
+                Seguici Ovunque
+              </ResponsiveText>
+            </ResponsiveText>
+            <ResponsiveText style={styles.categorySubtitleInline}>
               Resta connesso e scopri come fare la differenza
-            </Text>
+            </ResponsiveText>
           </View>
         </Animated.View>
 
@@ -337,7 +338,9 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.sectionDividerContainer}>
           <View style={styles.sectionDivider} />
           <View style={styles.dividerEmojiContainer}>
-            <Text style={styles.dividerEmoji}>📱</Text>
+            <ResponsiveText style={[{ fontSize: 20 }, styles.dividerEmoji]}>
+              📱
+            </ResponsiveText>
           </View>
         </View>
 
@@ -403,7 +406,7 @@ const styles = StyleSheet.create({
   },
 
   categoryTitle: {
-    fontSize: screenWidth > 375 ? 36 : 30, // IDENTICO CHI SIAMO: responsive sizing
+    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900], // IDENTICO CHI SIAMO: titolo base nero
     textAlign: 'center' as const,
@@ -502,7 +505,6 @@ const styles = StyleSheet.create({
   },
 
   socialIconEmoji: {
-    fontSize: 28, // AUMENTATO: più grande e visibile nel container più ampio
     textAlign: 'center' as const,
   },
 
@@ -577,7 +579,6 @@ const styles = StyleSheet.create({
   },
 
   dividerEmoji: {
-    fontSize: 20,
     textAlign: 'center' as const,
   },
 });

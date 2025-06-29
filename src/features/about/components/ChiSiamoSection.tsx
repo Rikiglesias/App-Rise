@@ -1,7 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
-import { Animated, Text, View } from 'react-native';
+import { Animated, View } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
+import { ResponsiveText } from '../../../components/ui/ResponsiveText';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { chiSiamoSectionStyles } from '../styles';
@@ -44,12 +45,18 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               activeOpacity={0.7}
               style={chiSiamoSectionStyles.titleClickableContainer}
             >
-              <Text style={chiSiamoSectionStyles.categoryTitle}>
-                <Text style={chiSiamoSectionStyles.titleAccent}>Chi Siamo</Text>
-              </Text>
-              <Text style={chiSiamoSectionStyles.mainSubtitleInline}>
+              <ResponsiveText
+                style={[{ fontSize: 32 }, chiSiamoSectionStyles.categoryTitle]}
+              >
+                <ResponsiveText
+                  style={[{ fontSize: 32 }, chiSiamoSectionStyles.titleAccent]}
+                >
+                  Chi Siamo
+                </ResponsiveText>
+              </ResponsiveText>
+              <ResponsiveText style={chiSiamoSectionStyles.mainSubtitleInline}>
                 Non profit contro la fame - premi (i) per saperne di più
-              </Text>
+              </ResponsiveText>
             </PlatformTouchable>
             <PlatformTouchable
               onPress={handleInfoPress}
