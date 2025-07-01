@@ -1,5 +1,5 @@
 {
-  "totalSize": 12068809,
+  "totalSize": 12051184,
   "breakdown": {
     "5": {
       "size": 21806,
@@ -122,13 +122,13 @@
       "files": 1
     },
     "domain": {
-      "size": 59088,
-      "sizeHuman": "57.7 KB",
+      "size": 57397,
+      "sizeHuman": "56.05 KB",
       "files": 10
     },
     "enhanced": {
-      "size": 4624,
-      "sizeHuman": "4.52 KB",
+      "size": 4444,
+      "sizeHuman": "4.34 KB",
       "files": 1
     },
     "layout": {
@@ -162,8 +162,8 @@
       "files": 9
     },
     "ProjectCard": {
-      "size": 8816,
-      "sizeHuman": "8.61 KB",
+      "size": 8637,
+      "sizeHuman": "8.43 KB",
       "files": 5
     },
     "ui": {
@@ -177,13 +177,13 @@
       "files": 1
     },
     "screens": {
-      "size": 17112,
-      "sizeHuman": "16.71 KB",
+      "size": 16484,
+      "sizeHuman": "16.1 KB",
       "files": 3
     },
     "about": {
-      "size": 43596,
-      "sizeHuman": "42.57 KB",
+      "size": 42628,
+      "sizeHuman": "41.63 KB",
       "files": 12
     },
     "Contribute": {
@@ -192,13 +192,13 @@
       "files": 2
     },
     "actions": {
-      "size": 66885,
-      "sizeHuman": "65.32 KB",
+      "size": 65542,
+      "sizeHuman": "64.01 KB",
       "files": 18
     },
     "EntraInAzione": {
-      "size": 9577,
-      "sizeHuman": "9.35 KB",
+      "size": 9829,
+      "sizeHuman": "9.6 KB",
       "files": 4
     },
     "HeroImage": {
@@ -207,13 +207,13 @@
       "files": 2
     },
     "home": {
-      "size": 33503,
-      "sizeHuman": "32.72 KB",
+      "size": 33755,
+      "sizeHuman": "32.96 KB",
       "files": 16
     },
     "impact": {
-      "size": 76199,
-      "sizeHuman": "74.41 KB",
+      "size": 74148,
+      "sizeHuman": "72.41 KB",
       "files": 13
     },
     "projects": {
@@ -227,8 +227,8 @@
       "files": 580
     },
     "navigation": {
-      "size": 16842,
-      "sizeHuman": "16.45 KB",
+      "size": 16481,
+      "sizeHuman": "16.09 KB",
       "files": 4
     },
     "config": {
@@ -12004,7 +12004,7 @@
       ]
     }
   ],
-  "timestamp": "2025-07-01T11:04:42.277Z",
+  "timestamp": "2025-07-01T12:34:25.016Z",
   "config": {
     "thresholds": {
       "totalSize": 25,
@@ -12045,7 +12045,7 @@
     }
   },
   "analysis": {
-    "totalSizeMB": "11.51",
+    "totalSizeMB": "11.49",
     "exceedsThreshold": false,
     "topFiles": [
       [

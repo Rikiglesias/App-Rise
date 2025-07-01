@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import {
   Animated,
   Image,
+  Platform,
   SafeAreaView,
   StyleSheet,
   View,
@@ -21,6 +22,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
+import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
 import { isSuccess } from '../../../shared/utils/result';
@@ -46,80 +48,29 @@ interface SocialPlatform {
   readonly onPress: () => Promise<void>;
 }
 
-// CONTROLLO GLOBALE PRIMA VOLTA - PERSISTE TUTTA LA SESSIONE
-let seguiciHasAnimated = false;
+// ANIMAZIONI DISABILITATE - controllo non più necessario
 
 const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { openLink } = useLinkHandler();
   const { triggerHaptic } = useHapticFeedback();
   const insets = useSafeAreaInsets();
 
-  // Animazioni veloci come altre pagine
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current; // AUMENTATO per coerenza
-  const scaleAnim = useRef(new Animated.Value(0.95)).current; // REGOLATO per coerenza
+  // ANIMAZIONI DISABILITATE - valori statici per evitare bordi grigi
+  const fadeAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
+  const slideAnim = useRef(new Animated.Value(0)).current; // Sempre in posizione
+  const scaleAnim = useRef(new Animated.Value(1)).current; // Sempre a scala normale
 
-  // ANIMAZIONI STAGGERED PER BOTTONI SOCIAL
+  // ANIMAZIONI STAGGERED DISABILITATE
   const socialAnimations = useRef([
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
+    new Animated.Value(1), // Sempre visibili
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
   ] as const).current;
 
   useEffect(() => {
-    // ANIMAZIONI SOLO ALLA PRIMA VISUALIZZAZIONE
-    if (seguiciHasAnimated) {
-      // Imposta immediatamente i valori finali se già animato
-      fadeAnim.setValue(1);
-      slideAnim.setValue(0);
-      scaleAnim.setValue(1);
-      socialAnimations.forEach(anim => anim.setValue(1));
-      return;
-    }
-
-    // Marca come già animato
-    seguiciHasAnimated = true;
-    const sequence = Animated.sequence([
-      // Header animation - VELOCE
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300, // VELOCE: ridotto da 800 a 300
-          useNativeDriver: true,
-        }),
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          useNativeDriver: true,
-          tension: 120, // VELOCE: aumentato da 50 a 120
-          friction: 10, // OTTIMIZZATO per velocità
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 140, // VELOCE: aumentato da 60 a 140
-          friction: 10, // OTTIMIZZATO per velocità
-        }),
-      ]),
-      // Social animations staggered VELOCE
-      Animated.delay(100), // VELOCE: ridotto da 300 a 100
-      Animated.stagger(
-        80, // VELOCE: ridotto da 200 a 80
-        socialAnimations.map(anim =>
-          Animated.timing(anim, {
-            toValue: 1,
-            duration: 250, // VELOCE: ridotto da 600 a 250
-            useNativeDriver: true,
-          })
-        )
-      ),
-    ]);
-
-    sequence.start();
-
-    return () => {
-      sequence.stop();
-    };
+    // ANIMAZIONI DISABILITATE - nessuna animazione per evitare bordi grigi
+    // Tutti i valori sono già impostati staticamente sopra
   }, [fadeAnim, slideAnim, scaleAnim, socialAnimations]);
 
   const handleBackPress = useCallback(async () => {
@@ -222,29 +173,8 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
     },
   ];
 
-  const renderSocialCard = (platform: SocialPlatform, index: number) => (
-    <Animated.View
-      key={platform.id}
-      style={[
-        {
-          opacity: socialAnimations[index] ?? fadeAnim, // USA ANIMAZIONE STAGGERED INDIVIDUALE
-          transform: [
-            {
-              translateY: (socialAnimations[index] ?? fadeAnim).interpolate({
-                inputRange: [0, 1],
-                outputRange: [30, 0], // MOVIMENTO COORDINATO
-              }),
-            },
-            {
-              scale: (socialAnimations[index] ?? fadeAnim).interpolate({
-                inputRange: [0, 1],
-                outputRange: [0.9, 1], // SCALING COORDINATO
-              }),
-            },
-          ],
-        },
-      ]}
-    >
+  const renderSocialCard = (platform: SocialPlatform, _index: number) => (
+    <View key={platform.id}>
       <PlatformTouchable
         style={styles.socialCardWrapper}
         onPress={platform.onPress}
@@ -298,7 +228,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         </LinearGradient>
       </PlatformTouchable>
-    </Animated.View>
+    </View>
   );
 
   return (
@@ -313,15 +243,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
 
       <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         {/* HEADER SECTION - Pattern da Chi Siamo */}
-        <Animated.View
-          style={[
-            styles.headerSection,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }, { scale: scaleAnim }],
-            },
-          ]}
-        >
+        <View style={styles.headerSection}>
           <View style={styles.titleContainer}>
             <Text style={[styles.categoryTitle, { fontSize: 32 }]}>
               <Text style={[styles.titleAccent, { fontSize: 32 }]}>
@@ -332,7 +254,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
               Resta connesso e scopri come fare la differenza
             </Text>
           </View>
-        </Animated.View>
+        </View>
 
         {/* SEPARATORE TRA SEZIONI - IDENTICO CHI SIAMO */}
         <View style={styles.sectionDividerContainer}>
@@ -366,19 +288,15 @@ const styles = StyleSheet.create({
     padding: Spacing[2],
     borderRadius: BorderRadius.full,
     backgroundColor: Colors.neutral[0],
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 6,
+    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
     zIndex: 20,
   },
 
-  // Scroll Content - PADDING PER FRECCIA
+  // Scroll Content - PADDING AUMENTATO PER FRECCIA
   scrollContent: {
-    paddingTop: Spacing[16], // AGGIUNTO: spazio sufficiente per evitare sovrapposizione freccia
-    paddingHorizontal: Spacing[4], // AGGIUNTO: margini laterali per non schiacciare contro i bordi
-    paddingBottom: Spacing[8], // AGGIUNTO: spazio bottom per navigazione
+    paddingTop: Spacing[20], // AUMENTATO: più spazio per evitare sovrapposizione freccia
+    paddingHorizontal: Spacing[4],
+    paddingBottom: Platform.OS === 'android' ? Spacing[24] : Spacing[8], // ANDROID: Spacing[24] per evitare sovrapposizione bottom navigation / iOS: Spacing[8] normale
   },
 
   // Header Section - Pattern da Chi Siamo IDENTICO
@@ -386,21 +304,27 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[2], // IDENTICO CHI SIAMO: chiSiamoSectionStyles.categoryContainer
   },
 
-  // CONTAINER ELEGANTE COLORATO COME ALTRE PAGINE
+  // CONTAINER ELEGANTE COLORATO - ANDROID OTTIMIZZATO
   titleContainer: {
     alignItems: 'center' as const,
-    backgroundColor: 'rgba(220, 38, 38, 0.03)', // BACKGROUND COLORATO ELEGANTE
-    paddingVertical: Spacing[3], // COME PAGINE AZIONI
-    paddingHorizontal: Spacing[5], // COME PAGINE AZIONI
-    borderRadius: 16, // MODERNO COME PAGINE AZIONI
+    backgroundColor:
+      Platform.OS === 'android'
+        ? '#FEF2F2' // ANDROID: rosso solido equivalente a rgba(220, 38, 38, 0.03)
+        : 'rgba(220, 38, 38, 0.03)', // iOS: mantieni rgba originale
+    paddingVertical: Spacing[3],
+    paddingHorizontal: Spacing[5],
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(220, 38, 38, 0.12)', // BORDO ROSSO SOTTILE
-    shadowColor: '#DC2626', // OMBRA ROSSA COORDINATA
+    borderColor:
+      Platform.OS === 'android'
+        ? '#FECACA' // ANDROID: rosso solido equivalente a rgba(220, 38, 38, 0.12)
+        : 'rgba(220, 38, 38, 0.12)', // iOS: mantieni rgba originale
+    shadowColor: '#DC2626',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08, // ANDROID: ombra ridotta per stabilità
     shadowRadius: 8,
-    elevation: 3,
-    marginBottom: Spacing[2], // RIDOTTO: da Spacing[4] a Spacing[2] per avvicinare alla linea
+    elevation: Platform.OS === 'android' ? 2 : 3, // ANDROID: elevation ridotta per stabilità
+    marginBottom: Spacing[2],
   },
 
   categoryTitle: {

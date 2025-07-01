@@ -2,10 +2,6 @@
 // CONTRIBUTE COMPONENTS - Central Export
 // ===================================================================
 
-// ===================================================================
-// CONTRIBUTE COMPONENTS - Central Export
-// ===================================================================
-
 export { default as ActionButtons } from '../../components/ActionButtons';
 export { useNewActionsAnimations } from '../../components/ContributeAnimations';
 export { default as ContributeHeader } from '../../components/ContributeHeader';

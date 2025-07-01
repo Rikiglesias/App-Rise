@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
-import { Animated, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
@@ -8,7 +8,7 @@ import { chiSiamoSectionStyles } from '../styles';
 import type { ChiSiamoSectionProps } from '../types';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
-  animations,
+  animations: _animations,
   onInfoPress,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
@@ -20,21 +20,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
 
   return (
     <View style={chiSiamoSectionStyles.categoryContainer}>
-      <Animated.View
-        style={[
-          {
-            opacity: animations.fadeAnim,
-            transform: [
-              {
-                translateY: animations.slideAnim,
-              },
-              {
-                scale: animations.scaleAnim,
-              },
-            ],
-          },
-        ]}
-      >
+      <View>
         {/* HEADER CON TITOLO CLICCABILE */}
         <View style={chiSiamoSectionStyles.headerContainer}>
           <View style={chiSiamoSectionStyles.titleHeaderContainer}>
@@ -69,7 +55,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             </PlatformTouchable>
           </View>
         </View>
-      </Animated.View>
+      </View>
     </View>
   );
 };

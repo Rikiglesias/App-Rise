@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 
 import { contactSectionStyles } from '../styles';
 import type { ContactSectionProps } from '../types';
@@ -11,26 +11,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 }) => {
   return (
     <View style={contactSectionStyles.categoryContainer}>
-      {/* HEADER IDENTICO SEZIONE "SCOPRI" - ORA CON ANIMAZIONI */}
-      <Animated.View
-        style={[
-          contactSectionStyles.categoryHeader,
-          {
-            opacity: animations.fadeAnim,
-            transform: [
-              {
-                translateY: animations.slideAnim.interpolate({
-                  inputRange: [0, 50],
-                  outputRange: [20, 0],
-                }),
-              },
-              {
-                scale: animations.scaleAnim,
-              },
-            ],
-          },
-        ]}
-      >
+      {/* HEADER SENZA ANIMAZIONI */}
+      <View style={contactSectionStyles.categoryHeader}>
         <View style={contactSectionStyles.exploreHeaderContainer}>
           <Text style={[{ fontSize: 30 }, contactSectionStyles.categoryTitle]}>
             I Nostri Contatti
@@ -39,40 +21,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             Sede di Bologna e recapiti ufficiali
           </Text>
         </View>
-      </Animated.View>
+      </View>
       <View style={contactSectionStyles.contactsGrid}>
         {contacts.map((contact, index) => {
           const animationValue = animations.contactAnimations[index];
           if (!animationValue) return null;
 
           return (
-            <Animated.View
-              key={contact.id}
-              style={[
-                {
-                  opacity: animationValue,
-                  transform: [
-                    {
-                      translateY: animationValue.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [30, 0],
-                      }),
-                    },
-                    {
-                      scale: animationValue.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.9, 1],
-                      }),
-                    },
-                  ],
-                },
-              ]}
-            >
+            <View key={contact.id}>
               <AnimatedContact
                 contact={contact}
                 animationValue={animationValue}
               />
-            </Animated.View>
+            </View>
           );
         })}
       </View>

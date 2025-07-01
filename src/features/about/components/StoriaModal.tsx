@@ -13,38 +13,13 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
-  const modalAnim = useRef(new Animated.Value(0)).current;
-  const backdropAnim = useRef(new Animated.Value(0)).current;
+  // ANIMAZIONI DISABILITATE - valori statici per evitare bordi grigi
+  const modalAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
+  const backdropAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
 
   useEffect(() => {
-    if (visible) {
-      Animated.parallel([
-        Animated.timing(backdropAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(modalAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 50,
-          friction: 8,
-        }),
-      ]).start();
-    } else {
-      Animated.parallel([
-        Animated.timing(backdropAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(modalAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
+    // ANIMAZIONI DISABILITATE - nessuna animazione per evitare bordi grigi
+    // Il modal si apre/chiude istantaneamente
   }, [visible, modalAnim, backdropAnim]);
 
   const handleClose = useCallback(async () => {
@@ -66,39 +41,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
           onPress={handleClose}
           activeOpacity={1}
         >
-          <Animated.View
-            style={[
-              modalStyles.backdrop,
-              {
-                opacity: backdropAnim,
-              },
-            ]}
-          />
+          <View style={modalStyles.backdrop} />
         </PlatformTouchable>
 
         {/* Modal Content */}
-        <Animated.View
-          style={[
-            modalStyles.modalContainer,
-            {
-              opacity: modalAnim,
-              transform: [
-                {
-                  scale: modalAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.9, 1],
-                  }),
-                },
-                {
-                  translateY: modalAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [50, 0],
-                  }),
-                },
-              ],
-            },
-          ]}
-        >
+        <View style={modalStyles.modalContainer}>
           {/* GRADIENT CONTAINER PATTERN per modal */}
           <LinearGradient
             colors={['#DC2626', '#B91C1C', '#991B1B']}
@@ -240,7 +187,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               </View>
             </View>
           </LinearGradient>
-        </Animated.View>
+        </View>
       </View>
     </Modal>
   );

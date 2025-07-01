@@ -27,8 +27,8 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   onClose,
 }) => {
   const handleCTAPress = useCallback(() => {
-    // TODO: Aprire link esterno quando fornito dall'utente
     logDebug('MapLocationModal', 'CTA pressed', { title: data?.title });
+    // Note: External links functionality would require extending MapModalData interface
   }, [data?.title]);
 
   if (!data) return null;

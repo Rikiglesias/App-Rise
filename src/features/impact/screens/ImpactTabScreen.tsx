@@ -5,6 +5,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   Animated,
   Image,
+  Platform,
   SafeAreaView,
   StyleSheet,
   View,
@@ -22,6 +23,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
+import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import type {
   ImpactNavigationProp,
   ImpactScreenName,
@@ -584,7 +586,7 @@ const styles = StyleSheet.create({
   },
   // Header - IDENTICO PAGINA AZIONI
   headerContainer: {
-    paddingTop: Spacing[3], // AGGIUNTO: stessa altezza di "Fai la differenza"
+    paddingTop: Spacing[8], // AUMENTATO: da Spacing[3] a Spacing[8] per abbassare e non tagliare il titolo
     paddingHorizontal: Spacing[4],
     paddingBottom: Spacing[6], // AUMENTATO: più spazio sotto il titolo principale
     alignItems: 'center',
@@ -601,17 +603,23 @@ const styles = StyleSheet.create({
   // CONTAINER ELEGANTE COLORATO COME PAGINA AZIONI
   mainHeaderContainer: {
     alignItems: 'center',
-    backgroundColor: 'rgba(31, 41, 55, 0.03)', // BACKGROUND COLORATO ELEGANTE
+    backgroundColor:
+      Platform.OS === 'android'
+        ? '#F5F6F6' // ANDROID: Grigio leggermente più scuro
+        : 'rgba(31, 41, 55, 0.03)', // iOS: Mantiene rgba originale
     paddingVertical: Spacing[3], // COME PAGINA AZIONI
     paddingHorizontal: Spacing[5], // COME PAGINA AZIONI
     borderRadius: 16, // MODERNO COME PAGINA AZIONI
     borderWidth: 1,
-    borderColor: 'rgba(31, 41, 55, 0.08)', // BORDO GRIGIO SOTTILE
+    borderColor:
+      Platform.OS === 'android'
+        ? '#E8EAEB' // ANDROID: Bordo grigio leggermente più scuro
+        : 'rgba(31, 41, 55, 0.08)', // iOS: Mantiene rgba originale
     shadowColor: '#1F2937', // OMBRA GRIGIA COORDINATA
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
-    elevation: 2,
+    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   // TIPOGRAFIA POTENTE E MODERNA - INGRANDITA
   titleText: {
@@ -682,11 +690,7 @@ const styles = StyleSheet.create({
   totalGradientContainer: {
     borderRadius: 24,
     padding: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 8,
+    ...PlatformShadows.xl, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
   },
   totalCardContent: {
     backgroundColor: Colors.neutral[0],
@@ -731,11 +735,7 @@ const styles = StyleSheet.create({
   communityGradientContainer: {
     borderRadius: 20,
     padding: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
+    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
   },
   communityCardContent: {
     backgroundColor: Colors.neutral[0],
@@ -774,16 +774,12 @@ const styles = StyleSheet.create({
 
   // MAP CONTAINER CLICCABILE - RIEMPIE TUTTO SENZA BORDI
   mapImageContainer: {
-    backgroundColor: Colors.neutral[0],
+    backgroundColor: Colors.neutral[0], // RIPRISTINATO: background per vedere l'immagine
     borderRadius: 20,
     marginTop: Spacing[4],
     marginHorizontal: 0, // RIMOSSO: margini laterali per riempire tutto
     padding: 0, // RIMOSSO: padding per eliminare bordi vuoti
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 6,
+    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
     position: 'relative',
     overflow: 'hidden',
     height: 280, // ALTEZZA FISSA: per container stabile
@@ -793,9 +789,8 @@ const styles = StyleSheet.create({
   },
   mapImage: {
     width: '100%',
-    height: '100%', // RIEMPIE TUTTO: il container senza bordi
+    height: '100%', // RIEMPIE TUTTO: il container
     borderRadius: 20, // UGUALE AL CONTAINER: per bordi perfetti
-    marginTop: -30, // OTTIMIZZATO: per mostrare parte inferiore
   },
   // INDICATORE CLICCABILE
   mapClickIndicator: {
@@ -804,11 +799,13 @@ const styles = StyleSheet.create({
     right: Spacing[2],
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: '#FAFAFA', // UNIFICATO: stesso colore su entrambe le piattaforme per consistenza
     paddingHorizontal: Spacing[2],
     paddingVertical: Spacing[1],
     borderRadius: 12,
     gap: Spacing[1],
+    zIndex: 2, // SOPRA l'immagine della mappa
+    elevation: 8, // PER ANDROID: assicura che stia sopra
   },
   mapClickText: {
     // fontSize rimosso - ora gestito da Text
@@ -868,7 +865,7 @@ const styles = StyleSheet.create({
 
   // Scroll Content - PADDING BOTTOM PER NAVIGATION
   scrollContent: {
-    paddingBottom: 120, // AGGIUNTO: spazio più ampio per evitare sovrapposizione bottom navigation
+    paddingBottom: Platform.OS === 'android' ? 200 : 160, // ANDROID: 200 per evitare taglio mappa dalla bottom navigation / iOS: 160 normale
   },
 
   // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
@@ -889,17 +886,23 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[10], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
   },
   numbersHeaderBackground: {
-    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    backgroundColor:
+      Platform.OS === 'android'
+        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
     borderRadius: 20,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
-    borderColor: 'rgba(55, 65, 81, 0.08)',
+    borderColor:
+      Platform.OS === 'android'
+        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
     shadowColor: '#374151',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   numbersTitle: {
     // fontSize rimosso - ora gestito da Text
@@ -927,17 +930,23 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[6],
   },
   communityHeaderBackground: {
-    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    backgroundColor:
+      Platform.OS === 'android'
+        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
     borderRadius: 20,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
-    borderColor: 'rgba(55, 65, 81, 0.08)',
+    borderColor:
+      Platform.OS === 'android'
+        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
     shadowColor: '#374151',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   communityTitle: {
     // fontSize rimosso - ora gestito da Text
@@ -966,17 +975,23 @@ const styles = StyleSheet.create({
   },
 
   mapHeaderBackground: {
-    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    backgroundColor:
+      Platform.OS === 'android'
+        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
     borderRadius: 20,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
-    borderColor: 'rgba(55, 65, 81, 0.08)',
+    borderColor:
+      Platform.OS === 'android'
+        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
     shadowColor: '#374151',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   mapTitle: {
     // fontSize rimosso - ora gestito da Text
@@ -1005,17 +1020,23 @@ const styles = StyleSheet.create({
   },
 
   results2024HeaderBackground: {
-    backgroundColor: 'rgba(55, 65, 81, 0.03)', // GRIGIO MOLTO SOTTILE
+    backgroundColor:
+      Platform.OS === 'android'
+        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
     borderRadius: 20,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
-    borderColor: 'rgba(55, 65, 81, 0.08)',
+    borderColor:
+      Platform.OS === 'android'
+        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
     shadowColor: '#374151',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   results2024Title: {
     // fontSize rimosso - ora gestito da Text

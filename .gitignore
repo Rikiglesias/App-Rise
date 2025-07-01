@@ -67,6 +67,9 @@ coverage/
 .vscode/settings.json
 .idea/
 
+# Bundle analysis reports (temporary)
+bundle-analysis-report.json
+
 # AGGIUNTE: Report temporanei e file di lavoro
 # Report ESLint temporanei
 eslint-*.json

@@ -48,6 +48,10 @@ export interface ProjectsScreenLogicReturn {
   readonly handleRefresh: () => Promise<void>;
   readonly createProjectPressHandler: (projectId: string) => () => void;
   readonly getSectionTitle: () => string;
+  // Project Detail Modal
+  readonly selectedProject: Project | null;
+  readonly isProjectDetailVisible: boolean;
+  readonly handleCloseProjectDetail: () => void;
 }
 
 // Type for styles to avoid circular imports

@@ -1,5 +1,5 @@
-import React, { useRef, useCallback } from 'react';
-import { Platform, View, StyleSheet, Animated, Text } from 'react-native';
+import React, { useCallback } from 'react';
+import { Platform, View, StyleSheet, Text } from 'react-native';
 
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -8,7 +8,6 @@ import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import {
   getAndroidMaterialProps,
   MaterialColors,
-  MaterialMotion,
 } from '../../shared/constants/materialDesignTokens';
 
 interface NavigationItem {
@@ -105,32 +104,7 @@ const MaterialNavigationItem: React.FC<MaterialNavigationItemProps> = ({
   variant: _variant, // RINOMINATO: non utilizzato nella nuova logica di colori specifici
   showLabel,
 }) => {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const indicatorAnim = useRef(new Animated.Value(isActive ? 1 : 0)).current;
-
-  React.useEffect(() => {
-    Animated.timing(indicatorAnim, {
-      toValue: isActive ? 1 : 0,
-      duration: MaterialMotion.duration.medium2,
-      useNativeDriver: false,
-    }).start();
-  }, [isActive, indicatorAnim]);
-
-  const handlePressIn = useCallback(() => {
-    Animated.timing(scaleAnim, {
-      toValue: 0.95,
-      duration: MaterialMotion.duration.short1,
-      useNativeDriver: true,
-    }).start();
-  }, [scaleAnim]);
-
-  const handlePressOut = useCallback(() => {
-    Animated.timing(scaleAnim, {
-      toValue: 1,
-      duration: MaterialMotion.duration.short2,
-      useNativeDriver: true,
-    }).start();
-  }, [scaleAnim]);
+  // Rimosso: tutte le animazioni scale e indicator
 
   const handlePress = useCallback(() => {
     onItemPress(item.key);
@@ -175,28 +149,18 @@ const MaterialNavigationItem: React.FC<MaterialNavigationItemProps> = ({
 
   const colors = getColors();
 
+  // Rimosso: animazioni indicator
   const indicatorStyle = {
     backgroundColor: colors.backgroundColor, // USA IL COLORE SPECIFICO DEL TAB
-    opacity: indicatorAnim,
-    transform: [
-      {
-        scaleX: indicatorAnim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0.6, 1],
-        }),
-      },
-    ],
+    opacity: isActive ? 1 : 0,
+    transform: [{ scaleX: isActive ? 1 : 0.6 }],
   };
 
   return (
-    <Animated.View
-      style={[styles.itemContainer, { transform: [{ scale: scaleAnim }] }]}
-    >
+    <View style={styles.itemContainer}>
       <TouchableRipple
         style={styles.itemTouchable}
         onPress={handlePress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
         rippleColor="transparent"
         borderless={true}
         accessibilityRole="tab"
@@ -205,7 +169,7 @@ const MaterialNavigationItem: React.FC<MaterialNavigationItemProps> = ({
       >
         <View style={styles.itemContent}>
           {/* Material Design 3 State Layer/Indicator */}
-          <Animated.View style={[styles.stateIndicator, indicatorStyle]} />
+          <View style={[styles.stateIndicator, indicatorStyle]} />
 
           {/* Icon Container */}
           <View style={styles.iconContainer}>
@@ -238,7 +202,7 @@ const MaterialNavigationItem: React.FC<MaterialNavigationItemProps> = ({
           )}
         </View>
       </TouchableRipple>
-    </Animated.View>
+    </View>
   );
 };
 

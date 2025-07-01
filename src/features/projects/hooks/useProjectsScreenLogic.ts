@@ -21,6 +21,8 @@ export const useProjectsScreenLogic = (): ProjectsScreenLogicReturn => {
 
   const [activeTab, setActiveTab] = useState('all');
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isProjectDetailVisible, setIsProjectDetailVisible] = useState(false);
 
   const stats = getProjectStats();
 
@@ -51,10 +53,16 @@ export const useProjectsScreenLogic = (): ProjectsScreenLogicReturn => {
     setRefreshing(false);
   }, []);
 
-  const handleProjectPress = useCallback((_projectId: string) => {
-    // Navigation logic here - removed console.log for no-console
-    // TODO: Implement navigation to project detail
-  }, []);
+  const handleProjectPress = useCallback(
+    (projectId: string) => {
+      const project = projects.find((p: Project) => p.id === projectId);
+      if (project) {
+        setSelectedProject(project);
+        setIsProjectDetailVisible(true);
+      }
+    },
+    [projects]
+  );
 
   const createProjectPressHandler = useCallback(
     (projectId: string) => {
@@ -69,6 +77,11 @@ export const useProjectsScreenLogic = (): ProjectsScreenLogicReturn => {
     return getSectionTitleByTab(activeTab);
   }, [activeTab]);
 
+  const handleCloseProjectDetail = useCallback(() => {
+    setIsProjectDetailVisible(false);
+    setSelectedProject(null);
+  }, []);
+
   return {
     projects,
     activeTab,
@@ -80,5 +93,9 @@ export const useProjectsScreenLogic = (): ProjectsScreenLogicReturn => {
     handleRefresh,
     createProjectPressHandler,
     getSectionTitle,
+    // Project Detail Modal
+    selectedProject,
+    isProjectDetailVisible,
+    handleCloseProjectDetail,
   };
 };

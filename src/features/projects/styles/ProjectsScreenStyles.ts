@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import {
   BorderRadius,
   Spacing,
@@ -82,7 +82,7 @@ export const useProjectsScreenStyles = () => {
         },
         content: {
           paddingHorizontal: Spacing[4],
-          paddingBottom: Spacing[8],
+          paddingBottom: Platform.OS === 'android' ? Spacing[20] : Spacing[8], // ANDROID: Spacing[20] per evitare sovrapposizione bottom navigation / iOS: Spacing[8] normale
         },
         sectionTitle: {
           fontSize: Typography.sizes.xl,

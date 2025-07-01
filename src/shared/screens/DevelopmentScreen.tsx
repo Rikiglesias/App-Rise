@@ -9,7 +9,7 @@ import {
   View,
   Text,
 } from 'react-native';
-import { PlatformTouchable } from '../../components/ui';
+import { PlatformTouchable, PlatformScrollView } from '../../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -18,6 +18,7 @@ import {
   Spacing,
   Typography,
 } from '../constants/designTokens';
+import { PlatformShadows } from '../constants/platformDesignTokens';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 
 interface DevelopmentScreenProps {
@@ -32,35 +33,12 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
 
-  // Animazioni
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
+  // Solo animazioni icone (funzionano bene)
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Animazione di entrata
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    // Animazione di rotazione continua per l'icona
+    // Solo animazioni icone (funzionano perfettamente)
     Animated.loop(
       Animated.timing(rotateAnim, {
         toValue: 1,
@@ -69,7 +47,6 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
       })
     ).start();
 
-    // Animazione di pulsazione per l'icona principale
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -84,7 +61,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
         }),
       ])
     ).start();
-  }, [fadeAnim, scaleAnim, slideAnim, rotateAnim, pulseAnim]);
+  }, [rotateAnim, pulseAnim]);
 
   const handleGoBack = useCallback(async () => {
     await triggerHaptic('light');
@@ -116,212 +93,217 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
         onPress={handleGoBack}
         activeOpacity={0.7}
       >
-        <LinearGradient
-          colors={['#DC2626', '#B91C1C']}
-          style={[
-            styles.backButtonGradient,
-            {
-              width: 48,
-              height: 48,
-              borderRadius: 24,
-            },
-          ]}
-        >
-          <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
-        </LinearGradient>
-      </PlatformTouchable>
-
-      {/* Contenuto Principale */}
-      <Animated.View
-        style={[
-          styles.content,
-          {
-            opacity: fadeAnim,
-            transform: [{ scale: scaleAnim }, { translateY: slideAnim }],
-            paddingHorizontal: Spacing[6],
-            paddingTop: Platform.OS === 'ios' ? Spacing[12] : Spacing[8],
-            paddingBottom: Spacing[16],
-          },
-        ]}
-      >
-        {/* Icona Principale Animata */}
-        <View
-          style={[
-            styles.iconContainer,
-            {
-              marginBottom: Spacing[4],
-              marginTop: Platform.OS === 'ios' ? Spacing[8] : Spacing[4],
-            },
-          ]}
-        >
-          <Animated.View
+        {/* Container per nascondere overflow durante animazioni */}
+        <View style={styles.backButtonContainer}>
+          <LinearGradient
+            colors={['#DC2626', '#B91C1C']}
             style={[
-              styles.iconBackground,
+              styles.backButtonGradient,
               {
-                width: 120,
-                height: 120,
-                borderRadius: 60,
-                transform: [
-                  { scale: pulseAnim },
-                  { rotate: rotateInterpolate },
-                ],
+                width: 48,
+                height: 48,
+                borderRadius: 24,
               },
             ]}
           >
-            <MaterialCommunityIcons
-              name="hammer-wrench"
-              size={60}
-              color="#DC2626"
-            />
-          </Animated.View>
-
-          {/* Icone decorative fluttuanti */}
-          <Animated.View
-            style={[
-              styles.floatingIcon,
-              styles.floatingIcon1,
-              { padding: Spacing[2] },
-            ]}
-          >
-            <MaterialCommunityIcons
-              name="code-tags"
-              size={24}
-              color="#059669"
-            />
-          </Animated.View>
-          <Animated.View
-            style={[
-              styles.floatingIcon,
-              styles.floatingIcon2,
-              { padding: Spacing[2] },
-            ]}
-          >
-            <MaterialCommunityIcons name="palette" size={20} color="#7C3AED" />
-          </Animated.View>
-          <Animated.View
-            style={[
-              styles.floatingIcon,
-              styles.floatingIcon3,
-              { padding: Spacing[2] },
-            ]}
-          >
-            <MaterialCommunityIcons name="rocket" size={22} color="#F59E0B" />
-          </Animated.View>
+            <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
+          </LinearGradient>
         </View>
+      </PlatformTouchable>
 
-        {/* Titolo Principale */}
-        <Animated.View
+      {/* Contenuto Principale - ScrollView per layout robusto */}
+      <PlatformScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View
           style={[
-            styles.titleContainer,
+            styles.content,
             {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-              marginBottom: Spacing[4],
+              paddingHorizontal: Spacing[6],
+              paddingTop: Platform.OS === 'ios' ? Spacing[12] : Spacing[20],
             },
           ]}
         >
-          <Text
-            style={[styles.mainTitle, { fontSize: 32 }]}
-            numberOfLines={2}
-            adjustsFontSizeToFit={true}
+          {/* Icona Principale Animata */}
+          <View
+            style={[
+              styles.iconContainer,
+              {
+                marginBottom: Spacing[4],
+                marginTop: Platform.OS === 'ios' ? Spacing[8] : Spacing[4],
+              },
+            ]}
           >
-            🚧 In Fase di Sviluppo
-          </Text>
-          <Text
-            style={[styles.subtitle, { fontSize: 18 }]}
-            numberOfLines={2}
-            adjustsFontSizeToFit={true}
-          >
-            Questa sezione sarà presto disponibile
-          </Text>
-        </Animated.View>
-
-        {/* Card Informativa */}
-        <Animated.View
-          style={[
-            styles.infoCard,
-            {
-              opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }],
-              marginBottom: Spacing[4],
-            },
-          ]}
-        >
-          <LinearGradient
-            colors={['rgba(220, 38, 38, 0.05)', 'rgba(220, 38, 38, 0.02)']}
-            style={styles.cardGradient}
-          >
-            <View style={[styles.cardContent, { padding: Spacing[6] }]}>
+            <Animated.View
+              style={[
+                styles.iconBackground,
+                {
+                  width: 120,
+                  height: 120,
+                  borderRadius: 60,
+                  transform: [
+                    { scale: pulseAnim },
+                    { rotate: rotateInterpolate },
+                  ],
+                },
+              ]}
+            >
               <MaterialCommunityIcons
-                name="information-outline"
-                size={28}
+                name="hammer-wrench"
+                size={60}
                 color="#DC2626"
-                style={[styles.cardIcon, { marginBottom: Spacing[2] }]}
               />
-              <Text
-                style={[styles.cardTitle, { fontSize: 24 }]}
-                numberOfLines={2}
-                adjustsFontSizeToFit={true}
-              >
-                Cosa stiamo preparando
-              </Text>
-              <Text
-                style={[styles.cardDescription, { fontSize: 16 }]}
-                numberOfLines={4}
-              >
-                Il nostro team sta lavorando duramente per portarti nuove
-                funzionalità innovative e un&apos;esperienza utente ancora
-                migliore.
-              </Text>
+            </Animated.View>
 
-              <View style={[styles.featuresList, { gap: Spacing[1] }]}>
-                <View style={[styles.featureItem, { gap: Spacing[3] }]}>
-                  <MaterialCommunityIcons
-                    name="check-circle"
-                    size={16}
-                    color="#059669"
-                  />
-                  <Text
-                    style={[styles.featureText, { fontSize: 16 }]}
-                    numberOfLines={1}
-                    adjustsFontSizeToFit={true}
-                  >
-                    Design migliorato
-                  </Text>
-                </View>
-                <View style={[styles.featureItem, { gap: Spacing[3] }]}>
-                  <MaterialCommunityIcons
-                    name="check-circle"
-                    size={16}
-                    color="#059669"
-                  />
-                  <Text
-                    style={[styles.featureText, { fontSize: 16 }]}
-                    numberOfLines={1}
-                    adjustsFontSizeToFit={true}
-                  >
-                    Nuove funzionalità
-                  </Text>
-                </View>
-                <View style={[styles.featureItem, { gap: Spacing[3] }]}>
-                  <MaterialCommunityIcons
-                    name="check-circle"
-                    size={16}
-                    color="#059669"
-                  />
-                  <Text
-                    style={[styles.featureText, { fontSize: 16 }]}
-                    numberOfLines={2}
-                    adjustsFontSizeToFit={true}
-                  >
-                    Performance ottimizzate
-                  </Text>
+            {/* Icone decorative fluttuanti */}
+            <Animated.View
+              style={[
+                styles.floatingIcon,
+                styles.floatingIcon1,
+                { padding: Spacing[2] },
+              ]}
+            >
+              <MaterialCommunityIcons
+                name="code-tags"
+                size={24}
+                color="#059669"
+              />
+            </Animated.View>
+            <Animated.View
+              style={[
+                styles.floatingIcon,
+                styles.floatingIcon2,
+                { padding: Spacing[2] },
+              ]}
+            >
+              <MaterialCommunityIcons
+                name="palette"
+                size={20}
+                color="#7C3AED"
+              />
+            </Animated.View>
+            <Animated.View
+              style={[
+                styles.floatingIcon,
+                styles.floatingIcon3,
+                { padding: Spacing[2] },
+              ]}
+            >
+              <MaterialCommunityIcons name="rocket" size={22} color="#F59E0B" />
+            </Animated.View>
+          </View>
+
+          {/* Titolo Principale */}
+          <View
+            style={[
+              styles.titleContainer,
+              {
+                marginBottom: Spacing[4],
+              },
+            ]}
+          >
+            <Text
+              style={[styles.mainTitle, { fontSize: 32 }]}
+              numberOfLines={2}
+              adjustsFontSizeToFit={true}
+            >
+              🚧 In Fase di Sviluppo
+            </Text>
+            <Text
+              style={[styles.subtitle, { fontSize: 18 }]}
+              numberOfLines={2}
+              adjustsFontSizeToFit={true}
+            >
+              Questa sezione sarà presto disponibile
+            </Text>
+          </View>
+
+          {/* Card Informativa */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                marginBottom: Spacing[4],
+              },
+            ]}
+          >
+            <LinearGradient
+              colors={['rgba(220, 38, 38, 0.05)', 'rgba(220, 38, 38, 0.02)']}
+              style={styles.cardGradient}
+            >
+              <View style={[styles.cardContent, { padding: Spacing[6] }]}>
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={28}
+                  color="#DC2626"
+                  style={[styles.cardIcon, { marginBottom: Spacing[2] }]}
+                />
+                <Text
+                  style={[styles.cardTitle, { fontSize: 24 }]}
+                  numberOfLines={2}
+                  adjustsFontSizeToFit={true}
+                >
+                  Cosa stiamo preparando
+                </Text>
+                <Text
+                  style={[styles.cardDescription, { fontSize: 16 }]}
+                  numberOfLines={4}
+                >
+                  Il nostro team sta lavorando duramente per portarti nuove
+                  funzionalità innovative e un&apos;esperienza utente ancora
+                  migliore.
+                </Text>
+
+                <View style={[styles.featuresList, { gap: Spacing[1] }]}>
+                  <View style={[styles.featureItem, { gap: Spacing[3] }]}>
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={16}
+                      color="#059669"
+                    />
+                    <Text
+                      style={[styles.featureText, { fontSize: 16 }]}
+                      numberOfLines={1}
+                      adjustsFontSizeToFit={true}
+                    >
+                      Design migliorato
+                    </Text>
+                  </View>
+                  <View style={[styles.featureItem, { gap: Spacing[3] }]}>
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={16}
+                      color="#059669"
+                    />
+                    <Text
+                      style={[styles.featureText, { fontSize: 16 }]}
+                      numberOfLines={1}
+                      adjustsFontSizeToFit={true}
+                    >
+                      Nuove funzionalità
+                    </Text>
+                  </View>
+                  <View style={[styles.featureItem, { gap: Spacing[3] }]}>
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={16}
+                      color="#059669"
+                    />
+                    <Text
+                      style={[styles.featureText, { fontSize: 16 }]}
+                      numberOfLines={2}
+                      adjustsFontSizeToFit={true}
+                    >
+                      Performance ottimizzate
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          </LinearGradient>
-        </Animated.View>
-      </Animated.View>
+            </LinearGradient>
+          </View>
+        </View>
+      </PlatformScrollView>
     </SafeAreaView>
   );
 };
@@ -342,20 +324,40 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: Spacing[4],
     zIndex: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    // PULITO: Zero decorazioni su container per evitare conflitti con LinearGradient
+  },
+  backButtonContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    overflow: 'hidden', // CRITICO: nasconde i bordi durante le animazioni su Android
+    // OMBRA SUL CONTAINER - più stabile durante animazioni
+    ...Platform.select({
+      ios: {
+        shadowColor: '#DC2626',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   backButtonGradient: {
     justifyContent: 'center',
     alignItems: 'center',
+    // GRADIENT PULITO - senza ombra per evitare conflitti
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center', // RIPRISTINATO: con ScrollView il centramento funziona correttamente
     alignItems: 'center',
+    minHeight: 600, // MINIMA altezza per garantire il centramento quando c'è poco contenuto
+  },
+  scrollContent: {
+    flexGrow: 1, // Permette al contenuto di crescere e centrarsi
+    paddingBottom: Platform.OS === 'android' ? 250 : Spacing[16], // ANDROID: 250 per evitare taglio dalla bottom navigation / iOS: normale
   },
   iconContainer: {
     position: 'relative',
@@ -364,11 +366,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 12,
+    ...PlatformShadows.primary, // CONVERTITO: shadow rossa ottimizzata per entrambe le piattaforme
     borderWidth: 3,
     borderColor: 'rgba(220, 38, 38, 0.1)',
   },
@@ -376,11 +374,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Colors.neutral[0],
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
+    ...PlatformShadows.md, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
   },
   floatingIcon1: {
     top: -10,
@@ -403,12 +397,34 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: Spacing[3],
     letterSpacing: -1,
+    // ANDROID: Zero text shadow per evitare bordi grigi durante animazioni
+    ...Platform.select({
+      ios: {
+        textShadowColor: 'rgba(31, 41, 55, 0.15)',
+        textShadowOffset: { width: 0, height: 2 },
+        textShadowRadius: 6,
+      },
+      android: {
+        // Nessuna text shadow per animazioni pulite
+      },
+    }),
   },
   subtitle: {
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center',
     letterSpacing: 0.2,
+    // ANDROID: Zero text shadow per evitare bordi grigi durante animazioni
+    ...Platform.select({
+      ios: {
+        textShadowColor: 'rgba(107, 114, 128, 0.1)',
+        textShadowOffset: { width: 0, height: 1 },
+        textShadowRadius: 3,
+      },
+      android: {
+        // Nessuna text shadow per animazioni pulite
+      },
+    }),
   },
   infoCard: {
     width: '100%',
@@ -422,11 +438,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 6,
+    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
   },
   cardIcon: {},
   cardTitle: {
@@ -434,6 +446,17 @@ const styles = StyleSheet.create({
     color: '#1F2937',
     textAlign: 'center',
     marginBottom: Spacing[3],
+    // ANDROID: Zero text shadow per evitare bordi grigi durante animazioni
+    ...Platform.select({
+      ios: {
+        textShadowColor: 'rgba(31, 41, 55, 0.1)',
+        textShadowOffset: { width: 0, height: 1 },
+        textShadowRadius: 4,
+      },
+      android: {
+        // Nessuna text shadow per animazioni pulite
+      },
+    }),
   },
   cardDescription: {
     color: '#6B7280',

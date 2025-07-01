@@ -249,22 +249,20 @@ const ActionButtonsContent: React.FC<{
           position: 'relative',
         },
 
-        // CONTAINER ELEGANTE PER TITOLO DONA - COLORI SOLIDI PER ANDROID
+        // CONTAINER ELEGANTE PER TITOLO DONA - IDENTICO CROSS-PLATFORM
         donateTitleContainer: {
           alignItems: 'center',
-          backgroundColor:
-            Platform.OS === 'android' ? '#FEF2F2' : 'rgba(220, 38, 38, 0.03)', // ANDROID: rosso solido molto chiaro
+          backgroundColor: 'rgba(220, 38, 38, 0.03)', // IDENTICO: stesso rgba su entrambe le piattaforme
           paddingVertical: Spacing[3],
           paddingHorizontal: Spacing[5],
           borderRadius: 16,
           borderWidth: 1,
-          borderColor:
-            Platform.OS === 'android' ? '#FECACA' : 'rgba(220, 38, 38, 0.12)', // ANDROID: rosso solido leggero
+          borderColor: 'rgba(220, 38, 38, 0.12)', // IDENTICO: stesso rgba su entrambe le piattaforme
           shadowColor: '#DC2626',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08,
+          shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08, // Solo ombra diversa per stabilità
           shadowRadius: 8,
-          elevation: 3,
+          elevation: Platform.OS === 'android' ? 2 : 3, // Solo elevation diversa per stabilità
         },
 
         // TITOLO CATEGORIA DONA ELEGANTE - PIÙ GRASSETTO
@@ -326,21 +324,19 @@ const ActionButtonsContent: React.FC<{
 
         infoButton: {
           position: 'absolute',
-          right: 45, // LEGGERMENTE PIÙ A DESTRA: da 60 a 45
-          top: Spacing[1], // ALZATA: da Spacing[3] a Spacing[1]
-          width: 24, // LEGGERMENTE PIÙ GRANDE per migliore usabilità
+          right: Platform.OS === 'android' ? 33 : 45, // ANDROID: 33 come regolato / iOS: 45 ancora più a sinistra
+          top: Platform.OS === 'android' ? 5 : 8, // ANDROID: 5 come regolato / iOS: 8 più in alto
+          width: 24,
           height: 24,
           borderRadius: 12,
           backgroundColor: '#DC2626',
           justifyContent: 'center',
           alignItems: 'center',
-          // OMBRA PIÙ DEFINITA per spiccare meglio
           shadowColor: '#DC2626',
           shadowOffset: { width: 0, height: 3 },
           shadowOpacity: 0.4,
           shadowRadius: 6,
           elevation: 6,
-          // BORDO SOTTILE per definizione
           borderWidth: 1,
           borderColor: 'rgba(220, 38, 38, 0.8)',
         },
@@ -357,18 +353,35 @@ const ActionButtonsContent: React.FC<{
         },
         // GRADIENT CONTAINER PATTERN per bottoni (clickabili) - ANDROID OTTIMIZZATO
         gradientBorder: {
-          borderRadius: 20, // RIDOTTO per Android
-          padding: 2, // RIDOTTO per evitare artefatti
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 6 }, // RIDOTTO
-          shadowOpacity: 0.2, // RIDOTTO
-          shadowRadius: 12, // RIDOTTO
-          elevation: 6, // RIDOTTO
+          borderRadius: 20,
+          padding: 2,
+          ...(Platform.OS === 'android'
+            ? {
+                // ANDROID: Rendering ottimizzato per evitare bleeding durante animazioni
+                elevation: 2, // MOLTO RIDOTTO per animazioni fluide
+                shadowColor: 'transparent',
+                // Forza compositing layer per stabilità durante animazioni
+                needsOffscreenAlphaCompositing: false,
+              }
+            : {
+                // iOS: Ombreggiatura normale
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: 0.2,
+                shadowRadius: 12,
+              }),
         },
         whiteContainer: {
           backgroundColor: Colors.neutral[0],
           borderRadius: 18, // 20-2 per effetto bordo
           overflow: 'hidden',
+          ...(Platform.OS === 'android' && {
+            // ANDROID: Forza background completamente opaco durante le animazioni
+            backgroundColor: '#FFFFFF',
+            // Forza il render layer per evitare bleeding durante animazioni
+            renderToHardwareTextureAndroid: true,
+            shouldRasterizeIOS: false,
+          }),
         },
         buttonContent: {
           paddingVertical: Spacing[4], // RIDOTTO per bottoni più compatti
@@ -433,47 +446,43 @@ const ActionButtonsContent: React.FC<{
           right: 8,
         },
 
-        // CONTAINER BACKGROUND ESPLORA - COLORI SOLIDI PER ANDROID
+        // CONTAINER BACKGROUND ESPLORA - IDENTICO CROSS-PLATFORM
         exploreHeaderBackground: {
-          backgroundColor:
-            Platform.OS === 'android' ? '#F8F9FA' : 'rgba(55, 65, 81, 0.03)', // ANDROID: grigio solido molto chiaro
+          backgroundColor: 'rgba(31, 41, 55, 0.03)', // IDENTICO: stesso rgba su entrambe le piattaforme
           borderRadius: 20,
           paddingVertical: Spacing[4],
           paddingHorizontal: Spacing[6],
           borderWidth: 1,
-          borderColor:
-            Platform.OS === 'android' ? '#E9ECEF' : 'rgba(55, 65, 81, 0.08)', // ANDROID: grigio solido leggero
+          borderColor: 'rgba(31, 41, 55, 0.08)', // IDENTICO: stesso rgba su entrambe le piattaforme
           shadowColor: '#374151',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.05,
+          shadowOpacity: Platform.OS === 'android' ? 0.03 : 0.05, // Solo ombra diversa per stabilità
           shadowRadius: 8,
-          elevation: 2,
+          elevation: Platform.OS === 'android' ? 1 : 2, // Solo elevation diversa per stabilità
         },
 
-        // CONTAINER BACKGROUND COMMUNITY - COLORI SOLIDI PER ANDROID
+        // CONTAINER BACKGROUND COMMUNITY - IDENTICO CROSS-PLATFORM
         communityHeaderBackground: {
-          backgroundColor:
-            Platform.OS === 'android' ? '#F8F9FA' : 'rgba(31, 41, 55, 0.03)', // ANDROID: grigio solido molto chiaro
+          backgroundColor: 'rgba(31, 41, 55, 0.03)', // IDENTICO: stesso rgba su entrambe le piattaforme
           borderRadius: 20,
           paddingVertical: Spacing[4],
           paddingHorizontal: Spacing[6],
           borderWidth: 1,
-          borderColor:
-            Platform.OS === 'android' ? '#E9ECEF' : 'rgba(31, 41, 55, 0.08)', // ANDROID: grigio solido leggero
+          borderColor: 'rgba(31, 41, 55, 0.08)', // IDENTICO: stesso rgba su entrambe le piattaforme
           shadowColor: '#1F2937',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.05,
+          shadowOpacity: Platform.OS === 'android' ? 0.03 : 0.05, // Solo ombra diversa per stabilità
           shadowRadius: 8,
-          elevation: 2,
-          position: 'relative', // AGGIUNTO: per posizionamento assoluto della freccia
+          elevation: Platform.OS === 'android' ? 1 : 2, // Solo elevation diversa per stabilità
+          position: 'relative',
         },
 
-        // FRECCIA COMMUNITY - STILE COME SUI BOTTONI
+        // ICONA LINK COMMUNITY - ESTREMO ANGOLO SUPERIORE DESTRO
         communityChevron: {
           position: 'absolute',
-          top: Spacing[3], // POSIZIONATA IN ALTO A DESTRA
-          right: Spacing[3],
-          opacity: 0.7, // SEMI-TRASPARENTE per essere discreta
+          top: Platform.OS === 'android' ? -4 : 8, // ANDROID: -4 come regolato / iOS: 8 più in basso
+          right: Platform.OS === 'android' ? -8 : 12, // ANDROID: -8 come regolato / iOS: 12 più a sinistra
+          opacity: 0.7, // IDENTICO iOS: semi-trasparente
         },
       }),
     []
@@ -545,27 +554,19 @@ const DonateButtonsSection: React.FC<{
 
   return (
     <View style={styles.categoryContainer}>
-      <Animated.View
-        style={[
-          styles.categoryHeader,
-          {
-            opacity: animations.fadeAnim,
-            transform: [
-              {
-                translateY: animations.slideAnim.interpolate({
-                  inputRange: [0, 50],
-                  outputRange: [20, 0],
-                }),
-              },
-              {
-                scale: animations.scaleAnim,
-              },
-            ],
-          },
-        ]}
-      >
+      <View style={styles.categoryHeader}>
         <PlatformTouchable
-          style={styles.donateTitleContainer}
+          style={
+            Platform.OS === 'android'
+              ? [
+                  styles.donateTitleContainer,
+                  {
+                    backgroundColor: '#FEF2F2', // Rosso più delicato e raffinato
+                    borderColor: '#FECACA', // Rosso più sottile per eleganza
+                  },
+                ]
+              : styles.donateTitleContainer
+          }
           onPress={onInfoPress}
           activeOpacity={0.8}
         >
@@ -583,7 +584,7 @@ const DonateButtonsSection: React.FC<{
         >
           <MaterialCommunityIcons name="information" size={16} color="white" />
         </PlatformTouchable>
-      </Animated.View>
+      </View>
       <View style={styles.buttonsGrid}>
         {/* Prima riga: Charity Shop, Gift Cards */}
         <View style={styles.buttonRow}>
@@ -666,26 +667,20 @@ const ExploreButtonsSection: React.FC<{
 
   return (
     <View style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
-      <Animated.View
-        style={[
-          styles.categoryHeader,
-          {
-            opacity: animations.fadeAnim,
-            transform: [
-              {
-                translateY: animations.slideAnim.interpolate({
-                  inputRange: [0, 50],
-                  outputRange: [20, 0],
-                }),
-              },
-              {
-                scale: animations.scaleAnim,
-              },
-            ],
-          },
-        ]}
-      >
-        <View style={styles.exploreHeaderBackground}>
+      <View style={styles.categoryHeader}>
+        <View
+          style={
+            Platform.OS === 'android'
+              ? [
+                  styles.exploreHeaderBackground,
+                  {
+                    backgroundColor: '#F0F2F3', // Grigio più intenso per maggiore visibilità
+                    borderColor: '#DDE1E4', // Grigio più intenso per definizione migliore
+                  },
+                ]
+              : styles.exploreHeaderBackground
+          }
+        >
           <Text style={[{ fontSize: 24 }, styles.exploreTitle]}>
             🔍 Esplora
           </Text>
@@ -693,7 +688,7 @@ const ExploreButtonsSection: React.FC<{
             Progetti e iniziative umanitarie
           </Text>
         </View>
-      </Animated.View>
+      </View>
       <View style={styles.buttonsGrid}>
         {/* Prima riga: Progetti, Eventi */}
         <View style={styles.buttonRow}>
@@ -766,27 +761,19 @@ const CommunityButtonsSection: React.FC<{
 
   return (
     <View style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
-      <Animated.View
-        style={[
-          styles.categoryHeader,
-          {
-            opacity: animations.fadeAnim,
-            transform: [
-              {
-                translateY: animations.slideAnim.interpolate({
-                  inputRange: [0, 50],
-                  outputRange: [20, 0],
-                }),
-              },
-              {
-                scale: animations.scaleAnim,
-              },
-            ],
-          },
-        ]}
-      >
+      <View style={styles.categoryHeader}>
         <PlatformTouchable
-          style={styles.communityHeaderBackground}
+          style={
+            Platform.OS === 'android'
+              ? [
+                  styles.communityHeaderBackground,
+                  {
+                    backgroundColor: '#F0F2F3', // Grigio più intenso per maggiore visibilità (identico a Esplora)
+                    borderColor: '#DDE1E4', // Grigio più intenso per definizione migliore (identico a Esplora)
+                  },
+                ]
+              : styles.communityHeaderBackground
+          }
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
         >
@@ -796,7 +783,6 @@ const CommunityButtonsSection: React.FC<{
           <Text style={styles.communitySubtitle}>
             Unisciti alla nostra comunità
           </Text>
-          {/* Icona link esterno per indicare che apre una pagina esterna */}
           <MaterialCommunityIcons
             name="open-in-new"
             size={16}
@@ -804,7 +790,7 @@ const CommunityButtonsSection: React.FC<{
             style={styles.communityChevron}
           />
         </PlatformTouchable>
-      </Animated.View>
+      </View>
       <View style={styles.buttonsGrid}>
         {/* Riga unica: Seguici, Chi Siamo */}
         <View style={styles.buttonRow}>
@@ -831,48 +817,47 @@ const CommunityButtonsSection: React.FC<{
   );
 };
 
-// Componente bottone animato riutilizzabile
+// Componente bottone senza animazioni - PULITO
 const AnimatedButton: React.FC<{
   button: ButtonData;
-  animationValue: Animated.Value;
+  animationValue: Animated.Value; // Mantenuto per compatibilità ma non usato
   styles: ButtonStyles;
   onPress: () => void;
   iconColor: string;
   fullWidth?: boolean;
 }> = ({
   button,
-  animationValue,
+  animationValue: _animationValue, // Rinominato con underscore per evitare warning
   styles,
   onPress,
   iconColor,
   fullWidth = false,
 }) => (
-  <Animated.View
-    style={[
-      fullWidth ? {} : styles.buttonContainer,
-      {
-        opacity: animationValue,
-        transform: [
-          {
-            translateY: animationValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [50, 0],
-            }),
-          },
-          {
-            scale: animationValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.9, 1],
-            }),
-          },
-        ],
-      },
-    ]}
-  >
+  <View style={fullWidth ? {} : styles.buttonContainer}>
     <PlatformTouchable activeOpacity={0.6} onPress={onPress}>
-      <LinearGradient colors={button.gradient} style={styles.gradientBorder}>
-        <View style={styles.whiteContainer}>
-          <View style={styles.buttonContent}>
+      {Platform.OS === 'android' ? (
+        // ANDROID: Container bianco con bordo colorato - ZERO sanguinamento durante animazioni
+        <View
+          style={{
+            backgroundColor: '#FFFFFF', // Background bianco solido
+            borderRadius: 20,
+            borderWidth: 3, // Bordo colorato esterno
+            borderColor: button.gradient[0], // Primo colore del gradiente
+            shadowColor: 'transparent', // Nessuna ombra per evitare artefatti
+            elevation: 2,
+            overflow: 'hidden', // Blocca qualsiasi overflow
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#FFFFFF', // Doppio layer bianco per sicurezza
+              paddingVertical: Spacing[4],
+              paddingHorizontal: Spacing[3],
+              alignItems: 'center',
+              minHeight: 100,
+              justifyContent: 'center',
+            }}
+          >
             <MaterialCommunityIcons
               name={
                 button.icon as
@@ -894,13 +879,48 @@ const AnimatedButton: React.FC<{
               name="chevron-right"
               size={20}
               color={iconColor}
-              style={styles.chevronPosition}
+              style={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+              }}
             />
           </View>
         </View>
-      </LinearGradient>
+      ) : (
+        // iOS: Mantieni il gradiente originale
+        <LinearGradient colors={button.gradient} style={styles.gradientBorder}>
+          <View style={styles.whiteContainer}>
+            <View style={styles.buttonContent}>
+              <MaterialCommunityIcons
+                name={
+                  button.icon as
+                    | 'heart'
+                    | 'charity'
+                    | 'shopping'
+                    | 'gift'
+                    | 'calendar'
+                    | 'share-variant'
+                    | 'map-marker-path'
+                    | 'information'
+                }
+                size={36}
+                color={iconColor}
+                style={styles.buttonIcon}
+              />
+              <Text style={styles.buttonTitle}>{button.title}</Text>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={20}
+                color={iconColor}
+                style={styles.chevronPosition}
+              />
+            </View>
+          </View>
+        </LinearGradient>
+      )}
     </PlatformTouchable>
-  </Animated.View>
+  </View>
 );
 
 export default NewActionButtonsSection;

@@ -4,6 +4,7 @@ import { PlatformScrollView } from '../../../components/ui';
 
 import FilterTabs from '../../../components/ui/FilterTabs';
 import ProjectCard from '../../../components/ProjectCard';
+import { ProjectDetailModal } from '../../../components/layout';
 import {
   ProjectsEmptyState,
   ProjectsHeader,
@@ -28,6 +29,9 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
     handleRefresh,
     createProjectPressHandler,
     getSectionTitle,
+    selectedProject,
+    isProjectDetailVisible,
+    handleCloseProjectDetail,
   } = useProjectsScreenLogic();
 
   const styles = useProjectsScreenStyles();
@@ -81,6 +85,28 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
           )}
         </View>
       </PlatformScrollView>
+
+      {/* Project Detail Modal */}
+      <ProjectDetailModal
+        visible={isProjectDetailVisible}
+        location={
+          selectedProject
+            ? {
+                id: selectedProject.id,
+                name: selectedProject.title,
+                country: selectedProject.location,
+                coordinates: { latitude: 0, longitude: 0 }, // Default coordinates
+                projects: 1,
+                beneficiaries: selectedProject.impact,
+                status: selectedProject.status,
+                description: selectedProject.description,
+                image:
+                  'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
+              }
+            : null
+        }
+        onClose={handleCloseProjectDetail}
+      />
     </SafeAreaView>
   );
 };

@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Animated, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
@@ -10,7 +10,7 @@ import type { AnimatedContactProps } from '../types';
 
 export const AnimatedContact: React.FC<AnimatedContactProps> = ({
   contact,
-  animationValue,
+  animationValue: _animationValue, // Non più utilizzato ma mantenuto per compatibilità
 }) => {
   const { triggerHaptic } = useHapticFeedback();
 
@@ -20,21 +20,7 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
   }, [contact, triggerHaptic]);
 
   return (
-    <Animated.View
-      style={[
-        animatedContactStyles.contactButtonContainer,
-        {
-          transform: [
-            {
-              scale: animationValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0.9, 1],
-              }),
-            },
-          ],
-        },
-      ]}
-    >
+    <View style={animatedContactStyles.contactButtonContainer}>
       <PlatformTouchable
         style={animatedContactStyles.contactTouchable}
         onPress={handlePress}
@@ -67,6 +53,6 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
           </View>
         </LinearGradient>
       </PlatformTouchable>
-    </Animated.View>
+    </View>
   );
 };

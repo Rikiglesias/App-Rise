@@ -6,11 +6,6 @@ import {
 import * as Haptics from 'expo-haptics';
 import React, { useMemo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Platform-specific components
@@ -137,15 +132,10 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
   onLongPress,
   routeName,
 }) => {
-  const buttonContainerStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateY: withSpring(isCentral && isFocused ? -18 : 0, {
-          damping: 15,
-        }),
-      },
-    ],
-  }));
+  // Rimosso: animazioni button container
+  const buttonContainerStyle = {
+    transform: [{ translateY: isCentral && isFocused ? -18 : 0 }],
+  };
 
   // COLORI STATICI - CALCOLO DIRETTO SENZA ANIMAZIONI (risolve bug timing)
   const getTabColors = () => {
@@ -177,22 +167,22 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
 
   const tabColors = getTabColors();
 
-  // ANIMAZIONI SOLO PER SCALA E OPACITY (non per colori)
-  const iconContainerStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(isFocused ? 1 : 0.9, { mass: 0.5 }) }],
-    shadowOpacity: withTiming(isFocused ? 0.3 : 0.05),
-  }));
+  // Rimosso: animazioni icon e label
+  const iconContainerStyle = {
+    transform: [{ scale: isFocused ? 1 : 0.9 }],
+    shadowOpacity: isFocused ? 0.3 : 0.05,
+  };
 
-  const labelStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(isFocused ? 1 : 0),
-    transform: [{ translateY: withTiming(isFocused ? 0 : 5) }],
-  }));
+  const labelStyle = {
+    opacity: isFocused ? 1 : 0,
+    transform: [{ translateY: isFocused ? 0 : 5 }],
+  };
 
   const iconName = ICON_MAP[routeName] ?? 'circle';
   const iconSize = isCentral ? 32 : 26;
 
   return (
-    <Animated.View style={[styles.buttonContainer, buttonContainerStyle]}>
+    <View style={[styles.buttonContainer, buttonContainerStyle]}>
       <PlatformTouchable
         activeOpacity={0.7}
         rippleColor="transparent"
@@ -204,7 +194,7 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
         style={styles.touchable}
       >
         <View style={styles.touchableContent}>
-          <Animated.View
+          <View
             style={[
               isCentral ? styles.centralIconContainer : styles.iconContainer,
               iconContainerStyle,
@@ -219,8 +209,8 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
               size={iconSize}
               color={tabColors.iconColor}
             />
-          </Animated.View>
-          <Animated.View style={labelStyle}>
+          </View>
+          <View style={labelStyle}>
             <Text
               style={[
                 styles.labelText,
@@ -231,10 +221,10 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
             >
               {options.tabBarAccessibilityLabel?.split(' ')[0]}
             </Text>
-          </Animated.View>
+          </View>
         </View>
       </PlatformTouchable>
-    </Animated.View>
+    </View>
   );
 };
 

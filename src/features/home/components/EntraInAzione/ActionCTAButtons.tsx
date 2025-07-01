@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Platform } from 'react-native';
 
 import { PlatformTouchable } from '../../../../components/ui';
 import {
@@ -10,6 +10,7 @@ import {
   Spacing,
   Typography,
 } from '../../../../shared/constants/designTokens';
+import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { BottomTabParamList } from '../../../../navigation/types';
@@ -51,7 +52,7 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="chart-line"
-                size={36}
+                size={Platform.OS === 'android' ? 35 : 36} // ANDROID: Icona ingrandita
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
@@ -78,7 +79,7 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="hand-heart"
-                size={36}
+                size={Platform.OS === 'android' ? 35 : 36} // ANDROID: Icona ingrandita
                 color="#059669"
                 style={styles.buttonIcon}
               />
@@ -108,18 +109,22 @@ const styles = StyleSheet.create({
   gradientBorder: {
     borderRadius: 20,
     padding: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 6,
+    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
   },
 
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 18,
-    paddingVertical: Spacing[3],
-    paddingHorizontal: Spacing[4],
+    // ANDROID: Bottoni leggermente più grandi
+    ...(Platform.OS === 'android' && {
+      paddingVertical: Spacing[3], // AUMENTATO: tornato a Spacing[3] per più spazio
+      paddingHorizontal: Spacing[3], // Mantenuto per equilibrio
+    }),
+    // iOS: Dimensioni originali
+    ...(Platform.OS === 'ios' && {
+      paddingVertical: Spacing[3],
+      paddingHorizontal: Spacing[4],
+    }),
     justifyContent: 'center',
     flex: 1,
   },
@@ -128,7 +133,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
-    paddingVertical: Spacing[1],
+    // ANDROID: Padding interno leggermente aumentato
+    ...(Platform.OS === 'android' && {
+      paddingVertical: Spacing[1], // AUMENTATO: tornato a Spacing[1] per più spazio
+    }),
+    // iOS: Padding originale
+    ...(Platform.OS === 'ios' && {
+      paddingVertical: Spacing[1],
+    }),
   },
 
   buttonIcon: {
@@ -137,12 +149,26 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
-    fontSize: 20, // INGRANDITO: da default a 20px per maggiore visibilità
+    // ANDROID: Testo ingrandito per migliore impatto
+    ...(Platform.OS === 'android' && {
+      fontSize: 19, // AUMENTATO: da 18 a 19 per maggiore visibilità
+    }),
+    // iOS: Dimensioni originali
+    ...(Platform.OS === 'ios' && {
+      fontSize: 20, // INGRANDITO: da default a 20px per maggiore visibilità
+    }),
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center' as const,
     letterSpacing: -0.6,
-    marginVertical: Spacing[1],
+    // ANDROID: Margini leggermente aumentati
+    ...(Platform.OS === 'android' && {
+      marginVertical: Spacing[0] + 2, // Leggermente aumentato per più spazio
+    }),
+    // iOS: Margini originali
+    ...(Platform.OS === 'ios' && {
+      marginVertical: Spacing[1],
+    }),
     textShadowColor: 'rgba(220, 38, 38, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
@@ -150,12 +176,26 @@ const styles = StyleSheet.create({
   },
 
   buttonDirection: {
-    fontSize: 16, // INGRANDITO: da default a 16px per bilanciare con il titolo
+    // ANDROID: Testo direzione ingrandito
+    ...(Platform.OS === 'android' && {
+      fontSize: 16, // AUMENTATO: da 15 a 16 per migliore leggibilità
+    }),
+    // iOS: Dimensioni originali
+    ...(Platform.OS === 'ios' && {
+      fontSize: 16, // INGRANDITO: da default a 16px per bilanciare con il titolo
+    }),
     fontWeight: Typography.weights.bold,
     color: '#10B981',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    marginVertical: Spacing[1],
+    // ANDROID: Margini leggermente aumentati
+    ...(Platform.OS === 'android' && {
+      marginVertical: Spacing[0] + 1, // Leggermente aumentato per più spazio
+    }),
+    // iOS: Margini originali
+    ...(Platform.OS === 'ios' && {
+      marginVertical: Spacing[1],
+    }),
     textShadowColor: 'rgba(16, 185, 129, 0.12)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
@@ -163,12 +203,26 @@ const styles = StyleSheet.create({
   },
 
   buttonDirectionRed: {
-    fontSize: 16, // INGRANDITO: da default a 16px per coerenza con buttonDirection
+    // ANDROID: Testo direzione ingrandito
+    ...(Platform.OS === 'android' && {
+      fontSize: 16, // AUMENTATO: da 15 a 16 per migliore leggibilità
+    }),
+    // iOS: Dimensioni originali
+    ...(Platform.OS === 'ios' && {
+      fontSize: 16, // INGRANDITO: da default a 16px per coerenza con buttonDirection
+    }),
     fontWeight: Typography.weights.bold,
     color: '#EF4444',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    marginVertical: Spacing[1],
+    // ANDROID: Margini leggermente aumentati
+    ...(Platform.OS === 'android' && {
+      marginVertical: Spacing[0] + 1, // Leggermente aumentato per più spazio
+    }),
+    // iOS: Margini originali
+    ...(Platform.OS === 'ios' && {
+      marginVertical: Spacing[1],
+    }),
     textShadowColor: 'rgba(239, 68, 68, 0.12)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
@@ -176,12 +230,26 @@ const styles = StyleSheet.create({
   },
 
   buttonTitleGreen: {
-    fontSize: 20, // INGRANDITO: da default a 20px per coerenza con buttonTitle
+    // ANDROID: Testo ingrandito per migliore impatto
+    ...(Platform.OS === 'android' && {
+      fontSize: 19, // AUMENTATO: da 18 a 19 per maggiore visibilità
+    }),
+    // iOS: Dimensioni originali
+    ...(Platform.OS === 'ios' && {
+      fontSize: 20, // INGRANDITO: da default a 20px per coerenza con buttonTitle
+    }),
     fontWeight: Typography.weights.black,
     color: '#059669',
     textAlign: 'center' as const,
     letterSpacing: -0.6,
-    marginVertical: Spacing[1],
+    // ANDROID: Margini leggermente aumentati
+    ...(Platform.OS === 'android' && {
+      marginVertical: Spacing[0] + 2, // Leggermente aumentato per più spazio
+    }),
+    // iOS: Margini originali
+    ...(Platform.OS === 'ios' && {
+      marginVertical: Spacing[1],
+    }),
     textShadowColor: 'rgba(5, 150, 105, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,

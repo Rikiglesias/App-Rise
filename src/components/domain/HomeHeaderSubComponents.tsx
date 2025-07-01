@@ -9,9 +9,9 @@ import {
   Platform,
   StyleSheet,
   View,
+  Text,
 } from 'react-native';
 import { PlatformTouchable } from '../ui';
-import { Text } from 'react-native-paper';
 
 import {
   Colors,
@@ -38,30 +38,63 @@ const modernTitleStyles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - ulteriore compattezza
     paddingHorizontal: Spacing[4],
-    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[6], // ANDROID: molto più spazio per evitare status bar
+    // ANDROID: Spazio ridotto in alto
+    ...(Platform.OS === 'android' && {
+      paddingTop: Spacing[8], // RIDOTTO: da Spacing[12] per meno spazio in alto
+      paddingBottom: Spacing[2], // Padding bottom specifico Android
+      marginTop: Spacing[2], // RIDOTTO: da Spacing[4] per compattezza
+    }),
+    // iOS: Layout nativo
+    ...(Platform.OS === 'ios' && {
+      paddingTop: Spacing[6],
+      paddingBottom: Spacing[0],
+    }),
     position: 'relative',
   },
 
   // Typography pulita e moderna - RESPONSIVE - INGRANDITA
   titleText: {
-    fontSize: 38, // INGRANDITO: da default a 38px per massimo impatto
+    fontSize: 40, // INGRANDITO: da 38 a 40px per maggiore impatto visivo
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center',
     letterSpacing: -1.3,
-    // Nessuna ombra per look pulito
-    includeFontPadding: false,
+    // ANDROID: Correzioni specifiche per rendering identico a iOS
+    ...(Platform.OS === 'android' && {
+      includeFontPadding: false,
+      textAlignVertical: 'center',
+      lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
+      fontFamily: 'sans-serif', // Font nativo Android sicuro
+      paddingVertical: 0,
+      marginVertical: 0,
+    }),
+    // iOS: Mantiene comportamento nativo
+    ...(Platform.OS === 'ios' && {
+      lineHeight: undefined, // iOS gestisce automaticamente
+    }),
     marginBottom: 0, // AZZERA MARGINE: da Spacing[1]/2 a 0 - immagine attaccata al titolo
   },
 
   // Stile per "Italia" in nero - RESPONSIVE - INGRANDITA
   titleTextItalia: {
-    fontSize: 38, // INGRANDITO: da default a 38px per coerenza con titolo principale
+    fontSize: 40, // INGRANDITO: da 38 a 40px per coerenza con titolo principale
     fontWeight: Typography.weights.black,
     color: '#1F2937', // Nero elegante
     textAlign: 'center',
     letterSpacing: -1.3,
-    includeFontPadding: false,
+    // ANDROID: Correzioni specifiche per rendering identico a iOS
+    ...(Platform.OS === 'android' && {
+      includeFontPadding: false,
+      textAlignVertical: 'center',
+      lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
+      fontFamily: 'sans-serif', // Font nativo Android sicuro
+      paddingVertical: 0,
+      marginVertical: 0,
+    }),
+    // iOS: Mantiene comportamento nativo
+    ...(Platform.OS === 'ios' && {
+      lineHeight: undefined, // iOS gestisce automaticamente
+    }),
   },
 
   // Separatore elegante con logo centrale

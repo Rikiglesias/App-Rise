@@ -19,11 +19,11 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
-        // HEADER CON SPAZIO ANDROID OTTIMIZZATO
+        // HEADER CON SPAZIO UNIFORMATO CON PAGINA IMPATTO
         headerContainer: {
-          paddingTop: Platform.OS === 'android' ? Spacing[12] : Spacing[1], // AUMENTATO: più spazio da status bar Android
+          paddingTop: Spacing[8], // UNIFORMATO: stesso paddingTop di "Il Nostro Impatto" (32px)
           paddingHorizontal: Spacing[4],
-          paddingBottom: Spacing[4], // AUMENTATO: più equilibrio generale
+          paddingBottom: Spacing[6], // UNIFORMATO: stesso paddingBottom di "Il Nostro Impatto"
           alignItems: 'center',
           position: 'relative',
         },
@@ -34,26 +34,30 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.02, // RIDOTTO per sottilità
+          opacity: Platform.OS === 'android' ? 0.01 : 0.02, // ANDROID: opacity ancora più bassa per evitare conflitti
         },
 
-        // CONTAINER ELEGANTE - DIMENSIONI OTTIMIZZATE
+        // CONTAINER ELEGANTE COLORATO - UNIFORMATO CON PAGINA IMPATTO
         mainHeaderContainer: {
           alignItems: 'center',
           backgroundColor:
-            Platform.OS === 'android' ? '#F8F9FA' : 'rgba(31, 41, 55, 0.03)',
-          paddingHorizontal: Spacing[4], // RIDOTTO: spazio laterale più contenuto
-          paddingTop: Platform.OS === 'android' ? Spacing[4] : Spacing[2], // DRASTICAMENTE RIDOTTO: contenuto su entrambe le piattaforme
-          paddingBottom: Spacing[3], // AUMENTATO: equilibrio tra sopra e sotto
+            Platform.OS === 'android'
+              ? '#F5F6F6' // ANDROID: Stesso grigio di "Il Nostro Impatto"
+              : 'rgba(31, 41, 55, 0.03)', // iOS: Stesso rgba di "Il Nostro Impatto"
+          paddingHorizontal: Spacing[4],
+          paddingTop: Spacing[3],
+          paddingBottom: Spacing[3],
           borderRadius: 16,
-          borderWidth: 1,
+          borderWidth: 1, // UNIFORMATO: stesso spessore di "Il Nostro Impatto"
           borderColor:
-            Platform.OS === 'android' ? '#E9ECEF' : 'rgba(31, 41, 55, 0.08)',
+            Platform.OS === 'android'
+              ? '#E8EAEB' // ANDROID: Stesso bordo di "Il Nostro Impatto"
+              : 'rgba(31, 41, 55, 0.08)', // iOS: Stesso rgba di "Il Nostro Impatto"
           shadowColor: '#1F2937',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.06,
+          shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08, // Solo ombra diversa per stabilità
           shadowRadius: 6,
-          elevation: 2,
+          elevation: Platform.OS === 'android' ? 1 : 3, // Solo elevation diversa per stabilità
         },
 
         // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
@@ -124,7 +128,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         style={styles.backgroundPattern}
       />
 
-      {/* HEADER INTEGRATO PRINCIPALE - STESSI COLORI IPHONE */}
+      {/* HEADER INTEGRATO PRINCIPALE - UNIFORMATO CON PAGINA IMPATTO */}
       <View style={styles.mainHeaderContainer}>{titleContent}</View>
     </Animated.View>
   );

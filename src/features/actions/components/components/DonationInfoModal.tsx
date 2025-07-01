@@ -1,13 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback } from 'react';
 import {
-  Animated,
   Dimensions,
   Modal,
+  Platform,
   StyleSheet,
   View,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 
 import { PlatformTouchable } from '../../../../components/ui';
@@ -31,39 +32,6 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
-  const modalAnim = useRef(new Animated.Value(0)).current;
-  const backdropAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    if (visible) {
-      Animated.parallel([
-        Animated.timing(backdropAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.spring(modalAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 50,
-          friction: 8,
-        }),
-      ]).start();
-    } else {
-      Animated.parallel([
-        Animated.timing(backdropAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(modalAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [visible, modalAnim, backdropAnim]);
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -83,6 +51,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
       paddingHorizontal: Spacing[4],
+      backgroundColor: 'transparent', // ANDROID: Elimina il cazzo di container grigio
     },
     backdrop: {
       position: 'absolute',
@@ -92,21 +61,27 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       bottom: 0,
       backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
-    // GRADIENT CONTAINER PATTERN per modal (elemento importante)
+    // DUAL PLATFORM CONTAINER - Android solido, iOS gradiente
     modalGradientBorder: {
       borderRadius: 24,
-      padding: 3,
+      padding: Platform.OS === 'android' ? 0 : 3, // ANDROID: Zero padding per eliminare spazi grigi
+      // ANDROID: Background rosso solido - ZERO artefatti
+      ...(Platform.OS === 'android' && {
+        backgroundColor: '#DC2626',
+        borderWidth: 2,
+        borderColor: '#DC2626', // Bordo rosso matching per eliminare artefatti
+      }),
       shadowColor: '#DC2626',
       shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: 0.3,
+      shadowOpacity: Platform.OS === 'android' ? 0.2 : 0.3, // ANDROID: ombra più leggera
       shadowRadius: 20,
-      elevation: 12,
+      elevation: Platform.OS === 'android' ? 8 : 12, // ANDROID: elevazione ridotta
       maxWidth: screenWidth * 0.9,
       width: '100%',
     },
     modalWhiteContainer: {
       backgroundColor: Colors.neutral[0],
-      borderRadius: 21,
+      borderRadius: Platform.OS === 'android' ? 21 : 21, // ANDROID: Border radius ottimizzato per eliminare spazi grigi
       overflow: 'hidden',
     },
     modalContent: {
@@ -122,21 +97,21 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
 
     closeButton: {
       position: 'absolute',
-      top: Spacing[2], // ABBASSATA: da -Spacing[2] a Spacing[2]
-      right: -Spacing[4], // MOLTO PIÙ A SINISTRA: da -Spacing[2] a -Spacing[4]
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      backgroundColor: 'rgba(220, 38, 38, 0.1)',
+      top: -10, // ANCORA PIÙ IN ALTO: entrambe le piattaforme, esce ancora di più dal bordo superiore
+      right: Platform.OS === 'android' ? -15 : -6, // Android: MOLTO più a destra / iOS: posizione normale
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: '#DC2626',
       justifyContent: 'center',
       alignItems: 'center',
-      borderWidth: 1,
-      borderColor: 'rgba(220, 38, 38, 0.2)',
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.15,
-      shadowRadius: 4,
-      elevation: 3,
+      borderWidth: 2,
+      borderColor: Colors.neutral[0],
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.25,
+      shadowRadius: 6,
+      elevation: 6,
     },
     // TITOLO CENTRATO CARINO
     centeredTitleContainer: {
@@ -144,6 +119,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       marginBottom: Spacing[5],
     },
     centeredTitle: {
+      fontSize: 28, // INGRANDITO: scritta più grande come richiesto
       fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',
@@ -153,11 +129,12 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       textShadowRadius: 6,
     },
     titleUnderline: {
-      width: 60,
+      width: 80, // Larghezza aumentata per essere proporzionata al titolo più grande
       height: 3,
       backgroundColor: '#DC2626',
       borderRadius: 2,
       marginTop: Spacing[2],
+      alignSelf: 'center', // CENTRAMENTO PERFETTO: forza la linea al centro
       shadowColor: '#DC2626',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.3,
@@ -190,113 +167,155 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       animationType="none"
       statusBarTranslucent
     >
-      <PlatformTouchable
+      <TouchableOpacity
         style={modalStyles.overlay}
         activeOpacity={1}
         onPress={handleClose}
       >
-        <Animated.View
-          style={[
-            modalStyles.backdrop,
-            {
-              opacity: backdropAnim,
-            },
-          ]}
-        />
-        <PlatformTouchable activeOpacity={1} onPress={handleStopPropagation}>
-          <Animated.View
-            style={[
-              {
-                opacity: modalAnim,
-                transform: [
-                  {
-                    scale: modalAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.8, 1],
-                    }),
-                  },
-                  {
-                    translateY: modalAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [50, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <LinearGradient
-              colors={['#DC2626', '#B91C1C', '#991B1B']}
-              style={modalStyles.modalGradientBorder}
-            >
-              <View style={modalStyles.modalWhiteContainer}>
-                <View style={modalStyles.modalContent}>
-                  <View style={modalStyles.modalHeader}>
-                    <PlatformTouchable
-                      style={modalStyles.closeButton}
-                      onPress={handleClose}
-                      activeOpacity={0.7}
+        <View style={modalStyles.backdrop} />
+        <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
+          <View style={{ backgroundColor: 'transparent' }}>
+            {Platform.OS === 'android' ? (
+              // ANDROID: Container solido - ZERO artefatti grigi
+              <View style={modalStyles.modalGradientBorder}>
+                <View style={modalStyles.modalWhiteContainer}>
+                  <View style={modalStyles.modalContent}>
+                    <View style={modalStyles.modalHeader}>
+                      <PlatformTouchable
+                        style={modalStyles.closeButton}
+                        onPress={handleClose}
+                        activeOpacity={0.7}
+                      >
+                        <MaterialCommunityIcons
+                          name="close"
+                          size={22}
+                          color={Colors.neutral[0]}
+                        />
+                      </PlatformTouchable>
+                    </View>
+
+                    {/* TITOLO CENTRATO E CARINO */}
+                    <View style={modalStyles.centeredTitleContainer}>
+                      <Text style={modalStyles.centeredTitle}>Come Donare</Text>
+                      <View style={modalStyles.titleUnderline} />
+                    </View>
+
+                    <Text
+                      style={[
+                        modalStyles.modalText,
+                        { fontWeight: Typography.weights.bold },
+                      ]}
                     >
-                      <MaterialCommunityIcons
-                        name="close"
-                        size={20}
-                        color="#DC2626" // ROSSO COORDINATO per maggiore visibilità
-                      />
-                    </PlatformTouchable>
-                  </View>
-
-                  {/* TITOLO CENTRATO E CARINO */}
-                  <View style={modalStyles.centeredTitleContainer}>
-                    <Text style={modalStyles.centeredTitle}>
-                      💝 Come Donare
+                      💰 Donazioni monetarie: Se vuoi fare una donazione
+                      monetaria diretta, clicca su &quot;Dona Ora&quot; per
+                      contribuire immediatamente alla nostra missione contro la
+                      fame.
                     </Text>
-                    <View style={modalStyles.titleUnderline} />
+
+                    <Text
+                      style={[
+                        modalStyles.modalText,
+                        { fontWeight: Typography.weights.bold },
+                      ]}
+                    >
+                      🛍️ Acquisti solidali: Attraverso il nostro Charity Shop,
+                      ogni acquisto dai nostri partner dona automaticamente una
+                      percentuale per i nostri programmi. Tu spendi lo stesso
+                      prezzo, ma aiuti a combattere la fame!
+                    </Text>
+
+                    <Text
+                      style={[
+                        modalStyles.modalText,
+                        { fontWeight: Typography.weights.bold },
+                      ]}
+                    >
+                      🎁 Gift Cards: Funzionano come gli acquisti: compri una
+                      Gift Card a prezzo normale (per te o come regalo), ma una
+                      percentuale viene automaticamente donata per la
+                      distribuzione di pasti. Aiuti senza costi extra!
+                    </Text>
+
+                    <Text style={modalStyles.highlightText}>
+                      ✨ Il modo più semplice è partecipare ai nostri eventi!
+                    </Text>
                   </View>
-
-                  <Text
-                    style={[
-                      modalStyles.modalText,
-                      { fontWeight: Typography.weights.bold },
-                    ]}
-                  >
-                    💰 Donazioni monetarie: Se vuoi fare una donazione monetaria
-                    diretta, clicca su &quot;Dona Ora&quot; per contribuire
-                    immediatamente alla nostra missione contro la fame.
-                  </Text>
-
-                  <Text
-                    style={[
-                      modalStyles.modalText,
-                      { fontWeight: Typography.weights.bold },
-                    ]}
-                  >
-                    🛍️ Acquisti solidali: Attraverso il nostro Charity Shop,
-                    ogni acquisto dai nostri partner dona automaticamente una
-                    percentuale per i nostri programmi. Tu spendi lo stesso
-                    prezzo, ma aiuti a combattere la fame!
-                  </Text>
-
-                  <Text
-                    style={[
-                      modalStyles.modalText,
-                      { fontWeight: Typography.weights.bold },
-                    ]}
-                  >
-                    🎁 Gift Cards: Funzionano come gli acquisti: compri una Gift
-                    Card a prezzo normale (per te o come regalo), ma una
-                    percentuale viene automaticamente donata per la
-                    distribuzione di pasti. Aiuti senza costi extra!
-                  </Text>
-
-                  <Text style={modalStyles.highlightText}>
-                    ✨ Il modo più semplice è partecipare ai nostri eventi!
-                  </Text>
                 </View>
               </View>
-            </LinearGradient>
-          </Animated.View>
-        </PlatformTouchable>
-      </PlatformTouchable>
+            ) : (
+              // iOS: Gradiente normale
+              <LinearGradient
+                colors={['#DC2626', '#B91C1C', '#991B1B']}
+                style={modalStyles.modalGradientBorder}
+              >
+                <View style={modalStyles.modalWhiteContainer}>
+                  <View style={modalStyles.modalContent}>
+                    <View style={modalStyles.modalHeader}>
+                      <PlatformTouchable
+                        style={modalStyles.closeButton}
+                        onPress={handleClose}
+                        activeOpacity={0.7}
+                      >
+                        <MaterialCommunityIcons
+                          name="close"
+                          size={22}
+                          color={Colors.neutral[0]}
+                        />
+                      </PlatformTouchable>
+                    </View>
+
+                    {/* TITOLO CENTRATO E CARINO */}
+                    <View style={modalStyles.centeredTitleContainer}>
+                      <Text style={modalStyles.centeredTitle}>Come Donare</Text>
+                      <View style={modalStyles.titleUnderline} />
+                    </View>
+
+                    <Text
+                      style={[
+                        modalStyles.modalText,
+                        { fontWeight: Typography.weights.bold },
+                      ]}
+                    >
+                      💰 Donazioni monetarie: Se vuoi fare una donazione
+                      monetaria diretta, clicca su &quot;Dona Ora&quot; per
+                      contribuire immediatamente alla nostra missione contro la
+                      fame.
+                    </Text>
+
+                    <Text
+                      style={[
+                        modalStyles.modalText,
+                        { fontWeight: Typography.weights.bold },
+                      ]}
+                    >
+                      🛍️ Acquisti solidali: Attraverso il nostro Charity Shop,
+                      ogni acquisto dai nostri partner dona automaticamente una
+                      percentuale per i nostri programmi. Tu spendi lo stesso
+                      prezzo, ma aiuti a combattere la fame!
+                    </Text>
+
+                    <Text
+                      style={[
+                        modalStyles.modalText,
+                        { fontWeight: Typography.weights.bold },
+                      ]}
+                    >
+                      🎁 Gift Cards: Funzionano come gli acquisti: compri una
+                      Gift Card a prezzo normale (per te o come regalo), ma una
+                      percentuale viene automaticamente donata per la
+                      distribuzione di pasti. Aiuti senza costi extra!
+                    </Text>
+
+                    <Text style={modalStyles.highlightText}>
+                      ✨ Il modo più semplice è partecipare ai nostri eventi!
+                    </Text>
+                  </View>
+                </View>
+              </LinearGradient>
+            )}
+          </View>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </Modal>
   );
 };

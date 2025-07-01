@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet } from 'react-native';
 import { PlatformScrollView } from '../../../components/ui';
 
 import { Colors } from '../../../shared/constants/designTokens';
@@ -22,7 +22,7 @@ export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
       backgroundColor: Colors.neutral[50],
     },
     scrollContent: {
-      paddingBottom: 120,
+      paddingBottom: Platform.OS === 'android' ? 160 : 120, // ANDROID: 160 per evitare sovrapposizione bottom navigation / iOS: 120 normale
     },
   });
 
