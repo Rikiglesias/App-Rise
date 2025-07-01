@@ -3,10 +3,10 @@ import { View, StyleSheet } from 'react-native';
 
 import { FormattedText } from '../../../../components/ui';
 import { Typography, Spacing } from '../../../../shared/constants/designTokens';
-import { useIntelligentFontScaling } from '../../../../shared/hooks';
+import { useResponsive } from '../../../../shared/hooks/useResponsive';
 
 export const ActionTitle: React.FC = () => {
-  const { scaleFont } = useIntelligentFontScaling();
+  const { scaleFont } = useResponsive();
 
   return (
     <View style={styles.titleSection}>

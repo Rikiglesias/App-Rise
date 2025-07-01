@@ -8,10 +8,10 @@ import {
   Spacing,
   Colors,
 } from '../../../../shared/constants/designTokens';
-import { useIntelligentFontScaling } from '../../../../shared/hooks';
+import { useResponsive } from '../../../../shared/hooks/useResponsive';
 
 export const ActionDescription: React.FC = () => {
-  const { scaleFont } = useIntelligentFontScaling();
+  const { scaleFont } = useResponsive();
 
   return (
     <View style={styles.descriptionContainer}>

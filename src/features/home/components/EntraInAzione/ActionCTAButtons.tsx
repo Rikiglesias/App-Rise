@@ -12,7 +12,7 @@ import {
 } from '../../../../shared/constants/designTokens';
 import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
-import { useIntelligentFontScaling } from '../../../../shared/hooks';
+import { useResponsive } from '../../../../shared/hooks/useResponsive';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { BottomTabParamList } from '../../../../navigation/types';
 
@@ -22,7 +22,7 @@ interface ActionCTAButtonsProps {
 
 export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
   const { triggerHaptic } = useHapticFeedback();
-  const { scaleFont } = useIntelligentFontScaling();
+  const { scaleFont } = useResponsive();
   const navigation =
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
