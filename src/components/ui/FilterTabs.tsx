@@ -1,9 +1,9 @@
 import { useTheme } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ResponsiveText } from './ResponsiveText';
+import { StyleSheet, View, Text } from 'react-native';
+
 import { PlatformScrollView } from './PlatformComponents';
-import { Text, TouchableRipple } from 'react-native-paper';
+import { TouchableRipple } from 'react-native-paper';
 import {
   BorderRadius,
   Spacing,
@@ -146,15 +146,14 @@ const TabItem: React.FC<TabItemProps> = ({
     >
       <View style={styles.tabContent}>
         {tab.icon && (
-          <ResponsiveText
+          <Text
             style={[
               styles.tabIcon,
               isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
             ]}
-            responsiveFontSize={16}
           >
             {tab.icon}
-          </ResponsiveText>
+          </Text>
         )}
 
         <Text

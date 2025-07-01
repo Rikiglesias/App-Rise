@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { ResponsiveText } from '../../../components/ui/ResponsiveText';
+import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 import { PlatformScrollView } from '../../../components/ui';
 
 import type { RootStackParamList } from '../../../navigation/types';
@@ -27,123 +26,97 @@ const Impatto2024Screen: React.FC<Props> = ({ navigation: _navigation }) => {
     <SafeAreaView style={styles.container}>
       <PlatformScrollView>
         <View style={styles.header}>
-          <ResponsiveText style={[{ fontSize: 40 }, styles.year]}>
-            2024
-          </ResponsiveText>
-          <ResponsiveText style={[{ fontSize: 24 }, styles.title]}>
+          <Text style={[styles.year, { fontSize: 40 }]}>2024</Text>
+          <Text style={[styles.title, { fontSize: 24 }]}>
             Il Nostro Impatto
-          </ResponsiveText>
-          <ResponsiveText style={[{ fontSize: 16 }, styles.subtitle]}>
+          </Text>
+          <Text style={[styles.subtitle, { fontSize: 16 }]}>
             Risultati raggiunti insieme
-          </ResponsiveText>
+          </Text>
         </View>
 
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <ResponsiveText style={[{ fontSize: 32 }, styles.statIcon]}>
-              🍽️
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 28 }, styles.statNumber]}>
-              3.14M
-            </ResponsiveText>
-            <ResponsiveText
-              style={[{ fontSize: 18 }, styles.statLabel]}
+            <Text style={[styles.statIcon, { fontSize: 32 }]}>🍽️</Text>
+            <Text style={[styles.statNumber, { fontSize: 28 }]}>3.14M</Text>
+            <Text
+              style={[styles.statLabel, { fontSize: 18 }]}
               numberOfLines={1}
               adjustsFontSizeToFit={true}
             >
               Pasti Confezionati
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 14 }, styles.statDesc]}>
+            </Text>
+            <Text style={[styles.statDesc, { fontSize: 14 }]}>
               Nutrizione per comunità in difficoltà
-            </ResponsiveText>
+            </Text>
           </View>
 
           <View style={styles.statCard}>
-            <ResponsiveText style={[{ fontSize: 32 }, styles.statIcon]}>
-              📦
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 28 }, styles.statNumber]}>
-              16.3K
-            </ResponsiveText>
-            <ResponsiveText
-              style={[{ fontSize: 18 }, styles.statLabel]}
+            <Text style={[styles.statIcon, { fontSize: 32 }]}>📦</Text>
+            <Text style={[styles.statNumber, { fontSize: 28 }]}>16.3K</Text>
+            <Text
+              style={[styles.statLabel, { fontSize: 18 }]}
               numberOfLines={1}
               adjustsFontSizeToFit={true}
             >
               Kit Prodotti
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 14 }, styles.statDesc]}>
+            </Text>
+            <Text style={[styles.statDesc, { fontSize: 14 }]}>
               Kit completi per emergenze
-            </ResponsiveText>
+            </Text>
           </View>
 
           <View style={styles.statCard}>
-            <ResponsiveText style={[{ fontSize: 32 }, styles.statIcon]}>
-              👥
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 28 }, styles.statNumber]}>
-              13K
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 18 }, styles.statLabel]}>
-              Volontari
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 14 }, styles.statDesc]}>
+            <Text style={[styles.statIcon, { fontSize: 32 }]}>👥</Text>
+            <Text style={[styles.statNumber, { fontSize: 28 }]}>13K</Text>
+            <Text style={[styles.statLabel, { fontSize: 18 }]}>Volontari</Text>
+            <Text style={[styles.statDesc, { fontSize: 14 }]}>
               Persone che hanno fatto la differenza
-            </ResponsiveText>
+            </Text>
           </View>
         </View>
 
         <View style={styles.impactSection}>
-          <ResponsiveText style={[{ fontSize: 20 }, styles.impactTitle]}>
+          <Text style={[styles.impactTitle, { fontSize: 20 }]}>
             Dove Arrivano i Nostri Aiuti
-          </ResponsiveText>
+          </Text>
 
           <View style={styles.impactList}>
             <View style={styles.impactItem}>
-              <ResponsiveText style={[{ fontSize: 20 }, styles.impactIcon]}>
-                🌍
-              </ResponsiveText>
-              <ResponsiveText style={[{ fontSize: 16 }, styles.impactText]}>
+              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🌍</Text>
+              <Text style={[styles.impactText, { fontSize: 16 }]}>
                 Africa Subsahariana
-              </ResponsiveText>
+              </Text>
             </View>
             <View style={styles.impactItem}>
-              <ResponsiveText style={[{ fontSize: 20 }, styles.impactIcon]}>
-                🏫
-              </ResponsiveText>
-              <ResponsiveText style={[{ fontSize: 16 }, styles.impactText]}>
+              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🏫</Text>
+              <Text style={[styles.impactText, { fontSize: 16 }]}>
                 Programmi scolastici
-              </ResponsiveText>
+              </Text>
             </View>
             <View style={styles.impactItem}>
-              <ResponsiveText style={[{ fontSize: 20 }, styles.impactIcon]}>
-                🚨
-              </ResponsiveText>
-              <ResponsiveText style={[{ fontSize: 16 }, styles.impactText]}>
+              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🚨</Text>
+              <Text style={[styles.impactText, { fontSize: 16 }]}>
                 Emergenze umanitarie
-              </ResponsiveText>
+              </Text>
             </View>
             <View style={styles.impactItem}>
-              <ResponsiveText style={[{ fontSize: 20 }, styles.impactIcon]}>
-                🇮🇹
-              </ResponsiveText>
-              <ResponsiveText style={[{ fontSize: 16 }, styles.impactText]}>
+              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🇮🇹</Text>
+              <Text style={[styles.impactText, { fontSize: 16 }]}>
                 Comunità italiane
-              </ResponsiveText>
+              </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.goalSection}>
-          <ResponsiveText style={[{ fontSize: 40 }, styles.goalIcon]}>
-            🎯
-          </ResponsiveText>
-          <ResponsiveText style={[{ fontSize: 20 }, styles.goalTitle]}>
+          <Text style={[styles.goalIcon, { fontSize: 40 }]}>🎯</Text>
+          <Text style={[styles.goalTitle, { fontSize: 20 }]}>
             Obiettivo 2025
-          </ResponsiveText>
-          <ResponsiveText style={[{ fontSize: 16 }, styles.goalText]}>
+          </Text>
+          <Text style={[styles.goalText, { fontSize: 16 }]}>
             Superare i 4 milioni di pasti confezionati
-          </ResponsiveText>
+          </Text>
         </View>
       </PlatformScrollView>
     </SafeAreaView>
@@ -164,14 +137,12 @@ const styles = StyleSheet.create({
   },
 
   year: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '900',
     color: Colors.primary[600],
     textAlign: 'center',
   },
 
   title: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '800',
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -179,7 +150,6 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '500',
     color: Colors.neutral[700],
     textAlign: 'center',
@@ -209,14 +179,12 @@ const styles = StyleSheet.create({
   },
 
   statNumber: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '800',
     color: Colors.primary[600],
     textAlign: 'center',
   },
 
   statLabel: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '600',
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -224,7 +192,6 @@ const styles = StyleSheet.create({
   },
 
   statDesc: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '400',
     color: Colors.neutral[600],
     textAlign: 'center',
@@ -241,7 +208,6 @@ const styles = StyleSheet.create({
   },
 
   impactTitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '700',
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -262,7 +228,6 @@ const styles = StyleSheet.create({
   },
 
   impactText: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '500',
     color: Colors.neutral[700],
   },
@@ -284,7 +249,6 @@ const styles = StyleSheet.create({
   },
 
   goalTitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '700',
     color: Colors.primary[800],
     textAlign: 'center',
@@ -292,7 +256,6 @@ const styles = StyleSheet.create({
   },
 
   goalText: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: '500',
     color: Colors.primary[700],
     textAlign: 'center',

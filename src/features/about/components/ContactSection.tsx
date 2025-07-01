@@ -1,6 +1,5 @@
 import React from 'react';
-import { Animated, View } from 'react-native';
-import { ResponsiveText } from '../../../components/ui/ResponsiveText';
+import { Animated, View, Text } from 'react-native';
 
 import { contactSectionStyles } from '../styles';
 import type { ContactSectionProps } from '../types';
@@ -33,14 +32,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         ]}
       >
         <View style={contactSectionStyles.exploreHeaderContainer}>
-          <ResponsiveText
-            style={[{ fontSize: 30 }, contactSectionStyles.categoryTitle]}
-          >
+          <Text style={[{ fontSize: 30 }, contactSectionStyles.categoryTitle]}>
             I Nostri Contatti
-          </ResponsiveText>
-          <ResponsiveText style={contactSectionStyles.exploreSubtitleInline}>
+          </Text>
+          <Text style={contactSectionStyles.exploreSubtitleInline}>
             Sede di Bologna e recapiti ufficiali
-          </ResponsiveText>
+          </Text>
         </View>
       </Animated.View>
       <View style={contactSectionStyles.contactsGrid}>

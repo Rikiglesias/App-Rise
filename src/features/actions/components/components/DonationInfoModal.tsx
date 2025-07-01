@@ -1,8 +1,15 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Animated, Dimensions, Modal, StyleSheet, View } from 'react-native';
-import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
+import {
+  Animated,
+  Dimensions,
+  Modal,
+  StyleSheet,
+  View,
+  Text,
+} from 'react-native';
+
 import { PlatformTouchable } from '../../../../components/ui';
 
 import {
@@ -240,59 +247,50 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
 
                   {/* TITOLO CENTRATO E CARINO */}
                   <View style={modalStyles.centeredTitleContainer}>
-                    <ResponsiveText
-                      style={modalStyles.centeredTitle}
-                      responsiveFontSize={Typography.sizes['2xl']}
-                    >
+                    <Text style={modalStyles.centeredTitle}>
                       💝 Come Donare
-                    </ResponsiveText>
+                    </Text>
                     <View style={modalStyles.titleUnderline} />
                   </View>
 
-                  <ResponsiveText
+                  <Text
                     style={[
                       modalStyles.modalText,
                       { fontWeight: Typography.weights.bold },
                     ]}
-                    responsiveFontSize={Typography.sizes.base}
                   >
                     💰 Donazioni monetarie: Se vuoi fare una donazione monetaria
                     diretta, clicca su &quot;Dona Ora&quot; per contribuire
                     immediatamente alla nostra missione contro la fame.
-                  </ResponsiveText>
+                  </Text>
 
-                  <ResponsiveText
+                  <Text
                     style={[
                       modalStyles.modalText,
                       { fontWeight: Typography.weights.bold },
                     ]}
-                    responsiveFontSize={Typography.sizes.base}
                   >
                     🛍️ Acquisti solidali: Attraverso il nostro Charity Shop,
                     ogni acquisto dai nostri partner dona automaticamente una
                     percentuale per i nostri programmi. Tu spendi lo stesso
                     prezzo, ma aiuti a combattere la fame!
-                  </ResponsiveText>
+                  </Text>
 
-                  <ResponsiveText
+                  <Text
                     style={[
                       modalStyles.modalText,
                       { fontWeight: Typography.weights.bold },
                     ]}
-                    responsiveFontSize={Typography.sizes.base}
                   >
                     🎁 Gift Cards: Funzionano come gli acquisti: compri una Gift
                     Card a prezzo normale (per te o come regalo), ma una
                     percentuale viene automaticamente donata per la
                     distribuzione di pasti. Aiuti senza costi extra!
-                  </ResponsiveText>
+                  </Text>
 
-                  <ResponsiveText
-                    style={modalStyles.highlightText}
-                    responsiveFontSize={Typography.sizes.lg}
-                  >
+                  <Text style={modalStyles.highlightText}>
                     ✨ Il modo più semplice è partecipare ai nostri eventi!
-                  </ResponsiveText>
+                  </Text>
                 </View>
               </View>
             </LinearGradient>

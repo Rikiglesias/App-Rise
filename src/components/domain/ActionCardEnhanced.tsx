@@ -8,7 +8,6 @@ import {
   Platform,
   View,
 } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
 
 import {
   BorderRadius,
@@ -152,13 +151,12 @@ const ActionCardIcon: React.FC<{
       },
     ]}
   >
-    <ResponsiveText
-      style={styles.icon}
-      responsiveFontSize={28}
+    <Text
+      style={[styles.icon, { fontSize: 28 }]}
       accessible={false} // Icon is decorative, description is in accessibilityLabel
     >
       {icon}
-    </ResponsiveText>
+    </Text>
   </Animated.View>
 );
 

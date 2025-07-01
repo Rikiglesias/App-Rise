@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { StyleSheet, View, Text } from 'react-native';
 
 import {
   BorderRadius,
@@ -43,9 +42,7 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
 
   return (
     <View style={styles.progressContainer}>
-      <ResponsiveText style={styles.progressLabel}>
-        Progresso: {progress}%
-      </ResponsiveText>
+      <Text style={styles.progressLabel}>Progresso: {progress}%</Text>
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>

@@ -7,11 +7,10 @@ import React, { useCallback } from 'react';
 import {
   Animated,
   StyleSheet,
-  Text,
   TouchableWithoutFeedback,
   View,
+  Text,
 } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
 
 import {
   BorderRadius,
@@ -140,11 +139,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     >
       <Animated.View style={[buttonStyle, microInteraction.animatedStyle]}>
         <View style={styles.content}>
-          {icon && (
-            <ResponsiveText style={styles.icon} responsiveFontSize={16}>
-              {icon}
-            </ResponsiveText>
-          )}
+          {icon && <Text style={styles.icon}>{icon}</Text>}
           <Text style={textStyle}>{title}</Text>
         </View>
       </Animated.View>

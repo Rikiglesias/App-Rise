@@ -50,7 +50,10 @@
     "fix:line-endings": "git add --renormalize . && git status",
     "prettier:fix-all": "prettier --write . && git add .",
     "docs:check": "markdownlint docs/ --fix",
-    "docs:optional": "echo '📝 Docs check opzionale (non bloccante)' && npm run docs:check || echo '⚠️ Errori docs trovati ma non bloccanti'"
+    "docs:optional": "echo '📝 Docs check opzionale (non bloccante)' && npm run docs:check || echo '⚠️ Errori docs trovati ma non bloccanti'",
+    "bundle:analyze": "node scripts/bundle-analysis.js",
+    "bundle:report": "node scripts/bundle-analysis.js && echo '📊 Bundle analysis completed! Check bundle-analysis-report.json for details.'",
+    "optimize:bundle": "npm run bundle:analyze && echo '💡 Review recommendations in the report for optimization opportunities.'"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
@@ -107,7 +110,7 @@
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.1.0",
     "react-test-renderer": "^19.0.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.5.4"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [

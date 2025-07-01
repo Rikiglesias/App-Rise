@@ -7,9 +7,9 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
+  Text,
 } from 'react-native';
 import { PlatformTouchable } from '../../components/ui';
-import { ResponsiveText } from '../../components/ui/ResponsiveText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -19,7 +19,6 @@ import {
   Typography,
 } from '../constants/designTokens';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
-import { useResponsive } from '../hooks/useResponsiveDesign';
 
 interface DevelopmentScreenProps {
   navigation: {
@@ -32,7 +31,6 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
-  const { responsive } = useResponsive();
 
   // Animazioni
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -98,20 +96,6 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
     outputRange: ['0deg', '360deg'],
   });
 
-  // Dimensioni responsive
-  const responsiveStyles = {
-    backButtonSize: responsive.getSpacing(48),
-    iconSize: responsive.getSpacing(60),
-    iconContainerSize: responsive.getSpacing(120),
-    floatingIconSizes: {
-      large: responsive.getSpacing(24),
-      medium: responsive.getSpacing(20),
-      small: responsive.getSpacing(22),
-    },
-    contentPadding: responsive.getSpacing(24),
-    verticalSpacing: responsive.getSpacing(16),
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
@@ -124,9 +108,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
         style={[
           styles.backButton,
           {
-            top: insets.top + responsiveStyles.verticalSpacing,
-            width: responsiveStyles.backButtonSize,
-            height: responsiveStyles.backButtonSize,
+            top: insets.top + Spacing[4],
+            width: 48,
+            height: 48,
           },
         ]}
         onPress={handleGoBack}
@@ -137,17 +121,13 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
           style={[
             styles.backButtonGradient,
             {
-              width: responsiveStyles.backButtonSize,
-              height: responsiveStyles.backButtonSize,
-              borderRadius: responsiveStyles.backButtonSize / 2,
+              width: 48,
+              height: 48,
+              borderRadius: 24,
             },
           ]}
         >
-          <MaterialCommunityIcons
-            name="arrow-left"
-            size={responsive.getSpacing(24)}
-            color="white"
-          />
+          <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
         </LinearGradient>
       </PlatformTouchable>
 
@@ -158,12 +138,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
           {
             opacity: fadeAnim,
             transform: [{ scale: scaleAnim }, { translateY: slideAnim }],
-            paddingHorizontal: responsiveStyles.contentPadding,
-            paddingTop:
-              Platform.OS === 'ios'
-                ? responsive.getSpacing(48)
-                : responsive.getSpacing(32),
-            paddingBottom: responsive.getSpacing(60), // Responsive bottom padding
+            paddingHorizontal: Spacing[6],
+            paddingTop: Platform.OS === 'ios' ? Spacing[12] : Spacing[8],
+            paddingBottom: Spacing[16],
           },
         ]}
       >
@@ -172,11 +149,8 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
           style={[
             styles.iconContainer,
             {
-              marginBottom: responsive.getSpacing(16),
-              marginTop:
-                Platform.OS === 'ios'
-                  ? responsive.getSpacing(32)
-                  : responsive.getSpacing(16),
+              marginBottom: Spacing[4],
+              marginTop: Platform.OS === 'ios' ? Spacing[8] : Spacing[4],
             },
           ]}
         >
@@ -184,9 +158,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             style={[
               styles.iconBackground,
               {
-                width: responsiveStyles.iconContainerSize,
-                height: responsiveStyles.iconContainerSize,
-                borderRadius: responsiveStyles.iconContainerSize / 2,
+                width: 120,
+                height: 120,
+                borderRadius: 60,
                 transform: [
                   { scale: pulseAnim },
                   { rotate: rotateInterpolate },
@@ -196,7 +170,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
           >
             <MaterialCommunityIcons
               name="hammer-wrench"
-              size={responsiveStyles.iconSize}
+              size={60}
               color="#DC2626"
             />
           </Animated.View>
@@ -206,12 +180,12 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             style={[
               styles.floatingIcon,
               styles.floatingIcon1,
-              { padding: responsive.getSpacing(8) },
+              { padding: Spacing[2] },
             ]}
           >
             <MaterialCommunityIcons
               name="code-tags"
-              size={responsiveStyles.floatingIconSizes.large}
+              size={24}
               color="#059669"
             />
           </Animated.View>
@@ -219,27 +193,19 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             style={[
               styles.floatingIcon,
               styles.floatingIcon2,
-              { padding: responsive.getSpacing(8) },
+              { padding: Spacing[2] },
             ]}
           >
-            <MaterialCommunityIcons
-              name="palette"
-              size={responsiveStyles.floatingIconSizes.medium}
-              color="#7C3AED"
-            />
+            <MaterialCommunityIcons name="palette" size={20} color="#7C3AED" />
           </Animated.View>
           <Animated.View
             style={[
               styles.floatingIcon,
               styles.floatingIcon3,
-              { padding: responsive.getSpacing(8) },
+              { padding: Spacing[2] },
             ]}
           >
-            <MaterialCommunityIcons
-              name="rocket"
-              size={responsiveStyles.floatingIconSizes.small}
-              color="#F59E0B"
-            />
+            <MaterialCommunityIcons name="rocket" size={22} color="#F59E0B" />
           </Animated.View>
         </View>
 
@@ -250,24 +216,24 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             {
               opacity: fadeAnim,
               transform: [{ translateY: slideAnim }],
-              marginBottom: responsive.getSpacing(16),
+              marginBottom: Spacing[4],
             },
           ]}
         >
-          <ResponsiveText
-            style={[{ fontSize: 32 }, styles.mainTitle]}
+          <Text
+            style={[styles.mainTitle, { fontSize: 32 }]}
             numberOfLines={2}
             adjustsFontSizeToFit={true}
           >
             🚧 In Fase di Sviluppo
-          </ResponsiveText>
-          <ResponsiveText
-            style={[{ fontSize: 18 }, styles.subtitle]}
+          </Text>
+          <Text
+            style={[styles.subtitle, { fontSize: 18 }]}
             numberOfLines={2}
             adjustsFontSizeToFit={true}
           >
             Questa sezione sarà presto disponibile
-          </ResponsiveText>
+          </Text>
         </Animated.View>
 
         {/* Card Informativa */}
@@ -277,7 +243,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             {
               opacity: fadeAnim,
               transform: [{ scale: scaleAnim }],
-              marginBottom: responsive.getSpacing(16),
+              marginBottom: Spacing[4],
             },
           ]}
         >
@@ -285,96 +251,71 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             colors={['rgba(220, 38, 38, 0.05)', 'rgba(220, 38, 38, 0.02)']}
             style={styles.cardGradient}
           >
-            <View
-              style={[
-                styles.cardContent,
-                { padding: responsive.getSpacing(24) },
-              ]}
-            >
+            <View style={[styles.cardContent, { padding: Spacing[6] }]}>
               <MaterialCommunityIcons
                 name="information-outline"
-                size={responsive.getSpacing(28)}
+                size={28}
                 color="#DC2626"
-                style={[
-                  styles.cardIcon,
-                  { marginBottom: responsive.getSpacing(8) },
-                ]}
+                style={[styles.cardIcon, { marginBottom: Spacing[2] }]}
               />
-              <ResponsiveText
-                style={[{ fontSize: 24 }, styles.cardTitle]}
+              <Text
+                style={[styles.cardTitle, { fontSize: 24 }]}
                 numberOfLines={2}
                 adjustsFontSizeToFit={true}
               >
                 Cosa stiamo preparando
-              </ResponsiveText>
-              <ResponsiveText
-                style={[{ fontSize: 16 }, styles.cardDescription]}
+              </Text>
+              <Text
+                style={[styles.cardDescription, { fontSize: 16 }]}
                 numberOfLines={4}
               >
                 Il nostro team sta lavorando duramente per portarti nuove
                 funzionalità innovative e un&apos;esperienza utente ancora
                 migliore.
-              </ResponsiveText>
+              </Text>
 
-              <View
-                style={[styles.featuresList, { gap: responsive.getSpacing(6) }]}
-              >
-                <View
-                  style={[
-                    styles.featureItem,
-                    { gap: responsive.getSpacing(12) },
-                  ]}
-                >
+              <View style={[styles.featuresList, { gap: Spacing[1] }]}>
+                <View style={[styles.featureItem, { gap: Spacing[3] }]}>
                   <MaterialCommunityIcons
                     name="check-circle"
-                    size={responsive.getSpacing(16)}
+                    size={16}
                     color="#059669"
                   />
-                  <ResponsiveText
-                    style={[{ fontSize: 16 }, styles.featureText]}
+                  <Text
+                    style={[styles.featureText, { fontSize: 16 }]}
                     numberOfLines={1}
                     adjustsFontSizeToFit={true}
                   >
                     Design migliorato
-                  </ResponsiveText>
+                  </Text>
                 </View>
-                <View
-                  style={[
-                    styles.featureItem,
-                    { gap: responsive.getSpacing(12) },
-                  ]}
-                >
+                <View style={[styles.featureItem, { gap: Spacing[3] }]}>
                   <MaterialCommunityIcons
                     name="check-circle"
-                    size={responsive.getSpacing(16)}
+                    size={16}
                     color="#059669"
                   />
-                  <ResponsiveText
-                    style={[{ fontSize: 16 }, styles.featureText]}
+                  <Text
+                    style={[styles.featureText, { fontSize: 16 }]}
                     numberOfLines={1}
                     adjustsFontSizeToFit={true}
                   >
                     Nuove funzionalità
-                  </ResponsiveText>
+                  </Text>
                 </View>
-                <View
-                  style={[
-                    styles.featureItem,
-                    { gap: responsive.getSpacing(12) },
-                  ]}
-                >
+                <View style={[styles.featureItem, { gap: Spacing[3] }]}>
                   <MaterialCommunityIcons
                     name="check-circle"
-                    size={responsive.getSpacing(16)}
+                    size={16}
                     color="#059669"
                   />
-                  <ResponsiveText
-                    style={[{ fontSize: 16 }, styles.featureText]}
+                  <Text
+                    style={[styles.featureText, { fontSize: 16 }]}
                     numberOfLines={2}
                     adjustsFontSizeToFit={true}
                   >
                     Performance ottimizzate
-                  </ResponsiveText>
+                  </Text>
                 </View>
               </View>
             </View>

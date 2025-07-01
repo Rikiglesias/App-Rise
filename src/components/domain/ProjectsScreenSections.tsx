@@ -1,6 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { View, Text } from 'react-native';
 import { Surface } from 'react-native-paper';
 import type {
   ProjectsEmptyStateProps,
@@ -13,13 +12,11 @@ import SectionContainer from '../layout/SectionContainer';
 export const ProjectsHeader: React.FC<ProjectsHeaderProps> = React.memo(
   ({ styles }) => (
     <View style={styles.header}>
-      <ResponsiveText style={styles.headerTitle}>
-        I Nostri Progetti
-      </ResponsiveText>
-      <ResponsiveText style={styles.headerSubtitle}>
+      <Text style={styles.headerTitle}>I Nostri Progetti</Text>
+      <Text style={styles.headerSubtitle}>
         Scopri dove stiamo facendo la differenza nel mondo{'\n'}
         contro la fame e la malnutrizione
-      </ResponsiveText>
+      </Text>
     </View>
   )
 );
@@ -31,33 +28,21 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
   ({ stats, styles }) => (
     <SectionContainer spacing="standard">
       <Surface style={styles.statsSurface} elevation={1}>
-        <ResponsiveText style={styles.statsTitle}>
-          Progetti in Numeri
-        </ResponsiveText>
+        <Text style={styles.statsTitle}>Progetti in Numeri</Text>
         <View style={styles.statsRow}>
           <View style={styles.statItem}>
-            <ResponsiveText style={styles.statNumber}>
-              {stats.total}
-            </ResponsiveText>
-            <ResponsiveText style={styles.statLabel}>
-              Progetti{'\n'}Totali
-            </ResponsiveText>
+            <Text style={styles.statNumber}>{stats.total}</Text>
+            <Text style={styles.statLabel}>Progetti{'\n'}Totali</Text>
           </View>
           <View style={styles.statItem}>
-            <ResponsiveText style={styles.statNumber}>
-              {stats.active}
-            </ResponsiveText>
-            <ResponsiveText style={styles.statLabel}>
-              In Corso{'\n'}Attualmente
-            </ResponsiveText>
+            <Text style={styles.statNumber}>{stats.active}</Text>
+            <Text style={styles.statLabel}>In Corso{'\n'}Attualmente</Text>
           </View>
           <View style={styles.statItem}>
-            <ResponsiveText style={styles.statNumber}>
+            <Text style={styles.statNumber}>
               {(stats.totalBeneficiaries / 1000).toFixed(0)}K+
-            </ResponsiveText>
-            <ResponsiveText style={styles.statLabel}>
-              Persone{'\n'}Aiutate
-            </ResponsiveText>
+            </Text>
+            <Text style={styles.statLabel}>Persone{'\n'}Aiutate</Text>
           </View>
         </View>
       </Surface>
@@ -71,10 +56,10 @@ ProjectsStats.displayName = 'ProjectsStats';
 export const ProjectsEmptyState: React.FC<ProjectsEmptyStateProps> = React.memo(
   ({ styles }) => (
     <View style={styles.emptyState}>
-      <ResponsiveText style={styles.emptyStateIcon}>🔍</ResponsiveText>
-      <ResponsiveText style={styles.emptyStateText}>
+      <Text style={styles.emptyStateIcon}>🔍</Text>
+      <Text style={styles.emptyStateText}>
         Nessun progetto trovato per questa categoria
-      </ResponsiveText>
+      </Text>
     </View>
   )
 );

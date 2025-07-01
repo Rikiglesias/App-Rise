@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { Animated, Modal, StyleSheet, View } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { Animated, Modal, StyleSheet, View, Text } from 'react-native';
 import { PlatformTouchable } from '../ui';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
@@ -150,60 +149,41 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
         <PlatformTouchable activeOpacity={1} onPress={handleStopPropagation}>
           <Animated.View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
-              <ResponsiveText style={styles.modalTitle} responsiveFontSize={20}>
-                Come Funziona la Donazione
-              </ResponsiveText>
+              <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>
               <PlatformTouchable
                 onPress={onClose}
                 style={styles.modalCloseButton}
               >
-                <ResponsiveText
-                  style={styles.modalCloseIcon}
-                  responsiveFontSize={18}
-                >
-                  ×
-                </ResponsiveText>
+                <Text style={styles.modalCloseIcon}>×</Text>
               </PlatformTouchable>
             </View>
 
             <View style={styles.modalContent}>
-              <ResponsiveText style={styles.modalText} responsiveFontSize={16}>
+              <Text style={styles.modalText}>
                 Puoi contribuire alla nostra missione in diversi modi:
                 attraverso acquisti solidali oppure con donazioni monetarie
                 dirette.
-              </ResponsiveText>
-              <ResponsiveText style={styles.modalText} responsiveFontSize={16}>
+              </Text>
+              <Text style={styles.modalText}>
                 Grazie agli accordi strategici con i nostri partner commerciali,
                 una percentuale degli acquisti effettuati tramite i nostri
                 canali viene automaticamente destinata ai progetti di Rise
                 Against Hunger Italia. Tu spendi lo stesso prezzo, ma aiuti a
                 combattere la fame!
-              </ResponsiveText>
-              <ResponsiveText
-                style={styles.modalSubtitle}
-                responsiveFontSize={18}
-              >
+              </Text>
+              <Text style={styles.modalSubtitle}>
                 Se vuoi fare una donazione monetaria:
-              </ResponsiveText>
+              </Text>
               <View style={styles.modalBullets}>
-                <ResponsiveText
-                  style={styles.modalBullet}
-                  responsiveFontSize={16}
-                >
+                <Text style={styles.modalBullet}>
                   • Clicca su &quot;Dona Ora&quot; per donazioni dirette
-                </ResponsiveText>
-                <ResponsiveText
-                  style={styles.modalBullet}
-                  responsiveFontSize={16}
-                >
+                </Text>
+                <Text style={styles.modalBullet}>
                   • Ogni euro dona pasti nutritivi ai bambini
-                </ResponsiveText>
-                <ResponsiveText
-                  style={styles.modalBullet}
-                  responsiveFontSize={16}
-                >
+                </Text>
+                <Text style={styles.modalBullet}>
                   • Sostieni progetti educativi e sviluppo sostenibile
-                </ResponsiveText>
+                </Text>
               </View>
             </View>
 
@@ -212,23 +192,13 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                 onPress={onClose}
                 style={styles.modalButtonSecondary}
               >
-                <ResponsiveText
-                  style={styles.modalButtonSecondaryText}
-                  responsiveFontSize={16}
-                >
-                  Ho Capito
-                </ResponsiveText>
+                <Text style={styles.modalButtonSecondaryText}>Ho Capito</Text>
               </PlatformTouchable>
               <PlatformTouchable
                 onPress={onDonate}
                 style={styles.modalButtonPrimary}
               >
-                <ResponsiveText
-                  style={styles.modalButtonPrimaryText}
-                  responsiveFontSize={16}
-                >
-                  Dona Subito
-                </ResponsiveText>
+                <Text style={styles.modalButtonPrimaryText}>Dona Subito</Text>
               </PlatformTouchable>
             </View>
           </Animated.View>

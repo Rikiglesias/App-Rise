@@ -18,14 +18,14 @@ interface ErrorContext {
   userId?: string;
   screen?: string;
   action?: string;
-  additionalData?: Record<string, any>;
+  additionalData?: Record<string, unknown>;
 }
 
 interface CrashReport {
   error: Error;
   context?: ErrorContext;
   timestamp: number;
-  deviceInfo?: Record<string, any>;
+  deviceInfo?: Record<string, unknown>;
   appVersion?: string;
 }
 
@@ -105,7 +105,7 @@ class ErrorTrackingService {
     });
 
     // Promise rejection handler
-    const handleUnhandledPromiseRejection = (event: any) => {
+    const handleUnhandledPromiseRejection = (event: PromiseRejectionEvent) => {
       this.captureError(
         new Error(`Unhandled Promise Rejection: ${event.reason}`),
         {
@@ -215,7 +215,7 @@ class ErrorTrackingService {
     message: string,
     category: string,
     level: 'info' | 'warning' | 'error' = 'info',
-    data?: Record<string, any>
+    data?: Record<string, unknown>
   ): void {
     if (!this.isInitialized) return;
 
@@ -240,7 +240,7 @@ class ErrorTrackingService {
   trackPerformance(
     operationName: string,
     duration: number,
-    additionalData?: Record<string, any>
+    additionalData?: Record<string, unknown>
   ): void {
     if (!this.isInitialized || !this.config.enablePerformanceMonitoring) return;
 
@@ -284,7 +284,7 @@ class ErrorTrackingService {
   /**
    * Ottieni informazioni del device
    */
-  private getDeviceInfo(): Record<string, any> {
+  private getDeviceInfo(): Record<string, unknown> {
     // In una implementazione reale, useremmo react-native-device-info
     return {
       platform: __DEV__ ? 'development' : 'production',
@@ -376,10 +376,10 @@ export const addBreadcrumb = (
   message: string,
   category: string,
   level?: 'info' | 'warning' | 'error',
-  data?: Record<string, any>
+  data?: Record<string, unknown>
 ) => errorTracking.addBreadcrumb(message, category, level, data);
 export const trackPerformance = (
   operationName: string,
   duration: number,
-  additionalData?: Record<string, any>
+  additionalData?: Record<string, unknown>
 ) => errorTracking.trackPerformance(operationName, duration, additionalData);

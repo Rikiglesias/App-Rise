@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { StyleSheet, TextStyle, View, ViewStyle, Text } from 'react-native';
 import { PlatformTouchable } from '../ui';
 import { Surface } from 'react-native-paper';
 import {
@@ -68,9 +67,9 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
             <View style={styles.cardHeader}>
               {/* 📍 Icon */}
               <View style={styles.iconContainer}>
-                <ResponsiveText style={[{ fontSize: 18, lineHeight: 20 }]}>
+                <Text style={[{ fontSize: 18, lineHeight: 20 }]}>
                   {card.icon}
-                </ResponsiveText>
+                </Text>
               </View>
 
               {/* 🏷️ Titles */}

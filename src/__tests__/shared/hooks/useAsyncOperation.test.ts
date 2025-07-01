@@ -514,4 +514,84 @@ describe('useApiOperation', () => {
     expect(result.current.state.data).toBe('api data');
     expect(result.current.state.error).toBe(null);
   });
+
+  it('should handle operations without cache key', async () => {
+    const mockApiCall = jest.fn().mockResolvedValue('uncached data');
+
+    const { result } = renderHook(() =>
+      useApiOperation(mockApiCall, {
+        // No cacheKey provided
+        cacheDuration: 5000,
+      })
+    );
+
+    // First call
+    await act(async () => {
+      await result.current.execute();
+    });
+    expect(mockApiCall).toHaveBeenCalledTimes(1);
+
+    // Second call should not use cache without cacheKey
+    await act(async () => {
+      await result.current.execute();
+    });
+    expect(mockApiCall).toHaveBeenCalledTimes(2);
+  });
+
+  it('should handle API errors correctly', async () => {
+    const apiError = new Error('API request failed');
+    const mockApiCall = jest.fn().mockRejectedValue(apiError);
+
+    const { result } = renderHook(() =>
+      useApiOperation(mockApiCall, {
+        cacheKey: 'error-test',
+      })
+    );
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    expect(result.current.state.error).toBe(apiError);
+    expect(result.current.state.data).toBe(null);
+  });
+
+  it('should handle timeout scenarios correctly', async () => {
+    const mockApiCall = jest.fn().mockImplementation(
+      () =>
+        new Promise(resolve => {
+          setTimeout(() => resolve('delayed response'), 200);
+        })
+    );
+
+    const { result } = renderHook(() =>
+      useApiOperation(mockApiCall, {
+        timeout: 100, // Short timeout to test timeout handling
+      })
+    );
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    // Should handle timeout gracefully
+    expect(result.current.state.error?.message).toContain('timed out');
+  }, 5000);
+
+  it('should handle debug logging scenarios', async () => {
+    const mockApiCall = jest.fn().mockResolvedValue('logged data');
+
+    const { result } = renderHook(() =>
+      useApiOperation(mockApiCall, {
+        enableDebugLogging: true,
+      })
+    );
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    expect(result.current.state.data).toBe('logged data');
+    expect(result.current.state.error).toBe(null);
+  });
 });

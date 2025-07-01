@@ -3,10 +3,9 @@ import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { ResponsiveText } from '../components/ui/ResponsiveText';
 import * as Haptics from 'expo-haptics';
 import React, { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -222,17 +221,16 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
             />
           </Animated.View>
           <Animated.View style={labelStyle}>
-            <ResponsiveText
+            <Text
               style={[
-                { fontSize: 16 }, // AUMENTATO: da 14 a 16 per leggibilità migliore
                 styles.labelText,
-                { color: tabColors.labelColor },
+                { fontSize: 16, color: tabColors.labelColor },
               ]}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {options.tabBarAccessibilityLabel?.split(' ')[0]}
-            </ResponsiveText>
+            </Text>
           </Animated.View>
         </View>
       </PlatformTouchable>
@@ -353,7 +351,6 @@ const styles = StyleSheet.create({
   },
   // --- Label ---
   labelText: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.semibold,
     marginTop: Spacing[1],
     textAlign: 'center',

@@ -319,7 +319,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   // TITOLO PRINCIPALE - DIMENSIONI BILANCIATE
   categoryTitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
+    // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -465,7 +465,7 @@ export const contactSectionStyles = StyleSheet.create({
   },
 
   categoryTitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
+    // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.black,
     color: Colors.neutral[800],
     textAlign: 'center',

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { PlatformTouchable } from '../ui';
 import { Text } from 'react-native-paper';
-import { ResponsiveText } from '../ui/ResponsiveText';
+
 import {
   Colors,
   Spacing,
@@ -42,8 +42,9 @@ const modernTitleStyles = StyleSheet.create({
     position: 'relative',
   },
 
-  // Typography pulita e moderna - RESPONSIVE
+  // Typography pulita e moderna - RESPONSIVE - INGRANDITA
   titleText: {
+    fontSize: 38, // INGRANDITO: da default a 38px per massimo impatto
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center',
@@ -53,8 +54,9 @@ const modernTitleStyles = StyleSheet.create({
     marginBottom: 0, // AZZERA MARGINE: da Spacing[1]/2 a 0 - immagine attaccata al titolo
   },
 
-  // Stile per "Italia" in nero - RESPONSIVE
+  // Stile per "Italia" in nero - RESPONSIVE - INGRANDITA
   titleTextItalia: {
+    fontSize: 38, // INGRANDITO: da default a 38px per coerenza con titolo principale
     fontWeight: Typography.weights.black,
     color: '#1F2937', // Nero elegante
     textAlign: 'center',
@@ -138,20 +140,10 @@ const ModernSmartTitle: React.FC<{
         <View style={modernTitleStyles.titleContainer}>
           {/* Titolo con colori differenziati */}
           <View>
-            <ResponsiveText
-              style={modernTitleStyles.titleText}
-              responsiveFontSize={46}
-              debugMode={false}
-            >
+            <Text style={modernTitleStyles.titleText}>
               Rise Against{'\n'}Hunger{' '}
-              <ResponsiveText
-                style={modernTitleStyles.titleTextItalia}
-                responsiveFontSize={46}
-                debugMode={false}
-              >
-                Italia
-              </ResponsiveText>
-            </ResponsiveText>
+              <Text style={modernTitleStyles.titleTextItalia}>Italia</Text>
+            </Text>
           </View>
 
           {/* Separatore elegante con logo simbolico centrale */}
@@ -364,7 +356,7 @@ const baseMissionStyles = StyleSheet.create({
     shadowColor: '#1F2937',
   },
   statNumber: {
-    // fontSize rimosso - ora gestito da ResponsiveText
+    // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
@@ -472,7 +464,7 @@ const baseMissionStyles = StyleSheet.create({
     color: Colors.neutral[700],
   },
   totalNumber: {
-    // fontSize rimosso - ora gestito da ResponsiveText
+    // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.black,
     color: '#DC2626',
   },
@@ -528,11 +520,9 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 onPress={handleMealsPress}
                 activeOpacity={0.8}
               >
-                <ResponsiveText
-                  style={[{ fontSize: 28 }, baseMissionStyles.statNumber]}
-                >
+                <Text style={[{ fontSize: 28 }, baseMissionStyles.statNumber]}>
                   3.14M
-                </ResponsiveText>
+                </Text>
                 <Text style={baseMissionStyles.statLabel}>
                   Pasti distribuiti
                 </Text>
@@ -644,11 +634,11 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                     <Text style={baseMissionStyles.totalLabel}>
                       Totale distribuito
                     </Text>
-                    <ResponsiveText
+                    <Text
                       style={[{ fontSize: 32 }, baseMissionStyles.totalNumber]}
                     >
                       3.14M
-                    </ResponsiveText>
+                    </Text>
                   </View>
                 </View>
               </View>

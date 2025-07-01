@@ -1,6 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { View, Text } from 'react-native';
 
 import { useHomeActionsLogic } from '../../features/actions/hooks/useHomeActionsHooks';
 import type {
@@ -30,12 +29,10 @@ export const HomeActionsSection: React.FC<HomeActionsSectionProps> = ({
     <View style={containerStyles.bentoContainer}>
       {/* 🎪 Header Moderno */}
       <View style={containerStyles.headerSection}>
-        <ResponsiveText style={typographyStyles.bentoTitle}>
-          🚀 Come Puoi Aiutare
-        </ResponsiveText>
-        <ResponsiveText style={typographyStyles.bentoSubtitle}>
+        <Text style={typographyStyles.bentoTitle}>🚀 Come Puoi Aiutare</Text>
+        <Text style={typographyStyles.bentoSubtitle}>
           Ogni gesto conta per costruire un mondo senza fame
-        </ResponsiveText>
+        </Text>
       </View>
 
       {/* 🏗️ Bento Grid */}

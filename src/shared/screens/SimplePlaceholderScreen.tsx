@@ -1,7 +1,6 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { ResponsiveText } from '../../components/ui/ResponsiveText';
+import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 
 import { ModernCTA } from '../../components/ModernCTARefactored';
 import Logo from '../../components/ui/Logo';
@@ -47,43 +46,34 @@ const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
         {/* Header */}
         <View style={styles.header}>
           <Logo size={48} />
-          <ResponsiveText
-            style={styles.constructionIcon}
-            responsiveFontSize={48}
-          >
-            🚧
-          </ResponsiveText>
+          <Text style={[styles.constructionIcon, { fontSize: 48 }]}>🚧</Text>
         </View>
 
         {/* Main Content */}
         <View style={styles.main}>
-          <ResponsiveText style={[{ fontSize: 36 }, styles.title]}>
-            {title}
-          </ResponsiveText>
+          <Text style={[styles.title, { fontSize: 36 }]}>{title}</Text>
           {subtitle && (
-            <ResponsiveText style={[{ fontSize: 20 }, styles.subtitle]}>
-              {subtitle}
-            </ResponsiveText>
+            <Text style={[styles.subtitle, { fontSize: 20 }]}>{subtitle}</Text>
           )}
 
-          <ResponsiveText style={[{ fontSize: 16 }, styles.message]}>
+          <Text style={[styles.message, { fontSize: 16 }]}>
             Questa sezione è in fase di sviluppo.{'\n'}
             Stiamo lavorando per offrirti la migliore esperienza possibile.
-          </ResponsiveText>
+          </Text>
 
           <View style={styles.features}>
-            <ResponsiveText style={[{ fontSize: 16 }, styles.featuresTitle]}>
+            <Text style={[styles.featuresTitle, { fontSize: 16 }]}>
               🎯 Prossimamente:
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 14 }, styles.feature]}>
+            </Text>
+            <Text style={[styles.feature, { fontSize: 14 }]}>
               ⚡ Contenuti aggiornati
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 14 }, styles.feature]}>
+            </Text>
+            <Text style={[styles.feature, { fontSize: 14 }]}>
               🎨 Design moderno
-            </ResponsiveText>
-            <ResponsiveText style={[{ fontSize: 14 }, styles.feature]}>
+            </Text>
+            <Text style={[styles.feature, { fontSize: 14 }]}>
               📱 Esperienza ottimizzata
-            </ResponsiveText>
+            </Text>
           </View>
         </View>
 
@@ -133,7 +123,6 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.extrabold,
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -141,14 +130,12 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     color: Colors.neutral[600],
     textAlign: 'center',
     marginBottom: Spacing[6],
   },
 
   message: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     color: Colors.neutral[700],
     textAlign: 'center',
     lineHeight: Typography.lineHeights.relaxed,
@@ -163,7 +150,6 @@ const styles = StyleSheet.create({
   },
 
   featuresTitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[900],
     marginBottom: Spacing[3],
@@ -171,7 +157,6 @@ const styles = StyleSheet.create({
   },
 
   feature: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     color: Colors.neutral[600],
     textAlign: 'center',
     marginBottom: Spacing[1],

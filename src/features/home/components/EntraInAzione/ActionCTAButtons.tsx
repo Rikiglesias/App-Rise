@@ -2,8 +2,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
+import { View, StyleSheet, Text } from 'react-native';
+
 import { PlatformTouchable } from '../../../../components/ui';
 import {
   Colors,
@@ -55,18 +55,8 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
-              <ResponsiveText
-                style={styles.buttonTitle}
-                responsiveFontSize={Typography.sizes.lg}
-              >
-                Scopri{'\n'}Impatto
-              </ResponsiveText>
-              <ResponsiveText
-                style={styles.buttonDirectionRed}
-                responsiveFontSize={Typography.sizes.lg}
-              >
-                ← Risultati
-              </ResponsiveText>
+              <Text style={styles.buttonTitle}>Scopri{'\n'}Impatto</Text>
+              <Text style={styles.buttonDirectionRed}>← Risultati</Text>
             </View>
           </View>
         </LinearGradient>
@@ -92,18 +82,8 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 color="#059669"
                 style={styles.buttonIcon}
               />
-              <ResponsiveText
-                style={styles.buttonTitleGreen}
-                responsiveFontSize={Typography.sizes.lg}
-              >
-                Dona e{'\n'}Aiuta
-              </ResponsiveText>
-              <ResponsiveText
-                style={styles.buttonDirection}
-                responsiveFontSize={Typography.sizes.lg}
-              >
-                Supporta →
-              </ResponsiveText>
+              <Text style={styles.buttonTitleGreen}>Dona e{'\n'}Aiuta</Text>
+              <Text style={styles.buttonDirection}>Supporta →</Text>
             </View>
           </View>
         </LinearGradient>
@@ -157,6 +137,7 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
+    fontSize: 20, // INGRANDITO: da default a 20px per maggiore visibilità
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center' as const,
@@ -169,6 +150,7 @@ const styles = StyleSheet.create({
   },
 
   buttonDirection: {
+    fontSize: 16, // INGRANDITO: da default a 16px per bilanciare con il titolo
     fontWeight: Typography.weights.bold,
     color: '#10B981',
     textAlign: 'center' as const,
@@ -181,6 +163,7 @@ const styles = StyleSheet.create({
   },
 
   buttonDirectionRed: {
+    fontSize: 16, // INGRANDITO: da default a 16px per coerenza con buttonDirection
     fontWeight: Typography.weights.bold,
     color: '#EF4444',
     textAlign: 'center' as const,
@@ -193,6 +176,7 @@ const styles = StyleSheet.create({
   },
 
   buttonTitleGreen: {
+    fontSize: 20, // INGRANDITO: da default a 20px per coerenza con buttonTitle
     fontWeight: Typography.weights.black,
     color: '#059669',
     textAlign: 'center' as const,

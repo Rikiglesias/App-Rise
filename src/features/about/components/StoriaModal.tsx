@@ -1,9 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Animated, Modal, Text, View } from 'react-native';
+import { Animated, Modal, View, Text } from 'react-native';
 import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
-import { ResponsiveText } from '../../../components/ui/ResponsiveText';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { modalStyles } from '../styles';
@@ -147,8 +146,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <View style={modalStyles.sectionDivider} />
 
                   <Text style={modalStyles.sectionTitle}>
-                    <ResponsiveText style={{ fontSize: 20 }}>🇮🇹</ResponsiveText>{' '}
-                    In Italia
+                    <Text style={{ fontSize: 20 }}>🇮🇹</Text> In Italia
                   </Text>
                   <Text style={modalStyles.storyText}>
                     La organizzazione arriva in{' '}
@@ -163,16 +161,13 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <View style={modalStyles.sectionDivider} />
 
                   <Text style={modalStyles.sectionTitle}>
-                    <ResponsiveText style={{ fontSize: 20 }}>🌟</ResponsiveText>{' '}
-                    I Nostri Pilastri
+                    <Text style={{ fontSize: 20 }}>🌟</Text> I Nostri Pilastri
                   </Text>
                   <View style={modalStyles.pillarsContainer}>
                     <View style={modalStyles.pillarItem}>
-                      <ResponsiveText
-                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
-                      >
+                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
                         🍽️
-                      </ResponsiveText>
+                      </Text>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>
                           Distribuzione Pasti
@@ -185,11 +180,9 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <ResponsiveText
-                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
-                      >
+                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
                         🤝
-                      </ResponsiveText>
+                      </Text>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>
                           Coinvolgimento Comunitario
@@ -202,11 +195,9 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <ResponsiveText
-                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
-                      >
+                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
                         🌍
-                      </ResponsiveText>
+                      </Text>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>
                           Impatto Globale
@@ -219,11 +210,9 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <ResponsiveText
-                        style={[{ fontSize: 24 }, modalStyles.pillarIcon]}
-                      >
+                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
                         📚
-                      </ResponsiveText>
+                      </Text>
                       <View style={modalStyles.pillarContent}>
                         <Text style={modalStyles.pillarTitle}>Educazione</Text>
                         <Text style={modalStyles.pillarText}>

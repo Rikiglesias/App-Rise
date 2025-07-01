@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View, Text } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
-import { ResponsiveText } from '../../../components/ui/ResponsiveText';
+
 import { Surface } from 'react-native-paper';
 
 import {
@@ -116,13 +116,13 @@ const useHeaderStyles = () => {
         },
         badgeText: {
           color: colors.primary[700],
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.medium,
           letterSpacing: 0.5,
           textTransform: 'uppercase',
         },
         title: {
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.semibold,
           color: colors.neutral[900],
           textAlign: 'center',
@@ -130,7 +130,7 @@ const useHeaderStyles = () => {
           letterSpacing: -0.3,
         },
         subtitle: {
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.regular,
           color: colors.neutral[600],
           textAlign: 'center',
@@ -167,19 +167,19 @@ const useStatsStyles = () => {
           borderColor: colors.neutral[100],
         },
         statNumber: {
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.bold,
           color: colors.primary[700],
           marginBottom: Spacing[1],
         },
         statLabel: {
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.medium,
           color: colors.neutral[900],
           marginBottom: Spacing[1],
         },
         statTarget: {
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.regular,
           color: colors.neutral[500],
         },
@@ -196,7 +196,7 @@ const useStatsStyles = () => {
         },
         ctaText: {
           color: colors.neutral[0],
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.medium,
           textAlign: 'center',
         },
@@ -230,16 +230,12 @@ interface ImpactHeaderProps {
 const ImpactHeader: React.FC<ImpactHeaderProps> = React.memo(({ styles }) => (
   <View style={styles.header}>
     <View style={styles.badge}>
-      <ResponsiveText style={[{ fontSize: 12 }, styles.badgeText]}>
-        RISULTATI 2024
-      </ResponsiveText>
+      <Text style={[{ fontSize: 12 }, styles.badgeText]}>RISULTATI 2024</Text>
     </View>
-    <ResponsiveText style={[{ fontSize: 32 }, styles.title]}>
-      Il Nostro Impatto
-    </ResponsiveText>
-    <ResponsiveText style={[{ fontSize: 16 }, styles.subtitle]}>
+    <Text style={[{ fontSize: 32 }, styles.title]}>Il Nostro Impatto</Text>
+    <Text style={[{ fontSize: 16 }, styles.subtitle]}>
       Dati concreti sui risultati raggiunti insieme
-    </ResponsiveText>
+    </Text>
   </View>
 ));
 
@@ -252,37 +248,19 @@ interface ImpactStatsProps {
 const ImpactStats: React.FC<ImpactStatsProps> = React.memo(({ styles }) => (
   <View style={styles.statsContainer}>
     <View style={styles.statCard}>
-      <ResponsiveText style={[{ fontSize: 32 }, styles.statNumber]}>
-        3.14M
-      </ResponsiveText>
-      <ResponsiveText style={[{ fontSize: 16 }, styles.statLabel]}>
-        Pasti
-      </ResponsiveText>
-      <ResponsiveText style={[{ fontSize: 14 }, styles.statTarget]}>
-        Distribuiti
-      </ResponsiveText>
+      <Text style={[{ fontSize: 32 }, styles.statNumber]}>3.14M</Text>
+      <Text style={[{ fontSize: 16 }, styles.statLabel]}>Pasti</Text>
+      <Text style={[{ fontSize: 14 }, styles.statTarget]}>Distribuiti</Text>
     </View>
     <View style={styles.statCard}>
-      <ResponsiveText style={[{ fontSize: 32 }, styles.statNumber]}>
-        13K
-      </ResponsiveText>
-      <ResponsiveText style={[{ fontSize: 16 }, styles.statLabel]}>
-        Volontari
-      </ResponsiveText>
-      <ResponsiveText style={[{ fontSize: 14 }, styles.statTarget]}>
-        Attivi
-      </ResponsiveText>
+      <Text style={[{ fontSize: 32 }, styles.statNumber]}>13K</Text>
+      <Text style={[{ fontSize: 16 }, styles.statLabel]}>Volontari</Text>
+      <Text style={[{ fontSize: 14 }, styles.statTarget]}>Attivi</Text>
     </View>
     <View style={styles.statCard}>
-      <ResponsiveText style={[{ fontSize: 32 }, styles.statNumber]}>
-        47
-      </ResponsiveText>
-      <ResponsiveText style={[{ fontSize: 16 }, styles.statLabel]}>
-        Progetti
-      </ResponsiveText>
-      <ResponsiveText style={[{ fontSize: 14 }, styles.statTarget]}>
-        Completati
-      </ResponsiveText>
+      <Text style={[{ fontSize: 32 }, styles.statNumber]}>47</Text>
+      <Text style={[{ fontSize: 16 }, styles.statLabel]}>Progetti</Text>
+      <Text style={[{ fontSize: 14 }, styles.statTarget]}>Completati</Text>
     </View>
   </View>
 ));
@@ -295,9 +273,7 @@ interface ImpactCTAProps {
 
 const ImpactCTA: React.FC<ImpactCTAProps> = React.memo(({ styles }) => (
   <View style={styles.ctaButton}>
-    <ResponsiveText style={[{ fontSize: 16 }, styles.ctaText]}>
-      Vedi Impatto 2024
-    </ResponsiveText>
+    <Text style={[{ fontSize: 16 }, styles.ctaText]}>Vedi Impatto 2024</Text>
   </View>
 ));
 

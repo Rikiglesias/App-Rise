@@ -3,8 +3,8 @@
 // Tutti gli stili in questo file sono verificati manualmente come utilizzati.
 
 import React, { useMemo } from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
-import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
+import { Animated, Platform, StyleSheet, View, Text } from 'react-native';
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Spacing, Typography } from '../../../../shared/constants/designTokens';
@@ -58,7 +58,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
 
         // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
         titleText: {
-          // fontSize rimosso - ora gestito da ResponsiveText
+          // fontSize rimosso - ora gestito da Text
           fontWeight: Typography.weights.black, // MASSIMO peso per autorità - IDENTICO A IMPATTO
           color: '#1F2937',
           textAlign: 'center',
@@ -96,15 +96,13 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   // CONTENUTO TITOLO
   const titleContent = (
     <>
-      <ResponsiveText style={[{ fontSize: 40 }, styles.titleText]}>
+      <Text style={[{ fontSize: 40 }, styles.titleText]}>
         Fai la{'\n'}
-        <ResponsiveText style={[{ fontSize: 40 }, styles.titleAccent]}>
-          Differenza
-        </ResponsiveText>
-      </ResponsiveText>
-      <ResponsiveText style={styles.mainSubtitle}>
+        <Text style={[{ fontSize: 40 }, styles.titleAccent]}>Differenza</Text>
+      </Text>
+      <Text style={styles.mainSubtitle}>
         Ogni azione conta nella lotta contro la fame
-      </ResponsiveText>
+      </Text>
     </>
   );
 

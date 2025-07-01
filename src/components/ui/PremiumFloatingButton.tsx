@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
-import { ResponsiveText } from './ResponsiveText';
+
 import PlatformTouchable from './PlatformTouchable';
 
 import {
@@ -234,9 +234,7 @@ const PremiumFloatingButtonContent: React.FC<{
       accessibilityLabel={`${title} - Pulsante di azione rapida`}
     >
       <Animated.View style={styles.content}>
-        <ResponsiveText style={[{ fontSize: 20 }, styles.icon]}>
-          {icon}
-        </ResponsiveText>
+        <Text style={[{ fontSize: 20 }, styles.icon]}>{icon}</Text>
         <Text style={[styles.title, variant === 'glass' && styles.glassTitle]}>
           {title}
         </Text>

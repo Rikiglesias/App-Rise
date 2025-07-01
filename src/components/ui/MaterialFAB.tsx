@@ -1,6 +1,6 @@
 import React, { useRef, useCallback } from 'react';
-import { Platform, Animated, StyleSheet, View } from 'react-native';
-import { ResponsiveText } from './ResponsiveText';
+import { Platform, Animated, StyleSheet, View, Text } from 'react-native';
+
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
@@ -214,7 +214,7 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
             color={variantConfig.iconColor}
           />
           {size === 'extended' && label && (
-            <ResponsiveText
+            <Text
               style={[
                 { fontSize: 14 },
                 styles.label,
@@ -223,7 +223,7 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
               ]}
             >
               {label}
-            </ResponsiveText>
+            </Text>
           )}
         </View>
       </TouchableRipple>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { Animated, StyleSheet, View, Text } from 'react-native';
 import { PlatformTouchable } from '../ui';
 import { useProfessionalTokens } from '../../features/actions/hooks/useProfessionalTokens';
 import {
@@ -178,22 +177,16 @@ export const ProfessionalSectionsRenderer: React.FC<
               >
                 <View style={styles.actionCardContent}>
                   <View style={styles.actionIconContainer}>
-                    <ResponsiveText
-                      style={[{ fontSize: 22 }, styles.actionIconText]}
-                    >
+                    <Text style={[{ fontSize: 22 }, styles.actionIconText]}>
                       {action.icon}
-                    </ResponsiveText>
+                    </Text>
                   </View>
                   <View style={styles.actionTextContent}>
                     <Text style={styles.actionTitle}>{action.title}</Text>
                     <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
                   </View>
                   <View style={styles.actionArrow}>
-                    <ResponsiveText
-                      style={[{ fontSize: 16 }, styles.arrowIcon]}
-                    >
-                      →
-                    </ResponsiveText>
+                    <Text style={[{ fontSize: 16 }, styles.arrowIcon]}>→</Text>
                   </View>
                 </View>
               </PlatformTouchable>

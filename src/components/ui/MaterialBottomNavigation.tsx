@@ -1,6 +1,6 @@
 import React, { useRef, useCallback } from 'react';
-import { Platform, View, StyleSheet, Animated } from 'react-native';
-import { ResponsiveText } from './ResponsiveText';
+import { Platform, View, StyleSheet, Animated, Text } from 'react-native';
+
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -216,29 +216,25 @@ const MaterialNavigationItem: React.FC<MaterialNavigationItemProps> = ({
             />
             {item.badge && item.badge > 0 && (
               <View style={styles.badge}>
-                <ResponsiveText
-                  style={styles.badgeText}
-                  responsiveFontSize={10}
-                >
+                <Text style={styles.badgeText}>
                   {item.badge > 99 ? '99+' : item.badge.toString()}
-                </ResponsiveText>
+                </Text>
               </View>
             )}
           </View>
 
           {/* Label */}
           {showLabel && (
-            <ResponsiveText
+            <Text
               style={[
                 styles.label,
                 isActive ? styles.activeLabel : styles.inactiveLabel,
                 { color: isActive ? colors.activeLabel : colors.inactiveLabel },
               ]}
-              responsiveFontSize={12}
               numberOfLines={1}
             >
               {item.title}
-            </ResponsiveText>
+            </Text>
           )}
         </View>
       </TouchableRipple>

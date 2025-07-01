@@ -32,14 +32,14 @@ interface APIRequestConfig {
   url: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   timeout?: number;
   retries?: number;
   requiresAuth?: boolean;
   skipValidation?: boolean;
 }
 
-interface APIResponse<T = any> {
+interface APIResponse<T = unknown> {
   data: T;
   status: number;
   headers: Record<string, string>;
@@ -174,7 +174,7 @@ class APISecurityService {
   /**
    * Valida i dati di risposta
    */
-  private validateResponse(response: any): boolean {
+  private validateResponse(response: unknown): boolean {
     // Controlla che la risposta abbia una struttura valida
     if (!response || typeof response !== 'object') {
       return false;
@@ -202,7 +202,7 @@ class APISecurityService {
   /**
    * Esegue una richiesta API sicura
    */
-  async secureRequest<T = any>(
+  async secureRequest<T = unknown>(
     config: APIRequestConfig
   ): Promise<APIResponse<T>> {
     const startTime = Date.now();
@@ -358,7 +358,7 @@ class APISecurityService {
 
       // Ritorna risposta di errore
       return {
-        data: null as any,
+        data: null as T,
         status: 0,
         headers: {},
         success: false,
@@ -379,7 +379,7 @@ class APISecurityService {
 
   async post<T>(
     url: string,
-    body?: any,
+    body?: unknown,
     config?: Partial<APIRequestConfig>
   ): Promise<APIResponse<T>> {
     return this.secureRequest<T>({ ...config, url, method: 'POST', body });
@@ -387,7 +387,7 @@ class APISecurityService {
 
   async put<T>(
     url: string,
-    body?: any,
+    body?: unknown,
     config?: Partial<APIRequestConfig>
   ): Promise<APIResponse<T>> {
     return this.secureRequest<T>({ ...config, url, method: 'PUT', body });
@@ -439,12 +439,12 @@ export const secureGet = <T>(url: string, config?: Partial<APIRequestConfig>) =>
   apiSecurity.get<T>(url, config);
 export const securePost = <T>(
   url: string,
-  body?: any,
+  body?: unknown,
   config?: Partial<APIRequestConfig>
 ) => apiSecurity.post<T>(url, body, config);
 export const securePut = <T>(
   url: string,
-  body?: any,
+  body?: unknown,
   config?: Partial<APIRequestConfig>
 ) => apiSecurity.put<T>(url, body, config);
 export const secureDelete = <T>(

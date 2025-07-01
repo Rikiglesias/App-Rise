@@ -1,8 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Modal, StyleSheet, Text, View } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { Modal, StyleSheet, View, Text } from 'react-native';
 import { PlatformTouchable } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
@@ -51,9 +50,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         >
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
-              <ResponsiveText style={styles.flag} responsiveFontSize={32}>
-                {data.flag}
-              </ResponsiveText>
+              <Text style={[styles.flag, { fontSize: 32 }]}>{data.flag}</Text>
               <View style={styles.headerTextContainer}>
                 <Text style={styles.title}>{data.title}</Text>
                 <Text style={styles.subtitle}>{data.subtitle}</Text>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ResponsiveText } from '../ui/ResponsiveText';
+import { StyleSheet, View, Text } from 'react-native';
 
 import {
   BorderRadius,
@@ -60,11 +59,11 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
   return (
     <View style={styles.header}>
       <View style={styles.titleContainer}>
-        <ResponsiveText style={styles.title}>{title}</ResponsiveText>
-        <ResponsiveText style={styles.location}>{location}</ResponsiveText>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.location}>{location}</Text>
       </View>
       <View style={styles.statusBadge}>
-        <ResponsiveText style={styles.statusText}>{statusText}</ResponsiveText>
+        <Text style={styles.statusText}>{statusText}</Text>
       </View>
     </View>
   );

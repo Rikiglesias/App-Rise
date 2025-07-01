@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { ResponsiveText } from '../../../../components/ui/ResponsiveText';
+import { View, StyleSheet, Text } from 'react-native';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Typography,
@@ -18,19 +18,13 @@ export const ActionDescription: React.FC = () => {
         style={styles.descriptionGradient}
       >
         <View style={styles.descriptionContent}>
-          <ResponsiveText
-            style={styles.descriptionMain}
-            responsiveFontSize={Typography.sizes.xl}
-          >
+          <Text style={styles.descriptionMain}>
             Unisciti a noi nella lotta contro la fame nel mondo
-          </ResponsiveText>
+          </Text>
           <View style={styles.descriptionDivider} />
-          <ResponsiveText
-            style={styles.descriptionSecondary}
-            responsiveFontSize={Typography.sizes.lg}
-          >
+          <Text style={styles.descriptionSecondary}>
             Ogni azione conta per cambiare vite
-          </ResponsiveText>
+          </Text>
         </View>
       </LinearGradient>
     </View>
@@ -63,6 +57,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionMain: {
+    fontSize: 20, // INGRANDITO: da default a 20px per maggiore leggibilità
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     textAlign: 'center' as const,
@@ -85,6 +80,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionSecondary: {
+    fontSize: 17, // INGRANDITO: da default a 17px per bilanciare con il testo principale
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center' as const,

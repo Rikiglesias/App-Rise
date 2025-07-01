@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useRef } from 'react';
-import type { TouchableOpacityProps } from 'react-native';
+import type { TouchableOpacityProps, StyleProp, ViewStyle } from 'react-native';
 import { Animated, Easing, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Animation, Glassmorphism } from '../../shared/constants/designTokens';
@@ -288,8 +288,7 @@ const useAnimationStyles = (
   rotateAnim: Animated.Value,
   elevationAnim: Animated.Value,
   style?: unknown
-) => {
-  /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
+): StyleProp<ViewStyle> => {
   return [
     getVariantStyle(),
     {
@@ -305,8 +304,7 @@ const useAnimationStyles = (
       elevation: elevationAnim,
     },
     style,
-  ].filter(Boolean) as any;
-  /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
+  ].filter(Boolean) as StyleProp<ViewStyle>;
 };
 
 // Main Component - Now much smaller

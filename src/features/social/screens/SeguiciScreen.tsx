@@ -3,9 +3,15 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Animated, Image, SafeAreaView, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+} from 'react-native';
 import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
-import { ResponsiveText } from '../../../components/ui/ResponsiveText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { RootStackParamList } from '../../../navigation/types';
@@ -36,7 +42,7 @@ interface SocialPlatform {
   readonly description: string;
   readonly icon?: number;
   readonly emoji?: string;
-  readonly gradient: readonly string[];
+  readonly gradient: string[];
   readonly onPress: () => Promise<void>;
 }
 
@@ -246,7 +252,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
       >
         {/* GRADIENT CONTAINER PATTERN - Design System Ufficiale */}
         <LinearGradient
-          colors={platform.gradient as any}
+          colors={platform.gradient as [string, string, ...string[]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.socialCardGradientBorder}
@@ -265,25 +271,19 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                     resizeMode="contain"
                   />
                 ) : (
-                  <ResponsiveText
-                    style={[{ fontSize: 28 }, styles.socialIconEmoji]}
-                  >
+                  <Text style={[styles.socialIconEmoji, { fontSize: 28 }]}>
                     {platform.emoji}
-                  </ResponsiveText>
+                  </Text>
                 )}
               </View>
 
               {/* Content Section */}
               <View style={styles.socialInfoContainer}>
-                <ResponsiveText style={styles.socialName}>
-                  {platform.name}
-                </ResponsiveText>
-                <ResponsiveText style={styles.socialHandle}>
-                  {platform.handle}
-                </ResponsiveText>
-                <ResponsiveText style={styles.socialDescription}>
+                <Text style={styles.socialName}>{platform.name}</Text>
+                <Text style={styles.socialHandle}>{platform.handle}</Text>
+                <Text style={styles.socialDescription}>
                   {platform.description}
-                </ResponsiveText>
+                </Text>
               </View>
 
               {/* Arrow Icon */}
@@ -323,14 +323,14 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
           ]}
         >
           <View style={styles.titleContainer}>
-            <ResponsiveText style={[{ fontSize: 32 }, styles.categoryTitle]}>
-              <ResponsiveText style={[{ fontSize: 32 }, styles.titleAccent]}>
+            <Text style={[styles.categoryTitle, { fontSize: 32 }]}>
+              <Text style={[styles.titleAccent, { fontSize: 32 }]}>
                 Seguici Ovunque
-              </ResponsiveText>
-            </ResponsiveText>
-            <ResponsiveText style={styles.categorySubtitleInline}>
+              </Text>
+            </Text>
+            <Text style={styles.categorySubtitleInline}>
               Resta connesso e scopri come fare la differenza
-            </ResponsiveText>
+            </Text>
           </View>
         </Animated.View>
 
@@ -338,9 +338,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.sectionDividerContainer}>
           <View style={styles.sectionDivider} />
           <View style={styles.dividerEmojiContainer}>
-            <ResponsiveText style={[{ fontSize: 20 }, styles.dividerEmoji]}>
-              📱
-            </ResponsiveText>
+            <Text style={[styles.dividerEmoji, { fontSize: 20 }]}>📱</Text>
           </View>
         </View>
 
@@ -406,7 +404,6 @@ const styles = StyleSheet.create({
   },
 
   categoryTitle: {
-    // fontSize rimosso - ora gestito da ResponsiveText
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900], // IDENTICO CHI SIAMO: titolo base nero
     textAlign: 'center' as const,
