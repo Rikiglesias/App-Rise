@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+
+import { FormattedText } from '../ui';
 
 import { useHomeActionsLogic } from '../../features/actions/hooks/useHomeActionsHooks';
 import type {
@@ -29,10 +31,18 @@ export const HomeActionsSection: React.FC<HomeActionsSectionProps> = ({
     <View style={containerStyles.bentoContainer}>
       {/* 🎪 Header Moderno */}
       <View style={containerStyles.headerSection}>
-        <Text style={typographyStyles.bentoTitle}>🚀 Come Puoi Aiutare</Text>
-        <Text style={typographyStyles.bentoSubtitle}>
+        <FormattedText
+          variant="headline-medium"
+          style={typographyStyles.bentoTitle}
+        >
+          🚀 Come Puoi Aiutare
+        </FormattedText>
+        <FormattedText
+          variant="body-large"
+          style={typographyStyles.bentoSubtitle}
+        >
           Ogni gesto conta per costruire un mondo senza fame
-        </Text>
+        </FormattedText>
       </View>
 
       {/* 🏗️ Bento Grid */}

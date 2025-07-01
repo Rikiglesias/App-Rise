@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, TextStyle, View, ViewStyle, Text } from 'react-native';
-import { PlatformTouchable } from '../ui';
+import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { PlatformTouchable, FormattedText } from '../ui';
 import { Surface } from 'react-native-paper';
 import {
   BorderRadius,
@@ -67,18 +67,27 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
             <View style={styles.cardHeader}>
               {/* 📍 Icon */}
               <View style={styles.iconContainer}>
-                <Text style={[{ fontSize: 18, lineHeight: 20 }]}>
+                <FormattedText
+                  variant="title-large"
+                  style={[{ lineHeight: 20 }]}
+                >
                   {card.icon}
-                </Text>
+                </FormattedText>
               </View>
 
               {/* 🏷️ Titles */}
-              <Text style={styles.cardSubtitle}>{card.subtitle}</Text>
-              <Text style={styles.cardTitle}>{card.title}</Text>
+              <FormattedText variant="label-large" style={styles.cardSubtitle}>
+                {card.subtitle}
+              </FormattedText>
+              <FormattedText variant="body-large" style={styles.cardTitle}>
+                {card.title}
+              </FormattedText>
             </View>
 
             {/* 📝 Description */}
-            <Text style={styles.cardDescription}>{card.description}</Text>
+            <FormattedText variant="body-medium" style={styles.cardDescription}>
+              {card.description}
+            </FormattedText>
           </View>
 
           {/* 🌟 Press Overlay */}

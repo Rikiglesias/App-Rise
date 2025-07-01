@@ -14,5 +14,21 @@ export {
   PlatformTouch,
 } from './platformDesignTokens';
 
+// Responsive System (Enterprise-grade responsive design)
+export {
+  ScalingFactors,
+  DeviceBreakpoints,
+  ResponsiveDimensions,
+  ResponsiveTypography,
+  ResponsiveSpacing,
+  ResponsiveShadows,
+  PlatformAdjustments,
+  DeviceInfo,
+  scaleSize,
+  scaleFont,
+  scaleSpacing,
+  getCurrentBreakpoint,
+} from './responsiveSystem';
+
 // Performance Constants
 export * from './performance';

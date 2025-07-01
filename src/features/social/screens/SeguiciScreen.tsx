@@ -22,9 +22,11 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
+import { DesignTokens } from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
+import { useResponsive } from '../../../shared/hooks';
 import { isSuccess } from '../../../shared/utils/result';
 import { logWarn } from '../../../shared/utils/logger';
 
@@ -54,6 +56,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { openLink } = useLinkHandler();
   const { triggerHaptic } = useHapticFeedback();
   const insets = useSafeAreaInsets();
+  const { scaleFont, scale } = useResponsive();
 
   // ANIMAZIONI DISABILITATE - valori statici per evitare bordi grigi
   const fadeAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
@@ -201,7 +204,12 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                     resizeMode="contain"
                   />
                 ) : (
-                  <Text style={[styles.socialIconEmoji, { fontSize: 28 }]}>
+                  <Text
+                    style={[
+                      styles.socialIconEmoji,
+                      { fontSize: scaleFont(28) },
+                    ]}
+                  >
                     {platform.emoji}
                   </Text>
                 )}
@@ -220,7 +228,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
               <View style={styles.arrowContainer}>
                 <MaterialCommunityIcons
                   name="arrow-right"
-                  size={24}
+                  size={scale(24)}
                   color={platform.gradient[0]}
                 />
               </View>
@@ -238,15 +246,19 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleBackPress}
         style={[styles.backButton, { top: insets.top + Spacing[2] }]}
       >
-        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
+        <MaterialCommunityIcons
+          name="arrow-left"
+          size={scale(24)}
+          color="#000000"
+        />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         {/* HEADER SECTION - Pattern da Chi Siamo */}
         <View style={styles.headerSection}>
           <View style={styles.titleContainer}>
-            <Text style={[styles.categoryTitle, { fontSize: 32 }]}>
-              <Text style={[styles.titleAccent, { fontSize: 32 }]}>
+            <Text style={[styles.categoryTitle, { fontSize: scaleFont(32) }]}>
+              <Text style={[styles.titleAccent, { fontSize: scaleFont(32) }]}>
                 Seguici Ovunque
               </Text>
             </Text>
@@ -260,7 +272,9 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.sectionDividerContainer}>
           <View style={styles.sectionDivider} />
           <View style={styles.dividerEmojiContainer}>
-            <Text style={[styles.dividerEmoji, { fontSize: 20 }]}>📱</Text>
+            <Text style={[styles.dividerEmoji, { fontSize: scaleFont(20) }]}>
+              📱
+            </Text>
           </View>
         </View>
 
@@ -396,8 +410,8 @@ const styles = StyleSheet.create({
   },
 
   socialIconContainer: {
-    width: 56, // AUMENTATO: più presenza e spazio per icone
-    height: 56, // AUMENTATO: proporzioni migliori
+    width: DesignTokens.components.iconSize.xlarge + 16, // 40 + 16 = 56 responsive
+    height: DesignTokens.components.iconSize.xlarge + 16, // 40 + 16 = 56 responsive
     borderRadius: 28, // AGGIORNATO: mantiene forma circolare perfetta
     backgroundColor: Colors.neutral[0], // MIGLIORATO: bianco puro per più contrasto
     borderWidth: 3, // AUMENTATO: bordo più definito
@@ -414,15 +428,15 @@ const styles = StyleSheet.create({
   },
 
   platformIcon: {
-    width: 34, // OTTIMIZZATO: perfetto per container 56x56 con bordo 3px
-    height: 34, // OTTIMIZZATO: lascia spazio adeguato dai bordi
+    width: DesignTokens.components.iconSize.large + 2, // 32 + 2 = 34 responsive
+    height: DesignTokens.components.iconSize.large + 2, // 32 + 2 = 34 responsive
     resizeMode: 'contain' as const, // Mantiene proporzioni senza distorsione
   },
 
   // Stile specifico per LinkedIn che è più piccola
   linkedinIcon: {
-    width: 35, // PERFETTO: pochissimo più piccolo per non toccare i bordi
-    height: 35, // PERFETTO: margine sicuro dal container
+    width: DesignTokens.components.iconSize.large + 3, // 32 + 3 = 35 responsive
+    height: DesignTokens.components.iconSize.large + 3, // 32 + 3 = 35 responsive
   },
 
   socialIconEmoji: {

@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import { FormattedText } from '../ui';
 
 import {
   BorderRadius,
@@ -59,11 +61,17 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
   return (
     <View style={styles.header}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.location}>{location}</Text>
+        <FormattedText variant="body-large" style={styles.title}>
+          {title}
+        </FormattedText>
+        <FormattedText variant="body-medium" style={styles.location}>
+          {location}
+        </FormattedText>
       </View>
       <View style={styles.statusBadge}>
-        <Text style={styles.statusText}>{statusText}</Text>
+        <FormattedText variant="label-small" style={styles.statusText}>
+          {statusText}
+        </FormattedText>
       </View>
     </View>
   );

@@ -5,11 +5,15 @@ import {
 } from '@react-navigation/bottom-tabs';
 import * as Haptics from 'expo-haptics';
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Platform-specific components
-import { PlatformBlur, PlatformTouchable } from '../components/ui';
+import {
+  PlatformBlur,
+  PlatformTouchable,
+  FormattedText,
+} from '../components/ui';
 
 // Screens
 import { ContributeTabScreen } from '../features/actions';
@@ -24,6 +28,7 @@ import {
   Spacing,
   Typography,
 } from '../shared/constants/designTokens';
+import { useResponsive } from '../shared/hooks';
 
 import type { BottomTabParamList } from './types';
 
@@ -54,15 +59,20 @@ const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
+  const { spacing, scale } = useResponsive();
 
   const tabContainerStyle = useMemo(
     () => [
       styles.tabBarContainer,
       {
-        bottom: Math.max(insets.bottom, Spacing[4]),
+        bottom: Math.max(insets.bottom, spacing[4]),
+        height: scale(95),
+        left: spacing[6],
+        right: spacing[6],
+        borderRadius: scale(32),
       },
     ],
-    [insets.bottom]
+    [insets.bottom, spacing, scale]
   );
 
   return (
@@ -132,6 +142,7 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
   onLongPress,
   routeName,
 }) => {
+  const { scale } = useResponsive();
   // Rimosso: animazioni button container
   const buttonContainerStyle = {
     transform: [{ translateY: isCentral && isFocused ? -18 : 0 }],
@@ -179,7 +190,7 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
   };
 
   const iconName = ICON_MAP[routeName] ?? 'circle';
-  const iconSize = isCentral ? 32 : 26;
+  const iconSize = isCentral ? scale(32) : scale(26);
 
   return (
     <View style={[styles.buttonContainer, buttonContainerStyle]}>
@@ -211,16 +222,14 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
             />
           </View>
           <View style={labelStyle}>
-            <Text
-              style={[
-                styles.labelText,
-                { fontSize: 16, color: tabColors.labelColor },
-              ]}
+            <FormattedText
+              variant="body-large"
+              style={[styles.labelText, { color: tabColors.labelColor }]}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {options.tabBarAccessibilityLabel?.split(' ')[0]}
-            </Text>
+            </FormattedText>
           </View>
         </View>
       </PlatformTouchable>
@@ -274,14 +283,10 @@ const styles = StyleSheet.create({
   // --- Tab Bar ---
   tabBarContainer: {
     position: 'absolute',
-    left: Spacing[6],
-    right: Spacing[6],
-    height: 95, // AUMENTATO: da 85 a 95 per spazio animazione icona Home
-    borderRadius: BorderRadius['3xl'],
+    // Dynamic values moved to tabContainerStyle
     ...Shadows.lg,
     shadowColor: Colors.neutral[900],
     shadowOpacity: 0.1,
-    shadowRadius: 20,
     elevation: 10,
   },
   blurView: {

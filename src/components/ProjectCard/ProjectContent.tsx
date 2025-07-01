@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import { FormattedText } from '../ui';
 
 import {
   BorderRadius,
@@ -48,10 +50,16 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
 
   return (
     <>
-      <Text style={styles.description}>{description}</Text>
+      <FormattedText variant="body-medium" style={styles.description}>
+        {description}
+      </FormattedText>
       <View style={styles.impactContainer}>
-        <Text style={styles.impactLabel}>Impatto</Text>
-        <Text style={styles.impactText}>{impact}</Text>
+        <FormattedText variant="label-small" style={styles.impactLabel}>
+          Impatto
+        </FormattedText>
+        <FormattedText variant="body-medium" style={styles.impactText}>
+          {impact}
+        </FormattedText>
       </View>
     </>
   );

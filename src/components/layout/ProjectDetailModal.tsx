@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, Modal, StyleSheet, Text, View } from 'react-native';
-import { PlatformScrollView, PlatformTouchable } from '../ui';
+import { Image, Modal, StyleSheet, View } from 'react-native';
+import { PlatformScrollView, PlatformTouchable, FormattedText } from '../ui';
 
 import {
   BorderRadius,
@@ -54,10 +54,17 @@ const ProjectDetailModal: React.FC<Props> = ({
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.statusBadge}>
-              <Text style={styles.statusText}>{location.status}</Text>
+              <FormattedText variant="body-medium" style={styles.statusText}>
+                {location.status}
+              </FormattedText>
             </View>
             <PlatformTouchable style={styles.closeButton} onPress={onClose}>
-              <Text style={styles.closeButtonText}>✕</Text>
+              <FormattedText
+                variant="body-large"
+                style={styles.closeButtonText}
+              >
+                ✕
+              </FormattedText>
             </PlatformTouchable>
           </View>
         </View>
@@ -71,69 +78,117 @@ const ProjectDetailModal: React.FC<Props> = ({
               resizeMode="cover"
             />
             <View style={styles.imageOverlay}>
-              <Text style={styles.locationName}>{location.name}</Text>
-              <Text style={styles.locationCountry}>{location.country}</Text>
+              <FormattedText
+                variant="headline-small"
+                style={styles.locationName}
+              >
+                {location.name}
+              </FormattedText>
+              <FormattedText
+                variant="body-medium"
+                style={styles.locationCountry}
+              >
+                {location.country}
+              </FormattedText>
             </View>
           </View>
 
           {/* Stats Cards */}
           <View style={styles.statsContainer}>
             <View style={styles.statCard}>
-              <Text style={styles.statNumber}>{location.projects}</Text>
-              <Text style={styles.statLabel}>Progetti Attivi</Text>
+              <FormattedText variant="display-small" style={styles.statNumber}>
+                {location.projects}
+              </FormattedText>
+              <FormattedText variant="body-medium" style={styles.statLabel}>
+                Progetti Attivi
+              </FormattedText>
               <View style={styles.statIcon}>
-                <Text style={[{ fontSize: 20 }, styles.statEmoji]}>🎯</Text>
+                <FormattedText variant="title-medium" style={styles.statEmoji}>
+                  🎯
+                </FormattedText>
               </View>
             </View>
             <View style={styles.statCard}>
-              <Text style={styles.statNumber}>{location.beneficiaries}</Text>
-              <Text style={styles.statLabel}>Beneficiari</Text>
+              <FormattedText variant="display-small" style={styles.statNumber}>
+                {location.beneficiaries}
+              </FormattedText>
+              <FormattedText variant="body-medium" style={styles.statLabel}>
+                Beneficiari
+              </FormattedText>
               <View style={styles.statIcon}>
-                <Text style={[{ fontSize: 20 }, styles.statEmoji]}>👥</Text>
+                <FormattedText variant="title-medium" style={styles.statEmoji}>
+                  👥
+                </FormattedText>
               </View>
             </View>
           </View>
 
           {/* Description */}
           <View style={styles.descriptionContainer}>
-            <Text style={styles.sectionTitle}>📝 Il Nostro Impatto</Text>
-            <Text style={styles.description}>{location.description}</Text>
+            <FormattedText variant="title-large" style={styles.sectionTitle}>
+              📝 Il Nostro Impatto
+            </FormattedText>
+            <FormattedText variant="body-medium" style={styles.description}>
+              {location.description}
+            </FormattedText>
           </View>
 
           {/* Achievements */}
           <View style={styles.achievementsContainer}>
-            <Text style={styles.sectionTitle}>🏆 Risultati Raggiunti</Text>
+            <FormattedText variant="title-large" style={styles.sectionTitle}>
+              🏆 Risultati Raggiunti
+            </FormattedText>
             <View style={styles.achievementsList}>
               <View style={styles.achievementItem}>
-                <Text style={[{ fontSize: 24 }, styles.achievementIcon]}>
+                <FormattedText
+                  variant="headline-small"
+                  style={styles.achievementIcon}
+                >
                   🍽️
-                </Text>
-                <Text style={styles.achievementText}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-medium"
+                  style={styles.achievementText}
+                >
                   Pasti distribuiti regolarmente
-                </Text>
+                </FormattedText>
               </View>
               <View style={styles.achievementItem}>
-                <Text style={[{ fontSize: 24 }, styles.achievementIcon]}>
+                <FormattedText
+                  variant="headline-small"
+                  style={styles.achievementIcon}
+                >
                   🏫
-                </Text>
-                <Text style={styles.achievementText}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-medium"
+                  style={styles.achievementText}
+                >
                   Partnership con scuole locali
-                </Text>
+                </FormattedText>
               </View>
               <View style={styles.achievementItem}>
-                <Text style={[{ fontSize: 24 }, styles.achievementIcon]}>
+                <FormattedText
+                  variant="headline-small"
+                  style={styles.achievementIcon}
+                >
                   🌱
-                </Text>
-                <Text style={styles.achievementText}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-medium"
+                  style={styles.achievementText}
+                >
                   Programmi sostenibilità
-                </Text>
+                </FormattedText>
               </View>
             </View>
           </View>
 
           {/* Action Buttons */}
           <View style={styles.actionsContainer}>
-            <Text style={styles.sectionTitle}>🚀 Sostieni Questo Progetto</Text>
+            <FormattedText variant="title-large" style={styles.sectionTitle}>
+              🚀 Sostieni Questo Progetto
+            </FormattedText>
             <View style={styles.buttonGrid}>
               <PlatformTouchable
                 style={styles.primaryButton}
@@ -144,7 +199,12 @@ const ProjectDetailModal: React.FC<Props> = ({
                   })
                 }
               >
-                <Text style={styles.primaryButtonText}>💝 Dona Ora</Text>
+                <FormattedText
+                  variant="body-large"
+                  style={styles.primaryButtonText}
+                >
+                  💝 Dona Ora
+                </FormattedText>
               </PlatformTouchable>
               <PlatformTouchable
                 style={styles.secondaryButton}
@@ -155,9 +215,12 @@ const ProjectDetailModal: React.FC<Props> = ({
                   })
                 }
               >
-                <Text style={styles.secondaryButtonText}>
+                <FormattedText
+                  variant="body-large"
+                  style={styles.secondaryButtonText}
+                >
                   🤝 Diventa Volontario
-                </Text>
+                </FormattedText>
               </PlatformTouchable>
             </View>
           </View>

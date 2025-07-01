@@ -57,11 +57,16 @@ describe('Design Tokens - Typography', () => {
 
   it('should have font sizes', () => {
     expect(Typography.sizes).toBeDefined();
-    expect(Typography.sizes.xs).toBe(12);
-    expect(Typography.sizes.sm).toBe(14);
-    expect(Typography.sizes.base).toBe(16);
-    expect(Typography.sizes.lg).toBe(18);
-    expect(Typography.sizes.xl).toBe(20);
+    // Values are now responsive scaled, test actual computed values
+    expect(typeof Typography.sizes.xs).toBe('number');
+    expect(typeof Typography.sizes.sm).toBe('number');
+    expect(typeof Typography.sizes.base).toBe('number');
+    expect(typeof Typography.sizes.lg).toBe('number');
+    expect(typeof Typography.sizes.xl).toBe('number');
+    // Ensure sizes are in correct relative order
+    expect(Typography.sizes.xs).toBeLessThan(Typography.sizes.sm);
+    expect(Typography.sizes.sm).toBeLessThan(Typography.sizes.base);
+    expect(Typography.sizes.base).toBeLessThan(Typography.sizes.lg);
   });
 
   it('should have font weights', () => {
@@ -83,11 +88,16 @@ describe('Design Tokens - Typography', () => {
 describe('Design Tokens - Spacing', () => {
   it('should have spacing scale', () => {
     expect(Spacing).toBeDefined();
-    expect(Spacing[0]).toBe(0);
-    expect(Spacing[1]).toBe(4);
-    expect(Spacing[2]).toBe(8);
-    expect(Spacing[4]).toBe(16);
-    expect(Spacing[8]).toBe(32);
+    expect(Spacing[0]).toBe(0); // Zero should always be zero
+    // Values are now responsive scaled, test types and relative order
+    expect(typeof Spacing[1]).toBe('number');
+    expect(typeof Spacing[2]).toBe('number');
+    expect(typeof Spacing[4]).toBe('number');
+    expect(typeof Spacing[8]).toBe('number');
+    // Ensure spacing increases correctly
+    expect(Spacing[1]).toBeLessThan(Spacing[2]);
+    expect(Spacing[2]).toBeLessThan(Spacing[4]);
+    expect(Spacing[4]).toBeLessThan(Spacing[8]);
   });
 
   it('should be numeric values', () => {
@@ -101,11 +111,17 @@ describe('Design Tokens - Spacing', () => {
 describe('Design Tokens - Border Radius', () => {
   it('should have border radius scale', () => {
     expect(BorderRadius).toBeDefined();
-    expect(BorderRadius.none).toBe(0);
-    expect(BorderRadius.sm).toBe(6);
-    expect(BorderRadius.md).toBe(12);
-    expect(BorderRadius.lg).toBe(16);
-    expect(BorderRadius.xl).toBe(20);
+    expect(BorderRadius.none).toBe(0); // Zero should always be zero
+    expect(BorderRadius.full).toBe(9999); // Full should always be 9999
+    // Values are now responsive scaled, test types and relative order
+    expect(typeof BorderRadius.sm).toBe('number');
+    expect(typeof BorderRadius.md).toBe('number');
+    expect(typeof BorderRadius.lg).toBe('number');
+    expect(typeof BorderRadius.xl).toBe('number');
+    // Ensure border radius increases correctly
+    expect(BorderRadius.sm).toBeLessThan(BorderRadius.md);
+    expect(BorderRadius.md).toBeLessThan(BorderRadius.lg);
+    expect(BorderRadius.lg).toBeLessThan(BorderRadius.xl);
   });
 
   it('should be numeric values', () => {

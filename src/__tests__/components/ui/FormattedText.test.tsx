@@ -6,184 +6,262 @@ import FormattedText from '../../../components/ui/FormattedText';
 
 describe('FormattedText', () => {
   describe('Basic Rendering', () => {
-    it('should render single paragraph text', () => {
+    it('should render with children', () => {
       const { getByText } = render(
-        <FormattedText text="Simple single paragraph text" />
+        <FormattedText>Simple text content</FormattedText>
       );
 
-      expect(getByText('Simple single paragraph text')).toBeTruthy();
+      expect(getByText('Simple text content')).toBeTruthy();
     });
 
     it('should render without crashing', () => {
-      const { toJSON } = render(<FormattedText text="Test text" />);
+      const { toJSON } = render(<FormattedText>Test text</FormattedText>);
 
       expect(toJSON()).toBeDefined();
     });
   });
 
-  describe('Paragraph Splitting', () => {
-    it('should split text into multiple paragraphs', () => {
-      const text = 'First paragraph\n\nSecond paragraph\n\nThird paragraph';
-      const { getByText } = render(<FormattedText text={text} />);
+  describe('Variants', () => {
+    it('should render display variants', () => {
+      const { getByText } = render(
+        <FormattedText variant="display-large">Display Text</FormattedText>
+      );
 
-      expect(getByText('First paragraph')).toBeTruthy();
-      expect(getByText('Second paragraph')).toBeTruthy();
-      expect(getByText('Third paragraph')).toBeTruthy();
+      expect(getByText('Display Text')).toBeTruthy();
     });
 
-    it('should handle single line breaks correctly', () => {
-      const text = 'First line\nSecond line in same paragraph\n\nNew paragraph';
-      const { getByText } = render(<FormattedText text={text} />);
+    it('should render headline variants', () => {
+      const { getByText } = render(
+        <FormattedText variant="headline-medium">Headline Text</FormattedText>
+      );
 
-      expect(
-        getByText('First line\nSecond line in same paragraph')
-      ).toBeTruthy();
-      expect(getByText('New paragraph')).toBeTruthy();
+      expect(getByText('Headline Text')).toBeTruthy();
     });
 
-    it('should handle multiple consecutive line breaks', () => {
-      const text = 'First paragraph\n\n\n\nSecond paragraph';
-      const { getAllByText } = render(<FormattedText text={text} />);
+    it('should render title variants', () => {
+      const { getByText } = render(
+        <FormattedText variant="title-large">Title Text</FormattedText>
+      );
 
-      expect(getAllByText('First paragraph')).toHaveLength(1);
-      expect(getAllByText('Second paragraph')).toHaveLength(1);
-      // text.split('\n\n') creates one empty string between the two
-      expect(getAllByText('')).toHaveLength(1);
+      expect(getByText('Title Text')).toBeTruthy();
+    });
+
+    it('should render body variants', () => {
+      const { getByText } = render(
+        <FormattedText variant="body-medium">Body Text</FormattedText>
+      );
+
+      expect(getByText('Body Text')).toBeTruthy();
+    });
+
+    it('should render label variants', () => {
+      const { getByText } = render(
+        <FormattedText variant="label-small">Label Text</FormattedText>
+      );
+
+      expect(getByText('Label Text')).toBeTruthy();
+    });
+
+    it('should default to body-medium variant', () => {
+      const { getByText } = render(<FormattedText>Default Text</FormattedText>);
+
+      expect(getByText('Default Text')).toBeTruthy();
     });
   });
 
-  describe('Style Handling', () => {
-    it('should apply custom styles', () => {
-      const customStyle = { color: 'red', fontSize: 20 };
+  describe('Font Scaling Control', () => {
+    it('should disable font scaling by default', () => {
       const { getByText } = render(
-        <FormattedText text="Styled text" style={customStyle} />
+        <FormattedText>Non-scaling text</FormattedText>
       );
 
-      const textElement = getByText('Styled text');
+      const textElement = getByText('Non-scaling text');
       expect(textElement).toBeTruthy();
+      expect(textElement.props.allowFontScaling).toBe(false);
     });
 
-    it('should handle style arrays', () => {
-      const styles = [{ color: 'blue' }, { fontSize: 16 }];
+    it('should allow font scaling when enabled', () => {
       const { getByText } = render(
-        <FormattedText text="Multi-styled text" style={styles} />
+        <FormattedText allowSystemFontScaling={true}>
+          Scaling text
+        </FormattedText>
       );
 
-      expect(getByText('Multi-styled text')).toBeTruthy();
-    });
-
-    it('should handle undefined style', () => {
-      const { getByText } = render(
-        <FormattedText text="No style text" style={undefined} />
-      );
-
-      expect(getByText('No style text')).toBeTruthy();
+      const textElement = getByText('Scaling text');
+      expect(textElement.props.allowFontScaling).toBe(true);
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle empty text', () => {
-      const { toJSON } = render(<FormattedText text="" />);
+  describe('Wrap Mode', () => {
+    it('should handle flexible wrap mode', () => {
+      const { getByText } = render(
+        <FormattedText wrapMode="flexible">
+          Flexible wrapping text
+        </FormattedText>
+      );
 
-      expect(toJSON()).toBeDefined();
+      expect(getByText('Flexible wrapping text')).toBeTruthy();
     });
 
-    it('should handle text with only line breaks', () => {
-      const { toJSON } = render(<FormattedText text="\n\n\n\n" />);
+    it('should handle strict wrap mode', () => {
+      const { getByText } = render(
+        <FormattedText wrapMode="strict">Strict wrapping text</FormattedText>
+      );
 
-      // Component handles this gracefully, renders a single Text with the raw content
-      expect(toJSON()).toBeDefined();
+      expect(getByText('Strict wrapping text')).toBeTruthy();
     });
 
-    it('should handle text starting with line breaks', () => {
-      const text = '\n\nActual content';
-      const { getByText, getAllByText } = render(<FormattedText text={text} />);
+    it('should handle none wrap mode', () => {
+      const { getByText } = render(
+        <FormattedText wrapMode="none">Single line text</FormattedText>
+      );
 
-      expect(getAllByText('')).toHaveLength(1); // 1 empty paragraph from split
-      expect(getByText('Actual content')).toBeTruthy();
-    });
-
-    it('should handle text ending with line breaks', () => {
-      const text = 'Actual content\n\n';
-      const { getByText, getAllByText } = render(<FormattedText text={text} />);
-
-      expect(getByText('Actual content')).toBeTruthy();
-      expect(getAllByText('')).toHaveLength(1); // 1 empty paragraph at end
-    });
-
-    it('should handle very long text', () => {
-      const longText = 'A'.repeat(1000) + '\n\n' + 'B'.repeat(1000);
-      const { getByText } = render(<FormattedText text={longText} />);
-
-      expect(getByText('A'.repeat(1000))).toBeTruthy();
-      expect(getByText('B'.repeat(1000))).toBeTruthy();
+      const textElement = getByText('Single line text');
+      expect(textElement.props.numberOfLines).toBe(1);
     });
   });
 
-  describe('Key Generation', () => {
-    it('should generate unique keys for paragraphs', () => {
-      const text = 'Same\n\nSame\n\nSame';
-      const { getAllByText } = render(<FormattedText text={text} />);
+  describe('Readability Constraints', () => {
+    it('should enforce readability constraints by default', () => {
+      const { getByText } = render(
+        <FormattedText fontSize={8}>Small text</FormattedText>
+      );
 
-      // Should render all three "Same" paragraphs
-      expect(getAllByText('Same')).toHaveLength(3);
+      expect(getByText('Small text')).toBeTruthy();
     });
 
-    it('should handle paragraphs shorter than 50 characters', () => {
-      const text = 'A\n\nB\n\nC';
-      const { getByText } = render(<FormattedText text={text} />);
+    it('should allow bypassing readability constraints', () => {
+      const { getByText } = render(
+        <FormattedText fontSize={8} enforceReadabilityConstraints={false}>
+          Tiny text
+        </FormattedText>
+      );
 
-      expect(getByText('A')).toBeTruthy();
-      expect(getByText('B')).toBeTruthy();
-      expect(getByText('C')).toBeTruthy();
+      expect(getByText('Tiny text')).toBeTruthy();
+    });
+  });
+
+  describe('Style Customization', () => {
+    it('should apply custom styles', () => {
+      const customStyle = { color: 'red', marginTop: 10 };
+      const { getByText } = render(
+        <FormattedText style={customStyle}>Styled text</FormattedText>
+      );
+
+      expect(getByText('Styled text')).toBeTruthy();
+    });
+
+    it('should apply custom color', () => {
+      const { getByText } = render(
+        <FormattedText color="#FF0000">Red text</FormattedText>
+      );
+
+      expect(getByText('Red text')).toBeTruthy();
+    });
+
+    it('should apply custom font weight', () => {
+      const { getByText } = render(
+        <FormattedText fontWeight="bold">Bold text</FormattedText>
+      );
+
+      expect(getByText('Bold text')).toBeTruthy();
+    });
+
+    it('should apply manual fontSize', () => {
+      const { getByText } = render(
+        <FormattedText fontSize={24}>Large text</FormattedText>
+      );
+
+      expect(getByText('Large text')).toBeTruthy();
     });
   });
 
   describe('Accessibility', () => {
     it('should be accessible to screen readers', () => {
       const { getByText } = render(
-        <FormattedText text="Accessible text content" />
+        <FormattedText>Accessible content</FormattedText>
       );
 
-      const textElement = getByText('Accessible text content');
-      expect(textElement).toBeTruthy();
-      // Text should be accessible by default
+      expect(getByText('Accessible content')).toBeTruthy();
     });
 
     it('should preserve text content for accessibility', () => {
-      const accessibleText = 'This is important content for screen readers';
-      const { getByText } = render(<FormattedText text={accessibleText} />);
+      const accessibleText = 'Important accessibility content';
+      const { getByText } = render(
+        <FormattedText>{accessibleText}</FormattedText>
+      );
 
       expect(getByText(accessibleText)).toBeTruthy();
+    });
+
+    it('should support accessibility props', () => {
+      const { getByText } = render(
+        <FormattedText
+          accessibilityLabel="Custom label"
+          accessibilityHint="Custom hint"
+        >
+          Accessibility text
+        </FormattedText>
+      );
+
+      const textElement = getByText('Accessibility text');
+      expect(textElement.props.accessibilityLabel).toBe('Custom label');
+      expect(textElement.props.accessibilityHint).toBe('Custom hint');
     });
   });
 
   describe('Performance', () => {
     it('should handle rapid re-renders', () => {
       const { rerender, getByText } = render(
-        <FormattedText text="Initial text" />
+        <FormattedText>Initial text</FormattedText>
       );
 
       expect(getByText('Initial text')).toBeTruthy();
 
-      rerender(<FormattedText text="Updated text" />);
+      rerender(<FormattedText>Updated text</FormattedText>);
       expect(getByText('Updated text')).toBeTruthy();
 
-      rerender(<FormattedText text="Final text" />);
+      rerender(<FormattedText>Final text</FormattedText>);
       expect(getByText('Final text')).toBeTruthy();
     });
 
-    it('should handle many paragraphs efficiently', () => {
-      const manyParagraphs = Array.from(
-        { length: 50 },
-        (_, i) => `Paragraph ${i + 1}`
-      ).join('\n\n');
+    it('should handle variant changes efficiently', () => {
+      const { rerender, getByText } = render(
+        <FormattedText variant="body-small">Test text</FormattedText>
+      );
 
-      const { getByText } = render(<FormattedText text={manyParagraphs} />);
+      expect(getByText('Test text')).toBeTruthy();
 
-      expect(getByText('Paragraph 1')).toBeTruthy();
-      expect(getByText('Paragraph 25')).toBeTruthy();
-      expect(getByText('Paragraph 50')).toBeTruthy();
+      rerender(
+        <FormattedText variant="headline-large">Test text</FormattedText>
+      );
+      expect(getByText('Test text')).toBeTruthy();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle empty children', () => {
+      const { toJSON } = render(<FormattedText></FormattedText>);
+
+      expect(toJSON()).toBeDefined();
+    });
+
+    it('should handle numeric children', () => {
+      const { getByText } = render(<FormattedText>{123}</FormattedText>);
+
+      expect(getByText('123')).toBeTruthy();
+    });
+
+    it('should handle boolean children gracefully', () => {
+      const { toJSON } = render(<FormattedText>{true}</FormattedText>);
+
+      expect(toJSON()).toBeDefined();
+    });
+
+    it('should handle null/undefined children', () => {
+      const { toJSON } = render(<FormattedText>{null}</FormattedText>);
+
+      expect(toJSON()).toBeDefined();
     });
   });
 });

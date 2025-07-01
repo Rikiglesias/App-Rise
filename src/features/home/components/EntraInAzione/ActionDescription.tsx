@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
+import { FormattedText } from '../../../../components/ui';
 import {
   Typography,
   Spacing,
@@ -18,13 +19,16 @@ export const ActionDescription: React.FC = () => {
         style={styles.descriptionGradient}
       >
         <View style={styles.descriptionContent}>
-          <Text style={styles.descriptionMain}>
+          <FormattedText variant="title-medium" style={styles.descriptionMain}>
             Unisciti a noi nella lotta contro la fame nel mondo
-          </Text>
+          </FormattedText>
           <View style={styles.descriptionDivider} />
-          <Text style={styles.descriptionSecondary}>
+          <FormattedText
+            variant="body-large"
+            style={styles.descriptionSecondary}
+          >
             Ogni azione conta per cambiare vite
-          </Text>
+          </FormattedText>
         </View>
       </LinearGradient>
     </View>

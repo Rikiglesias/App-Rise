@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
-import { PlatformScrollView } from '../../../components/ui';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+
+import { FormattedText, PlatformScrollView } from '../../../components/ui';
 
 import type { RootStackParamList } from '../../../navigation/types';
 import {
@@ -26,97 +27,125 @@ const Impatto2024Screen: React.FC<Props> = ({ navigation: _navigation }) => {
     <SafeAreaView style={styles.container}>
       <PlatformScrollView>
         <View style={styles.header}>
-          <Text style={[styles.year, { fontSize: 40 }]}>2024</Text>
-          <Text style={[styles.title, { fontSize: 24 }]}>
+          <FormattedText variant="display-small" style={styles.year}>
+            2024
+          </FormattedText>
+          <FormattedText variant="headline-small" style={styles.title}>
             Il Nostro Impatto
-          </Text>
-          <Text style={[styles.subtitle, { fontSize: 16 }]}>
+          </FormattedText>
+          <FormattedText variant="body-large" style={styles.subtitle}>
             Risultati raggiunti insieme
-          </Text>
+          </FormattedText>
         </View>
 
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <Text style={[styles.statIcon, { fontSize: 32 }]}>🍽️</Text>
-            <Text style={[styles.statNumber, { fontSize: 28 }]}>3.14M</Text>
-            <Text
-              style={[styles.statLabel, { fontSize: 18 }]}
+            <FormattedText variant="headline-large" style={styles.statIcon}>
+              🍽️
+            </FormattedText>
+            <FormattedText variant="headline-medium" style={styles.statNumber}>
+              3.14M
+            </FormattedText>
+            <FormattedText
+              variant="title-large"
+              style={styles.statLabel}
               numberOfLines={1}
               adjustsFontSizeToFit={true}
             >
               Pasti Confezionati
-            </Text>
-            <Text style={[styles.statDesc, { fontSize: 14 }]}>
+            </FormattedText>
+            <FormattedText variant="body-medium" style={styles.statDesc}>
               Nutrizione per comunità in difficoltà
-            </Text>
+            </FormattedText>
           </View>
 
           <View style={styles.statCard}>
-            <Text style={[styles.statIcon, { fontSize: 32 }]}>📦</Text>
-            <Text style={[styles.statNumber, { fontSize: 28 }]}>16.3K</Text>
-            <Text
-              style={[styles.statLabel, { fontSize: 18 }]}
+            <FormattedText variant="headline-large" style={styles.statIcon}>
+              📦
+            </FormattedText>
+            <FormattedText variant="headline-medium" style={styles.statNumber}>
+              16.3K
+            </FormattedText>
+            <FormattedText
+              variant="title-large"
+              style={styles.statLabel}
               numberOfLines={1}
               adjustsFontSizeToFit={true}
             >
               Kit Prodotti
-            </Text>
-            <Text style={[styles.statDesc, { fontSize: 14 }]}>
+            </FormattedText>
+            <FormattedText variant="body-medium" style={styles.statDesc}>
               Kit completi per emergenze
-            </Text>
+            </FormattedText>
           </View>
 
           <View style={styles.statCard}>
-            <Text style={[styles.statIcon, { fontSize: 32 }]}>👥</Text>
-            <Text style={[styles.statNumber, { fontSize: 28 }]}>13K</Text>
-            <Text style={[styles.statLabel, { fontSize: 18 }]}>Volontari</Text>
-            <Text style={[styles.statDesc, { fontSize: 14 }]}>
+            <FormattedText variant="headline-large" style={styles.statIcon}>
+              👥
+            </FormattedText>
+            <FormattedText variant="headline-medium" style={styles.statNumber}>
+              13K
+            </FormattedText>
+            <FormattedText variant="title-large" style={styles.statLabel}>
+              Volontari
+            </FormattedText>
+            <FormattedText variant="body-medium" style={styles.statDesc}>
               Persone che hanno fatto la differenza
-            </Text>
+            </FormattedText>
           </View>
         </View>
 
         <View style={styles.impactSection}>
-          <Text style={[styles.impactTitle, { fontSize: 20 }]}>
+          <FormattedText variant="title-medium" style={styles.impactTitle}>
             Dove Arrivano i Nostri Aiuti
-          </Text>
+          </FormattedText>
 
           <View style={styles.impactList}>
             <View style={styles.impactItem}>
-              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🌍</Text>
-              <Text style={[styles.impactText, { fontSize: 16 }]}>
+              <FormattedText variant="title-medium" style={styles.impactIcon}>
+                🌍
+              </FormattedText>
+              <FormattedText variant="body-large" style={styles.impactText}>
                 Africa Subsahariana
-              </Text>
+              </FormattedText>
             </View>
             <View style={styles.impactItem}>
-              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🏫</Text>
-              <Text style={[styles.impactText, { fontSize: 16 }]}>
+              <FormattedText variant="title-medium" style={styles.impactIcon}>
+                🏫
+              </FormattedText>
+              <FormattedText variant="body-large" style={styles.impactText}>
                 Programmi scolastici
-              </Text>
+              </FormattedText>
             </View>
             <View style={styles.impactItem}>
-              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🚨</Text>
-              <Text style={[styles.impactText, { fontSize: 16 }]}>
+              <FormattedText variant="title-medium" style={styles.impactIcon}>
+                🚨
+              </FormattedText>
+              <FormattedText variant="body-large" style={styles.impactText}>
                 Emergenze umanitarie
-              </Text>
+              </FormattedText>
             </View>
             <View style={styles.impactItem}>
-              <Text style={[styles.impactIcon, { fontSize: 20 }]}>🇮🇹</Text>
-              <Text style={[styles.impactText, { fontSize: 16 }]}>
+              <FormattedText variant="title-medium" style={styles.impactIcon}>
+                🇮🇹
+              </FormattedText>
+              <FormattedText variant="body-large" style={styles.impactText}>
                 Comunità italiane
-              </Text>
+              </FormattedText>
             </View>
           </View>
         </View>
 
         <View style={styles.goalSection}>
-          <Text style={[styles.goalIcon, { fontSize: 40 }]}>🎯</Text>
-          <Text style={[styles.goalTitle, { fontSize: 20 }]}>
+          <FormattedText variant="display-small" style={styles.goalIcon}>
+            🎯
+          </FormattedText>
+          <FormattedText variant="title-medium" style={styles.goalTitle}>
             Obiettivo 2025
-          </Text>
-          <Text style={[styles.goalText, { fontSize: 16 }]}>
+          </FormattedText>
+          <FormattedText variant="body-large" style={styles.goalText}>
             Superare i 4 milioni di pasti confezionati
-          </Text>
+          </FormattedText>
         </View>
       </PlatformScrollView>
     </SafeAreaView>

@@ -2,9 +2,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { View, StyleSheet, Text, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 
-import { PlatformTouchable } from '../../../../components/ui';
+import { PlatformTouchable, FormattedText } from '../../../../components/ui';
 import {
   Colors,
   Spacing,
@@ -56,8 +56,15 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
-              <Text style={styles.buttonTitle}>Scopri{'\n'}Impatto</Text>
-              <Text style={styles.buttonDirectionRed}>← Risultati</Text>
+              <FormattedText variant="title-medium" style={styles.buttonTitle}>
+                Scopri{'\n'}Impatto
+              </FormattedText>
+              <FormattedText
+                variant="body-large"
+                style={styles.buttonDirectionRed}
+              >
+                ← Risultati
+              </FormattedText>
             </View>
           </View>
         </LinearGradient>
@@ -83,8 +90,18 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 color="#059669"
                 style={styles.buttonIcon}
               />
-              <Text style={styles.buttonTitleGreen}>Dona e{'\n'}Aiuta</Text>
-              <Text style={styles.buttonDirection}>Supporta →</Text>
+              <FormattedText
+                variant="title-medium"
+                style={styles.buttonTitleGreen}
+              >
+                Dona e{'\n'}Aiuta
+              </FormattedText>
+              <FormattedText
+                variant="body-large"
+                style={styles.buttonDirection}
+              >
+                Supporta →
+              </FormattedText>
             </View>
           </View>
         </LinearGradient>

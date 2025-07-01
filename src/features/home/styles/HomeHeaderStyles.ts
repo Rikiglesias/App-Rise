@@ -1,14 +1,15 @@
-import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import {
   BorderRadius,
   Colors,
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { ADVANCED_CONFIG } from '../types/HomeHeaderTypes';
 
-const { width: windowWidth } = Dimensions.get('window');
+// Removed hardcoded windowWidth - now using responsive typography
 
 // Style factories split for max-lines-per-function compliance
 export const createContainerStyles = (
@@ -47,11 +48,11 @@ export const createTextStyles = (
   StyleSheet.create({
     title: {
       color: colors.neutral[900],
-      fontSize: windowWidth < 375 ? 32 : 36,
+      fontSize: TypographyTokens.styles.headline.large, // Responsive 32px (hybrid system)
       fontWeight: Typography.weights.bold,
       fontFamily: Typography.families.heading,
       textAlign: 'center',
-      lineHeight: windowWidth < 375 ? 38 : 42,
+      lineHeight: TypographyTokens.styles.headline.large * 1.17, // Responsive line height
       letterSpacing: -0.8,
       marginBottom: Spacing[4],
     },

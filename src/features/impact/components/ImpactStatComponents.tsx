@@ -63,7 +63,7 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
     <View style={styles.storyContent}>
       <Text style={styles.storyLocation}>{location}</Text>
       <Text style={styles.storyTitle}>{title}</Text>
-      <FormattedText text={text} style={styles.storyText} />
+      <FormattedText style={styles.storyText}>{text}</FormattedText>
     </View>
   </View>
 );

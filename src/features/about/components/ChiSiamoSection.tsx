@@ -4,6 +4,7 @@ import { View, Text } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
+import { useResponsive } from '../../../shared/hooks';
 import { chiSiamoSectionStyles } from '../styles';
 import type { ChiSiamoSectionProps } from '../types';
 
@@ -12,6 +13,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   onInfoPress,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
+  const { scaleFont, scale } = useResponsive();
 
   const handleInfoPress = useCallback(async () => {
     await triggerHaptic('light');
@@ -31,10 +33,16 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               style={chiSiamoSectionStyles.titleClickableContainer}
             >
               <Text
-                style={[{ fontSize: 32 }, chiSiamoSectionStyles.categoryTitle]}
+                style={[
+                  { fontSize: scaleFont(32) },
+                  chiSiamoSectionStyles.categoryTitle,
+                ]}
               >
                 <Text
-                  style={[{ fontSize: 32 }, chiSiamoSectionStyles.titleAccent]}
+                  style={[
+                    { fontSize: scaleFont(32) },
+                    chiSiamoSectionStyles.titleAccent,
+                  ]}
                 >
                   Chi Siamo
                 </Text>
@@ -49,7 +57,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             >
               <MaterialCommunityIcons
                 name="information"
-                size={20}
+                size={scale(20)}
                 color="white"
               />
             </PlatformTouchable>

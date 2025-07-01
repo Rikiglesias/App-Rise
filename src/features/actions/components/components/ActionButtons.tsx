@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Animated, Platform, StyleSheet, View, Text } from 'react-native';
 
-import { PlatformTouchable } from '../../../../components/ui';
+import { PlatformTouchable, FormattedText } from '../../../../components/ui';
 
 import {
   Colors,
@@ -570,9 +570,12 @@ const DonateButtonsSection: React.FC<{
           onPress={onInfoPress}
           activeOpacity={0.8}
         >
-          <Text style={[{ fontSize: 24 }, styles.donateCategoryTitle]}>
+          <FormattedText
+            variant="headline-small"
+            style={styles.donateCategoryTitle}
+          >
             ❤️ Contribuisci
-          </Text>
+          </FormattedText>
           <Text style={styles.donateInlineSubtitle}>
             Supporta la lotta contro la fame
           </Text>
@@ -681,9 +684,9 @@ const ExploreButtonsSection: React.FC<{
               : styles.exploreHeaderBackground
           }
         >
-          <Text style={[{ fontSize: 24 }, styles.exploreTitle]}>
+          <FormattedText variant="headline-small" style={styles.exploreTitle}>
             🔍 Esplora
-          </Text>
+          </FormattedText>
           <Text style={styles.exploreSubtitle}>
             Progetti e iniziative umanitarie
           </Text>
@@ -777,9 +780,9 @@ const CommunityButtonsSection: React.FC<{
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
         >
-          <Text style={[{ fontSize: 24 }, styles.communityTitle]}>
+          <FormattedText variant="headline-small" style={styles.communityTitle}>
             🤝 Community
-          </Text>
+          </FormattedText>
           <Text style={styles.communitySubtitle}>
             Unisciti alla nostra comunità
           </Text>

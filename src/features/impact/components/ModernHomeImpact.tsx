@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, View, Text } from 'react-native';
-import { PlatformTouchable } from '../../../components/ui';
+import { Animated, StyleSheet, View } from 'react-native';
+import { PlatformTouchable, FormattedText } from '../../../components/ui';
 
 import { Surface } from 'react-native-paper';
 
@@ -230,12 +230,16 @@ interface ImpactHeaderProps {
 const ImpactHeader: React.FC<ImpactHeaderProps> = React.memo(({ styles }) => (
   <View style={styles.header}>
     <View style={styles.badge}>
-      <Text style={[{ fontSize: 12 }, styles.badgeText]}>RISULTATI 2024</Text>
+      <FormattedText variant="label-medium" style={styles.badgeText}>
+        RISULTATI 2024
+      </FormattedText>
     </View>
-    <Text style={[{ fontSize: 32 }, styles.title]}>Il Nostro Impatto</Text>
-    <Text style={[{ fontSize: 16 }, styles.subtitle]}>
+    <FormattedText variant="headline-large" style={styles.title}>
+      Il Nostro Impatto
+    </FormattedText>
+    <FormattedText variant="body-large" style={styles.subtitle}>
       Dati concreti sui risultati raggiunti insieme
-    </Text>
+    </FormattedText>
   </View>
 ));
 
@@ -248,19 +252,37 @@ interface ImpactStatsProps {
 const ImpactStats: React.FC<ImpactStatsProps> = React.memo(({ styles }) => (
   <View style={styles.statsContainer}>
     <View style={styles.statCard}>
-      <Text style={[{ fontSize: 32 }, styles.statNumber]}>3.14M</Text>
-      <Text style={[{ fontSize: 16 }, styles.statLabel]}>Pasti</Text>
-      <Text style={[{ fontSize: 14 }, styles.statTarget]}>Distribuiti</Text>
+      <FormattedText variant="headline-large" style={styles.statNumber}>
+        3.14M
+      </FormattedText>
+      <FormattedText variant="body-large" style={styles.statLabel}>
+        Pasti
+      </FormattedText>
+      <FormattedText variant="body-medium" style={styles.statTarget}>
+        Distribuiti
+      </FormattedText>
     </View>
     <View style={styles.statCard}>
-      <Text style={[{ fontSize: 32 }, styles.statNumber]}>13K</Text>
-      <Text style={[{ fontSize: 16 }, styles.statLabel]}>Volontari</Text>
-      <Text style={[{ fontSize: 14 }, styles.statTarget]}>Attivi</Text>
+      <FormattedText variant="headline-large" style={styles.statNumber}>
+        13K
+      </FormattedText>
+      <FormattedText variant="body-large" style={styles.statLabel}>
+        Volontari
+      </FormattedText>
+      <FormattedText variant="body-medium" style={styles.statTarget}>
+        Attivi
+      </FormattedText>
     </View>
     <View style={styles.statCard}>
-      <Text style={[{ fontSize: 32 }, styles.statNumber]}>47</Text>
-      <Text style={[{ fontSize: 16 }, styles.statLabel]}>Progetti</Text>
-      <Text style={[{ fontSize: 14 }, styles.statTarget]}>Completati</Text>
+      <FormattedText variant="headline-large" style={styles.statNumber}>
+        47
+      </FormattedText>
+      <FormattedText variant="body-large" style={styles.statLabel}>
+        Progetti
+      </FormattedText>
+      <FormattedText variant="body-medium" style={styles.statTarget}>
+        Completati
+      </FormattedText>
     </View>
   </View>
 ));
@@ -273,7 +295,9 @@ interface ImpactCTAProps {
 
 const ImpactCTA: React.FC<ImpactCTAProps> = React.memo(({ styles }) => (
   <View style={styles.ctaButton}>
-    <Text style={[{ fontSize: 16 }, styles.ctaText]}>Vedi Impatto 2024</Text>
+    <FormattedText variant="body-large" style={styles.ctaText}>
+      Vedi Impatto 2024
+    </FormattedText>
   </View>
 ));
 

@@ -11,7 +11,11 @@ import {
   View,
   Text,
 } from 'react-native';
-import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
+import {
+  PlatformScrollView,
+  PlatformTouchable,
+  FormattedText,
+} from '../../../components/ui';
 
 import type { Location } from '../../../components/layout/InteractiveMap';
 import MapLocationModal from '../../../components/layout/MapLocationModal';
@@ -73,13 +77,15 @@ const ImpactHeader: React.FC<{
       />
 
       <View style={styles.mainHeaderContainer}>
-        <Text style={[styles.titleText, { fontSize: 40 }]}>
+        <FormattedText variant="display-small" style={styles.titleText}>
           Il Nostro{'\n'}
-          <Text style={[styles.titleAccent, { fontSize: 40 }]}>Impatto</Text>
-        </Text>
-        <Text style={[styles.mainSubtitle, { fontSize: 16 }]}>
+          <FormattedText variant="display-small" style={styles.titleAccent}>
+            Impatto
+          </FormattedText>
+        </FormattedText>
+        <FormattedText variant="body-large" style={styles.mainSubtitle}>
           Risultati concreti nella lotta contro la fame mondiale
-        </Text>
+        </FormattedText>
       </View>
     </Animated.View>
   );
@@ -109,12 +115,12 @@ const TotalMealsSection: React.FC<{
         ]}
       >
         <View style={styles.numbersHeaderBackground}>
-          <Text style={[{ fontSize: 24 }, styles.numbersTitle]}>
+          <FormattedText variant="headline-small" style={styles.numbersTitle}>
             <Text style={{ fontSize: 22 }}>📊</Text> I Nostri Numeri
-          </Text>
-          <Text style={[{ fontSize: 16 }, styles.numbersSubtitle]}>
+          </FormattedText>
+          <FormattedText variant="body-large" style={styles.numbersSubtitle}>
             Milioni di vite cambiate, un pasto alla volta
-          </Text>
+          </FormattedText>
         </View>
       </Animated.View>
 
@@ -140,15 +146,24 @@ const TotalMealsSection: React.FC<{
                   color="#DC2626"
                   style={styles.totalCardIcon}
                 />
-                <Text style={[{ fontSize: 26 }, styles.totalStatValue]}>
+                <FormattedText
+                  variant="headline-small"
+                  style={styles.totalStatValue}
+                >
                   15.8M
-                </Text>
-                <Text style={[{ fontSize: 16 }, styles.totalStatLabel]}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-large"
+                  style={styles.totalStatLabel}
+                >
                   Pasti Totali
-                </Text>
-                <Text style={[{ fontSize: 14 }, styles.totalStatSubtitle]}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-medium"
+                  style={styles.totalStatSubtitle}
+                >
                   Dal 2012 - Meals
-                </Text>
+                </FormattedText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -181,15 +196,24 @@ const TotalMealsSection: React.FC<{
                   color="#1F2937"
                   style={styles.totalCardIcon}
                 />
-                <Text style={[{ fontSize: 26 }, styles.totalStatValue]}>
+                <FormattedText
+                  variant="headline-small"
+                  style={styles.totalStatValue}
+                >
                   142K
-                </Text>
-                <Text style={[{ fontSize: 16 }, styles.totalStatLabel]}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-large"
+                  style={styles.totalStatLabel}
+                >
                   Kit Totali
-                </Text>
-                <Text style={[{ fontSize: 14 }, styles.totalStatSubtitle]}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-medium"
+                  style={styles.totalStatSubtitle}
+                >
                   Dal 2020 - Kits
-                </Text>
+                </FormattedText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -222,12 +246,18 @@ const Results2024Section: React.FC<{
         ]}
       >
         <View style={styles.results2024HeaderBackground}>
-          <Text style={[{ fontSize: 24 }, styles.results2024Title]}>
+          <FormattedText
+            variant="headline-small"
+            style={styles.results2024Title}
+          >
             <Text style={{ fontSize: 22 }}>🎯</Text> Risultati Raggiunti
-          </Text>
-          <Text style={[{ fontSize: 16 }, styles.results2024Subtitle]}>
+          </FormattedText>
+          <FormattedText
+            variant="body-large"
+            style={styles.results2024Subtitle}
+          >
             I numeri che raccontano il nostro impegno annuale
-          </Text>
+          </FormattedText>
         </View>
       </Animated.View>
 
@@ -248,19 +278,26 @@ const Results2024Section: React.FC<{
               size={28}
               color="#DC2626"
             />
-            <Text style={[{ fontSize: 24 }, styles.record2024Value]}>
+            <FormattedText
+              variant="headline-small"
+              style={styles.record2024Value}
+            >
               3.14M
-            </Text>
-            <Text
-              style={[{ fontSize: 18 }, styles.record2024Label]}
+            </FormattedText>
+            <FormattedText
+              variant="title-large"
+              style={styles.record2024Label}
               numberOfLines={1}
               adjustsFontSizeToFit={true}
             >
               Pasti Confezionati
-            </Text>
-            <Text style={[{ fontSize: 14 }, styles.record2024Description]}>
+            </FormattedText>
+            <FormattedText
+              variant="body-medium"
+              style={styles.record2024Description}
+            >
               Prodotti nel 2024
-            </Text>
+            </FormattedText>
           </View>
         </Animated.View>
 
@@ -279,19 +316,26 @@ const Results2024Section: React.FC<{
               size={28}
               color="#1F2937"
             />
-            <Text style={[{ fontSize: 24 }, styles.record2024Value]}>
+            <FormattedText
+              variant="headline-small"
+              style={styles.record2024Value}
+            >
               16.3K
-            </Text>
-            <Text
-              style={[{ fontSize: 18 }, styles.record2024Label]}
+            </FormattedText>
+            <FormattedText
+              variant="title-large"
+              style={styles.record2024Label}
               numberOfLines={1}
               adjustsFontSizeToFit={true}
             >
               Kit Confezionati
-            </Text>
-            <Text style={[{ fontSize: 14 }, styles.record2024Description]}>
+            </FormattedText>
+            <FormattedText
+              variant="body-medium"
+              style={styles.record2024Description}
+            >
               Creati nel 2024
-            </Text>
+            </FormattedText>
           </View>
         </Animated.View>
       </View>
@@ -318,12 +362,12 @@ const CommunitySection: React.FC<{
         ]}
       >
         <View style={styles.communityHeaderBackground}>
-          <Text style={[{ fontSize: 24 }, styles.communityTitle]}>
+          <FormattedText variant="headline-small" style={styles.communityTitle}>
             <Text style={{ fontSize: 22 }}>🤝</Text> La Nostra Community
-          </Text>
-          <Text style={[{ fontSize: 16 }, styles.communitySubtitle]}>
+          </FormattedText>
+          <FormattedText variant="body-large" style={styles.communitySubtitle}>
             Volontari e partner uniti nella missione #famezero
-          </Text>
+          </FormattedText>
         </View>
       </Animated.View>
 
@@ -349,12 +393,18 @@ const CommunitySection: React.FC<{
                   color="#10B981"
                   style={styles.communityCardIcon}
                 />
-                <Text style={[{ fontSize: 24 }, styles.communityStatValue]}>
+                <FormattedText
+                  variant="headline-small"
+                  style={styles.communityStatValue}
+                >
                   13.323
-                </Text>
-                <Text style={[{ fontSize: 16 }, styles.communityStatLabel]}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-large"
+                  style={styles.communityStatLabel}
+                >
                   Volontari 2024
-                </Text>
+                </FormattedText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -387,12 +437,18 @@ const CommunitySection: React.FC<{
                   color="#8B5CF6"
                   style={styles.communityCardIcon}
                 />
-                <Text style={[{ fontSize: 24 }, styles.communityStatValue]}>
+                <FormattedText
+                  variant="headline-small"
+                  style={styles.communityStatValue}
+                >
                   150+
-                </Text>
-                <Text style={[{ fontSize: 16 }, styles.communityStatLabel]}>
+                </FormattedText>
+                <FormattedText
+                  variant="body-large"
+                  style={styles.communityStatLabel}
+                >
                   Partner Attivi
-                </Text>
+                </FormattedText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -421,12 +477,12 @@ const MapSection: React.FC<{
       {/* Header GEOGRAFICO con elementi di location */}
       <View style={styles.mapHeaderContainer}>
         <View style={styles.mapHeaderBackground}>
-          <Text style={[{ fontSize: 24 }, styles.mapTitle]}>
+          <FormattedText variant="headline-small" style={styles.mapTitle}>
             <Text style={{ fontSize: 22 }}>🌍</Text> Dove Operiamo
-          </Text>
-          <Text style={[{ fontSize: 16 }, styles.mapSubtitle]}>
+          </FormattedText>
+          <FormattedText variant="body-large" style={styles.mapSubtitle}>
             Le nostre operazioni nel mondo
-          </Text>
+          </FormattedText>
         </View>
       </View>
 
@@ -449,9 +505,9 @@ const MapSection: React.FC<{
             size={20}
             color={Colors.neutral[600]}
           />
-          <Text style={[{ fontSize: 12 }, styles.mapClickText]}>
+          <FormattedText variant="label-medium" style={styles.mapClickText}>
             Tocca per mappa completa
-          </Text>
+          </FormattedText>
         </View>
       </PlatformTouchable>
     </View>

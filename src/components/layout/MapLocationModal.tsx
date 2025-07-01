@@ -1,8 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Modal, StyleSheet, View, Text } from 'react-native';
-import { PlatformTouchable } from '../ui';
+import { Modal, StyleSheet, View } from 'react-native';
+import { PlatformTouchable, FormattedText } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
 import {
@@ -50,10 +50,16 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         >
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
-              <Text style={[styles.flag, { fontSize: 32 }]}>{data.flag}</Text>
+              <FormattedText variant="headline-large" style={styles.flag}>
+                {data.flag}
+              </FormattedText>
               <View style={styles.headerTextContainer}>
-                <Text style={styles.title}>{data.title}</Text>
-                <Text style={styles.subtitle}>{data.subtitle}</Text>
+                <FormattedText variant="headline-small" style={styles.title}>
+                  {data.title}
+                </FormattedText>
+                <FormattedText variant="body-medium" style={styles.subtitle}>
+                  {data.subtitle}
+                </FormattedText>
               </View>
             </View>
 
@@ -74,10 +80,10 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         {/* Contenuto semplificato */}
         <View style={styles.content}>
           {/* Descrizione breve - max 2 righe */}
-          <Text style={styles.description}>
+          <FormattedText variant="body-large" style={styles.description}>
             Scopri il nostro impatto in {data.title} attraverso programmi di
             lotta alla fame e sviluppo sostenibile.
-          </Text>
+          </FormattedText>
 
           {/* Call to Action per link esterno */}
           <PlatformTouchable
@@ -91,7 +97,9 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               color={Colors.neutral[0]}
               style={styles.ctaIcon}
             />
-            <Text style={styles.ctaText}>Clicca qui per saperne di più</Text>
+            <FormattedText variant="body-large" style={styles.ctaText}>
+              Clicca qui per saperne di più
+            </FormattedText>
           </PlatformTouchable>
         </View>
       </View>

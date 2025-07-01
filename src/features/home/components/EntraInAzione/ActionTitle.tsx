@@ -1,12 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
+import { FormattedText } from '../../../../components/ui';
 import { Typography, Spacing } from '../../../../shared/constants/designTokens';
 
 export const ActionTitle: React.FC = () => {
   return (
     <View style={styles.titleSection}>
-      <Text style={styles.titleText}>⚡ Entra in Azione</Text>
+      <FormattedText variant="headline-large" style={styles.titleText}>
+        ⚡ Entra in Azione
+      </FormattedText>
     </View>
   );
 };

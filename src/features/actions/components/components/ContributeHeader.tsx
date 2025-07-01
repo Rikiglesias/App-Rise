@@ -3,7 +3,9 @@
 // Tutti gli stili in questo file sono verificati manualmente come utilizzati.
 
 import React, { useMemo } from 'react';
-import { Animated, Platform, StyleSheet, View, Text } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
+
+import { FormattedText } from '../../../../components/ui';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -100,13 +102,15 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   // CONTENUTO TITOLO
   const titleContent = (
     <>
-      <Text style={[{ fontSize: 40 }, styles.titleText]}>
+      <FormattedText variant="display-small" style={styles.titleText}>
         Fai la{'\n'}
-        <Text style={[{ fontSize: 40 }, styles.titleAccent]}>Differenza</Text>
-      </Text>
-      <Text style={styles.mainSubtitle}>
+        <FormattedText variant="display-small" style={styles.titleAccent}>
+          Differenza
+        </FormattedText>
+      </FormattedText>
+      <FormattedText variant="body-medium" style={styles.mainSubtitle}>
         Ogni azione conta nella lotta contro la fame
-      </Text>
+      </FormattedText>
     </>
   );
 
