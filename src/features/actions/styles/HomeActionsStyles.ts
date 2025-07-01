@@ -92,7 +92,10 @@ export const createCardBaseStyles = (colors: typeof Colors) => {
 };
 
 // Split into smaller functions for max-lines-per-function compliance
-export const createIconStyles = (colors: typeof Colors) =>
+export const createIconStyles = (
+  colors: typeof Colors,
+  scaleFont: (size: number) => number
+) =>
   StyleSheet.create({
     iconContainer: {
       width: 36,
@@ -106,7 +109,7 @@ export const createIconStyles = (colors: typeof Colors) =>
       borderColor: colors.neutral[200],
     },
     iconText: {
-      fontSize: 16,
+      fontSize: scaleFont(16),
       lineHeight: 18,
     },
   });
@@ -164,13 +167,19 @@ export const createOverlayStyles = (colors: typeof Colors) =>
     },
   });
 
-export const createCardContentStyles = (colors: typeof Colors) => ({
-  ...createIconStyles(colors),
+export const createCardContentStyles = (
+  colors: typeof Colors,
+  scaleFont: (size: number) => number
+) => ({
+  ...createIconStyles(colors, scaleFont),
   ...createTextStyles(colors),
   ...createOverlayStyles(colors),
 });
 
-export const createCardStyles = (colors: typeof Colors) => ({
+export const createCardStyles = (
+  colors: typeof Colors,
+  scaleFont: (size: number) => number
+) => ({
   ...createCardBaseStyles(colors),
-  ...createCardContentStyles(colors),
+  ...createCardContentStyles(colors, scaleFont),
 });

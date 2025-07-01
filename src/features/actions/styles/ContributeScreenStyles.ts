@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { BorderRadius, Spacing } from '../../../shared/constants/designTokens';
 import { useProfessionalTokens } from '../hooks/useProfessionalTokens';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 
 export const useProfessionalLayoutStyles = () => {
   const { professionalColors, professionalTypography, colors, isLargeScreen } =
@@ -74,6 +75,7 @@ export const useProfessionalLayoutStyles = () => {
 
 export const useProfessionalUtilityStyles = () => {
   const { colors, isLargeScreen } = useProfessionalTokens();
+  const { scaleFont } = useResponsive();
 
   return StyleSheet.create({
     // 🎭 VISUAL EFFECTS
@@ -114,7 +116,7 @@ export const useProfessionalUtilityStyles = () => {
     },
 
     infoIcon: {
-      fontSize: 16,
+      fontSize: scaleFont(16),
       fontWeight: '800',
       color: colors.primary[700],
     },
@@ -167,14 +169,14 @@ export const useProfessionalUtilityStyles = () => {
     },
 
     statNumber: {
-      fontSize: 20,
+      fontSize: scaleFont(20),
       fontWeight: '800',
       color: colors.primary[600],
       letterSpacing: -0.5,
     },
 
     statLabel: {
-      fontSize: 12,
+      fontSize: scaleFont(12),
       fontWeight: '500',
       color: '#374151',
       textTransform: 'uppercase',

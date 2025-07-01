@@ -12,6 +12,7 @@ import {
   Spacing,
   Typography,
 } from '../constants/designTokens';
+import { useResponsive } from '../hooks/useResponsive';
 
 type SimplePlaceholderScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -31,6 +32,7 @@ interface Props {
 
 const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
   const { title = 'Sezione in Sviluppo', subtitle } = route.params ?? {};
+  const { scaleFont } = useResponsive();
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -46,32 +48,38 @@ const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
         {/* Header */}
         <View style={styles.header}>
           <Logo size={48} />
-          <Text style={[styles.constructionIcon, { fontSize: 48 }]}>🚧</Text>
+          <Text style={[styles.constructionIcon, { fontSize: scaleFont(48) }]}>
+            🚧
+          </Text>
         </View>
 
         {/* Main Content */}
         <View style={styles.main}>
-          <Text style={[styles.title, { fontSize: 36 }]}>{title}</Text>
+          <Text style={[styles.title, { fontSize: scaleFont(36) }]}>
+            {title}
+          </Text>
           {subtitle && (
-            <Text style={[styles.subtitle, { fontSize: 20 }]}>{subtitle}</Text>
+            <Text style={[styles.subtitle, { fontSize: scaleFont(20) }]}>
+              {subtitle}
+            </Text>
           )}
 
-          <Text style={[styles.message, { fontSize: 16 }]}>
+          <Text style={[styles.message, { fontSize: scaleFont(16) }]}>
             Questa sezione è in fase di sviluppo.{'\n'}
             Stiamo lavorando per offrirti la migliore esperienza possibile.
           </Text>
 
           <View style={styles.features}>
-            <Text style={[styles.featuresTitle, { fontSize: 16 }]}>
+            <Text style={[styles.featuresTitle, { fontSize: scaleFont(16) }]}>
               🎯 Prossimamente:
             </Text>
-            <Text style={[styles.feature, { fontSize: 14 }]}>
+            <Text style={[styles.feature, { fontSize: scaleFont(14) }]}>
               ⚡ Contenuti aggiornati
             </Text>
-            <Text style={[styles.feature, { fontSize: 14 }]}>
+            <Text style={[styles.feature, { fontSize: scaleFont(14) }]}>
               🎨 Design moderno
             </Text>
-            <Text style={[styles.feature, { fontSize: 14 }]}>
+            <Text style={[styles.feature, { fontSize: scaleFont(14) }]}>
               📱 Esperienza ottimizzata
             </Text>
           </View>

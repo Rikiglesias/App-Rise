@@ -5,6 +5,7 @@ import { Animated, Modal, View, Text } from 'react-native';
 import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 import { modalStyles } from '../styles';
 import type { StoriaModalProps } from '../types';
 
@@ -13,6 +14,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
+  const { scaleFont } = useResponsive();
   // ANIMAZIONI DISABILITATE - valori statici per evitare bordi grigi
   const modalAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
   const backdropAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
@@ -93,7 +95,8 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <View style={modalStyles.sectionDivider} />
 
                   <Text style={modalStyles.sectionTitle}>
-                    <Text style={{ fontSize: 20 }}>🇮🇹</Text> In Italia
+                    <Text style={{ fontSize: scaleFont(20) }}>🇮🇹</Text> In
+                    Italia
                   </Text>
                   <Text style={modalStyles.storyText}>
                     La organizzazione arriva in{' '}
@@ -108,11 +111,17 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <View style={modalStyles.sectionDivider} />
 
                   <Text style={modalStyles.sectionTitle}>
-                    <Text style={{ fontSize: 20 }}>🌟</Text> I Nostri Pilastri
+                    <Text style={{ fontSize: scaleFont(20) }}>🌟</Text> I Nostri
+                    Pilastri
                   </Text>
                   <View style={modalStyles.pillarsContainer}>
                     <View style={modalStyles.pillarItem}>
-                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
+                      <Text
+                        style={[
+                          { fontSize: scaleFont(24) },
+                          modalStyles.pillarIcon,
+                        ]}
+                      >
                         🍽️
                       </Text>
                       <View style={modalStyles.pillarContent}>
@@ -127,7 +136,12 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
+                      <Text
+                        style={[
+                          { fontSize: scaleFont(24) },
+                          modalStyles.pillarIcon,
+                        ]}
+                      >
                         🤝
                       </Text>
                       <View style={modalStyles.pillarContent}>
@@ -142,7 +156,12 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
+                      <Text
+                        style={[
+                          { fontSize: scaleFont(24) },
+                          modalStyles.pillarIcon,
+                        ]}
+                      >
                         🌍
                       </Text>
                       <View style={modalStyles.pillarContent}>
@@ -157,7 +176,12 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text style={[{ fontSize: 24 }, modalStyles.pillarIcon]}>
+                      <Text
+                        style={[
+                          { fontSize: scaleFont(24) },
+                          modalStyles.pillarIcon,
+                        ]}
+                      >
                         📚
                       </Text>
                       <View style={modalStyles.pillarContent}>

@@ -19,6 +19,7 @@ import {
   Typography,
 } from '../../../../shared/constants/designTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
+import { useResponsive } from '../../../../shared/hooks/useResponsive';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -32,6 +33,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
+  const { scaleFont } = useResponsive();
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -119,7 +121,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       marginBottom: Spacing[5],
     },
     centeredTitle: {
-      fontSize: 28, // INGRANDITO: scritta più grande come richiesto
+      fontSize: scaleFont(28), // INGRANDITO: scritta più grande come richiesto
       fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',

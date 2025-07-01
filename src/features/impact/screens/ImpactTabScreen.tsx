@@ -16,6 +16,7 @@ import {
   PlatformTouchable,
   FormattedText,
 } from '../../../components/ui';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 
 import type { Location } from '../../../components/layout/InteractiveMap';
 import MapLocationModal from '../../../components/layout/MapLocationModal';
@@ -97,6 +98,7 @@ const TotalMealsSection: React.FC<{
   onMealsPress: () => void;
   onKitsPress: () => void;
 }> = ({ animations, onMealsPress, onKitsPress }) => {
+  const { scaleFont } = useResponsive();
   return (
     <View style={styles.totalMealsSection}>
       {/* Linea divisoria tra header e sezione Dal 2012 */}
@@ -116,7 +118,7 @@ const TotalMealsSection: React.FC<{
       >
         <View style={styles.numbersHeaderBackground}>
           <FormattedText variant="headline-small" style={styles.numbersTitle}>
-            <Text style={{ fontSize: 22 }}>📊</Text> I Nostri Numeri
+            <Text style={{ fontSize: scaleFont(22) }}>📊</Text> I Nostri Numeri
           </FormattedText>
           <FormattedText variant="body-large" style={styles.numbersSubtitle}>
             Milioni di vite cambiate, un pasto alla volta
@@ -233,6 +235,7 @@ const TotalMealsSection: React.FC<{
 const Results2024Section: React.FC<{
   animations: ReturnType<typeof useImpactAnimations>;
 }> = ({ animations }) => {
+  const { scaleFont } = useResponsive();
   return (
     <View style={styles.record2024Section}>
       {/* Header DRAMATICALLY ENHANCED */}
@@ -250,7 +253,8 @@ const Results2024Section: React.FC<{
             variant="headline-small"
             style={styles.results2024Title}
           >
-            <Text style={{ fontSize: 22 }}>🎯</Text> Risultati Raggiunti
+            <Text style={{ fontSize: scaleFont(22) }}>🎯</Text> Risultati
+            Raggiunti
           </FormattedText>
           <FormattedText
             variant="body-large"
@@ -349,6 +353,7 @@ const CommunitySection: React.FC<{
   onVolunteersPress: () => void;
   onPartnersPress: () => void;
 }> = ({ animations, onVolunteersPress, onPartnersPress }) => {
+  const { scaleFont } = useResponsive();
   return (
     <View style={styles.communitySection}>
       {/* Header RIVOLUZIONATO con elementi community */}
@@ -363,7 +368,8 @@ const CommunitySection: React.FC<{
       >
         <View style={styles.communityHeaderBackground}>
           <FormattedText variant="headline-small" style={styles.communityTitle}>
-            <Text style={{ fontSize: 22 }}>🤝</Text> La Nostra Community
+            <Text style={{ fontSize: scaleFont(22) }}>🤝</Text> La Nostra
+            Community
           </FormattedText>
           <FormattedText variant="body-large" style={styles.communitySubtitle}>
             Volontari e partner uniti nella missione #famezero
@@ -468,6 +474,7 @@ const CommunitySection: React.FC<{
 const MapSection: React.FC<{
   onMapPress: () => void;
 }> = React.memo(({ onMapPress }) => {
+  const { scaleFont } = useResponsive();
   const handleMapImagePress = useCallback(() => {
     onMapPress(); // Apre la mappa completa con tutti i pin
   }, [onMapPress]);
@@ -478,7 +485,7 @@ const MapSection: React.FC<{
       <View style={styles.mapHeaderContainer}>
         <View style={styles.mapHeaderBackground}>
           <FormattedText variant="headline-small" style={styles.mapTitle}>
-            <Text style={{ fontSize: 22 }}>🌍</Text> Dove Operiamo
+            <Text style={{ fontSize: scaleFont(22) }}>🌍</Text> Dove Operiamo
           </FormattedText>
           <FormattedText variant="body-large" style={styles.mapSubtitle}>
             Le nostre operazioni nel mondo

@@ -1,5 +1,6 @@
 import { Dimensions } from 'react-native';
 import { useTheme } from '../../../shared/hooks/useTheme';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 import type {
   ProfessionalColors,
   ProfessionalTypography,
@@ -9,6 +10,7 @@ const { width: screenWidth } = Dimensions.get('window');
 
 export const useProfessionalTokens = () => {
   const { colors } = useTheme();
+  const { scaleFont } = useResponsive();
   const isLargeScreen = screenWidth > 380;
 
   // Professional typography scale
@@ -26,19 +28,19 @@ export const useProfessionalTokens = () => {
       lineHeight: isLargeScreen ? 26 : 24,
     },
     title: {
-      fontSize: 18,
+      fontSize: scaleFont(18),
       fontWeight: '600' as const,
       letterSpacing: -0.2,
       lineHeight: 22,
     },
     body: {
-      fontSize: 16,
+      fontSize: scaleFont(16),
       fontWeight: '500' as const,
       letterSpacing: 0,
       lineHeight: 20,
     },
     caption: {
-      fontSize: 14,
+      fontSize: scaleFont(14),
       fontWeight: '400' as const,
       letterSpacing: 0.1,
       lineHeight: 16,

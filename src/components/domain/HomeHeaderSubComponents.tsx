@@ -18,6 +18,7 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { useResponsive } from '../../shared/hooks/useResponsive';
 import {
   type HeaderImageSectionProps,
   type HeaderMissionSectionProps,
@@ -25,110 +26,113 @@ import {
 } from '../../features/home/types/HomeHeaderTypes';
 
 // ✨ TITLE STYLES ELEGANTI - MIGLIORAMENTO SOTTILE
-const modernTitleStyles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[2] a Spacing[0] - compattezza massima
-    paddingTop: Platform.OS === 'android' ? Spacing[8] : Spacing[0], // ANDROID: padding extra container
-  },
+const createModernTitleStyles = (scaleFont: (size: number) => number) =>
+  /* eslint-disable react-native/no-unused-styles */
+  StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      paddingHorizontal: Spacing[4],
+      paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[2] a Spacing[0] - compattezza massima
+      paddingTop: Platform.OS === 'android' ? Spacing[8] : Spacing[0], // ANDROID: padding extra container
+    },
 
-  // Titolo con design compatto - ANDROID SAFE AREA FIX
-  titleContainer: {
-    alignItems: 'center',
-    paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - ulteriore compattezza
-    paddingHorizontal: Spacing[4],
-    // ANDROID: Spazio ridotto in alto
-    ...(Platform.OS === 'android' && {
-      paddingTop: Spacing[8], // RIDOTTO: da Spacing[12] per meno spazio in alto
-      paddingBottom: Spacing[2], // Padding bottom specifico Android
-      marginTop: Spacing[2], // RIDOTTO: da Spacing[4] per compattezza
-    }),
-    // iOS: Layout nativo
-    ...(Platform.OS === 'ios' && {
-      paddingTop: Spacing[6],
-      paddingBottom: Spacing[0],
-    }),
-    position: 'relative',
-  },
+    // Titolo con design compatto - ANDROID SAFE AREA FIX
+    titleContainer: {
+      alignItems: 'center',
+      paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - ulteriore compattezza
+      paddingHorizontal: Spacing[4],
+      // ANDROID: Spazio ridotto in alto
+      ...(Platform.OS === 'android' && {
+        paddingTop: Spacing[8], // RIDOTTO: da Spacing[12] per meno spazio in alto
+        paddingBottom: Spacing[2], // Padding bottom specifico Android
+        marginTop: Spacing[2], // RIDOTTO: da Spacing[4] per compattezza
+      }),
+      // iOS: Layout nativo
+      ...(Platform.OS === 'ios' && {
+        paddingTop: Spacing[6],
+        paddingBottom: Spacing[0],
+      }),
+      position: 'relative',
+    },
 
-  // Typography pulita e moderna - RESPONSIVE - INGRANDITA
-  titleText: {
-    fontSize: 40, // INGRANDITO: da 38 a 40px per maggiore impatto visivo
-    fontWeight: Typography.weights.black,
-    color: '#DC2626',
-    textAlign: 'center',
-    letterSpacing: -1.3,
-    // ANDROID: Correzioni specifiche per rendering identico a iOS
-    ...(Platform.OS === 'android' && {
-      includeFontPadding: false,
-      textAlignVertical: 'center',
-      lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
-      fontFamily: 'sans-serif', // Font nativo Android sicuro
-      paddingVertical: 0,
-      marginVertical: 0,
-    }),
-    // iOS: Mantiene comportamento nativo
-    ...(Platform.OS === 'ios' && {
-      lineHeight: undefined, // iOS gestisce automaticamente
-    }),
-    marginBottom: 0, // AZZERA MARGINE: da Spacing[1]/2 a 0 - immagine attaccata al titolo
-  },
+    // Typography pulita e moderna - RESPONSIVE - INGRANDITA
+    titleText: {
+      fontSize: scaleFont(40), // INGRANDITO: da 38 a 40px per maggiore impatto visivo
+      fontWeight: Typography.weights.black,
+      color: '#DC2626',
+      textAlign: 'center',
+      letterSpacing: -1.3,
+      // ANDROID: Correzioni specifiche per rendering identico a iOS
+      ...(Platform.OS === 'android' && {
+        includeFontPadding: false,
+        textAlignVertical: 'center',
+        lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
+        fontFamily: 'sans-serif', // Font nativo Android sicuro
+        paddingVertical: 0,
+        marginVertical: 0,
+      }),
+      // iOS: Mantiene comportamento nativo
+      ...(Platform.OS === 'ios' && {
+        lineHeight: undefined, // iOS gestisce automaticamente
+      }),
+      marginBottom: 0, // AZZERA MARGINE: da Spacing[1]/2 a 0 - immagine attaccata al titolo
+    },
 
-  // Stile per "Italia" in nero - RESPONSIVE - INGRANDITA
-  titleTextItalia: {
-    fontSize: 40, // INGRANDITO: da 38 a 40px per coerenza con titolo principale
-    fontWeight: Typography.weights.black,
-    color: '#1F2937', // Nero elegante
-    textAlign: 'center',
-    letterSpacing: -1.3,
-    // ANDROID: Correzioni specifiche per rendering identico a iOS
-    ...(Platform.OS === 'android' && {
-      includeFontPadding: false,
-      textAlignVertical: 'center',
-      lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
-      fontFamily: 'sans-serif', // Font nativo Android sicuro
-      paddingVertical: 0,
-      marginVertical: 0,
-    }),
-    // iOS: Mantiene comportamento nativo
-    ...(Platform.OS === 'ios' && {
-      lineHeight: undefined, // iOS gestisce automaticamente
-    }),
-  },
+    // Stile per "Italia" in nero - RESPONSIVE - INGRANDITA
+    titleTextItalia: {
+      fontSize: scaleFont(40), // INGRANDITO: da 38 a 40px per coerenza con titolo principale
+      fontWeight: Typography.weights.black,
+      color: '#1F2937', // Nero elegante
+      textAlign: 'center',
+      letterSpacing: -1.3,
+      // ANDROID: Correzioni specifiche per rendering identico a iOS
+      ...(Platform.OS === 'android' && {
+        includeFontPadding: false,
+        textAlignVertical: 'center',
+        lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
+        fontFamily: 'sans-serif', // Font nativo Android sicuro
+        paddingVertical: 0,
+        marginVertical: 0,
+      }),
+      // iOS: Mantiene comportamento nativo
+      ...(Platform.OS === 'ios' && {
+        lineHeight: undefined, // iOS gestisce automaticamente
+      }),
+    },
 
-  // Separatore elegante con logo centrale
-  titleSeparator: {
-    alignItems: 'center',
-    marginTop: Spacing[2], // ABBASSA LINEA: da 0 a Spacing[2] - separatore più in basso
-    marginBottom: Spacing[1], // MINIMO: da Spacing[2] a Spacing[1] - immagine quasi attaccata al separatore
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
+    // Separatore elegante con logo centrale
+    titleSeparator: {
+      alignItems: 'center',
+      marginTop: Spacing[2], // ABBASSA LINEA: da 0 a Spacing[2] - separatore più in basso
+      marginBottom: Spacing[1], // MINIMO: da Spacing[2] a Spacing[1] - immagine quasi attaccata al separatore
+      justifyContent: 'center',
+      flexDirection: 'row',
+    },
 
-  // Logo simbolico MOLTO PROMINENTE per il separatore
-  separatorLogo: {
-    width: 56, // ANCORA PIÙ GRANDE: da 48 a 56 per massima visibilità
-    height: 56, // ANCORA PIÙ GRANDE: da 48 a 56 per massima visibilità
-    marginHorizontal: Spacing[4], // SPAZIO MANTENUTO per equilibrio perfetto
-    opacity: 1, // COMPLETAMENTE VISIBILE
-    // tintColor: '#DC2626', // RIMOSSO: usiamo colori originali del logo
-  },
+    // Logo simbolico MOLTO PROMINENTE per il separatore
+    separatorLogo: {
+      width: 56, // ANCORA PIÙ GRANDE: da 48 a 56 per massima visibilità
+      height: 56, // ANCORA PIÙ GRANDE: da 48 a 56 per massima visibilità
+      marginHorizontal: Spacing[4], // SPAZIO MANTENUTO per equilibrio perfetto
+      opacity: 1, // COMPLETAMENTE VISIBILE
+      // tintColor: '#DC2626', // RIMOSSO: usiamo colori originali del logo
+    },
 
-  // Linee decorative BILANCIATE con logo 56px
-  separatorLine: {
-    height: 2, // EQUILIBRATA per non competere col logo
-    width: 110, // AUMENTATA: da 100 a 110 per bilanciare logo 56px
-    backgroundColor: 'rgba(220, 38, 38, 0.6)', // COORDINATA al logo rosso
-    marginHorizontal: 0, // NESSUN MARGINE - gestito dal logo
-    borderRadius: 1, // SOTTILE ed elegante
-    shadowColor: '#DC2626', // OMBRA COORDINATA
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-});
+    // Linee decorative BILANCIATE con logo 56px
+    separatorLine: {
+      height: 2, // EQUILIBRATA per non competere col logo
+      width: 110, // AUMENTATA: da 100 a 110 per bilanciare logo 56px
+      backgroundColor: 'rgba(220, 38, 38, 0.6)', // COORDINATA al logo rosso
+      marginHorizontal: 0, // NESSUN MARGINE - gestito dal logo
+      borderRadius: 1, // SOTTILE ed elegante
+      shadowColor: '#DC2626', // OMBRA COORDINATA
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 2,
+    },
+  });
+/* eslint-enable react-native/no-unused-styles */
 
 // ✨ CLEAN & MODERN TITLE COMPONENT
 const ModernSmartTitle: React.FC<{
@@ -136,6 +140,12 @@ const ModernSmartTitle: React.FC<{
   titleOpacity: Animated.AnimatedNode;
   titleTransform: Animated.AnimatedNode;
 }> = React.memo(({ titleAnim, titleOpacity, titleTransform }) => {
+  const { scaleFont } = useResponsive();
+  const modernTitleStyles = React.useMemo(
+    () => createModernTitleStyles(scaleFont),
+    [scaleFont]
+  );
+
   // Animazione semplice e professionale
   const mainTitleDelay = React.useRef(new Animated.Value(0)).current;
 
@@ -507,6 +517,7 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
   styles: _styles,
   scrollY: _scrollY,
 }) => {
+  const { scaleFont } = useResponsive();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleMealsPress = React.useCallback(() => {
@@ -553,7 +564,12 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 onPress={handleMealsPress}
                 activeOpacity={0.8}
               >
-                <Text style={[{ fontSize: 28 }, baseMissionStyles.statNumber]}>
+                <Text
+                  style={[
+                    { fontSize: scaleFont(28) },
+                    baseMissionStyles.statNumber,
+                  ]}
+                >
                   3.14M
                 </Text>
                 <Text style={baseMissionStyles.statLabel}>
@@ -668,7 +684,10 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                       Totale distribuito
                     </Text>
                     <Text
-                      style={[{ fontSize: 32 }, baseMissionStyles.totalNumber]}
+                      style={[
+                        { fontSize: scaleFont(32) },
+                        baseMissionStyles.totalNumber,
+                      ]}
                     >
                       3.14M
                     </Text>

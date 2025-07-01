@@ -4,6 +4,7 @@ import { Platform, Animated, StyleSheet, View, Text } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
+import { useResponsive } from '../../shared/hooks/useResponsive';
 import {
   getAndroidMaterialProps,
   MaterialColors,
@@ -35,6 +36,7 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
   disabled = false,
 }) => {
   const { buttonPress } = useHapticFeedback();
+  const { scaleFont } = useResponsive();
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   // REACT HOOKS: Sempre chiamati in ordine consistente
@@ -216,7 +218,7 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
           {size === 'extended' && label && (
             <Text
               style={[
-                { fontSize: 14 },
+                { fontSize: scaleFont(14) },
                 styles.label,
                 { color: variantConfig.iconColor },
                 styles.labelSpacing,

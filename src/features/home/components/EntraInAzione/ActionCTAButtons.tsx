@@ -12,6 +12,7 @@ import {
 } from '../../../../shared/constants/designTokens';
 import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
+import { useIntelligentFontScaling } from '../../../../shared/hooks';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { BottomTabParamList } from '../../../../navigation/types';
 
@@ -21,6 +22,7 @@ interface ActionCTAButtonsProps {
 
 export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
   const { triggerHaptic } = useHapticFeedback();
+  const { scaleFont } = useIntelligentFontScaling();
   const navigation =
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
@@ -56,12 +58,15 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
-              <FormattedText variant="title-medium" style={styles.buttonTitle}>
+              <FormattedText
+                variant="title-medium"
+                style={[styles.buttonTitle, { fontSize: scaleFont(20) }]}
+              >
                 Scopri{'\n'}Impatto
               </FormattedText>
               <FormattedText
                 variant="body-large"
-                style={styles.buttonDirectionRed}
+                style={[styles.buttonDirectionRed, { fontSize: scaleFont(16) }]}
               >
                 ← Risultati
               </FormattedText>
@@ -92,13 +97,13 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
               />
               <FormattedText
                 variant="title-medium"
-                style={styles.buttonTitleGreen}
+                style={[styles.buttonTitleGreen, { fontSize: scaleFont(20) }]}
               >
                 Dona e{'\n'}Aiuta
               </FormattedText>
               <FormattedText
                 variant="body-large"
-                style={styles.buttonDirection}
+                style={[styles.buttonDirection, { fontSize: scaleFont(16) }]}
               >
                 Supporta →
               </FormattedText>
@@ -166,14 +171,7 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
-    // ANDROID: Testo ingrandito per migliore impatto
-    ...(Platform.OS === 'android' && {
-      fontSize: 19, // AUMENTATO: da 18 a 19 per maggiore visibilità
-    }),
-    // iOS: Dimensioni originali
-    ...(Platform.OS === 'ios' && {
-      fontSize: 20, // INGRANDITO: da default a 20px per maggiore visibilità
-    }),
+    // fontSize moved to dynamic scaleFont(20) - responsive scaling
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center' as const,
@@ -193,14 +191,7 @@ const styles = StyleSheet.create({
   },
 
   buttonDirection: {
-    // ANDROID: Testo direzione ingrandito
-    ...(Platform.OS === 'android' && {
-      fontSize: 16, // AUMENTATO: da 15 a 16 per migliore leggibilità
-    }),
-    // iOS: Dimensioni originali
-    ...(Platform.OS === 'ios' && {
-      fontSize: 16, // INGRANDITO: da default a 16px per bilanciare con il titolo
-    }),
+    // fontSize moved to dynamic scaleFont(16) - responsive scaling
     fontWeight: Typography.weights.bold,
     color: '#10B981',
     textAlign: 'center' as const,
@@ -220,14 +211,7 @@ const styles = StyleSheet.create({
   },
 
   buttonDirectionRed: {
-    // ANDROID: Testo direzione ingrandito
-    ...(Platform.OS === 'android' && {
-      fontSize: 16, // AUMENTATO: da 15 a 16 per migliore leggibilità
-    }),
-    // iOS: Dimensioni originali
-    ...(Platform.OS === 'ios' && {
-      fontSize: 16, // INGRANDITO: da default a 16px per coerenza con buttonDirection
-    }),
+    // fontSize moved to dynamic scaleFont(16) - responsive scaling
     fontWeight: Typography.weights.bold,
     color: '#EF4444',
     textAlign: 'center' as const,
@@ -247,14 +231,7 @@ const styles = StyleSheet.create({
   },
 
   buttonTitleGreen: {
-    // ANDROID: Testo ingrandito per migliore impatto
-    ...(Platform.OS === 'android' && {
-      fontSize: 19, // AUMENTATO: da 18 a 19 per maggiore visibilità
-    }),
-    // iOS: Dimensioni originali
-    ...(Platform.OS === 'ios' && {
-      fontSize: 20, // INGRANDITO: da default a 20px per coerenza con buttonTitle
-    }),
+    // fontSize moved to dynamic scaleFont(20) - responsive scaling
     fontWeight: Typography.weights.black,
     color: '#059669',
     textAlign: 'center' as const,

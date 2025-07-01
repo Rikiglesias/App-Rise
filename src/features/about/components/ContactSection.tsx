@@ -4,17 +4,25 @@ import { View, Text } from 'react-native';
 import { contactSectionStyles } from '../styles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
   animations,
   contacts,
 }) => {
+  const { scaleFont } = useResponsive();
+
   return (
     <View style={contactSectionStyles.categoryContainer}>
       {/* HEADER SENZA ANIMAZIONI */}
       <View style={contactSectionStyles.categoryHeader}>
         <View style={contactSectionStyles.exploreHeaderContainer}>
-          <Text style={[{ fontSize: 30 }, contactSectionStyles.categoryTitle]}>
+          <Text
+            style={[
+              { fontSize: scaleFont(30) },
+              contactSectionStyles.categoryTitle,
+            ]}
+          >
             I Nostri Contatti
           </Text>
           <Text style={contactSectionStyles.exploreSubtitleInline}>

@@ -21,6 +21,7 @@ import {
 } from '../../shared/constants/designTokens';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
+import { useResponsive } from '../../shared/hooks/useResponsive';
 import { PlatformTouchable } from '../ui';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -52,6 +53,7 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
 }) => {
   const { colors } = useTheme();
   const { triggerHaptic } = useHapticFeedback();
+  const { scaleFont } = useResponsive();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   // Simplified animation
@@ -180,13 +182,15 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
       <View key={action.id} style={styles.cardContainer}>
         <PlatformTouchable onPress={action.onPress} style={styles.touchable}>
           <Surface style={styles.card}>
-            <Text style={[styles.icon, { fontSize: 24 }]}>{action.icon}</Text>
+            <Text style={[styles.icon, { fontSize: scaleFont(24) }]}>
+              {action.icon}
+            </Text>
             <Text style={styles.title}>{action.title}</Text>
           </Surface>
         </PlatformTouchable>
       </View>
     ),
-    [styles]
+    [styles, scaleFont]
   );
 
   return (

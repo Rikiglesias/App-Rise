@@ -6,10 +6,12 @@ import {
   Typography,
 } from '../../../shared/constants/designTokens';
 import { useTheme } from '../../../shared/hooks/useTheme';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 
 // Custom Hook for Projects Screen Styles
 export const useProjectsScreenStyles = () => {
   const { colors } = useTheme();
+  const { scaleFont } = useResponsive();
 
   return useMemo(
     () =>
@@ -96,7 +98,7 @@ export const useProjectsScreenStyles = () => {
           paddingVertical: Spacing[8],
         },
         emptyStateIcon: {
-          fontSize: 48,
+          fontSize: scaleFont(48),
           marginBottom: Spacing[4],
         },
         emptyStateText: {
@@ -106,6 +108,6 @@ export const useProjectsScreenStyles = () => {
         },
       }),
     /* eslint-enable react-native/no-unused-styles */
-    [colors]
+    [colors, scaleFont]
   );
 };

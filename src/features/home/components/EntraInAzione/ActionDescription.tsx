@@ -8,8 +8,11 @@ import {
   Spacing,
   Colors,
 } from '../../../../shared/constants/designTokens';
+import { useIntelligentFontScaling } from '../../../../shared/hooks';
 
 export const ActionDescription: React.FC = () => {
+  const { scaleFont } = useIntelligentFontScaling();
+
   return (
     <View style={styles.descriptionContainer}>
       <LinearGradient
@@ -19,13 +22,16 @@ export const ActionDescription: React.FC = () => {
         style={styles.descriptionGradient}
       >
         <View style={styles.descriptionContent}>
-          <FormattedText variant="title-medium" style={styles.descriptionMain}>
+          <FormattedText
+            variant="title-medium"
+            style={[styles.descriptionMain, { fontSize: scaleFont(20) }]}
+          >
             Unisciti a noi nella lotta contro la fame nel mondo
           </FormattedText>
           <View style={styles.descriptionDivider} />
           <FormattedText
             variant="body-large"
-            style={styles.descriptionSecondary}
+            style={[styles.descriptionSecondary, { fontSize: scaleFont(17) }]}
           >
             Ogni azione conta per cambiare vite
           </FormattedText>
@@ -61,7 +67,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionMain: {
-    fontSize: 20, // INGRANDITO: da default a 20px per maggiore leggibilità
+    // fontSize moved to dynamic scaleFont(20) - responsive scaling
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     textAlign: 'center' as const,
@@ -84,7 +90,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionSecondary: {
-    fontSize: 17, // INGRANDITO: da default a 17px per bilanciare con il testo principale
+    // fontSize moved to dynamic scaleFont(17) - responsive scaling
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center' as const,

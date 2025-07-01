@@ -16,6 +16,7 @@ import {
 } from '../../shared/constants/designTokens';
 import { MaterialActionCard } from '../ui';
 import { useTheme } from '../../shared/hooks/useTheme';
+import { useResponsive } from '../../shared/hooks/useResponsive';
 
 interface ActionCardEnhancedProps {
   readonly title: string;
@@ -140,25 +141,29 @@ const ActionCardIcon: React.FC<{
   iconScaleAnim: Animated.Value;
   variantStyles: VariantStyles;
   icon: string;
-}> = ({ iconScaleAnim, variantStyles, icon }) => (
-  <Animated.View
-    style={[
-      styles.iconContainer,
-      {
-        backgroundColor: variantStyles.iconBg,
-        borderColor: variantStyles.iconBorder,
-        transform: [{ scale: iconScaleAnim }],
-      },
-    ]}
-  >
-    <Text
-      style={[styles.icon, { fontSize: 28 }]}
-      accessible={false} // Icon is decorative, description is in accessibilityLabel
+}> = ({ iconScaleAnim, variantStyles, icon }) => {
+  const { scaleFont } = useResponsive();
+
+  return (
+    <Animated.View
+      style={[
+        styles.iconContainer,
+        {
+          backgroundColor: variantStyles.iconBg,
+          borderColor: variantStyles.iconBorder,
+          transform: [{ scale: iconScaleAnim }],
+        },
+      ]}
     >
-      {icon}
-    </Text>
-  </Animated.View>
-);
+      <Text
+        style={[styles.icon, { fontSize: scaleFont(28) }]}
+        accessible={false} // Icon is decorative, description is in accessibilityLabel
+      >
+        {icon}
+      </Text>
+    </Animated.View>
+  );
+};
 
 // Content Text Component - Extracted from main component
 const ActionCardContent: React.FC<{

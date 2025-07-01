@@ -20,6 +20,7 @@ import {
 } from '../constants/designTokens';
 import { PlatformShadows } from '../constants/platformDesignTokens';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
+import { useResponsive } from '../hooks/useResponsive';
 
 interface DevelopmentScreenProps {
   navigation: {
@@ -32,6 +33,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
+  const { scaleFont } = useResponsive();
 
   // Solo animazioni icone (funzionano bene)
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -204,14 +206,14 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             ]}
           >
             <Text
-              style={[styles.mainTitle, { fontSize: 32 }]}
+              style={[styles.mainTitle, { fontSize: scaleFont(32) }]}
               numberOfLines={2}
               adjustsFontSizeToFit={true}
             >
               🚧 In Fase di Sviluppo
             </Text>
             <Text
-              style={[styles.subtitle, { fontSize: 18 }]}
+              style={[styles.subtitle, { fontSize: scaleFont(18) }]}
               numberOfLines={2}
               adjustsFontSizeToFit={true}
             >
@@ -240,14 +242,14 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                   style={[styles.cardIcon, { marginBottom: Spacing[2] }]}
                 />
                 <Text
-                  style={[styles.cardTitle, { fontSize: 24 }]}
+                  style={[styles.cardTitle, { fontSize: scaleFont(24) }]}
                   numberOfLines={2}
                   adjustsFontSizeToFit={true}
                 >
                   Cosa stiamo preparando
                 </Text>
                 <Text
-                  style={[styles.cardDescription, { fontSize: 16 }]}
+                  style={[styles.cardDescription, { fontSize: scaleFont(16) }]}
                   numberOfLines={4}
                 >
                   Il nostro team sta lavorando duramente per portarti nuove
@@ -263,7 +265,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       color="#059669"
                     />
                     <Text
-                      style={[styles.featureText, { fontSize: 16 }]}
+                      style={[styles.featureText, { fontSize: scaleFont(16) }]}
                       numberOfLines={1}
                       adjustsFontSizeToFit={true}
                     >
@@ -277,7 +279,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       color="#059669"
                     />
                     <Text
-                      style={[styles.featureText, { fontSize: 16 }]}
+                      style={[styles.featureText, { fontSize: scaleFont(16) }]}
                       numberOfLines={1}
                       adjustsFontSizeToFit={true}
                     >
@@ -291,7 +293,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       color="#059669"
                     />
                     <Text
-                      style={[styles.featureText, { fontSize: 16 }]}
+                      style={[styles.featureText, { fontSize: scaleFont(16) }]}
                       numberOfLines={2}
                       adjustsFontSizeToFit={true}
                     >

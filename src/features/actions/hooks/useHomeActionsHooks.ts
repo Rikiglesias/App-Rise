@@ -1,6 +1,7 @@
 import React from 'react';
 import { createActionsData } from '../../../data/HomeActionsData';
 import { useTheme } from '../../../shared/hooks/useTheme';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 import {
   createCardStyles,
   createContainerStyles,
@@ -13,14 +14,15 @@ import type { ActionHandlers } from '../types/HomeActionsTypes';
 // ===================================================================
 export const useActionStyles = () => {
   const { colors } = useTheme();
+  const { scaleFont } = useResponsive();
 
   return React.useMemo(
     () => ({
       containerStyles: createContainerStyles(),
       typographyStyles: createTypographyStyles(colors),
-      cardStyles: createCardStyles(colors),
+      cardStyles: createCardStyles(colors, scaleFont),
     }),
-    [colors]
+    [colors, scaleFont]
   );
 };
 

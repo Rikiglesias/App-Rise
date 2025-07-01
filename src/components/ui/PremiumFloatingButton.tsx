@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
 
 import PlatformTouchable from './PlatformTouchable';
+import { useResponsive } from '../../shared/hooks/useResponsive';
 
 import {
   BorderRadius,
@@ -217,31 +218,37 @@ const PremiumFloatingButtonContent: React.FC<{
   handlePressOut,
   title,
   icon,
-}) => (
-  <Animated.View style={[styles.container, animatedStyle]}>
-    <Animated.View style={[styles.glow, glowStyle]} />
-    <PlatformTouchable
-      style={[
-        styles.button,
-        variant === 'glass' ? styles.glassButton : styles.primaryButton,
-      ]}
-      onPress={memoizedOnPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      activeOpacity={1}
-      accessible
-      accessibilityRole="button"
-      accessibilityLabel={`${title} - Pulsante di azione rapida`}
-    >
-      <Animated.View style={styles.content}>
-        <Text style={[{ fontSize: 20 }, styles.icon]}>{icon}</Text>
-        <Text style={[styles.title, variant === 'glass' && styles.glassTitle]}>
-          {title}
-        </Text>
-      </Animated.View>
-    </PlatformTouchable>
-  </Animated.View>
-);
+}) => {
+  const { scaleFont } = useResponsive();
+
+  return (
+    <Animated.View style={[styles.container, animatedStyle]}>
+      <Animated.View style={[styles.glow, glowStyle]} />
+      <PlatformTouchable
+        style={[
+          styles.button,
+          variant === 'glass' ? styles.glassButton : styles.primaryButton,
+        ]}
+        onPress={memoizedOnPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        activeOpacity={1}
+        accessible
+        accessibilityRole="button"
+        accessibilityLabel={`${title} - Pulsante di azione rapida`}
+      >
+        <Animated.View style={styles.content}>
+          <Text style={[{ fontSize: scaleFont(20) }, styles.icon]}>{icon}</Text>
+          <Text
+            style={[styles.title, variant === 'glass' && styles.glassTitle]}
+          >
+            {title}
+          </Text>
+        </Animated.View>
+      </PlatformTouchable>
+    </Animated.View>
+  );
+};
 
 // Main Component - Now much smaller
 export const PremiumFloatingButton: React.FC<PremiumFloatingButtonProps> = ({

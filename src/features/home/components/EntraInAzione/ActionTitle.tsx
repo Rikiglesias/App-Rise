@@ -3,11 +3,17 @@ import { View, StyleSheet } from 'react-native';
 
 import { FormattedText } from '../../../../components/ui';
 import { Typography, Spacing } from '../../../../shared/constants/designTokens';
+import { useIntelligentFontScaling } from '../../../../shared/hooks';
 
 export const ActionTitle: React.FC = () => {
+  const { scaleFont } = useIntelligentFontScaling();
+
   return (
     <View style={styles.titleSection}>
-      <FormattedText variant="headline-large" style={styles.titleText}>
+      <FormattedText
+        variant="headline-large"
+        style={[styles.titleText, { fontSize: scaleFont(32) }]}
+      >
         ⚡ Entra in Azione
       </FormattedText>
     </View>
@@ -21,7 +27,7 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    fontSize: 32, // INGRANDITO: da default a 32px per maggiore impatto
+    // fontSize moved to dynamic scaleFont(32) - responsive scaling
     fontWeight: Typography.weights.bold,
     color: '#DC2626',
     textAlign: 'center' as const,

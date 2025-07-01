@@ -2,6 +2,7 @@ import React from 'react';
 import { Animated, StyleSheet, View, Text } from 'react-native';
 import { PlatformTouchable } from '../ui';
 import { useProfessionalTokens } from '../../features/actions/hooks/useProfessionalTokens';
+import { useResponsive } from '../../shared/hooks/useResponsive';
 import {
   BorderRadius,
   Shadows,
@@ -23,6 +24,7 @@ export const ProfessionalSectionsRenderer: React.FC<
 > = ({ sections, contentReveal, onActionPress }) => {
   const { professionalColors, professionalTypography } =
     useProfessionalTokens();
+  const { scaleFont } = useResponsive();
 
   const handleActionPress = (action: InfoAction) => () => {
     onActionPress(action);
@@ -177,7 +179,12 @@ export const ProfessionalSectionsRenderer: React.FC<
               >
                 <View style={styles.actionCardContent}>
                   <View style={styles.actionIconContainer}>
-                    <Text style={[{ fontSize: 22 }, styles.actionIconText]}>
+                    <Text
+                      style={[
+                        { fontSize: scaleFont(22) },
+                        styles.actionIconText,
+                      ]}
+                    >
                       {action.icon}
                     </Text>
                   </View>
@@ -186,7 +193,11 @@ export const ProfessionalSectionsRenderer: React.FC<
                     <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
                   </View>
                   <View style={styles.actionArrow}>
-                    <Text style={[{ fontSize: 16 }, styles.arrowIcon]}>→</Text>
+                    <Text
+                      style={[{ fontSize: scaleFont(16) }, styles.arrowIcon]}
+                    >
+                      →
+                    </Text>
                   </View>
                 </View>
               </PlatformTouchable>
