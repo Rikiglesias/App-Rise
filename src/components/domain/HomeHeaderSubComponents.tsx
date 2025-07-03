@@ -358,11 +358,12 @@ const baseMissionStyles = StyleSheet.create({
     shadowRadius: 2,
   },
   impactTitleGradient: {
-    // fontSize handled by FormattedText variant="title-large" - responsive scaleFont(32)
+    // fontSize handled by FormattedText variant="title-large" - responsive scaleFont(26)
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center',
-    letterSpacing: -0.8,
+    letterSpacing: -0.6, // RIDOTTO: per migliore leggibilità (era -0.8)
+    lineHeight: 30, // RIDOTTO: più compatto per title-large (era 32)
     textShadowColor: 'rgba(220, 38, 38, 0.25)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 8,

@@ -674,14 +674,14 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
-  // TIPOGRAFIA POTENTE E MODERNA - INGRANDITA
+  // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
   titleText: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.black, // MASSIMO peso per autorità
     color: '#1F2937', // NERO per contrasto come richiesto
     textAlign: 'center',
-    letterSpacing: -1.2, // LEGGERMENTE AUMENTATO per bilanciare la dimensione
-    lineHeight: 42, // AUMENTATO per proporzioni
+    letterSpacing: -0.8, // RIDOTTO: per bilanciare la dimensione ridotta (era -1.2)
+    lineHeight: 32, // OTTIMIZZATO: spaziatura perfetta tra "Il Nostro" e "Impatto" (era 36)
     marginBottom: Spacing[2], // SPAZIO per separazione
     textShadowColor: 'rgba(31, 41, 55, 0.15)', // OMBRA SOTTILE
     textShadowOffset: { width: 0, height: 2 },
@@ -759,16 +759,19 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.black,
     color: '#1F2937', // NERO invece che rosso
     marginBottom: Spacing[1],
+    lineHeight: 28, // AGGIUNTO: lineHeight per headline-small
   },
   totalStatLabel: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold,
     color: '#374151',
-    marginBottom: Spacing[1],
+    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per più spazio
+    lineHeight: 22, // AGGIUNTO: lineHeight per body-large
   },
   totalStatSubtitle: {
     // fontSize rimosso - ora gestito da Text
     color: '#6B7280',
+    lineHeight: 18, // AGGIUNTO: lineHeight per body-medium
   },
 
   // Community Section
@@ -805,13 +808,15 @@ const styles = StyleSheet.create({
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
-    marginBottom: Spacing[1],
+    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per più spazio
+    lineHeight: 28, // AGGIUNTO: lineHeight per headline-small
   },
   communityStatLabel: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.semibold,
     color: '#374151',
     textAlign: 'center',
+    lineHeight: 22, // AGGIUNTO: lineHeight per body-large
   },
   chevronIcon: {
     position: 'absolute',
@@ -898,22 +903,24 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     marginTop: Spacing[2],
-    marginBottom: Spacing[1],
+    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per più spazio
   },
 
   record2024Label: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.semibold,
     color: '#374151',
-    marginBottom: Spacing[1],
+    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per bilanciare font più grandi
     textAlign: 'center',
+    lineHeight: 28, // AGGIUNTO: lineHeight per evitare sovrapposizioni
   },
   record2024Description: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center',
-    marginTop: Spacing[1],
+    marginTop: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per spacing bilanciato
+    lineHeight: 20, // AGGIUNTO: lineHeight appropriato per body-medium
   },
 
   // Scroll Content - PADDING BOTTOM PER NAVIGATION

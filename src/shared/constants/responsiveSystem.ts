@@ -286,7 +286,7 @@ export const TypographyTokens = {
     display: {
       large: scaleFont(57), // ~Display Large Material
       medium: scaleFont(45), // ~Display Medium Material
-      small: scaleFont(38), // RIDOTTO: per "Fai la Differenza" (era 48, troppo grande)
+      small: scaleFont(32), // RIDOTTO: per "Il Nostro Impatto" e "Fai la Differenza" (era 38)
     },
 
     // Headline styles
