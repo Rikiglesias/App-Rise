@@ -10,6 +10,7 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 
@@ -171,7 +172,7 @@ const usePremiumFloatingButtonStyles = (variant: string, position: string) => {
         icon: {},
         title: {
           color: colors.neutral[0],
-          fontSize: Typography.sizes.base,
+          fontSize: TypographyTokens.styles.body.medium,
           fontWeight: Typography.weights.bold,
           textShadowColor: 'rgba(0, 0, 0, 0.3)',
           textShadowOffset: { width: 0, height: 1 },

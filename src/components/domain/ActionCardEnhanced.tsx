@@ -14,6 +14,7 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { MaterialActionCard } from '../ui';
 import { useTheme } from '../../shared/hooks/useTheme';
 import { useResponsive } from '../../shared/hooks/useResponsive';
@@ -313,14 +314,14 @@ const styles = StyleSheet.create({
   icon: {},
   title: {
     textAlign: 'center',
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.bold,
     marginBottom: Spacing[1],
   },
   description: {
     textAlign: 'center',
-    fontSize: Typography.sizes.xs,
-    lineHeight: Typography.sizes.xs * 1.4,
+    fontSize: TypographyTokens.styles.body.small,
+    lineHeight: TypographyTokens.styles.body.small * 1.4,
     color: '#666',
   },
 });

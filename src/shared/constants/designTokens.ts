@@ -10,6 +10,7 @@ import {
   ShadowTokens,
   DesignTokens,
   scaleSize,
+  scaleFont,
 } from './responsiveSystem';
 
 // 🔴⚫ BRAND COLORS - ROSSO & NERO PREMIUM
@@ -153,18 +154,18 @@ export const Typography = {
     black: '900',
   } as const,
 
-  // Typography sizes with guaranteed order (fixed values for test compatibility)
+  // Typography sizes with responsive scaling - now using scaleFont()
   sizes: {
-    xs: 12, // Fixed minimum readable size
-    sm: 13, // Fixed small readable size (must be > xs)
-    base: 14, // Fixed base readable size (must be > sm)
-    lg: 16, // Fixed large readable size (must be > base)
-    xl: 18, // Fixed extra large size (must be > lg)
-    '2xl': 20, // Fixed 2xl size (must be > xl)
-    '3xl': 24, // Fixed 3xl size (must be > 2xl)
-    '4xl': 28, // Fixed 4xl size (must be > 3xl)
-    '5xl': 32, // Fixed 5xl size (must be > 4xl)
-    '6xl': 36, // Fixed 6xl size (must be > 5xl)
+    xs: scaleFont(12), // Responsive minimum readable size
+    sm: scaleFont(13), // Responsive small readable size
+    base: scaleFont(14), // Responsive base readable size
+    lg: scaleFont(16), // Responsive large readable size
+    xl: scaleFont(18), // Responsive extra large size
+    '2xl': scaleFont(20), // Responsive 2xl size
+    '3xl': scaleFont(24), // Responsive 3xl size
+    '4xl': scaleFont(28), // Responsive 4xl size
+    '5xl': scaleFont(32), // Responsive 5xl size
+    '6xl': scaleFont(36), // Responsive 6xl size
   },
 
   lineHeights: TypographyTokens.lineHeights,

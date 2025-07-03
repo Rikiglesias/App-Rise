@@ -4,8 +4,9 @@ import { useProfessionalTokens } from '../hooks/useProfessionalTokens';
 import { useResponsive } from '../../../shared/hooks/useResponsive';
 
 export const useProfessionalLayoutStyles = () => {
-  const { professionalColors, professionalTypography, colors, isLargeScreen } =
+  const { professionalColors, professionalTypography, colors } =
     useProfessionalTokens();
+  const { scaleFont } = useResponsive();
 
   return StyleSheet.create({
     // 🏗️ LAYOUT FOUNDATION
@@ -41,11 +42,11 @@ export const useProfessionalLayoutStyles = () => {
     },
 
     pageTitle: {
-      fontSize: isLargeScreen ? 32 : 28,
+      fontSize: scaleFont(30),
       fontWeight: '800',
       color: professionalColors.text.primary,
       letterSpacing: -0.5,
-      lineHeight: isLargeScreen ? 38 : 34,
+      lineHeight: scaleFont(36),
       textAlign: 'center',
       marginBottom: Spacing[4],
     },

@@ -5,6 +5,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { useResponsive } from '../../../shared/hooks/useResponsive';
 
@@ -31,17 +32,17 @@ export const useProjectsScreenStyles = () => {
           paddingHorizontal: Spacing[6],
         },
         headerTitle: {
-          fontSize: Typography.sizes['3xl'],
+          fontSize: TypographyTokens.styles.headline.small,
           fontWeight: Typography.weights.extrabold,
           color: colors.neutral[0],
           textAlign: 'center',
           marginBottom: Spacing[2],
         },
         headerSubtitle: {
-          fontSize: Typography.sizes.base,
+          fontSize: TypographyTokens.styles.body.medium,
           color: colors.primary[100],
           textAlign: 'center',
-          lineHeight: Typography.sizes.base * 1.4,
+          lineHeight: TypographyTokens.styles.body.medium * 1.4,
         },
         statsSurface: {
           borderRadius: BorderRadius.xl,
@@ -55,7 +56,7 @@ export const useProjectsScreenStyles = () => {
           borderColor: colors.neutral[100],
         },
         statsTitle: {
-          fontSize: Typography.sizes.lg,
+          fontSize: TypographyTokens.styles.body.large,
           fontWeight: Typography.weights.bold,
           color: colors.neutral[900],
           textAlign: 'center',
@@ -71,13 +72,13 @@ export const useProjectsScreenStyles = () => {
           flex: 1,
         },
         statNumber: {
-          fontSize: Typography.sizes['2xl'],
+          fontSize: TypographyTokens.styles.title.large,
           fontWeight: Typography.weights.bold,
           color: colors.primary[600],
           marginBottom: Spacing[1],
         },
         statLabel: {
-          fontSize: Typography.sizes.xs,
+          fontSize: TypographyTokens.styles.body.small,
           color: colors.neutral[600],
           textAlign: 'center',
           fontWeight: Typography.weights.medium,
@@ -87,7 +88,7 @@ export const useProjectsScreenStyles = () => {
           paddingBottom: Platform.OS === 'android' ? Spacing[20] : Spacing[8], // ANDROID: Spacing[20] per evitare sovrapposizione bottom navigation / iOS: Spacing[8] normale
         },
         sectionTitle: {
-          fontSize: Typography.sizes.xl,
+          fontSize: TypographyTokens.styles.title.medium,
           fontWeight: Typography.weights.bold,
           color: colors.neutral[900],
           marginBottom: Spacing[2],
@@ -102,7 +103,7 @@ export const useProjectsScreenStyles = () => {
           marginBottom: Spacing[4],
         },
         emptyStateText: {
-          fontSize: Typography.sizes.base,
+          fontSize: TypographyTokens.styles.body.medium,
           color: colors.neutral[600],
           textAlign: 'center',
         },

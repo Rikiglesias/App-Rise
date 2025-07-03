@@ -25,9 +25,9 @@ const INDUSTRY_STANDARDS = {
   // Responsive Font Constraints (Bi-directional)
   minReadableFont: 12, // Ridotto per dispositivi compatti
   baseReadableFont: 16, // Font di riferimento standard
-  maxReadableFontSmall: 20, // Limite per dispositivi compact/standard
-  maxReadableFontLarge: 28, // Limite per dispositivi large/xlarge
-  maxReadableFontXXL: 36, // Limite per dispositivi molto grandi (tablet/fold)
+  maxReadableFontSmall: 60, // AUMENTATO per titoli: compact/standard (era 20)
+  maxReadableFontLarge: 80, // AUMENTATO per titoli: large/xlarge (era 28)
+  maxReadableFontXXL: 100, // AUMENTATO per titoli: tablet/fold (era 36)
 
   // Content constraints
   optimalLineLength: 45, // 45-65 caratteri per riga (optimal reading)
@@ -286,19 +286,19 @@ export const TypographyTokens = {
     display: {
       large: scaleFont(57), // ~Display Large Material
       medium: scaleFont(45), // ~Display Medium Material
-      small: scaleFont(36), // ~Display Small Material
+      small: scaleFont(38), // RIDOTTO: per "Fai la Differenza" (era 48, troppo grande)
     },
 
     // Headline styles
     headline: {
-      large: scaleFont(32), // ~Headline Large Material
+      large: scaleFont(30), // RIDOTTO: finale 30 (era 35, ancora troppo grande)
       medium: scaleFont(28), // ~Headline Medium Material
       small: scaleFont(24), // ~Headline Small Material
     },
 
     // Title styles (più usati in UI)
     title: {
-      large: scaleFont(22), // ~Title Large Material
+      large: scaleFont(26), // RIDOTTO: per "Il nostro impatto", "Pasti/Kit Confezionati" (era 32)
       medium: scaleFont(16), // ~Title Medium Material
       small: scaleFont(14), // ~Title Small Material
     },
@@ -306,7 +306,7 @@ export const TypographyTokens = {
     // Body styles (testo principale)
     body: {
       large: scaleFont(16), // ~Body Large Material
-      medium: scaleFont(14), // ~Body Medium Material
+      medium: scaleFont(15), // RIDOTTO: per "Prodotti/Creati nel 2024" (era 16)
       small: scaleFont(12), // ~Body Small Material
     },
 

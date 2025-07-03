@@ -16,34 +16,34 @@ export const useProfessionalTokens = () => {
   // Professional typography scale
   const professionalTypography: ProfessionalTypography = {
     display: {
-      fontSize: isLargeScreen ? 30 : 26,
+      fontSize: scaleFont(28),
       fontWeight: '800' as const,
       letterSpacing: -0.8,
-      lineHeight: isLargeScreen ? 34 : 30,
+      lineHeight: scaleFont(32),
     },
     headline: {
-      fontSize: isLargeScreen ? 22 : 20,
+      fontSize: scaleFont(21),
       fontWeight: '700' as const,
       letterSpacing: -0.4,
-      lineHeight: isLargeScreen ? 26 : 24,
+      lineHeight: scaleFont(25),
     },
     title: {
       fontSize: scaleFont(18),
       fontWeight: '600' as const,
       letterSpacing: -0.2,
-      lineHeight: 22,
+      lineHeight: scaleFont(22),
     },
     body: {
       fontSize: scaleFont(16),
       fontWeight: '500' as const,
       letterSpacing: 0,
-      lineHeight: 20,
+      lineHeight: scaleFont(20),
     },
     caption: {
       fontSize: scaleFont(14),
       fontWeight: '400' as const,
       letterSpacing: 0.1,
-      lineHeight: 16,
+      lineHeight: scaleFont(16),
     },
   };
 

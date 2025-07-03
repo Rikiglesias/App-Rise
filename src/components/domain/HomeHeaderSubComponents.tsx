@@ -11,13 +11,14 @@ import {
   View,
   Text,
 } from 'react-native';
-import { PlatformTouchable } from '../ui';
+import { PlatformTouchable, FormattedText } from '../ui';
 
 import {
   Colors,
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useResponsive } from '../../shared/hooks/useResponsive';
 import {
   type HeaderImageSectionProps,
@@ -357,7 +358,7 @@ const baseMissionStyles = StyleSheet.create({
     shadowRadius: 2,
   },
   impactTitleGradient: {
-    fontSize: Typography.sizes['2xl'],
+    // fontSize handled by FormattedText variant="title-large" - responsive scaleFont(32)
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center',
@@ -368,12 +369,12 @@ const baseMissionStyles = StyleSheet.create({
   },
   // Typography Smart per il testo descrittivo - MIGLIORATO
   missionText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: '#1F2937', // Grigio scuro più elegante
     textAlign: 'center',
     letterSpacing: 0.4,
-    lineHeight: Typography.sizes.lg * 1.3,
+    lineHeight: TypographyTokens.styles.body.large * 1.3,
     marginBottom: Spacing[5],
     textShadowColor: 'rgba(31, 41, 55, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
@@ -411,7 +412,7 @@ const baseMissionStyles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[700],
     textAlign: 'center',
   },
@@ -450,7 +451,7 @@ const baseMissionStyles = StyleSheet.create({
     marginBottom: Spacing[4],
   },
   modalTitle: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
@@ -480,17 +481,17 @@ const baseMissionStyles = StyleSheet.create({
     flex: 1,
   },
   breakdownNumber: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
   breakdownLabel: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[700],
     marginTop: 2,
   },
   breakdownDescription: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[500],
     marginTop: 1,
   },
@@ -508,7 +509,7 @@ const baseMissionStyles = StyleSheet.create({
     alignItems: 'center',
   },
   totalLabel: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[700],
   },
@@ -523,7 +524,6 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
   styles: _styles,
   scrollY: _scrollY,
 }) => {
-  const { scaleFont } = useResponsive();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleMealsPress = React.useCallback(() => {
@@ -551,9 +551,12 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
             {/* CORREZIONE UX: Titolo principale SENZA GRADIENT - NON CLICCABILE */}
             <View style={baseMissionStyles.titleGradientContainer}>
               <View style={baseMissionStyles.titleContent}>
-                <Text style={baseMissionStyles.impactTitleGradient}>
+                <FormattedText
+                  variant="title-large"
+                  style={baseMissionStyles.impactTitleGradient}
+                >
                   Il nostro impatto sul mondo
-                </Text>
+                </FormattedText>
                 {/* Underline decorativo per separazione - DESIGN SYSTEM */}
                 <View style={baseMissionStyles.titleUnderline} />
               </View>
@@ -570,14 +573,12 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 onPress={handleMealsPress}
                 activeOpacity={0.8}
               >
-                <Text
-                  style={[
-                    { fontSize: scaleFont(28) },
-                    baseMissionStyles.statNumber,
-                  ]}
+                <FormattedText
+                  variant="title-large"
+                  style={baseMissionStyles.statNumber}
                 >
                   3.14M
-                </Text>
+                </FormattedText>
                 <Text style={baseMissionStyles.statLabel}>
                   Pasti distribuiti
                 </Text>
@@ -689,14 +690,12 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                     <Text style={baseMissionStyles.totalLabel}>
                       Totale distribuito
                     </Text>
-                    <Text
-                      style={[
-                        { fontSize: scaleFont(32) },
-                        baseMissionStyles.totalNumber,
-                      ]}
+                    <FormattedText
+                      variant="title-large"
+                      style={baseMissionStyles.totalNumber}
                     >
                       3.14M
-                    </Text>
+                    </FormattedText>
                   </View>
                 </View>
               </View>

@@ -6,6 +6,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { getLayoutConfig } from '../types/HomeActionsTypes';
 
 // ===================================================================
@@ -29,20 +30,22 @@ export const createContainerStyles = () =>
 export const createTypographyStyles = (colors: typeof Colors) =>
   StyleSheet.create({
     bentoTitle: {
-      fontSize: Typography.sizes['4xl'],
+      fontSize: TypographyTokens.styles.headline.medium,
       fontWeight: Typography.weights.black,
       color: colors.primary[800],
       textAlign: 'center',
       marginBottom: Spacing[2],
       letterSpacing: Typography.letterSpacing.tight,
-      lineHeight: Typography.lineHeights.tight * Typography.sizes['4xl'],
+      lineHeight:
+        Typography.lineHeights.tight * TypographyTokens.styles.headline.medium,
     },
     bentoSubtitle: {
-      fontSize: Typography.sizes.base,
+      fontSize: TypographyTokens.styles.body.medium,
       fontWeight: Typography.weights.medium,
       color: colors.neutral[600],
       textAlign: 'center',
-      lineHeight: Typography.lineHeights.normal * Typography.sizes.base,
+      lineHeight:
+        Typography.lineHeights.normal * TypographyTokens.styles.body.medium,
       letterSpacing: Typography.letterSpacing.normal,
     },
   });
@@ -121,25 +124,27 @@ export const createTextStyles = (colors: typeof Colors) =>
       flex: 1,
     },
     cardTitle: {
-      fontSize: Typography.sizes.base,
+      fontSize: TypographyTokens.styles.body.medium,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[900],
       marginBottom: 1,
       letterSpacing: Typography.letterSpacing.tight,
-      lineHeight: Typography.lineHeights.tight * Typography.sizes.base,
+      lineHeight:
+        Typography.lineHeights.tight * TypographyTokens.styles.body.medium,
     },
     cardSubtitle: {
-      fontSize: Typography.sizes.xs,
+      fontSize: TypographyTokens.styles.body.small,
       fontWeight: Typography.weights.semibold,
       color: colors.neutral[500],
       textTransform: 'uppercase',
       letterSpacing: Typography.letterSpacing.wide,
     },
     cardDescription: {
-      fontSize: Typography.sizes.sm,
+      fontSize: TypographyTokens.styles.body.small,
       fontWeight: Typography.weights.regular,
       color: colors.neutral[600],
-      lineHeight: Typography.lineHeights.snug * Typography.sizes.sm,
+      lineHeight:
+        Typography.lineHeights.snug * TypographyTokens.styles.body.small,
       letterSpacing: Typography.letterSpacing.normal,
     },
   });

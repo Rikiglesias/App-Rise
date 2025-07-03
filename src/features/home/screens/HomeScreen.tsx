@@ -1,11 +1,6 @@
 import React, { useRef } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Animated,
-  Platform,
-} from 'react-native';
+import { StyleSheet, View, Animated, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PlatformScrollView } from '../../../components/ui';
 import { EntraInAzione } from '../components';
 import { useHomeAnimations } from '../hooks';
@@ -22,6 +17,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     imageAnim: _imageAnim,
     containerAnim: _containerAnim,
   } = useHomeAnimations();
+
   // Temporarily disabled scroll animations to fix onScroll error
   // const scrollInterpolations = useScrollInterpolations(scrollY);
 

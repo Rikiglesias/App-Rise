@@ -19,6 +19,7 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 import { useResponsive } from '../../shared/hooks/useResponsive';
@@ -163,7 +164,7 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
         marginBottom: Spacing[1],
       },
       title: {
-        fontSize: Typography.sizes.sm,
+        fontSize: TypographyTokens.styles.body.small,
         fontWeight: Typography.weights.bold,
         color: colors.neutral[900],
         textAlign: 'center' as const,
