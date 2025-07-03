@@ -21,8 +21,11 @@ import {
   Colors,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
-import { DesignTokens } from '../../../shared/constants/responsiveSystem';
+} from '../../../shared/constants';
+import {
+  TypographyTokens,
+  DesignTokens,
+} from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
@@ -56,7 +59,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { openLink } = useLinkHandler();
   const { triggerHaptic } = useHapticFeedback();
   const insets = useSafeAreaInsets();
-  const { scaleFont, scale } = useResponsive();
+  const { scale } = useResponsive();
 
   // ANIMAZIONI DISABILITATE - valori statici per evitare bordi grigi
   const fadeAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
@@ -207,7 +210,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                   <Text
                     style={[
                       styles.socialIconEmoji,
-                      { fontSize: scaleFont(28) },
+                      { fontSize: TypographyTokens.styles.headline.medium },
                     ]}
                   >
                     {platform.emoji}
@@ -257,8 +260,18 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         {/* HEADER SECTION - Pattern da Chi Siamo */}
         <View style={styles.headerSection}>
           <View style={styles.titleContainer}>
-            <Text style={[styles.categoryTitle, { fontSize: scaleFont(32) }]}>
-              <Text style={[styles.titleAccent, { fontSize: scaleFont(32) }]}>
+            <Text
+              style={[
+                styles.categoryTitle,
+                { fontSize: TypographyTokens.styles.headline.large },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.titleAccent,
+                  { fontSize: TypographyTokens.styles.headline.large },
+                ]}
+              >
                 Seguici Ovunque
               </Text>
             </Text>
@@ -272,7 +285,12 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.sectionDividerContainer}>
           <View style={styles.sectionDivider} />
           <View style={styles.dividerEmojiContainer}>
-            <Text style={[styles.dividerEmoji, { fontSize: scaleFont(20) }]}>
+            <Text
+              style={[
+                styles.dividerEmoji,
+                { fontSize: TypographyTokens.styles.title.medium },
+              ]}
+            >
               📱
             </Text>
           </View>
@@ -364,7 +382,7 @@ const styles = StyleSheet.create({
 
   // SUBTITLE INLINE ELEGANTE COME PAGINE AZIONI
   categorySubtitleInline: {
-    fontSize: Typography.sizes.base, // INGRANDITO COME ALTRE PAGINE
+    fontSize: TypographyTokens.styles.body.medium, // INGRANDITO COME ALTRE PAGINE
     fontWeight: Typography.weights.medium,
     color: '#B91C1C', // ROSSO PIÙ SCURO COORDINATO
     textAlign: 'center' as const,
@@ -449,7 +467,7 @@ const styles = StyleSheet.create({
   },
 
   socialName: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
@@ -457,14 +475,14 @@ const styles = StyleSheet.create({
   },
 
   socialHandle: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.semibold,
     color: '#DC2626',
     marginBottom: Spacing[1],
   },
 
   socialDescription: {
-    fontSize: Typography.sizes.xs,
+    fontSize: TypographyTokens.styles.label.small,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     lineHeight: 16,

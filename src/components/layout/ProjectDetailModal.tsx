@@ -2,13 +2,14 @@ import React from 'react';
 import { Image, Modal, StyleSheet, View } from 'react-native';
 import { PlatformScrollView, PlatformTouchable, FormattedText } from '../ui';
 
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
+} from '../../shared/constants';
 
 interface Location {
   id: string;
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
   },
   statusText: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
   },
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   closeButtonText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     color: Colors.neutral[600],
   },
   imageContainer: {
@@ -294,13 +295,13 @@ const styles = StyleSheet.create({
     padding: Spacing[4],
   },
   locationName: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     marginBottom: Spacing[1],
   },
   locationCountry: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[200],
   },
   statsContainer: {
@@ -319,13 +320,13 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   statNumber: {
-    fontSize: Typography.sizes['3xl'],
+    fontSize: TypographyTokens.styles.headline.small,
     fontWeight: Typography.weights.black,
     color: Colors.primary[600],
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[600],
     textAlign: 'center',
   },
@@ -340,13 +341,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[6],
   },
   sectionTitle: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[3],
   },
   description: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[700],
     lineHeight: 24,
   },
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
     marginRight: Spacing[3],
   },
   achievementText: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[700],
     flex: 1,
   },
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   primaryButtonText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
   },
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary[600],
   },
   secondaryButtonText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.primary[600],
   },

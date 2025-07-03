@@ -4,7 +4,7 @@ import {
   Colors,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { ADVANCED_CONFIG } from '../types/HomeHeaderTypes';
@@ -58,10 +58,11 @@ export const createTextStyles = (
     },
     subtitle: {
       color: colors.neutral[600],
-      fontSize: Typography.sizes.lg,
+      fontSize: TypographyTokens.styles.body.large,
       fontWeight: Typography.weights.regular,
       textAlign: 'center',
-      lineHeight: Typography.lineHeights.relaxed * Typography.sizes.lg,
+      lineHeight:
+        Typography.lineHeights.relaxed * TypographyTokens.styles.body.large,
       letterSpacing: 0.2,
       paddingHorizontal: Spacing[6],
     },
@@ -159,18 +160,19 @@ export const createMissionStyles = (
       borderColor: colors.neutral[100],
     },
     missionTitle: {
-      fontSize: Typography.sizes.xl,
+      fontSize: TypographyTokens.styles.title.medium,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[900],
       textAlign: 'center',
       marginBottom: Spacing[3],
     },
     missionDescription: {
-      fontSize: Typography.sizes.base,
+      fontSize: TypographyTokens.styles.body.medium,
       fontWeight: Typography.weights.regular,
       color: colors.neutral[700],
       textAlign: 'center',
-      lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+      lineHeight:
+        Typography.lineHeights.relaxed * TypographyTokens.styles.body.medium,
       marginBottom: Spacing[4],
     },
     missionStats: {
@@ -182,13 +184,13 @@ export const createMissionStyles = (
       alignItems: 'center',
     },
     statNumber: {
-      fontSize: Typography.sizes['2xl'],
+      fontSize: TypographyTokens.styles.title.large,
       fontWeight: Typography.weights.bold,
       color: colors.primary[600],
       marginBottom: Spacing[1],
     },
     statLabel: {
-      fontSize: Typography.sizes.sm,
+      fontSize: TypographyTokens.styles.body.small,
       fontWeight: Typography.weights.medium,
       color: colors.neutral[600],
       textAlign: 'center',
@@ -210,7 +212,7 @@ export const baseMissionStyles = StyleSheet.create({
     elevation: 3,
   },
   missionText: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[700],
     textAlign: 'center',
     lineHeight: 22,
@@ -242,13 +244,13 @@ export const baseMissionStyles = StyleSheet.create({
     shadowColor: '#1F2937',
   },
   statNumber: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[700],
     textAlign: 'center',
   },
@@ -287,7 +289,7 @@ export const baseMissionStyles = StyleSheet.create({
     marginBottom: Spacing[4],
   },
   modalTitle: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
@@ -317,17 +319,17 @@ export const baseMissionStyles = StyleSheet.create({
     flex: 1,
   },
   breakdownNumber: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
   breakdownLabel: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[700],
     marginTop: 2,
   },
   breakdownDescription: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[500],
     marginTop: 1,
   },
@@ -345,12 +347,12 @@ export const baseMissionStyles = StyleSheet.create({
     alignItems: 'center',
   },
   totalLabel: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[700],
   },
   totalNumber: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.black,
     color: '#DC2626',
   },

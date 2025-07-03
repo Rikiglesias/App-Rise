@@ -25,7 +25,6 @@ export {
   PlatformAdjustments,
   DeviceInfo,
   scaleSize,
-  scaleFont,
   scaleSpacing,
   getCurrentBreakpoint,
 } from './responsiveSystem';

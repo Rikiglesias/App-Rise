@@ -2,11 +2,8 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '../../shared/constants/designTokens';
+import { Colors, Spacing, Typography } from '../../shared/constants';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 
 import AnimatedNumber from './AnimatedNumber';
 import { ProgressRing } from './ProgressRing';
@@ -122,8 +119,8 @@ export const ProgressStat: React.FC<ProgressStatProps> = ({
   const progressPercentage = Math.round(progress * 100);
 
   const sizes = {
-    compact: { ring: 60, text: Typography.sizes.sm },
-    standard: { ring: 80, text: Typography.sizes.lg },
+    compact: { ring: 60, text: TypographyTokens.styles.body.small },
+    standard: { ring: 80, text: TypographyTokens.styles.body.large },
   };
 
   const { ring: ringSize, text: textSize } = sizes[size];
@@ -190,23 +187,23 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
   currentValue: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.bold,
     fontFamily: Typography.families.mono,
   },
   targetValue: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[500],
     marginLeft: Spacing[1],
   },
   label: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[700],
     fontWeight: Typography.weights.medium,
     textAlign: 'center',
   },
   sublabel: {
-    fontSize: Typography.sizes.xs,
+    fontSize: TypographyTokens.styles.label.small,
     color: Colors.neutral[500],
     textAlign: 'center',
     marginTop: Spacing[1],

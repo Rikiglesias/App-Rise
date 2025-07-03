@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
 
 export const impactScreenStyles = StyleSheet.create({
   container: {
@@ -16,14 +17,14 @@ export const impactScreenStyles = StyleSheet.create({
     paddingTop: Spacing[12],
   },
   headerTitle: {
-    fontSize: Typography.sizes['4xl'],
+    fontSize: TypographyTokens.styles.headline.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
   headerSubtitle: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     color: Colors.neutral[600],
     textAlign: 'center',
     marginBottom: Spacing[8],
@@ -40,12 +41,12 @@ export const impactScreenStyles = StyleSheet.create({
     opacity: 0.8,
   },
   mainStatValue: {
-    fontSize: Typography.sizes['5xl'],
+    fontSize: TypographyTokens.styles.headline.large,
     fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
   },
   mainStatLabel: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[0],
     opacity: 0.9,
@@ -58,7 +59,7 @@ export const impactScreenStyles = StyleSheet.create({
     marginTop: Spacing[8],
   },
   sectionTitle: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
     marginBottom: Spacing[4],
@@ -91,7 +92,7 @@ export const impactScreenStyles = StyleSheet.create({
     zIndex: 1,
   },
   mapPreviewText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[0],
     marginTop: Spacing[2],

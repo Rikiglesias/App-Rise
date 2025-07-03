@@ -2,12 +2,13 @@ import React from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { PlatformTouchable, FormattedText } from '../ui';
 import { Surface } from 'react-native-paper';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Shadows,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
+} from '../../shared/constants';
 import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import { useTheme } from '../../shared/hooks/useTheme';
 
@@ -136,15 +137,16 @@ const ICON_STYLES = {
 // 🏷️ TYPOGRAPHY STYLES - Extracted as constants for max-lines-per-function compliance
 const TYPOGRAPHY_STYLES = {
   cardTitle: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     marginBottom: 2,
     letterSpacing: Typography.letterSpacing.tight,
-    lineHeight: Typography.lineHeights.tight * Typography.sizes.lg,
+    lineHeight:
+      Typography.lineHeights.tight * TypographyTokens.styles.body.large,
   },
 
   cardSubtitle: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.semibold,
     textTransform: 'uppercase',
     letterSpacing: Typography.letterSpacing.wide,
@@ -152,9 +154,10 @@ const TYPOGRAPHY_STYLES = {
   },
 
   cardDescription: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.regular,
-    lineHeight: Typography.lineHeights.normal * Typography.sizes.sm,
+    lineHeight:
+      Typography.lineHeights.normal * TypographyTokens.styles.body.small,
     letterSpacing: Typography.letterSpacing.normal,
   },
 };

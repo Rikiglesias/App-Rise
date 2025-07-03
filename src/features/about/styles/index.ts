@@ -1,11 +1,10 @@
 import { Dimensions, Platform, StyleSheet } from 'react-native';
 
 import {
-  BorderRadius,
-  Colors,
-  Spacing,
-  Typography,
-} from '../../../shared/constants/designTokens';
+  SpacingTokens as Spacing,
+  TypographyTokens,
+} from '../../../shared/constants/responsiveSystem';
+import { BorderRadius, Colors, Typography } from '../../../shared/constants';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -132,7 +131,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalTitle: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     letterSpacing: -0.8,
@@ -172,7 +171,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyTitle: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -180,7 +179,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyText: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     lineHeight: 24,
@@ -194,7 +193,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   sectionTitle: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[2],
@@ -212,7 +211,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   finalMessage: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
@@ -221,7 +220,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   introText: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
@@ -241,12 +240,12 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarIcon: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     marginTop: 2,
   },
 
   pillarTitle: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
@@ -257,7 +256,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarText: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     lineHeight: 22,
@@ -363,7 +362,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   // SUBTITLE INLINE INGRANDITO E ELEGANTE
   mainSubtitleInline: {
-    fontSize: Typography.sizes.base, // INGRANDITO: da sm a base per maggiore leggibilità
+    fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base per maggiore leggibilità
     fontWeight: Typography.weights.medium,
     color: '#B91C1C', // ROSSO PIÙ SCURO COORDINATO
     textAlign: 'center',
@@ -374,7 +373,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   // SUBTITLE - SPACING E STILE OTTIMIZZATI (LEGACY)
   mainSubtitle: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     textAlign: 'center',
@@ -423,11 +422,12 @@ export const chiSiamoSectionStyles = StyleSheet.create({
   },
 
   categorySubtitle: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.bold,
     textAlign: 'center',
     letterSpacing: 0.3,
-    lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+    lineHeight:
+      Typography.lineHeights.relaxed * TypographyTokens.styles.body.medium,
     marginBottom: Spacing[3],
     paddingHorizontal: Spacing[4],
     fontStyle: 'normal',
@@ -487,7 +487,7 @@ export const contactSectionStyles = StyleSheet.create({
 
   // SUBTITLE INLINE INGRANDITA
   exploreSubtitleInline: {
-    fontSize: Typography.sizes.base, // INGRANDITO: da sm a base per I nostri contatti
+    fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base per I nostri contatti
     fontWeight: Typography.weights.medium,
     color: '#374151',
     textAlign: 'center',
@@ -555,7 +555,7 @@ export const animatedContactStyles = StyleSheet.create({
     flex: 1,
   },
   contactButtonTitle: {
-    fontSize: Typography.sizes.base, // RIMPICCIOLITO: da lg a base
+    fontSize: TypographyTokens.styles.body.medium, // RIMPICCIOLITO: da lg a base
     fontWeight: Typography.weights.bold, // RIDOTTO: da black a bold
     color: Colors.neutral[900],
     marginBottom: 2, // RIDOTTO: da 3 a 2
@@ -565,7 +565,7 @@ export const animatedContactStyles = StyleSheet.create({
     letterSpacing: -0.2, // RIDOTTO: meno compresso
   },
   contactButtonSubtitle: {
-    fontSize: Typography.sizes.sm, // RIMPICCIOLITO: da base a sm
+    fontSize: TypographyTokens.styles.body.small, // RIMPICCIOLITO: da base a sm
     fontWeight: Typography.weights.medium, // RIDOTTO: da semibold a medium
     color: Colors.neutral[600], // PIÙ CHIARO: da 700 a 600
     letterSpacing: 0.2, // RIDOTTO: meno spaziato

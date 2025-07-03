@@ -2,13 +2,14 @@ import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
+} from '../../shared/constants';
 
 export interface Location {
   id: string;
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
     ...Shadows.sm,
   },
   countryText: {
-    fontSize: Typography.sizes.xs,
+    fontSize: TypographyTokens.styles.label.small,
     fontWeight: Typography.weights.bold,
     color: '#374151',
     textAlign: 'center',

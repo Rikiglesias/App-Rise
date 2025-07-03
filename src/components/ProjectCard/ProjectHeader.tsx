@@ -3,11 +3,8 @@ import { StyleSheet, View } from 'react-native';
 
 import { FormattedText } from '../ui';
 
-import {
-  BorderRadius,
-  Spacing,
-  Typography,
-} from '../../shared/constants/designTokens';
+import { BorderRadius, Spacing, Typography } from '../../shared/constants';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 import type { ProjectHeaderProps } from './types';
@@ -32,14 +29,14 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       marginRight: Spacing[3],
     },
     title: {
-      fontSize: Typography.sizes.lg,
+      fontSize: TypographyTokens.styles.body.large,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[900],
       marginBottom: Spacing[1],
-      lineHeight: Typography.sizes.lg * 1.2,
+      lineHeight: TypographyTokens.styles.body.large * 1.2,
     },
     location: {
-      fontSize: Typography.sizes.sm,
+      fontSize: TypographyTokens.styles.body.small,
       color: colors.neutral[500],
       fontWeight: Typography.weights.medium,
     },
@@ -52,7 +49,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       alignItems: 'center',
     },
     statusText: {
-      fontSize: Typography.sizes.xs,
+      fontSize: TypographyTokens.styles.label.small,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[0],
     },

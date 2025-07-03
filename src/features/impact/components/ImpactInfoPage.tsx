@@ -4,11 +4,8 @@ import { StyleSheet, Text } from 'react-native';
 import { PlatformScrollView } from '../../../components/ui';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '../../../shared/constants/designTokens';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+import { Colors, Spacing, Typography } from '../../../shared/constants';
 
 interface ImpactInfoPageProps {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -46,14 +43,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing[4],
   },
   title: {
-    fontSize: Typography.sizes['3xl'],
+    fontSize: TypographyTokens.styles.headline.small,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginTop: Spacing[4],
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     color: Colors.neutral[600],
     textAlign: 'center',
     marginTop: Spacing[2],

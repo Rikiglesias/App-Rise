@@ -5,13 +5,14 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
 
 import { IMPACT_DATA } from '../../../data/impactData';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
 import type { StatButtonProps } from '../types/ImpactScreenTypes';
 import FormattedText from '../../../components/ui/FormattedText';
 
@@ -103,12 +104,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statValue: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
   },
   statLabel: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[600],
   },
   storyCard: {
@@ -137,18 +138,18 @@ const styles = StyleSheet.create({
   storyLocation: {
     color: Colors.neutral[200],
     fontWeight: Typography.weights.semibold,
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     textTransform: 'uppercase',
   },
   storyTitle: {
     color: Colors.neutral[0],
     fontWeight: Typography.weights.bold,
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     marginTop: Spacing[1],
   },
   storyText: {
     color: Colors.neutral[100],
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     marginTop: Spacing[2],
     lineHeight: Typography.lineHeights.snug,
   },
@@ -165,12 +166,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   milestoneTitle: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[800],
   },
   milestoneValue: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[600],
   },
 });

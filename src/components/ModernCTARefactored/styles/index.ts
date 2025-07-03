@@ -1,12 +1,13 @@
 import { Platform, StyleSheet } from 'react-native';
 
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
 
 // ===================================================================
 // CONTAINER STYLES
@@ -184,39 +185,39 @@ export const createContentStyles = (colors: typeof Colors) =>
 export const createSizeTypographyStyles = () =>
   StyleSheet.create({
     compactDescription: {
-      fontSize: Typography.sizes.sm,
+      fontSize: TypographyTokens.styles.body.small,
       lineHeight: Typography.lineHeights.relaxed,
     },
     standardDescription: {
-      fontSize: Typography.sizes.base,
+      fontSize: TypographyTokens.styles.body.medium,
       lineHeight: Typography.lineHeights.relaxed,
     },
     largeDescription: {
-      fontSize: Typography.sizes.lg,
+      fontSize: TypographyTokens.styles.body.large,
       lineHeight: Typography.lineHeights.relaxed,
     },
     compactTitle: {
-      fontSize: Typography.sizes.xl,
+      fontSize: TypographyTokens.styles.title.medium,
       lineHeight: Typography.lineHeights.tight,
     },
     standardTitle: {
-      fontSize: Typography.sizes['2xl'],
+      fontSize: TypographyTokens.styles.title.large,
       lineHeight: Typography.lineHeights.tight,
     },
     largeTitle: {
-      fontSize: Typography.sizes['3xl'],
+      fontSize: TypographyTokens.styles.headline.small,
       lineHeight: Typography.lineHeights.tight,
     },
     compactSubtitle: {
-      fontSize: Typography.sizes.xs,
+      fontSize: TypographyTokens.styles.label.small,
       lineHeight: Typography.lineHeights.normal,
     },
     standardSubtitle: {
-      fontSize: Typography.sizes.sm,
+      fontSize: TypographyTokens.styles.body.small,
       lineHeight: Typography.lineHeights.normal,
     },
     largeSubtitle: {
-      fontSize: Typography.sizes.base,
+      fontSize: TypographyTokens.styles.body.medium,
       lineHeight: Typography.lineHeights.normal,
     },
   });

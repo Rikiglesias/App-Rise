@@ -1,14 +1,11 @@
-import { useTheme } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
-import { PlatformScrollView } from './PlatformComponents';
+import { BorderRadius, Spacing, Typography } from '../../shared/constants';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+
+import { useTheme } from '@react-navigation/native';
 import { TouchableRipple } from 'react-native-paper';
-import {
-  BorderRadius,
-  Spacing,
-  Typography,
-} from '../../shared/constants/designTokens';
 
 interface FilterTab {
   id: string;
@@ -67,14 +64,14 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       marginRight: Spacing[2],
     },
     tabLabel: {
-      fontSize: Typography.sizes.sm,
+      fontSize: TypographyTokens.styles.body.small,
       fontWeight: Typography.weights.semibold,
     },
     activeTabLabel: { color: colors.card },
     inactiveTabLabel: { color: colors.text },
     tabCount: {
       marginLeft: Spacing[2],
-      fontSize: Typography.sizes.xs,
+      fontSize: TypographyTokens.styles.label.small,
       fontWeight: Typography.weights.bold,
       backgroundColor: colors.card,
       color: colors.primary,
@@ -195,7 +192,12 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
 
   return (
     <View style={styles.container}>
-      <PlatformScrollView>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+      >
         {tabs.map(tab => (
           <TabItem
             key={tab.id}
@@ -206,7 +208,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
             styles={styles}
           />
         ))}
-      </PlatformScrollView>
+      </ScrollView>
     </View>
   );
 };

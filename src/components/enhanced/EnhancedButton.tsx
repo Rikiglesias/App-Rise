@@ -4,13 +4,8 @@
  */
 
 import React, { useCallback } from 'react';
-import {
-  Animated,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-  Text,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 import {
   BorderRadius,
@@ -18,7 +13,8 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../shared/constants/designTokens';
+} from '../../shared/constants';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useMicroInteraction } from '../../systems/MicroInteractionEngine';
 
 // ===================================================================
@@ -128,7 +124,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
   ];
 
   return (
-    <TouchableWithoutFeedback
+    <TouchableOpacity
       onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
@@ -143,7 +139,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
           <Text style={textStyle}>{title}</Text>
         </View>
       </Animated.View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
@@ -169,7 +165,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.semibold,
     textAlign: 'center',
   },

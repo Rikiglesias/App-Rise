@@ -55,18 +55,18 @@ const createModernTitleStyles = (scaleFont: (size: number) => number) =>
       position: 'relative',
     },
 
-    // Typography pulita e moderna - RESPONSIVE - INGRANDITA
+    // Typography pulita e moderna - RESPONSIVE - DIMENSIONE OTTIMALE
     titleText: {
-      fontSize: scaleFont(40), // INGRANDITO: da 38 a 40px per maggiore impatto visivo
+      fontSize: scaleFont(45), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
       fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',
-      letterSpacing: -1.3,
+      letterSpacing: -1.5,
       // ANDROID: Correzioni specifiche per rendering identico a iOS
       ...(Platform.OS === 'android' && {
         includeFontPadding: false,
         textAlignVertical: 'center',
-        lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
+        lineHeight: 48, // Adeguato al nuovo fontSize (45 * 1.07 = 48)
         fontFamily: 'sans-serif', // Font nativo Android sicuro
         paddingVertical: 0,
         marginVertical: 0,
@@ -78,18 +78,18 @@ const createModernTitleStyles = (scaleFont: (size: number) => number) =>
       marginBottom: 0, // AZZERA MARGINE: da Spacing[1]/2 a 0 - immagine attaccata al titolo
     },
 
-    // Stile per "Italia" in nero - RESPONSIVE - INGRANDITA
+    // Stile per "Italia" in nero - RESPONSIVE - DIMENSIONE OTTIMALE
     titleTextItalia: {
-      fontSize: scaleFont(40), // INGRANDITO: da 38 a 40px per coerenza con titolo principale
+      fontSize: scaleFont(45), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
       fontWeight: Typography.weights.black,
       color: '#1F2937', // Nero elegante
       textAlign: 'center',
-      letterSpacing: -1.3,
+      letterSpacing: -1.5,
       // ANDROID: Correzioni specifiche per rendering identico a iOS
       ...(Platform.OS === 'android' && {
         includeFontPadding: false,
         textAlignVertical: 'center',
-        lineHeight: 44, // Adeguato al nuovo fontSize (40 * 1.1 = 44)
+        lineHeight: 48, // Adeguato al nuovo fontSize (45 * 1.07 = 48)
         fontFamily: 'sans-serif', // Font nativo Android sicuro
         paddingVertical: 0,
         marginVertical: 0,
@@ -141,6 +141,7 @@ const ModernSmartTitle: React.FC<{
   titleTransform: Animated.AnimatedNode;
 }> = React.memo(({ titleAnim, titleOpacity, titleTransform }) => {
   const { scaleFont } = useResponsive();
+
   const modernTitleStyles = React.useMemo(
     () => createModernTitleStyles(scaleFont),
     [scaleFont]
@@ -183,9 +184,14 @@ const ModernSmartTitle: React.FC<{
         <View style={modernTitleStyles.titleContainer}>
           {/* Titolo con colori differenziati */}
           <View>
-            <Text style={modernTitleStyles.titleText}>
+            <Text style={modernTitleStyles.titleText} allowFontScaling={false}>
               Rise Against{'\n'}Hunger{' '}
-              <Text style={modernTitleStyles.titleTextItalia}>Italia</Text>
+              <Text
+                style={modernTitleStyles.titleTextItalia}
+                allowFontScaling={false}
+              >
+                Italia
+              </Text>
             </Text>
           </View>
 

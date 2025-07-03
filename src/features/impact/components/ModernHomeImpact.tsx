@@ -4,11 +4,8 @@ import { PlatformTouchable, FormattedText } from '../../../components/ui';
 
 import { Surface } from 'react-native-paper';
 
-import {
-  BorderRadius,
-  Spacing,
-  Typography,
-} from '../../../shared/constants/designTokens';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+import { BorderRadius, Spacing, Typography } from '../../../shared/constants';
 import { useAnimatedPress } from '../../../shared/hooks/useAnimatedPress';
 import { useTheme } from '../../../shared/hooks/useTheme';
 
@@ -134,7 +131,9 @@ const useHeaderStyles = () => {
           fontWeight: Typography.weights.regular,
           color: colors.neutral[600],
           textAlign: 'center',
-          lineHeight: Typography.lineHeights.relaxed * Typography.sizes.base,
+          lineHeight:
+            Typography.lineHeights.relaxed *
+            TypographyTokens.styles.body.medium,
           paddingHorizontal: Spacing[4],
         },
       }),

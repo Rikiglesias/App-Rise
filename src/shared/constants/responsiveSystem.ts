@@ -178,34 +178,30 @@ export const scaleSize = (
  * - SU schermi grandi: AUMENTA per proporzioni ottimali
  */
 export const scaleFont = (size: number): number => {
-  const breakpoint = getCurrentBreakpoint();
-  const currentBreakpointConfig = DeviceBreakpoints[breakpoint];
+  // CROSS-PLATFORM CONSISTENCY FIX: calcolo diretto basato su width
+  // Bypassa differenze di breakpoint detection tra iOS e Android
 
-  // 1. Scaling basato su breakpoint specifico (bi-directional)
-  const fontScale = currentBreakpointConfig.fontScale;
-  const scaled = size * fontScale;
+  const width = DEVICE_WIDTH;
+  let scale: number;
 
-  // 2. Vincoli DINAMICI basati su device category
-  const maxFont = currentBreakpointConfig.maxReadableFont;
+  // Scaling universale basato SOLO su width - identico iOS e Android
+  if (width <= 375) {
+    scale = 0.9; // iPhone SE, piccoli Android
+  } else if (width <= 414) {
+    scale = 1.0; // iPhone standard, Android standard
+  } else if (width <= 480) {
+    scale = 1.15; // iPhone Plus, grandi Android
+  } else if (width <= 600) {
+    scale = 1.25; // Fold, mini tablet
+  } else {
+    scale = 1.3; // iPad, tablet
+  }
+
+  const scaled = size * scale;
   const minFont = INDUSTRY_STANDARDS.minReadableFont;
 
-  // 3. CRITICAL: Su device grandi, permetti scaling UP senza limiti rigidi
-  let finalSize = scaled;
-
-  if (breakpoint === 'compact') {
-    // Compact: proteggi leggibilità (mai troppo piccolo)
-    finalSize = Math.max(scaled, minFont);
-  } else if (breakpoint === 'standard') {
-    // Standard: bilanciamento (limiti moderati)
-    finalSize = Math.min(Math.max(scaled, minFont), maxFont);
-  } else {
-    // Large/XLarge/XXLarge: PERMETTI SCALING UP per proporzioni ottimali
-    finalSize = Math.max(scaled, minFont);
-    // Solo vincolo soft per evitare testi giganti
-    if (finalSize > maxFont * 1.2) {
-      finalSize = maxFont * 1.2;
-    }
-  }
+  // Garantisce leggibilità minima
+  const finalSize = Math.max(scaled, minFont);
 
   return Math.round(finalSize);
 };
@@ -368,7 +364,7 @@ export const PlatformOptimizations = {
   // Rendering optimizations
   rendering: {
     textScaling: getPlatformValue({
-      ios: true, // iOS gestisce Dynamic Type nativamente
+      ios: false, // DISABILITATO: usiamo il nostro sistema custom bi-direzionale
       android: false, // Android: controlliamo noi lo scaling
       default: false,
     }),
@@ -405,7 +401,7 @@ export const PlatformOptimizations = {
   accessibility: {
     minimumTouchTarget: INDUSTRY_STANDARDS.minTouchTarget,
     allowFontScaling: getPlatformValue({
-      ios: true, // iOS: Dynamic Type supportato
+      ios: false, // DISABILITATO: usiamo il nostro sistema responsive custom
       android: false, // Android: scaling controllato da noi
       default: false,
     }),

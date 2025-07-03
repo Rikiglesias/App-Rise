@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
   Animation,
   BorderRadius,
@@ -8,7 +9,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
 
 interface ImpactCardProps {
   title: string;
@@ -341,13 +342,13 @@ const styles = StyleSheet.create({
   },
 
   compactValue: {
-    fontSize: Typography.sizes.lg,
-    lineHeight: Typography.sizes.lg * 1.2,
+    fontSize: TypographyTokens.styles.body.large,
+    lineHeight: TypographyTokens.styles.body.large * 1.2,
   },
 
   standardValue: {
-    fontSize: Typography.sizes.xl,
-    lineHeight: Typography.sizes.xl * 1.2,
+    fontSize: TypographyTokens.styles.title.medium,
+    lineHeight: TypographyTokens.styles.title.medium * 1.2,
   },
 
   // Title Styles
@@ -367,13 +368,13 @@ const styles = StyleSheet.create({
   },
 
   compactTitle: {
-    fontSize: Typography.sizes.xs,
-    lineHeight: Typography.sizes.xs * 1.3,
+    fontSize: TypographyTokens.styles.label.small,
+    lineHeight: TypographyTokens.styles.label.small * 1.3,
   },
 
   standardTitle: {
-    fontSize: Typography.sizes.sm,
-    lineHeight: Typography.sizes.sm * 1.3,
+    fontSize: TypographyTokens.styles.body.small,
+    lineHeight: TypographyTokens.styles.body.small * 1.3,
   },
 
   // Description Styles
@@ -393,13 +394,13 @@ const styles = StyleSheet.create({
   },
 
   compactDescription: {
-    fontSize: Typography.sizes.xs,
-    lineHeight: Typography.sizes.xs * 1.4,
+    fontSize: TypographyTokens.styles.label.small,
+    lineHeight: TypographyTokens.styles.label.small * 1.4,
   },
 
   standardDescription: {
-    fontSize: Typography.sizes.sm,
-    lineHeight: Typography.sizes.sm * 1.4,
+    fontSize: TypographyTokens.styles.body.small,
+    lineHeight: TypographyTokens.styles.body.small * 1.4,
   },
 
   // Accent Elements

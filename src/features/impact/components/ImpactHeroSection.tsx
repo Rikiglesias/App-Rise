@@ -1,13 +1,14 @@
 import React from 'react';
 import { Animated, StyleSheet, Text } from 'react-native';
 
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
 
 interface Props {
   fadeAnim: Animated.Value;
@@ -52,21 +53,21 @@ const styles = StyleSheet.create({
     ...Shadows.lg,
   },
   heroCounter: {
-    fontSize: Typography.sizes['6xl'],
+    fontSize: TypographyTokens.styles.display.small,
     fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
   heroLabel: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     textAlign: 'center',
     marginBottom: Spacing[3],
   },
   heroSubtitle: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[0],
     textAlign: 'center',
     opacity: 0.9,

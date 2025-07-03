@@ -9,7 +9,8 @@ import { FormattedText } from '../../../../components/ui';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { Spacing, Typography } from '../../../../shared/constants/designTokens';
+import { TypographyTokens } from '../../../../shared/constants/responsiveSystem';
+import { Spacing, Typography } from '../../../../shared/constants';
 
 import type { useNewActionsAnimations } from './ContributeAnimations';
 
@@ -87,7 +88,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
 
         // SUBTITLE INLINE INGRANDITO E ELEGANTE
         mainSubtitle: {
-          fontSize: Typography.sizes.base, // INGRANDITO: da sm a base per maggiore leggibilità
+          fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base per maggiore leggibilità
           fontWeight: Typography.weights.medium, // MEDIUM COME PAGINA AZIONI
           color: '#374151', // GRIGIO COORDINATO COME PAGINA AZIONI
           textAlign: 'center',

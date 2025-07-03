@@ -6,7 +6,8 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 
 /* eslint-disable react-native/no-unused-styles */
 export const enhancedCardStyles = StyleSheet.create({
@@ -73,15 +74,15 @@ export const enhancedCardStyles = StyleSheet.create({
   },
 
   compactIcon: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
   },
 
   standardIcon: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
   },
 
   largeIcon: {
-    fontSize: Typography.sizes['3xl'],
+    fontSize: TypographyTokens.styles.headline.small,
   },
 
   compactIconContainer: {
@@ -108,18 +109,21 @@ export const enhancedCardStyles = StyleSheet.create({
   },
 
   compactTitle: {
-    fontSize: Typography.sizes.base,
-    lineHeight: Typography.lineHeights.snug * Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
+    lineHeight:
+      Typography.lineHeights.snug * TypographyTokens.styles.body.medium,
   },
 
   standardTitle: {
-    fontSize: Typography.sizes.lg,
-    lineHeight: Typography.lineHeights.snug * Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
+    lineHeight:
+      Typography.lineHeights.snug * TypographyTokens.styles.body.large,
   },
 
   largeTitle: {
-    fontSize: Typography.sizes.xl,
-    lineHeight: Typography.lineHeights.snug * Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
+    lineHeight:
+      Typography.lineHeights.snug * TypographyTokens.styles.title.medium,
   },
 
   subtitle: {
@@ -129,22 +133,25 @@ export const enhancedCardStyles = StyleSheet.create({
   },
 
   compactSubtitle: {
-    fontSize: Typography.sizes.xs,
-    lineHeight: Typography.lineHeights.normal * Typography.sizes.xs,
+    fontSize: TypographyTokens.styles.label.small,
+    lineHeight:
+      Typography.lineHeights.normal * TypographyTokens.styles.label.small,
   },
 
   standardSubtitle: {
-    fontSize: Typography.sizes.sm,
-    lineHeight: Typography.lineHeights.normal * Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
+    lineHeight:
+      Typography.lineHeights.normal * TypographyTokens.styles.body.small,
   },
 
   largeSubtitle: {
-    fontSize: Typography.sizes.base,
-    lineHeight: Typography.lineHeights.normal * Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
+    lineHeight:
+      Typography.lineHeights.normal * TypographyTokens.styles.body.medium,
   },
 
   arrow: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.semibold,
   },
 

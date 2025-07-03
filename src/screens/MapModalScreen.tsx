@@ -11,12 +11,8 @@ import MapLocationModal from '../components/layout/MapLocationModal';
 import type { MapModalData } from '../data/mapModalData';
 import { getModalData } from '../data/mapModalData';
 import type { ImpactStackParamList } from '../navigation/types';
-import {
-  BorderRadius,
-  Colors,
-  Spacing,
-  Typography,
-} from '../shared/constants/designTokens';
+import { TypographyTokens } from '../shared/constants/responsiveSystem';
+import { BorderRadius, Colors, Spacing, Typography } from '../shared/constants';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
@@ -117,13 +113,13 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
   },
   title: {
-    fontSize: Typography.sizes.xl,
+    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[600],
     textAlign: 'center',
   },

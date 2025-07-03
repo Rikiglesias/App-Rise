@@ -1,13 +1,14 @@
 import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '../../../shared/constants';
 
 interface StatItem {
   id: string;
@@ -72,13 +73,13 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   statValue: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: Typography.sizes.sm,
+    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[600],
     marginBottom: Spacing[2],
   },

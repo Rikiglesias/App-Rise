@@ -5,11 +5,8 @@ import { Modal, StyleSheet, View } from 'react-native';
 import { PlatformTouchable, FormattedText } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '../../shared/constants/designTokens';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+import { Colors, Spacing, Typography } from '../../shared/constants';
 import { logDebug } from '../../shared/utils/logger';
 
 interface MapLocationModalProps {
@@ -136,13 +133,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: Typography.sizes['2xl'],
+    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
     marginBottom: Spacing[1],
   },
   subtitle: {
-    fontSize: Typography.sizes.base,
+    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[100],
     opacity: 0.9,
@@ -167,7 +164,7 @@ const styles = StyleSheet.create({
 
   // Descrizione breve
   description: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     textAlign: 'center',
@@ -196,7 +193,7 @@ const styles = StyleSheet.create({
     marginRight: Spacing[2],
   },
   ctaText: {
-    fontSize: Typography.sizes.lg,
+    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     textAlign: 'center',

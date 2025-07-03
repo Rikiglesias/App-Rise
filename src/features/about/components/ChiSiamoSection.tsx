@@ -6,6 +6,7 @@ import { PlatformTouchable } from '../../../components/ui';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useResponsive } from '../../../shared/hooks';
 import { chiSiamoSectionStyles } from '../styles';
+import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import type { ChiSiamoSectionProps } from '../types';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
@@ -13,7 +14,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   onInfoPress,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
-  const { scaleFont, scale } = useResponsive();
+  const { scale } = useResponsive();
 
   const handleInfoPress = useCallback(async () => {
     await triggerHaptic('light');
@@ -34,13 +35,13 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             >
               <Text
                 style={[
-                  { fontSize: scaleFont(32) },
+                  { fontSize: TypographyTokens.styles.headline.large },
                   chiSiamoSectionStyles.categoryTitle,
                 ]}
               >
                 <Text
                   style={[
-                    { fontSize: scaleFont(32) },
+                    { fontSize: TypographyTokens.styles.headline.large },
                     chiSiamoSectionStyles.titleAccent,
                   ]}
                 >

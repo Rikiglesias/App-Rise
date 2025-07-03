@@ -9,11 +9,8 @@ import { Animated, Platform, StyleSheet, View, Text } from 'react-native';
 
 import { PlatformTouchable, FormattedText } from '../../../../components/ui';
 
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '../../../../shared/constants/designTokens';
+import { TypographyTokens } from '../../../../shared/constants/responsiveSystem';
+import { Colors, Spacing, Typography } from '../../../../shared/constants';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../../shared/hooks/useLinkHandler';
 import type { ContributeTabScreenProps } from '../../types/ContributeScreenTypes';
@@ -277,7 +274,7 @@ const ActionButtonsContent: React.FC<{
 
         // SUBTITLE ELEGANTE DONA INGRANDITO
         donateInlineSubtitle: {
-          fontSize: Typography.sizes.base, // INGRANDITO: da sm a base
+          fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base
           fontWeight: Typography.weights.medium,
           color: '#B91C1C',
           textAlign: 'center',
@@ -313,7 +310,7 @@ const ActionButtonsContent: React.FC<{
         },
 
         exploreSubtitle: {
-          fontSize: Typography.sizes.base, // DIMENSIONE NORMALE
+          fontSize: TypographyTokens.styles.body.medium, // DIMENSIONE NORMALE
           fontWeight: Typography.weights.medium,
           color: '#4B5563', // GRIGIO MEDIO per leggibilità
           textAlign: 'center',
@@ -394,7 +391,7 @@ const ActionButtonsContent: React.FC<{
           marginBottom: Spacing[3],
         },
         buttonTitle: {
-          fontSize: Typography.sizes.xl, // AUMENTATO: testo più grande e visibile
+          fontSize: TypographyTokens.styles.title.medium, // AUMENTATO: testo più grande e visibile
           fontWeight: Typography.weights.bold,
           color: Colors.neutral[900],
           textAlign: 'center',
@@ -407,7 +404,7 @@ const ActionButtonsContent: React.FC<{
 
         // SUBTITLE POTENZIATO COMMUNITY
         communitySubtitle: {
-          fontSize: Typography.sizes.base, // DIMENSIONE NORMALE
+          fontSize: TypographyTokens.styles.body.medium, // DIMENSIONE NORMALE
           fontWeight: Typography.weights.medium,
           color: '#374151', // GRIGIO SCURO per leggibilità
           textAlign: 'center',

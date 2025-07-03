@@ -3,11 +3,8 @@ import { StyleSheet, View } from 'react-native';
 
 import { FormattedText } from '../ui';
 
-import {
-  BorderRadius,
-  Spacing,
-  Typography,
-} from '../../shared/constants/designTokens';
+import { BorderRadius, Spacing, Typography } from '../../shared/constants';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 import type { ProjectContentProps } from './types';
@@ -20,9 +17,9 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
 
   const styles = StyleSheet.create({
     description: {
-      fontSize: Typography.sizes.base,
+      fontSize: TypographyTokens.styles.body.medium,
       color: colors.neutral[700],
-      lineHeight: Typography.sizes.base * 1.4,
+      lineHeight: TypographyTokens.styles.body.medium * 1.4,
       marginBottom: Spacing[4],
     },
     impactContainer: {
@@ -34,7 +31,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       borderColor: colors.primary[200],
     },
     impactLabel: {
-      fontSize: Typography.sizes.xs,
+      fontSize: TypographyTokens.styles.label.small,
       fontWeight: Typography.weights.bold,
       color: colors.primary[700],
       marginBottom: Spacing[1],
@@ -42,7 +39,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       letterSpacing: 0.5,
     },
     impactText: {
-      fontSize: Typography.sizes.sm,
+      fontSize: TypographyTokens.styles.body.small,
       color: colors.primary[800],
       fontWeight: Typography.weights.medium,
     },

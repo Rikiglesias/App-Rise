@@ -1,11 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import {
-  BorderRadius,
-  Spacing,
-  Typography,
-} from '../../shared/constants/designTokens';
+import { BorderRadius, Spacing } from '../../shared/constants';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 import type { ProjectProgressProps } from './types';
@@ -21,7 +18,7 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
       marginTop: Spacing[2],
     },
     progressLabel: {
-      fontSize: Typography.sizes.xs,
+      fontSize: TypographyTokens.styles.label.small,
       color: colors.neutral[600],
       marginBottom: Spacing[2],
       textAlign: 'center',
