@@ -451,17 +451,8 @@ export const DeviceInfo = {
 } as const;
 
 // 🎯 RESPONSIVE VALUE HOOK (supporta tutti i breakpoints)
-export const useResponsiveValue = <T>(values: {
-  compact?: T;
-  standard?: T;
-  large?: T;
-  xlarge?: T;
-  xxlarge?: T;
-  default: T;
-}): T => {
-  const breakpoint = getCurrentBreakpoint();
-  return values[breakpoint] ?? values.default;
-};
+// useResponsiveValue rimosso - utilizzare la versione in useResponsive.ts
+// Questa funzione è ora disponibile tramite l'hook useResponsive()
 
 // 📏 SPACING SYSTEM (8dp grid)
 export const SpacingTokens = {
@@ -771,7 +762,7 @@ export default {
   scaleFont,
   scaleSpacing,
   getCurrentBreakpoint,
-  useResponsiveValue,
+  // useResponsiveValue rimosso - utilizzare useResponsive hook
 
   // Industry standards
   INDUSTRY_STANDARDS,
