@@ -189,6 +189,53 @@ const getAutoWrapText = (text: string): string => {
 };
 
 /**
+ * Calcola fontSize ottimale per wrapMode fixed
+ * Sistema di scaling automatico per garantire che il testo stia su N righe esatte
+ */
+const calculateOptimalFontSizeForFixedLines = (
+  text: string,
+  baseFontSize: number,
+  targetLines: number,
+  maxWidth: number = 350 // Larghezza stimata del container
+): number => {
+  if (!text || targetLines <= 0) return baseFontSize;
+
+  // Stima caratteri per riga basata su fontSize e larghezza
+  const estimateCharsPerLine = (fontSize: number) => {
+    const avgCharWidth = fontSize * 0.6; // Stima larghezza media carattere
+    return Math.floor(maxWidth / avgCharWidth);
+  };
+
+  // Calcola caratteri totali necessari per le righe target
+  const totalChars = text.length;
+  const charsPerLineNeeded = Math.ceil(totalChars / targetLines);
+
+  // Trova fontSize che permette il numero di caratteri necessario per riga
+  let optimalFontSize = baseFontSize;
+  let iterations = 0;
+  const maxIterations = 20;
+
+  while (iterations < maxIterations) {
+    const charsPerLine = estimateCharsPerLine(optimalFontSize);
+
+    if (charsPerLine >= charsPerLineNeeded) {
+      // Font size è corretto o può essere leggermente più grande
+      break;
+    } else {
+      // Font troppo grande, riduci
+      optimalFontSize *= 0.95;
+    }
+    iterations++;
+  }
+
+  // Assicurati che il font non diventi troppo piccolo o troppo grande
+  const minFontSize = baseFontSize * 0.7;
+  const maxFontSize = baseFontSize * 1.2;
+
+  return Math.max(minFontSize, Math.min(maxFontSize, optimalFontSize));
+};
+
+/**
  * Ottieni proprietà text wrapping basate su modalità + Netflix intelligence
  */
 const getWrapProps = (
@@ -213,10 +260,12 @@ const getWrapProps = (
   switch (wrapMode) {
     case 'fixed':
       // Modalità fissa: forza numero specifico di righe su tutti i dispositivi
+      // Con scaling automatico del font per garantire che il testo ci stia
       return {
         numberOfLines: fixedLines ?? 1,
         ellipsizeMode: 'tail' as const,
         adjustsFontSizeToFit: false,
+        // Il fontSize ottimale viene calcolato nel componente principale
       };
     case 'auto':
       // Modalità automatica: gestisce il wrapping intelligentemente
@@ -292,13 +341,22 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
 }) => {
   // Calcola fontSize finale
   const baseFontSize = manualFontSize ?? getVariantFontSize(variant);
-  const finalFontSize = enforceReadabilityConstraints
+  let finalFontSize = enforceReadabilityConstraints
     ? applyReadabilityConstraints(baseFontSize)
     : baseFontSize;
 
+  // Sistema di scaling automatico per wrapMode="fixed"
+  const textString = typeof children === 'string' ? children : '';
+  if (wrapMode === 'fixed' && fixedLines && textString) {
+    finalFontSize = calculateOptimalFontSizeForFixedLines(
+      textString,
+      finalFontSize,
+      fixedLines
+    );
+  }
+
   // Gestione automatica del testo per wrapMode 'auto'
   let processedText = children;
-  const textString = typeof children === 'string' ? children : '';
 
   if (wrapMode === 'auto' && textString) {
     processedText = getAutoWrapText(textString);

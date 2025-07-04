@@ -8,11 +8,8 @@ import {
   Spacing,
   Colors,
 } from '../../../../shared/constants/designTokens';
-import { useResponsive } from '../../../../shared/hooks/useResponsive';
 
 export const ActionDescription: React.FC = () => {
-  const { scaleFont } = useResponsive();
-
   return (
     <View style={styles.descriptionContainer}>
       <LinearGradient
@@ -23,9 +20,10 @@ export const ActionDescription: React.FC = () => {
       >
         <View style={styles.descriptionContent}>
           <FormattedText
-            variant="title-medium"
-            wrapMode="auto"
-            style={[styles.descriptionMain, { fontSize: scaleFont(20) }]}
+            variant="title-large"
+            wrapMode="fixed"
+            fixedLines={2}
+            style={styles.descriptionMain}
           >
             Unisciti a noi nella lotta contro la fame nel mondo
           </FormattedText>
@@ -33,7 +31,7 @@ export const ActionDescription: React.FC = () => {
           <FormattedText
             variant="body-large"
             wrapMode="auto"
-            style={[styles.descriptionSecondary, { fontSize: scaleFont(17) }]}
+            style={styles.descriptionSecondary}
           >
             Ogni azione conta per cambiare vite
           </FormattedText>
@@ -69,7 +67,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionMain: {
-    // fontSize moved to dynamic scaleFont(20) - responsive scaling
+    // fontSize gestito automaticamente dal variant title-large
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     textAlign: 'center' as const,
@@ -92,7 +90,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionSecondary: {
-    // fontSize moved to dynamic scaleFont(17) - responsive scaling
+    // fontSize gestito automaticamente dal variant body-large
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center' as const,

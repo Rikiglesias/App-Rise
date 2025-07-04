@@ -298,7 +298,7 @@ export const TypographyTokens = {
 
     // Title styles (più usati in UI)
     title: {
-      large: scaleFont(26), // RIDOTTO: per "Il nostro impatto", "Pasti/Kit Confezionati" (era 32)
+      large: scaleFont(22), // RIDOTTO: per "Unisciti a noi nella lotta contro la fame nel mondo" su 2 righe (era 26)
       medium: scaleFont(16), // ~Title Medium Material
       small: scaleFont(14), // ~Title Small Material
     },
