@@ -47,7 +47,12 @@ export interface FormattedTextProps
   /**
    * Modalità text wrapping per layout consistency
    */
-  wrapMode?: 'strict' | 'flexible' | 'none' | 'auto';
+  wrapMode?: 'strict' | 'flexible' | 'none' | 'auto' | 'fixed';
+
+  /**
+   * Numero fisso di righe per wrapMode 'fixed' (garantisce consistenza assoluta)
+   */
+  fixedLines?: number;
 
   /**
    * Controlla se applicare vincoli Netflix di leggibilità
@@ -189,7 +194,8 @@ const getAutoWrapText = (text: string): string => {
 const getWrapProps = (
   wrapMode: FormattedTextProps['wrapMode'],
   text: string = '',
-  fontSize: number = 14
+  fontSize: number = 14,
+  fixedLines?: number
 ) => {
   // Netflix intelligence: calcola larghezza ottimale per il testo
   const optimalWidth = TextIntelligence.getOptimalTextWidth(fontSize);
@@ -205,6 +211,13 @@ const getWrapProps = (
   );
 
   switch (wrapMode) {
+    case 'fixed':
+      // Modalità fissa: forza numero specifico di righe su tutti i dispositivi
+      return {
+        numberOfLines: fixedLines ?? 1,
+        ellipsizeMode: 'tail' as const,
+        adjustsFontSizeToFit: false,
+      };
     case 'auto':
       // Modalità automatica: gestisce il wrapping intelligentemente
       return {
@@ -272,6 +285,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   fontSize: manualFontSize,
   color,
   fontWeight,
+  fixedLines,
   style,
   children,
   ...textProps
@@ -291,7 +305,12 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   }
 
   // Ottieni proprietà wrapping intelligenti
-  const wrapProps = getWrapProps(wrapMode, textString, finalFontSize);
+  const wrapProps = getWrapProps(
+    wrapMode,
+    textString,
+    finalFontSize,
+    fixedLines
+  );
 
   // Calcola stile finale
   const computedStyle = [
