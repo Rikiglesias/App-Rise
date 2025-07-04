@@ -24,6 +24,7 @@ export const ActionDescription: React.FC = () => {
         <View style={styles.descriptionContent}>
           <FormattedText
             variant="title-medium"
+            wrapMode="auto"
             style={[styles.descriptionMain, { fontSize: scaleFont(20) }]}
           >
             Unisciti a noi nella lotta contro la fame nel mondo
@@ -31,6 +32,7 @@ export const ActionDescription: React.FC = () => {
           <View style={styles.descriptionDivider} />
           <FormattedText
             variant="body-large"
+            wrapMode="auto"
             style={[styles.descriptionSecondary, { fontSize: scaleFont(17) }]}
           >
             Ogni azione conta per cambiare vite

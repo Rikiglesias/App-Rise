@@ -58,7 +58,7 @@ const createModernTitleStyles = (scaleFont: (size: number) => number) =>
 
     // Typography pulita e moderna - RESPONSIVE - DIMENSIONE OTTIMALE
     titleText: {
-      fontSize: scaleFont(45), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
+      fontSize: scaleFont(42), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
       fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',
@@ -67,7 +67,7 @@ const createModernTitleStyles = (scaleFont: (size: number) => number) =>
       ...(Platform.OS === 'android' && {
         includeFontPadding: false,
         textAlignVertical: 'center',
-        lineHeight: 48, // Adeguato al nuovo fontSize (45 * 1.07 = 48)
+        lineHeight: 45, // Adeguato al nuovo fontSize (42 * 1.07 = 45)
         fontFamily: 'sans-serif', // Font nativo Android sicuro
         paddingVertical: 0,
         marginVertical: 0,
@@ -81,7 +81,7 @@ const createModernTitleStyles = (scaleFont: (size: number) => number) =>
 
     // Stile per "Italia" in nero - RESPONSIVE - DIMENSIONE OTTIMALE
     titleTextItalia: {
-      fontSize: scaleFont(45), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
+      fontSize: scaleFont(42), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
       fontWeight: Typography.weights.black,
       color: '#1F2937', // Nero elegante
       textAlign: 'center',
@@ -90,7 +90,7 @@ const createModernTitleStyles = (scaleFont: (size: number) => number) =>
       ...(Platform.OS === 'android' && {
         includeFontPadding: false,
         textAlignVertical: 'center',
-        lineHeight: 48, // Adeguato al nuovo fontSize (45 * 1.07 = 48)
+        lineHeight: 45, // Adeguato al nuovo fontSize (42 * 1.07 = 45)
         fontFamily: 'sans-serif', // Font nativo Android sicuro
         paddingVertical: 0,
         marginVertical: 0,

@@ -568,7 +568,7 @@ const DonateButtonsSection: React.FC<{
           activeOpacity={0.8}
         >
           <FormattedText
-            variant="headline-small"
+            variant="title-large"
             style={styles.donateCategoryTitle}
           >
             ❤️ Contribuisci

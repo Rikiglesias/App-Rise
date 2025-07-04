@@ -47,7 +47,7 @@ export interface FormattedTextProps
   /**
    * Modalità text wrapping per layout consistency
    */
-  wrapMode?: 'strict' | 'flexible' | 'none';
+  wrapMode?: 'strict' | 'flexible' | 'none' | 'auto';
 
   /**
    * Controlla se applicare vincoli Netflix di leggibilità
@@ -129,6 +129,61 @@ const applyReadabilityConstraints = (fontSize: number): number => {
 };
 
 /**
+ * Algoritmo intelligente per text wrapping automatico
+ * Determina automaticamente il punto di interruzione ottimale
+ */
+const getAutoWrapText = (text: string): string => {
+  if (!text || text.length <= 20) return text;
+
+  const words = text.split(' ');
+  if (words.length <= 3) return text;
+
+  // Regole specifiche per diversi tipi di testo
+  const totalLength = text.length;
+
+  // Testi brevi (20-40 caratteri): cerca punto naturale a metà
+  if (totalLength <= 40) {
+    const midPoint = Math.floor(words.length / 2);
+    return (
+      words.slice(0, midPoint).join(' ') +
+      '\n' +
+      words.slice(midPoint).join(' ')
+    );
+  }
+
+  // Testi medi (40-80 caratteri): bilancia le righe
+  if (totalLength <= 80) {
+    let bestSplit = 0;
+    let minDifference = Infinity;
+
+    for (let i = 1; i < words.length; i++) {
+      const firstPart = words.slice(0, i).join(' ');
+      const secondPart = words.slice(i).join(' ');
+      const difference = Math.abs(firstPart.length - secondPart.length);
+
+      if (difference < minDifference) {
+        minDifference = difference;
+        bestSplit = i;
+      }
+    }
+
+    return (
+      words.slice(0, bestSplit).join(' ') +
+      '\n' +
+      words.slice(bestSplit).join(' ')
+    );
+  }
+
+  // Testi lunghi: massimo 3 righe, bilanciate
+  const wordsPerLine = Math.ceil(words.length / 3);
+  const line1 = words.slice(0, wordsPerLine).join(' ');
+  const line2 = words.slice(wordsPerLine, wordsPerLine * 2).join(' ');
+  const line3 = words.slice(wordsPerLine * 2).join(' ');
+
+  return line1 + '\n' + line2 + (line3 ? '\n' + line3 : '');
+};
+
+/**
  * Ottieni proprietà text wrapping basate su modalità + Netflix intelligence
  */
 const getWrapProps = (
@@ -150,6 +205,13 @@ const getWrapProps = (
   );
 
   switch (wrapMode) {
+    case 'auto':
+      // Modalità automatica: gestisce il wrapping intelligentemente
+      return {
+        numberOfLines: undefined, // Permette wrapping naturale
+        ellipsizeMode: 'tail' as const,
+        adjustsFontSizeToFit: false,
+      };
     case 'strict':
       return {
         numberOfLines: shouldWrap ? optimalLines : 1,
@@ -205,7 +267,7 @@ const getFontWeight = (
 export const FormattedText: React.FC<FormattedTextProps> = ({
   variant = 'body-medium',
   allowSystemFontScaling = false,
-  wrapMode = 'flexible',
+  wrapMode = 'auto',
   enforceReadabilityConstraints = true,
   fontSize: manualFontSize,
   color,
@@ -220,8 +282,15 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
     ? applyReadabilityConstraints(baseFontSize)
     : baseFontSize;
 
-  // Ottieni proprietà wrapping intelligenti
+  // Gestione automatica del testo per wrapMode 'auto'
+  let processedText = children;
   const textString = typeof children === 'string' ? children : '';
+
+  if (wrapMode === 'auto' && textString) {
+    processedText = getAutoWrapText(textString);
+  }
+
+  // Ottieni proprietà wrapping intelligenti
   const wrapProps = getWrapProps(wrapMode, textString, finalFontSize);
 
   // Calcola stile finale
@@ -246,7 +315,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
       allowFontScaling={allowSystemFontScaling}
       style={computedStyle}
     >
-      {children}
+      {processedText}
     </Text>
   );
 };

@@ -76,12 +76,14 @@ const ImpactHeader: React.FC<{
       />
 
       <View style={styles.mainHeaderContainer}>
-        <FormattedText variant="display-small" style={styles.titleText}>
-          Il Nostro{'\n'}
-          <FormattedText variant="display-small" style={styles.titleAccent}>
+        <View style={styles.titleContainer}>
+          <FormattedText variant="display-medium" style={styles.titleText}>
+            Il Nostro
+          </FormattedText>
+          <FormattedText variant="display-medium" style={styles.titleAccent}>
             Impatto
           </FormattedText>
-        </FormattedText>
+        </View>
         <FormattedText variant="body-large" style={styles.mainSubtitle}>
           Risultati concreti nella lotta contro la fame mondiale
         </FormattedText>
@@ -284,7 +286,7 @@ const Results2024Section: React.FC<{
               3.14M
             </FormattedText>
             <FormattedText
-              variant="title-large"
+              variant="title-medium"
               style={styles.record2024Label}
               numberOfLines={1}
             >
@@ -321,7 +323,7 @@ const Results2024Section: React.FC<{
               16.3K
             </FormattedText>
             <FormattedText
-              variant="title-large"
+              variant="title-medium"
               style={styles.record2024Label}
               numberOfLines={1}
             >
@@ -640,7 +642,7 @@ const styles = StyleSheet.create({
   // Header - IDENTICO PAGINA AZIONI
   headerContainer: {
     paddingTop: Spacing[8], // AUMENTATO: da Spacing[3] a Spacing[8] per abbassare e non tagliare il titolo
-    paddingHorizontal: Spacing[4],
+    paddingHorizontal: Spacing[2], // RIDOTTO: da Spacing[4] a Spacing[2] per dare più spazio al mainHeaderContainer
     paddingBottom: Spacing[6], // AUMENTATO: più spazio sotto il titolo principale
     alignItems: 'center',
     position: 'relative',
@@ -660,8 +662,8 @@ const styles = StyleSheet.create({
       Platform.OS === 'android'
         ? '#F5F6F6' // ANDROID: Grigio leggermente più scuro
         : 'rgba(31, 41, 55, 0.03)', // iOS: Mantiene rgba originale
-    paddingVertical: Spacing[3], // COME PAGINA AZIONI
-    paddingHorizontal: Spacing[5], // COME PAGINA AZIONI
+    paddingVertical: Spacing[5], // AUMENTATO: da Spacing[4] a Spacing[5] per dare più spazio verticale al container
+    paddingHorizontal: Spacing[6], // AUMENTATO: da Spacing[5] a Spacing[6] per evitare taglio testo
     borderRadius: 16, // MODERNO COME PAGINA AZIONI
     borderWidth: 1,
     borderColor:
@@ -674,26 +676,37 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
+  // CONTAINER TITOLO - IMPAGINAZIONE ELEGANTE
+  titleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing[3], // SPAZIO tra titolo e subtitle
+  },
   // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
   titleText: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.black, // MASSIMO peso per autorità
+    fontSize: 40,
+    fontWeight: Typography.weights.black, // RIPRISTINATO: black (900) per massimo grassetto come richiesto
     color: '#1F2937', // NERO per contrasto come richiesto
     textAlign: 'center',
     letterSpacing: -0.8, // RIDOTTO: per bilanciare la dimensione ridotta (era -1.2)
-    lineHeight: 32, // OTTIMIZZATO: spaziatura perfetta tra "Il Nostro" e "Impatto" (era 36)
-    marginBottom: Spacing[2], // SPAZIO per separazione
+    lineHeight: 45, // RIDOTTO: da 50 a 45 per proporzioni migliori con fontSize 40
     textShadowColor: 'rgba(31, 41, 55, 0.15)', // OMBRA SOTTILE
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     includeFontPadding: false,
   },
-  // ACCENTO ROSSO STRATEGICO
+  // ACCENTO ROSSO STRATEGICO - IDENTICO A titleText tranne colore
   titleAccent: {
+    fontSize: 40,
+    fontWeight: Typography.weights.black, // IDENTICO: black (900) per consistenza
     color: '#DC2626', // ROSSO BRAND per accento
+    textAlign: 'center', // IDENTICO: per allineamento
+    letterSpacing: -0.8, // IDENTICO: per spaziatura caratteri
+    lineHeight: 45, // IDENTICO: per altezza linea - ridotto per proporzioni migliori
     textShadowColor: 'rgba(220, 38, 38, 0.15)', // OMBRA COORDINATA
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
+    includeFontPadding: false, // IDENTICO: per padding font
   },
   // SUBTITLE INLINE INGRANDITO E ELEGANTE
   mainSubtitle: {
@@ -879,7 +892,7 @@ const styles = StyleSheet.create({
   },
   record2024Grid: {
     flexDirection: 'row',
-    gap: Spacing[4],
+    gap: Spacing[3],
   },
   record2024Card: {
     flex: 1,
@@ -887,8 +900,8 @@ const styles = StyleSheet.create({
   record2024CardContent: {
     backgroundColor: Colors.neutral[50],
     borderRadius: 16,
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[3],
+    paddingVertical: Spacing[3],
+    paddingHorizontal: Spacing[2],
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#E5E7EB',
@@ -902,25 +915,28 @@ const styles = StyleSheet.create({
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
-    marginTop: Spacing[2],
-    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per più spazio
+    marginTop: Spacing[1],
+    marginBottom: Spacing[1],
+    textAlign: 'center',
   },
 
   record2024Label: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.semibold,
     color: '#374151',
-    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per bilanciare font più grandi
+    marginBottom: Spacing[1],
     textAlign: 'center',
-    lineHeight: 28, // AGGIUNTO: lineHeight per evitare sovrapposizioni
+    lineHeight: 22,
+    flexWrap: 'wrap',
   },
   record2024Description: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center',
-    marginTop: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per spacing bilanciato
-    lineHeight: 20, // AGGIUNTO: lineHeight appropriato per body-medium
+    marginTop: Spacing[1],
+    lineHeight: 18,
+    paddingHorizontal: Spacing[1],
   },
 
   // Scroll Content - PADDING BOTTOM PER NAVIGATION

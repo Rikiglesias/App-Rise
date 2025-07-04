@@ -2,14 +2,28 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { FormattedText } from '../../../../components/ui';
-import { Typography, Spacing } from '../../../../shared/constants/designTokens';
+import { Spacing } from '../../../../shared/constants/designTokens';
+import { scaleFont } from '../../../../shared/constants/responsiveSystem';
 
 export const ActionTitle: React.FC = () => {
   return (
     <View style={styles.titleSection}>
-      <FormattedText variant="headline-large" style={styles.titleText}>
-        ⚡ Entra in Azione
-      </FormattedText>
+      <View style={styles.titleContainer}>
+        <FormattedText
+          fontSize={scaleFont(35)}
+          wrapMode="auto"
+          style={[styles.titleText, { fontWeight: 'bold' }]}
+        >
+          ⚡ Entra in
+        </FormattedText>
+        <FormattedText
+          fontSize={scaleFont(35)}
+          wrapMode="auto"
+          style={[styles.titleText, { fontWeight: 'bold', color: '#DC2626' }]}
+        >
+          Azione
+        </FormattedText>
+      </View>
     </View>
   );
 };
@@ -20,16 +34,16 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[5], // AUMENTATO: da Spacing[4] a Spacing[5] per più respiro
   },
 
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginBottom: Spacing[3],
+  },
+
   titleText: {
-    // fontSize handled by variant="headline-large" - already responsive scaleFont(30)
-    fontWeight: Typography.weights.bold,
+    // fontSize gestito da variant="headline-large" (scaleFont(30)) - IDENTICO a "Il Nostro Impatto"
     color: '#DC2626',
-    textAlign: 'center' as const,
-    letterSpacing: -0.4,
-    lineHeight: 36, // AGGIUNTO: lineHeight appropriato per headline-large
-    includeFontPadding: false,
-    textShadowColor: 'rgba(220, 38, 38, 0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
   },
 });
