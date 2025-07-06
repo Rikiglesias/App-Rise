@@ -32,10 +32,16 @@ export { PlatformScrollView, PlatformSurface } from './PlatformComponents';
 
 // Display Components
 export { default as FormattedText } from './FormattedText';
+export { SafeFormattedText } from './SafeFormattedText';
 export { default as HeaderLogo } from './HeaderLogo';
 export { default as LoadingSkeleton } from './LoadingSkeleton';
 export { default as Logo } from './Logo';
 export { default as SocialIcon } from './SocialIcon';
+export {
+  ProfessionalContainer,
+  TitleContainer,
+  CardContainer,
+} from './ProfessionalContainer';
 
 // Progress Components
 export { ProgressRing } from './ProgressRing';

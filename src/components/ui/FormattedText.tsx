@@ -9,11 +9,14 @@
  */
 
 import React from 'react';
-import { Text, TextProps, TextStyle } from 'react-native';
+import { Text, TextProps, TextStyle, Platform } from 'react-native';
 import {
   TypographyTokens,
   AccessibilityIntelligence,
   scaleFont,
+  DesignTokens,
+  RTLTokens,
+  DeviceInfo,
 } from '../../shared/constants/responsiveSystem';
 
 // Extend TextProps con nuove proprietà specifiche
@@ -65,9 +68,44 @@ export interface FormattedTextProps
   fixedLines?: number;
 
   /**
+   * Supporto RTL - Abilita layout e text alignment per lingue RTL
+   */
+  enableRTL?: boolean;
+
+  /**
+   * Override della larghezza container per calcoli di layout (usa 90% screen width se non specificato)
+   */
+  containerWidth?: number;
+
+  /**
    * Controlla se applicare vincoli Netflix di leggibilità
    */
   enforceReadabilityConstraints?: boolean;
+
+  /**
+   * Strategia di line break per consistency cross-platform
+   * - 'push-out': iOS default, ottimale per titoli
+   * - 'standard': Bilanciato per testi normali
+   * - 'hangul-word': Per lingue asiatiche
+   * - 'none': Disabilitato
+   */
+  lineBreakStrategyIOS?: 'push-out' | 'standard' | 'hangul-word' | 'none';
+
+  /**
+   * Strategia di break per Android (complementare a iOS)
+   * - 'highQuality': Equivalente a 'push-out' iOS
+   * - 'balanced': Distribuzione uniforme
+   * - 'simple': Fallback veloce
+   */
+  breakStrategyAndroid?: 'simple' | 'highQuality' | 'balanced';
+
+  /**
+   * Frequenza di hyphenation per Android
+   * - 'full': Massima qualità, come iOS
+   * - 'normal': Bilanciato
+   * - 'none': Disabilitato
+   */
+  hyphenationFrequencyAndroid?: 'none' | 'normal' | 'full';
 
   /**
    * Override manuale fontSize (bypassa variant)
@@ -90,6 +128,16 @@ export interface FormattedTextProps
     | 'bold'
     | 'extrabold'
     | 'black';
+
+  /**
+   * Font family personalizzata (opzionale)
+   */
+  fontFamily?: string;
+
+  /**
+   * Abilita catena di fallback font automatica per emoji/CJK/arabo
+   */
+  enableFallbackFontChain?: boolean;
 }
 
 /**
@@ -153,14 +201,18 @@ const applyReadabilityConstraints = (fontSize: number): number => {
  * SISTEMA INTELLIGENTE MIGLIORATO: Calcola fontSize ottimale per fixedLines
  * PRINCIPIO: Mai troncare il testo, ridimensionare conservativamente per farlo entrare
  * MIGLIORAMENTI: Meno aggressivo, preserva meglio font weight e leggibilità
+ * CONTAINER AWARE: Usa larghezza container da Design Tokens per calcoli precisi
  */
 const calculateSmartFontSize = (
   text: string,
   scaledFontSize: number, // Già scalato con scaleFont()
   targetLines: number,
-  maxWidth: number = 350
+  maxWidth?: number // Opzionale, usa container width se non specificato
 ): number => {
   if (!text || targetLines <= 0) return scaledFontSize;
+
+  // CONTAINER AWARE: Usa larghezza container da Design Tokens (with fallback for tests)
+  const containerWidth = maxWidth ?? (DeviceInfo?.width ?? 375) * 0.9; // 90% screen width come default
 
   // GESTIONE \n ESPLICITI: Rispetta sempre i line breaks manuali
   const explicitLines = text.split('\n');
@@ -187,7 +239,7 @@ const calculateSmartFontSize = (
     return calculateOptimalFontSizeForText(
       longestLine,
       scaledFontSize,
-      maxWidth
+      containerWidth
     );
   }
 
@@ -201,7 +253,7 @@ const calculateSmartFontSize = (
   for (let sizeFactor = 1.0; sizeFactor >= 0.85; sizeFactor -= 0.02) {
     const testSize = scaledFontSize * sizeFactor;
     const avgCharWidth = testSize * 0.55; // Stima larghezza carattere
-    const charsPerLine = Math.floor(maxWidth / avgCharWidth);
+    const charsPerLine = Math.floor(containerWidth / avgCharWidth);
     const totalLinesNeeded = Math.ceil(totalChars / charsPerLine);
 
     if (totalLinesNeeded <= targetLines) {
@@ -295,6 +347,64 @@ const getFontWeight = (
 };
 
 /**
+ * Detecta il tipo di contenuto del testo per font fallback
+ */
+const detectTextContent = (
+  text: string
+): 'emoji' | 'cjk' | 'arabic' | 'latin' => {
+  // Emoji detection (Unicode ranges)
+  const emojiRegex =
+    /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u;
+  if (emojiRegex.test(text)) return 'emoji';
+
+  // CJK detection (Chinese, Japanese, Korean)
+  const cjkRegex =
+    /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u3040-\u309f]|[\u30a0-\u30ff]|[\uac00-\ud7af]/;
+  if (cjkRegex.test(text)) return 'cjk';
+
+  // Arabic detection
+  const arabicRegex =
+    /[\u0600-\u06ff]|[\u0750-\u077f]|[\u08a0-\u08ff]|[\ufb50-\ufdff]|[\ufe70-\ufeff]/;
+  if (arabicRegex.test(text)) return 'arabic';
+
+  return 'latin';
+};
+
+/**
+ * Catena di fallback font per diversi tipi di contenuto
+ */
+const getFallbackFontFamily = (
+  textContent: string,
+  customFontFamily?: string
+): string => {
+  const contentType = detectTextContent(textContent);
+  const customFont = customFontFamily ?? '';
+
+  const fontChains = Platform.select({
+    ios: {
+      emoji: `${customFont}, "Apple Color Emoji", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto`,
+      cjk: `${customFont}, "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont`,
+      arabic: `${customFont}, "Noto Sans Arabic", "Geeza Pro", -apple-system, BlinkMacSystemFont`,
+      latin: `${customFont}, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`,
+    },
+    android: {
+      emoji: `${customFont}, "Noto Color Emoji", "Segoe UI Emoji", "Segoe UI", Roboto, sans-serif`,
+      cjk: `${customFont}, "Noto Sans CJK SC", "Source Han Sans", "Droid Sans Fallback", Roboto, sans-serif`,
+      arabic: `${customFont}, "Noto Sans Arabic", "Droid Arabic Naskh", Roboto, sans-serif`,
+      latin: `${customFont}, Roboto, "Helvetica Neue", Arial, sans-serif`,
+    },
+    default: {
+      emoji: `${customFont}, "Segoe UI Emoji", "Segoe UI", "Helvetica Neue", Arial, sans-serif`,
+      cjk: `${customFont}, "Noto Sans CJK SC", "Helvetica Neue", Arial, sans-serif`,
+      arabic: `${customFont}, "Noto Sans Arabic", "Helvetica Neue", Arial, sans-serif`,
+      latin: `${customFont}, "Helvetica Neue", Arial, sans-serif`,
+    },
+  });
+
+  return fontChains[contentType] || fontChains.latin;
+};
+
+/**
  * FormattedText Component - SISTEMA INTELLIGENTE CONSERVATIVO
  *
  * ORDINE OPERAZIONI:
@@ -313,9 +423,16 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   fontSize: manualFontSize,
   color,
   fontWeight,
+  fontFamily, // Custom font family
+  enableFallbackFontChain = true, // Automatic font fallback
   wrapMode, // LEGACY: Supporto per backward compatibility
   fixed = false, // NUOVO: Sistema intelligente
   fixedLines, // OPZIONALE - funziona solo con fixed={true}
+  enableRTL = false, // RTL support
+  containerWidth, // Container width override
+  lineBreakStrategyIOS = 'push-out', // iOS line break strategy
+  breakStrategyAndroid = 'highQuality', // Android break strategy
+  hyphenationFrequencyAndroid = 'full', // Android hyphenation
   style,
   children,
   ...textProps
@@ -333,6 +450,18 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
 
   // PASSO 4: SISTEMA INTELLIGENTE - Solo se fixed={true} o wrapMode="fixed"
   const textString = typeof children === 'string' ? children : '';
+
+  // 🔍 DIAGNOSI: Logging per verificare doppio scaling
+  if (__DEV__ && textString.includes('Rise Against')) {
+    // eslint-disable-next-line no-console
+    console.log('🔍 FormattedText DEBUG:', {
+      raw: baseFontSize,
+      scaled: scaledFontSize,
+      ratio: scaledFontSize / baseFontSize,
+      hasDoubleScaling: scaledFontSize > baseFontSize * 1.2,
+      text: textString.substring(0, 30) + '...',
+    });
+  }
   let finalFontSize = scaledFontSize; // GIÀ SCALATO per device
   let wrapProps = {};
 
@@ -341,27 +470,59 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   if (isFixedMode) {
     wrapProps = getIntelligentWrapProps(fixed, wrapMode, fixedLines);
 
-    // MODALITÀ INTELLIGENTE CONSERVATIVA: Con fixedLines ridimensiona minimamente il font
+    // MODALITÀ INTELLIGENTE CONSERVATIVA: Con fixedLines ridimensiona minimalmente il font
     if (fixedLines && fixedLines > 0 && textString) {
       // CALCOLO CONSERVATIVO: Trova il fontSize ottimale per far entrare tutto il testo
       finalFontSize = calculateSmartFontSize(
         textString,
         scaledFontSize, // Parte dal font GIÀ SCALATO
-        fixedLines
+        fixedLines,
+        containerWidth // Usa containerWidth se specificato
       );
     }
   }
   // ALTRIMENTI: Modalità normale con font scalato standard
 
-  // Calcola stile finale
+  // RTL SUPPORT: Calcola textAlign basato su direzione
+  const rtlAwareTextAlign = enableRTL ? RTLTokens.textAlign.start : 'left';
+
+  // CROSS-PLATFORM LINE BREAK STRATEGIES
+  const platformLineBreakProps = Platform.select({
+    ios: {
+      lineBreakStrategyIOS: lineBreakStrategyIOS,
+    },
+    android: {
+      android_breakStrategy: breakStrategyAndroid,
+      android_hyphenationFrequency: hyphenationFrequencyAndroid,
+    },
+    default: {},
+  });
+
+  // FALLBACK FONT CHAIN: Determina fontFamily basata sul contenuto
+  const determinedFontFamily =
+    enableFallbackFontChain && textString
+      ? getFallbackFontFamily(textString, fontFamily)
+      : (fontFamily ?? undefined);
+
+  // Calcola stile finale con lineHeight intelligente usando baseline grid
   const computedStyle = [
     {
       fontSize: finalFontSize,
       color: color ?? '#171717',
       fontWeight: getFontWeight(fontWeight),
-      lineHeight: finalFontSize * TypographyTokens.lineHeights.normal,
+      fontFamily: determinedFontFamily,
+      // BASELINE GRID: lineHeight proporzionale usando Design Tokens (with fallback for tests)
+      lineHeight: DesignTokens?.containers?.baseline?.lineHeight
+        ? DesignTokens.containers.baseline.lineHeight(finalFontSize)
+        : Math.round(finalFontSize * 1.15),
       includeFontPadding: false,
       textAlignVertical: 'center' as const,
+      // RTL SUPPORT: Text alignment
+      textAlign: rtlAwareTextAlign,
+      // RTL SUPPORT: Writing direction
+      writingDirection: enableRTL
+        ? RTLTokens.writingDirection.auto
+        : RTLTokens.writingDirection.ltr,
     },
     style,
   ];
@@ -370,6 +531,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
     <Text
       {...textProps}
       {...wrapProps}
+      {...platformLineBreakProps}
       allowFontScaling={allowSystemFontScaling}
       style={computedStyle}
     >

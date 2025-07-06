@@ -245,6 +245,42 @@ export const DesignTokens = {
     dividerSpacing: scaleSpacing(INDUSTRY_STANDARDS.baseUnit), // 8dp
   },
 
+  // 📱 CONTAINER LAYOUT TOKENS (Professional Typography Guide)
+  containers: {
+    // Text block widths (consistent across all devices)
+    textBlock: {
+      // Responsive percentage (works on all form factors)
+      responsive: '90%',
+      // Fixed widths for larger screens (tablet optimization)
+      maxPhone: scaleSize(350), // ~90% di iPhone standard
+      maxTablet: scaleSize(428), // Optimal reading width on tablets
+      maxDesktop: scaleSize(512), // Max reading width on large screens
+    },
+
+    // Container padding (constant in dp, scaled consistently)
+    padding: {
+      internal: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp interno costante
+      external: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp esterno costante
+      compact: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp per spazi ridotti
+      generous: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 4), // 32dp per spazi ampi
+    },
+
+    // Baseline grid (4dp baseline for consistent rhythm)
+    baseline: {
+      unit: INDUSTRY_STANDARDS.baseUnit / 2, // 4dp baseline
+      lineHeight: (fontSize: number) => Math.round(fontSize * 1.15), // Proportional line-height
+      rhythm: scaleSpacing(INDUSTRY_STANDARDS.baseUnit / 2), // 4dp rhythm
+    },
+
+    // Safe area handling
+    safeArea: {
+      horizontal: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp orizzontale
+      vertical: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp verticale
+      // Dynamic safe area (calculated at runtime)
+      dynamic: true,
+    },
+  },
+
   // Component tokens (standardized)
   components: {
     buttonHeight: {
@@ -275,6 +311,45 @@ export const DesignTokens = {
     large: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp
     xlarge: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2.5), // 20dp
     full: 9999,
+  },
+} as const;
+
+// 🌍 RTL SUPPORT TOKENS
+export const RTLTokens = {
+  // Text alignment
+  textAlign: {
+    start: 'left' as const, // Will be 'right' in RTL
+    end: 'right' as const, // Will be 'left' in RTL
+    center: 'center' as const,
+  },
+
+  // Writing direction
+  writingDirection: {
+    ltr: 'ltr' as const,
+    rtl: 'rtl' as const,
+    auto: 'auto' as const,
+  },
+
+  // Layout direction
+  layout: {
+    flexDirection: {
+      row: 'row' as const, // Will be 'row-reverse' in RTL
+      rowReverse: 'row-reverse' as const, // Will be 'row' in RTL
+      column: 'column' as const,
+    },
+  },
+
+  // Position adjustments
+  position: {
+    left: 'left' as const, // Will be 'right' in RTL
+    right: 'right' as const, // Will be 'left' in RTL
+  },
+
+  // RTL-aware line breaks
+  lineBreak: {
+    soft: '\n', // Standard line break
+    rtlSoft: '\u202B\n', // RTL mark + line break
+    hardBreak: '\n\n', // Hard paragraph break
   },
 } as const;
 
@@ -318,13 +393,15 @@ export const TypographyTokens = {
     },
   },
 
-  // Line heights (relative, come Apple)
+  // Line heights (relative, come Apple) + baseline grid
   lineHeights: {
     tight: 1.25, // 125%
     snug: 1.375, // 137.5%
     normal: 1.5, // 150%
     relaxed: 1.625, // 162.5%
     loose: 2.0, // 200%
+    // Baseline grid integrated
+    baseline: (fontSize: number) => Math.round(fontSize * 1.15), // Proportional to baseline
   },
 
   // Letter spacing (responsive)
@@ -342,6 +419,48 @@ export const TypographyTokens = {
     maxReadableXXL: INDUSTRY_STANDARDS.maxReadableFontXXL,
     optimalLineLength: INDUSTRY_STANDARDS.optimalLineLength,
     maxLineLength: INDUSTRY_STANDARDS.maxLineLength,
+  },
+} as const;
+
+// 📊 BREAKPOINT LAYOUT STRATEGIES
+export const BreakpointLayouts = {
+  // Phone strategies (≤ 480dp)
+  phone: {
+    container: {
+      maxWidth: DesignTokens.containers.textBlock.responsive, // 90% viewport
+      padding: DesignTokens.containers.padding.internal,
+      margin: DesignTokens.containers.padding.compact,
+    },
+    text: {
+      alignment: RTLTokens.textAlign.start,
+      direction: RTLTokens.writingDirection.ltr,
+    },
+  },
+
+  // Tablet strategies (481-900dp)
+  tablet: {
+    container: {
+      maxWidth: DesignTokens.containers.textBlock.maxTablet, // 428dp fisso
+      padding: DesignTokens.containers.padding.internal,
+      margin: DesignTokens.containers.padding.external,
+    },
+    text: {
+      alignment: RTLTokens.textAlign.center, // Center on tablet
+      direction: RTLTokens.writingDirection.ltr,
+    },
+  },
+
+  // Desktop strategies (>900dp)
+  desktop: {
+    container: {
+      maxWidth: DesignTokens.containers.textBlock.maxDesktop, // 512dp fisso
+      padding: DesignTokens.containers.padding.generous,
+      margin: DesignTokens.containers.padding.generous,
+    },
+    text: {
+      alignment: RTLTokens.textAlign.center, // Center on desktop
+      direction: RTLTokens.writingDirection.ltr,
+    },
   },
 } as const;
 

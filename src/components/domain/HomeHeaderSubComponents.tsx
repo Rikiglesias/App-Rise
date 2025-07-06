@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { PlatformTouchable, FormattedText } from '../ui';
+import { TitleContainer } from '../ui/ProfessionalContainer';
 
 import {
   Colors,
@@ -60,7 +61,14 @@ const createModernTitleStyles = () =>
       fontWeight: Typography.weights.black,
       textAlign: 'center',
       letterSpacing: -1.5,
+      lineHeight: 75 * 1.15, // Rapporto costante 1.15 (guida responsive)
       marginBottom: 0, // AZZERA MARGINE: immagine attaccata al titolo
+    },
+
+    // Container a larghezza fissa per consistency layout (guida responsive)
+    titleTextContainer: {
+      maxWidth: '90%', // 90% viewport per stesso wrap su tutti device
+      alignSelf: 'center',
     },
 
     // Separatore elegante con logo centrale
@@ -140,21 +148,22 @@ const ModernSmartTitle: React.FC<{
         }}
       >
         <View style={modernTitleStyles.titleContainer}>
-          {/* Titolo con colori separati: Rise Against Hunger (rosso) + Italia (nero) */}
-          <View>
+          {/* Titolo con Container Professionale - Layout Consistency Guaranteed */}
+          <TitleContainer testID="main-title-container">
             <FormattedText
               fontSize={75}
               fixed={true}
               fixedLines={2}
               fontWeight="black"
               style={modernTitleStyles.titleText}
+              testID="main-title-text"
             >
               <FormattedText color="#DC2626">Rise Against</FormattedText>
               {'\n'}
               <FormattedText color="#DC2626">Hunger </FormattedText>
               <FormattedText color="#171717">Italia</FormattedText>
             </FormattedText>
-          </View>
+          </TitleContainer>
 
           {/* Separatore elegante con logo simbolico centrale */}
           <View style={modernTitleStyles.titleSeparator}>
