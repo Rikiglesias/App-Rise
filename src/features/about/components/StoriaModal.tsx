@@ -1,11 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Animated, Modal, View, Text } from 'react-native';
-import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
+import { Animated, Modal, View } from 'react-native';
+import {
+  PlatformScrollView,
+  PlatformTouchable,
+  FormattedText,
+} from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
-import { useResponsive } from '../../../shared/hooks/useResponsive';
 import { modalStyles } from '../styles';
 import type { StoriaModalProps } from '../types';
 
@@ -14,7 +17,6 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
-  const { scaleFont } = useResponsive();
   // ANIMAZIONI DISABILITATE - valori statici per evitare bordi grigi
   const modalAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
   const backdropAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
@@ -57,7 +59,9 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               <View style={modalStyles.modalContent}>
                 {/* Header */}
                 <View style={modalStyles.modalHeader}>
-                  <Text style={modalStyles.modalTitle}>La Nostra Storia</Text>
+                  <FormattedText fontSize={16} style={modalStyles.modalTitle}>
+                    La Nostra Storia
+                  </FormattedText>
                   <PlatformTouchable
                     onPress={handleClose}
                     style={modalStyles.closeButton}
@@ -77,119 +81,163 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   contentContainerStyle={modalStyles.storyContainer}
                   showsVerticalScrollIndicator={true}
                 >
-                  <Text style={modalStyles.introText}>
+                  <FormattedText fontSize={15} style={modalStyles.introText}>
                     Dal 1998, un movimento globale contro la fame
-                  </Text>
+                  </FormattedText>
 
-                  <Text style={modalStyles.storyText}>
-                    <Text style={modalStyles.highlightText}>
+                  <FormattedText fontSize={15} style={modalStyles.storyText}>
+                    <FormattedText
+                      fontSize={15}
+                      style={modalStyles.highlightText}
+                    >
                       Rise Against Hunger
-                    </Text>{' '}
+                    </FormattedText>{' '}
                     nasce nel{' '}
-                    <Text style={modalStyles.highlightText}>1998</Text> negli
-                    Stati Uniti con una missione chiara: combattere la fame nel
-                    mondo attraverso la distribuzione di pasti nutrienti e lo
-                    sviluppo di programmi sostenibili.
-                  </Text>
+                    <FormattedText
+                      fontSize={15}
+                      style={modalStyles.highlightText}
+                    >
+                      1998
+                    </FormattedText>{' '}
+                    negli Stati Uniti con una missione chiara: combattere la
+                    fame nel mondo attraverso la distribuzione di pasti
+                    nutrienti e lo sviluppo di programmi sostenibili.
+                  </FormattedText>
 
                   <View style={modalStyles.sectionDivider} />
 
-                  <Text style={modalStyles.sectionTitle}>
-                    <Text style={{ fontSize: scaleFont(20) }}>🇮🇹</Text> In
-                    Italia
-                  </Text>
-                  <Text style={modalStyles.storyText}>
+                  <FormattedText fontSize={15} style={modalStyles.sectionTitle}>
+                    <FormattedText fontSize={20} fixedLines={1}>
+                      🇮🇹
+                    </FormattedText>{' '}
+                    In Italia
+                  </FormattedText>
+                  <FormattedText fontSize={15} style={modalStyles.storyText}>
                     La organizzazione arriva in{' '}
-                    <Text style={modalStyles.highlightText}>Italia</Text> con lo
-                    obiettivo di coinvolgere le comunità locali nella lotta
-                    contro la fame globale. La nostra sede di{' '}
-                    <Text style={modalStyles.highlightText}>Bologna</Text> è il
-                    cuore operativo che coordina le attività su tutto il
+                    <FormattedText
+                      fontSize={15}
+                      style={modalStyles.highlightText}
+                    >
+                      Italia
+                    </FormattedText>{' '}
+                    con lo obiettivo di coinvolgere le comunità locali nella
+                    lotta contro la fame globale. La nostra sede di{' '}
+                    <FormattedText
+                      fontSize={15}
+                      style={modalStyles.highlightText}
+                    >
+                      Bologna
+                    </FormattedText>{' '}
+                    è il cuore operativo che coordina le attività su tutto il
                     territorio nazionale.
-                  </Text>
+                  </FormattedText>
 
                   <View style={modalStyles.sectionDivider} />
 
-                  <Text style={modalStyles.sectionTitle}>
-                    <Text style={{ fontSize: scaleFont(20) }}>🌟</Text> I Nostri
-                    Pilastri
-                  </Text>
+                  <FormattedText fontSize={15} style={modalStyles.sectionTitle}>
+                    <FormattedText fontSize={20} fixedLines={1}>
+                      🌟
+                    </FormattedText>{' '}
+                    I Nostri Pilastri
+                  </FormattedText>
                   <View style={modalStyles.pillarsContainer}>
                     <View style={modalStyles.pillarItem}>
-                      <Text
-                        style={[
-                          { fontSize: scaleFont(24) },
-                          modalStyles.pillarIcon,
-                        ]}
+                      <FormattedText
+                        fontSize={24}
+                        fixedLines={1}
+                        style={modalStyles.pillarIcon}
                       >
                         🍽️
-                      </Text>
+                      </FormattedText>
                       <View style={modalStyles.pillarContent}>
-                        <Text style={modalStyles.pillarTitle}>
+                        <FormattedText
+                          fontSize={15}
+                          style={modalStyles.pillarTitle}
+                        >
                           Distribuzione Pasti
-                        </Text>
-                        <Text style={modalStyles.pillarText}>
+                        </FormattedText>
+                        <FormattedText
+                          fontSize={12}
+                          style={modalStyles.pillarText}
+                        >
                           Organizziamo eventi di confezionamento pasti che
                           coinvolgono volontari di ogni età
-                        </Text>
+                        </FormattedText>
                       </View>
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text
-                        style={[
-                          { fontSize: scaleFont(24) },
-                          modalStyles.pillarIcon,
-                        ]}
+                      <FormattedText
+                        fontSize={24}
+                        fixedLines={1}
+                        style={modalStyles.pillarIcon}
                       >
                         🤝
-                      </Text>
+                      </FormattedText>
                       <View style={modalStyles.pillarContent}>
-                        <Text style={modalStyles.pillarTitle}>
+                        <FormattedText
+                          fontSize={15}
+                          style={modalStyles.pillarTitle}
+                        >
                           Coinvolgimento Comunitario
-                        </Text>
-                        <Text style={modalStyles.pillarText}>
+                        </FormattedText>
+                        <FormattedText
+                          fontSize={12}
+                          style={modalStyles.pillarText}
+                        >
                           Uniamo scuole, aziende e organizzazioni in un impegno
                           condiviso
-                        </Text>
+                        </FormattedText>
                       </View>
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text
-                        style={[
-                          { fontSize: scaleFont(24) },
-                          modalStyles.pillarIcon,
-                        ]}
+                      <FormattedText
+                        fontSize={24}
+                        fixedLines={1}
+                        style={modalStyles.pillarIcon}
                       >
                         🌍
-                      </Text>
+                      </FormattedText>
                       <View style={modalStyles.pillarContent}>
-                        <Text style={modalStyles.pillarTitle}>
+                        <FormattedText
+                          fontSize={15}
+                          style={modalStyles.pillarTitle}
+                        >
                           Impatto Globale
-                        </Text>
-                        <Text style={modalStyles.pillarText}>
+                        </FormattedText>
+                        <FormattedText
+                          fontSize={12}
+                          style={modalStyles.pillarText}
+                        >
                           I pasti confezionati raggiungono comunità vulnerabili
                           in tutto il mondo
-                        </Text>
+                        </FormattedText>
                       </View>
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <Text
-                        style={[
-                          { fontSize: scaleFont(24) },
-                          modalStyles.pillarIcon,
-                        ]}
+                      <FormattedText
+                        fontSize={24}
+                        fixedLines={1}
+                        style={modalStyles.pillarIcon}
                       >
                         📚
-                      </Text>
+                      </FormattedText>
                       <View style={modalStyles.pillarContent}>
-                        <Text style={modalStyles.pillarTitle}>Educazione</Text>
-                        <Text style={modalStyles.pillarText}>
+                        <FormattedText
+                          fontSize={15}
+                          style={modalStyles.pillarTitle}
+                        >
+                          Educazione
+                        </FormattedText>
+                        <FormattedText
+                          fontSize={12}
+                          style={modalStyles.pillarText}
+                        >
                           Sensibilizziamo sul tema della fame e promuoviamo la
                           solidarietà
-                        </Text>
+                        </FormattedText>
                       </View>
                     </View>
                   </View>
@@ -197,15 +245,21 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <View style={modalStyles.sectionDivider} />
 
                   <View style={modalStyles.finalMessageContainer}>
-                    <Text style={modalStyles.finalMessage}>
+                    <FormattedText
+                      fontSize={12}
+                      style={modalStyles.finalMessage}
+                    >
                       Ogni pasto che confezioniamo insieme è un gesto di amore
                       che attraversa i confini e raggiunge chi ne ha più
                       bisogno.
                       {'\n\n'}
-                      <Text style={modalStyles.highlightText}>
+                      <FormattedText
+                        fontSize={12}
+                        style={modalStyles.highlightText}
+                      >
                         Unisciti a noi in questa missione di speranza.
-                      </Text>
-                    </Text>
+                      </FormattedText>
+                    </FormattedText>
                   </View>
                 </PlatformScrollView>
               </View>

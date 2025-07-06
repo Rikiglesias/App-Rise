@@ -9,7 +9,6 @@ import {
   Platform,
   StyleSheet,
   View,
-  Text,
 } from 'react-native';
 import { PlatformTouchable, FormattedText } from '../ui';
 
@@ -18,8 +17,6 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
-import { useResponsive } from '../../shared/hooks/useResponsive';
 import {
   type HeaderImageSectionProps,
   type HeaderMissionSectionProps,
@@ -27,7 +24,7 @@ import {
 } from '../../features/home/types/HomeHeaderTypes';
 
 // ✨ TITLE STYLES ELEGANTI - MIGLIORAMENTO SOTTILE
-const createModernTitleStyles = (scaleFont: (size: number) => number) =>
+const createModernTitleStyles = () =>
   /* eslint-disable react-native/no-unused-styles */
   StyleSheet.create({
     container: {
@@ -56,49 +53,14 @@ const createModernTitleStyles = (scaleFont: (size: number) => number) =>
       position: 'relative',
     },
 
-    // Typography pulita e moderna - RESPONSIVE - DIMENSIONE OTTIMALE
+    // Typography con FormattedText - SISTEMA FIXED LINES UNIVERSALE
     titleText: {
-      fontSize: scaleFont(42), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
+      // fontSize gestito da FormattedText fontSize={75} + fontWeight="black" + fixed={true} + fixedLines={2}
+      // color gestito da prop color dei FormattedText nidificati
       fontWeight: Typography.weights.black,
-      color: '#DC2626',
       textAlign: 'center',
       letterSpacing: -1.5,
-      // ANDROID: Correzioni specifiche per rendering identico a iOS
-      ...(Platform.OS === 'android' && {
-        includeFontPadding: false,
-        textAlignVertical: 'center',
-        lineHeight: 45, // Adeguato al nuovo fontSize (42 * 1.07 = 45)
-        fontFamily: 'sans-serif', // Font nativo Android sicuro
-        paddingVertical: 0,
-        marginVertical: 0,
-      }),
-      // iOS: Mantiene comportamento nativo
-      ...(Platform.OS === 'ios' && {
-        lineHeight: undefined, // iOS gestisce automaticamente
-      }),
-      marginBottom: 0, // AZZERA MARGINE: da Spacing[1]/2 a 0 - immagine attaccata al titolo
-    },
-
-    // Stile per "Italia" in nero - RESPONSIVE - DIMENSIONE OTTIMALE
-    titleTextItalia: {
-      fontSize: scaleFont(42), // SISTEMA UNIVERSALE: modifica solo questo numero per cambiare dimensione ovunque
-      fontWeight: Typography.weights.black,
-      color: '#1F2937', // Nero elegante
-      textAlign: 'center',
-      letterSpacing: -1.5,
-      // ANDROID: Correzioni specifiche per rendering identico a iOS
-      ...(Platform.OS === 'android' && {
-        includeFontPadding: false,
-        textAlignVertical: 'center',
-        lineHeight: 45, // Adeguato al nuovo fontSize (42 * 1.07 = 45)
-        fontFamily: 'sans-serif', // Font nativo Android sicuro
-        paddingVertical: 0,
-        marginVertical: 0,
-      }),
-      // iOS: Mantiene comportamento nativo
-      ...(Platform.OS === 'ios' && {
-        lineHeight: undefined, // iOS gestisce automaticamente
-      }),
+      marginBottom: 0, // AZZERA MARGINE: immagine attaccata al titolo
     },
 
     // Separatore elegante con logo centrale
@@ -141,12 +103,7 @@ const ModernSmartTitle: React.FC<{
   titleOpacity: Animated.AnimatedNode;
   titleTransform: Animated.AnimatedNode;
 }> = React.memo(({ titleAnim, titleOpacity, titleTransform }) => {
-  const { scaleFont } = useResponsive();
-
-  const modernTitleStyles = React.useMemo(
-    () => createModernTitleStyles(scaleFont),
-    [scaleFont]
-  );
+  const modernTitleStyles = React.useMemo(() => createModernTitleStyles(), []);
 
   // Animazione semplice e professionale
   const mainTitleDelay = React.useRef(new Animated.Value(0)).current;
@@ -183,17 +140,20 @@ const ModernSmartTitle: React.FC<{
         }}
       >
         <View style={modernTitleStyles.titleContainer}>
-          {/* Titolo con colori differenziati */}
+          {/* Titolo con colori separati: Rise Against Hunger (rosso) + Italia (nero) */}
           <View>
-            <Text style={modernTitleStyles.titleText} allowFontScaling={false}>
-              Rise Against{'\n'}Hunger{' '}
-              <Text
-                style={modernTitleStyles.titleTextItalia}
-                allowFontScaling={false}
-              >
-                Italia
-              </Text>
-            </Text>
+            <FormattedText
+              fontSize={75}
+              fixed={true}
+              fixedLines={2}
+              fontWeight="black"
+              style={modernTitleStyles.titleText}
+            >
+              <FormattedText color="#DC2626">Rise Against</FormattedText>
+              {'\n'}
+              <FormattedText color="#DC2626">Hunger </FormattedText>
+              <FormattedText color="#171717">Italia</FormattedText>
+            </FormattedText>
           </View>
 
           {/* Separatore elegante con logo simbolico centrale */}
@@ -368,14 +328,13 @@ const baseMissionStyles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 8,
   },
-  // Typography Smart per il testo descrittivo - MIGLIORATO
+  // Typography Smart per il testo descrittivo - RESPONSIVE
   missionText: {
-    fontSize: TypographyTokens.styles.body.large,
+    // fontSize gestito da FormattedText variant="body-large"
     fontWeight: Typography.weights.bold,
     color: '#1F2937', // Grigio scuro più elegante
     textAlign: 'center',
     letterSpacing: 0.4,
-    lineHeight: TypographyTokens.styles.body.large * 1.3,
     marginBottom: Spacing[5],
     textShadowColor: 'rgba(31, 41, 55, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
@@ -413,7 +372,7 @@ const baseMissionStyles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: TypographyTokens.styles.body.small,
+    // fontSize gestito da FormattedText variant="body-small"
     color: Colors.neutral[700],
     textAlign: 'center',
   },
@@ -452,7 +411,7 @@ const baseMissionStyles = StyleSheet.create({
     marginBottom: Spacing[4],
   },
   modalTitle: {
-    fontSize: TypographyTokens.styles.title.medium,
+    // fontSize gestito da FormattedText variant="title-medium"
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
@@ -482,17 +441,17 @@ const baseMissionStyles = StyleSheet.create({
     flex: 1,
   },
   breakdownNumber: {
-    fontSize: TypographyTokens.styles.body.large,
+    // fontSize gestito da FormattedText variant="body-large"
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
   breakdownLabel: {
-    fontSize: TypographyTokens.styles.body.medium,
+    // fontSize gestito da FormattedText variant="body-medium"
     color: Colors.neutral[700],
     marginTop: 2,
   },
   breakdownDescription: {
-    fontSize: TypographyTokens.styles.body.small,
+    // fontSize gestito da FormattedText variant="body-small"
     color: Colors.neutral[500],
     marginTop: 1,
   },
@@ -510,7 +469,7 @@ const baseMissionStyles = StyleSheet.create({
     alignItems: 'center',
   },
   totalLabel: {
-    fontSize: TypographyTokens.styles.body.medium,
+    // fontSize gestito da FormattedText variant="body-medium"
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[700],
   },
@@ -563,8 +522,15 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
               </View>
             </View>
 
-            {/* Testo descrittivo con Typography Smart */}
-            <Text style={baseMissionStyles.missionText}>{missionText}</Text>
+            {/* Testo descrittivo con Typography Smart - RESPONSIVE */}
+            <FormattedText
+              variant="body-large"
+              style={baseMissionStyles.missionText}
+              fixed={true}
+              fixedLines={3}
+            >
+              {missionText}
+            </FormattedText>
 
             {/* Statistiche container */}
             <View style={baseMissionStyles.statsContainer}>
@@ -580,9 +546,12 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 >
                   3.14M
                 </FormattedText>
-                <Text style={baseMissionStyles.statLabel}>
+                <FormattedText
+                  variant="body-small"
+                  style={baseMissionStyles.statLabel}
+                >
                   Pasti distribuiti
-                </Text>
+                </FormattedText>
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={20}
@@ -598,10 +567,18 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                   baseMissionStyles.volunteersBox,
                 ]}
               >
-                <Text style={baseMissionStyles.statNumber}>13K</Text>
-                <Text style={baseMissionStyles.statLabel}>
+                <FormattedText
+                  variant="title-large"
+                  style={baseMissionStyles.statNumber}
+                >
+                  13K
+                </FormattedText>
+                <FormattedText
+                  variant="body-small"
+                  style={baseMissionStyles.statLabel}
+                >
                   Volontari attivi
-                </Text>
+                </FormattedText>
               </View>
             </View>
           </View>
@@ -624,9 +601,12 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
               <View style={baseMissionStyles.modalContent}>
                 {/* Header del modal */}
                 <View style={baseMissionStyles.modalHeader}>
-                  <Text style={baseMissionStyles.modalTitle}>
+                  <FormattedText
+                    variant="title-medium"
+                    style={baseMissionStyles.modalTitle}
+                  >
                     Pasti Distribuiti
-                  </Text>
+                  </FormattedText>
                   <PlatformTouchable
                     onPress={closeModal}
                     style={baseMissionStyles.closeButton}
@@ -650,15 +630,24 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                       />
                     </View>
                     <View style={baseMissionStyles.breakdownText}>
-                      <Text style={baseMissionStyles.breakdownNumber}>
+                      <FormattedText
+                        variant="body-large"
+                        style={baseMissionStyles.breakdownNumber}
+                      >
                         2.5M
-                      </Text>
-                      <Text style={baseMissionStyles.breakdownLabel}>
+                      </FormattedText>
+                      <FormattedText
+                        variant="body-medium"
+                        style={baseMissionStyles.breakdownLabel}
+                      >
                         Pasti completi
-                      </Text>
-                      <Text style={baseMissionStyles.breakdownDescription}>
+                      </FormattedText>
+                      <FormattedText
+                        variant="body-small"
+                        style={baseMissionStyles.breakdownDescription}
+                      >
                         Programmi Africa
-                      </Text>
+                      </FormattedText>
                     </View>
                   </View>
 
@@ -671,15 +660,24 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                       />
                     </View>
                     <View style={baseMissionStyles.breakdownText}>
-                      <Text style={baseMissionStyles.breakdownNumber}>
+                      <FormattedText
+                        variant="body-large"
+                        style={baseMissionStyles.breakdownNumber}
+                      >
                         600K
-                      </Text>
-                      <Text style={baseMissionStyles.breakdownLabel}>
+                      </FormattedText>
+                      <FormattedText
+                        variant="body-medium"
+                        style={baseMissionStyles.breakdownLabel}
+                      >
                         Kit di emergenza
-                      </Text>
-                      <Text style={baseMissionStyles.breakdownDescription}>
+                      </FormattedText>
+                      <FormattedText
+                        variant="body-small"
+                        style={baseMissionStyles.breakdownDescription}
+                      >
                         Situazioni di crisi
-                      </Text>
+                      </FormattedText>
                     </View>
                   </View>
                 </View>
@@ -688,9 +686,12 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 <View style={baseMissionStyles.totalContainer}>
                   <View style={baseMissionStyles.totalLine} />
                   <View style={baseMissionStyles.totalRow}>
-                    <Text style={baseMissionStyles.totalLabel}>
+                    <FormattedText
+                      variant="body-medium"
+                      style={baseMissionStyles.totalLabel}
+                    >
                       Totale distribuito
-                    </Text>
+                    </FormattedText>
                     <FormattedText
                       variant="title-large"
                       style={baseMissionStyles.totalNumber}

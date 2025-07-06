@@ -12,7 +12,6 @@ import {
 } from '../../../../shared/constants/designTokens';
 import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
-import { useResponsive } from '../../../../shared/hooks/useResponsive';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { BottomTabParamList } from '../../../../navigation/types';
 
@@ -22,7 +21,6 @@ interface ActionCTAButtonsProps {
 
 export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
   const { triggerHaptic } = useHapticFeedback();
-  const { scaleFont } = useResponsive();
   const navigation =
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
@@ -54,19 +52,21 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="chart-line"
-                size={Platform.OS === 'android' ? 35 : 36} // ANDROID: Icona ingrandita
+                size={Platform.OS === 'android' ? 35 : 36}
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
               <FormattedText
-                variant="title-medium"
-                style={[styles.buttonTitle, { fontSize: scaleFont(20) }]}
+                fontSize={20}
+                fixedLines={2}
+                style={styles.buttonTitle}
               >
                 Scopri{'\n'}Impatto
               </FormattedText>
               <FormattedText
-                variant="body-large"
-                style={[styles.buttonDirectionRed, { fontSize: scaleFont(16) }]}
+                fontSize={16}
+                fixedLines={1}
+                style={styles.buttonDirectionRed}
               >
                 ← Risultati
               </FormattedText>
@@ -91,19 +91,21 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="hand-heart"
-                size={Platform.OS === 'android' ? 35 : 36} // ANDROID: Icona ingrandita
+                size={Platform.OS === 'android' ? 35 : 36}
                 color="#059669"
                 style={styles.buttonIcon}
               />
               <FormattedText
-                variant="title-medium"
-                style={[styles.buttonTitleGreen, { fontSize: scaleFont(20) }]}
+                fontSize={20}
+                fixedLines={2}
+                style={styles.buttonTitleGreen}
               >
                 Dona e{'\n'}Aiuta
               </FormattedText>
               <FormattedText
-                variant="body-large"
-                style={[styles.buttonDirection, { fontSize: scaleFont(16) }]}
+                fontSize={16}
+                fixedLines={1}
+                style={styles.buttonDirection}
               >
                 Supporta →
               </FormattedText>
@@ -131,18 +133,16 @@ const styles = StyleSheet.create({
   gradientBorder: {
     borderRadius: 20,
     padding: 2,
-    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
+    ...PlatformShadows.lg,
   },
 
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 18,
-    // ANDROID: Bottoni leggermente più grandi
     ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[3], // AUMENTATO: tornato a Spacing[3] per più spazio
-      paddingHorizontal: Spacing[3], // Mantenuto per equilibrio
+      paddingVertical: Spacing[3],
+      paddingHorizontal: Spacing[3],
     }),
-    // iOS: Dimensioni originali
     ...(Platform.OS === 'ios' && {
       paddingVertical: Spacing[3],
       paddingHorizontal: Spacing[4],
@@ -155,11 +155,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
-    // ANDROID: Padding interno leggermente aumentato
     ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[1], // AUMENTATO: tornato a Spacing[1] per più spazio
+      paddingVertical: Spacing[1],
     }),
-    // iOS: Padding originale
     ...(Platform.OS === 'ios' && {
       paddingVertical: Spacing[1],
     }),
@@ -171,16 +169,13 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
-    // fontSize moved to dynamic scaleFont(20) - responsive scaling
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center' as const,
     letterSpacing: -0.6,
-    // ANDROID: Margini leggermente aumentati
     ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 2, // Leggermente aumentato per più spazio
+      marginVertical: Spacing[0] + 2,
     }),
-    // iOS: Margini originali
     ...(Platform.OS === 'ios' && {
       marginVertical: Spacing[1],
     }),
@@ -191,16 +186,13 @@ const styles = StyleSheet.create({
   },
 
   buttonDirection: {
-    // fontSize moved to dynamic scaleFont(16) - responsive scaling
     fontWeight: Typography.weights.bold,
     color: '#10B981',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    // ANDROID: Margini leggermente aumentati
     ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 1, // Leggermente aumentato per più spazio
+      marginVertical: Spacing[0] + 1,
     }),
-    // iOS: Margini originali
     ...(Platform.OS === 'ios' && {
       marginVertical: Spacing[1],
     }),
@@ -211,16 +203,13 @@ const styles = StyleSheet.create({
   },
 
   buttonDirectionRed: {
-    // fontSize moved to dynamic scaleFont(16) - responsive scaling
     fontWeight: Typography.weights.bold,
     color: '#EF4444',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    // ANDROID: Margini leggermente aumentati
     ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 1, // Leggermente aumentato per più spazio
+      marginVertical: Spacing[0] + 1,
     }),
-    // iOS: Margini originali
     ...(Platform.OS === 'ios' && {
       marginVertical: Spacing[1],
     }),
@@ -231,16 +220,13 @@ const styles = StyleSheet.create({
   },
 
   buttonTitleGreen: {
-    // fontSize moved to dynamic scaleFont(20) - responsive scaling
     fontWeight: Typography.weights.black,
     color: '#059669',
     textAlign: 'center' as const,
     letterSpacing: -0.6,
-    // ANDROID: Margini leggermente aumentati
     ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 2, // Leggermente aumentato per più spazio
+      marginVertical: Spacing[0] + 2,
     }),
-    // iOS: Margini originali
     ...(Platform.OS === 'ios' && {
       marginVertical: Spacing[1],
     }),

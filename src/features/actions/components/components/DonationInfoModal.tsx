@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { PlatformTouchable } from '../../../../components/ui';
+import { FormattedText } from '../../../../components/ui/FormattedText';
 
 import {
   Colors,
@@ -19,7 +20,6 @@ import {
   Typography,
 } from '../../../../shared/constants/designTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
-import { useResponsive } from '../../../../shared/hooks/useResponsive';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -33,7 +33,6 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
-  const { scaleFont } = useResponsive();
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -121,7 +120,6 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       marginBottom: Spacing[5],
     },
     centeredTitle: {
-      fontSize: scaleFont(28), // INGRANDITO: scritta più grande come richiesto
       fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',
@@ -198,7 +196,12 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
 
                     {/* TITOLO CENTRATO E CARINO */}
                     <View style={modalStyles.centeredTitleContainer}>
-                      <Text style={modalStyles.centeredTitle}>Come Donare</Text>
+                      <FormattedText
+                        fontSize={28}
+                        style={modalStyles.centeredTitle}
+                      >
+                        Come Donare
+                      </FormattedText>
                       <View style={modalStyles.titleUnderline} />
                     </View>
 
@@ -268,7 +271,12 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
 
                     {/* TITOLO CENTRATO E CARINO */}
                     <View style={modalStyles.centeredTitleContainer}>
-                      <Text style={modalStyles.centeredTitle}>Come Donare</Text>
+                      <FormattedText
+                        fontSize={28}
+                        style={modalStyles.centeredTitle}
+                      >
+                        Come Donare
+                      </FormattedText>
                       <View style={modalStyles.titleUnderline} />
                     </View>
 

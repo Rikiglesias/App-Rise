@@ -1,8 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { PlatformTouchable } from '../components/ui';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { FormattedText } from '../components/ui/FormattedText';
 
 import InteractiveMap, {
   type Location,
@@ -11,7 +11,6 @@ import MapLocationModal from '../components/layout/MapLocationModal';
 import type { MapModalData } from '../data/mapModalData';
 import { getModalData } from '../data/mapModalData';
 import type { ImpactStackParamList } from '../navigation/types';
-import { TypographyTokens } from '../shared/constants/responsiveSystem';
 import { BorderRadius, Colors, Spacing, Typography } from '../shared/constants';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
@@ -59,20 +58,22 @@ const MapModalScreen: React.FC = () => {
         onMarkerPress={handleMarkerPress}
         isFullScreen
       />
-      <PlatformTouchable
-        style={styles.closeButton}
-        onPress={handleClosePress}
-        activeOpacity={0.7}
-      >
-        <MaterialCommunityIcons
-          name="close"
-          size={28}
-          color={Colors.neutral[800]}
-        />
-      </PlatformTouchable>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Mappa Interattiva</Text>
-        <Text style={styles.subtitle}>Tocca i pin per maggiori dettagli</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <FormattedText fontSize={24} style={styles.title}>
+          Mappa Interattiva
+        </FormattedText>
+        <FormattedText fontSize={16} style={styles.subtitle}>
+          Tocca i pin per maggiori dettagli
+        </FormattedText>
+
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={handleClosePress}
+          activeOpacity={0.8}
+        >
+          <MaterialCommunityIcons name="close" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
       </View>
 
       {/* Modal per le location specifiche */}
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backdropFilter: 'blur(10px)', // For glassmorphism effect if supported
   },
-  titleContainer: {
+  header: {
     position: 'absolute',
     top: Spacing[12],
     left: Spacing[5],
@@ -111,15 +112,16 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing[2],
     paddingHorizontal: Spacing[4],
     borderRadius: BorderRadius.lg,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
-    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[600],
     textAlign: 'center',
   },

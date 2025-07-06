@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { FormattedText } from '../components/ui/FormattedText';
-import { scaleFont } from '../shared/constants/responsiveSystem';
 
 /**
  * Esempio pratico del nuovo wrapMode 'fixed'
@@ -43,29 +42,45 @@ export const FixedLinesExample: React.FC = () => {
         giorno.
       </FormattedText>
 
-      {/* Confronto con modalità auto (variabile) */}
-      <View style={styles.comparison}>
+      {/* Esempi di diverse configurazioni fixedLines */}
+      <View style={styles.examples}>
         <FormattedText variant="label-medium" style={styles.label}>
-          Modalità AUTO (variabile):
+          Badge/Etichette (1 riga):
         </FormattedText>
         <FormattedText
           variant="body-small"
-          wrapMode="auto"
-          style={styles.autoText}
+          wrapMode="fixed"
+          fixedLines={1}
+          style={styles.badgeText}
         >
-          Questo testo può andare su 1, 2 o 3 righe a seconda del dispositivo
+          Donazione Completata
         </FormattedText>
 
         <FormattedText variant="label-medium" style={styles.label}>
-          Modalità FIXED (consistente):
+          Descrizioni Medie (2 righe):
         </FormattedText>
         <FormattedText
           variant="body-small"
           wrapMode="fixed"
           fixedLines={2}
-          style={styles.fixedText}
+          style={styles.mediumText}
         >
-          Questo testo sarà SEMPRE su esattamente 2 righe su tutti i dispositivi
+          Ogni donazione aiuta a fornire pasti nutrienti alle famiglie in
+          difficoltà
+        </FormattedText>
+
+        <FormattedText variant="label-medium" style={styles.label}>
+          Contenuti Estesi (4 righe):
+        </FormattedText>
+        <FormattedText
+          variant="body-small"
+          wrapMode="fixed"
+          fixedLines={4}
+          style={styles.extendedText}
+        >
+          Il nostro programma di distribuzione pasti raggiunge comunità remote e
+          vulnerabili, garantendo accesso a cibo nutriente e sicuro per bambini,
+          famiglie e anziani che vivono in condizioni di povertà estrema.
         </FormattedText>
       </View>
     </View>
@@ -93,9 +108,9 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     marginBottom: 32,
     color: '#616161',
-    lineHeight: scaleFont(20),
+    lineHeight: 24, // FISSO: era scaleFont(20) - ora valore fisso ottimizzato
   },
-  comparison: {
+  examples: {
     backgroundColor: '#f5f5f5',
     padding: 16,
     borderRadius: 8,
@@ -106,14 +121,21 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     color: '#1976d2',
   },
-  autoText: {
-    backgroundColor: '#fff3e0',
+  badgeText: {
+    backgroundColor: '#e3f2fd',
+    padding: 8,
+    borderRadius: 4,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  mediumText: {
+    backgroundColor: '#e8f5e8',
     padding: 8,
     borderRadius: 4,
     marginBottom: 8,
   },
-  fixedText: {
-    backgroundColor: '#e8f5e8',
+  extendedText: {
+    backgroundColor: '#fff3e0',
     padding: 8,
     borderRadius: 4,
   },

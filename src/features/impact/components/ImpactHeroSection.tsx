@@ -1,7 +1,7 @@
 import React from 'react';
-import { Animated, StyleSheet, Text } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+import { FormattedText } from '../../../components/ui/FormattedText';
 import {
   BorderRadius,
   Colors,
@@ -35,9 +35,15 @@ const ImpactHeroSection: React.FC<Props> = ({
         },
       ]}
     >
-      <Text style={styles.heroCounter}>{heroData.mainStat}</Text>
-      <Text style={styles.heroLabel}>{heroData.label}</Text>
-      <Text style={styles.heroSubtitle}>{heroData.subtitle}</Text>
+      <FormattedText fontSize={32} style={styles.heroCounter}>
+        {heroData.mainStat}
+      </FormattedText>
+      <FormattedText fontSize={22} style={styles.heroLabel}>
+        {heroData.label}
+      </FormattedText>
+      <FormattedText fontSize={15} style={styles.heroSubtitle}>
+        {heroData.subtitle}
+      </FormattedText>
     </Animated.View>
   );
 };
@@ -53,21 +59,18 @@ const styles = StyleSheet.create({
     ...Shadows.lg,
   },
   heroCounter: {
-    fontSize: TypographyTokens.styles.display.small,
     fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
   heroLabel: {
-    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     textAlign: 'center',
     marginBottom: Spacing[3],
   },
   heroSubtitle: {
-    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[0],
     textAlign: 'center',
     opacity: 0.9,

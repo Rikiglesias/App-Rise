@@ -1,11 +1,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
 
 import { IMPACT_DATA } from '../../../data/impactData';
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+import { FormattedText } from '../../../components/ui/FormattedText';
 import {
   BorderRadius,
   Colors,
@@ -14,7 +14,6 @@ import {
   Typography,
 } from '../../../shared/constants';
 import type { StatButtonProps } from '../types/ImpactScreenTypes';
-import FormattedText from '../../../components/ui/FormattedText';
 
 export const StatButton: React.FC<StatButtonProps> = ({
   icon,
@@ -37,8 +36,12 @@ export const StatButton: React.FC<StatButtonProps> = ({
         />
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.statValue}>{value}</Text>
-        <Text style={styles.statLabel}>{label}</Text>
+        <FormattedText fontSize={22} style={styles.statValue}>
+          {value}
+        </FormattedText>
+        <FormattedText fontSize={15} style={styles.statLabel}>
+          {label}
+        </FormattedText>
       </View>
       <MaterialCommunityIcons
         name="chevron-right"
@@ -62,8 +65,12 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       style={styles.storyGradient}
     />
     <View style={styles.storyContent}>
-      <Text style={styles.storyLocation}>{location}</Text>
-      <Text style={styles.storyTitle}>{title}</Text>
+      <FormattedText fontSize={12} style={styles.storyLocation}>
+        {location}
+      </FormattedText>
+      <FormattedText fontSize={22} style={styles.storyTitle}>
+        {title}
+      </FormattedText>
       <FormattedText style={styles.storyText}>{text}</FormattedText>
     </View>
   </View>
@@ -75,8 +82,12 @@ export const MilestoneCard: React.FC<
   <View style={styles.milestoneCard}>
     <MaterialCommunityIcons name={icon} size={24} color={Colors.primary[600]} />
     <View style={styles.milestoneContent}>
-      <Text style={styles.milestoneTitle}>{title}</Text>
-      <Text style={styles.milestoneValue}>{value}</Text>
+      <FormattedText fontSize={15} style={styles.milestoneTitle}>
+        {title}
+      </FormattedText>
+      <FormattedText fontSize={12} style={styles.milestoneValue}>
+        {value}
+      </FormattedText>
     </View>
   </View>
 );
@@ -104,12 +115,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statValue: {
-    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
   },
   statLabel: {
-    fontSize: TypographyTokens.styles.body.medium,
     color: Colors.neutral[600],
   },
   storyCard: {
@@ -138,18 +147,15 @@ const styles = StyleSheet.create({
   storyLocation: {
     color: Colors.neutral[200],
     fontWeight: Typography.weights.semibold,
-    fontSize: TypographyTokens.styles.body.small,
     textTransform: 'uppercase',
   },
   storyTitle: {
     color: Colors.neutral[0],
     fontWeight: Typography.weights.bold,
-    fontSize: TypographyTokens.styles.title.large,
     marginTop: Spacing[1],
   },
   storyText: {
     color: Colors.neutral[100],
-    fontSize: TypographyTokens.styles.body.small,
     marginTop: Spacing[2],
     lineHeight: Typography.lineHeights.snug,
   },
@@ -166,12 +172,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   milestoneTitle: {
-    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[800],
   },
   milestoneValue: {
-    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[600],
   },
 });

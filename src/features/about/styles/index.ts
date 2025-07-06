@@ -131,7 +131,6 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalTitle: {
-    fontSize: TypographyTokens.styles.title.medium,
     fontWeight: Typography.weights.black,
     color: '#DC2626',
     letterSpacing: -0.8,
@@ -171,7 +170,6 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyTitle: {
-    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
@@ -179,7 +177,6 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyText: {
-    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     lineHeight: 24,
@@ -193,7 +190,6 @@ export const modalStyles = StyleSheet.create({
   },
 
   sectionTitle: {
-    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[2],
@@ -211,7 +207,6 @@ export const modalStyles = StyleSheet.create({
   },
 
   finalMessage: {
-    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
@@ -220,7 +215,6 @@ export const modalStyles = StyleSheet.create({
   },
 
   introText: {
-    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
@@ -240,12 +234,10 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarIcon: {
-    fontSize: TypographyTokens.styles.title.medium,
     marginTop: 2,
   },
 
   pillarTitle: {
-    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
@@ -256,7 +248,6 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarText: {
-    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     lineHeight: 22,

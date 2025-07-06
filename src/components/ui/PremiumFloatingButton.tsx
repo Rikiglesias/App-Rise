@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
+import { Animated, Dimensions, StyleSheet } from 'react-native';
 
 import PlatformTouchable from './PlatformTouchable';
-import { useResponsive } from '../../shared/hooks/useResponsive';
+import { FormattedText } from './FormattedText';
 
 import {
   BorderRadius,
@@ -220,8 +220,6 @@ const PremiumFloatingButtonContent: React.FC<{
   title,
   icon,
 }) => {
-  const { scaleFont } = useResponsive();
-
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <Animated.View style={[styles.glow, glowStyle]} />
@@ -239,12 +237,14 @@ const PremiumFloatingButtonContent: React.FC<{
         accessibilityLabel={`${title} - Pulsante di azione rapida`}
       >
         <Animated.View style={styles.content}>
-          <Text style={[{ fontSize: scaleFont(20) }, styles.icon]}>{icon}</Text>
-          <Text
+          <FormattedText fontSize={20} style={styles.icon}>
+            {icon}
+          </FormattedText>
+          <FormattedText
             style={[styles.title, variant === 'glass' && styles.glassTitle]}
           >
             {title}
-          </Text>
+          </FormattedText>
         </Animated.View>
       </PlatformTouchable>
     </Animated.View>

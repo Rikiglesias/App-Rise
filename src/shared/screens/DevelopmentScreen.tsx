@@ -7,9 +7,12 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  Text,
 } from 'react-native';
-import { PlatformTouchable, PlatformScrollView } from '../../components/ui';
+import {
+  PlatformTouchable,
+  PlatformScrollView,
+  FormattedText,
+} from '../../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -20,7 +23,6 @@ import {
 } from '../constants/designTokens';
 import { PlatformShadows } from '../constants/platformDesignTokens';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
-import { useResponsive } from '../hooks/useResponsive';
 
 interface DevelopmentScreenProps {
   navigation: {
@@ -33,7 +35,6 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
-  const { scaleFont } = useResponsive();
 
   // Solo animazioni icone (funzionano bene)
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -205,20 +206,16 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               },
             ]}
           >
-            <Text
-              style={[styles.mainTitle, { fontSize: scaleFont(32) }]}
-              numberOfLines={2}
-              adjustsFontSizeToFit={true}
+            <FormattedText
+              fontSize={32}
+              fixedLines={2}
+              style={styles.mainTitle}
             >
               🚧 In Fase di Sviluppo
-            </Text>
-            <Text
-              style={[styles.subtitle, { fontSize: scaleFont(18) }]}
-              numberOfLines={2}
-              adjustsFontSizeToFit={true}
-            >
+            </FormattedText>
+            <FormattedText fontSize={18} fixedLines={2} style={styles.subtitle}>
               Questa sezione sarà presto disponibile
-            </Text>
+            </FormattedText>
           </View>
 
           {/* Card Informativa */}
@@ -241,21 +238,22 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                   color="#DC2626"
                   style={[styles.cardIcon, { marginBottom: Spacing[2] }]}
                 />
-                <Text
-                  style={[styles.cardTitle, { fontSize: scaleFont(24) }]}
-                  numberOfLines={2}
-                  adjustsFontSizeToFit={true}
+                <FormattedText
+                  fontSize={24}
+                  fixedLines={2}
+                  style={styles.cardTitle}
                 >
                   Cosa stiamo preparando
-                </Text>
-                <Text
-                  style={[styles.cardDescription, { fontSize: scaleFont(16) }]}
-                  numberOfLines={4}
+                </FormattedText>
+                <FormattedText
+                  fontSize={16}
+                  fixedLines={4}
+                  style={styles.cardDescription}
                 >
                   Il nostro team sta lavorando duramente per portarti nuove
                   funzionalità innovative e un&apos;esperienza utente ancora
                   migliore.
-                </Text>
+                </FormattedText>
 
                 <View style={[styles.featuresList, { gap: Spacing[1] }]}>
                   <View style={[styles.featureItem, { gap: Spacing[3] }]}>
@@ -264,13 +262,13 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       size={16}
                       color="#059669"
                     />
-                    <Text
-                      style={[styles.featureText, { fontSize: scaleFont(16) }]}
-                      numberOfLines={1}
-                      adjustsFontSizeToFit={true}
+                    <FormattedText
+                      fontSize={16}
+                      fixedLines={1}
+                      style={styles.featureText}
                     >
                       Design migliorato
-                    </Text>
+                    </FormattedText>
                   </View>
                   <View style={[styles.featureItem, { gap: Spacing[3] }]}>
                     <MaterialCommunityIcons
@@ -278,13 +276,13 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       size={16}
                       color="#059669"
                     />
-                    <Text
-                      style={[styles.featureText, { fontSize: scaleFont(16) }]}
-                      numberOfLines={1}
-                      adjustsFontSizeToFit={true}
+                    <FormattedText
+                      fontSize={16}
+                      fixedLines={1}
+                      style={styles.featureText}
                     >
                       Nuove funzionalità
-                    </Text>
+                    </FormattedText>
                   </View>
                   <View style={[styles.featureItem, { gap: Spacing[3] }]}>
                     <MaterialCommunityIcons
@@ -292,13 +290,13 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       size={16}
                       color="#059669"
                     />
-                    <Text
-                      style={[styles.featureText, { fontSize: scaleFont(16) }]}
-                      numberOfLines={2}
-                      adjustsFontSizeToFit={true}
+                    <FormattedText
+                      fontSize={16}
+                      fixedLines={2}
+                      style={styles.featureText}
                     >
                       Performance ottimizzate
-                    </Text>
+                    </FormattedText>
                   </View>
                 </View>
               </View>
@@ -326,14 +324,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: Spacing[4],
     zIndex: 10,
-    // PULITO: Zero decorazioni su container per evitare conflitti con LinearGradient
   },
   backButtonContainer: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    overflow: 'hidden', // CRITICO: nasconde i bordi durante le animazioni su Android
-    // OMBRA SUL CONTAINER - più stabile durante animazioni
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#DC2626',
@@ -349,17 +345,16 @@ const styles = StyleSheet.create({
   backButtonGradient: {
     justifyContent: 'center',
     alignItems: 'center',
-    // GRADIENT PULITO - senza ombra per evitare conflitti
   },
   content: {
     flex: 1,
-    justifyContent: 'center', // RIPRISTINATO: con ScrollView il centramento funziona correttamente
+    justifyContent: 'center',
     alignItems: 'center',
-    minHeight: 600, // MINIMA altezza per garantire il centramento quando c'è poco contenuto
+    minHeight: 600,
   },
   scrollContent: {
-    flexGrow: 1, // Permette al contenuto di crescere e centrarsi
-    paddingBottom: Platform.OS === 'android' ? 250 : Spacing[16], // ANDROID: 250 per evitare taglio dalla bottom navigation / iOS: normale
+    flexGrow: 1,
+    paddingBottom: Platform.OS === 'android' ? 250 : Spacing[16],
   },
   iconContainer: {
     position: 'relative',
@@ -368,7 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
     justifyContent: 'center',
     alignItems: 'center',
-    ...PlatformShadows.primary, // CONVERTITO: shadow rossa ottimizzata per entrambe le piattaforme
+    ...PlatformShadows.primary,
     borderWidth: 3,
     borderColor: 'rgba(220, 38, 38, 0.1)',
   },
@@ -376,7 +371,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Colors.neutral[0],
     borderRadius: 20,
-    ...PlatformShadows.md, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
+    ...PlatformShadows.md,
   },
   floatingIcon1: {
     top: -10,
@@ -399,16 +394,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: Spacing[3],
     letterSpacing: -1,
-    // ANDROID: Zero text shadow per evitare bordi grigi durante animazioni
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(31, 41, 55, 0.15)',
         textShadowOffset: { width: 0, height: 2 },
         textShadowRadius: 6,
       },
-      android: {
-        // Nessuna text shadow per animazioni pulite
-      },
+      android: {},
     }),
   },
   subtitle: {
@@ -416,16 +408,13 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     textAlign: 'center',
     letterSpacing: 0.2,
-    // ANDROID: Zero text shadow per evitare bordi grigi durante animazioni
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(107, 114, 128, 0.1)',
         textShadowOffset: { width: 0, height: 1 },
         textShadowRadius: 3,
       },
-      android: {
-        // Nessuna text shadow per animazioni pulite
-      },
+      android: {},
     }),
   },
   infoCard: {
@@ -440,7 +429,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
-    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
+    ...PlatformShadows.lg,
   },
   cardIcon: {},
   cardTitle: {
@@ -448,16 +437,13 @@ const styles = StyleSheet.create({
     color: '#1F2937',
     textAlign: 'center',
     marginBottom: Spacing[3],
-    // ANDROID: Zero text shadow per evitare bordi grigi durante animazioni
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(31, 41, 55, 0.1)',
         textShadowOffset: { width: 0, height: 1 },
         textShadowRadius: 4,
       },
-      android: {
-        // Nessuna text shadow per animazioni pulite
-      },
+      android: {},
     }),
   },
   cardDescription: {

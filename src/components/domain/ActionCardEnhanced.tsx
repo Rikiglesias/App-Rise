@@ -16,8 +16,8 @@ import {
 } from '../../shared/constants/designTokens';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { MaterialActionCard } from '../ui';
+import { FormattedText } from '../ui/FormattedText';
 import { useTheme } from '../../shared/hooks/useTheme';
-import { useResponsive } from '../../shared/hooks/useResponsive';
 
 interface ActionCardEnhancedProps {
   readonly title: string;
@@ -143,8 +143,6 @@ const ActionCardIcon: React.FC<{
   variantStyles: VariantStyles;
   icon: string;
 }> = ({ iconScaleAnim, variantStyles, icon }) => {
-  const { scaleFont } = useResponsive();
-
   return (
     <Animated.View
       style={[
@@ -156,12 +154,9 @@ const ActionCardIcon: React.FC<{
         },
       ]}
     >
-      <Text
-        style={[styles.icon, { fontSize: scaleFont(28) }]}
-        accessible={false} // Icon is decorative, description is in accessibilityLabel
-      >
+      <FormattedText fontSize={28} fixedLines={1} style={styles.icon}>
         {icon}
-      </Text>
+      </FormattedText>
     </Animated.View>
   );
 };

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Animated, StyleSheet, View, Text } from 'react-native';
 import { PlatformTouchable } from '../ui';
+import { FormattedText } from '../ui/FormattedText';
 import { useProfessionalTokens } from '../../features/actions/hooks/useProfessionalTokens';
-import { useResponsive } from '../../shared/hooks/useResponsive';
 import {
   BorderRadius,
   Shadows,
@@ -24,7 +24,6 @@ export const ProfessionalSectionsRenderer: React.FC<
 > = ({ sections, contentReveal, onActionPress }) => {
   const { professionalColors, professionalTypography } =
     useProfessionalTokens();
-  const { scaleFont } = useResponsive();
 
   const handleActionPress = (action: InfoAction) => () => {
     onActionPress(action);
@@ -179,25 +178,30 @@ export const ProfessionalSectionsRenderer: React.FC<
               >
                 <View style={styles.actionCardContent}>
                   <View style={styles.actionIconContainer}>
-                    <Text
-                      style={[
-                        { fontSize: scaleFont(22) },
-                        styles.actionIconText,
-                      ]}
+                    <FormattedText
+                      fontSize={22}
+                      fixedLines={1}
+                      style={styles.actionIconText}
                     >
                       {action.icon}
-                    </Text>
+                    </FormattedText>
                   </View>
                   <View style={styles.actionTextContent}>
-                    <Text style={styles.actionTitle}>{action.title}</Text>
-                    <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
+                    <FormattedText style={styles.actionTitle}>
+                      {action.title}
+                    </FormattedText>
+                    <FormattedText style={styles.actionSubtitle}>
+                      {action.subtitle}
+                    </FormattedText>
                   </View>
                   <View style={styles.actionArrow}>
-                    <Text
-                      style={[{ fontSize: scaleFont(16) }, styles.arrowIcon]}
+                    <FormattedText
+                      fontSize={16}
+                      fixedLines={1}
+                      style={styles.arrowIcon}
                     >
                       →
-                    </Text>
+                    </FormattedText>
                   </View>
                 </View>
               </PlatformTouchable>

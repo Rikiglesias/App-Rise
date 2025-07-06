@@ -21,7 +21,6 @@ export const ActionDescription: React.FC = () => {
         <View style={styles.descriptionContent}>
           <FormattedText
             variant="title-large"
-            wrapMode="fixed"
             fixedLines={2}
             style={styles.descriptionMain}
           >
@@ -30,7 +29,7 @@ export const ActionDescription: React.FC = () => {
           <View style={styles.descriptionDivider} />
           <FormattedText
             variant="body-large"
-            wrapMode="auto"
+            fixedLines={1}
             style={styles.descriptionSecondary}
           >
             Ogni azione conta per cambiare vite

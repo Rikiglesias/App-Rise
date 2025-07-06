@@ -88,7 +88,6 @@ export const useProjectsScreenStyles = () => {
           paddingBottom: Platform.OS === 'android' ? Spacing[20] : Spacing[8], // ANDROID: Spacing[20] per evitare sovrapposizione bottom navigation / iOS: Spacing[8] normale
         },
         sectionTitle: {
-          fontSize: TypographyTokens.styles.title.medium,
           fontWeight: Typography.weights.bold,
           color: colors.neutral[900],
           marginBottom: Spacing[2],

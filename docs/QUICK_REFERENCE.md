@@ -1,4 +1,4 @@
-# ⚡ QUICK REFERENCE - COMANDI ESSENZIALI
+# 🚀 QUICK REFERENCE - RISE AGAINST HUNGER ITALIA
 
 ## 🚨 COMANDI CRITICI QUOTIDIANI
 
@@ -71,72 +71,161 @@ eas credentials --platform ios --clear
 
 ---
 
-## 📱 SISTEMA RESPONSIVE BI-DIREZIONALE UNIVERSALE
+## �� SISTEMA RESPONSIVE SEMPLIFICATO
 
-SISTEMA RESPONSIVE BI-DIREZIONALE UNIVERSALE implementato nel progetto Rise Against Hunger Italia - sistema cross-platform che funziona IDENTICAMENTE su iOS e Android.
+### FormattedText - Best Practices Aligned
 
-ARCHITETTURA SEMPLIFICATA:
-- Calcolo basato ESCLUSIVAMENTE su width dispositivo 
-- Zero differenze iOS/Android - stesso device = stesso risultato
-- Dynamic Type iOS disabilitato per garantire consistenza
+```tsx
+// ✅ CASO 1: Flusso naturale (90% dei casi)
+<FormattedText variant="body-large">
+  Testo che fluisce naturalmente
+</FormattedText>
 
-BREAKPOINTS UNIVERSALI (basati su width):
-- ≤375px: scale 0.9 (iPhone SE, piccoli Android)
-- ≤414px: scale 1.0 (iPhone standard, Android standard)  
-- ≤480px: scale 1.15 (iPhone Plus, grandi Android)
-- ≤600px: scale 1.25 (Fold, mini tablet)
-- >600px: scale 1.3 (iPad, tablet)
+// ✅ CASO 2: Controllo preciso layout
+<FormattedText fontSize={35} fixedLines={2}>
+  Rise Against{'\n'}Hunger Italia
+</FormattedText>
 
-FORMULA SCALING SEMPLIFICATA: finalSize = baseSize * scaleBasedOnWidth
-
-UTILIZZO: fontSize: scaleFont(valore) - funziona identicamente ovunque
-ESEMPIO: scaleFont(60) → iPhone SE: 54px, iPhone 15: 60px, iPad: 78px
-
-SISTEMA TEXT WRAPPING INTELLIGENTE:
-- wrapMode="fixed": Numero righe FISSO su tutti i dispositivi
-- wrapMode="auto": Wrapping automatico bilanciato
-- wrapMode="strict": Controllo rigido lunghezza righe
-- wrapMode="flexible": Adattamento flessibile
-- wrapMode="none": Nessun wrapping
-
-ESEMPIO RIGHE FISSE:
-```jsx
-<FormattedText 
-  wrapMode="fixed" 
-  fixedLines={2}
-  variant="headline-large"
->
-  Titolo sempre su 2 righe esatte
+// ✅ CASO 3: Solo variant
+<FormattedText variant="headline-large">
+  Titolo Importante
 </FormattedText>
 ```
 
-INTELLIGENZA NETFLIX UX:
-- Lunghezza ottimale: 45-65 caratteri per riga
-- Bilanciamento automatico righe per leggibilità
-- Calcolo larghezza container ottimale
-- Suggerimenti numero righe intelligenti
+### Sistema a 2 Livelli
 
-VANTAGGI CROSS-PLATFORM:
-- Comportamento IDENTICO iOS e Android per stessa larghezza
-- Prevedibile: stessa width = stesso fontSize garantito
-- Layout consistente: stesso numero righe su tutti i device
-- Automatico: un parametro funziona su tutti i dispositivi
-- Performance ottimizzata: calcolo diretto senza breakpoint complessi
-- Zero bug platform-specific: risolve inconsistenze iOS/Android
+**1️⃣ SCALING RESPONSIVE (sempre attivo)**
+- `fontSize={40}` → Scala automaticamente
+- iPhone SE: 36px | iPhone 15: 40px | iPad: 52px
 
-FIX IMPLEMENTATI:
-- Dynamic Type iOS disabilitato (textScaling: false, allowFontScaling: false)
-- Sistema breakpoint semplificato per eliminare differenze di detection
-- Cross-platform consistency garantita nel core scaleFont()
-- Text wrapping intelligente con algoritmi Netflix UX
+**2️⃣ FIXED LINES (opzionale)**
+- `fixedLines={2}` → Garantisce 2 righe esatte
+- Se non ci sta → riduce font proporzionalmente
 
-FILES CORE: 
-- src/shared/constants/responsiveSystem.ts (sistema responsive)
-- src/shared/hooks/useResponsive.ts (hook responsive)
-- src/components/ui/FormattedText.tsx (text wrapping)
-- docs/SISTEMA_RESPONSIVE_REFERENCE.md (documentazione completa)
+### Typography Variants
 
-UTILIZZO: 
-- Font scaling: scaleFont() ovunque per scaling automatico
-- Text wrapping: FormattedText con wrapMode per layout consistente
-- Container: scaleSize() e scaleSpacing() per dimensioni responsive
+```tsx
+// Display
+display-large    → 57px base
+display-medium   → 45px base  
+display-small    → 32px base
+
+// Headlines
+headline-large   → 30px base
+headline-medium  → 28px base
+headline-small   → 24px base
+
+// Titles
+title-large      → 22px base
+title-medium     → 16px base
+title-small      → 14px base
+
+// Body
+body-large       → 16px base
+body-medium      → 15px base
+body-small       → 12px base
+
+// Labels
+label-large      → 14px base
+label-medium     → 12px base
+label-small      → 11px base
+```
+
+## 🎨 ESEMPI PRATICI
+
+### Titolo Hero
+```tsx
+<FormattedText 
+  fontSize={60}
+  fixedLines={2}
+  fontWeight="bold"
+>
+  Rise Against{'\n'}Hunger Italia
+</FormattedText>
+```
+
+### Card Description
+```tsx
+<FormattedText 
+  variant="body-medium"
+  fixedLines={3}
+>
+  {description}
+</FormattedText>
+```
+
+### CTA Button
+```tsx
+<FormattedText 
+  variant="title-medium"
+  fixedLines={1}
+  fontWeight="semibold"
+>
+  Dona Ora
+</FormattedText>
+```
+
+## ⚡ COMANDI RAPIDI
+
+### Sviluppo
+```bash
+npm start              # Avvia Expo
+npm run pre-modifiche  # Check qualità pre-commit
+npm run post-modifiche # Check qualità post-modifiche
+```
+
+### Test
+```bash
+npm test              # Tutti i test
+npm test -- --watch   # Test in watch mode
+npm run test:coverage # Coverage report
+```
+
+### Build
+```bash
+# Commit normale (0 build)
+git commit -m "feat: nuova funzione"
+
+# Trigger build automatiche
+git commit -m "release: v1.0.0 [build]"        # Android + iOS
+git commit -m "fix: hotfix [build android]"    # Solo Android
+git commit -m "update: iOS [build ios]"        # Solo iOS
+```
+
+## 🔗 LINK UFFICIALI APP
+
+- **Progetti**: https://riseagainsthunger.org.welfare4charity.com/org/projects
+- **Shop**: https://riseagainsthunger.org.welfare4charity.com/charity/ecommerce
+- **Gift Cards**: https://riseagainsthunger.org.welfare4charity.com/charity/giftcards
+- **Eventi**: https://riseagainsthunger.org.welfare4charity.com/organization/events
+- **Tracciabilità**: https://italy.riseagainsthunger.org/chi-siamo/tracciabilita/
+
+## 📋 CHECKLIST VELOCE
+
+```tsx
+// ❌ EVITARE
+<FormattedText fontSize={scaleFont(35)}>  // Doppio scaling!
+
+// ✅ CORRETTO  
+<FormattedText fontSize={35}>             // Scaling automatico
+
+// ✅ BEST PRACTICE
+<FormattedText 
+  variant="headline-large"    // Design system
+  fixedLines={2}             // Solo se serve controllo
+>
+  Titolo{'\n'}Importante
+</FormattedText>
+```
+
+## 🎯 REGOLE D'ORO
+
+1. **fontSize** = sempre valore RAW (es. 35)
+2. **scaleFont()** = applicato automaticamente
+3. **fixedLines** = solo quando serve controllo preciso
+4. **variant** = preferire per consistenza design
+5. **\n manuale** = controllo a capo quando necessario
+
+---
+
+**v2.0 - Sistema Semplificato Best Practices Aligned** 🚀

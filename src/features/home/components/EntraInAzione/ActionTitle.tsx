@@ -3,22 +3,21 @@ import { View, StyleSheet } from 'react-native';
 
 import { FormattedText } from '../../../../components/ui';
 import { Spacing } from '../../../../shared/constants/designTokens';
-import { scaleFont } from '../../../../shared/constants/responsiveSystem';
 
 export const ActionTitle: React.FC = () => {
   return (
     <View style={styles.titleSection}>
       <View style={styles.titleContainer}>
         <FormattedText
-          fontSize={scaleFont(35)}
-          wrapMode="auto"
+          fontSize={35}
+          fixedLines={1}
           style={[styles.titleText, { fontWeight: 'bold' }]}
         >
           ⚡ Entra in
         </FormattedText>
         <FormattedText
-          fontSize={scaleFont(35)}
-          wrapMode="auto"
+          fontSize={35}
+          fixedLines={1}
           style={[styles.titleText, { fontWeight: 'bold', color: '#DC2626' }]}
         >
           Azione
@@ -31,7 +30,7 @@ export const ActionTitle: React.FC = () => {
 const styles = StyleSheet.create({
   titleSection: {
     alignItems: 'center',
-    marginBottom: Spacing[5], // AUMENTATO: da Spacing[4] a Spacing[5] per più respiro
+    marginBottom: Spacing[5],
   },
 
   titleContainer: {
@@ -43,7 +42,6 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    // fontSize gestito da variant="headline-large" (scaleFont(30)) - IDENTICO a "Il Nostro Impatto"
     color: '#DC2626',
   },
 });

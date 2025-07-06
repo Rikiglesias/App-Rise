@@ -1,30 +1,27 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+import { FormattedText } from '../../../components/ui/FormattedText';
 import { contactSectionStyles } from '../styles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
-import { useResponsive } from '../../../shared/hooks/useResponsive';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
   animations,
   contacts,
 }) => {
-  const { scaleFont } = useResponsive();
-
   return (
     <View style={contactSectionStyles.categoryContainer}>
       {/* HEADER SENZA ANIMAZIONI */}
       <View style={contactSectionStyles.categoryHeader}>
         <View style={contactSectionStyles.exploreHeaderContainer}>
-          <Text
-            style={[
-              { fontSize: scaleFont(30) },
-              contactSectionStyles.categoryTitle,
-            ]}
+          <FormattedText
+            fontSize={30}
+            fixedLines={1}
+            style={contactSectionStyles.categoryTitle}
           >
             I Nostri Contatti
-          </Text>
+          </FormattedText>
           <Text style={contactSectionStyles.exploreSubtitleInline}>
             Sede di Bologna e recapiti ufficiali
           </Text>

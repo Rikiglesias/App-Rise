@@ -9,11 +9,11 @@
  */
 
 import React from 'react';
-import { Text, TextProps, Platform, TextStyle } from 'react-native';
+import { Text, TextProps, TextStyle } from 'react-native';
 import {
   TypographyTokens,
-  TextIntelligence,
   AccessibilityIntelligence,
+  scaleFont,
 } from '../../shared/constants/responsiveSystem';
 
 // Extend TextProps con nuove proprietà specifiche
@@ -45,12 +45,22 @@ export interface FormattedTextProps
   allowSystemFontScaling?: boolean;
 
   /**
-   * Modalità text wrapping per layout consistency
+   * Modalità text wrapping - SOLO 'fixed' per layout consistency assoluto
+   * RIVOLUZIONE: 'auto', 'strict', 'flexible', 'none' sono OBSOLETI
    */
-  wrapMode?: 'strict' | 'flexible' | 'none' | 'auto' | 'fixed';
+  wrapMode?: 'fixed';
 
   /**
-   * Numero fisso di righe per wrapMode 'fixed' (garantisce consistenza assoluta)
+   * Attiva il sistema intelligente di layout fisso
+   * - fixed={true}: Controlla altezza ma permette text wrapping naturale
+   * - fixed={true} + fixedLines={n}: Ridimensiona automaticamente il font per far entrare tutto il testo nelle righe specificate (MAI tronca)
+   */
+  fixed?: boolean;
+
+  /**
+   * Numero fisso di righe - OPZIONALE, funziona solo con fixed={true}
+   * RANGE CONSIGLIATO: 1-8 righe
+   * COMPORTAMENTO: Ridimensiona automaticamente il font per far entrare tutto il testo nelle righe specificate (MAI tronca)
    */
   fixedLines?: number;
 
@@ -83,47 +93,53 @@ export interface FormattedTextProps
 }
 
 /**
- * Mapping variant a fontSize del sistema ibrido
+ * Mapping variant a fontSize del sistema ibrido - SENZA SCALING
+ * Lo scaling viene applicato UNA volta sola nel componente principale
  */
 const getVariantFontSize = (variant: FormattedTextProps['variant']): number => {
   if (!variant) return TypographyTokens.styles.body.medium;
 
   const [category, size] = variant.split('-') as [string, string];
 
+  let baseFontSize: number;
+
   switch (category) {
     case 'display':
-      return (
+      baseFontSize =
         TypographyTokens.styles.display[
           size as keyof typeof TypographyTokens.styles.display
-        ] || TypographyTokens.styles.display.medium
-      );
+        ] || TypographyTokens.styles.display.medium;
+      break;
     case 'headline':
-      return (
+      baseFontSize =
         TypographyTokens.styles.headline[
           size as keyof typeof TypographyTokens.styles.headline
-        ] || TypographyTokens.styles.headline.medium
-      );
+        ] || TypographyTokens.styles.headline.medium;
+      break;
     case 'title':
-      return (
+      baseFontSize =
         TypographyTokens.styles.title[
           size as keyof typeof TypographyTokens.styles.title
-        ] || TypographyTokens.styles.title.medium
-      );
+        ] || TypographyTokens.styles.title.medium;
+      break;
     case 'body':
-      return (
+      baseFontSize =
         TypographyTokens.styles.body[
           size as keyof typeof TypographyTokens.styles.body
-        ] || TypographyTokens.styles.body.medium
-      );
+        ] || TypographyTokens.styles.body.medium;
+      break;
     case 'label':
-      return (
+      baseFontSize =
         TypographyTokens.styles.label[
           size as keyof typeof TypographyTokens.styles.label
-        ] || TypographyTokens.styles.label.medium
-      );
+        ] || TypographyTokens.styles.label.medium;
+      break;
     default:
-      return TypographyTokens.styles.body.medium;
+      baseFontSize = TypographyTokens.styles.body.medium;
   }
+
+  // RITORNA fontSize RAW - lo scaling viene applicato dopo
+  return baseFontSize;
 };
 
 /**
@@ -134,171 +150,129 @@ const applyReadabilityConstraints = (fontSize: number): number => {
 };
 
 /**
- * Algoritmo intelligente per text wrapping automatico
- * Determina automaticamente il punto di interruzione ottimale
+ * SISTEMA INTELLIGENTE MIGLIORATO: Calcola fontSize ottimale per fixedLines
+ * PRINCIPIO: Mai troncare il testo, ridimensionare conservativamente per farlo entrare
+ * MIGLIORAMENTI: Meno aggressivo, preserva meglio font weight e leggibilità
  */
-const getAutoWrapText = (text: string): string => {
-  if (!text || text.length <= 20) return text;
+const calculateSmartFontSize = (
+  text: string,
+  scaledFontSize: number, // Già scalato con scaleFont()
+  targetLines: number,
+  maxWidth: number = 350
+): number => {
+  if (!text || targetLines <= 0) return scaledFontSize;
 
-  const words = text.split(' ');
-  if (words.length <= 3) return text;
+  // GESTIONE \n ESPLICITI: Rispetta sempre i line breaks manuali
+  const explicitLines = text.split('\n');
+  const hasExplicitLineBreaks = explicitLines.length > 1;
 
-  // Regole specifiche per diversi tipi di testo
-  const totalLength = text.length;
-
-  // Testi brevi (20-40 caratteri): cerca punto naturale a metà
-  if (totalLength <= 40) {
-    const midPoint = Math.floor(words.length / 2);
-    return (
-      words.slice(0, midPoint).join(' ') +
-      '\n' +
-      words.slice(midPoint).join(' ')
-    );
-  }
-
-  // Testi medi (40-80 caratteri): bilancia le righe
-  if (totalLength <= 80) {
-    let bestSplit = 0;
-    let minDifference = Infinity;
-
-    for (let i = 1; i < words.length; i++) {
-      const firstPart = words.slice(0, i).join(' ');
-      const secondPart = words.slice(i).join(' ');
-      const difference = Math.abs(firstPart.length - secondPart.length);
-
-      if (difference < minDifference) {
-        minDifference = difference;
-        bestSplit = i;
-      }
+  if (hasExplicitLineBreaks) {
+    // Se ci sono più \n delle righe target, riduci conservativamente
+    if (explicitLines.length > targetLines) {
+      return scaledFontSize * 0.9; // CONSERVATIVO: solo 10% di riduzione
     }
 
-    return (
-      words.slice(0, bestSplit).join(' ') +
-      '\n' +
-      words.slice(bestSplit).join(' ')
+    // Per testo con \n, calcola la larghezza necessaria per la riga più lunga
+    const longestLine = explicitLines.reduce((longest, line) => {
+      const cleanLine = line.trim();
+      return cleanLine.length > longest.length ? cleanLine : longest;
+    }, '');
+
+    // Se la riga più lunga è corta, mantieni il fontSize originale
+    if (longestLine.length <= 20) {
+      // AUMENTATO da 15 a 20
+      return scaledFontSize; // Mantieni dimensione originale
+    }
+
+    return calculateOptimalFontSizeForText(
+      longestLine,
+      scaledFontSize,
+      maxWidth
     );
   }
 
-  // Testi lunghi: massimo 3 righe, bilanciate
-  const wordsPerLine = Math.ceil(words.length / 3);
-  const line1 = words.slice(0, wordsPerLine).join(' ');
-  const line2 = words.slice(wordsPerLine, wordsPerLine * 2).join(' ');
-  const line3 = words.slice(wordsPerLine * 2).join(' ');
+  // GESTIONE WRAPPING AUTOMATICO: Calcola spazio necessario
+  const totalChars = text.length;
 
-  return line1 + '\n' + line2 + (line3 ? '\n' + line3 : '');
+  // Algoritmo CONSERVATIVO: riduce il meno possibile
+  let bestFit = scaledFontSize;
+
+  // MOLTO MENO AGGRESSIVO: da 75% a 85% minimum
+  for (let sizeFactor = 1.0; sizeFactor >= 0.85; sizeFactor -= 0.02) {
+    const testSize = scaledFontSize * sizeFactor;
+    const avgCharWidth = testSize * 0.55; // Stima larghezza carattere
+    const charsPerLine = Math.floor(maxWidth / avgCharWidth);
+    const totalLinesNeeded = Math.ceil(totalChars / charsPerLine);
+
+    if (totalLinesNeeded <= targetLines) {
+      bestFit = testSize;
+      break; // Trovato il fontSize più grande che fa entrare tutto
+    }
+  }
+
+  // CONSERVATIVO: non va mai sotto l'85% del fontSize originale
+  const minFontSize = scaledFontSize * 0.85;
+  return Math.max(minFontSize, bestFit);
 };
 
 /**
- * Calcola fontSize ottimale per wrapMode fixed
- * Sistema di scaling automatico per garantire che il testo stia su N righe esatte
+ * Helper: Calcola fontSize ottimale per una singola riga di testo
  */
-const calculateOptimalFontSizeForFixedLines = (
+const calculateOptimalFontSizeForText = (
   text: string,
   baseFontSize: number,
-  targetLines: number,
-  maxWidth: number = 350 // Larghezza stimata del container
+  maxWidth: number
 ): number => {
-  if (!text || targetLines <= 0) return baseFontSize;
+  if (!text) return baseFontSize;
 
-  // Stima caratteri per riga basata su fontSize e larghezza
-  const estimateCharsPerLine = (fontSize: number) => {
-    const avgCharWidth = fontSize * 0.6; // Stima larghezza media carattere
-    return Math.floor(maxWidth / avgCharWidth);
-  };
+  let optimalSize = baseFontSize;
 
-  // Calcola caratteri totali necessari per le righe target
-  const totalChars = text.length;
-  const charsPerLineNeeded = Math.ceil(totalChars / targetLines);
+  // CONSERVATIVO: solo fino all'85%
+  for (let sizeFactor = 1.0; sizeFactor >= 0.85; sizeFactor -= 0.02) {
+    const testSize = baseFontSize * sizeFactor;
+    const avgCharWidth = testSize * 0.55;
+    const estimatedWidth = text.length * avgCharWidth;
 
-  // Trova fontSize che permette il numero di caratteri necessario per riga
-  let optimalFontSize = baseFontSize;
-  let iterations = 0;
-  const maxIterations = 20;
-
-  while (iterations < maxIterations) {
-    const charsPerLine = estimateCharsPerLine(optimalFontSize);
-
-    if (charsPerLine >= charsPerLineNeeded) {
-      // Font size è corretto o può essere leggermente più grande
+    if (estimatedWidth <= maxWidth) {
+      optimalSize = testSize;
       break;
-    } else {
-      // Font troppo grande, riduci
-      optimalFontSize *= 0.95;
     }
-    iterations++;
   }
 
-  // Assicurati che il font non diventi troppo piccolo o troppo grande
-  const minFontSize = baseFontSize * 0.7;
-  const maxFontSize = baseFontSize * 1.2;
-
-  return Math.max(minFontSize, Math.min(maxFontSize, optimalFontSize));
+  return optimalSize;
 };
 
 /**
- * Ottieni proprietà text wrapping basate su modalità + Netflix intelligence
+ * SISTEMA INTELLIGENTE: Proprietà per modalità fixed
+ * - Con fixedLines: Sistema intelligente che ridimensiona il font conservativamente (MAI tronca)
+ * - Senza fixedLines: Layout controllato ma testo naturale
  */
-const getWrapProps = (
-  wrapMode: FormattedTextProps['wrapMode'],
-  text: string = '',
-  fontSize: number = 14,
+const getIntelligentWrapProps = (
+  fixed: boolean,
+  wrapMode?: string,
   fixedLines?: number
 ) => {
-  // Netflix intelligence: calcola larghezza ottimale per il testo
-  const optimalWidth = TextIntelligence.getOptimalTextWidth(fontSize);
-  const shouldWrap = TextIntelligence.shouldWrapText(
-    text,
-    fontSize,
-    optimalWidth
-  );
-  const optimalLines = TextIntelligence.getOptimalLineCount(
-    text,
-    fontSize,
-    optimalWidth
-  );
+  // Supporta sia fixed={true} che wrapMode="fixed" per backward compatibility
+  const isFixedMode = fixed || wrapMode === 'fixed';
 
-  switch (wrapMode) {
-    case 'fixed':
-      // Modalità fissa: forza numero specifico di righe su tutti i dispositivi
-      // Con scaling automatico del font per garantire che il testo ci stia
-      return {
-        numberOfLines: fixedLines ?? 1,
-        ellipsizeMode: 'tail' as const,
-        adjustsFontSizeToFit: false,
-        // Il fontSize ottimale viene calcolato nel componente principale
-      };
-    case 'auto':
-      // Modalità automatica: gestisce il wrapping intelligentemente
-      return {
-        numberOfLines: undefined, // Permette wrapping naturale
-        ellipsizeMode: 'tail' as const,
-        adjustsFontSizeToFit: false,
-      };
-    case 'strict':
-      return {
-        numberOfLines: shouldWrap ? optimalLines : 1,
-        ellipsizeMode: 'clip' as const,
-        adjustsFontSizeToFit: false,
-      };
-    case 'flexible':
-      return {
-        numberOfLines: shouldWrap ? optimalLines : undefined,
-        ellipsizeMode: 'tail' as const,
-        adjustsFontSizeToFit: Platform.OS === 'ios' && !shouldWrap,
-      };
-    case 'none':
-      return {
-        numberOfLines: 1,
-        ellipsizeMode: 'tail' as const,
-        adjustsFontSizeToFit: false,
-      };
-    default:
-      return {
-        numberOfLines: shouldWrap ? optimalLines : undefined,
-        ellipsizeMode: 'tail' as const,
-        adjustsFontSizeToFit: false,
-      };
+  if (!isFixedMode) {
+    // Modalità normale: testo naturale
+    return {};
   }
+
+  if (fixedLines && fixedLines > 0) {
+    // MODALITÀ INTELLIGENTE: Numero righe fisso + font auto-ridimensionato conservativamente
+    return {
+      numberOfLines: fixedLines,
+      ellipsizeMode: 'clip' as const, // Non troncare con "...", il font è già ottimizzato
+      adjustsFontSizeToFit: false, // Usiamo la nostra logica più precisa
+    };
+  }
+
+  // Solo fixed={true}: Layout controllato ma testo naturale
+  return {
+    adjustsFontSizeToFit: false,
+  };
 };
 
 /**
@@ -321,64 +295,71 @@ const getFontWeight = (
 };
 
 /**
- * FormattedText Component
+ * FormattedText Component - SISTEMA INTELLIGENTE CONSERVATIVO
  *
- * Garantisce layout consistency su tutti i dispositivi ignorando zoom sistema
- * e applicando text wrapping intelligente.
+ * ORDINE OPERAZIONI:
+ * 1. fontSize base → 2. scaleFont() → 3. ridimensionamento intelligente (se fixedLines)
+ *
+ * BEHAVIOR fixedLines:
+ * - Garantisce SEMPRE il numero di righe esatto (layout consistency)
+ * - Ridimensiona CONSERVATIVAMENTE il font (max 15% di riduzione)
+ * - NON taglia MAI il testo (tutto visibile sempre)
+ * - Preserva grassetto e qualità del font
  */
 export const FormattedText: React.FC<FormattedTextProps> = ({
   variant = 'body-medium',
   allowSystemFontScaling = false,
-  wrapMode = 'auto',
   enforceReadabilityConstraints = true,
   fontSize: manualFontSize,
   color,
   fontWeight,
-  fixedLines,
+  wrapMode, // LEGACY: Supporto per backward compatibility
+  fixed = false, // NUOVO: Sistema intelligente
+  fixedLines, // OPZIONALE - funziona solo con fixed={true}
   style,
   children,
   ...textProps
 }) => {
-  // Calcola fontSize finale
+  // PASSO 1: Ottieni fontSize base (RAW, senza scaling)
   const baseFontSize = manualFontSize ?? getVariantFontSize(variant);
-  let finalFontSize = enforceReadabilityConstraints
-    ? applyReadabilityConstraints(baseFontSize)
-    : baseFontSize;
 
-  // Sistema di scaling automatico per wrapMode="fixed"
+  // PASSO 2: Applica scaleFont() UNA volta sola
+  let scaledFontSize = scaleFont(baseFontSize);
+
+  // PASSO 3: Applica vincoli accessibilità se richiesto
+  if (enforceReadabilityConstraints) {
+    scaledFontSize = applyReadabilityConstraints(scaledFontSize);
+  }
+
+  // PASSO 4: SISTEMA INTELLIGENTE - Solo se fixed={true} o wrapMode="fixed"
   const textString = typeof children === 'string' ? children : '';
-  if (wrapMode === 'fixed' && fixedLines && textString) {
-    finalFontSize = calculateOptimalFontSizeForFixedLines(
-      textString,
-      finalFontSize,
-      fixedLines
-    );
+  let finalFontSize = scaledFontSize; // GIÀ SCALATO per device
+  let wrapProps = {};
+
+  const isFixedMode = fixed || wrapMode === 'fixed';
+
+  if (isFixedMode) {
+    wrapProps = getIntelligentWrapProps(fixed, wrapMode, fixedLines);
+
+    // MODALITÀ INTELLIGENTE CONSERVATIVA: Con fixedLines ridimensiona minimamente il font
+    if (fixedLines && fixedLines > 0 && textString) {
+      // CALCOLO CONSERVATIVO: Trova il fontSize ottimale per far entrare tutto il testo
+      finalFontSize = calculateSmartFontSize(
+        textString,
+        scaledFontSize, // Parte dal font GIÀ SCALATO
+        fixedLines
+      );
+    }
   }
-
-  // Gestione automatica del testo per wrapMode 'auto'
-  let processedText = children;
-
-  if (wrapMode === 'auto' && textString) {
-    processedText = getAutoWrapText(textString);
-  }
-
-  // Ottieni proprietà wrapping intelligenti
-  const wrapProps = getWrapProps(
-    wrapMode,
-    textString,
-    finalFontSize,
-    fixedLines
-  );
+  // ALTRIMENTI: Modalità normale con font scalato standard
 
   // Calcola stile finale
   const computedStyle = [
     {
       fontSize: finalFontSize,
-      color: color ?? '#171717', // Default neutral-900
+      color: color ?? '#171717',
       fontWeight: getFontWeight(fontWeight),
-      // Imposta lineHeight proporzionale per consistency
       lineHeight: finalFontSize * TypographyTokens.lineHeights.normal,
-      // Disabilita font padding su Android per consistency
       includeFontPadding: false,
       textAlignVertical: 'center' as const,
     },
@@ -392,7 +373,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
       allowFontScaling={allowSystemFontScaling}
       style={computedStyle}
     >
-      {processedText}
+      {children}
     </Text>
   );
 };

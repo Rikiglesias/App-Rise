@@ -1,318 +1,312 @@
-# SISTEMA RESPONSIVE COMPLETO - REFERENCE GUIDE
+# SISTEMA RESPONSIVE UNIVERSALE - BEST PRACTICES ALIGNED
+**Rise Against Hunger Italia - Reference Completa v2.0**
 
-## 🎯 OVERVIEW SISTEMA
+---
 
-Il progetto Rise Against Hunger Italia implementa un **Sistema Responsive Bi-Direzionale Universale** che garantisce consistenza assoluta tra iOS e Android.
+## 🎯 SISTEMA SEMPLIFICATO - COME GRANDI AZIENDE TECH
 
-### Principi Fondamentali
-- **Cross-platform consistency**: stesso device = stesso risultato
-- **Calcolo basato ESCLUSIVAMENTE su width dispositivo**
+### Filosofia Core (Netflix, Airbnb, Uber)
+- **fontSize base** → Valore RAW che specifichi (es. 35)
+- **scaleFont()** → Applicato AUTOMATICAMENTE una volta sola
+- **\n manuale** → Controllo preciso a capo quando necessario
+- **fixedLines** → OPZIONALE, solo per controllo preciso layout
+- **Flusso naturale** → DEFAULT per 90% del testo
+
+### Cross-Platform Consistency
+- **IDENTICO** comportamento su iOS e Android per stessa larghezza
+- **PREVEDIBILE**: stessa width = stesso fontSize garantito
+- **AUTOMATICO**: un parametro funziona su tutti i dispositivi
 - **Dynamic Type iOS disabilitato** per garantire consistenza
-- **Zero differenze iOS/Android**
 
 ## 📁 FILES CORE DEL SISTEMA
 
 ```
 src/shared/constants/responsiveSystem.ts  → Sistema responsive principale
 src/shared/hooks/useResponsive.ts         → Hook per utilizzo responsive
-src/components/ui/FormattedText.tsx       → Text wrapping intelligente
+src/components/ui/FormattedText.tsx       → Componente testo intelligente
 ```
 
-## 🔧 BREAKPOINTS UNIVERSALI
+## 🔧 BREAKPOINTS STANDARD INDUSTRIA
+
+Sistema basato su **larghezza dispositivo** (Base: 375px - iPhone 6/7/8):
 
 ```typescript
-// Scaling basato SOLO su width - identico iOS e Android
-≤375px: scale 0.9   // iPhone SE, piccoli Android
-≤414px: scale 1.0   // iPhone standard, Android standard
-≤480px: scale 1.15  // iPhone Plus, grandi Android
-≤600px: scale 1.25  // Fold, mini tablet
->600px: scale 1.3   // iPad, tablet
+// Breakpoint con fattori di scala
+≤375px → scale 0.9   // iPhone SE, piccoli Android
+≤414px → scale 1.0   // iPhone standard, Android standard  
+≤480px → scale 1.15  // iPhone Plus, grandi Android
+≤600px → scale 1.25  // Fold, mini tablet
+>600px → scale 1.3   // iPad, tablet
 ```
 
-### Formula Base
+### Formula Scaling
 ```typescript
+// Applicato automaticamente
 finalSize = baseSize * scaleBasedOnWidth
+
+// Esempio
+fontSize: 35 → iPhone SE: 31.5px, iPhone 15: 35px, iPad: 45.5px
 ```
 
-## 🚀 FUNZIONI PRINCIPALI
+## 🚀 COMPONENTE FormattedText - BEST PRACTICES
 
-### 1. Font Scaling
+### Utilizzo Standard (95% dei casi)
+
+```tsx
+// CASO 1: Flusso naturale (RACCOMANDATO)
+<FormattedText variant="body-large">
+  Testo che fluisce naturalmente senza vincoli rigidi
+</FormattedText>
+
+// CASO 2: Controllo preciso righe + a capo manuale
+<FormattedText fontSize={35} fixedLines={2}>
+  Rise Against{'\n'}Hunger Italia
+</FormattedText>
+
+// CASO 3: Solo variant (usa fontSize predefinito)
+<FormattedText variant="headline-large">
+  Titolo Importante
+</FormattedText>
+```
+
+### Props Principali
+
 ```typescript
-// Utilizzo: fontSize: scaleFont(valore)
-scaleFont(60) → iPhone SE: 54px, iPhone 15: 60px, iPad: 78px
-
-// Esempi pratici
-fontSize: scaleFont(22)  // Per titoli
-fontSize: scaleFont(16)  // Per body text
-fontSize: scaleFont(14)  // Per labels
+interface FormattedTextProps {
+  // Typography
+  variant?: TypographyVariant;        // Usa design system tokens
+  fontSize?: number;                  // Override manuale (base RAW)
+  fontWeight?: FontWeight;            // light → black
+  color?: string;                     // Colore testo
+  
+  // Layout Control
+  fixedLines?: number;                // OPZIONALE - righe esatte (1-8)
+  
+  // System
+  allowSystemFontScaling?: boolean;   // default: false
+  enforceReadabilityConstraints?: boolean; // default: true
+}
 ```
 
-### 2. Size e Spacing
+### Sistema a 2 Livelli
+
+**LIVELLO 1: Scaling Responsive (SEMPRE ATTIVO)**
+- `fontSize={40}` → Scala automaticamente per device
+- iPhone SE: 36px, iPhone 15: 40px, iPad: 52px
+
+**LIVELLO 2: Fixed Lines (SOLO SE SPECIFICATO)**
+- `fixedLines={2}` → Garantisce esattamente 2 righe
+- Se il testo scalato non ci sta → riduce ulteriormente
+- Mai ingrandisce, solo riduce se necessario
+
+### Variants Typography (Material Design + Apple HIG)
+
 ```typescript
-// 8dp grid system (Google Material Design)
-scaleSize(size, type)     // type: 'base' | 'conservative' | 'content'
-scaleSpacing(spacing)     // Content-aware spacing
+// Display (grandi titoli)
+'display-large'    → 57px base → scalato automaticamente
+'display-medium'   → 45px base → scalato automaticamente
+'display-small'    → 32px base → scalato automaticamente
 
-// Esempi
-width: scaleSize(200)           // Larghezza responsive
-padding: scaleSpacing(16)       // Padding responsive
-margin: scaleSpacing(24)        // Margin responsive
+// Headline (titoli sezioni)
+'headline-large'   → 30px base → scalato automaticamente
+'headline-medium'  → 28px base → scalato automaticamente
+'headline-small'   → 24px base → scalato automaticamente
+
+// Title (titoli componenti)
+'title-large'      → 22px base → scalato automaticamente
+'title-medium'     → 16px base → scalato automaticamente
+'title-small'      → 14px base → scalato automaticamente
+
+// Body (testo principale)
+'body-large'       → 16px base → scalato automaticamente
+'body-medium'      → 15px base → scalato automaticamente
+'body-small'       → 12px base → scalato automaticamente
+
+// Label (etichette UI)
+'label-large'      → 14px base → scalato automaticamente
+'label-medium'     → 12px base → scalato automaticamente
+'label-small'      → 11px base → scalato automaticamente
 ```
 
-### 3. Hook Responsive
+## 🎯 BEST PRACTICES - QUANDO USARE COSA
+
+### ✅ USA `variant` QUANDO:
+- Vuoi seguire il design system
+- Il testo deve fluire naturalmente
+- Non serve controllo preciso righe
+- Vuoi consistenza con altri testi simili
+
+```tsx
+<FormattedText variant="body-large">
+  Descrizione completa del progetto che può andare su più righe
+</FormattedText>
+```
+
+### ✅ USA `fontSize` QUANDO:
+- Serve una dimensione specifica non standard
+- Vuoi controllo diretto sul valore base
+- Stai creando un componente custom
+
+```tsx
+<FormattedText fontSize={42}>
+  Dimensione custom per caso speciale
+</FormattedText>
+```
+
+### ✅ USA `fixedLines` QUANDO:
+- Layout deve essere matematicamente preciso
+- Card devono avere altezza consistente
+- Titoli devono stare su N righe esatte
+- Controllo preciso del layout
+
+```tsx
+<FormattedText fontSize={35} fixedLines={2}>
+  Rise Against{'\n'}Hunger Italia
+</FormattedText>
+```
+
+### ✅ USA `\n` QUANDO:
+- Vuoi forzare a capo in punto specifico
+- Il design richiede layout preciso
+- Controllo manuale delle interruzioni
+
+```tsx
+<FormattedText>
+  Prima parte{'\n'}Seconda parte{'\n'}Terza parte
+</FormattedText>
+```
+
+## 🚀 ESEMPI PRATICI COMPLETI
+
+### Esempio 1: Hero Title
+```tsx
+// Titolo principale con controllo preciso
+<FormattedText 
+  fontSize={60}      // Base grande per impatto
+  fixedLines={2}     // Sempre 2 righe
+  fontWeight="bold"
+>
+  Rise Against{'\n'}Hunger Italia
+</FormattedText>
+```
+
+### Esempio 2: Card Description
+```tsx
+// Descrizione con layout consistente
+<FormattedText 
+  variant="body-medium"
+  fixedLines={3}     // Max 3 righe per card uniformi
+  color="#666"
+>
+  {project.description}
+</FormattedText>
+```
+
+### Esempio 3: CTA Button
+```tsx
+// Call-to-action sempre su 1 riga
+<FormattedText 
+  variant="title-medium" 
+  fixedLines={1}
+  fontWeight="semibold"
+  color="#DC2626"
+>
+  Dona Ora
+</FormattedText>
+```
+
+### Esempio 4: Flowing Content
+```tsx
+// Contenuto che fluisce naturalmente
+<FormattedText variant="body-large">
+  {article.content}
+</FormattedText>
+```
+
+## 🧠 INTELLIGENZA DEL SISTEMA
+
+### Calcolo Automatico Font Size
+Quando usi `fixedLines`, il sistema:
+1. Parte dal fontSize scalato per device
+2. Stima se il testo sta nelle righe richieste
+3. Se non ci sta, riduce proporzionalmente
+4. Mantiene leggibilità minima (0.7x del base)
+
+### Esempio Calcolo
+```
+Testo: "Rise Against Hunger Italia"
+fontSize base: 40
+Device: iPhone SE (375px)
+
+1. Scaling responsive: 40 × 0.9 = 36px
+2. Verifica: sta in 1 riga? NO
+3. Riduce: 36px → 32px
+4. Risultato: 1 riga a 32px ✅
+```
+
+## 🎨 RISULTATO FINALE
+
+Con questo sistema ottieni:
+- **App identica** su tutti i dispositivi
+- **Testo sempre leggibile** (mai tagliato)
+- **Layout matematicamente preciso**
+- **Performance ottimale**
+- **Codice pulito e manutenibile**
+
+## 📋 CHECKLIST RAPIDA
+
+```tsx
+// ✅ CORRETTO - Sistema semplificato
+<FormattedText fontSize={35} fixedLines={2}>
+  Rise Against{'\n'}Hunger Italia
+</FormattedText>
+
+// ❌ SBAGLIATO - Doppio scaling
+<FormattedText fontSize={scaleFont(35)}>
+  Rise Against Hunger Italia
+</FormattedText>
+
+// ✅ CORRETTO - Variant per consistenza
+<FormattedText variant="headline-large">
+  Titolo Sezione
+</FormattedText>
+
+// ✅ CORRETTO - Flusso naturale
+<FormattedText variant="body-medium">
+  Contenuto lungo che può fluire su più righe naturalmente
+</FormattedText>
+```
+
+## 🚀 HOOK useResponsive
+
+### Utilizzo Base
 ```typescript
 const {
-  scaleFont,
-  scaleSize, 
-  scaleSpacing,
-  isCompact,
-  isStandard,
-  isLarge,
-  isXLarge,
-  isXXLarge,
-  select
+  // Funzioni scaling
+  scaleSize, scaleFont, scaleSpacing,
+  
+  // Stato device
+  breakpoint, deviceWidth,
+  
+  // Helper
+  isCompact, isStandard, isLarge
 } = useResponsive();
 
-// Valori responsive condizionali
-const fontSize = select({
+// Uso
+fontSize: scaleFont(20)
+padding: scaleSpacing(16)
+width: scaleSize(200)
+```
+
+### Valori Responsive
+```typescript
+const fontSize = useResponsiveValue({
   compact: 14,
   standard: 16,
-  large: 18,
-  xlarge: 20,
-  xxlarge: 22,
-  default: 16
+  large: 18
 });
 ```
-
-## 📱 SISTEMA TEXT WRAPPING
-
-### Modalità Disponibili
-
-| Modalità | Comportamento | Consistenza | Uso |
-|----------|---------------|-------------|-----|
-| `fixed` | **Righe fisse specificate** | ✅ **Assoluta** | **Layout critici** |
-| `auto` | Wrapping intelligente variabile | ❌ Variabile | Testi dinamici |
-| `strict` | Righe ottimali calcolate | ⚠️ Semi-consistente | Testi tecnici |
-| `flexible` | Adattivo con limiti | ⚠️ Semi-consistente | Testi responsive |
-| `none` | Sempre 1 riga | ✅ Consistente | Etichette brevi |
-
-### Utilizzo FormattedText
-
-#### 1. Righe Fisse (RACCOMANDATO per layout critici)
-```tsx
-<FormattedText 
-  wrapMode="fixed" 
-  fixedLines={2}
-  variant="title-large"
->
-  Unisciti a noi nella lotta contro la fame nel mondo
-</FormattedText>
-```
-
-#### 2. Wrapping Automatico
-```tsx
-<FormattedText 
-  wrapMode="auto"
-  variant="body-medium"
->
-  Testo che si adatta automaticamente
-</FormattedText>
-```
-
-#### 3. Nessun Wrapping
-```tsx
-<FormattedText 
-  wrapMode="none"
-  variant="label-medium"
->
-  Etichetta singola riga
-</FormattedText>
-```
-
-## 🎨 TYPOGRAPHY TOKENS
-
-```typescript
-// Variants disponibili con fontSize responsive
-display-large    → scaleFont(57)
-display-medium   → scaleFont(45)
-display-small    → scaleFont(32)
-
-headline-large   → scaleFont(30)
-headline-medium  → scaleFont(28)
-headline-small   → scaleFont(24)
-
-title-large      → scaleFont(22)  // Per titoli principali
-title-medium     → scaleFont(16)  // Per sottotitoli
-title-small      → scaleFont(14)  // Per titoli piccoli
-
-body-large       → scaleFont(16)  // Testo principale
-body-medium      → scaleFont(15)  // Testo secondario
-body-small       → scaleFont(12)  // Testo piccolo
-
-label-large      → scaleFont(14)  // Labels grandi
-label-medium     → scaleFont(12)  // Labels standard
-label-small      → scaleFont(11)  // Labels piccole
-```
-
-## 🏗️ DESIGN TOKENS (8dp Grid)
-
-```typescript
-// Layout tokens
-DesignTokens.layout = {
-  unit: 8,                    // Base unit
-  screenPadding: 16,          // Padding schermo
-  sectionSpacing: 24,         // Spacing sezioni
-  cardSpacing: 12,            // Spacing card
-  dividerSpacing: 8           // Spacing divisori
-}
-
-// Component tokens
-DesignTokens.components = {
-  buttonHeight: {
-    compact: 40,              // Bottoni compatti
-    standard: 48,             // Bottoni standard
-    large: 56                 // Bottoni grandi
-  },
-  iconSize: {
-    small: 20,                // Icone piccole
-    medium: 24,               // Icone medie
-    large: 32,                // Icone grandi
-    xlarge: 40                // Icone extra grandi
-  }
-}
-```
-
-## ⚡ SCALING AUTOMATICO FONT (wrapMode="fixed")
-
-### Come Funziona
-Quando usi `wrapMode="fixed"` con `fixedLines`, il sistema:
-
-1. **Calcola automaticamente** il fontSize ottimale
-2. **Garantisce** che il testo stia su N righe esatte
-3. **Mantiene leggibilità** con limiti 70%-120% del valore base
-4. **Funziona identicamente** su iOS e Android
-
-### Algoritmo
-```typescript
-1. Stima caratteri per riga basata su fontSize e larghezza
-2. Calcola caratteri totali necessari per le righe target
-3. Riduce iterativamente il font se troppo grande
-4. Applica limiti di sicurezza (70%-120% del valore base)
-```
-
-### Esempio Pratico
-```tsx
-// Il sistema calcola automaticamente il fontSize per far stare
-// questo testo su esattamente 2 righe su TUTTI i dispositivi
-<FormattedText 
-  wrapMode="fixed" 
-  fixedLines={2}
-  variant="title-large"  // Base: scaleFont(22)
->
-  Unisciti a noi nella lotta contro la fame nel mondo
-</FormattedText>
-
-// Risultato:
-// iPhone SE: fontSize calcolato ~19px (ridotto per far stare su 2 righe)
-// iPhone 15: fontSize calcolato ~22px (valore base)
-// iPad: fontSize calcolato ~26px (aumentato proporzionalmente)
-```
-
-## 🎯 BEST PRACTICES
-
-### ✅ QUANDO USARE COSA
-
-#### wrapMode="fixed" + fixedLines
-- **Titoli principali** che devono avere layout consistente
-- **Card con testi** che devono allinearsi perfettamente
-- **Liste uniformi** dove ogni elemento deve avere stessa altezza
-- **Layout critici** dove la consistenza è fondamentale
-
-#### wrapMode="auto"
-- **Descrizioni lunghe** dove il contenuto varia molto
-- **Testi dinamici** da API o database
-- **Contenuti editoriali** dove la leggibilità è prioritaria
-
-#### wrapMode="none"
-- **Labels e etichette** che devono stare su 1 riga
-- **Bottoni** con testo fisso
-- **Navigazione** e menu items
-
-### 📏 Numero di Righe Consigliato
-```
-1 riga  → Titoli, etichette, nomi, bottoni
-2 righe → Sottotitoli, descrizioni brevi, card titles
-3 righe → Descrizioni medie, abstract, preview text
-4+ righe → ⚠️ Sconsigliato (leggibilità compromessa)
-```
-
-### 🔧 Responsive Values
-```typescript
-// Usa select() per valori condizionali
-const buttonSize = select({
-  compact: 'small',
-  standard: 'medium', 
-  large: 'large',
-  default: 'medium'
-});
-
-// Usa renderFor() per rendering condizionale
-if (renderFor(['compact', 'standard'])) {
-  return <CompactLayout />;
-}
-```
-
-## 🚨 REGOLE CRITICHE
-
-### ❌ NON FARE MAI
-- Non usare fontSize fissi senza scaleFont()
-- Non usare padding/margin fissi senza scaleSpacing()
-- Non usare allowFontScaling={true} (rompe la consistenza)
-- Non mixare wrapMode diversi nello stesso layout critico
-
-### ✅ SEMPRE FARE
-- Usa scaleFont() per TUTTI i fontSize
-- Usa scaleSpacing() per TUTTI i spacing
-- Usa wrapMode="fixed" per layout critici
-- Testa sempre su iPhone SE e iPad
-- Mantieni fixedLines ≤ 3 per leggibilità
-
-## 🔍 DEBUGGING
-
-### Verifica Consistenza
-```typescript
-// Controlla breakpoint corrente
-const { dimensions } = useResponsive();
-console.log('Current breakpoint:', dimensions.breakpoint);
-console.log('Device width:', dimensions.width);
-
-// Verifica scaling
-console.log('scaleFont(22):', scaleFont(22));
-console.log('scaleSpacing(16):', scaleSpacing(16));
-```
-
-### Test Cross-Platform
-1. **iPhone SE** (375px) - verifica che tutto sia leggibile
-2. **iPhone Standard** (414px) - verifica proporzioni base
-3. **iPad** (768px+) - verifica che non diventi troppo grande
-4. **Android equivalenti** - verifica consistenza
-
-## 📋 CHECKLIST IMPLEMENTAZIONE
-
-### Per Ogni Nuovo Componente
-- [ ] Usa scaleFont() per fontSize
-- [ ] Usa scaleSpacing() per padding/margin
-- [ ] Scegli wrapMode appropriato per FormattedText
-- [ ] Testa su almeno 3 breakpoints diversi
-- [ ] Verifica consistenza iOS/Android
-
-### Per Layout Critici
-- [ ] Usa wrapMode="fixed" con fixedLines
-- [ ] Limita fixedLines a max 3
-- [ ] Testa scaling automatico font
-- [ ] Verifica allineamenti perfetti
-- [ ] Controlla su dispositivi estremi
 
 ---
 
-**RICORDA**: Il sistema è progettato per garantire **consistenza assoluta** cross-platform. Seguendo queste linee guida, otterrai sempre risultati prevedibili e professionali su tutti i dispositivi.
+**SISTEMA COMPLETO E ALLINEATO ALLE BEST PRACTICES** 🎯

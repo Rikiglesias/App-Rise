@@ -1,8 +1,9 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 
 import { ModernCTA } from '../../components/ModernCTARefactored';
+import { FormattedText } from '../../components/ui/FormattedText';
 import Logo from '../../components/ui/Logo';
 import type { RootStackParamList } from '../../navigation/types';
 import {
@@ -12,7 +13,6 @@ import {
   Spacing,
   Typography,
 } from '../constants/designTokens';
-import { useResponsive } from '../hooks/useResponsive';
 
 type SimplePlaceholderScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,7 +32,6 @@ interface Props {
 
 const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
   const { title = 'Sezione in Sviluppo', subtitle } = route.params ?? {};
-  const { scaleFont } = useResponsive();
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -48,40 +47,48 @@ const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
         {/* Header */}
         <View style={styles.header}>
           <Logo size={48} />
-          <Text style={[styles.constructionIcon, { fontSize: scaleFont(48) }]}>
+          <FormattedText
+            fontSize={48}
+            fixedLines={1}
+            style={styles.constructionIcon}
+          >
             🚧
-          </Text>
+          </FormattedText>
         </View>
 
         {/* Main Content */}
         <View style={styles.main}>
-          <Text style={[styles.title, { fontSize: scaleFont(36) }]}>
+          <FormattedText fontSize={36} fixedLines={2} style={styles.title}>
             {title}
-          </Text>
+          </FormattedText>
           {subtitle && (
-            <Text style={[styles.subtitle, { fontSize: scaleFont(20) }]}>
+            <FormattedText fontSize={20} fixedLines={2} style={styles.subtitle}>
               {subtitle}
-            </Text>
+            </FormattedText>
           )}
 
-          <Text style={[styles.message, { fontSize: scaleFont(16) }]}>
+          <FormattedText fontSize={16} fixedLines={3} style={styles.message}>
             Questa sezione è in fase di sviluppo.{'\n'}
             Stiamo lavorando per offrirti la migliore esperienza possibile.
-          </Text>
+          </FormattedText>
 
           <View style={styles.features}>
-            <Text style={[styles.featuresTitle, { fontSize: scaleFont(16) }]}>
+            <FormattedText
+              fontSize={16}
+              fixedLines={1}
+              style={styles.featuresTitle}
+            >
               🎯 Prossimamente:
-            </Text>
-            <Text style={[styles.feature, { fontSize: scaleFont(14) }]}>
+            </FormattedText>
+            <FormattedText fontSize={14} fixedLines={1} style={styles.feature}>
               ⚡ Contenuti aggiornati
-            </Text>
-            <Text style={[styles.feature, { fontSize: scaleFont(14) }]}>
+            </FormattedText>
+            <FormattedText fontSize={14} fixedLines={1} style={styles.feature}>
               🎨 Design moderno
-            </Text>
-            <Text style={[styles.feature, { fontSize: scaleFont(14) }]}>
+            </FormattedText>
+            <FormattedText fontSize={14} fixedLines={1} style={styles.feature}>
               📱 Esperienza ottimizzata
-            </Text>
+            </FormattedText>
           </View>
         </View>
 

@@ -10,9 +10,12 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  Text,
 } from 'react-native';
-import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
+import {
+  PlatformScrollView,
+  PlatformTouchable,
+  FormattedText,
+} from '../../../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { RootStackParamList } from '../../../navigation/types';
@@ -22,10 +25,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants';
-import {
-  TypographyTokens,
-  DesignTokens,
-} from '../../../shared/constants/responsiveSystem';
+import { DesignTokens } from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
@@ -207,24 +207,23 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                     resizeMode="contain"
                   />
                 ) : (
-                  <Text
-                    style={[
-                      styles.socialIconEmoji,
-                      { fontSize: TypographyTokens.styles.headline.medium },
-                    ]}
-                  >
+                  <FormattedText fontSize={28} style={styles.socialIconEmoji}>
                     {platform.emoji}
-                  </Text>
+                  </FormattedText>
                 )}
               </View>
 
               {/* Content Section */}
               <View style={styles.socialInfoContainer}>
-                <Text style={styles.socialName}>{platform.name}</Text>
-                <Text style={styles.socialHandle}>{platform.handle}</Text>
-                <Text style={styles.socialDescription}>
+                <FormattedText fontSize={16} style={styles.socialName}>
+                  {platform.name}
+                </FormattedText>
+                <FormattedText fontSize={12} style={styles.socialHandle}>
+                  {platform.handle}
+                </FormattedText>
+                <FormattedText fontSize={11} style={styles.socialDescription}>
                   {platform.description}
-                </Text>
+                </FormattedText>
               </View>
 
               {/* Arrow Icon */}
@@ -260,24 +259,14 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         {/* HEADER SECTION - Pattern da Chi Siamo */}
         <View style={styles.headerSection}>
           <View style={styles.titleContainer}>
-            <Text
-              style={[
-                styles.categoryTitle,
-                { fontSize: TypographyTokens.styles.headline.large },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.titleAccent,
-                  { fontSize: TypographyTokens.styles.headline.large },
-                ]}
-              >
+            <FormattedText fontSize={30} style={styles.categoryTitle}>
+              <FormattedText fontSize={30} style={styles.titleAccent}>
                 Seguici Ovunque
-              </Text>
-            </Text>
-            <Text style={styles.categorySubtitleInline}>
+              </FormattedText>
+            </FormattedText>
+            <FormattedText fontSize={15} style={styles.categorySubtitleInline}>
               Resta connesso e scopri come fare la differenza
-            </Text>
+            </FormattedText>
           </View>
         </View>
 
@@ -285,14 +274,9 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.sectionDividerContainer}>
           <View style={styles.sectionDivider} />
           <View style={styles.dividerEmojiContainer}>
-            <Text
-              style={[
-                styles.dividerEmoji,
-                { fontSize: TypographyTokens.styles.title.medium },
-              ]}
-            >
+            <FormattedText fontSize={16} style={styles.dividerEmoji}>
               📱
-            </Text>
+            </FormattedText>
           </View>
         </View>
 
@@ -382,7 +366,6 @@ const styles = StyleSheet.create({
 
   // SUBTITLE INLINE ELEGANTE COME PAGINE AZIONI
   categorySubtitleInline: {
-    fontSize: TypographyTokens.styles.body.medium, // INGRANDITO COME ALTRE PAGINE
     fontWeight: Typography.weights.medium,
     color: '#B91C1C', // ROSSO PIÙ SCURO COORDINATO
     textAlign: 'center' as const,
@@ -467,7 +450,6 @@ const styles = StyleSheet.create({
   },
 
   socialName: {
-    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
@@ -475,14 +457,12 @@ const styles = StyleSheet.create({
   },
 
   socialHandle: {
-    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.semibold,
     color: '#DC2626',
     marginBottom: Spacing[1],
   },
 
   socialDescription: {
-    fontSize: TypographyTokens.styles.label.small,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     lineHeight: 16,

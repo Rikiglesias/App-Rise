@@ -92,32 +92,50 @@ describe('FormattedText', () => {
     });
   });
 
-  describe('Wrap Mode', () => {
-    it('should handle flexible wrap mode', () => {
+  describe('Fixed Lines Mode', () => {
+    it('should handle fixed lines with 1 line', () => {
       const { getByText } = render(
-        <FormattedText wrapMode="flexible">
-          Flexible wrapping text
+        <FormattedText wrapMode="fixed" fixedLines={1}>
+          Single line text
         </FormattedText>
-      );
-
-      expect(getByText('Flexible wrapping text')).toBeTruthy();
-    });
-
-    it('should handle strict wrap mode', () => {
-      const { getByText } = render(
-        <FormattedText wrapMode="strict">Strict wrapping text</FormattedText>
-      );
-
-      expect(getByText('Strict wrapping text')).toBeTruthy();
-    });
-
-    it('should handle none wrap mode', () => {
-      const { getByText } = render(
-        <FormattedText wrapMode="none">Single line text</FormattedText>
       );
 
       const textElement = getByText('Single line text');
       expect(textElement.props.numberOfLines).toBe(1);
+    });
+
+    it('should handle fixed lines with 2 lines', () => {
+      const { getByText } = render(
+        <FormattedText wrapMode="fixed" fixedLines={2}>
+          Two line text content
+        </FormattedText>
+      );
+
+      const textElement = getByText('Two line text content');
+      expect(textElement.props.numberOfLines).toBe(2);
+    });
+
+    it('should handle fixed lines with 3 lines', () => {
+      const { getByText } = render(
+        <FormattedText wrapMode="fixed" fixedLines={3}>
+          Three line text content for testing
+        </FormattedText>
+      );
+
+      const textElement = getByText('Three line text content for testing');
+      expect(textElement.props.numberOfLines).toBe(3);
+    });
+
+    it('should apply font scaling for fixed lines', () => {
+      const { getByText } = render(
+        <FormattedText wrapMode="fixed" fixedLines={2}>
+          Long text that should be scaled to fit exactly two lines
+        </FormattedText>
+      );
+
+      expect(
+        getByText('Long text that should be scaled to fit exactly two lines')
+      ).toBeTruthy();
     });
   });
 
