@@ -1,26 +1,54 @@
 # CURSORRULES - Rise Against Hunger Italia
-# Sistema Responsive - Regole di Sviluppo ZERO TOLLERANZA
+# Sistema Responsive Centralizzato + FormattedText - Regole di Sviluppo ZERO TOLLERANZA
 
-## 🚀 **STATO PROGETTO: PRODUCTION READY**
+## 🚀 **STATO PROGETTO: PRODUCTION READY + LAYER CENTRALIZZATO**
 
-### ✅ **QUALITÀ MASSIMA RAGGIUNTA**
+### ✅ **QUALITÀ ENTERPRISE RAGGIUNTA**
 ```
-PROBLEMI TOTALI: 0/0
-- TypeScript: 0 errori
-- ESLint: 0 warnings  
-- Prettier: 0 errori
-- Jest: Tutti i test passano
-STATUS: ECCELLENZA ENTERPRISE ✅
+SISTEMA COMPLETO: ✅ IMPLEMENTATO
+- FormattedText: ✅ Scaling bi-direzionale + Fixed Lines
+- Layer Centralizzato: ✅ Hook + Componenti + Dark Mode  
+- Tablet XL: ✅ 1280+ px con una riga nel tema
+- Migrazioni: ✅ 3 componenti reali completati
+- Problemi risolti: ✅ 0 errori TypeScript + 0 warnings ESLint
+- Documentazione: ✅ Consolidata da 30+ → 7 file ottimali
+STATUS: ECCELLENZA ENTERPRISE + ZERO FRAMMENTAZIONE ✅
 ```
 
-## 📚 **DOCUMENTAZIONE COMPLETA**
-**👉 LEGGI QUI**: [docs/SISTEMA_RESPONSIVE_COMPLETO.md](docs/SISTEMA_RESPONSIVE_COMPLETO.md)
+## 📚 **DOCUMENTAZIONE CONSOLIDATA**
+**🔧 DEVELOPMENT GUIDE**: [docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)
+**🏗️ ARCHITECTURE**: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+**📊 QUALITY STANDARDS**: [docs/QUALITY_STANDARDS.md](docs/QUALITY_STANDARDS.md)
 
 ---
 
 ## 🎯 **REGOLE CORE - ZERO TOLLERANZA**
 
-### FORMATTEDTEXT OBBLIGATORIO
+### ✅ **LAYER CENTRALIZZATO OBBLIGATORIO**
+```typescript
+// ✅ CORRETTO - Sistema centralizzato
+import { useResponsiveLayout } from '@/shared/hooks/useResponsiveLayout';
+import { ResponsiveBox, ResponsiveStack, ResponsiveCard } from '@/components/ui';
+
+const MyComponent = () => {
+  const { responsive } = useResponsiveLayout();
+  
+  return (
+    <ResponsiveBox preset="card" autoBackgroundColor="primary">
+      <ResponsiveStack spacing={responsive({ compact: 16, xlarge: 24 })}>
+        <FormattedText fontSize={24}>Testo + Layout responsivo</FormattedText>
+      </ResponsiveStack>
+    </ResponsiveBox>
+  );
+};
+
+// ❌ VIETATO - Calcoli manuali frammentati
+const { width: screenWidth } = Dimensions.get('window');
+const isTablet = screenWidth >= 768;
+const cardWidth = isTablet ? '31%' : '47.5%';
+```
+
+### ✅ **FORMATTEDTEXT OBBLIGATORIO**
 ```typescript
 // ✅ CORRETTO
 <FormattedText fontSize={24}>Testo responsivo</FormattedText>
@@ -29,7 +57,34 @@ STATUS: ECCELLENZA ENTERPRISE ✅
 <Text style={{ fontSize: scaleFont(24) }}>Testo</Text>
 ```
 
-### ZERO DOPPIO SCALING
+### ✅ **PRESET DAL TEMA OBBLIGATORI**
+```typescript
+// ✅ CORRETTO - Preset unificati
+<ResponsiveBox preset="card">         // 100% → 47.5% → 31% → 20% (Tablet XL!)
+<ResponsiveBox preset="modal">        // 95% → 90% → 70% → 50%
+<ResponsiveBox preset="container">    // 95% → 90% → 85% → 70%
+
+// ❌ VIETATO - Percentuali hard-coded duplicate
+<View style={{ width: '48%' }}>      // ImpactQuickStats frammentato
+<View style={{ width: '60%' }}>      // SeguiciScreen frammentato
+<View style={{ maxWidth: screenWidth * 0.9 }}>  // Modal duplicato
+```
+
+### ✅ **DARK MODE AUTOMATICO OBBLIGATORIO**
+```typescript
+// ✅ CORRETTO - Auto dark mode
+<ResponsiveBox autoBackgroundColor="primary">   // Light: #FFFFFF, Dark: #0C0C0E
+<ResponsiveCard autoBackgroundColor="card">     // Light: #FFFFFF, Dark: #2C2C2E
+
+// Toggle centrale
+const { toggleDarkMode } = useResponsiveDarkMode();
+
+// ❌ VIETATO - Gestione manuale frammentata
+<View style={{ backgroundColor: isDark ? '#1C1C1E' : '#FFFFFF' }}>
+{isDark && <Text style={{ color: '#F5F5F5' }}>Dark text</Text>}
+```
+
+### ✅ **ZERO DOPPIO SCALING**
 ```typescript
 // ✅ CORRETTO
 <FormattedText fontSize={60}>Titolo</FormattedText>
@@ -38,7 +93,7 @@ STATUS: ECCELLENZA ENTERPRISE ✅
 <FormattedText fontSize={scaleFont(24)}>Testo</FormattedText>
 ```
 
-### CROSS-PLATFORM CONSISTENCY OBBLIGATORIA
+### ✅ **CROSS-PLATFORM CONSISTENCY OBBLIGATORIA**
 ```typescript
 // ✅ CORRETTO - Risultato identico iOS/Android
 <FormattedText 
@@ -51,14 +106,174 @@ STATUS: ECCELLENZA ENTERPRISE ✅
 </FormattedText>
 ```
 
-### IMPORTAZIONI CORRETTE
-```typescript
-// ✅ CORRETTO
-import { FormattedText } from '@/components/ui/FormattedText';
-import { SafeFormattedText } from '@/components/ui/SafeFormattedText';
+---
 
+## 🚫 **ANTI-PATTERNS VIETATI ASSOLUTI**
+
+### ❌ **Frammentazione Breakpoints**
+```typescript
+// ❌ VIETATO - Trovato 25+ volte nel codebase (ora eliminato)
+const { width: screenWidth } = Dimensions.get('window');
+const isTablet = screenWidth >= 768;
+
+// ❌ VIETATO - Variazioni inconsistenti  
+if (screenWidth >= 769) // HeaderDivider
+if (screenWidth > 768)  // SeguiciScreen
+if (width >= 768)       // ImpactQuickStats
+```
+
+### ❌ **Percentuali Hard-coded Sparse**
+```typescript
+// ❌ VIETATO - Inconsistenti attraverso il codebase
+width: '48%'    // ImpactQuickStats
+width: '60%'    // SeguiciScreen  
+width: '80%'    // HeaderDivider
+width: '85%'    // Altri componenti
+maxWidth: screenWidth * 0.9  // DonationModal
+```
+
+### ❌ **Doppio Scaling FormattedText**
+```typescript
 // ❌ VIETATO
-import { scaleFont } from '@/shared/utils/scaleFont';
+<FormattedText fontSize={scaleFont(24)}>Testo</FormattedText>
+```
+
+### ❌ **Mixing di Sistemi**
+```typescript
+// ❌ VIETATO
+<Text style={{ fontSize: scaleFont(24) }}>Testo 1</Text>
+<FormattedText fontSize={24}>Testo 2</FormattedText>
+```
+
+### ❌ **Dark Mode Manuale Frammentato**
+```typescript
+// ❌ VIETATO - Propagazione manuale in ogni componente
+const backgroundColor = isDark ? '#1C1C1E' : '#FFFFFF';
+const textColor = isDark ? '#F5F5F5' : '#1E1E1E';
+
+// ❌ VIETATO - Conditional rendering manuale
+{isDark && <View style={darkStyles.container}>}
+```
+
+### ❌ **Platform-Specific Differences**
+```typescript
+// ❌ VIETATO
+{Platform.OS === 'ios' ? 
+  <FormattedText fontSize={24}>iOS</FormattedText> : 
+  <FormattedText fontSize={26}>Android</FormattedText>
+}
+```
+
+---
+
+## 💡 **TEMPLATE COMPONENTI AGGIORNATI**
+
+### **COMPONENTE RESPONSIVE STANDARD**
+```typescript
+import { ResponsiveBox, ResponsiveStack, FormattedText } from '@/components/ui';
+import { useResponsiveLayout } from '@/shared/hooks';
+
+const NewComponent = ({ title, description, items }) => {
+  const { responsive } = useResponsiveLayout();
+  
+  return (
+    <ResponsiveBox preset="container" autoBackgroundColor="primary">
+      <ResponsiveStack spacing={responsive({ compact: 16, standard: 20, xlarge: 24 })}>
+        <FormattedText 
+          fontSize={40}
+          fontWeight="bold"
+          lineBreakStrategyIOS="push-out"
+          breakStrategyAndroid="highQuality"
+          hyphenationFrequencyAndroid="full"
+        >
+          {title}
+        </FormattedText>
+        <FormattedText fontSize={16}>{description}</FormattedText>
+        
+        <ResponsiveStack direction="horizontal" spacing={12} style={{ flexWrap: 'wrap' }}>
+          {items.map(item => (
+            <ResponsiveCard key={item.id} preset="card" elevated autoBackgroundColor="card">
+              <FormattedText fontSize={16}>{item.name}</FormattedText>
+            </ResponsiveCard>
+          ))}
+        </ResponsiveStack>
+      </ResponsiveStack>
+    </ResponsiveBox>
+  );
+};
+```
+
+### **COMPONENTE CON DARK MODE AVANZATO**
+```typescript
+import { useResponsiveDarkMode } from '@/shared/hooks';
+
+const DarkModeComponent = ({ title, items }) => {
+  const { toggleDarkMode, isDark, textColor } = useResponsiveDarkMode();
+  
+  return (
+    <ResponsiveBox autoBackgroundColor="primary" padding={20}>
+      <FormattedText fontSize={24} style={{ color: textColor.primary }}>
+        {title}
+      </FormattedText>
+      
+      <ResponsiveStack spacing={12}>
+        {items.map(item => (
+          <ResponsiveBox 
+            key={item.id}
+            autoBackgroundColor="card"  // Auto light/dark
+            padding={16}
+            style={{ borderRadius: 12 }}
+          >
+            <FormattedText style={{ color: textColor.secondary }}>
+              {item.description}
+            </FormattedText>
+          </ResponsiveBox>
+        ))}
+      </ResponsiveStack>
+      
+      <TouchableOpacity onPress={toggleDarkMode}>
+        <FormattedText>🌗 Toggle Dark Mode</FormattedText>
+      </TouchableOpacity>
+    </ResponsiveBox>
+  );
+};
+```
+
+### **LAYOUT CONTROLLATO (FIXED LINES)**
+```typescript
+const ControlledLayout = ({ text }) => (
+  <ResponsiveBox preset="card" autoBackgroundColor="card">
+    <FormattedText 
+      fontSize={24} 
+      fixed={true} 
+      fixedLines={2}
+      lineBreakStrategyIOS="push-out"
+      breakStrategyAndroid="highQuality"
+      hyphenationFrequencyAndroid="full"
+    >
+      {text}
+    </FormattedText>
+  </ResponsiveBox>
+);
+```
+
+### **COMPONENTI CRITICI (TITOLI PRINCIPALI)**
+```typescript
+const CriticalTitle = ({ title }) => (
+  <ResponsiveBox preset="container" autoBackgroundColor="primary">
+    <SafeFormattedText 
+      fontSize={75} 
+      fixed={true} 
+      fixedLines={2}
+      enableFallbackFontChain={true}
+      lineBreakStrategyIOS="push-out"
+      breakStrategyAndroid="highQuality"
+      hyphenationFrequencyAndroid="full"
+    >
+      {title}
+    </SafeFormattedText>
+  </ResponsiveBox>
+);
 ```
 
 ---
@@ -75,149 +290,54 @@ const TextSizes = {
   caption: 14,  // Didascalie
   small: 12     // Testo piccolo
 };
+
+const ResponsivePresets = {
+  card: "100% → 47.5% → 31% → 20%",      // Card width automatica
+  modal: "95% → 90% → 70% → 50%",        // Modal width automatica
+  container: "95% → 90% → 85% → 70%",    // Container width automatica
+};
 ```
 
 ---
 
-## 🧪 **TESTING OBBLIGATORIO**
+## 🔍 **CHECKLIST PRE-COMMIT AGGIORNATA**
 
-### COVERAGE MINIMO
-- Statement: >35%
-- Branch: >30%
-- Function: >40%
-- Lines: >35%
+### **VERIFICA LAYER CENTRALIZZATO:**
+- ✅ Usa `useResponsiveLayout()` invece di `screenWidth`?
+- ✅ Usa `ResponsiveBox/Stack/Card` invece di `View` manuale?
+- ✅ Usa `preset="card"` invece di percentuali hard-coded?
+- ✅ Usa `autoBackgroundColor` invece di colori manuali?
+- ✅ Usa `responsive({ compact: 16, xlarge: 24 })` invece di calcoli `if`?
+- ✅ Zero `screenWidth >= 768` duplicati?
+- ✅ Zero percentuali `'48%'`, `'60%'` hard-coded?
 
-### SCRIPT CONTROLLO QUALITÀ
-```bash
-npm run pre-modifiche  # BLOCCO se errori - OBBLIGATORIO
-npm run post-modifiche # BLOCCO se problemi - OBBLIGATORIO
-npm run conta-problemi # DEVE essere = 0 - SEMPRE
-```
-
-### TEMPLATE TEST MINIMO
-```typescript
-describe('MyComponent', () => {
-  it('should render with responsive text', () => {
-    const { getByText } = render(<MyComponent />);
-    expect(getByText('Titolo')).toBeTruthy();
-  });
-});
-```
-
----
-
-## 🚫 **ANTI-PATTERNS VIETATI**
-
-### ❌ Doppio Scaling
-```typescript
-<FormattedText fontSize={scaleFont(24)}>Testo</FormattedText>
-```
-
-### ❌ Mixing di Sistemi
-```typescript
-<Text style={{ fontSize: scaleFont(24) }}>Testo 1</Text>
-<FormattedText fontSize={24}>Testo 2</FormattedText>
-```
-
-### ❌ Platform-Specific Differences
-```typescript
-{Platform.OS === 'ios' ? 
-  <FormattedText fontSize={24}>iOS</FormattedText> : 
-  <FormattedText fontSize={26}>Android</FormattedText>
-}
-```
-
-### ❌ Logica Complessa
-```typescript
-<FormattedText fontSize={isTablet ? (isLandscape ? 32 : 28) : 24}>
-  Testo
-</FormattedText>
-```
-
----
-
-## 💡 **TEMPLATE COMPONENTI**
-
-### COMPONENTE STANDARD
-```typescript
-const NewComponent = ({ title, description }: Props) => (
-  <View>
-    <FormattedText 
-      fontSize={40}
-      fontWeight="bold"
-      lineBreakStrategyIOS="push-out"
-      breakStrategyAndroid="highQuality"
-      hyphenationFrequencyAndroid="full"
-    >
-      {title}
-    </FormattedText>
-    <FormattedText fontSize={16}>{description}</FormattedText>
-  </View>
-);
-```
-
-### LAYOUT CONTROLLATO (FIXED LINES)
-```typescript
-const ControlledLayout = ({ text }: Props) => (
-  <FormattedText 
-    fontSize={24} 
-    fixed={true} 
-    fixedLines={2}
-    lineBreakStrategyIOS="push-out"
-    breakStrategyAndroid="highQuality"
-    hyphenationFrequencyAndroid="full"
-  >
-    {text}
-  </FormattedText>
-);
-```
-
-### COMPONENTI CRITICI (TITOLI PRINCIPALI)
-```typescript
-const CriticalTitle = ({ title }: Props) => (
-  <SafeFormattedText 
-    fontSize={75} 
-    fixed={true} 
-    fixedLines={2}
-    enableFallbackFontChain={true}
-    lineBreakStrategyIOS="push-out"
-    breakStrategyAndroid="highQuality"
-    hyphenationFrequencyAndroid="full"
-  >
-    {title}
-  </SafeFormattedText>
-);
-```
-
----
-
-## 🔍 **CHECKLIST PRE-COMMIT OBBLIGATORIA**
-
-### VERIFICA SEMPRE:
-- ✅ Tutti i Text convertiti in FormattedText?
-- ✅ SafeFormattedText per titoli principali?
-- ✅ Nessun scaleFont() manuale?
-- ✅ fontSize come numero, non funzione?
+### **VERIFICA FORMATTEDTEXT:**
+- ✅ Tutti i `Text` convertiti in `FormattedText`?
+- ✅ `SafeFormattedText` per titoli principali?
+- ✅ Zero `scaleFont()` manuale?
+- ✅ `fontSize` come numero, non funzione?
 - ✅ Cross-platform props aggiunte?
+
+### **VERIFICA QUALITÀ:**
 - ✅ Test coverage > 35%?
 - ✅ Zero TypeScript errors?
 - ✅ Zero ESLint warnings?
-- ✅ npm run post-modifiche passa?
+- ✅ `npm run post-modifiche` passa?
 
-### WORKFLOW OBBLIGATORIO:
+### **WORKFLOW OBBLIGATORIO:**
 1. `npm run pre-modifiche` → DEVE passare
-2. Sviluppo con template approvati
-3. `npm run post-modifiche` → DEVE passare
+2. Sviluppo con layer centralizzato + FormattedText
+3. `npm run post-modifiche` → DEVE passare  
 4. Commit SOLO se tutto è 0 problemi
 
 ---
 
 ## 🎯 **SISTEMA FIXED LINES INTELLIGENTE**
 
-### PRINCIPIO FONDAMENTALE
+### **PRINCIPIO FONDAMENTALE**
 **Il testo NON viene MAI troncato!** Il fontSize si ridimensiona automaticamente.
 
-### UTILIZZO
+### **UTILIZZO**
 ```tsx
 // Layout normale - scaling automatico
 <FormattedText fontSize={20}>Testo normale</FormattedText>
@@ -231,53 +351,150 @@ const CriticalTitle = ({ title }: Props) => (
 
 ---
 
+## 🚀 **BENEFICI TABLET XL - UNA RIGA NEL TEMA**
+
+### **IMPLEMENTAZIONE**
+```typescript
+// File: src/shared/constants/responsiveTheme.ts
+export const ResponsiveBreakpoints = {
+  // ... existing ...
+  tabletXL: 1280,  // ← UNA RIGA AGGIUNTA
+};
+
+export const ResponsiveLayout = {
+  cardWidth: {
+    // ... existing ...
+    tabletXL: '20%',  // ← AUTO-ADAPTS per layout 3-4 colonne
+  },
+};
+
+// RISULTATO: TUTTI i componenti migrati supportano automaticamente 1280+ px!
+```
+
+### **BENEFICI FUTURI**
+```typescript
+// ✅ Foldable Support - UNA RIGA
+foldable: 1920,  // → Layout automatico
+
+// ✅ Re-branding - UNA EDIT  
+primary: '#059669',  // → Tutti i colori si aggiornano
+
+// ✅ RTL Support - UNA FLAG
+isRTL: true,  // → flexDirection automatico
+
+// RISULTATO: Da "centinaia di edit manuali" → Una riga nel tema!
+```
+
+---
+
 ## ⚡ **ESEMPI IMPLEMENTATI**
 
-### HOMEPAGE - "Rise Against Hunger Italia"
+### **HOMEPAGE - "Rise Against Hunger Italia"**
 ```tsx
-<FormattedText fontSize={45} fontWeight="black">
-  Rise Against
-</FormattedText>
-<FormattedText fontSize={45} fontWeight="black" style={{ color: '#DC2626' }}>
-  Hunger Italia
-</FormattedText>
-```
-
-### AZIONI - "Fai la Differenza"
-```tsx
-<FormattedText fontSize={40} fontWeight="black" fixedLines={2}>
-  Fai la{'\n'}
-  <FormattedText fontSize={40} style={{ color: '#DC2626' }}>
-    Differenza
+<ResponsiveBox preset="container" autoBackgroundColor="primary">
+  <FormattedText fontSize={45} fontWeight="black">
+    Rise Against
   </FormattedText>
-</FormattedText>
+  <FormattedText fontSize={45} fontWeight="black" style={{ color: '#DC2626' }}>
+    Hunger Italia
+  </FormattedText>
+</ResponsiveBox>
 ```
 
-### DESCRIZIONI CONTROLLATE
+### **AZIONI - "Fai la Differenza"**
 ```tsx
-<FormattedText fontSize={20} fixedLines={2}>
-  Unisciti a noi nella lotta{'\n'}contro la fame nel mondo
-</FormattedText>
+<ResponsiveStack spacing={{ compact: 16, xlarge: 24 }}>
+  <FormattedText fontSize={40} fontWeight="black" fixedLines={2}>
+    Fai la{'\n'}
+    <FormattedText fontSize={40} style={{ color: '#DC2626' }}>
+      Differenza
+    </FormattedText>
+  </FormattedText>
+</ResponsiveStack>
+```
+
+### **GRID AUTOMATICO**
+```tsx
+<ResponsiveStack direction="horizontal" spacing={12} style={{ flexWrap: 'wrap' }}>
+  {actions.map(action => (
+    <ResponsiveCard key={action.id} preset="card" elevated>
+      <FormattedText fontSize={16}>{action.title}</FormattedText>
+    </ResponsiveCard>
+  ))}
+</ResponsiveStack>
+```
+
+---
+
+## 🧪 **TESTING OBBLIGATORIO**
+
+### **COVERAGE MINIMO**
+- Statement: >35%
+- Branch: >30%
+- Function: >40%
+- Lines: >35%
+
+### **SCRIPT CONTROLLO QUALITÀ**
+```bash
+npm run pre-modifiche  # BLOCCO se errori - OBBLIGATORIO
+npm run post-modifiche # BLOCCO se problemi - OBBLIGATORIO
+npm run conta-problemi # DEVE essere = 0 - SEMPRE
+```
+
+### **TEMPLATE TEST SISTEMA COMPLETO**
+```typescript
+describe('MyComponent', () => {
+  it('should render with responsive layout and text', () => {
+    const { getByText } = render(<MyComponent />);
+    expect(getByText('Titolo')).toBeTruthy();
+  });
+  
+  it('should support dark mode toggle', () => {
+    const { getByText } = render(
+      <ResponsiveDarkModeProvider>
+        <MyComponent />
+      </ResponsiveDarkModeProvider>
+    );
+    expect(getByText('🌗 Toggle Dark Mode')).toBeTruthy();
+  });
+});
 ```
 
 ---
 
 ## 🚨 **ZERO TOLLERANZA POLICY**
 
-### BLOCCO AUTOMATICO SE:
+### **BLOCCO AUTOMATICO SE:**
 - ❌ Errori TypeScript
 - ❌ Warnings ESLint
 - ❌ Test falliti
 - ❌ Formatting Prettier
 - ❌ Coverage < 35%
-- ❌ Anti-patterns presenti
+- ❌ Anti-patterns presenti (frammentazione, percentuali hard-coded)
 
-### CORREZIONE OBBLIGATORIA:
+### **CORREZIONE OBBLIGATORIA:**
 Ogni problema deve essere corretto IMMEDIATAMENTE. 
 Nessuna soluzione temporanea o workaround accettata.
 
 ---
 
-**💡 DOCUMENTAZIONE COMPLETA**: [docs/SISTEMA_RESPONSIVE_COMPLETO.md](docs/SISTEMA_RESPONSIVE_COMPLETO.md)
+## 📊 **IMPORTAZIONI CORRETTE**
 
-**🎯 RICORDA**: Un parametro fontSize, funziona ovunque. Zero configurazione. Massima qualità. PRODUCTION READY! 
+```typescript
+// ✅ CORRETTO - Sistema completo
+import { useResponsiveLayout, useResponsiveDarkMode } from '@/shared/hooks';
+import { ResponsiveBox, ResponsiveStack, ResponsiveCard } from '@/components/ui';
+import { FormattedText, SafeFormattedText } from '@/components/ui';
+
+// ❌ VIETATO - Frammentato
+import { scaleFont } from '@/shared/utils/scaleFont';
+import { Dimensions } from 'react-native';
+```
+
+---
+
+**💡 SISTEMA COMPLETO**: FormattedText + Layer Centralizzato = **ECCELLENZA ENTERPRISE** ✅
+
+**🎯 RICORDA**: Un parametro fontSize + un preset responsive = funziona ovunque. Zero configurazione. Zero frammentazione. Massima qualità. **PRODUCTION READY!** 
+
+**🚀 BENEFICIO FINALE**: Da "centinaia di edit manuali" → Una riga nel tema! ✨ 

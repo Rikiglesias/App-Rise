@@ -27,3 +27,10 @@ export {
   useIntelligentFontScaling,
   useBreakpointAware,
 } from './useResponsive';
+
+// Layer Centralizzato Responsive (🎯 Elimina Frammentazione)
+export { 
+  useResponsiveLayout, 
+  useResponsiveSpacing as useResponsiveLayoutSpacing,
+  useResponsiveColors 
+} from './useResponsiveLayout';
