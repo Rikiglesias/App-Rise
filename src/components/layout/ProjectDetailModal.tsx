@@ -104,9 +104,7 @@ const ProjectDetailModal: React.FC<Props> = ({
                 Progetti Attivi
               </FormattedText>
               <View style={styles.statIcon}>
-                <FormattedText variant="title-medium" style={styles.statEmoji}>
-                  🎯
-                </FormattedText>
+                <FormattedText variant="title-medium">🎯</FormattedText>
               </View>
             </View>
             <View style={styles.statCard}>
@@ -117,9 +115,7 @@ const ProjectDetailModal: React.FC<Props> = ({
                 Beneficiari
               </FormattedText>
               <View style={styles.statIcon}>
-                <FormattedText variant="title-medium" style={styles.statEmoji}>
-                  👥
-                </FormattedText>
+                <FormattedText variant="title-medium">👥</FormattedText>
               </View>
             </View>
           </View>
@@ -132,57 +128,6 @@ const ProjectDetailModal: React.FC<Props> = ({
             <FormattedText variant="body-medium" style={styles.description}>
               {location.description}
             </FormattedText>
-          </View>
-
-          {/* Achievements */}
-          <View style={styles.achievementsContainer}>
-            <FormattedText variant="title-large" style={styles.sectionTitle}>
-              🏆 Risultati Raggiunti
-            </FormattedText>
-            <View style={styles.achievementsList}>
-              <View style={styles.achievementItem}>
-                <FormattedText
-                  variant="headline-small"
-                  style={styles.achievementIcon}
-                >
-                  🍽️
-                </FormattedText>
-                <FormattedText
-                  variant="body-medium"
-                  style={styles.achievementText}
-                >
-                  Pasti distribuiti regolarmente
-                </FormattedText>
-              </View>
-              <View style={styles.achievementItem}>
-                <FormattedText
-                  variant="headline-small"
-                  style={styles.achievementIcon}
-                >
-                  🏫
-                </FormattedText>
-                <FormattedText
-                  variant="body-medium"
-                  style={styles.achievementText}
-                >
-                  Partnership con scuole locali
-                </FormattedText>
-              </View>
-              <View style={styles.achievementItem}>
-                <FormattedText
-                  variant="headline-small"
-                  style={styles.achievementIcon}
-                >
-                  🌱
-                </FormattedText>
-                <FormattedText
-                  variant="body-medium"
-                  style={styles.achievementText}
-                >
-                  Programmi sostenibilità
-                </FormattedText>
-              </View>
-            </View>
           </View>
 
           {/* Action Buttons */}
@@ -335,7 +280,6 @@ const styles = StyleSheet.create({
     top: Spacing[2],
     right: Spacing[2],
   },
-  statEmoji: {},
   descriptionContainer: {
     paddingHorizontal: Spacing[4],
     marginBottom: Spacing[6],
@@ -351,29 +295,7 @@ const styles = StyleSheet.create({
     color: Colors.neutral[700],
     lineHeight: 24,
   },
-  achievementsContainer: {
-    paddingHorizontal: Spacing[4],
-    marginBottom: Spacing[6],
-  },
-  achievementsList: {
-    gap: Spacing[3],
-  },
-  achievementItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.neutral[0],
-    padding: Spacing[4],
-    borderRadius: BorderRadius.lg,
-    ...Shadows.sm,
-  },
-  achievementIcon: {
-    marginRight: Spacing[3],
-  },
-  achievementText: {
-    fontSize: TypographyTokens.styles.body.medium,
-    color: Colors.neutral[700],
-    flex: 1,
-  },
+
   actionsContainer: {
     paddingHorizontal: Spacing[4],
     marginBottom: Spacing[6],

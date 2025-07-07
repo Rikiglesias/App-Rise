@@ -485,17 +485,17 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   // PASSO 4: SISTEMA INTELLIGENTE - Solo se fixed={true} o wrapMode="fixed"
   const textString = typeof children === 'string' ? children : '';
 
-  // 🔍 DIAGNOSI: Logging per verificare doppio scaling
-  if (__DEV__ && textString.includes('Rise Against')) {
-    // eslint-disable-next-line no-console
-    console.log('🔍 FormattedText DEBUG:', {
-      raw: baseFontSize,
-      scaled: scaledFontSize,
-      ratio: scaledFontSize / baseFontSize,
-      hasDoubleScaling: scaledFontSize > baseFontSize * 1.2,
-      text: textString.substring(0, 30) + '...',
-    });
-  }
+  // 🔍 DIAGNOSI: Debug temporaneamente disabilitato per evitare hang nei test
+  // if (__DEV__ && textString.includes('Rise Against')) {
+  //   // eslint-disable-next-line no-console
+  //   console.log('🔍 FormattedText DEBUG:', {
+  //     raw: baseFontSize,
+  //     scaled: scaledFontSize,
+  //     ratio: scaledFontSize / baseFontSize,
+  //     hasDoubleScaling: scaledFontSize > baseFontSize * 1.2,
+  //     text: textString.substring(0, 30) + '...',
+  //   });
+  // }
   let finalFontSize = scaledFontSize; // GIÀ SCALATO per device
   let wrapProps = {};
 

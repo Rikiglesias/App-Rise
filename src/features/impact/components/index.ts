@@ -1,10 +1,10 @@
-// ===================================================================
-// IMPACT COMPONENTS - Central Export
-// ===================================================================
+// Componenti dell'Impact Screen suddivisi per eccellenza architetturale
+export { ImpactHeader } from './ImpactHeader';
+export { TotalMealsSection } from './TotalMealsSection';
+export { Results2024Section } from './Results2024Section';
+export { CommunitySection } from './CommunitySection';
+export { MapSection } from './MapSection';
 
-export { ImpactCard } from './ImpactCard';
-export { default as ImpactHeroSection } from './ImpactHeroSection';
-export { default as ImpactInfoPage } from './ImpactInfoPage';
-export { default as ImpactQuickStats } from './ImpactQuickStats';
-export { StatButton, MilestoneCard } from './ImpactStatComponents';
-export { default as ModernHomeImpact } from './ModernHomeImpact';
+// Hook e utilità
+export { useImpactAnimations } from '../hooks/useImpactAnimations';
+export { convertToMapLocations } from '../utils/mapHelpers';

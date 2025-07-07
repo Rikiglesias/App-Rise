@@ -9,9 +9,7 @@ import {
   Typography,
 } from '../../../shared/constants';
 
-// ===================================================================
 // CONTAINER STYLES
-// ===================================================================
 export const createContainerStyles = () =>
   StyleSheet.create({
     container: {
@@ -32,9 +30,7 @@ export const createContainerStyles = () =>
     },
   });
 
-// ===================================================================
 // BASE BUTTON STYLES
-// ===================================================================
 export const createBaseButtonStyles = () =>
   StyleSheet.create({
     baseButton: {
@@ -63,9 +59,7 @@ export const createBaseButtonStyles = () =>
     },
   });
 
-// ===================================================================
 // VARIANT BUTTON STYLES
-// ===================================================================
 export const createVariantButtonStyles = (colors: typeof Colors) =>
   StyleSheet.create({
     primaryButton: {
@@ -115,9 +109,7 @@ export const createVariantButtonStyles = (colors: typeof Colors) =>
     },
   });
 
-// ===================================================================
 // COMBINED BUTTON STYLES
-// ===================================================================
 export const createButtonStyles = (colors: typeof Colors) => {
   const baseStyles = createBaseButtonStyles();
   const variantStyles = createVariantButtonStyles(colors);

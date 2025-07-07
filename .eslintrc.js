@@ -128,33 +128,73 @@ module.exports = {
         skipComments: true,
       },
     ],
+
+    // =================== LIMITE RIGHE PER FILE (PROFESSIONAL STANDARDS) ===================
+    // Soglie professionali per diversi contesti di sviluppo
+    'max-lines': [
+      'error',
+      {
+        max: 500, // Default generale - overrides specifici per tipo
+        skipBlankLines: true,
+        skipComments: true,
+      },
+    ],
   },
 
   // =================== CONFIGURAZIONI SPECIFICHE ===================
   overrides: [
     // =================== COMPONENTI REACT NATIVE ===================
-    // Componenti principali (.tsx/.jsx) - Eredita limite generale
+    // UI Components (.tsx/.jsx) - VERDE: ≤300, GIALLO: 300-500, ROSSO: >500
     {
       files: ['src/components/**/*.tsx', 'src/components/**/*.jsx'],
       rules: {
         'react/display-name': 'error', // Importante per debugging
         'react/jsx-no-bind': 'warn',
+        'max-lines': [
+          'error',
+          {
+            max: 500, // Soglia ROSSA per refactor obbligatorio
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
       },
     },
 
-    // Screen components - Eredita limite generale
+    // Screen/Container components - Classe/modulo di dominio ≤400 (verde), 400-800 (giallo), >800 (rosso)
     {
-      files: ['src/screens/**/*.tsx', 'src/screens/**/*.jsx'],
+      files: [
+        'src/screens/**/*.tsx', 
+        'src/screens/**/*.jsx',
+        'src/features/**/*Screen*.tsx',
+        'src/features/**/*Screen*.jsx'
+      ],
       rules: {
         'react/jsx-no-bind': 'warn',
+        'max-lines': [
+          'error',
+          {
+            max: 800, // Soglia ROSSA per moduli di dominio
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
       },
     },
 
-    // Hook personalizzati - Eredita limite generale
+    // Hook personalizzati - VERDE: ≤200, GIALLO: 200-400, ROSSO: >400
     {
-      files: ['src/hooks/**/*.ts', 'src/hooks/**/*.tsx'],
+      files: ['src/hooks/**/*.ts', 'src/hooks/**/*.tsx', '**/use*.ts', '**/use*.tsx'],
       rules: {
         'react-hooks/exhaustive-deps': 'error',
+        'max-lines': [
+          'error',
+          {
+            max: 400, // Soglia ROSSA per hook/helper functions
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
       },
     },
 
@@ -175,8 +215,56 @@ module.exports = {
       },
     },
 
+    // =================== HELPER LIBRARIES ===================
+    // Helper/Utils libraries - VERDE: ≤200, GIALLO: 200-400, ROSSO: >400
+    {
+      files: ['src/utils/**/*.ts', 'src/shared/utils/**/*.ts', 'src/services/**/*.ts'],
+      rules: {
+        'max-lines': [
+          'error',
+          {
+            max: 400, // Soglia ROSSA per helper functions
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
+      },
+    },
+
+    // =================== CONSTANTS & DESIGN TOKENS ===================
+    // Constants/Design tokens - VERDE: ≤400, GIALLO: 400-800, ROSSO: >800
+    {
+      files: ['src/constants/**/*.ts', 'src/shared/constants/**/*.ts', '**/designTokens.ts'],
+      rules: {
+        'max-lines': [
+          'error',
+          {
+            max: 800, // Soglia ROSSA per moduli di dominio
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
+      },
+    },
+
+    // =================== STYLE FILES ===================
+    // StyleSheet/Styled-components - VERDE: ≤200, GIALLO: 200-400, ROSSO: >400
+    {
+      files: ['**/*Styles.ts', '**/*Styled.ts', '**/*Style.ts', '**/styles/**/*.ts'],
+      rules: {
+        'max-lines': [
+          'error',
+          {
+            max: 400, // Soglia ROSSA per helper functions
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
+      },
+    },
+
     // =================== FILE DI TEST ===================
-    // Test files - Possono essere più lunghi per setup complessi
+    // Test files - VERDE: ≤600, GIALLO: 600-1000, ROSSO: >1000 (snapshot esclusi)
     {
       files: [
         '**/__tests__/**/*',
@@ -189,6 +277,14 @@ module.exports = {
         jest: true,
       },
       rules: {
+        'max-lines': [
+          'error',
+          {
+            max: 1000, // Soglia ROSSA per file di test
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
         'max-lines-per-function': [
           'error',
           {
@@ -206,15 +302,26 @@ module.exports = {
     },
 
     // =================== FILE DI CONFIGURAZIONE ===================
-    // File di configurazione - Standard rilassato
+    // Config/build scripts - VERDE: ≤150, GIALLO: 150-300, ROSSO: >300
     {
       files: [
         '**/*.config.ts',
         '**/*.config.js',
-        'src/constants/**/*.ts',
-        'src/types/**/*.ts',
+        'babel.config.js',
+        'metro.config.js',
+        'jest.config.js',
+        'eas.json',
+        'app.config.js'
       ],
       rules: {
+        'max-lines': [
+          'error',
+          {
+            max: 300, // Soglia ROSSA per config/build scripts
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
         'max-lines-per-function': [
           'error',
           {
@@ -224,6 +331,46 @@ module.exports = {
           },
         ],
         '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+
+    // =================== TYPE DEFINITION FILES ===================
+    // Type files - Standard ≤300 righe
+    {
+      files: ['src/types/**/*.ts', '**/types.ts', '**/*.d.ts'],
+      rules: {
+        'max-lines': [
+          'error',
+          {
+            max: 300, // Types possono essere un po' più lunghi
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+
+    // =================== LEGACY FILES - REFACTORING NECESSARIO ===================
+    // TEMPORARY: File che violano le nuove soglie professionali - Refactoring pianificato
+    {
+      files: [
+        'src/features/impact/screens/ImpactTabScreen.tsx', // 1082 righe > 800 (domain) → CRITICO
+        'src/features/actions/components/components/ActionButtons.tsx', // 916 righe > 500 (UI) → CRITICO  
+        'src/components/domain/HomeHeaderSubComponents.tsx', // 755 righe > 500 (UI) → CRITICO
+        'src/components/ui/FormattedText.tsx', // 568 righe > 500 (UI) → MEDIO
+      ],
+      rules: {
+        'max-lines': [
+          'warn', // TEMPORANEO: warning per non bloccare build durante refactoring
+          {
+            max: 1200, // Soglia alta temporanea
+            skipBlankLines: true,
+            skipComments: true,
+          },
+        ],
+        // TODO: Rimuovere questo override dopo completamento refactoring
+        // PRIORITÀ: ImpactTabScreen (282 righe eccesso), ActionButtons (416 righe eccesso)
       },
     },
 

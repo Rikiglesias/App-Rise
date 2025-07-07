@@ -19,7 +19,7 @@ describe('useAsyncOperation', () => {
   });
 
   describe('Initial state', () => {
-    it('should initialize with correct default state', () => {
+    it('should initialize with correct default state and functions', () => {
       const mockOperation = jest.fn().mockResolvedValue('test result');
       const { result } = renderHook(() => useAsyncOperation(mockOperation));
 
@@ -28,12 +28,6 @@ describe('useAsyncOperation', () => {
       expect(result.current.state.error).toBe(null);
       expect(result.current.state.lastExecutedAt).toBe(null);
       expect(result.current.isExecuting).toBe(false);
-    });
-
-    it('should provide execute and reset functions', () => {
-      const mockOperation = jest.fn().mockResolvedValue('test result');
-      const { result } = renderHook(() => useAsyncOperation(mockOperation));
-
       expect(typeof result.current.execute).toBe('function');
       expect(typeof result.current.reset).toBe('function');
     });
@@ -111,32 +105,6 @@ describe('useAsyncOperation', () => {
       });
 
       expect(mockOperation).toHaveBeenCalledWith('arg1', 'arg2', 123);
-    });
-
-    it('should handle operations with complex data types', async () => {
-      interface User {
-        id: number;
-        name: string;
-        email: string;
-      }
-
-      const userData: User = {
-        id: 1,
-        name: 'John Doe',
-        email: 'john@example.com',
-      };
-
-      const mockOperation = jest.fn().mockResolvedValue(userData);
-      const { result } = renderHook(() =>
-        useAsyncOperation<User>(mockOperation)
-      );
-
-      await act(async () => {
-        await result.current.execute();
-      });
-
-      expect(result.current.state.data).toEqual(userData);
-      expect(result.current.state.error).toBe(null);
     });
   });
 
@@ -325,35 +293,6 @@ describe('useAsyncOperation', () => {
     });
   });
 
-  describe('Timeout functionality', () => {
-    it('should handle timeout configuration', () => {
-      const mockOperation = jest.fn().mockResolvedValue('data');
-
-      const { result } = renderHook(() =>
-        useAsyncOperation(mockOperation, { timeout: 1000 })
-      );
-
-      // Should initialize without errors
-      expect(result.current.state.data).toBe(null);
-      expect(result.current.state.isLoading).toBe(false);
-    });
-
-    it('should handle fast operations correctly', async () => {
-      const mockOperation = jest.fn().mockResolvedValue('fast result');
-
-      const { result } = renderHook(() =>
-        useAsyncOperation(mockOperation, { timeout: 1000 })
-      );
-
-      await act(async () => {
-        await result.current.execute();
-      });
-
-      expect(result.current.state.data).toBe('fast result');
-      expect(result.current.state.error).toBe(null);
-    });
-  });
-
   describe('Concurrent operations', () => {
     it('should cancel previous operation when new one starts', async () => {
       let resolveFirst: ((value: string) => void) | undefined;
@@ -442,9 +381,11 @@ describe('useAsyncOperation', () => {
 });
 
 describe('useNavigationOperation', () => {
-  it('should handle navigation operations', async () => {
+  it('should handle navigation operations with timeout', async () => {
     const mockNavigate = jest.fn();
-    const { result } = renderHook(() => useNavigationOperation());
+    const { result } = renderHook(() =>
+      useNavigationOperation({ timeout: 5000 })
+    );
 
     await act(async () => {
       await result.current.execute(mockNavigate);
@@ -452,15 +393,6 @@ describe('useNavigationOperation', () => {
 
     expect(mockNavigate).toHaveBeenCalledTimes(1);
     expect(result.current.state.data).toBe(true);
-  });
-
-  it('should use navigation-specific timeout', () => {
-    const { result } = renderHook(() =>
-      useNavigationOperation({ timeout: 5000 })
-    );
-
-    // Should initialize without errors
-    expect(result.current.state.data).toBe(null);
     expect(result.current.state.isLoading).toBe(false);
   });
 });

@@ -54,7 +54,17 @@
     "bundle:analyze": "node scripts/bundle-analysis.js",
     "bundle:report": "node scripts/bundle-analysis.js && echo '📊 Bundle analysis completed! Check bundle-analysis-report.json for details.'",
     "optimize:bundle": "npm run bundle:analyze && echo '💡 Review recommendations in the report for optimization opportunities.'",
-    "pseudo-l10n": "node scripts/pseudo-l10n.js"
+    "pseudo-l10n": "node scripts/pseudo-l10n.js",
+    "snapshot:generate": "node scripts/snapshot-baseline-generator.js",
+    "snapshot:update": "jest --updateSnapshot --testPathPattern=snapshots",
+    "snapshot:clean": "jest --clearCache && node scripts/snapshot-baseline-generator.js cleanup",
+    "snapshot:validate": "jest --testPathPattern=snapshots --passWithNoTests",
+    "visual:test": "jest --testPathPattern=visual --passWithNoTests",
+    "protection:ci": "bash scripts/ci-snapshot-protection.sh",
+    "protection:full": "npm run snapshot:validate && npm run visual:test",
+    "filesize:analyze": "node scripts/file-size-monitor.js",
+    "filesize:report": "node scripts/file-size-monitor.js && echo '📊 Check file-size-report.json for details'",
+    "refactor:check": "npm run filesize:analyze && echo '✅ File size compliance verified'"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",

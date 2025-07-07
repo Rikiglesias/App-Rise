@@ -11,7 +11,6 @@ import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 
 /* eslint-disable react-native/no-unused-styles */
 export const enhancedCardStyles = StyleSheet.create({
-  // Base Card Styles
   baseCard: {
     borderRadius: BorderRadius.xl,
     marginBottom: Spacing[4],
@@ -52,7 +51,6 @@ export const enhancedCardStyles = StyleSheet.create({
     ...Accessibility.touchTarget,
   },
 
-  // Size Variants
   compactCard: {
     paddingVertical: Spacing[3],
     paddingHorizontal: Spacing[4],

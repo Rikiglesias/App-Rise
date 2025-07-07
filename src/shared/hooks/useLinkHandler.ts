@@ -53,7 +53,6 @@ export const useLinkHandler = (
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const { lightTap } = useHapticFeedback();
 
-  // Haptic feedback function using the existing hook
   const triggerHaptic = useCallback(() => {
     if (!enableHaptics) {
       return Promise.resolve({
@@ -61,13 +60,11 @@ export const useLinkHandler = (
         data: undefined as void,
       });
     }
-
     return safeAsync(async () => {
       await lightTap();
     });
   }, [enableHaptics, lightTap]);
 
-  // Core link opening operation
   const performLinkOpen = useCallback(
     (url: string) => {
       return withTimeout(

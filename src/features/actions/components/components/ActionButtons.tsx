@@ -5,11 +5,10 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Animated, Platform, StyleSheet, View, Text } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { PlatformTouchable, FormattedText } from '../../../../components/ui';
 
-import { TypographyTokens } from '../../../../shared/constants/responsiveSystem';
 import { Colors, Spacing, Typography } from '../../../../shared/constants';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../../shared/hooks/useLinkHandler';
@@ -274,7 +273,6 @@ const ActionButtonsContent: React.FC<{
 
         // SUBTITLE ELEGANTE DONA INGRANDITO
         donateInlineSubtitle: {
-          fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base
           fontWeight: Typography.weights.medium,
           color: '#B91C1C',
           textAlign: 'center',
@@ -310,7 +308,6 @@ const ActionButtonsContent: React.FC<{
         },
 
         exploreSubtitle: {
-          fontSize: TypographyTokens.styles.body.medium, // DIMENSIONE NORMALE
           fontWeight: Typography.weights.medium,
           color: '#4B5563', // GRIGIO MEDIO per leggibilità
           textAlign: 'center',
@@ -391,7 +388,6 @@ const ActionButtonsContent: React.FC<{
           marginBottom: Spacing[3],
         },
         buttonTitle: {
-          fontSize: TypographyTokens.styles.title.medium, // AUMENTATO: testo più grande e visibile
           fontWeight: Typography.weights.bold,
           color: Colors.neutral[900],
           textAlign: 'center',
@@ -404,7 +400,6 @@ const ActionButtonsContent: React.FC<{
 
         // SUBTITLE POTENZIATO COMMUNITY
         communitySubtitle: {
-          fontSize: TypographyTokens.styles.body.medium, // DIMENSIONE NORMALE
           fontWeight: Typography.weights.medium,
           color: '#374151', // GRIGIO SCURO per leggibilità
           textAlign: 'center',
@@ -576,9 +571,15 @@ const DonateButtonsSection: React.FC<{
           >
             ❤️ Contribuisci
           </FormattedText>
-          <Text style={styles.donateInlineSubtitle}>
+          <FormattedText
+            fontSize={16}
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
+            style={styles.donateInlineSubtitle}
+          >
             Supporta la lotta contro la fame
-          </Text>
+          </FormattedText>
         </PlatformTouchable>
         <PlatformTouchable
           style={styles.infoButton}
@@ -693,9 +694,15 @@ const ExploreButtonsSection: React.FC<{
           >
             🔍 Esplora
           </FormattedText>
-          <Text style={styles.exploreSubtitle}>
+          <FormattedText
+            fontSize={16}
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
+            style={styles.exploreSubtitle}
+          >
             Progetti e iniziative umanitarie
-          </Text>
+          </FormattedText>
         </View>
       </View>
       <View style={styles.buttonsGrid}>
@@ -795,9 +802,15 @@ const CommunityButtonsSection: React.FC<{
           >
             🤝 Community
           </FormattedText>
-          <Text style={styles.communitySubtitle}>
+          <FormattedText
+            fontSize={16}
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
+            style={styles.communitySubtitle}
+          >
             Unisciti alla nostra comunità
-          </Text>
+          </FormattedText>
           <MaterialCommunityIcons
             name="open-in-new"
             size={16}
@@ -889,7 +902,15 @@ const AnimatedButton: React.FC<{
               color={iconColor}
               style={styles.buttonIcon}
             />
-            <Text style={styles.buttonTitle}>{button.title}</Text>
+            <FormattedText
+              fontSize={18}
+              lineBreakStrategyIOS="push-out"
+              breakStrategyAndroid="highQuality"
+              hyphenationFrequencyAndroid="full"
+              style={styles.buttonTitle}
+            >
+              {button.title}
+            </FormattedText>
             <MaterialCommunityIcons
               name="chevron-right"
               size={20}
@@ -923,7 +944,15 @@ const AnimatedButton: React.FC<{
                 color={iconColor}
                 style={styles.buttonIcon}
               />
-              <Text style={styles.buttonTitle}>{button.title}</Text>
+              <FormattedText
+                fontSize={18}
+                lineBreakStrategyIOS="push-out"
+                breakStrategyAndroid="highQuality"
+                hyphenationFrequencyAndroid="full"
+                style={styles.buttonTitle}
+              >
+                {button.title}
+              </FormattedText>
               <MaterialCommunityIcons
                 name="chevron-right"
                 size={20}

@@ -53,20 +53,12 @@ const createPressInAnimation = (
         useNativeDriver: false,
       });
     case 'bounce':
-      return Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 1.1,
-          duration: Animation.duration.ultraFast,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: Animation.spring.playful.tension,
-          friction: Animation.spring.playful.friction,
-          useNativeDriver: true,
-        }),
-      ]);
+      return Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: Animation.duration.ultraFast,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      });
     default:
       return null;
   }
@@ -175,25 +167,9 @@ const useEnhancedTouchableAnimations = (
 
   const handlePress = useCallback(() => {
     if (!disabled && !loading && onPress) {
-      // Success feedback animation
-      if (microAnimation !== 'none') {
-        Animated.sequence([
-          Animated.timing(rotateAnim, {
-            toValue: 1,
-            duration: Animation.duration.fast,
-            easing: Easing.linear,
-            useNativeDriver: true,
-          }),
-          Animated.timing(rotateAnim, {
-            toValue: 0,
-            duration: 0,
-            useNativeDriver: true,
-          }),
-        ]).start();
-      }
       onPress();
     }
-  }, [disabled, loading, onPress, microAnimation, rotateAnim]);
+  }, [disabled, loading, onPress]);
 
   return {
     scaleAnim,
@@ -249,35 +225,6 @@ const useEnhancedTouchableStyles = (
   }, [variant, glowAnim]);
 
   return { getVariantStyle };
-};
-
-// Loading Animation Hook - Extracted from main component
-const useLoadingAnimation = (loading: boolean, scaleAnim: Animated.Value) => {
-  React.useEffect(() => {
-    if (loading) {
-      const loadingAnimation = Animated.loop(
-        Animated.sequence([
-          Animated.timing(scaleAnim, {
-            toValue: 1.05,
-            duration: 800,
-            easing: Easing.inOut(Easing.quad),
-            useNativeDriver: true,
-          }),
-          Animated.timing(scaleAnim, {
-            toValue: 1,
-            duration: 800,
-            easing: Easing.inOut(Easing.quad),
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      loadingAnimation.start();
-      return () => {
-        loadingAnimation.stop();
-      };
-    }
-    return undefined;
-  }, [loading, scaleAnim]);
 };
 
 // Animation Styles Hook - Extracted transform logic
@@ -339,7 +286,22 @@ export const EnhancedTouchable: React.FC<EnhancedTouchableProps> = ({
   const { getVariantStyle } = useEnhancedTouchableStyles(variant, glowAnim);
 
   // Loading animation effect
-  useLoadingAnimation(loading, scaleAnim);
+  React.useEffect(() => {
+    if (loading) {
+      const animation = Animated.loop(
+        Animated.timing(scaleAnim, {
+          toValue: 1.05,
+          duration: 800,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        })
+      );
+      animation.start();
+      return () => animation.stop();
+    }
+    // Return undefined for non-loading state
+    return undefined;
+  }, [loading, scaleAnim]);
 
   // Animation styles
   const animationStyles = useAnimationStyles(
