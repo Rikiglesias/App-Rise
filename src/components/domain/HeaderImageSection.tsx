@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Image, ImageStyle, Platform, View } from 'react-native';
 
-import { HomeHeaderTokens } from './design-tokens/HomeHeaderTokens';
+import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
 interface Props {
   imageAnim: Animated.Value;
@@ -74,7 +74,7 @@ export const HeaderImageSection: React.FC<Props> = React.memo(
             style={[styles.imageGradientOverlay, { opacity: gradientOpacity }]}
           >
             <LinearGradient
-              colors={HomeHeaderTokens.gradients.header}
+              colors={HomeHeaderDesignTokens.gradients.header}
               style={styles.flexOne}
             />
           </Animated.View>

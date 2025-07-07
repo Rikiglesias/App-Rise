@@ -1,10 +1,69 @@
+import {
+  TypographyTokens,
+  AccessibilityIntelligence,
+  DeviceInfo,
+} from '../../../shared/constants/responsiveSystem';
 import { smartFontSizeCache } from '../../../shared/utils/SmartFontSizeCache';
-import { DeviceInfo } from '../../../shared/constants/responsiveSystem';
+import { FormattedTextProps } from '../FormattedText';
 
 /**
- * Font size calculation utilities per FormattedText
- * Sistema intelligente per layout fisso con ridimensionamento conservativo
+ * Mapping variant a fontSize del sistema ibrido - SENZA SCALING
+ * Lo scaling viene applicato UNA volta sola nel componente principale
  */
+export const getVariantFontSize = (
+  variant: FormattedTextProps['variant']
+): number => {
+  if (!variant) return TypographyTokens.styles.body.medium;
+
+  const [category, size] = variant.split('-') as [string, string];
+
+  let baseFontSize: number;
+
+  switch (category) {
+    case 'display':
+      baseFontSize =
+        TypographyTokens.styles.display[
+          size as keyof typeof TypographyTokens.styles.display
+        ] || TypographyTokens.styles.display.medium;
+      break;
+    case 'headline':
+      baseFontSize =
+        TypographyTokens.styles.headline[
+          size as keyof typeof TypographyTokens.styles.headline
+        ] || TypographyTokens.styles.headline.medium;
+      break;
+    case 'title':
+      baseFontSize =
+        TypographyTokens.styles.title[
+          size as keyof typeof TypographyTokens.styles.title
+        ] || TypographyTokens.styles.title.medium;
+      break;
+    case 'body':
+      baseFontSize =
+        TypographyTokens.styles.body[
+          size as keyof typeof TypographyTokens.styles.body
+        ] || TypographyTokens.styles.body.medium;
+      break;
+    case 'label':
+      baseFontSize =
+        TypographyTokens.styles.label[
+          size as keyof typeof TypographyTokens.styles.label
+        ] || TypographyTokens.styles.label.medium;
+      break;
+    default:
+      baseFontSize = TypographyTokens.styles.body.medium;
+  }
+
+  // RITORNA fontSize RAW - lo scaling viene applicato dopo
+  return baseFontSize;
+};
+
+/**
+ * Applica vincoli Netflix + Apple accessibility intelligence
+ */
+export const applyReadabilityConstraints = (fontSize: number): number => {
+  return AccessibilityIntelligence.calculateAccessibleFontSize(fontSize);
+};
 
 /**
  * SISTEMA INTELLIGENTE MIGLIORATO: Calcola fontSize ottimale per fixedLines
@@ -43,7 +102,7 @@ export const calculateSmartFontSize = (
 /**
  * Logica interna di calcolo fontSize (wrapped dalla cache)
  */
-const calculateSmartFontSizeInternal = (
+export const calculateSmartFontSizeInternal = (
   text: string,
   scaledFontSize: number,
   targetLines: number,

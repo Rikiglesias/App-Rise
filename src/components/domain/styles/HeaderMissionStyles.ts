@@ -1,33 +1,30 @@
 import { StyleSheet } from 'react-native';
-
 import {
   Colors,
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
-import { HomeHeaderTokens } from '../design-tokens/HomeHeaderTokens';
+import { HomeHeaderDesignTokens } from '../design-tokens/HomeHeaderTokens';
 
-/**
- * Stili per la sezione Mission del header
- * Utilizza i design tokens centralizzati
- */
-export const headerMissionStyles = StyleSheet.create({
+// Stili per il modal dei pasti e sezione impatto - CON DESIGN TOKENS
+export const baseMissionStyles = StyleSheet.create({
   // Gradient Container Pattern del Design System
   outerGradientContainer: {
     marginTop: Spacing[4],
     marginHorizontal: Spacing[4],
-    borderRadius: HomeHeaderTokens.borderRadius.large,
-    ...HomeHeaderTokens.shadows.large,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.large,
+    ...HomeHeaderDesignTokens.shadows.large,
   },
   gradientBorder: {
-    borderRadius: HomeHeaderTokens.borderRadius.large,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.large,
     padding: 3,
   },
   missionContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: HomeHeaderTokens.borderRadius.medium,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.medium,
     padding: Spacing[5],
   },
+  // Titolo principale "Il nostro impatto sul mondo" - ROSSO
 
   // 🎨 NUOVI STILI GRADIENT TITLE - DESIGN SYSTEM 2025
   titleGradientContainer: {
@@ -36,42 +33,42 @@ export const headerMissionStyles = StyleSheet.create({
   },
   // CORREZIONE UX: Stile titolo NON cliccabile - Design System
   titleContent: {
-    backgroundColor: HomeHeaderTokens.colors.transparent,
-    borderRadius: HomeHeaderTokens.borderRadius.small,
+    backgroundColor: HomeHeaderDesignTokens.colors.transparent,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.small,
     borderWidth: 1,
-    borderColor: HomeHeaderTokens.colors.primaryLight,
+    borderColor: HomeHeaderDesignTokens.colors.primaryLight,
     paddingHorizontal: Spacing[4],
     paddingVertical: Spacing[2] + 2,
     alignItems: 'center',
-    ...HomeHeaderTokens.shadows.medium,
+    ...HomeHeaderDesignTokens.shadows.medium,
   },
   // Underline decorativo per separazione - DESIGN SYSTEM
   titleUnderline: {
     marginTop: Spacing[2],
     height: 3,
-    width: HomeHeaderTokens.dimensions.separatorWidth,
-    backgroundColor: HomeHeaderTokens.colors.primary,
+    width: HomeHeaderDesignTokens.dimensions.separatorWidth,
+    backgroundColor: HomeHeaderDesignTokens.colors.primary,
     borderRadius: 2,
-    ...HomeHeaderTokens.shadows.light,
+    ...HomeHeaderDesignTokens.shadows.light,
   },
   impactTitleGradient: {
     fontWeight: Typography.weights.black,
-    color: HomeHeaderTokens.colors.primary,
+    color: HomeHeaderDesignTokens.colors.primary,
     textAlign: 'center',
     letterSpacing: -0.6,
     lineHeight: 30,
-    textShadowColor: HomeHeaderTokens.colors.primaryShadow,
+    textShadowColor: HomeHeaderDesignTokens.colors.primaryShadow,
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 8,
   },
   // Typography Smart per il testo descrittivo - RESPONSIVE
   missionText: {
     fontWeight: Typography.weights.bold,
-    color: HomeHeaderTokens.colors.secondary,
+    color: HomeHeaderDesignTokens.colors.secondary,
     textAlign: 'center',
     letterSpacing: 0.4,
     marginBottom: Spacing[5],
-    textShadowColor: HomeHeaderTokens.colors.secondaryLight,
+    textShadowColor: HomeHeaderDesignTokens.colors.secondaryLight,
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
   },
@@ -82,26 +79,28 @@ export const headerMissionStyles = StyleSheet.create({
   statsBox: {
     flex: 1,
     backgroundColor: Colors.neutral[50],
-    borderRadius: HomeHeaderTokens.borderRadius.small,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.small,
     borderWidth: 2,
     padding: Spacing[3],
     alignItems: 'center',
-    ...HomeHeaderTokens.shadows.card,
+    ...HomeHeaderDesignTokens.shadows.card,
   },
   mealsBox: {
-    borderColor: HomeHeaderTokens.colors.primary,
-    shadowColor: HomeHeaderTokens.colors.primary,
+    borderColor: HomeHeaderDesignTokens.colors.primary,
+    shadowColor: HomeHeaderDesignTokens.colors.primary,
   },
   volunteersBox: {
-    borderColor: HomeHeaderTokens.colors.secondary,
-    shadowColor: HomeHeaderTokens.colors.secondary,
+    borderColor: HomeHeaderDesignTokens.colors.secondary,
+    shadowColor: HomeHeaderDesignTokens.colors.secondary,
   },
   statNumber: {
+    // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
   },
   statLabel: {
+    // fontSize gestito da FormattedText variant="body-small"
     color: Colors.neutral[700],
     textAlign: 'center',
   },
@@ -114,15 +113,15 @@ export const headerMissionStyles = StyleSheet.create({
   // Stili per il modal
   modalOverlay: {
     flex: 1,
-    backgroundColor: HomeHeaderTokens.colors.modalOverlay,
+    backgroundColor: HomeHeaderDesignTokens.colors.modalOverlay,
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing[4],
   },
   modalContainer: {
     width: '100%',
-    maxWidth: HomeHeaderTokens.dimensions.modalMaxWidth,
-    borderRadius: HomeHeaderTokens.borderRadius.large,
+    maxWidth: HomeHeaderDesignTokens.dimensions.modalMaxWidth,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.large,
     overflow: 'hidden',
   },
   modalGradient: {
@@ -130,7 +129,7 @@ export const headerMissionStyles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: HomeHeaderTokens.borderRadius.medium,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.medium,
     padding: Spacing[5],
   },
   modalHeader: {
@@ -140,9 +139,65 @@ export const headerMissionStyles = StyleSheet.create({
     marginBottom: Spacing[4],
   },
   modalTitle: {
-    fontWeight: Typography.weights.bold,
-    color: Colors.neutral[900],
+    fontWeight: Typography.weights.black,
+    color: HomeHeaderDesignTokens.colors.primary,
+    textAlign: 'center',
+    letterSpacing: -0.4,
   },
+  modalCloseButton: {
+    backgroundColor: Colors.neutral[100],
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...HomeHeaderDesignTokens.shadows.card,
+  },
+  modalSection: {
+    marginBottom: Spacing[4],
+  },
+  modalSectionTitle: {
+    fontWeight: Typography.weights.bold,
+    color: HomeHeaderDesignTokens.colors.secondary,
+    marginBottom: Spacing[2],
+    textAlign: 'center',
+  },
+  modalText: {
+    color: Colors.neutral[700],
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  modalHighlight: {
+    backgroundColor: Colors.primary[50],
+    borderRadius: HomeHeaderDesignTokens.borderRadius.small,
+    padding: Spacing[3],
+    marginVertical: Spacing[2],
+    borderLeftWidth: 4,
+    borderLeftColor: HomeHeaderDesignTokens.colors.primary,
+    ...HomeHeaderDesignTokens.shadows.light,
+  },
+  modalHighlightText: {
+    fontWeight: Typography.weights.bold,
+    color: HomeHeaderDesignTokens.colors.primary,
+    textAlign: 'center',
+  },
+  modalActions: {
+    marginTop: Spacing[4],
+    alignItems: 'center',
+  },
+  modalButton: {
+    backgroundColor: HomeHeaderDesignTokens.colors.primary,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.small,
+    paddingHorizontal: Spacing[6],
+    paddingVertical: Spacing[3],
+    ...HomeHeaderDesignTokens.shadows.medium,
+  },
+  modalButtonText: {
+    color: Colors.neutral[0],
+    fontWeight: Typography.weights.bold,
+    textAlign: 'center',
+  },
+  // STILI MANCANTI AGGIUNTI
   closeButton: {
     padding: Spacing[1],
   },
@@ -156,14 +211,14 @@ export const headerMissionStyles = StyleSheet.create({
     gap: Spacing[3],
   },
   breakdownBadge: {
-    width: HomeHeaderTokens.dimensions.logoSmall,
-    height: HomeHeaderTokens.dimensions.logoSmall,
-    borderRadius: HomeHeaderTokens.borderRadius.round,
+    width: HomeHeaderDesignTokens.dimensions.logoSmall,
+    height: HomeHeaderDesignTokens.dimensions.logoSmall,
+    borderRadius: HomeHeaderDesignTokens.borderRadius.round,
     backgroundColor: Colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: HomeHeaderTokens.colors.primary,
+    borderColor: HomeHeaderDesignTokens.colors.primary,
   },
   breakdownText: {
     flex: 1,
@@ -199,6 +254,6 @@ export const headerMissionStyles = StyleSheet.create({
   },
   totalNumber: {
     fontWeight: Typography.weights.black,
-    color: HomeHeaderTokens.colors.primary,
+    color: HomeHeaderDesignTokens.colors.primary,
   },
 });

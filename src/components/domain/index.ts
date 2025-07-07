@@ -7,8 +7,8 @@ export { ModernSmartTitle } from './ModernSmartTitle';
 export { HeaderMissionSection } from './HeaderMissionSection';
 
 // Design tokens and utilities
-export { HomeHeaderTokens } from './design-tokens/HomeHeaderTokens';
-export { headerMissionStyles } from './styles/HeaderMissionStyles';
+export { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
+export { baseMissionStyles } from './styles/HeaderMissionStyles';
 
 // Legacy exports (keeping for compatibility)
 export { default as ActionCardEnhanced } from './ActionCardEnhanced';

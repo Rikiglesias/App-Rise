@@ -1,30 +1,33 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal, View } from 'react-native';
 
 import { FormattedText, PlatformTouchable } from '../ui';
 import { Colors } from '../../shared/constants/designTokens';
-import { HomeHeaderTokens } from './design-tokens/HomeHeaderTokens';
-import { headerMissionStyles } from './styles/HeaderMissionStyles';
+import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
+import { baseMissionStyles } from './styles/HeaderMissionStyles';
 
 interface Props {
-  styles?: object; // Mantenuto per compatibilità
-  scrollY?: object; // Mantenuto per compatibilità
+  styles?: object;
+  scrollY?: object;
 }
 
 /**
- * Sezione mission del header con statistiche e modal interattivo
- * Completamente modulare con design tokens centralizzati
+ * HeaderMissionSection - Sezione impact e pasti distribuiti
+ * Con modal informativo e animazioni smooth
  */
-export const HeaderMissionSection: React.FC<Props> = () => {
+export const HeaderMissionSection: React.FC<Props> = ({
+  styles: _styles,
+  scrollY: _scrollY,
+}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleMealsPress = useCallback(() => {
+  const handleMealsPress = React.useCallback(() => {
     setIsModalVisible(true);
   }, []);
 
-  const closeModal = useCallback(() => {
+  const closeModal = React.useCallback(() => {
     setIsModalVisible(false);
   }, []);
 
@@ -34,31 +37,31 @@ export const HeaderMissionSection: React.FC<Props> = () => {
   return (
     <>
       {/* Container con Gradient Pattern del Design System */}
-      <View style={headerMissionStyles.outerGradientContainer}>
+      <View style={baseMissionStyles.outerGradientContainer}>
         <LinearGradient
-          colors={HomeHeaderTokens.gradients.dark}
-          {...HomeHeaderTokens.gradientConfig.diagonal}
-          style={headerMissionStyles.gradientBorder}
+          colors={HomeHeaderDesignTokens.gradients.dark}
+          {...HomeHeaderDesignTokens.gradientConfig.diagonal}
+          style={baseMissionStyles.gradientBorder}
         >
-          <View style={headerMissionStyles.missionContainer}>
+          <View style={baseMissionStyles.missionContainer}>
             {/* CORREZIONE UX: Titolo principale SENZA GRADIENT - NON CLICCABILE */}
-            <View style={headerMissionStyles.titleGradientContainer}>
-              <View style={headerMissionStyles.titleContent}>
+            <View style={baseMissionStyles.titleGradientContainer}>
+              <View style={baseMissionStyles.titleContent}>
                 <FormattedText
                   variant="title-large"
-                  style={headerMissionStyles.impactTitleGradient}
+                  style={baseMissionStyles.impactTitleGradient}
                 >
                   Il nostro impatto sul mondo
                 </FormattedText>
                 {/* Underline decorativo per separazione - DESIGN SYSTEM */}
-                <View style={headerMissionStyles.titleUnderline} />
+                <View style={baseMissionStyles.titleUnderline} />
               </View>
             </View>
 
             {/* Testo descrittivo con Typography Smart - RESPONSIVE */}
             <FormattedText
               variant="body-large"
-              style={headerMissionStyles.missionText}
+              style={baseMissionStyles.missionText}
               fixed={true}
               fixedLines={3}
             >
@@ -66,52 +69,49 @@ export const HeaderMissionSection: React.FC<Props> = () => {
             </FormattedText>
 
             {/* Statistiche container */}
-            <View style={headerMissionStyles.statsContainer}>
+            <View style={baseMissionStyles.statsContainer}>
               {/* Container pasti - CLICKABLE */}
               <PlatformTouchable
-                style={[
-                  headerMissionStyles.statsBox,
-                  headerMissionStyles.mealsBox,
-                ]}
+                style={[baseMissionStyles.statsBox, baseMissionStyles.mealsBox]}
                 onPress={handleMealsPress}
                 activeOpacity={0.8}
               >
                 <FormattedText
                   variant="title-large"
-                  style={headerMissionStyles.statNumber}
+                  style={baseMissionStyles.statNumber}
                 >
                   3.14M
                 </FormattedText>
                 <FormattedText
                   variant="body-small"
-                  style={headerMissionStyles.statLabel}
+                  style={baseMissionStyles.statLabel}
                 >
                   Pasti distribuiti
                 </FormattedText>
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={20}
-                  color={HomeHeaderTokens.colors.primary}
-                  style={headerMissionStyles.infoIcon}
+                  color={HomeHeaderDesignTokens.colors.primary}
+                  style={baseMissionStyles.infoIcon}
                 />
               </PlatformTouchable>
 
               {/* Container volontari - STATICO */}
               <View
                 style={[
-                  headerMissionStyles.statsBox,
-                  headerMissionStyles.volunteersBox,
+                  baseMissionStyles.statsBox,
+                  baseMissionStyles.volunteersBox,
                 ]}
               >
                 <FormattedText
                   variant="title-large"
-                  style={headerMissionStyles.statNumber}
+                  style={baseMissionStyles.statNumber}
                 >
                   13K
                 </FormattedText>
                 <FormattedText
                   variant="body-small"
-                  style={headerMissionStyles.statLabel}
+                  style={baseMissionStyles.statLabel}
                 >
                   Volontari attivi
                 </FormattedText>
@@ -128,24 +128,24 @@ export const HeaderMissionSection: React.FC<Props> = () => {
         visible={isModalVisible}
         onRequestClose={closeModal}
       >
-        <View style={headerMissionStyles.modalOverlay}>
-          <View style={headerMissionStyles.modalContainer}>
+        <View style={baseMissionStyles.modalOverlay}>
+          <View style={baseMissionStyles.modalContainer}>
             <LinearGradient
-              colors={HomeHeaderTokens.gradients.primary}
-              style={headerMissionStyles.modalGradient}
+              colors={HomeHeaderDesignTokens.gradients.primary}
+              style={baseMissionStyles.modalGradient}
             >
-              <View style={headerMissionStyles.modalContent}>
+              <View style={baseMissionStyles.modalContent}>
                 {/* Header del modal */}
-                <View style={headerMissionStyles.modalHeader}>
+                <View style={baseMissionStyles.modalHeader}>
                   <FormattedText
                     variant="title-medium"
-                    style={headerMissionStyles.modalTitle}
+                    style={baseMissionStyles.modalTitle}
                   >
                     Pasti Distribuiti
                   </FormattedText>
                   <PlatformTouchable
                     onPress={closeModal}
-                    style={headerMissionStyles.closeButton}
+                    style={baseMissionStyles.closeButton}
                   >
                     <MaterialCommunityIcons
                       name="close"
@@ -156,61 +156,61 @@ export const HeaderMissionSection: React.FC<Props> = () => {
                 </View>
 
                 {/* Breakdown dei pasti */}
-                <View style={headerMissionStyles.breakdownContainer}>
-                  <View style={headerMissionStyles.breakdownItem}>
-                    <View style={headerMissionStyles.breakdownBadge}>
+                <View style={baseMissionStyles.breakdownContainer}>
+                  <View style={baseMissionStyles.breakdownItem}>
+                    <View style={baseMissionStyles.breakdownBadge}>
                       <MaterialCommunityIcons
                         name="rice"
                         size={20}
-                        color={HomeHeaderTokens.colors.primary}
+                        color={HomeHeaderDesignTokens.colors.primary}
                       />
                     </View>
-                    <View style={headerMissionStyles.breakdownText}>
+                    <View style={baseMissionStyles.breakdownText}>
                       <FormattedText
                         variant="body-large"
-                        style={headerMissionStyles.breakdownNumber}
+                        style={baseMissionStyles.breakdownNumber}
                       >
                         2.5M
                       </FormattedText>
                       <FormattedText
                         variant="body-medium"
-                        style={headerMissionStyles.breakdownLabel}
+                        style={baseMissionStyles.breakdownLabel}
                       >
                         Pasti completi
                       </FormattedText>
                       <FormattedText
                         variant="body-small"
-                        style={headerMissionStyles.breakdownDescription}
+                        style={baseMissionStyles.breakdownDescription}
                       >
                         Programmi Africa
                       </FormattedText>
                     </View>
                   </View>
 
-                  <View style={headerMissionStyles.breakdownItem}>
-                    <View style={headerMissionStyles.breakdownBadge}>
+                  <View style={baseMissionStyles.breakdownItem}>
+                    <View style={baseMissionStyles.breakdownBadge}>
                       <MaterialCommunityIcons
                         name="package-variant"
                         size={20}
-                        color={HomeHeaderTokens.colors.primary}
+                        color={HomeHeaderDesignTokens.colors.primary}
                       />
                     </View>
-                    <View style={headerMissionStyles.breakdownText}>
+                    <View style={baseMissionStyles.breakdownText}>
                       <FormattedText
                         variant="body-large"
-                        style={headerMissionStyles.breakdownNumber}
+                        style={baseMissionStyles.breakdownNumber}
                       >
                         600K
                       </FormattedText>
                       <FormattedText
                         variant="body-medium"
-                        style={headerMissionStyles.breakdownLabel}
+                        style={baseMissionStyles.breakdownLabel}
                       >
                         Kit di emergenza
                       </FormattedText>
                       <FormattedText
                         variant="body-small"
-                        style={headerMissionStyles.breakdownDescription}
+                        style={baseMissionStyles.breakdownDescription}
                       >
                         Situazioni di crisi
                       </FormattedText>
@@ -219,18 +219,18 @@ export const HeaderMissionSection: React.FC<Props> = () => {
                 </View>
 
                 {/* Totale */}
-                <View style={headerMissionStyles.totalContainer}>
-                  <View style={headerMissionStyles.totalLine} />
-                  <View style={headerMissionStyles.totalRow}>
+                <View style={baseMissionStyles.totalContainer}>
+                  <View style={baseMissionStyles.totalLine} />
+                  <View style={baseMissionStyles.totalRow}>
                     <FormattedText
                       variant="body-medium"
-                      style={headerMissionStyles.totalLabel}
+                      style={baseMissionStyles.totalLabel}
                     >
                       Totale distribuito
                     </FormattedText>
                     <FormattedText
                       variant="title-large"
-                      style={headerMissionStyles.totalNumber}
+                      style={baseMissionStyles.totalNumber}
                     >
                       3.14M
                     </FormattedText>

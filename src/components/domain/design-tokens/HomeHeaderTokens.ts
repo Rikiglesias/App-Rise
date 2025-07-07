@@ -1,10 +1,7 @@
 import { Spacing } from '../../../shared/constants/designTokens';
 
-/**
- * Design Tokens centralizzati per HomeHeader
- * Eliminano duplicazioni e garantiscono consistenza
- */
-export const HomeHeaderTokens = {
+// 🎨 DESIGN TOKENS CENTRALIZZATI - ELIMINANO DUPLICAZIONI
+export const HomeHeaderDesignTokens = {
   // Colori centralizzati
   colors: {
     primary: '#DC2626',

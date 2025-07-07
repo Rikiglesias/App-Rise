@@ -2,10 +2,10 @@
 
 /**
  * SNAPSHOT BASELINE GENERATOR
- * 
- * Script per generare/aggiornare baseline snapshot che proteggono 
+ *
+ * Script per generare/aggiornare baseline snapshot che proteggono
  * il sistema responsive da regressioni:
- * 
+ *
  * - Genera snapshot strutturali Jest
  * - Setup snapshot visuali per Percy/Applitools
  * - Verifica cross-platform consistency
@@ -33,36 +33,42 @@ const log = (message, color = 'reset') => {
 
 const CRITICAL_COMPONENTS = [
   'FormattedText',
-  'SafeFormattedText', 
+  'SafeFormattedText',
   'ActionButtons',
   'HomeHeaderSection',
   'HomeActionsSection',
 ];
 
-const SNAPSHOT_TYPES = {
+const _SNAPSHOT_TYPES = {
   STRUCTURAL: 'structural', // Jest toMatchSnapshot
-  VISUAL: 'visual',         // Percy/Applitools screenshots
-  LAYOUT: 'layout',         // Bounding box consistency
-  PERFORMANCE: 'performance' // Render time baselines
+  VISUAL: 'visual', // Percy/Applitools screenshots
+  LAYOUT: 'layout', // Bounding box consistency
+  PERFORMANCE: 'performance', // Render time baselines
 };
 
 class SnapshotBaselineGenerator {
   constructor() {
-    this.snapshotDir = path.join(__dirname, '..', 'src', '__tests__', 'snapshots');
+    this.snapshotDir = path.join(
+      __dirname,
+      '..',
+      'src',
+      '__tests__',
+      'snapshots'
+    );
     this.visualSnapshotDir = path.join(__dirname, '..', 'visual-snapshots');
     this.baselineDir = path.join(__dirname, '..', '__snapshots__');
   }
 
   async generateStructuralBaselines() {
     log('🔥 GENERATING STRUCTURAL BASELINES - Jest Snapshots', 'yellow');
-    
+
     try {
       // Genera snapshot strutturali per tutti i componenti critici
       execSync('npm test -- --testPathPattern=snapshots --updateSnapshot', {
         stdio: 'inherit',
-        cwd: path.join(__dirname, '..')
+        cwd: path.join(__dirname, '..'),
       });
-      
+
       log('✅ Structural baselines generated successfully', 'green');
     } catch (error) {
       log('❌ Failed to generate structural baselines', 'red');
@@ -72,7 +78,7 @@ class SnapshotBaselineGenerator {
 
   async setupVisualSnapshots() {
     log('📸 SETTING UP VISUAL SNAPSHOT INFRASTRUCTURE', 'cyan');
-    
+
     // Crea directory per visual snapshots
     if (!fs.existsSync(this.visualSnapshotDir)) {
       fs.mkdirSync(this.visualSnapshotDir, { recursive: true });
@@ -80,15 +86,15 @@ class SnapshotBaselineGenerator {
 
     // Crea configurazione Percy
     const percyConfig = {
-      "version": 2,
-      "discovery": {
-        "network-idle-timeout": 100,
-        "allowed-hostnames": ["localhost"]
+      version: 2,
+      discovery: {
+        'network-idle-timeout': 100,
+        'allowed-hostnames': ['localhost'],
       },
-      "snapshot": {
-        "widths": [375, 393, 412, 768], // iPhone SE, iPhone 15 Pro, Pixel 8 Pro, Galaxy Tab S9
-        "min-height": 1024,
-        "percy-css": `
+      snapshot: {
+        widths: [375, 393, 412, 768], // iPhone SE, iPhone 15 Pro, Pixel 8 Pro, Galaxy Tab S9
+        'min-height': 1024,
+        'percy-css': `
           /* Stabilizza fonts per screenshot consistency */
           * {
             font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
@@ -101,13 +107,13 @@ class SnapshotBaselineGenerator {
           .animation-element {
             display: none !important;
           }
-        `
+        `,
       },
-      "static-snapshots": {
-        "base-url": "http://localhost:19006",
-        "snapshot-files": "**/*.percy.{js,ts}",
-        "ignore-files": "**/*.ignore.percy.{js,ts}"
-      }
+      'static-snapshots': {
+        'base-url': 'http://localhost:19006',
+        'snapshot-files': '**/*.percy.{js,ts}',
+        'ignore-files': '**/*.ignore.percy.{js,ts}',
+      },
     };
 
     fs.writeFileSync(
@@ -186,7 +192,7 @@ describe('Visual Regression Protection', () => {
 
     const snapshotFiles = this.findSnapshotFiles();
     const testFiles = this.findTestFiles();
-    
+
     const orphanedSnapshots = snapshotFiles.filter(snapshot => {
       const testName = this.extractTestNameFromSnapshot(snapshot);
       return !testFiles.some(test => test.includes(testName));
@@ -206,14 +212,14 @@ describe('Visual Regression Protection', () => {
 
   findSnapshotFiles() {
     const snapshotFiles = [];
-    const walkDir = (dir) => {
+    const walkDir = dir => {
       if (!fs.existsSync(dir)) return;
-      
+
       const files = fs.readdirSync(dir);
       files.forEach(file => {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory()) {
           walkDir(filePath);
         } else if (file.endsWith('.snap')) {
@@ -221,21 +227,21 @@ describe('Visual Regression Protection', () => {
         }
       });
     };
-    
+
     walkDir(this.baselineDir);
     return snapshotFiles;
   }
 
   findTestFiles() {
     const testFiles = [];
-    const walkDir = (dir) => {
+    const walkDir = dir => {
       if (!fs.existsSync(dir)) return;
-      
+
       const files = fs.readdirSync(dir);
       files.forEach(file => {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory()) {
           walkDir(filePath);
         } else if (file.endsWith('.test.tsx') || file.endsWith('.test.ts')) {
@@ -243,7 +249,7 @@ describe('Visual Regression Protection', () => {
         }
       });
     };
-    
+
     walkDir(path.join(__dirname, '..', 'src', '__tests__'));
     return testFiles;
   }
@@ -257,9 +263,12 @@ describe('Visual Regression Protection', () => {
     log('🔍 VALIDATING CRITICAL COMPONENTS COVERAGE', 'blue');
 
     const missingSnapshots = [];
-    
+
     CRITICAL_COMPONENTS.forEach(component => {
-      const snapshotFile = path.join(this.snapshotDir, `${component}Snapshot.test.tsx`);
+      const snapshotFile = path.join(
+        this.snapshotDir,
+        `${component}Snapshot.test.tsx`
+      );
       if (!fs.existsSync(snapshotFile)) {
         missingSnapshots.push(component);
       }
@@ -320,7 +329,7 @@ echo "🚀 Deployment protection verified"
 
     // Rendi executable
     execSync('chmod +x scripts/ci-snapshot-protection.sh', {
-      cwd: path.join(__dirname, '..')
+      cwd: path.join(__dirname, '..'),
     });
 
     log('✅ CI protection script generated', 'green');
@@ -329,14 +338,14 @@ echo "🚀 Deployment protection verified"
   async run() {
     try {
       log('🚀 SNAPSHOT BASELINE GENERATOR STARTED', 'bright');
-      
+
       await this.validateCriticalComponents();
       await this.setupVisualSnapshots();
       await this.createVisualTestSuite();
       await this.generateStructuralBaselines();
       await this.cleanupOrphanedSnapshots();
       await this.generateCIProtectionScript();
-      
+
       log('', 'reset');
       log('🎉 SNAPSHOT PROTECTION SYSTEM READY!', 'green');
       log('', 'reset');
@@ -347,7 +356,6 @@ echo "🚀 Deployment protection verified"
       log('  4. Add snapshot check to CI pipeline', 'cyan');
       log('', 'reset');
       log('🛡️ Your responsive system is now protected!', 'green');
-      
     } catch (error) {
       log('💥 SNAPSHOT GENERATOR FAILED', 'red');
       log(error.message, 'red');
@@ -362,4 +370,4 @@ if (require.main === module) {
   generator.run();
 }
 
-module.exports = SnapshotBaselineGenerator; 
+module.exports = SnapshotBaselineGenerator;

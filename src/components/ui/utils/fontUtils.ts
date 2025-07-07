@@ -1,22 +1,44 @@
 import { Platform, TextStyle } from 'react-native';
+import { FormattedTextProps } from '../FormattedText';
 
 /**
- * Font utilities per FormattedText
- * Gestisce fallback, detection e mapping font weights
+ * SISTEMA INTELLIGENTE: Proprietà per modalità fixed
+ * - Con fixedLines: Sistema intelligente che ridimensiona il font conservativamente (MAI tronca)
+ * - Senza fixedLines: Layout controllato ma testo naturale
  */
+export const getIntelligentWrapProps = (
+  fixed: boolean,
+  wrapMode?: string,
+  fixedLines?: number
+) => {
+  // Supporta sia fixed={true} che wrapMode="fixed" per backward compatibility
+  const isFixedMode = fixed || wrapMode === 'fixed';
+
+  if (!isFixedMode) {
+    // Modalità normale: testo naturale
+    return {};
+  }
+
+  if (fixedLines && fixedLines > 0) {
+    // MODALITÀ INTELLIGENTE: Numero righe fisso + font auto-ridimensionato conservativamente
+    return {
+      numberOfLines: fixedLines,
+      ellipsizeMode: 'clip' as const, // Non troncare con "...", il font è già ottimizzato
+      adjustsFontSizeToFit: false, // Usiamo la nostra logica più precisa
+    };
+  }
+
+  // Solo fixed={true}: Layout controllato ma testo naturale
+  return {
+    adjustsFontSizeToFit: false,
+  };
+};
 
 /**
  * Mapping font weights a valori numerici/string
  */
 export const getFontWeight = (
-  weight?:
-    | 'light'
-    | 'regular'
-    | 'medium'
-    | 'semibold'
-    | 'bold'
-    | 'extrabold'
-    | 'black'
+  weight: FormattedTextProps['fontWeight']
 ): TextStyle['fontWeight'] => {
   const weights: Record<string, TextStyle['fontWeight']> = {
     light: '300',
