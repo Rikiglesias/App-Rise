@@ -198,6 +198,9 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                     <View style={modalStyles.centeredTitleContainer}>
                       <FormattedText
                         fontSize={28}
+                        lineBreakStrategyIOS="push-out"
+                        breakStrategyAndroid="highQuality"
+                        hyphenationFrequencyAndroid="full"
                         style={modalStyles.centeredTitle}
                       >
                         Come Donare
@@ -273,6 +276,9 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                     <View style={modalStyles.centeredTitleContainer}>
                       <FormattedText
                         fontSize={28}
+                        lineBreakStrategyIOS="push-out"
+                        breakStrategyAndroid="highQuality"
+                        hyphenationFrequencyAndroid="full"
                         style={modalStyles.centeredTitle}
                       >
                         Come Donare

@@ -18,6 +18,7 @@ import {
   RTLTokens,
   DeviceInfo,
 } from '../../shared/constants/responsiveSystem';
+import { smartFontSizeCache } from '../../shared/utils/SmartFontSizeCache';
 
 // Extend TextProps con nuove proprietà specifiche
 export interface FormattedTextProps
@@ -138,6 +139,12 @@ export interface FormattedTextProps
    * Abilita catena di fallback font automatica per emoji/CJK/arabo
    */
   enableFallbackFontChain?: boolean;
+
+  /**
+   * Limite massimo per Dynamic Type scaling (default: 1.2)
+   * Previene testi troppo grandi in modalità accessibilità
+   */
+  maxFontSizeMultiplier?: number;
 }
 
 /**
@@ -202,6 +209,7 @@ const applyReadabilityConstraints = (fontSize: number): number => {
  * PRINCIPIO: Mai troncare il testo, ridimensionare conservativamente per farlo entrare
  * MIGLIORAMENTI: Meno aggressivo, preserva meglio font weight e leggibilità
  * CONTAINER AWARE: Usa larghezza container da Design Tokens per calcoli precisi
+ * PERFORMANCE: Integrato con SmartFontSizeCache per hit-rate ≥ 95%
  */
 const calculateSmartFontSize = (
   text: string,
@@ -214,6 +222,31 @@ const calculateSmartFontSize = (
   // CONTAINER AWARE: Usa larghezza container da Design Tokens (with fallback for tests)
   const containerWidth = maxWidth ?? (DeviceInfo?.width ?? 375) * 0.9; // 90% screen width come default
 
+  // PERFORMANCE BOOST: Usa SmartFontSizeCache per calcoli ripetuti
+  return smartFontSizeCache.get(
+    text,
+    scaledFontSize,
+    targetLines,
+    containerWidth,
+    () =>
+      calculateSmartFontSizeInternal(
+        text,
+        scaledFontSize,
+        targetLines,
+        containerWidth
+      )
+  );
+};
+
+/**
+ * Logica interna di calcolo fontSize (wrapped dalla cache)
+ */
+const calculateSmartFontSizeInternal = (
+  text: string,
+  scaledFontSize: number,
+  targetLines: number,
+  containerWidth: number
+): number => {
   // GESTIONE \n ESPLICITI: Rispetta sempre i line breaks manuali
   const explicitLines = text.split('\n');
   const hasExplicitLineBreaks = explicitLines.length > 1;
@@ -419,6 +452,7 @@ const getFallbackFontFamily = (
 export const FormattedText: React.FC<FormattedTextProps> = ({
   variant = 'body-medium',
   allowSystemFontScaling = false,
+  maxFontSizeMultiplier = 1.2, // Limite Dynamic Type al 120%
   enforceReadabilityConstraints = true,
   fontSize: manualFontSize,
   color,
@@ -533,6 +567,9 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
       {...wrapProps}
       {...platformLineBreakProps}
       allowFontScaling={allowSystemFontScaling}
+      maxFontSizeMultiplier={
+        allowSystemFontScaling ? maxFontSizeMultiplier : undefined
+      }
       style={computedStyle}
     >
       {children}

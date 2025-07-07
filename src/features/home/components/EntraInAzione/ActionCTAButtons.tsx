@@ -59,6 +59,9 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
               <FormattedText
                 fontSize={20}
                 fixedLines={2}
+                lineBreakStrategyIOS="push-out"
+                breakStrategyAndroid="highQuality"
+                hyphenationFrequencyAndroid="full"
                 style={styles.buttonTitle}
               >
                 Scopri{'\n'}Impatto
@@ -66,6 +69,9 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
               <FormattedText
                 fontSize={16}
                 fixedLines={1}
+                lineBreakStrategyIOS="push-out"
+                breakStrategyAndroid="highQuality"
+                hyphenationFrequencyAndroid="full"
                 style={styles.buttonDirectionRed}
               >
                 ← Risultati
@@ -98,6 +104,9 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
               <FormattedText
                 fontSize={20}
                 fixedLines={2}
+                lineBreakStrategyIOS="push-out"
+                breakStrategyAndroid="highQuality"
+                hyphenationFrequencyAndroid="full"
                 style={styles.buttonTitleGreen}
               >
                 Dona e{'\n'}Aiuta
@@ -105,6 +114,9 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
               <FormattedText
                 fontSize={16}
                 fixedLines={1}
+                lineBreakStrategyIOS="push-out"
+                breakStrategyAndroid="highQuality"
+                hyphenationFrequencyAndroid="full"
                 style={styles.buttonDirection}
               >
                 Supporta →

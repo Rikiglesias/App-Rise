@@ -569,6 +569,9 @@ const DonateButtonsSection: React.FC<{
         >
           <FormattedText
             variant="title-large"
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
             style={styles.donateCategoryTitle}
           >
             ❤️ Contribuisci
@@ -681,7 +684,13 @@ const ExploreButtonsSection: React.FC<{
               : styles.exploreHeaderBackground
           }
         >
-          <FormattedText variant="headline-small" style={styles.exploreTitle}>
+          <FormattedText
+            variant="headline-small"
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
+            style={styles.exploreTitle}
+          >
             🔍 Esplora
           </FormattedText>
           <Text style={styles.exploreSubtitle}>
@@ -777,7 +786,13 @@ const CommunityButtonsSection: React.FC<{
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
         >
-          <FormattedText variant="headline-small" style={styles.communityTitle}>
+          <FormattedText
+            variant="headline-small"
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
+            style={styles.communityTitle}
+          >
             🤝 Community
           </FormattedText>
           <Text style={styles.communitySubtitle}>

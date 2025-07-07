@@ -53,7 +53,8 @@
     "docs:optional": "echo '📝 Docs check opzionale (non bloccante)' && npm run docs:check || echo '⚠️ Errori docs trovati ma non bloccanti'",
     "bundle:analyze": "node scripts/bundle-analysis.js",
     "bundle:report": "node scripts/bundle-analysis.js && echo '📊 Bundle analysis completed! Check bundle-analysis-report.json for details.'",
-    "optimize:bundle": "npm run bundle:analyze && echo '💡 Review recommendations in the report for optimization opportunities.'"
+    "optimize:bundle": "npm run bundle:analyze && echo '💡 Review recommendations in the report for optimization opportunities.'",
+    "pseudo-l10n": "node scripts/pseudo-l10n.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",

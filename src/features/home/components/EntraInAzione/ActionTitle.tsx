@@ -10,15 +10,21 @@ export const ActionTitle: React.FC = () => {
       <View style={styles.titleContainer}>
         <FormattedText
           fontSize={35}
-          fixedLines={1}
-          style={[styles.titleText, { fontWeight: 'bold' }]}
+          fontWeight="bold"
+          lineBreakStrategyIOS="push-out"
+          breakStrategyAndroid="highQuality"
+          hyphenationFrequencyAndroid="full"
+          style={styles.titleText}
         >
-          ⚡ Entra in
+          ⚡ Entra in{' '}
         </FormattedText>
         <FormattedText
           fontSize={35}
-          fixedLines={1}
-          style={[styles.titleText, { fontWeight: 'bold', color: '#DC2626' }]}
+          fontWeight="bold"
+          lineBreakStrategyIOS="push-out"
+          breakStrategyAndroid="highQuality"
+          hyphenationFrequencyAndroid="full"
+          style={[styles.titleText, { color: '#DC2626' }]}
         >
           Azione
         </FormattedText>
@@ -37,7 +43,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    flexWrap: 'wrap',
     marginBottom: Spacing[3],
   },
 

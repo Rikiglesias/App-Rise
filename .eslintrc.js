@@ -104,6 +104,10 @@ module.exports = {
     'require-await': 'warn',
     'no-await-in-loop': 'warn',
 
+    // =================== BASELINE GRID ENFORCEMENT ===================
+    // TODO: Implementare plugin ESLint custom per no-offgrid-spacing
+    // File pronto: eslint-rules/no-offgrid-spacing.js
+
     // =================== ARROW FUNCTIONS ===================
     'prefer-arrow/prefer-arrow-functions': [
       'warn',
@@ -237,7 +241,6 @@ module.exports = {
       files: [
         '.eslintrc.js',
         'jest.config.js',
-        'scripts/**/*.js',
         '*.config.js',
       ],
       parser: 'espree',
@@ -263,6 +266,38 @@ module.exports = {
         'prefer-arrow/prefer-arrow-functions': 'off',
         'no-console': 'off',
         'import/no-unresolved': 'off',
+      },
+    },
+
+    // Scripts JavaScript - Regole rilassate per tool scripts
+    {
+      files: ['scripts/**/*.js'],
+      parser: 'espree',
+      env: {
+        node: true,
+        es6: true,
+      },
+      rules: {
+        // DISABILITA: Regole TypeScript non applicabili
+        '@typescript-eslint/prefer-nullish-coalescing': 'off',
+        '@typescript-eslint/prefer-optional-chain': 'off',
+        '@typescript-eslint/no-unnecessary-condition': 'off',
+        '@typescript-eslint/no-floating-promises': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-var-requires': 'off', // CommonJS OK per scripts
+        '@typescript-eslint/no-unused-vars': 'warn', // Solo warning per scripts
+
+        // RELAX: Patterns comuni negli script
+        'no-await-in-loop': 'off', // OK per script sequenziali
+        'require-await': 'off', // OK per script async senza await
+        'no-console': 'off', // Console logging OK per scripts
+        'prefer-arrow/prefer-arrow-functions': 'off',
+        'import/no-unresolved': 'off',
+        'max-lines-per-function': 'off', // Scripts possono essere lunghi
       },
     },
 
@@ -320,5 +355,6 @@ module.exports = {
     '.expo/',
     'coverage/',
     '*.config.js',
+    'eslint-rules/', // Exclude custom ESLint rules directory
   ],
 };

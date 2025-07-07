@@ -22,17 +22,23 @@ export const ActionDescription: React.FC = () => {
           <FormattedText
             variant="title-large"
             fixedLines={2}
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
             style={styles.descriptionMain}
           >
-            Unisciti a noi nella lotta contro la fame nel mondo
+            Unisciti a noi nella lotta{'\n'}contro la fame nel mondo
           </FormattedText>
           <View style={styles.descriptionDivider} />
           <FormattedText
             variant="body-large"
-            fixedLines={1}
+            fixedLines={2}
+            lineBreakStrategyIOS="push-out"
+            breakStrategyAndroid="highQuality"
+            hyphenationFrequencyAndroid="full"
             style={styles.descriptionSecondary}
           >
-            Ogni azione conta per cambiare vite
+            Ogni azione conta per{'\n'}cambiare vite
           </FormattedText>
         </View>
       </LinearGradient>

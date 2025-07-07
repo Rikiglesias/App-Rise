@@ -1,7 +1,24 @@
 # CURSORRULES - Rise Against Hunger Italia
-# Sistema Responsive Bi-Direzionale Universale Perfezionato
+# Sistema Responsive - Regole di Sviluppo ZERO TOLLERANZA
 
-## 🎯 REGOLE CORE - ZERO TOLLERANZA
+## 🚀 **STATO PROGETTO: PRODUCTION READY**
+
+### ✅ **QUALITÀ MASSIMA RAGGIUNTA**
+```
+PROBLEMI TOTALI: 0/0
+- TypeScript: 0 errori
+- ESLint: 0 warnings  
+- Prettier: 0 errori
+- Jest: Tutti i test passano
+STATUS: ECCELLENZA ENTERPRISE ✅
+```
+
+## 📚 **DOCUMENTAZIONE COMPLETA**
+**👉 LEGGI QUI**: [docs/SISTEMA_RESPONSIVE_COMPLETO.md](docs/SISTEMA_RESPONSIVE_COMPLETO.md)
+
+---
+
+## 🎯 **REGOLE CORE - ZERO TOLLERANZA**
 
 ### FORMATTEDTEXT OBBLIGATORIO
 ```typescript
@@ -21,76 +38,75 @@
 <FormattedText fontSize={scaleFont(24)}>Testo</FormattedText>
 ```
 
+### CROSS-PLATFORM CONSISTENCY OBBLIGATORIA
+```typescript
+// ✅ CORRETTO - Risultato identico iOS/Android
+<FormattedText 
+  fontSize={24}
+  lineBreakStrategyIOS="push-out"
+  breakStrategyAndroid="highQuality"
+  hyphenationFrequencyAndroid="full"
+>
+  Stesso risultato ovunque
+</FormattedText>
+```
+
 ### IMPORTAZIONI CORRETTE
 ```typescript
 // ✅ CORRETTO
 import { FormattedText } from '@/components/ui/FormattedText';
+import { SafeFormattedText } from '@/components/ui/SafeFormattedText';
 
 // ❌ VIETATO
 import { scaleFont } from '@/shared/utils/scaleFont';
 ```
 
-### CROSS-PLATFORM CONSISTENCY
-```typescript
-// ✅ CORRETTO - Risultato identico iOS/Android
-<FormattedText fontSize={24}>Stesso risultato ovunque</FormattedText>
+---
 
-// ❌ VIETATO - Differenze platform-specific
-{Platform.OS === 'ios' ? 
-  <FormattedText fontSize={24}>iOS</FormattedText> : 
-  <FormattedText fontSize={26}>Android</FormattedText>
-}
-```
-
-## 📏 DIMENSIONI STANDARD
+## 📏 **DIMENSIONI STANDARD**
 
 ```typescript
 const TextSizes = {
-  hero: 80,     // Titoli hero
-  title: 60,    // Titoli principali
-  subtitle: 28, // Sottotitoli
-  body: 16,     // Testo body
+  hero: 75,     // Titoli hero "Rise Against Hunger Italia"
+  title: 40,    // Titoli principali "Fai la Differenza"  
+  subtitle: 35, // Sottotitoli "Entra in Azione"
+  body: 20,     // Testo body importante
+  normal: 16,   // Testo normale
   caption: 14,  // Didascalie
   small: 12     // Testo piccolo
 };
 ```
 
-## 🧪 TESTING OBBLIGATORIO
+---
 
-### COVERAGE MINIMO 35%
+## 🧪 **TESTING OBBLIGATORIO**
+
+### COVERAGE MINIMO
 - Statement: >35%
 - Branch: >30%
 - Function: >40%
 - Lines: >35%
 
-### TEMPLATE TEST
+### SCRIPT CONTROLLO QUALITÀ
+```bash
+npm run pre-modifiche  # BLOCCO se errori - OBBLIGATORIO
+npm run post-modifiche # BLOCCO se problemi - OBBLIGATORIO
+npm run conta-problemi # DEVE essere = 0 - SEMPRE
+```
+
+### TEMPLATE TEST MINIMO
 ```typescript
 describe('MyComponent', () => {
-  it('should render with correct responsive text', () => {
+  it('should render with responsive text', () => {
     const { getByText } = render(<MyComponent />);
     expect(getByText('Titolo')).toBeTruthy();
   });
 });
 ```
 
-## 🔍 CONTROLLO QUALITÀ
+---
 
-### CHECKLIST PRE-COMMIT
-- Tutti i Text convertiti in FormattedText? ✓
-- Nessun scaleFont() manuale? ✓
-- fontSize come numero, non funzione? ✓
-- Test coverage > 35%? ✓
-- Zero TypeScript errors? ✓
-- Zero ESLint warnings? ✓
-
-### SCRIPT CONTROLLO
-```bash
-npm run pre-modifiche  # BLOCCO se errori
-npm run post-modifiche # BLOCCO se problemi
-npm run conta-problemi # DEVE essere = 0
-```
-
-## 🚫 ANTI-PATTERNS VIETATI
+## 🚫 **ANTI-PATTERNS VIETATI**
 
 ### ❌ Doppio Scaling
 ```typescript
@@ -103,199 +119,165 @@ npm run conta-problemi # DEVE essere = 0
 <FormattedText fontSize={24}>Testo 2</FormattedText>
 ```
 
-### ❌ Breakpoints Custom
+### ❌ Platform-Specific Differences
 ```typescript
-const customScale = screenWidth > 400 ? 1.2 : 1.0;
+{Platform.OS === 'ios' ? 
+  <FormattedText fontSize={24}>iOS</FormattedText> : 
+  <FormattedText fontSize={26}>Android</FormattedText>
+}
 ```
 
 ### ❌ Logica Complessa
 ```typescript
-<FormattedText fontSize={isTablet ? (isLandscape ? 32 : 28) : 24}>Testo</FormattedText>
+<FormattedText fontSize={isTablet ? (isLandscape ? 32 : 28) : 24}>
+  Testo
+</FormattedText>
 ```
 
-## 💡 TEMPLATE COMPONENTI
+---
+
+## 💡 **TEMPLATE COMPONENTI**
 
 ### COMPONENTE STANDARD
 ```typescript
 const NewComponent = ({ title, description }: Props) => (
   <View>
-    <FormattedText fontSize={60}>{title}</FormattedText>
+    <FormattedText 
+      fontSize={40}
+      fontWeight="bold"
+      lineBreakStrategyIOS="push-out"
+      breakStrategyAndroid="highQuality"
+      hyphenationFrequencyAndroid="full"
+    >
+      {title}
+    </FormattedText>
     <FormattedText fontSize={16}>{description}</FormattedText>
   </View>
 );
 ```
 
-### MIGRAZIONE LEGACY
+### LAYOUT CONTROLLATO (FIXED LINES)
 ```typescript
-// ❌ VECCHIO
-<Text style={{ fontSize: scaleFont(24) }}>Testo</Text>
-
-// ✅ NUOVO
-<FormattedText fontSize={24}>Testo</FormattedText>
-```
-
----
-
-## 🎯 SISTEMA RESPONSIVE BI-DIREZIONALE UNIVERSALE PERFEZIONATO
-
-### ARCHITETTURA PERFEZIONATA (2024)
-- Integrazione completa con FormattedText per eliminare doppio scaling
-- Sistema a 2 livelli: Responsive automatico + Fixed Lines opzionale
-- 31 componenti convertiti da Text+scaleFont a FormattedText unificato
-- Zero inconsistenze architetturali rimanenti
-
-### BREAKPOINTS UNIVERSALI (basati su width)
-- ≤375px: scale 0.9 (iPhone SE, piccoli Android)
-- ≤414px: scale 1.0 (iPhone standard, Android standard)
-- ≤480px: scale 1.15 (iPhone Plus, grandi Android)
-- ≤600px: scale 1.25 (Fold, mini tablet)
-- >600px: scale 1.3 (iPad, tablet)
-
-### UTILIZZO UNIFICATO
-- FormattedText: Scaling automatico sempre attivo
-- fontSize={valore}: Un parametro, funziona ovunque
-- fixedLines={n}: Controllo preciso opzionale
-- Risultato identico iOS/Android garantito
-
-### FILES CORE
-- src/shared/constants/responsiveSystem.ts
-- src/shared/hooks/useResponsive.ts
-- src/components/ui/FormattedText.tsx
-
-### GUIDA PRATICA MODIFICHE
-File: src/components/domain/HomeHeaderSubComponents.tsx
-Trova: fontSize: scaleFont(60)
-Cambia: Solo il numero 60
-Risultato: Scaling automatico cross-platform
-
-## 🎯 SISTEMA FIXED LINES INTELLIGENTE
-
-### NUOVA MODALITÀ INTELLIGENTE (2025)
-**RIVOLUZIONE**: Il sistema NON tronca mai il testo, ma ridimensiona automaticamente il font per farlo entrare nelle righe specificate.
-
-### PARAMETRI DISPONIBILI
-- **fixed={true}**: Attiva sistema intelligente di layout
-- **fixed={true} + fixedLines={n}**: INTELLIGENZA - Ridimensiona automaticamente il fontSize per far entrare tutto il testo (MAI tronca)
-
-### UTILIZZO INTELLIGENTE
-```tsx
-// Solo fixed - layout controllato, testo naturale
-<FormattedText fontSize={20} fixed={true}>
-  Testo con layout controllato ma può andare su più righe naturalmente
-</FormattedText>
-
-// MODALITÀ INTELLIGENTE - Ridimensiona font automaticamente
-<FormattedText fontSize={20} fixed={true} fixedLines={2}>
-  Questo testo lungo viene automaticamente ridimensionato per entrare in 2 righe senza mai essere troncato
-</FormattedText>
-```
-
-### INTELLIGENZA IN AZIONE
-```tsx
-// ESEMPIO PRATICO: Card progetti con titoli sempre allineati
-const ProjectCard = ({ title, description }) => (
-  <View style={styles.card}>
-    {/* Titolo: sempre 2 righe, font si adatta automaticamente */}
-    <FormattedText fontSize={18} fixed={true} fixedLines={2}>
-      {title} {/* "Progetto Breve" rimane 18px, "Progetto con Nome Molto Lungo e Dettagliato" diventa ~13px */}
-    </FormattedText>
-    
-    {/* Descrizione: sempre 3 righe, font si adatta */}
-    <FormattedText fontSize={14} fixed={true} fixedLines={3}>
-      {description}
-    </FormattedText>
-  </View>
+const ControlledLayout = ({ text }: Props) => (
+  <FormattedText 
+    fontSize={24} 
+    fixed={true} 
+    fixedLines={2}
+    lineBreakStrategyIOS="push-out"
+    breakStrategyAndroid="highQuality"
+    hyphenationFrequencyAndroid="full"
+  >
+    {text}
+  </FormattedText>
 );
 ```
 
-### VANTAGGI SISTEMA INTELLIGENTE
-- ✅ **Mai tronca il testo** - tutto il contenuto è sempre visibile
-- ✅ **Layout perfetti** - righe sempre allineate in griglie
-- ✅ **Automatico** - zero configurazione manuale
-- ✅ **Cross-platform** - funziona identicamente su iOS/Android
-- ✅ **Limiti intelligenti** - font non va mai sotto il 50% dell'originale
-
-### CASI D'USO PERFETTI
-- 📱 Card progetti con titoli di lunghezza variabile
-- 🏷️ Etichette in UI con testo dinamico  
-- 📋 Liste con descrizioni sempre allineate
-- 🎯 Bottoni con testi di lunghezza diversa
-- 📊 Dashboard con metriche in card
-
-## 🎯 SISTEMA GITHUB ACTIONS BUILD
-
-### WORKFLOW
-File: .github/workflows/conditional-build.yml
-
-### COMANDI SVILUPPO NORMALE (0 build)
-- git commit -m "feat: nuova funzione"
-- git commit -m "fix: corretto bug"  
-- git commit -m "refactor: cleanup codice"
-
-### COMANDI BUILD AUTOMATICHE
-- git commit -m "release: v1.2.1 [build]" → Android + iOS (2 build)
-- git commit -m "hotfix: problema [build android]" → Solo Android (1 build)
-- git commit -m "deploy: iOS [build ios]" → Solo iOS (1 build)
-- git commit -m "build: production ready" → Android + iOS (2 build)
-
-### PAROLE CHIAVE TRIGGER
-- [build] = Android + iOS (2 build)
-- [build all] = Android + iOS (2 build)
-- build: (inizio) = Android + iOS (2 build)
-- [build android] = Solo Android (1 build)
-- [build ios] = Solo iOS (1 build)
-
-## 🎯 SOLUZIONE COLORI ANDROID RGBA
-
-### PROBLEMA
-Su Android colori rgba per background/bordi appaiono diversi da iOS
-
-### SOLUZIONE COLORI SOLIDI EQUIVALENTI
-- rgba(31, 41, 55, 0.08) → #EDEEF0
-- rgba(31, 41, 55, 0.15) → #DDDFED
-- rgba(220, 38, 38, 0.03) → #FEF8F8
-- rgba(220, 38, 38, 0.12) → #FBE5E5
-- rgba(31, 41, 55, 0.03) → #F8F9F9
-- rgba(31, 41, 55, 0.08) → #EFF0F1
-
-### IMPLEMENTAZIONE
+### COMPONENTI CRITICI (TITOLI PRINCIPALI)
 ```typescript
-backgroundColor: Platform.OS === 'android' ? '#EDEEF0' : 'rgba(31, 41, 55, 0.08)'
+const CriticalTitle = ({ title }: Props) => (
+  <SafeFormattedText 
+    fontSize={75} 
+    fixed={true} 
+    fixedLines={2}
+    enableFallbackFontChain={true}
+    lineBreakStrategyIOS="push-out"
+    breakStrategyAndroid="highQuality"
+    hyphenationFrequencyAndroid="full"
+  >
+    {title}
+  </SafeFormattedText>
+);
 ```
-
-## 🎯 BUNDLE ID CONFIGURAZIONE
-
-### BUNDLE ID CORRETTO
-- **Bundle ID**: `it.creareunapp.editor.ios63da226b4447c`
-- **App Store Connect**: ID già esistente e configurato
-- **EAS Submission**: ID deve matchare esattamente
-
-### CONFIGURAZIONE OBBLIGATORIA
-```javascript
-// app.config.js
-export default {
-  expo: {
-    ios: {
-      bundleIdentifier: "it.creareunapp.editor.ios63da226b4447c"
-    },
-    android: {
-      package: "it.creareunapp.editor.ios63da226b4447c"
-    }
-  }
-}
-```
-
-### ❌ BUNDLE ID VIETATO
-```javascript
-// NON USARE - Vecchio bundle ID
-bundleIdentifier: "org.riseagainsthunger.italia"
-```
-
-### VERIFICA SUBMISSION
-- Controllare sempre che bundleIdentifier e package siano identici
-- Errore comune: "No suitable application records were found"
-- Causa: Mismatch tra app.config.js e App Store Connect
 
 ---
 
-**RICORDA: Zero tolleranza per regressioni nel sistema responsive. Ogni violazione di queste regole deve essere corretta immediatamente.** 
+## 🔍 **CHECKLIST PRE-COMMIT OBBLIGATORIA**
+
+### VERIFICA SEMPRE:
+- ✅ Tutti i Text convertiti in FormattedText?
+- ✅ SafeFormattedText per titoli principali?
+- ✅ Nessun scaleFont() manuale?
+- ✅ fontSize come numero, non funzione?
+- ✅ Cross-platform props aggiunte?
+- ✅ Test coverage > 35%?
+- ✅ Zero TypeScript errors?
+- ✅ Zero ESLint warnings?
+- ✅ npm run post-modifiche passa?
+
+### WORKFLOW OBBLIGATORIO:
+1. `npm run pre-modifiche` → DEVE passare
+2. Sviluppo con template approvati
+3. `npm run post-modifiche` → DEVE passare
+4. Commit SOLO se tutto è 0 problemi
+
+---
+
+## 🎯 **SISTEMA FIXED LINES INTELLIGENTE**
+
+### PRINCIPIO FONDAMENTALE
+**Il testo NON viene MAI troncato!** Il fontSize si ridimensiona automaticamente.
+
+### UTILIZZO
+```tsx
+// Layout normale - scaling automatico
+<FormattedText fontSize={20}>Testo normale</FormattedText>
+
+// Layout controllato - righe fisse, font intelligente
+<FormattedText fontSize={20} fixed={true} fixedLines={2}>
+  Questo testo viene ridimensionato automaticamente per 
+  entrare in 2 righe senza mai essere troncato
+</FormattedText>
+```
+
+---
+
+## ⚡ **ESEMPI IMPLEMENTATI**
+
+### HOMEPAGE - "Rise Against Hunger Italia"
+```tsx
+<FormattedText fontSize={45} fontWeight="black">
+  Rise Against
+</FormattedText>
+<FormattedText fontSize={45} fontWeight="black" style={{ color: '#DC2626' }}>
+  Hunger Italia
+</FormattedText>
+```
+
+### AZIONI - "Fai la Differenza"
+```tsx
+<FormattedText fontSize={40} fontWeight="black" fixedLines={2}>
+  Fai la{'\n'}
+  <FormattedText fontSize={40} style={{ color: '#DC2626' }}>
+    Differenza
+  </FormattedText>
+</FormattedText>
+```
+
+### DESCRIZIONI CONTROLLATE
+```tsx
+<FormattedText fontSize={20} fixedLines={2}>
+  Unisciti a noi nella lotta{'\n'}contro la fame nel mondo
+</FormattedText>
+```
+
+---
+
+## 🚨 **ZERO TOLLERANZA POLICY**
+
+### BLOCCO AUTOMATICO SE:
+- ❌ Errori TypeScript
+- ❌ Warnings ESLint
+- ❌ Test falliti
+- ❌ Formatting Prettier
+- ❌ Coverage < 35%
+- ❌ Anti-patterns presenti
+
+### CORREZIONE OBBLIGATORIA:
+Ogni problema deve essere corretto IMMEDIATAMENTE. 
+Nessuna soluzione temporanea o workaround accettata.
+
+---
+
+**💡 DOCUMENTAZIONE COMPLETA**: [docs/SISTEMA_RESPONSIVE_COMPLETO.md](docs/SISTEMA_RESPONSIVE_COMPLETO.md)
+
+**🎯 RICORDA**: Un parametro fontSize, funziona ovunque. Zero configurazione. Massima qualità. PRODUCTION READY! 

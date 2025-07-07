@@ -103,13 +103,35 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   // CONTENUTO TITOLO
   const titleContent = (
     <>
-      <FormattedText variant="display-small" style={styles.titleText}>
+      <FormattedText
+        fontSize={40}
+        fontWeight="black"
+        fixedLines={2}
+        lineBreakStrategyIOS="push-out"
+        breakStrategyAndroid="highQuality"
+        hyphenationFrequencyAndroid="full"
+        style={styles.titleText}
+      >
         Fai la{'\n'}
-        <FormattedText variant="display-small" style={styles.titleAccent}>
+        <FormattedText
+          fontSize={40}
+          fontWeight="black"
+          lineBreakStrategyIOS="push-out"
+          breakStrategyAndroid="highQuality"
+          hyphenationFrequencyAndroid="full"
+          style={styles.titleAccent}
+        >
           Differenza
         </FormattedText>
       </FormattedText>
-      <FormattedText variant="body-medium" style={styles.mainSubtitle}>
+      <FormattedText
+        fontSize={20}
+        fixedLines={1}
+        lineBreakStrategyIOS="push-out"
+        breakStrategyAndroid="highQuality"
+        hyphenationFrequencyAndroid="full"
+        style={styles.mainSubtitle}
+      >
         Ogni azione conta nella lotta contro la fame
       </FormattedText>
     </>
