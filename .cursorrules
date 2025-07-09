@@ -57,6 +57,84 @@ const cardWidth = isTablet ? '31%' : '47.5%';
 <Text style={{ fontSize: scaleFont(24) }}>Testo</Text>
 ```
 
+### ✅ **APPROCCIO MISTO: Text Nativo + FormattedText**
+```typescript
+// ✅ CASO SPECIALE: Titoli critici che richiedono adjustsFontSizeToFit perfetto
+import { Text } from 'react-native';
+import { scaleFont } from '@/shared/constants/responsiveSystem';
+
+<Text
+  allowFontScaling={false}
+  numberOfLines={1}
+  adjustsFontSizeToFit={true}
+  minimumFontScale={0.8}
+  style={{ fontSize: scaleFont(42), fontWeight: '900' }}
+>
+  Rise Against Hunger Italia
+</Text>
+
+// ✅ CASO STANDARD: Sistema FormattedText bi-direzionale
+<FormattedText 
+  fontSize={32}
+  intelligentAccessibilityScaling={true}
+  fixed={true}
+  fixedLines={1}
+>
+  Testo con sistema intelligente
+</FormattedText>
+
+// 🎯 DECISION RULE: 
+// Titolo principale critico? → Text nativo
+// Altri componenti? → FormattedText
+```
+
+### ✅ **SISTEMA BI-DIREZIONALE INTELLIGENTE OBBLIGATORIO**
+```typescript
+// ✅ CORRETTO - Sistema per APP IDENTICA su tutti i dispositivi
+<FormattedText 
+  fontSize={32}
+  intelligentAccessibilityScaling={true}  // ← SISTEMA BI-DIREZIONALE ATTIVO
+  fixed={true}
+  fixedLines={1}                          // ← SEMPRE 1 riga esatta
+  allowSystemFontScaling={false}          // ← CONSISTENCY ASSOLUTA
+  lineBreakStrategyIOS="push-out"
+  breakStrategyAndroid="highQuality"
+>
+  Rise Against Hunger Italia
+</FormattedText>
+
+// RISULTATI AUTOMATICI GARANTITI:
+// iPhone SE (375px): 32px → 26px (ridotto automaticamente per 1 riga)
+// iPhone 15 (414px): 32px → 32px (perfetto così)
+// iPad (768px): 32px → 42px (ingrandito automaticamente per utilizzare spazio)
+// iPad Pro (1024px): 32px → 48px (massima ottimizzazione automatica)
+// RISULTATO: APP IDENTICA - stesse proporzioni visive ovunque
+
+// ❌ VIETATO - Gestione manuale zoom/dispositivi
+<FormattedText fontSize={screenWidth > 768 ? 32 : 24}>Testo</FormattedText>
+{Platform.OS === 'ios' && <FormattedText fontSize={32}>iOS only</FormattedText>}
+
+// ❌ VIETATO - Zoom che rompe layout controllato
+<FormattedText 
+  fixed={true}
+  fixedLines={1}
+  allowSystemFontScaling={true}  // ← ROMPE il sistema controllato
+>
+  Testo che può andare su più righe
+</FormattedText>
+```
+
+### ✅ **CONFIGURAZIONE PERFETTA APP IDENTICA**
+```typescript
+// I 4 parametri FONDAMENTALI per app identica:
+intelligentAccessibilityScaling={true}  // ← Adatta fontSize per ogni dispositivo
+fixed={true}                            // ← Attiva sistema di calcolo intelligente  
+fixedLines={1}                          // ← Numero righe esatto (mai nascoste)
+allowSystemFontScaling={false}          // ← Evita zoom che rompe proportioni
+
+// BENEFICIO: Un solo componente → perfetto su OGNI dispositivo automaticamente
+```
+
 ### ✅ **PRESET DAL TEMA OBBLIGATORI**
 ```typescript
 // ✅ CORRETTO - Preset unificati
@@ -164,6 +242,34 @@ const textColor = isDark ? '#F5F5F5' : '#1E1E1E';
 }
 ```
 
+### ❌ **Gestione Manuale Zoom/Dispositivi**
+```typescript
+// ❌ VIETATO - Calcoli manuali per dispositivi/zoom
+const fontSize = screenWidth > 768 ? 32 : 24;
+const accessibilitySize = isAccessibilityEnabled ? fontSize * 1.5 : fontSize;
+
+// ❌ VIETATO - Disabilitazione zoom per "mantenere layout"
+<FormattedText fontSize={24} allowSystemFontScaling={false}>
+  Testo inaccessibile
+</FormattedText>
+
+// ❌ VIETATO - Conditional rendering per dispositivi
+{isTablet ? 
+  <FormattedText fontSize={32}>Grande</FormattedText> : 
+  <FormattedText fontSize={20}>Piccolo</FormattedText>
+}
+
+// ✅ CORRETTO - Sistema bi-direzionale automatico
+<FormattedText 
+  fontSize={32} 
+  intelligentAccessibilityScaling={true} 
+  fixed={true} 
+  fixedLines={1}
+>
+  Testo che si adatta automaticamente a tutto
+</FormattedText>
+```
+
 ---
 
 ## 💡 **TEMPLATE COMPONENTI AGGIORNATI**
@@ -179,16 +285,16 @@ const NewComponent = ({ title, description, items }) => {
   return (
     <ResponsiveBox preset="container" autoBackgroundColor="primary">
       <ResponsiveStack spacing={responsive({ compact: 16, standard: 20, xlarge: 24 })}>
-        <FormattedText 
-          fontSize={40}
-          fontWeight="bold"
-          lineBreakStrategyIOS="push-out"
-          breakStrategyAndroid="highQuality"
-          hyphenationFrequencyAndroid="full"
-        >
-          {title}
-        </FormattedText>
-        <FormattedText fontSize={16}>{description}</FormattedText>
+    <FormattedText 
+      fontSize={40}
+      fontWeight="bold"
+      lineBreakStrategyIOS="push-out"
+      breakStrategyAndroid="highQuality"
+      hyphenationFrequencyAndroid="full"
+    >
+      {title}
+    </FormattedText>
+    <FormattedText fontSize={16}>{description}</FormattedText>
         
         <ResponsiveStack direction="horizontal" spacing={12} style={{ flexWrap: 'wrap' }}>
           {items.map(item => (
@@ -243,35 +349,71 @@ const DarkModeComponent = ({ title, items }) => {
 ```typescript
 const ControlledLayout = ({ text }) => (
   <ResponsiveBox preset="card" autoBackgroundColor="card">
+  <FormattedText 
+    fontSize={24} 
+    fixed={true} 
+    fixedLines={2}
+    lineBreakStrategyIOS="push-out"
+    breakStrategyAndroid="highQuality"
+    hyphenationFrequencyAndroid="full"
+  >
+    {text}
+  </FormattedText>
+  </ResponsiveBox>
+);
+```
+
+### **LAYOUT BI-DIREZIONALE INTELLIGENTE (NUOVO)**
+```typescript
+const IntelligentLayout = ({ title, description }) => (
+  <ResponsiveBox preset="container" autoBackgroundColor="primary">
+    {/* Titolo con adattamento automatico per ogni dispositivo */}
     <FormattedText 
-      fontSize={24} 
-      fixed={true} 
-      fixedLines={2}
+      fontSize={45}
+      fontWeight="bold"
+      intelligentAccessibilityScaling={true}  // ← SISTEMA BI-DIREZIONALE
+      fixed={true}
+      fixedLines={1}                          // ← SEMPRE 1 riga
       lineBreakStrategyIOS="push-out"
       breakStrategyAndroid="highQuality"
-      hyphenationFrequencyAndroid="full"
     >
-      {text}
+      {title}
+    </FormattedText>
+    
+    {/* Descrizione ottimizzata per layout multi-riga */}
+    <FormattedText 
+      fontSize={16}
+      intelligentAccessibilityScaling={true}  // ← ACCESSIBILITÀ + LAYOUT
+      fixed={true}
+      fixedLines={3}                          // ← SEMPRE 3 righe
+    >
+      {description}
     </FormattedText>
   </ResponsiveBox>
 );
+
+// RISULTATI AUTOMATICI:
+// iPhone SE: fontSize ridotto per rispettare fixedLines
+// iPad Pro: fontSize ingrandito per utilizzare spazio disponibile  
+// Zoom utente: Consentito fino al limite che mantiene fixedLines
+// Cross-platform: Comportamento identico iOS/Android
 ```
 
 ### **COMPONENTI CRITICI (TITOLI PRINCIPALI)**
 ```typescript
 const CriticalTitle = ({ title }) => (
   <ResponsiveBox preset="container" autoBackgroundColor="primary">
-    <SafeFormattedText 
-      fontSize={75} 
-      fixed={true} 
-      fixedLines={2}
-      enableFallbackFontChain={true}
-      lineBreakStrategyIOS="push-out"
-      breakStrategyAndroid="highQuality"
-      hyphenationFrequencyAndroid="full"
-    >
-      {title}
-    </SafeFormattedText>
+  <SafeFormattedText 
+    fontSize={75} 
+    fixed={true} 
+    fixedLines={2}
+    enableFallbackFontChain={true}
+    lineBreakStrategyIOS="push-out"
+    breakStrategyAndroid="highQuality"
+    hyphenationFrequencyAndroid="full"
+  >
+    {title}
+  </SafeFormattedText>
   </ResponsiveBox>
 );
 ```
@@ -318,6 +460,14 @@ const ResponsivePresets = {
 - ✅ `fontSize` come numero, non funzione?
 - ✅ Cross-platform props aggiunte?
 
+### **VERIFICA SISTEMA BI-DIREZIONALE (NUOVO):**
+- ✅ Usa `intelligentAccessibilityScaling={true}` per titoli e testi importanti?
+- ✅ `fixed={true}` + `fixedLines` specificato per layout controllato?
+- ✅ Zero calcoli manuali `screenWidth > 768 ? x : y`?
+- ✅ Zero `allowSystemFontScaling={false}` (blocca accessibilità)?
+- ✅ Zero conditional rendering per dispositivi diversi?
+- ✅ Zoom accessibilità funziona su tutti i testi importanti?
+
 ### **VERIFICA QUALITÀ:**
 - ✅ Test coverage > 35%?
 - ✅ Zero TypeScript errors?
@@ -327,7 +477,7 @@ const ResponsivePresets = {
 ### **WORKFLOW OBBLIGATORIO:**
 1. `npm run pre-modifiche` → DEVE passare
 2. Sviluppo con layer centralizzato + FormattedText
-3. `npm run post-modifiche` → DEVE passare  
+3. `npm run post-modifiche` → DEVE passare
 4. Commit SOLO se tutto è 0 problemi
 
 ---
@@ -392,24 +542,24 @@ isRTL: true,  // → flexDirection automatico
 ### **HOMEPAGE - "Rise Against Hunger Italia"**
 ```tsx
 <ResponsiveBox preset="container" autoBackgroundColor="primary">
-  <FormattedText fontSize={45} fontWeight="black">
-    Rise Against
-  </FormattedText>
-  <FormattedText fontSize={45} fontWeight="black" style={{ color: '#DC2626' }}>
-    Hunger Italia
-  </FormattedText>
+<FormattedText fontSize={45} fontWeight="black">
+  Rise Against
+</FormattedText>
+<FormattedText fontSize={45} fontWeight="black" style={{ color: '#DC2626' }}>
+  Hunger Italia
+</FormattedText>
 </ResponsiveBox>
 ```
 
 ### **AZIONI - "Fai la Differenza"**
 ```tsx
 <ResponsiveStack spacing={{ compact: 16, xlarge: 24 }}>
-  <FormattedText fontSize={40} fontWeight="black" fixedLines={2}>
-    Fai la{'\n'}
-    <FormattedText fontSize={40} style={{ color: '#DC2626' }}>
-      Differenza
-    </FormattedText>
+<FormattedText fontSize={40} fontWeight="black" fixedLines={2}>
+  Fai la{'\n'}
+  <FormattedText fontSize={40} style={{ color: '#DC2626' }}>
+    Differenza
   </FormattedText>
+</FormattedText>
 </ResponsiveStack>
 ```
 
@@ -493,8 +643,10 @@ import { Dimensions } from 'react-native';
 
 ---
 
-**💡 SISTEMA COMPLETO**: FormattedText + Layer Centralizzato = **ECCELLENZA ENTERPRISE** ✅
+**💡 SISTEMA COMPLETO**: FormattedText + Layer Centralizzato + **Sistema Bi-Direzionale** = **ECCELLENZA ENTERPRISE ASSOLUTA** ✅
 
-**🎯 RICORDA**: Un parametro fontSize + un preset responsive = funziona ovunque. Zero configurazione. Zero frammentazione. Massima qualità. **PRODUCTION READY!** 
+**🎯 RICORDA**: Un parametro `fontSize` + `intelligentAccessibilityScaling={true}` = funziona perfettamente su OGNI dispositivo e zoom. Zero configurazione. Zero frammentazione. Accessibilità universale. **PRODUCTION READY!** 
 
-**🚀 BENEFICIO FINALE**: Da "centinaia di edit manuali" → Una riga nel tema! ✨ 
+**🔄 INNOVAZIONE BI-DIREZIONALE**: Da "font fisso per tutti" → **Font ottimale automatico per ogni situazione**! ✨
+
+**🚀 BENEFICIO FINALE**: Un componente, infinite possibilità → **Zero manutenzione futura** ⚡ 

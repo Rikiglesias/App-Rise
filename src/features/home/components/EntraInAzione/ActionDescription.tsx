@@ -20,8 +20,12 @@ export const ActionDescription: React.FC = () => {
       >
         <View style={styles.descriptionContent}>
           <FormattedText
-            variant="title-large"
-            fixedLines={2}
+            fontSize={18}
+            fontWeight="bold"
+            intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+            fixed={true}
+            fixedLines={2} // ← SEMPRE 2 righe esatte
+            allowSystemFontScaling={false} // ← CONSISTENCY ASSOLUTA
             lineBreakStrategyIOS="push-out"
             breakStrategyAndroid="highQuality"
             hyphenationFrequencyAndroid="full"
@@ -31,8 +35,12 @@ export const ActionDescription: React.FC = () => {
           </FormattedText>
           <View style={styles.descriptionDivider} />
           <FormattedText
-            variant="body-large"
-            fixedLines={2}
+            fontSize={16}
+            fontWeight="medium"
+            intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+            fixed={true}
+            fixedLines={2} // ← SEMPRE 2 righe esatte
+            allowSystemFontScaling={false} // ← CONSISTENCY ASSOLUTA
             lineBreakStrategyIOS="push-out"
             breakStrategyAndroid="highQuality"
             hyphenationFrequencyAndroid="full"

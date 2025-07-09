@@ -1,48 +1,56 @@
 /**
  * RESPONSIVE BOX - WRAPPER COMPONENT
- * 
+ *
  * Elimina layout hard-coded utilizzando tema centralizzato
  * Supporta width, padding, margin responsive tramite breakpoints
  */
 
 import React from 'react';
 import { View, ViewProps, ViewStyle } from 'react-native';
-import { useResponsiveLayout, ResponsiveValue } from '../../shared/hooks/useResponsiveLayout';
+import {
+  useResponsiveLayout,
+  ResponsiveValue,
+} from '../../shared/hooks/useResponsiveLayout';
 import { useResponsiveDarkMode } from '../../shared/hooks/useResponsiveDarkMode';
 import { ResponsiveTheme } from '../../shared/constants/responsiveTheme';
 
 export interface ResponsiveBoxProps extends Omit<ViewProps, 'style'> {
   // Responsive width
   width?: ResponsiveValue<string | number>;
-  
+
   // Responsive padding
   padding?: ResponsiveValue<number> | number;
   paddingHorizontal?: ResponsiveValue<number> | number;
   paddingVertical?: ResponsiveValue<number> | number;
-  
+
   // Responsive margin
   margin?: ResponsiveValue<number> | number;
   marginHorizontal?: ResponsiveValue<number> | number;
   marginVertical?: ResponsiveValue<number> | number;
-  
+
   // Preset widths (elimina hard-coding)
   preset?: 'card' | 'container' | 'modal' | 'progress' | 'divider';
-  
+
   // Background color con dark mode support
   backgroundColor?: string;
-  
+
   // Dark mode auto colors
   autoBackgroundColor?: 'primary' | 'secondary' | 'card' | 'modal';
-  
+
   // Flex properties
   flex?: number;
   flexDirection?: 'row' | 'column';
-  justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around';
+  justifyContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around';
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch';
-  
+
   // Style override
   style?: ViewStyle;
-  
+
   // Children
   children?: React.ReactNode;
 }
@@ -71,7 +79,7 @@ export const ResponsiveBox: React.FC<ResponsiveBoxProps> = ({
 }) => {
   const { responsive, breakpoint } = useResponsiveLayout();
   const { backgroundColor: themeColors } = useResponsiveDarkMode();
-  
+
   // Resolve responsive width
   const resolvedWidth = (() => {
     if (preset) {
@@ -91,52 +99,63 @@ export const ResponsiveBox: React.FC<ResponsiveBoxProps> = ({
           return undefined;
       }
     }
-    
+
     if (width) {
       return responsive(width);
     }
-    
+
     return undefined;
   })();
-  
+
   // Helper function to resolve responsive values
-  const resolveResponsiveValue = (value: ResponsiveValue<number> | number | undefined) => {
+  const resolveResponsiveValue = (
+    value: ResponsiveValue<number> | number | undefined
+  ) => {
     if (typeof value === 'number') return value;
     if (value) return responsive(value);
     return undefined;
   };
-  
+
   // Resolve responsive padding
   const resolvedPadding = resolveResponsiveValue(padding);
   const resolvedPaddingHorizontal = resolveResponsiveValue(paddingHorizontal);
   const resolvedPaddingVertical = resolveResponsiveValue(paddingVertical);
-  
+
   // Resolve responsive margin
   const resolvedMargin = resolveResponsiveValue(margin);
   const resolvedMarginHorizontal = resolveResponsiveValue(marginHorizontal);
   const resolvedMarginVertical = resolveResponsiveValue(marginVertical);
-  
+
   // Resolve background color (manual override or auto dark mode)
-  const resolvedBackgroundColor = backgroundColor ?? 
+  const resolvedBackgroundColor =
+    backgroundColor ??
     (autoBackgroundColor ? themeColors[autoBackgroundColor] : undefined);
 
   // Compose style
   const composedStyle: ViewStyle = {
     ...(resolvedWidth && { width: resolvedWidth as never }),
     ...(resolvedPadding && { padding: resolvedPadding }),
-    ...(resolvedPaddingHorizontal && { paddingHorizontal: resolvedPaddingHorizontal }),
-    ...(resolvedPaddingVertical && { paddingVertical: resolvedPaddingVertical }),
+    ...(resolvedPaddingHorizontal && {
+      paddingHorizontal: resolvedPaddingHorizontal,
+    }),
+    ...(resolvedPaddingVertical && {
+      paddingVertical: resolvedPaddingVertical,
+    }),
     ...(resolvedMargin && { margin: resolvedMargin }),
-    ...(resolvedMarginHorizontal && { marginHorizontal: resolvedMarginHorizontal }),
+    ...(resolvedMarginHorizontal && {
+      marginHorizontal: resolvedMarginHorizontal,
+    }),
     ...(resolvedMarginVertical && { marginVertical: resolvedMarginVertical }),
-    ...(resolvedBackgroundColor && { backgroundColor: resolvedBackgroundColor }),
+    ...(resolvedBackgroundColor && {
+      backgroundColor: resolvedBackgroundColor,
+    }),
     ...(flex && { flex }),
     ...(flexDirection && { flexDirection }),
     ...(justifyContent && { justifyContent }),
     ...(alignItems && { alignItems }),
     ...style,
   };
-  
+
   return (
     <View style={composedStyle} {...props}>
       {children}
@@ -159,27 +178,28 @@ export const ResponsiveStack: React.FC<ResponsiveStackProps> = ({
   ...props
 }) => {
   const { responsive } = useResponsiveLayout();
-  
+
   // Helper function to resolve responsive values
-  const resolveResponsiveValue = (value: ResponsiveValue<number> | number | undefined) => {
+  const resolveResponsiveValue = (
+    value: ResponsiveValue<number> | number | undefined
+  ) => {
     if (typeof value === 'number') return value;
     if (value) return responsive(value);
     return undefined;
   };
-  
+
   const resolvedSpacing = resolveResponsiveValue(spacing);
-  
+
   const stackStyle: ViewStyle = {
     flexDirection: direction === 'horizontal' ? 'row' : 'column',
-    ...(resolvedSpacing && direction === 'vertical' && { gap: resolvedSpacing }),
-    ...(resolvedSpacing && direction === 'horizontal' && { gap: resolvedSpacing }),
+    ...(resolvedSpacing &&
+      direction === 'vertical' && { gap: resolvedSpacing }),
+    ...(resolvedSpacing &&
+      direction === 'horizontal' && { gap: resolvedSpacing }),
   };
-  
+
   return (
-    <ResponsiveBox 
-      style={stackStyle} 
-      {...props}
-    >
+    <ResponsiveBox style={stackStyle} {...props}>
       {children}
     </ResponsiveBox>
   );
@@ -212,12 +232,6 @@ export const ResponsiveCard: React.FC<ResponsiveCardProps> = ({
     }),
     ...style,
   };
-  
-  return (
-    <ResponsiveBox
-      preset="card"
-      style={cardStyle}
-      {...props}
-    />
-  );
-}; 
+
+  return <ResponsiveBox preset="card" style={cardStyle} {...props} />;
+};

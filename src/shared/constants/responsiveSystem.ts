@@ -172,10 +172,17 @@ export const scaleSize = (
 };
 
 /**
- * 🚀 BI-DIRECTIONAL FONT SCALING (Revolutionary)
- * SCALA INTELLIGENTEMENTE in entrambe le direzioni:
+ * 🚀 SISTEMA SCALING UNIVERSALE + BI-DIREZIONALE INTELLIGENTE
+ *
+ * LAYER 1: SCALING UNIVERSALE (sempre attivo)
+ * - SCALA INTELLIGENTEMENTE in entrambe le direzioni
  * - SU schermi piccoli: riduce mantenendo leggibilità
  * - SU schermi grandi: AUMENTA per proporzioni ottimali
+ *
+ * LAYER 2: SISTEMA BI-DIREZIONALE INTELLIGENTE (opzionale)
+ * - Abilitato con intelligentAccessibilityScaling={true}
+ * - Calcola fontSize OTTIMALE per ogni dispositivo rispettando fixedLines
+ * - Supporta zoom accessibilità fino ai limiti calcolati
  */
 export const scaleFont = (size: number): number => {
   // CROSS-PLATFORM CONSISTENCY FIX: calcolo diretto basato su width
@@ -716,10 +723,11 @@ export const TextIntelligence = {
   },
 } as const;
 
-// 🎛️ ADVANCED ACCESSIBILITY (Apple HIG + WCAG)
+// 🎛️ ADVANCED ACCESSIBILITY + SISTEMA BI-DIREZIONALE INTELLIGENTE
 export const AccessibilityIntelligence = {
   /**
-   * Calcola il fontSize finale considerando Dynamic Type e vincoli responsive
+   * Calcola il fontSize finale considerando Dynamic Type, vincoli responsive e sistema bi-direzionale
+   * NUOVO: Integrato con intelligentAccessibilityScaling per calcoli ottimali
    */
   calculateAccessibleFontSize: (
     baseFontSize: number,

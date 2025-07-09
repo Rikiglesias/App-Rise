@@ -1,16 +1,24 @@
 import React from 'react';
-import { Animated, Image, Platform, StyleSheet, View } from 'react-native';
-import { FormattedText } from '../ui';
-import { Spacing, Typography } from '../../shared/constants/designTokens';
+import {
+  Animated,
+  Image,
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+} from 'react-native';
+import { ResponsiveBox, ResponsiveStack } from '../ui';
+import { useResponsiveLayout } from '../../shared/hooks';
+import { Spacing } from '../../shared/constants/designTokens';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
+import { scaleFont } from '../../shared/constants/responsiveSystem';
 
-// ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS
+// ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS + SISTEMA RESPONSIVE
 const createModernTitleStyles = () =>
   /* eslint-disable react-native/no-unused-styles */
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingHorizontal: Spacing[4],
       paddingVertical: Spacing[0],
       paddingTop: Platform.OS === 'android' ? Spacing[8] : Spacing[0],
     },
@@ -18,19 +26,10 @@ const createModernTitleStyles = () =>
     titleContainer: {
       alignItems: 'center',
       paddingVertical: Spacing[0],
-      paddingHorizontal: Spacing[4],
       ...(Platform.OS === 'android' &&
         HomeHeaderDesignTokens.platformStyles.android),
       ...(Platform.OS === 'ios' && HomeHeaderDesignTokens.platformStyles.ios),
       position: 'relative',
-    },
-
-    titleText: {
-      fontWeight: Typography.weights.black,
-      textAlign: 'center',
-      letterSpacing: -1.5,
-      lineHeight: 45 * 1.15, // Aggiornato per fontSize={45}
-      marginBottom: 0,
     },
 
     titleSeparator: {
@@ -66,13 +65,14 @@ export interface ModernSmartTitleProps {
   titleTransform: Animated.AnimatedNode;
 }
 
-// ✨ CLEAN & MODERN TITLE COMPONENT
+// ✨ SISTEMA BI-DIREZIONALE INTELLIGENTE - MODERN TITLE COMPONENT
 export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform }) => {
     const modernTitleStyles = React.useMemo(
       () => createModernTitleStyles(),
       []
     );
+    const { responsive } = useResponsiveLayout();
 
     // Animazione semplice e professionale
     const mainTitleDelay = React.useRef(new Animated.Value(0)).current;
@@ -88,7 +88,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
     }, [mainTitleDelay]);
 
     return (
-      <View style={modernTitleStyles.container}>
+      <ResponsiveBox preset="container" style={modernTitleStyles.container}>
         <Animated.View
           style={{
             opacity: Animated.multiply(
@@ -109,68 +109,79 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
           }}
         >
           <View style={modernTitleStyles.titleContainer}>
-            {/* Titolo con Container Professionale - Layout Consistency Guaranteed */}
-            <View style={{ width: '100%', alignItems: 'center' }}>
-              <View style={{ alignItems: 'center' }}>
-                <FormattedText
-                  fontSize={45}
-                  fontWeight="black"
-                  color={HomeHeaderDesignTokens.colors.primary}
-                  lineBreakStrategyIOS="push-out"
-                  breakStrategyAndroid="highQuality"
-                  hyphenationFrequencyAndroid="full"
+            {/* TITOLO UNIFICATO - Dimensioni Consistenti Garantite */}
+            <ResponsiveStack
+              spacing={responsive({ compact: 4, xlarge: 8 }) ?? 4}
+              style={{ alignItems: 'center' }}
+            >
+              {/* PRIMA RIGA - Rise Against */}
+              <Text
+                allowFontScaling={false} // ← DISABILITATO: dimensioni identiche garantite
+                numberOfLines={1} // ← 1 riga esatta
+                adjustsFontSizeToFit={true} // ← RIDIMENSIONA AUTOMATICAMENTE (nativo React Native)
+                minimumFontScale={0.8} // ← LIMITE MINIMO 80% (mantiene qualità)
+                style={{
+                  fontSize: scaleFont(42), // ← DIMENSIONE BASE SCALATA UNA VOLTA
+                  textAlign: 'center',
+                  fontWeight: '900',
+                  color: HomeHeaderDesignTokens.colors.primary,
+                }}
+              >
+                Rise Against
+              </Text>
+
+              {/* SECONDA RIGA - Hunger Italia (PARAMETRI IDENTICI) */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Text
+                  allowFontScaling={false} // ← DISABILITATO: dimensioni identiche garantite
+                  numberOfLines={1} // ← 1 riga esatta
+                  adjustsFontSizeToFit={true} // ← RIDIMENSIONA AUTOMATICAMENTE (nativo React Native)
+                  minimumFontScale={0.8} // ← LIMITE MINIMO 80% (mantiene qualità)
                   style={{
+                    fontSize: scaleFont(42), // ← DIMENSIONE BASE SCALATA UNA VOLTA
                     textAlign: 'center',
                     fontWeight: '900',
-                    lineHeight: 50,
+                    color: '#DC2626', // ← SOLO IL COLORE CAMBIA
                   }}
                 >
-                  Rise Against
-                </FormattedText>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <FormattedText
-                    fontSize={45}
-                    fontWeight="black"
-                    color={HomeHeaderDesignTokens.colors.primary}
-                    lineBreakStrategyIOS="push-out"
-                    breakStrategyAndroid="highQuality"
-                    hyphenationFrequencyAndroid="full"
-                    style={{
-                      fontWeight: '900',
-                    }}
-                  >
-                    Hunger{' '}
-                  </FormattedText>
-                  <FormattedText
-                    fontSize={45}
-                    fontWeight="black"
-                    color={HomeHeaderDesignTokens.colors.dark}
-                    lineBreakStrategyIOS="push-out"
-                    breakStrategyAndroid="highQuality"
-                    hyphenationFrequencyAndroid="full"
-                    style={{
-                      fontWeight: '900',
-                    }}
-                  >
-                    Italia
-                  </FormattedText>
-                </View>
+                  Hunger{' '}
+                </Text>
+                <Text
+                  allowFontScaling={false} // ← DISABILITATO: dimensioni identiche garantite
+                  numberOfLines={1} // ← 1 riga esatta
+                  adjustsFontSizeToFit={true} // ← RIDIMENSIONA AUTOMATICAMENTE (nativo React Native)
+                  minimumFontScale={0.8} // ← LIMITE MINIMO 80% (mantiene qualità)
+                  style={{
+                    fontSize: scaleFont(42), // ← DIMENSIONE BASE SCALATA UNA VOLTA
+                    textAlign: 'center',
+                    fontWeight: '900',
+                    color: HomeHeaderDesignTokens.colors.dark, // ← SOLO IL COLORE CAMBIA
+                  }}
+                >
+                  Italia
+                </Text>
               </View>
-            </View>
 
-            {/* Separatore elegante con logo simbolico centrale */}
-            <View style={modernTitleStyles.titleSeparator}>
-              <View style={modernTitleStyles.separatorLine} />
-              <Image
-                source={require('../../../assets/icons/app/logo.png')}
-                style={modernTitleStyles.separatorLogo}
-                resizeMode="contain"
-              />
-              <View style={modernTitleStyles.separatorLine} />
-            </View>
+              {/* Separatore elegante con logo simbolico centrale */}
+              <View style={modernTitleStyles.titleSeparator}>
+                <View style={modernTitleStyles.separatorLine} />
+                <Image
+                  source={require('../../../assets/icons/app/logo.png')}
+                  style={modernTitleStyles.separatorLogo}
+                  resizeMode="contain"
+                />
+                <View style={modernTitleStyles.separatorLine} />
+              </View>
+            </ResponsiveStack>
           </View>
         </Animated.View>
-      </View>
+      </ResponsiveBox>
     );
   }
 );

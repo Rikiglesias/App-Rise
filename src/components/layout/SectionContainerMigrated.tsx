@@ -30,15 +30,16 @@ const getSpacingConfig = (
   // if (screenWidth < 375) baseSpacing = 0.8;
   // else if (screenWidth < 768) baseSpacing = 1;
   // else baseSpacing = 1.2;
-  
+
   // ✅ NUOVO: Responsive scaling dal layer centralizzato
-  const baseSpacing = responsive({
-    compact: 0.8,
-    standard: 1.0,
-    large: 1.0,
-    xlarge: 1.2,
-    xxlarge: 1.2
-  }) ?? 1;
+  const baseSpacing =
+    responsive({
+      compact: 0.8,
+      standard: 1.0,
+      large: 1.0,
+      xlarge: 1.2,
+      xxlarge: 1.2,
+    }) ?? 1;
 
   switch (spacing) {
     case 'compact':
@@ -172,15 +173,16 @@ export const SectionContainerMigrated: React.FC<SectionContainerProps> = ({
     ...(variant !== 'default' && {
       // ❌ RIMOSSO: Calcolo manuale frammentato
       // padding: screenWidth < 375 ? Spacing[4] : Spacing[6],
-      
+
       // ✅ NUOVO: Padding dal layer centralizzato
-      padding: responsive({
-        compact: Spacing[4],
-        standard: Spacing[6],
-        large: Spacing[6],
-        xlarge: Spacing[8],
-        xxlarge: Spacing[10]
-      }) ?? Spacing[6],
+      padding:
+        responsive({
+          compact: Spacing[4],
+          standard: Spacing[6],
+          large: Spacing[6],
+          xlarge: Spacing[8],
+          xxlarge: Spacing[10],
+        }) ?? Spacing[6],
       borderRadius: getBorderRadiusForVariant(variantStyles),
       overflow: 'hidden' as const,
     }),
@@ -209,15 +211,15 @@ export default SectionContainerMigrated;
  * ❌ if (screenWidth < 375) baseSpacing = 0.8;                 // Breakpoint frammentato
  * ❌ else if (screenWidth < 768) baseSpacing = 1;              // Breakpoint frammentato
  * ❌ padding: screenWidth < 375 ? Spacing[4] : Spacing[6]      // Calcolo manuale
- * 
+ *
  * AGGIUNTI:
  * ✅ useResponsiveLayout()                                     // Layer centralizzato
  * ✅ responsive({ compact: 0.8, standard: 1.0, xlarge: 1.2 }) // Token-based
  * ✅ responsive({ compact: Spacing[4], xlarge: Spacing[8] })   // Padding unificato
- * 
+ *
  * FUTURE BENEFITS:
  * 🚀 Tablet XL → baseSpacing automatico per 1280+ px
  * 🚀 Dark mode → colori variant si aggiornano automaticamente
  * 🚀 RTL support → spacing direction aware
  * 🚀 Re-branding → colori primary/neutral dal tema centralizzato
- */ 
+ */

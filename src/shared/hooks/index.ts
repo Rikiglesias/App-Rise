@@ -29,8 +29,8 @@ export {
 } from './useResponsive';
 
 // Layer Centralizzato Responsive (🎯 Elimina Frammentazione)
-export { 
-  useResponsiveLayout, 
+export {
+  useResponsiveLayout,
   useResponsiveSpacing as useResponsiveLayoutSpacing,
-  useResponsiveColors 
+  useResponsiveColors,
 } from './useResponsiveLayout';

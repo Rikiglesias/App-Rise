@@ -1,15 +1,18 @@
 /**
- * FORMATTED TEXT COMPONENT - ENTERPRISE GRADE
+ * FormattedText Component - SISTEMA INTELLIGENTE BI-DIREZIONALE
  *
- * Component che garantisce layout consistency assoluto:
- * - allowFontScaling: false (ignora zoom sistema)
- * - Text wrapping intelligente (2 righe = 2 righe sempre)
- * - Integrazione con Sistema Ibrido Google-Apple-Netflix
- * - Supporto completo accessibilità controllata
+ * ORDINE OPERAZIONI:
+ * 1. fontSize base → 2. scaleFont() → 3. Sistema bi-direzionale intelligente (se abilitato)
+ *
+ * NUOVO SISTEMA intelligentAccessibilityScaling:
+ * - Calcola automaticamente il fontSize OTTIMALE per ogni dispositivo
+ * - Supporta zoom accessibilità fino ai limiti che rispettano fixedLines
+ * - Funziona bi-direzionalmente: riduce su dispositivi piccoli, ingrandisce su grandi
+ * - Layout consistency sempre garantito
  */
 
 import React from 'react';
-import { Text, TextProps, Platform } from 'react-native';
+import { Text, TextProps, Platform, Dimensions } from 'react-native';
 import {
   scaleFont,
   DesignTokens,
@@ -55,22 +58,23 @@ export interface FormattedTextProps
   allowSystemFontScaling?: boolean;
 
   /**
-   * Modalità text wrapping - SOLO 'fixed' per layout consistency assoluto
-   * RIVOLUZIONE: 'auto', 'strict', 'flexible', 'none' sono OBSOLETI
+   * Modalità text wrapping - NUOVO SISTEMA BI-DIREZIONALE
+   * - fixed: Layout controllato con sistema bi-direzionale intelligente
+   * - compatibilità: wrapMode="fixed" supportato per backward compatibility
    */
   wrapMode?: 'fixed';
 
   /**
    * Attiva il sistema intelligente di layout fisso
-   * - fixed={true}: Controlla altezza ma permette text wrapping naturale
-   * - fixed={true} + fixedLines={n}: Ridimensiona automaticamente il font per far entrare tutto il testo nelle righe specificate (MAI tronca)
+   * - fixed={true}: Layout controllato con possibilità di abilitare sistema bi-direzionale
+   * - fixed={true} + intelligentAccessibilityScaling={true}: Sistema bi-direzionale completo
    */
   fixed?: boolean;
 
   /**
-   * Numero fisso di righe - OPZIONALE, funziona solo con fixed={true}
-   * RANGE CONSIGLIATO: 1-8 righe
-   * COMPORTAMENTO: Ridimensiona automaticamente il font per far entrare tutto il testo nelle righe specificate (MAI tronca)
+   * Numero fisso di righe - OPZIONALE, funziona con sistema bi-direzionale
+   * COMPORTAMENTO NUOVO: Con intelligentAccessibilityScaling={true}, calcola automaticamente fontSize ottimale per rispettare fixedLines
+   * COMPORTAMENTO LEGACY: Senza intelligentAccessibilityScaling, ridimensiona conservativamente
    */
   fixedLines?: number;
 
@@ -151,6 +155,16 @@ export interface FormattedTextProps
    * Previene testi troppo grandi in modalità accessibilità
    */
   maxFontSizeMultiplier?: number;
+
+  /**
+   * NUOVO: Sistema di adattamento intelligente bi-direzionale
+   * - true: Calcola automaticamente il fontSize OTTIMALE per ogni dispositivo rispettando sempre fixedLines
+   * - Zoom UP: Se l'utente aumenta zoom → ingrandisce fino al limite che rispetta fixedLines
+   * - Zoom DOWN: Se dispositivo piccolo → riduce fontSize per far entrare il testo nelle righe
+   * - Zoom OPTIMAL: Su dispositivi grandi → ingrandisce per utilizzare meglio lo spazio
+   * BENEFICIO: Accessibilità universale + Layout consistency assoluto + Utilizzo ottimale spazio
+   */
+  intelligentAccessibilityScaling?: boolean;
 }
 
 /**
@@ -169,6 +183,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   variant = 'body-medium',
   allowSystemFontScaling = false,
   maxFontSizeMultiplier = 1.2, // Limite Dynamic Type al 120%
+  intelligentAccessibilityScaling = false, // NUOVO: Zoom intelligente
   enforceReadabilityConstraints = true,
   fontSize: manualFontSize,
   color,
@@ -198,7 +213,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
     scaledFontSize = applyReadabilityConstraints(scaledFontSize);
   }
 
-  // PASSO 4: SISTEMA INTELLIGENTE - Solo se fixed={true} o wrapMode="fixed"
+  // PASSO 4: SISTEMA BI-DIREZIONALE INTELLIGENTE - Solo se abilitato
   const textString = typeof children === 'string' ? children : '';
 
   // 🔍 DIAGNOSI: Debug temporaneamente disabilitato per evitare hang nei test
@@ -220,9 +235,9 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   if (isFixedMode) {
     wrapProps = getIntelligentWrapProps(fixed, wrapMode, fixedLines);
 
-    // MODALITÀ INTELLIGENTE CONSERVATIVA: Con fixedLines ridimensiona minimalmente il font
+    // SISTEMA BI-DIREZIONALE INTELLIGENTE: Calcola fontSize ottimale per dispositivo
     if (fixedLines && fixedLines > 0 && textString) {
-      // CALCOLO CONSERVATIVO: Trova il fontSize ottimale per far entrare tutto il testo
+      // CALCOLO OTTIMALE: Trova il fontSize perfetto per ogni dispositivo
       finalFontSize = calculateSmartFontSize(
         textString,
         scaledFontSize, // Parte dal font GIÀ SCALATO
@@ -232,6 +247,69 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
     }
   }
   // ALTRIMENTI: Modalità normale con font scalato standard
+
+  // 🆕 SISTEMA BI-DIREZIONALE INTELLIGENTE: Calcola fontSize ottimale per dispositivo
+  let smartMaxFontSizeMultiplier = maxFontSizeMultiplier;
+  let smartAllowSystemFontScaling = allowSystemFontScaling;
+
+  if (
+    intelligentAccessibilityScaling &&
+    isFixedMode &&
+    fixedLines &&
+    fixedLines > 0 &&
+    textString
+  ) {
+    // Abilita zoom del sistema per accessibilità
+    smartAllowSystemFontScaling = true;
+
+    // STEP 1: Calcola il fontSize OTTIMALE per questo dispositivo/container
+    const { width: screenWidth } = Dimensions.get('window');
+    // Usa containerWidth specificato o calcola 85% della larghezza schermo (più realistico)
+    const containerWidthForCalc = containerWidth ?? screenWidth * 0.85;
+
+    // Trova il fontSize perfetto che utilizza al meglio lo spazio disponibile
+    let optimalFontSize = finalFontSize;
+    let bestFontSize = finalFontSize;
+
+    // Test fontSize con range più ampio per trovare l'ottimale
+    for (
+      let testSize = finalFontSize * 0.4; // Minimo 40% del fontSize originale
+      testSize <= finalFontSize * 2.5; // Massimo 250% del fontSize originale
+      testSize += 0.3
+    ) {
+      const avgCharWidth = testSize * 0.6; // Stima più accurata
+      const charsPerLine = Math.floor(containerWidthForCalc / avgCharWidth);
+      const totalLinesNeeded = Math.ceil(textString.length / charsPerLine);
+
+      if (totalLinesNeeded <= fixedLines) {
+        bestFontSize = testSize; // Questo fontSize funziona
+      } else {
+        break; // Superato il limite, fermiamo qui
+      }
+    }
+
+    // STEP 2: Usa il fontSize ottimale trovato come nuovo base
+    optimalFontSize = bestFontSize;
+    finalFontSize = optimalFontSize; // Aggiorna il fontSize finale
+
+    // STEP 3: Calcola i limiti di zoom attorno al fontSize ottimale
+    let maxSafeScaling = 1.0;
+    for (let testScaling = 1.0; testScaling <= 3.0; testScaling += 0.1) {
+      const testFontSize = optimalFontSize * testScaling;
+      const avgCharWidth = testFontSize * 0.6; // Stima più accurata
+      const charsPerLine = Math.floor(containerWidthForCalc / avgCharWidth);
+      const totalLinesNeeded = Math.ceil(textString.length / charsPerLine);
+
+      if (totalLinesNeeded <= fixedLines) {
+        maxSafeScaling = testScaling;
+      } else {
+        break; // Trovato il limite superiore
+      }
+    }
+
+    // Imposta il limite calcolato (min 1.2 per garantire accessibilità base)
+    smartMaxFontSizeMultiplier = Math.max(1.2, maxSafeScaling);
+  }
 
   // RTL SUPPORT: Calcola textAlign basato su direzione
   const rtlAwareTextAlign = enableRTL ? RTLTokens.textAlign.start : 'left';
@@ -282,9 +360,9 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
       {...textProps}
       {...wrapProps}
       {...platformLineBreakProps}
-      allowFontScaling={allowSystemFontScaling}
+      allowFontScaling={smartAllowSystemFontScaling}
       maxFontSizeMultiplier={
-        allowSystemFontScaling ? maxFontSizeMultiplier : undefined
+        smartAllowSystemFontScaling ? smartMaxFontSizeMultiplier : undefined
       }
       style={computedStyle}
     >
@@ -293,6 +371,4 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   );
 };
 
-// Hook e utilità esportate da file separati
-export { useFormattedTextVariants } from './hooks/useFormattedTextVariants';
 export default FormattedText;

@@ -1,6 +1,6 @@
 /**
  * RESPONSIVE LAYER MIGRATION EXAMPLES
- * 
+ *
  * Dimostra come il layer centralizzato elimina frammentazione di:
  * - Breakpoints duplicati
  * - Percentuali hard-coded
@@ -9,7 +9,12 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { FormattedText, ResponsiveBox, ResponsiveStack, ResponsiveCard } from '../components/ui';
+import {
+  FormattedText,
+  ResponsiveBox,
+  ResponsiveStack,
+  ResponsiveCard,
+} from '../components/ui';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -19,28 +24,28 @@ export const ResponsiveLayerMigrationExample: React.FC = () => {
       <FormattedText fontSize={28} fontWeight="bold">
         🎯 Layer Centralizzato: Prima vs Dopo
       </FormattedText>
-      
+
       {/* ESEMPIO 1: Card Layout */}
-      <BeforeAfterSection 
+      <BeforeAfterSection
         title="1. Card Layout - Elimina Frammentazione"
         beforeComponent={<OldCardLayout />}
         afterComponent={<NewCardLayout />}
       />
-      
+
       {/* ESEMPIO 2: Modal Width */}
-      <BeforeAfterSection 
+      <BeforeAfterSection
         title="2. Modal Width - Elimina Hard-coding"
         beforeComponent={<OldModalWidth />}
         afterComponent={<NewModalWidth />}
       />
-      
+
       {/* ESEMPIO 3: Responsive Actions */}
-      <BeforeAfterSection 
+      <BeforeAfterSection
         title="3. Actions Grid - Unifica Breakpoints"
         beforeComponent={<OldActionsGrid />}
         afterComponent={<NewActionsGrid />}
       />
-      
+
       {/* ESEMPIO 4: Future Benefits */}
       <FutureBenefitsSection />
     </ResponsiveStack>
@@ -55,7 +60,7 @@ const OldCardLayout: React.FC = () => {
   // ❌ PROBLEMA: Breakpoint duplicato (trovato in 3+ componenti)
   const isTablet = screenWidth >= 768;
   const cardWidth = isTablet ? '31%' : '47.5%';
-  
+
   return (
     <View style={styles.problemSection}>
       <FormattedText fontSize={16} color="#DC2626">
@@ -66,7 +71,9 @@ const OldCardLayout: React.FC = () => {
 const cardWidth = isTablet ? '31%' : '47.5%';`}
       </Text>
       <View style={[styles.card, { width: cardWidth }]}>
-        <FormattedText fontSize={14}>Card con breakpoint duplicato</FormattedText>
+        <FormattedText fontSize={14}>
+          Card con breakpoint duplicato
+        </FormattedText>
       </View>
     </View>
   );
@@ -75,7 +82,7 @@ const cardWidth = isTablet ? '31%' : '47.5%';`}
 const OldModalWidth: React.FC = () => {
   // ❌ PROBLEMA: Calcolo manuale ripetuto
   const modalWidth = screenWidth * 0.9;
-  
+
   return (
     <View style={styles.problemSection}>
       <FormattedText fontSize={16} color="#DC2626">
@@ -134,7 +141,9 @@ const NewCardLayout: React.FC = () => {
 </ResponsiveCard>`}
       </Text>
       <ResponsiveCard preset="card" padding={16} elevated>
-        <FormattedText fontSize={14}>Card con breakpoint unificato</FormattedText>
+        <FormattedText fontSize={14}>
+          Card con breakpoint unificato
+        </FormattedText>
       </ResponsiveCard>
     </View>
   );
@@ -168,23 +177,23 @@ const NewActionsGrid: React.FC = () => {
         {`width={{ compact:'100%', standard:'47.5%', xlarge:'31%' }}`}
       </Text>
       <ResponsiveStack direction="horizontal" spacing={8}>
-        <ResponsiveBox 
+        <ResponsiveBox
           width={{ compact: '100%', standard: '30%', xlarge: '30%' }}
-          backgroundColor="#E5F3FF" 
+          backgroundColor="#E5F3FF"
           padding={8}
         >
           <FormattedText fontSize={12}>Consistente</FormattedText>
         </ResponsiveBox>
-        <ResponsiveBox 
+        <ResponsiveBox
           width={{ compact: '100%', standard: '30%', xlarge: '30%' }}
-          backgroundColor="#E5F3FF" 
+          backgroundColor="#E5F3FF"
           padding={8}
         >
           <FormattedText fontSize={12}>Unificato</FormattedText>
         </ResponsiveBox>
-        <ResponsiveBox 
+        <ResponsiveBox
           width={{ compact: '100%', standard: '30%', xlarge: '30%' }}
-          backgroundColor="#E5F3FF" 
+          backgroundColor="#E5F3FF"
           padding={8}
         >
           <FormattedText fontSize={12}>Scalabile</FormattedText>
@@ -200,38 +209,47 @@ const NewActionsGrid: React.FC = () => {
 
 const FutureBenefitsSection: React.FC = () => {
   return (
-    <ResponsiveBox backgroundColor="#F0FDF4" padding={20} style={{ borderRadius: 12 }}>
+    <ResponsiveBox
+      backgroundColor="#F0FDF4"
+      padding={20}
+      style={{ borderRadius: 12 }}
+    >
       <FormattedText fontSize={20} fontWeight="bold" color="#059669">
         🚀 Benefici Futuri - Una Riga nel Tema
       </FormattedText>
-      
+
       <ResponsiveStack spacing={16}>
-        <BenefitItem 
+        <BenefitItem
           title="Tablet XL (≥1280dp)"
           description="Una riga nei breakpoints → layout 3-4 colonne automatico"
           code="tabletXL: 1280, // Nuovo breakpoint"
         />
-        
-        <BenefitItem 
+
+        <BenefitItem
           title="Dark Mode Unificato"
           description="Toggle centrale → tutti i componenti si aggiornano"
           code="setColorMode('dark'); // TUTTI i Box/Text"
         />
-        
-        <BenefitItem 
+
+        <BenefitItem
           title="RTL Support"
           description="Flag globale → flexDirection e textAlign automatici"
           code="<Stack flexDirection={isRTL ? 'row-reverse' : 'row'} />"
         />
-        
-        <BenefitItem 
+
+        <BenefitItem
           title="Re-branding"
           description="Colori nel tema → zero trova & sostituisci"
           code="primary:'#5E60CE', // Una edit, tutto cambia"
         />
       </ResponsiveStack>
-      
-      <FormattedText fontSize={16} fontWeight="bold" color="#059669" style={{ marginTop: 16 }}>
+
+      <FormattedText
+        fontSize={16}
+        fontWeight="bold"
+        color="#059669"
+        style={{ marginTop: 16 }}
+      >
         💡 Da centinaia di edit manuali → Una riga nel tema!
       </FormattedText>
     </ResponsiveBox>
@@ -248,22 +266,18 @@ interface BeforeAfterSectionProps {
   afterComponent: React.ReactNode;
 }
 
-const BeforeAfterSection: React.FC<BeforeAfterSectionProps> = ({ 
-  title, 
-  beforeComponent, 
-  afterComponent 
+const BeforeAfterSection: React.FC<BeforeAfterSectionProps> = ({
+  title,
+  beforeComponent,
+  afterComponent,
 }) => (
   <ResponsiveBox>
     <FormattedText fontSize={18} fontWeight="bold" style={{ marginBottom: 12 }}>
       {title}
     </FormattedText>
     <ResponsiveStack direction="horizontal" spacing={12}>
-      <ResponsiveBox flex={1}>
-        {beforeComponent}
-      </ResponsiveBox>
-      <ResponsiveBox flex={1}>
-        {afterComponent}
-      </ResponsiveBox>
+      <ResponsiveBox flex={1}>{beforeComponent}</ResponsiveBox>
+      <ResponsiveBox flex={1}>{afterComponent}</ResponsiveBox>
     </ResponsiveStack>
   </ResponsiveBox>
 );
@@ -274,7 +288,11 @@ interface BenefitItemProps {
   code: string;
 }
 
-const BenefitItem: React.FC<BenefitItemProps> = ({ title, description, code }) => (
+const BenefitItem: React.FC<BenefitItemProps> = ({
+  title,
+  description,
+  code,
+}) => (
   <ResponsiveBox>
     <FormattedText fontSize={16} fontWeight="bold" color="#059669">
       {title}
@@ -298,7 +316,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#FECACA',
   },
-  
+
   solutionSection: {
     backgroundColor: '#F0FDF4',
     padding: 16,
@@ -306,7 +324,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#BBF7D0',
   },
-  
+
   codeText: {
     fontFamily: 'monospace',
     fontSize: 12,
@@ -316,7 +334,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     color: '#374151',
   },
-  
+
   codeTextSmall: {
     fontFamily: 'monospace',
     fontSize: 11,
@@ -325,7 +343,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     color: '#6B7280',
   },
-  
+
   card: {
     backgroundColor: '#FFFFFF',
     padding: 12,
@@ -337,25 +355,25 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-  
+
   modal: {
     backgroundColor: '#F8F8F8',
     padding: 16,
     borderRadius: 8,
     marginTop: 8,
   },
-  
+
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
     marginTop: 8,
   },
-  
+
   gridItem: {
     backgroundColor: '#E5E7EB',
     padding: 8,
     borderRadius: 4,
     alignItems: 'center',
   },
-}); 
+});

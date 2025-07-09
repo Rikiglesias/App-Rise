@@ -48,4 +48,8 @@ export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';
 
 // Responsive Layout Components
-export { ResponsiveBox, ResponsiveStack, ResponsiveCard } from './ResponsiveBox';
+export {
+  ResponsiveBox,
+  ResponsiveStack,
+  ResponsiveCard,
+} from './ResponsiveBox';

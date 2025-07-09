@@ -66,9 +66,9 @@ export const applyReadabilityConstraints = (fontSize: number): number => {
 };
 
 /**
- * SISTEMA INTELLIGENTE MIGLIORATO: Calcola fontSize ottimale per fixedLines
- * PRINCIPIO: Mai troncare il testo, ridimensionare conservativamente per farlo entrare
- * MIGLIORAMENTI: Meno aggressivo, preserva meglio font weight e leggibilità
+ * SISTEMA BI-DIREZIONALE INTELLIGENTE: Calcola fontSize ottimale per fixedLines
+ * PRINCIPIO: Calcola automaticamente il fontSize perfetto per ogni dispositivo
+ * COMPORTAMENTO: Bi-direzionale - riduce su dispositivi piccoli, ingrandisce su grandi
  * CONTAINER AWARE: Usa larghezza container da Design Tokens per calcoli precisi
  * PERFORMANCE: Integrato con SmartFontSizeCache per hit-rate ≥ 95%
  */
@@ -113,9 +113,9 @@ export const calculateSmartFontSizeInternal = (
   const hasExplicitLineBreaks = explicitLines.length > 1;
 
   if (hasExplicitLineBreaks) {
-    // Se ci sono più \n delle righe target, riduci conservativamente
+    // Se ci sono più \n delle righe target, riduci più aggressivamente
     if (explicitLines.length > targetLines) {
-      return scaledFontSize * 0.9; // CONSERVATIVO: solo 10% di riduzione
+      return scaledFontSize * 0.7; // AGGRESSIVO: riduzione del 30%
     }
 
     // Per testo con \n, calcola la larghezza necessaria per la riga più lunga
@@ -125,8 +125,7 @@ export const calculateSmartFontSizeInternal = (
     }, '');
 
     // Se la riga più lunga è corta, mantieni il fontSize originale
-    if (longestLine.length <= 20) {
-      // AUMENTATO da 15 a 20
+    if (longestLine.length <= 15) {
       return scaledFontSize; // Mantieni dimensione originale
     }
 
@@ -140,13 +139,13 @@ export const calculateSmartFontSizeInternal = (
   // GESTIONE WRAPPING AUTOMATICO: Calcola spazio necessario
   const totalChars = text.length;
 
-  // Algoritmo CONSERVATIVO: riduce il meno possibile
+  // Algoritmo AGGRESSIVO: riduce quanto necessario per far entrare tutto
   let bestFit = scaledFontSize;
 
-  // MOLTO MENO AGGRESSIVO: da 75% a 85% minimum
-  for (let sizeFactor = 1.0; sizeFactor >= 0.85; sizeFactor -= 0.02) {
+  // MOLTO PIÙ AGGRESSIVO: da 100% a 50% con passi più piccoli
+  for (let sizeFactor = 1.0; sizeFactor >= 0.5; sizeFactor -= 0.01) {
     const testSize = scaledFontSize * sizeFactor;
-    const avgCharWidth = testSize * 0.55; // Stima larghezza carattere
+    const avgCharWidth = testSize * 0.6; // Stima più accurata larghezza carattere
     const charsPerLine = Math.floor(containerWidth / avgCharWidth);
     const totalLinesNeeded = Math.ceil(totalChars / charsPerLine);
 
@@ -156,8 +155,8 @@ export const calculateSmartFontSizeInternal = (
     }
   }
 
-  // CONSERVATIVO: non va mai sotto l'85% del fontSize originale
-  const minFontSize = scaledFontSize * 0.85;
+  // AGGRESSIVO: può andare fino al 50% del fontSize originale se necessario
+  const minFontSize = scaledFontSize * 0.5;
   return Math.max(minFontSize, bestFit);
 };
 
@@ -173,10 +172,10 @@ export const calculateOptimalFontSizeForText = (
 
   let optimalSize = baseFontSize;
 
-  // CONSERVATIVO: solo fino all'85%
-  for (let sizeFactor = 1.0; sizeFactor >= 0.85; sizeFactor -= 0.02) {
+  // AGGRESSIVO: riduce fino al 50% se necessario
+  for (let sizeFactor = 1.0; sizeFactor >= 0.5; sizeFactor -= 0.01) {
     const testSize = baseFontSize * sizeFactor;
-    const avgCharWidth = testSize * 0.55;
+    const avgCharWidth = testSize * 0.6; // Stima più accurata
     const estimatedWidth = text.length * avgCharWidth;
 
     if (estimatedWidth <= maxWidth) {
@@ -185,5 +184,7 @@ export const calculateOptimalFontSizeForText = (
     }
   }
 
-  return optimalSize;
+  // Garantisce che il testo stia sempre dentro il container
+  const minFontSize = baseFontSize * 0.5;
+  return Math.max(minFontSize, optimalSize);
 };

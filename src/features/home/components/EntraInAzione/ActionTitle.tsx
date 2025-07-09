@@ -9,8 +9,12 @@ export const ActionTitle: React.FC = () => {
     <View style={styles.titleSection}>
       <View style={styles.titleContainer}>
         <FormattedText
-          fontSize={35}
+          fontSize={28}
           fontWeight="bold"
+          intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+          fixed={true}
+          fixedLines={1} // ← SEMPRE 1 riga esatta
+          allowSystemFontScaling={false} // ← CONSISTENCY ASSOLUTA
           lineBreakStrategyIOS="push-out"
           breakStrategyAndroid="highQuality"
           hyphenationFrequencyAndroid="full"
@@ -19,8 +23,12 @@ export const ActionTitle: React.FC = () => {
           ⚡ Entra in{' '}
         </FormattedText>
         <FormattedText
-          fontSize={35}
+          fontSize={28}
           fontWeight="bold"
+          intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+          fixed={true}
+          fixedLines={1} // ← SEMPRE 1 riga esatta
+          allowSystemFontScaling={false} // ← CONSISTENCY ASSOLUTA
           lineBreakStrategyIOS="push-out"
           breakStrategyAndroid="highQuality"
           hyphenationFrequencyAndroid="full"

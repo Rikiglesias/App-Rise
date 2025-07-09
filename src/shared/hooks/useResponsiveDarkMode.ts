@@ -1,27 +1,34 @@
 /**
  * RESPONSIVE DARK MODE - UNIFICATO CON LAYER CENTRALIZZATO
- * 
+ *
  * Estende il sistema useTheme esistente per supportare
  * dark mode automatico in tutti i ResponsiveBox components
  */
 
 import { useState, useCallback, useEffect } from 'react';
 import { Appearance, ColorSchemeName } from 'react-native';
-import { ResponsiveColors, getResponsiveColor, ResponsiveColorMode } from '../constants/responsiveTheme';
+import {
+  ResponsiveColors,
+  getResponsiveColor,
+  ResponsiveColorMode,
+} from '../constants/responsiveTheme';
 
 export interface ResponsiveDarkModeReturn {
   // Current mode
   isDark: boolean;
   colorMode: ResponsiveColorMode;
-  
+
   // Toggle functions
   toggleDarkMode: () => void;
   setColorMode: (mode: ResponsiveColorMode) => void;
-  
+
   // Responsive colors
   responsiveColors: typeof ResponsiveColors;
-  getColor: (colorKey: keyof typeof ResponsiveColors, property: string) => string;
-  
+  getColor: (
+    colorKey: keyof typeof ResponsiveColors,
+    property: string
+  ) => string;
+
   // Shorthand colors for common use
   backgroundColor: {
     primary: string;
@@ -29,13 +36,13 @@ export interface ResponsiveDarkModeReturn {
     card: string;
     modal: string;
   };
-  
+
   textColor: {
     primary: string;
     secondary: string;
     tertiary: string;
   };
-  
+
   borderColor: {
     primary: string;
     accent: string;
@@ -68,7 +75,7 @@ export const useResponsiveDarkMode = (): ResponsiveDarkModeReturn => {
 
   // Toggle functions
   const toggleDarkMode = useCallback(() => {
-    setColorModeState(prev => prev === 'dark' ? 'light' : 'dark');
+    setColorModeState(prev => (prev === 'dark' ? 'light' : 'dark'));
   }, []);
 
   const setColorMode = useCallback((mode: ResponsiveColorMode) => {
@@ -76,12 +83,12 @@ export const useResponsiveDarkMode = (): ResponsiveDarkModeReturn => {
   }, []);
 
   // Color getter function
-  const getColor = useCallback((
-    colorKey: keyof typeof ResponsiveColors,
-    property: string
-  ): string => {
-    return getResponsiveColor(colorKey, property, colorMode);
-  }, [colorMode]);
+  const getColor = useCallback(
+    (colorKey: keyof typeof ResponsiveColors, property: string): string => {
+      return getResponsiveColor(colorKey, property, colorMode);
+    },
+    [colorMode]
+  );
 
   // Computed values
   const isDark = colorMode === 'dark';
@@ -117,5 +124,3 @@ export const useResponsiveDarkMode = (): ResponsiveDarkModeReturn => {
     borderColor,
   };
 };
-
- 

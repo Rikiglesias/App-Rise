@@ -2,8 +2,9 @@ import { Platform, TextStyle } from 'react-native';
 import { FormattedTextProps } from '../FormattedText';
 
 /**
- * SISTEMA INTELLIGENTE: Proprietà per modalità fixed
- * - Con fixedLines: Sistema intelligente che ridimensiona il font conservativamente (MAI tronca)
+ * SISTEMA BI-DIREZIONALE INTELLIGENTE: Proprietà per modalità fixed
+ * - Con fixedLines + intelligentAccessibilityScaling: Sistema bi-direzionale completo
+ * - Con fixedLines (legacy): Ridimensionamento conservativo
  * - Senza fixedLines: Layout controllato ma testo naturale
  */
 export const getIntelligentWrapProps = (
@@ -20,11 +21,11 @@ export const getIntelligentWrapProps = (
   }
 
   if (fixedLines && fixedLines > 0) {
-    // MODALITÀ INTELLIGENTE: Numero righe fisso + font auto-ridimensionato conservativamente
+    // SISTEMA BI-DIREZIONALE: Numero righe fisso + fontSize ottimale automatico
     return {
       numberOfLines: fixedLines,
-      ellipsizeMode: 'clip' as const, // Non troncare con "...", il font è già ottimizzato
-      adjustsFontSizeToFit: false, // Usiamo la nostra logica più precisa
+      ellipsizeMode: 'clip' as const, // Non troncare, il fontSize è ottimizzato
+      adjustsFontSizeToFit: false, // Usiamo il nostro sistema bi-direzionale
     };
   }
 

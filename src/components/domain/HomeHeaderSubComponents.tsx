@@ -138,7 +138,13 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
             <View style={baseMissionStyles.titleGradientContainer}>
               <View style={baseMissionStyles.titleContent}>
                 <FormattedText
-                  variant="title-large"
+                  fontSize={35}
+                  intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE!
+                  fixed={true}
+                  fixedLines={1} // ← Layout consistency: sempre 1 riga
+                  lineBreakStrategyIOS="push-out"
+                  breakStrategyAndroid="highQuality"
+                  hyphenationFrequencyAndroid="full"
                   style={baseMissionStyles.impactTitleGradient}
                 >
                   Il nostro impatto sul mondo
@@ -148,12 +154,16 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
               </View>
             </View>
 
-            {/* Testo descrittivo con Typography Smart - RESPONSIVE */}
+            {/* Testo descrittivo con Sistema Bi-Direzionale Intelligente - RESPONSIVE */}
             <FormattedText
-              variant="body-large"
-              style={baseMissionStyles.missionText}
+              fontSize={18}
+              intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE!
               fixed={true}
-              fixedLines={3}
+              fixedLines={3} // ← Layout consistency: sempre 3 righe
+              lineBreakStrategyIOS="push-out"
+              breakStrategyAndroid="highQuality"
+              hyphenationFrequencyAndroid="full"
+              style={baseMissionStyles.missionText}
             >
               {missionText}
             </FormattedText>
@@ -167,13 +177,20 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 activeOpacity={0.8}
               >
                 <FormattedText
-                  variant="title-large"
+                  fontSize={32}
+                  intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE!
+                  fixed={true}
+                  fixedLines={1} // ← Layout consistency: sempre 1 riga
+                  fontWeight="bold"
                   style={baseMissionStyles.statNumber}
                 >
                   3.14M
                 </FormattedText>
                 <FormattedText
-                  variant="body-small"
+                  fontSize={14}
+                  intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE!
+                  fixed={true}
+                  fixedLines={1} // ← Layout consistency: sempre 1 riga
                   style={baseMissionStyles.statLabel}
                 >
                   Pasti distribuiti
@@ -194,13 +211,20 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 ]}
               >
                 <FormattedText
-                  variant="title-large"
+                  fontSize={32}
+                  intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE!
+                  fixed={true}
+                  fixedLines={1} // ← Layout consistency: sempre 1 riga
+                  fontWeight="bold"
                   style={baseMissionStyles.statNumber}
                 >
                   13K
                 </FormattedText>
                 <FormattedText
-                  variant="body-small"
+                  fontSize={14}
+                  intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE!
+                  fixed={true}
+                  fixedLines={1} // ← Layout consistency: sempre 1 riga
                   style={baseMissionStyles.statLabel}
                 >
                   Volontari attivi

@@ -57,8 +57,13 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 style={styles.buttonIcon}
               />
               <FormattedText
-                fontSize={20}
-                fixedLines={2}
+                fontSize={16}
+                fontWeight="bold"
+                intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+                fixed={true}
+                fixedLines={2} // ← SEMPRE 2 righe esatte
+                allowSystemFontScaling={true} // ← ZOOM ACCESSIBILITÀ ABILITATO
+                containerWidth={130} // ← AUMENTATO: più spazio per testo più grande
                 lineBreakStrategyIOS="push-out"
                 breakStrategyAndroid="highQuality"
                 hyphenationFrequencyAndroid="full"
@@ -67,8 +72,13 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 Scopri{'\n'}Impatto
               </FormattedText>
               <FormattedText
-                fontSize={16}
-                fixedLines={1}
+                fontSize={14} // ← RIPORTATO A DIMENSIONE NORMALE
+                fontWeight="bold"
+                intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+                fixed={true}
+                fixedLines={1} // ← SEMPRE 1 riga esatta
+                allowSystemFontScaling={true} // ← ZOOM ACCESSIBILITÀ ABILITATO
+                containerWidth={130} // ← AUMENTATO: più spazio per testo più grande
                 lineBreakStrategyIOS="push-out"
                 breakStrategyAndroid="highQuality"
                 hyphenationFrequencyAndroid="full"
@@ -102,8 +112,13 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 style={styles.buttonIcon}
               />
               <FormattedText
-                fontSize={20}
-                fixedLines={2}
+                fontSize={16}
+                fontWeight="bold"
+                intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+                fixed={true}
+                fixedLines={2} // ← SEMPRE 2 righe esatte
+                allowSystemFontScaling={true} // ← ZOOM ACCESSIBILITÀ ABILITATO
+                containerWidth={130} // ← AUMENTATO: più spazio per testo più grande
                 lineBreakStrategyIOS="push-out"
                 breakStrategyAndroid="highQuality"
                 hyphenationFrequencyAndroid="full"
@@ -112,8 +127,13 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                 Dona e{'\n'}Aiuta
               </FormattedText>
               <FormattedText
-                fontSize={16}
-                fixedLines={1}
+                fontSize={14} // ← RIPORTATO A DIMENSIONE NORMALE
+                fontWeight="bold"
+                intelligentAccessibilityScaling={true} // ← SISTEMA BI-DIREZIONALE ATTIVO
+                fixed={true}
+                fixedLines={1} // ← SEMPRE 1 riga esatta
+                allowSystemFontScaling={true} // ← ZOOM ACCESSIBILITÀ ABILITATO
+                containerWidth={110} // ← RIDOTTO: per farlo stare nel container
                 lineBreakStrategyIOS="push-out"
                 breakStrategyAndroid="highQuality"
                 hyphenationFrequencyAndroid="full"
@@ -151,12 +171,13 @@ const styles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 18,
+    minHeight: 120, // ← ALTEZZA MINIMA per contenere icona + titolo + direzione
     ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[3],
+      paddingVertical: Spacing[4], // ← Aumentato da Spacing[3] a Spacing[4]
       paddingHorizontal: Spacing[3],
     }),
     ...(Platform.OS === 'ios' && {
-      paddingVertical: Spacing[3],
+      paddingVertical: Spacing[4], // ← Aumentato da Spacing[3] a Spacing[4]
       paddingHorizontal: Spacing[4],
     }),
     justifyContent: 'center',
@@ -165,13 +186,14 @@ const styles = StyleSheet.create({
 
   buttonContent: {
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around', // ← Cambiato da 'space-between' a 'space-around'
     flex: 1,
+    minHeight: 100, // ← ALTEZZA MINIMA per il contenuto
     ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[1],
+      paddingVertical: Spacing[2], // ← Aumentato da Spacing[1] a Spacing[2]
     }),
     ...(Platform.OS === 'ios' && {
-      paddingVertical: Spacing[1],
+      paddingVertical: Spacing[2], // ← Aumentato da Spacing[1] a Spacing[2]
     }),
   },
 

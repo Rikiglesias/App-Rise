@@ -17,7 +17,12 @@ import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 // 🎯 NUOVO: Import layer centralizzato
 import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
-import { ResponsiveBox, ResponsiveStack, PlatformTouchable, FormattedText } from '../ui';
+import {
+  ResponsiveBox,
+  ResponsiveStack,
+  PlatformTouchable,
+  FormattedText,
+} from '../ui';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato
 // const { width: screenWidth } = Dimensions.get('window');
@@ -50,7 +55,7 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
   const { colors } = useTheme();
   const { triggerHaptic } = useHapticFeedback();
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  
+
   // 🎯 NUOVO: Layer centralizzato elimina frammentazione
   const { responsive } = useResponsiveLayout();
 
@@ -162,8 +167,8 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
       icon: string;
       onPress: () => void;
     }) => (
-      <ResponsiveBox 
-        key={action.id} 
+      <ResponsiveBox
+        key={action.id}
         preset="card"
         // 🎯 ALTERNATIVA: Uso width dal layer centralizzato
         // width={responsive({ compact: '100%', standard: '47.5%', xlarge: '31%' })}
@@ -184,22 +189,26 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
   return (
     <Animated.View style={styles.container}>
       {/* 🎯 MIGRATED: Grid usando ResponsiveStack */}
-      <ResponsiveStack 
-        direction="horizontal" 
-        spacing={responsive({ 
-          compact: Spacing[2], 
-          standard: Spacing[2], 
-          xlarge: Spacing[3] 
-        }) ?? Spacing[2]}
-        style={{ 
-          flexWrap: 'wrap', 
-          justifyContent: 'space-between' 
+      <ResponsiveStack
+        direction="horizontal"
+        spacing={
+          responsive({
+            compact: Spacing[2],
+            standard: Spacing[2],
+            xlarge: Spacing[3],
+          }) ?? Spacing[2]
+        }
+        style={{
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
         }}
-        padding={responsive({
-          compact: Spacing[4],
-          standard: Spacing[4],
-          xlarge: Spacing[6]
-        }) ?? Spacing[4]}
+        padding={
+          responsive({
+            compact: Spacing[4],
+            standard: Spacing[4],
+            xlarge: Spacing[6],
+          }) ?? Spacing[4]
+        }
       >
         {actions.map(renderAction)}
       </ResponsiveStack>
@@ -220,17 +229,17 @@ export default ModernHomeActionsMigrated;
  * ❌ const cardWidth = isTablet ? '31%' : '47.5%';             // Percentuale hard-coded
  * ❌ width: cardWidth as DimensionValue,                       // Calcolo manuale
  * ❌ flexDirection: 'row', flexWrap: 'wrap'                    // Layout manuale
- * 
+ *
  * AGGIUNTI:
  * ✅ useResponsiveLayout()                                     // Layer centralizzato
  * ✅ preset="card"                                             // Width dal tema
  * ✅ responsive({ compact: '100%', standard: '47.5%' })        // Token-based
  * ✅ ResponsiveStack direction="horizontal"                    // Layout semantico
  * ✅ spacing={responsive({ compact: 16, xlarge: 24 })}         // Spacing unificato
- * 
+ *
  * FUTURE BENEFITS:
  * 🚀 Tablet XL → Una riga nel tema: `tabletXL: 1280,`
  * 🚀 Dark mode → Toggle centrale aggiorna tutti i Surface
  * 🚀 RTL support → flexDirection automatico
  * 🚀 Re-branding → Colori nel tema, zero find & replace
- */ 
+ */

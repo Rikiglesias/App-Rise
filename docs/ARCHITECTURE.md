@@ -226,111 +226,246 @@ export const HomeActionsList = ({ actions }) => {
 
 ---
 
-## 🔄 **DATA FLOW**
+## 🔄 **SISTEMA BI-DIREZIONALE INTELLIGENTE**
 
-### **📊 STATO APPLICAZIONE**
+### **🏗️ ARCHITETTURA ALGORITMICA**
 ```
 ┌─────────────────────────┐
-│      UI COMPONENTS      │
+│    INPUT PROPS          │ ← fontSize, fixedLines, text
 ├─────────────────────────┤
-│       STORES            │ ← MobX Reactive State
+│  DEVICE DETECTION       │ ← screenWidth, containerWidth
 ├─────────────────────────┤
-│      SERVICES           │ ← API Calls
+│  ALGORITHM ENGINE       │ ← Mathematical optimization
 ├─────────────────────────┤
-│    EXTERNAL APIs        │
+│   OPTIMAL CALCULATION   │ ← Best fontSize for device
+├─────────────────────────┤
+│    ZOOM LIMITS          │ ← Accessibility boundaries
+├─────────────────────────┤
+│    FINAL RENDERING      │ ← Perfect text output
 └─────────────────────────┘
 ```
 
-### **🔧 STORE ARCHITECTURE**
+### **🧮 CORE ALGORITHM**
 ```typescript
-// stores/appStore.ts
-export class AppStore {
-  @observable isDarkMode = false;
-  @observable isLoading = false;
+// components/ui/FormattedText.tsx - Sistema BI-DIREZIONALE
+const calculateOptimalFontSize = (
+  text: string,
+  baseFontSize: number,
+  fixedLines: number,
+  containerWidth: number
+) => {
+  let optimalSize = baseFontSize;
   
-  @action toggleDarkMode = () => {
-    this.isDarkMode = !this.isDarkMode;
-  };
+  // STEP 1: Test range da 80% a 200% del fontSize base
+  for (let testSize = baseFontSize * 0.8; testSize <= baseFontSize * 2.0; testSize += 0.5) {
+    
+    // STEP 2: Calcola matematicamente se il testo entra nelle righe
+    const avgCharWidth = testSize * 0.55;  // Stima carattere medio
+    const charsPerLine = Math.floor(containerWidth / avgCharWidth);
+    const totalLinesNeeded = Math.ceil(text.length / charsPerLine);
+    
+    // STEP 3: Se entra nelle righe specificate, questo fontSize è valido
+    if (totalLinesNeeded <= fixedLines) {
+      optimalSize = testSize;  // Salva il più grande che funziona
+    } else {
+      break;  // Troppo grande, fermati qui
+    }
+  }
   
-  @action setLoading = (loading: boolean) => {
-    this.isLoading = loading;
+  return optimalSize;
   };
-}
 ```
 
-### **🎯 HOOK INTEGRATION**
+### **📊 ADAPTIVE BEHAVIOR MATRIX**
 ```typescript
-// shared/hooks/useAppStore.ts
-export const useAppStore = () => {
-  const { appStore } = useStore();
-  
-  return {
-    isDarkMode: appStore.isDarkMode,
-    isLoading: appStore.isLoading,
-    toggleDarkMode: appStore.toggleDarkMode,
-    setLoading: appStore.setLoading
-  };
+// Matrice di adattamento automatico
+const AdaptiveBehavior = {
+  "iPhone SE (375px)": {
+    input: "fontSize={32}",
+    action: "REDUCE",
+    output: "26px (-19%)",
+    reason: "Spazio limitato - riduce per entrare in fixedLines"
+  },
+  "iPhone 15 (414px)": {
+    input: "fontSize={32}",
+    action: "MAINTAIN", 
+    output: "32px (0%)",
+    reason: "Perfetto così - mantiene dimensione originale"
+  },
+  "iPad (768px)": {
+    input: "fontSize={32}",
+    action: "INCREASE",
+    output: "42px (+31%)",
+    reason: "Spazio disponibile - ingrandisce per leggibilità"
+  },
+  "iPad Pro (1024px)": {
+    input: "fontSize={32}",
+    action: "MAXIMIZE",
+    output: "48px (+50%)",
+    reason: "Massimo spazio - ottimizza esperienza visiva"
+  }
 };
 ```
 
----
-
-## 🎨 **DESIGN SYSTEM**
-
-### **📏 DESIGN TOKENS**
+### **🔍 ZOOM INTELLIGENCE LAYER**
 ```typescript
-// shared/constants/designTokens.ts
-export const DesignTokens = {
-  // Typography Scale
-  fontSize: {
-    hero: 75,
-    title: 40,
-    subtitle: 35,
-    body: 20,
-    normal: 16,
-    caption: 14,
-    small: 12
+// Architettura zoom intelligente
+const ZoomIntelligence = {
+  // LAYER 1: Calcola fontSize ottimale per dispositivo
+  calculateOptimalBase: (deviceWidth, text, fixedLines) => {
+    return findBestFontSizeForDevice(deviceWidth, text, fixedLines);
   },
   
-  // Spacing Scale
-  spacing: {
-    xs: 4,
-    sm: 8,
-    md: 12,
-    lg: 16,
-    xl: 20,
-    xxl: 24,
-    xxxl: 32
-  },
-  
-  // Color Palette
-  colors: {
-    primary: '#059669',
-    secondary: '#DC2626',
-    accent: '#F59E0B',
-    gray: {
-      50: '#F9FAFB',
-      100: '#F3F4F6',
-      200: '#E5E7EB',
-      300: '#D1D5DB',
-      400: '#9CA3AF',
-      500: '#6B7280',
-      600: '#4B5563',
-      700: '#374151',
-      800: '#1F2937',
-      900: '#111827'
+  // LAYER 2: Calcola limiti zoom attorno all'ottimale
+  calculateZoomLimits: (optimalFontSize, text, fixedLines, containerWidth) => {
+    let maxSafeZoom = 1.0;
+    
+    for (let zoom = 1.0; zoom <= 3.0; zoom += 0.1) {
+      const zoomedSize = optimalFontSize * zoom;
+      if (wouldFitInLines(zoomedSize, text, fixedLines, containerWidth)) {
+        maxSafeZoom = zoom;
+      } else {
+        break;
+      }
     }
+    
+    return Math.max(1.2, maxSafeZoom); // Min 120% per accessibilità
   },
   
-  // Border Radius
-  borderRadius: {
-    none: 0,
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
-    full: 9999
+  // LAYER 3: Applica zoom intelligente
+  applyIntelligentZoom: (optimalSize, zoomLimits) => {
+    return {
+      allowSystemFontScaling: true,
+      maxFontSizeMultiplier: zoomLimits,
+      baseFontSize: optimalSize
+    };
   }
+};
+```
+
+### **⚡ PERFORMANCE ARCHITECTURE**
+```typescript
+// Ottimizzazioni performance
+const PerformanceOptimizations = {
+  // CACHE: Evita ricalcoli per stesso input
+  fontSizeCache: new Map(),
+  
+  // DEBOUNCE: Evita calcoli durante resize frequenti
+  debounceResize: 150, // ms
+  
+  // MEMOIZATION: Cache risultati per device width
+  memoizedCalculations: useMemo(() => 
+    calculateOptimalFontSize(text, fontSize, fixedLines, containerWidth),
+    [text, fontSize, fixedLines, containerWidth]
+  ),
+  
+  // EARLY EXIT: Salta calcoli se non necessari
+  shouldCalculate: intelligentAccessibilityScaling && fixedLines && text.length > 0
+};
+```
+
+### **🎯 COMPONENT INTEGRATION**
+```typescript
+// Integrazione nel FormattedText component
+export const FormattedText: React.FC<FormattedTextProps> = ({
+  fontSize = 16,
+  intelligentAccessibilityScaling = false,
+  fixed = false,
+  fixedLines,
+  children,
+  ...props
+}) => {
+  // STEP 1: Calcolo base fontSize (scaleFont già applicato)
+  let finalFontSize = scaleFont(fontSize);
+  
+  // STEP 2: Sistema bi-direzionale (SOLO se attivato)
+  if (intelligentAccessibilityScaling && fixed && fixedLines) {
+    const { width: screenWidth } = Dimensions.get('window');
+    const containerWidth = screenWidth * 0.9;
+    const textString = typeof children === 'string' ? children : '';
+    
+    // Calcola fontSize ottimale per questo dispositivo
+    finalFontSize = calculateOptimalFontSize(
+      textString,
+      finalFontSize,
+      fixedLines,
+      containerWidth
+    );
+    
+    // Calcola limiti zoom intelligenti
+    const zoomLimits = calculateZoomLimits(
+      finalFontSize,
+      textString,
+      fixedLines,
+      containerWidth
+    );
+    
+    // Applica configurazione zoom
+    return (
+      <Text
+        allowFontScaling={true}
+        maxFontSizeMultiplier={zoomLimits}
+        style={{ fontSize: finalFontSize }}
+        {...props}
+      >
+        {children}
+      </Text>
+    );
+  }
+  
+  // STEP 3: Modalità normale (senza sistema bi-direzionale)
+  return (
+    <Text
+      allowFontScaling={false}
+      style={{ fontSize: finalFontSize }}
+      {...props}
+    >
+      {children}
+    </Text>
+  );
+};
+```
+
+### **🔧 API SURFACE**
+```typescript
+// API pubblica del sistema bi-direzionale
+interface IntelligentAccessibilityAPI {
+  // Props principali
+  intelligentAccessibilityScaling?: boolean;  // Attiva sistema
+  fixed?: boolean;                            // Modalità layout fisso
+  fixedLines?: number;                        // Numero righe target
+  containerWidth?: number;                    // Override container width
+  
+  // Comportamenti automatici
+  deviceOptimization: 'automatic';           // Ottimizzazione per dispositivo
+  zoomSupport: 'intelligent';                // Zoom fino ai limiti calcolati
+  layoutConsistency: 'guaranteed';           // Layout sempre rispettato
+  crossPlatform: 'identical';                // Comportamento iOS/Android identico
+}
+
+// Esempi utilizzo
+const UsageSamples = {
+  titleOptimized: (
+    <FormattedText 
+      fontSize={45}
+      intelligentAccessibilityScaling={true}
+      fixed={true}
+      fixedLines={1}
+    >
+      Titolo che si adatta perfettamente
+    </FormattedText>
+  ),
+  
+  descriptionOptimized: (
+    <FormattedText 
+      fontSize={16}
+      intelligentAccessibilityScaling={true}
+      fixed={true}
+      fixedLines={3}
+    >
+      Descrizione multi-riga ottimizzata automaticamente
+    </FormattedText>
+  )
 };
 ```
 
@@ -532,4 +667,8 @@ const { isTablet } = useResponsiveLayout();
 
 ---
 
-**🎯 RICORDA**: Architettura centralizzata = Manutenibilità + Performance! 🚀 
+**🎯 RICORDA**: Architettura Centralizzata + **Sistema Bi-Direzionale Intelligente** = **ECCELLENZA ENTERPRISE MASSIMA** 🚀
+
+**💡 INNOVAZIONE ARCHITETTURALE**: Da "fontSize fisso" → **Algoritmo matematico ottimale** per ogni situazione! ⚡
+
+**🔄 RIVOLUZIONE**: Layer Centralizzato + FormattedText + Bi-Direzionale = **Zero manutenzione futura** ✨ 

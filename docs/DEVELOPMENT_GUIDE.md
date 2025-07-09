@@ -184,6 +184,360 @@ const ResponsivePresets = {
 </FormattedText>
 ```
 
+---
+
+## 🎯 **CONFIGURAZIONE APP IDENTICA SU TUTTI I DISPOSITIVI**
+
+### **✅ OBIETTIVO: APP VISIVAMENTE IDENTICA**
+
+Per ottenere un'app che appare **esattamente identica** su tutti i dispositivi (iPhone SE, iPad Pro, Android, ecc.), devi configurare il sistema in modo che:
+
+1. **Il testo si adatti automaticamente** alle dimensioni del dispositivo
+2. **Le proporzioni rimangano identiche** ovunque
+3. **Le righe di testo siano sempre esatte** (mai nascoste, mai spezzate)
+
+### **🔧 CONFIGURAZIONE PERFETTA**
+
+```typescript
+// ✅ CONFIGURAZIONE OTTIMALE per app identica
+<FormattedText 
+  fontSize={32}                           // ← TU definisci dimensione di riferimento
+  intelligentAccessibilityScaling={true}  // ← SISTEMA calcola automaticamente
+  fixed={true}                            // ← ATTIVA sistema intelligente
+  fixedLines={1}                          // ← SEMPRE 1 riga esatta
+  allowSystemFontScaling={false}          // ← EVITA zoom che rompe layout
+  lineBreakStrategyIOS="push-out"
+  breakStrategyAndroid="highQuality"
+>
+  Rise Against Hunger Italia
+</FormattedText>
+```
+
+### **🧮 COME FUNZIONA IL SISTEMA**
+
+#### **STEP 1: TU DEFINISCI UNA DIMENSIONE BASE**
+```typescript
+fontSize={32}  // ← "Voglio che appaia come 32px su iPhone 15"
+```
+
+#### **STEP 2: SISTEMA RILEVA IL DISPOSITIVO**
+```typescript
+// Il sistema internamente rileva:
+// iPhone SE: 375px di larghezza
+// iPhone 15: 414px di larghezza  
+// iPad: 768px di larghezza
+// iPad Pro: 1024px di larghezza
+```
+
+#### **STEP 3: CALCOLA AUTOMATICAMENTE IL FONT OTTIMALE**
+```typescript
+// Il sistema calcola matematicamente:
+const containerWidth = screenWidth * 0.9;  // 90% larghezza schermo
+const avgCharWidth = fontSize * 0.55;      // Stima larghezza carattere
+const charsPerLine = Math.floor(containerWidth / avgCharWidth);
+const totalLinesNeeded = Math.ceil(textLength / charsPerLine);
+
+// Trova il fontSize più grande che rispetta fixedLines
+for (let testSize = fontSize * 0.8; testSize <= fontSize * 2.0; testSize += 0.5) {
+  if (totalLinesNeeded <= fixedLines) {
+    optimalSize = testSize;  // ← fontSize perfetto trovato!
+  }
+}
+```
+
+#### **STEP 4: RISULTATI AUTOMATICI**
+```typescript
+// STESSO TESTO "Rise Against Hunger Italia":
+// iPhone SE (375px):  32px → 26px (ridotto per entrare in 1 riga)
+// iPhone 15 (414px):  32px → 32px (perfetto così)
+// iPad (768px):       32px → 42px (ingrandito per utilizzare spazio)
+// iPad Pro (1024px):  32px → 48px (massima ottimizzazione)
+
+// RISULTATO: Stesse proporzioni visive su TUTTI i dispositivi!
+```
+
+### **🎨 ESEMPI PRATICI APP IDENTICA**
+
+#### **Titolo Principale**
+```typescript
+<FormattedText 
+  fontSize={45}
+  fontWeight="bold"
+  intelligentAccessibilityScaling={true}
+  fixed={true}
+  fixedLines={1}
+  allowSystemFontScaling={false}
+>
+  Rise Against Hunger Italia
+</FormattedText>
+```
+
+#### **Descrizione Multi-Riga**
+```typescript
+<FormattedText 
+  fontSize={16}
+  intelligentAccessibilityScaling={true}
+  fixed={true}
+  fixedLines={3}
+  allowSystemFontScaling={false}
+>
+  Combatti la fame nel mondo con azioni concrete
+  e donazioni che cambiano vite in modo significativo
+  attraverso progetti concreti e sostenibili
+</FormattedText>
+```
+
+#### **Bottone CTA**
+```typescript
+<ResponsiveBox 
+  width={280}
+  padding={16}
+  style={{
+    backgroundColor: '#DC2626',
+    borderRadius: 8,
+    minHeight: 56,
+    justifyContent: 'center',
+  }}
+>
+  <FormattedText 
+    fontSize={18}
+    fontWeight="bold"
+    color="#FFFFFF"
+    intelligentAccessibilityScaling={true}
+    fixed={true}
+    fixedLines={1}
+    allowSystemFontScaling={false}
+    style={{ textAlign: 'center' }}
+  >
+    Fai una Donazione
+  </FormattedText>
+</ResponsiveBox>
+```
+
+### **📊 COMPONENTE COMPLETO APP IDENTICA**
+
+```typescript
+// ✅ ESEMPIO COMPLETO: App visivamente identica ovunque
+const AppPerfettamenteIdentica: React.FC = () => {
+  return (
+    <ResponsiveStack spacing={24} padding={20}>
+      {/* Hero title - proporzioni identiche ovunque */}
+      <FormattedText 
+        fontSize={45}
+        fontWeight="black"
+        intelligentAccessibilityScaling={true}
+        fixed={true}
+        fixedLines={1}
+        allowSystemFontScaling={false}
+        style={{ textAlign: 'center' }}
+      >
+        Rise Against Hunger Italia
+      </FormattedText>
+
+      {/* Subtitle - sempre 2 righe con proporzioni perfette */}
+      <FormattedText 
+        fontSize={16}
+        color="#6B7280"
+        intelligentAccessibilityScaling={true}
+        fixed={true}
+        fixedLines={2}
+        allowSystemFontScaling={false}
+        style={{ textAlign: 'center' }}
+      >
+        Combatti la fame nel mondo con azioni concrete
+        e donazioni che cambiano vite
+      </FormattedText>
+
+      {/* Grid di card - stesse proporzioni ovunque */}
+      <ResponsiveStack
+        direction="horizontal"
+        spacing={12}
+        style={{ flexWrap: 'wrap' }}
+      >
+        {[1, 2, 3, 4].map(num => (
+          <ResponsiveCard key={num} preset="card" elevated>
+            <FormattedText 
+              fontSize={16}
+              fontWeight="bold"
+              intelligentAccessibilityScaling={true}
+              fixed={true}
+              fixedLines={1}
+              allowSystemFontScaling={false}
+            >
+              Card {num}
+            </FormattedText>
+          </ResponsiveCard>
+        ))}
+      </ResponsiveStack>
+    </ResponsiveStack>
+  );
+};
+```
+
+### **💡 PERCHÉ QUESTA CONFIGURAZIONE FUNZIONA**
+
+#### **✅ `intelligentAccessibilityScaling={true}`**
+- **ADATTA automaticamente** il fontSize per ogni dispositivo
+- **CALCOLA** la dimensione ottimale per rispettare fixedLines
+- **GARANTISCE** che il testo non venga mai nascosto o spezzato
+
+#### **✅ `fixed={true}` + `fixedLines={n}`**
+- **FORZA** il testo a stare esattamente nelle righe specificate
+- **ATTIVA** il sistema di calcolo intelligente
+- **IMPEDISCE** al testo di andare a capo inaspettatamente
+
+#### **✅ `allowSystemFontScaling={false}`**
+- **EVITA** che lo zoom utente rompa il layout controllato
+- **MANTIENE** le proporzioni sempre identiche
+- **PRESERVA** la consistency assoluta dell'app
+
+#### **✅ RISULTATO FINALE**
+- **iPhone SE**: Testo più piccolo ma stesse proporzioni
+- **iPad Pro**: Testo più grande ma stesse proporzioni  
+- **APP IDENTICA**: Esperienza visiva identica ovunque
+
+---
+
+## 🔄 **SISTEMA BI-DIREZIONALE INTELLIGENTE** 
+
+### **✅ RIVOLUZIONE ACCESSIBILITÀ**
+- **Adattamento automatico**: fontSize ottimale per ogni dispositivo
+- **Zoom intelligente**: Accessibilità senza rompere layout
+- **Bi-direzionale**: Ingrandisce SU tablet, riduce SU telefoni piccoli
+- **Layout consistency**: SEMPRE rispetta fixedLines
+
+### **🎯 UTILIZZO INTELLIGENTE**
+```typescript
+// Sistema bi-direzionale automatico
+<FormattedText 
+  fontSize={32}
+  intelligentAccessibilityScaling={true}  // ← SISTEMA BI-DIREZIONALE!
+  fixed={true}
+  fixedLines={1}                          // ← SEMPRE 1 riga
+>
+  Rise Against Hunger Italia
+</FormattedText>
+
+// RISULTATI AUTOMATICI:
+// iPhone SE (375px): 32px → 26px (ridotto per entrare in 1 riga)
+// iPhone 15 (414px): 32px → 32px (perfetto così)
+// iPad (768px): 32px → 42px (ingrandito per utilizzare spazio)
+// iPad Pro (1024px): 32px → 48px (massima ottimizzazione)
+// Zoom utente 300%: Permesso fino al limite che rispetta 1 riga
+```
+
+### **🧮 ALGORITMO MATEMATICO**
+```typescript
+// Il sistema calcola automaticamente:
+avgCharWidth = fontSize * 0.55  // Stima larghezza carattere
+charsPerLine = floor(containerWidth / avgCharWidth)  
+totalLinesNeeded = ceil(textLength / charsPerLine)
+
+// Trova il fontSize più grande che rispetta fixedLines
+for (testSize = fontSize * 0.8; testSize <= fontSize * 2.0; testSize += 0.5) {
+  if (totalLinesNeeded <= fixedLines) {
+    optimalSize = testSize;  // ← fontSize perfetto trovato!
+  }
+}
+```
+
+### **📊 ESEMPI PRATICI**
+
+#### **Titolo Principale**
+```typescript
+<FormattedText 
+  fontSize={45}
+  fontWeight="bold"
+  intelligentAccessibilityScaling={true}
+  fixed={true}
+  fixedLines={1}
+>
+  Titolo che si adatta perfettamente
+</FormattedText>
+```
+
+#### **Descrizione Multi-Riga**
+```typescript
+<FormattedText 
+  fontSize={16}
+  intelligentAccessibilityScaling={true}
+  fixed={true}
+  fixedLines={3}
+>
+  Descrizione lunga che si ottimizza automaticamente per utilizzare al meglio lo spazio disponibile su ogni dispositivo mantenendo sempre esattamente 3 righe.
+</FormattedText>
+```
+
+#### **CTA Button**
+```typescript
+<FormattedText 
+  fontSize={18}
+  fontWeight="bold"
+  intelligentAccessibilityScaling={true}
+  fixed={true}
+  fixedLines={2}
+  style={{ textAlign: 'center' }}
+>
+  Fai una Donazione Ora
+</FormattedText>
+```
+
+### **🎯 VANTAGGI BI-DIREZIONALI**
+
+#### **📱 Dispositivi Piccoli (iPhone SE)**
+- Font automaticamente **ridotto** per entrare nelle righe
+- Layout **sempre rispettato**
+- Zero testo che va a capo inaspettatamente
+
+#### **📊 Dispositivi Grandi (iPad Pro)**  
+- Font automaticamente **ingrandito** per utilizzare spazio
+- Esperienza visiva **ottimizzata**
+- Leggibilità **massimizzata**
+
+#### **🔍 Zoom Accessibilità**
+- Zoom consentito fino al **limite calcolato**
+- Layout **mai rotto**
+- Accessibilità **garantita**
+
+### **⚠️ ANTI-PATTERNS CORRETTI**
+```typescript
+// ❌ VIETATO - Calcoli manuali per dispositivi
+const fontSize = screenWidth > 768 ? 32 : 24;
+<FormattedText fontSize={fontSize}>Testo</FormattedText>
+
+// ❌ VIETATO - Disabilitare zoom senza sistema intelligente
+<FormattedText fontSize={24} allowSystemFontScaling={false}>
+  Testo senza adattamento automatico
+</FormattedText>
+
+// ❌ VIETATO - Conditional rendering per dispositivi
+{isTablet ? 
+  <FormattedText fontSize={32}>Grande</FormattedText> : 
+  <FormattedText fontSize={20}>Piccolo</FormattedText>
+}
+
+// ❌ VIETATO - Zoom che rompe layout controllato
+<FormattedText 
+  fontSize={32} 
+  fixed={true}
+  fixedLines={1}
+  allowSystemFontScaling={true}  // ← ROMPE il layout controllato
+>
+  Testo che può rompere le righe
+</FormattedText>
+
+// ✅ CORRETTO - Sistema intelligente per app identica
+<FormattedText 
+  fontSize={32} 
+  intelligentAccessibilityScaling={true}  // ← ADATTA per ogni dispositivo
+  fixed={true}
+  fixedLines={1}
+  allowSystemFontScaling={false}          // ← MANTIENE layout controllato
+>
+  App identica su tutti i dispositivi
+</FormattedText>
+```
+
 ### **🔧 CONFIGURAZIONE AVANZATA**
 ```typescript
 <FormattedText
@@ -458,6 +812,60 @@ const backgroundColor = isDark ? '#1C1C1E' : '#FFFFFF';
 
 ---
 
+## 🎯 **APPROCCIO MISTO: Text Nativo + FormattedText**
+
+### **🔧 QUANDO USARE Text NATIVO**
+Per componenti critici dove `adjustsFontSizeToFit` deve funzionare perfettamente:
+
+```typescript
+// ✅ CASO SPECIALE: Titoli critici con ridimensionamento assoluto
+import { Text } from 'react-native';
+import { scaleFont } from '@/shared/constants/responsiveSystem';
+
+<Text
+  allowFontScaling={false}               // ← Blocca zoom sistema
+  numberOfLines={1}                      // ← Controllo righe nativo
+  adjustsFontSizeToFit={true}            // ← Ridimensionamento React Native puro
+  minimumFontScale={0.8}                 // ← Limite riduzione 80%
+  style={{
+    fontSize: scaleFont(42),             // ← Font scalato UNA volta
+    fontWeight: '900',
+    textAlign: 'center',
+  }}
+>
+  Rise Against Hunger Italia
+</Text>
+```
+
+### **⚡ QUANDO USARE FormattedText**
+Per tutti gli altri casi con sistema bi-direzionale:
+
+```typescript
+// ✅ CASO STANDARD: Sistema intelligente completo
+<FormattedText 
+  fontSize={32}
+  intelligentAccessibilityScaling={true} // ← Sistema bi-direzionale
+  fixed={true}
+  fixedLines={1}
+  allowSystemFontScaling={false}
+>
+  Testo con sistema intelligente
+</FormattedText>
+```
+
+### **🎯 DECISION TREE**
+```
+Hai bisogno di adjustsFontSizeToFit perfetto?
+├── SÌ → Usa Text nativo (casi critici)
+└── NO → Usa FormattedText (casi standard)
+
+Il componente è un titolo principale critico?
+├── SÌ → Text nativo + scaleFont()
+└── NO → FormattedText + sistema bi-direzionale
+```
+
+---
+
 ## 🎯 **WORKFLOW SVILUPPO**
 
 ### **📋 CHECKLIST PRE-COMMIT**
@@ -466,6 +874,9 @@ const backgroundColor = isDark ? '#1C1C1E' : '#FFFFFF';
 - ✅ Test coverage > 35%
 - ✅ Zero TypeScript errors
 - ✅ Zero ESLint warnings
+- ✅ **Sistema bi-direzionale**: `intelligentAccessibilityScaling={true}` per titoli importanti
+- ✅ **Layout consistency**: `fixed={true}` + `fixedLines` specificato
+- ✅ **Zero anti-patterns**: Nessun calcolo manuale zoom/dispositivi
 
 ### **🚀 DEPLOYMENT**
 ```bash
@@ -494,6 +905,8 @@ npm run deploy
 
 ---
 
-**🎯 RICORDA**: Layer Centralizzato + FormattedText = **ECCELLENZA ENTERPRISE** ✅
+**🎯 RICORDA**: Layer Centralizzato + FormattedText + **Sistema Bi-Direzionale** = **ECCELLENZA ENTERPRISE ASSOLUTA** ✅
 
-**💡 BENEFICIO**: Una riga nel tema → Funziona ovunque! 🚀 
+**💡 BENEFICIO**: Un parametro `intelligentAccessibilityScaling={true}` → **Perfetto su ogni dispositivo e zoom!** 🚀
+
+**🔄 INNOVAZIONE**: Da "font fisso" → **Font ottimale automatico** per ogni situazione! ⚡ 

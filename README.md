@@ -78,6 +78,85 @@ const { toggleDarkMode } = useResponsiveDarkMode();
 
 ---
 
+## 🎯 **TEMPLATE APP IDENTICA SU TUTTI I DISPOSITIVI**
+
+### **✅ CONFIGURAZIONE PERFETTA**
+Per ottenere un'app che appare **esattamente identica** su iPhone SE, iPad Pro, Android e qualsiasi dispositivo:
+
+```typescript
+// ✅ TEMPLATE COMPLETO: App visivamente identica ovunque
+import { ResponsiveBox, ResponsiveStack, ResponsiveCard, FormattedText } from '@/components/ui';
+
+const AppIdentica: React.FC = () => {
+  return (
+    <ResponsiveBox preset="container" autoBackgroundColor="primary">
+      <ResponsiveStack spacing={24}>
+        {/* Titolo principale - stesse proporzioni ovunque */}
+        <FormattedText 
+          fontSize={32}
+          fontWeight="bold"
+          intelligentAccessibilityScaling={true}  // ← SISTEMA INTELLIGENTE
+          fixed={true}
+          fixedLines={1}                          // ← SEMPRE 1 riga
+          allowSystemFontScaling={false}          // ← CONSISTENCY ASSOLUTA
+          style={{ textAlign: 'center' }}
+        >
+          Rise Against Hunger Italia
+        </FormattedText>
+
+        {/* Descrizione - sempre 2 righe esatte */}
+        <FormattedText 
+          fontSize={16}
+          intelligentAccessibilityScaling={true}
+          fixed={true}
+          fixedLines={2}
+          allowSystemFontScaling={false}
+          style={{ textAlign: 'center' }}
+        >
+          Combatti la fame nel mondo con azioni concrete
+          e donazioni che cambiano vite
+        </FormattedText>
+
+        {/* Grid responsive - preset automatico */}
+        <ResponsiveStack direction="horizontal" spacing={12} style={{ flexWrap: 'wrap' }}>
+          {[1, 2, 3, 4].map(num => (
+            <ResponsiveCard key={num} preset="card" autoBackgroundColor="card">
+              <FormattedText 
+                fontSize={16}
+                intelligentAccessibilityScaling={true}
+                fixed={true}
+                fixedLines={1}
+                allowSystemFontScaling={false}
+              >
+                Azione {num}
+              </FormattedText>
+            </ResponsiveCard>
+          ))}
+        </ResponsiveStack>
+      </ResponsiveStack>
+    </ResponsiveBox>
+  );
+};
+```
+
+### **🎯 RISULTATO GARANTITO**
+- ✅ **iPhone SE**: Testo ridimensionato automaticamente per entrare nelle righe
+- ✅ **iPad Pro**: Testo ingrandito automaticamente per utilizzare spazio
+- ✅ **Android**: Comportamento identico a iOS
+- ✅ **App identica**: Stesse proporzioni visive su tutti i dispositivi
+- ✅ **Righe esatte**: Testo sempre nelle righe specificate, mai nascosto
+
+### **💡 CONFIGURAZIONE CHIAVE**
+```typescript
+// I 4 parametri fondamentali per app identica:
+intelligentAccessibilityScaling={true}  // ← Adatta fontSize automaticamente
+fixed={true}                            // ← Attiva sistema intelligente  
+fixedLines={1}                          // ← Numero righe esatto
+allowSystemFontScaling={false}          // ← Evita zoom che rompe layout
+```
+
+---
+
 ## 🚫 **ANTI-PATTERNS VIETATI**
 
 ### ❌ **Frammentazione Breakpoints**

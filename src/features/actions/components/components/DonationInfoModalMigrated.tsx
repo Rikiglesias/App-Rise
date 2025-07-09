@@ -34,7 +34,6 @@ interface ModalContentProps {
 }
 
 const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
-
   const modalStyles = StyleSheet.create({
     overlay: {
       flex: 1,
@@ -183,39 +182,28 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       </View>
 
       <Text
-        style={[
-          modalStyles.modalText,
-          { fontWeight: Typography.weights.bold },
-        ]}
+        style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
       >
-        💰 Donazioni monetarie: Se vuoi fare una donazione
-        monetaria diretta, clicca su &quot;Dona Ora&quot; per
-        contribuire immediatamente alla nostra missione contro la
-        fame.
+        💰 Donazioni monetarie: Se vuoi fare una donazione monetaria diretta,
+        clicca su &quot;Dona Ora&quot; per contribuire immediatamente alla
+        nostra missione contro la fame.
       </Text>
 
       <Text
-        style={[
-          modalStyles.modalText,
-          { fontWeight: Typography.weights.bold },
-        ]}
+        style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
       >
-        🛍️ Acquisti solidali: Attraverso il nostro Charity Shop,
-        ogni acquisto dai nostri partner dona automaticamente una
-        percentuale per i nostri programmi. Tu spendi lo stesso
-        prezzo, ma aiuti a combattere la fame!
+        🛍️ Acquisti solidali: Attraverso il nostro Charity Shop, ogni acquisto
+        dai nostri partner dona automaticamente una percentuale per i nostri
+        programmi. Tu spendi lo stesso prezzo, ma aiuti a combattere la fame!
       </Text>
 
       <Text
-        style={[
-          modalStyles.modalText,
-          { fontWeight: Typography.weights.bold },
-        ]}
+        style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
       >
-        🎁 Gift Cards: Funzionano come gli acquisti: compri una
-        Gift Card a prezzo normale (per te o come regalo), ma una
-        percentuale viene automaticamente donata per la
-        distribuzione di pasti. Aiuti senza costi extra!
+        🎁 Gift Cards: Funzionano come gli acquisti: compri una Gift Card a
+        prezzo normale (per te o come regalo), ma una percentuale viene
+        automaticamente donata per la distribuzione di pasti. Aiuti senza costi
+        extra!
       </Text>
 
       <Text style={modalStyles.highlightText}>
@@ -412,20 +400,20 @@ export default DonationInfoModalMigrated;
  * ELIMINATI:
  * ❌ const { width: screenWidth } = Dimensions.get('window');  // Duplicato in 3+ componenti
  * ❌ maxWidth: screenWidth * 0.9,                              // Calcolo manuale ripetuto
- * 
+ *
  * AGGIUNTI:
  * ✅ useResponsiveLayout()                                     // Layer centralizzato
  * ✅ modalWidth                                                // Width dal tema
  * ✅ ResponsiveBox (opzionale)                                 // Wrapper semantico
- * 
+ *
  * FUTURE BENEFITS:
  * 🚀 Tablet XL → modalWidth automatico per 1280+ px (60% → 50%)
  * 🚀 Dark mode → backgroundColor responsive nei styles
  * 🚀 RTL support → positioning automatico per closeButton
  * 🚀 Re-branding → colori rossi dal tema centralizzato
- * 
+ *
  * SEMANTIC IMPROVEMENT:
  * ✅ Componente ModalContent estratto per chiarezza
  * ✅ Width semantica invece di calcolo manuale
  * ✅ Preparato per future estensioni (desktop, foldable)
- */ 
+ */
