@@ -90,7 +90,7 @@
     "react-native": "0.79.5",
     "react-native-auto-size-text": "^1.1.1",
     "react-native-gesture-handler": "~2.24.0",
-    "react-native-maps": "1.20.1",
+    "react-native-maps": "1.24.3",
     "react-native-pager-view": "6.7.1",
     "react-native-paper": "^5.14.5",
     "react-native-reanimated": "~3.17.4",
