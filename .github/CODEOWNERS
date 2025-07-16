@@ -1,0 +1,53 @@
+# 🛡️ CODEOWNERS - RISE AGAINST HUNGER ITALIA
+# Definisce i proprietari del codice per approvazioni automatiche
+# Integrato con GitHub Ruleset per protezione enterprise
+
+# 📋 GLOBAL OWNERS
+# Tutti i file richiedono approvazione del team principale
+* @Rikiglesias
+
+# 🔧 CORE SYSTEM FILES - PROTEZIONE CRITICA
+# Sistema Perfetto - Richiede approvazione per qualsiasi modifica
+src/components/ui/Perfect*.tsx @Rikiglesias
+src/shared/utils/UniversalMillimetricSystem.ts @Rikiglesias
+src/shared/utils/SystemImmunity.ts @Rikiglesias
+src/shared/theme/UniversalTheme.tsx @Rikiglesias
+
+# 🚫 CRITICAL CONFIGURATION - DOPPIA APPROVAZIONE
+# File di configurazione critici
+app.config.js @Rikiglesias
+package.json @Rikiglesias
+eas.json @Rikiglesias
+tsconfig.json @Rikiglesias
+
+# 🛡️ SECURITY FILES - MASSIMA PROTEZIONE
+# Configurazioni di sicurezza
+android-network-security-config.xml @Rikiglesias
+src/shared/services/secureStorage.ts @Rikiglesias
+src/shared/services/apiSecurity.ts @Rikiglesias
+src/shared/services/errorTracking.ts @Rikiglesias
+
+# 🚀 CI/CD & WORKFLOW
+# GitHub Actions e script di automazione
+.github/ @Rikiglesias
+scripts/ @Rikiglesias
+.cursorrules @Rikiglesias
+
+# 📚 DOCUMENTATION
+# Documentazione tecnica
+docs/ @Rikiglesias
+README.md @Rikiglesias
+SISTEMA_RESPONSIVE_PERFETTO.md @Rikiglesias
+
+# 🧪 TESTING CRITICAL
+# Test files per componenti critici
+src/__tests__/components/ui/Perfect*.test.tsx @Rikiglesias
+src/__tests__/shared/utils/UniversalMillimetricSystem.test.ts @Rikiglesias
+src/__tests__/visual/visual-diff.test.tsx @Rikiglesias
+
+# 🎯 SPECIFIC COMPONENTS
+# Componenti specifici con proprietari dedicati
+src/features/home/ @Rikiglesias
+src/features/impact/ @Rikiglesias
+src/features/projects/ @Rikiglesias
+src/features/actions/ @Rikiglesias 
