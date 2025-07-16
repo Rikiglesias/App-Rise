@@ -1,0 +1,27 @@
+# Percy Visual Testing Configuration
+# Protegge il sistema responsive da regressioni visuali
+
+{
+  "version": 2,
+  "discovery": {
+    "network-idle-timeout": 100,
+    "allowed-hostnames": [
+      "localhost"
+    ]
+  },
+  "snapshot": {
+    "widths": [
+      375,
+      393,
+      412,
+      768
+    ],
+    "min-height": 1024,
+    "percy-css": "\n          /* Stabilizza fonts per screenshot consistency */\n          * {\n            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;\n            -webkit-font-smoothing: antialiased !important;\n            -moz-osx-font-smoothing: grayscale !important;\n          }\n          \n          /* Nasconde elementi dinamici che causano diff */\n          .dynamic-timestamp,\n          .animation-element {\n            display: none !important;\n          }\n        "
+  },
+  "static-snapshots": {
+    "base-url": "http://localhost:19006",
+    "snapshot-files": "**/*.percy.{js,ts}",
+    "ignore-files": "**/*.ignore.percy.{js,ts}"
+  }
+}

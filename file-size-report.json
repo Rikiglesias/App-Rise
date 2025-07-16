@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-07-07T11:46:04.434Z",
+  "violations": {
+    "green": 128,
+    "yellow": 13,
+    "red": 2,
+    "total": 143
+  },
+  "criticalFiles": [
+    {
+      "name": "ImpactTabScreen.tsx",
+      "current": 1082,
+      "redThreshold": 800,
+      "type": "Screen/Domain",
+      "priority": "CRITICO"
+    },
+    {
+      "name": "ActionButtons.tsx",
+      "current": 916,
+      "redThreshold": 500,
+      "type": "UI Component",
+      "priority": "CRITICO"
+    },
+    {
+      "name": "HomeHeaderSubComponents.tsx",
+      "current": 755,
+      "redThreshold": 500,
+      "type": "UI Component",
+      "priority": "CRITICO"
+    },
+    {
+      "name": "FormattedText.tsx",
+      "current": 568,
+      "redThreshold": 500,
+      "type": "UI Component",
+      "priority": "MEDIO"
+    }
+  ],
+  "recommendations": {
+    "immediate": 3,
+    "shortTerm": 0,
+    "mediumTerm": 1
+  }
+}

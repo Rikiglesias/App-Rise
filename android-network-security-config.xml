@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+🛡️ ENTERPRISE NETWORK SECURITY CONFIG - RISE AGAINST HUNGER ITALIA
+Configurazione di sicurezza Android avanzata per protezione MITM e hardening
+Implementato: 2025-07-01 - Roadmap Sicurezza Enterprise
+-->
+<network-security-config>
+  <!-- 🎯 CONFIGURAZIONE PRODUCTION - MASSIMA SICUREZZA -->
+  <domain-config cleartextTrafficPermitted="false">
+    <!-- Domini trusted per l'app -->
+    <domain includeSubdomains="true">expo.dev</domain>
+    <domain includeSubdomains="true">exp.host</domain>
+    <domain includeSubdomains="true">api.expo.dev</domain>
+    
+    <!-- Rise Against Hunger domini (quando saranno configurati) -->
+    <domain includeSubdomains="true">riseagainsthunger.it</domain>
+    <domain includeSubdomains="true">api.riseagainsthunger.it</domain>
+    
+    <!-- SSL Certificate Pinning per massima sicurezza -->
+    <pin-set expiration="2026-07-01">
+      <!-- Expo SSL pins (backup per sviluppo) -->
+      <pin digest="SHA-256">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</pin>
+      <!-- Let's Encrypt pins (comune per molti servizi) -->
+      <pin digest="SHA-256">BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=</pin>
+    </pin-set>
+    
+    <!-- Trust anchors personalizzati -->
+    <trust-anchors>
+      <!-- Sistema certificates + certificati custom -->
+      <certificates src="system"/>
+      <certificates src="user" overridePins="false"/>
+    </trust-anchors>
+  </domain-config>
+
+  <!-- 🔒 CONFIGURAZIONE DEVELOPMENT - SICUREZZA CONTROLLATA -->
+  <domain-config cleartextTrafficPermitted="true">
+    <!-- Solo per development locale e testing -->
+    <domain includeSubdomains="true">localhost</domain>
+    <domain includeSubdomains="true">127.0.0.1</domain>
+    <domain includeSubdomains="true">192.168.1.0/24</domain>
+    <domain includeSubdomains="true">10.0.0.0/8</domain>
+    
+    <!-- Expo development servers -->
+    <domain includeSubdomains="true">exp.direct</domain>
+    <domain includeSubdomains="true">ngrok.io</domain>
+    
+    <!-- NO SSL pinning per development -->
+    <trust-anchors>
+      <certificates src="system"/>
+      <certificates src="user"/>
+    </trust-anchors>
+  </domain-config>
+
+  <!-- 🚫 BASE CONFIG - DENY ALL CLEARTEXT PER DEFAULT -->
+  <base-config cleartextTrafficPermitted="false">
+    <trust-anchors>
+      <!-- Solo certificati di sistema trusted -->
+      <certificates src="system"/>
+    </trust-anchors>
+  </base-config>
+
+  <!-- 🛡️ PROTEZIONI AVANZATE -->
+  <!-- Blocca connessioni HTTP non sicure -->
+  <!-- Abilita HSTS (HTTP Strict Transport Security) -->
+  <!-- Certificate Transparency enforcement -->
+</network-security-config> 

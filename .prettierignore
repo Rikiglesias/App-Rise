@@ -1,0 +1,27 @@
+# File e cartelle da escludere dai controlli Prettier
+
+# Cartelle di sistema e build
+node_modules/
+.expo/
+android/
+ios/
+coverage/
+dist/
+build/
+
+# File di documentazione (esclusi per evitare warning su formattazione)
+docs/
+*.md
+
+# File di configurazione sensibili
+.env*
+package-lock.json
+yarn.lock
+
+# Output di sviluppo
+*.log
+*.tsbuildinfo
+
+# File generati automaticamente
+eslint-*.json
+*.backup 

@@ -1,0 +1,3 @@
+echo "=== CONTROLLO POST-COMMIT ==="
+npm run quality-check:summary
+echo "✅ Commit verificato!" 

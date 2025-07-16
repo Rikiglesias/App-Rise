@@ -1,0 +1,228 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import React from 'react';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
+
+import { FormattedText } from '../../../components/ui';
+import {
+  Colors,
+  Spacing,
+  Typography,
+} from '../../../shared/constants/designTokens';
+import type { useImpactAnimations } from '../hooks/useImpactAnimations';
+
+interface Props {
+  animations: ReturnType<typeof useImpactAnimations>;
+}
+
+/**
+ * Sezione dei risultati 2024 con header decorativo e statistiche annuali
+ */
+export const Results2024Section: React.FC<Props> = ({ animations }) => {
+  return (
+    <View style={styles.record2024Section}>
+      {/* Header DRAMATICALLY ENHANCED */}
+      <Animated.View
+        style={[
+          styles.results2024HeaderContainer,
+          {
+            opacity: animations.statsAnimations[1],
+            transform: [{ scale: animations.statsAnimations[1] }],
+          },
+        ]}
+      >
+        <View style={styles.results2024HeaderBackground}>
+          <FormattedText
+            variant="headline-small"
+            style={styles.results2024Title}
+          >
+            🎯 Risultati Raggiunti
+          </FormattedText>
+          <FormattedText
+            variant="body-large"
+            style={styles.results2024Subtitle}
+          >
+            I numeri che raccontano il nostro impegno annuale
+          </FormattedText>
+        </View>
+      </Animated.View>
+
+      {/* Cards informative senza "superato" */}
+      <View style={styles.record2024Grid}>
+        <Animated.View
+          style={[
+            styles.record2024Card,
+            {
+              opacity: animations.statsAnimations[2],
+              transform: [{ scale: animations.statsAnimations[2] }],
+            },
+          ]}
+        >
+          <View style={styles.record2024CardContent}>
+            <MaterialCommunityIcons
+              name="food-apple"
+              size={28}
+              color="#DC2626"
+            />
+            <FormattedText
+              variant="headline-small"
+              style={styles.record2024Value}
+            >
+              3.14M
+            </FormattedText>
+            <FormattedText
+              variant="title-medium"
+              style={styles.record2024Label}
+              numberOfLines={1}
+            >
+              Pasti Confezionati
+            </FormattedText>
+            <FormattedText
+              variant="body-medium"
+              style={styles.record2024Description}
+            >
+              Prodotti nel 2024
+            </FormattedText>
+          </View>
+        </Animated.View>
+
+        <Animated.View
+          style={[
+            styles.record2024Card,
+            {
+              opacity: animations.statsAnimations[3],
+              transform: [{ scale: animations.statsAnimations[3] }],
+            },
+          ]}
+        >
+          <View style={styles.record2024CardContent}>
+            <MaterialCommunityIcons
+              name="package-variant"
+              size={28}
+              color="#1F2937"
+            />
+            <FormattedText
+              variant="headline-small"
+              style={styles.record2024Value}
+            >
+              16.3K
+            </FormattedText>
+            <FormattedText
+              variant="title-medium"
+              style={styles.record2024Label}
+              numberOfLines={1}
+            >
+              Kit Confezionati
+            </FormattedText>
+            <FormattedText
+              variant="body-medium"
+              style={styles.record2024Description}
+            >
+              Creati nel 2024
+            </FormattedText>
+          </View>
+        </Animated.View>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  // Record 2024 Section - INGRANDITA
+  record2024Section: {
+    paddingHorizontal: Spacing[4],
+    marginTop: Spacing[6],
+    marginBottom: Spacing[8],
+  },
+  record2024Grid: {
+    flexDirection: 'row',
+    gap: Spacing[3],
+  },
+  record2024Card: {
+    flex: 1,
+  },
+  record2024CardContent: {
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 16,
+    paddingVertical: Spacing[3],
+    paddingHorizontal: Spacing[2],
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  record2024Value: {
+    // fontSize rimosso - ora gestito da Text
+    fontWeight: Typography.weights.bold,
+    color: '#1F2937',
+    marginTop: Spacing[1],
+    marginBottom: Spacing[1],
+    textAlign: 'center',
+  },
+  record2024Label: {
+    // fontSize rimosso - ora gestito da Text
+    fontWeight: Typography.weights.semibold,
+    color: '#374151',
+    marginBottom: Spacing[1],
+    textAlign: 'center',
+    lineHeight: 22,
+    flexWrap: 'wrap',
+  },
+  record2024Description: {
+    // fontSize rimosso - ora gestito da Text
+    fontWeight: Typography.weights.medium,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: Spacing[1],
+    lineHeight: 18,
+    paddingHorizontal: Spacing[1],
+  },
+
+  // Results 2024 Section - DRAMATICALLY ENHANCED
+  results2024HeaderContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing[6],
+  },
+  results2024HeaderBackground: {
+    backgroundColor:
+      Platform.OS === 'android'
+        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
+    borderRadius: 20,
+    paddingVertical: Spacing[4],
+    paddingHorizontal: Spacing[6],
+    borderWidth: 1,
+    borderColor:
+      Platform.OS === 'android'
+        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
+        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
+    shadowColor: '#374151',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
+  },
+  results2024Title: {
+    // fontSize rimosso - ora gestito da Text
+    fontWeight: Typography.weights.bold, // BOLD normale
+    color: '#374151', // GRIGIO ELEGANTE
+    textAlign: 'center',
+    letterSpacing: -0.4,
+    includeFontPadding: false,
+    textShadowColor: 'rgba(55, 65, 81, 0.15)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  results2024Subtitle: {
+    // fontSize rimosso - ora gestito da Text
+    fontWeight: Typography.weights.medium,
+    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    textAlign: 'center',
+    marginTop: Spacing[3],
+    opacity: 0.9,
+    letterSpacing: 0.1,
+  },
+});
