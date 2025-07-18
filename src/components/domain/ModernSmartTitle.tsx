@@ -1,5 +1,12 @@
 import React from 'react';
-import { Animated, Image, StyleSheet, View, Dimensions, Text } from 'react-native';
+import {
+  Animated,
+  Image,
+  StyleSheet,
+  View,
+  Dimensions,
+  Text,
+} from 'react-native';
 import { ResponsiveStack } from '../ui';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 import { findDeviceByWidth } from '../../shared/constants/deviceResolutionsDatabase';
@@ -204,7 +211,9 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               >
                 Rise Against{'\n'}
                 <Text style={{ color: '#DC2626' }}>Hunger </Text>
-                <Text style={{ color: HomeHeaderDesignTokens.colors.dark }}>Italia</Text>
+                <Text style={{ color: HomeHeaderDesignTokens.colors.dark }}>
+                  Italia
+                </Text>
               </Text>
 
               {/* Separatore elegante con logo simbolico centrale */}

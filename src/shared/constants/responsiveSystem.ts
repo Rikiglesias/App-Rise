@@ -37,7 +37,7 @@ const INDUSTRY_STANDARDS = {
 // 📱 LOGICAL REFERENCE (sistema millimetrico universale)
 const LOGICAL_REFERENCE = {
   width: 414, // iPhone 15 - SISTEMA MILLIMETRICO UNIVERSALE
-  height: 896, // iPhone 15 native resolution  
+  height: 896, // iPhone 15 native resolution
   scale: 2, // Standard scaling reference
 } as const;
 

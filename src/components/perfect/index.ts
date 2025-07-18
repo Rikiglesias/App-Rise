@@ -1,57 +1,57 @@
 /**
  * PERFECT SYSTEMS - INDEX EXPORT
- * 
+ *
  * Esporta tutti i 5 sistemi perfetti in un unico posto
  * per facilità d'uso e importazioni semplificate
  */
 
 // 🧮 Sistema Millimetrico Universale
-export { 
+export {
   universal,
   calculateMillimetricSize,
   universalFont,
   universalSpacing,
   universalWidth,
   universalHeight,
-  getDeviceInfo
+  getDeviceInfo,
 } from '../../shared/utils/UniversalMillimetricSystem';
 
 // 📝 Sistema Testi Perfetto
-export { 
+export {
   PerfectText,
   PerfectTitle,
   PerfectSubtitle,
-  PerfectBody
+  PerfectBody,
 } from '../ui/PerfectText';
 
 // 🌙 Sistema Dark Mode
-export { 
+export {
   UniversalThemeProvider,
   useUniversalTheme,
   getThemeColor,
-  ThemeStatus
+  ThemeStatus,
 } from '../../shared/theme/UniversalTheme';
 
 // 🖼️ Sistema Immagini Identiche
-export { 
+export {
   PerfectImage,
   HeroImage,
   CardImage,
   ThumbnailImage,
   AvatarImage,
-  BannerImage
+  BannerImage,
 } from '../ui/PerfectImage';
 
 // 📦 Sistema Container Uguali
-export { 
+export {
   PerfectContainer,
   PageContainer,
   CardContainer,
   SectionContainer,
   ModalContainer,
   HeaderContainer,
-  FooterContainer
+  FooterContainer,
 } from '../ui/PerfectContainer';
 
 // 🎯 Esempio Completo
-export { PerfectAppExample } from '../../examples/PerfectAppExample'; 
+export { PerfectAppExample } from '../../examples/PerfectAppExample';

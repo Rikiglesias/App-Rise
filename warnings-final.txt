@@ -1,3 +1,0 @@
-C:\Users\albie\OneDrive\Desktop\App Rise\src\features\actions\components\components\ActionButtonTypes.ts: line 95, col 19, Warning - Unexpected any. Specify a different type. (@typescript-eslint/no-explicit-any)
-
-1 problem

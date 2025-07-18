@@ -1,6 +1,6 @@
 /**
  * PERFECT IMAGE - Sistema Immagini Identiche iPhone 15
- * 
+ *
  * GARANTISCE:
  * - Dimensioni identiche proporzionalmente su tutti i dispositivi
  * - Mai troppo grandi o troppo piccole
@@ -15,36 +15,36 @@ import { universal } from '../../shared/utils/UniversalMillimetricSystem';
 interface PerfectImageProps extends Omit<ImageProps, 'style'> {
   /** Larghezza di riferimento su iPhone 15 */
   width: number;
-  
+
   /** Altezza di riferimento su iPhone 15 (opzionale - usa aspect ratio) */
   height?: number;
-  
+
   /** Aspect ratio (width/height) - usato se height non specificato */
   aspectRatio?: number;
-  
+
   /** Preset per casi comuni */
   preset?: 'hero' | 'card' | 'thumbnail' | 'avatar' | 'banner';
-  
+
   /** Border radius */
   borderRadius?: number;
-  
+
   /** Ombra */
   shadow?: boolean | 'light' | 'medium' | 'strong';
-  
+
   /** Stile container */
   containerStyle?: ViewStyle;
-  
+
   /** Stile immagine custom */
   imageStyle?: ImageStyle;
 }
 
 // 🎨 PRESET DIMENSIONI (riferimento iPhone 15)
 const IMAGE_PRESETS = {
-  hero: { width: 350, aspectRatio: 16/9, borderRadius: 12, shadow: 'medium' },
-  card: { width: 280, aspectRatio: 4/3, borderRadius: 8, shadow: 'light' },
+  hero: { width: 350, aspectRatio: 16 / 9, borderRadius: 12, shadow: 'medium' },
+  card: { width: 280, aspectRatio: 4 / 3, borderRadius: 8, shadow: 'light' },
   thumbnail: { width: 80, aspectRatio: 1, borderRadius: 8, shadow: false },
   avatar: { width: 60, aspectRatio: 1, borderRadius: 30, shadow: 'light' },
-  banner: { width: 380, aspectRatio: 3/1, borderRadius: 6, shadow: false }
+  banner: { width: 380, aspectRatio: 3 / 1, borderRadius: 6, shadow: false },
 } as const;
 
 // 🎭 SHADOW STYLES
@@ -69,7 +69,7 @@ const SHADOW_STYLES = {
     shadowOpacity: 0.2,
     shadowRadius: 16,
     elevation: 8,
-  }
+  },
 } as const;
 
 export const PerfectImage: React.FC<PerfectImageProps> = ({
@@ -85,11 +85,16 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
 }) => {
   // 🎯 RISOLVI PRESET O VALORI CUSTOM
   const config = preset ? IMAGE_PRESETS[preset] : null;
-  
+
   const finalWidth = universal.width(config?.width ?? width);
-  const finalAspectRatio = config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4/3);
-  const finalHeight = height ? universal.height(height) : finalWidth / finalAspectRatio;
-  const finalBorderRadius = universal.spacing(config?.borderRadius ?? borderRadius ?? 0);
+  const finalAspectRatio =
+    config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4 / 3);
+  const finalHeight = height
+    ? universal.height(height)
+    : finalWidth / finalAspectRatio;
+  const finalBorderRadius = universal.spacing(
+    config?.borderRadius ?? borderRadius ?? 0
+  );
   const finalShadow = config?.shadow ?? shadow ?? false;
 
   // 🎨 CALCOLA STILI
@@ -109,24 +114,20 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
     borderRadius: finalBorderRadius,
     overflow: 'hidden',
     ...shadowStyle,
-    ...containerStyle
+    ...containerStyle,
   };
 
   const imageStyleCalculated: ImageStyle = {
     width: '100%',
     height: '100%',
-    ...imageStyle
+    ...imageStyle,
   };
 
   // Debug info removed for production
 
   return (
     <View style={containerStyleCalculated}>
-      <Image
-        {...imageProps}
-        style={imageStyleCalculated}
-        resizeMode="cover"
-      />
+      <Image {...imageProps} style={imageStyleCalculated} resizeMode="cover" />
     </View>
   );
 };
@@ -150,4 +151,4 @@ export const AvatarImage = (props: Omit<PerfectImageProps, 'preset'>) => (
 
 export const BannerImage = (props: Omit<PerfectImageProps, 'preset'>) => (
   <PerfectImage {...props} preset="banner" />
-); 
+);

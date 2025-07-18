@@ -75,6 +75,12 @@ bundle-analysis-report.json
 eslint-*.json
 eslint-*.txt
 
+# Report Prettier temporanei
+prettier-*.txt
+
+# Report Markdown lint temporanei
+markdownlint-*.txt
+
 # File di analisi temporanei
 *_ANALYSIS.txt
 *_CORRECTED.txt
@@ -91,6 +97,10 @@ unused-imports.json
 # Cartella temporanea (se la crei)
 .temp/
 temp/
+
+# File di cleanup e documentazione temporanea
+cleanup-*.md
+*-OLD.md
 
 # IDE - Configurazioni personali complete
 .vscode/
