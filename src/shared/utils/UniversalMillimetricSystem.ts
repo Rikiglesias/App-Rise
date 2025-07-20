@@ -1,7 +1,7 @@
 /**
  * SISTEMA MILLIMETRICO UNIVERSALE UNIFICATO
  *
- * iPhone 15 (414px) come riferimento ASSOLUTO per tutto:
+ * iPhone 15 (393px) come riferimento ASSOLUTO per tutto:
  * - Testi: fontSize identico proporzionalmente
  * - Immagini: dimensioni identiche proporzionalmente
  * - Container: larghezze identiche proporzionalmente
@@ -11,31 +11,41 @@
  */
 
 import { Dimensions } from 'react-native';
+import { findDeviceByWidth } from '../constants/deviceResolutionsDatabase';
 
-// 📱 RIFERIMENTO ASSOLUTO - iPhone 15
+// 📱 RIFERIMENTO ASSOLUTO - iPhone 15 (CORREZIONE CRITICA 414→393px)
 const UNIVERSAL_REFERENCE = {
-  width: 414,
-  height: 896,
+  width: 393,
+  height: 852,
   name: 'iPhone 15',
 } as const;
 
-// 🧮 ALGORITMO MILLIMETRICO UNIVERSALE
+// 🧮 ALGORITMO MILLIMETRICO UNIVERSALE + DATABASE INTEGRATION
 export const calculateMillimetricSize = (referenceValue: number): number => {
   const { width: currentWidth } = Dimensions.get('window');
 
-  // Formula millimetrica universale
-  const proportion = referenceValue / UNIVERSAL_REFERENCE.width;
-  const scaledValue = currentWidth * proportion;
+  // 🎯 RICERCA DISPOSITIVO NEL DATABASE
+  const matchingDevices = findDeviceByWidth(currentWidth);
+  const deviceInfo = matchingDevices?.[0]; // Primo match più accurato
 
-  // Limiti di sicurezza per leggibilità
+  // 📊 UTILIZZA SCALE FACTOR DAL DATABASE SE DISPONIBILE
+  let finalScale: number;
+  if (deviceInfo?.scaleFactor) {
+    // Usa il scale factor preciso dal database
+    finalScale = deviceInfo.scaleFactor;
+  } else {
+    // Fallback al calcolo classico se dispositivo non trovato
+    const proportion = referenceValue / UNIVERSAL_REFERENCE.width;
+    const scaledValue = currentWidth * proportion;
+    finalScale = scaledValue / referenceValue;
+  }
+
+  // 🛡️ LIMITI DI SICUREZZA UNIVERSALI
   const minScale = 0.75; // 75% minimo (dispositivi molto piccoli)
   const maxScale = 2.0; // 200% massimo (tablet molto grandi)
 
-  const finalScale = Math.max(
-    minScale,
-    Math.min(maxScale, scaledValue / referenceValue)
-  );
-  return Math.round(referenceValue * finalScale * 100) / 100; // Precisione decimale
+  const safeScale = Math.max(minScale, Math.min(maxScale, finalScale));
+  return Math.round(referenceValue * safeScale * 100) / 100; // Precisione decimale
 };
 
 // 🎯 FUNZIONI SPECIFICHE PER OGNI TIPO
@@ -47,6 +57,19 @@ export const universalWidth = (width: number): number =>
   calculateMillimetricSize(width);
 export const universalHeight = (height: number): number =>
   calculateMillimetricSize(height);
+
+// 🔍 FUNZIONE DIAGNOSTICA - VERIFICA CONNESSIONE DATABASE
+export const getDatabaseDeviceInfo = () => {
+  const { width: currentWidth } = Dimensions.get('window');
+  const matchingDevices = findDeviceByWidth(currentWidth);
+
+  return {
+    currentWidth,
+    matchingDevices: matchingDevices?.slice(0, 3), // Top 3 matches
+    isConnectedToDatabase: matchingDevices && matchingDevices.length > 0,
+    referenceWidth: UNIVERSAL_REFERENCE.width,
+  };
+};
 
 // 📊 INFO DISPOSITIVO CORRENTE
 export const getDeviceInfo = () => {

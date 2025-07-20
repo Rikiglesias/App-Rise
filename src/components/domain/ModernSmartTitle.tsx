@@ -80,16 +80,16 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
       const { width: currentDeviceWidth } = Dimensions.get('window');
       const currentDeviceData = findDeviceByWidth(currentDeviceWidth)[0]; // Primo match
 
-      // STEP 2: iPhone 15 come riferimento assoluto (414px)
+      // STEP 2: iPhone 15 come riferimento assoluto (393px - CORREZIONE CRITICA)
       const REFERENCE_DEVICE = {
-        width: 414, // iPhone 15
-        containerPadding: 32, // 7.73% della larghezza (32/414)
-        separatorTopMargin: 8, // 1.93% della larghezza
-        separatorBottomMargin: 4, // 0.97% della larghezza
-        logoSize: 56, // 13.53% della larghezza
-        separatorLineWidth: 110, // 26.57% della larghezza
-        logoMargin: 16, // 3.86% della larghezza
-        stackSpacing: 8, // 1.93% della larghezza
+        width: 393, // iPhone 15 - CORREZIONE 414→393px
+        containerPadding: 30, // 7.63% della larghezza (30/393)
+        separatorTopMargin: 8, // 2.04% della larghezza
+        separatorBottomMargin: 4, // 1.02% della larghezza
+        logoSize: 53, // 13.49% della larghezza
+        separatorLineWidth: 104, // 26.46% della larghezza
+        logoMargin: 15, // 3.82% della larghezza
+        stackSpacing: 8, // 2.04% della larghezza
       };
 
       // STEP 3: Calcola proporzioni percentuali MILLIMETRICHE

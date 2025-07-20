@@ -46,7 +46,6 @@ src/
 │   ├── PerfectImage.tsx               # 🖼️ Immagini identiche
 │   ├── PerfectContainer.tsx           # 📦 Container iPhone 15
 │   └── UniversalTheme.tsx             # 🌙 Theme universale
-└── examples/                          # Esempi implementazione
 ```
 
 ### **📱 PRINCIPIO FONDAMENTALE**

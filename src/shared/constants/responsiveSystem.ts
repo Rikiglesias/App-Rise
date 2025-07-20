@@ -10,6 +10,10 @@
  */
 
 import { Dimensions, PixelRatio, Platform } from 'react-native';
+import {
+  findDeviceByWidth,
+  getDatabaseStats,
+} from './deviceResolutionsDatabase';
 
 // 🏭 STANDARD INDUSTRIALI
 const INDUSTRY_STANDARDS = {
@@ -34,10 +38,10 @@ const INDUSTRY_STANDARDS = {
   maxLineLength: 65,
 } as const;
 
-// 📱 LOGICAL REFERENCE (sistema millimetrico universale)
+// 📱 LOGICAL REFERENCE (sistema millimetrico universale - CORREZIONE CRITICA)
 const LOGICAL_REFERENCE = {
-  width: 414, // iPhone 15 - SISTEMA MILLIMETRICO UNIVERSALE
-  height: 896, // iPhone 15 native resolution
+  width: 393, // iPhone 15 - CORREZIONE 414→393px per precisione reale
+  height: 852, // iPhone 15 logical resolution corretta
   scale: 2, // Standard scaling reference
 } as const;
 
@@ -174,7 +178,7 @@ export const scaleSize = (
 /**
  * 🧮 SISTEMA MILLIMETRICO UNIVERSALE UNIFICATO
  *
- * UNICO RIFERIMENTO: iPhone 15 (414px) per FONT + SPACING + LAYOUT
+ * UNICO RIFERIMENTO: iPhone 15 (393px) per FONT + SPACING + LAYOUT
  * - Font scaling millimetrico: proporzioni identiche su tutti dispositivi
  * - Layout millimetrico: spacing proporzionale universale
  * - Precisione matematica: ±0.1px su 90+ dispositivi mappati
@@ -195,7 +199,7 @@ export const scaleFont = (size: number): number => {
   // Database completo: src/shared/constants/deviceResolutionsDatabase.ts
 
   const width = DEVICE_WIDTH;
-  const referenceWidth = 414; // iPhone 15 = RIFERIMENTO UNIVERSALE
+  const referenceWidth = 393; // iPhone 15 = RIFERIMENTO UNIVERSALE CORRETTO
 
   // Formula lineare millimetrica verificata su dispositivi reali
   let scale = width / referenceWidth;
@@ -214,12 +218,11 @@ export const scaleFont = (size: number): number => {
 
   // ✅ PRECISIONE DECIMALE MILLIMETRICA (NO Math.round)
   // Esempi reali per scaleFont(48): SISTEMA UNIFICATO FONT + SPACING
-  // iPhone SE (375px): 43.478px (proporzione identica a spacing)
-  // Samsung S24 (360px): 41.739px (proporzione identica a spacing)
-  // iPhone 16 (393px): 45.565px (proporzione identica a spacing)
-  // iPhone 15 (414px): 48.000px (RIFERIMENTO UNIVERSALE)
-  // iPhone Plus (430px): 49.855px (proporzione identica a spacing)
-  // iPad Pro (768px): 88.928px (proporzione identica a spacing)
+  // iPhone SE (375px): 45.802px (proporzione identica a spacing)
+  // Samsung S24 (360px): 43.970px (proporzione identica a spacing)
+  // iPhone 15 (393px): 48.000px (RIFERIMENTO UNIVERSALE CORRETTO)
+  // iPhone Plus (430px): 52.518px (proporzione identica a spacing)
+  // iPad Pro (768px): 93.766px (proporzione identica a spacing)
   return finalSize;
 };
 
@@ -904,4 +907,19 @@ export default {
   // Industry standards
   INDUSTRY_STANDARDS,
   LOGICAL_REFERENCE,
+
+  // 📊 DATABASE INTEGRATION - SISTEMA COLLEGATO
+  getDatabaseDeviceInfo: () => {
+    const { width } = getDimensions();
+    const devices = findDeviceByWidth(width);
+    const stats = getDatabaseStats();
+
+    return {
+      currentWidth: width,
+      matchedDevices: devices?.slice(0, 3),
+      isDeviceKnown: devices && devices.length > 0,
+      databaseStats: stats,
+      referenceWidth: LOGICAL_REFERENCE.width,
+    };
+  },
 };

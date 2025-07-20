@@ -6,7 +6,7 @@
 ### ✅ **PERFEZIONE ENTERPRISE + IMMUNITÀ TOTALE**
 ```
 SISTEMA PERFETTO COMPLETO ✅ RIVOLUZIONARIO
-├── 1. UniversalMillimetricSystem.ts   # iPhone 15 riferimento universale
+├── 1. UniversalMillimetricSystem.ts   # iPhone 15 (393px) riferimento universale
 ├── 2. PerfectText.tsx                 # Testi mai tagliati, righe esatte
 ├── 3. UniversalTheme.tsx              # Dark mode singolo toggle
 ├── 4. PerfectImage.tsx                # Immagini proporzioni identiche
@@ -14,7 +14,7 @@ SISTEMA PERFETTO COMPLETO ✅ RIVOLUZIONARIO
 └── SystemImmunity.ts                  # Immunità totale impostazioni
 
 RISULTATO: App identica al MILLIMETRO su ogni dispositivo!
-STATUS: STANDARD MONDIALE CREATO - RIFERIMENTO ASSOLUTO ✅
+STATUS: STANDARD MONDIALE CREATO - RIFERIMENTO ASSOLUTO (393px) ✅
 ```
 
 ## 📚 **DOCUMENTAZIONE PERFETTA AGGIORNATA**
@@ -207,15 +207,15 @@ const DebugImmunity = () => {
 // ✅ CORRETTO - UniversalMillimetricSystem per tutto
 import { UniversalMillimetricSystem } from '@/shared/utils/UniversalMillimetricSystem';
 
-// iPhone 15 (414px) = riferimento assoluto universale
+// iPhone 15 (393px) = riferimento assoluto universale CORRETTO
 const scaledFont = UniversalMillimetricSystem.scaleFont(32);
 const scaledSpacing = UniversalMillimetricSystem.scaleSpacing(16);
 const scaledDimension = UniversalMillimetricSystem.scaleDimension(100);
 
 // Calcoli matematici garantiti:
-// iPhone SE (375px): 32 * (375/414) = 29px (90.6%)
-// iPhone 15 (414px): 32 * (414/414) = 32px (100%)  
-// iPad (768px): 32 * (768/414) = 59px (185.5%)
+// iPhone SE (375px): 32 * (375/393) = 30.5px (95.4%)
+// iPhone 15 (393px): 32 * (393/393) = 32px (100%)  
+// iPad (768px): 32 * (768/393) = 62.5px (195.4%)
 
 // Risultato: Proporzioni IDENTICHE matematicamente ovunque!
 
@@ -495,13 +495,13 @@ const PerfectContainerPresets = {
   modal: "Modal centrato con border radius iPhone 15"
 };
 
-// 📱 SISTEMA UNIVERSALE - iPhone 15 (414px) RIFERIMENTO ASSOLUTO
+// 📱 SISTEMA UNIVERSALE - iPhone 15 (393px) RIFERIMENTO ASSOLUTO CORRETTO
 const UniversalScaling = {
-  "iPhone SE (375px)": "90.6% scaling - Proporzioni iPhone 15 esatte",
-  "iPhone 15 (414px)": "100% scaling - Riferimento perfetto", 
-  "Samsung (360px)": "87.0% scaling - Proporzioni iPhone 15 esatte",
-  "iPad (768px)": "185.5% scaling - Proporzioni iPhone 15 esatte",
-  "Foldable (1920px)": "463.8% scaling - Proporzioni iPhone 15 esatte"
+  "iPhone SE (375px)": "95.4% scaling - Proporzioni iPhone 15 esatte",
+  "iPhone 15 (393px)": "100% scaling - Riferimento perfetto", 
+  "Samsung (360px)": "91.6% scaling - Proporzioni iPhone 15 esatte",
+  "iPad (768px)": "195.4% scaling - Proporzioni iPhone 15 esatte",
+  "Foldable (1920px)": "488.6% scaling - Proporzioni iPhone 15 esatte"
 };
 ```
 

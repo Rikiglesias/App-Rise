@@ -52,6 +52,3 @@ export {
   HeaderContainer,
   FooterContainer,
 } from '../ui/PerfectContainer';
-
-// 🎯 Esempio Completo
-export { PerfectAppExample } from '../../examples/PerfectAppExample';
