@@ -194,9 +194,7 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
           flexWrap: 'wrap',
           justifyContent: 'space-between',
         }}
-        padding={Spacing[4]
-          }) ?? Spacing[4]
-        }
+        padding={Spacing[4]}
       >
         {actions.map(renderAction)}
       </PerfectContainer>

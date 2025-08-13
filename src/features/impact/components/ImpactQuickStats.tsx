@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { PerfectText } from '../../../components/ui';
 
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+// TypographyTokens non più usato qui
 import {
   BorderRadius,
   Colors,

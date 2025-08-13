@@ -9,12 +9,10 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, TextProps, TextStyle, View, Dimensions } from 'react-native';
-import {
+import { Text, TextProps, TextStyle, View } from 'react-native';
+import responsiveSystem, {
   scaleFont,
-  scaleSize,
   scaleDimensionLinear,
-  LOGICAL_REFERENCE,
 } from '../../shared/constants/responsiveSystem';
 import {
   getImmuneTextProps,
@@ -86,11 +84,11 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     }
 
     const text = children;
-    const { width: screenWidth } = Dimensions.get('window');
+    // reference via responsiveSystem.LOGICAL_REFERENCE
 
     // Calcola larghezza container effettiva
     // Usa scaling lineare coerente col font per mantenere gli stessi a capo
-    const referenceContainerWidth = LOGICAL_REFERENCE.width * 0.9;
+    const referenceContainerWidth = responsiveSystem.LOGICAL_REFERENCE.width * 0.9;
     const effectiveContainerWidth = containerWidth
       ? scaleDimensionLinear(containerWidth)
       : scaleDimensionLinear(referenceContainerWidth);
@@ -155,7 +153,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
   if (isCalculating) {
     // Placeholder durante calcolo (evita flash)
-    const referenceContainerWidth = LOGICAL_REFERENCE.width * 0.9;
+    const referenceContainerWidth = responsiveSystem.LOGICAL_REFERENCE.width * 0.9;
     const targetWidth = containerWidth
       ? scaleDimensionLinear(containerWidth)
       : scaleDimensionLinear(referenceContainerWidth);
@@ -166,7 +164,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     );
   }
 
-  const referenceContainerWidth = LOGICAL_REFERENCE.width * 0.9;
+  const referenceContainerWidth = responsiveSystem.LOGICAL_REFERENCE.width * 0.9;
   const targetWidth = containerWidth
     ? scaleDimensionLinear(containerWidth)
     : scaleDimensionLinear(referenceContainerWidth);

@@ -25,8 +25,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants';
-import { scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../shared/constants/responsiveSystem';
-import { DesignTokens } from '../../../shared/constants/responsiveSystem';
+import responsiveSystem, { scaleDimensionLinear, DesignTokens } from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
@@ -486,7 +485,7 @@ const styles = StyleSheet.create({
   sectionDivider: {
     height: 2, // IDENTICO CHI SIAMO: altezza bilanciata
     backgroundColor: Colors.neutral[300], // IDENTICO CHI SIAMO: più soft per eleganza
-    width: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.6), // 60% iPhone 15 scalato millimetricamente
+    width: scaleDimensionLinear(responsiveSystem.LOGICAL_REFERENCE.width * 0.6), // 60% iPhone 15 scalato millimetricamente
     borderRadius: 1, // IDENTICO CHI SIAMO
     opacity: 0.8, // IDENTICO CHI SIAMO: sottile trasparenza per delicatezza
     // OMBRA ELEGANTE IDENTICA CHI SIAMO
