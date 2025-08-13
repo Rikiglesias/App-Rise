@@ -1,20 +1,9 @@
 /**
  * PERFECT SYSTEMS - INDEX EXPORT
  *
- * Esporta tutti i 5 sistemi perfetti in un unico posto
+ * Esporta tutti i sistemi perfetti in un unico posto
  * per facilità d'uso e importazioni semplificate
  */
-
-// 🧮 Sistema Millimetrico Universale
-export {
-  universal,
-  calculateMillimetricSize,
-  universalFont,
-  universalSpacing,
-  universalWidth,
-  universalHeight,
-  getDeviceInfo,
-} from '../../shared/utils/UniversalMillimetricSystem';
 
 // 📝 Sistema Testi Perfetto
 export {

@@ -10,7 +10,10 @@
 
 import React from 'react';
 import { Image, ImageProps, View, ImageStyle, ViewStyle } from 'react-native';
-import { universal } from '../../shared/utils/UniversalMillimetricSystem';
+import {
+  scaleSize,
+  scaleSpacing,
+} from '../../shared/constants/responsiveSystem';
 
 interface PerfectImageProps extends Omit<ImageProps, 'style'> {
   /** Larghezza di riferimento su iPhone 15 */
@@ -86,13 +89,13 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   // 🎯 RISOLVI PRESET O VALORI CUSTOM
   const config = preset ? IMAGE_PRESETS[preset] : null;
 
-  const finalWidth = universal.width(config?.width ?? width);
+  const finalWidth = scaleSize(config?.width ?? width);
   const finalAspectRatio =
     config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4 / 3);
   const finalHeight = height
-    ? universal.height(height)
+    ? scaleSize(height)
     : finalWidth / finalAspectRatio;
-  const finalBorderRadius = universal.spacing(
+  const finalBorderRadius = scaleSpacing(
     config?.borderRadius ?? borderRadius ?? 0
   );
   const finalShadow = config?.shadow ?? shadow ?? false;

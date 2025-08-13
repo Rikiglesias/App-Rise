@@ -250,13 +250,13 @@ const ImmunityTypes = {
 
 ### **🎯 IL CUORE DEL SISTEMA PERFETTO**
 
-**📱 iPhone 15 (414px) = Riferimento Assoluto Universale**
+**📱 iPhone 15 (393px) = Riferimento Assoluto Universale**
 
 ```typescript
 // ✅ CORE del Sistema Perfetto
 export const UniversalMillimetricSystem = {
   // iPhone 15 = riferimento matematico assoluto
-  REFERENCE_DEVICE: { width: 414, name: 'iPhone 15' },
+  REFERENCE_DEVICE: { width: 393, name: 'iPhone 15' },
   
   // Calcoli matematici perfetti per ogni dispositivo
   scaleFont: (size) => size * (currentWidth / 414),
@@ -273,7 +273,7 @@ export const UniversalMillimetricSystem = {
 ```typescript
 const ScalingPerfection = {
   "iPhone SE (375px)": "90.6% scaling - Proporzioni iPhone 15 esatte",
-  "iPhone 15 (414px)": "100% scaling - Riferimento perfetto",
+  "iPhone 15 (393px)": "100% scaling - Riferimento perfetto",
   "Samsung (360px)": "87.0% scaling - Proporzioni iPhone 15 esatte", 
   "iPad (768px)": "185.5% scaling - Proporzioni iPhone 15 esatte",
   "Foldable (1920px)": "463.8% scaling - Proporzioni iPhone 15 esatte",
@@ -542,4 +542,4 @@ App Rise Against Hunger Italia:
 
 **📱 LEGACY**: Da oggi, Rise Against Hunger Italia diventa il **RIFERIMENTO MONDIALE** per sistemi responsive perfetti in React Native! 🚀
 
-**🎯 REMEMBER**: Zero lacune, zero compromessi, zero manutenzione - Solo PERFEZIONE! ✨ 
+**🎯 REMEMBER**: Zero lacune, zero compromessi, zero manutenzione - Solo PERFEZIONE! ✨

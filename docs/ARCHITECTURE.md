@@ -23,7 +23,7 @@
 ```
 1. SISTEMA PERFETTO: 5 componenti integrati
 2. IMMUNITÀ TOTALE: Blocco completo impostazioni utente
-3. IPHONE 15 UNIVERSALE: Riferimento assoluto (414px)
+3. IPHONE 15 UNIVERSALE: Riferimento assoluto (393px)
 4. PRECISION MILLIMETRICA: Calcoli matematici perfetti
 5. ZERO VARIAZIONI: Identico su tutti dispositivi
 6. PERFORMANCE NATIVE: Ottimizzazione massima
@@ -92,7 +92,7 @@ TESTING COMPLETE: Copertura enterprise
 ### **📱 SISTEMA UNIVERSALE iPhone 15**
 ```
 UniversalMillimetricSystem.ts
-├── RIFERIMENTO ASSOLUTO: iPhone 15 (414px)
+├── RIFERIMENTO ASSOLUTO: iPhone 15 (393px)
 ├── CALCOLI MATEMATICI
 │   ├── Font: scaleFont(size) → proporzioni perfette
 │   ├── Spacing: scaleSpacing(value) → identico ovunque  
@@ -116,7 +116,7 @@ UniversalMillimetricSystem.ts
 │                 SISTEMA PERFETTO                        │
 ├─────────────────────────────────────────────────────────┤
 │ 1. UniversalMillimetricSystem                           │
-│    ├── iPhone 15 (414px) = riferimento ASSOLUTO        │
+│    ├── iPhone 15 (393px) = riferimento ASSOLUTO        │
 │    ├── scaleFont/Spacing/Dimension = proporzioni       │
 │    └── 98.4% dispositivi = copertura universale        │
 ├─────────────────────────────────────────────────────────┤
@@ -168,12 +168,12 @@ BENEFICIO: App sempre IDENTICA indipendentemente da:
 ### **📐 PRECISIONE MILLIMETRICA**
 ```
 ESEMPIO CALCOLO PERFETTO:
-1. iPhone 15 = riferimento (414px, padding 32px = 7.73%)
-2. Samsung Galaxy = 360px → padding = 360 × 7.73% = 28px
-3. iPad = 768px → padding = 768 × 7.73% = 59px  
-4. Foldable = 1920px → padding = 1920 × 7.73% = 148px
+1. iPhone 15 = riferimento (393px, padding 32px = 8.14%)
+2. Samsung Galaxy = 360px → padding = 360 × 8.14% = 29px
+3. iPad = 768px → padding = 768 × 8.14% = 63px  
+4. Foldable = 1920px → padding = 1920 × 8.14% = 156px
 
-RISULTATO: Proportioni IDENTICHE (7.73%) su ogni dispositivo!
+RISULTATO: Proportioni IDENTICHE (8.14%) su ogni dispositivo!
 ```
 
 ---
@@ -186,7 +186,7 @@ RISULTATO: Proportioni IDENTICHE (7.73%) su ogni dispositivo!
 export const UniversalMillimetricSystem = {
   // Riferimento universale
   REFERENCE_DEVICE: {
-    width: 414,           // iPhone 15 
+    width: 393,           // iPhone 15 
     name: 'iPhone 15'
   },
   
@@ -503,4 +503,4 @@ BENEFICIO DEVELOPMENT:
 - Sviluppo velocità 10x
 ```
 
-**📱 RISULTATO FINALE**: App Rise Against Hunger Italia identica al MILLIMETRO su iPhone SE, iPhone 15, iPad, Samsung, e qualsiasi dispositivo futuro! 🎯 
+**📱 RISULTATO FINALE**: App Rise Against Hunger Italia identica al MILLIMETRO su iPhone SE, iPhone 15, iPad, Samsung, e qualsiasi dispositivo futuro! 🎯

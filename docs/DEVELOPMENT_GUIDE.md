@@ -50,7 +50,7 @@ src/
 
 ### **📱 PRINCIPIO FONDAMENTALE**
 ```
-RIFERIMENTO ASSOLUTO: iPhone 15 (414px)
+RIFERIMENTO ASSOLUTO: iPhone 15 (393px)
 ├── Font: scaleFont(size) → proporzioni perfette
 ├── Spacing: scaleSpacing(value) → identico ovunque
 ├── Images: scaleDimension(size) → millimetri esatti
@@ -178,7 +178,7 @@ const ScalingExamples = {
     example: "32px → 29px",
     accuracy: "Proporzioni iPhone 15 mantenute"
   },
-  "iPhone 15 (414px)": {
+  "iPhone 15 (393px)": {
     scaleFont: "size * 1.000",      // 414/414 = 100%
     example: "32px → 32px",
     accuracy: "Riferimento perfetto"
@@ -726,7 +726,7 @@ describe('Sistema Perfetto', () => {
       // iPhone SE: 375px → 90.6% scaling
       expect(UniversalMillimetricSystem.scaleFont(32)).toBeCloseTo(29);
       
-      // iPhone 15: 414px → 100% scaling
+      // iPhone 15: 393px → 100% scaling
       mockDimensions(414);
       expect(UniversalMillimetricSystem.scaleFont(32)).toBe(32);
       
@@ -1066,4 +1066,4 @@ BUSINESS:
 
 **📱 RISULTATO FINALE**: Sistema Perfetto che produce app identica al MILLIMETRO su iPhone SE, iPhone 15, iPad, Samsung, e qualsiasi dispositivo futuro! 🎯
 
-**🎯 REMEMBER**: Una volta implementato, il Sistema Perfetto lavora automaticamente - zero maintenance forever! ⚡ 
+**🎯 REMEMBER**: Una volta implementato, il Sistema Perfetto lavora automaticamente - zero maintenance forever! ⚡

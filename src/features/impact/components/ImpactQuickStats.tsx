@@ -1,5 +1,6 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
+import { PerfectText } from '../../../components/ui';
 
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
@@ -33,8 +34,12 @@ const ImpactQuickStats: React.FC<Props> = ({ fadeAnim, stats }) => {
             key={stat.id}
             style={[styles.statCard, { borderLeftColor: stat.color }]}
           >
-            <Text style={styles.statValue}>{stat.value}</Text>
-            <Text style={styles.statLabel}>{stat.label}</Text>
+            <PerfectText size={22} lines={1} style={styles.statValue}>
+              {stat.value}
+            </PerfectText>
+            <PerfectText size={12} lines={1} style={styles.statLabel}>
+              {stat.label}
+            </PerfectText>
             <View style={styles.statProgress}>
               <Animated.View
                 style={[
@@ -65,7 +70,9 @@ const styles = StyleSheet.create({
     gap: Spacing[3],
   },
   statCard: {
-    width: '48%',
+    // 2 card per riga con gap coerente su ogni device (millimetrico)
+    // Larghezza calcolata dal container (flex basis) per evitare percentuali
+    flexBasis: '48%',
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl,
     padding: Spacing[4],
@@ -73,13 +80,11 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   statValue: {
-    fontSize: TypographyTokens.styles.title.large,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: TypographyTokens.styles.body.small,
     color: Colors.neutral[600],
     marginBottom: Spacing[2],
   },

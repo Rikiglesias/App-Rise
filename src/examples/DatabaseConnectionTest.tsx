@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { getDatabaseDeviceInfo } from '../shared/utils/UniversalMillimetricSystem';
-import ResponsiveSystem from '../shared/constants/responsiveSystem';
+import ResponsiveSystem, {
+  DeviceInfo,
+} from '../shared/constants/responsiveSystem';
 import {
   getAllDevicesFlat,
   getDatabaseStats,
+  DeviceSpecs,
 } from '../shared/constants/deviceResolutionsDatabase';
 
 const DatabaseConnectionTest = () => {
-  const universalInfo = getDatabaseDeviceInfo();
+  const universalInfo = DeviceInfo;
   const responsiveInfo = ResponsiveSystem.getDatabaseDeviceInfo();
   const databaseStats = getDatabaseStats();
   const allDevices = getAllDevicesFlat();
@@ -18,27 +20,23 @@ const DatabaseConnectionTest = () => {
       <Text style={styles.title}>🔍 DATABASE CONNECTION TEST</Text>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>📱 UniversalMillimetricSystem</Text>
+        <Text style={styles.sectionTitle}>📱 DeviceInfo (Legacy)</Text>
+        <Text style={styles.info}>Current Width: {universalInfo.width}px</Text>
+        <Text style={styles.info}>Reference Width: 393px</Text>
         <Text style={styles.info}>
-          Current Width: {universalInfo.currentWidth}px
+          Connected: {responsiveInfo.isDeviceKnown ? '✅ YES' : '❌ NO'}
         </Text>
         <Text style={styles.info}>
-          Reference Width: {universalInfo.referenceWidth}px
+          Matched Devices: {responsiveInfo.matchedDevices?.length || 0}
         </Text>
-        <Text style={styles.info}>
-          Connected: {universalInfo.isConnectedToDatabase ? '✅ YES' : '❌ NO'}
-        </Text>
-        <Text style={styles.info}>
-          Matched Devices: {universalInfo.matchingDevices?.length || 0}
-        </Text>
-        {universalInfo.matchingDevices?.map(device => (
+        {responsiveInfo.matchedDevices?.map((device: DeviceSpecs) => (
           <Text
             key={`${device.brand}-${device.model}-${device.width}`}
             style={styles.deviceInfo}
           >
             • {device.brand} {device.model} ({device.width}×{device.height})
           </Text>
-        ))}
+        )) || []}
       </View>
 
       <View style={styles.section}>
@@ -68,9 +66,11 @@ const DatabaseConnectionTest = () => {
         <Text style={styles.info}>Total Brands: {databaseStats.topBrands}</Text>
 
         <Text style={styles.subTitle}>Devices by Year:</Text>
-        {Object.entries(databaseStats.devicesByYear).map(([year, count]) => (
+        {Object.entries(
+          databaseStats.devicesByYear as Record<string, number>
+        ).map(([year, count]) => (
           <Text key={year} style={styles.yearInfo}>
-            {year}: {count} devices
+            {year}: {count as number} devices
           </Text>
         ))}
       </View>
@@ -100,12 +100,12 @@ const DatabaseConnectionTest = () => {
         <Text
           style={[
             styles.status,
-            universalInfo.isConnectedToDatabase
+            responsiveInfo.isDeviceKnown
               ? styles.connected
               : styles.disconnected,
           ]}
         >
-          {universalInfo.isConnectedToDatabase
+          {responsiveInfo.isDeviceKnown
             ? '🟢 SISTEMA COLLEGATO AL DATABASE'
             : '🔴 SISTEMA NON COLLEGATO'}
         </Text>

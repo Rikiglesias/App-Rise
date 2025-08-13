@@ -17,7 +17,7 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
     "allowJs": true,
-    "module": "esnext",
+    "module": "es2022",
     "moduleResolution": "bundler",
     "target": "es2020",
     "baseUrl": "./src",

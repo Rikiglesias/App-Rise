@@ -85,9 +85,9 @@ const SuperioritàVsBestPractices = {
 </PerfectText>
 
 // CALCOLI MATEMATICI GARANTITI:
-// iPhone SE (375px): 32 * (375/414) = 29px (90.6% - proporzionale)
-// iPhone 15 (414px): 32 * (414/414) = 32px (100% - riferimento)  
-// iPad (768px): 32 * (768/414) = 59px (185.5% - proporzionale)
+// iPhone SE (375px): 32 * (375/393) = 30.5px (95.4% - proporzionale)
+// iPhone 15 (393px): 32 * (393/393) = 32px (100% - riferimento)  
+// iPad (768px): 32 * (768/393) = 62.5px (195.4% - proporzionale)
 
 // RISULTATO: Proporzioni IDENTICHE matematicamente! 📐
 ```
@@ -551,4 +551,4 @@ RISULTATO: RIFERIMENTO MONDIALE ASSOLUTO! 🌍
 
 **🚀 FUTURE**: Il Sistema Perfetto diventerà lo **STANDARD INDUSTRY** dei prossimi 10 anni!
 
-**💫 REMEMBER**: Da charity app locale → **LEADER TECNOLOGICO MONDIALE** - Una trasformazione epica! ✨ 
+**💫 REMEMBER**: Da charity app locale → **LEADER TECNOLOGICO MONDIALE** - Una trasformazione epica! ✨

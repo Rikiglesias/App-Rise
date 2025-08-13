@@ -10,7 +10,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Text, TextProps, TextStyle, View, Dimensions } from 'react-native';
-import { universal } from '../../shared/utils/UniversalMillimetricSystem';
+import {
+  scaleFont,
+  scaleSize,
+  scaleDimensionLinear,
+  LOGICAL_REFERENCE,
+} from '../../shared/constants/responsiveSystem';
 import {
   getImmuneTextProps,
   debugImmunity,
@@ -20,7 +25,8 @@ import {
 interface PerfectTextProps
   extends Omit<TextProps, 'numberOfLines' | 'adjustsFontSizeToFit'> {
   /** Font size di riferimento su iPhone 15 */
-  fontSize: number;
+  fontSize?: number; // retrocompatibilità
+  size?: number; // preferito
 
   /** Numero ESATTO di righe (sempre rispettato) */
   lines: number;
@@ -58,6 +64,7 @@ interface PerfectTextProps
 export const PerfectText: React.FC<PerfectTextProps> = ({
   children,
   fontSize,
+  size,
   lines,
   containerWidth,
   fontWeight = 'normal',
@@ -67,12 +74,13 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   style,
   ...props
 }) => {
-  const [optimalFontSize, setOptimalFontSize] = useState<number>(fontSize);
+  const referenceFontSize = size ?? fontSize ?? 16;
+  const [optimalFontSize, setOptimalFontSize] = useState<number>(referenceFontSize);
   const [isCalculating, setIsCalculating] = useState(true);
 
   const calculateOptimalFontSize = useCallback(() => {
     if (typeof children !== 'string') {
-      setOptimalFontSize(universal.font(fontSize));
+      setOptimalFontSize(scaleFont(referenceFontSize));
       setIsCalculating(false);
       return;
     }
@@ -81,12 +89,14 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     const { width: screenWidth } = Dimensions.get('window');
 
     // Calcola larghezza container effettiva
+    // Usa scaling lineare coerente col font per mantenere gli stessi a capo
+    const referenceContainerWidth = LOGICAL_REFERENCE.width * 0.9;
     const effectiveContainerWidth = containerWidth
-      ? universal.width(containerWidth)
-      : screenWidth * 0.9; // 90% dello schermo per default
+      ? scaleDimensionLinear(containerWidth)
+      : scaleDimensionLinear(referenceContainerWidth);
 
     // Calcola fontSize base proporzionale
-    const baseFontSize = universal.font(fontSize);
+    const baseFontSize = scaleFont(referenceFontSize);
 
     // Trova il fontSize ottimale che rispetta il numero di righe
     let testFontSize = baseFontSize;
@@ -114,7 +124,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
     setOptimalFontSize(testFontSize);
     setIsCalculating(false);
-  }, [children, fontSize, lines, containerWidth, debug]);
+  }, [children, referenceFontSize, lines, containerWidth, debug]);
 
   useEffect(() => {
     calculateOptimalFontSize();
@@ -145,22 +155,33 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
   if (isCalculating) {
     // Placeholder durante calcolo (evita flash)
+    const referenceContainerWidth = LOGICAL_REFERENCE.width * 0.9;
+    const targetWidth = containerWidth
+      ? scaleDimensionLinear(containerWidth)
+      : scaleDimensionLinear(referenceContainerWidth);
     return (
-      <View style={{ height: optimalFontSize * 1.2 * lines }}>
+      <View style={{ height: optimalFontSize * 1.2 * lines, maxWidth: targetWidth }}>
         <Text style={{ ...textStyle, opacity: 0 }}>{children}</Text>
       </View>
     );
   }
 
+  const referenceContainerWidth = LOGICAL_REFERENCE.width * 0.9;
+  const targetWidth = containerWidth
+    ? scaleDimensionLinear(containerWidth)
+    : scaleDimensionLinear(referenceContainerWidth);
+
   return (
-    <Text
-      {...props}
-      numberOfLines={lines}
-      {...immuneProps} // Props per immunità completa
-      style={textStyle}
-    >
-      {children}
-    </Text>
+    <View style={{ maxWidth: targetWidth }}>
+      <Text
+        {...props}
+        numberOfLines={lines}
+        {...immuneProps} // Props per immunità completa
+        style={textStyle}
+      >
+        {children}
+      </Text>
+    </View>
   );
 };
 

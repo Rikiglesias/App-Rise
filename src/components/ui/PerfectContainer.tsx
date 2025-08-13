@@ -10,7 +10,10 @@
 
 import React from 'react';
 import { View, ViewProps, ViewStyle, DimensionValue } from 'react-native';
-import { universal } from '../../shared/utils/UniversalMillimetricSystem';
+import {
+  scaleSpacing,
+  scaleSize,
+} from '../../shared/constants/responsiveSystem';
 import { useUniversalTheme } from '../../shared/theme/UniversalTheme';
 
 interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
@@ -152,40 +155,33 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
 
   // 📏 CALCOLA DIMENSIONI MILLIMETRICHE
   const finalPadding =
-    padding !== undefined ? universal.spacing(padding) : undefined;
+    padding !== undefined ? scaleSpacing(padding) : undefined;
   const finalPaddingH = (() => {
-    if (paddingHorizontal !== undefined)
-      return universal.spacing(paddingHorizontal);
-    if (config && 'padding' in config) return universal.spacing(config.padding);
+    if (paddingHorizontal !== undefined) return scaleSpacing(paddingHorizontal);
+    if (config && 'padding' in config) return scaleSpacing(config.padding);
     return undefined;
   })();
   const finalPaddingV = (() => {
-    if (paddingVertical !== undefined)
-      return universal.spacing(paddingVertical);
-    if (config && 'padding' in config) return universal.spacing(config.padding);
+    if (paddingVertical !== undefined) return scaleSpacing(paddingVertical);
+    if (config && 'padding' in config) return scaleSpacing(config.padding);
     return undefined;
   })();
 
-  const finalMargin =
-    margin !== undefined ? universal.spacing(margin) : undefined;
+  const finalMargin = margin !== undefined ? scaleSpacing(margin) : undefined;
   const finalMarginH =
-    marginHorizontal !== undefined
-      ? universal.spacing(marginHorizontal)
-      : undefined;
+    marginHorizontal !== undefined ? scaleSpacing(marginHorizontal) : undefined;
   const finalMarginV =
-    marginVertical !== undefined
-      ? universal.spacing(marginVertical)
-      : undefined;
+    marginVertical !== undefined ? scaleSpacing(marginVertical) : undefined;
 
-  const finalWidth = typeof width === 'number' ? universal.width(width) : width;
-  const finalHeight = height ? universal.height(height) : undefined;
+  const finalWidth = typeof width === 'number' ? scaleSize(width) : width;
+  const finalHeight = height ? scaleSize(height) : undefined;
   const finalBorderRadius = (() => {
-    if (borderRadius !== undefined) return universal.spacing(borderRadius);
+    if (borderRadius !== undefined) return scaleSpacing(borderRadius);
     if (config && 'borderRadius' in config)
-      return universal.spacing(config.borderRadius);
+      return scaleSpacing(config.borderRadius);
     return undefined;
   })();
-  const finalGap = gap ? universal.spacing(gap) : undefined;
+  const finalGap = gap ? scaleSpacing(gap) : undefined;
 
   // 🎨 RISOLVI COLORI AUTOMATICI
   const finalBackgroundColor = (() => {

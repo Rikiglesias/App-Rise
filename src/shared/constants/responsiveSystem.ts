@@ -107,6 +107,19 @@ export const ScalingFactors = {
   density: DEVICE_SCALE / LOGICAL_REFERENCE.scale,
 } as const;
 
+// 🧮 MILLIMETRIC SCALE (universale: iPhone 15 393px con clamp 0.85-1.4)
+export const getMillimetricScale = (): number => {
+  const raw = DEVICE_WIDTH / LOGICAL_REFERENCE.width;
+  if (raw < 0.85) return 0.85;
+  if (raw > 1.4) return 1.4;
+  return raw;
+};
+
+// 📏 Linear dimension scaling without grid rounding (per testi/line-break identici)
+export const scaleDimensionLinear = (referenceDimension: number): number => {
+  return referenceDimension * getMillimetricScale();
+};
+
 // 📊 SMART BREAKPOINTS (truly responsive, bi-directional)
 export const DeviceBreakpoints = {
   // Compact devices (SE, Mini)

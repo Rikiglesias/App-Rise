@@ -28,7 +28,7 @@ export const TestAutomaticoScreen: React.FC = () => {
   if (screenWidth <= 375) {
     deviceCategory = 'Android Piccolo (iPhone SE size)';
     expectedScale = 0.9;
-  } else if (screenWidth <= 414) {
+  } else if (screenWidth <= 393) {
     deviceCategory = 'Android Standard (iPhone 15 size)';
     expectedScale = 1.0;
   } else if (screenWidth <= 480) {
@@ -156,7 +156,7 @@ export const TestAutomaticoScreen: React.FC = () => {
           • iPhone SE (375px): 42px → 38px (-9%)
         </Text>
         <Text style={styles.comparisonText}>
-          • iPhone 15 (414px): 42px → 42px (0%)
+          • iPhone 15 (393px): 42px → 42px (0%)
         </Text>
         <Text style={[styles.comparisonText, styles.currentDevice]}>
           • Il tuo Android ({screenWidth}px): 42px → {scaledFontSize}px (

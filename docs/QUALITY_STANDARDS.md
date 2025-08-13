@@ -176,7 +176,7 @@ describe('Sistema Perfetto Enterprise', () => {
       // iPhone SE, iPhone 15, iPad, Samsung, Foldable
       allDevices.forEach(device => {
         const scaledFont = UniversalMillimetricSystem.scaleFont(32);
-        const expectedProportion = device.width / 414; // iPhone 15 reference
+        const expectedProportion = device.width / 393; // iPhone 15 reference
         expect(scaledFont).toBeCloseTo(32 * expectedProportion);
       });
     });
@@ -681,4 +681,4 @@ LEGACY BUILDING: Pioneering perfect responsive systems
 
 **🏆 FINAL DECLARATION**: Rise Against Hunger Italia ha raggiunto **QUALITY ENTERPRISE PERFETTA** che stabilisce il **NUOVO STANDARD MONDIALE** per app React Native!
 
-**🎯 REMEMBER**: Zero compromessi, zero tolleranza, solo **PERFEZIONE ASSOLUTA** sempre! ✨ 
+**🎯 REMEMBER**: Zero compromessi, zero tolleranza, solo **PERFEZIONE ASSOLUTA** sempre! ✨

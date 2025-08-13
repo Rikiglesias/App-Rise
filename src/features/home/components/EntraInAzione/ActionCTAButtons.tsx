@@ -145,13 +145,13 @@ const styles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 18,
-    minHeight: 90, // ← RIDOTTO da 120 a 90 per bottoni meno alti
+    minHeight: 70, // ← RIDOTTO da 90 a 70 per container più compatto
     ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[3], // ← RIDOTTO da Spacing[4] a Spacing[3]
+      paddingVertical: Spacing[2], // ← RIDOTTO da Spacing[3] a Spacing[2]
       paddingHorizontal: Spacing[3],
     }),
     ...(Platform.OS === 'ios' && {
-      paddingVertical: Spacing[3], // ← RIDOTTO da Spacing[4] a Spacing[3]
+      paddingVertical: Spacing[2], // ← RIDOTTO da Spacing[3] a Spacing[2]
       paddingHorizontal: Spacing[4],
     }),
     justifyContent: 'center',
@@ -162,12 +162,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around', // ← Cambiato da 'space-between' a 'space-around'
     flex: 1,
-    minHeight: 75, // ← RIDOTTO da 100 a 75 per contenuto meno alto
+    minHeight: 55, // ← RIDOTTO da 75 a 55 per contenuto più compatto
     ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[1], // ← RIDOTTO da Spacing[2] a Spacing[1]
+      paddingVertical: Spacing[0], // ← RIDOTTO da Spacing[1] a Spacing[0]
     }),
     ...(Platform.OS === 'ios' && {
-      paddingVertical: Spacing[1], // ← RIDOTTO da Spacing[2] a Spacing[1]
+      paddingVertical: Spacing[0], // ← RIDOTTO da Spacing[1] a Spacing[0]
     }),
   },
 
