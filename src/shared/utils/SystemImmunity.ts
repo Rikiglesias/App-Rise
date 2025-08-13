@@ -76,6 +76,8 @@ export const getImmuneTextProps = () => {
       // Android: Blocca font size sistema
       includeFontPadding: false,
       textAlignVertical: 'center',
+      textBreakStrategy: 'simple' as const,
+      ellipsizeMode: 'clip' as const,
     }),
   };
 };

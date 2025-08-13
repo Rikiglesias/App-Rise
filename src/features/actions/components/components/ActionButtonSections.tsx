@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 
-import { PlatformTouchable, FormattedText } from '../../../../components/ui';
+import { PlatformTouchable, PerfectText } from '../../../../components/ui';
 import { Spacing } from '../../../../shared/constants';
 import { AnimatedButton } from './AnimatedButton';
 import type {
@@ -63,24 +63,22 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
           onPress={onInfoPress}
           activeOpacity={0.8}
         >
-          <FormattedText
-            variant="title-large"
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          <PerfectText
+            size={24}
+            lines={1}
+            immunity={true}
             style={styles.donateCategoryTitle}
           >
             ❤️ Contribuisci
-          </FormattedText>
-          <FormattedText
-            fontSize={16}
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={1}
+            immunity={true}
             style={styles.donateInlineSubtitle}
           >
             Supporta la lotta contro la fame
-          </FormattedText>
+          </PerfectText>
         </PlatformTouchable>
         <PlatformTouchable
           style={styles.infoButton}
@@ -175,24 +173,22 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
               : styles.exploreHeaderBackground
           }
         >
-          <FormattedText
-            variant="headline-small"
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          <PerfectText
+            size={20}
+            lines={1}
+            immunity={true}
             style={styles.exploreTitle}
           >
             🔍 Esplora
-          </FormattedText>
-          <FormattedText
-            fontSize={16}
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={1}
+            immunity={true}
             style={styles.exploreSubtitle}
           >
             Progetti e iniziative umanitarie
-          </FormattedText>
+          </PerfectText>
         </View>
       </View>
       <View style={styles.buttonsGrid}>
@@ -280,24 +276,22 @@ export const CommunityButtonsSection: React.FC<
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
         >
-          <FormattedText
-            variant="headline-small"
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          <PerfectText
+            size={20}
+            lines={1}
+            immunity={true}
             style={styles.communityTitle}
           >
             🤝 Community
-          </FormattedText>
-          <FormattedText
-            fontSize={16}
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={1}
+            immunity={true}
             style={styles.communitySubtitle}
           >
             Unisciti alla nostra comunità
-          </FormattedText>
+          </PerfectText>
           <MaterialCommunityIcons
             name="open-in-new"
             size={16}

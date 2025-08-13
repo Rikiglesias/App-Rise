@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Platform, View } from 'react-native';
 
-import { PlatformTouchable, FormattedText } from '../../../../components/ui';
+import { PlatformTouchable, PerfectText } from '../../../../components/ui';
 import { Spacing } from '../../../../shared/constants';
 import type { AnimatedButtonProps } from './ActionButtonTypes';
 
@@ -57,15 +57,14 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
               color={iconColor}
               style={styles.buttonIcon}
             />
-            <FormattedText
-              fontSize={18}
-              lineBreakStrategyIOS="push-out"
-              breakStrategyAndroid="highQuality"
-              hyphenationFrequencyAndroid="full"
+            <PerfectText
+              size={18}
+              lines={1}
+              immunity={true}
               style={styles.buttonTitle}
             >
               {button.title}
-            </FormattedText>
+            </PerfectText>
             <MaterialCommunityIcons
               name="chevron-right"
               size={20}
@@ -99,15 +98,14 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
                 color={iconColor}
                 style={styles.buttonIcon}
               />
-              <FormattedText
-                fontSize={18}
-                lineBreakStrategyIOS="push-out"
-                breakStrategyAndroid="highQuality"
-                hyphenationFrequencyAndroid="full"
+              <PerfectText
+                size={18}
+                lines={1}
+                immunity={true}
                 style={styles.buttonTitle}
               >
                 {button.title}
-              </FormattedText>
+              </PerfectText>
               <MaterialCommunityIcons
                 name="chevron-right"
                 size={20}

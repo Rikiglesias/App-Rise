@@ -1,7 +1,8 @@
-import { Dimensions, ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import { ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import { DeviceInfo } from '../../../shared/constants/responsiveSystem';
 import { Spacing } from '../../../shared/constants/designTokens';
 
-const { width: screenWidth } = Dimensions.get('window');
+const screenWidth = DeviceInfo?.width ?? 393;
 
 export interface HomeActionsSectionProps {
   readonly onShopPress: () => void;

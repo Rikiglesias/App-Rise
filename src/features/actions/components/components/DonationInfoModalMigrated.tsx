@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { PlatformTouchable, FormattedText } from '../../../../components/ui';
+import { PlatformTouchable, PerfectText } from '../../../../components/ui';
 import { useResponsiveLayout } from '../../../../shared/hooks/useResponsiveLayout';
 
 import {
@@ -169,15 +169,14 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
 
       {/* TITOLO CENTRATO E CARINO */}
       <View style={modalStyles.centeredTitleContainer}>
-        <FormattedText
-          fontSize={28}
-          lineBreakStrategyIOS="push-out"
-          breakStrategyAndroid="highQuality"
-          hyphenationFrequencyAndroid="full"
+        <PerfectText
+          size={28}
+          lines={1}
+          immunity={true}
           style={modalStyles.centeredTitle}
         >
           Come Donare
-        </FormattedText>
+        </PerfectText>
         <View style={modalStyles.titleUnderline} />
       </View>
 

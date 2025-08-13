@@ -118,8 +118,8 @@ export const createImageStyles = (
     },
     image: {
       width: '100%',
-      height: '100%', // Mantiene l'altezza completa
-      resizeMode: 'cover', // RIPRISTINATO: da 'contain' a 'cover' - riempie tutto lo spazio senza bande vuote
+      height: '100%',
+      resizeMode: 'contain', // Evita tagli: mostra l'intera immagine
     },
     imageGradientOverlay: {
       position: 'absolute',

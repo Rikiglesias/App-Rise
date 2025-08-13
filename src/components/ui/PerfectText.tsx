@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, TextProps, TextStyle, View } from 'react-native';
+import { Text, TextProps, TextStyle, View, StyleSheet } from 'react-native';
 import responsiveSystem, {
   scaleFont,
   scaleDimensionLinear,
@@ -56,7 +56,10 @@ interface PerfectTextProps
   debug?: boolean;
 
   /** Stile custom */
-  style?: TextStyle;
+  style?: TextStyle | TextStyle[];
+
+  /** Immunità esplicita (opzionale, default true via SystemImmunity) */
+  immunity?: boolean;
 }
 
 export const PerfectText: React.FC<PerfectTextProps> = ({
@@ -70,10 +73,12 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   textAlign = 'left',
   debug = false,
   style,
+  immunity: _immunity,
   ...props
 }) => {
   const referenceFontSize = size ?? fontSize ?? 16;
-  const [optimalFontSize, setOptimalFontSize] = useState<number>(referenceFontSize);
+  const [optimalFontSize, setOptimalFontSize] =
+    useState<number>(referenceFontSize);
   const [isCalculating, setIsCalculating] = useState(true);
 
   const calculateOptimalFontSize = useCallback(() => {
@@ -88,7 +93,8 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
     // Calcola larghezza container effettiva
     // Usa scaling lineare coerente col font per mantenere gli stessi a capo
-    const referenceContainerWidth = responsiveSystem.LOGICAL_REFERENCE.width * 0.9;
+    const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+    const referenceContainerWidth = referenceWidth * 0.9;
     const effectiveContainerWidth = containerWidth
       ? scaleDimensionLinear(containerWidth)
       : scaleDimensionLinear(referenceContainerWidth);
@@ -140,6 +146,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   const immuneProps = getImmuneTextProps();
 
   // Stile ottimizzato per performance e consistency + immunità
+  const mergedStyle = Array.isArray(style) ? StyleSheet.flatten(style) : style;
   const textStyle = {
     fontSize: optimalFontSize,
     fontWeight,
@@ -148,23 +155,27 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     lineHeight: optimalFontSize * 1.2, // Line height proporzionale
     includeFontPadding: false, // Android consistency
     textAlignVertical: 'center' as const,
-    ...(style ?? {}),
+    ...(mergedStyle ?? {}),
   };
 
   if (isCalculating) {
     // Placeholder durante calcolo (evita flash)
-    const referenceContainerWidth = responsiveSystem.LOGICAL_REFERENCE.width * 0.9;
+    const referenceWidth2 = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+    const referenceContainerWidth = referenceWidth2 * 0.9;
     const targetWidth = containerWidth
       ? scaleDimensionLinear(containerWidth)
       : scaleDimensionLinear(referenceContainerWidth);
     return (
-      <View style={{ height: optimalFontSize * 1.2 * lines, maxWidth: targetWidth }}>
+      <View
+        style={{ height: optimalFontSize * 1.2 * lines, maxWidth: targetWidth }}
+      >
         <Text style={{ ...textStyle, opacity: 0 }}>{children}</Text>
       </View>
     );
   }
 
-  const referenceContainerWidth = responsiveSystem.LOGICAL_REFERENCE.width * 0.9;
+  const referenceWidth3 = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+  const referenceContainerWidth = referenceWidth3 * 0.9;
   const targetWidth = containerWidth
     ? scaleDimensionLinear(containerWidth)
     : scaleDimensionLinear(referenceContainerWidth);

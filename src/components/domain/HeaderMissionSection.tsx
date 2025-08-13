@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { Modal, View } from 'react-native';
 
-import { FormattedText, PlatformTouchable } from '../ui';
+import { PerfectText, PlatformTouchable } from '../ui';
 import { Colors } from '../../shared/constants/designTokens';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 import { baseMissionStyles } from './styles/HeaderMissionStyles';
@@ -47,26 +47,28 @@ export const HeaderMissionSection: React.FC<Props> = ({
             {/* CORREZIONE UX: Titolo principale SENZA GRADIENT - NON CLICCABILE */}
             <View style={baseMissionStyles.titleGradientContainer}>
               <View style={baseMissionStyles.titleContent}>
-                <FormattedText
-                  variant="title-large"
+                <PerfectText
+                  size={35}
+                  lines={1}
+                  immunity={true}
                   style={baseMissionStyles.impactTitleGradient}
                 >
                   Il nostro impatto sul mondo
-                </FormattedText>
+                </PerfectText>
                 {/* Underline decorativo per separazione - DESIGN SYSTEM */}
                 <View style={baseMissionStyles.titleUnderline} />
               </View>
             </View>
 
             {/* Testo descrittivo con Typography Smart - RESPONSIVE */}
-            <FormattedText
-              variant="body-large"
+            <PerfectText
+              size={18}
+              lines={3}
+              immunity={true}
               style={baseMissionStyles.missionText}
-              fixed={true}
-              fixedLines={3}
             >
               {missionText}
-            </FormattedText>
+            </PerfectText>
 
             {/* Statistiche container */}
             <View style={baseMissionStyles.statsContainer}>
@@ -76,18 +78,22 @@ export const HeaderMissionSection: React.FC<Props> = ({
                 onPress={handleMealsPress}
                 activeOpacity={0.8}
               >
-                <FormattedText
-                  variant="title-large"
-                  style={baseMissionStyles.statNumber}
+                <PerfectText
+                  size={32}
+                  lines={1}
+                  immunity={true}
+                  style={[baseMissionStyles.statNumber, { fontWeight: '900' }]}
                 >
                   3.14M
-                </FormattedText>
-                <FormattedText
-                  variant="body-small"
+                </PerfectText>
+                <PerfectText
+                  size={14}
+                  lines={1}
+                  immunity={true}
                   style={baseMissionStyles.statLabel}
                 >
                   Pasti distribuiti
-                </FormattedText>
+                </PerfectText>
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={20}
@@ -103,18 +109,22 @@ export const HeaderMissionSection: React.FC<Props> = ({
                   baseMissionStyles.volunteersBox,
                 ]}
               >
-                <FormattedText
-                  variant="title-large"
-                  style={baseMissionStyles.statNumber}
+                <PerfectText
+                  size={32}
+                  lines={1}
+                  immunity={true}
+                  style={[baseMissionStyles.statNumber, { fontWeight: '900' }]}
                 >
                   13K
-                </FormattedText>
-                <FormattedText
-                  variant="body-small"
+                </PerfectText>
+                <PerfectText
+                  size={14}
+                  lines={1}
+                  immunity={true}
                   style={baseMissionStyles.statLabel}
                 >
                   Volontari attivi
-                </FormattedText>
+                </PerfectText>
               </View>
             </View>
           </View>
@@ -137,12 +147,14 @@ export const HeaderMissionSection: React.FC<Props> = ({
               <View style={baseMissionStyles.modalContent}>
                 {/* Header del modal */}
                 <View style={baseMissionStyles.modalHeader}>
-                  <FormattedText
-                    variant="title-medium"
+                  <PerfectText
+                    size={24}
+                    lines={1}
+                    immunity={true}
                     style={baseMissionStyles.modalTitle}
                   >
                     Pasti Distribuiti
-                  </FormattedText>
+                  </PerfectText>
                   <PlatformTouchable
                     onPress={closeModal}
                     style={baseMissionStyles.closeButton}
@@ -166,24 +178,30 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       />
                     </View>
                     <View style={baseMissionStyles.breakdownText}>
-                      <FormattedText
-                        variant="body-large"
+                      <PerfectText
+                        size={18}
+                        lines={1}
+                        immunity={true}
                         style={baseMissionStyles.breakdownNumber}
                       >
                         2.5M
-                      </FormattedText>
-                      <FormattedText
-                        variant="body-medium"
+                      </PerfectText>
+                      <PerfectText
+                        size={14}
+                        lines={1}
+                        immunity={true}
                         style={baseMissionStyles.breakdownLabel}
                       >
                         Pasti completi
-                      </FormattedText>
-                      <FormattedText
-                        variant="body-small"
+                      </PerfectText>
+                      <PerfectText
+                        size={12}
+                        lines={1}
+                        immunity={true}
                         style={baseMissionStyles.breakdownDescription}
                       >
                         Programmi Africa
-                      </FormattedText>
+                      </PerfectText>
                     </View>
                   </View>
 
@@ -196,24 +214,30 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       />
                     </View>
                     <View style={baseMissionStyles.breakdownText}>
-                      <FormattedText
-                        variant="body-large"
+                      <PerfectText
+                        size={18}
+                        lines={1}
+                        immunity={true}
                         style={baseMissionStyles.breakdownNumber}
                       >
                         600K
-                      </FormattedText>
-                      <FormattedText
-                        variant="body-medium"
+                      </PerfectText>
+                      <PerfectText
+                        size={14}
+                        lines={1}
+                        immunity={true}
                         style={baseMissionStyles.breakdownLabel}
                       >
                         Kit di emergenza
-                      </FormattedText>
-                      <FormattedText
-                        variant="body-small"
+                      </PerfectText>
+                      <PerfectText
+                        size={12}
+                        lines={1}
+                        immunity={true}
                         style={baseMissionStyles.breakdownDescription}
                       >
                         Situazioni di crisi
-                      </FormattedText>
+                      </PerfectText>
                     </View>
                   </View>
                 </View>
@@ -222,18 +246,22 @@ export const HeaderMissionSection: React.FC<Props> = ({
                 <View style={baseMissionStyles.totalContainer}>
                   <View style={baseMissionStyles.totalLine} />
                   <View style={baseMissionStyles.totalRow}>
-                    <FormattedText
-                      variant="body-medium"
+                    <PerfectText
+                      size={14}
+                      lines={1}
+                      immunity={true}
                       style={baseMissionStyles.totalLabel}
                     >
                       Totale distribuito
-                    </FormattedText>
-                    <FormattedText
-                      variant="title-large"
+                    </PerfectText>
+                    <PerfectText
+                      size={24}
+                      lines={1}
+                      immunity={true}
                       style={baseMissionStyles.totalNumber}
                     >
                       3.14M
-                    </FormattedText>
+                    </PerfectText>
                   </View>
                 </View>
               </View>

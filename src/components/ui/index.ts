@@ -31,6 +31,7 @@ export { default as PlatformTouchable } from './PlatformTouchable';
 export { PlatformScrollView, PlatformSurface } from './PlatformComponents';
 
 // Display Components
+// LEGACY (DEPRECATO): mantenuto temporaneamente per compatibilità durante la migrazione
 export { default as FormattedText } from './FormattedText';
 export {
   FormattedTextEnhanced,
@@ -68,7 +69,7 @@ export {
 export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';
 
-// Responsive Layout Components
+// LEGACY (DEPRECATO): mantenuto temporaneamente per compatibilità durante la migrazione
 export {
   ResponsiveBox,
   ResponsiveStack,

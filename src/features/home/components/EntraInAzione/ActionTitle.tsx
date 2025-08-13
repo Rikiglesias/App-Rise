@@ -10,10 +10,10 @@ export const ActionTitle: React.FC = () => {
       <View style={styles.titleContainer}>
         {/* ✅ SISTEMA PERFETTO - PerfectText con immunità totale */}
         <PerfectText
-          fontSize={35} // ✅ Font size diretto, no scaleFont
-          lines={1} // ✅ lines invece numberOfLines
-          fontWeight="900" // ✅ Font weight massimo
-          color="#DC2626" // ✅ Rosso diretto
+          size={35}
+          lines={1}
+          fontWeight="900"
+          color="#DC2626"
           style={{
             textAlign: 'center',
             textShadowColor: 'rgba(220, 38, 38, 0.3)',

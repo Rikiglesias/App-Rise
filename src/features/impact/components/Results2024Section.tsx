@@ -31,18 +31,10 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
         ]}
       >
         <View style={styles.results2024HeaderBackground}>
-          <PerfectText
-            size={24}
-            lines={1}
-            style={styles.results2024Title}
-          >
+          <PerfectText size={24} lines={1} style={styles.results2024Title}>
             🎯 Risultati Raggiunti
           </PerfectText>
-          <PerfectText
-            size={16}
-            lines={2}
-            style={styles.results2024Subtitle}
-          >
+          <PerfectText size={16} lines={2} style={styles.results2024Subtitle}>
             I numeri che raccontano il nostro impegno annuale
           </PerfectText>
         </View>
@@ -65,18 +57,10 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
               size={28}
               color="#DC2626"
             />
-            <PerfectText
-              size={24}
-              lines={1}
-              style={styles.record2024Value}
-            >
+            <PerfectText size={24} lines={1} style={styles.record2024Value}>
               3.14M
             </PerfectText>
-            <PerfectText
-              size={16}
-              lines={1}
-              style={styles.record2024Label}
-            >
+            <PerfectText size={16} lines={1} style={styles.record2024Label}>
               Pasti Confezionati
             </PerfectText>
             <PerfectText
@@ -104,18 +88,10 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
               size={28}
               color="#1F2937"
             />
-            <PerfectText
-              size={24}
-              lines={1}
-              style={styles.record2024Value}
-            >
+            <PerfectText size={24} lines={1} style={styles.record2024Value}>
               16.3K
             </PerfectText>
-            <PerfectText
-              size={16}
-              lines={1}
-              style={styles.record2024Label}
-            >
+            <PerfectText size={16} lines={1} style={styles.record2024Label}>
               Kit Confezionati
             </PerfectText>
             <PerfectText

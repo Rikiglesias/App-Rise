@@ -9,7 +9,13 @@
  */
 
 import React from 'react';
-import { View, ViewProps, ViewStyle, DimensionValue } from 'react-native';
+import {
+  View,
+  ViewProps,
+  ViewStyle,
+  DimensionValue,
+  StyleSheet,
+} from 'react-native';
 import {
   scaleSpacing,
   scaleSize,
@@ -61,7 +67,7 @@ interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
   gap?: number;
 
   /** Stile custom */
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
 }
 
 // 🎨 PRESET CONTAINER (riferimento iPhone 15)
@@ -204,6 +210,7 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   })();
 
   // 🏗️ COMPONI STILE FINALE
+  const mergedStyle = Array.isArray(style) ? StyleSheet.flatten(style) : style;
   const containerStyle: ViewStyle = {
     // Preset properties
     ...(config && 'flex' in config && { flex: config.flex }),
@@ -236,8 +243,8 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
     // Shadow
     ...shadowStyle,
 
-    // Custom style override
-    ...style,
+    // Custom style override (supports style arrays)
+    ...(mergedStyle ?? {}),
   };
 
   // Debug info removed for production

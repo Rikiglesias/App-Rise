@@ -52,14 +52,8 @@ Per garantire che l'app appaia **matematicamente identica** su tutti i dispositi
 
 #### **✅ CONFIGURAZIONE PERFETTA OBBLIGATORIA**
 ```typescript
-// Standard per TUTTI i testi - ZERO ECCEZIONI
-<PerfectText 
-  size={32}              // Base iPhone 15, auto-scala matematicamente
-  lines={2}              // SEMPRE 2 righe esatte, mai tagliato
-  immunity={true}        // IMMUNE a qualsiasi impostazione utente
-  weight="bold"          // Typography perfetta automatica
-  color="auto"           // Auto light/dark theme
->
+// Standard per TUTTI i testi
+<PerfectText size={32} lines={2}>
   Testo sempre perfetto su ogni dispositivo
 </PerfectText>
 
@@ -108,6 +102,22 @@ const status = SystemImmunity.checkImmunityStatus();
 // }
 
 // RISULTATO GARANTITO: App IMMUNE a qualsiasi setting!
+```
+
+#### **✅ ANDROID PARITY E WRAP IDENTICI**
+- Normalizzazione Android (automatica in PerfectText via SystemImmunity):
+  - includeFontPadding = false
+  - textBreakStrategy = 'simple'
+  - ellipsizeMode = 'clip'
+- Per wrap identici su tutti i device, usa `containerWidth` riferito a iPhone 15:
+```tsx
+<PerfectText size={22} lines={2} containerWidth={140}>Dona e{"\n"}Aiuta</PerfectText>
+```
+- Usa il fallback sicuro per la reference:
+```ts
+import responsiveSystem, { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const width90 = scaleDimensionLinear(referenceWidth * 0.9);
 ```
 
 ---

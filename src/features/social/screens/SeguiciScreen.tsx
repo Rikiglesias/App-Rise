@@ -25,7 +25,10 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants';
-import responsiveSystem, { scaleDimensionLinear, DesignTokens } from '../../../shared/constants/responsiveSystem';
+import responsiveSystem, {
+  scaleDimensionLinear,
+  DesignTokens,
+} from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
@@ -207,7 +210,11 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                     resizeMode="contain"
                   />
                 ) : (
-                  <PerfectText size={28} lines={1} style={styles.socialIconEmoji}>
+                  <PerfectText
+                    size={28}
+                    lines={1}
+                    style={styles.socialIconEmoji}
+                  >
                     {platform.emoji}
                   </PerfectText>
                 )}
@@ -221,7 +228,11 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                 <PerfectText size={12} lines={1} style={styles.socialHandle}>
                   {platform.handle}
                 </PerfectText>
-                <PerfectText size={11} lines={2} style={styles.socialDescription}>
+                <PerfectText
+                  size={11}
+                  lines={2}
+                  style={styles.socialDescription}
+                >
                   {platform.description}
                 </PerfectText>
               </View>
@@ -264,7 +275,11 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                 Seguici Ovunque
               </PerfectText>
             </PerfectText>
-            <PerfectText size={15} lines={2} style={styles.categorySubtitleInline}>
+            <PerfectText
+              size={15}
+              lines={2}
+              style={styles.categorySubtitleInline}
+            >
               Resta connesso e scopri come fare la differenza
             </PerfectText>
           </View>
@@ -485,7 +500,9 @@ const styles = StyleSheet.create({
   sectionDivider: {
     height: 2, // IDENTICO CHI SIAMO: altezza bilanciata
     backgroundColor: Colors.neutral[300], // IDENTICO CHI SIAMO: più soft per eleganza
-    width: scaleDimensionLinear(responsiveSystem.LOGICAL_REFERENCE.width * 0.6), // 60% iPhone 15 scalato millimetricamente
+    width: scaleDimensionLinear(
+      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.6
+    ),
     borderRadius: 1, // IDENTICO CHI SIAMO
     opacity: 0.8, // IDENTICO CHI SIAMO: sottile trasparenza per delicatezza
     // OMBRA ELEGANTE IDENTICA CHI SIAMO

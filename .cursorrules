@@ -761,3 +761,34 @@ import { scaleFont } from '@/shared/utils/scaleFont';
 **🏆 LEGACY**: Da charity app → **RIFERIMENTO MONDIALE** per sistemi responsive perfetti in React Native! 
 
 **🎯 REMEMBER**: Zero compromessi, zero tolleranza, zero manutenzione - Solo **PERFEZIONE ASSOLUTA** sempre! ✨ 
+
+---
+
+## 📌 Addendum – Sistema Millimetrico aggiornato (Android parity + wrap identico)
+
+### PerfectText: regole per wrap identici
+- Imposta sempre `size` (riferimento iPhone 15) e, quando il wrap deve essere identico su tutti i device, aggiungi anche `containerWidth` millimetrico. Il valore è riferito a iPhone 15 (393) e viene scalato linearmente con `scaleDimensionLinear`.
+- Esempio bottoni identici (iPhone 15, Pixel 7, Samsung):
+```tsx
+<PerfectText size={22} lines={2} containerWidth={140}>Dona e{`\n`}Aiuta</PerfectText>
+```
+
+### Normalizzazione Android (testo)
+- Il sistema applica automaticamente su Android:
+  - `includeFontPadding = false`
+  - `textBreakStrategy = 'simple'`
+  - `ellipsizeMode = 'clip'`
+- Risultato: niente ellissi o padding inattesi, capi‑riga coerenti con iOS.
+
+### Accesso sicuro a LOGICAL_REFERENCE
+- Usa SEMPRE `responsiveSystem` e un fallback sicuro quando accedi alla reference iPhone 15:
+```ts
+import responsiveSystem, { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const ninetyPercent = scaleDimensionLinear(referenceWidth * 0.9);
+```
+- È vietato accedere a `LOGICAL_REFERENCE.width` senza fallback.
+
+### Immagini header
+- Per evitare tagli: `resizeMode='contain'` e altezza calcolata con scala millimetrica.
+- Alternativa consigliata: `PerfectImage preset='hero'` (rapporto 16:9 fisso, scalato millimetricamente).

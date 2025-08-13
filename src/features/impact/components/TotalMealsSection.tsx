@@ -3,8 +3,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
-import { FormattedText, PlatformTouchable } from '../../../components/ui';
-import responsiveSystem, { scaleDimensionLinear } from '../../../shared/constants/responsiveSystem';
+import { PerfectText, PlatformTouchable } from '../../../components/ui';
+import responsiveSystem, {
+  scaleDimensionLinear,
+} from '../../../shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,
@@ -45,12 +47,22 @@ export const TotalMealsSection: React.FC<Props> = ({
         ]}
       >
         <View style={styles.numbersHeaderBackground}>
-          <FormattedText variant="headline-small" style={styles.numbersTitle}>
+          <PerfectText
+            size={24}
+            lines={1}
+            immunity={true}
+            style={styles.numbersTitle}
+          >
             📊 I Nostri Numeri
-          </FormattedText>
-          <FormattedText variant="body-large" style={styles.numbersSubtitle}>
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={2}
+            immunity={true}
+            style={styles.numbersSubtitle}
+          >
             Milioni di vite cambiate, un pasto alla volta
-          </FormattedText>
+          </PerfectText>
         </View>
       </Animated.View>
 
@@ -76,24 +88,30 @@ export const TotalMealsSection: React.FC<Props> = ({
                   color="#DC2626"
                   style={styles.totalCardIcon}
                 />
-                <FormattedText
-                  variant="headline-small"
+                <PerfectText
+                  size={22}
+                  lines={1}
+                  immunity={true}
                   style={styles.totalStatValue}
                 >
                   15.8M
-                </FormattedText>
-                <FormattedText
-                  variant="body-large"
+                </PerfectText>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  immunity={true}
                   style={styles.totalStatLabel}
                 >
                   Pasti Totali
-                </FormattedText>
-                <FormattedText
-                  variant="body-medium"
+                </PerfectText>
+                <PerfectText
+                  size={14}
+                  lines={1}
+                  immunity={true}
                   style={styles.totalStatSubtitle}
                 >
                   Dal 2012 - Meals
-                </FormattedText>
+                </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -126,24 +144,30 @@ export const TotalMealsSection: React.FC<Props> = ({
                   color="#1F2937"
                   style={styles.totalCardIcon}
                 />
-                <FormattedText
-                  variant="headline-small"
+                <PerfectText
+                  size={22}
+                  lines={1}
+                  immunity={true}
                   style={styles.totalStatValue}
                 >
                   142K
-                </FormattedText>
-                <FormattedText
-                  variant="body-large"
+                </PerfectText>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  immunity={true}
                   style={styles.totalStatLabel}
                 >
                   Kit Totali
-                </FormattedText>
-                <FormattedText
-                  variant="body-medium"
+                </PerfectText>
+                <PerfectText
+                  size={14}
+                  lines={1}
+                  immunity={true}
                   style={styles.totalStatSubtitle}
                 >
                   Dal 2020 - Kits
-                </FormattedText>
+                </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -164,7 +188,9 @@ const styles = StyleSheet.create({
   titleSeparator: {
     height: 3, // PIÙ GROSSA: prima linea più prominente (IDENTICO PAGINA AZIONI)
     backgroundColor: Colors.neutral[300], // PIÙ SOFT per eleganza (IDENTICO PAGINA AZIONI)
-    width: scaleDimensionLinear(responsiveSystem.LOGICAL_REFERENCE.width * 0.9), // 90% iPhone 15 scalato millimetricamente
+    width: scaleDimensionLinear(
+      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.9
+    ),
     borderRadius: 1, // IDENTICO PAGINA AZIONI
     opacity: 0.8, // SOTTILE trasparenza per delicatezza (IDENTICO PAGINA AZIONI)
     alignSelf: 'center',

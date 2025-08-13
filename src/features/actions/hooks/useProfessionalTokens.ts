@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { DeviceInfo } from '../../../shared/constants/responsiveSystem';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { useResponsive } from '../../../shared/hooks/useResponsive';
 import type {
@@ -6,7 +6,7 @@ import type {
   ProfessionalTypography,
 } from '../types/ContributeScreenTypes';
 
-const { width: screenWidth } = Dimensions.get('window');
+const screenWidth = DeviceInfo?.width ?? 393;
 
 export const useProfessionalTokens = () => {
   const { colors } = useTheme();

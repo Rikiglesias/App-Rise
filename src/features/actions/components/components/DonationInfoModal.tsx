@@ -10,15 +10,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { PlatformTouchable } from '../../../../components/ui';
-import { FormattedText } from '../../../../components/ui/FormattedText';
+import { PlatformTouchable, PerfectText } from '../../../../components/ui';
 
 import {
   Colors,
   Spacing,
   Typography,
 } from '../../../../shared/constants/designTokens';
-import { scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../../shared/constants/responsiveSystem';
+import responsiveSystem, {
+  scaleDimensionLinear,
+} from '../../../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 
 interface DonationInfoModalProps {
@@ -75,7 +76,9 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       shadowOpacity: Platform.OS === 'android' ? 0.2 : 0.3, // ANDROID: ombra più leggera
       shadowRadius: 20,
       elevation: Platform.OS === 'android' ? 8 : 12, // ANDROID: elevazione ridotta
-      maxWidth: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.9), // 90% iPhone 15 scalato millimetricamente
+      maxWidth: scaleDimensionLinear(
+        (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.9
+      ),
       width: '100%',
     },
     modalWhiteContainer: {
@@ -194,15 +197,14 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
 
                     {/* TITOLO CENTRATO E CARINO */}
                     <View style={modalStyles.centeredTitleContainer}>
-                      <FormattedText
-                        fontSize={28}
-                        lineBreakStrategyIOS="push-out"
-                        breakStrategyAndroid="highQuality"
-                        hyphenationFrequencyAndroid="full"
+                      <PerfectText
+                        size={28}
+                        lines={1}
+                        immunity={true}
                         style={modalStyles.centeredTitle}
                       >
                         Come Donare
-                      </FormattedText>
+                      </PerfectText>
                       <View style={modalStyles.titleUnderline} />
                     </View>
 
@@ -272,15 +274,14 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
 
                     {/* TITOLO CENTRATO E CARINO */}
                     <View style={modalStyles.centeredTitleContainer}>
-                      <FormattedText
-                        fontSize={28}
-                        lineBreakStrategyIOS="push-out"
-                        breakStrategyAndroid="highQuality"
-                        hyphenationFrequencyAndroid="full"
+                      <PerfectText
+                        size={28}
+                        lines={1}
+                        immunity={true}
                         style={modalStyles.centeredTitle}
                       >
                         Come Donare
-                      </FormattedText>
+                      </PerfectText>
                       <View style={modalStyles.titleUnderline} />
                     </View>
 

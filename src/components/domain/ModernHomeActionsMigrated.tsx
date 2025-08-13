@@ -17,11 +17,7 @@ import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 // 🎯 NUOVO: Import layer centralizzato
 import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
-import {
-  PerfectContainer,
-  PlatformTouchable,
-  FormattedText,
-} from '../ui';
+import { PerfectContainer, PlatformTouchable, PerfectText } from '../ui';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato
 // const { width: screenWidth } = Dimensions.get('window');
@@ -56,7 +52,7 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   // 🎯 NUOVO: Layer centralizzato elimina frammentazione
-  const { responsive } = useResponsiveLayout();
+  const { responsive: _responsive } = useResponsiveLayout();
 
   // Simplified animation (unchanged)
   useEffect(() => {
@@ -173,9 +169,14 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
       >
         <PlatformTouchable onPress={action.onPress}>
           <Surface style={styles.card}>
-            <FormattedText fontSize={24} fixedLines={1} style={styles.icon}>
+            <PerfectText
+              size={24}
+              lines={1}
+              immunity={true}
+              style={styles.icon}
+            >
               {action.icon}
-            </FormattedText>
+            </PerfectText>
             <Text style={styles.title}>{action.title}</Text>
           </Surface>
         </PlatformTouchable>

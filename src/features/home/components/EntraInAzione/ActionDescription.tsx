@@ -6,6 +6,10 @@ import {
   PerfectContainer,
   PerfectCardContainer,
 } from '../../../../components/ui';
+import responsiveSystem, {
+  scaleDimensionLinear,
+} from '../../../../shared/constants/responsiveSystem';
+import Colors from '../../../../shared/constants/designTokens';
 
 export const ActionDescription: React.FC = () => {
   return (
@@ -28,14 +32,26 @@ export const ActionDescription: React.FC = () => {
           Unisciti a noi nella lotta {'\n'}contro la fame nel mondo
         </PerfectText>
 
-        {/* ✅ SISTEMA PERFETTO - Divider */}
+        {/* ✅ SISTEMA PERFETTO - Divider grigio standard (millimetrico, centrato) */}
         <PerfectContainer
-          width={50}
-          height={3}
-          backgroundColor="transparent"
-          marginVertical={18}
-          borderRadius={1}
-          style={styles.descriptionDivider}
+          style={[
+            styles.descriptionDivider,
+            {
+              width: scaleDimensionLinear(
+                (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.4
+              ),
+              height: 2,
+              marginVertical: 20,
+              borderRadius: 1,
+              backgroundColor: Colors.neutral[300],
+              opacity: 0.8,
+              shadowColor: Colors.neutral[400],
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.15,
+              shadowRadius: 3,
+              elevation: 2,
+            },
+          ]}
         />
 
         {/* ✅ SISTEMA PERFETTO - Seconda frase: andata a capo dopo "per" */}
@@ -63,12 +79,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionDivider: {
-    backgroundColor: '#DC2626',
     alignSelf: 'center',
-    shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
   },
 
   descriptionSecondary: {

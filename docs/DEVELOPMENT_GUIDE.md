@@ -38,8 +38,10 @@ STATUS: ENTERPRISE PERFECTION ACHIEVED ✨
 ### **🏗️ ARCHITETTURA PERFETTA**
 ```
 src/
+├── shared/constants/
+│   ├── responsiveSystem.ts            # ⭐ CORE millimetrico (393px)
+│   └── designTokens.ts                # Token di design
 ├── shared/utils/
-│   ├── UniversalMillimetricSystem.ts  # ⭐ CORE del sistema
 │   └── SystemImmunity.ts              # 🛡️ Immunità settings
 ├── components/ui/
 │   ├── PerfectText.tsx                # 📝 Testi perfetti
@@ -51,13 +53,12 @@ src/
 ### **📱 PRINCIPIO FONDAMENTALE**
 ```
 RIFERIMENTO ASSOLUTO: iPhone 15 (393px)
-├── Font: scaleFont(size) → proporzioni perfette
-├── Spacing: scaleSpacing(value) → identico ovunque
-├── Images: scaleDimension(size) → millimetri esatti
-├── Containers: scaleContainer(width) → sempre iPhone 15
+├── Font: responsiveSystem.scaleFont(size)
+├── Dimensioni: responsiveSystem.scaleDimensionLinear(value)
+├── Preset: PerfectImage/PerfectContainer
 └── IMMUNITÀ: SystemImmunity → blocco totale settings
 
-RISULTATO: Layout matematicamente IDENTICO su tutti dispositivi!
+RISULTATO: Layout matematicamente IDENTICO su tutti i dispositivi!
 ```
 
 ---
@@ -125,48 +126,17 @@ const fontSize = width > 768 ? 24 : 16;
 
 ## 🏗️ **SISTEMA UNIVERSALE**
 
-### **🧮 UniversalMillimetricSystem - CORE**
+### **🧮 responsiveSystem - CORE**
 ```typescript
-// src/shared/utils/UniversalMillimetricSystem.ts
-export const UniversalMillimetricSystem = {
-  // iPhone 15 = riferimento assoluto
-  REFERENCE_DEVICE: {
-    width: 414,
-    name: 'iPhone 15'
-  },
-  
-  // Auto-detection dispositivo corrente
-  getCurrentDevice: () => {
-    const { width } = Dimensions.get('window');
-    return findDeviceByWidth(width)[0] || { width };
-  },
-  
-  // Calcoli matematici perfetti
-  scaleFont: (size: number): number => {
-    const currentDevice = UniversalMillimetricSystem.getCurrentDevice();
-    return Math.round(size * (currentDevice.width / 414));
-  },
-  
-  scaleSpacing: (value: number): number => {
-    const currentDevice = UniversalMillimetricSystem.getCurrentDevice();
-    return Math.round(value * (currentDevice.width / 414));
-  },
-  
-  scaleDimension: (size: number): number => {
-    const currentDevice = UniversalMillimetricSystem.getCurrentDevice();
-    return Math.round(size * (currentDevice.width / 414));
-  },
-  
-  // Calcoli container sempre iPhone 15
-  scaleContainer: (baseWidth: string | number): string => {
-    // Mantiene sempre le stesse proporzioni del container
-    return typeof baseWidth === 'string' ? baseWidth : `${baseWidth}%`;
-  }
-};
+// src/shared/constants/responsiveSystem.ts
+import responsiveSystem, { scaleFont, scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
 
-// ✅ Utilizzo semplice
-const scaledFont = UniversalMillimetricSystem.scaleFont(32);     // Auto iPhone 15
-const scaledSpacing = UniversalMillimetricSystem.scaleSpacing(16);  // Auto iPhone 15
+// iPhone 15 (393px) = riferimento assoluto
+const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+
+// ✅ Utilizzo
+const font16 = scaleFont(16);
+const cardWidth = scaleDimensionLinear(referenceWidth * 0.9);
 ```
 
 ### **📊 ESEMPI SCALING PERFETTO**
@@ -174,23 +144,23 @@ const scaledSpacing = UniversalMillimetricSystem.scaleSpacing(16);  // Auto iPho
 // RISULTATI GARANTITI MATEMATICAMENTE:
 const ScalingExamples = {
   "iPhone SE (375px)": {
-    scaleFont: "size * 0.906",      // 375/414 = 90.6%
-    example: "32px → 29px",
+    scaleFont: "size * 0.954",      // 375/393 ≈ 95.4%
+    example: "32px → 30.5px",
     accuracy: "Proporzioni iPhone 15 mantenute"
   },
   "iPhone 15 (393px)": {
-    scaleFont: "size * 1.000",      // 414/414 = 100%
+    scaleFont: "size * 1.000",      // 393/393 = 100%
     example: "32px → 32px",
     accuracy: "Riferimento perfetto"
   },
   "Samsung (360px)": {
-    scaleFont: "size * 0.870",      // 360/414 = 87.0%
-    example: "32px → 28px",
+    scaleFont: "size * 0.916",      // 360/393 ≈ 91.6%
+    example: "32px → 29.3px",
     accuracy: "Proporzioni iPhone 15 esatte"
   },
   "iPad (768px)": {
-    scaleFont: "size * 1.855",      // 768/414 = 185.5%
-    example: "32px → 59px",
+    scaleFont: "size * 1.954",      // 768/393 ≈ 195.4%
+    example: "32px → 62.5px",
     accuracy: "Scala perfettamente proporzionale"
   }
 };
@@ -215,6 +185,27 @@ const ScalingExamples = {
   Testo sempre perfetto su ogni dispositivo
 </PerfectText>
 ```
+
+### 🔒 Android parity per testi
+- Il sistema applica automaticamente (via SystemImmunity):
+  - `includeFontPadding = false`
+  - `textBreakStrategy = 'simple'`
+  - `ellipsizeMode = 'clip'`
+- Obiettivo: evitare differenze di wrap/ellissi tra iOS e Android.
+
+### 📐 Container width millimetrico per wrap identici
+- Quando il wrap deve essere identico su tutti i device, usa `containerWidth` (riferito a iPhone 15):
+```tsx
+<PerfectText size={22} lines={2} containerWidth={140}>Dona e{`\n`}Aiuta</PerfectText>
+```
+- Il valore viene scalato linearmente su ogni device, mantenendo lo stesso punto di a capo.
+
+### 🛡️ Accesso sicuro a LOGICAL_REFERENCE
+```ts
+import responsiveSystem from '@/shared/constants/responsiveSystem';
+const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+```
+- Evita accessi diretti senza fallback.
 
 ### **🔧 API COMPLETA PerfectText**
 ```typescript

@@ -1,14 +1,11 @@
-import {
-  Animated,
-  Dimensions,
-  ViewStyle,
-  TextStyle,
-  ImageStyle,
-} from 'react-native';
+import { Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { Spacing } from '../../../shared/constants/designTokens';
+import responsiveSystem, {
+  scaleDimensionLinear,
+} from '../../../shared/constants/responsiveSystem';
 import { useTheme } from '../../../shared/hooks/useTheme';
 
-const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
+// Dimensioni calcolate in modo millimetrico rispetto a iPhone 15 (393px)
 
 // Configuration inline
 export const ADVANCED_CONFIG = {
@@ -18,11 +15,15 @@ export const ADVANCED_CONFIG = {
     minHeight: 120,
   },
   imageSection: {
-    height: windowHeight * 0.58,
+    // Altezza ancora più generosa per aumentare dimensione percepita senza tagli
+    height: scaleDimensionLinear(
+      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 1.2
+    ),
   },
   typography: {
-    title: windowWidth < 375 ? 28 : 32,
-    lineHeight: windowWidth < 375 ? 32 : 36,
+    // Valori di fallback non usati negli stili (si usano TypographyTokens)
+    title: 32,
+    lineHeight: 36,
   },
   animations: {
     staggerDelay: 200,

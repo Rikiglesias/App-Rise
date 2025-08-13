@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { StyleSheet, View, Animated, Platform } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PlatformScrollView } from '../../../components/ui';
 import { EntraInAzione } from '../components';
@@ -28,7 +28,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     },
     content: {
       flexGrow: 1,
-      paddingBottom: Platform.OS === 'android' ? Spacing[24] : Spacing[20], // ANDROID: Spacing[24] per evitare sovrapposizione bottom navigation / iOS: Spacing[20] normale
+      paddingBottom: Spacing[20],
     },
     heroSection: {
       marginBottom: Spacing[3],

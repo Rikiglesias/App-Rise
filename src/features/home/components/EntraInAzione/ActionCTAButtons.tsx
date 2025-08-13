@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import {
   PerfectText,
@@ -14,6 +14,7 @@ import {
   Spacing,
   Typography,
 } from '../../../../shared/constants/designTokens';
+import { scaleDimensionLinear } from '../../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -62,26 +63,35 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="chart-line"
-                size={Platform.OS === 'android' ? 35 : 36}
+                size={36}
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
               <PerfectText
-                fontSize={22}
+                size={22}
                 fontWeight="bold"
                 lines={2}
+                containerWidth={140}
                 style={styles.buttonTitle}
               >
                 Scopri{'\n'}Impatto
               </PerfectText>
-              <PerfectText
-                fontSize={18}
-                fontWeight="bold"
-                lines={1}
-                style={styles.buttonDirectionRed}
-              >
-                ← Risultati
-              </PerfectText>
+              <View style={styles.directionRowRed}>
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  size={18}
+                  color="#EF4444"
+                />
+                <PerfectText
+                  size={18}
+                  fontWeight="bold"
+                  lines={1}
+                  containerWidth={110}
+                  style={styles.buttonDirectionRed}
+                >
+                  Risultati
+                </PerfectText>
+              </View>
             </View>
           </View>
         </LinearGradient>
@@ -103,26 +113,36 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="hand-heart"
-                size={Platform.OS === 'android' ? 35 : 36}
+                size={36}
                 color="#059669"
                 style={styles.buttonIcon}
               />
               <PerfectText
-                fontSize={22}
+                size={22}
                 fontWeight="bold"
                 lines={2}
+                containerWidth={140}
+                textAlign="center"
                 style={styles.buttonTitleGreen}
               >
                 Dona e{'\n'}Aiuta
               </PerfectText>
-              <PerfectText
-                fontSize={18}
-                fontWeight="bold"
-                lines={1}
-                style={styles.buttonDirection}
-              >
-                Supporta →
-              </PerfectText>
+              <View style={styles.directionRowGreen}>
+                <PerfectText
+                  size={18}
+                  fontWeight="bold"
+                  lines={1}
+                  containerWidth={110}
+                  style={styles.buttonDirection}
+                >
+                  Supporta
+                </PerfectText>
+                <MaterialCommunityIcons
+                  name="arrow-right"
+                  size={18}
+                  color="#10B981"
+                />
+              </View>
             </View>
           </View>
         </LinearGradient>
@@ -145,30 +165,20 @@ const styles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 18,
-    minHeight: 70, // ← RIDOTTO da 90 a 70 per container più compatto
-    ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[2], // ← RIDOTTO da Spacing[3] a Spacing[2]
-      paddingHorizontal: Spacing[3],
-    }),
-    ...(Platform.OS === 'ios' && {
-      paddingVertical: Spacing[2], // ← RIDOTTO da Spacing[3] a Spacing[2]
-      paddingHorizontal: Spacing[4],
-    }),
+    minHeight: scaleDimensionLinear(140), // Più margine per Pixel 9 Pro XL
+    paddingVertical: Spacing[3],
+    paddingHorizontal: Spacing[3],
     justifyContent: 'center',
     flex: 1,
   },
 
   buttonContent: {
     alignItems: 'center',
-    justifyContent: 'space-around', // ← Cambiato da 'space-between' a 'space-around'
+    justifyContent: 'space-between', // Assicura label sempre visibile in basso
     flex: 1,
-    minHeight: 55, // ← RIDOTTO da 75 a 55 per contenuto più compatto
-    ...(Platform.OS === 'android' && {
-      paddingVertical: Spacing[0], // ← RIDOTTO da Spacing[1] a Spacing[0]
-    }),
-    ...(Platform.OS === 'ios' && {
-      paddingVertical: Spacing[0], // ← RIDOTTO da Spacing[1] a Spacing[0]
-    }),
+    minHeight: scaleDimensionLinear(112), // Aumentato per Pixel 9 Pro XL
+    paddingTop: Spacing[2],
+    paddingBottom: Spacing[2],
   },
 
   buttonIcon: {
@@ -181,12 +191,7 @@ const styles = StyleSheet.create({
     color: '#DC2626',
     textAlign: 'center' as const,
     letterSpacing: -0.6,
-    ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 2,
-    }),
-    ...(Platform.OS === 'ios' && {
-      marginVertical: Spacing[1],
-    }),
+    marginVertical: Spacing[1],
     textShadowColor: 'rgba(220, 38, 38, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
@@ -198,12 +203,7 @@ const styles = StyleSheet.create({
     color: '#10B981',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 1,
-    }),
-    ...(Platform.OS === 'ios' && {
-      marginVertical: Spacing[1],
-    }),
+    marginVertical: Spacing[1],
     textShadowColor: 'rgba(16, 185, 129, 0.12)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
@@ -215,16 +215,23 @@ const styles = StyleSheet.create({
     color: '#EF4444',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
-    ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 1,
-    }),
-    ...(Platform.OS === 'ios' && {
-      marginVertical: Spacing[1],
-    }),
+    marginVertical: Spacing[1],
     textShadowColor: 'rgba(239, 68, 68, 0.12)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
     textAlignVertical: 'center' as const,
+  },
+
+  directionRowRed: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: Spacing[1],
+  },
+
+  directionRowGreen: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: Spacing[1],
   },
 
   buttonTitleGreen: {
@@ -232,12 +239,7 @@ const styles = StyleSheet.create({
     color: '#059669',
     textAlign: 'center' as const,
     letterSpacing: -0.6,
-    ...(Platform.OS === 'android' && {
-      marginVertical: Spacing[0] + 2,
-    }),
-    ...(Platform.OS === 'ios' && {
-      marginVertical: Spacing[1],
-    }),
+    marginVertical: Spacing[1],
     textShadowColor: 'rgba(5, 150, 105, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,

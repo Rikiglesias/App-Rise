@@ -9,11 +9,7 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Platform-specific components
-import {
-  PlatformBlur,
-  PlatformTouchable,
-  FormattedText,
-} from '../components/ui';
+import { PlatformBlur, PlatformTouchable, PerfectText } from '../components/ui';
 
 // Screens
 import { ContributeTabScreen } from '../features/actions';
@@ -222,14 +218,13 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
             />
           </View>
           <View style={labelStyle}>
-            <FormattedText
-              variant="body-large"
-              style={[styles.labelText, { color: tabColors.labelColor }]}
-              numberOfLines={1}
-              ellipsizeMode="tail"
+            <PerfectText
+              size={16}
+              lines={1}
+              style={{ ...styles.labelText, color: tabColors.labelColor }}
             >
               {options.tabBarAccessibilityLabel?.split(' ')[0]}
-            </FormattedText>
+            </PerfectText>
           </View>
         </View>
       </PlatformTouchable>
