@@ -1,7 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Spacing } from '../../../../shared/constants/designTokens';
-
-const { width: screenWidth } = Dimensions.get('window');
+import { scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../../shared/constants/responsiveSystem';
 
 export const useHeroImageStyles = () => {
   return StyleSheet.create({
@@ -23,7 +22,7 @@ export const useHeroImageStyles = () => {
 
     image: {
       width: '100%',
-      height: screenWidth * 0.45, // Ridotto da 0.56 a 0.45 per immagine meno alta
+      height: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.45), // Altezza proporzionale iPhone 15 (45%)
       // Rimosso borderRadius dall'immagine per evitare problemi di rendering
     },
 

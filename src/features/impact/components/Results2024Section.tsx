@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
-import { FormattedText } from '../../../components/ui';
+import { PerfectText } from '../../../components/ui';
 import {
   Colors,
   Spacing,
@@ -31,18 +31,20 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
         ]}
       >
         <View style={styles.results2024HeaderBackground}>
-          <FormattedText
-            variant="headline-small"
+          <PerfectText
+            size={24}
+            lines={1}
             style={styles.results2024Title}
           >
             🎯 Risultati Raggiunti
-          </FormattedText>
-          <FormattedText
-            variant="body-large"
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={2}
             style={styles.results2024Subtitle}
           >
             I numeri che raccontano il nostro impegno annuale
-          </FormattedText>
+          </PerfectText>
         </View>
       </Animated.View>
 
@@ -63,25 +65,27 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
               size={28}
               color="#DC2626"
             />
-            <FormattedText
-              variant="headline-small"
+            <PerfectText
+              size={24}
+              lines={1}
               style={styles.record2024Value}
             >
               3.14M
-            </FormattedText>
-            <FormattedText
-              variant="title-medium"
+            </PerfectText>
+            <PerfectText
+              size={16}
+              lines={1}
               style={styles.record2024Label}
-              numberOfLines={1}
             >
               Pasti Confezionati
-            </FormattedText>
-            <FormattedText
-              variant="body-medium"
+            </PerfectText>
+            <PerfectText
+              size={14}
+              lines={1}
               style={styles.record2024Description}
             >
               Prodotti nel 2024
-            </FormattedText>
+            </PerfectText>
           </View>
         </Animated.View>
 
@@ -100,25 +104,27 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
               size={28}
               color="#1F2937"
             />
-            <FormattedText
-              variant="headline-small"
+            <PerfectText
+              size={24}
+              lines={1}
               style={styles.record2024Value}
             >
               16.3K
-            </FormattedText>
-            <FormattedText
-              variant="title-medium"
+            </PerfectText>
+            <PerfectText
+              size={16}
+              lines={1}
               style={styles.record2024Label}
-              numberOfLines={1}
             >
               Kit Confezionati
-            </FormattedText>
-            <FormattedText
-              variant="body-medium"
+            </PerfectText>
+            <PerfectText
+              size={14}
+              lines={1}
               style={styles.record2024Description}
             >
               Creati nel 2024
-            </FormattedText>
+            </PerfectText>
           </View>
         </Animated.View>
       </View>
@@ -155,7 +161,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   record2024Value: {
-    // fontSize rimosso - ora gestito da Text
+    // fontSize rimosso - ora gestito da PerfectText
     fontWeight: Typography.weights.bold,
     color: '#1F2937',
     marginTop: Spacing[1],
@@ -163,7 +169,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   record2024Label: {
-    // fontSize rimosso - ora gestito da Text
+    // fontSize rimosso - ora gestito da PerfectText
     fontWeight: Typography.weights.semibold,
     color: '#374151',
     marginBottom: Spacing[1],
@@ -172,7 +178,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   record2024Description: {
-    // fontSize rimosso - ora gestito da Text
+    // fontSize rimosso - ora gestito da PerfectText
     fontWeight: Typography.weights.medium,
     color: '#6B7280',
     textAlign: 'center',
@@ -206,7 +212,7 @@ const styles = StyleSheet.create({
     elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   results2024Title: {
-    // fontSize rimosso - ora gestito da Text
+    // fontSize rimosso - ora gestito da PerfectText
     fontWeight: Typography.weights.bold, // BOLD normale
     color: '#374151', // GRIGIO ELEGANTE
     textAlign: 'center',
@@ -217,7 +223,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   results2024Subtitle: {
-    // fontSize rimosso - ora gestito da Text
+    // fontSize rimosso - ora gestito da PerfectText
     fontWeight: Typography.weights.medium,
     color: '#4B5563', // GRIGIO MEDIO per leggibilità
     textAlign: 'center',

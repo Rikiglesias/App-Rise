@@ -1,6 +1,7 @@
 import { Platform, StyleSheet } from 'react-native';
 
 import { Colors, Spacing, Typography } from '../../../shared/constants';
+import { scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../shared/constants/responsiveSystem';
 
 /**
  * Stili modulari per ActionButtons
@@ -208,7 +209,7 @@ export const actionButtonsStyles = StyleSheet.create({
   },
   singleButtonContainer: {
     flex: 0,
-    width: '80%', // ANCORA PIÙ LARGO: dominante nella sezione
+    width: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.8), // 80% iPhone 15 scalato millimetricamente
   },
   chevronPosition: {
     position: 'absolute',

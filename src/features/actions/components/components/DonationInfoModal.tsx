@@ -2,7 +2,6 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import {
-  Dimensions,
   Modal,
   Platform,
   StyleSheet,
@@ -19,9 +18,8 @@ import {
   Spacing,
   Typography,
 } from '../../../../shared/constants/designTokens';
+import { scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
-
-const { width: screenWidth } = Dimensions.get('window');
 
 interface DonationInfoModalProps {
   visible: boolean;
@@ -77,7 +75,7 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
       shadowOpacity: Platform.OS === 'android' ? 0.2 : 0.3, // ANDROID: ombra più leggera
       shadowRadius: 20,
       elevation: Platform.OS === 'android' ? 8 : 12, // ANDROID: elevazione ridotta
-      maxWidth: screenWidth * 0.9,
+      maxWidth: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.9), // 90% iPhone 15 scalato millimetricamente
       width: '100%',
     },
     modalWhiteContainer: {

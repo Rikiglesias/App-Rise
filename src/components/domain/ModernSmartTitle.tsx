@@ -7,7 +7,7 @@ import {
   Dimensions,
   Text,
 } from 'react-native';
-import { ResponsiveStack } from '../ui';
+import { PerfectContainer } from '../ui';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 import { findDeviceByWidth } from '../../shared/constants/deviceResolutionsDatabase';
 import { scaleFont } from '../../shared/constants/responsiveSystem';
@@ -191,8 +191,8 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
         >
           <View style={modernTitleStyles.titleContainer}>
             {/* TITOLO SISTEMA RESPONSIVE COMPLETO - SINGOLO FormattedText per Garantire 2 Righe Fisse */}
-            <ResponsiveStack
-              spacing={responsiveSpacing.stackSpacing}
+            <PerfectContainer
+              gap={responsiveSpacing.stackSpacing}
               style={{ alignItems: 'center' }}
             >
               {/* TITOLO COMPLETO - TEXT NATIVO PER CONTROLLO ASSOLUTO */}
@@ -226,7 +226,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 />
                 <View style={modernTitleStyles.separatorLine} />
               </View>
-            </ResponsiveStack>
+            </PerfectContainer>
           </View>
         </Animated.View>
       </View>

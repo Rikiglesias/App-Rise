@@ -4,6 +4,7 @@ import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { FormattedText, PlatformTouchable } from '../../../components/ui';
+import { scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   titleSeparator: {
     height: 3, // PIÙ GROSSA: prima linea più prominente (IDENTICO PAGINA AZIONI)
     backgroundColor: Colors.neutral[300], // PIÙ SOFT per eleganza (IDENTICO PAGINA AZIONI)
-    width: '90%', // ALLARGATO: da 80% a 90% per compensare eventuali padding extra
+    width: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.9), // 90% iPhone 15 scalato millimetricamente
     borderRadius: 1, // IDENTICO PAGINA AZIONI
     opacity: 0.8, // SOTTILE trasparenza per delicatezza (IDENTICO PAGINA AZIONI)
     alignSelf: 'center',

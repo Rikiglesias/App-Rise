@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
-import { FormattedText } from '../../../components/ui';
+import { PerfectText } from '../../../components/ui';
 import { Spacing, Typography } from '../../../shared/constants/designTokens';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
@@ -34,16 +34,16 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
 
       <View style={styles.mainHeaderContainer}>
         <View style={styles.titleContainer}>
-          <FormattedText variant="display-medium" style={styles.titleText}>
+          <PerfectText size={40} lines={1} style={styles.titleText}>
             Il Nostro
-          </FormattedText>
-          <FormattedText variant="display-medium" style={styles.titleAccent}>
+          </PerfectText>
+          <PerfectText size={40} lines={1} style={styles.titleAccent}>
             Impatto
-          </FormattedText>
+          </PerfectText>
         </View>
-        <FormattedText variant="body-large" style={styles.mainSubtitle}>
+        <PerfectText size={16} lines={2} style={styles.mainSubtitle}>
           Risultati concreti nella lotta contro la fame mondiale
-        </FormattedText>
+        </PerfectText>
       </View>
     </Animated.View>
   );
@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
   },
   // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
   titleText: {
-    fontSize: 40,
     fontWeight: Typography.weights.black, // RIPRISTINATO: black (900) per massimo grassetto come richiesto
     color: '#1F2937', // NERO per contrasto come richiesto
     textAlign: 'center',
@@ -108,7 +107,6 @@ const styles = StyleSheet.create({
   },
   // ACCENTO ROSSO STRATEGICO - IDENTICO A titleText tranne colore
   titleAccent: {
-    fontSize: 40,
     fontWeight: Typography.weights.black, // IDENTICO: black (900) per consistenza
     color: '#DC2626', // ROSSO BRAND per accento
     textAlign: 'center', // IDENTICO: per allineamento
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
   },
   // SUBTITLE INLINE INGRANDITO E ELEGANTE
   mainSubtitle: {
-    // fontSize rimosso - ora gestito da Text
+    // fontSize rimosso - ora gestito da PerfectText
     fontWeight: Typography.weights.medium, // MEDIUM COME PAGINA AZIONI
     color: '#374151', // GRIGIO COORDINATO COME PAGINA AZIONI
     textAlign: 'center',

@@ -14,7 +14,7 @@ import {
 import {
   PlatformScrollView,
   PlatformTouchable,
-  FormattedText,
+  PerfectText,
 } from '../../../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -25,6 +25,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants';
+import { scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../shared/constants/responsiveSystem';
 import { DesignTokens } from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
@@ -207,23 +208,23 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
                     resizeMode="contain"
                   />
                 ) : (
-                  <FormattedText fontSize={28} style={styles.socialIconEmoji}>
+                  <PerfectText size={28} lines={1} style={styles.socialIconEmoji}>
                     {platform.emoji}
-                  </FormattedText>
+                  </PerfectText>
                 )}
               </View>
 
               {/* Content Section */}
               <View style={styles.socialInfoContainer}>
-                <FormattedText fontSize={16} style={styles.socialName}>
+                <PerfectText size={16} lines={1} style={styles.socialName}>
                   {platform.name}
-                </FormattedText>
-                <FormattedText fontSize={12} style={styles.socialHandle}>
+                </PerfectText>
+                <PerfectText size={12} lines={1} style={styles.socialHandle}>
                   {platform.handle}
-                </FormattedText>
-                <FormattedText fontSize={11} style={styles.socialDescription}>
+                </PerfectText>
+                <PerfectText size={11} lines={2} style={styles.socialDescription}>
                   {platform.description}
-                </FormattedText>
+                </PerfectText>
               </View>
 
               {/* Arrow Icon */}
@@ -259,14 +260,14 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         {/* HEADER SECTION - Pattern da Chi Siamo */}
         <View style={styles.headerSection}>
           <View style={styles.titleContainer}>
-            <FormattedText fontSize={30} style={styles.categoryTitle}>
-              <FormattedText fontSize={30} style={styles.titleAccent}>
+            <PerfectText size={30} lines={1} style={styles.categoryTitle}>
+              <PerfectText size={30} lines={1} style={styles.titleAccent}>
                 Seguici Ovunque
-              </FormattedText>
-            </FormattedText>
-            <FormattedText fontSize={15} style={styles.categorySubtitleInline}>
+              </PerfectText>
+            </PerfectText>
+            <PerfectText size={15} lines={2} style={styles.categorySubtitleInline}>
               Resta connesso e scopri come fare la differenza
-            </FormattedText>
+            </PerfectText>
           </View>
         </View>
 
@@ -274,9 +275,9 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.sectionDividerContainer}>
           <View style={styles.sectionDivider} />
           <View style={styles.dividerEmojiContainer}>
-            <FormattedText fontSize={16} style={styles.dividerEmoji}>
+            <PerfectText size={16} lines={1} style={styles.dividerEmoji}>
               📱
-            </FormattedText>
+            </PerfectText>
           </View>
         </View>
 
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
   sectionDivider: {
     height: 2, // IDENTICO CHI SIAMO: altezza bilanciata
     backgroundColor: Colors.neutral[300], // IDENTICO CHI SIAMO: più soft per eleganza
-    width: '60%', // IDENTICO CHI SIAMO: bilanciato per proporzioni migliori
+    width: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.6), // 60% iPhone 15 scalato millimetricamente
     borderRadius: 1, // IDENTICO CHI SIAMO
     opacity: 0.8, // IDENTICO CHI SIAMO: sottile trasparenza per delicatezza
     // OMBRA ELEGANTE IDENTICA CHI SIAMO

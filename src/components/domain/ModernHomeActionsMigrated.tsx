@@ -18,8 +18,7 @@ import { useTheme } from '../../shared/hooks/useTheme';
 // 🎯 NUOVO: Import layer centralizzato
 import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
 import {
-  ResponsiveBox,
-  ResponsiveStack,
+  PerfectContainer,
   PlatformTouchable,
   FormattedText,
 } from '../ui';
@@ -167,11 +166,10 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
       icon: string;
       onPress: () => void;
     }) => (
-      <ResponsiveBox
+      <PerfectContainer
         key={action.id}
         preset="card"
-        // 🎯 ALTERNATIVA: Uso width dal layer centralizzato
-        // width={responsive({ compact: '100%', standard: '47.5%', xlarge: '31%' })}
+        // Card con larghezza automatica per layout flessibile
       >
         <PlatformTouchable onPress={action.onPress}>
           <Surface style={styles.card}>
@@ -181,7 +179,7 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
             <Text style={styles.title}>{action.title}</Text>
           </Surface>
         </PlatformTouchable>
-      </ResponsiveBox>
+      </PerfectContainer>
     ),
     [styles]
   );
@@ -189,29 +187,19 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
   return (
     <Animated.View style={styles.container}>
       {/* 🎯 MIGRATED: Grid usando ResponsiveStack */}
-      <ResponsiveStack
-        direction="horizontal"
-        spacing={
-          responsive({
-            compact: Spacing[2],
-            standard: Spacing[2],
-            xlarge: Spacing[3],
-          }) ?? Spacing[2]
-        }
+      <PerfectContainer
+        flexDirection="row"
+        gap={Spacing[2]}
         style={{
           flexWrap: 'wrap',
           justifyContent: 'space-between',
         }}
-        padding={
-          responsive({
-            compact: Spacing[4],
-            standard: Spacing[4],
-            xlarge: Spacing[6],
+        padding={Spacing[4]
           }) ?? Spacing[4]
         }
       >
         {actions.map(renderAction)}
-      </ResponsiveStack>
+      </PerfectContainer>
     </Animated.View>
   );
 };

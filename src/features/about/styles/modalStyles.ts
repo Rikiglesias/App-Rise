@@ -1,9 +1,7 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { SpacingTokens as Spacing } from '../../../shared/constants/responsiveSystem';
+import { SpacingTokens as Spacing, scaleDimensionLinear, LOGICAL_REFERENCE } from '../../../shared/constants/responsiveSystem';
 import { Colors, Typography } from '../../../shared/constants';
-
-const { width: screenWidth } = Dimensions.get('window');
 
 /**
  * Stili per i modal della sezione About
@@ -35,7 +33,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalContainer: {
-    maxWidth: screenWidth * 0.9,
+    maxWidth: scaleDimensionLinear(LOGICAL_REFERENCE.width * 0.9), // 90% iPhone 15 scalato millimetricamente
     width: '100%',
     maxHeight: '90%', // ULTERIORMENTE ALLUNGATO: da 85% a 90% per molto più spazio
     minHeight: 700, // AUMENTATO: da 500 a 700px per garantire altezza significativa
