@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
-import { FormattedText, PlatformTouchable } from '../../../components/ui';
+import { PerfectText, PlatformTouchable } from '../../../components/ui';
 import {
   Colors,
   Spacing,
@@ -39,12 +39,22 @@ export const CommunitySection: React.FC<Props> = ({
         ]}
       >
         <View style={styles.communityHeaderBackground}>
-          <FormattedText variant="headline-small" style={styles.communityTitle}>
+          <PerfectText
+            size={22}
+            lines={1}
+            immunity={true}
+            style={styles.communityTitle}
+          >
             🤝 La Nostra Community
-          </FormattedText>
-          <FormattedText variant="body-large" style={styles.communitySubtitle}>
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={1}
+            immunity={true}
+            style={styles.communitySubtitle}
+          >
             Volontari e partner uniti nella missione #famezero
-          </FormattedText>
+          </PerfectText>
         </View>
       </Animated.View>
 
@@ -70,18 +80,22 @@ export const CommunitySection: React.FC<Props> = ({
                   color="#10B981"
                   style={styles.communityCardIcon}
                 />
-                <FormattedText
-                  variant="headline-small"
+                <PerfectText
+                  size={22}
+                  lines={1}
+                  immunity={true}
                   style={styles.communityStatValue}
                 >
                   13.323
-                </FormattedText>
-                <FormattedText
-                  variant="body-large"
+                </PerfectText>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  immunity={true}
                   style={styles.communityStatLabel}
                 >
                   Volontari 2024
-                </FormattedText>
+                </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}
@@ -114,18 +128,22 @@ export const CommunitySection: React.FC<Props> = ({
                   color="#8B5CF6"
                   style={styles.communityCardIcon}
                 />
-                <FormattedText
-                  variant="headline-small"
+                <PerfectText
+                  size={22}
+                  lines={1}
+                  immunity={true}
                   style={styles.communityStatValue}
                 >
                   150+
-                </FormattedText>
-                <FormattedText
-                  variant="body-large"
+                </PerfectText>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  immunity={true}
                   style={styles.communityStatLabel}
                 >
                   Partner Attivi
-                </FormattedText>
+                </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={20}

@@ -14,7 +14,6 @@
 import React from 'react';
 import { Text, TextProps, Platform, Dimensions } from 'react-native';
 import {
-  scaleFont,
   DesignTokens,
   RTLTokens,
 } from '../../shared/constants/responsiveSystem';
@@ -205,8 +204,8 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   // PASSO 1: Ottieni fontSize base (RAW, senza scaling)
   const baseFontSize = manualFontSize ?? getVariantFontSize(variant);
 
-  // PASSO 2: Applica scaleFont() UNA volta sola
-  let scaledFontSize = scaleFont(baseFontSize);
+  // PASSO 2: Usa il font base come misura logica 393 (la scala viene gestita a monte dal Sistema Perfetto)
+  let scaledFontSize = baseFontSize;
 
   // PASSO 3: Applica vincoli accessibilità se richiesto
   if (enforceReadabilityConstraints) {

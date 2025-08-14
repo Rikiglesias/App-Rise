@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { PlatformTouchable, PerfectText } from '../../../../components/ui';
-import { useResponsiveLayout } from '../../../../shared/hooks/useResponsiveLayout';
+// import { useResponsiveLayout } from '../../../../shared/hooks/useResponsiveLayout';
 
 import {
   Colors,
@@ -218,7 +218,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   // 🎯 NUOVO: Layer centralizzato
-  const { modalWidth: _modalWidth } = useResponsiveLayout();
+  // const { modalWidth: _modalWidth } = useResponsiveLayout();
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');

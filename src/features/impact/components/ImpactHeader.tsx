@@ -3,8 +3,21 @@ import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { PerfectText } from '../../../components/ui';
+// rimosso: responsiveSystem/scaleDimensionLinear non necessari senza containerWidth
 import { Spacing, Typography } from '../../../shared/constants/designTokens';
+import {
+  HEADER_TITLE_SIZE,
+  HEADER_SUBTITLE_SIZE,
+} from '../../shared/headerSizes';
+import responsiveSystem, {
+  scaleDimensionLinear,
+} from '../../../shared/constants/responsiveSystem';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
+import {
+  HEADER_VERTICAL_PADDING_FACTOR,
+  HEADER_FIXED_HEIGHT_FACTOR,
+  HEADER_TITLE_INTERLINE_FACTOR,
+} from '../../shared/headerLayout';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
@@ -13,6 +26,19 @@ interface Props {
 /**
  * Header della schermata Impact con titolo animato e gradient background
  */
+const TITLE_SIZE = HEADER_TITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
+const SUBTITLE_SIZE = HEADER_SUBTITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
+const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const HEADER_INNER_HEIGHT = scaleDimensionLinear(
+  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
+);
+const HEADER_VERTICAL_PADDING = scaleDimensionLinear(
+  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
+);
+const HEADER_TITLE_INTERLINE = scaleDimensionLinear(
+  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
+);
+
 export const ImpactHeader: React.FC<Props> = ({ animations }) => {
   return (
     <Animated.View
@@ -34,14 +60,30 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
 
       <View style={styles.mainHeaderContainer}>
         <View style={styles.titleContainer}>
-          <PerfectText size={40} lines={1} style={styles.titleText}>
+          <PerfectText
+            size={TITLE_SIZE}
+            lines={1}
+            immunity={true}
+            style={styles.titleText}
+          >
             Il Nostro
           </PerfectText>
-          <PerfectText size={40} lines={1} style={styles.titleAccent}>
+          <PerfectText
+            size={TITLE_SIZE}
+            lines={1}
+            immunity={true}
+            style={styles.titleAccent}
+          >
             Impatto
           </PerfectText>
         </View>
-        <PerfectText size={16} lines={2} style={styles.mainSubtitle}>
+        <PerfectText
+          size={SUBTITLE_SIZE}
+          maxSize={28}
+          lines={1}
+          immunity={true}
+          style={styles.mainSubtitle}
+        >
           Risultati concreti nella lotta contro la fame mondiale
         </PerfectText>
       </View>
@@ -52,8 +94,10 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
 const styles = StyleSheet.create({
   // Header - IDENTICO PAGINA AZIONI
   headerContainer: {
-    paddingTop: Spacing[8], // AUMENTATO: da Spacing[3] a Spacing[8] per abbassare e non tagliare il titolo
-    paddingHorizontal: Spacing[2], // RIDOTTO: da Spacing[4] a Spacing[2] per dare più spazio al mainHeaderContainer
+    alignSelf: 'stretch',
+    width: '100%',
+    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[8], // ANDROID: spazio superiore ulteriormente aumentato
+    paddingHorizontal: Spacing[4],
     paddingBottom: Spacing[6], // AUMENTATO: più spazio sotto il titolo principale
     alignItems: 'center',
     position: 'relative',
@@ -68,13 +112,17 @@ const styles = StyleSheet.create({
   },
   // CONTAINER ELEGANTE COLORATO COME PAGINA AZIONI
   mainHeaderContainer: {
+    alignSelf: 'stretch', // Forza larghezza 100% come pagina Azioni
+    width: '100%',
     alignItems: 'center',
+    height: HEADER_INNER_HEIGHT,
     backgroundColor:
       Platform.OS === 'android'
         ? '#F5F6F6' // ANDROID: Grigio leggermente più scuro
         : 'rgba(31, 41, 55, 0.03)', // iOS: Mantiene rgba originale
-    paddingVertical: Spacing[5], // AUMENTATO: da Spacing[4] a Spacing[5] per dare più spazio verticale al container
-    paddingHorizontal: Spacing[6], // AUMENTATO: da Spacing[5] a Spacing[6] per evitare taglio testo
+    paddingHorizontal: Spacing[4],
+    paddingTop: HEADER_VERTICAL_PADDING, // AUMENTATO: allunga verticalmente senza allargare
+    paddingBottom: HEADER_VERTICAL_PADDING, // AUMENTATO: allunga verticalmente senza allargare
     borderRadius: 16, // MODERNO COME PAGINA AZIONI
     borderWidth: 1,
     borderColor:
@@ -83,23 +131,24 @@ const styles = StyleSheet.create({
         : 'rgba(31, 41, 55, 0.08)', // iOS: Mantiene rgba originale
     shadowColor: '#1F2937', // OMBRA GRIGIA COORDINATA
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
+    shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08, // UNIFORMATO con ContributeHeader
     shadowRadius: 6,
-    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
+    elevation: Platform.OS === 'android' ? 1 : 3, // UNIFORMATO con ContributeHeader
   },
   // CONTAINER TITOLO - IMPAGINAZIONE ELEGANTE
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Spacing[3], // SPAZIO tra titolo e subtitle
+    marginBottom: Spacing[1], // UNIFORMATO a ContributeHeader
   },
   // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
   titleText: {
     fontWeight: Typography.weights.black, // RIPRISTINATO: black (900) per massimo grassetto come richiesto
     color: '#1F2937', // NERO per contrasto come richiesto
     textAlign: 'center',
-    letterSpacing: -0.8, // RIDOTTO: per bilanciare la dimensione ridotta (era -1.2)
-    lineHeight: 45, // RIDOTTO: da 50 a 45 per proporzioni migliori con fontSize 40
+    letterSpacing: -1.2, // UNIFORMATO con ContributeHeader
+    lineHeight: 42, // UNIFORMATO con ContributeHeader
+    marginBottom: HEADER_TITLE_INTERLINE,
     textShadowColor: 'rgba(31, 41, 55, 0.15)', // OMBRA SOTTILE
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
@@ -110,8 +159,8 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.black, // IDENTICO: black (900) per consistenza
     color: '#DC2626', // ROSSO BRAND per accento
     textAlign: 'center', // IDENTICO: per allineamento
-    letterSpacing: -0.8, // IDENTICO: per spaziatura caratteri
-    lineHeight: 45, // IDENTICO: per altezza linea - ridotto per proporzioni migliori
+    letterSpacing: -1.2, // UNIFORMATO: spaziatura caratteri
+    lineHeight: 42, // UNIFORMATO con ContributeHeader
     textShadowColor: 'rgba(220, 38, 38, 0.15)', // OMBRA COORDINATA
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
@@ -123,8 +172,9 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.medium, // MEDIUM COME PAGINA AZIONI
     color: '#374151', // GRIGIO COORDINATO COME PAGINA AZIONI
     textAlign: 'center',
-    letterSpacing: 0.2, // RIDOTTO PER ELEGANZA
-    marginTop: Spacing[1], // SPACING COORDINATO
+    letterSpacing: 0,
+    marginTop: 0, // UNIFORMATO con ContributeHeader
     opacity: 0.8, // TRASPARENZA ELEGANTE
+    includeFontPadding: false,
   },
 });

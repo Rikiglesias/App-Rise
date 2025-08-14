@@ -85,9 +85,9 @@ const SuperioritàVsBestPractices = {
 </PerfectText>
 
 // CALCOLI MATEMATICI GARANTITI:
-// iPhone SE (375px): 32 * (375/393) = 30.5px (95.4% - proporzionale)
+// iPhone SE (375px): 32 * (375/393) ≈ 30.5 (95.4% - proporzionale)
 // iPhone 15 (393px): 32 * (393/393) = 32px (100% - riferimento)  
-// iPad (768px): 32 * (768/393) = 62.5px (195.4% - proporzionale)
+// iPad (768px): 32 * (768/393) ≈ 62.5 (195.4% - proporzionale)
 
 // RISULTATO: Proporzioni IDENTICHE matematicamente! 📐
 ```

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Animated, StyleSheet, View, Text } from 'react-native';
-import { PlatformTouchable } from '../ui';
-import { FormattedText } from '../ui/FormattedText';
+import { Animated, StyleSheet, View } from 'react-native';
+import { PlatformTouchable, PerfectText } from '../ui';
 import { useProfessionalTokens } from '../../features/actions/hooks/useProfessionalTokens';
 import {
   BorderRadius,
@@ -162,8 +161,22 @@ export const ProfessionalSectionsRenderer: React.FC<
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
               <View style={styles.sectionTitleGroup}>
-                <Text style={styles.sectionTitle}>{section.title}</Text>
-                <Text style={styles.sectionSubtitle}>{section.subtitle}</Text>
+                <PerfectText
+                  size={18}
+                  lines={1}
+                  immunity={true}
+                  style={styles.sectionTitle}
+                >
+                  {section.title}
+                </PerfectText>
+                <PerfectText
+                  size={12}
+                  lines={1}
+                  immunity={true}
+                  style={styles.sectionSubtitle}
+                >
+                  {section.subtitle}
+                </PerfectText>
               </View>
             </View>
           </View>
@@ -178,30 +191,42 @@ export const ProfessionalSectionsRenderer: React.FC<
               >
                 <View style={styles.actionCardContent}>
                   <View style={styles.actionIconContainer}>
-                    <FormattedText
-                      fontSize={22}
-                      fixedLines={1}
+                    <PerfectText
+                      size={22}
+                      lines={1}
+                      immunity={true}
                       style={styles.actionIconText}
                     >
                       {action.icon}
-                    </FormattedText>
+                    </PerfectText>
                   </View>
                   <View style={styles.actionTextContent}>
-                    <FormattedText style={styles.actionTitle}>
+                    <PerfectText
+                      size={14}
+                      lines={1}
+                      immunity={true}
+                      style={styles.actionTitle}
+                    >
                       {action.title}
-                    </FormattedText>
-                    <FormattedText style={styles.actionSubtitle}>
+                    </PerfectText>
+                    <PerfectText
+                      size={12}
+                      lines={1}
+                      immunity={true}
+                      style={styles.actionSubtitle}
+                    >
                       {action.subtitle}
-                    </FormattedText>
+                    </PerfectText>
                   </View>
                   <View style={styles.actionArrow}>
-                    <FormattedText
-                      fontSize={16}
-                      fixedLines={1}
+                    <PerfectText
+                      size={16}
+                      lines={1}
+                      immunity={true}
                       style={styles.arrowIcon}
                     >
                       →
-                    </FormattedText>
+                    </PerfectText>
                   </View>
                 </View>
               </PlatformTouchable>

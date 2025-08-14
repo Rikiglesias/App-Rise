@@ -2,10 +2,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { PlatformTouchable } from '../../../components/ui';
+import { PlatformTouchable, PerfectText } from '../../../components/ui';
 
 import { IMPACT_DATA } from '../../../data/impactData';
-import { FormattedText } from '../../../components/ui/FormattedText';
 import {
   BorderRadius,
   Colors,
@@ -36,12 +35,22 @@ export const StatButton: React.FC<StatButtonProps> = ({
         />
       </View>
       <View style={styles.textContainer}>
-        <FormattedText fontSize={22} style={styles.statValue}>
+        <PerfectText
+          size={22}
+          lines={1}
+          immunity={true}
+          style={styles.statValue}
+        >
           {value}
-        </FormattedText>
-        <FormattedText fontSize={15} style={styles.statLabel}>
+        </PerfectText>
+        <PerfectText
+          size={15}
+          lines={1}
+          immunity={true}
+          style={styles.statLabel}
+        >
           {label}
-        </FormattedText>
+        </PerfectText>
       </View>
       <MaterialCommunityIcons
         name="chevron-right"
@@ -65,13 +74,25 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       style={styles.storyGradient}
     />
     <View style={styles.storyContent}>
-      <FormattedText fontSize={12} style={styles.storyLocation}>
+      <PerfectText
+        size={12}
+        lines={1}
+        immunity={true}
+        style={styles.storyLocation}
+      >
         {location}
-      </FormattedText>
-      <FormattedText fontSize={22} style={styles.storyTitle}>
+      </PerfectText>
+      <PerfectText
+        size={22}
+        lines={1}
+        immunity={true}
+        style={styles.storyTitle}
+      >
         {title}
-      </FormattedText>
-      <FormattedText style={styles.storyText}>{text}</FormattedText>
+      </PerfectText>
+      <PerfectText size={14} lines={2} immunity={true} style={styles.storyText}>
+        {text}
+      </PerfectText>
     </View>
   </View>
 );
@@ -82,12 +103,22 @@ export const MilestoneCard: React.FC<
   <View style={styles.milestoneCard}>
     <MaterialCommunityIcons name={icon} size={24} color={Colors.primary[600]} />
     <View style={styles.milestoneContent}>
-      <FormattedText fontSize={15} style={styles.milestoneTitle}>
+      <PerfectText
+        size={15}
+        lines={1}
+        immunity={true}
+        style={styles.milestoneTitle}
+      >
         {title}
-      </FormattedText>
-      <FormattedText fontSize={12} style={styles.milestoneValue}>
+      </PerfectText>
+      <PerfectText
+        size={12}
+        lines={1}
+        immunity={true}
+        style={styles.milestoneValue}
+      >
         {value}
-      </FormattedText>
+      </PerfectText>
     </View>
   </View>
 );

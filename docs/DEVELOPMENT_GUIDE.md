@@ -24,7 +24,7 @@
 ### **✅ STATO SISTEMA PERFETTO**
 ```
 SISTEMA PERFETTO COMPLETATO ✅
-├── 1. UniversalMillimetricSystem.ts   # iPhone 15 riferimento universale
+├── 1. responsiveSystem.ts             # iPhone 15 riferimento universale
 ├── 2. PerfectText.tsx                 # Testi mai tagliati, righe esatte
 ├── 3. UniversalTheme.tsx              # Dark mode singolo toggle
 ├── 4. PerfectImage.tsx                # Immagini proporzioni identiche
@@ -82,7 +82,7 @@ npm start
 ```typescript
 import { 
   PerfectText, PerfectImage, PerfectContainer,
-  UniversalMillimetricSystem, useUniversalTheme 
+  useUniversalTheme 
 } from '@/components/ui';
 
 const PerfectComponent = ({ title, description, image }) => {
@@ -261,7 +261,7 @@ interface PerfectTextProps {
 const PerfectTextLogic = {
   // STEP 1: Calcola size base per dispositivo corrente
   calculateBaseSize: (inputSize: number) => {
-    return UniversalMillimetricSystem.scaleFont(inputSize);
+    return scaleFont(inputSize);
   },
   
   // STEP 2: Calcola size ottimale per righe specificate
@@ -712,18 +712,18 @@ const DebugImmunity = () => {
 ```typescript
 // __tests__/PerfectSystem.test.tsx
 describe('Sistema Perfetto', () => {
-  describe('UniversalMillimetricSystem', () => {
+  describe('responsiveSystem', () => {
     it('should scale font correctly for all devices', () => {
       // iPhone SE: 375px → 90.6% scaling
-      expect(UniversalMillimetricSystem.scaleFont(32)).toBeCloseTo(29);
+      expect(scaleFont(32)).toBeCloseTo(29);
       
       // iPhone 15: 393px → 100% scaling
-      mockDimensions(414);
-      expect(UniversalMillimetricSystem.scaleFont(32)).toBe(32);
+      mockDimensions(393);
+      expect(scaleFont(32)).toBe(32);
       
       // iPad: 768px → 185.5% scaling
       mockDimensions(768);
-      expect(UniversalMillimetricSystem.scaleFont(32)).toBeCloseTo(59);
+      expect(scaleFont(32)).toBeCloseTo(59);
     });
   });
   
@@ -766,7 +766,7 @@ const TestingTargets = {
   lines: ">95%",           // Coverage righe
   
   criticalComponents: {
-    UniversalMillimetricSystem: "100%",  // Sistema core
+    responsiveSystem: "100%",  // Sistema core
     PerfectText: "100%",                 // Componente critico
     SystemImmunity: "100%",              // Sicurezza immunità
     UniversalTheme: "95%"                // Theme switching
@@ -778,7 +778,7 @@ const TestingTargets = {
 ```bash
 # Test singoli componenti
 npm test PerfectText
-npm test UniversalMillimetricSystem
+npm test responsiveSystem
 npm test SystemImmunity
 
 # Test completo sistema
@@ -843,10 +843,10 @@ const scaledSize = scaleFont(32); // Ricalcolato ogni render
 ### **🛠️ Debug Tools**
 ```typescript
 // Debug dimensioni dispositivo
-console.log('Device:', UniversalMillimetricSystem.getCurrentDevice());
+console.log('Reference:', responsiveSystem?.LOGICAL_REFERENCE);
 
 // Debug scaling calculations
-console.log('Font 32 →', UniversalMillimetricSystem.scaleFont(32));
+console.log('Font 32 →', scaleFont(32));
 
 // Debug immunità status
 console.log('Immunity:', SystemImmunity.checkImmunityStatus());
@@ -987,8 +987,8 @@ const PerfectForm = ({ onSubmit }) => {
         <PerfectText size={16} lines={1}>Nome</PerfectText>
         <TextInput 
           style={{
-            fontSize: UniversalMillimetricSystem.scaleFont(16),
-            padding: UniversalMillimetricSystem.scaleSpacing(12)
+            fontSize: scaleFont(16),
+            padding: scaleSpacing(12)
           }}
           placeholder="Inserisci nome"
         />
@@ -996,8 +996,8 @@ const PerfectForm = ({ onSubmit }) => {
         <PerfectText size={16} lines={1}>Email</PerfectText>
         <TextInput 
           style={{
-            fontSize: UniversalMillimetricSystem.scaleFont(16),
-            padding: UniversalMillimetricSystem.scaleSpacing(12)
+            fontSize: scaleFont(16),
+            padding: scaleSpacing(12)
           }}
           placeholder="Inserisci email"
         />
@@ -1005,8 +1005,8 @@ const PerfectForm = ({ onSubmit }) => {
         <TouchableOpacity 
           onPress={onSubmit}
   style={{
-            padding: UniversalMillimetricSystem.scaleSpacing(16),
-            borderRadius: UniversalMillimetricSystem.scaleSpacing(8)
+            padding: scaleSpacing(16),
+            borderRadius: scaleSpacing(8)
           }}
         >
           <PerfectText size={18} weight="bold" color="auto">
@@ -1025,7 +1025,7 @@ const PerfectForm = ({ onSubmit }) => {
 
 ### **✅ SISTEMA PERFETTO COMPLETATO**
 ```
-1. ✅ UniversalMillimetricSystem: iPhone 15 riferimento universale
+1. ✅ responsiveSystem: iPhone 15 riferimento universale
 2. ✅ PerfectText: Testi mai tagliati, righe sempre esatte
 3. ✅ PerfectImage: Immagini proporzioni identiche ovunque
 4. ✅ PerfectContainer: Container sempre iPhone 15

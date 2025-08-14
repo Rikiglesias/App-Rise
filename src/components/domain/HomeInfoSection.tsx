@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
-import { PlatformTouchable, FormattedText } from '../ui';
+import { PlatformTouchable, PerfectText } from '../ui';
 import { Surface } from 'react-native-paper';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+// import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Shadows,
@@ -68,27 +68,44 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
             <View style={styles.cardHeader}>
               {/* 📍 Icon */}
               <View style={styles.iconContainer}>
-                <FormattedText
-                  variant="title-large"
-                  style={[{ lineHeight: 20 }]}
+                <PerfectText
+                  size={24}
+                  lines={1}
+                  immunity={true}
+                  style={{ lineHeight: 20 } as TextStyle}
                 >
                   {card.icon}
-                </FormattedText>
+                </PerfectText>
               </View>
 
               {/* 🏷️ Titles */}
-              <FormattedText variant="label-large" style={styles.cardSubtitle}>
+              <PerfectText
+                size={12}
+                lines={1}
+                immunity={true}
+                style={styles.cardSubtitle as TextStyle}
+              >
                 {card.subtitle}
-              </FormattedText>
-              <FormattedText variant="body-large" style={styles.cardTitle}>
+              </PerfectText>
+              <PerfectText
+                size={18}
+                lines={1}
+                immunity={true}
+                style={styles.cardTitle as TextStyle}
+              >
                 {card.title}
-              </FormattedText>
+              </PerfectText>
             </View>
 
             {/* 📝 Description */}
-            <FormattedText variant="body-medium" style={styles.cardDescription}>
+            <PerfectText
+              size={14}
+              lines={2}
+              immunity={true}
+              style={styles.cardDescription as TextStyle}
+            >
               {card.description}
-            </FormattedText>
+            </PerfectText>
           </View>
 
           {/* 🌟 Press Overlay */}
@@ -137,16 +154,12 @@ const ICON_STYLES = {
 // 🏷️ TYPOGRAPHY STYLES - Extracted as constants for max-lines-per-function compliance
 const TYPOGRAPHY_STYLES = {
   cardTitle: {
-    fontSize: TypographyTokens.styles.body.large,
     fontWeight: Typography.weights.bold,
     marginBottom: 2,
     letterSpacing: Typography.letterSpacing.tight,
-    lineHeight:
-      Typography.lineHeights.tight * TypographyTokens.styles.body.large,
   },
 
   cardSubtitle: {
-    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.semibold,
     textTransform: 'uppercase',
     letterSpacing: Typography.letterSpacing.wide,
@@ -154,10 +167,7 @@ const TYPOGRAPHY_STYLES = {
   },
 
   cardDescription: {
-    fontSize: TypographyTokens.styles.body.small,
     fontWeight: Typography.weights.regular,
-    lineHeight:
-      Typography.lineHeights.normal * TypographyTokens.styles.body.small,
     letterSpacing: Typography.letterSpacing.normal,
   },
 };

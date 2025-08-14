@@ -28,9 +28,4 @@ export {
   useBreakpointAware,
 } from './useResponsive';
 
-// Layer Centralizzato Responsive (🎯 Elimina Frammentazione)
-export {
-  useResponsiveLayout,
-  useResponsiveSpacing as useResponsiveLayoutSpacing,
-  useResponsiveColors,
-} from './useResponsiveLayout';
+// Layer Centralizzato Responsive (rimosso)

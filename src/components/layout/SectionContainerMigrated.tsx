@@ -8,7 +8,7 @@ import {
 } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
 // 🎯 NUOVO: Import layer centralizzato
-import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
+// import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato
 // const { width: screenWidth } = Dimensions.get('window');
@@ -22,9 +22,13 @@ interface SectionContainerProps {
 }
 
 // 🚀 MIGRATED: Sistema spacing usando layer centralizzato
+type ResponsiveResolver = <T>(
+  values: Partial<Record<string, T>>
+) => T | undefined;
+
 const getSpacingConfig = (
   spacing: SectionContainerProps['spacing'],
-  responsive: ReturnType<typeof useResponsiveLayout>['responsive']
+  responsive: ResponsiveResolver
 ) => {
   // ❌ RIMOSSO: Breakpoints manuali frammentati
   // if (screenWidth < 375) baseSpacing = 0.8;
@@ -149,7 +153,15 @@ export const SectionContainerMigrated: React.FC<SectionContainerProps> = ({
 }) => {
   const { colors } = useTheme();
   // 🎯 NUOVO: Layer centralizzato
-  const { responsive } = useResponsiveLayout();
+  const responsive: ResponsiveResolver = values => {
+    // Fallback semplificato: usa standard/compact se presenti
+    if (values.standard !== undefined) return values.standard;
+    if (values.compact !== undefined) return values.compact;
+    const firstDefined = (
+      Object.values(values) as (unknown | undefined)[]
+    ).find(v => v !== undefined);
+    return firstDefined as never;
+  };
 
   const spacingConfig = getSpacingConfig(spacing, responsive);
   const variantStyles = getVariantStyles(variant, colors);

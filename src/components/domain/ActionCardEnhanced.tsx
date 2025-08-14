@@ -1,22 +1,13 @@
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useRef } from 'react';
-import {
-  Animated,
-  Pressable,
-  StyleSheet,
-  Text,
-  Platform,
-  View,
-} from 'react-native';
+import { Animated, Pressable, StyleSheet, Platform, View } from 'react-native';
 
 import {
   BorderRadius,
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
-import { MaterialActionCard } from '../ui';
-import { FormattedText } from '../ui/FormattedText';
+import { MaterialActionCard, PerfectText } from '../ui';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 interface ActionCardEnhancedProps {
@@ -154,9 +145,9 @@ const ActionCardIcon: React.FC<{
         },
       ]}
     >
-      <FormattedText fontSize={28} fixedLines={1} style={styles.icon}>
+      <PerfectText size={28} lines={1} immunity={true} style={styles.icon}>
         {icon}
-      </FormattedText>
+      </PerfectText>
     </Animated.View>
   );
 };
@@ -167,18 +158,24 @@ const ActionCardContent: React.FC<{
   description: string;
 }> = ({ title, description }) => (
   <>
-    <Text
+    <PerfectText
+      size={16}
+      lines={1}
+      immunity={true}
       style={styles.title}
-      accessible={false} // Combined in parent accessibilityLabel
+      accessible={false}
     >
       {title}
-    </Text>
-    <Text
+    </PerfectText>
+    <PerfectText
+      size={14}
+      lines={2}
+      immunity={true}
       style={styles.description}
-      accessible={false} // Combined in parent accessibilityLabel
+      accessible={false}
     >
       {description}
-    </Text>
+    </PerfectText>
   </>
 );
 
@@ -309,14 +306,11 @@ const styles = StyleSheet.create({
   icon: {},
   title: {
     textAlign: 'center',
-    fontSize: TypographyTokens.styles.body.medium,
     fontWeight: Typography.weights.bold,
     marginBottom: Spacing[1],
   },
   description: {
     textAlign: 'center',
-    fontSize: TypographyTokens.styles.body.small,
-    lineHeight: TypographyTokens.styles.body.small * 1.4,
     color: '#666',
   },
 });

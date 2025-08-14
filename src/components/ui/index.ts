@@ -31,19 +31,12 @@ export { default as PlatformTouchable } from './PlatformTouchable';
 export { PlatformScrollView, PlatformSurface } from './PlatformComponents';
 
 // Display Components
-// LEGACY (DEPRECATO): mantenuto temporaneamente per compatibilità durante la migrazione
-export { default as FormattedText } from './FormattedText';
-export {
-  FormattedTextEnhanced,
-  useTextRenderStrategy,
-} from './FormattedTextEnhanced';
 export {
   PerfectText,
   PerfectTitle,
   PerfectSubtitle,
   PerfectBody,
 } from './PerfectText';
-export { SafeFormattedText } from './SafeFormattedText';
 export { default as HeaderLogo } from './HeaderLogo';
 export { default as LoadingSkeleton } from './LoadingSkeleton';
 export { default as Logo } from './Logo';
@@ -69,10 +62,5 @@ export {
 export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';
 
-// LEGACY (DEPRECATO): mantenuto temporaneamente per compatibilità durante la migrazione
-export {
-  ResponsiveBox,
-  ResponsiveStack,
-  ResponsiveCard,
-} from './ResponsiveBox';
-export { ResponsiveImage } from './ResponsiveImage';
+// LEGACY (RIMOSSO): usare PerfectContainer/PerfectImage/PerfectText
+export { default as FormattedText } from './FormattedText';

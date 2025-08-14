@@ -4,9 +4,7 @@ import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { PerfectText, PlatformTouchable } from '../../../components/ui';
-import responsiveSystem, {
-  scaleDimensionLinear,
-} from '../../../shared/constants/responsiveSystem';
+// import responsiveSystem from '../../../shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,
@@ -186,26 +184,17 @@ export const TotalMealsSection: React.FC<Props> = ({
 const styles = StyleSheet.create({
   // Header Divider - ALLARGATO PER COMPENSARE
   titleSeparator: {
-    height: 3, // PIÙ GROSSA: prima linea più prominente (IDENTICO PAGINA AZIONI)
-    backgroundColor: Colors.neutral[300], // PIÙ SOFT per eleganza (IDENTICO PAGINA AZIONI)
-    width: scaleDimensionLinear(
-      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.9
-    ),
-    borderRadius: 1, // IDENTICO PAGINA AZIONI
-    opacity: 0.8, // SOTTILE trasparenza per delicatezza (IDENTICO PAGINA AZIONI)
-    alignSelf: 'center',
-    // OMBRA ELEGANTE per profondità sottile (IDENTICA PAGINA AZIONI)
-    shadowColor: Colors.neutral[400],
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 2,
+    height: 2, // IDENTICO a sectionDivider (Azioni)
+    backgroundColor: Colors.neutral[200], // IDENTICO a Azioni
+    marginVertical: Spacing[2], // IDENTICO a Azioni
+    marginHorizontal: Spacing[6], // IDENTICO a Azioni
+    alignSelf: 'stretch', // garantisce larghezza piena anche con alignItems:'center'
   },
-  // Container divisorio IDENTICO PAGINA AZIONI
+  // Container divisorio - allineato a pagina Azioni (sectionDivider)
   titleSeparatorContainer: {
-    paddingHorizontal: Spacing[4], // IDENTICO PAGINA AZIONI
-    paddingVertical: Spacing[4], // IDENTICO PAGINA AZIONI: stesso spacing del HeaderDivider (16px)
-    alignItems: 'center', // IDENTICO PAGINA AZIONI
+    paddingHorizontal: 0,
+    paddingVertical: 0, // Nessun padding: linea gestisce i margini come in Azioni
+    alignItems: 'stretch', // per imitare il comportamento della pagina Azioni
   },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI

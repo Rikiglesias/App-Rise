@@ -45,27 +45,25 @@ Il sistema implementa le **10 best practices** della guida professionale:
 ```tsx
 // Container universale con tutte le best practices
 <ProfessionalContainer variant="text|card|section" enableRTL={false}>
-  <FormattedText fontSize={24}>Content</FormattedText>
+  <PerfectText size={24}>Content</PerfectText>
+  
 </ProfessionalContainer>
 
 // Container specializzato per titoli (layout consistency garantita)
 <TitleContainer testID="main-title">
-  <FormattedText fontSize={75} fixed={true} fixedLines={2}>
+  <PerfectText size={75} lines={2} immunity={true}>
     Rise Against Hunger Italia
-  </FormattedText>
+  </PerfectText>
 </TitleContainer>
 
-// FormattedText container-aware + algoritmo conservativo
-<FormattedText
-  fontSize={75}           // Font base (sempre RAW)
-  fixed={true}            // Layout controllato  
-  fixedLines={2}          // Sempre 2 righe
-  fontWeight="black"      // Grassetto preservato
-  enableRTL={false}       // RTL support
-  containerWidth={350}    // Override larghezza container
+// PerfectText con sistema millimetrico e righe perfette
+<PerfectText
+  size={75}              // iPhone 15 base
+  lines={2}              // Sempre 2 righe
+  immunity={true}        // IMMUNE a impostazioni
 >
   Rise Against Hunger Italia
-</FormattedText>
+</PerfectText>
 ```
 
 ---

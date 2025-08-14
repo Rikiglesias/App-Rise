@@ -5,12 +5,24 @@
 import React, { useMemo } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
-import { FormattedText } from '../../../../components/ui';
+import { PerfectText } from '../../../../components/ui';
+import {
+  HEADER_TITLE_SIZE,
+  HEADER_SUBTITLE_SIZE,
+} from '../../../shared/headerSizes';
+import responsiveSystem, {
+  scaleDimensionLinear,
+} from '../../../../shared/constants/responsiveSystem';
+// rimosso: responsiveSystem/scaleDimensionLinear non necessari senza containerWidth
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { TypographyTokens } from '../../../../shared/constants/responsiveSystem';
 import { Spacing, Typography } from '../../../../shared/constants';
+import {
+  HEADER_VERTICAL_PADDING_FACTOR,
+  HEADER_FIXED_HEIGHT_FACTOR,
+  HEADER_TITLE_INTERLINE_FACTOR,
+} from '../../../shared/headerLayout';
 
 import type { useNewActionsAnimations } from './ContributeAnimations';
 
@@ -18,13 +30,28 @@ interface NewActionsHeaderProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
 }
 
+const TITLE_SIZE = HEADER_TITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
+const SUBTITLE_SIZE = HEADER_SUBTITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
+const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const HEADER_INNER_HEIGHT = scaleDimensionLinear(
+  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
+);
+const HEADER_VERTICAL_PADDING = scaleDimensionLinear(
+  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
+);
+const HEADER_TITLE_INTERLINE = scaleDimensionLinear(
+  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
+);
+
 const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
-        // HEADER CON SPAZIO UNIFORMATO CON PAGINA IMPATTO
+        // HEADER CON SPAZIO AUMENTATO SU ANDROID
         headerContainer: {
-          paddingTop: Spacing[8], // UNIFORMATO: stesso paddingTop di "Il Nostro Impatto" (32px)
+          alignSelf: 'stretch',
+          width: '100%',
+          paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[8], // ANDROID: più spazio sopra
           paddingHorizontal: Spacing[4],
           paddingBottom: Spacing[6], // UNIFORMATO: stesso paddingBottom di "Il Nostro Impatto"
           alignItems: 'center',
@@ -42,14 +69,17 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
 
         // CONTAINER ELEGANTE COLORATO - UNIFORMATO CON PAGINA IMPATTO
         mainHeaderContainer: {
+          alignSelf: 'stretch', // Forza larghezza 100% come pagina Impatto
+          width: '100%',
           alignItems: 'center',
+          height: HEADER_INNER_HEIGHT,
           backgroundColor:
             Platform.OS === 'android'
               ? '#F5F6F6' // ANDROID: Stesso grigio di "Il Nostro Impatto"
               : 'rgba(31, 41, 55, 0.03)', // iOS: Stesso rgba di "Il Nostro Impatto"
           paddingHorizontal: Spacing[4],
-          paddingTop: Spacing[3],
-          paddingBottom: Spacing[3],
+          paddingTop: HEADER_VERTICAL_PADDING,
+          paddingBottom: HEADER_VERTICAL_PADDING,
           borderRadius: 16,
           borderWidth: 1, // UNIFORMATO: stesso spessore di "Il Nostro Impatto"
           borderColor:
@@ -71,7 +101,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           textAlign: 'center',
           letterSpacing: -1.2, // IDENTICO A IMPATTO per coerenza
           lineHeight: 42, // AUMENTATO: da 30 a 42 per respirare meglio
-          marginBottom: Spacing[1], // AGGIUNTO: piccolo spazio sotto per equilibrio
+          marginBottom: HEADER_TITLE_INTERLINE,
           textShadowColor: 'rgba(31, 41, 55, 0.15)',
           textShadowOffset: { width: 0, height: 2 },
           textShadowRadius: 6,
@@ -88,13 +118,13 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
 
         // SUBTITLE INLINE INGRANDITO E ELEGANTE
         mainSubtitle: {
-          fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base per maggiore leggibilità
           fontWeight: Typography.weights.medium, // MEDIUM COME PAGINA AZIONI
           color: '#374151', // GRIGIO COORDINATO COME PAGINA AZIONI
           textAlign: 'center',
-          letterSpacing: 0.2, // RIDOTTO PER ELEGANZA
+          letterSpacing: 0,
           marginTop: 0, // ZERO: attaccato al titolo
           opacity: 0.8, // TRASPARENZA ELEGANTE
+          includeFontPadding: false,
         },
       }),
     []
@@ -103,37 +133,31 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   // CONTENUTO TITOLO
   const titleContent = (
     <>
-      <FormattedText
-        fontSize={40}
-        fontWeight="black"
-        fixedLines={2}
-        lineBreakStrategyIOS="push-out"
-        breakStrategyAndroid="highQuality"
-        hyphenationFrequencyAndroid="full"
+      <PerfectText
+        size={TITLE_SIZE}
+        lines={1}
+        immunity={true}
         style={styles.titleText}
       >
-        Fai la{'\n'}
-        <FormattedText
-          fontSize={40}
-          fontWeight="black"
-          lineBreakStrategyIOS="push-out"
-          breakStrategyAndroid="highQuality"
-          hyphenationFrequencyAndroid="full"
-          style={styles.titleAccent}
-        >
-          Differenza
-        </FormattedText>
-      </FormattedText>
-      <FormattedText
-        fontSize={20}
-        fixedLines={1}
-        lineBreakStrategyIOS="push-out"
-        breakStrategyAndroid="highQuality"
-        hyphenationFrequencyAndroid="full"
+        Fai la
+      </PerfectText>
+      <PerfectText
+        size={TITLE_SIZE}
+        lines={1}
+        immunity={true}
+        style={[styles.titleText, styles.titleAccent]}
+      >
+        Differenza
+      </PerfectText>
+      <PerfectText
+        size={SUBTITLE_SIZE}
+        maxSize={28}
+        lines={1}
+        immunity={true}
         style={styles.mainSubtitle}
       >
         Ogni azione conta nella lotta contro la fame
-      </FormattedText>
+      </PerfectText>
     </>
   );
 

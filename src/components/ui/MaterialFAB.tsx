@@ -4,7 +4,7 @@ import { Platform, Animated, StyleSheet, View } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
-import { FormattedText } from './FormattedText';
+import { PerfectText } from './PerfectText';
 import {
   getAndroidMaterialProps,
   MaterialColors,
@@ -215,9 +215,10 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
             color={variantConfig.iconColor}
           />
           {size === 'extended' && label && (
-            <FormattedText
-              fontSize={14}
-              fixedLines={1}
+            <PerfectText
+              size={14}
+              lines={1}
+              immunity={true}
               style={[
                 styles.label,
                 { color: variantConfig.iconColor },
@@ -225,7 +226,7 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
               ]}
             >
               {label}
-            </FormattedText>
+            </PerfectText>
           )}
         </View>
       </TouchableRipple>

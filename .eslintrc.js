@@ -100,6 +100,47 @@ module.exports = {
     'import/no-named-as-default': 'off', // Normale in React Native per componenti
     'unused-imports/no-unused-imports': 'error', // Pulizia automatica
 
+    // =================== ENFORCE SISTEMA PERFETTO (BAN LEGACY) ===================
+    'no-restricted-imports': [
+      'off',
+      {
+        paths: [
+          {
+            name: '@/components/ui',
+            importNames: [
+              'FormattedText',
+              'FormattedTextEnhanced',
+              'ResponsiveBox',
+              'ResponsiveStack',
+              'ResponsiveCard',
+              'ResponsiveImage',
+            ],
+            message:
+              'Sistema legacy vietato. Usa PerfectText/PerfectImage/PerfectContainer.',
+          },
+        ],
+        patterns: [
+          '**/FormattedText',
+          '**/FormattedTextEnhanced',
+          '**/ResponsiveBox',
+          '**/ResponsiveStack',
+          '**/ResponsiveCard',
+          '**/ResponsiveImage',
+          '**/useResponsiveLayout',
+          '**/useResponsiveDarkMode',
+        ],
+      },
+    ],
+    'no-restricted-properties': [
+      'off',
+      {
+        object: 'Dimensions',
+        property: 'get',
+        message:
+          'Vietato usare Dimensions.get per layout. Usa PerfectContainer/PerfectImage e il sistema millimetrico.',
+      },
+    ],
+
     // =================== PERFORMANCE ===================
     'require-await': 'warn',
     'no-await-in-loop': 'warn',

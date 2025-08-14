@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
 import { Image, Platform, StyleSheet, View } from 'react-native';
 
-import { FormattedText, PlatformTouchable } from '../../../components/ui';
+import { PerfectText, PlatformTouchable } from '../../../components/ui';
 import {
   Colors,
   Spacing,
@@ -27,12 +27,22 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
       {/* Header GEOGRAFICO con elementi di location */}
       <View style={styles.mapHeaderContainer}>
         <View style={styles.mapHeaderBackground}>
-          <FormattedText variant="headline-small" style={styles.mapTitle}>
+          <PerfectText
+            size={22}
+            lines={1}
+            immunity={true}
+            style={styles.mapTitle}
+          >
             🌍 Dove Operiamo
-          </FormattedText>
-          <FormattedText variant="body-large" style={styles.mapSubtitle}>
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={1}
+            immunity={true}
+            style={styles.mapSubtitle}
+          >
             Le nostre operazioni nel mondo
-          </FormattedText>
+          </PerfectText>
         </View>
       </View>
 
@@ -50,9 +60,14 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
 
         {/* INDICATORE CLICCABILE */}
         <View style={styles.mapClickIndicator}>
-          <FormattedText variant="body-small" style={styles.mapClickText}>
+          <PerfectText
+            size={12}
+            lines={1}
+            immunity={true}
+            style={styles.mapClickText}
+          >
             Tocca per esplorare
-          </FormattedText>
+          </PerfectText>
           <MaterialCommunityIcons
             name="map-search"
             size={16}

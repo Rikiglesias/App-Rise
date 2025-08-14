@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { FormattedText } from '../ui';
+import { PerfectText } from '../ui';
 
 import { BorderRadius, Spacing, Typography } from '../../shared/constants';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
@@ -47,16 +47,31 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
 
   return (
     <>
-      <FormattedText variant="body-medium" style={styles.description}>
+      <PerfectText
+        size={15}
+        lines={3}
+        immunity={true}
+        style={styles.description}
+      >
         {description}
-      </FormattedText>
+      </PerfectText>
       <View style={styles.impactContainer}>
-        <FormattedText variant="label-small" style={styles.impactLabel}>
+        <PerfectText
+          size={12}
+          lines={1}
+          immunity={true}
+          style={styles.impactLabel}
+        >
           Impatto
-        </FormattedText>
-        <FormattedText variant="body-medium" style={styles.impactText}>
+        </PerfectText>
+        <PerfectText
+          size={14}
+          lines={1}
+          immunity={true}
+          style={styles.impactText}
+        >
           {impact}
-        </FormattedText>
+        </PerfectText>
       </View>
     </>
   );

@@ -4,13 +4,7 @@
 // ===================================================================
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Text,
-  View,
-  type DimensionValue,
-} from 'react-native';
+import { Animated, View } from 'react-native';
 
 import { Surface } from 'react-native-paper';
 
@@ -19,13 +13,12 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+import responsiveSystem, {
+  scaleDimensionLinear,
+} from '../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
-import { PlatformTouchable } from '../ui';
-import { FormattedText } from '../ui/FormattedText';
-
-const { width: screenWidth } = Dimensions.get('window');
+import { PlatformTouchable, PerfectText } from '../ui';
 
 // ===================================================================
 // INTERFACES
@@ -67,9 +60,11 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
     }
   }, [isLoaded, fadeAnim]);
 
-  // Responsive layout
-  const isTablet = screenWidth >= 768;
-  const cardWidth = isTablet ? '31%' : '47.5%';
+  // Larghezza card millimetrica basata su riferimento iPhone 15
+  const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+  // 2 colonne con gap minimo → larghezza base ~ 47% su iPhone 15
+  const cardWidthPx = referenceWidth * 0.475;
+  const cardWidth = scaleDimensionLinear(cardWidthPx);
 
   const handlePress = useCallback(
     (onPress: () => void) => {
@@ -144,7 +139,7 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
         gap: Spacing[2],
       },
       cardContainer: {
-        width: cardWidth as DimensionValue,
+        width: cardWidth,
         marginBottom: Spacing[2],
       },
       touchable: {
@@ -163,7 +158,6 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
         marginBottom: Spacing[1],
       },
       title: {
-        fontSize: TypographyTokens.styles.body.small,
         fontWeight: Typography.weights.bold,
         color: colors.neutral[900],
         textAlign: 'center' as const,
@@ -182,10 +176,22 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
       <View key={action.id} style={styles.cardContainer}>
         <PlatformTouchable onPress={action.onPress} style={styles.touchable}>
           <Surface style={styles.card}>
-            <FormattedText fontSize={24} fixedLines={1} style={styles.icon}>
+            <PerfectText
+              size={24}
+              lines={1}
+              immunity={true}
+              style={styles.icon}
+            >
               {action.icon}
-            </FormattedText>
-            <Text style={styles.title}>{action.title}</Text>
+            </PerfectText>
+            <PerfectText
+              size={14}
+              lines={1}
+              immunity={true}
+              style={styles.title}
+            >
+              {action.title}
+            </PerfectText>
           </Surface>
         </PlatformTouchable>
       </View>

@@ -26,6 +26,10 @@ interface PerfectTextProps
   fontSize?: number; // retrocompatibilità
   size?: number; // preferito
 
+  /** Limiti opzionali (base iPhone 15) */
+  maxSize?: number;
+  minSize?: number;
+
   /** Numero ESATTO di righe (sempre rispettato) */
   lines: number;
 
@@ -68,6 +72,8 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   size,
   lines,
   containerWidth,
+  maxSize,
+  minSize,
   fontWeight = 'normal',
   color = '#000000',
   textAlign = 'left',
@@ -101,9 +107,16 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
     // Calcola fontSize base proporzionale
     const baseFontSize = scaleFont(referenceFontSize);
+    const scaledMax =
+      typeof maxSize === 'number' ? scaleFont(maxSize) : undefined;
+    const scaledMin =
+      typeof minSize === 'number' ? scaleFont(minSize) : undefined;
 
     // Trova il fontSize ottimale che rispetta il numero di righe
     let testFontSize = baseFontSize;
+    if (typeof scaledMax === 'number') {
+      testFontSize = Math.min(testFontSize, scaledMax);
+    }
     let foundOptimal = false;
 
     // Test partendo dal fontSize base e riducendo se necessario
@@ -126,9 +139,20 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
       // Debug info removed for production
     }
 
+    if (typeof scaledMin === 'number') {
+      testFontSize = Math.max(testFontSize, scaledMin);
+    }
     setOptimalFontSize(testFontSize);
     setIsCalculating(false);
-  }, [children, referenceFontSize, lines, containerWidth, debug]);
+  }, [
+    children,
+    referenceFontSize,
+    lines,
+    containerWidth,
+    debug,
+    maxSize,
+    minSize,
+  ]);
 
   useEffect(() => {
     calculateOptimalFontSize();

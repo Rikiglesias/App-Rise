@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 
-import { FormattedText } from '../../../components/ui';
+import { PerfectText } from '../../../components/ui';
 import { Spacing } from '../../../shared/constants';
 import type { ButtonData } from '../hooks/useActionButtonsLogic';
 import { actionButtonsStyles } from '../styles/ActionButtonsStyles';
@@ -66,24 +66,24 @@ export const ExploreSection: React.FC<Props> = ({
               : actionButtonsStyles.exploreHeaderBackground
           }
         >
-          <FormattedText
-            variant="headline-small"
+          <PerfectText
+            size={22}
+            lines={1}
+            immunity={true}
             lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
             style={actionButtonsStyles.exploreTitle}
           >
             🔍 Esplora
-          </FormattedText>
-          <FormattedText
-            fontSize={16}
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={1}
+            immunity={true}
             lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
             style={actionButtonsStyles.exploreSubtitle}
           >
             Progetti e iniziative umanitarie
-          </FormattedText>
+          </PerfectText>
         </View>
       </View>
       <View style={actionButtonsStyles.buttonsGrid}>

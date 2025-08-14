@@ -4,7 +4,7 @@
 // ===================================================================
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Text } from 'react-native';
+import { Animated } from 'react-native';
 import { Surface } from 'react-native-paper';
 
 import {
@@ -16,7 +16,7 @@ import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 // 🎯 NUOVO: Import layer centralizzato
-import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
+// import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
 import { PerfectContainer, PlatformTouchable, PerfectText } from '../ui';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato
@@ -52,7 +52,7 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   // 🎯 NUOVO: Layer centralizzato elimina frammentazione
-  const { responsive: _responsive } = useResponsiveLayout();
+  // const { responsive: _responsive } = useResponsiveLayout();
 
   // Simplified animation (unchanged)
   useEffect(() => {
@@ -177,7 +177,14 @@ const ModernHomeActionsMigrated: React.FC<ModernHomeActionsProps> = ({
             >
               {action.icon}
             </PerfectText>
-            <Text style={styles.title}>{action.title}</Text>
+            <PerfectText
+              size={14}
+              lines={1}
+              immunity={true}
+              style={styles.title}
+            >
+              {action.title}
+            </PerfectText>
           </Surface>
         </PlatformTouchable>
       </PerfectContainer>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
 
-import { FormattedText } from '../../../components/ui/FormattedText';
+import { PerfectText } from '../../../components/ui';
 import {
   BorderRadius,
   Colors,
@@ -35,15 +35,25 @@ const ImpactHeroSection: React.FC<Props> = ({
         },
       ]}
     >
-      <FormattedText fontSize={32} style={styles.heroCounter}>
+      <PerfectText
+        size={32}
+        lines={1}
+        immunity={true}
+        style={styles.heroCounter}
+      >
         {heroData.mainStat}
-      </FormattedText>
-      <FormattedText fontSize={22} style={styles.heroLabel}>
+      </PerfectText>
+      <PerfectText size={22} lines={1} immunity={true} style={styles.heroLabel}>
         {heroData.label}
-      </FormattedText>
-      <FormattedText fontSize={15} style={styles.heroSubtitle}>
+      </PerfectText>
+      <PerfectText
+        size={15}
+        lines={1}
+        immunity={true}
+        style={styles.heroSubtitle}
+      >
         {heroData.subtitle}
-      </FormattedText>
+      </PerfectText>
     </Animated.View>
   );
 };

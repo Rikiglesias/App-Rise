@@ -63,12 +63,12 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="chart-line"
-                size={36}
+                size={28}
                 color="#DC2626"
                 style={styles.buttonIcon}
               />
               <PerfectText
-                size={22}
+                size={20}
                 fontWeight="bold"
                 lines={2}
                 containerWidth={140}
@@ -83,7 +83,7 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
                   color="#EF4444"
                 />
                 <PerfectText
-                  size={18}
+                  size={16}
                   fontWeight="bold"
                   lines={1}
                   containerWidth={110}
@@ -113,12 +113,12 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
             <View style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="hand-heart"
-                size={36}
+                size={28}
                 color="#059669"
                 style={styles.buttonIcon}
               />
               <PerfectText
-                size={22}
+                size={20}
                 fontWeight="bold"
                 lines={2}
                 containerWidth={140}
@@ -129,7 +129,7 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
               </PerfectText>
               <View style={styles.directionRowGreen}>
                 <PerfectText
-                  size={18}
+                  size={16}
                   fontWeight="bold"
                   lines={1}
                   containerWidth={110}
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 18,
-    minHeight: scaleDimensionLinear(140), // Più margine per Pixel 9 Pro XL
-    paddingVertical: Spacing[3],
+    minHeight: scaleDimensionLinear(112), // Ridotto per bottoni più corti
+    paddingVertical: Spacing[2],
     paddingHorizontal: Spacing[3],
     justifyContent: 'center',
     flex: 1,
@@ -176,9 +176,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between', // Assicura label sempre visibile in basso
     flex: 1,
-    minHeight: scaleDimensionLinear(112), // Aumentato per Pixel 9 Pro XL
-    paddingTop: Spacing[2],
-    paddingBottom: Spacing[2],
+    minHeight: scaleDimensionLinear(88), // Ridotto per compattare l'altezza
+    paddingTop: Spacing[1],
+    paddingBottom: Spacing[1],
   },
 
   buttonIcon: {

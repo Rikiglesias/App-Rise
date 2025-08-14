@@ -136,13 +136,15 @@ const styles = StyleSheet.create({
 
   // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
   sectionDividerContainer: {
-    paddingTop: Spacing[8], // AUMENTATO: da Spacing[6] a Spacing[8] - maggiore respiro tra titoli sezioni e linee
-    paddingBottom: Spacing[4], // AUMENTATO: da Spacing[2] a Spacing[4] - spazio equilibrato sotto
+    paddingTop: Platform.OS === 'android' ? Spacing[12] : Spacing[8],
+    paddingBottom: Spacing[4],
   },
   sectionDivider: {
-    height: 2, // STANDARD: spessore normale per separazioni
-    backgroundColor: Colors.neutral[200], // CORRETTO: stesso colore delle linee tra sezioni nella pagina Azioni
-    marginHorizontal: Spacing[10], // CORRETTO: 40px = 16px (container Azioni) + 24px (margine Azioni)
+    height: 2, // IDENTICO a sectionDivider (Azioni)
+    backgroundColor: Colors.neutral[200], // IDENTICO a Azioni
+    marginVertical: Spacing[2], // IDENTICO a Azioni
+    marginHorizontal: Spacing[6], // IDENTICO a Azioni
+    alignSelf: 'stretch', // garantisce larghezza piena
   },
 });
 

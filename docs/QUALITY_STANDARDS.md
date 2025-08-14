@@ -139,7 +139,7 @@ const width90 = scaleDimensionLinear(referenceWidth * 0.9);
 ### **🔒 ZERO TOLERANCE POLICY PERFETTA**
 ```typescript
 const ZeroTolerancePolicy = {
-  "Manual calculations": "VIETATO - Solo UniversalMillimetricSystem",
+  "Manual calculations": "VIETATO - Solo responsiveSystem",
   "Hardcoded breakpoints": "VIETATO - Solo iPhone 15 universale",
   "Manual dark mode": "VIETATO - Solo UniversalTheme",
   "allowFontScaling=true": "VIETATO - Solo immunity=true",

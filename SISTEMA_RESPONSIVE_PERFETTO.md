@@ -37,7 +37,7 @@ console.log(info);
 //   width: 360,           // Larghezza attuale
 //   scale: 0.87,          // 87% di iPhone 15
 //   scalePercentage: 87,  // Percentuale
-//   reference: { name: 'iPhone 15', width: 414 }
+//   reference: { name: 'iPhone 15', width: 393 }
 // }
 ```
 

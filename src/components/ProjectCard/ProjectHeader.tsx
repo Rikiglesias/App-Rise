@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { FormattedText } from '../ui';
+import { PerfectText } from '../ui';
 
 import { BorderRadius, Spacing, Typography } from '../../shared/constants';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
@@ -58,17 +58,27 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
   return (
     <View style={styles.header}>
       <View style={styles.titleContainer}>
-        <FormattedText variant="body-large" style={styles.title}>
+        <PerfectText size={18} lines={1} immunity={true} style={styles.title}>
           {title}
-        </FormattedText>
-        <FormattedText variant="body-medium" style={styles.location}>
+        </PerfectText>
+        <PerfectText
+          size={14}
+          lines={1}
+          immunity={true}
+          style={styles.location}
+        >
           {location}
-        </FormattedText>
+        </PerfectText>
       </View>
       <View style={styles.statusBadge}>
-        <FormattedText variant="label-small" style={styles.statusText}>
+        <PerfectText
+          size={12}
+          lines={1}
+          immunity={true}
+          style={styles.statusText}
+        >
           {statusText}
-        </FormattedText>
+        </PerfectText>
       </View>
     </View>
   );

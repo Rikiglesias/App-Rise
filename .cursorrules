@@ -1,794 +1,89 @@
 # CURSORRULES - Rise Against Hunger Italia
 # Sistema Perfetto Completo - Regole di Sviluppo PERFEZIONE ASSOLUTA
 
-## 🏆 **STATO PROGETTO: SISTEMA PERFETTO COMPLETATO**
+## ⚡ TL;DR (versione corta da usare ogni giorno)
 
-### ✅ **PERFEZIONE ENTERPRISE + IMMUNITÀ TOTALE**
-```
-SISTEMA PERFETTO COMPLETO ✅ RIVOLUZIONARIO
-├── 1. UniversalMillimetricSystem.ts   # iPhone 15 (393px) riferimento universale
-├── 2. PerfectText.tsx                 # Testi mai tagliati, righe esatte
-├── 3. UniversalTheme.tsx              # Dark mode singolo toggle
-├── 4. PerfectImage.tsx                # Immagini proporzioni identiche
-├── 5. PerfectContainer.tsx            # Container sempre iPhone 15
-└── SystemImmunity.ts                  # Immunità totale impostazioni
-
-RISULTATO: App identica al MILLIMETRO su ogni dispositivo!
-STATUS: STANDARD MONDIALE CREATO - RIFERIMENTO ASSOLUTO (393px) ✅
-```
-
-## 📚 **DOCUMENTAZIONE PERFETTA AGGIORNATA**
-**🚀 DEVELOPMENT GUIDE**: [docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) - Sistema Perfetto Guide
-**🏗️ ARCHITECTURE**: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) - Architettura Perfetta
-**🏆 QUALITY STANDARDS**: [docs/QUALITY_STANDARDS.md](docs/QUALITY_STANDARDS.md) - Enterprise Gold
-**💎 SISTEMA PERFETTO**: [docs/RESPONSIVE_SYSTEM_GAPS_SOLUTIONS.md](docs/RESPONSIVE_SYSTEM_GAPS_SOLUTIONS.md) - Zero Lacune
-**🛡️ VALIDAZIONE**: [docs/RESPONSIVE_SYSTEM_VALIDATION.md](docs/RESPONSIVE_SYSTEM_VALIDATION.md) - Supera Best Practices
-
----
-
-## 🎯 **REGOLE CORE - PERFEZIONE ASSOLUTA**
-
-### ✅ **SISTEMA PERFETTO OBBLIGATORIO**
-```typescript
-// ✅ CORRETTO - Sistema Perfetto completo
-import { 
+- **Usa SEMPRE**: `PerfectText`, `PerfectImage`, `PerfectContainer`, `useUniversalTheme`, `SystemImmunity`, `responsiveSystem` (`scaleFont`, `scaleSpacing`, `scaleDimensionLinear`).
+- **Vietato**: `FormattedText`, `ResponsiveBox/ResponsiveImage`, `useResponsive*`, `Dimensions.get(...)` per layout/scaling, breakpoint manuali, `allowFontScaling=true`.
+- **PerfectText**: `size` obbligatorio; `lines` quando servono righe esatte; `immunity={true}` sempre. Per wrap identico su tutti i device, usa `containerWidth` riferito a iPhone 15.
+- **PerfectImage**: usa `preset` (`hero|card|thumbnail|banner`).
+- **PerfectContainer**: usa `preset`; `theme="auto"` di default; niente layout manuali.
+- **Dark Mode**: un solo toggle globale (`useUniversalTheme`); testi con `color="auto"` quando serve.
+- **Immunità**: `SystemImmunity.setGlobalImmunity(true)` all'avvio; niente gestioni manuali di scaling/accessibilità.
+- **Import corretti**:
+```ts
+import {
   PerfectText, PerfectImage, PerfectContainer,
-  UniversalMillimetricSystem, useUniversalTheme 
+  PageContainer, CardContainer, SectionContainer, ModalContainer,
+  useUniversalTheme
 } from '@/components/ui';
-
-const MyComponent = () => {
-  const { theme, toggleTheme } = useUniversalTheme();
-  
-  return (
-    <PerfectContainer preset="page" theme="auto">
-      <PerfectText size={32} lines={2} immunity={true} weight="bold">
-        Testo sempre perfetto su ogni dispositivo
-      </PerfectText>
-      
-      <PerfectImage preset="hero" source={image} rounded={12} />
-      
-      <TouchableOpacity onPress={toggleTheme}>
-        <PerfectText size={16}>🌙 Toggle Dark Mode</PerfectText>
-      </TouchableOpacity>
-    </PerfectContainer>
-  );
-};
-
-// ❌ VIETATO - Sistema precedente obsoleto
-import { FormattedText, ResponsiveBox } from '@/components/ui';
-const { width: screenWidth } = Dimensions.get('window');
-const isTablet = screenWidth >= 768;
-```
-
-### ✅ **PERFECTTEXT - TESTI PERFETTI OBBLIGATORIO**
-```typescript
-// ✅ CORRETTO - PerfectText per tutti i testi
-<PerfectText 
-  size={32}              // Base iPhone 15, auto-scala ovunque
-  lines={2}              // SEMPRE 2 righe esatte, mai tagliato
-  immunity={true}        // IMMUNE a qualsiasi impostazione utente
-  weight="bold"          // Typography perfetta automatica
-  color="auto"           // Auto light/dark theme
->
-  Testo mai tagliato, sempre perfetto
-</PerfectText>
-
-// Helper specializzati
-<PerfectTitle size={48} lines={1}>Titolo Principale</PerfectTitle>
-<PerfectSubtitle size={24} lines={2}>Sottotitolo</PerfectSubtitle>
-<PerfectBody size={16} lines={4}>Corpo testo</PerfectBody>
-<PerfectCaption size={12} lines={1}>Didascalia</PerfectCaption>
-
-// ❌ VIETATO - FormattedText obsoleto
-<FormattedText fontSize={32} fixedLines={2}>Testo obsoleto</FormattedText>
-<Text style={{ fontSize: scaleFont(24) }}>Testo frammentato</Text>
-```
-
-### ✅ **PERFECTIMAGE - IMMAGINI PERFETTE OBBLIGATORIO**
-```typescript
-// ✅ CORRETTO - PerfectImage con preset automatici
-<PerfectImage 
-  preset="hero"          // 16:9 automatico, proporzioni iPhone 15
-  source={heroImage}
-  rounded={12}           // Border radius proporzionale
-  shadow="medium"        // Shadow automatica
-/>
-
-// Preset automatici disponibili
-<PerfectImage preset="hero" source={image} />      // 16:9 hero
-<PerfectImage preset="card" source={image} />      // 4:3 card  
-<PerfectImage preset="thumbnail" source={image} /> // 1:1 thumbnail
-<PerfectImage preset="banner" source={image} />    // 21:9 banner
-
-// Helper ultra-semplici
-<HeroImage source={image} />        // 16:9 perfetto
-<CardImage source={image} />        // 4:3 perfetto
-<ThumbnailImage source={image} />   // 1:1 perfetto
-<BannerImage source={image} />      // 21:9 perfetto
-
-// ❌ VIETATO - Calcoli manuali immagini
-const { width } = Dimensions.get('window');
-<Image style={{ width: '100%', height: width * 0.45 }} />
-<ResponsiveImage preset="hero" source={image} />  // Obsoleto
-```
-
-### ✅ **PERFECTCONTAINER - LAYOUT PERFETTI OBBLIGATORIO**
-```typescript
-// ✅ CORRETTO - PerfectContainer sempre iPhone 15
-<PerfectContainer 
-  preset="page"          // Layout pagina con padding iPhone 15
-  theme="auto"           // Dark mode automatico universale
-  spacing="md"           // Spacing proporzionale
->
-  <PerfectText size={32}>Contenuto sempre perfetto</PerfectText>
-</PerfectContainer>
-
-// Preset layout disponibili
-<PerfectContainer preset="page">     // Pagina completa
-<PerfectContainer preset="card">     // Card con shadow
-<PerfectContainer preset="section">  // Sezione con spacing
-<PerfectContainer preset="modal">    // Modal centrato
-
-// Helper specializzati
-<PageContainer theme="auto">          // Pagina completa
-<CardContainer elevated>              // Card con shadow
-<SectionContainer spacing="lg">       // Sezione con spacing
-<ModalContainer centered>             // Modal centrato
-
-// ❌ VIETATO - Container manuali
-<ResponsiveBox preset="card" autoBackgroundColor="primary">  // Obsoleto
-<View style={{ paddingHorizontal: responsive({ compact: 16 }) }}>
-```
-
-### ✅ **UNIVERSALTHEME - DARK MODE PERFETTO OBBLIGATORIO**
-```typescript
-// ✅ CORRETTO - UniversalTheme toggle unico
-const { theme, toggleTheme, colors } = useUniversalTheme();
-
-// Un toggle → tutto l'app cambia automaticamente
-<TouchableOpacity onPress={toggleTheme}>
-  <PerfectText size={16}>
-    {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
-  </PerfectText>
-</TouchableOpacity>
-
-// Tutti i componenti reagiscono automaticamente
-<PerfectContainer theme="auto">    // Auto background light/dark
-  <PerfectText color="auto">       // Auto text color light/dark
-    Sempre perfetto light/dark!
-  </PerfectText>
-</PerfectContainer>
-
-// ❌ VIETATO - Dark mode manuale frammentato
-const { isDark, toggleDarkMode } = useResponsiveDarkMode();  // Obsoleto
-const backgroundColor = isDark ? '#000000' : '#FFFFFF';
-<ResponsiveBox autoBackgroundColor="primary">               // Obsoleto
-```
-
-### ✅ **SYSTEMIMMUNITY - IMMUNITÀ TOTALE OBBLIGATORIO**
-```typescript
-// ✅ CORRETTO - SystemImmunity per app sempre identica
+import responsiveSystem, { scaleFont, scaleSpacing, scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
 import { SystemImmunity } from '@/shared/utils/SystemImmunity';
-
-// Immunità globale attivata
-SystemImmunity.setGlobalImmunity(true);
-
-// Tutti i PerfectText hanno immunità automatica
-<PerfectText size={32} immunity={true}>
-  Testo IMMUNE a zoom, accessibilità, Dynamic Type, Font Size Android
-</PerfectText>
-
-// Status monitoring
-const status = SystemImmunity.checkImmunityStatus();
-console.log('Immunity:', status);
-
-// Debug immunità
-const DebugImmunity = () => {
-  const status = SystemImmunity.checkImmunityStatus();
-  return (
-    <PerfectContainer preset="card">
-      <PerfectText size={14} lines={4}>
-        Font Scaling: {status.fontScaling ? '🔒 Blocked' : '⚠️ Active'}
-        Dynamic Type: {status.dynamicType ? '🔒 Blocked' : '⚠️ Active'}
-        Accessibility: {status.accessibility ? '🔒 Blocked' : '⚠️ Active'}
-        System Theme: {status.systemTheme ? '🔒 Blocked' : '⚠️ Active'}
-      </PerfectText>
-    </PerfectContainer>
-  );
-};
-
-// ❌ VIETATO - Gestione manuale immunità
-<Text allowFontScaling={false}>Gestione manuale</Text>
-<FormattedText allowSystemFontScaling={false}>Obsoleto</FormattedText>
 ```
+- **Checklist rapida**:
+  - PerfectText/PerfectImage/PerfectContainer usati ovunque
+  - `size/lines/immunity` corretti nei testi
+  - `theme="auto"` e `color="auto"` quando servono
+  - Zero `Dimensions`, zero breakpoint manuali, zero percentuali hardcoded
+  - `npm run pre-modifiche` e `npm run post-modifiche` verdi; `npm run conta-problemi` = 0
 
-### ✅ **UNIVERSALMILLIMETRICSYSTEM - CORE PERFETTO OBBLIGATORIO**
-```typescript
-// ✅ CORRETTO - UniversalMillimetricSystem per tutto
-import { UniversalMillimetricSystem } from '@/shared/utils/UniversalMillimetricSystem';
-
-// iPhone 15 (393px) = riferimento assoluto universale CORRETTO
-const scaledFont = UniversalMillimetricSystem.scaleFont(32);
-const scaledSpacing = UniversalMillimetricSystem.scaleSpacing(16);
-const scaledDimension = UniversalMillimetricSystem.scaleDimension(100);
-
-// Calcoli matematici garantiti:
-// iPhone SE (375px): 32 * (375/393) = 30.5px (95.4%)
-// iPhone 15 (393px): 32 * (393/393) = 32px (100%)  
-// iPad (768px): 32 * (768/393) = 62.5px (195.4%)
-
-// Risultato: Proporzioni IDENTICHE matematicamente ovunque!
-
-// ❌ VIETATO - Calcoli manuali frammentati
-const { width } = Dimensions.get('window');
-const isTablet = width >= 768;
-const fontSize = isTablet ? 32 : 24;
-const containerPadding = width > 768 ? 24 : 16;
-const calculateProportionalSize = (ref, current) => {};  // Obsoleto
-```
+Per i dettagli completi, vedi: `docs/DEVELOPMENT_GUIDE.md`, `docs/ARCHITECTURE.md`, `docs/QUALITY_STANDARDS.md`, `docs/RESPONSIVE_SYSTEM_VALIDATION.md`.
 
 ---
 
-## 🚫 **ANTI-PATTERNS VIETATI ASSOLUTI**
-
-### ❌ **SISTEMA PRECEDENTE COMPLETAMENTE VIETATO**
-```typescript
-// ❌ VIETATO - Componenti obsoleti
+## 🚫 Anti‑patterns VIETATI (solo a scopo didattico, non usare mai)
+```ts
+// Componenti/Hook legacy
 import { FormattedText, FormattedTextEnhanced } from '@/components/ui';
-import { ResponsiveBox, ResponsiveStack, ResponsiveCard } from '@/components/ui';
-import { ResponsiveImage } from '@/components/ui';
+import { ResponsiveBox, ResponsiveStack, ResponsiveCard, ResponsiveImage } from '@/components/ui';
 import { useResponsiveLayout, useResponsiveDarkMode } from '@/shared/hooks';
 
-// ❌ VIETATO - Hook obsoleti
-const { responsive, isTablet } = useResponsiveLayout();
-const { isDark, toggleDarkMode } = useResponsiveDarkMode();
-
-// ❌ VIETATO - Props obsoleti
+// Calcoli/prop vietati
+const { width, height } = Dimensions.get('window');
 <FormattedText fontSize={32} fixedLines={2} intelligentAccessibilityScaling>
 <ResponsiveBox preset="card" autoBackgroundColor="primary">
 <ResponsiveImage preset="hero" source={image}>
-
-// ❌ VIETATO - Calcoli manuali
-const { width: screenWidth } = Dimensions.get('window');
-const isTablet = screenWidth >= 768;
-const fontSize = width > 768 ? 32 : 24;
-```
-
-### ❌ **GESTIONI MANUALI VIETATE**
-```typescript
-// ❌ VIETATO - Dark mode manuale
-const [isDark, setIsDark] = useState(false);
-const backgroundColor = isDark ? '#000000' : '#FFFFFF';
-const textColor = isDark ? '#FFFFFF' : '#000000';
-
-// ❌ VIETATO - Scaling manuale
-const scaleFont = (size) => size * (screenWidth / 414);
-const scaleSpacing = (value) => value * scaleFactor;
-
-// ❌ VIETATO - Breakpoint manuali
-if (screenWidth >= 768) { /* Tablet logic */ }
-if (width > 1024) { /* Desktop logic */ }
-
-// ❌ VIETATO - Immunità manuale
-<Text allowFontScaling={false} numberOfLines={2}>
-<FormattedText allowSystemFontScaling={false}>
-
-// ❌ VIETATO - Platform differences
-{Platform.OS === 'ios' ? <ComponentA /> : <ComponentB />}
-```
-
-### ❌ **CALCOLI DUPLICATI VIETATI**
-```typescript
-// ❌ VIETATO - Percentuali hardcoded sparse
-width: '48%'              // ImpactQuickStats
-width: '60%'              // SeguiciScreen  
-width: '31%'              // Card components
-maxWidth: screenWidth * 0.9  // Modal components
-
-// ❌ VIETATO - Doppio scaling
-<PerfectText size={scaleFont(32)}>  // scaleFont già in PerfectText
-fontSize: UniversalMillimetricSystem.scaleFont(scaleFont(24))
-
-// ❌ VIETATO - Conditional rendering dispositivi
-{isTablet ? 
-  <PerfectText size={32}>Grande</PerfectText> : 
-  <PerfectText size={20}>Piccolo</PerfectText>
-}
+<Text allowFontScaling={true}>
 ```
 
 ---
 
-## 💡 **TEMPLATE COMPONENTI PERFETTI**
-
-### **COMPONENTE PERFETTO COMPLETO**
-```typescript
-import { 
-  PerfectText, PerfectImage, PerfectContainer,
-  PageContainer, useUniversalTheme 
-} from '@/components/ui';
-
-const PerfectComponent = ({ title, description, image, items }) => {
-  const { toggleTheme } = useUniversalTheme();
-  
-  return (
-    <PageContainer theme="auto">
-      {/* Hero image sempre perfetta */}
-      <PerfectImage preset="hero" source={image} rounded={12} shadow="medium" />
-      
-      {/* Titolo mai tagliato */}
-      <PerfectText size={48} lines={2} immunity={true} weight="bold">
-            {title}
-      </PerfectText>
-      
-      {/* Descrizione sempre esatta */}
-      <PerfectText size={16} lines={4} immunity={true}>
-          {description}
-      </PerfectText>
-        
-      {/* Grid automatico */}
-      <PerfectContainer preset="section">
-          {items.map(item => (
-          <CardContainer key={item.id} elevated theme="auto">
-            <PerfectImage preset="card" source={item.image} />
-            <PerfectText size={20} lines={1} weight="bold">
-              {item.name}
-            </PerfectText>
-            <PerfectText size={14} lines={3}>
-              {item.description}
-            </PerfectText>
-          </CardContainer>
-        ))}
-      </PerfectContainer>
-      
-      {/* Dark mode universale */}
-      <TouchableOpacity onPress={toggleTheme}>
-        <PerfectText size={16}>🌙 Toggle Dark Mode</PerfectText>
-      </TouchableOpacity>
-    </PageContainer>
-  );
-};
-
-export default PerfectComponent;
-```
-
-### **SCREEN PERFETTO COMPLETO**
-```typescript
-import { 
-  PerfectText, PerfectImage, PerfectContainer,
-  PageContainer, CardContainer, useUniversalTheme 
-} from '@/components/ui';
-
-const PerfectScreen = ({ data }) => {
-  const { theme, colors } = useUniversalTheme();
-  
-  return (
-    <PageContainer theme="auto">
-      {/* Header section */}
-      <PerfectContainer preset="section">
-        <PerfectTitle size={48} lines={1}>
-          {data.screenTitle}
-        </PerfectTitle>
-        
-        <PerfectSubtitle size={24} lines={2}>
-          {data.screenSubtitle}
-        </PerfectSubtitle>
-      </PerfectContainer>
-      
-      {/* Hero section */}
-      <PerfectContainer preset="section">
-        <HeroImage source={data.heroImage} />
-        
-        <PerfectBody size={16} lines={4}>
-          {data.heroDescription}
-        </PerfectBody>
-      </PerfectContainer>
-      
-      {/* Content grid */}
-      <PerfectContainer preset="section">
-        {data.contentItems.map(item => (
-          <CardContainer key={item.id} elevated>
-            <CardImage source={item.image} />
-            
-            <PerfectContainer preset="section">
-              <PerfectText size={18} lines={1} weight="bold">
-                {item.title}
-              </PerfectText>
-              
-              <PerfectText size={14} lines={3}>
-              {item.description}
-              </PerfectText>
-            </PerfectContainer>
-          </CardContainer>
-        ))}
-      </PerfectContainer>
-      
-      {/* Footer actions */}
-      <PerfectContainer preset="section">
-        <TouchableOpacity>
-          <CardContainer elevated theme="auto">
-            <PerfectText size={18} weight="bold" color="auto">
-              Call to Action
-            </PerfectText>
-          </CardContainer>
-      </TouchableOpacity>
-      </PerfectContainer>
-    </PageContainer>
-  );
-};
-
-export default PerfectScreen;
-```
-
-### **FORM PERFETTO**
-```typescript
-const PerfectForm = ({ onSubmit }) => {
-  return (
-    <ModalContainer centered theme="auto">
-      <PerfectText size={32} lines={1} weight="bold">
-        Form Perfetto
-      </PerfectText>
-      
-      <PerfectContainer preset="section">
-        <PerfectText size={16} lines={1}>Nome</PerfectText>
-        <TextInput 
-          style={{
-            fontSize: UniversalMillimetricSystem.scaleFont(16),
-            padding: UniversalMillimetricSystem.scaleSpacing(12),
-            borderRadius: UniversalMillimetricSystem.scaleSpacing(8)
-          }}
-          placeholder="Inserisci nome"
-        />
-        
-        <PerfectText size={16} lines={1}>Email</PerfectText>
-        <TextInput 
-          style={{
-            fontSize: UniversalMillimetricSystem.scaleFont(16),
-            padding: UniversalMillimetricSystem.scaleSpacing(12),
-            borderRadius: UniversalMillimetricSystem.scaleSpacing(8)
-          }}
-          placeholder="Inserisci email"
-        />
-        
-        <TouchableOpacity 
-          onPress={onSubmit}
-          style={{
-            padding: UniversalMillimetricSystem.scaleSpacing(16),
-            borderRadius: UniversalMillimetricSystem.scaleSpacing(8)
-          }}
-        >
-          <PerfectText size={18} weight="bold" color="auto">
-            Invia
-          </PerfectText>
-        </TouchableOpacity>
-      </PerfectContainer>
-    </ModalContainer>
-  );
-};
-```
-
----
-
-## 📏 **DIMENSIONI STANDARD PERFETTE**
-
-```typescript
-const PerfectTextSizes = {
-  hero: 75,      // Titoli hero massimi "Rise Against Hunger Italia"
-  title: 48,     // Titoli principali aggiornati da 42 a 48px
-  subtitle: 32,  // Sottotitoli "Entra in Azione"
-  body: 20,      // Testo body importante
-  normal: 16,    // Testo normale
-  caption: 14,   // Didascalie
-  small: 12      // Testo piccolo
-};
-
-const PerfectImagePresets = {
-  hero: "16:9 - Hero images, banner principali",
-  card: "4:3 - Card immagini, gallery", 
-  thumbnail: "1:1 - Avatar, icone, thumbnail",
-  banner: "21:9 - Banner larghi, header"
-};
-
-const PerfectContainerPresets = {
-  page: "Pagina completa con padding iPhone 15 (7.73%)",
-  card: "Card con proporzioni iPhone 15 (3.86%)",
-  section: "Sezione con spacing iPhone 15 (5.80%)",
-  modal: "Modal centrato con border radius iPhone 15"
-};
-
-// 📱 SISTEMA UNIVERSALE - iPhone 15 (393px) RIFERIMENTO ASSOLUTO CORRETTO
-const UniversalScaling = {
-  "iPhone SE (375px)": "95.4% scaling - Proporzioni iPhone 15 esatte",
-  "iPhone 15 (393px)": "100% scaling - Riferimento perfetto", 
-  "Samsung (360px)": "91.6% scaling - Proporzioni iPhone 15 esatte",
-  "iPad (768px)": "195.4% scaling - Proporzioni iPhone 15 esatte",
-  "Foldable (1920px)": "488.6% scaling - Proporzioni iPhone 15 esatte"
-};
-```
-
----
-
-## 🔍 **CHECKLIST PRE-COMMIT PERFETTA**
-
-### **VERIFICA SISTEMA PERFETTO:**
-- ✅ Usa `PerfectText` invece di `FormattedText` o `Text`?
-- ✅ Usa `PerfectImage` invece di `Image` o `ResponsiveImage`?
-- ✅ Usa `PerfectContainer` invece di `View` o `ResponsiveBox`?
-- ✅ Usa `useUniversalTheme()` invece di dark mode manuale?
-- ✅ Usa `SystemImmunity` per immunità totale?
-- ✅ Zero `const { width } = Dimensions.get('window')` manuali?
-- ✅ Zero `screenWidth >= 768` breakpoint duplicati?
-- ✅ Zero percentuali `'48%'`, `'60%'` hardcoded?
-- ✅ Zero `allowFontScaling=true` che rompe layout?
-
-### **VERIFICA PROPS PERFETTE:**
-- ✅ `PerfectText`: `size` (non fontSize), `lines` (non fixedLines), `immunity={true}`?
-- ✅ `PerfectImage`: `preset` appropriato (`hero`, `card`, `thumbnail`, `banner`)?
-- ✅ `PerfectContainer`: `preset` appropriato (`page`, `card`, `section`, `modal`)?
-- ✅ `theme="auto"` per dark mode automatico ovunque?
-- ✅ `color="auto"` per text color automatico?
-
-### **VERIFICA IMMUNITÀ PERFETTA:**
-- ✅ `SystemImmunity.setGlobalImmunity(true)` attivata?
-- ✅ Tutti i `PerfectText` hanno `immunity={true}`?
-- ✅ Zero `allowFontScaling={false}` manuali?
-- ✅ Zero gestioni manuali zoom/accessibilità?
-
-### **VERIFICA QUALITÀ PERFETTA:**
-- ✅ Test coverage >98%?
-- ✅ Zero TypeScript errors?
-- ✅ Zero ESLint warnings?
-- ✅ `npm run pre-modifiche` passa?
-- ✅ `npm run conta-problemi` = 0?
-- ✅ `npm run post-modifiche` passa?
-
-### **WORKFLOW OBBLIGATORIO PERFETTO:**
-1. `npm run pre-modifiche` → DEVE passare SEMPRE
-2. Sviluppo con Sistema Perfetto ESCLUSIVAMENTE
-3. `npm run post-modifiche` → DEVE passare SEMPRE
-4. Commit SOLO se tutto è 0 problemi
-
----
-
-## 🎯 **BENEFICI SISTEMA PERFETTO**
-
-### **👨‍💻 SVILUPPATORE**
-```
-✅ Zero calcoli manuali necessari MAI
-✅ Zero gestione breakpoint MAI
-✅ Zero gestione dark mode manuale MAI
-✅ Zero inconsistenze layout IMPOSSIBILI
-✅ API intuitive e potenti SEMPRE
-✅ Sviluppo velocità 10x GARANTITO
-✅ Debug tools integrati AUTOMATICI
-✅ Testing completo incluso SEMPRE
-```
-
-### **👤 UTENTE**
-```
-✅ App sempre identica e prevedibile MATEMATICAMENTE
-✅ Performance ottimali sempre GARANTITE
-✅ Esperienza consistent cross-device ASSOLUTA
-✅ Layout immune a impostazioni TOTALMENTE
-✅ Accessibilità controllata PERFETTAMENTE
-✅ Dark mode fluido e automatico SEMPRE
-✅ Rendering perfetto su qualsiasi dispositivo UNIVERSALE
-✅ Zero glitch o inconsistenze IMPOSSIBILI
-```
-
-### **🏢 BUSINESS**
-```
-✅ Manutenzione drasticamente ridotta A ZERO
-✅ Bug layout impossibili MATEMATICAMENTE
-✅ Scalabilità automatica nuovi dispositivi SEMPRE
-✅ Quality enterprise garantita ASSOLUTA
-✅ Time-to-market accelerato 10x
-✅ Costi sviluppo ridotti DRASTICAMENTE
-✅ Customer satisfaction aumentata MASSIMA
-✅ Competitive advantage tecnologico MONDIALE
-```
-
----
-
-## 🚀 **ESEMPI IMPLEMENTAZIONE PERFETTA**
-
-### **HOMEPAGE PERFETTA**
-```typescript
-<PageContainer theme="auto">
-  <PerfectTitle size={48} lines={2}>
-    Rise Against{'\n'}Hunger Italia
-  </PerfectTitle>
-  
-  <HeroImage source={heroImage} />
-  
-  <PerfectBody size={16} lines={4}>
-    Combatti la fame nel mondo con azioni concrete
-    e donazioni che cambiano vite in modo significativo
-    attraverso progetti concreti e sostenibili
-    per un futuro migliore per tutti.
-  </PerfectBody>
-</PageContainer>
-```
-
-### **AZIONI PERFETTE**
-```typescript
-<SectionContainer spacing="lg">
-  <PerfectSubtitle size={32} lines={2}>
-    Fai la{'\n'}Differenza
-  </PerfectSubtitle>
-  
-  {actions.map(action => (
-    <CardContainer key={action.id} elevated>
-      <CardImage source={action.image} />
-      <PerfectText size={18} lines={1} weight="bold">
-        {action.title}
-      </PerfectText>
-      <PerfectText size={14} lines={3}>
-        {action.description}
-      </PerfectText>
-    </CardContainer>
-  ))}
-</SectionContainer>
-```
-
-### **DARK MODE PERFETTO**
-```typescript
-const PerfectDarkModeComponent = () => {
-  const { theme, toggleTheme } = useUniversalTheme();
-  
-  return (
-    <PerfectContainer theme="auto">
-      <PerfectText size={24} color="auto">
-        Contenuto automatico light/dark
-      </PerfectText>
-      
-      <TouchableOpacity onPress={toggleTheme}>
-        <PerfectText size={16}>
-          {theme === 'dark' ? '☀️ Light' : '🌙 Dark'} Mode
-        </PerfectText>
-      </TouchableOpacity>
-    </PerfectContainer>
-  );
-};
-```
-
----
-
-## 🧪 **TESTING PERFETTO**
-
-### **COVERAGE TARGET PERFETTO**
-- Statement: >98%
-- Branch: >95%
-- Function: >99%
-- Lines: >98%
-
-### **SCRIPT CONTROLLO QUALITÀ PERFETTA**
-```bash
-npm run pre-modifiche          # BLOCCO se errori - OBBLIGATORIO
-npm run post-modifiche         # BLOCCO se problemi - OBBLIGATORIO  
-npm run conta-problemi         # DEVE essere = 0 - SEMPRE
-npm run test:perfect-system    # Test sistema perfetto
-npm run immunity-check         # Verifica immunità totale
-```
-
-### **TEMPLATE TEST SISTEMA PERFETTO**
-```typescript
-describe('Sistema Perfetto', () => {
-  it('should render perfectly on all devices', () => {
-    const { getByText } = render(
-      <PerfectText size={32} lines={2} immunity={true}>
-        Testo perfetto
-      </PerfectText>
-    );
-    
-    const textElement = getByText('Testo perfetto');
-    expect(textElement.props.allowFontScaling).toBe(false);
-    expect(textElement.props.numberOfLines).toBe(2);
-  });
-  
-  it('should support perfect dark mode', () => {
-    const { getByText } = render(
-      <UniversalThemeProvider>
-        <PerfectContainer theme="auto">
-          <PerfectText color="auto">Auto theme text</PerfectText>
-        </PerfectContainer>
-      </UniversalThemeProvider>
-    );
-    
-    expect(getByText('Auto theme text')).toBeTruthy();
-  });
-  
-  it('should maintain immunity completely', () => {
-    const status = SystemImmunity.checkImmunityStatus();
-    
-    expect(status.fontScaling).toBe(true);    // Blocked
-    expect(status.dynamicType).toBe(true);    // Blocked
-    expect(status.accessibility).toBe(true);  // Controlled
-    expect(status.systemTheme).toBe(true);    // Overridden
-  });
-});
-```
-
----
-
-## 🚨 **ZERO TOLLERANZA POLICY PERFETTA**
-
-### **BLOCCO AUTOMATICO SE:**
-```
-❌ Errori TypeScript: BUILD FALLISCE automaticamente
-❌ Warnings ESLint: BUILD FALLISCE automaticamente
-❌ Test falliti: DEPLOY BLOCCATO automaticamente
-❌ Coverage <98%: DEPLOY BLOCCATO automaticamente
-❌ Performance degrado: ALERT automatico + block
-❌ Immunity compromessa: CRITICAL ALERT + block
-❌ Layout inconsistencies: MATHEMATICAL ALERT + block
-❌ Anti-patterns detected: AUTOMATIC REJECTION
-❌ Sistema precedente usato: IMMEDIATE FAILURE
-```
-
-### **CORREZIONE AUTOMATICA OBBLIGATORIA:**
-Ogni problema deve essere corretto **AUTOMATICAMENTE** dal sistema o **IMMEDIATAMENTE** dal developer.
-**ZERO** soluzioni temporanee o workaround accettate **MAI**.
-**ZERO** utilizzo del sistema precedente accettato **MAI**.
-
----
-
-## 📊 **IMPORTAZIONI CORRETTE PERFETTE**
-
-```typescript
-// ✅ CORRETTO - Sistema Perfetto completo
-import { 
+## ✅ Import corretti (unici)
+```ts
+import {
   PerfectText, PerfectImage, PerfectContainer,
   PerfectTitle, PerfectSubtitle, PerfectBody, PerfectCaption,
   HeroImage, CardImage, ThumbnailImage, BannerImage,
   PageContainer, CardContainer, SectionContainer, ModalContainer,
-  UniversalMillimetricSystem, useUniversalTheme, SystemImmunity
+  useUniversalTheme
 } from '@/components/ui';
 
-// ❌ VIETATO - Sistema precedente obsoleto
-import { FormattedText, FormattedTextEnhanced } from '@/components/ui';
-import { ResponsiveBox, ResponsiveStack, ResponsiveCard } from '@/components/ui';
-import { ResponsiveImage } from '@/components/ui';
-import { useResponsiveLayout, useResponsiveDarkMode } from '@/shared/hooks';
-import { scaleFont } from '@/shared/utils/scaleFont';
+import responsiveSystem, { scaleFont, scaleSpacing, scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+import { SystemImmunity } from '@/shared/utils/SystemImmunity';
 ```
 
 ---
 
-**💎 SISTEMA PERFETTO COMPLETATO**: PerfectText + PerfectImage + PerfectContainer + UniversalTheme + SystemImmunity + UniversalMillimetricSystem = **PERFEZIONE ASSOLUTA MONDIALE** ✅
-
-**📱 RISULTATO FINALE**: App Rise Against Hunger Italia identica al MILLIMETRO su iPhone SE, iPhone 15, iPad, Samsung, e qualsiasi dispositivo futuro - **IMMUNE** a qualsiasi impostazione utente! 
-
-**🏆 LEGACY**: Da charity app → **RIFERIMENTO MONDIALE** per sistemi responsive perfetti in React Native! 
-
-**🎯 REMEMBER**: Zero compromessi, zero tolleranza, zero manutenzione - Solo **PERFEZIONE ASSOLUTA** sempre! ✨ 
+## 📋 Checklist pre‑commit (rigorosa)
+```text
+[] Perfect* ovunque | [] size/lines/immunity | [] theme="auto"/color="auto"
+[] Niente Dimensions/breakpoint/percentuali | [] Conta‑problemi = 0 | [] Post‑modifiche OK
+```
 
 ---
 
-## 📌 Addendum – Sistema Millimetrico aggiornato (Android parity + wrap identico)
+## 📌 Addendum – Sistema Millimetrico (Android parity + wrap identico)
 
-### PerfectText: regole per wrap identici
-- Imposta sempre `size` (riferimento iPhone 15) e, quando il wrap deve essere identico su tutti i device, aggiungi anche `containerWidth` millimetrico. Il valore è riferito a iPhone 15 (393) e viene scalato linearmente con `scaleDimensionLinear`.
-- Esempio bottoni identici (iPhone 15, Pixel 7, Samsung):
+- PerfectText: per wrap identici su tutti i device, aggiungi `containerWidth` (riferito a iPhone 15, 393) scalato con `scaleDimensionLinear`.
 ```tsx
 <PerfectText size={22} lines={2} containerWidth={140}>Dona e{`\n`}Aiuta</PerfectText>
 ```
-
-### Normalizzazione Android (testo)
-- Il sistema applica automaticamente su Android:
-  - `includeFontPadding = false`
-  - `textBreakStrategy = 'simple'`
-  - `ellipsizeMode = 'clip'`
-- Risultato: niente ellissi o padding inattesi, capi‑riga coerenti con iOS.
-
-### Accesso sicuro a LOGICAL_REFERENCE
-- Usa SEMPRE `responsiveSystem` e un fallback sicuro quando accedi alla reference iPhone 15:
+- Normalizzazione Android (testo) automatica:
+  - `includeFontPadding = false`, `textBreakStrategy = 'simple'`, `ellipsizeMode = 'clip'`
+- Accesso sicuro a LOGICAL_REFERENCE:
 ```ts
 import responsiveSystem, { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
 const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
 const ninetyPercent = scaleDimensionLinear(referenceWidth * 0.9);
 ```
-- È vietato accedere a `LOGICAL_REFERENCE.width` senza fallback.
-
-### Immagini header
-- Per evitare tagli: `resizeMode='contain'` e altezza calcolata con scala millimetrica.
-- Alternativa consigliata: `PerfectImage preset='hero'` (rapporto 16:9 fisso, scalato millimetricamente).
+- Immagini header: preferisci `PerfectImage preset='hero'` (16:9). Se necessario, usa `resizeMode='contain'` con altezza scalata.
