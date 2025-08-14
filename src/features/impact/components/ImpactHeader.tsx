@@ -3,15 +3,15 @@ import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { PerfectText } from '../../../components/ui';
-// rimosso: responsiveSystem/scaleDimensionLinear non necessari senza containerWidth
 import { Spacing, Typography } from '../../../shared/constants/designTokens';
-import {
-  HEADER_TITLE_SIZE,
-  HEADER_SUBTITLE_SIZE,
-} from '../../shared/headerSizes';
 import responsiveSystem, {
   scaleDimensionLinear,
+  TypographyTokens,
 } from '../../../shared/constants/responsiveSystem';
+import {
+  HEADER_TITLE_SIZE,
+  IMPACT_SUBTITLE_SIZE,
+} from '../../shared/headerSizes';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import {
   HEADER_VERTICAL_PADDING_FACTOR,
@@ -23,11 +23,8 @@ interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
 }
 
-/**
- * Header della schermata Impact con titolo animato e gradient background
- */
-const TITLE_SIZE = HEADER_TITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
-const SUBTITLE_SIZE = HEADER_SUBTITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
+const TITLE_SIZE = HEADER_TITLE_SIZE;
+const SUBTITLE_SIZE = IMPACT_SUBTITLE_SIZE;
 const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
 const HEADER_INNER_HEIGHT = scaleDimensionLinear(
   REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
@@ -79,8 +76,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
         </View>
         <PerfectText
           size={SUBTITLE_SIZE}
-          maxSize={28}
-          lines={1}
+          lines={2}
           immunity={true}
           style={styles.mainSubtitle}
         >
@@ -92,13 +88,12 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
 };
 
 const styles = StyleSheet.create({
-  // Header - IDENTICO PAGINA AZIONI
   headerContainer: {
     alignSelf: 'stretch',
     width: '100%',
-    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[8], // ANDROID: spazio superiore ulteriormente aumentato
+    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[8],
     paddingHorizontal: Spacing[4],
-    paddingBottom: Spacing[6], // AUMENTATO: più spazio sotto il titolo principale
+    paddingBottom: Spacing[6],
     alignItems: 'center',
     position: 'relative',
   },
@@ -108,68 +103,59 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    opacity: Platform.OS === 'android' ? 0.01 : 0.02, // UNIFORMATO con ContributeHeader
+    opacity: Platform.OS === 'android' ? 0.01 : 0.02,
   },
-  // CONTAINER ELEGANTE COLORATO COME PAGINA AZIONI
   mainHeaderContainer: {
-    alignSelf: 'stretch', // Forza larghezza 100% come pagina Azioni
+    alignSelf: 'stretch',
     width: '100%',
     alignItems: 'center',
     height: HEADER_INNER_HEIGHT,
     backgroundColor:
-      Platform.OS === 'android'
-        ? '#F5F6F6' // ANDROID: Grigio leggermente più scuro
-        : 'rgba(31, 41, 55, 0.03)', // iOS: Mantiene rgba originale
+      Platform.OS === 'android' ? '#F5F6F6' : 'rgba(31, 41, 55, 0.03)',
     paddingHorizontal: Spacing[4],
-    paddingTop: HEADER_VERTICAL_PADDING, // AUMENTATO: allunga verticalmente senza allargare
-    paddingBottom: HEADER_VERTICAL_PADDING, // AUMENTATO: allunga verticalmente senza allargare
-    borderRadius: 16, // MODERNO COME PAGINA AZIONI
+    paddingTop: HEADER_VERTICAL_PADDING,
+    paddingBottom: HEADER_VERTICAL_PADDING,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor:
-      Platform.OS === 'android'
-        ? '#E8EAEB' // ANDROID: Bordo grigio leggermente più scuro
-        : 'rgba(31, 41, 55, 0.08)', // iOS: Mantiene rgba originale
-    shadowColor: '#1F2937', // OMBRA GRIGIA COORDINATA
+      Platform.OS === 'android' ? '#E8EAEB' : 'rgba(31, 41, 55, 0.08)',
+    shadowColor: '#1F2937',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08, // UNIFORMATO con ContributeHeader
+    shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08,
     shadowRadius: 6,
-    elevation: Platform.OS === 'android' ? 1 : 3, // UNIFORMATO con ContributeHeader
+    elevation: Platform.OS === 'android' ? 1 : 3,
   },
-  // CONTAINER TITOLO - IMPAGINAZIONE ELEGANTE
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Spacing[1], // UNIFORMATO a ContributeHeader
+    marginBottom: Spacing[1],
   },
-  // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
   titleText: {
-    fontWeight: Typography.weights.black, // RIPRISTINATO: black (900) per massimo grassetto come richiesto
-    color: '#1F2937', // NERO per contrasto come richiesto
+    fontWeight: Typography.weights.black,
+    color: '#1F2937',
     textAlign: 'center',
-    letterSpacing: -1.2, // UNIFORMATO con ContributeHeader
-    lineHeight: 42, // UNIFORMATO con ContributeHeader
+    letterSpacing: TypographyTokens.letterSpacing.tight,
+    lineHeight: TypographyTokens.lineHeights.baseline(HEADER_TITLE_SIZE),
     marginBottom: HEADER_TITLE_INTERLINE,
-    textShadowColor: 'rgba(31, 41, 55, 0.15)', // OMBRA SOTTILE
+    textShadowColor: 'rgba(31, 41, 55, 0.15)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     includeFontPadding: false,
   },
-  // ACCENTO ROSSO STRATEGICO - SOLO differenze cromatiche rispetto a titleText
   titleAccent: {
     color: '#DC2626',
     textShadowColor: 'rgba(220, 38, 38, 0.15)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
   },
-  // SUBTITLE INLINE INGRANDITO E ELEGANTE
   mainSubtitle: {
-    // fontSize rimosso - ora gestito da PerfectText
-    fontWeight: Typography.weights.medium, // MEDIUM COME PAGINA AZIONI
-    color: '#374151', // GRIGIO COORDINATO COME PAGINA AZIONI
+    fontWeight: Typography.weights.medium,
+    color: '#374151',
     textAlign: 'center',
-    letterSpacing: 0,
-    marginTop: 0, // UNIFORMATO con ContributeHeader
-    opacity: 0.8, // TRASPARENZA ELEGANTE
+    letterSpacing: TypographyTokens.letterSpacing.normal,
+    lineHeight: TypographyTokens.lineHeights.baseline(IMPACT_SUBTITLE_SIZE),
+    marginTop: Spacing[3],
+    opacity: 0.8,
     includeFontPadding: false,
   },
 });
