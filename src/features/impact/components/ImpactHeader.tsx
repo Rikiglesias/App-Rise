@@ -72,7 +72,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
             size={TITLE_SIZE}
             lines={1}
             immunity={true}
-            style={styles.titleAccent}
+            style={[styles.titleText, styles.titleAccent]}
           >
             Impatto
           </PerfectText>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    opacity: 0.02, // RIDOTTO per sottilità
+    opacity: Platform.OS === 'android' ? 0.01 : 0.02, // UNIFORMATO con ContributeHeader
   },
   // CONTAINER ELEGANTE COLORATO COME PAGINA AZIONI
   mainHeaderContainer: {
@@ -154,17 +154,12 @@ const styles = StyleSheet.create({
     textShadowRadius: 6,
     includeFontPadding: false,
   },
-  // ACCENTO ROSSO STRATEGICO - IDENTICO A titleText tranne colore
+  // ACCENTO ROSSO STRATEGICO - SOLO differenze cromatiche rispetto a titleText
   titleAccent: {
-    fontWeight: Typography.weights.black, // IDENTICO: black (900) per consistenza
-    color: '#DC2626', // ROSSO BRAND per accento
-    textAlign: 'center', // IDENTICO: per allineamento
-    letterSpacing: -1.2, // UNIFORMATO: spaziatura caratteri
-    lineHeight: 42, // UNIFORMATO con ContributeHeader
-    textShadowColor: 'rgba(220, 38, 38, 0.15)', // OMBRA COORDINATA
+    color: '#DC2626',
+    textShadowColor: 'rgba(220, 38, 38, 0.15)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
-    includeFontPadding: false, // IDENTICO: per padding font
   },
   // SUBTITLE INLINE INGRANDITO E ELEGANTE
   mainSubtitle: {
