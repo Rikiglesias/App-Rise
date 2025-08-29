@@ -20,7 +20,7 @@ const UNIVERSAL_REFERENCE = {
 - 📍 **IMPATTO**: Tutti i calcoli ora matematicamente precisi
 
 #### **2. Limiti di Scaling Non Allineati**
-- ❌ **PRIMA**: UniversalMillimetricSystem (0.75-2.0) ≠ responsiveSystem (0.85-1.4)
+- ❌ **PRIMA**: responsiveSystem.ts (0.75-2.0) ≠ responsiveSystem (0.85-1.4)
 - ✅ **DOPO**: Entrambi i sistemi usano 0.85-1.4
 - 📍 **IMPATTO**: Coerenza totale tra tutti i sistemi
 
@@ -118,7 +118,7 @@ const examples = {
 - ✅ Fallback matematico: per dispositivi non mappati
 
 ### **🔧 COERENZA TOTALE**
-- ✅ UniversalMillimetricSystem ↔ responsiveSystem
+- ✅ responsiveSystem.ts ↔ responsiveSystem
 - ✅ Database dispositivi ↔ Calcoli matematici
 - ✅ Documentazione ↔ Implementazione
 - ✅ UI debug ↔ Sistema reale

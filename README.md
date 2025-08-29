@@ -9,7 +9,7 @@
 ### ✅ **PERFEZIONE ENTERPRISE + IMMUNITÀ TOTALE**
 ```
 SISTEMA PERFETTO COMPLETO ✅ RIVOLUZIONARIO
-├── 1. UniversalMillimetricSystem.ts   # iPhone 15 riferimento universale
+├── 1. responsiveSystem.ts   # iPhone 15 riferimento universale
 ├── 2. PerfectText.tsx                 # Testi mai tagliati, righe esatte
 ├── 3. UniversalTheme.tsx              # Dark mode singolo toggle
 ├── 4. PerfectImage.tsx                # Immagini proporzioni identiche
@@ -183,7 +183,7 @@ src/
 │   ├── projects/           # Progetti attivi
 │   └── about/              # Chi siamo
 ├── shared/
-│   ├── utils/              # UniversalMillimetricSystem, SystemImmunity
+│   ├── utils/              # responsiveSystem, SystemImmunity
 │   ├── theme/              # UniversalTheme
 │   ├── constants/          # Design tokens
 │   └── hooks/              # Hook personalizzati
@@ -192,7 +192,7 @@ src/
 
 ### **💎 Sistema Perfetto Core**
 ```
-🎯 UniversalMillimetricSystem.ts  # iPhone 15 riferimento universale
+🎯 responsiveSystem.ts  # iPhone 15 riferimento universale
 🎨 PerfectText.tsx                # Testi perfetti sempre
 🖼️ PerfectImage.tsx              # Immagini proporzioni identiche
 📦 PerfectContainer.tsx           # Container perfetti

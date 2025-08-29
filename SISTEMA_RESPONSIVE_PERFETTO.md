@@ -17,21 +17,25 @@ Hai chiesto:
 
 ### **Come Funziona**
 ```typescript
-import { universal } from '@/shared/utils/UniversalMillimetricSystem';
+import responsiveSystem, {
+  scaleFont,
+  scaleSpacing,
+  scaleSize,
+} from '@/shared/constants/responsiveSystem';
 
-// iPhone 15 (414px) = RIFERIMENTO ASSOLUTO
+// iPhone 15 (393px) = RIFERIMENTO ASSOLUTO
 // Samsung Galaxy (360px) = 87% di iPhone 15 → tutto scala al 87%
 // iPad Pro (768px) = 185% di iPhone 15 → tutto scala al 185%
 
-const fontSize = universal.font(20);     // Font proporzionale
-const spacing = universal.spacing(16);   // Spacing proporzionale  
-const width = universal.width(200);      // Larghezza proporzionale
-const height = universal.height(100);    // Altezza proporzionale
+const fontSize = scaleFont(20);     // Font proporzionale
+const spacing = scaleSpacing(16);   // Spacing proporzionale
+const width = scaleSize(200);      // Larghezza proporzionale
+const height = scaleSize(100);    // Altezza proporzionale
 ```
 
 ### **Info Dispositivo**
 ```typescript
-const info = universal.info();
+const info = responsiveSystem.getDatabaseDeviceInfo();
 console.log(info);
 // {
 //   width: 360,           // Larghezza attuale
@@ -222,7 +226,7 @@ import { PerfectContainer } from '@/components/ui/PerfectContainer';
   flexDirection="row"      // Layout orizzontale
   justifyContent="space-between"
   alignItems="center"
-  gap={universal.spacing(12)}  // Gap tra children
+  gap={scaleSpacing(12)}  // Gap tra children
   paddingHorizontal={20}
 >
   <PerfectText fontSize={16} lines={1}>Item 1</PerfectText>
@@ -255,7 +259,7 @@ import {
 ```typescript
 import React from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
-import { universal } from '@/shared/utils/UniversalMillimetricSystem';
+import { scaleSpacing } from '@/shared/constants/responsiveSystem';
 import { PerfectText } from '@/components/ui/PerfectText';
 import { UniversalThemeProvider, useUniversalTheme } from '@/shared/theme/UniversalTheme';
 import { HeroImage, CardImage } from '@/components/ui/PerfectImage';
@@ -269,7 +273,7 @@ const MyPerfectApp = () => {
       <ScrollView>
         
         {/* Header */}
-        <CardContainer backgroundColor="card" margin={universal.spacing(20)}>
+        <CardContainer backgroundColor="card" margin={scaleSpacing(20)}>
           <HeroImage 
             source={{ uri: 'https://picsum.photos/400/300' }}
             width={350}
@@ -299,8 +303,8 @@ const MyPerfectApp = () => {
         <PerfectContainer 
           flexDirection="row" 
           justifyContent="space-around"
-          margin={universal.spacing(20)}
-          gap={universal.spacing(12)}
+          margin={scaleSpacing(20)}
+          gap={scaleSpacing(12)}
         >
           <CardContainer backgroundColor="card" padding={12}>
             <CardImage source={{ uri: 'https://picsum.photos/150/100' }} width={100} />
@@ -318,13 +322,13 @@ const MyPerfectApp = () => {
         </PerfectContainer>
 
         {/* Controls */}
-        <CardContainer backgroundColor="card" margin={universal.spacing(20)}>
+        <CardContainer backgroundColor="card" margin={scaleSpacing(20)}>
           <TouchableOpacity
             onPress={toggleTheme}
             style={{
               backgroundColor: colors.accent,
-              padding: universal.spacing(16),
-              borderRadius: universal.spacing(8),
+              padding: scaleSpacing(16),
+              borderRadius: scaleSpacing(8),
               alignItems: 'center'
             }}
           >
@@ -385,8 +389,8 @@ export default function App() {
 ### **Testa il Sistema**
 ```typescript
 // Vedi info dispositivo corrente
-const info = universal.info();
-console.log('Device:', info.width + 'px (' + info.scalePercentage + '% di iPhone 15)');
+const info = responsiveSystem.getDatabaseDeviceInfo();
+console.log('Device width:', info.currentWidth + 'px');
 
 // Debug testi
 <PerfectText fontSize={24} lines={2} debug={true}>

@@ -33,7 +33,7 @@
 ### **📊 SISTEMA PERFETTO INTEGRATO**
 ```
 SISTEMA PERFETTO COMPLETO ✅
-├── 1. UniversalMillimetricSystem.ts   # iPhone 15 riferimento universale
+├── 1. responsiveSystem.ts   # iPhone 15 riferimento universale
 ├── 2. PerfectText.tsx                 # Testi mai tagliati, righe esatte
 ├── 3. UniversalTheme.tsx              # Dark mode singolo toggle
 ├── 4. PerfectImage.tsx                # Immagini proporzioni identiche
@@ -63,7 +63,7 @@ Updates: EAS Update (consistent delivery)
 src/
 ├── shared/
 │   ├── utils/
-│   │   ├── UniversalMillimetricSystem.ts  # ⭐ CORE: iPhone 15 universale
+│   │   ├── responsiveSystem.ts  # ⭐ CORE: iPhone 15 universale
 │   │   └── SystemImmunity.ts              # 🛡️ IMMUNITY: Blocco impostazioni
 │   └── constants/
 │       └── deviceResolutionsDatabase.ts   # 📱 98.4% dispositivi mappati
@@ -91,7 +91,7 @@ TESTING COMPLETE: Copertura enterprise
 
 ### **📱 SISTEMA UNIVERSALE iPhone 15**
 ```
-UniversalMillimetricSystem.ts
+responsiveSystem.ts
 ├── RIFERIMENTO ASSOLUTO: iPhone 15 (393px)
 ├── CALCOLI MATEMATICI
 │   ├── Font: scaleFont(size) → proporzioni perfette
@@ -115,7 +115,7 @@ UniversalMillimetricSystem.ts
 ┌─────────────────────────────────────────────────────────┐
 │                 SISTEMA PERFETTO                        │
 ├─────────────────────────────────────────────────────────┤
-│ 1. UniversalMillimetricSystem                           │
+│ 1. responsiveSystem.ts                           │
 │    ├── iPhone 15 (393px) = riferimento ASSOLUTO        │
 │    ├── scaleFont/Spacing/Dimension = proporzioni       │
 │    └── 98.4% dispositivi = copertura universale        │
@@ -180,10 +180,10 @@ RISULTATO: Proportioni IDENTICHE (8.14%) su ogni dispositivo!
 
 ## 📱 **SISTEMA UNIVERSALE**
 
-### **🧮 UniversalMillimetricSystem**
+### **🧮 responsiveSystem.ts**
 ```typescript
 // CORE del sistema - iPhone 15 riferimento assoluto
-export const UniversalMillimetricSystem = {
+export const responsiveSystem = {
   // Riferimento universale
   REFERENCE_DEVICE: {
     width: 393,           // iPhone 15 
@@ -276,7 +276,7 @@ const { theme, toggleTheme, colors } = useUniversalTheme();
 ```
 User Interaction
        ↓
-UniversalMillimetricSystem (scaling)
+responsiveSystem.ts (scaling)
        ↓  
 PerfectText (immunity + layout)
        ↓
@@ -363,7 +363,7 @@ export const UniversalTypography = {
 ### **🔬 TEST STRATEGY PERFETTA**
 ```
 ├── Unit Tests
-│   ├── UniversalMillimetricSystem calculations
+│   ├── responsiveSystem.ts calculations
 │   ├── PerfectText sizing logic
 │   ├── SystemImmunity blocking
 │   └── Theme switching

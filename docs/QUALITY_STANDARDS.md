@@ -139,7 +139,7 @@ const width90 = scaleDimensionLinear(referenceWidth * 0.9);
 ### **🔒 ZERO TOLERANCE POLICY PERFETTA**
 ```typescript
 const ZeroTolerancePolicy = {
-  "Manual calculations": "VIETATO - Solo UniversalMillimetricSystem",
+  "Manual calculations": "VIETATO - Solo responsiveSystem.ts",
   "Hardcoded breakpoints": "VIETATO - Solo iPhone 15 universale",
   "Manual dark mode": "VIETATO - Solo UniversalTheme",
   "allowFontScaling=true": "VIETATO - Solo immunity=true",
@@ -168,7 +168,7 @@ Function Coverage: >99% (SUPERATO - attualmente 99.1%)
 Lines Coverage: >98% (SUPERATO - attualmente 98.7%)
 
 CRITICAL COMPONENTS: 100% COVERAGE OBBLIGATORIO
-├── UniversalMillimetricSystem: 100% ✅ PERFETTO
+├── responsiveSystem.ts: 100% ✅ PERFETTO
 ├── PerfectText: 100% ✅ PERFETTO
 ├── SystemImmunity: 100% ✅ PERFETTO
 ├── UniversalTheme: 100% ✅ PERFETTO
@@ -181,11 +181,11 @@ CRITICAL COMPONENTS: 100% COVERAGE OBBLIGATORIO
 ```typescript
 // Testing completo automatico
 describe('Sistema Perfetto Enterprise', () => {
-  describe('UniversalMillimetricSystem', () => {
+  describe('responsiveSystem.ts', () => {
     it('should maintain mathematical proportions across all devices', () => {
       // iPhone SE, iPhone 15, iPad, Samsung, Foldable
       allDevices.forEach(device => {
-        const scaledFont = UniversalMillimetricSystem.scaleFont(32);
+        const scaledFont = responsiveSystem.scaleFont(32);
         const expectedProportion = device.width / 393; // iPhone 15 reference
         expect(scaledFont).toBeCloseTo(32 * expectedProportion);
       });
