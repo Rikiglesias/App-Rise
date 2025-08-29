@@ -71,12 +71,12 @@ const getFontScale = () => {
   }
 };
 
-const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = getDimensions();
-const DEVICE_SCALE = getPixelRatio();
-const FONT_SCALE = getFontScale();
+let DEVICE_WIDTH: number = LOGICAL_REFERENCE.width;
+let DEVICE_HEIGHT: number = LOGICAL_REFERENCE.height;
+let DEVICE_SCALE: number = LOGICAL_REFERENCE.scale;
+let FONT_SCALE: number = 1;
 
-// 🎯 HYBRID SCALING SYSTEM
-export const ScalingFactors = {
+const createScalingFactors = () => ({
   // Base scaling (logical reference approach)
   base: DEVICE_WIDTH / LOGICAL_REFERENCE.width,
 
@@ -105,7 +105,9 @@ export const ScalingFactors = {
 
   // Density scaling
   density: DEVICE_SCALE / LOGICAL_REFERENCE.scale,
-} as const;
+});
+
+export let ScalingFactors = createScalingFactors();
 
 // 🧮 MILLIMETRIC SCALE (universale: iPhone 15 393px con clamp 0.85-1.4)
 export const getMillimetricScale = (): number => {
@@ -268,7 +270,7 @@ export const getCurrentBreakpoint = ():
 };
 
 // 📐 DESIGN TOKENS (8dp grid system)
-export const DesignTokens = {
+const createDesignTokens = () => ({
   // Layout tokens (8dp grid)
   layout: {
     unit: INDUSTRY_STANDARDS.baseUnit, // 8dp base unit
@@ -345,7 +347,9 @@ export const DesignTokens = {
     xlarge: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2.5), // 20dp
     full: 9999,
   },
-} as const;
+} as const);
+
+export let DesignTokens = createDesignTokens();
 
 // 🌍 RTL SUPPORT TOKENS
 export const RTLTokens = {
@@ -387,7 +391,7 @@ export const RTLTokens = {
 } as const;
 
 // 🎨 TYPOGRAPHY TOKENS (Apple + Netflix approach)
-export const TypographyTokens = {
+const createTypographyTokens = () => ({
   // Text styles (Apple-inspired with Netflix constraints)
   styles: {
     // Display styles (grandi schermi)
@@ -453,7 +457,9 @@ export const TypographyTokens = {
     optimalLineLength: INDUSTRY_STANDARDS.optimalLineLength,
     maxLineLength: INDUSTRY_STANDARDS.maxLineLength,
   },
-} as const;
+} as const);
+
+export let TypographyTokens = createTypographyTokens();
 
 // 📊 BREAKPOINT LAYOUT STRATEGIES
 export const BreakpointLayouts = {
@@ -563,51 +569,55 @@ export const PlatformOptimizations = {
 // 📊 DEVICE INFORMATION
 const getPlatformOS = () => {
   try {
-    return Platform.OS || 'ios'; // Fallback to ios for tests
+    return Platform.OS || 'ios'; // Fallback to ios per i test
   } catch {
-    return 'ios'; // Fallback for test environment
+    return 'ios'; // Fallback per ambienti di test
   }
 };
 
-const platformOS = getPlatformOS();
+const createDeviceInfo = () => {
+  const platformOS = getPlatformOS();
 
-export const DeviceInfo = {
-  // Basic info
-  width: DEVICE_WIDTH,
-  height: DEVICE_HEIGHT,
-  scale: DEVICE_SCALE,
-  fontScale: FONT_SCALE,
-  platform: platformOS,
+  return {
+    // Basic info
+    width: DEVICE_WIDTH,
+    height: DEVICE_HEIGHT,
+    scale: DEVICE_SCALE,
+    fontScale: FONT_SCALE,
+    platform: platformOS,
 
-  // Computed info
-  breakpoint: getCurrentBreakpoint(),
-  aspectRatio: DEVICE_WIDTH / DEVICE_HEIGHT,
+    // Computed info
+    breakpoint: getCurrentBreakpoint(),
+    aspectRatio: DEVICE_WIDTH / DEVICE_HEIGHT,
 
-  // Device categories
-  isCompact: DEVICE_WIDTH <= DeviceBreakpoints.compact.maxWidth,
-  isStandard:
-    DEVICE_WIDTH > DeviceBreakpoints.compact.maxWidth &&
-    DEVICE_WIDTH <= DeviceBreakpoints.standard.maxWidth,
-  isLarge:
-    DEVICE_WIDTH > DeviceBreakpoints.standard.maxWidth &&
-    DEVICE_WIDTH <= DeviceBreakpoints.large.maxWidth,
-  isXLarge: DEVICE_WIDTH > DeviceBreakpoints.large.maxWidth,
+    // Device categories
+    isCompact: DEVICE_WIDTH <= DeviceBreakpoints.compact.maxWidth,
+    isStandard:
+      DEVICE_WIDTH > DeviceBreakpoints.compact.maxWidth &&
+      DEVICE_WIDTH <= DeviceBreakpoints.standard.maxWidth,
+    isLarge:
+      DEVICE_WIDTH > DeviceBreakpoints.standard.maxWidth &&
+      DEVICE_WIDTH <= DeviceBreakpoints.large.maxWidth,
+    isXLarge: DEVICE_WIDTH > DeviceBreakpoints.large.maxWidth,
 
-  // Platform info
-  isIOS: platformOS === 'ios',
-  isAndroid: platformOS === 'android',
+    // Platform info
+    isIOS: platformOS === 'ios',
+    isAndroid: platformOS === 'android',
 
-  // Accessibility info
-  hasLargeFontScale: FONT_SCALE > 1.0,
-  needsAccessibilitySupport: FONT_SCALE > INDUSTRY_STANDARDS.maxScaleFactor,
-} as const;
+    // Accessibility info
+    hasLargeFontScale: FONT_SCALE > 1.0,
+    needsAccessibilitySupport: FONT_SCALE > INDUSTRY_STANDARDS.maxScaleFactor,
+  };
+};
+
+export let DeviceInfo = createDeviceInfo();
 
 // 🎯 RESPONSIVE VALUE HOOK (supporta tutti i breakpoints)
 // useResponsiveValue rimosso - utilizzare la versione in useResponsive.ts
 // Questa funzione è ora disponibile tramite l'hook useResponsive()
 
 // 📏 SPACING SYSTEM (8dp grid)
-export const SpacingTokens = {
+const createSpacingTokens = () => ({
   // Base spacing (8dp grid)
   0: 0,
   1: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 0.5), // 4dp
@@ -622,7 +632,9 @@ export const SpacingTokens = {
   16: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 8), // 64dp
   20: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 10), // 80dp
   24: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 12), // 96dp
-} as const;
+} as const);
+
+export let SpacingTokens = createSpacingTokens();
 
 // 🎨 SHADOW TOKENS (responsive)
 export const ShadowTokens = {
@@ -692,11 +704,35 @@ export const ShadowTokens = {
 
 // 🔄 LEGACY COMPATIBILITY (per transizione graduale)
 // Alias per mantenere compatibilità con sistema precedente
-export const ResponsiveDimensions = DesignTokens;
-export const ResponsiveTypography = TypographyTokens;
-export const ResponsiveSpacing = SpacingTokens;
-export const ResponsiveShadows = ShadowTokens;
+export let ResponsiveDimensions = DesignTokens;
+export let ResponsiveTypography = TypographyTokens;
+export let ResponsiveSpacing = SpacingTokens;
+export let ResponsiveShadows = ShadowTokens;
 export const PlatformAdjustments = PlatformOptimizations;
+
+// Rigenera i valori responsive e aggiorna DeviceInfo
+export const refreshResponsiveValues = () => {
+  const { width, height } = getDimensions();
+  DEVICE_WIDTH = width;
+  DEVICE_HEIGHT = height;
+  DEVICE_SCALE = getPixelRatio();
+  FONT_SCALE = getFontScale();
+
+  ScalingFactors = createScalingFactors();
+  DeviceInfo = createDeviceInfo();
+  SpacingTokens = createSpacingTokens();
+  DesignTokens = createDesignTokens();
+  TypographyTokens = createTypographyTokens();
+
+  // Aggiorna alias legacy
+  ResponsiveDimensions = DesignTokens;
+  ResponsiveTypography = TypographyTokens;
+  ResponsiveSpacing = SpacingTokens;
+  ResponsiveShadows = ShadowTokens;
+};
+
+// Inizializza i valori alla prima importazione
+refreshResponsiveValues();
 
 // 🧠 ADVANCED TEXT INTELLIGENCE (Netflix UX)
 export const TextIntelligence = {

@@ -20,6 +20,7 @@ import {
   BreakpointLayouts,
   RTLTokens,
   ShadowTokens,
+  refreshResponsiveValues,
 } from '../constants/responsiveSystem';
 
 /**
@@ -40,6 +41,7 @@ export const useResponsive = () => {
     }: {
       window: { width: number; height: number };
     }) => {
+      refreshResponsiveValues();
       setDimensions({
         width: window.width,
         height: window.height,
@@ -47,10 +49,7 @@ export const useResponsive = () => {
       });
     };
 
-    const subscription = Dimensions.addEventListener(
-      'change',
-      updateDimensions
-    );
+    const subscription = Dimensions.addEventListener('change', updateDimensions);
     return () => subscription?.remove();
   }, []);
 
