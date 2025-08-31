@@ -120,7 +120,7 @@ const useAnimationHandlers = (
       elevationAnim,
       glowAnim
     );
-    animation?.start();
+    void animation?.start();
   }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
 
   const executePressOutAnimation = useCallback(() => {
@@ -130,7 +130,7 @@ const useAnimationHandlers = (
       elevationAnim,
       glowAnim
     );
-    animation?.start();
+    void animation?.start();
   }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
 
   return { executePressInAnimation, executePressOutAnimation };
@@ -296,7 +296,7 @@ export const EnhancedTouchable: React.FC<EnhancedTouchableProps> = ({
           useNativeDriver: true,
         })
       );
-      animation.start();
+      void animation.start();
       return () => animation.stop();
     }
     // Return undefined for non-loading state

@@ -2,14 +2,14 @@
 # Configurazione di protezione repository per Zero Tolerance Policy
 # Standard enterprise per sicurezza e qualità garantita
 
-name: "Enterprise Protection Ruleset"
-description: "Zero Tolerance Policy - Protezione completa repository"
+name: 'Enterprise Protection Ruleset'
+description: 'Zero Tolerance Policy - Protezione completa repository'
 
 # Target: Protegge il branch master/main
 target: branch
 include:
-  - "master"
-  - "main"
+  - 'master'
+  - 'main'
 
 # 🚫 ENFORCEMENT LEVEL: ACTIVE (blocca violazioni)
 enforcement: active
@@ -24,66 +24,66 @@ rules:
       dismiss_stale_reviews: true
       require_code_owner_reviews: false
       require_last_push_approval: true
-      
+
   # 🧪 STATUS CHECKS REQUIRED
   - type: required_status_checks
     parameters:
       # CI/CD MUST PASS - Zero Tolerance
       required_status_checks:
-        - "🎯 Visual Diff - Layout Regression Detection"
-        - "🚨 Layout Regression Detection"
-        - "build"
-        - "test"
+        - '🎯 Visual Diff - Layout Regression Detection'
+        - '🚨 Layout Regression Detection'
+        - 'build'
+        - 'test'
       strict: true # Branch must be up to date
-      
+
   # 🚫 FORCE PUSH PROTECTION
   - type: non_fast_forward
     parameters:
       # Blocca force push e rewrite history
-      
+
   # 🔒 DELETE PROTECTION
   - type: deletion
     parameters:
       # Blocca eliminazione branch protetti
-      
+
   # 📝 COMMIT MESSAGE STANDARDS
   - type: commit_message_pattern
     parameters:
       # Enforza conventional commits
       pattern: "^(feat|fix|docs|style|refactor|test|chore|build|ci|perf|revert)(\\(.+\\))?: .{1,50}"
       negate: false
-      operator: "regex"
-      
+      operator: 'regex'
+
   # 🔐 COMMIT SIGNATURE (opzionale per ora)
   - type: required_signatures
     parameters:
       required: false # Può essere abilitato successivamente
-      
+
   # 👥 REQUIRED REVIEWERS
   - type: required_reviewers
     parameters:
       required_reviewer_count: 1
-      
+
   # 🏷️ REQUIRED DEPLOYMENTS
   - type: required_deployments
     parameters:
       required_deployment_environments: []
-      
+
   # 🔄 UPDATE REQUIREMENTS
   - type: update_allows_fetch_and_merge
     parameters:
       update_allows_fetch_and_merge: false
-      
+
 # 🎯 BYPASS PERMISSIONS
 bypass_actors:
   - actor_id: 1 # Repository owner
     actor_type: OrganizationAdmin
     bypass_mode: always
-    
+
 # 📊 ADDITIONAL CONFIGURATION
 conditions:
   ref_name:
     include:
-      - "refs/heads/master"
-      - "refs/heads/main"
-    exclude: [] 
+      - 'refs/heads/master'
+      - 'refs/heads/main'
+    exclude: []

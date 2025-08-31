@@ -36,7 +36,7 @@ interface ModernHomeActionsProps {
 // ===================================================================
 // CLEAN ARCHITECTURE COMPONENT - SIMPLIFIED
 // ===================================================================
-const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
+const ModernHomeActionsComponent: React.FC<ModernHomeActionsProps> = ({
   onShopPress,
   onGiftCardPress,
   onEventsPress,
@@ -205,5 +205,7 @@ const ModernHomeActions: React.FC<ModernHomeActionsProps> = ({
     </Animated.View>
   );
 };
+
+const ModernHomeActions = React.memo(ModernHomeActionsComponent);
 
 export default ModernHomeActions;

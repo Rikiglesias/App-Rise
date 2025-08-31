@@ -1,8 +1,8 @@
 /**
  * ESLint Custom Rule: no-offgrid-spacing
- * 
+ *
  * Enforces that spacing values are multiples of 8dp (baseline grid)
- * 
+ *
  * Targets:
  * - StyleSheet properties: margin, padding, width, height, fontSize, lineHeight
  * - Direct style objects: same properties
@@ -73,8 +73,10 @@ module.exports = {
       },
     ],
     messages: {
-      offGrid: 'Value "{{value}}" is not a multiple of {{baselineGrid}}dp baseline grid. Use {{suggestedValue}} instead.',
-      offGridWithTolerance: 'Value "{{value}}" is not within tolerance of {{baselineGrid}}dp baseline grid. Use {{suggestedValue}} instead.',
+      offGrid:
+        'Value "{{value}}" is not a multiple of {{baselineGrid}}dp baseline grid. Use {{suggestedValue}} instead.',
+      offGridWithTolerance:
+        'Value "{{value}}" is not within tolerance of {{baselineGrid}}dp baseline grid. Use {{suggestedValue}} instead.',
     },
   },
 
@@ -142,11 +144,11 @@ module.exports = {
 
       const lowerMultiple = Math.floor(value / baselineGrid) * baselineGrid;
       const upperMultiple = Math.ceil(value / baselineGrid) * baselineGrid;
-      
+
       // Choose the closer multiple
       const lowerDiff = Math.abs(value - lowerMultiple);
       const upperDiff = Math.abs(value - upperMultiple);
-      
+
       return lowerDiff <= upperDiff ? lowerMultiple : upperMultiple;
     }
 
@@ -155,7 +157,7 @@ module.exports = {
      */
     function reportOffGrid(node, value, property) {
       const suggestedValue = getSuggestedValue(value);
-      
+
       context.report({
         node,
         messageId: tolerance > 0 ? 'offGridWithTolerance' : 'offGrid',
@@ -180,12 +182,17 @@ module.exports = {
       }
 
       let value;
-      if (property.value.type === 'Literal' && typeof property.value.value === 'number') {
+      if (
+        property.value.type === 'Literal' &&
+        typeof property.value.value === 'number'
+      ) {
         value = property.value.value;
-      } else if (property.value.type === 'UnaryExpression' && 
-                 property.value.operator === '-' && 
-                 property.value.argument.type === 'Literal' && 
-                 typeof property.value.argument.value === 'number') {
+      } else if (
+        property.value.type === 'UnaryExpression' &&
+        property.value.operator === '-' &&
+        property.value.argument.type === 'Literal' &&
+        typeof property.value.argument.value === 'number'
+      ) {
         value = -property.value.argument.value;
       } else {
         return; // Skip non-literal values
@@ -200,10 +207,12 @@ module.exports = {
      * Checks StyleSheet.create() calls
      */
     function checkStyleSheet(node) {
-      if (node.type !== 'CallExpression' ||
-          node.callee.type !== 'MemberExpression' ||
-          node.callee.object.name !== 'StyleSheet' ||
-          node.callee.property.name !== 'create') {
+      if (
+        node.type !== 'CallExpression' ||
+        node.callee.type !== 'MemberExpression' ||
+        node.callee.object.name !== 'StyleSheet' ||
+        node.callee.property.name !== 'create'
+      ) {
         return;
       }
 
@@ -213,11 +222,13 @@ module.exports = {
       }
 
       // Check each style object
-      stylesArg.properties.forEach((styleProperty) => {
-        if (styleProperty.type === 'Property' && 
-            styleProperty.value.type === 'ObjectExpression') {
+      stylesArg.properties.forEach(styleProperty => {
+        if (
+          styleProperty.type === 'Property' &&
+          styleProperty.value.type === 'ObjectExpression'
+        ) {
           // Check each property in the style object
-          styleProperty.value.properties.forEach((property) => {
+          styleProperty.value.properties.forEach(property => {
             if (property.type === 'Property') {
               checkStyleProperty(styleProperty.value, property);
             }
@@ -236,11 +247,16 @@ module.exports = {
 
       // Check if this is likely a style object
       const parent = node.parent;
-      if (parent && parent.type === 'JSXExpressionContainer' && 
-          parent.parent && parent.parent.type === 'JSXAttribute' &&
-          parent.parent.name && parent.parent.name.name === 'style') {
+      if (
+        parent &&
+        parent.type === 'JSXExpressionContainer' &&
+        parent.parent &&
+        parent.parent.type === 'JSXAttribute' &&
+        parent.parent.name &&
+        parent.parent.name.name === 'style'
+      ) {
         // This is a style prop
-        node.properties.forEach((property) => {
+        node.properties.forEach(property => {
           if (property.type === 'Property') {
             checkStyleProperty(node, property);
           }
@@ -253,4 +269,4 @@ module.exports = {
       ObjectExpression: checkInlineStyle,
     };
   },
-}; 
+};

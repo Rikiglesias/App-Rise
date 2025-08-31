@@ -1,6 +1,12 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import React, { useCallback, useMemo } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import MapView, { Marker, type Region } from 'react-native-maps';
 
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
@@ -32,7 +38,7 @@ export interface Location {
 interface Props {
   locations: Location[];
   onMarkerPress: (location: Location) => void;
-  style?: object;
+  style?: StyleProp<ViewStyle>;
   isFullScreen?: boolean;
 }
 
@@ -58,27 +64,35 @@ const getMarkerColor = (location: Location) => {
 };
 
 // Componente per il marker semplice ma bello
-const SimpleMarker: React.FC<{ location: Location }> = ({ location }) => {
-  const markerColor = getMarkerColor(location);
+const SimpleMarker: React.FC<{ location: Location }> = React.memo(
+  ({ location }) => {
+    const markerColor = useMemo(() => getMarkerColor(location), [location]);
 
-  return (
-    <View style={styles.markerContainer}>
-      {/* Pin principale semplice */}
-      <View style={[styles.simpleMarker, { backgroundColor: markerColor }]}>
-        <View style={styles.markerInner} />
+    return (
+      <View style={styles.markerContainer}>
+        {/* Pin principale semplice */}
+        <View style={[styles.simpleMarker, { backgroundColor: markerColor }]}>
+          <View style={styles.markerInner} />
+        </View>
+
+        {/* Etichetta del paese */}
+        <View style={styles.countryLabel}>
+          <Text
+            style={styles.countryText}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {location.country}
+          </Text>
+        </View>
       </View>
+    );
+  }
+);
 
-      {/* Etichetta del paese */}
-      <View style={styles.countryLabel}>
-        <Text style={styles.countryText} numberOfLines={1} ellipsizeMode="tail">
-          {location.country}
-        </Text>
-      </View>
-    </View>
-  );
-};
+SimpleMarker.displayName = 'SimpleMarker';
 
-const InteractiveMap: React.FC<Props> = ({
+const InteractiveMapComponent: React.FC<Props> = ({
   locations,
   onMarkerPress,
   style,
@@ -91,26 +105,28 @@ const InteractiveMap: React.FC<Props> = ({
     [onMarkerPress]
   );
 
-  const initialRegion = isFullScreen
-    ? {
-        latitude: 25,
-        longitude: 15,
-        latitudeDelta: 80,
-        longitudeDelta: 80,
-      }
-    : {
-        latitude: 20,
-        longitude: 0,
-        latitudeDelta: 100,
-        longitudeDelta: 100,
-      };
+  const initialRegion: Region = useMemo(() => {
+    return isFullScreen
+      ? {
+          latitude: 25,
+          longitude: 15,
+          latitudeDelta: 80,
+          longitudeDelta: 80,
+        }
+      : {
+          latitude: 20,
+          longitude: 0,
+          latitudeDelta: 100,
+          longitudeDelta: 100,
+        };
+  }, [isFullScreen]);
 
-  const generateTitle = (location: Location) => {
+  const generateTitle = useCallback((location: Location) => {
     return `${location.name} - ${location.country}`;
-  };
+  }, []);
 
-  const generateDescription = (location: Location) => {
-    const parts = [];
+  const generateDescription = useCallback((location: Location) => {
+    const parts: string[] = [];
 
     if (location.meals && location.meals > 0) {
       parts.push(`${location.meals.toLocaleString()} pasti distribuiti`);
@@ -133,12 +149,12 @@ const InteractiveMap: React.FC<Props> = ({
     }
 
     return parts.join('\n');
-  };
+  }, []);
 
   return (
     <MapView
       style={[styles.map, style]}
-      provider={PROVIDER_GOOGLE}
+      provider="google"
       initialRegion={initialRegion}
       showsUserLocation={false}
       showsMyLocationButton={isFullScreen}
@@ -158,7 +174,6 @@ const InteractiveMap: React.FC<Props> = ({
       showsBuildings={isFullScreen} // 3D buildings solo fullscreen
       showsTraffic={false} // Disabilita traffico
       showsIndoors={false} // Disabilita mappe indoor
-      showsPointsOfInterest={false} // Disabilita POI
       showsCompass={isFullScreen} // Bussola solo fullscreen
       showsScale={false} // Disabilita scala
     >
@@ -219,5 +234,7 @@ const styles = StyleSheet.create({
     maxWidth: 80,
   },
 });
+
+const InteractiveMap = React.memo(InteractiveMapComponent);
 
 export default InteractiveMap;

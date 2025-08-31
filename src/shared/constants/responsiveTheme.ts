@@ -6,25 +6,9 @@
  */
 
 import { Colors } from './designTokens';
-import { SpacingTokens } from './responsiveSystem';
-
-// =================================================================
-// BREAKPOINTS CENTRALIZZATI
-// =================================================================
-
-export const ResponsiveBreakpoints = {
-  compact: 0,
-  standard: 376,
-  large: 415,
-  xlarge: 481,
-  xxlarge: 601,
-  // 🚀 TABLET XL: Una riga aggiunta - TUTTI i componenti supportano automaticamente
-  tabletXL: 1280,
-
-  // Per future estensioni (desktop)
-  desktop: 1024,
-  desktopXL: 1440,
-} as const;
+import { SpacingTokens, DeviceBreakpoints } from './responsiveSystem';
+// Centralizziamo i breakpoints in responsiveSystem.ts per evitare duplicazioni
+export { DeviceBreakpoints as ResponsiveBreakpoints } from './responsiveSystem';
 
 // =================================================================
 // COLORI CENTRALIZZATI CON DARK MODE
@@ -82,6 +66,7 @@ export const ResponsiveSpacing = {
     large: SpacingTokens[6], // 24
     xlarge: SpacingTokens[8], // 32
     xxlarge: SpacingTokens[10], // 40
+    // Tier aggiuntivi di layout (non breakpoints canonici)
     tabletXL: SpacingTokens[12], // 48
     desktop: SpacingTokens[12], // 48
     desktopXL: SpacingTokens[16], // 64
@@ -125,11 +110,11 @@ export const ResponsiveSpacing = {
 } as const;
 
 // =================================================================
-// LAYOUT PERCENTUALI CENTRALIZZATE
+// LAYOUT CENTRALIZZATO
 // =================================================================
 
 export const ResponsiveLayout = {
-  // Card widths (elimina hard-coding)
+  // Card widths
   cardWidth: {
     compact: '100%',
     standard: '47.5%',
@@ -165,7 +150,7 @@ export const ResponsiveLayout = {
     desktopXL: '40%',
   },
 
-  // Progress bar widths (unifica esistenti)
+  // Progress bar widths
   progressWidth: {
     compact: '100%',
     standard: '90%',
@@ -191,82 +176,76 @@ export const ResponsiveLayout = {
 } as const;
 
 // =================================================================
-// TEMA UNIFICATO
+// TEMA COMPOSITO
 // =================================================================
 
 export const ResponsiveTheme = {
-  breakpoints: ResponsiveBreakpoints,
+  breakpoints: DeviceBreakpoints, // single source of truth
   colors: ResponsiveColors,
   spacing: ResponsiveSpacing,
   layout: ResponsiveLayout,
 
-  // Shorthand per accesso rapido
-  bp: ResponsiveBreakpoints,
+  // Shorthand
+  bp: DeviceBreakpoints,
   c: ResponsiveColors,
   s: ResponsiveSpacing,
   l: ResponsiveLayout,
 } as const;
 
 // =================================================================
-// TYPES EXPORT
+// UTILITIES
 // =================================================================
 
-export type ResponsiveBreakpoint = keyof typeof ResponsiveBreakpoints;
+export type ResponsiveBreakpoint = keyof typeof DeviceBreakpoints;
 export type ResponsiveColorMode = 'light' | 'dark';
 export type ResponsiveColorKey = keyof typeof ResponsiveColors;
 export type ResponsiveSpacingKey = keyof typeof ResponsiveSpacing;
 export type ResponsiveLayoutKey = keyof typeof ResponsiveLayout;
 
-// =================================================================
-// UTILITIES
-// =================================================================
-
-/**
- * Ottiene colore basato su modo (light/dark)
- */
 export const getResponsiveColor = (
   colorKey: keyof typeof ResponsiveColors,
   property: string,
   mode: ResponsiveColorMode = 'light'
 ): string => {
-  const colorGroup = ResponsiveColors[colorKey] as Record<string, unknown>;
-  const colorProperty = colorGroup?.[property];
+  const colorGroup = ResponsiveColors[colorKey] as Record<
+    string,
+    Record<string, string>
+  >;
+  const colorValue = colorGroup?.[property]?.[mode] as string | undefined;
 
-  if (
-    typeof colorProperty === 'object' &&
-    colorProperty !== null &&
-    mode in colorProperty
-  ) {
-    const color = (colorProperty as Record<string, string>)[mode];
-    return color ?? ResponsiveColors.fallback.primary[500];
+  if (colorValue) {
+    return colorValue;
   }
 
-  if (typeof colorProperty === 'string') {
-    return colorProperty;
+  const fallbackColor = (Colors as Record<string, unknown>)?.[property];
+
+  if (typeof fallbackColor === 'string') {
+    return fallbackColor;
   }
 
-  // Fallback a colori esistenti
-  return ResponsiveColors.fallback.primary[500];
+  if (typeof fallbackColor === 'object' && fallbackColor !== null) {
+    return (fallbackColor as Record<string, string>)?.[500] ?? '#000000';
+  }
+
+  return '#000000';
 };
 
-/**
- * Ottiene spacing basato su breakpoint
- */
 export const getResponsiveSpacing = (
   spacingKey: keyof typeof ResponsiveSpacing,
   breakpoint: ResponsiveBreakpoint
 ): number => {
-  const spacingGroup = ResponsiveSpacing[spacingKey];
-  return spacingGroup[breakpoint] || spacingGroup.standard;
+  const spacingGroup = ResponsiveSpacing[spacingKey] as Record<string, number>;
+  // supporta solo i 5 breakpoints canonici; fallback su standard per tier extra
+  const value = spacingGroup[breakpoint] ?? spacingGroup.standard;
+  return value as number;
 };
 
-/**
- * Ottiene layout width basato su breakpoint
- */
 export const getResponsiveLayout = (
   layoutKey: keyof typeof ResponsiveLayout,
   breakpoint: ResponsiveBreakpoint
 ): string => {
-  const layoutGroup = ResponsiveLayout[layoutKey];
-  return layoutGroup[breakpoint] || layoutGroup.standard;
+  const layoutGroup = ResponsiveLayout[layoutKey] as Record<string, string>;
+  // supporta solo i 5 breakpoints canonici; fallback su standard per tier extra
+  const value = layoutGroup[breakpoint] ?? layoutGroup.standard;
+  return value as string;
 };

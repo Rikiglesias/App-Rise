@@ -35,16 +35,20 @@ class SmartFontSizeCache {
     avgCalculationTime: 0,
     memoryUsage: 0,
   };
+  private cleanupInterval: NodeJS.Timeout | null = null;
 
-  // Configurazione cache
   private readonly MAX_CACHE_SIZE = 1000;
   private readonly CACHE_TTL = 30 * 60 * 1000; // 30 minuti
   private readonly CLEANUP_INTERVAL = 5 * 60 * 1000; // 5 minuti
 
   constructor() {
     // Cleanup periodico per evitare memory leak
-    if (typeof setInterval !== 'undefined') {
-      setInterval(() => this.cleanup(), this.CLEANUP_INTERVAL);
+    // Non avviare l'interval durante i test Jest
+    if (typeof setInterval !== 'undefined' && typeof jest === 'undefined') {
+      this.cleanupInterval = setInterval(
+        () => this.cleanup(),
+        this.CLEANUP_INTERVAL
+      );
     }
   }
 
@@ -216,6 +220,17 @@ class SmartFontSizeCache {
       avgCalculationTime: 0,
       memoryUsage: 0,
     };
+  }
+
+  /**
+   * Distrugge la cache e pulisce l'interval per evitare memory leak
+   */
+  destroy(): void {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    this.clear();
   }
 
   /**

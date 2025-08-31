@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable require-await */
@@ -264,10 +263,12 @@ class APISecurityService {
 
           // Leggi risposta
           const responseText = await response.text();
-          let responseData;
+          let responseData: T | { raw: string } | null;
 
           try {
-            responseData = responseText ? JSON.parse(responseText) : null;
+            responseData = responseText
+              ? (JSON.parse(responseText) as T)
+              : null;
           } catch (parseError) {
             logger.error(
               'APISecurity',
@@ -291,7 +292,7 @@ class APISecurityService {
 
           // Costruisci risposta
           const apiResponse: APIResponse<T> = {
-            data: responseData,
+            data: responseData as T,
             status: response.status,
             headers: Object.fromEntries(response.headers.entries()),
             success: response.ok,

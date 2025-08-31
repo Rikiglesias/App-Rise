@@ -1,6 +1,12 @@
 import React from 'react';
-import { Platform, View, ViewStyle, StyleSheet } from 'react-native';
-import { Surface } from 'react-native-paper';
+import {
+  Platform,
+  View,
+  ViewStyle,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import { Surface, TouchableRipple } from 'react-native-paper';
 import {
   getAndroidMaterialProps,
   MaterialColors,
@@ -104,8 +110,6 @@ export const MaterialActionCard: React.FC<MaterialActionCardProps> = ({
 }) => {
   // iOS: usa Surface con TouchableOpacity wrapper
   if (Platform.OS === 'ios') {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { TouchableOpacity } = require('react-native');
     return (
       <TouchableOpacity
         onPress={onPress}
@@ -120,8 +124,6 @@ export const MaterialActionCard: React.FC<MaterialActionCardProps> = ({
   }
 
   // Android: TouchableRipple con Material Design
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { TouchableRipple } = require('react-native-paper');
 
   const getVariantStyle = () => {
     switch (variant) {

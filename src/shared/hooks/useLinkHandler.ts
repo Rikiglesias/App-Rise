@@ -8,8 +8,8 @@ import {
   withTimeout,
   type AsyncResult,
 } from '../utils/result';
-import { useHapticFeedback } from './useHapticFeedback';
 import { logWarn, logError } from '../utils/logger';
+import { useHapticFeedback } from './useHapticFeedback';
 
 interface UseLinkHandlerOptions {
   defaultErrorMessage?: string;

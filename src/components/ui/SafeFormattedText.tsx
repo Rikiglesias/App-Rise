@@ -6,7 +6,9 @@
 
 import React from 'react';
 import { Platform } from 'react-native';
+import * as ReactNativePackage from 'react-native/package.json';
 import { FormattedText, FormattedTextProps } from './FormattedText';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 
 /**
  * Interface per il package.json di React Native
@@ -20,9 +22,7 @@ interface ReactNativePackageInfo {
  */
 const isNewArchitecture = (): boolean => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const packageInfo =
-      require('react-native/package.json') as ReactNativePackageInfo;
+    const packageInfo = ReactNativePackage as ReactNativePackageInfo;
     const versionParts = packageInfo.version.split('.');
     const majorVersion = parseInt(versionParts[0] ?? '0');
     const minorVersion = parseInt(versionParts[1] ?? '0');

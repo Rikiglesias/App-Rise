@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PlatformScrollView } from '../../../components/ui';
@@ -9,7 +9,7 @@ import { Spacing } from '../../../shared/constants/designTokens';
 import { HomeHeaderSection } from '../../../components/domain/HomeHeaderSection';
 import type { HomeScreenProps } from '../types';
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+const HomeScreenComponent: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { colors } = useTheme();
   const scrollY = useRef(new Animated.Value(0)).current;
   const {
@@ -21,25 +21,29 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   // Temporarily disabled scroll animations to fix onScroll error
   // const scrollInterpolations = useScrollInterpolations(scrollY);
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.neutral[0],
-    },
-    content: {
-      flexGrow: 1,
-      paddingBottom: Spacing[20],
-    },
-    heroSection: {
-      marginBottom: Spacing[3],
-    },
-    ctaSection: {
-      marginHorizontal: Spacing[4],
-      paddingTop: 0,
-      paddingBottom: Spacing[6],
-      marginTop: 0,
-    },
-  });
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: colors.neutral[0],
+        },
+        content: {
+          flexGrow: 1,
+          paddingBottom: Spacing[20],
+        },
+        heroSection: {
+          marginBottom: Spacing[3],
+        },
+        ctaSection: {
+          marginHorizontal: Spacing[4],
+          paddingTop: 0,
+          paddingBottom: Spacing[6],
+          marginTop: 0,
+        },
+      }),
+    [colors]
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,5 +65,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+const HomeScreen = React.memo(HomeScreenComponent);
 
 export default HomeScreen;

@@ -28,7 +28,7 @@ export const useHomeAnimations = () => {
       }),
     ]);
 
-    sequence.start();
+    void sequence.start();
 
     return () => {
       sequence.stop();

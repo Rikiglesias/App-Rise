@@ -9,7 +9,6 @@ import {
 } from '../../../shared/constants';
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 
-/* eslint-disable react-native/no-unused-styles */
 export const enhancedCardStyles = StyleSheet.create({
   baseCard: {
     borderRadius: BorderRadius.xl,

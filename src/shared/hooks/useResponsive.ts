@@ -5,7 +5,12 @@
 
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { Dimensions, LayoutChangeEvent } from 'react-native';
+import {
+  Dimensions,
+  LayoutChangeEvent,
+  AppState,
+  PixelRatio,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   ScalingFactors,
@@ -21,6 +26,12 @@ import {
   RTLTokens,
   ShadowTokens,
 } from '../constants/responsiveSystem';
+import {
+  ResponsiveTheme,
+  getResponsiveLayout as getThemeLayout,
+  getResponsiveSpacing as getThemeSpacing,
+  type ResponsiveBreakpoint,
+} from '../constants/responsiveTheme';
 
 /**
  * Hook principale per il sistema responsive
@@ -31,20 +42,22 @@ export const useResponsive = () => {
     width: DeviceInfo.width,
     height: DeviceInfo.height,
     breakpoint: getCurrentBreakpoint(),
+    fontScale: DeviceInfo.fontScale,
   });
 
-  // Aggiorna dimensioni quando cambia l'orientamento
+  // Aggiorna dimensioni quando cambia l'orientamento o la finestra
   useEffect(() => {
     const updateDimensions = ({
       window,
     }: {
       window: { width: number; height: number };
     }) => {
-      setDimensions({
+      setDimensions(prev => ({
         width: window.width,
         height: window.height,
         breakpoint: getCurrentBreakpoint(),
-      });
+        fontScale: prev.fontScale, // invariato qui; verrà aggiornato da AppState listener
+      }));
     };
 
     const subscription = Dimensions.addEventListener(
@@ -54,10 +67,32 @@ export const useResponsive = () => {
     return () => subscription?.remove();
   }, []);
 
+  // Aggiorna fontScale dinamicamente quando l'app torna in primo piano (iOS/Android)
+  useEffect(() => {
+    const onAppStateChange = (state: string) => {
+      if (state === 'active') {
+        const currentFontScale = PixelRatio.getFontScale();
+        setDimensions(prev =>
+          prev.fontScale !== currentFontScale
+            ? {
+                ...prev,
+                fontScale: currentFontScale,
+                // Manteniamo breakpoint coerente con dimensioni correnti
+                breakpoint: getCurrentBreakpoint(),
+              }
+            : prev
+        );
+      }
+    };
+
+    const sub = AppState.addEventListener('change', onAppStateChange);
+    return () => sub.remove();
+  }, []);
+
   return {
     // Dimensioni e info device
     dimensions,
-    deviceInfo: DeviceInfo,
+    deviceInfo: { ...DeviceInfo, fontScale: dimensions.fontScale },
     scalingFactors: ScalingFactors,
 
     // Funzioni di scaling
@@ -353,6 +388,59 @@ export const useContainerLayout = (options?: {
       ? RTLTokens.writingDirection.auto
       : RTLTokens.writingDirection.ltr,
   };
+};
+
+// ================================
+// ✅ NEW: useResponsiveLayout (composito)
+// Unifica layout percentuali e spacing dal tema con i breakpoints reali
+// ================================
+export const useResponsiveLayout = () => {
+  const { dimensions } = useResponsive();
+  // Breakpoint di responsiveSystem (solo: compact|standard|large|xlarge|xxlarge)
+  const bp = dimensions.breakpoint as ResponsiveBreakpoint &
+    ('compact' | 'standard' | 'large' | 'xlarge' | 'xxlarge');
+
+  // Spacing centralizzati
+  const spacing = {
+    container: getThemeSpacing('container', bp),
+    card: getThemeSpacing('card', bp),
+    section: getThemeSpacing('section', bp),
+    modal: getThemeSpacing('modal', bp),
+  } as const;
+
+  // Widths percentuali centralizzati
+  const layout = {
+    cardWidth: getThemeLayout('cardWidth', bp),
+    containerWidth: getThemeLayout('containerWidth', bp),
+    modalWidth: getThemeLayout('modalWidth', bp),
+    progressWidth: getThemeLayout('progressWidth', bp),
+    dividerWidth: getThemeLayout('dividerWidth', bp),
+  } as const;
+
+  // Colori dal tema per comodità
+  const colors = ResponsiveTheme.colors;
+
+  return {
+    breakpoint: bp,
+    spacing,
+    layout,
+    colors,
+
+    // Shorthand
+    bpValues: ResponsiveTheme.breakpoints,
+
+    // Helper per selezione rapida
+    selectWidth: (
+      key:
+        | 'cardWidth'
+        | 'containerWidth'
+        | 'modalWidth'
+        | 'progressWidth'
+        | 'dividerWidth'
+    ) => layout[key],
+    selectSpacing: (key: 'container' | 'card' | 'section' | 'modal') =>
+      spacing[key],
+  } as const;
 };
 
 export default useResponsive;

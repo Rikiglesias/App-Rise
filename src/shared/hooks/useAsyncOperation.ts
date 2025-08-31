@@ -92,7 +92,12 @@ export const useAsyncOperation = <T, TArgs extends unknown[] = []>(
 
         // Execute with timeout and retry
         const result = await retry(
-          () => withTimeout(createOperation, timeout, 'Operation timed out'),
+          async () =>
+            await withTimeout(
+              () => createOperation(),
+              timeout,
+              'Operation timed out'
+            ),
           retryAttempts,
           retryDelay
         );

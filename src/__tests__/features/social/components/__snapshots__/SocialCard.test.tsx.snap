@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SocialCard applies correct gradient colors 1`] = `
+<Animated.View
+  style={
+    [
+      {
+        "marginBottom": 4,
+      },
+      {
+        "opacity": 1,
+        "transform": [
+          {
+            "translateY": 0,
+          },
+        ],
+      },
+    ]
+  }
+>
+  <LinearGradient
+    colors={
+      [
+        "#E1306C",
+        "#F56040",
+        "#FCAF45",
+      ]
+    }
+    end={
+      {
+        "x": 1,
+        "y": 1,
+      }
+    }
+    start={
+      {
+        "x": 0,
+        "y": 0,
+      }
+    }
+    style={
+      {
+        "borderRadius": 20,
+        "elevation": 6,
+        "padding": 2,
+        "shadowColor": "#DC2626",
+        "shadowOffset": {
+          "height": 6,
+          "width": 0,
+        },
+        "shadowOpacity": 0.15,
+        "shadowRadius": 10,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "backgroundColor": "#FFFFFF",
+          "borderRadius": 18,
+          "overflow": "hidden",
+        }
+      }
+    >
+      <View
+        accessibilityHint="Test description for Instagram"
+        accessibilityLabel="Seguici su Instagram: @test_handle"
+        accessibilityRole="button"
+        onPress={[MockFunction]}
+        style={
+          {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "padding": 16,
+          }
+        }
+        testID="social-card-instagram"
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "backgroundColor": "#FFFFFF",
+              "borderColor": "#DC2626",
+              "borderRadius": 28,
+              "borderWidth": 3,
+              "elevation": 6,
+              "height": 56,
+              "justifyContent": "center",
+              "marginRight": 16,
+              "shadowColor": "#DC2626",
+              "shadowOffset": {
+                "height": 4,
+                "width": 0,
+              },
+              "shadowOpacity": 0.15,
+              "shadowRadius": 8,
+              "width": 56,
+            }
+          }
+        >
+          <Text
+            lines={1}
+            size={24}
+            style={
+              {
+                "textAlign": "center",
+              }
+            }
+          >
+            📸
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "flex": 1,
+              "marginRight": 12,
+            }
+          }
+        >
+          <Text
+            lines={1}
+            size={16}
+            style={
+              {
+                "color": "#171717",
+                "fontWeight": "700",
+                "letterSpacing": -0.3,
+                "marginBottom": 4,
+              }
+            }
+          >
+            Instagram
+          </Text>
+          <Text
+            lines={1}
+            size={14}
+            style={
+              {
+                "color": "#DC2626",
+                "fontWeight": "600",
+                "marginBottom": 4,
+              }
+            }
+          >
+            @test_handle
+          </Text>
+          <Text
+            lines={2}
+            size={12}
+            style={
+              {
+                "color": "#525252",
+                "fontWeight": "500",
+                "lineHeight": 16,
+              }
+            }
+          >
+            Test description for Instagram
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "padding": 4,
+            }
+          }
+        >
+          <MaterialCommunityIcons
+            color="#A3A3A3"
+            name="chevron-right"
+            size={24}
+          />
+        </View>
+      </View>
+    </View>
+  </LinearGradient>
+</Animated.View>
+`;

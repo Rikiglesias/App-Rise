@@ -176,7 +176,7 @@ jobs:
           echo "📱 EAS BUILD SUMMARY"
           echo "🎯 ============================================"
           echo "📋 Build Type: ${{ needs.check-build-trigger.outputs.build-type }}"
-          
+
           if [[ "${{ needs.check-build-trigger.outputs.should-build-ios }}" == "true" ]]; then
             if [[ "${{ needs.build-ios.result }}" == "success" ]]; then
               echo "🍎 iOS: ✅ SUCCESS"
@@ -186,7 +186,7 @@ jobs:
           else
             echo "🍎 iOS: ⏭️ SKIPPED"
           fi
-          
+
           if [[ "${{ needs.check-build-trigger.outputs.should-build-android }}" == "true" ]]; then
             if [[ "${{ needs.build-android.result }}" == "success" ]]; then
               echo "🤖 Android: ✅ SUCCESS"
@@ -196,6 +196,6 @@ jobs:
           else
             echo "🤖 Android: ⏭️ SKIPPED"
           fi
-          
+
           echo "🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia"
           echo "🎯 ============================================"

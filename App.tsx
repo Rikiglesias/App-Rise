@@ -6,10 +6,13 @@ import {
   configureFonts,
 } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import { Typography } from './src/shared/constants/designTokens';
 import { ThemeProvider, useTheme } from './src/shared/hooks/useTheme';
 import { UniversalThemeProvider } from './src/shared/theme/UniversalTheme';
+import { performanceMonitor } from './src/shared/monitoring/PerformanceMonitor';
+import { logger } from './src/shared/utils/logger';
 
 // Define the font config based on our design tokens
 const fontConfig = {
@@ -71,6 +74,24 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  // Inizializza Performance Monitor all'avvio dell'app
+  useEffect(() => {
+    // Log dell'inizializzazione
+    logger.info('App', 'Performance Monitor initialized', {
+      timestamp: Date.now(),
+      version: '1.0.0'
+    });
+
+    // Monitora il tempo di avvio dell'app
+    const appStartTime = Date.now();
+    performanceMonitor.recordUserInteraction('app_startup', appStartTime);
+
+    return () => {
+      // Cleanup se necessario
+      logger.debug('App', 'Performance Monitor cleanup');
+    };
+  }, []);
+
   return (
     <SafeAreaProvider>
       <ThemeProvider>

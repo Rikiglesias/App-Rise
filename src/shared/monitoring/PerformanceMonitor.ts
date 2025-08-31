@@ -58,7 +58,7 @@ const PERFORMANCE_THRESHOLDS = {
   },
 } as const;
 
-class PerformanceMonitorService {
+export class PerformanceMonitorService {
   private metrics: PerformanceMetric[] = [];
   private componentData: Map<string, ComponentPerformanceData> = new Map();
   private networkRequests: NetworkPerformanceData[] = [];

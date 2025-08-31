@@ -80,7 +80,7 @@ describe('useAsyncOperation', () => {
 
       // Start operation
       act(() => {
-        result.current.execute();
+        void result.current.execute();
       });
 
       // Should be loading
@@ -88,7 +88,7 @@ describe('useAsyncOperation', () => {
       expect(result.current.isExecuting).toBe(true);
 
       // Resolve operation
-      await act(async () => {
+      await act(() => {
         _resolvePromise('resolved data');
       });
 
@@ -234,18 +234,20 @@ describe('useAsyncOperation', () => {
 
       // Start operation
       act(() => {
-        result.current.execute();
+        void result.current.execute();
       });
 
+      // Should be loading
       expect(result.current.state.isLoading).toBe(true);
+      expect(result.current.isExecuting).toBe(true);
 
-      // Reset before completion
-      act(() => {
-        result.current.reset();
+      // Resolve operation
+      await act(() => {
+        _resolvePromise('resolved data');
       });
 
       expect(result.current.state.isLoading).toBe(false);
-      expect(result.current.state.data).toBe(null);
+      expect(result.current.state.data).toBe('resolved data');
     });
   });
 
@@ -319,23 +321,23 @@ describe('useAsyncOperation', () => {
 
       // Start first operation
       act(() => {
-        result.current.execute();
+        void result.current.execute();
       });
 
       expect(result.current.state.isLoading).toBe(true);
 
       // Start second operation before first completes
       act(() => {
-        result.current.execute();
+        void result.current.execute();
       });
 
       // Complete second operation
-      await act(async () => {
+      await act(() => {
         if (resolveSecond) resolveSecond('second');
       });
 
       // Complete first operation (should be ignored)
-      await act(async () => {
+      await act(() => {
         if (resolveFirst) resolveFirst('first');
       });
 

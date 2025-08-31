@@ -3,10 +3,9 @@ import type { ImageStyle, ViewStyle } from 'react-native';
 import { Image, StyleSheet, View } from 'react-native';
 
 import { Colors } from '../../shared/constants/designTokens';
+import logoImage from '../../../assets/icons/app/app-icon.jpg';
 
 // Immagine logo importata correttamente
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const logoImage = require('../../../assets/icons/app/app-icon.jpg') as number;
 
 interface LogoProps {
   readonly size?: number;

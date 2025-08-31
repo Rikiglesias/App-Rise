@@ -2,13 +2,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import { Dimensions } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   ProfessionalContainer,
   TitleContainer,
   CardContainer,
 } from '../../../components/ui/ProfessionalContainer';
 import { FormattedText } from '../../../components/ui/FormattedText';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Mock SafeAreaProvider
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (

@@ -16,7 +16,6 @@ export const useProjectsScreenStyles = () => {
 
   return useMemo(
     () =>
-      /* eslint-disable react-native/no-unused-styles */
       StyleSheet.create({
         container: {
           flex: 1,
@@ -107,7 +106,7 @@ export const useProjectsScreenStyles = () => {
           textAlign: 'center',
         },
       }),
-    /* eslint-enable react-native/no-unused-styles */
+
     [colors, scaleFont]
   );
 };

@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import {
   PerfectText,
   PerfectContainer,
@@ -17,7 +18,6 @@ import {
 import { scaleDimensionLinear } from '../../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
-import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { BottomTabParamList } from '../../../../navigation/types';
 
 interface ActionCTAButtonsProps {
@@ -30,12 +30,12 @@ export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
   const handleImpactPress = useCallback(() => {
-    triggerHaptic('heavy');
+    void triggerHaptic('heavy');
     navigation.navigate('ImpactTab');
   }, [navigation, triggerHaptic]);
 
   const handleActionsPress = useCallback(() => {
-    triggerHaptic('heavy');
+    void triggerHaptic('heavy');
     navigation.navigate('InfoTab');
   }, [navigation, triggerHaptic]);
 

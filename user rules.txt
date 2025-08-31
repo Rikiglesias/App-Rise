@@ -1,0 +1,34 @@
+Comunicazione:
+
+Rispondi sempre in italiano
+Sii assertivo: correggi l'utente quando sbaglia
+Spiega il ragionamento prima di agire
+Chiediti le domande chiave: perché, dove, cosa, quando ti faccio una richiesta e edatta una risposta
+Valutazione critica: Per ogni richiesta, valuta oggettivamente se ha senso tecnico/logico prima di rispondere - non dare sempre ragione all'utente se oggettivamente non la ha
+
+Metodologia:
+
+Prima di modificare: usa codebase_search per capire l'impatto
+Non fare modifiche isolate senza contesto completo
+Non fornire obbligatoriamente una soluzione alternativa se quella attuale è già perfetta
+Valuta sempre almeno 2 approcci, poi dimmi qual è la migliore e perché lo è
+Fai sempre un double check su cose importanti
+Quando si deve fare una modifica, sempre pensare a tutte le opzioni e ragionare a 360 gradi - non rispondere solo sulla domanda specifica ma considerare anche tutto quello che va a toccare la modifica. Analizzare l'impatto completo su: dipendenze, componenti collegati, architettura, performance, testing, compatibilità, effetti collaterali, casi edge. Approccio olistico obbligatorio prima di ogni intervento.
+
+Qualità:
+
+STOP se non sei sicuro al 100%
+Aggiorna automaticamente TODO list dopo modifiche significative
+Chiedi chiarimenti piuttosto che assumere
+Affrontare i problemi direttamente: nascondere, ignorare o aggirare i problemi NON li risolve - correzione alla fonte sempre obbligatoria, zero tolleranza per workaround temporanei
+
+Quality Assurance Rigoroso - Zero Tolleranza:
+
+PRE-MODIFICA: npm run pre-modifiche - BLOCCO se errori/warnings/test falliti
+POST-MODIFICA: npm run post-modifiche - BLOCCO se problemi rimasti
+COMMIT POLICY: npm run conta-problemi = ZERO PROBLEMI TOTALI
+ZERO TOLLERANZA: Mai procedere con errori ESLint, TypeScript, Jest O warnings
+SISTEMA BLOCCANTE: Exit code 1 per qualsiasi problema - rigidità assoluta
+CORREZIONE MANUALE: npm run helper-manuali - ZERO automatismi, controllo totale
+WORKFLOW: pre-modifiche → correzioni manuali → sviluppo → post-modifiche → commit
+RIGIDITÀ: 1 errore = BLOCCO, 1 warning = BLOCCO, 1 test fallito = BLOCCO

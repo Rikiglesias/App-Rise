@@ -1,0 +1,197 @@
+import React from 'react';
+import { Animated, Image, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PlatformTouchable, PerfectText } from '../../../components/ui';
+import { Colors, Spacing, Typography } from '../../../shared/constants';
+import { DesignTokens } from '../../../shared/constants/responsiveSystem';
+import { useResponsive } from '../../../shared/hooks';
+
+export interface SocialPlatform {
+  readonly id: string;
+  readonly name: string;
+  readonly handle: string;
+  readonly description: string;
+  readonly icon?: number;
+  readonly emoji?: string;
+  readonly gradient: readonly [string, string, ...string[]];
+  readonly onPress: () => Promise<void>;
+}
+
+interface SocialCardProps {
+  readonly platform: SocialPlatform;
+  readonly animationValue: Animated.Value;
+}
+
+export const SocialCard: React.FC<SocialCardProps> = React.memo(
+  ({ platform, animationValue }) => {
+    const { scale } = useResponsive();
+
+    return (
+      <Animated.View
+        style={[
+          styles.socialCardWrapper,
+          {
+            opacity: animationValue,
+            transform: [
+              {
+                translateY: animationValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
+          },
+        ]}
+      >
+        <LinearGradient
+          colors={platform.gradient}
+          style={styles.socialCardGradientBorder}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.socialCardWhiteContainer}>
+            <PlatformTouchable
+              onPress={platform.onPress}
+              style={styles.socialCardContent}
+              accessibilityRole="button"
+              accessibilityLabel={`Seguici su ${platform.name}: ${platform.handle}`}
+              accessibilityHint={platform.description}
+              testID={`social-card-${platform.id}`}
+            >
+              <View style={styles.socialIconContainer}>
+                {platform.icon ? (
+                  <Image
+                    source={platform.icon}
+                    style={[
+                      styles.platformIcon,
+                      platform.id === 'linkedin' && styles.linkedinIcon,
+                    ]}
+                  />
+                ) : (
+                  <PerfectText
+                    size={scale(24)}
+                    lines={1}
+                    style={styles.socialIconEmoji}
+                  >
+                    {platform.emoji}
+                  </PerfectText>
+                )}
+              </View>
+
+              <View style={styles.socialInfoContainer}>
+                <PerfectText
+                  size={scale(16)}
+                  lines={1}
+                  style={styles.socialName}
+                >
+                  {platform.name}
+                </PerfectText>
+                <PerfectText
+                  size={scale(14)}
+                  lines={1}
+                  style={styles.socialHandle}
+                >
+                  {platform.handle}
+                </PerfectText>
+                <PerfectText
+                  size={scale(12)}
+                  lines={2}
+                  style={styles.socialDescription}
+                >
+                  {platform.description}
+                </PerfectText>
+              </View>
+
+              <View style={styles.arrowContainer}>
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  size={scale(24)}
+                  color={Colors.neutral[400]}
+                />
+              </View>
+            </PlatformTouchable>
+          </View>
+        </LinearGradient>
+      </Animated.View>
+    );
+  }
+);
+
+SocialCard.displayName = 'SocialCard';
+
+const styles = {
+  socialCardWrapper: {
+    marginBottom: Spacing[1],
+  },
+  socialCardGradientBorder: {
+    borderRadius: 20,
+    padding: 2,
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  socialCardWhiteContainer: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: 18,
+    overflow: 'hidden' as const,
+  },
+  socialCardContent: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    padding: Spacing[4],
+  },
+  socialIconContainer: {
+    width: DesignTokens.components.iconSize.xlarge + 16,
+    height: DesignTokens.components.iconSize.xlarge + 16,
+    borderRadius: 28,
+    backgroundColor: Colors.neutral[0],
+    borderWidth: 3,
+    borderColor: '#DC2626',
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    marginRight: Spacing[4],
+    shadowColor: '#DC2626',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  platformIcon: {
+    width: DesignTokens.components.iconSize.large + 2,
+    height: DesignTokens.components.iconSize.large + 2,
+    resizeMode: 'contain' as const,
+  },
+  linkedinIcon: {
+    width: DesignTokens.components.iconSize.large + 3,
+    height: DesignTokens.components.iconSize.large + 3,
+  },
+  socialIconEmoji: {
+    textAlign: 'center' as const,
+  },
+  socialInfoContainer: {
+    flex: 1,
+    marginRight: Spacing[3],
+  },
+  socialName: {
+    fontWeight: Typography.weights.bold,
+    color: Colors.neutral[900],
+    marginBottom: Spacing[1],
+    letterSpacing: -0.3,
+  },
+  socialHandle: {
+    fontWeight: Typography.weights.semibold,
+    color: '#DC2626',
+    marginBottom: Spacing[1],
+  },
+  socialDescription: {
+    fontWeight: Typography.weights.medium,
+    color: Colors.neutral[600],
+    lineHeight: 16,
+  },
+  arrowContainer: {
+    padding: Spacing[1],
+  },
+};

@@ -36,7 +36,7 @@ const useActionCardAnimations = () => {
     // Light haptic feedback on press
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-    Animated.parallel([
+    void Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 0.96,
         useNativeDriver: true,
@@ -50,7 +50,7 @@ const useActionCardAnimations = () => {
       }),
       // Subtle icon scale animation
       Animated.spring(iconScaleAnim, {
-        toValue: 0.95,
+        toValue: 0.9,
         useNativeDriver: true,
         tension: 500,
         friction: 6,
@@ -59,7 +59,7 @@ const useActionCardAnimations = () => {
   }, [scaleAnim, opacityAnim, iconScaleAnim]);
 
   const handlePressOut = useCallback(() => {
-    Animated.parallel([
+    void Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 1,
         useNativeDriver: true,

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { type EntraInAzioneProps } from '../../types';
+import { Spacing } from '../../../../shared/constants/designTokens';
 import { ActionTitle } from './ActionTitle';
 import { ActionDescription } from './ActionDescription';
 import { ActionCTAButtons } from './ActionCTAButtons';
-import { type EntraInAzioneProps } from '../../types';
-import { Spacing } from '../../../../shared/constants/designTokens';
 
 export const EntraInAzione: React.FC<EntraInAzioneProps> = ({ navigation }) => {
   return (

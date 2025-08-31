@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function, max-nested-callbacks, @typescript-eslint/no-explicit-any */
+/* eslint-disable max-lines-per-function, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any, max-nested-callbacks */
 import {
   map,
   mapError,
@@ -227,7 +227,7 @@ describe('Result Pattern - Advanced Functions', () => {
 
     beforeEach(() => {
       jest.clearAllMocks();
-      (global as any).__DEV__ = true;
+      (global as typeof global & { __DEV__?: boolean }).__DEV__ = true;
     });
 
     afterAll(() => {
@@ -257,7 +257,7 @@ describe('Result Pattern - Advanced Functions', () => {
     });
 
     it('should not affect result in production', () => {
-      (global as any).__DEV__ = false;
+      (global as typeof global & { __DEV__?: boolean }).__DEV__ = false;
       const result = success('test');
       const returned = logResult(result);
 

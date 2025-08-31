@@ -1,8 +1,11 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { FormattedText } from './FormattedText';
 
 // Import statici delle icone
+import instagramIcon from '../../../assets/icons/social/instagram.png';
+import facebookIcon from '../../../assets/icons/social/facebook.png';
+import linkedinIcon from '../../../assets/icons/social/linkedin.png';
+import { FormattedText } from './FormattedText';
 
 interface SocialIconProps {
   readonly platform: 'website' | 'instagram' | 'facebook' | 'linkedin';
@@ -25,21 +28,17 @@ const SocialIcon: React.FC<SocialIconProps> = ({
 
   // Funzione per verificare quale icona usare con typing sicuro
   const getIconSource = (): number | null => {
-    try {
-      switch (platform) {
-        case 'instagram':
-          return require('../../../assets/icons/social/instagram.png') as number;
-        case 'facebook':
-          return require('../../../assets/icons/social/facebook.png') as number;
-        case 'linkedin':
-          return require('../../../assets/icons/social/linkedin.png') as number;
-        case 'website':
-          return null;
-        default:
-          return null;
-      }
-    } catch (_error) {
-      return null;
+    switch (platform) {
+      case 'instagram':
+        return instagramIcon as number;
+      case 'facebook':
+        return facebookIcon as number;
+      case 'linkedin':
+        return linkedinIcon as number;
+      case 'website':
+        return null;
+      default:
+        return null;
     }
   };
 

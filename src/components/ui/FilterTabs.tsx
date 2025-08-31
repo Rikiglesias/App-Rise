@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
-import { BorderRadius, Spacing, Typography } from '../../shared/constants';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
-
 import { useTheme } from '@react-navigation/native';
 import { TouchableRipple } from 'react-native-paper';
+import { BorderRadius, Spacing, Typography } from '../../shared/constants';
+import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 
 interface FilterTab {
   id: string;
@@ -32,7 +31,7 @@ const createBaseStyles = () =>
   });
 
 // Stili con colori dinamici - tipizzazione corretta
-/* eslint-disable react-native/no-unused-styles */
+
 const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     // Tutti questi stili sono utilizzati nel componente TabItem
@@ -97,7 +96,6 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       elevation: 3,
     },
   });
-/* eslint-enable react-native/no-unused-styles */
 
 // Hook combinato
 const useTabStyles = () => {

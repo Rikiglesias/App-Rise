@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import { PlatformTouchable, FormattedText } from '../../../components/ui';
-
 import { Surface } from 'react-native-paper';
+import { PlatformTouchable, FormattedText } from '../../../components/ui';
 
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { BorderRadius, Spacing, Typography } from '../../../shared/constants';
@@ -147,7 +146,6 @@ const useStatsStyles = () => {
 
   return useMemo(
     () =>
-      /* eslint-disable react-native/no-unused-styles */
       StyleSheet.create({
         // Tutti questi stili sono utilizzati nei componenti ImpactStats e ImpactCTA
         // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
@@ -200,7 +198,7 @@ const useStatsStyles = () => {
           textAlign: 'center',
         },
       }),
-    /* eslint-enable react-native/no-unused-styles */
+
     [colors]
   );
 };
@@ -303,7 +301,7 @@ const ImpactCTA: React.FC<ImpactCTAProps> = React.memo(({ styles }) => (
 ImpactCTA.displayName = 'ImpactCTA';
 
 // Main Component - Now under 60 lines
-const ModernHomeImpact: React.FC<ModernHomeImpactProps> = ({
+const ModernHomeImpactComponent: React.FC<ModernHomeImpactProps> = ({
   onImpactPress,
   isLoaded,
 }) => {
@@ -350,5 +348,7 @@ const ModernHomeImpact: React.FC<ModernHomeImpactProps> = ({
     </Animated.View>
   );
 };
+
+const ModernHomeImpact = React.memo(ModernHomeImpactComponent);
 
 export default ModernHomeImpact;

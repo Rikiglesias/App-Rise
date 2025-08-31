@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
@@ -12,7 +12,7 @@ interface LoadingSkeletonProps {
   readonly style?: object;
 }
 
-const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
+const LoadingSkeletonComponent: React.FC<LoadingSkeletonProps> = ({
   width = '100%',
   height = 20,
   borderRadius = BorderRadius.md,
@@ -23,7 +23,7 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
 
   useEffect(() => {
     const startShimmer = () => {
-      Animated.loop(
+      void Animated.loop(
         Animated.sequence([
           Animated.timing(shimmerAnimation, {
             toValue: 1,
@@ -47,27 +47,31 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
     outputRange: [-200, 200],
   });
 
-  const styles = StyleSheet.create({
-    skeleton: {
-      width,
-      height,
-      borderRadius,
-      backgroundColor: colors.neutral[200],
-      overflow: 'hidden',
-      position: 'relative',
-    },
-    shimmer: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      transform: [{ translateX: shimmerTranslateX }],
-    },
-    gradientFill: {
-      flex: 1,
-    },
-  });
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        skeleton: {
+          width,
+          height,
+          borderRadius,
+          backgroundColor: colors.neutral[200],
+          overflow: 'hidden',
+          position: 'relative',
+        },
+        shimmer: {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          transform: [{ translateX: shimmerTranslateX }],
+        },
+        gradientFill: {
+          flex: 1,
+        },
+      }),
+    [width, height, borderRadius, colors.neutral, shimmerTranslateX]
+  );
 
   return (
     <View style={[styles.skeleton, style]}>
@@ -89,27 +93,33 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
   );
 };
 
+const LoadingSkeleton = React.memo(LoadingSkeletonComponent);
+
 // Skeleton specifici per diverse sezioni
-export const HeaderSkeleton: React.FC = () => {
+const HeaderSkeletonComponent: React.FC = () => {
   const { colors } = useTheme();
 
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: colors.neutral[50],
-      padding: Spacing[6],
-      height: 280,
-    },
-    titleSkeleton: {
-      marginBottom: Spacing[4],
-    },
-    subtitleSkeleton: {
-      marginBottom: Spacing[6],
-    },
-    buttonSkeleton: {
-      width: 140,
-      height: 44,
-    },
-  });
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          backgroundColor: colors.neutral[50],
+          padding: Spacing[6],
+          height: 280,
+        },
+        titleSkeleton: {
+          marginBottom: Spacing[4],
+        },
+        subtitleSkeleton: {
+          marginBottom: Spacing[6],
+        },
+        buttonSkeleton: {
+          width: 140,
+          height: 44,
+        },
+      }),
+    [colors.neutral]
+  );
 
   return (
     <View style={styles.container}>
@@ -129,31 +139,37 @@ export const HeaderSkeleton: React.FC = () => {
   );
 };
 
-export const ActionsSkeleton: React.FC = () => {
+export const HeaderSkeleton = React.memo(HeaderSkeletonComponent);
+
+const ActionsSkeletonComponent: React.FC = () => {
   const { colors } = useTheme();
 
-  const styles = StyleSheet.create({
-    container: {
-      padding: Spacing[4],
-      backgroundColor: colors.neutral[0],
-      margin: Spacing[4],
-      borderRadius: BorderRadius.xl,
-    },
-    titleSkeleton: {
-      alignSelf: 'center',
-      marginBottom: Spacing[4],
-    },
-    grid: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
-      gap: Spacing[3],
-    },
-    cardSkeleton: {
-      width: '48%',
-      height: 100,
-    },
-  });
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          padding: Spacing[4],
+          backgroundColor: colors.neutral[0],
+          margin: Spacing[4],
+          borderRadius: BorderRadius.xl,
+        },
+        titleSkeleton: {
+          alignSelf: 'center',
+          marginBottom: Spacing[4],
+        },
+        grid: {
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          gap: Spacing[3],
+        },
+        cardSkeleton: {
+          width: '48%',
+          height: 100,
+        },
+      }),
+    [colors.neutral]
+  );
 
   return (
     <View style={styles.container}>
@@ -172,24 +188,30 @@ export const ActionsSkeleton: React.FC = () => {
   );
 };
 
-export const StoriesSkeleton: React.FC = () => {
-  const styles = StyleSheet.create({
-    container: {
-      padding: Spacing[4],
-    },
-    titleSkeleton: {
-      alignSelf: 'center',
-      marginBottom: Spacing[4],
-    },
-    storiesContainer: {
-      flexDirection: 'row',
-      gap: Spacing[3],
-    },
-    storySkeleton: {
-      width: 200,
-      height: 120,
-    },
-  });
+export const ActionsSkeleton = React.memo(ActionsSkeletonComponent);
+
+const StoriesSkeletonComponent: React.FC = () => {
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          padding: Spacing[4],
+        },
+        titleSkeleton: {
+          alignSelf: 'center',
+          marginBottom: Spacing[4],
+        },
+        storiesContainer: {
+          flexDirection: 'row',
+          gap: Spacing[3],
+        },
+        storySkeleton: {
+          width: 200,
+          height: 120,
+        },
+      }),
+    []
+  );
 
   return (
     <View style={styles.container}>
@@ -207,5 +229,7 @@ export const StoriesSkeleton: React.FC = () => {
     </View>
   );
 };
+
+export const StoriesSkeleton = React.memo(StoriesSkeletonComponent);
 
 export default LoadingSkeleton;

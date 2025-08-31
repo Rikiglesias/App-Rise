@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
-import { PlatformTouchable, PerfectText } from '../ui';
 import { Surface } from 'react-native-paper';
+import { PlatformTouchable, PerfectText } from '../ui';
 // import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
@@ -72,7 +72,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ card, styles }) => {
                   size={24}
                   lines={1}
                   immunity={true}
-                  style={{ lineHeight: 20 } as TextStyle}
+                  style={{ lineHeight: 20 }}
                 >
                   {card.icon}
                 </PerfectText>
@@ -152,7 +152,11 @@ const ICON_STYLES = {
 };
 
 // 🏷️ TYPOGRAPHY STYLES - Extracted as constants for max-lines-per-function compliance
-const TYPOGRAPHY_STYLES = {
+const TYPOGRAPHY_STYLES: {
+  cardTitle: TextStyle;
+  cardSubtitle: TextStyle;
+  cardDescription: TextStyle;
+} = {
   cardTitle: {
     fontWeight: Typography.weights.bold,
     marginBottom: 2,
@@ -172,7 +176,6 @@ const TYPOGRAPHY_STYLES = {
   },
 };
 
-/* eslint-disable react-native/no-unused-styles */
 // 🎨 STYLES FACTORY - Extracted for max-lines-per-function compliance
 const createHomeInfoStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({

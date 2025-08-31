@@ -25,7 +25,7 @@ export default {
         process.env.ENABLE_PERFORMANCE_MONITORING === 'true',
       logLevel: process.env.LOG_LEVEL || 'info',
       eas: {
-        projectId: '52a33b0f-dec1-4674-812b-de5b888c911a',
+        projectId: process.env.EAS_PROJECT_ID,
       },
     },
 
@@ -33,8 +33,8 @@ export default {
     ios: {
       displayName: 'RAH Italia',
       supportsTablet: true,
-      bundleIdentifier: 'it.creareunapp.editor.ios63da226b4447c',
-      buildNumber: '19',
+      bundleIdentifier: process.env.IOS_BUNDLE_IDENTIFIER || 'it.creareunapp.editor.ios63da226b4447c',
+      buildNumber: process.env.IOS_BUILD_NUMBER || '19',
       icon: './assets/icons/app/app-icon.jpg',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
@@ -78,8 +78,8 @@ export default {
         backgroundColor: '#F8F8F8',
         monochromeImage: './assets/icons/app/app-icon.jpg', // Android 13+ themed icons
       },
-      package: 'it.creareunapp.editor.ios63da226b4447c',
-      versionCode: 3,
+      package: process.env.ANDROID_PACKAGE || 'it.creareunapp.editor.ios63da226b4447c',
+      versionCode: parseInt(process.env.ANDROID_VERSION_CODE || '3', 10),
       // Permessi specifici con giustificazione
       permissions: [
         'CAMERA', // QR code scanning per donazioni
@@ -93,7 +93,8 @@ export default {
       allowBackup: false, // Sicurezza: no backup automatici
       requestLegacyExternalStorage: false, // Scoped storage Android 10+
       // Configurazioni Google Play Store
-      playStoreUrl: 'https://play.google.com/store/apps/details?id=it.creareunapp.editor.ios63da226b4447c',
+      playStoreUrl:
+        'https://play.google.com/store/apps/details?id=it.creareunapp.editor.ios63da226b4447c',
       // Configurazioni performance
       compileSdkVersion: 34,
       targetSdkVersion: 34,

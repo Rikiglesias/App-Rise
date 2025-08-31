@@ -20,18 +20,21 @@
     "module": "es2022",
     "moduleResolution": "bundler",
     "target": "es2020",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@/shared/*": ["shared/*"],
-      "@/navigation/*": ["navigation/*"],
-      "@/stores/*": ["stores/*"],
-      "@/assets/*": ["assets/*"],
-      "@/components/*": ["components/*"],
-      "@/screens/*": ["screens/*"],
-      "@/hooks/*": ["hooks/*"],
-      "@/utils/*": ["utils/*"]
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@shared/*": ["src/shared/*"],
+      "@features/*": ["src/features/*"],
+      "@assets/*": ["assets/*"],
+      "@/navigation/*": ["src/navigation/*"],
+      "@/stores/*": ["src/stores/*"],
+      "@/screens/*": ["src/screens/*"],
+      "@/hooks/*": ["src/shared/hooks/*"],
+      "@/utils/*": ["src/shared/utils/*"],
+      "react-native-maps": ["src/types/react-native-maps.d.ts"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/types/**/*.d.ts"],
   "exclude": ["node_modules", ".expo", "web-build", "android", "ios", "**/*.js"]
 }

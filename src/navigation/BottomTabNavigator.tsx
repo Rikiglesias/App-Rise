@@ -14,7 +14,6 @@ import { PlatformBlur, PlatformTouchable, PerfectText } from '../components/ui';
 // Screens
 import { ContributeTabScreen } from '../features/actions';
 import { HomeScreen } from '../features/home';
-import ImpactStackNavigator from './ImpactStackNavigator';
 
 // Design Tokens & Hooks
 import {
@@ -25,6 +24,7 @@ import {
   Typography,
 } from '../shared/constants/designTokens';
 import { useResponsive } from '../shared/hooks';
+import ImpactStackNavigator from './ImpactStackNavigator';
 
 import type { BottomTabParamList } from './types';
 
@@ -92,7 +92,7 @@ const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
 
             if (!isFocused && !event.defaultPrevented) {
               navigation.navigate(route.name);
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             }
           };
 

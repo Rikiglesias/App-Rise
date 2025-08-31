@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Dimensions, StyleSheet } from 'react-native';
 
-import PlatformTouchable from './PlatformTouchable';
-import { FormattedText } from './FormattedText';
-
 import {
   BorderRadius,
   Shadows,
@@ -13,6 +10,8 @@ import {
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
+import { FormattedText } from './FormattedText';
+import PlatformTouchable from './PlatformTouchable';
 
 const { width } = Dimensions.get('window');
 
@@ -87,22 +86,22 @@ const usePremiumFloatingButtonAnimations = () => {
 
   useEffect(() => {
     const pulseAnimation = createPulseAnimation(pulseValue);
-    pulseAnimation.start();
+    void pulseAnimation.start();
     return () => pulseAnimation.stop();
   }, [pulseValue]);
 
   const handlePressIn = useCallback(() => {
-    buttonPress();
-    createPressInAnimation(scaleValue, glowValue).start();
+    void buttonPress();
+    void createPressInAnimation(scaleValue, glowValue).start();
   }, [buttonPress, scaleValue, glowValue]);
 
   const handlePressOut = useCallback(() => {
-    createPressOutAnimation(scaleValue, glowValue).start();
+    void createPressOutAnimation(scaleValue, glowValue).start();
   }, [scaleValue, glowValue]);
 
   const handlePress = useCallback(
     (onPress?: () => void) => {
-      pulsePattern();
+      void pulsePattern();
       onPress?.();
     },
     [pulsePattern]
@@ -145,7 +144,6 @@ const usePremiumFloatingButtonStyles = (variant: string, position: string) => {
 
   return useMemo(
     () =>
-      /* eslint-disable react-native/no-unused-styles */
       StyleSheet.create({
         container: { ...positionStyle },
         button: {
@@ -193,7 +191,7 @@ const usePremiumFloatingButtonStyles = (variant: string, position: string) => {
           opacity: 0.3,
         },
       }),
-    /* eslint-enable react-native/no-unused-styles */
+
     [colors, positionStyle]
   );
 };

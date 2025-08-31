@@ -1,0 +1,978 @@
+npm verbose cli C:\Program Files\nodejs\node.exe C:\Users\albie\AppData\Roaming\npm\node_modules\npm\bin\npm-cli.js
+npm info using npm@11.4.2
+npm info using node@v22.17.0
+npm warn Unknown cli config "--runInBand". This will stop working in the next major version of npm.
+npm verbose title npm test
+npm verbose argv "test" "--runInBand" "--loglevel" "verbose"
+npm verbose logfile logs-max:10 dir:C:\Users\albie\AppData\Local\npm-cache\_logs\2025-08-30T23_10_18_287Z-
+npm verbose logfile C:\Users\albie\AppData\Local\npm-cache\_logs\2025-08-30T23_10_18_287Z-debug-0.log
+
+> riseagainsthungeritalia@1.0.0 test
+> jest
+
+FAIL src/__tests__/components/domain/ActionCardEnhanced.test.tsx
+  ÔùÅ ActionCardEnhanced ÔÇ║ should handle press animations
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      56 |         friction: 6,
+      57 |       }),
+    > 58 |     ]).start();
+         |        ^
+      59 |   }, [scaleAnim, opacityAnim, iconScaleAnim]);
+      60 |
+      61 |   const handlePressOut = useCallback(() => {
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__connectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:218:48)
+      at AnimatedProps.__connectAnimatedView [as __makeNative] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:201:14)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:21:59)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:222:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:220:12)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:19:59)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:87:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at SpringAnimation.__makeNative [as __startAnimationIfNative] (node_modules/react-native/Libraries/Animated/animations/Animation.js:132:21)
+      at __startAnimationIfNative (node_modules/react-native/Libraries/Animated/animations/SpringAnimation.js:227:36)
+      at SpringAnimation.start (node_modules/react-native/Libraries/Animated/animations/SpringAnimation.js:237:7)
+      at AnimatedValue.start [as animate] (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:313:15)
+      at animate (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:178:19)
+      at Object.start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:184:9)
+      at start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:400:21)
+          at Array.forEach (<anonymous>)
+      at Object.forEach [as start] (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:382:18)
+      at start (src/components/domain/ActionCardEnhanced.tsx:58:8)
+      at handler (node_modules/@testing-library/react-native/src/fire-event.ts:122:19)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at fireEvent (node_modules/@testing-library/react-native/src/fire-event.ts:121:11)
+      at Object.<anonymous> (src/__tests__/components/domain/ActionCardEnhanced.test.tsx:91:14)
+
+  ÔùÅ ActionCardEnhanced ÔÇ║ should handle press animations
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__disconnectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:234:48)
+      at AnimatedProps.__disconnectAnimatedView [as __detach] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:168:12)
+      at __detach (node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:290:14)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14078:13)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:1574:13)
+      at commitHookEffectListUnmount (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8443:17)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9134:13)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9186:11)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9252:11)
+      at commitMutationEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9383:11)
+      at flushMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11331:13)
+      at commitRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11309:9)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:10445:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2094:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:860:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at unmount (node_modules/@testing-library/react-native/src/render.tsx:105:13)
+      at fn (node_modules/@testing-library/react-native/src/cleanup.ts:10:32)
+          at Set.forEach (<anonymous>)
+      at forEach (node_modules/@testing-library/react-native/src/cleanup.ts:10:16)
+      at Object.<anonymous> (node_modules/@testing-library/react-native/src/index.ts:17:14)
+
+FAIL src/__tests__/components/ui/EnhancedTouchable.test.tsx
+  ÔùÅ EnhancedTouchable ÔÇ║ Animation States ÔÇ║ should handle press animation
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      121 |       glowAnim
+      122 |     );
+    > 123 |     void animation?.start();
+          |                     ^
+      124 |   }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
+      125 |
+      126 |   const executePressOutAnimation = useCallback(() => {
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__connectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:218:48)
+      at AnimatedProps.__connectAnimatedView [as __makeNative] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:201:14)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:21:59)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:222:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:220:12)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:19:59)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:87:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:25:35)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:359:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:358:18)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:85:12)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at TimingAnimation.__makeNative [as __startAnimationIfNative] (node_modules/react-native/Libraries/Animated/animations/Animation.js:132:21)
+      at __startAnimationIfNative (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:121:36)
+      at TimingAnimation.start (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:137:7)
+      at AnimatedValue.start [as animate] (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:313:15)
+      at animate (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:231:19)
+      at Object.start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:238:9)
+      at start (src/components/ui/EnhancedTouchable.tsx:123:21)
+      at executePressInAnimation (src/components/ui/EnhancedTouchable.tsx:161:5)
+      at handler (node_modules/@testing-library/react-native/src/fire-event.ts:122:19)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at fireEvent (node_modules/@testing-library/react-native/src/fire-event.ts:121:11)
+      at Object.<anonymous> (src/__tests__/components/ui/EnhancedTouchable.test.tsx:155:16)
+
+  ÔùÅ EnhancedTouchable ÔÇ║ Animation States ÔÇ║ should handle press animation
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__disconnectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:234:48)
+      at AnimatedProps.__disconnectAnimatedView [as __detach] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:168:12)
+      at __detach (node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:290:14)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14078:13)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:1574:13)
+      at commitHookEffectListUnmount (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8443:17)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9134:13)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9252:11)
+      at commitMutationEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9383:11)
+      at flushMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11331:13)
+      at commitRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11309:9)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:10445:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2094:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:860:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at unmount (node_modules/@testing-library/react-native/src/render.tsx:105:13)
+      at fn (node_modules/@testing-library/react-native/src/cleanup.ts:10:32)
+          at Set.forEach (<anonymous>)
+      at forEach (node_modules/@testing-library/react-native/src/cleanup.ts:10:16)
+      at Object.<anonymous> (node_modules/@testing-library/react-native/src/index.ts:17:14)
+
+  ÔùÅ EnhancedTouchable ÔÇ║ Haptic Feedback ÔÇ║ should trigger haptic feedback on press
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      121 |       glowAnim
+      122 |     );
+    > 123 |     void animation?.start();
+          |                     ^
+      124 |   }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
+      125 |
+      126 |   const executePressOutAnimation = useCallback(() => {
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__connectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:218:48)
+      at AnimatedProps.__connectAnimatedView [as __makeNative] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:201:14)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:21:59)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:222:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:220:12)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:19:59)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:87:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:25:35)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:359:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:358:18)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:85:12)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at TimingAnimation.__makeNative [as __startAnimationIfNative] (node_modules/react-native/Libraries/Animated/animations/Animation.js:132:21)
+      at __startAnimationIfNative (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:121:36)
+      at TimingAnimation.start (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:137:7)
+      at AnimatedValue.start [as animate] (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:313:15)
+      at animate (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:231:19)
+      at Object.start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:238:9)
+      at start (src/components/ui/EnhancedTouchable.tsx:123:21)
+      at executePressInAnimation (src/components/ui/EnhancedTouchable.tsx:161:5)
+      at handler (node_modules/@testing-library/react-native/src/fire-event.ts:122:19)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at fireEvent (node_modules/@testing-library/react-native/src/fire-event.ts:121:11)
+      at Object.<anonymous> (src/__tests__/components/ui/EnhancedTouchable.test.tsx:185:16)
+
+  ÔùÅ EnhancedTouchable ÔÇ║ Haptic Feedback ÔÇ║ should trigger haptic feedback on press
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__disconnectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:234:48)
+      at AnimatedProps.__disconnectAnimatedView [as __detach] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:168:12)
+      at __detach (node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:290:14)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14078:13)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:1574:13)
+      at commitHookEffectListUnmount (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8443:17)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9134:13)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9252:11)
+      at commitMutationEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9383:11)
+      at flushMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11331:13)
+      at commitRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11309:9)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:10445:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2094:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:860:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at unmount (node_modules/@testing-library/react-native/src/render.tsx:105:13)
+      at fn (node_modules/@testing-library/react-native/src/cleanup.ts:10:32)
+          at Set.forEach (<anonymous>)
+      at forEach (node_modules/@testing-library/react-native/src/cleanup.ts:10:16)
+      at Object.<anonymous> (node_modules/@testing-library/react-native/src/index.ts:17:14)
+
+PASS src/__tests__/shared/hooks/useAsyncOperation.test.ts
+PASS src/__tests__/features/social/components/HeaderSection.test.tsx
+PASS src/__tests__/components/ProjectCard.test.tsx
+PASS src/__tests__/shared/utils/result-core.test.ts
+  ÔùÅ Console
+
+    console.error
+      2025-08-30T23:10:22.016Z ERROR [[TestContext] Error] ResultPattern {}
+
+      106 |         case 'fatal':
+      107 |           // eslint-disable-next-line no-console
+    > 108 |           console.error(formattedMessage);
+          |                   ^
+      109 |           break;
+      110 |       }
+      111 |     }
+
+      at ProfessionalLogger.error [as outputLog] (src/shared/utils/logger.ts:108:19)
+      at ProfessionalLogger.outputLog [as error] (src/shared/utils/logger.ts:135:10)
+      at error (src/shared/utils/logger.ts:214:10)
+      at logResult (src/shared/utils/result.ts:273:15)
+      at Object.<anonymous> (src/__tests__/shared/utils/result-core.test.ts:473:38)
+
+PASS src/__tests__/components/ui/PlatformTouchable.test.tsx
+PASS src/__tests__/shared/utils/result.test.ts
+  ÔùÅ Console
+
+    console.log
+      2025-08-30T23:10:22.287Z DEBUG [[TestContext] Success] ResultPattern "test data"
+
+      at ProfessionalLogger.log [as outputLog] (src/shared/utils/logger.ts:95:19)
+
+    console.error
+      2025-08-30T23:10:22.288Z ERROR [[TestContext] Error] ResultPattern {}
+
+      106 |         case 'fatal':
+      107 |           // eslint-disable-next-line no-console
+    > 108 |           console.error(formattedMessage);
+          |                   ^
+      109 |           break;
+      110 |       }
+      111 |     }
+
+      at ProfessionalLogger.error [as outputLog] (src/shared/utils/logger.ts:108:19)
+      at ProfessionalLogger.outputLog [as error] (src/shared/utils/logger.ts:135:10)
+      at error (src/shared/utils/logger.ts:214:10)
+      at logResult (src/shared/utils/result.ts:273:15)
+      at Object.<anonymous> (src/__tests__/shared/utils/result.test.ts:247:33)
+
+    console.log
+      2025-08-30T23:10:22.289Z DEBUG [[Result] Success] ResultPattern "test"
+
+      at ProfessionalLogger.log [as outputLog] (src/shared/utils/logger.ts:95:19)
+
+PASS src/__tests__/components/ui/FormattedText.test.tsx
+PASS src/__tests__/visual/visual-diff.test.tsx
+  ÔùÅ Console
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Unisciti a noi nella lotta con... on iPhone SE
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Unisciti a noi nella lotta con... on iPhone 15 Pro
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Unisciti a noi nella lotta con... on Pixel 8 Pro
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Unisciti a noi nella lotta con... on Galaxy Tab S9
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Il Nostro Impatto... on iPhone SE
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Il Nostro Impatto... on iPhone 15 Pro
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Il Nostro Impatto... on Pixel 8 Pro
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Il Nostro Impatto... on Galaxy Tab S9
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Fai la Differenza... on iPhone SE
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Fai la Differenza... on iPhone 15 Pro
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Fai la Differenza... on Pixel 8 Pro
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+    console.warn
+      ÔÜá´©Å Baseline misalignment: Fai la Differenza... on Galaxy Tab S9
+
+      224 |   if (!isAligned) {
+      225 |     // eslint-disable-next-line no-console
+    > 226 |     console.warn(
+          |             ^
+      227 |       `ÔÜá´©Å Baseline misalignment: ${testCase.text.substring(0, 30)}... on ${device.name}`
+      228 |     );
+      229 |   }
+
+      at warn (src/__tests__/visual/visual-diff.test.tsx:226:13)
+      at testBaselineAlignment (src/__tests__/visual/visual-diff.test.tsx:289:5)
+          at Array.forEach (<anonymous>)
+      at forEach (src/__tests__/visual/visual-diff.test.tsx:288:16)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/__tests__/visual/visual-diff.test.tsx:348:22)
+
+PASS src/__tests__/shared/hooks/useTheme.test.tsx
+PASS src/__tests__/features/social/components/SocialCard.test.tsx
+PASS src/__tests__/stores/appStore.test.ts
+PASS src/__tests__/features/social/hooks/useSocialPlatforms.test.ts
+PASS src/__tests__/components/ui/formattedtext.fixedlines.test.tsx
+PASS src/__tests__/components/ui/Logo.test.tsx
+PASS src/__tests__/components/ui/formattedtext.newline.test.tsx
+PASS src/__tests__/components/ui/HeaderLogo.test.tsx
+PASS src/__tests__/hooks/useProfessionalAnimations.test.ts
+PASS src/__tests__/hooks/useAnimatedPress.test.ts
+PASS src/__tests__/hooks/useHomeScrollAnimation.test.ts
+PASS src/__tests__/App.test.tsx
+PASS src/__tests__/stores/projectsStore.test.ts
+PASS src/__tests__/shared/utils/logger-simple.test.ts
+PASS src/__tests__/shared/constants/designTokens.test.ts
+PASS src/__tests__/shared/config/environment.test.ts
+PASS src/__tests__/hooks/useHapticFeedback.test.ts
+PASS src/__tests__/stores/impactStore.test.ts
+
+Summary of all failing tests
+FAIL src/__tests__/components/domain/ActionCardEnhanced.test.tsx
+  ÔùÅ ActionCardEnhanced ÔÇ║ should handle press animations
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      56 |         friction: 6,
+      57 |       }),
+    > 58 |     ]).start();
+         |        ^
+      59 |   }, [scaleAnim, opacityAnim, iconScaleAnim]);
+      60 |
+      61 |   const handlePressOut = useCallback(() => {
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__connectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:218:48)
+      at AnimatedProps.__connectAnimatedView [as __makeNative] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:201:14)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:21:59)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:222:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:220:12)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:19:59)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:87:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at SpringAnimation.__makeNative [as __startAnimationIfNative] (node_modules/react-native/Libraries/Animated/animations/Animation.js:132:21)
+      at __startAnimationIfNative (node_modules/react-native/Libraries/Animated/animations/SpringAnimation.js:227:36)
+      at SpringAnimation.start (node_modules/react-native/Libraries/Animated/animations/SpringAnimation.js:237:7)
+      at AnimatedValue.start [as animate] (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:313:15)
+      at animate (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:178:19)
+      at Object.start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:184:9)
+      at start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:400:21)
+          at Array.forEach (<anonymous>)
+      at Object.forEach [as start] (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:382:18)
+      at start (src/components/domain/ActionCardEnhanced.tsx:58:8)
+      at handler (node_modules/@testing-library/react-native/src/fire-event.ts:122:19)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at fireEvent (node_modules/@testing-library/react-native/src/fire-event.ts:121:11)
+      at Object.<anonymous> (src/__tests__/components/domain/ActionCardEnhanced.test.tsx:91:14)
+
+  ÔùÅ ActionCardEnhanced ÔÇ║ should handle press animations
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__disconnectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:234:48)
+      at AnimatedProps.__disconnectAnimatedView [as __detach] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:168:12)
+      at __detach (node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:290:14)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14078:13)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:1574:13)
+      at commitHookEffectListUnmount (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8443:17)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9134:13)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9186:11)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9252:11)
+      at commitMutationEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9383:11)
+      at flushMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11331:13)
+      at commitRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11309:9)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:10445:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2094:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:860:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at unmount (node_modules/@testing-library/react-native/src/render.tsx:105:13)
+      at fn (node_modules/@testing-library/react-native/src/cleanup.ts:10:32)
+          at Set.forEach (<anonymous>)
+      at forEach (node_modules/@testing-library/react-native/src/cleanup.ts:10:16)
+      at Object.<anonymous> (node_modules/@testing-library/react-native/src/index.ts:17:14)
+
+FAIL src/__tests__/components/ui/EnhancedTouchable.test.tsx
+  ÔùÅ EnhancedTouchable ÔÇ║ Animation States ÔÇ║ should handle press animation
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      121 |       glowAnim
+      122 |     );
+    > 123 |     void animation?.start();
+          |                     ^
+      124 |   }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
+      125 |
+      126 |   const executePressOutAnimation = useCallback(() => {
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__connectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:218:48)
+      at AnimatedProps.__connectAnimatedView [as __makeNative] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:201:14)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:21:59)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:222:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:220:12)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:19:59)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:87:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:25:35)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:359:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:358:18)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:85:12)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at TimingAnimation.__makeNative [as __startAnimationIfNative] (node_modules/react-native/Libraries/Animated/animations/Animation.js:132:21)
+      at __startAnimationIfNative (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:121:36)
+      at TimingAnimation.start (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:137:7)
+      at AnimatedValue.start [as animate] (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:313:15)
+      at animate (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:231:19)
+      at Object.start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:238:9)
+      at start (src/components/ui/EnhancedTouchable.tsx:123:21)
+      at executePressInAnimation (src/components/ui/EnhancedTouchable.tsx:161:5)
+      at handler (node_modules/@testing-library/react-native/src/fire-event.ts:122:19)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at fireEvent (node_modules/@testing-library/react-native/src/fire-event.ts:121:11)
+      at Object.<anonymous> (src/__tests__/components/ui/EnhancedTouchable.test.tsx:155:16)
+
+  ÔùÅ EnhancedTouchable ÔÇ║ Animation States ÔÇ║ should handle press animation
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__disconnectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:234:48)
+      at AnimatedProps.__disconnectAnimatedView [as __detach] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:168:12)
+      at __detach (node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:290:14)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14078:13)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:1574:13)
+      at commitHookEffectListUnmount (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8443:17)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9134:13)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9252:11)
+      at commitMutationEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9383:11)
+      at flushMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11331:13)
+      at commitRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11309:9)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:10445:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2094:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:860:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at unmount (node_modules/@testing-library/react-native/src/render.tsx:105:13)
+      at fn (node_modules/@testing-library/react-native/src/cleanup.ts:10:32)
+          at Set.forEach (<anonymous>)
+      at forEach (node_modules/@testing-library/react-native/src/cleanup.ts:10:16)
+      at Object.<anonymous> (node_modules/@testing-library/react-native/src/index.ts:17:14)
+
+  ÔùÅ EnhancedTouchable ÔÇ║ Haptic Feedback ÔÇ║ should trigger haptic feedback on press
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      121 |       glowAnim
+      122 |     );
+    > 123 |     void animation?.start();
+          |                     ^
+      124 |   }, [microAnimation, scaleAnim, elevationAnim, glowAnim]);
+      125 |
+      126 |   const executePressOutAnimation = useCallback(() => {
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__connectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:218:48)
+      at AnimatedProps.__connectAnimatedView [as __makeNative] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:201:14)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:21:59)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:222:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedStyle.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedStyle.js:220:12)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:19:59)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:87:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:25:35)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:359:5)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at AnimatedInterpolation.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedInterpolation.js:358:18)
+      at AnimatedTransform.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedTransform.js:85:12)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedWithChildren.js:33:17)
+      at apply (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:22:59)
+      at AnimatedValue.__makeNative (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:125:5)
+      at TimingAnimation.__makeNative [as __startAnimationIfNative] (node_modules/react-native/Libraries/Animated/animations/Animation.js:132:21)
+      at __startAnimationIfNative (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:121:36)
+      at TimingAnimation.start (node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:137:7)
+      at AnimatedValue.start [as animate] (node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:313:15)
+      at animate (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:231:19)
+      at Object.start (node_modules/react-native/Libraries/Animated/AnimatedImplementation.js:238:9)
+      at start (src/components/ui/EnhancedTouchable.tsx:123:21)
+      at executePressInAnimation (src/components/ui/EnhancedTouchable.tsx:161:5)
+      at handler (node_modules/@testing-library/react-native/src/fire-event.ts:122:19)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at fireEvent (node_modules/@testing-library/react-native/src/fire-event.ts:121:11)
+      at Object.<anonymous> (src/__tests__/components/ui/EnhancedTouchable.test.tsx:185:16)
+
+  ÔùÅ EnhancedTouchable ÔÇ║ Haptic Feedback ÔÇ║ should trigger haptic feedback on press
+
+    Incompatible React versions: The "react" and "react-native-renderer" packages must have the exact same version. Instead got:
+      - react:                  19.1.1
+      - react-native-renderer:  19.0.0
+    Learn more: https://react.dev/warnings/version-mismatch
+
+      at Error (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:16813:13)
+      at Object.<anonymous> (node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-dev.js:17024:4)
+      at Object.require (node_modules/react-native/Libraries/Renderer/shims/ReactNative.js:19:17)
+      at require (node_modules/react-native/Libraries/ReactNative/RendererImplementation.js:72:10)
+      at AnimatedProps.__disconnectAnimatedView (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:234:48)
+      at AnimatedProps.__disconnectAnimatedView [as __detach] (node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:168:12)
+      at __detach (node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:290:14)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14078:13)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:1574:13)
+      at commitHookEffectListUnmount (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8443:17)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9134:13)
+      at recursivelyTraverseDeletionEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9035:9)
+      at commitDeletionEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9145:11)
+      at recursivelyTraverseMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9252:11)
+      at commitMutationEffectsOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:9383:11)
+      at flushMutationEffects (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11331:13)
+      at commitRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:11309:9)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:10445:15)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2094:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:860:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at unmount (node_modules/@testing-library/react-native/src/render.tsx:105:13)
+      at fn (node_modules/@testing-library/react-native/src/cleanup.ts:10:32)
+          at Set.forEach (<anonymous>)
+      at forEach (node_modules/@testing-library/react-native/src/cleanup.ts:10:16)
+      at Object.<anonymous> (node_modules/@testing-library/react-native/src/index.ts:17:14)
+
+
+Test Suites: 2 failed, 2 skipped, 26 passed, 28 of 30 total
+Tests:       3 failed, 46 skipped, 365 passed, 414 total
+Snapshots:   1 passed, 1 total
+Time:        5.149 s
+Ran all test suites.
+
+Jest has detected the following 2 open handles potentially keeping Jest from exiting:
+
+  ÔùÅ  Timeout
+
+      90 |   return safeAsync(() =>
+      91 |     new Promise<T>((resolve, reject) => {
+    > 92 |       const timer = setTimeout(() => {
+         |                     ^
+      93 |         reject(new Error(timeoutMessage));
+      94 |       }, timeoutMs);
+      95 |
+
+      at setTimeout (src/shared/utils/result.ts:92:21)
+      at src/shared/utils/result.ts:91:5
+      at operation (src/shared/utils/result.ts:61:24)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (src/shared/utils/result.ts:57:23)
+      at safeAsync (src/shared/utils/result.ts:90:10)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (src/shared/utils/result.ts:85:25)
+      at src/shared/hooks/useAsyncOperation.ts:96:30
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at operation (src/shared/utils/result.ts:301:26)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (src/shared/utils/result.ts:293:19)
+      at Object.<anonymous> (src/shared/hooks/useAsyncOperation.ts:94:35)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.execute (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+      at execute (src/__tests__/shared/hooks/useAsyncOperation.test.ts:148:30)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at Object.<anonymous> (src/__tests__/shared/hooks/useAsyncOperation.test.ts:147:16)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+
+  ÔùÅ  Timeout
+
+      90 |   return safeAsync(() =>
+      91 |     new Promise<T>((resolve, reject) => {
+    > 92 |       const timer = setTimeout(() => {
+         |                     ^
+      93 |         reject(new Error(timeoutMessage));
+      94 |       }, timeoutMs);
+      95 |
+
+      at setTimeout (src/shared/utils/result.ts:92:21)
+      at src/shared/utils/result.ts:91:5
+      at operation (src/shared/utils/result.ts:61:24)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (src/shared/utils/result.ts:57:23)
+      at safeAsync (src/shared/utils/result.ts:90:10)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (src/shared/utils/result.ts:85:25)
+      at src/shared/hooks/useAsyncOperation.ts:96:30
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at operation (src/shared/utils/result.ts:301:26)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (src/shared/utils/result.ts:293:19)
+      at Object.<anonymous> (src/shared/hooks/useAsyncOperation.ts:94:35)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.execute (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+      at execute (src/__tests__/shared/hooks/useAsyncOperation.test.ts:237:24)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:32:24)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:790:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:31:25)
+      at Object.<anonymous> (src/__tests__/shared/hooks/useAsyncOperation.test.ts:236:10)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+npm verbose cwd C:\Users\albie\Desktop\Programmi\App Rise
+npm verbose os Windows_NT 10.0.26100
+npm verbose node v22.17.0
+npm verbose npm  v11.4.2
+npm verbose exit 1
+npm verbose code 1

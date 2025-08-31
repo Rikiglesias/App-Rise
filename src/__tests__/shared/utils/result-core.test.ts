@@ -345,12 +345,12 @@ describe('Result Pattern - Core Functions', () => {
     });
 
     it('should handle async operations correctly', async () => {
-      const asyncSuccess = async (): Promise<Result<string, Error>> => {
-        return success('async success');
+      const asyncSuccess = (): Promise<Result<string, Error>> => {
+        return Promise.resolve(success('async success'));
       };
 
-      const asyncFailure = async (): Promise<Result<string, Error>> => {
-        return failure(new Error('async error'));
+      const asyncFailure = (): Promise<Result<string, Error>> => {
+        return Promise.resolve(failure(new Error('async error')));
       };
 
       const successResult = await asyncSuccess();
@@ -367,12 +367,16 @@ describe('Result Pattern - Core Functions', () => {
 
   describe('Real-world scenarios', () => {
     it('should handle API response parsing', () => {
-      const parseApiResponse = (response: any): Result<User, string> => {
-        if (!response) return failure('Empty response');
-        if (!response.id) return failure('Missing user ID');
-        if (!response.name) return failure('Missing user name');
+      const parseApiResponse = (response: unknown): Result<User, string> => {
+        if (!response || typeof response !== 'object')
+          return failure('Empty response');
+        const obj = response as Record<string, unknown>;
+        if (!obj.id || typeof obj.id !== 'number')
+          return failure('Missing user ID');
+        if (!obj.name || typeof obj.name !== 'string')
+          return failure('Missing user name');
 
-        return success({ id: response.id, name: response.name });
+        return success({ id: obj.id, name: obj.name });
       };
 
       interface User {

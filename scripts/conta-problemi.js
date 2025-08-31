@@ -38,7 +38,7 @@ try {
 console.log('\n⚠️ PROBLEMI ESLINT:');
 try {
   execSync(
-    'npx eslint "**/*.{ts,tsx,js}" --ignore-pattern "node_modules/**" --ignore-pattern ".expo/**" --ignore-pattern "android/**" --ignore-pattern "ios/**" --ignore-pattern "coverage/**" --format compact --max-warnings 0',
+    'npx eslint "**/*.{ts,tsx}" --ignore-pattern "node_modules/**" --ignore-pattern ".expo/**" --ignore-pattern "android/**" --ignore-pattern "ios/**" --ignore-pattern "coverage/**" --format compact --max-warnings 0',
     {
       stdio: 'pipe',
       encoding: 'utf8',

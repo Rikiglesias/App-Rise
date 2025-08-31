@@ -90,15 +90,15 @@
     "react-native": "0.79.5",
     "react-native-auto-size-text": "^1.1.1",
     "react-native-gesture-handler": "~2.24.0",
-    "react-native-maps": "1.20.1",
-    "react-native-pager-view": "6.7.1",
+    "react-native-maps": "^1.25.3",
+    "react-native-pager-view": "^6.9.1",
     "react-native-paper": "^5.14.5",
-    "react-native-reanimated": "~3.17.4",
-    "react-native-safe-area-context": "5.4.0",
-    "react-native-screens": "^4.11.1",
-    "react-native-svg": "15.11.2",
+    "react-native-reanimated": "^3.17.5",
+    "react-native-safe-area-context": "^5.6.1",
+    "react-native-screens": "^4.15.4",
+    "react-native-svg": "^15.12.1",
     "react-native-web": "^0.20.0",
-    "zustand": "^5.0.5"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -108,7 +108,7 @@
     "@types/jest": "^29.5.14",
     "@types/react": "~19.0.10",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
-    "@typescript-eslint/parser": "^7.4.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
     "eslint-config-expo": "~9.2.0",
     "eslint-plugin-import": "^2.31.0",
@@ -125,8 +125,8 @@
     "lint-staged": "^16.1.0",
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.1.0",
-    "react-test-renderer": "^19.0.0",
-    "typescript": "~5.8.3"
+    "react-test-renderer": "19.0.0",
+    "typescript": "~5.9.2"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [

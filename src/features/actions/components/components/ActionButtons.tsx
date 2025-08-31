@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-unused-styles */
 // ↑ ESLint non riesce a tracciare gli stili quando sono passati tramite props a componenti figli.
 // Tutti gli stili in questo file sono verificati manualmente come utilizzati.
 

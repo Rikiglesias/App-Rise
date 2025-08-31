@@ -1,12 +1,12 @@
 import React from 'react';
 import { Animated, View } from 'react-native';
+import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import PlatformTouchable from './PlatformTouchable';
 
 import {
   useAccessibilityConfig,
   useCardStyling,
 } from './hooks/useEnhancedCardStyling';
-import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import { enhancedCardStyles } from './styles/EnhancedCardStyles';
 import type { EnhancedCardProps } from './types/EnhancedCardTypes';
 import { ArrowSection, IconSection, TextSection } from './EnhancedCardSections';

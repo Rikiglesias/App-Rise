@@ -48,7 +48,7 @@ const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
 
     // Start animation
     animatedValue.setValue(0); // Ensure animation starts from 0
-    Animated.timing(animatedValue, {
+    void Animated.timing(animatedValue, {
       toValue: isNaN(numericTarget) ? 0 : numericTarget,
       duration,
       useNativeDriver: false, // Essential for animating non-style props

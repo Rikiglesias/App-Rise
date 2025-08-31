@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { PlatformTouchable } from '../ui';
 import { Surface } from 'react-native-paper';
+import { PlatformTouchable } from '../ui';
 import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import type {
   BentoActionCardProps,

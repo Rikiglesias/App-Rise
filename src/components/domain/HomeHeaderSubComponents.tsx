@@ -60,6 +60,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
         <View style={styles.imageSection}>
           <View style={styles.imageContainer}>
             <Image
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               source={require('../../../assets/images/hero-banner.png')}
               style={styles.image as ImageStyle}
               resizeMode="contain"
@@ -86,6 +87,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
           ]}
         >
           <Image
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             source={require('../../../assets/images/hero-banner.png')}
             style={styles.image as ImageStyle}
             resizeMode="contain"

@@ -11,7 +11,7 @@
  * - Layout consistency sempre garantito
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text, TextProps, Platform, Dimensions } from 'react-native';
 import {
   DesignTokens,
@@ -178,7 +178,7 @@ export interface FormattedTextProps
  * - NON taglia MAI il testo (tutto visibile sempre)
  * - Preserva grassetto e qualità del font
  */
-export const FormattedText: React.FC<FormattedTextProps> = ({
+const FormattedTextComponent: React.FC<FormattedTextProps> = ({
   variant = 'body-medium',
   allowSystemFontScaling = false,
   maxFontSizeMultiplier = 1.2, // Limite Dynamic Type al 120%
@@ -201,19 +201,23 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   children,
   ...textProps
 }) => {
-  // PASSO 1: Ottieni fontSize base (RAW, senza scaling)
-  const baseFontSize = manualFontSize ?? getVariantFontSize(variant);
+  // PASSO 1-3: Calcoli fontSize ottimizzati con useMemo
+  const { baseFontSize: _baseFontSize, scaledFontSize } = useMemo(() => {
+    const base = manualFontSize ?? getVariantFontSize(variant);
+    let scaled = base;
 
-  // PASSO 2: Usa il font base come misura logica 393 (la scala viene gestita a monte dal Sistema Perfetto)
-  let scaledFontSize = baseFontSize;
+    if (enforceReadabilityConstraints) {
+      scaled = applyReadabilityConstraints(scaled);
+    }
 
-  // PASSO 3: Applica vincoli accessibilità se richiesto
-  if (enforceReadabilityConstraints) {
-    scaledFontSize = applyReadabilityConstraints(scaledFontSize);
-  }
+    return { baseFontSize: base, scaledFontSize: scaled };
+  }, [manualFontSize, variant, enforceReadabilityConstraints]);
 
-  // PASSO 4: SISTEMA BI-DIREZIONALE INTELLIGENTE - Solo se abilitato
-  const textString = typeof children === 'string' ? children : '';
+  // PASSO 4: SISTEMA BI-DIREZIONALE INTELLIGENTE - Solo se abilitato (memoized)
+  const textString = useMemo(
+    () => (typeof children === 'string' ? children : ''),
+    [children]
+  );
 
   // 🔍 DIAGNOSI: Debug temporaneamente disabilitato per evitare hang nei test
   // if (__DEV__ && textString.includes('Rise Against')) {
@@ -226,133 +230,169 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
   //     text: textString.substring(0, 30) + '...',
   //   });
   // }
-  let finalFontSize = scaledFontSize; // GIÀ SCALATO per device
-  let wrapProps = {};
+  // Calcoli layout ottimizzati con useMemo
+  const { finalFontSize, wrapProps, isFixedMode } = useMemo(() => {
+    let fontSize = scaledFontSize;
+    let props = {};
+    const fixedMode = fixed || wrapMode === 'fixed';
 
-  const isFixedMode = fixed || wrapMode === 'fixed';
+    if (fixedMode) {
+      props = getIntelligentWrapProps(fixed, wrapMode, fixedLines);
 
-  if (isFixedMode) {
-    wrapProps = getIntelligentWrapProps(fixed, wrapMode, fixedLines);
-
-    // SISTEMA BI-DIREZIONALE INTELLIGENTE: Calcola fontSize ottimale per dispositivo
-    if (fixedLines && fixedLines > 0 && textString) {
-      // CALCOLO OTTIMALE: Trova il fontSize perfetto per ogni dispositivo
-      finalFontSize = calculateSmartFontSize(
-        textString,
-        scaledFontSize, // Parte dal font GIÀ SCALATO
-        fixedLines,
-        containerWidth // Usa containerWidth se specificato
-      );
+      if (fixedLines && fixedLines > 0 && textString) {
+        fontSize = calculateSmartFontSize(
+          textString,
+          scaledFontSize,
+          fixedLines,
+          containerWidth
+        );
+      }
     }
-  }
+
+    return {
+      finalFontSize: fontSize,
+      wrapProps: props,
+      isFixedMode: fixedMode,
+    };
+  }, [scaledFontSize, fixed, wrapMode, fixedLines, textString, containerWidth]);
   // ALTRIMENTI: Modalità normale con font scalato standard
 
-  // 🆕 SISTEMA BI-DIREZIONALE INTELLIGENTE: Calcola fontSize ottimale per dispositivo
-  let smartMaxFontSizeMultiplier = maxFontSizeMultiplier;
-  const smartAllowSystemFontScaling = allowSystemFontScaling;
+  // Sistema di scaling intelligente ottimizzato con useMemo
+  const {
+    smartMaxFontSizeMultiplier,
+    smartAllowSystemFontScaling,
+    optimizedFinalFontSize,
+  } = useMemo(() => {
+    let maxMultiplier = maxFontSizeMultiplier;
+    const allowScaling = allowSystemFontScaling;
+    let optimizedFontSize = finalFontSize;
 
-  if (
-    intelligentAccessibilityScaling &&
-    isFixedMode &&
-    fixedLines &&
-    fixedLines > 0 &&
-    textString
-  ) {
-    // MANTIENI allowSystemFontScaling come specificato dall'utente
-    // NON forziamo più il zoom di sistema - rispettiamo la scelta dello sviluppatore
-
-    // STEP 1: Calcola il fontSize OTTIMALE per questo dispositivo/container
-    const { width: screenWidth } = Dimensions.get('window');
-    // Usa containerWidth specificato o calcola 85% della larghezza schermo (più realistico)
-    const containerWidthForCalc = containerWidth ?? screenWidth * 0.85;
-
-    // Trova il fontSize perfetto che utilizza al meglio lo spazio disponibile
-    let optimalFontSize = finalFontSize;
-    let bestFontSize = finalFontSize;
-
-    // Test fontSize con range più ampio per trovare l'ottimale
-    for (
-      let testSize = finalFontSize * 0.4; // Minimo 40% del fontSize originale
-      testSize <= finalFontSize * 2.5; // Massimo 250% del fontSize originale
-      testSize += 0.3
+    if (
+      intelligentAccessibilityScaling &&
+      isFixedMode &&
+      fixedLines &&
+      fixedLines > 0 &&
+      textString
     ) {
-      const avgCharWidth = testSize * 0.6; // Stima più accurata
-      const charsPerLine = Math.floor(containerWidthForCalc / avgCharWidth);
-      const totalLinesNeeded = Math.ceil(textString.length / charsPerLine);
+      const { width: screenWidth } = Dimensions.get('window');
+      const containerWidthForCalc = containerWidth ?? screenWidth * 0.85;
 
-      if (totalLinesNeeded <= fixedLines) {
-        bestFontSize = testSize; // Questo fontSize funziona
-      } else {
-        break; // Superato il limite, fermiamo qui
+      let bestFontSize = finalFontSize;
+
+      for (
+        let testSize = finalFontSize * 0.4;
+        testSize <= finalFontSize * 2.5;
+        testSize += 0.3
+      ) {
+        const avgCharWidth = testSize * 0.6;
+        const charsPerLine = Math.floor(containerWidthForCalc / avgCharWidth);
+        const totalLinesNeeded = Math.ceil(textString.length / charsPerLine);
+
+        if (totalLinesNeeded <= fixedLines) {
+          bestFontSize = testSize;
+        } else {
+          break;
+        }
       }
+
+      optimizedFontSize = bestFontSize;
+
+      let maxSafeScaling = 1.0;
+      for (let testScaling = 1.0; testScaling <= 3.0; testScaling += 0.1) {
+        const testFontSize = optimizedFontSize * testScaling;
+        const avgCharWidth = testFontSize * 0.6;
+        const charsPerLine = Math.floor(containerWidthForCalc / avgCharWidth);
+        const totalLinesNeeded = Math.ceil(textString.length / charsPerLine);
+
+        if (totalLinesNeeded <= fixedLines) {
+          maxSafeScaling = testScaling;
+        } else {
+          break;
+        }
+      }
+
+      maxMultiplier = Math.max(1.2, maxSafeScaling);
     }
 
-    // STEP 2: Usa il fontSize ottimale trovato come nuovo base
-    optimalFontSize = bestFontSize;
-    finalFontSize = optimalFontSize; // Aggiorna il fontSize finale
+    return {
+      smartMaxFontSizeMultiplier: maxMultiplier,
+      smartAllowSystemFontScaling: allowScaling,
+      optimizedFinalFontSize: optimizedFontSize,
+    };
+  }, [
+    maxFontSizeMultiplier,
+    allowSystemFontScaling,
+    finalFontSize,
+    intelligentAccessibilityScaling,
+    isFixedMode,
+    fixedLines,
+    textString,
+    containerWidth,
+  ]);
 
-    // STEP 3: Calcola i limiti di zoom attorno al fontSize ottimale
-    let maxSafeScaling = 1.0;
-    for (let testScaling = 1.0; testScaling <= 3.0; testScaling += 0.1) {
-      const testFontSize = optimalFontSize * testScaling;
-      const avgCharWidth = testFontSize * 0.6; // Stima più accurata
-      const charsPerLine = Math.floor(containerWidthForCalc / avgCharWidth);
-      const totalLinesNeeded = Math.ceil(textString.length / charsPerLine);
+  // Calcoli di stile ottimizzati con useMemo
+  const {
+    rtlAwareTextAlign: _rtlAwareTextAlign,
+    platformLineBreakProps,
+    determinedFontFamily: _determinedFontFamily,
+    computedStyle,
+  } = useMemo(() => {
+    const textAlign = enableRTL ? RTLTokens.textAlign.start : 'left';
 
-      if (totalLinesNeeded <= fixedLines) {
-        maxSafeScaling = testScaling;
-      } else {
-        break; // Trovato il limite superiore
-      }
-    }
+    const lineBreakProps = Platform.select({
+      ios: {
+        lineBreakStrategyIOS: lineBreakStrategyIOS,
+      },
+      android: {
+        android_breakStrategy: breakStrategyAndroid,
+        android_hyphenationFrequency: hyphenationFrequencyAndroid,
+      },
+      default: {},
+    });
 
-    // Imposta il limite calcolato (min 1.2 per garantire accessibilità base)
-    smartMaxFontSizeMultiplier = Math.max(1.2, maxSafeScaling);
-  }
+    const fontFamilyDetermined =
+      enableFallbackFontChain && textString
+        ? getFallbackFontFamily(textString, fontFamily)
+        : (fontFamily ?? undefined);
 
-  // RTL SUPPORT: Calcola textAlign basato su direzione
-  const rtlAwareTextAlign = enableRTL ? RTLTokens.textAlign.start : 'left';
+    const styleComputed = [
+      {
+        fontSize: optimizedFinalFontSize,
+        color: color ?? '#171717',
+        fontWeight: getFontWeight(fontWeight),
+        fontFamily: fontFamilyDetermined,
+        lineHeight: DesignTokens?.containers?.baseline?.lineHeight
+          ? DesignTokens.containers.baseline.lineHeight(optimizedFinalFontSize)
+          : Math.round(optimizedFinalFontSize * 1.15),
+        includeFontPadding: false,
+        textAlignVertical: 'center' as const,
+        textAlign: textAlign,
+        writingDirection: enableRTL
+          ? RTLTokens.writingDirection.auto
+          : RTLTokens.writingDirection.ltr,
+      },
+      style,
+    ];
 
-  // CROSS-PLATFORM LINE BREAK STRATEGIES
-  const platformLineBreakProps = Platform.select({
-    ios: {
-      lineBreakStrategyIOS: lineBreakStrategyIOS,
-    },
-    android: {
-      android_breakStrategy: breakStrategyAndroid,
-      android_hyphenationFrequency: hyphenationFrequencyAndroid,
-    },
-    default: {},
-  });
-
-  // FALLBACK FONT CHAIN: Determina fontFamily basata sul contenuto
-  const determinedFontFamily =
-    enableFallbackFontChain && textString
-      ? getFallbackFontFamily(textString, fontFamily)
-      : (fontFamily ?? undefined);
-
-  // Calcola stile finale con lineHeight intelligente usando baseline grid
-  const computedStyle = [
-    {
-      fontSize: finalFontSize,
-      color: color ?? '#171717',
-      fontWeight: getFontWeight(fontWeight),
-      fontFamily: determinedFontFamily,
-      // BASELINE GRID: lineHeight proporzionale usando Design Tokens (with fallback for tests)
-      lineHeight: DesignTokens?.containers?.baseline?.lineHeight
-        ? DesignTokens.containers.baseline.lineHeight(finalFontSize)
-        : Math.round(finalFontSize * 1.15),
-      includeFontPadding: false,
-      textAlignVertical: 'center' as const,
-      // RTL SUPPORT: Text alignment
-      textAlign: rtlAwareTextAlign,
-      // RTL SUPPORT: Writing direction
-      writingDirection: enableRTL
-        ? RTLTokens.writingDirection.auto
-        : RTLTokens.writingDirection.ltr,
-    },
+    return {
+      rtlAwareTextAlign: textAlign,
+      platformLineBreakProps: lineBreakProps,
+      determinedFontFamily: fontFamilyDetermined,
+      computedStyle: styleComputed,
+    };
+  }, [
+    enableRTL,
+    lineBreakStrategyIOS,
+    breakStrategyAndroid,
+    hyphenationFrequencyAndroid,
+    enableFallbackFontChain,
+    textString,
+    fontFamily,
+    optimizedFinalFontSize,
+    color,
+    fontWeight,
     style,
-  ];
+  ]);
 
   return (
     <Text
@@ -369,5 +409,8 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
     </Text>
   );
 };
+
+// Memoized component per ottimizzazioni performance
+export const FormattedText = React.memo(FormattedTextComponent);
 
 export default FormattedText;

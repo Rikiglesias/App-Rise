@@ -8,6 +8,7 @@ import type { MapModalData } from '../../data/mapModalData';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { Colors, Spacing, Typography } from '../../shared/constants';
 import { logDebug } from '../../shared/utils/logger';
+import { useResponsiveLayout } from '../../shared/hooks/useResponsive';
 
 interface MapLocationModalProps {
   visible: boolean;
@@ -23,6 +24,8 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   data,
   onClose,
 }) => {
+  const { spacing } = useResponsiveLayout();
+
   const handleCTAPress = useCallback(() => {
     logDebug('MapLocationModal', 'CTA pressed', { title: data?.title });
     // Note: External links functionality would require extending MapModalData interface
@@ -43,7 +46,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           colors={['#DC2626', '#B91C1C', '#991B1B']}
           start={gradientStart}
           end={gradientEnd}
-          style={styles.header}
+          style={[styles.header, { paddingHorizontal: spacing.modal }]}
         >
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
@@ -75,9 +78,12 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         </LinearGradient>
 
         {/* Contenuto semplificato */}
-        <View style={styles.content}>
+        <View style={[styles.content, { paddingHorizontal: spacing.modal }]}>
           {/* Descrizione breve - max 2 righe */}
-          <FormattedText variant="body-large" style={styles.description}>
+          <FormattedText
+            variant="body-large"
+            style={[styles.description, { paddingHorizontal: spacing.modal }]}
+          >
             Scopri il nostro impatto in {data.title} attraverso programmi di
             lotta alla fame e sviluppo sostenibile.
           </FormattedText>

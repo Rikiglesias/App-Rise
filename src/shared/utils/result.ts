@@ -87,13 +87,24 @@ export const withTimeout = async <T>(
   timeoutMs: number,
   timeoutMessage = 'Operation timed out'
 ): AsyncResult<T> => {
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
-  });
+  return safeAsync(
+    () =>
+      new Promise<T>((resolve, reject) => {
+        const timer = setTimeout(() => {
+          reject(new Error(timeoutMessage));
+        }, timeoutMs);
 
-  return safeAsync(() =>
-    // eslint-disable-next-line require-await
-    Promise.race([operation(), timeoutPromise])
+        // Esegui l'operazione e pulisci sempre il timer
+        operation()
+          .then(value => {
+            clearTimeout(timer);
+            resolve(value);
+          })
+          .catch(err => {
+            clearTimeout(timer);
+            reject(err);
+          });
+      })
   );
 };
 

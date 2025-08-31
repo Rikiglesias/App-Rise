@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Image, ImageStyle, Platform, View } from 'react-native';
+import { Animated, Image, Platform, View, type ImageStyle } from 'react-native';
 
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
@@ -13,7 +13,7 @@ interface Props {
   styles: {
     imageSection: object;
     imageContainer: object;
-    image: object;
+    image: ImageStyle;
     imageGradientOverlay: object;
     flexOne: object;
   };
@@ -39,8 +39,9 @@ export const HeaderImageSection: React.FC<Props> = React.memo(
         <View style={styles.imageSection}>
           <View style={styles.imageContainer}>
             <Image
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               source={require('../../../assets/images/hero-banner.png')}
-              style={styles.image as ImageStyle}
+              style={styles.image}
               resizeMode="cover"
             />
           </View>
@@ -65,8 +66,9 @@ export const HeaderImageSection: React.FC<Props> = React.memo(
           ]}
         >
           <Image
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             source={require('../../../assets/images/hero-banner.png')}
-            style={styles.image as ImageStyle}
+            style={styles.image}
             resizeMode="cover"
           />
 

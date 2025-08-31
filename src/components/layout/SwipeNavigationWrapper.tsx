@@ -57,13 +57,13 @@ export const SwipeNavigationWrapper: React.FC<SwipeNavigationWrapperProps> = ({
       }
 
       if (targetIndex < 0 || targetIndex >= TAB_ORDER.length) {
-        triggerHaptic('light');
+        void triggerHaptic('light');
         return;
       }
 
       const targetTab = TAB_ORDER[targetIndex];
       if (targetTab) {
-        triggerHaptic('light');
+        void triggerHaptic('light');
         navigation.navigate(targetTab);
       }
     },

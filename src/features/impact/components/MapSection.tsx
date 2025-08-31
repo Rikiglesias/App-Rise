@@ -53,6 +53,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
         activeOpacity={0.85}
       >
         <Image
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           source={require('../../../../assets/images/mappa.png')}
           style={styles.mapImage}
           resizeMode="cover"

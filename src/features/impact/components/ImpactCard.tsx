@@ -69,10 +69,10 @@ const useImpactCardAnimations = (delay: number) => {
       ])
     );
 
-    entranceAnimation.start();
+    void entranceAnimation.start();
     const pulseTimeout = setTimeout(() => {
       if (isMounted) {
-        pulseAnimation.start();
+        void pulseAnimation.start();
       }
     }, staggerDelay + 500);
 
@@ -232,7 +232,6 @@ export const ImpactCard: React.FC<ImpactCardProps> = React.memo(
 
 ImpactCard.displayName = 'ImpactCard';
 
-/* eslint-disable react-native/no-unused-styles */
 const styles = StyleSheet.create({
   // Container
   container: {

@@ -18,7 +18,7 @@ import type {
 } from '../types/ProjectsScreenTypes';
 
 // Main Component - Now much smaller
-const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
+const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
   const {
     activeTab,
     setActiveTab,
@@ -112,6 +112,8 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = () => {
     </SafeAreaView>
   );
 };
+
+const ProjectsScreen = React.memo(ProjectsScreenComponent);
 
 export default ProjectsScreen;
 

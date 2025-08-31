@@ -15,7 +15,7 @@ export const useProfessionalAnimations = () => {
 
   useEffect(() => {
     // Clean professional animation sequence
-    Animated.sequence([
+    void Animated.sequence([
       // Header fade in
       Animated.timing(headerFade, {
         toValue: 1,
@@ -43,7 +43,7 @@ export const useProfessionalAnimations = () => {
 
     // Animazione continua di pulsazione per le statistiche
     const startStatsAnimation = () => {
-      Animated.sequence([
+      void Animated.sequence([
         Animated.timing(statsAnimation, {
           toValue: 1.05,
           duration: 2000,

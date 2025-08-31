@@ -71,7 +71,6 @@ export const createTextStyles = (
 export const createImageStyles = (
   colors: ReturnType<typeof useTheme>['colors']
 ) =>
-  /* eslint-disable react-native/no-unused-styles */
   StyleSheet.create({
     // Tutti questi stili sono utilizzati nel componente HeaderImageSection
     // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
@@ -138,7 +137,6 @@ export const createImageStyles = (
 export const createMissionStyles = (
   colors: ReturnType<typeof useTheme>['colors']
 ) =>
-  /* eslint-disable react-native/no-unused-styles */
   StyleSheet.create({
     // Tutti questi stili sono utilizzati nel componente HeaderMissionSection
     // ma ESLint non riesce a rilevarlo perché vengono passati tramite props

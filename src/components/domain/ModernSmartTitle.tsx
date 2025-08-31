@@ -8,9 +8,9 @@ import {
   Text,
 } from 'react-native';
 import { PerfectContainer } from '../ui';
-import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 import { findDeviceByWidth } from '../../shared/constants/deviceResolutionsDatabase';
 import { scaleFont } from '../../shared/constants/responsiveSystem';
+import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
 // ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS + SISTEMA RESPONSIVE
 const createModernTitleStyles = (responsiveSpacing: {
@@ -22,7 +22,6 @@ const createModernTitleStyles = (responsiveSpacing: {
   logoMargin: number;
   stackSpacing: number;
 }) =>
-  /* eslint-disable react-native/no-unused-styles */
   StyleSheet.create({
     container: {
       alignItems: 'center',
@@ -62,7 +61,6 @@ const createModernTitleStyles = (responsiveSpacing: {
       ...HomeHeaderDesignTokens.shadows.light,
     },
   });
-/* eslint-enable react-native/no-unused-styles */
 
 // Props per ModernSmartTitle
 export interface ModernSmartTitleProps {
@@ -220,6 +218,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               <View style={modernTitleStyles.titleSeparator}>
                 <View style={modernTitleStyles.separatorLine} />
                 <Image
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   source={require('../../../assets/icons/app/logo.png')}
                   style={modernTitleStyles.separatorLogo}
                   resizeMode="contain"

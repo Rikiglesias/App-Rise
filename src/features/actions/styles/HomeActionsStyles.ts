@@ -118,7 +118,6 @@ export const createIconStyles = (
   });
 
 export const createTextStyles = (colors: typeof Colors) =>
-  /* eslint-disable react-native/no-unused-styles */
   StyleSheet.create({
     textContainer: {
       flex: 1,
@@ -148,7 +147,6 @@ export const createTextStyles = (colors: typeof Colors) =>
       letterSpacing: Typography.letterSpacing.normal,
     },
   });
-/* eslint-enable react-native/no-unused-styles */
 
 export const createOverlayStyles = (colors: typeof Colors) =>
   StyleSheet.create({

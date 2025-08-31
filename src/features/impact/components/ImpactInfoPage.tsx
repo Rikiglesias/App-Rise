@@ -1,8 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { PlatformScrollView } from '../../../components/ui';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { PlatformScrollView } from '../../../components/ui';
 
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { Colors, Spacing, Typography } from '../../../shared/constants';

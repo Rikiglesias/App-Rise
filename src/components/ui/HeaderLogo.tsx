@@ -2,6 +2,7 @@ import { Image, StyleSheet, View } from 'react-native';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
+import appIcon from '../../../assets/icons/app/app-icon.jpg';
 
 const HeaderLogo = () => {
   const { colors } = useTheme();
@@ -9,8 +10,7 @@ const HeaderLogo = () => {
   return (
     <View style={[styles.container, { backgroundColor: colors.glass.medium }]}>
       <Image
-        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment
-        source={require('../../../assets/icons/app/app-icon.jpg') as number}
+        source={appIcon as number}
         style={styles.logo}
         resizeMode="contain"
       />

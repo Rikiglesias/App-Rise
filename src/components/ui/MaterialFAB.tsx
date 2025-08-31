@@ -1,15 +1,15 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import { Platform, Animated, StyleSheet, View } from 'react-native';
 
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
-import { PerfectText } from './PerfectText';
 import {
   getAndroidMaterialProps,
   MaterialColors,
   MaterialMotion,
 } from '../../shared/constants/materialDesignTokens';
+import { PerfectText } from './PerfectText';
 
 interface MaterialFABProps {
   onPress?: () => void;
@@ -26,7 +26,7 @@ interface MaterialFABProps {
  * Implementa tutte le specifiche Material Design per Android
  * iOS: usa il PremiumFloatingButton esistente (zero cambiamenti)
  */
-export const MaterialFAB: React.FC<MaterialFABProps> = ({
+const MaterialFABComponent: React.FC<MaterialFABProps> = ({
   onPress,
   icon = 'plus',
   label,
@@ -40,8 +40,8 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
 
   // REACT HOOKS: Sempre chiamati in ordine consistente
   const handlePressIn = useCallback(() => {
-    buttonPress();
-    Animated.timing(scaleAnim, {
+    void buttonPress();
+    void Animated.timing(scaleAnim, {
       toValue: 0.95,
       duration: MaterialMotion.duration.short1,
       useNativeDriver: true,
@@ -49,7 +49,7 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
   }, [buttonPress, scaleAnim]);
 
   const handlePressOut = useCallback(() => {
-    Animated.timing(scaleAnim, {
+    void Animated.timing(scaleAnim, {
       toValue: 1,
       duration: MaterialMotion.duration.short2,
       useNativeDriver: true,
@@ -62,16 +62,8 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
     }
   }, [disabled, onPress]);
 
-  // iOS: rimanda al componente esistente (mantieni comportamento)
-  if (Platform.OS === 'ios') {
-    // Qui potresti importare e usare PremiumFloatingButton
-    // return <PremiumFloatingButton onPress={onPress} />;
-    // Per ora, renderizziamo null su iOS per non duplicare
-    return null;
-  }
-
-  // Configurazioni per variant
-  const getVariantConfig = () => {
+  // Configurazioni per variant (memoized)
+  const variantConfig = useMemo(() => {
     switch (variant) {
       case 'primary':
         return {
@@ -109,10 +101,10 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
           elevation: 'level3' as const,
         };
     }
-  };
+  }, [variant]);
 
-  // Configurazioni per size
-  const getSizeConfig = () => {
+  // Configurazioni per size (memoized)
+  const sizeConfig = useMemo(() => {
     switch (size) {
       case 'small':
         return {
@@ -144,10 +136,10 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
           iconSize: 24,
         };
     }
-  };
+  }, [size, label]);
 
-  // Configurazioni per position
-  const getPositionStyle = () => {
+  // Configurazioni per position (memoized)
+  const positionStyle = useMemo(() => {
     const baseStyle = {
       position: 'absolute' as const,
       bottom: 16,
@@ -164,29 +156,39 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
       default:
         return { ...baseStyle, right: 16 };
     }
-  };
+  }, [position]);
 
-  const variantConfig = getVariantConfig();
-  const sizeConfig = getSizeConfig();
-  const positionStyle = getPositionStyle();
+  const containerStyle = useMemo(
+    () => ({
+      ...positionStyle,
+      width: sizeConfig.width ?? sizeConfig.minWidth,
+      height: sizeConfig.height,
+      borderRadius: sizeConfig.borderRadius,
+      backgroundColor: variantConfig.backgroundColor,
+      ...getAndroidMaterialProps(variantConfig.elevation),
+      opacity: disabled ? 0.38 : 1,
+    }),
+    [positionStyle, sizeConfig, variantConfig, disabled]
+  );
 
-  const containerStyle = {
-    ...positionStyle,
-    width: sizeConfig.width ?? sizeConfig.minWidth,
-    height: sizeConfig.height,
-    borderRadius: sizeConfig.borderRadius,
-    backgroundColor: variantConfig.backgroundColor,
-    ...getAndroidMaterialProps(variantConfig.elevation),
-    opacity: disabled ? 0.38 : 1,
-  };
+  const contentStyle = useMemo(
+    () => ({
+      flex: 1,
+      flexDirection: 'row' as const,
+      alignItems: 'center' as const,
+      justifyContent: 'center' as const,
+      paddingHorizontal: sizeConfig.paddingHorizontal ?? 0,
+    }),
+    [sizeConfig.paddingHorizontal]
+  );
 
-  const contentStyle = {
-    flex: 1,
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    paddingHorizontal: sizeConfig.paddingHorizontal ?? 0,
-  };
+  // iOS: rimanda al componente esistente (mantieni comportamento)
+  if (Platform.OS === 'ios') {
+    // Qui potresti importare e usare PremiumFloatingButton
+    // return <PremiumFloatingButton onPress={onPress} />;
+    // Per ora, renderizziamo null su iOS per non duplicare
+    return null;
+  }
 
   return (
     <Animated.View
@@ -250,4 +252,6 @@ const styles = StyleSheet.create({
   },
 });
 
+// Memoized component per ottimizzazioni performance
+export const MaterialFAB = React.memo(MaterialFABComponent);
 export default MaterialFAB;

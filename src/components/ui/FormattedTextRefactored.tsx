@@ -231,7 +231,9 @@ export const FormattedText: React.FC<FormattedTextProps> = ({
       writingDirection:
         detectTextContent(textString) === 'arabic' ? 'rtl' : 'ltr',
     }),
-    ...(Array.isArray(style) ? Object.assign({}, ...style) : style),
+    ...(Array.isArray(style)
+      ? (Object.assign({}, ...style) as TextStyle)
+      : (style as TextStyle)),
   };
 
   return (

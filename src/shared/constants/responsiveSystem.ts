@@ -78,38 +78,48 @@ const FONT_SCALE = getFontScale();
 // 🎯 HYBRID SCALING SYSTEM
 export const ScalingFactors = {
   // Base scaling (logical reference approach)
-  base: DEVICE_WIDTH / LOGICAL_REFERENCE.width,
+  get base() {
+    const { width } = getDimensions();
+    return width / LOGICAL_REFERENCE.width;
+  },
 
   // Conservative scaling (evita overflow)
-  conservative: Math.min(
-    DEVICE_WIDTH / LOGICAL_REFERENCE.width,
-    DEVICE_HEIGHT / LOGICAL_REFERENCE.height
-  ),
+  get conservative() {
+    const { width, height } = getDimensions();
+    return Math.min(
+      width / LOGICAL_REFERENCE.width,
+      height / LOGICAL_REFERENCE.height
+    );
+  },
 
   // Content-aware scaling (Netflix approach)
-  content: (() => {
-    const scale = DEVICE_WIDTH / LOGICAL_REFERENCE.width;
-    // Assicura che il contenuto rimanga sempre leggibile
+  get content() {
+    const { width } = getDimensions();
+    const scale = width / LOGICAL_REFERENCE.width;
     return Math.min(Math.max(scale, 0.9), 1.2);
-  })(),
+  },
 
   // SP-like behavior (Apple approach)
-  font: (() => {
+  get font() {
     const userScale = Math.min(
-      Math.max(FONT_SCALE, INDUSTRY_STANDARDS.minScaleFactor),
+      Math.max(getFontScale(), INDUSTRY_STANDARDS.minScaleFactor),
       INDUSTRY_STANDARDS.maxScaleFactor
     );
-    const deviceScale = DEVICE_WIDTH / LOGICAL_REFERENCE.width;
+    const { width } = getDimensions();
+    const deviceScale = width / LOGICAL_REFERENCE.width;
     return deviceScale * userScale;
-  })(),
+  },
 
   // Density scaling
-  density: DEVICE_SCALE / LOGICAL_REFERENCE.scale,
+  get density() {
+    return getPixelRatio() / LOGICAL_REFERENCE.scale;
+  },
 } as const;
 
 // 🧮 MILLIMETRIC SCALE (universale: iPhone 15 393px con clamp 0.85-1.4)
 export const getMillimetricScale = (): number => {
-  const raw = DEVICE_WIDTH / LOGICAL_REFERENCE.width;
+  const { width } = getDimensions();
+  const raw = width / LOGICAL_REFERENCE.width;
   if (raw < 0.85) return 0.85;
   if (raw > 1.4) return 1.4;
   return raw;
@@ -207,35 +217,17 @@ export const scaleSize = (
  * - Supporta zoom accessibilità fino ai limiti calcolati
  */
 export const scaleFont = (size: number): number => {
-  // 🎯 SISTEMA MILLIMETRICO UNIVERSALE UNIFICATO
-  // Formula unificata per font + spacing + layout
-  // Database completo: src/shared/constants/deviceResolutionsDatabase.ts
-
-  const width = DEVICE_WIDTH;
+  // 🎯 SISTEMA MILLIMETRICO UNIVERSALE UNIFICATO (runtime-aware)
+  const { width } = getDimensions();
   const referenceWidth = 393; // iPhone 15 = RIFERIMENTO UNIVERSALE CORRETTO
 
-  // Formula lineare millimetrica verificata su dispositivi reali
   let scale = width / referenceWidth;
-
-  // Limiti basati sui dispositivi reali più estremi:
-  // 0.85: iPhone SE (375px) → 38.043px per scaleFont(42)
-  // 1.4: iPad Pro (1024px+) → 58.8px per scaleFont(42)
   if (scale < 0.85) scale = 0.85;
   if (scale > 1.4) scale = 1.4;
 
   const scaled = size * scale;
   const minFont = INDUSTRY_STANDARDS.minReadableFont;
-
-  // Garantisce leggibilità minima
   const finalSize = Math.max(scaled, minFont);
-
-  // ✅ PRECISIONE DECIMALE MILLIMETRICA (NO Math.round)
-  // Esempi reali per scaleFont(48): SISTEMA UNIFICATO FONT + SPACING
-  // iPhone SE (375px): 45.802px (proporzione identica a spacing)
-  // Samsung S24 (360px): 43.970px (proporzione identica a spacing)
-  // iPhone 15 (393px): 48.000px (RIFERIMENTO UNIVERSALE CORRETTO)
-  // iPhone Plus (430px): 52.518px (proporzione identica a spacing)
-  // iPad Pro (768px): 93.766px (proporzione identica a spacing)
   return finalSize;
 };
 
@@ -260,90 +252,99 @@ export const getCurrentBreakpoint = ():
   | 'large'
   | 'xlarge'
   | 'xxlarge' => {
-  if (DEVICE_WIDTH <= DeviceBreakpoints.compact.maxWidth) return 'compact';
-  if (DEVICE_WIDTH <= DeviceBreakpoints.standard.maxWidth) return 'standard';
-  if (DEVICE_WIDTH <= DeviceBreakpoints.large.maxWidth) return 'large';
-  if (DEVICE_WIDTH <= DeviceBreakpoints.xlarge.maxWidth) return 'xlarge';
+  const currentWidth = getDimensions().width;
+  if (currentWidth <= DeviceBreakpoints.compact.maxWidth) return 'compact';
+  if (currentWidth <= DeviceBreakpoints.standard.maxWidth) return 'standard';
+  if (currentWidth <= DeviceBreakpoints.large.maxWidth) return 'large';
+  if (currentWidth <= DeviceBreakpoints.xlarge.maxWidth) return 'xlarge';
   return 'xxlarge';
 };
 
 // 📐 DESIGN TOKENS (8dp grid system)
 export const DesignTokens = {
   // Layout tokens (8dp grid)
-  layout: {
-    unit: INDUSTRY_STANDARDS.baseUnit, // 8dp base unit
-    screenPadding: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp
-    sectionSpacing: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp
-    cardSpacing: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp
-    dividerSpacing: scaleSpacing(INDUSTRY_STANDARDS.baseUnit), // 8dp
+  get layout() {
+    return {
+      unit: INDUSTRY_STANDARDS.baseUnit, // 8dp base unit
+      screenPadding: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp
+      sectionSpacing: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp
+      cardSpacing: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp
+      dividerSpacing: scaleSpacing(INDUSTRY_STANDARDS.baseUnit), // 8dp
+    };
   },
 
   // 📱 CONTAINER LAYOUT TOKENS (Professional Typography Guide)
-  containers: {
-    // Text block widths (consistent across all devices)
-    textBlock: {
-      // Responsive percentage (works on all form factors)
-      responsive: '90%',
-      // Fixed widths for larger screens (tablet optimization)
-      maxPhone: scaleSize(350), // ~90% di iPhone standard
-      maxTablet: scaleSize(428), // Optimal reading width on tablets
-      maxDesktop: scaleSize(512), // Max reading width on large screens
-    },
+  get containers() {
+    return {
+      // Text block widths (consistent across all devices)
+      textBlock: {
+        // Responsive percentage (works on all form factors)
+        responsive: '90%',
+        // Fixed widths for larger screens (tablet optimization)
+        maxPhone: scaleSize(350), // ~90% di iPhone standard
+        maxTablet: scaleSize(428), // Optimal reading width on tablets
+        maxDesktop: scaleSize(512), // Max reading width on large screens
+      },
 
-    // Container padding (constant in dp, scaled consistently)
-    padding: {
-      internal: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp interno costante
-      external: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp esterno costante
-      compact: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp per spazi ridotti
-      generous: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 4), // 32dp per spazi ampi
-    },
+      // Container padding (constant in dp, scaled consistently)
+      padding: {
+        internal: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp interno costante
+        external: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp esterno costante
+        compact: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp per spazi ridotti
+        generous: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 4), // 32dp per spazi ampi
+      },
 
-    // Baseline grid (4dp baseline for consistent rhythm)
-    baseline: {
-      unit: INDUSTRY_STANDARDS.baseUnit / 2, // 4dp baseline
-      lineHeight: (fontSize: number) => Math.round(fontSize * 1.15), // Proportional line-height
-      rhythm: scaleSpacing(INDUSTRY_STANDARDS.baseUnit / 2), // 4dp rhythm
-    },
+      // Baseline grid (4dp baseline for consistent rhythm)
+      baseline: {
+        unit: INDUSTRY_STANDARDS.baseUnit / 2, // 4dp baseline
+        lineHeight: (fontSize: number) => Math.round(fontSize * 1.15), // Proportional line-height
+        rhythm: scaleSpacing(INDUSTRY_STANDARDS.baseUnit / 2), // 4dp rhythm
+      },
 
-    // Safe area handling
-    safeArea: {
-      horizontal: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp orizzontale
-      vertical: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp verticale
-      // Dynamic safe area (calculated at runtime)
-      dynamic: true,
-    },
+      // Safe area handling
+      safeArea: {
+        horizontal: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp orizzontale
+        vertical: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp verticale
+        // Dynamic safe area (calculated at runtime)
+        dynamic: true,
+      },
+    };
   },
 
   // Component tokens (standardized)
-  components: {
-    buttonHeight: {
-      compact: scaleSize(INDUSTRY_STANDARDS.baseUnit * 5), // 40dp
-      standard: scaleSize(INDUSTRY_STANDARDS.baseUnit * 6), // 48dp
-      large: scaleSize(INDUSTRY_STANDARDS.baseUnit * 7), // 56dp
-    },
+  get components() {
+    return {
+      buttonHeight: {
+        compact: scaleSize(INDUSTRY_STANDARDS.baseUnit * 5), // 40dp
+        standard: scaleSize(INDUSTRY_STANDARDS.baseUnit * 6), // 48dp
+        large: scaleSize(INDUSTRY_STANDARDS.baseUnit * 7), // 56dp
+      },
 
-    iconSize: {
-      small: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2.5), // 20dp
-      medium: scaleSize(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp
-      large: scaleSize(INDUSTRY_STANDARDS.baseUnit * 4), // 32dp
-      xlarge: scaleSize(INDUSTRY_STANDARDS.baseUnit * 5), // 40dp
-    },
+      iconSize: {
+        small: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2.5), // 20dp
+        medium: scaleSize(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp
+        large: scaleSize(INDUSTRY_STANDARDS.baseUnit * 4), // 32dp
+        xlarge: scaleSize(INDUSTRY_STANDARDS.baseUnit * 5), // 40dp
+      },
 
-    touchTarget: {
-      minimum: scaleSize(INDUSTRY_STANDARDS.minTouchTarget), // 44dp (Apple requirement)
-      comfortable: scaleSize(INDUSTRY_STANDARDS.baseUnit * 6), // 48dp
-      generous: scaleSize(INDUSTRY_STANDARDS.baseUnit * 7), // 56dp
-    },
+      touchTarget: {
+        minimum: scaleSize(INDUSTRY_STANDARDS.minTouchTarget), // 44dp (Apple requirement)
+        comfortable: scaleSize(INDUSTRY_STANDARDS.baseUnit * 6), // 48dp
+        generous: scaleSize(INDUSTRY_STANDARDS.baseUnit * 7), // 56dp
+      },
+    };
   },
 
   // Border radius tokens (8dp based)
-  borderRadius: {
-    none: 0,
-    small: scaleSize(INDUSTRY_STANDARDS.baseUnit * 0.75), // 6dp
-    medium: scaleSize(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp
-    large: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp
-    xlarge: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2.5), // 20dp
-    full: 9999,
+  get borderRadius() {
+    return {
+      none: 0,
+      small: scaleSize(INDUSTRY_STANDARDS.baseUnit * 0.75), // 6dp
+      medium: scaleSize(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp
+      large: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp
+      xlarge: scaleSize(INDUSTRY_STANDARDS.baseUnit * 2.5), // 20dp
+      full: 9999,
+    };
   },
 } as const;
 
@@ -389,111 +390,125 @@ export const RTLTokens = {
 // 🎨 TYPOGRAPHY TOKENS (Apple + Netflix approach)
 export const TypographyTokens = {
   // Text styles (Apple-inspired with Netflix constraints)
-  styles: {
-    // Display styles (grandi schermi)
-    display: {
-      large: scaleFont(57), // ~Display Large Material
-      medium: scaleFont(45), // ~Display Medium Material
-      small: scaleFont(32), // RIDOTTO: per "Il Nostro Impatto" e "Fai la Differenza" (era 38)
-    },
+  get styles() {
+    return {
+      // Display styles (grandi schermi)
+      display: {
+        large: scaleFont(57), // ~Display Large Material
+        medium: scaleFont(45), // ~Display Medium Material
+        small: scaleFont(32), // RIDOTTO: per "Il Nostro Impatto" e "Fai la Differenza" (era 38)
+      },
 
-    // Headline styles
-    headline: {
-      large: scaleFont(30), // RIDOTTO: finale 30 (era 35, ancora troppo grande)
-      medium: scaleFont(28), // ~Headline Medium Material
-      small: scaleFont(24), // ~Headline Small Material
-    },
+      // Headline styles
+      headline: {
+        large: scaleFont(30), // RIDOTTO: finale 30 (era 35, ancora troppo grande)
+        medium: scaleFont(28), // ~Headline Medium Material
+        small: scaleFont(24), // ~Headline Small Material
+      },
 
-    // Title styles (più usati in UI)
-    title: {
-      large: scaleFont(22), // RIDOTTO: per "Unisciti a noi nella lotta contro la fame nel mondo" su 2 righe (era 26)
-      medium: scaleFont(16), // ~Title Medium Material
-      small: scaleFont(14), // ~Title Small Material
-    },
+      // Title styles (più usati in UI)
+      title: {
+        large: scaleFont(22), // RIDOTTO: per "Unisciti a noi nella lotta contro la fame nel mondo" su 2 righe (era 26)
+        medium: scaleFont(16), // ~Title Medium Material
+        small: scaleFont(14), // ~Title Small Material
+      },
 
-    // Body styles (testo principale)
-    body: {
-      large: scaleFont(16), // ~Body Large Material
-      medium: scaleFont(15), // RIDOTTO: per "Prodotti/Creati nel 2024" (era 16)
-      small: scaleFont(12), // ~Body Small Material
-    },
+      // Body styles (testo principale)
+      body: {
+        large: scaleFont(16), // ~Body Large Material
+        medium: scaleFont(15), // RIDOTTO: per "Prodotti/Creati nel 2024" (era 16)
+        small: scaleFont(12), // ~Body Small Material
+      },
 
-    // Label styles (UI labels)
-    label: {
-      large: scaleFont(14), // ~Label Large Material
-      medium: scaleFont(12), // ~Label Medium Material
-      small: scaleFont(11), // ~Label Small Material
-    },
+      // Label styles (UI labels)
+      label: {
+        large: scaleFont(14), // ~Label Large Material
+        medium: scaleFont(12), // ~Label Medium Material
+        small: scaleFont(11), // ~Label Small Material
+      },
+    };
   },
 
   // Line heights (relative, come Apple) + baseline grid
-  lineHeights: {
-    tight: 1.25, // 125%
-    snug: 1.375, // 137.5%
-    normal: 1.5, // 150%
-    relaxed: 1.625, // 162.5%
-    loose: 2.0, // 200%
-    // Baseline grid integrated
-    baseline: (fontSize: number) => Math.round(fontSize * 1.15), // Proportional to baseline
+  get lineHeights() {
+    return {
+      tight: 1.25, // 125%
+      snug: 1.375, // 137.5%
+      normal: 1.5, // 150%
+      relaxed: 1.625, // 162.5%
+      loose: 2.0, // 200%
+      // Baseline grid integrated
+      baseline: (fontSize: number) => Math.round(fontSize * 1.15), // Proportional to baseline
+    };
   },
 
   // Letter spacing (responsive)
-  letterSpacing: {
-    tight: scaleSize(-0.5),
-    normal: 0,
-    wide: scaleSize(0.5),
+  get letterSpacing() {
+    return {
+      tight: scaleSize(-0.5),
+      normal: 0,
+      wide: scaleSize(0.5),
+    };
   },
 
   // Content constraints (Responsive approach)
-  constraints: {
-    minReadable: INDUSTRY_STANDARDS.minReadableFont,
-    maxReadableSmall: INDUSTRY_STANDARDS.maxReadableFontSmall,
-    maxReadableLarge: INDUSTRY_STANDARDS.maxReadableFontLarge,
-    maxReadableXXL: INDUSTRY_STANDARDS.maxReadableFontXXL,
-    optimalLineLength: INDUSTRY_STANDARDS.optimalLineLength,
-    maxLineLength: INDUSTRY_STANDARDS.maxLineLength,
+  get constraints() {
+    return {
+      minReadable: INDUSTRY_STANDARDS.minReadableFont,
+      maxReadableSmall: INDUSTRY_STANDARDS.maxReadableFontSmall,
+      maxReadableLarge: INDUSTRY_STANDARDS.maxReadableFontLarge,
+      maxReadableXXL: INDUSTRY_STANDARDS.maxReadableFontXXL,
+      optimalLineLength: INDUSTRY_STANDARDS.optimalLineLength,
+      maxLineLength: INDUSTRY_STANDARDS.maxLineLength,
+    };
   },
 } as const;
 
 // 📊 BREAKPOINT LAYOUT STRATEGIES
 export const BreakpointLayouts = {
   // Phone strategies (≤ 480dp)
-  phone: {
-    container: {
-      maxWidth: DesignTokens.containers.textBlock.responsive, // 90% viewport
-      padding: DesignTokens.containers.padding.internal,
-      margin: DesignTokens.containers.padding.compact,
-    },
-    text: {
-      alignment: RTLTokens.textAlign.start,
-      direction: RTLTokens.writingDirection.ltr,
-    },
+  get phone() {
+    return {
+      container: {
+        maxWidth: DesignTokens.containers.textBlock.responsive, // 90% viewport
+        padding: DesignTokens.containers.padding.internal,
+        margin: DesignTokens.containers.padding.compact,
+      },
+      text: {
+        alignment: RTLTokens.textAlign.start,
+        direction: RTLTokens.writingDirection.ltr,
+      },
+    };
   },
 
   // Tablet strategies (481-900dp)
-  tablet: {
-    container: {
-      maxWidth: DesignTokens.containers.textBlock.maxTablet, // 428dp fisso
-      padding: DesignTokens.containers.padding.internal,
-      margin: DesignTokens.containers.padding.external,
-    },
-    text: {
-      alignment: RTLTokens.textAlign.center, // Center on tablet
-      direction: RTLTokens.writingDirection.ltr,
-    },
+  get tablet() {
+    return {
+      container: {
+        maxWidth: DesignTokens.containers.textBlock.maxTablet, // 428dp fisso
+        padding: DesignTokens.containers.padding.internal,
+        margin: DesignTokens.containers.padding.external,
+      },
+      text: {
+        alignment: RTLTokens.textAlign.center, // Center on tablet
+        direction: RTLTokens.writingDirection.ltr,
+      },
+    };
   },
 
   // Desktop strategies (>900dp)
-  desktop: {
-    container: {
-      maxWidth: DesignTokens.containers.textBlock.maxDesktop, // 512dp fisso
-      padding: DesignTokens.containers.padding.generous,
-      margin: DesignTokens.containers.padding.generous,
-    },
-    text: {
-      alignment: RTLTokens.textAlign.center, // Center on desktop
-      direction: RTLTokens.writingDirection.ltr,
-    },
+  get desktop() {
+    return {
+      container: {
+        maxWidth: DesignTokens.containers.textBlock.maxDesktop, // 512dp fisso
+        padding: DesignTokens.containers.padding.generous,
+        margin: DesignTokens.containers.padding.generous,
+      },
+      text: {
+        alignment: RTLTokens.textAlign.center, // Center on desktop
+        direction: RTLTokens.writingDirection.ltr,
+      },
+    };
   },
 } as const;
 
@@ -608,20 +623,45 @@ export const DeviceInfo = {
 
 // 📏 SPACING SYSTEM (8dp grid)
 export const SpacingTokens = {
-  // Base spacing (8dp grid)
-  0: 0,
-  1: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 0.5), // 4dp
-  2: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1), // 8dp
-  3: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5), // 12dp
-  4: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2), // 16dp
-  5: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2.5), // 20dp
-  6: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 3), // 24dp
-  8: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 4), // 32dp
-  10: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 5), // 40dp
-  12: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 6), // 48dp
-  16: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 8), // 64dp
-  20: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 10), // 80dp
-  24: scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 12), // 96dp
+  get '0'() {
+    return 0;
+  },
+  get '1'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 0.5);
+  },
+  get '2'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1);
+  },
+  get '3'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 1.5);
+  },
+  get '4'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2);
+  },
+  get '5'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 2.5);
+  },
+  get '6'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 3);
+  },
+  get '8'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 4);
+  },
+  get '10'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 5);
+  },
+  get '12'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 6);
+  },
+  get '16'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 8);
+  },
+  get '20'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 10);
+  },
+  get '24'() {
+    return scaleSpacing(INDUSTRY_STANDARDS.baseUnit * 12);
+  },
 } as const;
 
 // 🎨 SHADOW TOKENS (responsive)

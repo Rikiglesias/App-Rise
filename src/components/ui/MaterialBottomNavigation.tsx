@@ -44,7 +44,7 @@ export const MaterialBottomNavigation: React.FC<
 
   const handleItemPress = useCallback(
     (key: string) => {
-      buttonPress();
+      void buttonPress();
       onItemPress(key);
     },
     [buttonPress, onItemPress]

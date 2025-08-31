@@ -41,7 +41,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
     animatedValue.setValue(0);
 
     // Start progress animation
-    Animated.timing(animatedValue, {
+    void Animated.timing(animatedValue, {
       toValue: progress,
       duration,
       useNativeDriver: false, // We're animating SVG props

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
@@ -22,7 +21,9 @@ interface Props {
   readonly navigation: Impatto2024ScreenNavigationProp;
 }
 
-const Impatto2024Screen: React.FC<Props> = ({ navigation: _navigation }) => {
+const Impatto2024ScreenComponent: React.FC<Props> = ({
+  navigation: _navigation,
+}) => {
   return (
     <SafeAreaView style={styles.container}>
       <PlatformScrollView>
@@ -290,5 +291,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+const Impatto2024Screen = React.memo(Impatto2024ScreenComponent);
 
 export default Impatto2024Screen;
