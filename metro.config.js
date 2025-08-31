@@ -98,11 +98,8 @@ config.resolver = {
 
 config.serializer = {
   ...config.serializer,
-  // Ottimizzazioni bundle splitting
-  createModuleIdFactory: () => {
-    let nextId = 0;
-    return () => nextId++;
-  },
+  // Rimuoviamo la createModuleIdFactory personalizzata per evitare ID non stabili
+  // che possono causare "Requiring unknown module <id>" con Hermes/HMR/OTA
   // Processamento moduli ottimizzato
   processModuleFilter: (module) => {
     // Escludi moduli di test dal bundle production
