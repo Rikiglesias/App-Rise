@@ -123,7 +123,7 @@ export default {
     },
 
     // Plugin richiesti
-    plugins: ['expo-secure-store', 'expo-updates'],
+    plugins: ['expo-secure-store', 'expo-updates', 'expo-font'],
 
     // Aggiornamenti OTA
     updates: {
