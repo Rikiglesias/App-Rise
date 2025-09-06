@@ -15,6 +15,12 @@ export default {
       backgroundColor: '#FFFFFF',
     },
 
+    // Configurazioni web
+    web: {
+      favicon: './assets/icons/app/app-icon.jpg',
+      bundler: 'metro',
+    },
+
     // Configurazioni sicurezza e ambiente
     extra: {
       apiUrl:

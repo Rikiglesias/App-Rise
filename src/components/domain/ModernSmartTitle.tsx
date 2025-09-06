@@ -17,7 +17,7 @@ const createModernTitleStyles = (responsiveSpacing: {
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingTop: 40, // ← SPAZIO SOPRA IL TITOLO AGGIUNTO
+      paddingTop: responsiveSpacing.containerPadding + 10, // ← SPAZIO SOPRA RESPONSIVE
       paddingBottom: 0,
       paddingHorizontal: responsiveSpacing.containerPadding, // ← MATEMATICO DIRETTO
       width: '100%', // ← LARGHEZZA CONTROLLATA
@@ -64,18 +64,17 @@ export interface ModernSmartTitleProps {
 // ✨ PERFECT SYSTEM INTEGRATION - MODERN TITLE COMPONENT
 export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform }) => {
-    // ✅ PERFECT SYSTEM - iPhone 15 reference values (will be scaled automatically)
+    // ✅ PERFECT SYSTEM - Responsive scaling automatico
     const responsiveSpacing = React.useMemo(() => {
-      // iPhone 15 reference values - Perfect System will handle scaling
       return {
-        containerPadding: 30,
-        separatorTopMargin: 8,
-        separatorBottomMargin: 4,
-        logoSize: 53,
-        separatorLineWidth: 104,
-        logoMargin: 15,
-        stackSpacing: 8,
-      }; // Perfect System will handle all scaling automatically
+        containerPadding: scaleFont(30),
+        separatorTopMargin: scaleFont(33), // ← ALLONTANA SEPARATORE DAL TITOLO
+        separatorBottomMargin: scaleFont(0), // ← AVVICINA IMMAGINE ALLA LINEA
+        logoSize: scaleFont(53),
+        separatorLineWidth: scaleFont(104),
+        logoMargin: scaleFont(15),
+        stackSpacing: scaleFont(8),
+      };
     }, []);
 
     const modernTitleStyles = React.useMemo(
@@ -123,26 +122,45 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               gap={responsiveSpacing.stackSpacing}
               style={{ alignItems: 'center' }}
             >
-              {/* TITOLO COMPLETO - TEXT NATIVO PER CONTROLLO ASSOLUTO */}
-              <Text
-                allowFontScaling={false} // ← BLOCCA QUALSIASI SCALING
-                numberOfLines={2} // ← MASSIMO 2 RIGHE
-                adjustsFontSizeToFit={true} // ← AUTO-ADJUST PER 2 RIGHE
-                minimumFontScale={0.8} // ← RIDUZIONE MINIMA PER FIT
-                style={{
-                  fontSize: scaleFont(48), // ← DIMENSIONE SCALATA UNA VOLTA SOLA
-                  fontWeight: '900', // ← BLACK WEIGHT
-                  textAlign: 'center',
-                  color: HomeHeaderDesignTokens.colors.primary,
-                  lineHeight: scaleFont(52), // ← LINE HEIGHT PROPORZIONALE
-                }}
-              >
-                Rise Against{'\n'}
-                <Text style={{ color: '#DC2626' }}>Hunger </Text>
-                <Text style={{ color: HomeHeaderDesignTokens.colors.dark }}>
-                  Italia
+              {/* TITOLO COMPLETO - LAYOUT ASSOLUTO PER CONTROLLO TOTALE INTERLINEA */}
+              <View style={{ alignItems: 'center', height: scaleFont(80) }}>
+                <Text
+                  allowFontScaling={false}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit={true}
+                  minimumFontScale={0.65}
+                  style={{
+                    fontSize: scaleFont(48),
+                    fontWeight: '900',
+                    textAlign: 'center',
+                    color: HomeHeaderDesignTokens.colors.primary,
+                    position: 'absolute',
+                    top: 0,
+                    width: '100%',
+                  }}
+                >
+                  Rise Against
                 </Text>
-              </Text>
+                <Text
+                  allowFontScaling={false}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit={true}
+                  minimumFontScale={0.65}
+                  style={{
+                    fontSize: scaleFont(48),
+                    fontWeight: '900',
+                    textAlign: 'center',
+                    position: 'absolute',
+                    top: scaleFont(55), // ← CONTROLLO ASSOLUTO POSIZIONE SECONDA RIGA
+                    width: '100%',
+                  }}
+                >
+                  <Text style={{ color: '#DC2626' }}>Hunger </Text>
+                  <Text style={{ color: HomeHeaderDesignTokens.colors.dark }}>
+                    Italia
+                  </Text>
+                </Text>
+              </View>
 
               {/* Separatore elegante con logo simbolico centrale */}
               <View style={modernTitleStyles.titleSeparator}>

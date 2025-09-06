@@ -11,6 +11,7 @@ import {
 
 import type { RootStackParamList } from '../../../navigation/types';
 import { BorderRadius, Colors, Spacing } from '../../../shared/constants';
+import { scaleFont } from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 
@@ -114,10 +115,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center' as const,
   },
   sectionDivider: {
-    height: 2,
+    height: scaleFont(2),
     backgroundColor: Colors.neutral[300],
-    width: 236, // 393 * 0.6 = 235.8, rounded to 236
-    borderRadius: 1,
+    width: scaleFont(236), // 393 * 0.6 = 235.8, rounded to 236
+    borderRadius: scaleFont(1),
     opacity: 0.8,
     shadowColor: Colors.neutral[400],
     shadowOffset: { width: 0, height: 1 },

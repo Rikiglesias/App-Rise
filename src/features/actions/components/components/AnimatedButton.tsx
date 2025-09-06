@@ -4,7 +4,15 @@ import React from 'react';
 import { Platform, View } from 'react-native';
 
 import { PlatformTouchable, PerfectText } from '../../../../components/ui';
-import { Spacing } from '../../../../shared/constants';
+import {
+  BorderColors,
+  BorderRadius,
+  Spacing,
+} from '../../../../shared/constants';
+import {
+  scaleDimensionLinear,
+  scaleSize,
+} from '../../../../shared/constants/responsiveSystem';
 import type { AnimatedButtonProps } from './ActionButtonTypes';
 
 // Componente bottone senza animazioni - PULITO
@@ -19,26 +27,27 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   <View style={fullWidth ? {} : styles.buttonContainer}>
     <PlatformTouchable activeOpacity={0.6} onPress={onPress}>
       {Platform.OS === 'android' ? (
-        // ANDROID: Container bianco con bordo colorato - ZERO sanguinamento durante animazioni
-        <View
+        // ANDROID: LinearGradient per bordi uniformi - RISOLVE PROBLEMA ANGOLI
+        <LinearGradient
+          colors={[BorderColors.brandElegant, BorderColors.brandElegant]} // Gradiente elegante uniforme
           style={{
-            backgroundColor: '#FFFFFF', // Background bianco solido
-            borderRadius: 20,
-            borderWidth: 3, // Bordo colorato esterno
-            borderColor: button.gradient[0], // Primo colore del gradiente
-            shadowColor: 'transparent', // Nessuna ombra per evitare artefatti
+            borderRadius: BorderRadius.xl,
+            padding: scaleSize(3), // Spessore bordo
+            shadowColor: 'transparent',
             elevation: 2,
-            overflow: 'hidden', // Blocca qualsiasi overflow
+            overflow: 'hidden', // RISOLVE PROBLEMA ANGOLI COPERTI
           }}
         >
           <View
             style={{
-              backgroundColor: '#FFFFFF', // Doppio layer bianco per sicurezza
+              backgroundColor: '#FFFFFF',
+              borderRadius: Math.max(0, BorderRadius.xl - scaleSize(3)), // Radius interno sicuro
               paddingVertical: Spacing[4],
               paddingHorizontal: Spacing[3],
               alignItems: 'center',
-              minHeight: 100,
+              minHeight: scaleDimensionLinear(100) - scaleSize(6), // Compenso padding
               justifyContent: 'center',
+              overflow: 'hidden', // PREVIENE CONTENUTO CHE COPRE ANGOLI
             }}
           >
             <MaterialCommunityIcons
@@ -71,12 +80,12 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
               color={iconColor}
               style={{
                 position: 'absolute',
-                top: 8,
-                right: 8,
+                top: scaleSize(8), // ← MIGRATO DA HARDCODED 8
+                right: scaleSize(8), // ← MIGRATO DA HARDCODED 8
               }}
             />
           </View>
-        </View>
+        </LinearGradient>
       ) : (
         // iOS: Mantieni il gradiente originale
         <LinearGradient colors={button.gradient} style={styles.gradientBorder}>

@@ -11,6 +11,7 @@ import {
   PlatformTouchable,
 } from '../../../../components/ui';
 import {
+  BorderRadius,
   Colors,
   Spacing,
   Typography,
@@ -157,14 +158,14 @@ const styles = StyleSheet.create({
   },
 
   gradientBorder: {
-    borderRadius: 20,
-    padding: 2,
+    borderRadius: BorderRadius.xl, // ← MIGRATO DA HARDCODED 20
+    padding: 3, // Bordo più sottile
     ...PlatformShadows.lg,
   },
 
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 18,
+    borderRadius: BorderRadius.xl - 3, // Radius interno coerente con padding
     minHeight: scaleDimensionLinear(112), // Ridotto per bottoni più corti
     paddingVertical: Spacing[2],
     paddingHorizontal: Spacing[3],

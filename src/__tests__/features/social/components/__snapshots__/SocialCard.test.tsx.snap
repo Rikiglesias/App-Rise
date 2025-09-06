@@ -42,7 +42,7 @@ exports[`SocialCard applies correct gradient colors 1`] = `
       {
         "borderRadius": 20,
         "elevation": 6,
-        "padding": 2,
+        "padding": 12,
         "shadowColor": "#DC2626",
         "shadowOffset": {
           "height": 6,
@@ -83,7 +83,7 @@ exports[`SocialCard applies correct gradient colors 1`] = `
               "backgroundColor": "#FFFFFF",
               "borderColor": "#DC2626",
               "borderRadius": 28,
-              "borderWidth": 3,
+              "borderWidth": 12,
               "elevation": 6,
               "height": 56,
               "justifyContent": "center",

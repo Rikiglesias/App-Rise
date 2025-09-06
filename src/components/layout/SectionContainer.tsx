@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import {
+  BorderColors,
   BorderRadius,
   Layout,
   Spacing,
@@ -76,7 +77,7 @@ const getVariantStyles = (
         shadowRadius: 16,
         elevation: 4,
         borderWidth: 1,
-        borderColor: colors.neutral[100],
+        borderColor: BorderColors.elegant, // ← AGGIORNATO A BORDO ELEGANTE
       };
 
     case 'glass':

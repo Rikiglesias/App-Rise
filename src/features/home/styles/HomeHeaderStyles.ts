@@ -1,5 +1,6 @@
 import { Platform, StyleSheet } from 'react-native';
 import {
+  BorderColors,
   BorderRadius,
   Colors,
   Spacing,
@@ -234,12 +235,12 @@ export const baseMissionStyles = StyleSheet.create({
     elevation: 2,
   },
   mealsBox: {
-    borderColor: '#DC2626',
+    borderColor: BorderColors.brandElegant, // ← AGGIORNATO A BORDO BRAND ELEGANTE
     shadowColor: '#DC2626',
   },
   volunteersBox: {
-    borderColor: '#1F2937',
-    shadowColor: '#1F2937',
+    borderColor: BorderColors.sophisticated, // ← AGGIORNATO A BORDO SOFISTICATO
+    shadowColor: Colors.neutral[700], // ← MIGRATO DA HARDCODED '#1F2937'
   },
   statNumber: {
     fontSize: TypographyTokens.styles.title.large,

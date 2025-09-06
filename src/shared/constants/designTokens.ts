@@ -135,6 +135,44 @@ export const BorderRadius = {
   full: 9999,
 };
 
+// 🎨 BORDER COLORS - Sistema Bilanciato per Visibilità Ottimale
+export const BorderColors = {
+  // Bordi principali - Visibilità migliorata
+  primary: Colors.neutral[200], // #E5E5E5 - Bordo standard visibile
+  secondary: Colors.neutral[300], // #D4D4D4 - Bordo più visibile
+  subtle: Colors.neutral[100], // #F5F5F5 - Bordo sottile
+
+  // Bordi neutri bilanciati
+  elegant: Colors.neutral[200], // #E5E5E5 - Grigio visibile
+  refined: Colors.neutral[300], // #D4D4D4 - Grigio più visibile
+  sophisticated: Colors.neutral[400], // #A3A3A3 - Grigio ben visibile
+
+  // Bordi semantici - Versioni bilanciate
+  success: Colors.semantic.success.light, // #D1FAE5 - Verde visibile
+  warning: Colors.semantic.warning.light, // #FEF3C7 - Ambra visibile
+  error: Colors.semantic.error.light, // #FEE2E2 - Rosso visibile
+  info: Colors.semantic.info.light, // #DBEAFE - Blu visibile
+
+  // Bordi brand - Gamma bilanciata
+  brand: Colors.primary[200], // #FECACA - Rosso pieno sottile
+  brandStrong: Colors.primary[500], // #DC2626 - Rosso pieno forte
+  brandElegant: Colors.primary[300], // #FCA5A5 - Rosso medio visibile
+
+  // Bordi interattivi - Visibilità ottimale
+  focus: Colors.primary[400], // #F87171 - Focus rosso visibile
+  hover: Colors.neutral[400], // #A3A3A3 - Hover grigio visibile
+  disabled: Colors.neutral[200], // #E5E5E5 - Disabled grigio chiaro
+
+  // Bordi glassmorphism - Bilanciati
+  glass: {
+    light: 'rgba(255, 255, 255, 0.2)',
+    medium: 'rgba(255, 255, 255, 0.25)',
+    dark: 'rgba(0, 0, 0, 0.1)',
+    primary: 'rgba(220, 38, 38, 0.2)',
+    elegant: 'rgba(31, 41, 55, 0.1)',
+  },
+};
+
 // TYPOGRAPHY SYSTEM - Now with responsive scaling
 export const Typography = {
   families: {

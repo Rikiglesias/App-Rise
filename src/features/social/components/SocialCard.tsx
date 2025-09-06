@@ -4,7 +4,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PlatformTouchable, PerfectText } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants';
-import { DesignTokens } from '../../../shared/constants/responsiveSystem';
+import {
+  DesignTokens,
+  scaleFont,
+} from '../../../shared/constants/responsiveSystem';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -114,8 +117,8 @@ const styles = {
     marginBottom: Spacing[1],
   },
   socialCardGradientBorder: {
-    borderRadius: 20,
-    padding: 2,
+    borderRadius: scaleFont(20),
+    padding: scaleFont(2),
     shadowColor: '#DC2626',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
@@ -124,7 +127,7 @@ const styles = {
   },
   socialCardWhiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 18,
+    borderRadius: scaleFont(18),
     overflow: 'hidden' as const,
   },
   socialCardContent: {
@@ -135,9 +138,9 @@ const styles = {
   socialIconContainer: {
     width: DesignTokens.components.iconSize.xlarge + 16,
     height: DesignTokens.components.iconSize.xlarge + 16,
-    borderRadius: 28,
+    borderRadius: scaleFont(28),
     backgroundColor: Colors.neutral[0],
-    borderWidth: 3,
+    borderWidth: scaleFont(3),
     borderColor: '#DC2626',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -178,7 +181,7 @@ const styles = {
   socialDescription: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
-    lineHeight: 16,
+    lineHeight: scaleFont(16),
   },
   arrowContainer: {
     padding: Spacing[1],
