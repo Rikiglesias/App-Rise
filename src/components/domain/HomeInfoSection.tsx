@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { Surface } from 'react-native-paper';
 import { PlatformTouchable, PerfectText } from '../ui';
-// import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+// Typography tokens available from design system when needed
 import {
   BorderRadius,
   Shadows,

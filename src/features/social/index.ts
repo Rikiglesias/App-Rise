@@ -2,5 +2,5 @@
 // SOCIAL FEATURE - Central Export
 // ===================================================================
 
-// export * from './components'; // Components folder empty for now
+// Components exports available when components are implemented
 export * from './screens';

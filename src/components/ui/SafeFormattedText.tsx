@@ -107,17 +107,7 @@ export const useNewArchitectureDetection = () => {
 export const logNewArchitectureInfo = (): void => {
   if (!__DEV__) return;
 
-  const isNewArch = isNewArchitecture();
-
-  // eslint-disable-next-line no-console
-  console.log('🏗️ New Architecture Detection:', {
-    isNewArchitecture: isNewArch,
-    platform: Platform.OS,
-    version: Platform.Version,
-    recommendation: isNewArch
-      ? 'Use SafeFormattedText'
-      : 'FormattedText is fine',
-  });
+  // New architecture detection completed - debug info removed for production
 };
 
 export default SafeFormattedText;

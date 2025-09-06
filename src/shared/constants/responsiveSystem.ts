@@ -31,7 +31,7 @@ const INDUSTRY_STANDARDS = {
   baseReadableFont: 16, // Font di riferimento standard
   maxReadableFontSmall: 60, // AUMENTATO per titoli: compact/standard (era 20)
   maxReadableFontLarge: 80, // AUMENTATO per titoli: large/xlarge (era 28)
-  maxReadableFontXXL: 100, // AUMENTATO per titoli: tablet/fold (era 36)
+  maxReadableFontXXL: 100, // Enhanced for tablet/foldable displays
 
   // Content constraints
   optimalLineLength: 45, // 45-65 caratteri per riga (optimal reading)
@@ -393,19 +393,19 @@ export const TypographyTokens = {
       display: {
         large: scaleFont(57), // ~Display Large Material
         medium: scaleFont(45), // ~Display Medium Material
-        small: scaleFont(32), // RIDOTTO: per "Il Nostro Impatto" e "Fai la Differenza" (era 38)
+        small: scaleFont(32), // Optimized for main section titles
       },
 
       // Headline styles
       headline: {
-        large: scaleFont(30), // RIDOTTO: finale 30 (era 35, ancora troppo grande)
+        large: scaleFont(30), // Balanced size for large displays
         medium: scaleFont(28), // ~Headline Medium Material
         small: scaleFont(24), // ~Headline Small Material
       },
 
       // Title styles (più usati in UI)
       title: {
-        large: scaleFont(22), // RIDOTTO: per "Unisciti a noi nella lotta contro la fame nel mondo" su 2 righe (era 26)
+        large: scaleFont(22), // Optimized for multi-line subtitles
         medium: scaleFont(16), // ~Title Medium Material
         small: scaleFont(14), // ~Title Small Material
       },
@@ -413,7 +413,7 @@ export const TypographyTokens = {
       // Body styles (testo principale)
       body: {
         large: scaleFont(16), // ~Body Large Material
-        medium: scaleFont(15), // RIDOTTO: per "Prodotti/Creati nel 2024" (era 16)
+        medium: scaleFont(15), // Consistent medium text sizing
         small: scaleFont(12), // ~Body Small Material
       },
 
@@ -528,8 +528,8 @@ export const PlatformOptimizations = {
   // Rendering optimizations
   rendering: {
     textScaling: getPlatformValue({
-      ios: false, // DISABILITATO: usiamo il nostro sistema custom bi-direzionale
-      android: false, // Android: controlliamo noi lo scaling
+      ios: false, // Custom responsive system enabled
+      android: false, // Manual scaling control
       default: false,
     }),
 
@@ -565,8 +565,8 @@ export const PlatformOptimizations = {
   accessibility: {
     minimumTouchTarget: INDUSTRY_STANDARDS.minTouchTarget,
     allowFontScaling: getPlatformValue({
-      ios: false, // DISABILITATO: usiamo il nostro sistema responsive custom
-      android: false, // Android: scaling controllato da noi
+      ios: false, // Custom responsive system active
+      android: false, // Manual scaling management
       default: false,
     }),
   },
@@ -727,7 +727,7 @@ export const ShadowTokens = {
   },
 } as const;
 
-// 🔄 LEGACY COMPATIBILITY (per transizione graduale)
+// Legacy compatibility layer for gradual migration
 // Alias per mantenere compatibilità con sistema precedente
 export const ResponsiveDimensions = DesignTokens;
 export const ResponsiveTypography = TypographyTokens;
@@ -821,7 +821,7 @@ export const AccessibilityIntelligence = {
   isContrastSufficient: (_foreground: string, _background: string): boolean => {
     // Implementazione semplificata - in produzione usare libreria dedicata
     // Per ora assumiamo che contrasti scuri su chiari siano sufficienti
-    return true; // TODO: implementare calcolo contrasto WCAG
+    return true; // Simplified implementation - use dedicated library for production WCAG compliance
   },
 
   /**

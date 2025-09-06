@@ -19,7 +19,7 @@ const Logo: React.FC<LogoProps> = ({
   showBackground = true,
 }) => {
   // Asset immagine - deve essere require per React Native
-  // import logoImage from '../../assets/icons/app/app-icon.jpg'; // Asset corretto
+  // Logo asset path available when needed
 
   const containerStyle: ViewStyle = {
     ...styles.logoContainer,

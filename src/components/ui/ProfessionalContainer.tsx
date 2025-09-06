@@ -47,33 +47,13 @@ export const ProfessionalContainer: React.FC<ProfessionalContainerProps> = ({
   onLayout,
   testID,
 }) => {
-  const {
-    containerStyle,
-    handleLayout,
-    breakpoint,
-    strategy,
-    containerWidth,
-    maxTextWidth,
-    isRTL,
-  } = useContainerLayout({
+  const { containerStyle, handleLayout } = useContainerLayout({
     variant,
     enableRTL,
     ...(forceWidth !== undefined && { forceWidth }),
   });
 
-  // Development info
-  if (__DEV__) {
-    // eslint-disable-next-line no-console
-    console.log('🏗️ ProfessionalContainer:', {
-      variant,
-      breakpoint,
-      maxWidth: strategy.container.maxWidth,
-      containerWidth,
-      maxTextWidth,
-      isRTL,
-      platform: Platform?.OS || 'ios',
-    });
-  }
+  // Container configuration completed - debug info removed for production
 
   const finalOnLayout = React.useCallback(
     (event: LayoutChangeEvent) => {

@@ -194,43 +194,144 @@ class ProfessionalLogger {
   }
 }
 
-// Istanza singleton del logger
+/**
+ * Singleton instance of the Professional Logger.
+ * Provides structured logging with different levels, context,
+ * and automatic buffering for production environments.
+ */
 export const logger = new ProfessionalLogger();
 
 // Export del tipo per TypeScript
 export type { LogLevel, LogEntry };
 
-// Metodi di convenienza per backward compatibility
+/**
+ * Logs a debug message with optional context and data.
+ * Debug messages are only shown in development environments.
+ *
+ * @param message - The debug message to log
+ * @param context - Optional context identifier (component, function, etc.)
+ * @param data - Optional additional data to include
+ *
+ * @example
+ * ```typescript
+ * logDebug('User data loaded', 'UserProfile', { userId: '123', loadTime: 250 });
+ * ```
+ */
 export const logDebug = (message: string, context?: string, data?: unknown) =>
   logger.debug(message, context, data);
 
+/**
+ * Logs an informational message with optional context and data.
+ *
+ * @param message - The info message to log
+ * @param context - Optional context identifier
+ * @param data - Optional additional data to include
+ *
+ * @example
+ * ```typescript
+ * logInfo('Navigation completed', 'AppNavigator', { screen: 'Profile' });
+ * ```
+ */
 export const logInfo = (message: string, context?: string, data?: unknown) =>
   logger.info(message, context, data);
 
+/**
+ * Logs a warning message with optional context and data.
+ *
+ * @param message - The warning message to log
+ * @param context - Optional context identifier
+ * @param data - Optional additional data to include
+ *
+ * @example
+ * ```typescript
+ * logWarn('API response slow', 'ApiService', { duration: 5000, endpoint: '/users' });
+ * ```
+ */
 export const logWarn = (message: string, context?: string, data?: unknown) =>
   logger.warn(message, context, data);
 
+/**
+ * Logs an error message with optional context and data.
+ *
+ * @param message - The error message to log
+ * @param context - Optional context identifier
+ * @param data - Optional additional data to include
+ *
+ * @example
+ * ```typescript
+ * logError('Failed to save user data', 'UserService', { userId: '123', error: errorObj });
+ * ```
+ */
 export const logError = (message: string, context?: string, data?: unknown) =>
   logger.error(message, context, data);
 
+/**
+ * Logs a fatal error message with optional context and data.
+ * Fatal errors indicate critical system failures.
+ *
+ * @param message - The fatal error message to log
+ * @param context - Optional context identifier
+ * @param data - Optional additional data to include
+ *
+ * @example
+ * ```typescript
+ * logFatal('Database connection lost', 'DatabaseService', { connectionId: 'db-001' });
+ * ```
+ */
 export const logFatal = (message: string, context?: string, data?: unknown) =>
   logger.fatal(message, context, data);
 
-// Helper per performance logging
+/**
+ * Logs performance metrics for operations.
+ *
+ * @param operation - Name of the operation being measured
+ * @param startTime - Start time in milliseconds (from Date.now() or performance.now())
+ * @param context - Optional context identifier
+ *
+ * @example
+ * ```typescript
+ * const startTime = Date.now();
+ * await performOperation();
+ * logPerformance('dataProcessing', startTime, 'DataProcessor');
+ * ```
+ */
 export const logPerformance = (
   operation: string,
   startTime: number,
   context?: string
 ) => logger.performance(operation, startTime, context);
 
-// Helper per user actions
+/**
+ * Logs user actions for analytics and debugging.
+ *
+ * @param action - Description of the user action
+ * @param userId - Optional user identifier
+ * @param data - Optional additional data about the action
+ *
+ * @example
+ * ```typescript
+ * logUserAction('button_click', 'user123', { buttonId: 'donate', amount: 50 });
+ * ```
+ */
 export const logUserAction = (
   action: string,
   userId?: string,
   data?: unknown
 ) => logger.userAction(action, userId, data);
 
-// Helper per API calls
+/**
+ * Logs API call information including performance metrics.
+ *
+ * @param method - HTTP method (GET, POST, etc.)
+ * @param url - API endpoint URL
+ * @param statusCode - HTTP response status code
+ * @param duration - Request duration in milliseconds
+ *
+ * @example
+ * ```typescript
+ * logApiCall('POST', '/api/users', 201, 450);
+ * ```
+ */
 export const logApiCall = (
   method: string,
   url: string,

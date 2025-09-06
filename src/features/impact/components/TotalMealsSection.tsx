@@ -4,7 +4,7 @@ import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { PerfectText, PlatformTouchable } from '../../../components/ui';
-// import responsiveSystem from '../../../shared/constants/responsiveSystem';
+// Responsive system available from Perfect System when needed
 import {
   Colors,
   Spacing,
@@ -82,7 +82,7 @@ export const TotalMealsSection: React.FC<Props> = ({
               <View style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="food-apple"
-                  size={28} // RIDOTTO: da 32 a 28 per proporzioni migliori
+                  size={28} // Optimized size for better proportions
                   color="#DC2626"
                   style={styles.totalCardIcon}
                 />
@@ -138,7 +138,7 @@ export const TotalMealsSection: React.FC<Props> = ({
               <View style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="package-variant"
-                  size={28} // RIDOTTO: da 32 a 28 per proporzioni migliori
+                  size={28} // Optimized size for better proportions
                   color="#1F2937"
                   style={styles.totalCardIcon}
                 />
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
   totalMealsSection: {
     paddingHorizontal: Spacing[4],
-    marginBottom: Spacing[2], // RIDOTTO: sezioni più compatte IDENTICO PAGINA AZIONI
+    marginBottom: Spacing[2], // Compact sections spacing
   },
 
   totalStatsRow: {
@@ -213,12 +213,12 @@ const styles = StyleSheet.create({
   totalGradientContainer: {
     borderRadius: 24,
     padding: 3,
-    ...PlatformShadows.xl, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
+    ...PlatformShadows.xl, // Platform-optimized shadow system
   },
   totalCardContent: {
     backgroundColor: Colors.neutral[0],
     borderRadius: 21,
-    paddingVertical: Spacing[3], // RIDOTTO: da Spacing[5] a Spacing[3] per bottoni più compatti
+    paddingVertical: Spacing[3], // Compact button padding
     alignItems: 'center',
   },
   totalCardIcon: {
@@ -229,40 +229,40 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.black,
     color: '#1F2937', // NERO invece che rosso
     marginBottom: Spacing[1],
-    lineHeight: 28, // AGGIUNTO: lineHeight per headline-small
+    lineHeight: 28, // Improved readability for headlines
   },
   totalStatLabel: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold,
     color: '#374151',
-    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per più spazio
-    lineHeight: 22, // AGGIUNTO: lineHeight per body-large
+    marginBottom: Spacing[2], // Balanced spacing for content
+    lineHeight: 22, // Enhanced readability for body text
   },
   totalStatSubtitle: {
     // fontSize rimosso - ora gestito da Text
     color: '#6B7280',
-    lineHeight: 18, // AGGIUNTO: lineHeight per body-medium
+    lineHeight: 18, // Consistent line height for medium text
   },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
   numbersHeaderContainer: {
     alignItems: 'center',
-    marginTop: Spacing[6], // AGGIUNTO: spazio generoso tra linea principale e titolo "I Nostri Numeri"
+    marginTop: Spacing[6], // Generous spacing before section title
     marginBottom: Spacing[10], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
   },
   numbersHeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
+        ? '#F4F5F5' // Android: Optimized solid color
+        : 'rgba(55, 65, 81, 0.03)', // iOS: Transparent background
     borderRadius: 20,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
+        ? '#E6E8EA' // Android: Consistent border color
+        : 'rgba(55, 65, 81, 0.08)', // iOS: Subtle border transparency
     shadowColor: '#374151',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,

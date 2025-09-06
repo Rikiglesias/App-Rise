@@ -432,22 +432,93 @@ class APISecurityService {
   }
 }
 
-// Singleton export
+/**
+ * Singleton instance of the API Security Service.
+ * Provides secure HTTP requests with built-in security headers,
+ * rate limiting, and request validation.
+ */
 export const apiSecurity = APISecurityService.getInstance();
 
-// Convenience exports
+/**
+ * Performs a secure GET request with automatic security headers and validation.
+ *
+ * @template T - The expected response data type
+ * @param url - The endpoint URL to request
+ * @param config - Optional request configuration
+ * @returns Promise resolving to the API response
+ *
+ * @example
+ * ```typescript
+ * const response = await secureGet<UserData>('/api/user/profile');
+ * if (response.success) {
+ *   console.log(response.data);
+ * }
+ * ```
+ */
 export const secureGet = <T>(url: string, config?: Partial<APIRequestConfig>) =>
   apiSecurity.get<T>(url, config);
+
+/**
+ * Performs a secure POST request with automatic security headers and validation.
+ *
+ * @template T - The expected response data type
+ * @param url - The endpoint URL to request
+ * @param body - The request body data
+ * @param config - Optional request configuration
+ * @returns Promise resolving to the API response
+ *
+ * @example
+ * ```typescript
+ * const response = await securePost<CreateUserResponse>('/api/user', {
+ *   name: 'John Doe',
+ *   email: 'john@example.com'
+ * });
+ * ```
+ */
 export const securePost = <T>(
   url: string,
   body?: unknown,
   config?: Partial<APIRequestConfig>
 ) => apiSecurity.post<T>(url, body, config);
+
+/**
+ * Performs a secure PUT request with automatic security headers and validation.
+ *
+ * @template T - The expected response data type
+ * @param url - The endpoint URL to request
+ * @param body - The request body data
+ * @param config - Optional request configuration
+ * @returns Promise resolving to the API response
+ *
+ * @example
+ * ```typescript
+ * const response = await securePut<UpdateUserResponse>('/api/user/123', {
+ *   name: 'Jane Doe'
+ * });
+ * ```
+ */
 export const securePut = <T>(
   url: string,
   body?: unknown,
   config?: Partial<APIRequestConfig>
 ) => apiSecurity.put<T>(url, body, config);
+
+/**
+ * Performs a secure DELETE request with automatic security headers and validation.
+ *
+ * @template T - The expected response data type
+ * @param url - The endpoint URL to request
+ * @param config - Optional request configuration
+ * @returns Promise resolving to the API response
+ *
+ * @example
+ * ```typescript
+ * const response = await secureDelete<DeleteResponse>('/api/user/123');
+ * if (response.success) {
+ *   console.log('User deleted successfully');
+ * }
+ * ```
+ */
 export const secureDelete = <T>(
   url: string,
   config?: Partial<APIRequestConfig>

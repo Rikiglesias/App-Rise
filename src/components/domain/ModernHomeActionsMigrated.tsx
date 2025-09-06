@@ -16,7 +16,7 @@ import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
 // 🎯 NUOVO: Import layer centralizzato
-// import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
+// Migrated to Perfect System responsive layout
 import { PerfectContainer, PlatformTouchable, PerfectText } from '../ui';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato

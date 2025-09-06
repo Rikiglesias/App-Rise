@@ -360,23 +360,98 @@ class ErrorTrackingService {
   }
 }
 
-// Singleton export
+/**
+ * Singleton instance of the Error Tracking Service.
+ * Provides comprehensive error tracking, crash reporting,
+ * and performance monitoring capabilities.
+ */
 export const errorTracking = ErrorTrackingService.getInstance();
 
-// Convenience exports
+/**
+ * Captures and reports an error with optional context information.
+ *
+ * @param error - The Error object to capture
+ * @param context - Optional context information (user, screen, action, etc.)
+ *
+ * @example
+ * ```typescript
+ * try {
+ *   await riskyOperation();
+ * } catch (error) {
+ *   captureError(error, {
+ *     userId: 'user123',
+ *     screen: 'ProfileScreen',
+ *     action: 'updateProfile'
+ *   });
+ * }
+ * ```
+ */
 export const captureError = (error: Error, context?: ErrorContext) =>
   errorTracking.captureError(error, context);
+
+/**
+ * Captures a custom message with specified severity level.
+ *
+ * @param message - The message to capture
+ * @param level - Severity level: 'info', 'warning', or 'error'
+ * @param context - Optional context information
+ *
+ * @example
+ * ```typescript
+ * captureMessage('User performed unusual action', 'warning', {
+ *   userId: 'user123',
+ *   action: 'bulkDelete'
+ * });
+ * ```
+ */
 export const captureMessage = (
   message: string,
   level?: 'info' | 'warning' | 'error',
   context?: ErrorContext
 ) => errorTracking.captureMessage(message, level, context);
+
+/**
+ * Adds a breadcrumb to track user actions leading up to errors.
+ *
+ * @param message - Description of the action
+ * @param category - Category of the action (navigation, user, api, etc.)
+ * @param level - Severity level of the breadcrumb
+ * @param data - Additional data associated with the action
+ *
+ * @example
+ * ```typescript
+ * addBreadcrumb('User clicked donate button', 'user', 'info', {
+ *   amount: 50,
+ *   currency: 'EUR'
+ * });
+ * ```
+ */
 export const addBreadcrumb = (
   message: string,
   category: string,
   level?: 'info' | 'warning' | 'error',
   data?: Record<string, unknown>
 ) => errorTracking.addBreadcrumb(message, category, level, data);
+
+/**
+ * Tracks performance metrics for operations and user interactions.
+ *
+ * @param operationName - Name of the operation being tracked
+ * @param duration - Duration of the operation in milliseconds
+ * @param additionalData - Additional performance-related data
+ *
+ * @example
+ * ```typescript
+ * const startTime = Date.now();
+ * await loadUserData();
+ * const duration = Date.now() - startTime;
+ *
+ * trackPerformance('loadUserData', duration, {
+ *   cacheHit: false,
+ *   dataSize: 1024
+ * });
+ * ```
+ */
 export const trackPerformance = (
   operationName: string,
   duration: number,

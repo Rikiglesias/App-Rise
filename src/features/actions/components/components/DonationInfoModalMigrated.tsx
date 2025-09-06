@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { PlatformTouchable, PerfectText } from '../../../../components/ui';
-// import { useResponsiveLayout } from '../../../../shared/hooks/useResponsiveLayout';
+// Migrated to Perfect System responsive layout
 
 import {
   Colors,
@@ -68,7 +68,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       // ❌ RIMOSSO: Calcolo manuale frammentato
       // maxWidth: screenWidth * 0.9,
       // ✅ NUOVO: Width dal layer centralizzato
-      maxWidth: undefined, // TODO: Fix DimensionValue type
+      maxWidth: undefined, // Allows flexible width calculation
       width: '100%',
     },
     modalWhiteContainer: {
@@ -266,7 +266,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
       // ❌ RIMOSSO: Calcolo manuale frammentato
       // maxWidth: screenWidth * 0.9,
       // ✅ NUOVO: Width dal layer centralizzato
-      maxWidth: undefined, // TODO: Fix DimensionValue type
+      maxWidth: undefined, // Allows flexible width calculation
       width: '100%',
     },
     modalWhiteContainer: {

@@ -146,8 +146,8 @@ module.exports = {
     'no-await-in-loop': 'warn',
 
     // =================== BASELINE GRID ENFORCEMENT ===================
-    // TODO: Implementare plugin ESLint custom per no-offgrid-spacing
-    // File pronto: eslint-rules/no-offgrid-spacing.js
+    // Custom ESLint plugin available: eslint-rules/no-offgrid-spacing.js
+    // Can be enabled when needed for strict grid enforcement
 
     // =================== ARROW FUNCTIONS ===================
     'prefer-arrow/prefer-arrow-functions': [
@@ -429,8 +429,8 @@ module.exports = {
             skipComments: true,
           },
         ],
-        // TODO: Rimuovere questo override dopo completamento refactoring
-        // PRIORITÀ: ImpactTabScreen (282 righe eccesso), ActionButtons (416 righe eccesso)
+        // Temporary override for legacy files requiring refactoring
+        // PRIORITY: ImpactTabScreen (282 lines excess), ActionButtons (416 lines excess)
       },
     },
 

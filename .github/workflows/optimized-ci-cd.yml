@@ -1,0 +1,367 @@
+name: 🚀 Optimized CI/CD Pipeline
+
+on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+    inputs:
+      force_build:
+        description: 'Force build regardless of changes'
+        required: false
+        default: false
+        type: boolean
+      build_platform:
+        description: 'Platform to build'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - ios
+          - android
+
+env:
+  NODE_VERSION: '20.x'
+  CACHE_VERSION: 'v2'
+  EXPO_CLI_VERSION: 'latest'
+  EAS_CLI_VERSION: 'latest'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ===================================================================
+  # SMART CHANGE DETECTION
+  # ===================================================================
+  detect-changes:
+    name: 🔍 Smart Change Detection
+    runs-on: ubuntu-latest
+    outputs:
+      should-test: ${{ steps.changes.outputs.should-test }}
+      should-build: ${{ steps.changes.outputs.should-build }}
+      build-ios: ${{ steps.changes.outputs.build-ios }}
+      build-android: ${{ steps.changes.outputs.build-android }}
+      test-scope: ${{ steps.changes.outputs.test-scope }}
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Detect Changes
+        id: changes
+        run: |
+          # Initialize outputs
+          echo "should-test=false" >> $GITHUB_OUTPUT
+          echo "should-build=false" >> $GITHUB_OUTPUT
+          echo "build-ios=false" >> $GITHUB_OUTPUT
+          echo "build-android=false" >> $GITHUB_OUTPUT
+          echo "test-scope=unit" >> $GITHUB_OUTPUT
+
+          # Force build if requested
+          if [[ "${{ github.event.inputs.force_build }}" == "true" ]]; then
+            echo "🔧 Force build requested"
+            echo "should-test=true" >> $GITHUB_OUTPUT
+            echo "should-build=true" >> $GITHUB_OUTPUT
+            echo "build-ios=true" >> $GITHUB_OUTPUT
+            echo "build-android=true" >> $GITHUB_OUTPUT
+            echo "test-scope=full" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check commit message for build triggers
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          if [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\] ]]; then
+            echo "should-build=true" >> $GITHUB_OUTPUT
+            echo "build-ios=true" >> $GITHUB_OUTPUT
+            echo "build-android=true" >> $GITHUB_OUTPUT
+          elif [[ "$COMMIT_MSG" =~ \[build\ ios\] ]]; then
+            echo "should-build=true" >> $GITHUB_OUTPUT
+            echo "build-ios=true" >> $GITHUB_OUTPUT
+          elif [[ "$COMMIT_MSG" =~ \[build\ android\] ]]; then
+            echo "should-build=true" >> $GITHUB_OUTPUT
+            echo "build-android=true" >> $GITHUB_OUTPUT
+          fi
+
+          # Detect file changes
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+          fi
+
+          # Get changed files
+          CHANGED_FILES=$(git diff --name-only $BASE_SHA..HEAD || echo "")
+          echo "Changed files: $CHANGED_FILES"
+
+          # Check if we need to run tests
+          if echo "$CHANGED_FILES" | grep -E "\.(ts|tsx|js|jsx|json)$|package\.json|jest\.|test\.|spec\."; then
+            echo "should-test=true" >> $GITHUB_OUTPUT
+          fi
+
+          # Check if we need visual diff tests
+          if echo "$CHANGED_FILES" | grep -E "src/(components|features)/.*\.(ts|tsx)$"; then
+            echo "test-scope=visual" >> $GITHUB_OUTPUT
+          fi
+
+          # Check if we need to build
+          if echo "$CHANGED_FILES" | grep -E "src/|app\.config\.|eas\.json|package\.json"; then
+            echo "should-build=true" >> $GITHUB_OUTPUT
+            echo "build-ios=true" >> $GITHUB_OUTPUT
+            echo "build-android=true" >> $GITHUB_OUTPUT
+          fi
+
+  # ===================================================================
+  # PARALLEL QUALITY CHECKS
+  # ===================================================================
+  quality-checks:
+    name: 🔍 Quality Checks
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should-test == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [typescript, eslint, prettier, tests]
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📱 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies (with cache)
+        run: |
+          # Use npm ci with cache for faster installs
+          npm ci --prefer-offline --no-audit
+
+      - name: 🔍 Run ${{ matrix.check }}
+        run: |
+          case "${{ matrix.check }}" in
+            "typescript")
+              echo "🔍 TypeScript Check"
+              npx tsc --noEmit --skipLibCheck
+              ;;
+            "eslint")
+              echo "📝 ESLint Check"
+              npx eslint "src/**/*.{ts,tsx}" --max-warnings 0 --cache
+              ;;
+            "prettier")
+              echo "🎨 Prettier Check"
+              npx prettier --check "src/**/*.{ts,tsx}" --cache
+              ;;
+            "tests")
+              echo "🧪 Unit Tests"
+              npm test -- --coverage --watchAll=false --maxWorkers=2
+              ;;
+          esac
+
+      - name: 📊 Upload Coverage
+        if: matrix.check == 'tests'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+  # ===================================================================
+  # VISUAL REGRESSION TESTING (OPTIMIZED)
+  # ===================================================================
+  visual-regression:
+    name: 🎯 Visual Regression
+    runs-on: ubuntu-latest
+    needs: [detect-changes, quality-checks]
+    if: needs.detect-changes.outputs.test-scope == 'visual' || needs.detect-changes.outputs.test-scope == 'full'
+    strategy:
+      fail-fast: false
+      matrix:
+        device: ['iPhone-SE-375x667', 'iPhone-15-Pro-393x852', 'Pixel-8-Pro-412x915', 'Galaxy-Tab-S9-768x1024']
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📱 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎯 Visual Diff Tests - ${{ matrix.device }}
+        run: |
+          npm run test -- --testPathPattern=visual-diff.test.tsx --maxWorkers=1
+        env:
+          CI: true
+          DEVICE_MATRIX: ${{ matrix.device }}
+          ENABLE_VISUAL_SNAPSHOTS: true
+
+      - name: 📊 Upload Visual Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-results-${{ matrix.device }}
+          path: visual-snapshots/
+          retention-days: 7
+
+  # ===================================================================
+  # OPTIMIZED BUILD PIPELINE
+  # ===================================================================
+  build-ios:
+    name: 🍎 iOS Build
+    runs-on: ubuntu-latest
+    needs: [detect-changes, quality-checks]
+    if: needs.detect-changes.outputs.should-build == 'true' && needs.detect-changes.outputs.build-ios == 'true'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📱 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🔧 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: ${{ env.EXPO_CLI_VERSION }}
+          eas-version: ${{ env.EAS_CLI_VERSION }}
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 🍎 Build iOS
+        run: |
+          echo "🍎 Building iOS..."
+          eas build --platform ios --profile production-store --non-interactive --wait
+
+      - name: 📤 Submit to App Store
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: |
+          echo "📤 Submitting to App Store..."
+          eas submit --platform ios --latest --non-interactive
+
+  build-android:
+    name: 🤖 Android Build
+    runs-on: ubuntu-latest
+    needs: [detect-changes, quality-checks]
+    if: needs.detect-changes.outputs.should-build == 'true' && needs.detect-changes.outputs.build-android == 'true'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📱 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🔧 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: ${{ env.EXPO_CLI_VERSION }}
+          eas-version: ${{ env.EAS_CLI_VERSION }}
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 🤖 Build Android
+        run: |
+          echo "🤖 Building Android..."
+          eas build --platform android --profile production-store --non-interactive --wait
+
+      - name: 📤 Submit to Google Play
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        continue-on-error: true
+        run: |
+          echo "📤 Submitting to Google Play..."
+          eas submit --platform android --latest --non-interactive
+
+  # ===================================================================
+  # DEPLOYMENT SUMMARY
+  # ===================================================================
+  deployment-summary:
+    name: 📊 Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [detect-changes, quality-checks, visual-regression, build-ios, build-android]
+    if: always()
+    steps:
+      - name: 📊 Generate Summary
+        run: |
+          echo "## 🚀 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Quality Checks
+          echo "### 🔍 Quality Checks" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.quality-checks.result }}" == "success" ]]; then
+            echo "✅ All quality checks passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Visual Regression
+          echo "### 🎯 Visual Regression" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.visual-regression.result }}" == "success" ]]; then
+            echo "✅ Visual regression tests passed" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.visual-regression.result }}" == "skipped" ]]; then
+            echo "⏭️ Visual regression tests skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Visual regression tests failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Builds
+          echo "### 📱 Builds" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.build-ios.result }}" == "success" ]]; then
+            echo "🍎 iOS: ✅ Success" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.build-ios.result }}" == "skipped" ]]; then
+            echo "🍎 iOS: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🍎 iOS: ❌ Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.build-android.result }}" == "success" ]]; then
+            echo "🤖 Android: ✅ Success" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.build-android.result }}" == "skipped" ]]; then
+            echo "🤖 Android: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🤖 Android: ❌ Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)" >> $GITHUB_STEP_SUMMARY
+
+      - name: 💬 Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const summary = `## 🚀 CI/CD Pipeline Results
+            
+            ### 🔍 Quality Checks
+            ${{ needs.quality-checks.result == 'success' && '✅ All quality checks passed' || '❌ Quality checks failed' }}
+            
+            ### 🎯 Visual Regression
+            ${{ needs.visual-regression.result == 'success' && '✅ Visual regression tests passed' || needs.visual-regression.result == 'skipped' && '⏭️ Visual regression tests skipped' || '❌ Visual regression tests failed' }}
+            
+            ### 📱 Builds
+            🍎 iOS: ${{ needs.build-ios.result == 'success' && '✅ Success' || needs.build-ios.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}
+            🤖 Android: ${{ needs.build-android.result == 'success' && '✅ Success' || needs.build-android.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}
+            
+            🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });

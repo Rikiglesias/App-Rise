@@ -141,7 +141,19 @@ export const getEnvironmentInfo = (): Record<string, unknown> => {
   };
 };
 
-// Helper per API calls
+/**
+ * Constructs a complete API URL by combining the base URL with an endpoint.
+ * Handles proper URL formatting and slash normalization.
+ *
+ * @param endpoint - The API endpoint path (with or without leading slash)
+ * @returns Complete API URL
+ *
+ * @example
+ * ```typescript
+ * const userUrl = getApiUrl('/users/123'); // 'https://api.example.com/users/123'
+ * const profileUrl = getApiUrl('profile'); // 'https://api.example.com/profile'
+ * ```
+ */
 export const getApiUrl = (endpoint: string): string => {
   const baseUrl = env.API_BASE_URL.endsWith('/')
     ? env.API_BASE_URL.slice(0, -1)
@@ -152,7 +164,23 @@ export const getApiUrl = (endpoint: string): string => {
   return `${baseUrl}${cleanEndpoint}`;
 };
 
-// Helper per feature flags
+/**
+ * Checks if a specific feature flag is enabled in the current environment.
+ *
+ * @param feature - The feature flag to check
+ * @returns True if the feature is enabled, false otherwise
+ *
+ * @example
+ * ```typescript
+ * if (isFeatureEnabled('ENABLE_PERFORMANCE_MONITORING')) {
+ *   startPerformanceTracking();
+ * }
+ *
+ * if (isFeatureEnabled('ENABLE_FLIPPER')) {
+ *   initializeFlipper();
+ * }
+ * ```
+ */
 export const isFeatureEnabled = (
   feature: keyof Pick<
     AppEnvironment,

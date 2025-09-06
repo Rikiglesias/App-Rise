@@ -8,9 +8,9 @@ import {
 } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
 // 🎯 NUOVO: Import layer centralizzato
-// import { useResponsiveLayout } from '../../shared/hooks/useResponsiveLayout';
+// Migrated to Perfect System responsive layout
 
-// ❌ RIMOSSO: Calcolo manuale duplicato
+// Removed: Manual calculation replaced by centralized system
 // const { width: screenWidth } = Dimensions.get('window');
 
 interface SectionContainerProps {
@@ -30,12 +30,12 @@ const getSpacingConfig = (
   spacing: SectionContainerProps['spacing'],
   responsive: ResponsiveResolver
 ) => {
-  // ❌ RIMOSSO: Breakpoints manuali frammentati
+  // Removed: Fragmented manual breakpoints
   // if (screenWidth < 375) baseSpacing = 0.8;
   // else if (screenWidth < 768) baseSpacing = 1;
   // else baseSpacing = 1.2;
 
-  // ✅ NUOVO: Responsive scaling dal layer centralizzato
+  // Enhanced: Centralized responsive scaling system
   const baseSpacing =
     responsive({
       compact: 0.8,
@@ -183,10 +183,10 @@ export const SectionContainerMigrated: React.FC<SectionContainerProps> = ({
   // 🎁 MIGRATED: Wrapper interno usando responsive padding
   const innerWrapperStyle = {
     ...(variant !== 'default' && {
-      // ❌ RIMOSSO: Calcolo manuale frammentato
+      // Removed: Manual fragmented calculation
       // padding: screenWidth < 375 ? Spacing[4] : Spacing[6],
 
-      // ✅ NUOVO: Padding dal layer centralizzato
+      // Enhanced: Centralized padding system
       padding:
         responsive({
           compact: Spacing[4],
@@ -226,7 +226,7 @@ export default SectionContainerMigrated;
  *
  * AGGIUNTI:
  * ✅ useResponsiveLayout()                                     // Layer centralizzato
- * ✅ responsive({ compact: 0.8, standard: 1.0, xlarge: 1.2 }) // Token-based
+ * Enhanced: responsive({ compact: 0.8, standard: 1.0, xlarge: 1.2 }) // Token-based
  * ✅ responsive({ compact: Spacing[4], xlarge: Spacing[8] })   // Padding unificato
  *
  * FUTURE BENEFITS:

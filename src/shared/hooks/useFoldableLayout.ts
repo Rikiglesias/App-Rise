@@ -310,19 +310,7 @@ export const useFoldableLayout = (options?: {
     };
   }, [dimensions, enablePostureDetection, preferredStrategy, minTabletWidth]);
 
-  // Development logging
-  useEffect(() => {
-    if (__DEV__ && foldableConfig.deviceInfo.isFoldable) {
-      // eslint-disable-next-line no-console
-      console.log('📱 Foldable Layout:', {
-        posture: foldableConfig.posture,
-        strategy: foldableConfig.strategy,
-        containerWidth: foldableConfig.containerWidth,
-        dimensions: `${dimensions.width}x${dimensions.height}`,
-        deviceType: foldableConfig.deviceInfo.foldableType,
-      });
-    }
-  }, [foldableConfig, dimensions]);
+  // Foldable layout configuration completed - debug info removed for production
 
   // Layout helpers
   const layoutHelpers = useMemo(

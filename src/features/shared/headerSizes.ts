@@ -8,5 +8,5 @@ export const HEADER_TITLE_SIZE = 40; // Incrementato da 40 per maggiore visibili
 export const IMPACT_SUBTITLE_SIZE = 18; // "Risultati concreti nella lotta contro la fame mondiale"
 export const CONTRIBUTE_SUBTITLE_SIZE = 18; // "Ogni azione conta nella lotta contro la fame"
 
-// LEGACY - mantenuto per retrocompatibilità ma deprecato
+// Deprecated: Use Perfect System responsive scaling instead
 export const HEADER_SUBTITLE_SIZE = 30; // Incrementato da 26 per maggiore leggibilità

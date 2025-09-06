@@ -6,7 +6,6 @@ export default {
     orientation: 'portrait',
     icon: './assets/icons/app/app-icon.jpg',
     userInterfaceStyle: 'light',
-    newArchEnabled: false,
     primaryColor: '#DC2626',
 
     // Configurazioni splash screen

@@ -114,7 +114,27 @@ export const usePerformanceTracking = ({
   };
 };
 
-// Hook semplificato per componenti che vogliono solo tracking automatico
+/**
+ * Simplified performance tracking hook for components that want automatic tracking.
+ * Automatically tracks component renders and provides user interaction tracking.
+ *
+ * @param componentName - Name of the component for tracking identification
+ * @returns Object with trackUserInteraction function and isEnabled flag
+ *
+ * @example
+ * ```typescript
+ * function MyComponent() {
+ *   const { trackUserInteraction, isEnabled } = useAutoPerformanceTracking('MyComponent');
+ *
+ *   const handleButtonClick = () => {
+ *     trackUserInteraction('button_click');
+ *     // ... handle click
+ *   };
+ *
+ *   return <Button onPress={handleButtonClick} />;
+ * }
+ * ```
+ */
 export const useAutoPerformanceTracking = (componentName: string) => {
   const { trackRender, trackUserInteraction, isEnabled } =
     usePerformanceTracking({
@@ -138,7 +158,21 @@ export const useAutoPerformanceTracking = (componentName: string) => {
   };
 };
 
-// Export del singleton per uso diretto
+/**
+ * Returns the global performance monitor instance for direct access.
+ * Use this when you need advanced performance monitoring capabilities
+ * outside of React components.
+ *
+ * @returns The global PerformanceMonitorService instance
+ *
+ * @example
+ * ```typescript
+ * const monitor = getGlobalPerformanceMonitor();
+ * monitor.startComponentRender('CustomComponent');
+ * // ... perform operations
+ * monitor.recordMemoryUsage('CustomComponent');
+ * ```
+ */
 export const getGlobalPerformanceMonitor = (): PerformanceMonitorService => {
   return performanceMonitor;
 };

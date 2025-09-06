@@ -339,28 +339,9 @@ export const useContainerLayout = (options?: {
   );
 
   // Layout measurement callback
-  const handleLayout = useCallback(
-    (event: LayoutChangeEvent) => {
-      const { width, height } = event.nativeEvent.layout;
-
-      // Development logging for layout consistency
-      if (__DEV__) {
-        // eslint-disable-next-line no-console
-        console.log('📐 Container Layout:', {
-          width,
-          height,
-          breakpoint,
-          strategy: strategy.container.maxWidth,
-          actualWidth: width,
-          widthDiff:
-            typeof strategy.container.maxWidth === 'string'
-              ? 'percentage'
-              : Math.abs(width - (strategy.container.maxWidth as number)),
-        });
-      }
-    },
-    [breakpoint, strategy]
-  );
+  const handleLayout = useCallback((_event: LayoutChangeEvent) => {
+    // Layout measurement completed - debug info removed for production
+  }, []);
 
   return {
     // Styles
