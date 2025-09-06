@@ -63,9 +63,9 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "$APPLE_ID",
-        "ascAppId": "$ASC_APP_ID",
-        "appleTeamId": "$APPLE_TEAM_ID"
+        "appleId": "salbieri@riseagainsthunger.it",
+        "ascAppId": "6447248221",
+        "appleTeamId": "7U2FBGZ8S6"
       },
       "android": {
         "serviceAccountKeyPath": "./google-service-account.json",
@@ -74,9 +74,9 @@
     },
     "production-store": {
       "ios": {
-        "appleId": "$APPLE_ID",
-        "ascAppId": "$ASC_APP_ID",
-        "appleTeamId": "$APPLE_TEAM_ID"
+        "appleId": "salbieri@riseagainsthunger.it",
+        "ascAppId": "6447248221",
+        "appleTeamId": "7U2FBGZ8S6"
       },
       "android": {
         "serviceAccountKeyPath": "./google-service-account.json",

@@ -283,13 +283,9 @@ jobs:
 
       - name: 📤 Submit to App Store
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-        env:
-          EXPO_APPLE_ID: ${{ secrets.APPLE_ID }}
-          EXPO_ASC_APP_ID: ${{ secrets.ASC_APP_ID }}
-          EXPO_APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           echo "📤 Submitting to App Store..."
-          eas submit --platform ios --latest --non-interactive
+          eas submit --platform ios --latest --non-interactive --profile production-store
 
       - name: 💬 Comment on commit (iOS Success)
         if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
