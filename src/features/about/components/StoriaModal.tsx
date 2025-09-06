@@ -5,7 +5,7 @@ import { Animated, Modal, View } from 'react-native';
 import {
   PlatformScrollView,
   PlatformTouchable,
-  FormattedText,
+  PerfectText,
 } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
@@ -59,9 +59,9 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               <View style={modalStyles.modalContent}>
                 {/* Header */}
                 <View style={modalStyles.modalHeader}>
-                  <FormattedText fontSize={16} style={modalStyles.modalTitle}>
+                  <PerfectText size={16} lines={1} style={modalStyles.modalTitle}>
                     La Nostra Storia
-                  </FormattedText>
+                  </PerfectText>
                   <PlatformTouchable
                     onPress={handleClose}
                     style={modalStyles.closeButton}
@@ -81,163 +81,175 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   contentContainerStyle={modalStyles.storyContainer}
                   showsVerticalScrollIndicator={true}
                 >
-                  <FormattedText fontSize={15} style={modalStyles.introText}>
+                  <PerfectText size={15} lines={1} style={modalStyles.introText}>
                     Dal 1998, un movimento globale contro la fame
-                  </FormattedText>
+                  </PerfectText>
 
-                  <FormattedText fontSize={15} style={modalStyles.storyText}>
-                    <FormattedText
-                      fontSize={15}
+                  <PerfectText size={15} lines={10} style={modalStyles.storyText}>
+                    <PerfectText
+                      size={15}
+                      lines={1}
                       style={modalStyles.highlightText}
                     >
                       Rise Against Hunger
-                    </FormattedText>{' '}
+                    </PerfectText>{' '}
                     nasce nel{' '}
-                    <FormattedText
-                      fontSize={15}
+                    <PerfectText
+                      size={15}
+                      lines={1}
                       style={modalStyles.highlightText}
                     >
                       1998
-                    </FormattedText>{' '}
+                    </PerfectText>{' '}
                     negli Stati Uniti con una missione chiara: combattere la
                     fame nel mondo attraverso la distribuzione di pasti
                     nutrienti e lo sviluppo di programmi sostenibili.
-                  </FormattedText>
+                  </PerfectText>
 
                   <View style={modalStyles.sectionDivider} />
 
-                  <FormattedText fontSize={15} style={modalStyles.sectionTitle}>
-                    <FormattedText fontSize={20} fixedLines={1}>
+                  <PerfectText size={15} lines={1} style={modalStyles.sectionTitle}>
+                    <PerfectText size={20} lines={1}>
                       🇮🇹
-                    </FormattedText>{' '}
+                    </PerfectText>{' '}
                     In Italia
-                  </FormattedText>
-                  <FormattedText fontSize={15} style={modalStyles.storyText}>
+                  </PerfectText>
+                  <PerfectText size={15} lines={8} style={modalStyles.storyText}>
                     La organizzazione arriva in{' '}
-                    <FormattedText
-                      fontSize={15}
+                    <PerfectText
+                      size={15}
+                      lines={1}
                       style={modalStyles.highlightText}
                     >
                       Italia
-                    </FormattedText>{' '}
+                    </PerfectText>{' '}
                     con lo obiettivo di coinvolgere le comunità locali nella
                     lotta contro la fame globale. La nostra sede di{' '}
-                    <FormattedText
-                      fontSize={15}
+                    <PerfectText
+                      size={15}
+                      lines={1}
                       style={modalStyles.highlightText}
                     >
                       Bologna
-                    </FormattedText>{' '}
+                    </PerfectText>{' '}
                     è il cuore operativo che coordina le attività su tutto il
                     territorio nazionale.
-                  </FormattedText>
+                  </PerfectText>
 
                   <View style={modalStyles.sectionDivider} />
 
-                  <FormattedText fontSize={15} style={modalStyles.sectionTitle}>
-                    <FormattedText fontSize={20} fixedLines={1}>
+                  <PerfectText size={15} lines={1} style={modalStyles.sectionTitle}>
+                    <PerfectText size={20} lines={1}>
                       🌟
-                    </FormattedText>{' '}
+                    </PerfectText>{' '}
                     I Nostri Pilastri
-                  </FormattedText>
+                  </PerfectText>
                   <View style={modalStyles.pillarsContainer}>
                     <View style={modalStyles.pillarItem}>
-                      <FormattedText
-                        fontSize={24}
-                        fixedLines={1}
+                      <PerfectText
+                        size={24}
+                        lines={1}
                         style={modalStyles.pillarIcon}
                       >
                         🍽️
-                      </FormattedText>
+                      </PerfectText>
                       <View style={modalStyles.pillarContent}>
-                        <FormattedText
-                          fontSize={15}
+                        <PerfectText
+                          size={15}
+                          lines={1}
                           style={modalStyles.pillarTitle}
                         >
                           Distribuzione Pasti
-                        </FormattedText>
-                        <FormattedText
-                          fontSize={12}
+                        </PerfectText>
+                        <PerfectText
+                          size={12}
+                          lines={3}
                           style={modalStyles.pillarText}
                         >
                           Organizziamo eventi di confezionamento pasti che
                           coinvolgono volontari di ogni età
-                        </FormattedText>
+                        </PerfectText>
                       </View>
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <FormattedText
-                        fontSize={24}
-                        fixedLines={1}
+                      <PerfectText
+                        size={24}
+                        lines={1}
                         style={modalStyles.pillarIcon}
                       >
                         🤝
-                      </FormattedText>
+                      </PerfectText>
                       <View style={modalStyles.pillarContent}>
-                        <FormattedText
-                          fontSize={15}
+                        <PerfectText
+                          size={15}
+                          lines={1}
                           style={modalStyles.pillarTitle}
                         >
                           Coinvolgimento Comunitario
-                        </FormattedText>
-                        <FormattedText
-                          fontSize={12}
+                        </PerfectText>
+                        <PerfectText
+                          size={12}
+                          lines={2}
                           style={modalStyles.pillarText}
                         >
                           Uniamo scuole, aziende e organizzazioni in un impegno
                           condiviso
-                        </FormattedText>
+                        </PerfectText>
                       </View>
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <FormattedText
-                        fontSize={24}
-                        fixedLines={1}
+                      <PerfectText
+                        size={24}
+                        lines={1}
                         style={modalStyles.pillarIcon}
                       >
                         🌍
-                      </FormattedText>
+                      </PerfectText>
                       <View style={modalStyles.pillarContent}>
-                        <FormattedText
-                          fontSize={15}
+                        <PerfectText
+                          size={15}
+                          lines={1}
                           style={modalStyles.pillarTitle}
                         >
                           Impatto Globale
-                        </FormattedText>
-                        <FormattedText
-                          fontSize={12}
+                        </PerfectText>
+                        <PerfectText
+                          size={12}
+                          lines={3}
                           style={modalStyles.pillarText}
                         >
                           I pasti confezionati raggiungono comunità vulnerabili
                           in tutto il mondo
-                        </FormattedText>
+                        </PerfectText>
                       </View>
                     </View>
 
                     <View style={modalStyles.pillarItem}>
-                      <FormattedText
-                        fontSize={24}
-                        fixedLines={1}
+                      <PerfectText
+                        size={24}
+                        lines={1}
                         style={modalStyles.pillarIcon}
                       >
                         📚
-                      </FormattedText>
+                      </PerfectText>
                       <View style={modalStyles.pillarContent}>
-                        <FormattedText
-                          fontSize={15}
+                        <PerfectText
+                          size={15}
+                          lines={1}
                           style={modalStyles.pillarTitle}
                         >
                           Educazione
-                        </FormattedText>
-                        <FormattedText
-                          fontSize={12}
+                        </PerfectText>
+                        <PerfectText
+                          size={12}
+                          lines={2}
                           style={modalStyles.pillarText}
                         >
                           Sensibilizziamo sul tema della fame e promuoviamo la
                           solidarietà
-                        </FormattedText>
+                        </PerfectText>
                       </View>
                     </View>
                   </View>
@@ -245,21 +257,23 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <View style={modalStyles.sectionDivider} />
 
                   <View style={modalStyles.finalMessageContainer}>
-                    <FormattedText
-                      fontSize={12}
+                    <PerfectText
+                      size={12}
+                      lines={6}
                       style={modalStyles.finalMessage}
                     >
                       Ogni pasto che confezioniamo insieme è un gesto di amore
                       che attraversa i confini e raggiunge chi ne ha più
                       bisogno.
                       {'\n\n'}
-                      <FormattedText
-                        fontSize={12}
+                      <PerfectText
+                        size={12}
+                        lines={1}
                         style={modalStyles.highlightText}
                       >
                         Unisciti a noi in questa missione di speranza.
-                      </FormattedText>
-                    </FormattedText>
+                      </PerfectText>
+                    </PerfectText>
                   </View>
                 </PlatformScrollView>
               </View>

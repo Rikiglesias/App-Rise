@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 
 import { ModernCTA } from '../../components/ModernCTARefactored';
-import { FormattedText } from '../../components/ui/FormattedText';
+import { PerfectText } from '../../components/ui/PerfectText';
 import Logo from '../../components/ui/Logo';
 import type { RootStackParamList } from '../../navigation/types';
 import {
@@ -47,48 +47,40 @@ const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
         {/* Header */}
         <View style={styles.header}>
           <Logo size={48} />
-          <FormattedText
-            fontSize={48}
-            fixedLines={1}
-            style={styles.constructionIcon}
-          >
+          <PerfectText size={48} lines={1} style={styles.constructionIcon}>
             🚧
-          </FormattedText>
+          </PerfectText>
         </View>
 
         {/* Main Content */}
         <View style={styles.main}>
-          <FormattedText fontSize={36} fixedLines={2} style={styles.title}>
+          <PerfectText size={36} lines={2} style={styles.title}>
             {title}
-          </FormattedText>
+          </PerfectText>
           {subtitle && (
-            <FormattedText fontSize={20} fixedLines={2} style={styles.subtitle}>
+            <PerfectText size={20} lines={2} style={styles.subtitle}>
               {subtitle}
-            </FormattedText>
+            </PerfectText>
           )}
 
-          <FormattedText fontSize={16} fixedLines={3} style={styles.message}>
+          <PerfectText size={16} lines={3} style={styles.message}>
             Questa sezione è in fase di sviluppo.{'\n'}
             Stiamo lavorando per offrirti la migliore esperienza possibile.
-          </FormattedText>
+          </PerfectText>
 
           <View style={styles.features}>
-            <FormattedText
-              fontSize={16}
-              fixedLines={1}
-              style={styles.featuresTitle}
-            >
+            <PerfectText size={16} lines={1} style={styles.featuresTitle}>
               🎯 Prossimamente:
-            </FormattedText>
-            <FormattedText fontSize={14} fixedLines={1} style={styles.feature}>
+            </PerfectText>
+            <PerfectText size={14} lines={1} style={styles.feature}>
               ⚡ Contenuti aggiornati
-            </FormattedText>
-            <FormattedText fontSize={14} fixedLines={1} style={styles.feature}>
+            </PerfectText>
+            <PerfectText size={14} lines={1} style={styles.feature}>
               🎨 Design moderno
-            </FormattedText>
-            <FormattedText fontSize={14} fixedLines={1} style={styles.feature}>
+            </PerfectText>
+            <PerfectText size={14} lines={1} style={styles.feature}>
               📱 Esperienza ottimizzata
-            </FormattedText>
+            </PerfectText>
           </View>
         </View>
 

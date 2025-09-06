@@ -63,4 +63,4 @@ export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';
 
 // LEGACY (RIMOSSO): usare PerfectContainer/PerfectImage/PerfectText
-export { default as FormattedText } from './FormattedText';
+// FormattedText rimosso - usa PerfectText dal Perfect System

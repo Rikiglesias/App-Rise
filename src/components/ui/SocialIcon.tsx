@@ -5,7 +5,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import instagramIcon from '../../../assets/icons/social/instagram.png';
 import facebookIcon from '../../../assets/icons/social/facebook.png';
 import linkedinIcon from '../../../assets/icons/social/linkedin.png';
-import { FormattedText } from './FormattedText';
+import { PerfectText } from './PerfectText';
 
 interface SocialIconProps {
   readonly platform: 'website' | 'instagram' | 'facebook' | 'linkedin';
@@ -66,9 +66,13 @@ const SocialIcon: React.FC<SocialIconProps> = ({
   // Versione con emoji (fallback per website) - anche senza cerchio
   return (
     <View style={[styles.iconContainer, { width: size, height: size }]}>
-      <FormattedText fontSize={Math.round(size * 0.6)} style={styles.iconEmoji}>
+      <PerfectText
+        size={Math.round(size * 0.6)}
+        lines={1}
+        style={styles.iconEmoji}
+      >
         {emojiMap[platform]}
-      </FormattedText>
+      </PerfectText>
     </View>
   );
 };

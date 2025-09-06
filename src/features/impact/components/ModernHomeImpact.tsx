@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { Surface } from 'react-native-paper';
-import { PlatformTouchable, FormattedText } from '../../../components/ui';
+import { PlatformTouchable, PerfectText } from '../../../components/ui';
 
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { BorderRadius, Spacing, Typography } from '../../../shared/constants';
@@ -227,16 +227,16 @@ interface ImpactHeaderProps {
 const ImpactHeader: React.FC<ImpactHeaderProps> = React.memo(({ styles }) => (
   <View style={styles.header}>
     <View style={styles.badge}>
-      <FormattedText variant="label-medium" style={styles.badgeText}>
+      <PerfectText size={12} lines={1} style={styles.badgeText}>
         RISULTATI 2024
-      </FormattedText>
+      </PerfectText>
     </View>
-    <FormattedText variant="headline-large" style={styles.title}>
+    <PerfectText size={28} lines={1} style={styles.title}>
       Il Nostro Impatto
-    </FormattedText>
-    <FormattedText variant="body-large" style={styles.subtitle}>
+    </PerfectText>
+    <PerfectText size={16} lines={2} style={styles.subtitle}>
       Dati concreti sui risultati raggiunti insieme
-    </FormattedText>
+    </PerfectText>
   </View>
 ));
 
@@ -249,37 +249,37 @@ interface ImpactStatsProps {
 const ImpactStats: React.FC<ImpactStatsProps> = React.memo(({ styles }) => (
   <View style={styles.statsContainer}>
     <View style={styles.statCard}>
-      <FormattedText variant="headline-large" style={styles.statNumber}>
+      <PerfectText size={28} lines={1} style={styles.statNumber}>
         3.14M
-      </FormattedText>
-      <FormattedText variant="body-large" style={styles.statLabel}>
+      </PerfectText>
+      <PerfectText size={16} lines={1} style={styles.statLabel}>
         Pasti
-      </FormattedText>
-      <FormattedText variant="body-medium" style={styles.statTarget}>
+      </PerfectText>
+      <PerfectText size={14} lines={1} style={styles.statTarget}>
         Distribuiti
-      </FormattedText>
+      </PerfectText>
     </View>
     <View style={styles.statCard}>
-      <FormattedText variant="headline-large" style={styles.statNumber}>
+      <PerfectText size={28} lines={1} style={styles.statNumber}>
         13K
-      </FormattedText>
-      <FormattedText variant="body-large" style={styles.statLabel}>
+      </PerfectText>
+      <PerfectText size={16} lines={1} style={styles.statLabel}>
         Volontari
-      </FormattedText>
-      <FormattedText variant="body-medium" style={styles.statTarget}>
+      </PerfectText>
+      <PerfectText size={14} lines={1} style={styles.statTarget}>
         Attivi
-      </FormattedText>
+      </PerfectText>
     </View>
     <View style={styles.statCard}>
-      <FormattedText variant="headline-large" style={styles.statNumber}>
+      <PerfectText size={28} lines={1} style={styles.statNumber}>
         47
-      </FormattedText>
-      <FormattedText variant="body-large" style={styles.statLabel}>
+      </PerfectText>
+      <PerfectText size={16} lines={1} style={styles.statLabel}>
         Progetti
-      </FormattedText>
-      <FormattedText variant="body-medium" style={styles.statTarget}>
+      </PerfectText>
+      <PerfectText size={14} lines={1} style={styles.statTarget}>
         Completati
-      </FormattedText>
+      </PerfectText>
     </View>
   </View>
 ));
@@ -292,9 +292,9 @@ interface ImpactCTAProps {
 
 const ImpactCTA: React.FC<ImpactCTAProps> = React.memo(({ styles }) => (
   <View style={styles.ctaButton}>
-    <FormattedText variant="body-large" style={styles.ctaText}>
+    <PerfectText size={16} lines={1} style={styles.ctaText}>
       Vedi Impatto 2024
-    </FormattedText>
+    </PerfectText>
   </View>
 ));
 

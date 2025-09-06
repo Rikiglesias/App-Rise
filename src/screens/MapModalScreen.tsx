@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { FormattedText } from '../components/ui/FormattedText';
+import { PerfectText } from '../components/ui/PerfectText';
 
 import InteractiveMap, {
   type Location,
@@ -60,12 +60,12 @@ const MapModalScreen: React.FC = () => {
       />
       {/* Header */}
       <View style={styles.header}>
-        <FormattedText fontSize={24} style={styles.title}>
+        <PerfectText size={24} lines={1} style={styles.title}>
           Mappa Interattiva
-        </FormattedText>
-        <FormattedText fontSize={16} style={styles.subtitle}>
+        </PerfectText>
+        <PerfectText size={16} lines={1} style={styles.subtitle}>
           Tocca i pin per maggiori dettagli
-        </FormattedText>
+        </PerfectText>
 
         <TouchableOpacity
           style={styles.closeButton}

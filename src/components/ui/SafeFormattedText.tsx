@@ -7,7 +7,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import * as ReactNativePackage from 'react-native/package.json';
-import { FormattedText, FormattedTextProps } from './FormattedText';
+import { PerfectText, PerfectTextProps } from './PerfectText';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 
 /**
@@ -62,41 +62,30 @@ const calculateOptimalFontSize = (
  *
  * Wrapper intelligente che detecta New Architecture
  */
-export const SafeFormattedText: React.FC<FormattedTextProps> = props => {
-  const {
-    fixed,
-    fixedLines,
-    children,
-    fontSize: manualFontSize,
-    ...otherProps
-  } = props;
+export const SafeFormattedText: React.FC<PerfectTextProps> = props => {
+  const { lines, children, size: manualFontSize, ...otherProps } = props;
 
   const isNewArch = isNewArchitecture();
   const text = typeof children === 'string' ? children : '';
 
-  // Su New Architecture con fixed + fixedLines, usa fontSize ottimizzato
-  if (isNewArch && fixed && fixedLines && text && manualFontSize) {
+  // Su New Architecture con lines, usa fontSize ottimizzato
+  if (isNewArch && lines && text && manualFontSize) {
     const optimizedFontSize = calculateOptimalFontSize(
       text,
       manualFontSize,
-      fixedLines,
+      lines,
       350 // Container width fallback
     );
 
     return (
-      <FormattedText
-        {...otherProps}
-        fixed={fixed}
-        fixedLines={fixedLines}
-        fontSize={optimizedFontSize}
-      >
+      <PerfectText {...otherProps} lines={lines} size={optimizedFontSize}>
         {children}
-      </FormattedText>
+      </PerfectText>
     );
   }
 
-  // Altrimenti usa FormattedText normale
-  return <FormattedText {...props}>{children}</FormattedText>;
+  // Altrimenti usa PerfectText normale
+  return <PerfectText {...props}>{children}</PerfectText>;
 };
 
 /**

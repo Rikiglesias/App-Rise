@@ -13,7 +13,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Dimensions, Platform } from 'react-native';
-import { FormattedText } from '../../components/ui/FormattedText';
+import { PerfectText } from '../../components/ui/PerfectText';
 
 const GRID_SIZE = 8; // 8dp baseline grid
 const GRID_COLOR = 'rgba(255, 0, 0, 0.15)'; // Rosso semi-trasparente
@@ -105,9 +105,9 @@ const GridOverlay: React.FC<GridOverlayProps> = ({
 
   const renderInfo = () => (
     <View style={styles.infoContainer}>
-      <FormattedText fontSize={12} style={styles.infoText} numberOfLines={1}>
+      <PerfectText size={12} lines={1} style={styles.infoText}>
         8dp Grid | ⌘G to toggle
-      </FormattedText>
+      </PerfectText>
     </View>
   );
 

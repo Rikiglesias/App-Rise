@@ -69,12 +69,13 @@ export const contactSectionStyles = StyleSheet.create({
     elevation: 2,
   },
 
-  // Grid contatti - AGGIUNTO per compatibilità
+  // Grid contatti - LAYOUT OTTIMIZZATO
   contactsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: Spacing[3],
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingHorizontal: Spacing[3],
+    paddingVertical: Spacing[2],
+    gap: Spacing[4], // AUMENTATO: da Spacing[2] a Spacing[4] per più spazio tra i bottoni grandi
   },
 });
 
@@ -83,9 +84,9 @@ export const contactSectionStyles = StyleSheet.create({
  */
 export const animatedContactStyles = StyleSheet.create({
   contactButtonContainer: {
-    flex: 1,
-    minWidth: '48%',
-    marginBottom: Spacing[3],
+    width: '100%',
+    maxWidth: 400, // AUMENTATO: da 300 a 400 per bottoni più larghi
+    alignSelf: 'center',
   },
 
   contactTouchable: {
@@ -101,33 +102,42 @@ export const animatedContactStyles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[50],
     borderRadius: 14,
-    padding: Spacing[4],
+    padding: Spacing[5], // AUMENTATO: da Spacing[3] a Spacing[5] per più spazio interno
+    minHeight: 90, // AUMENTATO: da 70 a 90 per bottoni più alti
+    justifyContent: 'center',
+    alignItems: 'stretch',
   },
 
   contactContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing[3],
+    paddingHorizontal: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2]
+    paddingVertical: Spacing[1], // AUMENTATO: da Spacing[0.5] a Spacing[1]
   },
 
   contactIcon: {
-    marginRight: Spacing[1],
+    width: 36, // AUMENTATO: da 28 a 36 per icone più grandi
+    height: 36, // AUMENTATO: da 28 a 36 per icone più grandi
+    marginRight: Spacing[5], // AUMENTATO: da Spacing[4] a Spacing[5] per più spazio
   },
 
   contactTextContainer: {
     flex: 1,
+    justifyContent: 'center',
   },
 
   contactButtonTitle: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: TypographyTokens.styles.body.large, // AUMENTATO: da medium a large per titoli più grandi
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
     marginBottom: Spacing[1],
+    letterSpacing: 0.3,
   },
 
   contactButtonSubtitle: {
-    fontSize: TypographyTokens.styles.body.small,
+    fontSize: TypographyTokens.styles.body.medium, // AUMENTATO: da small a medium per sottotitoli più leggibili
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
+    lineHeight: 22, // AUMENTATO: da 20 a 22 per migliore leggibilità
   },
 });

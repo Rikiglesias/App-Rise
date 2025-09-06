@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 
-import { FormattedText, PlatformTouchable } from '../../../components/ui';
+import { PerfectText, PlatformTouchable } from '../../../components/ui';
 import type { ButtonData } from '../hooks/useActionButtonsLogic';
 import { actionButtonsStyles } from '../styles/ActionButtonsStyles';
 import type { useNewActionsAnimations } from './components/ContributeAnimations';
@@ -64,24 +64,20 @@ export const DonateSection: React.FC<Props> = ({
           onPress={onInfoPress}
           activeOpacity={0.8}
         >
-          <FormattedText
-            variant="title-large"
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          <PerfectText
+            size={22}
+            lines={1}
             style={actionButtonsStyles.donateCategoryTitle}
           >
             ❤️ Contribuisci
-          </FormattedText>
-          <FormattedText
-            fontSize={16}
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={2}
             style={actionButtonsStyles.donateInlineSubtitle}
           >
             Supporta la lotta contro la fame
-          </FormattedText>
+          </PerfectText>
         </PlatformTouchable>
         <PlatformTouchable
           style={actionButtonsStyles.infoButton}

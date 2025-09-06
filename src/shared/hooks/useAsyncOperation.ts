@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   isSuccess,
@@ -194,6 +194,16 @@ export const useAsyncOperation = <T, TArgs extends unknown[] = []>(
   }, []);
 
   const isExecuting = state.isLoading;
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+    };
+  }, []);
 
   return {
     state,

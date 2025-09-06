@@ -491,14 +491,15 @@ describe('useApiOperation', () => {
   });
 
   it('should handle timeout scenarios correctly', async () => {
+    let timeoutId: NodeJS.Timeout | undefined;
     const mockApiCall = jest.fn().mockImplementation(
       () =>
         new Promise(resolve => {
-          setTimeout(() => resolve('delayed response'), 200);
+          timeoutId = setTimeout(() => resolve('delayed response'), 200);
         })
     );
 
-    const { result } = renderHook(() =>
+    const { result, unmount } = renderHook(() =>
       useApiOperation(mockApiCall, {
         timeout: 100, // Short timeout to test timeout handling
       })
@@ -510,6 +511,12 @@ describe('useApiOperation', () => {
 
     // Should handle timeout gracefully
     expect(result.current.state.error?.message).toContain('timed out');
+    
+    // Cleanup
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    unmount();
   }, 5000);
 
   it('should handle debug logging scenarios', async () => {

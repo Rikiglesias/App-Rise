@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
-import { PlatformTouchable, FormattedText } from '../ui';
+import { PlatformTouchable, PerfectText } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
@@ -50,16 +50,16 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         >
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
-              <FormattedText variant="headline-large" style={styles.flag}>
+              <PerfectText size={32} lines={1} style={styles.flag}>
                 {data.flag}
-              </FormattedText>
+              </PerfectText>
               <View style={styles.headerTextContainer}>
-                <FormattedText variant="headline-small" style={styles.title}>
+                <PerfectText size={20} lines={1} style={styles.title}>
                   {data.title}
-                </FormattedText>
-                <FormattedText variant="body-medium" style={styles.subtitle}>
+                </PerfectText>
+                <PerfectText size={14} lines={1} style={styles.subtitle}>
                   {data.subtitle}
-                </FormattedText>
+                </PerfectText>
               </View>
             </View>
 
@@ -80,13 +80,14 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         {/* Contenuto semplificato */}
         <View style={[styles.content, { paddingHorizontal: spacing.modal }]}>
           {/* Descrizione breve - max 2 righe */}
-          <FormattedText
-            variant="body-large"
+          <PerfectText
+            size={16}
+            lines={3}
             style={[styles.description, { paddingHorizontal: spacing.modal }]}
           >
             Scopri il nostro impatto in {data.title} attraverso programmi di
             lotta alla fame e sviluppo sostenibile.
-          </FormattedText>
+          </PerfectText>
 
           {/* Call to Action per link esterno */}
           <PlatformTouchable
@@ -100,9 +101,9 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               color={Colors.neutral[0]}
               style={styles.ctaIcon}
             />
-            <FormattedText variant="body-large" style={styles.ctaText}>
+            <PerfectText size={16} lines={1} style={styles.ctaText}>
               Clicca qui per saperne di più
-            </FormattedText>
+            </PerfectText>
           </PlatformTouchable>
         </View>
       </View>

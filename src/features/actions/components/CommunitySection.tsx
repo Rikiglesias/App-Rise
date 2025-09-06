@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 
-import { FormattedText, PlatformTouchable } from '../../../components/ui';
+import { PerfectText, PlatformTouchable } from '../../../components/ui';
 import { Spacing } from '../../../shared/constants';
 import type { ButtonData } from '../hooks/useActionButtonsLogic';
 import { actionButtonsStyles } from '../styles/ActionButtonsStyles';
@@ -63,24 +63,20 @@ export const CommunitySection: React.FC<Props> = ({
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
         >
-          <FormattedText
-            variant="headline-small"
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          <PerfectText
+            size={20}
+            lines={1}
             style={actionButtonsStyles.communityTitle}
           >
             🤝 Community
-          </FormattedText>
-          <FormattedText
-            fontSize={16}
-            lineBreakStrategyIOS="push-out"
-            breakStrategyAndroid="highQuality"
-            hyphenationFrequencyAndroid="full"
+          </PerfectText>
+          <PerfectText
+            size={16}
+            lines={2}
             style={actionButtonsStyles.communitySubtitle}
           >
             Unisciti alla nostra comunità
-          </FormattedText>
+          </PerfectText>
           <MaterialCommunityIcons
             name="open-in-new"
             size={16}

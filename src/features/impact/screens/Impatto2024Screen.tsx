@@ -2,7 +2,7 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 
-import { FormattedText, PlatformScrollView } from '../../../components/ui';
+import { PerfectText, PlatformScrollView } from '../../../components/ui';
 
 import type { RootStackParamList } from '../../../navigation/types';
 import {
@@ -28,125 +28,123 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
     <SafeAreaView style={styles.container}>
       <PlatformScrollView>
         <View style={styles.header}>
-          <FormattedText variant="display-small" style={styles.year}>
+          <PerfectText size={36} lines={1} style={styles.year}>
             2024
-          </FormattedText>
-          <FormattedText variant="headline-small" style={styles.title}>
+          </PerfectText>
+          <PerfectText size={20} lines={1} style={styles.title}>
             Il Nostro Impatto
-          </FormattedText>
-          <FormattedText variant="body-large" style={styles.subtitle}>
+          </PerfectText>
+          <PerfectText size={16} lines={1} style={styles.subtitle}>
             Risultati raggiunti insieme
-          </FormattedText>
+          </PerfectText>
         </View>
 
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <FormattedText variant="headline-large" style={styles.statIcon}>
+            <PerfectText size={28} lines={1} style={styles.statIcon}>
               🍽️
-            </FormattedText>
-            <FormattedText variant="headline-medium" style={styles.statNumber}>
+            </PerfectText>
+            <PerfectText size={24} lines={1} style={styles.statNumber}>
               3.14M
-            </FormattedText>
-            <FormattedText
-              variant="title-large"
+            </PerfectText>
+            <PerfectText
+              size={18}
+              lines={1}
               style={styles.statLabel}
-              numberOfLines={1}
-              adjustsFontSizeToFit={true}
             >
               Pasti Confezionati
-            </FormattedText>
-            <FormattedText variant="body-medium" style={styles.statDesc}>
+            </PerfectText>
+            <PerfectText size={14} lines={2} style={styles.statDesc}>
               Nutrizione per comunità in difficoltà
-            </FormattedText>
+            </PerfectText>
           </View>
 
           <View style={styles.statCard}>
-            <FormattedText variant="headline-large" style={styles.statIcon}>
+            <PerfectText size={28} lines={1} style={styles.statIcon}>
               📦
-            </FormattedText>
-            <FormattedText variant="headline-medium" style={styles.statNumber}>
+            </PerfectText>
+            <PerfectText size={24} lines={1} style={styles.statNumber}>
               16.3K
-            </FormattedText>
-            <FormattedText
-              variant="title-large"
+            </PerfectText>
+            <PerfectText
+              size={18}
+              lines={1}
               style={styles.statLabel}
-              numberOfLines={1}
-              adjustsFontSizeToFit={true}
             >
               Kit Prodotti
-            </FormattedText>
-            <FormattedText variant="body-medium" style={styles.statDesc}>
+            </PerfectText>
+            <PerfectText size={14} lines={2} style={styles.statDesc}>
               Kit completi per emergenze
-            </FormattedText>
+            </PerfectText>
           </View>
 
           <View style={styles.statCard}>
-            <FormattedText variant="headline-large" style={styles.statIcon}>
+            <PerfectText size={28} lines={1} style={styles.statIcon}>
               👥
-            </FormattedText>
-            <FormattedText variant="headline-medium" style={styles.statNumber}>
+            </PerfectText>
+            <PerfectText size={24} lines={1} style={styles.statNumber}>
               13K
-            </FormattedText>
-            <FormattedText variant="title-large" style={styles.statLabel}>
+            </PerfectText>
+            <PerfectText size={18} lines={1} style={styles.statLabel}>
               Volontari
-            </FormattedText>
-            <FormattedText variant="body-medium" style={styles.statDesc}>
+            </PerfectText>
+            <PerfectText size={14} lines={2} style={styles.statDesc}>
               Persone che hanno fatto la differenza
-            </FormattedText>
+            </PerfectText>
           </View>
         </View>
 
         <View style={styles.impactSection}>
-          <FormattedText variant="title-medium" style={styles.impactTitle}>
+          <PerfectText size={18} lines={1} style={styles.impactTitle}>
             Dove Arrivano i Nostri Aiuti
-          </FormattedText>
+          </PerfectText>
 
           <View style={styles.impactList}>
             <View style={styles.impactItem}>
-              <FormattedText variant="title-medium" style={styles.impactIcon}>
+              <PerfectText size={18} lines={1} style={styles.impactIcon}>
                 🌍
-              </FormattedText>
-              <FormattedText variant="body-large" style={styles.impactText}>
+              </PerfectText>
+              <PerfectText size={16} lines={1} style={styles.impactText}>
                 Africa Subsahariana
-              </FormattedText>
+              </PerfectText>
             </View>
             <View style={styles.impactItem}>
-              <FormattedText variant="title-medium" style={styles.impactIcon}>
+              <PerfectText size={18} lines={1} style={styles.impactIcon}>
                 🏫
-              </FormattedText>
-              <FormattedText variant="body-large" style={styles.impactText}>
+              </PerfectText>
+              <PerfectText size={16} lines={1} style={styles.impactText}>
                 Programmi scolastici
-              </FormattedText>
+              </PerfectText>
             </View>
             <View style={styles.impactItem}>
-              <FormattedText variant="title-medium" style={styles.impactIcon}>
+              <PerfectText size={18} lines={1} style={styles.impactIcon}>
                 🚨
-              </FormattedText>
-              <FormattedText variant="body-large" style={styles.impactText}>
+              </PerfectText>
+              <PerfectText size={16} lines={1} style={styles.impactText}>
                 Emergenze umanitarie
-              </FormattedText>
+              </PerfectText>
             </View>
             <View style={styles.impactItem}>
-              <FormattedText variant="title-medium" style={styles.impactIcon}>
+              <PerfectText size={18} lines={1} style={styles.impactIcon}>
                 🇮🇹
-              </FormattedText>
-              <FormattedText variant="body-large" style={styles.impactText}>
+              </PerfectText>
+              <PerfectText size={16} lines={1} style={styles.impactText}>
                 Comunità italiane
-              </FormattedText>
+              </PerfectText>
             </View>
           </View>
         </View>
 
         <View style={styles.goalSection}>
-          <FormattedText variant="display-small" style={styles.goalIcon}>
+          <PerfectText size={36} lines={1} style={styles.goalIcon}>
             🎯
-          </FormattedText>
-          <FormattedText variant="title-medium" style={styles.goalTitle}>
+          </PerfectText>
+          <PerfectText size={18} lines={1} style={styles.goalTitle}>
             Obiettivo 2025
-          </FormattedText>
-          <FormattedText variant="body-large" style={styles.goalText}>
+          </PerfectText>
+          <PerfectText size={16} lines={2} style={styles.goalText}>
             Superare i 4 milioni di pasti confezionati
-          </FormattedText>
+          </PerfectText>
         </View>
       </PlatformScrollView>
     </SafeAreaView>

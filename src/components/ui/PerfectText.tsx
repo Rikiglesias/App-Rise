@@ -20,7 +20,7 @@ import {
   warnIfUserScaled,
 } from '../../shared/utils/SystemImmunity';
 
-interface PerfectTextProps
+export interface PerfectTextProps
   extends Omit<TextProps, 'numberOfLines' | 'adjustsFontSizeToFit'> {
   /** Font size di riferimento su iPhone 15 */
   fontSize?: number; // retrocompatibilità

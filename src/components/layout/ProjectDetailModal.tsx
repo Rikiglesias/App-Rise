@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Modal, StyleSheet, View } from 'react-native';
-import { PlatformScrollView, PlatformTouchable, FormattedText } from '../ui';
+import { PlatformScrollView, PlatformTouchable, PerfectText } from '../ui';
 
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
@@ -55,17 +55,14 @@ const ProjectDetailModal: React.FC<Props> = ({
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.statusBadge}>
-              <FormattedText variant="body-medium" style={styles.statusText}>
+              <PerfectText size={14} lines={1} style={styles.statusText}>
                 {location.status}
-              </FormattedText>
+              </PerfectText>
             </View>
             <PlatformTouchable style={styles.closeButton} onPress={onClose}>
-              <FormattedText
-                variant="body-large"
-                style={styles.closeButtonText}
-              >
+              <PerfectText size={16} lines={1} style={styles.closeButtonText}>
                 ✕
-              </FormattedText>
+              </PerfectText>
             </PlatformTouchable>
           </View>
         </View>
@@ -79,62 +76,60 @@ const ProjectDetailModal: React.FC<Props> = ({
               resizeMode="cover"
             />
             <View style={styles.imageOverlay}>
-              <FormattedText
-                variant="headline-small"
-                style={styles.locationName}
-              >
+              <PerfectText size={20} lines={1} style={styles.locationName}>
                 {location.name}
-              </FormattedText>
-              <FormattedText
-                variant="body-medium"
-                style={styles.locationCountry}
-              >
+              </PerfectText>
+              <PerfectText size={14} lines={1} style={styles.locationCountry}>
                 {location.country}
-              </FormattedText>
+              </PerfectText>
             </View>
           </View>
 
           {/* Stats Cards */}
           <View style={styles.statsContainer}>
             <View style={styles.statCard}>
-              <FormattedText variant="display-small" style={styles.statNumber}>
+              <PerfectText size={28} lines={1} style={styles.statNumber}>
                 {location.projects}
-              </FormattedText>
-              <FormattedText variant="body-medium" style={styles.statLabel}>
+              </PerfectText>
+              <PerfectText size={12} lines={1} style={styles.statLabel}>
                 Progetti Attivi
-              </FormattedText>
+              </PerfectText>
               <View style={styles.statIcon}>
-                <FormattedText variant="title-medium">🎯</FormattedText>
+                <PerfectText size={18} lines={1}>
+                  🎯
+                </PerfectText>
               </View>
             </View>
             <View style={styles.statCard}>
-              <FormattedText variant="display-small" style={styles.statNumber}>
+              <PerfectText size={28} lines={1} style={styles.statNumber}>
                 {location.beneficiaries}
-              </FormattedText>
-              <FormattedText variant="body-medium" style={styles.statLabel}>
+              </PerfectText>
+              <PerfectText size={12} lines={1} style={styles.statLabel}>
                 Beneficiari
-              </FormattedText>
+              </PerfectText>
               <View style={styles.statIcon}>
-                <FormattedText variant="title-medium">👥</FormattedText>
+                <PerfectText size={18} lines={1}>
+                  👥
+                </PerfectText>
               </View>
             </View>
           </View>
 
           {/* Description */}
           <View style={styles.descriptionContainer}>
-            <FormattedText variant="title-large" style={styles.sectionTitle}>
+            <PerfectText size={22} lines={1} style={styles.sectionTitle}>
               📝 Il Nostro Impatto
-            </FormattedText>
-            <FormattedText variant="body-medium" style={styles.description}>
+            </PerfectText>
+            <PerfectText size={14} lines={4} style={styles.description}>
               {location.description}
-            </FormattedText>
+            </PerfectText>
           </View>
 
           {/* Action Buttons */}
           <View style={styles.actionsContainer}>
-            <FormattedText variant="title-large" style={styles.sectionTitle}>
+            <PerfectText size={20} lines={1} style={styles.sectionTitle}>
               🚀 Sostieni Questo Progetto
-            </FormattedText>
+            </PerfectText>
             <View style={styles.buttonGrid}>
               <PlatformTouchable
                 style={styles.primaryButton}
@@ -145,12 +140,13 @@ const ProjectDetailModal: React.FC<Props> = ({
                   })
                 }
               >
-                <FormattedText
-                  variant="body-large"
+                <PerfectText
+                  size={16}
+                  lines={1}
                   style={styles.primaryButtonText}
                 >
                   💝 Dona Ora
-                </FormattedText>
+                </PerfectText>
               </PlatformTouchable>
               <PlatformTouchable
                 style={styles.secondaryButton}
@@ -161,12 +157,13 @@ const ProjectDetailModal: React.FC<Props> = ({
                   })
                 }
               >
-                <FormattedText
-                  variant="body-large"
+                <PerfectText
+                  size={16}
+                  lines={1}
                   style={styles.secondaryButtonText}
                 >
                   🤝 Diventa Volontario
-                </FormattedText>
+                </PerfectText>
               </PlatformTouchable>
             </View>
           </View>

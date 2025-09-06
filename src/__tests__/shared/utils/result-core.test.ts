@@ -462,7 +462,8 @@ describe('Result Pattern - Core Functions', () => {
 
   describe('Logging and debugging', () => {
     it('should log results correctly', () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
       const successResult = success('test data');
       const loggedSuccess = logResult(successResult, 'TestContext');
@@ -474,7 +475,8 @@ describe('Result Pattern - Core Functions', () => {
 
       expect(loggedFailure).toBe(failureResult);
 
-      consoleSpy.mockRestore();
+      consoleLogSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
   });
 });

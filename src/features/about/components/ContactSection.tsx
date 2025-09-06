@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-import { FormattedText } from '../../../components/ui/FormattedText';
+import { PerfectText } from '../../../components/ui/PerfectText';
 import { contactSectionStyles } from '../styles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
@@ -15,13 +15,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       {/* HEADER SENZA ANIMAZIONI */}
       <View style={contactSectionStyles.categoryHeader}>
         <View style={contactSectionStyles.exploreHeaderContainer}>
-          <FormattedText
-            fontSize={30}
-            fixedLines={1}
+          <PerfectText
+            size={30}
+            lines={1}
             style={contactSectionStyles.categoryTitle}
           >
             I Nostri Contatti
-          </FormattedText>
+          </PerfectText>
           <Text style={contactSectionStyles.exploreSubtitleInline}>
             Sede di Bologna e recapiti ufficiali
           </Text>
@@ -33,12 +33,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           if (!animationValue) return null;
 
           return (
-            <View key={contact.id}>
-              <AnimatedContact
-                contact={contact}
-                animationValue={animationValue}
-              />
-            </View>
+            <AnimatedContact
+              key={contact.id}
+              contact={contact}
+              animationValue={animationValue}
+            />
           );
         })}
       </View>

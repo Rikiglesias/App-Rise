@@ -10,7 +10,7 @@ import {
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 import { useTheme } from '../../shared/hooks/useTheme';
-import { FormattedText } from './FormattedText';
+import { PerfectText } from './PerfectText';
 import PlatformTouchable from './PlatformTouchable';
 
 const { width } = Dimensions.get('window');
@@ -235,14 +235,16 @@ const PremiumFloatingButtonContent: React.FC<{
         accessibilityLabel={`${title} - Pulsante di azione rapida`}
       >
         <Animated.View style={styles.content}>
-          <FormattedText fontSize={20} style={styles.icon}>
+          <PerfectText size={20} lines={1} style={styles.icon}>
             {icon}
-          </FormattedText>
-          <FormattedText
-            style={[styles.title, variant === 'glass' && styles.glassTitle]}
+          </PerfectText>
+          <PerfectText
+            size={14}
+            lines={1}
+            style={[styles.title, ...(variant === 'glass' ? [styles.glassTitle] : [])]}
           >
             {title}
-          </FormattedText>
+          </PerfectText>
         </Animated.View>
       </PlatformTouchable>
     </Animated.View>

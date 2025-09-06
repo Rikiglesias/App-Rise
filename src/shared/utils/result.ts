@@ -90,19 +90,38 @@ export const withTimeout = async <T>(
   return safeAsync(
     () =>
       new Promise<T>((resolve, reject) => {
-        const timer = setTimeout(() => {
-          reject(new Error(timeoutMessage));
+        let isResolved = false;
+        let timer: NodeJS.Timeout | null = null;
+        
+        timer = setTimeout(() => {
+          if (!isResolved && timer) {
+            isResolved = true;
+            timer = null;
+            reject(new Error(timeoutMessage));
+          }
         }, timeoutMs);
 
         // Esegui l'operazione e pulisci sempre il timer
         operation()
           .then(value => {
-            clearTimeout(timer);
-            resolve(value);
+            if (!isResolved) {
+              isResolved = true;
+              if (timer) {
+                clearTimeout(timer);
+                timer = null;
+              }
+              resolve(value);
+            }
           })
           .catch(err => {
-            clearTimeout(timer);
-            reject(err);
+            if (!isResolved) {
+              isResolved = true;
+              if (timer) {
+                clearTimeout(timer);
+                timer = null;
+              }
+              reject(err);
+            }
           });
       })
   );

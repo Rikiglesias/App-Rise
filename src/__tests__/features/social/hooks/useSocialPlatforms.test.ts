@@ -40,7 +40,7 @@ describe('useSocialPlatforms', () => {
   it('returns social platforms data correctly', () => {
     const { result } = renderHook(() => useSocialPlatforms());
 
-    expect(result.current.socialPlatforms).toHaveLength(8);
+    expect(result.current.socialPlatforms).toHaveLength(4);
     expect(result.current.animationValue).toBeDefined();
     expect(result.current.startAnimation).toBeDefined();
   });
@@ -50,12 +50,11 @@ describe('useSocialPlatforms', () => {
     const platforms = result.current.socialPlatforms;
 
     const platformIds = platforms.map(p => p.id);
+    expect(platformIds).toContain('website');
     expect(platformIds).toContain('instagram');
-    expect(platformIds).toContain('linkedin');
     expect(platformIds).toContain('facebook');
-    expect(platformIds).toContain('twitter');
-    expect(platformIds).toContain('youtube');
-    expect(platformIds).toContain('tiktok');
+    expect(platformIds).toContain('linkedin');
+    expect(platforms).toHaveLength(4);
   });
 
   it('each platform has required properties', () => {
@@ -94,10 +93,10 @@ describe('useSocialPlatforms - Link Opening', () => {
       });
 
       expect(mockLinking.canOpenURL).toHaveBeenCalledWith(
-        'https://instagram.com/rise_against_hunger_italia'
+        'https://instagram.com/riseagainsthungeritalia'
       );
       expect(mockLinking.openURL).toHaveBeenCalledWith(
-        'https://instagram.com/rise_against_hunger_italia'
+        'https://instagram.com/riseagainsthungeritalia'
       );
     });
 
@@ -173,9 +172,24 @@ describe('useSocialPlatforms - Platform Data', () => {
     expect(instagram).toMatchObject({
       id: 'instagram',
       name: 'Instagram',
-      handle: '@rise_against_hunger_italia',
+      handle: '@riseagainsthungeritalia',
       description: 'Foto e storie delle nostre missioni',
       gradient: ['#E1306C', '#F56040', '#FCAF45'],
+    });
+  });
+
+  it('Website platform has correct data', () => {
+    const { result } = renderHook(() => useSocialPlatforms());
+    const website = result.current.socialPlatforms.find(
+      p => p.id === 'website'
+    );
+
+    expect(website).toMatchObject({
+      id: 'website',
+      name: 'Sito Web',
+      handle: 'italy.riseagainsthunger.org',
+      description: 'Il nostro sito ufficiale',
+      gradient: ['#6B7280', '#9CA3AF', '#D1D5DB'],
     });
   });
 
@@ -188,7 +202,7 @@ describe('useSocialPlatforms - Platform Data', () => {
     expect(linkedin).toMatchObject({
       id: 'linkedin',
       name: 'LinkedIn',
-      handle: '@rise-against-hunger-italia',
+      handle: 'Rise Against Hunger Italia',
       description: 'Aggiornamenti professionali e partnership',
     });
   });

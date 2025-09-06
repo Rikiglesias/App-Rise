@@ -227,6 +227,8 @@ describe('Result Pattern - Advanced Functions', () => {
 
     beforeEach(() => {
       jest.clearAllMocks();
+      jest.spyOn(console, 'log').mockImplementation();
+      jest.spyOn(console, 'error').mockImplementation();
       (global as typeof global & { __DEV__?: boolean }).__DEV__ = true;
     });
 

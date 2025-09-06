@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   PlatformTouchable,
   PlatformScrollView,
-  FormattedText,
+  PerfectText,
 } from '../../components/ui';
 
 import {
@@ -206,16 +206,12 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               },
             ]}
           >
-            <FormattedText
-              fontSize={32}
-              fixedLines={2}
-              style={styles.mainTitle}
-            >
+            <PerfectText size={32} lines={2} style={styles.mainTitle}>
               🚧 In Fase di Sviluppo
-            </FormattedText>
-            <FormattedText fontSize={18} fixedLines={2} style={styles.subtitle}>
+            </PerfectText>
+            <PerfectText size={18} lines={2} style={styles.subtitle}>
               Questa sezione sarà presto disponibile
-            </FormattedText>
+            </PerfectText>
           </View>
 
           {/* Card Informativa */}
@@ -238,22 +234,14 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                   color="#DC2626"
                   style={[styles.cardIcon, { marginBottom: Spacing[2] }]}
                 />
-                <FormattedText
-                  fontSize={24}
-                  fixedLines={2}
-                  style={styles.cardTitle}
-                >
+                <PerfectText size={24} lines={2} style={styles.cardTitle}>
                   Cosa stiamo preparando
-                </FormattedText>
-                <FormattedText
-                  fontSize={16}
-                  fixedLines={4}
-                  style={styles.cardDescription}
-                >
+                </PerfectText>
+                <PerfectText size={16} lines={4} style={styles.cardDescription}>
                   Il nostro team sta lavorando duramente per portarti nuove
                   funzionalità innovative e un&apos;esperienza utente ancora
                   migliore.
-                </FormattedText>
+                </PerfectText>
 
                 <View style={[styles.featuresList, { gap: Spacing[1] }]}>
                   <View style={[styles.featureItem, { gap: Spacing[3] }]}>
@@ -262,13 +250,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       size={16}
                       color="#059669"
                     />
-                    <FormattedText
-                      fontSize={16}
-                      fixedLines={1}
-                      style={styles.featureText}
-                    >
+                    <PerfectText size={16} lines={1} style={styles.featureText}>
                       Design migliorato
-                    </FormattedText>
+                    </PerfectText>
                   </View>
                   <View style={[styles.featureItem, { gap: Spacing[3] }]}>
                     <MaterialCommunityIcons
@@ -276,13 +260,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       size={16}
                       color="#059669"
                     />
-                    <FormattedText
-                      fontSize={16}
-                      fixedLines={1}
-                      style={styles.featureText}
-                    >
+                    <PerfectText size={16} lines={1} style={styles.featureText}>
                       Nuove funzionalità
-                    </FormattedText>
+                    </PerfectText>
                   </View>
                   <View style={[styles.featureItem, { gap: Spacing[3] }]}>
                     <MaterialCommunityIcons
@@ -290,13 +270,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       size={16}
                       color="#059669"
                     />
-                    <FormattedText
-                      fontSize={16}
-                      fixedLines={2}
-                      style={styles.featureText}
-                    >
+                    <PerfectText size={16} lines={2} style={styles.featureText}>
                       Performance ottimizzate
-                    </FormattedText>
+                    </PerfectText>
                   </View>
                 </View>
               </View>

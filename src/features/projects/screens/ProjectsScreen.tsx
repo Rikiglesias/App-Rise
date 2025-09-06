@@ -1,6 +1,6 @@
 import React from 'react';
 import { RefreshControl, SafeAreaView, View } from 'react-native';
-import { PlatformScrollView, FormattedText } from '../../../components/ui';
+import { PlatformScrollView, PerfectText } from '../../../components/ui';
 
 import FilterTabs from '../../../components/ui/FilterTabs';
 import ProjectCard from '../../../components/ProjectCard';
@@ -65,9 +65,9 @@ const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
 
         {/* Projects List */}
         <View style={styles.content}>
-          <FormattedText fontSize={18} style={styles.sectionTitle}>
+          <PerfectText size={18} lines={1} style={styles.sectionTitle}>
             {getSectionTitle()}
-          </FormattedText>
+          </PerfectText>
 
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project: Project) => (
