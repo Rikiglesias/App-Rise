@@ -1,4 +1,5 @@
 # 🇮🇹 **Rise Against Hunger Italia**
+<!-- Test workflow automatico -->
 
 *App React Native per combattere la fame nel mondo*
 
