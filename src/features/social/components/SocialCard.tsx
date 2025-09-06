@@ -5,7 +5,6 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PlatformTouchable, PerfectText } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants';
 import { DesignTokens } from '../../../shared/constants/responsiveSystem';
-import { useResponsive } from '../../../shared/hooks';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -25,8 +24,6 @@ interface SocialCardProps {
 
 export const SocialCard: React.FC<SocialCardProps> = React.memo(
   ({ platform, animationValue }) => {
-    const { scale } = useResponsive();
-
     return (
       <Animated.View
         style={[
@@ -70,7 +67,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                   />
                 ) : (
                   <PerfectText
-                    size={scale(24)}
+                    size={24}
                     lines={1}
                     style={styles.socialIconEmoji}
                   >
@@ -80,22 +77,14 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               </View>
 
               <View style={styles.socialInfoContainer}>
-                <PerfectText
-                  size={scale(16)}
-                  lines={1}
-                  style={styles.socialName}
-                >
+                <PerfectText size={16} lines={1} style={styles.socialName}>
                   {platform.name}
                 </PerfectText>
-                <PerfectText
-                  size={scale(14)}
-                  lines={1}
-                  style={styles.socialHandle}
-                >
+                <PerfectText size={14} lines={1} style={styles.socialHandle}>
                   {platform.handle}
                 </PerfectText>
                 <PerfectText
-                  size={scale(12)}
+                  size={12}
                   lines={2}
                   style={styles.socialDescription}
                 >
@@ -106,7 +95,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               <View style={styles.arrowContainer}>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={scale(24)}
+                  size={24}
                   color={Colors.neutral[400]}
                 />
               </View>

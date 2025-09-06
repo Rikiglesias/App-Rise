@@ -33,17 +33,25 @@ Per i dettagli completi, vedi: `docs/DEVELOPMENT_GUIDE.md`, `docs/ARCHITECTURE.m
 
 ## 🚫 Anti‑patterns VIETATI (solo a scopo didattico, non usare mai)
 ```ts
-// Componenti/Hook legacy
-import { FormattedText, FormattedTextEnhanced } from '@/components/ui';
-import { ResponsiveBox, ResponsiveStack, ResponsiveCard, ResponsiveImage } from '@/components/ui';
-import { useResponsiveLayout, useResponsiveDarkMode } from '@/shared/hooks';
+// ❌ PATTERN LEGACY VIETATI (esempi di cosa NON fare)
+// Questi pattern sono stati sostituiti dal Perfect System
 
-// Calcoli/prop vietati
-const { width, height } = Dimensions.get('window');
-<FormattedText fontSize={32} fixedLines={2} intelligentAccessibilityScaling>
-<ResponsiveBox preset="card" autoBackgroundColor="primary">
-<ResponsiveImage preset="hero" source={image}>
-<Text allowFontScaling={true}>
+// ❌ Componenti obsoleti (ora sostituiti da Perfect System)
+// import { FormattedText, FormattedTextEnhanced } from '@/components/ui';
+// import { ResponsiveBox, ResponsiveStack, ResponsiveCard, ResponsiveImage } from '@/components/ui';
+// import { useResponsiveLayout, useResponsiveDarkMode } from '@/shared/hooks';
+
+// ❌ Calcoli manuali (ora gestiti automaticamente)
+// const { width, height } = Dimensions.get('window');
+// <FormattedText fontSize={32} fixedLines={2}>
+// <ResponsiveBox preset="card">
+// <Text allowFontScaling={true}>
+
+// ✅ PERFECT SYSTEM (pattern corretti)
+import { PerfectText, PerfectImage, PerfectContainer } from '@/components/ui';
+<PerfectText size={32} lines={2}>Testo sempre perfetto</PerfectText>
+<PerfectContainer preset="card">Layout sempre identico</PerfectContainer>
+<PerfectImage preset="hero" source={image} />
 ```
 
 ---

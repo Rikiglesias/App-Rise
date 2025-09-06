@@ -59,7 +59,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               <View style={modalStyles.modalContent}>
                 {/* Header */}
                 <View style={modalStyles.modalHeader}>
-                  <PerfectText size={16} lines={1} style={modalStyles.modalTitle}>
+                  <PerfectText
+                    size={16}
+                    lines={1}
+                    style={modalStyles.modalTitle}
+                  >
                     La Nostra Storia
                   </PerfectText>
                   <PlatformTouchable
@@ -81,11 +85,19 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   contentContainerStyle={modalStyles.storyContainer}
                   showsVerticalScrollIndicator={true}
                 >
-                  <PerfectText size={15} lines={1} style={modalStyles.introText}>
+                  <PerfectText
+                    size={15}
+                    lines={1}
+                    style={modalStyles.introText}
+                  >
                     Dal 1998, un movimento globale contro la fame
                   </PerfectText>
 
-                  <PerfectText size={15} lines={10} style={modalStyles.storyText}>
+                  <PerfectText
+                    size={15}
+                    lines={10}
+                    style={modalStyles.storyText}
+                  >
                     <PerfectText
                       size={15}
                       lines={1}
@@ -108,13 +120,21 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
 
                   <View style={modalStyles.sectionDivider} />
 
-                  <PerfectText size={15} lines={1} style={modalStyles.sectionTitle}>
+                  <PerfectText
+                    size={15}
+                    lines={1}
+                    style={modalStyles.sectionTitle}
+                  >
                     <PerfectText size={20} lines={1}>
                       🇮🇹
                     </PerfectText>{' '}
                     In Italia
                   </PerfectText>
-                  <PerfectText size={15} lines={8} style={modalStyles.storyText}>
+                  <PerfectText
+                    size={15}
+                    lines={8}
+                    style={modalStyles.storyText}
+                  >
                     La organizzazione arriva in{' '}
                     <PerfectText
                       size={15}
@@ -138,7 +158,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
 
                   <View style={modalStyles.sectionDivider} />
 
-                  <PerfectText size={15} lines={1} style={modalStyles.sectionTitle}>
+                  <PerfectText
+                    size={15}
+                    lines={1}
+                    style={modalStyles.sectionTitle}
+                  >
                     <PerfectText size={20} lines={1}>
                       🌟
                     </PerfectText>{' '}

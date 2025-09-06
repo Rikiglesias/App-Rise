@@ -47,11 +47,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             <PerfectText size={24} lines={1} style={styles.statNumber}>
               3.14M
             </PerfectText>
-            <PerfectText
-              size={18}
-              lines={1}
-              style={styles.statLabel}
-            >
+            <PerfectText size={18} lines={1} style={styles.statLabel}>
               Pasti Confezionati
             </PerfectText>
             <PerfectText size={14} lines={2} style={styles.statDesc}>
@@ -66,11 +62,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             <PerfectText size={24} lines={1} style={styles.statNumber}>
               16.3K
             </PerfectText>
-            <PerfectText
-              size={18}
-              lines={1}
-              style={styles.statLabel}
-            >
+            <PerfectText size={18} lines={1} style={styles.statLabel}>
               Kit Prodotti
             </PerfectText>
             <PerfectText size={14} lines={2} style={styles.statDesc}>

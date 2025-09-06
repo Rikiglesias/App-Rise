@@ -3,7 +3,6 @@ import { Animated, View } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PerfectText } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants';
-import { useResponsive } from '../../../shared/hooks';
 
 interface HeaderSectionProps {
   readonly animationValue: Animated.Value;
@@ -11,8 +10,6 @@ interface HeaderSectionProps {
 
 export const HeaderSection: React.FC<HeaderSectionProps> = React.memo(
   ({ animationValue }) => {
-    const { scale } = useResponsive();
-
     return (
       <Animated.View
         style={[
@@ -33,16 +30,16 @@ export const HeaderSection: React.FC<HeaderSectionProps> = React.memo(
         <View style={styles.headerIconContainer}>
           <MaterialCommunityIcons
             name="account-group"
-            size={scale(32)}
+            size={32}
             color={Colors.primary[600]}
           />
         </View>
 
-        <PerfectText size={scale(28)} lines={1} style={styles.headerTitle}>
+        <PerfectText size={28} lines={1} style={styles.headerTitle}>
           Seguici sui Social
         </PerfectText>
 
-        <PerfectText size={scale(16)} lines={2} style={styles.headerSubtitle}>
+        <PerfectText size={16} lines={2} style={styles.headerSubtitle}>
           Resta aggiornato sulle nostre iniziative e scopri come puoi
           contribuire al cambiamento
         </PerfectText>

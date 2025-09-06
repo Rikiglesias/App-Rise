@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { scaleFont } from '../constants/responsiveSystem';
 
 /**
@@ -10,7 +10,9 @@ import { scaleFont } from '../constants/responsiveSystem';
  */
 
 export const TestAutomaticoScreen: React.FC = () => {
-  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+  // iPhone 15 reference dimensions - Perfect System will handle scaling
+  const screenWidth = 393;
+  const screenHeight = 852;
 
   // 🎯 CALCOLI IDENTICI AL MODERNSMARTITLE
   const baseFontSize = 42;

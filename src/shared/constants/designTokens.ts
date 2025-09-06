@@ -126,12 +126,12 @@ export const Spacing = SpacingTokens;
 // BORDER RADIUS - Now with responsive scaling
 export const BorderRadius = {
   none: 0,
-  sm: scaleSize(6),
-  md: scaleSize(12),
-  lg: scaleSize(16),
-  xl: scaleSize(20),
-  '2xl': scaleSize(24),
-  '3xl': scaleSize(32),
+  sm: 6,
+  md: 12,
+  lg: 18,
+  xl: 24,
+  '2xl': 32,
+  '3xl': 40,
   full: 9999,
 };
 

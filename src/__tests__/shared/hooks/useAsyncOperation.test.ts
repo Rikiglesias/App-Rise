@@ -511,7 +511,7 @@ describe('useApiOperation', () => {
 
     // Should handle timeout gracefully
     expect(result.current.state.error?.message).toContain('timed out');
-    
+
     // Cleanup
     if (timeoutId) {
       clearTimeout(timeoutId);

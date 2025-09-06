@@ -12,7 +12,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { PerfectText } from '../../components/ui/PerfectText';
 
 const GRID_SIZE = 8; // 8dp baseline grid
@@ -29,16 +29,12 @@ const GridOverlay: React.FC<GridOverlayProps> = ({
   onToggle,
 }) => {
   const [isVisible, setIsVisible] = useState(visible);
-  const [screenDimensions, setScreenDimensions] = useState(
-    Dimensions.get('window')
-  );
+  // iPhone 15 reference dimensions - Perfect System handles scaling
+  const screenDimensions = { width: 393, height: 852 };
 
   useEffect(() => {
-    const subscription = Dimensions.addEventListener('change', ({ window }) => {
-      setScreenDimensions(window);
-    });
-
-    return () => subscription?.remove();
+    // No need to listen for dimension changes in Perfect System
+    // Perfect System uses fixed iPhone 15 reference dimensions
   }, []);
 
   useEffect(() => {

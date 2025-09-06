@@ -49,10 +49,7 @@ export const useSocialPlatforms = () => {
       emoji: '🌐',
       gradient: ['#6B7280', '#9CA3AF', '#D1D5DB'],
       onPress: () =>
-        openSocialLink(
-          'https://italy.riseagainsthunger.org',
-          'Sito Web'
-        ),
+        openSocialLink('https://italy.riseagainsthunger.org', 'Sito Web'),
     },
     {
       id: 'instagram',
@@ -92,7 +89,7 @@ export const useSocialPlatforms = () => {
           'https://linkedin.com/company/rise-against-hunger-italia',
           'LinkedIn'
         ),
-    }
+    },
   ];
 
   const startAnimation = useCallback(() => {

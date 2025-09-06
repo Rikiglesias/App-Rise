@@ -11,12 +11,8 @@ import {
 
 import type { RootStackParamList } from '../../../navigation/types';
 import { BorderRadius, Colors, Spacing } from '../../../shared/constants';
-import responsiveSystem, {
-  scaleDimensionLinear,
-} from '../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
-import { useResponsive } from '../../../shared/hooks';
 
 // Componenti modulari
 import { SocialCard } from '../components/SocialCard';
@@ -35,7 +31,6 @@ interface Props {
 const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { triggerHaptic } = useHapticFeedback();
   const insets = useSafeAreaInsets();
-  const { scale } = useResponsive();
 
   // Hook personalizzato per gestire social platforms e animazioni
   const { socialPlatforms, animationValue } = useSocialPlatforms();
@@ -54,11 +49,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleBackPress}
         style={[styles.backButton, { top: insets.top + Spacing[2] }]}
       >
-        <MaterialCommunityIcons
-          name="arrow-left"
-          size={scale(24)}
-          color="#000000"
-        />
+        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={styles.scrollContent}>
@@ -125,9 +116,7 @@ const styles = StyleSheet.create({
   sectionDivider: {
     height: 2,
     backgroundColor: Colors.neutral[300],
-    width: scaleDimensionLinear(
-      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.6
-    ),
+    width: 236, // 393 * 0.6 = 235.8, rounded to 236
     borderRadius: 1,
     opacity: 0.8,
     shadowColor: Colors.neutral[400],

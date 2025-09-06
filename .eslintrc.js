@@ -102,7 +102,7 @@ module.exports = {
 
     // =================== ENFORCE SISTEMA PERFETTO (BAN LEGACY) ===================
     'no-restricted-imports': [
-      'off', // TEMPORANEO: Disabilitato per evitare blocchi
+      'error', // RIATTIVATO: Blocca pattern legacy dopo migrazione
       {
         paths: [
           {
@@ -132,7 +132,7 @@ module.exports = {
       },
     ],
     'no-restricted-properties': [
-      'off', // TEMPORANEO: Disabilitato per evitare blocchi
+      'error', // RIATTIVATO: Blocca Dimensions.get() dopo migrazione
       {
         object: 'Dimensions',
         property: 'get',
@@ -357,6 +357,7 @@ module.exports = {
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-call': 'off',
         'react/display-name': 'off',
+        'no-restricted-properties': 'off', // Allow Dimensions.get() in tests for mocking
       },
     },
 

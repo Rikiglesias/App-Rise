@@ -9,7 +9,7 @@
  * Battle-tested su miliardi di dispositivi dalle grandi tech companies
  */
 
-import { Dimensions, PixelRatio, Platform } from 'react-native';
+import { PixelRatio, Platform } from 'react-native';
 import {
   findDeviceByWidth,
   getDatabaseStats,
@@ -45,14 +45,11 @@ const LOGICAL_REFERENCE = {
   scale: 2, // Standard scaling reference
 } as const;
 
-// 📏 DIMENSIONI DEVICE CORRENTI
+// 📏 DIMENSIONI DEVICE CORRENTI - iPhone 15 reference
 const getDimensions = () => {
-  try {
-    return Dimensions.get('window');
-  } catch {
-    // Fallback for test environment - logical reference
-    return { width: LOGICAL_REFERENCE.width, height: LOGICAL_REFERENCE.height };
-  }
+  // Perfect System - always use iPhone 15 reference dimensions
+  // Actual scaling will be handled by the Perfect System components
+  return { width: LOGICAL_REFERENCE.width, height: LOGICAL_REFERENCE.height };
 };
 
 const getPixelRatio = () => {

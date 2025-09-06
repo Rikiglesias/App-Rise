@@ -92,7 +92,7 @@ export const withTimeout = async <T>(
       new Promise<T>((resolve, reject) => {
         let isResolved = false;
         let timer: NodeJS.Timeout | null = null;
-        
+
         timer = setTimeout(() => {
           if (!isResolved && timer) {
             isResolved = true;

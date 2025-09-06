@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  Animated,
-  Image,
-  StyleSheet,
-  View,
-  Dimensions,
-  Text,
-} from 'react-native';
+import { Animated, Image, StyleSheet, View, Text } from 'react-native';
 import { PerfectContainer } from '../ui';
-import { findDeviceByWidth } from '../../shared/constants/deviceResolutionsDatabase';
 import { scaleFont } from '../../shared/constants/responsiveSystem';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
@@ -69,83 +61,21 @@ export interface ModernSmartTitleProps {
   titleTransform: Animated.AnimatedNode;
 }
 
-// ✨ SISTEMA BI-DIREZIONALE INTELLIGENTE - MODERN TITLE COMPONENT
+// ✨ PERFECT SYSTEM INTEGRATION - MODERN TITLE COMPONENT
 export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform }) => {
-    // ✅ ALGORITMO MILLIMETRICO UNIVERSALE - Proporzioni identiche su TUTTI i dispositivi
+    // ✅ PERFECT SYSTEM - iPhone 15 reference values (will be scaled automatically)
     const responsiveSpacing = React.useMemo(() => {
-      // STEP 1: Rileva dispositivo corrente dal database universale
-      const { width: currentDeviceWidth } = Dimensions.get('window');
-      const currentDeviceData = findDeviceByWidth(currentDeviceWidth)[0]; // Primo match
-
-      // STEP 2: iPhone 15 come riferimento assoluto (393px - CORREZIONE CRITICA)
-      const REFERENCE_DEVICE = {
-        width: 393, // iPhone 15 - CORREZIONE 414→393px
-        containerPadding: 30, // 7.63% della larghezza (30/393)
-        separatorTopMargin: 8, // 2.04% della larghezza
-        separatorBottomMargin: 4, // 1.02% della larghezza
-        logoSize: 53, // 13.49% della larghezza
-        separatorLineWidth: 104, // 26.46% della larghezza
-        logoMargin: 15, // 3.82% della larghezza
-        stackSpacing: 8, // 2.04% della larghezza
-      };
-
-      // STEP 3: Calcola proporzioni percentuali MILLIMETRICHE
-      const calculateProportionalSize = (
-        referenceValue: number,
-        referenceWidth: number,
-        currentWidth: number
-      ) => {
-        const proportion = referenceValue / referenceWidth; // Percentuale del riferimento
-        return Math.round(currentWidth * proportion); // Applicata al dispositivo corrente
-      };
-
-      // STEP 4: Applica proporzioni al dispositivo corrente
-      const deviceWidth = currentDeviceData?.width ?? currentDeviceWidth;
-
+      // iPhone 15 reference values - Perfect System will handle scaling
       return {
-        containerPadding: calculateProportionalSize(
-          REFERENCE_DEVICE.containerPadding,
-          REFERENCE_DEVICE.width,
-          deviceWidth
-        ), // iPhone 15: 32px | Redmi 393px: 30px | iPad 768px: 59px
-
-        separatorTopMargin: calculateProportionalSize(
-          REFERENCE_DEVICE.separatorTopMargin,
-          REFERENCE_DEVICE.width,
-          deviceWidth
-        ), // iPhone 15: 8px | Redmi: 8px | iPad: 15px
-
-        separatorBottomMargin: calculateProportionalSize(
-          REFERENCE_DEVICE.separatorBottomMargin,
-          REFERENCE_DEVICE.width,
-          deviceWidth
-        ), // iPhone 15: 4px | Redmi: 4px | iPad: 7px
-
-        logoSize: calculateProportionalSize(
-          REFERENCE_DEVICE.logoSize,
-          REFERENCE_DEVICE.width,
-          deviceWidth
-        ), // iPhone 15: 56px | Redmi: 53px | iPad: 104px
-
-        separatorLineWidth: calculateProportionalSize(
-          REFERENCE_DEVICE.separatorLineWidth,
-          REFERENCE_DEVICE.width,
-          deviceWidth
-        ), // iPhone 15: 110px | Redmi: 104px | iPad: 204px
-
-        logoMargin: calculateProportionalSize(
-          REFERENCE_DEVICE.logoMargin,
-          REFERENCE_DEVICE.width,
-          deviceWidth
-        ), // iPhone 15: 16px | Redmi: 15px | iPad: 30px
-
-        stackSpacing: calculateProportionalSize(
-          REFERENCE_DEVICE.stackSpacing,
-          REFERENCE_DEVICE.width,
-          deviceWidth
-        ), // iPhone 15: 8px | Redmi: 8px | iPad: 15px
-      };
+        containerPadding: 30,
+        separatorTopMargin: 8,
+        separatorBottomMargin: 4,
+        logoSize: 53,
+        separatorLineWidth: 104,
+        logoMargin: 15,
+        stackSpacing: 8,
+      }; // Perfect System will handle all scaling automatically
     }, []);
 
     const modernTitleStyles = React.useMemo(

@@ -23,7 +23,6 @@ import {
   Spacing,
   Typography,
 } from '../shared/constants/designTokens';
-import { useResponsive } from '../shared/hooks';
 import ImpactStackNavigator from './ImpactStackNavigator';
 
 import type { BottomTabParamList } from './types';
@@ -55,20 +54,19 @@ const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const { spacing, scale } = useResponsive();
 
   const tabContainerStyle = useMemo(
     () => [
       styles.tabBarContainer,
       {
-        bottom: Math.max(insets.bottom, spacing[4]),
-        height: scale(95),
-        left: spacing[6],
-        right: spacing[6],
-        borderRadius: scale(32),
+        bottom: Math.max(insets.bottom, Spacing[4]),
+        height: 95,
+        left: Spacing[6],
+        right: Spacing[6],
+        borderRadius: 32,
       },
     ],
-    [insets.bottom, spacing, scale]
+    [insets.bottom]
   );
 
   return (
@@ -138,7 +136,6 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
   onLongPress,
   routeName,
 }) => {
-  const { scale } = useResponsive();
   // Rimosso: animazioni button container
   const buttonContainerStyle = {
     transform: [{ translateY: isCentral && isFocused ? -18 : 0 }],
@@ -186,7 +183,7 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
   };
 
   const iconName = ICON_MAP[routeName] ?? 'circle';
-  const iconSize = isCentral ? scale(32) : scale(26);
+  const iconSize = isCentral ? 32 : 26;
 
   return (
     <View style={[styles.buttonContainer, buttonContainerStyle]}>

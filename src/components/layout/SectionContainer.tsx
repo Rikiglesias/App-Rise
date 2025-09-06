@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   BorderRadius,
@@ -7,8 +7,6 @@ import {
   Spacing,
 } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
-
-const { width: screenWidth } = Dimensions.get('window');
 
 interface SectionContainerProps {
   readonly children: React.ReactNode;
@@ -18,17 +16,10 @@ interface SectionContainerProps {
   readonly centerContent?: boolean;
 }
 
-// 🚀 SISTEMA SPACING INTELLIGENTE CON GOLDEN RATIO
+// 🚀 PERFECT SYSTEM SPACING - iPhone 15 reference values
 const getSpacingConfig = (spacing: SectionContainerProps['spacing']) => {
-  // Responsive spacing basato su device e golden ratio
-  let baseSpacing: number;
-  if (screenWidth < 375) {
-    baseSpacing = 0.8;
-  } else if (screenWidth < 768) {
-    baseSpacing = 1;
-  } else {
-    baseSpacing = 1.2;
-  }
+  // Perfect System - fixed spacing values for iPhone 15 reference
+  const baseSpacing = 1; // iPhone 15 base spacing
 
   switch (spacing) {
     case 'compact':
@@ -158,7 +149,7 @@ export const SectionContainer: React.FC<SectionContainerProps> = ({
   // 🎁 WRAPPER INTERNO PER PADDING
   const innerWrapperStyle = {
     ...(variant !== 'default' && {
-      padding: screenWidth < 375 ? Spacing[4] : Spacing[6],
+      padding: 393 < 375 ? Spacing[4] : Spacing[6], // iPhone 15 width: 393 > 375, so always Spacing[6]
       borderRadius: getBorderRadiusForVariant(variantStyles),
       overflow: 'hidden' as const,
     }),

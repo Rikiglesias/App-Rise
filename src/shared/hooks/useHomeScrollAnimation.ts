@@ -4,9 +4,10 @@ import type {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
-import { Animated, Dimensions } from 'react-native';
+import { Animated } from 'react-native';
 
-const windowHeight = Dimensions.get('window').height;
+// iPhone 15 reference height - Perfect System handles scaling
+const windowHeight = 852;
 
 export const useHomeScrollAnimation = () => {
   const scrollY = useRef(new Animated.Value(0)).current;

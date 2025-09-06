@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Dimensions, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 import {
   BorderRadius,
@@ -13,7 +13,8 @@ import { useTheme } from '../../shared/hooks/useTheme';
 import { PerfectText } from './PerfectText';
 import PlatformTouchable from './PlatformTouchable';
 
-const { width } = Dimensions.get('window');
+// iPhone 15 reference width - will be scaled automatically by Perfect System
+const REFERENCE_WIDTH = 393;
 
 interface PremiumFloatingButtonProps {
   readonly onPress?: () => void;
@@ -128,7 +129,7 @@ const usePositionStyle = (position: string) => {
 
     switch (position) {
       case 'bottom-center':
-        return { ...baseStyle, left: width / 2 - 75 };
+        return { ...baseStyle, left: REFERENCE_WIDTH / 2 - 75 }; // 196.5 - 75 = 121.5
       case 'bottom-left':
         return { ...baseStyle, left: Spacing[6] };
       case 'bottom-right':
@@ -241,7 +242,10 @@ const PremiumFloatingButtonContent: React.FC<{
           <PerfectText
             size={14}
             lines={1}
-            style={[styles.title, ...(variant === 'glass' ? [styles.glassTitle] : [])]}
+            style={[
+              styles.title,
+              ...(variant === 'glass' ? [styles.glassTitle] : []),
+            ]}
           >
             {title}
           </PerfectText>

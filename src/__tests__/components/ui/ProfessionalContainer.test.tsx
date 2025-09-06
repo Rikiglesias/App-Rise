@@ -55,7 +55,9 @@ const testWidthManagement = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -72,7 +74,9 @@ const testWidthManagement = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -89,7 +93,9 @@ const testWidthManagement = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container" forceWidth="100%">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -109,7 +115,9 @@ const testPaddingConsistency = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -126,7 +134,9 @@ const testPaddingConsistency = () => {
       mockScreenSize(320, 568);
       const { rerender } = renderWithTestWrapper(
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -140,7 +150,9 @@ const testPaddingConsistency = () => {
       rerender(
         <TestWrapper>
           <ProfessionalContainer testID="test-container">
-            <PerfectText size={24} lines={1}>Test Content</PerfectText>
+            <PerfectText size={24} lines={1}>
+              Test Content
+            </PerfectText>
           </ProfessionalContainer>
         </TestWrapper>
       );
@@ -165,7 +177,9 @@ const testSafeAreaHandling = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -190,7 +204,9 @@ const testRTLSupport = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container" enableRTL={true}>
-          <PerfectText size={24} lines={1}>مرحبا بك</PerfectText>
+          <PerfectText size={24} lines={1}>
+            مرحبا بك
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -211,7 +227,9 @@ const testVariantBehaviors = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container" variant="text">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -227,7 +245,9 @@ const testVariantBehaviors = () => {
 
       renderWithTestWrapper(
         <ProfessionalContainer testID="test-container" variant="card">
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       );
 
@@ -328,7 +348,9 @@ describe.skip('CardContainer Specialized Tests', () => {
     render(
       <TestWrapper>
         <CardContainer testID="card-container">
-          <PerfectText size={16} lines={1}>Card Content</PerfectText>
+          <PerfectText size={16} lines={1}>
+            Card Content
+          </PerfectText>
         </CardContainer>
       </TestWrapper>
     );
@@ -351,7 +373,9 @@ describe.skip('📊 Layout Measurement Tests', () => {
     render(
       <TestWrapper>
         <ProfessionalContainer testID="test-container" onLayout={onLayoutMock}>
-          <PerfectText size={24} lines={1}>Test Content</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test Content
+          </PerfectText>
         </ProfessionalContainer>
       </TestWrapper>
     );
@@ -383,7 +407,9 @@ describe.skip('📐 Professional Guide Compliance Checklist', () => {
     render(
       <TestWrapper>
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test
+          </PerfectText>
         </ProfessionalContainer>
       </TestWrapper>
     );
@@ -396,7 +422,9 @@ describe.skip('📐 Professional Guide Compliance Checklist', () => {
     render(
       <TestWrapper>
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test
+          </PerfectText>
         </ProfessionalContainer>
       </TestWrapper>
     );
@@ -410,7 +438,9 @@ describe.skip('📐 Professional Guide Compliance Checklist', () => {
     render(
       <TestWrapper>
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test
+          </PerfectText>
         </ProfessionalContainer>
       </TestWrapper>
     );
@@ -424,7 +454,9 @@ describe.skip('📐 Professional Guide Compliance Checklist', () => {
     render(
       <TestWrapper>
         <ProfessionalContainer testID="test-container" enableRTL={true}>
-          <PerfectText size={24} lines={1}>Test</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test
+          </PerfectText>
         </ProfessionalContainer>
       </TestWrapper>
     );
@@ -438,7 +470,9 @@ describe.skip('📐 Professional Guide Compliance Checklist', () => {
     render(
       <TestWrapper>
         <ProfessionalContainer testID="test-container">
-          <PerfectText size={24} lines={1}>Test</PerfectText>
+          <PerfectText size={24} lines={1}>
+            Test
+          </PerfectText>
         </ProfessionalContainer>
       </TestWrapper>
     );

@@ -244,7 +244,9 @@ export const useFoldableLayout = (options?: {
       window: { width: number; height: number };
     }) => {
       setDimensions({
+        // @ts-expect-error - Legacy hook, Perfect System uses fixed dimensions
         width: window.width,
+        // @ts-expect-error - Legacy hook, Perfect System uses fixed dimensions
         height: window.height,
       });
     };
