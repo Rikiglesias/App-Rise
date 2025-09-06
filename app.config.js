@@ -30,7 +30,7 @@ export default {
         process.env.ENABLE_PERFORMANCE_MONITORING === 'true',
       logLevel: process.env.LOG_LEVEL || 'info',
       eas: {
-        projectId: process.env.EAS_PROJECT_ID,
+        projectId: '52a33b0f-dec1-4674-812b-de5b888c911a',
       },
     },
 

@@ -1,9 +1,13 @@
 import React from 'react';
 import { Animated, Image, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PlatformTouchable, PerfectText } from '../../../components/ui';
-import { Colors, Spacing, Typography } from '../../../shared/constants';
+import {
+  BorderColors,
+  Colors,
+  Spacing,
+  Typography,
+} from '../../../shared/constants';
 import {
   DesignTokens,
   scaleFont,
@@ -44,67 +48,57 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
           },
         ]}
       >
-        <LinearGradient
-          colors={platform.gradient}
-          style={styles.socialCardGradientBorder}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <View
+          style={[
+            styles.socialCardWhiteContainer,
+            { borderColor: platform.gradient[0], borderWidth: 2 },
+          ]}
         >
-          <View style={styles.socialCardWhiteContainer}>
-            <PlatformTouchable
-              onPress={platform.onPress}
-              style={styles.socialCardContent}
-              accessibilityRole="button"
-              accessibilityLabel={`Seguici su ${platform.name}: ${platform.handle}`}
-              accessibilityHint={platform.description}
-              testID={`social-card-${platform.id}`}
-            >
-              <View style={styles.socialIconContainer}>
-                {platform.icon ? (
-                  <Image
-                    source={platform.icon}
-                    style={[
-                      styles.platformIcon,
-                      platform.id === 'linkedin' && styles.linkedinIcon,
-                    ]}
-                  />
-                ) : (
-                  <PerfectText
-                    size={24}
-                    lines={1}
-                    style={styles.socialIconEmoji}
-                  >
-                    {platform.emoji}
-                  </PerfectText>
-                )}
-              </View>
-
-              <View style={styles.socialInfoContainer}>
-                <PerfectText size={16} lines={1} style={styles.socialName}>
-                  {platform.name}
-                </PerfectText>
-                <PerfectText size={14} lines={1} style={styles.socialHandle}>
-                  {platform.handle}
-                </PerfectText>
-                <PerfectText
-                  size={12}
-                  lines={2}
-                  style={styles.socialDescription}
-                >
-                  {platform.description}
-                </PerfectText>
-              </View>
-
-              <View style={styles.arrowContainer}>
-                <MaterialCommunityIcons
-                  name="chevron-right"
-                  size={24}
-                  color={Colors.neutral[400]}
+          <PlatformTouchable
+            onPress={platform.onPress}
+            style={styles.socialCardContent}
+            accessibilityRole="button"
+            accessibilityLabel={`Seguici su ${platform.name}: ${platform.handle}`}
+            accessibilityHint={platform.description}
+            testID={`social-card-${platform.id}`}
+          >
+            <View style={styles.socialIconContainer}>
+              {platform.icon ? (
+                <Image
+                  source={platform.icon}
+                  style={[
+                    styles.platformIcon,
+                    platform.id === 'linkedin' && styles.linkedinIcon,
+                  ]}
                 />
-              </View>
-            </PlatformTouchable>
-          </View>
-        </LinearGradient>
+              ) : (
+                <PerfectText size={24} lines={1} style={styles.socialIconEmoji}>
+                  {platform.emoji}
+                </PerfectText>
+              )}
+            </View>
+
+            <View style={styles.socialInfoContainer}>
+              <PerfectText size={16} lines={1} style={styles.socialName}>
+                {platform.name}
+              </PerfectText>
+              <PerfectText size={14} lines={1} style={styles.socialHandle}>
+                {platform.handle}
+              </PerfectText>
+              <PerfectText size={12} lines={2} style={styles.socialDescription}>
+                {platform.description}
+              </PerfectText>
+            </View>
+
+            <View style={styles.arrowContainer}>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                size={24}
+                color={Colors.neutral[400]}
+              />
+            </View>
+          </PlatformTouchable>
+        </View>
       </Animated.View>
     );
   }
@@ -116,19 +110,15 @@ const styles = {
   socialCardWrapper: {
     marginBottom: Spacing[1],
   },
-  socialCardGradientBorder: {
-    borderRadius: scaleFont(20),
-    padding: scaleFont(2),
-    shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-    elevation: 6,
-  },
+
   socialCardWhiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: scaleFont(18),
     overflow: 'hidden' as const,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 6,
   },
   socialCardContent: {
     flexDirection: 'row' as const,
@@ -140,12 +130,10 @@ const styles = {
     height: DesignTokens.components.iconSize.xlarge + 16,
     borderRadius: scaleFont(28),
     backgroundColor: Colors.neutral[0],
-    borderWidth: scaleFont(3),
-    borderColor: '#DC2626',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginRight: Spacing[4],
-    shadowColor: '#DC2626',
+    shadowColor: BorderColors.brandStrong,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -175,7 +163,7 @@ const styles = {
   },
   socialHandle: {
     fontWeight: Typography.weights.semibold,
-    color: '#DC2626',
+    color: BorderColors.brandStrong,
     marginBottom: Spacing[1],
   },
   socialDescription: {

@@ -288,12 +288,120 @@ jobs:
           eas submit --platform android --latest --non-interactive
 
   # ===================================================================
+  # OTA UPDATES AUTOMATICI
+  # ===================================================================
+  ota-update:
+    name: 🔄 OTA Update
+    runs-on: ubuntu-latest
+    needs: [detect-changes, quality-checks]
+    if: |
+      (contains(github.event.head_commit.message, '[ota]') || 
+       contains(github.event.head_commit.message, '[hotfix]') ||
+       contains(github.event.head_commit.message, 'hotfix:')) &&
+      needs.quality-checks.result == 'success'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📱 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🔧 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: ${{ env.EXPO_CLI_VERSION }}
+          eas-version: ${{ env.EAS_CLI_VERSION }}
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 🔄 Deploy OTA Update
+        run: |
+          echo "🔄 Deploying OTA Update..."
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          eas update --branch production --message "$COMMIT_MSG" --non-interactive
+          echo "✅ OTA Update deployed successfully"
+
+      - name: 💬 Comment on commit
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: '🔄 **OTA Update Deployed!**\n\n✅ Update published to production branch\n📱 Users will receive update on next app launch\n🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia/updates'
+            })
+
+  # ===================================================================
+  # BUNDLE ANALYSIS & SECURITY SCAN
+  # ===================================================================
+  bundle-analysis:
+    name: 📊 Bundle Analysis
+    runs-on: ubuntu-latest
+    needs: [detect-changes, quality-checks]
+    if: needs.detect-changes.outputs.should-build == 'true'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📱 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 📊 Bundle Analysis
+        run: |
+          echo "📊 Analyzing bundle size..."
+          npm run bundle-analysis || echo "Bundle analysis script not found, using basic analysis"
+          
+          # Basic bundle size check
+          if [ -d "dist" ]; then
+            BUNDLE_SIZE=$(du -sh dist/ | cut -f1)
+            echo "📦 Bundle size: $BUNDLE_SIZE"
+            echo "BUNDLE_SIZE=$BUNDLE_SIZE" >> $GITHUB_ENV
+          fi
+          
+          # Check for large dependencies
+          echo "📋 Top 10 largest dependencies:"
+          npm ls --depth=0 --json | jq -r '.dependencies | to_entries[] | "\(.key): \(.value.version)"' | head -10 || echo "Could not analyze dependencies"
+
+      - name: 🔒 Security Scan
+        run: |
+          echo "🔒 Running security scan..."
+          
+          # NPM Audit
+          echo "📋 NPM Audit Results:"
+          npm audit --audit-level high || echo "⚠️ Security vulnerabilities found - check npm audit for details"
+          
+          # Check for known vulnerable packages
+          echo "🔍 Checking for known vulnerable packages..."
+          npx audit-ci --high || echo "⚠️ High severity vulnerabilities detected"
+
+      - name: 📊 Upload Analysis Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis-results
+          path: |
+            dist/
+            bundle-analysis.json
+          retention-days: 7
+
+  # ===================================================================
   # DEPLOYMENT SUMMARY
   # ===================================================================
   deployment-summary:
     name: 📊 Deployment Summary
     runs-on: ubuntu-latest
-    needs: [detect-changes, quality-checks, visual-regression, build-ios, build-android]
+    needs: [detect-changes, quality-checks, visual-regression, build-ios, build-android, ota-update, bundle-analysis]
     if: always()
     steps:
       - name: 📊 Generate Summary
@@ -335,6 +443,26 @@ jobs:
             echo "🤖 Android: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY
           else
             echo "🤖 Android: ❌ Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # OTA Updates
+          echo "### 🔄 OTA Updates" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.ota-update.result }}" == "success" ]]; then
+            echo "✅ OTA Update deployed successfully" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.ota-update.result }}" == "skipped" ]]; then
+            echo "⏭️ OTA Update skipped (no [ota] or [hotfix] trigger)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ OTA Update failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Bundle Analysis
+          echo "### 📊 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.bundle-analysis.result }}" == "success" ]]; then
+            echo "✅ Bundle analysis completed" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.bundle-analysis.result }}" == "skipped" ]]; then
+            echo "⏭️ Bundle analysis skipped" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Bundle analysis failed" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
