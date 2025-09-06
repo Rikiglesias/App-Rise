@@ -83,23 +83,35 @@ jobs:
           
           # Build triggers
           if [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\] ]]; then
+            echo "should-test=true" >> $GITHUB_OUTPUT
             echo "should-build=true" >> $GITHUB_OUTPUT
             echo "build-ios=true" >> $GITHUB_OUTPUT
             echo "build-android=true" >> $GITHUB_OUTPUT
+            echo "test-scope=full" >> $GITHUB_OUTPUT
             echo "✅ Build triggered for both iOS and Android"
+            exit 0
           elif [[ "$COMMIT_MSG" =~ \[build\ ios\] ]]; then
+            echo "should-test=true" >> $GITHUB_OUTPUT
             echo "should-build=true" >> $GITHUB_OUTPUT
             echo "build-ios=true" >> $GITHUB_OUTPUT
+            echo "test-scope=full" >> $GITHUB_OUTPUT
             echo "✅ Build triggered for iOS only"
+            exit 0
           elif [[ "$COMMIT_MSG" =~ \[build\ android\] ]]; then
+            echo "should-test=true" >> $GITHUB_OUTPUT
             echo "should-build=true" >> $GITHUB_OUTPUT
             echo "build-android=true" >> $GITHUB_OUTPUT
+            echo "test-scope=full" >> $GITHUB_OUTPUT
             echo "✅ Build triggered for Android only"
+            exit 0
           elif [[ "$COMMIT_MSG" =~ ^build: ]]; then
+            echo "should-test=true" >> $GITHUB_OUTPUT
             echo "should-build=true" >> $GITHUB_OUTPUT
             echo "build-ios=true" >> $GITHUB_OUTPUT
             echo "build-android=true" >> $GITHUB_OUTPUT
+            echo "test-scope=full" >> $GITHUB_OUTPUT
             echo "✅ CI Build triggered for both platforms"
+            exit 0
           fi
           
           # OTA triggers (already handled in ota-update job)
