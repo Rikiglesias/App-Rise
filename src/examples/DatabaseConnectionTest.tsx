@@ -63,7 +63,9 @@ const DatabaseConnectionTest = () => {
         <Text style={styles.info}>
           Total Market Share: {databaseStats.totalMarketShare}%
         </Text>
-        <Text style={styles.info}>Total Brands: {databaseStats.topBrands}</Text>
+        <Text style={styles.info}>
+          Total Brands: {Object.keys(databaseStats.devicesByYear).length}
+        </Text>
 
         <Text style={styles.subTitle}>Devices by Year:</Text>
         {Object.entries(
