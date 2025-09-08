@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { PerfectText } from '../../ui/PerfectText';
 
 import { CTADescriptionProps, CTASubtitleProps, CTATitleProps } from '../types';
 
@@ -13,7 +13,9 @@ export const CTADescription: React.FC<CTADescriptionProps> = ({
   contentStyles,
   typographyStyles,
 }) => (
-  <Text
+  <PerfectText
+    size={16}
+    lines={3}
     style={[
       contentStyles.description,
       typographyStyles[`${size}Description` as keyof typeof typographyStyles],
@@ -23,7 +25,7 @@ export const CTADescription: React.FC<CTADescriptionProps> = ({
     ]}
   >
     {description}
-  </Text>
+  </PerfectText>
 );
 
 // ===================================================================
@@ -36,7 +38,9 @@ export const CTATitle: React.FC<CTATitleProps> = ({
   contentStyles,
   typographyStyles,
 }) => (
-  <Text
+  <PerfectText
+    size={24}
+    lines={2}
     style={[
       contentStyles.title,
       typographyStyles[`${size}Title` as keyof typeof typographyStyles],
@@ -44,7 +48,7 @@ export const CTATitle: React.FC<CTATitleProps> = ({
     ]}
   >
     {title}
-  </Text>
+  </PerfectText>
 );
 
 // ===================================================================
@@ -57,7 +61,9 @@ export const CTASubtitle: React.FC<CTASubtitleProps> = ({
   contentStyles,
   typographyStyles,
 }) => (
-  <Text
+  <PerfectText
+    size={18}
+    lines={2}
     style={[
       contentStyles.subtitle,
       typographyStyles[`${size}Subtitle` as keyof typeof typographyStyles],
@@ -65,5 +71,5 @@ export const CTASubtitle: React.FC<CTASubtitleProps> = ({
     ]}
   >
     {subtitle}
-  </Text>
+  </PerfectText>
 );

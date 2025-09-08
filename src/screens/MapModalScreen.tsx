@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { PerfectText } from '../components/ui/PerfectText';
 
 import InteractiveMap, {
@@ -47,7 +47,9 @@ const MapModalScreen: React.FC = () => {
     // Handle case where locations are not passed
     return (
       <View style={styles.container}>
-        <Text>Caricamento mappa...</Text>
+        <PerfectText size={16} lines={1}>
+          Caricamento mappa...
+        </PerfectText>
       </View>
     );
   }

@@ -14,7 +14,6 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { View, Dimensions } from 'react-native';
 import { PerfectText } from '../../components/ui/PerfectText';
-import { SafeFormattedText } from '../../components/ui/SafeFormattedText';
 
 /**
  * Test devices per visual diff
@@ -176,21 +175,21 @@ const testDeviceLayoutStability = (
 };
 
 /**
- * Test SafeFormattedText fallback per un device
+ * Test PerfectText rendering per un device
  */
-const testSafeFormattedTextFallback = (device: (typeof TEST_DEVICES)[0]) => {
+const testPerfectTextRendering = (device: (typeof TEST_DEVICES)[0]) => {
   const testText = 'Rise Against Hunger Italia';
 
   const { getByText } = render(
-    <SafeFormattedText size={75} lines={2}>
+    <PerfectText size={75} lines={2}>
       {testText}
-    </SafeFormattedText>
+    </PerfectText>
   );
 
   const textElement = getByText(testText);
   expect(textElement).toBeTruthy();
 
-  // Su New Architecture, SafeFormattedText dovrebbe fornire fallback
+  // PerfectText dovrebbe renderizzare correttamente
   const layout = calculateTheoreticalLayout(
     testText,
     75,
@@ -305,8 +304,8 @@ const createDeviceTestSuite = (device: (typeof TEST_DEVICES)[0]) => {
       });
     });
 
-    it('should use SafeFormattedText fallback on New Architecture', () => {
-      testSafeFormattedTextFallback(device);
+    it('should render PerfectText correctly', () => {
+      testPerfectTextRendering(device);
     });
   });
 };

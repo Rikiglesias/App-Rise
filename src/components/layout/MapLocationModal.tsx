@@ -46,7 +46,10 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           colors={['#DC2626', '#B91C1C', '#991B1B']}
           start={gradientStart}
           end={gradientEnd}
-          style={[styles.header, { paddingHorizontal: spacing.modal }]}
+          style={[
+            styles.header,
+            { paddingHorizontal: spacing.modal ?? Spacing[4] },
+          ]}
         >
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
@@ -78,12 +81,20 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         </LinearGradient>
 
         {/* Contenuto semplificato */}
-        <View style={[styles.content, { paddingHorizontal: spacing.modal }]}>
+        <View
+          style={[
+            styles.content,
+            { paddingHorizontal: spacing.modal ?? Spacing[6] },
+          ]}
+        >
           {/* Descrizione breve - max 2 righe */}
           <PerfectText
             size={16}
             lines={3}
-            style={[styles.description, { paddingHorizontal: spacing.modal }]}
+            style={[
+              styles.description,
+              { paddingHorizontal: spacing.modal ?? Spacing[4] },
+            ]}
           >
             Scopri il nostro impatto in {data.title} attraverso programmi di
             lotta alla fame e sviluppo sostenibile.

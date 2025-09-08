@@ -18,11 +18,6 @@ export {
 export {
   ScalingFactors,
   DeviceBreakpoints,
-  ResponsiveDimensions,
-  ResponsiveTypography,
-  ResponsiveSpacing,
-  ResponsiveShadows,
-  PlatformAdjustments,
   DeviceInfo,
   scaleSize,
   scaleSpacing,

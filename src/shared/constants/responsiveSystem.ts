@@ -729,11 +729,8 @@ export const ShadowTokens = {
 
 // Legacy compatibility layer for gradual migration
 // Alias per mantenere compatibilità con sistema precedente
-export const ResponsiveDimensions = DesignTokens;
-export const ResponsiveTypography = TypographyTokens;
-export const ResponsiveSpacing = SpacingTokens;
-export const ResponsiveShadows = ShadowTokens;
-export const PlatformAdjustments = PlatformOptimizations;
+// Alias ridondanti rimossi - utilizzare direttamente:
+// DesignTokens, TypographyTokens, SpacingTokens, ShadowTokens, PlatformOptimizations
 
 // 🧠 ADVANCED TEXT INTELLIGENCE (Netflix UX)
 export const TextIntelligence = {
@@ -940,12 +937,7 @@ export default {
   LayoutIntelligence,
   PerformanceIntelligence,
 
-  // Legacy compatibility
-  ResponsiveDimensions,
-  ResponsiveTypography,
-  ResponsiveSpacing,
-  ResponsiveShadows,
-  PlatformAdjustments,
+  // Legacy compatibility rimossa - utilizzare direttamente i token principali
 
   // Utility functions
   scaleSize,

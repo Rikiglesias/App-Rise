@@ -26,12 +26,7 @@ import {
   RTLTokens,
   ShadowTokens,
 } from '../constants/responsiveSystem';
-import {
-  ResponsiveTheme,
-  getResponsiveLayout as getThemeLayout,
-  getResponsiveSpacing as getThemeSpacing,
-  type ResponsiveBreakpoint,
-} from '../constants/responsiveTheme';
+// ResponsiveTheme rimosso - sistema unificato in responsiveSystem
 
 /**
  * Hook principale per il sistema responsive
@@ -140,36 +135,8 @@ export const useResponsive = () => {
   };
 };
 
-/**
- * Hook per valori responsive con tipo generico (supporta tutti i breakpoints)
- */
-export const useResponsiveValue = <T>(values: {
-  compact?: T;
-  standard?: T;
-  large?: T;
-  xlarge?: T;
-  xxlarge?: T;
-  default: T;
-}): T => {
-  const { select } = useResponsive();
-  return select(values);
-};
-
-/**
- * Hook per spacing responsive
- */
-export const useResponsiveSpacing = () => {
-  const { spacing } = useResponsive();
-  return spacing;
-};
-
-/**
- * Hook per typography responsive
- */
-export const useResponsiveTypography = () => {
-  const { typography } = useResponsive();
-  return typography;
-};
+// Hook ridondanti rimossi - utilizzare useResponsive() direttamente
+// const { select, spacing, typography } = useResponsive();
 
 /**
  * 🚀 Hook per Font Scaling Intelligente (Bi-directional)
@@ -377,52 +344,66 @@ export const useContainerLayout = (options?: {
 // Unifica layout percentuali e spacing dal tema con i breakpoints reali
 // ================================
 export const useResponsiveLayout = () => {
-  const { dimensions } = useResponsive();
-  // Breakpoint di responsiveSystem (solo: compact|standard|large|xlarge|xxlarge)
-  const bp = dimensions.breakpoint as ResponsiveBreakpoint &
-    ('compact' | 'standard' | 'large' | 'xlarge' | 'xxlarge');
+  const { dimensions, typography } = useResponsive();
+  const safeAreaInsets = useSafeAreaInsets();
 
-  // Spacing centralizzati
-  const spacing = {
-    container: getThemeSpacing('container', bp),
-    card: getThemeSpacing('card', bp),
-    section: getThemeSpacing('section', bp),
-    modal: getThemeSpacing('modal', bp),
-  } as const;
+  // Determine current breakpoint
+  const bp = dimensions.breakpoint;
 
-  // Widths percentuali centralizzati
+  // Use existing spacing from responsive system
+  const responsiveSpacing = {
+    container: SpacingTokens[4], // 16dp
+    card: SpacingTokens[3], // 12dp
+    section: SpacingTokens[5], // 20dp
+    modal: SpacingTokens[4], // 16dp
+  };
+
+  // Use breakpoint layouts from responsive system
+  const getCardWidth = () => {
+    if (bp === 'compact') return '100%';
+    if (bp === 'standard') return '47.5%';
+    return '31%';
+  };
+
+  const getContainerWidth = () => {
+    if (bp === 'compact') return '95%';
+    if (bp === 'standard') return '90%';
+    return '80%';
+  };
+
+  const getModalWidth = () => {
+    if (bp === 'compact') return '95%';
+    if (bp === 'standard') return '90%';
+    return '70%';
+  };
+
+  const getProgressWidth = () => {
+    if (bp === 'compact') return '100%';
+    if (bp === 'standard') return '90%';
+    return '70%';
+  };
+
+  const getDividerWidth = () => {
+    if (bp === 'compact') return '90%';
+    if (bp === 'standard') return '80%';
+    return '60%';
+  };
+
   const layout = {
-    cardWidth: getThemeLayout('cardWidth', bp),
-    containerWidth: getThemeLayout('containerWidth', bp),
-    modalWidth: getThemeLayout('modalWidth', bp),
-    progressWidth: getThemeLayout('progressWidth', bp),
-    dividerWidth: getThemeLayout('dividerWidth', bp),
-  } as const;
-
-  // Colori dal tema per comodità
-  const colors = ResponsiveTheme.colors;
+    cardWidth: getCardWidth(),
+    containerWidth: getContainerWidth(),
+    modalWidth: getModalWidth(),
+    progressWidth: getProgressWidth(),
+    dividerWidth: getDividerWidth(),
+  };
 
   return {
-    breakpoint: bp,
-    spacing,
+    spacing: responsiveSpacing,
     layout,
-    colors,
-
-    // Shorthand
-    bpValues: ResponsiveTheme.breakpoints,
-
-    // Helper per selezione rapida
-    selectWidth: (
-      key:
-        | 'cardWidth'
-        | 'containerWidth'
-        | 'modalWidth'
-        | 'progressWidth'
-        | 'dividerWidth'
-    ) => layout[key],
-    selectSpacing: (key: 'container' | 'card' | 'section' | 'modal') =>
-      spacing[key],
-  } as const;
+    typography,
+    safeAreaInsets,
+    breakpoint: bp,
+  };
 };
 
 export default useResponsive;

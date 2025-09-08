@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { useTheme } from '@react-navigation/native';
 import { TouchableRipple } from 'react-native-paper';
 import { BorderRadius, Spacing, Typography } from '../../shared/constants';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+import { PerfectText } from './PerfectText';
 
 interface FilterTab {
   id: string;
@@ -141,34 +142,40 @@ const TabItem: React.FC<TabItemProps> = ({
     >
       <View style={styles.tabContent}>
         {tab.icon && (
-          <Text
+          <PerfectText
+            size={14}
+            lines={1}
             style={[
               styles.tabIcon,
               isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
             ]}
           >
             {tab.icon}
-          </Text>
+          </PerfectText>
         )}
 
-        <Text
+        <PerfectText
+          size={14}
+          lines={1}
           style={[
             styles.tabLabel,
             isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
           ]}
         >
           {tab.label}
-        </Text>
+        </PerfectText>
 
         {showCounts && tab.count !== undefined && (
-          <Text
+          <PerfectText
+            size={12}
+            lines={1}
             style={[
               styles.tabCount,
               isActive ? styles.activeTabCount : styles.inactiveTabCount,
             ]}
           >
             {tab.count}
-          </Text>
+          </PerfectText>
         )}
       </View>
     </TouchableRipple>

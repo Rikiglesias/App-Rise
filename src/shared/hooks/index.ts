@@ -21,9 +21,6 @@ export {
 // Responsive System Hooks (🚀 Bi-directional System)
 export {
   useResponsive,
-  useResponsiveValue,
-  useResponsiveSpacing,
-  useResponsiveTypography,
   useIntelligentFontScaling,
   useBreakpointAware,
 } from './useResponsive';
