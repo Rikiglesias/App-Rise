@@ -6,10 +6,25 @@
 export { default as AnimatedNumber } from './AnimatedNumber';
 export { default as AnimatedTransition } from './AnimatedTransition';
 
-// Card Components
-export { default as EnhancedCard } from './EnhancedCard';
+// Card Components - UNIFIED SYSTEM
+export {
+  UnifiedCard,
+  MaterialCard,
+  EnhancedCard,
+  GlassmorphismCard,
+} from './UnifiedCard';
+export type {
+  UnifiedCardProps,
+  CardDesignVariant,
+  MaterialVariant,
+  EnhancedVariant,
+  GlassmorphismVariant,
+} from './UnifiedCard';
+
+// Legacy Card Components (DEPRECATED - use UnifiedCard instead)
+export { default as LegacyEnhancedCard } from './EnhancedCard';
 export { ArrowSection, IconSection, TextSection } from './EnhancedCardSections';
-export { default as GlassmorphismCard } from './GlassmorphismCard';
+export { default as LegacyGlassmorphismCard } from './GlassmorphismCard';
 
 // Interactive Components
 export { default as EnhancedTouchable } from './EnhancedTouchable';
@@ -24,7 +39,7 @@ export {
 
 // Material Design 3 Components (Android-specific)
 export { MaterialFAB } from './MaterialFAB';
-export { MaterialCard, MaterialActionCard } from './MaterialCard';
+export { MaterialActionCard } from './MaterialCard'; // Legacy MaterialCard now in UnifiedCard
 export { MaterialBottomNavigation } from './MaterialBottomNavigation';
 export { default as PlatformBlur } from './PlatformBlur';
 export { default as PlatformTouchable } from './PlatformTouchable';
