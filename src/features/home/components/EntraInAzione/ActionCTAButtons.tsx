@@ -21,11 +21,7 @@ import { PlatformShadows } from '../../../../shared/constants/platformDesignToke
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import type { BottomTabParamList } from '../../../../navigation/types';
 
-interface ActionCTAButtonsProps {
-  navigation: BottomTabNavigationProp<BottomTabParamList>;
-}
-
-export const ActionCTAButtons: React.FC<ActionCTAButtonsProps> = () => {
+export const ActionCTAButtons: React.FC = () => {
   const { triggerHaptic } = useHapticFeedback();
   const navigation =
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
@@ -166,8 +162,8 @@ const styles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - 3, // Radius interno coerente con padding
-    minHeight: scaleDimensionLinear(112), // Ridotto per bottoni più corti
-    paddingVertical: Spacing[2],
+    minHeight: scaleDimensionLinear(95), // Ulteriormente ridotto per bottoni più bassi
+    paddingVertical: Spacing[1],
     paddingHorizontal: Spacing[3],
     justifyContent: 'center',
     flex: 1,
@@ -177,9 +173,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between', // Assicura label sempre visibile in basso
     flex: 1,
-    minHeight: scaleDimensionLinear(88), // Ridotto per compattare l'altezza
-    paddingTop: Spacing[1],
-    paddingBottom: Spacing[1],
+    minHeight: scaleDimensionLinear(75), // Ulteriormente ridotto per compattare l'altezza
+    paddingTop: Spacing[0],
+    paddingBottom: Spacing[0],
   },
 
   buttonIcon: {
