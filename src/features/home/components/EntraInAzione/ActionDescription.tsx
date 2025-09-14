@@ -9,7 +9,7 @@ import {
 import responsiveSystem, {
   scaleDimensionLinear,
 } from '../../../../shared/constants/responsiveSystem';
-import Colors from '../../../../shared/constants/designTokens';
+import { Colors } from '../../../../shared/constants/designTokens';
 
 export const ActionDescription: React.FC = () => {
   return (

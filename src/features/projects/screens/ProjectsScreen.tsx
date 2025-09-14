@@ -1,5 +1,6 @@
 import React from 'react';
-import { RefreshControl, SafeAreaView, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PlatformScrollView, PerfectText } from '../../../components/ui';
 
 import FilterTabs from '../../../components/ui/FilterTabs';

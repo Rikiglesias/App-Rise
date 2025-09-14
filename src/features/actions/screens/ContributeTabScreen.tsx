@@ -1,5 +1,6 @@
 import React from 'react';
-import { Platform, SafeAreaView, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PlatformScrollView } from '../../../components/ui';
 
 import { Colors } from '../../../shared/constants/designTokens';

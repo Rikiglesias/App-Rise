@@ -41,7 +41,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
           marginBottom: Spacing[3],
         },
         ctaSection: {
-          marginHorizontal: Spacing[4],
+          marginHorizontal: Spacing[2], // Allargato il container più esterno
           paddingTop: 0,
           paddingBottom: Spacing[6],
           marginTop: 0,
@@ -63,7 +63,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
 
           {/* Sezione Entra in Azione con CTA */}
           <View style={styles.ctaSection}>
-            <EntraInAzione navigation={_navigation} />
+            <EntraInAzione />
           </View>
         </View>
       </PlatformScrollView>

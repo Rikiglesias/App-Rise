@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { Surface } from 'react-native-paper';
 import { PlatformTouchable, PerfectText } from '../../../components/ui';
@@ -13,41 +13,19 @@ interface ModernHomeImpactProps {
   readonly isLoaded: boolean;
 }
 
-// Hook for animations
-const useModernHomeImpactAnimations = (isLoaded: boolean) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(15)).current;
-  const scaleAnim = useRef(new Animated.Value(0.98)).current;
+// Hook for animations - ANIMAZIONI DISABILITATE
+const useModernHomeImpactAnimations = (_isLoaded: boolean) => {
+  // Valori statici per performance ottimale - nessuna animazione
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const { animatedStyle, handlePressIn, handlePressOut } = useAnimatedPress({
-    scaleValue: 0.98,
-    minOpacity: 0.95,
+    scaleValue: 1, // Disabilita animazione press
+    minOpacity: 1, // Disabilita animazione opacity
   });
 
-  useEffect(() => {
-    if ((isLoaded !== null) !== null) {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 500,
-          delay: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 400,
-          delay: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 450,
-          delay: 150,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [isLoaded, fadeAnim, slideAnim, scaleAnim]);
+  // useEffect rimosso - nessuna animazione da eseguire
 
   return {
     fadeAnim,

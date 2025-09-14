@@ -1,7 +1,7 @@
 import React from 'react';
-import { Animated, Easing } from 'react-native';
+import { Animated } from 'react-native';
 
-import { Animation, Colors } from '../../../shared/constants/designTokens';
+import { Colors } from '../../../shared/constants/designTokens';
 
 import {
   createButtonStyles,
@@ -12,54 +12,23 @@ import {
 import { AccessibilityConfig } from '../types';
 
 // ===================================================================
-// ANIMATIONS HOOK
+// ANIMATIONS HOOK - ANIMAZIONI DISABILITATE
 // ===================================================================
 export const useModernCTAAnimations = () => {
+  // Valori statici per performance ottimale - nessuna animazione
   const scaleValue = React.useRef(new Animated.Value(1)).current;
   const shimmerValue = React.useRef(new Animated.Value(0)).current;
 
-  React.useEffect(() => {
-    const shimmerAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(shimmerValue, {
-          toValue: 1,
-          duration: Animation.duration.slow,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-        Animated.timing(shimmerValue, {
-          toValue: 0,
-          duration: Animation.duration.slow,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-      ])
-    );
+  // useEffect rimosso - nessun shimmer loop
 
-    shimmerAnimation.start();
-
-    return () => {
-      shimmerAnimation.stop();
-    };
-  }, [shimmerValue]);
-
+  // Handler disabilitati - nessuna animazione press
   const handlePressIn = React.useCallback(() => {
-    Animated.spring(scaleValue, {
-      toValue: 0.96,
-      useNativeDriver: true,
-      tension: Animation.spring.snappy.tension,
-      friction: Animation.spring.snappy.friction,
-    }).start();
-  }, [scaleValue]);
+    // Nessuna animazione
+  }, []);
 
   const handlePressOut = React.useCallback(() => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-      tension: Animation.spring.snappy.tension,
-      friction: Animation.spring.snappy.friction,
-    }).start();
-  }, [scaleValue]);
+    // Nessuna animazione
+  }, []);
 
   return {
     scaleValue,

@@ -41,7 +41,7 @@ export const ActionCTAButtons: React.FC = () => {
       preset="section"
       flexDirection="row"
       gap={16}
-      paddingHorizontal={8}
+      paddingHorizontal={1}
       marginVertical={16}
     >
       {/* SCOPRI IL NOSTRO IMPATTO */}

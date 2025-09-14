@@ -24,7 +24,7 @@ interface UseAnimatedPressReturn {
 }
 
 // Animation factories - estratte per ridurre complessità
-const createPressInAnimations = (
+const _createPressInAnimations = (
   scale: Animated.Value,
   opacity: Animated.Value,
   shadow: Animated.Value,
@@ -58,7 +58,7 @@ const createPressInAnimations = (
   return animations;
 };
 
-const createPressOutAnimations = (
+const _createPressOutAnimations = (
   scale: Animated.Value,
   opacity: Animated.Value,
   shadow: Animated.Value,
@@ -111,43 +111,23 @@ const useAnimatedStyle = (
 };
 
 export const useAnimatedPress = (
-  options: UseAnimatedPressOptions = {}
+  _options: UseAnimatedPressOptions = {}
 ): UseAnimatedPressReturn => {
-  const {
-    scaleValue = 0.98,
-    minOpacity = 0.85,
-    shadowEnabled = true,
-  } = options;
-
-  // Animation values
+  // ANIMAZIONI DISABILITATE - Valori statici per performance ottimale
   const scale = useRef(new Animated.Value(1)).current;
   const opacity = useRef(new Animated.Value(1)).current;
   const shadow = useRef(new Animated.Value(0)).current;
 
-  // Press handlers
+  // Press handlers disabilitati - nessuna animazione
   const handlePressIn = useCallback(() => {
-    const animations = createPressInAnimations(
-      scale,
-      opacity,
-      shadow,
-      scaleValue,
-      minOpacity,
-      shadowEnabled
-    );
-    Animated.parallel(animations).start();
-  }, [scale, opacity, shadow, scaleValue, minOpacity, shadowEnabled]);
+    // Nessuna animazione
+  }, []);
 
   const handlePressOut = useCallback(() => {
-    const animations = createPressOutAnimations(
-      scale,
-      opacity,
-      shadow,
-      shadowEnabled
-    );
-    Animated.parallel(animations).start();
-  }, [scale, opacity, shadow, shadowEnabled]);
+    // Nessuna animazione
+  }, []);
 
-  const animatedStyle = useAnimatedStyle(scale, opacity, shadow, shadowEnabled);
+  const animatedStyle = useAnimatedStyle(scale, opacity, shadow, false);
 
   return {
     scaleValue: scale,

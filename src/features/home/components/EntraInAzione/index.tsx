@@ -6,9 +6,7 @@ import { ActionTitle } from './ActionTitle';
 import { ActionDescription } from './ActionDescription';
 import { ActionCTAButtons } from './ActionCTAButtons';
 
-export const EntraInAzione: React.FC<EntraInAzioneProps> = ({
-  navigation: _navigation,
-}) => {
+export const EntraInAzione: React.FC<EntraInAzioneProps> = () => {
   return (
     <View style={styles.container}>
       <ActionTitle />
@@ -20,7 +18,7 @@ export const EntraInAzione: React.FC<EntraInAzioneProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: Spacing[4],
+    marginHorizontal: Spacing[3], // Container un po' più stretto dell'immagine
     paddingTop: 0,
     paddingBottom: Spacing[6],
     marginTop: 0,

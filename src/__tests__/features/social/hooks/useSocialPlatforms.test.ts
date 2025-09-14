@@ -42,7 +42,7 @@ describe('useSocialPlatforms', () => {
 
     expect(result.current.socialPlatforms).toHaveLength(4);
     expect(result.current.animationValue).toBeDefined();
-    expect(result.current.startAnimation).toBeDefined();
+    // startAnimation rimosso - animazioni disabilitate
   });
 
   it('contains all expected social platforms', () => {
@@ -151,10 +151,11 @@ describe('useSocialPlatforms - Animation', () => {
     jest.clearAllMocks();
   });
 
-  it('provides startAnimation function', () => {
+  it('provides animation value (static)', () => {
     const { result } = renderHook(() => useSocialPlatforms());
 
-    expect(typeof result.current.startAnimation).toBe('function');
+    // startAnimation rimosso - animazioni disabilitate, solo animationValue statico
+    expect(result.current.animationValue).toBeDefined();
   });
 });
 

@@ -21,7 +21,8 @@ export interface HeroImageProps {
 
 // Props per EntraInAzione
 export interface EntraInAzioneProps {
-  navigation: BottomTabNavigationProp<BottomTabParamList>;
+  // Componente autonomo senza props
+  readonly __brand?: 'EntraInAzioneProps';
 }
 
 // Props per ActionCTAButtons

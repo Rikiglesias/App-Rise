@@ -1,39 +1,13 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { Animated } from 'react-native';
 
 export const useHomeAnimations = () => {
-  const titleAnim = useRef(new Animated.Value(0)).current;
-  const imageAnim = useRef(new Animated.Value(0)).current;
-  const containerAnim = useRef(new Animated.Value(0.95)).current;
+  // ANIMAZIONI DISABILITATE - Valori statici per performance ottimale
+  const titleAnim = useRef(new Animated.Value(1)).current;
+  const imageAnim = useRef(new Animated.Value(1)).current;
+  const containerAnim = useRef(new Animated.Value(1)).current;
 
-  useEffect(() => {
-    const sequence = Animated.sequence([
-      Animated.parallel([
-        Animated.timing(titleAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.spring(containerAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 50,
-          friction: 8,
-        }),
-      ]),
-      Animated.timing(imageAnim, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true,
-      }),
-    ]);
-
-    void sequence.start();
-
-    return () => {
-      sequence.stop();
-    };
-  }, [titleAnim, imageAnim, containerAnim]);
+  // useEffect rimosso - nessuna animazione da eseguire
 
   return { titleAnim, imageAnim, containerAnim };
 };

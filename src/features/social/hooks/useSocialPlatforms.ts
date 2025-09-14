@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { Animated, Linking, Alert } from 'react-native';
 import { SocialPlatform } from '../components/SocialCard';
 import { logWarn } from '../../../shared/utils/logger';
@@ -9,7 +9,8 @@ import linkedinIcon from '../../../../assets/icons/social/linkedin.png';
 import facebookIcon from '../../../../assets/icons/social/facebook.png';
 
 export const useSocialPlatforms = () => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  // ANIMAZIONI DISABILITATE - Valore statico per performance ottimale
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
   const openSocialLink = useCallback(
     async (url: string, platformName: string) => {
@@ -92,21 +93,10 @@ export const useSocialPlatforms = () => {
     },
   ];
 
-  const startAnimation = useCallback(() => {
-    void Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
-
-  useEffect(() => {
-    startAnimation();
-  }, [startAnimation]);
+  // startAnimation e useEffect rimossi - nessuna animazione da eseguire
 
   return {
     socialPlatforms,
-    animationValue: fadeAnim,
-    startAnimation,
+    animationValue: fadeAnim, // Manteniamo per compatibilità
   };
 };

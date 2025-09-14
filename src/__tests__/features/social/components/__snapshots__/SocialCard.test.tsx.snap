@@ -1,21 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SocialCard applies correct gradient colors 1`] = `
-<Animated.View
+<View
   style={
-    [
-      {
-        "marginBottom": 4,
-      },
-      {
-        "opacity": 1,
-        "transform": [
-          {
-            "translateY": 0,
-          },
-        ],
-      },
-    ]
+    {
+      "marginBottom": 4,
+    }
   }
 >
   <View
@@ -152,5 +142,5 @@ exports[`SocialCard applies correct gradient colors 1`] = `
       </View>
     </View>
   </View>
-</Animated.View>
+</View>
 `;

@@ -1,41 +1,18 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Animated } from 'react-native';
 import {
-  ADVANCED_CONFIG,
   type UseHomeHeaderAnimationsReturn,
   type UseScrollInterpolationsReturn,
 } from '../types/HomeHeaderTypes';
 
-// Hook for animations
+// Hook for animations - ANIMAZIONI DISABILITATE
 export const useHomeHeaderAnimations = (): UseHomeHeaderAnimationsReturn => {
-  const titleAnim = useRef(new Animated.Value(0)).current;
-  const imageAnim = useRef(new Animated.Value(0)).current;
-  const containerAnim = useRef(new Animated.Value(0)).current;
-  // pulseAnim removed - no more breathing animation
+  // Valori statici per performance ottimale - nessuna animazione
+  const titleAnim = useRef(new Animated.Value(1)).current;
+  const imageAnim = useRef(new Animated.Value(1)).current;
+  const containerAnim = useRef(new Animated.Value(1)).current;
 
-  useEffect(() => {
-    // Main entrance animation only - no breathing, no continuous loops
-    Animated.sequence([
-      Animated.timing(containerAnim, {
-        toValue: 1,
-        duration: ADVANCED_CONFIG.animations.fadeInDuration * 0.6,
-        useNativeDriver: true,
-      }),
-      Animated.stagger(ADVANCED_CONFIG.animations.staggerDelay, [
-        Animated.spring(titleAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 120,
-          friction: 8,
-        }),
-        Animated.timing(imageAnim, {
-          toValue: 1,
-          duration: ADVANCED_CONFIG.animations.fadeInDuration,
-          useNativeDriver: true,
-        }),
-      ]),
-    ]).start();
-  }, [containerAnim, titleAnim, imageAnim]);
+  // useEffect rimosso - nessuna animazione da eseguire
 
   return { titleAnim, imageAnim, containerAnim };
 };

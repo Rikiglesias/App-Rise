@@ -1,14 +1,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
 import {
-  Animated,
-  Platform,
   SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import {
   PlatformTouchable,
   PlatformScrollView,

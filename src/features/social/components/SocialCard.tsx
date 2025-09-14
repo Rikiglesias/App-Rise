@@ -26,28 +26,13 @@ export interface SocialPlatform {
 
 interface SocialCardProps {
   readonly platform: SocialPlatform;
-  readonly animationValue: Animated.Value;
+  readonly animationValue?: Animated.Value; // Opzionale per compatibilità
 }
 
 export const SocialCard: React.FC<SocialCardProps> = React.memo(
-  ({ platform, animationValue }) => {
+  ({ platform }) => {
     return (
-      <Animated.View
-        style={[
-          styles.socialCardWrapper,
-          {
-            opacity: animationValue,
-            transform: [
-              {
-                translateY: animationValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [20, 0],
-                }),
-              },
-            ],
-          },
-        ]}
-      >
+      <View style={styles.socialCardWrapper}>
         <View
           style={[
             styles.socialCardWhiteContainer,
@@ -99,7 +84,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
             </View>
           </PlatformTouchable>
         </View>
-      </Animated.View>
+      </View>
     );
   }
 );
