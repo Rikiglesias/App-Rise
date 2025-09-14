@@ -6,10 +6,10 @@
 - **Usa SEMPRE**: `PerfectText`, `PerfectImage`, `PerfectContainer`, `useUniversalTheme`, `SystemImmunity`, `responsiveSystem` (`scaleFont`, `scaleSpacing`, `scaleDimensionLinear`).
 - **Vietato**: `FormattedText`, `ResponsiveBox/ResponsiveImage`, `useResponsive*`, `Dimensions.get(...)` per layout/scaling, breakpoint manuali, `allowFontScaling=true`.
 - **PerfectText**: `size` obbligatorio; `lines` quando servono righe esatte; `immunity={true}` sempre. Per wrap identico su tutti i device, usa `containerWidth` riferito a iPhone 15.
-- **PerfectImage**: usa `preset` (`hero|card|thumbnail|banner`).
-- **PerfectContainer**: usa `preset`; `theme="auto"` di default; niente layout manuali.
+- **PerfectImage**: usa `preset` (`hero|card|thumbnail|avatar|banner`).
+- **PerfectContainer**: usa `preset` (`page|card|section|modal|header|footer`); `theme="auto"` di default; niente layout manuali.
 - **Dark Mode**: un solo toggle globale (`useUniversalTheme`); testi con `color="auto"` quando serve.
-- **Immunità**: `SystemImmunity.setGlobalImmunity(true)` all'avvio; niente gestioni manuali di scaling/accessibilità.
+- **Immunità**: `immunity={true}` nei PerfectText; niente gestioni manuali di scaling/accessibilità.
 - **Import corretti**:
 ```ts
 import {
@@ -27,7 +27,7 @@ import { SystemImmunity } from '@/shared/utils/SystemImmunity';
   - Zero `Dimensions`, zero breakpoint manuali, zero percentuali hardcoded
   - `npm run pre-modifiche` e `npm run post-modifiche` verdi; `npm run conta-problemi` = 0
 
-Per i dettagli completi, vedi: `docs/DEVELOPMENT_GUIDE.md`, `docs/ARCHITECTURE.md`, `docs/QUALITY_STANDARDS.md`, `docs/RESPONSIVE_SYSTEM_VALIDATION.md`.
+Per i dettagli completi, vedi: `docs/DEVELOPMENT_GUIDE.md`, `docs/ARCHITECTURE.md`, `docs/QUALITY_STANDARDS.md`.
 
 ---
 
@@ -60,8 +60,8 @@ import { PerfectText, PerfectImage, PerfectContainer } from '@/components/ui';
 ```ts
 import {
   PerfectText, PerfectImage, PerfectContainer,
-  PerfectTitle, PerfectSubtitle, PerfectBody, PerfectCaption,
-  HeroImage, CardImage, ThumbnailImage, BannerImage,
+  PerfectTitle, PerfectSubtitle, PerfectBody,
+  HeroImage, CardImage, ThumbnailImage, AvatarImage, BannerImage,
   PageContainer, CardContainer, SectionContainer, ModalContainer,
   useUniversalTheme
 } from '@/components/ui';
