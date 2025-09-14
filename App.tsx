@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import { Typography } from './src/shared/constants/designTokens';
 import { ThemeProvider, useTheme } from './src/shared/hooks/useTheme';
+import { useOTAUpdateScreen } from './src/shared/hooks/useOTAUpdateScreen';
+import { OTAUpdateScreen } from './src/shared/components/OTAUpdateScreen';
 import { UniversalThemeProvider } from './src/shared/theme/UniversalTheme';
 import { performanceMonitor } from './src/shared/monitoring/PerformanceMonitor';
 import { logger } from './src/shared/utils/logger';
@@ -79,6 +81,9 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  // Inizializza schermata OTA Updates
+  const { showUpdateScreen, hideUpdateScreen } = useOTAUpdateScreen();
+
   // Inizializza Performance Monitor e Lazy Loading all'avvio dell'app
   useEffect(() => {
     // Log dell'inizializzazione
@@ -90,6 +95,9 @@ const App: React.FC = () => {
     // Monitora il tempo di avvio dell'app
     const appStartTime = Date.now();
     performanceMonitor.recordUserInteraction('app_startup', appStartTime);
+
+    // Log dell'inizializzazione OTA Updates
+    logger.info('App', 'OTA Update system initialized');
 
     // Inizializza preloading intelligente - DISABILITATO per evitare caricamenti non necessari
     // preloadCriticalComponents();
@@ -111,6 +119,11 @@ const App: React.FC = () => {
       <ThemeProvider>
         <UniversalThemeProvider>
           <Main />
+          {/* Schermata di aggiornamento OTA */}
+          <OTAUpdateScreen 
+            visible={showUpdateScreen} 
+            onComplete={hideUpdateScreen}
+          />
         </UniversalThemeProvider>
       </ThemeProvider>
     </SafeAreaProvider>

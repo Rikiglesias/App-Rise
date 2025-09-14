@@ -126,15 +126,12 @@ export default {
     },
 
     // Plugin richiesti
-    plugins: [
-      'expo-secure-store', 
-      'expo-updates', 
-      'expo-font'
-    ],
+    plugins: ['expo-secure-store', 'expo-updates', 'expo-font'],
 
     // Aggiornamenti OTA
     updates: {
-      fallbackToCacheTimeout: 0,
+      fallbackToCacheTimeout: 30000, // 30 secondi per controllare updates
+      checkAutomatically: 'ON_LOAD', // Controlla all'avvio
       url: 'https://u.expo.dev/52a33b0f-dec1-4674-812b-de5b888c911a',
     },
 
@@ -142,7 +139,5 @@ export default {
     runtimeVersion: {
       policy: 'sdkVersion',
     },
-
-
   },
 };
