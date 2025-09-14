@@ -115,6 +115,7 @@ const styles = {
     backgroundColor: Colors.neutral[0],
     borderRadius: scaleFont(18),
     overflow: 'hidden' as const,
+    shadowColor: Colors.neutral[900],
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
     shadowRadius: 10,

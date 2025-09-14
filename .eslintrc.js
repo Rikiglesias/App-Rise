@@ -358,6 +358,13 @@ module.exports = {
         '@typescript-eslint/no-unsafe-call': 'off',
         'react/display-name': 'off',
         'no-restricted-properties': 'off', // Allow Dimensions.get() in tests for mocking
+        'prefer-arrow/prefer-arrow-functions': 'off', // Allow function declarations in tests
+        'no-await-in-loop': 'off', // Allow await in loops for test scenarios
+        '@typescript-eslint/require-await': 'off', // Allow async functions without await in tests
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        ],
       },
     },
 

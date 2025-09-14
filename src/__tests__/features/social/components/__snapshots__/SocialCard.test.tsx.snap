@@ -26,6 +26,7 @@ exports[`SocialCard applies correct gradient colors 1`] = `
           "borderRadius": 18,
           "elevation": 6,
           "overflow": "hidden",
+          "shadowColor": "#171717",
           "shadowOffset": {
             "height": 6,
             "width": 0,

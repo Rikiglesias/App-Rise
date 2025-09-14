@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - 3, // Radius interno coerente con padding
-    minHeight: scaleDimensionLinear(95), // Ulteriormente ridotto per bottoni più bassi
-    paddingVertical: Spacing[1],
+    minHeight: scaleDimensionLinear(105), // Leggermente ingrandito per bottoni più visibili
+    paddingVertical: Spacing[2],
     paddingHorizontal: Spacing[3],
     justifyContent: 'center',
     flex: 1,
@@ -173,9 +173,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between', // Assicura label sempre visibile in basso
     flex: 1,
-    minHeight: scaleDimensionLinear(75), // Ulteriormente ridotto per compattare l'altezza
-    paddingTop: Spacing[0],
-    paddingBottom: Spacing[0],
+    minHeight: scaleDimensionLinear(85), // Leggermente ingrandito per migliore proporzione
+    paddingTop: Spacing[1],
+    paddingBottom: Spacing[1],
   },
 
   buttonIcon: {

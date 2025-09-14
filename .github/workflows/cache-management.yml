@@ -41,14 +41,14 @@ jobs:
               repo: context.repo.repo,
               per_page: 100
             });
-            
+
             const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
             const oldCaches = caches.actions_caches.filter(cache => 
               new Date(cache.last_accessed_at) < oneWeekAgo
             );
-            
+
             console.log(`Found ${oldCaches.length} old caches to delete`);
-            
+
             for (const cache of oldCaches) {
               try {
                 await github.rest.actions.deleteActionsCacheById({
@@ -135,13 +135,13 @@ jobs:
               repo: context.repo.repo,
               per_page: 100
             });
-            
+
             console.log(`Total caches: ${caches.total_count}`);
-            
+
             // Group caches by type
             const cacheTypes = {};
             let totalSize = 0;
-            
+
             caches.actions_caches.forEach(cache => {
               const type = cache.key.split('-')[0] || 'unknown';
               if (!cacheTypes[type]) {
@@ -151,23 +151,23 @@ jobs:
               cacheTypes[type].size += cache.size_in_bytes;
               totalSize += cache.size_in_bytes;
             });
-            
+
             console.log('\n📊 Cache Analysis:');
             console.log('==================');
-            
+
             Object.entries(cacheTypes).forEach(([type, stats]) => {
               const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
               console.log(`${type}: ${stats.count} caches, ${sizeMB} MB`);
             });
-            
+
             const totalSizeMB = (totalSize / 1024 / 1024).toFixed(2);
             console.log(`\nTotal cache size: ${totalSizeMB} MB`);
-            
+
             // Find oldest and newest caches
             const sortedByDate = caches.actions_caches.sort((a, b) => 
               new Date(a.last_accessed_at) - new Date(b.last_accessed_at)
             );
-            
+
             if (sortedByDate.length > 0) {
               console.log(`\nOldest cache: ${sortedByDate[0].key} (${sortedByDate[0].last_accessed_at})`);
               console.log(`Newest cache: ${sortedByDate[sortedByDate.length - 1].key} (${sortedByDate[sortedByDate.length - 1].last_accessed_at})`);
@@ -183,7 +183,7 @@ jobs:
               repo: context.repo.repo,
               per_page: 100
             });
-            
+
             const report = {
               timestamp: new Date().toISOString(),
               total_caches: caches.total_count,
@@ -191,21 +191,21 @@ jobs:
               cache_breakdown: {},
               recommendations: []
             };
-            
+
             // Analyze cache efficiency
             const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
             const oldCaches = caches.actions_caches.filter(cache => 
               new Date(cache.last_accessed_at) < oneWeekAgo
             );
-            
+
             if (oldCaches.length > 0) {
               report.recommendations.push(`Consider cleaning ${oldCaches.length} old caches`);
             }
-            
+
             if (report.total_size_mb > 1000) {
               report.recommendations.push('Cache size is large, consider more aggressive cleanup');
             }
-            
+
             console.log('📈 Cache Report Generated:');
             console.log(JSON.stringify(report, null, 2));
 
@@ -222,7 +222,7 @@ jobs:
         run: |
           echo "## 🗄️ Cache Management Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [[ "${{ needs.cache-cleanup.result }}" == "success" ]]; then
             echo "✅ Cache cleanup completed successfully" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.cache-cleanup.result }}" == "skipped" ]]; then
@@ -230,7 +230,7 @@ jobs:
           else
             echo "❌ Cache cleanup failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.cache-warmup.result }}" == "success" ]]; then
             echo "✅ Cache warm-up completed successfully" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.cache-warmup.result }}" == "skipped" ]]; then
@@ -238,7 +238,7 @@ jobs:
           else
             echo "❌ Cache warm-up failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.cache-analysis.result }}" == "success" ]]; then
             echo "✅ Cache analysis completed successfully" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.cache-analysis.result }}" == "skipped" ]]; then
@@ -246,7 +246,7 @@ jobs:
           else
             echo "❌ Cache analysis failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🎯 Optimization Benefits" >> $GITHUB_STEP_SUMMARY
           echo "- Faster CI/CD pipeline execution" >> $GITHUB_STEP_SUMMARY

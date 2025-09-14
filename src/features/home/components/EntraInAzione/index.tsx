@@ -6,12 +6,14 @@ import { ActionTitle } from './ActionTitle';
 import { ActionDescription } from './ActionDescription';
 import { ActionCTAButtons } from './ActionCTAButtons';
 
-export const EntraInAzione: React.FC<EntraInAzioneProps> = ({ navigation }) => {
+export const EntraInAzione: React.FC<EntraInAzioneProps> = ({
+  navigation: _navigation,
+}) => {
   return (
     <View style={styles.container}>
       <ActionTitle />
       <ActionDescription />
-      <ActionCTAButtons navigation={navigation} />
+      <ActionCTAButtons />
     </View>
   );
 };

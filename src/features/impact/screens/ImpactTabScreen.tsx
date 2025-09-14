@@ -1,19 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
-
-import { PlatformScrollView } from '../../../components/ui';
-import MapLocationModal from '../../../components/layout/MapLocationModal';
-import { MAP_LOCATIONS } from '../../../data/impactData';
-import type { MapModalData } from '../../../data/mapModalData';
-import { getModalData } from '../../../data/mapModalData';
-import { Colors, Spacing } from '../../../shared/constants/designTokens';
 import type {
   ImpactNavigationProp,
   ImpactScreenName,
 } from '../types/ImpactScreenTypes';
-
-// Componenti modulari
 import {
   ImpactHeader,
   TotalMealsSection,
@@ -23,12 +14,20 @@ import {
   useImpactAnimations,
   convertToMapLocations,
 } from '../components';
+import { PlatformScrollView } from '@components/ui';
+import MapLocationModal from '@components/layout/MapLocationModal';
+import { Colors, Spacing } from '@shared/constants/designTokens';
+import { MAP_LOCATIONS } from '@/data/impactData';
+import type { MapModalData } from '@/data/mapModalData';
+import { getModalData } from '@/data/mapModalData';
+
+// Componenti modulari
 
 /**
  * Screen principale dell'impatto con architettura modulare
  * Ridotto da 1141 a ~150 righe (87% riduzione) per eccellenza architetturale
  */
-const ImpactTabScreen: React.FC = () => {
+const ImpactTabScreenComponent: React.FC = () => {
   const navigation = useNavigation<ImpactNavigationProp>();
 
   // State per il modal della mappa
@@ -122,6 +121,8 @@ const ImpactTabScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const ImpactTabScreen = React.memo(ImpactTabScreenComponent);
 
 const styles = StyleSheet.create({
   container: {

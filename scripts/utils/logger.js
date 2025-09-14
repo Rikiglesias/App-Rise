@@ -12,7 +12,7 @@ const LOG_LEVELS = {
   WARN: 2,
   INFO: 3,
   VERBOSE: 4,
-  DEBUG: 5
+  DEBUG: 5,
 };
 
 // Configurazione da variabili ambiente
@@ -30,7 +30,7 @@ const colors = {
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
   white: '\x1b[37m',
-  gray: '\x1b[90m'
+  gray: '\x1b[90m',
 };
 
 /**
@@ -138,7 +138,9 @@ class WorkflowLogger {
 
   endPhase(success = true, summary = '') {
     if (CURRENT_LEVEL >= LOG_LEVELS.INFO) {
-      const status = success ? colorize('✅ COMPLETATA', 'green') : colorize('❌ FALLITA', 'red');
+      const status = success
+        ? colorize('✅ COMPLETATA', 'green')
+        : colorize('❌ FALLITA', 'red');
       console.log(`\n${status}: ${this.phase}`);
       if (summary) {
         console.log(colorize(summary, 'gray'));
@@ -152,14 +154,14 @@ class WorkflowLogger {
     if (CURRENT_LEVEL >= LOG_LEVELS.INFO) {
       const duration = ((Date.now() - this.startTime) / 1000).toFixed(2);
       const separator = '='.repeat(60);
-      
+
       console.log(`\n${colorize(separator, 'gray')}`);
       console.log(colorize('📊 RIEPILOGO WORKFLOW', 'cyan'));
       console.log(colorize(separator, 'gray'));
       console.log(`⏱️  Durata: ${duration}s`);
       console.log(`❌ Errori: ${this.errors.length}`);
       console.log(`⚠️  Warning: ${this.warnings.length}`);
-      
+
       if (this.errors.length === 0 && this.warnings.length === 0) {
         console.log(colorize('✅ STATO: PERFETTO', 'green'));
       } else {
@@ -171,10 +173,14 @@ class WorkflowLogger {
 
   // Metodo privato per formattazione
   _format(level, message, color) {
-    const timestamp = CURRENT_LEVEL >= LOG_LEVELS.DEBUG ? `[${getTimestamp()}] ` : '';
+    const timestamp =
+      CURRENT_LEVEL >= LOG_LEVELS.DEBUG ? `[${getTimestamp()}] ` : '';
     const levelTag = CURRENT_LEVEL >= LOG_LEVELS.VERBOSE ? `[${level}] ` : '';
-    const phaseTag = this.phase && CURRENT_LEVEL >= LOG_LEVELS.VERBOSE ? `[${this.phase}] ` : '';
-    
+    const phaseTag =
+      this.phase && CURRENT_LEVEL >= LOG_LEVELS.VERBOSE
+        ? `[${this.phase}] `
+        : '';
+
     return colorize(`${timestamp}${levelTag}${phaseTag}${message}`, color);
   }
 

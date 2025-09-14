@@ -6,12 +6,14 @@ import 'react-native-gesture-handler';
 
 // Navigators
 
-// Screens
-import { ChiSiamoScreen } from '../features/about';
-import { Impatto2024Screen } from '../features/impact';
-import { ProjectsScreen } from '../features/projects';
-import { SeguiciScreen } from '../features/social';
-import { SimplePlaceholderScreen } from '../shared/screens';
+// Lazy Screens
+import {
+  WrappedChiSiamoScreen,
+  WrappedImpatto2024Screen,
+  WrappedProjectsScreen,
+  WrappedSeguiciScreen,
+  WrappedSimplePlaceholderScreen,
+} from './LazyLoading';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import type { RootStackParamList } from './types';
@@ -52,7 +54,7 @@ const AppNavigator: React.FC = () => {
         {/* Stack Screens for detailed views */}
         <Stack.Screen
           name="Progetti"
-          component={ProjectsScreen}
+          component={WrappedProjectsScreen}
           options={{
             title: 'I Nostri Progetti',
             headerShown: false,
@@ -62,12 +64,12 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="Impatto2024"
           options={{ title: 'Impatto 2024' }}
-          component={Impatto2024Screen}
+          component={WrappedImpatto2024Screen}
         />
 
         <Stack.Screen
           name="CharityShop"
-          component={SimplePlaceholderScreen}
+          component={WrappedSimplePlaceholderScreen}
           options={{
             title: 'Charity Shop',
           }}
@@ -79,7 +81,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="CharityGiftCard"
-          component={SimplePlaceholderScreen}
+          component={WrappedSimplePlaceholderScreen}
           options={{ title: 'Gift Cards' }}
           initialParams={{
             title: 'Gift Cards',
@@ -89,7 +91,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="Calendario"
-          component={SimplePlaceholderScreen}
+          component={WrappedSimplePlaceholderScreen}
           options={{ title: 'Eventi & Calendario' }}
           initialParams={{
             title: 'Calendario',
@@ -99,13 +101,13 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="Seguici"
-          component={SeguiciScreen}
+          component={WrappedSeguiciScreen}
           options={{ headerShown: false }}
         />
 
         <Stack.Screen
           name="Tracciabilita"
-          component={SimplePlaceholderScreen}
+          component={WrappedSimplePlaceholderScreen}
           options={{ title: 'Impatto Trasparente' }}
           initialParams={{
             title: 'Tracciabilità',
@@ -115,7 +117,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="ChiSiamo"
-          component={ChiSiamoScreen}
+          component={WrappedChiSiamoScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -80,7 +80,7 @@ jobs:
           # Check commit message for ALL triggers (consolidated from all workflows)
           COMMIT_MSG="${{ github.event.head_commit.message }}"
           echo "📝 Commit message: $COMMIT_MSG"
-          
+
           # Build triggers
           if [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\] ]]; then
             echo "should-test=true" >> $GITHUB_OUTPUT
@@ -113,7 +113,7 @@ jobs:
             echo "✅ CI Build triggered for both platforms"
             exit 0
           fi
-          
+
           # OTA triggers (already handled in ota-update job)
           if [[ "$COMMIT_MSG" =~ \[ota\]|\[hotfix\]|^hotfix: ]]; then
             echo "🔄 OTA Update will be triggered"
@@ -214,7 +214,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        device: ['iPhone-SE-375x667', 'iPhone-15-Pro-393x852', 'Pixel-8-Pro-412x915', 'Galaxy-Tab-S9-768x1024']
+        device:
+          [
+            'iPhone-SE-375x667',
+            'iPhone-15-Pro-393x852',
+            'Pixel-8-Pro-412x915',
+            'Galaxy-Tab-S9-768x1024',
+          ]
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -442,14 +448,14 @@ jobs:
         run: |
           echo "📊 Analyzing bundle size..."
           npm run bundle-analysis || echo "Bundle analysis script not found, using basic analysis"
-          
+
           # Basic bundle size check
           if [ -d "dist" ]; then
             BUNDLE_SIZE=$(du -sh dist/ | cut -f1)
             echo "📦 Bundle size: $BUNDLE_SIZE"
             echo "BUNDLE_SIZE=$BUNDLE_SIZE" >> $GITHUB_ENV
           fi
-          
+
           # Check for large dependencies
           echo "📋 Top 10 largest dependencies:"
           npm ls --depth=0 --json | jq -r '.dependencies | to_entries[] | "\(.key): \(.value.version)"' | head -10 || echo "Could not analyze dependencies"
@@ -457,11 +463,11 @@ jobs:
       - name: 🔒 Security Scan
         run: |
           echo "🔒 Running security scan..."
-          
+
           # NPM Audit
           echo "📋 NPM Audit Results:"
           npm audit --audit-level high || echo "⚠️ Security vulnerabilities found - check npm audit for details"
-          
+
           # Check for known vulnerable packages
           echo "🔍 Checking for known vulnerable packages..."
           npx audit-ci --high || echo "⚠️ High severity vulnerabilities detected"
@@ -481,14 +487,23 @@ jobs:
   deployment-summary:
     name: 📊 Deployment Summary
     runs-on: ubuntu-latest
-    needs: [detect-changes, quality-checks, visual-regression, build-ios, build-android, ota-update, bundle-analysis]
+    needs:
+      [
+        detect-changes,
+        quality-checks,
+        visual-regression,
+        build-ios,
+        build-android,
+        ota-update,
+        bundle-analysis,
+      ]
     if: always()
     steps:
       - name: 📊 Generate Summary
         run: |
           echo "## 🚀 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           # Quality Checks
           echo "### 🔍 Quality Checks" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ needs.quality-checks.result }}" == "success" ]]; then
@@ -496,7 +511,7 @@ jobs:
           else
             echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Visual Regression
           echo "### 🎯 Visual Regression" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ needs.visual-regression.result }}" == "success" ]]; then
@@ -506,7 +521,7 @@ jobs:
           else
             echo "❌ Visual regression tests failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Builds
           echo "### 📱 Builds" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ needs.build-ios.result }}" == "success" ]]; then
@@ -516,7 +531,7 @@ jobs:
           else
             echo "🍎 iOS: ❌ Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.build-android.result }}" == "success" ]]; then
             echo "🤖 Android: ✅ Success" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.build-android.result }}" == "skipped" ]]; then
@@ -524,7 +539,7 @@ jobs:
           else
             echo "🤖 Android: ❌ Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # OTA Updates
           echo "### 🔄 OTA Updates" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ needs.ota-update.result }}" == "success" ]]; then
@@ -534,7 +549,7 @@ jobs:
           else
             echo "❌ OTA Update failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Bundle Analysis
           echo "### 📊 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ needs.bundle-analysis.result }}" == "success" ]]; then
@@ -544,7 +559,7 @@ jobs:
           else
             echo "❌ Bundle analysis failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)" >> $GITHUB_STEP_SUMMARY
 
@@ -554,19 +569,19 @@ jobs:
         with:
           script: |
             const summary = `## 🚀 CI/CD Pipeline Results
-            
+
             ### 🔍 Quality Checks
             ${{ needs.quality-checks.result == 'success' && '✅ All quality checks passed' || '❌ Quality checks failed' }}
-            
+
             ### 🎯 Visual Regression
             ${{ needs.visual-regression.result == 'success' && '✅ Visual regression tests passed' || needs.visual-regression.result == 'skipped' && '⏭️ Visual regression tests skipped' || '❌ Visual regression tests failed' }}
-            
+
             ### 📱 Builds
             🍎 iOS: ${{ needs.build-ios.result == 'success' && '✅ Success' || needs.build-ios.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}
             🤖 Android: ${{ needs.build-android.result == 'success' && '✅ Success' || needs.build-android.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}
-            
+
             🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

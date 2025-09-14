@@ -1,15 +1,20 @@
 import React, { useRef, useMemo } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PlatformScrollView } from '../../../components/ui';
-import { EntraInAzione } from '../components';
-import { useHomeAnimations } from '../hooks';
-import { useTheme } from '../../../shared/hooks/useTheme';
-import { Spacing } from '../../../shared/constants/designTokens';
-import { HomeHeaderSection } from '../../../components/domain/HomeHeaderSection';
-import type { HomeScreenProps } from '../types';
 
-const HomeScreenComponent: React.FC<HomeScreenProps> = ({ navigation }) => {
+import { useHomeAnimations } from '../hooks/useHomeAnimations';
+import type { HomeScreenProps } from '../types/HomeScreenTypes';
+
+import { EntraInAzione } from '../components/EntraInAzione';
+
+import { PlatformScrollView } from '@components/ui';
+import { HomeHeaderSection } from '@components/domain/HomeHeaderSection';
+import { useTheme } from '@shared/hooks/useTheme';
+import { Spacing } from '@shared/constants/designTokens';
+
+const HomeScreenComponent: React.FC<HomeScreenProps> = ({
+  navigation: _navigation,
+}) => {
   const { colors } = useTheme();
   const scrollY = useRef(new Animated.Value(0)).current;
   const {
@@ -58,7 +63,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({ navigation }) => {
 
           {/* Sezione Entra in Azione con CTA */}
           <View style={styles.ctaSection}>
-            <EntraInAzione navigation={navigation} />
+            <EntraInAzione navigation={_navigation} />
           </View>
         </View>
       </PlatformScrollView>

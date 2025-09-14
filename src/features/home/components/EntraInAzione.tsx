@@ -115,8 +115,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing[6],
     paddingHorizontal: Spacing[4],
     alignItems: 'center',
-    borderLeftWidth: 4,
-    borderLeftColor: '#3B82F6',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -129,7 +127,7 @@ const styles = StyleSheet.create({
     minHeight: 120,
   },
   primaryMessage: {
-    color: '#1E40AF',
+    color: '#000000',
     textAlign: 'center',
     fontWeight: Typography.weights.bold,
     letterSpacing: -0.2,
@@ -143,7 +141,7 @@ const styles = StyleSheet.create({
     marginVertical: Spacing[3],
   },
   secondaryMessage: {
-    color: '#059669',
+    color: '#000000',
     textAlign: 'center',
     fontWeight: Typography.weights.medium,
     letterSpacing: 0.1,

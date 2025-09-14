@@ -28,21 +28,23 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
     };
 
     return (
-      <View style={styles.imageContainer}>
-        <Animated.View style={[styles.imageWrapper, { opacity: imageAnim }]}>
-          <Animated.View style={[styles.imageInner, imageStyle]}>
-            <Image
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              source={require('../../../../assets/images/hero-banner.png')}
-              style={styles.heroImage as ImageStyle}
-              resizeMode="cover"
-            />
-            <LinearGradient
-              colors={HomeHeaderDesignTokens.gradients.header}
-              style={styles.flexOne}
-            />
+      <View style={styles.imageSection}>
+        <View style={styles.imageContainer}>
+          <Animated.View style={[styles.flexOne, { opacity: imageAnim }]}>
+            <Animated.View style={[styles.flexOne, imageStyle]}>
+              <Image
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                source={require('../../../../assets/images/hero-banner.png')}
+                style={styles.image as ImageStyle}
+                resizeMode="cover"
+              />
+              <LinearGradient
+                colors={HomeHeaderDesignTokens.gradients.header}
+                style={styles.imageGradientOverlay}
+              />
+            </Animated.View>
           </Animated.View>
-        </Animated.View>
+        </View>
       </View>
     );
   }

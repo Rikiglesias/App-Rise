@@ -11,7 +11,7 @@ import {
   useNewActionsAnimations,
 } from '../components/Contribute/components';
 
-export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
+const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
   navigation,
 }) => {
   const animations = useNewActionsAnimations();
@@ -36,3 +36,5 @@ export const ContributeTabScreen: React.FC<ContributeTabScreenProps> = ({
     </SafeAreaView>
   );
 };
+
+export const ContributeTabScreen = React.memo(ContributeTabScreenComponent);

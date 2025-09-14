@@ -22,7 +22,7 @@ export const createContainerStyles = (
       overflow: 'hidden',
     },
     headerSection: {
-      paddingVertical: Spacing[0], // AZZERA PADDING: da Spacing[1] a Spacing[0] - compattezza estrema
+      paddingVertical: Spacing[1], // RIPRISTINATO: padding normale per spaziatura adeguata
       paddingHorizontal: ADVANCED_CONFIG.headerSection.paddingHorizontal,
       minHeight: ADVANCED_CONFIG.headerSection.minHeight,
       alignItems: 'center',
@@ -76,13 +76,13 @@ export const createImageStyles = (
     // Tutti questi stili sono utilizzati nel componente HeaderImageSection
     // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
     imageSection: {
-      height: ADVANCED_CONFIG.imageSection.height * 1.1, // AUMENTATA: da 0.75 a 1.1 - più spazio verticale per evitare ritagli
+      height: ADVANCED_CONFIG.imageSection.height * 1.2, // ALLUNGATA: immagine più alta per migliore impatto visivo
       width: '100%',
       position: 'relative',
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      marginTop: Spacing[0], // AZZERA MARGINE: da Spacing[2] a Spacing[0] - massima vicinanza immagine-titolo
+      marginTop: Spacing[2], // RIPRISTINATO: margine normale per spaziatura equilibrata
       marginBottom: Spacing[4], // Spazio maggiore per evitare overlap
       borderRadius: 24, // Bordi arrotondati per eleganza
       // iOS: Shadows complete per effetto premium
@@ -119,7 +119,7 @@ export const createImageStyles = (
     image: {
       width: '100%',
       height: '100%',
-      resizeMode: 'contain', // Evita tagli: mostra l'intera immagine
+      resizeMode: 'cover', // Copre l'intero container senza distorsioni
     },
     imageGradientOverlay: {
       position: 'absolute',

@@ -37,7 +37,10 @@ try {
 logger.endPhase(!hasErrors);
 
 // FASE 2: Verifiche dettagliate (errori E warnings)
-logger.startPhase('VERIFICA DETTAGLIATA', 'Zero tolleranza per errori e warnings');
+logger.startPhase(
+  'VERIFICA DETTAGLIATA',
+  'Zero tolleranza per errori e warnings'
+);
 
 // TypeScript
 logger.verbose('Verificando sintassi TypeScript...');

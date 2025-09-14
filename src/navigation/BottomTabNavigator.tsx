@@ -11,10 +11,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // Platform-specific components
 import { PlatformBlur, PlatformTouchable, PerfectText } from '../components/ui';
 
-// Screens
-import { ContributeTabScreen } from '../features/actions';
-import { HomeScreen } from '../features/home';
-
 // Design Tokens & Hooks
 import {
   BorderRadius,
@@ -24,6 +20,11 @@ import {
   Typography,
 } from '../shared/constants/designTokens';
 import { scaleFont } from '../shared/constants/responsiveSystem';
+
+// Lazy Screens (only for HomeScreen due to export issues)
+// Direct imports (no lazy loading to avoid spinner)
+import { ContributeTabScreen } from '../features/actions';
+import HomeScreen from '../features/home/screens/HomeScreen';
 import ImpactStackNavigator from './ImpactStackNavigator';
 
 import type { BottomTabParamList } from './types';
@@ -49,7 +50,7 @@ interface TabButtonProps {
 // 🎨 ADVANCED TAB BAR COMPONENT
 // =================================================================
 
-const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
+const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
   state,
   descriptors,
   navigation,
@@ -119,6 +120,8 @@ const AdvancedTabBar: React.FC<BottomTabBarProps> = ({
   );
 };
 
+const AdvancedTabBar = React.memo(AdvancedTabBarComponent);
+
 // =================================================================
 // ✨ ADVANCED TAB BUTTON COMPONENT
 // =================================================================
@@ -129,7 +132,7 @@ const ICON_MAP: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
   InfoTab: 'hand-heart',
 };
 
-const AdvancedTabButton: React.FC<TabButtonProps> = ({
+const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   isFocused,
   isCentral,
   options,
@@ -229,6 +232,8 @@ const AdvancedTabButton: React.FC<TabButtonProps> = ({
     </View>
   );
 };
+
+const AdvancedTabButton = React.memo(AdvancedTabButtonComponent);
 
 // =================================================================
 // 🚀 MAIN NAVIGATOR

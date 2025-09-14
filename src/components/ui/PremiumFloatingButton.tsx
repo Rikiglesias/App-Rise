@@ -256,7 +256,7 @@ const PremiumFloatingButtonContent: React.FC<{
 };
 
 // Main Component - Now much smaller
-export const PremiumFloatingButton: React.FC<PremiumFloatingButtonProps> = ({
+const PremiumFloatingButtonComponent: React.FC<PremiumFloatingButtonProps> = ({
   onPress,
   title = 'Aiuta Ora',
   icon = '💝',
@@ -309,5 +309,7 @@ export const PremiumFloatingButton: React.FC<PremiumFloatingButtonProps> = ({
     />
   );
 };
+
+export const PremiumFloatingButton = React.memo(PremiumFloatingButtonComponent);
 
 export default PremiumFloatingButton;

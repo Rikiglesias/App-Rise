@@ -11,22 +11,26 @@ import {
   API_BASE_URL,
 } from '../../../shared/config/environment';
 
-// Mock dei Constants
+// Mock dei Constants aggiornato per Expo SDK 54
 jest.mock('expo-constants', () => ({
   __esModule: true,
   default: {
-    manifest: {
-      releaseChannel: undefined,
-    },
     expoConfig: {
       version: '1.0.0',
+      name: 'App Rise',
+      slug: 'app-rise',
     },
+    executionEnvironment: 'standalone',
     platform: {
       ios: undefined,
       android: undefined,
     },
     deviceName: 'Test Device',
     appOwnership: 'expo',
+    // Proprietà deprecate mantenute per compatibilità
+    manifest: {
+      releaseChannel: undefined,
+    },
   },
 }));
 

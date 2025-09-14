@@ -38,7 +38,10 @@ try {
 logger.endPhase(!hasErrors);
 
 // FASE 2: Verifica qualità rigorosa (errori E warnings)
-logger.startPhase('VERIFICA QUALITÀ RIGOROSA', 'Zero tolleranza per errori e warnings');
+logger.startPhase(
+  'VERIFICA QUALITÀ RIGOROSA',
+  'Zero tolleranza per errori e warnings'
+);
 
 // TypeScript
 logger.verbose('Verificando TypeScript...');

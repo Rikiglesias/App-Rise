@@ -30,7 +30,7 @@ interface ActionButtonsUIProps {
  * - Non contiene logica business
  * - Focalizzato esclusivamente sul rendering
  */
-export const ActionButtonsUI: React.FC<ActionButtonsUIProps> = ({
+const ActionButtonsUIComponent: React.FC<ActionButtonsUIProps> = ({
   animations,
   data,
 }) => {
@@ -70,3 +70,5 @@ export const ActionButtonsUI: React.FC<ActionButtonsUIProps> = ({
     </View>
   );
 };
+
+export const ActionButtonsUI = React.memo(ActionButtonsUIComponent);

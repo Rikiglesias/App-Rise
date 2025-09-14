@@ -15,9 +15,9 @@ export const ADVANCED_CONFIG = {
     minHeight: 120,
   },
   imageSection: {
-    // Altezza ancora più generosa per aumentare dimensione percepita senza tagli
+    // Altezza responsiva: target ~0.72 * width (considerando moltiplicatore 1.1 negli styles)
     height: scaleDimensionLinear(
-      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 1.2
+      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 1.1
     ),
   },
   typography: {

@@ -38,7 +38,9 @@ export default {
     ios: {
       displayName: 'RAH Italia',
       supportsTablet: true,
-      bundleIdentifier: process.env.IOS_BUNDLE_IDENTIFIER || 'it.creareunapp.editor.ios63da226b4447c',
+      bundleIdentifier:
+        process.env.IOS_BUNDLE_IDENTIFIER ||
+        'it.creareunapp.editor.ios63da226b4447c',
       buildNumber: process.env.IOS_BUILD_NUMBER || '19',
       icon: './assets/icons/app/app-icon.jpg',
       infoPlist: {
@@ -83,7 +85,8 @@ export default {
         backgroundColor: '#F8F8F8',
         monochromeImage: './assets/icons/app/app-icon.jpg', // Android 13+ themed icons
       },
-      package: process.env.ANDROID_PACKAGE || 'it.creareunapp.editor.ios63da226b4447c',
+      package:
+        process.env.ANDROID_PACKAGE || 'it.creareunapp.editor.ios63da226b4447c',
       versionCode: parseInt(process.env.ANDROID_VERSION_CODE || '3', 10),
       // Permessi specifici con giustificazione
       permissions: [
@@ -123,7 +126,11 @@ export default {
     },
 
     // Plugin richiesti
-    plugins: ['expo-secure-store', 'expo-updates', 'expo-font'],
+    plugins: [
+      'expo-secure-store', 
+      'expo-updates', 
+      'expo-font'
+    ],
 
     // Aggiornamenti OTA
     updates: {
@@ -135,5 +142,7 @@ export default {
     runtimeVersion: {
       policy: 'sdkVersion',
     },
+
+
   },
 };

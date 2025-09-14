@@ -13,6 +13,11 @@ import { ThemeProvider, useTheme } from './src/shared/hooks/useTheme';
 import { UniversalThemeProvider } from './src/shared/theme/UniversalTheme';
 import { performanceMonitor } from './src/shared/monitoring/PerformanceMonitor';
 import { logger } from './src/shared/utils/logger';
+// Import rimossi - preloading disabilitato
+// import {
+//   preloadCriticalComponents,
+//   preloadSecondaryComponents,
+// } from './src/navigation/LazyLoading';
 
 // Define the font config based on our design tokens
 const fontConfig = {
@@ -74,20 +79,29 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  // Inizializza Performance Monitor all'avvio dell'app
+  // Inizializza Performance Monitor e Lazy Loading all'avvio dell'app
   useEffect(() => {
     // Log dell'inizializzazione
     logger.info('App', 'Performance Monitor initialized', {
       timestamp: Date.now(),
-      version: '1.0.0'
+      version: '1.0.0',
     });
 
     // Monitora il tempo di avvio dell'app
     const appStartTime = Date.now();
     performanceMonitor.recordUserInteraction('app_startup', appStartTime);
 
+    // Inizializza preloading intelligente - DISABILITATO per evitare caricamenti non necessari
+    // preloadCriticalComponents();
+
+    // Precarica componenti secondari dopo che l'app è stabile - DISABILITATO
+    // const secondaryPreloadTimer = setTimeout(() => {
+    //   preloadSecondaryComponents();
+    // }, 5000);
+
     return () => {
-      // Cleanup se necessario
+      // Cleanup
+      // clearTimeout(secondaryPreloadTimer); // DISABILITATO insieme al preloading
       logger.debug('App', 'Performance Monitor cleanup');
     };
   }, []);

@@ -14,7 +14,7 @@ const config = getDefaultConfig(__dirname);
 config.server = {
   ...config.server,
   port: 8081,
-  enhanceMiddleware: (middleware) => {
+  enhanceMiddleware: middleware => {
     return (req, res, next) => {
       // Compression headers per assets
       if (req.url?.match(/\.(js|css|json|svg)$/)) {
@@ -72,7 +72,14 @@ config.resolver = {
   sourceExts: [...config.resolver.sourceExts, 'cjs', 'mjs'],
   assetExts: [
     ...config.resolver.assetExts,
-    'bin', 'txt', 'jpg', 'png', 'json', 'svg', 'webp', 'gif'
+    'bin',
+    'txt',
+    'jpg',
+    'png',
+    'json',
+    'svg',
+    'webp',
+    'gif',
   ],
   // Platform-specific resolution
   platforms: ['ios', 'android', 'native', 'web'],
@@ -101,12 +108,14 @@ config.serializer = {
   // Rimuoviamo la createModuleIdFactory personalizzata per evitare ID non stabili
   // che possono causare "Requiring unknown module <id>" con Hermes/HMR/OTA
   // Processamento moduli ottimizzato
-  processModuleFilter: (module) => {
+  processModuleFilter: module => {
     // Escludi moduli di test dal bundle production
     if (process.env.NODE_ENV === 'production') {
-      return !module.path.includes('__tests__') && 
-             !module.path.includes('.test.') &&
-             !module.path.includes('.spec.');
+      return (
+        !module.path.includes('__tests__') &&
+        !module.path.includes('.test.') &&
+        !module.path.includes('.spec.')
+      );
     }
     return true;
   },

@@ -14,7 +14,7 @@ import {
 } from './HomeHeaderSubComponents';
 
 // Main Component - Now under 60 lines
-export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
+const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
   scrollY,
 }) => {
   const { colors } = useTheme();
@@ -84,10 +84,10 @@ export const HomeHeaderSection: React.FC<HomeHeaderSectionProps> = ({
         imageRotation={imageRotation}
         styles={styles}
       />
-
-      {/* HeaderMissionSection rimossa - spostata nella pagina impatto */}
     </Animated.View>
   );
 };
+
+export const HomeHeaderSection = React.memo(HomeHeaderSectionComponent);
 
 export default HomeHeaderSection;
