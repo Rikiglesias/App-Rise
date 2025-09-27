@@ -34,11 +34,20 @@ export const useOTAUpdates = () => {
       return;
     }
 
-    // In development, logga ma procedi comunque se Updates è abilitato
+    // In Expo Go (development), non procedere con il controllo per evitare errori
+    if (__DEV__ && !Updates.isEmbeddedLaunch) {
+      logger.debug(
+        'OTA Updates',
+        'Development mode in Expo Go detected - skipping update check to avoid errors'
+      );
+      return;
+    }
+
+    // In development builds standalone, procedi normalmente
     if (__DEV__) {
       logger.debug(
         'OTA Updates',
-        'Development mode detected, but Updates is enabled - proceeding with check'
+        'Development build detected - proceeding with update check'
       );
     }
 

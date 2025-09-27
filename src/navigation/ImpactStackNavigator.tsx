@@ -13,7 +13,9 @@ const ImpactStackNavigator: React.FC = () => {
     <ImpactStack.Navigator
       screenOptions={{
         headerShown: false,
+        animation: 'none', // Disabilita animazioni per transizioni istantanee
       }}
+      initialRouteName="Impact"
     >
       <ImpactStack.Screen name="Impact" component={ImpactTabScreen} />
       <ImpactStack.Screen name="Beneficiaries" component={DevelopmentScreen} />

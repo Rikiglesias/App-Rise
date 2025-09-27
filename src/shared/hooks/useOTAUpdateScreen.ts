@@ -26,14 +26,22 @@ export const useOTAUpdateScreen = () => {
       return;
     }
 
-    // In development, mostra solo se esplicitamente richiesto
-    if (__DEV__) {
+    // In Expo Go (development), salta completamente per evitare errori
+    if (__DEV__ && !Updates.isEmbeddedLaunch) {
       logger.debug(
         'OTA Update Screen',
-        'Development mode, skipping initial screen'
+        'Development mode in Expo Go detected - skipping initial screen to avoid errors'
       );
       setState(prev => ({ ...prev, isInitialCheck: false }));
       return;
+    }
+
+    // In development builds standalone, procedi normalmente ma con log specifico
+    if (__DEV__) {
+      logger.debug(
+        'OTA Update Screen',
+        'Development build detected - proceeding with update screen'
+      );
     }
 
     // Mostra la schermata di aggiornamento all'avvio

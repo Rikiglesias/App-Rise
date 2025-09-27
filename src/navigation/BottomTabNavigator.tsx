@@ -246,7 +246,10 @@ const renderTabBar = (props: BottomTabBarProps) => (
 const BottomTabNavigator: React.FC = () => (
   <Tab.Navigator
     initialRouteName="HomeTab"
-    screenOptions={{ headerShown: false }}
+    screenOptions={{
+      headerShown: false,
+      lazy: false, // Pre-monta tutte le tab per eliminare scatti
+    }}
     tabBar={renderTabBar}
   >
     <Tab.Screen

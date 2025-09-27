@@ -6,12 +6,14 @@ import 'react-native-gesture-handler';
 
 // Navigators
 
-// Lazy Screens
+// Direct imports (no lazy loading for immediate loading)
+import ChiSiamoScreen from '../features/about/screens/ChiSiamoScreen';
+import SeguiciScreen from '../features/social/screens/SeguiciScreen';
+
+// Lazy Screens (keep lazy for less critical screens)
 import {
-  WrappedChiSiamoScreen,
   WrappedImpatto2024Screen,
   WrappedProjectsScreen,
-  WrappedSeguiciScreen,
   WrappedSimplePlaceholderScreen,
 } from './LazyLoading';
 
@@ -101,7 +103,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="Seguici"
-          component={WrappedSeguiciScreen}
+          component={SeguiciScreen}
           options={{ headerShown: false }}
         />
 
@@ -117,7 +119,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="ChiSiamo"
-          component={WrappedChiSiamoScreen}
+          component={ChiSiamoScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

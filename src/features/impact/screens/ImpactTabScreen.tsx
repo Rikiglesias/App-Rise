@@ -82,7 +82,7 @@ const ImpactTabScreenComponent: React.FC = () => {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         <ImpactHeader animations={animations} />
 
@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[50],
   },
 
-  // Scroll Content - PADDING BOTTOM PER NAVIGATION
+  // Scroll Content - PADDING BOTTOM PER NAVIGATION (UNIFORMATO CON AZIONI)
   scrollContent: {
-    paddingBottom: Platform.OS === 'android' ? 200 : 160, // ANDROID: 200 per evitare taglio mappa dalla bottom navigation / iOS: 160 normale
+    paddingBottom: Platform.OS === 'android' ? 160 : 120, // UNIFORMATO: stesso valore di ContributeTabScreen per evitare layout shift
   },
 
   // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
