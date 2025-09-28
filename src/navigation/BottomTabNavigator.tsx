@@ -140,10 +140,8 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   onLongPress,
   routeName,
 }) => {
-  // Rimosso: animazioni button container
-  const buttonContainerStyle = {
-    transform: [{ translateY: isCentral && isFocused ? -18 : 0 }],
-  };
+  // NESSUNA ANIMAZIONE - container statico
+  const buttonContainerStyle = {};
 
   // COLORI STATICI - CALCOLO DIRETTO SENZA ANIMAZIONI (risolve bug timing)
   const getTabColors = () => {
@@ -175,16 +173,11 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
 
   const tabColors = getTabColors();
 
-  // Rimosso: animazioni icon e label
-  const iconContainerStyle = {
-    transform: [{ scale: isFocused ? 1 : 0.9 }],
-    shadowOpacity: isFocused ? 0.3 : 0.05,
-  };
+  // NESSUNA ANIMAZIONE - icona statica
+  const iconContainerStyle = {};
 
-  const labelStyle = {
-    opacity: isFocused ? 1 : 0,
-    transform: [{ translateY: isFocused ? 0 : 5 }],
-  };
+  // NESSUNA ANIMAZIONE - label statica
+  const labelStyle = {};
 
   const iconName = ICON_MAP[routeName] ?? 'circle';
   const iconSize = isCentral ? 32 : 26;

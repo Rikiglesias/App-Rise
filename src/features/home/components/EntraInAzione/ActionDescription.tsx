@@ -22,9 +22,9 @@ export const ActionDescription: React.FC = () => {
       >
         {/* ✅ SISTEMA PERFETTO - Prima frase: andata a capo dopo "lotta " */}
         <PerfectText
-          fontSize={20}
+          fontSize={18} // ← RIDOTTO DA 20 A 18 per evitare troncamento
           fontWeight="bold"
-          lines={2} // ✅ Sempre 2 righe esatte
+          lines={3} // ← AUMENTATO DA 2 A 3 per evitare taglio
           color="#1F2937"
           textAlign="center"
           style={styles.descriptionMain}
@@ -56,9 +56,9 @@ export const ActionDescription: React.FC = () => {
 
         {/* ✅ SISTEMA PERFETTO - Seconda frase: andata a capo dopo "per" */}
         <PerfectText
-          fontSize={18}
+          fontSize={16} // ← RIDOTTO DA 18 A 16 per evitare troncamento
           fontWeight="600"
-          lines={2} // ✅ Sempre 2 righe esatte
+          lines={3} // ← AUMENTATO DA 2 A 3 per evitare taglio
           color="#6B7280"
           textAlign="center"
           style={styles.descriptionSecondary}

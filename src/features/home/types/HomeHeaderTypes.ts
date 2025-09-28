@@ -10,7 +10,7 @@ import { useTheme } from '../../../shared/hooks/useTheme';
 // Configuration inline
 export const ADVANCED_CONFIG = {
   headerSection: {
-    paddingVertical: Spacing[6],
+    paddingVertical: Spacing[2], // ← RIDOTTO DA Spacing[6] A Spacing[2] per meno spazio sopra il titolo
     paddingHorizontal: Spacing[4],
     minHeight: 120,
   },

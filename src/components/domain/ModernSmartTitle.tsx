@@ -1,6 +1,6 @@
 import React from 'react';
-import { Animated, Image, StyleSheet, View, Text } from 'react-native';
-import { PerfectContainer } from '../ui';
+import { Animated, Image, StyleSheet, View } from 'react-native';
+import { PerfectContainer, PerfectText } from '../ui';
 import { scaleFont } from '../../shared/constants/responsiveSystem';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
@@ -17,7 +17,7 @@ const createModernTitleStyles = (responsiveSpacing: {
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingTop: responsiveSpacing.containerPadding + 10, // ← SPAZIO SOPRA RESPONSIVE
+      paddingTop: 0, // ← ELIMINATO COMPLETAMENTE il padding sopra per massima riduzione spazio
       paddingBottom: 0,
       paddingHorizontal: responsiveSpacing.containerPadding, // ← MATEMATICO DIRETTO
       width: '100%', // ← LARGHEZZA CONTROLLATA
@@ -67,9 +67,9 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
     // ✅ PERFECT SYSTEM - Responsive scaling automatico
     const responsiveSpacing = React.useMemo(() => {
       return {
-        containerPadding: scaleFont(30),
-        separatorTopMargin: scaleFont(33), // ← ALLONTANA SEPARATORE DAL TITOLO
-        separatorBottomMargin: scaleFont(0), // ← AVVICINA IMMAGINE ALLA LINEA
+        containerPadding: scaleFont(10), // ← RIDOTTO DA 15 A 10 per meno spazio sopra
+        separatorTopMargin: scaleFont(20), // ← RIDOTTO DA 25 A 20
+        separatorBottomMargin: scaleFont(10), // ← RIDOTTO PER COMPENSARE RIMOZIONE SOTTOTITOLO
         logoSize: scaleFont(53),
         separatorLineWidth: scaleFont(104),
         logoMargin: scaleFont(15),
@@ -123,43 +123,41 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               style={{ alignItems: 'center' }}
             >
               {/* TITOLO COMPLETO - LAYOUT ASSOLUTO PER CONTROLLO TOTALE INTERLINEA */}
-              <View style={{ alignItems: 'center', height: scaleFont(80) }}>
-                <Text
-                  allowFontScaling={false}
-                  numberOfLines={1}
-                  adjustsFontSizeToFit={true}
-                  minimumFontScale={0.65}
-                  style={{
-                    fontSize: scaleFont(48),
-                    fontWeight: '900',
-                    textAlign: 'center',
-                    color: HomeHeaderDesignTokens.colors.primary,
-                    position: 'absolute',
-                    top: 0,
-                    width: '100%',
-                  }}
+              {/* ✅ PERFECT SYSTEM - Titolo principale su due righe separate */}
+              <View style={{ alignItems: 'center' }}>
+                {/* Prima riga: "Rise Against" */}
+                <PerfectText
+                  size={48}
+                  lines={1}
+                  immunity={true}
+                  fontWeight="900"
+                  textAlign="center"
+                  color={HomeHeaderDesignTokens.colors.primary}
                 >
                   Rise Against
-                </Text>
-                <Text
-                  allowFontScaling={false}
-                  numberOfLines={1}
-                  adjustsFontSizeToFit={true}
-                  minimumFontScale={0.65}
-                  style={{
-                    fontSize: scaleFont(48),
-                    fontWeight: '900',
-                    textAlign: 'center',
-                    position: 'absolute',
-                    top: scaleFont(55), // ← CONTROLLO ASSOLUTO POSIZIONE SECONDA RIGA
-                    width: '100%',
-                  }}
-                >
-                  <Text style={{ color: '#DC2626' }}>Hunger </Text>
-                  <Text style={{ color: HomeHeaderDesignTokens.colors.dark }}>
+                </PerfectText>
+
+                {/* Seconda riga: "Hunger Italia" con colori diversi */}
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <PerfectText
+                    size={48}
+                    lines={1}
+                    immunity={true}
+                    fontWeight="900"
+                    color="#DC2626"
+                  >
+                    Hunger{' '}
+                  </PerfectText>
+                  <PerfectText
+                    size={48}
+                    lines={1}
+                    immunity={true}
+                    fontWeight="900"
+                    color={HomeHeaderDesignTokens.colors.dark}
+                  >
                     Italia
-                  </Text>
-                </Text>
+                  </PerfectText>
+                </View>
               </View>
 
               {/* Separatore elegante con logo simbolico centrale */}

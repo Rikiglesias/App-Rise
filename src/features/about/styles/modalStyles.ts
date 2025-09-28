@@ -2,13 +2,15 @@ import { StyleSheet } from 'react-native';
 
 import responsiveSystem, {
   SpacingTokens as Spacing,
+  DesignTokens,
+  ShadowTokens,
   scaleDimensionLinear,
 } from '../../../shared/constants/responsiveSystem';
 import { Colors, Typography } from '../../../shared/constants';
 
 /**
  * Stili per i modal della sezione About
- * Ottimizzati per contenuto lungo e scrolling
+ * Ottimizzati per contenuto lungo e scrolling - SISTEMA COERENTE
  */
 export const modalStyles = StyleSheet.create({
   overlay: {
@@ -40,35 +42,31 @@ export const modalStyles = StyleSheet.create({
       (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.9
     ),
     width: '100%',
-    maxHeight: '90%', // ULTERIORMENTE ALLUNGATO: da 85% a 90% per molto più spazio
-    minHeight: 700, // AUMENTATO: da 500 a 700px per garantire altezza significativa
-    height: '85%', // AUMENTATO: da 75% a 85% per modal molto più alto
+    maxHeight: '90%',
+    minHeight: scaleDimensionLinear(700), // Sistema responsive
+    height: '85%',
   },
 
   modalGradientBorder: {
-    borderRadius: 24,
-    padding: 3,
-    shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 12,
-    height: '100%', // AGGIUNTO: altezza piena per evitare collasso del gradient
-    minHeight: 700, // AGGIUNTO: altezza minima garantita
+    borderRadius: DesignTokens.borderRadius.xlarge, // Sistema responsive
+    padding: Spacing[1], // Sistema responsive (4dp)
+    ...ShadowTokens.xl, // Sistema ombre coerente
+    height: '100%',
+    minHeight: scaleDimensionLinear(700), // Sistema responsive
   },
 
   modalWhiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 21,
+    borderRadius: Math.max(0, DesignTokens.borderRadius.xlarge - Spacing[1]), // Sistema responsive
     overflow: 'hidden',
-    height: '100%', // CAMBIATO: da flex: 1 a height fisso per evitare collasso
-    minHeight: 650, // AGGIUNTO: altezza minima garantita
+    height: '100%',
+    minHeight: scaleDimensionLinear(650), // Sistema responsive
   },
 
   modalContent: {
-    height: '100%', // CAMBIATO: da flex a height fisso per evitare collasso
+    height: '100%',
     flexDirection: 'column',
-    minHeight: 600, // AUMENTATO: da 400 a 600px per contenuto molto più alto
+    minHeight: scaleDimensionLinear(600), // Sistema responsive
   },
 
   modalHeader: {
@@ -76,12 +74,12 @@ export const modalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: Spacing[4],
-    borderBottomWidth: 1,
+    borderBottomWidth: DesignTokens.borderRadius.none + 1, // 1dp responsive
     borderBottomColor: Colors.neutral[200],
     position: 'relative',
-    height: 70, // AGGIUNTO: altezza fissa per l'header per evitare collasso
-    minHeight: 70, // AGGIUNTO: altezza minima garantita
-    flexShrink: 0, // AGGIUNTO: impedisce al header di rimpicciolirsi
+    height: DesignTokens.components.buttonHeight.large + Spacing[4], // Sistema responsive
+    minHeight: DesignTokens.components.buttonHeight.large + Spacing[4], // Sistema responsive
+    flexShrink: 0,
   },
 
   modalTitle: {
@@ -90,37 +88,33 @@ export const modalStyles = StyleSheet.create({
     letterSpacing: -0.8,
     flex: 1,
     textAlign: 'center',
-    paddingRight: Spacing[8], // RIDOTTO: spazio appropriato per la X più piccola
+    paddingRight: Spacing[8],
   },
 
   closeButton: {
     position: 'absolute',
-    top: Spacing[3], // RIAVVICINATO: più in alto ma non troppo
-    right: Spacing[3], // RIAVVICINATO: più a destra ma equilibrato
-    width: 32, // RIDOTTO: dimensione più discreta
-    height: 32, // RIDOTTO: dimensione più discreta
-    borderRadius: 16, // AGGIORNATO: per mantenere la forma circolare
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', // SEMPLIFICATO: sfondo scuro minimale
+    top: Spacing[3],
+    right: Spacing[3],
+    width: DesignTokens.components.iconSize.large, // Sistema responsive (32dp)
+    height: DesignTokens.components.iconSize.large, // Sistema responsive (32dp)
+    borderRadius: DesignTokens.components.iconSize.large / 2, // Sistema responsive
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000000', // MANTENUTO: ombra pulita
-    shadowOffset: { width: 0, height: 2 }, // RIDOTTO: ombra più sottile
-    shadowOpacity: 0.3, // BILANCIATO: ombra discreta
-    shadowRadius: 4, // RIDOTTO: ombra più contenuta
-    elevation: 4, // RIDOTTO: elevazione più naturale
+    ...ShadowTokens.sm, // Sistema ombre coerente
   },
 
   storyScroll: {
-    height: 500, // CAMBIATO: da flex a height fisso per evitare collasso dell'area scroll
-    minHeight: 500, // AUMENTATO: da 300 a 500px per area scrollabile molto più alta
+    height: scaleDimensionLinear(500), // Sistema responsive
+    minHeight: scaleDimensionLinear(500), // Sistema responsive
   },
 
   storyContainer: {
     padding: Spacing[6],
     gap: Spacing[4],
-    minHeight: 800, // AUMENTATO: da 600 a 800px per contenuto molto più alto
-    flexGrow: 1, // AGGIUNTO: permette al contenuto di crescere se necessario
-    paddingBottom: Spacing[12], // AGGIUNTO: padding extra in basso per respiro
+    minHeight: scaleDimensionLinear(800), // Sistema responsive
+    flexGrow: 1,
+    paddingBottom: Spacing[12],
   },
 
   storyTitle: {
@@ -133,7 +127,7 @@ export const modalStyles = StyleSheet.create({
   storyText: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
-    lineHeight: 24,
+    lineHeight: DesignTokens.layout.unit * 3, // Sistema responsive (24dp)
     textAlign: 'justify',
     letterSpacing: 0.3,
   },
@@ -150,7 +144,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   sectionDivider: {
-    height: 1,
+    height: DesignTokens.borderRadius.none + 1, // 1dp responsive
     backgroundColor: Colors.neutral[200],
     marginVertical: Spacing[4],
   },
@@ -164,7 +158,7 @@ export const modalStyles = StyleSheet.create({
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: DesignTokens.layout.unit * 2.5, // Sistema responsive (20dp)
     letterSpacing: 0.3,
   },
 
@@ -188,7 +182,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarIcon: {
-    marginTop: 2,
+    marginTop: Spacing[1] / 2, // Sistema responsive (2dp)
   },
 
   pillarTitle: {
@@ -204,6 +198,6 @@ export const modalStyles = StyleSheet.create({
   pillarText: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
-    lineHeight: 22,
+    lineHeight: DesignTokens.layout.unit * 2.75, // Sistema responsive (22dp)
   },
 });

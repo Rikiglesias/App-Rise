@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignSelf: 'stretch',
     width: '100%',
-    paddingTop: Platform.OS === 'android' ? Spacing[24] + 16 : Spacing[20] + 12, // AUMENTATO MOLTO: aggiunto spazio extra per abbassare molto di più la pagina
+    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[20] + 12, // AUMENTATO ANDROID: da Spacing[12] a Spacing[16] per più spazio
     paddingHorizontal: Spacing[4],
     paddingBottom: Spacing[6],
     alignItems: 'center',

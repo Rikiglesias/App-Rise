@@ -18,9 +18,9 @@ export const EntraInAzione: React.FC<EntraInAzioneProps> = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: Spacing[3], // Container un po' più stretto dell'immagine
+    marginHorizontal: Spacing[2], // ← RIDOTTO DA 3 A 2 per più spazio orizzontale
     paddingTop: 0,
-    paddingBottom: Spacing[6],
+    paddingBottom: Spacing[4], // ← RIDOTTO DA 6 A 4 per evitare taglio in basso
     marginTop: 0,
   },
 });

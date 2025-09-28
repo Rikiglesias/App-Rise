@@ -8,7 +8,12 @@ import { View, StyleSheet, Modal, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PerfectText } from '../../components/ui';
 import { useOTAUpdates } from '../hooks/useOTAUpdates';
-import { Colors, Spacing, Typography } from '../constants/designTokens';
+import { Colors } from '../constants/designTokens';
+import {
+  DesignTokens,
+  SpacingTokens,
+  TypographyTokens,
+} from '../constants/responsiveSystem';
 
 interface OTAUpdateScreenProps {
   visible: boolean;
@@ -49,92 +54,101 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
       setTimeout(() => {
         onComplete();
       }, 1000);
-    } else if (error) {
-      setStatusMessage("❌ Errore durante l'aggiornamento");
-      setProgress(0);
-      setTimeout(() => {
-        onComplete();
-      }, 2000);
     }
-
     // Return undefined per i casi che non hanno cleanup
     return undefined;
-  }, [isChecking, isDownloading, isUpdateAvailable, error, onComplete]);
+  }, [isChecking, isDownloading, isUpdateAvailable, onComplete]);
 
-  // Gestisce il completamento del download
   useEffect(() => {
-    if (progress >= 90 && isDownloading) {
-      setStatusMessage('🔄 Installazione in corso...');
-      setProgress(100);
-      // L'app si ricaricherà automaticamente dopo il download
+    if (error) {
+      setStatusMessage("❌ Errore durante l'aggiornamento");
+      setProgress(0);
     }
-  }, [progress, isDownloading]);
+  }, [error]);
 
-  if (!visible) {
-    return null;
-  }
+  if (!visible) return null;
 
   return (
-    <Modal
-      visible={visible}
-      animationType="fade"
-      statusBarTranslucent
-      style={styles.modal}
-    >
+    <Modal visible={visible} animationType="fade" style={styles.modal}>
       <LinearGradient
-        colors={[Colors.primary[500], Colors.primary[700]]}
+        colors={Colors.gradients.redToBlack}
         style={styles.container}
       >
         <View style={styles.content}>
-          {/* Logo o icona dell'app */}
+          {/* Logo e titolo */}
           <View style={styles.logoContainer}>
-            <PerfectText lines={1} style={styles.appName}>
-              RAH Italia
-            </PerfectText>
-            <PerfectText lines={1} style={styles.subtitle}>
+            <PerfectText
+              size={TypographyTokens.styles.display.medium} // Sistema responsive
+              fontWeight="bold"
+              lines={1}
+              style={styles.appName}
+            >
               Rise Against Hunger
+            </PerfectText>
+            <PerfectText
+              size={TypographyTokens.styles.body.large} // Sistema responsive
+              lines={1}
+              style={styles.subtitle}
+            >
+              Italia
             </PerfectText>
           </View>
 
-          {/* Messaggio di stato */}
+          {/* Status */}
           <View style={styles.statusContainer}>
-            <PerfectText lines={1} style={styles.statusText}>
+            <PerfectText
+              size={TypographyTokens.styles.title.medium} // Sistema responsive
+              fontWeight="500"
+              lines={1}
+              style={styles.statusText}
+            >
               {statusMessage}
             </PerfectText>
           </View>
 
-          {/* Barra di progresso */}
-          <View style={styles.progressContainer}>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: `${progress}%` }]} />
+          {/* Progress Bar */}
+          {(isDownloading || progress > 0) && (
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBar}>
+                <View
+                  style={[styles.progressFill, { width: `${progress}%` }]}
+                />
+              </View>
+              <PerfectText
+                size={TypographyTokens.styles.body.small} // Sistema responsive
+                fontWeight="500"
+                lines={1}
+                style={styles.progressText}
+              >
+                {progress}%
+              </PerfectText>
             </View>
-            <PerfectText lines={1} style={styles.progressText}>
-              {progress}%
-            </PerfectText>
-          </View>
+          )}
 
-          {/* Spinner per operazioni in corso */}
-          {(isChecking || isDownloading) && (
+          {/* Spinner */}
+          {isChecking && (
             <View style={styles.spinnerContainer}>
               <ActivityIndicator size="large" color="white" />
             </View>
           )}
 
-          {/* Informazioni aggiuntive */}
+          {/* Info */}
           <View style={styles.infoContainer}>
-            {isUpdateAvailable && (
-              <PerfectText lines={1} style={styles.infoText}>
-                📱 Nuovo aggiornamento disponibile
+            {error ? (
+              <PerfectText
+                size={TypographyTokens.styles.body.small} // Sistema responsive
+                lines={2}
+                style={styles.errorText}
+              >
+                {error}
               </PerfectText>
-            )}
-            {error && (
-              <PerfectText lines={1} style={styles.errorText}>
-                Errore: {error}
-              </PerfectText>
-            )}
-            {!isUpdateAvailable && !isChecking && !error && (
-              <PerfectText lines={1} style={styles.infoText}>
-                🎉 La tua app è aggiornata!
+            ) : (
+              <PerfectText
+                size={TypographyTokens.styles.body.small} // Sistema responsive
+                lines={1}
+                style={styles.infoText}
+              >
+                Stiamo migliorando la tua esperienza
               </PerfectText>
             )}
           </View>
@@ -146,7 +160,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
 
 const styles = StyleSheet.create({
   modal: {
-    margin: 0,
+    margin: SpacingTokens['0'], // Sistema responsive
   },
   container: {
     flex: 1,
@@ -155,70 +169,61 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    paddingHorizontal: Spacing[6],
+    paddingHorizontal: SpacingTokens['6'], // Sistema responsive
     width: '100%',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: Spacing[8],
+    marginBottom: SpacingTokens['8'], // Sistema responsive
   },
   appName: {
-    fontSize: 32,
-    fontWeight: Typography.weights.bold as '700',
     color: 'white',
     textAlign: 'center',
-    marginBottom: Spacing[2],
+    marginBottom: SpacingTokens['2'], // Sistema responsive
   },
   subtitle: {
-    fontSize: 16,
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
   },
   statusContainer: {
-    marginBottom: Spacing[6],
+    marginBottom: SpacingTokens['6'], // Sistema responsive
   },
   statusText: {
-    fontSize: 18,
     color: 'white',
     textAlign: 'center',
-    fontWeight: Typography.weights.medium as '500',
   },
   progressContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: Spacing[6],
+    marginBottom: SpacingTokens['6'], // Sistema responsive
   },
   progressBar: {
     width: '80%',
-    height: 8,
+    height: SpacingTokens['2'], // Sistema responsive (8dp)
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 4,
+    borderRadius: DesignTokens.borderRadius.small, // Sistema responsive
     overflow: 'hidden',
-    marginBottom: Spacing[2],
+    marginBottom: SpacingTokens['2'], // Sistema responsive
   },
   progressFill: {
     height: '100%',
     backgroundColor: 'white',
-    borderRadius: 4,
+    borderRadius: DesignTokens.borderRadius.small, // Sistema responsive
   },
   progressText: {
-    fontSize: 14,
     color: 'white',
-    fontWeight: Typography.weights.medium as '500',
   },
   spinnerContainer: {
-    marginBottom: Spacing[6],
+    marginBottom: SpacingTokens['6'], // Sistema responsive
   },
   infoContainer: {
     alignItems: 'center',
   },
   infoText: {
-    fontSize: 14,
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
   },
   errorText: {
-    fontSize: 14,
     color: '#ffcccb',
     textAlign: 'center',
   },

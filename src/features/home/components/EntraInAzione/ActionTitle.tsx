@@ -1,21 +1,23 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-
+import { PerfectContainer, PerfectText } from '../../../../components/ui';
 import { Spacing } from '../../../../shared/constants/designTokens';
-import { PerfectText } from '../../../../components/ui';
 
 export const ActionTitle: React.FC = () => {
   return (
-    <View style={styles.titleSection}>
-      <View style={styles.titleContainer}>
+    <PerfectContainer
+      preset="section"
+      alignItems="center"
+      marginVertical={Spacing[1]}
+    >
+      <PerfectContainer alignItems="center" justifyContent="center">
         {/* ✅ SISTEMA PERFETTO - PerfectText con immunità totale */}
         <PerfectText
-          size={35}
-          lines={1}
+          size={32} // ← RIDOTTO DA 35 A 32 per evitare troncamento
+          lines={2} // ← AUMENTATO DA 1 A 2 per evitare taglio
           fontWeight="900"
           color="#DC2626"
+          textAlign="center"
           style={{
-            textAlign: 'center',
             textShadowColor: 'rgba(220, 38, 38, 0.3)',
             textShadowOffset: { width: 0, height: 2 },
             textShadowRadius: 4,
@@ -23,20 +25,7 @@ export const ActionTitle: React.FC = () => {
         >
           ⚡ Entra in Azione
         </PerfectText>
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  titleSection: {
-    alignItems: 'center',
-    marginBottom: Spacing[1],
-  },
-
-  titleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: Spacing[0],
-  },
-});

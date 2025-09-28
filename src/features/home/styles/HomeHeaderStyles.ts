@@ -76,14 +76,14 @@ export const createImageStyles = (
     // Tutti questi stili sono utilizzati nel componente HeaderImageSection
     // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
     imageSection: {
-      height: ADVANCED_CONFIG.imageSection.height * 1.2, // ALLUNGATA: immagine più alta per migliore impatto visivo
+      height: ADVANCED_CONFIG.imageSection.height * 1.0, // ← RIDOTTO DA 1.2 A 1.0 per dimensioni normali
       width: '100%',
       position: 'relative',
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      marginTop: Spacing[2], // RIPRISTINATO: margine normale per spaziatura equilibrata
-      marginBottom: Spacing[4], // Spazio maggiore per evitare overlap
+      marginTop: Spacing[1], // ← RIDOTTO DA Spacing[2] per meno spazio sopra
+      marginBottom: Spacing[3], // ← RIDOTTO DA Spacing[4] per bilanciare
       borderRadius: 24, // Bordi arrotondati per eleganza
       // iOS: Shadows complete per effetto premium
       ...Platform.select({
@@ -98,12 +98,13 @@ export const createImageStyles = (
         },
       }),
     },
+
     imageContainer: {
       width: '100%',
       height: '100%',
       borderRadius: BorderRadius.lg,
       overflow: 'hidden',
-      // iOS: Shadows sottili per profondità
+      // iOS: Shadow per container immagine
       ...Platform.select({
         ios: {
           shadowColor: colors.neutral[400],
@@ -112,7 +113,7 @@ export const createImageStyles = (
           shadowRadius: 12,
         },
         android: {
-          // Android: Rendering pulito senza shadows
+          // Android: ZERO shadows per evitare artefatti
         },
       }),
     },
@@ -128,7 +129,7 @@ export const createImageStyles = (
       right: 0,
       bottom: 0,
     },
-    // Stile estratto per evitare inline style warning
+    // Utility style per flex: 1
     flexOne: {
       flex: 1,
     },
