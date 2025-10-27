@@ -1,91 +1,77 @@
 // ===================================================================
-// 🎨 DESIGN TOKENS - BORDERS
+// ?? DESIGN TOKENS - BORDERS
 // ===================================================================
 
-// import { Borders as BaseBorders } from '../../shared/constants';
+import { BorderRadius as BaseBorderRadius } from '../../shared/constants/designTokens';
+import { DesignColors } from './colors';
 
-/**
- * Design Borders - Sistema bordi centralizzato
- * Bordi consistenti per tutti i componenti
- */
+const radiusValues = {
+  none: BaseBorderRadius.none,
+  xs: Math.max(2, Math.round(BaseBorderRadius.sm / 2)),
+  sm: BaseBorderRadius.sm,
+  md: BaseBorderRadius.md,
+  lg: BaseBorderRadius.lg,
+  xl: BaseBorderRadius.xl,
+  '2xl': BaseBorderRadius['2xl'],
+  '3xl': BaseBorderRadius['3xl'],
+  full: BaseBorderRadius.full,
+};
+
 export const DesignBorders = {
-  // Larghezze bordi
   width: {
     none: 0,
     thin: 1,
     normal: 2,
     thick: 4,
   },
-
-  // Raggi di curvatura
-  radius: {
-    none: 0,
-    xs: 2,
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
-    '2xl': 24,
-    '3xl': 32,
-    full: 9999,
-  },
-
-  // Stili bordi
+  radius: radiusValues,
   style: {
     solid: 'solid',
     dashed: 'dashed',
     dotted: 'dotted',
   },
-
-  // Bordi semantici
   semantic: {
     default: {
       width: 1,
       style: 'solid',
-      color: '#e5e7eb',
+      color: DesignColors.border.default,
     },
     focus: {
       width: 2,
       style: 'solid',
-      color: '#3b82f6',
+      color: DesignColors.border.focus,
     },
     error: {
       width: 1,
       style: 'solid',
-      color: '#ef4444',
+      color: DesignColors.border.error,
     },
     success: {
       width: 1,
       style: 'solid',
-      color: '#10b981',
+      color: DesignColors.semantic.success.main,
     },
   },
-
-  // Bordi componenti
   component: {
     button: {
-      radius: 8,
+      radius: radiusValues.md,
       width: 1,
     },
     card: {
-      radius: 12,
+      radius: radiusValues.lg,
       width: 1,
     },
     input: {
-      radius: 6,
+      radius: radiusValues.sm,
       width: 1,
     },
     modal: {
-      radius: 16,
+      radius: radiusValues.xl,
       width: 0,
     },
   },
 };
 
-// Compatibilità con sistema esistente
-export const Borders = {
-  // ...BaseBorders,
-  ...DesignBorders,
-};
+export const Borders = DesignBorders;
 
 export default DesignBorders;

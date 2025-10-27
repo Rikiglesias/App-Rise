@@ -4,6 +4,7 @@
 // NOW WITH RESPONSIVE SYSTEM - iPhone 15 proportions on all devices
 // ===================================================================
 
+import { Platform } from 'react-native';
 import {
   SpacingTokens,
   TypographyTokens,
@@ -12,6 +13,23 @@ import {
   scaleSize,
   scaleFont,
 } from './responsiveSystem';
+
+const selectPlatformValue = <T>(
+  options: { ios?: T; android?: T; default?: T },
+  fallback: T
+): T => {
+  try {
+    if (Platform && typeof Platform.select === 'function') {
+      const value = Platform.select(options);
+      if (value !== undefined && value !== null) {
+        return value;
+      }
+    }
+  } catch {
+    // Jest or non-RN environments may not provide Platform; fall back.
+  }
+  return fallback;
+};
 
 // 🔴⚫ BRAND COLORS - ROSSO & NERO PREMIUM
 export const Colors = {
@@ -176,10 +194,38 @@ export const BorderColors = {
 // TYPOGRAPHY SYSTEM - Now with responsive scaling
 export const Typography = {
   families: {
-    heading: 'SF Pro Display',
-    body: 'SF Pro Text',
-    accent: 'SF Pro Display',
-    mono: 'SF Mono',
+    heading: selectPlatformValue(
+      {
+        ios: 'SF Pro Display',
+        android: 'Roboto',
+        default: 'Roboto',
+      },
+      'Roboto'
+    ),
+    body: selectPlatformValue(
+      {
+        ios: 'SF Pro Text',
+        android: 'Roboto',
+        default: 'Roboto',
+      },
+      'Roboto'
+    ),
+    accent: selectPlatformValue(
+      {
+        ios: 'SF Pro Display',
+        android: 'Roboto',
+        default: 'Roboto',
+      },
+      'Roboto'
+    ),
+    mono: selectPlatformValue(
+      {
+        ios: 'SF Mono',
+        android: 'Roboto Mono',
+        default: 'Roboto Mono',
+      },
+      'Roboto Mono'
+    ),
   },
 
   weights: {

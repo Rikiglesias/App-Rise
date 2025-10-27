@@ -5,92 +5,93 @@ import { View } from 'react-native';
 
 import { PlatformTouchable, PerfectText } from '../../../../components/ui';
 import {
-  DesignTokens,
   SpacingTokens,
   ShadowTokens,
+  scaleDimensionLinear,
 } from '../../../../shared/constants/responsiveSystem';
 import type { AnimatedButtonProps } from './ActionButtonTypes';
 
-// Componente bottone PERFETTO - Sistema coerente cross-platform
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   button,
-  animationValue: _animationValue, // Rinominato con underscore per evitare warning
+  animationValue: _animationValue, // mantenuto per compatibilità
   styles,
   onPress,
   iconColor,
   fullWidth = false,
-}) => (
-  <View style={fullWidth ? {} : styles.buttonContainer}>
-    <PlatformTouchable
-      activeOpacity={0.6}
-      onPress={onPress}
-      style={{
-        borderRadius: DesignTokens.borderRadius.xlarge,
-        ...ShadowTokens.sm, // Sistema ombre coerente
-      }}
-    >
-      {/* UNIFICATO: Stesso design per Android e iOS */}
-      <LinearGradient
-        colors={button.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+}) => {
+  // Spessore bordo come pagina Azioni: 2pt (scalato linearmente)
+  const borderPadding = Math.max(1, Math.round(scaleDimensionLinear(2)));
+  const outerRadius = scaleDimensionLinear(20);
+  const innerRadius = Math.max(0, outerRadius - borderPadding);
+
+  return (
+    <View style={fullWidth ? {} : styles.buttonContainer}>
+      <PlatformTouchable
+        activeOpacity={0.6}
+        onPress={onPress}
         style={{
-          borderRadius: DesignTokens.borderRadius.xlarge,
-          padding: SpacingTokens['1'], // 4dp responsive
-          overflow: 'hidden',
+          borderRadius: outerRadius,
+          ...ShadowTokens.sm,
         }}
       >
-        <View
+        <LinearGradient
+          colors={button.gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
           style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: Math.max(
-              0,
-              DesignTokens.borderRadius.xlarge - SpacingTokens['1']
-            ),
-            paddingVertical: SpacingTokens['4'], // 16dp responsive
-            paddingHorizontal: SpacingTokens['3'], // 12dp responsive
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: DesignTokens.components.buttonHeight.large, // 56dp responsive
+            borderRadius: outerRadius,
+            padding: borderPadding,
             overflow: 'hidden',
           }}
         >
-          <MaterialCommunityIcons
-            name={
-              button.icon as
-                | 'heart'
-                | 'charity'
-                | 'shopping'
-                | 'gift'
-                | 'calendar'
-                | 'share-variant'
-                | 'map-marker-path'
-                | 'information'
-            }
-            size={DesignTokens.components.iconSize.large} // 32dp responsive
-            color={iconColor}
-            style={styles.buttonIcon}
-          />
-          <PerfectText
-            size={18}
-            lines={1}
-            immunity={true}
-            style={styles.buttonTitle}
-          >
-            {button.title}
-          </PerfectText>
-          <MaterialCommunityIcons
-            name="chevron-right"
-            size={DesignTokens.components.iconSize.small} // 20dp responsive
-            color={iconColor}
+          <View
             style={{
-              position: 'absolute',
-              top: SpacingTokens['2'], // 8dp responsive
-              right: SpacingTokens['2'], // 8dp responsive
+              backgroundColor: '#FFFFFF',
+              borderRadius: innerRadius,
+              paddingVertical: SpacingTokens['4'],
+              paddingHorizontal: SpacingTokens['3'],
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
             }}
-          />
-        </View>
-      </LinearGradient>
-    </PlatformTouchable>
-  </View>
-);
+          >
+            <MaterialCommunityIcons
+              name={
+                button.icon as
+                  | 'heart'
+                  | 'charity'
+                  | 'shopping'
+                  | 'gift'
+                  | 'calendar'
+                  | 'share-variant'
+                  | 'map-marker-path'
+                  | 'information'
+              }
+              size={scaleDimensionLinear(28)}
+              color={iconColor}
+              style={styles.buttonIcon}
+            />
+            <PerfectText
+              size={20}
+              lines={1}
+              immunity={true}
+              style={styles.buttonTitle}
+            >
+              {button.title}
+            </PerfectText>
+            <MaterialCommunityIcons
+              name="chevron-right"
+              size={scaleDimensionLinear(20)}
+              color={iconColor}
+              style={{
+                position: 'absolute',
+                top: SpacingTokens['2'],
+                right: SpacingTokens['2'],
+              }}
+            />
+          </View>
+        </LinearGradient>
+      </PlatformTouchable>
+    </View>
+  );
+};

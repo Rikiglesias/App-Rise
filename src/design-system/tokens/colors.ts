@@ -1,77 +1,35 @@
 // ===================================================================
-// 🎨 DESIGN TOKENS - COLORS
+// ?? DESIGN TOKENS - COLORS
 // ===================================================================
 
-// import { scaleColor } from '../../shared/constants/responsiveSystem';
+import { Colors as BaseColors } from '../../shared/constants/designTokens';
 
 /**
- * Design Colors - Sistema colori centralizzato
- * Basato sui colori esistenti con estensioni per design system
+ * Design Colors
+ * Re-uses the shared palette and exposes convenient semantic aliases
+ * so that the design system remains in sync with the brand tokens.
  */
 export const DesignColors = {
-  // Colori primari
-  primary: {
-    50: '#f0f9ff',
-    100: '#e0f2fe',
-    200: '#bae6fd',
-    300: '#7dd3fc',
-    400: '#38bdf8',
-    500: '#0ea5e9', // Primary main
-    600: '#0284c7',
-    700: '#0369a1',
-    800: '#075985',
-    900: '#0c4a6e',
-  },
+  ...BaseColors,
 
-  // Colori neutri
-  neutral: {
-    50: '#fafafa',
-    100: '#f5f5f5',
-    200: '#e5e5e5',
-    300: '#d4d4d4',
-    400: '#a3a3a3',
-    500: '#737373',
-    600: '#525252',
-    700: '#404040',
-    800: '#262626',
-    900: '#171717',
-  },
-
-  // Colori semantici
-  semantic: {
-    success: '#10b981',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    info: '#3b82f6',
-  },
-
-  // Colori di background
   background: {
-    default: '#ffffff',
-    elevated: '#f9fafb',
+    default: BaseColors.neutral[0],
+    elevated: BaseColors.neutral[50],
     overlay: 'rgba(0, 0, 0, 0.5)',
   },
-
-  // Colori di testo
   text: {
-    primary: '#111827',
-    secondary: '#6b7280',
-    disabled: '#9ca3af',
-    inverse: '#ffffff',
+    primary: BaseColors.neutral[900],
+    secondary: BaseColors.neutral[600],
+    disabled: BaseColors.neutral[400],
+    inverse: BaseColors.neutral[0],
   },
-
-  // Colori di bordo
   border: {
-    default: '#e5e7eb',
-    focus: '#3b82f6',
-    error: '#ef4444',
+    default: BaseColors.neutral[200],
+    focus: BaseColors.primary[500],
+    error: BaseColors.semantic.error.main,
   },
 };
 
-// Compatibilità con sistema esistente
-export const Colors = {
-  // ...BaseColors,
-  ...DesignColors,
-};
+export const Colors = DesignColors;
 
 export default DesignColors;

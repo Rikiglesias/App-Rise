@@ -13,7 +13,7 @@ exports[`SocialCard applies correct gradient colors 1`] = `
       [
         {
           "backgroundColor": "#FFFFFF",
-          "borderRadius": 18,
+          "borderRadius": 17.17557251908397,
           "elevation": 6,
           "overflow": "hidden",
           "shadowColor": "#171717",
@@ -50,7 +50,7 @@ exports[`SocialCard applies correct gradient colors 1`] = `
           {
             "alignItems": "center",
             "backgroundColor": "#FFFFFF",
-            "borderRadius": 28,
+            "borderRadius": 26.7175572519084,
             "elevation": 6,
             "height": 56,
             "justifyContent": "center",
@@ -120,7 +120,7 @@ exports[`SocialCard applies correct gradient colors 1`] = `
             {
               "color": "#525252",
               "fontWeight": "500",
-              "lineHeight": 16,
+              "lineHeight": 15.267175572519085,
             }
           }
         >

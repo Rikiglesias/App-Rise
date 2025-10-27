@@ -3,7 +3,7 @@ import type { ImageStyle, ViewStyle } from 'react-native';
 import { Image, StyleSheet, View } from 'react-native';
 
 import { Colors } from '../../shared/constants/designTokens';
-import logoImage from '../../../assets/icons/app/app-icon.jpg';
+import logoImage from '../../../assets/icons/app/app-icon.png';
 
 // Immagine logo importata correttamente
 

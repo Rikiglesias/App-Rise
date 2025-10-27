@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable require-await */
+import { env } from '../config/environment';
 import { logger } from '../utils/logger';
 import { errorTracking } from './errorTracking';
 import { secureStorage } from './secureStorage';
@@ -53,6 +54,7 @@ interface SecurityConfig {
   enableRequestSigning: boolean;
   enableRateLimiting: boolean;
   rateLimitPerMinute: number;
+  allowedHosts?: string[];
 }
 
 class APISecurityService {
@@ -61,18 +63,62 @@ class APISecurityService {
   private requestCount = 0;
   private lastRequestTime = 0;
   private readonly rateLimitWindow = 60000; // 1 minuto
+  private allowedHosts: Set<string>;
+
+  private static normalizeBaseURL(url: string): string {
+    return url.endsWith('/') ? url.slice(0, -1) : url;
+  }
+
+  private static extractHost(url: string): string {
+    try {
+      return new URL(url).hostname.toLowerCase();
+    } catch {
+      logger.warn('APISecurity', `Invalid base URL provided: ${url}`);
+      return '';
+    }
+  }
+
+  private isHostAllowed(hostname: string): boolean {
+    if (this.allowedHosts.has(hostname)) {
+      return true;
+    }
+
+    for (const allowed of this.allowedHosts) {
+      if (hostname === allowed) {
+        return true;
+      }
+
+      if (hostname.endsWith(`.${allowed}`)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   private constructor() {
+    const normalizedBaseUrl = APISecurityService.normalizeBaseURL(
+      env.API_BASE_URL
+    );
     this.config = {
-      baseURL: __DEV__
-        ? 'https://api.riseagainsthunger.org/dev'
-        : 'https://api.riseagainsthunger.org',
+      baseURL: normalizedBaseUrl,
       timeout: 10000, // 10 secondi
       maxRetries: 3,
       enableRequestSigning: !__DEV__, // Solo in produzione
       enableRateLimiting: true,
       rateLimitPerMinute: 60, // 60 richieste per minuto
+      allowedHosts: [
+        APISecurityService.extractHost(normalizedBaseUrl),
+        'riseagainsthunger.org',
+        'riseagainsthunger.italia',
+      ],
     };
+    this.allowedHosts = new Set(
+      (this.config.allowedHosts ?? [])
+        .filter(Boolean)
+        .map(host => host.toLowerCase())
+    );
+    this.config.allowedHosts = Array.from(this.allowedHosts);
   }
 
   static getInstance(): APISecurityService {
@@ -86,7 +132,27 @@ class APISecurityService {
    * Configura il servizio API
    */
   configure(customConfig: Partial<SecurityConfig>): void {
-    this.config = { ...this.config, ...customConfig };
+    const mergedConfig = { ...this.config, ...customConfig };
+    mergedConfig.baseURL = APISecurityService.normalizeBaseURL(
+      customConfig.baseURL ?? this.config.baseURL
+    );
+    this.config = mergedConfig;
+    if (customConfig.allowedHosts) {
+      this.allowedHosts = new Set(
+        customConfig.allowedHosts
+          .filter(Boolean)
+          .map(host => host.toLowerCase())
+      );
+    } else {
+      this.allowedHosts = new Set(
+        [
+          APISecurityService.extractHost(this.config.baseURL),
+          'riseagainsthunger.org',
+          'riseagainsthunger.italia',
+        ].filter(Boolean)
+      );
+    }
+    this.config.allowedHosts = Array.from(this.allowedHosts);
     logger.info('APISecurity', 'Service configured', {
       baseURL: this.config.baseURL,
     });
@@ -135,8 +201,17 @@ class APISecurityService {
       return `${this.config.baseURL}${sanitizedURL}`;
     }
 
-    if (sanitizedURL.includes('riseagainsthunger.org')) {
-      return sanitizedURL;
+    try {
+      const parsedUrl = new URL(sanitizedURL);
+      if (parsedUrl.protocol !== 'https:') {
+        throw new Error('Only HTTPS URLs are allowed');
+      }
+      const hostname = parsedUrl.hostname.toLowerCase();
+      if (this.isHostAllowed(hostname)) {
+        return sanitizedURL;
+      }
+    } catch {
+      // Gestito sotto da throw generico
     }
 
     logger.warn('APISecurity', `Potentially unsafe URL blocked: ${url}`);

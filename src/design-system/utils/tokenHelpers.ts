@@ -75,12 +75,14 @@ export const getSpacingComposition = ({
   bottom?: number;
   left?: number;
 }) => {
+  const spacingMap = DesignSpacing as unknown as Record<string, number>;
+  const lookup = (value: number): number => spacingMap[String(value)] ?? value;
+
   return {
-    paddingTop: DesignSpacing[top as keyof typeof DesignSpacing] || top,
-    paddingRight: DesignSpacing[right as keyof typeof DesignSpacing] || right,
-    paddingBottom:
-      DesignSpacing[bottom as keyof typeof DesignSpacing] || bottom,
-    paddingLeft: DesignSpacing[left as keyof typeof DesignSpacing] || left,
+    paddingTop: lookup(top),
+    paddingRight: lookup(right),
+    paddingBottom: lookup(bottom),
+    paddingLeft: lookup(left),
   };
 };
 

@@ -212,12 +212,12 @@ const styles = StyleSheet.create({
   },
   totalGradientContainer: {
     borderRadius: 24,
-    padding: 3,
+    padding: 2,
     ...PlatformShadows.xl, // Platform-optimized shadow system
   },
   totalCardContent: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 21,
+    borderRadius: 22,
     paddingVertical: Spacing[3], // Compact button padding
     alignItems: 'center',
   },

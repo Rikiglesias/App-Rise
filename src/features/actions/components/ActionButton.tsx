@@ -28,67 +28,68 @@ export const ActionButton: React.FC<Props> = ({
   onPress,
   iconColor,
   fullWidth = false,
-}) => (
-  <View style={fullWidth ? {} : actionButtonsStyles.buttonContainer}>
-    <PlatformTouchable activeOpacity={0.6} onPress={onPress}>
-      {Platform.OS === 'android' ? (
-        // ANDROID: Container bianco con bordo colorato - ZERO sanguinamento durante animazioni
-        <View
-          style={{
-            backgroundColor: '#FFFFFF', // Background bianco solido
-            borderRadius: 20,
-            borderWidth: 3, // Bordo colorato esterno
-            borderColor: button.gradient[0], // Primo colore del gradiente
-            shadowColor: 'transparent', // Nessuna ombra per evitare artefatti
-            elevation: 2,
-            overflow: 'hidden', // Blocca qualsiasi overflow
-          }}
-        >
+}) => {
+  const shouldUseGradient =
+    Platform.OS !== 'android' || button.id === 'charity-shop';
+
+  return (
+    <View style={fullWidth ? {} : actionButtonsStyles.buttonContainer}>
+      <PlatformTouchable activeOpacity={0.6} onPress={onPress}>
+        {shouldUseGradient ? (
+          // Gradiente (iOS e Charity Shop Android)
+          <LinearGradient
+            colors={button.gradient}
+            style={actionButtonsStyles.gradientBorder}
+          >
+            <View style={actionButtonsStyles.whiteContainer}>
+              <View style={actionButtonsStyles.buttonContent}>
+                <MaterialCommunityIcons
+                  name={button.icon as ActionButtonIconName}
+                  size={36}
+                  color={iconColor}
+                  style={actionButtonsStyles.buttonIcon}
+                />
+                <PerfectText
+                  size={18}
+                  lines={1}
+                  immunity={true}
+                  lineBreakStrategyIOS="push-out"
+                  style={actionButtonsStyles.buttonTitle}
+                >
+                  {button.title}
+                </PerfectText>
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  size={20}
+                  color={iconColor}
+                  style={actionButtonsStyles.chevronPosition}
+                />
+              </View>
+            </View>
+          </LinearGradient>
+        ) : (
+          // ANDROID: Container bianco con bordo colorato - ZERO sanguinamento durante animazioni
           <View
             style={{
-              backgroundColor: '#FFFFFF', // Doppio layer bianco per sicurezza
-              paddingVertical: Spacing[4],
-              paddingHorizontal: Spacing[3],
-              alignItems: 'center',
-              minHeight: 100,
-              justifyContent: 'center',
+              backgroundColor: '#FFFFFF', // Background bianco solido
+              borderRadius: 20,
+              borderWidth: 1, // Bordo colorato esterno
+              borderColor: button.gradient[0], // Primo colore del gradiente
+              shadowColor: 'transparent', // Nessuna ombra per evitare artefatti
+              elevation: 2,
+              overflow: 'hidden', // Blocca qualsiasi overflow
             }}
           >
-            <MaterialCommunityIcons
-              name={button.icon as ActionButtonIconName}
-              size={36}
-              color={iconColor}
-              style={actionButtonsStyles.buttonIcon}
-            />
-            <PerfectText
-              size={18}
-              lines={1}
-              immunity={true}
-              lineBreakStrategyIOS="push-out"
-              style={actionButtonsStyles.buttonTitle}
-            >
-              {button.title}
-            </PerfectText>
-            <MaterialCommunityIcons
-              name="chevron-right"
-              size={20}
-              color={iconColor}
+            <View
               style={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
+                backgroundColor: '#FFFFFF', // Doppio layer bianco per sicurezza
+                paddingVertical: Spacing[4],
+                paddingHorizontal: Spacing[3],
+                alignItems: 'center',
+                minHeight: 100,
+                justifyContent: 'center',
               }}
-            />
-          </View>
-        </View>
-      ) : (
-        // iOS: Mantieni il gradiente originale
-        <LinearGradient
-          colors={button.gradient}
-          style={actionButtonsStyles.gradientBorder}
-        >
-          <View style={actionButtonsStyles.whiteContainer}>
-            <View style={actionButtonsStyles.buttonContent}>
+            >
               <MaterialCommunityIcons
                 name={button.icon as ActionButtonIconName}
                 size={36}
@@ -108,12 +109,16 @@ export const ActionButton: React.FC<Props> = ({
                 name="chevron-right"
                 size={20}
                 color={iconColor}
-                style={actionButtonsStyles.chevronPosition}
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                }}
               />
             </View>
           </View>
-        </LinearGradient>
-      )}
-    </PlatformTouchable>
-  </View>
-);
+        )}
+      </PlatformTouchable>
+    </View>
+  );
+};

@@ -100,6 +100,10 @@ export const withTimeout = async <T>(
             reject(new Error(timeoutMessage));
           }
         }, timeoutMs);
+        // Evita che il timer mantenga attivo l'event loop nei test/node
+        if (typeof timer.unref === 'function') {
+          timer.unref();
+        }
 
         // Esegui l'operazione e pulisci sempre il timer
         operation()

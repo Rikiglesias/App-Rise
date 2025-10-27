@@ -1,6 +1,9 @@
 import React, { useRef, useMemo } from 'react';
 import { StyleSheet, Animated } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import { useHomeAnimations } from '../hooks/useHomeAnimations';
 import type { HomeScreenProps } from '../types/HomeScreenTypes';
@@ -10,18 +13,26 @@ import { EntraInAzione } from '../components/EntraInAzione';
 import { PlatformScrollView, PerfectContainer } from '@components/ui';
 import { HomeHeaderSection } from '@components/domain/HomeHeaderSection';
 import { useTheme } from '@shared/hooks/useTheme';
-import { SpacingTokens } from '@shared/constants/responsiveSystem';
+import {
+  PlatformOptimizations,
+  SpacingTokens,
+} from '@shared/constants/responsiveSystem';
 
 const HomeScreenComponent: React.FC<HomeScreenProps> = ({
   navigation: _navigation,
 }) => {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
   const {
     titleAnim: _titleAnim,
     imageAnim: _imageAnim,
     containerAnim: _containerAnim,
   } = useHomeAnimations();
+
+  const basePadding = SpacingTokens['6'];
+  const navHeight = PlatformOptimizations.layout.navigationBarHeight;
+  const bottomPadding = basePadding + navHeight + insets.bottom;
 
   // Temporarily disabled scroll animations to fix onScroll error
   // const scrollInterpolations = useScrollInterpolations(scrollY);
@@ -39,7 +50,11 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <PlatformScrollView>
+      <PlatformScrollView
+        contentContainerStyle={{
+          paddingBottom: bottomPadding,
+        }}
+      >
         <PerfectContainer preset="page" paddingVertical={0}>
           {/* Header Section con titolo e logo - SPAZIO BILANCIATO */}
           <PerfectContainer

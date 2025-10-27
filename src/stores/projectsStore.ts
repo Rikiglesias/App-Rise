@@ -43,69 +43,76 @@ const INITIAL_PROJECTS: Project[] = [
   },
 ];
 
+const creator = (
+  set: (
+    partial:
+      | Partial<ProjectsState>
+      | ((state: ProjectsState) => Partial<ProjectsState>),
+    replace?: boolean,
+    name?: string
+  ) => void
+) => ({
+  // State
+  projects: INITIAL_PROJECTS,
+  selectedProject: null,
+  isLoading: false,
+  error: null,
+
+  // Actions
+  setProjects: (projects: Project[]) =>
+    set({ projects }, false, 'projects/setProjects'),
+
+  addProject: (project: Project) =>
+    set(
+      state => ({
+        projects: [...state.projects, project],
+      }),
+      false,
+      'projects/addProject'
+    ),
+
+  updateProject: (id: string, updates: Partial<Project>) =>
+    set(
+      state => ({
+        projects: state.projects.map(project =>
+          project.id === id
+            ? {
+                ...project,
+                ...updates,
+                updatedAt: new Date().toISOString(),
+              }
+            : project
+        ),
+      }),
+      false,
+      'projects/updateProject'
+    ),
+
+  deleteProject: (id: string) =>
+    set(
+      state => ({
+        projects: state.projects.filter(project => project.id !== id),
+        selectedProject:
+          state.selectedProject?.id === id ? null : state.selectedProject,
+      }),
+      false,
+      'projects/deleteProject'
+    ),
+
+  selectProject: (project: Project | null) =>
+    set({ selectedProject: project }, false, 'projects/selectProject'),
+
+  setLoading: (loading: boolean) =>
+    set({ isLoading: loading }, false, 'projects/setLoading'),
+
+  setError: (error: string | null) =>
+    set({ error }, false, 'projects/setError'),
+
+  clearError: () => set({ error: null }, false, 'projects/clearError'),
+});
+
 export const useProjectsStore = create<ProjectsState>()(
-  devtools(
-    set => ({
-      // State
-      projects: INITIAL_PROJECTS,
-      selectedProject: null,
-      isLoading: false,
-      error: null,
-
-      // Actions
-      setProjects: (projects: Project[]) =>
-        set({ projects }, false, 'projects/setProjects'),
-
-      addProject: (project: Project) =>
-        set(
-          state => ({
-            projects: [...state.projects, project],
-          }),
-          false,
-          'projects/addProject'
-        ),
-
-      updateProject: (id: string, updates: Partial<Project>) =>
-        set(
-          state => ({
-            projects: state.projects.map(project =>
-              project.id === id
-                ? {
-                    ...project,
-                    ...updates,
-                    updatedAt: new Date().toISOString(),
-                  }
-                : project
-            ),
-          }),
-          false,
-          'projects/updateProject'
-        ),
-
-      deleteProject: (id: string) =>
-        set(
-          state => ({
-            projects: state.projects.filter(project => project.id !== id),
-            selectedProject:
-              state.selectedProject?.id === id ? null : state.selectedProject,
-          }),
-          false,
-          'projects/deleteProject'
-        ),
-
-      selectProject: (project: Project | null) =>
-        set({ selectedProject: project }, false, 'projects/selectProject'),
-
-      setLoading: (loading: boolean) =>
-        set({ isLoading: loading }, false, 'projects/setLoading'),
-
-      setError: (error: string | null) =>
-        set({ error }, false, 'projects/setError'),
-
-      clearError: () => set({ error: null }, false, 'projects/clearError'),
-    }),
-    {
-      name: 'projects-store',
-    }
-  )
+  __DEV__
+    ? devtools(creator as never, { name: 'projects-store' })
+    : (creator as never)
 );

@@ -123,6 +123,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     // GRADIENT CONTAINER PATTERN per bottoni (clickabili) - ANDROID OTTIMIZZATO
     gradientBorder: {
       borderRadius: 20,
+      // Spessore bordo pagina Azioni: 2pt
       padding: 2,
       ...(Platform.OS === 'android'
         ? {
@@ -156,7 +157,6 @@ export const createActionButtonStyles = (): ButtonStyles => {
       paddingVertical: Spacing[4], // RIDOTTO per bottoni più compatti
       paddingHorizontal: Spacing[3], // RIDOTTO per minimalismo
       alignItems: 'center',
-      minHeight: 100, // RIDOTTO per bottoni più piccoli
       justifyContent: 'center',
     },
     buttonIcon: {

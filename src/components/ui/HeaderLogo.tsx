@@ -2,18 +2,14 @@ import { Image, StyleSheet, View } from 'react-native';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
-import appIcon from '../../../assets/icons/app/app-icon.jpg';
+import appIcon from '../../../assets/icons/app/app-icon.png';
 
 const HeaderLogo = () => {
   const { colors } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.glass.medium }]}>
-      <Image
-        source={appIcon as number}
-        style={styles.logo}
-        resizeMode="contain"
-      />
+      <Image source={appIcon} style={styles.logo} resizeMode="contain" />
     </View>
   );
 };

@@ -25,46 +25,51 @@ const INITIAL_STATS: ImpactStats = {
   },
 };
 
+const creator = (
+  set: (
+    partial:
+      | Partial<ImpactState>
+      | ((state: ImpactState) => Partial<ImpactState>),
+    replace?: boolean,
+    name?: string
+  ) => void
+) => ({
+  // State
+  stats: INITIAL_STATS,
+  isLoading: false,
+  error: null,
+
+  // Actions
+  setStats: (stats: ImpactStats) => set({ stats }, false, 'impact/setStats'),
+
+  updateStat: (
+    category: keyof ImpactStats,
+    updates: Partial<ImpactStats[keyof ImpactStats]>
+  ) =>
+    set(
+      state => ({
+        stats: {
+          ...state.stats,
+          [category]: {
+            ...state.stats[category],
+            ...updates,
+          },
+        },
+      }),
+      false,
+      'impact/updateStat'
+    ),
+
+  setLoading: (loading: boolean) =>
+    set({ isLoading: loading }, false, 'impact/setLoading'),
+
+  setError: (error: string | null) => set({ error }, false, 'impact/setError'),
+
+  clearError: () => set({ error: null }, false, 'impact/clearError'),
+});
+
 export const useImpactStore = create<ImpactState>()(
-  devtools(
-    set => ({
-      // State
-      stats: INITIAL_STATS,
-      isLoading: false,
-      error: null,
-
-      // Actions
-      setStats: (stats: ImpactStats) =>
-        set({ stats }, false, 'impact/setStats'),
-
-      updateStat: (
-        category: keyof ImpactStats,
-        updates: Partial<ImpactStats[keyof ImpactStats]>
-      ) =>
-        set(
-          state => ({
-            stats: {
-              ...state.stats,
-              [category]: {
-                ...state.stats[category],
-                ...updates,
-              },
-            },
-          }),
-          false,
-          'impact/updateStat'
-        ),
-
-      setLoading: (loading: boolean) =>
-        set({ isLoading: loading }, false, 'impact/setLoading'),
-
-      setError: (error: string | null) =>
-        set({ error }, false, 'impact/setError'),
-
-      clearError: () => set({ error: null }, false, 'impact/clearError'),
-    }),
-    {
-      name: 'impact-store',
-    }
-  )
+  __DEV__
+    ? devtools(creator as never, { name: 'impact-store' })
+    : (creator as never)
 );

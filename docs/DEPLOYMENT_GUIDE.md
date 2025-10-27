@@ -90,6 +90,25 @@ ANDROID_KEY_ALIAS = [alias chiave]
 ANDROID_KEY_PASSWORD = [password chiave]
 ```
 
+#### Expo Updates Code Signing (Consigliato)
+
+```bash
+# Genera certificato firmato (non versionarlo)
+npx expo-updates codesigning:generate \
+  --key-output-directory ./certs \
+  --certificate-output-directory ./certs \
+  --certificate-validity-duration-years 10 \
+  --certificate-common-name 'Rise Against Hunger Italia'
+
+# Imposta variabili d'ambiente/secrets
+EXPO_UPDATES_CODE_SIGNING_CERTIFICATE=./certs/updates.pem
+EXPO_UPDATES_CODE_SIGNING_KEY_ID=main
+EXPO_UPDATES_CODE_SIGNING_ALGORITHM=rsa-v1_5-sha256
+```
+
+> Il path del certificato può essere salvato come variabile di ambiente o GitHub secret: l'app lo userà automaticamente se presente.
+> I file generati in `certs/` sono già esclusi dal versionamento (`.gitignore`): conserva la chiave privata in un luogo sicuro e carica il certificato nei secrets CI.
+
 ### Step 4: Primo Deploy
 
 #### Metodo 1: Tag Release (Automatico)
@@ -202,3 +221,9 @@ Hai ora un sistema di deployment **professionale**, **gratuito** e **automatizza
 **Production**: GitHub Actions (gratuito e potente)
 
 🎯 **Perfetto per Rise Against Hunger Italia!**
+
+### Step 3.1: Privacy Labels (iOS) e Data Safety (Android)
+
+- iOS: compila il Privacy Manifest per eventuali SDK terze parti (es. Sentry, Analytics). Se non usi SDK che tracciano utenti, le sezioni restano minime.
+- Android: aggiorna la sezione 'Data Safety' su Play Console coerente con i permessi (Camera, Network State) e con il flusso di donazioni esterne (nessun pagamento in-app).
+

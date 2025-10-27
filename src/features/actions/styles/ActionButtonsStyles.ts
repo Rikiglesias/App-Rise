@@ -139,7 +139,7 @@ export const actionButtonsStyles = StyleSheet.create({
           needsOffscreenAlphaCompositing: false,
         }
       : {
-          // iOS: Ombreggiatura normale
+          // iOS: mantiene ombra leggera come pagina Impatto
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 6 },
           shadowOpacity: 0.2,
@@ -148,7 +148,7 @@ export const actionButtonsStyles = StyleSheet.create({
   },
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 18, // 20-2 per effetto bordo
+    borderRadius: 18, // 20-2 per effetto bordo (Azioni)
     overflow: 'hidden',
     ...(Platform.OS === 'android' && {
       // ANDROID: Forza background completamente opaco durante le animazioni
@@ -159,10 +159,9 @@ export const actionButtonsStyles = StyleSheet.create({
     }),
   },
   buttonContent: {
-    paddingVertical: Spacing[4], // RIDOTTO per bottoni più compatti
-    paddingHorizontal: Spacing[3], // RIDOTTO per minimalismo
+    paddingVertical: Spacing[4],
+    paddingHorizontal: Spacing[3],
     alignItems: 'center',
-    minHeight: 100, // RIDOTTO per bottoni più piccoli
     justifyContent: 'center',
   },
   buttonIcon: {

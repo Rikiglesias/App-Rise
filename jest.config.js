@@ -14,6 +14,12 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   // Configurazione per evitare che Jest rimanga appeso
   testTimeout: 10000,
-  forceExit: true,
-  detectOpenHandles: false,
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+  },
 };

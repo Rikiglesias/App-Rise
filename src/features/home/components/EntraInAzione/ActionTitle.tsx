@@ -10,10 +10,11 @@ export const ActionTitle: React.FC = () => {
       marginVertical={Spacing[1]}
     >
       <PerfectContainer alignItems="center" justifyContent="center">
-        {/* ✅ SISTEMA PERFETTO - PerfectText con immunità totale */}
         <PerfectText
-          size={32} // ← RIDOTTO DA 35 A 32 per evitare troncamento
-          lines={2} // ← AUMENTATO DA 1 A 2 per evitare taglio
+          size={32}
+          maxSize={34}
+          minSize={26}
+          lines={1}
           fontWeight="900"
           color="#DC2626"
           textAlign="center"
@@ -23,7 +24,7 @@ export const ActionTitle: React.FC = () => {
             textShadowRadius: 4,
           }}
         >
-          ⚡ Entra in Azione
+          Entra in Azione
         </PerfectText>
       </PerfectContainer>
     </PerfectContainer>

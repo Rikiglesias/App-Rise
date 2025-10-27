@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import * as SecureStore from 'expo-secure-store';
+import type { SecureStoreOptions } from 'expo-secure-store';
 import { logger } from '../utils/logger';
 
 /**
@@ -12,12 +13,26 @@ import { logger } from '../utils/logger';
  * - Logging professionale
  * - Singleton pattern per performance
  */
+const DEFAULT_IOS_KEYCHAIN_SERVICE = 'it.creareunapp.editor.ios63da226b4447c';
+const resolveSecureStoreOptions = (): SecureStoreOptions => {
+  const keychainService =
+    typeof process.env.IOS_BUNDLE_IDENTIFIER === 'string'
+      ? process.env.IOS_BUNDLE_IDENTIFIER
+      : DEFAULT_IOS_KEYCHAIN_SERVICE;
+
+  return {
+    keychainService,
+  };
+};
+
 class SecureStorageManager {
   private static instance: SecureStorageManager;
   private readonly isProduction: boolean;
+  private readonly secureStoreOptions: SecureStoreOptions;
 
   private constructor() {
     this.isProduction = !__DEV__;
+    this.secureStoreOptions = resolveSecureStoreOptions();
   }
 
   static getInstance(): SecureStorageManager {
@@ -32,9 +47,7 @@ class SecureStorageManager {
    */
   async setSecure(key: string, value: string): Promise<void> {
     try {
-      await SecureStore.setItemAsync(key, value, {
-        keychainService: 'it.creareunapp.editor.ios63da226b4447c',
-      });
+      await SecureStore.setItemAsync(key, value, this.secureStoreOptions);
 
       logger.debug('SecureStorage', `Successfully stored key: ${key}`);
     } catch (error) {
@@ -52,9 +65,10 @@ class SecureStorageManager {
    */
   async getSecure(key: string): Promise<string | null> {
     try {
-      const value = await SecureStore.getItemAsync(key, {
-        keychainService: 'it.creareunapp.editor.ios63da226b4447c',
-      });
+      const value = await SecureStore.getItemAsync(
+        key,
+        this.secureStoreOptions
+      );
 
       if (value) {
         logger.debug('SecureStorage', `Successfully retrieved key: ${key}`);
@@ -76,9 +90,7 @@ class SecureStorageManager {
    */
   async removeSecure(key: string): Promise<void> {
     try {
-      await SecureStore.deleteItemAsync(key, {
-        keychainService: 'it.creareunapp.editor.ios63da226b4447c',
-      });
+      await SecureStore.deleteItemAsync(key, this.secureStoreOptions);
 
       logger.debug('SecureStorage', `Successfully removed key: ${key}`);
     } catch (error) {

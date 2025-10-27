@@ -1,10 +1,36 @@
+const CODE_SIGNING_CERTIFICATE =
+  process.env.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE ??
+  process.env.EXPO_PUBLIC_UPDATES_CODE_SIGNING_CERTIFICATE;
+const CODE_SIGNING_KEY_ID =
+  process.env.EXPO_UPDATES_CODE_SIGNING_KEY_ID ?? 'main';
+const CODE_SIGNING_ALGORITHM =
+  process.env.EXPO_UPDATES_CODE_SIGNING_ALGORITHM ?? 'rsa-v1_5-sha256';
+
+const baseUpdatesConfig = {
+  fallbackToCacheTimeout: 30000, // 30 secondi per controllare updates
+  checkAutomatically: 'ON_LOAD', // Controlla all'avvio
+  url: 'https://u.expo.dev/52a33b0f-dec1-4674-812b-de5b888c911a',
+};
+
+const updatesConfig =
+  CODE_SIGNING_CERTIFICATE !== undefined
+    ? {
+        ...baseUpdatesConfig,
+        codeSigningCertificate: CODE_SIGNING_CERTIFICATE,
+        codeSigningMetadata: {
+          keyId: CODE_SIGNING_KEY_ID,
+          alg: CODE_SIGNING_ALGORITHM,
+        },
+      }
+    : baseUpdatesConfig;
+
 export default {
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
     version: '1.2.4',
     orientation: 'portrait',
-    icon: './assets/icons/app/app-icon.jpg',
+    icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',
     primaryColor: '#DC2626',
 
@@ -17,14 +43,13 @@ export default {
 
     // Configurazioni web
     web: {
-      favicon: './assets/icons/app/app-icon.jpg',
+      favicon: './assets/icons/app/app-icon.png',
       bundler: 'metro',
     },
 
     // Configurazioni sicurezza e ambiente
     extra: {
-      apiUrl:
-        process.env.API_BASE_URL || 'https://api.riseagainsthunger.italia',
+      apiUrl: process.env.EXPO_PUBLIC_API_BASE_URL,
       enableFlipperInApp: process.env.ENABLE_FLIPPER === 'true',
       performanceMonitoring:
         process.env.ENABLE_PERFORMANCE_MONITORING === 'true',
@@ -42,7 +67,7 @@ export default {
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
       buildNumber: process.env.IOS_BUILD_NUMBER || '19',
-      icon: './assets/icons/app/app-icon.jpg',
+      icon: './assets/icons/app/app-icon.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSCameraUsageDescription:
@@ -52,7 +77,7 @@ export default {
         NSAppTransportSecurity: {
           NSAllowsArbitraryLoads: false,
           NSExceptionDomains: {
-            'riseagainsthunger.italia': {
+            'italy.riseagainsthunger.org': {
               NSExceptionAllowsInsecureHTTPLoads: false,
               NSExceptionMinimumTLSVersion: '1.2',
               NSExceptionRequiresForwardSecrecy: true,
@@ -61,16 +86,7 @@ export default {
               NSExceptionAllowsInsecureHTTPLoads: false,
               NSExceptionMinimumTLSVersion: '1.2',
               NSExceptionRequiresForwardSecrecy: true,
-              NSPinnedDomains: {
-                'api.riseagainsthunger.org': {
-                  NSIncludesSubdomains: true,
-                  NSPinnedCAIdentities: ["Let's Encrypt R3", 'ISRG Root X1'],
-                },
-                'cdn.riseagainsthunger.org': {
-                  NSIncludesSubdomains: true,
-                  NSPinnedCAIdentities: ["Let's Encrypt R3", 'ISRG Root X1'],
-                },
-              },
+              // TLS pinning non supportato in iOS managed: usare modulo nativo se necessario
             },
           },
         },
@@ -81,28 +97,30 @@ export default {
     android: {
       displayName: 'RAH Italia',
       adaptiveIcon: {
-        foregroundImage: './assets/icons/app/app-icon.jpg',
-        backgroundColor: '#F8F8F8',
-        monochromeImage: './assets/icons/app/app-icon.jpg', // Android 13+ themed icons
+        foregroundImage: './assets/icons/app/app-icon.png',
+        backgroundColor: '#FFFFFF',
+        monochromeImage: './assets/icons/app/app-icon.png',
       },
       package:
-        process.env.ANDROID_PACKAGE || 'it.creareunapp.editor.ios63da226b4447c',
-      versionCode: parseInt(process.env.ANDROID_VERSION_CODE || '3', 10),
+        process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
+      versionCode: parseInt(process.env.ANDROID_VERSION_CODE || '4', 10),
       // Permessi specifici con giustificazione
       permissions: [
         'CAMERA', // QR code scanning per donazioni
-        'ACCESS_FINE_LOCATION', // Eventi locali Rise Against Hunger
         'INTERNET', // Comunicazione API
-        'ACCESS_NETWORK_STATE', // Check connettività
+        'ACCESS_NETWORK_STATE', // Monitoraggio stato rete
       ],
       // Configurazioni sicurezza enterprise
-      networkSecurityConfig: './android-network-security-config.xml',
+      networkSecurityConfig:
+        (process.env.APP_ENV ?? process.env.NODE_ENV) === 'development'
+          ? './android-network-security-config.xml'
+          : './android-network-security-config.prod.xml',
       // Configurazioni build production
       allowBackup: false, // Sicurezza: no backup automatici
       requestLegacyExternalStorage: false, // Scoped storage Android 10+
       // Configurazioni Google Play Store
       playStoreUrl:
-        'https://play.google.com/store/apps/details?id=it.creareunapp.editor.ios63da226b4447c',
+        'https://play.google.com/store/apps/details?id=org.riseagainsthunger.italia',
       // Configurazioni performance
       compileSdkVersion: 34,
       targetSdkVersion: 34,
@@ -121,23 +139,16 @@ export default {
 
     // Configurazioni aggiuntive
     assetBundlePatterns: ['**/*'],
-    web: {
-      favicon: './assets/icons/app/app-icon.jpg',
-    },
 
     // Plugin richiesti
     plugins: ['expo-secure-store', 'expo-updates', 'expo-font'],
 
     // Aggiornamenti OTA
-    updates: {
-      fallbackToCacheTimeout: 30000, // 30 secondi per controllare updates
-      checkAutomatically: 'ON_LOAD', // Controlla all'avvio
-      url: 'https://u.expo.dev/52a33b0f-dec1-4674-812b-de5b888c911a',
-    },
+    updates: updatesConfig,
 
     // Runtime version per aggiornamenti
     runtimeVersion: {
-      policy: 'sdkVersion',
+      policy: 'appVersion',
     },
   },
 };

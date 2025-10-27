@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Alert, Linking } from 'react-native';
 
 import {
@@ -53,6 +53,41 @@ export const useLinkHandler = (
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const { lightTap } = useHapticFeedback();
 
+  // Allowlist domini: applicata in produzione, rilassata in sviluppo
+  const allowedDomains = useMemo(
+    () =>
+      new Set<string>([
+        'italy.riseagainsthunger.org',
+        'www.riseagainsthunger.it',
+        'riseagainsthunger.org',
+        'riseagainsthunger.org.welfare4charity.com',
+        'instagram.com',
+        'www.instagram.com',
+        'facebook.com',
+        'www.facebook.com',
+        'youtube.com',
+        'www.youtube.com',
+        'linkedin.com',
+        'www.linkedin.com',
+        'maps.google.com',
+        'www.riseagainsthunger.it',
+      ]),
+    []
+  );
+
+  const isUrlAllowed = useCallback(
+    (url: string): boolean => {
+      if (__DEV__) return true;
+      try {
+        const u = new URL(url);
+        return allowedDomains.has(u.hostname.toLowerCase());
+      } catch {
+        return false;
+      }
+    },
+    [allowedDomains]
+  );
+
   const triggerHaptic = useCallback(() => {
     if (!enableHaptics) {
       return Promise.resolve({
@@ -69,6 +104,9 @@ export const useLinkHandler = (
     (url: string) => {
       return withTimeout(
         async () => {
+          if (!isUrlAllowed(url)) {
+            throw new Error(`Dominio non consentito: ${url}`);
+          }
           const supported = await Linking.canOpenURL(url);
           if (!supported) {
             throw new Error(`URL non supportato: ${url}`);
@@ -79,7 +117,7 @@ export const useLinkHandler = (
         `Timeout nell'apertura del link: ${url}`
       );
     },
-    [timeout]
+    [timeout, isUrlAllowed]
   );
 
   // Generic link opener with Result pattern

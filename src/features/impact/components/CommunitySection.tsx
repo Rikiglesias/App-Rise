@@ -176,12 +176,12 @@ const styles = StyleSheet.create({
   },
   communityGradientContainer: {
     borderRadius: 20,
-    padding: 3,
+    padding: 2,
     ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
   },
   communityCardContent: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 17,
+    borderRadius: 18,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[3],
     alignItems: 'center',

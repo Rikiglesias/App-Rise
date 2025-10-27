@@ -47,7 +47,6 @@ export const useResponsive = () => {
     }: {
       window: { width: number; height: number };
     }) => {
-      // @ts-expect-error - Legacy hook, Perfect System uses fixed dimensions
       setDimensions(prev => ({
         width: window.width,
         height: window.height,

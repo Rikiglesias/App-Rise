@@ -9,7 +9,7 @@
  * Battle-tested su miliardi di dispositivi dalle grandi tech companies
  */
 
-import { PixelRatio, Platform } from 'react-native';
+import { Dimensions, PixelRatio, Platform } from 'react-native';
 import {
   findDeviceByWidth,
   getDatabaseStats,
@@ -46,11 +46,61 @@ const LOGICAL_REFERENCE = {
 } as const;
 
 // 📏 DIMENSIONI DEVICE CORRENTI - iPhone 15 reference
-const getDimensions = () => {
-  // Perfect System - always use iPhone 15 reference dimensions
-  // Actual scaling will be handled by the Perfect System components
-  return { width: LOGICAL_REFERENCE.width, height: LOGICAL_REFERENCE.height };
+type DimensionPair = { width: number; height: number };
+
+const FALLBACK_DIMENSIONS: DimensionPair = {
+  width: LOGICAL_REFERENCE.width,
+  height: LOGICAL_REFERENCE.height,
 };
+
+const readNativeDimensions = (): DimensionPair => {
+  try {
+    // eslint-disable-next-line no-restricted-properties
+    const { width, height } = Dimensions.get('window');
+    if (
+      typeof width === 'number' &&
+      width > 0 &&
+      typeof height === 'number' &&
+      height > 0
+    ) {
+      return { width, height };
+    }
+  } catch {
+    // Ambiente test o piattaforme non native: verr� usato il fallback logico
+  }
+  return FALLBACK_DIMENSIONS;
+};
+
+let DEVICE_WIDTH = FALLBACK_DIMENSIONS.width;
+let DEVICE_HEIGHT = FALLBACK_DIMENSIONS.height;
+
+const updateDeviceMetrics = ({ width, height }: DimensionPair) => {
+  DEVICE_WIDTH = width;
+  DEVICE_HEIGHT = height;
+};
+
+updateDeviceMetrics(readNativeDimensions());
+
+try {
+  Dimensions.addEventListener('change', ({ window }) => {
+    if (
+      window &&
+      typeof window.width === 'number' &&
+      window.width > 0 &&
+      typeof window.height === 'number' &&
+      window.height > 0
+    ) {
+      updateDeviceMetrics({ width: window.width, height: window.height });
+    }
+  });
+} catch {
+  // In ambiente test l'API pu� non essere disponibile: ignoriamo l'errore
+}
+
+const getDimensions = (): DimensionPair => ({
+  width: DEVICE_WIDTH,
+  height: DEVICE_HEIGHT,
+});
 
 const getPixelRatio = () => {
   try {
@@ -68,7 +118,6 @@ const getFontScale = () => {
   }
 };
 
-const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = getDimensions();
 const DEVICE_SCALE = getPixelRatio();
 const FONT_SCALE = getFontScale();
 

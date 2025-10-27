@@ -6,6 +6,36 @@
 
 import Constants from 'expo-constants';
 
+const getEnvVar = (key: string): string | undefined => {
+  const processEnv = (
+    globalThis as typeof globalThis & {
+      process?: { env?: Record<string, string | undefined> };
+    }
+  ).process?.env;
+  const value = processEnv?.[key] as string | undefined;
+  return typeof value === 'string' && value.trim().length > 0
+    ? value
+    : undefined;
+};
+
+const resolveProductionApiUrl = (): string => {
+  const extra = (Constants.expoConfig?.extra as { apiUrl?: string } | undefined)
+    ?.apiUrl;
+  const envFallback =
+    getEnvVar('EXPO_PUBLIC_API_BASE_URL') ?? getEnvVar('API_BASE_URL');
+  const url = extra ?? envFallback;
+  if (!url) {
+    const jestWorkerId = getEnvVar('JEST_WORKER_ID');
+    if (jestWorkerId) {
+      return 'https://test-api.local';
+    }
+    throw new Error(
+      'API base URL is not configured. Set EXPO_PUBLIC_API_BASE_URL (forwarded via extra.apiUrl) before building for production.'
+    );
+  }
+  return url;
+};
+
 // Tipizzazione forte per environment variables
 interface AppEnvironment {
   NODE_ENV: 'development' | 'staging' | 'production';
@@ -22,7 +52,10 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   development: {
     NODE_ENV: 'development',
     APP_VERSION: '1.0.0-dev',
-    API_BASE_URL: 'https://api.riseagainsthunger.italia.dev',
+    API_BASE_URL:
+      getEnvVar('EXPO_PUBLIC_API_BASE_URL_DEV') ??
+      getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
+      'https://api.riseagainsthunger.italia.dev',
     ENABLE_FLIPPER: true,
     ENABLE_PERFORMANCE_MONITORING: true,
     LOG_LEVEL: 'debug',
@@ -31,7 +64,10 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   staging: {
     NODE_ENV: 'staging',
     APP_VERSION: '1.0.0-staging',
-    API_BASE_URL: 'https://api.riseagainsthunger.italia.staging',
+    API_BASE_URL:
+      getEnvVar('EXPO_PUBLIC_API_BASE_URL_STAGING') ??
+      getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
+      'https://api.riseagainsthunger.italia.staging',
     ENABLE_FLIPPER: true,
     ENABLE_PERFORMANCE_MONITORING: true,
     LOG_LEVEL: 'info',
@@ -40,7 +76,7 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   production: {
     NODE_ENV: 'production',
     APP_VERSION: '1.0.0',
-    API_BASE_URL: 'https://api.riseagainsthunger.italia',
+    API_BASE_URL: resolveProductionApiUrl(),
     ENABLE_FLIPPER: false,
     ENABLE_PERFORMANCE_MONITORING: false,
     LOG_LEVEL: 'error',
