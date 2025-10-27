@@ -72,8 +72,6 @@ export default {
         ITSAppUsesNonExemptEncryption: false,
         NSCameraUsageDescription:
           'Questa app utilizza la fotocamera per scansionare QR code per donazioni e eventi.',
-        NSLocationWhenInUseUsageDescription:
-          'Questa app utilizza la posizione per trovare eventi locali di Rise Against Hunger.',
         NSAppTransportSecurity: {
           NSAllowsArbitraryLoads: false,
           NSExceptionDomains: {
