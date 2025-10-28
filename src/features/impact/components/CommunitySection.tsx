@@ -42,6 +42,7 @@ export const CommunitySection: React.FC<Props> = ({
           <PerfectText
             size={22}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.communityTitle}
           >
@@ -50,6 +51,7 @@ export const CommunitySection: React.FC<Props> = ({
           <PerfectText
             size={16}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.communitySubtitle}
           >
@@ -83,6 +85,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.communityStatValue}
                 >
@@ -91,6 +94,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.communityStatLabel}
                 >
@@ -131,6 +135,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.communityStatValue}
                 >
@@ -139,6 +144,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.communityStatLabel}
                 >

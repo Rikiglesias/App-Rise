@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { SpacingTokens as Spacing } from '../../../shared/constants/responsiveSystem';
 import { BorderRadius, Colors } from '../../../shared/constants';
@@ -15,7 +15,7 @@ export const mainStyles = StyleSheet.create({
 
   backButton: {
     position: 'absolute',
-    top: Platform.OS === 'android' ? 40 : 60, // ANDROID: 40 come regolato / iOS: 60 più in basso
+    top: 60,
     left: Spacing[4],
     padding: Spacing[2],
     borderRadius: BorderRadius.full,
@@ -31,8 +31,8 @@ export const mainStyles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: Spacing[4],
     gap: Spacing[0],
-    paddingTop: Platform.OS === 'android' ? Spacing[20] : Spacing[12], // ANDROID: Spacing[20] / iOS: Spacing[12] più in alto
-    paddingBottom: Platform.OS === 'android' ? Spacing[24] : Spacing[12], // ANDROID: Spacing[24] per evitare sovrapposizione bottom navigation / iOS: Spacing[12] normale
+    paddingTop: Spacing[12],
+    paddingBottom: Spacing[12],
   },
 
   // SEPARATORE TRA SEZIONI - IDENTICO PAGINA AZIONI

@@ -6,7 +6,7 @@
 export { default as SectionContainer } from './SectionContainer';
 
 // Modal Components
-export { DonationInfoModal } from './DonationInfoModal';
+// DonationInfoModal removed (use actions/components/DonationInfoModalMigrated)
 export { default as ProjectDetailModal } from './ProjectDetailModal';
 
 // Map Components

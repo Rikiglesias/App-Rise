@@ -66,7 +66,12 @@ const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
 
         {/* Projects List */}
         <View style={styles.content}>
-          <PerfectText size={18} lines={1} style={styles.sectionTitle}>
+          <PerfectText
+            size={18}
+            lines={1}
+            fontWeight="400"
+            style={styles.sectionTitle}
+          >
             {getSectionTitle()}
           </PerfectText>
 

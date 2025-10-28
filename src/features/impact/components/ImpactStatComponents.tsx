@@ -39,6 +39,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
         <PerfectText
           size={22}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={styles.statValue}
         >
@@ -47,6 +48,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
         <PerfectText
           size={15}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={styles.statLabel}
         >
@@ -83,6 +85,7 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       <PerfectText
         size={12}
         lines={1}
+        fontWeight="400"
         immunity={true}
         style={styles.storyLocation}
       >
@@ -91,12 +94,19 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       <PerfectText
         size={22}
         lines={1}
+        fontWeight="400"
         immunity={true}
         style={styles.storyTitle}
       >
         {title}
       </PerfectText>
-      <PerfectText size={14} lines={2} immunity={true} style={styles.storyText}>
+      <PerfectText
+        size={14}
+        lines={2}
+        fontWeight="400"
+        immunity={true}
+        style={styles.storyText}
+      >
         {text}
       </PerfectText>
     </View>
@@ -112,6 +122,7 @@ export const MilestoneCard: React.FC<
       <PerfectText
         size={15}
         lines={1}
+        fontWeight="400"
         immunity={true}
         style={styles.milestoneTitle}
       >
@@ -120,6 +131,7 @@ export const MilestoneCard: React.FC<
       <PerfectText
         size={12}
         lines={1}
+        fontWeight="400"
         immunity={true}
         style={styles.milestoneValue}
       >

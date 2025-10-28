@@ -77,20 +77,40 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                   );
                 })()
               ) : (
-                <PerfectText size={24} lines={1} style={styles.socialIconEmoji}>
+                <PerfectText
+                  size={24}
+                  lines={1}
+                  fontWeight="400"
+                  style={styles.socialIconEmoji}
+                >
                   {platform.emoji}
                 </PerfectText>
               )}
             </View>
 
             <View style={styles.socialInfoContainer}>
-              <PerfectText size={16} lines={1} style={styles.socialName}>
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight="400"
+                style={styles.socialName}
+              >
                 {platform.name}
               </PerfectText>
-              <PerfectText size={14} lines={1} style={styles.socialHandle}>
+              <PerfectText
+                size={14}
+                lines={1}
+                fontWeight="400"
+                style={styles.socialHandle}
+              >
                 {platform.handle}
               </PerfectText>
-              <PerfectText size={12} lines={2} style={styles.socialDescription}>
+              <PerfectText
+                size={12}
+                lines={2}
+                fontWeight="400"
+                style={styles.socialDescription}
+              >
                 {platform.description}
               </PerfectText>
             </View>

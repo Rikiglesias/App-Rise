@@ -14,6 +14,25 @@ const fs = require('fs');
 const _path = require('path');
 const glob = require('glob');
 
+const ROOT = _path.resolve(__dirname, '..');
+
+const CRITICAL_FILES = [
+  {
+    label: 'ImpactTabScreen.tsx',
+    path: 'src/features/impact/screens/ImpactTabScreen.tsx',
+    redThreshold: 800,
+    type: 'SCREEN_CONTAINER',
+    priority: 'CRITICO',
+  },
+  {
+    label: 'ActionButtons.tsx',
+    path: 'src/features/actions/components/components/ActionButtons.tsx',
+    redThreshold: 500,
+    type: 'UI_COMPONENT',
+    priority: 'MEDIO',
+  },
+];
+
 const COLORS = {
   reset: '\x1b[0m',
   bright: '\x1b[1m',
@@ -185,61 +204,51 @@ function analyzeFilesByType() {
  * CRITICAL FILES ANALYSIS - BASED ON NEW PROFESSIONAL THRESHOLDS
  */
 function analyzeCriticalFiles() {
-  log('\n🚨 CRITICAL FILES - REFACTORING ASSESSMENT', 'red');
+  log('\n?? CRITICAL FILES - REFACTORING ASSESSMENT', 'red');
   log('='.repeat(80), 'red');
 
-  const criticalFiles = [
-    {
-      name: 'ImpactTabScreen.tsx',
-      current: 1082,
-      redThreshold: 800,
-      type: 'Screen/Domain',
-      priority: 'CRITICO',
-    },
-    {
-      name: 'ActionButtons.tsx',
-      current: 916,
-      redThreshold: 500,
-      type: 'UI Component',
-      priority: 'CRITICO',
-    },
-    {
-      name: 'HomeHeaderSubComponents.tsx',
-      current: 755,
-      redThreshold: 500,
-      type: 'UI Component',
-      priority: 'CRITICO',
-    },
-    {
-      name: 'FormattedText.tsx',
-      current: 568,
-      redThreshold: 500,
-      type: 'UI Component',
-      priority: 'MEDIO',
-    },
-  ];
+  const evaluatedFiles = CRITICAL_FILES.map(file => {
+    const absolutePath = _path.resolve(ROOT, file.path);
+    const exists = fs.existsSync(absolutePath);
+    const current = exists ? countLines(absolutePath) : 0;
 
-  criticalFiles.forEach(file => {
+    return {
+      ...file,
+      current,
+      exists,
+    };
+  });
+
+  evaluatedFiles.forEach(file => {
+    if (!file.exists) {
+      log(
+        `?? ${file.label}: file non trovato (${file.path}) - rimuovere dal monitor o aggiornare il percorso`,
+        'yellow'
+      );
+      return;
+    }
+
     const excess = file.current - file.redThreshold;
     const isViolation = excess > 0;
-    const _status = isViolation ? 'VIOLA SOGLIA' : 'ENTRO LIMITI';
     const color = isViolation ? 'red' : 'green';
 
     if (isViolation) {
       const reduction = ((excess / file.current) * 100).toFixed(1);
       log(
-        `🔴 ${file.name}: ${file.current} righe (${excess} oltre soglia ${file.redThreshold}) [-${reduction}%] [${file.priority}]`,
+        `?? ${file.label}: ${file.current} righe (${excess} oltre soglia ${file.redThreshold}) [-${reduction}%] [${file.priority}]`,
         color
       );
     } else {
       log(
-        `✅ ${file.name}: ${file.current} righe (entro soglia ${file.redThreshold} per ${file.type})`,
+        `? ${file.label}: ${file.current} righe (entro soglia ${file.redThreshold} per ${file.type})`,
         color
       );
     }
   });
 
-  return criticalFiles.filter(file => file.current > file.redThreshold);
+  return evaluatedFiles.filter(
+    file => file.exists && file.current > file.redThreshold
+  );
 }
 
 /**
@@ -295,10 +304,13 @@ function generateReport(violations, criticalFiles) {
   log(`🔴 Red (Refactor): ${violations.red} (${redPercent}%)`, 'red');
 
   log('\n🎯 NEXT ACTIONS:', 'cyan');
-  log('1. ImpactTabScreen.tsx: Split in 3-4 screen components', 'white');
-  log('2. ActionButtons.tsx: Extract button components', 'white');
-  log('3. HomeHeaderSubComponents.tsx: Break into atomic components', 'white');
-  log('4. FormattedText.tsx: Extract platform-specific logic', 'white');
+  if (criticalFiles.length === 0) {
+    log('Tutti i file critici rispettano le soglie attese [OK]', 'green');
+  } else {
+    criticalFiles.forEach((file, index) => {
+      log(`${index + 1}. ${file.label}: riduci a <= ${file.redThreshold} righe (${file.type})`, 'white');
+    });
+  }
 
   // Save report to file
   const report = {
@@ -340,3 +352,5 @@ if (require.main === module) {
 }
 
 module.exports = { analyzeFilesByType, suggestRefactoringStrategies };
+
+

@@ -53,14 +53,29 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         >
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
-              <PerfectText size={32} lines={1} style={styles.flag}>
+              <PerfectText
+                size={32}
+                lines={1}
+                fontWeight="400"
+                style={styles.flag}
+              >
                 {data.flag}
               </PerfectText>
               <View style={styles.headerTextContainer}>
-                <PerfectText size={20} lines={1} style={styles.title}>
+                <PerfectText
+                  size={20}
+                  lines={1}
+                  fontWeight="400"
+                  style={styles.title}
+                >
                   {data.title}
                 </PerfectText>
-                <PerfectText size={14} lines={1} style={styles.subtitle}>
+                <PerfectText
+                  size={14}
+                  lines={1}
+                  fontWeight="400"
+                  style={styles.subtitle}
+                >
                   {data.subtitle}
                 </PerfectText>
               </View>
@@ -91,6 +106,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           <PerfectText
             size={16}
             lines={3}
+            fontWeight="400"
             style={[
               styles.description,
               { paddingHorizontal: spacing.modal ?? Spacing[4] },
@@ -112,7 +128,12 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               color={Colors.neutral[0]}
               style={styles.ctaIcon}
             />
-            <PerfectText size={16} lines={1} style={styles.ctaText}>
+            <PerfectText
+              size={16}
+              lines={1}
+              fontWeight="400"
+              style={styles.ctaText}
+            >
               Clicca qui per saperne di più
             </PerfectText>
           </PlatformTouchable>

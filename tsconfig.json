@@ -18,7 +18,7 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "es2020",
     "baseUrl": ".",
     "paths": {

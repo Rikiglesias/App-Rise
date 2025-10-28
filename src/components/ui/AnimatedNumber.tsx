@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated } from 'react-native';
 import type { TextProps } from 'react-native-paper';
-import { Text } from 'react-native-paper';
+import { PerfectText } from './PerfectText';
 
 interface AnimatedNumberProps {
   readonly value: number;
@@ -60,7 +60,11 @@ const AnimatedNumber: React.FC<AnimatedNumberProps> = ({
     };
   }, [value, duration, animatedValue, startAnimation]);
 
-  return <Text style={style}>{renderedValue}</Text>;
+  return (
+    <PerfectText size={16} lines={1} fontWeight="600" style={style}>
+      {renderedValue}
+    </PerfectText>
+  );
 };
 
 export default AnimatedNumber;

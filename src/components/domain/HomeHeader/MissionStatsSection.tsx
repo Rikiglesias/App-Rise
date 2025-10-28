@@ -27,14 +27,16 @@ export const MissionStatsSection: React.FC<MissionStatsSectionProps> =
         <PerfectText
           size={32}
           lines={1}
+          fontWeight="400"
           immunity={true}
-          style={[baseMissionStyles.statNumber, { fontWeight: '900' }]}
+          style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
         >
           3.14M
         </PerfectText>
         <PerfectText
           size={14}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={baseMissionStyles.statLabel}
         >
@@ -55,14 +57,16 @@ export const MissionStatsSection: React.FC<MissionStatsSectionProps> =
         <PerfectText
           size={32}
           lines={1}
+          fontWeight="400"
           immunity={true}
-          style={[baseMissionStyles.statNumber, { fontWeight: '900' }]}
+          style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
         >
           13K
         </PerfectText>
         <PerfectText
           size={14}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={baseMissionStyles.statLabel}
         >

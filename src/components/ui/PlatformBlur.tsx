@@ -22,37 +22,41 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
   backgroundColor,
   ...props
 }) => {
-  // iOS: mantiene BlurView nativo (zero cambiamenti)
-  if (Platform.OS === 'ios') {
-    return (
-      <BlurView intensity={intensity} tint={tint} style={style} {...props}>
-        {children}
-      </BlurView>
-    );
-  }
+  // Usa BlurView nativo anche su Android per parità visiva.
+  // Su Android limitiamo leggermente l'intensità per performance.
+  const effectiveIntensity =
+    Platform.OS === 'android' ? Math.min(intensity, 75) : intensity;
 
-  // Android: usa gradient ottimizzato per performance
-  const getAndroidBackground = () => {
-    if (backgroundColor) return backgroundColor;
-
-    switch (tint) {
-      case 'dark':
-        return 'rgba(0, 0, 0, 0.8)';
-      case 'light':
-      default:
-        return 'rgba(255, 255, 255, 0.95)';
-    }
-  };
-
-  return (
+  // Fallback minimale in caso di problemi di runtime
+  const fallback = (
     <View style={style} {...props}>
       <LinearGradient
-        colors={[getAndroidBackground(), getAndroidBackground()]}
+        colors={[
+          backgroundColor ??
+            (tint === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)'),
+          backgroundColor ??
+            (tint === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)'),
+        ]}
         style={gradientStyle}
       />
       {children}
     </View>
   );
+
+  try {
+    return (
+      <BlurView
+        intensity={effectiveIntensity}
+        tint={tint}
+        style={style}
+        {...props}
+      >
+        {children}
+      </BlurView>
+    );
+  } catch {
+    return fallback;
+  }
 };
 
 // Styles

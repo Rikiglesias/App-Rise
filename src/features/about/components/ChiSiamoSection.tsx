@@ -6,6 +6,8 @@ import { PlatformTouchable, PerfectText } from '../../../components/ui';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useResponsive } from '../../../shared/hooks';
 import { chiSiamoSectionStyles } from '../styles';
+// Ratio inline per evitare dipendenze condivise
+import responsiveSystem from '../../../shared/constants/responsiveSystem';
 import type { ChiSiamoSectionProps } from '../types';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
@@ -35,6 +37,10 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               <PerfectText
                 size={30}
                 lines={1}
+                fontWeight="400"
+                containerWidth={
+                  (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+                }
                 style={[
                   chiSiamoSectionStyles.categoryTitle,
                   chiSiamoSectionStyles.titleAccent,
@@ -45,6 +51,10 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               <PerfectText
                 size={15}
                 lines={2}
+                fontWeight="400"
+                containerWidth={
+                  (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+                }
                 style={chiSiamoSectionStyles.mainSubtitleInline}
               >
                 Non profit contro la fame - premi (i) per saperne di più

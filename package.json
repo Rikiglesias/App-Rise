@@ -64,7 +64,7 @@
     "snapshot:clean": "jest --clearCache && node scripts/snapshot-baseline-generator.js cleanup",
     "snapshot:validate": "jest --testPathPattern=snapshots --passWithNoTests",
     "visual:test": "jest --testPathPattern=visual --passWithNoTests",
-    "protection:ci": "bash scripts/ci-snapshot-protection.sh",
+    "protection:ci": "node scripts/ci-snapshot-protection.js",
     "protection:full": "npm run snapshot:validate && npm run visual:test",
     "filesize:analyze": "node scripts/file-size-monitor.js",
     "filesize:report": "node scripts/file-size-monitor.js && echo '📊 Check file-size-report.json for details'",

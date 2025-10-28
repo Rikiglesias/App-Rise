@@ -48,38 +48,78 @@ const SimplePlaceholderScreen: React.FC<Props> = ({ navigation, route }) => {
         {/* Header */}
         <View style={styles.header}>
           <Logo size={48} />
-          <PerfectText size={48} lines={1} style={styles.constructionIcon}>
+          <PerfectText
+            size={48}
+            lines={1}
+            fontWeight="400"
+            style={styles.constructionIcon}
+          >
             🚧
           </PerfectText>
         </View>
 
         {/* Main Content */}
         <View style={styles.main}>
-          <PerfectText size={36} lines={2} style={styles.title}>
+          <PerfectText
+            size={36}
+            lines={2}
+            fontWeight="400"
+            style={styles.title}
+          >
             {title}
           </PerfectText>
           {subtitle && (
-            <PerfectText size={20} lines={2} style={styles.subtitle}>
+            <PerfectText
+              size={20}
+              lines={2}
+              fontWeight="400"
+              style={styles.subtitle}
+            >
               {subtitle}
             </PerfectText>
           )}
 
-          <PerfectText size={16} lines={3} style={styles.message}>
+          <PerfectText
+            size={16}
+            lines={3}
+            fontWeight="400"
+            style={styles.message}
+          >
             Questa sezione è in fase di sviluppo.{'\n'}
             Stiamo lavorando per offrirti la migliore esperienza possibile.
           </PerfectText>
 
           <View style={styles.features}>
-            <PerfectText size={16} lines={1} style={styles.featuresTitle}>
+            <PerfectText
+              size={16}
+              lines={1}
+              fontWeight="400"
+              style={styles.featuresTitle}
+            >
               🎯 Prossimamente:
             </PerfectText>
-            <PerfectText size={14} lines={1} style={styles.feature}>
+            <PerfectText
+              size={14}
+              lines={1}
+              fontWeight="400"
+              style={styles.feature}
+            >
               ⚡ Contenuti aggiornati
             </PerfectText>
-            <PerfectText size={14} lines={1} style={styles.feature}>
+            <PerfectText
+              size={14}
+              lines={1}
+              fontWeight="400"
+              style={styles.feature}
+            >
               🎨 Design moderno
             </PerfectText>
-            <PerfectText size={14} lines={1} style={styles.feature}>
+            <PerfectText
+              size={14}
+              lines={1}
+              fontWeight="400"
+              style={styles.feature}
+            >
               📱 Esperienza ottimizzata
             </PerfectText>
           </View>

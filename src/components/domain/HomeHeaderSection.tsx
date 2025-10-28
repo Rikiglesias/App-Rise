@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Platform, View } from 'react-native';
+import { Animated } from 'react-native';
 
 import {
   useHomeHeaderAnimations,
@@ -8,10 +8,7 @@ import {
 import { useHomeHeaderStyles } from '../../features/home/hooks/useHomeHeaderStyles';
 import { useTheme } from '../../shared/hooks/useTheme';
 import { type HomeHeaderSectionProps } from '../../features/home/types/HomeHeaderTypes';
-import {
-  HeaderImageSection,
-  HeaderTextSection,
-} from './HomeHeaderSubComponents';
+import { HeaderImageSection, HeaderTextSection } from './HomeHeader';
 
 // Main Component - Now under 60 lines
 const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
@@ -29,35 +26,10 @@ const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
   } = useScrollInterpolations(scrollY);
   const styles = useHomeHeaderStyles();
 
-  // Android: Rendering completamente statico per evitare tutti gli artefatti
-  if (Platform.OS === 'android') {
-    return (
-      <View style={styles.container}>
-        <HeaderTextSection
-          colors={colors}
-          titleAnim={new Animated.Value(1)} // Valore statico
-          titleOpacity={new Animated.Value(1)} // Valore statico
-          titleTransform={new Animated.Value(0)} // Valore statico
-          styles={styles}
-        />
+  // Animazioni attive su entrambe le piattaforme con ottimizzazioni Android
+  // Stile aggiuntivo per stabilità Android durante le animazioni
+  // Applica direttamente le props di rendering Android
 
-        <HeaderImageSection
-          imageAnim={new Animated.Value(1)} // Valore statico
-          imageParallax={new Animated.Value(0)} // Valore statico
-          imageScale={new Animated.Value(1)} // Valore statico
-          gradientOpacity={new Animated.Value(0)} // Valore statico
-          imageRotation={scrollY.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['0deg', '0deg'],
-            extrapolate: 'clamp',
-          })} // Statico
-          styles={styles}
-        />
-      </View>
-    );
-  }
-
-  // iOS: Mantiene tutte le animazioni
   return (
     <Animated.View
       style={[
@@ -67,6 +39,9 @@ const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
           transform: [{ scale: containerAnim }],
         },
       ]}
+      renderToHardwareTextureAndroid
+      needsOffscreenAlphaCompositing
+      collapsable={false}
     >
       <HeaderTextSection
         colors={colors}

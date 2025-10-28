@@ -66,6 +66,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
           <PerfectText
             size={24}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.donateCategoryTitle}
           >
@@ -74,6 +75,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
           <PerfectText
             size={16}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.donateInlineSubtitle}
           >
@@ -176,6 +178,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
           <PerfectText
             size={20}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.exploreTitle}
           >
@@ -184,6 +187,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
           <PerfectText
             size={16}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.exploreSubtitle}
           >
@@ -279,6 +283,7 @@ export const CommunityButtonsSection: React.FC<
           <PerfectText
             size={20}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.communityTitle}
           >
@@ -287,6 +292,7 @@ export const CommunityButtonsSection: React.FC<
           <PerfectText
             size={16}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.communitySubtitle}
           >

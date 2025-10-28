@@ -1,13 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import {
-  Modal,
-  Platform,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import { Modal, StyleSheet, View, TouchableOpacity } from 'react-native';
 
 import { PlatformTouchable, PerfectText } from '../../../../components/ui';
 // Migrated to Perfect System responsive layout
@@ -49,21 +43,15 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       bottom: 0,
       backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
-    // DUAL PLATFORM CONTAINER - Android solido, iOS gradiente
+    // Contenitore con bordo gradiente coerente cross‑platform
     modalGradientBorder: {
       borderRadius: 24,
-      padding: Platform.OS === 'android' ? 0 : 3, // ANDROID: Zero padding per eliminare spazi grigi
-      // ANDROID: Background rosso solido - ZERO artefatti
-      ...(Platform.OS === 'android' && {
-        backgroundColor: '#DC2626',
-        borderWidth: 2,
-        borderColor: '#DC2626', // Bordo rosso matching per eliminare artefatti
-      }),
+      padding: 3,
       shadowColor: '#DC2626',
       shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: Platform.OS === 'android' ? 0.2 : 0.3, // ANDROID: ombra più leggera
+      shadowOpacity: 0.3,
       shadowRadius: 20,
-      elevation: Platform.OS === 'android' ? 8 : 12, // ANDROID: elevazione ridotta
+      elevation: 12,
       // ❌ RIMOSSO: Calcolo manuale frammentato
       // maxWidth: screenWidth * 0.9,
       // ✅ NUOVO: Width dal layer centralizzato
@@ -72,7 +60,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
     },
     modalWhiteContainer: {
       backgroundColor: Colors.neutral[0],
-      borderRadius: Platform.OS === 'android' ? 21 : 21, // ANDROID: Border radius ottimizzato per eliminare spazi grigi
+      borderRadius: 21,
       overflow: 'hidden',
     },
     modalContent: {
@@ -89,7 +77,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
     closeButton: {
       position: 'absolute',
       top: -10, // ANCORA PIÙ IN ALTO: entrambe le piattaforme, esce ancora di più dal bordo superiore
-      right: Platform.OS === 'android' ? -15 : -6, // Android: MOLTO più a destra / iOS: posizione normale
+      right: -6,
       width: 36,
       height: 36,
       borderRadius: 18,
@@ -171,6 +159,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         <PerfectText
           size={28}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={modalStyles.centeredTitle}
         >
@@ -182,6 +171,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       <PerfectText
         size={16}
         lines={3}
+        fontWeight="400"
         style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
       >
         💰 Donazioni monetarie: Se vuoi fare una donazione monetaria diretta,
@@ -192,6 +182,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       <PerfectText
         size={16}
         lines={4}
+        fontWeight="400"
         style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
       >
         🛍️ Acquisti solidali: Attraverso il nostro Charity Shop, ogni acquisto
@@ -202,6 +193,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       <PerfectText
         size={16}
         lines={4}
+        fontWeight="400"
         style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
       >
         🎁 Gift Cards: Funzionano come gli acquisti: compri una Gift Card a
@@ -210,7 +202,12 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         extra!
       </PerfectText>
 
-      <PerfectText size={15} lines={2} style={modalStyles.highlightText}>
+      <PerfectText
+        size={15}
+        lines={2}
+        fontWeight="400"
+        style={modalStyles.highlightText}
+      >
         ✨ Il modo più semplice è partecipare ai nostri eventi!
       </PerfectText>
     </View>
@@ -253,21 +250,15 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
       bottom: 0,
       backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
-    // DUAL PLATFORM CONTAINER - Android solido, iOS gradiente
+    // Contenitore con bordo gradiente coerente cross‑platform
     modalGradientBorder: {
       borderRadius: 24,
-      padding: Platform.OS === 'android' ? 0 : 3, // ANDROID: Zero padding per eliminare spazi grigi
-      // ANDROID: Background rosso solido - ZERO artefatti
-      ...(Platform.OS === 'android' && {
-        backgroundColor: '#DC2626',
-        borderWidth: 2,
-        borderColor: '#DC2626', // Bordo rosso matching per eliminare artefatti
-      }),
+      padding: 3,
       shadowColor: '#DC2626',
       shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: Platform.OS === 'android' ? 0.2 : 0.3, // ANDROID: ombra più leggera
+      shadowOpacity: 0.3,
       shadowRadius: 20,
-      elevation: Platform.OS === 'android' ? 8 : 12, // ANDROID: elevazione ridotta
+      elevation: 12,
       // ❌ RIMOSSO: Calcolo manuale frammentato
       // maxWidth: screenWidth * 0.9,
       // ✅ NUOVO: Width dal layer centralizzato
@@ -276,7 +267,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
     },
     modalWhiteContainer: {
       backgroundColor: Colors.neutral[0],
-      borderRadius: Platform.OS === 'android' ? 21 : 21, // ANDROID: Border radius ottimizzato per eliminare spazi grigi
+      borderRadius: 21,
       overflow: 'hidden',
     },
     modalContent: {
@@ -292,8 +283,8 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
 
     closeButton: {
       position: 'absolute',
-      top: -10, // ANCORA PIÙ IN ALTO: entrambe le piattaforme, esce ancora di più dal bordo superiore
-      right: Platform.OS === 'android' ? -15 : -6, // Android: MOLTO più a destra / iOS: posizione normale
+      top: -10,
+      right: -6,
       width: 36,
       height: 36,
       borderRadius: 18,
@@ -369,24 +360,14 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
         <View style={modalStyles.backdrop} />
         <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
           <View style={{ backgroundColor: 'transparent' }}>
-            {Platform.OS === 'android' ? (
-              // ANDROID: Container solido - ZERO artefatti grigi
-              <View style={modalStyles.modalGradientBorder}>
-                <View style={modalStyles.modalWhiteContainer}>
-                  <ModalContent handleClose={handleClose} />
-                </View>
+            <LinearGradient
+              colors={['#DC2626', '#B91C1C', '#991B1B']}
+              style={modalStyles.modalGradientBorder}
+            >
+              <View style={modalStyles.modalWhiteContainer}>
+                <ModalContent handleClose={handleClose} />
               </View>
-            ) : (
-              // iOS: Gradiente normale
-              <LinearGradient
-                colors={['#DC2626', '#B91C1C', '#991B1B']}
-                style={modalStyles.modalGradientBorder}
-              >
-                <View style={modalStyles.modalWhiteContainer}>
-                  <ModalContent handleClose={handleClose} />
-                </View>
-              </LinearGradient>
-            )}
+            </LinearGradient>
           </View>
         </TouchableOpacity>
       </TouchableOpacity>

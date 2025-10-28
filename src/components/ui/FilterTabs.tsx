@@ -145,6 +145,7 @@ const TabItem: React.FC<TabItemProps> = ({
           <PerfectText
             size={14}
             lines={1}
+            fontWeight="400"
             style={[
               styles.tabIcon,
               isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
@@ -157,6 +158,7 @@ const TabItem: React.FC<TabItemProps> = ({
         <PerfectText
           size={14}
           lines={1}
+          fontWeight="400"
           style={[
             styles.tabLabel,
             isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
@@ -169,6 +171,7 @@ const TabItem: React.FC<TabItemProps> = ({
           <PerfectText
             size={12}
             lines={1}
+            fontWeight="400"
             style={[
               styles.tabCount,
               isActive ? styles.activeTabCount : styles.inactiveTabCount,

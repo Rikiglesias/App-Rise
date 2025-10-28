@@ -27,7 +27,7 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
   onPress,
   children,
   style,
-  rippleColor = 'transparent',
+  rippleColor = 'rgba(0,0,0,0.12)',
   borderless = false,
   disabled = false,
   ...props

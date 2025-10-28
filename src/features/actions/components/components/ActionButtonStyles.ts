@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Colors, Spacing, Typography } from '../../../../shared/constants';
 import type { ButtonStyles } from './ActionButtonTypes';
 
@@ -24,16 +24,17 @@ export const createActionButtonStyles = (): ButtonStyles => {
     donateTitleContainer: {
       alignItems: 'center',
       backgroundColor: 'rgba(220, 38, 38, 0.03)', // IDENTICO: stesso rgba su entrambe le piattaforme
-      paddingVertical: Spacing[3],
-      paddingHorizontal: Spacing[5],
+      paddingVertical: Spacing[2],
+      paddingHorizontal: Spacing[3],
+      width: '70%', // Riduce visivamente la lunghezza del container
       borderRadius: 16,
       borderWidth: 1,
       borderColor: 'rgba(220, 38, 38, 0.12)', // IDENTICO: stesso rgba su entrambe le piattaforme
       shadowColor: '#DC2626',
       shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08, // Solo ombra diversa per stabilità
+      shadowOpacity: 0.08,
       shadowRadius: 8,
-      elevation: Platform.OS === 'android' ? 2 : 3, // Solo elevation diversa per stabilità
+      elevation: 3,
     },
 
     // TITOLO CATEGORIA DONA ELEGANTE - PIÙ GRASSETTO
@@ -93,8 +94,8 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     infoButton: {
       position: 'absolute',
-      right: Platform.OS === 'android' ? 33 : 45, // ANDROID: 33 come regolato / iOS: 45 ancora più a sinistra
-      top: Platform.OS === 'android' ? 5 : 8, // ANDROID: 5 come regolato / iOS: 8 più in alto
+      right: 45,
+      top: 8,
       width: 24,
       height: 24,
       borderRadius: 12,
@@ -125,33 +126,17 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderRadius: 20,
       // Spessore bordo pagina Azioni: 2pt
       padding: 2,
-      ...(Platform.OS === 'android'
-        ? {
-            // ANDROID: Rendering ottimizzato per evitare bleeding durante animazioni
-            elevation: 2, // MOLTO RIDOTTO per animazioni fluide
-            shadowColor: 'transparent',
-            // Forza compositing layer per stabilità durante animazioni
-            needsOffscreenAlphaCompositing: false,
-          }
-        : {
-            // iOS: Ombreggiatura normale
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.2,
-            shadowRadius: 12,
-          }),
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.2,
+      shadowRadius: 12,
+      elevation: 2,
     },
     whiteContainer: {
       backgroundColor: Colors.neutral[0],
       borderRadius: 18, // 20-2 per effetto bordo
       overflow: 'hidden',
-      ...(Platform.OS === 'android' && {
-        // ANDROID: Forza background completamente opaco durante le animazioni
-        backgroundColor: '#FFFFFF',
-        // Forza il render layer per evitare bleeding durante animazioni
-        renderToHardwareTextureAndroid: true,
-        shouldRasterizeIOS: false,
-      }),
+      // Nota: proprietà di rasterizzazione rimosse per compatibilità tipizzazioni
     },
     buttonContent: {
       paddingVertical: Spacing[4], // RIDOTTO per bottoni più compatti
@@ -223,9 +208,9 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderColor: 'rgba(31, 41, 55, 0.08)', // IDENTICO: stesso rgba su entrambe le piattaforme
       shadowColor: '#374151',
       shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: Platform.OS === 'android' ? 0.03 : 0.05, // Solo ombra diversa per stabilità
+      shadowOpacity: 0.05,
       shadowRadius: 8,
-      elevation: Platform.OS === 'android' ? 1 : 2, // Solo elevation diversa per stabilità
+      elevation: 2,
     },
 
     // CONTAINER BACKGROUND COMMUNITY - IDENTICO CROSS-PLATFORM
@@ -238,17 +223,17 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderColor: 'rgba(31, 41, 55, 0.08)', // IDENTICO: stesso rgba su entrambe le piattaforme
       shadowColor: '#1F2937',
       shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: Platform.OS === 'android' ? 0.03 : 0.05, // Solo ombra diversa per stabilità
+      shadowOpacity: 0.05,
       shadowRadius: 8,
-      elevation: Platform.OS === 'android' ? 1 : 2, // Solo elevation diversa per stabilità
+      elevation: 2,
       position: 'relative',
     },
 
     // ICONA LINK COMMUNITY - ESTREMO ANGOLO SUPERIORE DESTRO
     communityChevron: {
       position: 'absolute',
-      top: Platform.OS === 'android' ? -4 : 8, // ANDROID: -4 come regolato / iOS: 8 più in basso
-      right: Platform.OS === 'android' ? -8 : 12, // ANDROID: -8 come regolato / iOS: 12 più a sinistra
+      top: 8,
+      right: 12,
       opacity: 0.7, // IDENTICO iOS: semi-trasparente
     },
   });

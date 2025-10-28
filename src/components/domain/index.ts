@@ -12,11 +12,6 @@ export { baseMissionStyles } from './styles/HeaderMissionStyles';
 
 // Legacy exports (keeping for compatibility)
 export { default as ActionCardEnhanced } from './ActionCardEnhanced';
-export { default as HomeActionsSection } from './HomeActionsSection';
-export {
-  HeaderTextSection,
-  HeaderImageSection,
-} from './HomeHeaderSubComponents';
+export { HeaderTextSection, HeaderImageSection } from './HomeHeader';
 export { default as HomeHeaderSection } from './HomeHeaderSection';
-export { default as HomeInfoSection } from './HomeInfoSection';
-export { default as ModernHomeActions } from './ModernHomeActions';
+// Removed legacy components: HomeActionsSection, HomeInfoSection, ModernHomeActions

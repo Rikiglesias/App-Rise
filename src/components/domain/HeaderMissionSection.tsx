@@ -50,6 +50,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                 <PerfectText
                   size={35}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={baseMissionStyles.impactTitleGradient}
                 >
@@ -64,6 +65,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
             <PerfectText
               size={18}
               lines={3}
+              fontWeight="400"
               immunity={true}
               style={baseMissionStyles.missionText}
             >
@@ -81,14 +83,16 @@ export const HeaderMissionSection: React.FC<Props> = ({
                 <PerfectText
                   size={32}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
-                  style={[baseMissionStyles.statNumber, { fontWeight: '900' }]}
+                  style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
                 >
                   3.14M
                 </PerfectText>
                 <PerfectText
                   size={14}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={baseMissionStyles.statLabel}
                 >
@@ -112,14 +116,16 @@ export const HeaderMissionSection: React.FC<Props> = ({
                 <PerfectText
                   size={32}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
-                  style={[baseMissionStyles.statNumber, { fontWeight: '900' }]}
+                  style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
                 >
                   13K
                 </PerfectText>
                 <PerfectText
                   size={14}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={baseMissionStyles.statLabel}
                 >
@@ -150,6 +156,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                   <PerfectText
                     size={24}
                     lines={1}
+                    fontWeight="400"
                     immunity={true}
                     style={baseMissionStyles.modalTitle}
                   >
@@ -181,6 +188,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       <PerfectText
                         size={18}
                         lines={1}
+                        fontWeight="400"
                         immunity={true}
                         style={baseMissionStyles.breakdownNumber}
                       >
@@ -189,6 +197,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       <PerfectText
                         size={14}
                         lines={1}
+                        fontWeight="400"
                         immunity={true}
                         style={baseMissionStyles.breakdownLabel}
                       >
@@ -197,6 +206,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       <PerfectText
                         size={12}
                         lines={1}
+                        fontWeight="400"
                         immunity={true}
                         style={baseMissionStyles.breakdownDescription}
                       >
@@ -217,6 +227,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       <PerfectText
                         size={18}
                         lines={1}
+                        fontWeight="400"
                         immunity={true}
                         style={baseMissionStyles.breakdownNumber}
                       >
@@ -225,6 +236,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       <PerfectText
                         size={14}
                         lines={1}
+                        fontWeight="400"
                         immunity={true}
                         style={baseMissionStyles.breakdownLabel}
                       >
@@ -233,6 +245,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                       <PerfectText
                         size={12}
                         lines={1}
+                        fontWeight="400"
                         immunity={true}
                         style={baseMissionStyles.breakdownDescription}
                       >
@@ -249,6 +262,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                     <PerfectText
                       size={14}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.totalLabel}
                     >
@@ -257,6 +271,7 @@ export const HeaderMissionSection: React.FC<Props> = ({
                     <PerfectText
                       size={24}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.totalNumber}
                     >

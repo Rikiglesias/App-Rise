@@ -3,8 +3,9 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      'react-native-worklets/plugin', // Aggiornato per Expo SDK 54
-      'react-native-reanimated/plugin', // Necessario per react-native-reanimated
+      // react-native-reanimated already injects the worklets plugin internally,
+      // so we only register it once to avoid duplicate plugin issues in Jest.
+      'react-native-reanimated/plugin',
     ],
   };
 };

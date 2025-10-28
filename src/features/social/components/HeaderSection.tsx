@@ -3,7 +3,9 @@ import { Animated, View } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PerfectText } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants';
-import { scaleFont } from '../../../shared/constants/responsiveSystem';
+import responsiveSystem, {
+  scaleFont,
+} from '../../../shared/constants/responsiveSystem';
 
 interface HeaderSectionProps {
   readonly animationValue: Animated.Value;
@@ -36,11 +38,27 @@ export const HeaderSection: React.FC<HeaderSectionProps> = React.memo(
           />
         </View>
 
-        <PerfectText size={28} lines={1} style={styles.headerTitle}>
+        <PerfectText
+          size={28}
+          lines={1}
+          fontWeight="400"
+          containerWidth={
+            (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+          }
+          style={styles.headerTitle}
+        >
           Seguici sui Social
         </PerfectText>
 
-        <PerfectText size={16} lines={2} style={styles.headerSubtitle}>
+        <PerfectText
+          size={16}
+          lines={2}
+          fontWeight="400"
+          containerWidth={
+            (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+          }
+          style={styles.headerSubtitle}
+        >
           Resta aggiornato sulle nostre iniziative e scopri come puoi
           contribuire al cambiamento
         </PerfectText>

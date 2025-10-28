@@ -31,6 +31,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           <PerfectText
             size={22}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.mapTitle}
           >
@@ -39,6 +40,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           <PerfectText
             size={16}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.mapSubtitle}
           >
@@ -67,6 +69,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           <PerfectText
             size={12}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.mapClickText}
           >

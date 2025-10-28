@@ -1,7 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, View } from 'react-native';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import type {
   ImpactNavigationProp,
   ImpactScreenName,
@@ -30,6 +33,7 @@ import { getModalData } from '@/data/mapModalData';
  */
 const ImpactTabScreenComponent: React.FC = () => {
   const navigation = useNavigation<ImpactNavigationProp>();
+  const insets = useSafeAreaInsets();
 
   // State per il modal della mappa
   const [modalVisible, setModalVisible] = useState(false);
@@ -83,7 +87,11 @@ const ImpactTabScreenComponent: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <PlatformScrollView contentContainerStyle={styles.scrollContent}>
+      <PlatformScrollView
+        contentContainerStyle={{
+          paddingBottom: Math.max(insets.bottom, 16) + 95 + 24,
+        }}
+      >
         <ImpactHeader animations={animations} />
 
         <TotalMealsSection
@@ -132,13 +140,11 @@ const styles = StyleSheet.create({
   },
 
   // Scroll Content - PADDING BOTTOM PER NAVIGATION (UNIFORMATO CON AZIONI)
-  scrollContent: {
-    paddingBottom: Platform.OS === 'android' ? 160 : 120, // UNIFORMATO: stesso valore di ContributeTabScreen per evitare layout shift
-  },
+  // scrollContent dinamico calcolato nel componente con safe-area
 
   // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
   sectionDividerContainer: {
-    paddingTop: Platform.OS === 'android' ? Spacing[12] : Spacing[8],
+    paddingTop: Spacing[8],
     paddingBottom: Spacing[4],
   },
   sectionDivider: {

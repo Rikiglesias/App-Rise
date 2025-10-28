@@ -47,7 +47,7 @@ const MapModalScreen: React.FC = () => {
     // Handle case where locations are not passed
     return (
       <View style={styles.container}>
-        <PerfectText size={16} lines={1}>
+        <PerfectText size={16} lines={1} fontWeight="400">
           Caricamento mappa...
         </PerfectText>
       </View>
@@ -63,10 +63,15 @@ const MapModalScreen: React.FC = () => {
       />
       {/* Header */}
       <View style={styles.header}>
-        <PerfectText size={24} lines={1} style={styles.title}>
+        <PerfectText size={24} lines={1} fontWeight="400" style={styles.title}>
           Mappa Interattiva
         </PerfectText>
-        <PerfectText size={16} lines={1} style={styles.subtitle}>
+        <PerfectText
+          size={16}
+          lines={1}
+          fontWeight="400"
+          style={styles.subtitle}
+        >
           Tocca i pin per maggiori dettagli
         </PerfectText>
 

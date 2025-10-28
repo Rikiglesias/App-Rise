@@ -38,6 +38,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                 <PerfectText
                   size={24}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={baseMissionStyles.modalTitle}
                 >
@@ -69,6 +70,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     <PerfectText
                       size={18}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.breakdownNumber}
                     >
@@ -77,6 +79,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     <PerfectText
                       size={14}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.breakdownLabel}
                     >
@@ -85,6 +88,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     <PerfectText
                       size={12}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.breakdownDescription}
                     >
@@ -105,6 +109,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     <PerfectText
                       size={18}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.breakdownNumber}
                     >
@@ -113,6 +118,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     <PerfectText
                       size={14}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.breakdownLabel}
                     >
@@ -121,6 +127,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     <PerfectText
                       size={12}
                       lines={1}
+                      fontWeight="400"
                       immunity={true}
                       style={baseMissionStyles.breakdownDescription}
                     >
@@ -137,6 +144,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                   <PerfectText
                     size={14}
                     lines={1}
+                    fontWeight="400"
                     immunity={true}
                     style={baseMissionStyles.totalLabel}
                   >
@@ -145,6 +153,7 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                   <PerfectText
                     size={24}
                     lines={1}
+                    fontWeight="400"
                     immunity={true}
                     style={baseMissionStyles.totalNumber}
                   >

@@ -20,6 +20,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
     imageRotation,
     styles,
   }) => {
+    // Applica direttamente le props Android su Animated.View
     const imageStyle: ImageStyle = {
       transform: [
         { translateY: imageParallax },
@@ -32,7 +33,19 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
       <View style={styles.imageSection}>
         <View style={styles.imageContainer}>
           <Animated.View style={[styles.flexOne, { opacity: imageAnim }]}>
-            <Animated.View style={[styles.flexOne, imageStyle]}>
+            <Animated.View
+              style={[
+                styles.flexOne,
+                imageStyle,
+                {
+                  borderRadius: 24,
+                  overflow: 'hidden',
+                  backgroundColor: '#FFFFFF',
+                },
+              ]}
+              renderToHardwareTextureAndroid
+              needsOffscreenAlphaCompositing
+            >
               <PerfectImage
                 // iPhone 15 reference full width, ~1.1x height
                 width={393}

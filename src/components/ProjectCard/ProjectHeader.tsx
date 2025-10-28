@@ -58,12 +58,19 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
   return (
     <View style={styles.header}>
       <View style={styles.titleContainer}>
-        <PerfectText size={18} lines={1} immunity={true} style={styles.title}>
+        <PerfectText
+          size={18}
+          lines={1}
+          fontWeight="400"
+          immunity={true}
+          style={styles.title}
+        >
           {title}
         </PerfectText>
         <PerfectText
           size={14}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={styles.location}
         >
@@ -74,6 +81,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
         <PerfectText
           size={12}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={styles.statusText}
         >

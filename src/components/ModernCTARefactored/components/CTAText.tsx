@@ -16,6 +16,7 @@ export const CTADescription: React.FC<CTADescriptionProps> = ({
   <PerfectText
     size={16}
     lines={3}
+    fontWeight="400"
     style={[
       contentStyles.description,
       typographyStyles[`${size}Description` as keyof typeof typographyStyles],
@@ -41,6 +42,7 @@ export const CTATitle: React.FC<CTATitleProps> = ({
   <PerfectText
     size={24}
     lines={2}
+    fontWeight="400"
     style={[
       contentStyles.title,
       typographyStyles[`${size}Title` as keyof typeof typographyStyles],
@@ -64,6 +66,7 @@ export const CTASubtitle: React.FC<CTASubtitleProps> = ({
   <PerfectText
     size={18}
     lines={2}
+    fontWeight="400"
     style={[
       contentStyles.subtitle,
       typographyStyles[`${size}Subtitle` as keyof typeof typographyStyles],

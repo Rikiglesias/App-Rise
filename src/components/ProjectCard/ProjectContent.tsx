@@ -50,6 +50,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       <PerfectText
         size={15}
         lines={3}
+        fontWeight="400"
         immunity={true}
         style={styles.description}
       >
@@ -59,6 +60,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
         <PerfectText
           size={12}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={styles.impactLabel}
         >
@@ -67,6 +69,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
         <PerfectText
           size={14}
           lines={1}
+          fontWeight="400"
           immunity={true}
           style={styles.impactText}
         >

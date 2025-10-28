@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Platform, View } from 'react-native';
+import { Animated, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PerfectImage } from '../../../../components/ui/PerfectImage';
 import { type HeroImageProps } from '../../types';
@@ -14,25 +14,9 @@ export const HeroImage: React.FC<HeroImageProps> = ({
 }) => {
   const styles = useHeroImageStyles();
 
-  // Android: Rendering completamente statico per evitare artefatti
-  if (Platform.OS === 'android') {
-    return (
-      <View style={styles.imageSection}>
-        <View style={styles.imageContainer}>
-          <PerfectImage
-            // iPhone 15 reference full width, ~1.1x height
-            width={393}
-            height={432}
-            borderRadius={24}
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            source={require('../../../../../assets/images/hero-banner.png')}
-          />
-        </View>
-      </View>
-    );
-  }
+  // Props Android per stabilità durante le animazioni applicate su Animated.View
 
-  // iOS: Mantiene tutte le animazioni
+  // Animazioni attive su entrambe le piattaforme
   return (
     <View style={styles.imageSection}>
       <Animated.View
@@ -45,8 +29,13 @@ export const HeroImage: React.FC<HeroImageProps> = ({
               { scale: imageScale },
               { rotate: imageRotation },
             ],
+            borderRadius: 24,
+            overflow: 'hidden',
+            backgroundColor: '#FFFFFF',
           },
         ]}
+        renderToHardwareTextureAndroid
+        needsOffscreenAlphaCompositing
       >
         <PerfectImage
           // iPhone 15 reference full width, ~1.1x height

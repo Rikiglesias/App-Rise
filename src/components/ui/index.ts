@@ -21,15 +21,10 @@ export type {
   GlassmorphismVariant,
 } from './UnifiedCard';
 
-// Legacy Card Components (DEPRECATED - use UnifiedCard instead)
-export { default as LegacyEnhancedCard } from './EnhancedCard';
-export { ArrowSection, IconSection, TextSection } from './EnhancedCardSections';
-export { default as LegacyGlassmorphismCard } from './GlassmorphismCard';
-
 // Interactive Components
 export { default as EnhancedTouchable } from './EnhancedTouchable';
 export { default as FilterTabs } from './FilterTabs';
-export { default as PremiumFloatingButton } from './PremiumFloatingButton';
+// PremiumFloatingButton removed (legacy)
 
 // Platform-Specific Components
 export {
@@ -38,9 +33,7 @@ export {
 } from './PlatformAnimations';
 
 // Material Design 3 Components (Android-specific)
-export { MaterialFAB } from './MaterialFAB';
-export { MaterialActionCard } from './MaterialCard'; // Legacy MaterialCard now in UnifiedCard
-export { MaterialBottomNavigation } from './MaterialBottomNavigation';
+// MaterialFAB removed (legacy)
 export { default as PlatformBlur } from './PlatformBlur';
 export { default as PlatformTouchable } from './PlatformTouchable';
 export { PlatformScrollView, PlatformSurface } from './PlatformComponents';
@@ -87,5 +80,4 @@ export {
 export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';
 
-// LEGACY (RIMOSSO): usare PerfectContainer/PerfectImage/PerfectText
 // FormattedText rimosso - usa PerfectText dal Perfect System

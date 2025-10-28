@@ -2,7 +2,7 @@
 // Tutti gli stili in questo file sono verificati manualmente come utilizzati.
 
 import React, { useMemo } from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { PerfectText } from '../../../../components/ui';
@@ -50,8 +50,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         headerContainer: {
           alignSelf: 'stretch',
           width: '100%',
-          paddingTop:
-            Platform.OS === 'android' ? Spacing[16] : Spacing[20] + 12, // AUMENTATO ANDROID: da Spacing[12] a Spacing[16] per più spazio
+          paddingTop: Spacing[20] + 12,
           paddingHorizontal: Spacing[4],
           paddingBottom: Spacing[6],
           alignItems: 'center',
@@ -64,7 +63,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: Platform.OS === 'android' ? 0.01 : 0.02,
+          opacity: 0.02,
         },
 
         // CONTAINER ELEGANTE COLORATO - UNIFORMATO CON PAGINA IMPATTO
@@ -73,20 +72,18 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           width: '100%',
           alignItems: 'center',
           height: HEADER_INNER_HEIGHT,
-          backgroundColor:
-            Platform.OS === 'android' ? '#F5F6F6' : 'rgba(31, 41, 55, 0.03)',
+          backgroundColor: 'rgba(31, 41, 55, 0.03)',
           paddingHorizontal: Spacing[4],
           paddingTop: HEADER_VERTICAL_PADDING,
           paddingBottom: HEADER_VERTICAL_PADDING,
           borderRadius: 16,
           borderWidth: 1,
-          borderColor:
-            Platform.OS === 'android' ? '#E8EAEB' : 'rgba(31, 41, 55, 0.08)',
+          borderColor: 'rgba(31, 41, 55, 0.08)',
           shadowColor: '#1F2937',
           shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08,
+          shadowOpacity: 0.08,
           shadowRadius: 6,
-          elevation: Platform.OS === 'android' ? 1 : 3,
+          elevation: 3,
         },
 
         // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
@@ -134,6 +131,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         size={TITLE_SIZE}
         lines={1}
         immunity={true}
+        fontWeight="600"
         style={styles.titleText}
       >
         Fai la
@@ -142,6 +140,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         size={TITLE_SIZE}
         lines={1}
         immunity={true}
+        fontWeight="600"
         style={[styles.titleText, styles.titleAccent]}
       >
         Differenza
@@ -150,6 +149,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         size={SUBTITLE_SIZE}
         lines={2}
         immunity={true}
+        fontWeight="500"
         style={styles.mainSubtitle}
       >
         Ogni azione conta nella lotta contro la fame

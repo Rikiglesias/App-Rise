@@ -40,7 +40,12 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
 
   return (
     <View style={styles.progressContainer}>
-      <PerfectText size={12} lines={2} style={styles.progressLabel}>
+      <PerfectText
+        size={12}
+        lines={2}
+        fontWeight="400"
+        style={styles.progressLabel}
+      >
         Progresso: {progress}%
       </PerfectText>
       <View style={styles.progressBar}>

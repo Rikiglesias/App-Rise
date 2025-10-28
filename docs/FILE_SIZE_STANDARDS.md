@@ -178,11 +178,11 @@ npm run post-modifiche
 npm run helper-manuali
 ```
 
-### **File Attualmente in Refactoring**
-- `ImpactTabScreen.tsx`: 1082 righe → target 800 (282 eccesso)
-- `ActionButtons.tsx`: 916 righe → target 500 (416 eccesso)  
-- `HomeHeaderSubComponents.tsx`: 755 righe → target 500 (255 eccesso)
-- `FormattedText.tsx`: 568 righe → target 500 (68 eccesso)
+### **File Monitorati**
+- `ImpactTabScreen.tsx`: 129 righe (soglia 800) – refactor completato, monitoraggio continuo
+- `ActionButtons.tsx`: 31 righe (soglia 500) – legacy wrapper mantenuto solo per compatibilità
+- `HomeHeaderSubComponents.tsx`: rimosso, sostituito dai componenti modulari in `src/components/domain/HomeHeader/`
+- `FormattedText.tsx`: rimosso; utilizzare `PerfectText` come riferimento unico
 
 ---
 

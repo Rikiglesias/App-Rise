@@ -4,6 +4,8 @@ import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PerfectText, PlatformScrollView } from '../../../components/ui';
+// Ratio inline per evitare dipendenze condivise
+import responsiveSystem from '../../../shared/constants/responsiveSystem';
 
 import type { RootStackParamList } from '../../../navigation/types';
 import {
@@ -29,99 +31,228 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
     <SafeAreaView style={styles.container}>
       <PlatformScrollView>
         <View style={styles.header}>
-          <PerfectText size={36} lines={1} style={styles.year}>
+          <PerfectText
+            size={36}
+            lines={1}
+            fontWeight="600"
+            containerWidth={
+              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+            }
+            style={styles.year}
+          >
             2024
           </PerfectText>
-          <PerfectText size={20} lines={1} style={styles.title}>
+          <PerfectText
+            size={20}
+            lines={1}
+            fontWeight="600"
+            containerWidth={
+              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+            }
+            style={styles.title}
+          >
             Il Nostro Impatto
           </PerfectText>
-          <PerfectText size={16} lines={1} style={styles.subtitle}>
+          <PerfectText
+            size={16}
+            lines={1}
+            fontWeight="500"
+            containerWidth={
+              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+            }
+            style={styles.subtitle}
+          >
             Risultati raggiunti insieme
           </PerfectText>
         </View>
 
         <View style={styles.statsSection}>
           <View style={styles.statCard}>
-            <PerfectText size={28} lines={1} style={styles.statIcon}>
+            <PerfectText
+              size={28}
+              lines={1}
+              fontWeight="400"
+              style={styles.statIcon}
+            >
               🍽️
             </PerfectText>
-            <PerfectText size={24} lines={1} style={styles.statNumber}>
+            <PerfectText
+              size={24}
+              lines={1}
+              fontWeight="400"
+              style={styles.statNumber}
+            >
               3.14M
             </PerfectText>
-            <PerfectText size={18} lines={1} style={styles.statLabel}>
+            <PerfectText
+              size={18}
+              lines={1}
+              fontWeight="400"
+              style={styles.statLabel}
+            >
               Pasti Confezionati
             </PerfectText>
-            <PerfectText size={14} lines={2} style={styles.statDesc}>
+            <PerfectText
+              size={14}
+              lines={2}
+              fontWeight="400"
+              style={styles.statDesc}
+            >
               Nutrizione per comunità in difficoltà
             </PerfectText>
           </View>
 
           <View style={styles.statCard}>
-            <PerfectText size={28} lines={1} style={styles.statIcon}>
+            <PerfectText
+              size={28}
+              lines={1}
+              fontWeight="400"
+              style={styles.statIcon}
+            >
               📦
             </PerfectText>
-            <PerfectText size={24} lines={1} style={styles.statNumber}>
+            <PerfectText
+              size={24}
+              lines={1}
+              fontWeight="400"
+              style={styles.statNumber}
+            >
               16.3K
             </PerfectText>
-            <PerfectText size={18} lines={1} style={styles.statLabel}>
+            <PerfectText
+              size={18}
+              lines={1}
+              fontWeight="400"
+              style={styles.statLabel}
+            >
               Kit Prodotti
             </PerfectText>
-            <PerfectText size={14} lines={2} style={styles.statDesc}>
+            <PerfectText
+              size={14}
+              lines={2}
+              fontWeight="400"
+              style={styles.statDesc}
+            >
               Kit completi per emergenze
             </PerfectText>
           </View>
 
           <View style={styles.statCard}>
-            <PerfectText size={28} lines={1} style={styles.statIcon}>
+            <PerfectText
+              size={28}
+              lines={1}
+              fontWeight="400"
+              style={styles.statIcon}
+            >
               👥
             </PerfectText>
-            <PerfectText size={24} lines={1} style={styles.statNumber}>
+            <PerfectText
+              size={24}
+              lines={1}
+              fontWeight="400"
+              style={styles.statNumber}
+            >
               13K
             </PerfectText>
-            <PerfectText size={18} lines={1} style={styles.statLabel}>
+            <PerfectText
+              size={18}
+              lines={1}
+              fontWeight="400"
+              style={styles.statLabel}
+            >
               Volontari
             </PerfectText>
-            <PerfectText size={14} lines={2} style={styles.statDesc}>
+            <PerfectText
+              size={14}
+              lines={2}
+              fontWeight="400"
+              style={styles.statDesc}
+            >
               Persone che hanno fatto la differenza
             </PerfectText>
           </View>
         </View>
 
         <View style={styles.impactSection}>
-          <PerfectText size={18} lines={1} style={styles.impactTitle}>
+          <PerfectText
+            size={18}
+            lines={1}
+            fontWeight="400"
+            style={styles.impactTitle}
+          >
             Dove Arrivano i Nostri Aiuti
           </PerfectText>
 
           <View style={styles.impactList}>
             <View style={styles.impactItem}>
-              <PerfectText size={18} lines={1} style={styles.impactIcon}>
+              <PerfectText
+                size={18}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactIcon}
+              >
                 🌍
               </PerfectText>
-              <PerfectText size={16} lines={1} style={styles.impactText}>
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactText}
+              >
                 Africa Subsahariana
               </PerfectText>
             </View>
             <View style={styles.impactItem}>
-              <PerfectText size={18} lines={1} style={styles.impactIcon}>
+              <PerfectText
+                size={18}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactIcon}
+              >
                 🏫
               </PerfectText>
-              <PerfectText size={16} lines={1} style={styles.impactText}>
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactText}
+              >
                 Programmi scolastici
               </PerfectText>
             </View>
             <View style={styles.impactItem}>
-              <PerfectText size={18} lines={1} style={styles.impactIcon}>
+              <PerfectText
+                size={18}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactIcon}
+              >
                 🚨
               </PerfectText>
-              <PerfectText size={16} lines={1} style={styles.impactText}>
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactText}
+              >
                 Emergenze umanitarie
               </PerfectText>
             </View>
             <View style={styles.impactItem}>
-              <PerfectText size={18} lines={1} style={styles.impactIcon}>
+              <PerfectText
+                size={18}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactIcon}
+              >
                 🇮🇹
               </PerfectText>
-              <PerfectText size={16} lines={1} style={styles.impactText}>
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight="400"
+                style={styles.impactText}
+              >
                 Comunità italiane
               </PerfectText>
             </View>
@@ -129,13 +260,28 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
         </View>
 
         <View style={styles.goalSection}>
-          <PerfectText size={36} lines={1} style={styles.goalIcon}>
+          <PerfectText
+            size={36}
+            lines={1}
+            fontWeight="400"
+            style={styles.goalIcon}
+          >
             🎯
           </PerfectText>
-          <PerfectText size={18} lines={1} style={styles.goalTitle}>
+          <PerfectText
+            size={18}
+            lines={1}
+            fontWeight="400"
+            style={styles.goalTitle}
+          >
             Obiettivo 2025
           </PerfectText>
-          <PerfectText size={16} lines={2} style={styles.goalText}>
+          <PerfectText
+            size={16}
+            lines={2}
+            fontWeight="400"
+            style={styles.goalText}
+          >
             Superare i 4 milioni di pasti confezionati
           </PerfectText>
         </View>
@@ -158,13 +304,13 @@ const styles = StyleSheet.create({
   },
 
   year: {
-    fontWeight: '900',
+    fontWeight: '600',
     color: Colors.primary[600],
     textAlign: 'center',
   },
 
   title: {
-    fontWeight: '800',
+    fontWeight: '600',
     color: Colors.neutral[900],
     textAlign: 'center',
     marginTop: Spacing[2],
@@ -200,7 +346,7 @@ const styles = StyleSheet.create({
   },
 
   statNumber: {
-    fontWeight: '800',
+    fontWeight: '600',
     color: Colors.primary[600],
     textAlign: 'center',
   },
@@ -229,7 +375,7 @@ const styles = StyleSheet.create({
   },
 
   impactTitle: {
-    fontWeight: '700',
+    fontWeight: '600',
     color: Colors.neutral[900],
     textAlign: 'center',
     marginBottom: Spacing[4],
@@ -270,7 +416,7 @@ const styles = StyleSheet.create({
   },
 
   goalTitle: {
-    fontWeight: '700',
+    fontWeight: '600',
     color: Colors.primary[800],
     textAlign: 'center',
     marginBottom: Spacing[2],

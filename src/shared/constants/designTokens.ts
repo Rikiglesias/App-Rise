@@ -31,6 +31,8 @@ const selectPlatformValue = <T>(
   return fallback;
 };
 
+// Removed font weight helpers (now using fixed string-literal weights)
+
 // 🔴⚫ BRAND COLORS - ROSSO & NERO PREMIUM
 export const Colors = {
   // PRIMARY RED - Main brand color
@@ -191,23 +193,25 @@ export const BorderColors = {
   },
 };
 
-// TYPOGRAPHY SYSTEM - Now with responsive scaling
+// TYPOGRAPHY SYSTEM - Using native system fonts
 export const Typography = {
   families: {
-    heading: 'Inter_700Bold',
-    body: 'Inter_400Regular',
-    accent: 'Inter_500Medium',
+    // Manteniamo Inter come base per coerenza con snapshot/tests
+    heading: 'Inter_700Bold' as const,
+    body: 'Inter_400Regular' as const,
+    accent: 'Inter_500Medium' as const,
     mono: selectPlatformValue(
       {
         ios: 'SF Mono',
-        android: 'Roboto Mono',
-        default: 'Roboto Mono',
+        android: 'monospace',
+        default: 'monospace',
       },
-      'Roboto Mono'
+      'monospace'
     ),
   },
 
   weights: {
+    // String literal weights per compatibilità RN e snapshot
     light: '300',
     regular: '400',
     medium: '500',

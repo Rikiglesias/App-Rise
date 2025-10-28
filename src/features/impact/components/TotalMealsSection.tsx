@@ -48,6 +48,7 @@ export const TotalMealsSection: React.FC<Props> = ({
           <PerfectText
             size={24}
             lines={1}
+            fontWeight="400"
             immunity={true}
             style={styles.numbersTitle}
           >
@@ -56,6 +57,7 @@ export const TotalMealsSection: React.FC<Props> = ({
           <PerfectText
             size={16}
             lines={2}
+            fontWeight="400"
             immunity={true}
             style={styles.numbersSubtitle}
           >
@@ -89,6 +91,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.totalStatValue}
                 >
@@ -97,6 +100,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.totalStatLabel}
                 >
@@ -105,6 +109,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={14}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.totalStatSubtitle}
                 >
@@ -145,6 +150,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.totalStatValue}
                 >
@@ -153,6 +159,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.totalStatLabel}
                 >
@@ -161,6 +168,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={14}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={styles.totalStatSubtitle}
                 >

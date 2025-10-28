@@ -47,6 +47,7 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                 <PerfectText
                   size={35}
                   lines={1}
+                  fontWeight="400"
                   immunity={true}
                   style={baseMissionStyles.impactTitleGradient}
                 >
@@ -61,6 +62,7 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
             <PerfectText
               size={18}
               lines={3}
+              fontWeight="400"
               immunity={true}
               style={baseMissionStyles.missionText}
             >

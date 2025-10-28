@@ -215,6 +215,7 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
             <PerfectText
               size={16}
               lines={1}
+              fontWeight="400"
               style={{ ...styles.labelText, color: tabColors.labelColor }}
             >
               {options.tabBarAccessibilityLabel?.split(' ')[0]}

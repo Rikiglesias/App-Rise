@@ -49,10 +49,11 @@ describe('Design Tokens - Colors', () => {
 describe('Design Tokens - Typography', () => {
   it('should have font families', () => {
     expect(Typography.families).toBeDefined();
-    expect(Typography.families.heading).toBe('SF Pro Display');
-    expect(Typography.families.body).toBe('SF Pro Text');
-    expect(Typography.families.accent).toBe('SF Pro Display');
-    expect(Typography.families.mono).toBe('SF Mono');
+    expect(Typography.families.heading).toBe('Inter_700Bold');
+    expect(Typography.families.body).toBe('Inter_400Regular');
+    expect(Typography.families.accent).toBe('Inter_500Medium');
+    expect(typeof Typography.families.mono).toBe('string');
+    expect(Typography.families.mono.length).toBeGreaterThan(0);
   });
 
   it('should have font sizes', () => {

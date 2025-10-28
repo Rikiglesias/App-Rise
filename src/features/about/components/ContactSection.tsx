@@ -18,6 +18,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <PerfectText
             size={30}
             lines={1}
+            fontWeight="400"
             style={contactSectionStyles.categoryTitle}
           >
             I Nostri Contatti
@@ -25,6 +26,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <PerfectText
             size={15}
             lines={2}
+            fontWeight="400"
             style={contactSectionStyles.exploreSubtitleInline}
           >
             Sede di Bologna e recapiti ufficiali

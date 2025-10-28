@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
     textAlign: 'center',
     marginBottom: 12,
     color: '#007AFF',
@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
   updateText: {
     fontSize: 14,
     color: '#28a745',
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   errorText: {
     fontSize: 14,
     color: '#dc3545',
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -176,6 +176,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
 });

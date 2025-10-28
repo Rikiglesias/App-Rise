@@ -85,19 +85,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const FONT_WEIGHT_TO_FAMILY: Record<string, string> = {
-  normal: Typography.families.body,
-  bold: 'Inter_700Bold',
-  '100': Typography.families.body,
-  '200': Typography.families.body,
-  '300': 'Inter_400Regular',
-  '400': Typography.families.body,
-  '500': 'Inter_500Medium',
-  '600': 'Inter_600SemiBold',
-  '700': 'Inter_700Bold',
-  '800': 'Inter_800ExtraBold',
-  '900': 'Inter_900Black',
-};
+// Font mapping rimosso - ora usa font di sistema
 
 const DEFAULT_REFERENCE_WIDTH =
   responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
@@ -237,12 +225,8 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   const resolvedStyle = useMemo(() => {
     const mergedStyle = style ? StyleSheet.flatten(style) : undefined;
 
-    const normalizedWeight =
-      typeof fontWeight === 'string' ? fontWeight : String(fontWeight);
-
-    const fallbackFamily =
-      FONT_WEIGHT_TO_FAMILY[normalizedWeight] ?? Typography.families.body;
-    const fontFamily = mergedStyle?.fontFamily ?? fallbackFamily;
+    // Usa famiglia di default del Design System per coerenza visiva/snapshot
+    const fontFamily = Typography.families.body;
 
     const baseStyle: TextStyle = {
       fontSize: fontState.size,
@@ -252,6 +236,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
       includeFontPadding: false,
       textAlignVertical: 'center',
       fontFamily,
+      fontWeight,
     };
 
     return mergedStyle
@@ -277,11 +262,11 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 // ?? HELPER SHORTCUTS PER CASI COMUNI
 export const PerfectTitle = (
   props: Omit<PerfectTextProps, 'lines' | 'fontWeight'>
-) => <PerfectText {...props} lines={1} fontWeight="700" />;
+) => <PerfectText {...props} lines={1} fontWeight="600" />;
 
 export const PerfectSubtitle = (
   props: Omit<PerfectTextProps, 'lines' | 'fontWeight'>
-) => <PerfectText {...props} lines={2} fontWeight="600" />;
+) => <PerfectText {...props} lines={2} fontWeight="500" />;
 
 export const PerfectBody = (props: Omit<PerfectTextProps, 'lines'>) => (
   <PerfectText {...props} lines={3} />

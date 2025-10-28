@@ -28,13 +28,13 @@ export interface CategorySection {
 export interface ProfessionalTypography {
   display: {
     fontSize: number;
-    fontWeight: '800';
+    fontWeight: '600';
     letterSpacing: number;
     lineHeight: number;
   };
   headline: {
     fontSize: number;
-    fontWeight: '700';
+    fontWeight: '600';
     letterSpacing: number;
     lineHeight: number;
   };

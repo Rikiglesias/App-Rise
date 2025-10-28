@@ -1,13 +1,13 @@
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useRef } from 'react';
-import { Animated, Pressable, StyleSheet, Platform, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
 import {
   BorderRadius,
   Spacing,
   Typography,
 } from '../../shared/constants/designTokens';
-import { MaterialActionCard, PerfectText } from '../ui';
+import { PerfectText, UnifiedCard } from '../ui';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 interface ActionCardEnhancedProps {
@@ -145,7 +145,13 @@ const ActionCardIcon: React.FC<{
         },
       ]}
     >
-      <PerfectText size={28} lines={1} immunity={true} style={styles.icon}>
+      <PerfectText
+        size={28}
+        lines={1}
+        fontWeight="400"
+        immunity={true}
+        style={styles.icon}
+      >
         {icon}
       </PerfectText>
     </Animated.View>
@@ -161,6 +167,7 @@ const ActionCardContent: React.FC<{
     <PerfectText
       size={16}
       lines={1}
+      fontWeight="400"
       immunity={true}
       style={styles.title}
       accessible={false}
@@ -170,6 +177,7 @@ const ActionCardContent: React.FC<{
     <PerfectText
       size={14}
       lines={2}
+      fontWeight="400"
       immunity={true}
       style={styles.description}
       accessible={false}
@@ -214,28 +222,9 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
     </>
   );
 
-  // Android: usa MaterialActionCard con Material Design 3
-  if (Platform.OS === 'android') {
-    return (
-      <MaterialActionCard
-        variant="elevated"
-        elevation="level2"
-        onPress={handlePress}
-        style={styles.materialCard}
-      >
-        <View
-          style={[
-            styles.materialContent,
-            { backgroundColor: variantStyles.backgroundColor },
-          ]}
-        >
-          {cardContent}
-        </View>
-      </MaterialActionCard>
-    );
-  }
+  // Animazioni e interazione identiche su entrambe le piattaforme
+  // Android rendering props are applied directly on Animated.View
 
-  // iOS: mantiene comportamento esistente (animazioni complete)
   return (
     <Animated.View
       style={[
@@ -246,21 +235,34 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
           shadowColor: variantStyles.shadowColor,
         },
       ]}
+      renderToHardwareTextureAndroid
+      needsOffscreenAlphaCompositing
     >
       <Pressable
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={handlePress}
-        style={[
-          styles.content,
-          { backgroundColor: variantStyles.backgroundColor },
-        ]}
+        style={styles.pressable}
         accessible
         accessibilityRole="button"
         accessibilityLabel={`${title}: ${description}`}
-        accessibilityHint="Tocca per accedere a questa funzionalità"
+        accessibilityHint="Tocca per accedere a questa funzionalita"
       >
-        {cardContent}
+        <UnifiedCard
+          designVariant="material"
+          variant="elevated"
+          elevation="level2"
+          style={styles.iosCard}
+        >
+          <View
+            style={[
+              styles.content,
+              { backgroundColor: variantStyles.backgroundColor },
+            ]}
+          >
+            {cardContent}
+          </View>
+        </UnifiedCard>
       </Pressable>
     </Animated.View>
   );
@@ -275,6 +277,14 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     marginBottom: Spacing[4],
     elevation: 4, // Android shadow
+  },
+  pressable: {
+    width: '100%',
+    borderRadius: BorderRadius.xl,
+  },
+  iosCard: {
+    borderRadius: BorderRadius.xl,
+    overflow: 'hidden',
   },
   content: {
     alignItems: 'center',

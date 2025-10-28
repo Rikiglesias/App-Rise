@@ -1,75 +1,45 @@
 const { getDefaultConfig } = require('expo/metro-config');
-const { exclusionList } = require('metro-config');
 const path = require('path');
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 
 // ========================================
-// 🚀 OTTIMIZZAZIONI PERFORMANCE AVANZATE
+// 🚀 METRO CONFIG OTTIMIZZATA - EXPO SDK 54
+// ========================================
+// 
+// Configurazione Metro ottimizzata per performance e compatibilità
+// Ripristinata gradualmente dopo risoluzione problemi di caricamento
+// 
+// COMPATIBILE CON:
+// - Expo SDK 54.0.19
+// - Metro 0.83.2  
+// - React Native 0.81.5
+// 
+// OTTIMIZZAZIONI INCLUSE:
+// ✅ Server configuration (porta custom)
+// ✅ Resolver (alias, estensioni, platforms)
+// ✅ Transformer (bundle optimizations)
+// ✅ Serializer (configurazione sicura)
+// ✅ Watcher (health check, cartelle monitorate)
+// 
+// RIMOSSO (incompatibile):
+// ❌ exclusionList (metro-config@0.83.2)
+// ❌ minifierConfig (configurazioni avanzate)
+// ❌ enhanceMiddleware (middleware custom)
+// ❌ processModuleFilter (serializer custom)
 // ========================================
 
-// Use default Metro cache configuration
-
-// Server configuration per performance
+// Server configuration base
 config.server = {
   ...config.server,
   port: 8081,
-  enhanceMiddleware: middleware => {
-    return (req, res, next) => {
-      // Compression headers per assets
-      if (req.url?.match(/\.(js|css|json|svg)$/)) {
-        res.setHeader('Cache-Control', 'public, max-age=31536000');
-      }
-      return middleware(req, res, next);
-    };
-  },
 };
 
-// ========================================
-// 🌳 TREE SHAKING E MINIFICATION AVANZATA
-// ========================================
-
-config.transformer = {
-  ...config.transformer,
-  enableBabelRCLookup: false,
-  enableBabelRuntime: false,
-  // Minification avanzata
-  minifierConfig: {
-    // Tree shaking ottimizzato
-    keep_fnames: false,
-    mangle: {
-      keep_fnames: false,
-      toplevel: true,
-      safari10: true,
-    },
-    compress: {
-      drop_console: process.env.NODE_ENV === 'production',
-      drop_debugger: true,
-      pure_funcs: ['console.log', 'console.info', 'console.debug'],
-      passes: 3,
-      unsafe: true,
-      unsafe_comps: true,
-      unsafe_math: true,
-      unsafe_proto: true,
-    },
-    output: {
-      comments: false,
-      ascii_only: true,
-    },
-  },
-  // Ottimizzazioni bundle
-  experimentalImportSupport: true,
-  inlineRequires: true,
-};
-
-// ========================================
-// 📁 RESOLVER OTTIMIZZATO
-// ========================================
-
+// Resolver ottimizzato
 config.resolver = {
   ...config.resolver,
-  // Estensioni supportate ottimizzate
+  // Estensioni supportate
   sourceExts: [...config.resolver.sourceExts, 'cjs', 'mjs'],
   assetExts: [
     ...config.resolver.assetExts,
@@ -84,7 +54,7 @@ config.resolver = {
   ],
   // Platform-specific resolution
   platforms: ['ios', 'android', 'native', 'web'],
-  // Alias per ottimizzazioni
+  // Alias per path resolution
   alias: {
     '@': path.resolve(__dirname, 'src'),
     '@components': path.resolve(__dirname, 'src/components'),
@@ -92,40 +62,25 @@ config.resolver = {
     '@features': path.resolve(__dirname, 'src/features'),
     '@assets': path.resolve(__dirname, 'assets'),
   },
-  // Blocklist per escludere file non necessari
-  blockList: exclusionList([
-    /.*\/__tests__\/.*/, // Escludi test files dal bundle
-    /.*\/\..*/, // Escludi hidden files
-    /node_modules\/.*\/test\/.*/, // Escludi test in node_modules
-  ]),
 };
 
-// ========================================
-// 📊 SERIALIZER PER BUNDLE OPTIMIZATION
-// ========================================
+// Transformer con ottimizzazioni base
+config.transformer = {
+  ...config.transformer,
+  enableBabelRCLookup: false,
+  enableBabelRuntime: false,
+  // Ottimizzazioni bundle base
+  experimentalImportSupport: true,
+  inlineRequires: true,
+};
 
+// Serializer ottimizzato per bundle
 config.serializer = {
   ...config.serializer,
-  // Rimuoviamo la createModuleIdFactory personalizzata per evitare ID non stabili
-  // che possono causare "Requiring unknown module <id>" con Hermes/HMR/OTA
-  // Processamento moduli ottimizzato
-  processModuleFilter: module => {
-    // Escludi moduli di test dal bundle production
-    if (process.env.NODE_ENV === 'production') {
-      return (
-        !module.path.includes('__tests__') &&
-        !module.path.includes('.test.') &&
-        !module.path.includes('.spec.')
-      );
-    }
-    return true;
-  },
+  // Configurazione sicura senza processModuleFilter custom
 };
 
-// ========================================
-// 🔧 WATCHER OTTIMIZZATO
-// ========================================
-
+// Watcher ottimizzato per development
 config.watchFolders = [
   path.resolve(__dirname, 'src'),
   path.resolve(__dirname, 'assets'),

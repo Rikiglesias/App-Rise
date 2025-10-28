@@ -3,6 +3,7 @@ import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { PerfectText } from '../../../components/ui';
+// Ratio inline per evitare dipendenze condivise
 import { Spacing, Typography } from '../../../shared/constants/designTokens';
 import responsiveSystem, {
   scaleDimensionLinear,
@@ -61,6 +62,9 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
             size={TITLE_SIZE}
             lines={1}
             immunity={true}
+            containerWidth={
+              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+            }
             style={styles.titleText}
           >
             Il Nostro
@@ -69,6 +73,9 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
             size={TITLE_SIZE}
             lines={1}
             immunity={true}
+            containerWidth={
+              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+            }
             style={[styles.titleText, styles.titleAccent]}
           >
             Impatto
@@ -78,6 +85,9 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
           size={SUBTITLE_SIZE}
           lines={2}
           immunity={true}
+          containerWidth={
+            (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+          }
           style={styles.mainSubtitle}
         >
           Risultati concreti nella lotta contro la fame mondiale

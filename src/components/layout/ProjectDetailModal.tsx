@@ -56,12 +56,22 @@ const ProjectDetailModal: React.FC<Props> = ({
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.statusBadge}>
-              <PerfectText size={14} lines={1} style={styles.statusText}>
+              <PerfectText
+                size={14}
+                lines={1}
+                fontWeight="400"
+                style={styles.statusText}
+              >
                 {location.status}
               </PerfectText>
             </View>
             <PlatformTouchable style={styles.closeButton} onPress={onClose}>
-              <PerfectText size={16} lines={1} style={styles.closeButtonText}>
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight="400"
+                style={styles.closeButtonText}
+              >
                 ✕
               </PerfectText>
             </PlatformTouchable>
@@ -79,10 +89,20 @@ const ProjectDetailModal: React.FC<Props> = ({
               source={{ uri: location.image }}
             />
             <View style={styles.imageOverlay}>
-              <PerfectText size={20} lines={1} style={styles.locationName}>
+              <PerfectText
+                size={20}
+                lines={1}
+                fontWeight="400"
+                style={styles.locationName}
+              >
                 {location.name}
               </PerfectText>
-              <PerfectText size={14} lines={1} style={styles.locationCountry}>
+              <PerfectText
+                size={14}
+                lines={1}
+                fontWeight="400"
+                style={styles.locationCountry}
+              >
                 {location.country}
               </PerfectText>
             </View>
@@ -91,27 +111,47 @@ const ProjectDetailModal: React.FC<Props> = ({
           {/* Stats Cards */}
           <View style={styles.statsContainer}>
             <View style={styles.statCard}>
-              <PerfectText size={28} lines={1} style={styles.statNumber}>
+              <PerfectText
+                size={28}
+                lines={1}
+                fontWeight="400"
+                style={styles.statNumber}
+              >
                 {location.projects}
               </PerfectText>
-              <PerfectText size={12} lines={1} style={styles.statLabel}>
+              <PerfectText
+                size={12}
+                lines={1}
+                fontWeight="400"
+                style={styles.statLabel}
+              >
                 Progetti Attivi
               </PerfectText>
               <View style={styles.statIcon}>
-                <PerfectText size={18} lines={1}>
+                <PerfectText size={18} lines={1} fontWeight="400">
                   🎯
                 </PerfectText>
               </View>
             </View>
             <View style={styles.statCard}>
-              <PerfectText size={28} lines={1} style={styles.statNumber}>
+              <PerfectText
+                size={28}
+                lines={1}
+                fontWeight="400"
+                style={styles.statNumber}
+              >
                 {location.beneficiaries}
               </PerfectText>
-              <PerfectText size={12} lines={1} style={styles.statLabel}>
+              <PerfectText
+                size={12}
+                lines={1}
+                fontWeight="400"
+                style={styles.statLabel}
+              >
                 Beneficiari
               </PerfectText>
               <View style={styles.statIcon}>
-                <PerfectText size={18} lines={1}>
+                <PerfectText size={18} lines={1} fontWeight="400">
                   👥
                 </PerfectText>
               </View>
@@ -120,17 +160,32 @@ const ProjectDetailModal: React.FC<Props> = ({
 
           {/* Description */}
           <View style={styles.descriptionContainer}>
-            <PerfectText size={22} lines={1} style={styles.sectionTitle}>
+            <PerfectText
+              size={22}
+              lines={1}
+              fontWeight="400"
+              style={styles.sectionTitle}
+            >
               📝 Il Nostro Impatto
             </PerfectText>
-            <PerfectText size={14} lines={4} style={styles.description}>
+            <PerfectText
+              size={14}
+              lines={4}
+              fontWeight="400"
+              style={styles.description}
+            >
               {location.description}
             </PerfectText>
           </View>
 
           {/* Action Buttons */}
           <View style={styles.actionsContainer}>
-            <PerfectText size={20} lines={1} style={styles.sectionTitle}>
+            <PerfectText
+              size={20}
+              lines={1}
+              fontWeight="400"
+              style={styles.sectionTitle}
+            >
               🚀 Sostieni Questo Progetto
             </PerfectText>
             <View style={styles.buttonGrid}>
@@ -146,6 +201,7 @@ const ProjectDetailModal: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="400"
                   style={styles.primaryButtonText}
                 >
                   💝 Dona Ora
@@ -163,6 +219,7 @@ const ProjectDetailModal: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="400"
                   style={styles.secondaryButtonText}
                 >
                   🤝 Diventa Volontario

@@ -1,14 +1,26 @@
+// @ts-nocheck
 /* eslint-disable max-lines-per-function */
 import { renderHook, act } from '@testing-library/react-native';
 import {
   useAppLoading,
   useAppError,
   useAppUIState,
+  useProjectsUIState,
   useActiveProjects,
   useCompletedProjects,
   useProjectsStats,
+  useProjectsActions,
+  useFilteredProjects,
+  useImpactStats,
+  useMealsStats,
+  useVolunteersStats,
+  useKitsStats,
   useImpactProgress,
+  useImpactUIState,
+  useImpactActions,
+  useImpactTotals,
   useGlobalLoadingState,
+  useGlobalErrorState,
   useDashboardOverview,
 } from '../../stores/selectors';
 import { useAppStore } from '../../stores/appStore';
@@ -362,4 +374,177 @@ describe('Store Selectors', () => {
       expect(result.current.kits).toBe(Infinity); // 50/0
     });
   });
+
+  describe('Additional selectors', () => {
+    it('useProjectsUIState reflects loading, error and selection', () => {
+      const { result } = renderHook(() => useProjectsUIState());
+      expect(result.current).toEqual({
+        isLoading: false,
+        error: null,
+        selectedProject: null,
+        hasSelectedProject: false,
+        hasError: false,
+      });
+
+      act(() => {
+        useProjectsStore.getState().setLoading(true);
+        useProjectsStore.getState().setError('Projects error');
+        useProjectsStore.getState().selectProject(mockProjects[1]);
+      });
+
+      expect(result.current.isLoading).toBe(true);
+      expect(result.current.error).toBe('Projects error');
+      expect(result.current.selectedProject?.id).toBe('2');
+      expect(result.current.hasSelectedProject).toBe(true);
+      expect(result.current.hasError).toBe(true);
+    });
+
+    it('useProjectsActions manipulates project store state', () => {
+      const { result } = renderHook(() => useProjectsActions());
+
+      act(() => {
+        result.current.addProject({
+          id: '99',
+          title: 'Coverage Project',
+          location: 'Milan',
+          description: 'Test project for coverage',
+          impact: 'Demo',
+          status: 'active',
+          progress: 10,
+          createdAt: '2024-01-01',
+          updatedAt: '2024-01-01',
+        });
+      });
+      expect(
+        useProjectsStore.getState().projects.some(p => p.id === '99')
+      ).toBe(true);
+
+      act(() => {
+        result.current.updateProject('99', {
+          status: 'completed',
+          progress: 100,
+        });
+        result.current.selectProject(
+          useProjectsStore.getState().projects.find(p => p.id === '99') ?? null
+        );
+        result.current.setError('store issue');
+        result.current.clearError();
+        result.current.setLoading(true);
+      });
+
+      const storeState = useProjectsStore.getState();
+      const updated = storeState.projects.find(p => p.id === '99');
+      expect(updated?.status).toBe('completed');
+      expect(updated?.progress).toBe(100);
+      expect(storeState.selectedProject?.id).toBe('99');
+      expect(storeState.error).toBeNull();
+      expect(storeState.isLoading).toBe(true);
+
+      act(() => {
+        result.current.deleteProject('99');
+      });
+      expect(
+        useProjectsStore.getState().projects.some(p => p.id === '99')
+      ).toBe(false);
+    });
+
+    it('useFilteredProjects filters by title, location and description', () => {
+      const { result, rerender } = renderHook(
+        ({ query }) => useFilteredProjects(query),
+        {
+          initialProps: { query: 'Active' },
+        }
+      );
+
+      expect(result.current.map(project => project.id)).toEqual(['1']);
+
+      rerender({ query: 'Location 2' });
+      expect(result.current.map(project => project.id)).toEqual(['2']);
+
+      rerender({ query: 'Description 3' });
+      expect(result.current.map(project => project.id)).toEqual(['3']);
+
+      rerender({ query: '   ' });
+      expect(result.current).toHaveLength(mockProjects.length);
+    });
+
+    it('impact selectors return expected slices', () => {
+      const { result: statsResult } = renderHook(() => useImpactStats());
+      const { result: mealsResult } = renderHook(() => useMealsStats());
+      const { result: volunteersResult } = renderHook(() =>
+        useVolunteersStats()
+      );
+      const { result: kitsResult } = renderHook(() => useKitsStats());
+
+      expect(statsResult.current.meals.label).toBe('Pasti');
+      expect(mealsResult.current.target).toBe(2000);
+      expect(volunteersResult.current.current).toBe(500);
+      expect(kitsResult.current.label).toBe('Kit');
+    });
+
+    it('useImpactActions updates stats and flags', () => {
+      const { result } = renderHook(() => useImpactActions());
+
+      act(() => {
+        result.current.updateStat('meals', { current: 1500 });
+        result.current.setLoading(true);
+        result.current.setError('Impact issue');
+      });
+
+      const impactState = useImpactStore.getState();
+      expect(impactState.stats.meals.current).toBe(1500);
+      expect(impactState.isLoading).toBe(true);
+      expect(impactState.error).toBe('Impact issue');
+
+      act(() => {
+        result.current.clearError();
+      });
+      expect(useImpactStore.getState().error).toBeNull();
+    });
+
+    it('useImpactTotals calculates aggregates', () => {
+      const { result } = renderHook(() => useImpactTotals());
+      expect(result.current.totalCurrent).toBe(1700);
+      expect(result.current.totalTarget).toBe(3400);
+      expect(result.current.averageProgress).toBe(50);
+    });
+
+    it('useImpactUIState reflects loading/error state', () => {
+      const { result } = renderHook(() => useImpactUIState());
+      expect(result.current).toEqual({
+        isLoading: false,
+        error: null,
+        hasError: false,
+      });
+
+      act(() => {
+        useImpactStore.getState().setLoading(true);
+        useImpactStore.getState().setError('Impact error');
+      });
+
+      expect(result.current.isLoading).toBe(true);
+      expect(result.current.error).toBe('Impact error');
+      expect(result.current.hasError).toBe(true);
+    });
+
+    it('useGlobalErrorState aggregates errors and firstError', () => {
+      const { result } = renderHook(() => useGlobalErrorState());
+      expect(result.current.hasAnyError).toBe(false);
+
+      act(() => {
+        useProjectsStore.getState().setError('Projects down');
+      });
+
+      expect(result.current.hasAnyError).toBe(true);
+      expect(result.current.errors.projects).toBe('Projects down');
+      expect(result.current.firstError).toBe('Projects down');
+
+      act(() => {
+        useAppStore.getState().setError('App issue');
+      });
+
+      expect(result.current.firstError).toBe('App issue');
+    });
+  });
 });
+// @ts-nocheck

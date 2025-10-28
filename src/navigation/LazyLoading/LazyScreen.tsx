@@ -32,12 +32,19 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
   retry,
 }) => (
   <View style={styles.errorContainer}>
-    <PerfectText size={18} lines={1} style={styles.errorTitle} immunity={true}>
+    <PerfectText
+      size={18}
+      lines={1}
+      fontWeight="400"
+      style={styles.errorTitle}
+      immunity={true}
+    >
       Errore di caricamento
     </PerfectText>
     <PerfectText
       size={14}
       lines={2}
+      fontWeight="400"
       style={styles.errorMessage}
       immunity={true}
     >
@@ -47,6 +54,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
       <PerfectText
         size={16}
         lines={1}
+        fontWeight="400"
         style={styles.retryText}
         immunity={true}
         onPress={retry}

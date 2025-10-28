@@ -1,8 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
-import { DevelopmentScreen } from '../shared/screens';
 import { ImpactTabScreen } from '../features/impact';
+import MapModalScreen from '../screens/MapModalScreen';
+import { WrappedSimplePlaceholderScreen } from './LazyLoading';
 
 import type { ImpactStackParamList } from './types';
 
@@ -18,17 +19,26 @@ const ImpactStackNavigator: React.FC = () => {
       initialRouteName="Impact"
     >
       <ImpactStack.Screen name="Impact" component={ImpactTabScreen} />
-      <ImpactStack.Screen name="Beneficiaries" component={DevelopmentScreen} />
-      <ImpactStack.Screen name="Volunteers" component={DevelopmentScreen} />
-      <ImpactStack.Screen name="Partners" component={DevelopmentScreen} />
+      <ImpactStack.Screen
+        name="Beneficiaries"
+        component={WrappedSimplePlaceholderScreen}
+      />
+      <ImpactStack.Screen
+        name="Volunteers"
+        component={WrappedSimplePlaceholderScreen}
+      />
+      <ImpactStack.Screen
+        name="Partners"
+        component={WrappedSimplePlaceholderScreen}
+      />
       <ImpactStack.Screen
         name="MapModal"
-        component={DevelopmentScreen}
+        component={MapModalScreen}
         options={{ presentation: 'modal' }}
       />
       <ImpactStack.Screen
         name="Meals"
-        component={DevelopmentScreen}
+        component={WrappedSimplePlaceholderScreen}
         options={{
           title: 'Meal Packing',
           headerShown: false,
@@ -36,7 +46,7 @@ const ImpactStackNavigator: React.FC = () => {
       />
       <ImpactStack.Screen
         name="Kits"
-        component={DevelopmentScreen}
+        component={WrappedSimplePlaceholderScreen}
         options={{
           title: 'Kit Packing',
           headerShown: false,

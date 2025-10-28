@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
-
 import { Colors, Spacing, Typography } from '../../shared/constants';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 
+import { PerfectText } from './PerfectText';
 import AnimatedNumber from './AnimatedNumber';
 import { ProgressRing } from './ProgressRing';
 
@@ -46,13 +45,15 @@ const ProgressRingSection: React.FC<ProgressRingSectionProps> = React.memo(
       startAnimation={startAnimation}
     >
       <View style={styles.centerContent}>
-        <Text
-          style={[styles.percentage, { fontSize: textSize, color }]}
-          accessible
+        <PerfectText
+          size={textSize}
+          lines={1}
+          fontWeight="700"
+          style={[styles.percentage, { color }]}
           accessibilityLabel={`Progresso: ${progressPercentage} percento`}
         >
           {progressPercentage}%
-        </Text>
+        </PerfectText>
       </View>
     </ProgressRing>
   )
@@ -85,17 +86,36 @@ const ProgressTextSection: React.FC<ProgressTextSectionProps> = React.memo(
           style={[styles.currentValue, { color }]}
           startAnimation={startAnimation}
         />
-        <Text style={styles.targetValue}>/ {formatter(target)}</Text>
+        <PerfectText
+          size={14}
+          lines={1}
+          fontWeight="400"
+          style={styles.targetValue}
+        >
+          / {formatter(target)}
+        </PerfectText>
       </View>
 
-      <Text style={styles.label} accessible accessibilityRole="text">
+      <PerfectText
+        size={16}
+        lines={1}
+        fontWeight="500"
+        style={styles.label}
+        accessibilityRole="text"
+      >
         {label}
-      </Text>
+      </PerfectText>
 
       {sublabel !== undefined && sublabel !== null && sublabel !== '' && (
-        <Text style={styles.sublabel} accessible accessibilityRole="text">
+        <PerfectText
+          size={12}
+          lines={1}
+          fontWeight="400"
+          style={styles.sublabel}
+          accessibilityRole="text"
+        >
           {sublabel}
-        </Text>
+        </PerfectText>
       )}
     </View>
   )

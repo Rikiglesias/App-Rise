@@ -38,17 +38,25 @@ const ImpactHeroSection: React.FC<Props> = ({
       <PerfectText
         size={32}
         lines={1}
+        fontWeight="400"
         immunity={true}
         style={styles.heroCounter}
       >
         {heroData.mainStat}
       </PerfectText>
-      <PerfectText size={22} lines={1} immunity={true} style={styles.heroLabel}>
+      <PerfectText
+        size={22}
+        lines={1}
+        fontWeight="400"
+        immunity={true}
+        style={styles.heroLabel}
+      >
         {heroData.label}
       </PerfectText>
       <PerfectText
         size={15}
         lines={1}
+        fontWeight="400"
         immunity={true}
         style={styles.heroSubtitle}
       >

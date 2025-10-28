@@ -74,6 +74,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
             <PerfectText
               size={20}
               lines={1}
+              fontWeight="400"
               immunity={true}
               style={styles.buttonTitle}
             >
