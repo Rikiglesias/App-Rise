@@ -12,6 +12,9 @@ src/components/ui/Perfect*.tsx @Rikiglesias
 src/shared/utils/UniversalMillimetricSystem.ts @Rikiglesias
 src/shared/utils/SystemImmunity.ts @Rikiglesias
 src/shared/theme/UniversalTheme.tsx @Rikiglesias
+src/shared/constants/designTokens.ts @Rikiglesias
+src/shared/constants/responsiveSystem.ts @Rikiglesias
+src/shared/constants/platformDesignTokens.ts @Rikiglesias
 
 # 🚫 CRITICAL CONFIGURATION - DOPPIA APPROVAZIONE
 # File di configurazione critici
@@ -33,6 +36,13 @@ src/shared/services/errorTracking.ts @Rikiglesias
 scripts/ @Rikiglesias
 .cursorrules @Rikiglesias
 
+# 🧭 NAVIGATION (App flow)
+src/navigation/ @Rikiglesias
+
+# 🧩 LAYOUT & CARD SYSTEM
+src/components/layout/ @Rikiglesias
+src/components/ui/UnifiedCard/ @Rikiglesias
+
 # 📚 DOCUMENTATION
 # Documentazione tecnica
 docs/ @Rikiglesias
@@ -50,4 +60,4 @@ src/__tests__/visual/visual-diff.test.tsx @Rikiglesias
 src/features/home/ @Rikiglesias
 src/features/impact/ @Rikiglesias
 src/features/projects/ @Rikiglesias
-src/features/actions/ @Rikiglesias 
+src/features/actions/ @Rikiglesias
