@@ -22,7 +22,7 @@ rules:
       # Richiede PR per tutte le modifiche
       required_approving_review_count: 1
       dismiss_stale_reviews: true
-      require_code_owner_reviews: false
+      require_code_owner_reviews: true
       require_last_push_approval: true
 
   # 🧪 STATUS CHECKS REQUIRED
@@ -32,6 +32,10 @@ rules:
       required_status_checks:
         - '🎯 Visual Diff - Layout Regression Detection'
         - '🚨 Layout Regression Detection'
+        - '🔍 Quality Checks (typescript)'
+        - '🔍 Quality Checks (eslint)'
+        - '🔍 Quality Checks (prettier)'
+        - '🔍 Quality Checks (tests)'
         - 'build'
         - 'test'
       strict: true # Branch must be up to date

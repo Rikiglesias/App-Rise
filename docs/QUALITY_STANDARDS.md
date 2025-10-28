@@ -158,6 +158,40 @@ Ogni problema deve essere corretto **AUTOMATICAMENTE** dal sistema o **IMMEDIATA
 
 ---
 
+## 🔒 **QA Zero Tolleranza – Flusso Operativo**
+
+### PRE-MODIFICA (obbligatorio prima di lavorare)
+```
+npm run pre-modifiche
+```
+- Esegue: TypeScript, ESLint (0 warnings), Prettier (check), Test (Jest)
+- Blocca se qualsiasi controllo fallisce.
+
+### POST-MODIFICA (obbligatorio prima del push)
+```
+npm run post-modifiche
+```
+- Convalida i check e autorizza il commit come “pronto per sviluppo”.
+
+### Controllo Rigoroso (debug rapido)
+```
+npm run conta-problemi
+```
+- Riepilogo unico di errori/warnings TS/ESLint/Prettier/Jest con exit code bloccante.
+
+### Protezione Branch `master`
+- Richiesta Pull Request con almeno 1 review (CODEOWNERS obbligatori)
+- Vietati force-push e delete su branch protetti
+- Strict status checks abilitati con job richiesti del workflow CI:
+  - `🔍 Quality Checks (typescript)`
+  - `🔍 Quality Checks (eslint)`
+  - `🔍 Quality Checks (prettier)`
+  - `🔍 Quality Checks (tests)`
+  - Visual Diff checks, build e test laddove applicabili
+- Regole definite in `.github/ruleset.yml` e verificate da GitHub.
+
+---
+
 ## 🧪 **TESTING ENTERPRISE GOLD**
 
 ### **🏅 COVERAGE TARGET ENTERPRISE**
