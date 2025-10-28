@@ -32,6 +32,15 @@ yarn-error.*
 .DS_Store
 *.pem
 
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Finder metadata
+.AppleDouble
+.LSOverride
+
 # local env files
 .env
 .env*.local
@@ -80,6 +89,7 @@ coverage/
 
 # Bundle analysis reports (temporary)
 bundle-analysis-report.json
+complete-analysis-report.json
 
 # AGGIUNTE: Report temporanei e file di lavoro
 # Report ESLint temporanei
