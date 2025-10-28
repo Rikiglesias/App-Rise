@@ -1,11 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import MapView, { Marker, type Region } from 'react-native-maps';
 
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
@@ -16,6 +10,7 @@ import {
   Spacing,
   Typography,
 } from '../../shared/constants';
+import { PerfectText } from '../ui/PerfectText';
 
 export interface Location {
   id: string;
@@ -77,13 +72,13 @@ const SimpleMarker: React.FC<{ location: Location }> = React.memo(
 
         {/* Etichetta del paese */}
         <View style={styles.countryLabel}>
-          <Text
+          <PerfectText
+            size={TypographyTokens.styles.label.small}
+            lines={1}
             style={styles.countryText}
-            numberOfLines={1}
-            ellipsizeMode="tail"
           >
             {location.country}
-          </Text>
+          </PerfectText>
         </View>
       </View>
     );

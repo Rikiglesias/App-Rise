@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View, TextStyle } from 'react-native';
 
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
@@ -10,6 +10,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants';
+import { PerfectText } from '../../../components/ui/PerfectText';
 
 interface ImpactCardProps {
   title: string;
@@ -93,26 +94,35 @@ const AnimatedIcon: React.FC<{
   color: string;
   size: 'compact' | 'standard';
   pulseValue: Animated.Value;
-}> = ({ icon, color, size, pulseValue }) => (
-  <Animated.View
-    style={[
-      styles.iconContainer,
-      size === 'compact'
-        ? styles.compactIconContainer
-        : styles.standardIconContainer,
-      { backgroundColor: color, transform: [{ scale: pulseValue }] },
-    ]}
-  >
-    <Text
+}> = ({ icon, color, size, pulseValue }) => {
+  const iconFontSize =
+    (size === 'compact'
+      ? (styles.compactIcon as TextStyle)?.fontSize
+      : (styles.standardIcon as TextStyle)?.fontSize) ?? 20;
+
+  return (
+    <Animated.View
       style={[
-        styles.icon,
-        size === 'compact' ? styles.compactIcon : styles.standardIcon,
+        styles.iconContainer,
+        size === 'compact'
+          ? styles.compactIconContainer
+          : styles.standardIconContainer,
+        { backgroundColor: color, transform: [{ scale: pulseValue }] },
       ]}
     >
-      {icon}
-    </Text>
-  </Animated.View>
-);
+      <PerfectText
+        size={iconFontSize}
+        lines={1}
+        style={[
+          styles.icon,
+          size === 'compact' ? styles.compactIcon : styles.standardIcon,
+        ]}
+      >
+        {icon}
+      </PerfectText>
+    </Animated.View>
+  );
+};
 
 // Componente per il contenuto della card
 const CardContent: React.FC<{
@@ -122,55 +132,70 @@ const CardContent: React.FC<{
   variant: 'default' | 'elevated';
   size: 'compact' | 'standard';
   color: string;
-}> = ({ value, title, description, variant, size, color }) => (
-  <>
-    <Text
-      style={[
-        styles.value,
-        variant === 'default' ? styles.defaultValue : styles.elevatedValue,
-        size === 'compact' ? styles.compactValue : styles.standardValue,
-      ]}
-      numberOfLines={1}
-      adjustsFontSizeToFit
-    >
-      {value}
-    </Text>
+}> = ({ value, title, description, variant, size, color }) => {
+  const valueSize =
+    (size === 'compact'
+      ? (styles.compactValue as TextStyle)?.fontSize
+      : (styles.standardValue as TextStyle)?.fontSize) ?? 22;
+  const titleSize =
+    (size === 'compact'
+      ? (styles.compactTitle as TextStyle)?.fontSize
+      : (styles.standardTitle as TextStyle)?.fontSize) ?? 16;
+  const descriptionSize =
+    (size === 'compact'
+      ? (styles.compactDescription as TextStyle)?.fontSize
+      : (styles.standardDescription as TextStyle)?.fontSize) ?? 14;
 
-    <Text
-      style={[
-        styles.title,
-        variant === 'default' ? styles.defaultTitle : styles.elevatedTitle,
-        size === 'compact' ? styles.compactTitle : styles.standardTitle,
-      ]}
-      numberOfLines={1}
-      ellipsizeMode="tail"
-    >
-      {title}
-    </Text>
-
-    {description && (
-      <Text
+  return (
+    <>
+      <PerfectText
+        size={valueSize}
+        lines={1}
         style={[
-          styles.description,
-          variant === 'default'
-            ? styles.defaultDescription
-            : styles.elevatedDescription,
-          size === 'compact'
-            ? styles.compactDescription
-            : styles.standardDescription,
+          styles.value,
+          variant === 'default' ? styles.defaultValue : styles.elevatedValue,
+          size === 'compact' ? styles.compactValue : styles.standardValue,
         ]}
-        numberOfLines={2}
-        ellipsizeMode="tail"
       >
-        {description}
-      </Text>
-    )}
+        {value}
+      </PerfectText>
 
-    {variant === 'elevated' && (
-      <View style={[styles.accentLine, { backgroundColor: color }]} />
-    )}
-  </>
-);
+      <PerfectText
+        size={titleSize}
+        lines={1}
+        style={[
+          styles.title,
+          variant === 'default' ? styles.defaultTitle : styles.elevatedTitle,
+          size === 'compact' ? styles.compactTitle : styles.standardTitle,
+        ]}
+      >
+        {title}
+      </PerfectText>
+
+      {description && (
+        <PerfectText
+          size={descriptionSize}
+          lines={2}
+          style={[
+            styles.description,
+            variant === 'default'
+              ? styles.defaultDescription
+              : styles.elevatedDescription,
+            size === 'compact'
+              ? styles.compactDescription
+              : styles.standardDescription,
+          ]}
+        >
+          {description}
+        </PerfectText>
+      )}
+
+      {variant === 'elevated' && (
+        <View style={[styles.accentLine, { backgroundColor: color }]} />
+      )}
+    </>
+  );
+};
 
 export const ImpactCard: React.FC<ImpactCardProps> = React.memo(
   ({

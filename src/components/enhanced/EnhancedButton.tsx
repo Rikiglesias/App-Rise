@@ -4,8 +4,9 @@
  */
 
 import React, { useCallback } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { PerfectText } from '../ui/PerfectText';
 
 import {
   BorderRadius,
@@ -135,8 +136,14 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     >
       <Animated.View style={[buttonStyle, microInteraction.animatedStyle]}>
         <View style={styles.content}>
-          {icon && <Text style={styles.icon}>{icon}</Text>}
-          <Text style={textStyle}>{title}</Text>
+          {icon && (
+            <PerfectText size={18} lines={1} style={styles.icon}>
+              {icon}
+            </PerfectText>
+          )}
+          <PerfectText size={16} lines={1} style={textStyle}>
+            {title}
+          </PerfectText>
         </View>
       </Animated.View>
     </TouchableOpacity>

@@ -1,12 +1,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
-import { View, Text } from 'react-native';
-import { PlatformTouchable } from '../../../components/ui';
+import { View } from 'react-native';
+import { PlatformTouchable, PerfectText } from '../../../components/ui';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { useResponsive } from '../../../shared/hooks';
 import { chiSiamoSectionStyles } from '../styles';
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import type { ChiSiamoSectionProps } from '../types';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
@@ -33,24 +32,23 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               activeOpacity={0.7}
               style={chiSiamoSectionStyles.titleClickableContainer}
             >
-              <Text
+              <PerfectText
+                size={30}
+                lines={1}
                 style={[
-                  { fontSize: TypographyTokens.styles.headline.large },
                   chiSiamoSectionStyles.categoryTitle,
+                  chiSiamoSectionStyles.titleAccent,
                 ]}
               >
-                <Text
-                  style={[
-                    { fontSize: TypographyTokens.styles.headline.large },
-                    chiSiamoSectionStyles.titleAccent,
-                  ]}
-                >
-                  Chi Siamo
-                </Text>
-              </Text>
-              <Text style={chiSiamoSectionStyles.mainSubtitleInline}>
+                Chi Siamo
+              </PerfectText>
+              <PerfectText
+                size={15}
+                lines={2}
+                style={chiSiamoSectionStyles.mainSubtitleInline}
+              >
                 Non profit contro la fame - premi (i) per saperne di più
-              </Text>
+              </PerfectText>
             </PlatformTouchable>
             <PlatformTouchable
               onPress={handleInfoPress}

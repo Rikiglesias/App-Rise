@@ -53,10 +53,6 @@ Rise Against Hunger Italia combatte la fame nel mondo attraverso packaging event
 - **ESLint**: Code linting
 - **Prettier**: Code formatting
 - **TypeScript**: Static typing
-    {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
-  </PerfectText>
-</TouchableOpacity>
-```
 
 ---
 

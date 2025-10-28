@@ -8,12 +8,22 @@
  * - Auto-adattamento intelligente del fontSize
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Text, TextProps, TextStyle, View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import {
+  Text,
+  TextProps,
+  TextStyle,
+  View,
+  StyleSheet,
+  NativeSyntheticEvent,
+  TextLayoutEventData,
+  StyleProp,
+} from 'react-native';
 import responsiveSystem, {
   scaleFont,
   scaleDimensionLinear,
 } from '../../shared/constants/responsiveSystem';
+import { Typography } from '../../shared/constants/designTokens';
 import {
   getImmuneTextProps,
   debugImmunity,
@@ -60,11 +70,38 @@ export interface PerfectTextProps
   debug?: boolean;
 
   /** Stile custom */
-  style?: TextStyle | TextStyle[];
+  style?: StyleProp<TextStyle>;
 
   /** Immunità esplicita (opzionale, default true via SystemImmunity) */
   immunity?: boolean;
 }
+
+const MAX_CALC_ATTEMPTS = 12;
+const LINE_HEIGHT_RATIO = 1.2;
+
+const styles = StyleSheet.create({
+  hidden: {
+    opacity: 0,
+  },
+});
+
+const FONT_WEIGHT_TO_FAMILY: Record<string, string> = {
+  normal: Typography.families.body,
+  bold: 'Inter_700Bold',
+  '100': Typography.families.body,
+  '200': Typography.families.body,
+  '300': 'Inter_400Regular',
+  '400': Typography.families.body,
+  '500': 'Inter_500Medium',
+  '600': 'Inter_600SemiBold',
+  '700': 'Inter_700Bold',
+  '800': 'Inter_800ExtraBold',
+  '900': 'Inter_900Black',
+};
+
+const DEFAULT_REFERENCE_WIDTH =
+  responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const DEFAULT_REFERENCE_CONTAINER = DEFAULT_REFERENCE_WIDTH * 0.9;
 
 export const PerfectText: React.FC<PerfectTextProps> = ({
   children,
@@ -82,135 +119,154 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   immunity: _immunity,
   ...props
 }) => {
-  const referenceFontSize = size ?? fontSize ?? 16;
-  const [optimalFontSize, setOptimalFontSize] =
-    useState<number>(referenceFontSize);
-  const [isCalculating, setIsCalculating] = useState(true);
+  const shouldMeasure = typeof children === 'string';
 
-  const calculateOptimalFontSize = useCallback(() => {
-    if (typeof children !== 'string') {
-      setOptimalFontSize(scaleFont(referenceFontSize));
-      setIsCalculating(false);
-      return;
-    }
+  const scaledBase = useMemo(
+    () => scaleFont(size ?? fontSize ?? 16),
+    [fontSize, size]
+  );
+  const scaledMax = useMemo(
+    () => (typeof maxSize === 'number' ? scaleFont(maxSize) : undefined),
+    [maxSize]
+  );
+  const scaledMin = useMemo(
+    () => (typeof minSize === 'number' ? scaleFont(minSize) : undefined),
+    [minSize]
+  );
 
-    const text = children;
-    // reference via responsiveSystem.LOGICAL_REFERENCE
-
-    // Calcola larghezza container effettiva
-    // Usa scaling lineare coerente col font per mantenere gli stessi a capo
-    const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
-    const referenceContainerWidth = referenceWidth * 0.9;
-    const effectiveContainerWidth = containerWidth
-      ? scaleDimensionLinear(containerWidth)
-      : scaleDimensionLinear(referenceContainerWidth);
-
-    // Calcola fontSize base proporzionale
-    const baseFontSize = scaleFont(referenceFontSize);
-    const scaledMax =
-      typeof maxSize === 'number' ? scaleFont(maxSize) : undefined;
-    const scaledMin =
-      typeof minSize === 'number' ? scaleFont(minSize) : undefined;
-
-    // Trova il fontSize ottimale che rispetta il numero di righe
-    let testFontSize = baseFontSize;
+  const initialFontSize = useMemo(() => {
+    let base = scaledBase;
     if (typeof scaledMax === 'number') {
-      testFontSize = Math.min(testFontSize, scaledMax);
+      base = Math.min(base, scaledMax);
     }
-    let foundOptimal = false;
-
-    // Test partendo dal fontSize base e riducendo se necessario
-    for (let attempt = 0; attempt < 20 && !foundOptimal; attempt++) {
-      // Stima caratteri per riga (approssimazione accurata)
-      const avgCharWidth = testFontSize * 0.6; // Fattore empirico
-      const charsPerLine = Math.floor(effectiveContainerWidth / avgCharWidth);
-      const estimatedLines = Math.ceil(text.length / charsPerLine);
-
-      if (estimatedLines <= lines) {
-        foundOptimal = true;
-        break;
-      }
-
-      // Riduce font size del 5% per tentativo successivo
-      testFontSize = testFontSize * 0.95;
-    }
-
-    if (debug) {
-      // Debug info removed for production
-    }
-
     if (typeof scaledMin === 'number') {
-      testFontSize = Math.max(testFontSize, scaledMin);
+      base = Math.max(base, scaledMin);
     }
-    setOptimalFontSize(testFontSize);
-    setIsCalculating(false);
-  }, [
-    children,
-    referenceFontSize,
-    lines,
-    containerWidth,
-    debug,
-    maxSize,
-    minSize,
-  ]);
+    return base;
+  }, [scaledBase, scaledMax, scaledMin]);
+
+  const [fontState, setFontState] = useState(() => ({
+    size: initialFontSize,
+    measured: !shouldMeasure,
+    attempts: 0,
+  }));
+
+  const referenceWidth = useMemo(
+    () => containerWidth ?? DEFAULT_REFERENCE_CONTAINER,
+    [containerWidth]
+  );
+  const targetWidth = useMemo(
+    () => scaleDimensionLinear(referenceWidth),
+    [referenceWidth]
+  );
 
   useEffect(() => {
-    calculateOptimalFontSize();
-
-    // Debug immunità e avvisa se utente ha font scaling
     if (debug) {
       debugImmunity('PerfectText');
       warnIfUserScaled();
-
-      // Debug removed for production
     }
-  }, [calculateOptimalFontSize, debug]);
+  }, [debug]);
 
-  // Ottieni props per immunità completa alle impostazioni utente
+  useEffect(() => {
+    setFontState(prev => {
+      const next = {
+        size: initialFontSize,
+        measured: !shouldMeasure,
+        attempts: 0,
+      };
+      if (
+        Math.abs(prev.size - next.size) < 0.05 &&
+        prev.measured === next.measured &&
+        prev.attempts === next.attempts
+      ) {
+        return prev;
+      }
+      return next;
+    });
+  }, [initialFontSize, shouldMeasure, lines, containerWidth, children]);
+
+  const handleTextLayout = useCallback(
+    (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+      if (!shouldMeasure) {
+        return;
+      }
+
+      const layoutLines = event.nativeEvent.lines ?? [];
+      const usedLines = layoutLines.length;
+      const hasTruncation = layoutLines.some(
+        line => (line as unknown as { isTruncated?: boolean }).isTruncated
+      );
+      const overflow = hasTruncation || usedLines > lines;
+
+      setFontState(prev => {
+        if (!overflow || prev.attempts >= MAX_CALC_ATTEMPTS) {
+          if (prev.measured) {
+            return prev;
+          }
+          return { ...prev, measured: true };
+        }
+
+        const ratio = usedLines > 0 ? lines / usedLines : 1;
+        let nextSize = prev.size * Math.max(ratio, 0.82);
+        nextSize = Math.min(nextSize, prev.size * 0.97);
+        nextSize = Math.max(nextSize, prev.size - 0.75);
+
+        if (typeof scaledMin === 'number') {
+          nextSize = Math.max(nextSize, scaledMin);
+        }
+        if (typeof scaledMax === 'number') {
+          nextSize = Math.min(nextSize, scaledMax);
+        }
+
+        if (Math.abs(nextSize - prev.size) < 0.1) {
+          return { ...prev, measured: true };
+        }
+
+        return {
+          size: nextSize,
+          measured: false,
+          attempts: prev.attempts + 1,
+        };
+      });
+    },
+    [lines, scaledMax, scaledMin, shouldMeasure]
+  );
+
   const immuneProps = getImmuneTextProps();
 
-  // Stile ottimizzato per performance e consistency + immunità
-  const mergedStyle = Array.isArray(style) ? StyleSheet.flatten(style) : style;
-  const textStyle = {
-    fontSize: optimalFontSize,
-    fontWeight,
-    color,
-    textAlign,
-    lineHeight: optimalFontSize * 1.2, // Line height proporzionale
-    includeFontPadding: false, // Android consistency
-    textAlignVertical: 'center' as const,
-    ...(mergedStyle ?? {}),
-  };
+  const resolvedStyle = useMemo(() => {
+    const mergedStyle = style ? StyleSheet.flatten(style) : undefined;
 
-  if (isCalculating) {
-    // Placeholder durante calcolo (evita flash)
-    const referenceWidth2 = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
-    const referenceContainerWidth = referenceWidth2 * 0.9;
-    const targetWidth = containerWidth
-      ? scaleDimensionLinear(containerWidth)
-      : scaleDimensionLinear(referenceContainerWidth);
-    return (
-      <View
-        style={{ height: optimalFontSize * 1.2 * lines, maxWidth: targetWidth }}
-      >
-        <Text style={{ ...textStyle, opacity: 0 }}>{children}</Text>
-      </View>
-    );
-  }
+    const normalizedWeight =
+      typeof fontWeight === 'string' ? fontWeight : String(fontWeight);
 
-  const referenceWidth3 = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
-  const referenceContainerWidth = referenceWidth3 * 0.9;
-  const targetWidth = containerWidth
-    ? scaleDimensionLinear(containerWidth)
-    : scaleDimensionLinear(referenceContainerWidth);
+    const fallbackFamily =
+      FONT_WEIGHT_TO_FAMILY[normalizedWeight] ?? Typography.families.body;
+    const fontFamily = mergedStyle?.fontFamily ?? fallbackFamily;
+
+    const baseStyle: TextStyle = {
+      fontSize: fontState.size,
+      color,
+      textAlign,
+      lineHeight: fontState.size * LINE_HEIGHT_RATIO,
+      includeFontPadding: false,
+      textAlignVertical: 'center',
+      fontFamily,
+    };
+
+    return mergedStyle
+      ? { ...baseStyle, ...mergedStyle, fontFamily }
+      : baseStyle;
+  }, [style, fontState.size, color, textAlign, fontWeight]);
 
   return (
-    <View style={{ maxWidth: targetWidth }}>
+    <View style={{ width: targetWidth }}>
       <Text
         {...props}
         numberOfLines={lines}
-        {...immuneProps} // Props per immunità completa
-        style={textStyle}
+        {...immuneProps}
+        onTextLayout={shouldMeasure ? handleTextLayout : undefined}
+        style={[resolvedStyle, fontState.measured ? null : styles.hidden]}
       >
         {children}
       </Text>
@@ -218,10 +274,10 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   );
 };
 
-// 🎯 HELPER SHORTCUTS PER CASI COMUNI
+// ?? HELPER SHORTCUTS PER CASI COMUNI
 export const PerfectTitle = (
   props: Omit<PerfectTextProps, 'lines' | 'fontWeight'>
-) => <PerfectText {...props} lines={1} fontWeight="bold" />;
+) => <PerfectText {...props} lines={1} fontWeight="700" />;
 
 export const PerfectSubtitle = (
   props: Omit<PerfectTextProps, 'lines' | 'fontWeight'>

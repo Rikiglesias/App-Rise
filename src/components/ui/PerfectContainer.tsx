@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import {
   scaleSpacing,
-  scaleSize,
+  scaleDimensionLinear,
 } from '../../shared/constants/responsiveSystem';
 import { useUniversalTheme } from '../../shared/theme/UniversalTheme';
 
@@ -179,12 +179,13 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   const finalMarginV =
     marginVertical !== undefined ? scaleSpacing(marginVertical) : undefined;
 
-  const finalWidth = typeof width === 'number' ? scaleSize(width) : width;
-  const finalHeight = height ? scaleSize(height) : undefined;
+  const finalWidth =
+    typeof width === 'number' ? scaleDimensionLinear(width) : width;
+  const finalHeight = height ? scaleDimensionLinear(height) : undefined;
   const finalBorderRadius = (() => {
-    if (borderRadius !== undefined) return scaleSpacing(borderRadius);
+    if (borderRadius !== undefined) return scaleDimensionLinear(borderRadius);
     if (config && 'borderRadius' in config)
-      return scaleSpacing(config.borderRadius);
+      return scaleDimensionLinear(config.borderRadius);
     return undefined;
   })();
   const finalGap = gap ? scaleSpacing(gap) : undefined;

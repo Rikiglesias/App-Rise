@@ -194,30 +194,9 @@ export const BorderColors = {
 // TYPOGRAPHY SYSTEM - Now with responsive scaling
 export const Typography = {
   families: {
-    heading: selectPlatformValue(
-      {
-        ios: 'SF Pro Display',
-        android: 'Roboto',
-        default: 'Roboto',
-      },
-      'Roboto'
-    ),
-    body: selectPlatformValue(
-      {
-        ios: 'SF Pro Text',
-        android: 'Roboto',
-        default: 'Roboto',
-      },
-      'Roboto'
-    ),
-    accent: selectPlatformValue(
-      {
-        ios: 'SF Pro Display',
-        android: 'Roboto',
-        default: 'Roboto',
-      },
-      'Roboto'
-    ),
+    heading: 'Inter_700Bold',
+    body: 'Inter_400Regular',
+    accent: 'Inter_500Medium',
     mono: selectPlatformValue(
       {
         ios: 'SF Mono',

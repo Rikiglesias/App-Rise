@@ -73,6 +73,16 @@ export {
   FooterContainer,
 } from './PerfectContainer';
 
+// Perfect Image Components
+export {
+  PerfectImage,
+  HeroImage as PerfectHeroImage,
+  CardImage as PerfectCardImage,
+  ThumbnailImage as PerfectThumbnailImage,
+  AvatarImage as PerfectAvatarImage,
+  BannerImage as PerfectBannerImage,
+} from './PerfectImage';
+
 // Progress Components
 export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';

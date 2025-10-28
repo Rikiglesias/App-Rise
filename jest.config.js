@@ -22,4 +22,17 @@ module.exports = {
       statements: 85,
     },
   },
+  // Module name mapping per alias TypeScript
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@components/(.*)$': '<rootDir>/src/components/$1',
+    '^@shared/(.*)$': '<rootDir>/src/shared/$1',
+    '^@features/(.*)$': '<rootDir>/src/features/$1',
+    '^@assets/(.*)$': '<rootDir>/assets/$1',
+    '^@/navigation/(.*)$': '<rootDir>/src/navigation/$1',
+    '^@/stores/(.*)$': '<rootDir>/src/stores/$1',
+    '^@/screens/(.*)$': '<rootDir>/src/screens/$1',
+    '^@/hooks/(.*)$': '<rootDir>/src/shared/hooks/$1',
+    '^@/utils/(.*)$': '<rootDir>/src/shared/utils/$1',
+  },
 };

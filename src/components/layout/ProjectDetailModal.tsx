@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, Modal, StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 import { PlatformScrollView, PlatformTouchable, PerfectText } from '../ui';
+import { PerfectImage } from '../ui/PerfectImage';
 
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
@@ -70,10 +71,12 @@ const ProjectDetailModal: React.FC<Props> = ({
         <PlatformScrollView>
           {/* Hero Image */}
           <View style={styles.imageContainer}>
-            <Image
+            <PerfectImage
+              // iPhone 15 reference: full width minus horizontal margins (16*2 = 32)
+              width={361}
+              height={250}
+              borderRadius={24}
               source={{ uri: location.image }}
-              style={styles.heroImage}
-              resizeMode="cover"
             />
             <View style={styles.imageOverlay}>
               <PerfectText size={20} lines={1} style={styles.locationName}>

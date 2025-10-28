@@ -6,6 +6,16 @@ import { Colors } from './designTokens';
 // ===================================================================
 
 /**
+ * Helper function to convert hex color to rgba
+ */
+const hexToRgba = (hex: string, alpha: number): string => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
+/**
  * Shadows intelligenti che usano:
  * - iOS: shadowColor, shadowOffset, shadowOpacity, shadowRadius
  * - Android: elevation (più performante)
@@ -120,8 +130,8 @@ export const PlatformColors = {
 
   // Ripple colors per Material Design
   ripple: {
-    primary: `rgba(${Colors.primary[500]}, 0.2)`,
-    secondary: `rgba(${Colors.neutral[500]}, 0.1)`,
+    primary: hexToRgba(Colors.primary[500], 0.2),
+    secondary: hexToRgba(Colors.neutral[500], 0.1),
     light: 'rgba(255, 255, 255, 0.1)',
     dark: 'rgba(0, 0, 0, 0.1)',
   },

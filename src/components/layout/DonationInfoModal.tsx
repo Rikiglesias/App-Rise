@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { Animated, Modal, StyleSheet, View, Text } from 'react-native';
-import { PlatformTouchable } from '../ui';
+import { Animated, Modal, StyleSheet, View } from 'react-native';
+import { PlatformTouchable, PerfectText } from '../ui';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
@@ -149,41 +149,45 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
         <PlatformTouchable activeOpacity={1} onPress={handleStopPropagation}>
           <Animated.View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Come Funziona la Donazione</Text>
+              <PerfectText size={22} lines={2} style={styles.modalTitle}>
+                Come Funziona la Donazione
+              </PerfectText>
               <PlatformTouchable
                 onPress={onClose}
                 style={styles.modalCloseButton}
               >
-                <Text style={styles.modalCloseIcon}>×</Text>
+                <PerfectText size={18} lines={1} style={styles.modalCloseIcon}>
+                  ×
+                </PerfectText>
               </PlatformTouchable>
             </View>
 
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>
+              <PerfectText size={16} lines={6} style={styles.modalText}>
                 Puoi contribuire alla nostra missione in diversi modi:
                 attraverso acquisti solidali oppure con donazioni monetarie
                 dirette.
-              </Text>
-              <Text style={styles.modalText}>
+              </PerfectText>
+              <PerfectText size={16} lines={6} style={styles.modalText}>
                 Grazie agli accordi strategici con i nostri partner commerciali,
                 una percentuale degli acquisti effettuati tramite i nostri
                 canali viene automaticamente destinata ai progetti di Rise
                 Against Hunger Italia. Tu spendi lo stesso prezzo, ma aiuti a
                 combattere la fame!
-              </Text>
-              <Text style={styles.modalSubtitle}>
+              </PerfectText>
+              <PerfectText size={17} lines={2} style={styles.modalSubtitle}>
                 Se vuoi fare una donazione monetaria:
-              </Text>
+              </PerfectText>
               <View style={styles.modalBullets}>
-                <Text style={styles.modalBullet}>
+                <PerfectText size={16} lines={2} style={styles.modalBullet}>
                   • Clicca su &quot;Dona Ora&quot; per donazioni dirette
-                </Text>
-                <Text style={styles.modalBullet}>
+                </PerfectText>
+                <PerfectText size={16} lines={2} style={styles.modalBullet}>
                   • Ogni euro dona pasti nutritivi ai bambini
-                </Text>
-                <Text style={styles.modalBullet}>
+                </PerfectText>
+                <PerfectText size={16} lines={2} style={styles.modalBullet}>
                   • Sostieni progetti educativi e sviluppo sostenibile
-                </Text>
+                </PerfectText>
               </View>
             </View>
 
@@ -192,13 +196,25 @@ export const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                 onPress={onClose}
                 style={styles.modalButtonSecondary}
               >
-                <Text style={styles.modalButtonSecondaryText}>Ho Capito</Text>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  style={styles.modalButtonSecondaryText}
+                >
+                  Ho Capito
+                </PerfectText>
               </PlatformTouchable>
               <PlatformTouchable
                 onPress={onDonate}
                 style={styles.modalButtonPrimary}
               >
-                <Text style={styles.modalButtonPrimaryText}>Dona Subito</Text>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  style={styles.modalButtonPrimaryText}
+                >
+                  Dona Subito
+                </PerfectText>
               </PlatformTouchable>
             </View>
           </Animated.View>

@@ -3,9 +3,11 @@
 /**
  * Script di Conteggio RIGOROSO dei Problemi
  * ZERO TOLLERANZA: tutti gli errori E warnings sono bloccanti
+ *
+ * Nota: usa CommonJS per compatibilità Node senza type: module
  */
 
-import { execSync } from 'child_process';
+const { execSync } = require('child_process');
 
 console.log('🚨 CONTEGGIO RIGOROSO - ZERO TOLLERANZA\n');
 console.log('='.repeat(60));

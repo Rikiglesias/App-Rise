@@ -72,6 +72,7 @@
     "lint": "eslint src/ --ext .ts,.tsx --max-warnings 0"
   },
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.4.2",
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.3",
     "@react-navigation/bottom-tabs": "^7.3.14",
@@ -105,7 +106,6 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@react-native-community/eslint-config": "^3.2.0",
-    "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.1.10",

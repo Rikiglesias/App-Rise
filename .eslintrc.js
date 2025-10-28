@@ -118,6 +118,18 @@ module.exports = {
             message:
               'Sistema legacy vietato. Usa PerfectText/PerfectImage/PerfectContainer.',
           },
+          {
+            name: 'react-native',
+            importNames: ['Text'],
+            message:
+              'Import diretto vietato. Usa PerfectText per layout identici.',
+          },
+          {
+            name: 'react-native',
+            importNames: ['Image'],
+            message:
+              'Import diretto vietato. Usa PerfectImage per proporzioni identiche.',
+          },
         ],
         patterns: [
           '**/FormattedText',
@@ -184,6 +196,35 @@ module.exports = {
 
   // =================== CONFIGURAZIONI SPECIFICHE ===================
   overrides: [
+    {
+      files: [
+        '**/__tests__/**/*.{ts,tsx,js,jsx}',
+        'src/examples/**/*.{ts,tsx,js,jsx}',
+        'src/shared/examples/**/*.{ts,tsx,js,jsx}',
+        'src/shared/screens/TestAutomaticoScreen.tsx',
+        'src/shared/screens/DevelopmentScreen.tsx',
+        'src/shared/screens/SimplePlaceholderScreen.tsx',
+      ],
+      rules: {
+        'no-restricted-imports': 'off',
+      },
+    },
+    {
+      files: ['src/components/ui/PerfectText.tsx', 'src/components/ui/PerfectImage.tsx'],
+      rules: {
+        'no-restricted-imports': 'off',
+      },
+    },
+    {
+      files: [
+        'src/components/domain/HeaderImageSection.tsx',
+        'src/components/domain/HomeHeader/HeaderImageSection.tsx',
+        'src/features/home/components/HeroImage/index.tsx',
+      ],
+      rules: {
+        'no-restricted-imports': 'off',
+      },
+    },
     // =================== COMPONENTI REACT NATIVE ===================
     // UI Components (.tsx/.jsx) - VERDE: ≤300, GIALLO: 300-500, ROSSO: >500
     {

@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, TextStyle } from 'react-native';
 import { Surface } from 'react-native-paper';
 import { PlatformTouchable } from '../ui';
+import { PerfectText } from '../ui/PerfectText';
 import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
 import type {
   BentoActionCardProps,
@@ -38,13 +39,31 @@ export const CardHeader: React.FC<CardHeaderProps> = React.memo(
     <View style={cardStyles.cardHeader}>
       {/* 📍 Icon */}
       <View style={cardStyles.iconContainer}>
-        <Text style={cardStyles.iconText}>{action.icon}</Text>
+        <PerfectText
+          size={(cardStyles.iconText as TextStyle)?.fontSize ?? 18}
+          lines={1}
+          style={cardStyles.iconText}
+        >
+          {action.icon}
+        </PerfectText>
       </View>
 
       {/* 📝 Text Container */}
       <View style={cardStyles.textContainer}>
-        <Text style={cardStyles.cardSubtitle}>{action.subtitle}</Text>
-        <Text style={cardStyles.cardTitle}>{action.title}</Text>
+        <PerfectText
+          size={(cardStyles.cardSubtitle as TextStyle)?.fontSize ?? 16}
+          lines={2}
+          style={cardStyles.cardSubtitle}
+        >
+          {action.subtitle}
+        </PerfectText>
+        <PerfectText
+          size={(cardStyles.cardTitle as TextStyle)?.fontSize ?? 20}
+          lines={2}
+          style={cardStyles.cardTitle}
+        >
+          {action.title}
+        </PerfectText>
       </View>
     </View>
   )
@@ -85,9 +104,13 @@ export const BentoActionCard: React.FC<BentoActionCardProps> = React.memo(
               <CardHeader action={action} cardStyles={cardStyles} />
 
               {/* 📝 Description */}
-              <Text style={cardStyles.cardDescription}>
+              <PerfectText
+                size={(cardStyles.cardDescription as TextStyle)?.fontSize ?? 14}
+                lines={3}
+                style={cardStyles.cardDescription}
+              >
                 {action.description}
-              </Text>
+              </PerfectText>
             </View>
           </View>
         </Surface>

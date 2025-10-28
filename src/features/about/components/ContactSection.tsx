@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 
 import { PerfectText } from '../../../components/ui/PerfectText';
 import { contactSectionStyles } from '../styles';
@@ -22,9 +22,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           >
             I Nostri Contatti
           </PerfectText>
-          <Text style={contactSectionStyles.exploreSubtitleInline}>
+          <PerfectText
+            size={15}
+            lines={2}
+            style={contactSectionStyles.exploreSubtitleInline}
+          >
             Sede di Bologna e recapiti ufficiali
-          </Text>
+          </PerfectText>
         </View>
       </View>
       <View style={contactSectionStyles.contactsGrid}>

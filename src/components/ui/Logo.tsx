@@ -1,9 +1,10 @@
 import React from 'react';
-import type { ImageStyle, ViewStyle } from 'react-native';
-import { Image, StyleSheet, View } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Colors } from '../../shared/constants/designTokens';
 import logoImage from '../../../assets/icons/app/app-icon.png';
+import { PerfectImage } from './PerfectImage';
 
 // Immagine logo importata correttamente
 
@@ -30,23 +31,29 @@ const Logo: React.FC<LogoProps> = ({
     borderColor: Colors.primary[100],
   };
 
-  const imageStyle: ImageStyle = {
-    ...styles.logoImage,
-    width: showBackground ? size * 0.7 : size,
-    height: showBackground ? size * 0.7 : size,
-  };
+  const innerSize = showBackground ? size * 0.7 : size;
 
   if (showBackground !== null) {
     return (
       <View style={[containerStyle, style]}>
-        <Image source={logoImage} style={imageStyle} resizeMode="contain" />
+        <PerfectImage
+          width={innerSize}
+          height={innerSize}
+          source={logoImage}
+          imageStyle={{ resizeMode: 'contain' }}
+        />
       </View>
     );
   }
 
   return (
     <View style={style}>
-      <Image source={logoImage} style={imageStyle} resizeMode="contain" />
+      <PerfectImage
+        width={innerSize}
+        height={innerSize}
+        source={logoImage}
+        imageStyle={{ resizeMode: 'contain' }}
+      />
     </View>
   );
 };
@@ -63,9 +70,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     overflow: 'hidden',
   },
-  logoImage: {
-    // Immagine Rise Against Hunger
-  },
+  logoImage: {},
 });
 
 export default Logo;

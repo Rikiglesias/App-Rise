@@ -1,6 +1,7 @@
 import React from 'react';
-import { Animated, Image, Platform, View } from 'react-native';
+import { Animated, Platform, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { PerfectImage } from '../../../../components/ui/PerfectImage';
 import { type HeroImageProps } from '../../types';
 import { useHeroImageStyles } from './HeroImage.styles';
 
@@ -18,11 +19,13 @@ export const HeroImage: React.FC<HeroImageProps> = ({
     return (
       <View style={styles.imageSection}>
         <View style={styles.imageContainer}>
-          <Image
+          <PerfectImage
+            // iPhone 15 reference full width, ~1.1x height
+            width={393}
+            height={432}
+            borderRadius={24}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             source={require('../../../../../assets/images/hero-banner.png')}
-            style={styles.image}
-            resizeMode="cover"
           />
         </View>
       </View>
@@ -45,11 +48,13 @@ export const HeroImage: React.FC<HeroImageProps> = ({
           },
         ]}
       >
-        <Image
+        <PerfectImage
+          // iPhone 15 reference full width, ~1.1x height
+          width={393}
+          height={432}
+          borderRadius={24}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           source={require('../../../../../assets/images/hero-banner.png')}
-          style={styles.image}
-          resizeMode="cover"
         />
 
         <Animated.View

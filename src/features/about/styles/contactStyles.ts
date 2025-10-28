@@ -43,9 +43,8 @@ export const contactSectionStyles = StyleSheet.create({
     textShadowRadius: 8,
   },
 
-  // SUBTITLE INLINE INGRANDITA
+  // SUBTITLE INLINE INGRANDITA (fontSize gestito da PerfectText)
   exploreSubtitleInline: {
-    fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base per I nostri contatti
     fontWeight: Typography.weights.medium,
     color: '#374151',
     textAlign: 'center',

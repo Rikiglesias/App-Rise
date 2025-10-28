@@ -109,7 +109,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   // SUBTITLE INLINE INGRANDITO E ELEGANTE
   mainSubtitleInline: {
-    fontSize: TypographyTokens.styles.body.medium, // INGRANDITO: da sm a base per maggiore leggibilità
+    // fontSize gestito da PerfectText
     fontWeight: Typography.weights.medium,
     color: '#B91C1C', // ROSSO PIÙ SCURO COORDINATO
     textAlign: 'center',
@@ -120,7 +120,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   // SUBTITLE - SPACING E STILE OTTIMIZZATI (LEGACY)
   mainSubtitle: {
-    fontSize: TypographyTokens.styles.body.medium,
+    // fontSize gestito da PerfectText
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     textAlign: 'center',

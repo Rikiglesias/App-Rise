@@ -1,7 +1,11 @@
 import React from 'react';
-import { Animated, Image, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import { PerfectContainer, PerfectText } from '../ui';
-import { scaleFont } from '../../shared/constants/responsiveSystem';
+import { PerfectImage } from '../ui/PerfectImage';
+import {
+  scaleFont,
+  getMillimetricScale,
+} from '../../shared/constants/responsiveSystem';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
 // ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS + SISTEMA RESPONSIVE
@@ -163,12 +167,20 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               {/* Separatore elegante con logo simbolico centrale */}
               <View style={modernTitleStyles.titleSeparator}>
                 <View style={modernTitleStyles.separatorLine} />
-                <Image
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                  source={require('../../../assets/icons/app/logo.png')}
-                  style={modernTitleStyles.separatorLogo}
-                  resizeMode="contain"
-                />
+                {(() => {
+                  const size = modernTitleStyles.separatorLogo.width as number;
+                  const scale = getMillimetricScale();
+                  const ref = Math.round(size / scale);
+                  return (
+                    <PerfectImage
+                      width={ref}
+                      height={ref}
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                      source={require('../../../assets/icons/app/logo.png')}
+                      imageStyle={{ resizeMode: 'contain' }}
+                    />
+                  );
+                })()}
                 <View style={modernTitleStyles.separatorLine} />
               </View>
             </PerfectContainer>

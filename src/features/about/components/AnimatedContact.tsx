@@ -1,8 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { PlatformTouchable } from '../../../components/ui';
+import { PerfectText } from '../../../components/ui/PerfectText';
 
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
 import { animatedContactStyles } from '../styles';
@@ -42,12 +43,22 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
                 style={animatedContactStyles.contactIcon}
               />
               <View style={animatedContactStyles.contactTextContainer}>
-                <Text style={animatedContactStyles.contactButtonTitle}>
+                <PerfectText
+                  size={animatedContactStyles.contactButtonTitle.fontSize ?? 18}
+                  lines={1}
+                  style={animatedContactStyles.contactButtonTitle}
+                >
                   {contact.title}
-                </Text>
-                <Text style={animatedContactStyles.contactButtonSubtitle}>
+                </PerfectText>
+                <PerfectText
+                  size={
+                    animatedContactStyles.contactButtonSubtitle.fontSize ?? 16
+                  }
+                  lines={2}
+                  style={animatedContactStyles.contactButtonSubtitle}
+                >
                   {contact.subtitle}
-                </Text>
+                </PerfectText>
               </View>
             </View>
           </View>

@@ -1,7 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Image, Platform, View, type ImageStyle } from 'react-native';
+import { Animated, Platform, View, type ImageStyle } from 'react-native';
 
+import { PerfectImage } from '../ui/PerfectImage';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
 interface Props {
@@ -38,11 +39,13 @@ export const HeaderImageSection: React.FC<Props> = React.memo(
       return (
         <View style={styles.imageSection}>
           <View style={styles.imageContainer}>
-            <Image
+            <PerfectImage
+              // iPhone 15 reference full width, ~1.1x height
+              width={393}
+              height={432}
+              borderRadius={24}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               source={require('../../../assets/images/hero-banner.png')}
-              style={styles.image}
-              resizeMode="cover"
             />
           </View>
         </View>
@@ -65,11 +68,13 @@ export const HeaderImageSection: React.FC<Props> = React.memo(
             },
           ]}
         >
-          <Image
+          <PerfectImage
+            // iPhone 15 reference full width, ~1.1x height
+            width={393}
+            height={432}
+            borderRadius={24}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             source={require('../../../assets/images/hero-banner.png')}
-            style={styles.image}
-            resizeMode="cover"
           />
 
           <Animated.View

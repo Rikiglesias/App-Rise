@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { PerfectText } from '../ui/PerfectText';
 
 import { BorderRadius, Spacing } from '../../shared/constants';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
@@ -39,7 +40,9 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
 
   return (
     <View style={styles.progressContainer}>
-      <Text style={styles.progressLabel}>Progresso: {progress}%</Text>
+      <PerfectText size={12} lines={2} style={styles.progressLabel}>
+        Progresso: {progress}%
+      </PerfectText>
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>

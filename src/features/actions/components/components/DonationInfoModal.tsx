@@ -6,7 +6,6 @@ import {
   Platform,
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
 } from 'react-native';
 
@@ -208,7 +207,9 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       <View style={modalStyles.titleUnderline} />
                     </View>
 
-                    <Text
+                    <PerfectText
+                      size={16}
+                      lines={4}
                       style={[
                         modalStyles.modalText,
                         { fontWeight: Typography.weights.bold },
@@ -218,9 +219,11 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       monetaria diretta, clicca su &quot;Dona Ora&quot; per
                       contribuire immediatamente alla nostra missione contro la
                       fame.
-                    </Text>
+                    </PerfectText>
 
-                    <Text
+                    <PerfectText
+                      size={16}
+                      lines={4}
                       style={[
                         modalStyles.modalText,
                         { fontWeight: Typography.weights.bold },
@@ -230,9 +233,11 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       ogni acquisto dai nostri partner dona automaticamente una
                       percentuale per i nostri programmi. Tu spendi lo stesso
                       prezzo, ma aiuti a combattere la fame!
-                    </Text>
+                    </PerfectText>
 
-                    <Text
+                    <PerfectText
+                      size={16}
+                      lines={4}
                       style={[
                         modalStyles.modalText,
                         { fontWeight: Typography.weights.bold },
@@ -242,11 +247,15 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       Gift Card a prezzo normale (per te o come regalo), ma una
                       percentuale viene automaticamente donata per la
                       distribuzione di pasti. Aiuti senza costi extra!
-                    </Text>
+                    </PerfectText>
 
-                    <Text style={modalStyles.highlightText}>
+                    <PerfectText
+                      size={15}
+                      lines={2}
+                      style={modalStyles.highlightText}
+                    >
                       ✨ Il modo più semplice è partecipare ai nostri eventi!
-                    </Text>
+                    </PerfectText>
                   </View>
                 </View>
               </View>
@@ -285,7 +294,9 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       <View style={modalStyles.titleUnderline} />
                     </View>
 
-                    <Text
+                    <PerfectText
+                      size={16}
+                      lines={4}
                       style={[
                         modalStyles.modalText,
                         { fontWeight: Typography.weights.bold },
@@ -295,9 +306,11 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       monetaria diretta, clicca su &quot;Dona Ora&quot; per
                       contribuire immediatamente alla nostra missione contro la
                       fame.
-                    </Text>
+                    </PerfectText>
 
-                    <Text
+                    <PerfectText
+                      size={16}
+                      lines={4}
                       style={[
                         modalStyles.modalText,
                         { fontWeight: Typography.weights.bold },
@@ -307,9 +320,11 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       ogni acquisto dai nostri partner dona automaticamente una
                       percentuale per i nostri programmi. Tu spendi lo stesso
                       prezzo, ma aiuti a combattere la fame!
-                    </Text>
+                    </PerfectText>
 
-                    <Text
+                    <PerfectText
+                      size={16}
+                      lines={4}
                       style={[
                         modalStyles.modalText,
                         { fontWeight: Typography.weights.bold },
@@ -319,11 +334,15 @@ const DonationInfoModal: React.FC<DonationInfoModalProps> = ({
                       Gift Card a prezzo normale (per te o come regalo), ma una
                       percentuale viene automaticamente donata per la
                       distribuzione di pasti. Aiuti senza costi extra!
-                    </Text>
+                    </PerfectText>
 
-                    <Text style={modalStyles.highlightText}>
+                    <PerfectText
+                      size={15}
+                      lines={2}
+                      style={modalStyles.highlightText}
+                    >
                       ✨ Il modo più semplice è partecipare ai nostri eventi!
-                    </Text>
+                    </PerfectText>
                   </View>
                 </View>
               </LinearGradient>

@@ -1,8 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { PlatformTouchable, PerfectText } from '../../../components/ui';
+import { PerfectImage } from '../../../components/ui/PerfectImage';
 
 import { IMPACT_DATA } from '../../../data/impactData';
 import {
@@ -68,7 +69,12 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
   image,
 }) => (
   <View style={styles.storyCard}>
-    <Image source={{ uri: image }} style={styles.storyImage} />
+    <PerfectImage
+      width={280}
+      height={360}
+      borderRadius={24}
+      source={{ uri: image }}
+    />
     <LinearGradient
       colors={['transparent', 'rgba(0,0,0,0.7)']}
       style={styles.storyGradient}

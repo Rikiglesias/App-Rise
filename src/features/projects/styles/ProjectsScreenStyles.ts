@@ -31,14 +31,12 @@ export const useProjectsScreenStyles = () => {
           paddingHorizontal: Spacing[6],
         },
         headerTitle: {
-          fontSize: TypographyTokens.styles.headline.small,
           fontWeight: Typography.weights.extrabold,
           color: colors.neutral[0],
           textAlign: 'center',
           marginBottom: Spacing[2],
         },
         headerSubtitle: {
-          fontSize: TypographyTokens.styles.body.medium,
           color: colors.primary[100],
           textAlign: 'center',
           lineHeight: TypographyTokens.styles.body.medium * 1.4,
@@ -55,7 +53,6 @@ export const useProjectsScreenStyles = () => {
           borderColor: colors.neutral[100],
         },
         statsTitle: {
-          fontSize: TypographyTokens.styles.body.large,
           fontWeight: Typography.weights.bold,
           color: colors.neutral[900],
           textAlign: 'center',
@@ -71,13 +68,11 @@ export const useProjectsScreenStyles = () => {
           flex: 1,
         },
         statNumber: {
-          fontSize: TypographyTokens.styles.title.large,
           fontWeight: Typography.weights.bold,
           color: colors.primary[600],
           marginBottom: Spacing[1],
         },
         statLabel: {
-          fontSize: TypographyTokens.styles.body.small,
           color: colors.neutral[600],
           textAlign: 'center',
           fontWeight: Typography.weights.medium,
@@ -101,7 +96,6 @@ export const useProjectsScreenStyles = () => {
           marginBottom: Spacing[4],
         },
         emptyStateText: {
-          fontSize: TypographyTokens.styles.body.medium,
           color: colors.neutral[600],
           textAlign: 'center',
         },

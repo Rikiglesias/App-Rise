@@ -1,8 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
-import { Image, Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { PerfectText, PlatformTouchable } from '../../../components/ui';
+import { PerfectImage } from '../../../components/ui/PerfectImage';
 import {
   Colors,
   Spacing,
@@ -52,11 +53,13 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
         onPress={handleMapImagePress} // Mostra i dettagli dell'Italia per default
         activeOpacity={0.85}
       >
-        <Image
+        <PerfectImage
+          // iPhone 15 reference: container width ~393 - padding(16*2) = 361
+          width={361}
+          height={280}
+          borderRadius={20}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           source={require('../../../../assets/images/mappa.png')}
-          style={styles.mapImage}
-          resizeMode="cover"
         />
 
         {/* INDICATORE CLICCABILE */}

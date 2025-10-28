@@ -6,8 +6,8 @@
  * Versione ottimizzata con logging strutturato
  */
 
-import { execSync } from 'child_process';
-import { logger } from './utils/logger.js';
+const { execSync } = require('child_process');
+const { logger } = require('./utils/logger.js');
 
 // Configurazione da variabili ambiente
 const SILENT_MODE = process.env.WORKFLOW_SILENT === '1';

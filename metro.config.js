@@ -1,4 +1,5 @@
 const { getDefaultConfig } = require('expo/metro-config');
+const { exclusionList } = require('metro-config');
 const path = require('path');
 
 /** @type {import('expo/metro-config').MetroConfig} */
@@ -92,11 +93,11 @@ config.resolver = {
     '@assets': path.resolve(__dirname, 'assets'),
   },
   // Blocklist per escludere file non necessari
-  blockList: [
+  blockList: exclusionList([
     /.*\/__tests__\/.*/, // Escludi test files dal bundle
     /.*\/\..*/, // Escludi hidden files
     /node_modules\/.*\/test\/.*/, // Escludi test in node_modules
-  ],
+  ]),
 };
 
 // ========================================

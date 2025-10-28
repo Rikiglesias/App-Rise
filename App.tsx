@@ -1,5 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_800ExtraBold,
+  Inter_900Black,
+  useFonts,
+} from '@expo-google-fonts/inter';
+import {
   MD3DarkTheme,
   MD3LightTheme,
   PaperProvider,
@@ -81,6 +90,15 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold,
+    Inter_900Black,
+  });
+
   // Inizializza schermata OTA Updates
   const { showUpdateScreen, hideUpdateScreen } = useOTAUpdateScreen();
 
@@ -114,14 +132,18 @@ const App: React.FC = () => {
     };
   }, []);
 
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <ThemeProvider>
         <UniversalThemeProvider>
           <Main />
           {/* Schermata di aggiornamento OTA */}
-          <OTAUpdateScreen 
-            visible={showUpdateScreen} 
+          <OTAUpdateScreen
+            visible={showUpdateScreen}
             onComplete={hideUpdateScreen}
           />
         </UniversalThemeProvider>

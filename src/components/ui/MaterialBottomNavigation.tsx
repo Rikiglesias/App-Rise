@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Platform, View, StyleSheet, Text } from 'react-native';
+import { Platform, View, StyleSheet } from 'react-native';
 
 import { TouchableRipple } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -9,6 +9,7 @@ import {
   getAndroidMaterialProps,
   MaterialColors,
 } from '../../shared/constants/materialDesignTokens';
+import { PerfectText } from './PerfectText';
 
 interface NavigationItem {
   key: string;
@@ -180,25 +181,26 @@ const MaterialNavigationItem: React.FC<MaterialNavigationItemProps> = ({
             />
             {item.badge && item.badge > 0 && (
               <View style={styles.badge}>
-                <Text style={styles.badgeText}>
+                <PerfectText size={12} lines={1} style={styles.badgeText}>
                   {item.badge > 99 ? '99+' : item.badge.toString()}
-                </Text>
+                </PerfectText>
               </View>
             )}
           </View>
 
           {/* Label */}
           {showLabel && (
-            <Text
+            <PerfectText
+              size={14}
+              lines={1}
               style={[
                 styles.label,
                 isActive ? styles.activeLabel : styles.inactiveLabel,
                 { color: isActive ? colors.activeLabel : colors.inactiveLabel },
               ]}
-              numberOfLines={1}
             >
               {item.title}
-            </Text>
+            </PerfectText>
           )}
         </View>
       </TouchableRipple>
@@ -267,7 +269,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 2,
     letterSpacing: 0.5,
-    fontFamily: 'Roboto Medium',
+    fontFamily: 'Inter_500Medium',
   },
   activeLabel: {
     opacity: 1,

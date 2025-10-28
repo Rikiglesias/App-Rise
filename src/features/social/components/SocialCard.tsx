@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Image, View } from 'react-native';
+import { Animated, View } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PlatformTouchable, PerfectText } from '../../../components/ui';
 import {
@@ -11,7 +11,9 @@ import {
 import {
   DesignTokens,
   scaleFont,
+  getMillimetricScale,
 } from '../../../shared/constants/responsiveSystem';
+import { PerfectImage } from '../../../components/ui/PerfectImage';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -49,13 +51,31 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
           >
             <View style={styles.socialIconContainer}>
               {platform.icon ? (
-                <Image
-                  source={platform.icon}
-                  style={[
-                    styles.platformIcon,
-                    platform.id === 'linkedin' && styles.linkedinIcon,
-                  ]}
-                />
+                (() => {
+                  const baseWidth =
+                    (styles[
+                      platform.id === 'linkedin'
+                        ? 'linkedinIcon'
+                        : 'platformIcon'
+                    ].width as number) ?? 32;
+                  const baseHeight =
+                    (styles[
+                      platform.id === 'linkedin'
+                        ? 'linkedinIcon'
+                        : 'platformIcon'
+                    ].height as number) ?? 32;
+                  const scale = getMillimetricScale();
+                  const refWidth = Math.round(baseWidth / scale);
+                  const refHeight = Math.round(baseHeight / scale);
+                  return (
+                    <PerfectImage
+                      width={refWidth}
+                      height={refHeight}
+                      source={platform.icon}
+                      imageStyle={{ resizeMode: 'contain' }}
+                    />
+                  );
+                })()
               ) : (
                 <PerfectText size={24} lines={1} style={styles.socialIconEmoji}>
                   {platform.emoji}

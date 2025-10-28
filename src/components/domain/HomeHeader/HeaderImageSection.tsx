@@ -5,10 +5,11 @@
 
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Image, ImageStyle, View } from 'react-native';
+import { Animated, ImageStyle, View } from 'react-native';
 
 import { type HeaderImageSectionProps } from '../../../features/home/types/HomeHeaderTypes';
 import { HomeHeaderDesignTokens } from '../design-tokens/HomeHeaderTokens';
+import { PerfectImage } from '../../ui/PerfectImage';
 
 export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
   ({
@@ -32,11 +33,13 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
         <View style={styles.imageContainer}>
           <Animated.View style={[styles.flexOne, { opacity: imageAnim }]}>
             <Animated.View style={[styles.flexOne, imageStyle]}>
-              <Image
+              <PerfectImage
+                // iPhone 15 reference full width, ~1.1x height
+                width={393}
+                height={432}
+                borderRadius={24}
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 source={require('../../../../assets/images/hero-banner.png')}
-                style={styles.image as ImageStyle}
-                resizeMode="cover"
               />
               <LinearGradient
                 colors={HomeHeaderDesignTokens.gradients.header}
