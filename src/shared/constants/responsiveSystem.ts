@@ -1,14 +1,11 @@
 /**
- * RESPONSIVE SYSTEM - MATEMATICA PURA
+ * RESPONSIVE SYSTEM - ZERO RIDONDANZA
  * UNA SOLA FUNZIONE - MASSIMA SEMPLICITÀ
- * 
- * ⚠️ SOLO per uso INTERNO Perfect System components
- * ⚠️ NON importare nei features/ - USA Perfect components
  */
 
 import { Dimensions } from 'react-native';
 
-// 📱 REFERENCE: iPhone 15
+// REFERENCE: iPhone 15
 export const LOGICAL_REFERENCE = {
   width: 393,
   height: 852,
@@ -16,16 +13,9 @@ export const LOGICAL_REFERENCE = {
 } as const;
 
 /**
- * SCALE - Unica funzione di scaling
- * Scala qualsiasi valore proporzionalmente alla larghezza schermo
- * 
- * @param value - Valore da scalare (font size, padding, icon size, ecc)
- * @returns Valore scalato proporzionalmente
- * 
- * @example
- * scale(16)  // Font 16pt → scala su tutti device
- * scale(24)  // Icon 24px → scala su tutti device
- * scale(20)  // Padding 20px → scala su tutti device
+ * SCALE - Unica funzione scaling
+ * @param value - Valore da scalare
+ * @returns Valore * (larghezza_device / 393)
  */
 export const scale = (value: number): number => {
   try {
@@ -35,26 +25,15 @@ export const scale = (value: number): number => {
       return value * (width / LOGICAL_REFERENCE.width);
     }
   } catch {
-    // Fallback se Dimensions non disponibile
+    // Fallback
   }
-  return value; // Fallback: nessuno scaling
+  return value;
 };
 
-// 📦 EXPORT DEFAULT
+// EXPORT DEFAULT
 export default {
   LOGICAL_REFERENCE,
   scale,
 };
 
-// ⚠️ ALIAS per compatibilità (deprecati - usare scale())
-export const scaleFont = scale;
-export const scaleDimensionLinear = scale;
-export const getMillimetricScale = (): number => {
-  try {
-    // eslint-disable-next-line no-restricted-properties
-    const { width } = Dimensions.get('window');
-    return width / LOGICAL_REFERENCE.width;
-  } catch {
-    return 1;
-  }
-};
+// NESSUN ALIAS - SOLO scale()!

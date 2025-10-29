@@ -16,10 +16,7 @@ import {
   DimensionValue,
   StyleSheet,
 } from 'react-native';
-import {
-  scaleSpacing,
-  scaleDimensionLinear,
-} from '../../shared/constants/responsiveSystem';
+import { scale } from '../../shared/constants/responsiveSystem';
 import { getPerfectShadow, type ShadowType } from '../../shared/constants/perfectShadow';
 import { useUniversalTheme } from '../../shared/theme/UniversalTheme';
 
@@ -138,35 +135,34 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   const config = preset ? CONTAINER_PRESETS[preset] : null;
 
   // 📏 CALCOLA DIMENSIONI MILLIMETRICHE
-  const finalPadding =
-    padding !== undefined ? scaleSpacing(padding) : undefined;
+  const finalPadding = padding !== undefined ? scale(padding) : undefined;
   const finalPaddingH = (() => {
-    if (paddingHorizontal !== undefined) return scaleSpacing(paddingHorizontal);
-    if (config && 'padding' in config) return scaleSpacing(config.padding);
+    if (paddingHorizontal !== undefined) return scale(paddingHorizontal);
+    if (config && 'padding' in config) return scale(config.padding);
     return undefined;
   })();
   const finalPaddingV = (() => {
-    if (paddingVertical !== undefined) return scaleSpacing(paddingVertical);
-    if (config && 'padding' in config) return scaleSpacing(config.padding);
+    if (paddingVertical !== undefined) return scale(paddingVertical);
+    if (config && 'padding' in config) return scale(config.padding);
     return undefined;
   })();
 
-  const finalMargin = margin !== undefined ? scaleSpacing(margin) : undefined;
-  const finalMarginH =
-    marginHorizontal !== undefined ? scaleSpacing(marginHorizontal) : undefined;
-  const finalMarginV =
-    marginVertical !== undefined ? scaleSpacing(marginVertical) : undefined;
+  const finalMargin = margin !== undefined ? scale(margin) : undefined;
+  const finalPaddingHorizontal =
+    paddingHorizontal !== undefined ? scale(paddingHorizontal) : undefined;
+  const finalPaddingVertical =
+    paddingVertical !== undefined ? scale(paddingVertical) : undefined;
 
   const finalWidth =
-    typeof width === 'number' ? scaleDimensionLinear(width) : width;
-  const finalHeight = height ? scaleDimensionLinear(height) : undefined;
+    typeof width === 'number' ? scale(width) : width;
+  const finalHeight = height ? scale(height) : undefined;
   const finalBorderRadius = (() => {
-    if (borderRadius !== undefined) return scaleDimensionLinear(borderRadius);
+    if (borderRadius !== undefined) return scale(borderRadius);
     if (config && 'borderRadius' in config)
-      return scaleDimensionLinear(config.borderRadius);
+      return scale(config.borderRadius);
     return undefined;
   })();
-  const finalGap = gap ? scaleSpacing(gap) : undefined;
+  const finalGap = gap ? scale(gap) : undefined;
 
   // 🎨 RISOLVI COLORI AUTOMATICI
   const finalBackgroundColor = (() => {
