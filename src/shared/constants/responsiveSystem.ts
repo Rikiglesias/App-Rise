@@ -1,9 +1,9 @@
 /**
- * RESPONSIVE SYSTEM - CORE MINIMALE
- * SOLO per uso INTERNO Perfect System components
+ * RESPONSIVE SYSTEM - MATEMATICA PURA
+ * UNA SOLA FUNZIONE - MASSIMA SEMPLICITÀ
  * 
- * ⚠️ NON IMPORTARE QUESTO FILE NEI FEATURE FILES!
- * ⚠️ USA SOLO PerfectText/PerfectContainer/PerfectImage/PlatformIcon
+ * ⚠️ SOLO per uso INTERNO Perfect System components
+ * ⚠️ NON importare nei features/ - USA Perfect components
  */
 
 import { Dimensions } from 'react-native';
@@ -15,47 +15,46 @@ export const LOGICAL_REFERENCE = {
   scale: 2,
 } as const;
 
-// 📏 GET DIMENSIONS (uso interno)
-const getDimensions = () => {
+/**
+ * SCALE - Unica funzione di scaling
+ * Scala qualsiasi valore proporzionalmente alla larghezza schermo
+ * 
+ * @param value - Valore da scalare (font size, padding, icon size, ecc)
+ * @returns Valore scalato proporzionalmente
+ * 
+ * @example
+ * scale(16)  // Font 16pt → scala su tutti device
+ * scale(24)  // Icon 24px → scala su tutti device
+ * scale(20)  // Padding 20px → scala su tutti device
+ */
+export const scale = (value: number): number => {
   try {
     // eslint-disable-next-line no-restricted-properties
-    const { width, height } = Dimensions.get('window');
-    if (width > 0 && height > 0) return { width, height };
+    const { width } = Dimensions.get('window');
+    if (width > 0) {
+      return value * (width / LOGICAL_REFERENCE.width);
+    }
   } catch {
-    // Fallback
+    // Fallback se Dimensions non disponibile
   }
-  return { width: LOGICAL_REFERENCE.width, height: LOGICAL_REFERENCE.height };
+  return value; // Fallback: nessuno scaling
 };
 
-// 🧮 CORE: SCALE FACTOR (uso interno Perfect components)
-export const getMillimetricScale = (): number => {
-  const { width } = getDimensions();
-  return width / LOGICAL_REFERENCE.width;  // Matematica pura
-};
-
-// 📐 SCALE DIMENSION (uso interno Perfect components)
-export const scaleDimensionLinear = (value: number): number => {
-  return value * getMillimetricScale();
-};
-
-// 🔤 SCALE FONT (uso interno PerfectText)
-export const scaleFont = (size: number): number => {
-  const scaled = size * getMillimetricScale();
-  const minFont = 12; // Minimo leggibilità
-  return Math.max(scaled, minFont);
-};
-
-// 📦 EXPORT DEFAULT (uso interno)
+// 📦 EXPORT DEFAULT
 export default {
   LOGICAL_REFERENCE,
-  getMillimetricScale,
-  scaleDimensionLinear,
-  scaleFont,
+  scale,
 };
 
-// ⚠️ TUTTI GLI ALTRI SISTEMI SONO STATI ELIMINATI
-// ⚠️ USA SOLO PERFECT SYSTEM COMPONENTS:
-// - PerfectText
-// - PerfectContainer
-// - PerfectImage
-// - PlatformIcon
+// ⚠️ ALIAS per compatibilità (deprecati - usare scale())
+export const scaleFont = scale;
+export const scaleDimensionLinear = scale;
+export const getMillimetricScale = (): number => {
+  try {
+    // eslint-disable-next-line no-restricted-properties
+    const { width } = Dimensions.get('window');
+    return width / LOGICAL_REFERENCE.width;
+  } catch {
+    return 1;
+  }
+};
