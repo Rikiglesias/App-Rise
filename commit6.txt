@@ -1,0 +1,10 @@
+test: add useResponsive hook comprehensive tests
+
+- Add 20 tests for core responsive system hook
+- Test useResponsive (dimensions, breakpoints, tokens)
+- Test useIntelligentFontScaling (scaling helpers)
+- Test useBreakpointAware (wrapper utilities)
+- Test select helper and integration scenarios
+- Coverage: useResponsive.ts ~60%+ (critical paths covered)
+- Tests: 604 to 624 total
+- Note: Dimensions event tests skipped (RN mock limitation)
