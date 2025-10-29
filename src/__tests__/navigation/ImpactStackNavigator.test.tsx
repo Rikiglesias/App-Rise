@@ -8,7 +8,7 @@ jest.mock('../../features/impact', () => ({
   ImpactTabScreen: () => null,
 }));
 
-jest.mock('../../screens/MapModalScreen', () => ({
+jest.mock('../../features/impact/screens/MapModalScreen', () => ({
   __esModule: true,
   default: () => null,
 }));

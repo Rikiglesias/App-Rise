@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
 import { ImpactTabScreen } from '../features/impact';
-import MapModalScreen from '../screens/MapModalScreen';
+import MapModalScreen from '../features/impact/screens/MapModalScreen';
 import { WrappedSimplePlaceholderScreen } from './LazyLoading';
 
 import type { ImpactStackParamList } from './types';
