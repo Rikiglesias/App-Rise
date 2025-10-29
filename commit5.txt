@@ -1,0 +1,7 @@
+test: add AppNavigator and ImpactStackNavigator tests
+
+- Add 3 tests for AppNavigator configuration
+- Add 3 tests for ImpactStackNavigator structure  
+- Test component rendering and validity
+- Coverage: AppNavigator 0% to 50%, ImpactStackNavigator 0% to 50%
+- Tests: 598 to 604 total
