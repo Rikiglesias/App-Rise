@@ -162,13 +162,10 @@ export const ScalingFactors = {
   },
 } as const;
 
-// 🧮 MILLIMETRIC SCALE (universale: iPhone 15 393px con clamp 0.85-1.4)
+// 🧮 MILLIMETRIC SCALE (universale: iPhone 15 393px - SCALING PURO)
 export const getMillimetricScale = (): number => {
   const { width } = getDimensions();
-  const raw = width / LOGICAL_REFERENCE.width;
-  if (raw < 0.85) return 0.85;
-  if (raw > 1.4) return 1.4;
-  return raw;
+  return width / LOGICAL_REFERENCE.width;  // Matematica pura - nessun limite
 };
 
 // 📏 Linear dimension scaling without grid rounding (per testi/line-break identici)
@@ -263,17 +260,17 @@ export const scaleSize = (
  * - Supporta zoom accessibilità fino ai limiti calcolati
  */
 export const scaleFont = (size: number): number => {
-  // 🎯 SISTEMA MILLIMETRICO UNIVERSALE UNIFICATO (runtime-aware)
+  // 🎯 SCALING PROPORZIONALE PURO - MATEMATICA LINEARE
   const { width } = getDimensions();
-  const referenceWidth = 393; // iPhone 15 = RIFERIMENTO UNIVERSALE CORRETTO
+  const referenceWidth = 393; // iPhone 15 = RIFERIMENTO UNIVERSALE
 
-  let scale = width / referenceWidth;
-  if (scale < 0.85) scale = 0.85;
-  if (scale > 1.4) scale = 1.4;
-
+  const scale = width / referenceWidth;
   const scaled = size * scale;
+  
+  // Minimo leggibilità (solo protezione estrema)
   const minFont = INDUSTRY_STANDARDS.minReadableFont;
   const finalSize = Math.max(scaled, minFont);
+  
   return finalSize;
 };
 
