@@ -5,9 +5,12 @@ import {
   useAppLoading,
   useAppError,
   useAppUIState,
+  useAppActions,
   useProjectsUIState,
   useActiveProjects,
   useCompletedProjects,
+  useUpcomingProjects,
+  useSelectedProject,
   useProjectsStats,
   useProjectsActions,
   useFilteredProjects,
@@ -544,6 +547,145 @@ describe('Store Selectors', () => {
       });
 
       expect(result.current.firstError).toBe('App issue');
+    });
+  });
+
+  // ===================================================================
+  // EDGE CASES - Coverage Improvement
+  // ===================================================================
+
+  describe('useAppActions', () => {
+    it('should return memoized app actions', () => {
+      const { result, rerender } = renderHook(() => useAppActions());
+
+      const firstRender = result.current;
+
+      // Actions should be memoized
+      expect(firstRender).toHaveProperty('setLoading');
+      expect(firstRender).toHaveProperty('setError');
+      expect(firstRender).toHaveProperty('clearError');
+      expect(firstRender).toHaveProperty('setLastUpdated');
+
+      // Rerender should return same reference (memoization)
+      rerender();
+      expect(result.current).toBe(firstRender);
+    });
+
+    it('should have functional actions', () => {
+      const { result } = renderHook(() => useAppActions());
+
+      act(() => {
+        result.current.setLoading(true);
+      });
+      expect(useAppStore.getState().isLoading).toBe(true);
+
+      act(() => {
+        result.current.setError('Test error');
+      });
+      expect(useAppStore.getState().error).toBe('Test error');
+
+      act(() => {
+        result.current.clearError();
+      });
+      expect(useAppStore.getState().error).toBeNull();
+    });
+  });
+
+  describe('useUpcomingProjects', () => {
+    beforeEach(() => {
+      useProjectsStore.setState({ projects: mockProjects });
+    });
+
+    it('should return only upcoming projects', () => {
+      const { result } = renderHook(() => useUpcomingProjects());
+
+      expect(result.current).toHaveLength(1);
+      expect(result.current[0].id).toBe('3');
+      expect(result.current[0].status).toBe('upcoming');
+    });
+
+    it('should update when projects change', () => {
+      const { result } = renderHook(() => useUpcomingProjects());
+
+      expect(result.current).toHaveLength(1);
+
+      act(() => {
+        useProjectsStore.setState({
+          projects: [
+            ...mockProjects,
+            {
+              id: '4',
+              title: 'Another Upcoming',
+              location: 'Location 4',
+              description: 'Description 4',
+              impact: 'Impact 4',
+              status: 'upcoming' as const,
+              progress: 0,
+              createdAt: '2024-01-04',
+              updatedAt: '2024-01-04',
+            },
+          ],
+        });
+      });
+
+      expect(result.current).toHaveLength(2);
+    });
+
+    it('should return empty array when no upcoming projects', () => {
+      act(() => {
+        useProjectsStore.setState({
+          projects: mockProjects.filter(p => p.status !== 'upcoming'),
+        });
+      });
+
+      const { result } = renderHook(() => useUpcomingProjects());
+      expect(result.current).toHaveLength(0);
+    });
+
+    it('should be memoized', () => {
+      const { result, rerender } = renderHook(() => useUpcomingProjects());
+
+      const firstRender = result.current;
+      rerender();
+
+      // Same reference because projects didn't change
+      expect(result.current).toBe(firstRender);
+    });
+  });
+
+  describe('useSelectedProject', () => {
+    it('should return null when no project selected', () => {
+      const { result } = renderHook(() => useSelectedProject());
+      expect(result.current).toBeNull();
+    });
+
+    it('should return selected project', () => {
+      act(() => {
+        useProjectsStore.getState().selectProject('1');
+      });
+
+      const { result } = renderHook(() => useSelectedProject());
+      expect(result.current).toBe('1');
+    });
+
+    it('should update when selection changes', () => {
+      const { result, rerender } = renderHook(() => useSelectedProject());
+
+      expect(result.current).toBeNull();
+
+      act(() => {
+        useProjectsStore.getState().selectProject('2');
+      });
+
+      rerender();
+      expect(result.current).toBe('2');
+
+      act(() => {
+        useProjectsStore.getState().selectProject(null);
+      });
+
+      rerender();
+      expect(result.current).toBeNull();
     });
   });
 });
