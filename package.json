@@ -69,6 +69,8 @@
     "filesize:analyze": "node scripts/file-size-monitor.js",
     "filesize:report": "node scripts/file-size-monitor.js && echo '📊 Check file-size-report.json for details'",
     "refactor:check": "npm run filesize:analyze && echo '✅ File size compliance verified'",
+    "deadcode": "ts-prune -u",
+    "deadcode:ci": "ts-prune -u -e",
     "lint": "eslint src/ --ext .ts,.tsx --max-warnings 0"
   },
   "dependencies": {
@@ -128,6 +130,7 @@
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.1.0",
     "react-test-renderer": "^19.1.0",
+    "ts-prune": "^0.15.0",
     "typescript": "~5.9.2"
   },
   "lint-staged": {
