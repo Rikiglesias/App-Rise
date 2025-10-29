@@ -2,16 +2,17 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
 
-import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
-import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
-import { isSuccess } from '../../../shared/utils/result';
-import { logWarn } from '../../../shared/utils/logger';
 import { ChiSiamoSection, ContactSection, StoriaModal } from '../components';
 import { useChiSiamoAnimations } from '../hooks/useChiSiamoAnimations';
 import { mainStyles } from '../styles';
 import type { ChiSiamoScreenProps, ContactData } from '../types';
+
+import { PlatformScrollView, PlatformTouchable } from '@/components';
+import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { useLinkHandler } from '@/hooks/useLinkHandler';
+import { isSuccess } from '@/shared/utils/result';
+import { logWarn } from '@/shared/utils/logger';
 
 const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   const { openLink } = useLinkHandler({

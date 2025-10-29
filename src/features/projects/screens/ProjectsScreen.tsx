@@ -1,22 +1,22 @@
 import React from 'react';
 import { RefreshControl, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PlatformScrollView, PerfectText } from '../../../components/ui';
-
-import FilterTabs from '../../../components/ui/FilterTabs';
-import ProjectCard from '../../../components/ProjectCard';
-import { ProjectDetailModal } from '../../../components/layout';
-import {
-  ProjectsEmptyState,
-  ProjectsHeader,
-  ProjectsStats,
-} from '../../../components/domain/ProjectsScreenSections';
 import { useProjectsScreenLogic } from '../hooks/useProjectsScreenLogic';
 import { useProjectsScreenStyles } from '../styles/ProjectsScreenStyles';
 import type {
   Project,
   ProjectsScreenProps,
 } from '../types/ProjectsScreenTypes';
+
+import { PlatformScrollView, PerfectText } from '@/components';
+import FilterTabs from '@/components/ui/FilterTabs';
+import ProjectCard from '@/components/ProjectCard';
+import { ProjectDetailModal } from '@/components/layout';
+import {
+  ProjectsEmptyState,
+  ProjectsHeader,
+  ProjectsStats,
+} from '@/components/domain/ProjectsScreenSections';
 
 // Main Component - Now much smaller
 const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
