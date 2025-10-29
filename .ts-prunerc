@@ -1,0 +1,5 @@
+{
+  "project": "tsconfig.ts-prune.json",
+  "skip": "\\.(test|spec)\\.|__tests__|snapshots|visual-snapshots|scripts/",
+  "ignore": "node_modules|visual-snapshots|__mocks__|.*stories\\.tsx$"
+}
