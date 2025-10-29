@@ -22,7 +22,8 @@ class ProfessionalLogger {
   private readonly maxBufferSize = 1000;
 
   constructor() {
-    this.isProduction = !__DEV__;
+    // Safe handling of __DEV__ for Node/Jest/CI where it may be undefined
+    this.isProduction = typeof __DEV__ !== 'undefined' ? !__DEV__ : true;
 
     // Configurazione livelli basata su ambiente
     this.enabledLevels = new Set(
