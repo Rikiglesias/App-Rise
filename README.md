@@ -161,6 +161,77 @@ npm run conta-problemi
 
 ---
 
+## 🌿 **GIT WORKFLOW**
+
+### **🔀 Struttura Branch**
+
+#### **Branch Permanenti**
+- **`master`**: Production - Codice stabile in produzione
+- **`develop`**: Integration - Sviluppo attivo e testing
+- **`release/x.x`**: Release candidates - Preparazione release
+
+#### **Branch Temporanei**
+- **`feature/nome-feature`**: Nuove funzionalità
+  ```bash
+  git checkout -b feature/new-authentication develop
+  # ... sviluppo ...
+  git push origin feature/new-authentication
+  # Apri PR verso develop
+  ```
+
+- **`fix/nome-bug`**: Bugfix non critici
+  ```bash
+  git checkout -b fix/button-alignment develop
+  ```
+
+- **`hotfix/nome-urgente`**: Fix produzione urgenti
+  ```bash
+  git checkout -b hotfix/critical-crash master
+  # ... fix ...
+  # Merge in master E develop
+  ```
+
+- **`chore/nome-task`**: Manutenzione, refactor, CI/CD
+
+### **🔄 GitFlow Workflow**
+
+```
+1. Feature Development
+   feature/* → develop (PR + CI checks)
+
+2. Release Preparation
+   develop → release/x.x (stabilizzazione + testing)
+
+3. Production Deploy
+   release/x.x → master (tag + deploy automatico)
+
+4. Hotfix Urgente
+   hotfix/* → master (direct merge)
+   hotfix/* → develop (backport)
+```
+
+### **✅ Regole PR**
+
+- ✅ Tutti i check CI devono passare
+- ✅ Code review obbligatorio
+- ✅ Branch aggiornato con base
+- ✅ Commit message convenzionali:
+  - `feat:` nuove funzionalità
+  - `fix:` correzioni bug
+  - `chore:` manutenzione
+  - `docs:` documentazione
+  - `test:` test
+  - `refactor:` refactoring
+
+### **🚀 CI/CD Triggers**
+
+- **Push** su `master`, `develop` → Full CI/CD
+- **PR** verso `master`, `develop` → Quality checks, tests, visual diff
+- **Commit message `[build]`** → Force build iOS/Android
+- **Commit message `[ota]`** → Deploy OTA update
+
+---
+
 ## 🤝 **CONTRIBUTI**
 
 ### **👥 Team**
