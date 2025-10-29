@@ -1,0 +1,6 @@
+fix: resolve TypeScript errors in test files
+
+- Add required 'lines' prop to PerfectText test cases
+- Fix rerender call in useAnimatedPress test
+- All tests now pass without TypeScript errors
+- Zero linting issues remaining
