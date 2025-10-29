@@ -182,3 +182,5 @@ MIT License - Vedi [LICENSE](LICENSE) file per dettagli.
 ---
 
 **🎯 Rise Against Hunger Italia** - App React Native per combattere la fame nel mondo con tecnologie moderne e qualità enterprise.
+
+<!-- CI trigger: [build] -->
