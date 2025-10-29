@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, Text } from 'react-native';
 import { PerfectContainer, PerfectText } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 import {
@@ -29,9 +29,12 @@ const createModernTitleStyles = (responsiveSpacing: {
 
     titleContainer: {
       alignItems: 'center',
-      paddingVertical: 0,
-      position: 'relative',
     },
+
+    titleWrapper: {
+      alignItems: 'center',
+    },
+
 
     titleSeparator: {
       alignItems: 'center',
@@ -41,18 +44,10 @@ const createModernTitleStyles = (responsiveSpacing: {
       flexDirection: 'row',
     },
 
-    separatorLogo: {
-      width: responsiveSpacing.logoSize,
-      height: responsiveSpacing.logoSize,
-      marginHorizontal: responsiveSpacing.logoMargin,
-      opacity: 1,
-    },
-
     separatorLine: {
       height: HomeHeaderDesignTokens.dimensions.separatorHeight,
       width: responsiveSpacing.separatorLineWidth,
       backgroundColor: HomeHeaderDesignTokens.colors.primaryLight,
-      marginHorizontal: 0,
       borderRadius: 1,
       ...HomeHeaderDesignTokens.shadows.light,
     },
@@ -100,7 +95,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
     }, [mainTitleDelay]);
 
     return (
-      <View style={modernTitleStyles.container}>
+      <PerfectContainer style={modernTitleStyles.container}>
         <Animated.View
           style={{
             opacity: Animated.multiply(
@@ -120,20 +115,12 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
             ],
           }}
         >
-          <View style={modernTitleStyles.titleContainer}>
-            {/* TITOLO SISTEMA RESPONSIVE COMPLETO - SINGOLO FormattedText per Garantire 2 Righe Fisse */}
-            <PerfectContainer
-              gap={responsiveSpacing.stackSpacing}
-              style={{ alignItems: 'center' }}
-            >
-              {/* TITOLO COMPLETO - LAYOUT ASSOLUTO PER CONTROLLO TOTALE INTERLINEA */}
-              {/* ✅ PERFECT SYSTEM - Titolo principale su due righe separate */}
-              <View style={{ alignItems: 'center' }}>
+          <PerfectContainer style={modernTitleStyles.titleContainer}>
+            <PerfectContainer gap={responsiveSpacing.stackSpacing} style={modernTitleStyles.titleWrapper}>
                 {/* Prima riga: "Rise Against" */}
                 <PerfectText
-                  size={48}
+                  size={38}
                   lines={1}
-                  immunity={true}
                   fontWeight="900"
                   textAlign="center"
                   color={HomeHeaderDesignTokens.colors.primary}
@@ -142,51 +129,30 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 </PerfectText>
 
                 {/* Seconda riga: "Hunger Italia" con colori diversi */}
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <PerfectText
-                    size={48}
-                    lines={1}
-                    immunity={true}
-                    fontWeight="900"
-                    color="#DC2626"
-                  >
-                    Hunger{' '}
-                  </PerfectText>
-                  <PerfectText
-                    size={48}
-                    lines={1}
-                    immunity={true}
-                    fontWeight="900"
-                    color={HomeHeaderDesignTokens.colors.dark}
-                  >
-                    Italia
-                  </PerfectText>
-                </View>
-              </View>
+                <PerfectText
+                  size={38}
+                  lines={1}
+                  fontWeight="900"
+                  textAlign="center"
+                >
+                  <Text style={{ color: HomeHeaderDesignTokens.colors.primary }}>Hunger </Text>
+                  <Text style={{ color: HomeHeaderDesignTokens.colors.dark }}>Italia</Text>
+                </PerfectText>
 
-              {/* Separatore elegante con logo simbolico centrale */}
-              <View style={modernTitleStyles.titleSeparator}>
-                <View style={modernTitleStyles.separatorLine} />
-                {(() => {
-                  const size = modernTitleStyles.separatorLogo.width as number;
-                  const scale = getMillimetricScale();
-                  const ref = Math.round(size / scale);
-                  return (
-                    <PerfectImage
-                      width={ref}
-                      height={ref}
-                      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                      source={require('../../../assets/icons/app/logo.png')}
-                      imageStyle={{ resizeMode: 'contain' }}
-                    />
-                  );
-                })()}
-                <View style={modernTitleStyles.separatorLine} />
-              </View>
+              {/* Separatore con logo centrale */}
+              <PerfectContainer style={modernTitleStyles.titleSeparator}>
+                <PerfectContainer style={modernTitleStyles.separatorLine} />
+                <PerfectImage
+                  width={Math.round(responsiveSpacing.logoSize / getMillimetricScale())}
+                  height={Math.round(responsiveSpacing.logoSize / getMillimetricScale())}
+                  source={require('../../../assets/icons/app/logo.png')}
+                />
+                <PerfectContainer style={modernTitleStyles.separatorLine} />
+              </PerfectContainer>
             </PerfectContainer>
-          </View>
+          </PerfectContainer>
         </Animated.View>
-      </View>
+      </PerfectContainer>
     );
   }
 );

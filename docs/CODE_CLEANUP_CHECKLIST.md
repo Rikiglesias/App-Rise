@@ -6,6 +6,70 @@
 
 ---
 
+## 🔥 REGOLA #0: SOLO PERFECT SYSTEM (CRITICA!)
+
+### **0.1 ZERO import responsiveSystem**
+- [ ] Il file NON deve importare `responsiveSystem`
+- [ ] Cerca: `from.*responsiveSystem`
+- [ ] Se trovato → ELIMINA e usa Perfect components
+
+**Esempio**:
+```typescript
+// ❌ VIETATO ASSOLUTAMENTE
+import { scaleDimensionLinear, scaleFont } from '@/shared/constants/responsiveSystem';
+
+<MaterialCommunityIcons size={scaleDimensionLinear(24)} />
+
+// ✅ OBBLIGATORIO
+import { PlatformIcon } from '@/components/ui';
+
+<PlatformIcon name="heart" size={24} />  // Scala automaticamente
+```
+
+---
+
+### **0.2 ZERO scaling manuale**
+- [ ] Nessun `scaleDimensionLinear()` nel file
+- [ ] Nessun `scaleFont()` nel file
+- [ ] Nessun `TypographyTokens` importato
+- [ ] Nessun `SpacingTokens` importato
+
+**Perché?**
+```
+Se usi Perfect System, NON devi scalare manualmente.
+Perfect components scalano AUTOMATICAMENTE tutto.
+
+scaleDimensionLinear() = RIDONDANTE
+scaleFont() = RIDONDANTE
+TypographyTokens = RIDONDANTE
+SpacingTokens = RIDONDANTE (usa spacing={16} direttamente)
+```
+
+---
+
+### **0.3 USA Perfect Components**
+- [ ] `<PerfectText>` invece di `<Text>`
+- [ ] `<PerfectContainer>` invece di `<View>`
+- [ ] `<PerfectImage>` invece di `<Image>`
+- [ ] `<PlatformIcon>` invece di `MaterialCommunityIcons` + scale
+
+**Tabella conversione**:
+```typescript
+// ❌ PRIMA (manuale)
+import { scaleDimensionLinear } from '@/responsiveSystem';
+<MaterialCommunityIcons size={scaleDimensionLinear(24)} />
+<View style={{ padding: scaleDimensionLinear(16) }} />
+<Text style={{ fontSize: scaleFont(16) }}>Hello</Text>
+
+// ✅ DOPO (automatico)
+import { PlatformIcon, PerfectContainer, PerfectText } from '@/components/ui';
+<PlatformIcon name="heart" size={24} />
+<PerfectContainer padding={16} />
+<PerfectText size={16}>Hello</PerfectText>
+```
+
+---
+
 ## ✅ PARTE 1: IMPORT & DIPENDENZE
 
 ### **1.1 Import Inutili**
@@ -337,6 +401,252 @@ import { scaleDimensionLinear } from '@/constants';  // Funzione pura
 
 ---
 
+## ✅ PARTE 11: AUDIT RIGA PER RIGA (RIGOROSO)
+
+### **11.1 View Nativi → PerfectContainer**
+- [ ] Cerca TUTTI i `<View` nel file
+- [ ] Sostituisci con `<PerfectContainer>`
+- [ ] Rimuovi import `View` da react-native se non più usato
+- [ ] Verifica che ogni PerfectContainer abbia senso
+
+**Esempio**:
+```typescript
+// ❌ MALE
+import { View } from 'react-native';
+<View style={styles.container}>
+  <View style={{ alignItems: 'center' }}>
+    <Text>Hello</Text>
+  </View>
+</View>
+
+// ✅ BENE
+import { PerfectContainer } from '@/components/ui';
+<PerfectContainer style={styles.container}>
+  <PerfectContainer style={styles.centered}>
+    <PerfectText>Hello</PerfectText>
+  </PerfectContainer>
+</PerfectContainer>
+```
+
+---
+
+### **11.2 Magic Colors Hardcoded**
+- [ ] Cerca `color="#` o `backgroundColor="#` nel file
+- [ ] Sostituisci con `Colors.primary[600]` o `Colors.neutral[X]`
+- [ ] Verifica che Colors sia importato
+
+**Esempio**:
+```typescript
+// ❌ MALE
+color="#DC2626"
+backgroundColor="#FFFFFF"
+
+// ✅ BENE
+import { Colors } from '@/shared/constants';
+color={Colors.primary[600]}
+backgroundColor={Colors.neutral[0]}
+```
+
+---
+
+### **11.3 Inline Styles**
+- [ ] Cerca `style={{ ` nel file
+- [ ] Sposta TUTTI gli stili inline nel StyleSheet
+- [ ] Crea stili nominati e riutilizzabili
+
+**Esempio**:
+```typescript
+// ❌ MALE
+<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+<View style={{ alignItems: 'center' }}>
+
+// ✅ BENE
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  centered: {
+    alignItems: 'center',
+  },
+});
+
+<PerfectContainer style={styles.row}>
+<PerfectContainer style={styles.centered}>
+```
+
+---
+
+### **11.4 Props Default Inutili**
+- [ ] Cerca `opacity: 1` → rimuovi (valore default)
+- [ ] Cerca `marginHorizontal: 0` → rimuovi (valore default)
+- [ ] Cerca `paddingVertical: 0` → rimuovi (valore default)
+- [ ] Cerca `flexDirection: 'column'` → rimuovi (default)
+
+**Esempio**:
+```typescript
+// ❌ MALE
+const styles = StyleSheet.create({
+  container: {
+    opacity: 1,                // Default inutile
+    marginHorizontal: 0,       // Default inutile
+    paddingVertical: 0,        // Default inutile
+    flexDirection: 'column',   // Default inutile
+  },
+});
+
+// ✅ BENE
+const styles = StyleSheet.create({
+  container: {
+    // Solo props necessarie
+  },
+});
+```
+
+---
+
+### **11.5 Stili Non Usati nel StyleSheet**
+- [ ] Per ogni stile definito, cerca `styles.nomeStile` nel JSX
+- [ ] Se NON trovato → rimuovi stile
+- [ ] Verifica dopo ogni modifica che tutto compili
+
+**Esempio**:
+```typescript
+// ❌ MALE
+const styles = StyleSheet.create({
+  container: { ... },      // ✅ Usato
+  separator: { ... },      // ✅ Usato
+  oldLogo: { ... },        // ❌ MAI USATO - rimuovi!
+  deprecatedStyle: { ... }, // ❌ MAI USATO - rimuovi!
+});
+
+// ✅ BENE
+const styles = StyleSheet.create({
+  container: { ... },
+  separator: { ... },
+  // Solo stili effettivamente usati
+});
+```
+
+---
+
+### **11.6 Nesting Inutile di Componenti**
+- [ ] Cerca componenti identici annidati
+- [ ] Cerca `<Container><Container>` senza motivo
+- [ ] Rimuovi livelli inutili
+
+**Esempio**:
+```typescript
+// ❌ MALE
+<PerfectContainer style={styles.wrapper}>
+  <PerfectContainer style={styles.wrapper}>  // ❌ DUPLICATO!
+    <PerfectText>Hello</PerfectText>
+  </PerfectContainer>
+</PerfectContainer>
+
+// ✅ BENE
+<PerfectContainer style={styles.wrapper}>
+  <PerfectText>Hello</PerfectText>
+</PerfectContainer>
+```
+
+---
+
+### **11.7 CSS Properties Inutili**
+- [ ] Cerca `position: 'relative'` senza `position: 'absolute'` dentro
+- [ ] Cerca `zIndex` senza overlapping
+- [ ] Rimuovi proprietà CSS che non fanno nulla
+
+**Esempio**:
+```typescript
+// ❌ MALE
+titleContainer: {
+  alignItems: 'center',
+  position: 'relative',  // ❌ Niente absolute dentro? Inutile!
+},
+
+// ✅ BENE
+titleContainer: {
+  alignItems: 'center',
+  // Solo props necessarie
+},
+```
+
+---
+
+### **11.8 IIFE Eccessivamente Complessi**
+- [ ] Cerca `{(() => {` nel JSX
+- [ ] Se possibile, semplifica o estrai in variabile
+- [ ] Rimuovi type casting (`as number`) inutili
+
+**Esempio**:
+```typescript
+// ❌ MALE
+{(() => {
+  const size = styles.logo.width as number;  // Type casting
+  const scale = getMillimetricScale();
+  const ref = Math.round(size / scale);
+  return <Image width={ref} />;
+})()}
+
+// ✅ BENE
+<Image
+  width={Math.round(responsiveSpacing.logoSize / getMillimetricScale())}
+/>
+```
+
+---
+
+### **11.9 Commenti Ridondanti**
+- [ ] Rimuovi commenti che ripetono il codice
+- [ ] Mantieni solo commenti che aggiungono contesto
+- [ ] Rimuovi `// TODO` completati
+
+**Esempio**:
+```typescript
+// ❌ MALE
+{/* TITOLO SISTEMA RESPONSIVE COMPLETO - SINGOLO FormattedText per Garantire 2 Righe Fisse */}
+{/* TITOLO COMPLETO - LAYOUT ASSOLUTO PER CONTROLLO TOTALE INTERLINEA */}
+{/* ✅ PERFECT SYSTEM - Titolo principale su due righe separate */}
+
+// ✅ BENE
+{/* Prima riga: "Rise Against" */}
+{/* Seconda riga: "Hunger Italia" con colori diversi */}
+```
+
+---
+
+### **11.10 Controllo Size & Immunity**
+- [ ] Cerca `immunity={true}` → cambia a `false` (Perfect System)
+- [ ] Aggiungi `maxSize` e `minSize` per responsive
+- [ ] Aggiungi `containerWidth` se necessario
+- [ ] Riduci size hardcoded troppo grandi
+
+**Esempio**:
+```typescript
+// ❌ MALE
+<PerfectText
+  size={48}           // Troppo grande e fisso
+  immunity={true}     // Bypassa Perfect System
+>
+  Titolo
+</PerfectText>
+
+// ✅ BENE
+<PerfectText
+  size={36}
+  maxSize={42}
+  minSize={30}
+  immunity={false}    // Perfect System attivo
+  containerWidth={(responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.95}
+>
+  Titolo
+</PerfectText>
+```
+
+---
+
 ## 🎯 WORKFLOW COMPLETO
 
 ### **Step 1: PRE-ANALISI**
@@ -369,10 +679,28 @@ import { scaleDimensionLinear } from '@/constants';  // Funzione pura
 
 ### **File Pulito al 100%**
 ```
+🔥 REGOLA #0 (OBBLIGATORIA):
+✅ Zero import responsiveSystem
+✅ Zero scaleDimensionLinear/scaleFont nel codice
+✅ Zero TypographyTokens/SpacingTokens importati
+✅ SOLO Perfect components (100%)
+
+ALTRI CONTROLLI:
 ✅ Zero import inutili
 ✅ Zero hook ridondanti
 ✅ Zero props non usati
-✅ Zero nesting inutile
+✅ Zero View nativi (tutti PerfectContainer)
+✅ Zero Text nativi (tutti PerfectText)
+✅ Zero Image nativi (tutti PerfectImage)
+✅ Zero magic colors (tutti Design Tokens)
+✅ Zero inline styles (tutti StyleSheet)
+✅ Zero stili inutilizzati
+✅ Zero props default inutili (opacity: 1, margin: 0, etc)
+✅ Zero nesting duplicato
+✅ Zero position: relative inutili
+✅ Zero IIFE complessi
+✅ Zero commenti ridondanti
+✅ Zero immunity={true} (Perfect System attivo)
 ✅ Zero spacing fissi (tutti props)
 ✅ Perfect System al 100%
 ✅ Zero errori TypeScript
@@ -387,32 +715,67 @@ import { scaleDimensionLinear } from '@/constants';  // Funzione pura
 Se trovi questi, **STOP** e risolvi subito:
 
 ```typescript
+// 🔥 REGOLA #0 - VIOLAZIONI CRITICHE
+❌ import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem'
+❌ import { scaleFont } from '@/shared/constants/responsiveSystem'
+❌ import { TypographyTokens } from '@/shared/constants/responsiveSystem'
+❌ import { SpacingTokens } from '@/shared/constants/responsiveSystem'
+❌ scaleDimensionLinear(24) // Usa PlatformIcon size={24}
+❌ scaleFont(16) // Usa PerfectText size={16}
+❌ <MaterialCommunityIcons size={scaleDimensionLinear(24)} />
+❌ <View> invece di <PerfectContainer>
+❌ <Text> invece di <PerfectText>
+❌ <Image> invece di <PerfectImage>
+
+// Altri problemi
 ❌ import ... // Mai usato
 ❌ const { x } = hook(); // x mai usato
 ❌ animations: _animations // Props underscore non usato
-❌ <View> invece di <PerfectContainer>
 ❌ style={{ padding: 20 }} invece di padding={20}
+❌ color="#DC2626" invece di Colors.primary[600]
+❌ opacity: 1 // Props default inutili
+❌ marginHorizontal: 0 // Props default inutili
+❌ paddingVertical: 0 // Props default inutili
+❌ styles.oldStyle // Stile definito ma mai usato
+❌ <Container><Container> stesso style // Nesting duplicato
+❌ position: 'relative' senza absolute dentro
+❌ {(() => { const x = y as number; ... })()} // IIFE complesso
+❌ immunity={true} // Bypassa Perfect System
 ❌ useResponsive() solo per scale()
 ❌ ../../../ path (usa @/)
-❌ containerWidth su PerfectText (ridondante)
-❌ <Container><Container> nesting vuoto
 ❌ any types
 ```
 
 ---
 
-## ✅ CHECKLIST RAPIDA (1 minuto)
+## ✅ CHECKLIST RAPIDA (2 minuti)
 
-Prima di commit:
+Prima di commit - **CONTROLLO RIGOROSO**:
 
 ```
+🔥 REGOLA #0 (CRITICA):
+[ ] ZERO import responsiveSystem? (grep "from.*responsiveSystem")
+[ ] ZERO scaleDimensionLinear/scaleFont nel codice?
+[ ] ZERO TypographyTokens/SpacingTokens importati?
+[ ] SOLO Perfect components (PerfectText/Container/Image/Icon)?
+
+ALTRI CONTROLLI:
 [ ] Tutti import usati?
 [ ] Tutti hook usati?
 [ ] Tutti props usati?
 [ ] Nesting minimal?
 [ ] Spacing = props diretti?
-[ ] View → PerfectContainer?
+[ ] View → PerfectContainer? (TUTTI)
 [ ] Text → PerfectText?
+[ ] Magic colors → Design Tokens? (cerca color="#)
+[ ] Inline styles → StyleSheet? (cerca style={{)
+[ ] Stili inutilizzati rimossi?
+[ ] Props default rimossi? (opacity: 1, margin: 0, etc)
+[ ] Nesting duplicato rimosso?
+[ ] position: relative necessario?
+[ ] IIFE semplificati?
+[ ] Commenti ridondanti rimossi?
+[ ] immunity={false} su PerfectText?
 [ ] Zero TypeScript errors?
 [ ] Zero ESLint warnings?
 [ ] App compila?
@@ -480,24 +843,46 @@ Usa questo template ogni volta:
 # ANALISI: [NomeFile.tsx]
 
 ## ❌ PROBLEMI TROVATI
+0. 🔥 VIOLAZIONI REGOLA #0 (CRITICO):
+   - Import responsiveSystem: [count]
+   - scaleDimensionLinear/scaleFont usati: [count]
+   - TypographyTokens/SpacingTokens: [count]
+   - MaterialCommunityIcons invece PlatformIcon: [count]
 1. Import inutili: [lista]
 2. Hook ridondanti: [lista]
 3. Props non usati: [lista]
-4. Nesting inutile: [sì/no]
-5. Spacing fissi: [lista]
-6. View nativi: [count]
+4. View nativi: [count]
+5. Magic colors: [count]
+6. Inline styles: [count]
+7. Stili inutilizzati: [lista]
+8. Props default inutili: [lista]
+9. Nesting duplicato: [sì/no]
+10. IIFE complessi: [count]
+11. Commenti ridondanti: [count]
+12. immunity={true}: [count]
 
 ## ✅ FIX APPLICATI
-1. Rimosso: [cosa]
-2. Sostituito: [cosa con cosa]
-3. Estratto: [spacing come props]
-4. Consolidato: [import]
+1. Import: rimossi X, consolidati Y
+2. View → PerfectContainer: X sostituzioni
+3. Magic colors → Design Tokens: X fix
+4. Inline styles → StyleSheet: X fix
+5. Stili rimossi: X inutilizzati
+6. Props default rimossi: X
+7. Nesting semplificato: X livelli
+8. IIFE semplificati: X
+9. immunity={false}: X fix
+10. Size responsive: aggiunti min/max su X
 
 ## 📊 RISULTATO
-- Linee codice: [prima] → [dopo]
+- Linee codice: [prima] → [dopo] (Δ -X)
 - Import: [prima] → [dopo]
-- Hook: [prima] → [dopo]
+- Stili: [prima] → [dopo]
+- View nativi: [X] → 0
+- Magic colors: [X] → 0
+- Inline styles: [X] → 0
 - Perfect System: [%]
+- TypeScript errors: 0 ✅
+- ESLint warnings: 0 ✅
 ```
 
 ---
