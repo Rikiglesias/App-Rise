@@ -26,7 +26,6 @@ describe('LazyComponents', () => {
         expect(['function', 'object']).toContain(typeof component);
       });
     });
-
   });
 
   describe('Wrapped Component Exports', () => {
@@ -57,9 +56,7 @@ describe('LazyComponents', () => {
 
     it('should export preloadSecondaryComponents function', () => {
       expect(LazyComponents.preloadSecondaryComponents).toBeDefined();
-      expect(typeof LazyComponents.preloadSecondaryComponents).toBe(
-        'function'
-      );
+      expect(typeof LazyComponents.preloadSecondaryComponents).toBe('function');
     });
 
     it('should execute preloadCriticalComponents without errors', () => {

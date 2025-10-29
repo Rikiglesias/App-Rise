@@ -310,6 +310,18 @@ package: "it.creareunapp.editor.ios63da226b4447c"
 
 ## 📚 **DOCUMENTAZIONE**
 
+### **🧹 Code Quality**
+- **[CODE_CLEANUP_CHECKLIST.md](./CODE_CLEANUP_CHECKLIST.md)** - ⭐ **CONSULTA SEMPRE** - Checklist completa per pulizia e refactoring codice prima di ogni commit
+- **[MIGRATION_PLAN.md](./MIGRATION_PLAN.md)** - 🔄 **ROADMAP** - Piano completo migrazione Perfect System feature-by-feature
+
+### **🌟 Perfect System** ⭐ NEW
+- `perfect-system/PERFECT_SYSTEM_FINAL_PLAN.md` - **START HERE** - Piano completo e componenti
+- `perfect-system/PERFECT_SYSTEM_IMPROVEMENTS_DONE.md` - Log implementazioni completate
+- `perfect-system/PERFECT_SYSTEM_AUDIT_REPORT.md` - Audit codebase e rollout plan
+- `perfect-system/README.md` - Indice documentazione Perfect System
+
+**Perfect System**: Sistema UI responsive completo con scaling proporzionale automatico per consistenza identica su tutti i device.
+
 ### **Guide Tecniche**
 - `CONTAINER_LAYOUT_IMPLEMENTATION.md` - Sistema Container Layout completo
 - `SISTEMA_RESPONSIVE_REFERENCE.md` - Responsive system reference

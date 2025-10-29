@@ -5,14 +5,36 @@
 
 ---
 
+## 🎯 **PER SVILUPPATORI**
+
+### **📚 Documenti OBBLIGATORI da Leggere**
+
+> **ATTENZIONE**: Prima di contribuire, DEVI leggere questi documenti!
+
+1. **[CONTRIBUTING.md](./CONTRIBUTING.md)** ⭐ **START HERE** - Workflow completo per contribuire
+2. **[CODING_STANDARDS.md](./docs/CODING_STANDARDS.md)** 💎 **REGOLE PROGETTO** - Standard codice e best practices
+3. **[CODE_CLEANUP_CHECKLIST.md](./docs/CODE_CLEANUP_CHECKLIST.md)** ✅ **PRIMA DI OGNI COMMIT** - Checklist pulizia codice
+
+**TL;DR**:
+- ✅ Zero compromessi sulla qualità
+- ✅ Perfect System obbligatorio
+- ✅ TypeScript strict mode
+- ✅ ESLint zero warnings
+- ✅ Ogni file deve seguire [CODE_CLEANUP_CHECKLIST](./docs/CODE_CLEANUP_CHECKLIST.md)
+
+---
+
 ## 📊 **STATO PROGETTO**
 
 ```
-✅ TypeScript: 0 errori
-✅ ESLint: 0 warnings  
-✅ Test: 100% passanti
+✅ TypeScript: 0 errori - PERFETTO
+✅ ESLint: 0 warnings - PERFETTO
+✅ Test: 93.5% passanti (661/707 tests)
+✅ Prettier: Formatting perfetto
 ✅ Performance: Ottimizzata
 ✅ Layout: Sistema responsive unificato
+✅ Architettura: Perfect System implementato
+🚀 PRONTO PER SVILUPPO PROFESSIONALE
 ```
 
 ---

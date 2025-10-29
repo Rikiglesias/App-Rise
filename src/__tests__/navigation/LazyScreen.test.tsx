@@ -121,7 +121,6 @@ describe('LazyScreen', () => {
     });
   });
 
-
   describe('Component Props', () => {
     it('should accept and use fallback prop', () => {
       const MyFallback = () => <Text>My Fallback</Text>;
@@ -148,7 +147,6 @@ describe('LazyScreen', () => {
 
       expect(getByText('Content')).toBeTruthy();
     });
-
   });
 
   describe('Edge Cases', () => {
@@ -173,6 +171,5 @@ describe('LazyScreen', () => {
 
       expect(result).toBeTruthy();
     });
-
   });
 });

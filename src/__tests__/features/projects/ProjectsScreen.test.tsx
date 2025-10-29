@@ -7,7 +7,7 @@ describe('ProjectsScreen', () => {
 
   it('should be a valid React component type', () => {
     expect(ProjectsScreen).toBeTruthy();
-    expect(typeof ProjectsScreen).toBe('object'); // React.memo returns object  
+    expect(typeof ProjectsScreen).toBe('object'); // React.memo returns object
   });
 
   it('should have the expected module structure', () => {

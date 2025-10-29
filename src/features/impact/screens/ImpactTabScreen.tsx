@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -18,7 +18,7 @@ import {
   useImpactAnimations,
   convertToMapLocations,
 } from '../components';
-import { PlatformScrollView } from '@components/ui';
+import { PlatformScrollView, PerfectContainer } from '@components/ui';
 import MapLocationModal from '@components/layout/MapLocationModal';
 import { Colors, Spacing } from '@shared/constants/designTokens';
 import { MAP_LOCATIONS } from '@/data/impactData';
@@ -103,9 +103,9 @@ const ImpactTabScreenComponent: React.FC = () => {
         <Results2024Section animations={animations} />
 
         {/* Linea divisoria tra Dal 2012 e Community */}
-        <View style={styles.sectionDividerContainer}>
-          <View style={styles.sectionDivider} />
-        </View>
+        <PerfectContainer style={styles.sectionDividerContainer}>
+          <PerfectContainer style={styles.sectionDivider} />
+        </PerfectContainer>
 
         <CommunitySection
           animations={animations}
@@ -114,9 +114,9 @@ const ImpactTabScreenComponent: React.FC = () => {
         />
 
         {/* Linea divisoria tra Community e Mappa */}
-        <View style={styles.sectionDividerContainer}>
-          <View style={styles.sectionDivider} />
-        </View>
+        <PerfectContainer style={styles.sectionDividerContainer}>
+          <PerfectContainer style={styles.sectionDivider} />
+        </PerfectContainer>
 
         <MapSection onMapPress={handleMapPress} />
       </PlatformScrollView>

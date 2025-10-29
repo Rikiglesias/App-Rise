@@ -32,18 +32,15 @@ export interface ChiSiamoAnimations {
 
 // Component Props Types
 export interface ChiSiamoSectionProps {
-  animations: ChiSiamoAnimations;
   onInfoPress: () => void;
 }
 
 export interface ContactSectionProps {
-  animations: ChiSiamoAnimations;
   contacts: ContactData[];
 }
 
 export interface AnimatedContactProps {
   contact: ContactData;
-  animationValue: Animated.Value;
 }
 
 export interface StoriaModalProps {

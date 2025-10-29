@@ -2,17 +2,17 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { PerfectText } from '../components/ui/PerfectText';
+import { PerfectText } from '@/components/ui/PerfectText';
 
 import InteractiveMap, {
   type Location,
-} from '../components/layout/InteractiveMap';
-import MapLocationModal from '../components/layout/MapLocationModal';
-import type { MapModalData } from '../data/mapModalData';
-import { getModalData } from '../data/mapModalData';
-import type { ImpactStackParamList } from '../navigation/types';
-import { BorderRadius, Colors, Spacing, Typography } from '../shared/constants';
-import { scaleFont } from '../shared/constants/responsiveSystem';
+} from '@/components/layout/InteractiveMap';
+import MapLocationModal from '@/components/layout/MapLocationModal';
+import type { MapModalData } from '@/data/mapModalData';
+import { getModalData } from '@/data/mapModalData';
+import type { ImpactStackParamList } from '@/navigation/types';
+import { BorderRadius, Colors, Spacing, Typography } from '@/shared/constants';
+import { scaleFont, scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
@@ -80,7 +80,11 @@ const MapModalScreen: React.FC = () => {
           onPress={handleClosePress}
           activeOpacity={0.8}
         >
-          <MaterialCommunityIcons name="close" size={24} color="#FFFFFF" />
+          <MaterialCommunityIcons 
+            name="close" 
+            size={scaleDimensionLinear(24)} 
+            color={Colors.neutral[0]} 
+          />
         </TouchableOpacity>
       </View>
 

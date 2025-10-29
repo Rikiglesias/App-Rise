@@ -99,8 +99,7 @@ export default {
         backgroundColor: '#FFFFFF',
         monochromeImage: './assets/icons/app/app-icon.png',
       },
-      package:
-        process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
+      package: process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
       versionCode: parseInt(process.env.ANDROID_VERSION_CODE || '4', 10),
       // Permessi specifici con giustificazione
       permissions: [

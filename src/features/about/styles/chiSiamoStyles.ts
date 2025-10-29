@@ -29,9 +29,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
   titleHeaderContainer: {
     alignItems: 'center',
     backgroundColor: 'rgba(220, 38, 38, 0.03)',
-    paddingVertical: Spacing[3],
-    paddingHorizontal: Spacing[5],
-    borderRadius: 16,
+    // paddingVertical, paddingHorizontal, borderRadius ora gestiti da props diretti (SCALA!)
     borderWidth: 1,
     borderColor: 'rgba(220, 38, 38, 0.12)',
     shadowColor: '#DC2626',

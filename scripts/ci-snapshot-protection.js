@@ -18,9 +18,7 @@ const run = command => {
   }
 };
 
-run(
-  'npx jest --testPathPattern=snapshots --passWithNoTests --ci --runInBand'
-);
+run('npx jest --testPathPattern=snapshots --passWithNoTests --ci --runInBand');
 
 run('npx jest --testPathPattern=visual --passWithNoTests --ci --runInBand');
 
@@ -30,7 +28,9 @@ const gitStatus = spawnSync('git', ['status', '--porcelain'], {
 });
 
 if (gitStatus.status !== 0) {
-  console.warn('WARNING: unable to verify snapshot cleanliness; git status failed.');
+  console.warn(
+    'WARNING: unable to verify snapshot cleanliness; git status failed.'
+  );
   process.exit(gitStatus.status ?? 1);
 }
 
@@ -43,7 +43,9 @@ const dirtyEntries = gitStatus.stdout
 if (dirtyEntries.length > 0) {
   console.error('ERROR: snapshot changes detected after validation:');
   dirtyEntries.forEach(entry => console.error(` - ${entry}`));
-  console.error('Run `npm run snapshot:update` and commit the updated snapshots.');
+  console.error(
+    'Run `npm run snapshot:update` and commit the updated snapshots.'
+  );
   process.exit(1);
 }
 

@@ -1,21 +1,27 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { scaleDimensionLinear } from '../../shared/constants/responsiveSystem';
 
 interface PlatformIconProps {
   name: string;
+  /** Size riferimento iPhone 15 (sarà scalato automaticamente) */
   size?: number;
   color?: string;
   style?: object;
 }
 
 /**
- * Smart Icon che usa:
- * - iOS: MaterialCommunityIcons con mapping iOS-style
- * - Android: MaterialCommunityIcons standard
+ * PERFECT ICON (ex PlatformIcon) - Icone Scalate Proporzionalmente
+ * 
+ * GARANTISCE:
+ * - Icone scalano proporzionalmente su tutti device
+ * - Smart Icon iOS/Android mapping
+ * - Size riferimento iPhone 15
  *
- * Nota: Per SF Symbols veri, serve installazione separata.
- * Questo componente fornisce mapping intelligente.
+ * ESEMPIO:
+ * iPhone 15: size={24} → 24px
+ * iPad:      size={24} → 47px (scalato!)
  */
 export const PlatformIcon: React.FC<PlatformIconProps> = ({
   name,
@@ -23,6 +29,8 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   color,
   style,
 }) => {
+  // 🎯 SCALA size proporzionalmente
+  const scaledSize = scaleDimensionLinear(size);
   // Mapping strategico iOS-style -> Android Material
   const iconMapping = {
     // Navigation
@@ -60,11 +68,14 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   return (
     <MaterialCommunityIcons
       name={iconName as keyof typeof MaterialCommunityIcons.glyphMap}
-      size={size}
+      size={scaledSize}  // ✅ USA SIZE SCALATO
       color={color}
       style={style}
     />
   );
 };
+
+// Export con nome Perfect
+export const PerfectIcon = PlatformIcon;
 
 export default PlatformIcon;

@@ -1,19 +1,19 @@
 import React from 'react';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { PlatformTouchable, PerfectText } from '../../../components/ui';
+import { PlatformTouchable, PerfectText, PerfectContainer, PerfectImage } from '@/components/ui';
 import {
   BorderColors,
   Colors,
   Spacing,
   Typography,
-} from '../../../shared/constants';
+} from '@/shared/constants';
 import {
   DesignTokens,
   scaleFont,
   getMillimetricScale,
-} from '../../../shared/constants/responsiveSystem';
-import { PerfectImage } from '../../../components/ui/PerfectImage';
+  scaleDimensionLinear,
+} from '@/shared/constants/responsiveSystem';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -34,12 +34,12 @@ interface SocialCardProps {
 export const SocialCard: React.FC<SocialCardProps> = React.memo(
   ({ platform }) => {
     return (
-      <View style={styles.socialCardWrapper}>
-        <View
+      <PerfectContainer style={styles.socialCardWrapper}>
+        <PerfectContainer
           style={[
             styles.socialCardWhiteContainer,
             { borderColor: platform.gradient[0], borderWidth: 2 },
-          ]}
+          ] as never}
         >
           <PlatformTouchable
             onPress={platform.onPress}
@@ -49,7 +49,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
             accessibilityHint={platform.description}
             testID={`social-card-${platform.id}`}
           >
-            <View style={styles.socialIconContainer}>
+            <PerfectContainer style={styles.socialIconContainer}>
               {platform.icon ? (
                 (() => {
                   const baseWidth =
@@ -80,19 +80,17 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                 <PerfectText
                   size={24}
                   lines={1}
-                  fontWeight="400"
                   style={styles.socialIconEmoji}
                 >
                   {platform.emoji}
                 </PerfectText>
               )}
-            </View>
+            </PerfectContainer>
 
-            <View style={styles.socialInfoContainer}>
+            <PerfectContainer style={styles.socialInfoContainer}>
               <PerfectText
                 size={16}
                 lines={1}
-                fontWeight="400"
                 style={styles.socialName}
               >
                 {platform.name}
@@ -100,7 +98,6 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               <PerfectText
                 size={14}
                 lines={1}
-                fontWeight="400"
                 style={styles.socialHandle}
               >
                 {platform.handle}
@@ -108,23 +105,22 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               <PerfectText
                 size={12}
                 lines={2}
-                fontWeight="400"
                 style={styles.socialDescription}
               >
                 {platform.description}
               </PerfectText>
-            </View>
+            </PerfectContainer>
 
-            <View style={styles.arrowContainer}>
+            <PerfectContainer style={styles.arrowContainer}>
               <MaterialCommunityIcons
                 name="chevron-right"
-                size={24}
+                size={scaleDimensionLinear(24)}
                 color={Colors.neutral[400]}
               />
-            </View>
+            </PerfectContainer>
           </PlatformTouchable>
-        </View>
-      </View>
+        </PerfectContainer>
+      </PerfectContainer>
     );
   }
 );

@@ -1,9 +1,10 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PlatformScrollView, PlatformTouchable } from '../../../components/ui';
+import { PlatformScrollView, PlatformTouchable, PerfectContainer } from '../../../components/ui';
+import { scaleDimensionLinear } from '../../../shared/constants/responsiveSystem';
+import { Colors } from '../../../shared/constants';
 
 import type { RootStackParamList } from '../../../navigation/types';
 import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
@@ -41,7 +42,11 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleBackPress}
         style={mainStyles.backButton}
       >
-        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
+        <MaterialCommunityIcons 
+          name="arrow-left" 
+          size={scaleDimensionLinear(24)} 
+          color={Colors.neutral[900]} 
+        />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
@@ -49,12 +54,12 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <HeaderSection animationValue={animationValue} />
 
         {/* SEPARATORE TRA SEZIONI - IDENTICO ALLA PAGINA CHI SIAMO */}
-        <View style={mainStyles.sectionDividerContainer}>
-          <View style={mainStyles.sectionDivider} />
-        </View>
+        <PerfectContainer style={mainStyles.sectionDividerContainer}>
+          <PerfectContainer style={mainStyles.sectionDivider} />
+        </PerfectContainer>
 
         {/* Social Platforms Section */}
-        <View style={mainStyles.socialSection}>
+        <PerfectContainer style={mainStyles.socialSection}>
           {socialPlatforms.map((platform, _index) => (
             <SocialCard
               key={platform.id}
@@ -62,7 +67,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
               animationValue={animationValue}
             />
           ))}
-        </View>
+        </PerfectContainer>
       </PlatformScrollView>
     </SafeAreaView>
   );

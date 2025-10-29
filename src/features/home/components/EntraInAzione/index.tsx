@@ -1,18 +1,19 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { type EntraInAzioneProps } from '../../types';
 import { Spacing } from '../../../../shared/constants/designTokens';
+import { PerfectContainer } from '../../../../components/ui';
 import { ActionTitle } from './ActionTitle';
 import { ActionDescription } from './ActionDescription';
 import { ActionCTAButtons } from './ActionCTAButtons';
 
 export const EntraInAzione: React.FC<EntraInAzioneProps> = () => {
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       <ActionTitle />
       <ActionDescription />
       <ActionCTAButtons />
-    </View>
+    </PerfectContainer>
   );
 };
 

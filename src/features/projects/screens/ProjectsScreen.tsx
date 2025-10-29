@@ -1,5 +1,5 @@
 import React from 'react';
-import { RefreshControl, View } from 'react-native';
+import { RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProjectsScreenLogic } from '../hooks/useProjectsScreenLogic';
 import { useProjectsScreenStyles } from '../styles/ProjectsScreenStyles';
@@ -8,10 +8,11 @@ import type {
   ProjectsScreenProps,
 } from '../types/ProjectsScreenTypes';
 
-import { PlatformScrollView, PerfectText } from '@/components';
+import { PlatformScrollView, PerfectText, PerfectContainer } from '@/components';
 import FilterTabs from '@/components/ui/FilterTabs';
 import ProjectCard from '@/components/ProjectCard';
 import { ProjectDetailModal } from '@/components/layout';
+import { Colors } from '@/shared/constants';
 import {
   ProjectsEmptyState,
   ProjectsHeader,
@@ -45,8 +46,8 @@ const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={['#DC2626']}
-            tintColor="#DC2626"
+            colors={[Colors.primary[600]]}
+            tintColor={Colors.primary[600]}
           />
         }
       >
@@ -65,11 +66,10 @@ const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
         />
 
         {/* Projects List */}
-        <View style={styles.content}>
+        <PerfectContainer style={styles.content}>
           <PerfectText
             size={18}
             lines={1}
-            fontWeight="400"
             style={styles.sectionTitle}
           >
             {getSectionTitle()}
@@ -91,7 +91,7 @@ const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
           ) : (
             <ProjectsEmptyState styles={styles} />
           )}
-        </View>
+        </PerfectContainer>
       </PlatformScrollView>
 
       {/* Project Detail Modal */}

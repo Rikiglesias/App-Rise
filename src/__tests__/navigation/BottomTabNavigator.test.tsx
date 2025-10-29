@@ -45,7 +45,7 @@ jest.mock('../../navigation/ImpactStackNavigator', () => {
 // Mock PlatformBlur
 jest.mock('../../components/ui', () => ({
   PlatformBlur: ({ children }: { children: React.ReactNode }) =>
-    children || null,
+    children ?? null,
   PlatformTouchable: ({ children, onPress, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
     return (

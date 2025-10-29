@@ -20,6 +20,7 @@ import {
   scaleSpacing,
   scaleDimensionLinear,
 } from '../../shared/constants/responsiveSystem';
+import { getPerfectShadow, type ShadowType } from '../../shared/constants/perfectShadow';
 import { useUniversalTheme } from '../../shared/theme/UniversalTheme';
 
 interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
@@ -107,30 +108,7 @@ const CONTAINER_PRESETS = {
   },
 } as const;
 
-// 🎭 SHADOW STYLES
-const SHADOW_STYLES = {
-  light: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  medium: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  strong: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.16,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-} as const;
+// 🎭 SHADOW STYLES - Ora gestito da PerfectShadow system (scalato automaticamente)
 
 export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   preset,
@@ -197,15 +175,15 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
     return colors[bgKey as keyof typeof colors];
   })();
 
-  // 🎭 RISOLVI OMBRA
+  // 🎭 RISOLVI OMBRA (con Perfect Shadow - scalato automaticamente)
   const finalShadow =
     shadow ?? (config && 'shadow' in config ? config.shadow : undefined);
   const shadowStyle = (() => {
     if (finalShadow && typeof finalShadow === 'string') {
-      return SHADOW_STYLES[finalShadow as keyof typeof SHADOW_STYLES];
+      return getPerfectShadow(finalShadow as ShadowType);
     }
     if (finalShadow === true) {
-      return SHADOW_STYLES.medium;
+      return getPerfectShadow('medium');
     }
     return {};
   })();
@@ -266,7 +244,7 @@ export const CardContainer = (props: Omit<PerfectContainerProps, 'preset'>) => (
   <PerfectContainer {...props} preset="card" />
 );
 
-export const SectionContainer = (
+export const PerfectSection = (
   props: Omit<PerfectContainerProps, 'preset'>
 ) => <PerfectContainer {...props} preset="section" />;
 

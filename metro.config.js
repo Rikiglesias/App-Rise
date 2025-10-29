@@ -7,22 +7,22 @@ const config = getDefaultConfig(__dirname);
 // ========================================
 // 🚀 METRO CONFIG OTTIMIZZATA - EXPO SDK 54
 // ========================================
-// 
+//
 // Configurazione Metro ottimizzata per performance e compatibilità
 // Ripristinata gradualmente dopo risoluzione problemi di caricamento
-// 
+//
 // COMPATIBILE CON:
 // - Expo SDK 54.0.19
-// - Metro 0.83.2  
+// - Metro 0.83.2
 // - React Native 0.81.5
-// 
+//
 // OTTIMIZZAZIONI INCLUSE:
 // ✅ Server configuration (porta custom)
 // ✅ Resolver (alias, estensioni, platforms)
 // ✅ Transformer (bundle optimizations)
 // ✅ Serializer (configurazione sicura)
 // ✅ Watcher (health check, cartelle monitorate)
-// 
+//
 // RIMOSSO (incompatibile):
 // ❌ exclusionList (metro-config@0.83.2)
 // ❌ minifierConfig (configurazioni avanzate)

@@ -1,5 +1,9 @@
 import { renderHook } from '@testing-library/react-native';
-import { useResponsive, useIntelligentFontScaling, useBreakpointAware } from '../../../shared/hooks/useResponsive';
+import {
+  useResponsive,
+  useIntelligentFontScaling,
+  useBreakpointAware,
+} from '../../../shared/hooks/useResponsive';
 
 // Mock react-native modules
 jest.mock('react-native-safe-area-context', () => ({
@@ -211,7 +215,9 @@ describe('Integration Tests', () => {
 
   it('should work with useIntelligentFontScaling and useResponsive together', () => {
     const { result: responsiveResult } = renderHook(() => useResponsive());
-    const { result: fontResult } = renderHook(() => useIntelligentFontScaling());
+    const { result: fontResult } = renderHook(() =>
+      useIntelligentFontScaling()
+    );
 
     expect(responsiveResult.current.dimensions.breakpoint).toBe(
       fontResult.current.currentBreakpoint

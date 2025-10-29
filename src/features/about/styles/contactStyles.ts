@@ -26,8 +26,7 @@ export const contactSectionStyles = StyleSheet.create({
   // CONTAINER HEADER SEMPLICE SENZA BACKGROUND - COME ESPLORA E COMMUNITY
   exploreHeaderContainer: {
     alignItems: 'center',
-    paddingVertical: Spacing[2], // RIDOTTO per semplicità
-    paddingHorizontal: Spacing[3], // RIDOTTO per semplicità
+    // paddingVertical e paddingHorizontal ora gestiti da props diretti (SCALA!)
   },
 
   categoryTitle: {
@@ -72,8 +71,7 @@ export const contactSectionStyles = StyleSheet.create({
   contactsGrid: {
     flexDirection: 'column',
     alignItems: 'center',
-    paddingHorizontal: Spacing[3],
-    paddingVertical: Spacing[2],
+    // paddingHorizontal e paddingVertical ora gestiti da props diretti (SCALA!)
     gap: Spacing[4], // AUMENTATO: da Spacing[2] a Spacing[4] per più spazio tra i bottoni grandi
   },
 });

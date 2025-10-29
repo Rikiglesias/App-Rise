@@ -1,14 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback, useState } from 'react';
-import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ChiSiamoSection, ContactSection, StoriaModal } from '../components';
-import { useChiSiamoAnimations } from '../hooks/useChiSiamoAnimations';
 import { mainStyles } from '../styles';
 import type { ChiSiamoScreenProps, ContactData } from '../types';
 
-import { PlatformScrollView, PlatformTouchable } from '@/components';
+import { PlatformScrollView, PlatformTouchable, PerfectContainer } from '@/components';
+import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/hooks/useLinkHandler';
 import { isSuccess } from '@/shared/utils/result';
@@ -20,7 +20,6 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
     enableHaptics: false, // ⚡ DISABILITO HAPTICS DUPLICATI
     timeout: 5000, // ⚡ RIDUCO TIMEOUT
   });
-  const animations = useChiSiamoAnimations();
   const [isStoriaModalVisible, setIsStoriaModalVisible] = useState(false);
   const { triggerHaptic } = useHapticFeedback();
 
@@ -102,21 +101,22 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
         onPress={handleBackPress}
         style={mainStyles.backButton}
       >
-        <MaterialCommunityIcons name="arrow-left" size={24} color="#000000" />
+        <MaterialCommunityIcons 
+          name="arrow-left" 
+          size={scaleDimensionLinear(24)} 
+          color={Colors.neutral[900]} 
+        />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
-        <ChiSiamoSection
-          animations={animations}
-          onInfoPress={handleShowStoria}
-        />
+        <ChiSiamoSection onInfoPress={handleShowStoria} />
 
-        {/* SEPARATORE TRA SEZIONI - IDENTICO ALLA PAGINA AZIONI */}
-        <View style={mainStyles.sectionDividerContainer}>
-          <View style={mainStyles.sectionDivider} />
-        </View>
+        {/* SEPARATORE TRA SEZIONI */}
+        <PerfectContainer style={mainStyles.sectionDividerContainer}>
+          <PerfectContainer style={mainStyles.sectionDivider} />
+        </PerfectContainer>
 
-        <ContactSection animations={animations} contacts={contacts} />
+        <ContactSection contacts={contacts} />
       </PlatformScrollView>
 
       {/* Storia Modal */}

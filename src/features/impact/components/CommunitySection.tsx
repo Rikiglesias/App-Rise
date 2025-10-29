@@ -1,9 +1,10 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, Platform, StyleSheet } from 'react-native';
 
-import { PerfectText, PlatformTouchable } from '../../../components/ui';
+import { PerfectText, PlatformTouchable, PerfectContainer } from '../../../components/ui';
+import { scaleDimensionLinear } from '../../../shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,
@@ -27,7 +28,7 @@ export const CommunitySection: React.FC<Props> = ({
   onPartnersPress,
 }) => {
   return (
-    <View style={styles.communitySection}>
+    <PerfectContainer style={styles.communitySection}>
       {/* Header RIVOLUZIONATO con elementi community */}
       <Animated.View
         style={[
@@ -38,11 +39,10 @@ export const CommunitySection: React.FC<Props> = ({
           },
         ]}
       >
-        <View style={styles.communityHeaderBackground}>
+        <PerfectContainer style={styles.communityHeaderBackground}>
           <PerfectText
             size={22}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.communityTitle}
           >
@@ -51,16 +51,15 @@ export const CommunitySection: React.FC<Props> = ({
           <PerfectText
             size={16}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.communitySubtitle}
           >
             Volontari e partner uniti nella missione #famezero
           </PerfectText>
-        </View>
+        </PerfectContainer>
       </Animated.View>
 
-      <View style={styles.communityRow}>
+      <PerfectContainer style={styles.communityRow}>
         <Animated.View
           style={[
             styles.communityCard,
@@ -75,18 +74,17 @@ export const CommunitySection: React.FC<Props> = ({
               colors={['#10B981', '#059669', '#047857']}
               style={styles.communityGradientContainer}
             >
-              <View style={styles.communityCardContent}>
+              <PerfectContainer style={styles.communityCardContent}>
                 <MaterialCommunityIcons
                   name="account-group"
-                  size={28}
+                  size={scaleDimensionLinear(28)}
                   color="#10B981"
                   style={styles.communityCardIcon}
                 />
                 <PerfectText
                   size={22}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.communityStatValue}
                 >
                   13.323
@@ -94,19 +92,18 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.communityStatLabel}
                 >
                   Volontari 2024
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={20}
+                  size={scaleDimensionLinear(20)}
                   color="#10B981"
                   style={styles.chevronIcon}
                 />
-              </View>
+              </PerfectContainer>
             </LinearGradient>
           </PlatformTouchable>
         </Animated.View>
@@ -125,18 +122,17 @@ export const CommunitySection: React.FC<Props> = ({
               colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
               style={styles.communityGradientContainer}
             >
-              <View style={styles.communityCardContent}>
+              <PerfectContainer style={styles.communityCardContent}>
                 <MaterialCommunityIcons
                   name="handshake"
-                  size={28}
+                  size={scaleDimensionLinear(28)}
                   color="#8B5CF6"
                   style={styles.communityCardIcon}
                 />
                 <PerfectText
                   size={22}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.communityStatValue}
                 >
                   150+
@@ -144,24 +140,23 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.communityStatLabel}
                 >
                   Partner Attivi
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={20}
+                  size={scaleDimensionLinear(20)}
                   color="#8B5CF6"
                   style={styles.chevronIcon}
                 />
-              </View>
+              </PerfectContainer>
             </LinearGradient>
           </PlatformTouchable>
         </Animated.View>
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 
@@ -199,14 +194,14 @@ const styles = StyleSheet.create({
   communityStatValue: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold,
-    color: '#1F2937',
+    color: Colors.neutral[800],
     marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per più spazio
     lineHeight: 28, // AGGIUNTO: lineHeight per headline-small
   },
   communityStatLabel: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.semibold,
-    color: '#374151',
+    color: Colors.neutral[700],
     textAlign: 'center',
     lineHeight: 22, // AGGIUNTO: lineHeight per body-large
   },
@@ -224,7 +219,7 @@ const styles = StyleSheet.create({
   communityHeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
+        ? Colors.neutral[100] // ANDROID: Grigio leggermente più scuro
         : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
     borderRadius: 20,
     paddingVertical: Spacing[4],
@@ -232,9 +227,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
+        ? Colors.neutral[200] // ANDROID: Bordo grigio leggermente più scuro
         : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
-    shadowColor: '#374151',
+    shadowColor: Colors.neutral[700],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
@@ -243,7 +238,7 @@ const styles = StyleSheet.create({
   communityTitle: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold, // BOLD normale
-    color: '#374151', // GRIGIO ELEGANTE
+    color: Colors.neutral[700], // GRIGIO ELEGANTE
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,
@@ -253,7 +248,7 @@ const styles = StyleSheet.create({
   },
   communitySubtitle: {
     // fontSize rimosso - ora gestito da Text
-    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
     marginTop: Spacing[3],
     opacity: 0.9,

@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import { useTheme } from '@react-navigation/native';
 import { TouchableRipple } from 'react-native-paper';
 import { BorderRadius, Spacing, Typography } from '../../shared/constants';
 import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { PerfectText } from './PerfectText';
+import { PerfectContainer } from './PerfectContainer';
 
 interface FilterTab {
   id: string;
@@ -123,7 +124,7 @@ const TabItem: React.FC<TabItemProps> = ({
   showCounts,
   styles,
 }) => (
-  <View style={styles.tabContainer}>
+  <PerfectContainer style={styles.tabContainer}>
     <TouchableRipple
       onPress={onPress}
       borderless
@@ -140,7 +141,7 @@ const TabItem: React.FC<TabItemProps> = ({
         selected: isActive,
       }}
     >
-      <View style={styles.tabContent}>
+      <PerfectContainer style={styles.tabContent}>
         {tab.icon && (
           <PerfectText
             size={14}
@@ -180,9 +181,9 @@ const TabItem: React.FC<TabItemProps> = ({
             {tab.count}
           </PerfectText>
         )}
-      </View>
+      </PerfectContainer>
     </TouchableRipple>
-  </View>
+  </PerfectContainer>
 );
 
 export const FilterTabs: React.FC<FilterTabsProps> = ({
@@ -199,7 +200,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   );
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -217,7 +218,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
           />
         ))}
       </ScrollView>
-    </View>
+    </PerfectContainer>
   );
 };
 

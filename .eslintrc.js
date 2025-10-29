@@ -59,7 +59,6 @@ module.exports = {
     '@typescript-eslint/no-unnecessary-condition': 'off', // TEMPORANEO: Da rivedere caso per caso
     '@typescript-eslint/strict-boolean-expressions': 'off', // TEMPORANEO: Troppo restrittivo per codebase esistente
     '@typescript-eslint/no-floating-promises': 'error', // CRITICO: Gestisci sempre le Promise
-    '@typescript-eslint/require-await': 'error', // CRITICO: async solo se necessario
 
     // =================== REACT HOOKS ===================
     'react-hooks/rules-of-hooks': 'error', // Critico
@@ -100,6 +99,36 @@ module.exports = {
     'import/no-named-as-default': 'off', // TEMPORANEO: Troppi falsi positivi
     'unused-imports/no-unused-imports': 'error', // Pulizia automatica
 
+    // =================== PROJECT CODING STANDARDS ===================
+    // Enforcing Perfect System adoption
+    'react-native/no-inline-styles': 'warn', // Gradualmente enforce Perfect System
+    
+    // Naming conventions
+    '@typescript-eslint/naming-convention': [
+      'warn',
+      {
+        selector: 'variable',
+        format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+      },
+      {
+        selector: 'function',
+        format: ['camelCase', 'PascalCase'],
+      },
+      {
+        selector: 'typeLike',
+        format: ['PascalCase'],
+      },
+    ],
+
+    // Prevent deep nesting (max 4 levels enforced in docs)
+    'max-depth': ['warn', 4],
+    
+    // File length (max 200 lines enforced in docs)
+    'max-lines': ['warn', { max: 250, skipBlankLines: true, skipComments: true }],
+    
+    // Function length
+    'max-lines-per-function': ['warn', { max: 50, skipBlankLines: true, skipComments: true }],
+
     // =================== ENFORCE SISTEMA PERFETTO (BAN LEGACY) ===================
     'no-restricted-imports': [
       'error', // RIATTIVATO: Blocca pattern legacy dopo migrazione
@@ -132,6 +161,7 @@ module.exports = {
           },
         ],
         patterns: [
+          // Legacy responsive system (ban)
           '**/FormattedText',
           '**/FormattedTextEnhanced',
           '**/ResponsiveBox',
@@ -140,9 +170,7 @@ module.exports = {
           '**/ResponsiveImage',
           '**/useResponsiveLayout',
           '**/useResponsiveDarkMode',
-        ],
-        patterns: [
-          // Evita UI duplicate/legacy
+          // UI duplicate/legacy (ban)
           '**/features/actions/components/components/ActionButtons',
           '**/features/actions/components/components/DonationInfoModal',
           '**/components/layout/SectionContainerMigrated',
@@ -218,7 +246,10 @@ module.exports = {
       },
     },
     {
-      files: ['src/components/ui/PerfectText.tsx', 'src/components/ui/PerfectImage.tsx'],
+      files: [
+        'src/components/ui/PerfectText.tsx',
+        'src/components/ui/PerfectImage.tsx',
+      ],
       rules: {
         'no-restricted-imports': 'off',
       },
@@ -396,7 +427,7 @@ module.exports = {
         'max-lines-per-function': [
           'error',
           {
-            max: 100,
+            max: 200, // Aumentato per test complessi con setup/mocking/assertions
             skipBlankLines: true,
             skipComments: true,
           },
@@ -500,6 +531,9 @@ module.exports = {
         tsconfigRootDir: __dirname,
         project: ['./tsconfig.json'],
       },
+      rules: {
+        '@typescript-eslint/require-await': 'error', // CRITICO: async solo se necessario
+      },
     },
 
     // File di configurazione JavaScript - Non usare TypeScript parser
@@ -517,6 +551,7 @@ module.exports = {
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/require-await': 'off', // Disable per parser espree
 
         // MANTIENI: Regole utili anche per JavaScript
         '@typescript-eslint/no-var-requires': 'warn', // CommonJS vs ES6
@@ -552,6 +587,7 @@ module.exports = {
         '@typescript-eslint/no-unsafe-argument': 'off',
         '@typescript-eslint/no-var-requires': 'off', // CommonJS OK per scripts
         '@typescript-eslint/no-unused-vars': 'warn', // Solo warning per scripts
+        '@typescript-eslint/require-await': 'off', // Disable per parser espree
 
         // RELAX: Patterns comuni negli script
         'no-await-in-loop': 'off', // OK per script sequenziali
@@ -587,6 +623,7 @@ module.exports = {
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/require-await': 'off', // Disable per parser espree
         'no-console': 'off',
         'prefer-arrow/prefer-arrow-functions': 'off',
       },

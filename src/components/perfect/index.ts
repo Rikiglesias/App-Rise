@@ -36,7 +36,7 @@ export {
   PerfectContainer,
   PageContainer,
   CardContainer,
-  SectionContainer,
+  PerfectSection,
   ModalContainer,
   HeaderContainer,
   FooterContainer,

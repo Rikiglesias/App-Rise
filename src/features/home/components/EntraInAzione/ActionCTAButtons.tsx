@@ -2,13 +2,13 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import {
   PerfectText,
-  PerfectContainer,
   PlatformTouchable,
+  PerfectContainer,
 } from '../../../../components/ui';
 import {
   BorderRadius,
@@ -56,12 +56,12 @@ export const ActionCTAButtons: React.FC = () => {
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
         >
-          <View style={styles.whiteContainer}>
-            <View style={styles.buttonContent}>
+          <PerfectContainer style={styles.whiteContainer}>
+            <PerfectContainer style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="chart-line"
-                size={28}
-                color="#DC2626"
+                size={scaleDimensionLinear(28)}
+                color={Colors.primary[600]}
                 style={styles.buttonIcon}
               />
               <PerfectText
@@ -73,11 +73,11 @@ export const ActionCTAButtons: React.FC = () => {
               >
                 Scopri{'\n'}Impatto
               </PerfectText>
-              <View style={styles.directionRowRed}>
+              <PerfectContainer style={styles.directionRowRed}>
                 <MaterialCommunityIcons
                   name="arrow-left"
-                  size={18}
-                  color="#EF4444"
+                  size={scaleDimensionLinear(18)}
+                  color={Colors.primary[500]}
                 />
                 <PerfectText
                   size={16}
@@ -88,9 +88,9 @@ export const ActionCTAButtons: React.FC = () => {
                 >
                   Risultati
                 </PerfectText>
-              </View>
-            </View>
-          </View>
+              </PerfectContainer>
+            </PerfectContainer>
+          </PerfectContainer>
         </LinearGradient>
       </PlatformTouchable>
 
@@ -106,11 +106,11 @@ export const ActionCTAButtons: React.FC = () => {
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
         >
-          <View style={styles.whiteContainer}>
-            <View style={styles.buttonContent}>
+          <PerfectContainer style={styles.whiteContainer}>
+            <PerfectContainer style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="hand-heart"
-                size={28}
+                size={scaleDimensionLinear(28)}
                 color="#059669"
                 style={styles.buttonIcon}
               />
@@ -124,7 +124,7 @@ export const ActionCTAButtons: React.FC = () => {
               >
                 Dona e{'\n'}Aiuta
               </PerfectText>
-              <View style={styles.directionRowGreen}>
+              <PerfectContainer style={styles.directionRowGreen}>
                 <PerfectText
                   size={16}
                   fontWeight="bold"
@@ -136,12 +136,12 @@ export const ActionCTAButtons: React.FC = () => {
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="arrow-right"
-                  size={18}
+                  size={scaleDimensionLinear(18)}
                   color="#10B981"
                 />
-              </View>
-            </View>
-          </View>
+              </PerfectContainer>
+            </PerfectContainer>
+          </PerfectContainer>
         </LinearGradient>
       </PlatformTouchable>
     </PerfectContainer>

@@ -1,8 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { PlatformTouchable, PerfectText } from '../../../components/ui';
+import { StyleSheet } from 'react-native';
+import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../components/ui';
+import { scaleDimensionLinear } from '../../../shared/constants/responsiveSystem';
 import { PerfectImage } from '../../../components/ui/PerfectImage';
 
 import { IMPACT_DATA } from '../../../data/impactData';
@@ -27,19 +28,18 @@ export const StatButton: React.FC<StatButtonProps> = ({
     style={styles.statButton}
     activeOpacity={0.8}
   >
-    <View style={styles.statButtonContent}>
-      <View style={[styles.iconContainer, { backgroundColor: color }]}>
+    <PerfectContainer style={styles.statButtonContent}>
+      <PerfectContainer style={[styles.iconContainer, { backgroundColor: color }]}>
         <MaterialCommunityIcons
           name={icon}
-          size={28}
+          size={scaleDimensionLinear(28)}
           color={Colors.neutral[0]}
         />
-      </View>
-      <View style={styles.textContainer}>
+      </PerfectContainer>
+      <PerfectContainer style={styles.textContainer}>
         <PerfectText
           size={22}
           lines={1}
-          fontWeight="400"
           immunity={true}
           style={styles.statValue}
         >
@@ -48,19 +48,18 @@ export const StatButton: React.FC<StatButtonProps> = ({
         <PerfectText
           size={15}
           lines={1}
-          fontWeight="400"
           immunity={true}
           style={styles.statLabel}
         >
           {label}
         </PerfectText>
-      </View>
+      </PerfectContainer>
       <MaterialCommunityIcons
         name="chevron-right"
-        size={24}
+        size={scaleDimensionLinear(24)}
         color={Colors.neutral[400]}
       />
-    </View>
+    </PerfectContainer>
   </PlatformTouchable>
 );
 
@@ -70,7 +69,7 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
   text,
   image,
 }) => (
-  <View style={styles.storyCard}>
+  <PerfectContainer style={styles.storyCard}>
     <PerfectImage
       width={280}
       height={360}
@@ -81,11 +80,10 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       colors={['transparent', 'rgba(0,0,0,0.7)']}
       style={styles.storyGradient}
     />
-    <View style={styles.storyContent}>
+    <PerfectContainer style={styles.storyContent}>
       <PerfectText
         size={12}
         lines={1}
-        fontWeight="400"
         immunity={true}
         style={styles.storyLocation}
       >
@@ -94,7 +92,6 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       <PerfectText
         size={22}
         lines={1}
-        fontWeight="400"
         immunity={true}
         style={styles.storyTitle}
       >
@@ -103,26 +100,24 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       <PerfectText
         size={14}
         lines={2}
-        fontWeight="400"
         immunity={true}
         style={styles.storyText}
       >
         {text}
       </PerfectText>
-    </View>
-  </View>
+    </PerfectContainer>
+  </PerfectContainer>
 );
 
 export const MilestoneCard: React.FC<
   (typeof IMPACT_DATA.milestones)[number]
 > = ({ title, value, icon }) => (
-  <View style={styles.milestoneCard}>
-    <MaterialCommunityIcons name={icon} size={24} color={Colors.primary[600]} />
-    <View style={styles.milestoneContent}>
+  <PerfectContainer style={styles.milestoneCard}>
+    <MaterialCommunityIcons name={icon} size={scaleDimensionLinear(24)} color={Colors.primary[600]} />
+    <PerfectContainer style={styles.milestoneContent}>
       <PerfectText
         size={15}
         lines={1}
-        fontWeight="400"
         immunity={true}
         style={styles.milestoneTitle}
       >
@@ -131,14 +126,13 @@ export const MilestoneCard: React.FC<
       <PerfectText
         size={12}
         lines={1}
-        fontWeight="400"
         immunity={true}
         style={styles.milestoneValue}
       >
         {value}
       </PerfectText>
-    </View>
-  </View>
+    </PerfectContainer>
+  </PerfectContainer>
 );
 
 const styles = StyleSheet.create({

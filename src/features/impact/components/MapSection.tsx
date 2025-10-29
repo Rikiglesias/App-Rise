@@ -1,15 +1,15 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
-import { PerfectText, PlatformTouchable } from '../../../components/ui';
-import { PerfectImage } from '../../../components/ui/PerfectImage';
+import { PerfectText, PlatformTouchable, PerfectContainer, PerfectImage } from '@/components/ui';
+import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
-import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
+} from '@/shared/constants/designTokens';
+import { PlatformShadows } from '@/shared/constants/platformDesignTokens';
 
 interface Props {
   onMapPress: () => void;
@@ -24,14 +24,13 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
   }, [onMapPress]);
 
   return (
-    <View style={styles.mapSection}>
+    <PerfectContainer style={styles.mapSection}>
       {/* Header GEOGRAFICO con elementi di location */}
-      <View style={styles.mapHeaderContainer}>
-        <View style={styles.mapHeaderBackground}>
+      <PerfectContainer style={styles.mapHeaderContainer}>
+        <PerfectContainer style={styles.mapHeaderBackground}>
           <PerfectText
             size={22}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.mapTitle}
           >
@@ -40,14 +39,13 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           <PerfectText
             size={16}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.mapSubtitle}
           >
             Le nostre operazioni nel mondo
           </PerfectText>
-        </View>
-      </View>
+        </PerfectContainer>
+      </PerfectContainer>
 
       {/* CONTAINER MAPPA CLICCABILE - RIEMPIE TUTTO */}
       <PlatformTouchable
@@ -65,11 +63,10 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
         />
 
         {/* INDICATORE CLICCABILE */}
-        <View style={styles.mapClickIndicator}>
+        <PerfectContainer style={styles.mapClickIndicator}>
           <PerfectText
             size={12}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.mapClickText}
           >
@@ -77,12 +74,12 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           </PerfectText>
           <MaterialCommunityIcons
             name="map-search"
-            size={16}
+            size={scaleDimensionLinear(16)}
             color={Colors.neutral[600]}
           />
-        </View>
+        </PerfectContainer>
       </PlatformTouchable>
-    </View>
+    </PerfectContainer>
   );
 });
 
@@ -122,7 +119,7 @@ const styles = StyleSheet.create({
     right: Spacing[2],
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FAFAFA', // UNIFICATO: stesso colore su entrambe le piattaforme per consistenza
+    backgroundColor: Colors.neutral[50], // Design Token
     paddingHorizontal: Spacing[2],
     paddingVertical: Spacing[1],
     borderRadius: 12,
@@ -145,7 +142,7 @@ const styles = StyleSheet.create({
   mapHeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? '#F4F5F5' // ANDROID: Grigio leggermente più scuro
+        ? Colors.neutral[100] // ANDROID: Grigio leggermente più scuro
         : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
     borderRadius: 20,
     paddingVertical: Spacing[4],
@@ -153,9 +150,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? '#E6E8EA' // ANDROID: Bordo grigio leggermente più scuro
+        ? Colors.neutral[200] // ANDROID: Bordo grigio leggermente più scuro
         : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
-    shadowColor: '#374151',
+    shadowColor: Colors.neutral[700],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
@@ -164,7 +161,7 @@ const styles = StyleSheet.create({
   mapTitle: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold, // BOLD normale
-    color: '#374151', // GRIGIO ELEGANTE
+    color: Colors.neutral[700], // GRIGIO ELEGANTE
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,
@@ -174,7 +171,7 @@ const styles = StyleSheet.create({
   },
   mapSubtitle: {
     // fontSize rimosso - ora gestito da Text
-    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
     marginTop: Spacing[3],
     opacity: 0.9,

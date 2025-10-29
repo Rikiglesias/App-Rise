@@ -15,7 +15,6 @@ import { logger } from './src/shared/utils/logger';
 //   preloadSecondaryComponents,
 // } from './src/navigation/LazyLoading';
 
-
 // The new Main component that bridges the two theme systems
 const Main: React.FC = () => {
   const { isDark, colors } = useTheme();

@@ -1,10 +1,10 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, Platform, StyleSheet } from 'react-native';
 
-import { PerfectText } from '../../../components/ui';
+import { PerfectText, PerfectContainer } from '../../../components/ui';
 // Ratio inline per evitare dipendenze condivise
-import { Spacing, Typography } from '../../../shared/constants/designTokens';
+import { Colors, Spacing, Typography } from '../../../shared/constants/designTokens';
 import responsiveSystem, {
   scaleDimensionLinear,
   TypographyTokens,
@@ -56,8 +56,8 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
         style={styles.backgroundPattern}
       />
 
-      <View style={styles.mainHeaderContainer}>
-        <View style={styles.titleContainer}>
+      <PerfectContainer style={styles.mainHeaderContainer}>
+        <PerfectContainer style={styles.titleContainer}>
           <PerfectText
             size={TITLE_SIZE}
             lines={1}
@@ -80,7 +80,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
           >
             Impatto
           </PerfectText>
-        </View>
+        </PerfectContainer>
         <PerfectText
           size={SUBTITLE_SIZE}
           lines={2}
@@ -92,7 +92,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
         >
           Risultati concreti nella lotta contro la fame mondiale
         </PerfectText>
-      </View>
+      </PerfectContainer>
     </Animated.View>
   );
 };
@@ -121,15 +121,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: HEADER_INNER_HEIGHT,
     backgroundColor:
-      Platform.OS === 'android' ? '#F5F6F6' : 'rgba(31, 41, 55, 0.03)',
+      Platform.OS === 'android' ? Colors.neutral[100] : 'rgba(31, 41, 55, 0.03)',
     paddingHorizontal: Spacing[4],
     paddingTop: HEADER_VERTICAL_PADDING,
     paddingBottom: HEADER_VERTICAL_PADDING,
     borderRadius: 16,
     borderWidth: 1,
     borderColor:
-      Platform.OS === 'android' ? '#E8EAEB' : 'rgba(31, 41, 55, 0.08)',
-    shadowColor: '#1F2937',
+      Platform.OS === 'android' ? Colors.neutral[200] : 'rgba(31, 41, 55, 0.08)',
+    shadowColor: Colors.neutral[800],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08,
     shadowRadius: 6,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontWeight: Typography.weights.black,
-    color: '#1F2937',
+    color: Colors.neutral[800],
     textAlign: 'center',
     letterSpacing: TypographyTokens.letterSpacing.tight,
     lineHeight: TypographyTokens.lineHeights.baseline(HEADER_TITLE_SIZE),
@@ -153,14 +153,14 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
   titleAccent: {
-    color: '#DC2626',
+    color: Colors.primary[600],
     textShadowColor: 'rgba(220, 38, 38, 0.15)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
   },
   mainSubtitle: {
     fontWeight: Typography.weights.medium,
-    color: '#374151',
+    color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: TypographyTokens.letterSpacing.normal,
     lineHeight: TypographyTokens.lineHeights.baseline(IMPACT_SUBTITLE_SIZE),

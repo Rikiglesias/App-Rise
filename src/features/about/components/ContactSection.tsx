@@ -1,20 +1,27 @@
 import React from 'react';
-import { View } from 'react-native';
 
-import { PerfectText } from '../../../components/ui/PerfectText';
-import { contactSectionStyles } from '../styles';
+import { PerfectText, PerfectContainer } from '@/components/ui';
+
+import { contactSectionStyles } from '../styles/contactStyles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
-  animations,
   contacts,
 }) => {
   return (
-    <View style={contactSectionStyles.categoryContainer}>
+    <PerfectContainer 
+      style={contactSectionStyles.categoryContainer}  // marginBottom rimane qui (non prop disponibile)
+    >
       {/* HEADER SENZA ANIMAZIONI */}
-      <View style={contactSectionStyles.categoryHeader}>
-        <View style={contactSectionStyles.exploreHeaderContainer}>
+      <PerfectContainer 
+        style={contactSectionStyles.categoryHeader}  // marginBottom rimane qui
+      >
+        <PerfectContainer 
+          paddingVertical={8}  // ✅ Spacing[2] - SCALA!
+          paddingHorizontal={12}  // ✅ Spacing[3] - SCALA!
+          style={contactSectionStyles.exploreHeaderContainer}
+        >
           <PerfectText
             size={30}
             lines={1}
@@ -31,22 +38,20 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           >
             Sede di Bologna e recapiti ufficiali
           </PerfectText>
-        </View>
-      </View>
-      <View style={contactSectionStyles.contactsGrid}>
-        {contacts.map((contact, index) => {
-          const animationValue = animations.contactAnimations[index];
-          if (!animationValue) return null;
-
-          return (
-            <AnimatedContact
-              key={contact.id}
-              contact={contact}
-              animationValue={animationValue}
-            />
-          );
-        })}
-      </View>
-    </View>
+        </PerfectContainer>
+      </PerfectContainer>
+      <PerfectContainer 
+        paddingHorizontal={12}  // ✅ Spacing[3] - SCALA!
+        paddingVertical={8}  // ✅ Spacing[2] - SCALA!
+        style={contactSectionStyles.contactsGrid}
+      >
+        {contacts.map((contact) => (
+          <AnimatedContact
+            key={contact.id}
+            contact={contact}
+          />
+        ))}
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };

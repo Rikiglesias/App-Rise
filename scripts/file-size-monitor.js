@@ -308,7 +308,10 @@ function generateReport(violations, criticalFiles) {
     log('Tutti i file critici rispettano le soglie attese [OK]', 'green');
   } else {
     criticalFiles.forEach((file, index) => {
-      log(`${index + 1}. ${file.label}: riduci a <= ${file.redThreshold} righe (${file.type})`, 'white');
+      log(
+        `${index + 1}. ${file.label}: riduci a <= ${file.redThreshold} righe (${file.type})`,
+        'white'
+      );
     });
   }
 
@@ -352,5 +355,3 @@ if (require.main === module) {
 }
 
 module.exports = { analyzeFilesByType, suggestRefactoringStrategies };
-
-

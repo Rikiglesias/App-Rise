@@ -30,8 +30,25 @@ import {
   warnIfUserScaled,
 } from '../../shared/utils/SystemImmunity';
 
+// 📐 TYPOGRAPHY VARIANTS (presets comuni)
+const TYPOGRAPHY_VARIANTS = {
+  h1: { fontSize: 32, fontWeight: '700' as const },
+  h2: { fontSize: 28, fontWeight: '700' as const },
+  h3: { fontSize: 24, fontWeight: '600' as const },
+  h4: { fontSize: 20, fontWeight: '600' as const },
+  body: { fontSize: 16, fontWeight: '400' as const },
+  bodySmall: { fontSize: 14, fontWeight: '400' as const },
+  caption: { fontSize: 12, fontWeight: '400' as const },
+  button: { fontSize: 16, fontWeight: '600' as const },
+} as const;
+
+export type TypographyVariant = keyof typeof TYPOGRAPHY_VARIANTS;
+
 export interface PerfectTextProps
   extends Omit<TextProps, 'numberOfLines' | 'adjustsFontSizeToFit'> {
+  /** Typography variant (alternativa a fontSize/fontWeight) */
+  variant?: TypographyVariant;
+
   /** Font size di riferimento su iPhone 15 */
   fontSize?: number; // retrocompatibilità
   size?: number; // preferito
@@ -93,13 +110,14 @@ const DEFAULT_REFERENCE_CONTAINER = DEFAULT_REFERENCE_WIDTH * 0.9;
 
 export const PerfectText: React.FC<PerfectTextProps> = ({
   children,
+  variant,
   fontSize,
   size,
   lines,
   containerWidth,
   maxSize,
   minSize,
-  fontWeight = 'normal',
+  fontWeight,
   color = '#000000',
   textAlign = 'left',
   debug = false,
@@ -109,9 +127,14 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 }) => {
   const shouldMeasure = typeof children === 'string';
 
+  // Risolvi variant o valori custom
+  const variantConfig = variant ? TYPOGRAPHY_VARIANTS[variant] : null;
+  const finalFontSize = fontSize ?? size ?? variantConfig?.fontSize ?? 16;
+  const finalFontWeight = fontWeight ?? variantConfig?.fontWeight ?? 'normal';
+
   const scaledBase = useMemo(
-    () => scaleFont(size ?? fontSize ?? 16),
-    [fontSize, size]
+    () => scaleFont(finalFontSize),
+    [finalFontSize]
   );
   const scaledMax = useMemo(
     () => (typeof maxSize === 'number' ? scaleFont(maxSize) : undefined),
@@ -236,13 +259,13 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
       includeFontPadding: false,
       textAlignVertical: 'center',
       fontFamily,
-      fontWeight,
+      fontWeight: finalFontWeight,
     };
 
     return mergedStyle
       ? { ...baseStyle, ...mergedStyle, fontFamily }
       : baseStyle;
-  }, [style, fontState.size, color, textAlign, fontWeight]);
+  }, [style, fontState.size, color, textAlign, finalFontWeight]);
 
   return (
     <View style={{ width: targetWidth }}>

@@ -1,9 +1,9 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { PerfectText, PlatformScrollView } from '../../../components/ui';
+import { PerfectText, PlatformScrollView, PerfectContainer } from '../../../components/ui';
 // Ratio inline per evitare dipendenze condivise
 import responsiveSystem from '../../../shared/constants/responsiveSystem';
 
@@ -30,7 +30,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <PlatformScrollView>
-        <View style={styles.header}>
+        <PerfectContainer style={styles.header}>
           <PerfectText
             size={36}
             lines={1}
@@ -64,10 +64,10 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
           >
             Risultati raggiunti insieme
           </PerfectText>
-        </View>
+        </PerfectContainer>
 
-        <View style={styles.statsSection}>
-          <View style={styles.statCard}>
+        <PerfectContainer style={styles.statsSection}>
+          <PerfectContainer style={styles.statCard}>
             <PerfectText
               size={28}
               lines={1}
@@ -100,9 +100,9 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             >
               Nutrizione per comunità in difficoltà
             </PerfectText>
-          </View>
+          </PerfectContainer>
 
-          <View style={styles.statCard}>
+          <PerfectContainer style={styles.statCard}>
             <PerfectText
               size={28}
               lines={1}
@@ -135,9 +135,9 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             >
               Kit completi per emergenze
             </PerfectText>
-          </View>
+          </PerfectContainer>
 
-          <View style={styles.statCard}>
+          <PerfectContainer style={styles.statCard}>
             <PerfectText
               size={28}
               lines={1}
@@ -170,10 +170,10 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             >
               Persone che hanno fatto la differenza
             </PerfectText>
-          </View>
-        </View>
+          </PerfectContainer>
+        </PerfectContainer>
 
-        <View style={styles.impactSection}>
+        <PerfectContainer style={styles.impactSection}>
           <PerfectText
             size={18}
             lines={1}
@@ -183,8 +183,8 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             Dove Arrivano i Nostri Aiuti
           </PerfectText>
 
-          <View style={styles.impactList}>
-            <View style={styles.impactItem}>
+          <PerfectContainer style={styles.impactList}>
+            <PerfectContainer style={styles.impactItem}>
               <PerfectText
                 size={18}
                 lines={1}
@@ -201,8 +201,8 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
               >
                 Africa Subsahariana
               </PerfectText>
-            </View>
-            <View style={styles.impactItem}>
+            </PerfectContainer>
+            <PerfectContainer style={styles.impactItem}>
               <PerfectText
                 size={18}
                 lines={1}
@@ -219,8 +219,8 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
               >
                 Programmi scolastici
               </PerfectText>
-            </View>
-            <View style={styles.impactItem}>
+            </PerfectContainer>
+            <PerfectContainer style={styles.impactItem}>
               <PerfectText
                 size={18}
                 lines={1}
@@ -237,8 +237,8 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
               >
                 Emergenze umanitarie
               </PerfectText>
-            </View>
-            <View style={styles.impactItem}>
+            </PerfectContainer>
+            <PerfectContainer style={styles.impactItem}>
               <PerfectText
                 size={18}
                 lines={1}
@@ -255,11 +255,11 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
               >
                 Comunità italiane
               </PerfectText>
-            </View>
-          </View>
-        </View>
+            </PerfectContainer>
+          </PerfectContainer>
+        </PerfectContainer>
 
-        <View style={styles.goalSection}>
+        <PerfectContainer style={styles.goalSection}>
           <PerfectText
             size={36}
             lines={1}
@@ -284,7 +284,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
           >
             Superare i 4 milioni di pasti confezionati
           </PerfectText>
-        </View>
+        </PerfectContainer>
       </PlatformScrollView>
     </SafeAreaView>
   );

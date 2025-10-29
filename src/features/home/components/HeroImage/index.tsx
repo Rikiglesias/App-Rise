@@ -1,7 +1,7 @@
 import React from 'react';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { PerfectImage } from '../../../../components/ui/PerfectImage';
+import { PerfectImage, PerfectContainer } from '../../../../components/ui';
 import { type HeroImageProps } from '../../types';
 import { useHeroImageStyles } from './HeroImage.styles';
 
@@ -18,7 +18,7 @@ export const HeroImage: React.FC<HeroImageProps> = ({
 
   // Animazioni attive su entrambe le piattaforme
   return (
-    <View style={styles.imageSection}>
+    <PerfectContainer style={styles.imageSection}>
       <Animated.View
         style={[
           styles.imageContainer,
@@ -55,7 +55,7 @@ export const HeroImage: React.FC<HeroImageProps> = ({
           />
         </Animated.View>
       </Animated.View>
-    </View>
+    </PerfectContainer>
   );
 };
 

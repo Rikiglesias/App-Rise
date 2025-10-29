@@ -1,16 +1,16 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, Platform, StyleSheet } from 'react-native';
 
-import { PerfectText, PlatformTouchable } from '../../../components/ui';
-// Responsive system available from Perfect System when needed
+import { PerfectText, PlatformTouchable, PerfectContainer } from '@/components/ui';
+import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
-import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
+} from '@/shared/constants/designTokens';
+import { PlatformShadows } from '@/shared/constants/platformDesignTokens';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
 interface Props {
@@ -28,11 +28,11 @@ export const TotalMealsSection: React.FC<Props> = ({
   onKitsPress,
 }) => {
   return (
-    <View style={styles.totalMealsSection}>
+    <PerfectContainer style={styles.totalMealsSection}>
       {/* Linea divisoria tra header e sezione Dal 2012 */}
-      <View style={styles.titleSeparatorContainer}>
-        <View style={styles.titleSeparator} />
-      </View>
+      <PerfectContainer style={styles.titleSeparatorContainer}>
+        <PerfectContainer style={styles.titleSeparator} />
+      </PerfectContainer>
 
       {/* Header POTENZIATO con decorazioni eleganti */}
       <Animated.View
@@ -44,11 +44,10 @@ export const TotalMealsSection: React.FC<Props> = ({
           },
         ]}
       >
-        <View style={styles.numbersHeaderBackground}>
+        <PerfectContainer style={styles.numbersHeaderBackground}>
           <PerfectText
             size={24}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.numbersTitle}
           >
@@ -57,16 +56,15 @@ export const TotalMealsSection: React.FC<Props> = ({
           <PerfectText
             size={16}
             lines={2}
-            fontWeight="400"
             immunity={true}
             style={styles.numbersSubtitle}
           >
             Milioni di vite cambiate, un pasto alla volta
           </PerfectText>
-        </View>
+        </PerfectContainer>
       </Animated.View>
 
-      <View style={styles.totalStatsRow}>
+      <PerfectContainer style={styles.totalStatsRow}>
         <Animated.View
           style={[
             styles.totalStatCard,
@@ -78,21 +76,20 @@ export const TotalMealsSection: React.FC<Props> = ({
         >
           <PlatformTouchable onPress={onMealsPress} activeOpacity={0.9}>
             <LinearGradient
-              colors={['#DC2626', '#B91C1C', '#991B1B']}
+              colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
               style={styles.totalGradientContainer}
             >
-              <View style={styles.totalCardContent}>
+              <PerfectContainer style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="food-apple"
-                  size={28} // Optimized size for better proportions
-                  color="#DC2626"
+                  size={scaleDimensionLinear(28)}
+                  color={Colors.primary[600]}
                   style={styles.totalCardIcon}
                 />
                 <PerfectText
                   size={22}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.totalStatValue}
                 >
                   15.8M
@@ -100,8 +97,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.totalStatLabel}
                 >
                   Pasti Totali
@@ -109,19 +105,18 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={14}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.totalStatSubtitle}
                 >
                   Dal 2012 - Meals
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={20}
-                  color="#DC2626"
+                  size={scaleDimensionLinear(20)}
+                  color={Colors.primary[600]}
                   style={styles.chevronIcon}
                 />
-              </View>
+              </PerfectContainer>
             </LinearGradient>
           </PlatformTouchable>
         </Animated.View>
@@ -137,21 +132,20 @@ export const TotalMealsSection: React.FC<Props> = ({
         >
           <PlatformTouchable onPress={onKitsPress} activeOpacity={0.9}>
             <LinearGradient
-              colors={['#1F2937', '#374151', '#111827']}
+              colors={[Colors.neutral[800], Colors.neutral[700], Colors.neutral[900]]}
               style={styles.totalGradientContainer}
             >
-              <View style={styles.totalCardContent}>
+              <PerfectContainer style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="package-variant"
-                  size={28} // Optimized size for better proportions
-                  color="#1F2937"
+                  size={scaleDimensionLinear(28)}
+                  color={Colors.neutral[800]}
                   style={styles.totalCardIcon}
                 />
                 <PerfectText
                   size={22}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.totalStatValue}
                 >
                   142K
@@ -159,8 +153,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.totalStatLabel}
                 >
                   Kit Totali
@@ -168,24 +161,23 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={14}
                   lines={1}
-                  fontWeight="400"
-                  immunity={true}
+                        immunity={true}
                   style={styles.totalStatSubtitle}
                 >
                   Dal 2020 - Kits
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={20}
-                  color="#1F2937"
+                  size={scaleDimensionLinear(20)}
+                  color={Colors.neutral[800]}
                   style={styles.chevronIcon}
                 />
-              </View>
+              </PerfectContainer>
             </LinearGradient>
           </PlatformTouchable>
         </Animated.View>
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 
@@ -235,20 +227,20 @@ const styles = StyleSheet.create({
   totalStatValue: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.black,
-    color: '#1F2937', // NERO invece che rosso
+    color: Colors.neutral[800], // NERO invece che rosso
     marginBottom: Spacing[1],
     lineHeight: 28, // Improved readability for headlines
   },
   totalStatLabel: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold,
-    color: '#374151',
+    color: Colors.neutral[700],
     marginBottom: Spacing[2], // Balanced spacing for content
     lineHeight: 22, // Enhanced readability for body text
   },
   totalStatSubtitle: {
     // fontSize rimosso - ora gestito da Text
-    color: '#6B7280',
+    color: Colors.neutral[500],
     lineHeight: 18, // Consistent line height for medium text
   },
 
@@ -261,7 +253,7 @@ const styles = StyleSheet.create({
   numbersHeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? '#F4F5F5' // Android: Optimized solid color
+        ? Colors.neutral[100] // Android: Optimized solid color
         : 'rgba(55, 65, 81, 0.03)', // iOS: Transparent background
     borderRadius: 20,
     paddingVertical: Spacing[4],
@@ -269,9 +261,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? '#E6E8EA' // Android: Consistent border color
+        ? Colors.neutral[200] // Android: Consistent border color
         : 'rgba(55, 65, 81, 0.08)', // iOS: Subtle border transparency
-    shadowColor: '#374151',
+    shadowColor: Colors.neutral[700],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
@@ -280,7 +272,7 @@ const styles = StyleSheet.create({
   numbersTitle: {
     // fontSize rimosso - ora gestito da Text
     fontWeight: Typography.weights.bold, // BOLD normale
-    color: '#374151', // GRIGIO ELEGANTE
+    color: Colors.neutral[700], // GRIGIO ELEGANTE
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,
@@ -290,7 +282,7 @@ const styles = StyleSheet.create({
   },
   numbersSubtitle: {
     // fontSize rimosso - ora gestito da Text
-    color: '#4B5563', // GRIGIO MEDIO per leggibilità
+    color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
     marginTop: Spacing[3],
     opacity: 0.9,

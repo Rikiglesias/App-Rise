@@ -1,6 +1,7 @@
 import React from 'react';
-import { Animated, View, TextStyle } from 'react-native';
+import { Animated, TextStyle } from 'react-native';
 import { PerfectText } from './PerfectText';
+import { PerfectContainer } from './PerfectContainer';
 import { enhancedCardStyles } from './styles/EnhancedCardStyles';
 import type {
   ArrowSectionProps,
@@ -28,19 +29,19 @@ export const IconSection: React.FC<IconSectionProps> = ({
     18;
 
   return (
-    <View style={enhancedCardStyles.iconSection}>
-      <View
+    <PerfectContainer style={enhancedCardStyles.iconSection}>
+      <PerfectContainer
         style={[
           enhancedCardStyles.iconContainer,
-          variant ? enhancedCardStyles[`${variant}IconContainer`] : undefined,
-          size ? enhancedCardStyles[`${size}IconContainer`] : undefined,
-        ]}
+          variant && enhancedCardStyles[`${variant}IconContainer`],
+          size && enhancedCardStyles[`${size}IconContainer`],
+        ].filter(Boolean) as never}
       >
         <PerfectText size={iconFontSize} lines={1} style={iconStyle}>
           {icon}
         </PerfectText>
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 
@@ -74,7 +75,7 @@ export const TextSection: React.FC<TextSectionProps> = ({
     16;
 
   return (
-    <View style={enhancedCardStyles.textSection}>
+    <PerfectContainer style={enhancedCardStyles.textSection}>
       <PerfectText size={titleSize} lines={2} style={titleStyles}>
         {title}
       </PerfectText>
@@ -86,7 +87,7 @@ export const TextSection: React.FC<TextSectionProps> = ({
       )}
 
       {children}
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -119,10 +120,10 @@ export const ArrowSection: React.FC<ArrowSectionProps> = ({
   const arrowSize = enhancedCardStyles.arrow.fontSize ?? 16;
 
   return (
-    <View style={enhancedCardStyles.arrowSection}>
+    <PerfectContainer style={enhancedCardStyles.arrowSection}>
       <AnimatedPerfectText size={arrowSize} lines={1} style={arrowStyles}>
         ➔
       </AnimatedPerfectText>
-    </View>
+    </PerfectContainer>
   );
 };

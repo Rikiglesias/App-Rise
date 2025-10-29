@@ -1,15 +1,18 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { Animated, Modal, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { Modal } from 'react-native';
 import {
   PlatformScrollView,
   PlatformTouchable,
   PerfectText,
-} from '../../../components/ui';
+  PerfectContainer,
+} from '@/components/ui';
+import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+import { Colors } from '@/shared/constants';
+import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
-import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
-import { modalStyles } from '../styles';
+import { modalStyles } from '../styles/modalStyles';
 import type { StoriaModalProps } from '../types';
 
 export const StoriaModal: React.FC<StoriaModalProps> = ({
@@ -17,14 +20,6 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
-  // ANIMAZIONI DISABILITATE - valori statici per evitare bordi grigi
-  const modalAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
-  const backdropAnim = useRef(new Animated.Value(1)).current; // Sempre visibile
-
-  useEffect(() => {
-    // ANIMAZIONI DISABILITATE - nessuna animazione per evitare bordi grigi
-    // Il modal si apre/chiude istantaneamente
-  }, [visible, modalAnim, backdropAnim]);
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -38,31 +33,30 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
       onRequestClose={handleClose}
       animationType="none"
     >
-      <View style={modalStyles.overlay}>
+      <PerfectContainer style={modalStyles.overlay}>
         {/* Backdrop - cliccabile per chiudere */}
         <PlatformTouchable
           style={modalStyles.backdropTouchable}
           onPress={handleClose}
           activeOpacity={1}
         >
-          <View style={modalStyles.backdrop} />
+          <PerfectContainer style={modalStyles.backdrop} />
         </PlatformTouchable>
 
         {/* Modal Content */}
-        <View style={modalStyles.modalContainer}>
-          {/* GRADIENT CONTAINER PATTERN per modal */}
+        <PerfectContainer style={modalStyles.modalContainer}>
+          {/* GRADIENT BORDER */}
           <LinearGradient
-            colors={['#DC2626', '#B91C1C', '#991B1B']}
+            colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
             style={modalStyles.modalGradientBorder}
           >
-            <View style={modalStyles.modalWhiteContainer}>
-              <View style={modalStyles.modalContent}>
+            <PerfectContainer style={modalStyles.modalWhiteContainer}>
+              <PerfectContainer style={modalStyles.modalContent}>
                 {/* Header */}
-                <View style={modalStyles.modalHeader}>
+                <PerfectContainer style={modalStyles.modalHeader}>
                   <PerfectText
                     size={16}
                     lines={1}
-                    fontWeight="400"
                     style={modalStyles.modalTitle}
                   >
                     La Nostra Storia
@@ -74,11 +68,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="close"
-                      size={20} // RIDOTTO: da 24 a 20 per coordinare con il pulsante più piccolo
-                      color="#FFFFFF" // CAMBIATO: da rosso a bianco per contrasto con sfondo scuro
+                      size={scaleDimensionLinear(20)}
+                      color={Colors.neutral[0]}
                     />
                   </PlatformTouchable>
-                </View>
+                </PerfectContainer>
 
                 {/* Story Content */}
                 <PlatformScrollView
@@ -89,7 +83,6 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <PerfectText
                     size={15}
                     lines={1}
-                    fontWeight="400"
                     style={modalStyles.introText}
                   >
                     Dal 1998, un movimento globale contro la fame
@@ -98,14 +91,12 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <PerfectText
                     size={15}
                     lines={10}
-                    fontWeight="400"
                     style={modalStyles.storyText}
                   >
                     <PerfectText
                       size={15}
                       lines={1}
-                      fontWeight="400"
-                      style={modalStyles.highlightText}
+                        style={modalStyles.highlightText}
                     >
                       Rise Against Hunger
                     </PerfectText>{' '}
@@ -113,8 +104,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     <PerfectText
                       size={15}
                       lines={1}
-                      fontWeight="400"
-                      style={modalStyles.highlightText}
+                        style={modalStyles.highlightText}
                     >
                       1998
                     </PerfectText>{' '}
@@ -123,15 +113,14 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     nutrienti e lo sviluppo di programmi sostenibili.
                   </PerfectText>
 
-                  <View style={modalStyles.sectionDivider} />
+                  <PerfectContainer style={modalStyles.sectionDivider} />
 
                   <PerfectText
                     size={15}
                     lines={1}
-                    fontWeight="400"
                     style={modalStyles.sectionTitle}
                   >
-                    <PerfectText size={20} lines={1} fontWeight="400">
+                    <PerfectText size={20} lines={1}>
                       🇮🇹
                     </PerfectText>{' '}
                     In Italia
@@ -139,15 +128,13 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   <PerfectText
                     size={15}
                     lines={8}
-                    fontWeight="400"
                     style={modalStyles.storyText}
                   >
                     La organizzazione arriva in{' '}
                     <PerfectText
                       size={15}
                       lines={1}
-                      fontWeight="400"
-                      style={modalStyles.highlightText}
+                        style={modalStyles.highlightText}
                     >
                       Italia
                     </PerfectText>{' '}
@@ -156,8 +143,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     <PerfectText
                       size={15}
                       lines={1}
-                      fontWeight="400"
-                      style={modalStyles.highlightText}
+                        style={modalStyles.highlightText}
                     >
                       Bologna
                     </PerfectText>{' '}
@@ -165,148 +151,134 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     territorio nazionale.
                   </PerfectText>
 
-                  <View style={modalStyles.sectionDivider} />
+                  <PerfectContainer style={modalStyles.sectionDivider} />
 
                   <PerfectText
                     size={15}
                     lines={1}
-                    fontWeight="400"
                     style={modalStyles.sectionTitle}
                   >
-                    <PerfectText size={20} lines={1} fontWeight="400">
+                    <PerfectText size={20} lines={1}>
                       🌟
                     </PerfectText>{' '}
                     I Nostri Pilastri
                   </PerfectText>
-                  <View style={modalStyles.pillarsContainer}>
-                    <View style={modalStyles.pillarItem}>
+                  <PerfectContainer style={modalStyles.pillarsContainer}>
+                    <PerfectContainer style={modalStyles.pillarItem}>
                       <PerfectText
                         size={24}
                         lines={1}
-                        fontWeight="400"
-                        style={modalStyles.pillarIcon}
+                            style={modalStyles.pillarIcon}
                       >
                         🍽️
                       </PerfectText>
-                      <View style={modalStyles.pillarContent}>
+                      <PerfectContainer style={modalStyles.pillarContent}>
                         <PerfectText
                           size={15}
                           lines={1}
-                          fontWeight="400"
-                          style={modalStyles.pillarTitle}
+                                style={modalStyles.pillarTitle}
                         >
                           Distribuzione Pasti
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={3}
-                          fontWeight="400"
-                          style={modalStyles.pillarText}
+                                style={modalStyles.pillarText}
                         >
                           Organizziamo eventi di confezionamento pasti che
                           coinvolgono volontari di ogni età
                         </PerfectText>
-                      </View>
-                    </View>
+                      </PerfectContainer>
+                    </PerfectContainer>
 
-                    <View style={modalStyles.pillarItem}>
+                    <PerfectContainer style={modalStyles.pillarItem}>
                       <PerfectText
                         size={24}
                         lines={1}
-                        fontWeight="400"
-                        style={modalStyles.pillarIcon}
+                            style={modalStyles.pillarIcon}
                       >
                         🤝
                       </PerfectText>
-                      <View style={modalStyles.pillarContent}>
+                      <PerfectContainer style={modalStyles.pillarContent}>
                         <PerfectText
                           size={15}
                           lines={1}
-                          fontWeight="400"
-                          style={modalStyles.pillarTitle}
+                                style={modalStyles.pillarTitle}
                         >
                           Coinvolgimento Comunitario
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={2}
-                          fontWeight="400"
-                          style={modalStyles.pillarText}
+                                style={modalStyles.pillarText}
                         >
                           Uniamo scuole, aziende e organizzazioni in un impegno
                           condiviso
                         </PerfectText>
-                      </View>
-                    </View>
+                      </PerfectContainer>
+                    </PerfectContainer>
 
-                    <View style={modalStyles.pillarItem}>
+                    <PerfectContainer style={modalStyles.pillarItem}>
                       <PerfectText
                         size={24}
                         lines={1}
-                        fontWeight="400"
-                        style={modalStyles.pillarIcon}
+                            style={modalStyles.pillarIcon}
                       >
                         🌍
                       </PerfectText>
-                      <View style={modalStyles.pillarContent}>
+                      <PerfectContainer style={modalStyles.pillarContent}>
                         <PerfectText
                           size={15}
                           lines={1}
-                          fontWeight="400"
-                          style={modalStyles.pillarTitle}
+                                style={modalStyles.pillarTitle}
                         >
                           Impatto Globale
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={3}
-                          fontWeight="400"
-                          style={modalStyles.pillarText}
+                                style={modalStyles.pillarText}
                         >
                           I pasti confezionati raggiungono comunità vulnerabili
                           in tutto il mondo
                         </PerfectText>
-                      </View>
-                    </View>
+                      </PerfectContainer>
+                    </PerfectContainer>
 
-                    <View style={modalStyles.pillarItem}>
+                    <PerfectContainer style={modalStyles.pillarItem}>
                       <PerfectText
                         size={24}
                         lines={1}
-                        fontWeight="400"
-                        style={modalStyles.pillarIcon}
+                            style={modalStyles.pillarIcon}
                       >
                         📚
                       </PerfectText>
-                      <View style={modalStyles.pillarContent}>
+                      <PerfectContainer style={modalStyles.pillarContent}>
                         <PerfectText
                           size={15}
                           lines={1}
-                          fontWeight="400"
-                          style={modalStyles.pillarTitle}
+                                style={modalStyles.pillarTitle}
                         >
                           Educazione
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={2}
-                          fontWeight="400"
-                          style={modalStyles.pillarText}
+                                style={modalStyles.pillarText}
                         >
                           Sensibilizziamo sul tema della fame e promuoviamo la
                           solidarietà
                         </PerfectText>
-                      </View>
-                    </View>
-                  </View>
+                      </PerfectContainer>
+                    </PerfectContainer>
+                  </PerfectContainer>
 
-                  <View style={modalStyles.sectionDivider} />
+                  <PerfectContainer style={modalStyles.sectionDivider} />
 
-                  <View style={modalStyles.finalMessageContainer}>
+                  <PerfectContainer style={modalStyles.finalMessageContainer}>
                     <PerfectText
                       size={12}
                       lines={6}
-                      fontWeight="400"
                       style={modalStyles.finalMessage}
                     >
                       Ogni pasto che confezioniamo insieme è un gesto di amore
@@ -316,19 +288,18 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                       <PerfectText
                         size={12}
                         lines={1}
-                        fontWeight="400"
                         style={modalStyles.highlightText}
                       >
                         Unisciti a noi in questa missione di speranza.
                       </PerfectText>
                     </PerfectText>
-                  </View>
+                  </PerfectContainer>
                 </PlatformScrollView>
-              </View>
-            </View>
+              </PerfectContainer>
+            </PerfectContainer>
           </LinearGradient>
-        </View>
-      </View>
+        </PerfectContainer>
+      </PerfectContainer>
     </Modal>
   );
 };

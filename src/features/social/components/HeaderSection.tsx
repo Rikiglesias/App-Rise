@@ -1,10 +1,11 @@
 import React from 'react';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { PerfectText } from '../../../components/ui';
+import { PerfectText, PerfectContainer } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants';
 import responsiveSystem, {
   scaleFont,
+  scaleDimensionLinear,
 } from '../../../shared/constants/responsiveSystem';
 
 interface HeaderSectionProps {
@@ -30,18 +31,17 @@ export const HeaderSection: React.FC<HeaderSectionProps> = React.memo(
           },
         ]}
       >
-        <View style={styles.headerIconContainer}>
+        <PerfectContainer style={styles.headerIconContainer}>
           <MaterialCommunityIcons
             name="account-group"
-            size={32}
+            size={scaleDimensionLinear(32)}
             color={Colors.primary[600]}
           />
-        </View>
+        </PerfectContainer>
 
         <PerfectText
           size={28}
           lines={1}
-          fontWeight="400"
           containerWidth={
             (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
           }
@@ -53,7 +53,6 @@ export const HeaderSection: React.FC<HeaderSectionProps> = React.memo(
         <PerfectText
           size={16}
           lines={2}
-          fontWeight="400"
           containerWidth={
             (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
           }
