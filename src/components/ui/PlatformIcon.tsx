@@ -1,7 +1,6 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { scaleDimensionLinear } from '../../shared/constants/responsiveSystem';
 
 interface PlatformIconProps {
   name: string;
@@ -29,8 +28,10 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   color,
   style,
 }) => {
-  // 🎯 SCALA size proporzionalmente
-  const scaledSize = scaleDimensionLinear(size);
+  // 🎯 SCALA size proporzionalmente (Perfect System interno)
+  const { width } = Dimensions.get('window');
+  const scale = width / 393; // iPhone 15 reference
+  const scaledSize = size * scale;
   // Mapping strategico iOS-style -> Android Material
   const iconMapping = {
     // Navigation

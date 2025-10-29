@@ -1,9 +1,7 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PlatformScrollView, PlatformTouchable, PerfectContainer } from '../../../components/ui';
-import { scaleDimensionLinear } from '../../../shared/constants/responsiveSystem';
+import { PlatformScrollView, PlatformTouchable, PerfectContainer, PlatformIcon } from '../../../components/ui';
 import { Colors } from '../../../shared/constants';
 
 import type { RootStackParamList } from '../../../navigation/types';
@@ -42,9 +40,9 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleBackPress}
         style={mainStyles.backButton}
       >
-        <MaterialCommunityIcons 
+        <PlatformIcon 
           name="arrow-left" 
-          size={scaleDimensionLinear(24)} 
+          size={24} 
           color={Colors.neutral[900]} 
         />
       </PlatformTouchable>
