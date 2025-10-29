@@ -1,0 +1,8 @@
+test: add edge case tests for selectors coverage
+
+- Add 9 tests for uncovered selector edge cases
+- Test useAppActions memoization and functionality
+- Test useUpcomingProjects filtering and updates
+- Test useSelectedProject state management
+- Coverage: stores/selectors.ts 88% to 100%
+- Tests: 567 to 576 total
