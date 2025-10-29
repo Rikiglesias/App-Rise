@@ -3,8 +3,7 @@ import 'react-native-gesture-handler/jestSetup';
 // Ensure __DEV__ exists in Jest/CI environment
 // Enable development-mode logging for tests
 // Adjust to false if you want production-style silent logging
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-;(global as any).__DEV__ = true;
+global.__DEV__ = true;
 
 // React Navigation mock removed for 100% pure component testing
 // Components requiring navigation should be tested with NavigationContainer
