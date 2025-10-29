@@ -2,12 +2,12 @@
 // 🎨 DESIGN SYSTEM BASE COMPONENTS - BARREL EXPORTS
 // ===================================================================
 
-// TODO: Implement base components
-// Base Components
-// export { DSCard } from './DSCard';
-// export { DSButton } from './DSButton';
-// export { DSText } from './DSText';
-// export { DSContainer } from './DSContainer';
+// 🚧 ROADMAP v2.0: Design System Components
+// I seguenti componenti base saranno implementati nella prossima major version:
+// - DSCard: Card system unificato con varianti (elevated, outlined, glassmorphism)
+// - DSButton: Button system con stati e animazioni
+// - DSText: Text system con typography tokens
+// - DSContainer: Container system con layout utilities
 
 // Component variants
 // export {

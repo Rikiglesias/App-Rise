@@ -114,11 +114,6 @@ export const useResponsive = () => {
       dimensions.breakpoint === 'xxlarge',
     shouldScaleDown: dimensions.breakpoint === 'compact',
 
-    // Legacy compatibility - DEPRECATED: Use new breakpoint system instead
-    // isSmallDevice: Use isCompact instead
-    // isMediumDevice: Use isStandard instead
-    // isLargeDevice: Use isLarge, isXLarge, or isXXLarge instead
-
     // Responsive values helper (supporta tutti i breakpoints)
     select: <T>(values: {
       compact?: T;

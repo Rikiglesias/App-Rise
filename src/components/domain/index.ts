@@ -10,8 +10,7 @@ export { HeaderMissionSection } from './HeaderMissionSection';
 export { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 export { baseMissionStyles } from './styles/HeaderMissionStyles';
 
-// Legacy exports (keeping for compatibility)
+// Current exports
 export { default as ActionCardEnhanced } from './ActionCardEnhanced';
 export { HeaderTextSection, HeaderImageSection } from './HomeHeader';
 export { default as HomeHeaderSection } from './HomeHeaderSection';
-// Removed legacy components: HomeActionsSection, HomeInfoSection, ModernHomeActions

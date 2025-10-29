@@ -24,7 +24,6 @@ export type {
 // Interactive Components
 export { default as EnhancedTouchable } from './EnhancedTouchable';
 export { default as FilterTabs } from './FilterTabs';
-// PremiumFloatingButton removed (legacy)
 
 // Platform-Specific Components
 export {
@@ -33,7 +32,6 @@ export {
 } from './PlatformAnimations';
 
 // Material Design 3 Components (Android-specific)
-// MaterialFAB removed (legacy)
 export { default as PlatformBlur } from './PlatformBlur';
 export { default as PlatformTouchable } from './PlatformTouchable';
 export { PlatformScrollView, PlatformSurface } from './PlatformComponents';

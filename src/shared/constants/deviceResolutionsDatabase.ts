@@ -63,6 +63,7 @@ export {
   HonorDevices,
   NothingDevices,
   GamingDevices,
+  AllFoldableDevices,
   EntryLevelDevices,
   SonyDevices,
   MotorolaDevices,
@@ -79,9 +80,10 @@ export {
   getDatabaseStats,
 };
 
-// Legacy alias exports
-export { AllFoldableDevices as FoldableDevices };
-export { AllMobileDevicesDefault as AllMobileDevices };
+// ✅ LEGACY ALIASES REMOVED (v2.0 cleanup)
+// Usa direttamente: AllFoldableDevices, AllMobileDevicesDefault
+// export { AllFoldableDevices as FoldableDevices }; // REMOVED - non usato
+// export { AllMobileDevices }; // REMOVED - non usato
 
 // Default export for backward compatibility
 export default AllMobileDevicesDefault;
