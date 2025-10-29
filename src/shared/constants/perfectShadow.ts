@@ -8,7 +8,7 @@
  */
 
 import { Platform } from 'react-native';
-import { scaleDimensionLinear } from './responsiveSystem';
+import { scale } from './responsiveSystem';
 
 export type ShadowType = 'light' | 'medium' | 'strong';
 
@@ -43,10 +43,10 @@ export const getPerfectShadow = (type: ShadowType) => {
   const base = SHADOW_BASE[type];
 
   // Scala offset, radius e elevation proporzionalmente
-  const scaledOffsetHeight = scaleDimensionLinear(base.offset.height);
-  const scaledOffsetWidth = scaleDimensionLinear(base.offset.width);
-  const scaledRadius = scaleDimensionLinear(base.radius);
-  const scaledElevation = scaleDimensionLinear(base.elevation);
+  const scaledOffsetHeight = scale(base.offset.height);
+  const scaledOffsetWidth = scale(base.offset.width);
+  const scaledRadius = scale(base.radius);
+  const scaledElevation = scale(base.elevation);
 
   return {
     shadowColor: '#000',

@@ -7,7 +7,7 @@
  * - Preset comuni per consistenza
  */
 
-import { scaleDimensionLinear } from './responsiveSystem';
+import { scale } from './responsiveSystem';
 
 /**
  * DURATE STANDARDIZZATE (NON scalano - OK!)
@@ -37,10 +37,10 @@ export const AnimationEasings = {
  * Questi valori DEVONO scalare per sembrare identici
  */
 export const AnimationDistances = {
-  small: (value = 20) => scaleDimensionLinear(value),
-  medium: (value = 50) => scaleDimensionLinear(value),
-  large: (value = 100) => scaleDimensionLinear(value),
-  xlarge: (value = 200) => scaleDimensionLinear(value),
+  small: (value = 20) => scale(value),
+  medium: (value = 50) => scale(value),
+  large: (value = 100) => scale(value),
+  xlarge: (value = 200) => scale(value),
 } as const;
 
 /**
@@ -49,7 +49,7 @@ export const AnimationDistances = {
  * @returns Distanza scalata per device corrente
  */
 export const perfectTranslateY = (distance: number): number => {
-  return scaleDimensionLinear(distance);
+  return scale(distance);
 };
 
 /**
@@ -58,7 +58,7 @@ export const perfectTranslateY = (distance: number): number => {
  * @returns Distanza scalata per device corrente
  */
 export const perfectTranslateX = (distance: number): number => {
-  return scaleDimensionLinear(distance);
+  return scale(distance);
 };
 
 /**
