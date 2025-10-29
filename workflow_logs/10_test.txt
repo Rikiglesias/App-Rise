@@ -1,0 +1,991 @@
+﻿2025-10-29T15:32:02.9477395Z Current runner version: '2.328.0'
+2025-10-29T15:32:02.9500327Z ##[group]Runner Image Provisioner
+2025-10-29T15:32:02.9501098Z Hosted Compute Agent
+2025-10-29T15:32:02.9501645Z Version: 20250912.392
+2025-10-29T15:32:02.9502246Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+2025-10-29T15:32:02.9502997Z Build Date: 2025-09-12T15:23:14Z
+2025-10-29T15:32:02.9503556Z ##[endgroup]
+2025-10-29T15:32:02.9504118Z ##[group]Operating System
+2025-10-29T15:32:02.9504691Z Ubuntu
+2025-10-29T15:32:02.9505260Z 24.04.3
+2025-10-29T15:32:02.9505769Z LTS
+2025-10-29T15:32:02.9506408Z ##[endgroup]
+2025-10-29T15:32:02.9506914Z ##[group]Runner Image
+2025-10-29T15:32:02.9507425Z Image: ubuntu-24.04
+2025-10-29T15:32:02.9508001Z Version: 20250929.60.1
+2025-10-29T15:32:02.9508976Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-29T15:32:02.9510609Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+2025-10-29T15:32:02.9511574Z ##[endgroup]
+2025-10-29T15:32:02.9512677Z ##[group]GITHUB_TOKEN Permissions
+2025-10-29T15:32:02.9514434Z Contents: read
+2025-10-29T15:32:02.9514948Z Metadata: read
+2025-10-29T15:32:02.9515581Z Packages: read
+2025-10-29T15:32:02.9516276Z ##[endgroup]
+2025-10-29T15:32:02.9518783Z Secret source: Actions
+2025-10-29T15:32:02.9519569Z Prepare workflow directory
+2025-10-29T15:32:02.9944835Z Prepare all required actions
+2025-10-29T15:32:02.9980998Z Getting action download info
+2025-10-29T15:32:03.5046622Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-10-29T15:32:03.6631955Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-10-29T15:32:03.8273789Z Complete job name: test
+2025-10-29T15:32:03.8911492Z ##[group]Run actions/checkout@v4
+2025-10-29T15:32:03.8912284Z with:
+2025-10-29T15:32:03.8912684Z   repository: Rikiglesias/App-Rise
+2025-10-29T15:32:03.8913324Z   token: ***
+2025-10-29T15:32:03.8913705Z   ssh-strict: true
+2025-10-29T15:32:03.8914102Z   ssh-user: git
+2025-10-29T15:32:03.8914494Z   persist-credentials: true
+2025-10-29T15:32:03.8914942Z   clean: true
+2025-10-29T15:32:03.8915339Z   sparse-checkout-cone-mode: true
+2025-10-29T15:32:03.8915817Z   fetch-depth: 1
+2025-10-29T15:32:03.8916417Z   fetch-tags: false
+2025-10-29T15:32:03.8916862Z   show-progress: true
+2025-10-29T15:32:03.8917332Z   lfs: false
+2025-10-29T15:32:03.8917717Z   submodules: false
+2025-10-29T15:32:03.8918114Z   set-safe-directory: true
+2025-10-29T15:32:03.8918799Z env:
+2025-10-29T15:32:03.8919152Z   NODE_VERSION: 20.x
+2025-10-29T15:32:03.8919554Z   CACHE_VERSION: v2
+2025-10-29T15:32:03.8919946Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:32:03.8920379Z   EAS_CLI_VERSION: latest
+2025-10-29T15:32:03.8920830Z ##[endgroup]
+2025-10-29T15:32:03.9974733Z Syncing repository: Rikiglesias/App-Rise
+2025-10-29T15:32:03.9976843Z ##[group]Getting Git version info
+2025-10-29T15:32:03.9977548Z Working directory is '/home/runner/work/App-Rise/App-Rise'
+2025-10-29T15:32:03.9978494Z [command]/usr/bin/git version
+2025-10-29T15:32:04.0057778Z git version 2.51.0
+2025-10-29T15:32:04.0084707Z ##[endgroup]
+2025-10-29T15:32:04.0099921Z Temporarily overriding HOME='/home/runner/work/_temp/a4008798-0fba-4663-aada-ac90668af582' before making global git config changes
+2025-10-29T15:32:04.0102248Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-29T15:32:04.0105070Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
+2025-10-29T15:32:04.0143136Z Deleting the contents of '/home/runner/work/App-Rise/App-Rise'
+2025-10-29T15:32:04.0147719Z ##[group]Initializing the repository
+2025-10-29T15:32:04.0153893Z [command]/usr/bin/git init /home/runner/work/App-Rise/App-Rise
+2025-10-29T15:32:04.0258726Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-10-29T15:32:04.0259728Z hint: is subject to change. To configure the initial branch name to use in all
+2025-10-29T15:32:04.0260872Z hint: of your new repositories, which will suppress this warning, call:
+2025-10-29T15:32:04.0261527Z hint:
+2025-10-29T15:32:04.0261989Z hint: 	git config --global init.defaultBranch <name>
+2025-10-29T15:32:04.0262567Z hint:
+2025-10-29T15:32:04.0263094Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-10-29T15:32:04.0263966Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-10-29T15:32:04.0264715Z hint:
+2025-10-29T15:32:04.0265381Z hint: 	git branch -m <name>
+2025-10-29T15:32:04.0266437Z hint:
+2025-10-29T15:32:04.0267466Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-10-29T15:32:04.0269237Z Initialized empty Git repository in /home/runner/work/App-Rise/App-Rise/.git/
+2025-10-29T15:32:04.0280276Z [command]/usr/bin/git remote add origin https://github.com/Rikiglesias/App-Rise
+2025-10-29T15:32:04.0320038Z ##[endgroup]
+2025-10-29T15:32:04.0321207Z ##[group]Disabling automatic garbage collection
+2025-10-29T15:32:04.0324828Z [command]/usr/bin/git config --local gc.auto 0
+2025-10-29T15:32:04.0355718Z ##[endgroup]
+2025-10-29T15:32:04.0357243Z ##[group]Setting up auth
+2025-10-29T15:32:04.0363806Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-29T15:32:04.0396451Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-29T15:32:04.0744437Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-29T15:32:04.0773861Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-29T15:32:04.0990005Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-10-29T15:32:04.1032834Z ##[endgroup]
+2025-10-29T15:32:04.1033529Z ##[group]Fetching the repository
+2025-10-29T15:32:04.1041554Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +63b9c4c32fdc295327cdf01cb4c2e3341dd6efe9:refs/remotes/pull/19/merge
+2025-10-29T15:32:04.9534081Z From https://github.com/Rikiglesias/App-Rise
+2025-10-29T15:32:04.9540421Z  * [new ref]         63b9c4c32fdc295327cdf01cb4c2e3341dd6efe9 -> pull/19/merge
+2025-10-29T15:32:04.9569020Z ##[endgroup]
+2025-10-29T15:32:04.9570265Z ##[group]Determining the checkout info
+2025-10-29T15:32:04.9573446Z ##[endgroup]
+2025-10-29T15:32:04.9577271Z [command]/usr/bin/git sparse-checkout disable
+2025-10-29T15:32:04.9619012Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-10-29T15:32:04.9648113Z ##[group]Checking out the ref
+2025-10-29T15:32:04.9652334Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/19/merge
+2025-10-29T15:32:05.0011577Z Note: switching to 'refs/remotes/pull/19/merge'.
+2025-10-29T15:32:05.0012241Z 
+2025-10-29T15:32:05.0012767Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-10-29T15:32:05.0013905Z changes and commit them, and you can discard any commits you make in this
+2025-10-29T15:32:05.0015043Z state without impacting any branches by switching back to a branch.
+2025-10-29T15:32:05.0015707Z 
+2025-10-29T15:32:05.0016388Z If you want to create a new branch to retain commits you create, you may
+2025-10-29T15:32:05.0017451Z do so (now or later) by using -c with the switch command. Example:
+2025-10-29T15:32:05.0018047Z 
+2025-10-29T15:32:05.0018475Z   git switch -c <new-branch-name>
+2025-10-29T15:32:05.0019280Z 
+2025-10-29T15:32:05.0019605Z Or undo this operation with:
+2025-10-29T15:32:05.0020092Z 
+2025-10-29T15:32:05.0020351Z   git switch -
+2025-10-29T15:32:05.0020728Z 
+2025-10-29T15:32:05.0021296Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-10-29T15:32:05.0022094Z 
+2025-10-29T15:32:05.0023291Z HEAD is now at 63b9c4c Merge 1fe9c4a8a6fde6c9832d108d9fcba6ff76cc85ce into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
+2025-10-29T15:32:05.0026856Z ##[endgroup]
+2025-10-29T15:32:05.0059485Z [command]/usr/bin/git log -1 --format=%H
+2025-10-29T15:32:05.0081684Z 63b9c4c32fdc295327cdf01cb4c2e3341dd6efe9
+2025-10-29T15:32:05.0370494Z ##[group]Run actions/setup-node@v4
+2025-10-29T15:32:05.0371578Z with:
+2025-10-29T15:32:05.0372376Z   node-version: 20.x
+2025-10-29T15:32:05.0373255Z   cache: npm
+2025-10-29T15:32:05.0374093Z   always-auth: false
+2025-10-29T15:32:05.0374993Z   check-latest: false
+2025-10-29T15:32:05.0376451Z   token: ***
+2025-10-29T15:32:05.0377330Z env:
+2025-10-29T15:32:05.0378103Z   NODE_VERSION: 20.x
+2025-10-29T15:32:05.0378982Z   CACHE_VERSION: v2
+2025-10-29T15:32:05.0379851Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:32:05.0380813Z   EAS_CLI_VERSION: latest
+2025-10-29T15:32:05.0381732Z ##[endgroup]
+2025-10-29T15:32:05.2234458Z Found in cache @ /opt/hostedtoolcache/node/20.19.5/x64
+2025-10-29T15:32:05.2238853Z ##[group]Environment details
+2025-10-29T15:32:07.6490576Z node: v20.19.5
+2025-10-29T15:32:07.6491184Z npm: 10.8.2
+2025-10-29T15:32:07.6491577Z yarn: 1.22.22
+2025-10-29T15:32:07.6492864Z ##[endgroup]
+2025-10-29T15:32:07.6511509Z [command]/opt/hostedtoolcache/node/20.19.5/x64/bin/npm config get cache
+2025-10-29T15:32:07.9318322Z /home/runner/.npm
+2025-10-29T15:32:08.2094620Z Cache hit for: node-cache-Linux-x64-npm-96ec837cc094fd5dfc7930a7464d2a46a0d0767192867918cfaa071a3703ed5c
+2025-10-29T15:32:09.5176201Z Received 25165824 of 100876345 (24.9%), 24.0 MBs/sec
+2025-10-29T15:32:10.0540689Z Received 100876345 of 100876345 (100.0%), 62.6 MBs/sec
+2025-10-29T15:32:10.0542699Z Cache Size: ~96 MB (100876345 B)
+2025-10-29T15:32:10.0657577Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d4e3292a-5532-401e-9486-324826337ed3/cache.tzst -P -C /home/runner/work/App-Rise/App-Rise --use-compress-program unzstd
+2025-10-29T15:32:10.3519390Z Cache restored successfully
+2025-10-29T15:32:10.3717264Z Cache restored from key: node-cache-Linux-x64-npm-96ec837cc094fd5dfc7930a7464d2a46a0d0767192867918cfaa071a3703ed5c
+2025-10-29T15:32:10.3865591Z ##[group]Run npm ci --prefer-offline --no-audit
+2025-10-29T15:32:10.3866139Z [36;1mnpm ci --prefer-offline --no-audit[0m
+2025-10-29T15:32:10.4013226Z shell: /usr/bin/bash -e {0}
+2025-10-29T15:32:10.4013479Z env:
+2025-10-29T15:32:10.4013652Z   NODE_VERSION: 20.x
+2025-10-29T15:32:10.4013845Z   CACHE_VERSION: v2
+2025-10-29T15:32:10.4014031Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:32:10.4014255Z   EAS_CLI_VERSION: latest
+2025-10-29T15:32:10.4014463Z ##[endgroup]
+2025-10-29T15:32:17.7289153Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-10-29T15:32:17.9214131Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-10-29T15:32:17.9447518Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-10-29T15:32:17.9667160Z npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+2025-10-29T15:32:18.0947406Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-10-29T15:32:18.0981467Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-29T15:32:18.0988813Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-29T15:32:18.0999033Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-29T15:32:18.1015514Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-29T15:32:18.1018102Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-29T15:32:18.1133191Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-29T15:32:18.1133999Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-29T15:32:18.1931625Z npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+2025-10-29T15:32:19.1346334Z npm warn deprecated @testing-library/react-native@7.2.0: This version is no longer maintained. Upgrade to @latest (at least v12.4.0).
+2025-10-29T15:32:21.3120027Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-10-29T15:32:25.0869830Z 
+2025-10-29T15:32:25.0871079Z added 1285 packages in 15s
+2025-10-29T15:32:25.1555093Z ##[group]Run npm test -- --ci --coverage --maxWorkers=2
+2025-10-29T15:32:25.1555507Z [36;1mnpm test -- --ci --coverage --maxWorkers=2[0m
+2025-10-29T15:32:25.1592759Z shell: /usr/bin/bash -e {0}
+2025-10-29T15:32:25.1592989Z env:
+2025-10-29T15:32:25.1593164Z   NODE_VERSION: 20.x
+2025-10-29T15:32:25.1593349Z   CACHE_VERSION: v2
+2025-10-29T15:32:25.1593538Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:32:25.1593760Z   EAS_CLI_VERSION: latest
+2025-10-29T15:32:25.1593950Z   CI: true
+2025-10-29T15:32:25.1594111Z ##[endgroup]
+2025-10-29T15:32:25.2940622Z 
+2025-10-29T15:32:25.2941562Z > riseagainsthungeritalia@1.0.0 test
+2025-10-29T15:32:25.2942166Z > jest --ci --coverage --maxWorkers=2
+2025-10-29T15:32:25.2942454Z 
+2025-10-29T15:32:29.0405671Z PASS src/__tests__/security/penetrationTests.test.ts
+2025-10-29T15:32:29.2664421Z PASS src/__tests__/security/injectionPrevention.test.ts
+2025-10-29T15:32:29.6419658Z PASS src/__tests__/shared/services/secureStorage.test.ts
+2025-10-29T15:32:29.8791753Z PASS src/__tests__/security/xssProtection.test.ts
+2025-10-29T15:32:30.2153298Z PASS src/__tests__/security/inputValidation.test.ts
+2025-10-29T15:32:30.2918153Z PASS src/__tests__/shared/services/apiSecurity.test.ts
+2025-10-29T15:32:30.8957905Z PASS src/__tests__/stores/selectors.test.ts
+2025-10-29T15:32:31.1685820Z PASS src/__tests__/shared/utils/result-core.test.ts
+2025-10-29T15:32:31.4297250Z PASS src/__tests__/shared/hooks/useAsyncOperation.test.ts
+2025-10-29T15:32:32.6540165Z PASS src/__tests__/shared/hooks/useTheme.test.tsx
+2025-10-29T15:32:32.8252911Z PASS src/__tests__/stores/appStore.test.ts
+2025-10-29T15:32:32.9860057Z PASS src/__tests__/visual/visual-diff.test.tsx
+2025-10-29T15:32:33.0128126Z   ● Console
+2025-10-29T15:32:33.0131653Z 
+2025-10-29T15:32:33.0135165Z     console.log
+2025-10-29T15:32:33.0139749Z       📊 iPhone SE - Titolo principale - MAI deve andare a 3 righe: {
+2025-10-29T15:32:33.0142884Z         device: '375x667',
+2025-10-29T15:32:33.0145263Z         text: 'Rise Against Hunger Italia...',
+2025-10-29T15:32:33.0147835Z         fontSize: 75,
+2025-10-29T15:32:33.0150093Z         expectedLines: 2,
+2025-10-29T15:32:33.0152354Z         calculatedLines: 2,
+2025-10-29T15:32:33.0154792Z         containerWidth: 337.5,
+2025-10-29T15:32:33.0157459Z         layoutWidth: 337.5,
+2025-10-29T15:32:33.0159649Z         layoutHeight: 172,
+2025-10-29T15:32:33.0160032Z         breakpoint: 'compact'
+2025-10-29T15:32:33.0161573Z       }
+2025-10-29T15:32:33.0164997Z 
+2025-10-29T15:32:33.0168779Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0174345Z 
+2025-10-29T15:32:33.0197029Z     console.log
+2025-10-29T15:32:33.0199175Z       📊 iPhone SE - Sottotitolo - layout critico: {
+2025-10-29T15:32:33.0199719Z         device: '375x667',
+2025-10-29T15:32:33.0200189Z         text: 'Unisciti a noi nella lotta con...',
+2025-10-29T15:32:33.0200654Z         fontSize: 22,
+2025-10-29T15:32:33.0201003Z         expectedLines: 2,
+2025-10-29T15:32:33.0201370Z         calculatedLines: 2,
+2025-10-29T15:32:33.0201813Z         containerWidth: 337.5,
+2025-10-29T15:32:33.0202212Z         layoutWidth: 337.5,
+2025-10-29T15:32:33.0202576Z         layoutHeight: 50,
+2025-10-29T15:32:33.0202937Z         breakpoint: 'compact'
+2025-10-29T15:32:33.0203305Z       }
+2025-10-29T15:32:33.0203458Z 
+2025-10-29T15:32:33.0203803Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0204177Z 
+2025-10-29T15:32:33.0204635Z     console.log
+2025-10-29T15:32:33.0205211Z       📊 iPhone SE - Titolo sezione - una riga sempre: {
+2025-10-29T15:32:33.0205720Z         device: '375x667',
+2025-10-29T15:32:33.0206329Z         text: 'Il Nostro Impatto...',
+2025-10-29T15:32:33.0206739Z         fontSize: 32,
+2025-10-29T15:32:33.0207070Z         expectedLines: 1,
+2025-10-29T15:32:33.0207415Z         calculatedLines: 1,
+2025-10-29T15:32:33.0207812Z         containerWidth: 337.5,
+2025-10-29T15:32:33.0208243Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0208663Z         layoutHeight: 37,
+2025-10-29T15:32:33.0209276Z         breakpoint: 'compact'
+2025-10-29T15:32:33.0209647Z       }
+2025-10-29T15:32:33.0209813Z 
+2025-10-29T15:32:33.0210119Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0210502Z 
+2025-10-29T15:32:33.0210644Z     console.log
+2025-10-29T15:32:33.0211233Z       📊 iPhone SE - CTA principale - una riga sempre: {
+2025-10-29T15:32:33.0211732Z         device: '375x667',
+2025-10-29T15:32:33.0212234Z         text: 'Fai la Differenza...',
+2025-10-29T15:32:33.0212661Z         fontSize: 32,
+2025-10-29T15:32:33.0213014Z         expectedLines: 1,
+2025-10-29T15:32:33.0220585Z         calculatedLines: 1,
+2025-10-29T15:32:33.0221059Z         containerWidth: 337.5,
+2025-10-29T15:32:33.0221517Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0221940Z         layoutHeight: 37,
+2025-10-29T15:32:33.0222323Z         breakpoint: 'compact'
+2025-10-29T15:32:33.0222696Z       }
+2025-10-29T15:32:33.0222864Z 
+2025-10-29T15:32:33.0223189Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0223570Z 
+2025-10-29T15:32:33.0223707Z     console.log
+2025-10-29T15:32:33.0224460Z       📊 iPhone 15 Pro - Titolo principale - MAI deve andare a 3 righe: {
+2025-10-29T15:32:33.0225044Z         device: '393x852',
+2025-10-29T15:32:33.0225494Z         text: 'Rise Against Hunger Italia...',
+2025-10-29T15:32:33.0225945Z         fontSize: 75,
+2025-10-29T15:32:33.0226527Z         expectedLines: 2,
+2025-10-29T15:32:33.0226892Z         calculatedLines: 2,
+2025-10-29T15:32:33.0227307Z         containerWidth: 353.7,
+2025-10-29T15:32:33.0227692Z         layoutWidth: 353.7,
+2025-10-29T15:32:33.0228062Z         layoutHeight: 172,
+2025-10-29T15:32:33.0228510Z         breakpoint: 'standard'
+2025-10-29T15:32:33.0228927Z       }
+2025-10-29T15:32:33.0229033Z 
+2025-10-29T15:32:33.0229221Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0229464Z 
+2025-10-29T15:32:33.0229543Z     console.log
+2025-10-29T15:32:33.0229936Z       📊 iPhone 15 Pro - Sottotitolo - layout critico: {
+2025-10-29T15:32:33.0230242Z         device: '393x852',
+2025-10-29T15:32:33.0230510Z         text: 'Unisciti a noi nella lotta con...',
+2025-10-29T15:32:33.0230777Z         fontSize: 22,
+2025-10-29T15:32:33.0230980Z         expectedLines: 2,
+2025-10-29T15:32:33.0231201Z         calculatedLines: 2,
+2025-10-29T15:32:33.0231435Z         containerWidth: 353.7,
+2025-10-29T15:32:33.0231662Z         layoutWidth: 353.7,
+2025-10-29T15:32:33.0231873Z         layoutHeight: 50,
+2025-10-29T15:32:33.0232098Z         breakpoint: 'standard'
+2025-10-29T15:32:33.0232301Z       }
+2025-10-29T15:32:33.0232413Z 
+2025-10-29T15:32:33.0232584Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0232802Z 
+2025-10-29T15:32:33.0232875Z     console.log
+2025-10-29T15:32:33.0233205Z       📊 iPhone 15 Pro - Titolo sezione - una riga sempre: {
+2025-10-29T15:32:33.0233507Z         device: '393x852',
+2025-10-29T15:32:33.0233750Z         text: 'Il Nostro Impatto...',
+2025-10-29T15:32:33.0233999Z         fontSize: 32,
+2025-10-29T15:32:33.0234206Z         expectedLines: 1,
+2025-10-29T15:32:33.0234417Z         calculatedLines: 1,
+2025-10-29T15:32:33.0234649Z         containerWidth: 353.7,
+2025-10-29T15:32:33.0234894Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0235137Z         layoutHeight: 37,
+2025-10-29T15:32:33.0235361Z         breakpoint: 'standard'
+2025-10-29T15:32:33.0235807Z       }
+2025-10-29T15:32:33.0235908Z 
+2025-10-29T15:32:33.0236318Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0236548Z 
+2025-10-29T15:32:33.0236626Z     console.log
+2025-10-29T15:32:33.0237008Z       📊 iPhone 15 Pro - CTA principale - una riga sempre: {
+2025-10-29T15:32:33.0237304Z         device: '393x852',
+2025-10-29T15:32:33.0237540Z         text: 'Fai la Differenza...',
+2025-10-29T15:32:33.0237780Z         fontSize: 32,
+2025-10-29T15:32:33.0237982Z         expectedLines: 1,
+2025-10-29T15:32:33.0238195Z         calculatedLines: 1,
+2025-10-29T15:32:33.0238578Z         containerWidth: 353.7,
+2025-10-29T15:32:33.0238848Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0239103Z         layoutHeight: 37,
+2025-10-29T15:32:33.0239331Z         breakpoint: 'standard'
+2025-10-29T15:32:33.0239528Z       }
+2025-10-29T15:32:33.0239623Z 
+2025-10-29T15:32:33.0239797Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0240023Z 
+2025-10-29T15:32:33.0240098Z     console.log
+2025-10-29T15:32:33.0240473Z       📊 Pixel 8 Pro - Titolo principale - MAI deve andare a 3 righe: {
+2025-10-29T15:32:33.0240921Z         device: '412x915',
+2025-10-29T15:32:33.0241334Z         text: 'Rise Against Hunger Italia...',
+2025-10-29T15:32:33.0241750Z         fontSize: 75,
+2025-10-29T15:32:33.0242076Z         expectedLines: 2,
+2025-10-29T15:32:33.0242443Z         calculatedLines: 2,
+2025-10-29T15:32:33.0242839Z         containerWidth: 370.8,
+2025-10-29T15:32:33.0243216Z         layoutWidth: 370.8,
+2025-10-29T15:32:33.0243497Z         layoutHeight: 172,
+2025-10-29T15:32:33.0243712Z         breakpoint: 'large'
+2025-10-29T15:32:33.0243913Z       }
+2025-10-29T15:32:33.0244007Z 
+2025-10-29T15:32:33.0244178Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0244394Z 
+2025-10-29T15:32:33.0244469Z     console.log
+2025-10-29T15:32:33.0244820Z       📊 Pixel 8 Pro - Sottotitolo - layout critico: {
+2025-10-29T15:32:33.0245117Z         device: '412x915',
+2025-10-29T15:32:33.0245368Z         text: 'Unisciti a noi nella lotta con...',
+2025-10-29T15:32:33.0245639Z         fontSize: 22,
+2025-10-29T15:32:33.0245842Z         expectedLines: 2,
+2025-10-29T15:32:33.0246196Z         calculatedLines: 2,
+2025-10-29T15:32:33.0246553Z         containerWidth: 370.8,
+2025-10-29T15:32:33.0246815Z         layoutWidth: 370.8,
+2025-10-29T15:32:33.0247019Z         layoutHeight: 50,
+2025-10-29T15:32:33.0247230Z         breakpoint: 'large'
+2025-10-29T15:32:33.0247426Z       }
+2025-10-29T15:32:33.0247514Z 
+2025-10-29T15:32:33.0247694Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0247908Z 
+2025-10-29T15:32:33.0247984Z     console.log
+2025-10-29T15:32:33.0248322Z       📊 Pixel 8 Pro - Titolo sezione - una riga sempre: {
+2025-10-29T15:32:33.0248611Z         device: '412x915',
+2025-10-29T15:32:33.0248852Z         text: 'Il Nostro Impatto...',
+2025-10-29T15:32:33.0249104Z         fontSize: 32,
+2025-10-29T15:32:33.0249309Z         expectedLines: 1,
+2025-10-29T15:32:33.0249525Z         calculatedLines: 1,
+2025-10-29T15:32:33.0249761Z         containerWidth: 370.8,
+2025-10-29T15:32:33.0250013Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0250249Z         layoutHeight: 37,
+2025-10-29T15:32:33.0250456Z         breakpoint: 'large'
+2025-10-29T15:32:33.0250654Z       }
+2025-10-29T15:32:33.0250744Z 
+2025-10-29T15:32:33.0250913Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0251125Z 
+2025-10-29T15:32:33.0251200Z     console.log
+2025-10-29T15:32:33.0251519Z       📊 Pixel 8 Pro - CTA principale - una riga sempre: {
+2025-10-29T15:32:33.0251804Z         device: '412x915',
+2025-10-29T15:32:33.0252042Z         text: 'Fai la Differenza...',
+2025-10-29T15:32:33.0252281Z         fontSize: 32,
+2025-10-29T15:32:33.0252473Z         expectedLines: 1,
+2025-10-29T15:32:33.0252680Z         calculatedLines: 1,
+2025-10-29T15:32:33.0252910Z         containerWidth: 370.8,
+2025-10-29T15:32:33.0253351Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0253593Z         layoutHeight: 37,
+2025-10-29T15:32:33.0253802Z         breakpoint: 'large'
+2025-10-29T15:32:33.0254003Z       }
+2025-10-29T15:32:33.0254091Z 
+2025-10-29T15:32:33.0254265Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0254472Z 
+2025-10-29T15:32:33.0254547Z     console.log
+2025-10-29T15:32:33.0254926Z       📊 Galaxy Tab S9 - Titolo principale - MAI deve andare a 3 righe: {
+2025-10-29T15:32:33.0255254Z         device: '768x1024',
+2025-10-29T15:32:33.0255621Z         text: 'Rise Against Hunger Italia...',
+2025-10-29T15:32:33.0255890Z         fontSize: 75,
+2025-10-29T15:32:33.0256212Z         expectedLines: 2,
+2025-10-29T15:32:33.0256419Z         calculatedLines: 2,
+2025-10-29T15:32:33.0256651Z         containerWidth: 691.2,
+2025-10-29T15:32:33.0256870Z         layoutWidth: 691.2,
+2025-10-29T15:32:33.0257072Z         layoutHeight: 172,
+2025-10-29T15:32:33.0257297Z         breakpoint: 'xxlarge'
+2025-10-29T15:32:33.0257516Z       }
+2025-10-29T15:32:33.0257606Z 
+2025-10-29T15:32:33.0257780Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0257995Z 
+2025-10-29T15:32:33.0258075Z     console.log
+2025-10-29T15:32:33.0258386Z       📊 Galaxy Tab S9 - Sottotitolo - layout critico: {
+2025-10-29T15:32:33.0258668Z         device: '768x1024',
+2025-10-29T15:32:33.0258928Z         text: 'Unisciti a noi nella lotta con...',
+2025-10-29T15:32:33.0259197Z         fontSize: 22,
+2025-10-29T15:32:33.0259392Z         expectedLines: 2,
+2025-10-29T15:32:33.0259609Z         calculatedLines: 2,
+2025-10-29T15:32:33.0259845Z         containerWidth: 691.2,
+2025-10-29T15:32:33.0260063Z         layoutWidth: 617.1,
+2025-10-29T15:32:33.0260266Z         layoutHeight: 50,
+2025-10-29T15:32:33.0260476Z         breakpoint: 'xxlarge'
+2025-10-29T15:32:33.0260684Z       }
+2025-10-29T15:32:33.0260773Z 
+2025-10-29T15:32:33.0260947Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0261161Z 
+2025-10-29T15:32:33.0261242Z     console.log
+2025-10-29T15:32:33.0261555Z       📊 Galaxy Tab S9 - Titolo sezione - una riga sempre: {
+2025-10-29T15:32:33.0261841Z         device: '768x1024',
+2025-10-29T15:32:33.0262078Z         text: 'Il Nostro Impatto...',
+2025-10-29T15:32:33.0262315Z         fontSize: 32,
+2025-10-29T15:32:33.0262507Z         expectedLines: 1,
+2025-10-29T15:32:33.0262713Z         calculatedLines: 1,
+2025-10-29T15:32:33.0262943Z         containerWidth: 691.2,
+2025-10-29T15:32:33.0263204Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0263454Z         layoutHeight: 37,
+2025-10-29T15:32:33.0263665Z         breakpoint: 'xxlarge'
+2025-10-29T15:32:33.0263866Z       }
+2025-10-29T15:32:33.0263960Z 
+2025-10-29T15:32:33.0264119Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0264332Z 
+2025-10-29T15:32:33.0264406Z     console.log
+2025-10-29T15:32:33.0264719Z       📊 Galaxy Tab S9 - CTA principale - una riga sempre: {
+2025-10-29T15:32:33.0265032Z         device: '768x1024',
+2025-10-29T15:32:33.0265278Z         text: 'Fai la Differenza...',
+2025-10-29T15:32:33.0265520Z         fontSize: 32,
+2025-10-29T15:32:33.0265723Z         expectedLines: 1,
+2025-10-29T15:32:33.0265938Z         calculatedLines: 1,
+2025-10-29T15:32:33.0266262Z         containerWidth: 691.2,
+2025-10-29T15:32:33.0266513Z         layoutWidth: 299.20000000000005,
+2025-10-29T15:32:33.0266762Z         layoutHeight: 37,
+2025-10-29T15:32:33.0266975Z         breakpoint: 'xxlarge'
+2025-10-29T15:32:33.0267178Z       }
+2025-10-29T15:32:33.0267265Z 
+2025-10-29T15:32:33.0267438Z       at log (src/__tests__/visual/visual-diff.test.tsx:163:13)
+2025-10-29T15:32:33.0267657Z 
+2025-10-29T15:32:33.2198431Z PASS src/__tests__/shared/utils/result.test.ts
+2025-10-29T15:32:33.2611181Z PASS src/__tests__/shared/constants/designTokens.test.ts
+2025-10-29T15:32:33.4610622Z PASS src/__tests__/features/social/hooks/useSocialPlatforms.test.ts
+2025-10-29T15:32:33.6030108Z PASS src/__tests__/shared/utils/logger-simple.test.ts
+2025-10-29T15:32:35.2487308Z PASS src/__tests__/features/social/components/SocialCard.test.tsx
+2025-10-29T15:32:35.4104934Z PASS src/__tests__/stores/impactStore.test.ts
+2025-10-29T15:32:35.5519975Z PASS src/__tests__/shared/config/environment.test.ts
+2025-10-29T15:32:37.0686487Z PASS src/__tests__/components/ui/EnhancedTouchable.test.tsx
+2025-10-29T15:32:37.3401568Z PASS src/__tests__/systems/MicroInteractionEngine.test.tsx
+2025-10-29T15:32:37.5612912Z PASS src/__tests__/shared/utils/smartFontSizeCache.test.ts
+2025-10-29T15:32:43.8817564Z PASS src/__tests__/features/social/components/HeaderSection.test.tsx (6.284 s)
+2025-10-29T15:32:43.9883069Z PASS src/__tests__/components/domain/ActionCardEnhanced.test.tsx (8.394 s)
+2025-10-29T15:32:44.1446954Z PASS src/__tests__/shared/theme/UniversalTheme.test.tsx
+2025-10-29T15:32:44.2071587Z PASS src/__tests__/components/ui/PlatformTouchable.test.tsx
+2025-10-29T15:32:44.2636646Z PASS src/__tests__/stores/projectsStore.test.ts
+2025-10-29T15:32:44.2886417Z PASS src/__tests__/shared/utils/logger-extended.test.ts
+2025-10-29T15:32:44.3664563Z PASS src/__tests__/shared/services/errorTracking.test.ts
+2025-10-29T15:32:44.4141067Z   ● Console
+2025-10-29T15:32:44.4143234Z 
+2025-10-29T15:32:44.4143456Z     console.info
+2025-10-29T15:32:44.4144243Z       2025-10-29T15:32:44.337Z INFO [Session reset: session_1761751964337_fihrkdmlu] ErrorTracking
+2025-10-29T15:32:44.4144804Z 
+2025-10-29T15:32:44.4145281Z       at ProfessionalLogger.info [as outputLog] (src/shared/utils/logger.ts:100:19)
+2025-10-29T15:32:44.4145840Z 
+2025-10-29T15:32:44.4146262Z     console.log
+2025-10-29T15:32:44.4146872Z       2025-10-29T15:32:44.343Z DEBUG [Global error handlers configured] ErrorTracking
+2025-10-29T15:32:44.4147365Z 
+2025-10-29T15:32:44.4147813Z       at ProfessionalLogger.log [as outputLog] (src/shared/utils/logger.ts:96:19)
+2025-10-29T15:32:44.4148310Z 
+2025-10-29T15:32:44.4148463Z     console.info
+2025-10-29T15:32:44.4149265Z       2025-10-29T15:32:44.344Z INFO [Service initialized with session: session_1761751964337_fihrkdmlu] ErrorTracking
+2025-10-29T15:32:44.4149905Z 
+2025-10-29T15:32:44.4150352Z       at ProfessionalLogger.info [as outputLog] (src/shared/utils/logger.ts:100:19)
+2025-10-29T15:32:44.4150883Z 
+2025-10-29T15:32:44.4151026Z     console.error
+2025-10-29T15:32:44.4151606Z       2025-10-29T15:32:44.344Z ERROR [Error captured: boom] ErrorTracking {}
+2025-10-29T15:32:44.4152061Z 
+2025-10-29T15:32:44.4152545Z     [0m [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m
+2025-10-29T15:32:44.4153411Z      [90m 108 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4154430Z     [31m[1m>[22m[39m[90m 109 |[39m           console[33m.[39merror(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4155303Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4156217Z      [90m 110 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4156752Z      [90m 111 |[39m       }
+2025-10-29T15:32:44.4157258Z      [90m 112 |[39m     }[0m
+2025-10-29T15:32:44.4157509Z 
+2025-10-29T15:32:44.4157992Z       at ProfessionalLogger.error [as outputLog] (src/shared/utils/logger.ts:109:19)
+2025-10-29T15:32:44.4159030Z       at ProfessionalLogger.outputLog [as error] (src/shared/utils/logger.ts:136:10)
+2025-10-29T15:32:44.4160179Z       at ErrorTrackingService.error [as captureError] (src/shared/services/errorTracking.ts:169:12)
+2025-10-29T15:32:44.4161178Z       at captureError (src/shared/services/errorTracking.ts:390:17)
+2025-10-29T15:32:44.4162109Z       at Object.<anonymous> (src/__tests__/shared/services/errorTracking.test.ts:32:17)
+2025-10-29T15:32:44.4162648Z 
+2025-10-29T15:32:44.4162802Z     console.log
+2025-10-29T15:32:44.4163495Z       2025-10-29T15:32:44.345Z DEBUG [Error context] ErrorTracking {"userId":"u1","screen":"Home"}
+2025-10-29T15:32:44.4164068Z 
+2025-10-29T15:32:44.4164531Z       at ProfessionalLogger.log [as outputLog] (src/shared/utils/logger.ts:96:19)
+2025-10-29T15:32:44.4165060Z 
+2025-10-29T15:32:44.4165697Z     console.info
+2025-10-29T15:32:44.4166610Z       2025-10-29T15:32:44.346Z INFO [Session reset: session_1761751964346_hd6s3whgl] ErrorTracking
+2025-10-29T15:32:44.4167141Z 
+2025-10-29T15:32:44.4167614Z       at ProfessionalLogger.info [as outputLog] (src/shared/utils/logger.ts:100:19)
+2025-10-29T15:32:44.4168141Z 
+2025-10-29T15:32:44.4168293Z     console.warn
+2025-10-29T15:32:44.4168859Z       2025-10-29T15:32:44.346Z WARN [Service already initialized] ErrorTracking
+2025-10-29T15:32:44.4169321Z 
+2025-10-29T15:32:44.4170099Z     [0m [90m 102 |[39m         [36mcase[39m [32m'warn'[39m[33m:[39m
+2025-10-29T15:32:44.4171013Z      [90m 103 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4172007Z     [31m[1m>[22m[39m[90m 104 |[39m           console[33m.[39mwarn(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4172855Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4173548Z      [90m 105 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4174336Z      [90m 106 |[39m         [36mcase[39m [32m'error'[39m[33m:[39m
+2025-10-29T15:32:44.4175163Z      [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m[0m
+2025-10-29T15:32:44.4175561Z 
+2025-10-29T15:32:44.4176352Z       at ProfessionalLogger.warn [as outputLog] (src/shared/utils/logger.ts:104:19)
+2025-10-29T15:32:44.4177386Z       at ProfessionalLogger.outputLog [as warn] (src/shared/utils/logger.ts:131:10)
+2025-10-29T15:32:44.4178462Z       at ErrorTrackingService.warn [as initialize] (src/shared/services/errorTracking.ts:69:14)
+2025-10-29T15:32:44.4179519Z       at Object.initialize (src/__tests__/shared/services/errorTracking.test.ts:22:19)
+2025-10-29T15:32:44.4180054Z 
+2025-10-29T15:32:44.4180206Z     console.error
+2025-10-29T15:32:44.4180773Z       2025-10-29T15:32:44.347Z ERROR [Error captured: e1] ErrorTracking {}
+2025-10-29T15:32:44.4181217Z 
+2025-10-29T15:32:44.4181699Z     [0m [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m
+2025-10-29T15:32:44.4182580Z      [90m 108 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4183611Z     [31m[1m>[22m[39m[90m 109 |[39m           console[33m.[39merror(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4184482Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4185163Z      [90m 110 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4185701Z      [90m 111 |[39m       }
+2025-10-29T15:32:44.4186422Z      [90m 112 |[39m     }[0m
+2025-10-29T15:32:44.4186678Z 
+2025-10-29T15:32:44.4187167Z       at ProfessionalLogger.error [as outputLog] (src/shared/utils/logger.ts:109:19)
+2025-10-29T15:32:44.4188176Z       at ProfessionalLogger.outputLog [as error] (src/shared/utils/logger.ts:136:10)
+2025-10-29T15:32:44.4189272Z       at ErrorTrackingService.error [as captureError] (src/shared/services/errorTracking.ts:169:12)
+2025-10-29T15:32:44.4190250Z       at captureError (src/shared/services/errorTracking.ts:390:17)
+2025-10-29T15:32:44.4191136Z       at Object.<anonymous> (src/__tests__/shared/services/errorTracking.test.ts:43:17)
+2025-10-29T15:32:44.4191653Z 
+2025-10-29T15:32:44.4191802Z     console.error
+2025-10-29T15:32:44.4192355Z       2025-10-29T15:32:44.347Z ERROR [Error captured: e2] ErrorTracking {}
+2025-10-29T15:32:44.4192802Z 
+2025-10-29T15:32:44.4193287Z     [0m [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m
+2025-10-29T15:32:44.4194163Z      [90m 108 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4195170Z     [31m[1m>[22m[39m[90m 109 |[39m           console[33m.[39merror(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4196208Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4196910Z      [90m 110 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4197475Z      [90m 111 |[39m       }
+2025-10-29T15:32:44.4197983Z      [90m 112 |[39m     }[0m
+2025-10-29T15:32:44.4198527Z 
+2025-10-29T15:32:44.4199006Z       at ProfessionalLogger.error [as outputLog] (src/shared/utils/logger.ts:109:19)
+2025-10-29T15:32:44.4200006Z       at ProfessionalLogger.outputLog [as error] (src/shared/utils/logger.ts:136:10)
+2025-10-29T15:32:44.4201093Z       at ErrorTrackingService.error [as captureError] (src/shared/services/errorTracking.ts:169:12)
+2025-10-29T15:32:44.4202082Z       at captureError (src/shared/services/errorTracking.ts:390:17)
+2025-10-29T15:32:44.4202971Z       at Object.<anonymous> (src/__tests__/shared/services/errorTracking.test.ts:44:17)
+2025-10-29T15:32:44.4203749Z 
+2025-10-29T15:32:44.4203917Z     console.warn
+2025-10-29T15:32:44.4204586Z       2025-10-29T15:32:44.348Z WARN [Max errors per session reached, skipping] ErrorTracking
+2025-10-29T15:32:44.4205093Z 
+2025-10-29T15:32:44.4205585Z     [0m [90m 102 |[39m         [36mcase[39m [32m'warn'[39m[33m:[39m
+2025-10-29T15:32:44.4206667Z      [90m 103 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4207680Z     [31m[1m>[22m[39m[90m 104 |[39m           console[33m.[39mwarn(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4208547Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4209254Z      [90m 105 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4210025Z      [90m 106 |[39m         [36mcase[39m [32m'error'[39m[33m:[39m
+2025-10-29T15:32:44.4210853Z      [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m[0m
+2025-10-29T15:32:44.4211253Z 
+2025-10-29T15:32:44.4211731Z       at ProfessionalLogger.warn [as outputLog] (src/shared/utils/logger.ts:104:19)
+2025-10-29T15:32:44.4212725Z       at ProfessionalLogger.outputLog [as warn] (src/shared/utils/logger.ts:131:10)
+2025-10-29T15:32:44.4213809Z       at ErrorTrackingService.warn [as captureError] (src/shared/services/errorTracking.ts:150:14)
+2025-10-29T15:32:44.4214766Z       at captureError (src/shared/services/errorTracking.ts:390:17)
+2025-10-29T15:32:44.4215653Z       at Object.<anonymous> (src/__tests__/shared/services/errorTracking.test.ts:45:17)
+2025-10-29T15:32:44.4216424Z 
+2025-10-29T15:32:44.4216570Z     console.info
+2025-10-29T15:32:44.4217261Z       2025-10-29T15:32:44.354Z INFO [Session reset: session_1761751964354_i8tc017pv] ErrorTracking
+2025-10-29T15:32:44.4217803Z 
+2025-10-29T15:32:44.4218262Z       at ProfessionalLogger.info [as outputLog] (src/shared/utils/logger.ts:100:19)
+2025-10-29T15:32:44.4218772Z 
+2025-10-29T15:32:44.4218914Z     console.warn
+2025-10-29T15:32:44.4219498Z       2025-10-29T15:32:44.355Z WARN [Service already initialized] ErrorTracking
+2025-10-29T15:32:44.4219925Z 
+2025-10-29T15:32:44.4220386Z     [0m [90m 102 |[39m         [36mcase[39m [32m'warn'[39m[33m:[39m
+2025-10-29T15:32:44.4221223Z      [90m 103 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4222192Z     [31m[1m>[22m[39m[90m 104 |[39m           console[33m.[39mwarn(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4223009Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4223657Z      [90m 105 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4224366Z      [90m 106 |[39m         [36mcase[39m [32m'error'[39m[33m:[39m
+2025-10-29T15:32:44.4225126Z      [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m[0m
+2025-10-29T15:32:44.4225510Z 
+2025-10-29T15:32:44.4225971Z       at ProfessionalLogger.warn [as outputLog] (src/shared/utils/logger.ts:104:19)
+2025-10-29T15:32:44.4227248Z       at ProfessionalLogger.outputLog [as warn] (src/shared/utils/logger.ts:131:10)
+2025-10-29T15:32:44.4228308Z       at ErrorTrackingService.warn [as initialize] (src/shared/services/errorTracking.ts:69:14)
+2025-10-29T15:32:44.4229321Z       at Object.initialize (src/__tests__/shared/services/errorTracking.test.ts:22:19)
+2025-10-29T15:32:44.4229825Z 
+2025-10-29T15:32:44.4229966Z     console.error
+2025-10-29T15:32:44.4230713Z       2025-10-29T15:32:44.355Z ERROR [Error captured: hello-world] ErrorTracking {"name":"CapturedMessage"}
+2025-10-29T15:32:44.4231546Z 
+2025-10-29T15:32:44.4232029Z     [0m [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m
+2025-10-29T15:32:44.4232886Z      [90m 108 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4233893Z     [31m[1m>[22m[39m[90m 109 |[39m           console[33m.[39merror(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4234713Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4235569Z      [90m 110 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4236477Z      [90m 111 |[39m       }
+2025-10-29T15:32:44.4237010Z      [90m 112 |[39m     }[0m
+2025-10-29T15:32:44.4237320Z 
+2025-10-29T15:32:44.4237795Z       at ProfessionalLogger.error [as outputLog] (src/shared/utils/logger.ts:109:19)
+2025-10-29T15:32:44.4238771Z       at ProfessionalLogger.outputLog [as error] (src/shared/utils/logger.ts:136:10)
+2025-10-29T15:32:44.4239892Z       at ErrorTrackingService.error [as captureError] (src/shared/services/errorTracking.ts:169:12)
+2025-10-29T15:32:44.4241142Z       at ErrorTrackingService.captureError [as captureMessage] (src/shared/services/errorTracking.ts:190:10)
+2025-10-29T15:32:44.4242202Z       at captureMessage (src/shared/services/errorTracking.ts:411:20)
+2025-10-29T15:32:44.4243107Z       at Object.<anonymous> (src/__tests__/shared/services/errorTracking.test.ts:53:19)
+2025-10-29T15:32:44.4243631Z 
+2025-10-29T15:32:44.4243785Z     console.log
+2025-10-29T15:32:44.4244725Z       2025-10-29T15:32:44.356Z DEBUG [Error context] ErrorTracking {"action":"test","additionalData":{"level":"warning","synthetic":true}}
+2025-10-29T15:32:44.4245476Z 
+2025-10-29T15:32:44.4245932Z       at ProfessionalLogger.log [as outputLog] (src/shared/utils/logger.ts:96:19)
+2025-10-29T15:32:44.4246672Z 
+2025-10-29T15:32:44.4246819Z     console.log
+2025-10-29T15:32:44.4248006Z       2025-10-29T15:32:44.356Z DEBUG [Breadcrumb: [user] user clicked] ErrorTracking {"message":"user clicked","category":"user","level":"info","timestamp":1761751964356,"data":{"id":1}}
+2025-10-29T15:32:44.4248971Z 
+2025-10-29T15:32:44.4249420Z       at ProfessionalLogger.log [as outputLog] (src/shared/utils/logger.ts:96:19)
+2025-10-29T15:32:44.4249935Z 
+2025-10-29T15:32:44.4250088Z     console.info
+2025-10-29T15:32:44.4250756Z       2025-10-29T15:32:44.357Z INFO [Session reset: session_1761751964357_fs9qd56mb] ErrorTracking
+2025-10-29T15:32:44.4251273Z 
+2025-10-29T15:32:44.4251712Z       at ProfessionalLogger.info [as outputLog] (src/shared/utils/logger.ts:100:19)
+2025-10-29T15:32:44.4252242Z 
+2025-10-29T15:32:44.4252381Z     console.warn
+2025-10-29T15:32:44.4252948Z       2025-10-29T15:32:44.357Z WARN [Service already initialized] ErrorTracking
+2025-10-29T15:32:44.4253403Z 
+2025-10-29T15:32:44.4253875Z     [0m [90m 102 |[39m         [36mcase[39m [32m'warn'[39m[33m:[39m
+2025-10-29T15:32:44.4254753Z      [90m 103 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4255817Z     [31m[1m>[22m[39m[90m 104 |[39m           console[33m.[39mwarn(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4256922Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4257646Z      [90m 105 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4258412Z      [90m 106 |[39m         [36mcase[39m [32m'error'[39m[33m:[39m
+2025-10-29T15:32:44.4259256Z      [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m[0m
+2025-10-29T15:32:44.4259652Z 
+2025-10-29T15:32:44.4260138Z       at ProfessionalLogger.warn [as outputLog] (src/shared/utils/logger.ts:104:19)
+2025-10-29T15:32:44.4261117Z       at ProfessionalLogger.outputLog [as warn] (src/shared/utils/logger.ts:131:10)
+2025-10-29T15:32:44.4262179Z       at ErrorTrackingService.warn [as initialize] (src/shared/services/errorTracking.ts:69:14)
+2025-10-29T15:32:44.4263240Z       at Object.initialize (src/__tests__/shared/services/errorTracking.test.ts:22:19)
+2025-10-29T15:32:44.4264279Z 
+2025-10-29T15:32:44.4264424Z     console.log
+2025-10-29T15:32:44.4265778Z       2025-10-29T15:32:44.358Z DEBUG [Performance: fastOp (50ms)] ErrorTracking {"operation":"fastOp","duration":50,"timestamp":1761751964358,"sessionId":"session_1761751964357_fs9qd56mb","tag":"fast"}
+2025-10-29T15:32:44.4267056Z 
+2025-10-29T15:32:44.4267514Z       at ProfessionalLogger.log [as outputLog] (src/shared/utils/logger.ts:96:19)
+2025-10-29T15:32:44.4268036Z 
+2025-10-29T15:32:44.4268198Z     console.warn
+2025-10-29T15:32:44.4270145Z       2025-10-29T15:32:44.358Z WARN [Slow operation detected: slowOp (1500ms)] ErrorTracking {"operation":"slowOp","duration":1500,"timestamp":1761751964358,"sessionId":"session_1761751964357_fs9qd56mb","tag":"slow"}
+2025-10-29T15:32:44.4271362Z 
+2025-10-29T15:32:44.4271888Z     [0m [90m 102 |[39m         [36mcase[39m [32m'warn'[39m[33m:[39m
+2025-10-29T15:32:44.4272763Z      [90m 103 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4273775Z     [31m[1m>[22m[39m[90m 104 |[39m           console[33m.[39mwarn(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4274631Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4275293Z      [90m 105 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4276341Z      [90m 106 |[39m         [36mcase[39m [32m'error'[39m[33m:[39m
+2025-10-29T15:32:44.4277185Z      [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m[0m
+2025-10-29T15:32:44.4277580Z 
+2025-10-29T15:32:44.4278042Z       at ProfessionalLogger.warn [as outputLog] (src/shared/utils/logger.ts:104:19)
+2025-10-29T15:32:44.4279015Z       at ProfessionalLogger.outputLog [as warn] (src/shared/utils/logger.ts:131:10)
+2025-10-29T15:32:44.4280130Z       at ErrorTrackingService.warn [as trackPerformance] (src/shared/services/errorTracking.ts:257:14)
+2025-10-29T15:32:44.4281186Z       at trackPerformance (src/shared/services/errorTracking.ts:459:20)
+2025-10-29T15:32:44.4282129Z       at Object.<anonymous> (src/__tests__/shared/services/errorTracking.test.ts:64:21)
+2025-10-29T15:32:44.4282662Z 
+2025-10-29T15:32:44.4282811Z     console.info
+2025-10-29T15:32:44.4283493Z       2025-10-29T15:32:44.359Z INFO [Session reset: session_1761751964359_yy6pj893q] ErrorTracking
+2025-10-29T15:32:44.4284046Z 
+2025-10-29T15:32:44.4284516Z       at ProfessionalLogger.info [as outputLog] (src/shared/utils/logger.ts:100:19)
+2025-10-29T15:32:44.4285055Z 
+2025-10-29T15:32:44.4285198Z     console.warn
+2025-10-29T15:32:44.4285757Z       2025-10-29T15:32:44.359Z WARN [Service already initialized] ErrorTracking
+2025-10-29T15:32:44.4286400Z 
+2025-10-29T15:32:44.4286898Z     [0m [90m 102 |[39m         [36mcase[39m [32m'warn'[39m[33m:[39m
+2025-10-29T15:32:44.4287747Z      [90m 103 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4288741Z     [31m[1m>[22m[39m[90m 104 |[39m           console[33m.[39mwarn(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4289593Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4290280Z      [90m 105 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4291030Z      [90m 106 |[39m         [36mcase[39m [32m'error'[39m[33m:[39m
+2025-10-29T15:32:44.4291832Z      [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m[0m
+2025-10-29T15:32:44.4292214Z 
+2025-10-29T15:32:44.4292700Z       at ProfessionalLogger.warn [as outputLog] (src/shared/utils/logger.ts:104:19)
+2025-10-29T15:32:44.4293685Z       at ProfessionalLogger.outputLog [as warn] (src/shared/utils/logger.ts:131:10)
+2025-10-29T15:32:44.4294718Z       at ErrorTrackingService.warn [as initialize] (src/shared/services/errorTracking.ts:69:14)
+2025-10-29T15:32:44.4295767Z       at Object.initialize (src/__tests__/shared/services/errorTracking.test.ts:22:19)
+2025-10-29T15:32:44.4296516Z 
+2025-10-29T15:32:44.4296670Z     console.error
+2025-10-29T15:32:44.4297227Z       2025-10-29T15:32:44.359Z ERROR [Error captured: before] ErrorTracking {}
+2025-10-29T15:32:44.4297935Z 
+2025-10-29T15:32:44.4298424Z     [0m [90m 107 |[39m         [36mcase[39m [32m'fatal'[39m[33m:[39m
+2025-10-29T15:32:44.4299299Z      [90m 108 |[39m           [90m// eslint-disable-next-line no-console[39m
+2025-10-29T15:32:44.4300315Z     [31m[1m>[22m[39m[90m 109 |[39m           console[33m.[39merror(formattedMessage)[33m;[39m
+2025-10-29T15:32:44.4301155Z      [90m     |[39m                   [31m[1m^[22m[39m
+2025-10-29T15:32:44.4301865Z      [90m 110 |[39m           [36mbreak[39m[33m;[39m
+2025-10-29T15:32:44.4302667Z      [90m 111 |[39m       }
+2025-10-29T15:32:44.4303182Z      [90m 112 |[39m     }[0m
+2025-10-29T15:32:44.4303431Z 
+2025-10-29T15:32:44.4303898Z       at ProfessionalLogger.error [as outputLog] (src/shared/utils/logger.ts:109:19)
+2025-10-29T15:32:44.4304892Z       at ProfessionalLogger.outputLog [as error] (src/shared/utils/logger.ts:136:10)
+2025-10-29T15:32:44.4306199Z       at ErrorTrackingService.error [as captureError] (src/shared/services/errorTracking.ts:169:12)
+2025-10-29T15:32:44.4307237Z       at captureError (src/shared/services/errorTracking.ts:390:17)
+2025-10-29T15:32:44.4308150Z       at Object.<anonymous> (src/__tests__/shared/services/errorTracking.test.ts:71:17)
+2025-10-29T15:32:44.4308677Z 
+2025-10-29T15:32:44.4308831Z     console.info
+2025-10-29T15:32:44.4309501Z       2025-10-29T15:32:44.360Z INFO [Session reset: session_1761751964360_hzdv3e6lb] ErrorTracking
+2025-10-29T15:32:44.4310064Z 
+2025-10-29T15:32:44.4310543Z       at ProfessionalLogger.info [as outputLog] (src/shared/utils/logger.ts:100:19)
+2025-10-29T15:32:44.4311088Z 
+2025-10-29T15:32:44.4525411Z PASS src/__tests__/components/ui/HeaderLogo.test.tsx
+2025-10-29T15:32:44.6007142Z PASS src/__tests__/components/ui/Logo.test.tsx
+2025-10-29T15:32:44.7999712Z PASS src/__tests__/shared/utils/SystemImmunity.test.ts
+2025-10-29T15:32:44.9406796Z PASS src/__tests__/hooks/useHapticFeedback.test.ts
+2025-10-29T15:32:45.0129651Z PASS src/__tests__/components/ProjectCard.test.tsx
+2025-10-29T15:32:45.0668204Z PASS src/__tests__/hooks/useAnimatedPress.test.ts
+2025-10-29T15:32:45.1521570Z PASS src/__tests__/hooks/useProfessionalAnimations.test.ts
+2025-10-29T15:32:45.2880709Z PASS src/__tests__/hooks/useHomeScrollAnimation.test.ts
+2025-10-29T15:32:45.3725429Z PASS src/__tests__/stores/index.test.ts
+2025-10-29T15:32:45.4643446Z PASS src/__tests__/App.test.tsx
+2025-10-29T15:32:45.5775177Z PASS src/__tests__/components/ModernCTARefactored/ModernCTA.test.tsx
+2025-10-29T15:32:49.2449710Z -------------------------------------------|---------|----------|---------|---------|------------------------------------------------------------------------------------
+2025-10-29T15:32:49.2451221Z File                                       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                  
+2025-10-29T15:32:49.2452642Z -------------------------------------------|---------|----------|---------|---------|------------------------------------------------------------------------------------
+2025-10-29T15:32:49.2463949Z All files                                  |   40.18 |    25.85 |    37.5 |   40.51 |                                                                                    
+2025-10-29T15:32:49.2465454Z  components/ModernCTARefactored            |   91.66 |       40 |     100 |   91.66 |                                                                                    
+2025-10-29T15:32:49.2466686Z   index.tsx                                |   91.66 |       40 |     100 |   91.66 | 40                                                                                 
+2025-10-29T15:32:49.2467812Z  components/ModernCTARefactored/components |   94.11 |    83.33 |   85.71 |   94.11 |                                                                                    
+2025-10-29T15:32:49.2468624Z   CTAAccentLine.tsx                        |     100 |       50 |     100 |     100 | 33                                                                                 
+2025-10-29T15:32:49.2469736Z   CTAButtons.tsx                           |      80 |      100 |      50 |      80 | 37                                                                                 
+2025-10-29T15:32:49.2470604Z   CTAContent.tsx                           |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2471622Z   CTAText.tsx                              |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2472528Z  components/ProjectCard                    |   93.75 |       80 |     100 |   93.75 |                                                                                    
+2025-10-29T15:32:49.2473648Z   ProjectContent.tsx                       |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2474729Z   ProjectHeader.tsx                        |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2475816Z   ProjectProgress.tsx                      |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2477038Z   index.tsx                                |      90 |       80 |     100 |      90 | 29,42                                                                              
+2025-10-29T15:32:49.2477920Z   types.ts                                 |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2478871Z  components/domain                         |   39.13 |      100 |   38.09 |   39.13 |                                                                                    
+2025-10-29T15:32:49.2479973Z   ActionCardEnhanced.tsx                   |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2481111Z   HeaderMissionSection.tsx                 |       0 |      100 |       0 |       0 | 20-291                                                                             
+2025-10-29T15:32:49.2482220Z   HomeHeaderSection.tsx                    |       0 |      100 |       0 |       0 | 14-66                                                                              
+2025-10-29T15:32:49.2483282Z   ModernSmartTitle.tsx                     |       0 |      100 |       0 |       0 | 12-194                                                                             
+2025-10-29T15:32:49.2483950Z   ProjectsScreenSections.tsx               |       0 |      100 |       0 |       0 | 13-139                                                                             
+2025-10-29T15:32:49.2484560Z  components/domain/HomeHeader              |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2485408Z   HeaderImageSection.tsx                   |       0 |      100 |       0 |       0 | 14-69                                                                              
+2025-10-29T15:32:49.2486626Z   HeaderMissionSection.tsx                 |       0 |      100 |       0 |       0 | 17-84                                                                              
+2025-10-29T15:32:49.2487698Z   HeaderTextSection.tsx                    |       0 |      100 |       0 |       0 | 13-34                                                                              
+2025-10-29T15:32:49.2488743Z   MealsBreakdownModal.tsx                  |       0 |      100 |       0 |       0 | 22-171                                                                             
+2025-10-29T15:32:49.2489822Z   MissionStatsSection.tsx                  |       0 |      100 |       0 |       0 | 19-79                                                                              
+2025-10-29T15:32:49.2490975Z  components/domain/design-tokens           |       0 |      100 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2491835Z   HomeHeaderTokens.ts                      |       0 |      100 |     100 |       0 | 4                                                                                  
+2025-10-29T15:32:49.2492970Z  components/domain/styles                  |       0 |      100 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2494059Z   HeaderMissionStyles.ts                   |       0 |      100 |     100 |       0 | 10                                                                                 
+2025-10-29T15:32:49.2495081Z  components/layout                         |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2496178Z   InteractiveMap.tsx                       |       0 |        0 |       0 |       0 | 41-233                                                                             
+2025-10-29T15:32:49.2497125Z   MapLocationModal.tsx                     |       0 |        0 |       0 |       0 | 19-146                                                                             
+2025-10-29T15:32:49.2498045Z   ProjectDetailModal.tsx                   |       0 |        0 |       0 |       0 | 38-239                                                                             
+2025-10-29T15:32:49.2499100Z   SectionContainer.tsx                     |       0 |        0 |       0 |       0 | 21-159                                                                             
+2025-10-29T15:32:49.2499972Z  components/ui                             |   39.65 |    19.29 |    25.4 |   40.84 |                                                                                    
+2025-10-29T15:32:49.2500960Z   AnimatedNumber.tsx                       |    4.34 |        0 |       0 |    4.34 | 21-63                                                                              
+2025-10-29T15:32:49.2502094Z   AnimatedTransition.tsx                   |   21.42 |        0 |       0 |      24 | 33-57,66-82,160-176,189-197,220-226,243-284                                        
+2025-10-29T15:32:49.2503001Z   EnhancedCardSections.tsx                 |   23.52 |        0 |       0 |   23.52 | 19-30,55-76,101-121                                                                
+2025-10-29T15:32:49.2504113Z   EnhancedTouchable.tsx                    |   76.66 |    58.33 |   93.33 |   77.96 | 34-63,83-105,193-220,291-300                                                       
+2025-10-29T15:32:49.2505190Z   FilterTabs.tsx                           |   27.77 |        0 |       0 |   29.41 | 26,37,103-107,126,194-210                                                          
+2025-10-29T15:32:49.2506254Z   HeaderLogo.tsx                           |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2507371Z   LoadingSkeleton.tsx                      |    25.8 |        0 |       0 |    25.8 | 21-76,100-124,145-179,194-221                                                      
+2025-10-29T15:32:49.2508398Z   Logo.tsx                                 |   85.71 |    66.66 |     100 |   85.71 | 49                                                                                 
+2025-10-29T15:32:49.2509447Z   PerfectContainer.tsx                     |   15.78 |        0 |       0 |   17.64 | 157-253,262,266,271,275,279,283                                                    
+2025-10-29T15:32:49.2510525Z   PerfectImage.tsx                         |      75 |     82.6 |   28.57 |      75 | 103,106,137,141,145,149,153                                                        
+2025-10-29T15:32:49.2511902Z   PerfectText.tsx                          |   57.53 |    46.29 |   66.66 |   56.94 | 128,131,153-154,172,178-213,265,269,272                                            
+2025-10-29T15:32:49.2513000Z   PlatformAnimations.tsx                   |   33.33 |    28.57 |       0 |   33.33 | 29-59,68                                                                           
+2025-10-29T15:32:49.2514202Z   PlatformBlur.tsx                         |   28.57 |        0 |       0 |   28.57 | 28-58                                                                              
+2025-10-29T15:32:49.2515178Z   PlatformComponents.tsx                   |   30.76 |        0 |       0 |   30.76 | 21-42,67-84                                                                        
+2025-10-29T15:32:49.2516399Z   PlatformIcon.tsx                         |       0 |        0 |       0 |       0 | 20-60                                                                              
+2025-10-29T15:32:49.2517419Z   PlatformTouchable.tsx                    |   66.66 |    44.44 |      50 |   66.66 | 53-55                                                                              
+2025-10-29T15:32:49.2518411Z   ProfessionalContainer.tsx                |      25 |        0 |       0 |      25 | 50-66,86-93,111-121                                                                
+2025-10-29T15:32:49.2519435Z   ProgressRing.tsx                         |   23.07 |        0 |       0 |      25 | 32-56                                                                              
+2025-10-29T15:32:49.2520388Z   ProgressStat.tsx                         |      40 |        0 |       0 |      40 | 41,76,135-153                                                                      
+2025-10-29T15:32:49.2521267Z   SocialIcon.tsx                           |   14.28 |        0 |       0 |   14.28 | 23-63                                                                              
+2025-10-29T15:32:49.2522294Z  components/ui/UnifiedCard                 |   30.35 |    14.28 |   15.38 |   32.07 |                                                                                    
+2025-10-29T15:32:49.2523278Z   EnhancedCardRenderer.tsx                 |      20 |      100 |       0 |      20 | 53-68                                                                              
+2025-10-29T15:32:49.2524235Z   GlassmorphismCardRenderer.tsx            |   22.22 |        0 |       0 |   22.22 | 32-53                                                                              
+2025-10-29T15:32:49.2525214Z   MaterialCardRenderer.tsx                 |   22.72 |    11.76 |   33.33 |   22.72 | 58-117                                                                             
+2025-10-29T15:32:49.2526315Z   UnifiedCard.tsx                          |   42.85 |    17.85 |      25 |   54.54 | 37-74                                                                              
+2025-10-29T15:32:49.2527022Z   types.ts                                 |      50 |      100 |       0 |      50 | 79,83,87                                                                           
+2025-10-29T15:32:49.2527848Z  components/ui/hooks                       |   18.18 |        0 |       0 |   18.18 |                                                                                    
+2025-10-29T15:32:49.2528796Z   useEnhancedCardStyling.ts                |   18.18 |        0 |       0 |   18.18 | 13-31,43-58                                                                        
+2025-10-29T15:32:49.2529510Z  components/ui/styles                      |     100 |       50 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2530190Z   EnhancedCardStyles.ts                    |     100 |       50 |     100 |     100 | 216-224                                                                            
+2025-10-29T15:32:49.2531251Z  components/ui/types                       |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2532377Z   EnhancedCardTypes.ts                     |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2532997Z  data                                      |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2533772Z   ProjectsScreenData.ts                    |       0 |        0 |       0 |       0 | 7-46                                                                               
+2025-10-29T15:32:49.2534565Z   impactData.ts                            |       0 |      100 |       0 |       0 | 4-253                                                                              
+2025-10-29T15:32:49.2535300Z   mapModalData.ts                          |       0 |        0 |       0 |       0 | 22-179                                                                             
+2025-10-29T15:32:49.2536233Z  design-system/themes                      |       0 |      100 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2536886Z   lightTheme.ts                            |       0 |      100 |     100 |       0 | 17                                                                                 
+2025-10-29T15:32:49.2537721Z  design-system/tokens                      |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2538439Z   animations.ts                            |       0 |      100 |     100 |       0 | 11-119                                                                             
+2025-10-29T15:32:49.2539214Z   borders.ts                               |       0 |      100 |     100 |       0 | 8-75                                                                               
+2025-10-29T15:32:49.2539806Z   colors.ts                                |       0 |      100 |     100 |       0 | 12-33                                                                              
+2025-10-29T15:32:49.2540410Z   layout.ts                                |       0 |      100 |     100 |       0 | 12-97                                                                              
+2025-10-29T15:32:49.2541095Z   semantic.ts                              |       0 |        0 |       0 |       0 | 18-150                                                                             
+2025-10-29T15:32:49.2541729Z   shadows.ts                               |       0 |        0 |       0 |       0 | 7-30                                                                               
+2025-10-29T15:32:49.2542442Z   spacing.ts                               |       0 |        0 |       0 |       0 | 8-56                                                                               
+2025-10-29T15:32:49.2543056Z   typography.ts                            |       0 |        0 |       0 |       0 | 10-208                                                                             
+2025-10-29T15:32:49.2543716Z  design-system/utils                       |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2544368Z   tokenHelpers.ts                          |       0 |        0 |       0 |       0 | 16-161                                                                             
+2025-10-29T15:32:49.2545183Z  features/about/components                 |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2546222Z   AnimatedContact.tsx                      |       0 |        0 |       0 |       0 | 12-23                                                                              
+2025-10-29T15:32:49.2547242Z   ChiSiamoSection.tsx                      |       0 |        0 |       0 |       0 | 13-25                                                                              
+2025-10-29T15:32:49.2548198Z   ContactSection.tsx                       |       0 |        0 |       0 |       0 | 9-41                                                                               
+2025-10-29T15:32:49.2549064Z   StoriaModal.tsx                          |       0 |      100 |       0 |       0 | 15-34                                                                              
+2025-10-29T15:32:49.2549733Z  features/about/hooks                      |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2550304Z   useChiSiamoAnimations.ts                 |       0 |      100 |       0 |       0 | 8-24                                                                               
+2025-10-29T15:32:49.2550869Z  features/about/screens                    |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2551412Z   ChiSiamoScreen.tsx                       |       0 |        0 |       0 |       0 | 16-97                                                                              
+2025-10-29T15:32:49.2551949Z  features/about/styles                     |       0 |        0 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2552499Z   chiSiamoStyles.ts                        |       0 |      100 |     100 |       0 | 14                                                                                 
+2025-10-29T15:32:49.2553043Z   contactStyles.ts                         |       0 |      100 |     100 |       0 | 13-84                                                                              
+2025-10-29T15:32:49.2553568Z   indexRefactored.ts                       |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2554083Z   mainStyles.ts                            |       0 |      100 |     100 |       0 | 10                                                                                 
+2025-10-29T15:32:49.2554576Z   modalStyles.ts                           |       0 |        0 |     100 |       0 | 15                                                                                 
+2025-10-29T15:32:49.2555186Z  features/actions/components/ActionButtons |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2555852Z   ActionButtonsRefactored.tsx              |       0 |      100 |       0 |       0 | 27-34                                                                              
+2025-10-29T15:32:49.2556656Z   ActionButtonsUI.tsx                      |       0 |      100 |       0 |       0 | 33-74                                                                              
+2025-10-29T15:32:49.2557229Z   useActionButtonsData.ts                  |       0 |      100 |       0 |       0 | 35-156                                                                             
+2025-10-29T15:32:49.2557857Z  features/actions/components/components    |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2558483Z   ActionButtonSections.tsx                 |       0 |        0 |       0 |       0 | 19-327                                                                             
+2025-10-29T15:32:49.2559056Z   ActionButtonStyles.ts                    |       0 |      100 |       0 |       0 | 5-6                                                                                
+2025-10-29T15:32:49.2559601Z   ActionButtonTypes.ts                     |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2560266Z   ActionButtonUtils.tsx                    |       0 |        0 |       0 |       0 | 6-26                                                                               
+2025-10-29T15:32:49.2560806Z   AnimatedButton.tsx                       |       0 |        0 |       0 |       0 | 14-27                                                                              
+2025-10-29T15:32:49.2561633Z   ContributeAnimations.tsx                 |       0 |      100 |       0 |       0 | 5-26                                                                               
+2025-10-29T15:32:49.2562658Z   ContributeHeader.tsx                     |       0 |        0 |       0 |       0 | 32-160                                                                             
+2025-10-29T15:32:49.2563717Z   DonationInfoModalMigrated.tsx            |       0 |      100 |       0 |       0 | 29-348                                                                             
+2025-10-29T15:32:49.2564785Z   HeaderDivider.tsx                        |       0 |      100 |       0 |       0 | 14-40                                                                              
+2025-10-29T15:32:49.2565765Z  features/actions/hooks                    |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2566781Z   useActionButtonsLogic.ts                 |       0 |      100 |       0 |       0 | 19-139                                                                             
+2025-10-29T15:32:49.2567396Z  features/actions/screens                  |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2568138Z   ContributeTabScreen.tsx                  |       0 |      100 |       0 |       0 | 18-46                                                                              
+2025-10-29T15:32:49.2568721Z  features/actions/types                    |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2569286Z   ContributeScreenTypes.ts                 |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2569862Z  features/actions/utils                    |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2570401Z   buttonHelpers.ts                         |       0 |        0 |       0 |       0 | 11-24                                                                              
+2025-10-29T15:32:49.2570999Z  features/home/components/EntraInAzione    |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2571636Z   ActionCTAButtons.tsx                     |       0 |      100 |       0 |       0 | 24-151                                                                             
+2025-10-29T15:32:49.2572203Z   ActionDescription.tsx                    |       0 |        0 |       0 |       0 | 14-73                                                                              
+2025-10-29T15:32:49.2572738Z   ActionTitle.tsx                          |       0 |      100 |       0 |       0 | 5-6                                                                                
+2025-10-29T15:32:49.2573241Z   index.tsx                                |       0 |      100 |       0 |       0 | 9-19                                                                               
+2025-10-29T15:32:49.2573799Z  features/home/components/HeroImage        |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2574392Z   HeroImage.styles.ts                      |       0 |        0 |       0 |       0 | 7-8                                                                                
+2025-10-29T15:32:49.2575088Z   index.tsx                                |       0 |      100 |       0 |       0 | 8-20                                                                               
+2025-10-29T15:32:49.2575606Z  features/home/hooks                       |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2576506Z   useHomeAnimations.ts                     |       0 |      100 |       0 |       0 | 4-52                                                                               
+2025-10-29T15:32:49.2577082Z   useHomeHeaderHooks.ts                    |       0 |      100 |       0 |       0 | 9-61                                                                               
+2025-10-29T15:32:49.2577646Z   useHomeHeaderStyles.ts                   |       0 |      100 |       0 |       0 | 11-15                                                                              
+2025-10-29T15:32:49.2578209Z  features/home/screens                     |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2578745Z   HomeScreen.tsx                           |       0 |      100 |       0 |       0 | 21-83                                                                              
+2025-10-29T15:32:49.2579277Z  features/home/styles                      |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2597977Z   HomeHeaderStyles.ts                      |       0 |      100 |       0 |       0 | 16-202                                                                             
+2025-10-29T15:32:49.2598595Z  features/home/types                       |       0 |        0 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2599149Z   HomeHeaderTypes.ts                       |       0 |        0 |     100 |       0 | 11                                                                                 
+2025-10-29T15:32:49.2599673Z   HomeScreenTypes.ts                       |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2600223Z  features/impact/components                |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2600778Z   CommunitySection.tsx                     |       0 |        0 |       0 |       0 | 24-168                                                                             
+2025-10-29T15:32:49.2601304Z   ImpactHeader.tsx                         |       0 |        0 |       0 |       0 | 27-100                                                                             
+2025-10-29T15:32:49.2601835Z   ImpactHeroSection.tsx                    |       0 |      100 |       0 |       0 | 23-69                                                                              
+2025-10-29T15:32:49.2602403Z   ImpactStatComponents.tsx                 |       0 |      100 |       0 |       0 | 18-144                                                                             
+2025-10-29T15:32:49.2602937Z   MapSection.tsx                           |       0 |        0 |       0 |       0 | 21-91                                                                              
+2025-10-29T15:32:49.2603461Z   Results2024Section.tsx                   |       0 |        0 |       0 |       0 | 20-143                                                                             
+2025-10-29T15:32:49.2604030Z   TotalMealsSection.tsx                    |       0 |        0 |       0 |       0 | 25-192                                                                             
+2025-10-29T15:32:49.2604772Z  features/impact/hooks                     |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2605328Z   useImpactAnimations.ts                   |       0 |      100 |       0 |       0 | 8-23                                                                               
+2025-10-29T15:32:49.2605979Z  features/impact/screens                   |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2606701Z   ImpactTabScreen.tsx                      |       0 |        0 |       0 |       0 | 34-136                                                                             
+2025-10-29T15:32:49.2607242Z   Impatto2024Screen.tsx                    |       0 |        0 |       0 |       0 | 27-432                                                                             
+2025-10-29T15:32:49.2607806Z  features/impact/styles                    |       0 |      100 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2608365Z   ImpactScreenStyles.ts                    |       0 |      100 |     100 |       0 | 11                                                                                 
+2025-10-29T15:32:49.2608912Z  features/impact/types                     |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2609433Z   ImpactScreenTypes.ts                     |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2609955Z  features/impact/utils                     |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2610461Z   mapHelpers.ts                            |       0 |        0 |       0 |       0 | 9-12                                                                               
+2025-10-29T15:32:49.2610972Z  features/projects/data                    |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2611509Z   ProjectsScreenData.ts                    |       0 |        0 |       0 |       0 | 4-43                                                                               
+2025-10-29T15:32:49.2612054Z  features/projects/hooks                   |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2612612Z   useProjectsScreenLogic.ts                |       0 |        0 |       0 |       0 | 13-85                                                                              
+2025-10-29T15:32:49.2613181Z  features/projects/screens                 |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2613727Z   ProjectsScreen.tsx                       |       0 |        0 |       0 |       0 | 22-122                                                                             
+2025-10-29T15:32:49.2614266Z  features/projects/styles                  |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2614825Z   ProjectsScreenStyles.ts                  |       0 |        0 |       0 |       0 | 13-19                                                                              
+2025-10-29T15:32:49.2615382Z  features/projects/types                   |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2615925Z   ProjectsScreenTypes.ts                   |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2616693Z  features/shared                           |       0 |      100 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2617202Z   headerLayout.ts                          |       0 |      100 |     100 |       0 | 5-14                                                                               
+2025-10-29T15:32:49.2617805Z   headerSizes.ts                           |       0 |      100 |     100 |       0 | 5-12                                                                               
+2025-10-29T15:32:49.2618376Z  features/social/components                |     100 |    57.14 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2618965Z   HeaderSection.tsx                        |     100 |       50 |     100 |     100 | 46-58                                                                              
+2025-10-29T15:32:49.2619518Z   SocialCard.tsx                           |     100 |       60 |     100 |     100 | 56-63                                                                              
+2025-10-29T15:32:49.2620084Z  features/social/hooks                     |   81.25 |      100 |      50 |   81.25 |                                                                                    
+2025-10-29T15:32:49.2620671Z   useSocialPlatforms.ts                    |   81.25 |      100 |      50 |   81.25 | 53,76-89                                                                           
+2025-10-29T15:32:49.2621260Z  features/social/screens                   |       0 |      100 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2621804Z   SeguiciScreen.tsx                        |       0 |      100 |       0 |       0 | 26-59                                                                              
+2025-10-29T15:32:49.2622349Z  features/social/styles                    |       0 |      100 |     100 |       0 |                                                                                    
+2025-10-29T15:32:49.2622874Z   mainStyles.ts                            |       0 |      100 |     100 |       0 | 10                                                                                 
+2025-10-29T15:32:49.2623359Z  navigation                                |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2623848Z   AppNavigator.tsx                         |       0 |      100 |       0 |       0 | 23-26                                                                              
+2025-10-29T15:32:49.2624389Z   BottomTabNavigator.tsx                   |       0 |        0 |       0 |       0 | 32-277                                                                             
+2025-10-29T15:32:49.2624958Z   ImpactStackNavigator.tsx                 |       0 |      100 |       0 |       0 | 10-13                                                                              
+2025-10-29T15:32:49.2625465Z   types.ts                                 |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2625960Z  navigation/LazyLoading                    |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2626751Z   LazyComponents.tsx                       |       0 |      100 |       0 |       0 | 17-193                                                                             
+2025-10-29T15:32:49.2627280Z   LazyScreen.tsx                           |       0 |        0 |       0 |       0 | 21-134                                                                             
+2025-10-29T15:32:49.2627942Z   createLazyComponent.ts                   |       0 |        0 |       0 |       0 | 16-164                                                                             
+2025-10-29T15:32:49.2628440Z  screens                                   |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2628920Z   MapModalScreen.tsx                       |       0 |        0 |       0 |       0 | 19-97                                                                              
+2025-10-29T15:32:49.2629544Z  shared/components                         |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2630095Z   OTADebugPanel.tsx                        |       0 |        0 |       0 |       0 | 13-128                                                                             
+2025-10-29T15:32:49.2630634Z   OTAUpdateScreen.tsx                      |       0 |        0 |       0 |       0 | 23-161                                                                             
+2025-10-29T15:32:49.2631160Z  shared/config                             |   80.35 |     65.9 |     100 |   79.24 |                                                                                    
+2025-10-29T15:32:49.2631709Z   environment.ts                           |   80.35 |     65.9 |     100 |   79.24 | 32-36,95-109,118,135,145                                                           
+2025-10-29T15:32:49.2632267Z  shared/constants                          |   64.58 |       37 |   53.73 |   65.06 |                                                                                    
+2025-10-29T15:32:49.2632799Z   designTokens.ts                          |      88 |    77.77 |      25 |      88 | 369,372,375                                                                        
+2025-10-29T15:32:49.2633363Z   deviceResolutionsDatabase.ts             |       0 |        0 |       0 |       0 |                                                                                    
+2025-10-29T15:32:49.2633959Z   materialDesignTokens.ts                  |   66.66 |       20 |     100 |   64.28 | 399-411                                                                            
+2025-10-29T15:32:49.2634521Z   performance.ts                           |   27.27 |        0 |       0 |      30 | 86-97,104-106                                                                      
+2025-10-29T15:32:49.2635089Z   platformDesignTokens.ts                  |     100 |       50 |     100 |     100 | 89-92                                                                              
+2025-10-29T15:32:49.2635726Z   responsiveSystem.ts                      |   62.14 |    36.76 |   55.93 |    62.5 | 86-93,128-129,150-161,324-346,386,487,502,517-547,791-831,846-888,900-939,949-1008 
+2025-10-29T15:32:49.2636494Z   typographySizes.ts                       |       0 |      100 |     100 |       0 | 4-5                                                                                
+2025-10-29T15:32:49.2637072Z  shared/constants/devices                  |   96.42 |       75 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2637604Z   apple.ts                                 |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2638115Z   chinese-brands.ts                        |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2638628Z   google.ts                                |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2639112Z   samsung.ts                               |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2639764Z   special-categories.ts                    |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2640275Z   types.ts                                 |    87.5 |       75 |     100 |     100 | 20                                                                                 
+2025-10-29T15:32:49.2640851Z  shared/hooks                              |   18.85 |     9.85 |   15.57 |   20.25 |                                                                                    
+2025-10-29T15:32:49.2641390Z   useAnimatedPress.ts                      |    61.9 |    28.57 |   42.85 |    61.9 | 35-58,67-90                                                                        
+2025-10-29T15:32:49.2642015Z   useAsyncOperation.ts                     |   71.73 |    61.36 |   71.42 |   72.72 | 88,153-170,184-185,202-203,302-314,325-338                                         
+2025-10-29T15:32:49.2642630Z   useFoldableLayout.ts                     |       0 |        0 |       0 |       0 | 65-366                                                                             
+2025-10-29T15:32:49.2643196Z   useHapticFeedback.ts                     |    5.66 |        0 |       0 |    6.25 | 22-52,64-78,84-110                                                                 
+2025-10-29T15:32:49.2643792Z   useHomeScrollAnimation.ts                |   47.05 |        0 |   33.33 |      50 | 22-33,40                                                                           
+2025-10-29T15:32:49.2644344Z   useLinkHandler.ts                        |       0 |        0 |       0 |       0 | 42-274                                                                             
+2025-10-29T15:32:49.2644852Z   useNavigation.ts                         |       0 |        0 |       0 |       0 | 20-55                                                                              
+2025-10-29T15:32:49.2645380Z   useOTAUpdateScreen.ts                    |       0 |        0 |       0 |       0 | 15-107                                                                             
+2025-10-29T15:32:49.2645908Z   useOTAUpdates.ts                         |       0 |        0 |       0 |       0 | 18-140                                                                             
+2025-10-29T15:32:49.2646560Z   usePerformanceMonitor.ts                 |       0 |        0 |       0 |       0 | 19-168                                                                             
+2025-10-29T15:32:49.2647136Z   usePerformanceTracking.ts                |       0 |        0 |       0 |       0 | 29-177                                                                             
+2025-10-29T15:32:49.2647732Z   useProfessionalAnimations.ts             |    92.3 |      100 |      80 |    92.3 | 57                                                                                 
+2025-10-29T15:32:49.2648309Z   useProjectsData.ts                       |       0 |      100 |       0 |       0 | 16-138                                                                             
+2025-10-29T15:32:49.2648888Z   useResponsive.ts                         |     4.9 |        0 |       0 |    5.95 | 36-132,146-166,176-197,216-312,346-399                                             
+2025-10-29T15:32:49.2649469Z   useTheme.tsx                             |     100 |      100 |     100 |     100 |                                                                                    
+2025-10-29T15:32:49.2650002Z  shared/services                           |    87.2 |    70.68 |    86.3 |   88.81 |                                                                                    
+2025-10-29T15:32:49.2650586Z   apiSecurity.ts                           |   84.78 |    78.33 |   73.07 |   85.82 | 76-77,83,88,141-144,183-184,358,397-416,534,557,579,600                            
+2025-10-29T15:32:49.2651337Z   errorTracking.ts                         |   81.92 |    58.69 |   86.36 |   86.07 | 93-102,108,122,136-140,145,204-206,279                                             
+2025-10-29T15:32:49.2651931Z   secureStorage.ts                         |   97.36 |       80 |     100 |   97.26 | 114-119                                                                            
+2025-10-29T15:32:49.2652456Z  shared/theme                              |   82.05 |    55.17 |      70 |   82.35 |                                                                                    
+2025-10-29T15:32:49.2653106Z   UniversalTheme.tsx                       |   82.05 |    55.17 |      70 |   82.35 | 105,122,127,166-170                                                                
+2025-10-29T15:32:49.2653664Z  shared/utils                              |   80.98 |    73.33 |    77.5 |   81.75 |                                                                                    
+2025-10-29T15:32:49.2654233Z   SmartFontSizeCache.ts                    |   81.35 |    68.18 |   78.57 |   81.35 | 48-49,162-171,229-233                                                              
+2025-10-29T15:32:49.2654858Z   SystemImmunity.ts                        |   66.66 |    43.75 |   57.14 |   74.07 | 88,102-105,112-115,122                                                             
+2025-10-29T15:32:49.2655420Z   logger.ts                                |   90.78 |    78.12 |    86.2 |   91.78 | 82,156-157,181-189                                                                 
+2025-10-29T15:32:49.2655948Z   result.ts                                |   78.15 |       82 |   73.33 |   77.39 | 259-276,350-370                                                                    
+2025-10-29T15:32:49.2656651Z  stores                                    |    90.2 |    88.46 |   88.13 |    92.8 |                                                                                    
+2025-10-29T15:32:49.2657135Z   appStore.ts                              |     100 |       50 |     100 |     100 | 31                                                                                 
+2025-10-29T15:32:49.2657644Z   impactStore.ts                           |     100 |       50 |     100 |     100 | 72                                                                                 
+2025-10-29T15:32:49.2658178Z   projectsStore.ts                         |     100 |    83.33 |     100 |     100 | 115                                                                                
+2025-10-29T15:32:49.2658731Z   selectors.ts                             |   88.12 |      100 |   84.78 |   90.47 | 51-57,106-108,135                                                                  
+2025-10-29T15:32:49.2659244Z  systems                                   |   77.77 |     45.2 |     100 |   78.57 |                                                                                    
+2025-10-29T15:32:49.2659840Z   MicroInteractionEngine.ts                |   77.77 |     45.2 |     100 |   78.57 | 101-103,113,117-119,139,166,198-202,215-219,232-236,282,313                        
+2025-10-29T15:32:49.2660591Z -------------------------------------------|---------|----------|---------|---------|------------------------------------------------------------------------------------
+2025-10-29T15:32:49.4788363Z Jest: "global" coverage threshold for statements (85%) not met: 40.18%
+2025-10-29T15:32:49.4789201Z Jest: "global" coverage threshold for branches (80%) not met: 25.85%
+2025-10-29T15:32:49.4789701Z Jest: "global" coverage threshold for lines (85%) not met: 40.51%
+2025-10-29T15:32:49.4790205Z Jest: "global" coverage threshold for functions (85%) not met: 37.5%
+2025-10-29T15:32:49.4790454Z 
+2025-10-29T15:32:49.4791471Z Test Suites: 2 skipped, 40 passed, 40 of 42 total
+2025-10-29T15:32:49.4792064Z Tests:       46 skipped, 544 passed, 590 total
+2025-10-29T15:32:49.4792440Z Snapshots:   2 passed, 2 total
+2025-10-29T15:32:49.4792680Z Time:        23.352 s
+2025-10-29T15:32:49.4792887Z Ran all test suites.
+2025-10-29T15:32:49.5051708Z ##[error]Process completed with exit code 1.
+2025-10-29T15:32:49.5149118Z Post job cleanup.
+2025-10-29T15:32:49.6077652Z [command]/usr/bin/git version
+2025-10-29T15:32:49.6113375Z git version 2.51.0
+2025-10-29T15:32:49.6157154Z Temporarily overriding HOME='/home/runner/work/_temp/ebec9c46-ef06-4036-86cc-4a3ce4a4cd54' before making global git config changes
+2025-10-29T15:32:49.6158610Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-29T15:32:49.6170623Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
+2025-10-29T15:32:49.6204064Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-29T15:32:49.6235288Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-29T15:32:49.6463337Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-29T15:32:49.6483492Z http.https://github.com/.extraheader
+2025-10-29T15:32:49.6495700Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-10-29T15:32:49.6525114Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-29T15:32:49.6848628Z Cleaning up orphan processes

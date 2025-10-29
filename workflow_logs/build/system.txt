@@ -1,0 +1,5 @@
+2025-10-29T15:32:58.3890000Z Job is waiting for a hosted runner to come online.
+2025-10-29T15:32:58.3810000Z Requested labels: ubuntu-latest
+2025-10-29T15:32:58.3810000Z Job defined at: Rikiglesias/App-Rise/.github/workflows/optimized-ci-cd.yml@refs/pull/19/merge
+2025-10-29T15:32:58.3810000Z Waiting for a runner to pick up this job...
+2025-10-29T15:32:58.3900000Z Job is about to start running on the hosted runner: GitHub Actions 1000001148

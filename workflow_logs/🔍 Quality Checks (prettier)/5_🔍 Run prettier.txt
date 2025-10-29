@@ -1,0 +1,29 @@
+﻿2025-10-29T15:32:23.6415518Z ##[group]Run case "prettier" in
+2025-10-29T15:32:23.6415838Z [36;1mcase "prettier" in[0m
+2025-10-29T15:32:23.6416072Z [36;1m  "typescript")[0m
+2025-10-29T15:32:23.6416311Z [36;1m    echo "🔍 TypeScript Check"[0m
+2025-10-29T15:32:23.6416602Z [36;1m    npx tsc --noEmit --skipLibCheck[0m
+2025-10-29T15:32:23.6416855Z [36;1m    ;;[0m
+2025-10-29T15:32:23.6417042Z [36;1m  "eslint")[0m
+2025-10-29T15:32:23.6417248Z [36;1m    echo "📝 ESLint Check"[0m
+2025-10-29T15:32:23.6417553Z [36;1m    npx eslint "src/**/*.{ts,tsx}" --max-warnings 0 --cache[0m
+2025-10-29T15:32:23.6417854Z [36;1m    ;;[0m
+2025-10-29T15:32:23.6418042Z [36;1m  "prettier")[0m
+2025-10-29T15:32:23.6418251Z [36;1m    echo "🎨 Prettier Check"[0m
+2025-10-29T15:32:23.6418550Z [36;1m    npx prettier --check "src/**/*.{ts,tsx}" --cache[0m
+2025-10-29T15:32:23.6418833Z [36;1m    ;;[0m
+2025-10-29T15:32:23.6419002Z [36;1m  "tests")[0m
+2025-10-29T15:32:23.6419200Z [36;1m    echo "🧪 Unit Tests"[0m
+2025-10-29T15:32:23.6419490Z [36;1m    npm test -- --coverage --watchAll=false --maxWorkers=2[0m
+2025-10-29T15:32:23.6419818Z [36;1m    ;;[0m
+2025-10-29T15:32:23.6419986Z [36;1mesac[0m
+2025-10-29T15:32:23.6454214Z shell: /usr/bin/bash -e {0}
+2025-10-29T15:32:23.6454462Z env:
+2025-10-29T15:32:23.6454636Z   NODE_VERSION: 20.x
+2025-10-29T15:32:23.6454824Z   CACHE_VERSION: v2
+2025-10-29T15:32:23.6455017Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:32:23.6455235Z   EAS_CLI_VERSION: latest
+2025-10-29T15:32:23.6455428Z ##[endgroup]
+2025-10-29T15:32:23.6508450Z 🎨 Prettier Check
+2025-10-29T15:32:24.1174244Z Checking formatting...
+2025-10-29T15:32:28.0130409Z All matched files use Prettier code style!

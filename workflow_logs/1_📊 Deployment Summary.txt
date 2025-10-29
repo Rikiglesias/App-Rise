@@ -1,0 +1,190 @@
+﻿2025-10-29T15:33:00.9801330Z Current runner version: '2.328.0'
+2025-10-29T15:33:00.9824595Z ##[group]Runner Image Provisioner
+2025-10-29T15:33:00.9825418Z Hosted Compute Agent
+2025-10-29T15:33:00.9826082Z Version: 20250912.392
+2025-10-29T15:33:00.9826680Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+2025-10-29T15:33:00.9827430Z Build Date: 2025-09-12T15:23:14Z
+2025-10-29T15:33:00.9828037Z ##[endgroup]
+2025-10-29T15:33:00.9828829Z ##[group]Operating System
+2025-10-29T15:33:00.9829380Z Ubuntu
+2025-10-29T15:33:00.9829920Z 24.04.3
+2025-10-29T15:33:00.9830389Z LTS
+2025-10-29T15:33:00.9830898Z ##[endgroup]
+2025-10-29T15:33:00.9831436Z ##[group]Runner Image
+2025-10-29T15:33:00.9831968Z Image: ubuntu-24.04
+2025-10-29T15:33:00.9832481Z Version: 20250929.60.1
+2025-10-29T15:33:00.9833460Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-29T15:33:00.9835180Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+2025-10-29T15:33:00.9836183Z ##[endgroup]
+2025-10-29T15:33:00.9837265Z ##[group]GITHUB_TOKEN Permissions
+2025-10-29T15:33:00.9839422Z Contents: read
+2025-10-29T15:33:00.9840075Z Metadata: read
+2025-10-29T15:33:00.9840636Z Packages: read
+2025-10-29T15:33:00.9841119Z ##[endgroup]
+2025-10-29T15:33:00.9843516Z Secret source: Actions
+2025-10-29T15:33:00.9844240Z Prepare workflow directory
+2025-10-29T15:33:01.0229797Z Prepare all required actions
+2025-10-29T15:33:01.0276061Z Getting action download info
+2025-10-29T15:33:01.5275847Z Download action repository 'actions/github-script@v7' (SHA:f28e40c7f34bde8b3046d885e986cb6290c5673b)
+2025-10-29T15:33:02.3515152Z Complete job name: 📊 Deployment Summary
+2025-10-29T15:33:02.4262284Z ##[group]Run echo "## 🚀 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY
+2025-10-29T15:33:02.4263380Z [36;1mecho "## 🚀 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4264111Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4264654Z [36;1m[0m
+2025-10-29T15:33:02.4265097Z [36;1m# Quality Checks[0m
+2025-10-29T15:33:02.4265675Z [36;1mecho "### 🔍 Quality Checks" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4266364Z [36;1mif [[ "failure" == "success" ]]; then[0m
+2025-10-29T15:33:02.4267080Z [36;1m  echo "✅ All quality checks passed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4267758Z [36;1melse[0m
+2025-10-29T15:33:02.4268593Z [36;1m  echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4269337Z [36;1mfi[0m
+2025-10-29T15:33:02.4269741Z [36;1m[0m
+2025-10-29T15:33:02.4270155Z [36;1m# Visual Regression[0m
+2025-10-29T15:33:02.4270857Z [36;1mecho "### 🎯 Visual Regression" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4271593Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-29T15:33:02.4272372Z [36;1m  echo "✅ Visual regression tests passed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4273160Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-29T15:33:02.4273947Z [36;1m  echo "⏭️ Visual regression tests skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4274699Z [36;1melse[0m
+2025-10-29T15:33:02.4275308Z [36;1m  echo "❌ Visual regression tests failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4276072Z [36;1mfi[0m
+2025-10-29T15:33:02.4276475Z [36;1m[0m
+2025-10-29T15:33:02.4276926Z [36;1m# Builds[0m
+2025-10-29T15:33:02.4277471Z [36;1mecho "### 📱 Builds" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4278157Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-29T15:33:02.4278965Z [36;1m  echo "🍎 iOS: ✅ Success" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4279690Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-29T15:33:02.4280413Z [36;1m  echo "🍎 iOS: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4281074Z [36;1melse[0m
+2025-10-29T15:33:02.4281651Z [36;1m  echo "🍎 iOS: ❌ Failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4282276Z [36;1mfi[0m
+2025-10-29T15:33:02.4282702Z [36;1m[0m
+2025-10-29T15:33:02.4283190Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-29T15:33:02.4284295Z [36;1m  echo "🤖 Android: ✅ Success" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4285018Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-29T15:33:02.4285739Z [36;1m  echo "🤖 Android: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4286399Z [36;1melse[0m
+2025-10-29T15:33:02.4286939Z [36;1m  echo "🤖 Android: ❌ Failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4287583Z [36;1mfi[0m
+2025-10-29T15:33:02.4288003Z [36;1m[0m
+2025-10-29T15:33:02.4288553Z [36;1m# OTA Updates[0m
+2025-10-29T15:33:02.4289137Z [36;1mecho "### 🔄 OTA Updates" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4289843Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-29T15:33:02.4290619Z [36;1m  echo "✅ OTA Update deployed successfully" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4291430Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-29T15:33:02.4292302Z [36;1m  echo "⏭️ OTA Update skipped (no [ota] or [hotfix] trigger)" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4293110Z [36;1melse[0m
+2025-10-29T15:33:02.4293654Z [36;1m  echo "❌ OTA Update failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4294293Z [36;1mfi[0m
+2025-10-29T15:33:02.4294707Z [36;1m[0m
+2025-10-29T15:33:02.4295137Z [36;1m# Bundle Analysis[0m
+2025-10-29T15:33:02.4295754Z [36;1mecho "### 📊 Bundle Analysis" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4296465Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-29T15:33:02.4297204Z [36;1m  echo "✅ Bundle analysis completed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4297968Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-29T15:33:02.4298991Z [36;1m  echo "⏭️ Bundle analysis skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4299710Z [36;1melse[0m
+2025-10-29T15:33:02.4300285Z [36;1m  echo "❌ Bundle analysis failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4300950Z [36;1mfi[0m
+2025-10-29T15:33:02.4301372Z [36;1m[0m
+2025-10-29T15:33:02.4301804Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4303015Z [36;1mecho "🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-29T15:33:02.4341045Z shell: /usr/bin/bash -e {0}
+2025-10-29T15:33:02.4342246Z env:
+2025-10-29T15:33:02.4342696Z   NODE_VERSION: 20.x
+2025-10-29T15:33:02.4343177Z   CACHE_VERSION: v2
+2025-10-29T15:33:02.4343634Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:33:02.4344129Z   EAS_CLI_VERSION: latest
+2025-10-29T15:33:02.4344606Z ##[endgroup]
+2025-10-29T15:33:02.4651518Z ##[group]Run actions/github-script@v7
+2025-10-29T15:33:02.4652156Z with:
+2025-10-29T15:33:02.4655087Z   script: const summary = `## 🚀 CI/CD Pipeline Results
+
+### 🔍 Quality Checks
+❌ Quality checks failed
+
+### 🎯 Visual Regression
+⏭️ Visual regression tests skipped
+
+### 📱 Builds
+🍎 iOS: ⏭️ Skipped
+🤖 Android: ⏭️ Skipped
+
+🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)`;
+
+github.rest.issues.createComment({
+  issue_number: context.issue.number,
+  owner: context.repo.owner,
+  repo: context.repo.repo,
+  body: summary
+});
+
+2025-10-29T15:33:02.4658659Z   github-token: ***
+2025-10-29T15:33:02.4659137Z   debug: false
+2025-10-29T15:33:02.4659598Z   user-agent: actions/github-script
+2025-10-29T15:33:02.4660150Z   result-encoding: json
+2025-10-29T15:33:02.4660618Z   retries: 0
+2025-10-29T15:33:02.4661095Z   retry-exempt-status-codes: 400,401,403,404,422
+2025-10-29T15:33:02.4661698Z env:
+2025-10-29T15:33:02.4662099Z   NODE_VERSION: 20.x
+2025-10-29T15:33:02.4662588Z   CACHE_VERSION: v2
+2025-10-29T15:33:02.4663043Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:33:02.4663540Z   EAS_CLI_VERSION: latest
+2025-10-29T15:33:02.4664010Z ##[endgroup]
+2025-10-29T15:33:02.9448595Z RequestError [HttpError]: Resource not accessible by integration
+2025-10-29T15:33:02.9489984Z ##[error]Unhandled error: HttpError: Resource not accessible by integration
+2025-10-29T15:33:02.9503065Z     at /home/runner/work/_actions/actions/github-script/v7/dist/index.js:9537:21
+2025-10-29T15:33:02.9505596Z     at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+2025-10-29T15:33:02.9506936Z   status: 403,
+2025-10-29T15:33:02.9507654Z   response: {
+2025-10-29T15:33:02.9508962Z     url: 'https://api.github.com/repos/Rikiglesias/App-Rise/issues/19/comments',
+2025-10-29T15:33:02.9510204Z     status: 403,
+2025-10-29T15:33:02.9510892Z     headers: {
+2025-10-29T15:33:02.9511687Z       'access-control-allow-origin': '*',
+2025-10-29T15:33:02.9515512Z       'access-control-expose-headers': 'ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset',
+2025-10-29T15:33:02.9519476Z       'content-encoding': 'gzip',
+2025-10-29T15:33:02.9520510Z       'content-security-policy': "default-src 'none'",
+2025-10-29T15:33:02.9521727Z       'content-type': 'application/json; charset=utf-8',
+2025-10-29T15:33:02.9522847Z       date: 'Wed, 29 Oct 2025 15:33:02 GMT',
+2025-10-29T15:33:02.9524201Z       'referrer-policy': 'origin-when-cross-origin, strict-origin-when-cross-origin',
+2025-10-29T15:33:02.9525569Z       server: 'github.com',
+2025-10-29T15:33:02.9526751Z       'strict-transport-security': 'max-age=31536000; includeSubdomains; preload',
+2025-10-29T15:33:02.9528062Z       'transfer-encoding': 'chunked',
+2025-10-29T15:33:02.9529394Z       vary: 'Accept-Encoding, Accept, X-Requested-With',
+2025-10-29T15:33:02.9530715Z       'x-accepted-github-permissions': 'issues=write; pull_requests=write',
+2025-10-29T15:33:02.9532015Z       'x-content-type-options': 'nosniff',
+2025-10-29T15:33:02.9532992Z       'x-frame-options': 'deny',
+2025-10-29T15:33:02.9533981Z       'x-github-api-version-selected': '2022-11-28',
+2025-10-29T15:33:02.9535137Z       'x-github-media-type': 'github.v3; format=json',
+2025-10-29T15:33:02.9536393Z       'x-github-request-id': 'A029:2FA99C:35F0514:37602B1:690233AE',
+2025-10-29T15:33:02.9537705Z       'x-ratelimit-limit': '5000',
+2025-10-29T15:33:02.9538951Z       'x-ratelimit-remaining': '4994',
+2025-10-29T15:33:02.9539980Z       'x-ratelimit-reset': '1761752032',
+2025-10-29T15:33:02.9540972Z       'x-ratelimit-resource': 'core',
+2025-10-29T15:33:02.9541967Z       'x-ratelimit-used': '6',
+2025-10-29T15:33:02.9542879Z       'x-xss-protection': '0'
+2025-10-29T15:33:02.9543761Z     },
+2025-10-29T15:33:02.9544485Z     data: {
+2025-10-29T15:33:02.9545825Z       message: 'Resource not accessible by integration',
+2025-10-29T15:33:02.9547465Z       documentation_url: 'https://docs.github.com/rest/issues/comments#create-an-issue-comment',
+2025-10-29T15:33:02.9549096Z       status: '403'
+2025-10-29T15:33:02.9549811Z     }
+2025-10-29T15:33:02.9550478Z   },
+2025-10-29T15:33:02.9551153Z   request: {
+2025-10-29T15:33:02.9551883Z     method: 'POST',
+2025-10-29T15:33:02.9552959Z     url: 'https://api.github.com/repos/Rikiglesias/App-Rise/issues/19/comments',
+2025-10-29T15:33:02.9554259Z     headers: {
+2025-10-29T15:33:02.9555075Z       accept: 'application/vnd.github.v3+json',
+2025-10-29T15:33:02.9556693Z       'user-agent': 'actions/github-script octokit-core.js/5.0.1 Node.js/20.19.4 (linux; x64)',
+2025-10-29T15:33:02.9558178Z       authorization: 'token [REDACTED]',
+2025-10-29T15:33:02.9559417Z       'content-type': 'application/json; charset=utf-8'
+2025-10-29T15:33:02.9560518Z     },
+2025-10-29T15:33:02.9564256Z     body: '{"body":"## 🚀 CI/CD Pipeline Results\\n\\n### 🔍 Quality Checks\\n❌ Quality checks failed\\n\\n### 🎯 Visual Regression\\n⏭️ Visual regression tests skipped\\n\\n### 📱 Builds\\n🍎 iOS: ⏭️ Skipped\\n🤖 Android: ⏭️ Skipped\\n\\n🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)"}',
+2025-10-29T15:33:02.9567547Z     request: {
+2025-10-29T15:33:02.9568436Z       agent: [Agent],
+2025-10-29T15:33:02.9569199Z       fetch: [Function: proxyFetch],
+2025-10-29T15:33:02.9570150Z       hook: [Function: bound bound register]
+2025-10-29T15:33:02.9571320Z     }
+2025-10-29T15:33:02.9571957Z   }
+2025-10-29T15:33:02.9572579Z }
+2025-10-29T15:33:03.0221371Z Cleaning up orphan processes

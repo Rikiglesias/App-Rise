@@ -1,0 +1,37 @@
+﻿2025-10-29T15:33:00.9838698Z ##[group]Run IOS="skipped"
+2025-10-29T15:33:00.9839417Z [36;1mIOS="skipped"[0m
+2025-10-29T15:33:00.9839918Z [36;1mANDROID="skipped"[0m
+2025-10-29T15:33:00.9840576Z [36;1m[0m
+2025-10-29T15:33:00.9841016Z [36;1mecho "iOS result: $IOS"[0m
+2025-10-29T15:33:00.9841628Z [36;1mecho "Android result: $ANDROID"[0m
+2025-10-29T15:33:00.9842417Z [36;1m[0m
+2025-10-29T15:33:00.9843040Z [36;1m# Pass if both succeeded OR both skipped (no build required)[0m
+2025-10-29T15:33:00.9843921Z [36;1mif [ "$IOS" = "success" ] && [ "$ANDROID" = "success" ]; then[0m
+2025-10-29T15:33:00.9844636Z [36;1m  echo "✅ Both builds succeeded"[0m
+2025-10-29T15:33:00.9845231Z [36;1m  exit 0[0m
+2025-10-29T15:33:00.9845861Z [36;1mfi[0m
+2025-10-29T15:33:00.9846413Z [36;1m[0m
+2025-10-29T15:33:00.9846947Z [36;1mif [ "$IOS" = "skipped" ] && [ "$ANDROID" = "skipped" ]; then[0m
+2025-10-29T15:33:00.9847779Z [36;1m  echo "ℹ️ Builds skipped (no build required) — marking as pass"[0m
+2025-10-29T15:33:00.9848572Z [36;1m  exit 0[0m
+2025-10-29T15:33:00.9849129Z [36;1mfi[0m
+2025-10-29T15:33:00.9849611Z [36;1m[0m
+2025-10-29T15:33:00.9850113Z [36;1m# Fail only if at least one actually ran and failed[0m
+2025-10-29T15:33:00.9850872Z [36;1mif [ "$IOS" = "failure" ] || [ "$ANDROID" = "failure" ]; then[0m
+2025-10-29T15:33:00.9851576Z [36;1m  echo "❌ One or both builds failed"[0m
+2025-10-29T15:33:00.9852186Z [36;1m  exit 1[0m
+2025-10-29T15:33:00.9852606Z [36;1mfi[0m
+2025-10-29T15:33:00.9853106Z [36;1m[0m
+2025-10-29T15:33:00.9853701Z [36;1m# Mixed results (e.g., one skipped, one success) → pass[0m
+2025-10-29T15:33:00.9854501Z [36;1mecho "ℹ️ Mixed results (success/skipped) — marking as pass"[0m
+2025-10-29T15:33:00.9855265Z [36;1mexit 0[0m
+2025-10-29T15:33:01.0483641Z shell: /usr/bin/bash -e {0}
+2025-10-29T15:33:01.0485160Z env:
+2025-10-29T15:33:01.0486148Z   NODE_VERSION: 20.x
+2025-10-29T15:33:01.0487011Z   CACHE_VERSION: v2
+2025-10-29T15:33:01.0487844Z   EXPO_CLI_VERSION: latest
+2025-10-29T15:33:01.0488763Z   EAS_CLI_VERSION: latest
+2025-10-29T15:33:01.0489742Z ##[endgroup]
+2025-10-29T15:33:01.0819184Z iOS result: skipped
+2025-10-29T15:33:01.0820086Z Android result: skipped
+2025-10-29T15:33:01.0966146Z ℹ️ Builds skipped (no build required) — marking as pass
