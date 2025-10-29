@@ -621,7 +621,9 @@ jobs:
         run: npm ci --prefer-offline --no-audit
 
       - name: 🧪 Run Unit Tests
-        run: npm test -- --coverage --watchAll=false --maxWorkers=2
+        run: npm test -- --ci --coverage --maxWorkers=2
+        env:
+          CI: true
 
   # ===================================================================
   # BUILD SUMMARY (single 'build' check summarizing iOS+Android builds)
