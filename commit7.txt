@@ -1,8 +1,0 @@
-test: add useFoldableLayout and useLinkHandler tests
-
-- Add 4 tests for useFoldableLayout hook
-- Add 4 tests for useLinkHandler hook  
-- Test device foldable detection and layout modes
-- Test link handler methods (openLink, openWebsiteLink)
-- Coverage: ~40% for both hooks
-- Tests: 624 to 632 total (+8)

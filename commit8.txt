@@ -1,8 +1,0 @@
-test: add HomeScreen and ProjectsScreen module tests
-
-- Add 3 tests for HomeScreen module exports
-- Add 3 tests for ProjectsScreen module exports
-- Test module structure and React component validity
-- Coverage: Basic export coverage for both screens
-- Tests: 632 to 638 total (+6)
-- Note: Rendering tests skipped (require ThemeProvider setup)

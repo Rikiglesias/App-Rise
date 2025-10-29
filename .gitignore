@@ -61,6 +61,10 @@ expo-go.apk
 file-size-report.json
 estensioni.txt
 
+# Commit message drafts and logs
+commit*.txt
+logs_*.zip
+
 # Fastlane
 ios/fastlane/report.xml
 ios/fastlane/Preview.html

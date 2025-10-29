@@ -1,8 +1,0 @@
-test: add LazyComponents export and preload tests
-
-- Add 10 tests for lazy component exports
-- Test all Lazy* and Wrapped* components validity
-- Test preload functions (critical and secondary)
-- Coverage: LazyComponents.tsx 0% to 70%+
-- Tests: 576 to 586 total
-- Note: Rendering tests skipped due to Jest mock limitations

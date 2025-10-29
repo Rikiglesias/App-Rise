@@ -1,8 +1,0 @@
-docs: add legacy code audit and fix HEADER_SUBTITLE_SIZE conflict
-
-- Add comprehensive LEGACY_CODE_AUDIT.md report
-- Add LEGACY_QUICK_FIX.md with action items
-- Fix HEADER_SUBTITLE_SIZE conflict (30 vs 26)
-- Remove deprecated export from headerSizes.ts
-- Document all legacy code for future maintenance
-- All legacy items now properly tracked and managed
