@@ -4,8 +4,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PerfectText, PerfectContainer } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants';
 import responsiveSystem, {
-  scaleFont,
-  scaleDimensionLinear,
+  
+  
 } from '../../../shared/constants/responsiveSystem';
 
 interface HeaderSectionProps {
@@ -75,9 +75,9 @@ const styles = {
     paddingHorizontal: Spacing[4],
   },
   headerIconContainer: {
-    width: scaleFont(80),
-    height: scaleFont(80),
-    borderRadius: scaleFont(40),
+    width: /* scaleFont(80) */ 80,
+    height: /* scaleFont(80) */ 80,
+    borderRadius: /* scaleFont(40) */ 40,
     backgroundColor: Colors.primary[50],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -99,7 +99,7 @@ const styles = {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center' as const,
-    lineHeight: scaleFont(24),
+    lineHeight: /* scaleFont(24) */ 24,
     paddingHorizontal: Spacing[2],
   },
 };

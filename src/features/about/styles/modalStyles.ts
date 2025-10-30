@@ -1,12 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-import responsiveSystem, {
-  SpacingTokens as Spacing,
-  DesignTokens,
-  ShadowTokens,
-  scaleDimensionLinear,
-} from '../../../shared/constants/responsiveSystem';
-import { Colors, Typography } from '../../../shared/constants';
+// ELIMINATO: import vecchi responsiveSystem
+import { Colors, Typography, Spacing } from '../../../shared/constants/designTokens';
 
 /**
  * Stili per i modal della sezione About
@@ -38,35 +33,32 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalContainer: {
-    maxWidth: scaleDimensionLinear(
-      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.9
-    ),
+    maxWidth: 350,
     width: '100%',
     maxHeight: '90%',
-    minHeight: scaleDimensionLinear(700), // Sistema responsive
+    minHeight: 700,
     height: '85%',
   },
 
   modalGradientBorder: {
-    borderRadius: DesignTokens.borderRadius.xlarge, // Sistema responsive
-    padding: Spacing[1], // Sistema responsive (4dp)
-    ...ShadowTokens.xl, // Sistema ombre coerente
+    borderRadius: 24,
+    padding: Spacing[1],
     height: '100%',
-    minHeight: scaleDimensionLinear(700), // Sistema responsive
+    minHeight: 700,
   },
 
   modalWhiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: Math.max(0, DesignTokens.borderRadius.xlarge - Spacing[1]), // Sistema responsive
+    borderRadius: 20,
     overflow: 'hidden',
     height: '100%',
-    minHeight: scaleDimensionLinear(650), // Sistema responsive
+    minHeight: 650,
   },
 
   modalContent: {
     height: '100%',
     flexDirection: 'column',
-    minHeight: scaleDimensionLinear(600), // Sistema responsive
+    minHeight: 600,
   },
 
   modalHeader: {
@@ -74,11 +66,11 @@ export const modalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: Spacing[4],
-    borderBottomWidth: DesignTokens.borderRadius.none + 1, // 1dp responsive
+    borderBottomWidth: 1,
     borderBottomColor: Colors.neutral[200],
     position: 'relative',
-    height: DesignTokens.components.buttonHeight.large + Spacing[4], // Sistema responsive
-    minHeight: DesignTokens.components.buttonHeight.large + Spacing[4], // Sistema responsive
+    height: 56,
+    minHeight: 56,
     flexShrink: 0,
   },
 
@@ -95,24 +87,23 @@ export const modalStyles = StyleSheet.create({
     position: 'absolute',
     top: Spacing[3],
     right: Spacing[3],
-    width: DesignTokens.components.iconSize.large, // Sistema responsive (32dp)
-    height: DesignTokens.components.iconSize.large, // Sistema responsive (32dp)
-    borderRadius: DesignTokens.components.iconSize.large / 2, // Sistema responsive
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    ...ShadowTokens.sm, // Sistema ombre coerente
   },
 
   storyScroll: {
-    height: scaleDimensionLinear(500), // Sistema responsive
-    minHeight: scaleDimensionLinear(500), // Sistema responsive
+    height: 500,
+    minHeight: 500,
   },
 
   storyContainer: {
     padding: Spacing[6],
     gap: Spacing[4],
-    minHeight: scaleDimensionLinear(800), // Sistema responsive
+    minHeight: 800,
     flexGrow: 1,
     paddingBottom: Spacing[12],
   },
@@ -127,7 +118,7 @@ export const modalStyles = StyleSheet.create({
   storyText: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
-    lineHeight: DesignTokens.layout.unit * 3, // Sistema responsive (24dp)
+    lineHeight: 24,
     textAlign: 'justify',
     letterSpacing: 0.3,
   },
@@ -144,7 +135,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   sectionDivider: {
-    height: DesignTokens.borderRadius.none + 1, // 1dp responsive
+    height: 1,
     backgroundColor: Colors.neutral[200],
     marginVertical: Spacing[4],
   },
@@ -158,7 +149,7 @@ export const modalStyles = StyleSheet.create({
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
-    lineHeight: DesignTokens.layout.unit * 2.5, // Sistema responsive (20dp)
+    lineHeight: 20,
     letterSpacing: 0.3,
   },
 
@@ -182,7 +173,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarIcon: {
-    marginTop: Spacing[1] / 2, // Sistema responsive (2dp)
+    marginTop: 2,
   },
 
   pillarTitle: {
@@ -198,6 +189,6 @@ export const modalStyles = StyleSheet.create({
   pillarText: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
-    lineHeight: DesignTokens.layout.unit * 2.75, // Sistema responsive (22dp)
+    lineHeight: 22,
   },
 });

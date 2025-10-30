@@ -7,7 +7,7 @@ import { PlatformTouchable, PerfectText } from '../../../../components/ui';
 import {
   SpacingTokens,
   ShadowTokens,
-  scaleDimensionLinear,
+  
 } from '../../../../shared/constants/responsiveSystem';
 import type { AnimatedButtonProps } from './ActionButtonTypes';
 
@@ -21,7 +21,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 }) => {
   // Spessore bordo come pagina Azioni: 2pt (scalato linearmente)
   const borderPadding = Math.max(1, Math.round(scaleDimensionLinear(2)));
-  const outerRadius = scaleDimensionLinear(20);
+  const outerRadius = /* scaleDimensionLinear(20) */ 20;
   const innerRadius = Math.max(0, outerRadius - borderPadding);
 
   return (

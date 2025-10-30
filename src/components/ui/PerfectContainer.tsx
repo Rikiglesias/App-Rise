@@ -148,10 +148,8 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   })();
 
   const finalMargin = margin !== undefined ? scale(margin) : undefined;
-  const finalPaddingHorizontal =
-    paddingHorizontal !== undefined ? scale(paddingHorizontal) : undefined;
-  const finalPaddingVertical =
-    paddingVertical !== undefined ? scale(paddingVertical) : undefined;
+  const finalMarginH = marginHorizontal !== undefined ? scale(marginHorizontal) : undefined;
+  const finalMarginV = marginVertical !== undefined ? scale(marginVertical) : undefined;
 
   const finalWidth =
     typeof width === 'number' ? scale(width) : width;

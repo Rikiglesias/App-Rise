@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
 
 import { PlatformTouchable, PerfectText, PerfectContainer } from '@/components/ui';
-import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';

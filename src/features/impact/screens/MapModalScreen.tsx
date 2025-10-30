@@ -12,7 +12,7 @@ import type { MapModalData } from '@/data/mapModalData';
 import { getModalData } from '@/data/mapModalData';
 import type { ImpactStackParamList } from '@/navigation/types';
 import { BorderRadius, Colors, Spacing, Typography } from '@/shared/constants';
-import { scaleFont, scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+// ELIMINATO: scaleFont from '@/shared/constants/responsiveSystem';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
     top: Spacing[12],
     right: Spacing[5],
     backgroundColor: `${Colors.neutral[0]}99`,
-    width: scaleFont(44),
-    height: scaleFont(44),
-    borderRadius: scaleFont(22),
+    width: /* scaleFont(44) */ 44,
+    height: /* scaleFont(44) */ 44,
+    borderRadius: /* scaleFont(22) */ 22,
     justifyContent: 'center',
     alignItems: 'center',
     // backdropFilter: 'blur(10px)', // For glassmorphism effect if supported

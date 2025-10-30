@@ -3,7 +3,7 @@ import { Animated, StyleSheet, Text } from 'react-native';
 import { PerfectContainer, PerfectText } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 import {
-  scaleFont,
+  
   getMillimetricScale,
 } from '../../shared/constants/responsiveSystem';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
@@ -66,13 +66,13 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
     // ✅ PERFECT SYSTEM - Responsive scaling automatico
     const responsiveSpacing = React.useMemo(() => {
       return {
-        containerPadding: scaleFont(10), // ← RIDOTTO DA 15 A 10 per meno spazio sopra
-        separatorTopMargin: scaleFont(20), // ← RIDOTTO DA 25 A 20
-        separatorBottomMargin: scaleFont(10), // ← RIDOTTO PER COMPENSARE RIMOZIONE SOTTOTITOLO
-        logoSize: scaleFont(53),
-        separatorLineWidth: scaleFont(104),
-        logoMargin: scaleFont(15),
-        stackSpacing: scaleFont(8),
+        containerPadding: /* scaleFont(10) */ 10, // ← RIDOTTO DA 15 A 10 per meno spazio sopra
+        separatorTopMargin: /* scaleFont(20) */ 20, // ← RIDOTTO DA 25 A 20
+        separatorBottomMargin: /* scaleFont(10) */ 10, // ← RIDOTTO PER COMPENSARE RIMOZIONE SOTTOTITOLO
+        logoSize: /* scaleFont(53) */ 53,
+        separatorLineWidth: /* scaleFont(104) */ 104,
+        logoMargin: /* scaleFont(15) */ 15,
+        stackSpacing: /* scaleFont(8) */ 8,
       };
     }, []);
 

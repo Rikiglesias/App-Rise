@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../components/ui';
-import { scaleDimensionLinear } from '../../../shared/constants/responsiveSystem';
+// ELIMINATO: scaleDimensionLinear from '../../../shared/constants/responsiveSystem';
 import { PerfectImage } from '../../../components/ui/PerfectImage';
 
 import { IMPACT_DATA } from '../../../data/impactData';

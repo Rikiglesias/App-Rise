@@ -15,33 +15,33 @@ export const DesignTypography = {
   scale: {
     // Display - Per titoli molto grandi
     display: {
-      large: scaleFont(48),
-      medium: scaleFont(40),
-      small: scaleFont(32),
+      large: /* scaleFont(48) */ 48,
+      medium: /* scaleFont(40) */ 40,
+      small: /* scaleFont(32) */ 32,
     },
     // Headline - Per titoli principali
     headline: {
-      large: scaleFont(28),
-      medium: scaleFont(24),
-      small: scaleFont(20),
+      large: /* scaleFont(28) */ 28,
+      medium: /* scaleFont(24) */ 24,
+      small: /* scaleFont(20) */ 20,
     },
     // Title - Per sottotitoli
     title: {
-      large: scaleFont(18),
-      medium: scaleFont(16),
-      small: scaleFont(14),
+      large: /* scaleFont(18) */ 18,
+      medium: /* scaleFont(16) */ 16,
+      small: /* scaleFont(14) */ 14,
     },
     // Body - Per testo corpo
     body: {
-      large: scaleFont(16),
-      medium: scaleFont(14),
-      small: scaleFont(12),
+      large: /* scaleFont(16) */ 16,
+      medium: /* scaleFont(14) */ 14,
+      small: /* scaleFont(12) */ 12,
     },
     // Label - Per etichette
     label: {
-      large: scaleFont(14),
-      medium: scaleFont(12),
-      small: scaleFont(10),
+      large: /* scaleFont(14) */ 14,
+      medium: /* scaleFont(12) */ 12,
+      small: /* scaleFont(10) */ 10,
     },
   },
 
@@ -49,39 +49,39 @@ export const DesignTypography = {
   styles: {
     // Titoli
     h1: {
-      fontSize: scaleFont(32),
+      fontSize: /* scaleFont(32) */ 32,
       fontWeight: BaseTypography.weights.bold,
       fontFamily: BaseTypography.families.heading,
       lineHeight: 1.2,
       letterSpacing: -0.5,
     },
     h2: {
-      fontSize: scaleFont(28),
+      fontSize: /* scaleFont(28) */ 28,
       fontWeight: BaseTypography.weights.bold,
       fontFamily: BaseTypography.families.heading,
       lineHeight: 1.25,
       letterSpacing: -0.25,
     },
     h3: {
-      fontSize: scaleFont(24),
+      fontSize: /* scaleFont(24) */ 24,
       fontWeight: BaseTypography.weights.semibold,
       fontFamily: BaseTypography.families.heading,
       lineHeight: 1.3,
     },
     h4: {
-      fontSize: scaleFont(20),
+      fontSize: /* scaleFont(20) */ 20,
       fontWeight: BaseTypography.weights.semibold,
       fontFamily: BaseTypography.families.heading,
       lineHeight: 1.35,
     },
     h5: {
-      fontSize: scaleFont(18),
+      fontSize: /* scaleFont(18) */ 18,
       fontWeight: BaseTypography.weights.medium,
       fontFamily: BaseTypography.families.heading,
       lineHeight: 1.4,
     },
     h6: {
-      fontSize: scaleFont(16),
+      fontSize: /* scaleFont(16) */ 16,
       fontWeight: BaseTypography.weights.medium,
       fontFamily: BaseTypography.families.heading,
       lineHeight: 1.45,
@@ -89,19 +89,19 @@ export const DesignTypography = {
 
     // Corpo del testo
     bodyLarge: {
-      fontSize: scaleFont(16),
+      fontSize: /* scaleFont(16) */ 16,
       fontWeight: BaseTypography.weights.regular,
       fontFamily: BaseTypography.families.body,
       lineHeight: 1.5,
     },
     body: {
-      fontSize: scaleFont(14),
+      fontSize: /* scaleFont(14) */ 14,
       fontWeight: BaseTypography.weights.regular,
       fontFamily: BaseTypography.families.body,
       lineHeight: 1.5,
     },
     bodySmall: {
-      fontSize: scaleFont(12),
+      fontSize: /* scaleFont(12) */ 12,
       fontWeight: BaseTypography.weights.regular,
       fontFamily: BaseTypography.families.body,
       lineHeight: 1.4,
@@ -109,7 +109,7 @@ export const DesignTypography = {
 
     // Etichette
     label: {
-      fontSize: scaleFont(12),
+      fontSize: /* scaleFont(12) */ 12,
       fontWeight: BaseTypography.weights.medium,
       fontFamily: BaseTypography.families.body,
       lineHeight: 1.3,
@@ -119,7 +119,7 @@ export const DesignTypography = {
 
     // Caption
     caption: {
-      fontSize: scaleFont(10),
+      fontSize: /* scaleFont(10) */ 10,
       fontWeight: BaseTypography.weights.regular,
       fontFamily: BaseTypography.families.body,
       lineHeight: 1.3,
@@ -127,7 +127,7 @@ export const DesignTypography = {
 
     // Overline
     overline: {
-      fontSize: scaleFont(10),
+      fontSize: /* scaleFont(10) */ 10,
       fontWeight: BaseTypography.weights.medium,
       fontFamily: BaseTypography.families.body,
       lineHeight: 1.3,
@@ -187,7 +187,7 @@ export const createTextStyle = (
 export const ResponsiveTypography = {
   // Calcola font size responsive
   getResponsiveSize: (baseSize: number, scale: number = 1) =>
-    scaleFont(baseSize * scale),
+    /* scaleFont(baseSize * scale) */ baseSize * scale,
 
   // Calcola line height ottimale
   getOptimalLineHeight: (fontSize: number) => Math.round(fontSize * 1.4),
@@ -218,7 +218,7 @@ export const CommonTypographyPresets = {
   },
   // Button text
   buttonText: {
-    fontSize: scaleFont(14),
+    fontSize: /* scaleFont(14) */ 14,
     fontWeight: BaseTypography.weights.semibold,
     fontFamily: BaseTypography.families.body,
     textAlign: 'center' as const,

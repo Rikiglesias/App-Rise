@@ -18,11 +18,5 @@ export {
   useThemeStyles,
 } from './useTheme';
 
-// Responsive System Hooks (🚀 Bi-directional System)
-export {
-  useResponsive,
-  useIntelligentFontScaling,
-  useBreakpointAware,
-} from './useResponsive';
-
-// Layer Centralizzato Responsive (rimosso)
+// Responsive System Hooks - ELIMINATI (ora usa Perfect System)
+// useResponsive, useIntelligentFontScaling, useBreakpointAware: NON ESISTONO PIÙ

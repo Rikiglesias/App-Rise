@@ -62,7 +62,7 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
       styles.tabBarContainer,
       {
         bottom: Math.max(insets.bottom, Spacing[4]),
-        height: scaleFont(95),
+        height: /* scaleFont(95) */ 95,
         left: Spacing[6],
         right: Spacing[6],
         borderRadius: 32,
@@ -302,14 +302,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     alignItems: 'center',
-    minHeight: scaleFont(80), // AUMENTATO: da 70 a 80 per spazio animazione
+    minHeight: /* scaleFont(80) */ 80, // AUMENTATO: da 70 a 80 per spazio animazione
   },
   touchable: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: Spacing[2],
     width: '100%',
-    minHeight: scaleFont(80), // AUMENTATO: da 70 a 80 per spazio animazione
+    minHeight: /* scaleFont(80) */ 80, // AUMENTATO: da 70 a 80 per spazio animazione
   },
   touchableContent: {
     alignItems: 'center',
@@ -318,8 +318,8 @@ const styles = StyleSheet.create({
   },
   // --- Icon ---
   iconContainer: {
-    width: scaleFont(52),
-    height: scaleFont(52),
+    width: /* scaleFont(52) */ 52,
+    height: /* scaleFont(52) */ 52,
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
@@ -328,8 +328,8 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   centralIconContainer: {
-    width: scaleFont(64),
-    height: scaleFont(64),
+    width: /* scaleFont(64) */ 64,
+    height: /* scaleFont(64) */ 64,
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.semibold,
     marginTop: Spacing[1],
     textAlign: 'center',
-    maxWidth: scaleFont(80), // AUMENTATO: da 60 a 80 per contenere "Impatto" completo
+    maxWidth: /* scaleFont(80) */ 80, // AUMENTATO: da 60 a 80 per contenere "Impatto" completo
   },
 });
 

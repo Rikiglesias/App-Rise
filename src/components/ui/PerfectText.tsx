@@ -19,7 +19,7 @@ import {
   TextLayoutEventData,
   StyleProp,
 } from 'react-native';
-import { scale } from '../../shared/constants/responsiveSystem';
+import { scale, LOGICAL_REFERENCE } from '../../shared/constants/responsiveSystem';
 import { Typography } from '../../shared/constants/designTokens';
 import {
   getImmuneTextProps,
@@ -101,8 +101,7 @@ const styles = StyleSheet.create({
 
 // Font mapping rimosso - ora usa font di sistema
 
-const DEFAULT_REFERENCE_WIDTH =
-  responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const DEFAULT_REFERENCE_WIDTH = LOGICAL_REFERENCE.width;
 const DEFAULT_REFERENCE_CONTAINER = DEFAULT_REFERENCE_WIDTH * 0.9;
 
 export const PerfectText: React.FC<PerfectTextProps> = ({

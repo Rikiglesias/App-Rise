@@ -7,7 +7,7 @@ import { mainStyles } from '../styles';
 import type { ChiSiamoScreenProps, ContactData } from '../types';
 
 import { PlatformScrollView, PlatformTouchable, PerfectContainer } from '@/components';
-import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/hooks/useLinkHandler';

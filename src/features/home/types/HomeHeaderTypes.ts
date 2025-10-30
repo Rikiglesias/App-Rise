@@ -1,7 +1,7 @@
 import { Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { Spacing } from '../../../shared/constants/designTokens';
 import responsiveSystem, {
-  scaleDimensionLinear,
+  
 } from '../../../shared/constants/responsiveSystem';
 import { useTheme } from '../../../shared/hooks/useTheme';
 
@@ -16,8 +16,9 @@ export const ADVANCED_CONFIG = {
   },
   imageSection: {
     // Altezza responsiva: target ~0.72 * width (considerando moltiplicatore 1.1 negli styles)
-    height: scaleDimensionLinear(
-      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 1.1
+    height: /* scaleDimensionLinear(
+      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) */ 
+      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393 * 1.1
     ),
   },
   typography: {

@@ -6,7 +6,7 @@ import { PerfectText, PerfectContainer } from '../../../components/ui';
 // Ratio inline per evitare dipendenze condivise
 import { Colors, Spacing, Typography } from '../../../shared/constants/designTokens';
 import responsiveSystem, {
-  scaleDimensionLinear,
+  
   TypographyTokens,
 } from '../../../shared/constants/responsiveSystem';
 import {
@@ -27,15 +27,21 @@ interface Props {
 const TITLE_SIZE = HEADER_TITLE_SIZE;
 const SUBTITLE_SIZE = IMPACT_SUBTITLE_SIZE;
 const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
-const HEADER_INNER_HEIGHT = scaleDimensionLinear(
+const HEADER_INNER_HEIGHT = /* scaleDimensionLinear(
   REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
-);
-const HEADER_VERTICAL_PADDING = scaleDimensionLinear(
+) */ 
+  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
+;
+const HEADER_VERTICAL_PADDING = /* scaleDimensionLinear(
   REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
-);
-const HEADER_TITLE_INTERLINE = scaleDimensionLinear(
+) */ 
+  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
+;
+const HEADER_TITLE_INTERLINE = /* scaleDimensionLinear(
   REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
-);
+) */ 
+  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
+;
 
 export const ImpactHeader: React.FC<Props> = ({ animations }) => {
   return (

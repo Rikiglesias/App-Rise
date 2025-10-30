@@ -11,7 +11,6 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { Dimensions, Platform } from 'react-native';
-import { useResponsive } from './useResponsive';
 
 /**
  * Posture types per dispositivi pieghevoli
@@ -229,11 +228,9 @@ export const useFoldableLayout = (options?: {
     minTabletWidth = 600,
   } = options ?? {};
 
-  const { dimensions: responsiveDimensions } = useResponsive();
-
-  const [dimensions, setDimensions] = useState({
-    width: responsiveDimensions.width,
-    height: responsiveDimensions.height,
+  const [dimensions, setDimensions] = useState(() => {
+    const { width, height } = Dimensions.get('window');
+    return { width, height };
   });
 
   // Update dimensions when device changes

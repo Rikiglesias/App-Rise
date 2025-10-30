@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
 import { PerfectText, PlatformTouchable, PerfectContainer, PerfectImage } from '@/components/ui';
-import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,

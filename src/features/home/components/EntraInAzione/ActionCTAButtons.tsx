@@ -16,7 +16,7 @@ import {
   Spacing,
   Typography,
 } from '../../../../shared/constants/designTokens';
-import { scaleDimensionLinear } from '../../../../shared/constants/responsiveSystem';
+// ELIMINATO: scaleDimensionLinear from '../../../../shared/constants/responsiveSystem';
 import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import type { BottomTabParamList } from '../../../../navigation/types';
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - 3, // Radius interno coerente con padding
-    minHeight: scaleDimensionLinear(105), // Leggermente ingrandito per bottoni più visibili
+    minHeight: /* scaleDimensionLinear(105) */ 105, // Leggermente ingrandito per bottoni più visibili
     paddingVertical: Spacing[2],
     paddingHorizontal: Spacing[3],
     justifyContent: 'center',
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between', // Assicura label sempre visibile in basso
     flex: 1,
-    minHeight: scaleDimensionLinear(85), // Leggermente ingrandito per migliore proporzione
+    minHeight: /* scaleDimensionLinear(85) */ 85, // Leggermente ingrandito per migliore proporzione
     paddingTop: Spacing[1],
     paddingBottom: Spacing[1],
   },

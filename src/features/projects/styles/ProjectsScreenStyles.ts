@@ -7,7 +7,7 @@ import {
 } from '../../../shared/constants/designTokens';
 import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import { useTheme } from '../../../shared/hooks/useTheme';
-import { useResponsive } from '../../../shared/hooks/useResponsive';
+// ELIMINATO: useResponsive - ora usa Perfect System
 
 // Custom Hook for Projects Screen Styles
 export const useProjectsScreenStyles = () => {
@@ -92,7 +92,7 @@ export const useProjectsScreenStyles = () => {
           paddingVertical: Spacing[8],
         },
         emptyStateIcon: {
-          fontSize: scaleFont(48),
+          fontSize: /* scaleFont(48) */ 48,
           marginBottom: Spacing[4],
         },
         emptyStateText: {
@@ -101,6 +101,6 @@ export const useProjectsScreenStyles = () => {
         },
       }),
 
-    [colors, scaleFont]
+    [colors]
   );
 };

@@ -10,9 +10,9 @@ import {
 } from '@/shared/constants';
 import {
   DesignTokens,
-  scaleFont,
+  
   getMillimetricScale,
-  scaleDimensionLinear,
+  
 } from '@/shared/constants/responsiveSystem';
 
 export interface SocialPlatform {
@@ -134,7 +134,7 @@ const styles = {
 
   socialCardWhiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: scaleFont(18),
+    borderRadius: /* scaleFont(18) */ 18,
     overflow: 'hidden' as const,
     shadowColor: Colors.neutral[900],
     shadowOffset: { width: 0, height: 6 },
@@ -150,7 +150,7 @@ const styles = {
   socialIconContainer: {
     width: DesignTokens.components.iconSize.xlarge + 16,
     height: DesignTokens.components.iconSize.xlarge + 16,
-    borderRadius: scaleFont(28),
+    borderRadius: /* scaleFont(28) */ 28,
     backgroundColor: Colors.neutral[0],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -191,7 +191,7 @@ const styles = {
   socialDescription: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
-    lineHeight: scaleFont(16),
+    lineHeight: /* scaleFont(16) */ 16,
   },
   arrowContainer: {
     padding: Spacing[1],
