@@ -2,7 +2,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useMemo } from 'react';
 import { Platform } from 'react-native';
 
-import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../../components/ui';
+import {
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '../../../../components/ui';
 import { Spacing } from '../../../../shared/constants';
 import { AnimatedButton } from './AnimatedButton';
 import type {
@@ -160,7 +164,9 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
   );
 
   return (
-    <PerfectContainer style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
+    <PerfectContainer
+      style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}
+    >
       <PerfectContainer style={styles.categoryHeader}>
         <PerfectContainer
           style={
@@ -263,7 +269,9 @@ export const CommunityButtonsSection: React.FC<
   );
 
   return (
-    <PerfectContainer style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
+    <PerfectContainer
+      style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}
+    >
       <PerfectContainer style={styles.categoryHeader}>
         <PlatformTouchable
           style={

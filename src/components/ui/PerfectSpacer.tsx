@@ -43,8 +43,10 @@ export const PerfectSpacer: React.FC<PerfectSpacerProps> = ({
   // Risolvi dimensione finale
   const presetSize = size ? SPACER_PRESETS[size] : undefined;
 
-  const finalHeight = height ?? (direction === 'vertical' ? presetSize ?? 16 : undefined);
-  const finalWidth = width ?? (direction === 'horizontal' ? presetSize : undefined);
+  const finalHeight =
+    height ?? (direction === 'vertical' ? (presetSize ?? 16) : undefined);
+  const finalWidth =
+    width ?? (direction === 'horizontal' ? presetSize : undefined);
 
   return (
     <PerfectContainer
@@ -63,6 +65,8 @@ export const SpacerXL = () => <PerfectSpacer size="xl" />;
 export const SpacerXXL = () => <PerfectSpacer size="xxl" />;
 
 // 🎯 SHORTCUTS PER HORIZONTAL
-export const SpacerHorizontal = ({ size = 'm' }: { size?: PerfectSpacerProps['size'] }) => (
-  <PerfectSpacer size={size} direction="horizontal" />
-);
+export const SpacerHorizontal = ({
+  size = 'm',
+}: {
+  size?: PerfectSpacerProps['size'];
+}) => <PerfectSpacer size={size} direction="horizontal" />;

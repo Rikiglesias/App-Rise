@@ -9,7 +9,12 @@ import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Platform-specific components
-import { PlatformBlur, PlatformTouchable, PerfectText, PerfectContainer } from '../components/ui';
+import {
+  PlatformBlur,
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '../components/ui';
 
 // Design Tokens & Hooks
 import {

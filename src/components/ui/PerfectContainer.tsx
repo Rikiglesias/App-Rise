@@ -17,7 +17,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import { scale } from '../../shared/constants/responsiveSystem';
-import { getPerfectShadow, type ShadowType } from '../../shared/constants/perfectShadow';
+import {
+  getPerfectShadow,
+  type ShadowType,
+} from '../../shared/constants/perfectShadow';
 import { useUniversalTheme } from '../../shared/theme/UniversalTheme';
 
 interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
@@ -148,16 +151,16 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   })();
 
   const finalMargin = margin !== undefined ? scale(margin) : undefined;
-  const finalMarginH = marginHorizontal !== undefined ? scale(marginHorizontal) : undefined;
-  const finalMarginV = marginVertical !== undefined ? scale(marginVertical) : undefined;
+  const finalMarginH =
+    marginHorizontal !== undefined ? scale(marginHorizontal) : undefined;
+  const finalMarginV =
+    marginVertical !== undefined ? scale(marginVertical) : undefined;
 
-  const finalWidth =
-    typeof width === 'number' ? scale(width) : width;
+  const finalWidth = typeof width === 'number' ? scale(width) : width;
   const finalHeight = height ? scale(height) : undefined;
   const finalBorderRadius = (() => {
     if (borderRadius !== undefined) return scale(borderRadius);
-    if (config && 'borderRadius' in config)
-      return scale(config.borderRadius);
+    if (config && 'borderRadius' in config) return scale(config.borderRadius);
     return undefined;
   })();
   const finalGap = gap ? scale(gap) : undefined;

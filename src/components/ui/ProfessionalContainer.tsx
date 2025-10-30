@@ -49,7 +49,8 @@ export const ProfessionalContainer: React.FC<ProfessionalContainerProps> = ({
 }) => {
   // Implementazione inline semplice - useContainerLayout rimosso
   const containerStyle: ViewStyle = {
-    width: (forceWidth ?? (variant === 'text' ? '90%' : '100%')) as ViewStyle['width'],
+    width: (forceWidth ??
+      (variant === 'text' ? '90%' : '100%')) as ViewStyle['width'],
     alignSelf: 'center',
     ...(enableRTL && Platform.OS === 'ios' && { direction: 'rtl' }),
   };

@@ -3,11 +3,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { animatedContactStyles } from '../styles/contactStyles';
 import type { AnimatedContactProps } from '../types';
-import { PlatformTouchable, PerfectText, PerfectContainer } from '@/components/ui';
+import {
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
-
 
 export const AnimatedContact: React.FC<AnimatedContactProps> = ({
   contact,
@@ -28,7 +31,11 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
       >
         {/* GRADIENT BORDER */}
         <LinearGradient
-          colors={[Colors.neutral[800], Colors.neutral[700], Colors.neutral[900]]}
+          colors={[
+            Colors.neutral[800],
+            Colors.neutral[700],
+            Colors.neutral[900],
+          ]}
           style={animatedContactStyles.gradientBorder}
         >
           <PerfectContainer style={animatedContactStyles.whiteContainer}>
@@ -37,11 +44,13 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
                 name={
                   contact.icon as keyof typeof MaterialCommunityIcons.glyphMap
                 }
-                size={36}  // ✅ SCALA automaticamente
+                size={36} // ✅ SCALA automaticamente
                 color={Colors.neutral[800]}
                 style={animatedContactStyles.contactIcon}
               />
-              <PerfectContainer style={animatedContactStyles.contactTextContainer}>
+              <PerfectContainer
+                style={animatedContactStyles.contactTextContainer}
+              >
                 <PerfectText
                   size={18}
                   lines={1}

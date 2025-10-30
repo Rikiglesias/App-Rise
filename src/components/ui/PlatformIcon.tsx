@@ -12,7 +12,7 @@ interface PlatformIconProps {
 
 /**
  * PERFECT ICON (ex PlatformIcon) - Icone Scalate Proporzionalmente
- * 
+ *
  * GARANTISCE:
  * - Icone scalano proporzionalmente su tutti device
  * - Smart Icon iOS/Android mapping
@@ -31,7 +31,7 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   // 🎯 SCALA size proporzionalmente  // Get screen density safely - usa LOGICAL_REFERENCE invece di Dimensions
   const { width } = useWindowDimensions();
   const screenDensity = width / 393; // iPhone 15 reference
-  const scale = screenDensity; 
+  const scale = screenDensity;
   const scaledSize = size * scale;
   // Mapping strategico iOS-style -> Android Material
   const iconMapping = {
@@ -70,7 +70,7 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   return (
     <MaterialCommunityIcons
       name={iconName as keyof typeof MaterialCommunityIcons.glyphMap}
-      size={scaledSize}  // ✅ USA SIZE SCALATO
+      size={scaledSize} // ✅ USA SIZE SCALATO
       color={color}
       style={style}
     />

@@ -28,22 +28,21 @@ interface NewActionsHeaderProps {
 const TITLE_SIZE = HEADER_TITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
 const SUBTITLE_SIZE = CONTRIBUTE_SUBTITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
 const REF_WIDTH = LOGICAL_REFERENCE.width;
-const HEADER_INNER_HEIGHT = /* scaleDimensionLinear(
+const HEADER_INNER_HEIGHT =
+  /* scaleDimensionLinear(
   REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
-) */ 
-  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
-;
-const HEADER_VERTICAL_PADDING = /* scaleDimensionLinear(
+) */
+  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR;
+const HEADER_VERTICAL_PADDING =
+  /* scaleDimensionLinear(
   REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
-) */ 
-  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
-;
-const HEADER_TITLE_INTERLINE = /* scaleDimensionLinear(
+) */
+  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR;
+const HEADER_TITLE_INTERLINE =
+  /* scaleDimensionLinear(
   REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
-) */ 
-  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
-;
-
+) */
+  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR;
 const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const styles = useMemo(
     () =>
@@ -175,7 +174,9 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         style={styles.backgroundPattern}
       />
 
-      <PerfectContainer style={styles.mainHeaderContainer}>{titleContent}</PerfectContainer>
+      <PerfectContainer style={styles.mainHeaderContainer}>
+        {titleContent}
+      </PerfectContainer>
     </Animated.View>
   );
 };

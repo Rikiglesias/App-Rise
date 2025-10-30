@@ -28,7 +28,11 @@ jest.mock('../../navigation/BottomTabNavigator', () => ({
 
 describe('AppNavigator', () => {
   it('should render without crashing', () => {
-    const { root } = render(<AllProviders><AppNavigator /></AllProviders>);
+    const { root } = render(
+      <AllProviders>
+        <AppNavigator />
+      </AllProviders>
+    );
     expect(root).toBeTruthy();
   });
 
@@ -37,7 +41,13 @@ describe('AppNavigator', () => {
   });
 
   it('should wrap content in NavigationContainer', () => {
-    const { UNSAFE_root } = render(<AllProviders><NavigationContainer><AppNavigator /></NavigationContainer></AllProviders>);
+    const { UNSAFE_root } = render(
+      <AllProviders>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </AllProviders>
+    );
     expect(UNSAFE_root).toBeTruthy();
   });
 });

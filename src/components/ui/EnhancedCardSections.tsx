@@ -31,11 +31,13 @@ export const IconSection: React.FC<IconSectionProps> = ({
   return (
     <PerfectContainer style={enhancedCardStyles.iconSection}>
       <PerfectContainer
-        style={[
-          enhancedCardStyles.iconContainer,
-          variant && enhancedCardStyles[`${variant}IconContainer`],
-          size && enhancedCardStyles[`${size}IconContainer`],
-        ].filter(Boolean) as never}
+        style={
+          [
+            enhancedCardStyles.iconContainer,
+            variant && enhancedCardStyles[`${variant}IconContainer`],
+            size && enhancedCardStyles[`${size}IconContainer`],
+          ].filter(Boolean) as never
+        }
       >
         <PerfectText size={iconFontSize} lines={1} style={iconStyle}>
           {icon}

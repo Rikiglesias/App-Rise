@@ -4,10 +4,12 @@ import { Animated, Platform, StyleSheet } from 'react-native';
 
 import { PerfectText, PerfectContainer } from '../../../components/ui';
 // Ratio inline per evitare dipendenze condivise
-import { Colors, Spacing, Typography } from '../../../shared/constants/designTokens';
-import responsiveSystem, {
-  
-} from '../../../shared/constants/responsiveSystem';
+import {
+  Colors,
+  Spacing,
+  Typography,
+} from '../../../shared/constants/designTokens';
+import responsiveSystem from '../../../shared/constants/responsiveSystem';
 import {
   HEADER_TITLE_SIZE,
   IMPACT_SUBTITLE_SIZE,
@@ -26,22 +28,21 @@ interface Props {
 const TITLE_SIZE = HEADER_TITLE_SIZE;
 const SUBTITLE_SIZE = IMPACT_SUBTITLE_SIZE;
 const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
-const HEADER_INNER_HEIGHT = /* scaleDimensionLinear(
+const HEADER_INNER_HEIGHT =
+  /* scaleDimensionLinear(
   REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
-) */ 
-  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
-;
-const HEADER_VERTICAL_PADDING = /* scaleDimensionLinear(
+) */
+  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR;
+const HEADER_VERTICAL_PADDING =
+  /* scaleDimensionLinear(
   REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
-) */ 
-  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
-;
-const HEADER_TITLE_INTERLINE = /* scaleDimensionLinear(
+) */
+  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR;
+const HEADER_TITLE_INTERLINE =
+  /* scaleDimensionLinear(
   REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
-) */ 
-  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
-;
-
+) */
+  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR;
 export const ImpactHeader: React.FC<Props> = ({ animations }) => {
   return (
     <Animated.View
@@ -126,14 +127,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: HEADER_INNER_HEIGHT,
     backgroundColor:
-      Platform.OS === 'android' ? Colors.neutral[100] : 'rgba(31, 41, 55, 0.03)',
+      Platform.OS === 'android'
+        ? Colors.neutral[100]
+        : 'rgba(31, 41, 55, 0.03)',
     paddingHorizontal: Spacing[4],
     paddingTop: HEADER_VERTICAL_PADDING,
     paddingBottom: HEADER_VERTICAL_PADDING,
     borderRadius: 16,
     borderWidth: 1,
     borderColor:
-      Platform.OS === 'android' ? Colors.neutral[200] : 'rgba(31, 41, 55, 0.08)',
+      Platform.OS === 'android'
+        ? Colors.neutral[200]
+        : 'rgba(31, 41, 55, 0.08)',
     shadowColor: Colors.neutral[800],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08,

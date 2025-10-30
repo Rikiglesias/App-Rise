@@ -3,10 +3,13 @@ import React, { useCallback } from 'react';
 
 import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
 import type { ChiSiamoSectionProps } from '../types';
-import { PlatformTouchable, PerfectText, PerfectContainer } from '@/components/ui';
+import {
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
-
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   onInfoPress,
@@ -22,10 +25,10 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
     <PerfectContainer style={chiSiamoSectionStyles.categoryContainer}>
       {/* HEADER CON TITOLO CLICCABILE */}
       <PerfectContainer style={chiSiamoSectionStyles.headerContainer}>
-        <PerfectContainer 
-          paddingVertical={12}  // ✅ Spacing[3] - SCALA!
-          paddingHorizontal={20}  // ✅ Spacing[5] - SCALA!
-          borderRadius={16}  // ✅ SCALA!
+        <PerfectContainer
+          paddingVertical={12} // ✅ Spacing[3] - SCALA!
+          paddingHorizontal={20} // ✅ Spacing[5] - SCALA!
+          borderRadius={16} // ✅ SCALA!
           style={chiSiamoSectionStyles.titleHeaderContainer}
         >
           {/* TITOLO E SOTTOTITOLO */}
@@ -60,7 +63,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           >
             <MaterialCommunityIcons
               name="information"
-              size={40}  // ✅ Scaling diretto, no hook
+              size={40} // ✅ Scaling diretto, no hook
               color="white"
             />
           </PlatformTouchable>

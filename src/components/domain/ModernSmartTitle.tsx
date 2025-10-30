@@ -31,7 +31,6 @@ const createModernTitleStyles = (responsiveSpacing: {
       alignItems: 'center',
     },
 
-
     titleSeparator: {
       alignItems: 'center',
       marginTop: responsiveSpacing.separatorTopMargin,
@@ -117,37 +116,40 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
           }}
         >
           <PerfectContainer style={modernTitleStyles.titleContainer}>
-            <PerfectContainer gap={responsiveSpacing.stackSpacing} style={modernTitleStyles.titleWrapper}>
-                {/* Prima riga: "Rise Against" */}
+            <PerfectContainer
+              gap={responsiveSpacing.stackSpacing}
+              style={modernTitleStyles.titleWrapper}
+            >
+              {/* Prima riga: "Rise Against" */}
+              <PerfectText
+                size={38}
+                lines={1}
+                fontWeight="900"
+                textAlign="center"
+                color={HomeHeaderDesignTokens.colors.primary}
+              >
+                Rise Against
+              </PerfectText>
+
+              {/* Seconda riga: "Hunger Italia" con colori diversi */}
+              <PerfectContainer style={modernTitleStyles.titleRow}>
                 <PerfectText
                   size={38}
                   lines={1}
                   fontWeight="900"
-                  textAlign="center"
                   color={HomeHeaderDesignTokens.colors.primary}
                 >
-                  Rise Against
+                  Hunger{' '}
                 </PerfectText>
-
-                {/* Seconda riga: "Hunger Italia" con colori diversi */}
-                <PerfectContainer style={modernTitleStyles.titleRow}>
-                  <PerfectText
-                    size={38}
-                    lines={1}
-                    fontWeight="900"
-                    color={HomeHeaderDesignTokens.colors.primary}
-                  >
-                    Hunger{' '}
-                  </PerfectText>
-                  <PerfectText
-                    size={38}
-                    lines={1}
-                    fontWeight="900"
-                    color={HomeHeaderDesignTokens.colors.dark}
-                  >
-                    Italia
-                  </PerfectText>
-                </PerfectContainer>
+                <PerfectText
+                  size={38}
+                  lines={1}
+                  fontWeight="900"
+                  color={HomeHeaderDesignTokens.colors.dark}
+                >
+                  Italia
+                </PerfectText>
+              </PerfectContainer>
 
               {/* Separatore con logo centrale */}
               <PerfectContainer style={modernTitleStyles.titleSeparator}>

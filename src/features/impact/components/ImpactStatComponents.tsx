@@ -2,7 +2,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../components/ui';
+import {
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '../../../components/ui';
 // ELIMINATO: scaleDimensionLinear from '../../../shared/constants/responsiveSystem';
 import { PerfectImage } from '../../../components/ui/PerfectImage';
 
@@ -29,7 +33,9 @@ export const StatButton: React.FC<StatButtonProps> = ({
     activeOpacity={0.8}
   >
     <PerfectContainer style={styles.statButtonContent}>
-      <PerfectContainer style={[styles.iconContainer, { backgroundColor: color }]}>
+      <PerfectContainer
+        style={[styles.iconContainer, { backgroundColor: color }]}
+      >
         <MaterialCommunityIcons
           name={icon}
           size={28}
@@ -97,12 +103,7 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       >
         {title}
       </PerfectText>
-      <PerfectText
-        size={14}
-        lines={2}
-        immunity={true}
-        style={styles.storyText}
-      >
+      <PerfectText size={14} lines={2} immunity={true} style={styles.storyText}>
         {text}
       </PerfectText>
     </PerfectContainer>

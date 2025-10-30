@@ -19,7 +19,10 @@ import {
   TextLayoutEventData,
   StyleProp,
 } from 'react-native';
-import { scale, LOGICAL_REFERENCE } from '../../shared/constants/responsiveSystem';
+import {
+  scale,
+  LOGICAL_REFERENCE,
+} from '../../shared/constants/responsiveSystem';
 import { Typography } from '../../shared/constants/designTokens';
 import {
   getImmuneTextProps,
@@ -128,10 +131,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   const finalFontSize = fontSize ?? size ?? variantConfig?.fontSize ?? 16;
   const finalFontWeight = fontWeight ?? variantConfig?.fontWeight ?? 'normal';
 
-  const scaledBase = useMemo(
-    () => scale(finalFontSize),
-    [finalFontSize]
-  );
+  const scaledBase = useMemo(() => scale(finalFontSize), [finalFontSize]);
   const scaledMax = useMemo(
     () => (typeof maxSize === 'number' ? scale(maxSize) : undefined),
     [maxSize]
@@ -162,10 +162,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     () => containerWidth ?? DEFAULT_REFERENCE_CONTAINER,
     [containerWidth]
   );
-  const targetWidth = useMemo(
-    () => scale(referenceWidth),
-    [referenceWidth]
-  );
+  const targetWidth = useMemo(() => scale(referenceWidth), [referenceWidth]);
 
   useEffect(() => {
     if (debug) {

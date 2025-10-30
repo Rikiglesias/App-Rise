@@ -3,7 +3,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 
-import { PerfectText, PlatformTouchable, PerfectContainer } from '../../../components/ui';
+import {
+  PerfectText,
+  PlatformTouchable,
+  PerfectContainer,
+} from '../../../components/ui';
 // ELIMINATO: scaleDimensionLinear from '../../../shared/constants/responsiveSystem';
 import {
   Colors,
@@ -84,7 +88,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.communityStatValue}
                 >
                   13.323
@@ -92,7 +96,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.communityStatLabel}
                 >
                   Volontari 2024
@@ -132,7 +136,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.communityStatValue}
                 >
                   150+
@@ -140,7 +144,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.communityStatLabel}
                 >
                   Partner Attivi

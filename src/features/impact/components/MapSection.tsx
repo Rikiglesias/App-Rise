@@ -2,7 +2,12 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 
-import { PerfectText, PlatformTouchable, PerfectContainer, PerfectImage } from '@/components/ui';
+import {
+  PerfectText,
+  PlatformTouchable,
+  PerfectContainer,
+  PerfectImage,
+} from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import {
   Colors,

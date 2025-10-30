@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
-import { AllProviders } from '../helpers/testProviders';
 import { Text, View } from 'react-native';
+import { render } from '@testing-library/react-native';
+
 import { LazyScreen } from '../../navigation/LazyLoading/LazyScreen';
 
 // Mock logger to avoid console noise

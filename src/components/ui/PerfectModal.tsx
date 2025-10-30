@@ -8,7 +8,12 @@
  */
 
 import React from 'react';
-import { Modal, type ModalProps, StyleSheet, useWindowDimensions } from 'react-native';
+import {
+  Modal,
+  type ModalProps,
+  StyleSheet,
+  useWindowDimensions,
+} from 'react-native';
 import { PerfectContainer } from './PerfectContainer';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
@@ -64,7 +69,7 @@ const useModalBehavior = (size: PerfectModalProps['size']) => {
   };
 
   // 🎨 PRESENTATION STYLE
-  const presentationStyle: 'fullScreen' | 'formSheet' | 'pageSheet' = 
+  const presentationStyle: 'fullScreen' | 'formSheet' | 'pageSheet' =
     size === 'fullscreen' ? 'fullScreen' : isTablet ? 'formSheet' : 'pageSheet';
 
   return {

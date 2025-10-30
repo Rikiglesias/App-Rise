@@ -54,10 +54,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
       >
         <PerfectContainer preset="page" paddingVertical={0}>
           {/* Header Section con titolo e logo - SPAZIO BILANCIATO */}
-          <PerfectContainer
-            preset="section"
-            paddingVertical={Spacing[3]}
-          >
+          <PerfectContainer preset="section" paddingVertical={Spacing[3]}>
             <HomeHeaderSection scrollY={scrollY} />
 
             {/* Hero Image rimossa - già inclusa in HomeHeaderSection */}

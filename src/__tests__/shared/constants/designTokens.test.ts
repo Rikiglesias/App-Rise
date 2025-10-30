@@ -224,12 +224,7 @@ describe('Design Tokens - Consistency', () => {
   });
 
   it('should have consistent shadow elevations', () => {
-    const shadows = [
-      Shadows.none,
-      Shadows.sm,
-      Shadows.md,
-      Shadows.lg,
-    ];
+    const shadows = [Shadows.none, Shadows.sm, Shadows.md, Shadows.lg];
     shadows.forEach(shadow => {
       expect(typeof shadow.elevation).toBe('number');
       expect(shadow.elevation).toBeGreaterThanOrEqual(0); // none ha elevation 0

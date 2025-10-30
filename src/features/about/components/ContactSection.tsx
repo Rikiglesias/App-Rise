@@ -1,25 +1,22 @@
 import React from 'react';
 
-
 import { contactSectionStyles } from '../styles/contactStyles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 
-export const ContactSection: React.FC<ContactSectionProps> = ({
-  contacts,
-}) => {
+export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
   return (
-    <PerfectContainer 
-      style={contactSectionStyles.categoryContainer}  // marginBottom rimane qui (non prop disponibile)
+    <PerfectContainer
+      style={contactSectionStyles.categoryContainer} // marginBottom rimane qui (non prop disponibile)
     >
       {/* HEADER SENZA ANIMAZIONI */}
-      <PerfectContainer 
-        style={contactSectionStyles.categoryHeader}  // marginBottom rimane qui
+      <PerfectContainer
+        style={contactSectionStyles.categoryHeader} // marginBottom rimane qui
       >
-        <PerfectContainer 
-          paddingVertical={8}  // ✅ Spacing[2] - SCALA!
-          paddingHorizontal={12}  // ✅ Spacing[3] - SCALA!
+        <PerfectContainer
+          paddingVertical={8} // ✅ Spacing[2] - SCALA!
+          paddingHorizontal={12} // ✅ Spacing[3] - SCALA!
           style={contactSectionStyles.exploreHeaderContainer}
         >
           <PerfectText
@@ -40,16 +37,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           </PerfectText>
         </PerfectContainer>
       </PerfectContainer>
-      <PerfectContainer 
-        paddingHorizontal={12}  // ✅ Spacing[3] - SCALA!
-        paddingVertical={8}  // ✅ Spacing[2] - SCALA!
+      <PerfectContainer
+        paddingHorizontal={12} // ✅ Spacing[3] - SCALA!
+        paddingVertical={8} // ✅ Spacing[2] - SCALA!
         style={contactSectionStyles.contactsGrid}
       >
-        {contacts.map((contact) => (
-          <AnimatedContact
-            key={contact.id}
-            contact={contact}
-          />
+        {contacts.map(contact => (
+          <AnimatedContact key={contact.id} contact={contact} />
         ))}
       </PerfectContainer>
     </PerfectContainer>

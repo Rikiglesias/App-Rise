@@ -71,11 +71,7 @@ const SimpleMarker: React.FC<{ location: Location }> = React.memo(
 
         {/* Etichetta del paese */}
         <View style={styles.countryLabel}>
-          <PerfectText
-            size={10}
-            lines={1}
-            style={styles.countryText}
-          >
+          <PerfectText size={10} lines={1} style={styles.countryText}>
             {location.country}
           </PerfectText>
         </View>

@@ -1,10 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import {
-  BorderRadius,
-  Spacing,
-} from '../../shared/constants/designTokens';
+import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 interface SectionContainerProps {

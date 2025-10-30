@@ -1,12 +1,13 @@
 import React from 'react';
 import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { PlatformTouchable, PerfectText, PerfectContainer, PerfectImage } from '@/components/ui';
 import {
-  Colors,
-  Spacing,
-  Typography,
-} from '@/shared/constants';
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+  PerfectImage,
+} from '@/components/ui';
+import { Colors, Spacing, Typography } from '@/shared/constants';
 import { scale } from '@/shared/constants/responsiveSystem';
 
 export interface SocialPlatform {
@@ -30,10 +31,12 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
     return (
       <PerfectContainer style={styles.socialCardWrapper}>
         <PerfectContainer
-          style={[
-            styles.socialCardWhiteContainer,
-            { borderColor: platform.gradient[0], borderWidth: 2 },
-          ] as never}
+          style={
+            [
+              styles.socialCardWhiteContainer,
+              { borderColor: platform.gradient[0], borderWidth: 2 },
+            ] as never
+          }
         >
           <PlatformTouchable
             onPress={platform.onPress}
@@ -71,36 +74,20 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                   );
                 })()
               ) : (
-                <PerfectText
-                  size={24}
-                  lines={1}
-                  style={styles.socialIconEmoji}
-                >
+                <PerfectText size={24} lines={1} style={styles.socialIconEmoji}>
                   {platform.emoji}
                 </PerfectText>
               )}
             </PerfectContainer>
 
             <PerfectContainer style={styles.socialInfoContainer}>
-              <PerfectText
-                size={16}
-                lines={1}
-                style={styles.socialName}
-              >
+              <PerfectText size={16} lines={1} style={styles.socialName}>
                 {platform.name}
               </PerfectText>
-              <PerfectText
-                size={14}
-                lines={1}
-                style={styles.socialHandle}
-              >
+              <PerfectText size={14} lines={1} style={styles.socialHandle}>
                 {platform.handle}
               </PerfectText>
-              <PerfectText
-                size={12}
-                lines={2}
-                style={styles.socialDescription}
-              >
+              <PerfectText size={12} lines={2} style={styles.socialDescription}>
                 {platform.description}
               </PerfectText>
             </PerfectContainer>

@@ -89,12 +89,8 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   const finalWidth = scale(config?.width ?? width);
   const finalAspectRatio =
     config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4 / 3);
-  const finalHeight = height
-    ? scale(height)
-    : finalWidth / finalAspectRatio;
-  const finalBorderRadius = scale(
-    config?.borderRadius ?? borderRadius ?? 0
-  );
+  const finalHeight = height ? scale(height) : finalWidth / finalAspectRatio;
+  const finalBorderRadius = scale(config?.borderRadius ?? borderRadius ?? 0);
   const finalShadow = config?.shadow ?? shadow ?? false;
 
   // 🎨 CALCOLA STILI

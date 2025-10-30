@@ -3,7 +3,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { Modal, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../../components/ui';
+import {
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '../../../../components/ui';
 // Migrated to Perfect System responsive layout
 
 import {

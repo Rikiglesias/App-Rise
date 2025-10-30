@@ -1,7 +1,11 @@
 import { StyleSheet } from 'react-native';
 
 // ELIMINATO: import vecchi responsiveSystem
-import { Colors, Typography, Spacing } from '../../../shared/constants/designTokens';
+import {
+  Colors,
+  Typography,
+  Spacing,
+} from '../../../shared/constants/designTokens';
 
 /**
  * Stili per i modal della sezione About

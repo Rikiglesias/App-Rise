@@ -7,11 +7,11 @@ import { scale } from '../../shared/constants/responsiveSystem';
 
 // Valori fissi per layout - DesignTokens e DeviceBreakpoints rimossi
 const breakpointValues = {
-  xs: 360,    // Compact max width
-  sm: 640,    // Standard max width
-  md: 768,    // Large max width  
-  lg: 1024,   // XLarge max width
-  xl: 1280,   // XXLarge min width
+  xs: 360, // Compact max width
+  sm: 640, // Standard max width
+  md: 768, // Large max width
+  lg: 1024, // XLarge max width
+  xl: 1280, // XXLarge min width
   '2xl': 1480, // XXLarge + 200
 };
 
@@ -36,12 +36,12 @@ export const DesignLayout = {
   component: {
     button: {
       height: {
-        sm: 36,  // Compact
-        md: 44,  // Standard
-        lg: 52,  // Large
+        sm: 36, // Compact
+        md: 44, // Standard
+        lg: 52, // Large
       },
       minWidth: {
-        sm: 88,  // Minimum touch target
+        sm: 88, // Minimum touch target
         md: 120, // Comfortable
         lg: 160, // Generous
       },
@@ -81,10 +81,10 @@ export const DesignLayout = {
   },
   icon: {
     xs: scale(12),
-    sm: 24,     // Small icon
-    md: 32,     // Medium icon
-    lg: 40,     // Large icon
-    xl: 48,     // XLarge icon
+    sm: 24, // Small icon
+    md: 32, // Medium icon
+    lg: 40, // Large icon
+    xl: 48, // XLarge icon
     '2xl': scale(56),
   },
 };

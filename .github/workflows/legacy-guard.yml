@@ -29,13 +29,26 @@ jobs:
         run: |
           set -e
           echo "Scanning for forbidden Text/Image imports..."
-          if grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "import\s*\{[^}]*\bText\b[^}]*\}\s*from\s*['\"]react-native['\"]" src; then
-            echo "❌ Found direct Text import from react-native. Use PerfectText."
-            exit 1
+          # Check for Text imports (excluding PerfectText.tsx which wraps Text)
+          text_matches=$(grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "import\s*\{[^}]*\bText\b[^}]*\}\s*from\s*['\"]react-native['\"]" src || true)
+          if [ -n "$text_matches" ]; then
+            filtered_text=$(echo "$text_matches" | grep -v "src/components/ui/PerfectText.tsx" || true)
+            if [ -n "$filtered_text" ]; then
+              echo "$filtered_text"
+              echo "❌ Found direct Text import from react-native. Use PerfectText."
+              exit 1
+            fi
           fi
-          if grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "import\s*\{[^}]*\bImage\b[^}]*\}\s*from\s*['\"]react-native['\"]" src; then
-            echo "❌ Found direct Image import from react-native. Use PerfectImage."
-            exit 1
+          
+          # Check for Image imports (excluding PerfectImage.tsx which wraps Image)
+          image_matches=$(grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "import\s*\{[^}]*\bImage\b[^}]*\}\s*from\s*['\"]react-native['\"]" src || true)
+          if [ -n "$image_matches" ]; then
+            filtered_image=$(echo "$image_matches" | grep -v "src/components/ui/PerfectImage.tsx" || true)
+            if [ -n "$filtered_image" ]; then
+              echo "$filtered_image"
+              echo "❌ Found direct Image import from react-native. Use PerfectImage."
+              exit 1
+            fi
           fi
           echo "✅ No forbidden Text/Image imports."
 

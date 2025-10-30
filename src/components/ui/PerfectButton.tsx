@@ -179,18 +179,18 @@ export const PerfectButton: React.FC<PerfectButtonProps> = ({
 };
 
 // 🎯 SHORTCUTS PER VARIANT COMUNI
-export const PrimaryButton = (
-  props: Omit<PerfectButtonProps, 'variant'>
-) => <PerfectButton {...props} variant="primary" />;
+export const PrimaryButton = (props: Omit<PerfectButtonProps, 'variant'>) => (
+  <PerfectButton {...props} variant="primary" />
+);
 
-export const SecondaryButton = (
-  props: Omit<PerfectButtonProps, 'variant'>
-) => <PerfectButton {...props} variant="secondary" />;
+export const SecondaryButton = (props: Omit<PerfectButtonProps, 'variant'>) => (
+  <PerfectButton {...props} variant="secondary" />
+);
 
-export const OutlineButton = (
-  props: Omit<PerfectButtonProps, 'variant'>
-) => <PerfectButton {...props} variant="outline" />;
+export const OutlineButton = (props: Omit<PerfectButtonProps, 'variant'>) => (
+  <PerfectButton {...props} variant="outline" />
+);
 
-export const GhostButton = (
-  props: Omit<PerfectButtonProps, 'variant'>
-) => <PerfectButton {...props} variant="ghost" />;
+export const GhostButton = (props: Omit<PerfectButtonProps, 'variant'>) => (
+  <PerfectButton {...props} variant="ghost" />
+);

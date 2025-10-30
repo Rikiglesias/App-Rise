@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native';
 
-import { Spacing, Colors, Typography, Shadows } from '../../../shared/constants';
+import {
+  Spacing,
+  Colors,
+  Typography,
+  Shadows,
+} from '../../../shared/constants';
 
 /**
  * Stili per la sezione Chi Siamo

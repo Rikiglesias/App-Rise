@@ -8,7 +8,11 @@ import type {
   ProjectsScreenProps,
 } from '../types/ProjectsScreenTypes';
 
-import { PlatformScrollView, PerfectText, PerfectContainer } from '@/components';
+import {
+  PlatformScrollView,
+  PerfectText,
+  PerfectContainer,
+} from '@/components';
 import FilterTabs from '@/components/ui/FilterTabs';
 import ProjectCard from '@/components/ProjectCard';
 import { ProjectDetailModal } from '@/components/layout';
@@ -67,11 +71,7 @@ const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {
 
         {/* Projects List */}
         <PerfectContainer style={styles.content}>
-          <PerfectText
-            size={18}
-            lines={1}
-            style={styles.sectionTitle}
-          >
+          <PerfectText size={18} lines={1} style={styles.sectionTitle}>
             {getSectionTitle()}
           </PerfectText>
 

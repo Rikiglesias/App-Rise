@@ -14,7 +14,6 @@ import {
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
-
 export const StoriaModal: React.FC<StoriaModalProps> = ({
   visible,
   onClose,
@@ -47,7 +46,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
         <PerfectContainer style={modalStyles.modalContainer}>
           {/* GRADIENT BORDER */}
           <LinearGradient
-            colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
+            colors={[
+              Colors.primary[600],
+              Colors.primary[700],
+              Colors.primary[800],
+            ]}
             style={modalStyles.modalGradientBorder}
           >
             <PerfectContainer style={modalStyles.modalWhiteContainer}>
@@ -96,7 +99,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     <PerfectText
                       size={15}
                       lines={1}
-                        style={modalStyles.highlightText}
+                      style={modalStyles.highlightText}
                     >
                       Rise Against Hunger
                     </PerfectText>{' '}
@@ -104,7 +107,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     <PerfectText
                       size={15}
                       lines={1}
-                        style={modalStyles.highlightText}
+                      style={modalStyles.highlightText}
                     >
                       1998
                     </PerfectText>{' '}
@@ -134,7 +137,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     <PerfectText
                       size={15}
                       lines={1}
-                        style={modalStyles.highlightText}
+                      style={modalStyles.highlightText}
                     >
                       Italia
                     </PerfectText>{' '}
@@ -143,7 +146,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                     <PerfectText
                       size={15}
                       lines={1}
-                        style={modalStyles.highlightText}
+                      style={modalStyles.highlightText}
                     >
                       Bologna
                     </PerfectText>{' '}
@@ -168,7 +171,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                       <PerfectText
                         size={24}
                         lines={1}
-                            style={modalStyles.pillarIcon}
+                        style={modalStyles.pillarIcon}
                       >
                         🍽️
                       </PerfectText>
@@ -176,14 +179,14 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                         <PerfectText
                           size={15}
                           lines={1}
-                                style={modalStyles.pillarTitle}
+                          style={modalStyles.pillarTitle}
                         >
                           Distribuzione Pasti
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={3}
-                                style={modalStyles.pillarText}
+                          style={modalStyles.pillarText}
                         >
                           Organizziamo eventi di confezionamento pasti che
                           coinvolgono volontari di ogni età
@@ -195,7 +198,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                       <PerfectText
                         size={24}
                         lines={1}
-                            style={modalStyles.pillarIcon}
+                        style={modalStyles.pillarIcon}
                       >
                         🤝
                       </PerfectText>
@@ -203,14 +206,14 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                         <PerfectText
                           size={15}
                           lines={1}
-                                style={modalStyles.pillarTitle}
+                          style={modalStyles.pillarTitle}
                         >
                           Coinvolgimento Comunitario
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={2}
-                                style={modalStyles.pillarText}
+                          style={modalStyles.pillarText}
                         >
                           Uniamo scuole, aziende e organizzazioni in un impegno
                           condiviso
@@ -222,7 +225,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                       <PerfectText
                         size={24}
                         lines={1}
-                            style={modalStyles.pillarIcon}
+                        style={modalStyles.pillarIcon}
                       >
                         🌍
                       </PerfectText>
@@ -230,14 +233,14 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                         <PerfectText
                           size={15}
                           lines={1}
-                                style={modalStyles.pillarTitle}
+                          style={modalStyles.pillarTitle}
                         >
                           Impatto Globale
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={3}
-                                style={modalStyles.pillarText}
+                          style={modalStyles.pillarText}
                         >
                           I pasti confezionati raggiungono comunità vulnerabili
                           in tutto il mondo
@@ -249,7 +252,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                       <PerfectText
                         size={24}
                         lines={1}
-                            style={modalStyles.pillarIcon}
+                        style={modalStyles.pillarIcon}
                       >
                         📚
                       </PerfectText>
@@ -257,14 +260,14 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                         <PerfectText
                           size={15}
                           lines={1}
-                                style={modalStyles.pillarTitle}
+                          style={modalStyles.pillarTitle}
                         >
                           Educazione
                         </PerfectText>
                         <PerfectText
                           size={12}
                           lines={2}
-                                style={modalStyles.pillarText}
+                          style={modalStyles.pillarText}
                         >
                           Sensibilizziamo sul tema della fame e promuoviamo la
                           solidarietà

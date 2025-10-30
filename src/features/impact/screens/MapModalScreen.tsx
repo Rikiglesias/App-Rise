@@ -80,10 +80,10 @@ const MapModalScreen: React.FC = () => {
           onPress={handleClosePress}
           activeOpacity={0.8}
         >
-          <MaterialCommunityIcons 
-            name="close" 
-            size={24} 
-            color={Colors.neutral[0]} 
+          <MaterialCommunityIcons
+            name="close"
+            size={24}
+            color={Colors.neutral[0]}
           />
         </TouchableOpacity>
       </View>

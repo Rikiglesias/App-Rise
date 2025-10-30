@@ -3,7 +3,10 @@ import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PerfectText, PerfectContainer } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants';
-import { LOGICAL_REFERENCE, scale } from '../../../shared/constants/responsiveSystem';
+import {
+  LOGICAL_REFERENCE,
+  scale,
+} from '../../../shared/constants/responsiveSystem';
 
 interface HeaderSectionProps {
   readonly animationValue: Animated.Value;

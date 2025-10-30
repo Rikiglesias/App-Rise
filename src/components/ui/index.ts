@@ -48,7 +48,12 @@ export {
 } from './ProfessionalContainer';
 
 // Perfect System Components
-export { PerfectText, PerfectTitle, PerfectSubtitle, PerfectBody } from './PerfectText';
+export {
+  PerfectText,
+  PerfectTitle,
+  PerfectSubtitle,
+  PerfectBody,
+} from './PerfectText';
 export type { PerfectTextProps, TypographyVariant } from './PerfectText';
 
 export {
@@ -105,5 +110,3 @@ export {
 // Progress Components
 export { ProgressRing } from './ProgressRing';
 export { default as ProgressStat } from './ProgressStat';
-
-// FormattedText rimosso - usa PerfectText dal Perfect System

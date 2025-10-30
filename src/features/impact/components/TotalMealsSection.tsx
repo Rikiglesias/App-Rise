@@ -4,7 +4,11 @@ import React from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
-import { PerfectText, PlatformTouchable, PerfectContainer } from '@/components/ui';
+import {
+  PerfectText,
+  PlatformTouchable,
+  PerfectContainer,
+} from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import {
   Colors,
@@ -76,7 +80,11 @@ export const TotalMealsSection: React.FC<Props> = ({
         >
           <PlatformTouchable onPress={onMealsPress} activeOpacity={0.9}>
             <LinearGradient
-              colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
+              colors={[
+                Colors.primary[600],
+                Colors.primary[700],
+                Colors.primary[800],
+              ]}
               style={styles.totalGradientContainer}
             >
               <PerfectContainer style={styles.totalCardContent}>
@@ -89,7 +97,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.totalStatValue}
                 >
                   15.8M
@@ -97,7 +105,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.totalStatLabel}
                 >
                   Pasti Totali
@@ -105,7 +113,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={14}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.totalStatSubtitle}
                 >
                   Dal 2012 - Meals
@@ -132,7 +140,11 @@ export const TotalMealsSection: React.FC<Props> = ({
         >
           <PlatformTouchable onPress={onKitsPress} activeOpacity={0.9}>
             <LinearGradient
-              colors={[Colors.neutral[800], Colors.neutral[700], Colors.neutral[900]]}
+              colors={[
+                Colors.neutral[800],
+                Colors.neutral[700],
+                Colors.neutral[900],
+              ]}
               style={styles.totalGradientContainer}
             >
               <PerfectContainer style={styles.totalCardContent}>
@@ -145,7 +157,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.totalStatValue}
                 >
                   142K
@@ -153,7 +165,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.totalStatLabel}
                 >
                   Kit Totali
@@ -161,7 +173,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={14}
                   lines={1}
-                        immunity={true}
+                  immunity={true}
                   style={styles.totalStatSubtitle}
                 >
                   Dal 2020 - Kits

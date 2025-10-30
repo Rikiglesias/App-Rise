@@ -2,7 +2,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 
-import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../../components/ui';
+import {
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '../../../../components/ui';
 import { Spacing, Shadows } from '../../../../shared/constants/designTokens';
 import { scale } from '../../../../shared/constants/responsiveSystem';
 import type { AnimatedButtonProps } from './ActionButtonTypes';

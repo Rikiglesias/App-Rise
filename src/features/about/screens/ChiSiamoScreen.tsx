@@ -6,7 +6,11 @@ import { ChiSiamoSection, ContactSection, StoriaModal } from '../components';
 import { mainStyles } from '../styles';
 import type { ChiSiamoScreenProps, ContactData } from '../types';
 
-import { PlatformScrollView, PlatformTouchable, PerfectContainer } from '@/components';
+import {
+  PlatformScrollView,
+  PlatformTouchable,
+  PerfectContainer,
+} from '@/components';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
@@ -101,10 +105,10 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
         onPress={handleBackPress}
         style={mainStyles.backButton}
       >
-        <MaterialCommunityIcons 
-          name="arrow-left" 
-          size={32} 
-          color={Colors.neutral[900]} 
+        <MaterialCommunityIcons
+          name="arrow-left"
+          size={32}
+          color={Colors.neutral[900]}
         />
       </PlatformTouchable>
 

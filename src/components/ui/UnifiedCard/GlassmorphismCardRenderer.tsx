@@ -8,10 +8,7 @@ import React from 'react';
 import type { ViewStyle, GestureResponderEvent } from 'react-native';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import {
-  BorderRadius,
-  Spacing,
-} from '../../../shared/constants/designTokens';
+import { BorderRadius, Spacing } from '../../../shared/constants/designTokens';
 import type { GlassmorphismVariant, GlassmorphismIntensity } from './types';
 
 interface GlassmorphismCardRendererProps {

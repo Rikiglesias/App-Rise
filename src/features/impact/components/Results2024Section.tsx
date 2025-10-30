@@ -5,11 +5,7 @@ import { Animated, Platform, StyleSheet } from 'react-native';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '@/shared/constants/designTokens';
+import { Colors, Spacing, Typography } from '@/shared/constants/designTokens';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
@@ -32,18 +28,10 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
         ]}
       >
         <PerfectContainer style={styles.results2024HeaderBackground}>
-          <PerfectText
-            size={24}
-            lines={1}
-            style={styles.results2024Title}
-          >
+          <PerfectText size={24} lines={1} style={styles.results2024Title}>
             🎯 Risultati Raggiunti
           </PerfectText>
-          <PerfectText
-            size={16}
-            lines={2}
-            style={styles.results2024Subtitle}
-          >
+          <PerfectText size={16} lines={2} style={styles.results2024Subtitle}>
             I numeri che raccontano il nostro impegno annuale
           </PerfectText>
         </PerfectContainer>
@@ -66,24 +54,16 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
               size={28}
               color={Colors.primary[600]}
             />
-            <PerfectText
-              size={24}
-              lines={1}
-                style={styles.record2024Value}
-            >
+            <PerfectText size={24} lines={1} style={styles.record2024Value}>
               3.14M
             </PerfectText>
-            <PerfectText
-              size={16}
-              lines={1}
-                style={styles.record2024Label}
-            >
+            <PerfectText size={16} lines={1} style={styles.record2024Label}>
               Pasti Confezionati
             </PerfectText>
             <PerfectText
               size={14}
               lines={1}
-                style={styles.record2024Description}
+              style={styles.record2024Description}
             >
               Prodotti nel 2024
             </PerfectText>
@@ -105,24 +85,16 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
               size={28}
               color={Colors.neutral[800]}
             />
-            <PerfectText
-              size={24}
-              lines={1}
-                style={styles.record2024Value}
-            >
+            <PerfectText size={24} lines={1} style={styles.record2024Value}>
               16.3K
             </PerfectText>
-            <PerfectText
-              size={16}
-              lines={1}
-                style={styles.record2024Label}
-            >
+            <PerfectText size={16} lines={1} style={styles.record2024Label}>
               Kit Confezionati
             </PerfectText>
             <PerfectText
               size={14}
               lines={1}
-                style={styles.record2024Description}
+              style={styles.record2024Description}
             >
               Creati nel 2024
             </PerfectText>

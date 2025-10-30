@@ -3,7 +3,11 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { PerfectText, PlatformScrollView, PerfectContainer } from '../../../components/ui';
+import {
+  PerfectText,
+  PlatformScrollView,
+  PerfectContainer,
+} from '../../../components/ui';
 // Ratio inline per evitare dipendenze condivise
 import responsiveSystem from '../../../shared/constants/responsiveSystem';
 
