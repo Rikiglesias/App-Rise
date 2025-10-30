@@ -5,6 +5,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants';
+import { getPerfectShadow } from '../../../shared/constants/perfectShadow';
 // TypographyTokens rimosso - usa Typography.sizes
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { ADVANCED_CONFIG } from '../types/HomeHeaderTypes';
@@ -83,18 +84,8 @@ export const createImageStyles = (
       marginTop: Spacing[1], // ← RIDOTTO DA Spacing[2] per meno spazio sopra
       marginBottom: Spacing[3], // ← RIDOTTO DA Spacing[4] per bilanciare
       borderRadius: 24, // Bordi arrotondati per eleganza
-      // iOS: Shadows complete per effetto premium
-      ...Platform.select({
-        ios: {
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.15,
-          shadowRadius: 16,
-        },
-        android: {
-          // Android: ZERO shadows per evitare bordi scuri
-        },
-      }),
+      // iOS: Shadows complete per effetto premium, Android: ZERO shadows
+      ...(Platform.OS === 'ios' ? getPerfectShadow('strong') : {}),
     },
 
     imageContainer: {
@@ -202,11 +193,7 @@ export const baseMissionStyles = StyleSheet.create({
     borderRadius: 16,
     padding: Spacing[4],
     marginTop: Spacing[4],
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    ...getPerfectShadow('medium'),
   },
   missionText: {
     fontSize: 14, // Body medium
@@ -226,11 +213,7 @@ export const baseMissionStyles = StyleSheet.create({
     borderWidth: 2,
     padding: Spacing[3],
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
+    ...getPerfectShadow('light'),
   },
   mealsBox: {
     borderColor: Colors.primary[500], // Brand color

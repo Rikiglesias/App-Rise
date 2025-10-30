@@ -11,6 +11,7 @@
 import React from 'react';
 import { Image, ImageProps, View, ImageStyle, ViewStyle } from 'react-native';
 import { scale } from '../../shared/constants/responsiveSystem';
+import { getPerfectShadow } from '../../shared/constants/perfectShadow';
 
 interface PerfectImageProps extends Omit<ImageProps, 'style'> {
   /** Larghezza di riferimento su iPhone 15 */
@@ -47,30 +48,7 @@ const IMAGE_PRESETS = {
   banner: { width: 380, aspectRatio: 3 / 1, borderRadius: 6, shadow: false },
 } as const;
 
-// 🎭 SHADOW STYLES
-const SHADOW_STYLES = {
-  light: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  medium: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  strong: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-} as const;
+// 🎭 SHADOW STYLES - Usa getPerfectShadow per shadows scalati
 
 export const PerfectImage: React.FC<PerfectImageProps> = ({
   width,
@@ -96,10 +74,10 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   // 🎨 CALCOLA STILI
   const shadowStyle = (() => {
     if (finalShadow && typeof finalShadow === 'string') {
-      return SHADOW_STYLES[finalShadow];
+      return getPerfectShadow(finalShadow as 'light' | 'medium' | 'strong');
     }
     if (finalShadow === true) {
-      return SHADOW_STYLES.medium;
+      return getPerfectShadow('medium');
     }
     return {};
   })();

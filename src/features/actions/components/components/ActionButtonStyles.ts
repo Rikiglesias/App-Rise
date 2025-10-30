@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { Colors, Spacing, Typography } from '../../../../shared/constants';
+import { getPerfectShadow } from '../../../../shared/constants/perfectShadow';
 import type { ButtonStyles } from './ActionButtonTypes';
 
 export const createActionButtonStyles = (): ButtonStyles => {
@@ -126,11 +127,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderRadius: 20,
       // Spessore bordo pagina Azioni: 2pt
       padding: 2,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.2,
-      shadowRadius: 12,
-      elevation: 2,
+      ...getPerfectShadow('strong'),
     },
     whiteContainer: {
       backgroundColor: Colors.neutral[0],
