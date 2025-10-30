@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Spacing } from '../../../../shared/constants/designTokens';
 import { getPerfectShadow } from '../../../../shared/constants/perfectShadow';
+import { IMAGE_DIMENSIONS } from '../../../../shared/constants/dimensions';
 
 export const useHeroImageStyles = () => {
   return StyleSheet.create({
@@ -18,7 +19,7 @@ export const useHeroImageStyles = () => {
 
     image: {
       width: '100%',
-      height: 280,
+      height: IMAGE_DIMENSIONS.HERO_HEIGHT,
       // Rimosso borderRadius dall'immagine per evitare problemi di rendering
     },
 

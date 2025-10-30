@@ -18,6 +18,7 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants';
+import { IMAGE_DIMENSIONS } from '../../../shared/constants/dimensions';
 import type { StatButtonProps } from '../types/ImpactScreenTypes';
 
 export const StatButton: React.FC<StatButtonProps> = ({
@@ -166,8 +167,8 @@ const styles = StyleSheet.create({
     color: Colors.neutral[600],
   },
   storyCard: {
-    width: 280,
-    height: 360,
+    width: IMAGE_DIMENSIONS.STORY_WIDTH,
+    height: IMAGE_DIMENSIONS.STORY_HEIGHT,
     backgroundColor: Colors.neutral[200],
     borderRadius: BorderRadius.xl,
     ...Shadows.lg,

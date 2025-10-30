@@ -15,6 +15,7 @@ import {
   Typography,
   Shadows,
 } from '@/shared/constants/designTokens';
+import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
 interface Props {
   onMapPress: () => void;
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     ...Shadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
     position: 'relative',
     overflow: 'hidden',
-    height: 280, // ALTEZZA FISSA: per container stabile
+    height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT, // ALTEZZA FISSA: per container stabile
     // FEEDBACK VISIVO CLICCABILE
     borderWidth: 1,
     borderColor: 'transparent',
