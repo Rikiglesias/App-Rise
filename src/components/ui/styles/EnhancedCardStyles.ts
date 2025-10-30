@@ -1,13 +1,11 @@
 import { Platform, StyleSheet } from 'react-native';
 import {
-  Accessibility,
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
   Typography,
 } from '../../../shared/constants';
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 
 export const enhancedCardStyles = StyleSheet.create({
   baseCard: {
@@ -34,8 +32,8 @@ export const enhancedCardStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     ...Platform.select({
-      ios: Shadows.xs,
-      android: Shadows.xs,
+      ios: Shadows.sm,
+      android: Shadows.sm,
     }),
   },
 
@@ -47,7 +45,8 @@ export const enhancedCardStyles = StyleSheet.create({
   arrowSection: {
     justifyContent: 'center',
     alignItems: 'center',
-    ...Accessibility.touchTarget,
+    minWidth: 44,
+    minHeight: 44,
   },
 
   compactCard: {
@@ -71,15 +70,15 @@ export const enhancedCardStyles = StyleSheet.create({
   },
 
   compactIcon: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16,
   },
 
   standardIcon: {
-    fontSize: TypographyTokens.styles.title.large,
+    fontSize: 24,
   },
 
   largeIcon: {
-    fontSize: TypographyTokens.styles.headline.small,
+    fontSize: 20,
   },
 
   compactIconContainer: {
@@ -106,21 +105,18 @@ export const enhancedCardStyles = StyleSheet.create({
   },
 
   compactTitle: {
-    fontSize: TypographyTokens.styles.body.medium,
-    lineHeight:
-      Typography.lineHeights.snug * TypographyTokens.styles.body.medium,
+    fontSize: 14,
+    lineHeight: 1.25 * 14,
   },
 
   standardTitle: {
-    fontSize: TypographyTokens.styles.body.large,
-    lineHeight:
-      Typography.lineHeights.snug * TypographyTokens.styles.body.large,
+    fontSize: 16,
+    lineHeight: 1.25 * 16,
   },
 
   largeTitle: {
-    fontSize: TypographyTokens.styles.title.medium,
-    lineHeight:
-      Typography.lineHeights.snug * TypographyTokens.styles.title.medium,
+    fontSize: 20,
+    lineHeight: 1.25 * 20,
   },
 
   subtitle: {
@@ -130,25 +126,22 @@ export const enhancedCardStyles = StyleSheet.create({
   },
 
   compactSubtitle: {
-    fontSize: TypographyTokens.styles.label.small,
-    lineHeight:
-      Typography.lineHeights.normal * TypographyTokens.styles.label.small,
+    fontSize: 10,
+    lineHeight: Typography.lineHeights.normal * 10,
   },
 
   standardSubtitle: {
-    fontSize: TypographyTokens.styles.body.small,
-    lineHeight:
-      Typography.lineHeights.normal * TypographyTokens.styles.body.small,
+    fontSize: 12,
+    lineHeight: Typography.lineHeights.normal * 12,
   },
 
   largeSubtitle: {
-    fontSize: TypographyTokens.styles.body.medium,
-    lineHeight:
-      Typography.lineHeights.normal * TypographyTokens.styles.body.medium,
+    fontSize: 14,
+    lineHeight: Typography.lineHeights.normal * 14,
   },
 
   arrow: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16,
     fontWeight: Typography.weights.semibold,
   },
 

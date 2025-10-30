@@ -3,7 +3,6 @@
 // ===================================================================
 
 import { Spacing as BaseSpacing } from '../../shared/constants';
-import { DesignTokens } from '../../shared/constants/responsiveSystem';
 
 const spacingValue = (key: keyof typeof BaseSpacing): number => {
   const map = BaseSpacing as unknown as Record<string, number>;
@@ -45,12 +44,12 @@ export const DesignSpacing = {
     },
   },
 
-  // Spaziature layout derivate dal responsive system
-  layout: {
-    section: DesignTokens.layout.sectionSpacing,
-    container: DesignTokens.layout.screenPadding,
-    content: DesignTokens.layout.cardSpacing,
-  },
+  // Layout section commentata - DesignTokens rimosso
+  // layout: {
+  //   section: 24,
+  //   container: 16,
+  //   content: 12,
+  // },
 };
 
 export const Spacing = DesignSpacing;

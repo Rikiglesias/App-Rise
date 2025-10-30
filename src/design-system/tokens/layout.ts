@@ -69,9 +69,9 @@ export const DesignLayout = {
     },
   },
   spacing: {
-    section: DesignTokens.layout.sectionSpacing,
-    container: DesignTokens.layout.screenPadding,
-    content: DesignTokens.layout.cardSpacing,
+    sectionSpacing: 24,
+    screenPadding: 16,
+    cardSpacing: 12,
     component: DesignTokens.layout.dividerSpacing,
   },
   zIndex: {
