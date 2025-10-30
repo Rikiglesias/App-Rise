@@ -4,7 +4,6 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { TouchableRipple } from 'react-native-paper';
 import { BorderRadius, Spacing, Typography } from '../../shared/constants';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { PerfectText } from './PerfectText';
 import { PerfectContainer } from './PerfectContainer';
 
@@ -65,14 +64,14 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       marginRight: Spacing[2],
     },
     tabLabel: {
-      fontSize: TypographyTokens.styles.body.small,
+      fontSize: 12,
       fontWeight: Typography.weights.semibold,
     },
     activeTabLabel: { color: colors.card },
     inactiveTabLabel: { color: colors.text },
     tabCount: {
       marginLeft: Spacing[2],
-      fontSize: TypographyTokens.styles.label.small,
+      fontSize: 14,
       fontWeight: Typography.weights.bold,
       backgroundColor: colors.card,
       color: colors.primary,

@@ -1,0 +1,9 @@
+fix: batch 9-10 completato
+
+FilterTabs + ProgressStat fixati
+Rimossi tutti TypographyTokens
+Sostituiti con valori diretti
+
+10/117 completati (8.5%)
+Velocità: ~2 file/min
+Tempo rimanente: ~90min

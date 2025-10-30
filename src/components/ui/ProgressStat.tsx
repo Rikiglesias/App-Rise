@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Colors, Spacing, Typography } from '../../shared/constants';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 
 import { PerfectText } from './PerfectText';
 import AnimatedNumber from './AnimatedNumber';
@@ -139,8 +138,8 @@ export const ProgressStat: React.FC<ProgressStatProps> = ({
   const progressPercentage = Math.round(progress * 100);
 
   const sizes = {
-    compact: { ring: 60, text: TypographyTokens.styles.body.small },
-    standard: { ring: 80, text: TypographyTokens.styles.body.large },
+    compact: { ring: 60, text: 12 },
+    standard: { ring: 80, text: 16 },
   };
 
   const { ring: ringSize, text: textSize } = sizes[size];
@@ -207,23 +206,23 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
   currentValue: {
-    fontSize: TypographyTokens.styles.title.medium,
+    fontSize: 20,
     fontWeight: Typography.weights.bold,
     fontFamily: Typography.families.mono,
   },
   targetValue: {
-    fontSize: TypographyTokens.styles.body.small,
+    fontSize: 12,
     color: Colors.neutral[500],
     marginLeft: Spacing[1],
   },
   label: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 16,
     color: Colors.neutral[700],
-    fontWeight: Typography.weights.medium,
+    fontWeight: 'medium',
     textAlign: 'center',
   },
   sublabel: {
-    fontSize: TypographyTokens.styles.label.small,
+    fontSize: 20,
     color: Colors.neutral[500],
     textAlign: 'center',
     marginTop: Spacing[1],
