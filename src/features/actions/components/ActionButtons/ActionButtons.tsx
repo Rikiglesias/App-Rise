@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-import DonationInfoModal from '../components/DonationInfoModalMigrated';
+import DonationInfoModal from '../components/DonationInfoModal';
 import type { NewActionButtonsSectionProps } from '../components/ActionButtonTypes';
 import { useActionButtonsData } from './useActionButtonsData';
 import { ActionButtonsUI } from './ActionButtonsUI';

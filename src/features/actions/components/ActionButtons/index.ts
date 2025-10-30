@@ -1,11 +1,11 @@
 /**
- * ACTION BUTTONS REFACTORED - Export unificati
+ * ACTION BUTTONS - Export unificati
  * Sistema ActionButtons con separazione Business Logic / UI
  */
 
-// Componente principale refactorizzato
-export { default as ActionButtonsRefactored } from './ActionButtonsRefactored';
-export { default } from './ActionButtonsRefactored';
+// Componente principale
+export { default as ActionButtons } from './ActionButtons';
+export { default } from './ActionButtons';
 
 // Hook per logica business (per riuso in altri contesti)
 export { useActionButtonsData } from './useActionButtonsData';
