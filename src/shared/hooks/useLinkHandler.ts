@@ -9,6 +9,7 @@ import {
   type AsyncResult,
 } from '../utils/result';
 import { logWarn, logError } from '../utils/logger';
+import { RISE_URLS, SOCIAL_URLS } from '../constants/urls';
 import { useHapticFeedback } from './useHapticFeedback';
 
 interface UseLinkHandlerOptions {
@@ -185,7 +186,7 @@ export const useLinkHandler = (
   // Predefined link handlers for common actions
   const openDonationLink = useCallback(() => {
     return openLink(
-      'https://italy.riseagainsthunger.org/donaora/',
+      RISE_URLS.donation,
       'donation',
       'Impossibile aprire il link di donazione. Riprova più tardi.'
     );
@@ -193,7 +194,7 @@ export const useLinkHandler = (
 
   const openShopLink = useCallback(() => {
     return openLink(
-      'https://riseagainsthunger.org.welfare4charity.com/charity/ecommerce',
+      RISE_URLS.shop,
       'shop',
       'Impossibile aprire il charity shop. Riprova più tardi.'
     );
@@ -201,7 +202,7 @@ export const useLinkHandler = (
 
   const openGiftCardLink = useCallback(() => {
     return openLink(
-      'https://riseagainsthunger.org.welfare4charity.com/charity/giftcards',
+      RISE_URLS.giftCards,
       'giftcard',
       'Impossibile aprire le gift card. Riprova più tardi.'
     );
@@ -209,7 +210,7 @@ export const useLinkHandler = (
 
   const openEventsLink = useCallback(() => {
     return openLink(
-      'https://riseagainsthunger.org.welfare4charity.com/organization/events',
+      RISE_URLS.events,
       'events',
       'Impossibile aprire il calendario eventi. Riprova più tardi.'
     );
@@ -217,7 +218,7 @@ export const useLinkHandler = (
 
   const openProjectsLink = useCallback(() => {
     return openLink(
-      'https://riseagainsthunger.org.welfare4charity.com/org/projects',
+      RISE_URLS.projects,
       'projects',
       'Impossibile aprire la pagina progetti. Riprova più tardi.'
     );
@@ -225,7 +226,7 @@ export const useLinkHandler = (
 
   const openFacebookLink = useCallback(() => {
     return openLink(
-      'https://www.facebook.com/RAHItalia/',
+      SOCIAL_URLS.facebook,
       'facebook',
       'Impossibile aprire Facebook. Riprova più tardi.'
     );
@@ -233,7 +234,7 @@ export const useLinkHandler = (
 
   const openInstagramLink = useCallback(() => {
     return openLink(
-      'https://www.instagram.com/riseagainsthunger_italia/',
+      SOCIAL_URLS.instagram,
       'instagram',
       'Impossibile aprire Instagram. Riprova più tardi.'
     );
@@ -241,7 +242,7 @@ export const useLinkHandler = (
 
   const openYouTubeLink = useCallback(() => {
     return openLink(
-      'https://www.youtube.com/@RiseAgainstHungerItalia',
+      SOCIAL_URLS.youtube,
       'youtube',
       'Impossibile aprire YouTube. Riprova più tardi.'
     );
@@ -249,7 +250,7 @@ export const useLinkHandler = (
 
   const openLinkedInLink = useCallback(() => {
     return openLink(
-      'https://www.linkedin.com/company/rise-against-hunger-italia/',
+      SOCIAL_URLS.linkedin,
       'linkedin',
       'Impossibile aprire LinkedIn. Riprova più tardi.'
     );
@@ -257,7 +258,7 @@ export const useLinkHandler = (
 
   const openWebsiteLink = useCallback(() => {
     return openLink(
-      'https://www.riseagainsthunger.it/',
+      RISE_URLS.italyWebsite,
       'website',
       'Impossibile aprire il sito web. Riprova più tardi.'
     );
@@ -265,7 +266,7 @@ export const useLinkHandler = (
 
   const openTracciabilitaLink = useCallback(() => {
     return openLink(
-      'https://italy.riseagainsthunger.org/chi-siamo/tracciabilita/',
+      RISE_URLS.tracciabilita,
       'tracciabilita',
       'Impossibile aprire la pagina tracciabilità. Riprova più tardi.'
     );

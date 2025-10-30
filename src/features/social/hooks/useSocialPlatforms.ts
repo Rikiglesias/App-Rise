@@ -2,6 +2,7 @@ import { useCallback, useRef } from 'react';
 import { Animated, Linking, Alert } from 'react-native';
 import { SocialPlatform } from '../components/SocialCard';
 import { logWarn } from '../../../shared/utils/logger';
+import { RISE_URLS, SOCIAL_URLS } from '../../../shared/constants/urls';
 
 // Import delle icone dalla cartella social
 import instagramIcon from '../../../../assets/icons/social/instagram.png';
@@ -49,8 +50,7 @@ export const useSocialPlatforms = () => {
       description: 'Il nostro sito ufficiale',
       emoji: '🌐',
       gradient: ['#6B7280', '#9CA3AF', '#D1D5DB'],
-      onPress: () =>
-        openSocialLink('https://italy.riseagainsthunger.org', 'Sito Web'),
+      onPress: () => openSocialLink(RISE_URLS.italyMain, 'Sito Web'),
     },
     {
       id: 'instagram',
@@ -59,11 +59,7 @@ export const useSocialPlatforms = () => {
       description: 'Foto e storie delle nostre missioni',
       icon: instagramIcon,
       gradient: ['#E1306C', '#F56040', '#FCAF45'],
-      onPress: () =>
-        openSocialLink(
-          'https://instagram.com/riseagainsthungeritalia',
-          'Instagram'
-        ),
+      onPress: () => openSocialLink(SOCIAL_URLS.instagramShort, 'Instagram'),
     },
     {
       id: 'facebook',
@@ -72,11 +68,7 @@ export const useSocialPlatforms = () => {
       description: 'Community e eventi locali',
       icon: facebookIcon,
       gradient: ['#1877F2', '#42A5F5', '#64B5F6'],
-      onPress: () =>
-        openSocialLink(
-          'https://facebook.com/RiseAgainstHungerItalia',
-          'Facebook'
-        ),
+      onPress: () => openSocialLink(SOCIAL_URLS.facebookShort, 'Facebook'),
     },
     {
       id: 'linkedin',
@@ -85,11 +77,7 @@ export const useSocialPlatforms = () => {
       description: 'Aggiornamenti professionali e partnership',
       icon: linkedinIcon,
       gradient: ['#0077B5', '#00A0DC', '#40E0D0'],
-      onPress: () =>
-        openSocialLink(
-          'https://linkedin.com/company/rise-against-hunger-italia',
-          'LinkedIn'
-        ),
+      onPress: () => openSocialLink(SOCIAL_URLS.linkedinShort, 'LinkedIn'),
     },
   ];
 
