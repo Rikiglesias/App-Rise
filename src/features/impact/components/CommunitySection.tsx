@@ -77,7 +77,7 @@ export const CommunitySection: React.FC<Props> = ({
               <PerfectContainer style={styles.communityCardContent}>
                 <MaterialCommunityIcons
                   name="account-group"
-                  size={scaleDimensionLinear(28)}
+                  size={28}
                   color="#10B981"
                   style={styles.communityCardIcon}
                 />
@@ -99,7 +99,7 @@ export const CommunitySection: React.FC<Props> = ({
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={scaleDimensionLinear(20)}
+                  size={20}
                   color="#10B981"
                   style={styles.chevronIcon}
                 />
@@ -125,7 +125,7 @@ export const CommunitySection: React.FC<Props> = ({
               <PerfectContainer style={styles.communityCardContent}>
                 <MaterialCommunityIcons
                   name="handshake"
-                  size={scaleDimensionLinear(28)}
+                  size={28}
                   color="#8B5CF6"
                   style={styles.communityCardIcon}
                 />
@@ -147,7 +147,7 @@ export const CommunitySection: React.FC<Props> = ({
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={scaleDimensionLinear(20)}
+                  size={20}
                   color="#8B5CF6"
                   style={styles.chevronIcon}
                 />

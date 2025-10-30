@@ -9,8 +9,8 @@ import {
   Colors,
   Spacing,
   Typography,
+  Shadows,
 } from '@/shared/constants/designTokens';
-import { PlatformShadows } from '@/shared/constants/platformDesignTokens';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
 interface Props {
@@ -82,7 +82,7 @@ export const TotalMealsSection: React.FC<Props> = ({
               <PerfectContainer style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="food-apple"
-                  size={scaleDimensionLinear(28)}
+                  size={28}
                   color={Colors.primary[600]}
                   style={styles.totalCardIcon}
                 />
@@ -112,7 +112,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={scaleDimensionLinear(20)}
+                  size={20}
                   color={Colors.primary[600]}
                   style={styles.chevronIcon}
                 />
@@ -138,7 +138,7 @@ export const TotalMealsSection: React.FC<Props> = ({
               <PerfectContainer style={styles.totalCardContent}>
                 <MaterialCommunityIcons
                   name="package-variant"
-                  size={scaleDimensionLinear(28)}
+                  size={28}
                   color={Colors.neutral[800]}
                   style={styles.totalCardIcon}
                 />
@@ -168,7 +168,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={scaleDimensionLinear(20)}
+                  size={20}
                   color={Colors.neutral[800]}
                   style={styles.chevronIcon}
                 />
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   totalGradientContainer: {
     borderRadius: 24,
     padding: 2,
-    ...PlatformShadows.xl, // Platform-optimized shadow system
+    ...Shadows.lg, // Platform-optimized shadow system
   },
   totalCardContent: {
     backgroundColor: Colors.neutral[0],

@@ -32,7 +32,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
       <PerfectContainer style={[styles.iconContainer, { backgroundColor: color }]}>
         <MaterialCommunityIcons
           name={icon}
-          size={scaleDimensionLinear(28)}
+          size={28}
           color={Colors.neutral[0]}
         />
       </PerfectContainer>
@@ -56,7 +56,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
       </PerfectContainer>
       <MaterialCommunityIcons
         name="chevron-right"
-        size={scaleDimensionLinear(24)}
+        size={24}
         color={Colors.neutral[400]}
       />
     </PerfectContainer>
@@ -113,7 +113,7 @@ export const MilestoneCard: React.FC<
   (typeof IMPACT_DATA.milestones)[number]
 > = ({ title, value, icon }) => (
   <PerfectContainer style={styles.milestoneCard}>
-    <MaterialCommunityIcons name={icon} size={scaleDimensionLinear(24)} color={Colors.primary[600]} />
+    <MaterialCommunityIcons name={icon} size={24} color={Colors.primary[600]} />
     <PerfectContainer style={styles.milestoneContent}>
       <PerfectText
         size={15}

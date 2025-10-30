@@ -82,7 +82,7 @@ const MapModalScreen: React.FC = () => {
         >
           <MaterialCommunityIcons 
             name="close" 
-            size={scaleDimensionLinear(24)} 
+            size={24} 
             color={Colors.neutral[0]} 
           />
         </TouchableOpacity>

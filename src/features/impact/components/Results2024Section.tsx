@@ -63,7 +63,7 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
           <PerfectContainer style={styles.record2024CardContent}>
             <MaterialCommunityIcons
               name="food-apple"
-              size={scaleDimensionLinear(28)}
+              size={28}
               color={Colors.primary[600]}
             />
             <PerfectText
@@ -102,7 +102,7 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
           <PerfectContainer style={styles.record2024CardContent}>
             <MaterialCommunityIcons
               name="package-variant"
-              size={scaleDimensionLinear(28)}
+              size={28}
               color={Colors.neutral[800]}
             />
             <PerfectText

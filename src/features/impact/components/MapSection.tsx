@@ -8,8 +8,8 @@ import {
   Colors,
   Spacing,
   Typography,
+  Shadows,
 } from '@/shared/constants/designTokens';
-import { PlatformShadows } from '@/shared/constants/platformDesignTokens';
 
 interface Props {
   onMapPress: () => void;
@@ -74,7 +74,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           </PerfectText>
           <MaterialCommunityIcons
             name="map-search"
-            size={scaleDimensionLinear(16)}
+            size={28}
             color={Colors.neutral[600]}
           />
         </PerfectContainer>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing[4],
     marginHorizontal: 0, // RIMOSSO: margini laterali per riempire tutto
     padding: 0, // RIMOSSO: padding per eliminare bordi vuoti
-    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
+    ...Shadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
     position: 'relative',
     overflow: 'hidden',
     height: 280, // ALTEZZA FISSA: per container stabile
