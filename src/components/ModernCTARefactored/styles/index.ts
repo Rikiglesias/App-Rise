@@ -1,6 +1,5 @@
 import { Platform, StyleSheet } from 'react-native';
 
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
@@ -85,7 +84,7 @@ export const createVariantButtonStyles = (colors: typeof Colors) =>
       borderWidth: 0,
       position: 'relative',
       ...Platform.select({
-        ios: Shadows.xl,
+        ios: Shadows.lg,
         android: {
           shadowColor: colors.neutral[900],
           shadowOffset: { width: 0, height: 12 },
@@ -177,39 +176,39 @@ export const createContentStyles = (colors: typeof Colors) =>
 export const createSizeTypographyStyles = () =>
   StyleSheet.create({
     compactDescription: {
-      fontSize: TypographyTokens.styles.body.small,
+      fontSize: 12,
       lineHeight: Typography.lineHeights.relaxed,
     },
     standardDescription: {
-      fontSize: TypographyTokens.styles.body.medium,
+      fontSize: 14,
       lineHeight: Typography.lineHeights.relaxed,
     },
     largeDescription: {
-      fontSize: TypographyTokens.styles.body.large,
+      fontSize: 16,
       lineHeight: Typography.lineHeights.relaxed,
     },
     compactTitle: {
-      fontSize: TypographyTokens.styles.title.medium,
+      fontSize: 20,
       lineHeight: Typography.lineHeights.tight,
     },
     standardTitle: {
-      fontSize: TypographyTokens.styles.title.large,
+      fontSize: 24,
       lineHeight: Typography.lineHeights.tight,
     },
     largeTitle: {
-      fontSize: TypographyTokens.styles.headline.small,
+      fontSize: 20,
       lineHeight: Typography.lineHeights.tight,
     },
     compactSubtitle: {
-      fontSize: TypographyTokens.styles.label.small,
+      fontSize: 10,
       lineHeight: Typography.lineHeights.normal,
     },
     standardSubtitle: {
-      fontSize: TypographyTokens.styles.body.small,
+      fontSize: 12,
       lineHeight: Typography.lineHeights.normal,
     },
     largeSubtitle: {
-      fontSize: TypographyTokens.styles.body.medium,
+      fontSize: 14,
       lineHeight: Typography.lineHeights.normal,
     },
   });

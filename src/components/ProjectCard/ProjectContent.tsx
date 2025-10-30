@@ -3,8 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { PerfectText } from '../ui';
 
-import { BorderRadius, Spacing, Typography } from '../../shared/constants';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+import { Spacing, Typography } from '../../shared/constants';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 import type { ProjectContentProps } from './types';
@@ -17,21 +16,21 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
 
   const styles = StyleSheet.create({
     description: {
-      fontSize: TypographyTokens.styles.body.medium,
+      fontSize: 14,
       color: colors.neutral[700],
-      lineHeight: TypographyTokens.styles.body.medium * 1.4,
+      lineHeight: 14 * 1.4,
       marginBottom: Spacing[4],
     },
     impactContainer: {
       backgroundColor: colors.primary[50],
-      borderRadius: BorderRadius.lg,
+      borderRadius: 8,
       padding: Spacing[4],
       marginBottom: Spacing[4],
       borderWidth: 1,
       borderColor: colors.primary[200],
     },
     impactLabel: {
-      fontSize: TypographyTokens.styles.label.small,
+      fontSize: 10,
       fontWeight: Typography.weights.bold,
       color: colors.primary[700],
       marginBottom: Spacing[1],
@@ -39,7 +38,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       letterSpacing: 0.5,
     },
     impactText: {
-      fontSize: TypographyTokens.styles.body.small,
+      fontSize: 12,
       color: colors.primary[800],
       fontWeight: Typography.weights.medium,
     },

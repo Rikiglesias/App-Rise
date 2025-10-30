@@ -3,8 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { PerfectText } from '../ui';
 
-import { BorderRadius, Spacing, Typography } from '../../shared/constants';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
+import { Spacing, Typography } from '../../shared/constants';
 import { useTheme } from '../../shared/hooks/useTheme';
 
 import type { ProjectHeaderProps } from './types';
@@ -29,14 +28,14 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       marginRight: Spacing[3],
     },
     title: {
-      fontSize: TypographyTokens.styles.body.large,
+      fontSize: 16,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[900],
       marginBottom: Spacing[1],
-      lineHeight: TypographyTokens.styles.body.large * 1.2,
+      lineHeight: 16 * 1.2,
     },
     location: {
-      fontSize: TypographyTokens.styles.body.small,
+      fontSize: 12,
       color: colors.neutral[500],
       fontWeight: Typography.weights.medium,
     },
@@ -44,12 +43,12 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       backgroundColor: statusColor,
       paddingHorizontal: Spacing[3],
       paddingVertical: Spacing[1],
-      borderRadius: BorderRadius.full,
+      borderRadius: 8,
       minWidth: 80,
       alignItems: 'center',
     },
     statusText: {
-      fontSize: TypographyTokens.styles.label.small,
+      fontSize: 20,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[0],
     },
