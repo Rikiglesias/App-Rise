@@ -37,7 +37,7 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
                 name={
                   contact.icon as keyof typeof MaterialCommunityIcons.glyphMap
                 }
-                size={scaleDimensionLinear(36)}  // ✅ SCALA automaticamente
+                size={36}  // ✅ SCALA automaticamente
                 color={Colors.neutral[800]}
                 style={animatedContactStyles.contactIcon}
               />

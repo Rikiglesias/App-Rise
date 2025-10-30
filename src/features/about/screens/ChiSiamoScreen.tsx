@@ -103,7 +103,7 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
       >
         <MaterialCommunityIcons 
           name="arrow-left" 
-          size={scaleDimensionLinear(24)} 
+          size={32} 
           color={Colors.neutral[900]} 
         />
       </PlatformTouchable>

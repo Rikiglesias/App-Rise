@@ -68,7 +68,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="close"
-                      size={scaleDimensionLinear(20)}
+                      size={36}
                       color={Colors.neutral[0]}
                     />
                   </PlatformTouchable>

@@ -60,7 +60,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           >
             <MaterialCommunityIcons
               name="information"
-              size={scaleDimensionLinear(20)}  // ✅ Scaling diretto, no hook
+              size={40}  // ✅ Scaling diretto, no hook
               color="white"
             />
           </PlatformTouchable>
