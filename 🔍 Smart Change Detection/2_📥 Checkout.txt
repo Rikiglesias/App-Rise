@@ -1,0 +1,94 @@
+﻿2025-10-30T12:38:27.9528029Z ##[group]Run actions/checkout@v4
+2025-10-30T12:38:27.9528854Z with:
+2025-10-30T12:38:27.9529227Z   fetch-depth: 0
+2025-10-30T12:38:27.9529644Z   repository: Rikiglesias/App-Rise
+2025-10-30T12:38:27.9530328Z   token: ***
+2025-10-30T12:38:27.9530704Z   ssh-strict: true
+2025-10-30T12:38:27.9531235Z   ssh-user: git
+2025-10-30T12:38:27.9531657Z   persist-credentials: true
+2025-10-30T12:38:27.9532093Z   clean: true
+2025-10-30T12:38:27.9532480Z   sparse-checkout-cone-mode: true
+2025-10-30T12:38:27.9532948Z   fetch-tags: false
+2025-10-30T12:38:27.9533337Z   show-progress: true
+2025-10-30T12:38:27.9533726Z   lfs: false
+2025-10-30T12:38:27.9534090Z   submodules: false
+2025-10-30T12:38:27.9534490Z   set-safe-directory: true
+2025-10-30T12:38:27.9535133Z env:
+2025-10-30T12:38:27.9535494Z   NODE_VERSION: 20.x
+2025-10-30T12:38:27.9535883Z   CACHE_VERSION: v2
+2025-10-30T12:38:27.9536279Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:38:27.9536706Z   EAS_CLI_VERSION: latest
+2025-10-30T12:38:27.9537111Z ##[endgroup]
+2025-10-30T12:38:28.0581529Z Syncing repository: Rikiglesias/App-Rise
+2025-10-30T12:38:28.0583232Z ##[group]Getting Git version info
+2025-10-30T12:38:28.0583973Z Working directory is '/home/runner/work/App-Rise/App-Rise'
+2025-10-30T12:38:28.0584892Z [command]/usr/bin/git version
+2025-10-30T12:38:28.0681460Z git version 2.51.0
+2025-10-30T12:38:28.0706755Z ##[endgroup]
+2025-10-30T12:38:28.0721116Z Temporarily overriding HOME='/home/runner/work/_temp/6df6db62-57ad-43c9-96ea-da364d345b57' before making global git config changes
+2025-10-30T12:38:28.0722872Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-30T12:38:28.0726447Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:38:28.0764753Z Deleting the contents of '/home/runner/work/App-Rise/App-Rise'
+2025-10-30T12:38:28.0768927Z ##[group]Initializing the repository
+2025-10-30T12:38:28.0774321Z [command]/usr/bin/git init /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:38:28.0903609Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-10-30T12:38:28.0905005Z hint: is subject to change. To configure the initial branch name to use in all
+2025-10-30T12:38:28.0905910Z hint: of your new repositories, which will suppress this warning, call:
+2025-10-30T12:38:28.0906816Z hint:
+2025-10-30T12:38:28.0907512Z hint: 	git config --global init.defaultBranch <name>
+2025-10-30T12:38:28.0908513Z hint:
+2025-10-30T12:38:28.0909095Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-10-30T12:38:28.0910670Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-10-30T12:38:28.0912123Z hint:
+2025-10-30T12:38:28.0912808Z hint: 	git branch -m <name>
+2025-10-30T12:38:28.0913580Z hint:
+2025-10-30T12:38:28.0914601Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-10-30T12:38:28.0916373Z Initialized empty Git repository in /home/runner/work/App-Rise/App-Rise/.git/
+2025-10-30T12:38:28.0922823Z [command]/usr/bin/git remote add origin https://github.com/Rikiglesias/App-Rise
+2025-10-30T12:38:28.0961279Z ##[endgroup]
+2025-10-30T12:38:28.0962481Z ##[group]Disabling automatic garbage collection
+2025-10-30T12:38:28.0966282Z [command]/usr/bin/git config --local gc.auto 0
+2025-10-30T12:38:28.0995479Z ##[endgroup]
+2025-10-30T12:38:28.0996675Z ##[group]Setting up auth
+2025-10-30T12:38:28.1003473Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-30T12:38:28.1034419Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-30T12:38:28.1406480Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-30T12:38:28.1442515Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-30T12:38:28.1686484Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-10-30T12:38:28.1742002Z ##[endgroup]
+2025-10-30T12:38:28.1743257Z ##[group]Fetching the repository
+2025-10-30T12:38:28.1752641Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +1a1cdf437108ff16fdfa2972d072d51989873aa5:refs/remotes/pull/19/merge
+2025-10-30T12:38:28.7545198Z From https://github.com/Rikiglesias/App-Rise
+2025-10-30T12:38:28.7547222Z  * [new branch]      chore/ci-trigger-build-2                 -> origin/chore/ci-trigger-build-2
+2025-10-30T12:38:28.7550118Z  * [new branch]      develop                                  -> origin/develop
+2025-10-30T12:38:28.7551787Z  * [new branch]      master                                   -> origin/master
+2025-10-30T12:38:28.7553211Z  * [new branch]      release/1.0                              -> origin/release/1.0
+2025-10-30T12:38:28.7554909Z  * [new ref]         1a1cdf437108ff16fdfa2972d072d51989873aa5 -> pull/19/merge
+2025-10-30T12:38:28.7591189Z ##[endgroup]
+2025-10-30T12:38:28.7592652Z ##[group]Determining the checkout info
+2025-10-30T12:38:28.7594050Z ##[endgroup]
+2025-10-30T12:38:28.7598857Z [command]/usr/bin/git sparse-checkout disable
+2025-10-30T12:38:28.7643525Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-10-30T12:38:28.7673071Z ##[group]Checking out the ref
+2025-10-30T12:38:28.7676179Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/19/merge
+2025-10-30T12:38:28.8142726Z Note: switching to 'refs/remotes/pull/19/merge'.
+2025-10-30T12:38:28.8143746Z 
+2025-10-30T12:38:28.8144350Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-10-30T12:38:28.8145511Z changes and commit them, and you can discard any commits you make in this
+2025-10-30T12:38:28.8146652Z state without impacting any branches by switching back to a branch.
+2025-10-30T12:38:28.8147364Z 
+2025-10-30T12:38:28.8147822Z If you want to create a new branch to retain commits you create, you may
+2025-10-30T12:38:28.8148895Z do so (now or later) by using -c with the switch command. Example:
+2025-10-30T12:38:28.8149501Z 
+2025-10-30T12:38:28.8150050Z   git switch -c <new-branch-name>
+2025-10-30T12:38:28.8150560Z 
+2025-10-30T12:38:28.8150875Z Or undo this operation with:
+2025-10-30T12:38:28.8151564Z 
+2025-10-30T12:38:28.8151845Z   git switch -
+2025-10-30T12:38:28.8152219Z 
+2025-10-30T12:38:28.8152813Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-10-30T12:38:28.8154014Z 
+2025-10-30T12:38:28.8155322Z HEAD is now at 1a1cdf4 Merge 28b9b73b52d55d62bc721cc4d23f17e160438655 into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
+2025-10-30T12:38:28.8158481Z ##[endgroup]
+2025-10-30T12:38:28.8195070Z [command]/usr/bin/git log -1 --format=%H
+2025-10-30T12:38:28.8217475Z 1a1cdf437108ff16fdfa2972d072d51989873aa5

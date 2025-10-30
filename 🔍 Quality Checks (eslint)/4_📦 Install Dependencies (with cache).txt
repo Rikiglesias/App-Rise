@@ -1,0 +1,27 @@
+﻿2025-10-30T12:38:41.9357372Z ##[group]Run # Use npm ci with cache for faster installs
+2025-10-30T12:38:41.9358206Z [36;1m# Use npm ci with cache for faster installs[0m
+2025-10-30T12:38:41.9358879Z [36;1mnpm ci --prefer-offline --no-audit[0m
+2025-10-30T12:38:41.9533349Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:38:41.9533820Z env:
+2025-10-30T12:38:41.9534133Z   NODE_VERSION: 20.x
+2025-10-30T12:38:41.9534441Z   CACHE_VERSION: v2
+2025-10-30T12:38:41.9534780Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:38:41.9535147Z   EAS_CLI_VERSION: latest
+2025-10-30T12:38:41.9535478Z ##[endgroup]
+2025-10-30T12:38:51.5509415Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-10-30T12:38:51.7898217Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-10-30T12:38:51.8152436Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-10-30T12:38:51.8398998Z npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+2025-10-30T12:38:52.0045720Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-10-30T12:38:52.0085446Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0097076Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0127491Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0148189Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0153236Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0203758Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0216306Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.1270624Z npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+2025-10-30T12:38:53.2355753Z npm warn deprecated @testing-library/react-native@7.2.0: This version is no longer maintained. Upgrade to @latest (at least v12.4.0).
+2025-10-30T12:38:55.6601542Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-10-30T12:38:59.4740698Z 
+2025-10-30T12:38:59.4741993Z added 1284 packages in 17s

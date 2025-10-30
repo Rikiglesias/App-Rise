@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { AllProviders } from '../helpers/testProviders';
 import AppNavigator from '../../navigation/AppNavigator';
 
@@ -43,9 +42,7 @@ describe('AppNavigator', () => {
   it('should wrap content in NavigationContainer', () => {
     const { UNSAFE_root } = render(
       <AllProviders>
-        <NavigationContainer>
-          <AppNavigator />
-        </NavigationContainer>
+        <AppNavigator />
       </AllProviders>
     );
     expect(UNSAFE_root).toBeTruthy();

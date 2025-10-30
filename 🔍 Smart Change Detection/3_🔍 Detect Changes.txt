@@ -1,0 +1,109 @@
+﻿2025-10-30T12:38:28.8456452Z ##[group]Run # Initialize outputs
+2025-10-30T12:38:28.8457956Z [36;1m# Initialize outputs[0m
+2025-10-30T12:38:28.8459312Z [36;1mecho "should-test=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8460905Z [36;1mecho "should-build=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8462528Z [36;1mecho "build-ios=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8464053Z [36;1mecho "build-android=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8465489Z [36;1mecho "test-scope=unit" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8466719Z [36;1m[0m
+2025-10-30T12:38:28.8467592Z [36;1m# Force build if requested[0m
+2025-10-30T12:38:28.8468708Z [36;1mif [[ "" == "true" ]]; then[0m
+2025-10-30T12:38:28.8469856Z [36;1m  echo "🔧 Force build requested"[0m
+2025-10-30T12:38:28.8471232Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8472589Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8473899Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8475255Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8476583Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8477735Z [36;1m  exit 0[0m
+2025-10-30T12:38:28.8478565Z [36;1mfi[0m
+2025-10-30T12:38:28.8479341Z [36;1m[0m
+2025-10-30T12:38:28.8480618Z [36;1m# Check commit message for ALL triggers (consolidated from all workflows)[0m
+2025-10-30T12:38:28.8482651Z [36;1m# On PR: use PR title or last commit message from the head ref[0m
+2025-10-30T12:38:28.8484123Z [36;1mif [[ "pull_request" == "pull_request" ]]; then[0m
+2025-10-30T12:38:28.8485506Z [36;1m  COMMIT_MSG="Chore: CI trigger [build] on develop"[0m
+2025-10-30T12:38:28.8486797Z [36;1m  echo "📝 PR title: $COMMIT_MSG"[0m
+2025-10-30T12:38:28.8487982Z [36;1m  # Also check last commit message in PR[0m
+2025-10-30T12:38:28.8489251Z [36;1m  LAST_COMMIT_MSG=$(git log -1 --pretty=%B)[0m
+2025-10-30T12:38:28.8490552Z [36;1m  echo "📝 Last commit in PR: $LAST_COMMIT_MSG"[0m
+2025-10-30T12:38:28.8491920Z [36;1m  # Combine both for checking[0m
+2025-10-30T12:38:28.8493115Z [36;1m  COMMIT_MSG="$COMMIT_MSG $LAST_COMMIT_MSG"[0m
+2025-10-30T12:38:28.8494261Z [36;1melse[0m
+2025-10-30T12:38:28.8495084Z [36;1m  COMMIT_MSG=""[0m
+2025-10-30T12:38:28.8496157Z [36;1m  echo "📝 Commit message: $COMMIT_MSG"[0m
+2025-10-30T12:38:28.8497280Z [36;1mfi[0m
+2025-10-30T12:38:28.8498059Z [36;1m[0m
+2025-10-30T12:38:28.8498839Z [36;1m# Build triggers[0m
+2025-10-30T12:38:28.8499975Z [36;1mif [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\] ]]; then[0m
+2025-10-30T12:38:28.8501505Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8502819Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8504092Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8505370Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8506674Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8508005Z [36;1m  echo "✅ Build triggered for both iOS and Android"[0m
+2025-10-30T12:38:28.8509224Z [36;1m  exit 0[0m
+2025-10-30T12:38:28.8510210Z [36;1melif [[ "$COMMIT_MSG" =~ \[build\ ios\] ]]; then[0m
+2025-10-30T12:38:28.8511641Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8513140Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8514394Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8515647Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8516889Z [36;1m  echo "✅ Build triggered for iOS only"[0m
+2025-10-30T12:38:28.8518003Z [36;1m  exit 0[0m
+2025-10-30T12:38:28.8519018Z [36;1melif [[ "$COMMIT_MSG" =~ \[build\ android\] ]]; then[0m
+2025-10-30T12:38:28.8520365Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8521762Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8523051Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8524532Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8525788Z [36;1m  echo "✅ Build triggered for Android only"[0m
+2025-10-30T12:38:28.8526909Z [36;1m  exit 0[0m
+2025-10-30T12:38:28.8527841Z [36;1melif [[ "$COMMIT_MSG" =~ ^build: ]]; then[0m
+2025-10-30T12:38:28.8529087Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8530354Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8531699Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8532946Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8534193Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8535458Z [36;1m  echo "✅ CI Build triggered for both platforms"[0m
+2025-10-30T12:38:28.8536581Z [36;1m  exit 0[0m
+2025-10-30T12:38:28.8537373Z [36;1mfi[0m
+2025-10-30T12:38:28.8538104Z [36;1m[0m
+2025-10-30T12:38:28.8539042Z [36;1m# OTA triggers (already handled in ota-update job)[0m
+2025-10-30T12:38:28.8540469Z [36;1mif [[ "$COMMIT_MSG" =~ \[ota\]|\[hotfix\]|^hotfix: ]]; then[0m
+2025-10-30T12:38:28.8541944Z [36;1m  echo "🔄 OTA Update will be triggered"[0m
+2025-10-30T12:38:28.8543002Z [36;1mfi[0m
+2025-10-30T12:38:28.8543730Z [36;1m[0m
+2025-10-30T12:38:28.8544484Z [36;1m# Detect file changes[0m
+2025-10-30T12:38:28.8545572Z [36;1mif [[ "pull_request" == "pull_request" ]]; then[0m
+2025-10-30T12:38:28.8546902Z [36;1m  BASE_SHA="9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736"[0m
+2025-10-30T12:38:28.8548060Z [36;1melse[0m
+2025-10-30T12:38:28.8549019Z [36;1m  BASE_SHA="c69569525fe0f2bcc1f87c145e85e27343c6f6ab"[0m
+2025-10-30T12:38:28.8550145Z [36;1mfi[0m
+2025-10-30T12:38:28.8550866Z [36;1m[0m
+2025-10-30T12:38:28.8551687Z [36;1m# Get changed files[0m
+2025-10-30T12:38:28.8552924Z [36;1mCHANGED_FILES=$(git diff --name-only $BASE_SHA..HEAD || echo "")[0m
+2025-10-30T12:38:28.8554309Z [36;1mecho "Changed files: $CHANGED_FILES"[0m
+2025-10-30T12:38:28.8555309Z [36;1m[0m
+2025-10-30T12:38:28.8556077Z [36;1m# Check if we need to run tests[0m
+2025-10-30T12:38:28.8557650Z [36;1mif echo "$CHANGED_FILES" | grep -E "\.(ts|tsx|js|jsx|json)$|package\.json|jest\.|test\.|spec\."; then[0m
+2025-10-30T12:38:28.8559310Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8560358Z [36;1mfi[0m
+2025-10-30T12:38:28.8561152Z [36;1m[0m
+2025-10-30T12:38:28.8561944Z [36;1m# Check if we need visual diff tests[0m
+2025-10-30T12:38:28.8563459Z [36;1mif echo "$CHANGED_FILES" | grep -E "src/(components|features)/.*\.(ts|tsx)$"; then[0m
+2025-10-30T12:38:28.8565018Z [36;1m  echo "test-scope=visual" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8566072Z [36;1mfi[0m
+2025-10-30T12:38:28.8566774Z [36;1m[0m
+2025-10-30T12:38:28.8567523Z [36;1m# Check if we need to build[0m
+2025-10-30T12:38:28.8568961Z [36;1mif echo "$CHANGED_FILES" | grep -E "src/|app\.config\.|eas\.json|package\.json"; then[0m
+2025-10-30T12:38:28.8570583Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8571878Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8573070Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:38:28.8574139Z [36;1mfi[0m
+2025-10-30T12:38:28.8611534Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:38:28.8612492Z env:
+2025-10-30T12:38:28.8613425Z   NODE_VERSION: 20.x
+2025-10-30T12:38:28.8614241Z   CACHE_VERSION: v2
+2025-10-30T12:38:28.8615060Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:38:28.8615942Z   EAS_CLI_VERSION: latest
+2025-10-30T12:38:28.8616789Z ##[endgroup]
+2025-10-30T12:38:28.8699988Z 📝 PR title: Chore: CI trigger [build] on develop
+2025-10-30T12:38:28.8720835Z 📝 Last commit in PR: Merge 28b9b73b52d55d62bc721cc4d23f17e160438655 into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
+2025-10-30T12:38:28.8723311Z ✅ Build triggered for both iOS and Android

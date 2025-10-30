@@ -43,7 +43,7 @@ jest.mock('../../navigation/ImpactStackNavigator', () => {
   };
 });
 
-// Mock PlatformBlur
+// Mock UI Components
 jest.mock('../../components/ui', () => ({
   PlatformBlur: ({ children }: { children: React.ReactNode }) =>
     children ?? null,
@@ -58,6 +58,10 @@ jest.mock('../../components/ui', () => ({
   PerfectText: ({ children, ...props }: any) => {
     const { Text } = require('react-native');
     return <Text {...props}>{children}</Text>;
+  },
+  PerfectContainer: ({ children, ...props }: any) => {
+    const { View } = require('react-native');
+    return <View {...props}>{children}</View>;
   },
 }));
 

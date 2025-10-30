@@ -1,0 +1,31 @@
+﻿2025-10-30T12:38:33.6551214Z Current runner version: '2.328.0'
+2025-10-30T12:38:33.6583226Z ##[group]Runner Image Provisioner
+2025-10-30T12:38:33.6584130Z Hosted Compute Agent
+2025-10-30T12:38:33.6584875Z Version: 20250912.392
+2025-10-30T12:38:33.6585571Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+2025-10-30T12:38:33.6586775Z Build Date: 2025-09-12T15:23:14Z
+2025-10-30T12:38:33.6587541Z ##[endgroup]
+2025-10-30T12:38:33.6588147Z ##[group]Operating System
+2025-10-30T12:38:33.6588823Z Ubuntu
+2025-10-30T12:38:33.6589335Z 24.04.3
+2025-10-30T12:38:33.6590051Z LTS
+2025-10-30T12:38:33.6590584Z ##[endgroup]
+2025-10-30T12:38:33.6591141Z ##[group]Runner Image
+2025-10-30T12:38:33.6591837Z Image: ubuntu-24.04
+2025-10-30T12:38:33.6592453Z Version: 20250929.60.1
+2025-10-30T12:38:33.6593693Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-30T12:38:33.6595455Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+2025-10-30T12:38:33.6597149Z ##[endgroup]
+2025-10-30T12:38:33.6598447Z ##[group]GITHUB_TOKEN Permissions
+2025-10-30T12:38:33.6600404Z Contents: read
+2025-10-30T12:38:33.6601165Z Metadata: read
+2025-10-30T12:38:33.6601755Z Packages: read
+2025-10-30T12:38:33.6602333Z ##[endgroup]
+2025-10-30T12:38:33.6604741Z Secret source: Actions
+2025-10-30T12:38:33.6605557Z Prepare workflow directory
+2025-10-30T12:38:33.7016348Z Prepare all required actions
+2025-10-30T12:38:33.7058862Z Getting action download info
+2025-10-30T12:38:34.0574800Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-10-30T12:38:34.4785018Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-10-30T12:38:34.7084434Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-10-30T12:38:34.9494270Z Complete job name: 🔍 Quality Checks (eslint)

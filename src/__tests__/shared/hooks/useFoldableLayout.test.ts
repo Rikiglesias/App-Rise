@@ -1,13 +1,17 @@
 import { renderHook } from '@testing-library/react-native';
 import { useFoldableLayout } from '../../../shared/hooks/useFoldableLayout';
 
-// Mock dependencies
-jest.mock('../../../shared/hooks/useResponsive', () => ({
-  useResponsive: () => ({
-    dimensions: { width: 390, height: 844, breakpoint: 'standard' },
-    deviceInfo: { width: 390, height: 844, isLandscape: false },
-  }),
-}));
+// Mock Dimensions.get() since it's not available in test environment
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native');
+  return {
+    ...RN,
+    Dimensions: {
+      addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+      get: () => ({ width: 390, height: 844 }),
+    },
+  };
+});
 
 describe('useFoldableLayout', () => {
   it('should return layout configuration', () => {

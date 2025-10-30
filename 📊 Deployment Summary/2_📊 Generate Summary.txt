@@ -1,0 +1,69 @@
+﻿2025-10-30T12:39:36.7323294Z ##[group]Run echo "## 🚀 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY
+2025-10-30T12:39:36.7324354Z [36;1mecho "## 🚀 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7325083Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7325632Z [36;1m[0m
+2025-10-30T12:39:36.7326054Z [36;1m# Quality Checks[0m
+2025-10-30T12:39:36.7326619Z [36;1mecho "### 🔍 Quality Checks" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7327278Z [36;1mif [[ "failure" == "success" ]]; then[0m
+2025-10-30T12:39:36.7327961Z [36;1m  echo "✅ All quality checks passed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7328609Z [36;1melse[0m
+2025-10-30T12:39:36.7329123Z [36;1m  echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7329742Z [36;1mfi[0m
+2025-10-30T12:39:36.7330128Z [36;1m[0m
+2025-10-30T12:39:36.7330682Z [36;1m# Visual Regression[0m
+2025-10-30T12:39:36.7331298Z [36;1mecho "### 🎯 Visual Regression" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7332032Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-30T12:39:36.7332763Z [36;1m  echo "✅ Visual regression tests passed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7333522Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-30T12:39:36.7334270Z [36;1m  echo "⏭️ Visual regression tests skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7334965Z [36;1melse[0m
+2025-10-30T12:39:36.7335539Z [36;1m  echo "❌ Visual regression tests failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7336221Z [36;1mfi[0m
+2025-10-30T12:39:36.7336615Z [36;1m[0m
+2025-10-30T12:39:36.7337017Z [36;1m# Builds[0m
+2025-10-30T12:39:36.7337510Z [36;1mecho "### 📱 Builds" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7338146Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-30T12:39:36.7338786Z [36;1m  echo "🍎 iOS: ✅ Success" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7339453Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-30T12:39:36.7340107Z [36;1m  echo "🍎 iOS: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7340941Z [36;1melse[0m
+2025-10-30T12:39:36.7341454Z [36;1m  echo "🍎 iOS: ❌ Failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7342049Z [36;1mfi[0m
+2025-10-30T12:39:36.7342442Z [36;1m[0m
+2025-10-30T12:39:36.7342976Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-30T12:39:36.7343900Z [36;1m  echo "🤖 Android: ✅ Success" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7344578Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-30T12:39:36.7345260Z [36;1m  echo "🤖 Android: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7345890Z [36;1melse[0m
+2025-10-30T12:39:36.7346392Z [36;1m  echo "🤖 Android: ❌ Failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7346997Z [36;1mfi[0m
+2025-10-30T12:39:36.7347385Z [36;1m[0m
+2025-10-30T12:39:36.7347804Z [36;1m# OTA Updates[0m
+2025-10-30T12:39:36.7348350Z [36;1mecho "### 🔄 OTA Updates" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7348998Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-30T12:39:36.7349735Z [36;1m  echo "✅ OTA Update deployed successfully" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7350650Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-30T12:39:36.7351504Z [36;1m  echo "⏭️ OTA Update skipped (no [ota] or [hotfix] trigger)" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7352295Z [36;1melse[0m
+2025-10-30T12:39:36.7352797Z [36;1m  echo "❌ OTA Update failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7353388Z [36;1mfi[0m
+2025-10-30T12:39:36.7353786Z [36;1m[0m
+2025-10-30T12:39:36.7354169Z [36;1m# Bundle Analysis[0m
+2025-10-30T12:39:36.7354736Z [36;1mecho "### 📊 Bundle Analysis" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7355385Z [36;1mif [[ "skipped" == "success" ]]; then[0m
+2025-10-30T12:39:36.7356079Z [36;1m  echo "✅ Bundle analysis completed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7356782Z [36;1melif [[ "skipped" == "skipped" ]]; then[0m
+2025-10-30T12:39:36.7357477Z [36;1m  echo "⏭️ Bundle analysis skipped" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7358296Z [36;1melse[0m
+2025-10-30T12:39:36.7358816Z [36;1m  echo "❌ Bundle analysis failed" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7359442Z [36;1mfi[0m
+2025-10-30T12:39:36.7359822Z [36;1m[0m
+2025-10-30T12:39:36.7360241Z [36;1mecho "" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7361510Z [36;1mecho "🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)" >> $GITHUB_STEP_SUMMARY[0m
+2025-10-30T12:39:36.7398168Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:39:36.7398993Z env:
+2025-10-30T12:39:36.7399398Z   NODE_VERSION: 20.x
+2025-10-30T12:39:36.7399852Z   CACHE_VERSION: v2
+2025-10-30T12:39:36.7400296Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:39:36.7400942Z   EAS_CLI_VERSION: latest
+2025-10-30T12:39:36.7401413Z ##[endgroup]

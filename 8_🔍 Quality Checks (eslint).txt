@@ -1,0 +1,218 @@
+﻿2025-10-30T12:38:33.6551941Z Current runner version: '2.328.0'
+2025-10-30T12:38:33.6583251Z ##[group]Runner Image Provisioner
+2025-10-30T12:38:33.6584134Z Hosted Compute Agent
+2025-10-30T12:38:33.6584878Z Version: 20250912.392
+2025-10-30T12:38:33.6585574Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+2025-10-30T12:38:33.6586783Z Build Date: 2025-09-12T15:23:14Z
+2025-10-30T12:38:33.6587545Z ##[endgroup]
+2025-10-30T12:38:33.6588150Z ##[group]Operating System
+2025-10-30T12:38:33.6588826Z Ubuntu
+2025-10-30T12:38:33.6589338Z 24.04.3
+2025-10-30T12:38:33.6590055Z LTS
+2025-10-30T12:38:33.6590588Z ##[endgroup]
+2025-10-30T12:38:33.6591144Z ##[group]Runner Image
+2025-10-30T12:38:33.6591840Z Image: ubuntu-24.04
+2025-10-30T12:38:33.6592458Z Version: 20250929.60.1
+2025-10-30T12:38:33.6593700Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-30T12:38:33.6595730Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+2025-10-30T12:38:33.6597155Z ##[endgroup]
+2025-10-30T12:38:33.6598451Z ##[group]GITHUB_TOKEN Permissions
+2025-10-30T12:38:33.6600422Z Contents: read
+2025-10-30T12:38:33.6601169Z Metadata: read
+2025-10-30T12:38:33.6601758Z Packages: read
+2025-10-30T12:38:33.6602336Z ##[endgroup]
+2025-10-30T12:38:33.6604760Z Secret source: Actions
+2025-10-30T12:38:33.6605561Z Prepare workflow directory
+2025-10-30T12:38:33.7016398Z Prepare all required actions
+2025-10-30T12:38:33.7058901Z Getting action download info
+2025-10-30T12:38:34.0574912Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-10-30T12:38:34.4785062Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-10-30T12:38:34.7084491Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-10-30T12:38:34.9494334Z Complete job name: 🔍 Quality Checks (eslint)
+2025-10-30T12:38:35.0233019Z ##[group]Run actions/checkout@v4
+2025-10-30T12:38:35.0234134Z with:
+2025-10-30T12:38:35.0234659Z   repository: Rikiglesias/App-Rise
+2025-10-30T12:38:35.0235714Z   token: ***
+2025-10-30T12:38:35.0236447Z   ssh-strict: true
+2025-10-30T12:38:35.0236966Z   ssh-user: git
+2025-10-30T12:38:35.0237489Z   persist-credentials: true
+2025-10-30T12:38:35.0238090Z   clean: true
+2025-10-30T12:38:35.0238617Z   sparse-checkout-cone-mode: true
+2025-10-30T12:38:35.0239291Z   fetch-depth: 1
+2025-10-30T12:38:35.0239796Z   fetch-tags: false
+2025-10-30T12:38:35.0240300Z   show-progress: true
+2025-10-30T12:38:35.0240813Z   lfs: false
+2025-10-30T12:38:35.0241298Z   submodules: false
+2025-10-30T12:38:35.0241836Z   set-safe-directory: true
+2025-10-30T12:38:35.0242721Z env:
+2025-10-30T12:38:35.0243200Z   NODE_VERSION: 20.x
+2025-10-30T12:38:35.0243785Z   CACHE_VERSION: v2
+2025-10-30T12:38:35.0244300Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:38:35.0244902Z   EAS_CLI_VERSION: latest
+2025-10-30T12:38:35.0245523Z ##[endgroup]
+2025-10-30T12:38:35.1400207Z Syncing repository: Rikiglesias/App-Rise
+2025-10-30T12:38:35.1402736Z ##[group]Getting Git version info
+2025-10-30T12:38:35.1404388Z Working directory is '/home/runner/work/App-Rise/App-Rise'
+2025-10-30T12:38:35.1407199Z [command]/usr/bin/git version
+2025-10-30T12:38:35.1466394Z git version 2.51.0
+2025-10-30T12:38:35.1493043Z ##[endgroup]
+2025-10-30T12:38:35.1508410Z Temporarily overriding HOME='/home/runner/work/_temp/20151df0-c298-4d50-8718-a725517cfed9' before making global git config changes
+2025-10-30T12:38:35.1511608Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-30T12:38:35.1514480Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:38:35.1555034Z Deleting the contents of '/home/runner/work/App-Rise/App-Rise'
+2025-10-30T12:38:35.1558732Z ##[group]Initializing the repository
+2025-10-30T12:38:35.1562899Z [command]/usr/bin/git init /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:38:35.1686493Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-10-30T12:38:35.1689167Z hint: is subject to change. To configure the initial branch name to use in all
+2025-10-30T12:38:35.1691608Z hint: of your new repositories, which will suppress this warning, call:
+2025-10-30T12:38:35.1693228Z hint:
+2025-10-30T12:38:35.1694960Z hint: 	git config --global init.defaultBranch <name>
+2025-10-30T12:38:35.1697241Z hint:
+2025-10-30T12:38:35.1699536Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-10-30T12:38:35.1702836Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-10-30T12:38:35.1705003Z hint:
+2025-10-30T12:38:35.1706203Z hint: 	git branch -m <name>
+2025-10-30T12:38:35.1707461Z hint:
+2025-10-30T12:38:35.1709280Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-10-30T12:38:35.1712424Z Initialized empty Git repository in /home/runner/work/App-Rise/App-Rise/.git/
+2025-10-30T12:38:35.1717022Z [command]/usr/bin/git remote add origin https://github.com/Rikiglesias/App-Rise
+2025-10-30T12:38:35.1756357Z ##[endgroup]
+2025-10-30T12:38:35.1757613Z ##[group]Disabling automatic garbage collection
+2025-10-30T12:38:35.1759792Z [command]/usr/bin/git config --local gc.auto 0
+2025-10-30T12:38:35.1791602Z ##[endgroup]
+2025-10-30T12:38:35.1792715Z ##[group]Setting up auth
+2025-10-30T12:38:35.1798813Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-30T12:38:35.1831678Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-30T12:38:35.2207041Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-30T12:38:35.2241954Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-30T12:38:35.2476612Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-10-30T12:38:35.2524986Z ##[endgroup]
+2025-10-30T12:38:35.2526422Z ##[group]Fetching the repository
+2025-10-30T12:38:35.2538258Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +1a1cdf437108ff16fdfa2972d072d51989873aa5:refs/remotes/pull/19/merge
+2025-10-30T12:38:35.6804031Z From https://github.com/Rikiglesias/App-Rise
+2025-10-30T12:38:35.6806317Z  * [new ref]         1a1cdf437108ff16fdfa2972d072d51989873aa5 -> pull/19/merge
+2025-10-30T12:38:35.6847058Z ##[endgroup]
+2025-10-30T12:38:35.6849017Z ##[group]Determining the checkout info
+2025-10-30T12:38:35.6851285Z ##[endgroup]
+2025-10-30T12:38:35.6857580Z [command]/usr/bin/git sparse-checkout disable
+2025-10-30T12:38:35.6909293Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-10-30T12:38:35.6941805Z ##[group]Checking out the ref
+2025-10-30T12:38:35.6944653Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/19/merge
+2025-10-30T12:38:35.7458310Z Note: switching to 'refs/remotes/pull/19/merge'.
+2025-10-30T12:38:35.7459470Z 
+2025-10-30T12:38:35.7460285Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-10-30T12:38:35.7462227Z changes and commit them, and you can discard any commits you make in this
+2025-10-30T12:38:35.7465039Z state without impacting any branches by switching back to a branch.
+2025-10-30T12:38:35.7466929Z 
+2025-10-30T12:38:35.7467882Z If you want to create a new branch to retain commits you create, you may
+2025-10-30T12:38:35.7470062Z do so (now or later) by using -c with the switch command. Example:
+2025-10-30T12:38:35.7471308Z 
+2025-10-30T12:38:35.7471803Z   git switch -c <new-branch-name>
+2025-10-30T12:38:35.7472812Z 
+2025-10-30T12:38:35.7473515Z Or undo this operation with:
+2025-10-30T12:38:35.7474475Z 
+2025-10-30T12:38:35.7474996Z   git switch -
+2025-10-30T12:38:35.7476360Z 
+2025-10-30T12:38:35.7477496Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-10-30T12:38:35.7479115Z 
+2025-10-30T12:38:35.7481049Z HEAD is now at 1a1cdf4 Merge 28b9b73b52d55d62bc721cc4d23f17e160438655 into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
+2025-10-30T12:38:35.7486618Z ##[endgroup]
+2025-10-30T12:38:35.7522795Z [command]/usr/bin/git log -1 --format=%H
+2025-10-30T12:38:35.7547361Z 1a1cdf437108ff16fdfa2972d072d51989873aa5
+2025-10-30T12:38:35.7862432Z ##[group]Run actions/setup-node@v4
+2025-10-30T12:38:35.7863386Z with:
+2025-10-30T12:38:35.7864077Z   node-version: 20.x
+2025-10-30T12:38:35.7864834Z   cache: npm
+2025-10-30T12:38:35.7865559Z   always-auth: false
+2025-10-30T12:38:35.7866487Z   check-latest: false
+2025-10-30T12:38:35.7867520Z   token: ***
+2025-10-30T12:38:35.7868223Z env:
+2025-10-30T12:38:35.7868892Z   NODE_VERSION: 20.x
+2025-10-30T12:38:35.7869684Z   CACHE_VERSION: v2
+2025-10-30T12:38:35.7870454Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:38:35.7871320Z   EAS_CLI_VERSION: latest
+2025-10-30T12:38:35.7872159Z ##[endgroup]
+2025-10-30T12:38:35.9819379Z Found in cache @ /opt/hostedtoolcache/node/20.19.5/x64
+2025-10-30T12:38:35.9824344Z ##[group]Environment details
+2025-10-30T12:38:39.6472109Z node: v20.19.5
+2025-10-30T12:38:39.6473118Z npm: 10.8.2
+2025-10-30T12:38:39.6473731Z yarn: 1.22.22
+2025-10-30T12:38:39.6476057Z ##[endgroup]
+2025-10-30T12:38:39.6500540Z [command]/opt/hostedtoolcache/node/20.19.5/x64/bin/npm config get cache
+2025-10-30T12:38:40.0647912Z /home/runner/.npm
+2025-10-30T12:38:40.2210082Z Cache hit for: node-cache-Linux-x64-npm-72ec4cf4fb159c1dfb634b3b163d0245b53800fdca0f008d6acf18fa32586e05
+2025-10-30T12:38:41.2832284Z Received 98618842 of 102813146 (95.9%), 94.0 MBs/sec
+2025-10-30T12:38:41.4476459Z Received 102813146 of 102813146 (100.0%), 84.1 MBs/sec
+2025-10-30T12:38:41.4478219Z Cache Size: ~98 MB (102813146 B)
+2025-10-30T12:38:41.4522325Z [command]/usr/bin/tar -xf /home/runner/work/_temp/b39773ad-d087-4623-ad34-12aabfff0212/cache.tzst -P -C /home/runner/work/App-Rise/App-Rise --use-compress-program unzstd
+2025-10-30T12:38:41.8751503Z Cache restored successfully
+2025-10-30T12:38:41.9034912Z Cache restored from key: node-cache-Linux-x64-npm-72ec4cf4fb159c1dfb634b3b163d0245b53800fdca0f008d6acf18fa32586e05
+2025-10-30T12:38:41.9357409Z ##[group]Run # Use npm ci with cache for faster installs
+2025-10-30T12:38:41.9358245Z [36;1m# Use npm ci with cache for faster installs[0m
+2025-10-30T12:38:41.9358885Z [36;1mnpm ci --prefer-offline --no-audit[0m
+2025-10-30T12:38:41.9533382Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:38:41.9533826Z env:
+2025-10-30T12:38:41.9534137Z   NODE_VERSION: 20.x
+2025-10-30T12:38:41.9534446Z   CACHE_VERSION: v2
+2025-10-30T12:38:41.9534784Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:38:41.9535150Z   EAS_CLI_VERSION: latest
+2025-10-30T12:38:41.9535483Z ##[endgroup]
+2025-10-30T12:38:51.5509486Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-10-30T12:38:51.7898261Z npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2025-10-30T12:38:51.8152627Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2025-10-30T12:38:51.8399044Z npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+2025-10-30T12:38:52.0045784Z npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2025-10-30T12:38:52.0085460Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0097088Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0127503Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0148201Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0153247Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0203769Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.0216346Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-10-30T12:38:52.1270708Z npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+2025-10-30T12:38:53.2355800Z npm warn deprecated @testing-library/react-native@7.2.0: This version is no longer maintained. Upgrade to @latest (at least v12.4.0).
+2025-10-30T12:38:55.6601599Z npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2025-10-30T12:38:59.4740765Z 
+2025-10-30T12:38:59.4742002Z added 1284 packages in 17s
+2025-10-30T12:38:59.5500088Z ##[group]Run case "eslint" in
+2025-10-30T12:38:59.5500459Z [36;1mcase "eslint" in[0m
+2025-10-30T12:38:59.5500741Z [36;1m  "typescript")[0m
+2025-10-30T12:38:59.5501049Z [36;1m    echo "🔍 TypeScript Check"[0m
+2025-10-30T12:38:59.5501414Z [36;1m    npx tsc --noEmit --skipLibCheck[0m
+2025-10-30T12:38:59.5501748Z [36;1m    ;;[0m
+2025-10-30T12:38:59.5501971Z [36;1m  "eslint")[0m
+2025-10-30T12:38:59.5502232Z [36;1m    echo "📝 ESLint Check"[0m
+2025-10-30T12:38:59.5502630Z [36;1m    npx eslint "src/**/*.{ts,tsx}" --max-warnings 0 --cache[0m
+2025-10-30T12:38:59.5503015Z [36;1m    ;;[0m
+2025-10-30T12:38:59.5503248Z [36;1m  "prettier")[0m
+2025-10-30T12:38:59.5503525Z [36;1m    echo "🎨 Prettier Check"[0m
+2025-10-30T12:38:59.5503922Z [36;1m    npx prettier --check "src/**/*.{ts,tsx}" --cache[0m
+2025-10-30T12:38:59.5504275Z [36;1m    ;;[0m
+2025-10-30T12:38:59.5504491Z [36;1m  "tests")[0m
+2025-10-30T12:38:59.5504735Z [36;1m    echo "🧪 Unit Tests"[0m
+2025-10-30T12:38:59.5505142Z [36;1m    npm test -- --coverage --watchAll=false --maxWorkers=2[0m
+2025-10-30T12:38:59.5505517Z [36;1m    ;;[0m
+2025-10-30T12:38:59.5505737Z [36;1mesac[0m
+2025-10-30T12:38:59.5541372Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:38:59.5541670Z env:
+2025-10-30T12:38:59.5541897Z   NODE_VERSION: 20.x
+2025-10-30T12:38:59.5542152Z   CACHE_VERSION: v2
+2025-10-30T12:38:59.5542415Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:38:59.5542703Z   EAS_CLI_VERSION: latest
+2025-10-30T12:38:59.5542971Z ##[endgroup]
+2025-10-30T12:38:59.5609857Z 📝 ESLint Check
+2025-10-30T12:39:14.1168694Z Post job cleanup.
+2025-10-30T12:39:14.2788266Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-72ec4cf4fb159c1dfb634b3b163d0245b53800fdca0f008d6acf18fa32586e05, not saving cache.
+2025-10-30T12:39:14.2984113Z Post job cleanup.
+2025-10-30T12:39:14.4085792Z [command]/usr/bin/git version
+2025-10-30T12:39:14.4136616Z git version 2.51.0
+2025-10-30T12:39:14.4220379Z Temporarily overriding HOME='/home/runner/work/_temp/b9a8df55-e93b-43ab-b53d-448f26dc5e1c' before making global git config changes
+2025-10-30T12:39:14.4221611Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-30T12:39:14.4229912Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:39:14.4282185Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-30T12:39:14.4328200Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-30T12:39:14.4619078Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-30T12:39:14.4652067Z http.https://github.com/.extraheader
+2025-10-30T12:39:14.4672075Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-10-30T12:39:14.4720328Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-30T12:39:14.5151267Z Cleaning up orphan processes
