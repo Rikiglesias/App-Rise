@@ -1,7 +1,0 @@
-﻿2025-10-30T12:49:21.5949767Z Evaluate and set job outputs
-2025-10-30T12:49:21.5959397Z Set output 'should-test'
-2025-10-30T12:49:21.5961838Z Set output 'should-build'
-2025-10-30T12:49:21.5963003Z Set output 'build-ios'
-2025-10-30T12:49:21.5964042Z Set output 'build-android'
-2025-10-30T12:49:21.5965123Z Set output 'test-scope'
-2025-10-30T12:49:21.5966519Z Cleaning up orphan processes

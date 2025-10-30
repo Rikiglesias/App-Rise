@@ -1,251 +1,251 @@
-﻿2025-10-29T15:31:54.7545993Z Current runner version: '2.328.0'
-2025-10-29T15:31:54.7570105Z ##[group]Runner Image Provisioner
-2025-10-29T15:31:54.7571128Z Hosted Compute Agent
-2025-10-29T15:31:54.7571638Z Version: 20250912.392
-2025-10-29T15:31:54.7572334Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
-2025-10-29T15:31:54.7573025Z Build Date: 2025-09-12T15:23:14Z
-2025-10-29T15:31:54.7573596Z ##[endgroup]
-2025-10-29T15:31:54.7574152Z ##[group]Operating System
-2025-10-29T15:31:54.7574707Z Ubuntu
-2025-10-29T15:31:54.7575171Z 24.04.3
-2025-10-29T15:31:54.7575672Z LTS
-2025-10-29T15:31:54.7576158Z ##[endgroup]
-2025-10-29T15:31:54.7576606Z ##[group]Runner Image
-2025-10-29T15:31:54.7577205Z Image: ubuntu-24.04
-2025-10-29T15:31:54.7577675Z Version: 20250929.60.1
-2025-10-29T15:31:54.7578697Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
-2025-10-29T15:31:54.7580250Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
-2025-10-29T15:31:54.7581384Z ##[endgroup]
-2025-10-29T15:31:54.7582499Z ##[group]GITHUB_TOKEN Permissions
-2025-10-29T15:31:54.7584285Z Contents: read
-2025-10-29T15:31:54.7584974Z Metadata: read
-2025-10-29T15:31:54.7585499Z Packages: read
-2025-10-29T15:31:54.7585999Z ##[endgroup]
-2025-10-29T15:31:54.7588435Z Secret source: Actions
-2025-10-29T15:31:54.7589142Z Prepare workflow directory
-2025-10-29T15:31:54.7981338Z Prepare all required actions
-2025-10-29T15:31:54.8018652Z Getting action download info
-2025-10-29T15:31:55.2423143Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
-2025-10-29T15:31:55.4689890Z Complete job name: 🔍 Smart Change Detection
-2025-10-29T15:31:55.5356322Z ##[group]Run actions/checkout@v4
-2025-10-29T15:31:55.5357141Z with:
-2025-10-29T15:31:55.5357532Z   fetch-depth: 0
-2025-10-29T15:31:55.5357975Z   repository: Rikiglesias/App-Rise
-2025-10-29T15:31:55.5358659Z   token: ***
-2025-10-29T15:31:55.5359041Z   ssh-strict: true
-2025-10-29T15:31:55.5359433Z   ssh-user: git
-2025-10-29T15:31:55.5359849Z   persist-credentials: true
-2025-10-29T15:31:55.5360295Z   clean: true
-2025-10-29T15:31:55.5360871Z   sparse-checkout-cone-mode: true
-2025-10-29T15:31:55.5361358Z   fetch-tags: false
-2025-10-29T15:31:55.5361744Z   show-progress: true
-2025-10-29T15:31:55.5362141Z   lfs: false
-2025-10-29T15:31:55.5362500Z   submodules: false
-2025-10-29T15:31:55.5362901Z   set-safe-directory: true
-2025-10-29T15:31:55.5363562Z env:
-2025-10-29T15:31:55.5363922Z   NODE_VERSION: 20.x
-2025-10-29T15:31:55.5364318Z   CACHE_VERSION: v2
-2025-10-29T15:31:55.5364716Z   EXPO_CLI_VERSION: latest
-2025-10-29T15:31:55.5365152Z   EAS_CLI_VERSION: latest
-2025-10-29T15:31:55.5365601Z ##[endgroup]
-2025-10-29T15:31:55.6444336Z Syncing repository: Rikiglesias/App-Rise
-2025-10-29T15:31:55.6446167Z ##[group]Getting Git version info
-2025-10-29T15:31:55.6446865Z Working directory is '/home/runner/work/App-Rise/App-Rise'
-2025-10-29T15:31:55.6447791Z [command]/usr/bin/git version
-2025-10-29T15:31:55.6539180Z git version 2.51.0
-2025-10-29T15:31:55.6565629Z ##[endgroup]
-2025-10-29T15:31:55.6579051Z Temporarily overriding HOME='/home/runner/work/_temp/72e67af3-327c-49cb-acef-02d1bd3d0b53' before making global git config changes
-2025-10-29T15:31:55.6581330Z Adding repository directory to the temporary git global config as a safe directory
-2025-10-29T15:31:55.6584325Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
-2025-10-29T15:31:55.6620190Z Deleting the contents of '/home/runner/work/App-Rise/App-Rise'
-2025-10-29T15:31:55.6623906Z ##[group]Initializing the repository
-2025-10-29T15:31:55.6627686Z [command]/usr/bin/git init /home/runner/work/App-Rise/App-Rise
-2025-10-29T15:31:55.6746040Z hint: Using 'master' as the name for the initial branch. This default branch name
-2025-10-29T15:31:55.6747525Z hint: is subject to change. To configure the initial branch name to use in all
-2025-10-29T15:31:55.6748584Z hint: of your new repositories, which will suppress this warning, call:
-2025-10-29T15:31:55.6750052Z hint:
-2025-10-29T15:31:55.6750871Z hint: 	git config --global init.defaultBranch <name>
-2025-10-29T15:31:55.6751556Z hint:
-2025-10-29T15:31:55.6752178Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
-2025-10-29T15:31:55.6753304Z hint: 'development'. The just-created branch can be renamed via this command:
-2025-10-29T15:31:55.6754151Z hint:
-2025-10-29T15:31:55.6754603Z hint: 	git branch -m <name>
-2025-10-29T15:31:55.6755226Z hint:
-2025-10-29T15:31:55.6756131Z hint: Disable this message with "git config set advice.defaultBranchName false"
-2025-10-29T15:31:55.6757309Z Initialized empty Git repository in /home/runner/work/App-Rise/App-Rise/.git/
-2025-10-29T15:31:55.6761463Z [command]/usr/bin/git remote add origin https://github.com/Rikiglesias/App-Rise
-2025-10-29T15:31:55.6795817Z ##[endgroup]
-2025-10-29T15:31:55.6796505Z ##[group]Disabling automatic garbage collection
-2025-10-29T15:31:55.6799847Z [command]/usr/bin/git config --local gc.auto 0
-2025-10-29T15:31:55.6826919Z ##[endgroup]
-2025-10-29T15:31:55.6827612Z ##[group]Setting up auth
-2025-10-29T15:31:55.6833933Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-2025-10-29T15:31:55.6862446Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-2025-10-29T15:31:55.7226534Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-2025-10-29T15:31:55.7258710Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-2025-10-29T15:31:55.7500230Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
-2025-10-29T15:31:55.7544618Z ##[endgroup]
-2025-10-29T15:31:55.7545868Z ##[group]Fetching the repository
-2025-10-29T15:31:55.7555456Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +63b9c4c32fdc295327cdf01cb4c2e3341dd6efe9:refs/remotes/pull/19/merge
-2025-10-29T15:31:56.7937502Z From https://github.com/Rikiglesias/App-Rise
-2025-10-29T15:31:56.7938660Z  * [new branch]      chore/ci-trigger-build-2                 -> origin/chore/ci-trigger-build-2
-2025-10-29T15:31:56.7939634Z  * [new branch]      develop                                  -> origin/develop
-2025-10-29T15:31:56.7940420Z  * [new branch]      master                                   -> origin/master
-2025-10-29T15:31:56.7941635Z  * [new branch]      release/1.0                              -> origin/release/1.0
-2025-10-29T15:31:56.7942480Z  * [new ref]         63b9c4c32fdc295327cdf01cb4c2e3341dd6efe9 -> pull/19/merge
-2025-10-29T15:31:56.7986380Z ##[endgroup]
-2025-10-29T15:31:56.7987708Z ##[group]Determining the checkout info
-2025-10-29T15:31:56.7991025Z ##[endgroup]
-2025-10-29T15:31:56.7996247Z [command]/usr/bin/git sparse-checkout disable
-2025-10-29T15:31:56.8040998Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
-2025-10-29T15:31:56.8070572Z ##[group]Checking out the ref
-2025-10-29T15:31:56.8075151Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/19/merge
-2025-10-29T15:31:56.8474269Z Note: switching to 'refs/remotes/pull/19/merge'.
-2025-10-29T15:31:56.8475320Z 
-2025-10-29T15:31:56.8476198Z You are in 'detached HEAD' state. You can look around, make experimental
-2025-10-29T15:31:56.8478237Z changes and commit them, and you can discard any commits you make in this
-2025-10-29T15:31:56.8480285Z state without impacting any branches by switching back to a branch.
-2025-10-29T15:31:56.8481718Z 
-2025-10-29T15:31:56.8482498Z If you want to create a new branch to retain commits you create, you may
-2025-10-29T15:31:56.8483898Z do so (now or later) by using -c with the switch command. Example:
-2025-10-29T15:31:56.8484619Z 
-2025-10-29T15:31:56.8485201Z   git switch -c <new-branch-name>
-2025-10-29T15:31:56.8485804Z 
-2025-10-29T15:31:56.8486111Z Or undo this operation with:
-2025-10-29T15:31:56.8486855Z 
-2025-10-29T15:31:56.8487303Z   git switch -
-2025-10-29T15:31:56.8487980Z 
-2025-10-29T15:31:56.8488948Z Turn off this advice by setting config variable advice.detachedHead to false
-2025-10-29T15:31:56.8490261Z 
-2025-10-29T15:31:56.8491643Z HEAD is now at 63b9c4c Merge 1fe9c4a8a6fde6c9832d108d9fcba6ff76cc85ce into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
-2025-10-29T15:31:56.8495352Z ##[endgroup]
-2025-10-29T15:31:56.8527506Z [command]/usr/bin/git log -1 --format=%H
-2025-10-29T15:31:56.8548870Z 63b9c4c32fdc295327cdf01cb4c2e3341dd6efe9
-2025-10-29T15:31:56.8783205Z ##[group]Run # Initialize outputs
-2025-10-29T15:31:56.8784720Z [36;1m# Initialize outputs[0m
-2025-10-29T15:31:56.8786090Z [36;1mecho "should-test=false" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8787747Z [36;1mecho "should-build=false" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8789332Z [36;1mecho "build-ios=false" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8791161Z [36;1mecho "build-android=false" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8792712Z [36;1mecho "test-scope=unit" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8794051Z [36;1m[0m
-2025-10-29T15:31:56.8794928Z [36;1m# Force build if requested[0m
-2025-10-29T15:31:56.8796110Z [36;1mif [[ "" == "true" ]]; then[0m
-2025-10-29T15:31:56.8797341Z [36;1m  echo "🔧 Force build requested"[0m
-2025-10-29T15:31:56.8798703Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8800169Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8801795Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8803247Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8804721Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8805995Z [36;1m  exit 0[0m
-2025-10-29T15:31:56.8806843Z [36;1mfi[0m
-2025-10-29T15:31:56.8807659Z [36;1m[0m
-2025-10-29T15:31:56.8809056Z [36;1m# Check commit message for ALL triggers (consolidated from all workflows)[0m
-2025-10-29T15:31:56.8811269Z [36;1m# On PR: use PR title or last commit message from the head ref[0m
-2025-10-29T15:31:56.8812938Z [36;1mif [[ "pull_request" == "pull_request" ]]; then[0m
-2025-10-29T15:31:56.8814517Z [36;1m  COMMIT_MSG="Chore: CI trigger [build] on develop"[0m
-2025-10-29T15:31:56.8815985Z [36;1m  echo "📝 PR title: $COMMIT_MSG"[0m
-2025-10-29T15:31:56.8817296Z [36;1m  # Also check last commit message in PR[0m
-2025-10-29T15:31:56.8818713Z [36;1m  LAST_COMMIT_MSG=$(git log -1 --pretty=%B)[0m
-2025-10-29T15:31:56.8820163Z [36;1m  echo "📝 Last commit in PR: $LAST_COMMIT_MSG"[0m
-2025-10-29T15:31:56.8821647Z [36;1m  # Combine both for checking[0m
-2025-10-29T15:31:56.8822962Z [36;1m  COMMIT_MSG="$COMMIT_MSG $LAST_COMMIT_MSG"[0m
-2025-10-29T15:31:56.8824246Z [36;1melse[0m
-2025-10-29T15:31:56.8825102Z [36;1m  COMMIT_MSG=""[0m
-2025-10-29T15:31:56.8826193Z [36;1m  echo "📝 Commit message: $COMMIT_MSG"[0m
-2025-10-29T15:31:56.8827441Z [36;1mfi[0m
-2025-10-29T15:31:56.8828244Z [36;1m[0m
-2025-10-29T15:31:56.8829062Z [36;1m# Build triggers[0m
-2025-10-29T15:31:56.8830305Z [36;1mif [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\] ]]; then[0m
-2025-10-29T15:31:56.8831968Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8833407Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8834815Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8836253Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8837731Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8839259Z [36;1m  echo "✅ Build triggered for both iOS and Android"[0m
-2025-10-29T15:31:56.8840763Z [36;1m  exit 0[0m
-2025-10-29T15:31:56.8841826Z [36;1melif [[ "$COMMIT_MSG" =~ \[build\ ios\] ]]; then[0m
-2025-10-29T15:31:56.8843306Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8844996Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8846407Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8847812Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8849211Z [36;1m  echo "✅ Build triggered for iOS only"[0m
-2025-10-29T15:31:56.8850453Z [36;1m  exit 0[0m
-2025-10-29T15:31:56.8851733Z [36;1melif [[ "$COMMIT_MSG" =~ \[build\ android\] ]]; then[0m
-2025-10-29T15:31:56.8853397Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8854857Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8856560Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8858030Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8859451Z [36;1m  echo "✅ Build triggered for Android only"[0m
-2025-10-29T15:31:56.8860844Z [36;1m  exit 0[0m
-2025-10-29T15:31:56.8861820Z [36;1melif [[ "$COMMIT_MSG" =~ ^build: ]]; then[0m
-2025-10-29T15:31:56.8863237Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8864647Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8866053Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8867443Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8868853Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8870260Z [36;1m  echo "✅ CI Build triggered for both platforms"[0m
-2025-10-29T15:31:56.8871658Z [36;1m  exit 0[0m
-2025-10-29T15:31:56.8872447Z [36;1mfi[0m
-2025-10-29T15:31:56.8873191Z [36;1m[0m
-2025-10-29T15:31:56.8874544Z [36;1m# OTA triggers (already handled in ota-update job)[0m
-2025-10-29T15:31:56.8876184Z [36;1mif [[ "$COMMIT_MSG" =~ \[ota\]|\[hotfix\]|^hotfix: ]]; then[0m
-2025-10-29T15:31:56.8877678Z [36;1m  echo "🔄 OTA Update will be triggered"[0m
-2025-10-29T15:31:56.8878895Z [36;1mfi[0m
-2025-10-29T15:31:56.8879645Z [36;1m[0m
-2025-10-29T15:31:56.8880409Z [36;1m# Detect file changes[0m
-2025-10-29T15:31:56.8881723Z [36;1mif [[ "pull_request" == "pull_request" ]]; then[0m
-2025-10-29T15:31:56.8883252Z [36;1m  BASE_SHA="9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736"[0m
-2025-10-29T15:31:56.8884568Z [36;1melse[0m
-2025-10-29T15:31:56.8885605Z [36;1m  BASE_SHA="672d12049b3f61de325011073c5d62175a070406"[0m
-2025-10-29T15:31:56.8886890Z [36;1mfi[0m
-2025-10-29T15:31:56.8887624Z [36;1m[0m
-2025-10-29T15:31:56.8888367Z [36;1m# Get changed files[0m
-2025-10-29T15:31:56.8889776Z [36;1mCHANGED_FILES=$(git diff --name-only $BASE_SHA..HEAD || echo "")[0m
-2025-10-29T15:31:56.8891599Z [36;1mecho "Changed files: $CHANGED_FILES"[0m
-2025-10-29T15:31:56.8892742Z [36;1m[0m
-2025-10-29T15:31:56.8893552Z [36;1m# Check if we need to run tests[0m
-2025-10-29T15:31:56.8895412Z [36;1mif echo "$CHANGED_FILES" | grep -E "\.(ts|tsx|js|jsx|json)$|package\.json|jest\.|test\.|spec\."; then[0m
-2025-10-29T15:31:56.8897400Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8898593Z [36;1mfi[0m
-2025-10-29T15:31:56.8899319Z [36;1m[0m
-2025-10-29T15:31:56.8900133Z [36;1m# Check if we need visual diff tests[0m
-2025-10-29T15:31:56.8901970Z [36;1mif echo "$CHANGED_FILES" | grep -E "src/(components|features)/.*\.(ts|tsx)$"; then[0m
-2025-10-29T15:31:56.8903808Z [36;1m  echo "test-scope=visual" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8905007Z [36;1mfi[0m
-2025-10-29T15:31:56.8905741Z [36;1m[0m
-2025-10-29T15:31:56.8906507Z [36;1m# Check if we need to build[0m
-2025-10-29T15:31:56.8908179Z [36;1mif echo "$CHANGED_FILES" | grep -E "src/|app\.config\.|eas\.json|package\.json"; then[0m
-2025-10-29T15:31:56.8910059Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8911487Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8912841Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
-2025-10-29T15:31:56.8914040Z [36;1mfi[0m
-2025-10-29T15:31:56.8952451Z shell: /usr/bin/bash -e {0}
-2025-10-29T15:31:56.8953437Z env:
-2025-10-29T15:31:56.8954361Z   NODE_VERSION: 20.x
-2025-10-29T15:31:56.8955202Z   CACHE_VERSION: v2
-2025-10-29T15:31:56.8956033Z   EXPO_CLI_VERSION: latest
-2025-10-29T15:31:56.8956968Z   EAS_CLI_VERSION: latest
-2025-10-29T15:31:56.8957844Z ##[endgroup]
-2025-10-29T15:31:56.9042287Z 📝 PR title: Chore: CI trigger [build] on develop
-2025-10-29T15:31:56.9063472Z 📝 Last commit in PR: Merge 1fe9c4a8a6fde6c9832d108d9fcba6ff76cc85ce into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
-2025-10-29T15:31:56.9066877Z ✅ Build triggered for both iOS and Android
-2025-10-29T15:31:56.9254658Z Post job cleanup.
-2025-10-29T15:31:57.0190253Z [command]/usr/bin/git version
-2025-10-29T15:31:57.0226415Z git version 2.51.0
-2025-10-29T15:31:57.0270122Z Temporarily overriding HOME='/home/runner/work/_temp/b26ff86f-78a9-468f-8070-088754bd3b3e' before making global git config changes
-2025-10-29T15:31:57.0273854Z Adding repository directory to the temporary git global config as a safe directory
-2025-10-29T15:31:57.0283350Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
-2025-10-29T15:31:57.0316544Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-2025-10-29T15:31:57.0348217Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-2025-10-29T15:31:57.0574251Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-2025-10-29T15:31:57.0594035Z http.https://github.com/.extraheader
-2025-10-29T15:31:57.0606346Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-2025-10-29T15:31:57.0636433Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-2025-10-29T15:31:57.0975757Z Evaluate and set job outputs
-2025-10-29T15:31:57.0985025Z Set output 'should-test'
-2025-10-29T15:31:57.0987550Z Set output 'should-build'
-2025-10-29T15:31:57.0988836Z Set output 'build-ios'
-2025-10-29T15:31:57.0990000Z Set output 'build-android'
-2025-10-29T15:31:57.0991485Z Set output 'test-scope'
-2025-10-29T15:31:57.0993131Z Cleaning up orphan processes
+﻿2025-10-30T12:49:19.8450815Z Current runner version: '2.328.0'
+2025-10-30T12:49:19.8474262Z ##[group]Runner Image Provisioner
+2025-10-30T12:49:19.8475014Z Hosted Compute Agent
+2025-10-30T12:49:19.8475514Z Version: 20250912.392
+2025-10-30T12:49:19.8476032Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+2025-10-30T12:49:19.8476724Z Build Date: 2025-09-12T15:23:14Z
+2025-10-30T12:49:19.8477268Z ##[endgroup]
+2025-10-30T12:49:19.8477852Z ##[group]Operating System
+2025-10-30T12:49:19.8478399Z Ubuntu
+2025-10-30T12:49:19.8478799Z 24.04.3
+2025-10-30T12:49:19.8479223Z LTS
+2025-10-30T12:49:19.8479630Z ##[endgroup]
+2025-10-30T12:49:19.8480079Z ##[group]Runner Image
+2025-10-30T12:49:19.8480529Z Image: ubuntu-24.04
+2025-10-30T12:49:19.8480996Z Version: 20250929.60.1
+2025-10-30T12:49:19.8481930Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-30T12:49:19.8483335Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+2025-10-30T12:49:19.8484212Z ##[endgroup]
+2025-10-30T12:49:19.8485157Z ##[group]GITHUB_TOKEN Permissions
+2025-10-30T12:49:19.8487003Z Contents: read
+2025-10-30T12:49:19.8487461Z Metadata: read
+2025-10-30T12:49:19.8488169Z Packages: read
+2025-10-30T12:49:19.8488710Z ##[endgroup]
+2025-10-30T12:49:19.8490647Z Secret source: Actions
+2025-10-30T12:49:19.8491306Z Prepare workflow directory
+2025-10-30T12:49:19.8851934Z Prepare all required actions
+2025-10-30T12:49:19.8889866Z Getting action download info
+2025-10-30T12:49:20.2173457Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-10-30T12:49:20.4579167Z Complete job name: 🔍 Smart Change Detection
+2025-10-30T12:49:20.5159778Z ##[group]Run actions/checkout@v4
+2025-10-30T12:49:20.5160575Z with:
+2025-10-30T12:49:20.5161280Z   fetch-depth: 0
+2025-10-30T12:49:20.5161769Z   repository: Rikiglesias/App-Rise
+2025-10-30T12:49:20.5162484Z   token: ***
+2025-10-30T12:49:20.5162879Z   ssh-strict: true
+2025-10-30T12:49:20.5163315Z   ssh-user: git
+2025-10-30T12:49:20.5163756Z   persist-credentials: true
+2025-10-30T12:49:20.5164258Z   clean: true
+2025-10-30T12:49:20.5164681Z   sparse-checkout-cone-mode: true
+2025-10-30T12:49:20.5165192Z   fetch-tags: false
+2025-10-30T12:49:20.5165569Z   show-progress: true
+2025-10-30T12:49:20.5166023Z   lfs: false
+2025-10-30T12:49:20.5166400Z   submodules: false
+2025-10-30T12:49:20.5166837Z   set-safe-directory: true
+2025-10-30T12:49:20.5167612Z env:
+2025-10-30T12:49:20.5168159Z   NODE_VERSION: 20.x
+2025-10-30T12:49:20.5168594Z   CACHE_VERSION: v2
+2025-10-30T12:49:20.5169045Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:49:20.5169516Z   EAS_CLI_VERSION: latest
+2025-10-30T12:49:20.5170074Z ##[endgroup]
+2025-10-30T12:49:20.6176160Z Syncing repository: Rikiglesias/App-Rise
+2025-10-30T12:49:20.6178864Z ##[group]Getting Git version info
+2025-10-30T12:49:20.6180000Z Working directory is '/home/runner/work/App-Rise/App-Rise'
+2025-10-30T12:49:20.6181746Z [command]/usr/bin/git version
+2025-10-30T12:49:20.6260909Z git version 2.51.0
+2025-10-30T12:49:20.6284311Z ##[endgroup]
+2025-10-30T12:49:20.6299084Z Temporarily overriding HOME='/home/runner/work/_temp/c0c465a9-70cd-44fc-b8e9-e859150aa3f3' before making global git config changes
+2025-10-30T12:49:20.6301388Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-30T12:49:20.6305627Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:49:20.6339368Z Deleting the contents of '/home/runner/work/App-Rise/App-Rise'
+2025-10-30T12:49:20.6343513Z ##[group]Initializing the repository
+2025-10-30T12:49:20.6348662Z [command]/usr/bin/git init /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:49:20.6452815Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-10-30T12:49:20.6453772Z hint: is subject to change. To configure the initial branch name to use in all
+2025-10-30T12:49:20.6455231Z hint: of your new repositories, which will suppress this warning, call:
+2025-10-30T12:49:20.6456550Z hint:
+2025-10-30T12:49:20.6457434Z hint: 	git config --global init.defaultBranch <name>
+2025-10-30T12:49:20.6458416Z hint:
+2025-10-30T12:49:20.6459139Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-10-30T12:49:20.6460058Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-10-30T12:49:20.6460714Z hint:
+2025-10-30T12:49:20.6461129Z hint: 	git branch -m <name>
+2025-10-30T12:49:20.6461587Z hint:
+2025-10-30T12:49:20.6462482Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-10-30T12:49:20.6464014Z Initialized empty Git repository in /home/runner/work/App-Rise/App-Rise/.git/
+2025-10-30T12:49:20.6468704Z [command]/usr/bin/git remote add origin https://github.com/Rikiglesias/App-Rise
+2025-10-30T12:49:20.6505993Z ##[endgroup]
+2025-10-30T12:49:20.6507226Z ##[group]Disabling automatic garbage collection
+2025-10-30T12:49:20.6510831Z [command]/usr/bin/git config --local gc.auto 0
+2025-10-30T12:49:20.6535299Z ##[endgroup]
+2025-10-30T12:49:20.6536135Z ##[group]Setting up auth
+2025-10-30T12:49:20.6541835Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-30T12:49:20.6565945Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-30T12:49:20.6865647Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-30T12:49:20.6890132Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-30T12:49:20.7060342Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-10-30T12:49:20.7096620Z ##[endgroup]
+2025-10-30T12:49:20.7098100Z ##[group]Fetching the repository
+2025-10-30T12:49:20.7106638Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +f69c6f6ba6aac7875ca3f4f3fb111d0f99de0ca3:refs/remotes/pull/19/merge
+2025-10-30T12:49:21.3112239Z From https://github.com/Rikiglesias/App-Rise
+2025-10-30T12:49:21.3113435Z  * [new branch]      chore/ci-trigger-build-2                 -> origin/chore/ci-trigger-build-2
+2025-10-30T12:49:21.3114593Z  * [new branch]      develop                                  -> origin/develop
+2025-10-30T12:49:21.3147222Z  * [new branch]      master                                   -> origin/master
+2025-10-30T12:49:21.3149004Z  * [new branch]      release/1.0                              -> origin/release/1.0
+2025-10-30T12:49:21.3150721Z  * [new ref]         f69c6f6ba6aac7875ca3f4f3fb111d0f99de0ca3 -> pull/19/merge
+2025-10-30T12:49:21.3153675Z ##[endgroup]
+2025-10-30T12:49:21.3155009Z ##[group]Determining the checkout info
+2025-10-30T12:49:21.3156357Z ##[endgroup]
+2025-10-30T12:49:21.3157527Z [command]/usr/bin/git sparse-checkout disable
+2025-10-30T12:49:21.3198183Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-10-30T12:49:21.3222122Z ##[group]Checking out the ref
+2025-10-30T12:49:21.3225195Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/19/merge
+2025-10-30T12:49:21.3641222Z Note: switching to 'refs/remotes/pull/19/merge'.
+2025-10-30T12:49:21.3642313Z 
+2025-10-30T12:49:21.3643161Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-10-30T12:49:21.3645273Z changes and commit them, and you can discard any commits you make in this
+2025-10-30T12:49:21.3648116Z state without impacting any branches by switching back to a branch.
+2025-10-30T12:49:21.3649331Z 
+2025-10-30T12:49:21.3650051Z If you want to create a new branch to retain commits you create, you may
+2025-10-30T12:49:21.3652081Z do so (now or later) by using -c with the switch command. Example:
+2025-10-30T12:49:21.3653173Z 
+2025-10-30T12:49:21.3653868Z   git switch -c <new-branch-name>
+2025-10-30T12:49:21.3654621Z 
+2025-10-30T12:49:21.3655005Z Or undo this operation with:
+2025-10-30T12:49:21.3655730Z 
+2025-10-30T12:49:21.3656077Z   git switch -
+2025-10-30T12:49:21.3656622Z 
+2025-10-30T12:49:21.3657497Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-10-30T12:49:21.3658993Z 
+2025-10-30T12:49:21.3660498Z HEAD is now at f69c6f6 Merge 6342f5d0cef938353cb29e8eed02d301d1a5e43b into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
+2025-10-30T12:49:21.3664976Z ##[endgroup]
+2025-10-30T12:49:21.3682196Z [command]/usr/bin/git log -1 --format=%H
+2025-10-30T12:49:21.3700592Z f69c6f6ba6aac7875ca3f4f3fb111d0f99de0ca3
+2025-10-30T12:49:21.4028500Z ##[group]Run # Initialize outputs
+2025-10-30T12:49:21.4029915Z [36;1m# Initialize outputs[0m
+2025-10-30T12:49:21.4031126Z [36;1mecho "should-test=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4032607Z [36;1mecho "should-build=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4034020Z [36;1mecho "build-ios=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4035471Z [36;1mecho "build-android=false" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4036857Z [36;1mecho "test-scope=unit" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4038218Z [36;1m[0m
+2025-10-30T12:49:21.4038999Z [36;1m# Force build if requested[0m
+2025-10-30T12:49:21.4040040Z [36;1mif [[ "" == "true" ]]; then[0m
+2025-10-30T12:49:21.4041120Z [36;1m  echo "🔧 Force build requested"[0m
+2025-10-30T12:49:21.4042325Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4043627Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4044964Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4046253Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4047533Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4048826Z [36;1m  exit 0[0m
+2025-10-30T12:49:21.4049572Z [36;1mfi[0m
+2025-10-30T12:49:21.4050262Z [36;1m[0m
+2025-10-30T12:49:21.4051482Z [36;1m# Check commit message for ALL triggers (consolidated from all workflows)[0m
+2025-10-30T12:49:21.4053333Z [36;1m# On PR: use PR title or last commit message from the head ref[0m
+2025-10-30T12:49:21.4054825Z [36;1mif [[ "pull_request" == "pull_request" ]]; then[0m
+2025-10-30T12:49:21.4056222Z [36;1m  COMMIT_MSG="Chore: CI trigger [build] on develop"[0m
+2025-10-30T12:49:21.4057535Z [36;1m  echo "📝 PR title: $COMMIT_MSG"[0m
+2025-10-30T12:49:21.4058792Z [36;1m  # Also check last commit message in PR[0m
+2025-10-30T12:49:21.4060041Z [36;1m  LAST_COMMIT_MSG=$(git log -1 --pretty=%B)[0m
+2025-10-30T12:49:21.4061354Z [36;1m  echo "📝 Last commit in PR: $LAST_COMMIT_MSG"[0m
+2025-10-30T12:49:21.4062587Z [36;1m  # Combine both for checking[0m
+2025-10-30T12:49:21.4063742Z [36;1m  COMMIT_MSG="$COMMIT_MSG $LAST_COMMIT_MSG"[0m
+2025-10-30T12:49:21.4064872Z [36;1melse[0m
+2025-10-30T12:49:21.4065626Z [36;1m  COMMIT_MSG=""[0m
+2025-10-30T12:49:21.4066597Z [36;1m  echo "📝 Commit message: $COMMIT_MSG"[0m
+2025-10-30T12:49:21.4067767Z [36;1mfi[0m
+2025-10-30T12:49:21.4068463Z [36;1m[0m
+2025-10-30T12:49:21.4069166Z [36;1m# Build triggers[0m
+2025-10-30T12:49:21.4070245Z [36;1mif [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\] ]]; then[0m
+2025-10-30T12:49:21.4071610Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4072872Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4074111Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4075378Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4076645Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4078118Z [36;1m  echo "✅ Build triggered for both iOS and Android"[0m
+2025-10-30T12:49:21.4079306Z [36;1m  exit 0[0m
+2025-10-30T12:49:21.4080220Z [36;1melif [[ "$COMMIT_MSG" =~ \[build\ ios\] ]]; then[0m
+2025-10-30T12:49:21.4081493Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4082950Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4084183Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4085395Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4086606Z [36;1m  echo "✅ Build triggered for iOS only"[0m
+2025-10-30T12:49:21.4087680Z [36;1m  exit 0[0m
+2025-10-30T12:49:21.4088775Z [36;1melif [[ "$COMMIT_MSG" =~ \[build\ android\] ]]; then[0m
+2025-10-30T12:49:21.4090186Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4091440Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4092872Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4094133Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4095372Z [36;1m  echo "✅ Build triggered for Android only"[0m
+2025-10-30T12:49:21.4096471Z [36;1m  exit 0[0m
+2025-10-30T12:49:21.4097319Z [36;1melif [[ "$COMMIT_MSG" =~ ^build: ]]; then[0m
+2025-10-30T12:49:21.4098677Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4099924Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4101143Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4102372Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4103625Z [36;1m  echo "test-scope=full" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4104917Z [36;1m  echo "✅ CI Build triggered for both platforms"[0m
+2025-10-30T12:49:21.4106064Z [36;1m  exit 0[0m
+2025-10-30T12:49:21.4106772Z [36;1mfi[0m
+2025-10-30T12:49:21.4107431Z [36;1m[0m
+2025-10-30T12:49:21.4108423Z [36;1m# OTA triggers (already handled in ota-update job)[0m
+2025-10-30T12:49:21.4109871Z [36;1mif [[ "$COMMIT_MSG" =~ \[ota\]|\[hotfix\]|^hotfix: ]]; then[0m
+2025-10-30T12:49:21.4111209Z [36;1m  echo "🔄 OTA Update will be triggered"[0m
+2025-10-30T12:49:21.4112257Z [36;1mfi[0m
+2025-10-30T12:49:21.4112906Z [36;1m[0m
+2025-10-30T12:49:21.4113585Z [36;1m# Detect file changes[0m
+2025-10-30T12:49:21.4114652Z [36;1mif [[ "pull_request" == "pull_request" ]]; then[0m
+2025-10-30T12:49:21.4116002Z [36;1m  BASE_SHA="9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736"[0m
+2025-10-30T12:49:21.4117164Z [36;1melse[0m
+2025-10-30T12:49:21.4118201Z [36;1m  BASE_SHA="8a9a48e9a19649d8723b82835998b28fa1eb45da"[0m
+2025-10-30T12:49:21.4119356Z [36;1mfi[0m
+2025-10-30T12:49:21.4119990Z [36;1m[0m
+2025-10-30T12:49:21.4120654Z [36;1m# Get changed files[0m
+2025-10-30T12:49:21.4121893Z [36;1mCHANGED_FILES=$(git diff --name-only $BASE_SHA..HEAD || echo "")[0m
+2025-10-30T12:49:21.4123334Z [36;1mecho "Changed files: $CHANGED_FILES"[0m
+2025-10-30T12:49:21.4124334Z [36;1m[0m
+2025-10-30T12:49:21.4125038Z [36;1m# Check if we need to run tests[0m
+2025-10-30T12:49:21.4126697Z [36;1mif echo "$CHANGED_FILES" | grep -E "\.(ts|tsx|js|jsx|json)$|package\.json|jest\.|test\.|spec\."; then[0m
+2025-10-30T12:49:21.4128651Z [36;1m  echo "should-test=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4129713Z [36;1mfi[0m
+2025-10-30T12:49:21.4130342Z [36;1m[0m
+2025-10-30T12:49:21.4131072Z [36;1m# Check if we need visual diff tests[0m
+2025-10-30T12:49:21.4132625Z [36;1mif echo "$CHANGED_FILES" | grep -E "src/(components|features)/.*\.(ts|tsx)$"; then[0m
+2025-10-30T12:49:21.4134293Z [36;1m  echo "test-scope=visual" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4135354Z [36;1mfi[0m
+2025-10-30T12:49:21.4135990Z [36;1m[0m
+2025-10-30T12:49:21.4136663Z [36;1m# Check if we need to build[0m
+2025-10-30T12:49:21.4138259Z [36;1mif echo "$CHANGED_FILES" | grep -E "src/|app\.config\.|eas\.json|package\.json"; then[0m
+2025-10-30T12:49:21.4139954Z [36;1m  echo "should-build=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4141148Z [36;1m  echo "build-ios=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4142363Z [36;1m  echo "build-android=true" >> $GITHUB_OUTPUT[0m
+2025-10-30T12:49:21.4143420Z [36;1mfi[0m
+2025-10-30T12:49:21.4167910Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:49:21.4168797Z env:
+2025-10-30T12:49:21.4169602Z   NODE_VERSION: 20.x
+2025-10-30T12:49:21.4170341Z   CACHE_VERSION: v2
+2025-10-30T12:49:21.4171078Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:49:21.4171903Z   EAS_CLI_VERSION: latest
+2025-10-30T12:49:21.4172682Z ##[endgroup]
+2025-10-30T12:49:21.4241763Z 📝 PR title: Chore: CI trigger [build] on develop
+2025-10-30T12:49:21.4260632Z 📝 Last commit in PR: Merge 6342f5d0cef938353cb29e8eed02d301d1a5e43b into 9025c3284e0cad1c5dd7cd2fb71bf49a9b2a0736
+2025-10-30T12:49:21.4263797Z ✅ Build triggered for both iOS and Android
+2025-10-30T12:49:21.4430956Z Post job cleanup.
+2025-10-30T12:49:21.5304193Z [command]/usr/bin/git version
+2025-10-30T12:49:21.5335956Z git version 2.51.0
+2025-10-30T12:49:21.5374618Z Temporarily overriding HOME='/home/runner/work/_temp/30efec76-ff0f-4930-a7dd-c716f33d5224' before making global git config changes
+2025-10-30T12:49:21.5377630Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-30T12:49:21.5387229Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/App-Rise/App-Rise
+2025-10-30T12:49:21.5416845Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-30T12:49:21.5444200Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-30T12:49:21.5622177Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-30T12:49:21.5638977Z http.https://github.com/.extraheader
+2025-10-30T12:49:21.5649731Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-10-30T12:49:21.5674568Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-30T12:49:21.5949802Z Evaluate and set job outputs
+2025-10-30T12:49:21.5959431Z Set output 'should-test'
+2025-10-30T12:49:21.5961858Z Set output 'should-build'
+2025-10-30T12:49:21.5963008Z Set output 'build-ios'
+2025-10-30T12:49:21.5964047Z Set output 'build-android'
+2025-10-30T12:49:21.5965139Z Set output 'test-scope'
+2025-10-30T12:49:21.5966527Z Cleaning up orphan processes
