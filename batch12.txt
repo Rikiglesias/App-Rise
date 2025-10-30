@@ -1,8 +1,0 @@
-fix: batch 11-12 EnhancedCard e design-system
-
-- EnhancedCardStyles (17 fix)
-- spacing.ts (commentato layout)
-- layout.ts (skip - troppo complesso, fix dopo)
-
-12/117 (10.2%)
-Ritmo: costante ~2 file/min

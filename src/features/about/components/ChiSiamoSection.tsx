@@ -1,12 +1,12 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
 
+import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
+import type { ChiSiamoSectionProps } from '../types';
 import { PlatformTouchable, PerfectText, PerfectContainer } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
-import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
-import type { ChiSiamoSectionProps } from '../types';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   onInfoPress,

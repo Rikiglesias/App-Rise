@@ -1,12 +1,11 @@
 import { Platform, StyleSheet } from 'react-native';
 import {
-  BorderColors,
   BorderRadius,
   Colors,
   Spacing,
   Typography,
 } from '../../../shared/constants';
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+// TypographyTokens rimosso - usa Typography.sizes
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { ADVANCED_CONFIG } from '../types/HomeHeaderTypes';
 
@@ -49,21 +48,20 @@ export const createTextStyles = (
   StyleSheet.create({
     title: {
       color: colors.neutral[900],
-      fontSize: TypographyTokens.styles.headline.large, // Responsive 32px (hybrid system)
+      fontSize: 32, // Headline large
       fontWeight: Typography.weights.bold,
       fontFamily: Typography.families.heading,
       textAlign: 'center',
-      lineHeight: TypographyTokens.styles.headline.large * 1.17, // Responsive line height
+      lineHeight: 32 * 1.17, // Headline large * 1.17
       letterSpacing: -0.8,
       marginBottom: Spacing[4],
     },
     subtitle: {
       color: colors.neutral[600],
-      fontSize: TypographyTokens.styles.body.large,
+      fontSize: 16, // Body large
       fontWeight: Typography.weights.regular,
       textAlign: 'center',
-      lineHeight:
-        Typography.lineHeights.relaxed * TypographyTokens.styles.body.large,
+      lineHeight: Typography.lineHeights.relaxed * 16,
       letterSpacing: 0.2,
       paddingHorizontal: Spacing[6],
     },
@@ -160,19 +158,18 @@ export const createMissionStyles = (
       borderColor: colors.neutral[100],
     },
     missionTitle: {
-      fontSize: TypographyTokens.styles.title.medium,
+      fontSize: 20, // Title medium
       fontWeight: Typography.weights.bold,
       color: colors.neutral[900],
       textAlign: 'center',
       marginBottom: Spacing[3],
     },
     missionDescription: {
-      fontSize: TypographyTokens.styles.body.medium,
+      fontSize: 14, // Body medium
       fontWeight: Typography.weights.regular,
       color: colors.neutral[700],
       textAlign: 'center',
-      lineHeight:
-        Typography.lineHeights.relaxed * TypographyTokens.styles.body.medium,
+      lineHeight: Typography.lineHeights.relaxed * 14,
       marginBottom: Spacing[4],
     },
     missionStats: {
@@ -184,13 +181,13 @@ export const createMissionStyles = (
       alignItems: 'center',
     },
     statNumber: {
-      fontSize: TypographyTokens.styles.title.large,
+      fontSize: 24, // Title large
       fontWeight: Typography.weights.bold,
       color: colors.primary[600],
       marginBottom: Spacing[1],
     },
     statLabel: {
-      fontSize: TypographyTokens.styles.body.small,
+      fontSize: 13, // Body small
       fontWeight: Typography.weights.medium,
       color: colors.neutral[600],
       textAlign: 'center',
@@ -212,7 +209,7 @@ export const baseMissionStyles = StyleSheet.create({
     elevation: 3,
   },
   missionText: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 14, // Body medium
     color: Colors.neutral[700],
     textAlign: 'center',
     lineHeight: 22,
@@ -236,21 +233,21 @@ export const baseMissionStyles = StyleSheet.create({
     elevation: 2,
   },
   mealsBox: {
-    borderColor: BorderColors.brandElegant, // ← AGGIORNATO A BORDO BRAND ELEGANTE
+    borderColor: Colors.primary[500], // Brand color
     shadowColor: '#DC2626',
   },
   volunteersBox: {
-    borderColor: BorderColors.sophisticated, // ← AGGIORNATO A BORDO SOFISTICATO
+    borderColor: Colors.neutral[300], // Sophisticated gray
     shadowColor: Colors.neutral[700], // ← MIGRATO DA HARDCODED '#1F2937'
   },
   statNumber: {
-    fontSize: TypographyTokens.styles.title.large,
+    fontSize: 24, // Title large
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: TypographyTokens.styles.body.small,
+    fontSize: 13, // Body small
     color: Colors.neutral[700],
     textAlign: 'center',
   },
@@ -289,7 +286,7 @@ export const baseMissionStyles = StyleSheet.create({
     marginBottom: Spacing[4],
   },
   modalTitle: {
-    fontSize: TypographyTokens.styles.title.medium,
+    fontSize: 20, // Title medium
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
@@ -319,17 +316,17 @@ export const baseMissionStyles = StyleSheet.create({
     flex: 1,
   },
   breakdownNumber: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16, // Body large
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
   },
   breakdownLabel: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 14, // Body medium
     color: Colors.neutral[700],
     marginTop: 2,
   },
   breakdownDescription: {
-    fontSize: TypographyTokens.styles.body.small,
+    fontSize: 13, // Body small
     color: Colors.neutral[500],
     marginTop: 1,
   },
@@ -347,12 +344,12 @@ export const baseMissionStyles = StyleSheet.create({
     alignItems: 'center',
   },
   totalLabel: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 14, // Body medium
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[700],
   },
   totalNumber: {
-    fontSize: TypographyTokens.styles.title.medium,
+    fontSize: 20, // Title medium
     fontWeight: Typography.weights.black,
     color: '#DC2626',
   },

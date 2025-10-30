@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 
+import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PlatformTouchable, PerfectContainer } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import {
@@ -11,7 +12,6 @@ import {
   Typography,
   Shadows,
 } from '@/shared/constants/designTokens';
-import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;

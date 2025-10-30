@@ -5,14 +5,14 @@ import {
   Spacing,
   Typography,
 } from '../../../shared/constants/designTokens';
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+// TypographyTokens rimosso - usa Typography.sizes
 import { useTheme } from '../../../shared/hooks/useTheme';
 // ELIMINATO: useResponsive - ora usa Perfect System
 
 // Custom Hook for Projects Screen Styles
 export const useProjectsScreenStyles = () => {
   const { colors } = useTheme();
-  const { scaleFont } = useResponsive();
+  // scaleFont rimosso - usa scale() direttamente
 
   return useMemo(
     () =>
@@ -39,7 +39,7 @@ export const useProjectsScreenStyles = () => {
         headerSubtitle: {
           color: colors.primary[100],
           textAlign: 'center',
-          lineHeight: TypographyTokens.styles.body.medium * 1.4,
+          lineHeight: 14 * 1.4, // Body medium * 1.4
         },
         statsSurface: {
           borderRadius: BorderRadius.xl,

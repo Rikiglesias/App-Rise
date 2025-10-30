@@ -160,9 +160,31 @@ export const BorderRadius = {
 // TYPOGRAPHY SYSTEM
 export const Typography = {
   families: {
-    heading: 'Inter_700Bold' as const,
-    body: 'Inter_400Regular' as const,
-    accent: 'Inter_500Medium' as const,
+    // Use platform system fonts to remove custom font dependency
+    heading: selectPlatformValue(
+      {
+        ios: 'System',
+        android: 'Roboto',
+        default: 'System',
+      },
+      'System'
+    ),
+    body: selectPlatformValue(
+      {
+        ios: 'System',
+        android: 'Roboto',
+        default: 'System',
+      },
+      'System'
+    ),
+    accent: selectPlatformValue(
+      {
+        ios: 'System',
+        android: 'Roboto',
+        default: 'System',
+      },
+      'System'
+    ),
     mono: selectPlatformValue(
       {
         ios: 'SF Mono',

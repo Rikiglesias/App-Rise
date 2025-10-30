@@ -4,7 +4,7 @@
 
 ### **✅ FASE 1: Preparazione**
 - [ ] Backup del progetto
-- [ ] Verifica che tutti i font Inter siano caricati
+- [ ] Verifica resa dei font di sistema su entrambe le piattaforme
 - [ ] Test su dispositivo iOS e Android
 
 ### **✅ FASE 2: Migrazione Typography**
@@ -44,7 +44,7 @@
 import { Text } from 'react-native-paper';
 <Text variant="titleLarge">Titolo</Text>
 
-// ✅ DOPO (sempre Inter)
+// ✅ DOPO (font di sistema)
 import { PerfectText } from '../components/ui';
 <PerfectText size={22} lines={1} fontWeight="600">
   Titolo
@@ -198,7 +198,7 @@ grep -r "PerfectText" src/ | wc -l
 ## 🚀 **BENEFICI FINALI**
 
 ### **✅ Coerenza Cross-Platform**
-- Font identico su iOS e Android (Inter)
+- Font di sistema coerente su iOS e Android
 - Pesi ottimizzati per entrambe le piattaforme
 - Nessun fallback a font di sistema
 

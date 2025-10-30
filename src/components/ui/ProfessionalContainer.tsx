@@ -6,7 +6,7 @@ import {
   StyleProp,
   LayoutChangeEvent,
 } from 'react-native';
-import { useContainerLayout } from '../../shared/hooks/useResponsive';
+// useResponsive rimosso - usa PerfectContainer invece
 
 interface ProfessionalContainerProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ interface ProfessionalContainerProps {
  * @example
  * ```tsx
  * <ProfessionalContainer variant="text">
- *   <FormattedText fontSize={75}>Rise Against Hunger Italia</FormattedText>
+ *   <PerfectText size={24} lines={1}>Rise Against Hunger Italia</PerfectText>
  * </ProfessionalContainer>
  * ```
  */
@@ -47,20 +47,20 @@ export const ProfessionalContainer: React.FC<ProfessionalContainerProps> = ({
   onLayout,
   testID,
 }) => {
-  const { containerStyle, handleLayout } = useContainerLayout({
-    variant,
-    enableRTL,
-    ...(forceWidth !== undefined && { forceWidth }),
-  });
+  // Implementazione inline semplice - useContainerLayout rimosso
+  const containerStyle: ViewStyle = {
+    width: (forceWidth ?? (variant === 'text' ? '90%' : '100%')) as ViewStyle['width'],
+    alignSelf: 'center',
+    ...(enableRTL && Platform.OS === 'ios' && { direction: 'rtl' }),
+  };
 
   // Container configuration completed - debug info removed for production
 
   const finalOnLayout = React.useCallback(
     (event: LayoutChangeEvent) => {
-      handleLayout(event);
       onLayout?.(event);
     },
-    [handleLayout, onLayout]
+    [onLayout]
   );
 
   return (

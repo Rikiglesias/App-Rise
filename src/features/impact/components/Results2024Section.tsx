@@ -2,6 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 
+import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import {
@@ -9,7 +10,6 @@ import {
   Spacing,
   Typography,
 } from '@/shared/constants/designTokens';
-import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;

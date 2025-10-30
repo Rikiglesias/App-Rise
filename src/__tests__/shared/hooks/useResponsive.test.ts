@@ -1,15 +1,15 @@
-import { renderHook } from '@testing-library/react-native';
-import {
-  useResponsive,
-  useIntelligentFontScaling,
-  useBreakpointAware,
-} from '../../../shared/hooks/useResponsive';
+/**
+ * TEST DISABILITATO - useResponsive rimosso
+ * Ora usiamo Perfect System e scale() direttamente
+ */
 
-// Mock react-native modules
-jest.mock('react-native-safe-area-context', () => ({
-  useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
-}));
+describe.skip('useResponsive - DEPRECATED', () => {
+  it('is replaced by Perfect System', () => {
+    expect(true).toBe(true);
+  });
+});
 
+/* CODICE ORIGINALE COMMENTATO
 describe('useResponsive', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -224,3 +224,4 @@ describe('Integration Tests', () => {
     );
   });
 });
+*/

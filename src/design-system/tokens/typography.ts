@@ -4,7 +4,7 @@
 // ===================================================================
 
 import { Typography as BaseTypography } from '../../shared/constants';
-import { scaleFont } from '../../shared/constants/responsiveSystem';
+// scaleFont rimosso - usa scale() da responsiveSystem se necessario
 
 // 📝 SISTEMA TIPOGRAFICO ESTESO
 export const DesignTypography = {

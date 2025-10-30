@@ -13,10 +13,7 @@ import { EntraInAzione } from '../components/EntraInAzione';
 import { PlatformScrollView, PerfectContainer } from '@components/ui';
 import { HomeHeaderSection } from '@components/domain/HomeHeaderSection';
 import { useTheme } from '@shared/hooks/useTheme';
-import {
-  PlatformOptimizations,
-  SpacingTokens,
-} from '@shared/constants/responsiveSystem';
+import { Spacing } from '@shared/constants';
 
 const HomeScreenComponent: React.FC<HomeScreenProps> = ({
   navigation: _navigation,
@@ -30,8 +27,8 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
     containerAnim: _containerAnim,
   } = useHomeAnimations();
 
-  const basePadding = SpacingTokens['6'];
-  const navHeight = PlatformOptimizations.layout.navigationBarHeight;
+  const basePadding = Spacing[6];
+  const navHeight = 80; // Navigation bar height
   const bottomPadding = basePadding + navHeight + insets.bottom;
 
   // Temporarily disabled scroll animations to fix onScroll error
@@ -59,7 +56,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
           {/* Header Section con titolo e logo - SPAZIO BILANCIATO */}
           <PerfectContainer
             preset="section"
-            paddingVertical={SpacingTokens['3']}
+            paddingVertical={Spacing[3]}
           >
             <HomeHeaderSection scrollY={scrollY} />
 
@@ -69,8 +66,8 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
           {/* Sezione Entra in Azione con CTA */}
           <PerfectContainer
             preset="section"
-            marginHorizontal={SpacingTokens['2']}
-            paddingVertical={SpacingTokens['4']} // ← RIDOTTO DA 6 A 4 per più spazio visibile
+            marginHorizontal={Spacing[2]}
+            paddingVertical={Spacing[4]} // ← RIDOTTO DA 6 A 4 per più spazio visibile
           >
             <EntraInAzione />
           </PerfectContainer>

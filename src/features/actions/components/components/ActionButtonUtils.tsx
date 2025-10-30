@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { PerfectContainer } from '../../../../components/ui';
 import type { SectionDividerProps } from './ActionButtonTypes';
 
 // Helper function per determinare i colori delle icone della sezione Esplora
@@ -17,10 +17,10 @@ export const getCommunityIconColor = (index: number): string => {
 
 // Componente divisore semplice per separare le sezioni
 export const SectionDivider: React.FC<SectionDividerProps> = ({ styles }) => (
-  <View style={styles.sectionDivider} />
+  <PerfectContainer style={styles.sectionDivider} />
 );
 
 // Componente prima linea più grossa
 export const FirstSectionDivider: React.FC<SectionDividerProps> = ({
   styles,
-}) => <View style={styles.firstSectionDivider} />;
+}) => <PerfectContainer style={styles.firstSectionDivider} />;

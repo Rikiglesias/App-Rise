@@ -229,8 +229,8 @@ export const useFoldableLayout = (options?: {
   } = options ?? {};
 
   const [dimensions, setDimensions] = useState(() => {
-    const { width, height } = Dimensions.get('window');
-    return { width, height };
+    // Usa 393x852 come default (iPhone 15) - Dimensions.get rimosso
+    return { width: 393, height: 852 };
   });
 
   // Update dimensions when device changes

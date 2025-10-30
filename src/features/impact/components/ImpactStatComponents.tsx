@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   storyText: {
     color: Colors.neutral[100],
     marginTop: Spacing[2],
-    lineHeight: Typography.lineHeights.snug,
+    lineHeight: Typography.lineHeights.tight,
   },
   milestoneCard: {
     flexDirection: 'row',

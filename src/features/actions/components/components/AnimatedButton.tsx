@@ -1,14 +1,10 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { View } from 'react-native';
 
-import { PlatformTouchable, PerfectText } from '../../../../components/ui';
-import {
-  SpacingTokens,
-  ShadowTokens,
-  
-} from '../../../../shared/constants/responsiveSystem';
+import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../../components/ui';
+import { Spacing, Shadows } from '../../../../shared/constants/designTokens';
+import { scale } from '../../../../shared/constants/responsiveSystem';
 import type { AnimatedButtonProps } from './ActionButtonTypes';
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
@@ -19,19 +15,19 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   iconColor,
   fullWidth = false,
 }) => {
-  // Spessore bordo come pagina Azioni: 2pt (scalato linearmente)
-  const borderPadding = Math.max(1, Math.round(scaleDimensionLinear(2)));
-  const outerRadius = /* scaleDimensionLinear(20) */ 20;
+  // Spessore bordo come pagina Azioni: 2pt (scalato)
+  const borderPadding = Math.max(1, Math.round(scale(2)));
+  const outerRadius = 20;
   const innerRadius = Math.max(0, outerRadius - borderPadding);
 
   return (
-    <View style={fullWidth ? {} : styles.buttonContainer}>
+    <PerfectContainer style={fullWidth ? {} : styles.buttonContainer}>
       <PlatformTouchable
         activeOpacity={0.6}
         onPress={onPress}
         style={{
           borderRadius: outerRadius,
-          ...ShadowTokens.sm,
+          ...Shadows.sm,
         }}
       >
         <LinearGradient
@@ -44,12 +40,12 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
             overflow: 'hidden',
           }}
         >
-          <View
+          <PerfectContainer
             style={{
               backgroundColor: '#FFFFFF',
               borderRadius: innerRadius,
-              paddingVertical: SpacingTokens['4'],
-              paddingHorizontal: SpacingTokens['3'],
+              paddingVertical: Spacing[4],
+              paddingHorizontal: Spacing[3],
               alignItems: 'center',
               justifyContent: 'center',
               overflow: 'hidden',
@@ -67,7 +63,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
                   | 'map-marker-path'
                   | 'information'
               }
-              size={scaleDimensionLinear(28)}
+              size={scale(28)}
               color={iconColor}
               style={styles.buttonIcon}
             />
@@ -82,17 +78,17 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
             </PerfectText>
             <MaterialCommunityIcons
               name="chevron-right"
-              size={scaleDimensionLinear(20)}
+              size={scale(20)}
               color={iconColor}
               style={{
                 position: 'absolute',
-                top: SpacingTokens['2'],
-                right: SpacingTokens['2'],
+                top: Spacing[2],
+                right: Spacing[2],
               }}
             />
-          </View>
+          </PerfectContainer>
         </LinearGradient>
       </PlatformTouchable>
-    </View>
+    </PerfectContainer>
   );
 };

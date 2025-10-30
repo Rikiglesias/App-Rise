@@ -138,8 +138,8 @@ export const getTextTokens = (
 // Container Tokens
 export const getContainerTokens = () => ({
   spacing: {
-    padding: DesignSpacing.layout.container,
-    margin: DesignSpacing.layout.section,
+    padding: DesignSpacing[4], // Container padding
+    margin: DesignSpacing[6], // Section margin
   },
   layout: {
     maxWidth: DesignLayout.container.xl,

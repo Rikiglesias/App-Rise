@@ -1,9 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Modal, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Modal, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { PlatformTouchable, PerfectText } from '../../../../components/ui';
+import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../../components/ui';
 // Migrated to Perfect System responsive layout
 
 import {
@@ -139,8 +139,8 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
   });
 
   return (
-    <View style={modalStyles.modalContent}>
-      <View style={modalStyles.modalHeader}>
+    <PerfectContainer style={modalStyles.modalContent}>
+      <PerfectContainer style={modalStyles.modalHeader}>
         <PlatformTouchable
           style={modalStyles.closeButton}
           onPress={handleClose}
@@ -152,10 +152,10 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
             color={Colors.neutral[0]}
           />
         </PlatformTouchable>
-      </View>
+      </PerfectContainer>
 
       {/* TITOLO CENTRATO E CARINO */}
-      <View style={modalStyles.centeredTitleContainer}>
+      <PerfectContainer style={modalStyles.centeredTitleContainer}>
         <PerfectText
           size={28}
           lines={1}
@@ -165,8 +165,8 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         >
           Come Donare
         </PerfectText>
-        <View style={modalStyles.titleUnderline} />
-      </View>
+        <PerfectContainer style={modalStyles.titleUnderline} />
+      </PerfectContainer>
 
       <PerfectText
         size={16}
@@ -210,7 +210,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       >
         ✨ Il modo più semplice è partecipare ai nostri eventi!
       </PerfectText>
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -220,7 +220,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   // 🎯 NUOVO: Layer centralizzato
-  // const { modalWidth: _modalWidth } = useResponsiveLayout();
+  // Layout responsive del modal gestito dai componenti Perfect (PerfectContainer/PerfectModal)
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -357,18 +357,18 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
         activeOpacity={1}
         onPress={handleClose}
       >
-        <View style={modalStyles.backdrop} />
+        <PerfectContainer style={modalStyles.backdrop} />
         <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
-          <View style={{ backgroundColor: 'transparent' }}>
+          <PerfectContainer style={{ backgroundColor: 'transparent' }}>
             <LinearGradient
               colors={['#DC2626', '#B91C1C', '#991B1B']}
               style={modalStyles.modalGradientBorder}
             >
-              <View style={modalStyles.modalWhiteContainer}>
+              <PerfectContainer style={modalStyles.modalWhiteContainer}>
                 <ModalContent handleClose={handleClose} />
-              </View>
+              </PerfectContainer>
             </LinearGradient>
-          </View>
+          </PerfectContainer>
         </TouchableOpacity>
       </TouchableOpacity>
     </Modal>
@@ -387,9 +387,9 @@ export default DonationInfoModalMigrated;
  * ❌ maxWidth: screenWidth * 0.9,                              // Calcolo manuale ripetuto
  *
  * AGGIUNTI:
- * ✅ useResponsiveLayout()                                     // Layer centralizzato
- * ✅ modalWidth                                                // Width dal tema
- * ✅ ResponsiveBox (opzionale)                                 // Wrapper semantico
+ * ✅ PerfectContainer/PerfectModal                             // Layer centralizzato
+ * ✅ modalWidth derivato dai token/layout                      // Width dal tema
+ * ✅ PerfectContainer                                          // Wrapper semantico
  *
  * FUTURE BENEFITS:
  * 🚀 Tablet XL → modalWidth automatico per 1280+ px (60% → 50%)

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { PerfectText, PerfectContainer } from '@/components/ui';
 
 import { contactSectionStyles } from '../styles/contactStyles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
+import { PerfectText, PerfectContainer } from '@/components/ui';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
   contacts,

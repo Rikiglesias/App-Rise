@@ -7,7 +7,7 @@ const CODE_SIGNING_ALGORITHM =
   process.env.EXPO_UPDATES_CODE_SIGNING_ALGORITHM ?? 'rsa-v1_5-sha256';
 
 const baseUpdatesConfig = {
-  fallbackToCacheTimeout: 30000, // 30 secondi per controllare updates
+  fallbackToCacheTimeout: 3000, // 3 secondi per controllare updates (miglior TTI)
   checkAutomatically: 'ON_LOAD', // Controlla all'avvio
   url: 'https://u.expo.dev/52a33b0f-dec1-4674-812b-de5b888c911a',
 };

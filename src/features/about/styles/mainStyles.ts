@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { SpacingTokens as Spacing } from '../../../shared/constants/responsiveSystem';
+import { Spacing } from '../../../shared/constants/designTokens';
 import { BorderRadius, Colors } from '../../../shared/constants';
 
 /**

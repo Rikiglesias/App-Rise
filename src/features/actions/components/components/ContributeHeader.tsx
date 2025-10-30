@@ -2,18 +2,14 @@
 // Tutti gli stili in questo file sono verificati manualmente come utilizzati.
 
 import React, { useMemo } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
-
+import { Animated, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { PerfectText } from '../../../../components/ui';
+import { PerfectContainer, PerfectText } from '../../../../components/ui';
 import {
   HEADER_TITLE_SIZE,
   CONTRIBUTE_SUBTITLE_SIZE,
 } from '../../../shared/headerSizes';
-import responsiveSystem, {
-  
-  TypographyTokens,
-} from '../../../../shared/constants/responsiveSystem';
+import { LOGICAL_REFERENCE } from '../../../../shared/constants/responsiveSystem';
 
 import { Spacing, Typography } from '../../../../shared/constants';
 
@@ -31,7 +27,7 @@ interface NewActionsHeaderProps {
 
 const TITLE_SIZE = HEADER_TITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
 const SUBTITLE_SIZE = CONTRIBUTE_SUBTITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
-const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const REF_WIDTH = LOGICAL_REFERENCE.width;
 const HEADER_INNER_HEIGHT = /* scaleDimensionLinear(
   REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
 ) */ 
@@ -97,8 +93,8 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           fontWeight: Typography.weights.black,
           color: '#1F2937',
           textAlign: 'center',
-          letterSpacing: TypographyTokens.letterSpacing.tight,
-          lineHeight: TypographyTokens.lineHeights.baseline(HEADER_TITLE_SIZE),
+          letterSpacing: -0.5,
+          lineHeight: HEADER_TITLE_SIZE * 1.2,
           marginBottom: HEADER_TITLE_INTERLINE,
           textShadowColor: 'rgba(31, 41, 55, 0.15)',
           textShadowOffset: { width: 0, height: 2 },
@@ -119,10 +115,8 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           fontWeight: Typography.weights.medium,
           color: '#374151',
           textAlign: 'center',
-          letterSpacing: TypographyTokens.letterSpacing.normal,
-          lineHeight: TypographyTokens.lineHeights.baseline(
-            CONTRIBUTE_SUBTITLE_SIZE
-          ),
+          letterSpacing: 0,
+          lineHeight: CONTRIBUTE_SUBTITLE_SIZE * 1.2,
           marginTop: Spacing[3],
           opacity: 0.8,
           includeFontPadding: false,
@@ -181,7 +175,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         style={styles.backgroundPattern}
       />
 
-      <View style={styles.mainHeaderContainer}>{titleContent}</View>
+      <PerfectContainer style={styles.mainHeaderContainer}>{titleContent}</PerfectContainer>
     </Animated.View>
   );
 };

@@ -1,11 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  SpacingTokens as Spacing,
-  TypographyTokens,
-} from '../../../shared/constants/responsiveSystem';
-import { Colors, Typography } from '../../../shared/constants';
-import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
+import { Spacing, Colors, Typography, Shadows } from '../../../shared/constants';
 
 /**
  * Stili per la sezione Chi Siamo
@@ -154,19 +149,18 @@ export const chiSiamoSectionStyles = StyleSheet.create({
     backgroundColor: '#DC2626',
     justifyContent: 'center',
     alignItems: 'center',
-    ...PlatformShadows.primary, // CONVERTITO: ombra primaria ottimizzata per entrambe le piattaforme
+    ...Shadows.md, // CONVERTITO: ombra primaria ottimizzata per entrambe le piattaforme
     // BORDO PULITO
     borderWidth: 2,
     borderColor: Colors.neutral[0],
   },
 
   categorySubtitle: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 14, // Body medium
     fontWeight: Typography.weights.bold,
     textAlign: 'center',
     letterSpacing: 0.3,
-    lineHeight:
-      Typography.lineHeights.relaxed * TypographyTokens.styles.body.medium,
+    lineHeight: 14 * 1.5, // Body medium * relaxed
     marginBottom: Spacing[3],
     paddingHorizontal: Spacing[4],
     fontStyle: 'normal',

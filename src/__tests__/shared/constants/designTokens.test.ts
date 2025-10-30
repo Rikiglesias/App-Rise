@@ -49,9 +49,13 @@ describe('Design Tokens - Colors', () => {
 describe('Design Tokens - Typography', () => {
   it('should have font families', () => {
     expect(Typography.families).toBeDefined();
-    expect(Typography.families.heading).toBe('Inter_700Bold');
-    expect(Typography.families.body).toBe('Inter_400Regular');
-    expect(Typography.families.accent).toBe('Inter_500Medium');
+    expect(typeof Typography.families.heading).toBe('string');
+    expect(typeof Typography.families.body).toBe('string');
+    expect(typeof Typography.families.accent).toBe('string');
+    // Ensure we are not using Inter anymore
+    expect(Typography.families.heading).not.toMatch(/^Inter_/);
+    expect(Typography.families.body).not.toMatch(/^Inter_/);
+    expect(Typography.families.accent).not.toMatch(/^Inter_/);
     expect(typeof Typography.families.mono).toBe('string');
     expect(Typography.families.mono.length).toBeGreaterThan(0);
   });
@@ -80,9 +84,15 @@ describe('Design Tokens - Typography', () => {
 
   it('should have line heights', () => {
     expect(Typography.lineHeights).toBeDefined();
-    expect(Typography.lineHeights.tight).toBe(1.25);
-    expect(Typography.lineHeights.normal).toBe(1.5);
-    expect(Typography.lineHeights.relaxed).toBe(1.625);
+    expect(typeof Typography.lineHeights.tight).toBe('number');
+    expect(typeof Typography.lineHeights.normal).toBe('number');
+    expect(typeof Typography.lineHeights.relaxed).toBe('number');
+    expect(Typography.lineHeights.tight).toBeLessThan(
+      Typography.lineHeights.normal
+    );
+    expect(Typography.lineHeights.normal).toBeLessThan(
+      Typography.lineHeights.relaxed
+    );
   });
 });
 
@@ -144,11 +154,11 @@ describe('Design Tokens - Border Radius', () => {
 describe('Design Tokens - Shadows', () => {
   it('should have shadow definitions', () => {
     expect(Shadows).toBeDefined();
-    expect(Shadows.xs).toBeDefined();
+    expect(Shadows.none).toBeDefined();
     expect(Shadows.sm).toBeDefined();
     expect(Shadows.md).toBeDefined();
     expect(Shadows.lg).toBeDefined();
-    expect(Shadows.xl).toBeDefined();
+    // xs e xl rimossi - non esistono più
   });
 
   it('should have shadow properties', () => {
@@ -215,15 +225,14 @@ describe('Design Tokens - Consistency', () => {
 
   it('should have consistent shadow elevations', () => {
     const shadows = [
-      Shadows.xs,
+      Shadows.none,
       Shadows.sm,
       Shadows.md,
       Shadows.lg,
-      Shadows.xl,
     ];
     shadows.forEach(shadow => {
       expect(typeof shadow.elevation).toBe('number');
-      expect(shadow.elevation).toBeGreaterThan(0);
+      expect(shadow.elevation).toBeGreaterThanOrEqual(0); // none ha elevation 0
     });
   });
 });

@@ -2,7 +2,8 @@
 // Tutti gli stili in questo file sono verificati manualmente come utilizzati.
 
 import React, { useMemo } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
+import { PerfectContainer } from '../../../../components/ui';
 
 import { Colors, Spacing } from '../../../../shared/constants/designTokens';
 import type { useNewActionsAnimations } from './ContributeAnimations';
@@ -47,7 +48,7 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
         },
       ]}
     >
-      <View style={styles.mainDivider} />
+      <PerfectContainer style={styles.mainDivider} />
     </Animated.View>
   );
 };

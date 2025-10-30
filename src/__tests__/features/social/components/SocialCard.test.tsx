@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
 import { SocialCard } from '../../../../features/social/components/SocialCard';
 import type { SocialPlatform } from '../../../../features/social/components/SocialCard';
-import { ThemeProvider } from '../../../../shared/hooks/useTheme';
+import { AllProviders } from '../../../helpers/testProviders';
 
 // Mock delle dipendenze - approccio semplificato
 jest.mock('react-native', () => ({
@@ -134,9 +134,9 @@ const mockAnimationValue = new (jest.requireActual(
 ).Animated.Value)(1);
 
 const SocialCardWithTheme = (props: { platform: SocialPlatform }) => (
-  <ThemeProvider>
+  <AllProviders>
     <SocialCard platform={props.platform} animationValue={mockAnimationValue} />
-  </ThemeProvider>
+  </AllProviders>
 );
 
 describe('SocialCard', () => {

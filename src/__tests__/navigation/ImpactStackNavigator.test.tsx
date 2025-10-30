@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { AllProviders } from '../helpers/testProviders';
 import ImpactStackNavigator from '../../navigation/ImpactStackNavigator';
 
 // Mock all screen components
@@ -20,9 +21,11 @@ jest.mock('../../navigation/LazyLoading', () => ({
 describe('ImpactStackNavigator', () => {
   const renderNavigator = () => {
     return render(
-      <NavigationContainer>
-        <ImpactStackNavigator />
-      </NavigationContainer>
+      <AllProviders>
+        <NavigationContainer>
+          <ImpactStackNavigator />
+        </NavigationContainer>
+      </AllProviders>
     );
   };
 

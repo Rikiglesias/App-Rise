@@ -2,9 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import {
-  BorderColors,
   BorderRadius,
-  Layout,
   Spacing,
 } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
@@ -19,38 +17,35 @@ interface SectionContainerProps {
 
 // 🚀 PERFECT SYSTEM SPACING - iPhone 15 reference values
 const getSpacingConfig = (spacing: SectionContainerProps['spacing']) => {
-  // Perfect System - fixed spacing values for iPhone 15 reference
-  const baseSpacing = 1; // iPhone 15 base spacing
-
   switch (spacing) {
     case 'compact':
       return {
-        vertical: Math.round(Layout.golden.xs * baseSpacing),
-        horizontal: Math.round(Spacing[3] * baseSpacing),
+        vertical: Spacing[2], // XS spacing
+        horizontal: Spacing[3],
       };
     case 'standard':
       return {
-        vertical: Math.round(Layout.golden.sm * baseSpacing),
-        horizontal: Math.round(Spacing[4] * baseSpacing),
+        vertical: Spacing[4], // SM spacing
+        horizontal: Spacing[4],
       };
     case 'large':
       return {
-        vertical: Math.round(Layout.golden.md * baseSpacing),
-        horizontal: Math.round(Spacing[6] * baseSpacing),
+        vertical: Spacing[6], // MD spacing
+        horizontal: Spacing[6],
       };
     case 'hero':
       return {
-        vertical: Math.round(Layout.golden.lg * baseSpacing),
-        horizontal: Math.round(Spacing[8] * baseSpacing),
+        vertical: Spacing[8], // LG spacing
+        horizontal: Spacing[8],
       };
     case 'golden':
       return {
-        vertical: Math.round(Layout.golden.xl * baseSpacing),
-        horizontal: Math.round(Layout.golden.sm * baseSpacing),
+        vertical: Spacing[10], // XL spacing
+        horizontal: Spacing[4], // SM spacing
       };
     default:
       return {
-        vertical: Layout.golden.sm,
+        vertical: Spacing[4], // SM spacing
         horizontal: Spacing[4],
       };
   }
@@ -77,7 +72,7 @@ const getVariantStyles = (
         shadowRadius: 16,
         elevation: 4,
         borderWidth: 1,
-        borderColor: BorderColors.elegant, // ← AGGIORNATO A BORDO ELEGANTE
+        borderColor: colors.neutral[200], // Elegant border
       };
 
     case 'glass':

@@ -8,9 +8,8 @@
  */
 
 import React from 'react';
-import { Modal, type ModalProps, StyleSheet, Dimensions } from 'react-native';
+import { Modal, type ModalProps, StyleSheet, useWindowDimensions } from 'react-native';
 import { PerfectContainer } from './PerfectContainer';
-import responsiveSystem from '../../shared/constants/responsiveSystem';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
   /** Contenuto modal */
@@ -36,7 +35,7 @@ interface PerfectModalProps extends Omit<ModalProps, 'children'> {
  * Calcola comportamento responsive del modal
  */
 const useModalBehavior = (size: PerfectModalProps['size']) => {
-  const width = Dimensions.get('window').width;
+  const { width } = useWindowDimensions();
   const isTablet = width >= 768; // iPad e superiori
   const isPhablet = width >= 600 && width < 768; // Device grandi
 

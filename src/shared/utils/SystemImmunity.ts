@@ -98,11 +98,14 @@ export const getImmuneDimensions = (originalSize: number): number => {
 };
 
 // 🔍 DEBUG IMMUNITÀ
-export const debugImmunity = (_componentName: string) => {
+export const debugImmunity = (componentName: string) => {
   if (!__DEV__) return;
-
-  const _settings = getSystemFontSettings();
-  const _immuneProps = getImmuneTextProps();
+  // Variabili non usate per debug
+  void componentName;
+  const settings = getSystemFontSettings();
+  const immuneProps = getImmuneTextProps();
+  void settings;
+  void immuneProps;
 
   // Debug info removed for production
 };
@@ -111,15 +114,17 @@ export const debugImmunity = (_componentName: string) => {
 export const warnIfUserScaled = () => {
   if (!__DEV__) return;
 
-  const { isUserScaled: _isUserScaled, fontScale: _fontScale } =
-    getSystemFontSettings();
+  const { isUserScaled, fontScale } = getSystemFontSettings();
+  void isUserScaled;
+  void fontScale;
 
   // Warning removed for production
 };
 
 // 🔧 UTILITY PER TESTING
-export const simulateUserFontSettings = (_scale: number) => {
+export const simulateUserFontSettings = (scaleValue: number) => {
   if (!__DEV__) return;
+  void scaleValue;
 
   // Debug info removed for production
 };

@@ -1,5 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { AllProviders } from '../helpers/testProviders';
 import AppNavigator from '../../navigation/AppNavigator';
 
 // Mock all screen components
@@ -26,7 +28,7 @@ jest.mock('../../navigation/BottomTabNavigator', () => ({
 
 describe('AppNavigator', () => {
   it('should render without crashing', () => {
-    const { root } = render(<AppNavigator />);
+    const { root } = render(<AllProviders><AppNavigator /></AllProviders>);
     expect(root).toBeTruthy();
   });
 
@@ -35,7 +37,7 @@ describe('AppNavigator', () => {
   });
 
   it('should wrap content in NavigationContainer', () => {
-    const { UNSAFE_root } = render(<AppNavigator />);
+    const { UNSAFE_root } = render(<AllProviders><NavigationContainer><AppNavigator /></NavigationContainer></AllProviders>);
     expect(UNSAFE_root).toBeTruthy();
   });
 });

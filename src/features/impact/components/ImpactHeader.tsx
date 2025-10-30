@@ -7,7 +7,6 @@ import { PerfectText, PerfectContainer } from '../../../components/ui';
 import { Colors, Spacing, Typography } from '../../../shared/constants/designTokens';
 import responsiveSystem, {
   
-  TypographyTokens,
 } from '../../../shared/constants/responsiveSystem';
 import {
   HEADER_TITLE_SIZE,
@@ -150,8 +149,8 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.black,
     color: Colors.neutral[800],
     textAlign: 'center',
-    letterSpacing: TypographyTokens.letterSpacing.tight,
-    lineHeight: TypographyTokens.lineHeights.baseline(HEADER_TITLE_SIZE),
+    letterSpacing: -0.5, // Tight
+    lineHeight: HEADER_TITLE_SIZE * 1.2, // Baseline
     marginBottom: HEADER_TITLE_INTERLINE,
     textShadowColor: 'rgba(31, 41, 55, 0.15)',
     textShadowOffset: { width: 0, height: 2 },
@@ -168,8 +167,8 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     textAlign: 'center',
-    letterSpacing: TypographyTokens.letterSpacing.normal,
-    lineHeight: TypographyTokens.lineHeights.baseline(IMPACT_SUBTITLE_SIZE),
+    letterSpacing: 0, // Normal
+    lineHeight: IMPACT_SUBTITLE_SIZE * 1.2, // Baseline
     marginTop: Spacing[3],
     opacity: 0.8,
     includeFontPadding: false,

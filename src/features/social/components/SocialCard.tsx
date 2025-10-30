@@ -3,17 +3,11 @@ import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PlatformTouchable, PerfectText, PerfectContainer, PerfectImage } from '@/components/ui';
 import {
-  BorderColors,
   Colors,
   Spacing,
   Typography,
 } from '@/shared/constants';
-import {
-  DesignTokens,
-  
-  getMillimetricScale,
-  
-} from '@/shared/constants/responsiveSystem';
+import { scale } from '@/shared/constants/responsiveSystem';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -64,9 +58,9 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                         ? 'linkedinIcon'
                         : 'platformIcon'
                     ].height as number) ?? 32;
-                  const scale = getMillimetricScale();
-                  const refWidth = Math.round(baseWidth / scale);
-                  const refHeight = Math.round(baseHeight / scale);
+                  // Usa dimensioni dirette senza millimetric scale
+                  const refWidth = baseWidth;
+                  const refHeight = baseHeight;
                   return (
                     <PerfectImage
                       width={refWidth}
@@ -114,7 +108,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
             <PerfectContainer style={styles.arrowContainer}>
               <MaterialCommunityIcons
                 name="chevron-right"
-                size={scaleDimensionLinear(24)}
+                size={scale(24)}
                 color={Colors.neutral[400]}
               />
             </PerfectContainer>
@@ -148,27 +142,27 @@ const styles = {
     padding: Spacing[4],
   },
   socialIconContainer: {
-    width: DesignTokens.components.iconSize.xlarge + 16,
-    height: DesignTokens.components.iconSize.xlarge + 16,
+    width: 56, // xlarge icon (40) + 16
+    height: 56,
     borderRadius: /* scaleFont(28) */ 28,
     backgroundColor: Colors.neutral[0],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginRight: Spacing[4],
-    shadowColor: BorderColors.brandStrong,
+    shadowColor: Colors.primary[600], // Brand strong
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 6,
   },
   platformIcon: {
-    width: DesignTokens.components.iconSize.large + 2,
-    height: DesignTokens.components.iconSize.large + 2,
+    width: 34, // large icon (32) + 2
+    height: 34,
     resizeMode: 'contain' as const,
   },
   linkedinIcon: {
-    width: DesignTokens.components.iconSize.large + 3,
-    height: DesignTokens.components.iconSize.large + 3,
+    width: 35, // large icon (32) + 3
+    height: 35,
   },
   socialIconEmoji: {
     textAlign: 'center' as const,
@@ -185,7 +179,7 @@ const styles = {
   },
   socialHandle: {
     fontWeight: Typography.weights.semibold,
-    color: BorderColors.brandStrong,
+    color: Colors.primary[600], // Brand strong
     marginBottom: Spacing[1],
   },
   socialDescription: {

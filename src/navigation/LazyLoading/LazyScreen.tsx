@@ -4,8 +4,8 @@
  */
 
 import React, { Suspense } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { PerfectText } from '../../components/ui';
+import { StyleSheet } from 'react-native';
+import { PerfectText, PerfectContainer } from '../../components/ui';
 import { Colors, Spacing } from '../../shared/constants/designTokens';
 import { logger } from '../../shared/utils/logger';
 
@@ -19,9 +19,9 @@ interface LazyScreenProps {
  * Componente di fallback per il loading - RIMOSSO
  */
 const DefaultLoadingFallback: React.FC = () => (
-  <View style={styles.loadingContainer}>
+  <PerfectContainer style={styles.loadingContainer}>
     {/* Loading rimosso per migliorare UX */}
-  </View>
+  </PerfectContainer>
 );
 
 /**
@@ -31,7 +31,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
   error,
   retry,
 }) => (
-  <View style={styles.errorContainer}>
+  <PerfectContainer style={styles.errorContainer}>
     <PerfectText
       size={18}
       lines={1}
@@ -50,7 +50,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
     >
       {error.message || 'Impossibile caricare la schermata'}
     </PerfectText>
-    <View style={styles.retryButton}>
+    <PerfectContainer style={styles.retryButton}>
       <PerfectText
         size={16}
         lines={1}
@@ -61,8 +61,8 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
       >
         Riprova
       </PerfectText>
-    </View>
-  </View>
+    </PerfectContainer>
+  </PerfectContainer>
 );
 
 /**

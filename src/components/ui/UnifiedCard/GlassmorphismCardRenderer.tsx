@@ -10,7 +10,6 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import {
   BorderRadius,
-  Glassmorphism,
   Spacing,
 } from '../../../shared/constants/designTokens';
 import type { GlassmorphismVariant, GlassmorphismIntensity } from './types';
@@ -25,13 +24,19 @@ interface GlassmorphismCardRendererProps {
   disabled: boolean;
 }
 
+const baseStyle = {
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.15,
+  shadowRadius: 8,
+  elevation: 4,
+};
+
 export const GlassmorphismCardRenderer: React.FC<
   GlassmorphismCardRendererProps
-> = ({ children, style, variant, intensity, gradient, onPress, disabled }) => {
+> = ({ children, style, intensity, gradient, onPress, disabled }) => {
   // Get glassmorphism style based on variant
   const getGlassStyle = () => {
-    const baseStyle = Glassmorphism[variant];
-
     // Adjust intensity
     const intensityMultiplier = {
       subtle: 0.5,

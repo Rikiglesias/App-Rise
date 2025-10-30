@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import { Animated } from 'react-native';
 import { HeaderSection } from '../../../../features/social/components/HeaderSection';
-import { ThemeProvider } from '../../../../shared/hooks/useTheme';
+import { AllProviders } from '../../../helpers/testProviders';
 
 // Mock dei moduli necessari
 jest.mock('../../../../shared/hooks', () => ({
@@ -20,9 +20,9 @@ jest.mock(
 );
 
 const HeaderSectionWithTheme = (props: { animationValue: Animated.Value }) => (
-  <ThemeProvider>
+  <AllProviders>
     <HeaderSection animationValue={props.animationValue} />
-  </ThemeProvider>
+  </AllProviders>
 );
 
 describe('HeaderSection', () => {

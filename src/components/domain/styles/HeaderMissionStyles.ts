@@ -100,7 +100,7 @@ export const baseMissionStyles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
   statLabel: {
-    // fontSize gestito da FormattedText variant="body-small"
+    // fontSize gestito dai Typography tokens / PerfectText
     color: Colors.neutral[700],
     textAlign: 'center',
   },

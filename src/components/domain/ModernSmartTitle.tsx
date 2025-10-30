@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, StyleSheet, Text } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import { PerfectContainer, PerfectText } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
@@ -46,6 +46,11 @@ const createModernTitleStyles = (responsiveSpacing: {
       backgroundColor: HomeHeaderDesignTokens.colors.primaryLight,
       borderRadius: 1,
       ...HomeHeaderDesignTokens.shadows.light,
+    },
+
+    titleRow: {
+      flexDirection: 'row',
+      justifyContent: 'center',
     },
   });
 
@@ -125,15 +130,24 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 </PerfectText>
 
                 {/* Seconda riga: "Hunger Italia" con colori diversi */}
-                <PerfectText
-                  size={38}
-                  lines={1}
-                  fontWeight="900"
-                  textAlign="center"
-                >
-                  <Text style={{ color: HomeHeaderDesignTokens.colors.primary }}>Hunger </Text>
-                  <Text style={{ color: HomeHeaderDesignTokens.colors.dark }}>Italia</Text>
-                </PerfectText>
+                <PerfectContainer style={modernTitleStyles.titleRow}>
+                  <PerfectText
+                    size={38}
+                    lines={1}
+                    fontWeight="900"
+                    color={HomeHeaderDesignTokens.colors.primary}
+                  >
+                    Hunger{' '}
+                  </PerfectText>
+                  <PerfectText
+                    size={38}
+                    lines={1}
+                    fontWeight="900"
+                    color={HomeHeaderDesignTokens.colors.dark}
+                  >
+                    Italia
+                  </PerfectText>
+                </PerfectContainer>
 
               {/* Separatore con logo centrale */}
               <PerfectContainer style={modernTitleStyles.titleSeparator}>

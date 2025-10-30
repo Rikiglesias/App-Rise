@@ -78,6 +78,7 @@ android/fastlane/test_output
 # Signing certificates
 *.keystore
 google-play-service-account.json
+google-service-account.json
 
 # Bundler
 vendor/bundle/

@@ -4,43 +4,37 @@
 
 import { Spacing as BaseSpacing } from '../../shared/constants';
 
-const spacingValue = (key: keyof typeof BaseSpacing): number => {
-  const map = BaseSpacing as unknown as Record<string, number>;
-  const value = map[key as string];
-  return typeof value === 'number' ? value : 0;
-};
-
 export const DesignSpacing = {
   ...BaseSpacing,
 
   // Alias semantici
-  xs: spacingValue('1'),
-  sm: spacingValue('2'),
-  md: spacingValue('4'),
-  lg: spacingValue('6'),
-  xl: spacingValue('8'),
-  '2xl': spacingValue('10'),
-  '3xl': spacingValue('16'),
+  xs: BaseSpacing[1],
+  sm: BaseSpacing[2],
+  md: BaseSpacing[4],
+  lg: BaseSpacing[6],
+  xl: BaseSpacing[8],
+  '2xl': BaseSpacing[10],
+  '3xl': BaseSpacing[16],
 
   // Spaziature componenti
   component: {
     padding: {
-      xs: spacingValue('2'),
-      sm: spacingValue('3'),
-      md: spacingValue('4'),
-      lg: spacingValue('6'),
+      xs: BaseSpacing[2],
+      sm: BaseSpacing[3],
+      md: BaseSpacing[4],
+      lg: BaseSpacing[6],
     },
     margin: {
-      xs: spacingValue('1'),
-      sm: spacingValue('2'),
-      md: spacingValue('4'),
-      lg: spacingValue('6'),
+      xs: BaseSpacing[1],
+      sm: BaseSpacing[2],
+      md: BaseSpacing[4],
+      lg: BaseSpacing[6],
     },
     gap: {
-      xs: spacingValue('1'),
-      sm: spacingValue('2'),
-      md: spacingValue('3'),
-      lg: spacingValue('4'),
+      xs: BaseSpacing[1],
+      sm: BaseSpacing[2],
+      md: BaseSpacing[3],
+      lg: BaseSpacing[4],
     },
   },
 

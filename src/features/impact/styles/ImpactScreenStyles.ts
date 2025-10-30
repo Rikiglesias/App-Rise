@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { TypographyTokens } from '../../../shared/constants/responsiveSystem';
+// TypographyTokens rimosso - usa Typography.sizes
 import {
   BorderRadius,
   Colors,
@@ -17,14 +17,14 @@ export const impactScreenStyles = StyleSheet.create({
     paddingTop: Spacing[12],
   },
   headerTitle: {
-    fontSize: TypographyTokens.styles.headline.medium,
+    fontSize: 28, // Headline medium
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
   headerSubtitle: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16, // Body large
     color: Colors.neutral[600],
     textAlign: 'center',
     marginBottom: Spacing[8],
@@ -41,12 +41,12 @@ export const impactScreenStyles = StyleSheet.create({
     opacity: 0.8,
   },
   mainStatValue: {
-    fontSize: TypographyTokens.styles.headline.large,
+    fontSize: 32, // Headline large
     fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
   },
   mainStatLabel: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16, // Body large
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[0],
     opacity: 0.9,
@@ -59,7 +59,7 @@ export const impactScreenStyles = StyleSheet.create({
     marginTop: Spacing[8],
   },
   sectionTitle: {
-    fontSize: TypographyTokens.styles.title.large,
+    fontSize: 24, // Title large
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
     marginBottom: Spacing[4],
@@ -92,7 +92,7 @@ export const impactScreenStyles = StyleSheet.create({
     zIndex: 1,
   },
   mapPreviewText: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16, // Body large
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[0],
     marginTop: Spacing[2],

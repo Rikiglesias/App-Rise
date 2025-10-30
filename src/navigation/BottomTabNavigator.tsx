@@ -5,11 +5,11 @@ import {
 } from '@react-navigation/bottom-tabs';
 import * as Haptics from 'expo-haptics';
 import React, { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Platform-specific components
-import { PlatformBlur, PlatformTouchable, PerfectText } from '../components/ui';
+import { PlatformBlur, PlatformTouchable, PerfectText, PerfectContainer } from '../components/ui';
 
 // Design Tokens & Hooks
 import {
@@ -19,7 +19,6 @@ import {
   Spacing,
   Typography,
 } from '../shared/constants/designTokens';
-import { scaleFont } from '../shared/constants/responsiveSystem';
 
 // Lazy Screens (only for HomeScreen due to export issues)
 // Direct imports (no lazy loading to avoid spinner)
@@ -72,9 +71,9 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
   );
 
   return (
-    <View style={tabContainerStyle}>
+    <PerfectContainer style={tabContainerStyle}>
       <PlatformBlur intensity={90} tint="light" style={styles.blurView} />
-      <View style={styles.tabBarContent}>
+      <PerfectContainer style={styles.tabBarContent}>
         {state.routes.map((route, index: number) => {
           const descriptor = descriptors[route.key];
           if (!descriptor) return null;
@@ -115,8 +114,8 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
             />
           );
         })}
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 
@@ -183,7 +182,7 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   const iconSize = isCentral ? 32 : 26;
 
   return (
-    <View style={[styles.buttonContainer, buttonContainerStyle]}>
+    <PerfectContainer style={[styles.buttonContainer, buttonContainerStyle]}>
       <PlatformTouchable
         activeOpacity={0.7}
         rippleColor="transparent"
@@ -194,8 +193,8 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
         onLongPress={onLongPress}
         style={styles.touchable}
       >
-        <View style={styles.touchableContent}>
-          <View
+        <PerfectContainer style={styles.touchableContent}>
+          <PerfectContainer
             style={[
               isCentral ? styles.centralIconContainer : styles.iconContainer,
               iconContainerStyle,
@@ -210,8 +209,8 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
               size={iconSize}
               color={tabColors.iconColor}
             />
-          </View>
-          <View style={labelStyle}>
+          </PerfectContainer>
+          <PerfectContainer style={labelStyle}>
             <PerfectText
               size={16}
               lines={1}
@@ -220,10 +219,10 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
             >
               {options.tabBarAccessibilityLabel?.split(' ')[0]}
             </PerfectText>
-          </View>
-        </View>
+          </PerfectContainer>
+        </PerfectContainer>
       </PlatformTouchable>
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -242,7 +241,7 @@ const BottomTabNavigator: React.FC = () => (
     initialRouteName="HomeTab"
     screenOptions={{
       headerShown: false,
-      lazy: false, // Pre-monta tutte le tab per eliminare scatti
+      lazy: true, // Lazy loading: migliora cold start; preloading mirato se serve
     }}
     tabBar={renderTabBar}
   >
@@ -335,7 +334,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2, // RIDOTTO: da 4 a 2 per bordo più sottile
     borderColor: 'rgba(255, 255, 255, 0.9)', // SEMI-TRASPARENTE: meno visibile ma presente
-    ...Shadows.xl,
+    ...Shadows.lg,
     shadowOffset: { width: 0, height: 6 },
     elevation: 12,
   },

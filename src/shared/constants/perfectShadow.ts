@@ -77,6 +77,7 @@ export const PerfectShadows = {
 export const debugShadow = (type: ShadowType) => {
   if (!__DEV__) return;
 
-  const _shadow = getPerfectShadow(type);
+  const shadow = getPerfectShadow(type);
+  void shadow;
   // Debug info removed for production
 };

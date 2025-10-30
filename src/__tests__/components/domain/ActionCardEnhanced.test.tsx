@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 
 import ActionCardEnhanced from '../../../components/domain/ActionCardEnhanced';
-import { ThemeProvider } from '../../../shared/hooks/useTheme';
+import { AllProviders } from '../../helpers/testProviders';
 
 // Mock expo-haptics
 jest.mock('expo-haptics', () => ({
@@ -15,7 +15,7 @@ jest.mock('expo-haptics', () => ({
 
 // Helper to wrap components with ThemeProvider
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(<ThemeProvider>{component}</ThemeProvider>);
+  return render(<AllProviders>{component}</AllProviders>);
 };
 
 describe('ActionCardEnhanced', () => {

@@ -9,8 +9,8 @@ import {
   Colors,
   Spacing,
   Typography,
+  Shadows,
 } from '../../../shared/constants/designTokens';
-import { PlatformShadows } from '../../../shared/constants/platformDesignTokens';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
 interface Props {
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   communityGradientContainer: {
     borderRadius: 20,
     padding: 2,
-    ...PlatformShadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
+    ...Shadows.lg, // CONVERTITO: da shadow manuale a Shadows per Android ottimizzato
   },
   communityCardContent: {
     backgroundColor: Colors.neutral[0],

@@ -2,7 +2,7 @@
  * SMART FONT SIZE CACHE
  *
  * Sistema di cache intelligente per ottimizzare i calcoli del fontSize
- * nelle modalità fixed lines del FormattedText.
+ * nelle modalità a righe fisse del PerfectText (Perfect System).
  *
  * Performance Target:
  * - Hit-rate: ≥ 95% in produzione

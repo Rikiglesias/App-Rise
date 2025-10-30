@@ -4,16 +4,11 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Modal, ActivityIndicator } from 'react-native';
+import { StyleSheet, Modal, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { PerfectText } from '../../components/ui';
+import { PerfectText, PerfectContainer } from '../../components/ui';
 import { useOTAUpdates } from '../hooks/useOTAUpdates';
-import { Colors } from '../constants/designTokens';
-import {
-  DesignTokens,
-  SpacingTokens,
-  TypographyTokens,
-} from '../constants/responsiveSystem';
+import { Colors, Spacing, BorderRadius } from '../constants/designTokens';
 
 interface OTAUpdateScreenProps {
   visible: boolean;
@@ -74,11 +69,11 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
         colors={Colors.gradients.redToBlack}
         style={styles.container}
       >
-        <View style={styles.content}>
+        <PerfectContainer style={styles.content}>
           {/* Logo e titolo */}
-          <View style={styles.logoContainer}>
+          <PerfectContainer style={styles.logoContainer}>
             <PerfectText
-              size={TypographyTokens.styles.display.medium} // Sistema responsive
+              size={32} // Display medium
               fontWeight="bold"
               lines={1}
               style={styles.appName}
@@ -86,57 +81,57 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
               Rise Against Hunger
             </PerfectText>
             <PerfectText
-              size={TypographyTokens.styles.body.large} // Sistema responsive
+              size={16} // Body large
               lines={1}
               style={styles.subtitle}
             >
               Italia
             </PerfectText>
-          </View>
+          </PerfectContainer>
 
           {/* Status */}
-          <View style={styles.statusContainer}>
+          <PerfectContainer style={styles.statusContainer}>
             <PerfectText
-              size={TypographyTokens.styles.title.medium} // Sistema responsive
+              size={20} // Title medium
               fontWeight="500"
               lines={1}
               style={styles.statusText}
             >
               {statusMessage}
             </PerfectText>
-          </View>
+          </PerfectContainer>
 
           {/* Progress Bar */}
           {(isDownloading || progress > 0) && (
-            <View style={styles.progressContainer}>
-              <View style={styles.progressBar}>
-                <View
+            <PerfectContainer style={styles.progressContainer}>
+              <PerfectContainer style={styles.progressBar}>
+                <PerfectContainer
                   style={[styles.progressFill, { width: `${progress}%` }]}
                 />
-              </View>
+              </PerfectContainer>
               <PerfectText
-                size={TypographyTokens.styles.body.small} // Sistema responsive
+                size={13} // Body small
                 fontWeight="500"
                 lines={1}
                 style={styles.progressText}
               >
                 {progress}%
               </PerfectText>
-            </View>
+            </PerfectContainer>
           )}
 
           {/* Spinner */}
           {isChecking && (
-            <View style={styles.spinnerContainer}>
+            <PerfectContainer style={styles.spinnerContainer}>
               <ActivityIndicator size="large" color="white" />
-            </View>
+            </PerfectContainer>
           )}
 
           {/* Info */}
-          <View style={styles.infoContainer}>
+          <PerfectContainer style={styles.infoContainer}>
             {error ? (
               <PerfectText
-                size={TypographyTokens.styles.body.small} // Sistema responsive
+                size={13} // Body small
                 lines={2}
                 style={styles.errorText}
               >
@@ -144,15 +139,15 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
               </PerfectText>
             ) : (
               <PerfectText
-                size={TypographyTokens.styles.body.small} // Sistema responsive
+                size={13} // Body small
                 lines={1}
                 style={styles.infoText}
               >
                 Stiamo migliorando la tua esperienza
               </PerfectText>
             )}
-          </View>
-        </View>
+          </PerfectContainer>
+        </PerfectContainer>
       </LinearGradient>
     </Modal>
   );
@@ -160,7 +155,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
 
 const styles = StyleSheet.create({
   modal: {
-    margin: SpacingTokens['0'], // Sistema responsive
+    margin: Spacing[0],
   },
   container: {
     flex: 1,
@@ -169,24 +164,24 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    paddingHorizontal: SpacingTokens['6'], // Sistema responsive
+    paddingHorizontal: Spacing[6],
     width: '100%',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: SpacingTokens['8'], // Sistema responsive
+    marginBottom: Spacing[8],
   },
   appName: {
     color: 'white',
     textAlign: 'center',
-    marginBottom: SpacingTokens['2'], // Sistema responsive
+    marginBottom: Spacing[2],
   },
   subtitle: {
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
   },
   statusContainer: {
-    marginBottom: SpacingTokens['6'], // Sistema responsive
+    marginBottom: Spacing[6],
   },
   statusText: {
     color: 'white',
@@ -195,26 +190,26 @@ const styles = StyleSheet.create({
   progressContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: SpacingTokens['6'], // Sistema responsive
+    marginBottom: Spacing[6],
   },
   progressBar: {
     width: '80%',
-    height: SpacingTokens['2'], // Sistema responsive (8dp)
+    height: Spacing[2], // 8dp
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: DesignTokens.borderRadius.small, // Sistema responsive
+    borderRadius: BorderRadius.sm,
     overflow: 'hidden',
-    marginBottom: SpacingTokens['2'], // Sistema responsive
+    marginBottom: Spacing[2],
   },
   progressFill: {
     height: '100%',
     backgroundColor: 'white',
-    borderRadius: DesignTokens.borderRadius.small, // Sistema responsive
+    borderRadius: BorderRadius.sm,
   },
   progressText: {
     color: 'white',
   },
   spinnerContainer: {
-    marginBottom: SpacingTokens['6'], // Sistema responsive
+    marginBottom: Spacing[6],
   },
   infoContainer: {
     alignItems: 'center',

@@ -1,0 +1,56 @@
+name: 🔒 Legacy Pattern Guard
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  legacy-guard:
+    name: Legacy Pattern Guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔍 Scan for legacy UI patterns
+        run: |
+          set -e
+          echo "Scanning for legacy UI patterns..."
+          if grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "(FormattedText|FormattedTextEnhanced|ResponsiveBox|ResponsiveStack|ResponsiveCard|ResponsiveImage|useResponsiveLayout|useResponsiveDarkMode)" src; then
+            echo "❌ Legacy UI patterns found. Migrate to Perfect System."
+            exit 1
+          else
+            echo "✅ No legacy UI patterns found."
+          fi
+
+      - name: 🚫 Guard forbidden react-native Text/Image imports
+        run: |
+          set -e
+          echo "Scanning for forbidden Text/Image imports..."
+          if grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "import\s*\{[^}]*\bText\b[^}]*\}\s*from\s*['\"]react-native['\"]" src; then
+            echo "❌ Found direct Text import from react-native. Use PerfectText."
+            exit 1
+          fi
+          if grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "import\s*\{[^}]*\bImage\b[^}]*\}\s*from\s*['\"]react-native['\"]" src; then
+            echo "❌ Found direct Image import from react-native. Use PerfectImage."
+            exit 1
+          fi
+          echo "✅ No forbidden Text/Image imports."
+
+      - name: 📐 Guard Dimensions.get() usage
+        run: |
+          set -e
+          echo "Scanning for Dimensions.get usage..."
+          matches=$(grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "Dimensions\\.get\\(" src || true)
+          if [ -n "$matches" ]; then
+            filtered=$(echo "$matches" | grep -v "src/shared/constants/responsiveSystem.ts" || true)
+            if [ -n "$filtered" ]; then
+              echo "$filtered"
+              echo "❌ Disallowed Dimensions.get() usage outside responsiveSystem.ts."
+              exit 1
+            fi
+          fi
+          echo "✅ Dimensions.get usage limited to allowed module."
+

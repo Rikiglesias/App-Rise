@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react-native';
 
 import { ProjectCard } from '../../components/ProjectCard';
 import type { ProjectCardProps } from '../../components/ProjectCard/types';
-import { ThemeProvider } from '../../shared/hooks/useTheme';
+import { AllProviders } from '../helpers/testProviders';
 
 const mockProject: ProjectCardProps = {
   title: 'Test Project',
@@ -15,9 +15,9 @@ const mockProject: ProjectCardProps = {
 };
 
 const ProjectCardWithTheme = (props: ProjectCardProps) => (
-  <ThemeProvider>
+  <AllProviders>
     <ProjectCard {...props} />
-  </ThemeProvider>
+  </AllProviders>
 );
 
 describe('ProjectCard', () => {

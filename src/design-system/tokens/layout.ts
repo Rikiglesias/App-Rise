@@ -2,33 +2,28 @@
 // ?? DESIGN TOKENS - LAYOUT
 // ===================================================================
 
-import { Layout as BaseLayout } from '../../shared/constants';
-import {
-  DeviceBreakpoints,
-  DesignTokens,
-  scaleSize,
-} from '../../shared/constants/responsiveSystem';
+import { Spacing } from '../../shared/constants';
+import { scale } from '../../shared/constants/responsiveSystem';
 
-const containerSizes = DesignTokens.containers.textBlock;
-const componentTokens = DesignTokens.components;
-const buttonHeights = componentTokens.buttonHeight;
-const touchTargets = componentTokens.touchTarget;
-const iconSizes = componentTokens.iconSize;
-
+// Valori fissi per layout - DesignTokens e DeviceBreakpoints rimossi
 const breakpointValues = {
-  xs: DeviceBreakpoints.compact.maxWidth,
-  sm: DeviceBreakpoints.standard.maxWidth,
-  md: DeviceBreakpoints.large.maxWidth,
-  lg: DeviceBreakpoints.xlarge.maxWidth,
-  xl: DeviceBreakpoints.xxlarge.minWidth,
-  '2xl': DeviceBreakpoints.xxlarge.minWidth + 200,
+  xs: 360,    // Compact max width
+  sm: 640,    // Standard max width
+  md: 768,    // Large max width  
+  lg: 1024,   // XLarge max width
+  xl: 1280,   // XXLarge min width
+  '2xl': 1480, // XXLarge + 200
+};
+
+const containerSizes = {
+  maxPhone: 480,
+  maxTablet: 768,
+  maxDesktop: 1200,
 };
 
 export const DesignLayout = {
-  ...BaseLayout,
   breakpoints: {
     ...breakpointValues,
-    device: DeviceBreakpoints,
   },
   container: {
     xs: '100%',
@@ -41,38 +36,38 @@ export const DesignLayout = {
   component: {
     button: {
       height: {
-        sm: buttonHeights.compact,
-        md: buttonHeights.standard,
-        lg: buttonHeights.large,
+        sm: 36,  // Compact
+        md: 44,  // Standard
+        lg: 52,  // Large
       },
       minWidth: {
-        sm: touchTargets.minimum,
-        md: touchTargets.comfortable,
-        lg: touchTargets.generous,
+        sm: 88,  // Minimum touch target
+        md: 120, // Comfortable
+        lg: 160, // Generous
       },
     },
     input: {
       height: {
-        sm: buttonHeights.compact,
-        md: buttonHeights.standard,
-        lg: buttonHeights.large,
+        sm: 36,
+        md: 44,
+        lg: 52,
       },
     },
     card: {
-      minHeight: scaleSize(120),
+      minHeight: scale(120),
       maxWidth: containerSizes.maxPhone,
     },
     modal: {
-      minWidth: scaleSize(320),
+      minWidth: scale(320),
       maxWidth: containerSizes.maxTablet,
-      minHeight: scaleSize(200),
+      minHeight: scale(200),
     },
   },
   spacing: {
-    sectionSpacing: 24,
-    screenPadding: 16,
-    cardSpacing: 12,
-    component: DesignTokens.layout.dividerSpacing,
+    sectionSpacing: Spacing[6],
+    screenPadding: Spacing[4],
+    cardSpacing: Spacing[3],
+    component: Spacing[2],
   },
   zIndex: {
     base: 0,
@@ -85,12 +80,12 @@ export const DesignLayout = {
     toast: 1070,
   },
   icon: {
-    xs: scaleSize(12),
-    sm: iconSizes.small,
-    md: iconSizes.medium,
-    lg: iconSizes.large,
-    xl: iconSizes.xlarge,
-    '2xl': scaleSize(56),
+    xs: scale(12),
+    sm: 24,     // Small icon
+    md: 32,     // Medium icon
+    lg: 40,     // Large icon
+    xl: 48,     // XLarge icon
+    '2xl': scale(56),
   },
 };
 

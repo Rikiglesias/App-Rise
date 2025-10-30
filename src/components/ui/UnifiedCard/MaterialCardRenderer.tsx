@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { Surface, TouchableRipple } from 'react-native-paper';
 
-import { MaterialColors } from '../../../shared/constants/materialDesignTokens';
+import { Colors } from '../../../shared/constants/designTokens';
 import type { MaterialVariant, ElevationLevel } from './types';
 
 interface MaterialCardRendererProps {
@@ -106,7 +106,7 @@ export const MaterialCardRenderer: React.FC<MaterialCardRendererProps> = ({
         style={[styles.androidCard, variantStyle, style]}
         onPress={onPress}
         disabled={disabled}
-        rippleColor={rippleColor ?? MaterialColors.primary[50]}
+        rippleColor={rippleColor ?? Colors.primary[50]}
         borderless={false}
       >
         <View style={styles.cardContent}>{children}</View>

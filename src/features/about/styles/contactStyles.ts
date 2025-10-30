@@ -1,10 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  SpacingTokens as Spacing,
-  TypographyTokens,
-} from '../../../shared/constants/responsiveSystem';
-import { Colors, Typography } from '../../../shared/constants';
+import { Spacing, Colors, Typography } from '../../../shared/constants';
 
 /**
  * Stili per la sezione contatti
@@ -124,7 +120,7 @@ export const animatedContactStyles = StyleSheet.create({
   },
 
   contactButtonTitle: {
-    fontSize: TypographyTokens.styles.body.large, // AUMENTATO: da medium a large per titoli più grandi
+    fontSize: 16, // Body large
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
     marginBottom: Spacing[1],
@@ -132,7 +128,7 @@ export const animatedContactStyles = StyleSheet.create({
   },
 
   contactButtonSubtitle: {
-    fontSize: TypographyTokens.styles.body.medium, // AUMENTATO: da small a medium per sottotitoli più leggibili
+    fontSize: 14, // Body medium
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     lineHeight: 22, // AUMENTATO: da 20 a 22 per migliore leggibilità

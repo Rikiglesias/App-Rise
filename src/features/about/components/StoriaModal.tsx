@@ -2,6 +2,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { Modal } from 'react-native';
+import { modalStyles } from '../styles/modalStyles';
+import type { StoriaModalProps } from '../types';
 import {
   PlatformScrollView,
   PlatformTouchable,
@@ -12,8 +14,6 @@ import {
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
-import { modalStyles } from '../styles/modalStyles';
-import type { StoriaModalProps } from '../types';
 
 export const StoriaModal: React.FC<StoriaModalProps> = ({
   visible,

@@ -3,7 +3,7 @@ import React, { useCallback, useRef } from 'react';
 import type { TouchableOpacityProps, StyleProp, ViewStyle } from 'react-native';
 import { Animated, Easing, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Animation, Glassmorphism } from '../../shared/constants/designTokens';
+import { Animation } from '../../shared/constants/designTokens';
 
 interface EnhancedTouchableProps extends TouchableOpacityProps {
   readonly children: React.ReactNode;
@@ -193,7 +193,8 @@ const useEnhancedTouchableStyles = (
         return [
           styles.glassVariant,
           {
-            ...Glassmorphism.light,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)', // Glassmorphism light effect
+            backdropFilter: 'blur(10px)',
             shadowOpacity: glowAnim.interpolate({
               inputRange: [0, 1],
               outputRange: [0.1, 0.3],

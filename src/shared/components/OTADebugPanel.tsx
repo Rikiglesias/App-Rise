@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import * as Updates from 'expo-updates';
-import { PerfectText, PlatformTouchable } from '../../components/ui';
+import { PerfectText, PlatformTouchable, PerfectContainer } from '../../components/ui';
 import { useOTAUpdates } from '../hooks/useOTAUpdates';
 import { logger } from '../utils/logger';
 
@@ -71,12 +71,12 @@ export const OTADebugPanel: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       <PerfectText lines={1} style={styles.title}>
         🔄 OTA Debug Panel
       </PerfectText>
 
-      <View style={styles.statusContainer}>
+      <PerfectContainer style={styles.statusContainer}>
         <PerfectText lines={1} style={styles.statusText}>
           Status: {getStatusText(isChecking, isDownloading)}
         </PerfectText>
@@ -92,9 +92,9 @@ export const OTADebugPanel: React.FC = () => {
             ❌ Error: {error}
           </PerfectText>
         )}
-      </View>
+      </PerfectContainer>
 
-      <View style={styles.buttonsContainer}>
+      <PerfectContainer style={styles.buttonsContainer}>
         <PlatformTouchable style={styles.button} onPress={showUpdateInfo}>
           <PerfectText lines={1} style={styles.buttonText}>
             ℹ️ Show Info
@@ -120,8 +120,8 @@ export const OTADebugPanel: React.FC = () => {
             🔄 Reload App
           </PerfectText>
         </PlatformTouchable>
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 

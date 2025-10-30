@@ -1,5 +1,5 @@
 import type { GestureResponderEvent, ViewStyle } from 'react-native';
-import { Accessibility } from '../../../shared/constants/designTokens';
+// Colors e Shadows non più usati - rimossi
 import { enhancedCardStyles } from '../styles/EnhancedCardStyles';
 import type { EnhancedCardProps } from '../types/EnhancedCardTypes';
 
@@ -52,7 +52,7 @@ export const useAccessibilityConfig = (
     accessibilityHint:
       accessibilityHint ?? (onPress ? 'Tocca per aprire' : undefined),
     accessibilityState: { disabled },
-    ...Accessibility.touchTarget,
+    // Accessibility.touchTarget rimosso - gestito da PerfectComponents
   };
 
   return accessibilityConfig;

@@ -74,7 +74,6 @@
     "lint": "eslint src/ --ext .ts,.tsx --max-warnings 0"
   },
   "dependencies": {
-    "@expo-google-fonts/inter": "^0.4.2",
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.3",
     "@react-navigation/bottom-tabs": "^7.3.14",

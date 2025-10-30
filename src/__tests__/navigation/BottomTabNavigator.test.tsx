@@ -4,6 +4,7 @@ import * as Haptics from 'expo-haptics';
 import React from 'react';
 
 import BottomTabNavigator from '../../navigation/BottomTabNavigator';
+import { AllProviders } from '../helpers/testProviders';
 
 // Mock Haptics
 jest.mock('expo-haptics');
@@ -63,9 +64,11 @@ jest.mock('../../components/ui', () => ({
 describe('BottomTabNavigator', () => {
   const renderNavigator = () => {
     return render(
-      <NavigationContainer>
-        <BottomTabNavigator />
-      </NavigationContainer>
+      <AllProviders>
+        <NavigationContainer>
+          <BottomTabNavigator />
+        </NavigationContainer>
+      </AllProviders>
     );
   };
 

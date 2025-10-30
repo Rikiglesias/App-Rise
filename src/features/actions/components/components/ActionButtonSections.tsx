@@ -1,8 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useMemo } from 'react';
-import { Platform, View } from 'react-native';
+import { Platform } from 'react-native';
 
-import { PlatformTouchable, PerfectText } from '../../../../components/ui';
+import { PlatformTouchable, PerfectText, PerfectContainer } from '../../../../components/ui';
 import { Spacing } from '../../../../shared/constants';
 import { AnimatedButton } from './AnimatedButton';
 import type {
@@ -46,8 +46,8 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
   );
 
   return (
-    <View style={styles.categoryContainer}>
-      <View style={styles.categoryHeader}>
+    <PerfectContainer style={styles.categoryContainer}>
+      <PerfectContainer style={styles.categoryHeader}>
         <PlatformTouchable
           style={
             Platform.OS === 'android'
@@ -89,10 +89,10 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
         >
           <MaterialCommunityIcons name="information" size={16} color="white" />
         </PlatformTouchable>
-      </View>
-      <View style={styles.buttonsGrid}>
+      </PerfectContainer>
+      <PerfectContainer style={styles.buttonsGrid}>
         {/* Prima riga: Charity Shop, Gift Cards */}
-        <View style={styles.buttonRow}>
+        <PerfectContainer style={styles.buttonRow}>
           {donateButtons.slice(1, 3).map((button, index) => {
             const animationValue = animations.buttonAnimations[index + 1];
             const onPress = handleSecondRowButtons[index];
@@ -110,11 +110,11 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
             }
             return null;
           })}
-        </View>
+        </PerfectContainer>
         {/* Seconda riga: Dona (lungo e centrato) */}
-        <View style={[styles.buttonRow, styles.centeredRow]}>
+        <PerfectContainer style={[styles.buttonRow, styles.centeredRow]}>
           {donateButtons[0] && (
-            <View style={styles.singleButtonContainer}>
+            <PerfectContainer style={styles.singleButtonContainer}>
               <AnimatedButton
                 button={donateButtons[0]}
                 animationValue={animations.buttonAnimations[0]}
@@ -122,11 +122,11 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
                 onPress={handleFirstRowButton}
                 iconColor="#DC2626"
               />
-            </View>
+            </PerfectContainer>
           )}
-        </View>
-      </View>
-    </View>
+        </PerfectContainer>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 
@@ -160,9 +160,9 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
   );
 
   return (
-    <View style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
-      <View style={styles.categoryHeader}>
-        <View
+    <PerfectContainer style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
+      <PerfectContainer style={styles.categoryHeader}>
+        <PerfectContainer
           style={
             Platform.OS === 'android'
               ? [
@@ -193,11 +193,11 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
           >
             Progetti e iniziative umanitarie
           </PerfectText>
-        </View>
-      </View>
-      <View style={styles.buttonsGrid}>
+        </PerfectContainer>
+      </PerfectContainer>
+      <PerfectContainer style={styles.buttonsGrid}>
         {/* Prima riga: Progetti, Eventi */}
-        <View style={styles.buttonRow}>
+        <PerfectContainer style={styles.buttonRow}>
           {[exploreButtons[0], exploreButtons[2]].map((button, index) => {
             if (!button) return null;
             const animationValue =
@@ -218,11 +218,11 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
             }
             return null;
           })}
-        </View>
+        </PerfectContainer>
         {/* Seconda riga: Tracciabilità (centrata) */}
-        <View style={[styles.buttonRow, styles.centeredRow]}>
+        <PerfectContainer style={[styles.buttonRow, styles.centeredRow]}>
           {exploreButtons[1] && (
-            <View style={styles.singleButtonContainer}>
+            <PerfectContainer style={styles.singleButtonContainer}>
               <AnimatedButton
                 button={exploreButtons[1]}
                 animationValue={animations.buttonAnimations[4]}
@@ -230,11 +230,11 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
                 onPress={handleSecondRowButton}
                 iconColor={getExploreIconColor(1)}
               />
-            </View>
+            </PerfectContainer>
           )}
-        </View>
-      </View>
-    </View>
+        </PerfectContainer>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 
@@ -263,8 +263,8 @@ export const CommunityButtonsSection: React.FC<
   );
 
   return (
-    <View style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
-      <View style={styles.categoryHeader}>
+    <PerfectContainer style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}>
+      <PerfectContainer style={styles.categoryHeader}>
         <PlatformTouchable
           style={
             Platform.OS === 'android'
@@ -305,10 +305,10 @@ export const CommunityButtonsSection: React.FC<
             style={styles.communityChevron}
           />
         </PlatformTouchable>
-      </View>
-      <View style={styles.buttonsGrid}>
+      </PerfectContainer>
+      <PerfectContainer style={styles.buttonsGrid}>
         {/* Riga unica: Seguici, Chi Siamo */}
-        <View style={styles.buttonRow}>
+        <PerfectContainer style={styles.buttonRow}>
           {communityButtons.map((button, index) => {
             const animationValue = animations.buttonAnimations[index + 6];
             const onPress = handleCommunityButtons[index];
@@ -326,8 +326,8 @@ export const CommunityButtonsSection: React.FC<
             }
             return null;
           })}
-        </View>
-      </View>
-    </View>
+        </PerfectContainer>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };

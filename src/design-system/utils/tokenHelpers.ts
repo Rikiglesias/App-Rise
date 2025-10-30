@@ -5,7 +5,7 @@
 import { DesignColors } from '../tokens/colors';
 import { DesignSpacing } from '../tokens/spacing';
 import { DesignBorders } from '../tokens/borders';
-import { scaleSize } from '../../shared/constants/responsiveSystem';
+import { scale as scaleSize } from '../../shared/constants/responsiveSystem';
 
 /**
  * Token Helpers - Utility per lavorare con i design tokens
@@ -15,9 +15,9 @@ import { scaleSize } from '../../shared/constants/responsiveSystem';
 // Helper per spacing responsivo
 export const getResponsiveSpacing = (
   baseSpacing: number,
-  scale: number = 1
+  scaleFactor: number = 1
 ) => {
-  return scaleSize(baseSpacing * scale);
+  return scaleSize(baseSpacing * scaleFactor);
 };
 
 // Helper per colori con opacità
