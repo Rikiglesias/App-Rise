@@ -14,3 +14,46 @@ global.__DEV__ = true;
 
 // Console mock removed - using real console for better Logger integration
 // Our Logger system handles console output properly
+
+// Mock TurboModuleRegistry DevMenu to avoid RN DevMenu in tests
+jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
+  const actual = jest.requireActual('react-native/Libraries/TurboModule/TurboModuleRegistry');
+  return {
+    ...actual,
+    getEnforcing: (name) => {
+      if (name === 'DevMenu') {
+        return {};
+      }
+      try {
+        return actual.getEnforcing(name);
+      } catch {
+        return {};
+      }
+    },
+  };
+});
+
+
+// Mock NativeSettingsManager to satisfy React Native Settings module in Jest
+jest.mock('react-native/Libraries/Settings/NativeSettingsManager', () => ({
+  default: {
+    getConstants: () => ({
+      userInterfaceStyle: 'light',
+      selectedFontScale: 1,
+    }),
+    setValues: () => {},
+  },
+}));
+
+// Fallback mock for Settings to avoid internal NativeSettingsManager dependency issues
+jest.mock('react-native/Libraries/Settings/Settings', () => ({
+  default: {
+    _settings: {},
+    get: () => null,
+    set: () => {},
+    watchKeys: () => 0,
+    clearWatch: () => {},
+    _sendObservations: () => {},
+  },
+}));
+

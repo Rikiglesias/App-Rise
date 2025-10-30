@@ -74,8 +74,12 @@ export const createLazyComponent = (
   // Crea componente lazy
   const LazyComponent = React.lazy(cachedImportFn);
 
-  // Preload se richiesto
-  if (preload && !preloadQueue.has(name)) {
+  // Preload se richiesto (salta in ambiente di test/CI)
+  const isTestEnv =
+    process.env.NODE_ENV === 'test' ||
+    (typeof process !== 'undefined' && !!process.env.JEST_WORKER_ID);
+
+  if (preload && !preloadQueue.has(name) && !isTestEnv) {
     preloadQueue.add(name);
     // Preload in background dopo un breve delay
     setTimeout(() => {

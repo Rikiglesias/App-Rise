@@ -167,7 +167,14 @@ export const WrappedSimplePlaceholderScreen = withLazyScreen(
 /**
  * Precarica componenti critici per l'app
  */
+// Evita i dynamic import di preloading durante i test/CI
+const shouldSkipPreload = (): boolean => {
+  if (process.env.NODE_ENV === 'test') return true;
+  if (typeof process !== 'undefined' && process.env.JEST_WORKER_ID) return true;
+  return false;
+};
 export const preloadCriticalComponents = (): void => {
+  if (shouldSkipPreload()) return;
   // Precarica componenti che l'utente probabilmente userà presto
   setTimeout(() => {
     void import('../../features/actions/screens/ContributeTabScreen');
@@ -182,6 +189,7 @@ export const preloadCriticalComponents = (): void => {
  * Precarica componenti secondari in background
  */
 export const preloadSecondaryComponents = (): void => {
+  if (shouldSkipPreload()) return;
   // Precarica dopo che l'app è completamente caricata
   setTimeout(() => {
     void import('../../features/about/screens/ChiSiamoScreen');

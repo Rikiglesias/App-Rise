@@ -74,20 +74,40 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                   );
                 })()
               ) : (
-                <PerfectText size={24} lines={1} style={styles.socialIconEmoji}>
+                <PerfectText
+                  size={24}
+                  lines={1}
+                  fontWeight={Typography.weights.regular}
+                  style={styles.socialIconEmoji}
+                >
                   {platform.emoji}
                 </PerfectText>
               )}
             </PerfectContainer>
 
             <PerfectContainer style={styles.socialInfoContainer}>
-              <PerfectText size={16} lines={1} style={styles.socialName}>
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight={Typography.weights.regular}
+                style={styles.socialName}
+              >
                 {platform.name}
               </PerfectText>
-              <PerfectText size={14} lines={1} style={styles.socialHandle}>
+              <PerfectText
+                size={14}
+                lines={1}
+                fontWeight={Typography.weights.regular}
+                style={styles.socialHandle}
+              >
                 {platform.handle}
               </PerfectText>
-              <PerfectText size={12} lines={2} style={styles.socialDescription}>
+              <PerfectText
+                size={12}
+                lines={2}
+                fontWeight={Typography.weights.regular}
+                style={styles.socialDescription}
+              >
                 {platform.description}
               </PerfectText>
             </PerfectContainer>
@@ -95,7 +115,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
             <PerfectContainer style={styles.arrowContainer}>
               <MaterialCommunityIcons
                 name="chevron-right"
-                size={scale(24)}
+                size={24}
                 color={Colors.neutral[400]}
               />
             </PerfectContainer>
@@ -115,7 +135,7 @@ const styles = {
 
   socialCardWhiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: /* scaleFont(18) */ 18,
+    borderRadius: scale(18),
     overflow: 'hidden' as const,
     shadowColor: Colors.neutral[900],
     shadowOffset: { width: 0, height: 6 },
@@ -131,12 +151,12 @@ const styles = {
   socialIconContainer: {
     width: 56, // xlarge icon (40) + 16
     height: 56,
-    borderRadius: /* scaleFont(28) */ 28,
+    borderRadius: scale(28),
     backgroundColor: Colors.neutral[0],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginRight: Spacing[4],
-    shadowColor: Colors.primary[600], // Brand strong
+    shadowColor: Colors.primary[500], // Brand main
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -166,13 +186,13 @@ const styles = {
   },
   socialHandle: {
     fontWeight: Typography.weights.semibold,
-    color: Colors.primary[600], // Brand strong
+    color: Colors.primary[500], // Brand main
     marginBottom: Spacing[1],
   },
   socialDescription: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
-    lineHeight: /* scaleFont(16) */ 16,
+    lineHeight: scale(16),
   },
   arrowContainer: {
     padding: Spacing[1],
