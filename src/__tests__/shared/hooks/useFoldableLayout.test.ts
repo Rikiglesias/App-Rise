@@ -1,14 +1,25 @@
 import { renderHook } from '@testing-library/react-native';
 import { useFoldableLayout } from '../../../shared/hooks/useFoldableLayout';
 
-// Mock Dimensions API since it's not available in test environment
+// Mock react-native to avoid DevMenu and other native module issues
 jest.mock('react-native', () => {
   const RN = jest.requireActual('react-native');
   return {
     ...RN,
+    Platform: {
+      ...RN.Platform,
+      OS: 'ios',
+    },
     Dimensions: {
       addEventListener: jest.fn(() => ({ remove: jest.fn() })),
       get: () => ({ width: 390, height: 844 }),
+    },
+    NativeModules: {
+      ...RN.NativeModules,
+      DevMenu: null,
+    },
+    TurboModuleRegistry: {
+      getEnforcing: jest.fn(),
     },
   };
 });

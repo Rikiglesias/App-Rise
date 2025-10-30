@@ -81,14 +81,6 @@ jest.mock('react-native-svg', () => ({
   G: 'G',
 }));
 
-jest.mock('../../../../shared/hooks/useResponsive', () => ({
-  useResponsive: () => ({
-    scale: (value: number) => value,
-    spacing: (value: number) => value,
-    fontSize: (value: number) => value,
-  }),
-}));
-
 jest.mock('../../../../components/ui', () => {
   const React = jest.requireActual('react');
   return {
@@ -113,6 +105,15 @@ jest.mock('../../../../components/ui', () => {
       ...props
     }: React.ComponentProps<'span'> & { children: React.ReactNode }) => {
       return React.createElement('Text', props, children);
+    },
+    PerfectContainer: ({
+      children,
+      ...props
+    }: React.ComponentProps<'div'> & { children?: React.ReactNode }) => {
+      return React.createElement('View', props, children);
+    },
+    PerfectImage: (props: any) => {
+      return React.createElement('Image', props);
     },
   };
 });

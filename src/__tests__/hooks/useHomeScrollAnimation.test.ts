@@ -2,6 +2,11 @@ import { renderHook } from '@testing-library/react-native';
 
 import { useHomeScrollAnimation } from '../../shared/hooks/useHomeScrollAnimation';
 
+// Mock LazyComponents to avoid dynamic import issues in tests
+jest.mock('../../navigation/LazyLoading/LazyComponents', () => ({
+  WrappedImpatto2024Screen: () => null,
+}));
+
 describe('useHomeScrollAnimation', () => {
   it('should initialize with correct values', () => {
     const { result } = renderHook(() => useHomeScrollAnimation());

@@ -1,6 +1,6 @@
-﻿2025-10-30T12:39:36.7689584Z ##[group]Run actions/github-script@v7
-2025-10-30T12:39:36.7690200Z with:
-2025-10-30T12:39:36.7693252Z   script: const summary = `## 🚀 CI/CD Pipeline Results
+﻿2025-10-30T12:50:32.6338026Z ##[group]Run actions/github-script@v7
+2025-10-30T12:50:32.6338713Z with:
+2025-10-30T12:50:32.6341736Z   script: const summary = `## 🚀 CI/CD Pipeline Results
 
 ### 🔍 Quality Checks
 ❌ Quality checks failed
@@ -21,71 +21,71 @@ github.rest.issues.createComment({
   body: summary
 });
 
-2025-10-30T12:39:36.7696420Z   github-token: ***
-2025-10-30T12:39:36.7696849Z   debug: false
-2025-10-30T12:39:36.7697284Z   user-agent: actions/github-script
-2025-10-30T12:39:36.7697811Z   result-encoding: json
-2025-10-30T12:39:36.7698263Z   retries: 0
-2025-10-30T12:39:36.7698710Z   retry-exempt-status-codes: 400,401,403,404,422
-2025-10-30T12:39:36.7699308Z env:
-2025-10-30T12:39:36.7699688Z   NODE_VERSION: 20.x
-2025-10-30T12:39:36.7700115Z   CACHE_VERSION: v2
-2025-10-30T12:39:36.7700836Z   EXPO_CLI_VERSION: latest
-2025-10-30T12:39:36.7701333Z   EAS_CLI_VERSION: latest
-2025-10-30T12:39:36.7701775Z ##[endgroup]
-2025-10-30T12:39:37.1948602Z RequestError [HttpError]: Resource not accessible by integration
-2025-10-30T12:39:37.1979309Z ##[error]Unhandled error: HttpError: Resource not accessible by integration
-2025-10-30T12:39:37.1987714Z     at /home/runner/work/_actions/actions/github-script/v7/dist/index.js:9537:21
-2025-10-30T12:39:37.1989663Z     at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
-2025-10-30T12:39:37.1991051Z   status: 403,
-2025-10-30T12:39:37.1991655Z   response: {
-2025-10-30T12:39:37.1992688Z     url: 'https://api.github.com/repos/Rikiglesias/App-Rise/issues/19/comments',
-2025-10-30T12:39:37.1993847Z     status: 403,
-2025-10-30T12:39:37.1994449Z     headers: {
-2025-10-30T12:39:37.1995138Z       'access-control-allow-origin': '*',
-2025-10-30T12:39:37.1999236Z       'access-control-expose-headers': 'ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset',
-2025-10-30T12:39:37.2003983Z       'content-encoding': 'gzip',
-2025-10-30T12:39:37.2004997Z       'content-security-policy': "default-src 'none'",
-2025-10-30T12:39:37.2006291Z       'content-type': 'application/json; charset=utf-8',
-2025-10-30T12:39:37.2007433Z       date: 'Thu, 30 Oct 2025 12:39:37 GMT',
-2025-10-30T12:39:37.2009045Z       'referrer-policy': 'origin-when-cross-origin, strict-origin-when-cross-origin',
-2025-10-30T12:39:37.2010984Z       server: 'github.com',
-2025-10-30T12:39:37.2012413Z       'strict-transport-security': 'max-age=31536000; includeSubdomains; preload',
-2025-10-30T12:39:37.2014015Z       'transfer-encoding': 'chunked',
-2025-10-30T12:39:37.2015208Z       vary: 'Accept-Encoding, Accept, X-Requested-With',
-2025-10-30T12:39:37.2016979Z       'x-accepted-github-permissions': 'issues=write; pull_requests=write',
-2025-10-30T12:39:37.2018658Z       'x-content-type-options': 'nosniff',
-2025-10-30T12:39:37.2019766Z       'x-frame-options': 'deny',
-2025-10-30T12:39:37.2020993Z       'x-github-api-version-selected': '2022-11-28',
-2025-10-30T12:39:37.2022452Z       'x-github-media-type': 'github.v3; format=json',
-2025-10-30T12:39:37.2024177Z       'x-github-request-id': '3019:8406E:F36C3A7:F948013:69035C88',
-2025-10-30T12:39:37.2025779Z       'x-ratelimit-limit': '5000',
-2025-10-30T12:39:37.2027042Z       'x-ratelimit-remaining': '4998',
-2025-10-30T12:39:37.2028365Z       'x-ratelimit-reset': '1761830351',
-2025-10-30T12:39:37.2029715Z       'x-ratelimit-resource': 'core',
-2025-10-30T12:39:37.2031122Z       'x-ratelimit-used': '2',
-2025-10-30T12:39:37.2032335Z       'x-xss-protection': '0'
-2025-10-30T12:39:37.2033490Z     },
-2025-10-30T12:39:37.2034385Z     data: {
-2025-10-30T12:39:37.2035493Z       message: 'Resource not accessible by integration',
-2025-10-30T12:39:37.2038061Z       documentation_url: 'https://docs.github.com/rest/issues/comments#create-an-issue-comment',
-2025-10-30T12:39:37.2040341Z       status: '403'
-2025-10-30T12:39:37.2041440Z     }
-2025-10-30T12:39:37.2042322Z   },
-2025-10-30T12:39:37.2043202Z   request: {
-2025-10-30T12:39:37.2044148Z     method: 'POST',
-2025-10-30T12:39:37.2045692Z     url: 'https://api.github.com/repos/Rikiglesias/App-Rise/issues/19/comments',
-2025-10-30T12:39:37.2047560Z     headers: {
-2025-10-30T12:39:37.2048645Z       accept: 'application/vnd.github.v3+json',
-2025-10-30T12:39:37.2051017Z       'user-agent': 'actions/github-script octokit-core.js/5.0.1 Node.js/20.19.4 (linux; x64)',
-2025-10-30T12:39:37.2053192Z       authorization: 'token [REDACTED]',
-2025-10-30T12:39:37.2054695Z       'content-type': 'application/json; charset=utf-8'
-2025-10-30T12:39:37.2056149Z     },
-2025-10-30T12:39:37.2061443Z     body: '{"body":"## 🚀 CI/CD Pipeline Results\\n\\n### 🔍 Quality Checks\\n❌ Quality checks failed\\n\\n### 🎯 Visual Regression\\n⏭️ Visual regression tests skipped\\n\\n### 📱 Builds\\n🍎 iOS: ⏭️ Skipped\\n🤖 Android: ⏭️ Skipped\\n\\n🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)"}',
-2025-10-30T12:39:37.2066522Z     request: {
-2025-10-30T12:39:37.2067464Z       agent: [Agent],
-2025-10-30T12:39:37.2068473Z       fetch: [Function: proxyFetch],
-2025-10-30T12:39:37.2069720Z       hook: [Function: bound bound register]
-2025-10-30T12:39:37.2071209Z     }
-2025-10-30T12:39:37.2072015Z   }
-2025-10-30T12:39:37.2072781Z }
+2025-10-30T12:50:32.6344986Z   github-token: ***
+2025-10-30T12:50:32.6345422Z   debug: false
+2025-10-30T12:50:32.6345862Z   user-agent: actions/github-script
+2025-10-30T12:50:32.6346387Z   result-encoding: json
+2025-10-30T12:50:32.6346832Z   retries: 0
+2025-10-30T12:50:32.6347292Z   retry-exempt-status-codes: 400,401,403,404,422
+2025-10-30T12:50:32.6347871Z env:
+2025-10-30T12:50:32.6348256Z   NODE_VERSION: 20.x
+2025-10-30T12:50:32.6348685Z   CACHE_VERSION: v2
+2025-10-30T12:50:32.6349187Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:50:32.6349659Z   EAS_CLI_VERSION: latest
+2025-10-30T12:50:32.6350105Z ##[endgroup]
+2025-10-30T12:50:32.9644240Z RequestError [HttpError]: Resource not accessible by integration
+2025-10-30T12:50:32.9645820Z     at /home/runner/work/_actions/actions/github-script/v7/dist/index.js:9537:21
+2025-10-30T12:50:32.9647300Z     at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+2025-10-30T12:50:32.9648864Z   status: 403,
+2025-10-30T12:50:32.9649437Z   response: {
+2025-10-30T12:50:32.9650362Z     url: 'https://api.github.com/repos/Rikiglesias/App-Rise/issues/19/comments',
+2025-10-30T12:50:32.9651656Z     status: 403,
+2025-10-30T12:50:32.9652246Z     headers: {
+2025-10-30T12:50:32.9652901Z       'access-control-allow-origin': '*',
+2025-10-30T12:50:32.9656532Z       'access-control-expose-headers': 'ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset',
+2025-10-30T12:50:32.9661080Z       'content-encoding': 'gzip',
+2025-10-30T12:50:32.9662092Z       'content-security-policy': "default-src 'none'",
+2025-10-30T12:50:32.9695385Z ##[error]Unhandled error: HttpError: Resource not accessible by integration
+2025-10-30T12:50:32.9705865Z       'content-type': 'application/json; charset=utf-8',
+2025-10-30T12:50:32.9707066Z       date: 'Thu, 30 Oct 2025 12:50:32 GMT',
+2025-10-30T12:50:32.9708690Z       'referrer-policy': 'origin-when-cross-origin, strict-origin-when-cross-origin',
+2025-10-30T12:50:32.9710356Z       server: 'github.com',
+2025-10-30T12:50:32.9711903Z       'strict-transport-security': 'max-age=31536000; includeSubdomains; preload',
+2025-10-30T12:50:32.9713524Z       'transfer-encoding': 'chunked',
+2025-10-30T12:50:32.9714723Z       vary: 'Accept-Encoding, Accept, X-Requested-With',
+2025-10-30T12:50:32.9716522Z       'x-accepted-github-permissions': 'issues=write; pull_requests=write',
+2025-10-30T12:50:32.9718213Z       'x-content-type-options': 'nosniff',
+2025-10-30T12:50:32.9719298Z       'x-frame-options': 'deny',
+2025-10-30T12:50:32.9720362Z       'x-github-api-version-selected': '2022-11-28',
+2025-10-30T12:50:32.9722064Z       'x-github-media-type': 'github.v3; format=json',
+2025-10-30T12:50:32.9723784Z       'x-github-request-id': 'A849:3A970B:B6EC75:311BC7C:69035F18',
+2025-10-30T12:50:32.9725414Z       'x-ratelimit-limit': '5000',
+2025-10-30T12:50:32.9726676Z       'x-ratelimit-remaining': '4995',
+2025-10-30T12:50:32.9728039Z       'x-ratelimit-reset': '1761830351',
+2025-10-30T12:50:32.9729373Z       'x-ratelimit-resource': 'core',
+2025-10-30T12:50:32.9730938Z       'x-ratelimit-used': '5',
+2025-10-30T12:50:32.9732181Z       'x-xss-protection': '0'
+2025-10-30T12:50:32.9733333Z     },
+2025-10-30T12:50:32.9734225Z     data: {
+2025-10-30T12:50:32.9735336Z       message: 'Resource not accessible by integration',
+2025-10-30T12:50:32.9738107Z       documentation_url: 'https://docs.github.com/rest/issues/comments#create-an-issue-comment',
+2025-10-30T12:50:32.9740219Z       status: '403'
+2025-10-30T12:50:32.9741407Z     }
+2025-10-30T12:50:32.9742275Z   },
+2025-10-30T12:50:32.9743132Z   request: {
+2025-10-30T12:50:32.9744063Z     method: 'POST',
+2025-10-30T12:50:32.9745598Z     url: 'https://api.github.com/repos/Rikiglesias/App-Rise/issues/19/comments',
+2025-10-30T12:50:32.9747456Z     headers: {
+2025-10-30T12:50:32.9748514Z       accept: 'application/vnd.github.v3+json',
+2025-10-30T12:50:32.9750724Z       'user-agent': 'actions/github-script octokit-core.js/5.0.1 Node.js/20.19.4 (linux; x64)',
+2025-10-30T12:50:32.9752845Z       authorization: 'token [REDACTED]',
+2025-10-30T12:50:32.9754322Z       'content-type': 'application/json; charset=utf-8'
+2025-10-30T12:50:32.9755743Z     },
+2025-10-30T12:50:32.9761144Z     body: '{"body":"## 🚀 CI/CD Pipeline Results\\n\\n### 🔍 Quality Checks\\n❌ Quality checks failed\\n\\n### 🎯 Visual Regression\\n⏭️ Visual regression tests skipped\\n\\n### 📱 Builds\\n🍎 iOS: ⏭️ Skipped\\n🤖 Android: ⏭️ Skipped\\n\\n🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)"}',
+2025-10-30T12:50:32.9766310Z     request: {
+2025-10-30T12:50:32.9767236Z       agent: [Agent],
+2025-10-30T12:50:32.9768245Z       fetch: [Function: proxyFetch],
+2025-10-30T12:50:32.9769460Z       hook: [Function: bound bound register]
+2025-10-30T12:50:32.9771369Z     }
+2025-10-30T12:50:32.9772144Z   }
+2025-10-30T12:50:32.9772898Z }

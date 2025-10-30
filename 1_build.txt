@@ -1,65 +1,65 @@
-﻿2025-10-30T12:39:35.3806336Z Current runner version: '2.328.0'
-2025-10-30T12:39:35.3831930Z ##[group]Runner Image Provisioner
-2025-10-30T12:39:35.3832838Z Hosted Compute Agent
-2025-10-30T12:39:35.3833359Z Version: 20250912.392
-2025-10-30T12:39:35.3834002Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
-2025-10-30T12:39:35.3834667Z Build Date: 2025-09-12T15:23:14Z
-2025-10-30T12:39:35.3835301Z ##[endgroup]
-2025-10-30T12:39:35.3835781Z ##[group]Operating System
-2025-10-30T12:39:35.3836404Z Ubuntu
-2025-10-30T12:39:35.3836887Z 24.04.3
-2025-10-30T12:39:35.3837303Z LTS
-2025-10-30T12:39:35.3837829Z ##[endgroup]
-2025-10-30T12:39:35.3838300Z ##[group]Runner Image
-2025-10-30T12:39:35.3838869Z Image: ubuntu-24.04
-2025-10-30T12:39:35.3839416Z Version: 20250929.60.1
-2025-10-30T12:39:35.3840415Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
-2025-10-30T12:39:35.3842191Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
-2025-10-30T12:39:35.3843180Z ##[endgroup]
-2025-10-30T12:39:35.3844273Z ##[group]GITHUB_TOKEN Permissions
-2025-10-30T12:39:35.3846140Z Contents: read
-2025-10-30T12:39:35.3846698Z Metadata: read
-2025-10-30T12:39:35.3847234Z Packages: read
-2025-10-30T12:39:35.3847757Z ##[endgroup]
-2025-10-30T12:39:35.3850288Z Secret source: Actions
-2025-10-30T12:39:35.3851350Z Prepare workflow directory
-2025-10-30T12:39:35.4284018Z Prepare all required actions
-2025-10-30T12:39:35.4356206Z Complete job name: build
-2025-10-30T12:39:35.5149648Z ##[group]Run IOS="skipped"
-2025-10-30T12:39:35.5150857Z [36;1mIOS="skipped"[0m
-2025-10-30T12:39:35.5152063Z [36;1mANDROID="skipped"[0m
-2025-10-30T12:39:35.5152987Z [36;1m[0m
-2025-10-30T12:39:35.5153750Z [36;1mecho "iOS result: $IOS"[0m
-2025-10-30T12:39:35.5154859Z [36;1mecho "Android result: $ANDROID"[0m
-2025-10-30T12:39:35.5156198Z [36;1m[0m
-2025-10-30T12:39:35.5157222Z [36;1m# Pass if both succeeded OR both skipped (no build required)[0m
-2025-10-30T12:39:35.5158696Z [36;1mif [ "$IOS" = "success" ] && [ "$ANDROID" = "success" ]; then[0m
-2025-10-30T12:39:35.5159879Z [36;1m  echo "✅ Both builds succeeded"[0m
-2025-10-30T12:39:35.5160933Z [36;1m  exit 0[0m
-2025-10-30T12:39:35.5161935Z [36;1mfi[0m
-2025-10-30T12:39:35.5162715Z [36;1m[0m
-2025-10-30T12:39:35.5163653Z [36;1mif [ "$IOS" = "skipped" ] && [ "$ANDROID" = "skipped" ]; then[0m
-2025-10-30T12:39:35.5165058Z [36;1m  echo "ℹ️ Builds skipped (no build required) — marking as pass"[0m
-2025-10-30T12:39:35.5166474Z [36;1m  exit 0[0m
-2025-10-30T12:39:35.5167185Z [36;1mfi[0m
-2025-10-30T12:39:35.5168002Z [36;1m[0m
-2025-10-30T12:39:35.5168832Z [36;1m# Fail only if at least one actually ran and failed[0m
-2025-10-30T12:39:35.5170192Z [36;1mif [ "$IOS" = "failure" ] || [ "$ANDROID" = "failure" ]; then[0m
-2025-10-30T12:39:35.5171573Z [36;1m  echo "❌ One or both builds failed"[0m
-2025-10-30T12:39:35.5172552Z [36;1m  exit 1[0m
-2025-10-30T12:39:35.5173386Z [36;1mfi[0m
-2025-10-30T12:39:35.5174132Z [36;1m[0m
-2025-10-30T12:39:35.5175158Z [36;1m# Mixed results (e.g., one skipped, one success) → pass[0m
-2025-10-30T12:39:35.5176515Z [36;1mecho "ℹ️ Mixed results (success/skipped) — marking as pass"[0m
-2025-10-30T12:39:35.5177773Z [36;1mexit 0[0m
-2025-10-30T12:39:35.6587271Z shell: /usr/bin/bash -e {0}
-2025-10-30T12:39:35.6588332Z env:
-2025-10-30T12:39:35.6588848Z   NODE_VERSION: 20.x
-2025-10-30T12:39:35.6589331Z   CACHE_VERSION: v2
-2025-10-30T12:39:35.6590242Z   EXPO_CLI_VERSION: latest
-2025-10-30T12:39:35.6590819Z   EAS_CLI_VERSION: latest
-2025-10-30T12:39:35.6591706Z ##[endgroup]
-2025-10-30T12:39:35.6868641Z iOS result: skipped
-2025-10-30T12:39:35.6869458Z Android result: skipped
-2025-10-30T12:39:35.7012006Z ℹ️ Builds skipped (no build required) — marking as pass
-2025-10-30T12:39:35.7130171Z Cleaning up orphan processes
+﻿2025-10-30T12:50:31.0443727Z Current runner version: '2.328.0'
+2025-10-30T12:50:31.0467171Z ##[group]Runner Image Provisioner
+2025-10-30T12:50:31.0467979Z Hosted Compute Agent
+2025-10-30T12:50:31.0468547Z Version: 20250912.392
+2025-10-30T12:50:31.0469170Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+2025-10-30T12:50:31.0469859Z Build Date: 2025-09-12T15:23:14Z
+2025-10-30T12:50:31.0470471Z ##[endgroup]
+2025-10-30T12:50:31.0470997Z ##[group]Operating System
+2025-10-30T12:50:31.0471918Z Ubuntu
+2025-10-30T12:50:31.0472415Z 24.04.3
+2025-10-30T12:50:31.0472901Z LTS
+2025-10-30T12:50:31.0473301Z ##[endgroup]
+2025-10-30T12:50:31.0473860Z ##[group]Runner Image
+2025-10-30T12:50:31.0474442Z Image: ubuntu-24.04
+2025-10-30T12:50:31.0474892Z Version: 20250929.60.1
+2025-10-30T12:50:31.0475989Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250929.60/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-30T12:50:31.0477556Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250929.60
+2025-10-30T12:50:31.0478607Z ##[endgroup]
+2025-10-30T12:50:31.0479754Z ##[group]GITHUB_TOKEN Permissions
+2025-10-30T12:50:31.0481860Z Contents: read
+2025-10-30T12:50:31.0482621Z Metadata: read
+2025-10-30T12:50:31.0483123Z Packages: read
+2025-10-30T12:50:31.0483776Z ##[endgroup]
+2025-10-30T12:50:31.0485838Z Secret source: Actions
+2025-10-30T12:50:31.0486537Z Prepare workflow directory
+2025-10-30T12:50:31.0863293Z Prepare all required actions
+2025-10-30T12:50:31.0915130Z Complete job name: build
+2025-10-30T12:50:31.1626382Z ##[group]Run IOS="skipped"
+2025-10-30T12:50:31.1627122Z [36;1mIOS="skipped"[0m
+2025-10-30T12:50:31.1627789Z [36;1mANDROID="skipped"[0m
+2025-10-30T12:50:31.1628396Z [36;1m[0m
+2025-10-30T12:50:31.1628887Z [36;1mecho "iOS result: $IOS"[0m
+2025-10-30T12:50:31.1629611Z [36;1mecho "Android result: $ANDROID"[0m
+2025-10-30T12:50:31.1630354Z [36;1m[0m
+2025-10-30T12:50:31.1631033Z [36;1m# Pass if both succeeded OR both skipped (no build required)[0m
+2025-10-30T12:50:31.1632283Z [36;1mif [ "$IOS" = "success" ] && [ "$ANDROID" = "success" ]; then[0m
+2025-10-30T12:50:31.1633021Z [36;1m  echo "✅ Both builds succeeded"[0m
+2025-10-30T12:50:31.1633634Z [36;1m  exit 0[0m
+2025-10-30T12:50:31.1634140Z [36;1mfi[0m
+2025-10-30T12:50:31.1634606Z [36;1m[0m
+2025-10-30T12:50:31.1635122Z [36;1mif [ "$IOS" = "skipped" ] && [ "$ANDROID" = "skipped" ]; then[0m
+2025-10-30T12:50:31.1635991Z [36;1m  echo "ℹ️ Builds skipped (no build required) — marking as pass"[0m
+2025-10-30T12:50:31.1636807Z [36;1m  exit 0[0m
+2025-10-30T12:50:31.1637277Z [36;1mfi[0m
+2025-10-30T12:50:31.1637750Z [36;1m[0m
+2025-10-30T12:50:31.1638291Z [36;1m# Fail only if at least one actually ran and failed[0m
+2025-10-30T12:50:31.1639036Z [36;1mif [ "$IOS" = "failure" ] || [ "$ANDROID" = "failure" ]; then[0m
+2025-10-30T12:50:31.1639836Z [36;1m  echo "❌ One or both builds failed"[0m
+2025-10-30T12:50:31.1640488Z [36;1m  exit 1[0m
+2025-10-30T12:50:31.1641003Z [36;1mfi[0m
+2025-10-30T12:50:31.1641742Z [36;1m[0m
+2025-10-30T12:50:31.1642364Z [36;1m# Mixed results (e.g., one skipped, one success) → pass[0m
+2025-10-30T12:50:31.1643246Z [36;1mecho "ℹ️ Mixed results (success/skipped) — marking as pass"[0m
+2025-10-30T12:50:31.1644045Z [36;1mexit 0[0m
+2025-10-30T12:50:31.3134059Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:50:31.3134975Z env:
+2025-10-30T12:50:31.3135519Z   NODE_VERSION: 20.x
+2025-10-30T12:50:31.3136209Z   CACHE_VERSION: v2
+2025-10-30T12:50:31.3136757Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:50:31.3137342Z   EAS_CLI_VERSION: latest
+2025-10-30T12:50:31.3137960Z ##[endgroup]
+2025-10-30T12:50:31.3399263Z iOS result: skipped
+2025-10-30T12:50:31.3400038Z Android result: skipped
+2025-10-30T12:50:31.3542493Z ℹ️ Builds skipped (no build required) — marking as pass
+2025-10-30T12:50:31.3639486Z Cleaning up orphan processes

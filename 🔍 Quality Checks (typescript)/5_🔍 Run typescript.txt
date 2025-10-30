@@ -1,27 +1,27 @@
-﻿2025-10-30T12:38:55.2714129Z ##[group]Run case "typescript" in
-2025-10-30T12:38:55.2714460Z [36;1mcase "typescript" in[0m
-2025-10-30T12:38:55.2714687Z [36;1m  "typescript")[0m
-2025-10-30T12:38:55.2715184Z [36;1m    echo "🔍 TypeScript Check"[0m
-2025-10-30T12:38:55.2715535Z [36;1m    npx tsc --noEmit --skipLibCheck[0m
-2025-10-30T12:38:55.2715792Z [36;1m    ;;[0m
-2025-10-30T12:38:55.2715966Z [36;1m  "eslint")[0m
-2025-10-30T12:38:55.2716160Z [36;1m    echo "📝 ESLint Check"[0m
-2025-10-30T12:38:55.2716462Z [36;1m    npx eslint "src/**/*.{ts,tsx}" --max-warnings 0 --cache[0m
-2025-10-30T12:38:55.2716765Z [36;1m    ;;[0m
-2025-10-30T12:38:55.2716936Z [36;1m  "prettier")[0m
-2025-10-30T12:38:55.2717146Z [36;1m    echo "🎨 Prettier Check"[0m
-2025-10-30T12:38:55.2717447Z [36;1m    npx prettier --check "src/**/*.{ts,tsx}" --cache[0m
-2025-10-30T12:38:55.2717721Z [36;1m    ;;[0m
-2025-10-30T12:38:55.2717896Z [36;1m  "tests")[0m
-2025-10-30T12:38:55.2718086Z [36;1m    echo "🧪 Unit Tests"[0m
-2025-10-30T12:38:55.2718374Z [36;1m    npm test -- --coverage --watchAll=false --maxWorkers=2[0m
-2025-10-30T12:38:55.2718691Z [36;1m    ;;[0m
-2025-10-30T12:38:55.2718854Z [36;1mesac[0m
-2025-10-30T12:38:55.2752568Z shell: /usr/bin/bash -e {0}
-2025-10-30T12:38:55.2752810Z env:
-2025-10-30T12:38:55.2752977Z   NODE_VERSION: 20.x
-2025-10-30T12:38:55.2753163Z   CACHE_VERSION: v2
-2025-10-30T12:38:55.2753353Z   EXPO_CLI_VERSION: latest
-2025-10-30T12:38:55.2753562Z   EAS_CLI_VERSION: latest
-2025-10-30T12:38:55.2753750Z ##[endgroup]
-2025-10-30T12:38:55.2810583Z 🔍 TypeScript Check
+﻿2025-10-30T12:49:47.1248238Z ##[group]Run case "typescript" in
+2025-10-30T12:49:47.1248715Z [36;1mcase "typescript" in[0m
+2025-10-30T12:49:47.1249259Z [36;1m  "typescript")[0m
+2025-10-30T12:49:47.1249621Z [36;1m    echo "🔍 TypeScript Check"[0m
+2025-10-30T12:49:47.1250087Z [36;1m    npx tsc --noEmit --skipLibCheck[0m
+2025-10-30T12:49:47.1250492Z [36;1m    ;;[0m
+2025-10-30T12:49:47.1250768Z [36;1m  "eslint")[0m
+2025-10-30T12:49:47.1251079Z [36;1m    echo "📝 ESLint Check"[0m
+2025-10-30T12:49:47.1251559Z [36;1m    npx eslint "src/**/*.{ts,tsx}" --max-warnings 0 --cache[0m
+2025-10-30T12:49:47.1252035Z [36;1m    ;;[0m
+2025-10-30T12:49:47.1252316Z [36;1m  "prettier")[0m
+2025-10-30T12:49:47.1252640Z [36;1m    echo "🎨 Prettier Check"[0m
+2025-10-30T12:49:47.1253113Z [36;1m    npx prettier --check "src/**/*.{ts,tsx}" --cache[0m
+2025-10-30T12:49:47.1253562Z [36;1m    ;;[0m
+2025-10-30T12:49:47.1253824Z [36;1m  "tests")[0m
+2025-10-30T12:49:47.1254124Z [36;1m    echo "🧪 Unit Tests"[0m
+2025-10-30T12:49:47.1254593Z [36;1m    npm test -- --coverage --watchAll=false --maxWorkers=2[0m
+2025-10-30T12:49:47.1255102Z [36;1m    ;;[0m
+2025-10-30T12:49:47.1255366Z [36;1mesac[0m
+2025-10-30T12:49:47.1298311Z shell: /usr/bin/bash -e {0}
+2025-10-30T12:49:47.1298687Z env:
+2025-10-30T12:49:47.1299127Z   NODE_VERSION: 20.x
+2025-10-30T12:49:47.1299426Z   CACHE_VERSION: v2
+2025-10-30T12:49:47.1299724Z   EXPO_CLI_VERSION: latest
+2025-10-30T12:49:47.1300053Z   EAS_CLI_VERSION: latest
+2025-10-30T12:49:47.1300356Z ##[endgroup]
+2025-10-30T12:49:47.1367799Z 🔍 TypeScript Check
