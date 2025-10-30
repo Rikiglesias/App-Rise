@@ -3,7 +3,6 @@ import { Modal, StyleSheet, View } from 'react-native';
 import { PlatformScrollView, PlatformTouchable, PerfectText } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
@@ -260,7 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
   },
   statusText: {
-    fontSize: TypographyTokens.styles.body.small,
+    fontSize: 12,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
   },
@@ -273,7 +272,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   closeButtonText: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16,
     color: Colors.neutral[600],
   },
   imageContainer: {
@@ -297,13 +296,13 @@ const styles = StyleSheet.create({
     padding: Spacing[4],
   },
   locationName: {
-    fontSize: TypographyTokens.styles.title.large,
+    fontSize: 24,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     marginBottom: Spacing[1],
   },
   locationCountry: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 14,
     color: Colors.neutral[200],
   },
   statsContainer: {
@@ -322,13 +321,13 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   statNumber: {
-    fontSize: TypographyTokens.styles.headline.small,
+    fontSize: 20,
     fontWeight: Typography.weights.black,
     color: Colors.primary[600],
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: TypographyTokens.styles.body.small,
+    fontSize: 12,
     color: Colors.neutral[600],
     textAlign: 'center',
   },
@@ -342,13 +341,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[6],
   },
   sectionTitle: {
-    fontSize: TypographyTokens.styles.title.medium,
+    fontSize: 20,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[3],
   },
   description: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 14,
     color: Colors.neutral[700],
     lineHeight: 24,
   },
@@ -368,7 +367,7 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   primaryButtonText: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
   },
@@ -381,7 +380,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary[600],
   },
   secondaryButtonText: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16,
     fontWeight: Typography.weights.bold,
     color: Colors.primary[600],
   },

@@ -5,10 +5,8 @@ import { Modal, StyleSheet, View } from 'react-native';
 import { PlatformTouchable, PerfectText } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import { Colors, Spacing, Typography } from '../../shared/constants';
 import { logDebug } from '../../shared/utils/logger';
-import { useResponsiveLayout } from '../../shared/hooks/useResponsive';
 
 interface MapLocationModalProps {
   visible: boolean;
@@ -24,8 +22,6 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   data,
   onClose,
 }) => {
-  const { spacing } = useResponsiveLayout();
-
   const handleCTAPress = useCallback(() => {
     logDebug('MapLocationModal', 'CTA pressed', { title: data?.title });
     // Note: External links functionality would require extending MapModalData interface
@@ -48,7 +44,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           end={gradientEnd}
           style={[
             styles.header,
-            { paddingHorizontal: spacing.modal ?? Spacing[4] },
+            { paddingHorizontal: Spacing[4] },
           ]}
         >
           <View style={styles.headerContent}>
@@ -99,7 +95,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         <View
           style={[
             styles.content,
-            { paddingHorizontal: spacing.modal ?? Spacing[6] },
+            { paddingHorizontal: Spacing[6] },
           ]}
         >
           {/* Descrizione breve - max 2 righe */}
@@ -109,7 +105,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
             fontWeight="400"
             style={[
               styles.description,
-              { paddingHorizontal: spacing.modal ?? Spacing[4] },
+              { paddingHorizontal: Spacing[4] },
             ]}
           >
             Scopri il nostro impatto in {data.title} attraverso programmi di
@@ -172,13 +168,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: TypographyTokens.styles.title.large,
+    fontSize: 24,
     fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
-    marginBottom: Spacing[1],
+    marginBottom: Spacing[6],
   },
   subtitle: {
-    fontSize: TypographyTokens.styles.body.medium,
+    fontSize: 14,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[100],
     opacity: 0.9,
@@ -203,7 +199,7 @@ const styles = StyleSheet.create({
 
   // Descrizione breve
   description: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16,
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     textAlign: 'center',
@@ -232,7 +228,7 @@ const styles = StyleSheet.create({
     marginRight: Spacing[2],
   },
   ctaText: {
-    fontSize: TypographyTokens.styles.body.large,
+    fontSize: 16,
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     textAlign: 'center',

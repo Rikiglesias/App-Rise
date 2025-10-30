@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import MapView, { Marker, type Region } from 'react-native-maps';
 
-import { TypographyTokens } from '../../shared/constants/responsiveSystem';
 import {
   BorderRadius,
   Colors,
@@ -73,7 +72,7 @@ const SimpleMarker: React.FC<{ location: Location }> = React.memo(
         {/* Etichetta del paese */}
         <View style={styles.countryLabel}>
           <PerfectText
-            size={TypographyTokens.styles.label.small}
+            size={10}
             lines={1}
             style={styles.countryText}
           >
@@ -222,7 +221,7 @@ const styles = StyleSheet.create({
     ...Shadows.sm,
   },
   countryText: {
-    fontSize: TypographyTokens.styles.label.small,
+    fontSize: 10,
     fontWeight: Typography.weights.bold,
     color: '#374151',
     textAlign: 'center',
