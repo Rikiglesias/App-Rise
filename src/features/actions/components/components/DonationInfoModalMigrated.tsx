@@ -17,8 +17,7 @@ import {
 } from '../../../../shared/constants/designTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 
-// ❌ RIMOSSO: Calcolo manuale duplicato
-// const { width: screenWidth } = Dimensions.get('window');
+// ❌ RIMOSSO: Calcolo manuale duplicato con dimensioni schermo
 
 interface DonationInfoModalProps {
   visible: boolean;
@@ -387,8 +386,8 @@ export default DonationInfoModalMigrated;
 
 /**
  * ELIMINATI:
- * ❌ const { width: screenWidth } = Dimensions.get('window');  // Duplicato in 3+ componenti
- * ❌ maxWidth: screenWidth * 0.9,                              // Calcolo manuale ripetuto
+ * ❌ Calcolo manuale dimensioni schermo duplicato in 3+ componenti
+ * ❌ maxWidth calcolato manualmente e ripetuto
  *
  * AGGIUNTI:
  * ✅ PerfectContainer/PerfectModal                             // Layer centralizzato

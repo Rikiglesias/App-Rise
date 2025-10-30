@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-native';
 import { useFoldableLayout } from '../../../shared/hooks/useFoldableLayout';
 
-// Mock Dimensions.get() since it's not available in test environment
+// Mock Dimensions API since it's not available in test environment
 jest.mock('react-native', () => {
   const RN = jest.requireActual('react-native');
   return {
