@@ -2,10 +2,6 @@ import React from 'react';
 import { Animated, StyleSheet, Text } from 'react-native';
 import { PerfectContainer, PerfectText } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
-import {
-  
-  getMillimetricScale,
-} from '../../shared/constants/responsiveSystem';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
 
 // ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS + SISTEMA RESPONSIVE
@@ -143,8 +139,8 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               <PerfectContainer style={modernTitleStyles.titleSeparator}>
                 <PerfectContainer style={modernTitleStyles.separatorLine} />
                 <PerfectImage
-                  width={Math.round(responsiveSpacing.logoSize / getMillimetricScale())}
-                  height={Math.round(responsiveSpacing.logoSize / getMillimetricScale())}
+                  width={Math.round(responsiveSpacing.logoSize)}
+                  height={Math.round(responsiveSpacing.logoSize)}
                   source={require('../../../assets/icons/app/logo.png')}
                 />
                 <PerfectContainer style={modernTitleStyles.separatorLine} />
