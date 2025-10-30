@@ -4,45 +4,21 @@ import { Animated, Platform, StyleSheet } from 'react-native';
 
 import { PerfectText, PerfectContainer } from '../../../components/ui';
 // Ratio inline per evitare dipendenze condivise
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '../../../shared/constants/designTokens';
+import { Colors, Spacing } from '../../../shared/constants/designTokens';
 import responsiveSystem from '../../../shared/constants/responsiveSystem';
-import {
-  HEADER_TITLE_SIZE,
-  IMPACT_SUBTITLE_SIZE,
-} from '../../shared/headerSizes';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
-import {
-  HEADER_VERTICAL_PADDING_FACTOR,
-  HEADER_FIXED_HEIGHT_FACTOR,
-  HEADER_TITLE_INTERLINE_FACTOR,
-} from '../../shared/headerLayout';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
 }
 
-const TITLE_SIZE = HEADER_TITLE_SIZE;
-const SUBTITLE_SIZE = IMPACT_SUBTITLE_SIZE;
+// Header sizes - hardcoded direttamente (Perfect System scala automaticamente)
+const TITLE_SIZE = 40;
+const SUBTITLE_SIZE = 18;
 const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
-const HEADER_INNER_HEIGHT =
-  /* scaleDimensionLinear(
-  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
-) */
-  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR;
-const HEADER_VERTICAL_PADDING =
-  /* scaleDimensionLinear(
-  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
-) */
-  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR;
-const HEADER_TITLE_INTERLINE =
-  /* scaleDimensionLinear(
-  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
-) */
-  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR;
+const HEADER_INNER_HEIGHT = REF_WIDTH * 0.43;
+const HEADER_VERTICAL_PADDING = REF_WIDTH * 0.025;
+const HEADER_TITLE_INTERLINE = REF_WIDTH * 0.002;
 export const ImpactHeader: React.FC<Props> = ({ animations }) => {
   return (
     <Animated.View
@@ -67,6 +43,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
           <PerfectText
             size={TITLE_SIZE}
             lines={1}
+            fontWeight="900"
             immunity={true}
             containerWidth={
               (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
@@ -78,6 +55,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
           <PerfectText
             size={TITLE_SIZE}
             lines={1}
+            fontWeight="900"
             immunity={true}
             containerWidth={
               (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
@@ -90,6 +68,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
         <PerfectText
           size={SUBTITLE_SIZE}
           lines={2}
+          fontWeight="500"
           immunity={true}
           containerWidth={
             (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
@@ -151,11 +130,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
   titleText: {
-    fontWeight: Typography.weights.black,
     color: Colors.neutral[800],
     textAlign: 'center',
-    letterSpacing: -0.5, // Tight
-    lineHeight: HEADER_TITLE_SIZE * 1.2, // Baseline
+    letterSpacing: -0.5,
     marginBottom: HEADER_TITLE_INTERLINE,
     textShadowColor: 'rgba(31, 41, 55, 0.15)',
     textShadowOffset: { width: 0, height: 2 },
@@ -169,11 +146,9 @@ const styles = StyleSheet.create({
     textShadowRadius: 6,
   },
   mainSubtitle: {
-    fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     textAlign: 'center',
-    letterSpacing: 0, // Normal
-    lineHeight: IMPACT_SUBTITLE_SIZE * 1.2, // Baseline
+    letterSpacing: 0,
     marginTop: Spacing[3],
     opacity: 0.8,
     includeFontPadding: false,

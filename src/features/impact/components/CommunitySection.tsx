@@ -12,7 +12,6 @@ import {
 import {
   Colors,
   Spacing,
-  Typography,
   Shadows,
 } from '../../../shared/constants/designTokens';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
@@ -47,6 +46,7 @@ export const CommunitySection: React.FC<Props> = ({
           <PerfectText
             size={22}
             lines={1}
+            fontWeight="700"
             immunity={true}
             style={styles.communityTitle}
           >
@@ -88,6 +88,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="700"
                   immunity={true}
                   style={styles.communityStatValue}
                 >
@@ -96,6 +97,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="600"
                   immunity={true}
                   style={styles.communityStatLabel}
                 >
@@ -136,6 +138,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="700"
                   immunity={true}
                   style={styles.communityStatValue}
                 >
@@ -144,6 +147,7 @@ export const CommunitySection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="600"
                   immunity={true}
                   style={styles.communityStatLabel}
                 >
@@ -196,18 +200,12 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[3],
   },
   communityStatValue: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
-    marginBottom: Spacing[2], // AUMENTATO: da Spacing[1] a Spacing[2] per più spazio
-    lineHeight: 28, // AGGIUNTO: lineHeight per headline-small
+    marginBottom: Spacing[2],
   },
   communityStatLabel: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.semibold,
     color: Colors.neutral[700],
     textAlign: 'center',
-    lineHeight: 22, // AGGIUNTO: lineHeight per body-large
   },
   chevronIcon: {
     position: 'absolute',
@@ -240,9 +238,7 @@ const styles = StyleSheet.create({
     elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   communityTitle: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.bold, // BOLD normale
-    color: Colors.neutral[700], // GRIGIO ELEGANTE
+    color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,

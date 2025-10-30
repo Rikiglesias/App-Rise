@@ -9,12 +9,7 @@ import {
   PerfectImage,
 } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
-import {
-  Colors,
-  Spacing,
-  Typography,
-  Shadows,
-} from '@/shared/constants/designTokens';
+import { Colors, Spacing, Shadows } from '@/shared/constants/designTokens';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
 interface Props {
@@ -37,6 +32,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           <PerfectText
             size={22}
             lines={1}
+            fontWeight="700"
             immunity={true}
             style={styles.mapTitle}
           >
@@ -73,6 +69,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           <PerfectText
             size={12}
             lines={1}
+            fontWeight="500"
             immunity={true}
             style={styles.mapClickText}
           >
@@ -134,8 +131,6 @@ const styles = StyleSheet.create({
     elevation: 8, // PER ANDROID: assicura che stia sopra
   },
   mapClickText: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
   },
 
@@ -165,9 +160,7 @@ const styles = StyleSheet.create({
     elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   mapTitle: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.bold, // BOLD normale
-    color: Colors.neutral[700], // GRIGIO ELEGANTE
+    color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,

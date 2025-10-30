@@ -7,7 +7,7 @@ import { DesignSpacing } from '../tokens/spacing';
 import { DesignShadows } from '../tokens/shadows';
 import { DesignBorders } from '../tokens/borders';
 import { DesignLayout } from '../tokens/layout';
-import { DesignTypography } from '../tokens/typography';
+// ⚠️ NO DesignTypography - usa Typography da @/shared/constants/designTokens
 import { DesignAnimations } from '../tokens/animations';
 
 /**
@@ -24,7 +24,7 @@ export const lightTheme = {
   shadows: DesignShadows,
   borders: DesignBorders,
   layout: DesignLayout,
-  typography: DesignTypography,
+  // ⚠️ NO typography - usa Typography da @/shared/constants/designTokens
   animations: DesignAnimations,
 
   // Configurazioni tema-specifiche

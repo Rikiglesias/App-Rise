@@ -60,19 +60,8 @@ describe('Design Tokens - Typography', () => {
     expect(Typography.families.mono.length).toBeGreaterThan(0);
   });
 
-  it('should have font sizes', () => {
-    expect(Typography.sizes).toBeDefined();
-    // Values are now responsive scaled, test actual computed values
-    expect(typeof Typography.sizes.xs).toBe('number');
-    expect(typeof Typography.sizes.sm).toBe('number');
-    expect(typeof Typography.sizes.base).toBe('number');
-    expect(typeof Typography.sizes.lg).toBe('number');
-    expect(typeof Typography.sizes.xl).toBe('number');
-    // Ensure sizes are in correct relative order
-    expect(Typography.sizes.xs).toBeLessThan(Typography.sizes.sm);
-    expect(Typography.sizes.sm).toBeLessThan(Typography.sizes.base);
-    expect(Typography.sizes.base).toBeLessThan(Typography.sizes.lg);
-  });
+  // ⚠️ NO font sizes - usa direttamente numeri in <PerfectText size={16}>
+  // Perfect System scala automaticamente tramite scale()
 
   it('should have font weights', () => {
     expect(Typography.weights).toBeDefined();
@@ -215,13 +204,7 @@ describe('Design Tokens - Consistency', () => {
     });
   });
 
-  it('should have consistent typography scales', () => {
-    const fontSizes = Object.values(Typography.sizes);
-    fontSizes.forEach(size => {
-      expect(typeof size).toBe('number');
-      expect(size).toBeGreaterThan(0);
-    });
-  });
+  // ⚠️ NO typography scales - usa direttamente numeri in <PerfectText size={16}>
 
   it('should have consistent shadow elevations', () => {
     const shadows = [Shadows.none, Shadows.sm, Shadows.md, Shadows.lg];

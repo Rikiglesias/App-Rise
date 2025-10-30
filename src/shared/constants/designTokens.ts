@@ -205,19 +205,8 @@ export const Typography = {
     black: '900',
   } as const,
 
-  // Font sizes FISSI (usa PerfectText per scaling!)
-  sizes: {
-    xs: 12,
-    sm: 13,
-    base: 14,
-    lg: 16,
-    xl: 18,
-    '2xl': 20,
-    '3xl': 24,
-    '4xl': 28,
-    '5xl': 32,
-    '6xl': 36,
-  },
+  // ⚠️ NO sizes - usa direttamente numeri in <PerfectText size={16}>
+  // Perfect System scala automaticamente tramite scale()
 
   lineHeights: {
     tight: 1.1,

@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { PerfectText } from '../ui/PerfectText';
+import { PerfectContainer } from '../ui/PerfectContainer';
 
 import { BorderRadius, Spacing } from '../../shared/constants';
 import { useTheme } from '../../shared/hooks/useTheme';
@@ -18,7 +19,6 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
       marginTop: Spacing[2],
     },
     progressLabel: {
-      fontSize: 12,
       color: colors.neutral[600],
       marginBottom: Spacing[2],
       textAlign: 'center',
@@ -38,7 +38,7 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
   });
 
   return (
-    <View style={styles.progressContainer}>
+    <PerfectContainer style={styles.progressContainer}>
       <PerfectText
         size={12}
         lines={2}
@@ -47,9 +47,9 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
       >
         Progresso: {progress}%
       </PerfectText>
-      <View style={styles.progressBar}>
-        <View style={styles.progressFill} />
-      </View>
-    </View>
+      <PerfectContainer style={styles.progressBar}>
+        <PerfectContainer style={styles.progressFill} />
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };

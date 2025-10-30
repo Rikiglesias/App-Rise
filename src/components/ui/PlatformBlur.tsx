@@ -1,7 +1,8 @@
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Platform, View, ViewProps } from 'react-native';
+import { Platform, type ViewProps, type ViewStyle } from 'react-native';
+import { PerfectContainer } from './PerfectContainer';
 
 interface PlatformBlurProps extends ViewProps {
   intensity?: number;
@@ -29,7 +30,7 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
 
   // Fallback minimale in caso di problemi di runtime
   const fallback = (
-    <View style={style} {...props}>
+    <PerfectContainer style={style as ViewStyle} {...props}>
       <LinearGradient
         colors={[
           backgroundColor ??
@@ -40,7 +41,7 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
         style={gradientStyle}
       />
       {children}
-    </View>
+    </PerfectContainer>
   );
 
   try {

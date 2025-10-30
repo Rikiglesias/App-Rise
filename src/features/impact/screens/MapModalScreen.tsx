@@ -1,8 +1,12 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { PerfectText } from '@/components/ui/PerfectText';
+import { StyleSheet } from 'react-native';
+import {
+  PerfectText,
+  PerfectContainer,
+  PlatformTouchable,
+} from '@/components/ui';
 
 import InteractiveMap, {
   type Location,
@@ -11,7 +15,7 @@ import MapLocationModal from '@/components/layout/MapLocationModal';
 import type { MapModalData } from '@/data/mapModalData';
 import { getModalData } from '@/data/mapModalData';
 import type { ImpactStackParamList } from '@/navigation/types';
-import { BorderRadius, Colors, Spacing, Typography } from '@/shared/constants';
+import { BorderRadius, Colors, Spacing } from '@/shared/constants';
 // ELIMINATO: scaleFont from '@/shared/constants/responsiveSystem';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
@@ -46,24 +50,24 @@ const MapModalScreen: React.FC = () => {
   if (!locations) {
     // Handle case where locations are not passed
     return (
-      <View style={styles.container}>
+      <PerfectContainer style={styles.container}>
         <PerfectText size={16} lines={1} fontWeight="400">
           Caricamento mappa...
         </PerfectText>
-      </View>
+      </PerfectContainer>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       <InteractiveMap
         locations={locations}
         onMarkerPress={handleMarkerPress}
         isFullScreen
       />
       {/* Header */}
-      <View style={styles.header}>
-        <PerfectText size={24} lines={1} fontWeight="400" style={styles.title}>
+      <PerfectContainer style={styles.header}>
+        <PerfectText size={24} lines={1} fontWeight="700" style={styles.title}>
           Mappa Interattiva
         </PerfectText>
         <PerfectText
@@ -75,7 +79,7 @@ const MapModalScreen: React.FC = () => {
           Tocca i pin per maggiori dettagli
         </PerfectText>
 
-        <TouchableOpacity
+        <PlatformTouchable
           style={styles.closeButton}
           onPress={handleClosePress}
           activeOpacity={0.8}
@@ -85,8 +89,8 @@ const MapModalScreen: React.FC = () => {
             size={24}
             color={Colors.neutral[0]}
           />
-        </TouchableOpacity>
-      </View>
+        </PlatformTouchable>
+      </PerfectContainer>
 
       {/* Modal per le location specifiche */}
       <MapLocationModal
@@ -94,7 +98,7 @@ const MapModalScreen: React.FC = () => {
         data={selectedLocationData}
         onClose={handleLocationModalClose}
       />
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -129,7 +133,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
   },

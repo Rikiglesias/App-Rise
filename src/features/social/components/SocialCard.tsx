@@ -7,7 +7,7 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, Spacing, Typography } from '@/shared/constants';
+import { Colors, Spacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/responsiveSystem';
 
 export interface SocialPlatform {
@@ -74,12 +74,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                   );
                 })()
               ) : (
-                <PerfectText
-                  size={24}
-                  lines={1}
-                  fontWeight={Typography.weights.regular}
-                  style={styles.socialIconEmoji}
-                >
+                <PerfectText size={24} lines={1} style={styles.socialIconEmoji}>
                   {platform.emoji}
                 </PerfectText>
               )}
@@ -89,7 +84,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               <PerfectText
                 size={16}
                 lines={1}
-                fontWeight={Typography.weights.regular}
+                fontWeight="700"
                 style={styles.socialName}
               >
                 {platform.name}
@@ -97,7 +92,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               <PerfectText
                 size={14}
                 lines={1}
-                fontWeight={Typography.weights.regular}
+                fontWeight="600"
                 style={styles.socialHandle}
               >
                 {platform.handle}
@@ -105,7 +100,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               <PerfectText
                 size={12}
                 lines={2}
-                fontWeight={Typography.weights.regular}
+                fontWeight="500"
                 style={styles.socialDescription}
               >
                 {platform.description}
@@ -179,20 +174,16 @@ const styles = {
     marginRight: Spacing[3],
   },
   socialName: {
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
     letterSpacing: -0.3,
   },
   socialHandle: {
-    fontWeight: Typography.weights.semibold,
-    color: Colors.primary[500], // Brand main
+    color: Colors.primary[500],
     marginBottom: Spacing[1],
   },
   socialDescription: {
-    fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
-    lineHeight: scale(16),
   },
   arrowContainer: {
     padding: Spacing[1],

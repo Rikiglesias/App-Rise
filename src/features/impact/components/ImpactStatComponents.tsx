@@ -16,7 +16,6 @@ import {
   Colors,
   Shadows,
   Spacing,
-  Typography,
 } from '../../../shared/constants';
 import { IMAGE_DIMENSIONS } from '../../../shared/constants/dimensions';
 import type { StatButtonProps } from '../types/ImpactScreenTypes';
@@ -47,6 +46,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
         <PerfectText
           size={22}
           lines={1}
+          fontWeight="700"
           immunity={true}
           style={styles.statValue}
         >
@@ -91,6 +91,7 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       <PerfectText
         size={12}
         lines={1}
+        fontWeight="600"
         immunity={true}
         style={styles.storyLocation}
       >
@@ -99,6 +100,7 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       <PerfectText
         size={22}
         lines={1}
+        fontWeight="700"
         immunity={true}
         style={styles.storyTitle}
       >
@@ -120,6 +122,7 @@ export const MilestoneCard: React.FC<
       <PerfectText
         size={15}
         lines={1}
+        fontWeight="600"
         immunity={true}
         style={styles.milestoneTitle}
       >
@@ -160,7 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statValue: {
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
   },
   statLabel: {
@@ -191,18 +193,15 @@ const styles = StyleSheet.create({
   },
   storyLocation: {
     color: Colors.neutral[200],
-    fontWeight: Typography.weights.semibold,
     textTransform: 'uppercase',
   },
   storyTitle: {
     color: Colors.neutral[0],
-    fontWeight: Typography.weights.bold,
     marginTop: Spacing[1],
   },
   storyText: {
     color: Colors.neutral[100],
     marginTop: Spacing[2],
-    lineHeight: Typography.lineHeights.tight,
   },
   milestoneCard: {
     flexDirection: 'row',
@@ -217,7 +216,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   milestoneTitle: {
-    fontWeight: Typography.weights.semibold,
     color: Colors.neutral[800],
   },
   milestoneValue: {

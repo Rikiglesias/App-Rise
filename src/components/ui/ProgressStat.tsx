@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Colors, Spacing, Typography } from '../../shared/constants';
 
 import { PerfectText } from './PerfectText';
+import { PerfectContainer } from './PerfectContainer';
 import AnimatedNumber from './AnimatedNumber';
 import { ProgressRing } from './ProgressRing';
 
@@ -43,7 +44,7 @@ const ProgressRingSection: React.FC<ProgressRingSectionProps> = React.memo(
       color={color}
       startAnimation={startAnimation}
     >
-      <View style={styles.centerContent}>
+      <PerfectContainer style={styles.centerContent}>
         <PerfectText
           size={textSize}
           lines={1}
@@ -53,7 +54,7 @@ const ProgressRingSection: React.FC<ProgressRingSectionProps> = React.memo(
         >
           {progressPercentage}%
         </PerfectText>
-      </View>
+      </PerfectContainer>
     </ProgressRing>
   )
 );
@@ -72,8 +73,8 @@ interface ProgressTextSectionProps {
 
 const ProgressTextSection: React.FC<ProgressTextSectionProps> = React.memo(
   ({ current, target, label, sublabel, color, startAnimation, formatter }) => (
-    <View style={styles.textSection}>
-      <View
+    <PerfectContainer style={styles.textSection}>
+      <PerfectContainer
         style={styles.currentValueRow}
         accessible
         accessibilityLabel={`Valore attuale: ${formatter(
@@ -93,7 +94,7 @@ const ProgressTextSection: React.FC<ProgressTextSectionProps> = React.memo(
         >
           / {formatter(target)}
         </PerfectText>
-      </View>
+      </PerfectContainer>
 
       <PerfectText
         size={16}
@@ -116,7 +117,7 @@ const ProgressTextSection: React.FC<ProgressTextSectionProps> = React.memo(
           {sublabel}
         </PerfectText>
       )}
-    </View>
+    </PerfectContainer>
   )
 );
 
@@ -150,7 +151,7 @@ export const ProgressStat: React.FC<ProgressStatProps> = ({
   )} su ${formatter(target)}, progresso ${progressPercentage} percento`;
 
   return (
-    <View
+    <PerfectContainer
       style={styles.container}
       accessible
       accessibilityRole="progressbar"
@@ -179,7 +180,7 @@ export const ProgressStat: React.FC<ProgressStatProps> = ({
         startAnimation={startAnimation}
         formatter={formatter}
       />
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -193,7 +194,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   percentage: {
-    fontWeight: Typography.weights.bold,
     fontFamily: Typography.families.mono,
   },
   textSection: {
@@ -206,23 +206,18 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[1],
   },
   currentValue: {
-    fontSize: 20,
     fontWeight: Typography.weights.bold,
     fontFamily: Typography.families.mono,
   },
   targetValue: {
-    fontSize: 12,
     color: Colors.neutral[500],
     marginLeft: Spacing[1],
   },
   label: {
-    fontSize: 16,
     color: Colors.neutral[700],
-    fontWeight: 'medium',
     textAlign: 'center',
   },
   sublabel: {
-    fontSize: 20,
     color: Colors.neutral[500],
     textAlign: 'center',
     marginTop: Spacing[1],

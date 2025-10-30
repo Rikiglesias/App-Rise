@@ -5,7 +5,7 @@
 
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { PerfectText } from '../../ui';
 import { type HeaderMissionSectionProps } from '../../../features/home/types/HomeHeaderTypes';
@@ -34,16 +34,16 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
   return (
     <>
       {/* Container con Gradient Pattern del Design System */}
-      <View style={baseMissionStyles.outerGradientContainer}>
+      <PerfectContainer style={baseMissionStyles.outerGradientContainer}>
         <LinearGradient
           colors={HomeHeaderDesignTokens.gradients.dark}
           {...HomeHeaderDesignTokens.gradientConfig.diagonal}
           style={baseMissionStyles.gradientBorder}
         >
-          <View style={baseMissionStyles.missionContainer}>
+          <PerfectContainer style={baseMissionStyles.missionContainer}>
             {/* CORREZIONE UX: Titolo principale SENZA GRADIENT - NON CLICCABILE */}
-            <View style={baseMissionStyles.titleGradientContainer}>
-              <View style={baseMissionStyles.titleContent}>
+            <PerfectContainer style={baseMissionStyles.titleGradientContainer}>
+              <PerfectContainer style={baseMissionStyles.titleContent}>
                 <PerfectText
                   size={35}
                   lines={1}
@@ -54,9 +54,9 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
                   Il nostro impatto sul mondo
                 </PerfectText>
                 {/* Underline decorativo per separazione - DESIGN SYSTEM */}
-                <View style={baseMissionStyles.titleUnderline} />
-              </View>
-            </View>
+                <PerfectContainer style={baseMissionStyles.titleUnderline} />
+              </PerfectContainer>
+            </PerfectContainer>
 
             {/* Testo descrittivo con Sistema Bi-Direzionale Intelligente - RESPONSIVE */}
             <PerfectText
@@ -71,9 +71,9 @@ export const HeaderMissionSection: React.FC<HeaderMissionSectionProps> = ({
 
             {/* Statistiche container - Componente modulare */}
             <MissionStatsSection onMealsPress={handleMealsPress} />
-          </View>
+          </PerfectContainer>
         </LinearGradient>
-      </View>
+      </PerfectContainer>
 
       {/* Modal per la breakdown dei pasti - Componente modulare */}
       <MealsBreakdownModal isVisible={isModalVisible} onClose={closeModal} />

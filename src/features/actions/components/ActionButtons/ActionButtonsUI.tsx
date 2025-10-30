@@ -4,7 +4,6 @@
  */
 
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
 
 import { createActionButtonStyles } from '../components/ActionButtonStyles';
 import {
@@ -18,6 +17,7 @@ import {
 } from '../components/ActionButtonUtils';
 import type { useNewActionsAnimations } from '../components/ContributeAnimations';
 import type { ActionButtonsData } from './useActionButtonsData';
+import { PerfectContainer } from '@/components/ui';
 
 interface ActionButtonsUIProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -37,7 +37,7 @@ const ActionButtonsUIComponent: React.FC<ActionButtonsUIProps> = ({
   const styles = useMemo(() => createActionButtonStyles(), []);
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       {/* CATEGORIA CONTRIBUISCI con Info Button */}
       <DonateButtonsSection
         styles={styles}
@@ -67,7 +67,7 @@ const ActionButtonsUIComponent: React.FC<ActionButtonsUIProps> = ({
         onButtonPress={data.handleButtonPress}
         onCommunityTitlePress={data.openCommunityRegistration}
       />
-    </View>
+    </PerfectContainer>
   );
 };
 

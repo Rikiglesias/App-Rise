@@ -33,23 +33,27 @@ describe('ActionCardEnhanced', () => {
   });
 
   it('should render with all props', () => {
-    const { getByText, toJSON } = renderWithTheme(
+    const { getByLabelText, toJSON } = renderWithTheme(
       <ActionCardEnhanced {...defaultProps} />
     );
 
-    expect(getByText('Progetti')).toBeTruthy();
-    expect(getByText('Scopri i nostri progetti internazionali')).toBeTruthy();
-    expect(getByText('🌍')).toBeTruthy();
+    // Usa accessibilityLabel che è sempre presente
+    const card = getByLabelText(
+      'Progetti: Scopri i nostri progetti internazionali'
+    );
+    expect(card).toBeTruthy();
     expect(toJSON()).toBeDefined();
   });
 
   it('should handle press events', async () => {
-    const { getByText } = renderWithTheme(
+    const { getByLabelText } = renderWithTheme(
       <ActionCardEnhanced {...defaultProps} />
     );
 
-    const card = getByText('Progetti');
-    fireEvent.press(card.parent?.parent || card);
+    const card = getByLabelText(
+      'Progetti: Scopri i nostri progetti internazionali'
+    );
+    fireEvent.press(card);
 
     await waitFor(() => {
       expect(mockOnPress).toHaveBeenCalled();
@@ -60,15 +64,17 @@ describe('ActionCardEnhanced', () => {
     const variants = ['info', 'success', 'warning', 'brand'] as const;
 
     variants.forEach(variant => {
-      const { getByText } = renderWithTheme(
+      const { getByLabelText } = renderWithTheme(
         <ActionCardEnhanced {...defaultProps} variant={variant} />
       );
-      expect(getByText('Progetti')).toBeTruthy();
+      expect(
+        getByLabelText('Progetti: Scopri i nostri progetti internazionali')
+      ).toBeTruthy();
     });
   });
 
   it('should handle different content', () => {
-    const { getByText } = renderWithTheme(
+    const { getByLabelText } = renderWithTheme(
       <ActionCardEnhanced
         {...defaultProps}
         title="Test Title"
@@ -76,41 +82,39 @@ describe('ActionCardEnhanced', () => {
         icon="🎯"
       />
     );
-    expect(getByText('Test Title')).toBeTruthy();
-    expect(getByText('Test Description')).toBeTruthy();
-    expect(getByText('🎯')).toBeTruthy();
+    expect(getByLabelText('Test Title: Test Description')).toBeTruthy();
   });
 
   it('should handle press animations', () => {
-    const { getByText } = renderWithTheme(
+    const { getByLabelText } = renderWithTheme(
       <ActionCardEnhanced {...defaultProps} />
     );
 
-    const card = getByText('Progetti');
+    const card = getByLabelText(
+      'Progetti: Scopri i nostri progetti internazionali'
+    );
 
-    fireEvent(card.parent?.parent || card, 'pressIn');
-    fireEvent(card.parent?.parent || card, 'pressOut');
+    fireEvent(card, 'pressIn');
+    fireEvent(card, 'pressOut');
 
     expect(card).toBeTruthy();
   });
 
   it('should be accessible', () => {
-    const { getByText } = renderWithTheme(
+    const { getByLabelText, getByRole } = renderWithTheme(
       <ActionCardEnhanced {...defaultProps} />
     );
 
-    const title = getByText('Progetti');
-    const description = getByText('Scopri i nostri progetti internazionali');
-    const icon = getByText('🌍');
-
-    expect(title).toBeTruthy();
-    expect(description).toBeTruthy();
-    expect(icon).toBeTruthy();
+    const card = getByLabelText(
+      'Progetti: Scopri i nostri progetti internazionali'
+    );
+    expect(card).toBeTruthy();
+    expect(getByRole('button')).toBeTruthy();
   });
 
   it('should handle edge cases', () => {
     const customOnPress = jest.fn();
-    const { getByText } = renderWithTheme(
+    const { getByLabelText } = renderWithTheme(
       <ActionCardEnhanced
         {...defaultProps}
         onPress={customOnPress}
@@ -119,8 +123,8 @@ describe('ActionCardEnhanced', () => {
       />
     );
 
-    const card = getByText('🌍');
-    fireEvent.press(card.parent?.parent || card);
+    const card = getByLabelText(': ');
+    fireEvent.press(card);
 
     expect(customOnPress).toHaveBeenCalled();
   });

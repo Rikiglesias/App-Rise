@@ -7,12 +7,12 @@ import React from 'react';
 import {
   Platform,
   StyleSheet,
-  TouchableOpacity,
-  View,
   ViewStyle,
   GestureResponderEvent,
 } from 'react-native';
 import { Surface, TouchableRipple } from 'react-native-paper';
+import { PerfectContainer } from '../PerfectContainer';
+import { PlatformTouchable } from '../PlatformTouchable';
 
 import { Colors } from '../../../shared/constants/designTokens';
 import type { MaterialVariant, ElevationLevel } from './types';
@@ -38,11 +38,11 @@ export const MaterialCardRenderer: React.FC<MaterialCardRendererProps> = ({
 }) => {
   // iOS: mantiene comportamento esistente con Surface
   if (Platform.OS === 'ios') {
-    const CardComponent = onPress ? TouchableOpacity : View;
+    const CardComponent = onPress ? PlatformTouchable : PerfectContainer;
 
     return (
       <CardComponent
-        style={[styles.iosCard, style]}
+        style={[styles.iosCard, ...(style ? [style] : [])]}
         onPress={onPress}
         disabled={disabled}
         activeOpacity={0.8}
@@ -109,15 +109,19 @@ export const MaterialCardRenderer: React.FC<MaterialCardRendererProps> = ({
         rippleColor={rippleColor ?? Colors.primary[50]}
         borderless={false}
       >
-        <View style={styles.cardContent}>{children}</View>
+        <PerfectContainer style={styles.cardContent}>
+          {children}
+        </PerfectContainer>
       </TouchableRipple>
     );
   }
 
   return (
-    <View style={[styles.androidCard, variantStyle, style]}>
-      <View style={styles.cardContent}>{children}</View>
-    </View>
+    <PerfectContainer
+      style={[styles.androidCard, variantStyle, ...(style ? [style] : [])]}
+    >
+      <PerfectContainer style={styles.cardContent}>{children}</PerfectContainer>
+    </PerfectContainer>
   );
 };
 

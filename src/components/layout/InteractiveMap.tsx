@@ -1,14 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import MapView, { Marker, type Region } from 'react-native-maps';
+import { PerfectContainer } from '../ui/PerfectContainer';
 
-import {
-  BorderRadius,
-  Colors,
-  Shadows,
-  Spacing,
-  Typography,
-} from '../../shared/constants';
+import { BorderRadius, Colors, Shadows, Spacing } from '../../shared/constants';
 import { PerfectText } from '../ui/PerfectText';
 
 export interface Location {
@@ -63,19 +58,26 @@ const SimpleMarker: React.FC<{ location: Location }> = React.memo(
     const markerColor = useMemo(() => getMarkerColor(location), [location]);
 
     return (
-      <View style={styles.markerContainer}>
+      <PerfectContainer style={styles.markerContainer}>
         {/* Pin principale semplice */}
-        <View style={[styles.simpleMarker, { backgroundColor: markerColor }]}>
-          <View style={styles.markerInner} />
-        </View>
+        <PerfectContainer
+          style={[styles.simpleMarker, { backgroundColor: markerColor }]}
+        >
+          <PerfectContainer style={styles.markerInner} />
+        </PerfectContainer>
 
         {/* Etichetta del paese */}
-        <View style={styles.countryLabel}>
-          <PerfectText size={10} lines={1} style={styles.countryText}>
+        <PerfectContainer style={styles.countryLabel}>
+          <PerfectText
+            size={10}
+            lines={1}
+            fontWeight="700"
+            style={styles.countryText}
+          >
             {location.country}
           </PerfectText>
-        </View>
-      </View>
+        </PerfectContainer>
+      </PerfectContainer>
     );
   }
 );
@@ -217,8 +219,6 @@ const styles = StyleSheet.create({
     ...Shadows.sm,
   },
   countryText: {
-    fontSize: 10,
-    fontWeight: Typography.weights.bold,
     color: '#374151',
     textAlign: 'center',
     maxWidth: 80,

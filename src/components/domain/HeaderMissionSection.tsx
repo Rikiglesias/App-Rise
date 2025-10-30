@@ -83,9 +83,9 @@ export const HeaderMissionSection: React.FC<Props> = ({
                 <PerfectText
                   size={32}
                   lines={1}
-                  fontWeight="400"
+                  fontWeight="600"
                   immunity={true}
-                  style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
+                  style={baseMissionStyles.statNumber}
                 >
                   3.14M
                 </PerfectText>
@@ -116,9 +116,9 @@ export const HeaderMissionSection: React.FC<Props> = ({
                 <PerfectText
                   size={32}
                   lines={1}
-                  fontWeight="400"
+                  fontWeight="600"
                   immunity={true}
-                  style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
+                  style={baseMissionStyles.statNumber}
                 >
                   13K
                 </PerfectText>

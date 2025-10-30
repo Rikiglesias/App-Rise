@@ -1,8 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
+import { PerfectContainer } from '../ui/PerfectContainer';
 
 interface SectionContainerProps {
   readonly children: React.ReactNode;
@@ -17,32 +17,32 @@ const getSpacingConfig = (spacing: SectionContainerProps['spacing']) => {
   switch (spacing) {
     case 'compact':
       return {
-        vertical: Spacing[2], // XS spacing
+        vertical: Spacing[2],
         horizontal: Spacing[3],
       };
     case 'standard':
       return {
-        vertical: Spacing[4], // SM spacing
+        vertical: Spacing[4],
         horizontal: Spacing[4],
       };
     case 'large':
       return {
-        vertical: Spacing[6], // MD spacing
+        vertical: Spacing[6],
         horizontal: Spacing[6],
       };
     case 'hero':
       return {
-        vertical: Spacing[8], // LG spacing
+        vertical: Spacing[8],
         horizontal: Spacing[8],
       };
     case 'golden':
       return {
-        vertical: Spacing[10], // XL spacing
-        horizontal: Spacing[4], // SM spacing
+        vertical: Spacing[10],
+        horizontal: Spacing[4],
       };
     default:
       return {
-        vertical: Spacing[4], // SM spacing
+        vertical: Spacing[4],
         horizontal: Spacing[4],
       };
   }
@@ -142,20 +142,22 @@ export const SectionContainer: React.FC<SectionContainerProps> = ({
   // 🎁 WRAPPER INTERNO PER PADDING
   const innerWrapperStyle = {
     ...(variant !== 'default' && {
-      padding: 393 < 375 ? Spacing[4] : Spacing[6], // iPhone 15 width: 393 > 375, so always Spacing[6]
+      padding: Spacing[6],
       borderRadius: getBorderRadiusForVariant(variantStyles),
       overflow: 'hidden' as const,
     }),
   };
 
   return (
-    <View style={containerStyle}>
+    <PerfectContainer style={containerStyle}>
       {variant === 'default' ? (
         children
       ) : (
-        <View style={innerWrapperStyle}>{children}</View>
+        <PerfectContainer style={innerWrapperStyle}>
+          {children}
+        </PerfectContainer>
       )}
-    </View>
+    </PerfectContainer>
   );
 };
 

@@ -4,12 +4,11 @@
 
 // Core Tokens - Named exports
 export { DesignColors } from './colors';
-export { DesignTypography } from './typography';
+// ⚠️ NO DesignTypography - usa Typography da @/shared/constants/designTokens
 export { DesignSpacing } from './spacing';
 export { DesignShadows } from './shadows';
 export { DesignBorders } from './borders';
 export { DesignLayout } from './layout';
 export { DesignAnimations } from './animations';
 
-// Semantic Tokens
-export * from './semantic';
+// ⚠️ NO Semantic Tokens - usa Perfect System components direttamente

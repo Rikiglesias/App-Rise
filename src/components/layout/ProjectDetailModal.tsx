@@ -1,15 +1,14 @@
 import React from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
-import { PlatformScrollView, PlatformTouchable, PerfectText } from '../ui';
+import { Modal, StyleSheet } from 'react-native';
+import {
+  PlatformScrollView,
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+} from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 
-import {
-  BorderRadius,
-  Colors,
-  Shadows,
-  Spacing,
-  Typography,
-} from '../../shared/constants';
+import { BorderRadius, Colors, Shadows, Spacing } from '../../shared/constants';
 
 interface Location {
   id: string;
@@ -50,11 +49,11 @@ const ProjectDetailModal: React.FC<Props> = ({
       presentationStyle="formSheet"
       onRequestClose={onClose}
     >
-      <View style={styles.container}>
+      <PerfectContainer style={styles.container}>
         {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <View style={styles.statusBadge}>
+        <PerfectContainer style={styles.header}>
+          <PerfectContainer style={styles.headerContent}>
+            <PerfectContainer style={styles.statusBadge}>
               <PerfectText
                 size={14}
                 lines={1}
@@ -63,7 +62,7 @@ const ProjectDetailModal: React.FC<Props> = ({
               >
                 {location.status}
               </PerfectText>
-            </View>
+            </PerfectContainer>
             <PlatformTouchable style={styles.closeButton} onPress={onClose}>
               <PerfectText
                 size={16}
@@ -74,12 +73,12 @@ const ProjectDetailModal: React.FC<Props> = ({
                 ✕
               </PerfectText>
             </PlatformTouchable>
-          </View>
-        </View>
+          </PerfectContainer>
+        </PerfectContainer>
 
         <PlatformScrollView>
           {/* Hero Image */}
-          <View style={styles.imageContainer}>
+          <PerfectContainer style={styles.imageContainer}>
             <PerfectImage
               // iPhone 15 reference: full width minus horizontal margins (16*2 = 32)
               width={361}
@@ -87,7 +86,7 @@ const ProjectDetailModal: React.FC<Props> = ({
               borderRadius={24}
               source={{ uri: location.image }}
             />
-            <View style={styles.imageOverlay}>
+            <PerfectContainer style={styles.imageOverlay}>
               <PerfectText
                 size={20}
                 lines={1}
@@ -104,12 +103,12 @@ const ProjectDetailModal: React.FC<Props> = ({
               >
                 {location.country}
               </PerfectText>
-            </View>
-          </View>
+            </PerfectContainer>
+          </PerfectContainer>
 
           {/* Stats Cards */}
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
+          <PerfectContainer style={styles.statsContainer}>
+            <PerfectContainer style={styles.statCard}>
               <PerfectText
                 size={28}
                 lines={1}
@@ -126,13 +125,13 @@ const ProjectDetailModal: React.FC<Props> = ({
               >
                 Progetti Attivi
               </PerfectText>
-              <View style={styles.statIcon}>
+              <PerfectContainer style={styles.statIcon}>
                 <PerfectText size={18} lines={1} fontWeight="400">
                   🎯
                 </PerfectText>
-              </View>
-            </View>
-            <View style={styles.statCard}>
+              </PerfectContainer>
+            </PerfectContainer>
+            <PerfectContainer style={styles.statCard}>
               <PerfectText
                 size={28}
                 lines={1}
@@ -149,16 +148,16 @@ const ProjectDetailModal: React.FC<Props> = ({
               >
                 Beneficiari
               </PerfectText>
-              <View style={styles.statIcon}>
+              <PerfectContainer style={styles.statIcon}>
                 <PerfectText size={18} lines={1} fontWeight="400">
                   👥
                 </PerfectText>
-              </View>
-            </View>
-          </View>
+              </PerfectContainer>
+            </PerfectContainer>
+          </PerfectContainer>
 
           {/* Description */}
-          <View style={styles.descriptionContainer}>
+          <PerfectContainer style={styles.descriptionContainer}>
             <PerfectText
               size={22}
               lines={1}
@@ -175,10 +174,10 @@ const ProjectDetailModal: React.FC<Props> = ({
             >
               {location.description}
             </PerfectText>
-          </View>
+          </PerfectContainer>
 
           {/* Action Buttons */}
-          <View style={styles.actionsContainer}>
+          <PerfectContainer style={styles.actionsContainer}>
             <PerfectText
               size={20}
               lines={1}
@@ -187,7 +186,7 @@ const ProjectDetailModal: React.FC<Props> = ({
             >
               🚀 Sostieni Questo Progetto
             </PerfectText>
-            <View style={styles.buttonGrid}>
+            <PerfectContainer style={styles.buttonGrid}>
               <PlatformTouchable
                 style={styles.primaryButton}
                 onPress={
@@ -224,13 +223,13 @@ const ProjectDetailModal: React.FC<Props> = ({
                   🤝 Diventa Volontario
                 </PerfectText>
               </PlatformTouchable>
-            </View>
-          </View>
+            </PerfectContainer>
+          </PerfectContainer>
 
           {/* Bottom Spacing */}
-          <View style={styles.bottomSpacing} />
+          <PerfectContainer style={styles.bottomSpacing} />
         </PlatformScrollView>
-      </View>
+      </PerfectContainer>
     </Modal>
   );
 };
@@ -259,8 +258,6 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
   },
   statusText: {
-    fontSize: 12,
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
   },
   closeButton: {
@@ -272,7 +269,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   closeButtonText: {
-    fontSize: 16,
     color: Colors.neutral[600],
   },
   imageContainer: {
@@ -296,13 +292,10 @@ const styles = StyleSheet.create({
     padding: Spacing[4],
   },
   locationName: {
-    fontSize: 24,
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     marginBottom: Spacing[1],
   },
   locationCountry: {
-    fontSize: 14,
     color: Colors.neutral[200],
   },
   statsContainer: {
@@ -321,13 +314,10 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   statNumber: {
-    fontSize: 20,
-    fontWeight: Typography.weights.black,
     color: Colors.primary[600],
     marginBottom: Spacing[1],
   },
   statLabel: {
-    fontSize: 12,
     color: Colors.neutral[600],
     textAlign: 'center',
   },
@@ -341,15 +331,11 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[6],
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     marginBottom: Spacing[3],
   },
   description: {
-    fontSize: 14,
     color: Colors.neutral[700],
-    lineHeight: 24,
   },
 
   actionsContainer: {
@@ -367,8 +353,6 @@ const styles = StyleSheet.create({
     ...Shadows.md,
   },
   primaryButtonText: {
-    fontSize: 16,
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
   },
   secondaryButton: {
@@ -380,8 +364,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary[600],
   },
   secondaryButtonText: {
-    fontSize: 16,
-    fontWeight: Typography.weights.bold,
     color: Colors.primary[600],
   },
   bottomSpacing: {

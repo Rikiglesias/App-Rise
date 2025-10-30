@@ -10,12 +10,7 @@ import {
   PerfectContainer,
 } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
-import {
-  Colors,
-  Spacing,
-  Typography,
-  Shadows,
-} from '@/shared/constants/designTokens';
+import { Colors, Spacing, Shadows } from '@/shared/constants/designTokens';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
@@ -52,6 +47,7 @@ export const TotalMealsSection: React.FC<Props> = ({
           <PerfectText
             size={24}
             lines={1}
+            fontWeight="700"
             immunity={true}
             style={styles.numbersTitle}
           >
@@ -97,6 +93,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="900"
                   immunity={true}
                   style={styles.totalStatValue}
                 >
@@ -105,6 +102,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="700"
                   immunity={true}
                   style={styles.totalStatLabel}
                 >
@@ -157,6 +155,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={22}
                   lines={1}
+                  fontWeight="900"
                   immunity={true}
                   style={styles.totalStatValue}
                 >
@@ -165,6 +164,7 @@ export const TotalMealsSection: React.FC<Props> = ({
                 <PerfectText
                   size={16}
                   lines={1}
+                  fontWeight="700"
                   immunity={true}
                   style={styles.totalStatLabel}
                 >
@@ -237,23 +237,15 @@ const styles = StyleSheet.create({
     marginBottom: Spacing[3],
   },
   totalStatValue: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.black,
-    color: Colors.neutral[800], // NERO invece che rosso
+    color: Colors.neutral[800],
     marginBottom: Spacing[1],
-    lineHeight: 28, // Improved readability for headlines
   },
   totalStatLabel: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[700],
-    marginBottom: Spacing[2], // Balanced spacing for content
-    lineHeight: 22, // Enhanced readability for body text
+    marginBottom: Spacing[2],
   },
   totalStatSubtitle: {
-    // fontSize rimosso - ora gestito da Text
     color: Colors.neutral[500],
-    lineHeight: 18, // Consistent line height for medium text
   },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
@@ -282,9 +274,7 @@ const styles = StyleSheet.create({
     elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
   },
   numbersTitle: {
-    // fontSize rimosso - ora gestito da Text
-    fontWeight: Typography.weights.bold, // BOLD normale
-    color: Colors.neutral[700], // GRIGIO ELEGANTE
+    color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,

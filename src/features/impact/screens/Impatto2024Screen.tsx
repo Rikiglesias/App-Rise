@@ -308,20 +308,17 @@ const styles = StyleSheet.create({
   },
 
   year: {
-    fontWeight: '600',
     color: Colors.primary[600],
     textAlign: 'center',
   },
 
   title: {
-    fontWeight: '600',
     color: Colors.neutral[900],
     textAlign: 'center',
     marginTop: Spacing[2],
   },
 
   subtitle: {
-    fontWeight: '500',
     color: Colors.neutral[700],
     textAlign: 'center',
     marginTop: Spacing[3],
@@ -350,20 +347,17 @@ const styles = StyleSheet.create({
   },
 
   statNumber: {
-    fontWeight: '600',
     color: Colors.primary[600],
     textAlign: 'center',
   },
 
   statLabel: {
-    fontWeight: '600',
     color: Colors.neutral[900],
     textAlign: 'center',
     marginTop: Spacing[2],
   },
 
   statDesc: {
-    fontWeight: '400',
     color: Colors.neutral[600],
     textAlign: 'center',
     marginTop: Spacing[1],
@@ -379,7 +373,6 @@ const styles = StyleSheet.create({
   },
 
   impactTitle: {
-    fontWeight: '600',
     color: Colors.neutral[900],
     textAlign: 'center',
     marginBottom: Spacing[4],
@@ -399,7 +392,6 @@ const styles = StyleSheet.create({
   },
 
   impactText: {
-    fontWeight: '500',
     color: Colors.neutral[700],
   },
 
@@ -420,14 +412,12 @@ const styles = StyleSheet.create({
   },
 
   goalTitle: {
-    fontWeight: '600',
     color: Colors.primary[800],
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
 
   goalText: {
-    fontWeight: '500',
     color: Colors.primary[700],
     textAlign: 'center',
   },

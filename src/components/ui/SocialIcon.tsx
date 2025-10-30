@@ -1,23 +1,24 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 // Import statici delle icone
 import instagramIcon from '../../../assets/icons/social/instagram.png';
 import facebookIcon from '../../../assets/icons/social/facebook.png';
 import linkedinIcon from '../../../assets/icons/social/linkedin.png';
+import { PerfectContainer } from './PerfectContainer';
 import { PerfectText } from './PerfectText';
 import { PerfectImage } from './PerfectImage';
 
 interface SocialIconProps {
   readonly platform: 'website' | 'instagram' | 'facebook' | 'linkedin';
   readonly size?: number;
-  readonly backgroundColor: string; // Mantengo per compatibilità ma non lo uso più
+  readonly backgroundColor?: string; // Opzionale per compatibilità
 }
 
 const SocialIcon: React.FC<SocialIconProps> = ({
   platform,
   size = 48,
-  backgroundColor: _backgroundColor, // Non usato più ma mantengo per non rompere l'interfaccia
+  backgroundColor: _backgroundColor, // Non usato ma mantenuto per compatibilità
 }) => {
   // Mapping delle emoji di fallback
   const emojiMap = {
@@ -48,20 +49,24 @@ const SocialIcon: React.FC<SocialIconProps> = ({
   if (iconSource !== null) {
     // Versione con icone reali - solo immagine senza cerchio
     return (
-      <View style={[styles.iconContainer, { width: size, height: size }]}>
+      <PerfectContainer
+        style={[styles.iconContainer, { width: size, height: size }]}
+      >
         <PerfectImage
           width={size}
           height={size}
           source={iconSource}
           imageStyle={{ resizeMode: 'contain' }}
         />
-      </View>
+      </PerfectContainer>
     );
   }
 
   // Versione con emoji (fallback per website) - anche senza cerchio
   return (
-    <View style={[styles.iconContainer, { width: size, height: size }]}>
+    <PerfectContainer
+      style={[styles.iconContainer, { width: size, height: size }]}
+    >
       <PerfectText
         size={Math.round(size * 0.6)}
         lines={1}
@@ -69,7 +74,7 @@ const SocialIcon: React.FC<SocialIconProps> = ({
       >
         {emojiMap[platform]}
       </PerfectText>
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -77,10 +82,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    // Rimosso tutto lo styling del cerchio colorato
-  },
-  iconImage: {
-    // Icone pure senza modifiche
   },
   iconEmoji: {
     textAlign: 'center',

@@ -5,23 +5,17 @@
 
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, ImageStyle, View } from 'react-native';
+import { Animated, type ImageStyle, type ViewStyle } from 'react-native';
+import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { type HeaderImageSectionProps } from '../../../features/home/types/HomeHeaderTypes';
 import { HomeHeaderDesignTokens } from '../design-tokens/HomeHeaderTokens';
 import { PerfectImage } from '../../ui/PerfectImage';
 
 export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
-  ({
-    imageAnim,
-    imageParallax,
-    imageScale,
-    gradientOpacity: _gradientOpacity,
-    imageRotation,
-    styles,
-  }) => {
+  ({ imageAnim, imageParallax, imageScale, imageRotation, styles }) => {
     // Applica direttamente le props Android su Animated.View
-    const imageStyle: ImageStyle = {
+    const imageStyle: ImageStyle | ViewStyle = {
       transform: [
         { translateY: imageParallax },
         { scale: imageScale },
@@ -30,8 +24,8 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
     };
 
     return (
-      <View style={styles.imageSection}>
-        <View style={styles.imageContainer}>
+      <PerfectContainer style={styles.imageSection as ViewStyle}>
+        <PerfectContainer style={styles.imageContainer as ViewStyle}>
           <Animated.View style={[styles.flexOne, { opacity: imageAnim }]}>
             <Animated.View
               style={[
@@ -60,8 +54,8 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
               />
             </Animated.View>
           </Animated.View>
-        </View>
-      </View>
+        </PerfectContainer>
+      </PerfectContainer>
     );
   }
 );

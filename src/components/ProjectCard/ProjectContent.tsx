@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { PerfectText } from '../ui';
+import { PerfectText, PerfectContainer } from '../ui';
 
 import { Spacing, Typography } from '../../shared/constants';
 import { useTheme } from '../../shared/hooks/useTheme';
@@ -16,9 +16,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
 
   const styles = StyleSheet.create({
     description: {
-      fontSize: 14,
       color: colors.neutral[700],
-      lineHeight: 14 * 1.4,
       marginBottom: Spacing[4],
     },
     impactContainer: {
@@ -30,7 +28,6 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       borderColor: colors.primary[200],
     },
     impactLabel: {
-      fontSize: 10,
       fontWeight: Typography.weights.bold,
       color: colors.primary[700],
       marginBottom: Spacing[1],
@@ -38,7 +35,6 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       letterSpacing: 0.5,
     },
     impactText: {
-      fontSize: 12,
       color: colors.primary[800],
       fontWeight: Typography.weights.medium,
     },
@@ -55,7 +51,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       >
         {description}
       </PerfectText>
-      <View style={styles.impactContainer}>
+      <PerfectContainer style={styles.impactContainer}>
         <PerfectText
           size={12}
           lines={1}
@@ -74,7 +70,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
         >
           {impact}
         </PerfectText>
-      </View>
+      </PerfectContainer>
     </>
   );
 };

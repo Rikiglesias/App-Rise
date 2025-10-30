@@ -5,7 +5,7 @@
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
-import { View } from 'react-native';
+import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { PlatformTouchable, PerfectText } from '../../ui';
 import { HomeHeaderDesignTokens } from '../design-tokens/HomeHeaderTokens';
@@ -17,7 +17,7 @@ interface MissionStatsSectionProps {
 
 export const MissionStatsSection: React.FC<MissionStatsSectionProps> =
   React.memo(({ onMealsPress }) => (
-    <View style={baseMissionStyles.statsContainer}>
+    <PerfectContainer style={baseMissionStyles.statsContainer}>
       {/* Container pasti - CLICKABLE */}
       <PlatformTouchable
         style={[baseMissionStyles.statsBox, baseMissionStyles.mealsBox]}
@@ -27,9 +27,9 @@ export const MissionStatsSection: React.FC<MissionStatsSectionProps> =
         <PerfectText
           size={32}
           lines={1}
-          fontWeight="400"
+          fontWeight="600"
           immunity={true}
-          style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
+          style={baseMissionStyles.statNumber}
         >
           3.14M
         </PerfectText>
@@ -51,15 +51,15 @@ export const MissionStatsSection: React.FC<MissionStatsSectionProps> =
       </PlatformTouchable>
 
       {/* Container volontari - STATICO */}
-      <View
+      <PerfectContainer
         style={[baseMissionStyles.statsBox, baseMissionStyles.volunteersBox]}
       >
         <PerfectText
           size={32}
           lines={1}
-          fontWeight="400"
+          fontWeight="600"
           immunity={true}
-          style={[baseMissionStyles.statNumber, { fontWeight: '600' }]}
+          style={baseMissionStyles.statNumber}
         >
           13K
         </PerfectText>
@@ -72,8 +72,8 @@ export const MissionStatsSection: React.FC<MissionStatsSectionProps> =
         >
           Volontari attivi
         </PerfectText>
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   ));
 
 MissionStatsSection.displayName = 'MissionStatsSection';

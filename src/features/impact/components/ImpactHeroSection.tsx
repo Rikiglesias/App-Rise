@@ -7,7 +7,6 @@ import {
   Colors,
   Shadows,
   Spacing,
-  Typography,
 } from '../../../shared/constants';
 
 interface Props {
@@ -38,12 +37,19 @@ const ImpactHeroSection: React.FC<Props> = ({
       <PerfectText
         size={32}
         lines={1}
+        fontWeight="900"
         immunity={true}
         style={styles.heroCounter}
       >
         {heroData.mainStat}
       </PerfectText>
-      <PerfectText size={22} lines={1} immunity={true} style={styles.heroLabel}>
+      <PerfectText
+        size={22}
+        lines={1}
+        fontWeight="700"
+        immunity={true}
+        style={styles.heroLabel}
+      >
         {heroData.label}
       </PerfectText>
       <PerfectText
@@ -69,13 +75,11 @@ const styles = StyleSheet.create({
     ...Shadows.lg,
   },
   heroCounter: {
-    fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
   heroLabel: {
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     textAlign: 'center',
     marginBottom: Spacing[3],

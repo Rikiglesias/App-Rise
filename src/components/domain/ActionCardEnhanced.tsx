@@ -1,6 +1,8 @@
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useRef } from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
+import { PerfectContainer } from '../ui/PerfectContainer';
+import { PlatformTouchable } from '../ui/PlatformTouchable';
 
 import {
   BorderRadius,
@@ -210,18 +212,6 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
     onPress();
   }, [onPress]);
 
-  // Contenuto comune per iOS e Android
-  const cardContent = (
-    <>
-      <ActionCardIcon
-        iconScaleAnim={iconScaleAnim}
-        variantStyles={variantStyles}
-        icon={icon}
-      />
-      <ActionCardContent title={title} description={description} />
-    </>
-  );
-
   // Animazioni e interazione identiche su entrambe le piattaforme
   // Android rendering props are applied directly on Animated.View
 
@@ -238,7 +228,7 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
       renderToHardwareTextureAndroid
       needsOffscreenAlphaCompositing
     >
-      <Pressable
+      <PlatformTouchable
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={handlePress}
@@ -254,16 +244,18 @@ export const ActionCardEnhanced: React.FC<ActionCardEnhancedProps> = ({
           elevation="level2"
           style={styles.iosCard}
         >
-          <View
-            style={[
-              styles.content,
-              { backgroundColor: variantStyles.backgroundColor },
-            ]}
-          >
-            {cardContent}
-          </View>
+          <PerfectContainer style={styles.cardInner}>
+            <ActionCardIcon
+              iconScaleAnim={iconScaleAnim}
+              variantStyles={variantStyles}
+              icon={icon}
+            />
+            <PerfectContainer style={styles.contentContainer}>
+              <ActionCardContent title={title} description={description} />
+            </PerfectContainer>
+          </PerfectContainer>
         </UnifiedCard>
-      </Pressable>
+      </PlatformTouchable>
     </Animated.View>
   );
 };
@@ -286,24 +278,6 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
   },
-  content: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing[4],
-    borderRadius: BorderRadius.xl,
-    minHeight: 120,
-  },
-  // Android Material Design styles
-  materialCard: {
-    width: '100%',
-    marginBottom: Spacing[4],
-  },
-  materialContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing[4],
-    minHeight: 120,
-  },
   iconContainer: {
     width: 56,
     height: 56,
@@ -322,6 +296,15 @@ const styles = StyleSheet.create({
   description: {
     textAlign: 'center',
     color: '#666',
+  },
+  cardInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing[4],
+  },
+  contentContainer: {
+    flex: 1,
+    marginLeft: Spacing[3],
   },
 });
 

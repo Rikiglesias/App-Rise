@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { Animated, View, ViewStyle, GestureResponderEvent } from 'react-native';
+import { Animated, ViewStyle, GestureResponderEvent } from 'react-native';
+import { PerfectContainer } from '../PerfectContainer';
 
 import { useAnimatedPress } from '../../../shared/hooks/useAnimatedPress';
 import PlatformTouchable from '../PlatformTouchable';
@@ -75,7 +76,9 @@ export const EnhancedCardRenderer: React.FC<EnhancedCardRendererProps> = ({
         disabled={disabled}
         {...accessibilityConfig}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <PerfectContainer
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+        >
           <IconSection icon={icon} variant={variant} size={size} />
 
           <TextSection
@@ -94,7 +97,7 @@ export const EnhancedCardRenderer: React.FC<EnhancedCardRendererProps> = ({
             variant={variant}
             shadowValue={shadowValue}
           />
-        </View>
+        </PerfectContainer>
       </PlatformTouchable>
     </Animated.View>
   );

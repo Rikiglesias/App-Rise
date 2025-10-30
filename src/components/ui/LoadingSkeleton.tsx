@@ -1,15 +1,16 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef, useMemo } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, ViewStyle } from 'react-native';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useTheme } from '../../shared/hooks/useTheme';
+import { PerfectContainer } from './PerfectContainer';
 
 interface LoadingSkeletonProps {
   readonly width?: number | `${number}%`;
   readonly height?: number;
   readonly borderRadius?: number;
-  readonly style?: object;
+  readonly style?: ViewStyle;
 }
 
 const LoadingSkeletonComponent: React.FC<LoadingSkeletonProps> = ({
@@ -74,7 +75,7 @@ const LoadingSkeletonComponent: React.FC<LoadingSkeletonProps> = ({
   );
 
   return (
-    <View style={[styles.skeleton, style]}>
+    <PerfectContainer style={[styles.skeleton, ...(style ? [style] : [])]}>
       <Animated.View style={styles.shimmer}>
         <LinearGradient
           colors={[
@@ -89,7 +90,7 @@ const LoadingSkeletonComponent: React.FC<LoadingSkeletonProps> = ({
           style={styles.gradientFill}
         />
       </Animated.View>
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -122,7 +123,7 @@ const HeaderSkeletonComponent: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       <LoadingSkeleton width="80%" height={32} style={styles.titleSkeleton} />
       <LoadingSkeleton
         width="60%"
@@ -135,7 +136,7 @@ const HeaderSkeletonComponent: React.FC = () => {
         borderRadius={BorderRadius.full}
         style={styles.buttonSkeleton}
       />
-    </View>
+    </PerfectContainer>
   );
 };
 
@@ -172,9 +173,9 @@ const ActionsSkeletonComponent: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       <LoadingSkeleton width="60%" height={28} style={styles.titleSkeleton} />
-      <View style={styles.grid}>
+      <PerfectContainer style={styles.grid}>
         {[1, 2, 3, 4].map(i => (
           <LoadingSkeleton
             key={i}
@@ -183,8 +184,8 @@ const ActionsSkeletonComponent: React.FC = () => {
             style={styles.cardSkeleton}
           />
         ))}
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 
@@ -214,9 +215,9 @@ const StoriesSkeletonComponent: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer style={styles.container}>
       <LoadingSkeleton width="70%" height={24} style={styles.titleSkeleton} />
-      <View style={styles.storiesContainer}>
+      <PerfectContainer style={styles.storiesContainer}>
         {[1, 2, 3].map(i => (
           <LoadingSkeleton
             key={i}
@@ -225,8 +226,8 @@ const StoriesSkeletonComponent: React.FC = () => {
             style={styles.storySkeleton}
           />
         ))}
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-
 import { Colors } from '../../shared/constants/designTokens';
+import { PerfectContainer } from './PerfectContainer';
 
 interface ProgressRingProps {
   readonly progress: number; // 0 to 1
@@ -54,7 +54,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
   });
 
   return (
-    <View style={[styles.container, { width: size, height: size }]}>
+    <PerfectContainer style={[styles.container, { width: size, height: size }]}>
       <Svg width={size} height={size}>
         {/* Background ring */}
         <Circle
@@ -83,9 +83,11 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
 
       {/* Content in center */}
       {children !== undefined && children !== null && (
-        <View style={styles.centerContent}>{children}</View>
+        <PerfectContainer style={styles.centerContent}>
+          {children}
+        </PerfectContainer>
       )}
-    </View>
+    </PerfectContainer>
   );
 };
 

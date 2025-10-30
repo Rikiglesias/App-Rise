@@ -1,11 +1,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
-import { PlatformTouchable, PerfectText } from '../ui';
+import { Modal, StyleSheet } from 'react-native';
+import { PlatformTouchable, PerfectText, PerfectContainer } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
-import { Colors, Spacing, Typography } from '../../shared/constants';
+import { Colors, Spacing } from '../../shared/constants';
 import { logDebug } from '../../shared/utils/logger';
 
 interface MapLocationModalProps {
@@ -36,7 +36,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
+      <PerfectContainer style={styles.modalContainer}>
         {/* Header compatto con gradient */}
         <LinearGradient
           colors={['#DC2626', '#B91C1C', '#991B1B']}
@@ -44,8 +44,8 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           end={gradientEnd}
           style={[styles.header, { paddingHorizontal: Spacing[4] }]}
         >
-          <View style={styles.headerContent}>
-            <View style={styles.headerLeft}>
+          <PerfectContainer style={styles.headerContent}>
+            <PerfectContainer style={styles.headerLeft}>
               <PerfectText
                 size={32}
                 lines={1}
@@ -54,7 +54,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               >
                 {data.flag}
               </PerfectText>
-              <View style={styles.headerTextContainer}>
+              <PerfectContainer style={styles.headerTextContainer}>
                 <PerfectText
                   size={20}
                   lines={1}
@@ -71,8 +71,8 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
                 >
                   {data.subtitle}
                 </PerfectText>
-              </View>
-            </View>
+              </PerfectContainer>
+            </PerfectContainer>
 
             <PlatformTouchable
               style={styles.closeButton}
@@ -85,11 +85,13 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
                 color={Colors.neutral[0]}
               />
             </PlatformTouchable>
-          </View>
+          </PerfectContainer>
         </LinearGradient>
 
         {/* Contenuto semplificato */}
-        <View style={[styles.content, { paddingHorizontal: Spacing[6] }]}>
+        <PerfectContainer
+          style={[styles.content, { paddingHorizontal: Spacing[6] }]}
+        >
           {/* Descrizione breve - max 2 righe */}
           <PerfectText
             size={16}
@@ -122,8 +124,8 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               Clicca qui per saperne di più
             </PerfectText>
           </PlatformTouchable>
-        </View>
-      </View>
+        </PerfectContainer>
+      </PerfectContainer>
     </Modal>
   );
 };
@@ -157,14 +159,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 24,
-    fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
     marginBottom: Spacing[6],
   },
   subtitle: {
-    fontSize: 14,
-    fontWeight: Typography.weights.medium,
     color: Colors.neutral[100],
     opacity: 0.9,
   },
@@ -188,11 +186,8 @@ const styles = StyleSheet.create({
 
   // Descrizione breve
   description: {
-    fontSize: 16,
-    fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     textAlign: 'center',
-    lineHeight: 28,
     marginBottom: Spacing[10],
     paddingHorizontal: Spacing[4],
   },
@@ -217,8 +212,6 @@ const styles = StyleSheet.create({
     marginRight: Spacing[2],
   },
   ctaText: {
-    fontSize: 16,
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[0],
     textAlign: 'center',
   },

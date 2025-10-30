@@ -346,6 +346,189 @@ container: {
 
 ---
 
+### **5.4 Duplicazioni fontSize/fontWeight negli Styles** ⚠️ NUOVO!
+- [ ] Cerca `fontSize:` negli StyleSheet dopo conversione Perfect System
+- [ ] Cerca `fontWeight:` negli StyleSheet quando già usi prop `fontWeight=`
+- [ ] Cerca `lineHeight:` negli StyleSheet (calcolato automaticamente)
+- [ ] ELIMINA se già gestito da props di PerfectText
+- [ ] MANTIENI solo per componenti che NON hanno props (es: AnimatedNumber)
+
+**Problema:**
+Dopo conversione a Perfect System, molti styles contengono proprietà duplicate:
+- `fontSize` negli styles vs `size` prop
+- `fontWeight` negli styles vs `fontWeight` prop  
+- `lineHeight` negli styles (auto-calcolato)
+
+**Pattern di Ricerca**:
+```typescript
+// Trova duplicazioni
+fontSize:.*,
+fontWeight:.*Typography\.weights
+fontWeight:.*['"]
+lineHeight:.*,
+```
+
+**Esempio 1 - fontSize Duplicato**:
+```typescript
+// ❌ MALE
+<PerfectText size={16} style={styles.label}>  
+  Label
+</PerfectText>
+
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 16,  // ❌ DUPLICATO - già in size prop!
+    color: Colors.neutral[700],
+  },
+});
+
+// ✅ BENE
+<PerfectText size={16} style={styles.label}>
+  Label
+</PerfectText>
+
+const styles = StyleSheet.create({
+  label: {
+    // fontSize rimosso - già gestito da prop
+    color: Colors.neutral[700],
+  },
+});
+```
+
+**Esempio 2 - fontWeight Duplicato**:
+```typescript
+// ❌ MALE
+<PerfectText 
+  size={24}
+  fontWeight="600"  // Prop corretta
+  style={styles.title}  // Style duplica weight!
+>
+  Title
+</PerfectText>
+
+const styles = StyleSheet.create({
+  title: {
+    fontWeight: Typography.weights.bold,  // ❌ DUPLICATO!
+    color: Colors.neutral[900],
+  },
+});
+
+// ✅ BENE  
+<PerfectText 
+  size={24}
+  fontWeight="600"
+  style={styles.title}
+>
+  Title
+</PerfectText>
+
+const styles = StyleSheet.create({
+  title: {
+    // fontWeight rimosso - già gestito da prop
+    color: Colors.neutral[900],
+  },
+});
+```
+
+**Esempio 3 - fontWeight Inline**:
+```typescript
+// ❌ MALE
+<PerfectText
+  size={32}
+  fontWeight="400"
+  style={[styles.statNumber, { fontWeight: '600' }]}  // ❌ Override inline!
+>
+  3.14M
+</PerfectText>
+
+// ✅ BENE
+<PerfectText
+  size={32}
+  fontWeight="600"  // ✅ Prop corretta direttamente
+  style={styles.statNumber}
+>
+  3.14M
+</PerfectText>
+```
+
+**ECCEZIONE - AnimatedNumber:**
+```typescript
+// ✅ CORRETTO - AnimatedNumber NON ha prop fontWeight
+<AnimatedNumber
+  value={current}
+  style={styles.currentValue}  // ← Style necessario!
+/>
+
+const styles = StyleSheet.create({
+  currentValue: {
+    fontWeight: Typography.weights.bold,  // ✅ OK - no prop alternativa
+    fontFamily: Typography.families.mono,  // ✅ OK - no prop alternativa
+  },
+});
+```
+
+**Checklist Verifica**:
+1. Per ogni `<PerfectText>` verifica abbia:
+   - `size={numero}` - dimensione font
+   - `lines={numero}` - max righe
+   - `fontWeight="valore"` - se diverso da default
+
+2. Per ogni StyleSheet cerca:
+   - `fontSize:` → Rimuovi se c'è `size` prop
+   - `fontWeight:` → Rimuovi se c'è `fontWeight` prop
+   - `lineHeight:` → Rimuovi (calcolato automaticamente)
+
+3. Per inline styles cerca pattern:
+   - `style={[styles.x, { fontWeight: '600' }]}` → Sposta su prop
+   - `style={[styles.x, { fontSize: 16 }]}` → Rimuovi, usa `size` prop
+
+4. Verifica import Typography:
+   - Se rimuovi tutti fontWeight/fontSize da styles
+   - Check se import Typography ancora usato
+   - Rimuovi import se non più necessario
+
+---
+
+### **5.5 Commenti Obsoleti Sistema Vecchio** ⚠️ NUOVO!
+- [ ] Cerca commenti `// XS spacing`, `// SM spacing`, `// MD spacing`, `// LG spacing`
+- [ ] ELIMINA TUTTI - sono residui del vecchio sistema semantico
+- [ ] Perfect System usa SOLO numeri diretti senza label
+
+**Esempio**:
+```typescript
+// ❌ MALE
+return {
+  vertical: Spacing[2], // XS spacing  ← SBAGLIATO!
+  horizontal: Spacing[4], // SM spacing  ← SBAGLIATO!
+};
+
+// ✅ BENE
+return {
+  vertical: Spacing[2],  // Solo numero
+  horizontal: Spacing[4],  // Solo numero
+};
+```
+
+---
+
+### **5.6 Condizioni Hardcoded Inutili** ⚠️ NUOVO!
+- [ ] Cerca condizioni tipo `393 < 375 ? A : B` (sempre false!)
+- [ ] Cerca condizioni con magic numbers che sono sempre true/false
+- [ ] SEMPLIFICA: se sempre stesso risultato, usa valore diretto
+
+**Esempio**:
+```typescript
+// ❌ MALE
+padding: 393 < 375 ? Spacing[4] : Spacing[6], // iPhone 15: 393 > 375, sempre Spacing[6]!
+const size = isLarge ? 24 : 24;  // Sempre 24!
+
+// ✅ BENE
+padding: Spacing[6],  // Diretto, niente condizione inutile
+const size = 24;  // Semplice
+```
+
+---
+
 ## ✅ PARTE 6: PERFORMANCE
 
 ### **6.1 Re-render Inutili**
@@ -758,6 +941,9 @@ Se trovi questi, **STOP** e risolvi subito:
 ❌ animations: _animations // Props underscore non usato
 ❌ style={{ padding: 20 }} invece di padding={20}
 ❌ color="#DC2626" invece di Colors.primary[600]
+❌ fontSize: 16 negli styles con size={16} prop (duplicazione!)
+❌ fontWeight: Typography.weights.bold con fontWeight="700" prop (duplicazione!)
+❌ style={[styles.x, { fontWeight: '600' }]} invece fontWeight="600" prop
 ❌ opacity: 1 // Props default inutili
 ❌ marginHorizontal: 0 // Props default inutili
 ❌ paddingVertical: 0 // Props default inutili
@@ -769,6 +955,8 @@ Se trovi questi, **STOP** e risolvi subito:
 ❌ useResponsive() solo per scale()
 ❌ ../../../ path (usa @/)
 ❌ any types
+❌ // XS spacing, // SM spacing  ← Commenti obsoleti!
+❌ 393 < 375 ? A : B  ← Condizione sempre false!
 ```
 
 ---
@@ -792,6 +980,10 @@ ALTRI CONTROLLI:
 [ ] Spacing = props diretti?
 [ ] View → PerfectContainer? (TUTTI)
 [ ] Text → PerfectText?
+[ ] fontSize negli styles rimosso? (cerca "fontSize:")
+[ ] fontWeight negli styles rimosso? (cerca "fontWeight:")
+[ ] fontWeight inline rimosso? (cerca "{ fontWeight:")
+[ ] import Typography ancora usato? (rimuovi se no)
 [ ] Magic colors → Design Tokens? (cerca color="#)
 [ ] Inline styles → StyleSheet? (cerca style={{)
 [ ] Stili inutilizzati rimossi?
@@ -800,6 +992,8 @@ ALTRI CONTROLLI:
 [ ] position: relative necessario?
 [ ] IIFE semplificati?
 [ ] Commenti ridondanti rimossi?
+[ ] Commenti obsoleti XS/SM/MD rimossi? (cerca "// XS spacing")
+[ ] Condizioni hardcoded inutili rimosse? (cerca "393 < 375")
 [ ] immunity={false} su PerfectText?
 [ ] Zero TypeScript errors?
 [ ] Zero ESLint warnings?

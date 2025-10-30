@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PerfectText, PerfectContainer } from '../../../components/ui';
-import { Colors, Spacing, Typography } from '../../../shared/constants';
+import { Colors, Spacing } from '../../../shared/constants';
 import {
   LOGICAL_REFERENCE,
   scale,
@@ -42,6 +42,7 @@ export const HeaderSection: React.FC<HeaderSectionProps> = React.memo(
         <PerfectText
           size={28}
           lines={1}
+          fontWeight="700"
           containerWidth={LOGICAL_REFERENCE.width * 0.7}
           style={styles.headerTitle}
         >
@@ -51,6 +52,7 @@ export const HeaderSection: React.FC<HeaderSectionProps> = React.memo(
         <PerfectText
           size={16}
           lines={2}
+          fontWeight="500"
           containerWidth={LOGICAL_REFERENCE.width * 0.7}
           style={styles.headerSubtitle}
         >
@@ -85,17 +87,14 @@ const styles = {
     elevation: 4,
   },
   headerTitle: {
-    fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center' as const,
     marginBottom: Spacing[3],
     letterSpacing: -0.5,
   },
   headerSubtitle: {
-    fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center' as const,
-    lineHeight: /* scaleFont(24) */ 24,
     paddingHorizontal: Spacing[2],
   },
 };

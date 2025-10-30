@@ -6,7 +6,9 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import type { ViewStyle, GestureResponderEvent } from 'react-native';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { PerfectContainer } from '../PerfectContainer';
+import { PlatformTouchable } from '../PlatformTouchable';
 
 import { BorderRadius, Spacing } from '../../../shared/constants/designTokens';
 import type { GlassmorphismVariant, GlassmorphismIntensity } from './types';
@@ -50,11 +52,11 @@ export const GlassmorphismCardRenderer: React.FC<
 
   const glassStyle = getGlassStyle();
 
-  const CardWrapper = onPress ? TouchableOpacity : View;
+  const CardWrapper = onPress ? PlatformTouchable : PerfectContainer;
 
   return (
     <CardWrapper
-      style={[styles.container, glassStyle, style]}
+      style={[styles.container, glassStyle, ...(style ? [style] : [])]}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={0.8}
@@ -66,10 +68,10 @@ export const GlassmorphismCardRenderer: React.FC<
           end={{ x: 1, y: 1 }}
           style={styles.gradientOverlay}
         >
-          <View style={styles.content}>{children}</View>
+          <PerfectContainer style={styles.content}>{children}</PerfectContainer>
         </LinearGradient>
       ) : (
-        <View style={styles.content}>{children}</View>
+        <PerfectContainer style={styles.content}>{children}</PerfectContainer>
       )}
     </CardWrapper>
   );

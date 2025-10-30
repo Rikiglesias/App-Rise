@@ -10,11 +10,7 @@ import {
 } from '../../../../components/ui';
 // Migrated to Perfect System responsive layout
 
-import {
-  Colors,
-  Spacing,
-  Typography,
-} from '../../../../shared/constants/designTokens';
+import { Colors, Spacing } from '../../../../shared/constants/designTokens';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato con dimensioni schermo
@@ -101,7 +97,6 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       marginBottom: Spacing[5],
     },
     centeredTitle: {
-      fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',
       letterSpacing: -0.8,
@@ -126,7 +121,6 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       marginBottom: Spacing[4],
     },
     highlightText: {
-      fontWeight: Typography.weights.bold,
       color: '#DC2626',
       textAlign: 'center',
       marginTop: Spacing[3],
@@ -162,7 +156,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         <PerfectText
           size={28}
           lines={1}
-          fontWeight="400"
+          fontWeight="900"
           immunity={true}
           style={modalStyles.centeredTitle}
         >
@@ -174,8 +168,8 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       <PerfectText
         size={16}
         lines={3}
-        fontWeight="400"
-        style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
+        fontWeight="700"
+        style={modalStyles.modalText}
       >
         💰 Donazioni monetarie: Se vuoi fare una donazione monetaria diretta,
         clicca su &quot;Dona Ora&quot; per contribuire immediatamente alla
@@ -185,8 +179,8 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       <PerfectText
         size={16}
         lines={4}
-        fontWeight="400"
-        style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
+        fontWeight="700"
+        style={modalStyles.modalText}
       >
         🛍️ Acquisti solidali: Attraverso il nostro Charity Shop, ogni acquisto
         dai nostri partner dona automaticamente una percentuale per i nostri
@@ -196,8 +190,8 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       <PerfectText
         size={16}
         lines={4}
-        fontWeight="400"
-        style={[modalStyles.modalText, { fontWeight: Typography.weights.bold }]}
+        fontWeight="700"
+        style={modalStyles.modalText}
       >
         🎁 Gift Cards: Funzionano come gli acquisti: compri una Gift Card a
         prezzo normale (per te o come regalo), ma una percentuale viene
@@ -208,7 +202,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       <PerfectText
         size={15}
         lines={2}
-        fontWeight="400"
+        fontWeight="700"
         style={modalStyles.highlightText}
       >
         ✨ Il modo più semplice è partecipare ai nostri eventi!
@@ -308,7 +302,6 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
       marginBottom: Spacing[5],
     },
     centeredTitle: {
-      fontWeight: Typography.weights.black,
       color: '#DC2626',
       textAlign: 'center',
       letterSpacing: -0.8,
@@ -333,7 +326,6 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
       marginBottom: Spacing[4],
     },
     highlightText: {
-      fontWeight: Typography.weights.bold,
       color: '#DC2626',
       textAlign: 'center',
       marginTop: Spacing[3],

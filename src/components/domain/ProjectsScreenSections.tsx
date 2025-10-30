@@ -1,6 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import type { ViewStyle } from 'react-native';
 import { Surface } from 'react-native-paper';
+import { PerfectContainer } from '../ui/PerfectContainer';
 import { PerfectText } from '../ui/PerfectText';
 import type {
   ProjectsEmptyStateProps,
@@ -12,7 +13,7 @@ import SectionContainer from '../layout/SectionContainer';
 // Header Component
 export const ProjectsHeader: React.FC<ProjectsHeaderProps> = React.memo(
   ({ styles }) => (
-    <View style={styles.header}>
+    <PerfectContainer style={styles.header as ViewStyle}>
       <PerfectText
         size={24}
         lines={1}
@@ -28,9 +29,9 @@ export const ProjectsHeader: React.FC<ProjectsHeaderProps> = React.memo(
         style={styles.headerSubtitle}
       >
         Scopri dove stiamo facendo la differenza nel mondo{'\n'}
-        contro la fame e la malnutrizione
+        nella lotta alla fame
       </PerfectText>
-    </View>
+    </PerfectContainer>
   )
 );
 
@@ -49,8 +50,8 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
         >
           Progetti in Numeri
         </PerfectText>
-        <View style={styles.statsRow}>
-          <View style={styles.statItem}>
+        <PerfectContainer style={styles.statsRow as ViewStyle}>
+          <PerfectContainer style={styles.statItem as ViewStyle}>
             <PerfectText
               size={22}
               lines={1}
@@ -67,8 +68,8 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
             >
               Progetti{'\n'}Totali
             </PerfectText>
-          </View>
-          <View style={styles.statItem}>
+          </PerfectContainer>
+          <PerfectContainer style={styles.statItem as ViewStyle}>
             <PerfectText
               size={22}
               lines={1}
@@ -85,8 +86,8 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
             >
               In Corso{'\n'}Attualmente
             </PerfectText>
-          </View>
-          <View style={styles.statItem}>
+          </PerfectContainer>
+          <PerfectContainer style={styles.statItem as ViewStyle}>
             <PerfectText
               size={22}
               lines={1}
@@ -103,8 +104,8 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
             >
               Persone{'\n'}Aiutate
             </PerfectText>
-          </View>
-        </View>
+          </PerfectContainer>
+        </PerfectContainer>
       </Surface>
     </SectionContainer>
   )
@@ -115,7 +116,7 @@ ProjectsStats.displayName = 'ProjectsStats';
 // Empty State Component
 export const ProjectsEmptyState: React.FC<ProjectsEmptyStateProps> = React.memo(
   ({ styles }) => (
-    <View style={styles.emptyState}>
+    <PerfectContainer style={styles.emptyState as ViewStyle}>
       <PerfectText
         size={48}
         lines={1}
@@ -132,7 +133,7 @@ export const ProjectsEmptyState: React.FC<ProjectsEmptyStateProps> = React.memo(
       >
         Nessun progetto trovato per questa categoria
       </PerfectText>
-    </View>
+    </PerfectContainer>
   )
 );
 

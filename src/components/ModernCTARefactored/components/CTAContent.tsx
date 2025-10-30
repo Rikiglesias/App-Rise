@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { ContentProps } from '../types';
 import { CTAAccentLine } from './CTAAccentLine';
@@ -18,7 +18,7 @@ export const CTAContent: React.FC<ContentProps> = ({
   typographyStyles,
   shimmerValue,
 }) => (
-  <View style={contentStyles.content}>
+  <PerfectContainer style={contentStyles.content}>
     {description && (
       <CTADescription
         description={description}
@@ -52,5 +52,5 @@ export const CTAContent: React.FC<ContentProps> = ({
         typographyStyles={typographyStyles}
       />
     )}
-  </View>
+  </PerfectContainer>
 );

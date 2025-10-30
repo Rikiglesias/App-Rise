@@ -6,7 +6,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Modal, View } from 'react-native';
+import { Modal } from 'react-native';
+import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { PlatformTouchable, PerfectText } from '../../ui';
 import { Colors } from '../../../shared/constants/designTokens';
@@ -26,15 +27,15 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
       visible={isVisible}
       onRequestClose={onClose}
     >
-      <View style={baseMissionStyles.modalOverlay}>
-        <View style={baseMissionStyles.modalContainer}>
+      <PerfectContainer style={baseMissionStyles.modalOverlay}>
+        <PerfectContainer style={baseMissionStyles.modalContainer}>
           <LinearGradient
             colors={HomeHeaderDesignTokens.gradients.primary}
             style={baseMissionStyles.modalGradient}
           >
-            <View style={baseMissionStyles.modalContent}>
+            <PerfectContainer style={baseMissionStyles.modalContent}>
               {/* Header del modal */}
-              <View style={baseMissionStyles.modalHeader}>
+              <PerfectContainer style={baseMissionStyles.modalHeader}>
                 <PerfectText
                   size={24}
                   lines={1}
@@ -54,19 +55,19 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     color={Colors.neutral[700]}
                   />
                 </PlatformTouchable>
-              </View>
+              </PerfectContainer>
 
               {/* Breakdown dei pasti */}
-              <View style={baseMissionStyles.breakdownContainer}>
-                <View style={baseMissionStyles.breakdownItem}>
-                  <View style={baseMissionStyles.breakdownBadge}>
+              <PerfectContainer style={baseMissionStyles.breakdownContainer}>
+                <PerfectContainer style={baseMissionStyles.breakdownItem}>
+                  <PerfectContainer style={baseMissionStyles.breakdownBadge}>
                     <MaterialCommunityIcons
                       name="rice"
                       size={20}
                       color={HomeHeaderDesignTokens.colors.primary}
                     />
-                  </View>
-                  <View style={baseMissionStyles.breakdownText}>
+                  </PerfectContainer>
+                  <PerfectContainer style={baseMissionStyles.breakdownText}>
                     <PerfectText
                       size={18}
                       lines={1}
@@ -94,18 +95,18 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     >
                       Programmi Africa
                     </PerfectText>
-                  </View>
-                </View>
+                  </PerfectContainer>
+                </PerfectContainer>
 
-                <View style={baseMissionStyles.breakdownItem}>
-                  <View style={baseMissionStyles.breakdownBadge}>
+                <PerfectContainer style={baseMissionStyles.breakdownItem}>
+                  <PerfectContainer style={baseMissionStyles.breakdownBadge}>
                     <MaterialCommunityIcons
                       name="package-variant"
                       size={20}
                       color={HomeHeaderDesignTokens.colors.primary}
                     />
-                  </View>
-                  <View style={baseMissionStyles.breakdownText}>
+                  </PerfectContainer>
+                  <PerfectContainer style={baseMissionStyles.breakdownText}>
                     <PerfectText
                       size={18}
                       lines={1}
@@ -133,14 +134,14 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                     >
                       Situazioni di crisi
                     </PerfectText>
-                  </View>
-                </View>
-              </View>
+                  </PerfectContainer>
+                </PerfectContainer>
+              </PerfectContainer>
 
               {/* Totale */}
-              <View style={baseMissionStyles.totalContainer}>
-                <View style={baseMissionStyles.totalLine} />
-                <View style={baseMissionStyles.totalRow}>
+              <PerfectContainer style={baseMissionStyles.totalContainer}>
+                <PerfectContainer style={baseMissionStyles.totalLine} />
+                <PerfectContainer style={baseMissionStyles.totalRow}>
                   <PerfectText
                     size={14}
                     lines={1}
@@ -159,12 +160,12 @@ export const MealsBreakdownModal: React.FC<MealsBreakdownModalProps> =
                   >
                     3.14M
                   </PerfectText>
-                </View>
-              </View>
-            </View>
+                </PerfectContainer>
+              </PerfectContainer>
+            </PerfectContainer>
           </LinearGradient>
-        </View>
-      </View>
+        </PerfectContainer>
+      </PerfectContainer>
     </Modal>
   ));
 

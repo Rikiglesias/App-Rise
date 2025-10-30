@@ -1,5 +1,6 @@
 import React from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
+import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { CTAAccentLineProps } from '../types';
 
@@ -26,7 +27,7 @@ export const CTAAccentLine: React.FC<CTAAccentLineProps> = ({
   const isGradient = variant === 'gradient';
 
   return (
-    <View style={contentStyles.accentLine}>
+    <PerfectContainer style={contentStyles.accentLine}>
       <Animated.View
         style={[
           contentStyles.shimmerOverlay,
@@ -41,6 +42,6 @@ export const CTAAccentLine: React.FC<CTAAccentLineProps> = ({
           },
         ]}
       />
-    </View>
+    </PerfectContainer>
   );
 };

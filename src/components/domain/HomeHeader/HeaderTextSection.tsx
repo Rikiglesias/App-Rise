@@ -5,14 +5,15 @@
 
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { View } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { type HeaderTextSectionProps } from '../../../features/home/types/HomeHeaderTypes';
 import { ModernSmartTitle } from '../ModernSmartTitle';
 
 export const HeaderTextSection: React.FC<HeaderTextSectionProps> = React.memo(
   ({ colors, titleAnim, titleOpacity, titleTransform, styles }) => (
-    <View style={styles.headerSection}>
+    <PerfectContainer style={styles.headerSection as ViewStyle}>
       <LinearGradient
         colors={[colors.primary[100], colors.primary[50], colors.neutral[50]]}
         style={styles.gradientBackground}
@@ -20,14 +21,14 @@ export const HeaderTextSection: React.FC<HeaderTextSectionProps> = React.memo(
         end={{ x: 1, y: 1 }}
       />
 
-      <View style={styles.textContainer}>
+      <PerfectContainer style={styles.textContainer as ViewStyle}>
         <ModernSmartTitle
           titleAnim={titleAnim}
           titleOpacity={titleOpacity}
           titleTransform={titleTransform}
         />
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   )
 );
 

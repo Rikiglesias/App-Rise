@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { PerfectText } from '../ui';
+import { PerfectText, PerfectContainer } from '../ui';
 
 import { Spacing, Typography } from '../../shared/constants';
 import { useTheme } from '../../shared/hooks/useTheme';
@@ -28,14 +28,11 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       marginRight: Spacing[3],
     },
     title: {
-      fontSize: 16,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[900],
       marginBottom: Spacing[1],
-      lineHeight: 16 * 1.2,
     },
     location: {
-      fontSize: 12,
       color: colors.neutral[500],
       fontWeight: Typography.weights.medium,
     },
@@ -48,15 +45,14 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       alignItems: 'center',
     },
     statusText: {
-      fontSize: 20,
       fontWeight: Typography.weights.bold,
       color: colors.neutral[0],
     },
   });
 
   return (
-    <View style={styles.header}>
-      <View style={styles.titleContainer}>
+    <PerfectContainer style={styles.header}>
+      <PerfectContainer style={styles.titleContainer}>
         <PerfectText
           size={18}
           lines={1}
@@ -75,8 +71,8 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
         >
           {location}
         </PerfectText>
-      </View>
-      <View style={styles.statusBadge}>
+      </PerfectContainer>
+      <PerfectContainer style={styles.statusBadge}>
         <PerfectText
           size={12}
           lines={1}
@@ -86,7 +82,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
         >
           {statusText}
         </PerfectText>
-      </View>
-    </View>
+      </PerfectContainer>
+    </PerfectContainer>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Pressable, StyleSheet } from 'react-native';
 import { Surface } from 'react-native-paper';
+import { PerfectContainer } from '../ui/PerfectContainer';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
 import { useAnimatedPress } from '../../shared/hooks/useAnimatedPress';
@@ -93,7 +94,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         accessibilityLabel={`Progetto ${title} in ${location}`}
       >
         <Surface style={styles.surface}>
-          <View style={styles.content}>
+          <PerfectContainer style={styles.content}>
             <ProjectHeader
               title={title}
               location={location}
@@ -106,7 +107,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             {progress !== undefined && (
               <ProjectProgress progress={progress} statusColor={statusColor} />
             )}
-          </View>
+          </PerfectContainer>
         </Surface>
       </Pressable>
     </Animated.View>

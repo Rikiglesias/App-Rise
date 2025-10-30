@@ -5,19 +5,8 @@ import React, { useMemo } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PerfectContainer, PerfectText } from '../../../../components/ui';
-import {
-  HEADER_TITLE_SIZE,
-  CONTRIBUTE_SUBTITLE_SIZE,
-} from '../../../shared/headerSizes';
 import { LOGICAL_REFERENCE } from '../../../../shared/constants/responsiveSystem';
-
-import { Spacing, Typography } from '../../../../shared/constants';
-
-import {
-  HEADER_VERTICAL_PADDING_FACTOR,
-  HEADER_FIXED_HEIGHT_FACTOR,
-  HEADER_TITLE_INTERLINE_FACTOR,
-} from '../../../shared/headerLayout';
+import { Spacing } from '../../../../shared/constants';
 
 import type { useNewActionsAnimations } from './ContributeAnimations';
 
@@ -25,24 +14,13 @@ interface NewActionsHeaderProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
 }
 
-const TITLE_SIZE = HEADER_TITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
-const SUBTITLE_SIZE = CONTRIBUTE_SUBTITLE_SIZE; // iPhone 15 base, scala millimetrica automatica
+// Header sizes - hardcoded direttamente (Perfect System scala automaticamente)
+const TITLE_SIZE = 40;
+const SUBTITLE_SIZE = 18;
 const REF_WIDTH = LOGICAL_REFERENCE.width;
-const HEADER_INNER_HEIGHT =
-  /* scaleDimensionLinear(
-  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR
-) */
-  REF_WIDTH * HEADER_FIXED_HEIGHT_FACTOR;
-const HEADER_VERTICAL_PADDING =
-  /* scaleDimensionLinear(
-  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR
-) */
-  REF_WIDTH * HEADER_VERTICAL_PADDING_FACTOR;
-const HEADER_TITLE_INTERLINE =
-  /* scaleDimensionLinear(
-  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR
-) */
-  REF_WIDTH * HEADER_TITLE_INTERLINE_FACTOR;
+const HEADER_INNER_HEIGHT = REF_WIDTH * 0.43;
+const HEADER_VERTICAL_PADDING = REF_WIDTH * 0.025;
+const HEADER_TITLE_INTERLINE = REF_WIDTH * 0.002;
 const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const styles = useMemo(
     () =>
@@ -89,11 +67,9 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
 
         // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
         titleText: {
-          fontWeight: Typography.weights.black,
           color: '#1F2937',
           textAlign: 'center',
           letterSpacing: -0.5,
-          lineHeight: HEADER_TITLE_SIZE * 1.2,
           marginBottom: HEADER_TITLE_INTERLINE,
           textShadowColor: 'rgba(31, 41, 55, 0.15)',
           textShadowOffset: { width: 0, height: 2 },
@@ -111,11 +87,9 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
 
         // SUBTITLE INLINE INGRANDITO E ELEGANTE
         mainSubtitle: {
-          fontWeight: Typography.weights.medium,
           color: '#374151',
           textAlign: 'center',
           letterSpacing: 0,
-          lineHeight: CONTRIBUTE_SUBTITLE_SIZE * 1.2,
           marginTop: Spacing[3],
           opacity: 0.8,
           includeFontPadding: false,

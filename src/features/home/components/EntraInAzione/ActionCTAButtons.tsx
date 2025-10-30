@@ -14,7 +14,6 @@ import {
   BorderRadius,
   Colors,
   Spacing,
-  Typography,
   Shadows,
 } from '../../../../shared/constants/designTokens';
 // ELIMINATO: scaleDimensionLinear e PlatformShadows
@@ -184,7 +183,6 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
-    fontWeight: Typography.weights.black,
     color: '#DC2626',
     textAlign: 'center' as const,
     letterSpacing: -0.6,
@@ -196,7 +194,6 @@ const styles = StyleSheet.create({
   },
 
   buttonDirection: {
-    fontWeight: Typography.weights.bold,
     color: '#10B981',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
@@ -208,7 +205,6 @@ const styles = StyleSheet.create({
   },
 
   buttonDirectionRed: {
-    fontWeight: Typography.weights.bold,
     color: '#EF4444',
     textAlign: 'center' as const,
     letterSpacing: 0.3,
@@ -232,7 +228,6 @@ const styles = StyleSheet.create({
   },
 
   buttonTitleGreen: {
-    fontWeight: Typography.weights.black,
     color: '#059669',
     textAlign: 'center' as const,
     letterSpacing: -0.6,

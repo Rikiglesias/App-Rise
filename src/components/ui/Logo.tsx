@@ -1,10 +1,11 @@
 import React from 'react';
 import type { ViewStyle } from 'react-native';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Colors } from '../../shared/constants/designTokens';
 import logoImage from '../../../assets/icons/app/app-icon.png';
 import { PerfectImage } from './PerfectImage';
+import { PerfectContainer } from './PerfectContainer';
 
 // Immagine logo importata correttamente
 
@@ -35,26 +36,26 @@ const Logo: React.FC<LogoProps> = ({
 
   if (showBackground !== null) {
     return (
-      <View style={[containerStyle, style]}>
+      <PerfectContainer style={[containerStyle, ...(style ? [style] : [])]}>
         <PerfectImage
           width={innerSize}
           height={innerSize}
           source={logoImage}
           imageStyle={{ resizeMode: 'contain' }}
         />
-      </View>
+      </PerfectContainer>
     );
   }
 
   return (
-    <View style={style}>
+    <PerfectContainer {...(style && { style })}>
       <PerfectImage
         width={innerSize}
         height={innerSize}
         source={logoImage}
         imageStyle={{ resizeMode: 'contain' }}
       />
-    </View>
+    </PerfectContainer>
   );
 };
 
