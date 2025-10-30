@@ -6,9 +6,6 @@ import {
   PerfectContainer,
   PerfectCardContainer,
 } from '../../../../components/ui';
-import responsiveSystem, {
-  
-} from '../../../../shared/constants/responsiveSystem';
 import { Colors } from '../../../../shared/constants/designTokens';
 
 export const ActionDescription: React.FC = () => {
@@ -37,10 +34,7 @@ export const ActionDescription: React.FC = () => {
           style={[
             styles.descriptionDivider,
             {
-              width: /* scaleDimensionLinear(
-                (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) */ 
-                (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393 * 0.4
-              ),
+              width: 393 * 0.4,
               height: 2,
               marginVertical: 20,
               borderRadius: 1,

@@ -1,8 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { Spacing } from '../../../../shared/constants/designTokens';
-import responsiveSystem, {
-  
-} from '../../../../shared/constants/responsiveSystem';
 
 export const useHeroImageStyles = () => {
   return StyleSheet.create({
@@ -24,10 +21,7 @@ export const useHeroImageStyles = () => {
 
     image: {
       width: '100%',
-      height: /* scaleDimensionLinear(
-        (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) */ 
-        (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393 * 0.45
-      ),
+      height: 280,
       // Rimosso borderRadius dall'immagine per evitare problemi di rendering
     },
 

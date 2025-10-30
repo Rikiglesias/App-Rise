@@ -15,9 +15,9 @@ import {
   Colors,
   Spacing,
   Typography,
+  Shadows,
 } from '../../../../shared/constants/designTokens';
-// ELIMINATO: scaleDimensionLinear from '../../../../shared/constants/responsiveSystem';
-import { PlatformShadows } from '../../../../shared/constants/platformDesignTokens';
+// ELIMINATO: scaleDimensionLinear e PlatformShadows
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import type { BottomTabParamList } from '../../../../navigation/types';
 
@@ -60,7 +60,7 @@ export const ActionCTAButtons: React.FC = () => {
             <PerfectContainer style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="chart-line"
-                size={scaleDimensionLinear(28)}
+                size={28}
                 color={Colors.primary[600]}
                 style={styles.buttonIcon}
               />
@@ -76,7 +76,7 @@ export const ActionCTAButtons: React.FC = () => {
               <PerfectContainer style={styles.directionRowRed}>
                 <MaterialCommunityIcons
                   name="arrow-left"
-                  size={scaleDimensionLinear(18)}
+                  size={18}
                   color={Colors.primary[500]}
                 />
                 <PerfectText
@@ -110,7 +110,7 @@ export const ActionCTAButtons: React.FC = () => {
             <PerfectContainer style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="hand-heart"
-                size={scaleDimensionLinear(28)}
+                size={28}
                 color="#059669"
                 style={styles.buttonIcon}
               />
@@ -136,7 +136,7 @@ export const ActionCTAButtons: React.FC = () => {
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="arrow-right"
-                  size={scaleDimensionLinear(18)}
+                  size={18}
                   color="#10B981"
                 />
               </PerfectContainer>
@@ -156,13 +156,13 @@ const styles = StyleSheet.create({
   gradientBorder: {
     borderRadius: BorderRadius.xl, // ← MIGRATO DA HARDCODED 20
     padding: 3, // Bordo più sottile
-    ...PlatformShadows.lg,
+    ...Shadows.lg,
   },
 
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - 3, // Radius interno coerente con padding
-    minHeight: /* scaleDimensionLinear(105) */ 105, // Leggermente ingrandito per bottoni più visibili
+    minHeight: 105, // Leggermente ingrandito per bottoni più visibili
     paddingVertical: Spacing[2],
     paddingHorizontal: Spacing[3],
     justifyContent: 'center',
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between', // Assicura label sempre visibile in basso
     flex: 1,
-    minHeight: /* scaleDimensionLinear(85) */ 85, // Leggermente ingrandito per migliore proporzione
+    minHeight: 85, // Leggermente ingrandito per migliore proporzione
     paddingTop: Spacing[1],
     paddingBottom: Spacing[1],
   },
