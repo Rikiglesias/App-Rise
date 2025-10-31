@@ -1,34 +1,40 @@
 /**
- * SISTEMA IMMUNITÀ TOTALE ALLE IMPOSTAZIONI UTENTE
+ * SISTEMA ACCESSIBILITÀ BILANCIATO
  *
- * Blocca QUALSIASI interferenza delle impostazioni del dispositivo:
- * - Font scaling utente
- * - Impostazioni accessibilità
- * - Zoom sistema
- * - Dynamic Type (iOS)
- * - Font Size (Android)
+ * FILOSOFIA: Rispetta le preferenze utente per accessibilità mantenendo
+ * la stabilità del layout del Perfect System.
  *
- * RISULTATO: App sempre identica indipendentemente dalle preferenze utente
+ * COSA RISPETTA:
+ * ✅ Font scaling utente (utenti ipovedenti, Large Text, Dynamic Type)
+ * ✅ Impostazioni accessibilità sistema
+ * ✅ Conformità WCAG 2.1 (Web Content Accessibility Guidelines)
+ *
+ * COSA LIMITA:
+ * ⚠️ Scaling eccessivo (max 1.3x per prevenire layout rotti)
+ * ⚠️ Pixel ratio inconsistente (mantiene riferimento iPhone 15)
+ *
+ * RISULTATO: App accessibile ma layout stabile
  */
 
 import { PixelRatio, Platform } from 'react-native';
 
-// 🔒 CONFIGURAZIONE IMMUNITÀ
+// ⚖️ CONFIGURAZIONE ACCESSIBILITÀ BILANCIATA
 const IMMUNITY_CONFIG = {
-  // Blocca scaling automatico
-  BLOCK_FONT_SCALING: true,
+  // RISPETTA scaling utente (accessibilità)
+  BLOCK_FONT_SCALING: false,
 
-  // Forza density pixel ratio fisso
+  // Forza density pixel ratio fisso (stabilità)
   FORCE_FIXED_DENSITY: true,
 
-  // Blocca Dynamic Type iOS
-  BLOCK_DYNAMIC_TYPE: true,
+  // RISPETTA Dynamic Type iOS (accessibilità)
+  BLOCK_DYNAMIC_TYPE: false,
 
-  // Blocca Font Size Android
-  BLOCK_ANDROID_FONT_SIZE: true,
+  // RISPETTA Font Size Android (accessibilità)
+  BLOCK_ANDROID_FONT_SIZE: false,
 
-  // Font scale massimo consentito (1.0 = nessun scaling)
-  MAX_FONT_SCALE: 1.0,
+  // Font scale massimo consentito (1.3 = fino a 30% più grande)
+  // Bilancia accessibilità e stabilità layout
+  MAX_FONT_SCALE: 1.3,
 
   // Pixel ratio di riferimento (iPhone 15)
   REFERENCE_PIXEL_RATIO: 3.0,
@@ -52,28 +58,28 @@ export const getSystemFontSettings = () => {
   };
 };
 
-// 🛡️ APPLICA IMMUNITÀ AI PROPS TEXT
+// ⚖️ APPLICA ACCESSIBILITÀ BILANCIATA AI PROPS TEXT
 export const getImmuneTextProps = () => {
   return {
-    // Blocca font scaling sistema
-    allowFontScaling: !IMMUNITY_CONFIG.BLOCK_FONT_SCALING,
+    // ✅ RISPETTA font scaling sistema (accessibilità)
+    allowFontScaling: !IMMUNITY_CONFIG.BLOCK_FONT_SCALING, // = true
 
-    // Limita moltiplicatore
-    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE,
+    // ⚠️ LIMITA moltiplicatore a 1.3x (stabilità layout)
+    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE, // = 1.3
 
-    // Proprietà aggiuntive per stabilità
-    adjustsFontSizeToFit: false, // Disabilita auto-fit nativo
-    minimumFontScale: 1.0, // Blocca riduzione automatica
+    // Proprietà aggiuntive per stabilità Perfect System
+    adjustsFontSizeToFit: false, // Disabilita auto-fit nativo (PerfectText lo gestisce)
+    minimumFontScale: 1.0, // Blocca riduzione automatica (solo ingrandimento permesso)
 
-    // Platform-specific immunity
+    // Platform-specific per stabilità rendering
     ...(Platform.OS === 'ios' && {
-      // iOS: Blocca Dynamic Type
+      // iOS: Rendering consistente
       textBreakStrategy: 'simple' as const,
       lineBreakMode: 'clip' as const,
     }),
 
     ...(Platform.OS === 'android' && {
-      // Android: Blocca font size sistema
+      // Android: Padding consistente
       includeFontPadding: false,
       textAlignVertical: 'center',
       textBreakStrategy: 'simple' as const,
@@ -162,10 +168,11 @@ export const generateImmunityReport = () => {
 
     // Raccomandazioni
     recommendations: [
-      'Testa su dispositivi reali con font scaling attivo',
-      'Verifica in Settings > Display > Font Size su Android',
-      'Verifica in Settings > Display & Brightness > Text Size su iOS',
-      'Usa debugImmunity() per monitorare componenti critici',
+      '✅ Testa con Large Text attivo (iOS Settings > Accessibility > Display & Text Size)',
+      '✅ Testa con Font Size grande (Android Settings > Display > Font Size)',
+      '✅ Verifica layout con maxFontSizeMultiplier 1.0, 1.15, 1.3',
+      '⚠️ Se layout si rompe con 1.3x, considera ridurre MAX_FONT_SCALE a 1.2',
+      '📊 Usa debugImmunity() per monitorare scaling in tempo reale',
     ],
   };
 };

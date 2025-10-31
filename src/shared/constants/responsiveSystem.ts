@@ -66,10 +66,56 @@ export const scale = (value: number): number => {
   return value;
 };
 
+/**
+ * SCALE WITH CUSTOM DIMENSIONS - Per hook e casi speciali
+ *
+ * Usa questa funzione quando hai già le dimensioni (es. da useResponsiveDimensions)
+ * invece di leggerle nuovamente da Dimensions.get().
+ *
+ * QUANDO USARE:
+ * - In componenti con useResponsiveDimensions() hook
+ * - Quando vuoi evitare multiple letture di Dimensions
+ * - Per testing con dimensioni mockate
+ *
+ * @param value - Valore da scalare
+ * @param width - Larghezza schermo
+ * @param height - Altezza schermo
+ * @returns Valore scalato
+ */
+export const scaleWithDimensions = (
+  value: number,
+  width: number,
+  height: number
+): number => {
+  try {
+    // Normalizza a portrait
+    const baseWidth = Math.min(width, height);
+    const baseHeight = Math.max(width, height);
+
+    // Calcola diagonale
+    const deviceDiagonal = Math.sqrt(
+      baseWidth * baseWidth + baseHeight * baseHeight
+    );
+
+    const referenceDiagonal = Math.sqrt(
+      LOGICAL_REFERENCE.width * LOGICAL_REFERENCE.width +
+        LOGICAL_REFERENCE.height * LOGICAL_REFERENCE.height
+    );
+
+    if (deviceDiagonal > 0) {
+      return value * (deviceDiagonal / referenceDiagonal);
+    }
+  } catch {
+    // Fallback
+  }
+  return value;
+};
+
 // EXPORT DEFAULT
 export default {
   LOGICAL_REFERENCE,
   scale,
+  scaleWithDimensions,
 };
 
-// NESSUN ALIAS - SOLO scale()!
+// NESSUN ALIAS - SOLO scale() e scaleWithDimensions()!
