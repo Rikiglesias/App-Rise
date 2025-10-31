@@ -76,23 +76,23 @@ export const OTADebugPanel: React.FC = () => {
 
   return (
     <PerfectContainer style={styles.container}>
-      <PerfectText lines={1} style={styles.title}>
+      <PerfectText size={18} lines={1} style={styles.title}>
         🔄 OTA Debug Panel
       </PerfectText>
 
       <PerfectContainer style={styles.statusContainer}>
-        <PerfectText lines={1} style={styles.statusText}>
+        <PerfectText size={14} lines={1} style={styles.statusText}>
           Status: {getStatusText(isChecking, isDownloading)}
         </PerfectText>
 
         {isUpdateAvailable && (
-          <PerfectText lines={1} style={styles.updateText}>
+          <PerfectText size={14} lines={1} style={styles.updateText}>
             📦 Update Available!
           </PerfectText>
         )}
 
         {error && (
-          <PerfectText lines={1} style={styles.errorText}>
+          <PerfectText size={14} lines={1} style={styles.errorText}>
             ❌ Error: {error}
           </PerfectText>
         )}
@@ -100,7 +100,7 @@ export const OTADebugPanel: React.FC = () => {
 
       <PerfectContainer style={styles.buttonsContainer}>
         <PlatformTouchable style={styles.button} onPress={showUpdateInfo}>
-          <PerfectText lines={1} style={styles.buttonText}>
+          <PerfectText size={12} lines={1} style={styles.buttonText}>
             ℹ️ Show Info
           </PerfectText>
         </PlatformTouchable>
@@ -110,7 +110,7 @@ export const OTADebugPanel: React.FC = () => {
           onPress={handleManualCheck}
           disabled={isChecking || isDownloading}
         >
-          <PerfectText lines={1} style={styles.buttonText}>
+          <PerfectText size={12} lines={1} style={styles.buttonText}>
             🔍 Check Updates
           </PerfectText>
         </PlatformTouchable>
@@ -120,7 +120,7 @@ export const OTADebugPanel: React.FC = () => {
           onPress={handleManualReload}
           disabled={isChecking || isDownloading}
         >
-          <PerfectText lines={1} style={styles.buttonText}>
+          <PerfectText size={12} lines={1} style={styles.buttonText}>
             🔄 Reload App
           </PerfectText>
         </PlatformTouchable>
@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
     borderColor: '#007AFF',
   },
   title: {
-    fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 12,
@@ -149,17 +148,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   statusText: {
-    fontSize: 14,
     marginBottom: 4,
     color: '#333',
   },
   updateText: {
-    fontSize: 14,
     color: '#28a745',
     fontWeight: '600',
   },
   errorText: {
-    fontSize: 14,
     color: '#dc3545',
     fontWeight: '600',
   },
@@ -178,7 +174,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 12,
     textAlign: 'center',
     fontWeight: '600',
   },

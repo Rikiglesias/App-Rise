@@ -17,6 +17,7 @@ import {
   Shadows,
   Spacing,
 } from '../../../shared/constants';
+import { scale } from '../../../shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '../../../shared/constants/dimensions';
 import type { StatButtonProps } from '../types/ImpactScreenTypes';
 
@@ -152,8 +153,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconContainer: {
-    width: 50,
-    height: 50,
+    width: scale(50),
+    height: scale(50),
     borderRadius: BorderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',

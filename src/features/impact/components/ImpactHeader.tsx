@@ -4,8 +4,8 @@ import { Animated, Platform, StyleSheet } from 'react-native';
 
 import { PerfectText, PerfectContainer } from '../../../components/ui';
 // Ratio inline per evitare dipendenze condivise
-import { Colors, Spacing } from '../../../shared/constants/designTokens';
-import responsiveSystem from '../../../shared/constants/responsiveSystem';
+import { Colors, Spacing, BorderRadius, Shadows } from '../../../shared/constants/designTokens';
+import { LOGICAL_REFERENCE } from '../../../shared/constants/perfectScale';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 // Header sizes - hardcoded direttamente (Perfect System scala automaticamente)
 const TITLE_SIZE = 40;
 const SUBTITLE_SIZE = 18;
-const REF_WIDTH = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
+const REF_WIDTH = LOGICAL_REFERENCE.width;
 const HEADER_INNER_HEIGHT = REF_WIDTH * 0.43;
 const HEADER_VERTICAL_PADDING = REF_WIDTH * 0.025;
 const HEADER_TITLE_INTERLINE = REF_WIDTH * 0.002;
@@ -46,7 +46,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
             fontWeight="900"
             immunity={true}
             containerWidth={
-              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+              LOGICAL_REFERENCE.width * 0.7
             }
             style={styles.titleText}
           >
@@ -58,7 +58,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
             fontWeight="900"
             immunity={true}
             containerWidth={
-              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+              LOGICAL_REFERENCE.width * 0.7
             }
             style={[styles.titleText, styles.titleAccent]}
           >
@@ -71,7 +71,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
           fontWeight="500"
           immunity={true}
           containerWidth={
-            (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+            LOGICAL_REFERENCE.width * 0.7
           }
           style={styles.mainSubtitle}
         >
@@ -112,17 +112,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing[4],
     paddingTop: HEADER_VERTICAL_PADDING,
     paddingBottom: HEADER_VERTICAL_PADDING,
-    borderRadius: 16,
+    borderRadius: BorderRadius.lg,
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
         ? Colors.neutral[200]
         : 'rgba(31, 41, 55, 0.08)',
-    shadowColor: Colors.neutral[800],
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: Platform.OS === 'android' ? 0.04 : 0.08,
-    shadowRadius: 6,
-    elevation: Platform.OS === 'android' ? 1 : 3,
+    ...Shadows.sm,
   },
   titleContainer: {
     alignItems: 'center',
@@ -134,16 +130,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: -0.5,
     marginBottom: HEADER_TITLE_INTERLINE,
-    textShadowColor: 'rgba(31, 41, 55, 0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 6,
+    ...Shadows.sm,
     includeFontPadding: false,
   },
   titleAccent: {
     color: Colors.primary[600],
-    textShadowColor: 'rgba(220, 38, 38, 0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 6,
+    ...Shadows.sm,
   },
   mainSubtitle: {
     color: Colors.neutral[700],

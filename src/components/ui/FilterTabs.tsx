@@ -3,7 +3,8 @@ import { ScrollView, StyleSheet } from 'react-native';
 
 import { useTheme } from '@react-navigation/native';
 import { TouchableRipple } from 'react-native-paper';
-import { BorderRadius, Spacing, Typography } from '../../shared/constants';
+import { BorderRadius, Spacing, Typography, Shadows } from '../../shared/constants';
+import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText } from './PerfectText';
 import { PerfectContainer } from './PerfectContainer';
 
@@ -41,7 +42,7 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       borderRadius: BorderRadius.full,
       paddingHorizontal: Spacing[4],
       paddingVertical: Spacing[3],
-      minHeight: 44,
+      minHeight: scale(44),
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'row',
@@ -50,11 +51,7 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
     activeTab: {
       backgroundColor: colors.primary,
       borderColor: colors.primary,
-      shadowColor: colors.primary,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      elevation: 3,
+      ...Shadows.sm,
     },
     inactiveTab: {
       backgroundColor: colors.card,
@@ -76,9 +73,9 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       backgroundColor: colors.card,
       color: colors.primary,
       paddingHorizontal: Spacing[2],
-      paddingVertical: 1,
+      paddingVertical: scale(1),
       borderRadius: BorderRadius.full,
-      minWidth: 20,
+      minWidth: scale(20),
       textAlign: 'center',
     },
     activeTabCount: {
@@ -90,11 +87,7 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       color: colors.text,
     },
     shadowContainer: {
-      shadowColor: colors.border,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      elevation: 3,
+      ...Shadows.sm,
     },
   });
 

@@ -11,6 +11,7 @@
 import React from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useTheme } from '../../shared/hooks/useTheme';
+import { scale } from '../../shared/constants/perfectScale';
 import { PerfectContainer } from './PerfectContainer';
 import { PerfectText } from './PerfectText';
 
@@ -48,19 +49,19 @@ const BUTTON_SIZE_PRESETS = {
   small: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    fontSize: 14,
+    size: 14,
     minHeight: 36,
   },
   medium: {
     paddingVertical: 12,
     paddingHorizontal: 24,
-    fontSize: 16,
+    size: 16,
     minHeight: 44, // Apple HIG minimum touch target
   },
   large: {
     paddingVertical: 16,
     paddingHorizontal: 32,
-    fontSize: 18,
+    size: 18,
     minHeight: 52,
   },
 } as const;
@@ -144,9 +145,9 @@ export const PerfectButton: React.FC<PerfectButtonProps> = ({
         flexDirection="row"
         gap={8}
         style={{
-          minHeight: preset.minHeight,
+          minHeight: scale(preset.minHeight),
           ...(variant === 'outline' && {
-            borderWidth: 2,
+            borderWidth: scale(2),
             borderColor: buttonColors.border as string,
           }),
           ...(isDisabled && {
@@ -162,7 +163,7 @@ export const PerfectButton: React.FC<PerfectButtonProps> = ({
           <ActivityIndicator color={buttonColors.text as string} size="small" />
         ) : (
           <PerfectText
-            fontSize={preset.fontSize}
+            size={preset.size}
             lines={1}
             fontWeight="600"
             color={buttonColors.text}

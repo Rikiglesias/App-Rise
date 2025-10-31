@@ -1,14 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import type {
-  ImpactNavigationProp,
-  ImpactScreenName,
-} from '../types/ImpactScreenTypes';
+import type { ImpactNavigationProp } from '../types/ImpactScreenTypes';
 import {
   ImpactHeader,
   TotalMealsSection,
@@ -19,13 +16,15 @@ import {
   convertToMapLocations,
 } from '../components';
 import { PlatformScrollView, PerfectContainer } from '@components/ui';
-import MapLocationModal from '@components/layout/MapLocationModal';
 import { Colors, Spacing } from '@shared/constants/designTokens';
+import { scale } from '@shared/constants/perfectScale';
 import { MAP_LOCATIONS } from '@/data/impactData';
-import type { MapModalData } from '@/data/mapModalData';
-import { getModalData } from '@/data/mapModalData';
+import { logError } from '@/shared/utils/logger';
 
-// Componenti modulari
+// Constants for padding calculations
+const BASE_PADDING = 16;
+const TAB_BAR_HEIGHT = 95;
+const EXTRA_PADDING = 24;
 
 /**
  * Screen principale dell'impatto con architettura modulare
@@ -34,63 +33,63 @@ import { getModalData } from '@/data/mapModalData';
 const ImpactTabScreenComponent: React.FC = () => {
   const navigation = useNavigation<ImpactNavigationProp>();
   const insets = useSafeAreaInsets();
-
-  // State per il modal della mappa
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState<MapModalData | null>(
-    null
-  );
   const animations = useImpactAnimations();
 
-  // Handler per aprire il modal con i dettagli della location (utilizzato dalla mappa)
-  const _handleLocationPress = useCallback((locationId: string) => {
-    const modalData = getModalData(locationId);
-    if (modalData) {
-      setSelectedLocation(modalData);
-      setModalVisible(true);
-    }
-  }, []);
-
-  // Handler per chiudere il modal
-  const handleModalClose = useCallback(() => {
-    setModalVisible(false);
-    setSelectedLocation(null);
-  }, []);
-
-  const handleNavigate = useCallback(
-    (screen: ImpactScreenName) => {
-      navigation.navigate(screen);
-    },
-    [navigation]
-  );
-
   const handleMealsPress = useCallback(() => {
-    handleNavigate('Meals');
-  }, [handleNavigate]);
-
-  const handleKitsPress = useCallback(() => {
-    handleNavigate('Kits');
-  }, [handleNavigate]);
-
-  const handleVolunteersPress = useCallback(() => {
-    handleNavigate('Volunteers');
-  }, [handleNavigate]);
-
-  const handlePartnersPress = useCallback(() => {
-    handleNavigate('Partners');
-  }, [handleNavigate]);
-
-  const handleMapPress = useCallback(() => {
-    const convertedLocations = convertToMapLocations(MAP_LOCATIONS);
-    navigation.navigate('MapModal', { locations: convertedLocations });
+    try {
+      navigation.navigate('Meals');
+    } catch (error) {
+      logError('Navigation error to Meals screen', error instanceof Error ? error.message : String(error));
+    }
   }, [navigation]);
 
+  const handleKitsPress = useCallback(() => {
+    try {
+      navigation.navigate('Kits');
+    } catch (error) {
+      logError('Navigation error to Kits screen', error instanceof Error ? error.message : String(error));
+    }
+  }, [navigation]);
+
+  const handleVolunteersPress = useCallback(() => {
+    try {
+      navigation.navigate('Volunteers');
+    } catch (error) {
+      logError('Navigation error to Volunteers screen', error instanceof Error ? error.message : String(error));
+    }
+  }, [navigation]);
+
+  const handlePartnersPress = useCallback(() => {
+    try {
+      navigation.navigate('Partners');
+    } catch (error) {
+      logError('Navigation error to Partners screen', error instanceof Error ? error.message : String(error));
+    }
+  }, [navigation]);
+
+  const handleMapPress = useCallback(() => {
+    try {
+      const convertedLocations = convertToMapLocations(MAP_LOCATIONS);
+      navigation.navigate('MapModal', { locations: convertedLocations });
+    } catch (error) {
+      logError('Navigation error to MapModal screen', error instanceof Error ? error.message : String(error));
+    }
+  }, [navigation]);
+
+  const scrollContentPadding = Math.max(insets.bottom, scale(BASE_PADDING)) + scale(TAB_BAR_HEIGHT) + scale(EXTRA_PADDING);
+
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView 
+      style={styles.container}
+      edges={['top', 'bottom']}
+      accessibilityLabel="Schermata Impatto"
+      testID="impact-tab-screen"
+    >
       <PlatformScrollView
         contentContainerStyle={{
-          paddingBottom: Math.max(insets.bottom, 16) + 95 + 24,
+          paddingBottom: scrollContentPadding,
         }}
+        accessibilityLabel="Scroll impatto e statistiche"
       >
         <ImpactHeader animations={animations} />
 
@@ -120,13 +119,6 @@ const ImpactTabScreenComponent: React.FC = () => {
 
         <MapSection onMapPress={handleMapPress} />
       </PlatformScrollView>
-
-      {/* Modal per i dettagli delle location */}
-      <MapLocationModal
-        visible={modalVisible}
-        data={selectedLocation}
-        onClose={handleModalClose}
-      />
     </SafeAreaView>
   );
 };
@@ -148,11 +140,11 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing[4],
   },
   sectionDivider: {
-    height: 2, // IDENTICO a sectionDivider (Azioni)
-    backgroundColor: Colors.neutral[200], // IDENTICO a Azioni
-    marginVertical: Spacing[2], // IDENTICO a Azioni
-    marginHorizontal: Spacing[6], // IDENTICO a Azioni
-    alignSelf: 'stretch', // garantisce larghezza piena
+    height: scale(2),
+    backgroundColor: Colors.neutral[200],
+    marginVertical: Spacing[2],
+    marginHorizontal: Spacing[6],
+    alignSelf: 'stretch',
   },
 });
 

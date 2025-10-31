@@ -13,7 +13,9 @@ import {
   Colors,
   Spacing,
   Shadows,
+  BorderRadius,
 } from '../../../shared/constants/designTokens';
+import { scale } from '../../../shared/constants/perfectScale';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 
 interface Props {
@@ -184,13 +186,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   communityGradientContainer: {
-    borderRadius: 20,
-    padding: 2,
-    ...Shadows.lg, // CONVERTITO: da shadow manuale a Shadows per Android ottimizzato
+    borderRadius: BorderRadius.xl,
+    padding: scale(2),
+    ...Shadows.lg,
   },
   communityCardContent: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 18,
+    borderRadius: BorderRadius.xl - scale(2),
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[3],
     alignItems: 'center',
@@ -221,30 +223,24 @@ const styles = StyleSheet.create({
   communityHeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? Colors.neutral[100] // ANDROID: Grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
-    borderRadius: 20,
+        ? Colors.neutral[100]
+        : 'rgba(55, 65, 81, 0.03)',
+    borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? Colors.neutral[200] // ANDROID: Bordo grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
-    shadowColor: Colors.neutral[700],
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
+        ? Colors.neutral[200]
+        : 'rgba(55, 65, 81, 0.08)',
+    ...Shadows.sm,
   },
   communityTitle: {
     color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,
-    textShadowColor: 'rgba(55, 65, 81, 0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    ...Shadows.sm,
   },
   communitySubtitle: {
     // fontSize rimosso - ora gestito da Text

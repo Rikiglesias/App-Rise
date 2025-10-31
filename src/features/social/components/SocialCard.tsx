@@ -7,8 +7,8 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, Spacing } from '@/shared/constants';
-import { scale } from '@/shared/constants/responsiveSystem';
+import { Colors, Spacing, Shadows } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -132,11 +132,7 @@ const styles = {
     backgroundColor: Colors.neutral[0],
     borderRadius: scale(18),
     overflow: 'hidden' as const,
-    shadowColor: Colors.neutral[900],
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-    elevation: 6,
+    ...Shadows.lg,
   },
   socialCardContent: {
     flexDirection: 'row' as const,
@@ -144,27 +140,23 @@ const styles = {
     padding: Spacing[4],
   },
   socialIconContainer: {
-    width: 56, // xlarge icon (40) + 16
-    height: 56,
+    width: scale(56),
+    height: scale(56),
     borderRadius: scale(28),
     backgroundColor: Colors.neutral[0],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginRight: Spacing[4],
-    shadowColor: Colors.primary[500], // Brand main
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
+    ...Shadows.md,
   },
   platformIcon: {
-    width: 34, // large icon (32) + 2
-    height: 34,
+    width: scale(34),
+    height: scale(34),
     resizeMode: 'contain' as const,
   },
   linkedinIcon: {
-    width: 35, // large icon (32) + 3
-    height: 35,
+    width: scale(35),
+    height: scale(35),
   },
   socialIconEmoji: {
     textAlign: 'center' as const,

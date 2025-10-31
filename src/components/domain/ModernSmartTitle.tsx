@@ -1,5 +1,6 @@
 import React from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, Text } from 'react-native';
+import { scale } from '../../shared/constants/perfectScale';
 import { PerfectContainer, PerfectText } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
@@ -46,11 +47,6 @@ const createModernTitleStyles = (responsiveSpacing: {
       borderRadius: 1,
       ...HomeHeaderDesignTokens.shadows.light,
     },
-
-    titleRow: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-    },
   });
 
 // Props per ModernSmartTitle
@@ -66,13 +62,13 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
     // ✅ PERFECT SYSTEM - Responsive scaling automatico
     const responsiveSpacing = React.useMemo(() => {
       return {
-        containerPadding: /* scaleFont(10) */ 10, // ← RIDOTTO DA 15 A 10 per meno spazio sopra
-        separatorTopMargin: /* scaleFont(20) */ 20, // ← RIDOTTO DA 25 A 20
-        separatorBottomMargin: /* scaleFont(10) */ 10, // ← RIDOTTO PER COMPENSARE RIMOZIONE SOTTOTITOLO
-        logoSize: /* scaleFont(53) */ 53,
-        separatorLineWidth: /* scaleFont(104) */ 104,
-        logoMargin: /* scaleFont(15) */ 15,
-        stackSpacing: /* scaleFont(8) */ 8,
+        containerPadding: scale(10),
+        separatorTopMargin: scale(20),
+        separatorBottomMargin: scale(10),
+        logoSize: scale(53),
+        separatorLineWidth: scale(104),
+        logoMargin: scale(15),
+        stackSpacing: scale(8),
       };
     }, []);
 
@@ -132,24 +128,23 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               </PerfectText>
 
               {/* Seconda riga: "Hunger Italia" con colori diversi */}
-              <PerfectContainer style={modernTitleStyles.titleRow}>
-                <PerfectText
-                  size={38}
-                  lines={1}
-                  fontWeight="900"
-                  color={HomeHeaderDesignTokens.colors.primary}
-                >
-                  Hunger{' '}
-                </PerfectText>
-                <PerfectText
-                  size={38}
-                  lines={1}
-                  fontWeight="900"
-                  color={HomeHeaderDesignTokens.colors.dark}
+              <PerfectText
+                size={38}
+                lines={1}
+                fontWeight="900"
+                textAlign="center"
+                color={HomeHeaderDesignTokens.colors.primary}
+              >
+                Hunger{' '}
+                <Text
+                  style={{
+                    fontWeight: '900',
+                    color: HomeHeaderDesignTokens.colors.dark,
+                  }}
                 >
                   Italia
-                </PerfectText>
-              </PerfectContainer>
+                </Text>
+              </PerfectText>
 
               {/* Separatore con logo centrale */}
               <PerfectContainer style={modernTitleStyles.titleSeparator}>

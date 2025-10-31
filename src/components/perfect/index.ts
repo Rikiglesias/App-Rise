@@ -6,12 +6,7 @@
  */
 
 // 📝 Sistema Testi Perfetto
-export {
-  PerfectText,
-  PerfectTitle,
-  PerfectSubtitle,
-  PerfectBody,
-} from '../ui/PerfectText';
+export { PerfectText } from '../ui/PerfectText';
 
 // 🌙 Sistema Dark Mode
 export {

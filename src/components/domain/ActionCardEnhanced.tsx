@@ -8,7 +8,9 @@ import {
   BorderRadius,
   Spacing,
   Typography,
+  Shadows,
 } from '../../shared/constants/designTokens';
+import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText, UnifiedCard } from '../ui';
 import { useTheme } from '../../shared/hooks/useTheme';
 
@@ -264,11 +266,8 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     borderRadius: BorderRadius.xl,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
+    ...Shadows.md,
     marginBottom: Spacing[4],
-    elevation: 4, // Android shadow
   },
   pressable: {
     width: '100%',
@@ -279,9 +278,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   iconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: scale(56),
+    height: scale(56),
+    borderRadius: scale(28),
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing[3],

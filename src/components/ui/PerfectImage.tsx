@@ -10,7 +10,7 @@
 
 import React from 'react';
 import { Image, ImageProps, View, ImageStyle, ViewStyle } from 'react-native';
-import { scale } from '../../shared/constants/responsiveSystem';
+import { scale } from '../../shared/constants/perfectScale';
 import { getPerfectShadow } from '../../shared/constants/perfectShadow';
 
 interface PerfectImageProps extends Omit<ImageProps, 'style'> {

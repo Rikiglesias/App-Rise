@@ -5,7 +5,7 @@
 import { DesignColors } from '../tokens/colors';
 import { DesignSpacing } from '../tokens/spacing';
 import { DesignBorders } from '../tokens/borders';
-import { scale as scaleSize } from '../../shared/constants/responsiveSystem';
+import { scale as scaleSize } from '../../shared/constants/perfectScale';
 
 /**
  * Token Helpers - Utility per lavorare con i design tokens

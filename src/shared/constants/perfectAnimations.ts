@@ -7,7 +7,7 @@
  * - Preset comuni per consistenza
  */
 
-import { scale } from './responsiveSystem';
+import { scale } from './perfectScale';
 
 /**
  * DURATE STANDARDIZZATE (NON scalano - OK!)

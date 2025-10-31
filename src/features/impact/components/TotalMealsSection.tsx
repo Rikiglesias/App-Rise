@@ -10,7 +10,8 @@ import {
   PerfectContainer,
 } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
-import { Colors, Spacing, Shadows } from '@/shared/constants/designTokens';
+import { Colors, Spacing, Shadows, BorderRadius } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
@@ -196,17 +197,17 @@ export const TotalMealsSection: React.FC<Props> = ({
 const styles = StyleSheet.create({
   // Header Divider - ALLARGATO PER COMPENSARE
   titleSeparator: {
-    height: 2, // IDENTICO a sectionDivider (Azioni)
-    backgroundColor: Colors.neutral[200], // IDENTICO a Azioni
-    marginVertical: Spacing[2], // IDENTICO a Azioni
-    marginHorizontal: Spacing[6], // IDENTICO a Azioni
-    alignSelf: 'stretch', // garantisce larghezza piena anche con alignItems:'center'
-  },
+    height: scale(2),
+    backgroundColor: Colors.neutral[200],
+    marginVertical: Spacing[2],
+    marginHorizontal: Spacing[6],
+    borderRadius: BorderRadius.sm,
+  }, 
   // Container divisorio - allineato a pagina Azioni (sectionDivider)
   titleSeparatorContainer: {
     paddingHorizontal: 0,
-    paddingVertical: 0, // Nessun padding: linea gestisce i margini come in Azioni
-    alignItems: 'stretch', // per imitare il comportamento della pagina Azioni
+    paddingVertical: 0, 
+    alignItems: 'stretch', 
   },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
@@ -223,14 +224,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   totalGradientContainer: {
-    borderRadius: 24,
-    padding: 2,
-    ...Shadows.lg, // Platform-optimized shadow system
+    borderRadius: BorderRadius.xl,
+    padding: scale(2),
+    ...Shadows.lg,
   },
   totalCardContent: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 22,
-    paddingVertical: Spacing[3], // Compact button padding
+    borderRadius: BorderRadius.xl - scale(2),
+    paddingVertical: Spacing[3],
     alignItems: 'center',
   },
   totalCardIcon: {
@@ -257,30 +258,24 @@ const styles = StyleSheet.create({
   numbersHeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? Colors.neutral[100] // Android: Optimized solid color
-        : 'rgba(55, 65, 81, 0.03)', // iOS: Transparent background
-    borderRadius: 20,
+        ? Colors.neutral[100]
+        : 'rgba(55, 65, 81, 0.03)',
+    borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? Colors.neutral[200] // Android: Consistent border color
-        : 'rgba(55, 65, 81, 0.08)', // iOS: Subtle border transparency
-    shadowColor: Colors.neutral[700],
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
+        ? Colors.neutral[200]
+        : 'rgba(55, 65, 81, 0.08)',
+    ...Shadows.sm,
   },
   numbersTitle: {
     color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,
-    textShadowColor: 'rgba(55, 65, 81, 0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    ...Shadows.sm,
   },
   numbersSubtitle: {
     // fontSize rimosso - ora gestito da Text

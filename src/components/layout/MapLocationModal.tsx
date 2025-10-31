@@ -5,7 +5,8 @@ import { Modal, StyleSheet } from 'react-native';
 import { PlatformTouchable, PerfectText, PerfectContainer } from '../ui';
 
 import type { MapModalData } from '../../data/mapModalData';
-import { Colors, Spacing } from '../../shared/constants';
+import { Colors, Spacing, BorderRadius, Shadows } from '../../shared/constants';
+import { scale } from '../../shared/constants/perfectScale';
 import { logDebug } from '../../shared/utils/logger';
 
 interface MapLocationModalProps {
@@ -167,9 +168,9 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   closeButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: scale(40),
+    height: scale(40),
+    borderRadius: scale(20),
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -197,16 +198,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#DC2626',
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[8],
-    borderRadius: 16,
+    borderRadius: BorderRadius.lg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#DC2626',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-    minWidth: 280,
+    ...Shadows.md,
+    minWidth: scale(280),
   },
   ctaIcon: {
     marginRight: Spacing[2],

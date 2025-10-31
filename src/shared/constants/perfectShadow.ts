@@ -8,7 +8,7 @@
  */
 
 import { Platform } from 'react-native';
-import { scale } from './responsiveSystem';
+import { scale } from './perfectScale';
 
 export type ShadowType = 'light' | 'medium' | 'strong';
 

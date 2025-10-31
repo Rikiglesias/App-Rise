@@ -6,7 +6,7 @@ import { Colors, Spacing } from '../../../shared/constants';
 import {
   LOGICAL_REFERENCE,
   scale,
-} from '../../../shared/constants/responsiveSystem';
+} from '../../../shared/constants/perfectScale';
 
 interface HeaderSectionProps {
   readonly animationValue: Animated.Value;

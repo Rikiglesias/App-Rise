@@ -8,7 +8,7 @@ import {
   PerfectContainer,
 } from '../../../../components/ui';
 import { Spacing, Shadows } from '../../../../shared/constants/designTokens';
-import { scale } from '../../../../shared/constants/responsiveSystem';
+import { scale } from '../../../../shared/constants/perfectScale';
 import type { AnimatedButtonProps } from './ActionButtonTypes';
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({

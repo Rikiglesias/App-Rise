@@ -1,6 +1,6 @@
 import { Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { Spacing } from '../../../shared/constants/designTokens';
-import responsiveSystem from '../../../shared/constants/responsiveSystem';
+import { LOGICAL_REFERENCE } from '../../../shared/constants/perfectScale';
 import { useTheme } from '../../../shared/hooks/useTheme';
 
 // Dimensioni calcolate in modo millimetrico rispetto a iPhone 15 (393px)
@@ -14,9 +14,7 @@ export const ADVANCED_CONFIG = {
   },
   imageSection: {
     // Altezza responsiva: target ~0.72 * width (considerando moltiplicatore 1.1 negli styles)
-    /* scaleDimensionLinear(
-      (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) */
-    height: responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393 * 1.1,
+    height: LOGICAL_REFERENCE.width * 1.1,
   },
   typography: {
     // Valori di fallback non usati negli stili (si usano TypographyTokens)

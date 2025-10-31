@@ -1,11 +1,14 @@
 /**
- * RESPONSIVE SYSTEM - ZERO RIDONDANZA
- * UNA SOLA FUNZIONE - MASSIMA SEMPLICITÀ
+ * PERFECT SCALE - Sistema Scaling Proporzionale
+ * 
+ * Parte del Perfect System per garantire UI consistente su tutti i device.
+ * Usa scaling basato sulla diagonale dello schermo per bilanciare
+ * naturalmente aspect ratio diversi (phone vs tablet).
  */
 
 import { Dimensions } from 'react-native';
 
-// REFERENCE: iPhone 15
+// REFERENCE: iPhone 15 (device di riferimento)
 export const LOGICAL_REFERENCE = {
   width: 393,
   height: 852,
@@ -110,12 +113,3 @@ export const scaleWithDimensions = (
   }
   return value;
 };
-
-// EXPORT DEFAULT
-export default {
-  LOGICAL_REFERENCE,
-  scale,
-  scaleWithDimensions,
-};
-
-// NESSUN ALIAS - SOLO scale() e scaleWithDimensions()!

@@ -3,7 +3,7 @@
 // ===================================================================
 
 import { Spacing } from '../../shared/constants';
-import { scale } from '../../shared/constants/responsiveSystem';
+import { scale } from '../../shared/constants/perfectScale';
 
 // Valori fissi per layout - DesignTokens e DeviceBreakpoints rimossi
 const breakpointValues = {

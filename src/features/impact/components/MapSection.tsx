@@ -9,7 +9,7 @@ import {
   PerfectImage,
 } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
-import { Colors, Spacing, Shadows } from '@/shared/constants/designTokens';
+import { Colors, Spacing, Shadows, BorderRadius } from '@/shared/constants/designTokens';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
 interface Props {
@@ -97,23 +97,22 @@ const styles = StyleSheet.create({
 
   // MAP CONTAINER CLICCABILE - RIEMPIE TUTTO SENZA BORDI
   mapImageContainer: {
-    backgroundColor: Colors.neutral[0], // RIPRISTINATO: background per vedere l'immagine
-    borderRadius: 20,
+    backgroundColor: Colors.neutral[0],
+    borderRadius: BorderRadius.xl,
     marginTop: Spacing[4],
-    marginHorizontal: 0, // RIMOSSO: margini laterali per riempire tutto
-    padding: 0, // RIMOSSO: padding per eliminare bordi vuoti
-    ...Shadows.lg, // CONVERTITO: da shadow manuale a PlatformShadows per Android ottimizzato
+    marginHorizontal: 0,
+    padding: 0,
+    ...Shadows.lg,
     position: 'relative',
     overflow: 'hidden',
-    height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT, // ALTEZZA FISSA: per container stabile
-    // FEEDBACK VISIVO CLICCABILE
+    height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT,
     borderWidth: 1,
     borderColor: 'transparent',
   },
   mapImage: {
     width: '100%',
-    height: '100%', // RIEMPIE TUTTO: il container
-    borderRadius: 20, // UGUALE AL CONTAINER: per bordi perfetti
+    height: '100%',
+    borderRadius: BorderRadius.xl,
   },
   // INDICATORE CLICCABILE
   mapClickIndicator: {
@@ -122,13 +121,13 @@ const styles = StyleSheet.create({
     right: Spacing[2],
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.neutral[50], // Design Token
+    backgroundColor: Colors.neutral[50],
     paddingHorizontal: Spacing[2],
     paddingVertical: Spacing[1],
-    borderRadius: 12,
+    borderRadius: BorderRadius.lg,
     gap: Spacing[1],
-    zIndex: 2, // SOPRA l'immagine della mappa
-    elevation: 8, // PER ANDROID: assicura che stia sopra
+    zIndex: 2,
+    elevation: 8,
   },
   mapClickText: {
     color: Colors.neutral[600],
@@ -143,30 +142,24 @@ const styles = StyleSheet.create({
   mapHeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? Colors.neutral[100] // ANDROID: Grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
-    borderRadius: 20,
+        ? Colors.neutral[100]
+        : 'rgba(55, 65, 81, 0.03)',
+    borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? Colors.neutral[200] // ANDROID: Bordo grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
-    shadowColor: Colors.neutral[700],
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
+        ? Colors.neutral[200]
+        : 'rgba(55, 65, 81, 0.08)',
+    ...Shadows.sm,
   },
   mapTitle: {
     color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,
-    textShadowColor: 'rgba(55, 65, 81, 0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    ...Shadows.sm,
   },
   mapSubtitle: {
     // fontSize rimosso - ora gestito da Text

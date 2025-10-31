@@ -5,8 +5,8 @@
 // Design System (original)
 export * from './designTokens';
 
-// Responsive System - SOLO scale() e LOGICAL_REFERENCE
-export { scale, LOGICAL_REFERENCE } from './responsiveSystem';
+// Perfect Scale - Sistema scaling proporzionale (Perfect System)
+export { scale, scaleWithDimensions, LOGICAL_REFERENCE } from './perfectScale';
 
 // Performance Constants
 export * from './performance';

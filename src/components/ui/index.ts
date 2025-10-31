@@ -48,13 +48,8 @@ export {
 } from './ProfessionalContainer';
 
 // Perfect System Components
-export {
-  PerfectText,
-  PerfectTitle,
-  PerfectSubtitle,
-  PerfectBody,
-} from './PerfectText';
-export type { PerfectTextProps, TypographyVariant } from './PerfectText';
+export { PerfectText } from './PerfectText';
+export type { PerfectTextProps } from './PerfectText';
 
 export {
   PerfectContainer,

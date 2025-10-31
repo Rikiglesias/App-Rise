@@ -3,21 +3,21 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import type { RootStackParamList } from '../../../navigation/types';
 import {
   PerfectText,
   PlatformScrollView,
   PerfectContainer,
 } from '../../../components/ui';
-// Ratio inline per evitare dipendenze condivise
-import responsiveSystem from '../../../shared/constants/responsiveSystem';
-
-import type { RootStackParamList } from '../../../navigation/types';
+import { LOGICAL_REFERENCE } from '../../../shared/constants/perfectScale';
 import {
   BorderRadius,
   Colors,
-  Shadows,
   Spacing,
+  Shadows,
 } from '../../../shared/constants/designTokens';
+import { StatCard, ImpactItem } from '../components/Impatto2024Components';
+import { STATS_2024, IMPACT_AREAS, GOAL_2025 } from '../data/impatto2024Data';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,7 +32,12 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
   navigation: _navigation,
 }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView 
+      style={styles.container}
+      edges={['top', 'bottom']}
+      accessibilityLabel="Schermata Impatto 2024"
+      testID="impatto2024-screen"
+    >
       <PlatformScrollView>
         <PerfectContainer style={styles.header}>
           <PerfectText
@@ -40,7 +45,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             lines={1}
             fontWeight="600"
             containerWidth={
-              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+              LOGICAL_REFERENCE.width * 0.7
             }
             style={styles.year}
           >
@@ -51,7 +56,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             lines={1}
             fontWeight="600"
             containerWidth={
-              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+              LOGICAL_REFERENCE.width * 0.7
             }
             style={styles.title}
           >
@@ -62,7 +67,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             lines={1}
             fontWeight="500"
             containerWidth={
-              (responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393) * 0.7
+              LOGICAL_REFERENCE.width * 0.7
             }
             style={styles.subtitle}
           >
@@ -70,113 +75,14 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
           </PerfectText>
         </PerfectContainer>
 
+        {/* Stats Cards - Data-driven rendering */}
         <PerfectContainer style={styles.statsSection}>
-          <PerfectContainer style={styles.statCard}>
-            <PerfectText
-              size={28}
-              lines={1}
-              fontWeight="400"
-              style={styles.statIcon}
-            >
-              🍽️
-            </PerfectText>
-            <PerfectText
-              size={24}
-              lines={1}
-              fontWeight="400"
-              style={styles.statNumber}
-            >
-              3.14M
-            </PerfectText>
-            <PerfectText
-              size={18}
-              lines={1}
-              fontWeight="400"
-              style={styles.statLabel}
-            >
-              Pasti Confezionati
-            </PerfectText>
-            <PerfectText
-              size={14}
-              lines={2}
-              fontWeight="400"
-              style={styles.statDesc}
-            >
-              Nutrizione per comunità in difficoltà
-            </PerfectText>
-          </PerfectContainer>
-
-          <PerfectContainer style={styles.statCard}>
-            <PerfectText
-              size={28}
-              lines={1}
-              fontWeight="400"
-              style={styles.statIcon}
-            >
-              📦
-            </PerfectText>
-            <PerfectText
-              size={24}
-              lines={1}
-              fontWeight="400"
-              style={styles.statNumber}
-            >
-              16.3K
-            </PerfectText>
-            <PerfectText
-              size={18}
-              lines={1}
-              fontWeight="400"
-              style={styles.statLabel}
-            >
-              Kit Prodotti
-            </PerfectText>
-            <PerfectText
-              size={14}
-              lines={2}
-              fontWeight="400"
-              style={styles.statDesc}
-            >
-              Kit completi per emergenze
-            </PerfectText>
-          </PerfectContainer>
-
-          <PerfectContainer style={styles.statCard}>
-            <PerfectText
-              size={28}
-              lines={1}
-              fontWeight="400"
-              style={styles.statIcon}
-            >
-              👥
-            </PerfectText>
-            <PerfectText
-              size={24}
-              lines={1}
-              fontWeight="400"
-              style={styles.statNumber}
-            >
-              13K
-            </PerfectText>
-            <PerfectText
-              size={18}
-              lines={1}
-              fontWeight="400"
-              style={styles.statLabel}
-            >
-              Volontari
-            </PerfectText>
-            <PerfectText
-              size={14}
-              lines={2}
-              fontWeight="400"
-              style={styles.statDesc}
-            >
-              Persone che hanno fatto la differenza
-            </PerfectText>
-          </PerfectContainer>
+          {STATS_2024.map((stat) => (
+            <StatCard key={stat.label} data={stat} />
+          ))}
         </PerfectContainer>
 
+        {/* Impact Areas Section */}
         <PerfectContainer style={styles.impactSection}>
           <PerfectText
             size={18}
@@ -188,81 +94,13 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
           </PerfectText>
 
           <PerfectContainer style={styles.impactList}>
-            <PerfectContainer style={styles.impactItem}>
-              <PerfectText
-                size={18}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactIcon}
-              >
-                🌍
-              </PerfectText>
-              <PerfectText
-                size={16}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactText}
-              >
-                Africa Subsahariana
-              </PerfectText>
-            </PerfectContainer>
-            <PerfectContainer style={styles.impactItem}>
-              <PerfectText
-                size={18}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactIcon}
-              >
-                🏫
-              </PerfectText>
-              <PerfectText
-                size={16}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactText}
-              >
-                Programmi scolastici
-              </PerfectText>
-            </PerfectContainer>
-            <PerfectContainer style={styles.impactItem}>
-              <PerfectText
-                size={18}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactIcon}
-              >
-                🚨
-              </PerfectText>
-              <PerfectText
-                size={16}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactText}
-              >
-                Emergenze umanitarie
-              </PerfectText>
-            </PerfectContainer>
-            <PerfectContainer style={styles.impactItem}>
-              <PerfectText
-                size={18}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactIcon}
-              >
-                🇮🇹
-              </PerfectText>
-              <PerfectText
-                size={16}
-                lines={1}
-                fontWeight="400"
-                style={styles.impactText}
-              >
-                Comunità italiane
-              </PerfectText>
-            </PerfectContainer>
+            {IMPACT_AREAS.map((area) => (
+              <ImpactItem key={area.text} data={area} />
+            ))}
           </PerfectContainer>
         </PerfectContainer>
 
+        {/* Goal 2025 Section */}
         <PerfectContainer style={styles.goalSection}>
           <PerfectText
             size={36}
@@ -270,7 +108,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             fontWeight="400"
             style={styles.goalIcon}
           >
-            🎯
+            {GOAL_2025.icon}
           </PerfectText>
           <PerfectText
             size={18}
@@ -278,7 +116,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             fontWeight="400"
             style={styles.goalTitle}
           >
-            Obiettivo 2025
+            {GOAL_2025.title}
           </PerfectText>
           <PerfectText
             size={16}
@@ -286,7 +124,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             fontWeight="400"
             style={styles.goalText}
           >
-            Superare i 4 milioni di pasti confezionati
+            {GOAL_2025.description}
           </PerfectText>
         </PerfectContainer>
       </PlatformScrollView>
@@ -334,35 +172,6 @@ const styles = StyleSheet.create({
     gap: Spacing[4],
   },
 
-  statCard: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.lg,
-    padding: Spacing[6],
-    alignItems: 'center',
-    ...Shadows.sm,
-  },
-
-  statIcon: {
-    marginBottom: Spacing[3],
-  },
-
-  statNumber: {
-    color: Colors.primary[600],
-    textAlign: 'center',
-  },
-
-  statLabel: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    marginTop: Spacing[2],
-  },
-
-  statDesc: {
-    color: Colors.neutral[600],
-    textAlign: 'center',
-    marginTop: Spacing[1],
-  },
-
   impactSection: {
     backgroundColor: Colors.neutral[0],
     marginHorizontal: Spacing[4],
@@ -380,19 +189,6 @@ const styles = StyleSheet.create({
 
   impactList: {
     gap: Spacing[3],
-  },
-
-  impactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  impactIcon: {
-    marginRight: Spacing[3],
-  },
-
-  impactText: {
-    color: Colors.neutral[700],
   },
 
   goalSection: {

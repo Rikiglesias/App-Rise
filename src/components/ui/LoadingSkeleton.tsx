@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useMemo } from 'react';
 import { Animated, StyleSheet, ViewStyle } from 'react-native';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
+import { scale } from '../../shared/constants/perfectScale';
 import { useTheme } from '../../shared/hooks/useTheme';
 import { PerfectContainer } from './PerfectContainer';
 
@@ -106,7 +107,7 @@ const HeaderSkeletonComponent: React.FC = () => {
         container: {
           backgroundColor: colors.neutral[50],
           padding: Spacing[6],
-          height: 280,
+          height: scale(280),
         },
         titleSkeleton: {
           marginBottom: Spacing[4],
@@ -115,8 +116,8 @@ const HeaderSkeletonComponent: React.FC = () => {
           marginBottom: Spacing[6],
         },
         buttonSkeleton: {
-          width: 140,
-          height: 44,
+          width: scale(140),
+          height: scale(44),
         },
       }),
     [colors.neutral]
@@ -166,7 +167,7 @@ const ActionsSkeletonComponent: React.FC = () => {
         },
         cardSkeleton: {
           width: '48%',
-          height: 100,
+          height: scale(100),
         },
       }),
     [colors.neutral]
@@ -207,8 +208,8 @@ const StoriesSkeletonComponent: React.FC = () => {
           gap: Spacing[3],
         },
         storySkeleton: {
-          width: 200,
-          height: 120,
+          width: scale(200),
+          height: scale(120),
         },
       }),
     []

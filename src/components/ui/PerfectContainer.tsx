@@ -16,7 +16,7 @@ import {
   DimensionValue,
   StyleSheet,
 } from 'react-native';
-import { scale } from '../../shared/constants/responsiveSystem';
+import { scale } from '../../shared/constants/perfectScale';
 import {
   getPerfectShadow,
   type ShadowType,

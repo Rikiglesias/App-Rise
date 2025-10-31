@@ -16,7 +16,7 @@ import {
   Spacing,
   Shadows,
 } from '../../../../shared/constants/designTokens';
-// ELIMINATO: scaleDimensionLinear e PlatformShadows
+import { scale } from '../../../../shared/constants/perfectScale';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 import type { BottomTabParamList } from '../../../../navigation/types';
 
@@ -39,9 +39,9 @@ export const ActionCTAButtons: React.FC = () => {
     <PerfectContainer
       preset="section"
       flexDirection="row"
-      gap={16}
-      paddingHorizontal={1}
-      marginVertical={16}
+      gap={Spacing[4]}
+      paddingHorizontal={Spacing[1]}
+      marginVertical={Spacing[4]}
     >
       {/* SCOPRI IL NOSTRO IMPATTO */}
       <PlatformTouchable
@@ -59,7 +59,7 @@ export const ActionCTAButtons: React.FC = () => {
             <PerfectContainer style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="chart-line"
-                size={28}
+                size={scale(28)}
                 color={Colors.primary[600]}
                 style={styles.buttonIcon}
               />
@@ -67,7 +67,7 @@ export const ActionCTAButtons: React.FC = () => {
                 size={20}
                 fontWeight="bold"
                 lines={2}
-                containerWidth={140}
+                containerWidth={scale(140)}
                 style={styles.buttonTitle}
               >
                 Scopri{'\n'}Impatto
@@ -75,14 +75,14 @@ export const ActionCTAButtons: React.FC = () => {
               <PerfectContainer style={styles.directionRowRed}>
                 <MaterialCommunityIcons
                   name="arrow-left"
-                  size={18}
+                  size={scale(18)}
                   color={Colors.primary[500]}
                 />
                 <PerfectText
                   size={16}
                   fontWeight="bold"
                   lines={1}
-                  containerWidth={110}
+                  containerWidth={scale(110)}
                   style={styles.buttonDirectionRed}
                 >
                   Risultati
@@ -109,15 +109,15 @@ export const ActionCTAButtons: React.FC = () => {
             <PerfectContainer style={styles.buttonContent}>
               <MaterialCommunityIcons
                 name="hand-heart"
-                size={28}
-                color="#059669"
+                size={scale(28)}
+                color={Colors.semantic.success.dark}
                 style={styles.buttonIcon}
               />
               <PerfectText
                 size={20}
                 fontWeight="bold"
                 lines={2}
-                containerWidth={140}
+                containerWidth={scale(140)}
                 textAlign="center"
                 style={styles.buttonTitleGreen}
               >
@@ -128,15 +128,15 @@ export const ActionCTAButtons: React.FC = () => {
                   size={16}
                   fontWeight="bold"
                   lines={1}
-                  containerWidth={110}
+                  containerWidth={scale(110)}
                   style={styles.buttonDirection}
                 >
                   Supporta
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="arrow-right"
-                  size={18}
-                  color="#10B981"
+                  size={scale(18)}
+                  color={Colors.semantic.success.main}
                 />
               </PerfectContainer>
             </PerfectContainer>
@@ -153,15 +153,15 @@ const styles = StyleSheet.create({
   },
 
   gradientBorder: {
-    borderRadius: BorderRadius.xl, // ← MIGRATO DA HARDCODED 20
-    padding: 3, // Bordo più sottile
+    borderRadius: BorderRadius.xl,
+    padding: scale(3),
     ...Shadows.lg,
   },
 
   whiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl - 3, // Radius interno coerente con padding
-    minHeight: 105, // Leggermente ingrandito per bottoni più visibili
+    borderRadius: BorderRadius.xl - scale(3),
+    minHeight: scale(105),
     paddingVertical: Spacing[2],
     paddingHorizontal: Spacing[3],
     justifyContent: 'center',
@@ -170,9 +170,9 @@ const styles = StyleSheet.create({
 
   buttonContent: {
     alignItems: 'center',
-    justifyContent: 'space-between', // Assicura label sempre visibile in basso
+    justifyContent: 'space-between',
     flex: 1,
-    minHeight: 85, // Leggermente ingrandito per migliore proporzione
+    minHeight: scale(85),
     paddingTop: Spacing[1],
     paddingBottom: Spacing[1],
   },
@@ -183,35 +183,29 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
-    color: '#DC2626',
+    color: Colors.primary[600],
     textAlign: 'center' as const,
     letterSpacing: -0.6,
     marginVertical: Spacing[1],
-    textShadowColor: 'rgba(220, 38, 38, 0.2)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    ...Shadows.sm,
     textAlignVertical: 'center' as const,
   },
 
   buttonDirection: {
-    color: '#10B981',
+    color: Colors.semantic.success.main,
     textAlign: 'center' as const,
     letterSpacing: 0.3,
     marginVertical: Spacing[1],
-    textShadowColor: 'rgba(16, 185, 129, 0.12)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    ...Shadows.sm,
     textAlignVertical: 'center' as const,
   },
 
   buttonDirectionRed: {
-    color: '#EF4444',
+    color: Colors.semantic.error.main,
     textAlign: 'center' as const,
     letterSpacing: 0.3,
     marginVertical: Spacing[1],
-    textShadowColor: 'rgba(239, 68, 68, 0.12)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    ...Shadows.sm,
     textAlignVertical: 'center' as const,
   },
 
@@ -228,13 +222,11 @@ const styles = StyleSheet.create({
   },
 
   buttonTitleGreen: {
-    color: '#059669',
+    color: Colors.semantic.success.dark,
     textAlign: 'center' as const,
     letterSpacing: -0.6,
     marginVertical: Spacing[1],
-    textShadowColor: 'rgba(5, 150, 105, 0.2)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    ...Shadows.sm,
     textAlignVertical: 'center' as const,
   },
 });

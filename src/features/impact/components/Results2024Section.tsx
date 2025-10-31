@@ -5,7 +5,7 @@ import { Animated, Platform, StyleSheet } from 'react-native';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
-import { Colors, Spacing } from '@/shared/constants/designTokens';
+import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
@@ -153,17 +153,13 @@ const styles = StyleSheet.create({
   },
   record2024CardContent: {
     backgroundColor: Colors.neutral[50],
-    borderRadius: 16,
+    borderRadius: BorderRadius.lg,
     paddingVertical: Spacing[3],
     paddingHorizontal: Spacing[2],
     alignItems: 'center',
     borderWidth: 1,
     borderColor: Colors.neutral[200],
-    shadowColor: Colors.black.pure,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    ...Shadows.sm,
   },
   record2024Value: {
     color: Colors.neutral[800],
@@ -192,30 +188,24 @@ const styles = StyleSheet.create({
   results2024HeaderBackground: {
     backgroundColor:
       Platform.OS === 'android'
-        ? Colors.neutral[100] // ANDROID: Grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.03)', // iOS: Mantiene rgba originale
-    borderRadius: 20,
+        ? Colors.neutral[100]
+        : 'rgba(55, 65, 81, 0.03)',
+    borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
     borderWidth: 1,
     borderColor:
       Platform.OS === 'android'
-        ? Colors.neutral[200] // ANDROID: Bordo grigio leggermente più scuro
-        : 'rgba(55, 65, 81, 0.08)', // iOS: Mantiene rgba originale
-    shadowColor: Colors.neutral[700],
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: Platform.OS === 'android' ? 1 : 2, // RIDOTTO su Android per stabilità
+        ? Colors.neutral[200]
+        : 'rgba(55, 65, 81, 0.08)',
+    ...Shadows.sm,
   },
   results2024Title: {
     color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: -0.4,
     includeFontPadding: false,
-    textShadowColor: 'rgba(55, 65, 81, 0.15)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    ...Shadows.sm,
   },
   results2024Subtitle: {
     color: Colors.neutral[600],

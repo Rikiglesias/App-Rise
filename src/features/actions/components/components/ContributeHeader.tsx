@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PerfectContainer, PerfectText } from '../../../../components/ui';
-import { LOGICAL_REFERENCE } from '../../../../shared/constants/responsiveSystem';
+import { LOGICAL_REFERENCE } from '../../../../shared/constants/perfectScale';
 import { Spacing } from '../../../../shared/constants';
 
 import type { useNewActionsAnimations } from './ContributeAnimations';

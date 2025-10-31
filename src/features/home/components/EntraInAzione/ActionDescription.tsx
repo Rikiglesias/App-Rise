@@ -6,23 +6,24 @@ import {
   PerfectContainer,
   PerfectCardContainer,
 } from '../../../../components/ui';
-import { Colors } from '../../../../shared/constants/designTokens';
+import { Colors, Spacing, BorderRadius, Shadows } from '../../../../shared/constants/designTokens';
+import { scale } from '../../../../shared/constants/perfectScale';
 
 export const ActionDescription: React.FC = () => {
   return (
-    <PerfectContainer preset="section" marginVertical={16} marginHorizontal={4}>
+    <PerfectContainer preset="section" marginVertical={Spacing[4]} marginHorizontal={Spacing[1]}>
       <PerfectCardContainer
         backgroundColor="card"
         shadow="medium"
-        padding={40}
-        borderRadius={24}
+        padding={scale(40)}
+        borderRadius={BorderRadius.xl}
       >
         {/* ✅ SISTEMA PERFETTO - Prima frase: andata a capo dopo "lotta " */}
         <PerfectText
-          fontSize={18} // ← RIDOTTO DA 20 A 18 per evitare troncamento
+          size={18} // ← RIDOTTO DA 20 A 18 per evitare troncamento
           fontWeight="bold"
           lines={3} // ← AUMENTATO DA 2 A 3 per evitare taglio
-          color="#1F2937"
+          color={Colors.neutral[800]}
           textAlign="center"
           style={styles.descriptionMain}
         >
@@ -30,31 +31,14 @@ export const ActionDescription: React.FC = () => {
         </PerfectText>
 
         {/* ✅ SISTEMA PERFETTO - Divider grigio standard (millimetrico, centrato) */}
-        <PerfectContainer
-          style={[
-            styles.descriptionDivider,
-            {
-              width: 393 * 0.4,
-              height: 2,
-              marginVertical: 20,
-              borderRadius: 1,
-              backgroundColor: Colors.neutral[300],
-              opacity: 0.8,
-              shadowColor: Colors.neutral[400],
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.15,
-              shadowRadius: 3,
-              elevation: 2,
-            },
-          ]}
-        />
+        <PerfectContainer style={styles.descriptionDivider} />
 
         {/* ✅ SISTEMA PERFETTO - Seconda frase: andata a capo dopo "per" */}
         <PerfectText
-          fontSize={16} // ← RIDOTTO DA 18 A 16 per evitare troncamento
+          size={16} // ← RIDOTTO DA 18 A 16 per evitare troncamento
           fontWeight="600"
           lines={3} // ← AUMENTATO DA 2 A 3 per evitare taglio
-          color="#6B7280"
+          color={Colors.neutral[500]}
           textAlign="center"
           style={styles.descriptionSecondary}
         >
@@ -68,20 +52,23 @@ export const ActionDescription: React.FC = () => {
 const styles = StyleSheet.create({
   descriptionMain: {
     letterSpacing: -0.3,
-    textShadowColor: 'rgba(31, 41, 55, 0.1)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    ...Shadows.sm,
   },
 
   descriptionDivider: {
     alignSelf: 'center',
+    width: scale(157), // 40% dello schermo reference
+    height: scale(2),
+    marginVertical: Spacing[5],
+    borderRadius: scale(1),
+    backgroundColor: Colors.neutral[300],
+    opacity: 0.8,
+    ...Shadows.sm,
   },
 
   descriptionSecondary: {
     letterSpacing: 0.3,
     fontStyle: 'italic' as const,
-    textShadowColor: 'rgba(107, 114, 128, 0.1)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    ...Shadows.sm,
   },
 });

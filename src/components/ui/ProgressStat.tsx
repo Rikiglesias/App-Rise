@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Colors, Spacing, Typography } from '../../shared/constants';
+import { scale } from '../../shared/constants/perfectScale';
 
 import { PerfectText } from './PerfectText';
 import { PerfectContainer } from './PerfectContainer';
@@ -139,8 +140,8 @@ export const ProgressStat: React.FC<ProgressStatProps> = ({
   const progressPercentage = Math.round(progress * 100);
 
   const sizes = {
-    compact: { ring: 60, text: 12 },
-    standard: { ring: 80, text: 16 },
+    compact: { ring: scale(60), text: 12 },
+    standard: { ring: scale(80), text: 16 },
   };
 
   const { ring: ringSize, text: textSize } = sizes[size];

@@ -10,7 +10,8 @@ import {
 } from '../../../../components/ui';
 // Migrated to Perfect System responsive layout
 
-import { Colors, Spacing } from '../../../../shared/constants/designTokens';
+import { Colors, Spacing, BorderRadius, Shadows } from '../../../../shared/constants/designTokens';
+import { scale } from '../../../../shared/constants/perfectScale';
 import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato con dimensioni schermo
@@ -25,116 +26,96 @@ interface ModalContentProps {
   handleClose: () => Promise<void>;
 }
 
+// ✅ Stili estratti e unificati - Perfect System compliant
+const modalStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing[4],
+    backgroundColor: 'transparent',
+  },
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  modalGradientBorder: {
+    borderRadius: BorderRadius.xl,
+    padding: scale(3),
+    ...Shadows.lg,
+    maxWidth: undefined,
+    width: '100%',
+  },
+  modalWhiteContainer: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: BorderRadius.xl - scale(3),
+    overflow: 'hidden',
+  },
+  modalContent: {
+    padding: Spacing[6],
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: Spacing[2],
+    position: 'relative',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: scale(-10),
+    right: scale(-6),
+    width: scale(36),
+    height: scale(36),
+    borderRadius: scale(18),
+    backgroundColor: Colors.primary[600],
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Colors.neutral[0],
+    ...Shadows.md,
+  },
+  centeredTitleContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing[5],
+  },
+  centeredTitle: {
+    color: Colors.primary[600],
+    textAlign: 'center',
+    letterSpacing: -0.8,
+    ...Shadows.sm,
+  },
+  titleUnderline: {
+    width: scale(80),
+    height: scale(3),
+    backgroundColor: Colors.primary[600],
+    borderRadius: scale(2),
+    marginTop: Spacing[2],
+    alignSelf: 'center',
+    ...Shadows.sm,
+  },
+  modalText: {
+    color: Colors.neutral[700],
+    marginBottom: Spacing[4],
+  },
+  highlightText: {
+    color: Colors.primary[600],
+    textAlign: 'center',
+    marginTop: Spacing[3],
+    paddingVertical: Spacing[3],
+    paddingHorizontal: Spacing[4],
+    backgroundColor: 'rgba(220, 38, 38, 0.05)',
+    borderRadius: BorderRadius.lg,
+    letterSpacing: -0.3,
+    ...Shadows.sm,
+  },
+});
+
 const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
-  const modalStyles = StyleSheet.create({
-    overlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: Spacing[4],
-      backgroundColor: 'transparent', // ANDROID: Elimina il cazzo di container grigio
-    },
-    backdrop: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    },
-    // Contenitore con bordo gradiente coerente cross‑platform
-    modalGradientBorder: {
-      borderRadius: 24,
-      padding: 3,
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: 0.3,
-      shadowRadius: 20,
-      elevation: 12,
-      // ❌ RIMOSSO: Calcolo manuale frammentato
-      // maxWidth: screenWidth * 0.9,
-      // ✅ NUOVO: Width dal layer centralizzato
-      maxWidth: undefined, // Allows flexible width calculation
-      width: '100%',
-    },
-    modalWhiteContainer: {
-      backgroundColor: Colors.neutral[0],
-      borderRadius: 21,
-      overflow: 'hidden',
-    },
-    modalContent: {
-      padding: Spacing[6],
-    },
-    modalHeader: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      marginBottom: Spacing[2],
-      position: 'relative',
-    },
-
-    closeButton: {
-      position: 'absolute',
-      top: -10, // ANCORA PIÙ IN ALTO: entrambe le piattaforme, esce ancora di più dal bordo superiore
-      right: -6,
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      backgroundColor: '#DC2626',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 2,
-      borderColor: Colors.neutral[0],
-      shadowColor: '#000000',
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.25,
-      shadowRadius: 6,
-      elevation: 6,
-    },
-    // TITOLO CENTRATO CARINO
-    centeredTitleContainer: {
-      alignItems: 'center',
-      marginBottom: Spacing[5],
-    },
-    centeredTitle: {
-      color: '#DC2626',
-      textAlign: 'center',
-      letterSpacing: -0.8,
-      textShadowColor: 'rgba(220, 38, 38, 0.15)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 6,
-    },
-    titleUnderline: {
-      width: 80, // Larghezza aumentata per essere proporzionata al titolo più grande
-      height: 3,
-      backgroundColor: '#DC2626',
-      borderRadius: 2,
-      marginTop: Spacing[2],
-      alignSelf: 'center', // CENTRAMENTO PERFETTO: forza la linea al centro
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.3,
-      shadowRadius: 4,
-    },
-    modalText: {
-      color: Colors.neutral[700],
-      marginBottom: Spacing[4],
-    },
-    highlightText: {
-      color: '#DC2626',
-      textAlign: 'center',
-      marginTop: Spacing[3],
-      paddingVertical: Spacing[3],
-      paddingHorizontal: Spacing[4],
-      backgroundColor: 'rgba(220, 38, 38, 0.05)',
-      borderRadius: 12,
-      letterSpacing: -0.3,
-      textShadowColor: 'rgba(220, 38, 38, 0.1)',
-      textShadowOffset: { width: 0, height: 1 },
-      textShadowRadius: 3,
-    },
-  });
-
   return (
     <PerfectContainer style={modalStyles.modalContent}>
       <PerfectContainer style={modalStyles.modalHeader}>
@@ -230,115 +211,6 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
     },
     []
   );
-
-  const modalStyles = StyleSheet.create({
-    overlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: Spacing[4],
-      backgroundColor: 'transparent', // ANDROID: Elimina il cazzo di container grigio
-    },
-    backdrop: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    },
-    // Contenitore con bordo gradiente coerente cross‑platform
-    modalGradientBorder: {
-      borderRadius: 24,
-      padding: 3,
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: 0.3,
-      shadowRadius: 20,
-      elevation: 12,
-      // ❌ RIMOSSO: Calcolo manuale frammentato
-      // maxWidth: screenWidth * 0.9,
-      // ✅ NUOVO: Width dal layer centralizzato
-      maxWidth: undefined, // Allows flexible width calculation
-      width: '100%',
-    },
-    modalWhiteContainer: {
-      backgroundColor: Colors.neutral[0],
-      borderRadius: 21,
-      overflow: 'hidden',
-    },
-    modalContent: {
-      padding: Spacing[6],
-    },
-    modalHeader: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      marginBottom: Spacing[2],
-      position: 'relative',
-    },
-
-    closeButton: {
-      position: 'absolute',
-      top: -10,
-      right: -6,
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      backgroundColor: '#DC2626',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 2,
-      borderColor: Colors.neutral[0],
-      shadowColor: '#000000',
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.25,
-      shadowRadius: 6,
-      elevation: 6,
-    },
-    // TITOLO CENTRATO CARINO
-    centeredTitleContainer: {
-      alignItems: 'center',
-      marginBottom: Spacing[5],
-    },
-    centeredTitle: {
-      color: '#DC2626',
-      textAlign: 'center',
-      letterSpacing: -0.8,
-      textShadowColor: 'rgba(220, 38, 38, 0.15)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 6,
-    },
-    titleUnderline: {
-      width: 80, // Larghezza aumentata per essere proporzionata al titolo più grande
-      height: 3,
-      backgroundColor: '#DC2626',
-      borderRadius: 2,
-      marginTop: Spacing[2],
-      alignSelf: 'center', // CENTRAMENTO PERFETTO: forza la linea al centro
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.3,
-      shadowRadius: 4,
-    },
-    modalText: {
-      color: Colors.neutral[700],
-      marginBottom: Spacing[4],
-    },
-    highlightText: {
-      color: '#DC2626',
-      textAlign: 'center',
-      marginTop: Spacing[3],
-      paddingVertical: Spacing[3],
-      paddingHorizontal: Spacing[4],
-      backgroundColor: 'rgba(220, 38, 38, 0.05)',
-      borderRadius: 12,
-      letterSpacing: -0.3,
-      textShadowColor: 'rgba(220, 38, 38, 0.1)',
-      textShadowOffset: { width: 0, height: 1 },
-      textShadowRadius: 3,
-    },
-  });
 
   return (
     <Modal
