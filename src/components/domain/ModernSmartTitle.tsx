@@ -3,7 +3,7 @@ import { Animated, StyleSheet, Text } from 'react-native';
 import { scale } from '../../shared/constants/perfectScale';
 import { PerfectContainer, PerfectText } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
-import { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
+import { HomeHeaderDesignTokens } from './designTokens/HomeHeaderTokens';
 
 // ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS + SISTEMA RESPONSIVE
 const createModernTitleStyles = (responsiveSpacing: {

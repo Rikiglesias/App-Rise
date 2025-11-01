@@ -6,7 +6,7 @@
 export { ModernSmartTitle } from './ModernSmartTitle';
 
 // Design tokens and utilities
-export { HomeHeaderDesignTokens } from './design-tokens/HomeHeaderTokens';
+export { HomeHeaderDesignTokens } from './designTokens/HomeHeaderTokens';
 
 // Current exports
 export { HeaderTextSection, HeaderImageSection } from './HomeHeader';
