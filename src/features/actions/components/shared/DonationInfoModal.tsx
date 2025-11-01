@@ -75,7 +75,7 @@ const modalStyles = StyleSheet.create({
     backgroundColor: Colors.primary[600],
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: scale(2),
     borderColor: Colors.neutral[0],
     ...Shadows.md,
   },
@@ -86,7 +86,7 @@ const modalStyles = StyleSheet.create({
   centeredTitle: {
     color: Colors.primary[600],
     textAlign: 'center',
-    letterSpacing: -0.8,
+    letterSpacing: scale(-0.8),
     ...Shadows.sm,
   },
   titleUnderline: {
@@ -108,9 +108,9 @@ const modalStyles = StyleSheet.create({
     marginTop: Spacing[3],
     paddingVertical: Spacing[3],
     paddingHorizontal: Spacing[4],
-    backgroundColor: 'rgba(220, 38, 38, 0.05)',
+    backgroundColor: Colors.primary[50],
     borderRadius: BorderRadius.lg,
-    letterSpacing: -0.3,
+    letterSpacing: scale(-0.3),
     ...Shadows.sm,
   },
 });
@@ -126,13 +126,12 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         >
           <MaterialCommunityIcons
             name="close"
-            size={22}
+            size={scale(22)}
             color={Colors.neutral[0]}
           />
         </PlatformTouchable>
       </PerfectContainer>
 
-      {/* TITOLO CENTRATO E CARINO */}
       <PerfectContainer style={modalStyles.centeredTitleContainer}>
         <PerfectText
           size={28}
@@ -228,7 +227,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
         <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
           <PerfectContainer style={{ backgroundColor: 'transparent' }}>
             <LinearGradient
-              colors={['#DC2626', '#B91C1C', '#991B1B']}
+              colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
               style={modalStyles.modalGradientBorder}
             >
               <PerfectContainer style={modalStyles.modalWhiteContainer}>
