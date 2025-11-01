@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@/shared/constants';
 import { getPerfectShadow } from '@/shared/constants/perfectShadow';
-// TypographyTokens rimosso - usa Typography.sizes
+import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
 
 // Removed hardcoded windowWidth - now using responsive typography
@@ -21,7 +21,7 @@ export const createContainerStyles = (
       overflow: 'hidden',
     },
     headerSection: {
-      paddingVertical: Spacing[1], // RIPRISTINATO: padding normale per spaziatura adeguata
+      paddingVertical: Spacing[1],
       paddingHorizontal: ADVANCED_CONFIG.headerSection.paddingHorizontal,
       minHeight: ADVANCED_CONFIG.headerSection.minHeight,
       alignItems: 'center',
@@ -48,21 +48,19 @@ export const createTextStyles = (
   StyleSheet.create({
     title: {
       color: colors.neutral[900],
-      fontSize: 32, // Headline large
       fontWeight: Typography.weights.bold,
       fontFamily: Typography.families.heading,
       textAlign: 'center',
-      lineHeight: 32 * 1.17, // Headline large * 1.17
-      letterSpacing: -0.8,
+      lineHeight: scale(37),
+      letterSpacing: scale(-0.8),
       marginBottom: Spacing[4],
     },
     subtitle: {
       color: colors.neutral[600],
-      fontSize: 16, // Body large
       fontWeight: Typography.weights.regular,
       textAlign: 'center',
-      lineHeight: Typography.lineHeights.relaxed * 16,
-      letterSpacing: 0.2,
+      lineHeight: scale(24),
+      letterSpacing: scale(0.2),
       paddingHorizontal: Spacing[6],
     },
   });
@@ -71,19 +69,16 @@ export const createImageStyles = (
   colors: ReturnType<typeof useTheme>['colors']
 ) =>
   StyleSheet.create({
-    // Tutti questi stili sono utilizzati nel componente HeaderImageSection
-    // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
     imageSection: {
-      height: ADVANCED_CONFIG.imageSection.height * 1.0, // ← RIDOTTO DA 1.2 A 1.0 per dimensioni normali
+      height: ADVANCED_CONFIG.imageSection.height * 1.0,
       width: '100%',
       position: 'relative',
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      marginTop: Spacing[1], // ← RIDOTTO DA Spacing[2] per meno spazio sopra
-      marginBottom: Spacing[3], // ← RIDOTTO DA Spacing[4] per bilanciare
-      borderRadius: 24, // Bordi arrotondati per eleganza
-      // iOS: Shadows complete per effetto premium, Android: ZERO shadows
+      marginTop: Spacing[1],
+      marginBottom: Spacing[3],
+      borderRadius: scale(24),
       ...(Platform.OS === 'ios' ? getPerfectShadow('strong') : {}),
     },
 
@@ -92,17 +87,14 @@ export const createImageStyles = (
       height: '100%',
       borderRadius: BorderRadius.lg,
       overflow: 'hidden',
-      // iOS: Shadow per container immagine
       ...Platform.select({
         ios: {
           shadowColor: colors.neutral[400],
-          shadowOffset: { width: 0, height: 4 },
+          shadowOffset: { width: 0, height: scale(4) },
           shadowOpacity: 0.08,
-          shadowRadius: 12,
+          shadowRadius: scale(12),
         },
-        android: {
-          // Android: ZERO shadows per evitare artefatti
-        },
+        android: {},
       }),
     },
     image: {
