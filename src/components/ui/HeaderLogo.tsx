@@ -5,7 +5,6 @@ import { PerfectContainer } from './PerfectContainer';
 import appIcon from '@assets/icons/app/app-icon.png';
 import { BorderRadius, Spacing } from '@/shared/constants/designTokens';
 import { useTheme } from '@/shared/hooks/useTheme';
-import { scale } from '@/shared/constants/perfectScale';
 
 const HeaderLogo = () => {
   const { colors } = useTheme();
@@ -30,10 +29,6 @@ const styles = StyleSheet.create({
     padding: Spacing[2],
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-  },
-  logo: {
-    width: scale(100),
-    height: scale(40),
   },
 });
 

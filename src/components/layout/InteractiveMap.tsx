@@ -4,6 +4,7 @@ import MapView, { Marker, type Region } from 'react-native-maps';
 import { PerfectContainer } from '../ui/PerfectContainer';
 
 import { BorderRadius, Colors, Shadows, Spacing } from '../../shared/constants';
+import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText } from '../ui/PerfectText';
 
 export interface Location {
@@ -34,22 +35,22 @@ interface Props {
 // Funzione per determinare il colore del marker in base al tipo di progetto
 const getMarkerColor = (location: Location) => {
   if (location.status === 'emergency') {
-    return '#DC2626'; // Rosso per emergenze
+    return Colors.primary[600]; // Rosso per emergenze
   }
 
   if (location.volunteers && location.volunteers > 0) {
-    return '#10B981'; // Verde per volontari
+    return Colors.primary[400]; // Colore più chiaro per volontari
   }
 
   if (location.meals && location.meals > 0) {
-    return '#F59E0B'; // Arancione per pasti
+    return Colors.primary[500]; // Colore medio per pasti
   }
 
   if (location.kits && location.kits > 0) {
-    return '#8B5CF6'; // Viola per kit
+    return Colors.primary[700]; // Colore più scuro per kit
   }
 
-  return '#6B7280'; // Grigio default
+  return Colors.neutral[500]; // Grigio default
 };
 
 // Componente per il marker semplice ma bello
@@ -193,19 +194,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   simpleMarker: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: scale(32),
+    height: scale(32),
+    borderRadius: scale(16),
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 3,
+    borderWidth: scale(3),
     borderColor: Colors.neutral[0],
     ...Shadows.md,
   },
   markerInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: scale(12),
+    height: scale(12),
+    borderRadius: scale(6),
     backgroundColor: Colors.neutral[0],
   },
   countryLabel: {
@@ -214,14 +215,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing[2],
     paddingVertical: Spacing[1],
     marginTop: Spacing[1],
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor: Colors.neutral[200],
     ...Shadows.sm,
   },
   countryText: {
-    color: '#374151',
+    color: Colors.neutral[700],
     textAlign: 'center',
-    maxWidth: 80,
+    maxWidth: scale(80),
   },
 });
 

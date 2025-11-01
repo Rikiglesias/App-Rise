@@ -40,7 +40,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
       <PerfectContainer style={styles.modalContainer}>
         {/* Header compatto con gradient */}
         <LinearGradient
-          colors={['#DC2626', '#B91C1C', '#991B1B']}
+          colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
           start={gradientStart}
           end={gradientEnd}
           style={[styles.header, { paddingHorizontal: Spacing[4] }]}
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
 
   // Call to Action button
   ctaButton: {
-    backgroundColor: '#DC2626',
+    backgroundColor: Colors.primary[600],
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[8],
     borderRadius: BorderRadius.lg,

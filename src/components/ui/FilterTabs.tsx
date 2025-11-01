@@ -46,7 +46,7 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'row',
-      borderWidth: 1,
+      borderWidth: scale(1),
     },
     activeTab: {
       backgroundColor: colors.primary,
@@ -61,14 +61,12 @@ const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
       marginRight: Spacing[2],
     },
     tabLabel: {
-      fontSize: 12,
       fontWeight: Typography.weights.semibold,
     },
     activeTabLabel: { color: colors.card },
     inactiveTabLabel: { color: colors.text },
     tabCount: {
       marginLeft: Spacing[2],
-      fontSize: 14,
       fontWeight: Typography.weights.bold,
       backgroundColor: colors.card,
       color: colors.primary,

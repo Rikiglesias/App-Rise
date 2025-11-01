@@ -44,7 +44,7 @@ const createModernTitleStyles = (responsiveSpacing: {
       height: HomeHeaderDesignTokens.dimensions.separatorHeight,
       width: responsiveSpacing.separatorLineWidth,
       backgroundColor: HomeHeaderDesignTokens.colors.primaryLight,
-      borderRadius: 1,
+      borderRadius: scale(1),
       ...HomeHeaderDesignTokens.shadows.light,
     },
   });
@@ -65,7 +65,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
         containerPadding: scale(10),
         separatorTopMargin: scale(20),
         separatorBottomMargin: scale(10),
-        logoSize: scale(53),
+        logoSize: 53, // NON scalato - PerfectImage lo scala automaticamente
         separatorLineWidth: scale(104),
         logoMargin: scale(15),
         stackSpacing: scale(8),
@@ -103,7 +103,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 translateY: Animated.add(
                   titleAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [30, 0],
+                    outputRange: [scale(30), 0],
                   }),
                   titleTransform as Animated.Value
                 ),
@@ -150,8 +150,8 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
               <PerfectContainer style={modernTitleStyles.titleSeparator}>
                 <PerfectContainer style={modernTitleStyles.separatorLine} />
                 <PerfectImage
-                  width={Math.round(responsiveSpacing.logoSize)}
-                  height={Math.round(responsiveSpacing.logoSize)}
+                  width={responsiveSpacing.logoSize}
+                  height={responsiveSpacing.logoSize}
                   source={require('@assets/icons/app/logo.png')}
                 />
                 <PerfectContainer style={modernTitleStyles.separatorLine} />

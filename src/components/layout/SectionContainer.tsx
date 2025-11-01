@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
+import { scale } from '../../shared/constants/perfectScale';
 import { useTheme } from '../../shared/hooks/useTheme';
 import { PerfectContainer } from '../ui/PerfectContainer';
 
@@ -64,11 +65,11 @@ const getVariantStyles = (
         backgroundColor: colors.neutral[0],
         borderRadius: BorderRadius.xl,
         shadowColor: colors.primary[200],
-        shadowOffset: { width: 0, height: 6 },
+        shadowOffset: { width: 0, height: scale(6) },
         shadowOpacity: 0.08,
-        shadowRadius: 16,
+        shadowRadius: scale(16),
         elevation: 4,
-        borderWidth: 1,
+        borderWidth: scale(1),
         borderColor: colors.neutral[200], // Elegant border
       };
 
@@ -76,12 +77,12 @@ const getVariantStyles = (
       return {
         backgroundColor: colors.neutral[0] + 'E6', // 90% opacity
         borderRadius: BorderRadius['2xl'],
-        borderWidth: 1,
+        borderWidth: scale(1),
         borderColor: colors.neutral[200] + '80', // 50% opacity
         shadowColor: colors.primary[300],
-        shadowOffset: { width: 0, height: 8 },
+        shadowOffset: { width: 0, height: scale(8) },
         shadowOpacity: 0.1,
-        shadowRadius: 20,
+        shadowRadius: scale(20),
         elevation: 6,
       };
 
@@ -89,12 +90,12 @@ const getVariantStyles = (
       return {
         backgroundColor: colors.neutral[0],
         borderRadius: getBorderRadiusForPremium(),
-        borderLeftWidth: 4,
+        borderLeftWidth: scale(4),
         borderLeftColor: colors.primary[500],
         shadowColor: colors.primary[400],
-        shadowOffset: { width: 0, height: 12 },
+        shadowOffset: { width: 0, height: scale(12) },
         shadowOpacity: 0.12,
-        shadowRadius: 24,
+        shadowRadius: scale(24),
         elevation: 8,
       };
 

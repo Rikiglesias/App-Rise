@@ -9,6 +9,7 @@ import {
 import { PerfectImage } from '../ui/PerfectImage';
 
 import { BorderRadius, Colors, Shadows, Spacing } from '../../shared/constants';
+import { scale } from '../../shared/constants/perfectScale';
 
 interface Location {
   id: string;
@@ -263,8 +264,8 @@ const styles = StyleSheet.create({
   closeButton: {
     backgroundColor: Colors.neutral[100],
     borderRadius: BorderRadius.full,
-    width: 36,
-    height: 36,
+    width: scale(36),
+    height: scale(36),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     position: 'relative',
-    height: 250,
+    height: scale(250),
     margin: Spacing[4],
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: scale(2),
     borderColor: Colors.primary[600],
   },
   secondaryButtonText: {

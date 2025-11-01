@@ -23,16 +23,18 @@ const Logo: React.FC<LogoProps> = ({
 }) => {
   // Asset immagine - deve essere require per React Native
   // Logo asset path available when needed
+  const scaledSize = scale(size);
 
   const containerStyle: ViewStyle = {
     ...styles.logoContainer,
-    width: size,
-    height: size,
+    width: scaledSize,
+    height: scaledSize,
     backgroundColor: Colors.neutral[0],
     shadowColor: Colors.primary[600],
     borderColor: Colors.primary[100],
   };
 
+  // innerSize NON scalato - PerfectImage lo scala automaticamente
   const innerSize = showBackground ? size * 0.7 : size;
 
   if (showBackground !== null) {
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: scale(12),
     elevation: 12,
-    borderWidth: 3,
+    borderWidth: scale(3),
     overflow: 'hidden',
   },
   logoImage: {},
