@@ -1,13 +1,10 @@
-// ↑ ESLint non riesce a tracciare gli stili quando sono dentro useMemo.
-// Tutti gli stili in questo file sono verificati manualmente come utilizzati.
-
 import React, { useMemo } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { useNewActionsAnimations } from './ContributeAnimations';
 import { PerfectContainer, PerfectText } from '@/components/ui';
-import { LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
-import { Spacing } from '@/shared/constants';
+import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
+import { Colors, Spacing } from '@/shared/constants';
 
 interface NewActionsHeaderProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -24,11 +21,10 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
-        // HEADER CON SPAZIO AUMENTATO MOLTO SU ANDROID E iOS
         headerContainer: {
           alignSelf: 'stretch',
           width: '100%',
-          paddingTop: Spacing[20] + 12,
+          paddingTop: Spacing[20] + scale(12),
           paddingHorizontal: Spacing[4],
           paddingBottom: Spacing[6],
           alignItems: 'center',
@@ -44,49 +40,45 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           opacity: 0.02,
         },
 
-        // CONTAINER ELEGANTE COLORATO - UNIFORMATO CON PAGINA IMPATTO
         mainHeaderContainer: {
           alignSelf: 'stretch',
           width: '100%',
           alignItems: 'center',
           height: HEADER_INNER_HEIGHT,
-          backgroundColor: 'rgba(31, 41, 55, 0.03)',
+          backgroundColor: Colors.neutral[50],
           paddingHorizontal: Spacing[4],
           paddingTop: HEADER_VERTICAL_PADDING,
           paddingBottom: HEADER_VERTICAL_PADDING,
-          borderRadius: 16,
-          borderWidth: 1,
-          borderColor: 'rgba(31, 41, 55, 0.08)',
-          shadowColor: '#1F2937',
-          shadowOffset: { width: 0, height: 2 },
+          borderRadius: scale(16),
+          borderWidth: scale(1),
+          borderColor: Colors.neutral[100],
+          shadowColor: Colors.neutral[900],
+          shadowOffset: { width: 0, height: scale(2) },
           shadowOpacity: 0.08,
-          shadowRadius: 6,
+          shadowRadius: scale(6),
           elevation: 3,
         },
 
-        // TIPOGRAFIA POTENTE E MODERNA - BILANCIATA
         titleText: {
-          color: '#1F2937',
+          color: Colors.neutral[900],
           textAlign: 'center',
-          letterSpacing: -0.5,
+          letterSpacing: scale(-0.5),
           marginBottom: HEADER_TITLE_INTERLINE,
-          textShadowColor: 'rgba(31, 41, 55, 0.15)',
-          textShadowOffset: { width: 0, height: 2 },
-          textShadowRadius: 6,
+          textShadowColor: Colors.neutral[800],
+          textShadowOffset: { width: 0, height: scale(2) },
+          textShadowRadius: scale(6),
           includeFontPadding: false,
         },
 
-        // ACCENTO ROSSO STRATEGICO
         titleAccent: {
-          color: '#DC2626',
-          textShadowColor: 'rgba(220, 38, 38, 0.15)',
-          textShadowOffset: { width: 0, height: 2 },
-          textShadowRadius: 6,
+          color: Colors.primary[600],
+          textShadowColor: Colors.primary[600],
+          textShadowOffset: { width: 0, height: scale(2) },
+          textShadowRadius: scale(6),
         },
 
-        // SUBTITLE INLINE INGRANDITO E ELEGANTE
         mainSubtitle: {
-          color: '#374151',
+          color: Colors.neutral[700],
           textAlign: 'center',
           letterSpacing: 0,
           marginTop: Spacing[3],
@@ -143,7 +135,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
       ]}
     >
       <LinearGradient
-        colors={['rgba(55, 65, 81, 0.03)', 'transparent']}
+        colors={[Colors.neutral[50], 'transparent']}
         style={styles.backgroundPattern}
       />
 
