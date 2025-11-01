@@ -26,6 +26,7 @@ import {
   Spacing,
   Typography,
 } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 
 // Lazy Screens (only for HomeScreen due to export issues)
 // Direct imports (no lazy loading to avoid spinner)
@@ -322,25 +323,25 @@ const styles = StyleSheet.create({
   },
   // --- Icon ---
   iconContainer: {
-    width: /* scaleFont(52) */ 52,
-    height: /* scaleFont(52) */ 52,
+    width: scale(52),
+    height: scale(52),
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
     ...Shadows.md,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: scale(4) },
     elevation: 8,
   },
   centralIconContainer: {
-    width: /* scaleFont(64) */ 64,
-    height: /* scaleFont(64) */ 64,
+    width: scale(64),
+    height: scale(64),
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2, // RIDOTTO: da 4 a 2 per bordo più sottile
-    borderColor: 'rgba(255, 255, 255, 0.9)', // SEMI-TRASPARENTE: meno visibile ma presente
+    borderWidth: scale(2),
+    borderColor: Colors.neutral[0],
     ...Shadows.lg,
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: { width: 0, height: scale(6) },
     elevation: 12,
   },
   // --- Label ---
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.semibold,
     marginTop: Spacing[1],
     textAlign: 'center',
-    maxWidth: /* scaleFont(80) */ 80, // AUMENTATO: da 60 a 80 per contenere "Impatto" completo
+    maxWidth: scale(80),
   },
 });
 

@@ -18,6 +18,8 @@ import {
 import BottomTabNavigator from './BottomTabNavigator';
 import type { RootStackParamList } from './types';
 import SeguiciScreen from '@/features/social/screens/SeguiciScreen';
+import { Colors } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -29,18 +31,18 @@ const AppNavigator: React.FC = () => {
         initialRouteName="Home"
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#DC2626',
+            backgroundColor: Colors.primary[600],
             elevation: 8,
-            shadowColor: '#DC2626',
-            shadowOffset: { width: 0, height: 4 },
+            shadowColor: Colors.primary[600],
+            shadowOffset: { width: 0, height: scale(4) },
             shadowOpacity: 0.3,
-            shadowRadius: 8,
+            shadowRadius: scale(8),
             borderBottomWidth: 0,
           },
-          headerTintColor: '#FFFFFF',
+          headerTintColor: Colors.neutral[0],
           headerTitleStyle: {
             fontWeight: '700',
-            letterSpacing: 0.5,
+            letterSpacing: scale(0.5),
           },
         }}
       >

@@ -1,13 +1,11 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
+import type { ProjectContentProps } from './types';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-
-import { Colors, Spacing, Typography } from '@/shared/constants';
+import { Spacing, Typography } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
-
-import type { ProjectContentProps } from './types';
 
 export const ProjectContent: React.FC<ProjectContentProps> = ({
   description,
@@ -33,7 +31,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       color: colors.primary[700],
       marginBottom: Spacing[1],
       textTransform: 'uppercase',
-      letterSpacing: 0.5,
+      letterSpacing: scale(0.5),
     },
     impactText: {
       color: colors.primary[800],

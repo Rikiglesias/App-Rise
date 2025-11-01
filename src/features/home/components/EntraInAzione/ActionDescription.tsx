@@ -51,7 +51,7 @@ export const ActionDescription: React.FC = () => {
 
 const styles = StyleSheet.create({
   descriptionMain: {
-    letterSpacing: -0.3,
+    letterSpacing: scale(-0.3),
     ...Shadows.sm,
   },
 
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionSecondary: {
-    letterSpacing: 0.3,
+    letterSpacing: scale(0.3),
     fontStyle: 'italic' as const,
     ...Shadows.sm,
   },

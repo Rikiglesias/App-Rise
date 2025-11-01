@@ -7,7 +7,7 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { BorderRadius, Colors, Shadows, Spacing } from '@/shared/constants';
+import { Colors, Shadows, Spacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 export interface SocialPlatform {
@@ -168,7 +168,7 @@ const styles = {
   socialName: {
     color: Colors.neutral[900],
     marginBottom: Spacing[1],
-    letterSpacing: -0.3,
+    letterSpacing: scale(-0.3),
   },
   socialHandle: {
     color: Colors.primary[500],

@@ -1,17 +1,16 @@
 import React from 'react';
 import { Animated, Pressable, StyleSheet } from 'react-native';
 import { Surface } from 'react-native-paper';
-import { PerfectContainer } from '@/components/ui/PerfectContainer';
-
-import { BorderRadius, Shadows, Spacing } from '@/shared/constants/designTokens';
-import { scale } from '@/shared/constants/perfectScale';
-import { useAnimatedPress } from '@/shared/hooks/useAnimatedPress';
-import { useTheme } from '@/shared/hooks/useTheme';
 
 import { ProjectContent } from './ProjectContent';
 import { ProjectHeader } from './ProjectHeader';
 import { ProjectProgress } from './ProjectProgress';
 import type { ProjectCardProps, ProjectStatus } from './types';
+import { PerfectContainer } from '@/components/ui/PerfectContainer';
+import { BorderRadius, Spacing } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
+import { useAnimatedPress } from '@/shared/hooks/useAnimatedPress';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 // ===================================================================
 // HELPER FUNCTIONS
@@ -72,9 +71,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       borderRadius: BorderRadius.xl,
       backgroundColor: colors.neutral[0],
       shadowColor: colors.neutral[900],
-      shadowOffset: { width: 0, height: 4 },
+      shadowOffset: { width: 0, height: scale(4) },
       shadowOpacity: 0.08,
-      shadowRadius: 12,
+      shadowRadius: scale(12),
       borderWidth: scale(1),
       borderColor: colors.neutral[100],
       elevation: 3,

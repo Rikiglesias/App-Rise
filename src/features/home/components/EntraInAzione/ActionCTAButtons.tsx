@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: Colors.primary[600],
     textAlign: 'center' as const,
-    letterSpacing: -0.6,
+    letterSpacing: scale(-0.6),
     marginVertical: Spacing[1],
     ...Shadows.sm,
     textAlignVertical: 'center' as const,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   buttonDirection: {
     color: Colors.semantic.success.main,
     textAlign: 'center' as const,
-    letterSpacing: 0.3,
+    letterSpacing: scale(0.3),
     marginVertical: Spacing[1],
     ...Shadows.sm,
     textAlignVertical: 'center' as const,
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   buttonDirectionRed: {
     color: Colors.semantic.error.main,
     textAlign: 'center' as const,
-    letterSpacing: 0.3,
+    letterSpacing: scale(0.3),
     marginVertical: Spacing[1],
     ...Shadows.sm,
     textAlignVertical: 'center' as const,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   buttonTitleGreen: {
     color: Colors.semantic.success.dark,
     textAlign: 'center' as const,
-    letterSpacing: -0.6,
+    letterSpacing: scale(-0.6),
     marginVertical: Spacing[1],
     ...Shadows.sm,
     textAlignVertical: 'center' as const,

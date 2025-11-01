@@ -84,7 +84,7 @@ export const StoryCard: React.FC<(typeof IMPACT_DATA.stories)[number]> = ({
       source={{ uri: image }}
     />
     <LinearGradient
-      colors={['transparent', 'rgba(0,0,0,0.7)']}
+      colors={['transparent', Colors.neutral[900]]}
       style={styles.storyGradient}
     />
     <PerfectContainer style={styles.storyContent}>

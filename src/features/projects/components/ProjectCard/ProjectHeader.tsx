@@ -1,12 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
+import type { ProjectHeaderProps } from './types';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-
 import { Spacing, Typography } from '@/shared/constants';
 import { useTheme } from '@/shared/hooks/useTheme';
-
-import type { ProjectHeaderProps } from './types';
 
 export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
   title,

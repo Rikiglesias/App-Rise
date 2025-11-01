@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor:
       Platform.OS === 'android'
         ? Colors.neutral[100]
-        : 'rgba(55, 65, 81, 0.03)',
+        : Colors.neutral[50],
     borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
@@ -266,13 +266,13 @@ const styles = StyleSheet.create({
     borderColor:
       Platform.OS === 'android'
         ? Colors.neutral[200]
-        : 'rgba(55, 65, 81, 0.08)',
+        : Colors.neutral[100],
     ...Shadows.sm,
   },
   numbersTitle: {
     color: Colors.neutral[700],
     textAlign: 'center',
-    letterSpacing: -0.4,
+    letterSpacing: scale(-0.4),
     includeFontPadding: false,
     ...Shadows.sm,
   },
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: Spacing[3],
     opacity: 0.9,
-    letterSpacing: 0.1,
+    letterSpacing: scale(0.1),
   },
 
   chevronIcon: {
