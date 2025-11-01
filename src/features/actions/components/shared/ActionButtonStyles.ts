@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import type { ButtonStyles } from './ActionButtonTypes';
 import { Colors, Spacing, Typography } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 
 export const createActionButtonStyles = (): ButtonStyles => {
@@ -24,17 +25,17 @@ export const createActionButtonStyles = (): ButtonStyles => {
     // CONTAINER ELEGANTE PER TITOLO DONA - IDENTICO CROSS-PLATFORM
     donateTitleContainer: {
       alignItems: 'center',
-      backgroundColor: 'rgba(220, 38, 38, 0.03)', // IDENTICO: stesso rgba su entrambe le piattaforme
+      backgroundColor: Colors.primary[50], // IDENTICO: stesso rgba su entrambe le piattaforme
       paddingVertical: Spacing[2],
       paddingHorizontal: Spacing[3],
       width: '70%', // Riduce visivamente la lunghezza del container
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: 'rgba(220, 38, 38, 0.12)', // IDENTICO: stesso rgba su entrambe le piattaforme
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 2 },
+      borderRadius: scale(16),
+      borderWidth: scale(1),
+      borderColor: Colors.primary[100], // IDENTICO: stesso rgba su entrambe le piattaforme
+      shadowColor: Colors.primary[600],
+      shadowOffset: { width: 0, height: scale(2) },
       shadowOpacity: 0.08,
-      shadowRadius: 8,
+      shadowRadius: scale(8),
       elevation: 3,
     },
 
@@ -42,18 +43,18 @@ export const createActionButtonStyles = (): ButtonStyles => {
     donateCategoryTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.black, // PIÙ GRASSETTO: da bold a black
-      color: '#DC2626',
+      color: Colors.primary[600],
       textAlign: 'center',
-      letterSpacing: -0.4,
+      letterSpacing: scale(-0.4),
       includeFontPadding: false,
     },
 
     // SUBTITLE ELEGANTE DONA INGRANDITO
     donateInlineSubtitle: {
       fontWeight: Typography.weights.medium,
-      color: '#B91C1C',
+      color: Colors.primary[700],
       textAlign: 'center',
-      letterSpacing: 0.2,
+      letterSpacing: scale(0.2),
       marginTop: Spacing[1], // MANTENUTO: spazio dal titolo anche senza container
       opacity: 0.8,
     },
@@ -62,54 +63,54 @@ export const createActionButtonStyles = (): ButtonStyles => {
     exploreTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.bold, // BOLD normale
-      color: '#374151', // GRIGIO SCURO ELEGANTE per Esplora
+      color: Colors.neutral[700], // GRIGIO SCURO ELEGANTE per Esplora
       textAlign: 'center',
-      letterSpacing: -0.4,
+      letterSpacing: scale(-0.4),
       includeFontPadding: false,
-      textShadowColor: 'rgba(55, 65, 81, 0.15)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 4,
+      textShadowColor: Colors.neutral[700],
+      textShadowOffset: { width: 0, height: scale(2) },
+      textShadowRadius: scale(4),
     },
 
     // TITOLO COMMUNITY DISTINTIVO
     communityTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.bold, // BOLD normale
-      color: '#1F2937', // NERO per Community
+      color: Colors.neutral[900], // NERO per Community
       textAlign: 'center',
-      letterSpacing: -0.4,
+      letterSpacing: scale(-0.4),
       includeFontPadding: false,
-      textShadowColor: 'rgba(31, 41, 55, 0.15)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 4,
+      textShadowColor: Colors.neutral[800],
+      textShadowOffset: { width: 0, height: scale(2) },
+      textShadowRadius: scale(4),
     },
 
     exploreSubtitle: {
       fontWeight: Typography.weights.medium,
-      color: '#4B5563', // GRIGIO MEDIO per leggibilità
+      color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
       textAlign: 'center',
       marginTop: Spacing[3],
       opacity: 0.9,
-      letterSpacing: 0.1,
+      letterSpacing: scale(0.1),
     },
 
     infoButton: {
       position: 'absolute',
-      right: 45,
-      top: 8,
-      width: 24,
-      height: 24,
-      borderRadius: 12,
-      backgroundColor: '#DC2626',
+      right: scale(45),
+      top: scale(8),
+      width: scale(24),
+      height: scale(24),
+      borderRadius: scale(12),
+      backgroundColor: Colors.primary[600],
       justifyContent: 'center',
       alignItems: 'center',
-      shadowColor: '#DC2626',
-      shadowOffset: { width: 0, height: 3 },
+      shadowColor: Colors.primary[600],
+      shadowOffset: { width: 0, height: scale(3) },
       shadowOpacity: 0.4,
-      shadowRadius: 6,
+      shadowRadius: scale(6),
       elevation: 6,
       borderWidth: 1,
-      borderColor: 'rgba(220, 38, 38, 0.8)',
+      borderColor: Colors.primary[500],
     },
 
     buttonsGrid: {
@@ -124,14 +125,14 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     // GRADIENT CONTAINER PATTERN per bottoni (clickabili) - ANDROID OTTIMIZZATO
     gradientBorder: {
-      borderRadius: 20,
+      borderRadius: scale(20),
       // Spessore bordo pagina Azioni: 2pt
-      padding: 2,
+      padding: scale(2),
       ...getPerfectShadow('strong'),
     },
     whiteContainer: {
       backgroundColor: Colors.neutral[0],
-      borderRadius: 18, // 20-2 per effetto bordo
+      borderRadius: scale(18), // 20-2 per effetto bordo
       overflow: 'hidden',
       // Nota: proprietà di rasterizzazione rimosse per compatibilità tipizzazioni
     },
@@ -148,26 +149,26 @@ export const createActionButtonStyles = (): ButtonStyles => {
       fontWeight: Typography.weights.bold,
       color: Colors.neutral[900],
       textAlign: 'center',
-      letterSpacing: -0.3,
+      letterSpacing: scale(-0.3),
       // Text shadow per profondità
-      textShadowColor: 'rgba(0, 0, 0, 0.05)',
-      textShadowOffset: { width: 0, height: 1 },
-      textShadowRadius: 3,
+      textShadowColor: Colors.neutral[900],
+      textShadowOffset: { width: 0, height: scale(1) },
+      textShadowRadius: scale(3),
     },
 
     // SUBTITLE POTENZIATO COMMUNITY
     communitySubtitle: {
       fontWeight: Typography.weights.medium,
-      color: '#374151', // GRIGIO SCURO per leggibilità
+      color: Colors.neutral[700], // GRIGIO SCURO per leggibilità
       textAlign: 'center',
       marginTop: Spacing[3],
       opacity: 0.9,
-      letterSpacing: 0.1,
+      letterSpacing: scale(0.1),
     },
 
     // DIVISORE ULTRA COMPATTO TRA SEZIONI
     sectionDivider: {
-      height: 2, // SPESSORE STANDARD
+      height: scale(2), // SPESSORE STANDARD
       backgroundColor: Colors.neutral[200], // SCURITO: da neutral[100] a [200] per maggiore visibilità
       marginVertical: Spacing[2], // RIDOTTO ulteriormente
       marginHorizontal: Spacing[6], // LUNGHEZZA STANDARD
@@ -175,7 +176,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     // LINEA TRA SEZIONI - IDENTICA A SECTIONDIVIDER
     firstSectionDivider: {
-      height: 2, // STESSO SPESSORE di sectionDivider
+      height: scale(2), // STESSO SPESSORE di sectionDivider
       backgroundColor: Colors.neutral[200],
       marginVertical: Spacing[2],
       marginHorizontal: Spacing[6], // STESSA LUNGHEZZA di sectionDivider
@@ -191,37 +192,37 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     chevronPosition: {
       position: 'absolute',
-      top: 8,
-      right: 8,
+      top: scale(8),
+      right: scale(8),
     },
 
     // CONTAINER BACKGROUND ESPLORA - IDENTICO CROSS-PLATFORM
     exploreHeaderBackground: {
-      backgroundColor: 'rgba(31, 41, 55, 0.03)', // IDENTICO: stesso rgba su entrambe le piattaforme
-      borderRadius: 20,
+      backgroundColor: Colors.neutral[50], // IDENTICO: stesso rgba su entrambe le piattaforme
+      borderRadius: scale(20),
       paddingVertical: Spacing[4],
       paddingHorizontal: Spacing[6],
       borderWidth: 1,
-      borderColor: 'rgba(31, 41, 55, 0.08)', // IDENTICO: stesso rgba su entrambe le piattaforme
-      shadowColor: '#374151',
+      borderColor: Colors.neutral[100], // IDENTICO: stesso rgba su entrambe le piattaforme
+      shadowColor: Colors.neutral[700],
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.05,
-      shadowRadius: 8,
+      shadowRadius: scale(8),
       elevation: 2,
     },
 
     // CONTAINER BACKGROUND COMMUNITY - IDENTICO CROSS-PLATFORM
     communityHeaderBackground: {
-      backgroundColor: 'rgba(31, 41, 55, 0.03)', // IDENTICO: stesso rgba su entrambe le piattaforme
-      borderRadius: 20,
+      backgroundColor: Colors.neutral[50], // IDENTICO: stesso rgba su entrambe le piattaforme
+      borderRadius: scale(20),
       paddingVertical: Spacing[4],
       paddingHorizontal: Spacing[6],
       borderWidth: 1,
-      borderColor: 'rgba(31, 41, 55, 0.08)', // IDENTICO: stesso rgba su entrambe le piattaforme
-      shadowColor: '#1F2937',
+      borderColor: Colors.neutral[100], // IDENTICO: stesso rgba su entrambe le piattaforme
+      shadowColor: Colors.neutral[900],
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.05,
-      shadowRadius: 8,
+      shadowRadius: scale(8),
       elevation: 2,
       position: 'relative',
     },
@@ -229,8 +230,8 @@ export const createActionButtonStyles = (): ButtonStyles => {
     // ICONA LINK COMMUNITY - ESTREMO ANGOLO SUPERIORE DESTRO
     communityChevron: {
       position: 'absolute',
-      top: 8,
-      right: 12,
+      top: scale(8),
+      right: scale(12),
       opacity: 0.7, // IDENTICO iOS: semi-trasparente
     },
   });
