@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-// ELIMINATO: import vecchi responsiveSystem
 import {
   Colors,
   Typography,

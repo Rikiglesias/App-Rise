@@ -8,7 +8,6 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({

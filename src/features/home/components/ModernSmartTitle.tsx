@@ -18,7 +18,7 @@ const createModernTitleStyles = (responsiveSpacing: {
   StyleSheet.create({
     container: {
       alignItems: 'center',
-      paddingTop: 0, // ← ELIMINATO COMPLETAMENTE il padding sopra per massima riduzione spazio
+      paddingTop: 0,
       paddingBottom: 0,
       paddingHorizontal: responsiveSpacing.containerPadding, // ← MATEMATICO DIRETTO
       width: '100%', // ← LARGHEZZA CONTROLLATA

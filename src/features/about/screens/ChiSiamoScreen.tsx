@@ -11,7 +11,6 @@ import {
   PlatformTouchable,
   PerfectContainer,
 } from '@/components';
-// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';

@@ -4,7 +4,6 @@ import { Animated, Platform, StyleSheet } from 'react-native';
 
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
 
 interface Props {

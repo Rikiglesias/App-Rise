@@ -10,7 +10,6 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 

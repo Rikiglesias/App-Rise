@@ -7,7 +7,6 @@ import {
 } from '@/shared/constants/designTokens';
 // TypographyTokens rimosso - usa Typography.sizes
 import { useTheme } from '@/shared/hooks/useTheme';
-// ELIMINATO: useResponsive - ora usa Perfect System
 
 // Custom Hook for Projects Screen Styles
 export const useProjectsScreenStyles = () => {

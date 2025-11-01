@@ -8,7 +8,6 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 
 import { IMPACT_DATA } from '../data/impactData';

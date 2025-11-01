@@ -8,7 +8,6 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors, Spacing, Shadows, BorderRadius } from '@/shared/constants/designTokens';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
