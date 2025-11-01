@@ -35,10 +35,6 @@ jest.mock('@/components/ui', () => ({
     const { Image } = require('react-native');
     return <Image source={source} {...props} />;
   },
-  AnimatedNumber: ({ value, ...props }: any) => {
-    const { Text } = require('react-native');
-    return <Text {...props}>{value}</Text>;
-  },
   PlatformTouchable: ({ children, onPress, testID, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
     return <TouchableOpacity onPress={onPress} testID={testID} {...props}>{children}</TouchableOpacity>;

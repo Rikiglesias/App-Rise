@@ -20,11 +20,7 @@ export {
 
 // UI Components - Explicit exports
 export {
-  // Animation Components
-  AnimatedNumber,
-  AnimatedTransition,
   // Interactive Components
-  EnhancedTouchable,
   FilterTabs,
   // Platform Components
   PlatformAnimations,
@@ -35,12 +31,8 @@ export {
   PlatformSurface,
   // Display Components
   HeaderLogo,
-  LoadingSkeleton,
   Logo,
   SocialIcon,
-  ProfessionalContainer,
-  TitleContainer,
-  ProfessionalCardContainer,
   // Perfect System
   PerfectText,
   PerfectContainer,
@@ -51,11 +43,6 @@ export {
   HeaderContainer,
   FooterContainer,
   PerfectImage,
-  PerfectButton,
-  PrimaryButton,
-  SecondaryButton,
-  OutlineButton,
-  GhostButton,
   PerfectSpacer,
   SpacerXS,
   SpacerS,
@@ -76,12 +63,10 @@ export {
   PerfectThumbnailImage,
   PerfectAvatarImage,
   PerfectBannerImage,
-  ProgressRing,
-  ProgressStat,
 } from './ui';
 
 // Export types
-export type { PerfectTextProps, PerfectButtonProps } from './ui';
+export type { PerfectTextProps } from './ui';
 
 // Complex Components - Explicit exports
 export { default as ModernCTA } from './ModernCTARefactored';
