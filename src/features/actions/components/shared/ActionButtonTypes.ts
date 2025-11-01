@@ -18,6 +18,7 @@ export interface ButtonStyles {
   categoryHeader: ViewStyle;
 
   donateTitleContainer: ViewStyle;
+  donateTitleContainerAndroid: ViewStyle;
   donateCategoryTitle: TextStyle;
   donateInlineSubtitle: TextStyle;
 
@@ -41,7 +42,9 @@ export interface ButtonStyles {
   exploreTitle: TextStyle;
   communityTitle: TextStyle;
   exploreHeaderBackground: ViewStyle;
+  exploreHeaderBackgroundAndroid: ViewStyle;
   communityHeaderBackground: ViewStyle;
+  communityHeaderBackgroundAndroid: ViewStyle;
   communitySubtitle: TextStyle;
   communityChevron: ViewStyle;
 }

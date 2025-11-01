@@ -39,6 +39,23 @@ export const createActionButtonStyles = (): ButtonStyles => {
       elevation: 3,
     },
 
+    // STILE ANDROID-SPECIFIC PER DONA (colori più delicati)
+    donateTitleContainerAndroid: {
+      alignItems: 'center',
+      backgroundColor: Colors.primary[50],
+      paddingVertical: Spacing[2],
+      paddingHorizontal: Spacing[3],
+      width: '70%',
+      borderRadius: scale(16),
+      borderWidth: scale(1),
+      borderColor: Colors.primary[200],
+      shadowColor: Colors.primary[600],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.08,
+      shadowRadius: scale(8),
+      elevation: 3,
+    },
+
     // TITOLO CATEGORIA DONA ELEGANTE - PIÙ GRASSETTO
     donateCategoryTitle: {
       // fontSize rimosso - ora gestito da Text
@@ -211,6 +228,21 @@ export const createActionButtonStyles = (): ButtonStyles => {
       elevation: 2,
     },
 
+    // STILE ANDROID-SPECIFIC PER ESPLORA (grigio più intenso)
+    exploreHeaderBackgroundAndroid: {
+      backgroundColor: Colors.neutral[100],
+      borderRadius: scale(20),
+      paddingVertical: Spacing[4],
+      paddingHorizontal: Spacing[6],
+      borderWidth: 1,
+      borderColor: Colors.neutral[200],
+      shadowColor: Colors.neutral[700],
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: scale(8),
+      elevation: 2,
+    },
+
     // CONTAINER BACKGROUND COMMUNITY - IDENTICO CROSS-PLATFORM
     communityHeaderBackground: {
       backgroundColor: Colors.neutral[50], // IDENTICO: stesso rgba su entrambe le piattaforme
@@ -219,6 +251,22 @@ export const createActionButtonStyles = (): ButtonStyles => {
       paddingHorizontal: Spacing[6],
       borderWidth: 1,
       borderColor: Colors.neutral[100], // IDENTICO: stesso rgba su entrambe le piattaforme
+      shadowColor: Colors.neutral[900],
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: scale(8),
+      elevation: 2,
+      position: 'relative',
+    },
+
+    // STILE ANDROID-SPECIFIC PER COMMUNITY (grigio più intenso)
+    communityHeaderBackgroundAndroid: {
+      backgroundColor: Colors.neutral[100],
+      borderRadius: scale(20),
+      paddingVertical: Spacing[4],
+      paddingHorizontal: Spacing[6],
+      borderWidth: 1,
+      borderColor: Colors.neutral[200],
       shadowColor: Colors.neutral[900],
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.05,

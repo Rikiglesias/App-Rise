@@ -11,7 +11,8 @@ import {
   getExploreIconColor,
   getCommunityIconColor,
 } from './ActionButtonUtils';
-import { Spacing } from '@/shared/constants';
+import { Colors, Spacing } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import {
   PlatformTouchable,
   PerfectText,
@@ -54,13 +55,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
         <PlatformTouchable
           style={
             Platform.OS === 'android'
-              ? [
-                  styles.donateTitleContainer,
-                  {
-                    backgroundColor: '#FEF2F2', // Rosso più delicato e raffinato
-                    borderColor: '#FECACA', // Rosso più sottile per eleganza
-                  },
-                ]
+              ? styles.donateTitleContainerAndroid
               : styles.donateTitleContainer
           }
           onPress={onInfoPress}
@@ -90,7 +85,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
           onPress={onInfoPress}
           activeOpacity={0.7}
         >
-          <MaterialCommunityIcons name="information" size={16} color="white" />
+          <MaterialCommunityIcons name="information" size={scale(16)} color={Colors.neutral[0]} />
         </PlatformTouchable>
       </PerfectContainer>
       <PerfectContainer style={styles.buttonsGrid}>
@@ -107,7 +102,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
                   animationValue={animationValue}
                   styles={styles}
                   onPress={onPress}
-                  iconColor="#E11D48"
+                  iconColor={Colors.primary[600]}
                 />
               );
             }
@@ -123,7 +118,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
                 animationValue={animations.buttonAnimations[0]}
                 styles={styles}
                 onPress={handleFirstRowButton}
-                iconColor="#DC2626"
+                iconColor={Colors.primary[600]}
               />
             </PerfectContainer>
           )}
@@ -170,13 +165,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
         <PerfectContainer
           style={
             Platform.OS === 'android'
-              ? [
-                  styles.exploreHeaderBackground,
-                  {
-                    backgroundColor: '#F0F2F3', // Grigio più intenso per maggiore visibilità
-                    borderColor: '#DDE1E4', // Grigio più intenso per definizione migliore
-                  },
-                ]
+              ? styles.exploreHeaderBackgroundAndroid
               : styles.exploreHeaderBackground
           }
         >
@@ -275,13 +264,7 @@ export const CommunityButtonsSection: React.FC<
         <PlatformTouchable
           style={
             Platform.OS === 'android'
-              ? [
-                  styles.communityHeaderBackground,
-                  {
-                    backgroundColor: '#F0F2F3', // Grigio più intenso per maggiore visibilità (identico a Esplora)
-                    borderColor: '#DDE1E4', // Grigio più intenso per definizione migliore (identico a Esplora)
-                  },
-                ]
+              ? styles.communityHeaderBackgroundAndroid
               : styles.communityHeaderBackground
           }
           onPress={onCommunityTitlePress}
@@ -307,8 +290,8 @@ export const CommunityButtonsSection: React.FC<
           </PerfectText>
           <MaterialCommunityIcons
             name="open-in-new"
-            size={16}
-            color="#1F2937"
+            size={scale(16)}
+            color={Colors.neutral[900]}
             style={styles.communityChevron}
           />
         </PlatformTouchable>
