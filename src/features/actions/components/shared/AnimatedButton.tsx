@@ -7,7 +7,7 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-import { Spacing, Shadows } from '@/shared/constants/designTokens';
+import { Colors, Spacing, Shadows } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
@@ -20,7 +20,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 }) => {
   // Spessore bordo come pagina Azioni: 2pt (scalato)
   const borderPadding = Math.max(1, Math.round(scale(2)));
-  const outerRadius = 20;
+  const outerRadius = scale(20);
   const innerRadius = Math.max(0, outerRadius - borderPadding);
 
   return (
@@ -45,7 +45,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
         >
           <PerfectContainer
             style={{
-              backgroundColor: '#FFFFFF',
+              backgroundColor: Colors.neutral[0],
               borderRadius: innerRadius,
               paddingVertical: Spacing[4],
               paddingHorizontal: Spacing[3],
