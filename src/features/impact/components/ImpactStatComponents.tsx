@@ -17,7 +17,7 @@ import {
   Shadows,
   PerfectSpacing,
 } from '@/shared/constants';
-import { scale, scaleTouch } from '@/shared/constants/perfectScale';
+import { scaleTouch } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
 export const StatButton: React.FC<StatButtonProps> = ({

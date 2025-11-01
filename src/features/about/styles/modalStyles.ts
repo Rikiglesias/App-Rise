@@ -1,9 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import {
-  BorderRadius,
   Colors,
-  Shadows,
   Typography,
 } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';

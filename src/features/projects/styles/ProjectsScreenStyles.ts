@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import {
   BorderRadius,
-  Colors,
-  Shadows,
   Typography,
 } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';

@@ -18,9 +18,9 @@ import {
   Shadows,
   Typography,
 } from '../constants/designTokens';
-import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '../constants/perfectScale';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
+import { PerfectSpacing } from '@/shared/constants';
 
 interface DevelopmentScreenProps {
   navigation: {

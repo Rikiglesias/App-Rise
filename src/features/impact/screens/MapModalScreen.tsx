@@ -16,7 +16,7 @@ import InteractiveMap, {
 import MapLocationModal from '@/components/layout/MapLocationModal';
 import type { ImpactStackParamList } from '@/navigation/types';
 import { BorderRadius, Colors, PerfectSpacing } from '@/shared/constants';
-import { scale, scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
+import { scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 

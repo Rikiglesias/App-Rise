@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { BorderRadius } from '@/shared/constants/designTokens';
-import { PerfectSpacing } from '@/shared/constants';
+import { PerfectContainer } from '../ui/PerfectContainer';
+
 import { scale } from '../../shared/constants/perfectScale';
 import { useTheme } from '../../shared/hooks/useTheme';
-import { PerfectContainer } from '../ui/PerfectContainer';
+import { BorderRadius } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 
 interface SectionContainerProps {
   readonly children: React.ReactNode;
