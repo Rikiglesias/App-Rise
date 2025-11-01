@@ -8,30 +8,30 @@ export const createActionButtonStyles = (): ButtonStyles => {
   return StyleSheet.create({
     container: {
       paddingHorizontal: Spacing[4],
-      gap: Spacing[2], // RIDOTTO: sezioni più unite, compensa l'aumento marginBottom categoryContainer
-      paddingTop: Spacing[2], // AUMENTATO: più spazio sopra per respirazione
-      paddingBottom: Spacing[4], // AUMENTATO: più spazio sotto per equilibrio
+      gap: Spacing[2],
+      paddingTop: Spacing[2],
+      paddingBottom: Spacing[4],
     },
     categoryContainer: {
-      marginBottom: Spacing[6], // AUMENTATO: da Spacing[3] a Spacing[6] per maggiore separazione tra sezioni
+      marginBottom: Spacing[6],
     },
     categoryHeader: {
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: Spacing[12], // ULTERIORMENTE AUMENTATO: da Spacing[8] a Spacing[12] per respirazione ottimale
+      marginBottom: Spacing[12],
       position: 'relative',
     },
 
     // CONTAINER ELEGANTE PER TITOLO DONA - IDENTICO CROSS-PLATFORM
     donateTitleContainer: {
       alignItems: 'center',
-      backgroundColor: Colors.primary[50], // IDENTICO: stesso rgba su entrambe le piattaforme
+      backgroundColor: Colors.primary[50],
       paddingVertical: Spacing[2],
       paddingHorizontal: Spacing[3],
       width: '70%', // Riduce visivamente la lunghezza del container
       borderRadius: scale(16),
       borderWidth: scale(1),
-      borderColor: Colors.primary[100], // IDENTICO: stesso rgba su entrambe le piattaforme
+      borderColor: Colors.primary[100],
       shadowColor: Colors.primary[600],
       shadowOffset: { width: 0, height: scale(2) },
       shadowOpacity: 0.08,
@@ -72,7 +72,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       color: Colors.primary[700],
       textAlign: 'center',
       letterSpacing: scale(0.2),
-      marginTop: Spacing[1], // MANTENUTO: spazio dal titolo anche senza container
+      marginTop: Spacing[1],
       opacity: 0.8,
     },
 
@@ -80,7 +80,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     exploreTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.bold, // BOLD normale
-      color: Colors.neutral[700], // GRIGIO SCURO ELEGANTE per Esplora
+      color: Colors.neutral[700],
       textAlign: 'center',
       letterSpacing: scale(-0.4),
       includeFontPadding: false,
@@ -93,7 +93,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     communityTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.bold, // BOLD normale
-      color: Colors.neutral[900], // NERO per Community
+      color: Colors.neutral[900],
       textAlign: 'center',
       letterSpacing: scale(-0.4),
       includeFontPadding: false,
@@ -104,7 +104,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     exploreSubtitle: {
       fontWeight: Typography.weights.medium,
-      color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
+      color: Colors.neutral[600],
       textAlign: 'center',
       marginTop: Spacing[3],
       opacity: 0.9,
@@ -126,7 +126,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       shadowOpacity: 0.4,
       shadowRadius: scale(6),
       elevation: 6,
-      borderWidth: 1,
+      borderWidth: scale(1),
       borderColor: Colors.primary[500],
     },
 
@@ -154,8 +154,8 @@ export const createActionButtonStyles = (): ButtonStyles => {
       // Nota: proprietà di rasterizzazione rimosse per compatibilità tipizzazioni
     },
     buttonContent: {
-      paddingVertical: Spacing[4], // RIDOTTO per bottoni più compatti
-      paddingHorizontal: Spacing[3], // RIDOTTO per minimalismo
+      paddingVertical: Spacing[4],
+      paddingHorizontal: Spacing[3],
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -185,18 +185,18 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     // DIVISORE ULTRA COMPATTO TRA SEZIONI
     sectionDivider: {
-      height: scale(2), // SPESSORE STANDARD
-      backgroundColor: Colors.neutral[200], // SCURITO: da neutral[100] a [200] per maggiore visibilità
-      marginVertical: Spacing[2], // RIDOTTO ulteriormente
-      marginHorizontal: Spacing[6], // LUNGHEZZA STANDARD
+      height: scale(2),
+      backgroundColor: Colors.neutral[200],
+      marginVertical: Spacing[2],
+      marginHorizontal: Spacing[6],
     },
 
     // LINEA TRA SEZIONI - IDENTICA A SECTIONDIVIDER
     firstSectionDivider: {
-      height: scale(2), // STESSO SPESSORE di sectionDivider
+      height: scale(2),
       backgroundColor: Colors.neutral[200],
       marginVertical: Spacing[2],
-      marginHorizontal: Spacing[6], // STESSA LUNGHEZZA di sectionDivider
+      marginHorizontal: Spacing[6],
     },
 
     // STILI PER INLINE STYLES
@@ -205,7 +205,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     singleButtonContainer: {
       flex: 0,
-      width: '80%', // ANCORA PIÙ LARGO: dominante nella sezione
+      width: '80%',
     },
     chevronPosition: {
       position: 'absolute',
@@ -213,62 +213,62 @@ export const createActionButtonStyles = (): ButtonStyles => {
       right: scale(8),
     },
 
-    // CONTAINER BACKGROUND ESPLORA - IDENTICO CROSS-PLATFORM
+    // CONTAINER BACKGROUND ESPLORA
     exploreHeaderBackground: {
-      backgroundColor: Colors.neutral[50], // IDENTICO: stesso rgba su entrambe le piattaforme
+      backgroundColor: Colors.neutral[50],
       borderRadius: scale(20),
       paddingVertical: Spacing[4],
       paddingHorizontal: Spacing[6],
-      borderWidth: 1,
-      borderColor: Colors.neutral[100], // IDENTICO: stesso rgba su entrambe le piattaforme
+      borderWidth: scale(1),
+      borderColor: Colors.neutral[100],
       shadowColor: Colors.neutral[700],
-      shadowOffset: { width: 0, height: 2 },
+      shadowOffset: { width: 0, height: scale(2) },
       shadowOpacity: 0.05,
       shadowRadius: scale(8),
       elevation: 2,
     },
 
-    // STILE ANDROID-SPECIFIC PER ESPLORA (grigio più intenso)
+    // STILE ANDROID-SPECIFIC PER ESPLORA
     exploreHeaderBackgroundAndroid: {
       backgroundColor: Colors.neutral[100],
       borderRadius: scale(20),
       paddingVertical: Spacing[4],
       paddingHorizontal: Spacing[6],
-      borderWidth: 1,
+      borderWidth: scale(1),
       borderColor: Colors.neutral[200],
       shadowColor: Colors.neutral[700],
-      shadowOffset: { width: 0, height: 2 },
+      shadowOffset: { width: 0, height: scale(2) },
       shadowOpacity: 0.05,
       shadowRadius: scale(8),
       elevation: 2,
     },
 
-    // CONTAINER BACKGROUND COMMUNITY - IDENTICO CROSS-PLATFORM
+    // CONTAINER BACKGROUND COMMUNITY
     communityHeaderBackground: {
-      backgroundColor: Colors.neutral[50], // IDENTICO: stesso rgba su entrambe le piattaforme
+      backgroundColor: Colors.neutral[50],
       borderRadius: scale(20),
       paddingVertical: Spacing[4],
       paddingHorizontal: Spacing[6],
-      borderWidth: 1,
-      borderColor: Colors.neutral[100], // IDENTICO: stesso rgba su entrambe le piattaforme
+      borderWidth: scale(1),
+      borderColor: Colors.neutral[100],
       shadowColor: Colors.neutral[900],
-      shadowOffset: { width: 0, height: 2 },
+      shadowOffset: { width: 0, height: scale(2) },
       shadowOpacity: 0.05,
       shadowRadius: scale(8),
       elevation: 2,
       position: 'relative',
     },
 
-    // STILE ANDROID-SPECIFIC PER COMMUNITY (grigio più intenso)
+    // STILE ANDROID-SPECIFIC PER COMMUNITY
     communityHeaderBackgroundAndroid: {
       backgroundColor: Colors.neutral[100],
       borderRadius: scale(20),
       paddingVertical: Spacing[4],
       paddingHorizontal: Spacing[6],
-      borderWidth: 1,
+      borderWidth: scale(1),
       borderColor: Colors.neutral[200],
       shadowColor: Colors.neutral[900],
-      shadowOffset: { width: 0, height: 2 },
+      shadowOffset: { width: 0, height: scale(2) },
       shadowOpacity: 0.05,
       shadowRadius: scale(8),
       elevation: 2,
@@ -280,7 +280,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       position: 'absolute',
       top: scale(8),
       right: scale(12),
-      opacity: 0.7, // IDENTICO iOS: semi-trasparente
+      opacity: 0.7,
     },
   });
 };
