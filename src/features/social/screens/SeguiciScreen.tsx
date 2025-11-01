@@ -12,6 +12,7 @@ import {
   PlatformIcon,
 } from '@/components/ui';
 import { Colors } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 
 import type { RootStackParamList } from '@/navigation/types';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
@@ -45,7 +46,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleBackPress}
         style={mainStyles.backButton}
       >
-        <PlatformIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
+        <PlatformIcon name="arrow-left" size={scale(24)} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>

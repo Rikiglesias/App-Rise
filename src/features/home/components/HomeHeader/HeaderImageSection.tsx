@@ -3,18 +3,26 @@
  * Sezione immagine del header con animazioni parallax
  */
 
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, type ImageStyle, type ViewStyle } from 'react-native';
-import { HomeHeaderDesignTokens } from '../../designTokens/HomeHeaderTokens';
-import { type HeaderImageSectionProps } from '@/features/home/types/HomeHeaderTypes';
+import { Animated } from 'react-native';
+
 import { PerfectContainer } from '@/components/ui/PerfectContainer';
 import { PerfectImage } from '@/components/ui/PerfectImage';
+import { type HeaderImageSectionProps } from '@/features/home/types/HomeHeaderTypes';
+import { BorderRadius } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
+
+const imageContainerStyle = {
+  width: '100%' as const,
+  alignItems: 'center' as const,
+  borderRadius: BorderRadius.xl,
+  overflow: 'hidden' as const,
+};
 
 export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
   ({ imageAnim, imageParallax, imageScale, imageRotation, styles }) => {
-    // Applica direttamente le props Android su Animated.View
-    const imageStyle: ImageStyle | ViewStyle = {
+    const animatedStyle = {
+      opacity: imageAnim,
       transform: [
         { translateY: imageParallax },
         { scale: imageScale },
@@ -23,37 +31,24 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
     };
 
     return (
-      <PerfectContainer style={styles.imageSection as ViewStyle}>
-        <PerfectContainer style={styles.imageContainer as ViewStyle}>
-          <Animated.View style={[styles.flexOne, { opacity: imageAnim }]}>
-            <Animated.View
-              style={[
-                styles.flexOne,
-                imageStyle,
-                {
-                  borderRadius: 24,
-                  overflow: 'hidden',
-                  backgroundColor: '#FFFFFF',
-                },
-              ]}
-              renderToHardwareTextureAndroid
-              needsOffscreenAlphaCompositing
-            >
-              <PerfectImage
-                // iPhone 15 reference full width, ~1.1x height
-                width={393}
-                height={432}
-                borderRadius={24}
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                source={require('@assets/images/hero-banner.png')}
-              />
-              <LinearGradient
-                colors={HomeHeaderDesignTokens.gradients.header}
-                style={styles.imageGradientOverlay}
-              />
-            </Animated.View>
-          </Animated.View>
-        </PerfectContainer>
+      <PerfectContainer 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        style={styles.imageSection as any}
+      >
+        <Animated.View
+          style={[imageContainerStyle, animatedStyle]}
+          renderToHardwareTextureAndroid
+          needsOffscreenAlphaCompositing
+        >
+          <PerfectImage
+            width={393}
+            aspectRatio={1131 / 1567}
+            borderRadius={scale(24)}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            source={require('@assets/images/hero-banner.png')}
+            resizeMode="cover"
+          />
+        </Animated.View>
       </PerfectContainer>
     );
   }

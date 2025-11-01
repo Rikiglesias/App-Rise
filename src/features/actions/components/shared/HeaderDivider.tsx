@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import type { useNewActionsAnimations } from './ContributeAnimations';
 import { PerfectContainer } from '@/components/ui';
-import { Colors, Spacing } from '@/shared/constants/designTokens';
+import { Colors } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 interface HeaderDividerProps {
@@ -14,8 +15,8 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
     () =>
       StyleSheet.create({
         dividerContainer: {
-          paddingHorizontal: Spacing[4],
-          paddingVertical: Spacing[4],
+          paddingHorizontal: PerfectSpacing.base,
+          paddingVertical: PerfectSpacing.base,
           alignItems: 'center',
         },
         mainDivider: {

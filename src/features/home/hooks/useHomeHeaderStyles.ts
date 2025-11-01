@@ -14,7 +14,7 @@ export const useHomeHeaderStyles = () => {
     () => ({
       ...createContainerStyles(colors),
       ...createTextStyles(colors),
-      ...createImageStyles(colors),
+      ...createImageStyles(),
     }),
     [colors]
   );

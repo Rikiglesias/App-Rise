@@ -15,8 +15,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
         style={contactSectionStyles.categoryHeader} // marginBottom rimane qui
       >
         <PerfectContainer
-          paddingVertical={8} // ✅ Spacing[2] - SCALA!
-          paddingHorizontal={12} // ✅ Spacing[3] - SCALA!
+          paddingVertical={8} // ✅ PerfectSpacing.sm - SCALA!
+          paddingHorizontal={12} // ✅ PerfectSpacing.md - SCALA!
           style={contactSectionStyles.exploreHeaderContainer}
         >
           <PerfectText
@@ -38,8 +38,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
         </PerfectContainer>
       </PerfectContainer>
       <PerfectContainer
-        paddingHorizontal={12} // ✅ Spacing[3] - SCALA!
-        paddingVertical={8} // ✅ Spacing[2] - SCALA!
+        paddingHorizontal={12} // ✅ PerfectSpacing.md - SCALA!
+        paddingVertical={8} // ✅ PerfectSpacing.sm - SCALA!
         style={contactSectionStyles.contactsGrid}
       >
         {contacts.map(contact => (

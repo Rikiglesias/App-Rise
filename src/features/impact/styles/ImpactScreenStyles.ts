@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native';
 import {
   BorderRadius,
   Colors,
+  PerfectSpacing,
   Shadows,
-  Spacing,
   Typography,
 } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
@@ -14,29 +14,29 @@ export const impactScreenStyles = StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    padding: Spacing[6],
-    paddingTop: Spacing[12],
+    padding: PerfectSpacing.lg,
+    paddingTop: PerfectSpacing['3xl'],
   },
   headerTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
   headerSubtitle: {
     color: Colors.neutral[600],
     textAlign: 'center',
-    marginBottom: Spacing[8],
+    marginBottom: PerfectSpacing.xl,
   },
   mainStatCard: {
     borderRadius: BorderRadius['2xl'],
-    padding: Spacing[6],
+    padding: PerfectSpacing.lg,
     alignItems: 'center',
     ...Shadows.lg,
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   mainIcon: {
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
     opacity: 0.8,
   },
   mainStatValue: {
@@ -47,31 +47,31 @@ export const impactScreenStyles = StyleSheet.create({
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[0],
     opacity: 0.9,
-    marginTop: Spacing[1],
+    marginTop: PerfectSpacing.xs,
   },
   quickStatsContainer: {
-    gap: Spacing[4],
+    gap: PerfectSpacing.base,
   },
   section: {
-    marginTop: Spacing[8],
+    marginTop: PerfectSpacing.xl,
   },
   sectionTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
-    marginBottom: Spacing[4],
-    paddingHorizontal: Spacing[2],
+    marginBottom: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.sm,
   },
   storiesScroll: {
-    paddingHorizontal: Spacing[2],
-    paddingBottom: Spacing[4],
-    gap: Spacing[4],
+    paddingHorizontal: PerfectSpacing.sm,
+    paddingBottom: PerfectSpacing.base,
+    gap: PerfectSpacing.base,
   },
   milestonesContainer: {
-    gap: Spacing[3],
+    gap: PerfectSpacing.md,
   },
   mapSection: {
-    marginTop: Spacing[8],
-    marginBottom: Spacing[6],
+    marginTop: PerfectSpacing.xl,
+    marginBottom: PerfectSpacing.lg,
   },
   mapPreview: {
     backgroundColor: Colors.primary[100],
@@ -90,7 +90,7 @@ export const impactScreenStyles = StyleSheet.create({
   mapPreviewText: {
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[0],
-    marginTop: Spacing[2],
+    marginTop: PerfectSpacing.sm,
     textAlign: 'center',
   },
 });

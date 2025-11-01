@@ -13,10 +13,10 @@ import {
 import {
   BorderRadius,
   Colors,
-  Spacing,
   Shadows,
 } from '@/shared/constants/designTokens';
-import { scale } from '@/shared/constants/perfectScale';
+import { PerfectSpacing } from '@/shared/constants';
+import { scale, scaleSpacing, scaleTouch } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import type { BottomTabParamList } from '@/navigation/types';
 
@@ -39,55 +39,52 @@ export const ActionCTAButtons: React.FC = () => {
     <PerfectContainer
       preset="section"
       flexDirection="row"
-      gap={Spacing[4]}
-      paddingHorizontal={Spacing[1]}
-      marginVertical={Spacing[4]}
+      gap={PerfectSpacing.base}
+      paddingHorizontal={PerfectSpacing.xs}
+      marginVertical={PerfectSpacing.base}
     >
       {/* SCOPRI IL NOSTRO IMPATTO */}
       <PlatformTouchable
-        style={styles.buttonWrapper}
+        style={{ flex: 1 }}
         onPress={handleImpactPress}
         activeOpacity={0.92}
       >
         <LinearGradient
-          colors={['#DC2626', '#B91C1C', '#991B1B']}
+          colors={Colors.gradients.primary}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
         >
-          <PerfectContainer style={styles.whiteContainer}>
-            <PerfectContainer style={styles.buttonContent}>
+          <PerfectContainer style={styles.buttonContainer}>
+            <MaterialCommunityIcons
+              name="chart-line"
+              size={scale(28)}
+              color={Colors.primary[500]}
+            />
+            <PerfectText
+              size={20}
+              fontWeight="bold"
+              lines={2}
+              color={Colors.primary[500]}
+              textAlign="center"
+              style={{ marginVertical: PerfectSpacing.xs, ...Shadows.sm }}
+            >
+              Scopri{'\n'}Impatto
+            </PerfectText>
+            <PerfectContainer flexDirection="row" alignItems="center" gap={PerfectSpacing.sm}>
               <MaterialCommunityIcons
-                name="chart-line"
-                size={scale(28)}
-                color={Colors.primary[600]}
-                style={styles.buttonIcon}
+                name="arrow-left"
+                size={scale(20)}
+                color={Colors.primary[500]}
               />
               <PerfectText
-                size={20}
+                size={16}
                 fontWeight="bold"
-                lines={2}
-                containerWidth={scale(140)}
-                style={styles.buttonTitle}
+                lines={1}
+                color={Colors.primary[500]}
               >
-                Scopri{'\n'}Impatto
+                Risultati
               </PerfectText>
-              <PerfectContainer style={styles.directionRowRed}>
-                <MaterialCommunityIcons
-                  name="arrow-left"
-                  size={scale(18)}
-                  color={Colors.primary[500]}
-                />
-                <PerfectText
-                  size={16}
-                  fontWeight="bold"
-                  lines={1}
-                  containerWidth={scale(110)}
-                  style={styles.buttonDirectionRed}
-                >
-                  Risultati
-                </PerfectText>
-              </PerfectContainer>
             </PerfectContainer>
           </PerfectContainer>
         </LinearGradient>
@@ -95,50 +92,46 @@ export const ActionCTAButtons: React.FC = () => {
 
       {/* DONA E AIUTA */}
       <PlatformTouchable
-        style={styles.buttonWrapper}
+        style={{ flex: 1 }}
         onPress={handleActionsPress}
         activeOpacity={0.92}
       >
         <LinearGradient
-          colors={['#059669', '#10B981', '#047857']}
+          colors={Colors.gradients.success}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
         >
-          <PerfectContainer style={styles.whiteContainer}>
-            <PerfectContainer style={styles.buttonContent}>
-              <MaterialCommunityIcons
-                name="hand-heart"
-                size={scale(28)}
-                color={Colors.semantic.success.dark}
-                style={styles.buttonIcon}
-              />
+          <PerfectContainer style={styles.buttonContainer}>
+            <MaterialCommunityIcons
+              name="hand-heart"
+              size={scale(28)}
+              color={Colors.semantic.success.main}
+            />
+            <PerfectText
+              size={20}
+              fontWeight="bold"
+              lines={2}
+              color={Colors.semantic.success.main}
+              textAlign="center"
+              style={{ marginVertical: PerfectSpacing.xs, ...Shadows.sm }}
+            >
+              Dona e{'\n'}Aiuta
+            </PerfectText>
+            <PerfectContainer flexDirection="row" alignItems="center" gap={PerfectSpacing.sm}>
               <PerfectText
-                size={20}
+                size={16}
                 fontWeight="bold"
-                lines={2}
-                containerWidth={scale(140)}
-                textAlign="center"
-                style={styles.buttonTitleGreen}
+                lines={1}
+                color={Colors.semantic.success.main}
               >
-                Dona e{'\n'}Aiuta
+                Supporta
               </PerfectText>
-              <PerfectContainer style={styles.directionRowGreen}>
-                <PerfectText
-                  size={16}
-                  fontWeight="bold"
-                  lines={1}
-                  containerWidth={scale(110)}
-                  style={styles.buttonDirection}
-                >
-                  Supporta
-                </PerfectText>
-                <MaterialCommunityIcons
-                  name="arrow-right"
-                  size={scale(18)}
-                  color={Colors.semantic.success.main}
-                />
-              </PerfectContainer>
+              <MaterialCommunityIcons
+                name="arrow-right"
+                size={scale(20)}
+                color={Colors.semantic.success.main}
+              />
             </PerfectContainer>
           </PerfectContainer>
         </LinearGradient>
@@ -148,85 +141,20 @@ export const ActionCTAButtons: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  buttonWrapper: {
-    flex: 1,
-  },
-
   gradientBorder: {
     borderRadius: BorderRadius.xl,
     padding: scale(3),
     ...Shadows.lg,
   },
 
-  whiteContainer: {
+  buttonContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - scale(3),
-    minHeight: scale(105),
-    paddingVertical: Spacing[2],
-    paddingHorizontal: Spacing[3],
-    justifyContent: 'center',
-    flex: 1,
-  },
-
-  buttonContent: {
+    minHeight: scaleTouch(105),
+    paddingVertical: scaleSpacing(12),
+    paddingHorizontal: scaleSpacing(12),
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
-    minHeight: scale(85),
-    paddingTop: Spacing[1],
-    paddingBottom: Spacing[1],
-  },
-
-  buttonIcon: {
-    textAlign: 'center' as const,
-    textAlignVertical: 'center' as const,
-  },
-
-  buttonTitle: {
-    color: Colors.primary[600],
-    textAlign: 'center' as const,
-    letterSpacing: scale(-0.6),
-    marginVertical: Spacing[1],
-    ...Shadows.sm,
-    textAlignVertical: 'center' as const,
-  },
-
-  buttonDirection: {
-    color: Colors.semantic.success.main,
-    textAlign: 'center' as const,
-    letterSpacing: scale(0.3),
-    marginVertical: Spacing[1],
-    ...Shadows.sm,
-    textAlignVertical: 'center' as const,
-  },
-
-  buttonDirectionRed: {
-    color: Colors.semantic.error.main,
-    textAlign: 'center' as const,
-    letterSpacing: scale(0.3),
-    marginVertical: Spacing[1],
-    ...Shadows.sm,
-    textAlignVertical: 'center' as const,
-  },
-
-  directionRowRed: {
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-    gap: Spacing[1],
-  },
-
-  directionRowGreen: {
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-    gap: Spacing[1],
-  },
-
-  buttonTitleGreen: {
-    color: Colors.semantic.success.dark,
-    textAlign: 'center' as const,
-    letterSpacing: scale(-0.6),
-    marginVertical: Spacing[1],
-    ...Shadows.sm,
-    textAlignVertical: 'center' as const,
   },
 });

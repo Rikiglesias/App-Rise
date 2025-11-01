@@ -7,7 +7,7 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, Shadows, Spacing } from '@/shared/constants';
+import { Colors, Shadows, PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 export interface SocialPlatform {
@@ -110,7 +110,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
             <PerfectContainer style={styles.arrowContainer}>
               <MaterialCommunityIcons
                 name="chevron-right"
-                size={24}
+                size={scale(24)}
                 color={Colors.neutral[400]}
               />
             </PerfectContainer>
@@ -125,7 +125,7 @@ SocialCard.displayName = 'SocialCard';
 
 const styles = {
   socialCardWrapper: {
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
   },
 
   socialCardWhiteContainer: {
@@ -137,7 +137,7 @@ const styles = {
   socialCardContent: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    padding: Spacing[4],
+    padding: PerfectSpacing.base,
   },
   socialIconContainer: {
     width: scale(56),
@@ -146,7 +146,7 @@ const styles = {
     backgroundColor: Colors.neutral[0],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
-    marginRight: Spacing[4],
+    marginRight: PerfectSpacing.base,
     ...Shadows.md,
   },
   platformIcon: {
@@ -163,21 +163,21 @@ const styles = {
   },
   socialInfoContainer: {
     flex: 1,
-    marginRight: Spacing[3],
+    marginRight: PerfectSpacing.md,
   },
   socialName: {
     color: Colors.neutral[900],
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
     letterSpacing: scale(-0.3),
   },
   socialHandle: {
     color: Colors.primary[500],
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
   },
   socialDescription: {
     color: Colors.neutral[600],
   },
   arrowContainer: {
-    padding: Spacing[1],
+    padding: PerfectSpacing.xs,
   },
 };

@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useCallback } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import {
   PerfectText,
@@ -8,7 +8,8 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
@@ -91,15 +92,15 @@ MapSection.displayName = 'MapSection';
 const styles = StyleSheet.create({
   // Map Section - SENZA CONTAINER GRIGIO
   mapSection: {
-    paddingHorizontal: Spacing[4],
-    marginTop: Spacing[6], // AGGIUNTO: spazio generoso tra linea e titolo "Dove Operiamo"
+    paddingHorizontal: PerfectSpacing.base,
+    marginTop: PerfectSpacing.lg, // AGGIUNTO: spazio generoso tra linea e titolo "Dove Operiamo"
   },
 
   // MAP CONTAINER CLICCABILE - RIEMPIE TUTTO SENZA BORDI
   mapImageContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl,
-    marginTop: Spacing[4],
+    marginTop: PerfectSpacing.base,
     marginHorizontal: 0,
     padding: 0,
     ...Shadows.lg,
@@ -117,15 +118,15 @@ const styles = StyleSheet.create({
   // INDICATORE CLICCABILE
   mapClickIndicator: {
     position: 'absolute',
-    top: Spacing[2],
-    right: Spacing[2],
+    top: PerfectSpacing.sm,
+    right: PerfectSpacing.sm,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.neutral[50],
-    paddingHorizontal: Spacing[2],
-    paddingVertical: Spacing[1],
+    paddingHorizontal: PerfectSpacing.sm,
+    paddingVertical: PerfectSpacing.xs,
     borderRadius: BorderRadius.lg,
-    gap: Spacing[1],
+    gap: PerfectSpacing.xs,
     zIndex: 2,
     elevation: 8,
   },
@@ -136,22 +137,16 @@ const styles = StyleSheet.create({
   // Map Section - GEOGRAFICO
   mapHeaderContainer: {
     alignItems: 'center',
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
 
   mapHeaderBackground: {
-    backgroundColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[100]
-        : Colors.neutral[50],
+    backgroundColor: Colors.neutral[50],
     borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[6],
+    paddingVertical: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[200]
-        : Colors.neutral[100],
+    borderColor: Colors.neutral[100],
     ...Shadows.sm,
   },
   mapTitle: {
@@ -165,7 +160,7 @@ const styles = StyleSheet.create({
     // fontSize rimosso - ora gestito da Text
     color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
-    marginTop: Spacing[3],
+    marginTop: PerfectSpacing.md,
     opacity: 0.9,
     letterSpacing: scale(0.1),
   },

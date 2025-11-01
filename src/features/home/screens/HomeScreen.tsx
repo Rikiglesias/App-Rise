@@ -8,20 +8,18 @@ import {
 import type { HomeScreenProps } from '../types/HomeScreenTypes';
 import { EntraInAzione } from '../components/EntraInAzione';
 
-import { PerfectContainer } from '@components/ui';
 import { HomeHeaderSection } from '../components/HomeHeaderSection';
+import { PerfectContainer } from '@components/ui';
 import { useTheme } from '@shared/hooks/useTheme';
-import { Spacing } from '@shared/constants';
+import { PerfectSpacing } from '@shared/constants';
 import { scale } from '@shared/constants/perfectScale';
 
-const HomeScreenComponent: React.FC<HomeScreenProps> = ({
-  navigation: _navigation,
-}) => {
+const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  const basePadding = Spacing[6];
+  const basePadding = PerfectSpacing.lg;
   const navHeight = scale(80);
   const bottomPadding = basePadding + navHeight + insets.bottom;
 
@@ -55,20 +53,14 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
-        <PerfectContainer preset="page" paddingVertical={0}>
-          {/* Header Section con titolo e logo - SPAZIO BILANCIATO */}
-          <PerfectContainer preset="section" paddingVertical={Spacing[3]}>
+        <PerfectContainer preset="page" paddingVertical={0} paddingHorizontal={0}>
+          {/* Header Section con titolo e logo - FULL WIDTH */}
+          <PerfectContainer paddingVertical={PerfectSpacing.md}>
             <HomeHeaderSection scrollY={scrollY} />
           </PerfectContainer>
 
           {/* Sezione Entra in Azione con CTA */}
-          <PerfectContainer
-            preset="section"
-            marginHorizontal={Spacing[2]}
-            paddingVertical={Spacing[4]} // ← RIDOTTO DA 6 A 4 per più spazio visibile
-          >
-            <EntraInAzione />
-          </PerfectContainer>
+          <EntraInAzione />
         </PerfectContainer>
       </Animated.ScrollView>
     </SafeAreaView>

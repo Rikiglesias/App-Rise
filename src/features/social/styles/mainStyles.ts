@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import { mainStyles as aboutMainStyles } from '../../about/styles/mainStyles';
-import { Spacing } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 
 /**
  * Stili principali per la sezione Social
@@ -13,9 +13,9 @@ export const mainStyles = StyleSheet.create({
 
   // Stile specifico per la sezione social
   socialSection: {
-    marginTop: Spacing[6],
-    marginBottom: Spacing[1],
-    gap: Spacing[4],
+    marginTop: PerfectSpacing.lg,
+    marginBottom: PerfectSpacing.xs,
+    gap: PerfectSpacing.base,
     paddingHorizontal: 0,
   },
 });

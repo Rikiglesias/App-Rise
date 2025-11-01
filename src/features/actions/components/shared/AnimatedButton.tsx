@@ -7,7 +7,8 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-import { Colors, Spacing, Shadows } from '@/shared/constants/designTokens';
+import { Colors, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
@@ -47,8 +48,8 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
             style={{
               backgroundColor: Colors.neutral[0],
               borderRadius: innerRadius,
-              paddingVertical: Spacing[4],
-              paddingHorizontal: Spacing[3],
+              paddingVertical: PerfectSpacing.base,
+              paddingHorizontal: PerfectSpacing.md,
               alignItems: 'center',
               justifyContent: 'center',
               overflow: 'hidden',
@@ -85,8 +86,8 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
               color={iconColor}
               style={{
                 position: 'absolute',
-                top: Spacing[2],
-                right: Spacing[2],
+                top: PerfectSpacing.sm,
+                right: PerfectSpacing.sm,
               }}
             />
           </PerfectContainer>

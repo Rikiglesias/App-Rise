@@ -22,9 +22,10 @@ import {
 } from 'react-native';
 import {
   scale,
+  scaleText,
   LOGICAL_REFERENCE,
 } from '../../shared/constants/perfectScale';
-import { Typography } from '../../shared/constants/designTokens';
+import { Typography, Colors } from '../../shared/constants/designTokens';
 import {
   getImmuneTextProps,
   debugImmunity,
@@ -34,12 +35,8 @@ import {
 
 export interface PerfectTextProps
   extends Omit<TextProps, 'numberOfLines' | 'adjustsFontSizeToFit'> {
-  /** Font size di riferimento su iPhone 15 */
+  /** Font size di riferimento su iPhone 15 (limiti device-aware automatici) */
   size: number;
-
-  /** Limiti opzionali (base iPhone 15) */
-  maxSize?: number;
-  minSize?: number;
 
   /** Numero ESATTO di righe (sempre rispettato) */
   lines: number;
@@ -89,36 +86,16 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   size,
   lines,
   containerWidth,
-  maxSize,
-  minSize,
   fontWeight = 'normal',
-  color = '#000000',
+  color = Colors.neutral[900],
   textAlign = 'left',
   debug = false,
   style,
   immunity: _immunity,
   ...props
 }) => {
-  const scaledBase = useMemo(() => scale(size), [size]);
-  const scaledMax = useMemo(
-    () => (typeof maxSize === 'number' ? scale(maxSize) : undefined),
-    [maxSize]
-  );
-  const scaledMin = useMemo(
-    () => (typeof minSize === 'number' ? scale(minSize) : undefined),
-    [minSize]
-  );
-
-  const finalScaledFontSize = useMemo(() => {
-    let base = scaledBase;
-    if (typeof scaledMax === 'number') {
-      base = Math.min(base, scaledMax);
-    }
-    if (typeof scaledMin === 'number') {
-      base = Math.max(base, scaledMin);
-    }
-    return base;
-  }, [scaledBase, scaledMax, scaledMin]);
+  // Usa scaleText() device-aware - applica limiti automatici solo su device estremi
+  const finalScaledFontSize = useMemo(() => scaleText(size), [size]);
 
   const referenceWidth = useMemo(
     () => containerWidth ?? DEFAULT_REFERENCE_CONTAINER,
@@ -157,16 +134,32 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
       : baseStyle;
   }, [style, finalScaledFontSize, color, textAlign, fontWeight]);
 
+  // Se containerWidth specificato → usa wrapper con width fissa
+  // Altrimenti → Text diretto che si adatta al contenuto (flex/row friendly)
+  if (containerWidth) {
+    return (
+      <View style={{ width: targetWidth }}>
+        <Text
+          {...props}
+          numberOfLines={lines}
+          {...immuneProps}
+          style={resolvedStyle}
+        >
+          {children}
+        </Text>
+      </View>
+    );
+  }
+
+  // Text diretto senza wrapper - per layout flex/row
   return (
-    <View style={{ width: targetWidth }}>
-      <Text
-        {...props}
-        numberOfLines={lines}
-        {...immuneProps}
-        style={resolvedStyle}
-      >
-        {children}
-      </Text>
-    </View>
+    <Text
+      {...props}
+      numberOfLines={lines}
+      {...immuneProps}
+      style={resolvedStyle}
+    >
+      {children}
+    </Text>
   );
 };

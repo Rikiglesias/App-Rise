@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import type { ProjectHeaderProps } from './types';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Spacing, Typography } from '@/shared/constants';
+import { PerfectSpacing, Typography } from '@/shared/constants';
 import { useTheme } from '@/shared/hooks/useTheme';
 
 export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
@@ -19,16 +19,16 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'flex-start',
-      marginBottom: Spacing[4],
+      marginBottom: PerfectSpacing.base,
     },
     titleContainer: {
       flex: 1,
-      marginRight: Spacing[3],
+      marginRight: PerfectSpacing.md,
     },
     title: {
       fontWeight: Typography.weights.bold,
       color: colors.neutral[900],
-      marginBottom: Spacing[1],
+      marginBottom: PerfectSpacing.xs,
     },
     location: {
       color: colors.neutral[500],
@@ -36,8 +36,8 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
     },
     statusBadge: {
       backgroundColor: statusColor,
-      paddingHorizontal: Spacing[3],
-      paddingVertical: Spacing[1],
+      paddingHorizontal: PerfectSpacing.md,
+      paddingVertical: PerfectSpacing.xs,
       borderRadius: 8,
       minWidth: 80,
       alignItems: 'center',

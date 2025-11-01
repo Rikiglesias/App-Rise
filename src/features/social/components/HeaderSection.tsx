@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors, Spacing } from '@/shared/constants';
+import { Colors, PerfectSpacing } from '@/shared/constants';
 import {
   LOGICAL_REFERENCE,
   scale,
@@ -69,8 +69,8 @@ HeaderSection.displayName = 'HeaderSection';
 const styles = {
   headerContainer: {
     alignItems: 'center' as const,
-    marginBottom: Spacing[8],
-    paddingHorizontal: Spacing[4],
+    marginBottom: PerfectSpacing.xl,
+    paddingHorizontal: PerfectSpacing.base,
   },
   headerIconContainer: {
     width: /* scaleFont(80) */ 80,
@@ -79,7 +79,7 @@ const styles = {
     backgroundColor: Colors.primary[50],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
-    marginBottom: Spacing[4],
+    marginBottom: PerfectSpacing.base,
     shadowColor: Colors.primary[600],
     shadowOffset: { width: 0, height: scale(4) },
     shadowOpacity: 0.1,
@@ -89,12 +89,12 @@ const styles = {
   headerTitle: {
     color: Colors.neutral[900],
     textAlign: 'center' as const,
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
     letterSpacing: scale(-0.5),
   },
   headerSubtitle: {
     color: Colors.neutral[600],
     textAlign: 'center' as const,
-    paddingHorizontal: Spacing[2],
+    paddingHorizontal: PerfectSpacing.sm,
   },
 };

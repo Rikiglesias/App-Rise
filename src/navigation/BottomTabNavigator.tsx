@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import * as Haptics from 'expo-haptics';
 import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Platform-specific components
@@ -23,9 +23,9 @@ import {
   BorderRadius,
   Colors,
   Shadows,
-  Spacing,
   Typography,
 } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 // Lazy Screens (only for HomeScreen due to export issues)
@@ -63,22 +63,37 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
   const insets = useSafeAreaInsets();
 
   const tabContainerStyle = useMemo(
-    () => [
-      styles.tabBarContainer,
-      {
-        bottom: Math.max(insets.bottom, Spacing[4]),
-        height: /* scaleFont(95) */ 95,
-        left: Spacing[6],
-        right: Spacing[6],
-        borderRadius: 32,
-      },
-    ],
+    () => {
+      const radius = scale(32);
+      return [
+        styles.tabBarContainer,
+        {
+          bottom: Math.max(insets.bottom, PerfectSpacing.base),
+          height: scale(95),
+          left: PerfectSpacing.lg,
+          right: PerfectSpacing.lg,
+          borderRadius: radius,
+          overflow: 'hidden' as const,
+        },
+      ];
+    },
     [insets.bottom]
   );
 
+  const blurBackground = Platform.select({
+    ios: 'rgba(255, 255, 255, 0.35)',
+    android: 'rgba(255, 255, 255, 0.97)',
+    default: 'rgba(255, 255, 255, 0.97)',
+  });
+
   return (
     <PerfectContainer style={tabContainerStyle}>
-      <PlatformBlur intensity={90} tint="light" style={styles.blurView} />
+      <PlatformBlur 
+        intensity={90} 
+        tint="light" 
+        backgroundColor={blurBackground}
+        style={styles.blurView} 
+      />
       <PerfectContainer style={styles.tabBarContent}>
         {state.routes.map((route, index: number) => {
           const descriptor = descriptors[route.key];
@@ -132,7 +147,7 @@ const AdvancedTabBar = React.memo(AdvancedTabBarComponent);
 // =================================================================
 
 const ICON_MAP: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
-  ImpactTab: 'chart-line', // CAMBIATO: da 'chart-donut' a 'chart-line' - stessa icona del bottone impatto
+  ImpactTab: 'chart-line',
   HomeTab: 'home',
   InfoTab: 'hand-heart',
 };
@@ -145,50 +160,38 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   onLongPress,
   routeName,
 }) => {
-  // NESSUNA ANIMAZIONE - container statico
-  const buttonContainerStyle = {};
-
-  // COLORI STATICI - CALCOLO DIRETTO SENZA ANIMAZIONI (risolve bug timing)
-  const getTabColors = () => {
+  const tabColors = useMemo(() => {
     switch (routeName) {
       case 'ImpactTab':
         return {
-          backgroundColor: '#DC2626', // ROSSO FISSO sempre
-          shadowColor: '#DC2626',
-          iconColor: Colors.neutral[0], // Bianco sempre
-          labelColor: '#DC2626',
+          backgroundColor: Colors.primary[500],
+          shadowColor: Colors.primary[500],
+          iconColor: Colors.neutral[0],
+          labelColor: Colors.primary[500],
         };
       case 'InfoTab':
         return {
-          backgroundColor: '#059669', // VERDE FISSO sempre
-          shadowColor: '#059669',
-          iconColor: Colors.neutral[0], // Bianco sempre
-          labelColor: '#059669',
+          backgroundColor: Colors.semantic.success.main,
+          shadowColor: Colors.semantic.success.main,
+          iconColor: Colors.neutral[0],
+          labelColor: Colors.semantic.success.main,
         };
       case 'HomeTab':
       default:
         return {
-          backgroundColor: isFocused ? '#6B7280' : '#FFFFFF', // GRIGIO quando attivo, BIANCO quando inattivo
-          shadowColor: '#6B7280',
+          backgroundColor: isFocused ? Colors.neutral[500] : Colors.neutral[0],
+          shadowColor: Colors.neutral[500],
           iconColor: isFocused ? Colors.neutral[0] : Colors.neutral[700],
-          labelColor: '#6B7280',
+          labelColor: Colors.neutral[500],
         };
     }
-  };
+  }, [routeName, isFocused]);
 
-  const tabColors = getTabColors();
-
-  // NESSUNA ANIMAZIONE - icona statica
-  const iconContainerStyle = {};
-
-  // NESSUNA ANIMAZIONE - label statica
-  const labelStyle = {};
-
-  const iconName = ICON_MAP[routeName] ?? 'circle';
-  const iconSize = isCentral ? 32 : 26;
+  const iconName = useMemo(() => ICON_MAP[routeName] ?? 'circle', [routeName]);
+  const iconSize = useMemo(() => isCentral ? scale(32) : scale(26), [isCentral]);
 
   return (
-    <PerfectContainer style={[styles.buttonContainer, buttonContainerStyle]}>
+    <PerfectContainer style={styles.buttonContainer}>
       <PlatformTouchable
         activeOpacity={0.7}
         rippleColor="transparent"
@@ -203,7 +206,6 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
           <PerfectContainer
             style={[
               isCentral ? styles.centralIconContainer : styles.iconContainer,
-              iconContainerStyle,
               {
                 backgroundColor: tabColors.backgroundColor,
                 shadowColor: tabColors.shadowColor,
@@ -216,14 +218,15 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
               color={tabColors.iconColor}
             />
           </PerfectContainer>
-          <PerfectContainer style={labelStyle}>
+          <PerfectContainer>
             <PerfectText
               size={16}
               lines={1}
               fontWeight="400"
-              style={{ ...styles.labelText, color: tabColors.labelColor }}
+              color={tabColors.labelColor}
+              style={styles.labelText}
             >
-              {options.tabBarAccessibilityLabel?.split(' ')[0]}
+              {options.tabBarAccessibilityLabel?.split(' ')[0] ?? 'Tab'}
             </PerfectText>
           </PerfectContainer>
         </PerfectContainer>
@@ -283,38 +286,36 @@ const styles = StyleSheet.create({
   // --- Tab Bar ---
   tabBarContainer: {
     position: 'absolute',
-    // Dynamic values moved to tabContainerStyle
     ...Shadows.lg,
     shadowColor: Colors.neutral[900],
     shadowOpacity: 0.1,
-    elevation: 10,
+    elevation: scale(10),
+    borderWidth: scale(1),
+    borderColor: Colors.neutral[200],
   },
   blurView: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: BorderRadius['3xl'],
-    overflow: 'hidden',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // AGGIUNTO: leggero tint per evitare artefatti
   },
   tabBarContent: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    paddingHorizontal: Spacing[2],
-    paddingVertical: Spacing[2],
+    paddingHorizontal: PerfectSpacing.sm,
+    paddingVertical: PerfectSpacing.sm,
   },
   // --- Tab Button ---
   buttonContainer: {
     flex: 1,
     alignItems: 'center',
-    minHeight: /* scaleFont(80) */ 80, // AUMENTATO: da 70 a 80 per spazio animazione
+    minHeight: scale(80),
   },
   touchable: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: Spacing[2],
+    padding: PerfectSpacing.sm,
     width: '100%',
-    minHeight: /* scaleFont(80) */ 80, // AUMENTATO: da 70 a 80 per spazio animazione
+    minHeight: scale(80),
   },
   touchableContent: {
     alignItems: 'center',
@@ -329,8 +330,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     ...Shadows.md,
-    shadowOffset: { width: 0, height: scale(4) },
-    elevation: 8,
+    elevation: scale(8),
   },
   centralIconContainer: {
     width: scale(64),
@@ -341,13 +341,12 @@ const styles = StyleSheet.create({
     borderWidth: scale(2),
     borderColor: Colors.neutral[0],
     ...Shadows.lg,
-    shadowOffset: { width: 0, height: scale(6) },
-    elevation: 12,
+    elevation: scale(12),
   },
   // --- Label ---
   labelText: {
     fontWeight: Typography.weights.semibold,
-    marginTop: Spacing[1],
+    marginTop: PerfectSpacing.xs,
     textAlign: 'center',
     maxWidth: scale(80),
   },

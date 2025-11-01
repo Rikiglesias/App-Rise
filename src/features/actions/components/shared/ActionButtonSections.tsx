@@ -1,6 +1,5 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useMemo } from 'react';
-import { Platform } from 'react-native';
 import { AnimatedButton } from './AnimatedButton';
 import type {
   DonateButtonsSectionProps,
@@ -11,7 +10,7 @@ import {
   getExploreIconColor,
   getCommunityIconColor,
 } from './ActionButtonUtils';
-import { Colors, Spacing } from '@/shared/constants';
+import { Colors, PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import {
   PlatformTouchable,
@@ -53,11 +52,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
     <PerfectContainer style={styles.categoryContainer}>
       <PerfectContainer style={styles.categoryHeader}>
         <PlatformTouchable
-          style={
-            Platform.OS === 'android'
-              ? styles.donateTitleContainerAndroid
-              : styles.donateTitleContainer
-          }
+          style={styles.donateTitleContainer}
           onPress={onInfoPress}
           activeOpacity={0.8}
         >
@@ -159,16 +154,10 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
 
   return (
     <PerfectContainer
-      style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}
+      style={[styles.categoryContainer, { marginTop: -PerfectSpacing.xs }]}
     >
       <PerfectContainer style={styles.categoryHeader}>
-        <PerfectContainer
-          style={
-            Platform.OS === 'android'
-              ? styles.exploreHeaderBackgroundAndroid
-              : styles.exploreHeaderBackground
-          }
-        >
+        <PerfectContainer style={styles.exploreHeaderBackground}>
           <PerfectText
             size={20}
             lines={1}
@@ -258,15 +247,11 @@ export const CommunityButtonsSection: React.FC<
 
   return (
     <PerfectContainer
-      style={[styles.categoryContainer, { marginTop: -Spacing[1] }]}
+      style={[styles.categoryContainer, { marginTop: -PerfectSpacing.xs }]}
     >
       <PerfectContainer style={styles.categoryHeader}>
         <PlatformTouchable
-          style={
-            Platform.OS === 'android'
-              ? styles.communityHeaderBackgroundAndroid
-              : styles.communityHeaderBackground
-          }
+          style={styles.communityHeaderBackground}
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
         >

@@ -7,7 +7,8 @@ import { ProjectHeader } from './ProjectHeader';
 import { ProjectProgress } from './ProjectProgress';
 import type { ProjectCardProps, ProjectStatus } from './types';
 import { PerfectContainer } from '@/components/ui/PerfectContainer';
-import { BorderRadius, Spacing } from '@/shared/constants/designTokens';
+import { BorderRadius } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useAnimatedPress } from '@/shared/hooks/useAnimatedPress';
 import { useTheme } from '@/shared/hooks/useTheme';
@@ -65,7 +66,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const styles = StyleSheet.create({
     container: {
-      marginBottom: Spacing[4],
+      marginBottom: PerfectSpacing.base,
     },
     surface: {
       borderRadius: BorderRadius.xl,
@@ -79,7 +80,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       elevation: 3,
     },
     content: {
-      padding: Spacing[6],
+      padding: PerfectSpacing.lg,
     },
   });
 

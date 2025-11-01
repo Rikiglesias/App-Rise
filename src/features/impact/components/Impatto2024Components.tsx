@@ -7,7 +7,8 @@ import { StyleSheet } from 'react-native';
 
 import type { StatCardData, ImpactItemData } from '../data/impatto2024Data';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 
 interface StatCardProps {
   readonly data: StatCardData;
@@ -91,12 +92,12 @@ const styles = StyleSheet.create({
   statCard: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.lg,
-    padding: Spacing[6],
+    padding: PerfectSpacing.lg,
     alignItems: 'center',
     ...Shadows.sm,
   },
   statIcon: {
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
   },
   statNumber: {
     color: Colors.primary[600],
@@ -105,19 +106,19 @@ const styles = StyleSheet.create({
   statLabel: {
     color: Colors.neutral[900],
     textAlign: 'center',
-    marginTop: Spacing[2],
+    marginTop: PerfectSpacing.sm,
   },
   statDesc: {
     color: Colors.neutral[600],
     textAlign: 'center',
-    marginTop: Spacing[1],
+    marginTop: PerfectSpacing.xs,
   },
   impactItem: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   impactIcon: {
-    marginRight: Spacing[3],
+    marginRight: PerfectSpacing.md,
   },
   impactText: {
     color: Colors.neutral[700],

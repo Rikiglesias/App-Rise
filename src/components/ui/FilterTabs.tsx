@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
-import { useTheme } from '@react-navigation/native';
 import { TouchableRipple } from 'react-native-paper';
-import { BorderRadius, Spacing, Typography, Shadows } from '../../shared/constants';
+import { BorderRadius, Colors, PerfectSpacing, Typography, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText } from './PerfectText';
 import { PerfectContainer } from './PerfectContainer';
@@ -22,81 +21,73 @@ interface FilterTabsProps {
   readonly showCounts?: boolean;
 }
 
-// Stili di layout base
-const createBaseStyles = () =>
-  StyleSheet.create({
-    container: { marginBottom: Spacing[4] },
-    scrollView: { paddingHorizontal: Spacing[4] },
-    scrollContent: { paddingRight: Spacing[4] },
-    tabContainer: { marginRight: Spacing[3] },
-    tabContent: { flexDirection: 'row', alignItems: 'center' },
-  });
-
-// Stili con colori dinamici - tipizzazione corretta
-
-const createColorStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
-  StyleSheet.create({
-    // Tutti questi stili sono utilizzati nel componente TabItem
-    // ma ESLint non riesce a rilevarlo perché vengono passati tramite props
-    tab: {
-      borderRadius: BorderRadius.full,
-      paddingHorizontal: Spacing[4],
-      paddingVertical: Spacing[3],
-      minHeight: scale(44),
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'row',
-      borderWidth: scale(1),
-    },
-    activeTab: {
-      backgroundColor: colors.primary,
-      borderColor: colors.primary,
-      ...Shadows.sm,
-    },
-    inactiveTab: {
-      backgroundColor: colors.card,
-      borderColor: colors.border,
-    },
-    tabIcon: {
-      marginRight: Spacing[2],
-    },
-    tabLabel: {
-      fontWeight: Typography.weights.semibold,
-    },
-    activeTabLabel: { color: colors.card },
-    inactiveTabLabel: { color: colors.text },
-    tabCount: {
-      marginLeft: Spacing[2],
-      fontWeight: Typography.weights.bold,
-      backgroundColor: colors.card,
-      color: colors.primary,
-      paddingHorizontal: Spacing[2],
-      paddingVertical: scale(1),
-      borderRadius: BorderRadius.full,
-      minWidth: scale(20),
-      textAlign: 'center',
-    },
-    activeTabCount: {
-      backgroundColor: colors.card,
-      color: colors.primary,
-    },
-    inactiveTabCount: {
-      backgroundColor: colors.border,
-      color: colors.text,
-    },
-    shadowContainer: {
-      ...Shadows.sm,
-    },
-  });
-
-// Hook combinato
-const useTabStyles = () => {
-  const { colors } = useTheme();
-  const baseStyles = createBaseStyles();
-  const colorStyles = createColorStyles(colors);
-
-  return { ...baseStyles, ...colorStyles };
-};
+// Stili statici con Colors tokens interni
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: PerfectSpacing.base,
+  },
+  scrollView: {
+    paddingHorizontal: PerfectSpacing.base,
+  },
+  scrollContent: {
+    paddingRight: PerfectSpacing.base,
+  },
+  tabContainer: {
+    marginRight: PerfectSpacing.md,
+  },
+  tabContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tab: {
+    borderRadius: BorderRadius.full,
+    paddingHorizontal: PerfectSpacing.base,
+    paddingVertical: PerfectSpacing.md,
+    minHeight: scale(44),
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderWidth: scale(1),
+  },
+  activeTab: {
+    backgroundColor: Colors.primary[600],
+    borderColor: Colors.primary[600],
+    ...Shadows.sm,
+  },
+  inactiveTab: {
+    backgroundColor: Colors.neutral[0],
+    borderColor: Colors.neutral[200],
+  },
+  tabIcon: {
+    marginRight: PerfectSpacing.sm,
+  },
+  tabLabel: {
+    fontWeight: Typography.weights.semibold,
+  },
+  activeTabLabel: {
+    color: Colors.neutral[0],
+  },
+  inactiveTabLabel: {
+    color: Colors.neutral[900],
+  },
+  tabCount: {
+    marginLeft: PerfectSpacing.sm,
+    fontWeight: Typography.weights.bold,
+    paddingHorizontal: PerfectSpacing.sm,
+    paddingVertical: scale(1),
+    borderRadius: BorderRadius.full,
+    minWidth: scale(20),
+    textAlign: 'center',
+  },
+  activeTabCount: {
+    backgroundColor: Colors.neutral[0],
+    color: Colors.primary[600],
+  },
+  inactiveTabCount: {
+    backgroundColor: Colors.neutral[200],
+    color: Colors.neutral[900],
+  },
+});
 
 // Componente singolo tab
 interface TabItemProps {
@@ -104,26 +95,16 @@ interface TabItemProps {
   isActive: boolean;
   onPress: () => void;
   showCounts: boolean;
-  styles: ReturnType<typeof useTabStyles>;
 }
 
-const TabItem: React.FC<TabItemProps> = ({
-  tab,
-  isActive,
-  onPress,
-  showCounts,
-  styles,
-}) => (
+const TabItem: React.FC<TabItemProps> = React.memo(
+  ({ tab, isActive, onPress, showCounts }) => (
   <PerfectContainer style={styles.tabContainer}>
     <TouchableRipple
       onPress={onPress}
       borderless
       rippleColor="transparent"
-      style={[
-        styles.tab,
-        isActive ? styles.activeTab : styles.inactiveTab,
-        styles.shadowContainer,
-      ]}
+      style={[styles.tab, isActive ? styles.activeTab : styles.inactiveTab]}
       accessible
       accessibilityRole="tab"
       accessibilityLabel={tab.label || 'Categoria senza nome'}
@@ -174,7 +155,10 @@ const TabItem: React.FC<TabItemProps> = ({
       </PerfectContainer>
     </TouchableRipple>
   </PerfectContainer>
+  )
 );
+
+TabItem.displayName = 'TabItem';
 
 export const FilterTabs: React.FC<FilterTabsProps> = ({
   tabs,
@@ -182,7 +166,6 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   onTabPress,
   showCounts = true,
 }) => {
-  const styles = useTabStyles();
 
   const createTabPressHandler = useCallback(
     (tabId: string) => () => onTabPress(tabId),
@@ -204,7 +187,6 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
             isActive={tab.id === activeTab}
             onPress={createTabPressHandler(tab.id)}
             showCounts={showCounts}
-            styles={styles}
           />
         ))}
       </ScrollView>

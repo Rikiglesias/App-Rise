@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import type { ProjectProgressProps } from './types';
 import { PerfectText } from '@/components/ui/PerfectText';
 import { PerfectContainer } from '@/components/ui/PerfectContainer';
-import { BorderRadius, Spacing } from '@/shared/constants';
+import { BorderRadius, PerfectSpacing } from '@/shared/constants';
 import { useTheme } from '@/shared/hooks/useTheme';
 
 export const ProjectProgress: React.FC<ProjectProgressProps> = ({
@@ -15,11 +15,11 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
 
   const styles = StyleSheet.create({
     progressContainer: {
-      marginTop: Spacing[2],
+      marginTop: PerfectSpacing.sm,
     },
     progressLabel: {
       color: colors.neutral[600],
-      marginBottom: Spacing[2],
+      marginBottom: PerfectSpacing.sm,
       textAlign: 'center',
     },
     progressBar: {

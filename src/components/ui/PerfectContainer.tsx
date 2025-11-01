@@ -16,7 +16,7 @@ import {
   DimensionValue,
   StyleSheet,
 } from 'react-native';
-import { scale } from '../../shared/constants/perfectScale';
+import { scale, scaleSpacing, scaleTouch } from '../../shared/constants/perfectScale';
 import {
   getPerfectShadow,
   type ShadowType,
@@ -34,6 +34,10 @@ interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
 
   /** Margin esterno (riferimento iPhone 15) */
   margin?: number;
+  marginTop?: number;
+  marginBottom?: number;
+  marginLeft?: number;
+  marginRight?: number;
   marginHorizontal?: number;
   marginVertical?: number;
 
@@ -71,39 +75,39 @@ interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
   style?: ViewStyle | ViewStyle[];
 }
 
-// 🎨 PRESET CONTAINER (riferimento iPhone 15)
+// 🎨 PRESET CONTAINER (riferimento iPhone 15) - Device-aware automatico
 const CONTAINER_PRESETS = {
   page: {
-    padding: scale(20),
+    padding: scaleSpacing(20),
     backgroundColor: 'primary' as const,
     flex: 1,
   },
   card: {
-    padding: scale(16),
+    padding: scaleSpacing(16),
     backgroundColor: 'card' as const,
     borderRadius: scale(12),
     shadow: 'light' as const,
   },
   section: {
-    padding: scale(16),
+    padding: scaleSpacing(16),
     marginVertical: scale(8),
     backgroundColor: 'transparent' as const,
   },
   modal: {
-    padding: scale(24),
+    padding: scaleSpacing(24),
     backgroundColor: 'modal' as const,
     borderRadius: scale(16),
     shadow: 'strong' as const,
-    marginHorizontal: scale(20),
+    marginHorizontal: scaleSpacing(20),
   },
   header: {
-    paddingHorizontal: scale(20),
-    paddingVertical: scale(12),
+    paddingHorizontal: scaleSpacing(20),
+    paddingVertical: scaleSpacing(12),
     backgroundColor: 'primary' as const,
   },
   footer: {
-    paddingHorizontal: scale(20),
-    paddingVertical: scale(16),
+    paddingHorizontal: scaleSpacing(20),
+    paddingVertical: scaleSpacing(16),
     backgroundColor: 'secondary' as const,
   },
 } as const;
@@ -116,6 +120,10 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   paddingHorizontal,
   paddingVertical,
   margin,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
   marginHorizontal,
   marginVertical,
   width,
@@ -137,33 +145,40 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   // 🎯 RISOLVI PRESET O VALORI CUSTOM
   const config = preset ? CONTAINER_PRESETS[preset] : null;
 
-  // 📏 CALCOLA DIMENSIONI MILLIMETRICHE
-  const finalPadding = padding !== undefined ? scale(padding) : undefined;
+  // 📏 CALCOLA DIMENSIONI - Device-aware automatico
+  // Padding/Margin: scaleSpacing (limita su iPad)
+  const finalPadding = padding !== undefined ? scaleSpacing(padding) : undefined;
   const finalPaddingH = (() => {
-    if (paddingHorizontal !== undefined) return scale(paddingHorizontal);
+    if (paddingHorizontal !== undefined) return scaleSpacing(paddingHorizontal);
     if (config && 'padding' in config) return config.padding;
     return undefined;
   })();
   const finalPaddingV = (() => {
-    if (paddingVertical !== undefined) return scale(paddingVertical);
+    if (paddingVertical !== undefined) return scaleSpacing(paddingVertical);
     if (config && 'padding' in config) return config.padding;
     return undefined;
   })();
 
-  const finalMargin = margin !== undefined ? scale(margin) : undefined;
+  const finalMargin = margin !== undefined ? scaleSpacing(margin) : undefined;
+  const finalMarginTop = marginTop !== undefined ? scaleSpacing(marginTop) : undefined;
+  const finalMarginBottom = marginBottom !== undefined ? scaleSpacing(marginBottom) : undefined;
+  const finalMarginLeft = marginLeft !== undefined ? scaleSpacing(marginLeft) : undefined;
+  const finalMarginRight = marginRight !== undefined ? scaleSpacing(marginRight) : undefined;
   const finalMarginH = (() => {
-    if (marginHorizontal !== undefined) return scale(marginHorizontal);
+    if (marginHorizontal !== undefined) return scaleSpacing(marginHorizontal);
     if (config && 'marginHorizontal' in config) return config.marginHorizontal;
     return undefined;
   })();
   const finalMarginV = (() => {
-    if (marginVertical !== undefined) return scale(marginVertical);
+    if (marginVertical !== undefined) return scaleSpacing(marginVertical);
     if (config && 'marginVertical' in config) return config.marginVertical;
     return undefined;
   })();
 
+  // Width: scale puro (proporzionale)
   const finalWidth = typeof width === 'number' ? scale(width) : width;
-  const finalHeight = height ? scale(height) : undefined;
+  // Height: scaleTouch se è un touch target, altrimenti scale
+  const finalHeight = height ? scaleTouch(height) : undefined;
   const finalBorderRadius = (() => {
     if (borderRadius !== undefined) return scale(borderRadius);
     if (config && 'borderRadius' in config) return config.borderRadius;
@@ -213,6 +228,10 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
     ...(finalPaddingH && { paddingHorizontal: finalPaddingH }),
     ...(finalPaddingV && { paddingVertical: finalPaddingV }),
     ...(finalMargin && { margin: finalMargin }),
+    ...(finalMarginTop && { marginTop: finalMarginTop }),
+    ...(finalMarginBottom && { marginBottom: finalMarginBottom }),
+    ...(finalMarginLeft && { marginLeft: finalMarginLeft }),
+    ...(finalMarginRight && { marginRight: finalMarginRight }),
     ...(finalMarginH && { marginHorizontal: finalMarginH }),
     ...(finalMarginV && { marginVertical: finalMarginV }),
 

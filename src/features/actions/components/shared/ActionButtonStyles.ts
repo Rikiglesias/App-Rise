@@ -1,24 +1,24 @@
 import { StyleSheet } from 'react-native';
 import type { ButtonStyles } from './ActionButtonTypes';
-import { Colors, Spacing, Typography } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { Colors, PerfectSpacing, Typography } from '@/shared/constants';
+import { scale, scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
 import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 
 export const createActionButtonStyles = (): ButtonStyles => {
   return StyleSheet.create({
     container: {
-      paddingHorizontal: Spacing[4],
-      gap: Spacing[2],
-      paddingTop: Spacing[2],
-      paddingBottom: Spacing[4],
+      paddingHorizontal: PerfectSpacing.base,
+      gap: PerfectSpacing.sm,
+      paddingTop: PerfectSpacing.sm,
+      paddingBottom: PerfectSpacing.base,
     },
     categoryContainer: {
-      marginBottom: Spacing[6],
+      marginBottom: PerfectSpacing.lg,
     },
     categoryHeader: {
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: Spacing[12],
+      marginBottom: PerfectSpacing['3xl'],
       position: 'relative',
     },
 
@@ -26,8 +26,8 @@ export const createActionButtonStyles = (): ButtonStyles => {
     donateTitleContainer: {
       alignItems: 'center',
       backgroundColor: Colors.primary[50],
-      paddingVertical: Spacing[2],
-      paddingHorizontal: Spacing[3],
+      paddingVertical: PerfectSpacing.sm,
+      paddingHorizontal: PerfectSpacing.md,
       width: '70%', // Riduce visivamente la lunghezza del container
       borderRadius: scale(16),
       borderWidth: scale(1),
@@ -39,22 +39,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       elevation: 3,
     },
 
-    // STILE ANDROID-SPECIFIC PER DONA (colori più delicati)
-    donateTitleContainerAndroid: {
-      alignItems: 'center',
-      backgroundColor: Colors.primary[50],
-      paddingVertical: Spacing[2],
-      paddingHorizontal: Spacing[3],
-      width: '70%',
-      borderRadius: scale(16),
-      borderWidth: scale(1),
-      borderColor: Colors.primary[200],
-      shadowColor: Colors.primary[600],
-      shadowOffset: { width: 0, height: scale(2) },
-      shadowOpacity: 0.08,
-      shadowRadius: scale(8),
-      elevation: 3,
-    },
+    // ELIMINATO: donateTitleContainerAndroid - ora iOS e Android usano stesso stile
 
     // TITOLO CATEGORIA DONA ELEGANTE - PIÙ GRASSETTO
     donateCategoryTitle: {
@@ -72,7 +57,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       color: Colors.primary[700],
       textAlign: 'center',
       letterSpacing: scale(0.2),
-      marginTop: Spacing[1],
+      marginTop: PerfectSpacing.xs,
       opacity: 0.8,
     },
 
@@ -106,17 +91,17 @@ export const createActionButtonStyles = (): ButtonStyles => {
       fontWeight: Typography.weights.medium,
       color: Colors.neutral[600],
       textAlign: 'center',
-      marginTop: Spacing[3],
+      marginTop: PerfectSpacing.md,
       opacity: 0.9,
       letterSpacing: scale(0.1),
     },
 
     infoButton: {
       position: 'absolute',
-      right: scale(45),
-      top: scale(8),
-      width: scale(24),
-      height: scale(24),
+      right: scaleSpacing(45),
+      top: scaleSpacing(8),
+      width: scaleTouch(24),
+      height: scaleTouch(24),
       borderRadius: scale(12),
       backgroundColor: Colors.primary[600],
       justifyContent: 'center',
@@ -131,11 +116,11 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
 
     buttonsGrid: {
-      gap: Spacing[4],
+      gap: PerfectSpacing.base,
     },
     buttonRow: {
       flexDirection: 'row',
-      gap: Spacing[4],
+      gap: PerfectSpacing.base,
     },
     buttonContainer: {
       flex: 1,
@@ -154,13 +139,13 @@ export const createActionButtonStyles = (): ButtonStyles => {
       // Nota: proprietà di rasterizzazione rimosse per compatibilità tipizzazioni
     },
     buttonContent: {
-      paddingVertical: Spacing[4],
-      paddingHorizontal: Spacing[3],
+      paddingVertical: PerfectSpacing.base,
+      paddingHorizontal: PerfectSpacing.md,
       alignItems: 'center',
       justifyContent: 'center',
     },
     buttonIcon: {
-      marginBottom: Spacing[3],
+      marginBottom: PerfectSpacing.md,
     },
     buttonTitle: {
       fontWeight: Typography.weights.bold,
@@ -178,7 +163,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       fontWeight: Typography.weights.medium,
       color: Colors.neutral[700], // GRIGIO SCURO per leggibilità
       textAlign: 'center',
-      marginTop: Spacing[3],
+      marginTop: PerfectSpacing.md,
       opacity: 0.9,
       letterSpacing: scale(0.1),
     },
@@ -187,16 +172,16 @@ export const createActionButtonStyles = (): ButtonStyles => {
     sectionDivider: {
       height: scale(2),
       backgroundColor: Colors.neutral[200],
-      marginVertical: Spacing[2],
-      marginHorizontal: Spacing[6],
+      marginVertical: PerfectSpacing.sm,
+      marginHorizontal: PerfectSpacing.lg,
     },
 
     // LINEA TRA SEZIONI - IDENTICA A SECTIONDIVIDER
     firstSectionDivider: {
       height: scale(2),
       backgroundColor: Colors.neutral[200],
-      marginVertical: Spacing[2],
-      marginHorizontal: Spacing[6],
+      marginVertical: PerfectSpacing.sm,
+      marginHorizontal: PerfectSpacing.lg,
     },
 
     // STILI PER INLINE STYLES
@@ -209,16 +194,16 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     chevronPosition: {
       position: 'absolute',
-      top: scale(8),
-      right: scale(8),
+      top: scaleSpacing(8),
+      right: scaleSpacing(8),
     },
 
     // CONTAINER BACKGROUND ESPLORA
     exploreHeaderBackground: {
       backgroundColor: Colors.neutral[50],
       borderRadius: scale(20),
-      paddingVertical: Spacing[4],
-      paddingHorizontal: Spacing[6],
+      paddingVertical: PerfectSpacing.base,
+      paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
       borderColor: Colors.neutral[100],
       shadowColor: Colors.neutral[700],
@@ -228,27 +213,14 @@ export const createActionButtonStyles = (): ButtonStyles => {
       elevation: 2,
     },
 
-    // STILE ANDROID-SPECIFIC PER ESPLORA
-    exploreHeaderBackgroundAndroid: {
-      backgroundColor: Colors.neutral[100],
-      borderRadius: scale(20),
-      paddingVertical: Spacing[4],
-      paddingHorizontal: Spacing[6],
-      borderWidth: scale(1),
-      borderColor: Colors.neutral[200],
-      shadowColor: Colors.neutral[700],
-      shadowOffset: { width: 0, height: scale(2) },
-      shadowOpacity: 0.05,
-      shadowRadius: scale(8),
-      elevation: 2,
-    },
+    // ELIMINATO: exploreHeaderBackgroundAndroid - uniformità iOS/Android
 
     // CONTAINER BACKGROUND COMMUNITY
     communityHeaderBackground: {
       backgroundColor: Colors.neutral[50],
       borderRadius: scale(20),
-      paddingVertical: Spacing[4],
-      paddingHorizontal: Spacing[6],
+      paddingVertical: PerfectSpacing.base,
+      paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
       borderColor: Colors.neutral[100],
       shadowColor: Colors.neutral[900],
@@ -259,27 +231,13 @@ export const createActionButtonStyles = (): ButtonStyles => {
       position: 'relative',
     },
 
-    // STILE ANDROID-SPECIFIC PER COMMUNITY
-    communityHeaderBackgroundAndroid: {
-      backgroundColor: Colors.neutral[100],
-      borderRadius: scale(20),
-      paddingVertical: Spacing[4],
-      paddingHorizontal: Spacing[6],
-      borderWidth: scale(1),
-      borderColor: Colors.neutral[200],
-      shadowColor: Colors.neutral[900],
-      shadowOffset: { width: 0, height: scale(2) },
-      shadowOpacity: 0.05,
-      shadowRadius: scale(8),
-      elevation: 2,
-      position: 'relative',
-    },
+    // ELIMINATO: communityHeaderBackgroundAndroid - uniformità iOS/Android
 
     // ICONA LINK COMMUNITY - ESTREMO ANGOLO SUPERIORE DESTRO
     communityChevron: {
       position: 'absolute',
-      top: scale(8),
-      right: scale(12),
+      top: scaleSpacing(8),
+      right: scaleSpacing(12),
       opacity: 0.7,
     },
   });

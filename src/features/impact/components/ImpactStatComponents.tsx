@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import type { StatButtonProps } from '../types/ImpactScreenTypes';
+import { IMPACT_DATA } from '../data/impactData';
 import {
   PlatformTouchable,
   PerfectText,
@@ -10,14 +11,13 @@ import {
 } from '@/components/ui';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 
-import { IMPACT_DATA } from '../data/impactData';
 import {
   BorderRadius,
   Colors,
   Shadows,
-  Spacing,
+  PerfectSpacing,
 } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { scale, scaleTouch } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
 export const StatButton: React.FC<StatButtonProps> = ({
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   statButton: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl,
-    padding: Spacing[4],
+    padding: PerfectSpacing.base,
     ...Shadows.md,
   },
   statButtonContent: {
@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconContainer: {
-    width: scale(50),
-    height: scale(50),
+    width: scaleTouch(50),
+    height: scaleTouch(50),
     borderRadius: BorderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing[4],
+    marginRight: PerfectSpacing.base,
   },
   textContainer: {
     flex: 1,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   storyContent: {
     flex: 1,
     justifyContent: 'flex-end',
-    padding: Spacing[4],
+    padding: PerfectSpacing.base,
   },
   storyLocation: {
     color: Colors.neutral[200],
@@ -197,22 +197,22 @@ const styles = StyleSheet.create({
   },
   storyTitle: {
     color: Colors.neutral[0],
-    marginTop: Spacing[1],
+    marginTop: PerfectSpacing.xs,
   },
   storyText: {
     color: Colors.neutral[100],
-    marginTop: Spacing[2],
+    marginTop: PerfectSpacing.sm,
   },
   milestoneCard: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.lg,
-    padding: Spacing[4],
+    padding: PerfectSpacing.base,
     ...Shadows.sm,
   },
   milestoneContent: {
-    marginLeft: Spacing[4],
+    marginLeft: PerfectSpacing.base,
     flex: 1,
   },
   milestoneTitle: {

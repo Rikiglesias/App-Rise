@@ -1,10 +1,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
-import { Animated, Platform, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
@@ -140,13 +141,13 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
 const styles = StyleSheet.create({
   // Record 2024 Section - INGRANDITA
   record2024Section: {
-    paddingHorizontal: Spacing[4],
-    marginTop: Spacing[6],
-    marginBottom: Spacing[8],
+    paddingHorizontal: PerfectSpacing.base,
+    marginTop: PerfectSpacing.lg,
+    marginBottom: PerfectSpacing.xl,
   },
   record2024Grid: {
     flexDirection: 'row',
-    gap: Spacing[3],
+    gap: PerfectSpacing.md,
   },
   record2024Card: {
     flex: 1,
@@ -154,8 +155,8 @@ const styles = StyleSheet.create({
   record2024CardContent: {
     backgroundColor: Colors.neutral[50],
     borderRadius: BorderRadius.lg,
-    paddingVertical: Spacing[3],
-    paddingHorizontal: Spacing[2],
+    paddingVertical: PerfectSpacing.md,
+    paddingHorizontal: PerfectSpacing.sm,
     alignItems: 'center',
     borderWidth: scale(1),
     borderColor: Colors.neutral[200],
@@ -163,41 +164,35 @@ const styles = StyleSheet.create({
   },
   record2024Value: {
     color: Colors.neutral[800],
-    marginTop: Spacing[1],
-    marginBottom: Spacing[1],
+    marginTop: PerfectSpacing.xs,
+    marginBottom: PerfectSpacing.xs,
     textAlign: 'center',
   },
   record2024Label: {
     color: Colors.neutral[700],
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
     textAlign: 'center',
     flexWrap: 'wrap',
   },
   record2024Description: {
     color: Colors.neutral[500],
     textAlign: 'center',
-    marginTop: Spacing[1],
-    paddingHorizontal: Spacing[1],
+    marginTop: PerfectSpacing.xs,
+    paddingHorizontal: PerfectSpacing.xs,
   },
 
   // Results 2024 Section - DRAMATICALLY ENHANCED
   results2024HeaderContainer: {
     alignItems: 'center',
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   results2024HeaderBackground: {
-    backgroundColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[100]
-        : Colors.neutral[50],
+    backgroundColor: Colors.neutral[50],
     borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[6],
+    paddingVertical: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[200]
-        : Colors.neutral[100],
+    borderColor: Colors.neutral[100],
     ...Shadows.sm,
   },
   results2024Title: {
@@ -210,7 +205,7 @@ const styles = StyleSheet.create({
   results2024Subtitle: {
     color: Colors.neutral[600],
     textAlign: 'center',
-    marginTop: Spacing[3],
+    marginTop: PerfectSpacing.md,
     opacity: 0.9,
     letterSpacing: scale(0.1),
   },

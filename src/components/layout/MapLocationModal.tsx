@@ -4,10 +4,10 @@ import React, { useCallback } from 'react';
 import { Modal, StyleSheet } from 'react-native';
 import { PlatformTouchable, PerfectText, PerfectContainer } from '../ui';
 
-import type { MapModalData } from '@/features/impact/data/mapModalData';
-import { Colors, Spacing, BorderRadius, Shadows } from '../../shared/constants';
+import { Colors, PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { logDebug } from '../../shared/utils/logger';
+import type { MapModalData } from '@/features/impact/data/mapModalData';
 
 interface MapLocationModalProps {
   visible: boolean;
@@ -43,7 +43,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
           start={gradientStart}
           end={gradientEnd}
-          style={[styles.header, { paddingHorizontal: Spacing[4] }]}
+          style={styles.header}
         >
           <PerfectContainer style={styles.headerContent}>
             <PerfectContainer style={styles.headerLeft}>
@@ -82,7 +82,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
             >
               <MaterialCommunityIcons
                 name="close"
-                size={24}
+                size={scale(24)}
                 color={Colors.neutral[0]}
               />
             </PlatformTouchable>
@@ -90,15 +90,13 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
         </LinearGradient>
 
         {/* Contenuto semplificato */}
-        <PerfectContainer
-          style={[styles.content, { paddingHorizontal: Spacing[6] }]}
-        >
+        <PerfectContainer style={styles.content}>
           {/* Descrizione breve - max 2 righe */}
           <PerfectText
             size={16}
             lines={3}
             fontWeight="400"
-            style={[styles.description, { paddingHorizontal: Spacing[4] }]}
+            style={styles.description}
           >
             Scopri il nostro impatto in {data.title} attraverso programmi di
             lotta alla fame e sviluppo sostenibile.
@@ -112,7 +110,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           >
             <MaterialCommunityIcons
               name="open-in-new"
-              size={20}
+              size={scale(20)}
               color={Colors.neutral[0]}
               style={styles.ctaIcon}
             />
@@ -139,9 +137,9 @@ const styles = StyleSheet.create({
 
   // Header compatto
   header: {
-    paddingTop: Spacing[12],
-    paddingBottom: Spacing[6],
-    paddingHorizontal: Spacing[4],
+    paddingTop: PerfectSpacing['3xl'],
+    paddingBottom: PerfectSpacing.lg,
+    paddingHorizontal: PerfectSpacing.base,
   },
   headerContent: {
     flexDirection: 'row',
@@ -154,14 +152,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flag: {
-    marginRight: Spacing[3],
+    marginRight: PerfectSpacing.md,
   },
   headerTextContainer: {
     flex: 1,
   },
   title: {
     color: Colors.neutral[0],
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   subtitle: {
     color: Colors.neutral[100],
@@ -171,6 +169,7 @@ const styles = StyleSheet.create({
     width: scale(40),
     height: scale(40),
     borderRadius: scale(20),
+    // rgba necessario per background semi-trasparente senza rendere opaca l'icona
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -179,8 +178,8 @@ const styles = StyleSheet.create({
   // Contenuto semplificato
   content: {
     flex: 1,
-    paddingHorizontal: Spacing[6],
-    paddingTop: Spacing[8],
+    paddingHorizontal: PerfectSpacing.lg,
+    paddingTop: PerfectSpacing.xl,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -189,15 +188,15 @@ const styles = StyleSheet.create({
   description: {
     color: Colors.neutral[700],
     textAlign: 'center',
-    marginBottom: Spacing[10],
-    paddingHorizontal: Spacing[4],
+    marginBottom: PerfectSpacing['2xl'],
+    paddingHorizontal: PerfectSpacing.base,
   },
 
   // Call to Action button
   ctaButton: {
     backgroundColor: Colors.primary[600],
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[8],
+    paddingVertical: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.xl,
     borderRadius: BorderRadius.lg,
     flexDirection: 'row',
     alignItems: 'center',
@@ -206,7 +205,7 @@ const styles = StyleSheet.create({
     minWidth: scale(280),
   },
   ctaIcon: {
-    marginRight: Spacing[2],
+    marginRight: PerfectSpacing.sm,
   },
   ctaText: {
     color: Colors.neutral[0],

@@ -3,7 +3,7 @@ import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import MapView, { Marker, type Region } from 'react-native-maps';
 import { PerfectContainer } from '../ui/PerfectContainer';
 
-import { BorderRadius, Colors, Shadows, Spacing } from '../../shared/constants';
+import { BorderRadius, Colors, Shadows, PerfectSpacing } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText } from '../ui/PerfectText';
 
@@ -56,7 +56,7 @@ const getMarkerColor = (location: Location) => {
 // Componente per il marker semplice ma bello
 const SimpleMarker: React.FC<{ location: Location }> = React.memo(
   ({ location }) => {
-    const markerColor = useMemo(() => getMarkerColor(location), [location]);
+    const markerColor = getMarkerColor(location);
 
     return (
       <PerfectContainer style={styles.markerContainer}>
@@ -212,9 +212,9 @@ const styles = StyleSheet.create({
   countryLabel: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.sm,
-    paddingHorizontal: Spacing[2],
-    paddingVertical: Spacing[1],
-    marginTop: Spacing[1],
+    paddingHorizontal: PerfectSpacing.sm,
+    paddingVertical: PerfectSpacing.xs,
+    marginTop: PerfectSpacing.xs,
     borderWidth: scale(1),
     borderColor: Colors.neutral[200],
     ...Shadows.sm,

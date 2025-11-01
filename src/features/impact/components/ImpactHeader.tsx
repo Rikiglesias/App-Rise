@@ -1,11 +1,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Platform, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 // Ratio inline per evitare dipendenze condivise
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
 
 interface Props {
@@ -87,9 +88,9 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignSelf: 'stretch',
     width: '100%',
-    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[20] + scale(12),
-    paddingHorizontal: Spacing[4],
-    paddingBottom: Spacing[6],
+    paddingTop: PerfectSpacing['5xl'] + scale(12),
+    paddingHorizontal: PerfectSpacing.base,
+    paddingBottom: PerfectSpacing.lg,
     alignItems: 'center',
     position: 'relative',
   },
@@ -99,32 +100,26 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    opacity: Platform.OS === 'android' ? 0.01 : 0.02,
+    opacity: 0.02,
   },
   mainHeaderContainer: {
     alignSelf: 'stretch',
     width: '100%',
     alignItems: 'center',
     height: HEADER_INNER_HEIGHT,
-    backgroundColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[100]
-        : Colors.neutral[50],
-    paddingHorizontal: Spacing[4],
+    backgroundColor: Colors.neutral[50],
+    paddingHorizontal: PerfectSpacing.base,
     paddingTop: HEADER_VERTICAL_PADDING,
     paddingBottom: HEADER_VERTICAL_PADDING,
     borderRadius: BorderRadius.lg,
     borderWidth: scale(1),
-    borderColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[200]
-        : Colors.neutral[100],
+    borderColor: Colors.neutral[100],
     ...Shadows.sm,
   },
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
   },
   titleText: {
     color: Colors.neutral[800],
@@ -142,7 +137,7 @@ const styles = StyleSheet.create({
     color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: 0,
-    marginTop: Spacing[3],
+    marginTop: PerfectSpacing.md,
     opacity: 0.8,
     includeFontPadding: false,
   },

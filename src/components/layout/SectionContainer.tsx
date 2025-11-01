@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
+import { BorderRadius } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { useTheme } from '../../shared/hooks/useTheme';
 import { PerfectContainer } from '../ui/PerfectContainer';
@@ -18,33 +19,33 @@ const getSpacingConfig = (spacing: SectionContainerProps['spacing']) => {
   switch (spacing) {
     case 'compact':
       return {
-        vertical: Spacing[2],
-        horizontal: Spacing[3],
+        vertical: PerfectSpacing.sm,
+        horizontal: PerfectSpacing.md,
       };
     case 'standard':
       return {
-        vertical: Spacing[4],
-        horizontal: Spacing[4],
+        vertical: PerfectSpacing.base,
+        horizontal: PerfectSpacing.base,
       };
     case 'large':
       return {
-        vertical: Spacing[6],
-        horizontal: Spacing[6],
+        vertical: PerfectSpacing.lg,
+        horizontal: PerfectSpacing.lg,
       };
     case 'hero':
       return {
-        vertical: Spacing[8],
-        horizontal: Spacing[8],
+        vertical: PerfectSpacing.xl,
+        horizontal: PerfectSpacing.xl,
       };
     case 'golden':
       return {
-        vertical: Spacing[10],
-        horizontal: Spacing[4],
+        vertical: PerfectSpacing['2xl'],
+        horizontal: PerfectSpacing.base,
       };
     default:
       return {
-        vertical: Spacing[4],
-        horizontal: Spacing[4],
+        vertical: PerfectSpacing.base,
+        horizontal: PerfectSpacing.base,
       };
   }
 };
@@ -143,7 +144,7 @@ export const SectionContainer: React.FC<SectionContainerProps> = ({
   // 🎁 WRAPPER INTERNO PER PADDING
   const innerWrapperStyle = {
     ...(variant !== 'default' && {
-      padding: Spacing[6],
+      padding: PerfectSpacing.lg,
       borderRadius: getBorderRadiusForVariant(variantStyles),
       overflow: 'hidden' as const,
     }),

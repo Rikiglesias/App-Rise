@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Platform, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import {
@@ -9,7 +9,8 @@ import {
   PlatformTouchable,
   PerfectContainer,
 } from '@/components/ui';
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
@@ -198,8 +199,8 @@ const styles = StyleSheet.create({
   titleSeparator: {
     height: scale(2),
     backgroundColor: Colors.neutral[200],
-    marginVertical: Spacing[2],
-    marginHorizontal: Spacing[6],
+    marginVertical: PerfectSpacing.sm,
+    marginHorizontal: PerfectSpacing.lg,
     borderRadius: BorderRadius.sm,
   }, 
   // Container divisorio - allineato a pagina Azioni (sectionDivider)
@@ -211,13 +212,13 @@ const styles = StyleSheet.create({
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
   totalMealsSection: {
-    paddingHorizontal: Spacing[4],
-    marginBottom: Spacing[2], // Compact sections spacing
+    paddingHorizontal: PerfectSpacing.base,
+    marginBottom: PerfectSpacing.sm, // Compact sections spacing
   },
 
   totalStatsRow: {
     flexDirection: 'row',
-    gap: Spacing[4],
+    gap: PerfectSpacing.base,
   },
   totalStatCard: {
     flex: 1,
@@ -230,19 +231,19 @@ const styles = StyleSheet.create({
   totalCardContent: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - scale(2),
-    paddingVertical: Spacing[3],
+    paddingVertical: PerfectSpacing.md,
     alignItems: 'center',
   },
   totalCardIcon: {
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
   },
   totalStatValue: {
     color: Colors.neutral[800],
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
   },
   totalStatLabel: {
     color: Colors.neutral[700],
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
   totalStatSubtitle: {
     color: Colors.neutral[500],
@@ -251,22 +252,16 @@ const styles = StyleSheet.create({
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
   numbersHeaderContainer: {
     alignItems: 'center',
-    marginTop: Spacing[6], // Generous spacing before section title
-    marginBottom: Spacing[10], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
+    marginTop: PerfectSpacing.lg, // Generous spacing before section title
+    marginBottom: PerfectSpacing['2xl'], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
   },
   numbersHeaderBackground: {
-    backgroundColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[100]
-        : Colors.neutral[50],
+    backgroundColor: Colors.neutral[50],
     borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[6],
+    paddingVertical: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[200]
-        : Colors.neutral[100],
+    borderColor: Colors.neutral[100],
     ...Shadows.sm,
   },
   numbersTitle: {
@@ -280,14 +275,14 @@ const styles = StyleSheet.create({
     // fontSize rimosso - ora gestito da Text
     color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
-    marginTop: Spacing[3],
+    marginTop: PerfectSpacing.md,
     opacity: 0.9,
     letterSpacing: scale(0.1),
   },
 
   chevronIcon: {
     position: 'absolute',
-    top: Spacing[2],
-    right: Spacing[2],
+    top: PerfectSpacing.sm,
+    right: PerfectSpacing.sm,
   },
 });

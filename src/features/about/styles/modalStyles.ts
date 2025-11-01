@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 import {
+  BorderRadius,
   Colors,
+  Shadows,
   Typography,
-  Spacing,
 } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 /**
@@ -16,7 +18,7 @@ export const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacing[4],
+    paddingHorizontal: PerfectSpacing.base,
   },
 
   backdropTouchable: {
@@ -33,6 +35,7 @@ export const modalStyles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    // rgba necessario per backdrop modal semi-trasparente
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
 
@@ -46,7 +49,7 @@ export const modalStyles = StyleSheet.create({
 
   modalGradientBorder: {
     borderRadius: scale(24),
-    padding: Spacing[1],
+    padding: PerfectSpacing.xs,
     height: '100%',
     minHeight: scale(700),
   },
@@ -69,7 +72,7 @@ export const modalStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: Spacing[4],
+    padding: PerfectSpacing.base,
     borderBottomWidth: scale(1),
     borderBottomColor: Colors.neutral[200],
     position: 'relative',
@@ -84,13 +87,13 @@ export const modalStyles = StyleSheet.create({
     letterSpacing: scale(-0.8),
     flex: 1,
     textAlign: 'center',
-    paddingRight: Spacing[8],
+    paddingRight: PerfectSpacing.xl,
   },
 
   closeButton: {
     position: 'absolute',
-    top: Spacing[3],
-    right: Spacing[3],
+    top: PerfectSpacing.md,
+    right: PerfectSpacing.md,
     width: scale(32),
     height: scale(32),
     borderRadius: scale(16),
@@ -105,18 +108,18 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyContainer: {
-    padding: Spacing[6],
-    gap: Spacing[4],
+    padding: PerfectSpacing.lg,
+    gap: PerfectSpacing.base,
     minHeight: scale(800),
     flexGrow: 1,
-    paddingBottom: Spacing[12],
+    paddingBottom: PerfectSpacing['3xl'],
   },
 
   storyTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
 
   storyText: {
@@ -135,17 +138,17 @@ export const modalStyles = StyleSheet.create({
   sectionTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
 
   sectionDivider: {
     height: scale(1),
     backgroundColor: Colors.neutral[200],
-    marginVertical: Spacing[4],
+    marginVertical: PerfectSpacing.base,
   },
 
   finalMessageContainer: {
-    marginTop: Spacing[6],
+    marginTop: PerfectSpacing.lg,
     alignItems: 'center',
   },
 
@@ -161,19 +164,19 @@ export const modalStyles = StyleSheet.create({
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
-    marginBottom: Spacing[4],
+    marginBottom: PerfectSpacing.base,
     fontStyle: 'italic',
   },
 
   pillarsContainer: {
-    gap: Spacing[4],
+    gap: PerfectSpacing.base,
   },
 
   pillarItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: Spacing[3],
-    marginBottom: Spacing[3],
+    gap: PerfectSpacing.md,
+    marginBottom: PerfectSpacing.md,
   },
 
   pillarIcon: {
@@ -183,7 +186,7 @@ export const modalStyles = StyleSheet.create({
   pillarTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
   },
 
   pillarContent: {

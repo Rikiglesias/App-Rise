@@ -2,9 +2,11 @@ import { useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import {
   BorderRadius,
-  Spacing,
+  Colors,
+  Shadows,
   Typography,
 } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
 
@@ -23,15 +25,15 @@ export const useProjectsScreenStyles = () => {
         },
         header: {
           backgroundColor: colors.primary[500],
-          paddingTop: Spacing[8],
-          paddingBottom: Spacing[6],
-          paddingHorizontal: Spacing[6],
+          paddingTop: PerfectSpacing.xl,
+          paddingBottom: PerfectSpacing.lg,
+          paddingHorizontal: PerfectSpacing.lg,
         },
         headerTitle: {
           fontWeight: Typography.weights.extrabold,
           color: colors.neutral[0],
           textAlign: 'center',
-          marginBottom: Spacing[2],
+          marginBottom: PerfectSpacing.sm,
         },
         headerSubtitle: {
           color: colors.primary[100],
@@ -41,7 +43,7 @@ export const useProjectsScreenStyles = () => {
         statsSurface: {
           borderRadius: BorderRadius.xl,
           backgroundColor: colors.neutral[0],
-          padding: Spacing[6],
+          padding: PerfectSpacing.lg,
           shadowColor: colors.neutral[900],
           shadowOffset: { width: 0, height: scale(4) },
           shadowOpacity: 0.08,
@@ -53,7 +55,7 @@ export const useProjectsScreenStyles = () => {
           fontWeight: Typography.weights.bold,
           color: colors.neutral[900],
           textAlign: 'center',
-          marginBottom: Spacing[4],
+          marginBottom: PerfectSpacing.base,
         },
         statsRow: {
           flexDirection: 'row',
@@ -67,7 +69,7 @@ export const useProjectsScreenStyles = () => {
         statNumber: {
           fontWeight: Typography.weights.bold,
           color: colors.primary[600],
-          marginBottom: Spacing[1],
+          marginBottom: PerfectSpacing.xs,
         },
         statLabel: {
           color: colors.neutral[600],
@@ -75,21 +77,21 @@ export const useProjectsScreenStyles = () => {
           fontWeight: Typography.weights.medium,
         },
         content: {
-          paddingHorizontal: Spacing[4],
-          paddingBottom: Platform.OS === 'android' ? Spacing[20] : Spacing[8],
+          paddingHorizontal: PerfectSpacing.base,
+          paddingBottom: Platform.OS === 'android' ? PerfectSpacing['5xl'] : PerfectSpacing.xl,
         },
         sectionTitle: {
           fontWeight: Typography.weights.bold,
           color: colors.neutral[900],
-          marginBottom: Spacing[2],
-          paddingHorizontal: Spacing[2],
+          marginBottom: PerfectSpacing.sm,
+          paddingHorizontal: PerfectSpacing.sm,
         },
         emptyState: {
           alignItems: 'center',
-          paddingVertical: Spacing[8],
+          paddingVertical: PerfectSpacing.xl,
         },
         emptyStateIcon: {
-          marginBottom: Spacing[4],
+          marginBottom: PerfectSpacing.base,
         },
         emptyStateText: {
           color: colors.neutral[600],

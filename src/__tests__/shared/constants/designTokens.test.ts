@@ -1,11 +1,11 @@
 import {
   Colors,
   Typography,
-  Spacing,
   BorderRadius,
   Shadows,
   Animations,
 } from '../../../shared/constants/designTokens';
+import { PerfectSpacing } from '../../../shared/constants';
 
 describe('Design Tokens - Colors', () => {
   it('should have primary color palette', () => {
@@ -87,21 +87,21 @@ describe('Design Tokens - Typography', () => {
 
 describe('Design Tokens - Spacing', () => {
   it('should have spacing scale', () => {
-    expect(Spacing).toBeDefined();
-    expect(Spacing[0]).toBe(0); // Zero should always be zero
+    expect(PerfectSpacing).toBeDefined();
+    expect(PerfectSpacing.none).toBe(0); // Zero should always be zero
     // Values are now responsive scaled, test types and relative order
-    expect(typeof Spacing[1]).toBe('number');
-    expect(typeof Spacing[2]).toBe('number');
-    expect(typeof Spacing[4]).toBe('number');
-    expect(typeof Spacing[8]).toBe('number');
+    expect(typeof PerfectSpacing.xs).toBe('number');
+    expect(typeof PerfectSpacing.sm).toBe('number');
+    expect(typeof PerfectSpacing.base).toBe('number');
+    expect(typeof PerfectSpacing.xl).toBe('number');
     // Ensure spacing increases correctly
-    expect(Spacing[1]).toBeLessThan(Spacing[2]);
-    expect(Spacing[2]).toBeLessThan(Spacing[4]);
-    expect(Spacing[4]).toBeLessThan(Spacing[8]);
+    expect(PerfectSpacing.xs).toBeLessThan(PerfectSpacing.sm);
+    expect(PerfectSpacing.sm).toBeLessThan(PerfectSpacing.base);
+    expect(PerfectSpacing.base).toBeLessThan(PerfectSpacing.xl);
   });
 
   it('should be numeric values', () => {
-    Object.values(Spacing).forEach(value => {
+    Object.values(PerfectSpacing).forEach(value => {
       expect(typeof value).toBe('number');
       expect(value).toBeGreaterThanOrEqual(0);
     });

@@ -1,74 +1,50 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 
 import {
   PerfectText,
   PerfectContainer,
   PerfectCardContainer,
 } from '@/components/ui';
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
-import { scale } from '@/shared/constants/perfectScale';
+import { Colors, BorderRadius, Shadows, PerfectSpacing } from '@/shared/constants';
+import { scale, scaleSpacing } from '@/shared/constants/perfectScale';
 
 export const ActionDescription: React.FC = () => {
   return (
-    <PerfectContainer preset="section" marginVertical={Spacing[4]} marginHorizontal={Spacing[1]}>
+    <PerfectContainer 
+      preset="section" 
+      marginVertical={PerfectSpacing.base} 
+      marginHorizontal={PerfectSpacing.xs}
+    >
       <PerfectCardContainer
         backgroundColor="card"
         shadow="medium"
-        padding={scale(40)}
+        padding={scaleSpacing(32)}
         borderRadius={BorderRadius.xl}
       >
-        {/* ✅ SISTEMA PERFETTO - Prima frase: andata a capo dopo "lotta " */}
         <PerfectText
-          size={18} // ← RIDOTTO DA 20 A 18 per evitare troncamento
+          size={18}
           fontWeight="bold"
-          lines={3} // ← AUMENTATO DA 2 A 3 per evitare taglio
+          lines={3}
           color={Colors.neutral[800]}
           textAlign="center"
-          style={styles.descriptionMain}
+          style={Shadows.sm}
         >
-          Unisciti a noi nella lotta {'\n'}contro la fame nel mondo
+          Unisciti a noi nella lotta {"\n"}contro la fame nel mondo
         </PerfectText>
 
-        {/* ✅ SISTEMA PERFETTO - Divider grigio standard (millimetrico, centrato) */}
-        <PerfectContainer style={styles.descriptionDivider} />
+        <PerfectContainer style={{ alignSelf: 'center', width: '40%', height: scale(2), marginVertical: scaleSpacing(20), borderRadius: scale(1), backgroundColor: Colors.neutral[300], opacity: 0.8 }} />
 
-        {/* ✅ SISTEMA PERFETTO - Seconda frase: andata a capo dopo "per" */}
         <PerfectText
-          size={16} // ← RIDOTTO DA 18 A 16 per evitare troncamento
+          size={16}
           fontWeight="600"
-          lines={3} // ← AUMENTATO DA 2 A 3 per evitare taglio
+          lines={3}
           color={Colors.neutral[500]}
           textAlign="center"
-          style={styles.descriptionSecondary}
+          style={{ fontStyle: 'italic', ...Shadows.sm }}
         >
-          Ogni azione conta per{'\n'}cambiare vite
+          Ogni azione conta per{"\n"}cambiare vite
         </PerfectText>
       </PerfectCardContainer>
     </PerfectContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  descriptionMain: {
-    letterSpacing: scale(-0.3),
-    ...Shadows.sm,
-  },
-
-  descriptionDivider: {
-    alignSelf: 'center',
-    width: scale(157), // 40% dello schermo reference
-    height: scale(2),
-    marginVertical: Spacing[5],
-    borderRadius: scale(1),
-    backgroundColor: Colors.neutral[300],
-    opacity: 0.8,
-    ...Shadows.sm,
-  },
-
-  descriptionSecondary: {
-    letterSpacing: scale(0.3),
-    fontStyle: 'italic' as const,
-    ...Shadows.sm,
-  },
-});

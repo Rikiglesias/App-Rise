@@ -235,7 +235,7 @@ describe('BottomTabNavigator', () => {
     });
 
     it('should apply minimum spacing when insets are zero', () => {
-      // Component uses Math.max(insets.bottom, Spacing[4])
+      // Component uses Math.max(insets.bottom, PerfectSpacing.base)
       const { getByTestId } = renderNavigator();
       expect(getByTestId('home-screen')).toBeTruthy();
     });

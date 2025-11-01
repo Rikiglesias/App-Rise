@@ -8,7 +8,7 @@ import {
 } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 
-import { BorderRadius, Colors, Shadows, Spacing } from '../../shared/constants';
+import { BorderRadius, Colors, Shadows, PerfectSpacing } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 
 interface Location {
@@ -242,20 +242,20 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: Colors.neutral[0],
-    paddingTop: Spacing[12],
-    paddingBottom: Spacing[4],
+    paddingTop: PerfectSpacing['3xl'],
+    paddingBottom: PerfectSpacing.base,
     ...Shadows.sm,
   },
   headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: Spacing[4],
+    paddingHorizontal: PerfectSpacing.base,
   },
   statusBadge: {
     backgroundColor: Colors.primary[600],
-    paddingHorizontal: Spacing[3],
-    paddingVertical: Spacing[1],
+    paddingHorizontal: PerfectSpacing.md,
+    paddingVertical: PerfectSpacing.xs,
     borderRadius: BorderRadius.full,
   },
   statusText: {
@@ -275,48 +275,45 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     height: scale(250),
-    margin: Spacing[4],
+    margin: PerfectSpacing.base,
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
     ...Shadows.lg,
-  },
-  heroImage: {
-    width: '100%',
-    height: '100%',
   },
   imageOverlay: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    padding: Spacing[4],
+    // rgba necessario per overlay gradient semi-trasparente su immagine
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: PerfectSpacing.base,
   },
   locationName: {
     color: Colors.neutral[0],
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
   },
   locationCountry: {
     color: Colors.neutral[200],
   },
   statsContainer: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing[4],
-    marginBottom: Spacing[6],
-    gap: Spacing[3],
+    paddingHorizontal: PerfectSpacing.base,
+    marginBottom: PerfectSpacing.lg,
+    gap: PerfectSpacing.md,
   },
   statCard: {
     flex: 1,
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl,
-    padding: Spacing[4],
+    padding: PerfectSpacing.base,
     alignItems: 'center',
     position: 'relative',
     ...Shadows.md,
   },
   statNumber: {
     color: Colors.primary[600],
-    marginBottom: Spacing[1],
+    marginBottom: PerfectSpacing.xs,
   },
   statLabel: {
     color: Colors.neutral[600],
@@ -324,32 +321,32 @@ const styles = StyleSheet.create({
   },
   statIcon: {
     position: 'absolute',
-    top: Spacing[2],
-    right: Spacing[2],
+    top: PerfectSpacing.sm,
+    right: PerfectSpacing.sm,
   },
   descriptionContainer: {
-    paddingHorizontal: Spacing[4],
-    marginBottom: Spacing[6],
+    paddingHorizontal: PerfectSpacing.base,
+    marginBottom: PerfectSpacing.lg,
   },
   sectionTitle: {
     color: Colors.neutral[900],
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
   },
   description: {
     color: Colors.neutral[700],
   },
 
   actionsContainer: {
-    paddingHorizontal: Spacing[4],
-    marginBottom: Spacing[6],
+    paddingHorizontal: PerfectSpacing.base,
+    marginBottom: PerfectSpacing.lg,
   },
   buttonGrid: {
-    gap: Spacing[3],
+    gap: PerfectSpacing.md,
   },
   primaryButton: {
     backgroundColor: Colors.primary[600],
     borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing[4],
+    paddingVertical: PerfectSpacing.base,
     alignItems: 'center',
     ...Shadows.md,
   },
@@ -359,7 +356,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing[4],
+    paddingVertical: PerfectSpacing.base,
     alignItems: 'center',
     borderWidth: scale(2),
     borderColor: Colors.primary[600],
@@ -368,7 +365,7 @@ const styles = StyleSheet.create({
     color: Colors.primary[600],
   },
   bottomSpacing: {
-    height: Spacing[8],
+    height: PerfectSpacing.xl,
   },
 });
 

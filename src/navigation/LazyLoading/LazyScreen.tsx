@@ -6,7 +6,8 @@
 import React, { Suspense } from 'react';
 import { StyleSheet } from 'react-native';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors, Spacing } from '@/shared/constants/designTokens';
+import { Colors  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { logger } from '@/shared/utils/logger';
 
 interface LazyScreenProps {
@@ -137,10 +138,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.neutral[50],
-    paddingHorizontal: Spacing[6],
+    paddingHorizontal: PerfectSpacing.lg,
   },
   loadingText: {
-    marginTop: Spacing[4],
+    marginTop: PerfectSpacing.base,
     color: Colors.neutral[600],
     textAlign: 'center',
   },
@@ -149,27 +150,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.neutral[50],
-    paddingHorizontal: Spacing[6],
+    paddingHorizontal: PerfectSpacing.lg,
   },
   errorTitle: {
-    color: '#DC2626', // Red-600 equivalent
+    color: Colors.primary[500],
     fontWeight: '600',
     textAlign: 'center',
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
   errorMessage: {
     color: Colors.neutral[600],
     textAlign: 'center',
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   retryButton: {
     backgroundColor: Colors.primary[500],
-    paddingHorizontal: Spacing[6],
-    paddingVertical: Spacing[3],
+    paddingHorizontal: PerfectSpacing.lg,
+    paddingVertical: PerfectSpacing.md,
     borderRadius: 8,
   },
   retryText: {
-    color: '#FFFFFF', // White equivalent
+    color: Colors.neutral[0],
     fontWeight: '600',
   },
 });

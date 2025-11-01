@@ -1,28 +1,26 @@
 import React from 'react';
 import { PerfectContainer, PerfectText } from '@/components/ui';
-import { Spacing, Colors, Shadows } from '@/shared/constants/designTokens';
+import { Colors, Shadows } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 
 export const ActionTitle: React.FC = () => {
   return (
     <PerfectContainer
       preset="section"
       alignItems="center"
-      marginVertical={Spacing[1]}
+      marginTop={-20}
+      marginBottom={PerfectSpacing.xs}
     >
-      <PerfectContainer alignItems="center" justifyContent="center">
-        <PerfectText
-          size={32}
-          maxSize={34}
-          minSize={26}
-          lines={1}
-          fontWeight="900"
-          color={Colors.primary[600]}
-          textAlign="center"
-          style={Shadows.md}
-        >
-          Entra in Azione
-        </PerfectText>
-      </PerfectContainer>
+      <PerfectText
+        size={32}
+        lines={1}
+        fontWeight="900"
+        color={Colors.primary[500]}
+        textAlign="center"
+        style={Shadows.md}
+      >
+        ⚡ Entra in Azione
+      </PerfectText>
     </PerfectContainer>
   );
 };

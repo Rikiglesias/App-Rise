@@ -6,7 +6,6 @@ import {
   useScrollInterpolations,
 } from '../hooks/useHomeHeaderHooks';
 import { useHomeHeaderStyles } from '../hooks/useHomeHeaderStyles';
-import { useTheme } from '@/shared/hooks/useTheme';
 import { type HomeHeaderSectionProps } from '../types/HomeHeaderTypes';
 import { HeaderImageSection, HeaderTextSection } from './HomeHeader';
 
@@ -14,7 +13,6 @@ import { HeaderImageSection, HeaderTextSection } from './HomeHeader';
 const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
   scrollY,
 }) => {
-  const { colors } = useTheme();
   const { titleAnim, imageAnim, containerAnim } = useHomeHeaderAnimations();
   const {
     titleOpacity,
@@ -25,10 +23,6 @@ const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
     imageRotation,
   } = useScrollInterpolations(scrollY);
   const styles = useHomeHeaderStyles();
-
-  // Animazioni attive su entrambe le piattaforme con ottimizzazioni Android
-  // Stile aggiuntivo per stabilità Android durante le animazioni
-  // Applica direttamente le props di rendering Android
 
   return (
     <Animated.View
@@ -44,7 +38,6 @@ const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
       collapsable={false}
     >
       <HeaderTextSection
-        colors={colors}
         titleAnim={titleAnim}
         titleOpacity={titleOpacity}
         titleTransform={titleTransform}
@@ -64,5 +57,3 @@ const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
 };
 
 export const HomeHeaderSection = React.memo(HomeHeaderSectionComponent);
-
-export default HomeHeaderSection;

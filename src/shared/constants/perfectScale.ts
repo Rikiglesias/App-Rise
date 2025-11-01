@@ -113,3 +113,127 @@ export const scaleWithDimensions = (
   }
   return value;
 };
+
+/**
+ * DEVICE TYPE DETECTION
+ * Rileva il tipo di device per applicare limiti solo dove necessario
+ */
+const DEVICE_BREAKPOINTS = {
+  small: 380,   // iPhone SE, mini → limiti MINIMI
+  normal: 600,  // iPhone standard, Android → scale() PURO
+  large: 1024,  // iPad, tablet → limiti MASSIMI
+} as const;
+
+export const getDeviceType = (): 'small' | 'normal' | 'large' => {
+  // eslint-disable-next-line no-restricted-properties
+  const width = Dimensions.get('window').width;
+  
+  if (width < DEVICE_BREAKPOINTS.small) return 'small';
+  if (width < DEVICE_BREAKPOINTS.normal) return 'normal';
+  return 'large';
+};
+
+// Export statici per uso diretto
+export const DEVICE_TYPE = getDeviceType();
+export const IS_SMALL_DEVICE = DEVICE_TYPE === 'small';
+export const IS_LARGE_DEVICE = DEVICE_TYPE === 'large';
+
+/**
+ * SCALE TOUCH - Per touch targets accessibili
+ * 
+ * Applica limite MINIMO di 44px SOLO su device piccoli.
+ * Su device normali e grandi: scale() puro.
+ * 
+ * QUANDO USARE:
+ * - Button height/width
+ * - Touch target minimi
+ * - Elementi interattivi
+ * 
+ * @param value - Valore touch target (base iPhone 15)
+ * @returns Valore scalato con minimo 44px su device piccoli
+ * 
+ * @example
+ * height: scaleTouch(44)  // iPhone SE: 44px (min), iPhone 15: scale(44), iPad: scale(44)
+ */
+export const scaleTouch = (value: number): number => {
+  const scaled = scale(value);
+  
+  // Solo su device piccoli applica minimo Apple (44px)
+  if (IS_SMALL_DEVICE) {
+    return Math.max(scaled, 44);
+  }
+  
+  // Device normali e grandi: scale() puro
+  return scaled;
+};
+
+/**
+ * SCALE SPACING - Per spacing su tablet
+ * 
+ * Applica limite MASSIMO di 1.5x SOLO su device grandi.
+ * Su device piccoli e normali: scale() puro.
+ * 
+ * QUANDO USARE:
+ * - Padding/margin su sezioni
+ * - Gap tra elementi
+ * - Spacing che potrebbe diventare eccessivo su tablet
+ * 
+ * @param value - Valore spacing (base iPhone 15)
+ * @returns Valore scalato con massimo 1.5x su tablet
+ * 
+ * @example
+ * padding: scaleSpacing(16)  // iPhone: scale(16), iPad: max 24px (16*1.5)
+ */
+export const scaleSpacing = (value: number): number => {
+  const scaled = scale(value);
+  
+  // Solo su tablet/device grandi limita a 1.5x
+  if (IS_LARGE_DEVICE) {
+    return Math.min(scaled, value * 1.5);
+  }
+  
+  // Device piccoli e normali: scale() puro
+  return scaled;
+};
+
+/**
+ * SCALE TEXT - Per dimensioni testo leggibili
+ * 
+ * Applica:
+ * - Limite MINIMO 12px su device piccoli (leggibilità)
+ * - Limite MASSIMO 1.3x su device grandi (proporzioni)
+ * - scale() puro su device normali
+ * 
+ * NOTA IMPORTANTE:
+ * - SystemImmunity già limita fontScale utente a 1.3x (maxFontSizeMultiplier)
+ * - Questo è SUFFICIENTE per proteggere il layout
+ * - Rispettiamo le preferenze utente (WCAG compliance)
+ * - Layout deve essere robusto, non compensare il testo
+ * 
+ * QUANDO USARE:
+ * - Automatico in PerfectText
+ * - Font size custom (quando non usi PerfectText)
+ * - Line height basato su font size
+ * 
+ * @param value - Valore font size (base iPhone 15)
+ * @returns Valore scalato con limiti leggibilità
+ * 
+ * @example
+ * fontSize: scaleText(14)  // iPhone SE: min 12px, iPhone 15: 14px, iPad: max 18px
+ */
+export const scaleText = (value: number): number => {
+  const scaled = scale(value);
+  
+  // Device piccoli: minimo leggibilità
+  if (IS_SMALL_DEVICE) {
+    return Math.max(scaled, 12);
+  }
+  
+  // Device grandi: massimo proporzionale
+  if (IS_LARGE_DEVICE) {
+    return Math.min(scaled, value * 1.3);
+  }
+  
+  // Device normali: scale() puro
+  return scaled;
+};

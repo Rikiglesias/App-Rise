@@ -15,9 +15,10 @@ import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
 import {
   BorderRadius,
   Colors,
-  Spacing,
   Shadows,
+  Typography,
 } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -140,8 +141,8 @@ const styles = StyleSheet.create({
 
   header: {
     backgroundColor: Colors.neutral[0],
-    paddingVertical: Spacing[8],
-    paddingHorizontal: Spacing[6],
+    paddingVertical: PerfectSpacing.xl,
+    paddingHorizontal: PerfectSpacing.lg,
     alignItems: 'center',
   },
 
@@ -153,64 +154,64 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.neutral[900],
     textAlign: 'center',
-    marginTop: Spacing[2],
+    marginTop: PerfectSpacing.sm,
   },
 
   subtitle: {
     color: Colors.neutral[700],
     textAlign: 'center',
-    marginTop: Spacing[3],
+    marginTop: PerfectSpacing.md,
     backgroundColor: Colors.primary[50],
-    paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[2],
+    paddingHorizontal: PerfectSpacing.base,
+    paddingVertical: PerfectSpacing.sm,
     borderRadius: BorderRadius.full,
   },
 
   statsSection: {
-    marginHorizontal: Spacing[4],
-    marginTop: Spacing[6],
-    gap: Spacing[4],
+    marginHorizontal: PerfectSpacing.base,
+    marginTop: PerfectSpacing.lg,
+    gap: PerfectSpacing.base,
   },
 
   impactSection: {
     backgroundColor: Colors.neutral[0],
-    marginHorizontal: Spacing[4],
-    marginTop: Spacing[6],
+    marginHorizontal: PerfectSpacing.base,
+    marginTop: PerfectSpacing.lg,
     borderRadius: BorderRadius.lg,
-    padding: Spacing[6],
+    padding: PerfectSpacing.lg,
     ...Shadows.sm,
   },
 
   impactTitle: {
     color: Colors.neutral[900],
     textAlign: 'center',
-    marginBottom: Spacing[4],
+    marginBottom: PerfectSpacing.base,
   },
 
   impactList: {
-    gap: Spacing[3],
+    gap: PerfectSpacing.md,
   },
 
   goalSection: {
     backgroundColor: Colors.primary[50],
-    marginHorizontal: Spacing[4],
-    marginTop: Spacing[6],
-    marginBottom: Spacing[8],
+    marginHorizontal: PerfectSpacing.base,
+    marginTop: PerfectSpacing.lg,
+    marginBottom: PerfectSpacing.xl,
     borderRadius: BorderRadius.lg,
-    padding: Spacing[6],
+    padding: PerfectSpacing.lg,
     alignItems: 'center',
     borderWidth: scale(1),
     borderColor: Colors.primary[200],
   },
 
   goalIcon: {
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
   },
 
   goalTitle: {
     color: Colors.primary[800],
     textAlign: 'center',
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
 
   goalText: {

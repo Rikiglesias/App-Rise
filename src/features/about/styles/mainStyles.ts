@@ -1,8 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-import { Spacing } from '@/shared/constants/designTokens';
-import { BorderRadius, Colors } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { PerfectSpacing, BorderRadius, Colors } from '@/shared/constants';
+import { scale, scaleSpacing } from '@/shared/constants/perfectScale';
 
 /**
  * Stili principali per la sezione About
@@ -16,9 +15,9 @@ export const mainStyles = StyleSheet.create({
 
   backButton: {
     position: 'absolute',
-    top: scale(60),
-    left: Spacing[4],
-    padding: Spacing[2],
+    top: scaleSpacing(60),
+    left: PerfectSpacing.base,
+    padding: PerfectSpacing.sm,
     borderRadius: BorderRadius.full,
     backgroundColor: Colors.neutral[0],
     shadowColor: Colors.neutral[900],
@@ -30,15 +29,15 @@ export const mainStyles = StyleSheet.create({
   },
 
   contentContainer: {
-    paddingHorizontal: Spacing[4],
-    gap: Spacing[0],
-    paddingTop: Spacing[12],
-    paddingBottom: Spacing[12],
+    paddingHorizontal: PerfectSpacing.base,
+    gap: PerfectSpacing.none,
+    paddingTop: PerfectSpacing['3xl'],
+    paddingBottom: PerfectSpacing['3xl'],
   },
 
   sectionDividerContainer: {
-    paddingHorizontal: Spacing[4],
-    paddingVertical: Spacing[4],
+    paddingHorizontal: PerfectSpacing.base,
+    paddingVertical: PerfectSpacing.base,
     alignItems: 'center',
   },
 

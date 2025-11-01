@@ -8,10 +8,6 @@ export {
   FirstSectionDivider,
 } from './shared/ActionButtonUtils';
 
-// Hook and utilities
-export { useActionButtonsLogic } from '../hooks/useActionButtonsLogic';
-export type { ButtonData } from '../hooks/useActionButtonsLogic';
-
 // Modern ActionButtons entry
 export { default as ActionButtons } from './ActionButtons/ActionButtons';
 export { useNewActionsAnimations } from './shared/ContributeAnimations';

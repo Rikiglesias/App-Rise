@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Platform, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import {
@@ -9,7 +9,8 @@ import {
   PlatformTouchable,
   PerfectContainer,
 } from '@/components/ui';
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
@@ -71,14 +72,14 @@ export const CommunitySection: React.FC<Props> = ({
         >
           <PlatformTouchable onPress={onVolunteersPress} activeOpacity={0.9}>
             <LinearGradient
-              colors={['#10B981', '#059669', '#047857']}
+              colors={[Colors.gradients.success[1], Colors.gradients.success[0], Colors.gradients.success[2]]}
               style={styles.communityGradientContainer}
             >
               <PerfectContainer style={styles.communityCardContent}>
                 <MaterialCommunityIcons
                   name="account-group"
-                  size={28}
-                  color="#10B981"
+                  size={scale(28)}
+                  color={Colors.semantic.success.main}
                   style={styles.communityCardIcon}
                 />
                 <PerfectText
@@ -101,8 +102,8 @@ export const CommunitySection: React.FC<Props> = ({
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={20}
-                  color="#10B981"
+                  size={scale(20)}
+                  color={Colors.semantic.success.main}
                   style={styles.chevronIcon}
                 />
               </PerfectContainer>
@@ -121,14 +122,14 @@ export const CommunitySection: React.FC<Props> = ({
         >
           <PlatformTouchable onPress={onPartnersPress} activeOpacity={0.9}>
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
+              colors={Colors.gradients.purple}
               style={styles.communityGradientContainer}
             >
               <PerfectContainer style={styles.communityCardContent}>
                 <MaterialCommunityIcons
                   name="handshake"
-                  size={28}
-                  color="#8B5CF6"
+                  size={scale(28)}
+                  color={Colors.gradients.purple[0]}
                   style={styles.communityCardIcon}
                 />
                 <PerfectText
@@ -151,8 +152,8 @@ export const CommunitySection: React.FC<Props> = ({
                 </PerfectText>
                 <MaterialCommunityIcons
                   name="chevron-right"
-                  size={20}
-                  color="#8B5CF6"
+                  size={scale(20)}
+                  color={Colors.gradients.purple[0]}
                   style={styles.chevronIcon}
                 />
               </PerfectContainer>
@@ -167,14 +168,14 @@ export const CommunitySection: React.FC<Props> = ({
 const styles = StyleSheet.create({
   // Community Section
   communitySection: {
-    paddingHorizontal: Spacing[4],
-    marginTop: Spacing[6], // AGGIUNTO: spazio generoso tra linea e titolo "La Nostra Community"
-    marginBottom: Spacing[6],
+    paddingHorizontal: PerfectSpacing.base,
+    marginTop: PerfectSpacing.lg, // AGGIUNTO: spazio generoso tra linea e titolo "La Nostra Community"
+    marginBottom: PerfectSpacing.lg,
   },
 
   communityRow: {
     flexDirection: 'row',
-    gap: Spacing[4],
+    gap: PerfectSpacing.base,
   },
   communityCard: {
     flex: 1,
@@ -187,17 +188,17 @@ const styles = StyleSheet.create({
   communityCardContent: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - scale(2),
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[3],
+    paddingVertical: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.md,
     alignItems: 'center',
     position: 'relative',
   },
   communityCardIcon: {
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
   },
   communityStatValue: {
     color: Colors.neutral[800],
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
   communityStatLabel: {
     color: Colors.neutral[700],
@@ -205,28 +206,22 @@ const styles = StyleSheet.create({
   },
   chevronIcon: {
     position: 'absolute',
-    top: Spacing[2],
-    right: Spacing[2],
+    top: PerfectSpacing.sm,
+    right: PerfectSpacing.sm,
   },
 
   // Community Section - RIVOLUZIONATO
   communityHeaderContainer: {
     alignItems: 'center',
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   communityHeaderBackground: {
-    backgroundColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[100]
-        : Colors.neutral[50],
+    backgroundColor: Colors.neutral[50],
     borderRadius: BorderRadius.xl,
-    paddingVertical: Spacing[4],
-    paddingHorizontal: Spacing[6],
+    paddingVertical: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor:
-      Platform.OS === 'android'
-        ? Colors.neutral[200]
-        : Colors.neutral[100],
+    borderColor: Colors.neutral[100],
     ...Shadows.sm,
   },
   communityTitle: {
@@ -240,7 +235,7 @@ const styles = StyleSheet.create({
     // fontSize rimosso - ora gestito da Text
     color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
     textAlign: 'center',
-    marginTop: Spacing[3],
+    marginTop: PerfectSpacing.md,
     opacity: 0.9,
     letterSpacing: scale(0.1),
   },

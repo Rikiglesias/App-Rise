@@ -1,9 +1,9 @@
 import React from 'react';
 import { Animated, StyleSheet, Text } from 'react-native';
 import { scale } from '@/shared/constants/perfectScale';
+import { Colors, PerfectSpacing, Shadows } from '@/shared/constants';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { PerfectImage } from '@/components/ui/PerfectImage';
-import { HomeHeaderDesignTokens } from '../designTokens/HomeHeaderTokens';
 
 // ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS + SISTEMA RESPONSIVE
 const createModernTitleStyles = (responsiveSpacing: {
@@ -38,14 +38,25 @@ const createModernTitleStyles = (responsiveSpacing: {
       marginBottom: responsiveSpacing.separatorBottomMargin,
       justifyContent: 'center',
       flexDirection: 'row',
+      gap: PerfectSpacing.md, // Spacing tra linee e logo
     },
 
     separatorLine: {
-      height: HomeHeaderDesignTokens.dimensions.separatorHeight,
+      height: scale(2), // Linea sottile elegante
       width: responsiveSpacing.separatorLineWidth,
-      backgroundColor: HomeHeaderDesignTokens.colors.primaryLight,
+      backgroundColor: Colors.primary[200], // Colore primario chiaro
       borderRadius: scale(1),
-      ...HomeHeaderDesignTokens.shadows.light,
+      ...Shadows.sm,
+    },
+
+    // Stili per testo titolo
+    titleText: {
+      fontWeight: '900' as const,
+      color: Colors.primary[500],
+    },
+    italiaText: {
+      fontWeight: '900' as const,
+      color: Colors.neutral[900],
     },
   });
 
@@ -68,7 +79,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
         logoSize: 53, // NON scalato - PerfectImage lo scala automaticamente
         separatorLineWidth: scale(104),
         logoMargin: scale(15),
-        stackSpacing: scale(8),
+        stackSpacing: scale(4), // Ridotto per meno spazio tra le righe
       };
     }, []);
 
@@ -118,30 +129,25 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
             >
               {/* Prima riga: "Rise Against" */}
               <PerfectText
-                size={38}
+                size={44}
                 lines={1}
                 fontWeight="900"
                 textAlign="center"
-                color={HomeHeaderDesignTokens.colors.primary}
+                color={Colors.primary[500]}
               >
                 Rise Against
               </PerfectText>
 
               {/* Seconda riga: "Hunger Italia" con colori diversi */}
               <PerfectText
-                size={38}
+                size={44}
                 lines={1}
                 fontWeight="900"
                 textAlign="center"
-                color={HomeHeaderDesignTokens.colors.primary}
+                color={Colors.primary[500]}
               >
                 Hunger{' '}
-                <Text
-                  style={{
-                    fontWeight: '900',
-                    color: HomeHeaderDesignTokens.colors.dark,
-                  }}
-                >
+                <Text style={modernTitleStyles.italiaText}>
                   Italia
                 </Text>
               </PerfectText>

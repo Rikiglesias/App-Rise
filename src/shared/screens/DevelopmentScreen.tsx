@@ -15,10 +15,10 @@ import {
 import {
   BorderRadius,
   Colors,
-  Spacing,
-  Typography,
   Shadows,
+  Typography,
 } from '../constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '../constants/perfectScale';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
 
@@ -86,7 +86,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
         style={[
           styles.backButton,
           {
-            top: insets.top + Spacing[4],
+            top: insets.top + PerfectSpacing.base,
             width: scale(48),
             height: scale(48),
           },
@@ -121,8 +121,8 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
           style={[
             styles.content,
             {
-              paddingHorizontal: Spacing[6],
-              paddingTop: Platform.OS === 'ios' ? Spacing[12] : Spacing[20],
+              paddingHorizontal: PerfectSpacing.lg,
+              paddingTop: Platform.OS === 'ios' ? PerfectSpacing['3xl'] : PerfectSpacing['5xl'],
             },
           ]}
         >
@@ -131,8 +131,8 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             style={[
               styles.iconContainer,
               {
-                marginBottom: Spacing[4],
-                marginTop: Platform.OS === 'ios' ? Spacing[8] : Spacing[4],
+                marginBottom: PerfectSpacing.base,
+                marginTop: Platform.OS === 'ios' ? PerfectSpacing.xl : PerfectSpacing.base,
               },
             ]}
           >
@@ -162,7 +162,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               style={[
                 styles.floatingIcon,
                 styles.floatingIcon1,
-                { padding: Spacing[2] },
+                { padding: PerfectSpacing.sm },
               ]}
             >
               <MaterialCommunityIcons
@@ -175,7 +175,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               style={[
                 styles.floatingIcon,
                 styles.floatingIcon2,
-                { padding: Spacing[2] },
+                { padding: PerfectSpacing.sm },
               ]}
             >
               <MaterialCommunityIcons
@@ -188,7 +188,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               style={[
                 styles.floatingIcon,
                 styles.floatingIcon3,
-                { padding: Spacing[2] },
+                { padding: PerfectSpacing.sm },
               ]}
             >
               <MaterialCommunityIcons name="rocket" size={scale(22)} color={Colors.primary[400]} />
@@ -200,7 +200,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             style={[
               styles.titleContainer,
               {
-                marginBottom: Spacing[4],
+                marginBottom: PerfectSpacing.base,
               },
             ]}
           >
@@ -217,7 +217,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             style={[
               styles.infoCard,
               {
-                marginBottom: Spacing[4],
+                marginBottom: PerfectSpacing.base,
               },
             ]}
           >
@@ -225,12 +225,12 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               colors={['rgba(220, 38, 38, 0.05)', 'rgba(220, 38, 38, 0.02)']}
               style={styles.cardGradient}
             >
-              <View style={[styles.cardContent, { padding: Spacing[6] }]}>
+              <View style={[styles.cardContent, { padding: PerfectSpacing.lg }]}>
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={scale(28)}
                   color={Colors.primary[600]}
-                  style={[styles.cardIcon, { marginBottom: Spacing[2] }]}
+                  style={[styles.cardIcon, { marginBottom: PerfectSpacing.sm }]}
                 />
                 <PerfectText size={24} lines={2} style={styles.cardTitle}>
                   Cosa stiamo preparando
@@ -241,8 +241,8 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                   migliore.
                 </PerfectText>
 
-                <View style={[styles.featuresList, { gap: Spacing[1] }]}>
-                  <View style={[styles.featureItem, { gap: Spacing[3] }]}>
+                <View style={[styles.featuresList, { gap: PerfectSpacing.xs }]}>
+                  <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
                     <MaterialCommunityIcons
                       name="check-circle"
                       size={scale(16)}
@@ -252,7 +252,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       Design migliorato
                     </PerfectText>
                   </View>
-                  <View style={[styles.featureItem, { gap: Spacing[3] }]}>
+                  <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
                     <MaterialCommunityIcons
                       name="check-circle"
                       size={scale(16)}
@@ -262,7 +262,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       Nuove funzionalità
                     </PerfectText>
                   </View>
-                  <View style={[styles.featureItem, { gap: Spacing[3] }]}>
+                  <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
                     <MaterialCommunityIcons
                       name="check-circle"
                       size={scale(16)}
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    left: Spacing[4],
+    left: PerfectSpacing.base,
     zIndex: 10,
   },
   backButtonContainer: {
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: Platform.OS === 'android' ? scale(250) : Spacing[16],
+    paddingBottom: Platform.OS === 'android' ? scale(250) : PerfectSpacing['4xl'],
   },
   iconContainer: {
     position: 'relative',
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.black,
     color: Colors.neutral[900],
     textAlign: 'center',
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
     letterSpacing: scale(-1),
     ...Platform.select({
       ios: {
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
-    marginBottom: Spacing[3],
+    marginBottom: PerfectSpacing.md,
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(31, 41, 55, 0.1)',
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
     color: Colors.neutral[500],
     textAlign: 'center',
     lineHeight: scale(24),
-    marginBottom: Spacing[5],
+    marginBottom: scale(20),
   },
   featuresList: {
     width: '100%',

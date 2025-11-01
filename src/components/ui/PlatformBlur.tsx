@@ -33,10 +33,11 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
     <PerfectContainer style={style as ViewStyle} {...props}>
       <LinearGradient
         colors={[
+          // rgba necessario per fallback gradient blur semi-trasparente
           backgroundColor ??
-            (tint === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)'),
+            (tint === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)'),
           backgroundColor ??
-            (tint === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)'),
+            (tint === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)'),
         ]}
         style={gradientStyle}
       />
@@ -45,11 +46,15 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
   );
 
   try {
+    const combinedStyle = backgroundColor 
+      ? [style, { backgroundColor }]
+      : style;
+
     return (
       <BlurView
         intensity={effectiveIntensity}
         tint={tint}
-        style={style}
+        style={combinedStyle}
         {...props}
       >
         {children}

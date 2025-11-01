@@ -8,7 +8,8 @@ import { StyleSheet, Modal, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
-import { Colors, Spacing, BorderRadius } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 
 interface OTAUpdateScreenProps {
   visible: boolean;
@@ -155,7 +156,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
 
 const styles = StyleSheet.create({
   modal: {
-    margin: Spacing[0],
+    margin: PerfectSpacing.none,
   },
   container: {
     flex: 1,
@@ -164,24 +165,24 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    paddingHorizontal: Spacing[6],
+    paddingHorizontal: PerfectSpacing.lg,
     width: '100%',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: Spacing[8],
+    marginBottom: PerfectSpacing.xl,
   },
   appName: {
     color: 'white',
     textAlign: 'center',
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
   subtitle: {
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
   },
   statusContainer: {
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   statusText: {
     color: 'white',
@@ -190,15 +191,15 @@ const styles = StyleSheet.create({
   progressContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   progressBar: {
     width: '80%',
-    height: Spacing[2], // 8dp
+    height: PerfectSpacing.sm, // 8dp
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: BorderRadius.sm,
     overflow: 'hidden',
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
   progressFill: {
     height: '100%',
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   spinnerContainer: {
-    marginBottom: Spacing[6],
+    marginBottom: PerfectSpacing.lg,
   },
   infoContainer: {
     alignItems: 'center',
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   errorText: {
-    color: '#ffcccb',
+    color: Colors.semantic.error.light,
     textAlign: 'center',
   },
 });

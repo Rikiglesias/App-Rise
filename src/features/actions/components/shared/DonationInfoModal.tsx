@@ -10,8 +10,9 @@ import {
 } from '@/components/ui';
 // Migrated to Perfect System responsive layout
 
-import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
-import { scale } from '@/shared/constants/perfectScale';
+import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
+import { scale, scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato con dimensioni schermo
@@ -32,7 +33,7 @@ const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacing[4],
+    paddingHorizontal: PerfectSpacing.base,
     backgroundColor: 'transparent',
   },
   backdrop: {
@@ -41,6 +42,7 @@ const modalStyles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    // rgba necessario per backdrop modal semi-trasparente
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalGradientBorder: {
@@ -56,21 +58,21 @@ const modalStyles = StyleSheet.create({
     overflow: 'hidden',
   },
   modalContent: {
-    padding: Spacing[6],
+    padding: PerfectSpacing.lg,
   },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
     position: 'relative',
   },
   closeButton: {
     position: 'absolute',
-    top: scale(-10),
-    right: scale(-6),
-    width: scale(36),
-    height: scale(36),
+    top: scaleSpacing(-10),
+    right: scaleSpacing(-6),
+    width: scaleTouch(36),
+    height: scaleTouch(36),
     borderRadius: scale(18),
     backgroundColor: Colors.primary[600],
     justifyContent: 'center',
@@ -81,7 +83,7 @@ const modalStyles = StyleSheet.create({
   },
   centeredTitleContainer: {
     alignItems: 'center',
-    marginBottom: Spacing[5],
+    marginBottom: scale(20),
   },
   centeredTitle: {
     color: Colors.primary[600],
@@ -94,20 +96,20 @@ const modalStyles = StyleSheet.create({
     height: scale(3),
     backgroundColor: Colors.primary[600],
     borderRadius: scale(2),
-    marginTop: Spacing[2],
+    marginTop: PerfectSpacing.sm,
     alignSelf: 'center',
     ...Shadows.sm,
   },
   modalText: {
     color: Colors.neutral[700],
-    marginBottom: Spacing[4],
+    marginBottom: PerfectSpacing.base,
   },
   highlightText: {
     color: Colors.primary[600],
     textAlign: 'center',
-    marginTop: Spacing[3],
-    paddingVertical: Spacing[3],
-    paddingHorizontal: Spacing[4],
+    marginTop: PerfectSpacing.md,
+    paddingVertical: PerfectSpacing.md,
+    paddingHorizontal: PerfectSpacing.base,
     backgroundColor: Colors.primary[50],
     borderRadius: BorderRadius.lg,
     letterSpacing: scale(-0.3),

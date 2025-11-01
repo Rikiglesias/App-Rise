@@ -16,7 +16,8 @@ import {
   convertToMapLocations,
 } from '../components';
 import { PlatformScrollView, PerfectContainer } from '@components/ui';
-import { Colors, Spacing } from '@shared/constants/designTokens';
+import { Colors } from '@/shared/constants/designTokens';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@shared/constants/perfectScale';
 import { logError } from '@/shared/utils/logger';
 
@@ -136,14 +137,14 @@ const styles = StyleSheet.create({
 
   // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
   sectionDividerContainer: {
-    paddingTop: Spacing[8],
-    paddingBottom: Spacing[4],
+    paddingTop: PerfectSpacing.xl,
+    paddingBottom: PerfectSpacing.base,
   },
   sectionDivider: {
     height: scale(2),
     backgroundColor: Colors.neutral[200],
-    marginVertical: Spacing[2],
-    marginHorizontal: Spacing[6],
+    marginVertical: PerfectSpacing.sm,
+    marginHorizontal: PerfectSpacing.lg,
     alignSelf: 'stretch',
   },
 });

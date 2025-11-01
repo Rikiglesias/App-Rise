@@ -13,7 +13,10 @@ import {
   type ModalProps,
   StyleSheet,
   useWindowDimensions,
+  type DimensionValue,
 } from 'react-native';
+
+import { Colors } from '../../shared/constants';
 import { PerfectContainer } from './PerfectContainer';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
@@ -33,7 +36,7 @@ interface PerfectModalProps extends Omit<ModalProps, 'children'> {
   borderRadius?: number;
 
   /** Custom style per container */
-  containerStyle?: object;
+  containerStyle?: import('react-native').ViewStyle;
 }
 
 /**
@@ -83,7 +86,7 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
   children,
   size = 'medium',
   padding = 20,
-  backgroundColor = '#ffffff',
+  backgroundColor,
   borderRadius = 16,
   containerStyle,
   ...modalProps
@@ -98,9 +101,7 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
     >
       {/* Overlay per modal non-fullscreen su phone */}
       {size !== 'fullscreen' && !isTablet && (
-        <PerfectContainer
-          style={[styles.overlay, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}
-        />
+        <PerfectContainer style={styles.overlay} />
       )}
 
       {/* Container centrato */}
@@ -112,15 +113,15 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
       >
         <PerfectContainer
           padding={padding}
-          backgroundColor={backgroundColor as never}
           borderRadius={size === 'fullscreen' ? 0 : borderRadius}
           style={[
             {
-              width: dimensions.width as never,
+              width: dimensions.width as DimensionValue,
               maxWidth: dimensions.maxWidth,
-              height: dimensions.height as never,
+              height: dimensions.height as DimensionValue,
+              backgroundColor: backgroundColor || Colors.neutral[0],
             },
-            containerStyle as never,
+            ...(containerStyle ? [containerStyle] : []),
           ]}
         >
           {children}
@@ -133,6 +134,8 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
+    // rgba necessario per overlay semi-trasparente del modal
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalWrapper: {
     flex: 1,

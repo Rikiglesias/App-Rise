@@ -1,20 +1,21 @@
 import { Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
-import { Spacing } from '@/shared/constants/designTokens';
-import { LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { PerfectSpacing } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 
 // Dimensioni calcolate in modo millimetrico rispetto a iPhone 15 (393px)
 
 // Configuration inline
 export const ADVANCED_CONFIG = {
   headerSection: {
-    paddingVertical: Spacing[2], // ← RIDOTTO DA Spacing[6] A Spacing[2] per meno spazio sopra il titolo
-    paddingHorizontal: Spacing[4],
-    minHeight: 120,
+    paddingVertical: PerfectSpacing.sm,
+    paddingHorizontal: PerfectSpacing.base,
+    minHeight: scale(120),
   },
   imageSection: {
-    // Altezza responsiva: target ~0.72 * width (considerando moltiplicatore 1.1 negli styles)
-    height: LOGICAL_REFERENCE.width * 1.1,
+    // Altezza scalata proporzionalmente (aspect ratio 1567/1131 dell'immagine)
+    // Base: 393px × 1.386 = 544px su iPhone 15
+    // Scala automaticamente su tutti i device mantenendo proporzioni
+    height: scale(544),
   },
   typography: {
     // Valori di fallback non usati negli stili (si usano TypographyTokens)
@@ -60,7 +61,6 @@ export type HomeHeaderStyles = Record<
 >;
 
 export interface HeaderTextSectionProps {
-  readonly colors: ReturnType<typeof useTheme>['colors'];
   readonly titleAnim: Animated.Value;
   readonly titleOpacity: Animated.AnimatedInterpolation<number>;
   readonly titleTransform: Animated.AnimatedInterpolation<number>;

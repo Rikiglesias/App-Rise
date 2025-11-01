@@ -25,8 +25,8 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
       {/* HEADER CON TITOLO CLICCABILE */}
       <PerfectContainer style={chiSiamoSectionStyles.headerContainer}>
         <PerfectContainer
-          paddingVertical={12} // ✅ Spacing[3] - SCALA!
-          paddingHorizontal={20} // ✅ Spacing[5] - SCALA!
+          paddingVertical={12} // ✅ PerfectSpacing.md - SCALA!
+          paddingHorizontal={20} // ✅ scale(20) - SCALA!
           borderRadius={16} // ✅ SCALA!
           style={chiSiamoSectionStyles.titleHeaderContainer}
         >

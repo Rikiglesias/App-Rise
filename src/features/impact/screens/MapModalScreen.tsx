@@ -2,6 +2,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import type { MapModalData } from '../data/mapModalData';
+import { getModalData } from '../data/mapModalData';
 import {
   PerfectText,
   PerfectContainer,
@@ -12,10 +14,9 @@ import InteractiveMap, {
   type Location,
 } from '@/components/layout/InteractiveMap';
 import MapLocationModal from '@/components/layout/MapLocationModal';
-import type { MapModalData } from '../data/mapModalData';
-import { getModalData } from '../data/mapModalData';
 import type { ImpactStackParamList } from '@/navigation/types';
-import { BorderRadius, Colors, Spacing } from '@/shared/constants';
+import { BorderRadius, Colors, PerfectSpacing } from '@/shared/constants';
+import { scale, scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
@@ -108,11 +109,11 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: Spacing[12],
-    right: Spacing[5],
+    top: PerfectSpacing['3xl'],
+    right: scaleSpacing(20),
     backgroundColor: `${Colors.neutral[0]}99`,
-    width: /* scaleFont(44) */ 44,
-    height: /* scaleFont(44) */ 44,
+    width: scaleTouch(44),
+    height: scaleTouch(44),
     borderRadius: /* scaleFont(22) */ 22,
     justifyContent: 'center',
     alignItems: 'center',
@@ -120,12 +121,12 @@ const styles = StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    top: Spacing[12],
-    left: Spacing[5],
-    right: Spacing[12],
+    top: PerfectSpacing['3xl'],
+    left: scaleSpacing(20),
+    right: PerfectSpacing['3xl'],
     backgroundColor: `${Colors.neutral[0]}99`,
-    paddingVertical: Spacing[2],
-    paddingHorizontal: Spacing[4],
+    paddingVertical: PerfectSpacing.sm,
+    paddingHorizontal: PerfectSpacing.base,
     borderRadius: BorderRadius.lg,
     flexDirection: 'row',
     justifyContent: 'space-between',

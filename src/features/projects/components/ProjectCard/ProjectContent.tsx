@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import type { ProjectContentProps } from './types';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Spacing, Typography } from '@/shared/constants';
+import { PerfectSpacing, Typography } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
 
@@ -16,20 +16,20 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
   const styles = StyleSheet.create({
     description: {
       color: colors.neutral[700],
-      marginBottom: Spacing[4],
+      marginBottom: PerfectSpacing.base,
     },
     impactContainer: {
       backgroundColor: colors.primary[50],
       borderRadius: 8,
-      padding: Spacing[4],
-      marginBottom: Spacing[4],
+      padding: PerfectSpacing.base,
+      marginBottom: PerfectSpacing.base,
       borderWidth: scale(1),
       borderColor: colors.primary[200],
     },
     impactLabel: {
       fontWeight: Typography.weights.bold,
       color: colors.primary[700],
-      marginBottom: Spacing[1],
+      marginBottom: PerfectSpacing.xs,
       textTransform: 'uppercase',
       letterSpacing: scale(0.5),
     },

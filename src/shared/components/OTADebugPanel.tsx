@@ -6,11 +6,8 @@
 import React from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import * as Updates from 'expo-updates';
-import {
-  PerfectText,
-  PlatformTouchable,
-  PerfectContainer,
-} from '@/components/ui';
+import { Colors } from '../constants';
+import { PerfectText, PerfectContainer, PlatformTouchable } from '@/components/ui';
 import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
 import { logger } from '@/shared/utils/logger';
 
@@ -131,32 +128,32 @@ export const OTADebugPanel: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: Colors.neutral[100],
     padding: 16,
     margin: 16,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: '#007AFF',
+    borderColor: Colors.semantic.info.main,
   },
   title: {
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 12,
-    color: '#007AFF',
+    color: Colors.semantic.info.main,
   },
   statusContainer: {
     marginBottom: 16,
   },
   statusText: {
     marginBottom: 4,
-    color: '#333',
+    color: Colors.neutral[800],
   },
   updateText: {
-    color: '#28a745',
+    color: Colors.semantic.success.main,
     fontWeight: '600',
   },
   errorText: {
-    color: '#dc3545',
+    color: Colors.semantic.error.main,
     fontWeight: '600',
   },
   buttonsContainer: {
@@ -165,7 +162,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: Colors.semantic.info.main,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 6,

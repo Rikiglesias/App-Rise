@@ -37,9 +37,11 @@ const Logo: React.FC<LogoProps> = ({
   // innerSize NON scalato - PerfectImage lo scala automaticamente
   const innerSize = showBackground ? size * 0.7 : size;
 
-  if (showBackground !== null) {
+  if (showBackground) {
     return (
-      <PerfectContainer style={[containerStyle, ...(style ? [style] : [])]}>
+      <PerfectContainer
+        style={style ? [containerStyle, style] : containerStyle}
+      >
         <PerfectImage
           width={innerSize}
           height={innerSize}
@@ -74,7 +76,6 @@ const styles = StyleSheet.create({
     borderWidth: scale(3),
     overflow: 'hidden',
   },
-  logoImage: {},
 });
 
 export default Logo;

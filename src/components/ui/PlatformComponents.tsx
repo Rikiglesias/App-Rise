@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, ScrollView, ScrollViewProps } from 'react-native';
+import { Platform, ScrollView, ScrollViewProps, type ViewStyle } from 'react-native';
 import { Surface } from 'react-native-paper';
 import { PlatformBlur } from './PlatformBlur';
 import { PlatformTouchable } from './PlatformTouchable';
@@ -46,7 +46,7 @@ const PlatformScrollViewComponent: React.FC<PlatformScrollViewProps> = ({
 
 interface PlatformSurfaceProps {
   children: React.ReactNode;
-  style?: object;
+  style?: ViewStyle;
   elevation?: number;
   variant?: 'card' | 'modal' | 'elevated';
 }

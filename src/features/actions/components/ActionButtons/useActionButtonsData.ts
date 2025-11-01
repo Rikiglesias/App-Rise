@@ -8,6 +8,7 @@ import type { ContributeTabScreenProps } from '../../types/ContributeScreenTypes
 import type { ButtonData } from '../shared/ActionButtonTypes';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
+import { Colors } from '@/shared/constants';
 
 export interface ActionButtonsData {
   // Data arrays
@@ -55,21 +56,21 @@ export const useActionButtonsData = (
         id: 'dona',
         title: 'Dona Ora',
         icon: 'heart',
-        gradient: ['#E11D48', '#DC2626', '#B91C1C'] as const,
+        gradient: Colors.gradients.donate,
         onPress: () => openDonationLink(),
       },
       {
         id: 'charity-shop',
         title: 'Charity Shop',
         icon: 'shopping',
-        gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
+        gradient: Colors.gradients.shop,
         onPress: () => openShopLink(),
       },
       {
         id: 'gift-card',
         title: 'Gift Cards',
         icon: 'gift',
-        gradient: ['#DC2626', '#B91C1C', '#991B1B'] as const,
+        gradient: Colors.gradients.shop,
         onPress: () => openGiftCardLink(),
       },
     ],
@@ -83,21 +84,21 @@ export const useActionButtonsData = (
         id: 'progetti',
         title: 'Progetti',
         icon: 'charity',
-        gradient: ['#0F766E', '#0D9488', '#14B8A6'] as const,
+        gradient: Colors.gradients.projects,
         onPress: () => openProjectsLink(),
       },
       {
         id: 'tracciabilita',
         title: 'Tracciabilità',
         icon: 'map-marker-path',
-        gradient: ['#1565C0', '#1976D2', '#2196F3'] as const,
+        gradient: Colors.gradients.tracking,
         onPress: () => openTracciabilitaLink(),
       },
       {
         id: 'calendario',
         title: 'Eventi',
         icon: 'calendar',
-        gradient: ['#7C3AED', '#8B5CF6', '#A855F7'] as const,
+        gradient: Colors.gradients.events,
         onPress: () => openEventsLink(),
       },
     ],
@@ -120,14 +121,14 @@ export const useActionButtonsData = (
         id: 'seguici',
         title: 'Seguici',
         icon: 'share-variant',
-        gradient: ['#1F2937', '#374151', '#4B5563'] as const,
+        gradient: Colors.gradients.community,
         onPress: () => navigation.navigate('Seguici'),
       },
       {
         id: 'chi-siamo',
         title: 'Chi Siamo',
         icon: 'information',
-        gradient: ['#1F2937', '#374151', '#4B5563'] as const,
+        gradient: Colors.gradients.community,
         onPress: () => navigation.navigate('ChiSiamo'),
       },
     ],

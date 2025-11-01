@@ -100,6 +100,20 @@ export const Colors = {
     blackToRed: ['#000000', '#DC2626'] as const,
     subtle: ['#FAFAFA', '#F5F5F5'] as const,
     energy: ['#DC2626', '#FF4500'] as const,
+    // Action buttons gradients
+    donate: ['#E11D48', '#DC2626', '#B91C1C'] as const, // Rose → Red
+    shop: ['#DC2626', '#B91C1C', '#991B1B'] as const, // Red gradient
+    projects: ['#0F766E', '#0D9488', '#14B8A6'] as const, // Teal gradient
+    tracking: ['#1565C0', '#1976D2', '#2196F3'] as const, // Blue gradient
+    events: ['#7C3AED', '#8B5CF6', '#A855F7'] as const, // Purple gradient
+    community: ['#1F2937', '#374151', '#4B5563'] as const, // Dark gray gradient
+    success: ['#059669', '#10B981', '#047857'] as const, // Green gradient
+    purple: ['#8B5CF6', '#7C3AED', '#6D28D9'] as const, // Purple gradient for partners
+    // Social platforms gradients
+    website: ['#6B7280', '#9CA3AF', '#D1D5DB'] as const, // Gray gradient
+    instagram: ['#E1306C', '#F56040', '#FCAF45'] as const, // Instagram gradient
+    facebook: ['#1877F2', '#42A5F5', '#64B5F6'] as const, // Facebook blue gradient
+    linkedin: ['#0077B5', '#00A0DC', '#40E0D0'] as const, // LinkedIn blue gradient
   },
 
   // GLASSMORPHISM
@@ -129,21 +143,8 @@ export const Colors = {
   },
 };
 
-// SPACING SYSTEM - Valori fissi (usa Perfect components per scaling!)
-export const Spacing = {
-  0: 0,
-  1: 4,
-  2: 8,
-  3: 12,
-  4: 16,
-  5: 20,
-  6: 24,
-  8: 32,
-  10: 40,
-  12: 48,
-  16: 64,
-  20: 80,
-};
+// SPACING SYSTEM - ⚠️ DEPRECATO - Usa PerfectSpacing invece!
+// Il vecchio Spacing è stato rimosso. Usa PerfectSpacing per spacing semantico e scalato.
 
 // BORDER RADIUS
 export const BorderRadius = {

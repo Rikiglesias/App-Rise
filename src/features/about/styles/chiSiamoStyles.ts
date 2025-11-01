@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import {
-  Spacing,
+  PerfectSpacing,
   Colors,
   Typography,
   Shadows,
@@ -14,13 +14,13 @@ import { scale } from '@/shared/constants/perfectScale';
  */
 export const chiSiamoSectionStyles = StyleSheet.create({
   categoryContainer: {
-    marginBottom: Spacing[2],
+    marginBottom: PerfectSpacing.sm,
   },
 
   headerContainer: {
-    paddingTop: Spacing[3],
-    paddingHorizontal: Spacing[4],
-    paddingBottom: Spacing[2],
+    paddingTop: PerfectSpacing.md,
+    paddingHorizontal: PerfectSpacing.base,
+    paddingBottom: PerfectSpacing.sm,
     alignItems: 'center',
     position: 'relative',
   },
@@ -44,12 +44,12 @@ export const chiSiamoSectionStyles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     position: 'relative',
-    marginBottom: Spacing[4],
+    marginBottom: PerfectSpacing.base,
   },
 
   titleTouchableArea: {
-    paddingHorizontal: Spacing[2],
-    paddingVertical: Spacing[1],
+    paddingHorizontal: PerfectSpacing.sm,
+    paddingVertical: PerfectSpacing.xs,
   },
 
   titleContainer: {
@@ -92,7 +92,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
     color: Colors.primary[700],
     textAlign: 'center',
     letterSpacing: scale(0.2),
-    marginTop: Spacing[1],
+    marginTop: PerfectSpacing.xs,
     opacity: 0.8,
   },
 
@@ -109,7 +109,7 @@ export const chiSiamoSectionStyles = StyleSheet.create({
   },
 
   infoIconSubtitle: {
-    marginLeft: Spacing[2],
+    marginLeft: PerfectSpacing.sm,
     width: scale(24),
     height: scale(24),
     borderRadius: scale(12),
@@ -127,8 +127,8 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   infoIconImproved: {
     position: 'absolute',
-    right: Spacing[1],
-    top: Spacing[1],
+    right: PerfectSpacing.xs,
+    top: PerfectSpacing.xs,
     width: scale(32),
     height: scale(32),
     borderRadius: scale(16),
@@ -145,12 +145,12 @@ export const chiSiamoSectionStyles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: scale(0.3),
     lineHeight: scale(21),
-    marginBottom: Spacing[3],
-    paddingHorizontal: Spacing[4],
+    marginBottom: PerfectSpacing.md,
+    paddingHorizontal: PerfectSpacing.base,
     fontStyle: 'normal',
     color: Colors.primary[600],
     backgroundColor: Colors.primary[50],
-    paddingVertical: Spacing[3],
+    paddingVertical: PerfectSpacing.md,
     borderRadius: scale(12),
     borderWidth: scale(1),
     borderColor: Colors.primary[100],

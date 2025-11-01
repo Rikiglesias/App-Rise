@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import type { useNewActionsAnimations } from './ContributeAnimations';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
-import { Colors, Spacing } from '@/shared/constants';
+import { Colors, PerfectSpacing } from '@/shared/constants';
 
 interface NewActionsHeaderProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -25,9 +25,9 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         headerContainer: {
           alignSelf: 'stretch',
           width: '100%',
-          paddingTop: Spacing[20] + scale(12),
-          paddingHorizontal: Spacing[4],
-          paddingBottom: Spacing[6],
+          paddingTop: PerfectSpacing['5xl'] + scale(12),
+          paddingHorizontal: PerfectSpacing.base,
+          paddingBottom: PerfectSpacing.lg,
           alignItems: 'center',
           position: 'relative',
         },
@@ -47,7 +47,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           alignItems: 'center',
           height: HEADER_INNER_HEIGHT,
           backgroundColor: Colors.neutral[50],
-          paddingHorizontal: Spacing[4],
+          paddingHorizontal: PerfectSpacing.base,
           paddingTop: HEADER_VERTICAL_PADDING,
           paddingBottom: HEADER_VERTICAL_PADDING,
           borderRadius: scale(16),
@@ -82,7 +82,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           color: Colors.neutral[700],
           textAlign: 'center',
           letterSpacing: 0,
-          marginTop: Spacing[3],
+          marginTop: PerfectSpacing.md,
           opacity: 0.8,
           includeFontPadding: false,
         },
