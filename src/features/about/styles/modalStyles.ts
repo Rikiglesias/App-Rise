@@ -5,6 +5,7 @@ import {
   Typography,
   Spacing,
 } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 
 /**
  * Stili per i modal della sezione About
@@ -36,32 +37,32 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalContainer: {
-    maxWidth: 350,
+    maxWidth: scale(350),
     width: '100%',
     maxHeight: '90%',
-    minHeight: 700,
+    minHeight: scale(700),
     height: '85%',
   },
 
   modalGradientBorder: {
-    borderRadius: 24,
+    borderRadius: scale(24),
     padding: Spacing[1],
     height: '100%',
-    minHeight: 700,
+    minHeight: scale(700),
   },
 
   modalWhiteContainer: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: 20,
+    borderRadius: scale(20),
     overflow: 'hidden',
     height: '100%',
-    minHeight: 650,
+    minHeight: scale(650),
   },
 
   modalContent: {
     height: '100%',
     flexDirection: 'column',
-    minHeight: 600,
+    minHeight: scale(600),
   },
 
   modalHeader: {
@@ -69,18 +70,18 @@ export const modalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: Spacing[4],
-    borderBottomWidth: 1,
+    borderBottomWidth: scale(1),
     borderBottomColor: Colors.neutral[200],
     position: 'relative',
-    height: 56,
-    minHeight: 56,
+    height: scale(56),
+    minHeight: scale(56),
     flexShrink: 0,
   },
 
   modalTitle: {
     fontWeight: Typography.weights.black,
-    color: '#DC2626',
-    letterSpacing: -0.8,
+    color: Colors.primary[600],
+    letterSpacing: scale(-0.8),
     flex: 1,
     textAlign: 'center',
     paddingRight: Spacing[8],
@@ -90,23 +91,23 @@ export const modalStyles = StyleSheet.create({
     position: 'absolute',
     top: Spacing[3],
     right: Spacing[3],
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    width: scale(32),
+    height: scale(32),
+    borderRadius: scale(16),
+    backgroundColor: Colors.neutral[900],
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   storyScroll: {
-    height: 500,
-    minHeight: 500,
+    height: scale(500),
+    minHeight: scale(500),
   },
 
   storyContainer: {
     padding: Spacing[6],
     gap: Spacing[4],
-    minHeight: 800,
+    minHeight: scale(800),
     flexGrow: 1,
     paddingBottom: Spacing[12],
   },
@@ -121,13 +122,13 @@ export const modalStyles = StyleSheet.create({
   storyText: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
-    lineHeight: 24,
+    lineHeight: scale(24),
     textAlign: 'justify',
-    letterSpacing: 0.3,
+    letterSpacing: scale(0.3),
   },
 
   highlightText: {
-    color: '#DC2626',
+    color: Colors.primary[600],
     fontWeight: Typography.weights.bold,
   },
 
@@ -138,7 +139,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   sectionDivider: {
-    height: 1,
+    height: scale(1),
     backgroundColor: Colors.neutral[200],
     marginVertical: Spacing[4],
   },
@@ -152,8 +153,8 @@ export const modalStyles = StyleSheet.create({
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
     textAlign: 'center',
-    lineHeight: 20,
-    letterSpacing: 0.3,
+    lineHeight: scale(20),
+    letterSpacing: scale(0.3),
   },
 
   introText: {
@@ -176,7 +177,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarIcon: {
-    marginTop: 2,
+    marginTop: scale(2),
   },
 
   pillarTitle: {
@@ -192,6 +193,6 @@ export const modalStyles = StyleSheet.create({
   pillarText: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
-    lineHeight: 22,
+    lineHeight: scale(22),
   },
 });
