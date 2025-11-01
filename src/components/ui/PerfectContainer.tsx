@@ -141,26 +141,32 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   const finalPadding = padding !== undefined ? scale(padding) : undefined;
   const finalPaddingH = (() => {
     if (paddingHorizontal !== undefined) return scale(paddingHorizontal);
-    if (config && 'padding' in config) return scale(config.padding);
+    if (config && 'padding' in config) return config.padding;
     return undefined;
   })();
   const finalPaddingV = (() => {
     if (paddingVertical !== undefined) return scale(paddingVertical);
-    if (config && 'padding' in config) return scale(config.padding);
+    if (config && 'padding' in config) return config.padding;
     return undefined;
   })();
 
   const finalMargin = margin !== undefined ? scale(margin) : undefined;
-  const finalMarginH =
-    marginHorizontal !== undefined ? scale(marginHorizontal) : undefined;
-  const finalMarginV =
-    marginVertical !== undefined ? scale(marginVertical) : undefined;
+  const finalMarginH = (() => {
+    if (marginHorizontal !== undefined) return scale(marginHorizontal);
+    if (config && 'marginHorizontal' in config) return config.marginHorizontal;
+    return undefined;
+  })();
+  const finalMarginV = (() => {
+    if (marginVertical !== undefined) return scale(marginVertical);
+    if (config && 'marginVertical' in config) return config.marginVertical;
+    return undefined;
+  })();
 
   const finalWidth = typeof width === 'number' ? scale(width) : width;
   const finalHeight = height ? scale(height) : undefined;
   const finalBorderRadius = (() => {
     if (borderRadius !== undefined) return scale(borderRadius);
-    if (config && 'borderRadius' in config) return scale(config.borderRadius);
+    if (config && 'borderRadius' in config) return config.borderRadius;
     return undefined;
   })();
   const finalGap = gap ? scale(gap) : undefined;

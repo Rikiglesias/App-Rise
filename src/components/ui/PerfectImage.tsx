@@ -64,11 +64,11 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   // 🎯 RISOLVI PRESET O VALORI CUSTOM
   const config = preset ? IMAGE_PRESETS[preset] : null;
 
-  const finalWidth = scale(config?.width ?? width);
+  const finalWidth = config?.width ?? scale(width);
   const finalAspectRatio =
     config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4 / 3);
   const finalHeight = height ? scale(height) : finalWidth / finalAspectRatio;
-  const finalBorderRadius = scale(config?.borderRadius ?? borderRadius ?? 0);
+  const finalBorderRadius = config?.borderRadius ?? scale(borderRadius ?? 0);
   const finalShadow = config?.shadow ?? shadow ?? false;
 
   // 🎨 CALCOLA STILI
