@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-// TypographyTokens rimosso - usa Typography.sizes
+
 import {
   BorderRadius,
   Colors,
@@ -7,6 +7,7 @@ import {
   Spacing,
   Typography,
 } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 
 export const impactScreenStyles = StyleSheet.create({
   container: {
@@ -17,14 +18,12 @@ export const impactScreenStyles = StyleSheet.create({
     paddingTop: Spacing[12],
   },
   headerTitle: {
-    fontSize: 28, // Headline medium
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
     textAlign: 'center',
     marginBottom: Spacing[2],
   },
   headerSubtitle: {
-    fontSize: 16, // Body large
     color: Colors.neutral[600],
     textAlign: 'center',
     marginBottom: Spacing[8],
@@ -41,12 +40,10 @@ export const impactScreenStyles = StyleSheet.create({
     opacity: 0.8,
   },
   mainStatValue: {
-    fontSize: 32, // Headline large
     fontWeight: Typography.weights.black,
     color: Colors.neutral[0],
   },
   mainStatLabel: {
-    fontSize: 16, // Body large
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[0],
     opacity: 0.9,
@@ -59,7 +56,6 @@ export const impactScreenStyles = StyleSheet.create({
     marginTop: Spacing[8],
   },
   sectionTitle: {
-    fontSize: 24, // Title large
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
     marginBottom: Spacing[4],
@@ -80,7 +76,7 @@ export const impactScreenStyles = StyleSheet.create({
   mapPreview: {
     backgroundColor: Colors.primary[100],
     borderRadius: BorderRadius.xl,
-    height: 140,
+    height: scale(140),
     justifyContent: 'center',
     alignItems: 'center',
     ...Shadows.md,
@@ -92,7 +88,6 @@ export const impactScreenStyles = StyleSheet.create({
     zIndex: 1,
   },
   mapPreviewText: {
-    fontSize: 16, // Body large
     fontWeight: Typography.weights.semibold,
     color: Colors.neutral[0],
     marginTop: Spacing[2],
