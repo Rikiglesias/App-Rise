@@ -1,0 +1,199 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = `
+<View
+  style={
+    {
+      "marginTop": 24,
+      "paddingHorizontal": 16,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "marginBottom": 24,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "backgroundColor": "rgba(55, 65, 81, 0.03)",
+          "borderColor": "rgba(55, 65, 81, 0.08)",
+          "borderRadius": 24,
+          "borderWidth": 1,
+          "elevation": 1,
+          "paddingHorizontal": 24,
+          "paddingVertical": 16,
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 0.05,
+          "shadowRadius": 2,
+        }
+      }
+    >
+      <Text
+        fontWeight="700"
+        immunity={true}
+        lines={1}
+        size={22}
+        style={
+          {
+            "color": "#404040",
+            "elevation": 1,
+            "includeFontPadding": false,
+            "letterSpacing": -0.4,
+            "shadowColor": "#000",
+            "shadowOffset": {
+              "height": 1,
+              "width": 0,
+            },
+            "shadowOpacity": 0.05,
+            "shadowRadius": 2,
+            "textAlign": "center",
+          }
+        }
+      >
+        🌍 Dove Operiamo
+      </Text>
+      <Text
+        immunity={true}
+        lines={1}
+        size={16}
+        style={
+          {
+            "color": "#525252",
+            "letterSpacing": 0.1,
+            "marginTop": 12,
+            "opacity": 0.9,
+            "textAlign": "center",
+          }
+        }
+      >
+        Le nostre operazioni nel mondo
+      </Text>
+    </View>
+  </View>
+  <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "backgroundColor": "#FFFFFF",
+        "borderColor": "transparent",
+        "borderRadius": 24,
+        "borderWidth": 1,
+        "elevation": 4,
+        "height": 280,
+        "marginHorizontal": 0,
+        "marginTop": 16,
+        "opacity": 1,
+        "overflow": "hidden",
+        "padding": 0,
+        "position": "relative",
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 4,
+          "width": 0,
+        },
+        "shadowOpacity": 0.15,
+        "shadowRadius": 8,
+      }
+    }
+  >
+    <Image
+      borderRadius={20}
+      height={280}
+      source={
+        {
+          "testUri": "../../../assets/images/mappa.png",
+        }
+      }
+      width={361}
+    />
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "backgroundColor": "#FAFAFA",
+          "borderRadius": 18,
+          "elevation": 8,
+          "flexDirection": "row",
+          "gap": 4,
+          "paddingHorizontal": 8,
+          "paddingVertical": 4,
+          "position": "absolute",
+          "right": 8,
+          "top": 8,
+          "zIndex": 2,
+        }
+      }
+    >
+      <Text
+        fontWeight="500"
+        immunity={true}
+        lines={1}
+        size={12}
+        style={
+          {
+            "color": "#525252",
+          }
+        }
+      >
+        Tocca per esplorare
+      </Text>
+      <Text
+        allowFontScaling={false}
+        selectable={false}
+        style={
+          [
+            {
+              "color": "#525252",
+              "fontSize": 28,
+            },
+            undefined,
+            {
+              "fontFamily": "material-community",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            {},
+          ]
+        }
+      >
+        󰦄
+      </Text>
+    </View>
+  </View>
+</View>
+`;

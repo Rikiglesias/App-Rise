@@ -74,36 +74,36 @@ interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
 // 🎨 PRESET CONTAINER (riferimento iPhone 15)
 const CONTAINER_PRESETS = {
   page: {
-    padding: 20,
+    padding: scale(20),
     backgroundColor: 'primary' as const,
     flex: 1,
   },
   card: {
-    padding: 16,
+    padding: scale(16),
     backgroundColor: 'card' as const,
-    borderRadius: 12,
+    borderRadius: scale(12),
     shadow: 'light' as const,
   },
   section: {
-    padding: 16,
-    marginVertical: 8,
+    padding: scale(16),
+    marginVertical: scale(8),
     backgroundColor: 'transparent' as const,
   },
   modal: {
-    padding: 24,
+    padding: scale(24),
     backgroundColor: 'modal' as const,
-    borderRadius: 16,
+    borderRadius: scale(16),
     shadow: 'strong' as const,
-    marginHorizontal: 20,
+    marginHorizontal: scale(20),
   },
   header: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(12),
     backgroundColor: 'primary' as const,
   },
   footer: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(16),
     backgroundColor: 'secondary' as const,
   },
 } as const;

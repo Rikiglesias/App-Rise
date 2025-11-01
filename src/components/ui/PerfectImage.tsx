@@ -41,11 +41,11 @@ interface PerfectImageProps extends Omit<ImageProps, 'style'> {
 
 // 🎨 PRESET DIMENSIONI (riferimento iPhone 15)
 const IMAGE_PRESETS = {
-  hero: { width: 350, aspectRatio: 16 / 9, borderRadius: 12, shadow: 'medium' },
-  card: { width: 280, aspectRatio: 4 / 3, borderRadius: 8, shadow: 'light' },
-  thumbnail: { width: 80, aspectRatio: 1, borderRadius: 8, shadow: false },
-  avatar: { width: 60, aspectRatio: 1, borderRadius: 30, shadow: 'light' },
-  banner: { width: 380, aspectRatio: 3 / 1, borderRadius: 6, shadow: false },
+  hero: { width: scale(350), aspectRatio: 16 / 9, borderRadius: scale(12), shadow: 'medium' },
+  card: { width: scale(280), aspectRatio: 4 / 3, borderRadius: scale(8), shadow: 'light' },
+  thumbnail: { width: scale(80), aspectRatio: 1, borderRadius: scale(8), shadow: false },
+  avatar: { width: scale(60), aspectRatio: 1, borderRadius: scale(30), shadow: 'light' },
+  banner: { width: scale(380), aspectRatio: 3 / 1, borderRadius: scale(6), shadow: false },
 } as const;
 
 // 🎭 SHADOW STYLES - Usa getPerfectShadow per shadows scalati
