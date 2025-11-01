@@ -6,8 +6,8 @@ import {
   safeAsync,
   withTimeout,
   type AsyncResult,
-} from '../utils/result';
-import { logDebug, logError } from '../utils/logger';
+} from '@/shared/utils/result';
+import { logDebug, logError } from '@/shared/utils/logger';
 
 // ===================================================================
 // ASYNC OPERATION HOOK

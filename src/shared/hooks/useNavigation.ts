@@ -1,9 +1,9 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback } from 'react';
 
-import type { RootStackParamList } from '../../navigation/types';
-
 import { useHapticFeedback } from './useHapticFeedback';
+import type { RootStackParamList } from '@/navigation/types';
+
 
 interface UseNavigationHookOptions {
   enableHaptics?: boolean;

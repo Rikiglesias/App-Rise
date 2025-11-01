@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import { Animated } from 'react-native';
-import { HeaderSection } from '../../../../features/social/components/HeaderSection';
 import { AllProviders } from '../../../helpers/testProviders';
+import { HeaderSection } from '@/features/social/components/HeaderSection';
 
 // Mock dei moduli necessari
-jest.mock('../../../../shared/hooks', () => ({
+jest.mock('@/shared/hooks', () => ({
   useResponsive: () => ({
     scale: (value: number) => value,
     width: 375,

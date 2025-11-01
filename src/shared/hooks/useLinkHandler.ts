@@ -1,16 +1,16 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Alert, Linking } from 'react-native';
 
+import { useHapticFeedback } from './useHapticFeedback';
 import {
   isSuccess,
   retry,
   safeAsync,
   withTimeout,
   type AsyncResult,
-} from '../utils/result';
-import { logWarn, logError } from '../utils/logger';
-import { RISE_URLS, SOCIAL_URLS } from '../constants/urls';
-import { useHapticFeedback } from './useHapticFeedback';
+} from '@/shared/utils/result';
+import { logWarn, logError } from '@/shared/utils/logger';
+import { RISE_URLS, SOCIAL_URLS } from '@/shared/constants/urls';
 
 interface UseLinkHandlerOptions {
   defaultErrorMessage?: string;

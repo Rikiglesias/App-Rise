@@ -1,28 +1,31 @@
+/**
+ * APP ROOT COMPONENT TEST
+ * 
+ * Test base dell'entry point dell'applicazione.
+ * Verifica che l'app si inizializzi correttamente con tutti i provider necessari.
+ */
+
+import React from 'react';
 import { render } from '@testing-library/react-native';
-import { Text, View } from 'react-native';
+import App from '../../App';
 
-// Componente di test semplice
-const TestComponent = () => {
-  return (
-    <View testID="test-container">
-      <Text testID="test-text">Test Component</Text>
-    </View>
-  );
-};
+// Mock dei moduli nativi necessari per il test
+jest.mock('expo-font');
+jest.mock('expo-asset');
+jest.mock('expo-status-bar', () => ({
+  StatusBar: 'StatusBar',
+}));
 
-describe('App Configuration Tests', () => {
-  it('dovrebbe renderizzare un componente semplice', () => {
-    const { getByTestId } = render(<TestComponent />);
-
-    // Test di base - verifica che il rendering funzioni
-    expect(getByTestId('test-container')).toBeTruthy();
-    expect(getByTestId('test-text')).toBeTruthy();
+describe('App Root Component', () => {
+  it('dovrebbe renderizzare senza errori', () => {
+    // Test di smoke - verifica che l'app si monti senza crash
+    const { toJSON } = render(<App />);
+    expect(toJSON()).toBeTruthy();
   });
 
-  it('dovrebbe verificare il contenuto del testo', () => {
-    const { getByText } = render(<TestComponent />);
-
-    // Verifica che il testo sia presente
-    expect(getByText('Test Component')).toBeTruthy();
+  it('dovrebbe inizializzare i provider necessari', () => {
+    // Verifica che l'app renderizzi con la struttura base
+    const { root } = render(<App />);
+    expect(root).toBeDefined();
   });
 });

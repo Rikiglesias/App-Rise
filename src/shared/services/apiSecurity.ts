@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable require-await */
-import { env } from '../config/environment';
-import { logger } from '../utils/logger';
 import { errorTracking } from './errorTracking';
 import { secureStorage } from './secureStorage';
+import { env } from '@/shared/config/environment';
+import { logger } from '@/shared/utils/logger';
 
 /**
  * APISecurityService - Sistema di sicurezza per chiamate API

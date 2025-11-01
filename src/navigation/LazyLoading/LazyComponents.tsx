@@ -110,12 +110,12 @@ export const LazyImpatto2024Screen = createLazyComponent(
 );
 
 /**
- * SIMPLE PLACEHOLDER SCREEN
+ * DEVELOPMENT SCREEN (Work in Progress)
  */
-export const LazySimplePlaceholderScreen = createLazyComponent(
-  () => import('../../shared/screens/SimplePlaceholderScreen'),
+export const LazyDevelopmentScreen = createLazyComponent(
+  () => import('../../shared/screens/DevelopmentScreen'),
   {
-    name: 'SimplePlaceholderScreen',
+    name: 'DevelopmentScreen',
     preload: false,
     timeout: 4000,
     retryAttempts: 2,
@@ -156,8 +156,8 @@ export const WrappedChiSiamoScreen = withLazyScreen(LazyChiSiamoScreen);
 export const WrappedSeguiciScreen = withLazyScreen(LazySeguiciScreen);
 export const WrappedProjectsScreen = withLazyScreen(LazyProjectsScreen);
 export const WrappedImpatto2024Screen = withLazyScreen(LazyImpatto2024Screen);
-export const WrappedSimplePlaceholderScreen = withLazyScreen(
-  LazySimplePlaceholderScreen
+export const WrappedDevelopmentScreen = withLazyScreen(
+  LazyDevelopmentScreen
 );
 
 // =================================================================

@@ -6,9 +6,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Modal, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { PerfectText, PerfectContainer } from '../../components/ui';
-import { useOTAUpdates } from '../hooks/useOTAUpdates';
-import { Colors, Spacing, BorderRadius } from '../constants/designTokens';
+import { PerfectText, PerfectContainer } from '@/components/ui';
+import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
+import { Colors, Spacing, BorderRadius } from '@/shared/constants/designTokens';
 
 interface OTAUpdateScreenProps {
   visible: boolean;

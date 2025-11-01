@@ -2,24 +2,24 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import type { StatButtonProps } from '../types/ImpactScreenTypes';
 import {
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
-} from '../../../components/ui';
-// ELIMINATO: scaleDimensionLinear from '../../../shared/constants/responsiveSystem';
-import { PerfectImage } from '../../../components/ui/PerfectImage';
+} from '@/components/ui';
+// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
+import { PerfectImage } from '@/components/ui/PerfectImage';
 
-import { IMPACT_DATA } from '../../../data/impactData';
+import { IMPACT_DATA } from '@/data/impactData';
 import {
   BorderRadius,
   Colors,
   Shadows,
   Spacing,
-} from '../../../shared/constants';
-import { scale } from '../../../shared/constants/perfectScale';
-import { IMAGE_DIMENSIONS } from '../../../shared/constants/dimensions';
-import type { StatButtonProps } from '../types/ImpactScreenTypes';
+} from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
+import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
 export const StatButton: React.FC<StatButtonProps> = ({
   icon,

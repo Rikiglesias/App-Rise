@@ -5,9 +5,9 @@
 
 import React, { Suspense } from 'react';
 import { StyleSheet } from 'react-native';
-import { PerfectText, PerfectContainer } from '../../components/ui';
-import { Colors, Spacing } from '../../shared/constants/designTokens';
-import { logger } from '../../shared/utils/logger';
+import { PerfectText, PerfectContainer } from '@/components/ui';
+import { Colors, Spacing } from '@/shared/constants/designTokens';
+import { logger } from '@/shared/utils/logger';
 
 interface LazyScreenProps {
   children: React.ReactNode;

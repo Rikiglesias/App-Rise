@@ -6,7 +6,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants';
+} from '@/shared/constants';
 
 // CONTAINER STYLES
 export const createContainerStyles = () =>

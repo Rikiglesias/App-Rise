@@ -5,17 +5,17 @@
 
 import React, { useMemo } from 'react';
 
-import { createActionButtonStyles } from '../components/ActionButtonStyles';
+import { createActionButtonStyles } from '../shared/ActionButtonStyles';
 import {
   DonateButtonsSection,
   ExploreButtonsSection,
   CommunityButtonsSection,
-} from '../components/ActionButtonSections';
+} from '../shared/ActionButtonSections';
 import {
   FirstSectionDivider,
   SectionDivider,
-} from '../components/ActionButtonUtils';
-import type { useNewActionsAnimations } from '../components/ContributeAnimations';
+} from '../shared/ActionButtonUtils';
+import type { useNewActionsAnimations } from '../shared/ContributeAnimations';
 import type { ActionButtonsData } from './useActionButtonsData';
 import { PerfectContainer } from '@/components/ui';
 

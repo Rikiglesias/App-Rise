@@ -1,7 +1,7 @@
 import React from 'react';
-import { PerfectText } from '../../ui/PerfectText';
-
 import { CTADescriptionProps, CTASubtitleProps, CTATitleProps } from '../types';
+import { PerfectText } from '@/components/ui/PerfectText';
+
 
 // ===================================================================
 // DESCRIPTION COMPONENT

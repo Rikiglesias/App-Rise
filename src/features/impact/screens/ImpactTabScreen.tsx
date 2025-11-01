@@ -18,7 +18,6 @@ import {
 import { PlatformScrollView, PerfectContainer } from '@components/ui';
 import { Colors, Spacing } from '@shared/constants/designTokens';
 import { scale } from '@shared/constants/perfectScale';
-import { MAP_LOCATIONS } from '@/data/impactData';
 import { logError } from '@/shared/utils/logger';
 
 // Constants for padding calculations
@@ -69,7 +68,8 @@ const ImpactTabScreenComponent: React.FC = () => {
 
   const handleMapPress = useCallback(() => {
     try {
-      const convertedLocations = convertToMapLocations(MAP_LOCATIONS);
+      // Converti locations con helper
+      const convertedLocations = convertToMapLocations();
       navigation.navigate('MapModal', { locations: convertedLocations });
     } catch (error) {
       logError('Navigation error to MapModal screen', error instanceof Error ? error.message : String(error));

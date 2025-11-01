@@ -3,21 +3,21 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import type { RootStackParamList } from '../../../navigation/types';
+import { StatCard, ImpactItem } from '../components/Impatto2024Components';
+import { STATS_2024, IMPACT_AREAS, GOAL_2025 } from '../data/impatto2024Data';
+import type { RootStackParamList } from '@/navigation/types';
 import {
   PerfectText,
   PlatformScrollView,
   PerfectContainer,
-} from '../../../components/ui';
-import { LOGICAL_REFERENCE } from '../../../shared/constants/perfectScale';
+} from '@/components/ui';
+import { LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
 import {
   BorderRadius,
   Colors,
   Spacing,
   Shadows,
-} from '../../../shared/constants/designTokens';
-import { StatCard, ImpactItem } from '../components/Impatto2024Components';
-import { STATS_2024, IMPACT_AREAS, GOAL_2025 } from '../data/impatto2024Data';
+} from '@/shared/constants/designTokens';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

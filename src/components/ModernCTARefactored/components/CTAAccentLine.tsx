@@ -1,8 +1,8 @@
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import { PerfectContainer } from '../../ui/PerfectContainer';
-
 import { CTAAccentLineProps } from '../types';
+import { PerfectContainer } from '@/components/ui/PerfectContainer';
+
 
 // ===================================================================
 // LOCAL STYLES

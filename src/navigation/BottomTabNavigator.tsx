@@ -9,12 +9,14 @@ import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Platform-specific components
+import ImpactStackNavigator from './ImpactStackNavigator';
+import type { BottomTabParamList } from './types';
 import {
   PlatformBlur,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
-} from '../components/ui';
+} from '@/components/ui';
 
 // Design Tokens & Hooks
 import {
@@ -23,15 +25,13 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../shared/constants/designTokens';
+} from '@/shared/constants/designTokens';
 
 // Lazy Screens (only for HomeScreen due to export issues)
 // Direct imports (no lazy loading to avoid spinner)
-import { ContributeTabScreen } from '../features/actions';
-import HomeScreen from '../features/home/screens/HomeScreen';
-import ImpactStackNavigator from './ImpactStackNavigator';
+import { ContributeTabScreen } from '@/features/actions';
+import HomeScreen from '@/features/home/screens/HomeScreen';
 
-import type { BottomTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 

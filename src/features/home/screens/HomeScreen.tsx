@@ -8,7 +8,7 @@ import {
 import type { HomeScreenProps } from '../types/HomeScreenTypes';
 import { EntraInAzione } from '../components/EntraInAzione';
 
-import { PlatformScrollView, PerfectContainer } from '@components/ui';
+import { PerfectContainer } from '@components/ui';
 import { HomeHeaderSection } from '@components/domain/HomeHeaderSection';
 import { useTheme } from '@shared/hooks/useTheme';
 import { Spacing } from '@shared/constants';
@@ -46,13 +46,14 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
       accessibilityLabel="Schermata Home"
       testID="home-screen"
     >
-      <PlatformScrollView 
+      <Animated.ScrollView 
         contentContainerStyle={styles.scrollContent}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: true }
         )}
         scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
       >
         <PerfectContainer preset="page" paddingVertical={0}>
           {/* Header Section con titolo e logo - SPAZIO BILANCIATO */}
@@ -69,7 +70,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = ({
             <EntraInAzione />
           </PerfectContainer>
         </PerfectContainer>
-      </PlatformScrollView>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 };

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { logger } from '../utils/logger';
+import { logger } from '@/shared/utils/logger';
 
 /**
  * ErrorTrackingService - Sistema di monitoraggio errori e crash

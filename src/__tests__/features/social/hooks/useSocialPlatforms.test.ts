@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react-native';
 import { Linking, Alert } from 'react-native';
-import { useSocialPlatforms } from '../../../../features/social/hooks/useSocialPlatforms';
-import { logWarn } from '../../../../shared/utils/logger';
+import { useSocialPlatforms } from '@/features/social/hooks/useSocialPlatforms';
+import { logWarn } from '@/shared/utils/logger';
 
 // Mock delle dipendenze - approccio semplificato
 jest.mock('react-native', () => ({
@@ -22,7 +22,7 @@ jest.mock('react-native', () => ({
   },
 }));
 
-jest.mock('../../../../shared/utils/logger', () => ({
+jest.mock('@/shared/utils/logger', () => ({
   logWarn: jest.fn(),
 }));
 

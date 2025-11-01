@@ -1,6 +1,6 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { ViewStyle, TextStyle, ImageStyle } from 'react-native';
-import type { RootStackParamList } from '../../../navigation/types';
+import type { RootStackParamList } from '@/navigation/types';
 
 export type ProjectsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

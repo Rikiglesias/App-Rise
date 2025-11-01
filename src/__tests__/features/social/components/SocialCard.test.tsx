@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
-import { SocialCard } from '../../../../features/social/components/SocialCard';
-import type { SocialPlatform } from '../../../../features/social/components/SocialCard';
 import { AllProviders } from '../../../helpers/testProviders';
+import { SocialCard } from '@/features/social/components/SocialCard';
+import type { SocialPlatform } from '@/features/social/components/SocialCard';
 
 // Mock delle dipendenze - approccio semplificato
 jest.mock('react-native', () => ({
@@ -81,7 +81,7 @@ jest.mock('react-native-svg', () => ({
   G: 'G',
 }));
 
-jest.mock('../../../../components/ui', () => {
+jest.mock('@/components/ui', () => {
   const React = jest.requireActual('react');
   return {
     PlatformTouchable: ({

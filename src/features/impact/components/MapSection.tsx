@@ -61,7 +61,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           height={280}
           borderRadius={20}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          source={require('../../../../assets/images/mappa.png')}
+          source={require('@assets/images/mappa.png')}
         />
 
         {/* INDICATORE CLICCABILE */}

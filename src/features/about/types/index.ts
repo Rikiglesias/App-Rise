@@ -1,7 +1,7 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { Animated, TextStyle, ViewStyle } from 'react-native';
 
-import type { RootStackParamList } from '../../../navigation/types';
+import type { RootStackParamList } from '@/navigation/types';
 
 // Navigation Types
 export type ChiSiamoScreenNavigationProp = StackNavigationProp<

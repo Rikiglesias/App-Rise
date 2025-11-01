@@ -9,16 +9,16 @@ import {
   PerfectText,
   PlatformTouchable,
   PerfectContainer,
-} from '../../../../components/ui';
+} from '@/components/ui';
 import {
   BorderRadius,
   Colors,
   Spacing,
   Shadows,
-} from '../../../../shared/constants/designTokens';
-import { scale } from '../../../../shared/constants/perfectScale';
-import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
-import type { BottomTabParamList } from '../../../../navigation/types';
+} from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
+import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import type { BottomTabParamList } from '@/navigation/types';
 
 export const ActionCTAButtons: React.FC = () => {
   const { triggerHaptic } = useHapticFeedback();

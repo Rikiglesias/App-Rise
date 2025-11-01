@@ -1,12 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-import { PlatformScrollView } from '../../../components/ui';
-
-import { Colors } from '../../../shared/constants/designTokens';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ContributeTabScreenProps } from '../types/ContributeScreenTypes';
 import {
   ActionButtons,
@@ -14,6 +8,8 @@ import {
   HeaderDivider,
   useNewActionsAnimations,
 } from '../components/Contribute/components';
+import { PlatformScrollView } from '@/components/ui';
+import { Colors } from '@/shared/constants/designTokens';
 
 const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
   navigation,

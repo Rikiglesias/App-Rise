@@ -10,7 +10,7 @@
 
 import React from 'react';
 import type { ComponentType } from 'react';
-import { logger } from '../../shared/utils/logger';
+import { logger } from '@/shared/utils/logger';
 
 // Cache per i componenti già caricati
 const componentCache = new Map<

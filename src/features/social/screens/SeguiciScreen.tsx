@@ -1,22 +1,22 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SocialCard } from '../components/SocialCard';
+import { HeaderSection } from '../components/HeaderSection';
+import { useSocialPlatforms } from '../hooks/useSocialPlatforms';
+import { mainStyles } from '../styles/mainStyles';
 import {
   PlatformScrollView,
   PlatformTouchable,
   PerfectContainer,
   PlatformIcon,
-} from '../../../components/ui';
-import { Colors } from '../../../shared/constants';
+} from '@/components/ui';
+import { Colors } from '@/shared/constants';
 
-import type { RootStackParamList } from '../../../navigation/types';
-import { useHapticFeedback } from '../../../shared/hooks/useHapticFeedback';
+import type { RootStackParamList } from '@/navigation/types';
+import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 // Componenti modulari
-import { SocialCard } from '../components/SocialCard';
-import { HeaderSection } from '../components/HeaderSection';
-import { useSocialPlatforms } from '../hooks/useSocialPlatforms';
-import { mainStyles } from '../styles/mainStyles';
 
 type SeguiciScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

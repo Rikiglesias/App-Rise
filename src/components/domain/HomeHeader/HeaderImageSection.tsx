@@ -6,11 +6,10 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, type ImageStyle, type ViewStyle } from 'react-native';
-import { PerfectContainer } from '../../ui/PerfectContainer';
-
-import { type HeaderImageSectionProps } from '../../../features/home/types/HomeHeaderTypes';
 import { HomeHeaderDesignTokens } from '../design-tokens/HomeHeaderTokens';
-import { PerfectImage } from '../../ui/PerfectImage';
+import { type HeaderImageSectionProps } from '@/features/home/types/HomeHeaderTypes';
+import { PerfectContainer } from '@/components/ui/PerfectContainer';
+import { PerfectImage } from '@/components/ui/PerfectImage';
 
 export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
   ({ imageAnim, imageParallax, imageScale, imageRotation, styles }) => {
@@ -46,7 +45,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
                 height={432}
                 borderRadius={24}
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                source={require('../../../../assets/images/hero-banner.png')}
+                source={require('@assets/images/hero-banner.png')}
               />
               <LinearGradient
                 colors={HomeHeaderDesignTokens.gradients.header}

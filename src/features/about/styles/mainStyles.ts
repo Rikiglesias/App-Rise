@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-import { Spacing } from '../../../shared/constants/designTokens';
-import { BorderRadius, Colors } from '../../../shared/constants';
+import { Spacing } from '@/shared/constants/designTokens';
+import { BorderRadius, Colors } from '@/shared/constants';
 
 /**
  * Stili principali per la sezione About

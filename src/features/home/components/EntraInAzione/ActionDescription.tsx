@@ -5,9 +5,9 @@ import {
   PerfectText,
   PerfectContainer,
   PerfectCardContainer,
-} from '../../../../components/ui';
-import { Colors, Spacing, BorderRadius, Shadows } from '../../../../shared/constants/designTokens';
-import { scale } from '../../../../shared/constants/perfectScale';
+} from '@/components/ui';
+import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 
 export const ActionDescription: React.FC = () => {
   return (

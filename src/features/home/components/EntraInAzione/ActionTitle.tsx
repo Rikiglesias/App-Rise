@@ -1,6 +1,6 @@
 import React from 'react';
-import { PerfectContainer, PerfectText } from '../../../../components/ui';
-import { Spacing, Colors, Shadows } from '../../../../shared/constants/designTokens';
+import { PerfectContainer, PerfectText } from '@/components/ui';
+import { Spacing, Colors, Shadows } from '@/shared/constants/designTokens';
 
 export const ActionTitle: React.FC = () => {
   return (

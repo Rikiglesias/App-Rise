@@ -6,10 +6,9 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import type { ViewStyle } from 'react-native';
-import { PerfectContainer } from '../../ui/PerfectContainer';
-
-import { type HeaderTextSectionProps } from '../../../features/home/types/HomeHeaderTypes';
 import { ModernSmartTitle } from '../ModernSmartTitle';
+import { type HeaderTextSectionProps } from '@/features/home/types/HomeHeaderTypes';
+import { PerfectContainer } from '@/components/ui/PerfectContainer';
 
 export const HeaderTextSection: React.FC<HeaderTextSectionProps> = React.memo(
   ({ colors, titleAnim, titleOpacity, titleTransform, styles }) => (

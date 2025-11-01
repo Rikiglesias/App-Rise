@@ -1,7 +1,7 @@
 import { Animated, ViewStyle, TextStyle, ImageStyle } from 'react-native';
-import { Spacing } from '../../../shared/constants/designTokens';
-import { LOGICAL_REFERENCE } from '../../../shared/constants/perfectScale';
-import { useTheme } from '../../../shared/hooks/useTheme';
+import { Spacing } from '@/shared/constants/designTokens';
+import { LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 // Dimensioni calcolate in modo millimetrico rispetto a iPhone 15 (393px)
 
@@ -74,9 +74,4 @@ export interface HeaderImageSectionProps {
   readonly gradientOpacity: Animated.AnimatedInterpolation<number>;
   readonly imageRotation: Animated.AnimatedInterpolation<string>;
   readonly styles: HomeHeaderStyles;
-}
-
-export interface HeaderMissionSectionProps {
-  readonly styles: HomeHeaderStyles;
-  readonly scrollY?: Animated.Value;
 }

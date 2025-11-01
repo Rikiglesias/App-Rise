@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-import { Spacing } from '../../../shared/constants/designTokens';
 import { mainStyles as aboutMainStyles } from '../../about/styles/mainStyles';
+import { Spacing } from '@/shared/constants/designTokens';
 
 /**
  * Stili principali per la sezione Social

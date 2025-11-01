@@ -1,6 +1,6 @@
 import { Animated } from 'react-native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import type { BottomTabParamList } from '../../../navigation/types';
+import type { BottomTabParamList } from '@/navigation/types';
 
 // Props per HeaderSection
 export interface HeaderSectionProps {

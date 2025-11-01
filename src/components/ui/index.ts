@@ -6,21 +6,6 @@
 export { default as AnimatedNumber } from './AnimatedNumber';
 export { default as AnimatedTransition } from './AnimatedTransition';
 
-// Card Components - UNIFIED SYSTEM
-export {
-  UnifiedCard,
-  MaterialCard,
-  EnhancedCard,
-  GlassmorphismCard,
-} from './UnifiedCard';
-export type {
-  UnifiedCardProps,
-  CardDesignVariant,
-  MaterialVariant,
-  EnhancedVariant,
-  GlassmorphismVariant,
-} from './UnifiedCard';
-
 // Interactive Components
 export { default as EnhancedTouchable } from './EnhancedTouchable';
 export { default as FilterTabs } from './FilterTabs';

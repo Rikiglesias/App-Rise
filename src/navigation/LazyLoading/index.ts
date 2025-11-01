@@ -22,7 +22,7 @@ export {
   LazySeguiciScreen,
   LazyProjectsScreen,
   LazyImpatto2024Screen,
-  LazySimplePlaceholderScreen,
+  LazyDevelopmentScreen,
 } from './LazyComponents';
 
 // Wrapped components (ready to use)
@@ -33,7 +33,7 @@ export {
   WrappedSeguiciScreen,
   WrappedProjectsScreen,
   WrappedImpatto2024Screen,
-  WrappedSimplePlaceholderScreen,
+  WrappedDevelopmentScreen,
 } from './LazyComponents';
 
 // Note: WrappedImpactStackNavigator removed - using direct import to avoid loading spinner

@@ -13,8 +13,8 @@ import {
 } from '@/components';
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { Colors } from '@/shared/constants';
-import { useHapticFeedback } from '@/hooks/useHapticFeedback';
-import { useLinkHandler } from '@/hooks/useLinkHandler';
+import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { isSuccess } from '@/shared/utils/result';
 import { logWarn } from '@/shared/utils/logger';
 

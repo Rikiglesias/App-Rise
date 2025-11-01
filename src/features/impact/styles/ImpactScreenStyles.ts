@@ -6,7 +6,7 @@ import {
   Shadows,
   Spacing,
   Typography,
-} from '../../../shared/constants';
+} from '@/shared/constants';
 
 export const impactScreenStyles = StyleSheet.create({
   container: {

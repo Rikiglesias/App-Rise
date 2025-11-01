@@ -10,9 +10,9 @@ import {
   PerfectText,
   PlatformTouchable,
   PerfectContainer,
-} from '../../components/ui';
-import { useOTAUpdates } from '../hooks/useOTAUpdates';
-import { logger } from '../utils/logger';
+} from '@/components/ui';
+import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
+import { logger } from '@/shared/utils/logger';
 
 const getStatusText = (isChecking: boolean, isDownloading: boolean): string => {
   if (isChecking) return '🔍 Checking...';

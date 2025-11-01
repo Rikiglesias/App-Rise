@@ -4,9 +4,8 @@
 
 // Design System (original)
 export * from './designTokens';
+export * from './dimensions';
+export * from './perfectShadow';
 
 // Perfect Scale - Sistema scaling proporzionale (Perfect System)
-export { scale, scaleWithDimensions, LOGICAL_REFERENCE } from './perfectScale';
-
-// Performance Constants
-export * from './performance';
+export * from './perfectScale';

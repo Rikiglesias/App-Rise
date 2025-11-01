@@ -1,13 +1,13 @@
 import { useCallback, useRef } from 'react';
 import { Animated, Linking, Alert } from 'react-native';
 import { SocialPlatform } from '../components/SocialCard';
-import { logWarn } from '../../../shared/utils/logger';
-import { RISE_URLS, SOCIAL_URLS } from '../../../shared/constants/urls';
+import { logWarn } from '@/shared/utils/logger';
+import { RISE_URLS, SOCIAL_URLS } from '@/shared/constants/urls';
 
 // Import delle icone dalla cartella social
-import instagramIcon from '../../../../assets/icons/social/instagram.png';
-import linkedinIcon from '../../../../assets/icons/social/linkedin.png';
-import facebookIcon from '../../../../assets/icons/social/facebook.png';
+import instagramIcon from '@assets/icons/social/instagram.png';
+import linkedinIcon from '@assets/icons/social/linkedin.png';
+import facebookIcon from '@assets/icons/social/facebook.png';
 
 export const useSocialPlatforms = () => {
   // ANIMAZIONI DISABILITATE - Valore statico per performance ottimale

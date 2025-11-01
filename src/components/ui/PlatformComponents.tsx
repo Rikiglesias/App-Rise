@@ -22,25 +22,19 @@ const PlatformScrollViewComponent: React.FC<PlatformScrollViewProps> = ({
     return <ScrollView {...props}>{children}</ScrollView>;
   }
 
-  // Android: ottimizzazioni specifiche
+  // Android: ottimizzazioni specifiche (solo props valide per ScrollView)
   const androidOptimizations = optimizeAndroid
     ? {
         // Performance optimizations
         removeClippedSubviews: true,
-        scrollEventThrottle: 16,
         // Gesture ottimizzazioni
         nestedScrollEnabled: true,
         overScrollMode: 'auto' as const,
-        // Memory optimizations
-        windowSize: 10,
-        initialNumToRender: 5,
-        maxToRenderPerBatch: 5,
-        updateCellsBatchingPeriod: 100,
       }
     : {};
 
   return (
-    <ScrollView {...props} {...androidOptimizations}>
+    <ScrollView {...androidOptimizations} {...props}>
       {children}
     </ScrollView>
   );

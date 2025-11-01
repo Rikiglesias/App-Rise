@@ -2,11 +2,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 
-import { PerfectText, PerfectContainer } from '../../../components/ui';
-// Ratio inline per evitare dipendenze condivise
-import { Colors, Spacing, BorderRadius, Shadows } from '../../../shared/constants/designTokens';
-import { LOGICAL_REFERENCE } from '../../../shared/constants/perfectScale';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
+import { PerfectText, PerfectContainer } from '@/components/ui';
+// Ratio inline per evitare dipendenze condivise
+import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;

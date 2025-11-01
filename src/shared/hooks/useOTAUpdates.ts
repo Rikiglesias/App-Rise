@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import * as Updates from 'expo-updates';
-import { logger } from '../utils/logger';
+import { logger } from '@/shared/utils/logger';
 
 interface UpdateState {
   isChecking: boolean;

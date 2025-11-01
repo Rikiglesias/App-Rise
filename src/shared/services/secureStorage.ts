@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import * as SecureStore from 'expo-secure-store';
 import type { SecureStoreOptions } from 'expo-secure-store';
-import { logger } from '../utils/logger';
+import { logger } from '@/shared/utils/logger';
 
 /**
  * SecureStorageManager - Gestione sicura dei dati sensibili

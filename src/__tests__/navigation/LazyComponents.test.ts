@@ -17,7 +17,7 @@ describe('LazyComponents', () => {
         LazyComponents.LazySeguiciScreen,
         LazyComponents.LazyProjectsScreen,
         LazyComponents.LazyImpatto2024Screen,
-        LazyComponents.LazySimplePlaceholderScreen,
+        LazyComponents.LazyDevelopmentScreen,
       ];
 
       components.forEach(component => {
@@ -37,7 +37,7 @@ describe('LazyComponents', () => {
         LazyComponents.WrappedSeguiciScreen,
         LazyComponents.WrappedProjectsScreen,
         LazyComponents.WrappedImpatto2024Screen,
-        LazyComponents.WrappedSimplePlaceholderScreen,
+        LazyComponents.WrappedDevelopmentScreen,
       ];
 
       wrappedComponents.forEach(component => {

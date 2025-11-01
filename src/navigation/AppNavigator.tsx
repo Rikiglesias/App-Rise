@@ -7,18 +7,18 @@ import 'react-native-gesture-handler';
 // Navigators
 
 // Direct imports (no lazy loading for immediate loading)
-import ChiSiamoScreen from '../features/about/screens/ChiSiamoScreen';
-import SeguiciScreen from '../features/social/screens/SeguiciScreen';
 
 // Lazy Screens (keep lazy for less critical screens)
 import {
   WrappedImpatto2024Screen,
   WrappedProjectsScreen,
-  WrappedSimplePlaceholderScreen,
+  WrappedDevelopmentScreen,
 } from './LazyLoading';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import type { RootStackParamList } from './types';
+import SeguiciScreen from '@/features/social/screens/SeguiciScreen';
+import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -71,7 +71,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="CharityShop"
-          component={WrappedSimplePlaceholderScreen}
+          component={WrappedDevelopmentScreen}
           options={{
             title: 'Charity Shop',
           }}
@@ -83,7 +83,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="CharityGiftCard"
-          component={WrappedSimplePlaceholderScreen}
+          component={WrappedDevelopmentScreen}
           options={{ title: 'Gift Cards' }}
           initialParams={{
             title: 'Gift Cards',
@@ -93,7 +93,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="Calendario"
-          component={WrappedSimplePlaceholderScreen}
+          component={WrappedDevelopmentScreen}
           options={{ title: 'Eventi & Calendario' }}
           initialParams={{
             title: 'Calendario',
@@ -109,7 +109,7 @@ const AppNavigator: React.FC = () => {
 
         <Stack.Screen
           name="Tracciabilita"
-          component={WrappedSimplePlaceholderScreen}
+          component={WrappedDevelopmentScreen}
           options={{ title: 'Impatto Trasparente' }}
           initialParams={{
             title: 'Tracciabilità',

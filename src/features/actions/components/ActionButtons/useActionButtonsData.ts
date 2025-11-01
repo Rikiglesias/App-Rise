@@ -5,9 +5,9 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import type { ContributeTabScreenProps } from '../../types/ContributeScreenTypes';
-import { useHapticFeedback } from '../../../../shared/hooks/useHapticFeedback';
-import { useLinkHandler } from '../../../../shared/hooks/useLinkHandler';
-import type { ButtonData } from '../components/ActionButtonTypes';
+import type { ButtonData } from '../shared/ActionButtonTypes';
+import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 
 export interface ActionButtonsData {
   // Data arrays

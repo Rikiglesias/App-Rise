@@ -1,5 +1,6 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
-import type { RootStackParamList } from '../../../navigation/types';
+
+import type { RootStackParamList } from '@/navigation/types';
 
 export interface ContributeTabScreenProps {
   navigation: StackNavigationProp<RootStackParamList>;

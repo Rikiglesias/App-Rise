@@ -152,7 +152,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 <PerfectImage
                   width={Math.round(responsiveSpacing.logoSize)}
                   height={Math.round(responsiveSpacing.logoSize)}
-                  source={require('../../../assets/icons/app/logo.png')}
+                  source={require('@assets/icons/app/logo.png')}
                 />
                 <PerfectContainer style={modernTitleStyles.separatorLine} />
               </PerfectContainer>

@@ -5,7 +5,7 @@ import {
   Colors,
   Typography,
   Spacing,
-} from '../../../shared/constants/designTokens';
+} from '@/shared/constants/designTokens';
 
 /**
  * Stili per i modal della sezione About

@@ -1,4 +1,4 @@
-import { Spacing } from '../../../shared/constants/designTokens';
+import { Spacing } from '@/shared/constants/designTokens';
 
 // 🎨 DESIGN TOKENS CENTRALIZZATI - ELIMINANO DUPLICAZIONI
 export const HomeHeaderDesignTokens = {

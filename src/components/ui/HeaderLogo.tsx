@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
-import { BorderRadius, Spacing } from '../../shared/constants/designTokens';
-import { useTheme } from '../../shared/hooks/useTheme';
-import appIcon from '../../../assets/icons/app/app-icon.png';
 import { PerfectImage } from './PerfectImage';
 import { PerfectContainer } from './PerfectContainer';
+import appIcon from '@assets/icons/app/app-icon.png';
+import { BorderRadius, Spacing } from '@/shared/constants/designTokens';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 const HeaderLogo = () => {
   const { colors } = useTheme();

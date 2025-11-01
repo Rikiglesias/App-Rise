@@ -3,11 +3,11 @@ import {
   createProjectTabs,
   getSectionTitleByTab,
 } from '../data/ProjectsScreenData';
-import { useProjectsData } from '../../../shared/hooks/useProjectsData';
 import type {
   Project,
   ProjectsScreenLogicReturn,
 } from '../types/ProjectsScreenTypes';
+import { useProjectsData } from '@/shared/hooks/useProjectsData';
 
 // Custom Hook for Projects Screen Logic
 export const useProjectsScreenLogic = (): ProjectsScreenLogicReturn => {

@@ -2,25 +2,29 @@
 // SHARED - Central Export Hub
 //===================================================================
 
-// Design System
+// Design System - Explicit exports
 export * from './constants';
 export * from './hooks';
 export * from './screens';
 
-// Utilities & Services
-export * from './utils/result';
-export * from './utils/logger';
-export * from './config/environment';
-
-// Services
-export * from './services/apiSecurity';
-export * from './services/errorTracking';
-export * from './services/secureStorage';
-
-// Monitoring (explicit exports to avoid conflicts)
+// Utilities
 export {
-  performanceMonitor,
-  type PerformanceMetric,
-  type ComponentPerformanceData,
-  type NetworkPerformanceData,
-} from './monitoring/PerformanceMonitor';
+  success,
+  failure,
+  isSuccess,
+  isFailure,
+  map,
+  mapError,
+  chain,
+  combine,
+  type Result,
+} from './utils/result';
+
+export { logger, logDebug, logInfo, logWarn, logError } from './utils/logger';
+
+export { env, isProduction, isDevelopment, isFeatureEnabled } from './config/environment';
+
+// Services - Singletons
+export { apiSecurity } from './services/apiSecurity';
+export { errorTracking } from './services/errorTracking';
+export { secureStorage } from './services/secureStorage';

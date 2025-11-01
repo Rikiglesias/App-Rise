@@ -3,20 +3,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 
+import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import {
   PerfectText,
   PlatformTouchable,
   PerfectContainer,
-} from '../../../components/ui';
-// ELIMINATO: scaleDimensionLinear from '../../../shared/constants/responsiveSystem';
+} from '@/components/ui';
+// ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import {
   Colors,
   Spacing,
   Shadows,
   BorderRadius,
-} from '../../../shared/constants/designTokens';
-import { scale } from '../../../shared/constants/perfectScale';
-import type { useImpactAnimations } from '../hooks/useImpactAnimations';
+} from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;

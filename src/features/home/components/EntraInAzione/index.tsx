@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { type EntraInAzioneProps } from '../../types';
-import { Spacing } from '../../../../shared/constants/designTokens';
-import { PerfectContainer } from '../../../../components/ui';
 import { ActionTitle } from './ActionTitle';
 import { ActionDescription } from './ActionDescription';
 import { ActionCTAButtons } from './ActionCTAButtons';
+import { PerfectContainer } from '@/components/ui';
+import { Spacing } from '@/shared/constants/designTokens';
 
 export const EntraInAzione: React.FC<EntraInAzioneProps> = () => {
   return (

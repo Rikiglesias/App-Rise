@@ -21,16 +21,15 @@
     "target": "es2020",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@shared/*": ["src/shared/*"],
-      "@features/*": ["src/features/*"],
-      "@assets/*": ["assets/*"],
-      "@/navigation/*": ["src/navigation/*"],
-      "@/stores/*": ["src/stores/*"],
-      "@/screens/*": ["src/screens/*"],
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@features/*": ["./src/features/*"],
+      "@assets/*": ["./assets/*"],
+      "@/navigation/*": ["./src/navigation/*"],
       "@/hooks/*": ["src/shared/hooks/*"],
       "@/utils/*": ["src/shared/utils/*"],
+      "@/data/*": ["src/data/*"],
       "react-native-maps": ["src/types/react-native-maps.d.ts"]
     }
   },

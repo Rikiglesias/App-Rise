@@ -9,6 +9,11 @@ import type {
 } from '../types/ProjectsScreenTypes';
 
 import {
+  ProjectsEmptyState,
+  ProjectsHeader,
+  ProjectsStats,
+} from '../components';
+import {
   PlatformScrollView,
   PerfectText,
   PerfectContainer,
@@ -17,11 +22,6 @@ import FilterTabs from '@/components/ui/FilterTabs';
 import ProjectCard from '@/components/ProjectCard';
 import { ProjectDetailModal } from '@/components/layout';
 import { Colors } from '@/shared/constants';
-import {
-  ProjectsEmptyState,
-  ProjectsHeader,
-  ProjectsStats,
-} from '@/components/domain/ProjectsScreenSections';
 
 // Main Component - Now much smaller
 const ProjectsScreenComponent: React.FC<ProjectsScreenProps> = () => {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Animated } from 'react-native';
 
-import { Colors } from '../../../shared/constants/designTokens';
 
 import {
   createButtonStyles,
@@ -10,6 +9,7 @@ import {
   createTypographyStyles,
 } from '../styles';
 import { AccessibilityConfig } from '../types';
+import { Colors } from '@/shared/constants/designTokens';
 
 // ===================================================================
 // ANIMATIONS HOOK - ANIMAZIONI DISABILITATE

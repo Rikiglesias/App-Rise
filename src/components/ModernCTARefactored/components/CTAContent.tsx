@@ -1,9 +1,9 @@
 import React from 'react';
-import { PerfectContainer } from '../../ui/PerfectContainer';
 
 import { ContentProps } from '../types';
 import { CTAAccentLine } from './CTAAccentLine';
 import { CTADescription, CTASubtitle, CTATitle } from './CTAText';
+import { PerfectContainer } from '@/components/ui/PerfectContainer';
 
 // ===================================================================
 // CONTENT COMPONENT

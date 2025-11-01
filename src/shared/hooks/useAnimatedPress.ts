@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react';
 import { Animated } from 'react-native';
 
-import { Animation } from '../constants/designTokens';
+import { Animation } from '@/shared/constants/designTokens';
 
 interface UseAnimatedPressOptions {
   scaleValue?: number;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Animated } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { PerfectText, PerfectContainer } from '../../../components/ui';
-import { Colors, Spacing } from '../../../shared/constants';
+import { PerfectText, PerfectContainer } from '@/components/ui';
+import { Colors, Spacing } from '@/shared/constants';
 import {
   LOGICAL_REFERENCE,
   scale,
-} from '../../../shared/constants/perfectScale';
+} from '@/shared/constants/perfectScale';
 
 interface HeaderSectionProps {
   readonly animationValue: Animated.Value;

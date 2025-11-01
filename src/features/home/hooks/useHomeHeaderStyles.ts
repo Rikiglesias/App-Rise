@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
-import { useTheme } from '../../../shared/hooks/useTheme';
 import {
   createContainerStyles,
   createImageStyles,
-  createMissionStyles,
   createTextStyles,
 } from '../styles/HomeHeaderStyles';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 // Hook for styles - now under 60 lines
 export const useHomeHeaderStyles = () => {
@@ -16,7 +15,6 @@ export const useHomeHeaderStyles = () => {
       ...createContainerStyles(colors),
       ...createTextStyles(colors),
       ...createImageStyles(colors),
-      ...createMissionStyles(colors),
     }),
     [colors]
   );

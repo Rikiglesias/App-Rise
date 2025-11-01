@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Spacing, Colors, Typography } from '../../../shared/constants';
+import { Spacing, Colors, Typography } from '@/shared/constants';
 
 /**
  * Stili per la sezione contatti

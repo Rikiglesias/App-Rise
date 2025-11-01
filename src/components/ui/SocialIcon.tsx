@@ -2,12 +2,12 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 // Import statici delle icone
-import instagramIcon from '../../../assets/icons/social/instagram.png';
-import facebookIcon from '../../../assets/icons/social/facebook.png';
-import linkedinIcon from '../../../assets/icons/social/linkedin.png';
 import { PerfectContainer } from './PerfectContainer';
 import { PerfectText } from './PerfectText';
 import { PerfectImage } from './PerfectImage';
+import instagramIcon from '@assets/icons/social/instagram.png';
+import facebookIcon from '@assets/icons/social/facebook.png';
+import linkedinIcon from '@assets/icons/social/linkedin.png';
 
 interface SocialIconProps {
   readonly platform: 'website' | 'instagram' | 'facebook' | 'linkedin';

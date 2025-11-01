@@ -1,12 +1,12 @@
 import { Animated, StyleProp, ViewStyle } from 'react-native';
 
-import { Colors } from '../../../shared/constants/designTokens';
 import {
   createButtonStyles,
   createContainerStyles,
   createContentStyles,
   createTypographyStyles,
 } from '../styles';
+import { Colors } from '@/shared/constants/designTokens';
 
 // ===================================================================
 // MAIN COMPONENT PROPS

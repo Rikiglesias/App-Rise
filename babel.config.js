@@ -3,9 +3,36 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      // react-native-reanimated already injects the worklets plugin internally,
-      // so we only register it once to avoid duplicate plugin issues in Jest.
-      'react-native-reanimated/plugin',
+      [
+        'module-resolver',
+        {
+          root: ['./src'],
+          extensions: [
+            '.ios.ts',
+            '.android.ts',
+            '.ts',
+            '.ios.tsx',
+            '.android.tsx',
+            '.tsx',
+            '.jsx',
+            '.js',
+            '.json',
+            '.png',
+            '.jpg',
+            '.jpeg',
+            '.gif',
+            '.svg',
+          ],
+          alias: {
+            '@': './src',
+            '@components': './src/components',
+            '@shared': './src/shared',
+            '@navigation': './src/navigation',
+            '@features': './src/features',
+            '@assets': './assets',
+          },
+        },
+      ],
     ],
   };
 };

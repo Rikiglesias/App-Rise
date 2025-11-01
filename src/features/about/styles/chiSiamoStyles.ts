@@ -5,7 +5,7 @@ import {
   Colors,
   Typography,
   Shadows,
-} from '../../../shared/constants';
+} from '@/shared/constants';
 
 /**
  * Stili per la sezione Chi Siamo

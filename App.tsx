@@ -7,7 +7,6 @@ import { ThemeProvider, useTheme } from './src/shared/hooks/useTheme';
 import { useOTAUpdateScreen } from './src/shared/hooks/useOTAUpdateScreen';
 import { OTAUpdateScreen } from './src/shared/components/OTAUpdateScreen';
 import { UniversalThemeProvider } from './src/shared/theme/UniversalTheme';
-import { performanceMonitor } from './src/shared/monitoring/PerformanceMonitor';
 import { logger } from './src/shared/utils/logger';
 // Import rimossi - preloading disabilitato
 // import {
@@ -48,24 +47,10 @@ const App: React.FC = () => {
   // Inizializza schermata OTA Updates
   const { showUpdateScreen, hideUpdateScreen } = useOTAUpdateScreen();
 
-  // Inizializza Performance Monitor all'avvio dell'app
+  // Inizializzazione app
   useEffect(() => {
-    // Log dell'inizializzazione
-    logger.info('App', 'Performance Monitor initialized', {
-      timestamp: Date.now(),
-      version: '1.0.0',
-    });
-
-    // Monitora il tempo di avvio dell'app
-    const appStartTime = Date.now();
-    performanceMonitor.recordUserInteraction('app_startup', appStartTime);
-
     // Log dell'inizializzazione OTA Updates
     logger.info('App', 'OTA Update system initialized');
-
-    return () => {
-      logger.debug('App', 'Performance Monitor cleanup');
-    };
   }, []);
 
   return (

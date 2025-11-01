@@ -4,9 +4,9 @@ import {
   BorderRadius,
   Spacing,
   Typography,
-} from '../../../shared/constants/designTokens';
+} from '@/shared/constants/designTokens';
 // TypographyTokens rimosso - usa Typography.sizes
-import { useTheme } from '../../../shared/hooks/useTheme';
+import { useTheme } from '@/shared/hooks/useTheme';
 // ELIMINATO: useResponsive - ora usa Perfect System
 
 // Custom Hook for Projects Screen Styles

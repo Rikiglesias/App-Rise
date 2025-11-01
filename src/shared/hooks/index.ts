@@ -9,7 +9,6 @@ export {
   useNavigationOperation,
 } from './useAsyncOperation';
 export { useHomeScrollAnimation } from './useHomeScrollAnimation';
-export { usePerformanceMonitor } from './usePerformanceMonitor';
 export { useProfessionalAnimations } from './useProfessionalAnimations';
 export {
   ThemeProvider,
