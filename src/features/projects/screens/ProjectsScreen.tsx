@@ -19,7 +19,7 @@ import {
   PerfectContainer,
 } from '@/components';
 import FilterTabs from '@/components/ui/FilterTabs';
-import ProjectCard from '@/components/ProjectCard';
+import ProjectCard from '../components/ProjectCard';
 import { ProjectDetailModal } from '@/components/layout';
 import { Colors } from '@/shared/constants';
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { PerfectText } from '../ui/PerfectText';
-import { PerfectContainer } from '../ui/PerfectContainer';
+import { PerfectText } from '@/components/ui/PerfectText';
+import { PerfectContainer } from '@/components/ui/PerfectContainer';
 
-import { BorderRadius, Spacing } from '../../shared/constants';
-import { useTheme } from '../../shared/hooks/useTheme';
+import { BorderRadius, Spacing } from '@/shared/constants';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 import type { ProjectProgressProps } from './types';
 

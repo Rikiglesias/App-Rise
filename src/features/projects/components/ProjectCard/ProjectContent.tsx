@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { PerfectText, PerfectContainer } from '../ui';
+import { PerfectText, PerfectContainer } from '@/components/ui';
 
-import { Spacing, Typography } from '../../shared/constants';
-import { useTheme } from '../../shared/hooks/useTheme';
+import { Spacing, Typography } from '@/shared/constants';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 import type { ProjectContentProps } from './types';
 

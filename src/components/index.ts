@@ -67,6 +67,3 @@ export {
 
 // Export types
 export type { PerfectTextProps } from './ui';
-
-// Complex Components - Explicit exports
-export { default as ProjectCard } from './ProjectCard';

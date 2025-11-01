@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react-native';
 
-import { ProjectCard } from '../../components/ProjectCard';
-import type { ProjectCardProps } from '../../components/ProjectCard/types';
+import { ProjectCard } from '../../features/projects/components/ProjectCard';
+import type { ProjectCardProps } from '../../features/projects/components/ProjectCard/types';
 import { AllProviders } from '../helpers/testProviders';
 
 const mockProject: ProjectCardProps = {
