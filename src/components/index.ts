@@ -69,5 +69,4 @@ export {
 export type { PerfectTextProps } from './ui';
 
 // Complex Components - Explicit exports
-export { default as ModernCTA } from './ModernCTARefactored';
 export { default as ProjectCard } from './ProjectCard';
