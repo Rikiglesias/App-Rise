@@ -2,15 +2,6 @@
 // COMPONENTS - Central Export Hub
 // ===================================================================
 
-// Domain Components - Explicit exports for better tree-shaking
-export {
-  ModernSmartTitle,
-  HomeHeaderDesignTokens,
-  HeaderTextSection,
-  HeaderImageSection,
-  HomeHeaderSection,
-} from './domain';
-
 // Layout Components - Explicit exports
 export {
   SectionContainer,

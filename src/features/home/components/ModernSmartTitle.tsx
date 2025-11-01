@@ -1,9 +1,9 @@
 import React from 'react';
 import { Animated, StyleSheet, Text } from 'react-native';
-import { scale } from '../../shared/constants/perfectScale';
-import { PerfectContainer, PerfectText } from '../ui';
-import { PerfectImage } from '../ui/PerfectImage';
-import { HomeHeaderDesignTokens } from './designTokens/HomeHeaderTokens';
+import { scale } from '@/shared/constants/perfectScale';
+import { PerfectContainer, PerfectText } from '@/components/ui';
+import { PerfectImage } from '@/components/ui/PerfectImage';
+import { HomeHeaderDesignTokens } from '../designTokens/HomeHeaderTokens';
 
 // ✨ TITLE STYLES ELEGANTI - UTILIZZANO DESIGN TOKENS + SISTEMA RESPONSIVE
 const createModernTitleStyles = (responsiveSpacing: {

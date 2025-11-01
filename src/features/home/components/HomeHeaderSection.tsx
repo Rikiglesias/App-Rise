@@ -4,10 +4,10 @@ import { Animated } from 'react-native';
 import {
   useHomeHeaderAnimations,
   useScrollInterpolations,
-} from '../../features/home/hooks/useHomeHeaderHooks';
-import { useHomeHeaderStyles } from '../../features/home/hooks/useHomeHeaderStyles';
-import { useTheme } from '../../shared/hooks/useTheme';
-import { type HomeHeaderSectionProps } from '../../features/home/types/HomeHeaderTypes';
+} from '../hooks/useHomeHeaderHooks';
+import { useHomeHeaderStyles } from '../hooks/useHomeHeaderStyles';
+import { useTheme } from '@/shared/hooks/useTheme';
+import { type HomeHeaderSectionProps } from '../types/HomeHeaderTypes';
 import { HeaderImageSection, HeaderTextSection } from './HomeHeader';
 
 // Main Component - Now under 60 lines

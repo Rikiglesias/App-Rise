@@ -9,7 +9,7 @@ import type { HomeScreenProps } from '../types/HomeScreenTypes';
 import { EntraInAzione } from '../components/EntraInAzione';
 
 import { PerfectContainer } from '@components/ui';
-import { HomeHeaderSection } from '@components/domain/HomeHeaderSection';
+import { HomeHeaderSection } from '../components/HomeHeaderSection';
 import { useTheme } from '@shared/hooks/useTheme';
 import { Spacing } from '@shared/constants';
 import { scale } from '@shared/constants/perfectScale';
