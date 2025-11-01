@@ -5,13 +5,11 @@ import {
   Spacing,
   Typography,
 } from '@/shared/constants/designTokens';
-// TypographyTokens rimosso - usa Typography.sizes
+import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
 
-// Custom Hook for Projects Screen Styles
 export const useProjectsScreenStyles = () => {
   const { colors } = useTheme();
-  // scaleFont rimosso - usa scale() direttamente
 
   return useMemo(
     () =>
@@ -38,17 +36,17 @@ export const useProjectsScreenStyles = () => {
         headerSubtitle: {
           color: colors.primary[100],
           textAlign: 'center',
-          lineHeight: 14 * 1.4, // Body medium * 1.4
+          lineHeight: scale(20),
         },
         statsSurface: {
           borderRadius: BorderRadius.xl,
           backgroundColor: colors.neutral[0],
           padding: Spacing[6],
           shadowColor: colors.neutral[900],
-          shadowOffset: { width: 0, height: 4 },
+          shadowOffset: { width: 0, height: scale(4) },
           shadowOpacity: 0.08,
-          shadowRadius: 12,
-          borderWidth: 1,
+          shadowRadius: scale(12),
+          borderWidth: scale(1),
           borderColor: colors.neutral[100],
         },
         statsTitle: {
@@ -78,7 +76,7 @@ export const useProjectsScreenStyles = () => {
         },
         content: {
           paddingHorizontal: Spacing[4],
-          paddingBottom: Platform.OS === 'android' ? Spacing[20] : Spacing[8], // ANDROID: Spacing[20] per evitare sovrapposizione bottom navigation / iOS: Spacing[8] normale
+          paddingBottom: Platform.OS === 'android' ? Spacing[20] : Spacing[8],
         },
         sectionTitle: {
           fontWeight: Typography.weights.bold,
@@ -91,7 +89,6 @@ export const useProjectsScreenStyles = () => {
           paddingVertical: Spacing[8],
         },
         emptyStateIcon: {
-          fontSize: /* scaleFont(48) */ 48,
           marginBottom: Spacing[4],
         },
         emptyStateText: {
