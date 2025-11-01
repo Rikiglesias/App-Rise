@@ -9,7 +9,7 @@ import {
   PlatformTouchable,
   PerfectContainer,
 } from '@/components/ui';
-import { Colors, Spacing, Shadows, BorderRadius } from '@/shared/constants/designTokens';
+import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor:
       Platform.OS === 'android'
         ? Colors.neutral[200]

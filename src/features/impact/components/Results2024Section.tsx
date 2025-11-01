@@ -5,6 +5,7 @@ import { Animated, Platform, StyleSheet } from 'react-native';
 import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing[3],
     paddingHorizontal: Spacing[2],
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor: Colors.neutral[200],
     ...Shadows.sm,
   },
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor:
       Platform.OS === 'android'
         ? Colors.neutral[200]

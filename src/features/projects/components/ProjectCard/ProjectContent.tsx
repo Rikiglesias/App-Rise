@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 
 import { PerfectText, PerfectContainer } from '@/components/ui';
 
-import { Spacing, Typography } from '@/shared/constants';
+import { Colors, Spacing, Typography } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
 
 import type { ProjectContentProps } from './types';
@@ -24,7 +25,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
       borderRadius: 8,
       padding: Spacing[4],
       marginBottom: Spacing[4],
-      borderWidth: 1,
+      borderWidth: scale(1),
       borderColor: colors.primary[200],
     },
     impactLabel: {

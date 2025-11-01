@@ -7,7 +7,7 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, Spacing, Shadows } from '@/shared/constants';
+import { BorderRadius, Colors, Shadows, Spacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 export interface SocialPlatform {
@@ -34,7 +34,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
           style={
             [
               styles.socialCardWhiteContainer,
-              { borderColor: platform.gradient[0], borderWidth: 2 },
+              { borderColor: platform.gradient[0], borderWidth: scale(2) },
             ] as never
           }
         >

@@ -8,7 +8,8 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, Spacing, Shadows, BorderRadius } from '@/shared/constants/designTokens';
+import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { scale } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
 interface Props {
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
     height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT,
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor: 'transparent',
   },
   mapImage: {
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     paddingVertical: Spacing[4],
     paddingHorizontal: Spacing[6],
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor:
       Platform.OS === 'android'
         ? Colors.neutral[200]

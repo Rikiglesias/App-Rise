@@ -10,13 +10,14 @@ interface NewActionsHeaderProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
 }
 
-// Header sizes - hardcoded direttamente (Perfect System scala automaticamente)
+// Header sizes - TITLE/SUBTITLE NON scalati (PerfectText scala automaticamente)
+// HEADER dimensions SCALATI (usati direttamente negli styles)
 const TITLE_SIZE = 40;
 const SUBTITLE_SIZE = 18;
 const REF_WIDTH = LOGICAL_REFERENCE.width;
-const HEADER_INNER_HEIGHT = REF_WIDTH * 0.43;
-const HEADER_VERTICAL_PADDING = REF_WIDTH * 0.025;
-const HEADER_TITLE_INTERLINE = REF_WIDTH * 0.002;
+const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
+const HEADER_VERTICAL_PADDING = scale(REF_WIDTH * 0.025);
+const HEADER_TITLE_INTERLINE = scale(REF_WIDTH * 0.002);
 const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const styles = useMemo(
     () =>

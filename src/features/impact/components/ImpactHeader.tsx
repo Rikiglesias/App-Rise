@@ -6,19 +6,20 @@ import type { useImpactAnimations } from '../hooks/useImpactAnimations';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 // Ratio inline per evitare dipendenze condivise
 import { Colors, Spacing, BorderRadius, Shadows } from '@/shared/constants/designTokens';
-import { LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
+import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
 
 interface Props {
   animations: ReturnType<typeof useImpactAnimations>;
 }
 
-// Header sizes - hardcoded direttamente (Perfect System scala automaticamente)
+// Header sizes - TITLE/SUBTITLE NON scalati (PerfectText scala automaticamente)
+// HEADER dimensions SCALATI (usati direttamente negli styles)
 const TITLE_SIZE = 40;
 const SUBTITLE_SIZE = 18;
 const REF_WIDTH = LOGICAL_REFERENCE.width;
-const HEADER_INNER_HEIGHT = REF_WIDTH * 0.43;
-const HEADER_VERTICAL_PADDING = REF_WIDTH * 0.025;
-const HEADER_TITLE_INTERLINE = REF_WIDTH * 0.002;
+const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
+const HEADER_VERTICAL_PADDING = scale(REF_WIDTH * 0.025);
+const HEADER_TITLE_INTERLINE = scale(REF_WIDTH * 0.002);
 export const ImpactHeader: React.FC<Props> = ({ animations }) => {
   return (
     <Animated.View
@@ -34,7 +35,7 @@ export const ImpactHeader: React.FC<Props> = ({ animations }) => {
       ]}
     >
       <LinearGradient
-        colors={['rgba(55, 65, 81, 0.03)', 'transparent']}
+        colors={[Colors.neutral[50], 'transparent']}
         style={styles.backgroundPattern}
       />
 
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignSelf: 'stretch',
     width: '100%',
-    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[20] + 12, // AUMENTATO ANDROID: da Spacing[12] a Spacing[16] per più spazio
+    paddingTop: Platform.OS === 'android' ? Spacing[16] : Spacing[20] + scale(12),
     paddingHorizontal: Spacing[4],
     paddingBottom: Spacing[6],
     alignItems: 'center',
@@ -108,16 +109,16 @@ const styles = StyleSheet.create({
     backgroundColor:
       Platform.OS === 'android'
         ? Colors.neutral[100]
-        : 'rgba(31, 41, 55, 0.03)',
+        : Colors.neutral[50],
     paddingHorizontal: Spacing[4],
     paddingTop: HEADER_VERTICAL_PADDING,
     paddingBottom: HEADER_VERTICAL_PADDING,
     borderRadius: BorderRadius.lg,
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor:
       Platform.OS === 'android'
         ? Colors.neutral[200]
-        : 'rgba(31, 41, 55, 0.08)',
+        : Colors.neutral[100],
     ...Shadows.sm,
   },
   titleContainer: {
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
   titleText: {
     color: Colors.neutral[800],
     textAlign: 'center',
-    letterSpacing: -0.5,
+    letterSpacing: scale(-0.5),
     marginBottom: HEADER_TITLE_INTERLINE,
     ...Shadows.sm,
     includeFontPadding: false,

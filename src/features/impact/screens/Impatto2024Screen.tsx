@@ -11,7 +11,7 @@ import {
   PlatformScrollView,
   PerfectContainer,
 } from '@/components/ui';
-import { LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
+import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
 import {
   BorderRadius,
   Colors,
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: Spacing[6],
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor: Colors.primary[200],
   },
 
