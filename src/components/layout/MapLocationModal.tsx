@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { Modal, StyleSheet } from 'react-native';
 import { PlatformTouchable, PerfectText, PerfectContainer } from '../ui';
 
-import type { MapModalData } from '../../data/mapModalData';
+import type { MapModalData } from '@/features/impact/data/mapModalData';
 import { Colors, Spacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { logDebug } from '../../shared/utils/logger';

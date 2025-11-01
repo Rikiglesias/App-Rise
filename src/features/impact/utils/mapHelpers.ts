@@ -1,5 +1,5 @@
 import type { Location } from '@/components/layout/InteractiveMap';
-import { MAP_LOCATIONS } from '@/data/impactData';
+import { MAP_LOCATIONS } from '../data/impactData';
 
 /**
  * Converte le location dal formato impactData al formato InteractiveMap

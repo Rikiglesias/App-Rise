@@ -11,7 +11,7 @@ import {
 // ELIMINATO: scaleDimensionLinear from '@/shared/constants/responsiveSystem';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 
-import { IMPACT_DATA } from '@/data/impactData';
+import { IMPACT_DATA } from '../data/impactData';
 import {
   BorderRadius,
   Colors,

@@ -12,8 +12,8 @@ import InteractiveMap, {
   type Location,
 } from '@/components/layout/InteractiveMap';
 import MapLocationModal from '@/components/layout/MapLocationModal';
-import type { MapModalData } from '@/data/mapModalData';
-import { getModalData } from '@/data/mapModalData';
+import type { MapModalData } from '../data/mapModalData';
+import { getModalData } from '../data/mapModalData';
 import type { ImpactStackParamList } from '@/navigation/types';
 import { BorderRadius, Colors, Spacing } from '@/shared/constants';
 // ELIMINATO: scaleFont from '@/shared/constants/responsiveSystem';
