@@ -7,7 +7,7 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-import { Colors, Shadows  } from '@/shared/constants/designTokens';
+import { Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
@@ -74,7 +74,6 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
             <PerfectText
               size={20}
               lines={1}
-              fontWeight="400"
               immunity={true}
               style={styles.buttonTitle}
             >

@@ -15,8 +15,11 @@ export interface ButtonData {
 export interface ButtonStyles {
   container: ViewStyle;
   categoryContainer: ViewStyle;
+  categoryContainerExplore: ViewStyle;
+  categoryContainerCommunity: ViewStyle;
   categoryHeader: ViewStyle;
 
+  donateTitleContainerWrapper: ViewStyle;
   donateTitleContainer: ViewStyle;
   donateCategoryTitle: TextStyle;
   donateInlineSubtitle: TextStyle;
@@ -25,9 +28,6 @@ export interface ButtonStyles {
   buttonsGrid: ViewStyle;
   buttonRow: ViewStyle;
   buttonContainer: ViewStyle;
-  gradientBorder: ViewStyle;
-  whiteContainer: ViewStyle;
-  buttonContent: ViewStyle;
   buttonIcon: ViewStyle;
   buttonTitle: TextStyle;
   infoButton: ViewStyle;
@@ -37,7 +37,6 @@ export interface ButtonStyles {
 
   centeredRow: ViewStyle;
   singleButtonContainer: ViewStyle;
-  chevronPosition: ViewStyle;
   exploreTitle: TextStyle;
   communityTitle: TextStyle;
   exploreHeaderBackground: ViewStyle;

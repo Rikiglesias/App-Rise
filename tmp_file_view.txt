@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
 import type { ButtonStyles } from './ActionButtonTypes';
 import { Colors, PerfectSpacing, Typography } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { scale, scaleSpacing } from '@/shared/constants/perfectScale';
+import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 
 export const createActionButtonStyles = (): ButtonStyles => {
   return StyleSheet.create({
@@ -14,36 +15,33 @@ export const createActionButtonStyles = (): ButtonStyles => {
     categoryContainer: {
       marginBottom: PerfectSpacing.lg,
     },
-    categoryContainerExplore: {
-      marginBottom: PerfectSpacing.lg,
-      marginTop: -PerfectSpacing.xs,
-    },
-    categoryContainerCommunity: {
-      marginBottom: PerfectSpacing.lg,
-      marginTop: -PerfectSpacing.xs,
-    },
     categoryHeader: {
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: PerfectSpacing['3xl'],
-    },
-
-    donateTitleContainerWrapper: {
-      width: '80%',
       position: 'relative',
     },
 
+    // CONTAINER ELEGANTE PER TITOLO DONA - IDENTICO CROSS-PLATFORM
     donateTitleContainer: {
       alignItems: 'center',
       backgroundColor: Colors.primary[50],
       paddingVertical: PerfectSpacing.sm,
       paddingHorizontal: PerfectSpacing.md,
+      width: '80%',
       borderRadius: scale(16),
       borderWidth: scale(1),
-      borderColor: Colors.primary[300],
+      borderColor: Colors.primary[100],
+      shadowColor: Colors.primary[600],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.08,
+      shadowRadius: scale(8),
+      elevation: 3,
     },
 
-    // TITOLO CATEGORIA DONA ELEGANTE
+    // ELIMINATO: donateTitleContainerAndroid - ora iOS e Android usano stesso stile
+
+    // TITOLO CATEGORIA DONA ELEGANTE - PIÙ GRASSETTO
     donateCategoryTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.black, // PIÙ GRASSETTO: da bold a black
@@ -94,15 +92,21 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     infoButton: {
       position: 'absolute',
-      right: scale(8),
-      top: '30%',
-      transform: [{ translateY: -10 }],
-      width: 24,
-      height: 24,
+      right: scale(38),
+      top: scale(8),
+      width: scale(28),
+      height: scale(28),
       borderRadius: 999,
       backgroundColor: Colors.primary[500],
       justifyContent: 'center',
       alignItems: 'center',
+      shadowColor: Colors.primary[500],
+      shadowOffset: { width: 0, height: scale(3) },
+      shadowOpacity: 0.4,
+      shadowRadius: scale(6),
+      elevation: 6,
+      borderWidth: scale(1),
+      borderColor: Colors.primary[500],
     },
 
     buttonsGrid: {
@@ -115,7 +119,25 @@ export const createActionButtonStyles = (): ButtonStyles => {
     buttonContainer: {
       flex: 1,
     },
-    // Rimosso pattern gradient/white/buttonContent: gestito in AnimatedButton
+    // GRADIENT CONTAINER PATTERN per bottoni (clickabili) - ANDROID OTTIMIZZATO
+    gradientBorder: {
+      borderRadius: scale(20),
+      // Spessore bordo pagina Azioni: 2pt
+      padding: scale(2),
+      ...getPerfectShadow('strong'),
+    },
+    whiteContainer: {
+      backgroundColor: Colors.neutral[0],
+      borderRadius: scale(18), // 20-2 per effetto bordo
+      overflow: 'hidden',
+      // Nota: proprietà di rasterizzazione rimosse per compatibilità tipizzazioni
+    },
+    buttonContent: {
+      paddingVertical: PerfectSpacing.base,
+      paddingHorizontal: PerfectSpacing.md,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     buttonIcon: {
       marginBottom: PerfectSpacing.md,
     },
@@ -124,11 +146,16 @@ export const createActionButtonStyles = (): ButtonStyles => {
       color: Colors.neutral[900],
       textAlign: 'center',
       letterSpacing: scale(-0.3),
+      // Text shadow per profondità
+      textShadowColor: Colors.neutral[900],
+      textShadowOffset: { width: 0, height: scale(1) },
+      textShadowRadius: scale(3),
     },
 
+    // SUBTITLE POTENZIATO COMMUNITY
     communitySubtitle: {
       fontWeight: Typography.weights.medium,
-      color: Colors.neutral[700],
+      color: Colors.neutral[700], // GRIGIO SCURO per leggibilità
       textAlign: 'center',
       marginTop: PerfectSpacing.md,
       opacity: 0.9,
@@ -159,32 +186,54 @@ export const createActionButtonStyles = (): ButtonStyles => {
       flex: 0,
       width: '80%',
     },
-    // CONTAINER BACKGROUND ESPLORA
-    exploreHeaderBackground: {
-      backgroundColor: Colors.neutral[100],
-      borderRadius: scale(20),
-      paddingVertical: PerfectSpacing.base,
-      paddingHorizontal: PerfectSpacing.lg,
-      borderWidth: scale(1),
-      borderColor: Colors.neutral[400],
+    chevronPosition: {
+      position: 'absolute',
+      top: scaleSpacing(8),
+      right: scaleSpacing(8),
     },
 
-    communityHeaderBackground: {
-      backgroundColor: Colors.neutral[100],
+    // CONTAINER BACKGROUND ESPLORA
+    exploreHeaderBackground: {
+      backgroundColor: Colors.neutral[50],
       borderRadius: scale(20),
       paddingVertical: PerfectSpacing.base,
       paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
-      borderColor: Colors.neutral[400],
+      borderColor: Colors.neutral[100],
+      shadowColor: Colors.neutral[700],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.05,
+      shadowRadius: scale(8),
+      elevation: 2,
+    },
+
+    // ELIMINATO: exploreHeaderBackgroundAndroid - uniformità iOS/Android
+
+    // CONTAINER BACKGROUND COMMUNITY
+    communityHeaderBackground: {
+      backgroundColor: Colors.neutral[50],
+      borderRadius: scale(20),
+      paddingVertical: PerfectSpacing.base,
+      paddingHorizontal: PerfectSpacing.lg,
+      borderWidth: scale(1),
+      borderColor: Colors.neutral[100],
+      shadowColor: Colors.neutral[900],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.05,
+      shadowRadius: scale(8),
+      elevation: 2,
       position: 'relative',
     },
 
-    // ICONA LINK COMMUNITY
+    // ELIMINATO: communityHeaderBackgroundAndroid - uniformità iOS/Android
+
+    // ICONA LINK COMMUNITY - ESTREMO ANGOLO SUPERIORE DESTRO
     communityChevron: {
       position: 'absolute',
-      top: scale(8),
-      right: scale(12),
+      top: scaleSpacing(8),
+      right: scaleSpacing(12),
       opacity: 0.7,
     },
   });
 };
+

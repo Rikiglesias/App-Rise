@@ -31,7 +31,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
     };
 
     return (
-      <PerfectContainer 
+      <PerfectContainer
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         style={styles.imageSection as any}
       >

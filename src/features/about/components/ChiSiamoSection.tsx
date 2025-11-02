@@ -8,6 +8,7 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
+import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
@@ -25,9 +26,8 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
       {/* HEADER CON TITOLO CLICCABILE */}
       <PerfectContainer style={chiSiamoSectionStyles.headerContainer}>
         <PerfectContainer
-          paddingVertical={12} // ✅ PerfectSpacing.md - SCALA!
-          paddingHorizontal={20} // ✅ scale(20) - SCALA!
-          borderRadius={16} // ✅ SCALA!
+          paddingVertical={PerfectSpacing.md}
+          paddingHorizontal={PerfectSpacing.lg}
           style={chiSiamoSectionStyles.titleHeaderContainer}
         >
           {/* TITOLO E SOTTOTITOLO */}
@@ -39,21 +39,18 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             <PerfectText
               size={30}
               lines={1}
-              fontWeight="400"
-              style={[
-                chiSiamoSectionStyles.categoryTitle,
-                chiSiamoSectionStyles.titleAccent,
-              ]}
+              fontWeight="700"
+              style={chiSiamoSectionStyles.categoryTitle}
             >
               Chi Siamo
             </PerfectText>
             <PerfectText
               size={15}
               lines={2}
-              fontWeight="400"
-              style={chiSiamoSectionStyles.mainSubtitleInline}
+              fontWeight="500"
+              style={chiSiamoSectionStyles.descriptionText}
             >
-              Non profit contro la fame - premi (i) per saperne di più
+              Organizzazione contro la fame nel mondo
             </PerfectText>
           </PlatformTouchable>
           <PlatformTouchable
@@ -62,8 +59,8 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           >
             <MaterialCommunityIcons
               name="information"
-              size={40} // ✅ Scaling diretto, no hook
-              color="white"
+              size={24}
+              color={Colors.neutral[900]}
             />
           </PlatformTouchable>
         </PerfectContainer>

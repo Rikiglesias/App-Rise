@@ -13,10 +13,10 @@ import {
 import {
   BorderRadius,
   Colors,
-  Shadows,
+  Typography,
 } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale, scaleSpacing, scaleTouch } from '@/shared/constants/perfectScale';
+import { scale } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import type { BottomTabParamList } from '@/navigation/types';
 
@@ -48,6 +48,7 @@ export const ActionCTAButtons: React.FC = () => {
         style={{ flex: 1 }}
         onPress={handleImpactPress}
         activeOpacity={0.92}
+        accessibilityRole="button"
       >
         <LinearGradient
           colors={Colors.gradients.primary}
@@ -58,30 +59,33 @@ export const ActionCTAButtons: React.FC = () => {
           <PerfectContainer style={styles.buttonContainer}>
             <MaterialCommunityIcons
               name="chart-line"
-              size={scale(28)}
+              size={28}
               color={Colors.primary[500]}
             />
             <PerfectText
               size={20}
-              fontWeight="bold"
               lines={2}
               color={Colors.primary[500]}
               textAlign="center"
-              style={{ marginVertical: PerfectSpacing.xs, ...Shadows.sm }}
+              style={styles.buttonTitle}
             >
               Scopri{'\n'}Impatto
             </PerfectText>
-            <PerfectContainer flexDirection="row" alignItems="center" gap={PerfectSpacing.sm}>
+            <PerfectContainer
+              flexDirection="row"
+              alignItems="center"
+              gap={PerfectSpacing.sm}
+            >
               <MaterialCommunityIcons
                 name="arrow-left"
-                size={scale(20)}
+                size={20}
                 color={Colors.primary[500]}
               />
               <PerfectText
                 size={16}
-                fontWeight="bold"
                 lines={1}
                 color={Colors.primary[500]}
+                style={styles.buttonSubtext}
               >
                 Risultati
               </PerfectText>
@@ -95,6 +99,7 @@ export const ActionCTAButtons: React.FC = () => {
         style={{ flex: 1 }}
         onPress={handleActionsPress}
         activeOpacity={0.92}
+        accessibilityRole="button"
       >
         <LinearGradient
           colors={Colors.gradients.success}
@@ -105,31 +110,34 @@ export const ActionCTAButtons: React.FC = () => {
           <PerfectContainer style={styles.buttonContainer}>
             <MaterialCommunityIcons
               name="hand-heart"
-              size={scale(28)}
+              size={28}
               color={Colors.semantic.success.main}
             />
             <PerfectText
               size={20}
-              fontWeight="bold"
               lines={2}
               color={Colors.semantic.success.main}
               textAlign="center"
-              style={{ marginVertical: PerfectSpacing.xs, ...Shadows.sm }}
+              style={styles.buttonTitle}
             >
               Dona e{'\n'}Aiuta
             </PerfectText>
-            <PerfectContainer flexDirection="row" alignItems="center" gap={PerfectSpacing.sm}>
+            <PerfectContainer
+              flexDirection="row"
+              alignItems="center"
+              gap={PerfectSpacing.sm}
+            >
               <PerfectText
                 size={16}
-                fontWeight="bold"
                 lines={1}
                 color={Colors.semantic.success.main}
+                style={styles.buttonSubtext}
               >
                 Supporta
               </PerfectText>
               <MaterialCommunityIcons
                 name="arrow-right"
-                size={scale(20)}
+                size={20}
                 color={Colors.semantic.success.main}
               />
             </PerfectContainer>
@@ -144,17 +152,25 @@ const styles = StyleSheet.create({
   gradientBorder: {
     borderRadius: BorderRadius.xl,
     padding: scale(3),
-    ...Shadows.lg,
   },
 
   buttonContainer: {
     backgroundColor: Colors.neutral[0],
     borderRadius: BorderRadius.xl - scale(3),
-    minHeight: scaleTouch(105),
-    paddingVertical: scaleSpacing(12),
-    paddingHorizontal: scaleSpacing(12),
+    minHeight: scale(105),
+    paddingVertical: PerfectSpacing.sm,
+    paddingHorizontal: PerfectSpacing.sm,
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
+  },
+
+  buttonTitle: {
+    fontWeight: Typography.weights.bold,
+    marginVertical: PerfectSpacing.xs,
+  },
+
+  buttonSubtext: {
+    fontWeight: Typography.weights.bold,
   },
 });

@@ -130,13 +130,9 @@ const mockSocialPlatform: SocialPlatform = {
   onPress: mockOnPress,
 };
 
-const mockAnimationValue = new (jest.requireActual(
-  'react-native'
-).Animated.Value)(1);
-
 const SocialCardWithTheme = (props: { platform: SocialPlatform }) => (
   <AllProviders>
-    <SocialCard platform={props.platform} animationValue={mockAnimationValue} />
+    <SocialCard platform={props.platform} />
   </AllProviders>
 );
 

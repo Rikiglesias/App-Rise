@@ -1,5 +1,3 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { Modal } from 'react-native';
 import { modalStyles } from '../styles/modalStyles';
@@ -9,6 +7,7 @@ import {
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
+  PlatformIcon,
 } from '@/components/ui';
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
@@ -43,263 +42,201 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
 
         {/* Modal Content */}
         <PerfectContainer style={modalStyles.modalContainer}>
-          {/* GRADIENT BORDER */}
-          <LinearGradient
-            colors={[
-              Colors.primary[600],
-              Colors.primary[700],
-              Colors.primary[800],
-            ]}
-            style={modalStyles.modalGradientBorder}
-          >
-            <PerfectContainer style={modalStyles.modalWhiteContainer}>
-              <PerfectContainer style={modalStyles.modalContent}>
-                {/* Header */}
-                <PerfectContainer style={modalStyles.modalHeader}>
-                  <PerfectText
-                    size={16}
-                    lines={1}
-                    style={modalStyles.modalTitle}
-                  >
-                    La Nostra Storia
-                  </PerfectText>
-                  <PlatformTouchable
-                    onPress={handleClose}
-                    style={modalStyles.closeButton}
-                    activeOpacity={0.8}
-                  >
-                    <MaterialCommunityIcons
-                      name="close"
-                      size={36}
-                      color={Colors.neutral[0]}
-                    />
-                  </PlatformTouchable>
-                </PerfectContainer>
-
-                {/* Story Content */}
-                <PlatformScrollView
-                  style={modalStyles.storyScroll}
-                  contentContainerStyle={modalStyles.storyContainer}
-                  showsVerticalScrollIndicator={true}
+          <PerfectContainer style={modalStyles.modalCard}>
+            <PerfectContainer style={modalStyles.modalContent}>
+              {/* Header */}
+              <PerfectContainer style={modalStyles.modalHeader}>
+                <PerfectText size={24} lines={1} style={modalStyles.modalTitle}>
+                  La Nostra Storia
+                </PerfectText>
+                <PlatformTouchable
+                  onPress={handleClose}
+                  style={modalStyles.closeButton}
+                  activeOpacity={0.8}
                 >
+                  <PlatformIcon
+                    name="close"
+                    size={24}
+                    color={Colors.neutral[0]}
+                  />
+                </PlatformTouchable>
+              </PerfectContainer>
+
+              {/* Story Content */}
+              <PlatformScrollView
+                style={modalStyles.storyScroll}
+                contentContainerStyle={modalStyles.storyContainer}
+                showsVerticalScrollIndicator={true}
+              >
+                <PerfectContainer style={modalStyles.introCard}>
                   <PerfectText
-                    size={15}
-                    lines={1}
+                    size={14}
+                    lines={2}
                     style={modalStyles.introText}
                   >
                     Dal 1998, un movimento globale contro la fame
                   </PerfectText>
+                </PerfectContainer>
 
+                <PerfectText size={16} lines={8} style={modalStyles.storyText}>
+                  Rise Against Hunger nasce nel 1998 negli Stati Uniti con una
+                  missione chiara: combattere la fame nel mondo attraverso la
+                  distribuzione di pasti nutrienti e lo sviluppo di programmi
+                  sostenibili.
+                </PerfectText>
+
+                <PerfectContainer style={modalStyles.sectionDivider} />
+
+                <PerfectContainer style={modalStyles.italyCard}>
                   <PerfectText
-                    size={15}
-                    lines={10}
-                    style={modalStyles.storyText}
-                  >
-                    <PerfectText
-                      size={15}
-                      lines={1}
-                      style={modalStyles.highlightText}
-                    >
-                      Rise Against Hunger
-                    </PerfectText>{' '}
-                    nasce nel{' '}
-                    <PerfectText
-                      size={15}
-                      lines={1}
-                      style={modalStyles.highlightText}
-                    >
-                      1998
-                    </PerfectText>{' '}
-                    negli Stati Uniti con una missione chiara: combattere la
-                    fame nel mondo attraverso la distribuzione di pasti
-                    nutrienti e lo sviluppo di programmi sostenibili.
-                  </PerfectText>
-
-                  <PerfectContainer style={modalStyles.sectionDivider} />
-
-                  <PerfectText
-                    size={15}
+                    size={18}
                     lines={1}
                     style={modalStyles.sectionTitle}
                   >
-                    <PerfectText size={20} lines={1}>
-                      🇮🇹
-                    </PerfectText>{' '}
-                    In Italia
+                    🇮🇹 In Italia
                   </PerfectText>
-                  <PerfectText
-                    size={15}
-                    lines={8}
-                    style={modalStyles.storyText}
-                  >
-                    La organizzazione arriva in{' '}
+                  <PerfectText size={15} lines={6} style={modalStyles.cardText}>
+                    La organizzazione arriva in Italia con lo obiettivo di
+                    coinvolgere le comunità locali nella lotta contro la fame
+                    globale. La nostra sede di Bologna è il cuore operativo che
+                    coordina le attività su tutto il territorio nazionale.
+                  </PerfectText>
+                </PerfectContainer>
+
+                <PerfectContainer style={modalStyles.sectionDivider} />
+
+                <PerfectText
+                  size={20}
+                  lines={1}
+                  style={modalStyles.mainSectionTitle}
+                >
+                  I Nostri Pilastri
+                </PerfectText>
+
+                <PerfectContainer style={modalStyles.pillarsContainer}>
+                  <PerfectContainer style={modalStyles.pillarCard}>
                     <PerfectText
-                      size={15}
+                      size={32}
                       lines={1}
-                      style={modalStyles.highlightText}
+                      style={modalStyles.pillarIcon}
                     >
-                      Italia
-                    </PerfectText>{' '}
-                    con lo obiettivo di coinvolgere le comunità locali nella
-                    lotta contro la fame globale. La nostra sede di{' '}
+                      🍽️
+                    </PerfectText>
                     <PerfectText
-                      size={15}
-                      lines={1}
-                      style={modalStyles.highlightText}
+                      size={16}
+                      lines={2}
+                      style={modalStyles.pillarTitle}
                     >
-                      Bologna
-                    </PerfectText>{' '}
-                    è il cuore operativo che coordina le attività su tutto il
-                    territorio nazionale.
-                  </PerfectText>
-
-                  <PerfectContainer style={modalStyles.sectionDivider} />
-
-                  <PerfectText
-                    size={15}
-                    lines={1}
-                    style={modalStyles.sectionTitle}
-                  >
-                    <PerfectText size={20} lines={1}>
-                      🌟
-                    </PerfectText>{' '}
-                    I Nostri Pilastri
-                  </PerfectText>
-                  <PerfectContainer style={modalStyles.pillarsContainer}>
-                    <PerfectContainer style={modalStyles.pillarItem}>
-                      <PerfectText
-                        size={24}
-                        lines={1}
-                        style={modalStyles.pillarIcon}
-                      >
-                        🍽️
-                      </PerfectText>
-                      <PerfectContainer style={modalStyles.pillarContent}>
-                        <PerfectText
-                          size={15}
-                          lines={1}
-                          style={modalStyles.pillarTitle}
-                        >
-                          Distribuzione Pasti
-                        </PerfectText>
-                        <PerfectText
-                          size={12}
-                          lines={3}
-                          style={modalStyles.pillarText}
-                        >
-                          Organizziamo eventi di confezionamento pasti che
-                          coinvolgono volontari di ogni età
-                        </PerfectText>
-                      </PerfectContainer>
-                    </PerfectContainer>
-
-                    <PerfectContainer style={modalStyles.pillarItem}>
-                      <PerfectText
-                        size={24}
-                        lines={1}
-                        style={modalStyles.pillarIcon}
-                      >
-                        🤝
-                      </PerfectText>
-                      <PerfectContainer style={modalStyles.pillarContent}>
-                        <PerfectText
-                          size={15}
-                          lines={1}
-                          style={modalStyles.pillarTitle}
-                        >
-                          Coinvolgimento Comunitario
-                        </PerfectText>
-                        <PerfectText
-                          size={12}
-                          lines={2}
-                          style={modalStyles.pillarText}
-                        >
-                          Uniamo scuole, aziende e organizzazioni in un impegno
-                          condiviso
-                        </PerfectText>
-                      </PerfectContainer>
-                    </PerfectContainer>
-
-                    <PerfectContainer style={modalStyles.pillarItem}>
-                      <PerfectText
-                        size={24}
-                        lines={1}
-                        style={modalStyles.pillarIcon}
-                      >
-                        🌍
-                      </PerfectText>
-                      <PerfectContainer style={modalStyles.pillarContent}>
-                        <PerfectText
-                          size={15}
-                          lines={1}
-                          style={modalStyles.pillarTitle}
-                        >
-                          Impatto Globale
-                        </PerfectText>
-                        <PerfectText
-                          size={12}
-                          lines={3}
-                          style={modalStyles.pillarText}
-                        >
-                          I pasti confezionati raggiungono comunità vulnerabili
-                          in tutto il mondo
-                        </PerfectText>
-                      </PerfectContainer>
-                    </PerfectContainer>
-
-                    <PerfectContainer style={modalStyles.pillarItem}>
-                      <PerfectText
-                        size={24}
-                        lines={1}
-                        style={modalStyles.pillarIcon}
-                      >
-                        📚
-                      </PerfectText>
-                      <PerfectContainer style={modalStyles.pillarContent}>
-                        <PerfectText
-                          size={15}
-                          lines={1}
-                          style={modalStyles.pillarTitle}
-                        >
-                          Educazione
-                        </PerfectText>
-                        <PerfectText
-                          size={12}
-                          lines={2}
-                          style={modalStyles.pillarText}
-                        >
-                          Sensibilizziamo sul tema della fame e promuoviamo la
-                          solidarietà
-                        </PerfectText>
-                      </PerfectContainer>
-                    </PerfectContainer>
-                  </PerfectContainer>
-
-                  <PerfectContainer style={modalStyles.sectionDivider} />
-
-                  <PerfectContainer style={modalStyles.finalMessageContainer}>
+                      Distribuzione Pasti
+                    </PerfectText>
                     <PerfectText
-                      size={12}
-                      lines={6}
-                      style={modalStyles.finalMessage}
+                      size={14}
+                      lines={3}
+                      style={modalStyles.pillarText}
                     >
-                      Ogni pasto che confezioniamo insieme è un gesto di amore
-                      che attraversa i confini e raggiunge chi ne ha più
-                      bisogno.
-                      {'\n\n'}
-                      <PerfectText
-                        size={12}
-                        lines={1}
-                        style={modalStyles.highlightText}
-                      >
-                        Unisciti a noi in questa missione di speranza.
-                      </PerfectText>
+                      Organizziamo eventi di confezionamento pasti che
+                      coinvolgono volontari di ogni età
                     </PerfectText>
                   </PerfectContainer>
-                </PlatformScrollView>
-              </PerfectContainer>
+
+                  <PerfectContainer style={modalStyles.pillarCard}>
+                    <PerfectText
+                      size={32}
+                      lines={1}
+                      style={modalStyles.pillarIcon}
+                    >
+                      🤝
+                    </PerfectText>
+                    <PerfectText
+                      size={16}
+                      lines={2}
+                      style={modalStyles.pillarTitle}
+                    >
+                      Coinvolgimento Comunitario
+                    </PerfectText>
+                    <PerfectText
+                      size={14}
+                      lines={2}
+                      style={modalStyles.pillarText}
+                    >
+                      Uniamo scuole, aziende e organizzazioni in un impegno
+                      condiviso
+                    </PerfectText>
+                  </PerfectContainer>
+
+                  <PerfectContainer style={modalStyles.pillarCard}>
+                    <PerfectText
+                      size={32}
+                      lines={1}
+                      style={modalStyles.pillarIcon}
+                    >
+                      🌍
+                    </PerfectText>
+                    <PerfectText
+                      size={16}
+                      lines={1}
+                      style={modalStyles.pillarTitle}
+                    >
+                      Impatto Globale
+                    </PerfectText>
+                    <PerfectText
+                      size={14}
+                      lines={3}
+                      style={modalStyles.pillarText}
+                    >
+                      I pasti confezionati raggiungono comunità vulnerabili in
+                      tutto il mondo
+                    </PerfectText>
+                  </PerfectContainer>
+
+                  <PerfectContainer style={modalStyles.pillarCard}>
+                    <PerfectText
+                      size={32}
+                      lines={1}
+                      style={modalStyles.pillarIcon}
+                    >
+                      📚
+                    </PerfectText>
+                    <PerfectText
+                      size={16}
+                      lines={1}
+                      style={modalStyles.pillarTitle}
+                    >
+                      Educazione
+                    </PerfectText>
+                    <PerfectText
+                      size={14}
+                      lines={2}
+                      style={modalStyles.pillarText}
+                    >
+                      Sensibilizziamo sul tema della fame e promuoviamo la
+                      solidarietà
+                    </PerfectText>
+                  </PerfectContainer>
+                </PerfectContainer>
+
+                <PerfectContainer style={modalStyles.sectionDivider} />
+
+                <PerfectContainer style={modalStyles.finalCard}>
+                  <PerfectText
+                    size={15}
+                    lines={4}
+                    style={modalStyles.finalMessage}
+                  >
+                    Ogni pasto che confezioniamo insieme è un gesto di amore che
+                    attraversa i confini e raggiunge chi ne ha più bisogno.
+                  </PerfectText>
+                  <PerfectText
+                    size={16}
+                    lines={2}
+                    style={modalStyles.finalHighlight}
+                  >
+                    Unisciti a noi in questa missione di speranza.
+                  </PerfectText>
+                </PerfectContainer>
+              </PlatformScrollView>
             </PerfectContainer>
-          </LinearGradient>
+          </PerfectContainer>
         </PerfectContainer>
       </PerfectContainer>
     </Modal>

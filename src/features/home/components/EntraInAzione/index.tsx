@@ -5,13 +5,12 @@ import { ActionDescription } from './ActionDescription';
 import { ActionCTAButtons } from './ActionCTAButtons';
 import { PerfectContainer } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
-import { scaleSpacing } from '@/shared/constants/perfectScale';
 
 export const EntraInAzione: React.FC<EntraInAzioneProps> = () => {
   return (
-    <PerfectContainer 
+    <PerfectContainer
       marginHorizontal={PerfectSpacing.sm}
-      padding={scaleSpacing(16)}
+      padding={PerfectSpacing.base}
     >
       <ActionTitle />
       <ActionDescription />

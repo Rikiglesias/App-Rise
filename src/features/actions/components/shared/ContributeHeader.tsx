@@ -12,7 +12,7 @@ interface NewActionsHeaderProps {
 
 // Header sizes - TITLE/SUBTITLE NON scalati (PerfectText scala automaticamente)
 // HEADER dimensions SCALATI (usati direttamente negli styles)
-const TITLE_SIZE = 40;
+const TITLE_SIZE = 32;
 const SUBTITLE_SIZE = 18;
 const REF_WIDTH = LOGICAL_REFERENCE.width;
 const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
@@ -46,18 +46,13 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           width: '100%',
           alignItems: 'center',
           height: HEADER_INNER_HEIGHT,
-          backgroundColor: Colors.neutral[50],
+          backgroundColor: Colors.neutral[0],
           paddingHorizontal: PerfectSpacing.base,
           paddingTop: HEADER_VERTICAL_PADDING,
           paddingBottom: HEADER_VERTICAL_PADDING,
           borderRadius: scale(16),
           borderWidth: scale(1),
-          borderColor: Colors.neutral[100],
-          shadowColor: Colors.neutral[900],
-          shadowOffset: { width: 0, height: scale(2) },
-          shadowOpacity: 0.08,
-          shadowRadius: scale(6),
-          elevation: 3,
+          borderColor: Colors.neutral[300],
         },
 
         titleText: {
@@ -65,17 +60,11 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           textAlign: 'center',
           letterSpacing: scale(-0.5),
           marginBottom: HEADER_TITLE_INTERLINE,
-          textShadowColor: Colors.neutral[800],
-          textShadowOffset: { width: 0, height: scale(2) },
-          textShadowRadius: scale(6),
           includeFontPadding: false,
         },
 
         titleAccent: {
-          color: Colors.primary[600],
-          textShadowColor: Colors.primary[600],
-          textShadowOffset: { width: 0, height: scale(2) },
-          textShadowRadius: scale(6),
+          color: Colors.primary[500],
         },
 
         mainSubtitle: {
@@ -96,7 +85,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         size={TITLE_SIZE}
         lines={1}
         immunity={true}
-        fontWeight="600"
+        fontWeight="900"
         style={styles.titleText}
       >
         Fai la
@@ -105,7 +94,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         size={TITLE_SIZE}
         lines={1}
         immunity={true}
-        fontWeight="600"
+        fontWeight="900"
         style={[styles.titleText, styles.titleAccent]}
       >
         Differenza

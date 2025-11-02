@@ -10,9 +10,18 @@ import {
 } from '@/components/ui';
 // Migrated to Perfect System responsive layout
 
-import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import {
+  Colors,
+  BorderRadius,
+  Shadows,
+  Typography,
+} from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale, scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
+import {
+  scale,
+  scaleTouch,
+  scaleSpacing,
+} from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 // ❌ RIMOSSO: Calcolo manuale duplicato con dimensioni schermo
@@ -74,7 +83,7 @@ const modalStyles = StyleSheet.create({
     width: scaleTouch(36),
     height: scaleTouch(36),
     borderRadius: scale(18),
-    backgroundColor: Colors.primary[600],
+    backgroundColor: Colors.primary[500],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: scale(2),
@@ -86,7 +95,8 @@ const modalStyles = StyleSheet.create({
     marginBottom: scale(20),
   },
   centeredTitle: {
-    color: Colors.primary[600],
+    fontWeight: Typography.weights.black,
+    color: Colors.primary[500],
     textAlign: 'center',
     letterSpacing: scale(-0.8),
     ...Shadows.sm,
@@ -94,18 +104,24 @@ const modalStyles = StyleSheet.create({
   titleUnderline: {
     width: scale(80),
     height: scale(3),
-    backgroundColor: Colors.primary[600],
+    backgroundColor: Colors.primary[500],
     borderRadius: scale(2),
     marginTop: PerfectSpacing.sm,
     alignSelf: 'center',
     ...Shadows.sm,
   },
+  modalSectionTitle: {
+    fontWeight: Typography.weights.black,
+    color: Colors.neutral[800],
+  },
   modalText: {
+    fontWeight: Typography.weights.medium,
     color: Colors.neutral[700],
     marginBottom: PerfectSpacing.base,
   },
   highlightText: {
-    color: Colors.primary[600],
+    fontWeight: Typography.weights.bold,
+    color: Colors.primary[500],
     textAlign: 'center',
     marginTop: PerfectSpacing.md,
     paddingVertical: PerfectSpacing.md,
@@ -114,6 +130,10 @@ const modalStyles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     letterSpacing: scale(-0.3),
     ...Shadows.sm,
+  },
+
+  transparentContainer: {
+    backgroundColor: 'transparent',
   },
 });
 
@@ -125,6 +145,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
           style={modalStyles.closeButton}
           onPress={handleClose}
           activeOpacity={0.7}
+          accessibilityRole="button"
         >
           <MaterialCommunityIcons
             name="close"
@@ -138,7 +159,6 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         <PerfectText
           size={28}
           lines={1}
-          fontWeight="900"
           immunity={true}
           style={modalStyles.centeredTitle}
         >
@@ -147,46 +167,34 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         <PerfectContainer style={modalStyles.titleUnderline} />
       </PerfectContainer>
 
-      <PerfectText
-        size={16}
-        lines={3}
-        fontWeight="700"
-        style={modalStyles.modalText}
-      >
-        💰 Donazioni monetarie: Se vuoi fare una donazione monetaria diretta,
-        clicca su &quot;Dona Ora&quot; per contribuire immediatamente alla
-        nostra missione contro la fame.
+      <PerfectText size={16} lines={0} style={modalStyles.modalText}>
+        <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
+          💰 Donazioni monetarie:
+        </PerfectText>{' '}
+        Se vuoi fare una donazione monetaria diretta, clicca su &quot;Dona
+        Ora&quot; per contribuire immediatamente alla nostra missione contro la
+        fame.
       </PerfectText>
 
-      <PerfectText
-        size={16}
-        lines={4}
-        fontWeight="700"
-        style={modalStyles.modalText}
-      >
-        🛍️ Acquisti solidali: Attraverso il nostro Charity Shop, ogni acquisto
-        dai nostri partner dona automaticamente una percentuale per i nostri
-        programmi. Tu spendi lo stesso prezzo, ma aiuti a combattere la fame!
+      <PerfectText size={16} lines={0} style={modalStyles.modalText}>
+        <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
+          🛍️ Acquisti solidali:
+        </PerfectText>{' '}
+        Attraverso il nostro Charity Shop, ogni acquisto dai nostri partner dona
+        automaticamente una percentuale per i nostri programmi. Tu spendi lo
+        stesso prezzo, ma aiuti a combattere la fame!
       </PerfectText>
 
-      <PerfectText
-        size={16}
-        lines={4}
-        fontWeight="700"
-        style={modalStyles.modalText}
-      >
-        🎁 Gift Cards: Funzionano come gli acquisti: compri una Gift Card a
-        prezzo normale (per te o come regalo), ma una percentuale viene
-        automaticamente donata per la distribuzione di pasti. Aiuti senza costi
-        extra!
+      <PerfectText size={16} lines={0} style={modalStyles.modalText}>
+        <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
+          🎁 Gift Cards:
+        </PerfectText>{' '}
+        Funzionano come gli acquisti: compri una Gift Card a prezzo normale (per
+        te o come regalo), ma una percentuale viene automaticamente donata per
+        la distribuzione di pasti. Aiuti senza costi extra!
       </PerfectText>
 
-      <PerfectText
-        size={15}
-        lines={2}
-        fontWeight="700"
-        style={modalStyles.highlightText}
-      >
+      <PerfectText size={15} lines={2} style={modalStyles.highlightText}>
         ✨ Il modo più semplice è partecipare ai nostri eventi!
       </PerfectText>
     </PerfectContainer>
@@ -227,9 +235,13 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
       >
         <PerfectContainer style={modalStyles.backdrop} />
         <TouchableOpacity activeOpacity={1} onPress={handleStopPropagation}>
-          <PerfectContainer style={{ backgroundColor: 'transparent' }}>
+          <PerfectContainer style={modalStyles.transparentContainer}>
             <LinearGradient
-              colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
+              colors={[
+                Colors.primary[500],
+                Colors.primary[600],
+                Colors.primary[700],
+              ]}
               style={modalStyles.modalGradientBorder}
             >
               <PerfectContainer style={modalStyles.modalWhiteContainer}>

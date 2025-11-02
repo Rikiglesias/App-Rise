@@ -1,6 +1,6 @@
 import React from 'react';
 import { PerfectContainer, PerfectText } from '@/components/ui';
-import { Colors, Shadows } from '@/shared/constants/designTokens';
+import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 
 export const ActionTitle: React.FC = () => {
@@ -8,8 +8,7 @@ export const ActionTitle: React.FC = () => {
     <PerfectContainer
       preset="section"
       alignItems="center"
-      marginTop={-20}
-      marginBottom={PerfectSpacing.xs}
+      marginBottom={PerfectSpacing.base}
     >
       <PerfectText
         size={32}
@@ -17,7 +16,6 @@ export const ActionTitle: React.FC = () => {
         fontWeight="900"
         color={Colors.primary[500]}
         textAlign="center"
-        style={Shadows.md}
       >
         ⚡ Entra in Azione
       </PerfectText>

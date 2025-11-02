@@ -1,6 +1,9 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import React, { useCallback, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useCallback, useState, useMemo } from 'react';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
 
 import { ChiSiamoSection, ContactSection, StoriaModal } from '../components';
 import { mainStyles } from '../styles';
@@ -10,14 +13,16 @@ import {
   PlatformScrollView,
   PlatformTouchable,
   PerfectContainer,
+  PlatformIcon,
 } from '@/components';
-import { Colors } from '@/shared/constants';
+import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { isSuccess } from '@/shared/utils/result';
 import { logWarn } from '@/shared/utils/logger';
 
 const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const { openLink } = useLinkHandler({
     loadingDelay: 0, // ⚡ RIDUCO RITARDO A ZERO per velocità
     enableHaptics: false, // ⚡ DISABILITO HAPTICS DUPLICATI
@@ -25,6 +30,18 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   });
   const [isStoriaModalVisible, setIsStoriaModalVisible] = useState(false);
   const { triggerHaptic } = useHapticFeedback();
+
+  // Calcola top dinamico: safe area + spacing token
+  const dynamicBackButtonStyle = useMemo(
+    () =>
+      StyleSheet.create({
+        backButton: {
+          ...mainStyles.backButton,
+          top: insets.top + PerfectSpacing.base,
+        },
+      }),
+    [insets.top]
+  );
 
   const handleLocationPress = useCallback(async () => {
     const address = 'Via dei Fornaciai, 17, 40129 Bologna, BO, Italia';
@@ -98,17 +115,13 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   ];
 
   return (
-    <SafeAreaView style={mainStyles.container}>
+    <SafeAreaView style={mainStyles.container} edges={['top', 'left', 'right']}>
       {/* FRECCIA STACCATA */}
       <PlatformTouchable
         onPress={handleBackPress}
-        style={mainStyles.backButton}
+        style={dynamicBackButtonStyle.backButton}
       >
-        <MaterialCommunityIcons
-          name="arrow-left"
-          size={32}
-          color={Colors.neutral[900]}
-        />
+        <PlatformIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>

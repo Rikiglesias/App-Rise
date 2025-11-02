@@ -1,9 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  Colors,
-  Typography,
-} from '@/shared/constants/designTokens';
+import { Colors, Typography } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
@@ -45,19 +42,14 @@ export const modalStyles = StyleSheet.create({
     height: '85%',
   },
 
-  modalGradientBorder: {
-    borderRadius: scale(24),
-    padding: PerfectSpacing.xs,
-    height: '100%',
-    minHeight: scale(700),
-  },
-
-  modalWhiteContainer: {
+  modalCard: {
     backgroundColor: Colors.neutral[0],
-    borderRadius: scale(20),
+    borderRadius: scale(24),
+    borderWidth: 2,
+    borderColor: Colors.neutral[700],
     overflow: 'hidden',
     height: '100%',
-    minHeight: scale(650),
+    minHeight: scale(700),
   },
 
   modalContent: {
@@ -82,19 +74,19 @@ export const modalStyles = StyleSheet.create({
   modalTitle: {
     fontWeight: Typography.weights.black,
     color: Colors.primary[600],
-    letterSpacing: scale(-0.8),
+    letterSpacing: 0,
     flex: 1,
     textAlign: 'center',
-    paddingRight: PerfectSpacing.xl,
+    paddingRight: PerfectSpacing.lg,
   },
 
   closeButton: {
     position: 'absolute',
     top: PerfectSpacing.md,
     right: PerfectSpacing.md,
-    width: scale(32),
-    height: scale(32),
-    borderRadius: scale(16),
+    width: 32,
+    height: 32,
+    borderRadius: 999,
     backgroundColor: Colors.neutral[900],
     justifyContent: 'center',
     alignItems: 'center',
@@ -107,7 +99,7 @@ export const modalStyles = StyleSheet.create({
 
   storyContainer: {
     padding: PerfectSpacing.lg,
-    gap: PerfectSpacing.base,
+    gap: PerfectSpacing.lg,
     minHeight: scale(800),
     flexGrow: 1,
     paddingBottom: PerfectSpacing['3xl'],
@@ -121,11 +113,11 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyText: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[700],
-    lineHeight: scale(24),
-    textAlign: 'justify',
-    letterSpacing: scale(0.3),
+    fontWeight: Typography.weights.regular,
+    color: Colors.neutral[800],
+    lineHeight: scale(28),
+    textAlign: 'left',
+    letterSpacing: 0,
   },
 
   highlightText: {
@@ -136,64 +128,113 @@ export const modalStyles = StyleSheet.create({
   sectionTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
-    marginBottom: PerfectSpacing.sm,
+    marginBottom: PerfectSpacing.md,
+    marginTop: PerfectSpacing.sm,
+    letterSpacing: 0,
   },
 
   sectionDivider: {
     height: scale(1),
     backgroundColor: Colors.neutral[200],
-    marginVertical: PerfectSpacing.base,
+    marginVertical: PerfectSpacing.lg,
   },
 
-  finalMessageContainer: {
-    marginTop: PerfectSpacing.lg,
-    alignItems: 'center',
+  finalCard: {
+    backgroundColor: Colors.primary[50],
+    borderRadius: scale(16),
+    padding: PerfectSpacing.lg,
+    borderWidth: 2,
+    borderColor: Colors.primary[200],
+    gap: PerfectSpacing.md,
   },
 
   finalMessage: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[600],
+    fontWeight: Typography.weights.regular,
+    color: Colors.neutral[700],
     textAlign: 'center',
-    lineHeight: scale(20),
-    letterSpacing: scale(0.3),
+    lineHeight: scale(24),
+    letterSpacing: 0,
+  },
+
+  finalHighlight: {
+    fontWeight: Typography.weights.bold,
+    color: Colors.primary[700],
+    textAlign: 'center',
+    lineHeight: scale(24),
+    letterSpacing: 0,
+  },
+
+  introCard: {
+    backgroundColor: Colors.primary[50],
+    borderRadius: scale(12),
+    padding: PerfectSpacing.md,
+    borderLeftWidth: scale(4),
+    borderLeftColor: Colors.primary[500],
   },
 
   introText: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[600],
+    fontWeight: Typography.weights.semibold,
+    color: Colors.primary[700],
+    textAlign: 'left',
+    letterSpacing: 0,
+    lineHeight: scale(20),
+  },
+
+  italyCard: {
+    backgroundColor: Colors.neutral[50],
+    borderRadius: scale(16),
+    padding: PerfectSpacing.lg,
+    borderWidth: 1,
+    borderColor: Colors.neutral[200],
+  },
+
+  cardText: {
+    fontWeight: Typography.weights.regular,
+    color: Colors.neutral[700],
+    lineHeight: scale(24),
+    letterSpacing: 0,
+    marginTop: PerfectSpacing.sm,
+  },
+
+  mainSectionTitle: {
+    fontWeight: Typography.weights.black,
+    color: Colors.neutral[900],
     textAlign: 'center',
-    marginBottom: PerfectSpacing.base,
-    fontStyle: 'italic',
-  },
-
-  pillarsContainer: {
-    gap: PerfectSpacing.base,
-  },
-
-  pillarItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: PerfectSpacing.md,
+    letterSpacing: 0,
     marginBottom: PerfectSpacing.md,
   },
 
+  pillarsContainer: {
+    gap: PerfectSpacing.lg,
+  },
+
+  pillarCard: {
+    backgroundColor: Colors.neutral[0],
+    borderRadius: scale(16),
+    padding: PerfectSpacing.lg,
+    borderWidth: 2,
+    borderColor: Colors.neutral[300],
+    alignItems: 'center',
+    gap: PerfectSpacing.md,
+  },
+
   pillarIcon: {
-    marginTop: scale(2),
+    textAlign: 'center',
   },
 
   pillarTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[900],
-    marginBottom: PerfectSpacing.xs,
-  },
-
-  pillarContent: {
-    flex: 1,
+    textAlign: 'center',
+    letterSpacing: 0,
+    lineHeight: scale(22),
   },
 
   pillarText: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[700],
+    fontWeight: Typography.weights.regular,
+    color: Colors.neutral[600],
+    textAlign: 'center',
     lineHeight: scale(22),
+    letterSpacing: 0,
   },
 });

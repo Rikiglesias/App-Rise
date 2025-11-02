@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 import { PerfectSpacing, BorderRadius, Colors } from '@/shared/constants';
-import { scale, scaleSpacing } from '@/shared/constants/perfectScale';
+import { scale } from '@/shared/constants/perfectScale';
 
 /**
  * Stili principali per la sezione About
@@ -15,23 +15,31 @@ export const mainStyles = StyleSheet.create({
 
   backButton: {
     position: 'absolute',
-    top: scaleSpacing(60),
+    top: PerfectSpacing['2xl'],
     left: PerfectSpacing.base,
     padding: PerfectSpacing.sm,
     borderRadius: BorderRadius.full,
     backgroundColor: Colors.neutral[0],
-    shadowColor: Colors.neutral[900],
-    shadowOffset: { width: 0, height: scale(3) },
-    shadowOpacity: 0.25,
-    shadowRadius: scale(8),
-    elevation: 6,
+    borderWidth: scale(1),
+    borderColor: Colors.neutral[300],
     zIndex: 10,
+    ...Platform.select({
+      android: {
+        elevation: 10,
+      },
+      ios: {
+        shadowColor: Colors.neutral[900],
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+    }),
   },
 
   contentContainer: {
     paddingHorizontal: PerfectSpacing.base,
     gap: PerfectSpacing.none,
-    paddingTop: PerfectSpacing['3xl'],
+    paddingTop: PerfectSpacing['4xl'],
     paddingBottom: PerfectSpacing['3xl'],
   },
 
@@ -47,10 +55,5 @@ export const mainStyles = StyleSheet.create({
     width: '60%',
     borderRadius: scale(1),
     opacity: 0.8,
-    shadowColor: Colors.neutral[400],
-    shadowOffset: { width: 0, height: scale(1) },
-    shadowOpacity: 0.15,
-    shadowRadius: scale(3),
-    elevation: 2,
   },
 });

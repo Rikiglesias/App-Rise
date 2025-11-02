@@ -1,23 +1,24 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
-import React, { useCallback } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { SocialCard } from '../components/SocialCard';
-import { HeaderSection } from '../components/HeaderSection';
+import React, { useCallback, useMemo } from 'react';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
+import { SocialCard, HeaderSection } from '../components';
 import { useSocialPlatforms } from '../hooks/useSocialPlatforms';
 import { mainStyles } from '../styles/mainStyles';
+import { mainStyles as aboutMainStyles } from '../../about/styles/mainStyles';
+
 import {
   PlatformScrollView,
   PlatformTouchable,
   PerfectContainer,
   PlatformIcon,
 } from '@/components/ui';
-import { Colors } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
-
+import { Colors, PerfectSpacing } from '@/shared/constants';
 import type { RootStackParamList } from '@/navigation/types';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
-
-// Componenti modulari
 
 type SeguiciScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -29,10 +30,21 @@ interface Props {
 }
 
 const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
+  const { socialPlatforms } = useSocialPlatforms();
 
-  // Hook personalizzato per gestire social platforms e animazioni
-  const { socialPlatforms, animationValue } = useSocialPlatforms();
+  // Calcola top dinamico: safe area + spacing token
+  const dynamicBackButtonStyle = useMemo(
+    () =>
+      StyleSheet.create({
+        backButton: {
+          ...aboutMainStyles.backButton,
+          top: insets.top + PerfectSpacing.base,
+        },
+      }),
+    [insets.top]
+  );
 
   const handleBackPress = useCallback(async () => {
     await triggerHaptic('medium');
@@ -40,18 +52,17 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   }, [navigation, triggerHaptic]);
 
   return (
-    <SafeAreaView style={mainStyles.container}>
+    <SafeAreaView style={mainStyles.container} edges={['top', 'left', 'right']}>
       {/* FRECCIA STACCATA - IDENTICA A CHI SIAMO */}
       <PlatformTouchable
         onPress={handleBackPress}
-        style={mainStyles.backButton}
+        style={dynamicBackButtonStyle.backButton}
       >
-        <PlatformIcon name="arrow-left" size={scale(24)} color={Colors.neutral[900]} />
+        <PlatformIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
-        {/* Header Section Modulare */}
-        <HeaderSection animationValue={animationValue} />
+        <HeaderSection />
 
         {/* SEPARATORE TRA SEZIONI - IDENTICO ALLA PAGINA CHI SIAMO */}
         <PerfectContainer style={mainStyles.sectionDividerContainer}>
@@ -61,11 +72,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         {/* Social Platforms Section */}
         <PerfectContainer style={mainStyles.socialSection}>
           {socialPlatforms.map((platform, _index) => (
-            <SocialCard
-              key={platform.id}
-              platform={platform}
-              animationValue={animationValue}
-            />
+            <SocialCard key={platform.id} platform={platform} />
           ))}
         </PerfectContainer>
       </PlatformScrollView>

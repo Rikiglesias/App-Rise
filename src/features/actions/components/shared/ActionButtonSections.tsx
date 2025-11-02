@@ -1,4 +1,3 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useMemo } from 'react';
 import { AnimatedButton } from './AnimatedButton';
 import type {
@@ -10,12 +9,12 @@ import {
   getExploreIconColor,
   getCommunityIconColor,
 } from './ActionButtonUtils';
-import { Colors, PerfectSpacing } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { Colors } from '@/shared/constants';
 import {
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
+  PlatformIcon,
 } from '@/components/ui';
 
 // Componente sezione per i bottoni di donazione
@@ -51,37 +50,43 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
   return (
     <PerfectContainer style={styles.categoryContainer}>
       <PerfectContainer style={styles.categoryHeader}>
-        <PlatformTouchable
-          style={styles.donateTitleContainer}
-          onPress={onInfoPress}
-          activeOpacity={0.8}
-        >
-          <PerfectText
-            size={24}
-            lines={1}
-            fontWeight="400"
-            immunity={true}
-            style={styles.donateCategoryTitle}
+        <PerfectContainer style={styles.donateTitleContainerWrapper}>
+          <PlatformTouchable
+            style={styles.donateTitleContainer}
+            onPress={onInfoPress}
+            activeOpacity={0.8}
+            accessibilityRole="button"
           >
-            ❤️ Contribuisci
-          </PerfectText>
-          <PerfectText
-            size={16}
-            lines={1}
-            fontWeight="400"
-            immunity={true}
-            style={styles.donateInlineSubtitle}
+            <PerfectText
+              size={24}
+              lines={1}
+              immunity={true}
+              style={styles.donateCategoryTitle}
+            >
+              ❤️ Contribuisci
+            </PerfectText>
+            <PerfectText
+              size={16}
+              lines={1}
+              immunity={true}
+              style={styles.donateInlineSubtitle}
+            >
+              Supporta la lotta contro la fame
+            </PerfectText>
+          </PlatformTouchable>
+          <PlatformTouchable
+            style={styles.infoButton}
+            onPress={onInfoPress}
+            activeOpacity={0.7}
+            accessibilityRole="button"
           >
-            Supporta la lotta contro la fame
-          </PerfectText>
-        </PlatformTouchable>
-        <PlatformTouchable
-          style={styles.infoButton}
-          onPress={onInfoPress}
-          activeOpacity={0.7}
-        >
-          <MaterialCommunityIcons name="information" size={scale(16)} color={Colors.neutral[0]} />
-        </PlatformTouchable>
+            <PlatformIcon
+              name="information"
+              size={20}
+              color={Colors.neutral[0]}
+            />
+          </PlatformTouchable>
+        </PerfectContainer>
       </PerfectContainer>
       <PerfectContainer style={styles.buttonsGrid}>
         {/* Prima riga: Charity Shop, Gift Cards */}
@@ -153,15 +158,12 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
   );
 
   return (
-    <PerfectContainer
-      style={[styles.categoryContainer, { marginTop: -PerfectSpacing.xs }]}
-    >
+    <PerfectContainer style={styles.categoryContainerExplore}>
       <PerfectContainer style={styles.categoryHeader}>
         <PerfectContainer style={styles.exploreHeaderBackground}>
           <PerfectText
             size={20}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.exploreTitle}
           >
@@ -170,7 +172,6 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
           <PerfectText
             size={16}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.exploreSubtitle}
           >
@@ -246,19 +247,17 @@ export const CommunityButtonsSection: React.FC<
   );
 
   return (
-    <PerfectContainer
-      style={[styles.categoryContainer, { marginTop: -PerfectSpacing.xs }]}
-    >
+    <PerfectContainer style={styles.categoryContainerCommunity}>
       <PerfectContainer style={styles.categoryHeader}>
         <PlatformTouchable
           style={styles.communityHeaderBackground}
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
+          accessibilityRole="button"
         >
           <PerfectText
             size={20}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.communityTitle}
           >
@@ -267,15 +266,14 @@ export const CommunityButtonsSection: React.FC<
           <PerfectText
             size={16}
             lines={1}
-            fontWeight="400"
             immunity={true}
             style={styles.communitySubtitle}
           >
             Unisciti alla nostra comunità
           </PerfectText>
-          <MaterialCommunityIcons
+          <PlatformIcon
             name="open-in-new"
-            size={scale(16)}
+            size={16}
             color={Colors.neutral[900]}
             style={styles.communityChevron}
           />

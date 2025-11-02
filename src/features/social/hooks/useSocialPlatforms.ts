@@ -1,5 +1,5 @@
-import { useCallback, useRef } from 'react';
-import { Linking, Animated, Alert } from 'react-native';
+import { useCallback } from 'react';
+import { Linking, Alert } from 'react-native';
 import { SocialPlatform } from '../components/SocialCard';
 import { Colors } from '@/shared/constants';
 import { logWarn } from '@/shared/utils/logger';
@@ -11,9 +11,6 @@ import linkedinIcon from '@assets/icons/social/linkedin.png';
 import facebookIcon from '@assets/icons/social/facebook.png';
 
 export const useSocialPlatforms = () => {
-  // ANIMAZIONI DISABILITATE - Valore statico per performance ottimale
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-
   const openSocialLink = useCallback(
     async (url: string, platformName: string) => {
       try {
@@ -48,7 +45,7 @@ export const useSocialPlatforms = () => {
       id: 'website',
       name: 'Sito Web',
       handle: 'italy.riseagainsthunger.org',
-      description: 'Il nostro sito ufficiale',
+      description: 'Scopri tutte le nostre iniziative',
       emoji: '🌐',
       gradient: Colors.gradients.website,
       onPress: () => openSocialLink(RISE_URLS.italyMain, 'Sito Web'),
@@ -57,7 +54,7 @@ export const useSocialPlatforms = () => {
       id: 'instagram',
       name: 'Instagram',
       handle: '@riseagainsthungeritalia',
-      description: 'Foto e storie delle nostre missioni',
+      description: 'Foto e storie delle missioni',
       icon: instagramIcon,
       gradient: Colors.gradients.instagram,
       onPress: () => openSocialLink(SOCIAL_URLS.instagramShort, 'Instagram'),
@@ -75,17 +72,14 @@ export const useSocialPlatforms = () => {
       id: 'linkedin',
       name: 'LinkedIn',
       handle: 'Rise Against Hunger Italia',
-      description: 'Aggiornamenti professionali e partnership',
+      description: 'Opportunità e partnership',
       icon: linkedinIcon,
       gradient: Colors.gradients.linkedin,
       onPress: () => openSocialLink(SOCIAL_URLS.linkedinShort, 'LinkedIn'),
     },
   ];
 
-  // startAnimation e useEffect rimossi - nessuna animazione da eseguire
-
   return {
     socialPlatforms,
-    animationValue: fadeAnim, // Manteniamo per compatibilità
   };
 };

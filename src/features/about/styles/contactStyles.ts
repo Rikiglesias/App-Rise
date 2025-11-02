@@ -13,49 +13,26 @@ export const contactSectionStyles = StyleSheet.create({
   },
 
   categoryHeader: {
-    flexDirection: 'row',
+    paddingTop: PerfectSpacing.md,
+    paddingHorizontal: PerfectSpacing.base,
+    paddingBottom: PerfectSpacing.sm,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: PerfectSpacing['3xl'],
-    position: 'relative',
-  },
-
-  exploreHeaderContainer: {
-    alignItems: 'center',
+    marginBottom: PerfectSpacing.lg,
   },
 
   categoryTitle: {
-    fontWeight: Typography.weights.black,
-    color: Colors.neutral[800],
+    color: Colors.primary[600],
     textAlign: 'center',
-    letterSpacing: scale(-0.8),
-    marginBottom: PerfectSpacing.xs,
-    textShadowColor: Colors.neutral[800],
-    textShadowOffset: { width: 0, height: scale(3) },
-    textShadowRadius: scale(8),
+    letterSpacing: scale(-1.0),
+    includeFontPadding: false,
   },
 
-  exploreSubtitleInline: {
-    fontWeight: Typography.weights.medium,
+  descriptionText: {
     color: Colors.neutral[700],
     textAlign: 'center',
-    letterSpacing: scale(0.3),
-    fontStyle: 'italic',
-    lineHeight: scale(24),
-  },
-
-  headerDivider: {
-    width: '70%',
-    height: scale(3),
-    backgroundColor: Colors.neutral[900],
-    borderRadius: scale(2),
-    alignSelf: 'center',
-    marginTop: PerfectSpacing.md,
-    shadowColor: Colors.neutral[900],
-    shadowOffset: { width: 0, height: scale(1) },
-    shadowOpacity: 0.2,
-    shadowRadius: scale(3),
-    elevation: 2,
+    letterSpacing: scale(0.2),
+    marginTop: PerfectSpacing.xs,
+    opacity: 0.9,
   },
 
   contactsGrid: {
@@ -80,14 +57,11 @@ export const animatedContactStyles = StyleSheet.create({
     overflow: 'hidden',
   },
 
-  gradientBorder: {
-    padding: scale(2),
+  contactCard: {
+    backgroundColor: Colors.neutral[0],
     borderRadius: scale(16),
-  },
-
-  whiteContainer: {
-    backgroundColor: Colors.neutral[50],
-    borderRadius: scale(14),
+    borderWidth: 2,
+    borderColor: Colors.neutral[700],
     padding: scale(20),
     minHeight: scaleTouch(90),
     justifyContent: 'center',
@@ -97,14 +71,7 @@ export const animatedContactStyles = StyleSheet.create({
   contactContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: PerfectSpacing.sm,
-    paddingVertical: PerfectSpacing.xs,
-  },
-
-  contactIcon: {
-    width: scale(36),
-    height: scale(36),
-    marginRight: scale(20),
+    gap: scale(20),
   },
 
   contactTextContainer: {

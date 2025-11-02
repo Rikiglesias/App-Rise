@@ -1,4 +1,4 @@
-import { Colors  } from '@/shared/constants/designTokens';
+import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 
 // 🎨 DESIGN TOKENS CENTRALIZZATI - ELIMINANO DUPLICAZIONI

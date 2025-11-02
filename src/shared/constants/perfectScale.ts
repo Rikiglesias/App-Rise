@@ -134,6 +134,9 @@ export const getDeviceType = (): 'small' | 'normal' | 'large' => {
 };
 
 // Export statici per uso diretto
+// ⚠️ DEPRECATO: Queste costanti sono calcolate 1 SOLA VOLTA all'avvio app
+// NON si aggiornano con rotazione o resize!
+// Usa getDeviceType() dinamico se hai bisogno di logica condizionale aggiornata
 export const DEVICE_TYPE = getDeviceType();
 export const IS_SMALL_DEVICE = DEVICE_TYPE === 'small';
 export const IS_LARGE_DEVICE = DEVICE_TYPE === 'large';
@@ -158,8 +161,11 @@ export const IS_LARGE_DEVICE = DEVICE_TYPE === 'large';
 export const scaleTouch = (value: number): number => {
   const scaled = scale(value);
   
+  // Calcola device type DINAMICAMENTE (non usa costante statica)
+  const deviceType = getDeviceType();
+  
   // Solo su device piccoli applica minimo Apple (44px)
-  if (IS_SMALL_DEVICE) {
+  if (deviceType === 'small') {
     return Math.max(scaled, 44);
   }
   
@@ -187,8 +193,11 @@ export const scaleTouch = (value: number): number => {
 export const scaleSpacing = (value: number): number => {
   const scaled = scale(value);
   
+  // Calcola device type DINAMICAMENTE (non usa costante statica)
+  const deviceType = getDeviceType();
+  
   // Solo su tablet/device grandi limita a 1.5x
-  if (IS_LARGE_DEVICE) {
+  if (deviceType === 'large') {
     return Math.min(scaled, value * 1.5);
   }
   
@@ -224,13 +233,16 @@ export const scaleSpacing = (value: number): number => {
 export const scaleText = (value: number): number => {
   const scaled = scale(value);
   
+  // Calcola device type DINAMICAMENTE (non usa costante statica)
+  const deviceType = getDeviceType();
+  
   // Device piccoli: minimo leggibilità
-  if (IS_SMALL_DEVICE) {
+  if (deviceType === 'small') {
     return Math.max(scaled, 12);
   }
   
   // Device grandi: massimo proporzionale
-  if (IS_LARGE_DEVICE) {
+  if (deviceType === 'large') {
     return Math.min(scaled, value * 1.3);
   }
   

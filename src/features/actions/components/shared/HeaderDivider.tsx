@@ -20,10 +20,10 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
           alignItems: 'center',
         },
         mainDivider: {
-          height: scale(3),
+          height: scale(4),
           backgroundColor: Colors.neutral[300],
           width: '80%',
-          borderRadius: scale(1),
+          borderRadius: scale(2),
           opacity: 0.8,
           shadowColor: Colors.neutral[400],
           shadowOffset: { width: 0, height: scale(1) },

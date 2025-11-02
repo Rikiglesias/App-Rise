@@ -11,8 +11,11 @@ import { PerfectContainer } from '@/components/ui/PerfectContainer';
 
 export const HeaderTextSection: React.FC<HeaderTextSectionProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform, styles }) => {
-    const combinedStyle = StyleSheet.flatten([styles.headerSection, styles.textContainer]);
-    
+    const combinedStyle = StyleSheet.flatten([
+      styles.headerSection,
+      styles.textContainer,
+    ]);
+
     return (
       <PerfectContainer style={combinedStyle}>
         <ModernSmartTitle

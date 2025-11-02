@@ -41,11 +41,36 @@ interface PerfectImageProps extends Omit<ImageProps, 'style'> {
 
 // 🎨 PRESET DIMENSIONI (riferimento iPhone 15)
 const IMAGE_PRESETS = {
-  hero: { width: scale(350), aspectRatio: 16 / 9, borderRadius: scale(12), shadow: 'medium' },
-  card: { width: scale(280), aspectRatio: 4 / 3, borderRadius: scale(8), shadow: 'light' },
-  thumbnail: { width: scale(80), aspectRatio: 1, borderRadius: scale(8), shadow: false },
-  avatar: { width: scale(60), aspectRatio: 1, borderRadius: scale(30), shadow: 'light' },
-  banner: { width: scale(380), aspectRatio: 3 / 1, borderRadius: scale(6), shadow: false },
+  hero: {
+    width: scale(350),
+    aspectRatio: 16 / 9,
+    borderRadius: scale(12),
+    shadow: 'medium',
+  },
+  card: {
+    width: scale(280),
+    aspectRatio: 4 / 3,
+    borderRadius: scale(8),
+    shadow: 'light',
+  },
+  thumbnail: {
+    width: scale(80),
+    aspectRatio: 1,
+    borderRadius: scale(8),
+    shadow: false,
+  },
+  avatar: {
+    width: scale(60),
+    aspectRatio: 1,
+    borderRadius: scale(30),
+    shadow: 'light',
+  },
+  banner: {
+    width: scale(380),
+    aspectRatio: 3 / 1,
+    borderRadius: scale(6),
+    shadow: false,
+  },
 } as const;
 
 // 🎭 SHADOW STYLES - Usa getPerfectShadow per shadows scalati
@@ -97,11 +122,16 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
     ...imageStyle,
   };
 
-  // Debug info removed for production
+  // Estrai resizeMode da imageStyle se presente, altrimenti usa 'cover'
+  const resizeMode = imageStyle?.resizeMode ?? 'cover';
 
   return (
     <View style={containerStyleCalculated}>
-      <Image {...imageProps} style={imageStyleCalculated} resizeMode="cover" />
+      <Image
+        {...imageProps}
+        style={imageStyleCalculated}
+        resizeMode={resizeMode}
+      />
     </View>
   );
 };

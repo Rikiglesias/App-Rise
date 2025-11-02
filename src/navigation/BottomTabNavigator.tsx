@@ -222,7 +222,6 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
             <PerfectText
               size={16}
               lines={1}
-              fontWeight="400"
               color={tabColors.labelColor}
               style={styles.labelText}
             >

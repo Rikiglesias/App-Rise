@@ -146,10 +146,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 textAlign="center"
                 color={Colors.primary[500]}
               >
-                Hunger{' '}
-                <Text style={modernTitleStyles.italiaText}>
-                  Italia
-                </Text>
+                Hunger <Text style={modernTitleStyles.italiaText}>Italia</Text>
               </PerfectText>
 
               {/* Separatore con logo centrale */}

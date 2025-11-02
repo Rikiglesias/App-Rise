@@ -38,13 +38,13 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
   );
 
   return (
-    <SafeAreaView 
+    <SafeAreaView
       style={styles.container}
       edges={['top', 'bottom']}
       accessibilityLabel="Schermata Home"
       testID="home-screen"
     >
-      <Animated.ScrollView 
+      <Animated.ScrollView
         contentContainerStyle={styles.scrollContent}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -53,7 +53,11 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
-        <PerfectContainer preset="page" paddingVertical={0} paddingHorizontal={0}>
+        <PerfectContainer
+          preset="page"
+          paddingVertical={0}
+          paddingHorizontal={0}
+        >
           {/* Header Section con titolo e logo - FULL WIDTH */}
           <PerfectContainer paddingVertical={PerfectSpacing.md}>
             <HomeHeaderSection scrollY={scrollY} />

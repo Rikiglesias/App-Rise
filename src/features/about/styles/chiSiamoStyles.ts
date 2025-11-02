@@ -1,11 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  PerfectSpacing,
-  Colors,
-  Typography,
-  Shadows,
-} from '@/shared/constants';
+import { PerfectSpacing, Colors } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 /**
@@ -27,59 +22,11 @@ export const chiSiamoSectionStyles = StyleSheet.create({
 
   titleHeaderContainer: {
     alignItems: 'center',
-    backgroundColor: Colors.primary[50],
+    backgroundColor: Colors.neutral[100],
     borderWidth: scale(1),
-    borderColor: Colors.primary[100],
-    shadowColor: Colors.primary[600],
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.08,
-    shadowRadius: scale(8),
-    elevation: 3,
+    borderColor: Colors.neutral[400],
+    borderRadius: scale(16),
     width: '100%',
-  },
-
-  titleWithInfoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    position: 'relative',
-    marginBottom: PerfectSpacing.base,
-  },
-
-  titleTouchableArea: {
-    paddingHorizontal: PerfectSpacing.sm,
-    paddingVertical: PerfectSpacing.xs,
-  },
-
-  titleContainer: {
-    position: 'relative',
-    alignItems: 'center',
-  },
-
-  categoryTitle: {
-    fontWeight: Typography.weights.black,
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    letterSpacing: scale(-1.0),
-    includeFontPadding: false,
-    textShadowColor: Colors.neutral[900],
-    textShadowOffset: { width: 0, height: scale(2) },
-    textShadowRadius: scale(6),
-  },
-
-  titleAccent: {
-    color: Colors.primary[600],
-    textShadowColor: Colors.primary[600],
-    textShadowOffset: { width: 0, height: scale(3) },
-    textShadowRadius: scale(8),
-  },
-
-  subtitleWithInfoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
   },
 
   titleClickableContainer: {
@@ -87,77 +34,33 @@ export const chiSiamoSectionStyles = StyleSheet.create({
     flex: 1,
   },
 
-  mainSubtitleInline: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.primary[700],
+  categoryTitle: {
+    color: Colors.neutral[900],
+    textAlign: 'center',
+    letterSpacing: scale(-1.0),
+    includeFontPadding: false,
+  },
+
+  descriptionText: {
+    color: Colors.neutral[700],
     textAlign: 'center',
     letterSpacing: scale(0.2),
     marginTop: PerfectSpacing.xs,
-    opacity: 0.8,
-  },
-
-  mainSubtitle: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[700],
-    textAlign: 'center',
-    letterSpacing: scale(0.3),
-    fontStyle: 'italic',
-    lineHeight: scale(24),
-    textShadowColor: Colors.neutral[900],
-    textShadowOffset: { width: 0, height: scale(1) },
-    textShadowRadius: scale(2),
-  },
-
-  infoIconSubtitle: {
-    marginLeft: PerfectSpacing.sm,
-    width: scale(24),
-    height: scale(24),
-    borderRadius: scale(12),
-    backgroundColor: Colors.primary[600],
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: Colors.primary[600],
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.3,
-    shadowRadius: scale(4),
-    elevation: 4,
-    borderWidth: scale(1),
-    borderColor: Colors.primary[500],
+    opacity: 0.9,
   },
 
   infoIconImproved: {
     position: 'absolute',
-    right: PerfectSpacing.xs,
-    top: PerfectSpacing.xs,
-    width: scale(32),
-    height: scale(32),
-    borderRadius: scale(16),
-    backgroundColor: Colors.primary[600],
+    right: scale(8),
+    top: '30%',
+    transform: [{ translateY: -14 }],
+    width: 32,
+    height: 32,
+    borderRadius: 999,
+    backgroundColor: Colors.neutral[0],
+    borderWidth: 2,
+    borderColor: Colors.neutral[400],
     justifyContent: 'center',
     alignItems: 'center',
-    ...Shadows.md,
-    borderWidth: scale(2),
-    borderColor: Colors.neutral[0],
-  },
-
-  categorySubtitle: {
-    fontWeight: Typography.weights.bold,
-    textAlign: 'center',
-    letterSpacing: scale(0.3),
-    lineHeight: scale(21),
-    marginBottom: PerfectSpacing.md,
-    paddingHorizontal: PerfectSpacing.base,
-    fontStyle: 'normal',
-    color: Colors.primary[600],
-    backgroundColor: Colors.primary[50],
-    paddingVertical: PerfectSpacing.md,
-    borderRadius: scale(12),
-    borderWidth: scale(1),
-    borderColor: Colors.primary[100],
-    shadowColor: Colors.primary[600],
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.08,
-    shadowRadius: scale(4),
-    elevation: 2,
   },
 });

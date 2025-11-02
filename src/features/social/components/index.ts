@@ -2,4 +2,6 @@
 // SOCIAL COMPONENTS - Central Export
 // ===================================================================
 
-// Future social media components will be exported here
+export { HeaderSection } from './HeaderSection';
+export { SocialCard } from './SocialCard';
+export type { SocialPlatform } from './SocialCard';

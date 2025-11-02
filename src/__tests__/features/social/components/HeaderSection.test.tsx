@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
-import { Animated } from 'react-native';
 import { AllProviders } from '../../../helpers/testProviders';
 import { HeaderSection } from '@/features/social/components/HeaderSection';
 
@@ -19,28 +18,19 @@ jest.mock(
   () => 'MaterialCommunityIcons'
 );
 
-const HeaderSectionWithTheme = (props: { animationValue: Animated.Value }) => (
+const HeaderSectionWithTheme = () => (
   <AllProviders>
-    <HeaderSection animationValue={props.animationValue} />
+    <HeaderSection />
   </AllProviders>
 );
 
 describe('HeaderSection', () => {
-  let mockAnimationValue: Animated.Value;
-
   beforeEach(() => {
     jest.clearAllMocks();
-    // Crea una nuova istanza per ogni test per evitare interferenze
-    mockAnimationValue = new Animated.Value(1);
-  });
-
-  afterEach(() => {
-    // Forza la pulizia dell'istanza
-    mockAnimationValue = new Animated.Value(0);
   });
 
   it('renders header content correctly', () => {
-    render(<HeaderSectionWithTheme animationValue={mockAnimationValue} />);
+    render(<HeaderSectionWithTheme />);
 
     expect(screen.getByText('Seguici sui Social')).toBeTruthy();
     expect(
@@ -50,9 +40,9 @@ describe('HeaderSection', () => {
     ).toBeTruthy();
   });
 
-  it('renders with animation prop', () => {
+  it('renders correctly', () => {
     const { toJSON } = render(
-      <HeaderSectionWithTheme animationValue={mockAnimationValue} />
+      <HeaderSectionWithTheme />
     );
 
     expect(toJSON()).toBeTruthy();
@@ -60,7 +50,7 @@ describe('HeaderSection', () => {
 
   it('maintains consistent structure', () => {
     const { toJSON } = render(
-      <HeaderSectionWithTheme animationValue={mockAnimationValue} />
+      <HeaderSectionWithTheme />
     );
 
     expect(toJSON()).toMatchObject({
@@ -73,7 +63,7 @@ describe('HeaderSection', () => {
   });
 
   it('renders header icon correctly', () => {
-    render(<HeaderSectionWithTheme animationValue={mockAnimationValue} />);
+    render(<HeaderSectionWithTheme />);
 
     // Verifica che l'icona sia presente
     expect(
@@ -82,14 +72,14 @@ describe('HeaderSection', () => {
   });
 
   it('renders title with correct styling', () => {
-    render(<HeaderSectionWithTheme animationValue={mockAnimationValue} />);
+    render(<HeaderSectionWithTheme />);
 
     const title = screen.getByText('Seguici sui Social');
     expect(title).toBeTruthy();
   });
 
   it('renders subtitle with correct content', () => {
-    render(<HeaderSectionWithTheme animationValue={mockAnimationValue} />);
+    render(<HeaderSectionWithTheme />);
 
     const subtitle = screen.getByText(
       'Resta aggiornato sulle nostre iniziative e scopri come puoi contribuire al cambiamento'
@@ -99,11 +89,11 @@ describe('HeaderSection', () => {
 
   it('handles multiple renders without issues', () => {
     const { rerender, toJSON } = render(
-      <HeaderSectionWithTheme animationValue={mockAnimationValue} />
+      <HeaderSectionWithTheme />
     );
 
     const snapshot1 = toJSON();
-    rerender(<HeaderSectionWithTheme animationValue={mockAnimationValue} />);
+    rerender(<HeaderSectionWithTheme />);
     const snapshot2 = toJSON();
 
     expect(snapshot1).toEqual(snapshot2);

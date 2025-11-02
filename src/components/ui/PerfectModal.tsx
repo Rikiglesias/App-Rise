@@ -16,8 +16,8 @@ import {
   type DimensionValue,
 } from 'react-native';
 
-import { Colors } from '../../shared/constants';
 import { PerfectContainer } from './PerfectContainer';
+import { Colors } from '@/shared/constants';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
   /** Contenuto modal */

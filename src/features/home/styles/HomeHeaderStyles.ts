@@ -1,9 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ADVANCED_CONFIG } from '../types/HomeHeaderTypes';
-import {
-  Typography,
-  PerfectSpacing,
-} from '@/shared/constants';
+import { Typography, PerfectSpacing } from '@/shared/constants';
 import { scale, scaleSpacing } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
 export const createContainerStyles = (

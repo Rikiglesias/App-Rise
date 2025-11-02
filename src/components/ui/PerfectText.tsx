@@ -32,7 +32,6 @@ import {
   warnIfUserScaled,
 } from '../../shared/utils/SystemImmunity';
 
-
 export interface PerfectTextProps
   extends Omit<TextProps, 'numberOfLines' | 'adjustsFontSizeToFit'> {
   /** Font size di riferimento su iPhone 15 (limiti device-aware automatici) */
@@ -79,7 +78,7 @@ const LINE_HEIGHT_RATIO = 1.2;
 // Font mapping rimosso - ora usa font di sistema
 
 const DEFAULT_REFERENCE_WIDTH = LOGICAL_REFERENCE.width;
-const DEFAULT_REFERENCE_CONTAINER = DEFAULT_REFERENCE_WIDTH * 0.9;
+const DEFAULT_MULTILINE_CONTAINER = DEFAULT_REFERENCE_WIDTH * 0.7; // 70% per leggibilità ottimale
 
 export const PerfectText: React.FC<PerfectTextProps> = ({
   children,
@@ -97,11 +96,28 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   // Usa scaleText() device-aware - applica limiti automatici solo su device estremi
   const finalScaledFontSize = useMemo(() => scaleText(size), [size]);
 
+  // ✅ SISTEMA AUTOMATICO: per testi multilinea applica automaticamente width ottimale
+  const shouldApplyAutoWidth = useMemo(() => {
+    // Se containerWidth è specificato manualmente, usa quello (0 = disabilita)
+    if (containerWidth !== undefined) {
+      return containerWidth === 0 ? undefined : containerWidth;
+    }
+
+    // Se lines > 1 (testo multilinea), applica automaticamente 70% per leggibilità
+    if (lines > 1) return DEFAULT_MULTILINE_CONTAINER;
+
+    // Se lines === 1 (titolo singola riga), nessuna limitazione
+    return undefined;
+  }, [containerWidth, lines]);
+
   const referenceWidth = useMemo(
-    () => containerWidth ?? DEFAULT_REFERENCE_CONTAINER,
-    [containerWidth]
+    () => shouldApplyAutoWidth,
+    [shouldApplyAutoWidth]
   );
-  const targetWidth = useMemo(() => scale(referenceWidth), [referenceWidth]);
+  const targetWidth = useMemo(
+    () => (referenceWidth ? scale(referenceWidth) : undefined),
+    [referenceWidth]
+  );
 
   useEffect(() => {
     if (debug) {
@@ -134,9 +150,9 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
       : baseStyle;
   }, [style, finalScaledFontSize, color, textAlign, fontWeight]);
 
-  // Se containerWidth specificato → usa wrapper con width fissa
+  // Se width è necessario (manuale o automatico) → usa wrapper con width fissa
   // Altrimenti → Text diretto che si adatta al contenuto (flex/row friendly)
-  if (containerWidth) {
+  if (referenceWidth && targetWidth) {
     return (
       <View style={{ width: targetWidth }}>
         <Text
@@ -151,7 +167,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     );
   }
 
-  // Text diretto senza wrapper - per layout flex/row
+  // Text diretto senza wrapper - per titoli single-line e layout flex/row
   return (
     <Text
       {...props}
