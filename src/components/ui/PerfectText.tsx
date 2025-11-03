@@ -11,7 +11,7 @@
  * Se appare "...", significa che i valori base devono essere aggiustati.
  */
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   Text,
   TextProps,
@@ -26,11 +26,7 @@ import {
   LOGICAL_REFERENCE,
 } from '../../shared/constants/perfectScale';
 import { Typography, Colors } from '../../shared/constants/designTokens';
-import {
-  getImmuneTextProps,
-  debugImmunity,
-  warnIfUserScaled,
-} from '../../shared/utils/SystemImmunity';
+import { getImmuneTextProps } from '../../shared/utils/SystemImmunity';
 
 export interface PerfectTextProps
   extends Omit<TextProps, 'numberOfLines' | 'adjustsFontSizeToFit'> {
@@ -63,7 +59,7 @@ export interface PerfectTextProps
   /** Allineamento testo */
   textAlign?: 'left' | 'center' | 'right';
 
-  /** Debug mode - mostra info calcoli */
+  /** Debug mode for testing layout behavior (legacy, non utilizzato) */
   debug?: boolean;
 
   /** Stile custom */
@@ -88,7 +84,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   fontWeight = 'normal',
   color = Colors.neutral[900],
   textAlign = 'left',
-  debug = false,
+  debug: _debug = false,
   style,
   immunity: _immunity,
   ...props
@@ -118,13 +114,6 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     () => (referenceWidth ? scale(referenceWidth) : undefined),
     [referenceWidth]
   );
-
-  useEffect(() => {
-    if (debug) {
-      debugImmunity('PerfectText');
-      warnIfUserScaled();
-    }
-  }, [debug]);
 
   const immuneProps = getImmuneTextProps();
 
