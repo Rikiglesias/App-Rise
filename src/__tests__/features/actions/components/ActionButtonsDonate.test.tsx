@@ -48,6 +48,13 @@ jest.mock('expo-linear-gradient', () => ({
 // Mock icons
 jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
 
+// Mock DonationInfoModal
+jest.mock('@/features/actions/components/shared/DonationInfoModal', () => ({
+  __esModule: true,
+  default: () => null,
+  DonationInfoModalMigrated: () => null,
+}));
+
 // Mock UI components to ensure press events work in tests
 jest.mock('@/components/ui', () => {
   const React = require('react');

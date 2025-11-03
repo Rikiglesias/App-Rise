@@ -32,10 +32,10 @@ describe('HeaderSection', () => {
   it('renders header content correctly', () => {
     render(<HeaderSectionWithTheme />);
 
-    expect(screen.getByText('Seguici sui Social')).toBeTruthy();
+    expect(screen.getByText('Seguici sui social')).toBeTruthy();
     expect(
       screen.getByText(
-        'Resta aggiornato sulle nostre iniziative e scopri come puoi contribuire al cambiamento'
+        'Resta aggiornato sulle nostre iniziative e unisciti al cambiamento'
       )
     ).toBeTruthy();
   });
@@ -74,7 +74,7 @@ describe('HeaderSection', () => {
   it('renders title with correct styling', () => {
     render(<HeaderSectionWithTheme />);
 
-    const title = screen.getByText('Seguici sui Social');
+    const title = screen.getByText('Seguici sui social');
     expect(title).toBeTruthy();
   });
 
@@ -82,7 +82,7 @@ describe('HeaderSection', () => {
     render(<HeaderSectionWithTheme />);
 
     const subtitle = screen.getByText(
-      'Resta aggiornato sulle nostre iniziative e scopri come puoi contribuire al cambiamento'
+      'Resta aggiornato sulle nostre iniziative e unisciti al cambiamento'
     );
     expect(subtitle).toBeTruthy();
   });

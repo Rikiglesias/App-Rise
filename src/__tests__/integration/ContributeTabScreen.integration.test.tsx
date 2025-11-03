@@ -36,6 +36,13 @@ jest.mock('@/shared/hooks/useHapticFeedback', () => ({
   }),
 }));
 
+// Mock DonationInfoModal
+jest.mock('@/features/actions/components/shared/DonationInfoModal', () => ({
+  __esModule: true,
+  default: () => null,
+  DonationInfoModalMigrated: () => null,
+}));
+
 // Mock components
 jest.mock('@/components/ui', () => ({
   PerfectText: ({ children, ...props }: any) => {
@@ -46,9 +53,21 @@ jest.mock('@/components/ui', () => ({
     const { View } = require('react-native');
     return <View {...props}>{children}</View>;
   },
+  PerfectCardContainer: ({ children, ...props }: any) => {
+    const { View } = require('react-native');
+    return <View {...props}>{children}</View>;
+  },
+  PerfectIcon: ({ name, ...props }: any) => {
+    const { Text } = require('react-native');
+    return <Text {...props}>{name}</Text>;
+  },
   PlatformTouchable: ({ children, onPress, testID, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
     return <TouchableOpacity onPress={onPress} testID={testID} {...props}>{children}</TouchableOpacity>;
+  },
+  PerfectImage: ({ source, ...props }: any) => {
+    const { Image } = require('react-native');
+    return <Image source={source} {...props} />;
   },
 }));
 

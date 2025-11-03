@@ -116,6 +116,7 @@ jest.mock('@/components/ui', () => {
       return React.createElement('Image', props);
     },
     PlatformIcon: (props: any) => React.createElement('Text', props),
+    PerfectIcon: (props: any) => React.createElement('Text', props),
   };
 });
 
