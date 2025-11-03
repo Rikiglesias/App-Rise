@@ -20,13 +20,28 @@ jest.mock('@/shared/hooks/useTheme', () => ({
       primary: '#DC2626',
       background: '#FFFFFF',
       text: '#1F2937',
+      neutral: {
+        0: '#FFFFFF',
+        50: '#F9FAFB',
+        100: '#F3F4F6',
+        200: '#E5E7EB',
+        300: '#D1D5DB',
+        400: '#9CA3AF',
+        500: '#6B7280',
+        600: '#4B5563',
+        700: '#374151',
+        800: '#1F2937',
+        900: '#111827',
+      },
     },
   }),
   ThemeProvider: ({ children }: any) => children,
 }));
 
 // Creo provider semplificato locale
-const AllProviders = ({ children }: any) => <>{children}</>;
+const AllProviders = ({ children }: any) => {
+  return React.createElement(React.Fragment, null, children);
+};
 
 // Mock navigation
 const mockNavigate = jest.fn();
@@ -144,8 +159,8 @@ describe('HomeScreen - Integration Test', () => {
     );
     
     await waitFor(() => {
-      expect(screen.getByText(/Scopri.*Impatto/i)).toBeTruthy();
-      expect(screen.getByText(/Cosa puoi fare/i)).toBeTruthy();
+      expect(screen.getByTestId('cta-impact')).toBeTruthy();
+      expect(screen.getByTestId('cta-donate')).toBeTruthy();
     });
   });
 
