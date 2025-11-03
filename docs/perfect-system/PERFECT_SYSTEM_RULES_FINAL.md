@@ -41,7 +41,7 @@ const mySize = scale(24);  // ❌ scale() è PRIVATO!
 // src/components/ui/PerfectText.tsx
 // src/components/ui/PerfectContainer.tsx
 // src/components/ui/PerfectImage.tsx
-// src/components/ui/PlatformIcon.tsx
+// src/components/ui/PerfectIcon.tsx (PlatformIcon.tsx)
 ```
 
 ---
@@ -100,11 +100,13 @@ aspectRatio?: number
 borderRadius?: number
 ```
 
-#### **PlatformIcon**
+#### **PerfectIcon** (alias: PlatformIcon)
 ```typescript
-import { PlatformIcon } from '@/components/ui';
+import { PerfectIcon } from '@/components/ui';
+// O per retrocompatibilità:
+// import { PlatformIcon } from '@/components/ui';
 
-<PlatformIcon 
+<PerfectIcon 
   name="heart"
   size={24}
   color="#DC2626"
@@ -114,6 +116,8 @@ import { PlatformIcon } from '@/components/ui';
 name: string
 size?: number  // Defaults to 24
 color?: string
+minSize?: number  // Clamp minimo
+maxSize?: number  // Clamp massimo
 ```
 
 ---
@@ -128,7 +132,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 <View>  // ❌ USA PerfectContainer
 <Text>  // ❌ USA PerfectText
 <Image>  // ❌ USA PerfectImage
-<MaterialCommunityIcons>  // ❌ USA PlatformIcon
+<MaterialCommunityIcons>  // ❌ USA PerfectIcon
 ```
 
 ### **OBBLIGATORIO**:
@@ -137,13 +141,13 @@ import {
   PerfectContainer, 
   PerfectText, 
   PerfectImage, 
-  PlatformIcon 
+  PerfectIcon 
 } from '@/components/ui';
 
 <PerfectContainer>  // ✅
 <PerfectText>  // ✅
 <PerfectImage>  // ✅
-<PlatformIcon>  // ✅
+<PerfectIcon>  // ✅
 ```
 
 ---

@@ -29,12 +29,13 @@ Basandomi sull'analisi della tua app (216 Icon usage, 108 Modal usage, 240 Anima
 
 #### **1. PerfectIcon** ✅
 
-**File**: `src/components/ui/PlatformIcon.tsx` (upgraded)
+**File**: `src/components/ui/PlatformIcon.tsx` (nome file storico, esporta come PerfectIcon)
 
 **Cosa fa**:
-- Upgrade del tuo `PlatformIcon` esistente
-- Ora scala proporzionalmente: `size={24}` → iPhone 24px, iPad 47px
+- Componente icone scalato proporzionalmente
+- `size={24}` → iPhone 24px, iPad 47px
 - Mantiene mapping iOS/Android
+- Esportato come `PerfectIcon` (alias `PlatformIcon` per retrocompatibilità)
 
 **Uso**:
 ```typescript
