@@ -25,6 +25,17 @@ jest.mock('@/shared/hooks/useHapticFeedback', () => ({
   }),
 }));
 
+// Mock useTheme
+jest.mock('@/shared/hooks/useTheme', () => ({
+  useTheme: () => ({
+    colors: {
+      primary: '#DC2626',
+      background: '#FFFFFF',
+      text: '#1F2937',
+    },
+  }),
+}));
+
 // Mock expo-linear-gradient
 jest.mock('expo-linear-gradient', () => ({
   LinearGradient: 'LinearGradient',

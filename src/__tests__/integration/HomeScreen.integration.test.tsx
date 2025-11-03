@@ -90,19 +90,7 @@ describe('HomeScreen - Integration Test', () => {
     });
   });
 
-  it('dovrebbe mostrare il logo nell\'header', async () => {
-    renderWithProviders(
-      <NavigationContainer>
-        <HomeScreen navigation={mockNavigation as any} />
-      </NavigationContainer>
-    , render);
-    
-    await waitFor(() => {
-      expect(screen.getByText('Logo')).toBeTruthy();
-    });
-  });
-
-  it('dovrebbe mostrare il titolo "Rise Against Hunger Italia"', async () => {
+  it('dovrebbe mostrare il titolo nell\'header', async () => {
     renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />

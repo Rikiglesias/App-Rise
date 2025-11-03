@@ -3,6 +3,17 @@ import { Animated } from 'react-native';
 import { render, screen } from '@testing-library/react-native';
 import { ModernSmartTitle } from '@/features/home/components/ModernSmartTitle';
 
+// Mock useTheme
+jest.mock('@/shared/hooks/useTheme', () => ({
+  useTheme: () => ({
+    colors: {
+      primary: '#DC2626',
+      background: '#FFFFFF',
+      text: '#1F2937',
+    },
+  }),
+}));
+
 describe('ModernSmartTitle', () => {
   it('renderizza titolo e logo', () => {
     const anim = new Animated.Value(1);
