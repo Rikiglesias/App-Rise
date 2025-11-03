@@ -3,14 +3,13 @@ import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import {
+  PerfectIcon,
   PerfectText,
   PlatformTouchable,
   PerfectContainer,
 } from '@/components/ui';
-import { PerfectIcon } from '@/components/ui';
-import { IconClamps } from '@/shared/constants';
 import { Colors, BorderRadius } from '@/shared/constants/designTokens';
-import { PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 interface StatCardProps {

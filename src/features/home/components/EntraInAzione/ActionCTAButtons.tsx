@@ -1,12 +1,12 @@
-import { PerfectIcon } from '@/components/ui';
-import { IconClamps } from '@/shared/constants';
-import { useNavigation } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import type { BottomTabParamList } from '@/navigation/types';
 import {
+  PerfectIcon,
   PerfectText,
   PlatformTouchable,
   PerfectContainer,
@@ -16,10 +16,9 @@ import {
   Colors,
   Typography,
 } from '@/shared/constants/designTokens';
-import { PerfectSpacing } from '@/shared/constants';
-import { scale, scaleIcon } from '@/shared/constants/perfectScale';
+import { PerfectSpacing, IconClamps } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
-import type { BottomTabParamList } from '@/navigation/types';
 
 const ActionCTAButtonsComponent: React.FC = () => {
   const { triggerHaptic } = useHapticFeedback();

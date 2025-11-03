@@ -1,16 +1,15 @@
-import { PerfectIcon } from '@/components/ui';
-import { IconClamps } from '@/shared/constants';
 import React, { useCallback } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 
 import {
+  PerfectIcon,
   PerfectText,
   PlatformTouchable,
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
 import { Colors, BorderRadius, Shadows } from '@/shared/constants/designTokens';
-import { PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 
@@ -20,6 +19,7 @@ interface Props {
 
 // Sezione mappa geografica con header decorativo e immagine interattiva
 export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
+  // eslint-disable-next-line no-restricted-properties -- Necessario per calcolo dimensioni dinamiche mappa
   const window = Dimensions.get('window');
   const horizontalPadding = PerfectSpacing.base * 2; // as used in section/container
   const containerWidth = Math.max(
