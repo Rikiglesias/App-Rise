@@ -60,9 +60,23 @@ jest.mock('react-native/Libraries/Settings/Settings', () => ({
 // Provide SafeArea defaults to avoid provider errors in integration tests
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');
+  
+  // Create a proper Context for React Native Paper compatibility
+  const SafeAreaContext = React.createContext({
+    insets: { top: 0, bottom: 0, left: 0, right: 0 },
+    frame: { x: 0, y: 0, width: 390, height: 844 },
+  });
+  
   return {
-    SafeAreaProvider: ({ children }) => children,
+    SafeAreaContext,
+    SafeAreaProvider: ({ children }) => React.createElement(SafeAreaContext.Provider, {
+      value: {
+        insets: { top: 0, bottom: 0, left: 0, right: 0 },
+        frame: { x: 0, y: 0, width: 390, height: 844 },
+      }
+    }, children),
     useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+    useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
     SafeAreaView: ({ children, ...props }) => React.createElement('View', props, children),
   };
 });
