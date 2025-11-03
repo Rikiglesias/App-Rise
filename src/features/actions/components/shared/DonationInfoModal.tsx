@@ -2,9 +2,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { PlatformTouchable, PerfectText, PerfectContainer } from '@/components/ui';
-import { PerfectModal } from '@/components/ui/PerfectModal';
-import { PerfectIcon } from '@/components/ui';
+import {
+  PerfectIcon,
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+  PerfectModal,
+} from '@/components/ui';
 import { Colors, BorderRadius, Shadows, Typography } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale, scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
@@ -126,7 +130,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
           💶 Donazioni monetarie:
         </PerfectText>{' '}
-        Se vuoi fare una donazione monetaria diretta, clicca su "Dona Ora" per contribuire immediatamente alla nostra missione contro la fame.
+        Se vuoi fare una donazione monetaria diretta, clicca su &quot;Dona Ora&quot; per contribuire immediatamente alla nostra missione contro la fame.
       </PerfectText>
 
       <PerfectText size={16} lines={0} style={modalStyles.modalText}>

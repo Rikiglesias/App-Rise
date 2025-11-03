@@ -1,17 +1,16 @@
-import { PerfectIcon } from '@/components/ui';
+import React, { useMemo } from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import * as Haptics from 'expo-haptics';
-import React, { useMemo } from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// Platform-specific components
-import ImpactStackNavigator from './ImpactStackNavigator';
 import type { BottomTabParamList } from './types';
+import ImpactStackNavigator from './ImpactStackNavigator';
 import {
+  PerfectIcon,
   PlatformBlur,
   PlatformTouchable,
   PerfectText,

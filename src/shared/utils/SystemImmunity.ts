@@ -19,7 +19,7 @@
 import { PixelRatio, Platform } from 'react-native';
 
 // ⚖️ CONFIGURAZIONE ACCESSIBILITÀ BILANCIATA
-const IN_JEST = typeof process !== 'undefined' && !!(process && (process).env && (process).env.JEST_WORKER_ID);
+const IN_JEST = typeof process !== 'undefined' && !!process?.env?.JEST_WORKER_ID;
 
 const IMMUNITY_CONFIG = {
   // RISPETTA scaling utente (accessibilità)

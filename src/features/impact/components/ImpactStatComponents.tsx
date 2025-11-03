@@ -1,15 +1,16 @@
-import { PerfectIcon } from '@/components/ui';
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import type { StatButtonProps } from '../types/ImpactScreenTypes';
+import { LinearGradient } from 'expo-linear-gradient';
+
 import { IMPACT_DATA } from '../data/impactData';
+import type { StatButtonProps } from '../types/ImpactScreenTypes';
 import {
+  PerfectIcon,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
+  PerfectImage,
 } from '@/components/ui';
-import { PerfectImage } from '@/components/ui/PerfectImage';
 
 import {
   BorderRadius,

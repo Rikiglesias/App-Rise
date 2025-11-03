@@ -5,9 +5,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ActivityIndicator } from 'react-native';
-import { PerfectModal } from '@/components/ui/PerfectModal';
 import { LinearGradient } from 'expo-linear-gradient';
-import { PerfectText, PerfectContainer } from '@/components/ui';
+
+import { PerfectModal, PerfectText, PerfectContainer } from '@/components/ui';
 import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
 import { Colors, BorderRadius  } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';

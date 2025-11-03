@@ -1,16 +1,17 @@
-import { PerfectIcon } from '@/components/ui';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+
 import {
+  PerfectIcon,
   PlatformTouchable,
   PlatformScrollView,
   PerfectText,
-} from '../../components/ui';
+} from '@/components/ui';
 
 import {
   BorderRadius,

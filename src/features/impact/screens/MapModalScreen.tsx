@@ -1,10 +1,11 @@
-import { PerfectIcon } from '@/components/ui';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import type { MapModalData } from '../data/mapModalData';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+
 import { getModalData } from '../data/mapModalData';
+import type { MapModalData } from '../data/mapModalData';
 import {
+  PerfectIcon,
   PerfectText,
   PerfectContainer,
   PlatformTouchable,
