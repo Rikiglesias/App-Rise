@@ -1,15 +1,16 @@
-import { PerfectIcon } from '@/components/ui';
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+
 import type { AnimatedButtonProps } from './ActionButtonTypes';
 import {
+  PerfectIcon,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
 import { Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale, scaleIcon } from '@/shared/constants/perfectScale';
+import { scale } from '@/shared/constants/perfectScale';
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   button,

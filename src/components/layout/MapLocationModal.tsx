@@ -1,9 +1,13 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
-import { PlatformTouchable, PerfectText, PerfectContainer } from '../ui';
-import { PerfectModal } from '../ui/PerfectModal';
-import { PerfectIcon } from '../ui';
+import {
+  PerfectIcon,
+  PlatformTouchable,
+  PerfectText,
+  PerfectContainer,
+  PerfectModal,
+} from '../ui';
 
 import { Colors, PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';

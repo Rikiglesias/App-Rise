@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import type { ButtonStyles } from './ActionButtonTypes';
 import { Colors, PerfectSpacing, Typography } from '@/shared/constants';
-import { scale, scaleSpacing, scaleTouch, scaleBadge, scaleClamp } from '@/shared/constants/perfectScale';
+import { scale, scaleSpacing, scaleBadge, scaleClamp } from '@/shared/constants/perfectScale';
 
 // Info button container size centralized via Perfect Scale helpers
 const INFO_BTN_SIZE = scaleBadge(28, { min: 22, max: 32 });

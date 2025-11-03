@@ -1,9 +1,9 @@
-import { PerfectIcon } from '@/components/ui';
 import React, { useCallback } from 'react';
 
-import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
 import type { ChiSiamoSectionProps } from '../types';
+import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
 import {
+  PerfectIcon,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,

@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { PerfectModal } from '@/components/ui/PerfectModal';
-import { modalStyles } from '../styles/modalStyles';
+
 import type { StoriaModalProps } from '../types';
+import { modalStyles } from '../styles/modalStyles';
+import { PerfectModal } from '@/components/ui/PerfectModal';
 import {
   PlatformScrollView,
   PlatformTouchable,
@@ -71,7 +72,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({ visible, onClose }) =>
                     🇮🇹 In Italia
                   </PerfectText>
                   <PerfectText size={15} lines={6} style={modalStyles.cardText}>
-                    L'organizzazione arriva in Italia con l'obiettivo di coinvolgere le comunità locali nella lotta
+                    L&apos;organizzazione arriva in Italia con l&apos;obiettivo di coinvolgere le comunità locali nella lotta
                     contro la fame globale. La nostra sede di Bologna è il cuore operativo che coordina le attività su
                     tutto il territorio nazionale.
                   </PerfectText>
