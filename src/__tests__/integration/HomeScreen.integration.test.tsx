@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react-native';
+import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '@/features/home/screens/HomeScreen';
 
@@ -69,11 +70,11 @@ describe('HomeScreen - Integration Test', () => {
   });
 
   it('dovrebbe renderizzare la schermata completa senza errori', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
@@ -81,11 +82,11 @@ describe('HomeScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare il logo nell\'header', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(screen.getByText('Logo')).toBeTruthy();
@@ -93,11 +94,11 @@ describe('HomeScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare il titolo "Rise Against Hunger Italia"', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(screen.getByText(/Rise Against Hunger Italia/i)).toBeTruthy();
@@ -105,11 +106,11 @@ describe('HomeScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare la sezione "Entra in Azione"', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(screen.getByText(/Entra in Azione/i)).toBeTruthy();
@@ -130,11 +131,11 @@ describe('HomeScreen - Integration Test', () => {
   });
 
   it('dovrebbe gestire lo scroll con animazioni', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
@@ -144,11 +145,11 @@ describe('HomeScreen - Integration Test', () => {
   });
 
   it('dovrebbe avere gradient background', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(toJSON()).toMatchSnapshot();
@@ -156,11 +157,11 @@ describe('HomeScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare tutti i componenti principali insieme', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <HomeScreen navigation={mockNavigation as any} />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       // Header

@@ -10,11 +10,12 @@ import {
   getCommunityIconColor,
 } from './ActionButtonUtils';
 import { Colors } from '@/shared/constants';
+// No direct scaling here: PerfectIcon scales its size internally.
 import {
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
-  PlatformIcon,
+  PerfectIcon,
 } from '@/components/ui';
 
 // Componente sezione per i bottoni di donazione
@@ -25,6 +26,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
   onButtonPress,
   onInfoPress,
 }) => {
+  const infoIconSize = 16;
   const handleFirstRowButton = useMemo(
     () => () => {
       const button = donateButtons[0];
@@ -50,26 +52,27 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
   return (
     <PerfectContainer style={styles.categoryContainer}>
       <PerfectContainer style={styles.categoryHeader}>
-        <PerfectContainer style={styles.donateTitleContainerWrapper}>
+        <PerfectContainer style={styles.donateTitleContainerWrapper} testID="donate-header">
           <PlatformTouchable
             style={styles.donateTitleContainer}
             onPress={onInfoPress}
             activeOpacity={0.8}
             accessibilityRole="button"
+            accessibilityLabel="Contribuisci"
           >
             <PerfectText
               size={24}
               lines={1}
               immunity={true}
-              style={styles.donateCategoryTitle}
+              testID="donate-title" style={styles.donateCategoryTitle}
             >
-              ❤️ Contribuisci
+              Contribuisci
             </PerfectText>
             <PerfectText
               size={16}
               lines={1}
               immunity={true}
-              style={styles.donateInlineSubtitle}
+              testID="donate-subtitle" style={styles.donateInlineSubtitle}
             >
               Supporta la lotta contro la fame
             </PerfectText>
@@ -79,12 +82,11 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
             onPress={onInfoPress}
             activeOpacity={0.7}
             accessibilityRole="button"
+            accessibilityLabel="Informazioni su Contribuisci"
+            testID="donate-info-button"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <PlatformIcon
-              name="information"
-              size={20}
-              color={Colors.neutral[0]}
-            />
+            <PerfectIcon name="information" size={infoIconSize} minSize={14} maxSize={18} color={Colors.neutral[0]} />
           </PlatformTouchable>
         </PerfectContainer>
       </PerfectContainer>
@@ -167,7 +169,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
             immunity={true}
             style={styles.exploreTitle}
           >
-            🔍 Esplora
+            Esplora
           </PerfectText>
           <PerfectText
             size={16}
@@ -253,7 +255,8 @@ export const CommunityButtonsSection: React.FC<
           style={styles.communityHeaderBackground}
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
-          accessibilityRole="button"
+            accessibilityRole="button"
+            accessibilityLabel="Contribuisci"
         >
           <PerfectText
             size={20}
@@ -261,7 +264,7 @@ export const CommunityButtonsSection: React.FC<
             immunity={true}
             style={styles.communityTitle}
           >
-            🤝 Community
+            Community
           </PerfectText>
           <PerfectText
             size={16}
@@ -271,7 +274,7 @@ export const CommunityButtonsSection: React.FC<
           >
             Unisciti alla nostra comunità
           </PerfectText>
-          <PlatformIcon
+          <PerfectIcon
             name="open-in-new"
             size={16}
             color={Colors.neutral[900]}
@@ -304,3 +307,6 @@ export const CommunityButtonsSection: React.FC<
     </PerfectContainer>
   );
 };
+
+
+

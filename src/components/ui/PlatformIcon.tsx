@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { scale } from '@/shared/constants/perfectScale';
+import { scale, scaleClamp } from '@/shared/constants/perfectScale';
 
 interface PlatformIconProps {
   name: string;
@@ -9,6 +9,9 @@ interface PlatformIconProps {
   size?: number;
   color?: string;
   style?: object;
+  /** Limiti opzionali per clamp del size finale (in px assoluti) */
+  minSize?: number;
+  maxSize?: number;
 }
 
 /**
@@ -21,18 +24,28 @@ interface PlatformIconProps {
  *
  * ESEMPIO:
  * iPhone 15: size={24} → 24px
- * iPad:      size={24} → 47px (scalato!)
+ * iPad:      size={24} → ~47px (scalato!)
  */
 export const PlatformIcon: React.FC<PlatformIconProps> = ({
   name,
   size = 24,
   color,
   style,
+  minSize,
+  maxSize,
 }) => {
-  // 🎯 SCALA size usando sistema Perfect Scale centralizzato
-  const scaledSize = scale(size);
-  // Mapping strategico iOS-style -> Android Material
-  const iconMapping = {
+  // SCALA size usando Perfect Scale con clamp opzionale (px assoluti)
+  const scaledSize =
+    typeof minSize === 'number' || typeof maxSize === 'number'
+      ? scaleClamp(
+          size,
+          typeof minSize === 'number' ? minSize : -Infinity,
+          typeof maxSize === 'number' ? maxSize : Infinity
+        )
+      : scale(size);
+
+  // Mapping iOS-style → MaterialCommunityIcons (fallback diretto sul nome passato)
+  const iconMapping: Record<string, string> = {
     // Navigation
     'house.fill': Platform.OS === 'ios' ? 'home-variant' : 'home',
     'heart.fill': 'heart',
@@ -57,18 +70,14 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
     'chevron.left': 'chevron-left',
     xmark: 'close',
     checkmark: 'check',
-
-    // Direct mapping fallback
-    [name]: name,
   };
 
-  // Get the appropriate icon name
   const iconName = iconMapping[name] ?? name;
 
   return (
     <MaterialCommunityIcons
       name={iconName as keyof typeof MaterialCommunityIcons.glyphMap}
-      size={scaledSize} // ✅ USA SIZE SCALATO
+      size={scaledSize}
       color={color}
       style={style}
     />
@@ -79,3 +88,4 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
 export const PerfectIcon = PlatformIcon;
 
 export default PlatformIcon;
+

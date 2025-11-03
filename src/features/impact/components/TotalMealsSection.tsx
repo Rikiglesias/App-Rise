@@ -1,20 +1,13 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import type { useImpactAnimations } from '../hooks/useImpactAnimations';
-import {
-  PerfectText,
-  PlatformTouchable,
-  PerfectContainer,
-} from '@/components/ui';
-import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { StatCard } from './StatCard';
+import { PerfectText, PerfectContainer } from '@/components/ui';
+import { Colors, BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 interface Props {
-  animations: ReturnType<typeof useImpactAnimations>;
   onMealsPress: () => void;
   onKitsPress: () => void;
 }
@@ -23,7 +16,6 @@ interface Props {
  * Sezione dei numeri totali con header decorativo e card interattive
  */
 export const TotalMealsSection: React.FC<Props> = ({
-  animations,
   onMealsPress,
   onKitsPress,
 }) => {
@@ -35,160 +27,41 @@ export const TotalMealsSection: React.FC<Props> = ({
       </PerfectContainer>
 
       {/* Header POTENZIATO con decorazioni eleganti */}
-      <Animated.View
-        style={[
-          styles.numbersHeaderContainer,
-          {
-            opacity: animations.statsAnimations[0],
-            transform: [{ scale: animations.statsAnimations[0] }],
-          },
-        ]}
-      >
+      <PerfectContainer style={styles.numbersHeaderContainer}>
         <PerfectContainer style={styles.numbersHeaderBackground}>
           <PerfectText
             size={24}
             lines={1}
             fontWeight="700"
-            immunity={true}
             style={styles.numbersTitle}
           >
             📊 I Nostri Numeri
           </PerfectText>
-          <PerfectText
-            size={16}
-            lines={2}
-            immunity={true}
-            style={styles.numbersSubtitle}
-          >
+          <PerfectText size={16} lines={2} style={styles.numbersSubtitle}>
             Milioni di vite cambiate, un pasto alla volta
           </PerfectText>
         </PerfectContainer>
-      </Animated.View>
+      </PerfectContainer>
 
       <PerfectContainer style={styles.totalStatsRow}>
-        <Animated.View
-          style={[
-            styles.totalStatCard,
-            {
-              opacity: animations.statsAnimations[0],
-              transform: [{ scale: animations.statsAnimations[0] }],
-            },
-          ]}
-        >
-          <PlatformTouchable onPress={onMealsPress} activeOpacity={0.9}>
-            <LinearGradient
-              colors={[
-                Colors.primary[600],
-                Colors.primary[700],
-                Colors.primary[800],
-              ]}
-              style={styles.totalGradientContainer}
-            >
-              <PerfectContainer style={styles.totalCardContent}>
-                <MaterialCommunityIcons
-                  name="food-apple"
-                  size={28}
-                  color={Colors.primary[600]}
-                  style={styles.totalCardIcon}
-                />
-                <PerfectText
-                  size={22}
-                  lines={1}
-                  fontWeight="900"
-                  immunity={true}
-                  style={styles.totalStatValue}
-                >
-                  15.8M
-                </PerfectText>
-                <PerfectText
-                  size={16}
-                  lines={1}
-                  fontWeight="700"
-                  immunity={true}
-                  style={styles.totalStatLabel}
-                >
-                  Pasti Totali
-                </PerfectText>
-                <PerfectText
-                  size={14}
-                  lines={1}
-                  immunity={true}
-                  style={styles.totalStatSubtitle}
-                >
-                  Dal 2012 - Meals
-                </PerfectText>
-                <MaterialCommunityIcons
-                  name="chevron-right"
-                  size={20}
-                  color={Colors.primary[600]}
-                  style={styles.chevronIcon}
-                />
-              </PerfectContainer>
-            </LinearGradient>
-          </PlatformTouchable>
-        </Animated.View>
-
-        <Animated.View
-          style={[
-            styles.totalStatCard,
-            {
-              opacity: animations.statsAnimations[1],
-              transform: [{ scale: animations.statsAnimations[1] }],
-            },
-          ]}
-        >
-          <PlatformTouchable onPress={onKitsPress} activeOpacity={0.9}>
-            <LinearGradient
-              colors={[
-                Colors.neutral[800],
-                Colors.neutral[700],
-                Colors.neutral[900],
-              ]}
-              style={styles.totalGradientContainer}
-            >
-              <PerfectContainer style={styles.totalCardContent}>
-                <MaterialCommunityIcons
-                  name="package-variant"
-                  size={28}
-                  color={Colors.neutral[800]}
-                  style={styles.totalCardIcon}
-                />
-                <PerfectText
-                  size={22}
-                  lines={1}
-                  fontWeight="900"
-                  immunity={true}
-                  style={styles.totalStatValue}
-                >
-                  142K
-                </PerfectText>
-                <PerfectText
-                  size={16}
-                  lines={1}
-                  fontWeight="700"
-                  immunity={true}
-                  style={styles.totalStatLabel}
-                >
-                  Kit Totali
-                </PerfectText>
-                <PerfectText
-                  size={14}
-                  lines={1}
-                  immunity={true}
-                  style={styles.totalStatSubtitle}
-                >
-                  Dal 2020 - Kits
-                </PerfectText>
-                <MaterialCommunityIcons
-                  name="chevron-right"
-                  size={20}
-                  color={Colors.neutral[800]}
-                  style={styles.chevronIcon}
-                />
-              </PerfectContainer>
-            </LinearGradient>
-          </PlatformTouchable>
-        </Animated.View>
+        <StatCard
+          icon="food-apple"
+          iconColor={Colors.primary[600]}
+          value="15.8M"
+          label="Pasti Totali"
+          subtitle="Dal 2012 - Meals"
+          gradientColors={[Colors.primary[600], Colors.primary[800]]}
+          onPress={onMealsPress}
+        />
+        <StatCard
+          icon="package-variant"
+          iconColor={Colors.neutral[800]}
+          value="142K"
+          label="Kit Totali"
+          subtitle="Dal 2020 - Kits"
+          gradientColors={[Colors.neutral[700], Colors.neutral[900]]}
+          onPress={onKitsPress}
+        />
       </PerfectContainer>
     </PerfectContainer>
   );
@@ -202,12 +75,12 @@ const styles = StyleSheet.create({
     marginVertical: PerfectSpacing.sm,
     marginHorizontal: PerfectSpacing.lg,
     borderRadius: BorderRadius.sm,
-  }, 
+  },
   // Container divisorio - allineato a pagina Azioni (sectionDivider)
   titleSeparatorContainer: {
     paddingHorizontal: 0,
-    paddingVertical: 0, 
-    alignItems: 'stretch', 
+    paddingVertical: 0,
+    alignItems: 'stretch',
   },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
@@ -220,34 +93,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: PerfectSpacing.base,
   },
-  totalStatCard: {
-    flex: 1,
-  },
-  totalGradientContainer: {
-    borderRadius: BorderRadius.xl,
-    padding: scale(2),
-    ...Shadows.lg,
-  },
-  totalCardContent: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl - scale(2),
-    paddingVertical: PerfectSpacing.md,
-    alignItems: 'center',
-  },
-  totalCardIcon: {
-    marginBottom: PerfectSpacing.md,
-  },
-  totalStatValue: {
-    color: Colors.neutral[800],
-    marginBottom: PerfectSpacing.xs,
-  },
-  totalStatLabel: {
-    color: Colors.neutral[700],
-    marginBottom: PerfectSpacing.sm,
-  },
-  totalStatSubtitle: {
-    color: Colors.neutral[500],
-  },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
   numbersHeaderContainer: {
@@ -256,33 +101,24 @@ const styles = StyleSheet.create({
     marginBottom: PerfectSpacing['2xl'], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
   },
   numbersHeaderBackground: {
-    backgroundColor: Colors.neutral[50],
-    borderRadius: BorderRadius.xl,
+    alignSelf: 'stretch',
+    backgroundColor: Colors.neutral[0],
+    borderRadius: scale(16),
     paddingVertical: PerfectSpacing.base,
     paddingHorizontal: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor: Colors.neutral[100],
-    ...Shadows.sm,
+    borderColor: Colors.neutral[300],
   },
   numbersTitle: {
-    color: Colors.neutral[700],
+    color: Colors.neutral[900],
     textAlign: 'center',
-    letterSpacing: scale(-0.4),
-    includeFontPadding: false,
-    ...Shadows.sm,
+    letterSpacing: 0,
   },
   numbersSubtitle: {
-    // fontSize rimosso - ora gestito da Text
-    color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
+    color: Colors.neutral[700],
     textAlign: 'center',
-    marginTop: PerfectSpacing.md,
-    opacity: 0.9,
-    letterSpacing: scale(0.1),
-  },
-
-  chevronIcon: {
-    position: 'absolute',
-    top: PerfectSpacing.sm,
-    right: PerfectSpacing.sm,
+    marginTop: PerfectSpacing.sm,
+    opacity: 0.8,
+    letterSpacing: 0,
   },
 });

@@ -5,7 +5,7 @@ import {
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
-  PlatformIcon,
+  PerfectIcon,
 } from '@/components/ui';
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
@@ -15,9 +15,9 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
 
-  const handlePress = useCallback(async () => {
-    await triggerHaptic('medium');
+  const handlePress = useCallback(() => {
     contact.onPress();
+    void triggerHaptic('medium');
   }, [contact, triggerHaptic]);
 
   return (
@@ -26,10 +26,12 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
         style={animatedContactStyles.contactTouchable}
         onPress={handlePress}
         activeOpacity={0.8}
+        accessibilityRole="button"
+        accessibilityLabel={`Apri ${contact.title}`}
       >
         <PerfectContainer style={animatedContactStyles.contactCard}>
           <PerfectContainer style={animatedContactStyles.contactContent}>
-            <PlatformIcon
+            <PerfectIcon
               name={contact.icon}
               size={36}
               color={Colors.neutral[800]}
@@ -40,6 +42,7 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
               <PerfectText
                 size={18}
                 lines={1}
+                containerWidth={0}
                 style={animatedContactStyles.contactButtonTitle}
               >
                 {contact.title}
@@ -47,6 +50,7 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
               <PerfectText
                 size={16}
                 lines={2}
+                containerWidth={0}
                 style={animatedContactStyles.contactButtonSubtitle}
               >
                 {contact.subtitle}

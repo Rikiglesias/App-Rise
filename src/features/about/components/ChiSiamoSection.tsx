@@ -1,4 +1,4 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PerfectIcon } from '@/components/ui';
 import React, { useCallback } from 'react';
 
 import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
@@ -16,9 +16,9 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
 
-  const handleInfoPress = useCallback(async () => {
-    await triggerHaptic('light');
+  const handleInfoPress = useCallback(() => {
     onInfoPress();
+    void triggerHaptic('light');
   }, [onInfoPress, triggerHaptic]);
 
   return (
@@ -34,6 +34,8 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           <PlatformTouchable
             onPress={handleInfoPress}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Mostra la storia dell'organizzazione"
             style={chiSiamoSectionStyles.titleClickableContainer}
           >
             <PerfectText
@@ -55,16 +57,15 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           </PlatformTouchable>
           <PlatformTouchable
             onPress={handleInfoPress}
+            accessibilityRole="button"
+            accessibilityLabel="Apri informazioni su Chi Siamo"
             style={chiSiamoSectionStyles.infoIconImproved}
           >
-            <MaterialCommunityIcons
-              name="information"
-              size={24}
-              color={Colors.neutral[900]}
-            />
+            <PerfectIcon name="information" size={24} color={Colors.neutral[900]} />
           </PlatformTouchable>
         </PerfectContainer>
       </PerfectContainer>
     </PerfectContainer>
   );
 };
+

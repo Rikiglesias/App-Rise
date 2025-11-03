@@ -1,4 +1,4 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PerfectIcon } from '@/components/ui';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet } from 'react-native';
@@ -36,11 +36,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
       <PerfectContainer
         style={[styles.iconContainer, { backgroundColor: color }]}
       >
-        <MaterialCommunityIcons
-          name={icon}
-          size={28}
-          color={Colors.neutral[0]}
-        />
+        <PerfectIcon name={icon} size={28} color={Colors.neutral[0]} />
       </PerfectContainer>
       <PerfectContainer style={styles.textContainer}>
         <PerfectText
@@ -61,11 +57,7 @@ export const StatButton: React.FC<StatButtonProps> = ({
           {label}
         </PerfectText>
       </PerfectContainer>
-      <MaterialCommunityIcons
-        name="chevron-right"
-        size={24}
-        color={Colors.neutral[400]}
-      />
+      <PerfectIcon name="chevron-right" size={24} color={Colors.neutral[400]} />
     </PerfectContainer>
   </PlatformTouchable>
 );
@@ -117,7 +109,7 @@ export const MilestoneCard: React.FC<
   (typeof IMPACT_DATA.milestones)[number]
 > = ({ title, value, icon }) => (
   <PerfectContainer style={styles.milestoneCard}>
-    <MaterialCommunityIcons name={icon} size={24} color={Colors.primary[600]} />
+    <PerfectIcon name={icon} size={24} color={Colors.primary[600]} />
     <PerfectContainer style={styles.milestoneContent}>
       <PerfectText
         size={15}
@@ -222,3 +214,4 @@ const styles = StyleSheet.create({
     color: Colors.neutral[600],
   },
 });
+

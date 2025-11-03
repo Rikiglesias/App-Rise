@@ -12,8 +12,6 @@ import {
   Results2024Section,
   CommunitySection,
   MapSection,
-  useImpactAnimations,
-  convertToMapLocations,
 } from '../components';
 import { PlatformScrollView, PerfectContainer } from '@components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -33,13 +31,15 @@ const EXTRA_PADDING = 24;
 const ImpactTabScreenComponent: React.FC = () => {
   const navigation = useNavigation<ImpactNavigationProp>();
   const insets = useSafeAreaInsets();
-  const animations = useImpactAnimations();
 
   const handleMealsPress = useCallback(() => {
     try {
       navigation.navigate('Meals');
     } catch (error) {
-      logError('Navigation error to Meals screen', error instanceof Error ? error.message : String(error));
+      logError(
+        'Navigation error to Meals screen',
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }, [navigation]);
 
@@ -47,7 +47,10 @@ const ImpactTabScreenComponent: React.FC = () => {
     try {
       navigation.navigate('Kits');
     } catch (error) {
-      logError('Navigation error to Kits screen', error instanceof Error ? error.message : String(error));
+      logError(
+        'Navigation error to Kits screen',
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }, [navigation]);
 
@@ -55,7 +58,10 @@ const ImpactTabScreenComponent: React.FC = () => {
     try {
       navigation.navigate('Volunteers');
     } catch (error) {
-      logError('Navigation error to Volunteers screen', error instanceof Error ? error.message : String(error));
+      logError(
+        'Navigation error to Volunteers screen',
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }, [navigation]);
 
@@ -63,44 +69,52 @@ const ImpactTabScreenComponent: React.FC = () => {
     try {
       navigation.navigate('Partners');
     } catch (error) {
-      logError('Navigation error to Partners screen', error instanceof Error ? error.message : String(error));
+      logError(
+        'Navigation error to Partners screen',
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }, [navigation]);
 
   const handleMapPress = useCallback(() => {
     try {
-      // Converti locations con helper
-      const convertedLocations = convertToMapLocations();
-      navigation.navigate('MapModal', { locations: convertedLocations });
+      // Naviga alla schermata "In Fase di Sviluppo" come modal
+      navigation.navigate('DevelopmentModal' as never);
     } catch (error) {
-      logError('Navigation error to MapModal screen', error instanceof Error ? error.message : String(error));
+      logError(
+        'Navigation error to DevelopmentModal',
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }, [navigation]);
 
-  const scrollContentPadding = Math.max(insets.bottom, scale(BASE_PADDING)) + scale(TAB_BAR_HEIGHT) + scale(EXTRA_PADDING);
+  const scrollContentPadding =
+    Math.max(insets.bottom, scale(BASE_PADDING)) +
+    scale(TAB_BAR_HEIGHT) +
+    scale(EXTRA_PADDING);
 
   return (
-    <SafeAreaView 
+    <SafeAreaView
       style={styles.container}
-      edges={['top', 'bottom']}
+      edges={['bottom']}
       accessibilityLabel="Schermata Impatto"
       testID="impact-tab-screen"
     >
+      {/* Nessun modal locale: si usa schermata esistente "In Fase di Sviluppo" */}
       <PlatformScrollView
         contentContainerStyle={{
           paddingBottom: scrollContentPadding,
         }}
         accessibilityLabel="Scroll impatto e statistiche"
       >
-        <ImpactHeader animations={animations} />
+        <ImpactHeader />
 
         <TotalMealsSection
-          animations={animations}
           onMealsPress={handleMealsPress}
           onKitsPress={handleKitsPress}
         />
 
-        <Results2024Section animations={animations} />
+        <Results2024Section />
 
         {/* Linea divisoria tra Dal 2012 e Community */}
         <PerfectContainer style={styles.sectionDividerContainer}>
@@ -108,7 +122,6 @@ const ImpactTabScreenComponent: React.FC = () => {
         </PerfectContainer>
 
         <CommunitySection
-          animations={animations}
           onVolunteersPress={handleVolunteersPress}
           onPartnersPress={handlePartnersPress}
         />

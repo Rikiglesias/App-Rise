@@ -59,7 +59,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
           paddingHorizontal={0}
         >
           {/* Header Section con titolo e logo - FULL WIDTH */}
-          <PerfectContainer paddingVertical={PerfectSpacing.md}>
+          <PerfectContainer paddingVertical={PerfectSpacing.sm}>
             <HomeHeaderSection scrollY={scrollY} />
           </PerfectContainer>
 

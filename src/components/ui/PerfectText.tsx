@@ -93,7 +93,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   immunity: _immunity,
   ...props
 }) => {
-  // Usa scaleText() device-aware - applica limiti automatici solo su device estremi
+  // Usa scaleText() che ora è scale() puro - proporzionalità perfetta sempre
   const finalScaledFontSize = useMemo(() => scaleText(size), [size]);
 
   // ✅ SISTEMA AUTOMATICO: per testi multilinea applica automaticamente width ottimale
@@ -154,7 +154,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   // Altrimenti → Text diretto che si adatta al contenuto (flex/row friendly)
   if (referenceWidth && targetWidth) {
     return (
-      <View style={{ width: targetWidth }}>
+      <View style={{ width: targetWidth, alignSelf: 'center' }}>
         <Text
           {...props}
           numberOfLines={lines}

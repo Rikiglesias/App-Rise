@@ -12,3 +12,6 @@ export * from './perfectScale';
 
 // Perfect Spacing - Sistema spacing semantico e scalato
 export * from './perfectSpacing';
+
+// Icon clamps presets (micro elements only)
+export * from './iconClamps';

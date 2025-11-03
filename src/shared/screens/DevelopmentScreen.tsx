@@ -1,4 +1,4 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PerfectIcon } from '@/components/ui';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
@@ -96,19 +96,19 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
       >
         {/* Container per nascondere overflow durante animazioni */}
         <View style={styles.backButtonContainer}>
-          <LinearGradient
-            colors={[Colors.primary[600], Colors.primary[700]]}
-            style={[
-              styles.backButtonGradient,
-              {
-                width: scale(48),
-                height: scale(48),
-                borderRadius: scale(24),
-              },
-            ]}
-          >
-            <MaterialCommunityIcons name="arrow-left" size={scale(24)} color={Colors.neutral[0]} />
-          </LinearGradient>
+            <LinearGradient
+              colors={[Colors.primary[600], Colors.primary[700]]}
+              style={[
+                styles.backButtonGradient,
+                {
+                  width: scale(48),
+                  height: scale(48),
+                  borderRadius: scale(24),
+                },
+              ]}
+            >
+              <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[0]} />
+            </LinearGradient>
         </View>
       </PlatformTouchable>
 
@@ -150,11 +150,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 },
               ]}
             >
-              <MaterialCommunityIcons
-                name="hammer-wrench"
-                size={scale(60)}
-                color={Colors.primary[600]}
-              />
+              <PerfectIcon name="hammer-wrench" size={60} color={Colors.primary[600]} />
             </Animated.View>
 
             {/* Icone decorative fluttuanti */}
@@ -165,11 +161,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 { padding: PerfectSpacing.sm },
               ]}
             >
-              <MaterialCommunityIcons
-                name="code-tags"
-                size={scale(24)}
-                color={Colors.semantic.success.dark}
-              />
+              <PerfectIcon name="code-tags" size={24} color={Colors.semantic.success.dark} />
             </Animated.View>
             <Animated.View
               style={[
@@ -178,11 +170,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 { padding: PerfectSpacing.sm },
               ]}
             >
-              <MaterialCommunityIcons
-                name="palette"
-                size={scale(20)}
-                color={Colors.primary[500]}
-              />
+              <PerfectIcon name="palette" size={20} color={Colors.primary[500]} />
             </Animated.View>
             <Animated.View
               style={[
@@ -191,7 +179,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 { padding: PerfectSpacing.sm },
               ]}
             >
-              <MaterialCommunityIcons name="rocket" size={scale(22)} color={Colors.primary[400]} />
+              <PerfectIcon name="rocket" size={22} color={Colors.primary[400]} />
             </Animated.View>
           </View>
 
@@ -226,9 +214,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               style={styles.cardGradient}
             >
               <View style={[styles.cardContent, { padding: PerfectSpacing.lg }]}>
-                <MaterialCommunityIcons
+                <PerfectIcon
                   name="information-outline"
-                  size={scale(28)}
+                  size={28}
                   color={Colors.primary[600]}
                   style={[styles.cardIcon, { marginBottom: PerfectSpacing.sm }]}
                 />
@@ -243,31 +231,19 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
 
                 <View style={[styles.featuresList, { gap: PerfectSpacing.xs }]}>
                   <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
-                    <MaterialCommunityIcons
-                      name="check-circle"
-                      size={scale(16)}
-                      color={Colors.semantic.success.dark}
-                    />
+                    <PerfectIcon name="check-circle" size={16} color={Colors.semantic.success.dark} />
                     <PerfectText size={16} lines={1} style={styles.featureText}>
                       Design migliorato
                     </PerfectText>
                   </View>
                   <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
-                    <MaterialCommunityIcons
-                      name="check-circle"
-                      size={scale(16)}
-                      color={Colors.semantic.success.dark}
-                    />
+                    <PerfectIcon name="check-circle" size={16} color={Colors.semantic.success.dark} />
                     <PerfectText size={16} lines={1} style={styles.featureText}>
                       Nuove funzionalità
                     </PerfectText>
                   </View>
                   <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
-                    <MaterialCommunityIcons
-                      name="check-circle"
-                      size={scale(16)}
-                      color={Colors.semantic.success.dark}
-                    />
+                    <PerfectIcon name="check-circle" size={16} color={Colors.semantic.success.dark} />
                     <PerfectText size={16} lines={2} style={styles.featureText}>
                       Performance ottimizzate
                     </PerfectText>
@@ -431,3 +407,4 @@ const styles = StyleSheet.create({
 });
 
 export default DevelopmentScreen;
+

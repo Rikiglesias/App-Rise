@@ -30,7 +30,7 @@ export const contactSectionStyles = StyleSheet.create({
   descriptionText: {
     color: Colors.neutral[700],
     textAlign: 'center',
-    letterSpacing: scale(0.2),
+    letterSpacing: 0,
     marginTop: PerfectSpacing.xs,
     opacity: 0.9,
   },
@@ -62,33 +62,38 @@ export const animatedContactStyles = StyleSheet.create({
     borderRadius: scale(16),
     borderWidth: 2,
     borderColor: Colors.neutral[700],
-    padding: scale(20),
-    minHeight: scaleTouch(90),
+    padding: scale(16),
+    minHeight: scaleTouch(72),
     justifyContent: 'center',
     alignItems: 'stretch',
   },
 
   contactContent: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(20),
+    alignItems: 'flex-start',
+    gap: PerfectSpacing.base,
   },
 
   contactTextContainer: {
     flex: 1,
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
 
   contactButtonTitle: {
     fontWeight: Typography.weights.bold,
     color: Colors.neutral[800],
     marginBottom: PerfectSpacing.xs,
-    letterSpacing: scale(0.3),
+    letterSpacing: 0,
+    textAlign: 'left',
+    alignSelf: 'flex-start',
   },
 
   contactButtonSubtitle: {
     fontWeight: Typography.weights.medium,
     color: Colors.neutral[600],
-    lineHeight: scale(22),
+    letterSpacing: 0,
+    textAlign: 'left',
+    alignSelf: 'flex-start',
   },
 });

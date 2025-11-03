@@ -1,6 +1,7 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PerfectIcon } from '@/components/ui';
+import { IconClamps } from '@/shared/constants';
 import React, { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import {
   PerfectText,
@@ -8,7 +9,7 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
@@ -17,10 +18,18 @@ interface Props {
   onMapPress: () => void;
 }
 
-/**
- * Sezione mappa geografica con header decorativo e immagine interattiva
- */
+// Sezione mappa geografica con header decorativo e immagine interattiva
 export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
+  const window = Dimensions.get('window');
+  const horizontalPadding = PerfectSpacing.base * 2; // as used in section/container
+  const containerWidth = Math.max(
+    0,
+    Math.floor(Math.min(window.width, window.height) - horizontalPadding)
+  );
+  // Maintain iPhone 15 reference aspect ratio ~ 361/280
+  const aspectRatio = 361 / 280;
+  const computedHeight = Math.round(containerWidth / aspectRatio);
+
   const handleMapImagePress = useCallback(() => {
     onMapPress(); // Apre la mappa completa con tutti i pin
   }, [onMapPress]);
@@ -41,8 +50,8 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           </PerfectText>
           <PerfectText
             size={16}
-            lines={1}
             immunity={true}
+            lines={2}
             style={styles.mapSubtitle}
           >
             Le nostre operazioni nel mondo
@@ -52,14 +61,14 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
 
       {/* CONTAINER MAPPA CLICCABILE - RIEMPIE TUTTO */}
       <PlatformTouchable
-        style={styles.mapImageContainer}
-        onPress={handleMapImagePress} // Mostra i dettagli dell'Italia per default
+        style={[styles.mapImageContainer, { height: computedHeight }]}
+        onPress={handleMapImagePress}
         activeOpacity={0.85}
       >
         <PerfectImage
-          // iPhone 15 reference: container width ~393 - padding(16*2) = 361
-          width={361}
-          height={280}
+          width={containerWidth}
+          height={computedHeight}
+          absoluteDimensions
           borderRadius={20}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           source={require('@assets/images/mappa.png')}
@@ -76,9 +85,10 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
           >
             Tocca per esplorare
           </PerfectText>
-          <MaterialCommunityIcons
+          <PerfectIcon
             name="map-search"
             size={28}
+            {...IconClamps.mapIndicator}
             color={Colors.neutral[600]}
           />
         </PerfectContainer>
@@ -93,7 +103,7 @@ const styles = StyleSheet.create({
   // Map Section - SENZA CONTAINER GRIGIO
   mapSection: {
     paddingHorizontal: PerfectSpacing.base,
-    marginTop: PerfectSpacing.lg, // AGGIUNTO: spazio generoso tra linea e titolo "Dove Operiamo"
+    marginTop: PerfectSpacing.lg, // spazio tra linea e titolo "Dove Operiamo"
   },
 
   // MAP CONTAINER CLICCABILE - RIEMPIE TUTTO SENZA BORDI
@@ -107,13 +117,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
     height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT,
-    borderWidth: scale(1),
-    borderColor: 'transparent',
-  },
-  mapImage: {
-    width: '100%',
-    height: '100%',
-    borderRadius: BorderRadius.xl,
   },
   // INDICATORE CLICCABILE
   mapClickIndicator: {
@@ -141,27 +144,25 @@ const styles = StyleSheet.create({
   },
 
   mapHeaderBackground: {
-    backgroundColor: Colors.neutral[50],
-    borderRadius: BorderRadius.xl,
+    alignSelf: 'stretch',
+    backgroundColor: Colors.neutral[0],
+    borderRadius: scale(16),
     paddingVertical: PerfectSpacing.base,
     paddingHorizontal: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor: Colors.neutral[100],
-    ...Shadows.sm,
+    borderColor: Colors.neutral[300],
   },
   mapTitle: {
-    color: Colors.neutral[700],
+    color: Colors.neutral[900],
     textAlign: 'center',
-    letterSpacing: scale(-0.4),
+    letterSpacing: 0,
     includeFontPadding: false,
-    ...Shadows.sm,
   },
   mapSubtitle: {
-    // fontSize rimosso - ora gestito da Text
-    color: Colors.neutral[600], // GRIGIO MEDIO per leggibilità
+    color: Colors.neutral[700],
     textAlign: 'center',
-    marginTop: PerfectSpacing.md,
-    opacity: 0.9,
-    letterSpacing: scale(0.1),
+    marginTop: PerfectSpacing.sm,
+    opacity: 0.8,
+    letterSpacing: 0,
   },
 });

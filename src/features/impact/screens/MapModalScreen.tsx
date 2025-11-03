@@ -1,4 +1,4 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PerfectIcon } from '@/components/ui';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -84,7 +84,7 @@ const MapModalScreen: React.FC = () => {
           onPress={handleClosePress}
           activeOpacity={0.8}
         >
-          <MaterialCommunityIcons
+          <PerfectIcon
             name="close"
             size={24}
             color={Colors.neutral[0]}
@@ -143,3 +143,5 @@ const styles = StyleSheet.create({
 });
 
 export default MapModalScreen;
+
+

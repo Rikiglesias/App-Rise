@@ -45,38 +45,33 @@ describe('EntraInAzione Component', () => {
 
   it('dovrebbe mostrare il titolo "Entra in Azione"', () => {
     render(<EntraInAzione />);
-    expect(screen.getByText(/Entra in Azione/i)).toBeTruthy();
+    expect(screen.getByTestId('action-title')).toBeTruthy();
   });
 
-  it('dovrebbe mostrare la descrizione del componente', () => {
+  it('dovrebbe mostrare la descrizione (due frasi)', () => {
     render(<EntraInAzione />);
-    expect(screen.getByText(/Esplora l'impatto/i)).toBeTruthy();
+    expect(screen.getByTestId('action-description-main')).toBeTruthy();
+    expect(screen.getByTestId('action-description-sub')).toBeTruthy();
   });
 
   it('dovrebbe mostrare entrambi i bottoni CTA', () => {
     render(<EntraInAzione />);
-    
-    // Verifica presenza bottoni
-    expect(screen.getByText(/Scopri.*Impatto/i)).toBeTruthy();
-    expect(screen.getByText(/Cosa puoi fare/i)).toBeTruthy();
+    expect(screen.getByTestId('cta-impact')).toBeTruthy();
+    expect(screen.getByTestId('cta-donate')).toBeTruthy();
   });
 
-  it('dovrebbe navigare a ImpactTab quando si clicca "Scopri Impatto"', () => {
+  it('dovrebbe navigare a ImpactTab quando si clicca il CTA impatto', () => {
     render(<EntraInAzione />);
-    
-    const impactButton = screen.getByText(/Scopri.*Impatto/i);
-    fireEvent.press(impactButton.parent?.parent as any);
-    
+    const impactButton = screen.getByTestId('cta-impact');
+    fireEvent.press(impactButton);
     expect(mockNavigate).toHaveBeenCalledWith('ImpactTab');
   });
 
-  it('dovrebbe navigare a ActionsTab quando si clicca "Cosa puoi fare"', () => {
+  it('dovrebbe navigare a InfoTab quando si clicca il CTA dona', () => {
     render(<EntraInAzione />);
-    
-    const actionsButton = screen.getByText(/Cosa puoi fare/i);
-    fireEvent.press(actionsButton.parent?.parent as any);
-    
-    expect(mockNavigate).toHaveBeenCalledWith('ActionsTab');
+    const donateButton = screen.getByTestId('cta-donate');
+    fireEvent.press(donateButton);
+    expect(mockNavigate).toHaveBeenCalledWith('InfoTab');
   });
 
   it('dovrebbe avere gli stili corretti per i gradient borders', () => {

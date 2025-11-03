@@ -1,8 +1,9 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { Modal, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { PlatformTouchable, PerfectText, PerfectContainer } from '../ui';
+import { PerfectModal } from '../ui/PerfectModal';
+import { PerfectIcon } from '../ui';
 
 import { Colors, PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
@@ -31,12 +32,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   if (!data) return null;
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={onClose}
-    >
+    <PerfectModal visible={visible} onRequestClose={onClose} size="medium">
       <PerfectContainer style={styles.modalContainer}>
         {/* Header compatto con gradient */}
         <LinearGradient
@@ -79,12 +75,10 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               style={styles.closeButton}
               onPress={onClose}
               activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityLabel="Chiudi mappa"
             >
-              <MaterialCommunityIcons
-                name="close"
-                size={scale(24)}
-                color={Colors.neutral[0]}
-              />
+              <PerfectIcon name="close" size={24} color={Colors.neutral[0]} />
             </PlatformTouchable>
           </PerfectContainer>
         </LinearGradient>
@@ -108,12 +102,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
             activeOpacity={0.8}
             onPress={handleCTAPress}
           >
-            <MaterialCommunityIcons
-              name="open-in-new"
-              size={scale(20)}
-              color={Colors.neutral[0]}
-              style={styles.ctaIcon}
-            />
+            <PerfectIcon name="open-in-new" size={20} color={Colors.neutral[0]} style={styles.ctaIcon} />
             <PerfectText
               size={16}
               lines={1}
@@ -125,7 +114,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
           </PlatformTouchable>
         </PerfectContainer>
       </PerfectContainer>
-    </Modal>
+    </PerfectModal>
   );
 };
 
@@ -214,3 +203,5 @@ const styles = StyleSheet.create({
 });
 
 export default MapLocationModal;
+
+

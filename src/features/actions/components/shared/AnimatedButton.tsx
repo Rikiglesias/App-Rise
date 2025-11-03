@@ -1,4 +1,4 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PerfectIcon } from '@/components/ui';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import type { AnimatedButtonProps } from './ActionButtonTypes';
@@ -9,7 +9,7 @@ import {
 } from '@/components/ui';
 import { Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { scale, scaleIcon } from '@/shared/constants/perfectScale';
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   button,
@@ -29,6 +29,9 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
       <PlatformTouchable
         activeOpacity={0.6}
         onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={button.title}
+        testID={`action-button-${button.id}`}
         style={{
           borderRadius: outerRadius,
           ...Shadows.sm,
@@ -55,19 +58,9 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
               overflow: 'hidden',
             }}
           >
-            <MaterialCommunityIcons
-              name={
-                button.icon as
-                  | 'heart'
-                  | 'charity'
-                  | 'shopping'
-                  | 'gift'
-                  | 'calendar'
-                  | 'share-variant'
-                  | 'map-marker-path'
-                  | 'information'
-              }
-              size={scale(28)}
+            <PerfectIcon
+              name={button.icon}
+              size={28}
               color={iconColor}
               style={styles.buttonIcon}
             />
@@ -79,9 +72,11 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
             >
               {button.title}
             </PerfectText>
-            <MaterialCommunityIcons
+            <PerfectIcon
               name="chevron-right"
-              size={scale(20)}
+              size={20}
+              minSize={18}
+              maxSize={24}
               color={iconColor}
               style={{
                 position: 'absolute',
@@ -95,3 +90,4 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     </PerfectContainer>
   );
 };
+

@@ -13,7 +13,7 @@ export const ADVANCED_CONFIG = {
   },
   imageSection: {
     // Altezza scalata proporzionalmente (aspect ratio 1567/1131 dell'immagine)
-    // Base: 393px × 1.386 = 544px su iPhone 15
+    // Base: 393px x 1.386 = 544px su iPhone 15
     // Scala automaticamente su tutti i device mantenendo proporzioni
     height: scale(544),
   },
@@ -55,10 +55,17 @@ export interface UseScrollInterpolationsReturn {
 }
 
 // Type for styles to avoid circular imports
-export type HomeHeaderStyles = Record<
-  string,
-  ViewStyle | TextStyle | ImageStyle
->;
+export interface HomeHeaderStyles {
+  container: ViewStyle;
+  headerSection: ViewStyle;
+  gradientBackground: ViewStyle;
+  textContainer: ViewStyle;
+  title: TextStyle;
+  subtitle: TextStyle;
+  imageSection: ViewStyle;
+  image: ImageStyle;
+  imageGradientOverlay: ViewStyle;
+}
 
 export interface HeaderTextSectionProps {
   readonly titleAnim: Animated.Value;
@@ -75,3 +82,5 @@ export interface HeaderImageSectionProps {
   readonly imageRotation: Animated.AnimatedInterpolation<string>;
   readonly styles: HomeHeaderStyles;
 }
+
+

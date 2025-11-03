@@ -1,0 +1,1679 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ActionButtons Component dovrebbe renderizzare ActionButtonsUI per la presentazione 1`] = `
+<View
+  style={
+    {
+      "gap": 12,
+      "paddingBottom": 24,
+      "paddingHorizontal": 24,
+      "paddingTop": 12,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "marginBottom": 36,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "justifyContent": "center",
+          "marginBottom": 72,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "position": "relative",
+            "width": "80%",
+          }
+        }
+        testID="donate-header"
+      >
+        <View
+          accessibilityLabel="Contribuisci"
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": false,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "alignItems": "center",
+              "backgroundColor": "#FEF2F2",
+              "borderColor": "#FCA5A5",
+              "borderRadius": 26.096976587728204,
+              "borderWidth": 1.6310610367330127,
+              "opacity": 1,
+              "paddingHorizontal": 18,
+              "paddingVertical": 12,
+              "position": "relative",
+            }
+          }
+        >
+          <Text
+            adjustsFontSizeToFit={false}
+            allowFontScaling={false}
+            lineBreakMode="clip"
+            maxFontSizeMultiplier={1}
+            minimumFontScale={1}
+            numberOfLines={1}
+            style={
+              {
+                "color": "#DC2626",
+                "fontFamily": "System",
+                "fontSize": 39.145464881592304,
+                "fontWeight": "900",
+                "includeFontPadding": false,
+                "letterSpacing": -0.6524244146932051,
+                "lineHeight": 46.97455785791076,
+                "textAlign": "center",
+                "textAlignVertical": "center",
+              }
+            }
+            testID="donate-title"
+            textBreakStrategy="simple"
+          >
+            ❤️ Contribuisci
+          </Text>
+          <Text
+            adjustsFontSizeToFit={false}
+            allowFontScaling={false}
+            lineBreakMode="clip"
+            maxFontSizeMultiplier={1}
+            minimumFontScale={1}
+            numberOfLines={1}
+            style={
+              {
+                "color": "#991B1B",
+                "fontFamily": "System",
+                "fontSize": 26.096976587728204,
+                "fontWeight": "500",
+                "includeFontPadding": false,
+                "letterSpacing": 0.32621220734660256,
+                "lineHeight": 31.316371905273844,
+                "marginTop": 6,
+                "opacity": 0.8,
+                "textAlign": "center",
+                "textAlignVertical": "center",
+              }
+            }
+            testID="donate-subtitle"
+            textBreakStrategy="simple"
+          >
+            Supporta la lotta contro la fame
+          </Text>
+        </View>
+        <View
+          accessibilityLabel="Informazioni su Contribuisci"
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": false,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          hitSlop={
+            {
+              "bottom": 10,
+              "left": 10,
+              "right": 10,
+              "top": 10,
+            }
+          }
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "alignItems": "center",
+              "backgroundColor": "#DC2626",
+              "borderColor": "#FFFFFF",
+              "borderRadius": 16,
+              "borderWidth": 2,
+              "elevation": 3,
+              "height": 32,
+              "justifyContent": "center",
+              "opacity": 1,
+              "position": "absolute",
+              "right": 9,
+              "shadowColor": "#DC2626",
+              "shadowOffset": {
+                "height": 4.893183110199038,
+                "width": 0,
+              },
+              "shadowOpacity": 0.16,
+              "shadowRadius": 9.786366220398076,
+              "top": 9,
+              "width": 32,
+            }
+          }
+          testID="donate-info-button"
+        >
+          <MaterialCommunityIcons
+            color="#FFFFFF"
+            name="information"
+            size={29.359098661194228}
+          />
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "gap": 24,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "flexDirection": "row",
+            "gap": 24,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Charity Shop"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "borderRadius": 32.621220734660255,
+                "elevation": 1,
+                "opacity": 1,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.05,
+                "shadowRadius": 2,
+              }
+            }
+            testID="action-button-charity-shop"
+          >
+            <LinearGradient
+              colors={
+                [
+                  "#DC2626",
+                  "#B91C1C",
+                  "#991B1B",
+                ]
+              }
+              end={
+                {
+                  "x": 1,
+                  "y": 1,
+                }
+              }
+              start={
+                {
+                  "x": 0,
+                  "y": 0,
+                }
+              }
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "overflow": "hidden",
+                  "padding": 3,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 29.621220734660255,
+                    "justifyContent": "center",
+                    "overflow": "hidden",
+                    "paddingHorizontal": 18,
+                    "paddingVertical": 24,
+                  }
+                }
+              >
+                <MaterialCommunityIcons
+                  color="#B91C1C"
+                  name="shopping"
+                  size={45.66970902852436}
+                  style={
+                    {
+                      "marginBottom": 18,
+                    }
+                  }
+                />
+                <Text
+                  adjustsFontSizeToFit={false}
+                  allowFontScaling={false}
+                  lineBreakMode="clip"
+                  maxFontSizeMultiplier={1}
+                  minimumFontScale={1}
+                  numberOfLines={1}
+                  style={
+                    {
+                      "color": "#171717",
+                      "fontFamily": "System",
+                      "fontSize": 32.621220734660255,
+                      "fontWeight": "700",
+                      "includeFontPadding": false,
+                      "letterSpacing": -0.4893183110199038,
+                      "lineHeight": 39.145464881592304,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                    }
+                  }
+                  textBreakStrategy="simple"
+                >
+                  Charity Shop
+                </Text>
+                <MaterialCommunityIcons
+                  color="#B91C1C"
+                  name="chevron-right"
+                  size={32.621220734660255}
+                  style={
+                    {
+                      "position": "absolute",
+                      "right": 12,
+                      "top": 12,
+                    }
+                  }
+                />
+              </View>
+            </LinearGradient>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Gift Cards"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "borderRadius": 32.621220734660255,
+                "elevation": 1,
+                "opacity": 1,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.05,
+                "shadowRadius": 2,
+              }
+            }
+            testID="action-button-gift-card"
+          >
+            <LinearGradient
+              colors={
+                [
+                  "#DC2626",
+                  "#B91C1C",
+                  "#991B1B",
+                ]
+              }
+              end={
+                {
+                  "x": 1,
+                  "y": 1,
+                }
+              }
+              start={
+                {
+                  "x": 0,
+                  "y": 0,
+                }
+              }
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "overflow": "hidden",
+                  "padding": 3,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 29.621220734660255,
+                    "justifyContent": "center",
+                    "overflow": "hidden",
+                    "paddingHorizontal": 18,
+                    "paddingVertical": 24,
+                  }
+                }
+              >
+                <MaterialCommunityIcons
+                  color="#B91C1C"
+                  name="gift"
+                  size={45.66970902852436}
+                  style={
+                    {
+                      "marginBottom": 18,
+                    }
+                  }
+                />
+                <Text
+                  adjustsFontSizeToFit={false}
+                  allowFontScaling={false}
+                  lineBreakMode="clip"
+                  maxFontSizeMultiplier={1}
+                  minimumFontScale={1}
+                  numberOfLines={1}
+                  style={
+                    {
+                      "color": "#171717",
+                      "fontFamily": "System",
+                      "fontSize": 32.621220734660255,
+                      "fontWeight": "700",
+                      "includeFontPadding": false,
+                      "letterSpacing": -0.4893183110199038,
+                      "lineHeight": 39.145464881592304,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                    }
+                  }
+                  textBreakStrategy="simple"
+                >
+                  Gift Cards
+                </Text>
+                <MaterialCommunityIcons
+                  color="#B91C1C"
+                  name="chevron-right"
+                  size={32.621220734660255}
+                  style={
+                    {
+                      "position": "absolute",
+                      "right": 12,
+                      "top": 12,
+                    }
+                  }
+                />
+              </View>
+            </LinearGradient>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          {
+            "flexDirection": "row",
+            "gap": 24,
+            "justifyContent": "center",
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "flex": 0,
+              "width": "80%",
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "flex": 1,
+              }
+            }
+          >
+            <View
+              accessibilityLabel="Dona Ora"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": false,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "elevation": 1,
+                  "opacity": 1,
+                  "shadowColor": "#000",
+                  "shadowOffset": {
+                    "height": 1,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0.05,
+                  "shadowRadius": 2,
+                }
+              }
+              testID="action-button-dona"
+            >
+              <LinearGradient
+                colors={
+                  [
+                    "#E11D48",
+                    "#DC2626",
+                    "#B91C1C",
+                  ]
+                }
+                end={
+                  {
+                    "x": 1,
+                    "y": 1,
+                  }
+                }
+                start={
+                  {
+                    "x": 0,
+                    "y": 0,
+                  }
+                }
+                style={
+                  {
+                    "borderRadius": 32.621220734660255,
+                    "overflow": "hidden",
+                    "padding": 3,
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "backgroundColor": "#FFFFFF",
+                      "borderRadius": 29.621220734660255,
+                      "justifyContent": "center",
+                      "overflow": "hidden",
+                      "paddingHorizontal": 18,
+                      "paddingVertical": 24,
+                    }
+                  }
+                >
+                  <MaterialCommunityIcons
+                    color="#B91C1C"
+                    name="heart"
+                    size={45.66970902852436}
+                    style={
+                      {
+                        "marginBottom": 18,
+                      }
+                    }
+                  />
+                  <Text
+                    adjustsFontSizeToFit={false}
+                    allowFontScaling={false}
+                    lineBreakMode="clip"
+                    maxFontSizeMultiplier={1}
+                    minimumFontScale={1}
+                    numberOfLines={1}
+                    style={
+                      {
+                        "color": "#171717",
+                        "fontFamily": "System",
+                        "fontSize": 32.621220734660255,
+                        "fontWeight": "700",
+                        "includeFontPadding": false,
+                        "letterSpacing": -0.4893183110199038,
+                        "lineHeight": 39.145464881592304,
+                        "textAlign": "center",
+                        "textAlignVertical": "center",
+                      }
+                    }
+                    textBreakStrategy="simple"
+                  >
+                    Dona Ora
+                  </Text>
+                  <MaterialCommunityIcons
+                    color="#B91C1C"
+                    name="chevron-right"
+                    size={32.621220734660255}
+                    style={
+                      {
+                        "position": "absolute",
+                        "right": 12,
+                        "top": 12,
+                      }
+                    }
+                  />
+                </View>
+              </LinearGradient>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "backgroundColor": "#E5E5E5",
+        "height": 3.2621220734660255,
+        "marginHorizontal": 36,
+        "marginVertical": 12,
+      }
+    }
+  />
+  <View
+    style={
+      {
+        "marginBottom": 36,
+        "marginTop": -6,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "justifyContent": "center",
+          "marginBottom": 72,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "backgroundColor": "#F5F5F5",
+            "borderColor": "#A3A3A3",
+            "borderRadius": 32.621220734660255,
+            "borderWidth": 1.6310610367330127,
+            "paddingHorizontal": 36,
+            "paddingVertical": 24,
+          }
+        }
+      >
+        <Text
+          adjustsFontSizeToFit={false}
+          allowFontScaling={false}
+          lineBreakMode="clip"
+          maxFontSizeMultiplier={1}
+          minimumFontScale={1}
+          numberOfLines={1}
+          style={
+            {
+              "color": "#404040",
+              "fontFamily": "System",
+              "fontSize": 32.621220734660255,
+              "fontWeight": "700",
+              "includeFontPadding": false,
+              "letterSpacing": -0.6524244146932051,
+              "lineHeight": 39.145464881592304,
+              "textAlign": "center",
+              "textAlignVertical": "center",
+            }
+          }
+          textBreakStrategy="simple"
+        >
+          🔍 Esplora
+        </Text>
+        <Text
+          adjustsFontSizeToFit={false}
+          allowFontScaling={false}
+          lineBreakMode="clip"
+          maxFontSizeMultiplier={1}
+          minimumFontScale={1}
+          numberOfLines={1}
+          style={
+            {
+              "color": "#525252",
+              "fontFamily": "System",
+              "fontSize": 26.096976587728204,
+              "fontWeight": "500",
+              "includeFontPadding": false,
+              "letterSpacing": 0.16310610367330128,
+              "lineHeight": 31.316371905273844,
+              "marginTop": 18,
+              "opacity": 0.9,
+              "textAlign": "center",
+              "textAlignVertical": "center",
+            }
+          }
+          textBreakStrategy="simple"
+        >
+          Progetti e iniziative umanitarie
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "gap": 24,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "flexDirection": "row",
+            "gap": 24,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Progetti"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "borderRadius": 32.621220734660255,
+                "elevation": 1,
+                "opacity": 1,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.05,
+                "shadowRadius": 2,
+              }
+            }
+            testID="action-button-progetti"
+          >
+            <LinearGradient
+              colors={
+                [
+                  "#0F766E",
+                  "#0D9488",
+                  "#14B8A6",
+                ]
+              }
+              end={
+                {
+                  "x": 1,
+                  "y": 1,
+                }
+              }
+              start={
+                {
+                  "x": 0,
+                  "y": 0,
+                }
+              }
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "overflow": "hidden",
+                  "padding": 3,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 29.621220734660255,
+                    "justifyContent": "center",
+                    "overflow": "hidden",
+                    "paddingHorizontal": 18,
+                    "paddingVertical": 24,
+                  }
+                }
+              >
+                <MaterialCommunityIcons
+                  color="#0F766E"
+                  name="charity"
+                  size={45.66970902852436}
+                  style={
+                    {
+                      "marginBottom": 18,
+                    }
+                  }
+                />
+                <Text
+                  adjustsFontSizeToFit={false}
+                  allowFontScaling={false}
+                  lineBreakMode="clip"
+                  maxFontSizeMultiplier={1}
+                  minimumFontScale={1}
+                  numberOfLines={1}
+                  style={
+                    {
+                      "color": "#171717",
+                      "fontFamily": "System",
+                      "fontSize": 32.621220734660255,
+                      "fontWeight": "700",
+                      "includeFontPadding": false,
+                      "letterSpacing": -0.4893183110199038,
+                      "lineHeight": 39.145464881592304,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                    }
+                  }
+                  textBreakStrategy="simple"
+                >
+                  Progetti
+                </Text>
+                <MaterialCommunityIcons
+                  color="#0F766E"
+                  name="chevron-right"
+                  size={32.621220734660255}
+                  style={
+                    {
+                      "position": "absolute",
+                      "right": 12,
+                      "top": 12,
+                    }
+                  }
+                />
+              </View>
+            </LinearGradient>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Eventi"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "borderRadius": 32.621220734660255,
+                "elevation": 1,
+                "opacity": 1,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.05,
+                "shadowRadius": 2,
+              }
+            }
+            testID="action-button-calendario"
+          >
+            <LinearGradient
+              colors={
+                [
+                  "#7C3AED",
+                  "#8B5CF6",
+                  "#A855F7",
+                ]
+              }
+              end={
+                {
+                  "x": 1,
+                  "y": 1,
+                }
+              }
+              start={
+                {
+                  "x": 0,
+                  "y": 0,
+                }
+              }
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "overflow": "hidden",
+                  "padding": 3,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 29.621220734660255,
+                    "justifyContent": "center",
+                    "overflow": "hidden",
+                    "paddingHorizontal": 18,
+                    "paddingVertical": 24,
+                  }
+                }
+              >
+                <MaterialCommunityIcons
+                  color="#7C3AED"
+                  name="calendar"
+                  size={45.66970902852436}
+                  style={
+                    {
+                      "marginBottom": 18,
+                    }
+                  }
+                />
+                <Text
+                  adjustsFontSizeToFit={false}
+                  allowFontScaling={false}
+                  lineBreakMode="clip"
+                  maxFontSizeMultiplier={1}
+                  minimumFontScale={1}
+                  numberOfLines={1}
+                  style={
+                    {
+                      "color": "#171717",
+                      "fontFamily": "System",
+                      "fontSize": 32.621220734660255,
+                      "fontWeight": "700",
+                      "includeFontPadding": false,
+                      "letterSpacing": -0.4893183110199038,
+                      "lineHeight": 39.145464881592304,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                    }
+                  }
+                  textBreakStrategy="simple"
+                >
+                  Eventi
+                </Text>
+                <MaterialCommunityIcons
+                  color="#7C3AED"
+                  name="chevron-right"
+                  size={32.621220734660255}
+                  style={
+                    {
+                      "position": "absolute",
+                      "right": 12,
+                      "top": 12,
+                    }
+                  }
+                />
+              </View>
+            </LinearGradient>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          {
+            "flexDirection": "row",
+            "gap": 24,
+            "justifyContent": "center",
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "flex": 0,
+              "width": "80%",
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "flex": 1,
+              }
+            }
+          >
+            <View
+              accessibilityLabel="Tracciabilità"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": false,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "elevation": 1,
+                  "opacity": 1,
+                  "shadowColor": "#000",
+                  "shadowOffset": {
+                    "height": 1,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0.05,
+                  "shadowRadius": 2,
+                }
+              }
+              testID="action-button-tracciabilita"
+            >
+              <LinearGradient
+                colors={
+                  [
+                    "#1565C0",
+                    "#1976D2",
+                    "#2196F3",
+                  ]
+                }
+                end={
+                  {
+                    "x": 1,
+                    "y": 1,
+                  }
+                }
+                start={
+                  {
+                    "x": 0,
+                    "y": 0,
+                  }
+                }
+                style={
+                  {
+                    "borderRadius": 32.621220734660255,
+                    "overflow": "hidden",
+                    "padding": 3,
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "backgroundColor": "#FFFFFF",
+                      "borderRadius": 29.621220734660255,
+                      "justifyContent": "center",
+                      "overflow": "hidden",
+                      "paddingHorizontal": 18,
+                      "paddingVertical": 24,
+                    }
+                  }
+                >
+                  <MaterialCommunityIcons
+                    color="#1565C0"
+                    name="map-marker-path"
+                    size={45.66970902852436}
+                    style={
+                      {
+                        "marginBottom": 18,
+                      }
+                    }
+                  />
+                  <Text
+                    adjustsFontSizeToFit={false}
+                    allowFontScaling={false}
+                    lineBreakMode="clip"
+                    maxFontSizeMultiplier={1}
+                    minimumFontScale={1}
+                    numberOfLines={1}
+                    style={
+                      {
+                        "color": "#171717",
+                        "fontFamily": "System",
+                        "fontSize": 32.621220734660255,
+                        "fontWeight": "700",
+                        "includeFontPadding": false,
+                        "letterSpacing": -0.4893183110199038,
+                        "lineHeight": 39.145464881592304,
+                        "textAlign": "center",
+                        "textAlignVertical": "center",
+                      }
+                    }
+                    textBreakStrategy="simple"
+                  >
+                    Tracciabilità
+                  </Text>
+                  <MaterialCommunityIcons
+                    color="#1565C0"
+                    name="chevron-right"
+                    size={32.621220734660255}
+                    style={
+                      {
+                        "position": "absolute",
+                        "right": 12,
+                        "top": 12,
+                      }
+                    }
+                  />
+                </View>
+              </LinearGradient>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "backgroundColor": "#E5E5E5",
+        "height": 3.2621220734660255,
+        "marginHorizontal": 36,
+        "marginVertical": 12,
+      }
+    }
+  />
+  <View
+    style={
+      {
+        "marginBottom": 36,
+        "marginTop": -6,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "justifyContent": "center",
+          "marginBottom": 72,
+        }
+      }
+    >
+      <View
+        accessibilityLabel="Contribuisci"
+        accessibilityRole="button"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": false,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "#F5F5F5",
+            "borderColor": "#A3A3A3",
+            "borderRadius": 32.621220734660255,
+            "borderWidth": 1.6310610367330127,
+            "opacity": 1,
+            "paddingHorizontal": 36,
+            "paddingVertical": 24,
+            "position": "relative",
+          }
+        }
+      >
+        <Text
+          adjustsFontSizeToFit={false}
+          allowFontScaling={false}
+          lineBreakMode="clip"
+          maxFontSizeMultiplier={1}
+          minimumFontScale={1}
+          numberOfLines={1}
+          style={
+            {
+              "color": "#171717",
+              "fontFamily": "System",
+              "fontSize": 32.621220734660255,
+              "fontWeight": "700",
+              "includeFontPadding": false,
+              "letterSpacing": -0.6524244146932051,
+              "lineHeight": 39.145464881592304,
+              "textAlign": "center",
+              "textAlignVertical": "center",
+            }
+          }
+          textBreakStrategy="simple"
+        >
+          🤝 Community
+        </Text>
+        <Text
+          adjustsFontSizeToFit={false}
+          allowFontScaling={false}
+          lineBreakMode="clip"
+          maxFontSizeMultiplier={1}
+          minimumFontScale={1}
+          numberOfLines={1}
+          style={
+            {
+              "color": "#404040",
+              "fontFamily": "System",
+              "fontSize": 26.096976587728204,
+              "fontWeight": "500",
+              "includeFontPadding": false,
+              "letterSpacing": 0.16310610367330128,
+              "lineHeight": 31.316371905273844,
+              "marginTop": 18,
+              "opacity": 0.9,
+              "textAlign": "center",
+              "textAlignVertical": "center",
+            }
+          }
+          textBreakStrategy="simple"
+        >
+          Unisciti alla nostra comunità
+        </Text>
+        <MaterialCommunityIcons
+          color="#171717"
+          name="open-in-new"
+          size={26.096976587728204}
+          style={
+            {
+              "opacity": 0.7,
+              "position": "absolute",
+              "right": 19.572732440796152,
+              "top": 13.048488293864102,
+            }
+          }
+        />
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "gap": 24,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "flexDirection": "row",
+            "gap": 24,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Seguici"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "borderRadius": 32.621220734660255,
+                "elevation": 1,
+                "opacity": 1,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.05,
+                "shadowRadius": 2,
+              }
+            }
+            testID="action-button-seguici"
+          >
+            <LinearGradient
+              colors={
+                [
+                  "#1F2937",
+                  "#374151",
+                  "#4B5563",
+                ]
+              }
+              end={
+                {
+                  "x": 1,
+                  "y": 1,
+                }
+              }
+              start={
+                {
+                  "x": 0,
+                  "y": 0,
+                }
+              }
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "overflow": "hidden",
+                  "padding": 3,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 29.621220734660255,
+                    "justifyContent": "center",
+                    "overflow": "hidden",
+                    "paddingHorizontal": 18,
+                    "paddingVertical": 24,
+                  }
+                }
+              >
+                <MaterialCommunityIcons
+                  color="#1F2937"
+                  name="share-variant"
+                  size={45.66970902852436}
+                  style={
+                    {
+                      "marginBottom": 18,
+                    }
+                  }
+                />
+                <Text
+                  adjustsFontSizeToFit={false}
+                  allowFontScaling={false}
+                  lineBreakMode="clip"
+                  maxFontSizeMultiplier={1}
+                  minimumFontScale={1}
+                  numberOfLines={1}
+                  style={
+                    {
+                      "color": "#171717",
+                      "fontFamily": "System",
+                      "fontSize": 32.621220734660255,
+                      "fontWeight": "700",
+                      "includeFontPadding": false,
+                      "letterSpacing": -0.4893183110199038,
+                      "lineHeight": 39.145464881592304,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                    }
+                  }
+                  textBreakStrategy="simple"
+                >
+                  Seguici
+                </Text>
+                <MaterialCommunityIcons
+                  color="#1F2937"
+                  name="chevron-right"
+                  size={32.621220734660255}
+                  style={
+                    {
+                      "position": "absolute",
+                      "right": 12,
+                      "top": 12,
+                    }
+                  }
+                />
+              </View>
+            </LinearGradient>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Chi Siamo"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "borderRadius": 32.621220734660255,
+                "elevation": 1,
+                "opacity": 1,
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.05,
+                "shadowRadius": 2,
+              }
+            }
+            testID="action-button-chi-siamo"
+          >
+            <LinearGradient
+              colors={
+                [
+                  "#1F2937",
+                  "#374151",
+                  "#4B5563",
+                ]
+              }
+              end={
+                {
+                  "x": 1,
+                  "y": 1,
+                }
+              }
+              start={
+                {
+                  "x": 0,
+                  "y": 0,
+                }
+              }
+              style={
+                {
+                  "borderRadius": 32.621220734660255,
+                  "overflow": "hidden",
+                  "padding": 3,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 29.621220734660255,
+                    "justifyContent": "center",
+                    "overflow": "hidden",
+                    "paddingHorizontal": 18,
+                    "paddingVertical": 24,
+                  }
+                }
+              >
+                <MaterialCommunityIcons
+                  color="#1F2937"
+                  name="information"
+                  size={45.66970902852436}
+                  style={
+                    {
+                      "marginBottom": 18,
+                    }
+                  }
+                />
+                <Text
+                  adjustsFontSizeToFit={false}
+                  allowFontScaling={false}
+                  lineBreakMode="clip"
+                  maxFontSizeMultiplier={1}
+                  minimumFontScale={1}
+                  numberOfLines={1}
+                  style={
+                    {
+                      "color": "#171717",
+                      "fontFamily": "System",
+                      "fontSize": 32.621220734660255,
+                      "fontWeight": "700",
+                      "includeFontPadding": false,
+                      "letterSpacing": -0.4893183110199038,
+                      "lineHeight": 39.145464881592304,
+                      "textAlign": "center",
+                      "textAlignVertical": "center",
+                    }
+                  }
+                  textBreakStrategy="simple"
+                >
+                  Chi Siamo
+                </Text>
+                <MaterialCommunityIcons
+                  color="#1F2937"
+                  name="chevron-right"
+                  size={32.621220734660255}
+                  style={
+                    {
+                      "position": "absolute",
+                      "right": 12,
+                      "top": 12,
+                    }
+                  }
+                />
+              </View>
+            </LinearGradient>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

@@ -1,33 +1,20 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import type { useImpactAnimations } from '../hooks/useImpactAnimations';
+import { StatCard } from './StatCard';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors, BorderRadius, Shadows  } from '@/shared/constants/designTokens';
+import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
-
-interface Props {
-  animations: ReturnType<typeof useImpactAnimations>;
-}
 
 /**
  * Sezione dei risultati 2024 con header decorativo e statistiche annuali
  */
-export const Results2024Section: React.FC<Props> = ({ animations }) => {
+export const Results2024Section: React.FC = () => {
   return (
     <PerfectContainer style={styles.record2024Section}>
       {/* Header DRAMATICALLY ENHANCED */}
-      <Animated.View
-        style={[
-          styles.results2024HeaderContainer,
-          {
-            opacity: animations.statsAnimations[1],
-            transform: [{ scale: animations.statsAnimations[1] }],
-          },
-        ]}
-      >
+      <PerfectContainer style={styles.results2024HeaderContainer}>
         <PerfectContainer style={styles.results2024HeaderBackground}>
           <PerfectText
             size={24}
@@ -46,93 +33,32 @@ export const Results2024Section: React.FC<Props> = ({ animations }) => {
             I numeri che raccontano il nostro impegno annuale
           </PerfectText>
         </PerfectContainer>
-      </Animated.View>
+      </PerfectContainer>
 
       {/* Cards informative senza "superato" */}
       <PerfectContainer style={styles.record2024Grid}>
-        <Animated.View
-          style={[
-            styles.record2024Card,
-            {
-              opacity: animations.statsAnimations[2],
-              transform: [{ scale: animations.statsAnimations[2] }],
-            },
-          ]}
-        >
-          <PerfectContainer style={styles.record2024CardContent}>
-            <MaterialCommunityIcons
-              name="food-apple"
-              size={28}
-              color={Colors.primary[600]}
-            />
-            <PerfectText
-              size={24}
-              lines={1}
-              fontWeight="700"
-              style={styles.record2024Value}
-            >
-              3.14M
-            </PerfectText>
-            <PerfectText
-              size={16}
-              lines={1}
-              fontWeight="600"
-              style={styles.record2024Label}
-            >
-              Pasti Confezionati
-            </PerfectText>
-            <PerfectText
-              size={14}
-              lines={1}
-              fontWeight="500"
-              style={styles.record2024Description}
-            >
-              Prodotti nel 2024
-            </PerfectText>
-          </PerfectContainer>
-        </Animated.View>
-
-        <Animated.View
-          style={[
-            styles.record2024Card,
-            {
-              opacity: animations.statsAnimations[3],
-              transform: [{ scale: animations.statsAnimations[3] }],
-            },
-          ]}
-        >
-          <PerfectContainer style={styles.record2024CardContent}>
-            <MaterialCommunityIcons
-              name="package-variant"
-              size={28}
-              color={Colors.neutral[800]}
-            />
-            <PerfectText
-              size={24}
-              lines={1}
-              fontWeight="700"
-              style={styles.record2024Value}
-            >
-              16.3K
-            </PerfectText>
-            <PerfectText
-              size={16}
-              lines={1}
-              fontWeight="600"
-              style={styles.record2024Label}
-            >
-              Kit Confezionati
-            </PerfectText>
-            <PerfectText
-              size={14}
-              lines={1}
-              fontWeight="500"
-              style={styles.record2024Description}
-            >
-              Creati nel 2024
-            </PerfectText>
-          </PerfectContainer>
-        </Animated.View>
+        <StatCard
+          icon="food-apple"
+          iconColor={Colors.primary[600]}
+          value="3.14M"
+          label="Pasti Confezionati"
+          subtitle="Prodotti nel 2024"
+          gradientColors={[Colors.primary[500], Colors.primary[700]]}
+          pressable={false}
+          showChevron={false}
+          withGradientBorder={false}
+        />
+        <StatCard
+          icon="package-variant"
+          iconColor={Colors.neutral[800]}
+          value="16.3K"
+          label="Kit Confezionati"
+          subtitle="Creati nel 2024"
+          gradientColors={[Colors.neutral[600], Colors.neutral[800]]}
+          pressable={false}
+          showChevron={false}
+          withGradientBorder={false}
+        />
       </PerfectContainer>
     </PerfectContainer>
   );
@@ -147,38 +73,7 @@ const styles = StyleSheet.create({
   },
   record2024Grid: {
     flexDirection: 'row',
-    gap: PerfectSpacing.md,
-  },
-  record2024Card: {
-    flex: 1,
-  },
-  record2024CardContent: {
-    backgroundColor: Colors.neutral[50],
-    borderRadius: BorderRadius.lg,
-    paddingVertical: PerfectSpacing.md,
-    paddingHorizontal: PerfectSpacing.sm,
-    alignItems: 'center',
-    borderWidth: scale(1),
-    borderColor: Colors.neutral[200],
-    ...Shadows.sm,
-  },
-  record2024Value: {
-    color: Colors.neutral[800],
-    marginTop: PerfectSpacing.xs,
-    marginBottom: PerfectSpacing.xs,
-    textAlign: 'center',
-  },
-  record2024Label: {
-    color: Colors.neutral[700],
-    marginBottom: PerfectSpacing.xs,
-    textAlign: 'center',
-    flexWrap: 'wrap',
-  },
-  record2024Description: {
-    color: Colors.neutral[500],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.xs,
-    paddingHorizontal: PerfectSpacing.xs,
+    gap: PerfectSpacing.base,
   },
 
   // Results 2024 Section - DRAMATICALLY ENHANCED
@@ -187,26 +82,24 @@ const styles = StyleSheet.create({
     marginBottom: PerfectSpacing.lg,
   },
   results2024HeaderBackground: {
-    backgroundColor: Colors.neutral[50],
-    borderRadius: BorderRadius.xl,
+    alignSelf: 'stretch',
+    backgroundColor: Colors.neutral[0],
+    borderRadius: scale(16),
     paddingVertical: PerfectSpacing.base,
     paddingHorizontal: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor: Colors.neutral[100],
-    ...Shadows.sm,
+    borderColor: Colors.neutral[300],
   },
   results2024Title: {
-    color: Colors.neutral[700],
+    color: Colors.neutral[900],
     textAlign: 'center',
-    letterSpacing: scale(-0.4),
-    includeFontPadding: false,
-    ...Shadows.sm,
+    letterSpacing: 0,
   },
   results2024Subtitle: {
-    color: Colors.neutral[600],
+    color: Colors.neutral[700],
     textAlign: 'center',
-    marginTop: PerfectSpacing.md,
-    opacity: 0.9,
-    letterSpacing: scale(0.1),
+    marginTop: PerfectSpacing.sm,
+    opacity: 0.8,
+    letterSpacing: 0,
   },
 });

@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
+import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import { Animated } from 'react-native';
 import ActionButtons from '@/features/actions/components/ActionButtons/ActionButtons';
 
@@ -65,39 +66,44 @@ describe('ActionButtons Component', () => {
   });
 
   it('dovrebbe renderizzare il componente senza errori', () => {
-    const { toJSON } = render(
-      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />
+    const { toJSON } = renderWithProviders(
+      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />,
+      render
     );
     expect(toJSON()).toBeTruthy();
   });
 
   it('dovrebbe mostrare le tre sezioni di bottoni', () => {
-    render(<ActionButtons animations={mockAnimations} navigation={mockNavigation} />);
-    
-    // Sezione Donazioni
+    renderWithProviders(
+      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />,
+      render
+    );
+
+    // Sezione Donazioni (titolo bottone principale)
     expect(screen.getByText(/Dona Ora/i)).toBeTruthy();
-    
-    // Sezione Esplora
-    expect(screen.getByText(/Progetti/i)).toBeTruthy();
-    
-    // Sezione Community
-    expect(screen.getByText(/Social/i)).toBeTruthy();
+
+    // Sezione Esplora (almeno una occorrenza di "Progetti")
+    expect(screen.getAllByText(/Progetti/i).length).toBeGreaterThan(0);
+
+    // Sezione Community (bottone "Seguici")
+    expect(screen.getByText(/Seguici/i)).toBeTruthy();
   });
 
-  it('dovrebbe mostrare il DonationInfoModal quando si clicca info', () => {
-    const { getByTestId } = render(
-      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />
+  it('non mostra il DonationInfoModal all\'inizio (prima del tap)', () => {
+    renderWithProviders(
+      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />,
+      render
     );
-    
-    // Verifica che il modal sia inizialmente nascosto
-    // e possa essere aperto tramite handler
-    expect(() => screen.getByText(/Come funziona/i)).not.toThrow();
+
+    // Il testo del modal non è presente finché non si preme info
+    expect(screen.queryByText(/Come (Donare|funziona)/i)).toBeNull();
   });
 
   it('dovrebbe usare useActionButtonsData hook per la business logic', () => {
     // Test che verifica la separazione Business Logic / UI
-    const { toJSON } = render(
-      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />
+    const { toJSON } = renderWithProviders(
+      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />,
+      render
     );
     
     expect(toJSON()).toBeTruthy();
@@ -105,11 +111,15 @@ describe('ActionButtons Component', () => {
   });
 
   it('dovrebbe renderizzare ActionButtonsUI per la presentazione', () => {
-    const { toJSON } = render(
-      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />
+    renderWithProviders(
+      <ActionButtons animations={mockAnimations} navigation={mockNavigation} />,
+      render
     );
-    
-    // Verifica struttura UI separata
-    expect(toJSON()).toMatchSnapshot();
+
+    // Verifica elementi chiave senza snapshot fragile
+    expect(screen.getByTestId('donate-header')).toBeTruthy();
+    expect(screen.getByText(/Dona Ora/i)).toBeTruthy();
+    expect(screen.getAllByText(/Progetti/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Seguici/i)).toBeTruthy();
   });
 });

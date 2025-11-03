@@ -3,23 +3,20 @@
 // ===================================================================
 
 // Locations Data (Single Source of Truth)
-export {
-  LOCATIONS_DATA,
-  type LocationData,
-} from './locationsData';
+export { LOCATIONS_DATA, type LocationData } from './locationsData';
 
 // Impact Data
 export {
   IMPACT_DATA,
   MAP_LOCATIONS, // Re-export di LOCATIONS_DATA
-  formatNumber,  // Re-export da shared/utils
+  formatNumber, // Re-export da shared/utils
 } from './impactData';
 
 // Map Modal Data
 export {
   MAP_MODAL_DATA, // Generato da LOCATIONS_DATA
   getModalData,
-  formatStat,     // Re-export da shared/utils
+  formatStat, // Re-export da shared/utils
   type MapModalData,
 } from './mapModalData';
 

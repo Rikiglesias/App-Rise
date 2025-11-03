@@ -13,7 +13,7 @@ import {
   PlatformScrollView,
   PlatformTouchable,
   PerfectContainer,
-  PlatformIcon,
+  PerfectIcon,
 } from '@/components';
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
@@ -121,16 +121,14 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
         onPress={handleBackPress}
         style={dynamicBackButtonStyle.backButton}
       >
-        <PlatformIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
+        <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
         <ChiSiamoSection onInfoPress={handleShowStoria} />
 
-        {/* SEPARATORE TRA SEZIONI */}
-        <PerfectContainer style={mainStyles.sectionDividerContainer}>
-          <PerfectContainer style={mainStyles.sectionDivider} />
-        </PerfectContainer>
+        {/* Spazio tra sezioni (rimosso separatore visivo per evitare la riga che attraversa l'header) */}
+        <PerfectContainer style={{ height: PerfectSpacing.lg }} />
 
         <ContactSection contacts={contacts} />
       </PlatformScrollView>
@@ -142,3 +140,4 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
 };
 
 export default ChiSiamoScreen;
+

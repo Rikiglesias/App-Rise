@@ -1,7 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { ButtonStyles } from './ActionButtonTypes';
 import { Colors, PerfectSpacing, Typography } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { scale, scaleSpacing, scaleTouch, scaleBadge, scaleClamp } from '@/shared/constants/perfectScale';
+
+// Info button container size centralized via Perfect Scale helpers
+const INFO_BTN_SIZE = scaleBadge(28, { min: 22, max: 32 });
+const INFO_BORDER = scaleClamp(2, 1, 2);
 
 export const createActionButtonStyles = (): ButtonStyles => {
   return StyleSheet.create({
@@ -38,6 +42,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       backgroundColor: Colors.primary[50],
       paddingVertical: PerfectSpacing.sm,
       paddingHorizontal: PerfectSpacing.md,
+      position: 'relative',
       borderRadius: scale(16),
       borderWidth: scale(1),
       borderColor: Colors.primary[300],
@@ -94,15 +99,21 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     infoButton: {
       position: 'absolute',
-      right: scale(8),
-      top: '30%',
-      transform: [{ translateY: -10 }],
-      width: 24,
-      height: 24,
-      borderRadius: 999,
+      right: scaleSpacing(6),
+      top: scaleSpacing(6),
+      width: INFO_BTN_SIZE,
+      height: INFO_BTN_SIZE,
+      borderRadius: INFO_BTN_SIZE / 2,
       backgroundColor: Colors.primary[500],
       justifyContent: 'center',
       alignItems: 'center',
+      borderWidth: INFO_BORDER,
+      borderColor: Colors.neutral[0],
+      shadowColor: Colors.primary[500],
+      shadowOffset: { width: 0, height: scale(3) },
+      shadowOpacity: 0.16,
+      shadowRadius: scale(6),
+      elevation: 3,
     },
 
     buttonsGrid: {

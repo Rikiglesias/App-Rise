@@ -37,6 +37,13 @@ interface PerfectImageProps extends Omit<ImageProps, 'style'> {
 
   /** Stile immagine custom */
   imageStyle?: ImageStyle;
+
+  /**
+   * Usa dimensioni assolute (px schermo) senza scaling.
+   * Utile quando width/height sono calcolati da Dimensions per riempire container.
+   * Default: false -> scala in base a iPhone 15.
+   */
+  absoluteDimensions?: boolean;
 }
 
 // 🎨 PRESET DIMENSIONI (riferimento iPhone 15)
@@ -84,15 +91,16 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   shadow,
   containerStyle,
   imageStyle,
+  absoluteDimensions = false,
   ...imageProps
 }) => {
   // 🎯 RISOLVI PRESET O VALORI CUSTOM
   const config = preset ? IMAGE_PRESETS[preset] : null;
 
-  const finalWidth = config?.width ?? scale(width);
+  const finalWidth = config?.width ?? (absoluteDimensions ? width : scale(width));
   const finalAspectRatio =
     config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4 / 3);
-  const finalHeight = height ? scale(height) : finalWidth / finalAspectRatio;
+  const finalHeight = height ? (absoluteDimensions ? height : scale(height)) : finalWidth / finalAspectRatio;
   const finalBorderRadius = config?.borderRadius ?? scale(borderRadius ?? 0);
   const finalShadow = config?.shadow ?? shadow ?? false;
 

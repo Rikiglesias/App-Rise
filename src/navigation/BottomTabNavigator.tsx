@@ -1,4 +1,4 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { PerfectIcon } from '@/components/ui';
 import {
   BottomTabBarProps,
   createBottomTabNavigator,
@@ -146,7 +146,7 @@ const AdvancedTabBar = React.memo(AdvancedTabBarComponent);
 // ✨ ADVANCED TAB BUTTON COMPONENT
 // =================================================================
 
-const ICON_MAP: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+const ICON_MAP: Record<string, string> = {
   ImpactTab: 'chart-line',
   HomeTab: 'home',
   InfoTab: 'hand-heart',
@@ -212,11 +212,7 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
               },
             ]}
           >
-            <MaterialCommunityIcons
-              name={iconName}
-              size={iconSize}
-              color={tabColors.iconColor}
-            />
+            <PerfectIcon name={iconName} size={iconSize} color={tabColors.iconColor} />
           </PerfectContainer>
           <PerfectContainer>
             <PerfectText
@@ -352,3 +348,4 @@ const styles = StyleSheet.create({
 });
 
 export default BottomTabNavigator;
+

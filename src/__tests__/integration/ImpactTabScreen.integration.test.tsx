@@ -10,6 +10,7 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react-native';
+import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import { NavigationContainer } from '@react-navigation/native';
 import ImpactTabScreen from '@/features/impact/screens/ImpactTabScreen';
 
@@ -22,6 +23,48 @@ const mockNavigation = {
 };
 
 // Mock components
+jest.mock('@/features/impact/components', () => ({
+  ImpactHeader: () => {
+    const { View, Text } = require('react-native');
+    return (
+      <View>
+        <Text>Il Nostro Impatto</Text>
+      </View>
+    );
+  },
+  TotalMealsSection: () => {
+    const { View, Text } = require('react-native');
+    return (
+      <View>
+        <Text>Pasti Donati</Text>
+      </View>
+    );
+  },
+  Results2024Section: () => {
+    const { View, Text } = require('react-native');
+    return (
+      <View>
+        <Text>Risultati 2024</Text>
+      </View>
+    );
+  },
+  CommunitySection: () => {
+    const { View, Text } = require('react-native');
+    return (
+      <View>
+        <Text>La Nostra Community</Text>
+      </View>
+    );
+  },
+  MapSection: () => {
+    const { View, Text } = require('react-native');
+    return (
+      <View>
+        <Text>Dove Operiamo</Text>
+      </View>
+    );
+  },
+}));
 jest.mock('@/components/ui', () => ({
   PerfectText: ({ children, ...props }: any) => {
     const { Text } = require('react-native');
@@ -38,6 +81,10 @@ jest.mock('@/components/ui', () => ({
   PlatformTouchable: ({ children, onPress, testID, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
     return <TouchableOpacity onPress={onPress} testID={testID} {...props}>{children}</TouchableOpacity>;
+  },
+  PlatformScrollView: ({ children, ...props }: any) => {
+    const { ScrollView } = require('react-native');
+    return <ScrollView {...props}>{children}</ScrollView>;
   },
 }));
 
@@ -67,11 +114,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe renderizzare la schermata completa senza errori', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
@@ -79,11 +126,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare l\'header "Il Nostro Impatto"', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(screen.getByText(/Il Nostro Impatto/i)).toBeTruthy();
@@ -91,11 +138,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare la sezione pasti donati', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(screen.getByText(/Pasti Donati/i)).toBeTruthy();
@@ -103,11 +150,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare la sezione mappa Italia', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
       </NavigationContainer>
-    );
+    , render);
     
     await waitFor(() => {
       expect(screen.getByText(/Dove Operiamo/i)).toBeTruthy();
@@ -139,11 +186,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe gestire lo scroll senza crash', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
       </NavigationContainer>
-    );
+    , render);
     
     // Verifica che il componente ScrollView sia renderizzato
     await waitFor(() => {
@@ -152,11 +199,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe avere tutte le animazioni inizializzate', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
       </NavigationContainer>
-    );
+    , render);
     
     // Le animazioni dovrebbero essere inizializzate senza errori
     await waitFor(() => {

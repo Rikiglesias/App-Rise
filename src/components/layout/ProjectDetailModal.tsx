@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { PerfectModal } from '../ui/PerfectModal';
 import {
   PlatformScrollView,
   PlatformTouchable,
@@ -44,12 +45,7 @@ const ProjectDetailModal: React.FC<Props> = ({
   if (!location) return null;
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      presentationStyle="formSheet"
-      onRequestClose={onClose}
-    >
+    <PerfectModal visible={visible} onRequestClose={onClose} size="large">
       <PerfectContainer style={styles.container}>
         {/* Header */}
         <PerfectContainer style={styles.header}>
@@ -231,7 +227,7 @@ const ProjectDetailModal: React.FC<Props> = ({
           <PerfectContainer style={styles.bottomSpacing} />
         </PlatformScrollView>
       </PerfectContainer>
-    </Modal>
+    </PerfectModal>
   );
 };
 

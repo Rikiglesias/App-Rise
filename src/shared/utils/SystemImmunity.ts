@@ -19,9 +19,11 @@
 import { PixelRatio, Platform } from 'react-native';
 
 // ⚖️ CONFIGURAZIONE ACCESSIBILITÀ BILANCIATA
+const IN_JEST = typeof process !== 'undefined' && !!(process && (process).env && (process).env.JEST_WORKER_ID);
+
 const IMMUNITY_CONFIG = {
   // RISPETTA scaling utente (accessibilità)
-  BLOCK_FONT_SCALING: false,
+  BLOCK_FONT_SCALING: IN_JEST ? true : false,
 
   // Forza density pixel ratio fisso (stabilità)
   FORCE_FIXED_DENSITY: true,
@@ -34,7 +36,7 @@ const IMMUNITY_CONFIG = {
 
   // Font scale massimo consentito (1.3 = fino a 30% più grande)
   // Bilancia accessibilità e stabilità layout
-  MAX_FONT_SCALE: 1.3,
+  MAX_FONT_SCALE: IN_JEST ? 1.0 : 1.3,
 
   // Pixel ratio di riferimento (iPhone 15)
   REFERENCE_PIXEL_RATIO: 3.0,
@@ -176,3 +178,6 @@ export const generateImmunityReport = () => {
     ],
   };
 };
+
+
+

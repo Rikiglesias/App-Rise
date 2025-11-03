@@ -13,7 +13,8 @@ export const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: PerfectSpacing.base,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   },
 
   backdropTouchable: {
@@ -35,11 +36,10 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalContainer: {
-    maxWidth: scale(350),
-    width: '100%',
-    maxHeight: '90%',
-    minHeight: scale(700),
-    height: '85%',
+    width: '90%',
+    maxHeight: '85%',
+    // nessuna height fissa: lasciare auto, per evitare overflow
+    minHeight: scale(600),
   },
 
   modalCard: {
@@ -48,14 +48,13 @@ export const modalStyles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.neutral[700],
     overflow: 'hidden',
-    height: '100%',
-    minHeight: scale(700),
+    // no percentage height: lasciamo crescere con il contenuto/maxHeight
+    // height: '100%',
   },
 
   modalContent: {
-    height: '100%',
+    flex: 1,
     flexDirection: 'column',
-    minHeight: scale(600),
   },
 
   modalHeader: {
@@ -93,15 +92,12 @@ export const modalStyles = StyleSheet.create({
   },
 
   storyScroll: {
-    height: scale(500),
-    minHeight: scale(500),
+    flex: 1,
   },
 
   storyContainer: {
     padding: PerfectSpacing.lg,
     gap: PerfectSpacing.lg,
-    minHeight: scale(800),
-    flexGrow: 1,
     paddingBottom: PerfectSpacing['3xl'],
   },
 

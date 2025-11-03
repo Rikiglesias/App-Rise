@@ -13,7 +13,7 @@ interface NewActionsHeaderProps {
 // Header sizes - TITLE/SUBTITLE NON scalati (PerfectText scala automaticamente)
 // HEADER dimensions SCALATI (usati direttamente negli styles)
 const TITLE_SIZE = 32;
-const SUBTITLE_SIZE = 18;
+const SUBTITLE_SIZE = 16; // Ridotto da 18 per evitare limite minimo su small devices
 const REF_WIDTH = LOGICAL_REFERENCE.width;
 const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
 const HEADER_VERTICAL_PADDING = scale(REF_WIDTH * 0.025);
@@ -87,6 +87,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         immunity={true}
         fontWeight="900"
         style={styles.titleText}
+        testID="actions-title-1"
       >
         Fai la
       </PerfectText>
@@ -96,6 +97,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         immunity={true}
         fontWeight="900"
         style={[styles.titleText, styles.titleAccent]}
+        testID="actions-title-2"
       >
         Differenza
       </PerfectText>
@@ -105,6 +107,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         immunity={true}
         fontWeight="500"
         style={styles.mainSubtitle}
+        testID="actions-subtitle"
       >
         Ogni azione conta nella lotta contro la fame
       </PerfectText>
@@ -123,6 +126,9 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           ],
         },
       ]}
+      accessibilityRole="header"
+      accessibilityLabel="Fai la differenza"
+      testID="actions-header"
     >
       <LinearGradient
         colors={[Colors.neutral[50], 'transparent']}

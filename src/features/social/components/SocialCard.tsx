@@ -4,9 +4,9 @@ import {
   PerfectText,
   PerfectContainer,
   PerfectImage,
-  PlatformIcon,
+  PerfectIcon,
 } from '@/components/ui';
-import { Colors, PerfectSpacing } from '@/shared/constants';
+import { Colors, PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
 export interface SocialPlatform {
@@ -91,9 +91,10 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
               </PerfectContainer>
 
               <PerfectContainer style={styles.arrowContainer}>
-                <PlatformIcon
+                <PerfectIcon
                   name="chevron-right"
-                  size={24}
+                  size={20}
+                  {...IconClamps.chevron}
                   color={Colors.neutral[400]}
                 />
               </PerfectContainer>
@@ -164,3 +165,4 @@ const styles = {
     padding: PerfectSpacing.xs,
   },
 };
+

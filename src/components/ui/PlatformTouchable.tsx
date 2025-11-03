@@ -27,8 +27,9 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
   onPress,
   children,
   style,
-  // rgba necessario per Material Design ripple effect standard Android
-  rippleColor = 'rgba(0, 0, 0, 0.12)',
+  // Evita flash/grigio su Android durante animazioni
+  // (può essere sovrascritto localmente dove serve un ripple visibile)
+  rippleColor = 'transparent',
   borderless = false,
   disabled = false,
   ...props

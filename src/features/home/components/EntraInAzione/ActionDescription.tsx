@@ -14,7 +14,7 @@ import {
 } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
-export const ActionDescription: React.FC = () => {
+const ActionDescriptionComponent: React.FC = () => {
   return (
     <PerfectContainer
       preset="section"
@@ -26,6 +26,8 @@ export const ActionDescription: React.FC = () => {
         padding={PerfectSpacing.lg}
         borderRadius={BorderRadius.xl}
         style={styles.cardContainer}
+        accessibilityRole="summary"
+        testID="action-description-card"
       >
         <PerfectText
           size={18}
@@ -34,6 +36,8 @@ export const ActionDescription: React.FC = () => {
           color={Colors.neutral[800]}
           textAlign="center"
           style={styles.mainText}
+          accessibilityRole="text"
+          testID="action-description-main"
         >
           Unisciti a noi nella lotta {'\n'}contro la fame nel mondo
         </PerfectText>
@@ -47,6 +51,8 @@ export const ActionDescription: React.FC = () => {
           color={Colors.neutral[500]}
           textAlign="center"
           style={styles.subtitleText}
+          accessibilityRole="text"
+          testID="action-description-sub"
         >
           Ogni azione conta per{'\n'}cambiare vite
         </PerfectText>
@@ -54,6 +60,8 @@ export const ActionDescription: React.FC = () => {
     </PerfectContainer>
   );
 };
+
+export const ActionDescription = React.memo(ActionDescriptionComponent);
 
 const styles = StyleSheet.create({
   cardContainer: {

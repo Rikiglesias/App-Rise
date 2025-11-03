@@ -4,7 +4,8 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Modal, ActivityIndicator } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
+import { PerfectModal } from '@/components/ui/PerfectModal';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
@@ -65,7 +66,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   if (!visible) return null;
 
   return (
-    <Modal visible={visible} animationType="fade" style={styles.modal}>
+    <PerfectModal visible={visible} size="fullscreen" onRequestClose={onComplete}>
       <LinearGradient
         colors={Colors.gradients.redToBlack}
         style={styles.container}
@@ -150,7 +151,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
           </PerfectContainer>
         </PerfectContainer>
       </LinearGradient>
-    </Modal>
+    </PerfectModal>
   );
 };
 

@@ -14,7 +14,7 @@ import {
   PlatformScrollView,
   PlatformTouchable,
   PerfectContainer,
-  PlatformIcon,
+  PerfectIcon,
 } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import type { RootStackParamList } from '@/navigation/types';
@@ -58,7 +58,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleBackPress}
         style={dynamicBackButtonStyle.backButton}
       >
-        <PlatformIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
+        <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
@@ -81,3 +81,4 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default SeguiciScreen;
+

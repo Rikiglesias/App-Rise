@@ -27,11 +27,11 @@ export const convertToMapLocations = (): Location[] => {
       meals: location.stats.meals ?? 0,
       kits: location.stats.kits ?? 0,
     };
-    
+
     if (location.stats.beneficiaries) {
       result.volunteers = location.stats.beneficiaries;
     }
-    
+
     return result;
   });
 };

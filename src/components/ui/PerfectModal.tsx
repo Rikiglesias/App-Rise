@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 
 import { PerfectContainer } from './PerfectContainer';
-import { Colors } from '@/shared/constants';
+import { Colors, scale } from '@/shared/constants';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
   /** Contenuto modal */
@@ -37,6 +37,11 @@ interface PerfectModalProps extends Omit<ModalProps, 'children'> {
 
   /** Custom style per container */
   containerStyle?: import('react-native').ViewStyle;
+
+  /** Bordo in stile "La Nostra Community" */
+  outlined?: boolean;
+  /** Colore bordo (default: neutral[300]) */
+  outlineColor?: string;
 }
 
 /**
@@ -72,8 +77,10 @@ const useModalBehavior = (size: PerfectModalProps['size']) => {
   };
 
   // 🎨 PRESENTATION STYLE
-  const presentationStyle: 'fullScreen' | 'formSheet' | 'pageSheet' =
-    size === 'fullscreen' ? 'fullScreen' : isTablet ? 'formSheet' : 'pageSheet';
+  // iOS note: 'transparent' is not supported with 'pageSheet'.
+  // For phones (non-tablet) we use 'overFullScreen' to support semi-transparent overlays.
+  const presentationStyle: 'fullScreen' | 'formSheet' | 'pageSheet' | 'overFullScreen' =
+    size === 'fullscreen' ? 'fullScreen' : isTablet ? 'formSheet' : 'overFullScreen';
 
   return {
     dimensions: modalSizes[size || 'medium'],
@@ -89,6 +96,8 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
   backgroundColor,
   borderRadius = 16,
   containerStyle,
+  outlined = false,
+  outlineColor,
   ...modalProps
 }) => {
   const { dimensions, presentationStyle, isTablet } = useModalBehavior(size);
@@ -121,6 +130,14 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
               height: dimensions.height as DimensionValue,
               backgroundColor: backgroundColor || Colors.neutral[0],
             },
+            ...(outlined
+              ? [
+                  {
+                    borderWidth: scale(1),
+                    borderColor: outlineColor || Colors.neutral[300],
+                  },
+                ]
+              : []),
             ...(containerStyle ? [containerStyle] : []),
           ]}
         >

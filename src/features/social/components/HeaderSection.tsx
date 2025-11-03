@@ -1,5 +1,5 @@
 import React from 'react';
-import { PerfectText, PerfectContainer, PlatformIcon } from '@/components/ui';
+import { PerfectText, PerfectContainer, PerfectIcon } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
@@ -7,7 +7,7 @@ export const HeaderSection: React.FC = React.memo(() => {
   return (
     <PerfectContainer style={styles.headerContainer}>
       <PerfectContainer style={styles.headerIconContainer}>
-        <PlatformIcon
+        <PerfectIcon
           name="account-group"
           size={32}
           color={Colors.primary[600]}
@@ -78,3 +78,4 @@ const styles = {
     paddingHorizontal: PerfectSpacing.sm,
   },
 };
+

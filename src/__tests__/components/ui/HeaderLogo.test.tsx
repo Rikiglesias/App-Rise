@@ -1,6 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import HeaderLogo from '../../../components/ui/HeaderLogo';
+// Mock PerfectContainer to avoid UniversalTheme dependency in tests
+jest.mock('../../../components/ui/PerfectContainer', () => ({
+  PerfectContainer: ({ children, ...props }: any) => {
+    const { View } = require('react-native');
+    return <View {...props}>{children}</View>;
+  },
+}));
 
 // Mock useTheme hook
 jest.mock('../../../shared/hooks/useTheme', () => ({

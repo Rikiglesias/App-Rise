@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
-import { Linking, Alert } from 'react-native';
 import { SocialPlatform } from '../components/SocialCard';
 import { Colors } from '@/shared/constants';
 import { logWarn } from '@/shared/utils/logger';
-import { RISE_URLS, SOCIAL_URLS } from '@/shared/constants/urls';
+import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 
 // Import delle icone dalla cartella social
 import instagramIcon from '@assets/icons/social/instagram.png';
@@ -11,31 +10,22 @@ import linkedinIcon from '@assets/icons/social/linkedin.png';
 import facebookIcon from '@assets/icons/social/facebook.png';
 
 export const useSocialPlatforms = () => {
-  const openSocialLink = useCallback(
-    async (url: string, platformName: string) => {
-      try {
-        const supported = await Linking.canOpenURL(url);
-        if (supported) {
-          await Linking.openURL(url);
-        } else {
-          Alert.alert(
-            'Errore',
-            `Non è possibile aprire ${platformName}. Assicurati di avere l'app installata.`,
-            [{ text: 'OK' }]
-          );
+  const {
+    openWebsiteLink,
+    openInstagramLink,
+    openFacebookLink,
+    openLinkedInLink,
+  } = useLinkHandler();
+
+  const wrap = useCallback(
+    (fn: () => Promise<unknown>): (() => Promise<void>) => {
+      return async () => {
+        try {
+          await fn();
+        } catch (error) {
+          logWarn('SocialPlatforms', 'open link failed', error);
         }
-      } catch (error) {
-        logWarn(
-          `Errore nell'apertura di ${platformName}`,
-          'SocialPlatforms',
-          error
-        );
-        Alert.alert(
-          'Errore',
-          `Si è verificato un errore nell'apertura di ${platformName}.`,
-          [{ text: 'OK' }]
-        );
-      }
+      };
     },
     []
   );
@@ -48,7 +38,7 @@ export const useSocialPlatforms = () => {
       description: 'Scopri tutte le nostre iniziative',
       emoji: '🌐',
       gradient: Colors.gradients.website,
-      onPress: () => openSocialLink(RISE_URLS.italyMain, 'Sito Web'),
+      onPress: wrap(openWebsiteLink),
     },
     {
       id: 'instagram',
@@ -57,7 +47,7 @@ export const useSocialPlatforms = () => {
       description: 'Foto e storie delle missioni',
       icon: instagramIcon,
       gradient: Colors.gradients.instagram,
-      onPress: () => openSocialLink(SOCIAL_URLS.instagramShort, 'Instagram'),
+      onPress: wrap(openInstagramLink),
     },
     {
       id: 'facebook',
@@ -66,7 +56,7 @@ export const useSocialPlatforms = () => {
       description: 'Community e eventi locali',
       icon: facebookIcon,
       gradient: Colors.gradients.facebook,
-      onPress: () => openSocialLink(SOCIAL_URLS.facebookShort, 'Facebook'),
+      onPress: wrap(openFacebookLink),
     },
     {
       id: 'linkedin',
@@ -75,7 +65,7 @@ export const useSocialPlatforms = () => {
       description: 'Opportunità e partnership',
       icon: linkedinIcon,
       gradient: Colors.gradients.linkedin,
-      onPress: () => openSocialLink(SOCIAL_URLS.linkedinShort, 'LinkedIn'),
+      onPress: wrap(openLinkedInLink),
     },
   ];
 
@@ -83,3 +73,4 @@ export const useSocialPlatforms = () => {
     socialPlatforms,
   };
 };
+

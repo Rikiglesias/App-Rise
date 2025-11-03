@@ -44,6 +44,9 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
           transform: [{ translateY: animations.slideAnim }],
         },
       ]}
+      accessibilityElementsHidden
+      importantForAccessibility="no"
+      testID="actions-header-divider"
     >
       <PerfectContainer style={styles.mainDivider} />
     </Animated.View>

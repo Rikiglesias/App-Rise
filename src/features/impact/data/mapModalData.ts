@@ -27,13 +27,14 @@ const toModalFormat = (location: LocationData): MapModalData => {
   const result: MapModalData = {
     id: location.id,
     title: location.name,
-    subtitle: location.id === 'italy' 
-      ? `${location.country} - Sede Europea` 
-      : location.id === 'usa'
-      ? `${location.country} - Sede Globale`
-      : location.id === 'ukraine'
-      ? `${location.country} - Emergenza Umanitaria`
-      : location.country,
+    subtitle:
+      location.id === 'italy'
+        ? `${location.country} - Sede Europea`
+        : location.id === 'usa'
+          ? `${location.country} - Sede Globale`
+          : location.id === 'ukraine'
+            ? `${location.country} - Emergenza Umanitaria`
+            : location.country,
     flag: location.flag,
     description: location.description,
     program: location.program,
@@ -41,10 +42,10 @@ const toModalFormat = (location: LocationData): MapModalData => {
     stats: location.stats,
     year: location.year,
   };
-  
+
   if (location.partner) result.partner = location.partner;
   if (location.image) result.image = location.image;
-  
+
   return result;
 };
 

@@ -12,11 +12,7 @@ import {
   PerfectContainer,
 } from '@/components/ui';
 import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
-import {
-  BorderRadius,
-  Colors,
-  Shadows,
-} from '@/shared/constants/designTokens';
+import { BorderRadius, Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
@@ -32,7 +28,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
   navigation: _navigation,
 }) => {
   return (
-    <SafeAreaView 
+    <SafeAreaView
       style={styles.container}
       edges={['top', 'bottom']}
       accessibilityLabel="Schermata Impatto 2024"
@@ -44,9 +40,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             size={36}
             lines={1}
             fontWeight="600"
-            containerWidth={
-              LOGICAL_REFERENCE.width * 0.7
-            }
+            containerWidth={LOGICAL_REFERENCE.width * 0.7}
             style={styles.year}
           >
             2024
@@ -55,9 +49,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             size={20}
             lines={1}
             fontWeight="600"
-            containerWidth={
-              LOGICAL_REFERENCE.width * 0.7
-            }
+            containerWidth={LOGICAL_REFERENCE.width * 0.7}
             style={styles.title}
           >
             Il Nostro Impatto
@@ -66,9 +58,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
             size={16}
             lines={1}
             fontWeight="500"
-            containerWidth={
-              LOGICAL_REFERENCE.width * 0.7
-            }
+            containerWidth={LOGICAL_REFERENCE.width * 0.7}
             style={styles.subtitle}
           >
             Risultati raggiunti insieme
@@ -77,7 +67,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
 
         {/* Stats Cards - Data-driven rendering */}
         <PerfectContainer style={styles.statsSection}>
-          {STATS_2024.map((stat) => (
+          {STATS_2024.map(stat => (
             <StatCard key={stat.label} data={stat} />
           ))}
         </PerfectContainer>
@@ -94,7 +84,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
           </PerfectText>
 
           <PerfectContainer style={styles.impactList}>
-            {IMPACT_AREAS.map((area) => (
+            {IMPACT_AREAS.map(area => (
               <ImpactItem key={area.text} data={area} />
             ))}
           </PerfectContainer>
