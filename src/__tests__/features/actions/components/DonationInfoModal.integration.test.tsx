@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
-import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import { Animated } from 'react-native';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
+
+import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import ActionButtons from '@/features/actions/components/ActionButtons/ActionButtons';
 
 // Mock link handler to avoid external calls

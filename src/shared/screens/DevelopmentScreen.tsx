@@ -7,13 +7,6 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 import {
-  PerfectIcon,
-  PlatformTouchable,
-  PlatformScrollView,
-  PerfectText,
-} from '@/components/ui';
-
-import {
   BorderRadius,
   Colors,
   Shadows,
@@ -21,6 +14,12 @@ import {
 } from '../constants/designTokens';
 import { scale } from '../constants/perfectScale';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
+import {
+  PerfectIcon,
+  PlatformTouchable,
+  PlatformScrollView,
+  PerfectText,
+} from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
 
 interface DevelopmentScreenProps {

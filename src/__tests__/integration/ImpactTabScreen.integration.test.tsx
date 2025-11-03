@@ -10,8 +10,9 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react-native';
-import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import { NavigationContainer } from '@react-navigation/native';
+
+import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import ImpactTabScreen from '@/features/impact/screens/ImpactTabScreen';
 
 // Mock navigation

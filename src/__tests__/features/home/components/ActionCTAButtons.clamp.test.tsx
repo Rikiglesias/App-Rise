@@ -17,6 +17,7 @@ jest.mock('expo-linear-gradient', () => {
   };
 });
 
+// eslint-disable-next-line import/first -- Import dopo mock setup è necessario per test
 import { ActionCTAButtons } from '@/features/home/components/EntraInAzione/ActionCTAButtons';
 
 // Mock navigation hook used inside ActionCTAButtons

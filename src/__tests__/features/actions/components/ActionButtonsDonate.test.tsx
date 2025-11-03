@@ -6,10 +6,10 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
-import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import { Animated } from 'react-native';
-import ReactNative from 'react-native';
+import { render, screen, fireEvent } from '@testing-library/react-native';
+
+import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 
 // Mock navigation
 const mockNavigate = jest.fn();
@@ -71,6 +71,7 @@ jest.mock('@/components/ui', () => {
   };
 });
 
+// eslint-disable-next-line import/first -- Import dopo mock setup è necessario per test
 import ActionButtons from '@/features/actions/components/ActionButtons/ActionButtons';
 
 const mockAnimations = {

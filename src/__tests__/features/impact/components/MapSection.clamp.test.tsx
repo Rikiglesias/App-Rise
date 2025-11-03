@@ -9,6 +9,7 @@ jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
   return ({ name, size, color }: any) => React.createElement(Text, { testID: `mdi-${name}-${size}-${color || 'none'}` }, 'icon');
 });
 
+// eslint-disable-next-line import/first -- Import dopo mock setup è necessario per test
 import { MapSection } from '@/features/impact/components/MapSection';
 
 describe('MapSection map-search clamp', () => {
