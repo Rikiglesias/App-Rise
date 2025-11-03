@@ -6,6 +6,7 @@ import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors, BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { sectionHeaderBackground } from '@/shared/styles';
 
 interface Props {
   onMealsPress: () => void;
@@ -100,15 +101,7 @@ const styles = StyleSheet.create({
     marginTop: PerfectSpacing.lg, // Generous spacing before section title
     marginBottom: PerfectSpacing['2xl'], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
   },
-  numbersHeaderBackground: {
-    alignSelf: 'stretch',
-    backgroundColor: Colors.neutral[0],
-    borderRadius: scale(16),
-    paddingVertical: PerfectSpacing.base,
-    paddingHorizontal: PerfectSpacing.lg,
-    borderWidth: scale(1),
-    borderColor: Colors.neutral[300],
-  },
+  numbersHeaderBackground: sectionHeaderBackground('white'),
   numbersTitle: {
     color: Colors.neutral[900],
     textAlign: 'center',

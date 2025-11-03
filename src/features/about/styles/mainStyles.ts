@@ -2,6 +2,7 @@ import { StyleSheet, Platform } from 'react-native';
 
 import { PerfectSpacing, BorderRadius, Colors } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { decorativeSeparator } from '@/shared/styles';
 
 /**
  * Stili principali per la sezione About
@@ -50,10 +51,7 @@ export const mainStyles = StyleSheet.create({
   },
 
   sectionDivider: {
-    height: scale(2),
-    backgroundColor: Colors.neutral[300],
+    ...decorativeSeparator(),
     width: '60%',
-    borderRadius: scale(1),
-    opacity: 0.8,
   },
 });
