@@ -10,8 +10,8 @@ import {
 } from '@/components/ui';
 import { Colors, BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
+import { sectionHeaderBackground } from '@/shared/styles';
 
 interface Props {
   onMapPress: () => void;
@@ -143,15 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: PerfectSpacing.lg,
   },
 
-  mapHeaderBackground: {
-    alignSelf: 'stretch',
-    backgroundColor: Colors.neutral[0],
-    borderRadius: scale(16),
-    paddingVertical: PerfectSpacing.base,
-    paddingHorizontal: PerfectSpacing.lg,
-    borderWidth: scale(1),
-    borderColor: Colors.neutral[300],
-  },
+  mapHeaderBackground: sectionHeaderBackground('white'),
   mapTitle: {
     color: Colors.neutral[900],
     textAlign: 'center',

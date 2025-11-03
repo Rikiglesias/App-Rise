@@ -5,7 +5,7 @@ import { StatCard } from './StatCard';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { sectionHeaderBackground } from '@/shared/styles';
 
 /**
  * Sezione dei risultati 2024 con header decorativo e statistiche annuali
@@ -81,15 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: PerfectSpacing.lg,
   },
-  results2024HeaderBackground: {
-    alignSelf: 'stretch',
-    backgroundColor: Colors.neutral[0],
-    borderRadius: scale(16),
-    paddingVertical: PerfectSpacing.base,
-    paddingHorizontal: PerfectSpacing.lg,
-    borderWidth: scale(1),
-    borderColor: Colors.neutral[300],
-  },
+  results2024HeaderBackground: sectionHeaderBackground('white'),
   results2024Title: {
     color: Colors.neutral[900],
     textAlign: 'center',

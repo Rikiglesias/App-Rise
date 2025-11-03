@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Colors, Typography } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { circularCloseButton } from '@/shared/styles';
 
 /**
  * Stili per i modal della sezione About
@@ -83,12 +84,7 @@ export const modalStyles = StyleSheet.create({
     position: 'absolute',
     top: PerfectSpacing.md,
     right: PerfectSpacing.md,
-    width: 32,
-    height: 32,
-    borderRadius: 999,
-    backgroundColor: Colors.neutral[900],
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...circularCloseButton(32, Colors.neutral[900]),
   },
 
   storyScroll: {

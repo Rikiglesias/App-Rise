@@ -5,7 +5,7 @@ import { StatCard } from './StatCard';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { sectionHeaderBackground } from '@/shared/styles';
 
 interface Props {
   onVolunteersPress: () => void;
@@ -91,15 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: PerfectSpacing.lg,
   },
-  communityHeaderBackground: {
-    alignSelf: 'stretch',
-    backgroundColor: Colors.neutral[0],
-    borderRadius: scale(16),
-    paddingVertical: PerfectSpacing.base,
-    paddingHorizontal: PerfectSpacing.lg,
-    borderWidth: scale(1),
-    borderColor: Colors.neutral[300],
-  },
+  communityHeaderBackground: sectionHeaderBackground('white'),
   communityTitle: {
     color: Colors.neutral[900],
     textAlign: 'center',
