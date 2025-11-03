@@ -177,3 +177,4 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({ visible, 
 };
 
 export default DonationInfoModalMigrated;
+export { DonationInfoModalMigrated };

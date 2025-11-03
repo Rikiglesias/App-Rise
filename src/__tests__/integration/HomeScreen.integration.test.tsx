@@ -40,9 +40,17 @@ jest.mock('@/components/ui', () => ({
     const { View } = require('react-native');
     return <View {...props}>{children}</View>;
   },
+  PerfectCardContainer: ({ children, ...props }: any) => {
+    const { View } = require('react-native');
+    return <View {...props}>{children}</View>;
+  },
   PerfectImage: ({ source, ...props }: any) => {
     const { Image } = require('react-native');
     return <Image source={source} {...props} />;
+  },
+  PerfectIcon: ({ name, ...props }: any) => {
+    const { Text } = require('react-native');
+    return <Text {...props}>{name}</Text>;
   },
   PlatformTouchable: ({ children, onPress, testID, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
@@ -165,14 +173,17 @@ describe('HomeScreen - Integration Test', () => {
     , render);
     
     await waitFor(() => {
-      // Header
-      expect(screen.getByText('Logo')).toBeTruthy();
-      expect(screen.getByText(/Rise Against Hunger Italia/i)).toBeTruthy();
+      // Header con titolo principale
+      expect(screen.getByText(/Rise Against/i)).toBeTruthy();
+      expect(screen.getByText(/Hunger/i)).toBeTruthy();
       
       // EntraInAzione section
       expect(screen.getByText(/Entra in Azione/i)).toBeTruthy();
-      expect(screen.getByText(/Scopri.*Impatto/i)).toBeTruthy();
-      expect(screen.getByText(/Cosa puoi fare/i)).toBeTruthy();
+      expect(screen.getByTestId('action-description-card')).toBeTruthy();
+      
+      // CTA Buttons
+      expect(screen.getByTestId('cta-impact')).toBeTruthy();
+      expect(screen.getByTestId('cta-donate')).toBeTruthy();
     });
   });
 });

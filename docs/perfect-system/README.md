@@ -43,21 +43,19 @@ Documentazione completa del **Perfect System V2** implementato nell'app Rise Aga
 
 ## 📁 DOCUMENTI DISPONIBILI
 
-### **✅ AGGIORNATI (Usa questi)**
+### **✅ DOCUMENTI ATTIVI (3 Nov 2025)**
 
-- **[PERFECT_SYSTEM_V2_COMPLETE.md](./PERFECT_SYSTEM_V2_COMPLETE.md)** ⭐ **PRINCIPALE**
-- **[MIGLIORIE_E_ROLLOUT.md](./MIGLIORIE_E_ROLLOUT.md)** - Piano rollout componenti
+- **[PERFECT_SYSTEM_V2_COMPLETE.md](./PERFECT_SYSTEM_V2_COMPLETE.md)** ⭐ **PRINCIPALE** - Guida completa sistema
+- **[PERFECT_SYSTEM_RULES_FINAL.md](./PERFECT_SYSTEM_RULES_FINAL.md)** - Regole e convenzioni
+- **[PERFECT_SYSTEM_FINAL_PLAN.md](./PERFECT_SYSTEM_FINAL_PLAN.md)** - Piano implementazione V1
 
-### **📦 STORICI (Reference)**
+### **📦 REPORT STORICI (Spostati in reports/)**
 
-- **[PERFECT_SYSTEM_FINAL_PLAN.md](./PERFECT_SYSTEM_FINAL_PLAN.md)** - V1 (29 Ott 2025)
-- **[PERFECT_SYSTEM_IMPROVEMENTS_DONE.md](./PERFECT_SYSTEM_IMPROVEMENTS_DONE.md)** - Log V1
-- **[PERFECT_SYSTEM_AUDIT_REPORT.md](./PERFECT_SYSTEM_AUDIT_REPORT.md)** - Audit V1
-- **[ANALISI_COERENZA_PERFECT_SYSTEM.md](./ANALISI_COERENZA_PERFECT_SYSTEM.md)** - Analisi V1
-- **[PERFECT_SYSTEM_RULES_FINAL.md](./PERFECT_SYSTEM_RULES_FINAL.md)** - Regole V1
+- **[../reports/perfect-system-improvements.md](../reports/perfect-system-improvements.md)** - Log implementazioni V1
+- **[../reports/perfect-system-audit.md](../reports/perfect-system-audit.md)** - Audit codebase V1
+- **[../reports/coerenza-analysis.md](../reports/coerenza-analysis.md)** - Analisi coerenza V1
 
-> ⚠️ **NOTA**: I documenti V1 sono mantenuti per reference storico.  
-> Per la documentazione aggiornata, usa **PERFECT_SYSTEM_V2_COMPLETE.md**
+> ✅ **AGGIORNAMENTO 3 NOV 2025**: Documentazione consolidata e aggiornata con stato corrente sistema.
 
 ---
 
@@ -101,8 +99,8 @@ import {
   // ... altri
 } from '@components/ui';
 
-// Import utilities
-import { scale, scaleWithDimensions } from '@shared/constants/responsiveSystem';
+// Import utilities scaling
+import { scale, scaleText, scaleSpacing, scaleTouch } from '@shared/constants/perfectScale';
 import { useResponsiveDimensions } from '@shared/hooks';
 import { getImmuneTextProps } from '@shared/utils/SystemImmunity';
 ```
@@ -124,15 +122,16 @@ import { getImmuneTextProps } from '@shared/utils/SystemImmunity';
 ## 📞 Riferimenti Rapidi
 
 ### **Codice Sorgente:**
-- **Responsive System**: `src/shared/constants/responsiveSystem.ts`
+- **Perfect Scale**: `src/shared/constants/perfectScale.ts` (scale, scaleText, scaleSpacing, scaleTouch)
 - **Accessibilità**: `src/shared/utils/SystemImmunity.ts`
 - **Hook Orientation**: `src/shared/hooks/useResponsiveDimensions.ts`
 - **Componenti**: `src/components/ui/Perfect*.tsx`
+- **Pattern Comuni**: `src/shared/styles/commonPatterns.ts`
 
 ### **Utilities:**
+- **Spacing**: `src/shared/constants/PerfectSpacing.ts`
 - **Shadows**: `src/shared/constants/perfectShadow.ts`
 - **Animations**: `src/shared/constants/perfectAnimations.ts`
-- **Cache**: `src/shared/utils/SmartFontSizeCache.ts`
 
 ---
 
@@ -154,4 +153,4 @@ import { getImmuneTextProps } from '@shared/utils/SystemImmunity';
 ---
 
 **Perfect System V2** - Sviluppato con ❤️ per Rise Against Hunger Italia  
-**Ultima modifica**: 31 Ottobre 2025
+**Ultima modifica**: 3 Novembre 2025

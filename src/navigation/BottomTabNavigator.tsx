@@ -231,6 +231,9 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
 
 const AdvancedTabButton = React.memo(AdvancedTabButtonComponent);
 
+// Export per testing
+export { AdvancedTabButton, AdvancedTabButtonComponent };
+
 // =================================================================
 // 🚀 MAIN NAVIGATOR
 // =================================================================

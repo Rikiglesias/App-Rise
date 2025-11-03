@@ -64,10 +64,12 @@ Il **Perfect System** è un sistema di design responsive **proprietario** che ga
 ```
 PERFECT SYSTEM V2
 │
-├── 🧮 RESPONSIVE SYSTEM (Core Engine)
-│   ├── responsiveSystem.ts
-│   │   ├── scale() - Scaling diagonale automatico
-│   │   └── scaleWithDimensions() - Scaling custom
+├── 🧮 PERFECT SCALE (Core Engine)
+│   ├── perfectScale.ts
+│   │   ├── scale() - Scaling diagonale proporzionale
+│   │   ├── scaleText() - Scaling testi (= scale)
+│   │   ├── scaleSpacing() - Spacing (max 1.5x)
+│   │   └── scaleTouch() - Touch targets (min 44px)
 │   └── useResponsiveDimensions() - Hook orientation
 │
 ├── 🎨 PERFECT COMPONENTS (UI Layer)
@@ -321,7 +323,7 @@ const { width, height } = useResponsiveDimensions();
 
 ```typescript
 import { PerfectText, PerfectContainer } from '@components/ui';
-import { scale } from '@shared/constants/responsiveSystem';
+import { scale } from '@shared/constants/perfectScale';
 
 const MyCard = () => (
   <PerfectContainer preset="card" gap={12}>
@@ -343,7 +345,7 @@ const MyCard = () => (
 
 ```typescript
 import { useResponsiveDimensions } from '@shared/hooks';
-import { scaleWithDimensions } from '@shared/constants/responsiveSystem';
+import { scaleWithDimensions } from '@shared/constants/perfectScale';
 
 const ResponsiveLayout = () => {
   const { width, height } = useResponsiveDimensions();
@@ -381,6 +383,55 @@ const AccessibleText = () => {
   );
 };
 ```
+
+---
+
+### **Caso 4: Approccio Ibrido - Line Break Manuali** ⭐
+
+**Problema:** Anche con ratio matematico identico, iOS ("San Francisco") e Android ("Roboto") hanno kerning diverso → wrapping DIVERSO per frasi critiche.
+
+**Soluzione:** Line break manuali per frasi UI critiche (5-10 totali nell'app).
+
+#### **Per Frasi Critiche UI:**
+```typescript
+// ✅ WRAPPING IDENTICO GARANTITO iOS/Android
+<PerfectText
+  size={16}
+  lines={2}
+  containerWidth={0}  // Usa 100% width del parent
+  style={styles.subtitle}
+>
+  Volontari e partner uniti nella {'\n'}missione #famezero
+  {/* ↑ Line break manuale = 100% identico */}
+</PerfectText>
+```
+
+#### **Per Contenuti Dinamici:**
+```typescript
+// ✅ AUTOMATICO - ~95% identico
+<PerfectText size={16} lines={2}>
+  {dynamicContent}
+  {/* Sistema automatico gestisce wrapping */}
+</PerfectText>
+```
+
+#### **Quando Usare Line Break Manuali:**
+- ✅ Slogan principali
+- ✅ Sottotitoli header sezioni
+- ✅ Frasi dove wrapping è visivamente critico
+- ✅ ~5-10 frasi totali nell'app
+
+#### **Quando Usare Automatico:**
+- ✅ Descrizioni lunghe
+- ✅ Contenuti dinamici
+- ✅ Liste
+- ✅ Testi che cambiano frequentemente
+
+**Vantaggi Approccio Ibrido:**
+- ✅ Controllo totale dove serve (frasi critiche)
+- ✅ Flessibilità dove serve (contenuti dinamici)
+- ✅ Manutenzione minima (solo 5-10 frasi)
+- ✅ Localizzazione gestibile
 
 ---
 
@@ -561,6 +612,15 @@ const { width } = useResponsiveDimensions();  // Dinamico!
 
 ## 📝 CHANGELOG
 
+### **V2.1 (3 Novembre 2025)** ⭐ AGGIORNAMENTO DOCUMENTAZIONE
+- ✅ Documentazione aggiornata (responsiveSystem → perfectScale)
+- ✅ 4 funzioni scaling documentate (scale, scaleText, scaleSpacing, scaleTouch)
+- ✅ Aggiunto "Approccio Ibrido" con line break manuali
+- ✅ scale() dichiarato PUBBLICO (usabile in commonPatterns)
+- ✅ Consolidamento pattern DRY (commonPatterns.ts)
+- ✅ Esempi aggiornati con import corretti
+- ✅ Regole aggiornate per riflettere stato corrente
+
 ### **V2.0 (31 Ottobre 2025)**
 - ✅ FIX 1: Rotazione device (Math.min portrait)
 - ✅ FIX 2: Scaling diagonale (bilancia aspect ratio)
@@ -580,11 +640,12 @@ const { width } = useResponsiveDimensions();  // Dinamico!
 ## 📞 SUPPORTO
 
 **Domande?** Consulta questa guida o:
-- Leggi codice sorgente: `src/shared/constants/responsiveSystem.ts`
+- Leggi codice sorgente: `src/shared/constants/perfectScale.ts`
+- Pattern comuni: `src/shared/styles/commonPatterns.ts`
 - Vedi esempi: `src/components/ui/Perfect*.tsx`
 - Test: `src/__tests__/components/ui/PerfectText.test.tsx`
 
 ---
 
 **Perfect System V2** - Sviluppato con ❤️ per Rise Against Hunger Italia  
-**Ultima modifica**: 31 Ottobre 2025
+**Ultima modifica**: 3 Novembre 2025

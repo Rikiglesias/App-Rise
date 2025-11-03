@@ -1,0 +1,511 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradient borders 1`] = `
+<View
+  style={
+    {
+      "marginHorizontal": 18,
+      "padding": 36,
+    }
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "marginBottom": 36,
+        "marginVertical": 13.048488293864102,
+        "paddingHorizontal": 24,
+        "paddingVertical": 24,
+      }
+    }
+  >
+    <Text
+      accessibilityRole="header"
+      adjustsFontSizeToFit={false}
+      allowFontScaling={false}
+      lineBreakMode="clip"
+      maxFontSizeMultiplier={1}
+      minimumFontScale={1}
+      numberOfLines={1}
+      style={
+        {
+          "color": "#DC2626",
+          "fontFamily": "System",
+          "fontSize": 52.19395317545641,
+          "fontWeight": "900",
+          "includeFontPadding": false,
+          "lineHeight": 62.63274381054769,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+        }
+      }
+      testID="action-title"
+      textBreakStrategy="simple"
+    >
+      ⚡ Entra in Azione
+    </Text>
+  </View>
+  <View
+    style={
+      {
+        "marginHorizontal": 9,
+        "marginVertical": 36,
+        "paddingHorizontal": 24,
+        "paddingVertical": 24,
+      }
+    }
+  >
+    <View
+      accessibilityRole="summary"
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": undefined,
+          "borderRadius": 39.145464881592304,
+          "elevation": undefined,
+          "padding": 54,
+          "paddingHorizontal": 24,
+          "paddingVertical": 24,
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 3.2621220734660255,
+            "width": 0,
+          },
+          "shadowOpacity": 0.08,
+          "shadowRadius": 6.524244146932051,
+          "width": "90%",
+        }
+      }
+      testID="action-description-card"
+    >
+      <Text
+        accessibilityRole="text"
+        adjustsFontSizeToFit={false}
+        allowFontScaling={false}
+        lineBreakMode="clip"
+        maxFontSizeMultiplier={1}
+        minimumFontScale={1}
+        numberOfLines={2}
+        style={
+          {
+            "color": "#262626",
+            "fontFamily": "System",
+            "fontSize": 29.359098661194228,
+            "fontWeight": "700",
+            "includeFontPadding": false,
+            "lineHeight": 35.23091839343307,
+            "textAlign": "center",
+            "textAlignVertical": "center",
+          }
+        }
+        testID="action-description-main"
+        textBreakStrategy="simple"
+      >
+        Unisciti a noi nella lotta 
+        
+
+        contro la fame nel mondo
+      </Text>
+      <View
+        style={
+          {
+            "alignSelf": "center",
+            "backgroundColor": "#D4D4D4",
+            "borderRadius": 1.6310610367330127,
+            "height": 3.2621220734660255,
+            "marginVertical": 24,
+            "opacity": 0.8,
+            "width": "40%",
+          }
+        }
+      />
+      <Text
+        accessibilityRole="text"
+        adjustsFontSizeToFit={false}
+        allowFontScaling={false}
+        lineBreakMode="clip"
+        maxFontSizeMultiplier={1}
+        minimumFontScale={1}
+        numberOfLines={2}
+        style={
+          {
+            "color": "#737373",
+            "fontFamily": "System",
+            "fontSize": 26.096976587728204,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "includeFontPadding": false,
+            "lineHeight": 31.316371905273844,
+            "textAlign": "center",
+            "textAlignVertical": "center",
+          }
+        }
+        testID="action-description-sub"
+        textBreakStrategy="simple"
+      >
+        Ogni azione conta per
+        
+
+        cambiare vite
+      </Text>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+        "gap": 39.145464881592304,
+        "marginVertical": 36,
+        "paddingHorizontal": 9,
+        "paddingVertical": 24,
+      }
+    }
+    testID="home-cta-section"
+  >
+    <View
+      accessibilityHint="Apre la sezione Impatto"
+      accessibilityLabel="Scopri il nostro impatto"
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": false,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      hitSlop={
+        {
+          "bottom": 8,
+          "left": 8,
+          "right": 8,
+          "top": 8,
+        }
+      }
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "flex": 1,
+          "opacity": 1,
+        }
+      }
+      testID="cta-impact"
+    >
+      <LinearGradient
+        colors={
+          [
+            "#DC2626",
+            "#B91C1C",
+          ]
+        }
+        end={
+          {
+            "x": 1,
+            "y": 1,
+          }
+        }
+        start={
+          {
+            "x": 0,
+            "y": 0,
+          }
+        }
+        style={
+          {
+            "borderRadius": 24,
+            "padding": 4.893183110199038,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "backgroundColor": "#FFFFFF",
+              "borderRadius": 19.10681688980096,
+              "flex": 1,
+              "justifyContent": "space-between",
+              "minHeight": 171.26140885696634,
+              "paddingHorizontal": 12,
+              "paddingVertical": 12,
+            }
+          }
+        >
+          <MaterialCommunityIcons
+            color="#DC2626"
+            name="chart-line"
+            size={45.66970902852436}
+          />
+          <View
+            style={
+              {
+                "alignSelf": "center",
+                "width": 448.7048912052517,
+              }
+            }
+          >
+            <Text
+              adjustsFontSizeToFit={false}
+              allowFontScaling={false}
+              lineBreakMode="clip"
+              maxFontSizeMultiplier={1}
+              minimumFontScale={1}
+              numberOfLines={2}
+              style={
+                {
+                  "color": "#DC2626",
+                  "fontFamily": "System",
+                  "fontSize": 32.621220734660255,
+                  "fontWeight": "700",
+                  "includeFontPadding": false,
+                  "lineHeight": 39.145464881592304,
+                  "marginVertical": 6,
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                }
+              }
+              testID="cta-impact-label"
+              textBreakStrategy="simple"
+            >
+              Scopri
+              
+
+              Impatto
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "gap": 19.572732440796152,
+              }
+            }
+          >
+            <MaterialCommunityIcons
+              color="#DC2626"
+              name="arrow-left"
+              size={24}
+            />
+            <Text
+              adjustsFontSizeToFit={false}
+              allowFontScaling={false}
+              lineBreakMode="clip"
+              maxFontSizeMultiplier={1}
+              minimumFontScale={1}
+              numberOfLines={1}
+              style={
+                {
+                  "color": "#DC2626",
+                  "fontFamily": "System",
+                  "fontSize": 26.096976587728204,
+                  "fontWeight": "700",
+                  "includeFontPadding": false,
+                  "lineHeight": 31.316371905273844,
+                  "textAlign": "left",
+                  "textAlignVertical": "center",
+                }
+              }
+              testID="cta-impact-sub"
+              textBreakStrategy="simple"
+            >
+              Risultati
+            </Text>
+          </View>
+        </View>
+      </LinearGradient>
+    </View>
+    <View
+      accessibilityHint="Apre la sezione Azioni"
+      accessibilityLabel="Dona e aiuta"
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": false,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      hitSlop={
+        {
+          "bottom": 8,
+          "left": 8,
+          "right": 8,
+          "top": 8,
+        }
+      }
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "flex": 1,
+          "opacity": 1,
+        }
+      }
+      testID="cta-donate"
+    >
+      <LinearGradient
+        colors={
+          [
+            "#059669",
+            "#10B981",
+            "#047857",
+          ]
+        }
+        end={
+          {
+            "x": 1,
+            "y": 1,
+          }
+        }
+        start={
+          {
+            "x": 0,
+            "y": 0,
+          }
+        }
+        style={
+          {
+            "borderRadius": 24,
+            "padding": 4.893183110199038,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "backgroundColor": "#FFFFFF",
+              "borderRadius": 19.10681688980096,
+              "flex": 1,
+              "justifyContent": "space-between",
+              "minHeight": 171.26140885696634,
+              "paddingHorizontal": 12,
+              "paddingVertical": 12,
+            }
+          }
+        >
+          <MaterialCommunityIcons
+            color="#10B981"
+            name="hand-heart"
+            size={45.66970902852436}
+          />
+          <View
+            style={
+              {
+                "alignSelf": "center",
+                "width": 448.7048912052517,
+              }
+            }
+          >
+            <Text
+              adjustsFontSizeToFit={false}
+              allowFontScaling={false}
+              lineBreakMode="clip"
+              maxFontSizeMultiplier={1}
+              minimumFontScale={1}
+              numberOfLines={2}
+              style={
+                {
+                  "color": "#10B981",
+                  "fontFamily": "System",
+                  "fontSize": 32.621220734660255,
+                  "fontWeight": "700",
+                  "includeFontPadding": false,
+                  "lineHeight": 39.145464881592304,
+                  "marginVertical": 6,
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                }
+              }
+              testID="cta-donate-label"
+              textBreakStrategy="simple"
+            >
+              Dona e
+              
+
+              Aiuta
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "gap": 19.572732440796152,
+              }
+            }
+          >
+            <Text
+              adjustsFontSizeToFit={false}
+              allowFontScaling={false}
+              lineBreakMode="clip"
+              maxFontSizeMultiplier={1}
+              minimumFontScale={1}
+              numberOfLines={1}
+              style={
+                {
+                  "color": "#10B981",
+                  "fontFamily": "System",
+                  "fontSize": 26.096976587728204,
+                  "fontWeight": "700",
+                  "includeFontPadding": false,
+                  "lineHeight": 31.316371905273844,
+                  "textAlign": "left",
+                  "textAlignVertical": "center",
+                }
+              }
+              testID="cta-donate-sub"
+              textBreakStrategy="simple"
+            >
+              Supporta
+            </Text>
+            <MaterialCommunityIcons
+              color="#10B981"
+              name="arrow-right"
+              size={24}
+            />
+          </View>
+        </View>
+      </LinearGradient>
+    </View>
+  </View>
+</View>
+`;

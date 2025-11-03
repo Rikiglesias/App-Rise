@@ -9,7 +9,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
 import { MapSection } from '@/features/impact/components/MapSection';
 
-// Mock PerfectImage
+// Mock Perfect UI Components
 jest.mock('@/components/ui', () => ({
   PerfectText: ({ children, ...props }: any) => {
     const { Text } = require('react-native');
@@ -22,6 +22,10 @@ jest.mock('@/components/ui', () => ({
   PerfectImage: ({ source, ...props }: any) => {
     const { Image } = require('react-native');
     return <Image source={source} {...props} />;
+  },
+  PerfectIcon: ({ name, ...props }: any) => {
+    const { Text } = require('react-native');
+    return <Text {...props}>{name}</Text>;
   },
   PlatformTouchable: ({ children, onPress, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');

@@ -57,26 +57,74 @@ jest.mock('react-native/Libraries/Settings/Settings', () => ({
   },
 }));
 
+// Mock UniversalTheme per evitare errori "must be used within UniversalThemeProvider"
+jest.mock('@/shared/theme/UniversalTheme', () => {
+  const defaultTheme = {
+    colors: {
+      primary: '#DC2626',
+      background: '#FFFFFF',
+      surface: '#F5F5F5',
+      text: '#1F2937',
+      textSecondary: '#6B7280',
+      border: '#E5E7EB',
+      error: '#EF4444',
+      success: '#10B981',
+      warning: '#F59E0B',
+    },
+    spacing: {
+      xs: 4,
+      sm: 8,
+      md: 16,
+      lg: 24,
+      xl: 32,
+    },
+    borderRadius: {
+      sm: 4,
+      md: 8,
+      lg: 12,
+      xl: 16,
+    },
+  };
+
+  return {
+    UniversalThemeProvider: ({ children }) => children,
+    useUniversalTheme: () => defaultTheme,
+    UniversalTheme: defaultTheme,
+  };
+});
+
 // Provide SafeArea defaults to avoid provider errors in integration tests
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');
   
   // Create a proper Context for React Native Paper compatibility
-  const SafeAreaContext = React.createContext({
-    insets: { top: 0, bottom: 0, left: 0, right: 0 },
-    frame: { x: 0, y: 0, width: 390, height: 844 },
-  });
+  const defaultInsets = { top: 0, bottom: 0, left: 0, right: 0 };
+  const defaultFrame = { x: 0, y: 0, width: 390, height: 844 };
+  
+  const SafeAreaInsetsContext = React.createContext(defaultInsets);
+  const SafeAreaFrameContext = React.createContext(defaultFrame);
   
   return {
-    SafeAreaContext,
-    SafeAreaProvider: ({ children }) => React.createElement(SafeAreaContext.Provider, {
-      value: {
-        insets: { top: 0, bottom: 0, left: 0, right: 0 },
-        frame: { x: 0, y: 0, width: 390, height: 844 },
-      }
-    }, children),
-    useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
-    useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
+    SafeAreaContext: React.createContext({
+      insets: defaultInsets,
+      frame: defaultFrame,
+    }),
+    SafeAreaInsetsContext,
+    SafeAreaFrameContext,
+    SafeAreaProvider: ({ children }) => {
+      return React.createElement(SafeAreaInsetsContext.Provider, {
+        value: defaultInsets
+      }, React.createElement(SafeAreaFrameContext.Provider, {
+        value: defaultFrame
+      }, children));
+    },
+    SafeAreaConsumer: SafeAreaInsetsContext.Consumer,
+    useSafeAreaInsets: () => defaultInsets,
+    useSafeAreaFrame: () => defaultFrame,
     SafeAreaView: ({ children, ...props }) => React.createElement('View', props, children),
+    initialWindowMetrics: {
+      insets: defaultInsets,
+      frame: defaultFrame,
+    },
   };
 });

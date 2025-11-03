@@ -63,6 +63,10 @@ jest.mock('../../components/ui', () => ({
     const { View } = require('react-native');
     return <View {...props}>{children}</View>;
   },
+  PerfectIcon: ({ name, ...props }: any) => {
+    const { Text } = require('react-native');
+    return <Text {...props}>{name}</Text>;
+  },
 }));
 
 describe('BottomTabNavigator', () => {

@@ -1,0 +1,717 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = `
+<View
+  accessibilityLabel="Schermata Home"
+  edges={
+    [
+      "top",
+      "bottom",
+    ]
+  }
+  style={
+    {
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+    }
+  }
+  testID="home-screen"
+>
+  <RCTScrollView
+    collapsable={false}
+    contentContainerStyle={
+      {
+        "paddingBottom": 166.48488293864102,
+      }
+    }
+    onScroll={[Function]}
+    scrollEventThrottle={16}
+    showsVerticalScrollIndicator={false}
+  >
+    <View>
+      <View
+        paddingHorizontal={0}
+        paddingVertical={0}
+        preset="page"
+      >
+        <View
+          paddingVertical={12}
+        >
+          <View
+            collapsable={false}
+            needsOffscreenAlphaCompositing={true}
+            renderToHardwareTextureAndroid={true}
+            style={
+              {
+                "backgroundColor": "#FFFFFF",
+                "opacity": 1,
+                "overflow": "visible",
+                "transform": [
+                  {
+                    "scale": 1,
+                  },
+                ],
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "justifyContent": "center",
+                  "minHeight": 195.72732440796153,
+                  "paddingHorizontal": 24,
+                  "paddingVertical": 6,
+                  "position": "relative",
+                  "zIndex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "paddingBottom": 0,
+                    "paddingHorizontal": 16.310610367330128,
+                    "paddingTop": 0,
+                    "width": "100%",
+                  }
+                }
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "opacity": 0,
+                      "transform": [
+                        {
+                          "translateY": 0,
+                        },
+                      ],
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      {
+                        "alignItems": "center",
+                      }
+                    }
+                  >
+                    <View
+                      gap={6.524244146932051}
+                      style={
+                        {
+                          "alignItems": "center",
+                        }
+                      }
+                    >
+                      <Text
+                        color="#DC2626"
+                        fontWeight="900"
+                        lines={1}
+                        size={44}
+                        style={
+                          {
+                            "color": "#DC2626",
+                            "fontWeight": "900",
+                          }
+                        }
+                        textAlign="center"
+                      >
+                        Rise Against
+                      </Text>
+                      <Text
+                        color="#DC2626"
+                        fontWeight="900"
+                        lines={1}
+                        size={44}
+                        style={
+                          {
+                            "color": "#DC2626",
+                            "fontWeight": "900",
+                          }
+                        }
+                        textAlign="center"
+                      >
+                        Hunger 
+                        <Text
+                          style={
+                            {
+                              "color": "#171717",
+                              "fontWeight": "900",
+                            }
+                          }
+                        >
+                          Italia
+                        </Text>
+                      </Text>
+                      <View
+                        style={
+                          {
+                            "alignItems": "center",
+                            "flexDirection": "row",
+                            "gap": 18,
+                            "justifyContent": "center",
+                            "marginBottom": 16.310610367330128,
+                            "marginTop": 32.621220734660255,
+                            "maxWidth": 521.9395317545641,
+                            "width": "100%",
+                          }
+                        }
+                      >
+                        <View
+                          style={
+                            {
+                              "backgroundColor": "#FECACA",
+                              "borderRadius": 1.6310610367330127,
+                              "elevation": 1,
+                              "flex": 1,
+                              "height": 3.2621220734660255,
+                              "maxWidth": 169.6303478202333,
+                              "minWidth": 78.29092976318461,
+                              "shadowColor": "#000",
+                              "shadowOffset": {
+                                "height": 1,
+                                "width": 0,
+                              },
+                              "shadowOpacity": 0.05,
+                              "shadowRadius": 2,
+                            }
+                          }
+                        />
+                        <View
+                          style={
+                            {
+                              "borderRadius": 0,
+                              "height": 86.44623494684967,
+                              "overflow": "hidden",
+                              "width": 86.44623494684967,
+                            }
+                          }
+                        >
+                          <Image
+                            accessibilityLabel="Logo Rise Against Hunger"
+                            accessibilityRole="image"
+                            resizeMode="cover"
+                            source={
+                              {
+                                "testUri": "../../../assets/icons/app/logo.png",
+                              }
+                            }
+                            style={
+                              {
+                                "height": "100%",
+                                "width": "100%",
+                              }
+                            }
+                          />
+                        </View>
+                        <View
+                          style={
+                            {
+                              "backgroundColor": "#FECACA",
+                              "borderRadius": 1.6310610367330127,
+                              "elevation": 1,
+                              "flex": 1,
+                              "height": 3.2621220734660255,
+                              "maxWidth": 169.6303478202333,
+                              "minWidth": 78.29092976318461,
+                              "shadowColor": "#000",
+                              "shadowOffset": {
+                                "height": 1,
+                                "width": 0,
+                              },
+                              "shadowOpacity": 0.05,
+                              "shadowRadius": 2,
+                            }
+                          }
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "height": 887.2972039827589,
+                  "justifyContent": "flex-start",
+                  "marginBottom": 12,
+                  "marginTop": -48,
+                  "paddingHorizontal": 24,
+                  "width": "100%",
+                }
+              }
+            >
+              <View
+                accessibilityLabel="Hero Rise Against Hunger"
+                accessibilityRole="image"
+                collapsable={false}
+                needsOffscreenAlphaCompositing={true}
+                renderToHardwareTextureAndroid={true}
+                style={
+                  {
+                    "alignItems": "center",
+                    "borderRadius": 24,
+                    "opacity": 1,
+                    "overflow": "hidden",
+                    "transform": [
+                      {
+                        "translateY": 0,
+                      },
+                      {
+                        "scale": 1,
+                      },
+                      {
+                        "rotate": "0deg",
+                      },
+                    ],
+                    "width": "100%",
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "borderRadius": 63.84864253316569,
+                      "elevation": undefined,
+                      "height": 888.1148977120495,
+                      "overflow": "hidden",
+                      "shadowColor": "#000",
+                      "shadowOffset": {
+                        "height": 3.2621220734660255,
+                        "width": 0,
+                      },
+                      "shadowOpacity": 0.08,
+                      "shadowRadius": 6.524244146932051,
+                      "width": 641.006987436074,
+                    }
+                  }
+                >
+                  <Image
+                    resizeMode="cover"
+                    source={
+                      {
+                        "testUri": "../../../assets/images/hero-banner.png",
+                      }
+                    }
+                    style={
+                      {
+                        "height": "100%",
+                        "width": "100%",
+                      }
+                    }
+                  />
+                </View>
+                <View
+                  collapsable={false}
+                  pointerEvents="none"
+                  style={
+                    {
+                      "bottom": 0,
+                      "left": 0,
+                      "opacity": 0,
+                      "position": "absolute",
+                      "right": 0,
+                      "top": 0,
+                    }
+                  }
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+        <View
+          marginHorizontal={12}
+          padding={24}
+        >
+          <View
+            alignItems="center"
+            marginBottom={24}
+            preset="section"
+          >
+            <Text
+              accessibilityRole="header"
+              color="#DC2626"
+              fontWeight="900"
+              lines={1}
+              size={32}
+              testID="action-title"
+              textAlign="center"
+            >
+              ⚡ Entra in Azione
+            </Text>
+          </View>
+          <View
+            marginHorizontal={6}
+            marginVertical={24}
+            preset="section"
+          >
+            <View
+              accessibilityRole="summary"
+              backgroundColor="card"
+              borderRadius={24}
+              padding={36}
+              style={
+                {
+                  "alignSelf": "center",
+                  "width": "90%",
+                }
+              }
+              testID="action-description-card"
+            >
+              <Text
+                accessibilityRole="text"
+                color="#262626"
+                containerWidth={0}
+                lines={2}
+                size={18}
+                style={
+                  {
+                    "fontWeight": "700",
+                  }
+                }
+                testID="action-description-main"
+                textAlign="center"
+              >
+                Unisciti a noi nella lotta 
+                
+
+                contro la fame nel mondo
+              </Text>
+              <View
+                style={
+                  {
+                    "alignSelf": "center",
+                    "backgroundColor": "#D4D4D4",
+                    "borderRadius": 1.6310610367330127,
+                    "height": 3.2621220734660255,
+                    "marginVertical": 24,
+                    "opacity": 0.8,
+                    "width": "40%",
+                  }
+                }
+              />
+              <Text
+                accessibilityRole="text"
+                color="#737373"
+                containerWidth={0}
+                lines={2}
+                size={16}
+                style={
+                  {
+                    "fontStyle": "italic",
+                    "fontWeight": "600",
+                  }
+                }
+                testID="action-description-sub"
+                textAlign="center"
+              >
+                Ogni azione conta per
+                
+
+                cambiare vite
+              </Text>
+            </View>
+          </View>
+          <View
+            flexDirection="row"
+            gap={24}
+            marginVertical={24}
+            paddingHorizontal={6}
+            preset="section"
+            testID="home-cta-section"
+          >
+            <View
+              accessibilityHint="Apre la sezione Impatto"
+              accessibilityLabel="Scopri il nostro impatto"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              hitSlop={
+                {
+                  "bottom": 8,
+                  "left": 8,
+                  "right": 8,
+                  "top": 8,
+                }
+              }
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "flex": 1,
+                  "opacity": 1,
+                }
+              }
+              testID="cta-impact"
+            >
+              <View
+                colors={
+                  [
+                    "#DC2626",
+                    "#B91C1C",
+                  ]
+                }
+                end={
+                  {
+                    "x": 1,
+                    "y": 1,
+                  }
+                }
+                start={
+                  {
+                    "x": 0,
+                    "y": 0,
+                  }
+                }
+                style={
+                  {
+                    "borderRadius": 24,
+                    "padding": 4.893183110199038,
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "backgroundColor": "#FFFFFF",
+                      "borderRadius": 19.10681688980096,
+                      "flex": 1,
+                      "justifyContent": "space-between",
+                      "minHeight": 171.26140885696634,
+                      "paddingHorizontal": 12,
+                      "paddingVertical": 12,
+                    }
+                  }
+                >
+                  <Text
+                    color="#DC2626"
+                    size={28}
+                  >
+                    chart-line
+                  </Text>
+                  <Text
+                    color="#DC2626"
+                    lines={2}
+                    size={20}
+                    style={
+                      {
+                        "fontWeight": "700",
+                        "marginVertical": 6,
+                      }
+                    }
+                    testID="cta-impact-label"
+                    textAlign="center"
+                  >
+                    Scopri
+                    
+
+                    Impatto
+                  </Text>
+                  <View
+                    alignItems="center"
+                    flexDirection="row"
+                    gap={12}
+                  >
+                    <Text
+                      color="#DC2626"
+                      maxSize={24}
+                      minSize={18}
+                      size={20}
+                    >
+                      arrow-left
+                    </Text>
+                    <Text
+                      color="#DC2626"
+                      lines={1}
+                      size={16}
+                      style={
+                        {
+                          "fontWeight": "700",
+                        }
+                      }
+                      testID="cta-impact-sub"
+                    >
+                      Risultati
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              accessibilityHint="Apre la sezione Azioni"
+              accessibilityLabel="Dona e aiuta"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              hitSlop={
+                {
+                  "bottom": 8,
+                  "left": 8,
+                  "right": 8,
+                  "top": 8,
+                }
+              }
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "flex": 1,
+                  "opacity": 1,
+                }
+              }
+              testID="cta-donate"
+            >
+              <View
+                colors={
+                  [
+                    "#059669",
+                    "#10B981",
+                    "#047857",
+                  ]
+                }
+                end={
+                  {
+                    "x": 1,
+                    "y": 1,
+                  }
+                }
+                start={
+                  {
+                    "x": 0,
+                    "y": 0,
+                  }
+                }
+                style={
+                  {
+                    "borderRadius": 24,
+                    "padding": 4.893183110199038,
+                  }
+                }
+              >
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "backgroundColor": "#FFFFFF",
+                      "borderRadius": 19.10681688980096,
+                      "flex": 1,
+                      "justifyContent": "space-between",
+                      "minHeight": 171.26140885696634,
+                      "paddingHorizontal": 12,
+                      "paddingVertical": 12,
+                    }
+                  }
+                >
+                  <Text
+                    color="#10B981"
+                    size={28}
+                  >
+                    hand-heart
+                  </Text>
+                  <Text
+                    color="#10B981"
+                    lines={2}
+                    size={20}
+                    style={
+                      {
+                        "fontWeight": "700",
+                        "marginVertical": 6,
+                      }
+                    }
+                    testID="cta-donate-label"
+                    textAlign="center"
+                  >
+                    Dona e
+                    
+
+                    Aiuta
+                  </Text>
+                  <View
+                    alignItems="center"
+                    flexDirection="row"
+                    gap={12}
+                  >
+                    <Text
+                      color="#10B981"
+                      lines={1}
+                      size={16}
+                      style={
+                        {
+                          "fontWeight": "700",
+                        }
+                      }
+                      testID="cta-donate-sub"
+                    >
+                      Supporta
+                    </Text>
+                    <Text
+                      color="#10B981"
+                      maxSize={24}
+                      minSize={18}
+                      size={20}
+                    >
+                      arrow-right
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+</View>
+`;
