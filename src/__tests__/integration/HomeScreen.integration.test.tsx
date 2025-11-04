@@ -38,6 +38,35 @@ jest.mock('@/shared/hooks/useTheme', () => ({
   ThemeProvider: ({ children }: any) => children,
 }));
 
+// Mock UniversalTheme to avoid provider requirement in this integration test
+jest.mock('@/shared/theme/UniversalTheme', () => ({
+  UniversalThemeProvider: ({ children }: any) => children,
+  useUniversalTheme: () => ({
+    isDark: false,
+    toggleTheme: jest.fn(),
+    setTheme: jest.fn(),
+    themeMode: 'light',
+    colors: {
+      primary: '#FFFFFF',
+      secondary: '#F8F9FA',
+      card: '#FFFFFF',
+      modal: '#FFFFFF',
+      text: '#1F2937',
+      textSecondary: '#6B7280',
+      textMuted: '#9CA3AF',
+      border: '#E5E7EB',
+      borderLight: '#F3F4F6',
+      accent: '#DC2626',
+      success: '#10B981',
+      warning: '#D97706',
+    },
+  }),
+  getThemeColor: (key: any, isDark: boolean) =>
+    isDark
+      ? { text: '#F5F5F5' }[key] ?? '#F5F5F5'
+      : { text: '#1F2937' }[key] ?? '#1F2937',
+}));
+
 // Creo provider semplificato locale
 const AllProviders = ({ children }: any) => {
   return React.createElement(React.Fragment, null, children);

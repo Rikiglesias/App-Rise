@@ -3,12 +3,12 @@ import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
-import { ThemeProvider, useTheme } from './src/shared/hooks/useTheme';
+import { ThemeProvider } from './src/shared/hooks/useTheme';
 import { useOTAUpdateScreen } from './src/shared/hooks/useOTAUpdateScreen';
 import { OTAUpdateScreen } from './src/shared/components/OTAUpdateScreen';
-import { UniversalThemeProvider } from './src/shared/theme/UniversalTheme';
 import { logger } from './src/shared/utils/logger';
 import { initDisplayZoom } from './src/shared/services/displayZoom';
+import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
 // Import rimossi - preloading disabilitato
 // import {
 //   preloadCriticalComponents,
@@ -17,7 +17,7 @@ import { initDisplayZoom } from './src/shared/services/displayZoom';
 
 // The new Main component that bridges the two theme systems
 const Main: React.FC = () => {
-  const { isDark, colors } = useTheme();
+  const { isDark, universal, brand } = usePerfectTheme();
 
   // Define base theme from React Native Paper
   const baseTheme = isDark ? MD3DarkTheme : MD3LightTheme;
@@ -27,9 +27,10 @@ const Main: React.FC = () => {
     ...baseTheme,
     colors: {
       ...baseTheme.colors,
-      primary: colors.primary[500],
-      background: colors.neutral[50],
-      surface: colors.neutral[0],
+      // Use brand for primary/accent, universal for surfaces/backgrounds
+      primary: brand.primary[500],
+      background: universal.primary,
+      surface: universal.card,
       // text: colors.neutral[900], // The base theme handles text color well based on isDark
       // You can continue to map more colors here if needed
       // e.g., error, notification, etc.
@@ -61,14 +62,9 @@ const App: React.FC = () => {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <UniversalThemeProvider>
-          <Main />
-          {/* Schermata di aggiornamento OTA */}
-          <OTAUpdateScreen
-            visible={showUpdateScreen}
-            onComplete={hideUpdateScreen}
-          />
-        </UniversalThemeProvider>
+        <Main />
+        {/* Schermata di aggiornamento OTA */}
+        <OTAUpdateScreen visible={showUpdateScreen} onComplete={hideUpdateScreen} />
       </ThemeProvider>
     </SafeAreaProvider>
   );

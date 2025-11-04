@@ -1,75 +1,47 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Appearance, ColorSchemeName } from 'react-native';
+import React from 'react';
 import { Colors } from '@/shared/constants/designTokens';
+import {
+  UniversalThemeProvider,
+  useUniversalTheme,
+} from '@/shared/theme/UniversalTheme';
 
-// Types
+// Adapter type (keeps existing API for brand tokens)
 interface ThemeContextType {
   isDark: boolean;
   toggleTheme: () => void;
-  colors: typeof Colors;
+  colors: typeof Colors; // brand tokens
 }
 
-// Create context
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+// ThemeProvider now delegates to UniversalThemeProvider (single source of truth)
+export const ThemeProvider: React.FC<{ children: React.ReactNode }>
+  = ({ children }) => (
+  <UniversalThemeProvider>{children}</UniversalThemeProvider>
+);
 
-// Theme provider
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [isDark, setIsDark] = useState(false);
-
-  // Initialize theme from system preference
-  useEffect(() => {
-    const colorScheme = Appearance.getColorScheme();
-    setIsDark(colorScheme === 'dark');
-
-    // Listen for system theme changes
-    const subscription = Appearance.addChangeListener(
-      ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
-        if (colorScheme) {
-          setIsDark(colorScheme === 'dark');
-        }
-      }
-    );
-
-    return () => subscription?.remove();
-  }, []);
-
-  // Toggle theme
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-  };
-
-  return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme, colors: Colors }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
-// Custom hook to use theme
+// Hook adapter: reads mode/toggle from UniversalTheme, exposes brand colors
 export const useTheme = (): ThemeContextType => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
+  try {
+    const { isDark, toggleTheme: _toggle, setTheme } = useUniversalTheme();
+    // Adapter toggle: simple light <-> dark flip for callers expecting binary toggle
+    const toggleTheme = () => setTheme(isDark ? 'light' : 'dark');
+    return { isDark, toggleTheme, colors: Colors };
+  } catch {
+    // Preserve legacy error contract for tests/callers
     throw new Error('useTheme must be used within a ThemeProvider');
   }
-  return context;
 };
 
-// Hook for getting current theme colors
-export const useThemeColors = () => {
-  const { colors } = useTheme();
-  return colors;
-};
+// Hook for getting current brand colors
+export const useThemeColors = () => Colors;
 
-// Hook for getting theme-aware styles
+// Hook for getting theme-aware styles (brand-based)
 export const useThemeStyles = () => {
-  const { isDark, colors } = useTheme();
+  const { isDark } = useUniversalTheme();
+  const colors = Colors;
 
   return {
     isDark,
     colors,
-    // Common theme-aware style helpers
     container: {
       backgroundColor: colors.neutral[50],
     },
