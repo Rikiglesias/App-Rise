@@ -56,10 +56,10 @@ export const StatCard: React.FC<StatCardProps> = ({
               <PerfectText size={22} lines={1} fontWeight="900" style={styles.value} testID="stat-card-value">
                 {value}
               </PerfectText>
-              <PerfectText size={16} lines={1} fontWeight="700" style={styles.label} testID="stat-card-label">
+              <PerfectText size={16} lines={1} variant="compact" fontWeight="700" style={styles.label} testID="stat-card-label">
                 {label}
               </PerfectText>
-              <PerfectText size={14} lines={1} style={styles.subtitle}>
+              <PerfectText size={14} lines={1} variant="compact" style={styles.subtitle}>
                 {subtitle}
               </PerfectText>
               {showChevron ? (
@@ -73,10 +73,10 @@ export const StatCard: React.FC<StatCardProps> = ({
             <PerfectText size={22} lines={1} fontWeight="900" style={styles.value}>
               {value}
             </PerfectText>
-            <PerfectText size={16} lines={1} fontWeight="700" style={styles.label}>
+            <PerfectText size={16} lines={1} variant="compact" fontWeight="700" style={styles.label}>
               {label}
             </PerfectText>
-            <PerfectText size={14} lines={1} style={styles.subtitle}>
+            <PerfectText size={14} lines={1} variant="compact" style={styles.subtitle}>
               {subtitle}
             </PerfectText>
             {showChevron ? (

@@ -61,10 +61,7 @@ jest.mock('@/shared/theme/UniversalTheme', () => ({
       warning: '#D97706',
     },
   }),
-  getThemeColor: (key: any, isDark: boolean) =>
-    isDark
-      ? { text: '#F5F5F5' }[key] ?? '#F5F5F5'
-      : { text: '#1F2937' }[key] ?? '#1F2937',
+  getThemeColor: (_key: any, isDark: boolean) => (isDark ? '#F5F5F5' : '#1F2937'),
 }));
 
 // Creo provider semplificato locale

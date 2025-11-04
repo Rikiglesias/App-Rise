@@ -44,20 +44,8 @@ jest.mock('@/shared/theme/UniversalTheme', () => ({
     toggleTheme: jest.fn(),
     setTheme: jest.fn(),
     themeMode: 'light',
-    colors: {
-      primary: '#FFFFFF',
-      secondary: '#F8F9FA',
-      card: '#FFFFFF',
-      modal: '#FFFFFF',
-      text: '#1F2937',
-      textSecondary: '#6B7280',
-      textMuted: '#9CA3AF',
-      border: '#E5E7EB',
-      borderLight: '#F3F4F6',
-      accent: '#DC2626',
-      success: '#10B981',
-      warning: '#D97706',
-    },
+    // Empty colors to preserve previous snapshot (no auto background)
+    colors: {} as any,
   }),
 }));
 

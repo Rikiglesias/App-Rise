@@ -18,12 +18,8 @@ import {
 } from '@/components/ui';
 
 // Design Tokens & Hooks
-import {
-  BorderRadius,
-  Colors,
-  Shadows,
-  Typography,
-} from '@/shared/constants/designTokens';
+import { BorderRadius, Colors, Typography } from '@/shared/constants/designTokens';
+import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
@@ -217,6 +213,7 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
             <PerfectText
               size={16}
               lines={1}
+              variant="compact"
               color={tabColors.labelColor}
               style={styles.labelText}
             >
@@ -283,7 +280,7 @@ const styles = StyleSheet.create({
   // --- Tab Bar ---
   tabBarContainer: {
     position: 'absolute',
-    ...Shadows.lg,
+    ...getPerfectShadow('strong'),
     shadowColor: Colors.neutral[900],
     shadowOpacity: 0.1,
     elevation: scale(10),
@@ -326,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
-    ...Shadows.md,
+    ...getPerfectShadow('medium'),
     elevation: scale(8),
   },
   centralIconContainer: {
@@ -337,7 +334,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: scale(2),
     borderColor: Colors.neutral[0],
-    ...Shadows.lg,
+    ...getPerfectShadow('strong'),
     elevation: scale(12),
   },
   // --- Label ---

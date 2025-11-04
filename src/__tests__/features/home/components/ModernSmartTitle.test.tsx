@@ -14,6 +14,18 @@ jest.mock('@/shared/hooks/useTheme', () => ({
   }),
 }));
 
+// Mock UniversalTheme to avoid provider requirement in this unit test
+jest.mock('@/shared/theme/UniversalTheme', () => ({
+  UniversalThemeProvider: ({ children }: any) => children,
+  useUniversalTheme: () => ({
+    isDark: false,
+    toggleTheme: jest.fn(),
+    setTheme: jest.fn(),
+    themeMode: 'light',
+    colors: {} as any,
+  }),
+}));
+
 describe('ModernSmartTitle', () => {
   it('renderizza titolo e logo', () => {
     const anim = new Animated.Value(1);

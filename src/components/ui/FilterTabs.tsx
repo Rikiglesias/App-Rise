@@ -2,7 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
 import { TouchableRipple } from 'react-native-paper';
-import { BorderRadius, Colors, PerfectSpacing, Typography, Shadows } from '../../shared/constants';
+import { BorderRadius, Colors, PerfectSpacing, Typography } from '../../shared/constants';
+import { getPerfectShadow } from '../../shared/constants/perfectShadow';
 import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText } from './PerfectText';
 import { PerfectContainer } from './PerfectContainer';
@@ -52,7 +53,7 @@ const makeStyles = () => StyleSheet.create({
   activeTab: {
     backgroundColor: Colors.primary[600],
     borderColor: Colors.primary[600],
-    ...Shadows.sm,
+    ...getPerfectShadow('light'),
   },
   inactiveTab: {
     backgroundColor: Colors.neutral[0],

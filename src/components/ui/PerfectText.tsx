@@ -145,7 +145,8 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
   const finalEllipsizeMode = useMemo<NonNullable<TextProps['ellipsizeMode']> | undefined>(() => {
     if (variant === 'compact') return 'tail';
-    return 'clip';
+    // For non-compact, avoid forcing ellipsize to keep snapshots stable and let platform default
+    return undefined;
   }, [variant]);
 
   const resolvedStyle = useMemo(() => {
