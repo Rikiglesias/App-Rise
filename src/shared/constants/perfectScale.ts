@@ -11,6 +11,10 @@ import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
 import { getDisplayZoomFactor } from '../services/displayZoom';
 
+type ExpoExtra = Record<string, unknown> & {
+  features?: Record<string, unknown>;
+};
+
 // REFERENCE: iPhone 15 (device di riferimento)
 export const LOGICAL_REFERENCE = {
   width: 393,
@@ -25,11 +29,11 @@ export const LOGICAL_REFERENCE = {
  */
 const shouldNormalizeDisplayZoom = (): boolean => {
   try {
-    const extra =
-      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-      ((Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }).manifest
+    const extra: ExpoExtra | undefined =
+      (Constants.expoConfig?.extra as ExpoExtra | undefined) ??
+      ((Updates as unknown as { manifest?: { extra?: ExpoExtra } }).manifest
         ?.extra);
-    const raw = (extra as any)?.displayZoomNormalization ?? (extra as any)?.features?.displayZoomNormalization;
+    const raw = extra?.['displayZoomNormalization'] ?? extra?.features?.['displayZoomNormalization'];
     if (raw !== undefined) {
       return raw === true || String(raw).toLowerCase() === 'true';
     }
