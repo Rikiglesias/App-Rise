@@ -58,12 +58,13 @@ jobs:
           echo "Scanning for Dimensions.get usage..."
           matches=$(grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=src/__tests__ -E "Dimensions\\.get\\(" src || true)
           if [ -n "$matches" ]; then
-            filtered=$(echo "$matches" | grep -v "src/shared/constants/responsiveSystem.ts" || true)
+            filtered=$(echo "$matches" | grep -v "src/shared/constants/perfectScale.ts" || true)
             if [ -n "$filtered" ]; then
               echo "$filtered"
-              echo "❌ Disallowed Dimensions.get() usage outside responsiveSystem.ts."
+              echo "❌ Disallowed Dimensions.get() usage outside perfectScale.ts."
+              echo "💡 Use getWindowDimensions() from perfectScale.ts instead."
               exit 1
             fi
           fi
-          echo "✅ Dimensions.get usage limited to allowed module."
+          echo "✅ Dimensions.get usage limited to perfectScale.ts."
 

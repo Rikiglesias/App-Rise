@@ -316,3 +316,14 @@ export const scaleBadge = (
   const max = opts?.max ?? 36;
   return scaleClamp(base, min, max);
 };
+
+/**
+ * Helper centralizzato per ottenere dimensioni window.
+ * Unico punto autorizzato per Dimensions.get() insieme alle funzioni scale.
+ *
+ * @returns Dimensioni window correnti { width, height }
+ */
+export const getWindowDimensions = (): { width: number; height: number } => {
+  // eslint-disable-next-line no-restricted-properties
+  return Dimensions.get('window');
+};
