@@ -22,7 +22,12 @@ export {
 
 export { logger, logDebug, logInfo, logWarn, logError } from './utils/logger';
 
-export { env, isProduction, isDevelopment, isFeatureEnabled } from './config/environment';
+export {
+  env,
+  isProduction,
+  isDevelopment,
+  isFeatureEnabled,
+} from './config/environment';
 
 // Services - Singletons
 export { apiSecurity } from './services/apiSecurity';

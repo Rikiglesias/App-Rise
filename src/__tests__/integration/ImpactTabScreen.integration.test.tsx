@@ -1,6 +1,6 @@
 /**
  * IMPACT TAB SCREEN - INTEGRATION TEST
- * 
+ *
  * Test integrazione completa della schermata Impact:
  * - Rendering di tutti i componenti
  * - Scroll interactions
@@ -81,7 +81,11 @@ jest.mock('@/components/ui', () => ({
   },
   PlatformTouchable: ({ children, onPress, testID, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
-    return <TouchableOpacity onPress={onPress} testID={testID} {...props}>{children}</TouchableOpacity>;
+    return (
+      <TouchableOpacity onPress={onPress} testID={testID} {...props}>
+        {children}
+      </TouchableOpacity>
+    );
   },
   PlatformScrollView: ({ children, ...props }: any) => {
     const { ScrollView } = require('react-native');
@@ -107,7 +111,10 @@ jest.mock('react-native-maps', () => {
 });
 
 // Mock icons
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
+jest.mock(
+  '@expo/vector-icons/MaterialCommunityIcons',
+  () => 'MaterialCommunityIcons'
+);
 
 describe('ImpactTabScreen - Integration Test', () => {
   beforeEach(() => {
@@ -118,9 +125,10 @@ describe('ImpactTabScreen - Integration Test', () => {
     const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
-    , render);
-    
+      </NavigationContainer>,
+      render
+    );
+
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
     });
@@ -130,9 +138,10 @@ describe('ImpactTabScreen - Integration Test', () => {
     renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
-    , render);
-    
+      </NavigationContainer>,
+      render
+    );
+
     await waitFor(() => {
       expect(screen.getByText(/Il Nostro Impatto/i)).toBeTruthy();
     });
@@ -142,9 +151,10 @@ describe('ImpactTabScreen - Integration Test', () => {
     renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
-    , render);
-    
+      </NavigationContainer>,
+      render
+    );
+
     await waitFor(() => {
       expect(screen.getByText(/Pasti Donati/i)).toBeTruthy();
     });
@@ -154,9 +164,10 @@ describe('ImpactTabScreen - Integration Test', () => {
     renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
-    , render);
-    
+      </NavigationContainer>,
+      render
+    );
+
     await waitFor(() => {
       expect(screen.getByText(/Dove Operiamo/i)).toBeTruthy();
     });
@@ -168,7 +179,7 @@ describe('ImpactTabScreen - Integration Test', () => {
         <ImpactTabScreen />
       </NavigationContainer>
     );
-    
+
     await waitFor(() => {
       expect(screen.getByText(/Risultati 2024/i)).toBeTruthy();
     });
@@ -180,7 +191,7 @@ describe('ImpactTabScreen - Integration Test', () => {
         <ImpactTabScreen />
       </NavigationContainer>
     );
-    
+
     await waitFor(() => {
       expect(screen.getByText(/La Nostra Community/i)).toBeTruthy();
     });
@@ -190,9 +201,10 @@ describe('ImpactTabScreen - Integration Test', () => {
     const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
-    , render);
-    
+      </NavigationContainer>,
+      render
+    );
+
     // Verifica che il componente ScrollView sia renderizzato
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
@@ -203,9 +215,10 @@ describe('ImpactTabScreen - Integration Test', () => {
     const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
-    , render);
-    
+      </NavigationContainer>,
+      render
+    );
+
     // Le animazioni dovrebbero essere inizializzate senza errori
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();

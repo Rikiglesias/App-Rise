@@ -6,14 +6,20 @@ import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
   const React = require('react');
   const { Text } = require('react-native');
-  return ({ name, size, color }: any) => React.createElement(Text, { testID: `mdi-${name}-${size}-${color || 'none'}` }, 'icon');
+  return ({ name, size, color }: any) =>
+    React.createElement(
+      Text,
+      { testID: `mdi-${name}-${size}-${color || 'none'}` },
+      'icon'
+    );
 });
 
 // Mock gradient
 jest.mock('expo-linear-gradient', () => {
   const { View } = require('react-native');
   return {
-    LinearGradient: ({ children, ...props }: any) => require('react').createElement(View, props, children),
+    LinearGradient: ({ children, ...props }: any) =>
+      require('react').createElement(View, props, children),
   };
 });
 

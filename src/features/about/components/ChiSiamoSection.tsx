@@ -61,11 +61,14 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             accessibilityLabel="Apri informazioni su Chi Siamo"
             style={chiSiamoSectionStyles.infoIconImproved}
           >
-            <PerfectIcon name="information" size={24} color={Colors.neutral[900]} />
+            <PerfectIcon
+              name="information"
+              size={24}
+              color={Colors.neutral[900]}
+            />
           </PlatformTouchable>
         </PerfectContainer>
       </PerfectContainer>
     </PerfectContainer>
   );
 };
-

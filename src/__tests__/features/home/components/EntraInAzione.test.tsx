@@ -1,6 +1,6 @@
 /**
  * ENTRA IN AZIONE COMPONENT TEST
- * 
+ *
  * Test suite per il componente principale della home che mostra
  * titolo, descrizione e CTA buttons per navigare verso Impact e Actions.
  */
@@ -55,7 +55,10 @@ jest.mock('expo-linear-gradient', () => ({
 }));
 
 // Mock icons
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
+jest.mock(
+  '@expo/vector-icons/MaterialCommunityIcons',
+  () => 'MaterialCommunityIcons'
+);
 
 describe('EntraInAzione Component', () => {
   beforeEach(() => {
@@ -101,7 +104,7 @@ describe('EntraInAzione Component', () => {
   it('dovrebbe avere gli stili corretti per i gradient borders', () => {
     const { toJSON } = render(<EntraInAzione />);
     const tree = toJSON();
-    
+
     // Verifica che il componente abbia una struttura valida
     expect(tree).toMatchSnapshot();
   });

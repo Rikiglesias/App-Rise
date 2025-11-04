@@ -46,7 +46,10 @@ jest.mock('expo-linear-gradient', () => ({
 }));
 
 // Mock icons
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
+jest.mock(
+  '@expo/vector-icons/MaterialCommunityIcons',
+  () => 'MaterialCommunityIcons'
+);
 
 // Mock DonationInfoModal
 jest.mock('@/features/actions/components/shared/DonationInfoModal', () => ({
@@ -65,7 +68,9 @@ jest.mock('@/components/ui', () => {
         {children}
       </TouchableOpacity>
     ),
-    PerfectText: ({ children, ...props }: any) => <Text {...props}>{children}</Text>,
+    PerfectText: ({ children, ...props }: any) => (
+      <Text {...props}>{children}</Text>
+    ),
     PerfectContainer: ({ children, ...props }: any) => (
       <View {...props}>{children}</View>
     ),

@@ -9,7 +9,12 @@ import {
 } from '../ui';
 import { PerfectImage } from '../ui/PerfectImage';
 
-import { BorderRadius, Colors, Shadows, PerfectSpacing } from '../../shared/constants';
+import {
+  BorderRadius,
+  Colors,
+  Shadows,
+  PerfectSpacing,
+} from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 
 interface Location {

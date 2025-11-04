@@ -96,19 +96,23 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
       >
         {/* Container per nascondere overflow durante animazioni */}
         <View style={styles.backButtonContainer}>
-            <LinearGradient
-              colors={[Colors.primary[600], Colors.primary[700]]}
-              style={[
-                styles.backButtonGradient,
-                {
-                  width: scale(48),
-                  height: scale(48),
-                  borderRadius: scale(24),
-                },
-              ]}
-            >
-              <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[0]} />
-            </LinearGradient>
+          <LinearGradient
+            colors={[Colors.primary[600], Colors.primary[700]]}
+            style={[
+              styles.backButtonGradient,
+              {
+                width: scale(48),
+                height: scale(48),
+                borderRadius: scale(24),
+              },
+            ]}
+          >
+            <PerfectIcon
+              name="arrow-left"
+              size={24}
+              color={Colors.neutral[0]}
+            />
+          </LinearGradient>
         </View>
       </PlatformTouchable>
 
@@ -122,7 +126,10 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
             styles.content,
             {
               paddingHorizontal: PerfectSpacing.lg,
-              paddingTop: Platform.OS === 'ios' ? PerfectSpacing['3xl'] : PerfectSpacing['5xl'],
+              paddingTop:
+                Platform.OS === 'ios'
+                  ? PerfectSpacing['3xl']
+                  : PerfectSpacing['5xl'],
             },
           ]}
         >
@@ -132,7 +139,10 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               styles.iconContainer,
               {
                 marginBottom: PerfectSpacing.base,
-                marginTop: Platform.OS === 'ios' ? PerfectSpacing.xl : PerfectSpacing.base,
+                marginTop:
+                  Platform.OS === 'ios'
+                    ? PerfectSpacing.xl
+                    : PerfectSpacing.base,
               },
             ]}
           >
@@ -150,7 +160,11 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 },
               ]}
             >
-              <PerfectIcon name="hammer-wrench" size={60} color={Colors.primary[600]} />
+              <PerfectIcon
+                name="hammer-wrench"
+                size={60}
+                color={Colors.primary[600]}
+              />
             </Animated.View>
 
             {/* Icone decorative fluttuanti */}
@@ -161,7 +175,11 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 { padding: PerfectSpacing.sm },
               ]}
             >
-              <PerfectIcon name="code-tags" size={24} color={Colors.semantic.success.dark} />
+              <PerfectIcon
+                name="code-tags"
+                size={24}
+                color={Colors.semantic.success.dark}
+              />
             </Animated.View>
             <Animated.View
               style={[
@@ -170,7 +188,11 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 { padding: PerfectSpacing.sm },
               ]}
             >
-              <PerfectIcon name="palette" size={20} color={Colors.primary[500]} />
+              <PerfectIcon
+                name="palette"
+                size={20}
+                color={Colors.primary[500]}
+              />
             </Animated.View>
             <Animated.View
               style={[
@@ -179,7 +201,11 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 { padding: PerfectSpacing.sm },
               ]}
             >
-              <PerfectIcon name="rocket" size={22} color={Colors.primary[400]} />
+              <PerfectIcon
+                name="rocket"
+                size={22}
+                color={Colors.primary[400]}
+              />
             </Animated.View>
           </View>
 
@@ -213,7 +239,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               colors={['rgba(220, 38, 38, 0.05)', 'rgba(220, 38, 38, 0.02)']}
               style={styles.cardGradient}
             >
-              <View style={[styles.cardContent, { padding: PerfectSpacing.lg }]}>
+              <View
+                style={[styles.cardContent, { padding: PerfectSpacing.lg }]}
+              >
                 <PerfectIcon
                   name="information-outline"
                   size={28}
@@ -230,20 +258,38 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                 </PerfectText>
 
                 <View style={[styles.featuresList, { gap: PerfectSpacing.xs }]}>
-                  <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
-                    <PerfectIcon name="check-circle" size={16} color={Colors.semantic.success.dark} />
+                  <View
+                    style={[styles.featureItem, { gap: PerfectSpacing.md }]}
+                  >
+                    <PerfectIcon
+                      name="check-circle"
+                      size={16}
+                      color={Colors.semantic.success.dark}
+                    />
                     <PerfectText size={16} lines={1} style={styles.featureText}>
                       Design migliorato
                     </PerfectText>
                   </View>
-                  <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
-                    <PerfectIcon name="check-circle" size={16} color={Colors.semantic.success.dark} />
+                  <View
+                    style={[styles.featureItem, { gap: PerfectSpacing.md }]}
+                  >
+                    <PerfectIcon
+                      name="check-circle"
+                      size={16}
+                      color={Colors.semantic.success.dark}
+                    />
                     <PerfectText size={16} lines={1} style={styles.featureText}>
                       Nuove funzionalità
                     </PerfectText>
                   </View>
-                  <View style={[styles.featureItem, { gap: PerfectSpacing.md }]}>
-                    <PerfectIcon name="check-circle" size={16} color={Colors.semantic.success.dark} />
+                  <View
+                    style={[styles.featureItem, { gap: PerfectSpacing.md }]}
+                  >
+                    <PerfectIcon
+                      name="check-circle"
+                      size={16}
+                      color={Colors.semantic.success.dark}
+                    />
                     <PerfectText size={16} lines={2} style={styles.featureText}>
                       Performance ottimizzate
                     </PerfectText>
@@ -294,7 +340,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: Platform.OS === 'android' ? scale(250) : PerfectSpacing['4xl'],
+    paddingBottom:
+      Platform.OS === 'android' ? scale(250) : PerfectSpacing['4xl'],
   },
   iconContainer: {
     position: 'relative',
@@ -407,4 +454,3 @@ const styles = StyleSheet.create({
 });
 
 export default DevelopmentScreen;
-

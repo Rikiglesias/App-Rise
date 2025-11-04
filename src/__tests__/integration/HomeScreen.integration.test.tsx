@@ -1,6 +1,6 @@
 /**
  * HOME SCREEN - INTEGRATION TEST
- * 
+ *
  * Test integrazione completa della schermata Home:
  * - Rendering di tutti i componenti principali
  * - Header con logo e scroll parallax
@@ -61,7 +61,8 @@ jest.mock('@/shared/theme/UniversalTheme', () => ({
       warning: '#D97706',
     },
   }),
-  getThemeColor: (_key: any, isDark: boolean) => (isDark ? '#F5F5F5' : '#1F2937'),
+  getThemeColor: (_key: any, isDark: boolean) =>
+    isDark ? '#F5F5F5' : '#1F2937',
 }));
 
 // Creo provider semplificato locale
@@ -108,11 +109,19 @@ jest.mock('@/components/ui', () => ({
   },
   PlatformTouchable: ({ children, onPress, testID, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
-    return <TouchableOpacity onPress={onPress} testID={testID} {...props}>{children}</TouchableOpacity>;
+    return (
+      <TouchableOpacity onPress={onPress} testID={testID} {...props}>
+        {children}
+      </TouchableOpacity>
+    );
   },
   Logo: ({ ...props }: any) => {
     const { View, Text } = require('react-native');
-    return <View {...props}><Text>Logo</Text></View>;
+    return (
+      <View {...props}>
+        <Text>Logo</Text>
+      </View>
+    );
   },
 }));
 
@@ -125,7 +134,10 @@ jest.mock('expo-linear-gradient', () => ({
 }));
 
 // Mock icons
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
+jest.mock(
+  '@expo/vector-icons/MaterialCommunityIcons',
+  () => 'MaterialCommunityIcons'
+);
 
 describe('HomeScreen - Integration Test', () => {
   beforeEach(() => {
@@ -140,13 +152,13 @@ describe('HomeScreen - Integration Test', () => {
         </NavigationContainer>
       </AllProviders>
     );
-    
+
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
     });
   });
 
-  it('dovrebbe mostrare il titolo nell\'header', async () => {
+  it("dovrebbe mostrare il titolo nell'header", async () => {
     render(
       <AllProviders>
         <NavigationContainer>
@@ -154,7 +166,7 @@ describe('HomeScreen - Integration Test', () => {
         </NavigationContainer>
       </AllProviders>
     );
-    
+
     await waitFor(() => {
       expect(screen.getByText('Rise Against')).toBeTruthy();
       expect(screen.getByText(/Hunger/i)).toBeTruthy();
@@ -169,7 +181,7 @@ describe('HomeScreen - Integration Test', () => {
         </NavigationContainer>
       </AllProviders>
     );
-    
+
     await waitFor(() => {
       expect(screen.getByText(/Entra in Azione/i)).toBeTruthy();
     });
@@ -183,7 +195,7 @@ describe('HomeScreen - Integration Test', () => {
         </NavigationContainer>
       </AllProviders>
     );
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('cta-impact')).toBeTruthy();
       expect(screen.getByTestId('cta-donate')).toBeTruthy();
@@ -198,11 +210,11 @@ describe('HomeScreen - Integration Test', () => {
         </NavigationContainer>
       </AllProviders>
     );
-    
+
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
     });
-    
+
     // Header dovrebbe avere animazioni parallax configurate
   });
 
@@ -214,7 +226,7 @@ describe('HomeScreen - Integration Test', () => {
         </NavigationContainer>
       </AllProviders>
     );
-    
+
     await waitFor(() => {
       expect(toJSON()).toMatchSnapshot();
     });
@@ -228,16 +240,16 @@ describe('HomeScreen - Integration Test', () => {
         </NavigationContainer>
       </AllProviders>
     );
-    
+
     await waitFor(() => {
       // Header con titolo principale
       expect(screen.getByText(/Rise Against/i)).toBeTruthy();
       expect(screen.getByText(/Hunger/i)).toBeTruthy();
-      
+
       // EntraInAzione section
       expect(screen.getByText(/Entra in Azione/i)).toBeTruthy();
       expect(screen.getByTestId('action-description-card')).toBeTruthy();
-      
+
       // CTA Buttons
       expect(screen.getByTestId('cta-impact')).toBeTruthy();
       expect(screen.getByTestId('cta-donate')).toBeTruthy();

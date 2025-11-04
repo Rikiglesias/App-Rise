@@ -1,6 +1,11 @@
 import React from 'react';
 import { Animated } from 'react-native';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react-native';
 
 import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import ActionButtons from '@/features/actions/components/ActionButtons/ActionButtons';
@@ -19,13 +24,19 @@ jest.mock('@/shared/hooks/useLinkHandler', () => ({
 }));
 
 jest.mock('expo-linear-gradient', () => ({ LinearGradient: 'LinearGradient' }));
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
+jest.mock(
+  '@expo/vector-icons/MaterialCommunityIcons',
+  () => 'MaterialCommunityIcons'
+);
 
 const mockAnimations = {
   fadeAnim: new Animated.Value(1),
   slideAnim: new Animated.Value(0),
   scaleAnim: new Animated.Value(1),
-  buttonAnimations: Array.from({ length: 8 }, () => new Animated.Value(1)) as any,
+  buttonAnimations: Array.from(
+    { length: 8 },
+    () => new Animated.Value(1)
+  ) as any,
 };
 
 describe('DonationInfoModal integration', () => {

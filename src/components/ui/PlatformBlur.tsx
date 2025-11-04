@@ -35,9 +35,13 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
         colors={[
           // rgba necessario per fallback gradient blur semi-trasparente
           backgroundColor ??
-            (tint === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)'),
+            (tint === 'dark'
+              ? 'rgba(0, 0, 0, 0.7)'
+              : 'rgba(255, 255, 255, 0.9)'),
           backgroundColor ??
-            (tint === 'dark' ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.9)'),
+            (tint === 'dark'
+              ? 'rgba(0, 0, 0, 0.7)'
+              : 'rgba(255, 255, 255, 0.9)'),
         ]}
         style={gradientStyle}
       />
@@ -46,7 +50,7 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
   );
 
   try {
-    const combinedStyle = backgroundColor 
+    const combinedStyle = backgroundColor
       ? [style, { backgroundColor }]
       : style;
 

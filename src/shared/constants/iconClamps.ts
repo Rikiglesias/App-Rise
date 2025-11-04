@@ -21,4 +21,3 @@ export const IconClamps = {
 } as const;
 
 export type IconClampPreset = keyof typeof IconClamps;
-

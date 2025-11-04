@@ -59,6 +59,36 @@ jest.mock('react-native/Libraries/Settings/Settings', () => ({
 
 // Do NOT mock UniversalTheme here: some tests validate real behavior.
 
+// Mock expo-constants to avoid EXDevLauncher errors in tests
+jest.mock('expo-constants', () => ({
+  __esModule: true,
+  default: {
+    expoConfig: {
+      extra: {
+        fontScaleUnlockThreshold: 1.3,
+      },
+    },
+    manifest: {
+      extra: {
+        fontScaleUnlockThreshold: 1.3,
+      },
+    },
+  },
+}));
+
+// Mock expo-updates for OTA functionality in tests
+jest.mock('expo-updates', () => ({
+  __esModule: true,
+  manifest: {
+    extra: {
+      fontScaleUnlockThreshold: 1.3,
+    },
+  },
+  checkForUpdateAsync: jest.fn(),
+  fetchUpdateAsync: jest.fn(),
+  reloadAsync: jest.fn(),
+}));
+
 // Provide SafeArea defaults to avoid provider errors in integration tests
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');

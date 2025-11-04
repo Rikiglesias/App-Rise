@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 
 import { PerfectContainer } from './PerfectContainer';
+import { PlatformScrollView, PlatformTouchable } from './PlatformComponents';
 import { Colors, scale } from '@/shared/constants';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
@@ -79,8 +80,16 @@ const useModalBehavior = (size: PerfectModalProps['size']) => {
   // 🎨 PRESENTATION STYLE
   // iOS note: 'transparent' is not supported with 'pageSheet'.
   // For phones (non-tablet) we use 'overFullScreen' to support semi-transparent overlays.
-  const presentationStyle: 'fullScreen' | 'formSheet' | 'pageSheet' | 'overFullScreen' =
-    size === 'fullscreen' ? 'fullScreen' : isTablet ? 'formSheet' : 'overFullScreen';
+  const presentationStyle:
+    | 'fullScreen'
+    | 'formSheet'
+    | 'pageSheet'
+    | 'overFullScreen' =
+    size === 'fullscreen'
+      ? 'fullScreen'
+      : isTablet
+        ? 'formSheet'
+        : 'overFullScreen';
 
   return {
     dimensions: modalSizes[size || 'medium'],
@@ -101,6 +110,11 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
   ...modalProps
 }) => {
   const { dimensions, presentationStyle, isTablet } = useModalBehavior(size);
+  const { height } = useWindowDimensions();
+  const safeMaxHeight =
+    size === 'fullscreen'
+      ? undefined
+      : Math.max(0, Math.floor(height - scale(32)));
 
   return (
     <Modal
@@ -110,7 +124,15 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
     >
       {/* Overlay per modal non-fullscreen su phone */}
       {size !== 'fullscreen' && !isTablet && (
-        <PerfectContainer style={styles.overlay} />
+        <>
+          <PerfectContainer style={styles.overlay} />
+          <PlatformTouchable
+            style={styles.backdropTouchable}
+            onPress={modalProps.onRequestClose}
+            accessibilityRole="button"
+            accessibilityLabel="Chiudi modale"
+          />
+        </>
       )}
 
       {/* Container centrato */}
@@ -127,7 +149,12 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
             {
               width: dimensions.width as DimensionValue,
               maxWidth: dimensions.maxWidth,
-              height: dimensions.height as DimensionValue,
+              ...(dimensions.height === 'auto'
+                ? {}
+                : { height: dimensions.height as DimensionValue }),
+              ...(safeMaxHeight !== undefined
+                ? { maxHeight: safeMaxHeight as unknown as DimensionValue }
+                : {}),
               backgroundColor: backgroundColor || Colors.neutral[0],
             },
             ...(outlined
@@ -141,7 +168,18 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
             ...(containerStyle ? [containerStyle] : []),
           ]}
         >
-          {children}
+          {size === 'fullscreen' ? (
+            <>{children}</>
+          ) : (
+            <PlatformScrollView
+              style={safeMaxHeight ? { maxHeight: safeMaxHeight } : undefined}
+              contentContainerStyle={{ paddingBottom: 0 }}
+              bounces={false}
+              showsVerticalScrollIndicator
+            >
+              {children}
+            </PlatformScrollView>
+          )}
         </PerfectContainer>
       </PerfectContainer>
     </Modal>
@@ -153,6 +191,10 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     // rgba necessario per overlay semi-trasparente del modal
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  backdropTouchable: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'transparent',
   },
   modalWrapper: {
     flex: 1,

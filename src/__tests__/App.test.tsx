@@ -1,6 +1,6 @@
 /**
  * APP ROOT COMPONENT TEST
- * 
+ *
  * Test base dell'entry point dell'applicazione.
  * Verifica che l'app si inizializzi correttamente con tutti i provider necessari.
  */

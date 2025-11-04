@@ -45,7 +45,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           alignSelf: 'stretch',
           width: '100%',
           alignItems: 'center',
-          height: HEADER_INNER_HEIGHT,
+          minHeight: HEADER_INNER_HEIGHT,
           backgroundColor: Colors.neutral[0],
           paddingHorizontal: PerfectSpacing.base,
           paddingTop: HEADER_VERTICAL_PADDING,

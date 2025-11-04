@@ -3,7 +3,12 @@ import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import MapView, { Marker, type Region } from 'react-native-maps';
 import { PerfectContainer } from '../ui/PerfectContainer';
 
-import { BorderRadius, Colors, Shadows, PerfectSpacing } from '../../shared/constants';
+import {
+  BorderRadius,
+  Colors,
+  Shadows,
+  PerfectSpacing,
+} from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText } from '../ui/PerfectText';
 

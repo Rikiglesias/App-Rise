@@ -52,7 +52,10 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
   return (
     <PerfectContainer style={styles.categoryContainer}>
       <PerfectContainer style={styles.categoryHeader}>
-        <PerfectContainer style={styles.donateTitleContainerWrapper} testID="donate-header">
+        <PerfectContainer
+          style={styles.donateTitleContainerWrapper}
+          testID="donate-header"
+        >
           <PlatformTouchable
             style={styles.donateTitleContainer}
             onPress={onInfoPress}
@@ -64,15 +67,17 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
               size={24}
               lines={1}
               immunity={true}
-              testID="donate-title" style={styles.donateCategoryTitle}
+              testID="donate-title"
+              style={styles.donateCategoryTitle}
             >
-              Contribuisci
+              {'\u2764\uFE0F '}Contribuisci
             </PerfectText>
             <PerfectText
               size={16}
               lines={1}
               immunity={true}
-              testID="donate-subtitle" style={styles.donateInlineSubtitle}
+              testID="donate-subtitle"
+              style={styles.donateInlineSubtitle}
             >
               Supporta la lotta contro la fame
             </PerfectText>
@@ -86,7 +91,13 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
             testID="donate-info-button"
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <PerfectIcon name="information" size={infoIconSize} minSize={14} maxSize={18} color={Colors.neutral[0]} />
+            <PerfectIcon
+              name="information"
+              size={infoIconSize}
+              minSize={14}
+              maxSize={18}
+              color={Colors.neutral[0]}
+            />
           </PlatformTouchable>
         </PerfectContainer>
       </PerfectContainer>
@@ -169,7 +180,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
             immunity={true}
             style={styles.exploreTitle}
           >
-            Esplora
+            {'\uD83D\uDD0E '}Esplora
           </PerfectText>
           <PerfectText
             size={16}
@@ -255,8 +266,8 @@ export const CommunityButtonsSection: React.FC<
           style={styles.communityHeaderBackground}
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
-            accessibilityRole="button"
-            accessibilityLabel="Contribuisci"
+          accessibilityRole="button"
+          accessibilityLabel="Contribuisci"
         >
           <PerfectText
             size={20}
@@ -264,7 +275,7 @@ export const CommunityButtonsSection: React.FC<
             immunity={true}
             style={styles.communityTitle}
           >
-            Community
+            {'\uD83E\uDD1D '}Community
           </PerfectText>
           <PerfectText
             size={16}
@@ -307,6 +318,3 @@ export const CommunityButtonsSection: React.FC<
     </PerfectContainer>
   );
 };
-
-
-

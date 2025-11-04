@@ -19,7 +19,8 @@ export const sectionHeaderBackground = (
   variant: 'white' | 'light' = 'white'
 ): ViewStyle => ({
   alignSelf: 'stretch',
-  backgroundColor: variant === 'white' ? Colors.neutral[0] : Colors.neutral[100],
+  backgroundColor:
+    variant === 'white' ? Colors.neutral[0] : Colors.neutral[100],
   borderRadius: scale(16),
   paddingVertical: PerfectSpacing.base,
   paddingHorizontal: PerfectSpacing.lg,

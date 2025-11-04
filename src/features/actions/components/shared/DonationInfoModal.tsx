@@ -9,9 +9,18 @@ import {
   PerfectContainer,
   PerfectModal,
 } from '@/components/ui';
-import { Colors, BorderRadius, Shadows, Typography } from '@/shared/constants/designTokens';
+import {
+  Colors,
+  BorderRadius,
+  Shadows,
+  Typography,
+} from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale, scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
+import {
+  scale,
+  scaleTouch,
+  scaleSpacing,
+} from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 interface DonationInfoModalProps {
@@ -105,7 +114,10 @@ const modalStyles = StyleSheet.create({
 
 const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
   return (
-    <PerfectContainer style={modalStyles.modalContent} testID="donation-modal-content">
+    <PerfectContainer
+      style={modalStyles.modalContent}
+      testID="donation-modal-content"
+    >
       <PerfectContainer style={modalStyles.modalHeader}>
         <PlatformTouchable
           style={modalStyles.closeButton}
@@ -120,7 +132,12 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
       </PerfectContainer>
 
       <PerfectContainer style={modalStyles.centeredTitleContainer}>
-        <PerfectText size={28} lines={1} immunity={true} style={modalStyles.centeredTitle}>
+        <PerfectText
+          size={28}
+          lines={1}
+          immunity={true}
+          style={modalStyles.centeredTitle}
+        >
           Come Donare
         </PerfectText>
         <PerfectContainer style={modalStyles.titleUnderline} />
@@ -130,21 +147,27 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
         <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
           💶 Donazioni monetarie:
         </PerfectText>{' '}
-        Se vuoi fare una donazione monetaria diretta, clicca su &quot;Dona Ora&quot; per contribuire immediatamente alla nostra missione contro la fame.
+        Se vuoi fare una donazione monetaria diretta, clicca su &quot;Dona
+        Ora&quot; per contribuire immediatamente alla nostra missione contro la
+        fame.
       </PerfectText>
 
       <PerfectText size={16} lines={0} style={modalStyles.modalText}>
         <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
           🛍️ Acquisti solidali:
         </PerfectText>{' '}
-        Attraverso il nostro Charity Shop, ogni acquisto dai nostri partner dona automaticamente una percentuale per i nostri programmi. Tu spendi lo stesso prezzo, ma aiuti a combattere la fame!
+        Attraverso il nostro Charity Shop, ogni acquisto dai nostri partner dona
+        automaticamente una percentuale per i nostri programmi. Tu spendi lo
+        stesso prezzo, ma aiuti a combattere la fame!
       </PerfectText>
 
       <PerfectText size={16} lines={0} style={modalStyles.modalText}>
         <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
           🎁 Gift Cards:
         </PerfectText>{' '}
-        Funzionano come gli acquisti: compri una Gift Card a prezzo normale (per te o come regalo), ma una percentuale viene automaticamente donata per la distribuzione di pasti. Aiuti senza costi extra!
+        Funzionano come gli acquisti: compri una Gift Card a prezzo normale (per
+        te o come regalo), ma una percentuale viene automaticamente donata per
+        la distribuzione di pasti. Aiuti senza costi extra!
       </PerfectText>
 
       <PerfectText size={15} lines={2} style={modalStyles.highlightText}>
@@ -154,7 +177,10 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
   );
 };
 
-const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({ visible, onClose }) => {
+const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
+  visible,
+  onClose,
+}) => {
   const { triggerHaptic } = useHapticFeedback();
 
   const handleClose = useCallback(async () => {
@@ -163,10 +189,20 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({ visible, 
   }, [onClose, triggerHaptic]);
 
   return (
-    <PerfectModal visible={visible} onRequestClose={handleClose} size="small" backgroundColor="transparent" padding={0}>
+    <PerfectModal
+      visible={visible}
+      onRequestClose={handleClose}
+      size="small"
+      backgroundColor="transparent"
+      padding={0}
+    >
       <PerfectContainer style={modalStyles.transparentContainer}>
         <LinearGradient
-          colors={[Colors.primary[500], Colors.primary[600], Colors.primary[700]]}
+          colors={[
+            Colors.primary[500],
+            Colors.primary[600],
+            Colors.primary[700],
+          ]}
           style={modalStyles.modalGradientBorder}
         >
           <ModalContent handleClose={handleClose} />

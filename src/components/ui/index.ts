@@ -66,4 +66,3 @@ export {
   AvatarImage as PerfectAvatarImage,
   BannerImage as PerfectBannerImage,
 } from './PerfectImage';
-

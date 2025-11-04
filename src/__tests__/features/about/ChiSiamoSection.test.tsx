@@ -37,9 +37,7 @@ describe('ChiSiamoSection', () => {
       <ChiSiamoSection onInfoPress={onInfoPress} />
     );
 
-    const headerButton = getByLabelText(
-      'Mostra la storia dell\'organizzazione'
-    );
+    const headerButton = getByLabelText("Mostra la storia dell'organizzazione");
     fireEvent.press(headerButton);
 
     expect(onInfoPress).toHaveBeenCalledTimes(1);

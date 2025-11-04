@@ -1,6 +1,6 @@
 /**
  * CONTRIBUTE TAB SCREEN - INTEGRATION TEST
- * 
+ *
  * Test integrazione completa della schermata Actions/Contribute:
  * - Rendering completo con tutte le sezioni
  * - Animazioni header
@@ -74,7 +74,11 @@ jest.mock('@/components/ui', () => ({
   },
   PlatformTouchable: ({ children, onPress, testID, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
-    return <TouchableOpacity onPress={onPress} testID={testID} {...props}>{children}</TouchableOpacity>;
+    return (
+      <TouchableOpacity onPress={onPress} testID={testID} {...props}>
+        {children}
+      </TouchableOpacity>
+    );
   },
   PerfectImage: ({ source, ...props }: any) => {
     const { Image } = require('react-native');
@@ -95,7 +99,10 @@ jest.mock('expo-linear-gradient', () => ({
 }));
 
 // Mock icons
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
+jest.mock(
+  '@expo/vector-icons/MaterialCommunityIcons',
+  () => 'MaterialCommunityIcons'
+);
 
 describe('ContributeTabScreen - Integration Test', () => {
   beforeEach(() => {
@@ -109,7 +116,7 @@ describe('ContributeTabScreen - Integration Test', () => {
         <ContributeTabScreen navigation={mockNavigation as any} />
       </NavigationContainer>
     );
-    
+
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
     });
@@ -121,7 +128,7 @@ describe('ContributeTabScreen - Integration Test', () => {
         <ContributeTabScreen navigation={mockNavigation as any} />
       </NavigationContainer>
     );
-    
+
     await waitFor(() => {
       expect(toJSON()).toMatchObject({
         type: 'View',
@@ -136,7 +143,7 @@ describe('ContributeTabScreen - Integration Test', () => {
         <ContributeTabScreen navigation={mockNavigation as any} />
       </NavigationContainer>
     );
-    
+
     await waitFor(() => {
       expect(toJSON()).toBeTruthy();
     });

@@ -125,10 +125,21 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   const enhancedReferenceWidth = useMemo(() => {
     if (referenceWidth) return referenceWidth;
     if (variant === 'content' && allowsScale && fontScale > adaptiveThreshold) {
-      return DEFAULT_MULTILINE_CONTAINER;
+      // Per zoom alti: non restringere i titoli single-line (lines===1)
+      // per evitare a capo precoce. Per testi realmente multilinea,
+      // mantieni width ottimale (70%).
+      if (lines > 1) return DEFAULT_MULTILINE_CONTAINER;
+      return undefined;
     }
     return undefined;
-  }, [referenceWidth, variant, allowsScale, fontScale, adaptiveThreshold]);
+  }, [
+    referenceWidth,
+    variant,
+    allowsScale,
+    fontScale,
+    adaptiveThreshold,
+    lines,
+  ]);
   const targetWidth = useMemo(
     () => (enhancedReferenceWidth ? scale(enhancedReferenceWidth) : undefined),
     [enhancedReferenceWidth]
@@ -143,7 +154,9 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     return lines;
   }, [variant, allowsScale, fontScale, adaptiveThreshold, lines]);
 
-  const finalEllipsizeMode = useMemo<NonNullable<TextProps['ellipsizeMode']> | undefined>(() => {
+  const finalEllipsizeMode = useMemo<
+    NonNullable<TextProps['ellipsizeMode']> | undefined
+  >(() => {
     if (variant === 'compact') return 'tail';
     // For non-compact, avoid forcing ellipsize to keep snapshots stable and let platform default
     return undefined;
@@ -177,9 +190,9 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     return (
       <View style={{ width: targetWidth, alignSelf: 'center' }}>
         <Text
+          {...immuneProps}
           {...props}
           numberOfLines={effectiveLines}
-          {...immuneProps}
           ellipsizeMode={finalEllipsizeMode}
           style={resolvedStyle}
         >
@@ -192,9 +205,9 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   // Text diretto senza wrapper - per titoli single-line e layout flex/row
   return (
     <Text
+      {...immuneProps}
       {...props}
       numberOfLines={effectiveLines}
-      {...immuneProps}
       ellipsizeMode={finalEllipsizeMode}
       style={resolvedStyle}
     >
@@ -202,5 +215,3 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     </Text>
   );
 };
-
-

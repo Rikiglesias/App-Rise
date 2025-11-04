@@ -7,7 +7,11 @@ import React from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import * as Updates from 'expo-updates';
 import { Colors } from '../constants';
-import { PerfectText, PerfectContainer, PlatformTouchable } from '@/components/ui';
+import {
+  PerfectText,
+  PerfectContainer,
+  PlatformTouchable,
+} from '@/components/ui';
 import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
 import { logger } from '@/shared/utils/logger';
 

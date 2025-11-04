@@ -1,5 +1,10 @@
 import React from 'react';
-import { Platform, ScrollView, ScrollViewProps, type ViewStyle } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  ScrollViewProps,
+  type ViewStyle,
+} from 'react-native';
 import { Surface } from 'react-native-paper';
 import { PlatformBlur } from './PlatformBlur';
 import { PlatformTouchable } from './PlatformTouchable';

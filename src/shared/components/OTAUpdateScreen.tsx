@@ -9,7 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { PerfectModal, PerfectText, PerfectContainer } from '@/components/ui';
 import { useOTAUpdates } from '@/shared/hooks/useOTAUpdates';
-import { Colors, BorderRadius  } from '@/shared/constants/designTokens';
+import { Colors, BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 
 interface OTAUpdateScreenProps {
@@ -66,7 +66,11 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   if (!visible) return null;
 
   return (
-    <PerfectModal visible={visible} size="fullscreen" onRequestClose={onComplete}>
+    <PerfectModal
+      visible={visible}
+      size="fullscreen"
+      onRequestClose={onComplete}
+    >
       <LinearGradient
         colors={Colors.gradients.redToBlack}
         style={styles.container}

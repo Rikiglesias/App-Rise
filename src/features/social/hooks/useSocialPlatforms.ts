@@ -73,4 +73,3 @@ export const useSocialPlatforms = () => {
     socialPlatforms,
   };
 };
-

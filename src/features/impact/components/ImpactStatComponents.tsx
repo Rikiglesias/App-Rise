@@ -215,4 +215,3 @@ const styles = StyleSheet.create({
     color: Colors.neutral[600],
   },
 });
-

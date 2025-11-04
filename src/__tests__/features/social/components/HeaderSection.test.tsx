@@ -41,17 +41,13 @@ describe('HeaderSection', () => {
   });
 
   it('renders correctly', () => {
-    const { toJSON } = render(
-      <HeaderSectionWithTheme />
-    );
+    const { toJSON } = render(<HeaderSectionWithTheme />);
 
     expect(toJSON()).toBeTruthy();
   });
 
   it('maintains consistent structure', () => {
-    const { toJSON } = render(
-      <HeaderSectionWithTheme />
-    );
+    const { toJSON } = render(<HeaderSectionWithTheme />);
 
     expect(toJSON()).toMatchObject({
       type: 'View',
@@ -88,9 +84,7 @@ describe('HeaderSection', () => {
   });
 
   it('handles multiple renders without issues', () => {
-    const { rerender, toJSON } = render(
-      <HeaderSectionWithTheme />
-    );
+    const { rerender, toJSON } = render(<HeaderSectionWithTheme />);
 
     const snapshot1 = toJSON();
     rerender(<HeaderSectionWithTheme />);

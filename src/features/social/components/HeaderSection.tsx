@@ -78,4 +78,3 @@ const styles = {
     paddingHorizontal: PerfectSpacing.sm,
   },
 };
-

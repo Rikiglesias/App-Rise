@@ -31,15 +31,22 @@ const shouldNormalizeDisplayZoom = (): boolean => {
   try {
     const extra: ExpoExtra | undefined =
       (Constants.expoConfig?.extra as ExpoExtra | undefined) ??
-      ((Updates as unknown as { manifest?: { extra?: ExpoExtra } }).manifest
-        ?.extra);
-    const raw = extra?.['displayZoomNormalization'] ?? extra?.features?.['displayZoomNormalization'];
+      (Updates as unknown as { manifest?: { extra?: ExpoExtra } }).manifest
+        ?.extra;
+    const raw =
+      extra?.['displayZoomNormalization'] ??
+      extra?.features?.['displayZoomNormalization'];
     if (raw !== undefined) {
       return raw === true || String(raw).toLowerCase() === 'true';
     }
-    const env = (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } })
-      .process?.env;
-    const rawEnv = env?.EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION ?? env?.ENABLE_DISPLAY_ZOOM_NORMALIZATION;
+    const env = (
+      globalThis as unknown as {
+        process?: { env?: Record<string, string | undefined> };
+      }
+    ).process?.env;
+    const rawEnv =
+      env?.EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION ??
+      env?.ENABLE_DISPLAY_ZOOM_NORMALIZATION;
     return String(rawEnv).toLowerCase() === 'true';
   } catch {
     return false;
@@ -288,11 +295,8 @@ export const scaleText = (value: number): number => {
 export const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
-export const scaleClamp = (
-  value: number,
-  min: number,
-  max: number
-): number => clamp(scale(value), min, max);
+export const scaleClamp = (value: number, min: number, max: number): number =>
+  clamp(scale(value), min, max);
 
 export const scaleIcon = (
   base: number,

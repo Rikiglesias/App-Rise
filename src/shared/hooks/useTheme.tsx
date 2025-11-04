@@ -13,10 +13,9 @@ interface ThemeContextType {
 }
 
 // ThemeProvider now delegates to UniversalThemeProvider (single source of truth)
-export const ThemeProvider: React.FC<{ children: React.ReactNode }>
-  = ({ children }) => (
-  <UniversalThemeProvider>{children}</UniversalThemeProvider>
-);
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <UniversalThemeProvider>{children}</UniversalThemeProvider>;
 
 // Hook adapter: reads mode/toggle from UniversalTheme, exposes brand colors
 export const useTheme = (): ThemeContextType => {

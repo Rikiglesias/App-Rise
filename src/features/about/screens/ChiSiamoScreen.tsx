@@ -140,4 +140,3 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
 };
 
 export default ChiSiamoScreen;
-

@@ -9,7 +9,12 @@ import {
   PerfectModal,
 } from '../ui';
 
-import { Colors, PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
+import {
+  Colors,
+  PerfectSpacing,
+  BorderRadius,
+  Shadows,
+} from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { logDebug } from '../../shared/utils/logger';
 import type { MapModalData } from '@/features/impact/data/mapModalData';
@@ -40,7 +45,11 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
       <PerfectContainer style={styles.modalContainer}>
         {/* Header compatto con gradient */}
         <LinearGradient
-          colors={[Colors.primary[600], Colors.primary[700], Colors.primary[800]]}
+          colors={[
+            Colors.primary[600],
+            Colors.primary[700],
+            Colors.primary[800],
+          ]}
           start={gradientStart}
           end={gradientEnd}
           style={styles.header}
@@ -106,7 +115,12 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
             activeOpacity={0.8}
             onPress={handleCTAPress}
           >
-            <PerfectIcon name="open-in-new" size={20} color={Colors.neutral[0]} style={styles.ctaIcon} />
+            <PerfectIcon
+              name="open-in-new"
+              size={20}
+              color={Colors.neutral[0]}
+              style={styles.ctaIcon}
+            />
             <PerfectText
               size={16}
               lines={1}
@@ -207,5 +221,3 @@ const styles = StyleSheet.create({
 });
 
 export default MapLocationModal;
-
-

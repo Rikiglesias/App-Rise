@@ -5,7 +5,12 @@ import { render } from '@testing-library/react-native';
 jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
   const React = require('react');
   const { Text } = require('react-native');
-  return ({ name, size, color }: any) => React.createElement(Text, { testID: `mdi-${name}-${size}-${color || 'none'}` }, 'icon');
+  return ({ name, size, color }: any) =>
+    React.createElement(
+      Text,
+      { testID: `mdi-${name}-${size}-${color || 'none'}` },
+      'icon'
+    );
 });
 
 // eslint-disable-next-line import/first -- Import dopo mock setup è necessario per test

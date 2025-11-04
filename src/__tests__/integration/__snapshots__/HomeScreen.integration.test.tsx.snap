@@ -134,12 +134,12 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         }
                         textAlign="center"
                       >
-                        Hunger 
+                        Hunger
+                         
                         <Text
                           style={
                             {
                               "color": "#171717",
-                              "fontWeight": "900",
                             }
                           }
                         >
@@ -330,7 +330,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
         >
           <View
             alignItems="center"
-            marginBottom={24}
+            marginBottom={6}
             preset="section"
           >
             <Text
@@ -338,7 +338,17 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               color="#DC2626"
               fontWeight="900"
               lines={1}
-              size={32}
+              size={35}
+              style={
+                {
+                  "textShadowColor": "rgba(255, 30, 0, 0.2)",
+                  "textShadowOffset": {
+                    "height": 3,
+                    "width": 0,
+                  },
+                  "textShadowRadius": 8,
+                }
+              }
               testID="action-title"
               textAlign="center"
             >
@@ -500,28 +510,33 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               >
                 <View
                   style={
-                    {
-                      "alignItems": "center",
-                      "backgroundColor": "#FFFFFF",
-                      "borderRadius": 19.10681688980096,
-                      "flex": 1,
-                      "justifyContent": "space-between",
-                      "minHeight": 171.26140885696634,
-                      "paddingHorizontal": 12,
-                      "paddingVertical": 12,
-                    }
+                    [
+                      {
+                        "alignItems": "center",
+                        "backgroundColor": "#FFFFFF",
+                        "borderRadius": 19.10681688980096,
+                        "flex": 1,
+                        "justifyContent": "space-between",
+                        "minHeight": 171.26140885696634,
+                        "paddingHorizontal": 12,
+                        "paddingVertical": 12,
+                      },
+                      {
+                        "paddingHorizontal": 18,
+                      },
+                    ]
                   }
                 >
                   <Text
                     color="#DC2626"
-                    size={28}
+                    size={30}
                   >
                     chart-line
                   </Text>
                   <Text
                     color="#DC2626"
                     lines={2}
-                    size={20}
+                    size={22}
                     style={
                       {
                         "fontWeight": "700",
@@ -540,6 +555,13 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     alignItems="center"
                     flexDirection="row"
                     gap={12}
+                    style={
+                      [
+                        {
+                          "paddingHorizontal": 6,
+                        },
+                      ]
+                    }
                   >
                     <Text
                       color="#DC2626"
@@ -552,7 +574,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     <Text
                       color="#DC2626"
                       lines={1}
-                      size={16}
+                      size={18}
                       style={
                         {
                           "fontWeight": "700",
@@ -642,28 +664,33 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               >
                 <View
                   style={
-                    {
-                      "alignItems": "center",
-                      "backgroundColor": "#FFFFFF",
-                      "borderRadius": 19.10681688980096,
-                      "flex": 1,
-                      "justifyContent": "space-between",
-                      "minHeight": 171.26140885696634,
-                      "paddingHorizontal": 12,
-                      "paddingVertical": 12,
-                    }
+                    [
+                      {
+                        "alignItems": "center",
+                        "backgroundColor": "#FFFFFF",
+                        "borderRadius": 19.10681688980096,
+                        "flex": 1,
+                        "justifyContent": "space-between",
+                        "minHeight": 171.26140885696634,
+                        "paddingHorizontal": 12,
+                        "paddingVertical": 12,
+                      },
+                      {
+                        "paddingHorizontal": 18,
+                      },
+                    ]
                   }
                 >
                   <Text
                     color="#10B981"
-                    size={28}
+                    size={30}
                   >
                     hand-heart
                   </Text>
                   <Text
                     color="#10B981"
                     lines={2}
-                    size={20}
+                    size={22}
                     style={
                       {
                         "fontWeight": "700",
@@ -682,11 +709,18 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     alignItems="center"
                     flexDirection="row"
                     gap={12}
+                    style={
+                      [
+                        {
+                          "paddingHorizontal": 6,
+                        },
+                      ]
+                    }
                   >
                     <Text
                       color="#10B981"
                       lines={1}
-                      size={16}
+                      size={18}
                       style={
                         {
                           "fontWeight": "700",

@@ -6,7 +6,6 @@ import type { ImpactStackParamList } from './types';
 import { ImpactTabScreen } from '@/features/impact';
 import MapModalScreen from '@/features/impact/screens/MapModalScreen';
 
-
 const ImpactStack = createNativeStackNavigator<ImpactStackParamList>();
 
 const ImpactStackNavigator: React.FC = () => {

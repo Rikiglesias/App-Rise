@@ -4,7 +4,6 @@ import type { StoriaModalProps } from '../types';
 import { modalStyles } from '../styles/modalStyles';
 import { PerfectModal } from '@/components/ui/PerfectModal';
 import {
-  PlatformScrollView,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
@@ -13,7 +12,10 @@ import {
 import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
-export const StoriaModal: React.FC<StoriaModalProps> = ({ visible, onClose }) => {
+export const StoriaModal: React.FC<StoriaModalProps> = ({
+  visible,
+  onClose,
+}) => {
   const { triggerHaptic } = useHapticFeedback();
 
   const handleClose = useCallback(async () => {
@@ -36,116 +38,155 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({ visible, onClose }) =>
       statusBarTranslucent
       animationType="fade"
     >
-      {/* Contenuto modal */}
-      <PerfectContainer style={modalStyles.modalContent}>
-              {/* Header */}
-              <PerfectContainer style={modalStyles.modalHeader}>
-                <PerfectText size={24} lines={1} style={modalStyles.modalTitle}>
-                  La Nostra Storia
+      {/* Wrapper con close fisso */}
+      <PerfectContainer style={{ flex: 1, position: 'relative' }}>
+        <PlatformTouchable
+          onPress={handleClose}
+          style={modalStyles.closeButton}
+          activeOpacity={0.8}
+          accessibilityRole="button"
+          accessibilityLabel="Chiudi modal"
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          testID="storia-modal-close"
+        >
+          <PerfectIcon name="close" size={24} color={Colors.neutral[0]} />
+        </PlatformTouchable>
+
+        {/* Contenuto modal */}
+        <PerfectContainer style={modalStyles.modalContent}>
+          {/* Header */}
+          <PerfectContainer style={modalStyles.modalHeader}>
+            <PerfectText size={24} lines={1} style={modalStyles.modalTitle}>
+              La Nostra Storia
+            </PerfectText>
+          </PerfectContainer>
+
+          {/* Story Content - senza ScrollView perché PerfectModal lo gestisce */}
+          <PerfectContainer style={modalStyles.storyContainer}>
+            <PerfectContainer style={modalStyles.introCard}>
+              <PerfectText size={14} lines={2} style={modalStyles.introText}>
+                Dal 1998, un movimento globale contro la fame
+              </PerfectText>
+            </PerfectContainer>
+
+            <PerfectText size={16} lines={8} style={modalStyles.storyText}>
+              Rise Against Hunger nasce nel 1998 negli Stati Uniti con una
+              missione chiara: combattere la fame nel mondo attraverso la
+              distribuzione di pasti nutrienti e lo sviluppo di programmi
+              sostenibili.
+            </PerfectText>
+
+            <PerfectContainer style={modalStyles.sectionDivider} />
+
+            <PerfectContainer style={modalStyles.italyCard}>
+              <PerfectText size={18} lines={1} style={modalStyles.sectionTitle}>
+                🇮🇹 In Italia
+              </PerfectText>
+              <PerfectText size={15} lines={6} style={modalStyles.cardText}>
+                L&apos;organizzazione arriva in Italia con l&apos;obiettivo di
+                coinvolgere le comunità locali nella lotta contro la fame
+                globale. La nostra sede di Bologna è il cuore operativo che
+                coordina le attività su tutto il territorio nazionale.
+              </PerfectText>
+            </PerfectContainer>
+
+            <PerfectContainer style={modalStyles.sectionDivider} />
+
+            <PerfectText
+              size={20}
+              lines={1}
+              style={modalStyles.mainSectionTitle}
+            >
+              I Nostri Pilastri
+            </PerfectText>
+
+            <PerfectContainer style={modalStyles.pillarsContainer}>
+              <PerfectContainer style={modalStyles.pillarCard}>
+                <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
+                  🍽️
                 </PerfectText>
-                <PlatformTouchable onPress={handleClose} style={modalStyles.closeButton} activeOpacity={0.8}>
-                  <PerfectIcon name="close" size={24} color={Colors.neutral[0]} />
-                </PlatformTouchable>
+                <PerfectText
+                  size={16}
+                  lines={2}
+                  style={modalStyles.pillarTitle}
+                >
+                  Distribuzione Pasti
+                </PerfectText>
+                <PerfectText size={14} lines={3} style={modalStyles.pillarText}>
+                  Organizziamo eventi di confezionamento pasti che coinvolgono
+                  volontari di ogni età
+                </PerfectText>
               </PerfectContainer>
 
-              {/* Story Content */}
-              <PlatformScrollView
-                style={modalStyles.storyScroll}
-                contentContainerStyle={modalStyles.storyContainer}
-                showsVerticalScrollIndicator
+              <PerfectContainer style={modalStyles.pillarCard}>
+                <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
+                  🤝
+                </PerfectText>
+                <PerfectText
+                  size={16}
+                  lines={2}
+                  style={modalStyles.pillarTitle}
+                >
+                  Coinvolgimento Comunitario
+                </PerfectText>
+                <PerfectText size={14} lines={2} style={modalStyles.pillarText}>
+                  Uniamo scuole, aziende e organizzazioni in un impegno
+                  condiviso
+                </PerfectText>
+              </PerfectContainer>
+
+              <PerfectContainer style={modalStyles.pillarCard}>
+                <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
+                  🌍
+                </PerfectText>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  style={modalStyles.pillarTitle}
+                >
+                  Impatto Globale
+                </PerfectText>
+                <PerfectText size={14} lines={3} style={modalStyles.pillarText}>
+                  I pasti confezionati raggiungono comunità vulnerabili in tutto
+                  il mondo
+                </PerfectText>
+              </PerfectContainer>
+
+              <PerfectContainer style={modalStyles.pillarCard}>
+                <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
+                  🎓
+                </PerfectText>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  style={modalStyles.pillarTitle}
+                >
+                  Educazione
+                </PerfectText>
+                <PerfectText size={14} lines={2} style={modalStyles.pillarText}>
+                  Sensibilizziamo sul tema della fame e promuoviamo la
+                  solidarietà
+                </PerfectText>
+              </PerfectContainer>
+            </PerfectContainer>
+
+            <PerfectContainer style={modalStyles.sectionDivider} />
+
+            <PerfectContainer style={modalStyles.finalCard}>
+              <PerfectText size={15} lines={4} style={modalStyles.finalMessage}>
+                Ogni pasto che confezioniamo insieme è un gesto di amore che
+                attraversa i confini e raggiunge chi ne ha più bisogno.
+              </PerfectText>
+              <PerfectText
+                size={16}
+                lines={2}
+                style={modalStyles.finalHighlight}
               >
-                <PerfectContainer style={modalStyles.introCard}>
-                  <PerfectText size={14} lines={2} style={modalStyles.introText}>
-                    Dal 1998, un movimento globale contro la fame
-                  </PerfectText>
-                </PerfectContainer>
-
-                <PerfectText size={16} lines={8} style={modalStyles.storyText}>
-                  Rise Against Hunger nasce nel 1998 negli Stati Uniti con una missione chiara: combattere la fame
-                  nel mondo attraverso la distribuzione di pasti nutrienti e lo sviluppo di programmi sostenibili.
-                </PerfectText>
-
-                <PerfectContainer style={modalStyles.sectionDivider} />
-
-                <PerfectContainer style={modalStyles.italyCard}>
-                  <PerfectText size={18} lines={1} style={modalStyles.sectionTitle}>
-                    🇮🇹 In Italia
-                  </PerfectText>
-                  <PerfectText size={15} lines={6} style={modalStyles.cardText}>
-                    L&apos;organizzazione arriva in Italia con l&apos;obiettivo di coinvolgere le comunità locali nella lotta
-                    contro la fame globale. La nostra sede di Bologna è il cuore operativo che coordina le attività su
-                    tutto il territorio nazionale.
-                  </PerfectText>
-                </PerfectContainer>
-
-                <PerfectContainer style={modalStyles.sectionDivider} />
-
-                <PerfectText size={20} lines={1} style={modalStyles.mainSectionTitle}>
-                  I Nostri Pilastri
-                </PerfectText>
-
-                <PerfectContainer style={modalStyles.pillarsContainer}>
-                  <PerfectContainer style={modalStyles.pillarCard}>
-                    <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                      🍽️
-                    </PerfectText>
-                    <PerfectText size={16} lines={2} style={modalStyles.pillarTitle}>
-                      Distribuzione Pasti
-                    </PerfectText>
-                    <PerfectText size={14} lines={3} style={modalStyles.pillarText}>
-                      Organizziamo eventi di confezionamento pasti che coinvolgono volontari di ogni età
-                    </PerfectText>
-                  </PerfectContainer>
-
-                  <PerfectContainer style={modalStyles.pillarCard}>
-                    <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                      🤝
-                    </PerfectText>
-                    <PerfectText size={16} lines={2} style={modalStyles.pillarTitle}>
-                      Coinvolgimento Comunitario
-                    </PerfectText>
-                    <PerfectText size={14} lines={2} style={modalStyles.pillarText}>
-                      Uniamo scuole, aziende e organizzazioni in un impegno condiviso
-                    </PerfectText>
-                  </PerfectContainer>
-
-                  <PerfectContainer style={modalStyles.pillarCard}>
-                    <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                      🌍
-                    </PerfectText>
-                    <PerfectText size={16} lines={1} style={modalStyles.pillarTitle}>
-                      Impatto Globale
-                    </PerfectText>
-                    <PerfectText size={14} lines={3} style={modalStyles.pillarText}>
-                      I pasti confezionati raggiungono comunità vulnerabili in tutto il mondo
-                    </PerfectText>
-                  </PerfectContainer>
-
-                  <PerfectContainer style={modalStyles.pillarCard}>
-                    <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                      🎓
-                    </PerfectText>
-                    <PerfectText size={16} lines={1} style={modalStyles.pillarTitle}>
-                      Educazione
-                    </PerfectText>
-                    <PerfectText size={14} lines={2} style={modalStyles.pillarText}>
-                      Sensibilizziamo sul tema della fame e promuoviamo la solidarietà
-                    </PerfectText>
-                  </PerfectContainer>
-                </PerfectContainer>
-
-                <PerfectContainer style={modalStyles.sectionDivider} />
-
-                <PerfectContainer style={modalStyles.finalCard}>
-                  <PerfectText size={15} lines={4} style={modalStyles.finalMessage}>
-                    Ogni pasto che confezioniamo insieme è un gesto di amore che attraversa i confini e raggiunge chi
-                    ne ha più bisogno.
-                  </PerfectText>
-                  <PerfectText size={16} lines={2} style={modalStyles.finalHighlight}>
-                    Unisciti a noi in questa missione di speranza.
-                  </PerfectText>
-                </PerfectContainer>
-              </PlatformScrollView>
+                Unisciti a noi in questa missione di speranza.
+              </PerfectText>
+            </PerfectContainer>
+          </PerfectContainer>
+        </PerfectContainer>
       </PerfectContainer>
     </PerfectModal>
   );

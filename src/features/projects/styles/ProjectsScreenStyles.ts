@@ -1,9 +1,6 @@
 import { useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import {
-  BorderRadius,
-  Typography,
-} from '@/shared/constants/designTokens';
+import { BorderRadius, Typography } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
@@ -76,7 +73,10 @@ export const useProjectsScreenStyles = () => {
         },
         content: {
           paddingHorizontal: PerfectSpacing.base,
-          paddingBottom: Platform.OS === 'android' ? PerfectSpacing['5xl'] : PerfectSpacing.xl,
+          paddingBottom:
+            Platform.OS === 'android'
+              ? PerfectSpacing['5xl']
+              : PerfectSpacing.xl,
         },
         sectionTitle: {
           fontWeight: Typography.weights.bold,

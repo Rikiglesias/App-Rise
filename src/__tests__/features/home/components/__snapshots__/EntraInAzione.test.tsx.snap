@@ -13,7 +13,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
     style={
       {
         "alignItems": "center",
-        "marginBottom": 36,
+        "marginBottom": 9,
         "marginVertical": 13.048488293864102,
         "paddingHorizontal": 24,
         "paddingVertical": 24,
@@ -32,12 +32,18 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
         {
           "color": "#DC2626",
           "fontFamily": "System",
-          "fontSize": 52.19395317545641,
+          "fontSize": 57.08713628565545,
           "fontWeight": "900",
           "includeFontPadding": false,
-          "lineHeight": 62.63274381054769,
+          "lineHeight": 68.50456354278653,
           "textAlign": "center",
           "textAlignVertical": "center",
+          "textShadowColor": "rgba(255, 30, 0, 0.2)",
+          "textShadowOffset": {
+            "height": 3,
+            "width": 0,
+          },
+          "textShadowRadius": 8,
         }
       }
       testID="action-title"
@@ -245,7 +251,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
               "flex": 1,
               "justifyContent": "space-between",
               "minHeight": 171.26140885696634,
-              "paddingHorizontal": 12,
+              "paddingHorizontal": 18,
               "paddingVertical": 12,
             }
           }
@@ -253,7 +259,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
           <MaterialCommunityIcons
             color="#DC2626"
             name="chart-line"
-            size={45.66970902852436}
+            size={48.93183110199038}
           />
           <View
             style={
@@ -274,10 +280,10 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 {
                   "color": "#DC2626",
                   "fontFamily": "System",
-                  "fontSize": 32.621220734660255,
+                  "fontSize": 35.88334280812628,
                   "fontWeight": "700",
                   "includeFontPadding": false,
-                  "lineHeight": 39.145464881592304,
+                  "lineHeight": 43.060011369751535,
                   "marginVertical": 6,
                   "textAlign": "center",
                   "textAlignVertical": "center",
@@ -298,6 +304,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 "alignItems": "center",
                 "flexDirection": "row",
                 "gap": 19.572732440796152,
+                "paddingHorizontal": 6,
               }
             }
           >
@@ -317,10 +324,10 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 {
                   "color": "#DC2626",
                   "fontFamily": "System",
-                  "fontSize": 26.096976587728204,
+                  "fontSize": 29.359098661194228,
                   "fontWeight": "700",
                   "includeFontPadding": false,
-                  "lineHeight": 31.316371905273844,
+                  "lineHeight": 35.23091839343307,
                   "textAlign": "left",
                   "textAlignVertical": "center",
                 }
@@ -417,7 +424,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
               "flex": 1,
               "justifyContent": "space-between",
               "minHeight": 171.26140885696634,
-              "paddingHorizontal": 12,
+              "paddingHorizontal": 18,
               "paddingVertical": 12,
             }
           }
@@ -425,7 +432,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
           <MaterialCommunityIcons
             color="#10B981"
             name="hand-heart"
-            size={45.66970902852436}
+            size={48.93183110199038}
           />
           <View
             style={
@@ -446,10 +453,10 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 {
                   "color": "#10B981",
                   "fontFamily": "System",
-                  "fontSize": 32.621220734660255,
+                  "fontSize": 35.88334280812628,
                   "fontWeight": "700",
                   "includeFontPadding": false,
-                  "lineHeight": 39.145464881592304,
+                  "lineHeight": 43.060011369751535,
                   "marginVertical": 6,
                   "textAlign": "center",
                   "textAlignVertical": "center",
@@ -470,6 +477,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 "alignItems": "center",
                 "flexDirection": "row",
                 "gap": 19.572732440796152,
+                "paddingHorizontal": 6,
               }
             }
           >
@@ -484,10 +492,10 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 {
                   "color": "#10B981",
                   "fontFamily": "System",
-                  "fontSize": 26.096976587728204,
+                  "fontSize": 29.359098661194228,
                   "fontWeight": "700",
                   "includeFontPadding": false,
-                  "lineHeight": 31.316371905273844,
+                  "lineHeight": 35.23091839343307,
                   "textAlign": "left",
                   "textAlignVertical": "center",
                 }

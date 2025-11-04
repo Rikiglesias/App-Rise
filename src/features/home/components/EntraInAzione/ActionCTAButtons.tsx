@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, PixelRatio } from 'react-native';
+import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -20,10 +22,30 @@ import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
+// Helper tipizzato per ottenere il threshold
+const getFontScaleThreshold = (): number => {
+  const expoExtra = Constants.expoConfig?.extra as
+    | Record<string, unknown>
+    | undefined;
+  const updatesExtra = (
+    Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }
+  ).manifest?.extra;
+
+  return (
+    (expoExtra?.fontScaleUnlockThreshold as number | undefined) ??
+    (updatesExtra?.fontScaleUnlockThreshold as number | undefined) ??
+    1.3
+  );
+};
+
 const ActionCTAButtonsComponent: React.FC = () => {
   const { triggerHaptic } = useHapticFeedback();
   const navigation =
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
+
+  const fontScale = PixelRatio.getFontScale();
+  const threshold = getFontScaleThreshold();
+  const isLargeFontScale = fontScale > threshold;
 
   const handleImpactPress = useCallback(() => {
     void triggerHaptic('heavy');
@@ -61,10 +83,21 @@ const ActionCTAButtonsComponent: React.FC = () => {
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
         >
-          <PerfectContainer style={styles.buttonContainer}>
-            <PerfectIcon name="chart-line" size={28} color={Colors.primary[500]} />
+          <PerfectContainer
+            style={[
+              styles.buttonContainer,
+              ...(isLargeFontScale
+                ? [{ paddingHorizontal: PerfectSpacing.md }]
+                : []),
+            ]}
+          >
+            <PerfectIcon
+              name="chart-line"
+              size={30}
+              color={Colors.primary[500]}
+            />
             <PerfectText
-              size={20}
+              size={22}
               lines={2}
               color={Colors.primary[500]}
               textAlign="center"
@@ -77,10 +110,20 @@ const ActionCTAButtonsComponent: React.FC = () => {
               flexDirection="row"
               alignItems="center"
               gap={PerfectSpacing.sm}
+              style={[
+                ...(isLargeFontScale
+                  ? [{ paddingHorizontal: PerfectSpacing.xs }]
+                  : []),
+              ]}
             >
-              <PerfectIcon name="arrow-left" size={20} {...IconClamps.chevron} color={Colors.primary[500]} />
+              <PerfectIcon
+                name="arrow-left"
+                size={20}
+                {...IconClamps.chevron}
+                color={Colors.primary[500]}
+              />
               <PerfectText
-                size={16}
+                size={18}
                 lines={1}
                 color={Colors.primary[500]}
                 style={styles.buttonSubtext}
@@ -110,10 +153,21 @@ const ActionCTAButtonsComponent: React.FC = () => {
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
         >
-          <PerfectContainer style={styles.buttonContainer}>
-            <PerfectIcon name="hand-heart" size={28} color={Colors.semantic.success.main} />
+          <PerfectContainer
+            style={[
+              styles.buttonContainer,
+              ...(isLargeFontScale
+                ? [{ paddingHorizontal: PerfectSpacing.md }]
+                : []),
+            ]}
+          >
+            <PerfectIcon
+              name="hand-heart"
+              size={30}
+              color={Colors.semantic.success.main}
+            />
             <PerfectText
-              size={20}
+              size={22}
               lines={2}
               color={Colors.semantic.success.main}
               textAlign="center"
@@ -126,9 +180,14 @@ const ActionCTAButtonsComponent: React.FC = () => {
               flexDirection="row"
               alignItems="center"
               gap={PerfectSpacing.sm}
+              style={[
+                ...(isLargeFontScale
+                  ? [{ paddingHorizontal: PerfectSpacing.xs }]
+                  : []),
+              ]}
             >
               <PerfectText
-                size={16}
+                size={18}
                 lines={1}
                 color={Colors.semantic.success.main}
                 style={styles.buttonSubtext}
@@ -136,7 +195,12 @@ const ActionCTAButtonsComponent: React.FC = () => {
               >
                 Supporta
               </PerfectText>
-              <PerfectIcon name="arrow-right" size={20} {...IconClamps.chevron} color={Colors.semantic.success.main} />
+              <PerfectIcon
+                name="arrow-right"
+                size={20}
+                {...IconClamps.chevron}
+                color={Colors.semantic.success.main}
+              />
             </PerfectContainer>
           </PerfectContainer>
         </LinearGradient>
@@ -173,4 +237,3 @@ const styles = StyleSheet.create({
 });
 
 export const ActionCTAButtons = React.memo(ActionCTAButtonsComponent);
-

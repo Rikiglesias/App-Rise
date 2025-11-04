@@ -1,6 +1,6 @@
 /**
  * ACTION BUTTONS COMPONENT TEST
- * 
+ *
  * Test suite per il componente ActionButtons refactored.
  * Verifica separazione Business Logic / UI e comportamento dei bottoni.
  */
@@ -41,7 +41,10 @@ jest.mock('expo-linear-gradient', () => ({
 }));
 
 // Mock icons
-jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcons');
+jest.mock(
+  '@expo/vector-icons/MaterialCommunityIcons',
+  () => 'MaterialCommunityIcons'
+);
 
 const mockAnimations = {
   fadeAnim: new Animated.Value(1),
@@ -90,7 +93,7 @@ describe('ActionButtons Component', () => {
     expect(screen.getByText(/Seguici/i)).toBeTruthy();
   });
 
-  it('non mostra il DonationInfoModal all\'inizio (prima del tap)', () => {
+  it("non mostra il DonationInfoModal all'inizio (prima del tap)", () => {
     renderWithProviders(
       <ActionButtons animations={mockAnimations} navigation={mockNavigation} />,
       render
@@ -106,7 +109,7 @@ describe('ActionButtons Component', () => {
       <ActionButtons animations={mockAnimations} navigation={mockNavigation} />,
       render
     );
-    
+
     expect(toJSON()).toBeTruthy();
     // Hook interno gestisce dati e handlers
   });

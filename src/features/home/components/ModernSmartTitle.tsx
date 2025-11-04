@@ -54,10 +54,6 @@ const createModernTitleStyles = (spacing: ResponsiveSpacing) =>
       fontWeight: '900' as const,
       color: Colors.primary[500],
     },
-    italiaText: {
-      fontWeight: '900' as const,
-      color: Colors.neutral[900],
-    },
   });
 
 export interface ModernSmartTitleProps {
@@ -68,15 +64,18 @@ export interface ModernSmartTitleProps {
 
 export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform }) => {
-    const responsiveSpacing = useMemo<ResponsiveSpacing>(() => ({
-      containerPadding: scale(10),
-      separatorTopMargin: scale(20),
-      separatorBottomMargin: scale(10),
-      logoSize: 53,
-      separatorLineWidth: scale(104),
-      separatorMaxWidth: scale(320),
-      stackSpacing: scale(4),
-    }), []);
+    const responsiveSpacing = useMemo<ResponsiveSpacing>(
+      () => ({
+        containerPadding: scale(10),
+        separatorTopMargin: scale(20),
+        separatorBottomMargin: scale(10),
+        logoSize: 53,
+        separatorLineWidth: scale(104),
+        separatorMaxWidth: scale(320),
+        stackSpacing: scale(4),
+      }),
+      []
+    );
 
     const styles = useMemo(
       () => createModernTitleStyles(responsiveSpacing),
@@ -144,7 +143,8 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 color={Colors.primary[500]}
                 style={styles.titleText}
               >
-                Hunger <Text style={styles.italiaText}>Italia</Text>
+                Hunger{' '}
+                <Text style={{ color: Colors.neutral[900] }}>Italia</Text>
               </PerfectText>
 
               <PerfectContainer style={styles.titleSeparator}>

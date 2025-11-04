@@ -81,4 +81,3 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default SeguiciScreen;
-

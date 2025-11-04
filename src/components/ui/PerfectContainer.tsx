@@ -16,7 +16,11 @@ import {
   DimensionValue,
   StyleSheet,
 } from 'react-native';
-import { scale, scaleSpacing, scaleTouch } from '../../shared/constants/perfectScale';
+import {
+  scale,
+  scaleSpacing,
+  scaleTouch,
+} from '../../shared/constants/perfectScale';
 import {
   getPerfectShadow,
   type ShadowType,
@@ -163,10 +167,13 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   const { colors } = useUniversalTheme();
 
   // Risolvi preset a runtime
-  const config: ContainerPreset | null = preset ? getPresetRuntime(preset) : null;
+  const config: ContainerPreset | null = preset
+    ? getPresetRuntime(preset)
+    : null;
 
   // Dimensioni (device-aware)
-  const finalPadding = padding !== undefined ? scaleSpacing(padding) : undefined;
+  const finalPadding =
+    padding !== undefined ? scaleSpacing(padding) : undefined;
   const finalPaddingH = (() => {
     if (paddingHorizontal !== undefined) return scaleSpacing(paddingHorizontal);
     if (config?.padding !== undefined) return config.padding;
@@ -179,10 +186,14 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   })();
 
   const finalMargin = margin !== undefined ? scaleSpacing(margin) : undefined;
-  const finalMarginTop = marginTop !== undefined ? scaleSpacing(marginTop) : undefined;
-  const finalMarginBottom = marginBottom !== undefined ? scaleSpacing(marginBottom) : undefined;
-  const finalMarginLeft = marginLeft !== undefined ? scaleSpacing(marginLeft) : undefined;
-  const finalMarginRight = marginRight !== undefined ? scaleSpacing(marginRight) : undefined;
+  const finalMarginTop =
+    marginTop !== undefined ? scaleSpacing(marginTop) : undefined;
+  const finalMarginBottom =
+    marginBottom !== undefined ? scaleSpacing(marginBottom) : undefined;
+  const finalMarginLeft =
+    marginLeft !== undefined ? scaleSpacing(marginLeft) : undefined;
+  const finalMarginRight =
+    marginRight !== undefined ? scaleSpacing(marginRight) : undefined;
   const finalMarginH = (() => {
     if (marginHorizontal !== undefined) return scaleSpacing(marginHorizontal);
     if (config?.marginHorizontal !== undefined) return config.marginHorizontal;
@@ -248,7 +259,9 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
     ...(finalMarginRight && { marginRight: finalMarginRight }),
     ...(finalMarginH && { marginHorizontal: finalMarginH }),
     ...(finalMarginV && { marginVertical: finalMarginV }),
-    ...(finalBackgroundColor !== 'transparent' && { backgroundColor: finalBackgroundColor }),
+    ...(finalBackgroundColor !== 'transparent' && {
+      backgroundColor: finalBackgroundColor,
+    }),
     ...(finalBorderRadius && { borderRadius: finalBorderRadius }),
     ...shadowStyle,
     ...(mergedStyle ?? {}),

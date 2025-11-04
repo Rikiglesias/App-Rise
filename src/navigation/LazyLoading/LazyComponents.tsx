@@ -156,9 +156,7 @@ export const WrappedChiSiamoScreen = withLazyScreen(LazyChiSiamoScreen);
 export const WrappedSeguiciScreen = withLazyScreen(LazySeguiciScreen);
 export const WrappedProjectsScreen = withLazyScreen(LazyProjectsScreen);
 export const WrappedImpatto2024Screen = withLazyScreen(LazyImpatto2024Screen);
-export const WrappedDevelopmentScreen = withLazyScreen(
-  LazyDevelopmentScreen
-);
+export const WrappedDevelopmentScreen = withLazyScreen(LazyDevelopmentScreen);
 
 // =================================================================
 // 🚀 PRELOADING STRATEGIES

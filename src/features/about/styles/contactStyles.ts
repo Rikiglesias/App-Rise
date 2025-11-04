@@ -21,7 +21,7 @@ export const contactSectionStyles = StyleSheet.create({
   },
 
   categoryTitle: {
-    color: Colors.primary[600],
+    color: Colors.primary[500],
     textAlign: 'center',
     letterSpacing: scale(-1.0),
     includeFontPadding: false,

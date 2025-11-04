@@ -82,5 +82,3 @@ export interface HeaderImageSectionProps {
   readonly imageRotation: Animated.AnimatedInterpolation<string>;
   readonly styles: HomeHeaderStyles;
 }
-
-

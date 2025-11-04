@@ -33,7 +33,9 @@ describe('ModernSmartTitle', () => {
       <ModernSmartTitle
         titleAnim={anim}
         titleOpacity={anim as unknown as Animated.AnimatedInterpolation<number>}
-        titleTransform={anim as unknown as Animated.AnimatedInterpolation<number>}
+        titleTransform={
+          anim as unknown as Animated.AnimatedInterpolation<number>
+        }
       />
     );
 

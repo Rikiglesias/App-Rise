@@ -33,7 +33,9 @@ jest.mock('react-native', () => ({
     flatten: jest.fn(style => style || {}),
   },
   Dimensions: {
-    get: jest.fn(() => ({ width: 375, height: 812 })),
+    get: jest.fn(() => ({ width: 390, height: 844, scale: 3, fontScale: 1 })),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
   },
   View: 'View',
   Image: 'Image',

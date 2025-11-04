@@ -85,11 +85,7 @@ const MapModalScreen: React.FC = () => {
           onPress={handleClosePress}
           activeOpacity={0.8}
         >
-          <PerfectIcon
-            name="close"
-            size={24}
-            color={Colors.neutral[0]}
-          />
+          <PerfectIcon name="close" size={24} color={Colors.neutral[0]} />
         </PlatformTouchable>
       </PerfectContainer>
 
@@ -144,5 +140,3 @@ const styles = StyleSheet.create({
 });
 
 export default MapModalScreen;
-
-

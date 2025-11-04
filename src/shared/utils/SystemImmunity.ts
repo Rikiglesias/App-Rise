@@ -21,29 +21,89 @@ import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
 
 // ⚖️ CONFIGURAZIONE ACCESSIBILITÀ BILANCIATA
-const IN_JEST = typeof process !== 'undefined' && !!process?.env?.JEST_WORKER_ID;
+const IN_JEST =
+  typeof process !== 'undefined' && !!process?.env?.JEST_WORKER_ID;
 
 const shouldLockText = (): boolean => {
   try {
     const extra =
       (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-      ((Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
-        .manifest?.extra);
+      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
+        .manifest?.extra;
     const rawFromExtra = extra
-      ? (extra['perfectStrictMode'] as unknown) ??
-        ((extra['perfect'] as Record<string, unknown> | undefined)?.['strictMode'] as unknown)
+      ? ((extra['perfectStrictMode'] as unknown) ??
+        ((extra['perfect'] as Record<string, unknown> | undefined)?.[
+          'strictMode'
+        ] as unknown))
       : undefined;
     if (rawFromExtra !== undefined) {
-      return rawFromExtra === true || String(rawFromExtra).toLowerCase() === 'true';
+      return (
+        rawFromExtra === true || String(rawFromExtra).toLowerCase() === 'true'
+      );
     }
-    const env = (globalThis as unknown as {
-      process?: { env?: Record<string, string | undefined> };
-    }).process?.env;
-    const rawEnv = env?.EXPO_PUBLIC_PERFECT_STRICT_MODE ?? env?.PERFECT_STRICT_MODE;
+    const env = (
+      globalThis as unknown as {
+        process?: { env?: Record<string, string | undefined> };
+      }
+    ).process?.env;
+    const rawEnv =
+      env?.EXPO_PUBLIC_PERFECT_STRICT_MODE ?? env?.PERFECT_STRICT_MODE;
     return String(rawEnv).toLowerCase() === 'true';
   } catch {
     return false;
   }
+};
+
+// Legge un valore configurabile per il limite di font scaling
+const getConfiguredMaxFontScale = (): number => {
+  try {
+    const extra =
+      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
+      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
+        .manifest?.extra;
+    const fromExtra = extra?.['maxFontScale'] as unknown;
+    if (typeof fromExtra === 'number' && isFinite(fromExtra) && fromExtra > 0) {
+      return fromExtra;
+    }
+    const env = (
+      globalThis as unknown as {
+        process?: { env?: Record<string, string | undefined> };
+      }
+    ).process?.env;
+    const rawEnv = env?.EXPO_PUBLIC_MAX_FONT_SCALE ?? env?.MAX_FONT_SCALE;
+    const parsed = rawEnv ? Number(rawEnv) : NaN;
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  } catch {
+    // ignore parsing errors
+  }
+  return 2.0;
+};
+
+// Soglia oltre la quale sbloccare lo scaling di sistema (per piccoli aumenti resta identico)
+const getUnlockFontScaleThreshold = (): number => {
+  try {
+    const extra =
+      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
+      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
+        .manifest?.extra;
+    const fromExtra = extra?.['fontScaleUnlockThreshold'] as unknown;
+    if (typeof fromExtra === 'number' && isFinite(fromExtra) && fromExtra > 0) {
+      return fromExtra;
+    }
+    const env = (
+      globalThis as unknown as {
+        process?: { env?: Record<string, string | undefined> };
+      }
+    ).process?.env;
+    const rawEnv =
+      env?.EXPO_PUBLIC_FONT_SCALE_UNLOCK_THRESHOLD ??
+      env?.FONT_SCALE_UNLOCK_THRESHOLD;
+    const parsed = rawEnv ? Number(rawEnv) : NaN;
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  } catch {
+    // ignore
+  }
+  return 1.3;
 };
 
 const IMMUNITY_CONFIG = {
@@ -59,9 +119,8 @@ const IMMUNITY_CONFIG = {
   // RISPETTA Font Size Android (accessibilità)
   BLOCK_ANDROID_FONT_SIZE: false,
 
-  // Font scale massimo consentito (1.3 = fino a 30% più grande)
-  // Bilancia accessibilità e stabilità layout
-  MAX_FONT_SCALE: IN_JEST ? 1.0 : 2.0,
+  // Font scale massimo consentito (configurabile via extra/env)
+  MAX_FONT_SCALE: IN_JEST ? 1.0 : getConfiguredMaxFontScale(),
 
   // Pixel ratio di riferimento (iPhone 15)
   REFERENCE_PIXEL_RATIO: 3.0,
@@ -87,9 +146,13 @@ export const getSystemFontSettings = () => {
 
 // ⚖️ APPLICA ACCESSIBILITÀ BILANCIATA AI PROPS TEXT
 export const getImmuneTextProps = () => {
+  const sysFontScale = PixelRatio.getFontScale();
+  const unlockThreshold = getUnlockFontScaleThreshold();
+  const allowScaling =
+    !IMMUNITY_CONFIG.BLOCK_FONT_SCALING && sysFontScale > unlockThreshold;
   return {
     // ✅ RISPETTA font scaling sistema (accessibilità)
-    allowFontScaling: !IMMUNITY_CONFIG.BLOCK_FONT_SCALING, // = true
+    allowFontScaling: allowScaling,
 
     // ⚠️ LIMITA moltiplicatore a 1.3x (stabilità layout)
     maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE, // = 1.3
@@ -114,10 +177,3 @@ export const getImmuneTextProps = () => {
     }),
   };
 };
-
-
-
-
-
-
-

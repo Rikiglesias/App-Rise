@@ -6,7 +6,12 @@ import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
   const React = require('react');
   const { Text } = require('react-native');
-  return ({ name, size, color }: any) => React.createElement(Text, { testID: `mdi-${name}-${size}-${color || 'none'}` }, 'icon');
+  return ({ name, size, color }: any) =>
+    React.createElement(
+      Text,
+      { testID: `mdi-${name}-${size}-${color || 'none'}` },
+      'icon'
+    );
 });
 
 // eslint-disable-next-line import/first -- Import dopo mock setup è necessario per test
@@ -22,14 +27,19 @@ describe('MapSection map-search clamp', () => {
 
   it('clamps to min on small devices', () => {
     Dimensions.get = jest.fn().mockReturnValue({ width: 320, height: 568 });
-    const { getByTestId } = renderWithProviders(<MapSection onMapPress={() => {}} />, render);
+    const { getByTestId } = renderWithProviders(
+      <MapSection onMapPress={() => {}} />,
+      render
+    );
     expect(getByTestId(/mdi-map-search-24/)).toBeTruthy();
   });
 
   it('clamps to max on large tablets', () => {
     Dimensions.get = jest.fn().mockReturnValue({ width: 1366, height: 1024 });
-    const { getByTestId } = renderWithProviders(<MapSection onMapPress={() => {}} />, render);
+    const { getByTestId } = renderWithProviders(
+      <MapSection onMapPress={() => {}} />,
+      render
+    );
     expect(getByTestId(/mdi-map-search-32/)).toBeTruthy();
   });
 });
-

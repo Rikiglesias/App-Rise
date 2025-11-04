@@ -88,4 +88,3 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
 export const PerfectIcon = PlatformIcon;
 
 export default PlatformIcon;
-

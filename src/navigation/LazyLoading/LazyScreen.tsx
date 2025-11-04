@@ -6,7 +6,7 @@
 import React, { Suspense } from 'react';
 import { StyleSheet } from 'react-native';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors  } from '@/shared/constants/designTokens';
+import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { logger } from '@/shared/utils/logger';
 

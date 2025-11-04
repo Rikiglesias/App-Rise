@@ -47,9 +47,7 @@ interface PerfectImageProps extends Omit<ImageProps, 'style'> {
 }
 
 // Preset dimensioni calcolati a runtime (no valori scalati all'import)
-const getImagePreset = (
-  preset: NonNullable<PerfectImageProps['preset']>
-) => {
+const getImagePreset = (preset: NonNullable<PerfectImageProps['preset']>) => {
   switch (preset) {
     case 'hero':
       return {
@@ -104,7 +102,8 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   // Risolvi preset o valori custom (runtime)
   const config = preset ? getImagePreset(preset) : null;
 
-  const finalWidth = config?.width ?? (absoluteDimensions ? width : scale(width));
+  const finalWidth =
+    config?.width ?? (absoluteDimensions ? width : scale(width));
   const finalAspectRatio =
     config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4 / 3);
   const finalHeight = height
@@ -146,7 +145,11 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
 
   return (
     <View style={containerStyleCalculated}>
-      <Image {...imageProps} style={imageStyleCalculated} resizeMode={resizeMode} />
+      <Image
+        {...imageProps}
+        style={imageStyleCalculated}
+        resizeMode={resizeMode}
+      />
     </View>
   );
 };
@@ -171,4 +174,3 @@ export const AvatarImage = (props: Omit<PerfectImageProps, 'preset'>) => (
 export const BannerImage = (props: Omit<PerfectImageProps, 'preset'>) => (
   <PerfectImage {...props} preset="banner" />
 );
-

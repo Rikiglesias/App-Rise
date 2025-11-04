@@ -66,14 +66,14 @@ export const modalStyles = StyleSheet.create({
     borderBottomWidth: scale(1),
     borderBottomColor: Colors.neutral[200],
     position: 'relative',
-    height: scale(56),
     minHeight: scale(56),
+    height: 'auto',
     flexShrink: 0,
   },
 
   modalTitle: {
     fontWeight: Typography.weights.black,
-    color: Colors.primary[600],
+    color: Colors.primary[500],
     letterSpacing: 0,
     flex: 1,
     textAlign: 'center',
@@ -84,6 +84,8 @@ export const modalStyles = StyleSheet.create({
     position: 'absolute',
     top: PerfectSpacing.md,
     right: PerfectSpacing.md,
+    zIndex: 9999,
+    elevation: 10,
     ...circularCloseButton(32, Colors.neutral[900]),
   },
 
@@ -113,7 +115,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   highlightText: {
-    color: Colors.primary[600],
+    color: Colors.primary[500],
     fontWeight: Typography.weights.bold,
   },
 
@@ -150,7 +152,7 @@ export const modalStyles = StyleSheet.create({
 
   finalHighlight: {
     fontWeight: Typography.weights.bold,
-    color: Colors.primary[700],
+    color: Colors.primary[500],
     textAlign: 'center',
     lineHeight: scale(24),
     letterSpacing: 0,
@@ -166,7 +168,7 @@ export const modalStyles = StyleSheet.create({
 
   introText: {
     fontWeight: Typography.weights.semibold,
-    color: Colors.primary[700],
+    color: Colors.primary[500],
     textAlign: 'left',
     letterSpacing: 0,
     lineHeight: scale(20),

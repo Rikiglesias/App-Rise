@@ -1,6 +1,6 @@
 /**
  * MAP SECTION COMPONENT TEST
- * 
+ *
  * Test suite per il componente MapSection che mostra
  * la mappa dell'Italia con indicatore cliccabile.
  */
@@ -29,7 +29,11 @@ jest.mock('@/components/ui', () => ({
   },
   PlatformTouchable: ({ children, onPress, ...props }: any) => {
     const { TouchableOpacity } = require('react-native');
-    return <TouchableOpacity onPress={onPress} {...props}>{children}</TouchableOpacity>;
+    return (
+      <TouchableOpacity onPress={onPress} {...props}>
+        {children}
+      </TouchableOpacity>
+    );
   },
 }));
 
@@ -55,10 +59,10 @@ describe('MapSection Component', () => {
     expect(screen.getByText(/Dove Operiamo/i)).toBeTruthy();
   });
 
-  it('dovrebbe mostrare l\'immagine della mappa', () => {
+  it("dovrebbe mostrare l'immagine della mappa", () => {
     const { toJSON } = render(<MapSection onMapPress={mockOnMapPress} />);
     const tree = toJSON();
-    
+
     // Verifica presenza immagine
     expect(tree).toBeTruthy();
   });
@@ -70,20 +74,20 @@ describe('MapSection Component', () => {
 
   it('dovrebbe chiamare onMapPress quando si clicca sulla mappa', () => {
     const { getByText } = render(<MapSection onMapPress={mockOnMapPress} />);
-    
+
     // Trova e clicca l'elemento touchable
     const touchable = getByText(/Tocca per esplorare/i).parent?.parent;
     if (touchable) {
       fireEvent.press(touchable);
     }
-    
+
     expect(mockOnMapPress).toHaveBeenCalled();
   });
 
   it('dovrebbe avere il gradient overlay corretto', () => {
     const { toJSON } = render(<MapSection onMapPress={mockOnMapPress} />);
     const tree = toJSON();
-    
+
     expect(tree).toMatchSnapshot();
   });
 });

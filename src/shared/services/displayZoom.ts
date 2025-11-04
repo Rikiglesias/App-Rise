@@ -25,17 +25,18 @@ export const initDisplayZoom = async (): Promise<void> => {
     const fontScale = PixelRatio.getFontScale();
 
     // Tentativo modulo nativo opzionale (non ancora implementato):
-    type DisplayZoomModule = {
-      getDisplayZoomFactor?: () => Promise<number>;
-      getFactor?: () => Promise<number>;
-    } | undefined;
-    const NativeDisplayZoom = (NativeModules as unknown as { DisplayZoom?: DisplayZoomModule })
-      .DisplayZoom;
+    type DisplayZoomModule =
+      | {
+          getDisplayZoomFactor?: () => Promise<number>;
+          getFactor?: () => Promise<number>;
+        }
+      | undefined;
+    const NativeDisplayZoom = (
+      NativeModules as unknown as { DisplayZoom?: DisplayZoomModule }
+    ).DisplayZoom;
 
     if (NativeDisplayZoom) {
-      const getFactorFn:
-        | (() => Promise<number>)
-        | undefined =
+      const getFactorFn: (() => Promise<number>) | undefined =
         typeof NativeDisplayZoom.getDisplayZoomFactor === 'function'
           ? NativeDisplayZoom.getDisplayZoomFactor.bind(NativeDisplayZoom)
           : typeof NativeDisplayZoom.getFactor === 'function'
@@ -45,7 +46,8 @@ export const initDisplayZoom = async (): Promise<void> => {
       if (getFactorFn) {
         const factor: unknown = await getFactorFn();
 
-        const asNumber = typeof factor === 'number' && isFinite(factor) ? factor : 1.0;
+        const asNumber =
+          typeof factor === 'number' && isFinite(factor) ? factor : 1.0;
         cachedDisplayZoomFactor = asNumber > 0 ? asNumber : 1.0;
       } else {
         // No native getter available
@@ -55,11 +57,19 @@ export const initDisplayZoom = async (): Promise<void> => {
       // Fallback: se non c'è modulo nativo, prova eventuale fattore di test da extra (solo dev)
       const extra =
         (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-        ((Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }).manifest
-          ?.extra);
+        (
+          Updates as unknown as {
+            manifest?: { extra?: Record<string, unknown> };
+          }
+        ).manifest?.extra;
       const testFactor = extra?.displayZoomTestFactor as number | undefined;
       const isDev = typeof __DEV__ !== 'undefined' ? __DEV__ : false;
-      if (isDev && typeof testFactor === 'number' && isFinite(testFactor) && testFactor > 0) {
+      if (
+        isDev &&
+        typeof testFactor === 'number' &&
+        isFinite(testFactor) &&
+        testFactor > 0
+      ) {
         cachedDisplayZoomFactor = testFactor;
       } else {
         cachedDisplayZoomFactor = 1.0;
@@ -71,10 +81,14 @@ export const initDisplayZoom = async (): Promise<void> => {
       fontScale,
       displayZoomFactor: cachedDisplayZoomFactor,
       nativeAvailable: !!NativeDisplayZoom,
-      testFactorFromExtra:
-        ((Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-          ((Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }).manifest
-            ?.extra))?.displayZoomTestFactor,
+      testFactorFromExtra: (
+        (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
+        (
+          Updates as unknown as {
+            manifest?: { extra?: Record<string, unknown> };
+          }
+        ).manifest?.extra
+      )?.displayZoomTestFactor,
     });
   } catch (err) {
     cachedDisplayZoomFactor = 1.0;

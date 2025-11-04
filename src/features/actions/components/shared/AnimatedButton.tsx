@@ -91,4 +91,3 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     </PerfectContainer>
   );
 };
-

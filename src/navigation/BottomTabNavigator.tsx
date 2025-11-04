@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, PixelRatio } from 'react-native';
+import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomTabBarProps,
@@ -18,7 +20,11 @@ import {
 } from '@/components/ui';
 
 // Design Tokens & Hooks
-import { BorderRadius, Colors, Typography } from '@/shared/constants/designTokens';
+import {
+  BorderRadius,
+  Colors,
+  Typography,
+} from '@/shared/constants/designTokens';
 import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
@@ -27,7 +33,6 @@ import { scale } from '@/shared/constants/perfectScale';
 // Direct imports (no lazy loading to avoid spinner)
 import { ContributeTabScreen } from '@/features/actions';
 import HomeScreen from '@/features/home/screens/HomeScreen';
-
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -57,23 +62,32 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
 
-  const tabContainerStyle = useMemo(
-    () => {
-      const radius = scale(32);
-      return [
-        styles.tabBarContainer,
-        {
-          bottom: Math.max(insets.bottom, PerfectSpacing.base),
-          height: scale(95),
-          left: PerfectSpacing.lg,
-          right: PerfectSpacing.lg,
-          borderRadius: radius,
-          overflow: 'hidden' as const,
-        },
-      ];
-    },
-    [insets.bottom]
-  );
+  const tabContainerStyle = useMemo(() => {
+    const radius = scale(32);
+    const extra =
+      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
+      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
+        .manifest?.extra;
+    const unlock = (() => {
+      const v = extra?.['fontScaleUnlockThreshold'] as number | undefined;
+      return typeof v === 'number' && isFinite(v) && v > 0 ? v : 1.3;
+    })();
+    const fontScale = PixelRatio.getFontScale();
+    const isHighZoom = fontScale > unlock;
+    const baseHeight = scale(95);
+    const highZoomHeight = scale(136);
+    return [
+      styles.tabBarContainer,
+      {
+        bottom: Math.max(insets.bottom, PerfectSpacing.base),
+        height: isHighZoom ? highZoomHeight : baseHeight,
+        left: PerfectSpacing.lg,
+        right: PerfectSpacing.lg,
+        borderRadius: radius,
+        overflow: 'hidden' as const,
+      },
+    ];
+  }, [insets.bottom]);
 
   const blurBackground = Platform.select({
     ios: 'rgba(255, 255, 255, 0.35)',
@@ -83,11 +97,11 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
 
   return (
     <PerfectContainer style={tabContainerStyle}>
-      <PlatformBlur 
-        intensity={90} 
-        tint="light" 
+      <PlatformBlur
+        intensity={90}
+        tint="light"
         backgroundColor={blurBackground}
-        style={styles.blurView} 
+        style={styles.blurView}
       />
       <PerfectContainer style={styles.tabBarContent}>
         {state.routes.map((route, index: number) => {
@@ -147,6 +161,22 @@ const ICON_MAP: Record<string, string> = {
   InfoTab: 'hand-heart',
 };
 
+// Helper tipizzato per ottenere il threshold
+const getFontScaleThreshold = (): number => {
+  const expoExtra = Constants.expoConfig?.extra as
+    | Record<string, unknown>
+    | undefined;
+  const updatesExtra = (
+    Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }
+  ).manifest?.extra;
+
+  return (
+    (expoExtra?.fontScaleUnlockThreshold as number | undefined) ??
+    (updatesExtra?.fontScaleUnlockThreshold as number | undefined) ??
+    1.3
+  );
+};
+
 const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   isFocused,
   isCentral,
@@ -155,6 +185,9 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   onLongPress,
   routeName,
 }) => {
+  const fontScale = PixelRatio.getFontScale();
+  const threshold = getFontScaleThreshold();
+  const isLargeFontScale = fontScale > threshold;
   const tabColors = useMemo(() => {
     switch (routeName) {
       case 'ImpactTab':
@@ -183,10 +216,18 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   }, [routeName, isFocused]);
 
   const iconName = useMemo(() => ICON_MAP[routeName] ?? 'circle', [routeName]);
-  const iconSize = useMemo(() => isCentral ? scale(32) : scale(26), [isCentral]);
+  const iconSize = useMemo(
+    () => (isCentral ? scale(32) : scale(26)),
+    [isCentral]
+  );
 
   return (
-    <PerfectContainer style={styles.buttonContainer}>
+    <PerfectContainer
+      style={[
+        styles.buttonContainer,
+        ...(isLargeFontScale ? [{ minHeight: scale(96) }] : []),
+      ]}
+    >
       <PlatformTouchable
         activeOpacity={0.7}
         rippleColor="transparent"
@@ -195,7 +236,10 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
         accessibilityLabel={options.tabBarAccessibilityLabel}
         onPress={onPress}
         onLongPress={onLongPress}
-        style={styles.touchable}
+        style={[
+          styles.touchable,
+          ...(isLargeFontScale ? [{ minHeight: scale(96) }] : []),
+        ]}
       >
         <PerfectContainer style={styles.touchableContent}>
           <PerfectContainer
@@ -207,15 +251,21 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
               },
             ]}
           >
-            <PerfectIcon name={iconName} size={iconSize} color={tabColors.iconColor} />
+            <PerfectIcon
+              name={iconName}
+              size={iconSize}
+              color={tabColors.iconColor}
+            />
           </PerfectContainer>
           <PerfectContainer>
             <PerfectText
               size={16}
               lines={1}
-              variant="compact"
               color={tabColors.labelColor}
-              style={styles.labelText}
+              style={[
+                styles.labelText,
+                ...(isLargeFontScale ? [{ maxWidth: scale(96) }] : []),
+              ]}
             >
               {options.tabBarAccessibilityLabel?.split(' ')[0] ?? 'Tab'}
             </PerfectText>
@@ -347,4 +397,3 @@ const styles = StyleSheet.create({
 });
 
 export default BottomTabNavigator;
-

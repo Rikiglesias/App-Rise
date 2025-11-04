@@ -17,4 +17,3 @@ export const usePerfectTheme = () => {
 };
 
 export type PerfectTheme = ReturnType<typeof usePerfectTheme>;
-
