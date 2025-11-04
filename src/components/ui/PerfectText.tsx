@@ -19,6 +19,7 @@ import {
   View,
   StyleSheet,
   StyleProp,
+  PixelRatio,
 } from 'react-native';
 import {
   scale,
@@ -35,6 +36,11 @@ export interface PerfectTextProps
 
   /** Numero ESATTO di righe (sempre rispettato) */
   lines: number;
+
+  /** Varianti di comportamento per adattività */
+  variant?: 'content' | 'compact';
+  /** Soglia fontScale oltre la quale i testi content si espandono (no tagli) */
+  adaptiveThreshold?: number;
 
   /** Larghezza container (default: 90% screen width) */
   containerWidth?: number;
@@ -80,6 +86,8 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   children,
   size,
   lines,
+  variant = 'content',
+  adaptiveThreshold = 1.2,
   containerWidth,
   fontWeight = 'normal',
   color = Colors.neutral[900],
@@ -91,6 +99,9 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 }) => {
   // Usa scaleText() che ora è scale() puro - proporzionalità perfetta sempre
   const finalScaledFontSize = useMemo(() => scaleText(size), [size]);
+  const immuneProps = getImmuneTextProps();
+  const allowsScale = immuneProps.allowFontScaling !== false;
+  const fontScale = PixelRatio.getFontScale();
 
   // ✅ SISTEMA AUTOMATICO: per testi multilinea applica automaticamente width ottimale
   const shouldApplyAutoWidth = useMemo(() => {
@@ -110,12 +121,32 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     () => shouldApplyAutoWidth,
     [shouldApplyAutoWidth]
   );
+  // Adattività: se non c'è referenceWidth ma serve allargare per font grande
+  const enhancedReferenceWidth = useMemo(() => {
+    if (referenceWidth) return referenceWidth;
+    if (variant === 'content' && allowsScale && fontScale > adaptiveThreshold) {
+      return DEFAULT_MULTILINE_CONTAINER;
+    }
+    return undefined;
+  }, [referenceWidth, variant, allowsScale, fontScale, adaptiveThreshold]);
   const targetWidth = useMemo(
-    () => (referenceWidth ? scale(referenceWidth) : undefined),
-    [referenceWidth]
+    () => (enhancedReferenceWidth ? scale(enhancedReferenceWidth) : undefined),
+    [enhancedReferenceWidth]
   );
 
-  const immuneProps = getImmuneTextProps();
+  // (già calcolati sopra)
+
+  // Adattività: per variant 'content' e fontScale alto -> nessun taglio
+  const effectiveLines = useMemo(() => {
+    if (variant === 'compact') return 1;
+    if (allowsScale && fontScale > adaptiveThreshold) return undefined; // lascia andare a capo
+    return lines;
+  }, [variant, allowsScale, fontScale, adaptiveThreshold, lines]);
+
+  const finalEllipsizeMode = useMemo<NonNullable<TextProps['ellipsizeMode']> | undefined>(() => {
+    if (variant === 'compact') return 'tail';
+    return 'clip';
+  }, [variant]);
 
   const resolvedStyle = useMemo(() => {
     const mergedStyle = style ? StyleSheet.flatten(style) : undefined;
@@ -141,13 +172,14 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
   // Se width è necessario (manuale o automatico) → usa wrapper con width fissa
   // Altrimenti → Text diretto che si adatta al contenuto (flex/row friendly)
-  if (referenceWidth && targetWidth) {
+  if (enhancedReferenceWidth && targetWidth) {
     return (
       <View style={{ width: targetWidth, alignSelf: 'center' }}>
         <Text
           {...props}
-          numberOfLines={lines}
+          numberOfLines={effectiveLines}
           {...immuneProps}
+          ellipsizeMode={finalEllipsizeMode}
           style={resolvedStyle}
         >
           {children}
@@ -160,11 +192,14 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   return (
     <Text
       {...props}
-      numberOfLines={lines}
+      numberOfLines={effectiveLines}
       {...immuneProps}
+      ellipsizeMode={finalEllipsizeMode}
       style={resolvedStyle}
     >
       {children}
     </Text>
   );
 };
+
+

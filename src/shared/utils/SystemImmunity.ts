@@ -17,13 +17,38 @@
  */
 
 import { PixelRatio, Platform } from 'react-native';
+import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 
 // ⚖️ CONFIGURAZIONE ACCESSIBILITÀ BILANCIATA
 const IN_JEST = typeof process !== 'undefined' && !!process?.env?.JEST_WORKER_ID;
 
+const shouldLockText = (): boolean => {
+  try {
+    const extra =
+      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
+      ((Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
+        .manifest?.extra);
+    const rawFromExtra = extra
+      ? (extra['perfectStrictMode'] as unknown) ??
+        ((extra['perfect'] as Record<string, unknown> | undefined)?.['strictMode'] as unknown)
+      : undefined;
+    if (rawFromExtra !== undefined) {
+      return rawFromExtra === true || String(rawFromExtra).toLowerCase() === 'true';
+    }
+    const env = (globalThis as unknown as {
+      process?: { env?: Record<string, string | undefined> };
+    }).process?.env;
+    const rawEnv = env?.EXPO_PUBLIC_PERFECT_STRICT_MODE ?? env?.PERFECT_STRICT_MODE;
+    return String(rawEnv).toLowerCase() === 'true';
+  } catch {
+    return false;
+  }
+};
+
 const IMMUNITY_CONFIG = {
   // RISPETTA scaling utente (accessibilità)
-  BLOCK_FONT_SCALING: IN_JEST ? true : false,
+  BLOCK_FONT_SCALING: IN_JEST ? true : shouldLockText(),
 
   // Forza density pixel ratio fisso (stabilità)
   FORCE_FIXED_DENSITY: true,
@@ -36,7 +61,7 @@ const IMMUNITY_CONFIG = {
 
   // Font scale massimo consentito (1.3 = fino a 30% più grande)
   // Bilancia accessibilità e stabilità layout
-  MAX_FONT_SCALE: IN_JEST ? 1.0 : 1.3,
+  MAX_FONT_SCALE: IN_JEST ? 1.0 : 2.0,
 
   // Pixel ratio di riferimento (iPhone 15)
   REFERENCE_PIXEL_RATIO: 3.0,
@@ -89,6 +114,10 @@ export const getImmuneTextProps = () => {
     }),
   };
 };
+
+
+
+
 
 
 

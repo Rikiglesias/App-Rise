@@ -7,6 +7,9 @@
  */
 
 import { Dimensions } from 'react-native';
+import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
+import { getDisplayZoomFactor } from '../services/displayZoom';
 
 // REFERENCE: iPhone 15 (device di riferimento)
 export const LOGICAL_REFERENCE = {
@@ -14,6 +17,30 @@ export const LOGICAL_REFERENCE = {
   height: 852,
   scale: 2,
 } as const;
+
+/**
+ * Feature flag: abilita normalizzazione Display Zoom.
+ * Usa env EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION === 'true'.
+ * Default: disabilitato per rollout sicuro.
+ */
+const shouldNormalizeDisplayZoom = (): boolean => {
+  try {
+    const extra =
+      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
+      ((Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }).manifest
+        ?.extra);
+    const raw = (extra as any)?.displayZoomNormalization ?? (extra as any)?.features?.displayZoomNormalization;
+    if (raw !== undefined) {
+      return raw === true || String(raw).toLowerCase() === 'true';
+    }
+    const env = (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } })
+      .process?.env;
+    const rawEnv = env?.EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION ?? env?.ENABLE_DISPLAY_ZOOM_NORMALIZATION;
+    return String(rawEnv).toLowerCase() === 'true';
+  } catch {
+    return false;
+  }
+};
 
 /**
  * SCALE - Scaling basato su DIAGONALE dello schermo
@@ -47,10 +74,16 @@ export const scale = (value: number): number => {
     const baseWidth = Math.min(width, height);
     const baseHeight = Math.max(width, height);
 
+    // Opzionale: normalizzazione Display Zoom (feature flag via env)
+    const normalize = shouldNormalizeDisplayZoom();
+    const zoomFactor = normalize ? getDisplayZoomFactor() : 1.0;
+    const normWidth = baseWidth * zoomFactor;
+    const normHeight = baseHeight * zoomFactor;
+
     // Calcola diagonale usando Teorema di Pitagora
     // Questo rappresenta la "grandezza percepita" dello schermo
     const deviceDiagonal = Math.sqrt(
-      baseWidth * baseWidth + baseHeight * baseHeight
+      normWidth * normWidth + normHeight * normHeight
     );
 
     // Diagonale di riferimento (iPhone 15)
@@ -95,9 +128,15 @@ export const scaleWithDimensions = (
     const baseWidth = Math.min(width, height);
     const baseHeight = Math.max(width, height);
 
+    // Opzionale: normalizzazione Display Zoom (feature flag via env)
+    const normalize = shouldNormalizeDisplayZoom();
+    const zoomFactor = normalize ? getDisplayZoomFactor() : 1.0;
+    const normWidth = baseWidth * zoomFactor;
+    const normHeight = baseHeight * zoomFactor;
+
     // Calcola diagonale
     const deviceDiagonal = Math.sqrt(
-      baseWidth * baseWidth + baseHeight * baseHeight
+      normWidth * normWidth + normHeight * normHeight
     );
 
     const referenceDiagonal = Math.sqrt(

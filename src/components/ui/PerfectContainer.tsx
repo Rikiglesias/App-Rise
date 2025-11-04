@@ -23,6 +23,18 @@ import {
 } from '../../shared/constants/perfectShadow';
 import { useUniversalTheme } from '../../shared/theme/UniversalTheme';
 
+type ContainerPreset = {
+  padding?: number;
+  paddingHorizontal?: number;
+  paddingVertical?: number;
+  backgroundColor?: 'primary' | 'secondary' | 'card' | 'modal' | 'transparent';
+  flex?: number;
+  borderRadius?: number;
+  shadow?: ShadowType | boolean;
+  marginHorizontal?: number;
+  marginVertical?: number;
+};
+
 interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
   /** Preset per layout comuni */
   preset?: 'page' | 'card' | 'section' | 'modal' | 'header' | 'footer';
@@ -75,44 +87,52 @@ interface PerfectContainerProps extends Omit<ViewProps, 'style'> {
   style?: ViewStyle | ViewStyle[];
 }
 
-// 🎨 PRESET CONTAINER (riferimento iPhone 15) - Device-aware automatico
-const CONTAINER_PRESETS = {
-  page: {
-    padding: scaleSpacing(20),
-    backgroundColor: 'primary' as const,
-    flex: 1,
-  },
-  card: {
-    padding: scaleSpacing(16),
-    backgroundColor: 'card' as const,
-    borderRadius: scale(12),
-    shadow: 'light' as const,
-  },
-  section: {
-    padding: scaleSpacing(16),
-    marginVertical: scale(8),
-    backgroundColor: 'transparent' as const,
-  },
-  modal: {
-    padding: scaleSpacing(24),
-    backgroundColor: 'modal' as const,
-    borderRadius: scale(16),
-    shadow: 'strong' as const,
-    marginHorizontal: scaleSpacing(20),
-  },
-  header: {
-    paddingHorizontal: scaleSpacing(20),
-    paddingVertical: scaleSpacing(12),
-    backgroundColor: 'primary' as const,
-  },
-  footer: {
-    paddingHorizontal: scaleSpacing(20),
-    paddingVertical: scaleSpacing(16),
-    backgroundColor: 'secondary' as const,
-  },
-} as const;
-
-// 🎭 SHADOW STYLES - Ora gestito da PerfectShadow system (scalato automaticamente)
+// Preset calcolati a runtime (evita valori scalati all'import)
+const getPresetRuntime = (
+  preset: NonNullable<PerfectContainerProps['preset']>
+): ContainerPreset => {
+  switch (preset) {
+    case 'page':
+      return {
+        padding: scaleSpacing(20),
+        backgroundColor: 'primary' as const,
+        flex: 1,
+      };
+    case 'card':
+      return {
+        padding: scaleSpacing(16),
+        backgroundColor: 'card' as const,
+        borderRadius: scale(12),
+        shadow: 'light' as const,
+      };
+    case 'section':
+      return {
+        padding: scaleSpacing(16),
+        marginVertical: scale(8),
+        backgroundColor: 'transparent' as const,
+      };
+    case 'modal':
+      return {
+        padding: scaleSpacing(24),
+        backgroundColor: 'modal' as const,
+        borderRadius: scale(16),
+        shadow: 'strong' as const,
+        marginHorizontal: scaleSpacing(20),
+      };
+    case 'header':
+      return {
+        paddingHorizontal: scaleSpacing(20),
+        paddingVertical: scaleSpacing(12),
+        backgroundColor: 'primary' as const,
+      };
+    case 'footer':
+      return {
+        paddingHorizontal: scaleSpacing(20),
+        paddingVertical: scaleSpacing(16),
+        backgroundColor: 'secondary' as const,
+      };
+  }
+};
 
 export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   preset,
@@ -142,20 +162,19 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
 }) => {
   const { colors } = useUniversalTheme();
 
-  // 🎯 RISOLVI PRESET O VALORI CUSTOM
-  const config = preset ? CONTAINER_PRESETS[preset] : null;
+  // Risolvi preset a runtime
+  const config: ContainerPreset | null = preset ? getPresetRuntime(preset) : null;
 
-  // 📏 CALCOLA DIMENSIONI - Device-aware automatico
-  // Padding/Margin: scaleSpacing (limita su iPad)
+  // Dimensioni (device-aware)
   const finalPadding = padding !== undefined ? scaleSpacing(padding) : undefined;
   const finalPaddingH = (() => {
     if (paddingHorizontal !== undefined) return scaleSpacing(paddingHorizontal);
-    if (config && 'padding' in config) return config.padding;
+    if (config?.padding !== undefined) return config.padding;
     return undefined;
   })();
   const finalPaddingV = (() => {
     if (paddingVertical !== undefined) return scaleSpacing(paddingVertical);
-    if (config && 'padding' in config) return config.padding;
+    if (config?.padding !== undefined) return config.padding;
     return undefined;
   })();
 
@@ -166,36 +185,38 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   const finalMarginRight = marginRight !== undefined ? scaleSpacing(marginRight) : undefined;
   const finalMarginH = (() => {
     if (marginHorizontal !== undefined) return scaleSpacing(marginHorizontal);
-    if (config && 'marginHorizontal' in config) return config.marginHorizontal;
+    if (config?.marginHorizontal !== undefined) return config.marginHorizontal;
     return undefined;
   })();
   const finalMarginV = (() => {
     if (marginVertical !== undefined) return scaleSpacing(marginVertical);
-    if (config && 'marginVertical' in config) return config.marginVertical;
+    if (config?.marginVertical !== undefined) return config.marginVertical;
     return undefined;
   })();
 
-  // Width: scale puro (proporzionale)
+  // Width/Height
   const finalWidth = typeof width === 'number' ? scale(width) : width;
-  // Height: scaleTouch se è un touch target, altrimenti scale
   const finalHeight = height ? scaleTouch(height) : undefined;
   const finalBorderRadius = (() => {
     if (borderRadius !== undefined) return scale(borderRadius);
-    if (config && 'borderRadius' in config) return config.borderRadius;
+    if (config?.borderRadius !== undefined) return config.borderRadius;
     return undefined;
   })();
   const finalGap = gap ? scale(gap) : undefined;
 
-  // 🎨 RISOLVI COLORI AUTOMATICI
+  // Background
   const finalBackgroundColor = (() => {
     const bgKey = backgroundColor ?? config?.backgroundColor;
     if (!bgKey || bgKey === 'transparent') return 'transparent';
     return colors[bgKey as keyof typeof colors];
   })();
 
-  // 🎭 RISOLVI OMBRA (con Perfect Shadow - scalato automaticamente)
-  const finalShadow =
-    shadow ?? (config && 'shadow' in config ? config.shadow : undefined);
+  // Shadow
+  const finalShadow = ((): ShadowType | boolean | undefined => {
+    if (shadow !== undefined) return shadow;
+    if (config?.shadow !== undefined) return config.shadow;
+    return undefined;
+  })();
   const shadowStyle = (() => {
     if (finalShadow && typeof finalShadow === 'string') {
       return getPerfectShadow(finalShadow as ShadowType);
@@ -206,24 +227,17 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
     return {};
   })();
 
-  // 🏗️ COMPONI STILE FINALE
+  // Compose
   const mergedStyle = Array.isArray(style) ? StyleSheet.flatten(style) : style;
   const containerStyle: ViewStyle = {
-    // Preset properties
-    ...(config && 'flex' in config && { flex: config.flex }),
-
-    // Layout properties
+    ...(config?.flex !== undefined && { flex: config.flex }),
     ...(flex && { flex }),
     ...(flexDirection && { flexDirection }),
     ...(justifyContent && { justifyContent }),
     ...(alignItems && { alignItems }),
     ...(finalGap && { gap: finalGap }),
-
-    // Dimensions
     ...(finalWidth && { width: finalWidth as DimensionValue }),
     ...(finalHeight && { height: finalHeight }),
-
-    // Spacing
     ...(finalPadding && { padding: finalPadding }),
     ...(finalPaddingH && { paddingHorizontal: finalPaddingH }),
     ...(finalPaddingV && { paddingVertical: finalPaddingV }),
@@ -234,21 +248,11 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
     ...(finalMarginRight && { marginRight: finalMarginRight }),
     ...(finalMarginH && { marginHorizontal: finalMarginH }),
     ...(finalMarginV && { marginVertical: finalMarginV }),
-
-    // Appearance
-    ...(finalBackgroundColor !== 'transparent' && {
-      backgroundColor: finalBackgroundColor,
-    }),
+    ...(finalBackgroundColor !== 'transparent' && { backgroundColor: finalBackgroundColor }),
     ...(finalBorderRadius && { borderRadius: finalBorderRadius }),
-
-    // Shadow
     ...shadowStyle,
-
-    // Custom style override (supports style arrays)
     ...(mergedStyle ?? {}),
   };
-
-  // Debug info removed for production
 
   return (
     <View style={containerStyle} {...props}>
@@ -257,7 +261,7 @@ export const PerfectContainer: React.FC<PerfectContainerProps> = ({
   );
 };
 
-// 🎯 HELPER SHORTCUTS PER PRESET
+// Shortcuts
 export const PageContainer = (props: Omit<PerfectContainerProps, 'preset'>) => (
   <PerfectContainer {...props} preset="page" />
 );

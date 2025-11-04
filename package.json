@@ -4,6 +4,12 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
+    "android:client": "node scripts/build-android-client.js",
+    "dev:android": "node scripts/start-zoom.js",
+    "dev:android:strict": "node scripts/start-strict.js",
+    "dev:expo-go": "node scripts/start-zoom-test.js",
+    "ios:build:dev": "node scripts/build-ios-dev.js",
+    "ios:build:strict": "node scripts/build-ios-dev-strict.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -129,7 +135,8 @@
     "prettier": "^3.1.0",
     "react-test-renderer": "^19.1.0",
     "ts-prune": "^0.10.3",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "@expo/config-plugins": "^8.0.8"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [

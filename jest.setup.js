@@ -57,41 +57,7 @@ jest.mock('react-native/Libraries/Settings/Settings', () => ({
   },
 }));
 
-// Mock UniversalTheme per evitare errori "must be used within UniversalThemeProvider"
-jest.mock('@/shared/theme/UniversalTheme', () => {
-  const defaultTheme = {
-    colors: {
-      primary: '#DC2626',
-      background: '#FFFFFF',
-      surface: '#F5F5F5',
-      text: '#1F2937',
-      textSecondary: '#6B7280',
-      border: '#E5E7EB',
-      error: '#EF4444',
-      success: '#10B981',
-      warning: '#F59E0B',
-    },
-    spacing: {
-      xs: 4,
-      sm: 8,
-      md: 16,
-      lg: 24,
-      xl: 32,
-    },
-    borderRadius: {
-      sm: 4,
-      md: 8,
-      lg: 12,
-      xl: 16,
-    },
-  };
-
-  return {
-    UniversalThemeProvider: ({ children }) => children,
-    useUniversalTheme: () => defaultTheme,
-    UniversalTheme: defaultTheme,
-  };
-});
+// Do NOT mock UniversalTheme here: some tests validate real behavior.
 
 // Provide SafeArea defaults to avoid provider errors in integration tests
 jest.mock('react-native-safe-area-context', () => {

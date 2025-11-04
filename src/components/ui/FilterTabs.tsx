@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
 import { TouchableRipple } from 'react-native-paper';
@@ -21,8 +21,8 @@ interface FilterTabsProps {
   readonly showCounts?: boolean;
 }
 
-// Stili statici con Colors tokens interni
-const styles = StyleSheet.create({
+// Stili runtime con valori scalati calcolati al render
+const makeStyles = () => StyleSheet.create({
   container: {
     marginBottom: PerfectSpacing.base,
   },
@@ -95,10 +95,11 @@ interface TabItemProps {
   isActive: boolean;
   onPress: () => void;
   showCounts: boolean;
+  styles: ReturnType<typeof makeStyles>;
 }
 
 const TabItem: React.FC<TabItemProps> = React.memo(
-  ({ tab, isActive, onPress, showCounts }) => (
+  ({ tab, isActive, onPress, showCounts, styles }) => (
   <PerfectContainer style={styles.tabContainer}>
     <TouchableRipple
       onPress={onPress}
@@ -118,6 +119,7 @@ const TabItem: React.FC<TabItemProps> = React.memo(
             size={14}
             lines={1}
             fontWeight="400"
+            variant="compact"
             style={[
               styles.tabIcon,
               isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
@@ -131,6 +133,7 @@ const TabItem: React.FC<TabItemProps> = React.memo(
           size={14}
           lines={1}
           fontWeight="400"
+          variant="compact"
           style={[
             styles.tabLabel,
             isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
@@ -144,6 +147,7 @@ const TabItem: React.FC<TabItemProps> = React.memo(
             size={12}
             lines={1}
             fontWeight="400"
+            variant="compact"
             style={[
               styles.tabCount,
               isActive ? styles.activeTabCount : styles.inactiveTabCount,
@@ -166,6 +170,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   onTabPress,
   showCounts = true,
 }) => {
+  const styles = useMemo(makeStyles, [activeTab, showCounts]);
 
   const createTabPressHandler = useCallback(
     (tabId: string) => () => onTabPress(tabId),
@@ -187,6 +192,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
             isActive={tab.id === activeTab}
             onPress={createTabPressHandler(tab.id)}
             showCounts={showCounts}
+            styles={styles}
           />
         ))}
       </ScrollView>

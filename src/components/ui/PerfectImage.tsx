@@ -46,41 +46,48 @@ interface PerfectImageProps extends Omit<ImageProps, 'style'> {
   absoluteDimensions?: boolean;
 }
 
-// 🎨 PRESET DIMENSIONI (riferimento iPhone 15)
-const IMAGE_PRESETS = {
-  hero: {
-    width: scale(350),
-    aspectRatio: 16 / 9,
-    borderRadius: scale(12),
-    shadow: 'medium',
-  },
-  card: {
-    width: scale(280),
-    aspectRatio: 4 / 3,
-    borderRadius: scale(8),
-    shadow: 'light',
-  },
-  thumbnail: {
-    width: scale(80),
-    aspectRatio: 1,
-    borderRadius: scale(8),
-    shadow: false,
-  },
-  avatar: {
-    width: scale(60),
-    aspectRatio: 1,
-    borderRadius: scale(30),
-    shadow: 'light',
-  },
-  banner: {
-    width: scale(380),
-    aspectRatio: 3 / 1,
-    borderRadius: scale(6),
-    shadow: false,
-  },
-} as const;
-
-// 🎭 SHADOW STYLES - Usa getPerfectShadow per shadows scalati
+// Preset dimensioni calcolati a runtime (no valori scalati all'import)
+const getImagePreset = (
+  preset: NonNullable<PerfectImageProps['preset']>
+) => {
+  switch (preset) {
+    case 'hero':
+      return {
+        width: scale(350),
+        aspectRatio: 16 / 9,
+        borderRadius: scale(12),
+        shadow: 'medium' as const,
+      };
+    case 'card':
+      return {
+        width: scale(280),
+        aspectRatio: 4 / 3,
+        borderRadius: scale(8),
+        shadow: 'light' as const,
+      };
+    case 'thumbnail':
+      return {
+        width: scale(80),
+        aspectRatio: 1,
+        borderRadius: scale(8),
+        shadow: false as const,
+      };
+    case 'avatar':
+      return {
+        width: scale(60),
+        aspectRatio: 1,
+        borderRadius: scale(30),
+        shadow: 'light' as const,
+      };
+    case 'banner':
+      return {
+        width: scale(380),
+        aspectRatio: 3 / 1,
+        borderRadius: scale(6),
+        shadow: false as const,
+      };
+  }
+};
 
 export const PerfectImage: React.FC<PerfectImageProps> = ({
   width,
@@ -94,17 +101,21 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   absoluteDimensions = false,
   ...imageProps
 }) => {
-  // 🎯 RISOLVI PRESET O VALORI CUSTOM
-  const config = preset ? IMAGE_PRESETS[preset] : null;
+  // Risolvi preset o valori custom (runtime)
+  const config = preset ? getImagePreset(preset) : null;
 
   const finalWidth = config?.width ?? (absoluteDimensions ? width : scale(width));
   const finalAspectRatio =
     config?.aspectRatio ?? aspectRatio ?? (height ? width / height : 4 / 3);
-  const finalHeight = height ? (absoluteDimensions ? height : scale(height)) : finalWidth / finalAspectRatio;
+  const finalHeight = height
+    ? absoluteDimensions
+      ? height
+      : scale(height)
+    : finalWidth / finalAspectRatio;
   const finalBorderRadius = config?.borderRadius ?? scale(borderRadius ?? 0);
   const finalShadow = config?.shadow ?? shadow ?? false;
 
-  // 🎨 CALCOLA STILI
+  // Calcola stili (shadow scalati)
   const shadowStyle = (() => {
     if (finalShadow && typeof finalShadow === 'string') {
       return getPerfectShadow(finalShadow as 'light' | 'medium' | 'strong');
@@ -135,16 +146,12 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
 
   return (
     <View style={containerStyleCalculated}>
-      <Image
-        {...imageProps}
-        style={imageStyleCalculated}
-        resizeMode={resizeMode}
-      />
+      <Image {...imageProps} style={imageStyleCalculated} resizeMode={resizeMode} />
     </View>
   );
 };
 
-// 🎯 HELPER SHORTCUTS PER PRESET
+// Shortcuts per preset
 export const HeroImage = (props: Omit<PerfectImageProps, 'preset'>) => (
   <PerfectImage {...props} preset="hero" />
 );
@@ -164,3 +171,4 @@ export const AvatarImage = (props: Omit<PerfectImageProps, 'preset'>) => (
 export const BannerImage = (props: Omit<PerfectImageProps, 'preset'>) => (
   <PerfectImage {...props} preset="banner" />
 );
+

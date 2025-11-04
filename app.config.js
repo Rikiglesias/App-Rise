@@ -28,7 +28,7 @@ export default {
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
-    version: '1.2.4',
+    version: '1.2.5',
     orientation: 'portrait',
     icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',
@@ -54,6 +54,20 @@ export default {
       performanceMonitoring:
         process.env.ENABLE_PERFORMANCE_MONITORING === 'true',
       logLevel: process.env.LOG_LEVEL || 'info',
+      // Feature flags e opzioni di runtime esposte a JS
+      displayZoomNormalization:
+        String(process.env.EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION ?? process.env.ENABLE_DISPLAY_ZOOM_NORMALIZATION)
+          .toLowerCase() === 'true',
+      // Modalità "Perfect Strict": blocca il font scaling di sistema per testi identici
+      perfectStrictMode:
+        String(process.env.EXPO_PUBLIC_PERFECT_STRICT_MODE ?? process.env.PERFECT_STRICT_MODE)
+          .toLowerCase() === 'true',
+      // Fattore di test per Expo Go (solo sviluppo). Esempio: 1.2
+      displayZoomTestFactor: (() => {
+        const raw = process.env.EXPO_PUBLIC_DISPLAY_ZOOM_TEST_FACTOR ?? process.env.DISPLAY_ZOOM_TEST_FACTOR;
+        const num = raw ? Number(raw) : NaN;
+        return Number.isFinite(num) && num > 0 ? num : undefined;
+      })(),
       eas: {
         projectId: '52a33b0f-dec1-4674-812b-de5b888c911a',
       },
@@ -66,7 +80,7 @@ export default {
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
-      buildNumber: process.env.IOS_BUILD_NUMBER || '19',
+      buildNumber: process.env.IOS_BUILD_NUMBER || '20',
       icon: './assets/icons/app/app-icon.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
@@ -138,7 +152,7 @@ export default {
     assetBundlePatterns: ['**/*'],
 
     // Plugin richiesti
-    plugins: ['expo-secure-store', 'expo-updates', 'expo-font'],
+    plugins: ['expo-secure-store', 'expo-updates', 'expo-font', './plugins/with-display-zoom'],
 
     // Aggiornamenti OTA
     updates: updatesConfig,
