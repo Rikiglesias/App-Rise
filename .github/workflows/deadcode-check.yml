@@ -1,7 +1,18 @@
-name: Deadcode Scan
+name: 🧹 Deadcode Scan
 
 on:
   workflow_dispatch:
+    inputs:
+      fail_on_threshold:
+        description: 'Fail if deadcode exceeds threshold'
+        required: false
+        default: false
+        type: boolean
+      threshold:
+        description: 'Max number of unused exports allowed'
+        required: false
+        default: 50
+        type: number
   pull_request:
     branches:
       - master
@@ -11,27 +22,137 @@ on:
       - master
       - develop
 
+env:
+  NODE_VERSION: '20.x'
+  CACHE_VERSION: 'v1'
+
 jobs:
   deadcode:
-    name: Deadcode Scan
+    name: 🧹 Deadcode Analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Node
+      - name: 📱 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: 📦 Install Dependencies
+        run: npm ci --prefer-offline --no-audit
 
-      - name: Run deadcode scan (non-blocking)
-        run: npm run deadcode:ci || echo "⚠️ Deadcode found - review recommended but not blocking"
-
-      - name: Upload deadcode report (log)
-        if: always()
+      - name: 🔍 Run Deadcode Scan
+        id: deadcode-scan
+        continue-on-error: true
         run: |
-          echo "Deadcode scan completed (optional). See logs above for details."
+          echo "🔍 Running ts-prune to detect unused exports..."
+          
+          # Run ts-prune and save output
+          npx ts-prune -u -e > deadcode-report.txt 2>&1 || true
+          
+          # Count unused exports
+          DEADCODE_COUNT=$(grep -c "used in module" deadcode-report.txt || echo "0")
+          echo "deadcode_count=$DEADCODE_COUNT" >> $GITHUB_OUTPUT
+          
+          # Create summary
+          echo "## 🧹 Deadcode Analysis Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Total unused exports found:** $DEADCODE_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "$DEADCODE_COUNT" -eq 0 ]; then
+            echo "✅ No deadcode detected! Clean codebase." >> $GITHUB_STEP_SUMMARY
+            echo "status=clean" >> $GITHUB_OUTPUT
+          elif [ "$DEADCODE_COUNT" -lt 10 ]; then
+            echo "🟢 Minimal deadcode detected ($DEADCODE_COUNT exports)" >> $GITHUB_STEP_SUMMARY
+            echo "status=minimal" >> $GITHUB_OUTPUT
+          elif [ "$DEADCODE_COUNT" -lt 30 ]; then
+            echo "🟡 Moderate deadcode detected ($DEADCODE_COUNT exports)" >> $GITHUB_STEP_SUMMARY
+            echo "status=moderate" >> $GITHUB_OUTPUT
+          else
+            echo "🔴 High deadcode detected ($DEADCODE_COUNT exports)" >> $GITHUB_STEP_SUMMARY
+            echo "status=high" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Top Unused Exports" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          head -20 deadcode-report.txt >> $GITHUB_STEP_SUMMARY || true
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          
+          # Check threshold if enabled
+          THRESHOLD=${{ github.event.inputs.threshold || 50 }}
+          if [[ "${{ github.event.inputs.fail_on_threshold }}" == "true" ]] && [ "$DEADCODE_COUNT" -gt "$THRESHOLD" ]; then
+            echo "❌ Deadcode count ($DEADCODE_COUNT) exceeds threshold ($THRESHOLD)" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: 📊 Upload Deadcode Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deadcode-report
+          path: deadcode-report.txt
+          retention-days: 30
+
+      - name: 💬 Comment on PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const deadcodeCount = '${{ steps.deadcode-scan.outputs.deadcode_count }}';
+            const status = '${{ steps.deadcode-scan.outputs.status }}';
+            
+            let emoji = '✅';
+            let statusText = 'Clean';
+            let color = '🟢';
+            
+            if (status === 'minimal') {
+              emoji = '🟢';
+              statusText = 'Minimal';
+            } else if (status === 'moderate') {
+              emoji = '🟡';
+              statusText = 'Moderate';
+              color = '🟡';
+            } else if (status === 'high') {
+              emoji = '🔴';
+              statusText = 'High';
+              color = '🔴';
+            }
+            
+            // Read top 10 entries from report
+            let topIssues = '';
+            try {
+              const report = fs.readFileSync('deadcode-report.txt', 'utf8');
+              const lines = report.split('\n').filter(l => l.trim()).slice(0, 10);
+              if (lines.length > 0) {
+                topIssues = '\n\n<details>\n<summary>📋 Top Unused Exports (click to expand)</summary>\n\n```\n' + 
+                           lines.join('\n') + 
+                           '\n```\n\n</details>';
+              }
+            } catch (e) {
+              console.log('Could not read report file');
+            }
+            
+            const body = '## 🧹 Deadcode Scan Results\n\n' +
+              emoji + ' **Status:** ' + statusText + '\n' +
+              '**Unused exports found:** ' + deadcodeCount + '\n\n' +
+              (deadcodeCount === '0' ? '🎉 Excellent! No unused exports detected.' : color + ' Consider reviewing and removing unused exports to keep the codebase clean.') +
+              topIssues + '\n\n' +
+              '💡 **Tip:** Run `npm run deadcode` locally to see the full report.\n' +
+              '📊 Full report available in workflow artifacts.';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

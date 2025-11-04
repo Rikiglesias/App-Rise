@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, Text } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { PerfectImage } from '@/components/ui/PerfectImage';
@@ -144,7 +144,14 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 style={styles.titleText}
               >
                 Hunger{' '}
-                <Text style={{ color: Colors.neutral[900] }}>Italia</Text>
+                <PerfectText
+                  size={44}
+                  lines={1}
+                  fontWeight="900"
+                  color={Colors.neutral[900]}
+                >
+                  Italia
+                </PerfectText>
               </PerfectText>
 
               <PerfectContainer style={styles.titleSeparator}>

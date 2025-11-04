@@ -137,11 +137,10 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         Hunger
                          
                         <Text
-                          style={
-                            {
-                              "color": "#171717",
-                            }
-                          }
+                          color="#171717"
+                          fontWeight="900"
+                          lines={1}
+                          size={44}
                         >
                           Italia
                         </Text>
