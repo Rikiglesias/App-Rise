@@ -77,20 +77,9 @@ jobs:
             exit 0
           fi
 
-          # Check commit message for ALL triggers (consolidated from all workflows)
-          # On PR: use PR title or last commit message from the head ref
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            COMMIT_MSG="${{ github.event.pull_request.title }}"
-            echo "📝 PR title: $COMMIT_MSG"
-            # Also check last commit message in PR
-            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
-            echo "📝 Last commit in PR: $LAST_COMMIT_MSG"
-            # Combine both for checking
-            COMMIT_MSG="$COMMIT_MSG $LAST_COMMIT_MSG"
-          else
-            COMMIT_MSG="${{ github.event.head_commit.message }}"
-            echo "📝 Commit message: $COMMIT_MSG"
-          fi
+          # Check commit message for ALL triggers
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          echo "📝 Commit message: $COMMIT_MSG"
 
           # Build triggers
           if [[ "$COMMIT_MSG" =~ \[build\]|\[build\ all\] ]]; then
@@ -125,7 +114,7 @@ jobs:
             exit 0
           fi
 
-          # OTA triggers (already handled in ota-update job)
+          # OTA triggers
           if [[ "$COMMIT_MSG" =~ \[ota\]|\[hotfix\]|^hotfix: ]]; then
             echo "🔄 OTA Update will be triggered"
           fi
@@ -137,7 +126,6 @@ jobs:
             BASE_SHA="${{ github.event.before }}"
           fi
 
-          # Get changed files
           CHANGED_FILES=$(git diff --name-only $BASE_SHA..HEAD || echo "")
           echo "Changed files: $CHANGED_FILES"
 
@@ -182,26 +170,21 @@ jobs:
 
       - name: 📦 Install Dependencies (with cache)
         run: |
-          # Use npm ci with cache for faster installs
           npm ci --prefer-offline --no-audit
 
       - name: 🔍 Run ${{ matrix.check }}
         run: |
           case "${{ matrix.check }}" in
             "typescript")
-              echo "🔍 TypeScript Check"
               npx tsc --noEmit --skipLibCheck
               ;;
             "eslint")
-              echo "📝 ESLint Check"
               npx eslint "src/**/*.{ts,tsx}" --max-warnings 0 --cache
               ;;
             "prettier")
-              echo "🎨 Prettier Check"
               npx prettier --check "src/**/*.{ts,tsx}" --cache
               ;;
             "tests")
-              echo "🧪 Unit Tests"
               npm test -- --coverage --watchAll=false --maxWorkers=2
               ;;
           esac
@@ -295,26 +278,12 @@ jobs:
 
       - name: 🍎 Build iOS
         run: |
-          echo "🍎 Building iOS..."
           eas build --platform ios --profile production-store --non-interactive --wait
 
       - name: 📤 Submit to App Store
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: |
-          echo "📤 Submitting to App Store..."
           eas submit --platform ios --latest --non-interactive --profile production-store
-
-      - name: 💬 Comment on commit (iOS Success)
-        if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.repos.createCommitComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: context.sha,
-              body: '🍎 **iOS Build & Submit Completed!**\n\n✅ Build completed on EAS\n✅ Submitted to App Store Connect\n📱 Check TestFlight: Available within 10-30 minutes\n🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia'
-            })
 
   build-android:
     name: 🤖 Android Build
@@ -334,6 +303,11 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci --prefer-offline --no-audit
 
+      - name: 🔧 Setup Google Service Account
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > google-service-account.json
+          echo "✅ Google Service Account configured"
+
       - name: 🔧 Setup EAS
         uses: expo/expo-github-action@v8
         with:
@@ -343,59 +317,27 @@ jobs:
 
       - name: 🤖 Build Android
         run: |
-          echo "🤖 Building Android..."
           eas build --platform android --profile production-store --non-interactive --wait
 
       - name: 📤 Submit to Google Play
         id: submit-android
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         continue-on-error: true
         run: |
-          echo "📤 Submitting to Google Play..."
           if eas submit --platform android --latest --non-interactive; then
             echo "submitted=true" >> $GITHUB_OUTPUT
           else
             echo "submitted=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: 💬 Comment on commit (Android Success)
-        if: success() && steps.submit-android.outputs.submitted == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.repos.createCommitComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: context.sha,
-              body: '🤖 **Android Build & Submit Completed!**\n\n✅ Build completed on EAS\n✅ Submitted to Google Play Store\n📱 Check Google Play Console: Available within 1-2 hours\n🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia'
-            })
-
-      - name: 💬 Comment on commit (Android Build Only)
-        if: success() && steps.submit-android.outputs.submitted == 'false'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.repos.createCommitComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: context.sha,
-              body: '🤖 **Android Build Completed!**\n\n✅ Build completed on EAS\n⚠️ Auto-submit skipped (Google Play service account not configured)\n📋 Manual submit: `eas submit --platform android --latest`\n🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia'
-            })
-
   # ===================================================================
-  # OTA UPDATES AUTOMATICI
+  # UNIT TESTS (Dedicated 'test' check)
   # ===================================================================
-  ota-update:
-    name: 🔄 OTA Update
+  unit-tests:
+    name: test
     runs-on: ubuntu-latest
-    needs: [detect-changes, quality-checks]
-    if: |
-      ((contains(github.event.head_commit.message, '[ota]') || 
-        contains(github.event.head_commit.message, '[hotfix]') ||
-        contains(github.event.head_commit.message, 'hotfix:') ||
-        github.event.inputs.force_ota == 'true') &&
-       needs.quality-checks.result == 'success') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.force_ota == 'true')
+    needs: detect-changes
+    if: github.event_name == 'pull_request' || needs.detect-changes.outputs.should-test == 'true'
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -409,30 +351,34 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci --prefer-offline --no-audit
 
-      - name: 🔧 Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          expo-version: ${{ env.EXPO_CLI_VERSION }}
-          eas-version: ${{ env.EAS_CLI_VERSION }}
-          token: ${{ secrets.EXPO_TOKEN }}
+      - name: 🧪 Run Unit Tests
+        run: npm test -- --coverage --watchAll=false --maxWorkers=2
 
-      - name: 🔄 Deploy OTA Update
+  # ===================================================================
+  # BUILD SUMMARY ('build' check aggregating iOS+Android)
+  # ===================================================================
+  build-summary:
+    name: build
+    runs-on: ubuntu-latest
+    needs: [build-ios, build-android]
+    if: always()
+    steps:
+      - name: 📊 Evaluate build results
         run: |
-          echo "🔄 Deploying OTA Update..."
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
-          eas update --branch production --message "$COMMIT_MSG" --non-interactive
-          echo "✅ OTA Update deployed successfully"
-
-      - name: 💬 Comment on commit
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.repos.createCommitComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: context.sha,
-              body: '🔄 **OTA Update Deployed!**\n\n✅ Update published to production branch\n📱 Users will receive update on next app launch\n🔗 Monitor: https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia/updates'
-            })
+          IOS="${{ needs.build-ios.result }}"
+          ANDROID="${{ needs.build-android.result }}"
+          echo "iOS result: $IOS"
+          echo "Android result: $ANDROID"
+          if [ "$IOS" = "success" ] && [ "$ANDROID" = "success" ]; then
+            exit 0
+          fi
+          if [ "$IOS" = "skipped" ] && [ "$ANDROID" = "skipped" ]; then
+            exit 0
+          fi
+          if [ "$IOS" = "failure" ] || [ "$ANDROID" = "failure" ]; then
+            exit 1
+          fi
+          exit 0
 
   # ===================================================================
   # BUNDLE ANALYSIS & SECURITY SCAN
@@ -457,40 +403,16 @@ jobs:
 
       - name: 📊 Bundle Analysis
         run: |
-          echo "📊 Analyzing bundle size..."
           npm run bundle-analysis || echo "Bundle analysis script not found, using basic analysis"
-
-          # Basic bundle size check
           if [ -d "dist" ]; then
             BUNDLE_SIZE=$(du -sh dist/ | cut -f1)
-            echo "📦 Bundle size: $BUNDLE_SIZE"
             echo "BUNDLE_SIZE=$BUNDLE_SIZE" >> $GITHUB_ENV
           fi
 
-          # Check for large dependencies
-          echo "📋 Top 10 largest dependencies:"
-          npm ls --depth=0 --json | jq -r '.dependencies | to_entries[] | "\(.key): \(.value.version)"' | head -10 || echo "Could not analyze dependencies"
-
       - name: 🔒 Security Scan
         run: |
-          echo "🔒 Running security scan..."
-
-          # NPM Audit
-          echo "📋 NPM Audit Results:"
-          npm audit --audit-level high || echo "⚠️ Security vulnerabilities found - check npm audit for details"
-
-          # Check for known vulnerable packages
-          echo "🔍 Checking for known vulnerable packages..."
+          npm audit --audit-level high || echo "⚠️ Security vulnerabilities found"
           npx audit-ci --high || echo "⚠️ High severity vulnerabilities detected"
-
-      - name: 📊 Upload Analysis Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-analysis-results
-          path: |
-            dist/
-            bundle-analysis.json
-          retention-days: 7
 
   # ===================================================================
   # DEPLOYMENT SUMMARY
@@ -507,156 +429,11 @@ jobs:
         build-android,
         ota-update,
         bundle-analysis,
+        unit-tests,
+        build-summary,
       ]
     if: always()
     steps:
       - name: 📊 Generate Summary
         run: |
           echo "## 🚀 CI/CD Pipeline Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          # Quality Checks
-          echo "### 🔍 Quality Checks" >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ needs.quality-checks.result }}" == "success" ]]; then
-            echo "✅ All quality checks passed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Visual Regression
-          echo "### 🎯 Visual Regression" >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ needs.visual-regression.result }}" == "success" ]]; then
-            echo "✅ Visual regression tests passed" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.visual-regression.result }}" == "skipped" ]]; then
-            echo "⏭️ Visual regression tests skipped" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Visual regression tests failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Builds
-          echo "### 📱 Builds" >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ needs.build-ios.result }}" == "success" ]]; then
-            echo "🍎 iOS: ✅ Success" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.build-ios.result }}" == "skipped" ]]; then
-            echo "🍎 iOS: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "🍎 iOS: ❌ Failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [[ "${{ needs.build-android.result }}" == "success" ]]; then
-            echo "🤖 Android: ✅ Success" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.build-android.result }}" == "skipped" ]]; then
-            echo "🤖 Android: ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "🤖 Android: ❌ Failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # OTA Updates
-          echo "### 🔄 OTA Updates" >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ needs.ota-update.result }}" == "success" ]]; then
-            echo "✅ OTA Update deployed successfully" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.ota-update.result }}" == "skipped" ]]; then
-            echo "⏭️ OTA Update skipped (no [ota] or [hotfix] trigger)" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ OTA Update failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Bundle Analysis
-          echo "### 📊 Bundle Analysis" >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ needs.bundle-analysis.result }}" == "success" ]]; then
-            echo "✅ Bundle analysis completed" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.bundle-analysis.result }}" == "skipped" ]]; then
-            echo "⏭️ Bundle analysis skipped" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Bundle analysis failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)" >> $GITHUB_STEP_SUMMARY
-
-      - name: 💬 Comment on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const summary = `## 🚀 CI/CD Pipeline Results
-
-            ### 🔍 Quality Checks
-            ${{ needs.quality-checks.result == 'success' && '✅ All quality checks passed' || '❌ Quality checks failed' }}
-
-            ### 🎯 Visual Regression
-            ${{ needs.visual-regression.result == 'success' && '✅ Visual regression tests passed' || needs.visual-regression.result == 'skipped' && '⏭️ Visual regression tests skipped' || '❌ Visual regression tests failed' }}
-
-            ### 📱 Builds
-            🍎 iOS: ${{ needs.build-ios.result == 'success' && '✅ Success' || needs.build-ios.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}
-            🤖 Android: ${{ needs.build-android.result == 'success' && '✅ Success' || needs.build-android.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}
-
-            🔗 [Monitor EAS Builds](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)`;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: summary
-            });
-  # ===================================================================
-  # UNIT TESTS (Dedicated job to expose a 'test' check)
-  # ===================================================================
-  unit-tests:
-    name: test
-    runs-on: ubuntu-latest
-    needs: detect-changes
-    if: github.event_name == 'pull_request' || needs.detect-changes.outputs.should-test == 'true'
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
-
-      - name: 📱 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: 📦 Install Dependencies
-        run: npm ci --prefer-offline --no-audit
-
-      - name: 🧪 Run Unit Tests
-        run: npm test -- --coverage --watchAll=false --maxWorkers=2
-
-  # ===================================================================
-  # BUILD SUMMARY (single 'build' check summarizing iOS+Android builds)
-  # ===================================================================
-  build-summary:
-    name: build
-    runs-on: ubuntu-latest
-    needs: [build-ios, build-android]
-    if: always()
-    steps:
-      - name: 📊 Evaluate build results
-        run: |
-          IOS="${{ needs.build-ios.result }}"
-          ANDROID="${{ needs.build-android.result }}"
-
-          echo "iOS result: $IOS"
-          echo "Android result: $ANDROID"
-
-          # Pass if both succeeded OR both skipped (no build required)
-          if [ "$IOS" = "success" ] && [ "$ANDROID" = "success" ]; then
-            echo "✅ Both builds succeeded"
-            exit 0
-          fi
-
-          if [ "$IOS" = "skipped" ] && [ "$ANDROID" = "skipped" ]; then
-            echo "ℹ️ Builds skipped (no build required) — marking as pass"
-            exit 0
-          fi
-
-          # Fail only if at least one actually ran and failed
-          if [ "$IOS" = "failure" ] || [ "$ANDROID" = "failure" ]; then
-            echo "❌ One or both builds failed"
-            exit 1
-          fi
-
-          # Mixed results (e.g., one skipped, one success) → pass
-          echo "ℹ️ Mixed results (success/skipped) — marking as pass"
-          exit 0
