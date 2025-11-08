@@ -29,6 +29,7 @@
     "deploy:android": "pwsh ./scripts/deploy-android.ps1",
     "deploy:android:build-only": "pwsh ./scripts/deploy-android.ps1 -SkipSubmit",
     "deploy:android:submit-only": "pwsh ./scripts/deploy-android.ps1 -SkipBuild",
+    "verify:google-play": "node scripts/verify-google-play-setup.js",
     "preview": "eas build --profile preview",
     "update": "eas update",
     "update:dev": "eas update --branch development --message",
@@ -101,7 +102,8 @@
     "react-native-svg": "15.12.1",
     "react-native-web": "^0.21.0",
     "react-native-worklets": "^0.5.1",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.8",
+    "@expo/config-plugins": "^8.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -128,6 +130,7 @@
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.1.0",
     "react-test-renderer": "^19.1.0",
+    "ts-prune": "^0.10.3",
     "typescript": "~5.9.2"
   },
   "lint-staged": {
