@@ -303,6 +303,11 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci --prefer-offline --no-audit
 
+      - name: 🔧 Setup Google Service Account
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > google-service-account.json
+          echo "✅ Google Service Account configured"
+
       - name: 🔧 Setup EAS
         uses: expo/expo-github-action@v8
         with:
