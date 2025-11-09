@@ -28,6 +28,7 @@ import {
 import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 // Lazy Screens (only for HomeScreen due to export issues)
 // Direct imports (no lazy loading to avoid spinner)
@@ -289,38 +290,42 @@ const renderTabBar = (props: BottomTabBarProps) => (
   <AdvancedTabBar {...props} />
 );
 
-const BottomTabNavigator: React.FC = () => (
-  <Tab.Navigator
-    initialRouteName="HomeTab"
-    screenOptions={{
-      headerShown: false,
-      lazy: true, // Lazy loading: migliora cold start; preloading mirato se serve
-    }}
-    tabBar={renderTabBar}
-  >
-    <Tab.Screen
-      name="ImpactTab"
-      component={ImpactStackNavigator}
-      options={{
-        tabBarAccessibilityLabel: 'Impatto Globale',
+const BottomTabNavigator: React.FC = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Tab.Navigator
+      initialRouteName="HomeTab"
+      screenOptions={{
+        headerShown: false,
+        lazy: true, // Lazy loading: migliora cold start; preloading mirato se serve
       }}
-    />
-    <Tab.Screen
-      name="HomeTab"
-      component={HomeScreen}
-      options={{
-        tabBarAccessibilityLabel: 'Home Principale',
-      }}
-    />
-    <Tab.Screen
-      name="InfoTab"
-      component={ContributeTabScreen}
-      options={{
-        tabBarAccessibilityLabel: 'Azioni Utili',
-      }}
-    />
-  </Tab.Navigator>
-);
+      tabBar={renderTabBar}
+    >
+      <Tab.Screen
+        name="ImpactTab"
+        component={ImpactStackNavigator}
+        options={{
+          tabBarAccessibilityLabel: t('navigation.impact'),
+        }}
+      />
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeScreen}
+        options={{
+          tabBarAccessibilityLabel: t('navigation.home'),
+        }}
+      />
+      <Tab.Screen
+        name="InfoTab"
+        component={ContributeTabScreen}
+        options={{
+          tabBarAccessibilityLabel: t('navigation.actions'),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 // =================================================================
 // 🎨 MODERN STYLES

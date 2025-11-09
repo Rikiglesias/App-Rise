@@ -132,6 +132,12 @@ export default {
         'CAMERA', // QR code scanning per donazioni
         'INTERNET', // Comunicazione API
         'ACCESS_NETWORK_STATE', // Monitoraggio stato rete
+        // Nota: com.google.android.gms.permission.AD_ID non necessario
+        // perché l'app NON usa l'Advertising ID
+      ],
+      // Dichiarazione Google Play per Android 13+
+      blockedPermissions: [
+        'com.google.android.gms.permission.AD_ID', // App non usa advertising
       ],
       // Configurazioni sicurezza enterprise
       networkSecurityConfig:
@@ -164,7 +170,12 @@ export default {
     assetBundlePatterns: ['**/*'],
 
     // Plugin richiesti
-    plugins: ['expo-secure-store', 'expo-updates', 'expo-font'],
+    plugins: [
+      'expo-secure-store',
+      'expo-updates',
+      'expo-font',
+      'expo-localization',
+    ],
 
     // Aggiornamenti OTA
     updates: updatesConfig,

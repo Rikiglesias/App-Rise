@@ -15,6 +15,7 @@ export {
   useThemeColors,
   useThemeStyles,
 } from './useTheme';
+export { useTranslation } from './useTranslation';
 
 // Responsive System Hooks - ELIMINATI (ora usa Perfect System)
 // useResponsive, useIntelligentFontScaling, useBreakpointAware: NON ESISTONO PIÙ
