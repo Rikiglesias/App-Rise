@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Upptäck hur du kan hjälpa',
     featuredTitle: 'Utvalda',
     newsTitle: 'Senaste Nytt',
+    actionTitle: '⚡ Agera',
+    actionMainText: 'Gå med oss i kampen \nmot världssvälten',
+    actionSubText: 'Varje åtgärd räknas för att\nförändra liv',
+    ctaImpactLabel: 'Upptäck vår påverkan',
+    ctaImpactHint: 'Öppnar sektionen Påverkan',
+    ctaImpactButton: 'Upptäck\nPåverkan',
+    ctaImpactSub: 'Resultat',
+    ctaDonateLabel: 'Donera och hjälp',
+    ctaDonateHint: 'Öppnar sektionen Åtgärder',
+    ctaDonateButton: 'Donera och\nHjälp',
+    ctaDonateSub: 'Stöd',
+    screenLabel: 'Hemskärm',
   },
 
   impact: {

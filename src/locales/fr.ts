@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Découvrez comment aider',
     featuredTitle: 'En Vedette',
     newsTitle: 'Dernières Nouvelles',
+    actionTitle: '⚡ Passez à l\'Action',
+    actionMainText: 'Rejoignez-nous dans la lutte \ncontre la faim mondiale',
+    actionSubText: 'Chaque action compte pour\nchanger des vies',
+    ctaImpactLabel: 'Découvrez notre impact',
+    ctaImpactHint: 'Ouvre la section Impact',
+    ctaImpactButton: 'Découvrez\nImpact',
+    ctaImpactSub: 'Résultats',
+    ctaDonateLabel: 'Faites un don et aidez',
+    ctaDonateHint: 'Ouvre la section Actions',
+    ctaDonateButton: 'Faites un don\net Aidez',
+    ctaDonateSub: 'Soutenez',
+    screenLabel: 'Écran d\'Accueil',
   },
 
   impact: {

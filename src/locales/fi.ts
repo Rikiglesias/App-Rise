@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Tutustu miten voit auttaa',
     featuredTitle: 'Esittelyssä',
     newsTitle: 'Uusimmat Uutiset',
+    actionTitle: '⚡ Ryhdy Toimeen',
+    actionMainText: 'Liity meihin taistelussa \nmaailmannälkää vastaan',
+    actionSubText: 'Jokainen teko merkitsee\nelämän muuttamiseksi',
+    ctaImpactLabel: 'Tutustu vaikutukseemme',
+    ctaImpactHint: 'Avaa Vaikutus-osion',
+    ctaImpactButton: 'Tutustu\nVaikutus',
+    ctaImpactSub: 'Tulokset',
+    ctaDonateLabel: 'Lahjoita ja auta',
+    ctaDonateHint: 'Avaa Toimet-osion',
+    ctaDonateButton: 'Lahjoita ja\nAuta',
+    ctaDonateSub: 'Tue',
+    screenLabel: 'Etusivu',
   },
 
   impact: {

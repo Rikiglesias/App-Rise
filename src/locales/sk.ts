@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Zistite, ako pomôcť',
     featuredTitle: 'Odporúčané',
     newsTitle: 'Najnovšie Správy',
+    actionTitle: '⚡ Konajte',
+    actionMainText: 'Pripojte sa k nám v boji \nproti svetovému hladu',
+    actionSubText: 'Každá akcia sa počíta pre\nzmenu životov',
+    ctaImpactLabel: 'Objavte náš dopad',
+    ctaImpactHint: 'Otvorí sekciu Dopad',
+    ctaImpactButton: 'Objavte\nDopad',
+    ctaImpactSub: 'Výsledky',
+    ctaDonateLabel: 'Prispejte a pomôžte',
+    ctaDonateHint: 'Otvorí sekciu Akcie',
+    ctaDonateButton: 'Prispejte a\nPomôžte',
+    ctaDonateSub: 'Podporte',
+    screenLabel: 'Domovská obrazovka',
   },
 
   impact: {

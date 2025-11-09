@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Odkryj jak pomóc',
     featuredTitle: 'Wyróżnione',
     newsTitle: 'Najnowsze Wiadomości',
+    actionTitle: '⚡ Podejmij Działanie',
+    actionMainText: 'Dołącz do nas w walce \nz głodem na świecie',
+    actionSubText: 'Każde działanie się liczy, by\nzmienić życie',
+    ctaImpactLabel: 'Odkryj nasz wpływ',
+    ctaImpactHint: 'Otwiera sekcję Wpływ',
+    ctaImpactButton: 'Odkryj\nWpływ',
+    ctaImpactSub: 'Wyniki',
+    ctaDonateLabel: 'Przekazz darowiznę i pomóż',
+    ctaDonateHint: 'Otwiera sekcję Działania',
+    ctaDonateButton: 'Przekazz i\nPomóż',
+    ctaDonateSub: 'Wspieraj',
+    screenLabel: 'Ekran Główny',
   },
 
   impact: {

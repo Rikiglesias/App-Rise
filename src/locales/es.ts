@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Descubre cómo ayudar',
     featuredTitle: 'Destacado',
     newsTitle: 'Últimas Noticias',
+    actionTitle: '⚡ Entra en Acción',
+    actionMainText: 'Únete a nosotros en la lucha \ncontra el hambre mundial',
+    actionSubText: 'Cada acción cuenta para\ncambiar vidas',
+    ctaImpactLabel: 'Descubre nuestro impacto',
+    ctaImpactHint: 'Abre la sección Impacto',
+    ctaImpactButton: 'Descubre\nImpacto',
+    ctaImpactSub: 'Resultados',
+    ctaDonateLabel: 'Dona y ayuda',
+    ctaDonateHint: 'Abre la sección Acciones',
+    ctaDonateButton: 'Dona y\nAyuda',
+    ctaDonateSub: 'Apoya',
+    screenLabel: 'Pantalla Principal',
   },
 
   impact: {

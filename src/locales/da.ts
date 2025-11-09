@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Opdag hvordan du kan hjælpe',
     featuredTitle: 'Fremhævet',
     newsTitle: 'Seneste Nyheder',
+    actionTitle: '⚡ Tag Handling',
+    actionMainText: 'Bliv en del af kampen \nmod verdenssult',
+    actionSubText: 'Hver handling tæller for\nat ændre liv',
+    ctaImpactLabel: 'Opdag vores indvirkning',
+    ctaImpactHint: 'Åbner sektionen Indvirkning',
+    ctaImpactButton: 'Opdag\nIndvirkning',
+    ctaImpactSub: 'Resultater',
+    ctaDonateLabel: 'Doner og hjælp',
+    ctaDonateHint: 'Åbner sektionen Handlinger',
+    ctaDonateButton: 'Doner og\nHjælp',
+    ctaDonateSub: 'Støt',
+    screenLabel: 'Hjemmeskærm',
   },
 
   impact: {

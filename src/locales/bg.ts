@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Открийте как да помогнете',
     featuredTitle: 'Препоръчано',
     newsTitle: 'Последни Новини',
+    actionTitle: '⚡ Действайте',
+    actionMainText: 'Присъединете се към нас в борбата \nсрещу световния глад',
+    actionSubText: 'Всяко действие се брои за\nпромяна на животи',
+    ctaImpactLabel: 'Открийте нашето въздействие',
+    ctaImpactHint: 'Отваря секцията Въздействие',
+    ctaImpactButton: 'Открийте\nВъздействие',
+    ctaImpactSub: 'Резултати',
+    ctaDonateLabel: 'Дарете и помогнете',
+    ctaDonateHint: 'Отваря секцията Действия',
+    ctaDonateButton: 'Дарете и\nПомогнете',
+    ctaDonateSub: 'Подкрепа',
+    screenLabel: 'Начален екран',
   },
 
   impact: {

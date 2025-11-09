@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Ontdek hoe je kunt helpen',
     featuredTitle: 'Uitgelicht',
     newsTitle: 'Laatste Nieuws',
+    actionTitle: '⚡ Onderneem Actie',
+    actionMainText: 'Sluit je bij ons aan in de strijd \ntegen wereldhonger',
+    actionSubText: 'Elke actie telt om\nlevens te veranderen',
+    ctaImpactLabel: 'Ontdek onze impact',
+    ctaImpactHint: 'Opent de sectie Impact',
+    ctaImpactButton: 'Ontdek\nImpact',
+    ctaImpactSub: 'Resultaten',
+    ctaDonateLabel: 'Doneer en help',
+    ctaDonateHint: 'Opent de sectie Acties',
+    ctaDonateButton: 'Doneer en\nHelp',
+    ctaDonateSub: 'Steun',
+    screenLabel: 'Startscherm',
   },
 
   impact: {

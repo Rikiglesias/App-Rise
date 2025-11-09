@@ -134,3 +134,10 @@ cleanup-*.md
 *.iml
 *.ipr
 *.iws
+
+# Build artifacts
+*.aab
+*.apk
+
+# Store assets (template files)
+assets/store/

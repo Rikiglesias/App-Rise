@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Descoperă cum să ajuți',
     featuredTitle: 'Recomandate',
     newsTitle: 'Ultimele Știri',
+    actionTitle: '⚡ Treci la Acțiune',
+    actionMainText: 'Alătură-te nouă în lupta \ncontra foametei mondiale',
+    actionSubText: 'Fiecare acțiune contează pentru\na schimba vieți',
+    ctaImpactLabel: 'Descoperă impactul nostru',
+    ctaImpactHint: 'Deschide secțiunea Impact',
+    ctaImpactButton: 'Descoperă\nImpact',
+    ctaImpactSub: 'Rezultate',
+    ctaDonateLabel: 'Donează și ajuță',
+    ctaDonateHint: 'Deschide secțiunea Acțiuni',
+    ctaDonateButton: 'Donează și\nAjuță',
+    ctaDonateSub: 'Sprijină',
+    screenLabel: 'Ecran Principal',
   },
 
   impact: {

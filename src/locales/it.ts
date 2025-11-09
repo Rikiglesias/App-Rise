@@ -35,6 +35,20 @@ export default {
     ctaButton: 'Scopri come aiutare',
     featuredTitle: 'In Evidenza',
     newsTitle: 'Ultime Notizie',
+    // Home Screen - Sezione Azione
+    actionTitle: '⚡ Entra in Azione',
+    actionMainText: 'Unisciti a noi nella lotta \ncontro la fame nel mondo',
+    actionSubText: 'Ogni azione conta per\ncambiare vite',
+    // CTA Buttons
+    ctaImpactLabel: 'Scopri il nostro impatto',
+    ctaImpactHint: 'Apre la sezione Impatto',
+    ctaImpactButton: 'Scopri\nImpatto',
+    ctaImpactSub: 'Risultati',
+    ctaDonateLabel: 'Dona e aiuta',
+    ctaDonateHint: 'Apre la sezione Azioni',
+    ctaDonateButton: 'Dona e\nAiuta',
+    ctaDonateSub: 'Supporta',
+    screenLabel: 'Schermata Home',
   },
 
   impact: {

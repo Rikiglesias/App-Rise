@@ -35,6 +35,20 @@ export default {
     ctaButton: 'Discover how to help',
     featuredTitle: 'Featured',
     newsTitle: 'Latest News',
+    // Home Screen - Action Section
+    actionTitle: '⚡ Take Action',
+    actionMainText: 'Join us in the fight \nagainst world hunger',
+    actionSubText: 'Every action counts to\nchange lives',
+    // CTA Buttons
+    ctaImpactLabel: 'Discover our impact',
+    ctaImpactHint: 'Opens the Impact section',
+    ctaImpactButton: 'Discover\nImpact',
+    ctaImpactSub: 'Results',
+    ctaDonateLabel: 'Donate and help',
+    ctaDonateHint: 'Opens the Actions section',
+    ctaDonateButton: 'Donate and\nHelp',
+    ctaDonateSub: 'Support',
+    screenLabel: 'Home Screen',
   },
 
   impact: {

@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Fedezd fel, hogyan segíthetsz',
     featuredTitle: 'Kiemelt',
     newsTitle: 'Legfrissebb Hírek',
+    actionTitle: '⚡ Cselekedj',
+    actionMainText: 'Csatlakozz hozzánk a világéhezés \nelleni harcban',
+    actionSubText: 'Minden tett számít, hogy\nmegváltoztassuk az életeket',
+    ctaImpactLabel: 'Fedezd fel hatásunkat',
+    ctaImpactHint: 'Megnyitja a Hatás részt',
+    ctaImpactButton: 'Fedezd fel\nHatás',
+    ctaImpactSub: 'Eredmények',
+    ctaDonateLabel: 'Adományozz és segíts',
+    ctaDonateHint: 'Megnyitja a Cselekvések részt',
+    ctaDonateButton: 'Adományozz\nSegíts',
+    ctaDonateSub: 'Támogass',
+    screenLabel: 'Főképernyő',
   },
 
   impact: {

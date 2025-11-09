@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Ανακαλύψτε πώς να βοηθήσετε',
     featuredTitle: 'Προτεινόμενα',
     newsTitle: 'Τελευταία Νέα',
+    actionTitle: '⚡ Πάρτε Δράση',
+    actionMainText: 'Ενώστε μαζί μας στη μάχη \nκατά της παγκόσμιας πείνας',
+    actionSubText: 'Κάθε δράση μετράει για να\nαλλάξουμε ζωές',
+    ctaImpactLabel: 'Ανακαλύψτε τον αντίκτυπό μας',
+    ctaImpactHint: 'Ανοίγει την ενότητα Αντίκτυπος',
+    ctaImpactButton: 'Ανακαλύψτε\nΑντίκτυπο',
+    ctaImpactSub: 'Αποτελέσματα',
+    ctaDonateLabel: 'Δωρεά και βοήθεια',
+    ctaDonateHint: 'Ανοίγει την ενότητα Δράσεις',
+    ctaDonateButton: 'Δωρεά και\nΒοήθεια',
+    ctaDonateSub: 'Υποστήριξη',
+    screenLabel: 'Οθόνη Αρχικής',
   },
 
   impact: {

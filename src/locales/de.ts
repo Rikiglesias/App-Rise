@@ -35,6 +35,18 @@ export default {
     ctaButton: 'Erfahren Sie, wie Sie helfen können',
     featuredTitle: 'Hervorgehoben',
     newsTitle: 'Neueste Nachrichten',
+    actionTitle: '⚡ Werde Aktiv',
+    actionMainText: 'Schließen Sie sich uns im Kampf \ngegen den Welthunger an',
+    actionSubText: 'Jede Aktion zählt, um\nLeben zu verändern',
+    ctaImpactLabel: 'Entdecken Sie unsere Wirkung',
+    ctaImpactHint: 'Öffnet den Bereich Wirkung',
+    ctaImpactButton: 'Entdecken\nWirkung',
+    ctaImpactSub: 'Ergebnisse',
+    ctaDonateLabel: 'Spenden und helfen',
+    ctaDonateHint: 'Öffnet den Bereich Aktionen',
+    ctaDonateButton: 'Spenden und\nHelfen',
+    ctaDonateSub: 'Unterstützen',
+    screenLabel: 'Startbildschirm',
   },
 
   impact: {
