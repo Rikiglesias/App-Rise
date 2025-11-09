@@ -13,8 +13,11 @@ import {
   PerfectSpacing,
 } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 const ActionDescriptionComponent: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <PerfectContainer
       preset="section"
@@ -39,7 +42,7 @@ const ActionDescriptionComponent: React.FC = () => {
           accessibilityRole="text"
           testID="action-description-main"
         >
-          Unisciti a noi nella lotta {'\n'}contro la fame nel mondo
+          {t('home.actionMainText')}
         </PerfectText>
 
         <PerfectContainer style={styles.divider} />
@@ -54,7 +57,7 @@ const ActionDescriptionComponent: React.FC = () => {
           accessibilityRole="text"
           testID="action-description-sub"
         >
-          Ogni azione conta per{'\n'}cambiare vite
+          {t('home.actionSubText')}
         </PerfectText>
       </PerfectCardContainer>
     </PerfectContainer>

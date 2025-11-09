@@ -21,6 +21,7 @@ import {
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 // Helper tipizzato per ottenere il threshold
 const getFontScaleThreshold = (): number => {
@@ -39,6 +40,7 @@ const getFontScaleThreshold = (): number => {
 };
 
 const ActionCTAButtonsComponent: React.FC = () => {
+  const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
   const navigation =
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
@@ -72,8 +74,8 @@ const ActionCTAButtonsComponent: React.FC = () => {
         onPress={handleImpactPress}
         activeOpacity={0.92}
         accessibilityRole="button"
-        accessibilityLabel="Scopri il nostro impatto"
-        accessibilityHint="Apre la sezione Impatto"
+        accessibilityLabel={t('home.ctaImpactLabel')}
+        accessibilityHint={t('home.ctaImpactHint')}
         testID="cta-impact"
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
@@ -104,7 +106,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
               style={styles.buttonTitle}
               testID="cta-impact-label"
             >
-              Scopri{'\n'}Impatto
+              {t('home.ctaImpactButton')}
             </PerfectText>
             <PerfectContainer
               flexDirection="row"
@@ -129,7 +131,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
                 style={styles.buttonSubtext}
                 testID="cta-impact-sub"
               >
-                Risultati
+                {t('home.ctaImpactSub')}
               </PerfectText>
             </PerfectContainer>
           </PerfectContainer>
@@ -142,8 +144,8 @@ const ActionCTAButtonsComponent: React.FC = () => {
         onPress={handleActionsPress}
         activeOpacity={0.92}
         accessibilityRole="button"
-        accessibilityLabel="Dona e aiuta"
-        accessibilityHint="Apre la sezione Azioni"
+        accessibilityLabel={t('home.ctaDonateLabel')}
+        accessibilityHint={t('home.ctaDonateHint')}
         testID="cta-donate"
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
@@ -174,7 +176,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
               style={styles.buttonTitle}
               testID="cta-donate-label"
             >
-              Dona e{'\n'}Aiuta
+              {t('home.ctaDonateButton')}
             </PerfectText>
             <PerfectContainer
               flexDirection="row"
@@ -193,7 +195,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
                 style={styles.buttonSubtext}
                 testID="cta-donate-sub"
               >
-                Supporta
+                {t('home.ctaDonateSub')}
               </PerfectText>
               <PerfectIcon
                 name="arrow-right"

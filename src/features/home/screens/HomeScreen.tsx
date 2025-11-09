@@ -11,10 +11,12 @@ import { EntraInAzione } from '../components/EntraInAzione';
 import { HomeHeaderSection } from '../components/HomeHeaderSection';
 import { PerfectContainer } from '@components/ui';
 import { useTheme } from '@shared/hooks/useTheme';
+import { useTranslation } from '@shared/hooks/useTranslation';
 import { PerfectSpacing } from '@shared/constants';
 import { scale } from '@shared/constants/perfectScale';
 
 const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -41,7 +43,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
     <SafeAreaView
       style={styles.container}
       edges={['top', 'bottom']}
-      accessibilityLabel="Schermata Home"
+      accessibilityLabel={t('home.screenLabel')}
       testID="home-screen"
     >
       <Animated.ScrollView

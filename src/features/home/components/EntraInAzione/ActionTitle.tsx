@@ -3,8 +3,11 @@ import { StyleSheet } from 'react-native';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 const ActionTitleComponent: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <PerfectContainer
       preset="section"
@@ -21,7 +24,7 @@ const ActionTitleComponent: React.FC = () => {
         accessibilityRole="header"
         testID="action-title"
       >
-        ⚡ Entra in Azione
+        {t('home.actionTitle')}
       </PerfectText>
     </PerfectContainer>
   );
