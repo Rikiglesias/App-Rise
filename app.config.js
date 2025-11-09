@@ -164,7 +164,7 @@ export default {
     assetBundlePatterns: ['**/*'],
 
     // Plugin richiesti
-    plugins: ['expo-secure-store', 'expo-updates', 'expo-font', './plugins/with-display-zoom'],
+    plugins: ['expo-secure-store', 'expo-updates', 'expo-font'],
 
     // Aggiornamenti OTA
     updates: updatesConfig,
