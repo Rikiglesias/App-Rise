@@ -56,7 +56,8 @@
       "extends": "production",
       "channel": "production",
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease"
       }
     }
   },
@@ -82,6 +83,17 @@
         "serviceAccountKeyPath": "./google-service-account.json",
         "track": "production"
       }
+    }
+  },
+  "update": {
+    "development": {
+      "channel": "development"
+    },
+    "preview": {
+      "channel": "preview"
+    },
+    "production": {
+      "channel": "production"
     }
   }
 }

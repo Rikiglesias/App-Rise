@@ -1,0 +1,90 @@
+/**
+ * Traduzioni Italiano
+ * Rise Against Hunger Italia
+ */
+
+export default {
+  common: {
+    appName: 'Rise Against Hunger Italia',
+    loading: 'Caricamento...',
+    error: 'Errore',
+    retry: 'Riprova',
+    close: 'Chiudi',
+    cancel: 'Annulla',
+    confirm: 'Conferma',
+    save: 'Salva',
+    delete: 'Elimina',
+    edit: 'Modifica',
+    back: 'Indietro',
+    next: 'Avanti',
+    finish: 'Termina',
+    skip: 'Salta',
+  },
+
+  navigation: {
+    home: 'Home',
+    impact: 'Impatto',
+    actions: 'Azioni',
+    about: 'Chi Siamo',
+  },
+
+  home: {
+    welcome: 'Benvenuto',
+    subtitle: 'Insieme contro la fame',
+    heroTitle: 'Volontari e partner uniti nella\nmissione #famezero',
+    ctaButton: 'Scopri come aiutare',
+    featuredTitle: 'In Evidenza',
+    newsTitle: 'Ultime Notizie',
+  },
+
+  impact: {
+    title: 'Il Nostro Impatto',
+    description: 'I numeri che raccontano il nostro impegno annuale',
+    mealsPackaged: 'Pasti Confezionati',
+    volunteersInvolved: 'Volontari Coinvolti',
+    countriesReached: 'Paesi Raggiunti',
+    eventsOrganized: 'Eventi Organizzati',
+  },
+
+  actions: {
+    title: 'Cosa Puoi Fare',
+    donate: 'Dona',
+    volunteer: 'Diventa Volontario',
+    organize: 'Organizza un Evento',
+    share: 'Condividi la Missione',
+    donateDescription: 'Il tuo contributo aiuta a preparare pasti per chi ne ha bisogno',
+    volunteerDescription: 'Unisciti al nostro team di volontari',
+    organizeDescription: 'Organizza un evento di confezionamento nella tua comunità',
+    shareDescription: 'Aiutaci a diffondere la nostra missione',
+  },
+
+  about: {
+    title: 'Chi Siamo',
+    mission: 'La Nostra Missione',
+    missionText:
+      'Rise Against Hunger Italia lavora per eliminare la fame nel mondo attraverso il confezionamento e la distribuzione di pasti, sostenendo progetti di sviluppo sostenibile.',
+    vision: 'La Nostra Visione',
+    visionText: 'Un mondo senza fame entro il 2030.',
+    values: 'I Nostri Valori',
+    transparency: 'Trasparenza',
+    impact: 'Impatto',
+    sustainability: 'Sostenibilità',
+    community: 'Comunità',
+  },
+
+  errors: {
+    generic: 'Si è verificato un errore',
+    network: 'Errore di connessione. Verifica la tua connessione internet.',
+    notFound: 'Contenuto non trovato',
+    unauthorized: 'Accesso non autorizzato',
+    serverError: 'Errore del server. Riprova più tardi.',
+  },
+
+  updates: {
+    checking: 'Controllo aggiornamenti...',
+    downloading: 'Scaricamento aggiornamento...',
+    upToDate: 'App aggiornata',
+    error: "Errore durante l'aggiornamento",
+    improving: 'Stiamo migliorando la tua esperienza',
+  },
+};
