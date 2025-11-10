@@ -45,7 +45,8 @@ jest.mock('@/shared/hooks/useTranslation', () => ({
       const translations: Record<string, string> = {
         'home.screenLabel': 'Schermata Home',
         'home.actionTitle': '⚡ Entra in Azione',
-        'home.actionMainText': 'Unisciti a noi nella lotta contro la fame nel mondo',
+        'home.actionMainText':
+          'Unisciti a noi nella lotta contro la fame nel mondo',
         'home.actionSubText': 'Ogni azione conta per cambiare vite',
         'home.ctaImpactLabel': 'Scopri il nostro impatto',
         'home.ctaImpactHint': 'Apre la sezione Impatto',

@@ -30,7 +30,8 @@ jest.mock('@/shared/hooks/useTranslation', () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
         'home.actionTitle': '⚡ Entra in Azione',
-        'home.actionMainText': 'Unisciti a noi nella lotta contro la fame nel mondo',
+        'home.actionMainText':
+          'Unisciti a noi nella lotta contro la fame nel mondo',
         'home.actionSubText': 'Ogni azione conta per cambiare vite',
         'home.ctaImpactLabel': 'Scopri il nostro impatto',
         'home.ctaImpactHint': 'Apre la sezione Impatto',

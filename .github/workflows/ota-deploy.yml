@@ -1,14 +1,6 @@
-name: 🚀 OTA Deploy - Automatic Updates
+name: 🚀 OTA Deploy - Manual Only
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'src/**'
-      - 'assets/**'
-      - 'app.config.js'
-      - 'package.json'
   workflow_dispatch:
     inputs:
       message:
