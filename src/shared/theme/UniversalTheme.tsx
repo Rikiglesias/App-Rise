@@ -93,20 +93,34 @@ export const UniversalThemeProvider: React.FC<UniversalThemeProviderProps> = ({
 
   // 📱 SISTEMA THEME DETECTION
   useEffect(() => {
-    // Rileva tema sistema iniziale
-    const currentSystemTheme = Appearance.getColorScheme();
-    setSystemTheme(currentSystemTheme === 'dark' ? 'dark' : 'light');
+    try {
+      // Rileva tema sistema iniziale (può essere null)
+      const currentSystemTheme = Appearance.getColorScheme();
+      setSystemTheme(currentSystemTheme === 'dark' ? 'dark' : 'light');
 
-    if (!followSystem) return;
-
-    // Listener per cambiamenti tema sistema
-    const subscription = Appearance.addChangeListener(
-      ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
-        setSystemTheme(colorScheme === 'dark' ? 'dark' : 'light');
+      if (!followSystem) {
+        return undefined; // No cleanup needed
       }
-    );
 
-    return () => subscription?.remove();
+      // Listener per cambiamenti tema sistema
+      const subscription = Appearance.addChangeListener(
+        ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
+          setSystemTheme(colorScheme === 'dark' ? 'dark' : 'light');
+        }
+      );
+
+      return () => {
+        try {
+          subscription?.remove();
+        } catch {
+          // Fail silently se subscription non esiste più
+        }
+      };
+    } catch (error) {
+      // Fallback a light theme se Appearance API fallisce
+      setSystemTheme('light');
+      return undefined; // No cleanup needed
+    }
   }, [followSystem]);
 
   // 🎯 CALCOLA TEMA ATTUALE
@@ -161,29 +175,6 @@ export const getThemeColor = (
     : UNIVERSAL_COLORS.light[colorKey];
 };
 
-// 📱 THEME STATUS COMPONENT (per debug)
-export const ThemeStatus: React.FC = () => {
-  const { isDark, themeMode, toggleTheme } = useUniversalTheme();
-
-  if (!__DEV__) return null;
-
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 10,
-        right: 10,
-        padding: '8px 12px',
-        background: isDark ? '#2C2C2E' : '#F8F9FA',
-        color: isDark ? '#F5F5F5' : '#1F2937',
-        borderRadius: 8,
-        fontSize: 12,
-        cursor: 'pointer',
-        zIndex: 9999,
-      }}
-      onClick={toggleTheme}
-    >
-      🌓 {themeMode} ({isDark ? 'dark' : 'light'})
-    </div>
-  );
-};
+// 📱 THEME STATUS COMPONENT - REMOVED
+// HTML elements like <div> cause crashes in React Native production builds
+// If needed for debugging, use React Native View component instead
