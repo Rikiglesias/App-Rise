@@ -92,7 +92,10 @@ export default {
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
-      buildNumber: process.env.IOS_BUILD_NUMBER || '56',
+      // buildNumber removed - managed by EAS remote (appVersionSource: "remote" in eas.json)
+      ...(process.env.IOS_BUILD_NUMBER && {
+        buildNumber: process.env.IOS_BUILD_NUMBER,
+      }),
       icon: './assets/icons/app/app-icon.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
@@ -125,8 +128,13 @@ export default {
         backgroundColor: '#FFFFFF',
         monochromeImage: './assets/icons/app/app-icon.png',
       },
-      package: process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
-      versionCode: parseInt(process.env.ANDROID_VERSION_CODE || '4', 10),
+      package:
+        process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
+      // versionCode removed - managed by EAS remote (appVersionSource: "remote" in eas.json)
+      ...(process.env.ANDROID_VERSION_CODE && {
+        versionCode: parseInt(process.env.ANDROID_VERSION_CODE, 10),
+      }),
+      icon: './assets/icons/app/app-icon.png',
       // Permessi specifici con giustificazione
       permissions: [
         'CAMERA', // QR code scanning per donazioni
