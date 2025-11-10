@@ -55,16 +55,21 @@ export const initDisplayZoom = async (): Promise<void> => {
     } else {
       // Fallback: se non c'è modulo nativo, usa 1.0 (o test factor in dev)
       cachedDisplayZoomFactor = 1.0;
-      
+
       // Development only: override con test factor se presente
       const isDev = typeof __DEV__ !== 'undefined' && __DEV__;
       const shouldTryTestFactor = isDev;
-      
+
       if (shouldTryTestFactor) {
         try {
-          const extra = Constants.expoConfig?.extra as Record<string, unknown> | undefined;
+          const extra = Constants.expoConfig?.extra as
+            | Record<string, unknown>
+            | undefined;
           const testFactor = extra?.displayZoomTestFactor as number | undefined;
-          const isValid = typeof testFactor === 'number' && isFinite(testFactor) && testFactor > 0;
+          const isValid =
+            typeof testFactor === 'number' &&
+            isFinite(testFactor) &&
+            testFactor > 0;
           cachedDisplayZoomFactor = isValid ? testFactor : 1.0;
         } catch {
           // Keep default 1.0
