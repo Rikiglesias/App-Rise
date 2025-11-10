@@ -138,6 +138,10 @@ cleanup-*.md
 # Build artifacts
 *.aab
 *.apk
+*.ipa
+
+# Temporary logs
+temp_logs/
 
 # Store assets (template files)
 assets/store/
