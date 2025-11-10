@@ -133,25 +133,42 @@ export const useOTAUpdates = () => {
     }
   };
 
-  // Controlla aggiornamenti all'avvio dell'app - DISABILITATO
-  // Il controllo OTA avviene SOLO:
-  // 1. Manualmente tramite OTADebugPanel (dev mode)
-  // 2. Background check (senza UI) quando l'app torna in foreground
-  // Questo evita la "schermata OTA" fastidiosa all'apertura dell'app
+  // Controlla aggiornamenti in background quando app torna in foreground
   useEffect(() => {
-    // NOTA: Controllo automatico disabilitato per UX migliore
-    // L'update verrà scaricato in background senza disturbare l'utente
-    // e applicato al prossimo riavvio dell'app
-    
-    // Se vuoi riabilitarlo:
-    // const timer = setTimeout(() => {
-    //   void checkForUpdates();
-    // }, 2000);
-    // return () => clearTimeout(timer);
+    // Import dinamico di AppState per evitare dipendenze circolari
+    let subscription: { remove: () => void } | null = null;
+
+    const setupBackgroundCheck = async () => {
+      try {
+        const { AppState } = await import('react-native');
+        
+        subscription = AppState.addEventListener('change', (nextAppState) => {
+          // Check OTA solo quando app torna attiva da background
+          if (nextAppState === 'active') {
+            // Silent check - nessuna UI, nessun alert
+            void checkForUpdates().catch(() => {
+              // Fail silently - non disturbare l'utente
+              // Log già gestito in checkForUpdates()
+            });
+          }
+        });
+      } catch (error) {
+        logger.warn('OTA Updates', 'AppState listener setup failed', error as Error);
+      }
+    };
+
+    void setupBackgroundCheck();
+
+    return () => {
+      subscription?.remove();
+    };
   }, []);
 
-  // Nota: Il controllo automatico quando l'app torna in foreground
-  // può essere implementato in futuro usando AppState.addEventListener
+  // Note: 
+  // - NO check all'avvio (evita schermata loading fastidiosa)
+  // - Check SOLO quando app torna in foreground (silent)
+  // - Update scaricato in background
+  // - Update applicato al prossimo restart (no reload forzato)
 
   return {
     ...updateState,
