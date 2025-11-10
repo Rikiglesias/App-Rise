@@ -142,7 +142,7 @@ export const useOTAUpdates = () => {
       try {
         const { AppState } = await import('react-native');
 
-        subscription = AppState.addEventListener('change', nextAppState => {
+        subscription = AppState.addEventListener('change', (nextAppState) => {
           // Check OTA solo quando app torna attiva da background
           if (nextAppState === 'active') {
             // Silent check - nessuna UI, nessun alert
@@ -153,11 +153,7 @@ export const useOTAUpdates = () => {
           }
         });
       } catch (error) {
-        logger.warn(
-          'OTA Updates',
-          'AppState listener setup failed',
-          error as Error
-        );
+        logger.warn('OTA Updates', 'AppState listener setup failed', error as Error);
       }
     };
 
