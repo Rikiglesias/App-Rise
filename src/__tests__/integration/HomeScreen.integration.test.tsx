@@ -11,7 +11,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from '@/features/home/screens/HomeScreen';
 
 // Mock ThemeProvider
 jest.mock('@/shared/hooks/useTheme', () => ({
@@ -36,6 +35,34 @@ jest.mock('@/shared/hooks/useTheme', () => ({
     },
   }),
   ThemeProvider: ({ children }: any) => children,
+}));
+
+// Mock useTranslation per forzare italiano
+jest.mock('@/shared/hooks/useTranslation', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      // Mock traduzioni italiane per i test
+      const translations: Record<string, string> = {
+        'home.screenLabel': 'Schermata Home',
+        'home.actionTitle': '⚡ Entra in Azione',
+        'home.actionMainText': 'Unisciti a noi nella lotta contro la fame nel mondo',
+        'home.actionSubText': 'Ogni azione conta per cambiare vite',
+        'home.ctaImpactLabel': 'Scopri il nostro impatto',
+        'home.ctaImpactHint': 'Apre la sezione Impatto',
+        'home.ctaImpactButton': 'Scopri Impatto',
+        'home.ctaImpactSub': 'Risultati',
+        'home.ctaDonateLabel': 'Dona e aiuta',
+        'home.ctaDonateHint': 'Apre la sezione Azioni',
+        'home.ctaDonateButton': 'Dona e Aiuta',
+        'home.ctaDonateSub': 'Supporta',
+      };
+      return translations[key] || key;
+    },
+    locale: 'it',
+    setLocale: jest.fn(),
+    isItalian: true,
+    isEnglish: false,
+  }),
 }));
 
 // Mock UniversalTheme to avoid provider requirement in this integration test
@@ -64,6 +91,10 @@ jest.mock('@/shared/theme/UniversalTheme', () => ({
   getThemeColor: (_key: any, isDark: boolean) =>
     isDark ? '#F5F5F5' : '#1F2937',
 }));
+
+// Import HomeScreen DOPO i mock (necessario per far funzionare i mock)
+// eslint-disable-next-line import/first
+import HomeScreen from '@/features/home/screens/HomeScreen';
 
 // Creo provider semplificato locale
 const AllProviders = ({ children }: any) => {

@@ -386,10 +386,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 testID="action-description-main"
                 textAlign="center"
               >
-                Unisciti a noi nella lotta 
-                
-
-                contro la fame nel mondo
+                Unisciti a noi nella lotta contro la fame nel mondo
               </Text>
               <View
                 style={
@@ -419,10 +416,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 testID="action-description-sub"
                 textAlign="center"
               >
-                Ogni azione conta per
-                
-
-                cambiare vite
+                Ogni azione conta per cambiare vite
               </Text>
             </View>
           </View>
@@ -545,10 +539,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     testID="cta-impact-label"
                     textAlign="center"
                   >
-                    Scopri
-                    
-
-                    Impatto
+                    Scopri Impatto
                   </Text>
                   <View
                     alignItems="center"
@@ -699,10 +690,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     testID="cta-donate-label"
                     textAlign="center"
                   >
-                    Dona e
-                    
-
-                    Aiuta
+                    Dona e Aiuta
                   </Text>
                   <View
                     alignItems="center"

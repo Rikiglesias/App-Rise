@@ -108,10 +108,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
         testID="action-description-main"
         textBreakStrategy="simple"
       >
-        Unisciti a noi nella lotta 
-        
-
-        contro la fame nel mondo
+        Unisciti a noi nella lotta contro la fame nel mondo
       </Text>
       <View
         style={
@@ -150,10 +147,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
         testID="action-description-sub"
         textBreakStrategy="simple"
       >
-        Ogni azione conta per
-        
-
-        cambiare vite
+        Ogni azione conta per cambiare vite
       </Text>
     </View>
   </View>
@@ -292,10 +286,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
               testID="cta-impact-label"
               textBreakStrategy="simple"
             >
-              Scopri
-              
-
-              Impatto
+              Scopri Impatto
             </Text>
           </View>
           <View
@@ -465,10 +456,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
               testID="cta-donate-label"
               textBreakStrategy="simple"
             >
-              Dona e
-              
-
-              Aiuta
+              Dona e Aiuta
             </Text>
           </View>
           <View

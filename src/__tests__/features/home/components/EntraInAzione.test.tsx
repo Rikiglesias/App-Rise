@@ -7,9 +7,8 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
-import { EntraInAzione } from '@/features/home/components/EntraInAzione';
 
-// Mock navigation
+// Mock navigation - PRIMA degli import
 const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -24,6 +23,36 @@ jest.mock('@/shared/hooks/useHapticFeedback', () => ({
     triggerHaptic: jest.fn(),
   }),
 }));
+
+// Mock useTranslation per testi italiani - PRIMA dell'import del componente
+jest.mock('@/shared/hooks/useTranslation', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'home.actionTitle': '⚡ Entra in Azione',
+        'home.actionMainText': 'Unisciti a noi nella lotta contro la fame nel mondo',
+        'home.actionSubText': 'Ogni azione conta per cambiare vite',
+        'home.ctaImpactLabel': 'Scopri il nostro impatto',
+        'home.ctaImpactHint': 'Apre la sezione Impatto',
+        'home.ctaImpactButton': 'Scopri Impatto',
+        'home.ctaImpactSub': 'Risultati',
+        'home.ctaDonateLabel': 'Dona e aiuta',
+        'home.ctaDonateHint': 'Apre la sezione Azioni',
+        'home.ctaDonateButton': 'Dona e Aiuta',
+        'home.ctaDonateSub': 'Supporta',
+      };
+      return translations[key] || key;
+    },
+    locale: 'it',
+    setLocale: jest.fn(),
+    isItalian: true,
+    isEnglish: false,
+  }),
+}));
+
+// Import del componente DOPO i mock (necessario per far funzionare i mock)
+// eslint-disable-next-line import/first
+import { EntraInAzione } from '@/features/home/components/EntraInAzione';
 
 // Mock useTheme
 jest.mock('@/shared/hooks/useTheme', () => ({

@@ -9,6 +9,24 @@ import { AllProviders } from '../helpers/testProviders';
 // Mock Haptics
 jest.mock('expo-haptics');
 
+// Mock useTranslation per navigation labels italiane
+jest.mock('../../shared/hooks/useTranslation', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'navigation.impact': 'Impatto',
+        'navigation.home': 'Home',
+        'navigation.actions': 'Azioni',
+      };
+      return translations[key] || key;
+    },
+    locale: 'it',
+    setLocale: jest.fn(),
+    isItalian: true,
+    isEnglish: false,
+  }),
+}));
+
 // Mock Screens
 jest.mock('../../features/home/screens/HomeScreen', () => {
   const { View, Text } = require('react-native');
