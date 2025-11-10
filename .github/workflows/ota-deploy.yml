@@ -1,0 +1,195 @@
+name: 🚀 OTA Deploy - Automatic Updates
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'assets/**'
+      - 'app.config.js'
+      - 'package.json'
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Messaggio custom per update'
+        required: false
+        default: 'Manual OTA update'
+      branch:
+        description: 'Branch EAS target'
+        required: false
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - preview
+          - development
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  NODE_VERSION: '20.17.0'
+  EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+# Previene deploy OTA simultanei
+concurrency:
+  group: ota-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ===================================================================
+  # PRE-FLIGHT CHECKS - Quality gates prima del deploy
+  # ===================================================================
+  quality-checks:
+    name: ✅ Quality Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔍 TypeScript Check
+        run: npx tsc --noEmit
+        continue-on-error: false
+
+      - name: 🧹 ESLint Check
+        run: npx eslint . --ext .ts,.tsx --max-warnings 0
+        continue-on-error: true # Non blocca deploy per warnings
+
+      - name: 🧪 Run Tests
+        run: npm test -- --passWithNoTests
+        continue-on-error: true # Tests non bloccano deploy
+
+      - name: 📊 Conta Problemi
+        run: npm run conta-problemi || true
+        continue-on-error: true
+
+  # ===================================================================
+  # OTA DEPLOY - Pubblica update su Expo
+  # ===================================================================
+  deploy-ota:
+    name: 🚀 Deploy OTA Update
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    timeout-minutes: 15
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Serve per commit info
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔧 Setup Expo & EAS CLI
+        run: |
+          npm install -g eas-cli@latest
+          npm install -g expo-cli@latest
+
+      - name: 🔐 Authenticate with Expo
+        run: |
+          echo "Authenticating with Expo..."
+          eas whoami || echo "Not authenticated yet"
+
+      - name: 📝 Generate Update Message
+        id: update-msg
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            MSG="${{ github.event.inputs.message }}"
+          else
+            # Estrai messaggio commit più recente
+            COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1)
+            COMMIT_SHORT=$(git rev-parse --short HEAD)
+            MSG="$COMMIT_MSG (${COMMIT_SHORT})"
+          fi
+          
+          # Pulisci messaggio per evitare caratteri speciali problematici
+          MSG=$(echo "$MSG" | tr -d '\n\r' | sed 's/"/\\"/g')
+          
+          echo "message=$MSG" >> $GITHUB_OUTPUT
+          echo "📝 Update message: $MSG"
+
+      - name: 🚀 Publish OTA Update
+        id: publish
+        run: |
+          BRANCH="${{ github.event.inputs.branch || 'production' }}"
+          MESSAGE="${{ steps.update-msg.outputs.message }}"
+          
+          echo "Publishing OTA update to branch: $BRANCH"
+          echo "Message: $MESSAGE"
+          
+          # Pubblica update con retry su fallimento
+          for i in {1..3}; do
+            if eas update --branch "$BRANCH" --message "$MESSAGE" --non-interactive; then
+              echo "✅ OTA update published successfully on attempt $i"
+              exit 0
+            else
+              echo "❌ Attempt $i failed, retrying..."
+              sleep 5
+            fi
+          done
+          
+          echo "❌ Failed to publish OTA update after 3 attempts"
+          exit 1
+
+      - name: 📊 Get Update Details
+        if: success()
+        run: |
+          BRANCH="${{ github.event.inputs.branch || 'production' }}"
+          echo "Fetching latest update details for branch: $BRANCH"
+          eas update:list --branch "$BRANCH" --limit 1 || true
+
+      - name: 💬 Comment on PR (if applicable)
+        if: github.event_name == 'pull_request' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = '${{ github.event.inputs.branch || 'production' }}';
+            const message = '${{ steps.update-msg.outputs.message }}';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **OTA Update Deployed!**\n\n**Branch:** ${branch}\n**Message:** ${message}\n\n✅ Update is now live for all users on runtime version matching this build.`
+            });
+
+  # ===================================================================
+  # NOTIFY - Notifica risultato deploy
+  # ===================================================================
+  notify-result:
+    name: 📢 Notify Results
+    runs-on: ubuntu-latest
+    needs: deploy-ota
+    if: always()
+    
+    steps:
+      - name: 📊 Deploy Status
+        run: |
+          if [[ "${{ needs.deploy-ota.result }}" == "success" ]]; then
+            echo "✅ OTA Deploy SUCCESSFUL"
+            echo "Update is now live for all users!"
+          else
+            echo "❌ OTA Deploy FAILED"
+            echo "Check logs above for details"
+            exit 1
+          fi

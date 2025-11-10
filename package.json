@@ -49,6 +49,8 @@
     "update:auto": "eas update --auto",
     "update:gui": "pwsh ./scripts/update-ota.ps1",
     "update:status": "pwsh ./scripts/check-updates.ps1",
+    "update:workflow-test": "pwsh ./scripts/test-ota-workflow.ps1",
+    "update:workflow-preview": "pwsh ./scripts/test-ota-workflow.ps1 -Branch preview",
     "doctor": "npx expo-doctor",
     "install:clean": "rm -rf node_modules package-lock.json && npm install",
     "typecheck": "tsc --noEmit",
