@@ -159,7 +159,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                 <PerfectImage
                   width={responsiveSpacing.logoSize}
                   height={responsiveSpacing.logoSize}
-                  source={require('../../../../assets/icons/app/logo.png')}
+                  source={require('@assets/icons/app/splash-screen.png')}
                   accessibilityRole="image"
                   accessibilityLabel="Logo Rise Against Hunger"
                 />
