@@ -64,7 +64,8 @@ export default {
     volunteer: 'Postani Volonter',
     organize: 'Organiziraj Događaj',
     share: 'Podijeli Misiju',
-    donateDescription: 'Vaš doprinos pomaže pripremiti obroke za one kojima je potrebno',
+    donateDescription:
+      'Vaš doprinos pomaže pripremiti obroke za one kojima je potrebno',
     volunteerDescription: 'Pridruži se našem volonterskom timu',
     organizeDescription: 'Organiziraj događaj pakiranja u svojoj zajednici',
     shareDescription: 'Pomozi nam širiti našu misiju',

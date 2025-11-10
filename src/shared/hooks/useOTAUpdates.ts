@@ -141,8 +141,8 @@ export const useOTAUpdates = () => {
     const setupBackgroundCheck = async () => {
       try {
         const { AppState } = await import('react-native');
-        
-        subscription = AppState.addEventListener('change', (nextAppState) => {
+
+        subscription = AppState.addEventListener('change', nextAppState => {
           // Check OTA solo quando app torna attiva da background
           if (nextAppState === 'active') {
             // Silent check - nessuna UI, nessun alert
@@ -153,7 +153,11 @@ export const useOTAUpdates = () => {
           }
         });
       } catch (error) {
-        logger.warn('OTA Updates', 'AppState listener setup failed', error as Error);
+        logger.warn(
+          'OTA Updates',
+          'AppState listener setup failed',
+          error as Error
+        );
       }
     };
 
@@ -164,7 +168,7 @@ export const useOTAUpdates = () => {
     };
   }, []);
 
-  // Note: 
+  // Note:
   // - NO check all'avvio (evita schermata loading fastidiosa)
   // - Check SOLO quando app torna in foreground (silent)
   // - Update scaricato in background

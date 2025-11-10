@@ -64,9 +64,11 @@ export default {
     volunteer: 'Vrijwilliger Worden',
     organize: 'Een Evenement Organiseren',
     share: 'De Missie Delen',
-    donateDescription: 'Jouw bijdrage helpt maaltijden te bereiden voor wie het nodig heeft',
+    donateDescription:
+      'Jouw bijdrage helpt maaltijden te bereiden voor wie het nodig heeft',
     volunteerDescription: 'Sluit je aan bij ons vrijwilligersteam',
-    organizeDescription: 'Organiseer een verpakkingsevenement in je gemeenschap',
+    organizeDescription:
+      'Organiseer een verpakkingsevenement in je gemeenschap',
     shareDescription: 'Help ons onze missie te verspreiden',
   },
 

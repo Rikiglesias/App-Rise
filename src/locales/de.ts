@@ -64,9 +64,11 @@ export default {
     volunteer: 'Freiwilliger Werden',
     organize: 'Eine Veranstaltung Organisieren',
     share: 'Die Mission Teilen',
-    donateDescription: 'Ihr Beitrag hilft, Mahlzeiten für Bedürftige zuzubereiten',
+    donateDescription:
+      'Ihr Beitrag hilft, Mahlzeiten für Bedürftige zuzubereiten',
     volunteerDescription: 'Treten Sie unserem Freiwilligen-Team bei',
-    organizeDescription: 'Organisieren Sie eine Verpackungsveranstaltung in Ihrer Gemeinde',
+    organizeDescription:
+      'Organisieren Sie eine Verpackungsveranstaltung in Ihrer Gemeinde',
     shareDescription: 'Helfen Sie uns, unsere Mission zu verbreiten',
   },
 

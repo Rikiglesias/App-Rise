@@ -64,7 +64,8 @@ export default {
     volunteer: 'Tornar-se Voluntário',
     organize: 'Organizar um Evento',
     share: 'Partilhar a Missão',
-    donateDescription: 'A sua contribuição ajuda a preparar refeições para quem precisa',
+    donateDescription:
+      'A sua contribuição ajuda a preparar refeições para quem precisa',
     volunteerDescription: 'Junte-se à nossa equipa de voluntários',
     organizeDescription: 'Organize um evento de embalagem na sua comunidade',
     shareDescription: 'Ajude-nos a divulgar a nossa missão',

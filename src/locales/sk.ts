@@ -64,7 +64,8 @@ export default {
     volunteer: 'Stať sa Dobrovoľníkom',
     organize: 'Organizovať Akciu',
     share: 'Zdieľať Misiu',
-    donateDescription: 'Váš príspevok pomáha pripraviť jedlo pre tých, ktorí ho potrebujú',
+    donateDescription:
+      'Váš príspevok pomáha pripraviť jedlo pre tých, ktorí ho potrebujú',
     volunteerDescription: 'Pripojte sa k nášmu tímu dobrovoľníkov',
     organizeDescription: 'Zorganizujte akciu balenia vo vašej komunite',
     shareDescription: 'Pomôžte nám šíriť našu misiu',

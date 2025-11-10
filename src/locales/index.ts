@@ -67,8 +67,25 @@ const getDeviceLocale = (): SupportedLocale => {
 
   // Mappa lingua rilevata a lingua supportata (19 lingue europee)
   const supportedLocales: SupportedLocale[] = [
-    'it', 'en', 'es', 'fr', 'de', 'pt', 'nl', 'pl', 'ro',
-    'el', 'cs', 'sv', 'hu', 'da', 'fi', 'no', 'bg', 'sk', 'hr',
+    'it',
+    'en',
+    'es',
+    'fr',
+    'de',
+    'pt',
+    'nl',
+    'pl',
+    'ro',
+    'el',
+    'cs',
+    'sv',
+    'hu',
+    'da',
+    'fi',
+    'no',
+    'bg',
+    'sk',
+    'hr',
   ];
 
   // Verifica se lingua rilevata è supportata
@@ -97,5 +114,25 @@ export const getCurrentLocale = (): SupportedLocale => {
 export default i18n;
 
 // Export traduzioni per accesso diretto (opzionale)
-export { it, en, es, fr, de, pt, nl, pl, ro, el, cs, sv, hu, da, fi, no, bg, sk, hr };
+export {
+  it,
+  en,
+  es,
+  fr,
+  de,
+  pt,
+  nl,
+  pl,
+  ro,
+  el,
+  cs,
+  sv,
+  hu,
+  da,
+  fi,
+  no,
+  bg,
+  sk,
+  hr,
+};
 export type { SupportedLocale };

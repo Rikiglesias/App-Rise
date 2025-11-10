@@ -64,7 +64,8 @@ export default {
     volunteer: 'Ser Voluntario',
     organize: 'Organizar un Evento',
     share: 'Compartir la Misión',
-    donateDescription: 'Tu contribución ayuda a preparar comidas para quienes lo necesitan',
+    donateDescription:
+      'Tu contribución ayuda a preparar comidas para quienes lo necesitan',
     volunteerDescription: 'Únete a nuestro equipo de voluntarios',
     organizeDescription: 'Organiza un evento de empaquetado en tu comunidad',
     shareDescription: 'Ayúdanos a difundir nuestra misión',

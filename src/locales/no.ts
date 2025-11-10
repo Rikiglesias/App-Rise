@@ -64,7 +64,8 @@ export default {
     volunteer: 'Bli Frivillig',
     organize: 'Organiser et Arrangement',
     share: 'Del Oppdraget',
-    donateDescription: 'Ditt bidrag hjelper til med å forberede måltider for de som trenger det',
+    donateDescription:
+      'Ditt bidrag hjelper til med å forberede måltider for de som trenger det',
     volunteerDescription: 'Bli med i vårt frivillige team',
     organizeDescription: 'Organiser et pakkearrangement i ditt samfunn',
     shareDescription: 'Hjelp oss å spre vårt oppdrag',

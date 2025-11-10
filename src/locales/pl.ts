@@ -64,9 +64,11 @@ export default {
     volunteer: 'Zostań Wolontariuszem',
     organize: 'Zorganizuj Wydarzenie',
     share: 'Udostępnij Misję',
-    donateDescription: 'Twoja wpłata pomaga przygotować posiłki dla potrzebujących',
+    donateDescription:
+      'Twoja wpłata pomaga przygotować posiłki dla potrzebujących',
     volunteerDescription: 'Dołącz do naszego zespołu wolontariuszy',
-    organizeDescription: 'Zorganizuj wydarzenie pakowania w swojej społeczności',
+    organizeDescription:
+      'Zorganizuj wydarzenie pakowania w swojej społeczności',
     shareDescription: 'Pomóż nam rozpowszechniać naszą misję',
   },
 

@@ -66,7 +66,8 @@ export default {
     volunteer: 'Become a Volunteer',
     organize: 'Organize an Event',
     share: 'Share the Mission',
-    donateDescription: 'Your contribution helps prepare meals for those in need',
+    donateDescription:
+      'Your contribution helps prepare meals for those in need',
     volunteerDescription: 'Join our volunteer team',
     organizeDescription: 'Organize a meal packaging event in your community',
     shareDescription: 'Help us spread our mission',

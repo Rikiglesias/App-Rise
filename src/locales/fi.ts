@@ -64,7 +64,8 @@ export default {
     volunteer: 'Liity Vapaaehtoiseksi',
     organize: 'Järjestä Tapahtuma',
     share: 'Jaa Missio',
-    donateDescription: 'Lahjoituksesi auttaa valmistamaan aterioita niitä tarvitseville',
+    donateDescription:
+      'Lahjoituksesi auttaa valmistamaan aterioita niitä tarvitseville',
     volunteerDescription: 'Liity vapaaehtoistiimiimme',
     organizeDescription: 'Järjestä pakkaustapahtuma yhteisössäsi',
     shareDescription: 'Auta meitä levittämään missiotamme',

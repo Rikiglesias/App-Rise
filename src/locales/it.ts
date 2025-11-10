@@ -61,7 +61,7 @@ export default {
     communityTitle: 'La Nostra Community',
     communitySubtitle: 'Volontari e partner uniti nella\nmissione #famezero',
     volunteers2024: 'Volontari 2024',
-    volunteersActive: 'Attivi quest\'anno',
+    volunteersActive: "Attivi quest'anno",
     partnersActive: 'Partner Attivi',
     partnersCollaboration: 'Collaborazioni attive',
     totalMeals: 'Pasti Totali',
@@ -79,9 +79,11 @@ export default {
     volunteer: 'Diventa Volontario',
     organize: 'Organizza un Evento',
     share: 'Condividi la Missione',
-    donateDescription: 'Il tuo contributo aiuta a preparare pasti per chi ne ha bisogno',
+    donateDescription:
+      'Il tuo contributo aiuta a preparare pasti per chi ne ha bisogno',
     volunteerDescription: 'Unisciti al nostro team di volontari',
-    organizeDescription: 'Organizza un evento di confezionamento nella tua comunità',
+    organizeDescription:
+      'Organizza un evento di confezionamento nella tua comunità',
     shareDescription: 'Aiutaci a diffondere la nostra missione',
   },
 

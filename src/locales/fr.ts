@@ -35,7 +35,7 @@ export default {
     ctaButton: 'Découvrez comment aider',
     featuredTitle: 'En Vedette',
     newsTitle: 'Dernières Nouvelles',
-    actionTitle: '⚡ Passez à l\'Action',
+    actionTitle: "⚡ Passez à l'Action",
     actionMainText: 'Rejoignez-nous dans la lutte \ncontre la faim mondiale',
     actionSubText: 'Chaque action compte pour\nchanger des vies',
     ctaImpactLabel: 'Découvrez notre impact',
@@ -46,7 +46,7 @@ export default {
     ctaDonateHint: 'Ouvre la section Actions',
     ctaDonateButton: 'Faites un don\net Aidez',
     ctaDonateSub: 'Soutenez',
-    screenLabel: 'Écran d\'Accueil',
+    screenLabel: "Écran d'Accueil",
   },
 
   impact: {
@@ -64,9 +64,11 @@ export default {
     volunteer: 'Devenir Bénévole',
     organize: 'Organiser un Événement',
     share: 'Partager la Mission',
-    donateDescription: 'Votre contribution aide à préparer des repas pour ceux qui en ont besoin',
+    donateDescription:
+      'Votre contribution aide à préparer des repas pour ceux qui en ont besoin',
     volunteerDescription: 'Rejoignez notre équipe de bénévoles',
-    organizeDescription: 'Organisez un événement d\'emballage dans votre communauté',
+    organizeDescription:
+      "Organisez un événement d'emballage dans votre communauté",
     shareDescription: 'Aidez-nous à diffuser notre mission',
   },
 
@@ -74,9 +76,9 @@ export default {
     title: 'À Propos de Nous',
     mission: 'Notre Mission',
     missionText:
-      'Rise Against Hunger Italia travaille à éliminer la faim dans le monde par l\'emballage et la distribution de repas, en soutenant des projets de développement durable.',
+      "Rise Against Hunger Italia travaille à éliminer la faim dans le monde par l'emballage et la distribution de repas, en soutenant des projets de développement durable.",
     vision: 'Notre Vision',
-    visionText: 'Un monde sans faim d\'ici 2030.',
+    visionText: "Un monde sans faim d'ici 2030.",
     values: 'Nos Valeurs',
     transparency: 'Transparence',
     impact: 'Impact',
@@ -85,7 +87,7 @@ export default {
   },
 
   errors: {
-    generic: 'Une erreur s\'est produite',
+    generic: "Une erreur s'est produite",
     network: 'Erreur de connexion. Vérifiez votre connexion internet.',
     notFound: 'Contenu introuvable',
     unauthorized: 'Accès non autorisé',

@@ -64,9 +64,11 @@ export default {
     volunteer: 'Devino Voluntar',
     organize: 'Organizează un Eveniment',
     share: 'Distribuie Misiunea',
-    donateDescription: 'Contribuția ta ajută la prepararea meselor pentru cei care au nevoie',
+    donateDescription:
+      'Contribuția ta ajută la prepararea meselor pentru cei care au nevoie',
     volunteerDescription: 'Alătură-te echipei noastre de voluntari',
-    organizeDescription: 'Organizează un eveniment de ambalare în comunitatea ta',
+    organizeDescription:
+      'Organizează un eveniment de ambalare în comunitatea ta',
     shareDescription: 'Ajută-ne să răspândim misiunea noastră',
   },
 
