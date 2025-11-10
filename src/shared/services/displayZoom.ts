@@ -1,6 +1,5 @@
 import { NativeModules, PixelRatio } from 'react-native';
 import Constants from 'expo-constants';
-import * as Updates from 'expo-updates';
 import { logger } from '../utils/logger';
 
 let cachedDisplayZoomFactor = 1.0;
@@ -54,32 +53,22 @@ export const initDisplayZoom = async (): Promise<void> => {
         cachedDisplayZoomFactor = 1.0;
       }
     } else {
-      // Fallback: se non c'è modulo nativo, usa 1.0
-      // In production, Updates.manifest potrebbe non esistere - skip test factor
+      // Fallback: se non c'è modulo nativo, usa 1.0 (o test factor in dev)
       cachedDisplayZoomFactor = 1.0;
       
-      // Solo in development: prova eventuale fattore di test da extra
-      try {
-        const isDev = typeof __DEV__ !== 'undefined' ? __DEV__ : false;
-        if (isDev) {
-          const extra =
-            (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-            (
-              Updates as unknown as {
-                manifest?: { extra?: Record<string, unknown> };
-              }
-            ).manifest?.extra;
+      // Development only: override con test factor se presente
+      const isDev = typeof __DEV__ !== 'undefined' && __DEV__;
+      const shouldTryTestFactor = isDev;
+      
+      if (shouldTryTestFactor) {
+        try {
+          const extra = Constants.expoConfig?.extra as Record<string, unknown> | undefined;
           const testFactor = extra?.displayZoomTestFactor as number | undefined;
-          if (
-            typeof testFactor === 'number' &&
-            isFinite(testFactor) &&
-            testFactor > 0
-          ) {
-            cachedDisplayZoomFactor = testFactor;
-          }
+          const isValid = typeof testFactor === 'number' && isFinite(testFactor) && testFactor > 0;
+          cachedDisplayZoomFactor = isValid ? testFactor : 1.0;
+        } catch {
+          // Keep default 1.0
         }
-      } catch {
-        // Fail silently - mantieni 1.0
       }
     }
 

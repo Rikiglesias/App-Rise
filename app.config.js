@@ -92,7 +92,7 @@ export default {
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
-      buildNumber: process.env.IOS_BUILD_NUMBER || '54',
+      buildNumber: process.env.IOS_BUILD_NUMBER || '55',
       icon: './assets/icons/app/app-icon.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
