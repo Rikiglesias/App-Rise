@@ -15,6 +15,8 @@ export interface SocialPlatform {
   readonly handle: string;
   readonly description: string;
   readonly icon?: number;
+  readonly iconName?: string;
+  readonly iconColor?: string;
   readonly emoji?: string;
   readonly gradient: readonly [string, string, ...string[]];
   readonly onPress: () => Promise<void>;
@@ -44,7 +46,13 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
           >
             <PerfectContainer style={styles.socialCardContent}>
               <PerfectContainer style={styles.socialIconContainer}>
-                {platform.icon ? (
+                {platform.iconName ? (
+                  <PerfectIcon
+                    name={platform.iconName}
+                    size={32}
+                    color={platform.iconColor ?? Colors.neutral[900]}
+                  />
+                ) : platform.icon ? (
                   <PerfectImage
                     width={40}
                     height={40}

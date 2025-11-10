@@ -82,10 +82,19 @@ export const useOTAUpdates = () => {
 
         await Updates.fetchUpdateAsync();
 
-        logger.info('OTA Updates', 'Update downloaded, reloading app...');
+        logger.info(
+          'OTA Updates',
+          'Update downloaded. It will apply on next app restart.'
+        );
 
-        // Riavvia l'app per applicare l'aggiornamento
-        await Updates.reloadAsync();
+        // Nota: niente reload immediato per evitare crash/loop.
+        // L'aggiornamento verrà applicato al prossimo riavvio dell'app.
+        setUpdateState(prev => ({
+          ...prev,
+          isChecking: false,
+          isDownloading: false,
+          isUpdateAvailable: true,
+        }));
       } else {
         logger.info('OTA Updates', 'No updates available');
         setUpdateState(prev => ({
@@ -124,14 +133,21 @@ export const useOTAUpdates = () => {
     }
   };
 
-  // Controlla aggiornamenti all'avvio dell'app
+  // Controlla aggiornamenti all'avvio dell'app - DISABILITATO
+  // Il controllo OTA avviene SOLO:
+  // 1. Manualmente tramite OTADebugPanel (dev mode)
+  // 2. Background check (senza UI) quando l'app torna in foreground
+  // Questo evita la "schermata OTA" fastidiosa all'apertura dell'app
   useEffect(() => {
-    // Ritarda il controllo di 2 secondi per permettere all'app di caricarsi completamente
-    const timer = setTimeout(() => {
-      void checkForUpdates();
-    }, 2000);
-
-    return () => clearTimeout(timer);
+    // NOTA: Controllo automatico disabilitato per UX migliore
+    // L'update verrà scaricato in background senza disturbare l'utente
+    // e applicato al prossimo riavvio dell'app
+    
+    // Se vuoi riabilitarlo:
+    // const timer = setTimeout(() => {
+    //   void checkForUpdates();
+    // }, 2000);
+    // return () => clearTimeout(timer);
   }, []);
 
   // Nota: Il controllo automatico quando l'app torna in foreground

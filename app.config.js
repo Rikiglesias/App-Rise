@@ -180,9 +180,7 @@ export default {
     // Aggiornamenti OTA
     updates: updatesConfig,
 
-    // Runtime version per aggiornamenti
-    runtimeVersion: {
-      policy: 'appVersion',
-    },
+    // Runtime version per aggiornamenti: unificata su appVersion
+    runtimeVersion: { policy: 'appVersion' },
   },
 };

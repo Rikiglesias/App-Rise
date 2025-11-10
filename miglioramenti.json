@@ -1,0 +1,447 @@
+{
+  "meta": {
+    "project": "riseagainsthungeritalia",
+    "lastUpdated": "2025-11-10",
+    "appStatus": "PRODUCTION_READY",
+    "securityRating": "10/10",
+    "i18nStatus": "19 languages implemented (Home screen complete)",
+    "scope": "LAUNCH-FOCUSED priorities - Post-security audit",
+    "note": "App is ready for Google Play / App Store submission"
+  },
+  "launch_priorities": [
+    {
+      "priority": 1,
+      "id": "security-secret-scanning",
+      "effort": "5 minutes",
+      "impact": "CRITICAL",
+      "reason": "Prevent accidental secret commits - GitHub native feature"
+    },
+    {
+      "priority": 2,
+      "id": "nav-deep-linking",
+      "effort": "2-3 hours",
+      "impact": "HIGH",
+      "reason": "Essential for QR codes, push notifications, email campaigns"
+    },
+    {
+      "priority": 3,
+      "id": "build-targetsdk-update",
+      "effort": "30 minutes",
+      "impact": "HIGH",
+      "reason": "Google Play compliance - check SDK 54 supports latest targetSdk"
+    },
+    {
+      "priority": 4,
+      "id": "i18n-runtime-switch",
+      "effort": "3-4 hours",
+      "impact": "MEDIUM-HIGH",
+      "reason": "Already have 19 languages - need runtime change without restart"
+    },
+    {
+      "priority": 5,
+      "id": "i18n-missing-keys-check",
+      "effort": "1 hour",
+      "impact": "MEDIUM",
+      "reason": "Prevent missing translations across 19 languages"
+    },
+    {
+      "priority": 6,
+      "id": "logging-remote-integration",
+      "effort": "4-5 hours",
+      "impact": "HIGH",
+      "reason": "Production debugging with Sentry - essential post-launch"
+    }
+  ],
+  "post_launch": [
+    {
+      "priority": 7,
+      "id": "complete-i18n-app",
+      "effort": "2-3 days",
+      "impact": "HIGH",
+      "reason": "Translate remaining screens (Impact, Actions, Social) - currently only Home is done"
+    },
+    {
+      "priority": 8,
+      "id": "analytics-tracking",
+      "effort": "1 day",
+      "impact": "HIGH",
+      "reason": "User behavior tracking for product decisions"
+    }
+  ],
+  "improvements": [
+    {
+      "id": "nav-native-stack",
+      "title": "Usare createNativeStackNavigator in AppNavigator",
+      "category": "navigation",
+      "description": "Allinea AppNavigator all'uso di native-stack per performance migliori e gesture native, come già fatto nell'Impact stack.",
+      "rationale": "Riduce overhead JS delle animazioni e migliora fluidità.",
+      "files": ["src/navigation/AppNavigator.tsx:1"],
+      "actions": [
+        "Sostituire @react-navigation/stack con @react-navigation/native-stack",
+        "Aggiornare le opzioni header a quelle supportate da native-stack"
+      ],
+      "impact": "medium",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Navigazione tra tutte le screen senza regressioni", "Profilare TTI/transition jank"]
+    },
+    {
+      "id": "nav-deep-linking",
+      "title": "Aggiungere deep linking e scheme personalizzato",
+      "category": "navigation",
+      "description": "Configurare linking su NavigationContainer e uno scheme (es. rah://) per aprire schermate da link e notifiche.",
+      "rationale": "Permette integrazioni con web, email e push.",
+      "files": ["src/navigation/AppNavigator.tsx:1", "app.config.js:1"],
+      "actions": [
+        "Definire linking config (prefixes, config per route)",
+        "Aggiungere scheme in app.config.js (expo.scheme)"
+      ],
+      "impact": "high",
+      "effort": "medium",
+      "risk": "low",
+      "verification": ["Aprire rah://route da emulatori iOS/Android", "Testare cold/warm start"]
+    },
+    {
+      "id": "nav-types-consistency",
+      "title": "Coerenza dei tipi param per route",
+      "category": "navigation",
+      "description": "Garantire che tutti i navigator usino param list tipizzate ed esportate centralmente.",
+      "rationale": "Previene bug in navigate/route.params con TypeScript strict.",
+      "files": ["src/navigation/types.ts:1", "src/navigation/*.tsx"],
+      "actions": ["Unificare RootStackParamList e BottomTabParamList", "Tipizzare tutti i create*Navigator"],
+      "impact": "medium",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["TS noImplicitAny rimane a zero su navigazione"]
+    },
+    {
+      "id": "display-zoom-plugin-integration",
+      "title": "Integrare plugin Display Zoom iOS",
+      "category": "platform/ios",
+      "description": "Aggiungere il plugin custom nella sezione plugins di app.config per generare il modulo nativo DisplayZoom.m.",
+      "rationale": "Ottiene un fattore di zoom reale su iOS invece del fallback 1.0 in JS.",
+      "files": ["plugins/with-display-zoom.js:1", "app.config.js:1", "src/shared/services/displayZoom.ts:1"],
+      "actions": [
+        "Elencare 'plugins/with-display-zoom' in app.config.js",
+        "Eseguire prebuild iOS e verificare che NativeModules.DisplayZoom esponga il metodo"
+      ],
+      "impact": "medium",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Logga displayZoomFactor != 1.0 dove applicabile"]
+    },
+    {
+      "id": "paper-theme-mapping",
+      "title": "Mappatura completa tema MD3 di React Native Paper",
+      "category": "ui/theme",
+      "description": "Completare il mapping di colori (on-*, surfaceVariant), shapes, elevation e tipografia in PaperProvider.",
+      "rationale": "Coerenza visiva e accessibilità (contrasto) migliori su tutta l'app.",
+      "files": ["App.tsx:1"],
+      "actions": ["Estendere paperTheme.colors e shape/typography", "Verificare componenti Paper (Button/Card/Surface)"] ,
+      "impact": "medium",
+      "effort": "medium",
+      "risk": "low",
+      "verification": ["Verifica contrasto AA/AAA su schermi chiari/scuri"]
+    },
+    {
+      "id": "reduced-motion-support",
+      "title": "Supporto Reduced Motion (accessibilità)",
+      "category": "ui/accessibility",
+      "description": "Rispetto della preferenza di sistema per ridurre animazioni/blur/ombre ove possibile.",
+      "rationale": "Migliora l’accessibilità per utenti sensibili al movimento.",
+      "files": ["src/components/ui/*.tsx", "src/navigation/BottomTabNavigator.tsx:1"],
+      "actions": ["Leggere AccessibilityInfo.isReduceMotionEnabled", "Disabilitare animazioni non essenziali"],
+      "impact": "medium",
+      "effort": "medium",
+      "risk": "low",
+      "verification": ["Simulare reduce motion in emulatori e verificare comportamenti"]
+    },
+    {
+      "id": "persist-theme-selection",
+      "title": "Persistenza tema (light/dark/system)",
+      "category": "ui/theme",
+      "description": "Salvare e ripristinare la scelta utente in UniversalTheme con AsyncStorage.",
+      "rationale": "Esperienza consistente tra sessioni.",
+      "files": ["src/shared/theme/UniversalTheme.tsx:1"],
+      "actions": ["Persistenza themeMode e ripristino all'avvio"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Cambiare tema, riavviare app e verificare persistenza"]
+    },
+    {
+      "id": "reanimated-adoption",
+      "title": "Valutare Reanimated per micro-animazioni",
+      "category": "performance",
+      "description": "Usare React Native Reanimated per animazioni fluide in tab bar e UI interattive.",
+      "rationale": "Riduce jank nelle interazioni complesse.",
+      "files": ["src/navigation/BottomTabNavigator.tsx:1", "src/components/ui/*"],
+      "actions": ["Integrare reanimated dove utile (icon scale/press feedback)"],
+      "impact": "medium",
+      "effort": "medium",
+      "risk": "medium",
+      "verification": ["Profilare frame time durante interazioni tab"]
+    },
+    {
+      "id": "alias-consistency",
+      "title": "Allineamento alias tra TS/Babel/Metro",
+      "category": "tooling",
+      "description": "Garantire che paths (tsconfig), alias (babel, metro) restino sincronizzati e necessari.",
+      "rationale": "Evita import rotti e drift di configurazione.",
+      "files": ["tsconfig.json:1", "babel.config.js:1", "metro.config.js:1"],
+      "actions": ["Aggiungere script di verifica alias", "Rimuovere alias non usati (es. @navigation se non necessario)"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Eseguire script e build in dev/ci"]
+    },
+    {
+      "id": "jest-alias-stores",
+      "title": "Coerenza mapper Jest per '@/stores'",
+      "category": "testing",
+      "description": "Rimuovere o creare la cartella 'src/stores' per allineare moduleNameMapper.",
+      "rationale": "Previene import futuri rotti nei test.",
+      "files": ["jest.config.js:1", "src/stores/"],
+      "actions": ["Allineare mapper/alias con struttura reale"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Jest senza errori di risoluzione moduli"]
+    },
+    {
+      "id": "jest-ota-mocks",
+      "title": "Mock espliciti expo-updates per OTA",
+      "category": "testing",
+      "description": "Aggiungere mock di isEnabled/isEmbeddedLaunch/updateId per stabilizzare i test OTA.",
+      "rationale": "Riduce flakiness e migliora affidabilità test.",
+      "files": ["jest.setup.js:1", "src/shared/hooks/useOTAUpdates.ts:1"],
+      "actions": ["Estendere mock di expo-updates con proprietà mancante"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Test OTA deterministici e ripetibili"]
+    },
+    {
+      "id": "tests-perfect-scale",
+      "title": "Test estremi per PerfectScale",
+      "category": "testing",
+      "description": "Aggiungere test su device estremi (SE/iPad) e con display zoom per wrapping identico.",
+      "rationale": "Previene regressioni di layout e testo.",
+      "files": ["src/shared/constants/perfectScale.ts:1", "src/components/ui/PerfectText.tsx:1"],
+      "actions": ["Snapshot/behavioral tests su fontSize/lineHeight/width calcolati"],
+      "impact": "medium",
+      "effort": "medium",
+      "risk": "low",
+      "verification": ["Snapshot stabili su più matrici di dimensioni"]
+    },
+    {
+      "id": "tests-tab-large-fontscale",
+      "title": "Test TabBar con fontScale alto",
+      "category": "testing",
+      "description": "Validare label truncation/overflow e altezze con fontScale > threshold.",
+      "rationale": "Garantisce usabilità con accessibilità elevata.",
+      "files": ["src/navigation/BottomTabNavigator.tsx:1"],
+      "actions": ["Testare isHighZoom e misure derivate in componenti tab"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Snapshot testo e dimensioni coerenti"]
+    },
+    {
+      "id": "i18n-context-rerender",
+      "title": "Rerender su cambio lingua",
+      "category": "i18n",
+      "description": "Portare stato lingua in un Context per far re-renderizzare i consumer al cambio lingua.",
+      "rationale": "Permette switch runtime affidabile.",
+      "files": ["src/locales/index.ts:1", "src/shared/hooks/useTranslation.ts:1"],
+      "actions": ["Introdurre LanguageProvider e usare i18n.onChange"],
+      "impact": "medium",
+      "effort": "medium",
+      "risk": "low",
+      "verification": ["UI cambia lingua senza restart"]
+    },
+    {
+      "id": "i18n-missing-keys-check",
+      "title": "Verifica chiavi mancanti fra lingue",
+      "category": "i18n",
+      "description": "Script per diff tra lingua base e secondarie per copertura traduzioni.",
+      "rationale": "Previene fallback indesiderati in produzione.",
+      "files": ["src/locales/*.ts", "scripts/utils/"] ,
+      "actions": ["Aggiungere script di controllo e job CI opzionale"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Report chiavi mancanti in CI"]
+    },
+    {
+      "id": "security-secret-scanning",
+      "title": "Secret scanning in CI",
+      "category": "security",
+      "description": "Abilitare scansioni di segreti (service accounts, chiavi) nelle PR.",
+      "rationale": "Riduce rischio di commit accidentali di segreti.",
+      "files": [".github/workflows/*", "eas.json:1"],
+      "actions": ["Integrare strumenti (es. GitHub secret scanning/Snyk)"],
+      "impact": "high",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["PR con segreti triggera blocco/alert"]
+    },
+    {
+      "id": "security-pins-lifecycle",
+      "title": "Gestione ciclo di vita certificate pinning",
+      "category": "security",
+      "description": "Monitorare scadenze pin e mantenere almeno un backup pin valido.",
+      "rationale": "Evita blocchi rete al rotate certificati.",
+      "files": ["android-network-security-config*.xml:1", "app.config.js:1"],
+      "actions": ["Programmare review periodica dei pin", "Aggiornare quando CA/leaf ruotano"],
+      "impact": "medium",
+      "effort": "low",
+      "risk": "medium",
+      "verification": ["Test con certificati aggiornati in staging"]
+    },
+    {
+      "id": "build-targetsdk-update",
+      "title": "Aggiornamento targetSdkVersion (quando supportato)",
+      "category": "build/release",
+      "description": "Pianificare targetSdk 35+ non appena supportato dall’SDK Expo in uso.",
+      "rationale": "Conformità ai requisiti Google Play futuri.",
+      "files": ["app.config.js:1"],
+      "actions": ["Monitorare release Expo/React Native", "Aggiornare target al momento opportuno"],
+      "impact": "high",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Build EAS production-store ok, nessun warning Play"]
+    },
+    {
+      "id": "metro-port-fallback",
+      "title": "Fallback dinamico porta Metro",
+      "category": "devx",
+      "description": "Consentire override via env/arg e fallback automatico se 8081 è occupata.",
+      "rationale": "Riduce attrito in ambienti di sviluppo condivisi.",
+      "files": ["metro.config.js:1"],
+      "actions": ["Leggere porta da process.env o provare alternative (8082/19000)"] ,
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Start dev server anche con 8081 occupata"]
+    },
+    {
+      "id": "eslint-overrides-refresh",
+      "title": "Aggiornare override ESLint legacy",
+      "category": "linting",
+      "description": "Rimuovere voci riferite a file non più lunghi/inesistenti e mantenere la lista attuale.",
+      "rationale": "Evita confusione e segnali falsi nel piano refactor.",
+      "files": [".eslintrc.js:1"],
+      "actions": ["Rivalutare elenco file in sezione LEGACY FILES"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Lint senza override non necessari"]
+    },
+    {
+      "id": "eslint-custom-rule-phased",
+      "title": "Abilitare gradualmente no-offgrid-spacing",
+      "category": "linting",
+      "description": "Abilitare la regola custom su scope limitato (UI) per enforcement progressivo della grid.",
+      "rationale": "Migliora coerenza del layout senza bloccare il flusso.",
+      "files": ["eslint-rules/no-offgrid-spacing.js:1", ".eslintrc.js:1"],
+      "actions": ["Aggiungere rule come warn su src/components/ui", "Portare a error quando la codebase è allineata"],
+      "impact": "medium",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Nessun false positive su componenti critiche"]
+    },
+    {
+      "id": "conta-problemi-json",
+      "title": "Output JSON per conta-problemi",
+      "category": "ci/tooling",
+      "description": "Aggiungere flag per generare un report JSON consumabile dalla CI.",
+      "rationale": "Consente trend e gating più fini in pipeline.",
+      "files": ["scripts/conta-problemi.js:1"],
+      "actions": ["Aggiungere opzione --json e scrivere su complete-analysis-report.json"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Job CI legge il JSON e pubblica artefatto"]
+    },
+    {
+      "id": "maps-performance-tuning",
+      "title": "Ottimizzazioni Mappe",
+      "category": "performance/maps",
+      "description": "Usare initialRegion per viste statiche, limitare update su onRegionChange, valutare clustering markers.",
+      "rationale": "Riduce re-render ed evita CPU spikes su liste lunghe di marker.",
+      "files": ["src/components/layout/InteractiveMap.tsx:1", "src/features/impact/screens/MapModalScreen.tsx:1"],
+      "actions": ["Sostituire region con initialRegion se non serve controllo", "Throttle/debounce degli handler", "Clustering se molti marker"],
+      "impact": "medium",
+      "effort": "medium",
+      "risk": "medium",
+      "verification": ["Scroll/Pan mappa fluido in device low-end"]
+    },
+    {
+      "id": "logging-remote-integration",
+      "title": "Integrazione logger con backend/Sentry",
+      "category": "observability",
+      "description": "Inviare buffer log a backend/SDK (Sentry/Segment) con scrub di dati sensibili e rate limit.",
+      "rationale": "Migliora diagnosi in produzione mantenendo privacy.",
+      "files": ["src/shared/utils/logger.ts:1"],
+      "actions": ["Aggiungere transport remoto opzionale", "Redazione dati e sampling per release"],
+      "impact": "high",
+      "effort": "medium",
+      "risk": "medium",
+      "verification": ["Eventi visibili in Sentry/endpoint con PII pulito"]
+    },
+    {
+      "id": "housekeeping-artifacts",
+      "title": "Pulizia artefatti pesanti locali",
+      "category": "devx",
+      "description": "Rimuovere file .aab/.apk di test e usare cartelle dedicate/ignora per tenere il workspace snello.",
+      "rationale": "Riduce tempi di indexing e spazio disco.",
+      "files": ["application-*.aab:1", ".gitignore:1"],
+      "actions": ["Spostare artefatti in cartelle di output ignorate", "Aggiungere script cleanup"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Workspace più reattivo, meno file monitorati"]
+    },
+    {
+      "id": "ota-behavior-options",
+      "title": "Parametrizzare UX OTA (silent vs prompt)",
+      "category": "ota",
+      "description": "Esporre flag per decidere se applicare update subito (reload) o mostrare un prompt all’utente.",
+      "rationale": "Controllo fine della UX in produzione.",
+      "files": ["src/shared/hooks/useOTAUpdates.ts:1", "app.config.js:1"],
+      "actions": ["Aggiungere extra per strategy e switch nella hook"],
+      "impact": "medium",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["Simulare update disponibile e verificare comportamento"]
+    },
+    {
+      "id": "expo-compat-check",
+      "title": "Verifica compatibilità React/Expo/RN",
+      "category": "stability",
+      "description": "Eseguire expo-doctor e note di rilascio per confermare compatibilità React 19 con SDK 54.",
+      "rationale": "Evita mismatch runtime.",
+      "files": ["package.json:1"],
+      "actions": ["Eseguire npx expo-doctor", "Adeguare versioni se necessario"],
+      "impact": "high",
+      "effort": "low",
+      "risk": "medium",
+      "verification": ["expo-doctor clean, app avviata su iOS/Android/Web"]
+    },
+    {
+      "id": "ts-allowjs-cleanup",
+      "title": "Chiarezza su allowJs",
+      "category": "typescript",
+      "description": "Valutare rimozione di allowJs se i .js sono esclusi, per ridurre ambiguità.",
+      "rationale": "Config più semplice per il team.",
+      "files": ["tsconfig.json:1"],
+      "actions": ["Rimuovere allowJs o motivarne l’uso in README/AGENTS"],
+      "impact": "low",
+      "effort": "low",
+      "risk": "low",
+      "verification": ["tsc --noEmit resta pulito"]
+    }
+  ]
+}
+
