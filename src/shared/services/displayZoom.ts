@@ -54,25 +54,32 @@ export const initDisplayZoom = async (): Promise<void> => {
         cachedDisplayZoomFactor = 1.0;
       }
     } else {
-      // Fallback: se non c'è modulo nativo, prova eventuale fattore di test da extra (solo dev)
-      const extra =
-        (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-        (
-          Updates as unknown as {
-            manifest?: { extra?: Record<string, unknown> };
+      // Fallback: se non c'è modulo nativo, usa 1.0
+      // In production, Updates.manifest potrebbe non esistere - skip test factor
+      cachedDisplayZoomFactor = 1.0;
+      
+      // Solo in development: prova eventuale fattore di test da extra
+      try {
+        const isDev = typeof __DEV__ !== 'undefined' ? __DEV__ : false;
+        if (isDev) {
+          const extra =
+            (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
+            (
+              Updates as unknown as {
+                manifest?: { extra?: Record<string, unknown> };
+              }
+            ).manifest?.extra;
+          const testFactor = extra?.displayZoomTestFactor as number | undefined;
+          if (
+            typeof testFactor === 'number' &&
+            isFinite(testFactor) &&
+            testFactor > 0
+          ) {
+            cachedDisplayZoomFactor = testFactor;
           }
-        ).manifest?.extra;
-      const testFactor = extra?.displayZoomTestFactor as number | undefined;
-      const isDev = typeof __DEV__ !== 'undefined' ? __DEV__ : false;
-      if (
-        isDev &&
-        typeof testFactor === 'number' &&
-        isFinite(testFactor) &&
-        testFactor > 0
-      ) {
-        cachedDisplayZoomFactor = testFactor;
-      } else {
-        cachedDisplayZoomFactor = 1.0;
+        }
+      } catch {
+        // Fail silently - mantieni 1.0
       }
     }
 
@@ -81,14 +88,6 @@ export const initDisplayZoom = async (): Promise<void> => {
       fontScale,
       displayZoomFactor: cachedDisplayZoomFactor,
       nativeAvailable: !!NativeDisplayZoom,
-      testFactorFromExtra: (
-        (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-        (
-          Updates as unknown as {
-            manifest?: { extra?: Record<string, unknown> };
-          }
-        ).manifest?.extra
-      )?.displayZoomTestFactor,
     });
   } catch (err) {
     cachedDisplayZoomFactor = 1.0;

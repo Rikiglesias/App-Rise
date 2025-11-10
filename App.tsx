@@ -7,7 +7,8 @@ import { ThemeProvider } from './src/shared/hooks/useTheme';
 import { logger } from './src/shared/utils/logger';
 import { initDisplayZoom } from './src/shared/services/displayZoom';
 import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
-import { useOTAUpdates } from './src/shared/hooks/useOTAUpdates';
+// 🧪 TEST: OTA Updates disabilitati per diagnostica crash TestFlight
+// import { useOTAUpdates } from './src/shared/hooks/useOTAUpdates';
 // Import rimossi - preloading disabilitato
 // import {
 //   preloadCriticalComponents,
@@ -45,15 +46,15 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  // Inizializza sistema OTA in background (solo ON_ERROR_RECOVERY - no delay all'avvio)
-  useOTAUpdates();
+  // 🧪 TEST DIAGNOSTICO: OTA Updates DISABILITATI per identificare crash TestFlight
+  // useOTAUpdates();
   // Trigger re-render dopo init display zoom (per applicare normalizzazione)
   const [_, setZoomReadyTick] = useState(0);
 
   // Inizializzazione app
   useEffect(() => {
     // Log dell'inizializzazione
-    logger.info('App', 'App initialized - OTA updates running in background (ON_ERROR_RECOVERY)');
+    logger.info('App', '🧪 TEST DIAGNOSTICO: App initialized - OTA Updates DISABLED');
     // Telemetria Display Zoom e re-render per applicare normalizzazione
     void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
   }, []);
