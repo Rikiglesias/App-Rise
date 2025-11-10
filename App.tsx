@@ -45,7 +45,7 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  // Inizializza sistema OTA in background (senza schermata UI)
+  // Inizializza sistema OTA in background (solo ON_ERROR_RECOVERY - no delay all'avvio)
   useOTAUpdates();
   // Trigger re-render dopo init display zoom (per applicare normalizzazione)
   const [_, setZoomReadyTick] = useState(0);
@@ -53,7 +53,7 @@ const App: React.FC = () => {
   // Inizializzazione app
   useEffect(() => {
     // Log dell'inizializzazione
-    logger.info('App', 'App initialized - OTA updates running in background');
+    logger.info('App', 'App initialized - OTA updates running in background (ON_ERROR_RECOVERY)');
     // Telemetria Display Zoom e re-render per applicare normalizzazione
     void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
   }, []);

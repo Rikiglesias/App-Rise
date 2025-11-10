@@ -12,47 +12,48 @@
 import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import it from './it';
-import en from './en';
-import es from './es';
-import fr from './fr';
-import de from './de';
-import pt from './pt';
-import nl from './nl';
-import pl from './pl';
-import ro from './ro';
-import el from './el';
-import cs from './cs';
-import sv from './sv';
-import hu from './hu';
-import da from './da';
-import fi from './fi';
-import no from './no';
-import bg from './bg';
-import sk from './sk';
-import hr from './hr';
+// Lingue disattivate - solo italiano attivo
+// import en from './en';
+// import es from './es';
+// import fr from './fr';
+// import de from './de';
+// import pt from './pt';
+// import nl from './nl';
+// import pl from './pl';
+// import ro from './ro';
+// import el from './el';
+// import cs from './cs';
+// import sv from './sv';
+// import hu from './hu';
+// import da from './da';
+// import fi from './fi';
+// import no from './no';
+// import bg from './bg';
+// import sk from './sk';
+// import hr from './hr';
 import type { SupportedLocale } from './types';
 
-// Crea istanza i18n con tutte le 19 lingue europee
+// Solo italiano attivo
 const i18n = new I18n({
   it,
-  en,
-  es,
-  fr,
-  de,
-  pt,
-  nl,
-  pl,
-  ro,
-  el,
-  cs,
-  sv,
-  hu,
-  da,
-  fi,
-  no,
-  bg,
-  sk,
-  hr,
+  // en,
+  // es,
+  // fr,
+  // de,
+  // pt,
+  // nl,
+  // pl,
+  // ro,
+  // el,
+  // cs,
+  // sv,
+  // hu,
+  // da,
+  // fi,
+  // no,
+  // bg,
+  // sk,
+  // hr,
 });
 
 // Configurazione
@@ -65,27 +66,27 @@ const getDeviceLocale = (): SupportedLocale => {
   const locales = Localization.getLocales();
   const primaryLocale = locales[0]?.languageCode || 'it';
 
-  // Mappa lingua rilevata a lingua supportata (19 lingue europee)
+  // Solo italiano supportato
   const supportedLocales: SupportedLocale[] = [
     'it',
-    'en',
-    'es',
-    'fr',
-    'de',
-    'pt',
-    'nl',
-    'pl',
-    'ro',
-    'el',
-    'cs',
-    'sv',
-    'hu',
-    'da',
-    'fi',
-    'no',
-    'bg',
-    'sk',
-    'hr',
+    // 'en',
+    // 'es',
+    // 'fr',
+    // 'de',
+    // 'pt',
+    // 'nl',
+    // 'pl',
+    // 'ro',
+    // 'el',
+    // 'cs',
+    // 'sv',
+    // 'hu',
+    // 'da',
+    // 'fi',
+    // 'no',
+    // 'bg',
+    // 'sk',
+    // 'hr',
   ];
 
   // Verifica se lingua rilevata è supportata
@@ -116,23 +117,23 @@ export default i18n;
 // Export traduzioni per accesso diretto (opzionale)
 export {
   it,
-  en,
-  es,
-  fr,
-  de,
-  pt,
-  nl,
-  pl,
-  ro,
-  el,
-  cs,
-  sv,
-  hu,
-  da,
-  fi,
-  no,
-  bg,
-  sk,
-  hr,
+  // en,
+  // es,
+  // fr,
+  // de,
+  // pt,
+  // nl,
+  // pl,
+  // ro,
+  // el,
+  // cs,
+  // sv,
+  // hu,
+  // da,
+  // fi,
+  // no,
+  // bg,
+  // sk,
+  // hr,
 };
 export type { SupportedLocale };

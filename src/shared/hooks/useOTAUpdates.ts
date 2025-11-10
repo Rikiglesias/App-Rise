@@ -135,6 +135,15 @@ export const useOTAUpdates = () => {
 
   // Controlla aggiornamenti in background quando app torna in foreground
   useEffect(() => {
+    // 🛡️ PROTEZIONE: Skip in Expo Go per evitare crash da moduli native
+    if (__DEV__ && !Updates.isEmbeddedLaunch) {
+      logger.debug(
+        'OTA Updates',
+        'Expo Go detected - skipping AppState listener to prevent crash'
+      );
+      return;
+    }
+
     // Import dinamico di AppState per evitare dipendenze circolari
     let subscription: { remove: () => void } | null = null;
 

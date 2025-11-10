@@ -7,8 +7,8 @@ const CODE_SIGNING_ALGORITHM =
   process.env.EXPO_UPDATES_CODE_SIGNING_ALGORITHM ?? 'rsa-v1_5-sha256';
 
 const baseUpdatesConfig = {
-  fallbackToCacheTimeout: 3000, // 3 secondi per controllare updates (miglior TTI)
-  checkAutomatically: 'ON_LOAD', // Controlla all'avvio
+  fallbackToCacheTimeout: 0, // Nessun delay all'avvio - instant TTI
+  checkAutomatically: 'ON_ERROR_RECOVERY', // Check OTA solo su errori, non all'avvio
   url: 'https://u.expo.dev/52a33b0f-dec1-4674-812b-de5b888c911a',
 };
 
@@ -92,7 +92,7 @@ export default {
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
-      buildNumber: process.env.IOS_BUILD_NUMBER || '20',
+      buildNumber: process.env.IOS_BUILD_NUMBER || '53',
       icon: './assets/icons/app/app-icon.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
