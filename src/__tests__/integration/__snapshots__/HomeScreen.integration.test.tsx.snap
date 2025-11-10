@@ -195,7 +195,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                             resizeMode="cover"
                             source={
                               {
-                                "testUri": "../../../assets/icons/app/logo.png",
+                                "testUri": "../../../assets/icons/app/splash-screen.png",
                               }
                             }
                             style={
