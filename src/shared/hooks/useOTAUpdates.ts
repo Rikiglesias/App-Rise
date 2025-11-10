@@ -169,6 +169,7 @@ export const useOTAUpdates = () => {
   // - Check SOLO quando app torna in foreground (silent)
   // - Update scaricato in background
   // - Update applicato al prossimo restart (no reload forzato)
+  // GitHub Actions: workflow auto-trigger test
 
   return {
     ...updateState,
