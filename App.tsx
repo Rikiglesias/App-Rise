@@ -7,13 +7,8 @@ import { ThemeProvider } from './src/shared/hooks/useTheme';
 import { logger } from './src/shared/utils/logger';
 import { initDisplayZoom } from './src/shared/services/displayZoom';
 import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
-// 🧪 TEST: OTA Updates disabilitati per diagnostica crash TestFlight
-// import { useOTAUpdates } from './src/shared/hooks/useOTAUpdates';
-// Import rimossi - preloading disabilitato
-// import {
-//   preloadCriticalComponents,
-//   preloadSecondaryComponents,
-// } from './src/navigation/LazyLoading';
+import { useOTAUpdates } from './src/shared/hooks/useOTAUpdates';
+import { OTAUpdateScreen } from './src/shared/OTAUpdateScreen';
 
 // The new Main component that bridges the two theme systems
 const Main: React.FC = () => {
@@ -46,18 +41,32 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  // 🧪 TEST DIAGNOSTICO: OTA Updates DISABILITATI per identificare crash TestFlight
-  // useOTAUpdates();
+  // OTA Updates hook
+  const { isChecking, isDownloading, downloadProgress } = useOTAUpdates();
+
   // Trigger re-render dopo init display zoom (per applicare normalizzazione)
   const [_, setZoomReadyTick] = useState(0);
 
   // Inizializzazione app
   useEffect(() => {
     // Log dell'inizializzazione
-    logger.info('App', '🧪 TEST DIAGNOSTICO: App initialized - OTA Updates DISABLED');
+    logger.info('App', '✅ App initialized with OTA Updates enabled');
     // Telemetria Display Zoom e re-render per applicare normalizzazione
     void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
   }, []);
+
+  // Mostra schermata aggiornamento se necessario
+  const showUpdateScreen = isChecking || isDownloading;
+
+  if (showUpdateScreen) {
+    return (
+      <OTAUpdateScreen
+        isChecking={isChecking}
+        isDownloading={isDownloading}
+        progress={downloadProgress}
+      />
+    );
+  }
 
   return (
     <SafeAreaProvider>

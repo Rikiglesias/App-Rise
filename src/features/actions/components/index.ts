@@ -8,7 +8,7 @@ export {
   FirstSectionDivider,
 } from './shared/ActionButtonUtils';
 
-// Modern ActionButtons entry
+// Modern ActionButtons & Contribute components
 export { default as ActionButtons } from './ActionButtons/ActionButtons';
 export { useNewActionsAnimations } from './shared/ContributeAnimations';
 export { default as ContributeHeader } from './shared/ContributeHeader';

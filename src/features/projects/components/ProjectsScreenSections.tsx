@@ -5,7 +5,7 @@ import type {
   ProjectsEmptyStateProps,
   ProjectsHeaderProps,
   ProjectsStatsProps,
-} from '../types/ProjectsScreenTypes';
+} from '../ProjectsScreenTypes';
 import { PerfectContainer } from '@/components/ui/PerfectContainer';
 import { PerfectText } from '@/components/ui/PerfectText';
 import SectionContainer from '@/components/layout/SectionContainer';

@@ -6,8 +6,8 @@ import {
 } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { SocialCard, HeaderSection } from '../components';
-import { useSocialPlatforms } from '../hooks/useSocialPlatforms';
-import { mainStyles } from '../styles/mainStyles';
+import { useSocialPlatforms } from '../useSocialPlatforms';
+import { mainStyles } from '../mainStyles';
 import { mainStyles as aboutMainStyles } from '../../about/styles/mainStyles';
 
 import {

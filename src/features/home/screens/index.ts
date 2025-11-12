@@ -1,6 +1,6 @@
 // ===================================================================
-// ACTIONS FEATURE - Central Export
+// HOME SCREENS - Central Export
 // ===================================================================
 
-export * from './screens';
-export type { ContributeTabScreenProps } from './ContributeScreenTypes';
+export { default } from './HomeScreen';
+export { default as HomeScreen } from './HomeScreen';

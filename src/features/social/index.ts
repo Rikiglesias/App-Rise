@@ -2,5 +2,8 @@
 // SOCIAL FEATURE - Central Export
 // ===================================================================
 
-// Components exports available when components are implemented
-export * from './screens';
+// Screens
+export { default as SeguiciScreen } from './screens/SeguiciScreen';
+
+// Hooks
+export { useSocialPlatforms } from './useSocialPlatforms';

@@ -37,7 +37,7 @@ jest.mock('@/shared/hooks/useHapticFeedback', () => ({
 }));
 
 // Mock Contribute components
-jest.mock('@/features/actions/components/Contribute/components', () => ({
+jest.mock('@/features/actions/components', () => ({
   ActionButtons: () => null,
   ContributeHeader: () => null,
   HeaderDivider: () => null,

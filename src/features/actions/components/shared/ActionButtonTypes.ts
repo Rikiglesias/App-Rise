@@ -1,5 +1,5 @@
 import type { ViewStyle, TextStyle, Animated } from 'react-native';
-import type { ContributeTabScreenProps } from '../../types/ContributeScreenTypes';
+import type { ContributeTabScreenProps } from '../../ContributeScreenTypes';
 import type { useNewActionsAnimations } from './ContributeAnimations';
 
 // Interfaccia per i dati di ogni bottone

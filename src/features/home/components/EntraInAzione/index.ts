@@ -1,6 +1,6 @@
 // ===================================================================
-// ACTIONS FEATURE - Central Export
+// ENTRA IN AZIONE - Central Export
 // ===================================================================
 
-export * from './screens';
-export type { ContributeTabScreenProps } from './ContributeScreenTypes';
+export { EntraInAzione } from './EntraInAzione';
+export { default } from './EntraInAzione';

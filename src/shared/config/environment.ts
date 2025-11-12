@@ -18,22 +18,27 @@ const getEnvVar = (key: string): string | undefined => {
     : undefined;
 };
 
+/**
+ * Resolve production API URL.
+ * NOTA: L'app attualmente NON usa API backend - tutti i dati sono statici.
+ * Questo URL è solo placeholder per mantenere compatibilità con apiSecurity.ts
+ * (che non viene utilizzato ma è importato da shared/index.ts).
+ */
 const resolveProductionApiUrl = (): string => {
   const extra = (Constants.expoConfig?.extra as { apiUrl?: string } | undefined)
     ?.apiUrl;
   const envFallback =
     getEnvVar('EXPO_PUBLIC_API_BASE_URL') ?? getEnvVar('API_BASE_URL');
   const url = extra ?? envFallback;
-  if (!url) {
-    const jestWorkerId = getEnvVar('JEST_WORKER_ID');
-    if (jestWorkerId) {
-      return 'https://test-api.local';
-    }
-    throw new Error(
-      'API base URL is not configured. Set EXPO_PUBLIC_API_BASE_URL (forwarded via extra.apiUrl) before building for production.'
-    );
+
+  // Fallback per Jest
+  const jestWorkerId = getEnvVar('JEST_WORKER_ID');
+  if (!url && jestWorkerId) {
+    return 'https://test-api.local';
   }
-  return url;
+
+  // Placeholder per produzione se non configurato (l'app non usa API)
+  return url ?? 'https://api.placeholder.local';
 };
 
 // Tipizzazione forte per environment variables
@@ -109,15 +114,6 @@ const getCurrentEnvironment = (): keyof typeof environmentConfigs => {
   return 'production';
 };
 
-// Ottieni configurazione ambiente corrente
-const currentEnv = getCurrentEnvironment();
-const config = environmentConfigs[currentEnv];
-
-// Sicurezza: verifica che la configurazione esista
-if (!config) {
-  throw new Error(`Environment configuration not found for: ${currentEnv}`);
-}
-
 // Validazione configurazione
 const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
   const requiredFields: (keyof AppEnvironment)[] = [
@@ -138,7 +134,7 @@ const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
     }
   }
 
-  // Validazione URL API
+  // Validazione URL API (permetti placeholder per produzione senza backend)
   try {
     new URL(envConfig.API_BASE_URL);
   } catch {
@@ -146,11 +142,39 @@ const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
   }
 };
 
-// Valida configurazione all'avvio
-validateEnvironmentConfig(config);
+// Lazy initialization: configurazione validata solo al primo accesso
+let cachedConfig: AppEnvironment | null = null;
 
-// Export configurazione tipizzata
-export const env: AppEnvironment = config;
+const getEnvironmentConfig = (): AppEnvironment => {
+  if (cachedConfig) {
+    return cachedConfig;
+  }
+
+  // Ottieni configurazione ambiente corrente
+  const currentEnv = getCurrentEnvironment();
+  const config = environmentConfigs[currentEnv];
+
+  // Sicurezza: verifica che la configurazione esista
+  if (!config) {
+    throw new Error(`Environment configuration not found for: ${currentEnv}`);
+  }
+
+  // Valida configurazione
+  validateEnvironmentConfig(config);
+
+  // Cache per accessi successivi
+  cachedConfig = config;
+  return config;
+};
+
+// Export configurazione tipizzata con lazy initialization
+// Usa Proxy per intercettare accessi e validare solo quando necessario
+export const env: AppEnvironment = new Proxy({} as AppEnvironment, {
+  get: (_target, prop: string | symbol) => {
+    const config = getEnvironmentConfig();
+    return config[prop as keyof AppEnvironment];
+  },
+});
 
 // Export helper functions
 export const isDevelopment = (): boolean => env.NODE_ENV === 'development';
@@ -167,7 +191,7 @@ export const getEnvironmentInfo = (): Record<string, unknown> => {
       : undefined;
 
   return {
-    current: currentEnv,
+    current: getCurrentEnvironment(),
     isDev: __DEV__,
     releaseChannel,
     expoVersion: Constants.expoConfig?.version,

@@ -2,7 +2,7 @@
 export { ProjectsScreen } from './screens/ProjectsScreen';
 
 // Hooks
-export { useProjectsScreenLogic } from './hooks/useProjectsScreenLogic';
+export { useProjectsScreenLogic } from './useProjectsScreenLogic';
 
 // Types
 export type {
@@ -11,4 +11,4 @@ export type {
   ProjectsScreenLogicReturn,
   ProjectTab,
   ProjectStats,
-} from './types/ProjectsScreenTypes';
+} from './ProjectsScreenTypes';

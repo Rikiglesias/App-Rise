@@ -1,12 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
-import {
-  createProjectTabs,
-  getSectionTitleByTab,
-} from '../data/ProjectsScreenData';
-import type {
-  Project,
-  ProjectsScreenLogicReturn,
-} from '../types/ProjectsScreenTypes';
+import { createProjectTabs, getSectionTitleByTab } from './ProjectsScreenData';
+import type { Project, ProjectsScreenLogicReturn } from './ProjectsScreenTypes';
 import { useProjectsData } from '@/shared/hooks/useProjectsData';
 
 // Custom Hook for Projects Screen Logic

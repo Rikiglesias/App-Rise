@@ -80,6 +80,64 @@ import { SystemImmunity } from '@/shared/utils/SystemImmunity';
 
 ---
 
+---
+
+## 📁 File Organization & Architecture
+
+### Feature Structure Pattern
+```
+features/[name]/
+├── index.ts              ← Barrel export
+├── [SingleFile].ts       ← Files singleton FLAT (no cartelle)
+├── components/           ← Solo se 2+ files
+├── hooks/                ← Solo se 2+ files
+├── screens/              ← Sempre (anche 1 file)
+├── styles/               ← Solo se 3+ files
+├── types/                ← Solo se 2+ files  
+├── data/                 ← Solo se 2+ files
+└── utils/                ← Solo se 2+ files
+```
+
+### Regole Cartelle vs Flat
+- ✅ **1 file = FLAT** (no cartella dedicata)
+  ```ts
+  ✅ home/HomeHeaderStyles.ts        (non home/styles/)
+  ✅ impact/useImpactAnimations.ts   (non impact/hooks/)
+  ```
+- ✅ **2+ files = Cartella + index.ts**
+  ```ts
+  ✅ home/components/EntraInAzione/
+     ├── ActionTitle.tsx
+     ├── ActionDescription.tsx
+     └── index.ts
+  ```
+- ✅ **3+ styles = Cartella giustificata**
+  ```ts
+  ✅ about/styles/
+     ├── mainStyles.ts
+     ├── modalStyles.ts
+     └── contactStyles.ts
+  ```
+
+### Barrel Exports (index.ts)
+- Usa index.ts in ogni cartella con 2+ files
+- File singleton non necessita index.ts
+- Pattern: `export { Component } from './Component';`
+
+### Import Paths
+- Usa alias `@/`: `import { X } from '@/features/home';`
+- Evita import relativi profondi: `../../..`
+- Barrel exports centralizzano gli export
+
+### Naming Conventions
+- **Components**: PascalCase (`ActionTitle.tsx`)
+- **Hooks**: camelCase con `use` prefix (`useHomeAnimations.ts`)
+- **Styles**: camelCase + `Styles` suffix (`homeHeaderStyles.ts`)
+- **Types**: PascalCase + `Types` suffix (`HomeScreenTypes.ts`)
+- **Utils**: camelCase (`mapHelpers.ts`)
+
+---
+
 ## 📌 Addendum – Sistema Millimetrico (Android parity + wrap identico)
 
 - PerfectText: per wrap identici su tutti i device, aggiungi `containerWidth` (riferito a iPhone 15, 393) scalato con `scaleDimensionLinear`.

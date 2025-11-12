@@ -3,7 +3,7 @@ import {
   createContainerStyles,
   createImageStyles,
   createTextStyles,
-} from '../styles/HomeHeaderStyles';
+} from '../HomeHeaderStyles';
 import type { HomeHeaderStyles } from '../types/HomeHeaderTypes';
 import { useTheme } from '@/shared/hooks/useTheme';
 

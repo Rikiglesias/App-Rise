@@ -1,12 +1,9 @@
 import React from 'react';
 import { RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useProjectsScreenLogic } from '../hooks/useProjectsScreenLogic';
-import { useProjectsScreenStyles } from '../styles/ProjectsScreenStyles';
-import type {
-  Project,
-  ProjectsScreenProps,
-} from '../types/ProjectsScreenTypes';
+import { useProjectsScreenLogic } from '../useProjectsScreenLogic';
+import { useProjectsScreenStyles } from '../ProjectsScreenStyles';
+import type { Project, ProjectsScreenProps } from '../ProjectsScreenTypes';
 
 import {
   ProjectsEmptyState,

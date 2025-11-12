@@ -9,7 +9,7 @@ jest.mock('expo-haptics', () => ({
 // Imports must come after jest.mock() calls - required by Jest
 import { renderHook, act } from '@testing-library/react-native';
 import { Linking, Alert } from 'react-native';
-import { useSocialPlatforms } from '@/features/social/hooks/useSocialPlatforms';
+import { useSocialPlatforms } from '@/features/social/useSocialPlatforms';
 import { logWarn } from '@/shared/utils/logger';
 /* eslint-enable import/first */
 

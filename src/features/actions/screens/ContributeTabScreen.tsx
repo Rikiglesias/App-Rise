@@ -4,13 +4,13 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import type { ContributeTabScreenProps } from '../types/ContributeScreenTypes';
+import type { ContributeTabScreenProps } from '../ContributeScreenTypes';
 import {
   ActionButtons,
   ContributeHeader,
   HeaderDivider,
   useNewActionsAnimations,
-} from '../components/Contribute/components';
+} from '../components';
 import { PlatformScrollView } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 

@@ -64,6 +64,7 @@ estensioni.txt
 # Commit message drafts and logs
 commit*.txt
 logs_*.zip
+logs_extracted/
 
 # Fastlane
 ios/fastlane/report.xml

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { mainStyles as aboutMainStyles } from '../../about/styles/mainStyles';
+import { mainStyles as aboutMainStyles } from '../about/styles/mainStyles';
 import { PerfectSpacing } from '@/shared/constants';
 
 /**

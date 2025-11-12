@@ -1,5 +1,6 @@
 // ===================================================================
-// CONTRIBUTE COMPONENTS - Central Export
+// PROJECTS SCREENS - Central Export
 // ===================================================================
 
-export * from './components';
+export { default } from './ProjectsScreen';
+export { default as ProjectsScreen } from './ProjectsScreen';

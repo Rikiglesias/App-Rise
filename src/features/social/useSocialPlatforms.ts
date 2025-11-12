@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { SocialPlatform } from '../components/SocialCard';
+import { SocialPlatform } from './components/SocialCard';
 import { Colors } from '@/shared/constants';
 import { logWarn } from '@/shared/utils/logger';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';

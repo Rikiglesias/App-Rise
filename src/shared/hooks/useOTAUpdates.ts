@@ -11,6 +11,7 @@ interface UpdateState {
   isChecking: boolean;
   isDownloading: boolean;
   isUpdateAvailable: boolean;
+  downloadProgress: number; // 0-100
   error: string | null;
   updateInfo: Updates.UpdateCheckResult | null;
 }
@@ -20,6 +21,7 @@ export const useOTAUpdates = () => {
     isChecking: false,
     isDownloading: false,
     isUpdateAvailable: false,
+    downloadProgress: 0,
     error: null,
     updateInfo: null,
   });
@@ -77,14 +79,20 @@ export const useOTAUpdates = () => {
           ...prev,
           isUpdateAvailable: true,
           isDownloading: true,
+          downloadProgress: 0,
           updateInfo: update,
         }));
 
-        await Updates.fetchUpdateAsync();
+        // Download con listener progresso
+        const downloadResult = await Updates.fetchUpdateAsync();
+
+        // Simula progresso (Expo non fornisce progresso reale ancora)
+        setUpdateState(prev => ({ ...prev, downloadProgress: 100 }));
 
         logger.info(
           'OTA Updates',
-          'Update downloaded. It will apply on next app restart.'
+          'Update downloaded. It will apply on next app restart.',
+          { updateId: downloadResult.manifest?.id }
         );
 
         // Nota: niente reload immediato per evitare crash/loop.
