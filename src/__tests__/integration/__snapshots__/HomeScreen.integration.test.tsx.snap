@@ -367,7 +367,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               style={
                 {
                   "alignSelf": "center",
-                  "width": "90%",
+                  "width": 577.3956070034865,
                 }
               }
               testID="action-description-card"
@@ -397,7 +397,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     "height": 3.2621220734660255,
                     "marginVertical": 24,
                     "opacity": 0.8,
-                    "width": "40%",
+                    "width": 256.076582767083,
                   }
                 }
               />

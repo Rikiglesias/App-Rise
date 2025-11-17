@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { SocialPlatform } from './components/SocialCard';
 import { Colors } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { logWarn } from '@/shared/utils/logger';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 
@@ -10,6 +11,7 @@ import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 // import facebookIcon from '@assets/icons/social/facebook.png';
 
 export const useSocialPlatforms = () => {
+  const { t } = useTranslation();
   const {
     openWebsiteLink,
     openInstagramLink,
@@ -33,9 +35,9 @@ export const useSocialPlatforms = () => {
   const socialPlatforms: SocialPlatform[] = [
     {
       id: 'website',
-      name: 'Sito Web',
+      name: t('social.websiteName'),
       handle: 'italy.riseagainsthunger.org',
-      description: 'Scopri tutte le nostre iniziative',
+      description: t('social.websiteDescription'),
       // Vector icon for web
       iconName: 'web',
       iconColor: Colors.neutral[900],
@@ -44,9 +46,9 @@ export const useSocialPlatforms = () => {
     },
     {
       id: 'instagram',
-      name: 'Instagram',
+      name: t('social.instagramName'),
       handle: '@riseagainsthungeritalia',
-      description: 'Foto e storie delle missioni',
+      description: t('social.instagramDescription'),
       // Use crisp vector icon instead of raster PNG
       iconName: 'instagram',
       iconColor: Colors.neutral[900],
@@ -55,9 +57,9 @@ export const useSocialPlatforms = () => {
     },
     {
       id: 'facebook',
-      name: 'Facebook',
+      name: t('social.facebookName'),
       handle: '@RiseAgainstHungerItalia',
-      description: 'Community e eventi locali',
+      description: t('social.facebookDescription'),
       // Use crisp vector icon instead of raster PNG
       iconName: 'facebook',
       iconColor: Colors.neutral[900],
@@ -66,9 +68,9 @@ export const useSocialPlatforms = () => {
     },
     {
       id: 'linkedin',
-      name: 'LinkedIn',
+      name: t('social.linkedinName'),
       handle: 'Rise Against Hunger Italia',
-      description: 'Opportunità e partnership',
+      description: t('social.linkedinDescription'),
       iconName: 'linkedin',
       iconColor: Colors.neutral[900],
       gradient: Colors.gradients.linkedin,

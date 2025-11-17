@@ -8,6 +8,12 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
 import { MapSection } from '@/features/impact/components/MapSection';
+import i18n from '@/locales';
+
+// Forza locale italiana per test consistenti
+beforeAll(() => {
+  i18n.locale = 'it';
+});
 
 // Mock Perfect UI Components
 jest.mock('@/components/ui', () => ({

@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { PerfectContainer, PerfectText } from '@/components/ui';
 import { StatCard } from './StatCard';
+import { PerfectContainer, PerfectText } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
 
@@ -30,6 +31,7 @@ export const CommunitySection: React.FC<Props> = ({
             size={24}
             lines={1}
             fontWeight="700"
+            immunity={true}
             style={styles.communityTitle}
           >
             🤝 {t('impact.communityTitle')}
@@ -37,7 +39,7 @@ export const CommunitySection: React.FC<Props> = ({
           <PerfectText
             size={16}
             lines={2}
-            containerWidth={0}
+            immunity={true}
             style={styles.communitySubtitle}
           >
             {t('impact.communitySubtitle')}
@@ -93,7 +95,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: PerfectSpacing.lg,
   },
-  communityHeaderBackground: sectionHeaderBackground('white'),
+  communityHeaderBackground: {
+    ...sectionHeaderBackground('white'),
+    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15)
+    alignSelf: 'center',
+  },
   communityTitle: {
     color: Colors.neutral[900],
     textAlign: 'center',

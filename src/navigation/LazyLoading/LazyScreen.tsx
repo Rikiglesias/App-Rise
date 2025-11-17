@@ -8,6 +8,7 @@ import { StyleSheet } from 'react-native';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { logger } from '@/shared/utils/logger';
 
 interface LazyScreenProps {
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary[500],
     paddingHorizontal: PerfectSpacing.lg,
     paddingVertical: PerfectSpacing.md,
-    borderRadius: 8,
+    borderRadius: scale(8),
   },
   retryText: {
     color: Colors.neutral[0],

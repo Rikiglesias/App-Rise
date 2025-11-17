@@ -37,8 +37,8 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalContainer: {
-    width: '90%',
-    maxHeight: '85%',
+    width: scale(354),  // Perfect System: 90% di 393px (iPhone 15), scala su tutti device
+    maxHeight: '85%',  // Percentuale OK per maxHeight (relativa a screen)
     // nessuna height fissa: lasciare auto, per evitare overflow
     minHeight: scale(600),
   },
@@ -46,7 +46,7 @@ export const modalStyles = StyleSheet.create({
   modalCard: {
     backgroundColor: Colors.neutral[0],
     borderRadius: scale(24),
-    borderWidth: 2,
+    borderWidth: scale(2),
     borderColor: Colors.neutral[700],
     overflow: 'hidden',
     // no percentage height: lasciamo crescere con il contenuto/maxHeight
@@ -137,7 +137,7 @@ export const modalStyles = StyleSheet.create({
     backgroundColor: Colors.primary[50],
     borderRadius: scale(16),
     padding: PerfectSpacing.lg,
-    borderWidth: 2,
+    borderWidth: scale(2),
     borderColor: Colors.primary[200],
     gap: PerfectSpacing.md,
   },
@@ -178,7 +178,7 @@ export const modalStyles = StyleSheet.create({
     backgroundColor: Colors.neutral[50],
     borderRadius: scale(16),
     padding: PerfectSpacing.lg,
-    borderWidth: 1,
+    borderWidth: scale(1),
     borderColor: Colors.neutral[200],
   },
 
@@ -206,7 +206,7 @@ export const modalStyles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
     borderRadius: scale(16),
     padding: PerfectSpacing.lg,
-    borderWidth: 2,
+    borderWidth: scale(2),
     borderColor: Colors.neutral[300],
     alignItems: 'center',
     gap: PerfectSpacing.md,

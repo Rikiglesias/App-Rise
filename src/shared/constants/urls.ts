@@ -15,7 +15,7 @@
 export const RISE_URLS = {
   // Main websites
   italyMain: 'https://italy.riseagainsthunger.org',
-  italyWebsite: 'https://www.riseagainsthunger.it/',
+  italyWebsite: 'https://italy.riseagainsthunger.org',
 
   // Donation & Actions
   donation: 'https://italy.riseagainsthunger.org/donaora/',

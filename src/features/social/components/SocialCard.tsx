@@ -138,9 +138,9 @@ const styles = {
     width: '100%' as const,
   },
   socialIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: scale(56),
+    height: scale(56),
+    borderRadius: scale(28),
     backgroundColor: 'transparent' as const,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,

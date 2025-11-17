@@ -40,7 +40,7 @@ export const ImpactHeader: React.FC = () => {
           fontWeight="500"
           style={styles.mainSubtitle}
         >
-          {t('actions.headerSubtitle')}
+          {t('impact.description')}
         </PerfectText>
       </PerfectContainer>
     </PerfectContainer>

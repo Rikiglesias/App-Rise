@@ -116,27 +116,32 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
       ? undefined
       : Math.max(0, Math.floor(height - scale(32)));
 
+  const needsBackdrop = size !== 'fullscreen' && !isTablet;
+
   return (
     <Modal
       {...modalProps}
       presentationStyle={presentationStyle}
-      transparent={size !== 'fullscreen' && !isTablet}
+      transparent={needsBackdrop}
+      animationType={modalProps.animationType || 'fade'}
+      statusBarTranslucent
     >
-      {/* Overlay per modal non-fullscreen su phone */}
-      {size !== 'fullscreen' && !isTablet && (
-        <>
-          <PerfectContainer style={styles.overlay} />
-          <PlatformTouchable
-            style={styles.backdropTouchable}
-            onPress={modalProps.onRequestClose}
-            accessibilityRole="button"
-            accessibilityLabel="Chiudi modale"
-          />
-        </>
+      {/* Backdrop unificato per modal non-fullscreen su phone */}
+      {needsBackdrop && (
+        <PlatformTouchable
+          style={styles.backdropOverlay}
+          onPress={modalProps.onRequestClose}
+          activeOpacity={1}
+          accessibilityRole="button"
+          accessibilityLabel="Chiudi modale"
+        >
+          <PerfectContainer style={StyleSheet.absoluteFillObject} />
+        </PlatformTouchable>
       )}
 
       {/* Container centrato */}
       <PerfectContainer
+        pointerEvents="box-none"
         style={[
           styles.modalWrapper,
           ...(size === 'fullscreen' ? [styles.fullscreen] : []),
@@ -187,14 +192,11 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  overlay: {
+  backdropOverlay: {
     ...StyleSheet.absoluteFillObject,
-    // rgba necessario per overlay semi-trasparente del modal
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  backdropTouchable: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalWrapper: {
     flex: 1,

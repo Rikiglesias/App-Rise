@@ -14,6 +14,7 @@ import {
 } from '../constants/designTokens';
 import { scale } from '../constants/perfectScale';
 import { useHapticFeedback } from '../hooks/useHapticFeedback';
+import { useTranslation } from '../hooks/useTranslation';
 import {
   PerfectIcon,
   PlatformTouchable,
@@ -33,6 +34,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
+  const { t } = useTranslation();
 
   // Solo animazioni icone (funzionano bene)
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -218,11 +220,21 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               },
             ]}
           >
-            <PerfectText size={32} lines={2} style={styles.mainTitle}>
-              🚧 In Fase di Sviluppo
+            <PerfectText 
+              size={32} 
+              lines={2} 
+              immunity={true}
+              style={styles.mainTitle}
+            >
+              {t('development.title')}
             </PerfectText>
-            <PerfectText size={18} lines={2} style={styles.subtitle}>
-              Questa sezione sarà presto disponibile
+            <PerfectText 
+              size={18} 
+              lines={2} 
+              immunity={true}
+              style={styles.subtitle}
+            >
+              {t('development.subtitle')}
             </PerfectText>
           </View>
 
@@ -248,13 +260,16 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                   color={Colors.primary[600]}
                   style={[styles.cardIcon, { marginBottom: PerfectSpacing.sm }]}
                 />
-                <PerfectText size={24} lines={2} style={styles.cardTitle}>
-                  Cosa stiamo preparando
+                <PerfectText 
+                  size={24} 
+                  lines={2} 
+                  immunity={true}
+                  style={styles.cardTitle}
+                >
+                  {t('development.whatWeArePreparing')}
                 </PerfectText>
                 <PerfectText size={16} lines={4} style={styles.cardDescription}>
-                  Il nostro team sta lavorando duramente per portarti nuove
-                  funzionalità innovative e un&apos;esperienza utente ancora
-                  migliore.
+                  {t('development.description')}
                 </PerfectText>
 
                 <View style={[styles.featuresList, { gap: PerfectSpacing.xs }]}>
@@ -267,7 +282,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       color={Colors.semantic.success.dark}
                     />
                     <PerfectText size={16} lines={1} style={styles.featureText}>
-                      Design migliorato
+                      {t('development.improvedDesign')}
                     </PerfectText>
                   </View>
                   <View
@@ -279,7 +294,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       color={Colors.semantic.success.dark}
                     />
                     <PerfectText size={16} lines={1} style={styles.featureText}>
-                      Nuove funzionalità
+                      {t('development.newFeatures')}
                     </PerfectText>
                   </View>
                   <View
@@ -291,7 +306,7 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                       color={Colors.semantic.success.dark}
                     />
                     <PerfectText size={16} lines={2} style={styles.featureText}>
-                      Performance ottimizzate
+                      {t('development.optimizedPerformance')}
                     </PerfectText>
                   </View>
                 </View>

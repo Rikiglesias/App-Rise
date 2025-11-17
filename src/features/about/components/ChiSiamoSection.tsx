@@ -11,15 +11,14 @@ import {
 } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
-import { useNavigation } from '@react-navigation/native';
 
-export const ChiSiamoSection: React.FC = () => {
-  const navigation = useNavigation();
+export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({ onInfoPress }) => {
   const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
 
   const handleInfoPress = useCallback(() => {
     void triggerHaptic('light');
+    onInfoPress();
   }, [onInfoPress, triggerHaptic]);
 
   return (

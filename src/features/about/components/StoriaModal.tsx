@@ -10,12 +10,14 @@ import {
   PerfectIcon,
 } from '@/components/ui';
 import { Colors } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
 export const StoriaModal: React.FC<StoriaModalProps> = ({
   visible,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
 
   const handleClose = useCallback(async () => {
@@ -39,7 +41,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
       animationType="fade"
     >
       {/* Wrapper con close fisso */}
-      <PerfectContainer style={{ flex: 1, position: 'relative' }}>
+      <PerfectContainer style={modalStyles.modalContent}>
         <PlatformTouchable
           onPress={handleClose}
           style={modalStyles.closeButton}
@@ -57,7 +59,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
           {/* Header */}
           <PerfectContainer style={modalStyles.modalHeader}>
             <PerfectText size={24} lines={1} style={modalStyles.modalTitle}>
-              La Nostra Storia
+              {t('about.ourStory')}
             </PerfectText>
           </PerfectContainer>
 
@@ -65,28 +67,22 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
           <PerfectContainer style={modalStyles.storyContainer}>
             <PerfectContainer style={modalStyles.introCard}>
               <PerfectText size={14} lines={2} style={modalStyles.introText}>
-                Dal 1998, un movimento globale contro la fame
+                {t('about.storyIntro')}
               </PerfectText>
             </PerfectContainer>
 
             <PerfectText size={16} lines={8} style={modalStyles.storyText}>
-              Rise Against Hunger nasce nel 1998 negli Stati Uniti con una
-              missione chiara: combattere la fame nel mondo attraverso la
-              distribuzione di pasti nutrienti e lo sviluppo di programmi
-              sostenibili.
+              {t('about.storyOrigin')}
             </PerfectText>
 
             <PerfectContainer style={modalStyles.sectionDivider} />
 
             <PerfectContainer style={modalStyles.italyCard}>
               <PerfectText size={18} lines={1} style={modalStyles.sectionTitle}>
-                🇮🇹 In Italia
+                {t('about.inItaly')}
               </PerfectText>
-              <PerfectText size={15} lines={6} style={modalStyles.cardText}>
-                L&apos;organizzazione arriva in Italia con l&apos;obiettivo di
-                coinvolgere le comunità locali nella lotta contro la fame
-                globale. La nostra sede di Bologna è il cuore operativo che
-                coordina le attività su tutto il territorio nazionale.
+              <PerfectText size={15} lines={7} style={modalStyles.cardText}>
+                {t('about.italyText')}
               </PerfectText>
             </PerfectContainer>
 
@@ -97,7 +93,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               lines={1}
               style={modalStyles.mainSectionTitle}
             >
-              I Nostri Pilastri
+              {t('about.ourPillars')}
             </PerfectText>
 
             <PerfectContainer style={modalStyles.pillarsContainer}>
@@ -110,11 +106,10 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   lines={2}
                   style={modalStyles.pillarTitle}
                 >
-                  Distribuzione Pasti
+                  {t('about.mealDistribution')}
                 </PerfectText>
                 <PerfectText size={14} lines={3} style={modalStyles.pillarText}>
-                  Organizziamo eventi di confezionamento pasti che coinvolgono
-                  volontari di ogni età
+                  {t('about.mealDistributionText')}
                 </PerfectText>
               </PerfectContainer>
 
@@ -127,11 +122,10 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   lines={2}
                   style={modalStyles.pillarTitle}
                 >
-                  Coinvolgimento Comunitario
+                  {t('about.communityInvolvement')}
                 </PerfectText>
                 <PerfectText size={14} lines={2} style={modalStyles.pillarText}>
-                  Uniamo scuole, aziende e organizzazioni in un impegno
-                  condiviso
+                  {t('about.communityInvolvementText')}
                 </PerfectText>
               </PerfectContainer>
 
@@ -144,11 +138,10 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   lines={1}
                   style={modalStyles.pillarTitle}
                 >
-                  Impatto Globale
+                  {t('about.globalImpact')}
                 </PerfectText>
                 <PerfectText size={14} lines={3} style={modalStyles.pillarText}>
-                  I pasti confezionati raggiungono comunità vulnerabili in tutto
-                  il mondo
+                  {t('about.globalImpactText')}
                 </PerfectText>
               </PerfectContainer>
 
@@ -161,11 +154,10 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
                   lines={1}
                   style={modalStyles.pillarTitle}
                 >
-                  Educazione
+                  {t('about.education')}
                 </PerfectText>
                 <PerfectText size={14} lines={2} style={modalStyles.pillarText}>
-                  Sensibilizziamo sul tema della fame e promuoviamo la
-                  solidarietà
+                  {t('about.educationText')}
                 </PerfectText>
               </PerfectContainer>
             </PerfectContainer>
@@ -174,15 +166,14 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
 
             <PerfectContainer style={modalStyles.finalCard}>
               <PerfectText size={15} lines={4} style={modalStyles.finalMessage}>
-                Ogni pasto che confezioniamo insieme è un gesto di amore che
-                attraversa i confini e raggiunge chi ne ha più bisogno.
+                {t('about.finalMessage')}
               </PerfectText>
               <PerfectText
                 size={16}
                 lines={2}
                 style={modalStyles.finalHighlight}
               >
-                Unisciti a noi in questa missione di speranza.
+                {t('about.joinUs')}
               </PerfectText>
             </PerfectContainer>
           </PerfectContainer>

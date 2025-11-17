@@ -11,7 +11,11 @@ import { renderHook, act } from '@testing-library/react-native';
 import { Linking, Alert } from 'react-native';
 import { useSocialPlatforms } from '@/features/social/useSocialPlatforms';
 import { logWarn } from '@/shared/utils/logger';
+import i18n from '@/locales';
 /* eslint-enable import/first */
+
+// Forza lingua italiana per i test
+i18n.locale = 'it';
 
 // Mock delle dipendenze - approccio semplificato
 jest.mock('react-native', () => ({

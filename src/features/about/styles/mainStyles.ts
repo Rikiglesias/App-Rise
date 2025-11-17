@@ -52,6 +52,6 @@ export const mainStyles = StyleSheet.create({
 
   sectionDivider: {
     ...decorativeSeparator(),
-    width: '60%',
+    width: scale(236),  // Perfect System: 60% di 393px (iPhone 15), scala su tutti device
   },
 });

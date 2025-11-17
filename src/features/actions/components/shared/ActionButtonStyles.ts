@@ -38,7 +38,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
 
     donateTitleContainerWrapper: {
-      width: '80%',
+      width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
       position: 'relative',
     },
 
@@ -174,7 +174,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     singleButtonContainer: {
       flex: 0,
-      width: '80%',
+      width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
     },
     // CONTAINER BACKGROUND ESPLORA
     exploreHeaderBackground: {
@@ -184,7 +184,10 @@ export const createActionButtonStyles = (): ButtonStyles => {
       paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
       borderColor: Colors.neutral[400],
-      minHeight: scale(70),
+      minHeight: scale(60),
+      width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+      justifyContent: 'center',
+      alignSelf: 'center',
     },
 
     communityHeaderBackground: {
@@ -195,7 +198,10 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderWidth: scale(1),
       borderColor: Colors.neutral[400],
       position: 'relative',
-      minHeight: scale(70),
+      minHeight: scale(60),
+      width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+      justifyContent: 'center',
+      alignSelf: 'center',
     },
 
     // ICONA LINK COMMUNITY

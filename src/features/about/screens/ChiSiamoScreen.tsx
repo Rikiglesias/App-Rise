@@ -18,10 +18,12 @@ import {
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { isSuccess } from '@/shared/utils/result';
 import { logWarn } from '@/shared/utils/logger';
 
 const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { openLink } = useLinkHandler({
     loadingDelay: 0, // ⚡ RIDUCO RITARDO A ZERO per velocità
@@ -93,21 +95,21 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   const contacts: ContactData[] = [
     {
       id: 'location',
-      title: 'Sede',
+      title: t('about.locationTitle'),
       subtitle: 'Via dei Fornaciai, 17 - Bologna',
       icon: 'map-marker',
       onPress: handleLocationPress,
     },
     {
       id: 'phone',
-      title: 'Telefono',
+      title: t('about.phoneTitle'),
       subtitle: '051 704070',
       icon: 'phone',
       onPress: handlePhonePress,
     },
     {
       id: 'email',
-      title: 'Email',
+      title: t('about.emailTitle'),
       subtitle: 'info@riseagainsthunger.it',
       icon: 'email',
       onPress: handleEmailPress,

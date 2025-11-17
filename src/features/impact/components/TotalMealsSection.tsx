@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { StatCard } from './StatCard';
-import { PerfectText, PerfectContainer } from '@/components/ui';
+import { PerfectContainer, PerfectText } from '@/components/ui';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { Colors, BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
@@ -16,10 +17,9 @@ interface Props {
 /**
  * Sezione dei numeri totali con header decorativo e card interattive
  */
-export const TotalMealsSection: React.FC<Props> = ({
-  onMealsPress,
-  onKitsPress,
-}) => {
+export const TotalMealsSection: React.FC<Props> = ({ onMealsPress, onKitsPress }) => {
+  const { t } = useTranslation();
+
   return (
     <PerfectContainer style={styles.totalMealsSection}>
       {/* Linea divisoria tra header e sezione Dal 2012 */}
@@ -34,12 +34,18 @@ export const TotalMealsSection: React.FC<Props> = ({
             size={24}
             lines={1}
             fontWeight="700"
+            immunity={true}
             style={styles.numbersTitle}
           >
-            📊 I Nostri Numeri
+            {t('impact.ourNumbers')}
           </PerfectText>
-          <PerfectText size={16} lines={2} style={styles.numbersSubtitle}>
-            Milioni di vite cambiate, un pasto alla volta
+          <PerfectText 
+            size={16} 
+            lines={2}
+            immunity={true}
+            style={styles.numbersSubtitle}
+          >
+            {t('impact.numbersSubtitle')}
           </PerfectText>
         </PerfectContainer>
       </PerfectContainer>
@@ -49,8 +55,8 @@ export const TotalMealsSection: React.FC<Props> = ({
           icon="food-apple"
           iconColor={Colors.primary[600]}
           value="15.8M"
-          label="Pasti Totali"
-          subtitle="Dal 2012 - Meals"
+          label={t('impact.totalMealsLabel')}
+          subtitle={t('impact.totalMealsSubtitle2')}
           gradientColors={[Colors.primary[600], Colors.primary[800]]}
           onPress={onMealsPress}
         />
@@ -58,8 +64,8 @@ export const TotalMealsSection: React.FC<Props> = ({
           icon="package-variant"
           iconColor={Colors.neutral[800]}
           value="142K"
-          label="Kit Totali"
-          subtitle="Dal 2020 - Kits"
+          label={t('impact.totalKits')}
+          subtitle={t('impact.totalKitsSubtitle')}
           gradientColors={[Colors.neutral[700], Colors.neutral[900]]}
           onPress={onKitsPress}
         />
@@ -101,7 +107,11 @@ const styles = StyleSheet.create({
     marginTop: PerfectSpacing.lg, // Generous spacing before section title
     marginBottom: PerfectSpacing['2xl'], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
   },
-  numbersHeaderBackground: sectionHeaderBackground('white'),
+  numbersHeaderBackground: {
+    ...sectionHeaderBackground('white'),
+    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15)
+    alignSelf: 'center',
+  },
   numbersTitle: {
     color: Colors.neutral[900],
     textAlign: 'center',

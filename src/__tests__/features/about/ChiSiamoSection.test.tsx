@@ -7,6 +7,10 @@ import { ChiSiamoSection } from '@/features/about/components/ChiSiamoSection';
 import { AnimatedContact } from '@/features/about/components/AnimatedContact';
 import type { ContactData } from '@/features/about/types';
 import { UniversalThemeProvider } from '@/shared/theme/UniversalTheme';
+import i18n from '@/locales';
+
+// Forza lingua italiana per i test
+i18n.locale = 'it';
 
 jest.mock('expo-haptics', () => ({
   ImpactFeedbackStyle: {

@@ -6,45 +6,45 @@
 export interface StatCardData {
   readonly icon: string;
   readonly number: string;
-  readonly label: string;
-  readonly description: string;
+  readonly labelKey: string; // Chiave di traduzione
+  readonly descriptionKey: string; // Chiave di traduzione
 }
 
 export interface ImpactItemData {
   readonly icon: string;
-  readonly text: string;
+  readonly textKey: string; // Chiave di traduzione
 }
 
 export const STATS_2024: readonly StatCardData[] = [
   {
     icon: '🍽️',
     number: '3.14M',
-    label: 'Pasti Confezionati',
-    description: 'Nutrizione per comunità in difficoltà',
+    labelKey: 'impact.mealsPackagedStat',
+    descriptionKey: 'impact.mealsPackagedDesc',
   },
   {
     icon: '📦',
     number: '16.3K',
-    label: 'Kit Prodotti',
-    description: 'Kit completi per emergenze',
+    labelKey: 'impact.productKitsStat',
+    descriptionKey: 'impact.productKitsDesc',
   },
   {
     icon: '👥',
     number: '13K',
-    label: 'Volontari',
-    description: 'Persone che hanno fatto la differenza',
+    labelKey: 'impact.volunteersStat',
+    descriptionKey: 'impact.volunteersStatDesc',
   },
 ] as const;
 
 export const IMPACT_AREAS: readonly ImpactItemData[] = [
-  { icon: '🌍', text: 'Africa Subsahariana' },
-  { icon: '🏫', text: 'Programmi scolastici' },
-  { icon: '🚨', text: 'Emergenze umanitarie' },
-  { icon: '🇮🇹', text: 'Comunità italiane' },
+  { icon: '🌍', textKey: 'impact.subsaharanAfrica' },
+  { icon: '🏫', textKey: 'impact.schoolPrograms' },
+  { icon: '🚨', textKey: 'impact.humanitarianEmergencies' },
+  { icon: '🇮🇹', textKey: 'impact.italianCommunities' },
 ] as const;
 
 export const GOAL_2025 = {
   icon: '🎯',
-  title: 'Obiettivo 2025',
-  description: 'Superare i 4 milioni di pasti confezionati',
+  titleKey: 'impact.goal2025',
+  descriptionKey: 'impact.goal2025Description',
 } as const;

@@ -20,7 +20,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
     },
     impactContainer: {
       backgroundColor: colors.primary[50],
-      borderRadius: 8,
+      borderRadius: scale(8),
       padding: PerfectSpacing.base,
       marginBottom: PerfectSpacing.base,
       borderWidth: scale(1),

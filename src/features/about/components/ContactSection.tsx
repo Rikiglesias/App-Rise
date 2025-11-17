@@ -4,30 +4,26 @@ import { contactSectionStyles } from '../styles/contactStyles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
 import { PerfectText, PerfectContainer } from '@/components/ui';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { PerfectSpacing } from '@/shared/constants';
 
-export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
+export const ContactSection: React.FC<ContactSectionProps> = ({
+  contacts,
+}) => {
+  const { t } = useTranslation();
   return (
     <PerfectContainer
       style={contactSectionStyles.categoryContainer} // marginBottom rimane qui (non prop disponibile)
     >
-      {/* HEADER SENZA CONTAINER */}
+      {/* HEADER PULITO - Solo titolo per miglior flusso visivo */}
       <PerfectContainer style={contactSectionStyles.categoryHeader}>
         <PerfectText
-          size={30}
+          size={28}
           lines={1}
           fontWeight="700"
           style={contactSectionStyles.categoryTitle}
         >
-          I Nostri Contatti
-        </PerfectText>
-        <PerfectText
-          size={15}
-          lines={2}
-          fontWeight="500"
-          style={contactSectionStyles.descriptionText}
-        >
-          Sede di Bologna e recapiti ufficiali
+          {t('about.contactsTitle')}
         </PerfectText>
       </PerfectContainer>
       <PerfectContainer

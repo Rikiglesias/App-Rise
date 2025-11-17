@@ -20,13 +20,14 @@ exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = 
     <View
       style={
         {
-          "alignSelf": "stretch",
+          "alignSelf": "center",
           "backgroundColor": "#FFFFFF",
           "borderColor": "#E5E5E5",
           "borderRadius": 26.096976587728204,
           "borderWidth": 1.6310610367330127,
           "paddingHorizontal": 36,
           "paddingVertical": 24,
+          "width": 512.153165534166,
         }
       }
     >
@@ -44,7 +45,8 @@ exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = 
           }
         }
       >
-        🌍 Dove Operiamo
+        🌍 
+        Dove Operiamo
       </Text>
       <Text
         immunity={true}

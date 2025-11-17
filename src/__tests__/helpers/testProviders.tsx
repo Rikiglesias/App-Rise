@@ -1,6 +1,10 @@
 import React from 'react';
 import { ThemeProvider } from '../../shared/hooks/useTheme';
 import { UniversalThemeProvider } from '../../shared/theme/UniversalTheme';
+import i18n from '../../locales';
+
+// Forza lingua italiana per tutti i test per garantire consistenza
+i18n.locale = 'it';
 
 /**
  * Wrapper con tutti i provider necessari per i test

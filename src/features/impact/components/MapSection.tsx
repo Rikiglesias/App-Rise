@@ -10,9 +10,10 @@ import {
 } from '@/components/ui';
 import { Colors, BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
-import { getWindowDimensions } from '@/shared/constants/perfectScale';
+import { getWindowDimensions, scale } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 import { sectionHeaderBackground } from '@/shared/styles';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface Props {
   onMapPress: () => void;
@@ -20,6 +21,7 @@ interface Props {
 
 // Sezione mappa geografica con header decorativo e immagine interattiva
 export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
+  const { t } = useTranslation();
   const window = getWindowDimensions();
   const horizontalPadding = PerfectSpacing.base * 2; // as used in section/container
   const containerWidth = Math.max(
@@ -46,7 +48,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
             immunity={true}
             style={styles.mapTitle}
           >
-            🌍 Dove Operiamo
+            🌍 {t('impact.whereWeOperate')}
           </PerfectText>
           <PerfectText
             size={16}
@@ -54,7 +56,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
             lines={2}
             style={styles.mapSubtitle}
           >
-            Le nostre operazioni nel mondo
+            {t('impact.ourOperationsWorld')}
           </PerfectText>
         </PerfectContainer>
       </PerfectContainer>
@@ -83,7 +85,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
             immunity={true}
             style={styles.mapClickText}
           >
-            Tocca per esplorare
+            {t('impact.tapToExplore')}
           </PerfectText>
           <PerfectIcon
             name="map-search"
@@ -143,7 +145,11 @@ const styles = StyleSheet.create({
     marginBottom: PerfectSpacing.lg,
   },
 
-  mapHeaderBackground: sectionHeaderBackground('white'),
+  mapHeaderBackground: {
+    ...sectionHeaderBackground('white'),
+    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15)
+    alignSelf: 'center',
+  },
   mapTitle: {
     color: Colors.neutral[900],
     textAlign: 'center',

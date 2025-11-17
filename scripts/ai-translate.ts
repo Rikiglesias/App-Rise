@@ -286,17 +286,17 @@ class TranslationPipeline {
     for (const targetLocale of this.config.targetLocales) {
       console.log(`📝 Translating to ${targetLocale}...`);
 
-      const results = await this.translateToLocale(
+      const { translations, results } = await this.translateToLocale(
         sourceTranslations,
         targetLocale
       );
 
       // 3. Save results
-      await this.saveTranslations(targetLocale, results);
+      this.saveTranslations(targetLocale, translations);
 
       // 4. Generate review report
       if (this.config.reviewMode) {
-        await this.generateReviewReport(targetLocale, results);
+        this.generateReviewReport(targetLocale, results);
       }
 
       console.log(`✅ ${targetLocale}.ts generated!\n`);
@@ -308,9 +308,9 @@ class TranslationPipeline {
   /**
    * Load translations file
    */
-  private async loadTranslations(
+  private loadTranslations(
     filePath: string
-  ): Promise<Record<string, any>> {
+  ): Record<string, any> {
     const content = fs.readFileSync(filePath, 'utf-8');
 
     // Extract default export object
@@ -358,13 +358,17 @@ class TranslationPipeline {
 
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i];
+        if (!k) continue; // Skip if undefined
         if (!(k in current)) {
           current[k] = {};
         }
-        current = current[k];
+        current = current[k] as Record<string, any>;
       }
 
-      current[keys[keys.length - 1]] = value;
+      const lastKey = keys[keys.length - 1];
+      if (lastKey) {
+        current[lastKey] = value;
+      }
     }
 
     return result;
@@ -376,7 +380,7 @@ class TranslationPipeline {
   private async translateToLocale(
     sourceTranslations: Record<string, any>,
     targetLocale: string
-  ): Promise<Record<string, string>> {
+  ): Promise<{ translations: Record<string, string>; results: TranslationResult[] }> {
     const flat = this.flattenObject(sourceTranslations);
     const requests: TranslationRequest[] = [];
 
@@ -418,7 +422,7 @@ class TranslationPipeline {
       translated[result.key] = result.translatedText;
     }
 
-    return translated;
+    return { translations: translated, results: allResults };
   }
 
   /**
@@ -437,10 +441,10 @@ class TranslationPipeline {
   /**
    * Save translations to file
    */
-  private async saveTranslations(
+  private saveTranslations(
     locale: string,
     translations: Record<string, string>
-  ): Promise<void> {
+  ): void {
     const nested = this.unflattenObject(translations);
     const targetFile = path.join(__dirname, '../src/locales', `${locale}.ts`);
 
@@ -462,10 +466,10 @@ export default ${JSON.stringify(nested, null, 2)};
   /**
    * Generate review report for human validation
    */
-  private async generateReviewReport(
+  private generateReviewReport(
     locale: string,
     results: TranslationResult[]
-  ): Promise<void> {
+  ): void {
     const needsReview = results.filter(r => r.needsReview);
 
     const report = `# Translation Review Report - ${locale.toUpperCase()}
@@ -517,7 +521,7 @@ ${needsReview
 // CLI
 // ===================================================================
 
-async function main() {
+const main = async (): Promise<void> => {
   const args = process.argv.slice(2);
 
   const config: TranslationConfig = {
@@ -529,7 +533,10 @@ async function main() {
   // Parse args
   for (const arg of args) {
     if (arg.startsWith('--target=')) {
-      config.targetLocales = arg.split('=')[1].split(',');
+      const targetValue = arg.split('=')[1];
+      if (targetValue) {
+        config.targetLocales = targetValue.split(',');
+      }
     } else if (arg === '--no-review') {
       config.reviewMode = false;
     } else if (arg.startsWith('--model=')) {
@@ -556,7 +563,7 @@ async function main() {
   // Run pipeline
   const pipeline = new TranslationPipeline(config);
   await pipeline.run();
-}
+};
 
 // Run if called directly
 if (require.main === module) {

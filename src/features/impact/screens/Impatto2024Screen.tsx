@@ -11,9 +11,10 @@ import {
   PlatformScrollView,
   PerfectContainer,
 } from '@/components/ui';
-import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
+import { scale } from '@/shared/constants/perfectScale';
 import { BorderRadius, Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -27,6 +28,8 @@ interface Props {
 const Impatto2024ScreenComponent: React.FC<Props> = ({
   navigation: _navigation,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <SafeAreaView
       style={styles.container}
@@ -36,56 +39,61 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
     >
       <PlatformScrollView>
         <PerfectContainer style={styles.header}>
-          <PerfectText
-            size={36}
-            lines={1}
-            fontWeight="600"
-            containerWidth={LOGICAL_REFERENCE.width * 0.7}
-            style={styles.year}
-          >
-            2024
-          </PerfectText>
-          <PerfectText
-            size={20}
-            lines={1}
-            fontWeight="600"
-            containerWidth={LOGICAL_REFERENCE.width * 0.7}
-            style={styles.title}
-          >
-            Il Nostro Impatto
-          </PerfectText>
-          <PerfectText
-            size={16}
-            lines={1}
-            fontWeight="500"
-            containerWidth={LOGICAL_REFERENCE.width * 0.7}
-            style={styles.subtitle}
-          >
-            Risultati raggiunti insieme
-          </PerfectText>
+          <PerfectContainer style={styles.headerContent}>
+            <PerfectText
+              size={36}
+              lines={1}
+              fontWeight="600"
+              immunity={true}
+              style={styles.year}
+            >
+              2024
+            </PerfectText>
+            <PerfectText
+              size={20}
+              lines={1}
+              fontWeight="600"
+              immunity={true}
+              style={styles.title}
+            >
+              {t('impact.impactTitle')}
+            </PerfectText>
+            <PerfectText
+              size={16}
+              lines={1}
+              fontWeight="500"
+              immunity={true}
+              style={styles.subtitle}
+            >
+              {t('impact.impactSubtitle')}
+            </PerfectText>
+          </PerfectContainer>
         </PerfectContainer>
 
         {/* Stats Cards - Data-driven rendering */}
         <PerfectContainer style={styles.statsSection}>
           {STATS_2024.map(stat => (
-            <StatCard key={stat.label} data={stat} />
+            <StatCard key={stat.labelKey} data={stat} />
           ))}
         </PerfectContainer>
 
         {/* Impact Areas Section */}
         <PerfectContainer style={styles.impactSection}>
-          <PerfectText
-            size={18}
-            lines={1}
-            fontWeight="400"
-            style={styles.impactTitle}
-          >
-            Dove Arrivano i Nostri Aiuti
-          </PerfectText>
+          <PerfectContainer style={styles.sectionTitleContainer}>
+            <PerfectText
+              size={18}
+              lines={1}
+              fontWeight="400"
+              immunity={true}
+              style={styles.impactTitle}
+            >
+              {t('impact.whereHelpArrives')}
+            </PerfectText>
+          </PerfectContainer>
 
           <PerfectContainer style={styles.impactList}>
             {IMPACT_AREAS.map(area => (
-              <ImpactItem key={area.text} data={area} />
+              <ImpactItem key={area.textKey} data={area} />
             ))}
           </PerfectContainer>
         </PerfectContainer>
@@ -100,22 +108,26 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
           >
             {GOAL_2025.icon}
           </PerfectText>
-          <PerfectText
-            size={18}
-            lines={1}
-            fontWeight="400"
-            style={styles.goalTitle}
-          >
-            {GOAL_2025.title}
-          </PerfectText>
-          <PerfectText
-            size={16}
-            lines={2}
-            fontWeight="400"
-            style={styles.goalText}
-          >
-            {GOAL_2025.description}
-          </PerfectText>
+          <PerfectContainer style={styles.sectionTitleContainer}>
+            <PerfectText
+              size={18}
+              lines={1}
+              fontWeight="400"
+              immunity={true}
+              style={styles.goalTitle}
+            >
+              {t(GOAL_2025.titleKey)}
+            </PerfectText>
+            <PerfectText
+              size={16}
+              lines={2}
+              fontWeight="400"
+              immunity={true}
+              style={styles.goalText}
+            >
+              {t(GOAL_2025.descriptionKey)}
+            </PerfectText>
+          </PerfectContainer>
         </PerfectContainer>
       </PlatformScrollView>
     </SafeAreaView>
@@ -132,6 +144,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[0],
     paddingVertical: PerfectSpacing.xl,
     paddingHorizontal: PerfectSpacing.lg,
+    alignItems: 'center',
+  },
+
+  headerContent: {
+    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+    alignSelf: 'center',
     alignItems: 'center',
   },
 
@@ -169,6 +187,12 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     padding: PerfectSpacing.lg,
     ...Shadows.sm,
+  },
+
+  sectionTitleContainer: {
+    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 
   impactTitle: {

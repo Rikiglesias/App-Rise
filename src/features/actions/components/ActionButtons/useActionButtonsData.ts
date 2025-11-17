@@ -84,27 +84,27 @@ export const useActionButtonsData = (
     () => [
       {
         id: 'progetti',
-        title: 'Progetti',
+        title: t('actions.projects'),
         icon: 'charity',
         gradient: Colors.gradients.projects,
         onPress: () => openProjectsLink(),
       },
       {
         id: 'tracciabilita',
-        title: 'Tracciabilità',
+        title: t('actions.tracking'),
         icon: 'map-marker-path',
         gradient: Colors.gradients.tracking,
         onPress: () => openTracciabilitaLink(),
       },
       {
         id: 'calendario',
-        title: 'Eventi',
+        title: t('actions.events'),
         icon: 'calendar',
         gradient: Colors.gradients.events,
         onPress: () => openEventsLink(),
       },
     ],
-    [openProjectsLink, openEventsLink, openTracciabilitaLink]
+    [t, openProjectsLink, openTracciabilitaLink, openEventsLink]
   );
 
   // COMMUNITY REGISTRATION HANDLER
@@ -121,20 +121,20 @@ export const useActionButtonsData = (
     () => [
       {
         id: 'seguici',
-        title: 'Seguici',
+        title: t('actions.follow'),
         icon: 'share-variant',
         gradient: Colors.gradients.community,
         onPress: () => navigation.navigate('Seguici'),
       },
       {
         id: 'chi-siamo',
-        title: 'Chi Siamo',
+        title: t('actions.aboutUs'),
         icon: 'information',
         gradient: Colors.gradients.community,
         onPress: () => navigation.navigate('ChiSiamo'),
       },
     ],
-    [navigation]
+    [t, navigation]
   );
 
   // BUTTON PRESS HANDLER WITH HAPTIC FEEDBACK

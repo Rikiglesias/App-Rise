@@ -9,31 +9,38 @@ import type { StatCardData, ImpactItemData } from '../data/impatto2024Data';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors, BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface StatCardProps {
   readonly data: StatCardData;
 }
 
-export const StatCard: React.FC<StatCardProps> = React.memo(({ data }) => (
-  <PerfectContainer
-    style={styles.statCard}
-    accessibilityLabel={`${data.label}: ${data.number}. ${data.description}`}
-    accessibilityRole="text"
-  >
-    <PerfectText size={28} lines={1} fontWeight="400" style={styles.statIcon}>
-      {data.icon}
-    </PerfectText>
-    <PerfectText size={24} lines={1} fontWeight="400" style={styles.statNumber}>
-      {data.number}
-    </PerfectText>
-    <PerfectText size={18} lines={1} fontWeight="400" style={styles.statLabel}>
-      {data.label}
-    </PerfectText>
-    <PerfectText size={14} lines={2} fontWeight="400" style={styles.statDesc}>
-      {data.description}
-    </PerfectText>
-  </PerfectContainer>
-));
+export const StatCard: React.FC<StatCardProps> = React.memo(({ data }) => {
+  const { t } = useTranslation();
+  const label = t(data.labelKey);
+  const description = t(data.descriptionKey);
+
+  return (
+    <PerfectContainer
+      style={styles.statCard}
+      accessibilityLabel={`${label}: ${data.number}. ${description}`}
+      accessibilityRole="text"
+    >
+      <PerfectText size={28} lines={1} fontWeight="400" style={styles.statIcon}>
+        {data.icon}
+      </PerfectText>
+      <PerfectText size={24} lines={1} fontWeight="400" style={styles.statNumber}>
+        {data.number}
+      </PerfectText>
+      <PerfectText size={18} lines={1} fontWeight="400" style={styles.statLabel}>
+        {label}
+      </PerfectText>
+      <PerfectText size={14} lines={2} fontWeight="400" style={styles.statDesc}>
+        {description}
+      </PerfectText>
+    </PerfectContainer>
+  );
+});
 
 StatCard.displayName = 'StatCard';
 
@@ -41,20 +48,25 @@ interface ImpactItemProps {
   readonly data: ImpactItemData;
 }
 
-export const ImpactItem: React.FC<ImpactItemProps> = React.memo(({ data }) => (
-  <PerfectContainer
-    style={styles.impactItem}
-    accessibilityLabel={data.text}
-    accessibilityRole="text"
-  >
-    <PerfectText size={18} lines={1} fontWeight="400" style={styles.impactIcon}>
-      {data.icon}
-    </PerfectText>
-    <PerfectText size={16} lines={1} fontWeight="400" style={styles.impactText}>
-      {data.text}
-    </PerfectText>
-  </PerfectContainer>
-));
+export const ImpactItem: React.FC<ImpactItemProps> = React.memo(({ data }) => {
+  const { t } = useTranslation();
+  const text = t(data.textKey);
+
+  return (
+    <PerfectContainer
+      style={styles.impactItem}
+      accessibilityLabel={text}
+      accessibilityRole="text"
+    >
+      <PerfectText size={18} lines={1} fontWeight="400" style={styles.impactIcon}>
+        {data.icon}
+      </PerfectText>
+      <PerfectText size={16} lines={1} fontWeight="400" style={styles.impactText}>
+        {text}
+      </PerfectText>
+    </PerfectContainer>
+  );
+});
 
 ImpactItem.displayName = 'ImpactItem';
 

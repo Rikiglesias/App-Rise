@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import type { ProjectHeaderProps } from './types';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { PerfectSpacing, Typography } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { useTheme } from '@/shared/hooks/useTheme';
 
 export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
@@ -38,8 +39,8 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
       backgroundColor: statusColor,
       paddingHorizontal: PerfectSpacing.md,
       paddingVertical: PerfectSpacing.xs,
-      borderRadius: 8,
-      minWidth: 80,
+      borderRadius: scale(8),
+      minWidth: scale(80),
       alignItems: 'center',
     },
     statusText: {

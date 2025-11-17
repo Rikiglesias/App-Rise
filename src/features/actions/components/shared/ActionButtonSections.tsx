@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { AnimatedButton } from './AnimatedButton';
-import { useTranslation } from '@/shared/hooks/useTranslation';
 import type {
   DonateButtonsSectionProps,
   ExploreButtonsSectionProps,
@@ -10,6 +9,7 @@ import {
   getExploreIconColor,
   getCommunityIconColor,
 } from './ActionButtonUtils';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { Colors } from '@/shared/constants';
 // No direct scaling here: PerfectIcon scales its size internally.
 import {
@@ -186,7 +186,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
             {'🔎 '}{t('actions.exploreTitle')}
           </PerfectText>
           <PerfectText
-            size={13}
+            size={14}
             lines={1}
             immunity={true}
             style={styles.exploreSubtitle}
@@ -282,7 +282,7 @@ export const CommunityButtonsSection: React.FC<
             {'🤝 '}{t('actions.communityTitle')}
           </PerfectText>
           <PerfectText
-            size={13}
+            size={15}
             lines={1}
             immunity={true}
             style={styles.communitySubtitle}
