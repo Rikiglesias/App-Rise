@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
 
   headerContent: {
-    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+    width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
     alignSelf: 'center',
     alignItems: 'center',
   },
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
 
   sectionTitleContainer: {
-    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+    width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
     alignSelf: 'center',
     alignItems: 'center',
   },

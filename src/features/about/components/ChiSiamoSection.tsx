@@ -12,7 +12,9 @@ import {
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
-export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({ onInfoPress }) => {
+export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
+  onInfoPress,
+}) => {
   const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
 

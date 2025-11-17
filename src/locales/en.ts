@@ -59,7 +59,8 @@ export default {
     countriesReached: 'Countries Reached',
     eventsOrganized: 'Events Organized',
     communityTitle: 'Our Community',
-    communitySubtitle: 'Volunteers and partners united in the\n#zerohunger mission',
+    communitySubtitle:
+      'Volunteers and partners united in the\n#zerohunger mission',
     volunteers2024: 'Volunteers 2024',
     volunteersActive: 'Active this year',
     partnersActive: 'Active Partners',
@@ -168,7 +169,8 @@ export default {
 
   projects: {
     title: 'Our Projects',
-    subtitle: 'Discover where we are making a difference in the world\nin the fight against hunger',
+    subtitle:
+      'Discover where we are making a difference in the world\nin the fight against hunger',
     statsTitle: 'Projects in Numbers',
     totalProjects: 'Total\nProjects',
     activeProjects: 'Currently\nOngoing',
@@ -195,7 +197,8 @@ export default {
     title: '🚧 Under Development',
     subtitle: 'This section will be available soon',
     whatWeArePreparing: 'What we are preparing',
-    description: 'Our team is working hard to bring you innovative new features and an even better user experience.',
+    description:
+      'Our team is working hard to bring you innovative new features and an even better user experience.',
     improvedDesign: 'Improved design',
     newFeatures: 'New features',
     optimizedPerformance: 'Optimized performance',
@@ -223,17 +226,23 @@ export default {
     ourPillars: 'Our Pillars',
     globalImpact: 'Global Impact',
     storyIntro: 'Since 1998, a global movement against hunger',
-    storyOrigin: 'Rise Against Hunger was founded in 1998 in the United States with a clear mission: to fight world hunger through the distribution of nutritious meals and the development of sustainable programs.',
+    storyOrigin:
+      'Rise Against Hunger was founded in 1998 in the United States with a clear mission: to fight world hunger through the distribution of nutritious meals and the development of sustainable programs.',
     inItaly: '🇮🇹 In Italy',
-    italyText: 'The organization arrives in Italy with the goal of involving local communities in the fight against global hunger. Our Bologna headquarters is the operational heart and central hub for all of Europe, coordinating activities across national and European territory.',
+    italyText:
+      'The organization arrives in Italy with the goal of involving local communities in the fight against global hunger. Our Bologna headquarters is the operational heart and central hub for all of Europe, coordinating activities across national and European territory.',
     mealDistribution: 'Meal Distribution',
-    mealDistributionText: 'We organize meal packing events involving volunteers of all ages',
+    mealDistributionText:
+      'We organize meal packing events involving volunteers of all ages',
     communityInvolvement: 'Community Involvement',
-    communityInvolvementText: 'We unite schools, businesses and organizations in a shared commitment',
-    globalImpactText: 'Packed meals reach vulnerable communities around the world',
+    communityInvolvementText:
+      'We unite schools, businesses and organizations in a shared commitment',
+    globalImpactText:
+      'Packed meals reach vulnerable communities around the world',
     education: 'Education',
     educationText: 'We raise awareness about hunger and promote solidarity',
-    finalMessage: 'Every meal we pack together is a gesture of love that crosses borders and reaches those who need it most.',
+    finalMessage:
+      'Every meal we pack together is a gesture of love that crosses borders and reaches those who need it most.',
     joinUs: 'Join us in this mission! 💙',
   },
 

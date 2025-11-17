@@ -17,7 +17,10 @@ interface Props {
 /**
  * Sezione dei numeri totali con header decorativo e card interattive
  */
-export const TotalMealsSection: React.FC<Props> = ({ onMealsPress, onKitsPress }) => {
+export const TotalMealsSection: React.FC<Props> = ({
+  onMealsPress,
+  onKitsPress,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -39,8 +42,8 @@ export const TotalMealsSection: React.FC<Props> = ({ onMealsPress, onKitsPress }
           >
             {t('impact.ourNumbers')}
           </PerfectText>
-          <PerfectText 
-            size={16} 
+          <PerfectText
+            size={16}
             lines={2}
             immunity={true}
             style={styles.numbersSubtitle}
@@ -109,7 +112,7 @@ const styles = StyleSheet.create({
   },
   numbersHeaderBackground: {
     ...sectionHeaderBackground('white'),
-    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15)
+    width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
     alignSelf: 'center',
   },
   numbersTitle: {

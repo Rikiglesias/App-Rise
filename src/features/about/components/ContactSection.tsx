@@ -7,9 +7,7 @@ import { PerfectText, PerfectContainer } from '@/components/ui';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { PerfectSpacing } from '@/shared/constants';
 
-export const ContactSection: React.FC<ContactSectionProps> = ({
-  contacts,
-}) => {
+export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
   const { t } = useTranslation();
   return (
     <PerfectContainer

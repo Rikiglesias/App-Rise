@@ -69,14 +69,14 @@ export const ActionDescription = React.memo(ActionDescriptionComponent);
 const styles = StyleSheet.create({
   cardContainer: {
     alignSelf: 'center',
-    width: scale(354),  // Perfect System: 90% di 393px (iPhone 15), scala su tutti device
+    width: scale(354), // Perfect System: 90% di 393px (iPhone 15), scala su tutti device
   },
   mainText: {
     fontWeight: Typography.weights.bold,
   },
   divider: {
     alignSelf: 'center',
-    width: scale(157),  // Perfect System: 40% di 393px (iPhone 15), scala su tutti device
+    width: scale(157), // Perfect System: 40% di 393px (iPhone 15), scala su tutti device
     height: scale(2),
     marginVertical: PerfectSpacing.base,
     borderRadius: scale(1),

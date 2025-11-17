@@ -37,8 +37,8 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalContainer: {
-    width: scale(354),  // Perfect System: 90% di 393px (iPhone 15), scala su tutti device
-    maxHeight: '85%',  // Percentuale OK per maxHeight (relativa a screen)
+    width: scale(354), // Perfect System: 90% di 393px (iPhone 15), scala su tutti device
+    maxHeight: '85%', // Percentuale OK per maxHeight (relativa a screen)
     // nessuna height fissa: lasciare auto, per evitare overflow
     minHeight: scale(600),
   },

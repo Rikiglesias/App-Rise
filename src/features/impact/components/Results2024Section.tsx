@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   results2024HeaderBackground: {
     ...sectionHeaderBackground('white'),
-    width: scale(314),  // Perfect System: 80% di 393px (iPhone 15)
+    width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
     alignSelf: 'center',
   },
   results2024Title: {

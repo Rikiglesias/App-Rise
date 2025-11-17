@@ -165,7 +165,8 @@ export default {
 
   projects: {
     title: 'I Nostri Progetti',
-    subtitle: 'Scopri dove stiamo facendo la differenza nel mondo\nnella lotta alla fame',
+    subtitle:
+      'Scopri dove stiamo facendo la differenza nel mondo\nnella lotta alla fame',
     statsTitle: 'Progetti in Numeri',
     totalProjects: 'Progetti\nTotali',
     activeProjects: 'In Corso\nAttualmente',
@@ -177,7 +178,8 @@ export default {
 
   social: {
     title: 'Seguici sui social',
-    subtitle: 'Resta aggiornato sulle nostre iniziative e unisciti al cambiamento',
+    subtitle:
+      'Resta aggiornato sulle nostre iniziative e unisciti al cambiamento',
     websiteName: 'Sito Web',
     websiteDescription: 'Scopri tutte le nostre iniziative',
     instagramName: 'Instagram',
@@ -192,7 +194,8 @@ export default {
     title: '🚧 In Fase di Sviluppo',
     subtitle: 'Questa sezione sarà presto disponibile',
     whatWeArePreparing: 'Cosa stiamo preparando',
-    description: "Il nostro team sta lavorando duramente per portarti nuove funzionalità innovative e un'esperienza utente ancora migliore.",
+    description:
+      "Il nostro team sta lavorando duramente per portarti nuove funzionalità innovative e un'esperienza utente ancora migliore.",
     improvedDesign: 'Design migliorato',
     newFeatures: 'Nuove funzionalità',
     optimizedPerformance: 'Performance ottimizzate',
@@ -220,17 +223,24 @@ export default {
     ourPillars: 'I Nostri Pilastri',
     globalImpact: 'Impatto Globale',
     storyIntro: 'Dal 1998, un movimento globale contro la fame',
-    storyOrigin: 'Rise Against Hunger nasce nel 1998 negli Stati Uniti con una missione chiara: combattere la fame nel mondo attraverso la distribuzione di pasti nutrienti e lo sviluppo di programmi sostenibili.',
+    storyOrigin:
+      'Rise Against Hunger nasce nel 1998 negli Stati Uniti con una missione chiara: combattere la fame nel mondo attraverso la distribuzione di pasti nutrienti e lo sviluppo di programmi sostenibili.',
     inItaly: '🇮🇹 In Italia',
-    italyText: "L'organizzazione arriva in Italia con l'obiettivo di coinvolgere le comunità locali nella lotta contro la fame globale. La nostra sede di Bologna è il cuore operativo e la sede centrale per tutta Europa, coordinando le attività sul territorio nazionale ed europeo.",
+    italyText:
+      "L'organizzazione arriva in Italia con l'obiettivo di coinvolgere le comunità locali nella lotta contro la fame globale. La nostra sede di Bologna è il cuore operativo e la sede centrale per tutta Europa, coordinando le attività sul territorio nazionale ed europeo.",
     mealDistribution: 'Distribuzione Pasti',
-    mealDistributionText: 'Organizziamo eventi di confezionamento pasti che coinvolgono volontari di ogni età',
+    mealDistributionText:
+      'Organizziamo eventi di confezionamento pasti che coinvolgono volontari di ogni età',
     communityInvolvement: 'Coinvolgimento Comunitario',
-    communityInvolvementText: 'Uniamo scuole, aziende e organizzazioni in un impegno condiviso',
-    globalImpactText: 'I pasti confezionati raggiungono comunità vulnerabili in tutto il mondo',
+    communityInvolvementText:
+      'Uniamo scuole, aziende e organizzazioni in un impegno condiviso',
+    globalImpactText:
+      'I pasti confezionati raggiungono comunità vulnerabili in tutto il mondo',
     education: 'Educazione',
-    educationText: 'Sensibilizziamo sul tema della fame e promuoviamo la solidarietà',
-    finalMessage: 'Ogni pasto che confezioniamo insieme è un gesto di amore che attraversa i confini e raggiunge chi ne ha più bisogno.',
+    educationText:
+      'Sensibilizziamo sul tema della fame e promuoviamo la solidarietà',
+    finalMessage:
+      'Ogni pasto che confezioniamo insieme è un gesto di amore che attraversa i confini e raggiunge chi ne ha più bisogno.',
     joinUs: 'Unisciti a noi in questa missione! 💙',
   },
 

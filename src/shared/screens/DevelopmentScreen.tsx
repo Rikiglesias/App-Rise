@@ -220,17 +220,17 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
               },
             ]}
           >
-            <PerfectText 
-              size={32} 
-              lines={2} 
+            <PerfectText
+              size={32}
+              lines={2}
               immunity={true}
               style={styles.mainTitle}
             >
               {t('development.title')}
             </PerfectText>
-            <PerfectText 
-              size={18} 
-              lines={2} 
+            <PerfectText
+              size={18}
+              lines={2}
               immunity={true}
               style={styles.subtitle}
             >
@@ -260,9 +260,9 @@ const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
                   color={Colors.primary[600]}
                   style={[styles.cardIcon, { marginBottom: PerfectSpacing.sm }]}
                 />
-                <PerfectText 
-                  size={24} 
-                  lines={2} 
+                <PerfectText
+                  size={24}
+                  lines={2}
                   immunity={true}
                   style={styles.cardTitle}
                 >

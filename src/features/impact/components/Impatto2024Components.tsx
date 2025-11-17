@@ -29,10 +29,20 @@ export const StatCard: React.FC<StatCardProps> = React.memo(({ data }) => {
       <PerfectText size={28} lines={1} fontWeight="400" style={styles.statIcon}>
         {data.icon}
       </PerfectText>
-      <PerfectText size={24} lines={1} fontWeight="400" style={styles.statNumber}>
+      <PerfectText
+        size={24}
+        lines={1}
+        fontWeight="400"
+        style={styles.statNumber}
+      >
         {data.number}
       </PerfectText>
-      <PerfectText size={18} lines={1} fontWeight="400" style={styles.statLabel}>
+      <PerfectText
+        size={18}
+        lines={1}
+        fontWeight="400"
+        style={styles.statLabel}
+      >
         {label}
       </PerfectText>
       <PerfectText size={14} lines={2} fontWeight="400" style={styles.statDesc}>
@@ -58,10 +68,20 @@ export const ImpactItem: React.FC<ImpactItemProps> = React.memo(({ data }) => {
       accessibilityLabel={text}
       accessibilityRole="text"
     >
-      <PerfectText size={18} lines={1} fontWeight="400" style={styles.impactIcon}>
+      <PerfectText
+        size={18}
+        lines={1}
+        fontWeight="400"
+        style={styles.impactIcon}
+      >
         {data.icon}
       </PerfectText>
-      <PerfectText size={16} lines={1} fontWeight="400" style={styles.impactText}>
+      <PerfectText
+        size={16}
+        lines={1}
+        fontWeight="400"
+        style={styles.impactText}
+      >
         {text}
       </PerfectText>
     </PerfectContainer>

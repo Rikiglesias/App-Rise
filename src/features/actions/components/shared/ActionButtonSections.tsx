@@ -72,7 +72,8 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
               testID="donate-title"
               style={styles.donateCategoryTitle}
             >
-              {'❤️ '}{t('actions.donateTitle')}
+              {'❤️ '}
+              {t('actions.donateTitle')}
             </PerfectText>
             <PerfectText
               size={16}
@@ -183,7 +184,8 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
             immunity={true}
             style={styles.exploreTitle}
           >
-            {'🔎 '}{t('actions.exploreTitle')}
+            {'🔎 '}
+            {t('actions.exploreTitle')}
           </PerfectText>
           <PerfectText
             size={14}
@@ -279,7 +281,8 @@ export const CommunityButtonsSection: React.FC<
             immunity={true}
             style={styles.communityTitle}
           >
-            {'🤝 '}{t('actions.communityTitle')}
+            {'🤝 '}
+            {t('actions.communityTitle')}
           </PerfectText>
           <PerfectText
             size={15}
