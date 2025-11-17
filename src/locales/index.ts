@@ -94,8 +94,8 @@ const getDeviceLocale = (): SupportedLocale => {
     return primaryLocale as SupportedLocale;
   }
 
-  // Fallback a italiano
-  return 'it';
+  // Fallback a inglese per tutte le altre lingue
+  return 'en';
 };
 
 // Imposta lingua corrente
