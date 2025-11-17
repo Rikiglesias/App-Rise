@@ -249,7 +249,7 @@ export const CommunityButtonsSection: React.FC<
   onCommunityTitlePress,
 }) => {
   const { t } = useTranslation();
-  const handleButtons = useMemo(
+  const handleCommunityButtons = useMemo(
     () => [
       () => {
         const button = communityButtons[0];
