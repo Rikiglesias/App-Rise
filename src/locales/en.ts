@@ -58,10 +58,23 @@ export default {
     volunteersInvolved: 'Volunteers Involved',
     countriesReached: 'Countries Reached',
     eventsOrganized: 'Events Organized',
+    communityTitle: 'Our Community',
+    communitySubtitle: 'Volunteers and partners united in the\n#zerohunger mission',
+    volunteers2024: 'Volunteers 2024',
+    volunteersActive: 'Active this year',
+    partnersActive: 'Active Partners',
+    partnersCollaboration: 'Active collaborations',
+    totalMeals: 'Total Meals',
+    totalMealsSubtitle: 'Packaged since 2010',
+    results2024: 'Results 2024',
+    viewMap: 'View Map',
+    mapTitle: 'Our Global Presence',
   },
 
   actions: {
     title: 'What You Can Do',
+    headerTitle: 'Make a Difference',
+    headerSubtitle: 'Every action counts in the fight against hunger',
     donate: 'Donate',
     volunteer: 'Become a Volunteer',
     organize: 'Organize an Event',
@@ -71,6 +84,10 @@ export default {
     volunteerDescription: 'Join our volunteer team',
     organizeDescription: 'Organize a meal packaging event in your community',
     shareDescription: 'Help us spread our mission',
+    donateInfo: 'Donation Info',
+    donateInfoText:
+      'Every donation makes a direct impact. With just €0.30 we can package one complete meal.',
+    moreInfo: 'Learn More',
   },
 
   about: {
