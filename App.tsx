@@ -9,6 +9,7 @@ import { initDisplayZoom } from './src/shared/services/displayZoom';
 import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
 import { useOTAUpdates } from './src/shared/hooks/useOTAUpdates';
 import { OTAUpdateScreen } from './src/shared/OTAUpdateScreen';
+import { ErrorBoundary } from './src/shared/components/ErrorBoundary';
 
 // The new Main component that bridges the two theme systems
 const Main: React.FC = () => {
@@ -69,11 +70,13 @@ const App: React.FC = () => {
   }
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <Main />
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <Main />
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 };
 

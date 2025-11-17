@@ -27,33 +27,41 @@ export const useOTAUpdates = () => {
   });
 
   const checkForUpdates = async () => {
-    // Controlla se expo-updates è abilitato
-    if (!Updates.isEnabled) {
-      logger.debug(
-        'OTA Updates',
-        'Expo Updates is not enabled - skipping update check'
-      );
-      return;
-    }
-
-    // In Expo Go (development), non procedere con il controllo per evitare errori
-    if (__DEV__ && !Updates.isEmbeddedLaunch) {
-      logger.debug(
-        'OTA Updates',
-        'Development mode in Expo Go detected - skipping update check to avoid errors'
-      );
-      return;
-    }
-
-    // In development builds standalone, procedi normalmente
-    if (__DEV__) {
-      logger.debug(
-        'OTA Updates',
-        'Development build detected - proceeding with update check'
-      );
-    }
-
     try {
+      // 🛡️ PROTEZIONE TOTALE: Verifica Updates disponibile
+      if (typeof Updates?.isEnabled === 'undefined') {
+        logger.debug(
+          'OTA Updates',
+          'Expo Updates module not available - skipping update check'
+        );
+        return;
+      }
+
+      // Controlla se expo-updates è abilitato
+      if (!Updates.isEnabled) {
+        logger.debug(
+          'OTA Updates',
+          'Expo Updates is not enabled - skipping update check'
+        );
+        return;
+      }
+
+      // In Expo Go (development), non procedere con il controllo per evitare errori
+      if (__DEV__ && !Updates.isEmbeddedLaunch) {
+        logger.debug(
+          'OTA Updates',
+          'Development mode in Expo Go detected - skipping update check to avoid errors'
+        );
+        return;
+      }
+
+      // In development builds standalone, procedi normalmente
+      if (__DEV__) {
+        logger.debug(
+          'OTA Updates',
+          'Development build detected - proceeding with update check'
+        );
+      }
       setUpdateState(prev => ({ ...prev, isChecking: true, error: null }));
 
       logger.info('OTA Updates', 'Checking for updates...', {
@@ -143,46 +151,64 @@ export const useOTAUpdates = () => {
 
   // Controlla aggiornamenti in background quando app torna in foreground
   useEffect(() => {
-    // 🛡️ PROTEZIONE: Skip in Expo Go per evitare crash da moduli native
-    if (__DEV__ && !Updates.isEmbeddedLaunch) {
-      logger.debug(
-        'OTA Updates',
-        'Expo Go detected - skipping AppState listener to prevent crash'
-      );
-      return;
-    }
-
-    // Import dinamico di AppState per evitare dipendenze circolari
-    let subscription: { remove: () => void } | null = null;
-
-    const setupBackgroundCheck = async () => {
-      try {
-        const { AppState } = await import('react-native');
-
-        subscription = AppState.addEventListener('change', nextAppState => {
-          // Check OTA solo quando app torna attiva da background
-          if (nextAppState === 'active') {
-            // Silent check - nessuna UI, nessun alert
-            void checkForUpdates().catch(() => {
-              // Fail silently - non disturbare l'utente
-              // Log già gestito in checkForUpdates()
-            });
-          }
-        });
-      } catch (error) {
-        logger.warn(
+    // 🛡️ PROTEZIONE TOTALE: Verifica Updates disponibile prima di setup listener
+    try {
+      if (typeof Updates?.isEnabled === 'undefined') {
+        logger.debug(
           'OTA Updates',
-          'AppState listener setup failed',
-          error as Error
+          'Updates module unavailable - skipping AppState listener'
         );
+        return undefined;
       }
-    };
 
-    void setupBackgroundCheck();
+      // 🛡️ PROTEZIONE: Skip in Expo Go per evitare crash da moduli native
+      if (__DEV__ && !Updates.isEmbeddedLaunch) {
+        logger.debug(
+          'OTA Updates',
+          'Expo Go detected - skipping AppState listener to prevent crash'
+        );
+        return undefined;
+      }
 
-    return () => {
-      subscription?.remove();
-    };
+      // Import dinamico di AppState per evitare dipendenze circolari
+      let subscription: { remove: () => void } | null = null;
+
+      const setupBackgroundCheck = async () => {
+        try {
+          const { AppState } = await import('react-native');
+
+          subscription = AppState.addEventListener('change', nextAppState => {
+            // Check OTA solo quando app torna attiva da background
+            if (nextAppState === 'active') {
+              // Silent check - nessuna UI, nessun alert
+              void checkForUpdates().catch(() => {
+                // Fail silently - non disturbare l'utente
+                // Log già gestito in checkForUpdates()
+              });
+            }
+          });
+        } catch (error) {
+          logger.warn(
+            'OTA Updates',
+            'AppState listener setup failed',
+            error as Error
+          );
+        }
+      };
+
+      void setupBackgroundCheck();
+
+      return () => {
+        subscription?.remove();
+      };
+    } catch (error) {
+      logger.error(
+        'OTA Updates',
+        'useEffect setup crashed - OTA disabled',
+        error as Error
+      );
+      return undefined;
+    }
   }, []);
 
   // Note:

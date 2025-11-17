@@ -1,3 +1,52 @@
+// Mock react-native-gesture-handler BEFORE import to prevent React Native renderer errors
+jest.mock('react-native-gesture-handler', () => {
+  const View = require('react-native').View;
+  return {
+    Swipeable: View,
+    DrawerLayout: View,
+    State: {},
+    ScrollView: View,
+    Slider: View,
+    Switch: View,
+    TextInput: View,
+    ToolbarAndroid: View,
+    ViewPagerAndroid: View,
+    DrawerLayoutAndroid: View,
+    WebView: View,
+    NativeViewGestureHandler: View,
+    TapGestureHandler: View,
+    FlingGestureHandler: View,
+    ForceTouchGestureHandler: View,
+    LongPressGestureHandler: View,
+    PanGestureHandler: View,
+    PinchGestureHandler: View,
+    RotationGestureHandler: View,
+    RawButton: View,
+    BaseButton: View,
+    RectButton: View,
+    BorderlessButton: View,
+    FlatList: View,
+    gestureHandlerRootHOC: jest.fn(component => component),
+    Directions: {},
+    GestureDetector: View,
+    Gesture: {
+      Tap: () => ({}),
+      Pan: () => ({}),
+      Pinch: () => ({}),
+      Rotation: () => ({}),
+      Fling: () => ({}),
+      LongPress: () => ({}),
+      ForceTouch: () => ({}),
+      Native: () => ({}),
+      Race: () => ({}),
+      Simultaneous: () => ({}),
+      Exclusive: () => ({}),
+    },
+    GestureHandlerRootView: View,
+  };
+});
+
+// Now safe to import
 import 'react-native-gesture-handler/jestSetup';
 
 // Ensure __DEV__ exists in Jest/CI environment
