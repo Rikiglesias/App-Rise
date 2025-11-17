@@ -1,6 +1,8 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/**
+ * ESLint Disable Justification:
+ * - no-await-in-loop: Legittimo per retry sequenziale con exponential backoff (linea 410)
+ */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable require-await */
 import { errorTracking } from './errorTracking';
 import { secureStorage } from './secureStorage';
 import { env } from '@/shared/config/environment';
@@ -446,14 +448,14 @@ class APISecurityService {
   /**
    * Metodi convenience per HTTP verbs
    */
-  async get<T>(
+  get<T>(
     url: string,
     config?: Partial<APIRequestConfig>
   ): Promise<APIResponse<T>> {
     return this.secureRequest<T>({ ...config, url, method: 'GET' });
   }
 
-  async post<T>(
+  post<T>(
     url: string,
     body?: unknown,
     config?: Partial<APIRequestConfig>
@@ -461,7 +463,7 @@ class APISecurityService {
     return this.secureRequest<T>({ ...config, url, method: 'POST', body });
   }
 
-  async put<T>(
+  put<T>(
     url: string,
     body?: unknown,
     config?: Partial<APIRequestConfig>
@@ -469,7 +471,7 @@ class APISecurityService {
     return this.secureRequest<T>({ ...config, url, method: 'PUT', body });
   }
 
-  async delete<T>(
+  delete<T>(
     url: string,
     config?: Partial<APIRequestConfig>
   ): Promise<APIResponse<T>> {

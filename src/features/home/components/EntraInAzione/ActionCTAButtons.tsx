@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, PixelRatio } from 'react-native';
 import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
@@ -49,6 +49,19 @@ const ActionCTAButtonsComponent: React.FC = () => {
   const threshold = getFontScaleThreshold();
   const isLargeFontScale = fontScale > threshold;
 
+  // Memoize conditional styles
+  const conditionalStyles = useMemo(
+    () => ({
+      buttonPadding: isLargeFontScale
+        ? { paddingHorizontal: PerfectSpacing.md }
+        : {},
+      subTextPadding: isLargeFontScale
+        ? { paddingHorizontal: PerfectSpacing.xs }
+        : {},
+    }),
+    [isLargeFontScale]
+  );
+
   const handleImpactPress = useCallback(() => {
     void triggerHaptic('heavy');
     navigation.navigate('ImpactTab');
@@ -70,7 +83,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
     >
       {/* SCOPRI IL NOSTRO IMPATTO */}
       <PlatformTouchable
-        style={{ flex: 1 }}
+        style={styles.buttonWrapper}
         onPress={handleImpactPress}
         activeOpacity={0.92}
         accessibilityRole="button"
@@ -86,12 +99,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
           style={styles.gradientBorder}
         >
           <PerfectContainer
-            style={[
-              styles.buttonContainer,
-              ...(isLargeFontScale
-                ? [{ paddingHorizontal: PerfectSpacing.md }]
-                : []),
-            ]}
+            style={[styles.buttonContainer, conditionalStyles.buttonPadding]}
           >
             <PerfectIcon
               name="chart-line"
@@ -112,11 +120,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
               flexDirection="row"
               alignItems="center"
               gap={PerfectSpacing.sm}
-              style={[
-                ...(isLargeFontScale
-                  ? [{ paddingHorizontal: PerfectSpacing.xs }]
-                  : []),
-              ]}
+              style={conditionalStyles.subTextPadding}
             >
               <PerfectIcon
                 name="arrow-left"
@@ -140,7 +144,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
 
       {/* DONA E AIUTA */}
       <PlatformTouchable
-        style={{ flex: 1 }}
+        style={styles.buttonWrapper}
         onPress={handleActionsPress}
         activeOpacity={0.92}
         accessibilityRole="button"
@@ -156,12 +160,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
           style={styles.gradientBorder}
         >
           <PerfectContainer
-            style={[
-              styles.buttonContainer,
-              ...(isLargeFontScale
-                ? [{ paddingHorizontal: PerfectSpacing.md }]
-                : []),
-            ]}
+            style={[styles.buttonContainer, conditionalStyles.buttonPadding]}
           >
             <PerfectIcon
               name="hand-heart"
@@ -182,11 +181,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
               flexDirection="row"
               alignItems="center"
               gap={PerfectSpacing.sm}
-              style={[
-                ...(isLargeFontScale
-                  ? [{ paddingHorizontal: PerfectSpacing.xs }]
-                  : []),
-              ]}
+              style={conditionalStyles.subTextPadding}
             >
               <PerfectText
                 size={18}
@@ -212,6 +207,10 @@ const ActionCTAButtonsComponent: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  buttonWrapper: {
+    flex: 1,
+  },
+
   gradientBorder: {
     borderRadius: BorderRadius.xl,
     padding: scale(3),

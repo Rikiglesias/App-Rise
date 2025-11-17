@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import type { AnimatedButtonProps } from './ActionButtonTypes';
@@ -25,6 +25,36 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   const outerRadius = scale(20);
   const innerRadius = Math.max(0, outerRadius - borderPadding);
 
+  // Memoize dynamic styles to prevent re-creation on every render
+  const dynamicStyles = useMemo(
+    () => ({
+      touchable: {
+        borderRadius: outerRadius,
+        ...Shadows.sm,
+      },
+      gradient: {
+        borderRadius: outerRadius,
+        padding: borderPadding,
+        overflow: 'hidden' as const,
+      },
+      innerContainer: {
+        backgroundColor: Colors.neutral[0],
+        borderRadius: innerRadius,
+        paddingVertical: PerfectSpacing.base,
+        paddingHorizontal: PerfectSpacing.md,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        overflow: 'hidden' as const,
+      },
+      chevronIcon: {
+        position: 'absolute' as const,
+        top: PerfectSpacing.sm,
+        right: PerfectSpacing.sm,
+      },
+    }),
+    [outerRadius, innerRadius, borderPadding]
+  );
+
   return (
     <PerfectContainer style={fullWidth ? {} : styles.buttonContainer}>
       <PlatformTouchable
@@ -33,32 +63,15 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
         accessibilityRole="button"
         accessibilityLabel={button.title}
         testID={`action-button-${button.id}`}
-        style={{
-          borderRadius: outerRadius,
-          ...Shadows.sm,
-        }}
+        style={dynamicStyles.touchable}
       >
         <LinearGradient
           colors={button.gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{
-            borderRadius: outerRadius,
-            padding: borderPadding,
-            overflow: 'hidden',
-          }}
+          style={dynamicStyles.gradient}
         >
-          <PerfectContainer
-            style={{
-              backgroundColor: Colors.neutral[0],
-              borderRadius: innerRadius,
-              paddingVertical: PerfectSpacing.base,
-              paddingHorizontal: PerfectSpacing.md,
-              alignItems: 'center',
-              justifyContent: 'center',
-              overflow: 'hidden',
-            }}
-          >
+          <PerfectContainer style={dynamicStyles.innerContainer}>
             <PerfectIcon
               name={button.icon}
               size={28}
@@ -79,11 +92,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
               minSize={18}
               maxSize={24}
               color={iconColor}
-              style={{
-                position: 'absolute',
-                top: PerfectSpacing.sm,
-                right: PerfectSpacing.sm,
-              }}
+              style={dynamicStyles.chevronIcon}
             />
           </PerfectContainer>
         </LinearGradient>

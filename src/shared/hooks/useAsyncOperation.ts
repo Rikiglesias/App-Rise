@@ -257,33 +257,26 @@ export const useApiOperation = <T>(
     ...asyncOptions
   } = options;
 
-  const wrappedOperation = useCallback(() => {
-    return new Promise<T>(async (resolve, reject) => {
-      try {
-        // Check cache if key provided
-        if (cacheKey) {
-          const cached = cacheRef.current.get(cacheKey);
-          if (cached && Date.now() - cached.timestamp < cacheDuration) {
-            resolve(cached.data);
-            return;
-          }
-        }
-
-        const result = await apiCall();
-
-        // Cache result if key provided
-        if (cacheKey) {
-          cacheRef.current.set(cacheKey, {
-            data: result,
-            timestamp: Date.now(),
-          });
-        }
-
-        resolve(result);
-      } catch (error) {
-        reject(error);
+  const wrappedOperation = useCallback(async (): Promise<T> => {
+    // Check cache if key provided
+    if (cacheKey) {
+      const cached = cacheRef.current.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < cacheDuration) {
+        return cached.data;
       }
-    });
+    }
+
+    const result = await apiCall();
+
+    // Cache result if key provided
+    if (cacheKey) {
+      cacheRef.current.set(cacheKey, {
+        data: result,
+        timestamp: Date.now(),
+      });
+    }
+
+    return result;
   }, [apiCall, cacheKey, cacheDuration]);
 
   return useAsyncOperation(wrappedOperation, asyncOptions);

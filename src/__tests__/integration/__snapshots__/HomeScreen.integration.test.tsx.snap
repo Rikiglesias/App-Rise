@@ -546,11 +546,9 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     flexDirection="row"
                     gap={12}
                     style={
-                      [
-                        {
-                          "paddingHorizontal": 6,
-                        },
-                      ]
+                      {
+                        "paddingHorizontal": 6,
+                      }
                     }
                   >
                     <Text
@@ -697,11 +695,9 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     flexDirection="row"
                     gap={12}
                     style={
-                      [
-                        {
-                          "paddingHorizontal": 6,
-                        },
-                      ]
+                      {
+                        "paddingHorizontal": 6,
+                      }
                     }
                   >
                     <Text

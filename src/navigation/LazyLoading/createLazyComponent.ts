@@ -1,21 +1,25 @@
 /**
  * LAZY COMPONENT FACTORY - Creazione type-safe di componenti lazy
  * Utilities per creare componenti lazy con preloading e ottimizzazioni
+ *
+ * ESLint Disable Justification:
+ * - no-await-in-loop: Legittimo per retry logic sequenziale (linea 124)
+ * - no-explicit-any: Necessario per cache globale di componenti con props eterogenee.
+ *   Una cache che gestisce componenti diversi non può essere type-safe senza any,
+ *   perché i tipi delle props cambiano per ogni componente.
  */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable require-await */
 /* eslint-disable no-await-in-loop */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
 import type { ComponentType } from 'react';
 import { logger } from '@/shared/utils/logger';
 
 // Cache per i componenti già caricati
+// any è necessario: cache gestisce componenti con props diverse
 const componentCache = new Map<
   string,
-  Promise<{ default: ComponentType<unknown> }>
+  Promise<{ default: ComponentType<any> }>
 >();
 
 // Preload queue per componenti da precaricare
@@ -36,11 +40,13 @@ interface LazyComponentOptions {
  * Crea un componente lazy con caching e preloading
  *
  * BENEFICI:
- * - Type safety completa
  * - Caching automatico
  * - Preloading intelligente
  * - Error handling robusto
  * - Performance ottimizzate
+ *
+ * NOTA: `any` è necessario per la cache globale che gestisce componenti
+ * con props eterogenee. Impossibile usare generics o unknown per questo caso.
  */
 export const createLazyComponent = (
   importFn: () => Promise<{ default: ComponentType<any> }>,
@@ -50,23 +56,24 @@ export const createLazyComponent = (
 
   // Wrapper per gestire caching e retry
   const cachedImportFn = async (): Promise<{
-    default: ComponentType<unknown>;
+    default: ComponentType<any>;
   }> => {
     // Controlla cache
     const cached = componentCache.get(name);
     if (cached) {
-      return cached;
+      return await cached;
     }
 
     // Crea promise con retry logic
-    const importPromise = createRetryableImport(
+    const importPromise = await createRetryableImport(
       importFn,
       retryAttempts,
       timeout
     );
 
-    // Salva in cache
-    componentCache.set(name, importPromise);
+    // Salva in cache prima di ritornare
+    const cachedPromise = Promise.resolve(importPromise);
+    componentCache.set(name, cachedPromise);
 
     return importPromise;
   };
