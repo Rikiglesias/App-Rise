@@ -5,6 +5,7 @@ node_modules/
 
 # Expo
 .expo/
+!.expo/.gitkeep
 dist/
 web-build/
 expo-env.d.ts
@@ -167,3 +168,6 @@ reports/
 
 # Development notes and improvements
 miglioramenti.json
+
+# Snyk Security Extension - AI Rules (auto-generated)
+.windsurf\rules\snyk_rules.md
