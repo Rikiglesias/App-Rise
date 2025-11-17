@@ -9,10 +9,13 @@ import type {
 import { PerfectContainer } from '@/components/ui/PerfectContainer';
 import { PerfectText } from '@/components/ui/PerfectText';
 import SectionContainer from '@/components/layout/SectionContainer';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 // Header Component
 export const ProjectsHeader: React.FC<ProjectsHeaderProps> = React.memo(
-  ({ styles }) => (
+  ({ styles }) => {
+    const { t } = useTranslation();
+    return (
     <PerfectContainer style={styles.header as ViewStyle}>
       <PerfectText
         size={24}
@@ -20,7 +23,7 @@ export const ProjectsHeader: React.FC<ProjectsHeaderProps> = React.memo(
         fontWeight="400"
         style={styles.headerTitle}
       >
-        I Nostri Progetti
+        {t('projects.title')}
       </PerfectText>
       <PerfectText
         size={15}
@@ -28,18 +31,20 @@ export const ProjectsHeader: React.FC<ProjectsHeaderProps> = React.memo(
         fontWeight="400"
         style={styles.headerSubtitle}
       >
-        Scopri dove stiamo facendo la differenza nel mondo{'\n'}
-        nella lotta alla fame
+        {t('projects.subtitle')}
       </PerfectText>
     </PerfectContainer>
-  )
+    );
+  }
 );
 
 ProjectsHeader.displayName = 'ProjectsHeader';
 
 // Stats Section Component
 export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
-  ({ stats, styles }) => (
+  ({ stats, styles }) => {
+    const { t } = useTranslation();
+    return (
     <SectionContainer spacing="standard">
       <Surface style={styles.statsSurface} elevation={1}>
         <PerfectText
@@ -48,7 +53,7 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
           fontWeight="400"
           style={styles.statsTitle}
         >
-          Progetti in Numeri
+          {t('projects.statsTitle')}
         </PerfectText>
         <PerfectContainer style={styles.statsRow as ViewStyle}>
           <PerfectContainer style={styles.statItem as ViewStyle}>
@@ -66,7 +71,7 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
               fontWeight="400"
               style={styles.statLabel}
             >
-              Progetti{'\n'}Totali
+              {t('projects.totalProjects')}
             </PerfectText>
           </PerfectContainer>
           <PerfectContainer style={styles.statItem as ViewStyle}>
@@ -84,7 +89,7 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
               fontWeight="400"
               style={styles.statLabel}
             >
-              In Corso{'\n'}Attualmente
+              {t('projects.activeProjects')}
             </PerfectText>
           </PerfectContainer>
           <PerfectContainer style={styles.statItem as ViewStyle}>
@@ -102,20 +107,23 @@ export const ProjectsStats: React.FC<ProjectsStatsProps> = React.memo(
               fontWeight="400"
               style={styles.statLabel}
             >
-              Persone{'\n'}Aiutate
+              {t('projects.peopleHelped')}
             </PerfectText>
           </PerfectContainer>
         </PerfectContainer>
       </Surface>
     </SectionContainer>
-  )
+    );
+  }
 );
 
 ProjectsStats.displayName = 'ProjectsStats';
 
 // Empty State Component
 export const ProjectsEmptyState: React.FC<ProjectsEmptyStateProps> = React.memo(
-  ({ styles }) => (
+  ({ styles }) => {
+    const { t } = useTranslation();
+    return (
     <PerfectContainer style={styles.emptyState as ViewStyle}>
       <PerfectText
         size={48}
@@ -131,10 +139,11 @@ export const ProjectsEmptyState: React.FC<ProjectsEmptyStateProps> = React.memo(
         fontWeight="400"
         style={styles.emptyStateText}
       >
-        Nessun progetto trovato per questa categoria
+        {t('projects.emptyState')}
       </PerfectText>
     </PerfectContainer>
-  )
+    );
+  }
 );
 
 ProjectsEmptyState.displayName = 'ProjectsEmptyState';

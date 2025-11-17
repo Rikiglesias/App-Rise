@@ -4,6 +4,7 @@
  */
 
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ContributeTabScreenProps } from '../../ContributeScreenTypes';
 import type { ButtonData } from '../shared/ActionButtonTypes';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
@@ -37,6 +38,7 @@ export const useActionButtonsData = (
   navigation: ContributeTabScreenProps['navigation']
 ): ActionButtonsData => {
   const { triggerHaptic } = useHapticFeedback();
+  const { t } = useTranslation();
   const {
     openLink,
     openDonationLink,
@@ -54,7 +56,7 @@ export const useActionButtonsData = (
     () => [
       {
         id: 'dona',
-        title: 'Dona Ora',
+        title: t('actions.donateNow'),
         icon: 'heart',
         gradient: Colors.gradients.donate,
         onPress: () => openDonationLink(),

@@ -22,6 +22,7 @@ import {
   scaleSpacing,
 } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface DonationInfoModalProps {
   visible: boolean;
@@ -138,18 +139,16 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
           immunity={true}
           style={modalStyles.centeredTitle}
         >
-          Come Donare
+          {t('actions.donationInfoTitle')}
         </PerfectText>
         <PerfectContainer style={modalStyles.titleUnderline} />
       </PerfectContainer>
 
       <PerfectText size={16} lines={0} style={modalStyles.modalText}>
         <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
-          💶 Donazioni monetarie:
+          {t('actions.donationMonetary')}
         </PerfectText>{' '}
-        Se vuoi fare una donazione monetaria diretta, clicca su &quot;Dona
-        Ora&quot; per contribuire immediatamente alla nostra missione contro la
-        fame.
+        {t('actions.donationMonetaryText')}
       </PerfectText>
 
       <PerfectText size={16} lines={0} style={modalStyles.modalText}>
@@ -182,6 +181,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
   onClose,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
+  const { t } = useTranslation();
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');

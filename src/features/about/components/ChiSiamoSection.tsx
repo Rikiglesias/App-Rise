@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 
 import type { ChiSiamoSectionProps } from '../types';
 import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import {
   PerfectIcon,
   PlatformTouchable,
@@ -10,14 +11,14 @@ import {
 } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useNavigation } from '@react-navigation/native';
 
-export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
-  onInfoPress,
-}) => {
+export const ChiSiamoSection: React.FC = () => {
+  const navigation = useNavigation();
+  const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
 
   const handleInfoPress = useCallback(() => {
-    onInfoPress();
     void triggerHaptic('light');
   }, [onInfoPress, triggerHaptic]);
 
@@ -44,7 +45,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
               fontWeight="700"
               style={chiSiamoSectionStyles.categoryTitle}
             >
-              Chi Siamo
+              {t('about.title')}
             </PerfectText>
             <PerfectText
               size={15}
@@ -58,7 +59,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
           <PlatformTouchable
             onPress={handleInfoPress}
             accessibilityRole="button"
-            accessibilityLabel="Apri informazioni su Chi Siamo"
+            accessibilityLabel={t('about.accessibilityLabel')}
             style={chiSiamoSectionStyles.infoIconImproved}
           >
             <PerfectIcon

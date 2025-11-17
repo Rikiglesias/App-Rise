@@ -1,9 +1,12 @@
 import React from 'react';
 import { PerfectText, PerfectContainer, PerfectIcon } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { scale } from '@/shared/constants/perfectScale';
 
 export const HeaderSection: React.FC = React.memo(() => {
+  const { t } = useTranslation();
+
   return (
     <PerfectContainer style={styles.headerContainer}>
       <PerfectContainer style={styles.headerIconContainer}>
@@ -25,7 +28,7 @@ export const HeaderSection: React.FC = React.memo(() => {
           fontWeight="700"
           style={styles.headerTitle}
         >
-          Seguici sui social
+          {t('social.title')}
         </PerfectText>
 
         <PerfectText
@@ -34,7 +37,7 @@ export const HeaderSection: React.FC = React.memo(() => {
           fontWeight="500"
           style={styles.headerSubtitle}
         >
-          Resta aggiornato sulle nostre iniziative e unisciti al cambiamento
+          {t('social.subtitle')}
         </PerfectText>
       </PerfectContainer>
     </PerfectContainer>
