@@ -7,8 +7,8 @@ const CODE_SIGNING_ALGORITHM =
   process.env.EXPO_UPDATES_CODE_SIGNING_ALGORITHM ?? 'rsa-v1_5-sha256';
 
 const baseUpdatesConfig = {
-  fallbackToCacheTimeout: 0, // Nessun delay all'avvio - instant TTI
-  checkAutomatically: 'ON_ERROR_RECOVERY', // Check OTA solo su errori, non all'avvio
+  fallbackToCacheTimeout: 30000, // 30 secondi per fallback sicuro
+  checkAutomatically: 'NEVER', // DISABILITATO per evitare crash loop in produzione
   url: 'https://u.expo.dev/52a33b0f-dec1-4674-812b-de5b888c911a',
 };
 

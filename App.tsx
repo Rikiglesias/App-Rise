@@ -7,8 +7,8 @@ import { ThemeProvider } from './src/shared/hooks/useTheme';
 import { logger } from './src/shared/utils/logger';
 import { initDisplayZoom } from './src/shared/services/displayZoom';
 import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
-import { useOTAUpdates } from './src/shared/hooks/useOTAUpdates';
-import { OTAUpdateScreen } from './src/shared/OTAUpdateScreen';
+// import { useOTAUpdates } from './src/shared/hooks/useOTAUpdates';
+// import { OTAUpdateScreen } from './src/shared/OTAUpdateScreen';
 import { ErrorBoundary } from './src/shared/components/ErrorBoundary';
 
 // The new Main component that bridges the two theme systems
@@ -42,8 +42,8 @@ const Main: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  // OTA Updates hook
-  const { isChecking, isDownloading, downloadProgress } = useOTAUpdates();
+  // OTA Updates hook - TEMPORANEAMENTE DISABILITATO per fix crash produzione
+  // const { isChecking, isDownloading, downloadProgress } = useOTAUpdates();
 
   // Trigger re-render dopo init display zoom (per applicare normalizzazione)
   const [_, setZoomReadyTick] = useState(0);
@@ -51,23 +51,23 @@ const App: React.FC = () => {
   // Inizializzazione app
   useEffect(() => {
     // Log dell'inizializzazione
-    logger.info('App', '✅ App initialized with OTA Updates enabled');
+    logger.info('App', '✅ App initialized - OTA Updates disabled for stability');
     // Telemetria Display Zoom e re-render per applicare normalizzazione
     void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
   }, []);
 
-  // Mostra schermata aggiornamento se necessario
-  const showUpdateScreen = isChecking || isDownloading;
+  // Mostra schermata aggiornamento se necessario - DISABILITATO
+  // const showUpdateScreen = isChecking || isDownloading;
 
-  if (showUpdateScreen) {
-    return (
-      <OTAUpdateScreen
-        isChecking={isChecking}
-        isDownloading={isDownloading}
-        progress={downloadProgress}
-      />
-    );
-  }
+  // if (showUpdateScreen) {
+  //   return (
+  //     <OTAUpdateScreen
+  //       isChecking={isChecking}
+  //       isDownloading={isDownloading}
+  //       progress={downloadProgress}
+  //     />
+  //   );
+  // }
 
   return (
     <ErrorBoundary>
