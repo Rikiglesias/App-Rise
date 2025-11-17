@@ -15,6 +15,14 @@ jest.mock('expo-asset');
 jest.mock('expo-status-bar', () => ({
   StatusBar: 'StatusBar',
 }));
+jest.mock('expo-updates', () => ({
+  useUpdates: () => ({
+    isChecking: false,
+    isDownloading: false,
+    downloadProgress: 0,
+    availableUpdate: null,
+  }),
+}));
 
 describe('App Root Component', () => {
   it('dovrebbe renderizzare senza errori', () => {

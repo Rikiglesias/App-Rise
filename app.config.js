@@ -8,7 +8,7 @@ const CODE_SIGNING_ALGORITHM =
 
 const baseUpdatesConfig = {
   fallbackToCacheTimeout: 0, // Avvio immediato - nessun delay
-  checkAutomatically: 'ON_ERROR_RECOVERY', // Check SOLO dopo errori - SICURO
+  checkAutomatically: 'ON_LOAD', // Check automatico sempre - WiFi E dati mobile
   url: 'https://u.expo.dev/52a33b0f-dec1-4674-812b-de5b888c911a',
 };
 
@@ -28,7 +28,7 @@ export default {
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
-    version: '1.2.7',
+    version: '1.2.8',
     orientation: 'portrait',
     icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',

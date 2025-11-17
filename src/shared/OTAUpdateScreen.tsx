@@ -1,22 +1,23 @@
 /**
- * OTA Update Screen - Schermata Aggiornamento Moderna
+ * OTA Update Screen - Best Practices 2024
  * Rise Against Hunger Italia
  *
- * Design: Minimalista, elegante, con animazioni fluide
- * Coerente con il design system dell'app (rosso brand + nero premium)
+ * Design: Minimal, moderno, non invasivo
+ * Ispirato a: iOS/Android native update screens
+ * Best practices: Progress sempre visibile, messaging chiaro, no heavy animations
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Animated,
   Easing,
-  ActivityIndicator,
 } from 'react-native';
-import { BlurView } from 'expo-blur';
+import { getLocales } from 'expo-localization';
 import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Circle } from 'react-native-svg';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale, scaleText } from '@/shared/constants/perfectScale';
@@ -29,289 +30,388 @@ interface OTAUpdateScreenProps {
   message?: string;
 }
 
+// Traduzioni localizzate
+const translations = {
+  it: {
+    message: 'Stiamo aggiornando l\'app',
+    subMessage: 'Grazie della pazienza, ci vorranno solo pochi secondi',
+    complete: 'Aggiornamento completato!',
+  },
+  en: {
+    message: 'Updating the app',
+    subMessage: 'Thank you for your patience, just a few seconds',
+    complete: 'Update complete!',
+  },
+};
+
 export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
-  isChecking,
-  isDownloading,
   progress = 0,
-  message,
 }) => {
-  // Animazioni
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  // Rileva lingua dispositivo con fallback sicuro
+  const deviceLanguage = React.useMemo(() => {
+    try {
+      return getLocales()[0]?.languageCode || 'en';
+    } catch (_e) {
+      return 'en';
+    }
+  }, []);
+  
+  const isItalian = deviceLanguage === 'it';
+  const t = isItalian ? translations.it : translations.en;
+  
+  // Safe progress clamping
+  const safeProgress = React.useMemo(() => {
+    const val = Number(progress) || 0;
+    return Math.min(Math.max(val, 0), 100);
+  }, [progress]);
+
+  // Animazioni elite
   const progressAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const logoScaleAnim = useRef(new Animated.Value(1)).current;
+  const logoBreathAnim = useRef(new Animated.Value(1)).current;
+  const completeFadeAnim = useRef(new Animated.Value(0)).current;
   const shimmerAnim = useRef(new Animated.Value(0)).current;
-  const circleAnim1 = useRef(new Animated.Value(0)).current;
-  const circleAnim2 = useRef(new Animated.Value(0)).current;
+  const glowAnim = useRef(new Animated.Value(0)).current;
+  const [displayProgress, setDisplayProgress] = useState(0);
 
-  // Pulse animation per icona
+  // Fade in iniziale + logo bounce
   useEffect(() => {
-    const pulse = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.1,
-          duration: 1200,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1200,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    pulse.start();
-
-    return () => pulse.stop();
-  }, [pulseAnim]);
-
-  // Shimmer effect
-  useEffect(() => {
-    const shimmer = Animated.loop(
-      Animated.timing(shimmerAnim, {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 2000,
-        easing: Easing.linear,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
         useNativeDriver: true,
-      })
-    );
+      }),
+      Animated.spring(logoScaleAnim, {
+        toValue: 1,
+        friction: 8,
+        tension: 40,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [fadeAnim, logoScaleAnim]);
 
-    shimmer.start();
-
-    return () => shimmer.stop();
-  }, [shimmerAnim]);
-
-  // Cerchi animati sfondo
+  // Shimmer continuo sulla progress bar
   useEffect(() => {
-    const circle1 = Animated.loop(
-      Animated.sequence([
-        Animated.timing(circleAnim1, {
+    if (safeProgress > 0 && safeProgress < 100) {
+      shimmerAnim.setValue(0);
+      const shimmer = Animated.loop(
+        Animated.timing(shimmerAnim, {
           toValue: 1,
-          duration: 8000,
-          easing: Easing.inOut(Easing.ease),
+          duration: 1500,
+          easing: Easing.linear,
           useNativeDriver: true,
-        }),
-        Animated.timing(circleAnim1, {
-          toValue: 0,
-          duration: 8000,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ])
-    );
+        })
+      );
+      shimmer.start();
+      return () => shimmer.stop();
+    }
+    return undefined;
+  }, [safeProgress, shimmerAnim]);
 
-    const circle2 = Animated.loop(
-      Animated.sequence([
-        Animated.timing(circleAnim2, {
-          toValue: 1,
-          duration: 10000,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(circleAnim2, {
-          toValue: 0,
-          duration: 10000,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    circle1.start();
-    circle2.start();
-
-    return () => {
-      circle1.stop();
-      circle2.stop();
-    };
-  }, [circleAnim1, circleAnim2]);
-
-  // Fade in all'apertura
+  // Glow pulsante sul checkmark completamento
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
+    if (safeProgress >= 100) {
+      const glow = Animated.loop(
+        Animated.sequence([
+          Animated.timing(glowAnim, {
+            toValue: 1,
+            duration: 1000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+          Animated.timing(glowAnim, {
+            toValue: 0,
+            duration: 1000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+        ])
+      );
+      glow.start();
+      return () => glow.stop();
+    }
+    return undefined;
+  }, [safeProgress, glowAnim]);
 
-  // Animazione progresso
+  // Breathing animation sul logo durante download
+  useEffect(() => {
+    if (safeProgress > 0 && safeProgress < 100) {
+      const breathe = Animated.loop(
+        Animated.sequence([
+          Animated.timing(logoBreathAnim, {
+            toValue: 1.03,
+            duration: 2000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+          Animated.timing(logoBreathAnim, {
+            toValue: 1,
+            duration: 2000,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+        ])
+      );
+      breathe.start();
+      return () => breathe.stop();
+    }
+    return undefined;
+  }, [safeProgress, logoBreathAnim]);
+
+  // Pulse subtile per percentuale + effetto completamento
+  useEffect(() => {
+    if (safeProgress > 0 && safeProgress < 100) {
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.08,
+          duration: 150,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 150,
+          easing: Easing.in(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+
+    // Animazione completamento
+    if (safeProgress >= 100) {
+      Animated.parallel([
+        Animated.spring(pulseAnim, {
+          toValue: 1.15,
+          friction: 6,
+          useNativeDriver: true,
+        }),
+        Animated.timing(completeFadeAnim, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [safeProgress, pulseAnim, completeFadeAnim]);
+
+  // Animazione progresso ultra-smooth + counter animato
   useEffect(() => {
     Animated.timing(progressAnim, {
-      toValue: progress,
-      duration: 500,
-      easing: Easing.out(Easing.cubic),
+      toValue: safeProgress,
+      duration: 400,
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1), // Cubic bezier premium
       useNativeDriver: false,
     }).start();
-  }, [progress, progressAnim]);
 
-  // Calcola larghezza barra progresso
+    // Counter animato per percentuale
+    const start = displayProgress;
+    const end = Math.round(safeProgress);
+    const duration = 300;
+    const startTime = Date.now();
+
+    const animate = () => {
+      const now = Date.now();
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = Easing.out(Easing.ease)(progress);
+      const current = Math.round(start + (end - start) * eased);
+      
+      setDisplayProgress(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    if (start !== end) {
+      animate();
+    }
+  }, [safeProgress, progressAnim, displayProgress]);
+
+  // Calcola larghezza barra
   const progressWidth = progressAnim.interpolate({
     inputRange: [0, 100],
     outputRange: ['0%', '100%'],
   });
 
-  // Determina messaggio da mostrare
-  const displayMessage =
-    message ||
-    (isDownloading
-      ? 'Download aggiornamento in corso...'
-      : isChecking
-        ? 'Controllo aggiornamenti...'
-        : 'Preparazione in corso...');
-
-  // Interpolazioni cerchi animati
-  const circle1Translate = circleAnim1.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-100, 100],
+  // Anello di progresso circolare attorno al logo
+  const CIRCLE_SIZE = scale(130);
+  const RING_SIZE = scale(146);
+  const RING_STROKE = scale(6);
+  const RADIUS = (RING_SIZE - RING_STROKE) / 2;
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+  const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+  const ringDashoffset = progressAnim.interpolate({
+    inputRange: [0, 100],
+    outputRange: [CIRCUMFERENCE, 0],
   });
 
-  const circle2Translate = circleAnim2.interpolate({
-    inputRange: [0, 1],
-    outputRange: [100, -100],
-  });
-
-  const shimmerTranslate = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-400, 400],
-  });
+  const isComplete = safeProgress >= 100;
 
   return (
     <View style={styles.container}>
-      {/* Sfondo gradient premium */}
+      {/* Gradient background premium - più ricco */}
       <LinearGradient
-        colors={[
-          Colors.black.pure,
-          Colors.black.medium,
-          Colors.primary[900],
-          Colors.black.medium,
-        ]}
-        style={StyleSheet.absoluteFillObject}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      />
-
-      {/* Cerchi animati sfondo */}
-      <Animated.View
-        style={[
-          styles.animatedCircle,
-          styles.circle1,
-          {
-            transform: [
-              { translateX: circle1Translate },
-              { translateY: circle1Translate },
-            ],
-          },
-        ]}
-      />
-      <Animated.View
-        style={[
-          styles.animatedCircle,
-          styles.circle2,
-          {
-            transform: [
-              { translateX: circle2Translate },
-              { translateY: circle2Translate },
-            ],
-          },
-        ]}
-      />
-
-      {/* Blur overlay per depth - con fallback Android */}
-      <BlurView
-        intensity={30}
-        tint="dark"
+        colors={['#FAFAFA', '#F5F5F7', '#EEEFF1', '#F8F9FA']}
+        locations={[0, 0.3, 0.6, 1]}
         style={StyleSheet.absoluteFillObject}
       />
 
       {/* Contenuto centrato */}
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
-        {/* Logo App Animato */}
+        {/* Logo App con animazioni multiple */}
         <Animated.View
           style={[
-            styles.iconContainer,
+            styles.logoContainer,
             {
-              transform: [{ scale: pulseAnim }],
+              transform: [
+                { scale: logoScaleAnim },
+                { scale: logoBreathAnim },
+              ],
             },
           ]}
         >
-          <View style={styles.iconCircle}>
-            {/* Logo app */}
+          {/* Anello circolare progressivo */}
+          <View
+            style={{
+              position: 'absolute',
+              width: RING_SIZE,
+              height: RING_SIZE,
+              top: -(RING_SIZE - CIRCLE_SIZE) / 2,
+              left: -(RING_SIZE - CIRCLE_SIZE) / 2,
+              justifyContent: 'center',
+              alignItems: 'center',
+              pointerEvents: 'none',
+              transform: [{ rotate: '-90deg' }], // Inizia dall'alto
+            }}
+          >
+            <Svg width={RING_SIZE} height={RING_SIZE}>
+              <Circle
+                stroke={Colors.neutral[200]}
+                cx={RING_SIZE / 2}
+                cy={RING_SIZE / 2}
+                r={RADIUS}
+                strokeWidth={RING_STROKE}
+                fill="none"
+              />
+              <AnimatedCircle
+                stroke={Colors.primary[500]}
+                cx={RING_SIZE / 2}
+                cy={RING_SIZE / 2}
+                r={RADIUS}
+                strokeWidth={RING_STROKE}
+                strokeLinecap="round"
+                strokeDasharray={`${CIRCUMFERENCE} ${CIRCUMFERENCE}`}
+                strokeDashoffset={ringDashoffset}
+                fill="none"
+              />
+            </Svg>
+          </View>
+          <View style={styles.logoCircle}>
             <PerfectImage
               source={require('../../assets/icons/app/app-icon.png')}
-              preset="avatar"
-              width={scale(90)}
+              width={126}
+              aspectRatio={1}
+              borderRadius={63}
+              shadow={false}
               accessibilityLabel="Logo Rise Against Hunger Italia"
             />
-
-            {/* Shimmer effect sopra */}
-            <Animated.View
-              style={[
-                styles.shimmer,
-                {
-                  transform: [{ translateX: shimmerTranslate }],
-                },
-              ]}
-            />
-
-            {/* Ring esterno animato */}
-            <Animated.View
-              style={[
-                styles.outerRing,
-                {
-                  transform: [{ scale: pulseAnim }],
-                },
-              ]}
-            />
           </View>
-
-          {/* Activity indicator sotto il logo */}
-          <ActivityIndicator
-            size="small"
-            color={Colors.primary[400]}
-            style={styles.spinner}
-          />
         </Animated.View>
 
-        {/* Titolo */}
-        <Text style={styles.title}>Aggiornamento in corso</Text>
+        {/* Messaggio principale - Hero */}
+        {!isComplete ? (
+          <View style={styles.messageContainer}>
+            <Text style={styles.mainMessage}>{t.message}</Text>
+            <Text style={styles.subMessage}>{t.subMessage}</Text>
+          </View>
+        ) : (
+          <Animated.View
+            style={[
+              styles.completeContainer,
+              { opacity: completeFadeAnim },
+            ]}
+          >
+            <Animated.View
+              style={[
+                styles.completeCheckmark,
+                {
+                  transform: [
+                    {
+                      scale: glowAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [1, 1.1],
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            >
+              <Text style={styles.checkmark}>✓</Text>
+            </Animated.View>
+            <Text style={styles.completeMessage}>{t.complete}</Text>
+          </Animated.View>
+        )}
 
-        {/* Messaggio descrittivo */}
-        <Text style={styles.message}>{displayMessage}</Text>
-
-        {/* Barra di progresso (solo se download) */}
-        {isDownloading && (
+        {/* Progress bar compatta con percentuale inline */}
+        {!isComplete && (
           <View style={styles.progressContainer}>
+            {/* Barra */}
             <View style={styles.progressTrack}>
               <Animated.View
                 style={[
-                  styles.progressBar,
+                  styles.progressFill,
                   {
                     width: progressWidth,
                   },
                 ]}
               >
                 <LinearGradient
-                  colors={[Colors.primary[600], Colors.primary[400]]}
+                  colors={[Colors.primary[400], Colors.primary[500], Colors.primary[600]]}
+                  locations={[0, 0.5, 1]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={StyleSheet.absoluteFillObject}
                 />
+                {/* Shimmer overlay */}
+                <Animated.View
+                  style={[
+                    styles.shimmerOverlay,
+                    {
+                      opacity: shimmerAnim.interpolate({
+                        inputRange: [0, 0.5, 1],
+                        outputRange: [0.3, 0.6, 0.3],
+                      }),
+                      transform: [
+                        {
+                          translateX: shimmerAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [-100, 300],
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                />
               </Animated.View>
             </View>
-
-            {/* Percentuale */}
-            <Text style={styles.percentage}>{Math.round(progress)}%</Text>
+            {/* Percentuale piccola sotto */}
+            <Animated.Text
+              style={[
+                styles.percentage,
+                {
+                  transform: [{ scale: pulseAnim }],
+                },
+              ]}
+            >
+              {displayProgress}%
+            </Animated.Text>
           </View>
         )}
-
-        {/* Sottotitolo rassicurante */}
-        <Text style={styles.subtitle}>
-          L&apos;app si riavvierà automaticamente tra pochi istanti
-        </Text>
       </Animated.View>
     </View>
   );
@@ -322,122 +422,133 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.black.pure,
-    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
   },
   content: {
     alignItems: 'center',
-    paddingHorizontal: PerfectSpacing.lg,
-    maxWidth: scale(400),
-    zIndex: 10,
+    paddingHorizontal: PerfectSpacing.xl * 2,
+    maxWidth: scale(440),
+    width: '100%',
   },
-  // Cerchi animati sfondo
-  animatedCircle: {
-    position: 'absolute',
-    width: scale(300),
-    height: scale(300),
-    borderRadius: scale(150),
-    opacity: 0.03,
+  // Logo premium - hero element
+  logoContainer: {
+    marginBottom: PerfectSpacing.xl * 2,
   },
-  circle1: {
-    backgroundColor: Colors.primary[500],
-    top: '10%',
-    left: '10%',
-  },
-  circle2: {
-    backgroundColor: Colors.primary[700],
-    bottom: '10%',
-    right: '10%',
-    width: scale(250),
-    height: scale(250),
-    borderRadius: scale(125),
-  },
-  iconContainer: {
-    marginBottom: PerfectSpacing.xl,
-    alignItems: 'center',
-  },
-  iconCircle: {
-    width: scale(140),
-    height: scale(140),
-    borderRadius: scale(70),
-    backgroundColor: Colors.neutral[0],
+  logoCircle: {
+    width: scale(130),
+    height: scale(130),
+    borderRadius: scale(65),
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: Colors.primary[500],
-    shadowOffset: { width: 0, height: scale(12) },
-    shadowOpacity: 0.5,
-    shadowRadius: scale(24),
-    elevation: 15,
-    overflow: 'hidden',
-    position: 'relative',
+    shadowOffset: { width: 0, height: scale(8) },
+    shadowOpacity: 0.15,
+    shadowRadius: scale(20),
+    elevation: 12,
+    borderWidth: scale(1),
+    borderColor: Colors.neutral[100],
   },
-  shimmer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: '200%',
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    transform: [{ skewX: '-20deg' }],
-    zIndex: 3,
+  // Container messaggio principale
+  messageContainer: {
+    alignItems: 'center',
+    marginBottom: PerfectSpacing.xl * 1.8,
+    paddingHorizontal: PerfectSpacing.xl,
   },
-  outerRing: {
-    position: 'absolute',
-    width: scale(140),
-    height: scale(140),
-    borderRadius: scale(70),
-    borderWidth: scale(3),
-    borderColor: Colors.primary[500],
-    zIndex: 1,
-  },
-  spinner: {
-    marginTop: PerfectSpacing.sm,
-  },
-  title: {
+  // Messaggio principale GRANDE
+  mainMessage: {
     fontSize: scaleText(24),
     fontWeight: '700',
-    color: Colors.neutral[0],
+    color: Colors.neutral[900],
     textAlign: 'center',
-    marginBottom: PerfectSpacing.md,
-    letterSpacing: scale(0.5),
+    marginBottom: PerfectSpacing.sm,
+    letterSpacing: scale(-0.5),
   },
-  message: {
-    fontSize: scaleText(16),
-    fontWeight: '500',
-    color: Colors.neutral[300],
+  // Sotto-messaggio rassicurante
+  subMessage: {
+    fontSize: scaleText(15),
+    fontWeight: '400',
+    color: Colors.neutral[600],
     textAlign: 'center',
-    marginBottom: PerfectSpacing.xl,
-    lineHeight: scaleText(24),
+    lineHeight: scaleText(22),
+    letterSpacing: scale(-0.1),
   },
+  // Progress container compatto
   progressContainer: {
     width: '100%',
-    marginBottom: PerfectSpacing.lg,
+    alignItems: 'center',
+  },
+  // Percentuale sotto barra - leggibile
+  percentage: {
+    fontSize: scaleText(18),
+    fontWeight: '700',
+    color: Colors.primary[500],
+    textAlign: 'center',
+    marginTop: PerfectSpacing.sm,
+    letterSpacing: scale(-0.4),
   },
   progressTrack: {
+    width: '85%',
     height: scale(8),
-    backgroundColor: Colors.black.light,
+    backgroundColor: Colors.neutral[100],
     borderRadius: scale(4),
     overflow: 'hidden',
-    marginBottom: PerfectSpacing.sm,
+    shadowColor: Colors.neutral[900],
+    shadowOffset: { width: 0, height: scale(2) },
+    shadowOpacity: 0.08,
+    shadowRadius: scale(3),
+    borderWidth: scale(0.5),
+    borderColor: Colors.neutral[200],
   },
-  progressBar: {
+  progressFill: {
     height: '100%',
     borderRadius: scale(4),
+    shadowColor: Colors.primary[500],
+    shadowOffset: { width: 0, height: scale(2) },
+    shadowOpacity: 0.3,
+    shadowRadius: scale(4),
     overflow: 'hidden',
   },
-  percentage: {
-    fontSize: scaleText(14),
-    fontWeight: '600',
-    color: Colors.primary[400],
-    textAlign: 'center',
+  // Shimmer overlay animato
+  shimmerOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    width: scale(100),
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    transform: [{ skewX: '-20deg' }],
   },
-  subtitle: {
-    fontSize: scaleText(13),
-    fontWeight: '400',
-    color: Colors.neutral[500],
+  // Container completamento
+  completeContainer: {
+    alignItems: 'center',
+  },
+  // Messaggio completamento
+  completeMessage: {
+    fontSize: scaleText(22),
+    fontWeight: '700',
+    color: Colors.semantic.success.main,
     textAlign: 'center',
-    lineHeight: scaleText(20),
     marginTop: PerfectSpacing.md,
+    letterSpacing: scale(-0.4),
+  },
+  // Checkmark completamento
+  completeCheckmark: {
+    alignItems: 'center',
+    width: scale(70),
+    height: scale(70),
+    borderRadius: scale(35),
+    backgroundColor: Colors.semantic.success.light,
+    justifyContent: 'center',
+    shadowColor: Colors.semantic.success.main,
+    shadowOffset: { width: 0, height: scale(8) },
+    shadowOpacity: 0.35,
+    shadowRadius: scale(16),
+    borderWidth: scale(2.5),
+    borderColor: Colors.semantic.success.main,
+    marginBottom: PerfectSpacing.sm,
+  },
+  checkmark: {
+    fontSize: scaleText(38),
+    fontWeight: '700',
+    color: Colors.semantic.success.main,
+    textAlign: 'center',
   },
 });
