@@ -173,3 +173,21 @@ jest.mock('react-native-safe-area-context', () => {
     },
   };
 });
+
+// Mock expo-linear-gradient to avoid undefined errors in tests
+jest.mock('expo-linear-gradient', () => {
+  const React = require('react');
+  return {
+    LinearGradient: ({ children, ...props }) =>
+      React.createElement('View', props, children),
+  };
+});
+
+// Mock expo-blur to avoid undefined errors in tests
+jest.mock('expo-blur', () => {
+  const React = require('react');
+  return {
+    BlurView: ({ children, ...props }) =>
+      React.createElement('View', props, children),
+  };
+});
