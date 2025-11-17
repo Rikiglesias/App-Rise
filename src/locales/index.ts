@@ -7,57 +7,22 @@
  * - Android: Rileva lingua da Impostazioni → Sistema → Lingua
  * - Cambia automaticamente quando utente modifica lingua di sistema
  * - Traduzioni aggiornabili via OTA Updates
+ *
+ * STRATEGIA LINGUE:
+ * - 🇮🇹 Dispositivo Italiano → App in Italiano
+ * - 🇬🇧 Dispositivo Inglese → App in Inglese
+ * - 🌍 Qualsiasi altra lingua → App in Inglese (fallback universale)
  */
 
 import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import it from './it';
 import en from './en';
-// Altre lingue disattivate - solo IT e EN attivi
-// import es from './es';
-// import fr from './fr';
-// import de from './de';
-// import pt from './pt';
-// import nl from './nl';
-// import pl from './pl';
-// import ro from './ro';
-// import el from './el';
-// import cs from './cs';
-// import sv from './sv';
-// import hu from './hu';
-// import da from './da';
-// import fi from './fi';
-// import no from './no';
-// import bg from './bg';
-// import sk from './sk';
-// import hr from './hr';
 import type { SupportedLocale } from './types';
 
-// Italiano e Inglese attivi
-const i18n = new I18n({
-  it,
-  en,
-  // es,
-  // fr,
-  // de,
-  // pt,
-  // nl,
-  // pl,
-  // ro,
-  // el,
-  // cs,
-  // sv,
-  // hu,
-  // da,
-  // fi,
-  // no,
-  // bg,
-  // sk,
-  // hr,
-});
+const i18n = new I18n({ it, en });
 
-// Configurazione
-i18n.defaultLocale = 'it'; // Italiano come fallback
+i18n.defaultLocale = 'en';
 i18n.enableFallback = true;
 
 // Rileva lingua di sistema
@@ -66,28 +31,7 @@ const getDeviceLocale = (): SupportedLocale => {
   const locales = Localization.getLocales();
   const primaryLocale = locales[0]?.languageCode || 'it';
 
-  // Italiano e Inglese supportati
-  const supportedLocales: SupportedLocale[] = [
-    'it',
-    'en',
-    // 'es',
-    // 'fr',
-    // 'de',
-    // 'pt',
-    // 'nl',
-    // 'pl',
-    // 'ro',
-    // 'el',
-    // 'cs',
-    // 'sv',
-    // 'hu',
-    // 'da',
-    // 'fi',
-    // 'no',
-    // 'bg',
-    // 'sk',
-    // 'hr',
-  ];
+  const supportedLocales: SupportedLocale[] = ['it', 'en'];
 
   // Verifica se lingua rilevata è supportata
   if (supportedLocales.includes(primaryLocale as SupportedLocale)) {
@@ -114,26 +58,5 @@ export const getCurrentLocale = (): SupportedLocale => {
 // Export istanza configurata
 export default i18n;
 
-// Export traduzioni per accesso diretto (opzionale)
-export {
-  it,
-  en,
-  // es,
-  // fr,
-  // de,
-  // pt,
-  // nl,
-  // pl,
-  // ro,
-  // el,
-  // cs,
-  // sv,
-  // hu,
-  // da,
-  // fi,
-  // no,
-  // bg,
-  // sk,
-  // hr,
-};
+export { it, en };
 export type { SupportedLocale };
