@@ -109,7 +109,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         style={styles.mainSubtitle}
         testID="actions-subtitle"
       >
-        Ogni azione conta nella lotta contro la fame
+        {t('actions.headerSubtitle')}
       </PerfectText>
     </>
   );

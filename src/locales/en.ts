@@ -118,6 +118,10 @@ export default {
     donationGiftCard: '🎁 Gift Cards:',
     donationGiftCardText:
       'With our gift cards, you can choose the perfect gift while making a difference. Your loved ones will receive a unique experience, and you will contribute to feeding those in need.',
+    donationEvents: 'The easiest way is to participate in our events!',
+    donateSubtitle: 'Support the fight against hunger',
+    exploreSubtitle: 'Projects and humanitarian initiatives',
+    communitySubtitle: 'Join our community',
   },
 
   projects: {

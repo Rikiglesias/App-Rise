@@ -31,6 +31,7 @@ interface DonationInfoModalProps {
 
 interface ModalContentProps {
   handleClose: () => Promise<void>;
+  t: (key: string) => string;
 }
 
 const modalStyles = StyleSheet.create({
@@ -113,7 +114,7 @@ const modalStyles = StyleSheet.create({
   },
 });
 
-const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
+const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
   return (
     <PerfectContainer
       style={modalStyles.modalContent}
@@ -153,24 +154,20 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose }) => {
 
       <PerfectText size={16} lines={0} style={modalStyles.modalText}>
         <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
-          🛍️ Acquisti solidali:
+          {t('actions.donationShopping')}
         </PerfectText>{' '}
-        Attraverso il nostro Charity Shop, ogni acquisto dai nostri partner dona
-        automaticamente una percentuale per i nostri programmi. Tu spendi lo
-        stesso prezzo, ma aiuti a combattere la fame!
+        {t('actions.donationShoppingText')}
       </PerfectText>
 
       <PerfectText size={16} lines={0} style={modalStyles.modalText}>
         <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
-          🎁 Gift Cards:
+          {t('actions.donationGiftCard')}
         </PerfectText>{' '}
-        Funzionano come gli acquisti: compri una Gift Card a prezzo normale (per
-        te o come regalo), ma una percentuale viene automaticamente donata per
-        la distribuzione di pasti. Aiuti senza costi extra!
+        {t('actions.donationGiftCardText')}
       </PerfectText>
 
       <PerfectText size={15} lines={2} style={modalStyles.highlightText}>
-        Il modo più semplice è partecipare ai nostri eventi!
+        {t('actions.donationEvents')}
       </PerfectText>
     </PerfectContainer>
   );
@@ -205,7 +202,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
           ]}
           style={modalStyles.modalGradientBorder}
         >
-          <ModalContent handleClose={handleClose} />
+          <ModalContent handleClose={handleClose} t={t} />
         </LinearGradient>
       </PerfectContainer>
     </PerfectModal>

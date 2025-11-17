@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { AnimatedButton } from './AnimatedButton';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type {
   DonateButtonsSectionProps,
   ExploreButtonsSectionProps,
@@ -26,6 +27,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
   onButtonPress,
   onInfoPress,
 }) => {
+  const { t } = useTranslation();
   const infoIconSize = 16;
   const handleFirstRowButton = useMemo(
     () => () => {
@@ -79,7 +81,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
               testID="donate-subtitle"
               style={styles.donateInlineSubtitle}
             >
-              Supporta la lotta contro la fame
+              {t('actions.donateSubtitle')}
             </PerfectText>
           </PlatformTouchable>
           <PlatformTouchable
@@ -148,6 +150,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
   exploreButtons,
   onButtonPress,
 }) => {
+  const { t } = useTranslation();
   const handleFirstRowButtons = useMemo(
     () => [
       () => {
@@ -183,12 +186,12 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
             {'\uD83D\uDD0E '}Esplora
           </PerfectText>
           <PerfectText
-            size={16}
+            size={13}
             lines={1}
             immunity={true}
             style={styles.exploreSubtitle}
           >
-            Progetti e iniziative umanitarie
+            {t('actions.exploreSubtitle')}
           </PerfectText>
         </PerfectContainer>
       </PerfectContainer>

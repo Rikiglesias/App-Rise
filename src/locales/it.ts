@@ -109,6 +109,16 @@ export default {
     donationMonetary: '💶 Donazioni monetarie:',
     donationMonetaryText:
       'Se vuoi fare una donazione monetaria diretta, clicca su "Dona Ora" per contribuire immediatamente alla nostra missione contro la fame.',
+    donationShopping: '🛍️ Acquisti solidali:',
+    donationShoppingText:
+      'Attraverso il nostro Charity Shop, ogni acquisto dai nostri partner dona automaticamente una percentuale per i nostri programmi. Tu spendi lo stesso prezzo, ma aiuti a combattere la fame!',
+    donationGiftCard: '🎁 Gift Cards:',
+    donationGiftCardText:
+      'Funzionano come gli acquisti: compri una Gift Card a prezzo normale (per te o come regalo), ma una percentuale viene automaticamente donata per la distribuzione di pasti. Aiuti senza costi extra!',
+    donationEvents: 'Il modo più semplice è partecipare ai nostri eventi!',
+    donateSubtitle: 'Supporta la lotta contro la fame',
+    exploreSubtitle: 'Progetti e iniziative umanitarie',
+    communitySubtitle: 'Unisciti alla nostra comunità',
   },
 
   projects: {
