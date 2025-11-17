@@ -130,6 +130,7 @@ export default {
 
   about: {
     title: 'Chi Siamo',
+    description: 'Organizzazione contro la fame nel mondo',
     accessibilityLabel: 'Apri informazioni su Chi Siamo',
     mission: 'La Nostra Missione',
     missionText:

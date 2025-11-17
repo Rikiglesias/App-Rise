@@ -5,6 +5,7 @@ import type { useNewActionsAnimations } from './ContributeAnimations';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
 import { Colors, PerfectSpacing } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface NewActionsHeaderProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -19,6 +20,7 @@ const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
 const HEADER_VERTICAL_PADDING = scale(REF_WIDTH * 0.025);
 const HEADER_TITLE_INTERLINE = scale(REF_WIDTH * 0.002);
 const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
+  const { t } = useTranslation();
   const styles = useMemo(
     () =>
       StyleSheet.create({
@@ -84,22 +86,20 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
       <PerfectText
         size={TITLE_SIZE}
         lines={1}
-        immunity={true}
         fontWeight="900"
         style={styles.titleText}
         testID="actions-title-1"
       >
-        Fai la
+        {t('actions.headerTitle1')}
       </PerfectText>
       <PerfectText
         size={TITLE_SIZE}
         lines={1}
-        immunity={true}
         fontWeight="900"
         style={[styles.titleText, styles.titleAccent]}
         testID="actions-title-2"
       >
-        Differenza
+        {t('actions.headerTitle2')}
       </PerfectText>
       <PerfectText
         size={SUBTITLE_SIZE}
@@ -127,7 +127,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         },
       ]}
       accessibilityRole="header"
-      accessibilityLabel="Fai la differenza"
+      accessibilityLabel={t('actions.headerAccessibility')}
       testID="actions-header"
     >
       <LinearGradient

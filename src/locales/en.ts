@@ -139,6 +139,7 @@ export default {
 
   about: {
     title: 'About Us',
+    description: 'Organization fighting world hunger',
     accessibilityLabel: 'Open About Us information',
     mission: 'Our Mission',
     missionText:

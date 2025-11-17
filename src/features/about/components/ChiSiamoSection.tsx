@@ -53,7 +53,7 @@ export const ChiSiamoSection: React.FC = () => {
               fontWeight="500"
               style={chiSiamoSectionStyles.descriptionText}
             >
-              Organizzazione contro la fame nel mondo
+              {t('about.description')}
             </PerfectText>
           </PlatformTouchable>
           <PlatformTouchable
