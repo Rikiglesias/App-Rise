@@ -191,3 +191,148 @@ jest.mock('expo-blur', () => {
       React.createElement('View', props, children),
   };
 });
+
+// Mock React Native Animated API for complete animation support in tests
+// Fixes: TypeError: Cannot read properties of undefined (reading 'S')
+
+// Create mockable Animated.Value with all required methods
+const createMockAnimatedValue = (initialValue = 0) => {
+  let value = initialValue;
+  const listeners = [];
+  
+  return {
+    setValue: jest.fn((newValue) => {
+      value = newValue;
+      listeners.forEach(listener => listener.listener({ value }));
+    }),
+    setOffset: jest.fn(),
+    flattenOffset: jest.fn(),
+    extractOffset: jest.fn(),
+    addListener: jest.fn((listener) => {
+      const id = String(listeners.length);
+      listeners.push({ id, listener });
+      return id;
+    }),
+    removeListener: jest.fn((id) => {
+      const index = listeners.findIndex(l => l.id === id);
+      if (index >= 0) listeners.splice(index, 1);
+    }),
+    removeAllListeners: jest.fn(() => listeners.splice(0)),
+    stopAnimation: jest.fn((callback) => callback?.(value)),
+    resetAnimation: jest.fn((callback) => {
+      value = initialValue;
+      callback?.(value);
+    }),
+    interpolate: jest.fn((_config) => createMockAnimatedValue(value)),
+    animate: jest.fn(),
+    __getValue: jest.fn(() => value),
+    __getAnimatedValue: jest.fn(() => value),
+    __attach: jest.fn(),
+    __detach: jest.fn(),
+    __makeNative: jest.fn(),
+    __onAnimatedValueUpdateReceived: jest.fn(),
+    // Serializzazione per snapshot - restituisce valore primitivo
+    toJSON: jest.fn(() => value),
+  };
+};
+
+// Mock Animated timing/spring/decay with proper callback support
+const createMockAnimation = () => ({
+  start: jest.fn((callback) => {
+    // Simulate successful animation completion synchronously
+    // No setTimeout to avoid "act()" warnings and ensure immediate completion
+    callback?.({ finished: true });
+  }),
+  stop: jest.fn(),
+  reset: jest.fn(),
+});
+
+// Override global React Native Animated
+const RN = require('react-native');
+
+// Preserve original Animated structure
+const OriginalAnimated = RN.Animated;
+
+RN.Animated.Value = jest.fn((initialValue) => createMockAnimatedValue(initialValue));
+RN.Animated.ValueXY = jest.fn((initialValue) => {
+  const x = createMockAnimatedValue(initialValue?.x ?? 0);
+  const y = createMockAnimatedValue(initialValue?.y ?? 0);
+  return {
+    x,
+    y,
+    setValue: jest.fn((value) => {
+      x.setValue(value.x);
+      y.setValue(value.y);
+    }),
+    setOffset: jest.fn(),
+    flattenOffset: jest.fn(),
+    extractOffset: jest.fn(),
+    resetAnimation: jest.fn(),
+    stopAnimation: jest.fn(),
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    removeAllListeners: jest.fn(),
+    getLayout: jest.fn(() => ({ left: x, top: y })),
+    getTranslateTransform: jest.fn(() => [
+      { translateX: x },
+      { translateY: y },
+    ]),
+  };
+});
+
+RN.Animated.timing = jest.fn(() => createMockAnimation());
+RN.Animated.spring = jest.fn(() => createMockAnimation());
+RN.Animated.decay = jest.fn(() => createMockAnimation());
+
+RN.Animated.sequence = jest.fn((animations) => ({
+  start: jest.fn((callback) => {
+    // Execute all animations in sequence
+    animations.forEach(anim => anim.start?.());
+    callback?.({ finished: true });
+  }),
+  stop: jest.fn(),
+  reset: jest.fn(),
+}));
+
+RN.Animated.parallel = jest.fn((animations) => ({
+  start: jest.fn((callback) => {
+    // Execute all animations in parallel
+    animations.forEach(anim => anim.start?.());
+    callback?.({ finished: true });
+  }),
+  stop: jest.fn(),
+  reset: jest.fn(),
+}));
+
+RN.Animated.stagger = jest.fn((delay, animations) => ({
+  start: jest.fn((callback) => {
+    animations.forEach(anim => anim.start?.());
+    callback?.({ finished: true });
+  }),
+  stop: jest.fn(),
+  reset: jest.fn(),
+}));
+
+RN.Animated.delay = jest.fn(() => createMockAnimation());
+RN.Animated.loop = jest.fn((animation) => ({
+  start: jest.fn((callback) => {
+    animation.start?.();
+    callback?.({ finished: true });
+  }),
+  stop: jest.fn(),
+  reset: jest.fn(),
+}));
+
+// Preserve other Animated methods
+RN.Animated.add = jest.fn((_a, _b) => createMockAnimatedValue(0));
+RN.Animated.subtract = jest.fn((_a, _b) => createMockAnimatedValue(0));
+RN.Animated.multiply = jest.fn((_a, _b) => createMockAnimatedValue(0));
+RN.Animated.divide = jest.fn((_a, _b) => createMockAnimatedValue(1));
+RN.Animated.modulo = jest.fn((_a, _modulus) => createMockAnimatedValue(0));
+RN.Animated.diffClamp = jest.fn((_a, _min, _max) => createMockAnimatedValue(0));
+
+// Event handling
+RN.Animated.event = jest.fn(() => jest.fn());
+
+// Ensure createAnimatedComponent works
+RN.Animated.createAnimatedComponent = OriginalAnimated.createAnimatedComponent;

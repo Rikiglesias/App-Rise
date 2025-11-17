@@ -107,8 +107,8 @@
     "expo-status-bar": "~3.0.8",
     "expo-updates": "~29.0.12",
     "i18n-js": "^4.5.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-native": "0.81.5",
     "react-native-auto-size-text": "^1.1.1",
     "react-native-gesture-handler": "~2.28.0",
@@ -122,7 +122,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@expo/config-plugins": "^8.0.8",
+    "@expo/config-plugins": "~54.0.1",
     "@react-native-community/eslint-config": "^3.2.0",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.14",
@@ -145,7 +145,7 @@
     "lint-staged": "^16.1.0",
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.1.0",
-    "react-test-renderer": "^18.3.1",
+    "react-test-renderer": "^19.1.0",
     "sharp": "^0.34.5",
     "ts-prune": "^0.10.3",
     "typescript": "~5.9.2"
