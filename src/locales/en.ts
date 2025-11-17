@@ -112,6 +112,12 @@ export default {
     donationMonetary: '💶 Monetary donations:',
     donationMonetaryText:
       'If you want to make a direct monetary donation, click on "Donate Now" to contribute immediately to our mission against hunger.',
+    donationShopping: '🛍️ Charity shopping:',
+    donationShoppingText:
+      'Through our Charity Shop, every purchase from our partners automatically donates a percentage to our programs. You pay the same price, but help fight hunger!',
+    donationGiftCard: '🎁 Gift Cards:',
+    donationGiftCardText:
+      'With our gift cards, you can choose the perfect gift while making a difference. Your loved ones will receive a unique experience, and you will contribute to feeding those in need.',
   },
 
   projects: {
