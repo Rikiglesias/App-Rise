@@ -67,6 +67,8 @@
     "fix:line-endings": "git add --renormalize . && git status",
     "prettier:fix-all": "prettier --write . && git add .",
     "docs:check": "markdownlint docs/ --fix",
+    "translate": "ts-node scripts/ai-translate.ts",
+    "translate:review": "ts-node scripts/ai-translate.ts --review",
     "docs:optional": "echo '📝 Docs check opzionale (non bloccante)' && npm run docs:check || echo '⚠️ Errori docs trovati ma non bloccanti'",
     "bundle:analyze": "node scripts/bundle-analysis.js",
     "bundle:report": "node scripts/bundle-analysis.js && echo '📊 Bundle analysis completed! Check bundle-analysis-report.json for details.'",
