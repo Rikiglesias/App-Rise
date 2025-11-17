@@ -12,8 +12,8 @@
 import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import it from './it';
-// Lingue disattivate - solo italiano attivo
-// import en from './en';
+import en from './en';
+// Altre lingue disattivate - solo IT e EN attivi
 // import es from './es';
 // import fr from './fr';
 // import de from './de';
@@ -33,10 +33,10 @@ import it from './it';
 // import hr from './hr';
 import type { SupportedLocale } from './types';
 
-// Solo italiano attivo
+// Italiano e Inglese attivi
 const i18n = new I18n({
   it,
-  // en,
+  en,
   // es,
   // fr,
   // de,
@@ -66,10 +66,10 @@ const getDeviceLocale = (): SupportedLocale => {
   const locales = Localization.getLocales();
   const primaryLocale = locales[0]?.languageCode || 'it';
 
-  // Solo italiano supportato
+  // Italiano e Inglese supportati
   const supportedLocales: SupportedLocale[] = [
     'it',
-    // 'en',
+    'en',
     // 'es',
     // 'fr',
     // 'de',
@@ -117,7 +117,7 @@ export default i18n;
 // Export traduzioni per accesso diretto (opzionale)
 export {
   it,
-  // en,
+  en,
   // es,
   // fr,
   // de,
