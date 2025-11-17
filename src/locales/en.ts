@@ -120,8 +120,16 @@ export default {
       'With our gift cards, you can choose the perfect gift while making a difference. Your loved ones will receive a unique experience, and you will contribute to feeding those in need.',
     donationEvents: 'The easiest way is to participate in our events!',
     donateSubtitle: 'Support the fight against hunger',
-    exploreSubtitle: 'Projects and humanitarian initiatives',
+    exploreSubtitle: 'Humanitarian projects and initiatives',
     communitySubtitle: 'Join our community',
+    donateTitle: 'Contribute',
+    exploreTitle: 'Explore',
+    communityTitle: 'Community',
+    donateAccessibilityLabel: 'Contribute',
+    donateInfoAccessibilityLabel: 'Contribute information',
+    communityAccessibilityLabel: 'Community',
+    charityShop: 'Charity Shop',
+    giftCards: 'Gift Cards',
   },
 
   projects: {

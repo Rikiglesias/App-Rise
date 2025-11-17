@@ -63,7 +63,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
             onPress={onInfoPress}
             activeOpacity={0.8}
             accessibilityRole="button"
-            accessibilityLabel="Contribuisci"
+            accessibilityLabel={t('actions.donateAccessibilityLabel')}
           >
             <PerfectText
               size={24}
@@ -72,7 +72,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
               testID="donate-title"
               style={styles.donateCategoryTitle}
             >
-              {'\u2764\uFE0F '}Contribuisci
+              {'❤️ '}{t('actions.donateTitle')}
             </PerfectText>
             <PerfectText
               size={16}
@@ -89,7 +89,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
             onPress={onInfoPress}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel="Informazioni su Contribuisci"
+            accessibilityLabel={t('actions.donateInfoAccessibilityLabel')}
             testID="donate-info-button"
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
@@ -183,7 +183,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
             immunity={true}
             style={styles.exploreTitle}
           >
-            {'\uD83D\uDD0E '}Esplora
+            {'🔎 '}{t('actions.exploreTitle')}
           </PerfectText>
           <PerfectText
             size={13}
@@ -271,7 +271,7 @@ export const CommunityButtonsSection: React.FC<
           onPress={onCommunityTitlePress}
           activeOpacity={0.8}
           accessibilityRole="button"
-          accessibilityLabel="Contribuisci"
+          accessibilityLabel={t('actions.communityAccessibilityLabel')}
         >
           <PerfectText
             size={20}
@@ -279,7 +279,7 @@ export const CommunityButtonsSection: React.FC<
             immunity={true}
             style={styles.communityTitle}
           >
-            {'\uD83E\uDD1D '}Community
+            {'🤝 '}{t('actions.communityTitle')}
           </PerfectText>
           <PerfectText
             size={13}

@@ -4,12 +4,12 @@
  */
 
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ContributeTabScreenProps } from '../../ContributeScreenTypes';
 import type { ButtonData } from '../shared/ActionButtonTypes';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { Colors } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 export interface ActionButtonsData {
   // Data arrays
@@ -63,20 +63,20 @@ export const useActionButtonsData = (
       },
       {
         id: 'charity-shop',
-        title: 'Charity Shop',
+        title: t('actions.charityShop'),
         icon: 'shopping',
         gradient: Colors.gradients.shop,
         onPress: () => openShopLink(),
       },
       {
         id: 'gift-card',
-        title: 'Gift Cards',
+        title: t('actions.giftCards'),
         icon: 'gift',
         gradient: Colors.gradients.shop,
         onPress: () => openGiftCardLink(),
       },
     ],
-    [openDonationLink, openShopLink, openGiftCardLink]
+    [t, openDonationLink, openShopLink, openGiftCardLink]
   );
 
   // EXPLORE BUTTONS DATA

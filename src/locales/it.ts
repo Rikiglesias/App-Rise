@@ -119,6 +119,14 @@ export default {
     donateSubtitle: 'Supporta la lotta contro la fame',
     exploreSubtitle: 'Progetti e iniziative umanitarie',
     communitySubtitle: 'Unisciti alla nostra comunità',
+    donateTitle: 'Contribuisci',
+    exploreTitle: 'Esplora',
+    communityTitle: 'Community',
+    donateAccessibilityLabel: 'Contribuisci',
+    donateInfoAccessibilityLabel: 'Informazioni su Contribuisci',
+    communityAccessibilityLabel: 'Community',
+    charityShop: 'Charity Shop',
+    giftCards: 'Gift Cards',
   },
 
   projects: {
