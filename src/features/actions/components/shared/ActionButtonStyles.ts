@@ -51,6 +51,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderRadius: scale(16),
       borderWidth: scale(1),
       borderColor: Colors.primary[300],
+      minHeight: scale(60),
     },
 
     // TITOLO CATEGORIA DONA ELEGANTE
@@ -183,6 +184,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
       borderColor: Colors.neutral[400],
+      minHeight: scale(70),
     },
 
     communityHeaderBackground: {
@@ -193,6 +195,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderWidth: scale(1),
       borderColor: Colors.neutral[400],
       position: 'relative',
+      minHeight: scale(70),
     },
 
     // ICONA LINK COMMUNITY
