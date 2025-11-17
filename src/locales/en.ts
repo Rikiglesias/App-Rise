@@ -69,13 +69,33 @@ export default {
     results2024: 'Results 2024',
     viewMap: 'View Map',
     mapTitle: 'Our Global Presence',
+    // Map Modal
+    loadingMap: 'Loading map...',
+    interactiveMap: 'Interactive Map',
+    tapPins: 'Tap the pins for more details',
+    // Header
+    impactTitle1: 'Our',
+    impactTitle2: 'Impact',
+    impactAccessibility: 'Our Impact',
+    // Stats labels
+    totalMealsLabel: 'Total Meals',
+    totalMealsSubtitle2: 'Since 2012 - Meals',
+    mealsPackagedLabel: 'Meals Packaged',
+    mealsPackagedSubtitle: 'Produced in 2024',
+    volunteersLabel: 'Volunteers',
+    volunteersDescription: 'People who made a difference',
+    nutritionLabel: 'Nutrition for communities in need',
   },
 
   actions: {
     title: 'What You Can Do',
     headerTitle: 'Make a Difference',
+    headerTitle1: 'Make a',
+    headerTitle2: 'Difference',
     headerSubtitle: 'Every action counts in the fight against hunger',
+    headerAccessibility: 'Make a difference',
     donate: 'Donate',
+    donateNow: 'Donate Now',
     volunteer: 'Become a Volunteer',
     organize: 'Organize an Event',
     share: 'Share the Mission',
@@ -88,10 +108,32 @@ export default {
     donateInfoText:
       'Every donation makes a direct impact. With just €0.30 we can package one complete meal.',
     moreInfo: 'Learn More',
+    donationInfoTitle: 'How to Donate',
+    donationMonetary: '💶 Monetary donations:',
+    donationMonetaryText:
+      'If you want to make a direct monetary donation, click on "Donate Now" to contribute immediately to our mission against hunger.',
+  },
+
+  projects: {
+    title: 'Our Projects',
+    subtitle: 'Discover where we are making a difference in the world\nin the fight against hunger',
+    statsTitle: 'Projects in Numbers',
+    totalProjects: 'Total\nProjects',
+    activeProjects: 'Currently\nOngoing',
+    peopleHelped: 'People\nHelped',
+    emptyState: 'No projects found for this category',
+    progress: 'Progress',
+    impact: 'Impact',
+  },
+
+  social: {
+    title: 'Follow us on social',
+    subtitle: 'Stay updated on our initiatives and join the change',
   },
 
   about: {
     title: 'About Us',
+    accessibilityLabel: 'Open About Us information',
     mission: 'Our Mission',
     missionText:
       'Rise Against Hunger Italy works to eliminate world hunger through meal packaging and distribution, supporting sustainable development projects.',

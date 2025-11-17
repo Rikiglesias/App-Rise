@@ -69,13 +69,33 @@ export default {
     results2024: 'Risultati 2024',
     viewMap: 'Visualizza Mappa',
     mapTitle: 'La Nostra Presenza nel Mondo',
+    // Map Modal
+    loadingMap: 'Caricamento mappa...',
+    interactiveMap: 'Mappa Interattiva',
+    tapPins: 'Tocca i pin per maggiori dettagli',
+    // Header
+    impactTitle1: 'Il Nostro',
+    impactTitle2: 'Impatto',
+    impactAccessibility: 'Il Nostro Impatto',
+    // Stats labels
+    totalMealsLabel: 'Pasti Totali',
+    totalMealsSubtitle2: 'Dal 2012 - Meals',
+    mealsPackagedLabel: 'Pasti Confezionati',
+    mealsPackagedSubtitle: 'Prodotti nel 2024',
+    volunteersLabel: 'Volontari',
+    volunteersDescription: 'Persone che hanno fatto la differenza',
+    nutritionLabel: 'Nutrizione per comunità in difficoltà',
   },
 
   actions: {
     title: 'Cosa Puoi Fare',
     headerTitle: 'Fai la Differenza',
+    headerTitle1: 'Fai la',
+    headerTitle2: 'Differenza',
     headerSubtitle: 'Ogni azione conta nella lotta contro la fame',
+    headerAccessibility: 'Fai la differenza',
     donate: 'Dona',
+    donateNow: 'Dona Ora',
     volunteer: 'Diventa Volontario',
     organize: 'Organizza un Evento',
     share: 'Condividi la Missione',
@@ -85,10 +105,32 @@ export default {
     organizeDescription:
       'Organizza un evento di confezionamento nella tua comunità',
     shareDescription: 'Aiutaci a diffondere la nostra missione',
+    donationInfoTitle: 'Come Donare',
+    donationMonetary: '💶 Donazioni monetarie:',
+    donationMonetaryText:
+      'Se vuoi fare una donazione monetaria diretta, clicca su "Dona Ora" per contribuire immediatamente alla nostra missione contro la fame.',
+  },
+
+  projects: {
+    title: 'I Nostri Progetti',
+    subtitle: 'Scopri dove stiamo facendo la differenza nel mondo\nnella lotta alla fame',
+    statsTitle: 'Progetti in Numeri',
+    totalProjects: 'Progetti\nTotali',
+    activeProjects: 'In Corso\nAttualmente',
+    peopleHelped: 'Persone\nAiutate',
+    emptyState: 'Nessun progetto trovato per questa categoria',
+    progress: 'Progresso',
+    impact: 'Impatto',
+  },
+
+  social: {
+    title: 'Seguici sui social',
+    subtitle: 'Resta aggiornato sulle nostre iniziative e unisciti al cambiamento',
   },
 
   about: {
     title: 'Chi Siamo',
+    accessibilityLabel: 'Apri informazioni su Chi Siamo',
     mission: 'La Nostra Missione',
     missionText:
       'Rise Against Hunger Italia lavora per eliminare la fame nel mondo attraverso il confezionamento e la distribuzione di pasti, sostenendo progetti di sviluppo sostenibile.',

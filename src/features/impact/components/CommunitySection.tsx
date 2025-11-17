@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
+import { PerfectContainer, PerfectText } from '@/components/ui';
 import { StatCard } from './StatCard';
-import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
-import { PerfectSpacing } from '@/shared/constants';
+import { Colors, PerfectSpacing } from '@/shared/constants';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
 
 interface Props {
@@ -19,6 +19,8 @@ export const CommunitySection: React.FC<Props> = ({
   onVolunteersPress,
   onPartnersPress,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <PerfectContainer style={styles.communitySection}>
       {/* Header con elementi community */}
@@ -30,7 +32,7 @@ export const CommunitySection: React.FC<Props> = ({
             fontWeight="700"
             style={styles.communityTitle}
           >
-            🤝 La Nostra Community
+            🤝 {t('impact.communityTitle')}
           </PerfectText>
           <PerfectText
             size={16}
@@ -38,7 +40,7 @@ export const CommunitySection: React.FC<Props> = ({
             containerWidth={0}
             style={styles.communitySubtitle}
           >
-            Volontari e partner uniti nella {'\n'}missione #famezero
+            {t('impact.communitySubtitle')}
           </PerfectText>
         </PerfectContainer>
       </PerfectContainer>
@@ -48,8 +50,8 @@ export const CommunitySection: React.FC<Props> = ({
           icon="account-group"
           iconColor={Colors.semantic.success.main}
           value="13.323"
-          label="Volontari 2024"
-          subtitle="Attivi quest'anno"
+          label={t('impact.volunteers2024')}
+          subtitle={t('impact.volunteersActive')}
           gradientColors={[
             Colors.gradients.success[0],
             Colors.gradients.success[2],
@@ -60,8 +62,8 @@ export const CommunitySection: React.FC<Props> = ({
           icon="handshake"
           iconColor={Colors.gradients.purple[0]}
           value="150+"
-          label="Partner Attivi"
-          subtitle="Collaborazioni attive"
+          label={t('impact.partnersActive')}
+          subtitle={t('impact.partnersCollaboration')}
           gradientColors={[
             Colors.gradients.purple[0],
             Colors.gradients.purple[2],

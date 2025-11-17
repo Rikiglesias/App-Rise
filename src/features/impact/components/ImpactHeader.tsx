@@ -5,12 +5,15 @@ import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 // Header sizes - OTTIMIZZATI PER SCALING UNIFORME
 const TITLE_SIZE = 32;
 const SUBTITLE_SIZE = 16; // Ridotto da 18 per evitare limite minimo su small devices
 
 export const ImpactHeader: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <PerfectContainer style={styles.headerContainer} accessibilityRole="header">
       <PerfectContainer style={styles.mainHeaderContainer}>
@@ -19,9 +22,9 @@ export const ImpactHeader: React.FC = () => {
           lines={1}
           fontWeight="900"
           style={styles.titleText}
-          accessibilityLabel="Il Nostro Impatto"
+          accessibilityLabel={t('impact.impactAccessibility')}
         >
-          Il Nostro
+          {t('impact.impactTitle1')}
         </PerfectText>
         <PerfectText
           size={TITLE_SIZE}
@@ -29,7 +32,7 @@ export const ImpactHeader: React.FC = () => {
           fontWeight="900"
           style={[styles.titleText, styles.titleAccent]}
         >
-          Impatto
+          {t('impact.impactTitle2')}
         </PerfectText>
         <PerfectText
           size={SUBTITLE_SIZE}
@@ -37,7 +40,7 @@ export const ImpactHeader: React.FC = () => {
           fontWeight="500"
           style={styles.mainSubtitle}
         >
-          Ogni azione conta nella lotta contro la fame
+          {t('actions.headerSubtitle')}
         </PerfectText>
       </PerfectContainer>
     </PerfectContainer>
