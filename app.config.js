@@ -56,27 +56,36 @@ export default {
       logLevel: process.env.LOG_LEVEL || 'info',
       // Feature flags e opzioni di runtime esposte a JS
       displayZoomNormalization:
-        String(process.env.EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION ?? process.env.ENABLE_DISPLAY_ZOOM_NORMALIZATION)
-          .toLowerCase() === 'true',
+        String(
+          process.env.EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION ??
+            process.env.ENABLE_DISPLAY_ZOOM_NORMALIZATION
+        ).toLowerCase() === 'true',
       // Modalità "Perfect Strict": blocca il font scaling di sistema per testi identici
       perfectStrictMode:
-        String(process.env.EXPO_PUBLIC_PERFECT_STRICT_MODE ?? process.env.PERFECT_STRICT_MODE)
-          .toLowerCase() === 'true',
+        String(
+          process.env.EXPO_PUBLIC_PERFECT_STRICT_MODE ??
+            process.env.PERFECT_STRICT_MODE
+        ).toLowerCase() === 'true',
       // Soglia oltre la quale sbloccare il font scaling di sistema (es. 1.3)
       fontScaleUnlockThreshold: (() => {
-        const raw = process.env.EXPO_PUBLIC_FONT_SCALE_UNLOCK_THRESHOLD ?? process.env.FONT_SCALE_UNLOCK_THRESHOLD;
+        const raw =
+          process.env.EXPO_PUBLIC_FONT_SCALE_UNLOCK_THRESHOLD ??
+          process.env.FONT_SCALE_UNLOCK_THRESHOLD;
         const num = raw ? Number(raw) : NaN;
         return Number.isFinite(num) && num > 0 ? num : undefined;
       })(),
       // Limite massimo di scaling del testo (es. 1.3, 1.6, 2.0)
       maxFontScale: (() => {
-        const raw = process.env.EXPO_PUBLIC_MAX_FONT_SCALE ?? process.env.MAX_FONT_SCALE;
+        const raw =
+          process.env.EXPO_PUBLIC_MAX_FONT_SCALE ?? process.env.MAX_FONT_SCALE;
         const num = raw ? Number(raw) : NaN;
         return Number.isFinite(num) && num > 0 ? num : undefined;
       })(),
       // Fattore di test per Expo Go (solo sviluppo). Esempio: 1.2
       displayZoomTestFactor: (() => {
-        const raw = process.env.EXPO_PUBLIC_DISPLAY_ZOOM_TEST_FACTOR ?? process.env.DISPLAY_ZOOM_TEST_FACTOR;
+        const raw =
+          process.env.EXPO_PUBLIC_DISPLAY_ZOOM_TEST_FACTOR ??
+          process.env.DISPLAY_ZOOM_TEST_FACTOR;
         const num = raw ? Number(raw) : NaN;
         return Number.isFinite(num) && num > 0 ? num : undefined;
       })(),
@@ -128,8 +137,7 @@ export default {
         backgroundColor: '#FFFFFF',
         monochromeImage: './assets/icons/app/app-icon.png',
       },
-      package:
-        process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
+      package: process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
       // versionCode removed - managed by EAS remote (appVersionSource: "remote" in eas.json)
       ...(process.env.ANDROID_VERSION_CODE && {
         versionCode: parseInt(process.env.ANDROID_VERSION_CODE, 10),

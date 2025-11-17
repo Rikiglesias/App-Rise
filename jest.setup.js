@@ -66,10 +66,12 @@ global.__DEV__ = true;
 
 // Mock TurboModuleRegistry DevMenu to avoid RN DevMenu in tests
 jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
-  const actual = jest.requireActual('react-native/Libraries/TurboModule/TurboModuleRegistry');
+  const actual = jest.requireActual(
+    'react-native/Libraries/TurboModule/TurboModuleRegistry'
+  );
   return {
     ...actual,
-    getEnforcing: (name) => {
+    getEnforcing: name => {
       if (name === 'DevMenu') {
         return {};
       }
@@ -81,7 +83,6 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
     },
   };
 });
-
 
 // Mock NativeSettingsManager to satisfy React Native Settings module in Jest
 jest.mock('react-native/Libraries/Settings/NativeSettingsManager', () => ({
@@ -141,14 +142,14 @@ jest.mock('expo-updates', () => ({
 // Provide SafeArea defaults to avoid provider errors in integration tests
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');
-  
+
   // Create a proper Context for React Native Paper compatibility
   const defaultInsets = { top: 0, bottom: 0, left: 0, right: 0 };
   const defaultFrame = { x: 0, y: 0, width: 390, height: 844 };
-  
+
   const SafeAreaInsetsContext = React.createContext(defaultInsets);
   const SafeAreaFrameContext = React.createContext(defaultFrame);
-  
+
   return {
     SafeAreaContext: React.createContext({
       insets: defaultInsets,
@@ -157,16 +158,25 @@ jest.mock('react-native-safe-area-context', () => {
     SafeAreaInsetsContext,
     SafeAreaFrameContext,
     SafeAreaProvider: ({ children }) => {
-      return React.createElement(SafeAreaInsetsContext.Provider, {
-        value: defaultInsets
-      }, React.createElement(SafeAreaFrameContext.Provider, {
-        value: defaultFrame
-      }, children));
+      return React.createElement(
+        SafeAreaInsetsContext.Provider,
+        {
+          value: defaultInsets,
+        },
+        React.createElement(
+          SafeAreaFrameContext.Provider,
+          {
+            value: defaultFrame,
+          },
+          children
+        )
+      );
     },
     SafeAreaConsumer: SafeAreaInsetsContext.Consumer,
     useSafeAreaInsets: () => defaultInsets,
     useSafeAreaFrame: () => defaultFrame,
-    SafeAreaView: ({ children, ...props }) => React.createElement('View', props, children),
+    SafeAreaView: ({ children, ...props }) =>
+      React.createElement('View', props, children),
     initialWindowMetrics: {
       insets: defaultInsets,
       frame: defaultFrame,
@@ -199,31 +209,31 @@ jest.mock('expo-blur', () => {
 const createMockAnimatedValue = (initialValue = 0) => {
   let value = initialValue;
   const listeners = [];
-  
+
   return {
-    setValue: jest.fn((newValue) => {
+    setValue: jest.fn(newValue => {
       value = newValue;
       listeners.forEach(listener => listener.listener({ value }));
     }),
     setOffset: jest.fn(),
     flattenOffset: jest.fn(),
     extractOffset: jest.fn(),
-    addListener: jest.fn((listener) => {
+    addListener: jest.fn(listener => {
       const id = String(listeners.length);
       listeners.push({ id, listener });
       return id;
     }),
-    removeListener: jest.fn((id) => {
+    removeListener: jest.fn(id => {
       const index = listeners.findIndex(l => l.id === id);
       if (index >= 0) listeners.splice(index, 1);
     }),
     removeAllListeners: jest.fn(() => listeners.splice(0)),
-    stopAnimation: jest.fn((callback) => callback?.(value)),
-    resetAnimation: jest.fn((callback) => {
+    stopAnimation: jest.fn(callback => callback?.(value)),
+    resetAnimation: jest.fn(callback => {
       value = initialValue;
       callback?.(value);
     }),
-    interpolate: jest.fn((_config) => createMockAnimatedValue(value)),
+    interpolate: jest.fn(_config => createMockAnimatedValue(value)),
     animate: jest.fn(),
     __getValue: jest.fn(() => value),
     __getAnimatedValue: jest.fn(() => value),
@@ -238,7 +248,7 @@ const createMockAnimatedValue = (initialValue = 0) => {
 
 // Mock Animated timing/spring/decay with proper callback support
 const createMockAnimation = () => ({
-  start: jest.fn((callback) => {
+  start: jest.fn(callback => {
     // Simulate successful animation completion synchronously
     // No setTimeout to avoid "act()" warnings and ensure immediate completion
     callback?.({ finished: true });
@@ -253,14 +263,16 @@ const RN = require('react-native');
 // Preserve original Animated structure
 const OriginalAnimated = RN.Animated;
 
-RN.Animated.Value = jest.fn((initialValue) => createMockAnimatedValue(initialValue));
-RN.Animated.ValueXY = jest.fn((initialValue) => {
+RN.Animated.Value = jest.fn(initialValue =>
+  createMockAnimatedValue(initialValue)
+);
+RN.Animated.ValueXY = jest.fn(initialValue => {
   const x = createMockAnimatedValue(initialValue?.x ?? 0);
   const y = createMockAnimatedValue(initialValue?.y ?? 0);
   return {
     x,
     y,
-    setValue: jest.fn((value) => {
+    setValue: jest.fn(value => {
       x.setValue(value.x);
       y.setValue(value.y);
     }),
@@ -284,8 +296,8 @@ RN.Animated.timing = jest.fn(() => createMockAnimation());
 RN.Animated.spring = jest.fn(() => createMockAnimation());
 RN.Animated.decay = jest.fn(() => createMockAnimation());
 
-RN.Animated.sequence = jest.fn((animations) => ({
-  start: jest.fn((callback) => {
+RN.Animated.sequence = jest.fn(animations => ({
+  start: jest.fn(callback => {
     // Execute all animations in sequence
     animations.forEach(anim => anim.start?.());
     callback?.({ finished: true });
@@ -294,8 +306,8 @@ RN.Animated.sequence = jest.fn((animations) => ({
   reset: jest.fn(),
 }));
 
-RN.Animated.parallel = jest.fn((animations) => ({
-  start: jest.fn((callback) => {
+RN.Animated.parallel = jest.fn(animations => ({
+  start: jest.fn(callback => {
     // Execute all animations in parallel
     animations.forEach(anim => anim.start?.());
     callback?.({ finished: true });
@@ -305,7 +317,7 @@ RN.Animated.parallel = jest.fn((animations) => ({
 }));
 
 RN.Animated.stagger = jest.fn((delay, animations) => ({
-  start: jest.fn((callback) => {
+  start: jest.fn(callback => {
     animations.forEach(anim => anim.start?.());
     callback?.({ finished: true });
   }),
@@ -314,8 +326,8 @@ RN.Animated.stagger = jest.fn((delay, animations) => ({
 }));
 
 RN.Animated.delay = jest.fn(() => createMockAnimation());
-RN.Animated.loop = jest.fn((animation) => ({
-  start: jest.fn((callback) => {
+RN.Animated.loop = jest.fn(animation => ({
+  start: jest.fn(callback => {
     animation.start?.();
     callback?.({ finished: true });
   }),

@@ -8,13 +8,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Easing,
-} from 'react-native';
+import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
 import { getLocales } from 'expo-localization';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle } from 'react-native-svg';
@@ -33,7 +27,7 @@ interface OTAUpdateScreenProps {
 // Traduzioni localizzate
 const translations = {
   it: {
-    message: 'Stiamo aggiornando l\'app',
+    message: "Stiamo aggiornando l'app",
     subMessage: 'Grazie della pazienza, ci vorranno solo pochi secondi',
     complete: 'Aggiornamento completato!',
   },
@@ -55,10 +49,10 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
       return 'en';
     }
   }, []);
-  
+
   const isItalian = deviceLanguage === 'it';
   const t = isItalian ? translations.it : translations.en;
-  
+
   // Safe progress clamping
   const safeProgress = React.useMemo(() => {
     const val = Number(progress) || 0;
@@ -219,7 +213,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
       const progress = Math.min(elapsed / duration, 1);
       const eased = Easing.out(Easing.ease)(progress);
       const current = Math.round(start + (end - start) * eased);
-      
+
       setDisplayProgress(current);
 
       if (progress < 1) {
@@ -268,10 +262,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
           style={[
             styles.logoContainer,
             {
-              transform: [
-                { scale: logoScaleAnim },
-                { scale: logoBreathAnim },
-              ],
+              transform: [{ scale: logoScaleAnim }, { scale: logoBreathAnim }],
             },
           ]}
         >
@@ -331,10 +322,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
           </View>
         ) : (
           <Animated.View
-            style={[
-              styles.completeContainer,
-              { opacity: completeFadeAnim },
-            ]}
+            style={[styles.completeContainer, { opacity: completeFadeAnim }]}
           >
             <Animated.View
               style={[
@@ -371,7 +359,11 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
                 ]}
               >
                 <LinearGradient
-                  colors={[Colors.primary[400], Colors.primary[500], Colors.primary[600]]}
+                  colors={[
+                    Colors.primary[400],
+                    Colors.primary[500],
+                    Colors.primary[600],
+                  ]}
                   locations={[0, 0.5, 1]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
