@@ -248,7 +248,8 @@ export const CommunityButtonsSection: React.FC<
   onButtonPress,
   onCommunityTitlePress,
 }) => {
-  const handleCommunityButtons = useMemo(
+  const { t } = useTranslation();
+  const handleButtons = useMemo(
     () => [
       () => {
         const button = communityButtons[0];
@@ -281,12 +282,12 @@ export const CommunityButtonsSection: React.FC<
             {'\uD83E\uDD1D '}Community
           </PerfectText>
           <PerfectText
-            size={16}
+            size={13}
             lines={1}
             immunity={true}
             style={styles.communitySubtitle}
           >
-            Unisciti alla nostra comunità
+            {t('actions.communitySubtitle')}
           </PerfectText>
           <PerfectIcon
             name="open-in-new"
