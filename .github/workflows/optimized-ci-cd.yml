@@ -398,7 +398,7 @@ jobs:
         contains(github.event.head_commit.message, '[hotfix]') ||
         contains(github.event.head_commit.message, 'hotfix:') ||
         github.event.inputs.force_ota == 'true') &&
-       needs.quality-checks.result == 'success') ||
+       (needs.quality-checks.result == 'success' || needs.quality-checks.result == 'skipped')) ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.force_ota == 'true')
     steps:
       - name: 📥 Checkout
