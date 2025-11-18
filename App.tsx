@@ -50,8 +50,8 @@ const App: React.FC = () => {
 
   // 🧪 TEST: Rimuovi questo per testare la schermata OTA
   const [testProgress, setTestProgress] = useState(0);
-  const [forceShow, setForceShow] = useState(true); // Controllo dinamico
-  const FORCE_SHOW_OTA_SCREEN = forceShow; // ✅ ATTIVATO per vedere la schermata
+  const [forceShow, setForceShow] = useState(false); // Controllo dinamico
+  const FORCE_SHOW_OTA_SCREEN = forceShow; // ❌ DISATTIVATO in produzione
 
   // Inizializzazione app
   useEffect(() => {
