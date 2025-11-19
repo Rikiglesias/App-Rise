@@ -17,7 +17,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     container: {
       paddingHorizontal: PerfectSpacing.base,
       gap: PerfectSpacing.sm,
-      paddingTop: PerfectSpacing.sm,
+      paddingTop: PerfectSpacing.lg,
       paddingBottom: PerfectSpacing.base,
     },
     categoryContainer: {
@@ -25,16 +25,16 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     categoryContainerExplore: {
       marginBottom: PerfectSpacing.lg,
-      marginTop: -PerfectSpacing.xs,
+      marginTop: 0,
     },
     categoryContainerCommunity: {
       marginBottom: PerfectSpacing.lg,
-      marginTop: -PerfectSpacing.xs,
+      marginTop: 0,
     },
     categoryHeader: {
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: PerfectSpacing['3xl'],
+      marginBottom: PerfectSpacing['2xl'],
     },
 
     donateTitleContainerWrapper: {
