@@ -13,8 +13,8 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
     style={
       {
         "alignItems": "center",
-        "marginBottom": 9,
-        "marginVertical": 13.048488293864102,
+        "marginBottom": 36,
+        "marginTop": 9,
         "paddingHorizontal": 24,
         "paddingVertical": 24,
       }
@@ -53,37 +53,31 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
     </Text>
   </View>
   <View
+    accessibilityRole="summary"
     style={
       {
-        "marginHorizontal": 9,
-        "marginVertical": 36,
+        "backgroundColor": "#FFFFFF",
+        "borderColor": "#E5E5E5",
+        "borderLeftColor": "#171717",
+        "borderLeftWidth": 6.524244146932051,
+        "borderRadius": 24,
+        "borderWidth": 1.6310610367330127,
+        "marginBottom": 12,
+        "marginHorizontal": 12,
+        "marginTop": 24,
         "paddingHorizontal": 24,
         "paddingVertical": 24,
       }
     }
+    testID="action-description-card"
   >
     <View
-      accessibilityRole="summary"
       style={
         {
           "alignSelf": "center",
-          "backgroundColor": undefined,
-          "borderRadius": 39.145464881592304,
-          "elevation": undefined,
-          "padding": 54,
-          "paddingHorizontal": 24,
-          "paddingVertical": 24,
-          "shadowColor": "#000",
-          "shadowOffset": {
-            "height": 3.2621220734660255,
-            "width": 0,
-          },
-          "shadowOpacity": 0.08,
-          "shadowRadius": 6.524244146932051,
-          "width": 577.3956070034865,
+          "width": 448.7048912052517,
         }
       }
-      testID="action-description-card"
     >
       <Text
         accessibilityRole="text"
@@ -92,16 +86,17 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
         lineBreakMode="clip"
         maxFontSizeMultiplier={1}
         minimumFontScale={1}
-        numberOfLines={2}
+        numberOfLines={3}
         style={
           {
-            "color": "#262626",
+            "color": "#171717",
             "fontFamily": "System",
-            "fontSize": 29.359098661194228,
+            "fontSize": 32.621220734660255,
             "fontWeight": "700",
             "includeFontPadding": false,
-            "lineHeight": 35.23091839343307,
-            "textAlign": "center",
+            "lineHeight": 39.145464881592304,
+            "marginBottom": 6,
+            "textAlign": "left",
             "textAlignVertical": "center",
           }
         }
@@ -110,19 +105,15 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
       >
         Unisciti a noi nella lotta contro la fame nel mondo
       </Text>
-      <View
-        style={
-          {
-            "alignSelf": "center",
-            "backgroundColor": "#D4D4D4",
-            "borderRadius": 1.6310610367330127,
-            "height": 3.2621220734660255,
-            "marginVertical": 24,
-            "opacity": 0.8,
-            "width": 256.076582767083,
-          }
+    </View>
+    <View
+      style={
+        {
+          "alignSelf": "center",
+          "width": 448.7048912052517,
         }
-      />
+      }
+    >
       <Text
         accessibilityRole="text"
         adjustsFontSizeToFit={false}
@@ -130,17 +121,16 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
         lineBreakMode="clip"
         maxFontSizeMultiplier={1}
         minimumFontScale={1}
-        numberOfLines={2}
+        numberOfLines={3}
         style={
           {
-            "color": "#737373",
+            "color": "#525252",
             "fontFamily": "System",
             "fontSize": 26.096976587728204,
-            "fontStyle": "italic",
-            "fontWeight": "600",
+            "fontWeight": "400",
             "includeFontPadding": false,
-            "lineHeight": 31.316371905273844,
-            "textAlign": "center",
+            "lineHeight": 29.359098661194228,
+            "textAlign": "left",
             "textAlignVertical": "center",
           }
         }

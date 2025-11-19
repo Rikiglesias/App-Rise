@@ -329,7 +329,9 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
         >
           <View
             alignItems="center"
-            marginBottom={6}
+            marginBottom={24}
+            marginTop={6}
+            marginVertical={0}
             preset="section"
           >
             <Text
@@ -355,70 +357,54 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
             </Text>
           </View>
           <View
-            marginHorizontal={6}
-            marginVertical={24}
-            preset="section"
+            accessibilityRole="summary"
+            style={
+              {
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E5E5E5",
+                "borderLeftColor": "#171717",
+                "borderLeftWidth": 6.524244146932051,
+                "borderRadius": 24,
+                "borderWidth": 1.6310610367330127,
+                "marginBottom": 12,
+                "marginHorizontal": 12,
+                "marginTop": 24,
+                "paddingHorizontal": 24,
+                "paddingVertical": 24,
+              }
+            }
+            testID="action-description-card"
           >
-            <View
-              accessibilityRole="summary"
-              backgroundColor="card"
-              borderRadius={24}
-              padding={36}
+            <Text
+              accessibilityRole="text"
+              color="#171717"
+              lines={3}
+              size={20}
               style={
                 {
-                  "alignSelf": "center",
-                  "width": 577.3956070034865,
+                  "fontWeight": "700",
+                  "marginBottom": 6,
                 }
               }
-              testID="action-description-card"
+              testID="action-description-main"
             >
-              <Text
-                accessibilityRole="text"
-                color="#262626"
-                containerWidth={0}
-                lines={2}
-                size={18}
-                style={
-                  {
-                    "fontWeight": "700",
-                  }
+              Unisciti a noi nella lotta contro la fame nel mondo
+            </Text>
+            <Text
+              accessibilityRole="text"
+              color="#525252"
+              lines={3}
+              size={16}
+              style={
+                {
+                  "fontWeight": "400",
+                  "lineHeight": 29.359098661194228,
                 }
-                testID="action-description-main"
-                textAlign="center"
-              >
-                Unisciti a noi nella lotta contro la fame nel mondo
-              </Text>
-              <View
-                style={
-                  {
-                    "alignSelf": "center",
-                    "backgroundColor": "#D4D4D4",
-                    "borderRadius": 1.6310610367330127,
-                    "height": 3.2621220734660255,
-                    "marginVertical": 24,
-                    "opacity": 0.8,
-                    "width": 256.076582767083,
-                  }
-                }
-              />
-              <Text
-                accessibilityRole="text"
-                color="#737373"
-                containerWidth={0}
-                lines={2}
-                size={16}
-                style={
-                  {
-                    "fontStyle": "italic",
-                    "fontWeight": "600",
-                  }
-                }
-                testID="action-description-sub"
-                textAlign="center"
-              >
-                Ogni azione conta per cambiare vite
-              </Text>
-            </View>
+              }
+              testID="action-description-sub"
+            >
+              Ogni azione conta per cambiare vite
+            </Text>
           </View>
           <View
             flexDirection="row"
