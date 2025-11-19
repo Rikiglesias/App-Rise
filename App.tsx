@@ -52,183 +52,112 @@ const App: React.FC = () => {
   // Trigger re-render dopo init display zoom (per applicare normalizzazione)
   const [_, setZoomReadyTick] = useState(0);
 
-  // ?? TEST: Rimuovi questo per testare la schermata OTA
-  const [testProgress, setTestProgress] = useState(0);
-  const [forceShow, setForceShow] = useState(false); // Controllo dinamico
-  const FORCE_SHOW_OTA_SCREEN = forceShow; // ? DISATTIVATO in produzione
-
   const [showOtaScreen, setShowOtaScreen] = useState(false);
-  const [smoothProgress, setSmoothProgress] = useState(0);
+  const [visualProgress, setVisualProgress] = useState(0);
+  
+  // Refs per gestire lo stato asincrono senza causare re-render inutili durante l'animazione
   const downloadStartTimeRef = useRef<number | null>(null);
-  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const smoothIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const downloadProgressRef = useRef<number | null>(null);
-  const updatePendingRef = useRef(isUpdatePending);
-  const reloadTriggeredRef = useRef(false);
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isReloadingRef = useRef(false);
+
+  const MIN_ANIMATION_TIME = 2000; // Minimo tempo per arrivare al 90%
+  const UPDATE_COMPLETION_DELAY = 1500; // Tempo per mostrare "Completato" prima del reload
 
   // Inizializzazione app
   useEffect(() => {
-    // Log dell'inizializzazione
-    logger.info('App', '? App initialized with SDK 54 - OTA Updates with UI');
-    // Telemetria Display Zoom e re-render per applicare normalizzazione
+    logger.info('App', '🚀 App initialized with SDK 54 - Enhanced OTA Logic');
     void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
+  }, []);
 
-    // ?? TEST: Simula download progressivo
-    if (FORCE_SHOW_OTA_SCREEN) {
-      const interval = setInterval(() => {
-        setTestProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            // Dopo 100%, aspetta 1 sec e chiudi schermata
-            setTimeout(() => {
-              setForceShow(false); // Chiude schermata, mostra app
-            }, 1000);
-            return 100;
-          }
-          return prev + 5; // Più veloce per test
-        });
-      }, 150);
-      return () => clearInterval(interval);
-    }
-    return undefined;
-  }, [FORCE_SHOW_OTA_SCREEN]);
-
-  // Memorizza il progresso reale per uso negli intervalli di smoothing
+  // Gestione Logica OTA
   useEffect(() => {
-    downloadProgressRef.current =
-      typeof downloadProgress === 'number' ? downloadProgress : null;
-  }, [downloadProgress]);
-
-  useEffect(() => {
-    updatePendingRef.current = isUpdatePending;
-  }, [isUpdatePending]);
-
-  // Gestisce la visibilità della schermata OTA e impone una durata minima
-  useEffect(() => {
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-    }
-
-    if (isDownloading) {
+    // 1. Avvio Download
+    if (isDownloading && !showOtaScreen) {
       setShowOtaScreen(true);
-      if (!downloadStartTimeRef.current) {
-        downloadStartTimeRef.current = Date.now();
-      }
-      return;
+      setVisualProgress(0);
+      downloadStartTimeRef.current = Date.now();
+      
+      // Avvia animazione fluida
+      progressIntervalRef.current = setInterval(() => {
+        setVisualProgress(prev => {
+          // Se l'aggiornamento è pronto, accelera verso il 100%
+          if (isUpdatePending) {
+             const next = prev + 5;
+             return next >= 100 ? 100 : next;
+          }
+
+          // Altrimenti calcola progresso basato su tempo o download reale
+          const elapsed = Date.now() - (downloadStartTimeRef.current || Date.now());
+          const timeProgress = Math.min((elapsed / MIN_ANIMATION_TIME) * 90, 90);
+          
+          // Prendi il massimo tra progresso temporale e reale (se disponibile)
+          const realProgress = (downloadProgress || 0) * 100;
+          let target = Math.max(timeProgress, realProgress);
+          
+          // Cap al 95% finché non è pending
+          target = Math.min(target, 95);
+
+          // Movimento fluido verso il target
+          const diff = target - prev;
+          const step = Math.max(diff * 0.1, 0.5);
+          
+          return Math.min(prev + step, target);
+        });
+      }, 50);
     }
 
-    if (!isDownloading && !isUpdatePending && showOtaScreen) {
-      const elapsed = downloadStartTimeRef.current
-        ? Date.now() - downloadStartTimeRef.current
-        : 0;
-      const remaining = Math.max(MINIMUM_OTA_SCREEN_MS - elapsed, 0);
+    // 2. Download Completato (Pending)
+    if (isUpdatePending && showOtaScreen) {
+      // L'intervallo sopra gestirà l'arrivo al 100%
+      // Monitoriamo quando arriva a 100 per triggerare il reload
+      if (visualProgress >= 100 && !isReloadingRef.current) {
+        isReloadingRef.current = true;
+        
+        // Pulisci intervallo animazione
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
 
+        logger.info('App', '✅ OTA Update ready. Showing completion state before reload.');
+
+        // Aspetta per mostrare il messaggio "Completato"
+        setTimeout(() => {
+          logger.info('App', '🔄 Triggering reloadAsync...');
+          Updates.reloadAsync().catch(e => {
+            logger.error('App', '❌ Reload failed', e);
+            isReloadingRef.current = false;
+            setShowOtaScreen(false); // Fallback: nascondi schermo se reload fallisce
+          });
+        }, UPDATE_COMPLETION_DELAY);
+      }
+    }
+
+    // Cleanup
+    return () => {
+      // Non puliamo l'intervallo qui per evitare interruzioni durante re-render
+      // Lo puliamo solo quando finito o smontato
+    };
+  }, [isDownloading, downloadProgress, isUpdatePending, showOtaScreen, visualProgress]);
+
+  // Se non sta scaricando e non c'è update pending, assicurati che lo schermo sia nascosto
+  useEffect(() => {
+    if (!isDownloading && !isUpdatePending && showOtaScreen && !isReloadingRef.current) {
+      // Safety check: se per qualche motivo lo stato si blocca
       const timeout = setTimeout(() => {
         setShowOtaScreen(false);
-        setSmoothProgress(0);
-        downloadStartTimeRef.current = null;
-      }, remaining);
-
-      hideTimeoutRef.current = timeout;
-
-      return () => {
-        clearTimeout(timeout);
-        hideTimeoutRef.current = null;
-      };
+      }, 1000);
+      return () => clearTimeout(timeout);
     }
-
     return undefined;
   }, [isDownloading, isUpdatePending, showOtaScreen]);
 
-  // Calcola un progresso fluido anche per update "leggeri"
-  useEffect(() => {
-    if (!showOtaScreen || FORCE_SHOW_OTA_SCREEN) {
-      if (smoothIntervalRef.current) {
-        clearInterval(smoothIntervalRef.current);
-        smoothIntervalRef.current = null;
-      }
-
-      if (!showOtaScreen) {
-        setSmoothProgress(0);
-        downloadStartTimeRef.current = null;
-      }
-
-      return;
-    }
-
-    if (!downloadStartTimeRef.current) {
-      downloadStartTimeRef.current = Date.now();
-    }
-
-    smoothIntervalRef.current = setInterval(() => {
-      setSmoothProgress(prev => {
-        const startTime = downloadStartTimeRef.current ?? Date.now();
-        const elapsed = Date.now() - startTime;
-        const minimumGoal = Math.min(
-          (elapsed / MINIMUM_OTA_SCREEN_MS) * 85,
-          85
-        );
-        const actualProgress =
-          downloadProgressRef.current != null
-            ? downloadProgressRef.current * 100
-            : 0;
-
-        let target = Math.max(minimumGoal, actualProgress);
-
-        if (updatePendingRef.current) {
-          target = 100;
-        } else {
-          target = Math.min(target, PROGRESS_CAP_BEFORE_COMPLETE);
-        }
-
-        if (target <= prev) {
-          return updatePendingRef.current ? 100 : prev;
-        }
-
-        const delta = Math.max((target - prev) * 0.25, 1);
-        return Math.min(prev + delta, target);
-      });
-    }, 120);
-
-    return () => {
-      if (smoothIntervalRef.current) {
-        clearInterval(smoothIntervalRef.current);
-        smoothIntervalRef.current = null;
-      }
-    };
-  }, [showOtaScreen, FORCE_SHOW_OTA_SCREEN]);
-
-  // Applica immediatamente l'aggiornamento OTA appena scaricato
-  useEffect(() => {
-    if (isUpdatePending && !reloadTriggeredRef.current) {
-      reloadTriggeredRef.current = true;
-
-      const timeout = setTimeout(() => {
-        logger.info('App', 'Applying OTA update via automatic reload');
-        void Updates.reloadAsync().catch(error => {
-          reloadTriggeredRef.current = false;
-          logger.error('App', 'Failed to reload after OTA update', error);
-        });
-      }, 600);
-
-      return () => clearTimeout(timeout);
-    }
-
-    return undefined;
-  }, [isUpdatePending]);
-
-  const shouldRenderOtaScreen = showOtaScreen || FORCE_SHOW_OTA_SCREEN;
-  const progressValue = FORCE_SHOW_OTA_SCREEN ? testProgress : smoothProgress;
-
-  // Mostra UI aggiornamento SOLO durante download (non durante check)
-  // Check è veloce (1-2 sec) e silenzioso, download mostra UI
-  if (shouldRenderOtaScreen) {
+  if (showOtaScreen) {
     return (
       <OTAUpdateScreen
         isChecking={false}
         isDownloading={true}
-        progress={progressValue}
+        progress={visualProgress}
       />
     );
   }

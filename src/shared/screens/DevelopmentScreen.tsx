@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import {
@@ -23,15 +24,8 @@ import {
 } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
 
-interface DevelopmentScreenProps {
-  navigation: {
-    goBack: () => void;
-  };
-}
-
-const DevelopmentScreen: React.FC<DevelopmentScreenProps> = ({
-  navigation,
-}) => {
+const DevelopmentScreen: React.FC = () => {
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
   const { t } = useTranslation();
