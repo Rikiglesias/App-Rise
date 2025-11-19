@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.neutral[0],
     paddingHorizontal: PerfectSpacing.base,
-    paddingTop: PerfectSpacing.lg,
+    paddingTop: PerfectSpacing.sm,
     paddingBottom: PerfectSpacing.lg,
     borderRadius: scale(16),
     borderWidth: scale(1),
