@@ -152,19 +152,21 @@ export const createActionButtonStyles = (): ButtonStyles => {
       letterSpacing: scale(0.1),
     },
 
-    // DIVISORE ULTRA COMPATTO TRA SEZIONI
+    // DIVISORE TRA SEZIONI - IDENTICO ALLA PAGINA IMPATTO
     sectionDivider: {
       height: scale(2),
       backgroundColor: Colors.neutral[200],
-      marginVertical: PerfectSpacing.sm,
+      marginTop: PerfectSpacing.xl,
+      marginBottom: PerfectSpacing.base,
       marginHorizontal: PerfectSpacing.lg,
     },
 
-    // LINEA TRA SEZIONI - PIÙ GROSSA PER LA PRIMA SEPARAZIONE
+    // PRIMA SEPARAZIONE - STESSA ALTEZZA DELLE ALTRE
     firstSectionDivider: {
-      height: scale(4),
+      height: scale(2),
       backgroundColor: Colors.neutral[200],
-      marginVertical: PerfectSpacing.sm,
+      marginTop: PerfectSpacing.xl,
+      marginBottom: PerfectSpacing.base,
       marginHorizontal: PerfectSpacing.lg,
     },
 

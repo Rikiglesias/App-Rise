@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
   // Container divisorio - allineato a pagina Azioni (sectionDivider)
   titleSeparatorContainer: {
     paddingHorizontal: 0,
-    paddingVertical: 0,
+    paddingTop: 0,
+    paddingBottom: PerfectSpacing.xl,
     alignItems: 'stretch',
   },
 

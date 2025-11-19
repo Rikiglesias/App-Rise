@@ -16,15 +16,16 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
       StyleSheet.create({
         dividerContainer: {
           paddingHorizontal: PerfectSpacing.base,
-          paddingVertical: PerfectSpacing.base,
+          paddingTop: PerfectSpacing.base,
+          paddingBottom: PerfectSpacing.xl,
           alignItems: 'center',
         },
         mainDivider: {
           height: scale(4),
-          backgroundColor: Colors.neutral[300],
+          backgroundColor: Colors.neutral[200],
           width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
           borderRadius: scale(2),
-          opacity: 0.8,
+          opacity: 1,
           shadowColor: Colors.neutral[400],
           shadowOffset: { width: 0, height: scale(1) },
           shadowOpacity: 0.15,
