@@ -109,7 +109,13 @@ const App: React.FC = () => {
   // Gestione Completamento - Forza 100% quando update è pronto
   useEffect(() => {
     if (isUpdatePending && showOtaScreen && !isReloadingRef.current) {
-      // FORZA immediatamente il progresso al 100%
+      // FERMA l'intervallo PRIMA di forzare a 100%
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      
+      // ORA forza il progresso al 100%
       logger.info('App', '⚡ Update ready - forcing progress to 100%');
       setVisualProgress(100);
     }
@@ -119,12 +125,6 @@ const App: React.FC = () => {
   useEffect(() => {
     if (visualProgress >= 100 && isUpdatePending && showOtaScreen && !isReloadingRef.current) {
       isReloadingRef.current = true;
-      
-      // Pulisci intervallo animazione
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-        progressIntervalRef.current = null;
-      }
 
       logger.info('App', '✅ Progress at 100% - Showing completion state');
 
