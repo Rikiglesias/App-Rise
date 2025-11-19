@@ -78,9 +78,9 @@ export const TotalMealsSection: React.FC<Props> = ({
 };
 
 const styles = StyleSheet.create({
-  // Header Divider - ALLARGATO PER COMPENSARE
+  // Header Divider - IDENTICA ALLA PRIMA LINEA PAGINA AZIONI
   titleSeparator: {
-    height: scale(2),
+    height: scale(4),
     backgroundColor: Colors.neutral[200],
     marginVertical: PerfectSpacing.sm,
     marginHorizontal: PerfectSpacing.lg,

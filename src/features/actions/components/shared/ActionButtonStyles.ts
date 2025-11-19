@@ -160,9 +160,9 @@ export const createActionButtonStyles = (): ButtonStyles => {
       marginHorizontal: PerfectSpacing.lg,
     },
 
-    // LINEA TRA SEZIONI - IDENTICA A SECTIONDIVIDER
+    // LINEA TRA SEZIONI - PIÙ GROSSA PER LA PRIMA SEPARAZIONE
     firstSectionDivider: {
-      height: scale(2),
+      height: scale(4),
       backgroundColor: Colors.neutral[200],
       marginVertical: PerfectSpacing.sm,
       marginHorizontal: PerfectSpacing.lg,

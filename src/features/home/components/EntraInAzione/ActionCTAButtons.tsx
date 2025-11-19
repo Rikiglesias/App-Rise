@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   buttonDivider: {
     width: '70%',
-    height: StyleSheet.hairlineWidth * 2,
+    height: scale(1.5),
     backgroundColor: Colors.neutral[100],
     borderRadius: 999,
     marginBottom: PerfectSpacing.sm,
