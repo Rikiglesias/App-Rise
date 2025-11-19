@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
   numbersHeaderContainer: {
     alignItems: 'center',
-    marginTop: PerfectSpacing.base, // Spacing leggermente ridotto per avvicinare alla linea
+    marginTop: PerfectSpacing.sm, // Spacing ridotto per avvicinare alla linea
     marginBottom: PerfectSpacing['2xl'], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
   },
   numbersHeaderBackground: {
