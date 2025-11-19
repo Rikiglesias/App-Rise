@@ -11,9 +11,6 @@ import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
 import { OTAUpdateScreen } from './src/shared/OTAUpdateScreen';
 import { ErrorBoundary } from './src/shared/components/ErrorBoundary';
 
-const MINIMUM_OTA_SCREEN_MS = 2400;
-const PROGRESS_CAP_BEFORE_COMPLETE = 98;
-
 // The new Main component that bridges the two theme systems
 const Main: React.FC = () => {
   const { isDark, universal, brand } = usePerfectTheme();
@@ -69,7 +66,7 @@ const App: React.FC = () => {
     void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
   }, []);
 
-  // Gestione Logica OTA
+  // Gestione Logica OTA - Avvio Download e Animazione
   useEffect(() => {
     // 1. Avvio Download
     if (isDownloading && !showOtaScreen) {
@@ -80,12 +77,6 @@ const App: React.FC = () => {
       // Avvia animazione fluida
       progressIntervalRef.current = setInterval(() => {
         setVisualProgress(prev => {
-          // Se l'aggiornamento è pronto, accelera verso il 100%
-          if (isUpdatePending) {
-             const next = prev + 5;
-             return next >= 100 ? 100 : next;
-          }
-
           // Altrimenti calcola progresso basato su tempo o download reale
           const elapsed = Date.now() - (downloadStartTimeRef.current || Date.now());
           const timeProgress = Math.min((elapsed / MIN_ANIMATION_TIME) * 90, 90);
@@ -106,39 +97,48 @@ const App: React.FC = () => {
       }, 50);
     }
 
-    // 2. Download Completato (Pending)
-    if (isUpdatePending && showOtaScreen) {
-      // L'intervallo sopra gestirà l'arrivo al 100%
-      // Monitoriamo quando arriva a 100 per triggerare il reload
-      if (visualProgress >= 100 && !isReloadingRef.current) {
-        isReloadingRef.current = true;
-        
-        // Pulisci intervallo animazione
-        if (progressIntervalRef.current) {
-          clearInterval(progressIntervalRef.current);
-          progressIntervalRef.current = null;
-        }
-
-        logger.info('App', '✅ OTA Update ready. Showing completion state before reload.');
-
-        // Aspetta per mostrare il messaggio "Completato"
-        setTimeout(() => {
-          logger.info('App', '🔄 Triggering reloadAsync...');
-          Updates.reloadAsync().catch(e => {
-            logger.error('App', '❌ Reload failed', e);
-            isReloadingRef.current = false;
-            setShowOtaScreen(false); // Fallback: nascondi schermo se reload fallisce
-          });
-        }, UPDATE_COMPLETION_DELAY);
-      }
-    }
-
-    // Cleanup
+    // Cleanup intervallo quando componente smonta
     return () => {
-      // Non puliamo l'intervallo qui per evitare interruzioni durante re-render
-      // Lo puliamo solo quando finito o smontato
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
     };
-  }, [isDownloading, downloadProgress, isUpdatePending, showOtaScreen, visualProgress]);
+  }, [isDownloading, downloadProgress, showOtaScreen]);
+
+  // Gestione Completamento - Forza 100% quando update è pronto
+  useEffect(() => {
+    if (isUpdatePending && showOtaScreen && !isReloadingRef.current) {
+      // FORZA immediatamente il progresso al 100%
+      logger.info('App', '⚡ Update ready - forcing progress to 100%');
+      setVisualProgress(100);
+    }
+  }, [isUpdatePending, showOtaScreen]);
+
+  // Gestione Reload - Triggera solo quando effettivamente al 100%
+  useEffect(() => {
+    if (visualProgress >= 100 && isUpdatePending && showOtaScreen && !isReloadingRef.current) {
+      isReloadingRef.current = true;
+      
+      // Pulisci intervallo animazione
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+
+      logger.info('App', '✅ Progress at 100% - Showing completion state');
+
+      // Aspetta per mostrare il messaggio "Completato"
+      setTimeout(() => {
+        logger.info('App', '🔄 Triggering reloadAsync...');
+        Updates.reloadAsync().catch(e => {
+          logger.error('App', '❌ Reload failed', e);
+          isReloadingRef.current = false;
+          setShowOtaScreen(false);
+        });
+      }, UPDATE_COMPLETION_DELAY);
+    }
+  }, [visualProgress, isUpdatePending, showOtaScreen]);
 
   // Se non sta scaricando e non c'è update pending, assicurati che lo schermo sia nascosto
   useEffect(() => {
