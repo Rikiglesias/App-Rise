@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, PixelRatio } from 'react-native';
+import { StyleSheet, PixelRatio, View } from 'react-native';
 import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
 import { useNavigation } from '@react-navigation/native';
@@ -117,26 +117,27 @@ const ActionCTAButtonsComponent: React.FC = () => {
               {t('home.ctaImpactButton')}
             </PerfectText>
             <PerfectContainer
-              flexDirection="row"
-              alignItems="center"
-              gap={PerfectSpacing.sm}
-              style={conditionalStyles.subTextPadding}
+              style={[styles.buttonFooter, conditionalStyles.subTextPadding]}
             >
-              <PerfectIcon
-                name="arrow-left"
-                size={20}
-                {...IconClamps.chevron}
-                color={Colors.primary[500]}
-              />
-              <PerfectText
-                size={18}
-                lines={1}
-                color={Colors.primary[500]}
-                style={styles.buttonSubtext}
-                testID="cta-impact-sub"
-              >
-                {t('home.ctaImpactSub')}
-              </PerfectText>
+              <View style={styles.buttonDivider} />
+              <PerfectContainer style={styles.footerRow}>
+                <PerfectIcon
+                  name="arrow-left"
+                  size={20}
+                  {...IconClamps.chevron}
+                  color={Colors.primary[500]}
+                />
+                <PerfectText
+                  size={18}
+                  lines={1}
+                  color={Colors.primary[500]}
+                  textAlign="center"
+                  style={styles.buttonSubtext}
+                  testID="cta-impact-sub"
+                >
+                  {t('home.ctaImpactSub')}
+                </PerfectText>
+              </PerfectContainer>
             </PerfectContainer>
           </PerfectContainer>
         </LinearGradient>
@@ -178,26 +179,27 @@ const ActionCTAButtonsComponent: React.FC = () => {
               {t('home.ctaDonateButton')}
             </PerfectText>
             <PerfectContainer
-              flexDirection="row"
-              alignItems="center"
-              gap={PerfectSpacing.sm}
-              style={conditionalStyles.subTextPadding}
+              style={[styles.buttonFooter, conditionalStyles.subTextPadding]}
             >
-              <PerfectText
-                size={18}
-                lines={1}
-                color={Colors.semantic.success.main}
-                style={styles.buttonSubtext}
-                testID="cta-donate-sub"
-              >
-                {t('home.ctaDonateSub')}
-              </PerfectText>
-              <PerfectIcon
-                name="arrow-right"
-                size={20}
-                {...IconClamps.chevron}
-                color={Colors.semantic.success.main}
-              />
+              <View style={styles.buttonDivider} />
+              <PerfectContainer style={styles.footerRow}>
+                <PerfectText
+                  size={18}
+                  lines={1}
+                  color={Colors.semantic.success.main}
+                  textAlign="center"
+                  style={styles.buttonSubtext}
+                  testID="cta-donate-sub"
+                >
+                  {t('home.ctaDonateSub')}
+                </PerfectText>
+                <PerfectIcon
+                  name="arrow-right"
+                  size={20}
+                  {...IconClamps.chevron}
+                  color={Colors.semantic.success.main}
+                />
+              </PerfectContainer>
             </PerfectContainer>
           </PerfectContainer>
         </LinearGradient>
@@ -234,6 +236,24 @@ const styles = StyleSheet.create({
 
   buttonSubtext: {
     fontWeight: Typography.weights.bold,
+  },
+  buttonFooter: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: PerfectSpacing.sm,
+  },
+  footerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: PerfectSpacing.xs,
+  },
+  buttonDivider: {
+    width: '70%',
+    height: StyleSheet.hairlineWidth * 2,
+    backgroundColor: Colors.neutral[100],
+    borderRadius: 999,
+    marginBottom: PerfectSpacing.sm,
   },
 });
 

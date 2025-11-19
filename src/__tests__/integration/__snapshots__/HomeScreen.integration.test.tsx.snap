@@ -384,12 +384,25 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 {
                   "fontWeight": "700",
                   "marginBottom": 6,
+                  "textAlign": "center",
                 }
               }
               testID="action-description-main"
             >
               Unisciti a noi nella lotta contro la fame nel mondo
             </Text>
+            <View
+              style={
+                {
+                  "alignSelf": "center",
+                  "backgroundColor": "#F5F5F5",
+                  "borderRadius": 9999,
+                  "height": 3.2621220734660255,
+                  "marginVertical": 6,
+                  "width": "65%",
+                }
+              }
+            />
             <Text
               accessibilityRole="text"
               color="#525252"
@@ -399,6 +412,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 {
                   "fontWeight": "400",
                   "lineHeight": 29.359098661194228,
+                  "textAlign": "center",
                 }
               }
               testID="action-description-sub"
@@ -528,36 +542,63 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     Scopri Impatto
                   </Text>
                   <View
-                    alignItems="center"
-                    flexDirection="row"
-                    gap={12}
                     style={
-                      {
-                        "paddingHorizontal": 6,
-                      }
+                      [
+                        {
+                          "alignItems": "center",
+                          "marginTop": 12,
+                          "width": "100%",
+                        },
+                        {
+                          "paddingHorizontal": 6,
+                        },
+                      ]
                     }
                   >
-                    <Text
-                      color="#DC2626"
-                      maxSize={24}
-                      minSize={18}
-                      size={20}
-                    >
-                      arrow-left
-                    </Text>
-                    <Text
-                      color="#DC2626"
-                      lines={1}
-                      size={18}
+                    <View
                       style={
                         {
-                          "fontWeight": "700",
+                          "backgroundColor": "#F5F5F5",
+                          "borderRadius": 999,
+                          "height": 1,
+                          "marginBottom": 12,
+                          "width": "70%",
                         }
                       }
-                      testID="cta-impact-sub"
+                    />
+                    <View
+                      style={
+                        {
+                          "alignItems": "center",
+                          "flexDirection": "row",
+                          "gap": 6,
+                          "justifyContent": "center",
+                        }
+                      }
                     >
-                      Risultati
-                    </Text>
+                      <Text
+                        color="#DC2626"
+                        maxSize={24}
+                        minSize={18}
+                        size={20}
+                      >
+                        arrow-left
+                      </Text>
+                      <Text
+                        color="#DC2626"
+                        lines={1}
+                        size={18}
+                        style={
+                          {
+                            "fontWeight": "700",
+                          }
+                        }
+                        testID="cta-impact-sub"
+                        textAlign="center"
+                      >
+                        Risultati
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -677,36 +718,63 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     Dona e Aiuta
                   </Text>
                   <View
-                    alignItems="center"
-                    flexDirection="row"
-                    gap={12}
                     style={
-                      {
-                        "paddingHorizontal": 6,
-                      }
+                      [
+                        {
+                          "alignItems": "center",
+                          "marginTop": 12,
+                          "width": "100%",
+                        },
+                        {
+                          "paddingHorizontal": 6,
+                        },
+                      ]
                     }
                   >
-                    <Text
-                      color="#10B981"
-                      lines={1}
-                      size={18}
+                    <View
                       style={
                         {
-                          "fontWeight": "700",
+                          "backgroundColor": "#F5F5F5",
+                          "borderRadius": 999,
+                          "height": 1,
+                          "marginBottom": 12,
+                          "width": "70%",
                         }
                       }
-                      testID="cta-donate-sub"
+                    />
+                    <View
+                      style={
+                        {
+                          "alignItems": "center",
+                          "flexDirection": "row",
+                          "gap": 6,
+                          "justifyContent": "center",
+                        }
+                      }
                     >
-                      Supporta
-                    </Text>
-                    <Text
-                      color="#10B981"
-                      maxSize={24}
-                      minSize={18}
-                      size={20}
-                    >
-                      arrow-right
-                    </Text>
+                      <Text
+                        color="#10B981"
+                        lines={1}
+                        size={18}
+                        style={
+                          {
+                            "fontWeight": "700",
+                          }
+                        }
+                        testID="cta-donate-sub"
+                        textAlign="center"
+                      >
+                        Supporta
+                      </Text>
+                      <Text
+                        color="#10B981"
+                        maxSize={24}
+                        minSize={18}
+                        size={20}
+                      >
+                        arrow-right
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>

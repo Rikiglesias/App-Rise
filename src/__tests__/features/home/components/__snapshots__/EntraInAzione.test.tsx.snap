@@ -96,7 +96,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
             "includeFontPadding": false,
             "lineHeight": 39.145464881592304,
             "marginBottom": 6,
-            "textAlign": "left",
+            "textAlign": "center",
             "textAlignVertical": "center",
           }
         }
@@ -106,6 +106,18 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
         Unisciti a noi nella lotta contro la fame nel mondo
       </Text>
     </View>
+    <View
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": "#F5F5F5",
+          "borderRadius": 9999,
+          "height": 3.2621220734660255,
+          "marginVertical": 6,
+          "width": "65%",
+        }
+      }
+    />
     <View
       style={
         {
@@ -130,7 +142,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
             "fontWeight": "400",
             "includeFontPadding": false,
             "lineHeight": 29.359098661194228,
-            "textAlign": "left",
+            "textAlign": "center",
             "textAlignVertical": "center",
           }
         }
@@ -283,41 +295,63 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
             style={
               {
                 "alignItems": "center",
-                "flexDirection": "row",
-                "gap": 19.572732440796152,
+                "marginTop": 12,
                 "paddingHorizontal": 6,
+                "width": "100%",
               }
             }
           >
-            <MaterialCommunityIcons
-              color="#DC2626"
-              name="arrow-left"
-              size={24}
-            />
-            <Text
-              adjustsFontSizeToFit={false}
-              allowFontScaling={false}
-              lineBreakMode="clip"
-              maxFontSizeMultiplier={1}
-              minimumFontScale={1}
-              numberOfLines={1}
+            <View
               style={
                 {
-                  "color": "#DC2626",
-                  "fontFamily": "System",
-                  "fontSize": 29.359098661194228,
-                  "fontWeight": "700",
-                  "includeFontPadding": false,
-                  "lineHeight": 35.23091839343307,
-                  "textAlign": "left",
-                  "textAlignVertical": "center",
+                  "backgroundColor": "#F5F5F5",
+                  "borderRadius": 999,
+                  "height": 1,
+                  "marginBottom": 12,
+                  "width": "70%",
                 }
               }
-              testID="cta-impact-sub"
-              textBreakStrategy="simple"
+            />
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "gap": 6,
+                  "justifyContent": "center",
+                }
+              }
             >
-              Risultati
-            </Text>
+              <MaterialCommunityIcons
+                color="#DC2626"
+                name="arrow-left"
+                size={24}
+              />
+              <Text
+                adjustsFontSizeToFit={false}
+                allowFontScaling={false}
+                lineBreakMode="clip"
+                maxFontSizeMultiplier={1}
+                minimumFontScale={1}
+                numberOfLines={1}
+                style={
+                  {
+                    "color": "#DC2626",
+                    "fontFamily": "System",
+                    "fontSize": 29.359098661194228,
+                    "fontWeight": "700",
+                    "includeFontPadding": false,
+                    "lineHeight": 35.23091839343307,
+                    "textAlign": "center",
+                    "textAlignVertical": "center",
+                  }
+                }
+                testID="cta-impact-sub"
+                textBreakStrategy="simple"
+              >
+                Risultati
+              </Text>
+            </View>
           </View>
         </View>
       </LinearGradient>
@@ -453,41 +487,63 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
             style={
               {
                 "alignItems": "center",
-                "flexDirection": "row",
-                "gap": 19.572732440796152,
+                "marginTop": 12,
                 "paddingHorizontal": 6,
+                "width": "100%",
               }
             }
           >
-            <Text
-              adjustsFontSizeToFit={false}
-              allowFontScaling={false}
-              lineBreakMode="clip"
-              maxFontSizeMultiplier={1}
-              minimumFontScale={1}
-              numberOfLines={1}
+            <View
               style={
                 {
-                  "color": "#10B981",
-                  "fontFamily": "System",
-                  "fontSize": 29.359098661194228,
-                  "fontWeight": "700",
-                  "includeFontPadding": false,
-                  "lineHeight": 35.23091839343307,
-                  "textAlign": "left",
-                  "textAlignVertical": "center",
+                  "backgroundColor": "#F5F5F5",
+                  "borderRadius": 999,
+                  "height": 1,
+                  "marginBottom": 12,
+                  "width": "70%",
                 }
               }
-              testID="cta-donate-sub"
-              textBreakStrategy="simple"
-            >
-              Supporta
-            </Text>
-            <MaterialCommunityIcons
-              color="#10B981"
-              name="arrow-right"
-              size={24}
             />
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "gap": 6,
+                  "justifyContent": "center",
+                }
+              }
+            >
+              <Text
+                adjustsFontSizeToFit={false}
+                allowFontScaling={false}
+                lineBreakMode="clip"
+                maxFontSizeMultiplier={1}
+                minimumFontScale={1}
+                numberOfLines={1}
+                style={
+                  {
+                    "color": "#10B981",
+                    "fontFamily": "System",
+                    "fontSize": 29.359098661194228,
+                    "fontWeight": "700",
+                    "includeFontPadding": false,
+                    "lineHeight": 35.23091839343307,
+                    "textAlign": "center",
+                    "textAlignVertical": "center",
+                  }
+                }
+                testID="cta-donate-sub"
+                textBreakStrategy="simple"
+              >
+                Supporta
+              </Text>
+              <MaterialCommunityIcons
+                color="#10B981"
+                name="arrow-right"
+                size={24}
+              />
+            </View>
           </View>
         </View>
       </LinearGradient>

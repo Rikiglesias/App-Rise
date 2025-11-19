@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import {
@@ -30,6 +30,7 @@ const ActionDescriptionComponent: React.FC = () => {
       >
         {t('home.actionMainText')}
       </PerfectText>
+      <View style={styles.divider} />
 
       <PerfectText
         size={16}
@@ -64,9 +65,19 @@ const styles = StyleSheet.create({
   mainText: {
     fontWeight: Typography.weights.bold,
     marginBottom: PerfectSpacing.xs,
+    textAlign: 'center',
   },
   subText: {
     fontWeight: Typography.weights.regular,
     lineHeight: scale(18),
+    textAlign: 'center',
+  },
+  divider: {
+    width: '65%',
+    height: scale(2),
+    backgroundColor: Colors.neutral[100],
+    borderRadius: BorderRadius.full,
+    alignSelf: 'center',
+    marginVertical: PerfectSpacing.xs,
   },
 });
