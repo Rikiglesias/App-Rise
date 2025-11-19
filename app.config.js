@@ -33,6 +33,12 @@ export default {
     icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',
     primaryColor: '#DC2626',
+    
+    // Configurazione lingue supportate
+    locales: {
+      it: './locales/it.json',
+      en: './locales/en.json',
+    },
 
     // Configurazioni splash screen
     splash: {
@@ -110,6 +116,8 @@ export default {
         ITSAppUsesNonExemptEncryption: false,
         NSCameraUsageDescription:
           'Questa app utilizza la fotocamera per scansionare QR code per donazioni e eventi.',
+        CFBundleLocalizations: ['it', 'en'], // Lingue supportate nelle Settings iOS
+        CFBundleDevelopmentRegion: 'it', // Lingua di default
         NSAppTransportSecurity: {
           NSAllowsArbitraryLoads: false,
           NSExceptionDomains: {
