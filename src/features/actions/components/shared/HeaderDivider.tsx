@@ -16,7 +16,7 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
       StyleSheet.create({
         dividerContainer: {
           paddingHorizontal: PerfectSpacing.base,
-          paddingTop: PerfectSpacing.base,
+          paddingTop: PerfectSpacing.lg,
           paddingBottom: PerfectSpacing.xl,
           alignItems: 'center',
         },

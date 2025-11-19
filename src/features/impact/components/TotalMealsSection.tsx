@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   // Container divisorio - allineato a pagina Azioni (HeaderDivider)
   titleSeparatorContainer: {
     paddingHorizontal: 0,
-    paddingTop: PerfectSpacing.base,
+    paddingTop: PerfectSpacing.lg,
     paddingBottom: PerfectSpacing.xl,
     alignItems: 'center',
   },

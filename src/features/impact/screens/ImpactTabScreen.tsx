@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
 
   // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
   sectionDividerContainer: {
-    paddingTop: PerfectSpacing.xl,
+    paddingTop: PerfectSpacing.base,
     paddingBottom: PerfectSpacing.base,
     alignItems: 'center',
   },

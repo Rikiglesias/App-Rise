@@ -152,22 +152,22 @@ export const createActionButtonStyles = (): ButtonStyles => {
       letterSpacing: scale(0.1),
     },
 
-    // DIVISORE TRA SEZIONI - IDENTICO ALLA PAGINA IMPATTO
+    // DIVISORE TRA SEZIONI - PIÙ VICINO AL TITOLO SUCCESSIVO
     sectionDivider: {
       height: scale(2),
       backgroundColor: Colors.neutral[200],
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a linee Impatto
-      marginTop: PerfectSpacing.xl,
+      marginTop: PerfectSpacing.base,
       marginBottom: PerfectSpacing.base,
       alignSelf: 'center',
     },
 
-    // PRIMA SEPARAZIONE - STESSA ALTEZZA DELLE ALTRE
+    // PRIMA SEPARAZIONE - PIÙ VICINA AL TITOLO SUCCESSIVO
     firstSectionDivider: {
       height: scale(2),
       backgroundColor: Colors.neutral[200],
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a linee Impatto
-      marginTop: PerfectSpacing.xl,
+      marginTop: PerfectSpacing.base,
       marginBottom: PerfectSpacing.base,
       alignSelf: 'center',
     },
