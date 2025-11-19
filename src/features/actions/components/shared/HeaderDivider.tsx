@@ -26,11 +26,6 @@ const HeaderDivider: React.FC<HeaderDividerProps> = ({ animations }) => {
           width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
           borderRadius: scale(2),
           opacity: 1,
-          shadowColor: Colors.neutral[400],
-          shadowOffset: { width: 0, height: scale(1) },
-          shadowOpacity: 0.15,
-          shadowRadius: scale(3),
-          elevation: 2,
         },
       }),
     []

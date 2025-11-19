@@ -152,13 +152,14 @@ const styles = StyleSheet.create({
   sectionDividerContainer: {
     paddingTop: PerfectSpacing.xl,
     paddingBottom: PerfectSpacing.base,
+    alignItems: 'center',
   },
   sectionDivider: {
     height: scale(2),
     backgroundColor: Colors.neutral[200],
+    width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a linee Azioni
     marginVertical: PerfectSpacing.sm,
-    marginHorizontal: PerfectSpacing.lg,
-    alignSelf: 'stretch',
+    alignSelf: 'center',
   },
 });
 

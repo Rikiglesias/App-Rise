@@ -82,16 +82,17 @@ const styles = StyleSheet.create({
   titleSeparator: {
     height: scale(4),
     backgroundColor: Colors.neutral[200],
+    width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a HeaderDivider
     marginVertical: PerfectSpacing.sm,
-    marginHorizontal: PerfectSpacing.lg,
     borderRadius: BorderRadius.sm,
+    alignSelf: 'center',
   },
   // Container divisorio - allineato a pagina Azioni (sectionDivider)
   titleSeparatorContainer: {
     paddingHorizontal: 0,
     paddingTop: 0,
     paddingBottom: PerfectSpacing.xl,
-    alignItems: 'stretch',
+    alignItems: 'center',
   },
 
   // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI

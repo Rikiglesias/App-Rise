@@ -4,12 +4,14 @@ import { StyleSheet } from 'react-native';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { scale } from '@/shared/constants/perfectScale';
+import { scale, LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
 // Header sizes - OTTIMIZZATI PER SCALING UNIFORME
 const TITLE_SIZE = 32;
 const SUBTITLE_SIZE = 16; // Ridotto da 18 per evitare limite minimo su small devices
+const REF_WIDTH = LOGICAL_REFERENCE.width;
+const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
 
 export const ImpactHeader: React.FC = () => {
   const { t } = useTranslation();
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     alignItems: 'center',
+    minHeight: HEADER_INNER_HEIGHT,
     backgroundColor: Colors.neutral[0],
     paddingHorizontal: PerfectSpacing.base,
     paddingTop: PerfectSpacing.sm,
