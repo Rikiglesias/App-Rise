@@ -17,7 +17,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     container: {
       paddingHorizontal: PerfectSpacing.base,
       gap: PerfectSpacing.sm,
-      paddingTop: PerfectSpacing.lg,
+      paddingTop: PerfectSpacing.base,
       paddingBottom: PerfectSpacing.base,
     },
     categoryContainer: {
