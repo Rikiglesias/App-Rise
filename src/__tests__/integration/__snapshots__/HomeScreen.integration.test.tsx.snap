@@ -560,7 +560,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         {
                           "backgroundColor": "#F5F5F5",
                           "borderRadius": 999,
-                          "height": 1,
+                          "height": 2.446591555099519,
                           "marginBottom": 12,
                           "width": "70%",
                         }
@@ -736,7 +736,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         {
                           "backgroundColor": "#F5F5F5",
                           "borderRadius": 999,
-                          "height": 1,
+                          "height": 2.446591555099519,
                           "marginBottom": 12,
                           "width": "70%",
                         }

@@ -306,7 +306,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 {
                   "backgroundColor": "#F5F5F5",
                   "borderRadius": 999,
-                  "height": 1,
+                  "height": 2.446591555099519,
                   "marginBottom": 12,
                   "width": "70%",
                 }
@@ -498,7 +498,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 {
                   "backgroundColor": "#F5F5F5",
                   "borderRadius": 999,
-                  "height": 1,
+                  "height": 2.446591555099519,
                   "marginBottom": 12,
                   "width": "70%",
                 }
