@@ -87,10 +87,10 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     alignSelf: 'center',
   },
-  // Container divisorio - allineato a pagina Azioni (sectionDivider)
+  // Container divisorio - allineato a pagina Azioni (HeaderDivider)
   titleSeparatorContainer: {
     paddingHorizontal: 0,
-    paddingTop: 0,
+    paddingTop: PerfectSpacing.base,
     paddingBottom: PerfectSpacing.xl,
     alignItems: 'center',
   },

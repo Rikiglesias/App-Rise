@@ -156,18 +156,20 @@ export const createActionButtonStyles = (): ButtonStyles => {
     sectionDivider: {
       height: scale(2),
       backgroundColor: Colors.neutral[200],
+      width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a linee Impatto
       marginTop: PerfectSpacing.xl,
       marginBottom: PerfectSpacing.base,
-      marginHorizontal: PerfectSpacing.lg,
+      alignSelf: 'center',
     },
 
     // PRIMA SEPARAZIONE - STESSA ALTEZZA DELLE ALTRE
     firstSectionDivider: {
       height: scale(2),
       backgroundColor: Colors.neutral[200],
+      width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a linee Impatto
       marginTop: PerfectSpacing.xl,
       marginBottom: PerfectSpacing.base,
-      marginHorizontal: PerfectSpacing.lg,
+      alignSelf: 'center',
     },
 
     // STILI PER INLINE STYLES
