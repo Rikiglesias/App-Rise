@@ -12,7 +12,9 @@ const ActionTitleComponent: React.FC = () => {
     <PerfectContainer
       preset="section"
       alignItems="center"
-      marginBottom={PerfectSpacing.xs}
+      marginVertical={PerfectSpacing.none}
+      marginTop={PerfectSpacing.xs}
+      marginBottom={PerfectSpacing.base}
     >
       <PerfectText
         size={35}

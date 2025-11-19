@@ -1,11 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import {
-  PerfectText,
-  PerfectContainer,
-  PerfectCardContainer,
-} from '@/components/ui';
+import { PerfectText, PerfectContainer } from '@/components/ui';
 import {
   Colors,
   BorderRadius,
@@ -20,46 +16,31 @@ const ActionDescriptionComponent: React.FC = () => {
 
   return (
     <PerfectContainer
-      preset="section"
-      marginVertical={PerfectSpacing.base}
-      marginHorizontal={PerfectSpacing.xs}
+      style={styles.wrapper}
+      accessibilityRole="summary"
+      testID="action-description-card"
     >
-      <PerfectCardContainer
-        backgroundColor="card"
-        padding={PerfectSpacing.lg}
-        borderRadius={BorderRadius.xl}
-        style={styles.cardContainer}
-        accessibilityRole="summary"
-        testID="action-description-card"
+      <PerfectText
+        size={20}
+        lines={3}
+        color={Colors.neutral[900]}
+        style={styles.mainText}
+        accessibilityRole="text"
+        testID="action-description-main"
       >
-        <PerfectText
-          size={18}
-          lines={2}
-          containerWidth={0}
-          color={Colors.neutral[800]}
-          textAlign="center"
-          style={styles.mainText}
-          accessibilityRole="text"
-          testID="action-description-main"
-        >
-          {t('home.actionMainText')}
-        </PerfectText>
+        {t('home.actionMainText')}
+      </PerfectText>
 
-        <PerfectContainer style={styles.divider} />
-
-        <PerfectText
-          size={16}
-          lines={2}
-          containerWidth={0}
-          color={Colors.neutral[500]}
-          textAlign="center"
-          style={styles.subtitleText}
-          accessibilityRole="text"
-          testID="action-description-sub"
-        >
-          {t('home.actionSubText')}
-        </PerfectText>
-      </PerfectCardContainer>
+      <PerfectText
+        size={16}
+        lines={3}
+        color={Colors.neutral[600]}
+        style={styles.subText}
+        accessibilityRole="text"
+        testID="action-description-sub"
+      >
+        {t('home.actionSubText')}
+      </PerfectText>
     </PerfectContainer>
   );
 };
@@ -67,24 +48,25 @@ const ActionDescriptionComponent: React.FC = () => {
 export const ActionDescription = React.memo(ActionDescriptionComponent);
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    alignSelf: 'center',
-    width: scale(354), // Perfect System: 90% di 393px (iPhone 15), scala su tutti device
+  wrapper: {
+    marginHorizontal: PerfectSpacing.sm,
+    marginTop: PerfectSpacing.base,
+    marginBottom: PerfectSpacing.sm,
+    paddingVertical: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.base,
+    backgroundColor: Colors.neutral[0],
+    borderRadius: BorderRadius.xl,
+    borderWidth: scale(1),
+    borderColor: Colors.neutral[200],
+    borderLeftWidth: scale(4),
+    borderLeftColor: Colors.neutral[900],
   },
   mainText: {
     fontWeight: Typography.weights.bold,
+    marginBottom: PerfectSpacing.xs,
   },
-  divider: {
-    alignSelf: 'center',
-    width: scale(157), // Perfect System: 40% di 393px (iPhone 15), scala su tutti device
-    height: scale(2),
-    marginVertical: PerfectSpacing.base,
-    borderRadius: scale(1),
-    backgroundColor: Colors.neutral[300],
-    opacity: 0.8,
-  },
-  subtitleText: {
-    fontWeight: Typography.weights.semibold,
-    fontStyle: 'italic',
+  subText: {
+    fontWeight: Typography.weights.regular,
+    lineHeight: scale(18),
   },
 });
