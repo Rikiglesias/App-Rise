@@ -150,7 +150,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                   fontWeight="900"
                   color={Colors.neutral[900]}
                 >
-                  Italia ❤️
+                  Italia
                 </PerfectText>
               </PerfectText>
 

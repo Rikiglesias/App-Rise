@@ -272,7 +272,7 @@ jobs:
     name: 🍎 iOS Build
     runs-on: ubuntu-latest
     needs: [detect-changes, quality-checks]
-    if: needs.detect-changes.outputs.should-build == 'true' && needs.detect-changes.outputs.build-ios == 'true'
+    if: false  # ❌ Build automatiche disabilitate - usare workflow manuale o tag [build]
     env:
       APPLE_ID: ${{ secrets.APPLE_ID }}
       ASC_APP_ID: ${{ secrets.ASC_APP_ID }}
@@ -324,7 +324,7 @@ jobs:
     name: 🤖 Android Build
     runs-on: ubuntu-latest
     needs: [detect-changes, quality-checks]
-    if: needs.detect-changes.outputs.should-build == 'true' && needs.detect-changes.outputs.build-android == 'true'
+    if: false  # ❌ Build automatiche disabilitate - usare workflow manuale o tag [build]
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
