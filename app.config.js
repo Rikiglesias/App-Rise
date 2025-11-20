@@ -28,7 +28,7 @@ export default {
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
-    version: '1.2.8',
+    version: '1.2.9',
     orientation: 'portrait',
     icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',
