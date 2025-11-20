@@ -272,7 +272,7 @@ jobs:
     name: 🍎 iOS Build
     runs-on: ubuntu-latest
     needs: [detect-changes, quality-checks]
-    if: false  # ❌ Build automatiche disabilitate - usare workflow manuale o tag [build]
+    if: contains(github.event.head_commit.message, '[build]')  # 🔨 Build solo con tag [build] nel commit
     env:
       APPLE_ID: ${{ secrets.APPLE_ID }}
       ASC_APP_ID: ${{ secrets.ASC_APP_ID }}
@@ -324,7 +324,7 @@ jobs:
     name: 🤖 Android Build
     runs-on: ubuntu-latest
     needs: [detect-changes, quality-checks]
-    if: false  # ❌ Build automatiche disabilitate - usare workflow manuale o tag [build]
+    if: contains(github.event.head_commit.message, '[build]')  # 🔨 Build solo con tag [build] nel commit
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -521,8 +521,8 @@ jobs:
         detect-changes,
         quality-checks,
         visual-regression,
-        # build-ios,       # ❌ Rimosso - build bloccate
-        # build-android,   # ❌ Rimosso - build bloccate
+        build-ios,       # ✅ Riabilitato con tag [build]
+        build-android,   # ✅ Riabilitato con tag [build]
         ota-update,
         bundle-analysis,
       ]
@@ -551,10 +551,23 @@ jobs:
             echo "❌ Visual regression tests failed" >> $GITHUB_STEP_SUMMARY
           fi
 
-          # Builds - ❌ Disabilitate
+          # Builds
           echo "### 📱 Builds" >> $GITHUB_STEP_SUMMARY
-          echo "🍎 iOS: ❌ Disabilitate (solo OTA attivi)" >> $GITHUB_STEP_SUMMARY
-          echo "🤖 Android: ❌ Disabilitate (solo OTA attivi)" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.build-ios.result }}" == "success" ]]; then
+            echo "🍎 iOS: ✅ Build completata" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.build-ios.result }}" == "skipped" ]]; then
+            echo "🍎 iOS: ⏭️ Skipped (usa tag [build] per triggerare)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🍎 iOS: ❌ Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [[ "${{ needs.build-android.result }}" == "success" ]]; then
+            echo "🤖 Android: ✅ Build completata" >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ needs.build-android.result }}" == "skipped" ]]; then
+            echo "🤖 Android: ⏭️ Skipped (usa tag [build] per triggerare)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "🤖 Android: ❌ Failed" >> $GITHUB_STEP_SUMMARY
+          fi
 
           # OTA Updates
           echo "### 🔄 OTA Updates" >> $GITHUB_STEP_SUMMARY
@@ -594,10 +607,13 @@ jobs:
             ${{ needs.visual-regression.result == 'success' && '✅ Visual regression tests passed' || needs.visual-regression.result == 'skipped' && '⏭️ Visual regression tests skipped' || '❌ Visual regression tests failed' }}
 
             ### 📱 Builds
-            🍎 iOS: ❌ Disabilitate (solo OTA attivi)
-            🤖 Android: ❌ Disabilitate (solo OTA attivi)
+            🍎 iOS: ${{ needs.build-ios.result == 'success' && '✅ Build completata' || needs.build-ios.result == 'skipped' && '⏭️ Skipped (usa tag [build])' || '❌ Failed' }}
+            🤖 Android: ${{ needs.build-android.result == 'success' && '✅ Build completata' || needs.build-android.result == 'skipped' && '⏭️ Skipped (usa tag [build])' || '❌ Failed' }}
 
-            🔗 [Monitor OTA Updates](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia/updates)`;
+            ### 🔄 OTA Updates
+            ${{ needs.ota-update.result == 'success' && '✅ OTA Update deployed' || needs.ota-update.result == 'skipped' && '⏭️ Skipped (usa tag [ota])' || '❌ Failed' }}
+
+            🔗 [Monitor EAS](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia)`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -638,7 +654,7 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     needs: [build-ios, build-android]
-    if: false  # ❌ Disabilitato - build bloccate, solo OTA attivi
+    if: contains(github.event.head_commit.message, '[build]') && always()  # 🔨 Build summary con tag [build]
     steps:
       - name: 📊 Evaluate build results
         run: |
