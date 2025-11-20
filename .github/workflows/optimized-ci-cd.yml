@@ -392,26 +392,40 @@ jobs:
   ota-update:
     name: 🔄 OTA Update
     runs-on: ubuntu-latest
-    # Rimossa dipendenza da detect-changes - OTA deve triggerare SOLO in base al tag [ota]
-    if: |
-      contains(github.event.head_commit.message, '[ota]') || 
-      contains(github.event.head_commit.message, '[hotfix]') ||
-      contains(github.event.head_commit.message, 'hotfix:') ||
-      github.event.inputs.force_ota == 'true'
+    # Triggerare SEMPRE su push - filtering manuale nel job
+    if: github.event_name == 'push'
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Check if OTA tag present
+        id: check-ota
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MSG"
+          if [[ "$COMMIT_MSG" == *"[ota]"* ]] || [[ "$COMMIT_MSG" == *"[hotfix]"* ]] || [[ "$COMMIT_MSG" == hotfix:* ]]; then
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+            echo "✅ OTA tag detected - will deploy"
+          else
+            echo "should-deploy=false" >> $GITHUB_OUTPUT
+            echo "⏭️ No OTA tag - skipping deployment"
+          fi
 
       - name: 📱 Setup Node.js
+        if: steps.check-ota.outputs.should-deploy == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: 📦 Install Dependencies
+        if: steps.check-ota.outputs.should-deploy == 'true'
         run: npm ci --prefer-offline --no-audit
 
       - name: 🔧 Setup EAS
+        if: steps.check-ota.outputs.should-deploy == 'true'
         uses: expo/expo-github-action@v8
         with:
           expo-version: ${{ env.EXPO_CLI_VERSION }}
@@ -419,13 +433,15 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 🔄 Deploy OTA Update
+        if: steps.check-ota.outputs.should-deploy == 'true'
         run: |
           echo "🔄 Deploying OTA Update..."
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_MSG=$(git log -1 --pretty=%B)
           eas update --branch production --message "$COMMIT_MSG" --non-interactive
           echo "✅ OTA Update deployed successfully"
 
       - name: 💬 Comment on commit
+        if: steps.check-ota.outputs.should-deploy == 'true'
         uses: actions/github-script@v7
         with:
           script: |
