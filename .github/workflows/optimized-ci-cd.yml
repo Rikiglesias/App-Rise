@@ -392,7 +392,7 @@ jobs:
   ota-update:
     name: 🔄 OTA Update
     runs-on: ubuntu-latest
-    needs: detect-changes
+    # Rimossa dipendenza da detect-changes - OTA deve triggerare SOLO in base al tag [ota]
     if: |
       contains(github.event.head_commit.message, '[ota]') || 
       contains(github.event.head_commit.message, '[hotfix]') ||
