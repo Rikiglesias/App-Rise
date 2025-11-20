@@ -57,7 +57,7 @@ const App: React.FC = () => {
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isReloadingRef = useRef(false);
 
-  const MIN_ANIMATION_TIME = 2000; // Minimo tempo per arrivare al 90%
+  const MIN_ANIMATION_TIME = 3000; // ✨ Aumentato a 3s per garantire animazione visibile
   const UPDATE_COMPLETION_DELAY = 1500; // Tempo per mostrare "Completato" prima del reload
 
   // Inizializzazione app
@@ -74,10 +74,12 @@ const App: React.FC = () => {
       setVisualProgress(0);
       downloadStartTimeRef.current = Date.now();
       
-      // Avvia animazione fluida
+      logger.info('App', '📥 OTA Download started - animating progress from 0%');
+      
+      // Avvia animazione fluida GARANTITA da 0 a 90%
       progressIntervalRef.current = setInterval(() => {
         setVisualProgress(prev => {
-          // Altrimenti calcola progresso basato su tempo o download reale
+          // Calcola progresso basato su tempo per GARANTIRE animazione visibile
           const elapsed = Date.now() - (downloadStartTimeRef.current || Date.now());
           const timeProgress = Math.min((elapsed / MIN_ANIMATION_TIME) * 90, 90);
           
@@ -85,12 +87,12 @@ const App: React.FC = () => {
           const realProgress = (downloadProgress || 0) * 100;
           let target = Math.max(timeProgress, realProgress);
           
-          // Cap al 95% finché non è pending
-          target = Math.min(target, 95);
+          // Cap al 90% finché non è pending (NON 95%, così c'è spazio per salto finale)
+          target = Math.min(target, 90);
 
-          // Movimento fluido verso il target
+          // Movimento fluido verso il target - step piccolo per animazione smooth
           const diff = target - prev;
-          const step = Math.max(diff * 0.1, 0.5);
+          const step = Math.max(diff * 0.15, 0.3); // ✨ Step più graduale
           
           return Math.min(prev + step, target);
         });
@@ -106,18 +108,36 @@ const App: React.FC = () => {
     };
   }, [isDownloading, downloadProgress, showOtaScreen]);
 
-  // Gestione Completamento - Forza 100% quando update è pronto
+  // Gestione Completamento - Anima SMOOTH fino a 100% quando update è pronto
   useEffect(() => {
     if (isUpdatePending && showOtaScreen && !isReloadingRef.current) {
-      // FERMA l'intervallo PRIMA di forzare a 100%
+      // FERMA l'intervallo vecchio
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
         progressIntervalRef.current = null;
       }
       
-      // ORA forza il progresso al 100%
-      logger.info('App', '⚡ Update ready - forcing progress to 100%');
-      setVisualProgress(100);
+      logger.info('App', '⚡ Update ready - animating smoothly to 100%');
+      
+      // ✨ NUOVA animazione smooth da current progress a 100%
+      progressIntervalRef.current = setInterval(() => {
+        setVisualProgress(prev => {
+          if (prev >= 100) {
+            // Raggiunti 100% - ferma animazione
+            if (progressIntervalRef.current) {
+              clearInterval(progressIntervalRef.current);
+              progressIntervalRef.current = null;
+            }
+            return 100;
+          }
+          
+          // Animazione rapida ma smooth verso 100%
+          const remaining = 100 - prev;
+          const step = Math.max(remaining * 0.2, 1); // 20% della distanza rimanente, min 1%
+          
+          return Math.min(prev + step, 100);
+        });
+      }, 40); // 40ms = 25fps, smooth ma veloce
     }
   }, [isUpdatePending, showOtaScreen]);
 
