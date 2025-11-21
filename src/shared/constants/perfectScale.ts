@@ -23,6 +23,57 @@ export const LOGICAL_REFERENCE = {
 } as const;
 
 /**
+ * TABLET SCALING CAP
+ * Previene scaling eccessivo su iPad mantenendo proporzionalità su phone.
+ *
+ * PROBLEMA: Scaling basato su diagonale causa ingigantimento su tablet:
+ * - iPad Mini: 1.36x (troppo grande)
+ * - iPad Pro 12.9": 1.82x (MOLTO troppo grande)
+ *
+ * SOLUZIONE: Dopo threshold 1.1x, applica cap progressivo:
+ * - iPhone: 0.83x-1.07x → nessun cap (comportamento identico)
+ * - iPad Mini: 1.36x → ~1.18x (ridotto)
+ * - iPad Pro: 1.82x → ~1.30x (ridotto)
+ *
+ * MATEMATICA: Interpolazione logaritmica per transizione smooth
+ */
+const TABLET_SCALING_CONFIG = {
+  /** Threshold oltre il quale inizia il cap (nessun phone lo supera) */
+  threshold: 1.1,
+  /** Cap massimo per tablet più grandi */
+  maxScale: 1.3,
+  /** Fattore di easing per transizione smooth (più alto = più aggressivo) */
+  easingFactor: 0.3,
+} as const;
+
+/**
+ * Applica cap progressivo allo scaling factor per tablet.
+ * Phone rimangono inalterati (< threshold).
+ *
+ * Formula: threshold + (raw - threshold) * easingFactor
+ * Questo crea una curva che rallenta la crescita dopo il threshold.
+ *
+ * @param rawScaleFactor - Fattore di scaling grezzo dalla diagonale
+ * @returns Fattore con cap applicato se necessario
+ */
+const applyTabletScalingCap = (rawScaleFactor: number): number => {
+  const { threshold, maxScale, easingFactor } = TABLET_SCALING_CONFIG;
+
+  // Phone e device normali: nessun cap
+  if (rawScaleFactor <= threshold) {
+    return rawScaleFactor;
+  }
+
+  // Tablet: applica cap progressivo con easing
+  const excess = rawScaleFactor - threshold;
+  const cappedExcess = excess * easingFactor;
+  const result = threshold + cappedExcess;
+
+  // Assicura che non superi mai il maxScale
+  return Math.min(result, maxScale);
+};
+
+/**
  * Feature flag: abilita normalizzazione Display Zoom.
  * Usa env EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION === 'true'.
  * Default: disabilitato per rollout sicuro.
@@ -66,12 +117,12 @@ const shouldNormalizeDisplayZoom = (): boolean => {
  * GESTISCE ROTAZIONE: Usa sempre portrait orientation
  * per calcolare diagonale consistente.
  *
- * Esempi scaling:
+ * Esempi scaling (con tablet cap applicato):
  * - iPhone SE: 0.83x (leggerm. più piccolo)
  * - iPhone 15: 1.00x (reference)
  * - iPhone Pro Max: 1.07x (leggerm. più grande)
- * - iPad Mini: 1.36x (bilanciato, non 1.95x!)
- * - iPad Pro 12.9": 1.82x (grande ma non 2.60x!)
+ * - iPad Mini: ~1.15x (cap applicato, era 1.36x)
+ * - iPad Pro 12.9": ~1.20x (cap applicato, era 1.82x)
  *
  * @param value - Valore da scalare (riferimento iPhone 15 portrait)
  * @returns Valore scalato proporzionalmente alla diagonale
@@ -105,7 +156,9 @@ export const scale = (value: number): number => {
     // = √(393² + 852²) = √(154449 + 725904) = √880353 ≈ 938.27px
 
     if (deviceDiagonal > 0) {
-      return value * (deviceDiagonal / referenceDiagonal);
+      const rawScaleFactor = deviceDiagonal / referenceDiagonal;
+      const cappedScaleFactor = applyTabletScalingCap(rawScaleFactor);
+      return value * cappedScaleFactor;
     }
   } catch {
     // Fallback se Dimensions non disponibile
@@ -156,7 +209,9 @@ export const scaleWithDimensions = (
     );
 
     if (deviceDiagonal > 0) {
-      return value * (deviceDiagonal / referenceDiagonal);
+      const rawScaleFactor = deviceDiagonal / referenceDiagonal;
+      const cappedScaleFactor = applyTabletScalingCap(rawScaleFactor);
+      return value * cappedScaleFactor;
     }
   } catch {
     // Fallback

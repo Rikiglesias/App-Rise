@@ -74,10 +74,8 @@ const ActionCTAButtonsComponent: React.FC = () => {
 
   return (
     <PerfectContainer
-      preset="section"
       flexDirection="row"
       gap={PerfectSpacing.base}
-      paddingHorizontal={PerfectSpacing.xs}
       marginVertical={PerfectSpacing.base}
       testID="home-cta-section"
     >

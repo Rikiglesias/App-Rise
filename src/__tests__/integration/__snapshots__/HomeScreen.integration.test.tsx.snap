@@ -21,7 +21,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
     collapsable={false}
     contentContainerStyle={
       {
-        "paddingBottom": 166.48488293864102,
+        "paddingBottom": 130.96910434607,
       }
     }
     onScroll={[MockFunction]}
@@ -33,9 +33,16 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
         paddingHorizontal={0}
         paddingVertical={0}
         preset="page"
+        style={
+          {
+            "alignSelf": "center",
+            "maxWidth": "85%",
+            "width": "100%",
+          }
+        }
       >
         <View
-          paddingVertical={12}
+          paddingVertical={10.074546488159232}
         >
           <View
             collapsable={false}
@@ -59,9 +66,9 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 {
                   "alignItems": "center",
                   "justifyContent": "center",
-                  "minHeight": 195.72732440796153,
-                  "paddingHorizontal": 24,
-                  "paddingVertical": 6,
+                  "minHeight": 151.11819732238848,
+                  "paddingHorizontal": 20.149092976318464,
+                  "paddingVertical": 5.037273244079616,
                   "position": "relative",
                   "zIndex": 1,
                 }
@@ -72,7 +79,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                   {
                     "alignItems": "center",
                     "paddingBottom": 0,
-                    "paddingHorizontal": 16.310610367330128,
+                    "paddingHorizontal": 12.593183110199039,
                     "paddingTop": 0,
                     "width": "100%",
                   }
@@ -99,7 +106,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     }
                   >
                     <View
-                      gap={6.524244146932051}
+                      gap={5.037273244079616}
                       style={
                         {
                           "alignItems": "center",
@@ -150,11 +157,11 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                           {
                             "alignItems": "center",
                             "flexDirection": "row",
-                            "gap": 18,
+                            "gap": 15.111819732238848,
                             "justifyContent": "center",
-                            "marginBottom": 16.310610367330128,
-                            "marginTop": 32.621220734660255,
-                            "maxWidth": 521.9395317545641,
+                            "marginBottom": 12.593183110199039,
+                            "marginTop": 25.186366220398078,
+                            "maxWidth": 402.98185952636925,
                             "width": "100%",
                           }
                         }
@@ -163,12 +170,12 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                           style={
                             {
                               "backgroundColor": "#FECACA",
-                              "borderRadius": 1.6310610367330127,
+                              "borderRadius": 1.259318311019904,
                               "elevation": 1,
                               "flex": 1,
-                              "height": 3.2621220734660255,
-                              "maxWidth": 169.6303478202333,
-                              "minWidth": 78.29092976318461,
+                              "height": 2.518636622039808,
+                              "maxWidth": 130.96910434607003,
+                              "minWidth": 60.44727892895539,
                               "shadowColor": "#000",
                               "shadowOffset": {
                                 "height": 1,
@@ -183,9 +190,9 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                           style={
                             {
                               "borderRadius": 0,
-                              "height": 86.44623494684967,
+                              "height": 66.74387048405491,
                               "overflow": "hidden",
-                              "width": 86.44623494684967,
+                              "width": 66.74387048405491,
                             }
                           }
                         >
@@ -210,12 +217,12 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                           style={
                             {
                               "backgroundColor": "#FECACA",
-                              "borderRadius": 1.6310610367330127,
+                              "borderRadius": 1.259318311019904,
                               "elevation": 1,
                               "flex": 1,
-                              "height": 3.2621220734660255,
-                              "maxWidth": 169.6303478202333,
-                              "minWidth": 78.29092976318461,
+                              "height": 2.518636622039808,
+                              "maxWidth": 130.96910434607003,
+                              "minWidth": 60.44727892895539,
                               "shadowColor": "#000",
                               "shadowOffset": {
                                 "height": 1,
@@ -236,11 +243,11 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               style={
                 {
                   "alignItems": "center",
-                  "height": 887.2972039827589,
+                  "height": 685.0691611948278,
                   "justifyContent": "flex-start",
-                  "marginBottom": 12,
-                  "marginTop": -48,
-                  "paddingHorizontal": 24,
+                  "marginBottom": 10.074546488159232,
+                  "marginTop": -40.29818595263693,
+                  "paddingHorizontal": 20.149092976318464,
                   "width": "100%",
                 }
               }
@@ -275,18 +282,18 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 <View
                   style={
                     {
-                      "borderRadius": 63.84864253316569,
+                      "borderRadius": 38.06118260328057,
                       "elevation": undefined,
-                      "height": 888.1148977120495,
+                      "height": 685.7004905337741,
                       "overflow": "hidden",
                       "shadowColor": "#000",
                       "shadowOffset": {
-                        "height": 3.2621220734660255,
+                        "height": 2.518636622039808,
                         "width": 0,
                       },
                       "shadowOpacity": 0.08,
-                      "shadowRadius": 6.524244146932051,
-                      "width": 641.006987436074,
+                      "shadowRadius": 5.037273244079616,
+                      "width": 494.91209623082227,
                     }
                   }
                 >
@@ -324,15 +331,13 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
           </View>
         </View>
         <View
-          marginHorizontal={12}
-          padding={24}
+          marginHorizontal={10.074546488159232}
+          padding={20.149092976318464}
         >
           <View
             alignItems="center"
-            marginBottom={24}
-            marginTop={6}
-            marginVertical={0}
-            preset="section"
+            marginBottom={20.149092976318464}
+            marginTop={5.037273244079616}
           >
             <Text
               accessibilityRole="header"
@@ -363,14 +368,14 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 "backgroundColor": "#FFFFFF",
                 "borderColor": "#E5E5E5",
                 "borderLeftColor": "#171717",
-                "borderLeftWidth": 6.524244146932051,
+                "borderLeftWidth": 5.037273244079616,
                 "borderRadius": 24,
-                "borderWidth": 1.6310610367330127,
-                "marginBottom": 12,
-                "marginHorizontal": 12,
-                "marginTop": 24,
-                "paddingHorizontal": 24,
-                "paddingVertical": 24,
+                "borderWidth": 1.259318311019904,
+                "marginBottom": 10.074546488159232,
+                "marginTop": 20.149092976318464,
+                "paddingHorizontal": 20.149092976318464,
+                "paddingVertical": 20.149092976318464,
+                "width": "100%",
               }
             }
             testID="action-description-card"
@@ -383,7 +388,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               style={
                 {
                   "fontWeight": "700",
-                  "marginBottom": 6,
+                  "marginBottom": 5.037273244079616,
                   "textAlign": "center",
                 }
               }
@@ -397,8 +402,8 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                   "alignSelf": "center",
                   "backgroundColor": "#F5F5F5",
                   "borderRadius": 9999,
-                  "height": 3.2621220734660255,
-                  "marginVertical": 6,
+                  "height": 2.518636622039808,
+                  "marginVertical": 5.037273244079616,
                   "width": "65%",
                 }
               }
@@ -411,7 +416,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               style={
                 {
                   "fontWeight": "400",
-                  "lineHeight": 29.359098661194228,
+                  "lineHeight": 22.66772959835827,
                   "textAlign": "center",
                 }
               }
@@ -422,10 +427,8 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
           </View>
           <View
             flexDirection="row"
-            gap={24}
-            marginVertical={24}
-            paddingHorizontal={6}
-            preset="section"
+            gap={20.149092976318464}
+            marginVertical={20.149092976318464}
             testID="home-cta-section"
           >
             <View
@@ -497,7 +500,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 style={
                   {
                     "borderRadius": 24,
-                    "padding": 4.893183110199038,
+                    "padding": 3.777954933059712,
                   }
                 }
               >
@@ -507,15 +510,15 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                       {
                         "alignItems": "center",
                         "backgroundColor": "#FFFFFF",
-                        "borderRadius": 19.10681688980096,
+                        "borderRadius": 20.22204506694029,
                         "flex": 1,
                         "justifyContent": "space-between",
-                        "minHeight": 171.26140885696634,
-                        "paddingHorizontal": 12,
-                        "paddingVertical": 12,
+                        "minHeight": 132.2284226570899,
+                        "paddingHorizontal": 10.074546488159232,
+                        "paddingVertical": 10.074546488159232,
                       },
                       {
-                        "paddingHorizontal": 18,
+                        "paddingHorizontal": 15.111819732238848,
                       },
                     ]
                   }
@@ -533,7 +536,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     style={
                       {
                         "fontWeight": "700",
-                        "marginVertical": 6,
+                        "marginVertical": 5.037273244079616,
                       }
                     }
                     testID="cta-impact-label"
@@ -546,11 +549,11 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                       [
                         {
                           "alignItems": "center",
-                          "marginTop": 12,
+                          "marginTop": 10.074546488159232,
                           "width": "100%",
                         },
                         {
-                          "paddingHorizontal": 6,
+                          "paddingHorizontal": 5.037273244079616,
                         },
                       ]
                     }
@@ -560,8 +563,8 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         {
                           "backgroundColor": "#F5F5F5",
                           "borderRadius": 999,
-                          "height": 2.446591555099519,
-                          "marginBottom": 12,
+                          "height": 1.888977466529856,
+                          "marginBottom": 10.074546488159232,
                           "width": "70%",
                         }
                       }
@@ -571,7 +574,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         {
                           "alignItems": "center",
                           "flexDirection": "row",
-                          "gap": 6,
+                          "gap": 5.037273244079616,
                           "justifyContent": "center",
                         }
                       }
@@ -673,7 +676,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 style={
                   {
                     "borderRadius": 24,
-                    "padding": 4.893183110199038,
+                    "padding": 3.777954933059712,
                   }
                 }
               >
@@ -683,15 +686,15 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                       {
                         "alignItems": "center",
                         "backgroundColor": "#FFFFFF",
-                        "borderRadius": 19.10681688980096,
+                        "borderRadius": 20.22204506694029,
                         "flex": 1,
                         "justifyContent": "space-between",
-                        "minHeight": 171.26140885696634,
-                        "paddingHorizontal": 12,
-                        "paddingVertical": 12,
+                        "minHeight": 132.2284226570899,
+                        "paddingHorizontal": 10.074546488159232,
+                        "paddingVertical": 10.074546488159232,
                       },
                       {
-                        "paddingHorizontal": 18,
+                        "paddingHorizontal": 15.111819732238848,
                       },
                     ]
                   }
@@ -709,7 +712,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     style={
                       {
                         "fontWeight": "700",
-                        "marginVertical": 6,
+                        "marginVertical": 5.037273244079616,
                       }
                     }
                     testID="cta-donate-label"
@@ -722,11 +725,11 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                       [
                         {
                           "alignItems": "center",
-                          "marginTop": 12,
+                          "marginTop": 10.074546488159232,
                           "width": "100%",
                         },
                         {
-                          "paddingHorizontal": 6,
+                          "paddingHorizontal": 5.037273244079616,
                         },
                       ]
                     }
@@ -736,8 +739,8 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         {
                           "backgroundColor": "#F5F5F5",
                           "borderRadius": 999,
-                          "height": 2.446591555099519,
-                          "marginBottom": 12,
+                          "height": 1.888977466529856,
+                          "marginBottom": 10.074546488159232,
                           "width": "70%",
                         }
                       }
@@ -747,7 +750,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         {
                           "alignItems": "center",
                           "flexDirection": "row",
-                          "gap": 6,
+                          "gap": 5.037273244079616,
                           "justifyContent": "center",
                         }
                       }

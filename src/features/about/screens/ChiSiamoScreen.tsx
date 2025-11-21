@@ -16,6 +16,7 @@ import {
   PerfectIcon,
 } from '@/components';
 import { Colors, PerfectSpacing } from '@/shared/constants';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -24,6 +25,7 @@ import { logWarn } from '@/shared/utils/logger';
 
 const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   const { t } = useTranslation();
+  const { isTablet } = useDeviceType();
   const insets = useSafeAreaInsets();
   const { openLink } = useLinkHandler({
     loadingDelay: 0, // ⚡ RIDUCO RITARDO A ZERO per velocità
@@ -34,12 +36,17 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   const { triggerHaptic } = useHapticFeedback();
 
   // Calcola top dinamico: safe area + spacing token
-  const dynamicBackButtonStyle = useMemo(
+  const dynamicStyles = useMemo(
     () =>
       StyleSheet.create({
         backButton: {
           ...mainStyles.backButton,
           top: insets.top + PerfectSpacing.base,
+        },
+        tabletContainer: {
+          width: '100%',
+          maxWidth: '85%',
+          alignSelf: 'center',
         },
       }),
     [insets.top]
@@ -121,18 +128,20 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
       {/* FRECCIA STACCATA */}
       <PlatformTouchable
         onPress={handleBackPress}
-        style={dynamicBackButtonStyle.backButton}
+        style={dynamicStyles.backButton}
       >
         <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
-        <ChiSiamoSection onInfoPress={handleShowStoria} />
+        <PerfectContainer style={isTablet ? dynamicStyles.tabletContainer : {}}>
+          <ChiSiamoSection onInfoPress={handleShowStoria} />
 
-        {/* Spazio tra sezioni (rimosso separatore visivo per evitare la riga che attraversa l'header) */}
-        <PerfectContainer style={{ height: PerfectSpacing.lg }} />
+          {/* Spazio tra sezioni (rimosso separatore visivo per evitare la riga che attraversa l'header) */}
+          <PerfectContainer style={{ height: PerfectSpacing.lg }} />
 
-        <ContactSection contacts={contacts} />
+          <ContactSection contacts={contacts} />
+        </PerfectContainer>
       </PlatformScrollView>
 
       {/* Storia Modal */}

@@ -12,12 +12,14 @@ import { HomeHeaderSection } from '../components/HomeHeaderSection';
 import { PerfectContainer } from '@components/ui';
 import { useTheme } from '@shared/hooks/useTheme';
 import { useTranslation } from '@shared/hooks/useTranslation';
+import { useDeviceType } from '@shared/hooks/useDeviceType';
 import { PerfectSpacing } from '@shared/constants';
 import { scale } from '@shared/constants/perfectScale';
 
 const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const { isTablet } = useDeviceType();
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -34,6 +36,11 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
         },
         scrollContent: {
           paddingBottom: bottomPadding,
+        },
+        tabletContainer: {
+          width: '100%', // IMPORTANTE: serve per poter applicare maxWidth
+          maxWidth: '85%',
+          alignSelf: 'center',
         },
       }),
     [colors, bottomPadding]
@@ -59,6 +66,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
           preset="page"
           paddingVertical={0}
           paddingHorizontal={0}
+          style={isTablet ? styles.tabletContainer : {}}
         >
           {/* Header Section con titolo e logo - FULL WIDTH */}
           <PerfectContainer paddingVertical={PerfectSpacing.sm}>

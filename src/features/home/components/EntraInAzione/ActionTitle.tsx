@@ -10,9 +10,7 @@ const ActionTitleComponent: React.FC = () => {
 
   return (
     <PerfectContainer
-      preset="section"
       alignItems="center"
-      marginVertical={PerfectSpacing.none}
       marginTop={PerfectSpacing.xs}
       marginBottom={PerfectSpacing.base}
     >

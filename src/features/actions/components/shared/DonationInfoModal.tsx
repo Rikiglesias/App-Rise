@@ -1,13 +1,11 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Modal } from 'react-native';
 
 import {
   PerfectIcon,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
-  PerfectModal,
 } from '@/components/ui';
 import {
   Colors,
@@ -35,17 +33,22 @@ interface ModalContentProps {
 }
 
 const modalStyles = StyleSheet.create({
-  modalGradientBorder: {
-    borderRadius: BorderRadius.xl,
-    padding: scale(3),
-    ...Shadows.lg,
-    width: '100%',
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl - scale(3),
+    backgroundColor: Colors.neutral[0], // Bianco per sfondo
+    borderRadius: BorderRadius.xl,
+    borderWidth: scale(3),
+    borderColor: Colors.primary[500],
     overflow: 'hidden',
     padding: PerfectSpacing.lg,
+    ...Shadows.lg,
+    width: '99%',
+    maxHeight: '98%',
   },
   modalHeader: {
     flexDirection: 'row',
@@ -61,7 +64,7 @@ const modalStyles = StyleSheet.create({
     width: scaleTouch(36),
     height: scaleTouch(36),
     borderRadius: scale(18),
-    backgroundColor: Colors.primary[500],
+    backgroundColor: Colors.neutral[900],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: scale(2),
@@ -74,43 +77,37 @@ const modalStyles = StyleSheet.create({
   },
   centeredTitle: {
     fontWeight: Typography.weights.black,
-    color: Colors.primary[500],
+    color: Colors.neutral[900], // Nero su bianco
     textAlign: 'center',
     letterSpacing: scale(-0.8),
-    ...Shadows.sm,
   },
   titleUnderline: {
     width: scale(80),
     height: scale(3),
-    backgroundColor: Colors.primary[500],
+    backgroundColor: Colors.primary[500], // Rosso su bianco
     borderRadius: scale(2),
     marginTop: PerfectSpacing.sm,
     alignSelf: 'center',
-    ...Shadows.sm,
   },
   modalSectionTitle: {
     fontWeight: Typography.weights.black,
-    color: Colors.neutral[800],
+    color: Colors.neutral[900], // Nero su bianco
   },
   modalText: {
     fontWeight: Typography.weights.medium,
-    color: Colors.neutral[700],
+    color: Colors.neutral[900], // Nero su bianco
     marginBottom: PerfectSpacing.base,
   },
   highlightText: {
     fontWeight: Typography.weights.bold,
-    color: Colors.primary[500],
+    color: Colors.primary[500], // Rosso
     textAlign: 'center',
     marginTop: PerfectSpacing.md,
     paddingVertical: PerfectSpacing.md,
     paddingHorizontal: PerfectSpacing.base,
-    backgroundColor: Colors.primary[50],
+    backgroundColor: Colors.neutral[100], // Grigio chiaro
     borderRadius: BorderRadius.lg,
     letterSpacing: scale(-0.3),
-    ...Shadows.sm,
-  },
-  transparentContainer: {
-    backgroundColor: 'transparent',
   },
 });
 
@@ -145,28 +142,28 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
         <PerfectContainer style={modalStyles.titleUnderline} />
       </PerfectContainer>
 
-      <PerfectText size={16} lines={0} style={modalStyles.modalText}>
-        <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
+      <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+        <PerfectText size={15} lines={1} style={modalStyles.modalSectionTitle}>
           {t('actions.donationMonetary')}
         </PerfectText>{' '}
         {t('actions.donationMonetaryText')}
       </PerfectText>
 
-      <PerfectText size={16} lines={0} style={modalStyles.modalText}>
-        <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
+      <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+        <PerfectText size={15} lines={1} style={modalStyles.modalSectionTitle}>
           {t('actions.donationShopping')}
         </PerfectText>{' '}
         {t('actions.donationShoppingText')}
       </PerfectText>
 
-      <PerfectText size={16} lines={0} style={modalStyles.modalText}>
-        <PerfectText size={16} lines={1} style={modalStyles.modalSectionTitle}>
+      <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+        <PerfectText size={15} lines={1} style={modalStyles.modalSectionTitle}>
           {t('actions.donationGiftCard')}
         </PerfectText>{' '}
         {t('actions.donationGiftCardText')}
       </PerfectText>
 
-      <PerfectText size={15} lines={2} style={modalStyles.highlightText}>
+      <PerfectText size={14} lines={3} style={modalStyles.highlightText}>
         {t('actions.donationEvents')}
       </PerfectText>
     </PerfectContainer>
@@ -186,26 +183,23 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
   }, [onClose, triggerHaptic]);
 
   return (
-    <PerfectModal
+    <Modal
       visible={visible}
+      transparent={true}
+      animationType="fade"
       onRequestClose={handleClose}
-      size="small"
-      backgroundColor="transparent"
-      padding={0}
+      statusBarTranslucent
     >
-      <PerfectContainer style={modalStyles.transparentContainer}>
-        <LinearGradient
-          colors={[
-            Colors.primary[500],
-            Colors.primary[600],
-            Colors.primary[700],
-          ]}
-          style={modalStyles.modalGradientBorder}
-        >
+      <PlatformTouchable
+        style={modalStyles.modalOverlay}
+        onPress={handleClose}
+        activeOpacity={1}
+      >
+        <PlatformTouchable activeOpacity={1}>
           <ModalContent handleClose={handleClose} t={t} />
-        </LinearGradient>
-      </PerfectContainer>
-    </PerfectModal>
+        </PlatformTouchable>
+      </PlatformTouchable>
+    </Modal>
   );
 };
 

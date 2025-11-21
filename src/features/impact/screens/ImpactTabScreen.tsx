@@ -14,6 +14,7 @@ import {
   MapSection,
 } from '../components';
 import { PlatformScrollView, PerfectContainer } from '@components/ui';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@shared/constants/perfectScale';
@@ -30,6 +31,7 @@ const EXTRA_PADDING = 24;
  */
 const ImpactTabScreenComponent: React.FC = () => {
   const navigation = useNavigation<ImpactNavigationProp>();
+  const { isTablet } = useDeviceType();
   const insets = useSafeAreaInsets();
 
   const handleMealsPress = useCallback(() => {
@@ -107,31 +109,33 @@ const ImpactTabScreenComponent: React.FC = () => {
         }}
         accessibilityLabel="Scroll impatto e statistiche"
       >
-        <ImpactHeader />
+        <PerfectContainer style={isTablet ? styles.tabletContainer : {}}>
+          <ImpactHeader />
 
-        <TotalMealsSection
-          onMealsPress={handleMealsPress}
-          onKitsPress={handleKitsPress}
-        />
+          <TotalMealsSection
+            onMealsPress={handleMealsPress}
+            onKitsPress={handleKitsPress}
+          />
 
-        <Results2024Section />
+          <Results2024Section />
 
-        {/* Linea divisoria tra Dal 2012 e Community */}
-        <PerfectContainer style={styles.sectionDividerContainer}>
-          <PerfectContainer style={styles.sectionDivider} />
+          {/* Linea divisoria tra Dal 2012 e Community */}
+          <PerfectContainer style={styles.sectionDividerContainer}>
+            <PerfectContainer style={styles.sectionDivider} />
+          </PerfectContainer>
+
+          <CommunitySection
+            onVolunteersPress={handleVolunteersPress}
+            onPartnersPress={handlePartnersPress}
+          />
+
+          {/* Linea divisoria tra Community e Mappa */}
+          <PerfectContainer style={styles.sectionDividerContainer}>
+            <PerfectContainer style={styles.sectionDivider} />
+          </PerfectContainer>
+
+          <MapSection onMapPress={handleMapPress} />
         </PerfectContainer>
-
-        <CommunitySection
-          onVolunteersPress={handleVolunteersPress}
-          onPartnersPress={handlePartnersPress}
-        />
-
-        {/* Linea divisoria tra Community e Mappa */}
-        <PerfectContainer style={styles.sectionDividerContainer}>
-          <PerfectContainer style={styles.sectionDivider} />
-        </PerfectContainer>
-
-        <MapSection onMapPress={handleMapPress} />
       </PlatformScrollView>
     </SafeAreaView>
   );
@@ -147,6 +151,13 @@ const styles = StyleSheet.create({
 
   // Scroll Content - PADDING BOTTOM PER NAVIGATION (UNIFORMATO CON AZIONI)
   // scrollContent dinamico calcolato nel componente con safe-area
+
+  // Tablet Container - IDENTICO AD HOME E AZIONI
+  tabletContainer: {
+    width: '100%', // IMPORTANTE: serve per poter applicare maxWidth
+    maxWidth: '85%',
+    alignSelf: 'center',
+  },
 
   // Section Dividers - IDENTICHE ALLA PAGINA AZIONI
   sectionDividerContainer: {

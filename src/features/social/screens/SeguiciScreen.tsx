@@ -17,6 +17,7 @@ import {
   PerfectIcon,
 } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import type { RootStackParamList } from '@/navigation/types';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
@@ -31,16 +32,22 @@ interface Props {
 
 const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
+  const { isTablet } = useDeviceType();
   const { triggerHaptic } = useHapticFeedback();
   const { socialPlatforms } = useSocialPlatforms();
 
   // Calcola top dinamico: safe area + spacing token
-  const dynamicBackButtonStyle = useMemo(
+  const dynamicStyles = useMemo(
     () =>
       StyleSheet.create({
         backButton: {
           ...aboutMainStyles.backButton,
           top: insets.top + PerfectSpacing.base,
+        },
+        tabletContainer: {
+          width: '100%',
+          maxWidth: '85%',
+          alignSelf: 'center',
         },
       }),
     [insets.top]
@@ -56,24 +63,26 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
       {/* FRECCIA STACCATA - IDENTICA A CHI SIAMO */}
       <PlatformTouchable
         onPress={handleBackPress}
-        style={dynamicBackButtonStyle.backButton}
+        style={dynamicStyles.backButton}
       >
         <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
-        <HeaderSection />
+        <PerfectContainer style={isTablet ? dynamicStyles.tabletContainer : {}}>
+          <HeaderSection />
 
-        {/* SEPARATORE TRA SEZIONI - IDENTICO ALLA PAGINA CHI SIAMO */}
-        <PerfectContainer style={mainStyles.sectionDividerContainer}>
-          <PerfectContainer style={mainStyles.sectionDivider} />
-        </PerfectContainer>
+          {/* SEPARATORE TRA SEZIONI - IDENTICO ALLA PAGINA CHI SIAMO */}
+          <PerfectContainer style={mainStyles.sectionDividerContainer}>
+            <PerfectContainer style={mainStyles.sectionDivider} />
+          </PerfectContainer>
 
-        {/* Social Platforms Section */}
-        <PerfectContainer style={mainStyles.socialSection}>
-          {socialPlatforms.map((platform, _index) => (
-            <SocialCard key={platform.id} platform={platform} />
-          ))}
+          {/* Social Platforms Section */}
+          <PerfectContainer style={mainStyles.socialSection}>
+            {socialPlatforms.map((platform, _index) => (
+              <SocialCard key={platform.id} platform={platform} />
+            ))}
+          </PerfectContainer>
         </PerfectContainer>
       </PlatformScrollView>
     </SafeAreaView>

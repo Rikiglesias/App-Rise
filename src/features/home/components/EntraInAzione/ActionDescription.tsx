@@ -50,7 +50,7 @@ export const ActionDescription = React.memo(ActionDescriptionComponent);
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: PerfectSpacing.sm,
+    width: '100%',
     marginTop: PerfectSpacing.base,
     marginBottom: PerfectSpacing.sm,
     paddingVertical: PerfectSpacing.base,

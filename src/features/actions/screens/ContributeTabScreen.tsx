@@ -11,13 +11,15 @@ import {
   HeaderDivider,
   useNewActionsAnimations,
 } from '../components';
-import { PlatformScrollView } from '@/components/ui';
+import { PlatformScrollView, PerfectContainer } from '@/components/ui';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { Colors } from '@/shared/constants/designTokens';
 
 const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
   navigation,
 }) => {
   const animations = useNewActionsAnimations();
+  const { isTablet } = useDeviceType();
   const insets = useSafeAreaInsets();
 
   const styles = StyleSheet.create({
@@ -29,14 +31,21 @@ const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
       // Padding inferiore coerente con altezza bottom bar custom + safe-area
       paddingBottom: Math.max(insets.bottom, 16) + 95 + 24,
     },
+    tabletContainer: {
+      width: '100%', // IMPORTANTE: serve per poter applicare maxWidth
+      maxWidth: '85%',
+      alignSelf: 'center',
+    },
   });
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <PlatformScrollView contentContainerStyle={styles.scrollContent}>
-        <ContributeHeader animations={animations} />
-        <HeaderDivider animations={animations} />
-        <ActionButtons animations={animations} navigation={navigation} />
+        <PerfectContainer style={isTablet ? styles.tabletContainer : {}}>
+          <ContributeHeader animations={animations} />
+          <HeaderDivider animations={animations} />
+          <ActionButtons animations={animations} navigation={navigation} />
+        </PerfectContainer>
       </PlatformScrollView>
     </SafeAreaView>
   );

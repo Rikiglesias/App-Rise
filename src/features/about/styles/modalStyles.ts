@@ -12,6 +12,7 @@ import { circularCloseButton } from '@/shared/styles';
 export const modalStyles = StyleSheet.create({
   overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 0,
@@ -37,32 +38,28 @@ export const modalStyles = StyleSheet.create({
   },
 
   modalContainer: {
-    width: scale(354), // Perfect System: 90% di 393px (iPhone 15), scala su tutti device
-    maxHeight: '85%', // Percentuale OK per maxHeight (relativa a screen)
-    // nessuna height fissa: lasciare auto, per evitare overflow
-    minHeight: scale(600),
+    width: '90%',
+    maxHeight: '85%',
   },
 
   modalCard: {
-    backgroundColor: Colors.neutral[0],
+    backgroundColor: Colors.neutral[0], // Bianco
     borderRadius: scale(24),
-    borderWidth: scale(2),
-    borderColor: Colors.neutral[700],
+    borderWidth: scale(3),
+    borderColor: Colors.primary[500], // Bordo rosso
     overflow: 'hidden',
-    // no percentage height: lasciamo crescere con il contenuto/maxHeight
-    // height: '100%',
+    height: '100%',
+    width: '100%',
   },
 
-  modalContent: {
-    flex: 1,
-    flexDirection: 'column',
-  },
 
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: PerfectSpacing.base,
+    paddingHorizontal: PerfectSpacing.lg,
+    paddingTop: PerfectSpacing.lg,
+    paddingBottom: PerfectSpacing.base,
     borderBottomWidth: scale(1),
     borderBottomColor: Colors.neutral[200],
     position: 'relative',
@@ -73,7 +70,7 @@ export const modalStyles = StyleSheet.create({
 
   modalTitle: {
     fontWeight: Typography.weights.black,
-    color: Colors.primary[500],
+    color: Colors.neutral[900], // Nero su bianco
     letterSpacing: 0,
     flex: 1,
     textAlign: 'center',
@@ -89,9 +86,6 @@ export const modalStyles = StyleSheet.create({
     ...circularCloseButton(32, Colors.neutral[900]),
   },
 
-  storyScroll: {
-    flex: 1,
-  },
 
   storyContainer: {
     padding: PerfectSpacing.lg,
@@ -108,7 +102,7 @@ export const modalStyles = StyleSheet.create({
 
   storyText: {
     fontWeight: Typography.weights.regular,
-    color: Colors.neutral[800],
+    color: Colors.neutral[900], // Nero su bianco
     lineHeight: scale(28),
     textAlign: 'left',
     letterSpacing: 0,
@@ -121,7 +115,7 @@ export const modalStyles = StyleSheet.create({
 
   sectionTitle: {
     fontWeight: Typography.weights.bold,
-    color: Colors.neutral[900],
+    color: Colors.neutral[900], // Nero su bianco
     marginBottom: PerfectSpacing.md,
     marginTop: PerfectSpacing.sm,
     letterSpacing: 0,
@@ -134,17 +128,17 @@ export const modalStyles = StyleSheet.create({
   },
 
   finalCard: {
-    backgroundColor: Colors.primary[50],
+    backgroundColor: Colors.neutral[100], // Grigio chiaro
     borderRadius: scale(16),
     padding: PerfectSpacing.lg,
     borderWidth: scale(2),
-    borderColor: Colors.primary[200],
+    borderColor: Colors.primary[500], // Rosso
     gap: PerfectSpacing.md,
   },
 
   finalMessage: {
     fontWeight: Typography.weights.regular,
-    color: Colors.neutral[700],
+    color: Colors.neutral[900], // Nero
     textAlign: 'center',
     lineHeight: scale(24),
     letterSpacing: 0,
@@ -152,23 +146,23 @@ export const modalStyles = StyleSheet.create({
 
   finalHighlight: {
     fontWeight: Typography.weights.bold,
-    color: Colors.primary[500],
+    color: Colors.neutral[900], // Nero
     textAlign: 'center',
     lineHeight: scale(24),
     letterSpacing: 0,
   },
 
   introCard: {
-    backgroundColor: Colors.primary[50],
+    backgroundColor: Colors.neutral[50], // Grigio chiarissimo
     borderRadius: scale(12),
     padding: PerfectSpacing.md,
     borderLeftWidth: scale(4),
-    borderLeftColor: Colors.primary[500],
+    borderLeftColor: Colors.primary[500], // Rosso
   },
 
   introText: {
     fontWeight: Typography.weights.semibold,
-    color: Colors.primary[500],
+    color: Colors.neutral[900], // Nero
     textAlign: 'left',
     letterSpacing: 0,
     lineHeight: scale(20),
@@ -179,12 +173,12 @@ export const modalStyles = StyleSheet.create({
     borderRadius: scale(16),
     padding: PerfectSpacing.lg,
     borderWidth: scale(1),
-    borderColor: Colors.neutral[200],
+    borderColor: Colors.neutral[300],
   },
 
   cardText: {
     fontWeight: Typography.weights.regular,
-    color: Colors.neutral[700],
+    color: Colors.neutral[900], // Nero
     lineHeight: scale(24),
     letterSpacing: 0,
     marginTop: PerfectSpacing.sm,
@@ -192,7 +186,7 @@ export const modalStyles = StyleSheet.create({
 
   mainSectionTitle: {
     fontWeight: Typography.weights.black,
-    color: Colors.neutral[900],
+    color: Colors.neutral[900], // Nero
     textAlign: 'center',
     letterSpacing: 0,
     marginBottom: PerfectSpacing.md,
@@ -203,7 +197,7 @@ export const modalStyles = StyleSheet.create({
   },
 
   pillarCard: {
-    backgroundColor: Colors.neutral[0],
+    backgroundColor: Colors.neutral[50],
     borderRadius: scale(16),
     padding: PerfectSpacing.lg,
     borderWidth: scale(2),
@@ -218,7 +212,7 @@ export const modalStyles = StyleSheet.create({
 
   pillarTitle: {
     fontWeight: Typography.weights.bold,
-    color: Colors.neutral[900],
+    color: Colors.neutral[900], // Nero
     textAlign: 'center',
     letterSpacing: 0,
     lineHeight: scale(22),
@@ -226,7 +220,7 @@ export const modalStyles = StyleSheet.create({
 
   pillarText: {
     fontWeight: Typography.weights.regular,
-    color: Colors.neutral[600],
+    color: Colors.neutral[900], // Nero
     textAlign: 'center',
     lineHeight: scale(22),
     letterSpacing: 0,
