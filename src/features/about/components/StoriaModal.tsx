@@ -39,14 +39,8 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
           onPress={handleClose}
           activeOpacity={1}
         />
-        <View 
-          style={modalStyles.modalContainer}
-          pointerEvents="box-none"
-        >
-          <View 
-            style={modalStyles.modalCard}
-            pointerEvents="auto"
-          >
+        <View style={modalStyles.modalContainer} pointerEvents="box-none">
+          <View style={modalStyles.modalCard} pointerEvents="auto">
             {/* Close button fisso */}
             <PlatformTouchable
               onPress={handleClose}
@@ -66,104 +60,172 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               contentContainerStyle={{ paddingBottom: PerfectSpacing['5xl'] }}
               showsVerticalScrollIndicator={true}
             >
-        {/* Header */}
-        <PerfectContainer style={modalStyles.modalHeader}>
-          <PerfectText size={24} lines={1} style={modalStyles.modalTitle}>
-            {t('about.ourStory')}
-          </PerfectText>
-        </PerfectContainer>
+              {/* Header */}
+              <PerfectContainer style={modalStyles.modalHeader}>
+                <PerfectText size={24} lines={1} style={modalStyles.modalTitle}>
+                  {t('about.ourStory')}
+                </PerfectText>
+              </PerfectContainer>
 
-        {/* Story Content - senza ScrollView perché PerfectModal lo gestisce */}
-        <PerfectContainer style={modalStyles.storyContainer}>
-          <PerfectContainer style={modalStyles.introCard}>
-            <PerfectText size={14} lines={0} style={modalStyles.introText}>
-              {t('about.storyIntro')}
-            </PerfectText>
-          </PerfectContainer>
+              {/* Story Content - senza ScrollView perché PerfectModal lo gestisce */}
+              <PerfectContainer style={modalStyles.storyContainer}>
+                <PerfectContainer style={modalStyles.introCard}>
+                  <PerfectText
+                    size={14}
+                    lines={0}
+                    style={modalStyles.introText}
+                  >
+                    {t('about.storyIntro')}
+                  </PerfectText>
+                </PerfectContainer>
 
-          <PerfectText size={15} lines={0} style={modalStyles.storyText}>
-            {t('about.storyOrigin')}
-          </PerfectText>
+                <PerfectText size={15} lines={0} style={modalStyles.storyText}>
+                  {t('about.storyOrigin')}
+                </PerfectText>
 
-          <PerfectContainer style={modalStyles.sectionDivider} />
+                <PerfectContainer style={modalStyles.sectionDivider} />
 
-          <PerfectContainer style={modalStyles.italyCard}>
-            <PerfectText size={18} lines={1} style={modalStyles.sectionTitle}>
-              {t('about.inItaly')}
-            </PerfectText>
-            <PerfectText size={14} lines={0} style={modalStyles.cardText}>
-              {t('about.italyText')}
-            </PerfectText>
-          </PerfectContainer>
+                <PerfectContainer style={modalStyles.italyCard}>
+                  <PerfectText
+                    size={18}
+                    lines={1}
+                    style={modalStyles.sectionTitle}
+                  >
+                    {t('about.inItaly')}
+                  </PerfectText>
+                  <PerfectText size={14} lines={0} style={modalStyles.cardText}>
+                    {t('about.italyText')}
+                  </PerfectText>
+                </PerfectContainer>
 
-          <PerfectContainer style={modalStyles.sectionDivider} />
+                <PerfectContainer style={modalStyles.sectionDivider} />
 
-          <PerfectText size={20} lines={1} style={modalStyles.mainSectionTitle}>
-            {t('about.ourPillars')}
-          </PerfectText>
+                <PerfectText
+                  size={20}
+                  lines={1}
+                  style={modalStyles.mainSectionTitle}
+                >
+                  {t('about.ourPillars')}
+                </PerfectText>
 
-          <PerfectContainer style={modalStyles.pillarsContainer}>
-            <PerfectContainer style={modalStyles.pillarCard}>
-              <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                🍽️
-              </PerfectText>
-              <PerfectText size={16} lines={0} style={modalStyles.pillarTitle}>
-                {t('about.mealDistribution')}
-              </PerfectText>
-              <PerfectText size={13} lines={0} style={modalStyles.pillarText}>
-                {t('about.mealDistributionText')}
-              </PerfectText>
-            </PerfectContainer>
+                <PerfectContainer style={modalStyles.pillarsContainer}>
+                  <PerfectContainer style={modalStyles.pillarCard}>
+                    <PerfectText
+                      size={32}
+                      lines={1}
+                      style={modalStyles.pillarIcon}
+                    >
+                      🍽️
+                    </PerfectText>
+                    <PerfectText
+                      size={16}
+                      lines={0}
+                      style={modalStyles.pillarTitle}
+                    >
+                      {t('about.mealDistribution')}
+                    </PerfectText>
+                    <PerfectText
+                      size={13}
+                      lines={0}
+                      style={modalStyles.pillarText}
+                    >
+                      {t('about.mealDistributionText')}
+                    </PerfectText>
+                  </PerfectContainer>
 
-            <PerfectContainer style={modalStyles.pillarCard}>
-              <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                🤝
-              </PerfectText>
-              <PerfectText size={16} lines={0} style={modalStyles.pillarTitle}>
-                {t('about.communityInvolvement')}
-              </PerfectText>
-              <PerfectText size={13} lines={0} style={modalStyles.pillarText}>
-                {t('about.communityInvolvementText')}
-              </PerfectText>
-            </PerfectContainer>
+                  <PerfectContainer style={modalStyles.pillarCard}>
+                    <PerfectText
+                      size={32}
+                      lines={1}
+                      style={modalStyles.pillarIcon}
+                    >
+                      🤝
+                    </PerfectText>
+                    <PerfectText
+                      size={16}
+                      lines={0}
+                      style={modalStyles.pillarTitle}
+                    >
+                      {t('about.communityInvolvement')}
+                    </PerfectText>
+                    <PerfectText
+                      size={13}
+                      lines={0}
+                      style={modalStyles.pillarText}
+                    >
+                      {t('about.communityInvolvementText')}
+                    </PerfectText>
+                  </PerfectContainer>
 
-            <PerfectContainer style={modalStyles.pillarCard}>
-              <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                🌍
-              </PerfectText>
-              <PerfectText size={16} lines={0} style={modalStyles.pillarTitle}>
-                {t('about.globalImpact')}
-              </PerfectText>
-              <PerfectText size={13} lines={0} style={modalStyles.pillarText}>
-                {t('about.globalImpactText')}
-              </PerfectText>
-            </PerfectContainer>
+                  <PerfectContainer style={modalStyles.pillarCard}>
+                    <PerfectText
+                      size={32}
+                      lines={1}
+                      style={modalStyles.pillarIcon}
+                    >
+                      🌍
+                    </PerfectText>
+                    <PerfectText
+                      size={16}
+                      lines={0}
+                      style={modalStyles.pillarTitle}
+                    >
+                      {t('about.globalImpact')}
+                    </PerfectText>
+                    <PerfectText
+                      size={13}
+                      lines={0}
+                      style={modalStyles.pillarText}
+                    >
+                      {t('about.globalImpactText')}
+                    </PerfectText>
+                  </PerfectContainer>
 
-            <PerfectContainer style={modalStyles.pillarCard}>
-              <PerfectText size={32} lines={1} style={modalStyles.pillarIcon}>
-                🎓
-              </PerfectText>
-              <PerfectText size={16} lines={0} style={modalStyles.pillarTitle}>
-                {t('about.education')}
-              </PerfectText>
-              <PerfectText size={13} lines={0} style={modalStyles.pillarText}>
-                {t('about.educationText')}
-              </PerfectText>
-            </PerfectContainer>
-          </PerfectContainer>
+                  <PerfectContainer style={modalStyles.pillarCard}>
+                    <PerfectText
+                      size={32}
+                      lines={1}
+                      style={modalStyles.pillarIcon}
+                    >
+                      🎓
+                    </PerfectText>
+                    <PerfectText
+                      size={16}
+                      lines={0}
+                      style={modalStyles.pillarTitle}
+                    >
+                      {t('about.education')}
+                    </PerfectText>
+                    <PerfectText
+                      size={13}
+                      lines={0}
+                      style={modalStyles.pillarText}
+                    >
+                      {t('about.educationText')}
+                    </PerfectText>
+                  </PerfectContainer>
+                </PerfectContainer>
 
-          <PerfectContainer style={modalStyles.sectionDivider} />
+                <PerfectContainer style={modalStyles.sectionDivider} />
 
-          <PerfectContainer style={modalStyles.finalCard}>
-            <PerfectText size={14} lines={0} style={modalStyles.finalMessage}>
-              {t('about.finalMessage')}
-            </PerfectText>
-            <PerfectText size={15} lines={0} style={modalStyles.finalHighlight}>
-              {t('about.joinUs')}
-            </PerfectText>
-          </PerfectContainer>
-        </PerfectContainer>
-      </ScrollView>
+                <PerfectContainer style={modalStyles.finalCard}>
+                  <PerfectText
+                    size={14}
+                    lines={0}
+                    style={modalStyles.finalMessage}
+                  >
+                    {t('about.finalMessage')}
+                  </PerfectText>
+                  <PerfectText
+                    size={15}
+                    lines={0}
+                    style={modalStyles.finalHighlight}
+                  >
+                    {t('about.joinUs')}
+                  </PerfectText>
+                </PerfectContainer>
+              </PerfectContainer>
+            </ScrollView>
           </View>
         </View>
       </View>

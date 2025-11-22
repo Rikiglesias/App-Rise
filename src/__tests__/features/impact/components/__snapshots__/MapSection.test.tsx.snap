@@ -3,10 +3,15 @@
 exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = `
 <View
   style={
-    {
-      "marginTop": 30.223639464477696,
-      "paddingHorizontal": 20.149092976318464,
-    }
+    [
+      {
+        "marginTop": 30.223639464477696,
+        "paddingHorizontal": 20.149092976318464,
+      },
+      {
+        "paddingHorizontal": 0,
+      },
+    ]
   }
 >
   <View
@@ -100,7 +105,7 @@ exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = 
         "backgroundColor": "#FFFFFF",
         "borderRadius": 24,
         "elevation": 4,
-        "height": 346,
+        "height": 320,
         "marginHorizontal": 0,
         "marginTop": 20.149092976318464,
         "opacity": 1,
@@ -120,13 +125,13 @@ exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = 
     <Image
       absoluteDimensions={true}
       borderRadius={20}
-      height={346}
+      height={320}
       source={
         {
           "testUri": "../../../assets/images/mappa.png",
         }
       }
-      width={567}
+      width={525}
     />
     <View
       style={

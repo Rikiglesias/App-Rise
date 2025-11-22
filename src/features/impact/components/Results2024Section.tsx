@@ -8,14 +8,22 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 
 /**
  * Sezione dei risultati 2024 con header decorativo e statistiche annuali
  */
 export const Results2024Section: React.FC = () => {
   const { t } = useTranslation();
+  const { isTablet } = useDeviceType();
+
   return (
-    <PerfectContainer style={styles.record2024Section}>
+    <PerfectContainer
+      style={[
+        styles.record2024Section,
+        isTablet ? { paddingHorizontal: 0 } : {},
+      ]}
+    >
       {/* Header DRAMATICALLY ENHANCED */}
       <PerfectContainer style={styles.results2024HeaderContainer}>
         <PerfectContainer style={styles.results2024HeaderBackground}>

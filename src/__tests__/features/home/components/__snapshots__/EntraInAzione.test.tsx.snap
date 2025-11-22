@@ -4,7 +4,6 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
 <View
   style={
     {
-      "marginHorizontal": 12.68706086776019,
       "padding": 25.37412173552038,
     }
   }

@@ -6,15 +6,23 @@ import { AnimatedContact } from './AnimatedContact';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { PerfectSpacing } from '@/shared/constants';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
   const { t } = useTranslation();
+  const { isTablet } = useDeviceType();
+
   return (
     <PerfectContainer
       style={contactSectionStyles.categoryContainer} // marginBottom rimane qui (non prop disponibile)
     >
       {/* HEADER PULITO - Solo titolo per miglior flusso visivo */}
-      <PerfectContainer style={contactSectionStyles.categoryHeader}>
+      <PerfectContainer
+        style={[
+          contactSectionStyles.categoryHeader,
+          isTablet ? { paddingHorizontal: 0 } : {},
+        ]}
+      >
         <PerfectText
           size={28}
           lines={1}
@@ -25,7 +33,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
         </PerfectText>
       </PerfectContainer>
       <PerfectContainer
-        paddingHorizontal={PerfectSpacing.md}
+        paddingHorizontal={isTablet ? 0 : PerfectSpacing.md}
         paddingVertical={PerfectSpacing.sm}
         style={contactSectionStyles.contactsGrid}
       >

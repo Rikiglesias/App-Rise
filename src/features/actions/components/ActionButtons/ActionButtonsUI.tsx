@@ -18,6 +18,7 @@ import {
 import type { useNewActionsAnimations } from '../shared/ContributeAnimations';
 import type { ActionButtonsData } from './useActionButtonsData';
 import { PerfectContainer } from '@/components/ui';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 
 interface ActionButtonsUIProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -35,9 +36,15 @@ const ActionButtonsUIComponent: React.FC<ActionButtonsUIProps> = ({
   data,
 }) => {
   const styles = useMemo(() => createActionButtonStyles(), []);
+  const { isTablet } = useDeviceType();
 
   return (
-    <PerfectContainer style={styles.container}>
+    <PerfectContainer
+      style={[
+        styles.container,
+        isTablet ? { paddingHorizontal: 0 } : {}, // Rimuovi padding orizzontale su tablet
+      ]}
+    >
       {/* CATEGORIA CONTRIBUISCI con Info Button */}
       <DonateButtonsSection
         styles={styles}

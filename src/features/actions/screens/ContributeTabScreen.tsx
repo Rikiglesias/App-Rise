@@ -32,8 +32,8 @@ const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
       paddingBottom: Math.max(insets.bottom, 16) + 95 + 24,
     },
     tabletContainer: {
-      width: '100%', // IMPORTANTE: serve per poter applicare maxWidth
-      maxWidth: '85%',
+      width: '70%',
+      maxWidth: 640, // CAP per Landscape
       alignSelf: 'center',
     },
   });

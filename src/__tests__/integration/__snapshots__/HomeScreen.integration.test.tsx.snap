@@ -36,8 +36,8 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
         style={
           {
             "alignSelf": "center",
-            "maxWidth": "85%",
-            "width": "100%",
+            "maxWidth": 640,
+            "width": "70%",
           }
         }
       >
@@ -331,7 +331,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
           </View>
         </View>
         <View
-          marginHorizontal={10.074546488159232}
+          marginHorizontal={0}
           padding={20.149092976318464}
         >
           <View

@@ -105,7 +105,7 @@ const modalStyles = StyleSheet.create({
     marginTop: PerfectSpacing.md,
     paddingVertical: PerfectSpacing.md,
     paddingHorizontal: PerfectSpacing.base,
-    backgroundColor: Colors.neutral[100], // Grigio chiaro
+    backgroundColor: Colors.primary[50], // Rosso chiaro sfumato
     borderRadius: BorderRadius.lg,
     letterSpacing: scale(-0.3),
   },

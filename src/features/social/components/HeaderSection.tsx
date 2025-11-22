@@ -3,12 +3,16 @@ import { PerfectText, PerfectContainer, PerfectIcon } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { scale } from '@/shared/constants/perfectScale';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 
 export const HeaderSection: React.FC = React.memo(() => {
   const { t } = useTranslation();
+  const { isTablet } = useDeviceType();
 
   return (
-    <PerfectContainer style={styles.headerContainer}>
+    <PerfectContainer
+      style={[styles.headerContainer, isTablet ? { paddingHorizontal: 0 } : {}]}
+    >
       <PerfectContainer style={styles.headerIconContainer}>
         <PerfectIcon
           name="account-group"

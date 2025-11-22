@@ -45,8 +45,8 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
           top: insets.top + PerfectSpacing.base,
         },
         tabletContainer: {
-          width: '100%',
-          maxWidth: '85%',
+          width: '70%',
+          maxWidth: 640,
           alignSelf: 'center',
         },
       }),
@@ -68,7 +68,12 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
       </PlatformTouchable>
 
-      <PlatformScrollView contentContainerStyle={mainStyles.contentContainer}>
+      <PlatformScrollView
+        contentContainerStyle={[
+          mainStyles.contentContainer,
+          isTablet ? { paddingHorizontal: 0 } : {},
+        ]}
+      >
         <PerfectContainer style={isTablet ? dynamicStyles.tabletContainer : {}}>
           <HeaderSection />
 

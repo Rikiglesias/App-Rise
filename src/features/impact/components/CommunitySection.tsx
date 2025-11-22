@@ -7,6 +7,7 @@ import { Colors, PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 
 interface Props {
   onVolunteersPress: () => void;
@@ -21,9 +22,15 @@ export const CommunitySection: React.FC<Props> = ({
   onPartnersPress,
 }) => {
   const { t } = useTranslation();
+  const { isTablet } = useDeviceType();
 
   return (
-    <PerfectContainer style={styles.communitySection}>
+    <PerfectContainer
+      style={[
+        styles.communitySection,
+        isTablet ? { paddingHorizontal: 0 } : {},
+      ]}
+    >
       {/* Header con elementi community */}
       <PerfectContainer style={styles.communityHeaderContainer}>
         <PerfectContainer style={styles.communityHeaderBackground}>

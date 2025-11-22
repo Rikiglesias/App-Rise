@@ -38,8 +38,8 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
           paddingBottom: bottomPadding,
         },
         tabletContainer: {
-          width: '100%', // IMPORTANTE: serve per poter applicare maxWidth
-          maxWidth: '85%',
+          width: '70%',
+          maxWidth: 640, // CAP per Landscape: evita che il 70% diventi troppo largo su schermi wide
           alignSelf: 'center',
         },
       }),

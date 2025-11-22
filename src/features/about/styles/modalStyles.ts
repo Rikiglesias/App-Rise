@@ -52,7 +52,6 @@ export const modalStyles = StyleSheet.create({
     width: '100%',
   },
 
-
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -85,7 +84,6 @@ export const modalStyles = StyleSheet.create({
     elevation: 10,
     ...circularCloseButton(32, Colors.neutral[900]),
   },
-
 
   storyContainer: {
     padding: PerfectSpacing.lg,

@@ -30,9 +30,9 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
     0,
     Math.floor(Math.min(window.width, window.height) - horizontalPadding)
   );
-  // TABLET: Riduci all'80% larghezza e altezza. PHONE: 100%
+  // TABLET: Adatta al 70% della larghezza finestra (coerente con container padre). PHONE: 100% container
   const containerWidth = isTablet
-    ? Math.round(baseContainerWidth * 0.8)
+    ? Math.round(Math.min(window.width, window.height) * 0.7)
     : baseContainerWidth;
   // TABLET: aspect ratio ridotto per meno altezza. PHONE: originale
   const aspectRatio = isTablet ? 361 / 220 : 361 / 280;
@@ -43,7 +43,9 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
   }, [onMapPress]);
 
   return (
-    <PerfectContainer style={styles.mapSection}>
+    <PerfectContainer
+      style={[styles.mapSection, isTablet ? { paddingHorizontal: 0 } : {}]}
+    >
       {/* Header GEOGRAFICO con elementi di location */}
       <PerfectContainer style={styles.mapHeaderContainer}>
         <PerfectContainer style={styles.mapHeaderBackground}>

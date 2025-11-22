@@ -11,12 +11,14 @@ import {
 } from '@/components/ui';
 import { Colors, PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   onInfoPress,
 }) => {
   const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
+  const { isTablet } = useDeviceType();
 
   const handleInfoPress = useCallback(() => {
     void triggerHaptic('light');
@@ -26,7 +28,12 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   return (
     <PerfectContainer style={chiSiamoSectionStyles.categoryContainer}>
       {/* HEADER CON TITOLO CLICCABILE */}
-      <PerfectContainer style={chiSiamoSectionStyles.headerContainer}>
+      <PerfectContainer
+        style={[
+          chiSiamoSectionStyles.headerContainer,
+          isTablet ? { paddingHorizontal: 0 } : {},
+        ]}
+      >
         <PerfectContainer
           paddingVertical={PerfectSpacing.md}
           paddingHorizontal={PerfectSpacing.lg}

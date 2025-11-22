@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
 
   // Tablet Container - IDENTICO AD HOME E AZIONI
   tabletContainer: {
-    width: '100%', // IMPORTANTE: serve per poter applicare maxWidth
-    maxWidth: '85%',
+    width: '70%',
+    maxWidth: 640, // CAP per Landscape
     alignSelf: 'center',
   },
 

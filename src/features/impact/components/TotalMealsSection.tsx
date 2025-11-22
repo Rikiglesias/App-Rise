@@ -8,6 +8,7 @@ import { Colors, BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { sectionHeaderBackground } from '@/shared/styles';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 
 interface Props {
   onMealsPress: () => void;
@@ -22,9 +23,15 @@ export const TotalMealsSection: React.FC<Props> = ({
   onKitsPress,
 }) => {
   const { t } = useTranslation();
+  const { isTablet } = useDeviceType();
 
   return (
-    <PerfectContainer style={styles.totalMealsSection}>
+    <PerfectContainer
+      style={[
+        styles.totalMealsSection,
+        isTablet ? { paddingHorizontal: 0 } : {},
+      ]}
+    >
       {/* Linea divisoria tra header e sezione Dal 2012 */}
       <PerfectContainer style={styles.titleSeparatorContainer}>
         <PerfectContainer style={styles.titleSeparator} />
