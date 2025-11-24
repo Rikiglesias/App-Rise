@@ -1,7 +1,9 @@
+import 'react-native-gesture-handler'; // MUST BE AT THE TOP
 import { StatusBar } from 'expo-status-bar';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect, useRef, useState } from 'react';
+import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
 import AppNavigator from './src/navigation/AppNavigator';
 import { ThemeProvider } from './src/shared/hooks/useTheme';
@@ -41,7 +43,21 @@ const Main: React.FC = () => {
   );
 };
 
-const App: React.FC = () => {
+// --- WEB VERSION (No OTA logic) ---
+const WebApp: React.FC = () => {
+  return (
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <Main />
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
+  );
+};
+
+// --- NATIVE VERSION (Full OTA logic) ---
+const NativeApp: React.FC = () => {
   // Hook NATIVO expo-updates (SDK 54 - React 19 compatibile)
   const { isDownloading, downloadProgress, isUpdatePending } =
     Updates.useUpdates();
@@ -191,6 +207,14 @@ const App: React.FC = () => {
       </SafeAreaProvider>
     </ErrorBoundary>
   );
+};
+
+const App: React.FC = () => {
+  // Platform check at the root level - clean separation
+  if (Platform.OS === 'web') {
+    return <WebApp />;
+  }
+  return <NativeApp />;
 };
 
 export default App;

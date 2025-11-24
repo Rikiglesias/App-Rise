@@ -61,6 +61,9 @@ config.resolver = {
     '@shared': path.resolve(__dirname, 'src/shared'),
     '@features': path.resolve(__dirname, 'src/features'),
     '@assets': path.resolve(__dirname, 'assets'),
+    ...(process.env.EXPO_PUBLIC_PLATFORM === 'web' || process.env.NODE_ENV === 'development'
+      ? { 'react-native-maps': path.resolve(__dirname, 'web-maps-mock.js') }
+      : {}),
   },
 };
 
