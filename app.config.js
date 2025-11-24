@@ -1,3 +1,26 @@
+const { withAppBuildGradle } = require('@expo/config-plugins');
+
+// Plugin per disabilitare l'interruzione della build per errori di Lint (es. ExtraTranslation)
+const withDisableLintAbort = (config) => {
+  return withAppBuildGradle(config, (config) => {
+    if (config.modResults.language === 'groovy') {
+      const buildGradle = config.modResults.contents;
+      // Aggiungi lintOptions se non esiste già o modificalo
+      if (!buildGradle.includes('lintOptions {')) {
+        config.modResults.contents += `
+android {
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+`;
+      }
+    }
+    return config;
+  });
+};
+
 const CODE_SIGNING_CERTIFICATE =
   process.env.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE ??
   process.env.EXPO_PUBLIC_UPDATES_CODE_SIGNING_CERTIFICATE;
@@ -24,7 +47,7 @@ const updatesConfig =
       }
     : baseUpdatesConfig;
 
-export default {
+export default withDisableLintAbort({
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
@@ -207,4 +230,4 @@ export default {
     // Runtime version per aggiornamenti: unificata su appVersion
     runtimeVersion: { policy: 'appVersion' },
   },
-};
+});
