@@ -16,7 +16,6 @@ interface NewActionsHeaderProps {
 const TITLE_SIZE = 32;
 const SUBTITLE_SIZE = 16; // Ridotto da 18 per evitare limite minimo su small devices
 const REF_WIDTH = LOGICAL_REFERENCE.width;
-const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
 const HEADER_VERTICAL_PADDING = scale(REF_WIDTH * 0.025);
 const HEADER_TITLE_INTERLINE = scale(REF_WIDTH * 0.002);
 const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
@@ -47,7 +46,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           alignSelf: 'stretch',
           width: '100%',
           alignItems: 'center',
-          minHeight: HEADER_INNER_HEIGHT,
+          // minHeight rimosso: permette espansione con Large Text iOS
           backgroundColor: Colors.neutral[0],
           paddingHorizontal: PerfectSpacing.base,
           paddingTop: HEADER_VERTICAL_PADDING,

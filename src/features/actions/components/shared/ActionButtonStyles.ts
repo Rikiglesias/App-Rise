@@ -51,7 +51,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderRadius: scale(16),
       borderWidth: scale(1),
       borderColor: Colors.primary[300],
-      minHeight: scale(60),
+      // minHeight rimosso: permette espansione con Large Text iOS
     },
 
     // TITOLO CATEGORIA DONA ELEGANTE
@@ -188,7 +188,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
       borderColor: Colors.neutral[400],
-      minHeight: scale(60),
+      // minHeight rimosso: permette espansione con Large Text iOS
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
       justifyContent: 'center',
       alignSelf: 'center',
@@ -202,7 +202,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
       borderWidth: scale(1),
       borderColor: Colors.neutral[400],
       position: 'relative',
-      minHeight: scale(60),
+      // minHeight rimosso: permette espansione con Large Text iOS
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
       justifyContent: 'center',
       alignSelf: 'center',
