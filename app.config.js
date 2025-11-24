@@ -36,7 +36,6 @@ export default {
     
     // Configurazione lingue supportate
     locales: {
-      default: './locales/default.json',
       it: './locales/it.json',
       en: './locales/en.json',
     },
