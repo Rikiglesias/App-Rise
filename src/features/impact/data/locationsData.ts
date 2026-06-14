@@ -86,6 +86,10 @@ export const LOCATIONS_DATA: LocationData[] = [
     latitude: 44.4949,
     longitude: 11.3426,
     flag: '🇮🇹',
+    // NB: questi totali nazionali DUPLICANO IMPACT_DATA (mealsProduced/kitPackages/
+    // volunteers in ../data/impactData.ts). Tenere allineati a ogni report annuale.
+    // SSOT unica non applicata: impactData importa già questo file (deriverebbe un
+    // ciclo) e 'beneficiaries' qui riusa il valore volunteers (semantica divergente).
     stats: {
       meals: 3136968,
       kits: 16321,
