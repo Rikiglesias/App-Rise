@@ -1,8 +1,10 @@
-const { getDefaultConfig } = require('expo/metro-config');
+// getSentryExpoConfig è un drop-in di getDefaultConfig (chiama getDefaultConfig
+// internamente) + aggiunge il serializer per l'upload dei source map a Sentry.
+const { getSentryExpoConfig } = require('@sentry/react-native/metro');
 const path = require('path');
 
 /** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname);
+const config = getSentryExpoConfig(__dirname);
 
 // ========================================
 // 🚀 METRO CONFIG OTTIMIZZATA - EXPO SDK 54

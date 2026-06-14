@@ -46,6 +46,19 @@ jest.mock('react-native-gesture-handler', () => {
   };
 });
 
+// Mock @sentry/react-native: nei test niente modulo nativo né invii reali.
+// wrap deve restituire il componente (pass-through) così App renderizza.
+jest.mock('@sentry/react-native', () => ({
+  init: jest.fn(),
+  wrap: jest.fn(component => component),
+  captureException: jest.fn(),
+  captureMessage: jest.fn(),
+  addBreadcrumb: jest.fn(),
+  setUser: jest.fn(),
+  setContext: jest.fn(),
+  setTag: jest.fn(),
+}));
+
 // Now safe to import
 import 'react-native-gesture-handler/jestSetup';
 

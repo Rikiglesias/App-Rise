@@ -13,6 +13,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import * as Updates from 'expo-updates';
+import * as Sentry from '@sentry/react-native';
 import { logger } from '@/shared/utils/logger';
 
 interface Props {
@@ -49,6 +50,14 @@ export class ErrorBoundary extends Component<Props, State> {
       error: error.message,
       stack: error.stack,
       componentStack: errorInfo.componentStack,
+    });
+
+    // Crash reporting Sentry: invia il crash di render con il component stack come
+    // contesto. No-op se Sentry non è inizializzato (DSN assente) — vedi App.tsx.
+    Sentry.captureException(error, {
+      contexts: {
+        react: { componentStack: errorInfo.componentStack },
+      },
     });
 
     this.setState({

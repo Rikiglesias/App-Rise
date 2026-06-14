@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
 import * as SplashScreen from 'expo-splash-screen';
+import * as Sentry from '@sentry/react-native';
 import AppNavigator from './src/navigation/AppNavigator';
 import { ThemeProvider } from './src/shared/hooks/useTheme';
 import { logger } from './src/shared/utils/logger';
@@ -16,6 +17,19 @@ import { ErrorBoundary } from './src/shared/components/ErrorBoundary';
 
 // Durata minima splash screen (ms)
 const SPLASH_SCREEN_DURATION = 2500;
+
+// Crash reporting Sentry. DSN SOLO da env (mai committato): finché EXPO_PUBLIC_SENTRY_DSN
+// non è impostato, enabled=false => init no-op (nessun invio, nessun impatto runtime).
+// NB: il modulo nativo Sentry richiede un dev build / prebuild (NON funziona in Expo Go).
+const SENTRY_DSN = process.env.EXPO_PUBLIC_SENTRY_DSN;
+Sentry.init({
+  dsn: SENTRY_DSN,
+  enabled: !!SENTRY_DSN,
+  // App di contenuti: campiona le tracce per non generare volume inutile.
+  tracesSampleRate: 0.2,
+  // In sviluppo non inizializzare il layer nativo (evita rumore durante il dev).
+  enableNative: !__DEV__,
+});
 
 // Previene la chiusura automatica della splash screen
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -280,4 +294,5 @@ const App: React.FC = () => {
   return <NativeApp />;
 };
 
-export default App;
+// Sentry.wrap abilita l'instrumentation (touch/navigation/performance). No-op senza DSN.
+export default Sentry.wrap(App);

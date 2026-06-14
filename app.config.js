@@ -250,6 +250,21 @@ export default withDefaultStrings({
       'expo-font',
       'expo-localization',
       'expo-splash-screen',
+      // Sentry: config plugin per setup nativo + upload source map al build EAS.
+      // Attivo SOLO con SENTRY_ORG + SENTRY_PROJECT in env (auth token via SENTRY_AUTH_TOKEN,
+      // MAI committato). Senza questi -> plugin assente, prebuild invariato (pre-DSN safe).
+      ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
+        ? [
+            [
+              '@sentry/react-native/expo',
+              {
+                organization: process.env.SENTRY_ORG,
+                project: process.env.SENTRY_PROJECT,
+                url: process.env.SENTRY_URL || 'https://sentry.io/',
+              },
+            ],
+          ]
+        : []),
     ],
 
     // Aggiornamenti OTA
