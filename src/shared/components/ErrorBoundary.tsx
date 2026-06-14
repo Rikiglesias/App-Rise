@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log dell'errore per telemetria
-    logger.error('ErrorBoundary', 'Uncaught error in component tree', {
+    logger.error('Uncaught error in component tree', 'ErrorBoundary', {
       error: error.message,
       stack: error.stack,
       componentStack: errorInfo.componentStack,
