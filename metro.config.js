@@ -63,7 +63,15 @@ config.resolver = {
     '@shared': path.resolve(__dirname, 'src/shared'),
     '@features': path.resolve(__dirname, 'src/features'),
     '@assets': path.resolve(__dirname, 'assets'),
-    ...(process.env.EXPO_PUBLIC_PLATFORM === 'web' || process.env.NODE_ENV === 'development'
+    // react-native-maps -> mock SOLO dove il modulo nativo non è disponibile:
+    // - web (react-native-web non ha le mappe native);
+    // - dev (Expo Go SDK 54 NON include react-native-maps => senza mock crasherebbe).
+    // OPT-IN dev client: con EXPO_PUBLIC_USE_REAL_MAPS=true il mock è disattivato in dev,
+    // così un dev build (che HA il modulo nativo) carica la mappa reale e si può
+    // validare provider/API-key. Default invariato (dev => mock, Expo Go al sicuro).
+    ...(process.env.EXPO_PUBLIC_PLATFORM === 'web' ||
+    (process.env.NODE_ENV === 'development' &&
+      process.env.EXPO_PUBLIC_USE_REAL_MAPS !== 'true')
       ? { 'react-native-maps': path.resolve(__dirname, 'web-maps-mock.js') }
       : {}),
   },
