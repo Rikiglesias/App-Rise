@@ -110,12 +110,13 @@ const createRetryableImport = async (
   let lastError: Error = new Error('Import failed');
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     try {
       // Crea promise con timeout
       const importPromise = Promise.race([
         importFn(),
         new Promise<never>((_, reject) => {
-          setTimeout(
+          timeoutId = setTimeout(
             () => reject(new Error(`Import timeout after ${timeout}ms`)),
             timeout
           );
@@ -130,6 +131,10 @@ const createRetryableImport = async (
       if (attempt < maxRetries) {
         await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
       }
+    } finally {
+      // Cancella il timer del timeout: su successo evita un handle pendente
+      // che resterebbe attivo fino a `timeout` ms (leak + open-handle nei test)
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
     }
   }
 
