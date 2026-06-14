@@ -1,8 +1,8 @@
-const { withAndroidStrings } = require('@expo/config-plugins');
+const { withStringsXml } = require('@expo/config-plugins');
 
 // Plugin per garantire che le stringhe critiche (come il nome app) esistano nel locale di default
 const withDefaultStrings = (config) => {
-  return withAndroidStrings(config, (config) => {
+  return withStringsXml(config, (config) => {
     if (!config.modResults.resources) {
       config.modResults.resources = {};
     }
