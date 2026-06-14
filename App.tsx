@@ -32,8 +32,9 @@ Sentry.init({
 });
 
 // Previene la chiusura automatica della splash screen
-SplashScreen.preventAutoHideAsync().catch(() => {
-  // Ignora errori (es. web platform)
+SplashScreen.preventAutoHideAsync().catch((e: unknown) => {
+  // Atteso su web (nessuna splash nativa): traccia a debug invece di ingoiare
+  logger.debug('App', 'preventAutoHideAsync failed', e as Error);
 });
 
 // The new Main component that bridges the two theme systems
@@ -71,8 +72,8 @@ const WebApp: React.FC = () => {
   useEffect(() => {
     // Nasconde la splash screen dopo il delay
     const timer = setTimeout(() => {
-      SplashScreen.hideAsync().catch(() => {
-        // Ignora errori
+      SplashScreen.hideAsync().catch((e: unknown) => {
+        logger.debug('App', 'hideAsync failed (web)', e as Error);
       });
     }, SPLASH_SCREEN_DURATION);
 
@@ -120,12 +121,16 @@ const NativeApp: React.FC = () => {
   // Inizializzazione app e gestione splash screen
   useEffect(() => {
     logger.info('App', '🚀 App initialized with SDK 54 - Enhanced OTA Logic');
-    void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
+    void initDisplayZoom()
+      .catch((e: unknown) =>
+        logger.warn('App', 'initDisplayZoom failed', e as Error)
+      )
+      .finally(() => setZoomReadyTick(t => t + 1));
 
     // Nasconde la splash screen dopo il delay minimo
     const splashTimer = setTimeout(() => {
-      SplashScreen.hideAsync().catch(() => {
-        // Ignora errori
+      SplashScreen.hideAsync().catch((e: unknown) => {
+        logger.debug('App', 'hideAsync failed', e as Error);
       });
       logger.info('App', '🎨 Splash screen hidden after minimum duration');
     }, SPLASH_SCREEN_DURATION);
