@@ -2,7 +2,7 @@ import 'react-native-gesture-handler'; // MUST BE AT THE TOP
 import { StatusBar } from 'expo-status-bar';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
 import * as SplashScreen from 'expo-splash-screen';
@@ -44,20 +44,21 @@ const Main: React.FC = () => {
   // Define base theme from React Native Paper
   const baseTheme = isDark ? MD3DarkTheme : MD3LightTheme;
 
-  // Create a new, merged theme
-  const paperTheme = {
-    ...baseTheme,
-    colors: {
-      ...baseTheme.colors,
-      // Use brand for primary/accent, universal for surfaces/backgrounds
-      primary: brand.primary[500],
-      background: universal.primary,
-      surface: universal.card,
-      // text: colors.neutral[900], // The base theme handles text color well based on isDark
-      // You can continue to map more colors here if needed
-      // e.g., error, notification, etc.
-    },
-  };
+  // Create a new, merged theme (memoizzato: è il value passato a PaperProvider,
+  // ricrearlo a ogni render forzerebbe il re-render dei consumer del theme)
+  const paperTheme = useMemo(
+    () => ({
+      ...baseTheme,
+      colors: {
+        ...baseTheme.colors,
+        // Use brand for primary/accent, universal for surfaces/backgrounds
+        primary: brand.primary[500],
+        background: universal.primary,
+        surface: universal.card,
+      },
+    }),
+    [baseTheme, brand, universal]
+  );
 
   return (
     <PaperProvider theme={paperTheme}>
