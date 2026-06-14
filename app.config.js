@@ -1,22 +1,37 @@
-const { withAppBuildGradle } = require('@expo/config-plugins');
+const { withAndroidStrings } = require('@expo/config-plugins');
 
-// Plugin per disabilitare l'interruzione della build per errori di Lint (es. ExtraTranslation)
-const withDisableLintAbort = (config) => {
-  return withAppBuildGradle(config, (config) => {
-    if (config.modResults.language === 'groovy') {
-      const buildGradle = config.modResults.contents;
-      // Aggiungi lintOptions se non esiste già o modificalo
-      if (!buildGradle.includes('lintOptions {')) {
-        config.modResults.contents += `
-android {
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
+// Plugin per garantire che le stringhe critiche (come il nome app) esistano nel locale di default
+const withDefaultStrings = (config) => {
+  return withAndroidStrings(config, (config) => {
+    if (!config.modResults.resources) {
+      config.modResults.resources = {};
     }
-}
-`;
+    if (!config.modResults.resources.string) {
+      config.modResults.resources.string = [];
+    }
+
+    const strings = config.modResults.resources.string;
+    const appName = config.name || 'RAH Italia'; // Fallback sicuro
+
+    // Definisci le stringhe che devono essere presenti nel default (values/strings.xml)
+    const defaultStrings = [
+      { name: 'CFBundleDisplayName', value: appName },
+      { name: 'app_name', value: appName }
+    ];
+
+    defaultStrings.forEach(({ name, value }) => {
+      const existingIndex = strings.findIndex(s => s.$.name === name);
+      const stringItem = { $: { name }, _: value };
+
+      if (existingIndex > -1) {
+        // Aggiorna esistente
+        strings[existingIndex] = stringItem;
+      } else {
+        // Aggiungi nuova
+        strings.push(stringItem);
       }
-    }
+    });
+
     return config;
   });
 };
@@ -47,7 +62,7 @@ const updatesConfig =
       }
     : baseUpdatesConfig;
 
-export default withDisableLintAbort({
+export default withDefaultStrings({
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
@@ -222,6 +237,7 @@ export default withDisableLintAbort({
       'expo-updates',
       'expo-font',
       'expo-localization',
+      'expo-splash-screen',
     ],
 
     // Aggiornamenti OTA

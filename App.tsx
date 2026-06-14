@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 import * as Updates from 'expo-updates';
+import * as SplashScreen from 'expo-splash-screen';
 import AppNavigator from './src/navigation/AppNavigator';
 import { ThemeProvider } from './src/shared/hooks/useTheme';
 import { logger } from './src/shared/utils/logger';
@@ -12,6 +13,14 @@ import { initDisplayZoom } from './src/shared/services/displayZoom';
 import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
 import { OTAUpdateScreen } from './src/shared/OTAUpdateScreen';
 import { ErrorBoundary } from './src/shared/components/ErrorBoundary';
+
+// Durata minima splash screen (ms)
+const SPLASH_SCREEN_DURATION = 2500;
+
+// Previene la chiusura automatica della splash screen
+SplashScreen.preventAutoHideAsync().catch(() => {
+  // Ignora errori (es. web platform)
+});
 
 // The new Main component that bridges the two theme systems
 const Main: React.FC = () => {
@@ -45,6 +54,17 @@ const Main: React.FC = () => {
 
 // --- WEB VERSION (No OTA logic) ---
 const WebApp: React.FC = () => {
+  useEffect(() => {
+    // Nasconde la splash screen dopo il delay
+    const timer = setTimeout(() => {
+      SplashScreen.hideAsync().catch(() => {
+        // Ignora errori
+      });
+    }, SPLASH_SCREEN_DURATION);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <ErrorBoundary>
       <SafeAreaProvider>
@@ -76,10 +96,20 @@ const NativeApp: React.FC = () => {
   const MIN_ANIMATION_TIME = 3000; // ✨ Aumentato a 3s per garantire animazione visibile
   const UPDATE_COMPLETION_DELAY = 1500; // Tempo per mostrare "Completato" prima del reload
 
-  // Inizializzazione app
+  // Inizializzazione app e gestione splash screen
   useEffect(() => {
     logger.info('App', '🚀 App initialized with SDK 54 - Enhanced OTA Logic');
     void initDisplayZoom().finally(() => setZoomReadyTick(t => t + 1));
+
+    // Nasconde la splash screen dopo il delay minimo
+    const splashTimer = setTimeout(() => {
+      SplashScreen.hideAsync().catch(() => {
+        // Ignora errori
+      });
+      logger.info('App', '🎨 Splash screen hidden after minimum duration');
+    }, SPLASH_SCREEN_DURATION);
+
+    return () => clearTimeout(splashTimer);
   }, []);
 
   // Gestione Logica OTA - Avvio Download e Animazione
