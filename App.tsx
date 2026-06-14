@@ -91,7 +91,14 @@ const NativeApp: React.FC = () => {
   // Refs per gestire lo stato asincrono senza causare re-render inutili durante l'animazione
   const downloadStartTimeRef = useRef<number | null>(null);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Ref dedicato all'animazione di completamento: NON condiviso con il download,
+  // così ogni effetto cancella solo il proprio timer (evita interferenze cross-effect).
+  const completionIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Timeout del reload, cancellabile nel cleanup per non lasciare timer pendenti.
+  const reloadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isReloadingRef = useRef(false);
+  // Se il reload fallisce, evita di ri-tentare in loop su uno stato re-innescabile.
+  const reloadFailedRef = useRef(false);
 
   const MIN_ANIMATION_TIME = 3000; // ✨ Aumentato a 3s per garantire animazione visibile
   const UPDATE_COMPLETION_DELAY = 1500; // Tempo per mostrare "Completato" prima del reload
@@ -164,46 +171,72 @@ const NativeApp: React.FC = () => {
       }
       
       logger.info('App', '⚡ Update ready - animating smoothly to 100%');
-      
-      // ✨ NUOVA animazione smooth da current progress a 100%
-      progressIntervalRef.current = setInterval(() => {
+
+      // ✨ NUOVA animazione smooth da current progress a 100% (ref dedicato)
+      completionIntervalRef.current = setInterval(() => {
         setVisualProgress(prev => {
           if (prev >= 100) {
             // Raggiunti 100% - ferma animazione
-            if (progressIntervalRef.current) {
-              clearInterval(progressIntervalRef.current);
-              progressIntervalRef.current = null;
+            if (completionIntervalRef.current) {
+              clearInterval(completionIntervalRef.current);
+              completionIntervalRef.current = null;
             }
             return 100;
           }
-          
+
           // Animazione rapida ma smooth verso 100%
           const remaining = 100 - prev;
           const step = Math.max(remaining * 0.2, 1); // 20% della distanza rimanente, min 1%
-          
+
           return Math.min(prev + step, 100);
         });
       }, 40); // 40ms = 25fps, smooth ma veloce
     }
+
+    // Cleanup: ferma SOLO l'animazione di completamento (non il download) se le
+    // dipendenze cambiano o il componente smonta. Idempotente (StrictMode-safe).
+    return () => {
+      if (completionIntervalRef.current) {
+        clearInterval(completionIntervalRef.current);
+        completionIntervalRef.current = null;
+      }
+    };
   }, [isUpdatePending, showOtaScreen]);
 
   // Gestione Reload - Triggera solo quando effettivamente al 100%
   useEffect(() => {
-    if (visualProgress >= 100 && isUpdatePending && showOtaScreen && !isReloadingRef.current) {
+    if (
+      visualProgress >= 100 &&
+      isUpdatePending &&
+      showOtaScreen &&
+      !isReloadingRef.current &&
+      !reloadFailedRef.current
+    ) {
       isReloadingRef.current = true;
 
       logger.info('App', '✅ Progress at 100% - Showing completion state');
 
-      // Aspetta per mostrare il messaggio "Completato"
-      setTimeout(() => {
+      // Aspetta per mostrare il messaggio "Completato" (timeout cancellabile via ref)
+      reloadTimeoutRef.current = setTimeout(() => {
         logger.info('App', '🔄 Triggering reloadAsync...');
         Updates.reloadAsync().catch(e => {
           logger.error('App', '❌ Reload failed', e);
+          // Marca il fallimento per NON ri-tentare in loop su uno stato re-innescabile
+          reloadFailedRef.current = true;
           isReloadingRef.current = false;
           setShowOtaScreen(false);
         });
       }, UPDATE_COMPLETION_DELAY);
     }
+
+    // Cleanup: annulla il reload pendente se le dipendenze cambiano o il componente
+    // smonta prima che scada il delay. Idempotente (StrictMode-safe).
+    return () => {
+      if (reloadTimeoutRef.current) {
+        clearTimeout(reloadTimeoutRef.current);
+        reloadTimeoutRef.current = null;
+      }
+    };
   }, [visualProgress, isUpdatePending, showOtaScreen]);
 
   // Se non sta scaricando e non c'è update pending, assicurati che lo schermo sia nascosto
