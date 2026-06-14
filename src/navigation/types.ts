@@ -1,6 +1,6 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 
-import type { Location } from '@/components/layout/InteractiveMap';
+import type { Location } from '@/shared/types/location';
 
 export interface RootStackParamList {
   Home: undefined;

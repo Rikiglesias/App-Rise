@@ -11,9 +11,8 @@ import {
   PlatformTouchable,
 } from '@/components/ui';
 
-import InteractiveMap, {
-  type Location,
-} from '@/components/layout/InteractiveMap';
+import InteractiveMap from '@/components/layout/InteractiveMap';
+import type { Location } from '@/shared/types/location';
 import MapLocationModal from '@/components/layout/MapLocationModal';
 import type { ImpactStackParamList } from '@/navigation/types';
 import { BorderRadius, Colors, PerfectSpacing } from '@/shared/constants';
