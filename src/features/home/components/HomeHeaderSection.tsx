@@ -33,8 +33,6 @@ const HomeHeaderSectionComponent: React.FC<HomeHeaderSectionProps> = ({
           transform: [{ scale: containerAnim }],
         },
       ]}
-      renderToHardwareTextureAndroid
-      needsOffscreenAlphaCompositing
       collapsable={false}
     >
       <HeaderTextSection

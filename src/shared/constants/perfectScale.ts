@@ -220,22 +220,39 @@ export const scaleWithDimensions = (
 };
 
 /**
- * DEVICE TYPE DETECTION
- * Rileva il tipo di device per applicare limiti solo dove necessario
+ * DEVICE TYPE DETECTION — SSOT unica
+ *
+ * Soglie basate sul LATO CORTO (min dimension): è l'asse stabile per distinguere
+ * phone da tablet a prescindere dall'orientamento. Sotto orientation:'portrait'
+ * (app.config) width === min(width,height), quindi è equivalente al vecchio
+ * calcolo width-based sul target reale (phone).
+ *
+ * Questa è l'UNICA definizione di breakpoint device: la consuma sia getDeviceType
+ * (qui, per scaleSpacing/scaleTouch) sia useDeviceType (hook reattivo, per il layout).
  */
-const DEVICE_BREAKPOINTS = {
-  small: 380, // iPhone SE, mini → limiti MINIMI
-  normal: 600, // iPhone standard, Android → scale() PURO
-  large: 1024, // iPad, tablet → limiti MASSIMI
+export const DEVICE_BREAKPOINTS = {
+  /** Sotto questa soglia (lato corto): device piccolo (iPhone SE/mini) → min touch 44px */
+  small: 380,
+  /** Da questa soglia (lato corto): tablet/iPad → limiti spacing */
+  tablet: 500,
 } as const;
+
+/**
+ * Classifica il device dal lato corto (min dimension). Pura e testabile,
+ * senza dipendenze da Dimensions: il wrapper la alimenta col valore reale.
+ */
+export const classifyDeviceType = (
+  minDimension: number
+): 'small' | 'normal' | 'large' => {
+  if (minDimension < DEVICE_BREAKPOINTS.small) return 'small';
+  if (minDimension < DEVICE_BREAKPOINTS.tablet) return 'normal';
+  return 'large';
+};
 
 export const getDeviceType = (): 'small' | 'normal' | 'large' => {
   // eslint-disable-next-line no-restricted-properties
-  const width = Dimensions.get('window').width;
-
-  if (width < DEVICE_BREAKPOINTS.small) return 'small';
-  if (width < DEVICE_BREAKPOINTS.normal) return 'normal';
-  return 'large';
+  const { width, height } = Dimensions.get('window');
+  return classifyDeviceType(Math.min(width, height));
 };
 
 // Export statici per uso diretto

@@ -7,5 +7,4 @@ export { MapSection } from './MapSection';
 export { StatCard } from './StatCard';
 
 // Hook e utilità
-export { useImpactAnimations } from '../useImpactAnimations';
 export { convertToMapLocations } from '../utils/mapHelpers';

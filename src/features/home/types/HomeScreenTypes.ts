@@ -4,21 +4,13 @@
 
 import type { NavigationProp } from '@react-navigation/native';
 import type { Animated } from 'react-native';
+import type { RootStackParamList } from '@/navigation/types';
 
 /**
  * Home Screen Types
  * Tipi per la feature Home
+ * RootStackParamList: SSOT in @/navigation/types (qui NON ridefinito).
  */
-
-// Navigation param list type
-export type RootStackParamList = {
-  Home: undefined;
-  Impact: undefined;
-  Projects: undefined;
-  About: undefined;
-  Actions: undefined;
-  [key: string]: undefined | Record<string, unknown>;
-};
 
 // Navigation types
 export interface HomeScreenProps {

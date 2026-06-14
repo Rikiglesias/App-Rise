@@ -105,16 +105,8 @@ export const MODAL_DIMENSIONS = {
 // REFERENCE DEVICE
 // ===================================================================
 
-/**
- * iPhone 15 come device di riferimento
- * Tutte le dimensioni sono ottimizzate per questo device
- * Il responsive system scala automaticamente per altri device
- */
-export const REFERENCE_DEVICE = {
-  WIDTH: 393,
-  HEIGHT: 852,
-  SCALE: 2,
-} as const;
+// Device di riferimento (iPhone 15): SSOT in perfectScale.ts (LOGICAL_REFERENCE).
+// La ex-costante REFERENCE_DEVICE qui era un duplicato orfano (0 consumatori).
 
 // ===================================================================
 // TYPE EXPORTS

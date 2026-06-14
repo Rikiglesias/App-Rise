@@ -14,7 +14,7 @@ export {
   CommunitySection,
   MapSection,
 } from './impact';
-export { useImpactAnimations, convertToMapLocations } from './impact';
+export { convertToMapLocations } from './impact';
 
 // Actions Feature
 export { ContributeTabScreen } from './actions';

@@ -16,21 +16,7 @@ import {
   PerfectSpacing,
 } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
-
-interface Location {
-  id: string;
-  name: string;
-  country: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  projects: number;
-  beneficiaries: string;
-  status: string;
-  description: string;
-  image: string;
-}
+import type { Location } from '@/shared/types/location';
 
 interface Props {
   visible: boolean;

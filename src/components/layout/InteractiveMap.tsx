@@ -11,24 +11,7 @@ import {
 } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import { PerfectText } from '../ui/PerfectText';
-
-export interface Location {
-  id: string;
-  name: string;
-  country: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  projects: number;
-  beneficiaries: string;
-  status: string;
-  description: string;
-  image: string;
-  meals?: number;
-  kits?: number;
-  volunteers?: number;
-}
+import type { Location } from '@/shared/types/location';
 
 interface Props {
   locations: Location[];

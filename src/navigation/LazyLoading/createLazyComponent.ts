@@ -110,12 +110,13 @@ const createRetryableImport = async (
   let lastError: Error = new Error('Import failed');
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     try {
       // Crea promise con timeout
       const importPromise = Promise.race([
         importFn(),
         new Promise<never>((_, reject) => {
-          setTimeout(
+          timeoutId = setTimeout(
             () => reject(new Error(`Import timeout after ${timeout}ms`)),
             timeout
           );
@@ -130,47 +131,12 @@ const createRetryableImport = async (
       if (attempt < maxRetries) {
         await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
       }
+    } finally {
+      // Cancella il timer del timeout: su successo evita un handle pendente
+      // che resterebbe attivo fino a `timeout` ms (leak + open-handle nei test)
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
     }
   }
 
   throw lastError;
-};
-
-/**
- * Precarica un componente lazy
- */
-export const preloadComponent = (name: string): void => {
-  const cached = componentCache.get(name);
-  if (cached) {
-    void cached.catch(error => {
-      logger.warn('LazyComponent', `Preload failed for ${name}`, { error });
-    });
-  }
-};
-
-/**
- * Precarica multipli componenti
- */
-export const preloadComponents = (names: string[]): void => {
-  names.forEach(preloadComponent);
-};
-
-/**
- * Ottiene statistiche sui componenti lazy
- */
-export const getLazyComponentStats = () => {
-  return {
-    cached: componentCache.size,
-    preloaded: preloadQueue.size,
-    cacheKeys: Array.from(componentCache.keys()),
-    preloadQueue: Array.from(preloadQueue),
-  };
-};
-
-/**
- * Pulisce la cache dei componenti
- */
-export const clearComponentCache = (): void => {
-  componentCache.clear();
-  preloadQueue.clear();
 };

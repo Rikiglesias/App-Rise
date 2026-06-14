@@ -20,9 +20,8 @@ const getEnvVar = (key: string): string | undefined => {
 
 /**
  * Resolve production API URL.
- * NOTA: L'app attualmente NON usa API backend - tutti i dati sono statici.
- * Questo URL è solo placeholder per mantenere compatibilità con apiSecurity.ts
- * (che non viene utilizzato ma è importato da shared/index.ts).
+ * NOTA: l'app NON usa un API backend — tutti i dati sono statici. Questo resta
+ * un placeholder/feature-flag esposto via env, senza consumer di rete reali.
  */
 const resolveProductionApiUrl = (): string => {
   const extra = (Constants.expoConfig?.extra as { apiUrl?: string } | undefined)

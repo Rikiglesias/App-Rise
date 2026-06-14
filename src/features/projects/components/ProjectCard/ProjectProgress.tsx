@@ -13,6 +13,10 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
 }) => {
   const { colors } = useTheme();
 
+  // Clamp [0,100]: un progress fuori range romperebbe la width della barra
+  // (es. "150%" sfora, "-10%" è invalido) e mostrerebbe una percentuale assurda.
+  const clampedProgress = Math.min(100, Math.max(0, progress));
+
   const styles = StyleSheet.create({
     progressContainer: {
       marginTop: PerfectSpacing.sm,
@@ -32,7 +36,7 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
       height: '100%',
       backgroundColor: statusColor,
       borderRadius: BorderRadius.full,
-      width: `${progress}%`,
+      width: `${clampedProgress}%`,
     },
   });
 
@@ -44,7 +48,7 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
         fontWeight="400"
         style={styles.progressLabel}
       >
-        Progresso: {progress}%
+        Progresso: {clampedProgress}%
       </PerfectText>
       <PerfectContainer style={styles.progressBar}>
         <PerfectContainer style={styles.progressFill} />

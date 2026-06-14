@@ -1,16 +1,4 @@
-import { useRef } from 'react';
 import { Animated } from 'react-native';
-
-export const useHomeAnimations = () => {
-  // ANIMAZIONI DISABILITATE - Valori statici per performance ottimale
-  const titleAnim = useRef(new Animated.Value(1)).current;
-  const imageAnim = useRef(new Animated.Value(1)).current;
-  const containerAnim = useRef(new Animated.Value(1)).current;
-
-  // useEffect rimosso - nessuna animazione da eseguire
-
-  return { titleAnim, imageAnim, containerAnim };
-};
 
 export const useScrollInterpolations = (scrollY: Animated.Value) => {
   const titleOpacity = scrollY.interpolate({

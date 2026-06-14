@@ -1,6 +1,6 @@
 /**
  * LazyComponents Test
- * Tests exports and configuration of lazy-loaded components
+ * Verifica gli export delle schermate secondarie montate in modo lazy.
  * Note: Rendering tests skipped due to Jest mock limitations with JSX
  */
 
@@ -10,11 +10,6 @@ describe('LazyComponents', () => {
   describe('Component Exports', () => {
     it('should export all lazy components as valid React components', () => {
       const components = [
-        LazyComponents.LazyHomeScreen,
-        LazyComponents.LazyContributeTabScreen,
-        LazyComponents.LazyImpactStackNavigator,
-        LazyComponents.LazyChiSiamoScreen,
-        LazyComponents.LazySeguiciScreen,
         LazyComponents.LazyProjectsScreen,
         LazyComponents.LazyImpatto2024Screen,
         LazyComponents.LazyDevelopmentScreen,
@@ -31,10 +26,6 @@ describe('LazyComponents', () => {
   describe('Wrapped Component Exports', () => {
     it('should export all wrapped components as valid React components', () => {
       const wrappedComponents = [
-        LazyComponents.WrappedHomeScreen,
-        LazyComponents.WrappedContributeTabScreen,
-        LazyComponents.WrappedChiSiamoScreen,
-        LazyComponents.WrappedSeguiciScreen,
         LazyComponents.WrappedProjectsScreen,
         LazyComponents.WrappedImpatto2024Screen,
         LazyComponents.WrappedDevelopmentScreen,
@@ -48,44 +39,18 @@ describe('LazyComponents', () => {
     });
   });
 
-  describe('Preload Functions', () => {
-    it('should export preloadCriticalComponents function', () => {
-      expect(LazyComponents.preloadCriticalComponents).toBeDefined();
-      expect(typeof LazyComponents.preloadCriticalComponents).toBe('function');
-    });
-
-    it('should export preloadSecondaryComponents function', () => {
-      expect(LazyComponents.preloadSecondaryComponents).toBeDefined();
-      expect(typeof LazyComponents.preloadSecondaryComponents).toBe('function');
-    });
-
-    it('should execute preloadCriticalComponents without errors', () => {
-      expect(() => {
-        LazyComponents.preloadCriticalComponents();
-      }).not.toThrow();
-    });
-
-    it('should execute preloadSecondaryComponents without errors', () => {
-      expect(() => {
-        LazyComponents.preloadSecondaryComponents();
-      }).not.toThrow();
-    });
-  });
-
   describe('Module Structure', () => {
-    it('should export all expected members', () => {
-      const exportedKeys = Object.keys(LazyComponents);
+    it('should export exactly the lazy screens actually mounted by AppNavigator', () => {
+      const exportedKeys = Object.keys(LazyComponents).sort();
 
-      // Verify critical exports are present
-      expect(exportedKeys).toContain('LazyHomeScreen');
-      expect(exportedKeys).toContain('LazyContributeTabScreen');
-      expect(exportedKeys).toContain('preloadCriticalComponents');
-      expect(exportedKeys).toContain('preloadSecondaryComponents');
-    });
-
-    it('should have at least 15 exports total', () => {
-      const exportCount = Object.keys(LazyComponents).length;
-      expect(exportCount).toBeGreaterThanOrEqual(15);
+      expect(exportedKeys).toEqual([
+        'LazyDevelopmentScreen',
+        'LazyImpatto2024Screen',
+        'LazyProjectsScreen',
+        'WrappedDevelopmentScreen',
+        'WrappedImpatto2024Screen',
+        'WrappedProjectsScreen',
+      ]);
     });
   });
 
@@ -95,12 +60,12 @@ describe('LazyComponents', () => {
         key.startsWith('Lazy')
       );
 
-      lazyExports.forEach(([name, value]) => {
+      lazyExports.forEach(([, value]) => {
         // React.lazy() returns objects, HOCs return functions
         expect(['function', 'object']).toContain(typeof value);
       });
 
-      expect(lazyExports.length).toBeGreaterThan(5);
+      expect(lazyExports.length).toBe(3);
     });
 
     it('all Wrapped* exports should be valid React components', () => {
@@ -108,11 +73,11 @@ describe('LazyComponents', () => {
         key.startsWith('Wrapped')
       );
 
-      wrappedExports.forEach(([name, value]) => {
+      wrappedExports.forEach(([, value]) => {
         expect(['function', 'object']).toContain(typeof value);
       });
 
-      expect(wrappedExports.length).toBeGreaterThan(5);
+      expect(wrappedExports.length).toBe(3);
     });
   });
 });

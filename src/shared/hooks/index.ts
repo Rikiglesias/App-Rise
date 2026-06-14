@@ -8,13 +8,7 @@ export {
   useAsyncOperation,
   useNavigationOperation,
 } from './useAsyncOperation';
-export { useHomeScrollAnimation } from './useHomeScrollAnimation';
-export {
-  ThemeProvider,
-  useTheme,
-  useThemeColors,
-  useThemeStyles,
-} from './useTheme';
+export { ThemeProvider, useTheme } from './useTheme';
 export { useTranslation } from './useTranslation';
 export { useDeviceType } from './useDeviceType';
 

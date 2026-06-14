@@ -1,6 +1,6 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
 
-import type { Location } from '@/components/layout/InteractiveMap';
+import type { Location } from '@/shared/types/location';
 
 export interface RootStackParamList {
   Home: undefined;
@@ -29,6 +29,9 @@ export interface RootStackParamList {
   };
   ChiSiamo: undefined;
   Projects: undefined;
+  // Index signature RICHIESTA da React Navigation: StackNavigationProp vincola
+  // il ParamList a ParamListBase ([routeName: string]: object | undefined).
+  // Rimuoverla rompe il typecheck di Navigator/navigation in ~13 punti.
   [key: string]: undefined | object;
 }
 

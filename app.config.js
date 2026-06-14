@@ -142,6 +142,12 @@ export default withDefaultStrings({
     ios: {
       displayName: 'RAH Italia',
       supportsTablet: true,
+      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
+      // (mai committato); iniettata in Info.plist al prebuild. Senza key la mappa
+      // renderizza vuota (audit rank 3). RNMaps 1.20.1 < 1.22 => no config-plugin.
+      ...(process.env.GOOGLE_MAPS_API_KEY && {
+        config: { googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY },
+      }),
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
@@ -187,6 +193,12 @@ export default withDefaultStrings({
       // versionCode removed - managed by EAS remote (appVersionSource: "remote" in eas.json)
       ...(process.env.ANDROID_VERSION_CODE && {
         versionCode: parseInt(process.env.ANDROID_VERSION_CODE, 10),
+      }),
+      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
+      // (mai committato); iniettata nell'AndroidManifest al prebuild. Senza key
+      // i tile non caricano (audit rank 3).
+      ...(process.env.GOOGLE_MAPS_API_KEY && {
+        config: { googleMaps: { apiKey: process.env.GOOGLE_MAPS_API_KEY } },
       }),
       icon: './assets/icons/app/app-icon.png',
       // Permessi specifici con giustificazione
@@ -238,6 +250,21 @@ export default withDefaultStrings({
       'expo-font',
       'expo-localization',
       'expo-splash-screen',
+      // Sentry: config plugin per setup nativo + upload source map al build EAS.
+      // Attivo SOLO con SENTRY_ORG + SENTRY_PROJECT in env (auth token via SENTRY_AUTH_TOKEN,
+      // MAI committato). Senza questi -> plugin assente, prebuild invariato (pre-DSN safe).
+      ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
+        ? [
+            [
+              '@sentry/react-native/expo',
+              {
+                organization: process.env.SENTRY_ORG,
+                project: process.env.SENTRY_PROJECT,
+                url: process.env.SENTRY_URL || 'https://sentry.io/',
+              },
+            ],
+          ]
+        : []),
     ],
 
     // Aggiornamenti OTA

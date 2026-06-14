@@ -90,7 +90,7 @@ class LazyErrorBoundary extends React.Component<
   }
 
   override componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    logger.error('LazyScreen', 'Component error caught', {
+    logger.error('Component error caught', 'LazyScreen', {
       error: error.message,
       stack: error.stack,
       errorInfo,

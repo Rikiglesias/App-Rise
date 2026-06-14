@@ -54,6 +54,29 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
   const wrappedChildren =
     React.Children.count(children) > 1 ? <View>{children}</View> : children;
 
+  // Inoltra a TouchableRipple i prop a11y/interazione che il ramo iOS passa via
+  // {...props} ma che qui si perdevano (bug a11y su Android). Spread CONDIZIONALE:
+  // evita di passare `undefined` esplicito (incompatibile con exactOptionalPropertyTypes)
+  // e di propagare prop specifici di TouchableOpacity non validi su Ripple.
+  const forwardedProps = {
+    ...(props.accessibilityRole !== undefined && {
+      accessibilityRole: props.accessibilityRole,
+    }),
+    ...(props.accessibilityLabel !== undefined && {
+      accessibilityLabel: props.accessibilityLabel,
+    }),
+    ...(props.accessibilityHint !== undefined && {
+      accessibilityHint: props.accessibilityHint,
+    }),
+    ...(props.accessibilityState !== undefined && {
+      accessibilityState: props.accessibilityState,
+    }),
+    ...(props.accessible !== undefined && { accessible: props.accessible }),
+    ...(props.hitSlop !== undefined && { hitSlop: props.hitSlop }),
+    ...(props.testID !== undefined && { testID: props.testID }),
+    ...(props.onLongPress !== undefined && { onLongPress: props.onLongPress }),
+  };
+
   return (
     <TouchableRipple
       onPress={onPress ?? handleEmptyPress}
@@ -61,6 +84,7 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
       rippleColor={rippleColor}
       borderless={borderless}
       disabled={disabled}
+      {...forwardedProps}
     >
       {wrappedChildren}
     </TouchableRipple>

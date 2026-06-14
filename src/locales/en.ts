@@ -134,10 +134,6 @@ export default {
     volunteerDescription: 'Join our volunteer team',
     organizeDescription: 'Organize a meal packaging event in your community',
     shareDescription: 'Help us spread our mission',
-    donateInfo: 'Donation Info',
-    donateInfoText:
-      'Every donation makes a direct impact. With just €0.30 we can package one complete meal.',
-    moreInfo: 'Learn More',
     donationInfoTitle: 'How to Donate',
     donationMonetary: '💶 Monetary donations:',
     donationMonetaryText:
@@ -245,8 +241,6 @@ export default {
       'Every meal we pack together is a gesture of love that crosses borders and reaches those who need it most.',
     joinUs: 'Join us in this mission! 💙',
   },
-
-  community: 'Community',
 
   errors: {
     generic: 'An error occurred',
