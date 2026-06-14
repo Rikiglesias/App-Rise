@@ -1,8 +1,8 @@
-const { withAndroidStrings } = require('@expo/config-plugins');
+const { withStringsXml } = require('@expo/config-plugins');
 
 // Plugin per garantire che le stringhe critiche (come il nome app) esistano nel locale di default
 const withDefaultStrings = (config) => {
-  return withAndroidStrings(config, (config) => {
+  return withStringsXml(config, (config) => {
     if (!config.modResults.resources) {
       config.modResults.resources = {};
     }
@@ -142,6 +142,12 @@ export default withDefaultStrings({
     ios: {
       displayName: 'RAH Italia',
       supportsTablet: true,
+      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
+      // (mai committato); iniettata in Info.plist al prebuild. Senza key la mappa
+      // renderizza vuota (audit rank 3). RNMaps 1.20.1 < 1.22 => no config-plugin.
+      ...(process.env.GOOGLE_MAPS_API_KEY && {
+        config: { googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY },
+      }),
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
@@ -187,6 +193,12 @@ export default withDefaultStrings({
       // versionCode removed - managed by EAS remote (appVersionSource: "remote" in eas.json)
       ...(process.env.ANDROID_VERSION_CODE && {
         versionCode: parseInt(process.env.ANDROID_VERSION_CODE, 10),
+      }),
+      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
+      // (mai committato); iniettata nell'AndroidManifest al prebuild. Senza key
+      // i tile non caricano (audit rank 3).
+      ...(process.env.GOOGLE_MAPS_API_KEY && {
+        config: { googleMaps: { apiKey: process.env.GOOGLE_MAPS_API_KEY } },
       }),
       icon: './assets/icons/app/app-icon.png',
       // Permessi specifici con giustificazione
