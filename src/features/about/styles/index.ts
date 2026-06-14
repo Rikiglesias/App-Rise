@@ -6,7 +6,7 @@
  */
 
 // Re-export all styles from refactored modules
-export { mainStyles } from './mainStyles';
+export { createMainStyles } from './mainStyles';
 export { createModalStyles } from './modalStyles';
 export { createChiSiamoSectionStyles } from './chiSiamoStyles';
 export {
@@ -15,7 +15,7 @@ export {
 } from './contactStyles';
 
 // Legacy aliases for backward compatibility
-export { mainStyles as aboutMainStyles } from './mainStyles';
+export { createMainStyles as createAboutMainStyles } from './mainStyles';
 export { createModalStyles as createAboutModalStyles } from './modalStyles';
 export { createChiSiamoSectionStyles as createAboutChiSiamoStyles } from './chiSiamoStyles';
 export { createContactSectionStyles as createAboutContactStyles } from './contactStyles';

@@ -7,8 +7,8 @@ import {
 import { StyleSheet } from 'react-native';
 import { SocialCard, HeaderSection } from '../components';
 import { useSocialPlatforms } from '../useSocialPlatforms';
-import { mainStyles } from '../mainStyles';
-import { mainStyles as aboutMainStyles } from '../../about/styles/mainStyles';
+import { createMainStyles } from '../mainStyles';
+import { createMainStyles as createAboutMainStyles } from '../../about/styles/mainStyles';
 
 import {
   PlatformScrollView,
@@ -16,8 +16,9 @@ import {
   PerfectContainer,
   PerfectIcon,
 } from '@/components/ui';
-import { Colors, PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing } from '@/shared/constants';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { RootStackParamList } from '@/navigation/types';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 
@@ -35,6 +36,12 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { isTablet } = useDeviceType();
   const { triggerHaptic } = useHapticFeedback();
   const { socialPlatforms } = useSocialPlatforms();
+  const colors = useThemeColors();
+  const mainStyles = useMemo(() => createMainStyles(colors), [colors]);
+  const aboutMainStyles = useMemo(
+    () => createAboutMainStyles(colors),
+    [colors]
+  );
 
   // Calcola top dinamico: safe area + spacing token
   const dynamicStyles = useMemo(
@@ -50,7 +57,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
           alignSelf: 'center',
         },
       }),
-    [insets.top]
+    [insets.top, aboutMainStyles]
   );
 
   const handleBackPress = useCallback(async () => {
@@ -65,7 +72,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleBackPress}
         style={dynamicStyles.backButton}
       >
-        <PerfectIcon name="arrow-left" size={24} color={Colors.neutral[900]} />
+        <PerfectIcon name="arrow-left" size={24} color={colors.neutral[900]} />
       </PlatformTouchable>
 
       <PlatformScrollView

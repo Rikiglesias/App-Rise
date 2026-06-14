@@ -1,15 +1,17 @@
 import { StyleSheet } from 'react-native';
 
-import { mainStyles as aboutMainStyles } from '../about/styles/mainStyles';
+import { createMainStyles as createAboutMainStyles } from '../about/styles/mainStyles';
 import { PerfectSpacing } from '@/shared/constants';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
  * Stili principali per la sezione Social
  * Estende gli stili di About per consistenza grafica
  */
-export const mainStyles = StyleSheet.create({
-  // Eredita tutti gli stili da About per consistenza
-  ...aboutMainStyles,
+export const createMainStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    // Eredita tutti gli stili da About per consistenza
+    ...createAboutMainStyles(colors),
 
   // Override contentContainer per più spazio (4 bottoni social + header)
   contentContainer: {
