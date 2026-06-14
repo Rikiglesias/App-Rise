@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PerfectText, PerfectContainer, PerfectIcon } from '@/components/ui';
-import { Colors, PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { scale } from '@/shared/constants/perfectScale';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 export const HeaderSection: React.FC = React.memo(() => {
   const { t } = useTranslation();
   const { isTablet } = useDeviceType();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
     <PerfectContainer
@@ -17,7 +21,7 @@ export const HeaderSection: React.FC = React.memo(() => {
         <PerfectIcon
           name="account-group"
           size={32}
-          color={Colors.primary[600]}
+          color={colors.primary[600]}
         />
       </PerfectContainer>
 
@@ -50,7 +54,7 @@ export const HeaderSection: React.FC = React.memo(() => {
 
 HeaderSection.displayName = 'HeaderSection';
 
-const styles = {
+const createStyles = (colors: ThemeColors) => ({
   headerContainer: {
     alignItems: 'center' as const,
     marginBottom: PerfectSpacing.xl,
@@ -60,28 +64,28 @@ const styles = {
     width: scale(80),
     height: scale(80),
     borderRadius: scale(40),
-    backgroundColor: Colors.primary[50],
+    backgroundColor: colors.primary[50],
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginBottom: PerfectSpacing.base,
   },
   titleContainer: {
     alignItems: 'center' as const,
-    backgroundColor: Colors.neutral[100],
+    backgroundColor: colors.neutral[100],
     borderWidth: scale(1),
-    borderColor: Colors.neutral[400],
+    borderColor: colors.neutral[400],
     borderRadius: scale(16),
     width: '100%' as const,
   },
   headerTitle: {
-    color: Colors.neutral[900],
+    color: colors.neutral[900],
     textAlign: 'center' as const,
     marginBottom: PerfectSpacing.md,
     letterSpacing: scale(-0.5),
   },
   headerSubtitle: {
-    color: Colors.neutral[600],
+    color: colors.neutral[600],
     textAlign: 'center' as const,
     paddingHorizontal: PerfectSpacing.sm,
   },
-};
+});
