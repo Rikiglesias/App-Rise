@@ -9,24 +9,17 @@
 
 import { useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
-
-const DEVICE_BREAKPOINTS = {
-  small: 380, // iPhone SE, mini
-  normal: 500, // iPhone standard, Android (max: iPhone Pro Max 430px)
-  large: 500, // iPad, tablet (min: iPad Mini portrait 768px)
-} as const;
+import { classifyDeviceType } from '@/shared/constants/perfectScale';
 
 export const useDeviceType = () => {
   const { width, height } = useWindowDimensions();
 
-  const deviceType = useMemo(() => {
-    // Usa la dimensione minore (portrait orientation)
-    const minDimension = Math.min(width, height);
-
-    if (minDimension < DEVICE_BREAKPOINTS.small) return 'small';
-    if (minDimension < DEVICE_BREAKPOINTS.large) return 'normal';
-    return 'large';
-  }, [width, height]);
+  // Stessa SSOT di getDeviceType (perfectScale): un'unica definizione di breakpoint.
+  // isTablet resta = lato corto >= 500 (comportamento invariato per i 13 consumer).
+  const deviceType = useMemo(
+    () => classifyDeviceType(Math.min(width, height)),
+    [width, height]
+  );
 
   return {
     deviceType,
