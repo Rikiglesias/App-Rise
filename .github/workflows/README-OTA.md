@@ -6,14 +6,9 @@ Il workflow `ota-deploy.yml` automatizza la pubblicazione di aggiornamenti Over-
 
 ## Quando Si Attiva
 
-### Automatico (Push su Master)
-Il workflow si attiva automaticamente quando:
-- Viene fatto push su branch `master`
-- Le modifiche riguardano:
-  - `src/**` (codice sorgente)
-  - `assets/**` (immagini, icone)
-  - `app.config.js` (configurazione)
-  - `package.json` (dipendenze)
+> ⚠️ Questo workflow è **Manual Only** (`on: workflow_dispatch`): **NON** parte
+> automaticamente su push a `master`. Va lanciato a mano dalla UI di GitHub
+> Actions (o richiamato da un altro workflow).
 
 ### Manuale (Workflow Dispatch)
 Puoi attivare manualmente il workflow da:
@@ -79,7 +74,7 @@ EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}  # Token Expo
 
 ## Come Usare
 
-### Scenario 1: Deploy Automatico
+### Scenario 1: Deploy dopo merge (manuale)
 
 ```bash
 # 1. Fai modifiche al codice
@@ -91,7 +86,7 @@ git commit -am "fix: traduzione home screen"
 git push origin feature/fix-traduzione
 
 # 3. Crea PR e merge su master
-# GitHub Actions → Merge su master → OTA deploy automatico! ✅
+# 4. GitHub → Actions → "🚀 OTA Deploy" → Run workflow (NON automatico) ✅
 ```
 
 ### Scenario 2: Deploy Manuale
@@ -119,7 +114,7 @@ git commit -am "hotfix: critical crash fix"
 # 2. Push su master (bypass PR se urgente)
 git push origin master
 
-# 3. Workflow parte automaticamente
+# 3. Lancia "🚀 OTA Deploy" da GitHub Actions (manuale)
 # ✅ Update live in ~5 minuti
 ```
 
@@ -261,8 +256,9 @@ Il workflow può essere esteso con notifiche:
 
 ## FAQ
 
-### Q: Il workflow parte anche per PR?
-**A:** No, solo su push a `master` o trigger manuale.
+### Q: Il workflow parte automaticamente (push o PR)?
+**A:** No: è **solo manuale** (`workflow_dispatch`). Né push su `master` né PR lo
+attivano — va lanciato a mano da GitHub Actions.
 
 ### Q: Posso fare deploy su branch diversi da production?
 **A:** Sì, usa workflow_dispatch e seleziona branch target.
