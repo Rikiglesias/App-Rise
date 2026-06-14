@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import type { ChiSiamoSectionProps } from '../types';
-import { chiSiamoSectionStyles } from '../styles/chiSiamoStyles';
+import { createChiSiamoSectionStyles } from '../styles/chiSiamoStyles';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import {
   PerfectIcon,
@@ -9,9 +9,10 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-import { Colors, PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   onInfoPress,
@@ -19,6 +20,11 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
   const { isTablet } = useDeviceType();
+  const colors = useThemeColors();
+  const chiSiamoSectionStyles = useMemo(
+    () => createChiSiamoSectionStyles(colors),
+    [colors]
+  );
 
   const handleInfoPress = useCallback(() => {
     void triggerHaptic('light');
@@ -73,7 +79,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             <PerfectIcon
               name="information"
               size={24}
-              color={Colors.neutral[900]}
+              color={colors.neutral[900]}
             />
           </PlatformTouchable>
         </PerfectContainer>
