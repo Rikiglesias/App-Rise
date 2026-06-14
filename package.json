@@ -55,7 +55,7 @@
     "install:clean": "rm -rf node_modules package-lock.json && npm install",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",
-    "lint:fix": "eslint src/ --ext .ts,.tsx --fix",
+    "lint:fix": "eslint src/ App.tsx index.ts --ext .ts,.tsx --fix",
     "format": "prettier --write src/",
     "quality:full": "npm run typecheck && npm run lint && npm run test && npm run format",
     "optimize:android": "node scripts/migrate-to-platform-components.js",
@@ -87,7 +87,7 @@
     "refactor:check": "npm run filesize:analyze && echo '✅ File size compliance verified'",
     "deadcode": "npx ts-prune -u",
     "deadcode:ci": "npx ts-prune -u -e",
-    "lint": "eslint src/ --ext .ts,.tsx --max-warnings 0"
+    "lint": "eslint src/ App.tsx index.ts --ext .ts,.tsx --max-warnings 0"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
