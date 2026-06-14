@@ -1,12 +1,7 @@
 import React from 'react';
 import { render, renderHook, act } from '@testing-library/react-native';
 import { Appearance, ColorSchemeName } from 'react-native';
-import {
-  ThemeProvider,
-  useTheme,
-  useThemeColors,
-  useThemeStyles,
-} from '../../../shared/hooks/useTheme';
+import { ThemeProvider, useTheme } from '../../../shared/hooks/useTheme';
 import { Colors } from '../../../shared/constants/designTokens';
 
 // Mock React Native Appearance
@@ -185,118 +180,6 @@ describe('useTheme - Error Handling', () => {
     expect(() => render(<TestHook />)).toThrow(
       'useTheme must be used within a ThemeProvider'
     );
-  });
-});
-
-describe('useThemeColors - Hook Testing', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockAppearance.getColorScheme.mockReturnValue('light');
-    mockAppearance.addChangeListener.mockReturnValue({
-      remove: jest.fn(),
-    });
-  });
-
-  it('should return colors object', () => {
-    const { result } = renderHook(() => useThemeColors(), {
-      wrapper: ThemeProvider,
-    });
-
-    expect(result.current).toBe(Colors);
-    expect(result.current.primary).toBeDefined();
-    expect(result.current.neutral).toBeDefined();
-  });
-
-  it('should return same colors regardless of theme mode', () => {
-    const { result } = renderHook(
-      () => {
-        const { toggleTheme } = useTheme();
-        const colors = useThemeColors();
-        return { toggleTheme, colors };
-      },
-      {
-        wrapper: ThemeProvider,
-      }
-    );
-
-    const lightColors = result.current.colors;
-
-    act(() => {
-      result.current.toggleTheme();
-    });
-
-    const darkColors = result.current.colors;
-
-    expect(lightColors).toBe(darkColors);
-    expect(lightColors).toBe(Colors);
-  });
-});
-
-describe('useThemeStyles - Theme-Aware Styles', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockAppearance.getColorScheme.mockReturnValue('light');
-    mockAppearance.addChangeListener.mockReturnValue({
-      remove: jest.fn(),
-    });
-  });
-
-  it('should return theme styles with light mode', () => {
-    const { result } = renderHook(() => useThemeStyles(), {
-      wrapper: ThemeProvider,
-    });
-
-    expect(result.current.isDark).toBe(false);
-    expect(result.current.colors).toBe(Colors);
-    expect(result.current.container).toBeDefined();
-    expect(result.current.card).toBeDefined();
-    expect(result.current.text).toBeDefined();
-    expect(result.current.surface).toBeDefined();
-  });
-
-  it('should return theme styles with dark mode', () => {
-    const { result } = renderHook(
-      () => {
-        const { toggleTheme } = useTheme();
-        const styles = useThemeStyles();
-        return { toggleTheme, styles };
-      },
-      {
-        wrapper: ThemeProvider,
-      }
-    );
-
-    act(() => {
-      result.current.toggleTheme();
-    });
-
-    expect(result.current.styles.isDark).toBe(true);
-    expect(result.current.styles.colors).toBe(Colors);
-  });
-
-  it('should have consistent style structure', () => {
-    const { result } = renderHook(() => useThemeStyles(), {
-      wrapper: ThemeProvider,
-    });
-
-    const styles = result.current;
-
-    // Container styles
-    expect(styles.container.backgroundColor).toBe(Colors.neutral[50]);
-
-    // Card styles
-    expect(styles.card.backgroundColor).toBe(Colors.neutral[0]);
-    expect(styles.card.borderColor).toBe(Colors.neutral[200]);
-
-    // Text styles
-    expect(styles.text.primary).toBe(Colors.neutral[900]);
-    expect(styles.text.secondary).toBe(Colors.neutral[600]);
-    expect(styles.text.accent).toBe(Colors.primary[500]);
-
-    // Surface styles
-    expect(styles.surface.primary).toBe(Colors.neutral[0]);
-    expect(styles.surface.secondary).toBe(Colors.neutral[100]);
-    expect(styles.surface.elevated).toBe(Colors.neutral[0]);
   });
 });
 

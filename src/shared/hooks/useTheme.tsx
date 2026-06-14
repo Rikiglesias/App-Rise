@@ -30,35 +30,4 @@ export const useTheme = (): ThemeContextType => {
   }
 };
 
-// Hook for getting current brand colors
-export const useThemeColors = () => Colors;
-
-// Hook for getting theme-aware styles (brand-based)
-export const useThemeStyles = () => {
-  const { isDark } = useUniversalTheme();
-  const colors = Colors;
-
-  return {
-    isDark,
-    colors,
-    container: {
-      backgroundColor: colors.neutral[50],
-    },
-    card: {
-      backgroundColor: colors.neutral[0],
-      borderColor: colors.neutral[200],
-    },
-    text: {
-      primary: colors.neutral[900],
-      secondary: colors.neutral[600],
-      accent: colors.primary[500],
-    },
-    surface: {
-      primary: colors.neutral[0],
-      secondary: colors.neutral[100],
-      elevated: colors.neutral[0],
-    },
-  };
-};
-
 export default useTheme;
