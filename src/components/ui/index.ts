@@ -5,12 +5,6 @@
 // Interactive Components
 export { default as FilterTabs } from './FilterTabs';
 
-// Platform-Specific Components
-export {
-  default as PlatformAnimations,
-  usePlatformAnimations,
-} from './PlatformAnimations';
-
 // Material Design 3 Components (Android-specific)
 export { default as PlatformBlur } from './PlatformBlur';
 export { default as PlatformTouchable } from './PlatformTouchable';

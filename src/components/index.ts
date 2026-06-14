@@ -10,8 +10,6 @@ export {
   // Interactive Components
   FilterTabs,
   // Platform Components
-  PlatformAnimations,
-  usePlatformAnimations,
   PlatformBlur,
   PlatformTouchable,
   PlatformScrollView,
