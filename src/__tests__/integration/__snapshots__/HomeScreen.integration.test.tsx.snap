@@ -46,8 +46,6 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
         >
           <View
             collapsable={false}
-            needsOffscreenAlphaCompositing={true}
-            renderToHardwareTextureAndroid={true}
             style={
               {
                 "backgroundColor": "#FFFFFF",
@@ -256,8 +254,6 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                 accessibilityLabel="Hero Rise Against Hunger"
                 accessibilityRole="image"
                 collapsable={false}
-                needsOffscreenAlphaCompositing={true}
-                renderToHardwareTextureAndroid={true}
                 style={
                   {
                     "alignItems": "center",

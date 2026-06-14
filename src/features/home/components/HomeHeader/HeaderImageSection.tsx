@@ -46,8 +46,6 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
       <PerfectContainer style={styles.imageSection}>
         <Animated.View
           style={[localStyles.animatedContainer, animatedStyle]}
-          renderToHardwareTextureAndroid
-          needsOffscreenAlphaCompositing
           accessibilityRole="image"
           accessibilityLabel="Hero Rise Against Hunger"
         >
