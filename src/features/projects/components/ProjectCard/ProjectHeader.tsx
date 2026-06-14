@@ -5,7 +5,7 @@ import type { ProjectHeaderProps } from './types';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { PerfectSpacing, Typography } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
   title,
@@ -13,7 +13,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({
   statusColor,
   statusText,
 }) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
 
   const styles = StyleSheet.create({
     header: {

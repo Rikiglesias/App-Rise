@@ -5,13 +5,13 @@ import type { ProjectProgressProps } from './types';
 import { PerfectText } from '@/components/ui/PerfectText';
 import { PerfectContainer } from '@/components/ui/PerfectContainer';
 import { BorderRadius, PerfectSpacing } from '@/shared/constants';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const ProjectProgress: React.FC<ProjectProgressProps> = ({
   progress,
   statusColor,
 }) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
 
   // Clamp [0,100]: un progress fuori range romperebbe la width della barra
   // (es. "150%" sfora, "-10%" è invalido) e mostrerebbe una percentuale assurda.
