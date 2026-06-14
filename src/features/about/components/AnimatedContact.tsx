@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { animatedContactStyles } from '../styles/contactStyles';
+import React, { useCallback, useMemo } from 'react';
+import { createAnimatedContactStyles } from '../styles/contactStyles';
 import type { AnimatedContactProps } from '../types';
 import {
   PlatformTouchable,
@@ -7,13 +7,18 @@ import {
   PerfectContainer,
   PerfectIcon,
 } from '@/components/ui';
-import { Colors } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const AnimatedContact: React.FC<AnimatedContactProps> = ({
   contact,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
+  const colors = useThemeColors();
+  const animatedContactStyles = useMemo(
+    () => createAnimatedContactStyles(colors),
+    [colors]
+  );
 
   const handlePress = useCallback(() => {
     contact.onPress();
@@ -34,7 +39,7 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
             <PerfectIcon
               name={contact.icon}
               size={36}
-              color={Colors.neutral[800]}
+              color={colors.neutral[800]}
             />
             <PerfectContainer
               style={animatedContactStyles.contactTextContainer}

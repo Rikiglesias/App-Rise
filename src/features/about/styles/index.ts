@@ -9,10 +9,13 @@
 export { mainStyles } from './mainStyles';
 export { modalStyles } from './modalStyles';
 export { createChiSiamoSectionStyles } from './chiSiamoStyles';
-export { contactSectionStyles, animatedContactStyles } from './contactStyles';
+export {
+  createContactSectionStyles,
+  createAnimatedContactStyles,
+} from './contactStyles';
 
 // Legacy aliases for backward compatibility
 export { mainStyles as aboutMainStyles } from './mainStyles';
 export { modalStyles as aboutModalStyles } from './modalStyles';
 export { createChiSiamoSectionStyles as createAboutChiSiamoStyles } from './chiSiamoStyles';
-export { contactSectionStyles as aboutContactStyles } from './contactStyles';
+export { createContactSectionStyles as createAboutContactStyles } from './contactStyles';
