@@ -6,7 +6,9 @@
 
 **Architecture:** Supabase (Auth + Postgres + RLS) come backend. Client `supabase-js` con sessione persistita in MMKV cifrata (chiave in SecureStore, per il limite 2048B di SecureStore). Stato globale via `AuthContext`. Schermate in uno stack auth dentro `AppNavigator`, entry point = nuova tab "Profilo". Tutto dark-aware (pattern A `useThemeColors`).
 
-**Tech Stack:** TypeScript, Expo/React Native, `@supabase/supabase-js`, `expo-secure-store`, `expo-crypto`, `react-native-mmkv`, React Navigation, Jest.
+**Tech Stack:** TypeScript, Expo/React Native, `@supabase/supabase-js`, `expo-secure-store` (già installato), React Navigation, Jest.
+
+> **Nota implementativa (2026-06-15):** storage rivisto da MMKV → **SecureStore con chunking**. Motivo: `expo-secure-store` è già installato e configurato come plugin; cifra nativamente (keychain/keystore); MMKV avrebbe aggiunto un modulo nativo + dipendenza dalla new architecture (rischio build). Il chunking aggira il limite 2048B di SecureStore.
 
 **Spec di riferimento:** `docs/superpowers/specs/2026-06-15-donor-auth-design.md`
 
