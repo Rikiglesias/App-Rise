@@ -97,4 +97,12 @@ describe('ProfileScreen (autenticato)', () => {
     const { getByText } = wrap(<ProfileScreen />);
     expect(getByText('Annulla eliminazione')).toBeTruthy();
   });
+
+  it('il toggle marketing chiama setMarketingConsent', () => {
+    const setMarketingConsent = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(makeAuth({ setMarketingConsent }));
+    const { getByRole } = wrap(<ProfileScreen />);
+    fireEvent(getByRole('switch'), 'valueChange', true);
+    expect(setMarketingConsent).toHaveBeenCalledWith(true);
+  });
 });

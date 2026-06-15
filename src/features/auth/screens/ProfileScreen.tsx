@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
@@ -28,10 +28,12 @@ export const ProfileScreen: React.FC = () => {
     signOut,
     exportData,
     cancelScheduledDeletion,
+    setMarketingConsent,
   } = useAuth();
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const [exportError, setExportError] = useState<string | undefined>();
+  const [consentError, setConsentError] = useState<string | undefined>();
 
   const handleLogout = useCallback((): void => {
     void signOut();
@@ -51,6 +53,15 @@ export const ProfileScreen: React.FC = () => {
   const handleCancelDeletion = useCallback((): void => {
     void cancelScheduledDeletion();
   }, [cancelScheduledDeletion]);
+  const handleMarketingToggle = useCallback(
+    (value: boolean): void => {
+      setConsentError(undefined);
+      void setMarketingConsent(value).then((r) => {
+        if (r.error) setConsentError(t('auth.consents.error'));
+      });
+    },
+    [setMarketingConsent, t]
+  );
 
   if (status === 'loading') {
     return (
@@ -118,6 +129,28 @@ export const ProfileScreen: React.FC = () => {
         />
       ) : null}
       <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
+
+      <PerfectText size={15} lines={1} style={styles.sectionTitle}>
+        {t('auth.consents.title')}
+      </PerfectText>
+      <View style={styles.toggleRow}>
+        <PerfectText size={15} lines={2} style={styles.toggleLabel}>
+          {t('auth.consents.marketing')}
+        </PerfectText>
+        <Switch
+          value={profile?.marketing_consent ?? false}
+          onValueChange={handleMarketingToggle}
+          accessibilityLabel={t('auth.consents.marketing')}
+        />
+      </View>
+      <PerfectText size={13} lines={2} style={styles.hint}>
+        {t('auth.consents.marketingHint')}
+      </PerfectText>
+      {consentError ? (
+        <PerfectText size={13} lines={2} style={styles.error}>
+          {consentError}
+        </PerfectText>
+      ) : null}
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.privacy.title')}
@@ -195,6 +228,20 @@ const createStyles = (colors: ThemeColors) =>
       fontWeight: '700',
       marginTop: PerfectSpacing.xl,
       marginBottom: PerfectSpacing.xs,
+    },
+    toggleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    toggleLabel: {
+      color: colors.neutral[900],
+      flex: 1,
+      marginRight: PerfectSpacing.base,
+    },
+    hint: {
+      color: colors.neutral[500],
+      marginTop: PerfectSpacing.xs,
     },
     error: {
       color: Colors.semantic.error.main,
