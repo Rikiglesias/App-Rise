@@ -85,6 +85,29 @@ export default {
       subtitle: 'Mancano alcuni dati per completare la registrazione',
       submit: 'Salva e continua',
     },
+    privacy: {
+      title: 'Privacy e dati',
+      exportCta: 'Esporta i miei dati',
+      exportError: 'Esportazione non riuscita. Riprova.',
+      deleteCta: 'Elimina account',
+    },
+    delete: {
+      title: 'Elimina account',
+      warning:
+        'Questa azione è irreversibile: i tuoi dati personali verranno eliminati definitivamente.',
+      now: 'Elimina subito',
+      scheduled: 'Elimina tra 30 giorni',
+      scheduledHint:
+        'Account disattivato e recuperabile per 30 giorni, poi eliminato definitivamente.',
+      confirmNow: 'L’account e tutti i dati saranno eliminati subito. Confermi?',
+      confirmScheduled:
+        'L’account sarà eliminato tra 30 giorni. Potrai annullare accedendo di nuovo. Confermi?',
+      confirm: 'Sì, procedi',
+      cancel: 'Annulla',
+      banner: 'Eliminazione programmata il',
+      bannerCancel: 'Annulla eliminazione',
+      error: 'Operazione non riuscita. Riprova.',
+    },
     errors: {
       required: 'Campo obbligatorio',
       email_invalid: 'Email non valida',

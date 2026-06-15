@@ -85,6 +85,29 @@ export default {
       subtitle: 'A few details are missing to complete your registration',
       submit: 'Save and continue',
     },
+    privacy: {
+      title: 'Privacy and data',
+      exportCta: 'Export my data',
+      exportError: 'Export failed. Please try again.',
+      deleteCta: 'Delete account',
+    },
+    delete: {
+      title: 'Delete account',
+      warning:
+        'This action is irreversible: your personal data will be permanently deleted.',
+      now: 'Delete now',
+      scheduled: 'Delete in 30 days',
+      scheduledHint:
+        'Account disabled and recoverable for 30 days, then permanently deleted.',
+      confirmNow: 'Your account and all data will be deleted now. Confirm?',
+      confirmScheduled:
+        'Your account will be deleted in 30 days. You can cancel by signing in again. Confirm?',
+      confirm: 'Yes, proceed',
+      cancel: 'Cancel',
+      banner: 'Deletion scheduled for',
+      bannerCancel: 'Cancel deletion',
+      error: 'Operation failed. Please try again.',
+    },
     errors: {
       required: 'Required field',
       email_invalid: 'Invalid email',
