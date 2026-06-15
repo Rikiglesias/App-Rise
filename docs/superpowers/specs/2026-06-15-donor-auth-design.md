@@ -29,8 +29,8 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 | `id` | uuid PK | FK → `auth.users.id`, on delete cascade |
 | `first_name` | text | obbligatorio |
 | `last_name` | text | obbligatorio |
-| `location` | text/struttura | città + provincia (granularità "dove fare eventi", NON GPS) |
-| `birth_date` | date | obbligatorio; validazione età minima |
+| `location` | `city` (text) + `province` (text/select) | granularità "dove fare eventi", NON GPS |
+| `birth_date` | date | obbligatorio; **validazione ≥ 18 anni** |
 | `privacy_consent_at` | timestamptz | consenso privacy (obbligatorio) |
 | `marketing_consent` | boolean | opt-in separato (default false) |
 | `created_at` / `updated_at` | timestamptz | audit |
@@ -38,7 +38,7 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 `email` vive in `auth.users` (non duplicato). **RLS**: `select/update/insert/delete` consentiti solo dove `auth.uid() = id`. Trigger `on auth.users insert` per creare la riga profilo vuota (poi completata).
 
 ### Flussi
-1. **Signup email**: form (nome, cognome, email, password, location, data nascita, consenso) → `signUp` → email di verifica → al primo login profilo già popolato → home.
+1. **Signup email**: form (nome, cognome, email, password, città+provincia, data nascita, consenso) → `signUp` → **verifica email obbligatoria** → al primo login profilo già popolato → home.
 2. **Login email**: email+password → sessione → home.
 3. **Reset password**: email → link Supabase → nuova password.
 4. **Social (Google/Apple)**: id-token nativo → `signInWithIdToken` → se profilo incompleto (location/data nascita/consenso mancanti, come avviene sempre coi social) → **schermata "Completa profilo"** → home.
@@ -46,13 +46,13 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 6. **Elimina account** (GDPR): conferma → cancellazione `auth.users` (cascade su `profiles`) via Edge Function o RPC sicura.
 
 ### Schermate (in `AppNavigator`, stack già esistente; dark-aware pattern A)
-`AuthLanding` (scegli metodo) · `Login` · `SignUp` · `CompleteProfile` · `ForgotPassword` · `Profile` (visualizza/modifica/logout/elimina). Entry point dai contenuti pubblici: voce "Accedi"/"Profilo" (posizione da definire nel piano — tab o header).
+`AuthLanding` (scegli metodo) · `Login` · `SignUp` · `CompleteProfile` · `ForgotPassword` · `Profile` (visualizza/modifica/logout/elimina). **Entry point: nuova tab "Profilo"** nella bottom bar — da loggato mostra il profilo, da sloggato porta a `AuthLanding`/`Login`.
 
 ## Sicurezza & GDPR
 - Token in `expo-secure-store`; mai loggati (rispetta la policy logger esistente).
 - RLS come unica barriera dati (anon key pubblica per design).
 - Consenso privacy esplicito e tracciato (`privacy_consent_at`); marketing separato e opt-in.
-- **Minori**: età minima da confermare (consenso digitale IT = 14 anni ex art. 8 GDPR + d.lgs. 101/2018; molte ONG richiedono 18+ per donatori). **Decisione aperta → vedi sotto.**
+- **Minori**: **età minima 18+** — registrazione riservata a maggiorenni; validazione su `birth_date` con messaggio chiaro se < 18. Semplifica il consenso GDPR.
 - Data minimization: nessun GPS; location = città/provincia.
 - Diritto all'oblio: funzione elimina-account completa.
 
@@ -66,11 +66,11 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 ## Out of scope (Fase 1)
 Storico donazioni, ricevute fiscali, integrazione gateway pagamenti, notifiche push, Facebook login, gestione eventi. Ognuno = sotto-progetto successivo.
 
-## Decisioni aperte (da confermare in revisione)
-1. **Età minima**: 14 (consenso digitale IT) o 18+ (policy donatori)? Default proposto: **18+** per area donatori, con messaggio chiaro.
-2. **Location**: campo libero città vs select provincia/regione strutturata? Default proposto: **città (testo) + provincia (select)**.
-3. **Entry point** dell'area auth: tab dedicata "Profilo" vs voce nell'header? Default proposto: **tab "Profilo"** nella bottom bar.
-4. **Verifica email** obbligatoria prima dell'accesso? Default proposto: **sì** (sicurezza/anti-spam).
+## Decisioni (chiuse 2026-06-15)
+1. **Età minima**: **18+** (registrazione riservata a maggiorenni).
+2. **Location**: **città (testo) + provincia (select)**.
+3. **Entry point**: **tab "Profilo"** nella bottom bar.
+4. **Verifica email**: **obbligatoria** prima del primo accesso.
 
 ## Verifica end-to-end (a implementazione completata)
 Dev build EAS → signup email → ricezione email verifica → login → completa profilo → kill & riapri app (sessione persiste) → login Google → login Apple (iOS) → reset password → elimina account (verifica cascade su `profiles` lato Supabase). Test jest verdi (≥371). RLS testata: utente A non legge profilo di B.
