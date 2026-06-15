@@ -14,12 +14,13 @@ import {
   getGoogleIdToken,
   configureGoogle,
 } from './socialAuth';
+import { exportData as runDataExport } from './dataExport';
 import type { Profile, ProfileInput } from './types';
 import { env } from '@/shared/config/environment';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
 
-interface AuthState {
+export interface AuthState {
   status: Status;
   session: Session | null;
   profile: Profile | null;
@@ -34,6 +35,14 @@ interface AuthState {
   signInWithApple: () => Promise<{ error: string | null }>;
   signInWithGoogle: () => Promise<{ error: string | null }>;
   refreshProfile: () => Promise<void>;
+  /** Cancellazione immediata via Edge Function (GDPR Art.17). `appleAuthCode`: fresh per la revoca Apple. */
+  deleteAccountNow: (appleAuthCode?: string) => Promise<{ error: string | null }>;
+  /** Programma la cancellazione a +30gg (grace period recuperabile). */
+  scheduleDeletion: () => Promise<{ error: string | null }>;
+  /** Annulla una cancellazione programmata. */
+  cancelScheduledDeletion: () => Promise<{ error: string | null }>;
+  /** Esporta i dati dell'utente via share-sheet (GDPR Art.20). */
+  exportData: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -140,6 +149,52 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (session?.user.id) await loadProfile(session.user.id);
   }, [session, loadProfile]);
 
+  const deleteAccountNow = useCallback(async (appleAuthCode?: string) => {
+    const body = appleAuthCode ? { appleAuthCode } : {};
+    const { error } = await supabase.functions.invoke('delete-account', { body });
+    if (error) return { error: error.message };
+    await supabase.auth.signOut();
+    return { error: null };
+  }, []);
+
+  const scheduleDeletion = useCallback(async () => {
+    const userId = session?.user.id;
+    if (!userId) return { error: 'not_authenticated' };
+    const { error } = await supabase
+      .from('profiles')
+      .update({ deletion_requested_at: new Date().toISOString() })
+      .eq('id', userId);
+    if (error) return { error: error.message };
+    await loadProfile(userId);
+    return { error: null };
+  }, [session, loadProfile]);
+
+  const cancelScheduledDeletion = useCallback(async () => {
+    const userId = session?.user.id;
+    if (!userId) return { error: 'not_authenticated' };
+    const { error } = await supabase
+      .from('profiles')
+      .update({ deletion_requested_at: null })
+      .eq('id', userId);
+    if (error) return { error: error.message };
+    await loadProfile(userId);
+    return { error: null };
+  }, [session, loadProfile]);
+
+  const exportData = useCallback(async () => {
+    const user = session?.user;
+    if (!user) return;
+    await runDataExport(
+      {
+        id: user.id,
+        email: user.email ?? null,
+        created_at: user.created_at,
+        providers: user.identities?.map((i) => i.provider) ?? [],
+      },
+      profile
+    );
+  }, [session, profile]);
+
   const value = useMemo(
     () => ({
       status,
@@ -152,6 +207,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signInWithApple,
       signInWithGoogle,
       refreshProfile,
+      deleteAccountNow,
+      scheduleDeletion,
+      cancelScheduledDeletion,
+      exportData,
     }),
     [
       status,
@@ -164,6 +223,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signInWithApple,
       signInWithGoogle,
       refreshProfile,
+      deleteAccountNow,
+      scheduleDeletion,
+      cancelScheduledDeletion,
+      exportData,
     ]
   );
 

@@ -44,7 +44,7 @@ Nessuna nuova policy: `own_update` copre set/clear del campo; `own_select` lo es
 - **Annulla** (al rientro entro 30gg): banner in `ProfileScreen` se `profile.deletion_requested_at` valorizzato → `update profiles set deletion_requested_at = null`.
 
 ### Export dati (client-side, Art.20)
-- `exportData()` in `AuthContext`: raccoglie `session.user` (email, id, created_at, providers) + `profile` (tutti i campi) → oggetto JSON strutturato → file via `expo-file-system` → condivisione via `expo-sharing` (share-sheet nativo). Usa la sessione corrente (RLS `own_select`); nessun privilegio elevato.
+- `exportData()` in `AuthContext`: raccoglie `session.user` (email, id, created_at, providers) + `profile` (tutti i campi) → oggetto JSON strutturato (`buildExportPayload`, logica pura) → condivisione via **`Share` API di react-native** (`Share.share({ message })`, JSON nel share-sheet nativo). Scelta: **nessuna dipendenza nativa nuova** (coerente con M1 che preferì SecureStore per evitare moduli nativi); per dati minimi il JSON-come-testo è formato machine-readable conforme. Usa la sessione corrente (RLS `own_select`); nessun privilegio elevato.
 
 ### UI (dark-aware pattern A, componenti `AuthScreen`/`AuthButton`/`AuthInput` esistenti)
 - **`ProfileScreen`**: nuova sezione "Privacy e dati" con `Esporta i miei dati` e `Elimina account`. Banner in cima se cancellazione programmata: «Account in eliminazione il <data> — Annulla».
@@ -66,7 +66,7 @@ Nessuna nuova policy: `own_update` copre set/clear del campo; `own_select` lo es
 - Suite attuale **392** non deve regredire.
 
 ## Dipendenze nuove
-`expo-file-system`, `expo-sharing` (per l'export). Verificare se già presenti (expo-file-system spesso transitiva); altrimenti `expo install`. Edge Functions: runtime Deno gestito da Supabase (nessuna dep nel bundle app).
+**Nessuna lato app** (export via `Share` di react-native, già disponibile). Edge Functions: runtime Deno gestito da Supabase (`jose` per il client_secret ES256, `@supabase/supabase-js` via jsr — nessuna dep nel bundle app RN).
 
 ## Out of scope (M3)
 Audit-log/revoca granulare consensi, modifica-profilo avanzata, export CSV (oltre JSON), dashboard admin. Follow-up successivi.

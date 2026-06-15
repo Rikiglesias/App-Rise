@@ -111,7 +111,7 @@ Deno.serve(async (req) => {
 - [ ] **Step 1: Test che falliscono** — `buildExportPayload(user, profile)` ritorna un oggetto JSON con `account.email`, `account.created_at`, `profile.*`, `exported_at`; serializzazione stabile. Per AuthContext: `deleteAccountNow` chiama `supabase.functions.invoke('delete-account')` poi `signOut`; `scheduleDeletion` fa update `deletion_requested_at`; `cancelScheduledDeletion` lo rimette a null.
 - [ ] **Step 2: Eseguire** → FAIL.
 - [ ] **Step 3: Implementare**
-  - `dataExport.ts`: `buildExportPayload` (puro) + `exportData(user, profile)` che scrive il JSON con `expo-file-system` e apre `expo-sharing` (verificare `expo install expo-file-system expo-sharing` se assenti; dichiarare).
+  - `dataExport.ts`: `buildExportPayload` (puro) + `exportData(user, profile)` che serializza il JSON e apre il share-sheet con `Share.share({ message })` (react-native; nessuna dep nativa nuova — `expo-file-system`/`expo-sharing` NON installati e non necessari).
   - `AuthContext`: aggiungere i 4 metodi all'interfaccia + value memoizzato; `deleteAccountNow` → `functions.invoke` → on ok `signOut`; `scheduleDeletion`/`cancel` → `supabase.from('profiles').update({ deletion_requested_at }).eq('id', user.id)` + `refreshProfile`; `exportData` → delega a `dataExport`.
 - [ ] **Step 4: Eseguire** → PASS. `npx tsc --noEmit && npx eslint src/shared/auth` → exit 0.
 - [ ] **Step 5: Commit** `feat(auth): AuthContext delete/schedule/export + dataExport (M3 Task 4)`
