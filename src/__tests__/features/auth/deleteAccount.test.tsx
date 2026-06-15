@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert } from 'react-native';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import type { Session } from '@supabase/supabase-js';
 
 import { AllProviders } from '../../helpers/testProviders';
@@ -10,6 +10,7 @@ import { ReConsentScreen } from '@/features/auth/screens/ReConsentScreen';
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import type { Profile } from '@/shared/auth/types';
+import { getAppleAuthCodeForDeletion } from '@/shared/auth/socialAuth';
 
 jest.mock('@react-navigation/native', () => {
   const navigate = jest.fn();
@@ -19,6 +20,10 @@ jest.mock('@react-navigation/native', () => {
 jest.mock('@/shared/auth/AuthContext', () => ({
   useAuth: jest.fn(),
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+jest.mock('@/shared/auth/socialAuth', () => ({
+  getAppleAuthCodeForDeletion: jest.fn(),
 }));
 
 const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
@@ -87,6 +92,59 @@ describe('DeleteAccountScreen', () => {
     fireEvent.press(getByText('Elimina subito'));
     expect(alertSpy).toHaveBeenCalledTimes(1);
     expect(deleteAccountNow).not.toHaveBeenCalled();
+    alertSpy.mockRestore();
+  });
+
+  it('S12: branch Apple → confermando passa l’authCode fresco a deleteAccountNow', async () => {
+    const deleteAccountNow = jest.fn().mockResolvedValue({ error: null });
+    (getAppleAuthCodeForDeletion as jest.Mock).mockResolvedValue(
+      'apple-code-xyz'
+    );
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        deleteAccountNow,
+        session: {
+          user: {
+            id: 'u1',
+            email: 'm@r.it',
+            identities: [{ provider: 'apple' }],
+          },
+        } as unknown as Session,
+      })
+    );
+    const alertSpy = jest
+      .spyOn(Alert, 'alert')
+      .mockImplementation((_title, _msg, buttons) => {
+        const confirm = (
+          buttons as { style?: string; onPress?: () => void }[]
+        )?.find(b => b.style === 'destructive');
+        confirm?.onPress?.();
+      });
+    const { getByText } = wrap(<DeleteAccountScreen />);
+    fireEvent.press(getByText('Elimina subito'));
+    await waitFor(() =>
+      expect(deleteAccountNow).toHaveBeenCalledWith('apple-code-xyz')
+    );
+    alertSpy.mockRestore();
+  });
+
+  it('S12: branch non-Apple → confermando chiama deleteAccountNow senza authCode', async () => {
+    const deleteAccountNow = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(makeAuth({ deleteAccountNow }));
+    const alertSpy = jest
+      .spyOn(Alert, 'alert')
+      .mockImplementation((_title, _msg, buttons) => {
+        const confirm = (
+          buttons as { style?: string; onPress?: () => void }[]
+        )?.find(b => b.style === 'destructive');
+        confirm?.onPress?.();
+      });
+    const { getByText } = wrap(<DeleteAccountScreen />);
+    fireEvent.press(getByText('Elimina subito'));
+    await waitFor(() =>
+      expect(deleteAccountNow).toHaveBeenCalledWith(undefined)
+    );
+    expect(getAppleAuthCodeForDeletion).not.toHaveBeenCalled();
     alertSpy.mockRestore();
   });
 });

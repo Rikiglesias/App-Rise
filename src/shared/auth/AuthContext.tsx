@@ -16,7 +16,11 @@ import {
   configureGoogle,
 } from './socialAuth';
 import { exportData as runDataExport } from './dataExport';
-import { buildConsentInsert, isReConsentRequired } from './consent';
+import {
+  buildConsentInsert,
+  isReConsentRequired,
+  CURRENT_POLICY_VERSION,
+} from './consent';
 import type {
   Profile,
   ProfileInput,
@@ -334,18 +338,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return res;
   }, [recordConsent]);
 
-  // Verifica re-consenso quando l'utente è autenticato (cambio materiale policy).
+  // S7: legge is_material della versione corrente dell'informativa (fail-safe `true`
+  // se assente/errore → in dubbio si richiede il consenso). RLS policy_versions_read
+  // consente la lettura agli utenti autenticati (migration 0003).
+  const getCurrentPolicyIsMaterial = useCallback(async (): Promise<boolean> => {
+    const { data, error } = await supabase
+      .from('policy_versions')
+      .select('is_material')
+      .eq('version', CURRENT_POLICY_VERSION)
+      .single();
+    if (error || !data) return true;
+    return (data as { is_material: boolean }).is_material;
+  }, []);
+
+  // Verifica re-consenso quando l'utente è autenticato (SOLO per cambi materiali policy).
   useEffect(() => {
     if (status !== 'authenticated' || !session?.user.id) {
       setNeedsReConsent(false);
       return;
     }
-    void getConsentHistory().then(history => {
-      // Su errore di fetch (null) NON gattiamo: evita un falso re-consent da errore
-      // transient (coerente con la scelta di loadProfile di non azzerare su errore).
-      if (history !== null) setNeedsReConsent(isReConsentRequired(history));
-    });
-  }, [status, session, getConsentHistory]);
+    void Promise.all([getConsentHistory(), getCurrentPolicyIsMaterial()]).then(
+      ([history, isMaterial]) => {
+        // Su errore di fetch della history (null) NON gattiamo: evita un falso re-consent
+        // da errore transient (coerente con loadProfile che non azzera su errore).
+        if (history !== null)
+          setNeedsReConsent(
+            isReConsentRequired(history, CURRENT_POLICY_VERSION, isMaterial)
+          );
+      }
+    );
+  }, [status, session, getConsentHistory, getCurrentPolicyIsMaterial]);
 
   const value = useMemo(
     () => ({

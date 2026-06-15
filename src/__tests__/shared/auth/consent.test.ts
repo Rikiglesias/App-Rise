@@ -58,6 +58,23 @@ describe('consent helpers', () => {
     ).toBe(true);
   });
 
+  it('isReConsentRequired (S7): isCurrentMaterial=false → mai re-consenso; default true invariato', () => {
+    // cambio NON materiale → nessun re-consenso anche senza eventi
+    expect(isReConsentRequired([], CURRENT_POLICY_VERSION, false)).toBe(false);
+    // materiale + nessun evento → true
+    expect(isReConsentRequired([], CURRENT_POLICY_VERSION, true)).toBe(true);
+    // default (param omesso) resta true (fail-safe privacy)
+    expect(isReConsentRequired([])).toBe(true);
+    // materiale + privacy_notice granted versione corrente → false
+    expect(
+      isReConsentRequired(
+        [ev('privacy_notice', 'granted', '2026-01-01')],
+        CURRENT_POLICY_VERSION,
+        true
+      )
+    ).toBe(false);
+  });
+
   it('buildConsentInsert costruisce la riga con legal_basis e versione corrente', () => {
     expect(
       buildConsentInsert('u1', 'marketing', 'granted', 'ios:profile_toggle')

@@ -157,6 +157,102 @@ describe('AuthContext', () => {
       expect.objectContaining({ marketing_consent: true })
     );
   });
+
+  it('S12: deleteAccountNow su errore Edge ritorna l’errore e NON fa signOut', async () => {
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    (supabase.functions.invoke as jest.Mock).mockResolvedValueOnce({
+      data: null,
+      error: { message: 'boom' },
+    });
+    await act(async () => {
+      const res = await getAuth().deleteAccountNow();
+      expect(res.error).toBe('boom');
+    });
+    expect(supabase.auth.signOut).not.toHaveBeenCalled();
+  });
+
+  it('S12: scheduleDeletion su errore update ritorna l’errore', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const eqUpdate = (
+      supabase.from('profiles') as unknown as { update: jest.Mock }
+    ).update().eq as jest.Mock;
+    eqUpdate.mockResolvedValueOnce({ error: { message: 'boom' } });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const res = await getAuth().scheduleDeletion();
+      expect(res.error).toBe('boom');
+    });
+  });
+
+  it('S12: setMarketingConsent — errore insert evento → NON tocca la cache', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const api = supabase.from('consent_events') as unknown as {
+      insert: jest.Mock;
+    };
+    const updateMock = (
+      supabase.from('profiles') as unknown as { update: jest.Mock }
+    ).update;
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    updateMock.mockClear();
+    api.insert.mockResolvedValueOnce({ error: { message: 'ev-fail' } });
+    await act(async () => {
+      const res = await getAuth().setMarketingConsent(true);
+      expect(res.error).toBe('ev-fail');
+    });
+    expect(updateMock).not.toHaveBeenCalled();
+  });
+
+  it('S12: setMarketingConsent — insert ok ma errore cache → ritorna l’errore cache', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const eqUpdate = (
+      supabase.from('profiles') as unknown as { update: jest.Mock }
+    ).update().eq as jest.Mock;
+    eqUpdate.mockResolvedValueOnce({ error: { message: 'cache-fail' } });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const res = await getAuth().setMarketingConsent(true);
+      expect(res.error).toBe('cache-fail');
+    });
+  });
+
+  it('S12: acceptCurrentPolicy ok → needsReConsent torna false', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const res = await getAuth().acceptCurrentPolicy();
+      expect(res.error).toBeNull();
+    });
+    expect(getAuth().needsReConsent).toBe(false);
+  });
+
+  it('S12: acceptCurrentPolicy su errore recordConsent ritorna l’errore', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const api = supabase.from('consent_events') as unknown as {
+      insert: jest.Mock;
+    };
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    api.insert.mockResolvedValueOnce({ error: { message: 'rec-fail' } });
+    await act(async () => {
+      const res = await getAuth().acceptCurrentPolicy();
+      expect(res.error).toBe('rec-fail');
+    });
+  });
 });
 
 describe('AuthContext — update/signup/consenso', () => {

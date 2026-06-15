@@ -92,6 +92,8 @@ export default {
       success: 'Profile updated.',
       emailNotice:
         'To change your email, confirm the link sent to both inboxes (old and new).',
+      emailPending:
+        'Email change pending confirmation: {{email}}. Confirm the link sent to both inboxes to complete it.',
       error: 'Update failed. Please try again.',
     },
     privacy: {

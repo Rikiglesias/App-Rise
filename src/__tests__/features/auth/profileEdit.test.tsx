@@ -118,4 +118,43 @@ describe('ProfileEditScreen', () => {
     expect(updateEmail).toHaveBeenCalledWith('new@r.it');
     expect(updateProfile).not.toHaveBeenCalled();
   });
+
+  it('S8: mostra il banner email-in-attesa da session.user.new_email', () => {
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile,
+        session: {
+          user: {
+            id: 'u1',
+            email: 'old@r.it',
+            new_email: 'pending@r.it',
+            identities: [],
+          },
+        } as unknown as Session,
+      })
+    );
+    const { getByText } = wrap(<ProfileEditScreen />);
+    expect(getByText(/pending@r.it/)).toBeTruthy();
+  });
+
+  it('S8: senza new_email nessun banner pending', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ profile }));
+    const { queryByText } = wrap(<ProfileEditScreen />);
+    expect(queryByText(/in attesa di conferma/i)).toBeNull();
+  });
+
+  it('S12: errore updateProfile → messaggio errore e updateEmail NON chiamato', async () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: 'boom' });
+    const updateEmail = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile, updateProfile, updateEmail })
+    );
+    const { getByLabelText, getByText, findByText } = wrap(
+      <ProfileEditScreen />
+    );
+    fireEvent.changeText(getByLabelText('Telefono'), '+393339998877');
+    fireEvent.press(getByText('Salva modifiche'));
+    await findByText('Aggiornamento non riuscito. Riprova.');
+    expect(updateEmail).not.toHaveBeenCalled();
+  });
 });

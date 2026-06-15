@@ -93,6 +93,8 @@ export default {
       success: 'Profilo aggiornato.',
       emailNotice:
         'Per cambiare email, conferma il link inviato a entrambe le caselle (vecchia e nuova).',
+      emailPending:
+        'Cambio email in attesa di conferma: {{email}}. Conferma il link inviato a entrambe le caselle per completarlo.',
       error: 'Aggiornamento non riuscito. Riprova.',
     },
     privacy: {

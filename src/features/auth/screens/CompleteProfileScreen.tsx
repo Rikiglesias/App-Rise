@@ -76,6 +76,10 @@ export const CompleteProfileScreen: React.FC = () => {
       return;
     }
     setLoading(true);
+    // S10: upsert dei soli campi anagrafici + privacy_consent_at (prima registrazione del
+    // consenso privacy per il profilo social). NON ri-stampiamo marketing_consent: la cache
+    // è gestita esclusivamente da setMarketingConsent e la verità sta nel ledger consent_events;
+    // riscriverla a `false` qui azzererebbe un eventuale consenso marketing già concesso.
     const { error } = await supabase.from('profiles').upsert({
       id: userId,
       first_name: firstName.trim(),
@@ -85,7 +89,6 @@ export const CompleteProfileScreen: React.FC = () => {
       province: province.trim(),
       birth_date: birthDate.trim(),
       privacy_consent_at: new Date().toISOString(),
-      marketing_consent: false,
     });
     if (error) {
       setLoading(false);

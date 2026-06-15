@@ -49,16 +49,24 @@ export const deriveMarketingState = (events: ConsentEvent[]): boolean => {
 };
 
 /**
- * Serve re-consenso se l'utente NON ha un evento 'privacy_notice' granted
- * per la versione corrente dell'informativa (EDPB §110, cambio materiale).
+ * Serve re-consenso SOLO quando la versione corrente dell'informativa è un cambio
+ * MATERIALE (policy_versions.is_material=true, EDPB §110) e l'utente NON ha un evento
+ * 'privacy_notice' granted per quella versione.
+ *
+ * `isCurrentMaterial` (default `true` = fail-safe privacy): il chiamante lo deriva da
+ * policy_versions.is_material; se la versione NON è materiale (refuso/chiarimento) non
+ * si forza mai il re-consenso. Col default `true` il comportamento legacy è invariato.
  */
 export const isReConsentRequired = (
   events: ConsentEvent[],
-  currentVersion: string = CURRENT_POLICY_VERSION
-): boolean =>
-  !events.some(
+  currentVersion: string = CURRENT_POLICY_VERSION,
+  isCurrentMaterial: boolean = true
+): boolean => {
+  if (!isCurrentMaterial) return false;
+  return !events.some(
     e =>
       e.purpose === 'privacy_notice' &&
       e.action === 'granted' &&
       e.policy_version === currentVersion
   );
+};

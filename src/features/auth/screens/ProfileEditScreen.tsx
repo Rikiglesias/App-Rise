@@ -40,6 +40,10 @@ export const ProfileEditScreen: React.FC = () => {
   const { profile, session, updateProfile, updateEmail } = useAuth();
 
   const currentEmail = session?.user.email ?? '';
+  // S8: secure email change → Supabase popola user.new_email finché il cambio non è
+  // confermato su entrambe le caselle. Stato derivato dalla session (sopravvive a
+  // re-render/ri-apertura), non da un flag locale transitorio.
+  const pendingEmail = session?.user.new_email ?? null;
   const [firstName, setFirstName] = useState(profile?.first_name ?? '');
   const [lastName, setLastName] = useState(profile?.last_name ?? '');
   const [email, setEmail] = useState(currentEmail);
@@ -192,6 +196,11 @@ export const ProfileEditScreen: React.FC = () => {
           {submitError}
         </PerfectText>
       ) : null}
+      {pendingEmail ? (
+        <PerfectText size={14} lines={3} style={styles.pending}>
+          {t('auth.edit.emailPending', { email: pendingEmail })}
+        </PerfectText>
+      ) : null}
       {success ? (
         <PerfectText size={14} lines={3} style={styles.success}>
           {emailChanged ? t('auth.edit.emailNotice') : t('auth.edit.success')}
@@ -219,6 +228,10 @@ const createStyles = (colors: ThemeColors) =>
     },
     success: {
       color: Colors.semantic.success.main,
+      marginTop: PerfectSpacing.xs,
+    },
+    pending: {
+      color: colors.neutral[600],
       marginTop: PerfectSpacing.xs,
     },
   });
