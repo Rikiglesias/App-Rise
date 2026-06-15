@@ -45,6 +45,8 @@ interface AppEnvironment {
   NODE_ENV: 'development' | 'staging' | 'production';
   APP_VERSION: string;
   API_BASE_URL: string;
+  SUPABASE_URL: string;
+  SUPABASE_ANON_KEY: string;
   ENABLE_FLIPPER: boolean;
   ENABLE_PERFORMANCE_MONITORING: boolean;
   LOG_LEVEL: 'debug' | 'info' | 'warn' | 'error';
@@ -56,6 +58,8 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   development: {
     NODE_ENV: 'development',
     APP_VERSION: '1.0.0-dev',
+    SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
+    SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
     API_BASE_URL:
       getEnvVar('EXPO_PUBLIC_API_BASE_URL_DEV') ??
       getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
@@ -68,6 +72,8 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   staging: {
     NODE_ENV: 'staging',
     APP_VERSION: '1.0.0-staging',
+    SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
+    SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
     API_BASE_URL:
       getEnvVar('EXPO_PUBLIC_API_BASE_URL_STAGING') ??
       getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
@@ -80,6 +86,8 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   production: {
     NODE_ENV: 'production',
     APP_VERSION: '1.0.0',
+    SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
+    SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
     API_BASE_URL: resolveProductionApiUrl(),
     ENABLE_FLIPPER: false,
     ENABLE_PERFORMANCE_MONITORING: false,
