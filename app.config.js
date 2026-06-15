@@ -246,6 +246,18 @@ export default withDefaultStrings({
       // Tile/style via MapTiler (EXPO_PUBLIC_MAPTILER_KEY). Richiede New Arch
       // (default SDK 54) + dev build (no Expo Go). Sostituisce react-native-maps/Google.
       '@maplibre/maplibre-react-native',
+      // Social auth donatori: Apple (nessuna config) + Google (config plugin
+      // condizionale su env; iosUrlScheme = reversed iOS client ID). Senza l'env
+      // il plugin Google è assente → prebuild invariato (pre-OAuth safe).
+      'expo-apple-authentication',
+      ...(process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME
+        ? [
+            [
+              '@react-native-google-signin/google-signin',
+              { iosUrlScheme: process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME },
+            ],
+          ]
+        : []),
       // Sentry: config plugin per setup nativo + upload source map al build EAS.
       // Attivo SOLO con SENTRY_ORG + SENTRY_PROJECT in env (auth token via SENTRY_AUTH_TOKEN,
       // MAI committato). Senza questi -> plugin assente, prebuild invariato (pre-DSN safe).
