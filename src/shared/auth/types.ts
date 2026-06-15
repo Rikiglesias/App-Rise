@@ -13,6 +13,21 @@ export interface Profile {
   deletion_requested_at: string | null; // M3: NULL=attivo; valorizzato=cancellazione a +30gg
 }
 
+/** Consensi (M4, GDPR Art.7) — registro append-only. */
+export type ConsentPurpose = 'privacy_notice' | 'marketing' | 'profiling';
+export type ConsentAction = 'granted' | 'withdrawn';
+
+export interface ConsentEvent {
+  id: string;
+  user_id: string;
+  purpose: ConsentPurpose;
+  action: ConsentAction;
+  policy_version: string;
+  legal_basis: string; // 'consent' | 'contract'
+  channel: string;
+  created_at: string; // ISO timestamp
+}
+
 /** Dati raccolti dal form di registrazione (prima della scrittura su DB). */
 export interface ProfileInput {
   first_name: string;
