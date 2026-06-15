@@ -39,7 +39,7 @@ const AppNavigator: React.FC = () => {
             shadowRadius: scale(8),
             borderBottomWidth: 0,
           },
-          headerTintColor: Colors.neutral[0],
+          headerTintColor: Colors.accent.white,
           headerTitleStyle: {
             fontWeight: '700',
             letterSpacing: scale(0.5),

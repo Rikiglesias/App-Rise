@@ -270,9 +270,11 @@ describe('BottomTabNavigator', () => {
 
       // Re-render with same props
       rerender(
-        <NavigationContainer>
-          <BottomTabNavigator />
-        </NavigationContainer>
+        <AllProviders>
+          <NavigationContainer>
+            <BottomTabNavigator />
+          </NavigationContainer>
+        </AllProviders>
       );
 
       // Should not cause errors or unnecessary renders
