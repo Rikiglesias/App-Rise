@@ -1,47 +1,23 @@
 # 📐 Architecture Documentation
 
-Documentazione completa dell'architettura del progetto App-Rise.
+Documentazione dell'architettura del progetto App-Rise.
 
-## 📄 Documenti
+## Documenti correnti
 
 ### [overview.md](./overview.md)
-**Architettura Generale del Progetto**
-- Struttura generale della codebase
-- Pattern architetturali utilizzati
-- Decisioni di design principali
-- Diagrammi e overview
 
-### [src-analysis.md](./src-analysis.md)
-**Analisi Dettagliata src/**
-- Analisi maniacale della cartella src/
-- Score: 93/100 (Top 10% progetti React Native)
-- Identificazione di 148 import da ottimizzare
-- Metriche e raccomandazioni
+Architettura generale: struttura della codebase, pattern architetturali, decisioni di design.
 
-### [audit-report.md](./audit-report.md)
-**Architecture Audit Report**
-- Audit completo dell'architettura
-- Punti di forza e criticità
-- Piano d'azione prioritizzato
+## Stato corrente
 
-### [cleanup-summary.md](./cleanup-summary.md)
-**Architecture Cleanup Summary**
-- Riepilogo pulizia architetturale
-- File rimossi e organizzati
-- Miglioramenti Score: 92→98/100
+Per lo stato architetturale corrente e le criticità aperte:
 
----
+- [architecture-review-2026-06-14.md](../architecture-review-2026-06-14.md)
+- [audit-360-2026-06-14.md](../audit-360-2026-06-14.md)
 
-## 📊 Score Architettura
+## Storico
 
-| Aspetto | Score | Status |
-|---------|-------|--------|
-| **Overall** | 98/100 | ⭐⭐⭐⭐⭐ |
-| **src/ Organization** | 93/100 | ⭐⭐⭐⭐⭐ |
-| **Root Organization** | 100/100 | ⭐⭐⭐⭐⭐ |
-| **Feature-based** | 100/100 | ⭐⭐⭐⭐⭐ |
-
-**Industry Percentile**: Top 10% React Native Projects
+Gli audit e le analisi point-in-time del 2025 (`src-analysis`, `audit-report`, `cleanup-summary`, `CODEBASE_AUDIT_2024`, `CRASH_ANALYSIS_360`, `FILE_ORGANIZATION_ANALYSIS`, `REFACTORING_PLAN`) sono archiviati in [`../_archive/2025/architecture/`](../_archive/2025/architecture/) — non aggiornati.
 
 ---
 
