@@ -38,6 +38,9 @@ module.exports = {
   },
   // Module name mapping per alias TypeScript
   moduleNameMapper: {
+    // Mappa nativa: in jest usa il mock (come metro per web/Expo Go); il modulo
+    // nativo @maplibre non è caricabile nell'ambiente di test.
+    '^@maplibre/maplibre-react-native$': '<rootDir>/web-maps-mock.js',
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@components/(.*)$': '<rootDir>/src/components/$1',
     '^@shared/(.*)$': '<rootDir>/src/shared/$1',
