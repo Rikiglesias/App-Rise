@@ -32,6 +32,7 @@ export interface RootStackParamList {
   Login: undefined;
   SignUp: undefined;
   CompleteProfile: undefined;
+  ProfileEdit: undefined;
   ForgotPassword: undefined;
   DeleteAccount: undefined;
   // Index signature RICHIESTA da React Navigation: StackNavigationProp vincola
