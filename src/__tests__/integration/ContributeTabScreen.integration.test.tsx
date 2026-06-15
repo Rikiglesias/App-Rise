@@ -11,6 +11,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { renderWithProviders } from '@/__tests__/helpers/testProviders';
 import { ContributeTabScreen } from '@/features/actions/screens/ContributeTabScreen';
 
 // Mock navigation
@@ -111,10 +112,11 @@ describe('ContributeTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe renderizzare la schermata completa senza errori', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ContributeTabScreen navigation={mockNavigation as any} />
-      </NavigationContainer>
+      </NavigationContainer>,
+      render
     );
 
     await waitFor(() => {
@@ -123,10 +125,11 @@ describe('ContributeTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe avere la struttura base corretta', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ContributeTabScreen navigation={mockNavigation as any} />
-      </NavigationContainer>
+      </NavigationContainer>,
+      render
     );
 
     await waitFor(() => {
@@ -138,10 +141,11 @@ describe('ContributeTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe gestire lo scroll con animazioni header', async () => {
-    const { toJSON } = render(
+    const { toJSON } = renderWithProviders(
       <NavigationContainer>
         <ContributeTabScreen navigation={mockNavigation as any} />
-      </NavigationContainer>
+      </NavigationContainer>,
+      render
     );
 
     await waitFor(() => {

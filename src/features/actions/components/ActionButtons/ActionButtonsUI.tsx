@@ -19,6 +19,7 @@ import type { useNewActionsAnimations } from '../shared/ContributeAnimations';
 import type { ActionButtonsData } from './useActionButtonsData';
 import { PerfectContainer } from '@/components/ui';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 interface ActionButtonsUIProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -35,7 +36,8 @@ const ActionButtonsUIComponent: React.FC<ActionButtonsUIProps> = ({
   animations,
   data,
 }) => {
-  const styles = useMemo(() => createActionButtonStyles(), []);
+  const colors = useThemeColors();
+  const styles = useMemo(() => createActionButtonStyles(colors), [colors]);
   const { isTablet } = useDeviceType();
 
   return (

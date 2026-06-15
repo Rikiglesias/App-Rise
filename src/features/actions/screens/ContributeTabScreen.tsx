@@ -13,7 +13,7 @@ import {
 } from '../components';
 import { PlatformScrollView, PerfectContainer } from '@/components/ui';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
-import { Colors } from '@/shared/constants/designTokens';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
   navigation,
@@ -21,11 +21,12 @@ const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
   const animations = useNewActionsAnimations();
   const { isTablet } = useDeviceType();
   const insets = useSafeAreaInsets();
+  const colors = useThemeColors();
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.neutral[50],
+      backgroundColor: colors.neutral[50],
     },
     scrollContent: {
       // Padding inferiore coerente con altezza bottom bar custom + safe-area

@@ -4,8 +4,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import type { useNewActionsAnimations } from './ContributeAnimations';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
-import { Colors, PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 interface NewActionsHeaderProps {
   animations: ReturnType<typeof useNewActionsAnimations>;
@@ -20,6 +21,7 @@ const HEADER_VERTICAL_PADDING = scale(REF_WIDTH * 0.025);
 const HEADER_TITLE_INTERLINE = scale(REF_WIDTH * 0.002);
 const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
   const { t } = useTranslation();
+  const colors = useThemeColors();
   const styles = useMemo(
     () =>
       StyleSheet.create({
@@ -47,17 +49,17 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           width: '100%',
           alignItems: 'center',
           // minHeight rimosso: permette espansione con Large Text iOS
-          backgroundColor: Colors.neutral[0],
+          backgroundColor: colors.neutral[0],
           paddingHorizontal: PerfectSpacing.base,
           paddingTop: HEADER_VERTICAL_PADDING,
           paddingBottom: HEADER_VERTICAL_PADDING,
           borderRadius: scale(16),
           borderWidth: scale(1),
-          borderColor: Colors.neutral[300],
+          borderColor: colors.neutral[300],
         },
 
         titleText: {
-          color: Colors.neutral[900],
+          color: colors.neutral[900],
           textAlign: 'center',
           letterSpacing: scale(-0.5),
           marginBottom: HEADER_TITLE_INTERLINE,
@@ -65,11 +67,11 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         },
 
         titleAccent: {
-          color: Colors.primary[500],
+          color: colors.primary[500],
         },
 
         mainSubtitle: {
-          color: Colors.neutral[700],
+          color: colors.neutral[700],
           textAlign: 'center',
           letterSpacing: 0,
           marginTop: PerfectSpacing.md,
@@ -77,7 +79,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
           includeFontPadding: false,
         },
       }),
-    []
+    [colors]
   );
 
   const titleContent = (
@@ -130,7 +132,7 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
       testID="actions-header"
     >
       <LinearGradient
-        colors={[Colors.neutral[50], 'transparent']}
+        colors={[colors.neutral[50], 'transparent']}
         style={styles.backgroundPattern}
       />
 
