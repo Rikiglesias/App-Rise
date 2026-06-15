@@ -26,8 +26,9 @@ import {
   scaleText,
   LOGICAL_REFERENCE,
 } from '../../shared/constants/perfectScale';
-import { Typography, Colors } from '../../shared/constants/designTokens';
+import { Typography } from '../../shared/constants/designTokens';
 import { getImmuneTextProps } from '../../shared/utils/SystemImmunity';
+import { useThemeColors } from '../../shared/hooks/useThemeColors';
 
 export interface PerfectTextProps
   extends Omit<TextProps, 'numberOfLines' | 'adjustsFontSizeToFit'> {
@@ -90,13 +91,16 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   adaptiveThreshold = 1.2,
   containerWidth,
   fontWeight = 'normal',
-  color = Colors.neutral[900],
+  color,
   textAlign = 'left',
   debug: _debug = false,
   style,
   immunity: _immunity,
   ...props
 }) => {
+  const colors = useThemeColors();
+  // Default colore testo dark-aware: in light === neutral[900] (zero regressione)
+  const resolvedColor = color ?? colors.neutral[900];
   // Usa scaleText() che ora è scale() puro - proporzionalità perfetta sempre
   const finalScaledFontSize = useMemo(() => scaleText(size), [size]);
   const immuneProps = getImmuneTextProps();
@@ -170,7 +174,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
     const baseStyle: TextStyle = {
       fontSize: finalScaledFontSize,
-      color,
+      color: resolvedColor,
       textAlign,
       lineHeight: finalScaledFontSize * LINE_HEIGHT_RATIO,
       includeFontPadding: false,
@@ -182,7 +186,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     return mergedStyle
       ? { ...baseStyle, ...mergedStyle, fontFamily }
       : baseStyle;
-  }, [style, finalScaledFontSize, color, textAlign, fontWeight]);
+  }, [style, finalScaledFontSize, resolvedColor, textAlign, fontWeight]);
 
   // Se width è necessario (manuale o automatico) → usa wrapper con width fissa
   // Altrimenti → Text diretto che si adatta al contenuto (flex/row friendly)

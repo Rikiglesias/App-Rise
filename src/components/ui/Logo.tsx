@@ -5,8 +5,8 @@ import { StyleSheet } from 'react-native';
 import { PerfectImage } from './PerfectImage';
 import { PerfectContainer } from './PerfectContainer';
 import logoImage from '@assets/icons/app/app-icon.png';
-import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 // Immagine logo importata correttamente
 
@@ -23,15 +23,16 @@ const Logo: React.FC<LogoProps> = ({
 }) => {
   // Asset immagine - deve essere require per React Native
   // Logo asset path available when needed
+  const colors = useThemeColors();
   const scaledSize = scale(size);
 
   const containerStyle: ViewStyle = {
     ...styles.logoContainer,
     width: scaledSize,
     height: scaledSize,
-    backgroundColor: Colors.neutral[0],
-    shadowColor: Colors.primary[600],
-    borderColor: Colors.primary[100],
+    backgroundColor: colors.neutral[0],
+    shadowColor: colors.primary[600],
+    borderColor: colors.primary[100],
   };
 
   // innerSize NON scalato - PerfectImage lo scala automaticamente

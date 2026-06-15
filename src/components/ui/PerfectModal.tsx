@@ -18,7 +18,8 @@ import {
 
 import { PerfectContainer } from './PerfectContainer';
 import { PlatformScrollView, PlatformTouchable } from './PlatformComponents';
-import { Colors, scale } from '@/shared/constants';
+import { scale } from '@/shared/constants';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
   /** Contenuto modal */
@@ -110,6 +111,7 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
   ...modalProps
 }) => {
   const { dimensions, presentationStyle, isTablet } = useModalBehavior(size);
+  const colors = useThemeColors();
   const { height } = useWindowDimensions();
   const safeMaxHeight =
     size === 'fullscreen'
@@ -160,13 +162,13 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
               ...(safeMaxHeight !== undefined
                 ? { maxHeight: safeMaxHeight as unknown as DimensionValue }
                 : {}),
-              backgroundColor: backgroundColor || Colors.neutral[0],
+              backgroundColor: backgroundColor || colors.neutral[0],
             },
             ...(outlined
               ? [
                   {
                     borderWidth: scale(1),
-                    borderColor: outlineColor || Colors.neutral[300],
+                    borderColor: outlineColor || colors.neutral[300],
                   },
                 ]
               : []),

@@ -13,6 +13,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { View, Dimensions } from 'react-native';
+import { renderWithProviders } from '../helpers/testProviders';
 import { PerfectText } from '../../components/ui/PerfectText';
 
 /**
@@ -127,7 +128,7 @@ const testDeviceLayoutStability = (
   testCase: (typeof CRITICAL_TEXTS)[0]
 ) => {
   // Render del componente
-  const { getByText } = render(
+  const { getByText } = renderWithProviders(
     <View testID="container">
       <PerfectText
         testID="formatted-text"
@@ -136,7 +137,8 @@ const testDeviceLayoutStability = (
       >
         {testCase.text}
       </PerfectText>
-    </View>
+    </View>,
+    render
   );
 
   // Verifica che il testo sia renderizzato
@@ -180,10 +182,11 @@ const testDeviceLayoutStability = (
 const testPerfectTextRendering = (device: (typeof TEST_DEVICES)[0]) => {
   const testText = 'Rise Against Hunger Italia';
 
-  const { getByText } = render(
+  const { getByText } = renderWithProviders(
     <PerfectText size={75} lines={2}>
       {testText}
-    </PerfectText>
+    </PerfectText>,
+    render
   );
 
   const textElement = getByText(testText);
