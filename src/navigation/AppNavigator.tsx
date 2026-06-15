@@ -1,4 +1,7 @@
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
@@ -24,15 +27,21 @@ import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
 import { LoginScreen } from '@/features/auth/screens/LoginScreen';
 import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
 import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
+import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
+import { useRecoveryDeepLink } from '@/shared/auth/useRecoveryDeepLink';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator: React.FC = () => {
+  // Deep link di recovery password: stabilisce la sessione e porta a ResetPassword.
+  const navigationRef = useNavigationContainerRef<RootStackParamList>();
+  useRecoveryDeepLink(navigationRef);
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{
@@ -145,6 +154,11 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPasswordScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

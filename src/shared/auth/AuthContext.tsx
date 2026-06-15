@@ -15,6 +15,7 @@ import {
   getGoogleIdToken,
   configureGoogle,
 } from './socialAuth';
+import { buildResetRedirectTo, parseAuthRedirect } from './authRedirect';
 import { exportData as runDataExport } from './dataExport';
 import {
   buildConsentInsert,
@@ -49,6 +50,10 @@ export interface AuthState {
   ) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
+  /** Imposta la nuova password (post deep link di recovery, sessione già attiva). */
+  updatePassword: (newPassword: string) => Promise<{ error: string | null }>;
+  /** Stabilisce la sessione dal deep link di recovery (token nel fragment). */
+  completeRecoveryFromUrl: (url: string) => Promise<{ ok: boolean }>;
   signInWithApple: () => Promise<{ error: string | null }>;
   signInWithGoogle: () => Promise<{ error: string | null }>;
   refreshProfile: () => Promise<void>;
@@ -168,8 +173,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    // redirectTo: deep link che riporta nell'app (allow-list Supabase). Senza,
+    // il link punterebbe al Site URL web e il reset non si completerebbe in-app.
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: buildResetRedirectTo(),
+    });
     return { error: error?.message ?? null };
+  }, []);
+
+  const updatePassword = useCallback(async (newPassword: string) => {
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    return { error: error?.message ?? null };
+  }, []);
+
+  const completeRecoveryFromUrl = useCallback(async (url: string) => {
+    const { type, access_token, refresh_token } = parseAuthRedirect(url);
+    if (type !== 'recovery' || !access_token || !refresh_token) {
+      return { ok: false };
+    }
+    const { error } = await supabase.auth.setSession({
+      access_token,
+      refresh_token,
+    });
+    return { ok: !error };
   }, []);
 
   const signInWithApple = useCallback(async () => {
@@ -378,6 +404,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signUp,
       signOut,
       resetPassword,
+      updatePassword,
+      completeRecoveryFromUrl,
       signInWithApple,
       signInWithGoogle,
       refreshProfile,
@@ -401,6 +429,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signUp,
       signOut,
       resetPassword,
+      updatePassword,
+      completeRecoveryFromUrl,
       signInWithApple,
       signInWithGoogle,
       refreshProfile,

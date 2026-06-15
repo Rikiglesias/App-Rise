@@ -5,6 +5,7 @@ import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
 import { PerfectText } from '@/components/ui';
+import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -22,15 +23,19 @@ export const ForgotPasswordScreen: React.FC = () => {
   const [emailErr, setEmailErr] = useState<string | undefined>();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const onSubmit = useCallback(async (): Promise<void> => {
+    setSubmitError(null);
     const e = validateEmail(email);
     setEmailErr(e ? t(`auth.errors.${e}`) : undefined);
     if (e) return;
     setLoading(true);
-    await resetPassword(email.trim());
+    const { error } = await resetPassword(email.trim());
     setLoading(false);
-    setSent(true);
+    // NON mostrare "inviata" su errore reale (rate-limit/rete): false-positive fix.
+    if (error) setSubmitError(t('auth.forgot.error'));
+    else setSent(true);
   }, [email, resetPassword, t]);
 
   const handleSubmit = useCallback((): void => {
@@ -53,6 +58,11 @@ export const ForgotPasswordScreen: React.FC = () => {
             keyboardType="email-address"
             autoCapitalize="none"
           />
+          {submitError ? (
+            <PerfectText size={14} lines={2} style={styles.error}>
+              {submitError}
+            </PerfectText>
+          ) : null}
           <AuthButton
             label={t('auth.forgot.submit')}
             onPress={handleSubmit}
@@ -69,5 +79,9 @@ const createStyles = (colors: ThemeColors) =>
     sent: {
       color: colors.neutral[700],
       marginBottom: PerfectSpacing.lg,
+    },
+    error: {
+      color: Colors.semantic.error.main,
+      marginTop: PerfectSpacing.xs,
     },
   });
