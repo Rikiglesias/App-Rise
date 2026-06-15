@@ -26,6 +26,63 @@ export default {
     impact: 'Impact',
     actions: 'Actions',
     about: 'About Us',
+    profile: 'Profile',
+  },
+
+  auth: {
+    landing: {
+      title: 'Donor Area',
+      subtitle: 'Sign in or sign up to follow your impact',
+      login: 'Sign in',
+      signup: 'Sign up',
+    },
+    login: {
+      title: 'Sign in',
+      email: 'Email',
+      password: 'Password',
+      submit: 'Sign in',
+      forgotPassword: 'Forgot password?',
+      noAccount: "Don't have an account? Sign up",
+    },
+    signup: {
+      title: 'Create account',
+      firstName: 'First name',
+      lastName: 'Last name',
+      email: 'Email',
+      password: 'Password',
+      phone: 'Phone',
+      city: 'City',
+      province: 'Province',
+      birthDate: 'Date of birth (YYYY-MM-DD)',
+      privacyConsent: 'I accept the privacy policy',
+      marketingConsent: 'I want to receive updates (optional)',
+      submit: 'Sign up',
+      hasAccount: 'Already have an account? Sign in',
+      checkEmail:
+        'We sent you a verification email. Confirm it to sign in.',
+    },
+    forgot: {
+      title: 'Reset password',
+      email: 'Email',
+      submit: 'Send reset link',
+      sent: 'If the email exists, you will receive a link to reset your password.',
+    },
+    profile: {
+      title: 'My profile',
+      logout: 'Sign out',
+      phone: 'Phone',
+      location: 'Location',
+      birthDate: 'Date of birth',
+    },
+    errors: {
+      required: 'Required field',
+      email_invalid: 'Invalid email',
+      password_weak: 'Min 8 characters, one letter and one number',
+      phone_invalid: 'Invalid phone (e.g. +39...)',
+      not_adult: 'You must be of legal age',
+      date_invalid: 'Invalid date',
+      generic: 'An error occurred. Please try again.',
+    },
   },
 
   home: {

@@ -26,6 +26,63 @@ export default {
     impact: 'Impatto',
     actions: 'Azioni',
     about: 'Chi Siamo',
+    profile: 'Profilo',
+  },
+
+  auth: {
+    landing: {
+      title: 'Area Donatori',
+      subtitle: 'Accedi o registrati per seguire il tuo impatto',
+      login: 'Accedi',
+      signup: 'Registrati',
+    },
+    login: {
+      title: 'Accedi',
+      email: 'Email',
+      password: 'Password',
+      submit: 'Accedi',
+      forgotPassword: 'Password dimenticata?',
+      noAccount: 'Non hai un account? Registrati',
+    },
+    signup: {
+      title: 'Crea account',
+      firstName: 'Nome',
+      lastName: 'Cognome',
+      email: 'Email',
+      password: 'Password',
+      phone: 'Telefono',
+      city: 'Città',
+      province: 'Provincia',
+      birthDate: 'Data di nascita (AAAA-MM-GG)',
+      privacyConsent: 'Accetto la privacy policy',
+      marketingConsent: 'Voglio ricevere aggiornamenti (facoltativo)',
+      submit: 'Registrati',
+      hasAccount: 'Hai già un account? Accedi',
+      checkEmail:
+        'Ti abbiamo inviato un’email di verifica. Confermala per accedere.',
+    },
+    forgot: {
+      title: 'Recupera password',
+      email: 'Email',
+      submit: 'Invia link di reset',
+      sent: 'Se l’email esiste, riceverai un link per reimpostare la password.',
+    },
+    profile: {
+      title: 'Il mio profilo',
+      logout: 'Esci',
+      phone: 'Telefono',
+      location: 'Località',
+      birthDate: 'Data di nascita',
+    },
+    errors: {
+      required: 'Campo obbligatorio',
+      email_invalid: 'Email non valida',
+      password_weak: 'Min 8 caratteri, una lettera e un numero',
+      phone_invalid: 'Telefono non valido (es. +39...)',
+      not_adult: 'Devi essere maggiorenne',
+      date_invalid: 'Data non valida',
+      generic: 'Si è verificato un errore. Riprova.',
+    },
   },
 
   home: {
