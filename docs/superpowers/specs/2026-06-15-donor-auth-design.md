@@ -10,7 +10,7 @@ Obiettivo Fase 1: un donatore può creare un account, accedere (email/password o
 
 ## Requisiti
 - **Login "vostro"**: email + password con verifica email e reset password.
-- **Profilo donatore**: nome, cognome, email, **location** (per pianificare eventi sul territorio), **data di nascita** (non "età": si calcola, non invecchia).
+- **Profilo donatore**: nome, cognome, email, **telefono**, **location** (città+provincia, per pianificare eventi sul territorio), **data di nascita** (non "età": si calcola, non invecchia). **Tutti i campi dato sono obbligatori.**
 - **Social**: Google + Apple. *(Instagram NON disponibile — Basic Display API end-of-life 04/12/2024; eventuale Meta solo via Facebook, fuori scope ora.)*
 - **Auth opzionale (non-gating)**: i contenuti pubblici restano liberi; l'auth sblocca solo l'area donatori.
 - **GDPR**: consenso privacy esplicito, data minimization, gestione minori, diritto all'oblio.
@@ -29,7 +29,8 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 | `id` | uuid PK | FK → `auth.users.id`, on delete cascade |
 | `first_name` | text | obbligatorio |
 | `last_name` | text | obbligatorio |
-| `location` | `city` (text) + `province` (text/select) | granularità "dove fare eventi", NON GPS |
+| `phone` | text | obbligatorio; formato E.164 (default prefisso +39); **dato di contatto, NO verifica SMS in Fase 1** |
+| `location` | `city` (text) + `province` (text/select) | obbligatori; granularità "dove fare eventi", NON GPS |
 | `birth_date` | date | obbligatorio; **validazione ≥ 18 anni** |
 | `privacy_consent_at` | timestamptz | consenso privacy (obbligatorio) |
 | `marketing_consent` | boolean | opt-in separato (default false) |
@@ -38,7 +39,7 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 `email` vive in `auth.users` (non duplicato). **RLS**: `select/update/insert/delete` consentiti solo dove `auth.uid() = id`. Trigger `on auth.users insert` per creare la riga profilo vuota (poi completata).
 
 ### Flussi
-1. **Signup email**: form (nome, cognome, email, password, città+provincia, data nascita, consenso) → `signUp` → **verifica email obbligatoria** → al primo login profilo già popolato → home.
+1. **Signup email**: form (nome, cognome, email, password, telefono, città+provincia, data nascita, consenso privacy) — **tutti i campi dato obbligatori** → `signUp` → **verifica email obbligatoria** → al primo login profilo già popolato → home.
 2. **Login email**: email+password → sessione → home.
 3. **Reset password**: email → link Supabase → nuova password.
 4. **Social (Google/Apple)**: id-token nativo → `signInWithIdToken` → se profilo incompleto (location/data nascita/consenso mancanti, come avviene sempre coi social) → **schermata "Completa profilo"** → home.
@@ -51,7 +52,7 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 ## Sicurezza & GDPR
 - Token in `expo-secure-store`; mai loggati (rispetta la policy logger esistente).
 - RLS come unica barriera dati (anon key pubblica per design).
-- Consenso privacy esplicito e tracciato (`privacy_consent_at`); marketing separato e opt-in.
+- Consenso privacy esplicito e tracciato (`privacy_consent_at`), necessario per registrarsi. **Consenso marketing: resta FACOLTATIVO (opt-in libero) — per GDPR non può essere reso obbligatorio né condizione del servizio.** Telefono = dato di contatto (base giuridica: esecuzione servizio/eventi).
 - **Minori**: **età minima 18+** — registrazione riservata a maggiorenni; validazione su `birth_date` con messaggio chiaro se < 18. Semplifica il consenso GDPR.
 - Data minimization: nessun GPS; location = città/provincia.
 - Diritto all'oblio: funzione elimina-account completa.
@@ -71,6 +72,8 @@ Storico donazioni, ricevute fiscali, integrazione gateway pagamenti, notifiche p
 2. **Location**: **città (testo) + provincia (select)**.
 3. **Entry point**: **tab "Profilo"** nella bottom bar.
 4. **Verifica email**: **obbligatoria** prima del primo accesso.
+5. **Telefono**: campo **obbligatorio**, formato E.164 (default +39), **senza verifica SMS** in Fase 1.
+6. **Obbligatorietà**: tutti i campi dato del profilo sono obbligatori; il **consenso marketing resta facoltativo** (vincolo GDPR, non derogabile).
 
 ## Verifica end-to-end (a implementazione completata)
 Dev build EAS → signup email → ricezione email verifica → login → completa profilo → kill & riapri app (sessione persiste) → login Google → login Apple (iOS) → reset password → elimina account (verifica cascade su `profiles` lato Supabase). Test jest verdi (≥371). RLS testata: utente A non legge profilo di B.
