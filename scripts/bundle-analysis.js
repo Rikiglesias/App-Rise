@@ -39,7 +39,7 @@ const BUNDLE_CONFIG = {
   // Ottimizzazioni consigliate
   optimizations: {
     dynamicImports: [
-      'react-native-maps',
+      '@maplibre/maplibre-react-native',
       'react-native-svg',
       'react-native-reanimated',
     ],

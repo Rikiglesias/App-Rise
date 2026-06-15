@@ -101,15 +101,6 @@ jest.mock('expo-linear-gradient', () => ({
   },
 }));
 
-// Mock react-native-maps
-jest.mock('react-native-maps', () => {
-  const { View } = require('react-native');
-  return {
-    __esModule: true,
-    default: View,
-  };
-});
-
 // Mock icons
 jest.mock(
   '@expo/vector-icons/MaterialCommunityIcons',

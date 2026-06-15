@@ -142,12 +142,8 @@ export default withDefaultStrings({
     ios: {
       displayName: 'RAH Italia',
       supportsTablet: true,
-      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
-      // (mai committato); iniettata in Info.plist al prebuild. Senza key la mappa
-      // renderizza vuota (audit rank 3). RNMaps 1.20.1 < 1.22 => no config-plugin.
-      ...(process.env.GOOGLE_MAPS_API_KEY && {
-        config: { googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY },
-      }),
+      // Mappa: MapLibre + MapTiler (style via EXPO_PUBLIC_MAPTILER_KEY a runtime),
+      // nessuna API key Google nativa richiesta.
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
@@ -194,12 +190,8 @@ export default withDefaultStrings({
       ...(process.env.ANDROID_VERSION_CODE && {
         versionCode: parseInt(process.env.ANDROID_VERSION_CODE, 10),
       }),
-      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
-      // (mai committato); iniettata nell'AndroidManifest al prebuild. Senza key
-      // i tile non caricano (audit rank 3).
-      ...(process.env.GOOGLE_MAPS_API_KEY && {
-        config: { googleMaps: { apiKey: process.env.GOOGLE_MAPS_API_KEY } },
-      }),
+      // Mappa: MapLibre + MapTiler (style via EXPO_PUBLIC_MAPTILER_KEY a runtime),
+      // nessuna API key Google nativa richiesta.
       icon: './assets/icons/app/app-icon.png',
       // Permessi specifici con giustificazione
       permissions: [

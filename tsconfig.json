@@ -29,8 +29,7 @@
       "@/navigation/*": ["./src/navigation/*"],
       "@/hooks/*": ["src/shared/hooks/*"],
       "@/utils/*": ["src/shared/utils/*"],
-      "@/data/*": ["src/data/*"],
-      "react-native-maps": ["src/types/react-native-maps.d.ts"]
+      "@/data/*": ["src/data/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "src/types/**/*.d.ts"],
