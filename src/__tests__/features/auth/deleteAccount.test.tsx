@@ -6,6 +6,7 @@ import type { Session } from '@supabase/supabase-js';
 import { AllProviders } from '../../helpers/testProviders';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
 import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
+import { ReConsentScreen } from '@/features/auth/screens/ReConsentScreen';
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import type { Profile } from '@/shared/auth/types';
@@ -39,6 +40,11 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
     scheduleDeletion: jest.fn(),
     cancelScheduledDeletion: jest.fn(),
     exportData: jest.fn(),
+    recordConsent: jest.fn(),
+    setMarketingConsent: jest.fn(),
+    getConsentHistory: jest.fn(),
+    needsReConsent: false,
+    acceptCurrentPolicy: jest.fn(),
     ...over,
   }) as AuthState;
 
@@ -104,5 +110,23 @@ describe('ProfileScreen (autenticato)', () => {
     const { getByRole } = wrap(<ProfileScreen />);
     fireEvent(getByRole('switch'), 'valueChange', true);
     expect(setMarketingConsent).toHaveBeenCalledWith(true);
+  });
+
+  it('mostra il re-consenso quando needsReConsent è true', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ needsReConsent: true }));
+    const { getByText } = wrap(<ProfileScreen />);
+    expect(getByText('Aggiornamento informativa')).toBeTruthy();
+  });
+});
+
+describe('ReConsentScreen', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it('accetta l’informativa chiamando acceptCurrentPolicy', () => {
+    const acceptCurrentPolicy = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(makeAuth({ acceptCurrentPolicy }));
+    const { getByText } = wrap(<ReConsentScreen />);
+    fireEvent.press(getByText('Accetto'));
+    expect(acceptCurrentPolicy).toHaveBeenCalled();
   });
 });

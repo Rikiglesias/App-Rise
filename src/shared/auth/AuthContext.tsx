@@ -16,7 +16,7 @@ import {
   configureGoogle,
 } from './socialAuth';
 import { exportData as runDataExport } from './dataExport';
-import { buildConsentInsert } from './consent';
+import { buildConsentInsert, isReConsentRequired } from './consent';
 import type {
   Profile,
   ProfileInput,
@@ -60,6 +60,10 @@ export interface AuthState {
   setMarketingConsent: (enabled: boolean) => Promise<{ error: string | null }>;
   /** Cronologia consensi dell'utente (per export/trasparenza). */
   getConsentHistory: () => Promise<ConsentEvent[]>;
+  /** True se l'utente deve ri-accettare l'informativa corrente (cambio materiale). */
+  needsReConsent: boolean;
+  /** Registra l'accettazione della versione corrente dell'informativa. */
+  acceptCurrentPolicy: () => Promise<{ error: string | null }>;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -70,6 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [status, setStatus] = useState<Status>('loading');
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [needsReConsent, setNeedsReConsent] = useState(false);
 
   const loadProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
@@ -265,6 +270,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [session, loadProfile]
   );
 
+  const acceptCurrentPolicy = useCallback(async () => {
+    const res = await recordConsent('privacy_notice', 'granted');
+    if (!res.error) setNeedsReConsent(false);
+    return res;
+  }, [recordConsent]);
+
+  // Verifica re-consenso quando l'utente è autenticato (cambio materiale policy).
+  useEffect(() => {
+    if (status !== 'authenticated' || !session?.user.id) {
+      setNeedsReConsent(false);
+      return;
+    }
+    void getConsentHistory().then((history) => {
+      setNeedsReConsent(isReConsentRequired(history));
+    });
+  }, [status, session, getConsentHistory]);
+
   const value = useMemo(
     () => ({
       status,
@@ -284,6 +306,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       recordConsent,
       setMarketingConsent,
       getConsentHistory,
+      needsReConsent,
+      acceptCurrentPolicy,
     }),
     [
       status,
@@ -303,6 +327,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       recordConsent,
       setMarketingConsent,
       getConsentHistory,
+      needsReConsent,
+      acceptCurrentPolicy,
     ]
   );
 

@@ -47,3 +47,18 @@ export const deriveMarketingState = (events: ConsentEvent[]): boolean => {
     .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
   return latest?.action === 'granted';
 };
+
+/**
+ * Serve re-consenso se l'utente NON ha un evento 'privacy_notice' granted
+ * per la versione corrente dell'informativa (EDPB §110, cambio materiale).
+ */
+export const isReConsentRequired = (
+  events: ConsentEvent[],
+  currentVersion: string = CURRENT_POLICY_VERSION
+): boolean =>
+  !events.some(
+    (e) =>
+      e.purpose === 'privacy_notice' &&
+      e.action === 'granted' &&
+      e.policy_version === currentVersion
+  );

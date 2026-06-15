@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
 import { AuthLandingScreen } from './AuthLandingScreen';
+import { ReConsentScreen } from './ReConsentScreen';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -29,6 +30,7 @@ export const ProfileScreen: React.FC = () => {
     exportData,
     cancelScheduledDeletion,
     setMarketingConsent,
+    needsReConsent,
   } = useAuth();
   const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -73,6 +75,10 @@ export const ProfileScreen: React.FC = () => {
 
   if (status === 'unauthenticated') {
     return <AuthLandingScreen />;
+  }
+
+  if (needsReConsent) {
+    return <ReConsentScreen />;
   }
 
   const fullName = profile ? `${profile.first_name} ${profile.last_name}` : '';
