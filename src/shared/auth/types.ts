@@ -10,6 +10,7 @@ export interface Profile {
   birth_date: string; // ISO date (YYYY-MM-DD)
   privacy_consent_at: string; // ISO timestamp
   marketing_consent: boolean;
+  deletion_requested_at: string | null; // M3: NULL=attivo; valorizzato=cancellazione a +30gg
 }
 
 /** Dati raccolti dal form di registrazione (prima della scrittura su DB). */
