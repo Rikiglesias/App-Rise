@@ -198,9 +198,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { error: null };
   }, [session, loadProfile]);
 
+  const getConsentHistory = useCallback(async (): Promise<ConsentEvent[]> => {
+    const userId = session?.user.id;
+    if (!userId) return [];
+    const { data } = await supabase
+      .from('consent_events')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+    return (data as ConsentEvent[] | null) ?? [];
+  }, [session]);
+
   const exportData = useCallback(async () => {
     const user = session?.user;
     if (!user) return;
+    const consentHistory = await getConsentHistory();
     await runDataExport(
       {
         id: user.id,
@@ -208,9 +220,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         created_at: user.created_at,
         providers: user.identities?.map((i) => i.provider) ?? [],
       },
-      profile
+      profile,
+      consentHistory
     );
-  }, [session, profile]);
+  }, [session, profile, getConsentHistory]);
 
   const recordConsent = useCallback(
     async (purpose: ConsentPurpose, action: ConsentAction) => {
@@ -251,17 +264,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [session, loadProfile]
   );
-
-  const getConsentHistory = useCallback(async (): Promise<ConsentEvent[]> => {
-    const userId = session?.user.id;
-    if (!userId) return [];
-    const { data } = await supabase
-      .from('consent_events')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-    return (data as ConsentEvent[] | null) ?? [];
-  }, [session]);
 
   const value = useMemo(
     () => ({

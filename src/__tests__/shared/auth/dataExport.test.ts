@@ -1,7 +1,7 @@
 import { Share } from 'react-native';
 
 import { buildExportPayload, exportData } from '@/shared/auth/dataExport';
-import type { Profile } from '@/shared/auth/types';
+import type { Profile, ConsentEvent } from '@/shared/auth/types';
 
 const profile: Profile = {
   id: 'u1',
@@ -30,6 +30,24 @@ describe('dataExport', () => {
     expect(payload.profile?.first_name).toBe('Mario');
     expect(payload.profile?.marketing_consent).toBe(true);
     expect(typeof payload.exported_at).toBe('string');
+  });
+
+  it('buildExportPayload include la cronologia consensi (Art.20)', () => {
+    const history: ConsentEvent[] = [
+      {
+        id: '1',
+        user_id: 'u1',
+        purpose: 'marketing',
+        action: 'granted',
+        policy_version: 'privacy-2026-06-15',
+        legal_basis: 'consent',
+        channel: 'ios:signup',
+        created_at: '2026-01-01T00:00:00.000Z',
+      },
+    ];
+    const payload = buildExportPayload(account, profile, history);
+    expect(payload.consent_history).toHaveLength(1);
+    expect(payload.consent_history[0]?.purpose).toBe('marketing');
   });
 
   it('exportData apre il share-sheet con un JSON valido contenente i dati', async () => {
