@@ -43,7 +43,11 @@ const SimpleMarker: React.FC<{ location: Location; colors: ThemeColors }> =
     const markerColor = getMarkerColor(location, colors);
 
     return (
-      <PerfectContainer style={styles.markerContainer}>
+      <PerfectContainer
+        style={styles.markerContainer}
+        accessibilityRole="button"
+        accessibilityLabel={`${location.country}: tocca per i dettagli`}
+      >
         {/* Pin principale */}
         <PerfectContainer
           style={[styles.simpleMarker, { backgroundColor: markerColor }]}

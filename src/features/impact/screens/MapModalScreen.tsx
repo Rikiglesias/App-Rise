@@ -88,6 +88,8 @@ const MapModalScreen: React.FC = () => {
           style={styles.closeButton}
           onPress={handleClosePress}
           activeOpacity={0.8}
+          accessibilityRole="button"
+          accessibilityLabel="Chiudi la mappa"
         >
           <PerfectIcon name="close" size={24} color={colors.neutral[0]} />
         </PlatformTouchable>

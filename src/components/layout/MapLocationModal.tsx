@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Linking } from 'react-native';
 import {
   PerfectIcon,
   PlatformTouchable,
@@ -11,7 +11,7 @@ import {
 
 import { PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
-import { logDebug } from '../../shared/utils/logger';
+import { logError } from '../../shared/utils/logger';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import type { MapModalData } from '@/features/impact/data/mapModalData';
@@ -33,10 +33,17 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
+  const trackingUrl = data?.trackingUrl;
+
   const handleCTAPress = useCallback(() => {
-    logDebug('MapLocationModal', 'CTA pressed', { title: data?.title });
-    // Note: External links functionality would require extending MapModalData interface
-  }, [data?.title]);
+    if (!trackingUrl) return;
+    Linking.openURL(trackingUrl).catch(error => {
+      logError(
+        'Impossibile aprire il link di tracciamento',
+        error instanceof Error ? error.message : String(error)
+      );
+    });
+  }, [trackingUrl]);
 
   if (!data) return null;
 
@@ -102,38 +109,41 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
 
         {/* Contenuto semplificato */}
         <PerfectContainer style={styles.content}>
-          {/* Descrizione breve - max 2 righe */}
+          {/* Descrizione reale del paese */}
           <PerfectText
             size={16}
-            lines={3}
+            lines={5}
             fontWeight="400"
             style={styles.description}
           >
-            Scopri il nostro impatto in {data.title} attraverso programmi di
-            lotta alla fame e sviluppo sostenibile.
+            {data.description}
           </PerfectText>
 
-          {/* Call to Action per link esterno */}
-          <PlatformTouchable
-            style={styles.ctaButton}
-            activeOpacity={0.8}
-            onPress={handleCTAPress}
-          >
-            <PerfectIcon
-              name="open-in-new"
-              size={20}
-              color={colors.accent.white}
-              style={styles.ctaIcon}
-            />
-            <PerfectText
-              size={16}
-              lines={1}
-              fontWeight="400"
-              style={styles.ctaText}
+          {/* Call to Action: solo se esiste un link di tracciamento reale */}
+          {trackingUrl ? (
+            <PlatformTouchable
+              style={styles.ctaButton}
+              activeOpacity={0.8}
+              onPress={handleCTAPress}
+              accessibilityRole="link"
+              accessibilityLabel={`Apri il tracciamento di ${data.title}`}
             >
-              Clicca qui per saperne di più
-            </PerfectText>
-          </PlatformTouchable>
+              <PerfectIcon
+                name="open-in-new"
+                size={20}
+                color={colors.accent.white}
+                style={styles.ctaIcon}
+              />
+              <PerfectText
+                size={16}
+                lines={1}
+                fontWeight="400"
+                style={styles.ctaText}
+              >
+                Segui il tracciamento
+              </PerfectText>
+            </PlatformTouchable>
+          ) : null}
         </PerfectContainer>
       </PerfectContainer>
     </PerfectModal>
