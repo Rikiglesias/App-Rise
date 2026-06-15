@@ -26,6 +26,9 @@ jest.mock('@/shared/auth/supabaseClient', () => {
         ),
         signOut: jest.fn(() => Promise.resolve({ error: null })),
         updateUser: jest.fn(() => Promise.resolve({ data: {}, error: null })),
+        signUp: jest.fn(() =>
+          Promise.resolve({ data: { user: { id: 'u1' } }, error: null })
+        ),
       },
       from: jest.fn(() => ({ select, eq: eqSelect, single, update, insert })),
       functions: {
@@ -144,6 +147,13 @@ describe('AuthContext', () => {
       expect.objectContaining({ marketing_consent: true })
     );
   });
+});
+
+describe('AuthContext — update/signup/consenso', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRef = undefined;
+  });
 
   it('updateProfile aggiorna SOLO i campi passati (whitelist, no upsert)', async () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
@@ -211,6 +221,62 @@ describe('AuthContext', () => {
     });
     // ripristina il default (clearAllMocks NON resetta le implementazioni)
     single.mockResolvedValue({ data: null, error: null });
+  });
+
+  it('signUp passa i dati profilo via options.data e NON inserisce profiles client-side', async () => {
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    const insertMock = (supabase.from('profiles') as unknown as {
+      insert: jest.Mock;
+    }).insert;
+    await act(async () => {
+      const res = await getAuth().signUp('a@b.it', 'password1', {
+        first_name: 'Mario',
+        last_name: 'Rossi',
+        phone: '+393331234567',
+        city: 'Roma',
+        province: 'RM',
+        birth_date: '1990-01-01',
+        privacy_consent: true,
+        marketing_consent: true,
+      });
+      expect(res.error).toBeNull();
+    });
+    expect(supabase.auth.signUp).toHaveBeenCalledWith(
+      expect.objectContaining({
+        email: 'a@b.it',
+        password: 'password1',
+        options: {
+          data: expect.objectContaining({
+            first_name: 'Mario',
+            birth_date: '1990-01-01',
+            marketing_consent: true,
+          }),
+        },
+      })
+    );
+    // Il profilo lo crea il trigger server-side: nessun insert client-side.
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it('getConsentHistory ritorna null su errore di fetch (≠ [])', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const orderMock = (supabase.from('consent_events') as unknown as {
+      select: () => { eq: () => { order: jest.Mock } };
+    })
+      .select()
+      .eq().order;
+    orderMock.mockResolvedValue({ data: null, error: { message: 'boom' } });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const h = await getAuth().getConsentHistory();
+      expect(h).toBeNull();
+    });
+    // ripristina il default (clearAllMocks non resetta le implementazioni)
+    orderMock.mockResolvedValue({ data: [], error: null });
   });
 
   it('exportData apre il share-sheet quando c\'è una sessione', async () => {

@@ -33,7 +33,7 @@ export const CompleteProfileScreen: React.FC = () => {
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { session, refreshProfile } = useAuth();
+  const { session, refreshProfile, recordConsent } = useAuth();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -81,8 +81,16 @@ export const CompleteProfileScreen: React.FC = () => {
       privacy_consent_at: new Date().toISOString(),
       marketing_consent: false,
     });
-    setLoading(false);
     if (error) {
+      setLoading(false);
+      setSubmitError(t('auth.errors.generic'));
+      return;
+    }
+    // GDPR Art.7: registra il consenso privacy nel ledger (path social, sessione attiva
+    // → RLS soddisfatta). Per l'email il consenso lo semina il trigger handle_new_user.
+    const { error: consentError } = await recordConsent('privacy_notice', 'granted');
+    setLoading(false);
+    if (consentError) {
       setSubmitError(t('auth.errors.generic'));
       return;
     }
@@ -98,6 +106,7 @@ export const CompleteProfileScreen: React.FC = () => {
     privacyConsent,
     session,
     refreshProfile,
+    recordConsent,
     navigation,
     t,
   ]);

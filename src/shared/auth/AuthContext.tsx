@@ -66,8 +66,8 @@ export interface AuthState {
   ) => Promise<{ error: string | null }>;
   /** Concede/revoca il consenso marketing (evento + cache profiles.marketing_consent). */
   setMarketingConsent: (enabled: boolean) => Promise<{ error: string | null }>;
-  /** Cronologia consensi dell'utente (per export/trasparenza). */
-  getConsentHistory: () => Promise<ConsentEvent[]>;
+  /** Cronologia consensi dell'utente (per export/trasparenza). `null` = errore di fetch. */
+  getConsentHistory: () => Promise<ConsentEvent[] | null>;
   /** True se l'utente deve ri-accettare l'informativa corrente (cambio materiale). */
   needsReConsent: boolean;
   /** Registra l'accettazione della versione corrente dell'informativa. */
@@ -131,23 +131,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const signUp = useCallback(
     async (email: string, password: string, p: ProfileInput) => {
-      const { data, error } = await supabase.auth.signUp({ email, password });
-      if (error) return { error: error.message };
-      if (data.user) {
-        const { error: pErr } = await supabase.from('profiles').insert({
-          id: data.user.id,
-          first_name: p.first_name,
-          last_name: p.last_name,
-          phone: p.phone,
-          city: p.city,
-          province: p.province,
-          birth_date: p.birth_date,
-          privacy_consent_at: new Date().toISOString(),
-          marketing_consent: p.marketing_consent,
-        });
-        if (pErr) return { error: pErr.message };
-      }
-      return { error: null };
+      // Profilo + consensi iniziali creati SERVER-SIDE dal trigger handle_new_user
+      // (migration 0004) leggendo options.data: con "Confirm email" ON non c'è sessione
+      // attiva qui, quindi un insert client-side verrebbe bloccato da RLS (auth.uid() null).
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: p.first_name,
+            last_name: p.last_name,
+            phone: p.phone,
+            city: p.city,
+            province: p.province,
+            birth_date: p.birth_date,
+            marketing_consent: p.marketing_consent,
+          },
+        },
+      });
+      return { error: error?.message ?? null };
     },
     []
   );
@@ -244,14 +246,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { error: null };
   }, [session, loadProfile]);
 
-  const getConsentHistory = useCallback(async (): Promise<ConsentEvent[]> => {
+  const getConsentHistory = useCallback(async (): Promise<
+    ConsentEvent[] | null
+  > => {
     const userId = session?.user.id;
     if (!userId) return [];
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('consent_events')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
+    // null = errore di fetch (rete/RLS): distinto da "nessun evento" ([]), per non
+    // attivare un falso re-consent né esportare una cronologia vuota su errore transient.
+    if (error) return null;
     return (data as ConsentEvent[] | null) ?? [];
   }, [session]);
 
@@ -259,6 +266,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const user = session?.user;
     if (!user) return;
     const consentHistory = await getConsentHistory();
+    // Su errore di fetch (null) interrompiamo: meglio segnalare l'errore (lo cattura
+    // handleExport) che esportare un GDPR Art.20 con cronologia consensi incompleta.
+    if (consentHistory === null) throw new Error('consent_history_unavailable');
     await runDataExport(
       {
         id: user.id,
@@ -324,7 +334,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
     void getConsentHistory().then((history) => {
-      setNeedsReConsent(isReConsentRequired(history));
+      // Su errore di fetch (null) NON gattiamo: evita un falso re-consent da errore
+      // transient (coerente con la scelta di loadProfile di non azzerare su errore).
+      if (history !== null) setNeedsReConsent(isReConsentRequired(history));
     });
   }, [status, session, getConsentHistory]);
 
