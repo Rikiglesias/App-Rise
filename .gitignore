@@ -94,6 +94,9 @@ coverage/
 .vscode/settings.json
 .idea/
 
+# Claude Code (impostazioni personali, non condivise)
+.claude/settings.local.json
+
 # Bundle analysis reports (temporary)
 bundle-analysis-report.json
 complete-analysis-report.json
