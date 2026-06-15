@@ -95,12 +95,9 @@ export const SignUpScreen: React.FC = () => {
     (): void => navigation.navigate('Login'),
     [navigation]
   );
-  const togglePrivacy = useCallback(
-    (): void => setPrivacyConsent((v) => !v),
-    []
-  );
+  const togglePrivacy = useCallback((): void => setPrivacyConsent(v => !v), []);
   const toggleMarketing = useCallback(
-    (): void => setMarketingConsent((v) => !v),
+    (): void => setMarketingConsent(v => !v),
     []
   );
 

@@ -46,9 +46,7 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
           buttonType={
             AppleAuthentication.AppleAuthenticationButtonType.CONTINUE
           }
-          buttonStyle={
-            AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-          }
+          buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
           cornerRadius={scale(12)}
           style={styles.appleBtn}
           onPress={onApple}

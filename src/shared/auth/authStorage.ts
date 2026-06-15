@@ -60,7 +60,7 @@ const getItem = async (key: string): Promise<string | null> => {
       SecureStore.getItemAsync(chunkKey(key, i))
     )
   );
-  if (parts.some((p) => p === null)) return null; // chunk mancante → corrotto
+  if (parts.some(p => p === null)) return null; // chunk mancante → corrotto
   return parts.join('');
 };
 

@@ -28,7 +28,7 @@ export const getAppleIdToken = async (): Promise<string | null> => {
 export const getGoogleIdToken = async (): Promise<string | null> => {
   await GoogleSignin.hasPlayServices();
   const result = await GoogleSignin.signIn();
-  return result.type === 'success' ? result.data.idToken ?? null : null;
+  return result.type === 'success' ? (result.data.idToken ?? null) : null;
 };
 
 /**

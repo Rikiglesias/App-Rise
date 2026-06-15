@@ -4,7 +4,11 @@ import {
   isReConsentRequired,
   CURRENT_POLICY_VERSION,
 } from '@/shared/auth/consent';
-import type { ConsentEvent, ConsentPurpose, ConsentAction } from '@/shared/auth/types';
+import type {
+  ConsentEvent,
+  ConsentPurpose,
+  ConsentAction,
+} from '@/shared/auth/types';
 
 const ev = (
   purpose: ConsentPurpose,
@@ -24,7 +28,9 @@ const ev = (
 describe('consent helpers', () => {
   it('deriveMarketingState: vince l’ultimo evento marketing per data', () => {
     expect(deriveMarketingState([])).toBe(false);
-    expect(deriveMarketingState([ev('marketing', 'granted', '2026-01-01')])).toBe(true);
+    expect(
+      deriveMarketingState([ev('marketing', 'granted', '2026-01-01')])
+    ).toBe(true);
     expect(
       deriveMarketingState([
         ev('marketing', 'granted', '2026-01-01'),
@@ -34,7 +40,9 @@ describe('consent helpers', () => {
   });
 
   it('deriveMarketingState: ignora finalità diverse da marketing', () => {
-    expect(deriveMarketingState([ev('privacy_notice', 'granted', '2026-03-01')])).toBe(false);
+    expect(
+      deriveMarketingState([ev('privacy_notice', 'granted', '2026-03-01')])
+    ).toBe(false);
   });
 
   it('isReConsentRequired: true se manca un privacy_notice granted per la versione corrente', () => {
@@ -51,7 +59,9 @@ describe('consent helpers', () => {
   });
 
   it('buildConsentInsert costruisce la riga con legal_basis e versione corrente', () => {
-    expect(buildConsentInsert('u1', 'marketing', 'granted', 'ios:profile_toggle')).toEqual({
+    expect(
+      buildConsentInsert('u1', 'marketing', 'granted', 'ios:profile_toggle')
+    ).toEqual({
       user_id: 'u1',
       purpose: 'marketing',
       action: 'granted',

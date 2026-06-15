@@ -43,7 +43,7 @@ export const buildConsentInsert = (
 /** Stato marketing corrente = azione dell'ultimo evento 'marketing' per data (default false). */
 export const deriveMarketingState = (events: ConsentEvent[]): boolean => {
   const latest = events
-    .filter((e) => e.purpose === 'marketing')
+    .filter(e => e.purpose === 'marketing')
     .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
   return latest?.action === 'granted';
 };
@@ -57,7 +57,7 @@ export const isReConsentRequired = (
   currentVersion: string = CURRENT_POLICY_VERSION
 ): boolean =>
   !events.some(
-    (e) =>
+    e =>
       e.purpose === 'privacy_notice' &&
       e.action === 'granted' &&
       e.policy_version === currentVersion

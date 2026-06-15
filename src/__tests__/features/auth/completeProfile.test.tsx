@@ -71,9 +71,11 @@ describe('CompleteProfileScreen', () => {
   it('al completamento fa upsert profilo e registra il consenso privacy (Art.7)', async () => {
     const recordConsent = jest.fn().mockResolvedValue({ error: null });
     mockUseAuth.mockReturnValue(makeAuth({ recordConsent }));
-    const upsert = (supabase.from('profiles') as unknown as {
-      upsert: jest.Mock;
-    }).upsert;
+    const upsert = (
+      supabase.from('profiles') as unknown as {
+        upsert: jest.Mock;
+      }
+    ).upsert;
 
     const { getByLabelText, getByText, getByRole } = render(
       <AllProviders>

@@ -21,7 +21,13 @@ import type { ProfileEditable } from '@/shared/auth/types';
 
 type Errors = Partial<
   Record<
-    'firstName' | 'lastName' | 'phone' | 'city' | 'province' | 'birthDate' | 'email',
+    | 'firstName'
+    | 'lastName'
+    | 'phone'
+    | 'city'
+    | 'province'
+    | 'birthDate'
+    | 'email',
     string
   >
 >;
@@ -70,12 +76,16 @@ export const ProfileEditScreen: React.FC = () => {
     setLoading(true);
     // Solo i campi effettivamente cambiati (whitelist a valle in updateProfile).
     const changed: Partial<ProfileEditable> = {};
-    if (firstName.trim() !== profile?.first_name) changed.first_name = firstName.trim();
-    if (lastName.trim() !== profile?.last_name) changed.last_name = lastName.trim();
+    if (firstName.trim() !== profile?.first_name)
+      changed.first_name = firstName.trim();
+    if (lastName.trim() !== profile?.last_name)
+      changed.last_name = lastName.trim();
     if (phone.trim() !== profile?.phone) changed.phone = phone.trim();
     if (city.trim() !== profile?.city) changed.city = city.trim();
-    if (province.trim() !== profile?.province) changed.province = province.trim();
-    if (birthDate.trim() !== profile?.birth_date) changed.birth_date = birthDate.trim();
+    if (province.trim() !== profile?.province)
+      changed.province = province.trim();
+    if (birthDate.trim() !== profile?.birth_date)
+      changed.birth_date = birthDate.trim();
 
     if (Object.keys(changed).length > 0) {
       const { error } = await updateProfile(changed);

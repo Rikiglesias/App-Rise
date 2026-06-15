@@ -22,7 +22,13 @@ import type { RootStackNavigationProp } from '@/navigation/types';
 
 type Errors = Partial<
   Record<
-    'firstName' | 'lastName' | 'phone' | 'city' | 'province' | 'birthDate' | 'privacy',
+    | 'firstName'
+    | 'lastName'
+    | 'phone'
+    | 'city'
+    | 'province'
+    | 'birthDate'
+    | 'privacy',
     string
   >
 >;
@@ -88,7 +94,10 @@ export const CompleteProfileScreen: React.FC = () => {
     }
     // GDPR Art.7: registra il consenso privacy nel ledger (path social, sessione attiva
     // → RLS soddisfatta). Per l'email il consenso lo semina il trigger handle_new_user.
-    const { error: consentError } = await recordConsent('privacy_notice', 'granted');
+    const { error: consentError } = await recordConsent(
+      'privacy_notice',
+      'granted'
+    );
     setLoading(false);
     if (consentError) {
       setSubmitError(t('auth.errors.generic'));
@@ -114,10 +123,7 @@ export const CompleteProfileScreen: React.FC = () => {
   const handleSubmit = useCallback((): void => {
     void onSubmit();
   }, [onSubmit]);
-  const togglePrivacy = useCallback(
-    (): void => setPrivacyConsent((v) => !v),
-    []
-  );
+  const togglePrivacy = useCallback((): void => setPrivacyConsent(v => !v), []);
 
   return (
     <AuthScreen title={t('auth.completeProfile.title')}>

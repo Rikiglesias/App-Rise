@@ -27,7 +27,7 @@ export const ReConsentScreen: React.FC = () => {
   const handleAccept = useCallback((): void => {
     setError(undefined);
     setLoading(true);
-    void acceptCurrentPolicy().then((r) => {
+    void acceptCurrentPolicy().then(r => {
       setLoading(false);
       if (r.error) setError(t('auth.consents.error'));
     });

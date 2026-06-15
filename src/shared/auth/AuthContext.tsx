@@ -34,7 +34,10 @@ export interface AuthState {
   status: Status;
   session: Session | null;
   profile: Profile | null;
-  signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+  signIn: (
+    email: string,
+    password: string
+  ) => Promise<{ error: string | null }>;
   signUp: (
     email: string,
     password: string,
@@ -52,7 +55,9 @@ export interface AuthState {
   /** Cambia l'email dell'account (secure email change Supabase: conferma su vecchia+nuova casella). */
   updateEmail: (email: string) => Promise<{ error: string | null }>;
   /** Cancellazione immediata via Edge Function (GDPR Art.17). `appleAuthCode`: fresh per la revoca Apple. */
-  deleteAccountNow: (appleAuthCode?: string) => Promise<{ error: string | null }>;
+  deleteAccountNow: (
+    appleAuthCode?: string
+  ) => Promise<{ error: string | null }>;
   /** Programma la cancellazione a +30gg (grace period recuperabile). */
   scheduleDeletion: () => Promise<{ error: string | null }>;
   /** Annulla una cancellazione programmata. */
@@ -216,7 +221,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const deleteAccountNow = useCallback(async (appleAuthCode?: string) => {
     const body = appleAuthCode ? { appleAuthCode } : {};
-    const { error } = await supabase.functions.invoke('delete-account', { body });
+    const { error } = await supabase.functions.invoke('delete-account', {
+      body,
+    });
     if (error) return { error: error.message };
     await supabase.auth.signOut();
     return { error: null };
@@ -274,7 +281,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         id: user.id,
         email: user.email ?? null,
         created_at: user.created_at,
-        providers: user.identities?.map((i) => i.provider) ?? [],
+        providers: user.identities?.map(i => i.provider) ?? [],
       },
       profile,
       consentHistory
@@ -333,7 +340,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setNeedsReConsent(false);
       return;
     }
-    void getConsentHistory().then((history) => {
+    void getConsentHistory().then(history => {
       // Su errore di fetch (null) NON gattiamo: evita un falso re-consent da errore
       // transient (coerente con la scelta di loadProfile di non azzerare su errore).
       if (history !== null) setNeedsReConsent(isReConsentRequired(history));

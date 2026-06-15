@@ -50,7 +50,9 @@ export const ProfileScreen: React.FC = () => {
   );
   const handleExport = useCallback((): void => {
     setExportError(undefined);
-    void exportData().catch(() => setExportError(t('auth.privacy.exportError')));
+    void exportData().catch(() =>
+      setExportError(t('auth.privacy.exportError'))
+    );
   }, [exportData, t]);
   const handleDelete = useCallback(
     (): void => navigation.navigate('DeleteAccount'),
@@ -62,7 +64,7 @@ export const ProfileScreen: React.FC = () => {
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
       setConsentError(undefined);
-      void setMarketingConsent(value).then((r) => {
+      void setMarketingConsent(value).then(r => {
         if (r.error) setConsentError(t('auth.consents.error'));
       });
     },
@@ -115,10 +117,18 @@ export const ProfileScreen: React.FC = () => {
         </PerfectText>
       ) : null}
 
-      <Row label={t('auth.login.email')} value={session?.user.email ?? ''} styles={styles} />
+      <Row
+        label={t('auth.login.email')}
+        value={session?.user.email ?? ''}
+        styles={styles}
+      />
       {profile ? (
         <>
-          <Row label={t('auth.profile.phone')} value={profile.phone} styles={styles} />
+          <Row
+            label={t('auth.profile.phone')}
+            value={profile.phone}
+            styles={styles}
+          />
           <Row
             label={t('auth.profile.location')}
             value={`${profile.city} (${profile.province})`}

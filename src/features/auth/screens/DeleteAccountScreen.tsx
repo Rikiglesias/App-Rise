@@ -30,7 +30,7 @@ export const DeleteAccountScreen: React.FC = () => {
   const [error, setError] = useState<string | undefined>();
 
   const isApple =
-    session?.user.identities?.some((i) => i.provider === 'apple') ?? false;
+    session?.user.identities?.some(i => i.provider === 'apple') ?? false;
 
   const runDeleteNow = useCallback(async (): Promise<void> => {
     setError(undefined);

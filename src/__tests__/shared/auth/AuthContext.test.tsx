@@ -32,7 +32,9 @@ jest.mock('@/shared/auth/supabaseClient', () => {
       },
       from: jest.fn(() => ({ select, eq: eqSelect, single, update, insert })),
       functions: {
-        invoke: jest.fn(() => Promise.resolve({ data: { ok: true }, error: null })),
+        invoke: jest.fn(() =>
+          Promise.resolve({ data: { ok: true }, error: null })
+        ),
       },
     },
   };
@@ -71,7 +73,9 @@ describe('AuthContext', () => {
       useAuth();
       return null;
     };
-    const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const spy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
     expect(() => render(<Orphan />)).toThrow(
       'useAuth must be used within AuthProvider'
     );
@@ -106,9 +110,11 @@ describe('AuthContext', () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
       data: { session: { user: { id: 'u1', email: 'm@r.it' } } },
     });
-    const updateMock = (supabase.from('profiles') as unknown as {
-      update: jest.Mock;
-    }).update;
+    const updateMock = (
+      supabase.from('profiles') as unknown as {
+        update: jest.Mock;
+      }
+    ).update;
     const { getByText } = renderAuth();
     await waitFor(() => getByText('authenticated'));
 
@@ -141,7 +147,11 @@ describe('AuthContext', () => {
       await getAuth().setMarketingConsent(true);
     });
     expect(api.insert).toHaveBeenCalledWith(
-      expect.objectContaining({ purpose: 'marketing', action: 'granted', user_id: 'u1' })
+      expect.objectContaining({
+        purpose: 'marketing',
+        action: 'granted',
+        user_id: 'u1',
+      })
     );
     expect(api.update).toHaveBeenCalledWith(
       expect.objectContaining({ marketing_consent: true })
@@ -159,9 +169,11 @@ describe('AuthContext — update/signup/consenso', () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
       data: { session: { user: { id: 'u1' } } },
     });
-    const updateMock = (supabase.from('profiles') as unknown as {
-      update: jest.Mock;
-    }).update;
+    const updateMock = (
+      supabase.from('profiles') as unknown as {
+        update: jest.Mock;
+      }
+    ).update;
     const { getByText } = renderAuth();
     await waitFor(() => getByText('authenticated'));
     await act(async () => {
@@ -179,9 +191,11 @@ describe('AuthContext — update/signup/consenso', () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
       data: { session: { user: { id: 'u1' } } },
     });
-    const updateMock = (supabase.from('profiles') as unknown as {
-      update: jest.Mock;
-    }).update;
+    const updateMock = (
+      supabase.from('profiles') as unknown as {
+        update: jest.Mock;
+      }
+    ).update;
     const { getByText } = renderAuth();
     await waitFor(() => getByText('authenticated'));
     await act(async () => {
@@ -201,16 +215,20 @@ describe('AuthContext — update/signup/consenso', () => {
       const res = await getAuth().updateEmail('new@r.it');
       expect(res.error).toBeNull();
     });
-    expect(supabase.auth.updateUser).toHaveBeenCalledWith({ email: 'new@r.it' });
+    expect(supabase.auth.updateUser).toHaveBeenCalledWith({
+      email: 'new@r.it',
+    });
   });
 
   it('refreshProfile non lancia se la fetch del profilo fallisce', async () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
       data: { session: { user: { id: 'u1' } } },
     });
-    const single = (supabase.from('profiles') as unknown as {
-      select: () => { eq: () => { single: jest.Mock } };
-    })
+    const single = (
+      supabase.from('profiles') as unknown as {
+        select: () => { eq: () => { single: jest.Mock } };
+      }
+    )
       .select()
       .eq().single;
     single.mockResolvedValue({ data: null, error: { code: 'NETWORK' } });
@@ -226,9 +244,11 @@ describe('AuthContext — update/signup/consenso', () => {
   it('signUp passa i dati profilo via options.data e NON inserisce profiles client-side', async () => {
     const { getByText } = renderAuth();
     await waitFor(() => getByText('unauthenticated'));
-    const insertMock = (supabase.from('profiles') as unknown as {
-      insert: jest.Mock;
-    }).insert;
+    const insertMock = (
+      supabase.from('profiles') as unknown as {
+        insert: jest.Mock;
+      }
+    ).insert;
     await act(async () => {
       const res = await getAuth().signUp('a@b.it', 'password1', {
         first_name: 'Mario',
@@ -263,9 +283,11 @@ describe('AuthContext — update/signup/consenso', () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
       data: { session: { user: { id: 'u1' } } },
     });
-    const orderMock = (supabase.from('consent_events') as unknown as {
-      select: () => { eq: () => { order: jest.Mock } };
-    })
+    const orderMock = (
+      supabase.from('consent_events') as unknown as {
+        select: () => { eq: () => { order: jest.Mock } };
+      }
+    )
       .select()
       .eq().order;
     orderMock.mockResolvedValue({ data: null, error: { message: 'boom' } });
@@ -279,9 +301,11 @@ describe('AuthContext — update/signup/consenso', () => {
     orderMock.mockResolvedValue({ data: [], error: null });
   });
 
-  it('exportData apre il share-sheet quando c\'è una sessione', async () => {
+  it("exportData apre il share-sheet quando c'è una sessione", async () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
-      data: { session: { user: { id: 'u1', email: 'm@r.it', identities: [] } } },
+      data: {
+        session: { user: { id: 'u1', email: 'm@r.it', identities: [] } },
+      },
     });
     const spy = jest
       .spyOn(Share, 'share')

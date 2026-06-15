@@ -36,7 +36,9 @@ jest.mock('@/shared/auth/supabaseClient', () => ({
     from: jest.fn(() => ({
       select: jest.fn().mockReturnThis(),
       eq: jest.fn().mockReturnThis(),
-      single: jest.fn(() => Promise.resolve({ data: mockProfile, error: null })),
+      single: jest.fn(() =>
+        Promise.resolve({ data: mockProfile, error: null })
+      ),
       // getConsentHistory (M4): select().eq().order() — nessun evento nel mock.
       order: jest.fn(() => Promise.resolve({ data: [], error: null })),
     })),
