@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import {
   SafeAreaView,
@@ -23,12 +23,16 @@ import {
   PerfectText,
 } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 const DevelopmentScreen: React.FC = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
   const { t } = useTranslation();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   // Solo animazioni icone (funzionano bene)
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -73,7 +77,7 @@ const DevelopmentScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={[Colors.neutral[50], Colors.neutral[100], Colors.neutral[200]]}
+        colors={[colors.neutral[50], colors.neutral[100], colors.neutral[200]]}
         style={styles.gradientBackground}
       />
 
@@ -106,7 +110,7 @@ const DevelopmentScreen: React.FC = () => {
             <PerfectIcon
               name="arrow-left"
               size={24}
-              color={Colors.neutral[0]}
+              color={Colors.accent.white}
             />
           </LinearGradient>
         </View>
@@ -313,11 +317,12 @@ const DevelopmentScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.neutral[50],
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.neutral[50],
+    },
   gradientBackground: {
     position: 'absolute',
     left: 0,
@@ -356,7 +361,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   iconBackground: {
-    backgroundColor: Colors.neutral[0],
+    backgroundColor: colors.neutral[0],
     justifyContent: 'center',
     alignItems: 'center',
     ...Shadows.lg,
@@ -365,7 +370,7 @@ const styles = StyleSheet.create({
   },
   floatingIcon: {
     position: 'absolute',
-    backgroundColor: Colors.neutral[0],
+    backgroundColor: colors.neutral[0],
     borderRadius: scale(20),
     ...Shadows.sm,
   },
@@ -386,7 +391,7 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     fontWeight: Typography.weights.black,
-    color: Colors.neutral[900],
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: PerfectSpacing.md,
     letterSpacing: scale(-1),
@@ -401,7 +406,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontWeight: Typography.weights.medium,
-    color: Colors.neutral[500],
+    color: colors.neutral[500],
     textAlign: 'center',
     letterSpacing: scale(0.2),
     ...Platform.select({
@@ -422,7 +427,7 @@ const styles = StyleSheet.create({
     padding: scale(3),
   },
   cardContent: {
-    backgroundColor: Colors.neutral[0],
+    backgroundColor: colors.neutral[0],
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
     ...Shadows.lg,
@@ -430,7 +435,7 @@ const styles = StyleSheet.create({
   cardIcon: {},
   cardTitle: {
     fontWeight: Typography.weights.bold,
-    color: Colors.neutral[900],
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: PerfectSpacing.md,
     ...Platform.select({
@@ -443,7 +448,7 @@ const styles = StyleSheet.create({
     }),
   },
   cardDescription: {
-    color: Colors.neutral[500],
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: scale(24),
     marginBottom: scale(20),
@@ -456,7 +461,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   featureText: {
-    color: Colors.neutral[700],
+    color: colors.neutral[700],
     fontWeight: Typography.weights.medium,
     flex: 1,
   },
