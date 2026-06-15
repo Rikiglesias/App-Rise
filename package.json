@@ -3,6 +3,7 @@
   "version": "1.2.9",
   "main": "index.ts",
   "scripts": {
+    "prepare": "husky",
     "start": "expo start",
     "android:client": "node scripts/build-android-client.js",
     "dev:android": "node scripts/start-zoom.js",
