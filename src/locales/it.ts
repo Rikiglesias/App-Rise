@@ -109,7 +109,8 @@ export default {
       scheduled: 'Elimina tra 30 giorni',
       scheduledHint:
         'Account disattivato e recuperabile per 30 giorni, poi eliminato definitivamente.',
-      confirmNow: 'L’account e tutti i dati saranno eliminati subito. Confermi?',
+      confirmNow:
+        'L’account e tutti i dati saranno eliminati subito. Confermi?',
       confirmScheduled:
         'L’account sarà eliminato tra 30 giorni. Potrai annullare accedendo di nuovo. Confermi?',
       confirm: 'Sì, procedi',

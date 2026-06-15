@@ -444,131 +444,131 @@ const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       backgroundColor: colors.neutral[0],
     },
-  content: {
-    alignItems: 'center',
-    paddingHorizontal: PerfectSpacing.xl * 2,
-    maxWidth: scale(440),
-    width: '100%',
-  },
-  // Logo premium - hero element
-  logoContainer: {
-    marginBottom: PerfectSpacing.xl * 2,
-  },
-  logoCircle: {
-    width: scale(130),
-    height: scale(130),
-    borderRadius: scale(65),
-    backgroundColor: colors.neutral[0],
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: Colors.primary[500],
-    shadowOffset: { width: 0, height: scale(8) },
-    shadowOpacity: 0.15,
-    shadowRadius: scale(20),
-    elevation: 12,
-    borderWidth: scale(1),
-    borderColor: colors.neutral[100],
-  },
-  // Container messaggio principale
-  messageContainer: {
-    alignItems: 'center',
-    marginBottom: PerfectSpacing.xl * 1.8,
-    paddingHorizontal: PerfectSpacing.xl,
-  },
-  // Messaggio principale GRANDE
-  mainMessage: {
-    fontSize: scaleText(24),
-    fontWeight: '700',
-    color: colors.neutral[900],
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.sm,
-    letterSpacing: scale(-0.5),
-  },
-  // Sotto-messaggio rassicurante
-  subMessage: {
-    fontSize: scaleText(15),
-    fontWeight: '400',
-    color: colors.neutral[600],
-    textAlign: 'center',
-    lineHeight: scaleText(22),
-    letterSpacing: scale(-0.1),
-  },
-  // Progress container compatto
-  progressContainer: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  // Percentuale sotto barra - leggibile
-  percentage: {
-    fontSize: scaleText(18),
-    fontWeight: '700',
-    color: Colors.primary[500],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.sm,
-    letterSpacing: scale(-0.4),
-  },
-  progressTrack: {
-    width: '85%',
-    height: scale(8),
-    backgroundColor: colors.neutral[100],
-    borderRadius: scale(4),
-    overflow: 'hidden',
-    shadowColor: Colors.neutral[900],
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.08,
-    shadowRadius: scale(3),
-    borderWidth: scale(0.5),
-    borderColor: colors.neutral[200],
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: scale(4),
-    shadowColor: Colors.primary[500],
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.3,
-    shadowRadius: scale(4),
-    overflow: 'hidden',
-  },
-  // Shimmer overlay animato
-  shimmerOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    width: scale(100),
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    transform: [{ skewX: '-20deg' }],
-  },
-  // Container completamento
-  completeContainer: {
-    alignItems: 'center',
-  },
-  // Messaggio completamento
-  completeMessage: {
-    fontSize: scaleText(22),
-    fontWeight: '700',
-    color: Colors.semantic.success.main,
-    textAlign: 'center',
-    marginTop: PerfectSpacing.md,
-    letterSpacing: scale(-0.4),
-  },
-  // Checkmark completamento
-  completeCheckmark: {
-    alignItems: 'center',
-    width: scale(70),
-    height: scale(70),
-    borderRadius: scale(35),
-    backgroundColor: Colors.semantic.success.light,
-    justifyContent: 'center',
-    shadowColor: Colors.semantic.success.main,
-    shadowOffset: { width: 0, height: scale(8) },
-    shadowOpacity: 0.35,
-    shadowRadius: scale(16),
-    borderWidth: scale(2.5),
-    borderColor: Colors.semantic.success.main,
-    marginBottom: PerfectSpacing.sm,
-  },
-  checkmark: {
-    fontSize: scaleText(38),
-    fontWeight: '700',
-    color: Colors.semantic.success.main,
-    textAlign: 'center',
-  },
-});
+    content: {
+      alignItems: 'center',
+      paddingHorizontal: PerfectSpacing.xl * 2,
+      maxWidth: scale(440),
+      width: '100%',
+    },
+    // Logo premium - hero element
+    logoContainer: {
+      marginBottom: PerfectSpacing.xl * 2,
+    },
+    logoCircle: {
+      width: scale(130),
+      height: scale(130),
+      borderRadius: scale(65),
+      backgroundColor: colors.neutral[0],
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: Colors.primary[500],
+      shadowOffset: { width: 0, height: scale(8) },
+      shadowOpacity: 0.15,
+      shadowRadius: scale(20),
+      elevation: 12,
+      borderWidth: scale(1),
+      borderColor: colors.neutral[100],
+    },
+    // Container messaggio principale
+    messageContainer: {
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.xl * 1.8,
+      paddingHorizontal: PerfectSpacing.xl,
+    },
+    // Messaggio principale GRANDE
+    mainMessage: {
+      fontSize: scaleText(24),
+      fontWeight: '700',
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.sm,
+      letterSpacing: scale(-0.5),
+    },
+    // Sotto-messaggio rassicurante
+    subMessage: {
+      fontSize: scaleText(15),
+      fontWeight: '400',
+      color: colors.neutral[600],
+      textAlign: 'center',
+      lineHeight: scaleText(22),
+      letterSpacing: scale(-0.1),
+    },
+    // Progress container compatto
+    progressContainer: {
+      width: '100%',
+      alignItems: 'center',
+    },
+    // Percentuale sotto barra - leggibile
+    percentage: {
+      fontSize: scaleText(18),
+      fontWeight: '700',
+      color: Colors.primary[500],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.sm,
+      letterSpacing: scale(-0.4),
+    },
+    progressTrack: {
+      width: '85%',
+      height: scale(8),
+      backgroundColor: colors.neutral[100],
+      borderRadius: scale(4),
+      overflow: 'hidden',
+      shadowColor: Colors.neutral[900],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.08,
+      shadowRadius: scale(3),
+      borderWidth: scale(0.5),
+      borderColor: colors.neutral[200],
+    },
+    progressFill: {
+      height: '100%',
+      borderRadius: scale(4),
+      shadowColor: Colors.primary[500],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.3,
+      shadowRadius: scale(4),
+      overflow: 'hidden',
+    },
+    // Shimmer overlay animato
+    shimmerOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      width: scale(100),
+      backgroundColor: 'rgba(255, 255, 255, 0.4)',
+      transform: [{ skewX: '-20deg' }],
+    },
+    // Container completamento
+    completeContainer: {
+      alignItems: 'center',
+    },
+    // Messaggio completamento
+    completeMessage: {
+      fontSize: scaleText(22),
+      fontWeight: '700',
+      color: Colors.semantic.success.main,
+      textAlign: 'center',
+      marginTop: PerfectSpacing.md,
+      letterSpacing: scale(-0.4),
+    },
+    // Checkmark completamento
+    completeCheckmark: {
+      alignItems: 'center',
+      width: scale(70),
+      height: scale(70),
+      borderRadius: scale(35),
+      backgroundColor: Colors.semantic.success.light,
+      justifyContent: 'center',
+      shadowColor: Colors.semantic.success.main,
+      shadowOffset: { width: 0, height: scale(8) },
+      shadowOpacity: 0.35,
+      shadowRadius: scale(16),
+      borderWidth: scale(2.5),
+      borderColor: Colors.semantic.success.main,
+      marginBottom: PerfectSpacing.sm,
+    },
+    checkmark: {
+      fontSize: scaleText(38),
+      fontWeight: '700',
+      color: Colors.semantic.success.main,
+      textAlign: 'center',
+    },
+  });

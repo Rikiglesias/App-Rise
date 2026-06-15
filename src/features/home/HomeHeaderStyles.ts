@@ -33,9 +33,7 @@ export const createContainerStyles = (
     },
   });
 
-export const createTextStyles = (
-  colors: ReturnType<typeof useThemeColors>
-) =>
+export const createTextStyles = (colors: ReturnType<typeof useThemeColors>) =>
   StyleSheet.create({
     title: {
       color: colors.neutral[900],

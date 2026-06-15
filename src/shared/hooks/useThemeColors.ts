@@ -1,4 +1,7 @@
-import { getAdaptiveColors, type ThemeColors } from '@/shared/theme/adaptiveColors';
+import {
+  getAdaptiveColors,
+  type ThemeColors,
+} from '@/shared/theme/adaptiveColors';
 import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 
 /**

@@ -13,19 +13,19 @@ export const createMainStyles = (colors: ThemeColors) =>
     // Eredita tutti gli stili da About per consistenza
     ...createAboutMainStyles(colors),
 
-  // Override contentContainer per più spazio (4 bottoni social + header)
-  contentContainer: {
-    paddingHorizontal: PerfectSpacing.base,
-    gap: PerfectSpacing.none,
-    paddingTop: PerfectSpacing['4xl'],
-    paddingBottom: PerfectSpacing['5xl'], // 80px - garantisce visibilità completa LinkedIn
-  },
+    // Override contentContainer per più spazio (4 bottoni social + header)
+    contentContainer: {
+      paddingHorizontal: PerfectSpacing.base,
+      gap: PerfectSpacing.none,
+      paddingTop: PerfectSpacing['4xl'],
+      paddingBottom: PerfectSpacing['5xl'], // 80px - garantisce visibilità completa LinkedIn
+    },
 
-  // Stile specifico per la sezione social
-  socialSection: {
-    marginTop: PerfectSpacing.lg,
-    marginBottom: PerfectSpacing['2xl'], // 32px - più respiro sotto ultima card
-    gap: PerfectSpacing.base,
-    paddingHorizontal: 0,
-  },
-});
+    // Stile specifico per la sezione social
+    socialSection: {
+      marginTop: PerfectSpacing.lg,
+      marginBottom: PerfectSpacing['2xl'], // 32px - più respiro sotto ultima card
+      gap: PerfectSpacing.base,
+      paddingHorizontal: 0,
+    },
+  });

@@ -58,8 +58,7 @@ export default {
       marketingConsent: 'I want to receive updates (optional)',
       submit: 'Sign up',
       hasAccount: 'Already have an account? Sign in',
-      checkEmail:
-        'We sent you a verification email. Confirm it to sign in.',
+      checkEmail: 'We sent you a verification email. Confirm it to sign in.',
     },
     forgot: {
       title: 'Reset password',

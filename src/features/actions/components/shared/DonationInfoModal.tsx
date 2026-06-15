@@ -7,7 +7,11 @@ import {
   PerfectText,
   PerfectContainer,
 } from '@/components/ui';
-import { BorderRadius, Shadows, Typography } from '@/shared/constants/designTokens';
+import {
+  BorderRadius,
+  Shadows,
+  Typography,
+} from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import {
   scale,

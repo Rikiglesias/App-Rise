@@ -145,39 +145,39 @@ const createStyles = (colors: ThemeColors) =>
     card: {
       flex: 1,
     },
-  gradientContainer: {
-    borderRadius: BorderRadius.xl,
-    padding: scale(2),
-  },
-  cardContent: {
-    backgroundColor: colors.neutral[0],
-    borderRadius: BorderRadius.xl - scale(2),
-    paddingVertical: PerfectSpacing.md,
-    alignItems: 'center',
-  },
-  cardContentPlain: {
-    backgroundColor: colors.neutral[0],
-    borderRadius: BorderRadius.xl,
-    paddingVertical: PerfectSpacing.md,
-    alignItems: 'center',
-  },
-  icon: {
-    marginBottom: PerfectSpacing.md,
-  },
-  value: {
-    color: colors.neutral[800],
-    marginBottom: PerfectSpacing.xs,
-  },
-  label: {
-    color: colors.neutral[700],
-    marginBottom: PerfectSpacing.sm,
-  },
-  subtitle: {
-    color: colors.neutral[500],
-  },
-  chevron: {
-    position: 'absolute',
-    top: PerfectSpacing.sm,
-    right: PerfectSpacing.sm,
-  },
-});
+    gradientContainer: {
+      borderRadius: BorderRadius.xl,
+      padding: scale(2),
+    },
+    cardContent: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.xl - scale(2),
+      paddingVertical: PerfectSpacing.md,
+      alignItems: 'center',
+    },
+    cardContentPlain: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.xl,
+      paddingVertical: PerfectSpacing.md,
+      alignItems: 'center',
+    },
+    icon: {
+      marginBottom: PerfectSpacing.md,
+    },
+    value: {
+      color: colors.neutral[800],
+      marginBottom: PerfectSpacing.xs,
+    },
+    label: {
+      color: colors.neutral[700],
+      marginBottom: PerfectSpacing.sm,
+    },
+    subtitle: {
+      color: colors.neutral[500],
+    },
+    chevron: {
+      position: 'absolute',
+      top: PerfectSpacing.sm,
+      right: PerfectSpacing.sm,
+    },
+  });

@@ -98,11 +98,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               accessibilityRole="button"
               accessibilityLabel="Chiudi mappa"
             >
-              <PerfectIcon
-                name="close"
-                size={24}
-                color={colors.accent.white}
-              />
+              <PerfectIcon name="close" size={24} color={colors.accent.white} />
             </PlatformTouchable>
           </PerfectContainer>
         </LinearGradient>

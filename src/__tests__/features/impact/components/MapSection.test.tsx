@@ -64,7 +64,9 @@ describe('MapSection Component', () => {
   });
 
   it('dovrebbe renderizzare il componente senza errori', () => {
-    const { toJSON } = render(<MapSectionWithTheme onMapPress={mockOnMapPress} />);
+    const { toJSON } = render(
+      <MapSectionWithTheme onMapPress={mockOnMapPress} />
+    );
     expect(toJSON()).toBeTruthy();
   });
 
@@ -74,7 +76,9 @@ describe('MapSection Component', () => {
   });
 
   it("dovrebbe mostrare l'immagine della mappa", () => {
-    const { toJSON } = render(<MapSectionWithTheme onMapPress={mockOnMapPress} />);
+    const { toJSON } = render(
+      <MapSectionWithTheme onMapPress={mockOnMapPress} />
+    );
     const tree = toJSON();
 
     // Verifica presenza immagine
@@ -87,7 +91,9 @@ describe('MapSection Component', () => {
   });
 
   it('dovrebbe chiamare onMapPress quando si clicca sulla mappa', () => {
-    const { getByText } = render(<MapSectionWithTheme onMapPress={mockOnMapPress} />);
+    const { getByText } = render(
+      <MapSectionWithTheme onMapPress={mockOnMapPress} />
+    );
 
     // Trova e clicca l'elemento touchable
     const touchable = getByText(/Tocca per esplorare/i).parent?.parent;
@@ -99,7 +105,9 @@ describe('MapSection Component', () => {
   });
 
   it('dovrebbe avere il gradient overlay corretto', () => {
-    const { toJSON } = render(<MapSectionWithTheme onMapPress={mockOnMapPress} />);
+    const { toJSON } = render(
+      <MapSectionWithTheme onMapPress={mockOnMapPress} />
+    );
     const tree = toJSON();
 
     expect(tree).toMatchSnapshot();

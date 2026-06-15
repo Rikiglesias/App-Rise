@@ -93,6 +93,5 @@ describe('UniversalTheme', () => {
       expect(screen.getByTestId('theme').children.join('')).toBe('system-light')
     );
   });
-
 });
 // @ts-nocheck
