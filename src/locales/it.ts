@@ -85,6 +85,16 @@ export default {
       subtitle: 'Mancano alcuni dati per completare la registrazione',
       submit: 'Salva e continua',
     },
+    edit: {
+      title: 'Modifica profilo',
+      subtitle: 'Aggiorna i tuoi dati personali',
+      email: 'Email',
+      save: 'Salva modifiche',
+      success: 'Profilo aggiornato.',
+      emailNotice:
+        'Per cambiare email, conferma il link inviato a entrambe le caselle (vecchia e nuova).',
+      error: 'Aggiornamento non riuscito. Riprova.',
+    },
     privacy: {
       title: 'Privacy e dati',
       exportCta: 'Esporta i miei dati',

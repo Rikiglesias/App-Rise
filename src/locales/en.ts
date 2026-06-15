@@ -85,6 +85,16 @@ export default {
       subtitle: 'A few details are missing to complete your registration',
       submit: 'Save and continue',
     },
+    edit: {
+      title: 'Edit profile',
+      subtitle: 'Update your personal details',
+      email: 'Email',
+      save: 'Save changes',
+      success: 'Profile updated.',
+      emailNotice:
+        'To change your email, confirm the link sent to both inboxes (old and new).',
+      error: 'Update failed. Please try again.',
+    },
     privacy: {
       title: 'Privacy and data',
       exportCta: 'Export my data',
