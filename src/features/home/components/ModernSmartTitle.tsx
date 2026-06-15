@@ -5,6 +5,7 @@ import { PerfectContainer, PerfectText } from '@/components/ui';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 import { Colors, PerfectSpacing, Shadows } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 interface ResponsiveSpacing {
   containerPadding: number;
@@ -64,6 +65,7 @@ export interface ModernSmartTitleProps {
 
 export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform }) => {
+    const colors = useThemeColors();
     const responsiveSpacing = useMemo<ResponsiveSpacing>(
       () => ({
         containerPadding: scale(10),
@@ -148,7 +150,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                   size={44}
                   lines={1}
                   fontWeight="900"
-                  color={Colors.neutral[900]}
+                  color={colors.neutral[900]}
                 >
                   Italia
                 </PerfectText>
