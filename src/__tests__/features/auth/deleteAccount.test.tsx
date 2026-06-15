@@ -11,9 +11,10 @@ import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import type { Profile } from '@/shared/auth/types';
 
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
-}));
+jest.mock('@react-navigation/native', () => {
+  const navigate = jest.fn();
+  return { useNavigation: () => ({ navigate, goBack: jest.fn() }) };
+});
 
 jest.mock('@/shared/auth/AuthContext', () => ({
   useAuth: jest.fn(),
@@ -36,6 +37,8 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
     signInWithApple: jest.fn(),
     signInWithGoogle: jest.fn(),
     refreshProfile: jest.fn(),
+    updateProfile: jest.fn(),
+    updateEmail: jest.fn(),
     deleteAccountNow: jest.fn(),
     scheduleDeletion: jest.fn(),
     cancelScheduledDeletion: jest.fn(),
@@ -116,6 +119,29 @@ describe('ProfileScreen (autenticato)', () => {
     mockUseAuth.mockReturnValue(makeAuth({ needsReConsent: true }));
     const { getByText } = wrap(<ProfileScreen />);
     expect(getByText('Aggiornamento informativa')).toBeTruthy();
+  });
+
+  it('mostra "Modifica profilo" e naviga a ProfileEdit quando il profilo esiste', () => {
+    const activeProfile: Profile = {
+      ...profileWithDeletion,
+      deletion_requested_at: null,
+    };
+    mockUseAuth.mockReturnValue(makeAuth({ profile: activeProfile }));
+    const { getByText } = wrap(<ProfileScreen />);
+    fireEvent.press(getByText('Modifica profilo'));
+    const navigate = (
+      jest.requireMock('@react-navigation/native').useNavigation() as {
+        navigate: jest.Mock;
+      }
+    ).navigate;
+    expect(navigate).toHaveBeenCalledWith('ProfileEdit');
+  });
+
+  it('senza profilo NON mostra "Modifica profilo" (mostra completa profilo)', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ profile: null }));
+    const { queryByText, getByText } = wrap(<ProfileScreen />);
+    expect(queryByText('Modifica profilo')).toBeNull();
+    expect(getByText('Completa il tuo profilo')).toBeTruthy();
   });
 });
 

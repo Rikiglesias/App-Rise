@@ -44,6 +44,10 @@ export const ProfileScreen: React.FC = () => {
     (): void => navigation.navigate('CompleteProfile'),
     [navigation]
   );
+  const handleEditProfile = useCallback(
+    (): void => navigation.navigate('ProfileEdit'),
+    [navigation]
+  );
   const handleExport = useCallback((): void => {
     setExportError(undefined);
     void exportData().catch(() => setExportError(t('auth.privacy.exportError')));
@@ -133,7 +137,13 @@ export const ProfileScreen: React.FC = () => {
           label={t('auth.profile.completeCta')}
           onPress={handleCompleteProfile}
         />
-      ) : null}
+      ) : (
+        <AuthButton
+          label={t('auth.edit.title')}
+          onPress={handleEditProfile}
+          variant="link"
+        />
+      )}
       <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
