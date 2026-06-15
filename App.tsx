@@ -14,6 +14,7 @@ import { initDisplayZoom } from './src/shared/services/displayZoom';
 import { usePerfectTheme } from './src/shared/hooks/usePerfectTheme';
 import { OTAUpdateScreen } from './src/shared/OTAUpdateScreen';
 import { ErrorBoundary } from './src/shared/components/ErrorBoundary';
+import { AuthProvider } from './src/shared/auth/AuthContext';
 
 // Durata minima splash screen (ms)
 const SPLASH_SCREEN_DURATION = 2500;
@@ -85,7 +86,9 @@ const WebApp: React.FC = () => {
     <ErrorBoundary>
       <SafeAreaProvider>
         <ThemeProvider>
-          <Main />
+          <AuthProvider>
+            <Main />
+          </AuthProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </ErrorBoundary>
@@ -285,7 +288,9 @@ const NativeApp: React.FC = () => {
     <ErrorBoundary>
       <SafeAreaProvider>
         <ThemeProvider>
-          <Main />
+          <AuthProvider>
+            <Main />
+          </AuthProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </ErrorBoundary>

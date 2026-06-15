@@ -152,6 +152,35 @@ jest.mock('expo-updates', () => ({
   reloadAsync: jest.fn(),
 }));
 
+// Mock globale del client Supabase: nessuna chiamata di rete nei test.
+// I test che servono comportamenti specifici possono override con jest.mock locale.
+jest.mock('@/shared/auth/supabaseClient', () => ({
+  supabase: {
+    auth: {
+      getSession: jest.fn(() => Promise.resolve({ data: { session: null } })),
+      onAuthStateChange: jest.fn(() => ({
+        data: { subscription: { unsubscribe: jest.fn() } },
+      })),
+      signInWithPassword: jest.fn(() =>
+        Promise.resolve({ data: { session: null }, error: null })
+      ),
+      signUp: jest.fn(() =>
+        Promise.resolve({ data: { user: null }, error: null })
+      ),
+      signOut: jest.fn(() => Promise.resolve({ error: null })),
+      resetPasswordForEmail: jest.fn(() => Promise.resolve({ error: null })),
+      startAutoRefresh: jest.fn(),
+      stopAutoRefresh: jest.fn(),
+    },
+    from: jest.fn(() => ({
+      select: jest.fn().mockReturnThis(),
+      eq: jest.fn().mockReturnThis(),
+      single: jest.fn(() => Promise.resolve({ data: null, error: null })),
+      insert: jest.fn(() => Promise.resolve({ error: null })),
+    })),
+  },
+}));
+
 // Provide SafeArea defaults to avoid provider errors in integration tests
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');

@@ -10,7 +10,13 @@ import { env } from '@/shared/config/environment';
  * - autoRefreshToken gestito da AppState (refresh solo in foreground).
  * - anon key pubblica per design: la sicurezza dati sta nelle RLS policy.
  */
-export const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
+// Fallback placeholder se .env non è configurato: evita il crash di createClient
+// (richiede un URL valido) in dev/test pre-credenziali. Le chiamate falliranno con
+// errore di rete finché non si impostano le vere credenziali Supabase.
+const supabaseUrl = env.SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = env.SUPABASE_ANON_KEY || 'public-anon-key-placeholder';
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: authStorage,
     autoRefreshToken: true,
