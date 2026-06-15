@@ -60,7 +60,7 @@ alter table public.profiles
 
 **Files:** Create `supabase/functions/delete-account/index.ts`, `supabase/functions/_shared/appleRevoke.ts`
 
-- [ ] **Step 1: Apple revoke helper** (`_shared/appleRevoke.ts`) — costruisce il client_secret JWT (ES256 con la chiave `.p8`), chiama `POST https://appleid.apple.com/auth/revoke` con `client_id`, `client_secret`, `token`, `token_type_hint=refresh_token`. Ritorna void; throw solo per errori inattesi (il caller fa best-effort).
+- [ ] **Step 1: Apple revoke helper** (`_shared/appleRevoke.ts`) — `revokeAppleViaAuthCode(authCode)`: (a) costruisce il client_secret JWT ES256 (header `kid`, claims `iss=APPLE_TEAM_ID`, `aud=https://appleid.apple.com`, `sub=APPLE_BUNDLE_ID`, `iat`/`exp`) firmandolo con `APPLE_PRIVATE_KEY` (.p8 PKCS8) via `jose`; (b) scambia l'authCode → refresh-token (`POST https://appleid.apple.com/auth/token`, form-urlencoded, `grant_type=authorization_code`); (c) revoca (`POST .../auth/revoke`, `token_type_hint=refresh_token`). Throw su errore (il caller fa best-effort). **Motivo authCode** (finding triangolato): `signInWithIdToken` non espone il refresh-token Apple.
 - [ ] **Step 2: Edge Function** (`delete-account/index.ts`)
 ```ts
 import { createClient } from 'jsr:@supabase/supabase-js@2';

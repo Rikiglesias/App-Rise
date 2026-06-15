@@ -3,6 +3,7 @@ node_modules/
 web-build/
 android/
 ios/
+supabase/
 .github/
 **/*.md
 # Configuration files to ignore

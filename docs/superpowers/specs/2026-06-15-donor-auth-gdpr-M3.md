@@ -33,9 +33,11 @@ Nessuna nuova policy: `own_update` copre set/clear del campo; `own_select` lo es
 ### Eliminazione — due percorsi
 - **Subito** → **Edge Function `delete-account`** (richiede `service_role`, MAI nel client):
   1. Estrae il JWT dall'header `Authorization`, ricava l'utente (`auth.getUser`).
-  2. Se l'utente ha identità `apple` → **revoca best-effort** dei token presso `https://appleid.apple.com/auth/revoke` (client_secret JWT firmato con la chiave `.p8` da secrets). Fallimento revoca → log, NON blocca (la cancellazione dati GDPR prevale).
+  2. Se l'utente ha identità `apple` **e** il client ha fornito un `appleAuthCode` fresco (vedi nota sotto) → **revoca best-effort**: scambia l'`authorizationCode` per un refresh-token Apple (`POST https://appleid.apple.com/auth/token`, client_secret = JWT ES256 firmato con la chiave `.p8` da secrets), poi revoca (`POST .../auth/revoke`, `token_type_hint=refresh_token`). Fallimento o code assente → log esplicito, NON blocca (la cancellazione dati GDPR prevale).
   3. `supabase.auth.admin.deleteUser(userId)` → cascade su `profiles` (FK `on delete cascade`).
   4. Client: dopo successo → `signOut` + pulizia SecureStore.
+
+> **Nota Apple (finding 2026-06-15, triangolato):** con `signInWithIdToken` (login nativo M2) Supabase **non** persiste `providerRefreshToken` (fonti: supabase/auth #2155, #1308). Non esiste quindi un token Apple lato server da revocare. Soluzione adottata: **re-auth al delete** — l'utente Apple ri-effettua un Apple sign-in al momento della cancellazione, fornendo un `authorizationCode` fresco che la Edge Function scambia e revoca. Vantaggio collaterale GDPR: **nessun token Apple persistito** (data minimization). Per utenti email/Google il passo è saltato.
 - **Tra 30 giorni** → nessuna Edge Function: il client fa `update profiles set deletion_requested_at = now()` (RLS `own_update`) + `signOut`. L'hard-delete avviene via:
   - **Edge Function `purge-deletions`** (service_role): `admin.deleteUser` per ogni profilo con `deletion_requested_at < now() - interval '30 days'`.
   - Invocata da **Supabase Cron** (pg_cron + pg_net) una volta al giorno.
@@ -72,7 +74,7 @@ Audit-log/revoca granulare consensi, modifica-profilo avanzata, export CSV (oltr
 ## Decisioni (chiuse 2026-06-15)
 1. **Scope**: elimina-account + export dati (GDPR pieno).
 2. **Modello delete**: scelta utente finale — subito **o** tra 30 giorni (grace period recuperabile).
-3. **Apple revoke**: best-effort nella Edge Function, non bloccante per la cancellazione dati.
+3. **Apple revoke**: pattern **re-auth al delete** (l'utente Apple ri-autentica → `authorizationCode` → scambio+revoca lato Edge Function); best-effort, non bloccante; nessun token Apple persistito.
 4. **Export**: JSON, client-side, share-sheet nativo.
 
 ## Verifica end-to-end (a implementazione completata — leva utente, dev build + Supabase)
