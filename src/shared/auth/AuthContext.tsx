@@ -9,6 +9,7 @@ import React, {
 import type { Session } from '@supabase/supabase-js';
 
 import { supabase } from './supabaseClient';
+import { getAppleIdToken, getGoogleIdToken } from './socialAuth';
 import type { Profile, ProfileInput } from './types';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
@@ -25,6 +26,8 @@ interface AuthState {
   ) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
+  signInWithApple: () => Promise<{ error: string | null }>;
+  signInWithGoogle: () => Promise<{ error: string | null }>;
   refreshProfile: () => Promise<void>;
 }
 
@@ -104,6 +107,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { error: error?.message ?? null };
   }, []);
 
+  const signInWithApple = useCallback(async () => {
+    const token = await getAppleIdToken();
+    if (!token) return { error: 'apple_cancelled' };
+    const { error } = await supabase.auth.signInWithIdToken({
+      provider: 'apple',
+      token,
+    });
+    return { error: error?.message ?? null };
+  }, []);
+
+  const signInWithGoogle = useCallback(async () => {
+    const token = await getGoogleIdToken();
+    if (!token) return { error: 'google_cancelled' };
+    const { error } = await supabase.auth.signInWithIdToken({
+      provider: 'google',
+      token,
+    });
+    return { error: error?.message ?? null };
+  }, []);
+
   const refreshProfile = useCallback(async () => {
     if (session?.user.id) await loadProfile(session.user.id);
   }, [session, loadProfile]);
@@ -117,6 +140,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signUp,
       signOut,
       resetPassword,
+      signInWithApple,
+      signInWithGoogle,
       refreshProfile,
     }),
     [
@@ -127,6 +152,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signUp,
       signOut,
       resetPassword,
+      signInWithApple,
+      signInWithGoogle,
       refreshProfile,
     ]
   );

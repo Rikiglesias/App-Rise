@@ -169,6 +169,9 @@ jest.mock('@/shared/auth/supabaseClient', () => ({
       ),
       signOut: jest.fn(() => Promise.resolve({ error: null })),
       resetPasswordForEmail: jest.fn(() => Promise.resolve({ error: null })),
+      signInWithIdToken: jest.fn(() =>
+        Promise.resolve({ data: { session: null }, error: null })
+      ),
       startAutoRefresh: jest.fn(),
       stopAutoRefresh: jest.fn(),
     },
@@ -243,6 +246,30 @@ jest.mock('expo-blur', () => {
       React.createElement('View', props, children),
   };
 });
+
+// Mock social auth native modules (no native runtime in Jest)
+jest.mock('expo-apple-authentication', () => ({
+  signInAsync: jest.fn(() =>
+    Promise.resolve({ identityToken: 'apple-token-mock' })
+  ),
+  isAvailableAsync: jest.fn(() => Promise.resolve(true)),
+  AppleAuthenticationScope: { FULL_NAME: 0, EMAIL: 1 },
+  AppleAuthenticationButton: 'AppleAuthenticationButton',
+  AppleAuthenticationButtonType: { SIGN_IN: 0, CONTINUE: 1, SIGN_UP: 2 },
+  AppleAuthenticationButtonStyle: { WHITE: 0, WHITE_OUTLINE: 1, BLACK: 2 },
+}));
+
+jest.mock('@react-native-google-signin/google-signin', () => ({
+  GoogleSignin: {
+    configure: jest.fn(),
+    hasPlayServices: jest.fn(() => Promise.resolve(true)),
+    signIn: jest.fn(() =>
+      Promise.resolve({ type: 'success', data: { idToken: 'google-token-mock' } })
+    ),
+  },
+  GoogleSigninButton: 'GoogleSigninButton',
+  statusCodes: {},
+}));
 
 // Mock React Native Animated API for complete animation support in tests
 // Fixes: TypeError: Cannot read properties of undefined (reading 'S')
