@@ -250,6 +250,10 @@ export default withDefaultStrings({
       'expo-font',
       'expo-localization',
       'expo-splash-screen',
+      // MapLibre (mappa "Dove operiamo"): config plugin per il modulo nativo.
+      // Tile/style via MapTiler (EXPO_PUBLIC_MAPTILER_KEY). Richiede New Arch
+      // (default SDK 54) + dev build (no Expo Go). Sostituisce react-native-maps/Google.
+      '@maplibre/maplibre-react-native',
       // Sentry: config plugin per setup nativo + upload source map al build EAS.
       // Attivo SOLO con SENTRY_ORG + SENTRY_PROJECT in env (auth token via SENTRY_AUTH_TOKEN,
       // MAI committato). Senza questi -> plugin assente, prebuild invariato (pre-DSN safe).
