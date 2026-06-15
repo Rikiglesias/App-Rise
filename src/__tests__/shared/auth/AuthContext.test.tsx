@@ -8,10 +8,12 @@ import { supabase } from '@/shared/auth/supabaseClient';
 
 jest.mock('@/shared/auth/supabaseClient', () => {
   const single = jest.fn(() => Promise.resolve({ data: null, error: null }));
-  const eqSelect = jest.fn(() => ({ single }));
+  const order = jest.fn(() => Promise.resolve({ data: [], error: null }));
+  const eqSelect = jest.fn(() => ({ single, order }));
   const select = jest.fn(() => ({ eq: eqSelect }));
   const eqUpdate = jest.fn(() => Promise.resolve({ error: null }));
   const update = jest.fn(() => ({ eq: eqUpdate }));
+  const insert = jest.fn(() => Promise.resolve({ error: null }));
   return {
     supabase: {
       auth: {
@@ -24,7 +26,7 @@ jest.mock('@/shared/auth/supabaseClient', () => {
         ),
         signOut: jest.fn(() => Promise.resolve({ error: null })),
       },
-      from: jest.fn(() => ({ select, eq: eqSelect, single, update })),
+      from: jest.fn(() => ({ select, eq: eqSelect, single, update, insert })),
       functions: {
         invoke: jest.fn(() => Promise.resolve({ data: { ok: true }, error: null })),
       },
@@ -118,6 +120,27 @@ describe('AuthContext', () => {
     });
     expect(updateMock).toHaveBeenCalledWith(
       expect.objectContaining({ deletion_requested_at: null })
+    );
+  });
+
+  it('setMarketingConsent: inserisce evento marketing + aggiorna la cache', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const api = supabase.from('consent_events') as unknown as {
+      insert: jest.Mock;
+      update: jest.Mock;
+    };
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      await getAuth().setMarketingConsent(true);
+    });
+    expect(api.insert).toHaveBeenCalledWith(
+      expect.objectContaining({ purpose: 'marketing', action: 'granted', user_id: 'u1' })
+    );
+    expect(api.update).toHaveBeenCalledWith(
+      expect.objectContaining({ marketing_consent: true })
     );
   });
 

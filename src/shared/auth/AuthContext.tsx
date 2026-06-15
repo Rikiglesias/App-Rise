@@ -6,6 +6,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
+import { Platform } from 'react-native';
 import type { Session } from '@supabase/supabase-js';
 
 import { supabase } from './supabaseClient';
@@ -15,7 +16,14 @@ import {
   configureGoogle,
 } from './socialAuth';
 import { exportData as runDataExport } from './dataExport';
-import type { Profile, ProfileInput } from './types';
+import { buildConsentInsert } from './consent';
+import type {
+  Profile,
+  ProfileInput,
+  ConsentEvent,
+  ConsentPurpose,
+  ConsentAction,
+} from './types';
 import { env } from '@/shared/config/environment';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
@@ -43,6 +51,15 @@ export interface AuthState {
   cancelScheduledDeletion: () => Promise<{ error: string | null }>;
   /** Esporta i dati dell'utente via share-sheet (GDPR Art.20). */
   exportData: () => Promise<void>;
+  /** Registra un evento di consenso nel ledger append-only (M4, Art.7). */
+  recordConsent: (
+    purpose: ConsentPurpose,
+    action: ConsentAction
+  ) => Promise<{ error: string | null }>;
+  /** Concede/revoca il consenso marketing (evento + cache profiles.marketing_consent). */
+  setMarketingConsent: (enabled: boolean) => Promise<{ error: string | null }>;
+  /** Cronologia consensi dell'utente (per export/trasparenza). */
+  getConsentHistory: () => Promise<ConsentEvent[]>;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -195,6 +212,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   }, [session, profile]);
 
+  const recordConsent = useCallback(
+    async (purpose: ConsentPurpose, action: ConsentAction) => {
+      const userId = session?.user.id;
+      if (!userId) return { error: 'not_authenticated' };
+      const channel = `${Platform.OS}:profile`;
+      const { error } = await supabase
+        .from('consent_events')
+        .insert(buildConsentInsert(userId, purpose, action, channel));
+      return { error: error?.message ?? null };
+    },
+    [session]
+  );
+
+  const setMarketingConsent = useCallback(
+    async (enabled: boolean) => {
+      const userId = session?.user.id;
+      if (!userId) return { error: 'not_authenticated' };
+      const channel = `${Platform.OS}:profile_toggle`;
+      const { error: evErr } = await supabase
+        .from('consent_events')
+        .insert(
+          buildConsentInsert(
+            userId,
+            'marketing',
+            enabled ? 'granted' : 'withdrawn',
+            channel
+          )
+        );
+      if (evErr) return { error: evErr.message };
+      const { error: cacheErr } = await supabase
+        .from('profiles')
+        .update({ marketing_consent: enabled })
+        .eq('id', userId);
+      if (cacheErr) return { error: cacheErr.message };
+      await loadProfile(userId);
+      return { error: null };
+    },
+    [session, loadProfile]
+  );
+
+  const getConsentHistory = useCallback(async (): Promise<ConsentEvent[]> => {
+    const userId = session?.user.id;
+    if (!userId) return [];
+    const { data } = await supabase
+      .from('consent_events')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+    return (data as ConsentEvent[] | null) ?? [];
+  }, [session]);
+
   const value = useMemo(
     () => ({
       status,
@@ -211,6 +279,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       scheduleDeletion,
       cancelScheduledDeletion,
       exportData,
+      recordConsent,
+      setMarketingConsent,
+      getConsentHistory,
     }),
     [
       status,
@@ -227,6 +298,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       scheduleDeletion,
       cancelScheduledDeletion,
       exportData,
+      recordConsent,
+      setMarketingConsent,
+      getConsentHistory,
     ]
   );
 
