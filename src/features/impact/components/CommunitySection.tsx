@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { StatCard } from './StatCard';
 import { PerfectContainer, PerfectText } from '@/components/ui';
-import { Colors, PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface Props {
   onVolunteersPress: () => void;
@@ -23,6 +25,8 @@ export const CommunitySection: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
   const { isTablet } = useDeviceType();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
     <PerfectContainer
@@ -57,25 +61,25 @@ export const CommunitySection: React.FC<Props> = ({
       <PerfectContainer style={styles.communityRow}>
         <StatCard
           icon="account-group"
-          iconColor={Colors.semantic.success.main}
+          iconColor={colors.semantic.success.main}
           value="13.323"
           label={t('impact.volunteers2024')}
           subtitle={t('impact.volunteersActive')}
           gradientColors={[
-            Colors.gradients.success[0],
-            Colors.gradients.success[2],
+            colors.gradients.success[0],
+            colors.gradients.success[2],
           ]}
           onPress={onVolunteersPress}
         />
         <StatCard
           icon="handshake"
-          iconColor={Colors.gradients.purple[0]}
+          iconColor={colors.gradients.purple[0]}
           value="150+"
           label={t('impact.partnersActive')}
           subtitle={t('impact.partnersCollaboration')}
           gradientColors={[
-            Colors.gradients.purple[0],
-            Colors.gradients.purple[2],
+            colors.gradients.purple[0],
+            colors.gradients.purple[2],
           ]}
           onPress={onPartnersPress}
         />
@@ -84,39 +88,40 @@ export const CommunitySection: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  // Community Section
-  communitySection: {
-    paddingHorizontal: PerfectSpacing.base,
-    marginTop: PerfectSpacing.lg,
-    marginBottom: PerfectSpacing.lg,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    // Community Section
+    communitySection: {
+      paddingHorizontal: PerfectSpacing.base,
+      marginTop: PerfectSpacing.lg,
+      marginBottom: PerfectSpacing.lg,
+    },
 
-  communityRow: {
-    flexDirection: 'row',
-    gap: PerfectSpacing.base,
-  },
+    communityRow: {
+      flexDirection: 'row',
+      gap: PerfectSpacing.base,
+    },
 
-  // Community Header
-  communityHeaderContainer: {
-    alignItems: 'center',
-    marginBottom: PerfectSpacing.lg,
-  },
-  communityHeaderBackground: {
-    ...sectionHeaderBackground('white'),
-    width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
-    alignSelf: 'center',
-  },
-  communityTitle: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    letterSpacing: 0,
-  },
-  communitySubtitle: {
-    color: Colors.neutral[700],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.sm,
-    opacity: 0.8,
-    letterSpacing: 0,
-  },
-});
+    // Community Header
+    communityHeaderContainer: {
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.lg,
+    },
+    communityHeaderBackground: {
+      ...sectionHeaderBackground('white', colors),
+      width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
+      alignSelf: 'center',
+    },
+    communityTitle: {
+      color: colors.neutral[900],
+      textAlign: 'center',
+      letterSpacing: 0,
+    },
+    communitySubtitle: {
+      color: colors.neutral[700],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.sm,
+      opacity: 0.8,
+      letterSpacing: 0,
+    },
+  });

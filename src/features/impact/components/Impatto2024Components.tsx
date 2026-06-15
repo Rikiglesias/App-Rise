@@ -2,14 +2,16 @@
  * Componenti riutilizzabili per Impatto2024Screen
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { StatCardData, ImpactItemData } from '../data/impatto2024Data';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface StatCardProps {
   readonly data: StatCardData;
@@ -17,6 +19,8 @@ interface StatCardProps {
 
 export const StatCard: React.FC<StatCardProps> = React.memo(({ data }) => {
   const { t } = useTranslation();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const label = t(data.labelKey);
   const description = t(data.descriptionKey);
 
@@ -60,6 +64,8 @@ interface ImpactItemProps {
 
 export const ImpactItem: React.FC<ImpactItemProps> = React.memo(({ data }) => {
   const { t } = useTranslation();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const text = t(data.textKey);
 
   return (
@@ -90,40 +96,41 @@ export const ImpactItem: React.FC<ImpactItemProps> = React.memo(({ data }) => {
 
 ImpactItem.displayName = 'ImpactItem';
 
-const styles = StyleSheet.create({
-  statCard: {
-    alignSelf: 'stretch',
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.lg,
-    padding: PerfectSpacing.lg,
-    alignItems: 'center',
-    ...Shadows.sm,
-  },
-  statIcon: {
-    marginBottom: PerfectSpacing.md,
-  },
-  statNumber: {
-    color: Colors.primary[600],
-    textAlign: 'center',
-  },
-  statLabel: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.sm,
-  },
-  statDesc: {
-    color: Colors.neutral[600],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.xs,
-  },
-  impactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  impactIcon: {
-    marginRight: PerfectSpacing.md,
-  },
-  impactText: {
-    color: Colors.neutral[700],
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    statCard: {
+      alignSelf: 'stretch',
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.lg,
+      padding: PerfectSpacing.lg,
+      alignItems: 'center',
+      ...Shadows.sm,
+    },
+    statIcon: {
+      marginBottom: PerfectSpacing.md,
+    },
+    statNumber: {
+      color: colors.primary[600],
+      textAlign: 'center',
+    },
+    statLabel: {
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.sm,
+    },
+    statDesc: {
+      color: colors.neutral[600],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.xs,
+    },
+    impactItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    impactIcon: {
+      marginRight: PerfectSpacing.md,
+    },
+    impactText: {
+      color: colors.neutral[700],
+    },
+  });

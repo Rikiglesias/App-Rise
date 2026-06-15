@@ -9,23 +9,29 @@ import { ViewStyle } from 'react-native';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
  * Pattern per header di sezione con background
  * Usato in: Impact (TotalMeals, Results2024, Map, Community),
  * Actions (Contribute), Social (Header)
+ *
+ * @param colors token dark-aware (`useThemeColors()`); default `Colors` (light statico)
+ * per retro-compatibilità coi caller non ancora migrati. Passare `colors` rende
+ * lo sfondo adattivo al tema (necessario quando il testo sopra è adattivo).
  */
 export const sectionHeaderBackground = (
-  variant: 'white' | 'light' = 'white'
+  variant: 'white' | 'light' = 'white',
+  colors: ThemeColors = Colors
 ): ViewStyle => ({
   alignSelf: 'stretch',
   backgroundColor:
-    variant === 'white' ? Colors.neutral[0] : Colors.neutral[100],
+    variant === 'white' ? colors.neutral[0] : colors.neutral[100],
   borderRadius: scale(16),
   paddingVertical: PerfectSpacing.base,
   paddingHorizontal: PerfectSpacing.lg,
   borderWidth: scale(1),
-  borderColor: variant === 'white' ? Colors.neutral[200] : Colors.neutral[400],
+  borderColor: variant === 'white' ? colors.neutral[200] : colors.neutral[400],
 });
 
 /**

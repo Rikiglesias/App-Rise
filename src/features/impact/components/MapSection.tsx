@@ -160,7 +160,7 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     mapHeaderBackground: {
-      ...sectionHeaderBackground('white'),
+      ...sectionHeaderBackground('white', colors),
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
       alignSelf: 'center',
     },

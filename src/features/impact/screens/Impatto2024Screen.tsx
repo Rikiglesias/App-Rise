@@ -1,5 +1,5 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,9 +12,11 @@ import {
   PerfectContainer,
 } from '@/components/ui';
 import { scale } from '@/shared/constants/perfectScale';
-import { BorderRadius, Colors, Shadows } from '@/shared/constants/designTokens';
+import { BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 type Impatto2024ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -29,6 +31,8 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
   navigation: _navigation,
 }) => {
   const { t } = useTranslation();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
     <SafeAreaView
@@ -134,104 +138,105 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.neutral[50],
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.neutral[50],
+    },
 
-  header: {
-    backgroundColor: Colors.neutral[0],
-    paddingVertical: PerfectSpacing.xl,
-    paddingHorizontal: PerfectSpacing.lg,
-    alignItems: 'center',
-  },
+    header: {
+      backgroundColor: colors.neutral[0],
+      paddingVertical: PerfectSpacing.xl,
+      paddingHorizontal: PerfectSpacing.lg,
+      alignItems: 'center',
+    },
 
-  headerContent: {
-    width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
-    alignSelf: 'center',
-    alignItems: 'center',
-  },
+    headerContent: {
+      width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+      alignSelf: 'center',
+      alignItems: 'center',
+    },
 
-  year: {
-    color: Colors.primary[600],
-    textAlign: 'center',
-  },
+    year: {
+      color: colors.primary[600],
+      textAlign: 'center',
+    },
 
-  title: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.sm,
-  },
+    title: {
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.sm,
+    },
 
-  subtitle: {
-    color: Colors.neutral[700],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.md,
-    backgroundColor: Colors.primary[50],
-    paddingHorizontal: PerfectSpacing.base,
-    paddingVertical: PerfectSpacing.sm,
-    borderRadius: BorderRadius.full,
-  },
+    subtitle: {
+      color: colors.neutral[700],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.md,
+      backgroundColor: colors.primary[50],
+      paddingHorizontal: PerfectSpacing.base,
+      paddingVertical: PerfectSpacing.sm,
+      borderRadius: BorderRadius.full,
+    },
 
-  statsSection: {
-    marginHorizontal: PerfectSpacing.base,
-    marginTop: PerfectSpacing.lg,
-    gap: PerfectSpacing.base,
-  },
+    statsSection: {
+      marginHorizontal: PerfectSpacing.base,
+      marginTop: PerfectSpacing.lg,
+      gap: PerfectSpacing.base,
+    },
 
-  impactSection: {
-    backgroundColor: Colors.neutral[0],
-    marginHorizontal: PerfectSpacing.base,
-    marginTop: PerfectSpacing.lg,
-    borderRadius: BorderRadius.lg,
-    padding: PerfectSpacing.lg,
-    ...Shadows.sm,
-  },
+    impactSection: {
+      backgroundColor: colors.neutral[0],
+      marginHorizontal: PerfectSpacing.base,
+      marginTop: PerfectSpacing.lg,
+      borderRadius: BorderRadius.lg,
+      padding: PerfectSpacing.lg,
+      ...Shadows.sm,
+    },
 
-  sectionTitleContainer: {
-    width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
-    alignSelf: 'center',
-    alignItems: 'center',
-  },
+    sectionTitleContainer: {
+      width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
+      alignSelf: 'center',
+      alignItems: 'center',
+    },
 
-  impactTitle: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.base,
-  },
+    impactTitle: {
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.base,
+    },
 
-  impactList: {
-    gap: PerfectSpacing.md,
-  },
+    impactList: {
+      gap: PerfectSpacing.md,
+    },
 
-  goalSection: {
-    backgroundColor: Colors.primary[50],
-    marginHorizontal: PerfectSpacing.base,
-    marginTop: PerfectSpacing.lg,
-    marginBottom: PerfectSpacing.xl,
-    borderRadius: BorderRadius.lg,
-    padding: PerfectSpacing.lg,
-    alignItems: 'center',
-    borderWidth: scale(1),
-    borderColor: Colors.primary[200],
-  },
+    goalSection: {
+      backgroundColor: colors.primary[50],
+      marginHorizontal: PerfectSpacing.base,
+      marginTop: PerfectSpacing.lg,
+      marginBottom: PerfectSpacing.xl,
+      borderRadius: BorderRadius.lg,
+      padding: PerfectSpacing.lg,
+      alignItems: 'center',
+      borderWidth: scale(1),
+      borderColor: colors.primary[200],
+    },
 
-  goalIcon: {
-    marginBottom: PerfectSpacing.md,
-  },
+    goalIcon: {
+      marginBottom: PerfectSpacing.md,
+    },
 
-  goalTitle: {
-    color: Colors.primary[800],
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.sm,
-  },
+    goalTitle: {
+      color: colors.primary[800],
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.sm,
+    },
 
-  goalText: {
-    color: Colors.primary[700],
-    textAlign: 'center',
-  },
-});
+    goalText: {
+      color: colors.primary[700],
+      textAlign: 'center',
+    },
+  });
 
 const Impatto2024Screen = React.memo(Impatto2024ScreenComponent);
 
