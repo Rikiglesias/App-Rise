@@ -73,6 +73,17 @@ export default {
       phone: 'Telefono',
       location: 'Località',
       birthDate: 'Data di nascita',
+      completeCta: 'Completa il tuo profilo',
+    },
+    social: {
+      continueApple: 'Continua con Apple',
+      continueGoogle: 'Continua con Google',
+      or: 'oppure',
+    },
+    completeProfile: {
+      title: 'Completa il profilo',
+      subtitle: 'Mancano alcuni dati per completare la registrazione',
+      submit: 'Salva e continua',
     },
     errors: {
       required: 'Campo obbligatorio',

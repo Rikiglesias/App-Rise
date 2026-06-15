@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { SocialButtons } from '../components/SocialButtons';
 import { PerfectText } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -37,6 +38,7 @@ export const AuthLandingScreen: React.FC = () => {
         variant="link"
         onPress={goToSignUp}
       />
+      <SocialButtons />
     </AuthScreen>
   );
 };

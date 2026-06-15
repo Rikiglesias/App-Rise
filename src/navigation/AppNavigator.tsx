@@ -24,6 +24,7 @@ import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
 import { LoginScreen } from '@/features/auth/screens/LoginScreen';
 import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
 import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
+import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -142,6 +143,11 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CompleteProfile"
+          component={CompleteProfileScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

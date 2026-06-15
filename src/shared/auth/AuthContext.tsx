@@ -9,8 +9,13 @@ import React, {
 import type { Session } from '@supabase/supabase-js';
 
 import { supabase } from './supabaseClient';
-import { getAppleIdToken, getGoogleIdToken } from './socialAuth';
+import {
+  getAppleIdToken,
+  getGoogleIdToken,
+  configureGoogle,
+} from './socialAuth';
 import type { Profile, ProfileInput } from './types';
+import { env } from '@/shared/config/environment';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -47,6 +52,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       .eq('id', userId)
       .single();
     setProfile((data as Profile | null) ?? null);
+  }, []);
+
+  useEffect(() => {
+    if (env.GOOGLE_WEB_CLIENT_ID) configureGoogle(env.GOOGLE_WEB_CLIENT_ID);
   }, []);
 
   useEffect(() => {

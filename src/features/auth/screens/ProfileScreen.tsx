@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
@@ -11,15 +12,21 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
+import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const ProfileScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
   const { status, session, profile, signOut } = useAuth();
+  const navigation = useNavigation<RootStackNavigationProp>();
   const handleLogout = useCallback((): void => {
     void signOut();
   }, [signOut]);
+  const handleCompleteProfile = useCallback(
+    (): void => navigation.navigate('CompleteProfile'),
+    [navigation]
+  );
 
   if (status === 'loading') {
     return (
@@ -62,6 +69,12 @@ export const ProfileScreen: React.FC = () => {
         </>
       ) : null}
 
+      {!profile ? (
+        <AuthButton
+          label={t('auth.profile.completeCta')}
+          onPress={handleCompleteProfile}
+        />
+      ) : null}
       <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
     </AuthScreen>
   );

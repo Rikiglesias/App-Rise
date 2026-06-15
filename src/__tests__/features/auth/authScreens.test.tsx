@@ -7,6 +7,7 @@ import { LoginScreen } from '@/features/auth/screens/LoginScreen';
 import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
 import { AuthLandingScreen } from '@/features/auth/screens/AuthLandingScreen';
 import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
+import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
@@ -33,9 +34,17 @@ describe('Auth screens', () => {
     expect(getByText('Recupera password')).toBeTruthy();
   });
 
-  it('AuthLanding: render', () => {
+  it('AuthLanding: render + bottone social', () => {
     const { getByText } = wrap(<AuthLandingScreen />);
     expect(getByText('Area Donatori')).toBeTruthy();
+    expect(getByText('Continua con Google')).toBeTruthy();
+  });
+
+  it('CompleteProfile: render + errori su submit vuoto', () => {
+    const { getByText, queryAllByText } = wrap(<CompleteProfileScreen />);
+    expect(getByText('Completa il profilo')).toBeTruthy();
+    fireEvent.press(getByText('Salva e continua'));
+    expect(queryAllByText('Campo obbligatorio').length).toBeGreaterThan(0);
   });
 
   it('Profile: senza sessione mostra la landing', async () => {
