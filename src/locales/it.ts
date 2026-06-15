@@ -108,6 +108,16 @@ export default {
       bannerCancel: 'Annulla eliminazione',
       error: 'Operazione non riuscita. Riprova.',
     },
+    consents: {
+      title: 'Consensi',
+      marketing: 'Comunicazioni e aggiornamenti',
+      marketingHint: 'Puoi attivare o revocare in ogni momento.',
+      reconsentTitle: 'Aggiornamento informativa',
+      reconsentBody:
+        'Abbiamo aggiornato l’informativa privacy. Leggila e accetta per continuare.',
+      reconsentAccept: 'Accetto',
+      error: 'Operazione non riuscita. Riprova.',
+    },
     errors: {
       required: 'Campo obbligatorio',
       email_invalid: 'Email non valida',

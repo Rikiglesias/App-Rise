@@ -108,6 +108,16 @@ export default {
       bannerCancel: 'Cancel deletion',
       error: 'Operation failed. Please try again.',
     },
+    consents: {
+      title: 'Consents',
+      marketing: 'Communications and updates',
+      marketingHint: 'You can enable or withdraw at any time.',
+      reconsentTitle: 'Privacy policy update',
+      reconsentBody:
+        'We have updated our privacy policy. Please read and accept to continue.',
+      reconsentAccept: 'Accept',
+      error: 'Operation failed. Please try again.',
+    },
     errors: {
       required: 'Required field',
       email_invalid: 'Invalid email',
