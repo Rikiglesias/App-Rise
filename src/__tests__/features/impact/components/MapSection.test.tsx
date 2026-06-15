@@ -7,8 +7,8 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
-import { MapSection } from '@/features/impact/components/MapSection';
 import { AllProviders } from '../../../helpers/testProviders';
+import { MapSection } from '@/features/impact/components/MapSection';
 import i18n from '@/locales';
 
 // Forza locale italiana per test consistenti
