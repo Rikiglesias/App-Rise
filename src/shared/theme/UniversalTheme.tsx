@@ -165,16 +165,6 @@ export const useUniversalTheme = (): ThemeContextType => {
   return context;
 };
 
-// 🎨 HELPER FUNCTIONS
-export const getThemeColor = (
-  colorKey: keyof typeof UNIVERSAL_COLORS.light,
-  isDark: boolean
-) => {
-  return isDark
-    ? UNIVERSAL_COLORS.dark[colorKey]
-    : UNIVERSAL_COLORS.light[colorKey];
-};
-
 // 📱 THEME STATUS COMPONENT - REMOVED
 // HTML elements like <div> cause crashes in React Native production builds
 // If needed for debugging, use React Native View component instead
