@@ -28,6 +28,22 @@ export interface ConsentEvent {
   created_at: string; // ISO timestamp
 }
 
+/** Campi del profilo correggibili dall'utente in-app (M5, GDPR Art.16 rettifica). */
+export type ProfileEditable = Pick<
+  Profile,
+  'first_name' | 'last_name' | 'phone' | 'city' | 'province' | 'birth_date'
+>;
+
+/** Whitelist dei campi aggiornabili: previene update di id/created_at/consensi. */
+export const PROFILE_EDITABLE_KEYS: readonly (keyof ProfileEditable)[] = [
+  'first_name',
+  'last_name',
+  'phone',
+  'city',
+  'province',
+  'birth_date',
+];
+
 /** Dati raccolti dal form di registrazione (prima della scrittura su DB). */
 export interface ProfileInput {
   first_name: string;

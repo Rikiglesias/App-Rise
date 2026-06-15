@@ -25,6 +25,7 @@ jest.mock('@/shared/auth/supabaseClient', () => {
           Promise.resolve({ data: { session: {} }, error: null })
         ),
         signOut: jest.fn(() => Promise.resolve({ error: null })),
+        updateUser: jest.fn(() => Promise.resolve({ data: {}, error: null })),
       },
       from: jest.fn(() => ({ select, eq: eqSelect, single, update, insert })),
       functions: {
@@ -142,6 +143,74 @@ describe('AuthContext', () => {
     expect(api.update).toHaveBeenCalledWith(
       expect.objectContaining({ marketing_consent: true })
     );
+  });
+
+  it('updateProfile aggiorna SOLO i campi passati (whitelist, no upsert)', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const updateMock = (supabase.from('profiles') as unknown as {
+      update: jest.Mock;
+    }).update;
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const res = await getAuth().updateProfile({ phone: '+393331112233' });
+      expect(res.error).toBeNull();
+    });
+    expect(updateMock).toHaveBeenCalledWith({ phone: '+393331112233' });
+    // whitelist: nessun altro campo (es. first_name) finisce nell'update
+    expect(updateMock).not.toHaveBeenCalledWith(
+      expect.objectContaining({ first_name: expect.anything() })
+    );
+  });
+
+  it('updateProfile senza campi non chiama update', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const updateMock = (supabase.from('profiles') as unknown as {
+      update: jest.Mock;
+    }).update;
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const res = await getAuth().updateProfile({});
+      expect(res.error).toBeNull();
+    });
+    expect(updateMock).not.toHaveBeenCalled();
+  });
+
+  it('updateEmail chiama auth.updateUser con la nuova email', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1', email: 'old@r.it' } } },
+    });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const res = await getAuth().updateEmail('new@r.it');
+      expect(res.error).toBeNull();
+    });
+    expect(supabase.auth.updateUser).toHaveBeenCalledWith({ email: 'new@r.it' });
+  });
+
+  it('refreshProfile non lancia se la fetch del profilo fallisce', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const single = (supabase.from('profiles') as unknown as {
+      select: () => { eq: () => { single: jest.Mock } };
+    })
+      .select()
+      .eq().single;
+    single.mockResolvedValue({ data: null, error: { code: 'NETWORK' } });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      await expect(getAuth().refreshProfile()).resolves.toBeUndefined();
+    });
+    // ripristina il default (clearAllMocks NON resetta le implementazioni)
+    single.mockResolvedValue({ data: null, error: null });
   });
 
   it('exportData apre il share-sheet quando c\'è una sessione', async () => {

@@ -20,10 +20,12 @@ import { buildConsentInsert, isReConsentRequired } from './consent';
 import type {
   Profile,
   ProfileInput,
+  ProfileEditable,
   ConsentEvent,
   ConsentPurpose,
   ConsentAction,
 } from './types';
+import { PROFILE_EDITABLE_KEYS } from './types';
 import { env } from '@/shared/config/environment';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
@@ -43,6 +45,12 @@ export interface AuthState {
   signInWithApple: () => Promise<{ error: string | null }>;
   signInWithGoogle: () => Promise<{ error: string | null }>;
   refreshProfile: () => Promise<void>;
+  /** Aggiorna i campi profilo correggibili (GDPR Art.16). Whitelist: solo i campi passati, mai id/consensi. */
+  updateProfile: (
+    fields: Partial<ProfileEditable>
+  ) => Promise<{ error: string | null }>;
+  /** Cambia l'email dell'account (secure email change Supabase: conferma su vecchia+nuova casella). */
+  updateEmail: (email: string) => Promise<{ error: string | null }>;
   /** Cancellazione immediata via Edge Function (GDPR Art.17). `appleAuthCode`: fresh per la revoca Apple. */
   deleteAccountNow: (appleAuthCode?: string) => Promise<{ error: string | null }>;
   /** Programma la cancellazione a +30gg (grace period recuperabile). */
@@ -77,11 +85,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [needsReConsent, setNeedsReConsent] = useState(false);
 
   const loadProfile = useCallback(async (userId: string) => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
       .single();
+    if (error) {
+      // PGRST116 = nessuna riga: profilo non ancora creato (es. post-social) → assente.
+      // Altri errori (rete/RLS) → NON azzerare il profilo già caricato (evita flicker/perdita dati UI).
+      if (error.code === 'PGRST116') setProfile(null);
+      return;
+    }
     setProfile((data as Profile | null) ?? null);
   }, []);
 
@@ -170,6 +184,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const refreshProfile = useCallback(async () => {
     if (session?.user.id) await loadProfile(session.user.id);
   }, [session, loadProfile]);
+
+  const updateProfile = useCallback(
+    async (fields: Partial<ProfileEditable>) => {
+      const userId = session?.user.id;
+      if (!userId) return { error: 'not_authenticated' };
+      // Whitelist: solo i campi editabili effettivamente passati (no upsert/no null su campi assenti).
+      const patch: Partial<ProfileEditable> = {};
+      for (const key of PROFILE_EDITABLE_KEYS) {
+        const v = fields[key];
+        if (v !== undefined) patch[key] = v;
+      }
+      if (Object.keys(patch).length === 0) return { error: null };
+      const { error } = await supabase
+        .from('profiles')
+        .update(patch)
+        .eq('id', userId);
+      if (error) return { error: error.message };
+      await loadProfile(userId);
+      return { error: null };
+    },
+    [session, loadProfile]
+  );
+
+  const updateEmail = useCallback(async (email: string) => {
+    const { error } = await supabase.auth.updateUser({ email });
+    return { error: error?.message ?? null };
+  }, []);
 
   const deleteAccountNow = useCallback(async (appleAuthCode?: string) => {
     const body = appleAuthCode ? { appleAuthCode } : {};
@@ -299,6 +340,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signInWithApple,
       signInWithGoogle,
       refreshProfile,
+      updateProfile,
+      updateEmail,
       deleteAccountNow,
       scheduleDeletion,
       cancelScheduledDeletion,
@@ -320,6 +363,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       signInWithApple,
       signInWithGoogle,
       refreshProfile,
+      updateProfile,
+      updateEmail,
       deleteAccountNow,
       scheduleDeletion,
       cancelScheduledDeletion,
