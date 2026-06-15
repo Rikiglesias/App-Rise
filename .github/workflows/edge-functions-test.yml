@@ -1,0 +1,41 @@
+name: 🦕 Edge Functions (Deno) CI
+
+# Test/lint/fmt delle Supabase Edge Functions (runtime Deno), isolati dalla toolchain
+# Node/Expo del repo: girano SOLO quando cambia supabase/functions/**.
+on:
+  push:
+    branches: [master, develop]
+    paths: ['supabase/functions/**']
+  pull_request:
+    branches: [master, develop]
+    paths: ['supabase/functions/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: deno fmt + lint + test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: supabase/functions
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Format check
+        run: deno fmt --check
+
+      - name: Lint
+        run: deno lint
+
+      # Permessi minimi: --allow-env (Deno.env nei seam/secrets finti), --allow-net
+      # (risoluzione jsr:/npm: al primo run; le fetch reali sono stubbate), --allow-read.
+      - name: Test
+        run: deno test --allow-env --allow-net --allow-read

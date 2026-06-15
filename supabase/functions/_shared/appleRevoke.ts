@@ -11,7 +11,7 @@
 //
 // Runtime: Deno (Supabase Edge Functions). Non fa parte del bundle dell'app RN.
 
-import { SignJWT, importPKCS8 } from 'npm:jose@5';
+import { importPKCS8, SignJWT } from 'npm:jose@5';
 
 const APPLE_BASE = 'https://appleid.apple.com';
 

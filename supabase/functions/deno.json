@@ -1,0 +1,8 @@
+{
+  "fmt": { "singleQuote": true, "lineWidth": 100 },
+  "lint": { "rules": { "tags": ["recommended"] } },
+  "tasks": {
+    "test": "deno test --allow-env --allow-net --allow-read",
+    "cov": "deno test --allow-env --allow-net --allow-read --coverage=cov && deno coverage cov"
+  }
+}

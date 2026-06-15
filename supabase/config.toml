@@ -1,0 +1,18 @@
+# Supabase CLI config — pin del comportamento verify_jwt per le Edge Functions (fix S6).
+# Solo le sezioni rilevanti per questo branch; la CLI applica i default per il resto.
+# project_id è l'identificatore LOCALE del progetto (per `supabase start`), NON il ref
+# remoto (quello vive nel link `supabase link --project-ref ...`).
+project_id = "app-rise"
+
+# delete-account è invocata dal CLIENT autenticato (Authorization: Bearer <jwt utente>):
+# la piattaforma DEVE validare il JWT. L'handler poi cancella solo l'utente del token.
+[functions.delete-account]
+verify_jwt = true
+
+# purge-deletions è invocata dal Supabase Cron con header x-cron-secret e NESSUN JWT
+# utente: verify_jwt DEVE essere false, altrimenti la piattaforma rifiuta la chiamata
+# del Cron PRIMA dell'handler. L'autorizzazione è il segreto condiviso (timingSafeCompare
+# in index.ts). In deploy, se la CLI ignorasse il config: `supabase functions deploy
+# purge-deletions --no-verify-jwt`.
+[functions.purge-deletions]
+verify_jwt = false
