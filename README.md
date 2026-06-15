@@ -12,15 +12,15 @@
 > **ATTENZIONE**: Prima di contribuire, DEVI leggere questi documenti!
 
 1. **[CONTRIBUTING.md](./CONTRIBUTING.md)** ⭐ **START HERE** - Workflow completo per contribuire
-2. **[CODING_STANDARDS.md](./docs/CODING_STANDARDS.md)** 💎 **REGOLE PROGETTO** - Standard codice e best practices
-3. **[CODE_CLEANUP_CHECKLIST.md](./docs/CODE_CLEANUP_CHECKLIST.md)** ✅ **PRIMA DI OGNI COMMIT** - Checklist pulizia codice
+2. **[CODING_STANDARDS.md](./docs/guides/development.md)** 💎 **REGOLE PROGETTO** - Standard codice e best practices
+3. **[CODE_CLEANUP_CHECKLIST.md](./docs/guides/quality-standards.md)** ✅ **PRIMA DI OGNI COMMIT** - Checklist pulizia codice
 
 **TL;DR**:
 - ✅ Zero compromessi sulla qualità
 - ✅ Perfect System obbligatorio
 - ✅ TypeScript strict mode
 - ✅ ESLint zero warnings
-- ✅ Ogni file deve seguire [CODE_CLEANUP_CHECKLIST](./docs/CODE_CLEANUP_CHECKLIST.md)
+- ✅ Ogni file deve seguire [CODE_CLEANUP_CHECKLIST](./docs/guides/quality-standards.md)
 
 ---
 
@@ -128,11 +128,11 @@ npm run conta-problemi
 ## 📚 **DOCUMENTAZIONE**
 
 ### **📚 Guide e Documentazione**
-- [🚀 Development Guide](docs/DEVELOPMENT_GUIDE.md) - Guida sviluppo completa
-- [🏗️ Architecture](docs/ARCHITECTURE.md) - Architettura del progetto
-- [🏆 Quality Standards](docs/QUALITY_STANDARDS.md) - Standard di qualità
-- [⚙️ Deployment](docs/DEPLOYMENT_GUIDE.md) - Guida deploy
-- [🔒 Security](docs/SICUREZZA_E_PERFORMANCE.md) - Sicurezza e performance
+- [🚀 Development Guide](docs/guides/development.md) - Guida sviluppo completa
+- [🏗️ Architecture](docs/architecture/overview.md) - Architettura del progetto
+- [🏆 Quality Standards](docs/guides/quality-standards.md) - Standard di qualità
+- [⚙️ Deployment](docs/guides/deployment.md) - Guida deploy
+- [🔒 Security](docs/standards/security-performance.md) - Sicurezza e performance
 
 ---
 
