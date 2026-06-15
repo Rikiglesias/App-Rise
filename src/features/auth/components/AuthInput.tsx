@@ -17,7 +17,7 @@ interface AuthInputProps {
   label: string;
   value: string;
   onChangeText: (v: string) => void;
-  error?: string;
+  error?: string | undefined;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';

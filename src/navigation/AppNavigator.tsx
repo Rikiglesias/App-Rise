@@ -21,6 +21,9 @@ import SeguiciScreen from '@/features/social/screens/SeguiciScreen';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
+import { LoginScreen } from '@/features/auth/screens/LoginScreen';
+import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
+import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -122,6 +125,23 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="ChiSiamo"
           component={ChiSiamoScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* Area donatori (auth) */}
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

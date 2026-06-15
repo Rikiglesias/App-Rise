@@ -36,6 +36,7 @@ import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 // Direct imports (no lazy loading to avoid spinner)
 import { ContributeTabScreen } from '@/features/actions';
 import HomeScreen from '@/features/home/screens/HomeScreen';
+import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -169,6 +170,7 @@ const ICON_MAP: Record<string, string> = {
   ImpactTab: 'chart-line',
   HomeTab: 'home',
   InfoTab: 'hand-heart',
+  ProfileTab: 'account',
 };
 
 // Helper tipizzato per ottenere il threshold
@@ -331,6 +333,13 @@ const BottomTabNavigator: React.FC = () => {
         component={ContributeTabScreen}
         options={{
           tabBarAccessibilityLabel: t('navigation.actions'),
+        }}
+      />
+      <Tab.Screen
+        name="ProfileTab"
+        component={ProfileScreen}
+        options={{
+          tabBarAccessibilityLabel: t('navigation.profile'),
         }}
       />
     </Tab.Navigator>
