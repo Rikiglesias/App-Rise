@@ -126,7 +126,7 @@ const getCurrentEnvironment = (): keyof typeof environmentConfigs => {
 };
 
 // Validazione configurazione
-const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
+export const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
   const requiredFields: (keyof AppEnvironment)[] = [
     'NODE_ENV',
     'APP_VERSION',
@@ -150,6 +150,26 @@ const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
     new URL(envConfig.API_BASE_URL);
   } catch {
     throw new Error(`Invalid API_BASE_URL: ${envConfig.API_BASE_URL}`);
+  }
+
+  // Fail-fast Supabase nei build REALI: senza URL/anon key l'auth donatori
+  // fallirebbe in silenzio con errori di rete (placeholder in supabaseClient).
+  // In development/test si resta lenient per non bloccare lo sviluppo senza credenziali.
+  if (
+    envConfig.ENVIRONMENT === 'production' ||
+    envConfig.ENVIRONMENT === 'staging'
+  ) {
+    const supabaseRequired: (keyof AppEnvironment)[] = [
+      'SUPABASE_URL',
+      'SUPABASE_ANON_KEY',
+    ];
+    for (const field of supabaseRequired) {
+      if (!envConfig[field]) {
+        throw new Error(
+          `Environment variable ${field} is required in ${envConfig.ENVIRONMENT} but is missing/empty`
+        );
+      }
+    }
   }
 };
 
