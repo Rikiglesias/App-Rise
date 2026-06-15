@@ -11,6 +11,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validateEmail, validateRequired } from '@/shared/auth/validation';
+import { mapAuthError } from '@/shared/auth/authErrors';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const LoginScreen: React.FC = () => {
@@ -37,7 +38,7 @@ export const LoginScreen: React.FC = () => {
     setLoading(true);
     const { error } = await signIn(email.trim(), password);
     setLoading(false);
-    if (error) setSubmitError(t('auth.errors.generic'));
+    if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
     else navigation.goBack();
   }, [email, password, signIn, t, navigation]);
 

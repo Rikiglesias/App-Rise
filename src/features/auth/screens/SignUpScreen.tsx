@@ -16,6 +16,7 @@ import {
   validateSignUpForm,
   type SignUpErrors,
 } from '@/shared/auth/validation';
+import { mapAuthError } from '@/shared/auth/authErrors';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const SignUpScreen: React.FC = () => {
@@ -71,7 +72,7 @@ export const SignUpScreen: React.FC = () => {
       marketing_consent: marketingConsent,
     });
     setLoading(false);
-    if (error) setSubmitError(t('auth.errors.generic'));
+    if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
     else setDone(true);
   }, [
     firstName,

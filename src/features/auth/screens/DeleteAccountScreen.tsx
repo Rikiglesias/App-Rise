@@ -11,6 +11,7 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import { getAppleAuthCodeForDeletion } from '@/shared/auth/socialAuth';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
@@ -20,6 +21,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  * immediato o programmato a +30gg (grace period recuperabile).
  */
 export const DeleteAccountScreen: React.FC = () => {
+  useRequireAuth();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();

@@ -11,6 +11,7 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import {
   validateEmail,
   validatePhoneIT,
@@ -34,6 +35,7 @@ type Errors = Partial<
 
 /** Rettifica dei dati personali in-app (GDPR Art.16): campi profilo + cambio email. */
 export const ProfileEditScreen: React.FC = () => {
+  useRequireAuth();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();

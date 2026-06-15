@@ -12,6 +12,7 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import { supabase } from '@/shared/auth/supabaseClient';
 import {
   validatePhoneIT,
@@ -35,6 +36,7 @@ type Errors = Partial<
 
 /** Step post-social: i provider non danno telefono/città/provincia/data nascita. */
 export const CompleteProfileScreen: React.FC = () => {
+  useRequireAuth();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();

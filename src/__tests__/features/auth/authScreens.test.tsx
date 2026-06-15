@@ -108,4 +108,28 @@ describe('Auth screens', () => {
       )
     ).toBeNull();
   });
+
+  it('Login: credenziali errate → messaggio specifico (non generico)', async () => {
+    (supabase.auth.signInWithPassword as jest.Mock).mockResolvedValueOnce({
+      data: { session: null },
+      error: { message: 'Invalid login credentials' },
+    });
+    const { getByRole, getByLabelText, findByText } = wrap(<LoginScreen />);
+    fireEvent.changeText(getByLabelText('Email'), 'mario@rossi.it');
+    fireEvent.changeText(getByLabelText('Password'), 'abcd1234');
+    fireEvent.press(getByRole('button', { name: 'Accedi' }));
+    expect(await findByText('Email o password non corretti')).toBeTruthy();
+  });
+
+  it('AuthLanding: errore social (≠ cancelled) mostra un messaggio', async () => {
+    (supabase.auth.signInWithIdToken as jest.Mock).mockResolvedValueOnce({
+      data: { session: null },
+      error: { message: 'network blip' },
+    });
+    const { getByText, findByText } = wrap(<AuthLandingScreen />);
+    fireEvent.press(getByText('Continua con Google'));
+    expect(
+      await findByText('Si è verificato un errore. Riprova.')
+    ).toBeTruthy();
+  });
 });
