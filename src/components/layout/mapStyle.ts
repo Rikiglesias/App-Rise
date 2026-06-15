@@ -27,6 +27,3 @@ export const getMapStyleURL = (isDark: boolean): string => {
   const mapId = isDark ? MAPTILER_STYLE_DARK : MAPTILER_STYLE_LIGHT;
   return `https://api.maptiler.com/maps/${mapId}/style.json?key=${MAPTILER_KEY}`;
 };
-
-/** True se la key MapTiler è configurata (mappa brand attiva, non fallback demo). */
-export const hasMapTilerKey = (): boolean => MAPTILER_KEY.length > 0;

@@ -339,36 +339,3 @@ export const retry = async <T>(
 
   return failure(lastError);
 };
-
-/**
- * Debounce per operazioni asincrone
- */
-export const debounceAsync = <T>(
-  operation: () => AsyncResult<T>,
-  delayMs: number
-): (() => AsyncResult<T>) => {
-  let timeoutId: NodeJS.Timeout | null = null;
-  let resolveLatest: ((result: Result<T>) => void) | null = null;
-
-  return () => {
-    return new Promise<Result<T>>(resolve => {
-      // Cancella timeout precedente
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-
-      // Risolvi la promise precedente con un errore di cancellazione
-      if (resolveLatest) {
-        resolveLatest(failure(new Error('Debounced operation cancelled')));
-      }
-
-      resolveLatest = resolve;
-
-      timeoutId = setTimeout(async () => {
-        const result = await operation();
-        resolve(result);
-        resolveLatest = null;
-      }, delayMs);
-    });
-  };
-};

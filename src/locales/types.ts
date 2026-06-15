@@ -29,10 +29,3 @@ export type SupportedLocale =
   | 'bg' // 🇧🇬 Bulgaro
   | 'sk' // 🇸🇰 Slovacco
   | 'hr'; // 🇭🇷 Croato
-
-// Configurazione i18n
-export interface I18nConfig {
-  locale: SupportedLocale;
-  fallbackLocale: SupportedLocale;
-  translations: Record<SupportedLocale, TranslationKeys>;
-}
