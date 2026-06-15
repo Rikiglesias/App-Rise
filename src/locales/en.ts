@@ -65,6 +65,15 @@ export default {
       email: 'Email',
       submit: 'Send reset link',
       sent: 'If the email exists, you will receive a link to reset your password.',
+      error: 'Could not send. Please try again shortly.',
+    },
+    reset: {
+      title: 'Set new password',
+      newPassword: 'New password',
+      confirmPassword: 'Confirm password',
+      submit: 'Save password',
+      success: 'Password updated. You can now sign in with your new password.',
+      continue: 'Continue',
     },
     profile: {
       title: 'My profile',
@@ -136,6 +145,7 @@ export default {
       phone_invalid: 'Invalid phone (e.g. +39...)',
       not_adult: 'You must be of legal age',
       date_invalid: 'Invalid date',
+      password_mismatch: 'Passwords do not match',
       generic: 'An error occurred. Please try again.',
     },
   },

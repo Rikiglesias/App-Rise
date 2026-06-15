@@ -172,6 +172,12 @@ jest.mock('@/shared/auth/supabaseClient', () => ({
       signInWithIdToken: jest.fn(() =>
         Promise.resolve({ data: { session: null }, error: null })
       ),
+      updateUser: jest.fn(() =>
+        Promise.resolve({ data: { user: null }, error: null })
+      ),
+      setSession: jest.fn(() =>
+        Promise.resolve({ data: { session: null }, error: null })
+      ),
       startAutoRefresh: jest.fn(),
       stopAutoRefresh: jest.fn(),
     },
@@ -182,6 +188,15 @@ jest.mock('@/shared/auth/supabaseClient', () => ({
       insert: jest.fn(() => Promise.resolve({ error: null })),
     })),
   },
+}));
+
+// Mock expo-linking (deep link recovery password): createURL/useURL deterministici nei test.
+jest.mock('expo-linking', () => ({
+  createURL: jest.fn(path => `rahitalia://${path}`),
+  useURL: jest.fn(() => null),
+  parse: jest.fn(),
+  getInitialURL: jest.fn(() => Promise.resolve(null)),
+  addEventListener: jest.fn(() => ({ remove: jest.fn() })),
 }));
 
 // Provide SafeArea defaults to avoid provider errors in integration tests

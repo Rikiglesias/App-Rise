@@ -67,6 +67,10 @@ export default withDefaultStrings({
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
     version: '1.2.9',
+    // Custom URL scheme per i deep link auth (es. reset password: rahitalia://reset-password).
+    // Expo prebuild configura iOS CFBundleURLTypes + Android intent-filter. La stessa URL va
+    // aggiunta all'allow-list Redirect URLs del progetto Supabase.
+    scheme: 'rahitalia',
     orientation: 'portrait',
     icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',

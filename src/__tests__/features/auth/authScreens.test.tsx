@@ -8,6 +8,8 @@ import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScre
 import { AuthLandingScreen } from '@/features/auth/screens/AuthLandingScreen';
 import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
+import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
+import { supabase } from '@/shared/auth/supabaseClient';
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
@@ -50,5 +52,60 @@ describe('Auth screens', () => {
   it('Profile: senza sessione mostra la landing', async () => {
     const { findByText } = wrap(<ProfileScreen />);
     expect(await findByText('Area Donatori')).toBeTruthy();
+  });
+
+  it('ResetPassword: render', () => {
+    const { getByText } = wrap(<ResetPasswordScreen />);
+    expect(getByText('Imposta nuova password')).toBeTruthy();
+  });
+
+  it('ResetPassword: password non coincidenti mostra errore', async () => {
+    const { getByText, getByLabelText, findByText } = wrap(
+      <ResetPasswordScreen />
+    );
+    fireEvent.changeText(getByLabelText('Nuova password'), 'abcd1234');
+    fireEvent.changeText(getByLabelText('Conferma password'), 'abcd9999');
+    fireEvent.press(getByText('Salva password'));
+    expect(await findByText('Le password non coincidono')).toBeTruthy();
+  });
+
+  it('ResetPassword: submit valido aggiorna la password e mostra il successo', async () => {
+    (supabase.auth.updateUser as jest.Mock).mockResolvedValueOnce({
+      data: { user: { id: 'u1' } },
+      error: null,
+    });
+    const { getByText, getByLabelText, findByText } = wrap(
+      <ResetPasswordScreen />
+    );
+    fireEvent.changeText(getByLabelText('Nuova password'), 'abcd1234');
+    fireEvent.changeText(getByLabelText('Conferma password'), 'abcd1234');
+    fireEvent.press(getByText('Salva password'));
+    expect(
+      await findByText(
+        'Password aggiornata. Ora puoi accedere con la nuova password.'
+      )
+    ).toBeTruthy();
+    expect(supabase.auth.updateUser).toHaveBeenCalledWith({
+      password: 'abcd1234',
+    });
+  });
+
+  it('ForgotPassword: su errore mostra l’errore e NON il messaggio di invio', async () => {
+    (supabase.auth.resetPasswordForEmail as jest.Mock).mockResolvedValueOnce({
+      error: { message: 'rate-limit' },
+    });
+    const { getByText, getByLabelText, findByText, queryByText } = wrap(
+      <ForgotPasswordScreen />
+    );
+    fireEvent.changeText(getByLabelText('Email'), 'mario@rossi.it');
+    fireEvent.press(getByText('Invia link di reset'));
+    expect(
+      await findByText('Invio non riuscito. Riprova tra poco.')
+    ).toBeTruthy();
+    expect(
+      queryByText(
+        'Se l’email esiste, riceverai un link per reimpostare la password.'
+      )
+    ).toBeNull();
   });
 });

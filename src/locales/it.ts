@@ -66,6 +66,15 @@ export default {
       email: 'Email',
       submit: 'Invia link di reset',
       sent: 'Se l’email esiste, riceverai un link per reimpostare la password.',
+      error: 'Invio non riuscito. Riprova tra poco.',
+    },
+    reset: {
+      title: 'Imposta nuova password',
+      newPassword: 'Nuova password',
+      confirmPassword: 'Conferma password',
+      submit: 'Salva password',
+      success: 'Password aggiornata. Ora puoi accedere con la nuova password.',
+      continue: 'Continua',
     },
     profile: {
       title: 'Il mio profilo',
@@ -138,6 +147,7 @@ export default {
       phone_invalid: 'Telefono non valido (es. +39...)',
       not_adult: 'Devi essere maggiorenne',
       date_invalid: 'Data non valida',
+      password_mismatch: 'Le password non coincidono',
       generic: 'Si è verificato un errore. Riprova.',
     },
   },
