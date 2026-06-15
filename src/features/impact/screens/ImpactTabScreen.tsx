@@ -6,6 +6,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import type { ImpactNavigationProp } from '../types/ImpactScreenTypes';
+import { convertToMapLocations } from '../utils/mapHelpers';
 import {
   ImpactHeader,
   TotalMealsSection,
@@ -80,11 +81,11 @@ const ImpactTabScreenComponent: React.FC = () => {
 
   const handleMapPress = useCallback(() => {
     try {
-      // Naviga alla schermata "In Fase di Sviluppo" come modal
-      navigation.navigate('DevelopmentModal' as never);
+      // Apre la mappa fullscreen "Dove operiamo" con i paesi reali (MapLibre)
+      navigation.navigate('MapModal', { locations: convertToMapLocations() });
     } catch (error) {
       logError(
-        'Navigation error to DevelopmentModal',
+        'Navigation error to MapModal',
         error instanceof Error ? error.message : String(error)
       );
     }
