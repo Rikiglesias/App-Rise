@@ -25,6 +25,7 @@ import { LoginScreen } from '@/features/auth/screens/LoginScreen';
 import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
 import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
+import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -148,6 +149,11 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="CompleteProfile"
           component={CompleteProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DeleteAccount"
+          component={DeleteAccountScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

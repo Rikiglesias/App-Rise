@@ -30,3 +30,15 @@ export const getGoogleIdToken = async (): Promise<string | null> => {
   const result = await GoogleSignin.signIn();
   return result.type === 'success' ? result.data.idToken ?? null : null;
 };
+
+/**
+ * Fresh Apple sign-in al momento della cancellazione account → authorizationCode.
+ * Serve alla Edge Function `delete-account` per revocare i token Apple
+ * (signInWithIdToken non espone il refresh-token Apple). Null se annullato.
+ */
+export const getAppleAuthCodeForDeletion = async (): Promise<string | null> => {
+  const credential = await AppleAuthentication.signInAsync({
+    requestedScopes: [],
+  });
+  return credential.authorizationCode ?? null;
+};

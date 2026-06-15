@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,18 +8,31 @@ import { AuthLandingScreen } from './AuthLandingScreen';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
+const GRACE_DAYS = 30;
+
 export const ProfileScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
-  const { status, session, profile, signOut } = useAuth();
+  const {
+    status,
+    session,
+    profile,
+    signOut,
+    exportData,
+    cancelScheduledDeletion,
+  } = useAuth();
   const navigation = useNavigation<RootStackNavigationProp>();
+
+  const [exportError, setExportError] = useState<string | undefined>();
+
   const handleLogout = useCallback((): void => {
     void signOut();
   }, [signOut]);
@@ -27,6 +40,17 @@ export const ProfileScreen: React.FC = () => {
     (): void => navigation.navigate('CompleteProfile'),
     [navigation]
   );
+  const handleExport = useCallback((): void => {
+    setExportError(undefined);
+    void exportData().catch(() => setExportError(t('auth.privacy.exportError')));
+  }, [exportData, t]);
+  const handleDelete = useCallback(
+    (): void => navigation.navigate('DeleteAccount'),
+    [navigation]
+  );
+  const handleCancelDeletion = useCallback((): void => {
+    void cancelScheduledDeletion();
+  }, [cancelScheduledDeletion]);
 
   if (status === 'loading') {
     return (
@@ -40,12 +64,30 @@ export const ProfileScreen: React.FC = () => {
     return <AuthLandingScreen />;
   }
 
-  const fullName = profile
-    ? `${profile.first_name} ${profile.last_name}`
-    : '';
+  const fullName = profile ? `${profile.first_name} ${profile.last_name}` : '';
+
+  const scheduledDate = profile?.deletion_requested_at
+    ? new Date(
+        new Date(profile.deletion_requested_at).getTime() +
+          GRACE_DAYS * 24 * 60 * 60 * 1000
+      ).toLocaleDateString()
+    : null;
 
   return (
     <AuthScreen title={t('auth.profile.title')}>
+      {scheduledDate ? (
+        <View style={styles.banner}>
+          <PerfectText size={14} lines={2} style={styles.bannerText}>
+            {`${t('auth.delete.banner')} ${scheduledDate}`}
+          </PerfectText>
+          <AuthButton
+            label={t('auth.delete.bannerCancel')}
+            onPress={handleCancelDeletion}
+            variant="link"
+          />
+        </View>
+      ) : null}
+
       {fullName ? (
         <PerfectText size={20} lines={1} style={styles.name}>
           {fullName}
@@ -76,6 +118,25 @@ export const ProfileScreen: React.FC = () => {
         />
       ) : null}
       <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
+
+      <PerfectText size={15} lines={1} style={styles.sectionTitle}>
+        {t('auth.privacy.title')}
+      </PerfectText>
+      <AuthButton
+        label={t('auth.privacy.exportCta')}
+        onPress={handleExport}
+        variant="link"
+      />
+      {exportError ? (
+        <PerfectText size={13} lines={2} style={styles.error}>
+          {exportError}
+        </PerfectText>
+      ) : null}
+      <AuthButton
+        label={t('auth.privacy.deleteCta')}
+        onPress={handleDelete}
+        variant="link"
+      />
     </AuthScreen>
   );
 };
@@ -103,6 +164,16 @@ const createStyles = (colors: ThemeColors) =>
       justifyContent: 'center',
       backgroundColor: colors.neutral[50],
     },
+    banner: {
+      backgroundColor: colors.neutral[100],
+      borderRadius: scale(12),
+      padding: PerfectSpacing.base,
+      marginBottom: PerfectSpacing.lg,
+    },
+    bannerText: {
+      color: colors.neutral[900],
+      fontWeight: '600',
+    },
     name: {
       color: colors.neutral[900],
       fontWeight: '700',
@@ -118,5 +189,15 @@ const createStyles = (colors: ThemeColors) =>
     rowValue: {
       color: colors.neutral[900],
       fontWeight: '600',
+    },
+    sectionTitle: {
+      color: colors.neutral[700],
+      fontWeight: '700',
+      marginTop: PerfectSpacing.xl,
+      marginBottom: PerfectSpacing.xs,
+    },
+    error: {
+      color: Colors.semantic.error.main,
+      marginTop: PerfectSpacing.xs,
     },
   });

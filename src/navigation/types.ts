@@ -33,6 +33,7 @@ export interface RootStackParamList {
   SignUp: undefined;
   CompleteProfile: undefined;
   ForgotPassword: undefined;
+  DeleteAccount: undefined;
   // Index signature RICHIESTA da React Navigation: StackNavigationProp vincola
   // il ParamList a ParamListBase ([routeName: string]: object | undefined).
   // Rimuoverla rompe il typecheck di Navigator/navigation in ~13 punti.
