@@ -245,7 +245,21 @@ export default withDefaultStrings({
       'expo-updates',
       'expo-font',
       'expo-localization',
-      'expo-splash-screen',
+      // SDK 54: lo splash si configura QUI (config plugin), non più via la chiave
+      // legacy `splash`/`android.splash`. Senza `image` il plugin referenzia
+      // @drawable/splashscreen_logo senza generarlo → build Android fallisce
+      // (processDebugResources: resource not found). Valori = identici al legacy.
+      [
+        'expo-splash-screen',
+        {
+          image: './assets/icons/app/splash-screen.png',
+          resizeMode: 'contain',
+          backgroundColor: '#FFFFFF',
+          dark: {
+            backgroundColor: '#000000',
+          },
+        },
+      ],
       // MapLibre (mappa "Dove operiamo"): config plugin per il modulo nativo.
       // Tile/style via MapTiler (EXPO_PUBLIC_MAPTILER_KEY). Richiede New Arch
       // (default SDK 54) + dev build (no Expo Go). Sostituisce react-native-maps/Google.
