@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
 import { PerfectText, PlatformTouchable, PerfectIcon } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -170,13 +171,12 @@ export const SignUpScreen: React.FC = () => {
         error={err(errors.province)}
         autoCapitalize="characters"
       />
-      <AuthInput
+      <AuthDateField
         label={t('auth.signup.birthDate')}
         value={birthDate}
-        onChangeText={setBirthDate}
+        onChange={setBirthDate}
         error={err(errors.birthDate)}
-        placeholder="2000-01-31"
-        autoCapitalize="none"
+        placeholder={t('auth.signup.birthDatePlaceholder')}
       />
 
       <PlatformTouchable

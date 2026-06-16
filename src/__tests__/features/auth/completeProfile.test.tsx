@@ -52,7 +52,8 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
 
 const fillValidForm = (
   getByLabelText: (t: string) => unknown,
-  getByRole: (r: string) => unknown
+  getByRole: (r: string) => unknown,
+  getByTestId: (t: string) => unknown
 ): void => {
   const set = (label: string, value: string): void =>
     fireEvent.changeText(getByLabelText(label) as never, value);
@@ -61,7 +62,9 @@ const fillValidForm = (
   set('Telefono', '+393331234567');
   set('Città', 'Roma');
   set('Provincia', 'RM');
-  set('Data di nascita (AAAA-MM-GG)', '1990-01-01');
+  // Data di nascita via date picker: apre il campo e conferma (mock → 1990-01-01).
+  fireEvent.press(getByLabelText('Data di nascita') as never);
+  fireEvent.press(getByTestId('date-picker') as never);
   fireEvent.press(getByRole('checkbox') as never); // consenso privacy
 };
 
@@ -77,12 +80,12 @@ describe('CompleteProfileScreen', () => {
       }
     ).upsert;
 
-    const { getByLabelText, getByText, getByRole } = render(
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
       </AllProviders>
     );
-    fillValidForm(getByLabelText, getByRole);
+    fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() =>
@@ -96,12 +99,12 @@ describe('CompleteProfileScreen', () => {
     const upsert = (
       supabase.from('profiles') as unknown as { upsert: jest.Mock }
     ).upsert;
-    const { getByLabelText, getByText, getByRole } = render(
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
       </AllProviders>
     );
-    fillValidForm(getByLabelText, getByRole);
+    fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() => expect(upsert).toHaveBeenCalled());
@@ -117,12 +120,12 @@ describe('CompleteProfileScreen', () => {
       supabase.from('profiles') as unknown as { upsert: jest.Mock }
     ).upsert;
     upsert.mockResolvedValueOnce({ error: { message: 'boom' } });
-    const { getByLabelText, getByText, getByRole } = render(
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
       </AllProviders>
     );
-    fillValidForm(getByLabelText, getByRole);
+    fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() => expect(upsert).toHaveBeenCalled());

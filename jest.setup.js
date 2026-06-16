@@ -286,6 +286,26 @@ jest.mock('@react-native-google-signin/google-signin', () => ({
   statusCodes: {},
 }));
 
+// Mock @react-native-community/datetimepicker (modulo nativo): nei test renderizza un
+// Pressable che, premuto, conferma una data FISSA valida (1990-01-01, adulto) per
+// determinismo (evita flakiness sul confronto temporale di validateAdult).
+jest.mock('@react-native-community/datetimepicker', () => {
+  const React = require('react');
+  const { Pressable, Text } = require('react-native');
+  const FIXED_DATE = new Date(1990, 0, 1);
+  const DateTimePicker = ({ onChange, testID }) =>
+    React.createElement(
+      Pressable,
+      {
+        testID: testID || 'date-picker',
+        accessibilityLabel: 'date-picker-confirm',
+        onPress: () => onChange && onChange({ type: 'set' }, FIXED_DATE),
+      },
+      React.createElement(Text, null, 'date-picker')
+    );
+  return { __esModule: true, default: DateTimePicker };
+});
+
 // Mock React Native Animated API for complete animation support in tests
 // Fixes: TypeError: Cannot read properties of undefined (reading 'S')
 
