@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
@@ -12,11 +13,13 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validateEmail } from '@/shared/auth/validation';
+import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const ForgotPasswordScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
+  const navigation = useNavigation<RootStackNavigationProp>();
   const { resetPassword } = useAuth();
 
   const [email, setEmail] = useState('');
@@ -42,12 +45,24 @@ export const ForgotPasswordScreen: React.FC = () => {
     void onSubmit();
   }, [onSubmit]);
 
+  const goToLogin = useCallback(
+    (): void => navigation.navigate('Login'),
+    [navigation]
+  );
+
   return (
     <AuthScreen title={t('auth.forgot.title')}>
       {sent ? (
-        <PerfectText size={16} lines={4} style={styles.sent}>
-          {t('auth.forgot.sent')}
-        </PerfectText>
+        <>
+          <PerfectText size={16} lines={4} style={styles.sent}>
+            {t('auth.forgot.sent')}
+          </PerfectText>
+          <AuthButton
+            label={t('auth.forgot.backToLogin')}
+            variant="link"
+            onPress={goToLogin}
+          />
+        </>
       ) : (
         <>
           <AuthInput
@@ -67,6 +82,11 @@ export const ForgotPasswordScreen: React.FC = () => {
             label={t('auth.forgot.submit')}
             onPress={handleSubmit}
             loading={loading}
+          />
+          <AuthButton
+            label={t('auth.forgot.backToLogin')}
+            variant="link"
+            onPress={goToLogin}
           />
         </>
       )}

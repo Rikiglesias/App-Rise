@@ -36,6 +36,11 @@ describe('Auth screens', () => {
     expect(getByText('Recupera password')).toBeTruthy();
   });
 
+  it('ForgotPassword: mostra il link "Torna al Login"', () => {
+    const { getByText } = wrap(<ForgotPasswordScreen />);
+    expect(getByText('Torna al Login')).toBeTruthy();
+  });
+
   it('AuthLanding: render + bottone social', () => {
     const { getByText } = wrap(<AuthLandingScreen />);
     expect(getByText('Area Donatori')).toBeTruthy();

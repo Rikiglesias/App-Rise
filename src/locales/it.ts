@@ -71,6 +71,7 @@ export default {
       submit: 'Invia link di reset',
       sent: 'Se l’email esiste, riceverai un link per reimpostare la password.',
       error: 'Invio non riuscito. Riprova tra poco.',
+      backToLogin: 'Torna al Login',
     },
     reset: {
       title: 'Imposta nuova password',

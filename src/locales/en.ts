@@ -70,6 +70,7 @@ export default {
       submit: 'Send reset link',
       sent: 'If the email exists, you will receive a link to reset your password.',
       error: 'Could not send. Please try again shortly.',
+      backToLogin: 'Back to login',
     },
     reset: {
       title: 'Set new password',
