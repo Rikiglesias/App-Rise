@@ -241,11 +241,43 @@ export default withDefaultStrings({
 
     // Plugin richiesti
     plugins: [
+      // Pod Swift di google-signin (AppCheckCore) importa GoogleUtilities/RecaptchaInterop,
+      // pod ObjC senza module map → senza intervento `pod install` falliva (build 9ebcbab1,
+      // log r.482). Fix CocoaPods canonico: `modular_headers` MIRATO sui 2 soli pod ObjC, così
+      // AppCheckCore li importa come static libraries — SENZA `useFrameworks:static` globale,
+      // che invece rompeva i TurboModule di MapLibre v11 (New Arch) a runtime
+      // (MLRNCameraModule not found, build a325b65d; issue expo/expo #23190).
+      // Verificato: expo-build-properties supporta ios.extraPods[].modular_headers.
+      [
+        'expo-build-properties',
+        {
+          ios: {
+            extraPods: [
+              { name: 'GoogleUtilities', modular_headers: true },
+              { name: 'RecaptchaInterop', modular_headers: true },
+            ],
+          },
+        },
+      ],
       'expo-secure-store',
       'expo-updates',
       'expo-font',
       'expo-localization',
-      'expo-splash-screen',
+      // SDK 54: lo splash si configura QUI (config plugin), non più via la chiave
+      // legacy `splash`/`android.splash`. Senza `image` il plugin referenzia
+      // @drawable/splashscreen_logo senza generarlo → build Android fallisce
+      // (processDebugResources: resource not found). Valori = identici al legacy.
+      [
+        'expo-splash-screen',
+        {
+          image: './assets/icons/app/splash-screen.png',
+          resizeMode: 'contain',
+          backgroundColor: '#FFFFFF',
+          dark: {
+            backgroundColor: '#000000',
+          },
+        },
+      ],
       // MapLibre (mappa "Dove operiamo"): config plugin per il modulo nativo.
       // Tile/style via MapTiler (EXPO_PUBLIC_MAPTILER_KEY). Richiede New Arch
       // (default SDK 54) + dev build (no Expo Go). Sostituisce react-native-maps/Google.
