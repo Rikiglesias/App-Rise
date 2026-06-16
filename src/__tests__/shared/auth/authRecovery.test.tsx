@@ -100,4 +100,31 @@ describe('AuthContext — recovery password', () => {
     });
     expect(supabase.auth.setSession).not.toHaveBeenCalled();
   });
+
+  it('completeEmailConfirmFromUrl stabilisce la sessione su URL di conferma (type=signup)', async () => {
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    await act(async () => {
+      const res = await getAuth().completeEmailConfirmFromUrl(
+        'rahitalia://confirm-email#access_token=AAA&refresh_token=BBB&type=signup'
+      );
+      expect(res.ok).toBe(true);
+    });
+    expect(supabase.auth.setSession).toHaveBeenCalledWith({
+      access_token: 'AAA',
+      refresh_token: 'BBB',
+    });
+  });
+
+  it('completeEmailConfirmFromUrl ignora un URL di recovery (no cross-flusso)', async () => {
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    await act(async () => {
+      const res = await getAuth().completeEmailConfirmFromUrl(
+        'rahitalia://confirm-email#access_token=AAA&refresh_token=BBB&type=recovery'
+      );
+      expect(res.ok).toBe(false);
+    });
+    expect(supabase.auth.setSession).not.toHaveBeenCalled();
+  });
 });

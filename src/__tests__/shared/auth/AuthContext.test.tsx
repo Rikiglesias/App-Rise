@@ -362,13 +362,14 @@ describe('AuthContext — update/signup/consenso', () => {
       expect.objectContaining({
         email: 'a@b.it',
         password: 'password1',
-        options: {
+        options: expect.objectContaining({
+          emailRedirectTo: 'rahitalia://confirm-email',
           data: expect.objectContaining({
             first_name: 'Mario',
             birth_date: '1990-01-01',
             marketing_consent: true,
           }),
-        },
+        }),
       })
     );
     // Il profilo lo crea il trigger server-side: nessun insert client-side.

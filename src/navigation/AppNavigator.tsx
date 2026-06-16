@@ -31,14 +31,14 @@ import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
-import { useRecoveryDeepLink } from '@/shared/auth/useRecoveryDeepLink';
+import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator: React.FC = () => {
-  // Deep link di recovery password: stabilisce la sessione e porta a ResetPassword.
+  // Deep link auth (recovery password + conferma email signup): stabilisce la sessione.
   const navigationRef = useNavigationContainerRef<RootStackParamList>();
-  useRecoveryDeepLink(navigationRef);
+  useAuthDeepLink(navigationRef);
 
   return (
     <NavigationContainer ref={navigationRef}>

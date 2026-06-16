@@ -15,7 +15,11 @@ import {
   getGoogleIdToken,
   configureGoogle,
 } from './socialAuth';
-import { buildResetRedirectTo, parseAuthRedirect } from './authRedirect';
+import {
+  buildResetRedirectTo,
+  buildEmailConfirmRedirectTo,
+  parseAuthRedirect,
+} from './authRedirect';
 import { exportData as runDataExport } from './dataExport';
 import {
   buildConsentInsert,
@@ -54,6 +58,8 @@ export interface AuthState {
   updatePassword: (newPassword: string) => Promise<{ error: string | null }>;
   /** Stabilisce la sessione dal deep link di recovery (token nel fragment). */
   completeRecoveryFromUrl: (url: string) => Promise<{ ok: boolean }>;
+  /** Stabilisce la sessione dal deep link di conferma email signup (token nel fragment). */
+  completeEmailConfirmFromUrl: (url: string) => Promise<{ ok: boolean }>;
   signInWithApple: () => Promise<{ error: string | null }>;
   signInWithGoogle: () => Promise<{ error: string | null }>;
   refreshProfile: () => Promise<void>;
@@ -152,6 +158,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         email,
         password,
         options: {
+          // Deep link che riporta nell'app dopo la conferma email (flusso implicit,
+          // token nel fragment → gestiti da useAuthDeepLink). Senza, il link punterebbe
+          // al Site URL web e la conferma non rientrerebbe in-app. Allow-list `rahitalia://**`.
+          emailRedirectTo: buildEmailConfirmRedirectTo(),
           data: {
             first_name: p.first_name,
             last_name: p.last_name,
@@ -186,17 +196,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { error: error?.message ?? null };
   }, []);
 
-  const completeRecoveryFromUrl = useCallback(async (url: string) => {
-    const { type, access_token, refresh_token } = parseAuthRedirect(url);
-    if (type !== 'recovery' || !access_token || !refresh_token) {
-      return { ok: false };
-    }
-    const { error } = await supabase.auth.setSession({
-      access_token,
-      refresh_token,
-    });
-    return { ok: !error };
-  }, []);
+  // Stabilisce la sessione dai token nel fragment di un redirect auth, ma solo se il
+  // `type` combacia con quello atteso (recovery vs signup): evita che un deep link di un
+  // flusso venga consumato dall'altro. Condiviso da recovery e conferma email (DRY).
+  const setSessionFromUrl = useCallback(
+    async (url: string, expectedType: 'recovery' | 'signup') => {
+      const { type, access_token, refresh_token } = parseAuthRedirect(url);
+      if (type !== expectedType || !access_token || !refresh_token) {
+        return { ok: false };
+      }
+      const { error } = await supabase.auth.setSession({
+        access_token,
+        refresh_token,
+      });
+      return { ok: !error };
+    },
+    []
+  );
+
+  const completeRecoveryFromUrl = useCallback(
+    (url: string) => setSessionFromUrl(url, 'recovery'),
+    [setSessionFromUrl]
+  );
+
+  const completeEmailConfirmFromUrl = useCallback(
+    (url: string) => setSessionFromUrl(url, 'signup'),
+    [setSessionFromUrl]
+  );
 
   const signInWithApple = useCallback(async () => {
     const token = await getAppleIdToken();
@@ -406,6 +432,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       resetPassword,
       updatePassword,
       completeRecoveryFromUrl,
+      completeEmailConfirmFromUrl,
       signInWithApple,
       signInWithGoogle,
       refreshProfile,
@@ -431,6 +458,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       resetPassword,
       updatePassword,
       completeRecoveryFromUrl,
+      completeEmailConfirmFromUrl,
       signInWithApple,
       signInWithGoogle,
       refreshProfile,

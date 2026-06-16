@@ -17,7 +17,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
  * Schermata "Imposta nuova password": raggiunta via deep link di recovery
- * (la sessione è già stata stabilita da useRecoveryDeepLink). Salva la nuova
+ * (la sessione è già stata stabilita da useAuthDeepLink). Salva la nuova
  * password con `updatePassword`; l'utente resta loggato e torna all'app.
  */
 export const ResetPasswordScreen: React.FC = () => {

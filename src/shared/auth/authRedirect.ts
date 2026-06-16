@@ -11,9 +11,16 @@ import * as Linking from 'expo-linking';
 /** Path del deep link di reset (deve combaciare con la route + l'allow-list Supabase). */
 export const RESET_PASSWORD_PATH = 'reset-password';
 
+/** Path del deep link di conferma email signup (coperto dall'allow-list `rahitalia://**`). */
+export const EMAIL_CONFIRM_PATH = 'confirm-email';
+
 /** Redirect deep-link per il reset: `<scheme>://reset-password`. */
 export const buildResetRedirectTo = (): string =>
   Linking.createURL(RESET_PASSWORD_PATH);
+
+/** Redirect deep-link per la conferma email signup: `<scheme>://confirm-email`. */
+export const buildEmailConfirmRedirectTo = (): string =>
+  Linking.createURL(EMAIL_CONFIRM_PATH);
 
 export interface AuthRedirectParams {
   type?: string;
@@ -53,5 +60,13 @@ export const isRecoveryRedirect = (url: string): boolean => {
   const p = parseAuthRedirect(url);
   return (
     p.type === 'recovery' && Boolean(p.access_token) && Boolean(p.refresh_token)
+  );
+};
+
+/** True se l'URL è un redirect di conferma email signup (con token nel fragment). */
+export const isEmailConfirmRedirect = (url: string): boolean => {
+  const p = parseAuthRedirect(url);
+  return (
+    p.type === 'signup' && Boolean(p.access_token) && Boolean(p.refresh_token)
   );
 };
