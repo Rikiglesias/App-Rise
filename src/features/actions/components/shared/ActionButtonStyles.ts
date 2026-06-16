@@ -7,12 +7,13 @@ import {
   scaleBadge,
   scaleClamp,
 } from '@/shared/constants/perfectScale';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 // Info button container size centralized via Perfect Scale helpers
 const INFO_BTN_SIZE = scaleBadge(28, { min: 22, max: 32 });
 const INFO_BORDER = scaleClamp(2, 1, 2);
 
-export const createActionButtonStyles = (): ButtonStyles => {
+export const createActionButtonStyles = (colors: ThemeColors): ButtonStyles => {
   return StyleSheet.create({
     container: {
       paddingHorizontal: PerfectSpacing.base,
@@ -44,13 +45,13 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     donateTitleContainer: {
       alignItems: 'center',
-      backgroundColor: Colors.primary[50],
+      backgroundColor: colors.primary[50],
       paddingVertical: PerfectSpacing.sm,
       paddingHorizontal: PerfectSpacing.md,
       position: 'relative',
       borderRadius: scale(16),
       borderWidth: scale(1),
-      borderColor: Colors.primary[300],
+      borderColor: colors.primary[300],
       // minHeight rimosso: permette espansione con Large Text iOS
     },
 
@@ -58,7 +59,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     donateCategoryTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.black, // PIÙ GRASSETTO: da bold a black
-      color: Colors.primary[500],
+      color: colors.primary[500],
       textAlign: 'center',
       letterSpacing: scale(-0.4),
       includeFontPadding: false,
@@ -67,7 +68,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     // SUBTITLE ELEGANTE DONA INGRANDITO
     donateInlineSubtitle: {
       fontWeight: Typography.weights.medium,
-      color: Colors.primary[700],
+      color: colors.primary[700],
       textAlign: 'center',
       letterSpacing: scale(0.2),
       marginTop: PerfectSpacing.xs,
@@ -78,7 +79,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     exploreTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.bold, // BOLD normale
-      color: Colors.neutral[700],
+      color: colors.neutral[700],
       textAlign: 'center',
       letterSpacing: scale(-0.4),
       includeFontPadding: false,
@@ -88,7 +89,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     communityTitle: {
       // fontSize rimosso - ora gestito da Text
       fontWeight: Typography.weights.bold, // BOLD normale
-      color: Colors.neutral[900],
+      color: colors.neutral[900],
       textAlign: 'center',
       letterSpacing: scale(-0.4),
       includeFontPadding: false,
@@ -96,7 +97,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
 
     exploreSubtitle: {
       fontWeight: Typography.weights.medium,
-      color: Colors.neutral[600],
+      color: colors.neutral[600],
       textAlign: 'center',
       marginTop: PerfectSpacing.md,
       opacity: 0.9,
@@ -110,12 +111,12 @@ export const createActionButtonStyles = (): ButtonStyles => {
       width: INFO_BTN_SIZE,
       height: INFO_BTN_SIZE,
       borderRadius: INFO_BTN_SIZE / 2,
-      backgroundColor: Colors.primary[500],
+      backgroundColor: colors.primary[500],
       justifyContent: 'center',
       alignItems: 'center',
       borderWidth: INFO_BORDER,
-      borderColor: Colors.neutral[0],
-      shadowColor: Colors.primary[500],
+      borderColor: Colors.accent.white, // anello bianco fisso su bottone brand rosso
+      shadowColor: colors.primary[500],
       shadowOffset: { width: 0, height: scale(3) },
       shadowOpacity: 0.16,
       shadowRadius: scale(6),
@@ -138,14 +139,14 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     buttonTitle: {
       fontWeight: Typography.weights.bold,
-      color: Colors.neutral[900],
+      color: colors.neutral[900],
       textAlign: 'center',
       letterSpacing: scale(-0.3),
     },
 
     communitySubtitle: {
       fontWeight: Typography.weights.medium,
-      color: Colors.neutral[700],
+      color: colors.neutral[700],
       textAlign: 'center',
       marginTop: PerfectSpacing.md,
       opacity: 0.9,
@@ -155,7 +156,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     // DIVISORE TRA SEZIONI - SPAZIO GENEROSO SOTTO
     sectionDivider: {
       height: scale(2),
-      backgroundColor: Colors.neutral[200],
+      backgroundColor: colors.neutral[200],
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a linee Impatto
       marginTop: PerfectSpacing.base,
       marginBottom: PerfectSpacing.xl,
@@ -165,7 +166,7 @@ export const createActionButtonStyles = (): ButtonStyles => {
     // PRIMA SEPARAZIONE - SPAZIO GENEROSO SOTTO
     firstSectionDivider: {
       height: scale(2),
-      backgroundColor: Colors.neutral[200],
+      backgroundColor: colors.neutral[200],
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a linee Impatto
       marginTop: PerfectSpacing.base,
       marginBottom: PerfectSpacing.xl,
@@ -182,12 +183,12 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
     // CONTAINER BACKGROUND ESPLORA
     exploreHeaderBackground: {
-      backgroundColor: Colors.neutral[100],
+      backgroundColor: colors.neutral[100],
       borderRadius: scale(20),
       paddingVertical: PerfectSpacing.base,
       paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
-      borderColor: Colors.neutral[400],
+      borderColor: colors.neutral[400],
       // minHeight rimosso: permette espansione con Large Text iOS
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
       justifyContent: 'center',
@@ -195,12 +196,12 @@ export const createActionButtonStyles = (): ButtonStyles => {
     },
 
     communityHeaderBackground: {
-      backgroundColor: Colors.neutral[100],
+      backgroundColor: colors.neutral[100],
       borderRadius: scale(20),
       paddingVertical: PerfectSpacing.base,
       paddingHorizontal: PerfectSpacing.lg,
       borderWidth: scale(1),
-      borderColor: Colors.neutral[400],
+      borderColor: colors.neutral[400],
       position: 'relative',
       // minHeight rimosso: permette espansione con Large Text iOS
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device

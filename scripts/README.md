@@ -36,10 +36,6 @@ Guida rapida agli script disponibili per sviluppo, QA e delivery.
 - `npm run filesize:analyze` / `npm run filesize:report`
 - `npm run refactor:check`
 
-## Migrazioni e Fix
-- `npm run migrate:platform` (migrazione componenti platform-aware)
-- `npm run fix:migration` (fix automatici migrazione)
-
 ## Git/Windows helpers
 - `npm run setup:git-windows` (autocrlf/safecrlf/filemode)
 - `npm run fix:line-endings` (normalizza EOL + staging)

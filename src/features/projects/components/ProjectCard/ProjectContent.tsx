@@ -5,13 +5,13 @@ import type { ProjectContentProps } from './types';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { PerfectSpacing, Typography } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const ProjectContent: React.FC<ProjectContentProps> = ({
   description,
   impact,
 }) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
 
   const styles = StyleSheet.create({
     description: {

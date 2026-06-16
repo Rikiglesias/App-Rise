@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { contactSectionStyles } from '../styles/contactStyles';
+import { createContactSectionStyles } from '../styles/contactStyles';
 import type { ContactSectionProps } from '../types';
 import { AnimatedContact } from './AnimatedContact';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { PerfectSpacing } from '@/shared/constants';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ contacts }) => {
   const { t } = useTranslation();
   const { isTablet } = useDeviceType();
+  const colors = useThemeColors();
+  const contactSectionStyles = useMemo(
+    () => createContactSectionStyles(colors),
+    [colors]
+  );
 
   return (
     <PerfectContainer

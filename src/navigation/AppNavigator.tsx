@@ -1,4 +1,7 @@
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
@@ -21,12 +24,24 @@ import SeguiciScreen from '@/features/social/screens/SeguiciScreen';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
+import { LoginScreen } from '@/features/auth/screens/LoginScreen';
+import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
+import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
+import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
+import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
+import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
+import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
+import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator: React.FC = () => {
+  // Deep link auth (recovery password + conferma email signup): stabilisce la sessione.
+  const navigationRef = useNavigationContainerRef<RootStackParamList>();
+  useAuthDeepLink(navigationRef);
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{
@@ -39,7 +54,7 @@ const AppNavigator: React.FC = () => {
             shadowRadius: scale(8),
             borderBottomWidth: 0,
           },
-          headerTintColor: Colors.neutral[0],
+          headerTintColor: Colors.accent.white,
           headerTitleStyle: {
             fontWeight: '700',
             letterSpacing: scale(0.5),
@@ -122,6 +137,43 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="ChiSiamo"
           component={ChiSiamoScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* Area donatori (auth) */}
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CompleteProfile"
+          component={CompleteProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ProfileEdit"
+          component={ProfileEditScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DeleteAccount"
+          component={DeleteAccountScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

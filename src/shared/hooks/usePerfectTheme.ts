@@ -15,5 +15,3 @@ export const usePerfectTheme = () => {
     brand: Colors,
   } as const;
 };
-
-export type PerfectTheme = ReturnType<typeof usePerfectTheme>;

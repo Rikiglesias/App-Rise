@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   PlatformTouchable,
   PerfectText,
@@ -6,8 +6,10 @@ import {
   PerfectImage,
   PerfectIcon,
 } from '@/components/ui';
-import { Colors, PerfectSpacing, IconClamps } from '@/shared/constants';
+import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -28,6 +30,9 @@ interface SocialCardProps {
 
 export const SocialCard: React.FC<SocialCardProps> = React.memo(
   ({ platform }) => {
+    const colors = useThemeColors();
+    const styles = useMemo(() => createStyles(colors), [colors]);
+
     return (
       <PerfectContainer style={styles.socialCardWrapper}>
         <PerfectContainer
@@ -50,7 +55,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                   <PerfectIcon
                     name={platform.iconName}
                     size={32}
-                    color={platform.iconColor ?? Colors.neutral[900]}
+                    color={platform.iconColor ?? colors.neutral[900]}
                   />
                 ) : platform.icon ? (
                   <PerfectImage
@@ -103,7 +108,7 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
                   name="chevron-right"
                   size={20}
                   {...IconClamps.chevron}
-                  color={Colors.neutral[400]}
+                  color={colors.neutral[400]}
                 />
               </PerfectContainer>
             </PerfectContainer>
@@ -116,13 +121,13 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
 
 SocialCard.displayName = 'SocialCard';
 
-const styles = {
+const createStyles = (colors: ThemeColors) => ({
   socialCardWrapper: {
     marginBottom: PerfectSpacing.xs,
   },
 
   socialCardWhiteContainer: {
-    backgroundColor: Colors.neutral[0],
+    backgroundColor: colors.neutral[0],
     borderRadius: scale(18),
     borderWidth: 2,
     overflow: 'hidden' as const,
@@ -157,19 +162,19 @@ const styles = {
     marginRight: PerfectSpacing.md,
   },
   socialName: {
-    color: Colors.neutral[900],
+    color: colors.neutral[900],
     marginBottom: PerfectSpacing.xs,
     letterSpacing: 0,
   },
   socialHandle: {
-    color: Colors.primary[500],
+    color: colors.primary[500],
     marginBottom: PerfectSpacing.xs,
   },
   socialDescription: {
-    color: Colors.neutral[600],
+    color: colors.neutral[600],
   },
   arrowContainer: {
     flexShrink: 0,
     padding: PerfectSpacing.xs,
   },
-};
+});

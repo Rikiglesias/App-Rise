@@ -123,24 +123,9 @@ export const Colors = {
     dark: 'rgba(0, 0, 0, 0.3)',
     red: 'rgba(220, 38, 38, 0.1)',
   },
-
-  // DARK MODE COLORS
-  dark: {
-    surface: {
-      primary: '#1A1A1A',
-      secondary: '#262626',
-      tertiary: '#404040',
-    },
-    border: {
-      primary: '#404040',
-      secondary: '#525252',
-    },
-    text: {
-      primary: '#FFFFFF',
-      secondary: '#D4D4D4',
-      tertiary: '#A3A3A3',
-    },
-  },
+  // NB: la palette DARK MODE vive in UNIVERSAL_COLORS.dark (UniversalTheme) +
+  // adaptiveColors (DARK_NEUTRAL). Il vecchio `Colors.dark` (0 consumer) è stato
+  // rimosso per evitare una palette dark parallela e fuorviante.
 };
 
 // SPACING SYSTEM - ⚠️ DEPRECATO - Usa PerfectSpacing invece!

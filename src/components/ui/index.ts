@@ -11,7 +11,6 @@ export { default as PlatformTouchable } from './PlatformTouchable';
 export { PlatformScrollView, PlatformSurface } from './PlatformComponents';
 
 // Display Components
-export { default as HeaderLogo } from './HeaderLogo';
 export { default as Logo } from './Logo';
 export { default as SocialIcon } from './SocialIcon';
 

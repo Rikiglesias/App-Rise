@@ -101,15 +101,6 @@ jest.mock('expo-linear-gradient', () => ({
   },
 }));
 
-// Mock react-native-maps
-jest.mock('react-native-maps', () => {
-  const { View } = require('react-native');
-  return {
-    __esModule: true,
-    default: View,
-  };
-});
-
 // Mock icons
 jest.mock(
   '@expo/vector-icons/MaterialCommunityIcons',
@@ -174,10 +165,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare la sezione risultati 2024', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
+      </NavigationContainer>,
+      render
     );
 
     await waitFor(() => {
@@ -186,10 +178,11 @@ describe('ImpactTabScreen - Integration Test', () => {
   });
 
   it('dovrebbe mostrare la sezione community', async () => {
-    render(
+    renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
-      </NavigationContainer>
+      </NavigationContainer>,
+      render
     );
 
     await waitFor(() => {

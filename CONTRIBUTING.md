@@ -10,14 +10,14 @@
 
 **Prima di contribuire, DEVI leggere**:
 
-1. **[CODING_STANDARDS.md](./docs/CODING_STANDARDS.md)** ⭐ FONDAMENTALE
+1. **[CODING_STANDARDS.md](./docs/guides/development.md)** ⭐ FONDAMENTALE
    - Regole architettura
    - Convenzioni naming
    - Perfect System rules
    - TypeScript standards
    - Performance guidelines
 
-2. **[CODE_CLEANUP_CHECKLIST.md](./docs/CODE_CLEANUP_CHECKLIST.md)** ⭐ DA USARE SEMPRE
+2. **[CODE_CLEANUP_CHECKLIST.md](./docs/guides/quality-standards.md)** ⭐ DA USARE SEMPRE
    - Checklist pre-commit
    - Template analisi file
    - Esempi prima/dopo
@@ -86,9 +86,9 @@ npm run pre-modifiche
 
 #### **Per OGNI file che modifichi**:
 
-1. ✅ Apri [CODE_CLEANUP_CHECKLIST.md](./docs/CODE_CLEANUP_CHECKLIST.md)
+1. ✅ Apri [CODE_CLEANUP_CHECKLIST.md](./docs/guides/quality-standards.md)
 2. ✅ Segui checklist punto per punto
-3. ✅ Applica [CODING_STANDARDS.md](./docs/CODING_STANDARDS.md)
+3. ✅ Applica [CODING_STANDARDS.md](./docs/guides/development.md)
 4. ✅ Verifica visivamente l'app
 
 #### **Rules of Thumb**:
@@ -116,7 +116,7 @@ const handlePress = () => {};  // Inline function
 - ✅ Tests passano
 
 **MANUALE** (TUA responsabilità):
-- ✅ [Code Cleanup Checklist](./docs/CODE_CLEANUP_CHECKLIST.md) completa
+- ✅ [Code Cleanup Checklist](./docs/guides/quality-standards.md) completa
 - ✅ Zero `console.log()` left
 - ✅ Zero codice commentato
 - ✅ Zero `TODO` senza ticket
@@ -224,7 +224,7 @@ Come l'hai implementata
 
 #### **Come Reviewer**:
 
-**DEVI verificare** (usa [CODING_STANDARDS.md](./docs/CODING_STANDARDS.md)):
+**DEVI verificare** (usa [CODING_STANDARDS.md](./docs/guides/development.md)):
 
 ```markdown
 [ ] Tutti import usati?
@@ -247,7 +247,7 @@ Come l'hai implementata
 
 **Commenti**:
 - ✅ Costruttivi
-- ✅ Riferimenti a docs ([CODING_STANDARDS.md](./docs/CODING_STANDARDS.md))
+- ✅ Riferimenti a docs ([CODING_STANDARDS.md](./docs/guides/development.md))
 - ✅ Esempi concreti
 
 ---
@@ -413,8 +413,8 @@ const Component = ({ data, onPress }) => {
 ## 📞 HELP & SUPPORT
 
 ### **Stuck?**
-1. Leggi [CODING_STANDARDS.md](./docs/CODING_STANDARDS.md)
-2. Usa [CODE_CLEANUP_CHECKLIST.md](./docs/CODE_CLEANUP_CHECKLIST.md)
+1. Leggi [CODING_STANDARDS.md](./docs/guides/development.md)
+2. Usa [CODE_CLEANUP_CHECKLIST.md](./docs/guides/quality-standards.md)
 3. Esamina esempi esistenti
 4. Chiedi in PR draft
 

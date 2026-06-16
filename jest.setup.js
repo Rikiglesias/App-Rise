@@ -152,6 +152,53 @@ jest.mock('expo-updates', () => ({
   reloadAsync: jest.fn(),
 }));
 
+// Mock globale del client Supabase: nessuna chiamata di rete nei test.
+// I test che servono comportamenti specifici possono override con jest.mock locale.
+jest.mock('@/shared/auth/supabaseClient', () => ({
+  supabase: {
+    auth: {
+      getSession: jest.fn(() => Promise.resolve({ data: { session: null } })),
+      onAuthStateChange: jest.fn(() => ({
+        data: { subscription: { unsubscribe: jest.fn() } },
+      })),
+      signInWithPassword: jest.fn(() =>
+        Promise.resolve({ data: { session: null }, error: null })
+      ),
+      signUp: jest.fn(() =>
+        Promise.resolve({ data: { user: null }, error: null })
+      ),
+      signOut: jest.fn(() => Promise.resolve({ error: null })),
+      resetPasswordForEmail: jest.fn(() => Promise.resolve({ error: null })),
+      signInWithIdToken: jest.fn(() =>
+        Promise.resolve({ data: { session: null }, error: null })
+      ),
+      updateUser: jest.fn(() =>
+        Promise.resolve({ data: { user: null }, error: null })
+      ),
+      setSession: jest.fn(() =>
+        Promise.resolve({ data: { session: null }, error: null })
+      ),
+      startAutoRefresh: jest.fn(),
+      stopAutoRefresh: jest.fn(),
+    },
+    from: jest.fn(() => ({
+      select: jest.fn().mockReturnThis(),
+      eq: jest.fn().mockReturnThis(),
+      single: jest.fn(() => Promise.resolve({ data: null, error: null })),
+      insert: jest.fn(() => Promise.resolve({ error: null })),
+    })),
+  },
+}));
+
+// Mock expo-linking (deep link recovery password): createURL/useURL deterministici nei test.
+jest.mock('expo-linking', () => ({
+  createURL: jest.fn(path => `rahitalia://${path}`),
+  useURL: jest.fn(() => null),
+  parse: jest.fn(),
+  getInitialURL: jest.fn(() => Promise.resolve(null)),
+  addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+}));
+
 // Provide SafeArea defaults to avoid provider errors in integration tests
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');
@@ -213,6 +260,50 @@ jest.mock('expo-blur', () => {
     BlurView: ({ children, ...props }) =>
       React.createElement('View', props, children),
   };
+});
+
+// Mock social auth native modules (no native runtime in Jest)
+jest.mock('expo-apple-authentication', () => ({
+  signInAsync: jest.fn(() =>
+    Promise.resolve({ identityToken: 'apple-token-mock' })
+  ),
+  isAvailableAsync: jest.fn(() => Promise.resolve(true)),
+  AppleAuthenticationScope: { FULL_NAME: 0, EMAIL: 1 },
+  AppleAuthenticationButton: 'AppleAuthenticationButton',
+  AppleAuthenticationButtonType: { SIGN_IN: 0, CONTINUE: 1, SIGN_UP: 2 },
+  AppleAuthenticationButtonStyle: { WHITE: 0, WHITE_OUTLINE: 1, BLACK: 2 },
+}));
+
+jest.mock('@react-native-google-signin/google-signin', () => ({
+  GoogleSignin: {
+    configure: jest.fn(),
+    hasPlayServices: jest.fn(() => Promise.resolve(true)),
+    signIn: jest.fn(() =>
+      Promise.resolve({ type: 'success', data: { idToken: 'google-token-mock' } })
+    ),
+  },
+  GoogleSigninButton: 'GoogleSigninButton',
+  statusCodes: {},
+}));
+
+// Mock @react-native-community/datetimepicker (modulo nativo): nei test renderizza un
+// Pressable che, premuto, conferma una data FISSA valida (1990-01-01, adulto) per
+// determinismo (evita flakiness sul confronto temporale di validateAdult).
+jest.mock('@react-native-community/datetimepicker', () => {
+  const React = require('react');
+  const { Pressable, Text } = require('react-native');
+  const FIXED_DATE = new Date(1990, 0, 1);
+  const DateTimePicker = ({ onChange, testID }) =>
+    React.createElement(
+      Pressable,
+      {
+        testID: testID || 'date-picker',
+        accessibilityLabel: 'date-picker-confirm',
+        onPress: () => onChange && onChange({ type: 'set' }, FIXED_DATE),
+      },
+      React.createElement(Text, null, 'date-picker')
+    );
+  return { __esModule: true, default: DateTimePicker };
 });
 
 // Mock React Native Animated API for complete animation support in tests

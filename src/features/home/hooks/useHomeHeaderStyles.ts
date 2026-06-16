@@ -5,11 +5,11 @@ import {
   createTextStyles,
 } from '../HomeHeaderStyles';
 import type { HomeHeaderStyles } from '../types/HomeHeaderTypes';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 // Hook for styles - now under 60 lines
 export const useHomeHeaderStyles = (): HomeHeaderStyles => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
 
   return useMemo(
     () => ({

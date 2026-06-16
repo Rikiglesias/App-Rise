@@ -7,22 +7,6 @@ export type ImpactNavigationProp = StackNavigationProp<
   'Impact'
 >;
 
-export type ImpactScreenName =
-  | 'Impact'
-  | 'Beneficiaries'
-  | 'Volunteers'
-  | 'Partners'
-  | 'Meals'
-  | 'Kits';
-
-export interface StatButtonProps {
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  label: string;
-  value: string;
-  onPress: () => void;
-  color: string;
-}
-
 export interface ImpactStory {
   id: string;
   title: string;

@@ -10,6 +10,8 @@ import {
 } from '../../shared/constants';
 import { getPerfectShadow } from '../../shared/constants/perfectShadow';
 import { scale } from '../../shared/constants/perfectScale';
+import { useThemeColors } from '../../shared/hooks/useThemeColors';
+import type { ThemeColors } from '../../shared/theme/adaptiveColors';
 import { PerfectText } from './PerfectText';
 import { PerfectContainer } from './PerfectContainer';
 
@@ -28,7 +30,7 @@ interface FilterTabsProps {
 }
 
 // Stili runtime con valori scalati calcolati al render
-const makeStyles = () =>
+const makeStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       marginBottom: PerfectSpacing.base,
@@ -57,13 +59,13 @@ const makeStyles = () =>
       borderWidth: scale(1),
     },
     activeTab: {
-      backgroundColor: Colors.primary[600],
-      borderColor: Colors.primary[600],
+      backgroundColor: colors.primary[600],
+      borderColor: colors.primary[600],
       ...getPerfectShadow('light'),
     },
     inactiveTab: {
-      backgroundColor: Colors.neutral[0],
-      borderColor: Colors.neutral[200],
+      backgroundColor: colors.neutral[0],
+      borderColor: colors.neutral[200],
     },
     tabIcon: {
       marginRight: PerfectSpacing.sm,
@@ -71,11 +73,12 @@ const makeStyles = () =>
     tabLabel: {
       fontWeight: Typography.weights.semibold,
     },
+    // Tab attivo = sfondo brand rosso -> label bianca fissa
     activeTabLabel: {
-      color: Colors.neutral[0],
+      color: Colors.accent.white,
     },
     inactiveTabLabel: {
-      color: Colors.neutral[900],
+      color: colors.neutral[900],
     },
     tabCount: {
       marginLeft: PerfectSpacing.sm,
@@ -86,13 +89,14 @@ const makeStyles = () =>
       minWidth: scale(20),
       textAlign: 'center',
     },
+    // Badge sul tab attivo (rosso): sfondo bianco fisso, testo brand
     activeTabCount: {
-      backgroundColor: Colors.neutral[0],
-      color: Colors.primary[600],
+      backgroundColor: Colors.accent.white,
+      color: colors.primary[600],
     },
     inactiveTabCount: {
-      backgroundColor: Colors.neutral[200],
-      color: Colors.neutral[900],
+      backgroundColor: colors.neutral[200],
+      color: colors.neutral[900],
     },
   });
 
@@ -177,7 +181,8 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   onTabPress,
   showCounts = true,
 }) => {
-  const styles = useMemo(makeStyles, [activeTab, showCounts]);
+  const colors = useThemeColors();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
 
   const createTabPressHandler = useCallback(
     (tabId: string) => () => onTabPress(tabId),

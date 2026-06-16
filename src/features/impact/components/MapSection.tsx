@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -8,13 +8,15 @@ import {
   PerfectContainer,
   PerfectImage,
 } from '@/components/ui';
-import { Colors, BorderRadius, Shadows } from '@/shared/constants/designTokens';
+import { BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { getWindowDimensions, scale } from '@/shared/constants/perfectScale';
 import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 import { sectionHeaderBackground } from '@/shared/styles';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface Props {
   onMapPress: () => void;
@@ -24,6 +26,8 @@ interface Props {
 export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
   const { t } = useTranslation();
   const { isTablet } = useDeviceType();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const window = getWindowDimensions();
   const horizontalPadding = PerfectSpacing.base * 2; // as used in section/container
   const baseContainerWidth = Math.max(
@@ -99,7 +103,7 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
             name="map-search"
             size={28}
             {...IconClamps.mapIndicator}
-            color={Colors.neutral[600]}
+            color={colors.neutral[600]}
           />
         </PerfectContainer>
       </PlatformTouchable>
@@ -109,67 +113,68 @@ export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
 
 MapSection.displayName = 'MapSection';
 
-const styles = StyleSheet.create({
-  // Map Section - SENZA CONTAINER GRIGIO
-  mapSection: {
-    paddingHorizontal: PerfectSpacing.base,
-    marginTop: PerfectSpacing.lg, // spazio tra linea e titolo "Dove Operiamo"
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    // Map Section - SENZA CONTAINER GRIGIO
+    mapSection: {
+      paddingHorizontal: PerfectSpacing.base,
+      marginTop: PerfectSpacing.lg, // spazio tra linea e titolo "Dove Operiamo"
+    },
 
-  // MAP CONTAINER CLICCABILE - RIDOTTO E CENTRATO
-  mapImageContainer: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl,
-    marginTop: PerfectSpacing.base,
-    marginHorizontal: 0,
-    padding: 0,
-    ...Shadows.lg,
-    position: 'relative',
-    overflow: 'hidden',
-    height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT,
-    alignSelf: 'center', // Centra la mappa ridotta
-  },
-  // INDICATORE CLICCABILE
-  mapClickIndicator: {
-    position: 'absolute',
-    top: PerfectSpacing.sm,
-    right: PerfectSpacing.sm,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.neutral[50],
-    paddingHorizontal: PerfectSpacing.sm,
-    paddingVertical: PerfectSpacing.xs,
-    borderRadius: BorderRadius.lg,
-    gap: PerfectSpacing.xs,
-    zIndex: 2,
-    elevation: 8,
-  },
-  mapClickText: {
-    color: Colors.neutral[600],
-  },
+    // MAP CONTAINER CLICCABILE - RIDOTTO E CENTRATO
+    mapImageContainer: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.xl,
+      marginTop: PerfectSpacing.base,
+      marginHorizontal: 0,
+      padding: 0,
+      ...Shadows.lg,
+      position: 'relative',
+      overflow: 'hidden',
+      height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT,
+      alignSelf: 'center', // Centra la mappa ridotta
+    },
+    // INDICATORE CLICCABILE
+    mapClickIndicator: {
+      position: 'absolute',
+      top: PerfectSpacing.sm,
+      right: PerfectSpacing.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.neutral[50],
+      paddingHorizontal: PerfectSpacing.sm,
+      paddingVertical: PerfectSpacing.xs,
+      borderRadius: BorderRadius.lg,
+      gap: PerfectSpacing.xs,
+      zIndex: 2,
+      elevation: 8,
+    },
+    mapClickText: {
+      color: colors.neutral[600],
+    },
 
-  // Map Section - GEOGRAFICO
-  mapHeaderContainer: {
-    alignItems: 'center',
-    marginBottom: PerfectSpacing.lg,
-  },
+    // Map Section - GEOGRAFICO
+    mapHeaderContainer: {
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.lg,
+    },
 
-  mapHeaderBackground: {
-    ...sectionHeaderBackground('white'),
-    width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
-    alignSelf: 'center',
-  },
-  mapTitle: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    letterSpacing: 0,
-    includeFontPadding: false,
-  },
-  mapSubtitle: {
-    color: Colors.neutral[700],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.sm,
-    opacity: 0.8,
-    letterSpacing: 0,
-  },
-});
+    mapHeaderBackground: {
+      ...sectionHeaderBackground('white', colors),
+      width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
+      alignSelf: 'center',
+    },
+    mapTitle: {
+      color: colors.neutral[900],
+      textAlign: 'center',
+      letterSpacing: 0,
+      includeFontPadding: false,
+    },
+    mapSubtitle: {
+      color: colors.neutral[700],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.sm,
+      opacity: 0.8,
+      letterSpacing: 0,
+    },
+  });

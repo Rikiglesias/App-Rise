@@ -2,9 +2,9 @@ import { StyleSheet } from 'react-native';
 import { ADVANCED_CONFIG } from './types/HomeHeaderTypes';
 import { Typography, PerfectSpacing } from '@/shared/constants';
 import { scale, scaleSpacing } from '@/shared/constants/perfectScale';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 export const createContainerStyles = (
-  colors: ReturnType<typeof useTheme>['colors']
+  colors: ReturnType<typeof useThemeColors>
 ) =>
   StyleSheet.create({
     container: {
@@ -33,9 +33,7 @@ export const createContainerStyles = (
     },
   });
 
-export const createTextStyles = (
-  colors: ReturnType<typeof useTheme>['colors']
-) =>
+export const createTextStyles = (colors: ReturnType<typeof useThemeColors>) =>
   StyleSheet.create({
     title: {
       color: colors.neutral[900],

@@ -89,8 +89,6 @@ jest.mock('@/shared/theme/UniversalTheme', () => ({
       warning: '#D97706',
     },
   }),
-  getThemeColor: (_key: any, isDark: boolean) =>
-    isDark ? '#F5F5F5' : '#1F2937',
 }));
 
 // Import HomeScreen DOPO i mock (necessario per far funzionare i mock)

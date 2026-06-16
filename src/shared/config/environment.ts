@@ -45,6 +45,9 @@ interface AppEnvironment {
   NODE_ENV: 'development' | 'staging' | 'production';
   APP_VERSION: string;
   API_BASE_URL: string;
+  SUPABASE_URL: string;
+  SUPABASE_ANON_KEY: string;
+  GOOGLE_WEB_CLIENT_ID: string;
   ENABLE_FLIPPER: boolean;
   ENABLE_PERFORMANCE_MONITORING: boolean;
   LOG_LEVEL: 'debug' | 'info' | 'warn' | 'error';
@@ -56,6 +59,9 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   development: {
     NODE_ENV: 'development',
     APP_VERSION: '1.0.0-dev',
+    SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
+    SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
+    GOOGLE_WEB_CLIENT_ID: getEnvVar('EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID') ?? '',
     API_BASE_URL:
       getEnvVar('EXPO_PUBLIC_API_BASE_URL_DEV') ??
       getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
@@ -68,6 +74,9 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   staging: {
     NODE_ENV: 'staging',
     APP_VERSION: '1.0.0-staging',
+    SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
+    SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
+    GOOGLE_WEB_CLIENT_ID: getEnvVar('EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID') ?? '',
     API_BASE_URL:
       getEnvVar('EXPO_PUBLIC_API_BASE_URL_STAGING') ??
       getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
@@ -80,6 +89,9 @@ const environmentConfigs: Record<string, AppEnvironment> = {
   production: {
     NODE_ENV: 'production',
     APP_VERSION: '1.0.0',
+    SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
+    SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
+    GOOGLE_WEB_CLIENT_ID: getEnvVar('EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID') ?? '',
     API_BASE_URL: resolveProductionApiUrl(),
     ENABLE_FLIPPER: false,
     ENABLE_PERFORMANCE_MONITORING: false,
@@ -114,7 +126,7 @@ const getCurrentEnvironment = (): keyof typeof environmentConfigs => {
 };
 
 // Validazione configurazione
-const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
+export const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
   const requiredFields: (keyof AppEnvironment)[] = [
     'NODE_ENV',
     'APP_VERSION',
@@ -138,6 +150,26 @@ const validateEnvironmentConfig = (envConfig: AppEnvironment): void => {
     new URL(envConfig.API_BASE_URL);
   } catch {
     throw new Error(`Invalid API_BASE_URL: ${envConfig.API_BASE_URL}`);
+  }
+
+  // Fail-fast Supabase nei build REALI: senza URL/anon key l'auth donatori
+  // fallirebbe in silenzio con errori di rete (placeholder in supabaseClient).
+  // In development/test si resta lenient per non bloccare lo sviluppo senza credenziali.
+  if (
+    envConfig.ENVIRONMENT === 'production' ||
+    envConfig.ENVIRONMENT === 'staging'
+  ) {
+    const supabaseRequired: (keyof AppEnvironment)[] = [
+      'SUPABASE_URL',
+      'SUPABASE_ANON_KEY',
+    ];
+    for (const field of supabaseRequired) {
+      if (!envConfig[field]) {
+        throw new Error(
+          `Environment variable ${field} is required in ${envConfig.ENVIRONMENT} but is missing/empty`
+        );
+      }
+    }
   }
 };
 

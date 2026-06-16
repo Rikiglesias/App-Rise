@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, Modal } from 'react-native';
 
 import {
@@ -8,7 +8,6 @@ import {
   PerfectContainer,
 } from '@/components/ui';
 import {
-  Colors,
   BorderRadius,
   Shadows,
   Typography,
@@ -21,6 +20,8 @@ import {
 } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface DonationInfoModalProps {
   visible: boolean;
@@ -32,86 +33,89 @@ interface ModalContentProps {
   t: (key: string) => string;
 }
 
-const modalStyles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: Colors.neutral[0], // Bianco per sfondo
-    borderRadius: BorderRadius.xl,
-    borderWidth: scale(3),
-    borderColor: Colors.primary[500],
-    overflow: 'hidden',
-    padding: PerfectSpacing.lg,
-    ...Shadows.lg,
-    width: '99%',
-    maxHeight: '98%',
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: PerfectSpacing.sm,
-    position: 'relative',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: scaleSpacing(-10),
-    right: scaleSpacing(-6),
-    width: scaleTouch(36),
-    height: scaleTouch(36),
-    borderRadius: scale(18),
-    backgroundColor: Colors.neutral[900],
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: scale(2),
-    borderColor: Colors.neutral[0],
-    ...Shadows.md,
-  },
-  centeredTitleContainer: {
-    alignItems: 'center',
-    marginBottom: scale(20),
-  },
-  centeredTitle: {
-    fontWeight: Typography.weights.black,
-    color: Colors.neutral[900], // Nero su bianco
-    textAlign: 'center',
-    letterSpacing: scale(-0.8),
-  },
-  titleUnderline: {
-    width: scale(80),
-    height: scale(3),
-    backgroundColor: Colors.primary[500], // Rosso su bianco
-    borderRadius: scale(2),
-    marginTop: PerfectSpacing.sm,
-    alignSelf: 'center',
-  },
-  modalSectionTitle: {
-    fontWeight: Typography.weights.black,
-    color: Colors.neutral[900], // Nero su bianco
-  },
-  modalText: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[900], // Nero su bianco
-    marginBottom: PerfectSpacing.base,
-  },
-  highlightText: {
-    fontWeight: Typography.weights.bold,
-    color: Colors.primary[500], // Rosso
-    textAlign: 'center',
-    marginTop: PerfectSpacing.md,
-    paddingVertical: PerfectSpacing.md,
-    paddingHorizontal: PerfectSpacing.base,
-    backgroundColor: Colors.primary[50], // Rosso chiaro sfumato
-    borderRadius: BorderRadius.lg,
-    letterSpacing: scale(-0.3),
-  },
-});
+const createModalStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: colors.neutral[0], // superficie modale (adattiva)
+      borderRadius: BorderRadius.xl,
+      borderWidth: scale(3),
+      borderColor: colors.primary[500],
+      overflow: 'hidden',
+      padding: PerfectSpacing.lg,
+      ...Shadows.lg,
+      width: '99%',
+      maxHeight: '98%',
+    },
+    modalHeader: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.sm,
+      position: 'relative',
+    },
+    closeButton: {
+      position: 'absolute',
+      top: scaleSpacing(-10),
+      right: scaleSpacing(-6),
+      width: scaleTouch(36),
+      height: scaleTouch(36),
+      borderRadius: scale(18),
+      backgroundColor: colors.neutral[900],
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: scale(2),
+      borderColor: colors.neutral[0],
+      ...Shadows.md,
+    },
+    centeredTitleContainer: {
+      alignItems: 'center',
+      marginBottom: scale(20),
+    },
+    centeredTitle: {
+      fontWeight: Typography.weights.black,
+      color: colors.neutral[900],
+      textAlign: 'center',
+      letterSpacing: scale(-0.8),
+    },
+    titleUnderline: {
+      width: scale(80),
+      height: scale(3),
+      backgroundColor: colors.primary[500],
+      borderRadius: scale(2),
+      marginTop: PerfectSpacing.sm,
+      alignSelf: 'center',
+    },
+    modalSectionTitle: {
+      fontWeight: Typography.weights.black,
+      color: colors.neutral[900],
+    },
+    modalText: {
+      fontWeight: Typography.weights.medium,
+      color: colors.neutral[900],
+      marginBottom: PerfectSpacing.base,
+    },
+    highlightText: {
+      fontWeight: Typography.weights.bold,
+      color: colors.primary[500],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.md,
+      paddingVertical: PerfectSpacing.md,
+      paddingHorizontal: PerfectSpacing.base,
+      backgroundColor: colors.primary[50],
+      borderRadius: BorderRadius.lg,
+      letterSpacing: scale(-0.3),
+    },
+  });
 
 const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
+  const colors = useThemeColors();
+  const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
   return (
     <PerfectContainer
       style={modalStyles.modalContent}
@@ -126,7 +130,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
           accessibilityLabel="Chiudi informazioni donazioni"
           testID="donation-modal-close"
         >
-          <PerfectIcon name="close" size={22} color={Colors.neutral[0]} />
+          <PerfectIcon name="close" size={22} color={colors.neutral[0]} />
         </PlatformTouchable>
       </PerfectContainer>
 
@@ -176,6 +180,8 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   const { t } = useTranslation();
+  const colors = useThemeColors();
+  const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');

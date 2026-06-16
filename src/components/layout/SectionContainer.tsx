@@ -3,7 +3,7 @@ import React from 'react';
 import { PerfectContainer } from '../ui/PerfectContainer';
 
 import { scale } from '../../shared/constants/perfectScale';
-import { useTheme } from '../../shared/hooks/useTheme';
+import { useThemeColors } from '../../shared/hooks/useThemeColors';
 import { BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 
@@ -59,7 +59,7 @@ const getBorderRadiusForPremium = () => {
 // 🎨 VARIANTI DESIGN AVANZATE
 const getVariantStyles = (
   variant: SectionContainerProps['variant'],
-  colors: ReturnType<typeof useTheme>['colors']
+  colors: ReturnType<typeof useThemeColors>
 ) => {
   switch (variant) {
     case 'elevated':
@@ -123,7 +123,7 @@ export const SectionContainer: React.FC<SectionContainerProps> = ({
   variant = 'default',
   centerContent = false,
 }) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
 
   const spacingConfig = getSpacingConfig(spacing);
   const variantStyles = getVariantStyles(variant, colors);

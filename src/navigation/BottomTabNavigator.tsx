@@ -29,11 +29,14 @@ import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 
 // Lazy Screens (only for HomeScreen due to export issues)
 // Direct imports (no lazy loading to avoid spinner)
 import { ContributeTabScreen } from '@/features/actions';
 import HomeScreen from '@/features/home/screens/HomeScreen';
+import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -62,6 +65,7 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
+  const { isDark } = useUniversalTheme();
 
   const tabContainerStyle = useMemo(() => {
     const radius = scale(32);
@@ -90,17 +94,23 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
     ];
   }, [insets.bottom]);
 
-  const blurBackground = Platform.select({
-    ios: 'rgba(255, 255, 255, 0.35)',
-    android: 'rgba(255, 255, 255, 0.97)',
-    default: 'rgba(255, 255, 255, 0.97)',
-  });
+  const blurBackground = isDark
+    ? Platform.select({
+        ios: 'rgba(28, 28, 30, 0.55)',
+        android: 'rgba(20, 20, 22, 0.97)',
+        default: 'rgba(20, 20, 22, 0.97)',
+      })
+    : Platform.select({
+        ios: 'rgba(255, 255, 255, 0.35)',
+        android: 'rgba(255, 255, 255, 0.97)',
+        default: 'rgba(255, 255, 255, 0.97)',
+      });
 
   return (
     <PerfectContainer style={tabContainerStyle}>
       <PlatformBlur
         intensity={90}
-        tint="light"
+        tint={isDark ? 'dark' : 'light'}
         backgroundColor={blurBackground}
         style={styles.blurView}
       />
@@ -160,6 +170,7 @@ const ICON_MAP: Record<string, string> = {
   ImpactTab: 'chart-line',
   HomeTab: 'home',
   InfoTab: 'hand-heart',
+  ProfileTab: 'account',
 };
 
 // Helper tipizzato per ottenere il threshold
@@ -186,6 +197,7 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   onLongPress,
   routeName,
 }) => {
+  const colors = useThemeColors();
   const fontScale = PixelRatio.getFontScale();
   const threshold = getFontScaleThreshold();
   const isLargeFontScale = fontScale > threshold;
@@ -193,28 +205,28 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
     switch (routeName) {
       case 'ImpactTab':
         return {
-          backgroundColor: Colors.primary[500],
-          shadowColor: Colors.primary[500],
-          iconColor: Colors.neutral[0],
-          labelColor: Colors.primary[500],
+          backgroundColor: colors.primary[500],
+          shadowColor: colors.primary[500],
+          iconColor: Colors.accent.white, // icona bianca fissa su cerchio brand
+          labelColor: colors.primary[500],
         };
       case 'InfoTab':
         return {
-          backgroundColor: Colors.semantic.success.main,
-          shadowColor: Colors.semantic.success.main,
-          iconColor: Colors.neutral[0],
-          labelColor: Colors.semantic.success.main,
+          backgroundColor: colors.semantic.success.main,
+          shadowColor: colors.semantic.success.main,
+          iconColor: Colors.accent.white, // icona bianca fissa su cerchio brand
+          labelColor: colors.semantic.success.main,
         };
       case 'HomeTab':
       default:
         return {
-          backgroundColor: isFocused ? Colors.neutral[500] : Colors.neutral[0],
-          shadowColor: Colors.neutral[500],
-          iconColor: isFocused ? Colors.neutral[0] : Colors.neutral[700],
-          labelColor: Colors.neutral[500],
+          backgroundColor: isFocused ? colors.neutral[500] : colors.neutral[0],
+          shadowColor: colors.neutral[500],
+          iconColor: isFocused ? Colors.accent.white : colors.neutral[700],
+          labelColor: colors.neutral[500],
         };
     }
-  }, [routeName, isFocused]);
+  }, [routeName, isFocused, colors]);
 
   const iconName = useMemo(() => ICON_MAP[routeName] ?? 'circle', [routeName]);
   const iconSize = useMemo(
@@ -321,6 +333,13 @@ const BottomTabNavigator: React.FC = () => {
         component={ContributeTabScreen}
         options={{
           tabBarAccessibilityLabel: t('navigation.actions'),
+        }}
+      />
+      <Tab.Screen
+        name="ProfileTab"
+        component={ProfileScreen}
+        options={{
+          tabBarAccessibilityLabel: t('navigation.profile'),
         }}
       />
     </Tab.Navigator>

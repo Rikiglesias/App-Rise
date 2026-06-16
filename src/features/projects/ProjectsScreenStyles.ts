@@ -3,10 +3,10 @@ import { Platform, StyleSheet } from 'react-native';
 import { BorderRadius, Typography } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const useProjectsScreenStyles = () => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
 
   return useMemo(
     () =>

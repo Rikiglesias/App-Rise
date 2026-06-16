@@ -484,7 +484,7 @@ jobs:
       - name: 📊 Bundle Analysis
         run: |
           echo "📊 Analyzing bundle size..."
-          npm run bundle-analysis || echo "Bundle analysis script not found, using basic analysis"
+          npm run bundle:analyze || echo "Bundle analysis script not found, using basic analysis"
 
           # Basic bundle size check
           if [ -d "dist" ]; then

@@ -11,6 +11,7 @@ import {
 } from './ActionButtonUtils';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { Colors } from '@/shared/constants';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 // No direct scaling here: PerfectIcon scales its size internally.
 import {
   PlatformTouchable,
@@ -99,7 +100,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
               size={infoIconSize}
               minSize={14}
               maxSize={18}
-              color={Colors.neutral[0]}
+              color={Colors.accent.white}
             />
           </PlatformTouchable>
         </PerfectContainer>
@@ -251,6 +252,7 @@ export const CommunityButtonsSection: React.FC<
   onCommunityTitlePress,
 }) => {
   const { t } = useTranslation();
+  const colors = useThemeColors();
   const handleCommunityButtons = useMemo(
     () => [
       () => {
@@ -295,7 +297,7 @@ export const CommunityButtonsSection: React.FC<
           <PerfectIcon
             name="open-in-new"
             size={16}
-            color={Colors.neutral[900]}
+            color={colors.neutral[900]}
             style={styles.communityChevron}
           />
         </PlatformTouchable>

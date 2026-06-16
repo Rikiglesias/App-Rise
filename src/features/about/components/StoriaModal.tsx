@@ -1,17 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Modal, ScrollView, View, StyleSheet } from 'react-native';
 
 import type { StoriaModalProps } from '../types';
-import { modalStyles } from '../styles/modalStyles';
+import { createModalStyles } from '../styles/modalStyles';
 import {
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
   PerfectIcon,
 } from '@/components/ui';
-import { Colors, PerfectSpacing } from '@/shared/constants';
+import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 export const StoriaModal: React.FC<StoriaModalProps> = ({
   visible,
@@ -19,6 +20,8 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
+  const colors = useThemeColors();
+  const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -51,7 +54,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               testID="storia-modal-close"
             >
-              <PerfectIcon name="close" color={Colors.neutral[0]} />
+              <PerfectIcon name="close" color={colors.neutral[0]} />
             </PlatformTouchable>
 
             {/* Contenuto modal */}

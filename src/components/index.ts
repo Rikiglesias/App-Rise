@@ -15,7 +15,6 @@ export {
   PlatformScrollView,
   PlatformSurface,
   // Display Components
-  HeaderLogo,
   Logo,
   SocialIcon,
   // Perfect System

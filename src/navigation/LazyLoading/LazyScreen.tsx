@@ -3,13 +3,15 @@
  * Gestisce il caricamento lazy delle screen con fallback e error handling
  */
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { logger } from '@/shared/utils/logger';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface LazyScreenProps {
   children: React.ReactNode;
@@ -20,11 +22,15 @@ interface LazyScreenProps {
 /**
  * Componente di fallback per il loading - RIMOSSO
  */
-const DefaultLoadingFallback: React.FC = () => (
-  <PerfectContainer style={styles.loadingContainer}>
-    {/* Loading rimosso per migliorare UX */}
-  </PerfectContainer>
-);
+const DefaultLoadingFallback: React.FC = () => {
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+  return (
+    <PerfectContainer style={styles.loadingContainer}>
+      {/* Loading rimosso per migliorare UX */}
+    </PerfectContainer>
+  );
+};
 
 /**
  * Componente di fallback per errori
@@ -32,40 +38,44 @@ const DefaultLoadingFallback: React.FC = () => (
 const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
   error,
   retry,
-}) => (
-  <PerfectContainer style={styles.errorContainer}>
-    <PerfectText
-      size={18}
-      lines={1}
-      fontWeight="400"
-      style={styles.errorTitle}
-      immunity={true}
-    >
-      Errore di caricamento
-    </PerfectText>
-    <PerfectText
-      size={14}
-      lines={2}
-      fontWeight="400"
-      style={styles.errorMessage}
-      immunity={true}
-    >
-      {error.message || 'Impossibile caricare la schermata'}
-    </PerfectText>
-    <PerfectContainer style={styles.retryButton}>
+}) => {
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+  return (
+    <PerfectContainer style={styles.errorContainer}>
       <PerfectText
-        size={16}
+        size={18}
         lines={1}
         fontWeight="400"
-        style={styles.retryText}
+        style={styles.errorTitle}
         immunity={true}
-        onPress={retry}
       >
-        Riprova
+        Errore di caricamento
       </PerfectText>
+      <PerfectText
+        size={14}
+        lines={2}
+        fontWeight="400"
+        style={styles.errorMessage}
+        immunity={true}
+      >
+        {error.message || 'Impossibile caricare la schermata'}
+      </PerfectText>
+      <PerfectContainer style={styles.retryButton}>
+        <PerfectText
+          size={16}
+          lines={1}
+          fontWeight="400"
+          style={styles.retryText}
+          immunity={true}
+          onPress={retry}
+        >
+          Riprova
+        </PerfectText>
+      </PerfectContainer>
     </PerfectContainer>
-  </PerfectContainer>
-);
+  );
+};
 
 /**
  * Error Boundary per gestire errori durante il lazy loading
@@ -133,45 +143,47 @@ export const LazyScreen: React.FC<LazyScreenProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.neutral[50],
-    paddingHorizontal: PerfectSpacing.lg,
-  },
-  loadingText: {
-    marginTop: PerfectSpacing.base,
-    color: Colors.neutral[600],
-    textAlign: 'center',
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.neutral[50],
-    paddingHorizontal: PerfectSpacing.lg,
-  },
-  errorTitle: {
-    color: Colors.primary[500],
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.sm,
-  },
-  errorMessage: {
-    color: Colors.neutral[600],
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.lg,
-  },
-  retryButton: {
-    backgroundColor: Colors.primary[500],
-    paddingHorizontal: PerfectSpacing.lg,
-    paddingVertical: PerfectSpacing.md,
-    borderRadius: scale(8),
-  },
-  retryText: {
-    color: Colors.neutral[0],
-    fontWeight: '600',
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.neutral[50],
+      paddingHorizontal: PerfectSpacing.lg,
+    },
+    loadingText: {
+      marginTop: PerfectSpacing.base,
+      color: colors.neutral[600],
+      textAlign: 'center',
+    },
+    errorContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.neutral[50],
+      paddingHorizontal: PerfectSpacing.lg,
+    },
+    errorTitle: {
+      color: colors.primary[500],
+      fontWeight: '600',
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.sm,
+    },
+    errorMessage: {
+      color: colors.neutral[600],
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.lg,
+    },
+    retryButton: {
+      backgroundColor: colors.primary[500],
+      paddingHorizontal: PerfectSpacing.lg,
+      paddingVertical: PerfectSpacing.md,
+      borderRadius: scale(8),
+    },
+    // Testo su bottone brand -> bianco fisso
+    retryText: {
+      color: Colors.accent.white,
+      fontWeight: '600',
+    },
+  });

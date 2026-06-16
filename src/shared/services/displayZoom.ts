@@ -90,11 +90,3 @@ export const initDisplayZoom = async (): Promise<void> => {
     });
   }
 };
-
-/**
- * Reinizializza su richiesta (es. ritorno in foreground se in futuro necessario).
- */
-export const refreshDisplayZoom = async (): Promise<void> => {
-  initialized = false;
-  await initDisplayZoom();
-};

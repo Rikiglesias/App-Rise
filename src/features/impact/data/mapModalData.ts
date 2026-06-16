@@ -18,6 +18,9 @@ export interface MapModalData {
   };
   year: number;
   image?: string;
+  /** URL di tracciamento pasti/evento (opzionale). Non ancora popolato dai dati
+   *  reali (follow-up): finché assente la CTA "saperne di più" resta nascosta. */
+  trackingUrl?: string;
 }
 
 /**

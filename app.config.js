@@ -67,6 +67,10 @@ export default withDefaultStrings({
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
     version: '1.2.9',
+    // Custom URL scheme per i deep link auth (es. reset password: rahitalia://reset-password).
+    // Expo prebuild configura iOS CFBundleURLTypes + Android intent-filter. La stessa URL va
+    // aggiunta all'allow-list Redirect URLs del progetto Supabase.
+    scheme: 'rahitalia',
     orientation: 'portrait',
     icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',
@@ -142,12 +146,8 @@ export default withDefaultStrings({
     ios: {
       displayName: 'RAH Italia',
       supportsTablet: true,
-      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
-      // (mai committato); iniettata in Info.plist al prebuild. Senza key la mappa
-      // renderizza vuota (audit rank 3). RNMaps 1.20.1 < 1.22 => no config-plugin.
-      ...(process.env.GOOGLE_MAPS_API_KEY && {
-        config: { googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY },
-      }),
+      // Mappa: MapLibre + MapTiler (style via EXPO_PUBLIC_MAPTILER_KEY a runtime),
+      // nessuna API key Google nativa richiesta.
       bundleIdentifier:
         process.env.IOS_BUNDLE_IDENTIFIER ||
         'it.creareunapp.editor.ios63da226b4447c',
@@ -194,12 +194,8 @@ export default withDefaultStrings({
       ...(process.env.ANDROID_VERSION_CODE && {
         versionCode: parseInt(process.env.ANDROID_VERSION_CODE, 10),
       }),
-      // Google Maps API key per provider="google" (MapView). Valore SOLO da env
-      // (mai committato); iniettata nell'AndroidManifest al prebuild. Senza key
-      // i tile non caricano (audit rank 3).
-      ...(process.env.GOOGLE_MAPS_API_KEY && {
-        config: { googleMaps: { apiKey: process.env.GOOGLE_MAPS_API_KEY } },
-      }),
+      // Mappa: MapLibre + MapTiler (style via EXPO_PUBLIC_MAPTILER_KEY a runtime),
+      // nessuna API key Google nativa richiesta.
       icon: './assets/icons/app/app-icon.png',
       // Permessi specifici con giustificazione
       permissions: [
@@ -250,6 +246,22 @@ export default withDefaultStrings({
       'expo-font',
       'expo-localization',
       'expo-splash-screen',
+      // MapLibre (mappa "Dove operiamo"): config plugin per il modulo nativo.
+      // Tile/style via MapTiler (EXPO_PUBLIC_MAPTILER_KEY). Richiede New Arch
+      // (default SDK 54) + dev build (no Expo Go). Sostituisce react-native-maps/Google.
+      '@maplibre/maplibre-react-native',
+      // Social auth donatori: Apple (nessuna config) + Google (config plugin
+      // condizionale su env; iosUrlScheme = reversed iOS client ID). Senza l'env
+      // il plugin Google è assente → prebuild invariato (pre-OAuth safe).
+      'expo-apple-authentication',
+      ...(process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME
+        ? [
+            [
+              '@react-native-google-signin/google-signin',
+              { iosUrlScheme: process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME },
+            ],
+          ]
+        : []),
       // Sentry: config plugin per setup nativo + upload source map al build EAS.
       // Attivo SOLO con SENTRY_ORG + SENTRY_PROJECT in env (auth token via SENTRY_AUTH_TOKEN,
       // MAI committato). Senza questi -> plugin assente, prebuild invariato (pre-DSN safe).

@@ -29,6 +29,13 @@ export interface RootStackParamList {
   };
   ChiSiamo: undefined;
   Projects: undefined;
+  Login: undefined;
+  SignUp: undefined;
+  CompleteProfile: undefined;
+  ProfileEdit: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: undefined;
+  DeleteAccount: undefined;
   // Index signature RICHIESTA da React Navigation: StackNavigationProp vincola
   // il ParamList a ParamListBase ([routeName: string]: object | undefined).
   // Rimuoverla rompe il typecheck di Navigator/navigation in ~13 punti.
@@ -45,6 +52,7 @@ export type BottomTabParamList = {
   ImpactTab: undefined;
   HomeTab: undefined;
   InfoTab: undefined;
+  ProfileTab: undefined;
 };
 
 // Impact Stack Navigator Types

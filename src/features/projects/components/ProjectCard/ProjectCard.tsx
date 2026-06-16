@@ -11,14 +11,14 @@ import { BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useAnimatedPress } from '@/shared/hooks/useAnimatedPress';
-import { useTheme } from '@/shared/hooks/useTheme';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
 // ===================================================================
 // HELPER FUNCTIONS
 // ===================================================================
 const getStatusColor = (
   status: ProjectStatus,
-  colors: ReturnType<typeof useTheme>['colors']
+  colors: ReturnType<typeof useThemeColors>
 ): string => {
   switch (status) {
     case 'active':
@@ -57,7 +57,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   progress,
   onPress,
 }) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const { animatedStyle, handlePressIn, handlePressOut } = useAnimatedPress();
 
   const statusColor = getStatusColor(status, colors);

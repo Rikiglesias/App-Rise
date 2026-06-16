@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { StatCard } from './StatCard';
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
  * Sezione dei risultati 2024 con header decorativo e statistiche annuali
@@ -16,6 +17,8 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 export const Results2024Section: React.FC = () => {
   const { t } = useTranslation();
   const { isTablet } = useDeviceType();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
     <PerfectContainer
@@ -52,22 +55,22 @@ export const Results2024Section: React.FC = () => {
       <PerfectContainer style={styles.record2024Grid}>
         <StatCard
           icon="food-apple"
-          iconColor={Colors.primary[600]}
+          iconColor={colors.primary[600]}
           value="3.14M"
           label={t('impact.mealsPackagedLabel')}
           subtitle={t('impact.mealsPackagedSubtitle')}
-          gradientColors={[Colors.primary[500], Colors.primary[700]]}
+          gradientColors={[colors.primary[500], colors.primary[700]]}
           pressable={false}
           showChevron={false}
           withGradientBorder={false}
         />
         <StatCard
           icon="package-variant"
-          iconColor={Colors.neutral[800]}
+          iconColor={colors.neutral[800]}
           value="16.3K"
           label={t('impact.kitsPackaged')}
           subtitle={t('impact.kitsPackagedSubtitle')}
-          gradientColors={[Colors.neutral[600], Colors.neutral[800]]}
+          gradientColors={[colors.neutral[600], colors.neutral[800]]}
           pressable={false}
           showChevron={false}
           withGradientBorder={false}
@@ -77,38 +80,39 @@ export const Results2024Section: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  // Record 2024 Section - INGRANDITA
-  record2024Section: {
-    paddingHorizontal: PerfectSpacing.base,
-    marginTop: PerfectSpacing.lg,
-    marginBottom: PerfectSpacing.xl,
-  },
-  record2024Grid: {
-    flexDirection: 'row',
-    gap: PerfectSpacing.base,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    // Record 2024 Section - INGRANDITA
+    record2024Section: {
+      paddingHorizontal: PerfectSpacing.base,
+      marginTop: PerfectSpacing.lg,
+      marginBottom: PerfectSpacing.xl,
+    },
+    record2024Grid: {
+      flexDirection: 'row',
+      gap: PerfectSpacing.base,
+    },
 
-  // Results 2024 Section - DRAMATICALLY ENHANCED
-  results2024HeaderContainer: {
-    alignItems: 'center',
-    marginBottom: PerfectSpacing.lg,
-  },
-  results2024HeaderBackground: {
-    ...sectionHeaderBackground('white'),
-    width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
-    alignSelf: 'center',
-  },
-  results2024Title: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    letterSpacing: 0,
-  },
-  results2024Subtitle: {
-    color: Colors.neutral[700],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.sm,
-    opacity: 0.8,
-    letterSpacing: 0,
-  },
-});
+    // Results 2024 Section - DRAMATICALLY ENHANCED
+    results2024HeaderContainer: {
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.lg,
+    },
+    results2024HeaderBackground: {
+      ...sectionHeaderBackground('white', colors),
+      width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
+      alignSelf: 'center',
+    },
+    results2024Title: {
+      color: colors.neutral[900],
+      textAlign: 'center',
+      letterSpacing: 0,
+    },
+    results2024Subtitle: {
+      color: colors.neutral[700],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.sm,
+      opacity: 0.8,
+      letterSpacing: 0,
+    },
+  });

@@ -6,10 +6,26 @@ import {
   getEnvironmentInfo,
   getApiUrl,
   isFeatureEnabled,
+  validateEnvironmentConfig,
   NODE_ENV,
   APP_VERSION,
   API_BASE_URL,
 } from '../../../shared/config/environment';
+
+type Env = Parameters<typeof validateEnvironmentConfig>[0];
+
+const baseProd: Env = {
+  NODE_ENV: 'production',
+  APP_VERSION: '1.0.0',
+  API_BASE_URL: 'https://api.example.com',
+  SUPABASE_URL: 'https://proj.supabase.co',
+  SUPABASE_ANON_KEY: 'anon-key',
+  GOOGLE_WEB_CLIENT_ID: '',
+  ENABLE_FLIPPER: false,
+  ENABLE_PERFORMANCE_MONITORING: false,
+  LOG_LEVEL: 'error',
+  ENVIRONMENT: 'production',
+};
 
 // Mock dei Constants aggiornato per Expo SDK 54
 jest.mock('expo-constants', () => ({
@@ -138,6 +154,53 @@ describe('Environment Configuration', () => {
 
     it('should have consistent environment values', () => {
       expect(env.NODE_ENV).toBe(env.ENVIRONMENT);
+    });
+  });
+
+  describe('Fail-fast Supabase (build reali)', () => {
+    it('production con credenziali Supabase: non lancia', () => {
+      expect(() => validateEnvironmentConfig({ ...baseProd })).not.toThrow();
+    });
+
+    it('production senza SUPABASE_URL: lancia', () => {
+      expect(() =>
+        validateEnvironmentConfig({ ...baseProd, SUPABASE_URL: '' })
+      ).toThrow(/SUPABASE_URL/);
+    });
+
+    it('production senza SUPABASE_ANON_KEY: lancia', () => {
+      expect(() =>
+        validateEnvironmentConfig({ ...baseProd, SUPABASE_ANON_KEY: '' })
+      ).toThrow(/SUPABASE_ANON_KEY/);
+    });
+
+    it('staging senza Supabase: lancia', () => {
+      expect(() =>
+        validateEnvironmentConfig({
+          ...baseProd,
+          ENVIRONMENT: 'staging',
+          NODE_ENV: 'staging',
+          SUPABASE_URL: '',
+        })
+      ).toThrow(/staging/);
+    });
+
+    it('development senza Supabase: NON lancia (lenient per dev/test)', () => {
+      expect(() =>
+        validateEnvironmentConfig({
+          ...baseProd,
+          ENVIRONMENT: 'development',
+          NODE_ENV: 'development',
+          SUPABASE_URL: '',
+          SUPABASE_ANON_KEY: '',
+        })
+      ).not.toThrow();
+    });
+
+    it('GOOGLE_WEB_CLIENT_ID resta opzionale in production', () => {
+      expect(() =>
+        validateEnvironmentConfig({ ...baseProd, GOOGLE_WEB_CLIENT_ID: '' })
+      ).not.toThrow();
     });
   });
 });

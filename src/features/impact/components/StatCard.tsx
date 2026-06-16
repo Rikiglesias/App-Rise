@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -8,9 +8,11 @@ import {
   PlatformTouchable,
   PerfectContainer,
 } from '@/components/ui';
-import { Colors, BorderRadius } from '@/shared/constants/designTokens';
+import { BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface StatCardProps {
   icon: string;
@@ -40,6 +42,8 @@ export const StatCard: React.FC<StatCardProps> = ({
   showChevron = true,
   withGradientBorder = true,
 }) => {
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   return (
     <PerfectContainer style={styles.card} testID="stat-card">
       <PlatformTouchable
@@ -87,7 +91,7 @@ export const StatCard: React.FC<StatCardProps> = ({
                   name="chevron-right"
                   size={20}
                   {...IconClamps.chevron}
-                  color={Colors.neutral[400]}
+                  color={colors.neutral[400]}
                   style={styles.chevron}
                 />
               ) : null}
@@ -125,7 +129,7 @@ export const StatCard: React.FC<StatCardProps> = ({
                 name="chevron-right"
                 size={20}
                 {...IconClamps.chevron}
-                color={Colors.neutral[400]}
+                color={colors.neutral[400]}
                 style={styles.chevron}
               />
             ) : null}
@@ -136,43 +140,44 @@ export const StatCard: React.FC<StatCardProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-  },
-  gradientContainer: {
-    borderRadius: BorderRadius.xl,
-    padding: scale(2),
-  },
-  cardContent: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl - scale(2),
-    paddingVertical: PerfectSpacing.md,
-    alignItems: 'center',
-  },
-  cardContentPlain: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl,
-    paddingVertical: PerfectSpacing.md,
-    alignItems: 'center',
-  },
-  icon: {
-    marginBottom: PerfectSpacing.md,
-  },
-  value: {
-    color: Colors.neutral[800],
-    marginBottom: PerfectSpacing.xs,
-  },
-  label: {
-    color: Colors.neutral[700],
-    marginBottom: PerfectSpacing.sm,
-  },
-  subtitle: {
-    color: Colors.neutral[500],
-  },
-  chevron: {
-    position: 'absolute',
-    top: PerfectSpacing.sm,
-    right: PerfectSpacing.sm,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    card: {
+      flex: 1,
+    },
+    gradientContainer: {
+      borderRadius: BorderRadius.xl,
+      padding: scale(2),
+    },
+    cardContent: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.xl - scale(2),
+      paddingVertical: PerfectSpacing.md,
+      alignItems: 'center',
+    },
+    cardContentPlain: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.xl,
+      paddingVertical: PerfectSpacing.md,
+      alignItems: 'center',
+    },
+    icon: {
+      marginBottom: PerfectSpacing.md,
+    },
+    value: {
+      color: colors.neutral[800],
+      marginBottom: PerfectSpacing.xs,
+    },
+    label: {
+      color: colors.neutral[700],
+      marginBottom: PerfectSpacing.sm,
+    },
+    subtitle: {
+      color: colors.neutral[500],
+    },
+    chevron: {
+      position: 'absolute',
+      top: PerfectSpacing.sm,
+      right: PerfectSpacing.sm,
+    },
+  });

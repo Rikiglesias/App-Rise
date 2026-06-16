@@ -13,15 +13,13 @@ import {
   PlatformTouchable,
   PerfectContainer,
 } from '@/components/ui';
-import {
-  BorderRadius,
-  Colors,
-  Typography,
-} from '@/shared/constants/designTokens';
+import { BorderRadius, Typography } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 // Helper tipizzato per ottenere il threshold
 const getFontScaleThreshold = (): number => {
@@ -42,6 +40,8 @@ const getFontScaleThreshold = (): number => {
 const ActionCTAButtonsComponent: React.FC = () => {
   const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const navigation =
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
@@ -91,7 +91,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
         <LinearGradient
-          colors={Colors.gradients.primary}
+          colors={colors.gradients.primary}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
@@ -102,12 +102,12 @@ const ActionCTAButtonsComponent: React.FC = () => {
             <PerfectIcon
               name="chart-line"
               size={30}
-              color={Colors.primary[500]}
+              color={colors.primary[500]}
             />
             <PerfectText
               size={22}
               lines={2}
-              color={Colors.primary[500]}
+              color={colors.primary[500]}
               textAlign="center"
               style={styles.buttonTitle}
               testID="cta-impact-label"
@@ -123,12 +123,12 @@ const ActionCTAButtonsComponent: React.FC = () => {
                   name="arrow-left"
                   size={20}
                   {...IconClamps.chevron}
-                  color={Colors.primary[500]}
+                  color={colors.primary[500]}
                 />
                 <PerfectText
                   size={18}
                   lines={1}
-                  color={Colors.primary[500]}
+                  color={colors.primary[500]}
                   textAlign="center"
                   style={styles.buttonSubtext}
                   testID="cta-impact-sub"
@@ -153,7 +153,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
         <LinearGradient
-          colors={Colors.gradients.success}
+          colors={colors.gradients.success}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradientBorder}
@@ -164,12 +164,12 @@ const ActionCTAButtonsComponent: React.FC = () => {
             <PerfectIcon
               name="hand-heart"
               size={30}
-              color={Colors.semantic.success.main}
+              color={colors.semantic.success.main}
             />
             <PerfectText
               size={22}
               lines={2}
-              color={Colors.semantic.success.main}
+              color={colors.semantic.success.main}
               textAlign="center"
               style={styles.buttonTitle}
               testID="cta-donate-label"
@@ -184,7 +184,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
                 <PerfectText
                   size={18}
                   lines={1}
-                  color={Colors.semantic.success.main}
+                  color={colors.semantic.success.main}
                   textAlign="center"
                   style={styles.buttonSubtext}
                   testID="cta-donate-sub"
@@ -195,7 +195,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
                   name="arrow-right"
                   size={20}
                   {...IconClamps.chevron}
-                  color={Colors.semantic.success.main}
+                  color={colors.semantic.success.main}
                 />
               </PerfectContainer>
             </PerfectContainer>
@@ -206,53 +206,54 @@ const ActionCTAButtonsComponent: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  buttonWrapper: {
-    flex: 1,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    buttonWrapper: {
+      flex: 1,
+    },
 
-  gradientBorder: {
-    borderRadius: BorderRadius.xl,
-    padding: scale(3),
-  },
+    gradientBorder: {
+      borderRadius: BorderRadius.xl,
+      padding: scale(3),
+    },
 
-  buttonContainer: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.xl - scale(3),
-    minHeight: scale(105),
-    paddingVertical: PerfectSpacing.sm,
-    paddingHorizontal: PerfectSpacing.sm,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flex: 1,
-  },
+    buttonContainer: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.xl - scale(3),
+      minHeight: scale(105),
+      paddingVertical: PerfectSpacing.sm,
+      paddingHorizontal: PerfectSpacing.sm,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flex: 1,
+    },
 
-  buttonTitle: {
-    fontWeight: Typography.weights.bold,
-    marginVertical: PerfectSpacing.xs,
-  },
+    buttonTitle: {
+      fontWeight: Typography.weights.bold,
+      marginVertical: PerfectSpacing.xs,
+    },
 
-  buttonSubtext: {
-    fontWeight: Typography.weights.bold,
-  },
-  buttonFooter: {
-    width: '100%',
-    alignItems: 'center',
-    marginTop: PerfectSpacing.sm,
-  },
-  footerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: PerfectSpacing.xs,
-  },
-  buttonDivider: {
-    width: '70%',
-    height: scale(1.5),
-    backgroundColor: Colors.neutral[100],
-    borderRadius: 999,
-    marginBottom: PerfectSpacing.sm,
-  },
-});
+    buttonSubtext: {
+      fontWeight: Typography.weights.bold,
+    },
+    buttonFooter: {
+      width: '100%',
+      alignItems: 'center',
+      marginTop: PerfectSpacing.sm,
+    },
+    footerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: PerfectSpacing.xs,
+    },
+    buttonDivider: {
+      width: '70%',
+      height: scale(1.5),
+      backgroundColor: colors.neutral[100],
+      borderRadius: 999,
+      marginBottom: PerfectSpacing.sm,
+    },
+  });
 
 export const ActionCTAButtons = React.memo(ActionCTAButtonsComponent);

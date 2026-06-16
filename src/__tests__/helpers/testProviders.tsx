@@ -1,6 +1,7 @@
 import React from 'react';
 import { ThemeProvider } from '../../shared/hooks/useTheme';
 import { UniversalThemeProvider } from '../../shared/theme/UniversalTheme';
+import { AuthProvider } from '../../shared/auth/AuthContext';
 import i18n from '../../locales';
 
 // Forza lingua italiana per tutti i test per garantire consistenza
@@ -14,7 +15,9 @@ export const AllProviders: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
   <UniversalThemeProvider>
-    <ThemeProvider>{children}</ThemeProvider>
+    <ThemeProvider>
+      <AuthProvider>{children}</AuthProvider>
+    </ThemeProvider>
   </UniversalThemeProvider>
 );
 

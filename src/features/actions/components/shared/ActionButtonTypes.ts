@@ -51,17 +51,6 @@ export interface NewActionButtonsSectionProps {
   navigation: ContributeTabScreenProps['navigation'];
 }
 
-// Props per ActionButtonsContent
-export interface ActionButtonsContentProps {
-  animations: ReturnType<typeof useNewActionsAnimations>;
-  donateButtons: ButtonData[];
-  exploreButtons: ButtonData[];
-  communityButtons: ButtonData[];
-  onButtonPress: (button: ButtonData) => void;
-  onInfoPress: () => void;
-  onCommunityTitlePress: () => void;
-}
-
 // Props per DonateButtonsSection
 export interface DonateButtonsSectionProps {
   styles: ButtonStyles;

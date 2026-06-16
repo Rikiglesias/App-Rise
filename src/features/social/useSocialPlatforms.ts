@@ -40,7 +40,6 @@ export const useSocialPlatforms = () => {
       description: t('social.websiteDescription'),
       // Vector icon for web
       iconName: 'web',
-      iconColor: Colors.neutral[900],
       gradient: Colors.gradients.website,
       onPress: wrap(openWebsiteLink),
     },
@@ -51,7 +50,6 @@ export const useSocialPlatforms = () => {
       description: t('social.instagramDescription'),
       // Use crisp vector icon instead of raster PNG
       iconName: 'instagram',
-      iconColor: Colors.neutral[900],
       gradient: Colors.gradients.instagram,
       onPress: wrap(openInstagramLink),
     },
@@ -62,7 +60,6 @@ export const useSocialPlatforms = () => {
       description: t('social.facebookDescription'),
       // Use crisp vector icon instead of raster PNG
       iconName: 'facebook',
-      iconColor: Colors.neutral[900],
       gradient: Colors.gradients.facebook,
       onPress: wrap(openFacebookLink),
     },
@@ -72,7 +69,6 @@ export const useSocialPlatforms = () => {
       handle: 'Rise Against Hunger Italia',
       description: t('social.linkedinDescription'),
       iconName: 'linkedin',
-      iconColor: Colors.neutral[900],
       gradient: Colors.gradients.linkedin,
       onPress: wrap(openLinkedInLink),
     },

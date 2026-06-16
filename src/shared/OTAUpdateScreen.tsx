@@ -7,8 +7,15 @@
  * Best practices: Progress sempre visibile, messaging chiaro, no heavy animations
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  Easing,
+  useColorScheme,
+} from 'react-native';
 import { getLocales } from 'expo-localization';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle } from 'react-native-svg';
@@ -16,6 +23,10 @@ import { PerfectImage } from '@/components/ui/PerfectImage';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale, scaleText } from '@/shared/constants/perfectScale';
 import { PerfectSpacing } from '@/shared/constants/perfectSpacing';
+import {
+  getAdaptiveColors,
+  type ThemeColors,
+} from '@/shared/theme/adaptiveColors';
 
 interface OTAUpdateScreenProps {
   isChecking: boolean;
@@ -41,6 +52,13 @@ const translations = {
 export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   progress = 0,
 }) => {
+  // Tema dark-aware: OTAUpdateScreen è renderizzato in early-return PRIMA dei
+  // provider (App.tsx), quindi NON può usare useThemeColors()/context. Legge il
+  // color scheme direttamente da React Native (robusto in fase di boot/OTA).
+  const isDark = useColorScheme() === 'dark';
+  const colors = useMemo(() => getAdaptiveColors(isDark), [isDark]);
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   // Rileva lingua dispositivo con fallback sicuro
   const deviceLanguage = React.useMemo(() => {
     try {
@@ -246,11 +264,20 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
 
   const isComplete = safeProgress >= 100;
 
+  // Gradient sfondo: hex custom INVARIATI in LIGHT (byte-identico, zero
+  // regressione), scala neutral scura in DARK. Ramo condizionale perché gli hex
+  // custom non hanno mapping 1:1 sui token neutral.
+  const bgGradient = (
+    isDark
+      ? ['#0C0C0E', '#161618', '#1F1F22', '#0C0C0E']
+      : ['#FAFAFA', '#F5F5F7', '#EEEFF1', '#F8F9FA']
+  ) as readonly [string, string, ...string[]];
+
   return (
     <View style={styles.container}>
       {/* Gradient background premium - più ricco */}
       <LinearGradient
-        colors={['#FAFAFA', '#F5F5F7', '#EEEFF1', '#F8F9FA']}
+        colors={bgGradient}
         locations={[0, 0.3, 0.6, 1]}
         style={StyleSheet.absoluteFillObject}
       />
@@ -282,7 +309,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
           >
             <Svg width={RING_SIZE} height={RING_SIZE}>
               <Circle
-                stroke={Colors.neutral[200]}
+                stroke={colors.neutral[200]}
                 cx={RING_SIZE / 2}
                 cy={RING_SIZE / 2}
                 r={RADIUS}
@@ -409,138 +436,139 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  content: {
-    alignItems: 'center',
-    paddingHorizontal: PerfectSpacing.xl * 2,
-    maxWidth: scale(440),
-    width: '100%',
-  },
-  // Logo premium - hero element
-  logoContainer: {
-    marginBottom: PerfectSpacing.xl * 2,
-  },
-  logoCircle: {
-    width: scale(130),
-    height: scale(130),
-    borderRadius: scale(65),
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: Colors.primary[500],
-    shadowOffset: { width: 0, height: scale(8) },
-    shadowOpacity: 0.15,
-    shadowRadius: scale(20),
-    elevation: 12,
-    borderWidth: scale(1),
-    borderColor: Colors.neutral[100],
-  },
-  // Container messaggio principale
-  messageContainer: {
-    alignItems: 'center',
-    marginBottom: PerfectSpacing.xl * 1.8,
-    paddingHorizontal: PerfectSpacing.xl,
-  },
-  // Messaggio principale GRANDE
-  mainMessage: {
-    fontSize: scaleText(24),
-    fontWeight: '700',
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.sm,
-    letterSpacing: scale(-0.5),
-  },
-  // Sotto-messaggio rassicurante
-  subMessage: {
-    fontSize: scaleText(15),
-    fontWeight: '400',
-    color: Colors.neutral[600],
-    textAlign: 'center',
-    lineHeight: scaleText(22),
-    letterSpacing: scale(-0.1),
-  },
-  // Progress container compatto
-  progressContainer: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  // Percentuale sotto barra - leggibile
-  percentage: {
-    fontSize: scaleText(18),
-    fontWeight: '700',
-    color: Colors.primary[500],
-    textAlign: 'center',
-    marginTop: PerfectSpacing.sm,
-    letterSpacing: scale(-0.4),
-  },
-  progressTrack: {
-    width: '85%',
-    height: scale(8),
-    backgroundColor: Colors.neutral[100],
-    borderRadius: scale(4),
-    overflow: 'hidden',
-    shadowColor: Colors.neutral[900],
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.08,
-    shadowRadius: scale(3),
-    borderWidth: scale(0.5),
-    borderColor: Colors.neutral[200],
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: scale(4),
-    shadowColor: Colors.primary[500],
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.3,
-    shadowRadius: scale(4),
-    overflow: 'hidden',
-  },
-  // Shimmer overlay animato
-  shimmerOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    width: scale(100),
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    transform: [{ skewX: '-20deg' }],
-  },
-  // Container completamento
-  completeContainer: {
-    alignItems: 'center',
-  },
-  // Messaggio completamento
-  completeMessage: {
-    fontSize: scaleText(22),
-    fontWeight: '700',
-    color: Colors.semantic.success.main,
-    textAlign: 'center',
-    marginTop: PerfectSpacing.md,
-    letterSpacing: scale(-0.4),
-  },
-  // Checkmark completamento
-  completeCheckmark: {
-    alignItems: 'center',
-    width: scale(70),
-    height: scale(70),
-    borderRadius: scale(35),
-    backgroundColor: Colors.semantic.success.light,
-    justifyContent: 'center',
-    shadowColor: Colors.semantic.success.main,
-    shadowOffset: { width: 0, height: scale(8) },
-    shadowOpacity: 0.35,
-    shadowRadius: scale(16),
-    borderWidth: scale(2.5),
-    borderColor: Colors.semantic.success.main,
-    marginBottom: PerfectSpacing.sm,
-  },
-  checkmark: {
-    fontSize: scaleText(38),
-    fontWeight: '700',
-    color: Colors.semantic.success.main,
-    textAlign: 'center',
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.neutral[0],
+    },
+    content: {
+      alignItems: 'center',
+      paddingHorizontal: PerfectSpacing.xl * 2,
+      maxWidth: scale(440),
+      width: '100%',
+    },
+    // Logo premium - hero element
+    logoContainer: {
+      marginBottom: PerfectSpacing.xl * 2,
+    },
+    logoCircle: {
+      width: scale(130),
+      height: scale(130),
+      borderRadius: scale(65),
+      backgroundColor: colors.neutral[0],
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: Colors.primary[500],
+      shadowOffset: { width: 0, height: scale(8) },
+      shadowOpacity: 0.15,
+      shadowRadius: scale(20),
+      elevation: 12,
+      borderWidth: scale(1),
+      borderColor: colors.neutral[100],
+    },
+    // Container messaggio principale
+    messageContainer: {
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.xl * 1.8,
+      paddingHorizontal: PerfectSpacing.xl,
+    },
+    // Messaggio principale GRANDE
+    mainMessage: {
+      fontSize: scaleText(24),
+      fontWeight: '700',
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.sm,
+      letterSpacing: scale(-0.5),
+    },
+    // Sotto-messaggio rassicurante
+    subMessage: {
+      fontSize: scaleText(15),
+      fontWeight: '400',
+      color: colors.neutral[600],
+      textAlign: 'center',
+      lineHeight: scaleText(22),
+      letterSpacing: scale(-0.1),
+    },
+    // Progress container compatto
+    progressContainer: {
+      width: '100%',
+      alignItems: 'center',
+    },
+    // Percentuale sotto barra - leggibile
+    percentage: {
+      fontSize: scaleText(18),
+      fontWeight: '700',
+      color: Colors.primary[500],
+      textAlign: 'center',
+      marginTop: PerfectSpacing.sm,
+      letterSpacing: scale(-0.4),
+    },
+    progressTrack: {
+      width: '85%',
+      height: scale(8),
+      backgroundColor: colors.neutral[100],
+      borderRadius: scale(4),
+      overflow: 'hidden',
+      shadowColor: Colors.neutral[900],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.08,
+      shadowRadius: scale(3),
+      borderWidth: scale(0.5),
+      borderColor: colors.neutral[200],
+    },
+    progressFill: {
+      height: '100%',
+      borderRadius: scale(4),
+      shadowColor: Colors.primary[500],
+      shadowOffset: { width: 0, height: scale(2) },
+      shadowOpacity: 0.3,
+      shadowRadius: scale(4),
+      overflow: 'hidden',
+    },
+    // Shimmer overlay animato
+    shimmerOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      width: scale(100),
+      backgroundColor: 'rgba(255, 255, 255, 0.4)',
+      transform: [{ skewX: '-20deg' }],
+    },
+    // Container completamento
+    completeContainer: {
+      alignItems: 'center',
+    },
+    // Messaggio completamento
+    completeMessage: {
+      fontSize: scaleText(22),
+      fontWeight: '700',
+      color: Colors.semantic.success.main,
+      textAlign: 'center',
+      marginTop: PerfectSpacing.md,
+      letterSpacing: scale(-0.4),
+    },
+    // Checkmark completamento
+    completeCheckmark: {
+      alignItems: 'center',
+      width: scale(70),
+      height: scale(70),
+      borderRadius: scale(35),
+      backgroundColor: Colors.semantic.success.light,
+      justifyContent: 'center',
+      shadowColor: Colors.semantic.success.main,
+      shadowOffset: { width: 0, height: scale(8) },
+      shadowOpacity: 0.35,
+      shadowRadius: scale(16),
+      borderWidth: scale(2.5),
+      borderColor: Colors.semantic.success.main,
+      marginBottom: PerfectSpacing.sm,
+    },
+    checkmark: {
+      fontSize: scaleText(38),
+      fontWeight: '700',
+      color: Colors.semantic.success.main,
+      textAlign: 'center',
+    },
+  });

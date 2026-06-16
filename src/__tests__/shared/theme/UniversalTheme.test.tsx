@@ -11,7 +11,6 @@ import { Text, Appearance } from 'react-native';
 import {
   UniversalThemeProvider,
   useUniversalTheme,
-  getThemeColor,
 } from '../../../shared/theme/UniversalTheme';
 
 beforeEach(() => {
@@ -93,12 +92,6 @@ describe('UniversalTheme', () => {
     await waitFor(() =>
       expect(screen.getByTestId('theme').children.join('')).toBe('system-light')
     );
-  });
-
-  it('getThemeColor returns correct color for mode', () => {
-    const lightText = getThemeColor('text', false);
-    const darkText = getThemeColor('text', true);
-    expect(lightText).not.toBe(darkText);
   });
 });
 // @ts-nocheck

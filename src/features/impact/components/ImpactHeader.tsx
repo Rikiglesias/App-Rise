@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { PerfectText, PerfectContainer } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale, LOGICAL_REFERENCE } from '@/shared/constants/perfectScale';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 // Header sizes - OTTIMIZZATI PER SCALING UNIFORME
 const TITLE_SIZE = 32;
@@ -15,6 +16,8 @@ const HEADER_INNER_HEIGHT = scale(REF_WIDTH * 0.43);
 
 export const ImpactHeader: React.FC = () => {
   const { t } = useTranslation();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
     <PerfectContainer style={styles.headerContainer} accessibilityRole="header">
@@ -49,41 +52,42 @@ export const ImpactHeader: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    alignSelf: 'stretch',
-    width: '100%',
-    paddingTop: PerfectSpacing['5xl'] + scale(12),
-    paddingHorizontal: PerfectSpacing.base,
-    paddingBottom: PerfectSpacing.lg,
-    alignItems: 'center',
-  },
-  mainHeaderContainer: {
-    alignSelf: 'stretch',
-    width: '100%',
-    alignItems: 'center',
-    minHeight: HEADER_INNER_HEIGHT,
-    backgroundColor: Colors.neutral[0],
-    paddingHorizontal: PerfectSpacing.base,
-    paddingTop: PerfectSpacing.sm,
-    paddingBottom: PerfectSpacing.lg,
-    borderRadius: scale(16),
-    borderWidth: scale(1),
-    borderColor: Colors.neutral[300],
-  },
-  titleText: {
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    letterSpacing: 0,
-  },
-  titleAccent: {
-    color: Colors.primary[500],
-  },
-  mainSubtitle: {
-    color: Colors.neutral[700],
-    textAlign: 'center',
-    letterSpacing: 0,
-    marginTop: PerfectSpacing.md,
-    opacity: 0.8,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    headerContainer: {
+      alignSelf: 'stretch',
+      width: '100%',
+      paddingTop: PerfectSpacing['5xl'] + scale(12),
+      paddingHorizontal: PerfectSpacing.base,
+      paddingBottom: PerfectSpacing.lg,
+      alignItems: 'center',
+    },
+    mainHeaderContainer: {
+      alignSelf: 'stretch',
+      width: '100%',
+      alignItems: 'center',
+      minHeight: HEADER_INNER_HEIGHT,
+      backgroundColor: colors.neutral[0],
+      paddingHorizontal: PerfectSpacing.base,
+      paddingTop: PerfectSpacing.sm,
+      paddingBottom: PerfectSpacing.lg,
+      borderRadius: scale(16),
+      borderWidth: scale(1),
+      borderColor: colors.neutral[300],
+    },
+    titleText: {
+      color: colors.neutral[900],
+      textAlign: 'center',
+      letterSpacing: 0,
+    },
+    titleAccent: {
+      color: colors.primary[500],
+    },
+    mainSubtitle: {
+      color: colors.neutral[700],
+      textAlign: 'center',
+      letterSpacing: 0,
+      marginTop: PerfectSpacing.md,
+      opacity: 0.8,
+    },
+  });

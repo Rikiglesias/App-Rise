@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import {
   SafeAreaView,
@@ -23,12 +23,16 @@ import {
   PerfectText,
 } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 const DevelopmentScreen: React.FC = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { triggerHaptic } = useHapticFeedback();
   const { t } = useTranslation();
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   // Solo animazioni icone (funzionano bene)
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -73,7 +77,7 @@ const DevelopmentScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={[Colors.neutral[50], Colors.neutral[100], Colors.neutral[200]]}
+        colors={[colors.neutral[50], colors.neutral[100], colors.neutral[200]]}
         style={styles.gradientBackground}
       />
 
@@ -106,7 +110,7 @@ const DevelopmentScreen: React.FC = () => {
             <PerfectIcon
               name="arrow-left"
               size={24}
-              color={Colors.neutral[0]}
+              color={Colors.accent.white}
             />
           </LinearGradient>
         </View>
@@ -313,153 +317,154 @@ const DevelopmentScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.neutral[50],
-  },
-  gradientBackground: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-  },
-  backButton: {
-    position: 'absolute',
-    left: PerfectSpacing.base,
-    zIndex: 10,
-  },
-  backButtonContainer: {
-    width: scale(48),
-    height: scale(48),
-    borderRadius: scale(24),
-    overflow: 'hidden',
-    ...Shadows.md,
-  },
-  backButtonGradient: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: scale(600),
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingBottom:
-      Platform.OS === 'android' ? scale(250) : PerfectSpacing['4xl'],
-  },
-  iconContainer: {
-    position: 'relative',
-  },
-  iconBackground: {
-    backgroundColor: Colors.neutral[0],
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...Shadows.lg,
-    borderWidth: scale(3),
-    borderColor: Colors.primary[100],
-  },
-  floatingIcon: {
-    position: 'absolute',
-    backgroundColor: Colors.neutral[0],
-    borderRadius: scale(20),
-    ...Shadows.sm,
-  },
-  floatingIcon1: {
-    top: scale(-10),
-    right: scale(-10),
-  },
-  floatingIcon2: {
-    bottom: scale(10),
-    left: scale(-15),
-  },
-  floatingIcon3: {
-    top: scale(20),
-    left: scale(-20),
-  },
-  titleContainer: {
-    alignItems: 'center',
-  },
-  mainTitle: {
-    fontWeight: Typography.weights.black,
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.md,
-    letterSpacing: scale(-1),
-    ...Platform.select({
-      ios: {
-        textShadowColor: 'rgba(31, 41, 55, 0.15)',
-        textShadowOffset: { width: 0, height: 2 },
-        textShadowRadius: 6,
-      },
-      android: {},
-    }),
-  },
-  subtitle: {
-    fontWeight: Typography.weights.medium,
-    color: Colors.neutral[500],
-    textAlign: 'center',
-    letterSpacing: scale(0.2),
-    ...Platform.select({
-      ios: {
-        textShadowColor: 'rgba(107, 114, 128, 0.1)',
-        textShadowOffset: { width: 0, height: 1 },
-        textShadowRadius: 3,
-      },
-      android: {},
-    }),
-  },
-  infoCard: {
-    width: '100%',
-    maxWidth: scale(400),
-  },
-  cardGradient: {
-    borderRadius: BorderRadius.xl,
-    padding: scale(3),
-  },
-  cardContent: {
-    backgroundColor: Colors.neutral[0],
-    borderRadius: BorderRadius.lg,
-    alignItems: 'center',
-    ...Shadows.lg,
-  },
-  cardIcon: {},
-  cardTitle: {
-    fontWeight: Typography.weights.bold,
-    color: Colors.neutral[900],
-    textAlign: 'center',
-    marginBottom: PerfectSpacing.md,
-    ...Platform.select({
-      ios: {
-        textShadowColor: 'rgba(31, 41, 55, 0.1)',
-        textShadowOffset: { width: 0, height: 1 },
-        textShadowRadius: 4,
-      },
-      android: {},
-    }),
-  },
-  cardDescription: {
-    color: Colors.neutral[500],
-    textAlign: 'center',
-    lineHeight: scale(24),
-    marginBottom: scale(20),
-  },
-  featuresList: {
-    width: '100%',
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  featureText: {
-    color: Colors.neutral[700],
-    fontWeight: Typography.weights.medium,
-    flex: 1,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.neutral[50],
+    },
+    gradientBackground: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    },
+    backButton: {
+      position: 'absolute',
+      left: PerfectSpacing.base,
+      zIndex: 10,
+    },
+    backButtonContainer: {
+      width: scale(48),
+      height: scale(48),
+      borderRadius: scale(24),
+      overflow: 'hidden',
+      ...Shadows.md,
+    },
+    backButtonGradient: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    content: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: scale(600),
+    },
+    scrollContent: {
+      flexGrow: 1,
+      paddingBottom:
+        Platform.OS === 'android' ? scale(250) : PerfectSpacing['4xl'],
+    },
+    iconContainer: {
+      position: 'relative',
+    },
+    iconBackground: {
+      backgroundColor: colors.neutral[0],
+      justifyContent: 'center',
+      alignItems: 'center',
+      ...Shadows.lg,
+      borderWidth: scale(3),
+      borderColor: Colors.primary[100],
+    },
+    floatingIcon: {
+      position: 'absolute',
+      backgroundColor: colors.neutral[0],
+      borderRadius: scale(20),
+      ...Shadows.sm,
+    },
+    floatingIcon1: {
+      top: scale(-10),
+      right: scale(-10),
+    },
+    floatingIcon2: {
+      bottom: scale(10),
+      left: scale(-15),
+    },
+    floatingIcon3: {
+      top: scale(20),
+      left: scale(-20),
+    },
+    titleContainer: {
+      alignItems: 'center',
+    },
+    mainTitle: {
+      fontWeight: Typography.weights.black,
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.md,
+      letterSpacing: scale(-1),
+      ...Platform.select({
+        ios: {
+          textShadowColor: 'rgba(31, 41, 55, 0.15)',
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 6,
+        },
+        android: {},
+      }),
+    },
+    subtitle: {
+      fontWeight: Typography.weights.medium,
+      color: colors.neutral[500],
+      textAlign: 'center',
+      letterSpacing: scale(0.2),
+      ...Platform.select({
+        ios: {
+          textShadowColor: 'rgba(107, 114, 128, 0.1)',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: 3,
+        },
+        android: {},
+      }),
+    },
+    infoCard: {
+      width: '100%',
+      maxWidth: scale(400),
+    },
+    cardGradient: {
+      borderRadius: BorderRadius.xl,
+      padding: scale(3),
+    },
+    cardContent: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.lg,
+      alignItems: 'center',
+      ...Shadows.lg,
+    },
+    cardIcon: {},
+    cardTitle: {
+      fontWeight: Typography.weights.bold,
+      color: colors.neutral[900],
+      textAlign: 'center',
+      marginBottom: PerfectSpacing.md,
+      ...Platform.select({
+        ios: {
+          textShadowColor: 'rgba(31, 41, 55, 0.1)',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: 4,
+        },
+        android: {},
+      }),
+    },
+    cardDescription: {
+      color: colors.neutral[500],
+      textAlign: 'center',
+      lineHeight: scale(24),
+      marginBottom: scale(20),
+    },
+    featuresList: {
+      width: '100%',
+    },
+    featureItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    featureText: {
+      color: colors.neutral[700],
+      fontWeight: Typography.weights.medium,
+      flex: 1,
+    },
+  });
 
 export default DevelopmentScreen;
