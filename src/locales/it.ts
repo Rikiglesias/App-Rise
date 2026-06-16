@@ -30,6 +30,10 @@ export default {
   },
 
   auth: {
+    a11y: {
+      showPassword: 'Mostra password',
+      hidePassword: 'Nascondi password',
+    },
     landing: {
       title: 'Area Donatori',
       subtitle: 'Accedi o registrati per seguire il tuo impatto',
