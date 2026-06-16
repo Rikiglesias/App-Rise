@@ -241,11 +241,24 @@ export default withDefaultStrings({
 
     // Plugin richiesti
     plugins: [
-      // Pod Swift di google-signin (AppCheckCore → GoogleUtilities/RecaptchaInterop)
-      // non integrabili come static libraries di default → `pod install` fallisce.
-      // Fix Expo canonico: static frameworks (expo gestisce Hermes). Verificato:
-      // docs Expo + react-native-firebase issue #6332. NB blast: rivalutare maplibre al build.
-      ['expo-build-properties', { ios: { useFrameworks: 'static' } }],
+      // Pod Swift di google-signin (AppCheckCore) importa GoogleUtilities/RecaptchaInterop,
+      // pod ObjC senza module map → senza intervento `pod install` falliva (build 9ebcbab1,
+      // log r.482). Fix CocoaPods canonico: `modular_headers` MIRATO sui 2 soli pod ObjC, così
+      // AppCheckCore li importa come static libraries — SENZA `useFrameworks:static` globale,
+      // che invece rompeva i TurboModule di MapLibre v11 (New Arch) a runtime
+      // (MLRNCameraModule not found, build a325b65d; issue expo/expo #23190).
+      // Verificato: expo-build-properties supporta ios.extraPods[].modular_headers.
+      [
+        'expo-build-properties',
+        {
+          ios: {
+            extraPods: [
+              { name: 'GoogleUtilities', modular_headers: true },
+              { name: 'RecaptchaInterop', modular_headers: true },
+            ],
+          },
+        },
+      ],
       'expo-secure-store',
       'expo-updates',
       'expo-font',
