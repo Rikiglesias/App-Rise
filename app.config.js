@@ -241,6 +241,11 @@ export default withDefaultStrings({
 
     // Plugin richiesti
     plugins: [
+      // Pod Swift di google-signin (AppCheckCore → GoogleUtilities/RecaptchaInterop)
+      // non integrabili come static libraries di default → `pod install` fallisce.
+      // Fix Expo canonico: static frameworks (expo gestisce Hermes). Verificato:
+      // docs Expo + react-native-firebase issue #6332. NB blast: rivalutare maplibre al build.
+      ['expo-build-properties', { ios: { useFrameworks: 'static' } }],
       'expo-secure-store',
       'expo-updates',
       'expo-font',
