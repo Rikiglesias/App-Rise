@@ -62,6 +62,13 @@ jobs:
 
       - name: 🔍 Detect Changes
         id: changes
+        env:
+          # Input utente (PR title, commit message) passati come ENV, NON interpolati con ${{ }}
+          # nello script: l'interpolazione diretta in bash e' script injection — un messaggio
+          # multi-riga o malevolo viene spezzato ed eseguito come comandi (exit 127). Via env e'
+          # un valore opaco e sicuro. (root cause failure su master 7994e9e, 2026-06-20)
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          HEAD_COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
           # Initialize outputs
           echo "should-test=false" >> $GITHUB_OUTPUT
@@ -84,7 +91,7 @@ jobs:
           # Check commit message for ALL triggers (consolidated from all workflows)
           # On PR: use PR title or last commit message from the head ref
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            COMMIT_MSG="${{ github.event.pull_request.title }}"
+            COMMIT_MSG="$PR_TITLE"
             echo "📝 PR title: $COMMIT_MSG"
             # Also check last commit message in PR
             LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
@@ -92,7 +99,7 @@ jobs:
             # Combine both for checking
             COMMIT_MSG="$COMMIT_MSG $LAST_COMMIT_MSG"
           else
-            COMMIT_MSG="${{ github.event.head_commit.message }}"
+            COMMIT_MSG="$HEAD_COMMIT_MSG"
             echo "📝 Commit message: $COMMIT_MSG"
           fi
 
