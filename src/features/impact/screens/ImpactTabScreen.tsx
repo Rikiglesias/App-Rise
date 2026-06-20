@@ -84,7 +84,7 @@ const ImpactTabScreenComponent: React.FC = () => {
 
   const handleMapPress = useCallback(() => {
     try {
-      // Apre la mappa fullscreen "Dove operiamo" con i paesi reali (MapLibre)
+      // Apre la mappa fullscreen "Dove operiamo" con i paesi-evento (world map SVG)
       navigation.navigate('MapModal', { locations: convertToMapLocations() });
     } catch (error) {
       logError(

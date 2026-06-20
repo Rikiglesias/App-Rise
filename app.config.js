@@ -245,8 +245,8 @@ export default withDefaultStrings({
       // pod ObjC senza module map → senza intervento `pod install` falliva (build 9ebcbab1,
       // log r.482). Fix CocoaPods canonico: `modular_headers` MIRATO sui 2 soli pod ObjC, così
       // AppCheckCore li importa come static libraries — SENZA `useFrameworks:static` globale,
-      // che invece rompeva i TurboModule di MapLibre v11 (New Arch) a runtime
-      // (MLRNCameraModule not found, build a325b65d; issue expo/expo #23190).
+      // che invece rompeva i TurboModule nativi della New Arch a runtime (regressione
+      // storica con MapLibre v11, modulo poi rimosso; issue expo/expo #23190).
       // Verificato: expo-build-properties supporta ios.extraPods[].modular_headers.
       [
         'expo-build-properties',
@@ -278,10 +278,6 @@ export default withDefaultStrings({
           },
         },
       ],
-      // MapLibre (mappa "Dove operiamo"): config plugin per il modulo nativo.
-      // Tile/style via MapTiler (EXPO_PUBLIC_MAPTILER_KEY). Richiede New Arch
-      // (default SDK 54) + dev build (no Expo Go). Sostituisce react-native-maps/Google.
-      '@maplibre/maplibre-react-native',
       // Social auth donatori: Apple (nessuna config) + Google (config plugin
       // condizionale su env; iosUrlScheme = reversed iOS client ID). Senza l'env
       // il plugin Google è assente → prebuild invariato (pre-OAuth safe).

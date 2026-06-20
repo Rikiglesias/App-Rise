@@ -90,7 +90,6 @@
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.3",
-    "@maplibre/maplibre-react-native": "^11.3.4",
     "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-google-signin/google-signin": "^16.1.2",
     "@react-navigation/bottom-tabs": "^7.3.14",
@@ -100,6 +99,7 @@
     "@sentry/react-native": "~7.2.0",
     "@supabase/supabase-js": "^2.108.2",
     "babel-plugin-module-resolver": "^5.0.2",
+    "d3-geo": "^3.1.1",
     "expo": "~54.0.35",
     "expo-apple-authentication": "~8.0.8",
     "expo-blur": "~15.0.8",
@@ -122,15 +122,19 @@
     "react-native-paper": "^5.14.5",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
-    "react-native-svg": "15.12.1",
-    "react-native-web": "^0.21.0"
+    "react-native-svg": "15.15.5",
+    "react-native-web": "^0.21.0",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@expo/config-plugins": "~54.0.1",
     "@testing-library/react-native": "^13.2.0",
+    "@types/d3-geo": "^3.1.0",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.1.10",
+    "@types/topojson-client": "^3.1.5",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
@@ -163,6 +167,13 @@
       "eslint --max-warnings 0 --no-error-on-unmatched-pattern",
       "prettier --write"
     ]
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "react-native-svg"
+      ]
+    }
   },
   "private": true
 }

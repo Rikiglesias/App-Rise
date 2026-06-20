@@ -2,7 +2,7 @@ module.exports = {
   preset: 'jest-expo',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   transformIgnorePatterns: [
-    'node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg))',
+    'node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|d3-geo|d3-array|internmap|topojson-client))',
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
@@ -38,9 +38,6 @@ module.exports = {
   },
   // Module name mapping per alias TypeScript
   moduleNameMapper: {
-    // Mappa nativa: in jest usa il mock (come metro per web/Expo Go); il modulo
-    // nativo @maplibre non è caricabile nell'ambiente di test.
-    '^@maplibre/maplibre-react-native$': '<rootDir>/web-maps-mock.js',
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@components/(.*)$': '<rootDir>/src/components/$1',
     '^@shared/(.*)$': '<rootDir>/src/shared/$1',
