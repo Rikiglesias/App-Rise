@@ -38,11 +38,7 @@ const BUNDLE_CONFIG = {
 
   // Ottimizzazioni consigliate
   optimizations: {
-    dynamicImports: [
-      '@maplibre/maplibre-react-native',
-      'react-native-svg',
-      'react-native-reanimated',
-    ],
+    dynamicImports: ['react-native-svg', 'react-native-reanimated'],
     treeshaking: ['lodash', '@expo/vector-icons', 'react-native-paper'],
   },
 };
