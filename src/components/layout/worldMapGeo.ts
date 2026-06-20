@@ -63,15 +63,17 @@ export const buildCountryShapes = (
 };
 
 /**
- * Associa ogni Location al paese che la contiene (point-in-polygon su coordinate
- * sferiche [lng, lat]). Ritorna una mappa `countryNumericId → Location` per colorare
- * e rendere cliccabili solo i paesi-evento. Le Location senza paese (coordinate in
- * mare / paese assente in 110m) vengono ignorate dal match e gestite dal fallback UI.
+ * Associa le Location al paese che le contiene (point-in-polygon su coordinate
+ * sferiche [lng, lat]). Ritorna `countryNumericId → Location[]`: la LISTA preserva
+ * tutti gli eventi dello stesso paese (un paese può ospitare più location), usata
+ * per colorare/rendere cliccabili i paesi-evento. Le Location senza paese
+ * (coordinate in mare / paese assente in 110m) non finiscono nella mappa e restano
+ * accessibili dalla lista chip di fallback in WorldMapSvg.
  */
 export const matchLocationsToCountries = (
   locations: readonly Location[]
-): Map<string, Location> => {
-  const matched = new Map<string, Location>();
+): Map<string, Location[]> => {
+  const matched = new Map<string, Location[]>();
   for (const location of locations) {
     const point: [number, number] = [
       location.coordinates.longitude,
@@ -81,7 +83,13 @@ export const matchLocationsToCountries = (
       f => f.id !== undefined && geoContains(f, point)
     );
     if (country?.id !== undefined) {
-      matched.set(String(country.id), location);
+      const key = String(country.id);
+      const existing = matched.get(key);
+      if (existing) {
+        existing.push(location);
+      } else {
+        matched.set(key, [location]);
+      }
     }
   }
   return matched;

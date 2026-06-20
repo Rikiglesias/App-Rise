@@ -45,16 +45,21 @@ describe('worldMapGeo', () => {
   });
 
   describe('matchLocationsToCountries', () => {
-    it('associa tutte le 6 location-evento a un paese (match per coordinate)', () => {
+    it('associa tutte le 6 location-evento (6 paesi distinti)', () => {
       const matched = matchLocationsToCountries(asLocations());
-      expect(matched.size).toBe(LOCATIONS_DATA.length);
+      expect(matched.size).toBe(6);
+      const total = Array.from(matched.values()).reduce(
+        (n, arr) => n + arr.length,
+        0
+      );
+      expect(total).toBe(LOCATIONS_DATA.length);
     });
 
     it('mappa ogni location al paese geografico corretto, non per nome italiano', () => {
       const matched = matchLocationsToCountries(asLocations());
       const countryNameFor = (locId: string): string | undefined => {
-        for (const [numericId, loc] of matched) {
-          if (loc.id === locId) {
+        for (const [numericId, locs] of matched) {
+          if (locs.some(l => l.id === locId)) {
             return COUNTRY_FEATURES.find(f => String(f.id) === numericId)
               ?.properties?.name;
           }
@@ -67,6 +72,35 @@ describe('worldMapGeo', () => {
       expect(countryNameFor('zimbabwe')).toBe('Zimbabwe');
       expect(countryNameFor('south-africa')).toBe('South Africa');
       expect(countryNameFor('somalia')).toBe('Somalia');
+    });
+
+    it('preserva più location nello stesso paese senza sovrascrivere', () => {
+      const mk = (
+        id: string,
+        latitude: number,
+        longitude: number
+      ): Location => ({
+        id,
+        name: id,
+        country: 'Italia',
+        coordinates: { latitude, longitude },
+        projects: 0,
+        beneficiaries: '',
+        status: 'active',
+        description: '',
+        image: '',
+      });
+      const matched = matchLocationsToCountries([
+        mk('italy-bologna', 44.4949, 11.3426),
+        mk('italy-milano', 45.4642, 9.19),
+      ]);
+      expect(matched.size).toBe(1);
+      const italyLocs = Array.from(matched.values())[0] ?? [];
+      expect(italyLocs).toHaveLength(2);
+      expect(italyLocs.map(l => l.id).sort()).toEqual([
+        'italy-bologna',
+        'italy-milano',
+      ]);
     });
   });
 });

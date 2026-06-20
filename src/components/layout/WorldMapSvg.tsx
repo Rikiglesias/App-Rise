@@ -112,11 +112,6 @@ const WorldMapSvgComponent: React.FC<Props> = ({
     [onMarkerPress]
   );
 
-  const activeLocations = useMemo(
-    () => Array.from(activeByCountryId.values()),
-    [activeByCountryId]
-  );
-
   return (
     <View
       style={[styles.container, style]}
@@ -135,20 +130,26 @@ const WorldMapSvgComponent: React.FC<Props> = ({
           {shapes.map((shape, index) => {
             // Alcune feature Natural Earth non hanno id ISO (es. Somaliland, N. Cyprus):
             // mai attive, ma servono comunque una key univoca e stabile.
-            const location = shape.id
+            const countryLocations = shape.id
               ? activeByCountryId.get(shape.id)
               : undefined;
+            // Tap sul poligono apre la prima location del paese; le altre (stesso
+            // paese) restano raggiungibili dai chip, uno per evento.
+            const primary = countryLocations?.[0];
             return (
               <CountryPath
                 key={shape.id || `country-${index}`}
                 d={shape.d}
-                {...(location
+                {...(primary
                   ? {
                       fill: colors.primary[600],
                       stroke: colors.primary[800],
                       strokeWidth: scale(1.2),
-                      onPress: createPressHandler(location),
-                      accessibilityLabel: `${location.country}: tocca per i dettagli`,
+                      onPress: createPressHandler(primary),
+                      accessibilityLabel:
+                        countryLocations && countryLocations.length > 1
+                          ? `${primary.country}: ${countryLocations.length} eventi, tocca per i dettagli`
+                          : `${primary.country}: tocca per i dettagli`,
                     }
                   : {
                       fill: colors.neutral[300],
@@ -172,7 +173,7 @@ const WorldMapSvgComponent: React.FC<Props> = ({
           contentContainerStyle={styles.legendContent}
           accessibilityLabel="Paesi dove operiamo"
         >
-          {activeLocations.map(location => (
+          {locations.map(location => (
             <PlatformTouchable
               key={location.id}
               style={styles.chip}
