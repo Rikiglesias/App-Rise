@@ -13,6 +13,7 @@
     },
     "development": {
       "developmentClient": true,
+      "autoIncrement": true,
       "distribution": "internal",
       "channel": "development",
       "environment": "development"
@@ -29,6 +30,7 @@
       }
     },
     "preview-device": {
+      "autoIncrement": true,
       "distribution": "internal",
       "channel": "preview",
       "android": {
