@@ -71,7 +71,7 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
 
     return (
       <View style={styles.wrap}>
-        <PerfectText size={14} lines={1} style={styles.label}>
+        <PerfectText size={16} lines={1} style={styles.label}>
           {label}
         </PerfectText>
         <View
