@@ -29,7 +29,7 @@ export const AuthSection: React.FC<AuthSectionProps> = ({
 
   return (
     <View style={[styles.section, first ? styles.sectionFirst : null]}>
-      <PerfectText size={12} lines={1} style={styles.title}>
+      <PerfectText size={18} lines={1} style={styles.title}>
         {title}
       </PerfectText>
       {children}
@@ -40,16 +40,19 @@ export const AuthSection: React.FC<AuthSectionProps> = ({
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     section: {
-      marginTop: PerfectSpacing.lg,
+      marginTop: PerfectSpacing.xl,
     },
     sectionFirst: {
       marginTop: 0,
     },
+    // Intestazione di gruppo come vero sotto-titolo: scura e più grande delle
+    // label dei campi (18 > 16), così la gerarchia "gruppo > campo" è leggibile.
+    // Niente uppercase né accento di colore: i gruppi si distinguono per
+    // dimensione/peso, non colorando (il form non dev'essere "colorato").
     title: {
-      color: colors.neutral[500],
+      color: colors.neutral[900],
       fontWeight: '700',
-      textTransform: 'uppercase',
-      letterSpacing: scale(0.5),
-      marginBottom: PerfectSpacing.sm,
+      letterSpacing: scale(-0.3),
+      marginBottom: PerfectSpacing.base,
     },
   });
