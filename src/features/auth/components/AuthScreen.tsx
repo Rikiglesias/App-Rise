@@ -13,6 +13,12 @@ interface AuthScreenProps {
   subtitle?: string;
   /** Mostra il marchio brand in testa (default sì, per identità coerente). */
   showLogo?: boolean;
+  /**
+   * Centra verticalmente il contenuto (default no). Usare SOLO su schermate
+   * corte (es. landing): centrare un form lungo lo taglierebbe in cima quando
+   * supera il viewport.
+   */
+  centerContent?: boolean;
   children: React.ReactNode;
 }
 
@@ -21,6 +27,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   title,
   subtitle,
   showLogo = true,
+  centerContent = false,
   children,
 }) => {
   const colors = useThemeColors();
@@ -33,7 +40,10 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         style={styles.flex}
       >
         <PlatformScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[
+            styles.content,
+            centerContent && styles.contentCentered,
+          ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
@@ -78,6 +88,11 @@ const createStyles = (colors: ThemeColors) =>
       flexGrow: 1,
       padding: PerfectSpacing.lg,
       paddingTop: PerfectSpacing.xl,
+    },
+    contentCentered: {
+      // Centra il blocco corto (landing) ed elimina il vuoto in fondo.
+      // Su form lunghi NON va usato: taglierebbe il contenuto sopra il viewport.
+      justifyContent: 'center',
     },
     header: {
       marginBottom: PerfectSpacing.xl,
