@@ -30,7 +30,11 @@ type GoogleSigninModule =
  * se poi assorbito. Il try/catch resta come rete di sicurezza.
  */
 const loadGoogleSignin = (): GoogleSigninModule | undefined => {
-  if (!TurboModuleRegistry.get('RNGoogleSignin')) {
+  // Su web (react-native-web) `TurboModuleRegistry` non è esportato → è `undefined`:
+  // l'optional chaining evita il crash "Cannot read properties of undefined (reading
+  // 'get')". Il modulo nativo RNGoogleSignin non esiste su web, quindi il login Google
+  // resta inerte (come su Expo Go) senza buttare giù l'app.
+  if (!TurboModuleRegistry?.get?.('RNGoogleSignin')) {
     return undefined;
   }
   try {

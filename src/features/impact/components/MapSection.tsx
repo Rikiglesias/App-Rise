@@ -76,13 +76,19 @@ export const MapSection: React.FC<Props> = React.memo(
 
         {/* Anteprima mappa SVG live → apre la fullscreen al tap */}
         <PlatformTouchable
-          style={[styles.mapImageContainer, { height: computedHeight }]}
+          style={[
+            styles.mapImageContainer,
+            { width: containerWidth, height: computedHeight },
+          ]}
           onPress={onMapPress}
           activeOpacity={0.85}
           accessibilityRole="button"
           accessibilityLabel={t('impact.tapToExplore')}
         >
-          <View style={styles.mapPreview} pointerEvents="none">
+          <View
+            style={[styles.mapPreview, { height: computedHeight }]}
+            pointerEvents="none"
+          >
             <WorldMapSvg
               locations={locations}
               onMarkerPress={noop}
@@ -134,7 +140,7 @@ const createStyles = (colors: ThemeColors) =>
       alignSelf: 'center',
     },
     mapPreview: {
-      ...StyleSheet.absoluteFillObject,
+      width: '100%',
     },
     mapClickIndicator: {
       position: 'absolute',
