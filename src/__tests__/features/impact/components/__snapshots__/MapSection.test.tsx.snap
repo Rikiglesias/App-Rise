@@ -72,6 +72,8 @@ exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = 
     </View>
   </View>
   <View
+    accessibilityLabel="Tocca per esplorare"
+    accessibilityRole="button"
     accessibilityState={
       {
         "busy": undefined,
@@ -122,17 +124,24 @@ exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = 
       }
     }
   >
-    <Image
-      absoluteDimensions={true}
-      borderRadius={20}
-      height={320}
-      source={
+    <View
+      pointerEvents="none"
+      style={
         {
-          "testUri": "../../../assets/images/mappa.png",
+          "bottom": 0,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
         }
       }
-      width={525}
-    />
+    >
+      <WorldMapSvg
+        isFullScreen={false}
+        locations={[]}
+        onMarkerPress={[Function]}
+      />
+    </View>
     <View
       style={
         {
