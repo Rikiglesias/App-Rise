@@ -6,13 +6,40 @@
 
 import Constants from 'expo-constants';
 
+/**
+ * Mappa STATICA delle variabili `EXPO_PUBLIC_*`.
+ *
+ * Metro/Expo inlina i valori SOLO quando `process.env.EXPO_PUBLIC_*` è
+ * referenziato in modo statico con la dot-notation (doc Expo: `process.env['X']`
+ * e il destructuring NON vengono inlinati). Negli build standalone (release) non
+ * esiste un `process.env` popolato a runtime: senza questa mappa i valori
+ * risultano `undefined` e l'app crasha al boot in `validateEnvironmentConfig`.
+ * Qui ogni var è scritta con accesso letterale → i valori sono sostituiti a
+ * build-time dal bundler. Aggiungere QUI ogni nuova `EXPO_PUBLIC_*` consumata.
+ */
+const STATIC_PUBLIC_ENV: Record<string, string | undefined> = {
+  EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
+  EXPO_PUBLIC_SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+  EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID:
+    process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  EXPO_PUBLIC_API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL,
+  EXPO_PUBLIC_API_BASE_URL_DEV: process.env.EXPO_PUBLIC_API_BASE_URL_DEV,
+  EXPO_PUBLIC_API_BASE_URL_STAGING:
+    process.env.EXPO_PUBLIC_API_BASE_URL_STAGING,
+};
+
 const getEnvVar = (key: string): string | undefined => {
+  // Prima la mappa statica inlinata (unica fonte negli standalone build); poi
+  // fallback a `process.env` runtime per le var NON-EXPO_PUBLIC lette solo in
+  // ambiente Node (es. JEST_WORKER_ID nei test).
   const processEnv = (
     globalThis as typeof globalThis & {
       process?: { env?: Record<string, string | undefined> };
     }
   ).process?.env;
-  const value = processEnv?.[key] as string | undefined;
+  const value = (STATIC_PUBLIC_ENV[key] ?? processEnv?.[key]) as
+    | string
+    | undefined;
   return typeof value === 'string' && value.trim().length > 0
     ? value
     : undefined;
