@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { SocialButtons } from '../components/SocialButtons';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -25,6 +26,7 @@ export const LoginScreen: React.FC = () => {
   const [emailErr, setEmailErr] = useState<string | undefined>();
   const [pwdErr, setPwdErr] = useState<string | undefined>();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [socialError, setSocialError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const passwordRef = useRef<TextInput>(null);
@@ -53,9 +55,11 @@ export const LoginScreen: React.FC = () => {
     setLoading(true);
     const { error } = await signIn(email.trim(), password);
     setLoading(false);
+    // Post-login NON si naviga: questa schermata è il contenuto della tab
+    // Profilo quando unauthenticated; il cambio di status nell'AuthContext la
+    // ri-renderizza verso il profilo da solo.
     if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
-    else navigation.goBack();
-  }, [email, password, signIn, t, navigation]);
+  }, [email, password, signIn, t]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();
@@ -68,9 +72,17 @@ export const LoginScreen: React.FC = () => {
     (): void => navigation.navigate('SignUp'),
     [navigation]
   );
+  const handleSocialError = useCallback(
+    (message: string): void =>
+      setSocialError(t(`auth.errors.${mapAuthError(message)}`)),
+    [t]
+  );
 
   return (
-    <AuthScreen title={t('auth.login.title')}>
+    <AuthScreen
+      title={t('auth.login.title')}
+      subtitle={t('auth.login.subtitle')}
+    >
       <AuthInput
         label={t('auth.login.email')}
         value={email}
@@ -112,10 +124,16 @@ export const LoginScreen: React.FC = () => {
         onPress={goToForgot}
       />
       <AuthButton
-        label={t('auth.login.noAccount')}
-        variant="link"
+        label={t('auth.login.signup')}
+        variant="secondary"
         onPress={goToSignUp}
       />
+      <SocialButtons onError={handleSocialError} />
+      {socialError ? (
+        <PerfectText size={14} lines={2} style={styles.error}>
+          {socialError}
+        </PerfectText>
+      ) : null}
     </AuthScreen>
   );
 };

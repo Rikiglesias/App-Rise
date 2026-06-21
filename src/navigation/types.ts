@@ -29,7 +29,6 @@ export interface RootStackParamList {
   };
   ChiSiamo: undefined;
   Projects: undefined;
-  Login: undefined;
   SignUp: undefined;
   CompleteProfile: undefined;
   ProfileEdit: undefined;

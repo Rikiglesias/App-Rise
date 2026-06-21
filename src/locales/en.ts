@@ -34,19 +34,14 @@ export default {
       showPassword: 'Show password',
       hidePassword: 'Hide password',
     },
-    landing: {
+    login: {
       title: 'Donor Area',
       subtitle: 'Sign in or sign up to follow your impact',
-      login: 'Sign in',
-      signup: 'Sign up',
-    },
-    login: {
-      title: 'Sign in',
       email: 'Email',
       password: 'Password',
       submit: 'Sign in',
       forgotPassword: 'Forgot password?',
-      noAccount: "Don't have an account? Sign up",
+      signup: 'Sign up',
     },
     signup: {
       title: 'Create account',

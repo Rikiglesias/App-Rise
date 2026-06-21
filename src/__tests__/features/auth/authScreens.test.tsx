@@ -5,7 +5,6 @@ import { AllProviders } from '../../helpers/testProviders';
 import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
 import { LoginScreen } from '@/features/auth/screens/LoginScreen';
 import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
-import { AuthLandingScreen } from '@/features/auth/screens/AuthLandingScreen';
 import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
@@ -41,8 +40,8 @@ describe('Auth screens', () => {
     expect(getByText('Torna al Login')).toBeTruthy();
   });
 
-  it('AuthLanding: render + bottone social', () => {
-    const { getByText } = wrap(<AuthLandingScreen />);
+  it('Login: schermata unica con titolo "Area Donatori" + bottone social', () => {
+    const { getByText } = wrap(<LoginScreen />);
     expect(getByText('Area Donatori')).toBeTruthy();
     expect(getByText('Continua con Google')).toBeTruthy();
   });
@@ -54,7 +53,7 @@ describe('Auth screens', () => {
     expect(queryAllByText('Campo obbligatorio').length).toBeGreaterThan(0);
   });
 
-  it('Profile: senza sessione mostra la landing', async () => {
+  it('Profile: senza sessione mostra il login (Area Donatori)', async () => {
     const { findByText } = wrap(<ProfileScreen />);
     expect(await findByText('Area Donatori')).toBeTruthy();
   });
@@ -126,12 +125,12 @@ describe('Auth screens', () => {
     expect(await findByText('Email o password non corretti')).toBeTruthy();
   });
 
-  it('AuthLanding: errore social (≠ cancelled) mostra un messaggio', async () => {
+  it('Login: errore social (≠ cancelled) mostra un messaggio', async () => {
     (supabase.auth.signInWithIdToken as jest.Mock).mockResolvedValueOnce({
       data: { session: null },
       error: { message: 'network blip' },
     });
-    const { getByText, findByText } = wrap(<AuthLandingScreen />);
+    const { getByText, findByText } = wrap(<LoginScreen />);
     fireEvent.press(getByText('Continua con Google'));
     expect(
       await findByText('Si è verificato un errore. Riprova.')

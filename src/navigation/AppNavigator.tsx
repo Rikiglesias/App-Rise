@@ -24,7 +24,6 @@ import SeguiciScreen from '@/features/social/screens/SeguiciScreen';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
-import { LoginScreen } from '@/features/auth/screens/LoginScreen';
 import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
 import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
 import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
@@ -140,12 +139,9 @@ const AppNavigator: React.FC = () => {
           options={{ headerShown: false }}
         />
 
-        {/* Area donatori (auth) */}
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
+        {/* Area donatori (auth). NB: Login non è una Stack.Screen: è il
+            contenuto della tab Profilo quando l'utente è unauthenticated
+            (ProfileScreen). SignUp/ForgotPassword/ResetPassword restano push. */}
         <Stack.Screen
           name="SignUp"
           component={SignUpScreen}

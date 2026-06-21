@@ -156,10 +156,9 @@ export const useSignUpForm = () => {
   const handleSubmit = useCallback((): void => {
     void submit();
   }, [submit]);
-  const goToLogin = useCallback(
-    (): void => navigation.navigate('Login'),
-    [navigation]
-  );
+  // "Ho già un account" / post-signup: torna indietro alla tab Profilo (che
+  // mostra LoginScreen come contenuto). Login non è più una Stack.Screen.
+  const goToLogin = useCallback((): void => navigation.goBack(), [navigation]);
 
   return {
     values: {
