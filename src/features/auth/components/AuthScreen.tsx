@@ -14,9 +14,9 @@ interface AuthScreenProps {
   /** Mostra il marchio brand in testa (default sì, per identità coerente). */
   showLogo?: boolean;
   /**
-   * Centra verticalmente il contenuto (default no). Usare SOLO su schermate
-   * corte (es. landing): centrare un form lungo lo taglierebbe in cima quando
-   * supera il viewport.
+   * Layout "welcome" della landing (default no): hero in alto + azioni spinte
+   * verso il basso da uno spacer flessibile, senza vuoto sopra il logo. NON
+   * usare sui form lunghi: lo spacer spingerebbe i campi fuori dal viewport.
    */
   centerContent?: boolean;
   children: React.ReactNode;
@@ -40,17 +40,19 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         style={styles.flex}
       >
         <PlatformScrollView
-          contentContainerStyle={[
-            styles.content,
-            centerContent && styles.contentCentered,
-          ]}
+          contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
+          {/* Landing: gruppo hero+azioni COESO nel terzo superiore (spacer
+              sopra piccolo + sotto grande). Niente vuoto sopra il logo né gap
+              centrale; lo spazio residuo resta in fondo come padding naturale
+              sopra la tab bar. Sui form gli spacer non vengono inseriti. */}
+          {centerContent ? <View style={styles.heroSpacerTop} /> : null}
           <View style={styles.header}>
             {showLogo ? (
               <PerfectImage
-                width={72}
+                width={centerContent ? 96 : 72}
                 aspectRatio={1}
                 source={require('@assets/icons/app/logo.png')}
                 imageStyle={{ resizeMode: 'contain' }}
@@ -69,6 +71,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
             ) : null}
           </View>
           {children}
+          {centerContent ? <View style={styles.heroSpacerEnd} /> : null}
         </PlatformScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -89,10 +92,13 @@ const createStyles = (colors: ThemeColors) =>
       padding: PerfectSpacing.lg,
       paddingTop: PerfectSpacing.xl,
     },
-    contentCentered: {
-      // Centra il blocco corto (landing) ed elimina il vuoto in fondo.
-      // Su form lunghi NON va usato: taglierebbe il contenuto sopra il viewport.
-      justifyContent: 'center',
+    // Landing: posiziona il gruppo hero+azioni nel terzo superiore (spacer
+    // sopra piccolo + sotto grande), coeso, senza vuoto sopra né gap centrale.
+    heroSpacerTop: {
+      flex: 0.55,
+    },
+    heroSpacerEnd: {
+      flex: 1.45,
     },
     header: {
       marginBottom: PerfectSpacing.xl,
@@ -102,7 +108,7 @@ const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     logo: {
-      marginBottom: PerfectSpacing.base,
+      marginBottom: PerfectSpacing.md,
     },
     title: {
       color: colors.neutral[900],
@@ -114,5 +120,7 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[600],
       marginTop: PerfectSpacing.sm,
       textAlign: 'center',
+      // Limita la larghezza: evita l'a-capo sbilanciato (es. "...tuo / impatto").
+      maxWidth: scale(300),
     },
   });
