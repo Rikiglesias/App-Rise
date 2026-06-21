@@ -41,7 +41,7 @@ export default {
       submit: 'Accedi',
       welcome: 'Benvenuto',
       forgotPassword: 'Password dimenticata?',
-      createAccount: 'Crea un account',
+      createAccount: 'Non hai un account? Creane uno',
     },
     signup: {
       title: 'Crea account',
