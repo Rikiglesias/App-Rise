@@ -96,6 +96,10 @@ const createStyles = (colors: ThemeColors) =>
     },
     header: {
       marginBottom: PerfectSpacing.xl,
+      // Logo + titolo + sottotitolo centrati: pattern standard delle schermate
+      // auth. Allineati a sinistra apparivano sbilanciati rispetto ai bottoni
+      // full-width (logo "laterale", sottotitolo storto a capo).
+      alignItems: 'center',
     },
     logo: {
       marginBottom: PerfectSpacing.base,
@@ -104,9 +108,11 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[900],
       fontWeight: '800',
       letterSpacing: scale(-0.5),
+      textAlign: 'center',
     },
     subtitle: {
       color: colors.neutral[600],
       marginTop: PerfectSpacing.sm,
+      textAlign: 'center',
     },
   });
