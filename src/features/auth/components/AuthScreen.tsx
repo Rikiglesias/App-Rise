@@ -51,17 +51,18 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           {centerContent ? <View style={styles.heroSpacerTop} /> : null}
           <View style={styles.header}>
             {showLogo ? (
-              <PerfectImage
-                width={centerContent ? 96 : 72}
-                aspectRatio={1}
-                source={require('@assets/icons/app/logo.png')}
-                imageStyle={{ resizeMode: 'contain' }}
-                containerStyle={styles.logo}
-                accessibilityRole="image"
-                accessibilityLabel="Rise Against Hunger Italia"
-              />
+              <View style={styles.logoBadge}>
+                <PerfectImage
+                  width={centerContent ? 76 : 60}
+                  aspectRatio={1}
+                  source={require('@assets/icons/app/logo.png')}
+                  imageStyle={{ resizeMode: 'contain' }}
+                  accessibilityRole="image"
+                  accessibilityLabel="Rise Against Hunger Italia"
+                />
+              </View>
             ) : null}
-            <PerfectText size={30} lines={2} style={styles.title}>
+            <PerfectText size={32} lines={2} style={styles.title}>
               {title}
             </PerfectText>
             {subtitle ? (
@@ -112,8 +113,18 @@ const createStyles = (colors: ThemeColors) =>
       // full-width (logo "laterale", sottotitolo storto a capo).
       alignItems: 'center',
     },
-    logo: {
-      marginBottom: PerfectSpacing.md,
+    // Badge brand morbido dietro il logo: calore (rosso tenue) + contorno
+    // delicato, così il logo non "galleggia" sul bianco piatto. rgba fisso →
+    // coerente in light e dark.
+    logoBadge: {
+      padding: PerfectSpacing.lg,
+      borderRadius: scale(999),
+      backgroundColor: 'rgba(220, 38, 38, 0.07)',
+      borderWidth: scale(1),
+      borderColor: 'rgba(220, 38, 38, 0.14)',
+      marginBottom: PerfectSpacing.lg,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     title: {
       color: colors.neutral[900],
@@ -123,12 +134,13 @@ const createStyles = (colors: ThemeColors) =>
       textAlign: 'center',
     },
     subtitle: {
-      color: colors.neutral[600],
-      // Più aria sotto il titolo + tracking leggero per leggibilità.
+      // Secondary text: grigio più morbido (non "secco") + line-height arioso;
+      // contrasto AA mantenuto (neutral[500] su sfondo chiaro). A-capo bilanciato
+      // via containerWidth sul PerfectText (niente orfano "impatto").
+      color: colors.neutral[500],
       marginTop: PerfectSpacing.md,
       textAlign: 'center',
       letterSpacing: scale(0.2),
-      // L'a-capo bilanciato è gestito da containerWidth sul PerfectText
-      // (evita l'orfano "impatto" su riga isolata).
+      lineHeight: scale(21),
     },
   });
