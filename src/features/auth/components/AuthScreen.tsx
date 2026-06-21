@@ -144,10 +144,10 @@ const createStyles = (colors: ThemeColors) =>
     logo: {
       marginBottom: PerfectSpacing.base,
     },
-    // Occhiello: maiuscoletto rosso brand, spaziato. Nomina la pagina e crea
-    // gerarchia sopra il titolo (così l'header "dice" cos'è questa schermata).
+    // Occhiello: maiuscoletto rosso brand, spaziato. Stesso rosso primary[500]
+    // del CTA/link (coerenza: non una tonalità diversa dal resto dell'app).
     eyebrow: {
-      color: Colors.primary[600],
+      color: Colors.primary[500],
       fontWeight: '700',
       textTransform: 'uppercase',
       letterSpacing: scale(1.5),
