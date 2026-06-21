@@ -45,12 +45,12 @@ const createStyles = (colors: ThemeColors) =>
     sectionFirst: {
       marginTop: 0,
     },
-    // Intestazione di gruppo come vero sotto-titolo: scura e più grande delle
-    // label dei campi (18 > 16), così la gerarchia "gruppo > campo" è leggibile.
-    // Niente uppercase né accento di colore: i gruppi si distinguono per
-    // dimensione/peso, non colorando (il form non dev'essere "colorato").
+    // Intestazione di gruppo come vero sotto-titolo: più grande delle label dei
+    // campi (18 > 16) e in rosso brand (primary[500], theme-aware come AuthInput
+    // e AuthConsentCheckbox), così la gerarchia "gruppo > campo" è leggibile e i
+    // gruppi sono riconoscibili a colpo d'occhio.
     title: {
-      color: colors.neutral[900],
+      color: colors.primary[500],
       fontWeight: '700',
       letterSpacing: scale(-0.3),
       marginBottom: PerfectSpacing.base,
