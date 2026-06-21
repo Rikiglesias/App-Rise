@@ -87,10 +87,16 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
         accessibilityLabel={t('auth.social.continueGoogle')}
         style={styles.googleBtn}
       >
-        <GoogleGLogo />
-        <PerfectText size={16} lines={1} style={styles.googleText}>
-          {t('auth.social.continueGoogle')}
-        </PerfectText>
+        {/* Figlio singolo styled: su Android PlatformTouchable wrappa i figli
+            multipli in una View unstyled, perdendo il row → logo+testo in
+            colonna. Una sola View-row interna evita il wrapper e tiene il
+            layout coerente iOS/Android (Codex P2). */}
+        <View style={styles.googleRow}>
+          <GoogleGLogo />
+          <PerfectText size={16} lines={1} style={styles.googleText}>
+            {t('auth.social.continueGoogle')}
+          </PerfectText>
+        </View>
       </PlatformTouchable>
     </View>
   );
@@ -121,7 +127,6 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: PerfectSpacing.sm,
     },
     googleBtn: {
-      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       height: scale(48),
@@ -129,6 +134,10 @@ const createStyles = (colors: ThemeColors) =>
       borderWidth: scale(1),
       borderColor: colors.neutral[300],
       borderRadius: scale(12),
+    },
+    googleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     googleText: {
       color: colors.neutral[900],
