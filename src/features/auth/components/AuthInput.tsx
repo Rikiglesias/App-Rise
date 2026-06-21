@@ -1,9 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import {
   TextInput,
   View,
   StyleSheet,
+  AccessibilityInfo,
   type KeyboardTypeOptions,
+  type ReturnKeyTypeOptions,
+  type TextInputProps,
 } from 'react-native';
 
 import { PerfectText, PerfectIcon, PlatformTouchable } from '@/components/ui';
@@ -23,67 +26,116 @@ interface AuthInputProps {
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   placeholder?: string;
+  /** Abilita l'autofill dei password manager (iOS/Android). */
+  autoComplete?: TextInputProps['autoComplete'];
+  textContentType?: TextInputProps['textContentType'];
+  /** 'next' per saltare al campo seguente, 'done'/'go' sull'ultimo. */
+  returnKeyType?: ReturnKeyTypeOptions;
+  onSubmitEditing?: () => void;
 }
 
-export const AuthInput: React.FC<AuthInputProps> = ({
-  label,
-  value,
-  onChangeText,
-  error,
-  secureTextEntry = false,
-  keyboardType = 'default',
-  autoCapitalize = 'sentences',
-  placeholder,
-}) => {
-  const colors = useThemeColors();
-  const { t } = useTranslation();
-  const styles = useMemo(() => createStyles(colors), [colors]);
-  // Per i campi password: nasconde di default, l'occhio rivela/ri-nasconde.
-  const [revealed, setRevealed] = useState(false);
-  const toggleReveal = (): void => setRevealed(v => !v);
+/**
+ * Input auth condiviso: label + campo + toggle password + errore.
+ * `forwardRef` espone il TextInput per la navigazione campo→campo (focus chaining).
+ */
+export const AuthInput = forwardRef<TextInput, AuthInputProps>(
+  (
+    {
+      label,
+      value,
+      onChangeText,
+      error,
+      secureTextEntry = false,
+      keyboardType = 'default',
+      autoCapitalize = 'sentences',
+      placeholder,
+      autoComplete,
+      textContentType,
+      returnKeyType,
+      onSubmitEditing,
+    },
+    ref
+  ) => {
+    const colors = useThemeColors();
+    const { t } = useTranslation();
+    const styles = useMemo(() => createStyles(colors), [colors]);
+    // Per i campi password: nasconde di default, l'occhio rivela/ri-nasconde.
+    const [revealed, setRevealed] = useState(false);
+    const [focused, setFocused] = useState(false);
+    const toggleReveal = (): void => setRevealed(v => !v);
 
-  return (
-    <View style={styles.wrap}>
-      <PerfectText size={14} lines={1} style={styles.label}>
-        {label}
-      </PerfectText>
-      <View style={[styles.inputRow, error ? styles.inputRowError : null]}>
-        <TextInput
-          style={styles.input}
-          value={value}
-          onChangeText={onChangeText}
-          secureTextEntry={secureTextEntry && !revealed}
-          keyboardType={keyboardType}
-          autoCapitalize={autoCapitalize}
-          placeholder={placeholder}
-          placeholderTextColor={colors.neutral[400]}
-          accessibilityLabel={label}
-        />
-        {secureTextEntry ? (
-          <PlatformTouchable
-            onPress={toggleReveal}
-            accessibilityRole="button"
-            accessibilityLabel={t(
-              revealed ? 'auth.a11y.hidePassword' : 'auth.a11y.showPassword'
-            )}
-            style={styles.toggle}
-          >
-            <PerfectIcon
-              name={revealed ? 'eye-off' : 'eye'}
-              size={22}
-              color={colors.neutral[500]}
-            />
-          </PlatformTouchable>
+    // Annuncia l'errore allo screen reader quando compare (iOS + Android).
+    useEffect(() => {
+      if (error) AccessibilityInfo.announceForAccessibility(error);
+    }, [error]);
+
+    return (
+      <View style={styles.wrap}>
+        <PerfectText size={14} lines={1} style={styles.label}>
+          {label}
+        </PerfectText>
+        <View
+          style={[
+            styles.inputRow,
+            focused ? styles.inputRowFocused : null,
+            error ? styles.inputRowError : null,
+          ]}
+        >
+          <TextInput
+            ref={ref}
+            style={styles.input}
+            value={value}
+            onChangeText={onChangeText}
+            onFocus={(): void => setFocused(true)}
+            onBlur={(): void => setFocused(false)}
+            secureTextEntry={secureTextEntry && !revealed}
+            keyboardType={keyboardType}
+            autoCapitalize={autoCapitalize}
+            autoComplete={autoComplete}
+            textContentType={textContentType}
+            returnKeyType={returnKeyType}
+            onSubmitEditing={onSubmitEditing}
+            blurOnSubmit={returnKeyType !== 'next'}
+            placeholder={placeholder}
+            placeholderTextColor={colors.neutral[500]}
+            accessibilityLabel={label}
+          />
+          {secureTextEntry ? (
+            <PlatformTouchable
+              onPress={toggleReveal}
+              accessibilityRole="button"
+              accessibilityLabel={t(
+                revealed ? 'auth.a11y.hidePassword' : 'auth.a11y.showPassword'
+              )}
+              hitSlop={{
+                top: scale(8),
+                bottom: scale(8),
+                left: scale(8),
+                right: scale(8),
+              }}
+              style={styles.toggle}
+            >
+              <PerfectIcon
+                name={revealed ? 'eye-off' : 'eye'}
+                size={22}
+                color={colors.neutral[500]}
+              />
+            </PlatformTouchable>
+          ) : null}
+        </View>
+        {error ? (
+          <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
+            <PerfectText size={13} lines={2} style={styles.error}>
+              {error}
+            </PerfectText>
+          </View>
         ) : null}
       </View>
-      {error ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {error}
-        </PerfectText>
-      ) : null}
-    </View>
-  );
-};
+    );
+  }
+);
+
+AuthInput.displayName = 'AuthInput';
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
@@ -103,6 +155,9 @@ const createStyles = (colors: ThemeColors) =>
       borderColor: colors.neutral[200],
       borderRadius: scale(12),
       paddingHorizontal: PerfectSpacing.base,
+    },
+    inputRowFocused: {
+      borderColor: colors.primary[500],
     },
     inputRowError: {
       borderColor: Colors.semantic.error.main,

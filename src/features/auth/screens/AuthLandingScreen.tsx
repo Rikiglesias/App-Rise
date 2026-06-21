@@ -6,7 +6,6 @@ import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
 import { SocialButtons } from '../components/SocialButtons';
 import { PerfectText } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -37,10 +36,10 @@ export const AuthLandingScreen: React.FC = () => {
   );
 
   return (
-    <AuthScreen title={t('auth.landing.title')}>
-      <PerfectText size={16} lines={3} style={styles.subtitle}>
-        {t('auth.landing.subtitle')}
-      </PerfectText>
+    <AuthScreen
+      title={t('auth.landing.title')}
+      subtitle={t('auth.landing.subtitle')}
+    >
       <AuthButton label={t('auth.landing.login')} onPress={goToLogin} />
       <AuthButton
         label={t('auth.landing.signup')}
@@ -59,12 +58,8 @@ export const AuthLandingScreen: React.FC = () => {
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    subtitle: {
-      color: colors.neutral[600],
-      marginBottom: PerfectSpacing.xl,
-    },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.main,
       marginTop: PerfectSpacing.base,
       textAlign: 'center',
     },
