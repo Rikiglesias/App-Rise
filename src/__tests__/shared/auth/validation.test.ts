@@ -5,6 +5,7 @@ import {
   validateAdult,
   validateRequired,
   validateSignUpForm,
+  validateProfileForm,
 } from '@/shared/auth/validation';
 
 describe('auth validation', () => {
@@ -62,6 +63,33 @@ describe('auth validation', () => {
       birthDate: '2000-01-01',
       privacyConsent: false,
     });
+    expect(errors.privacyConsent).toBe('required');
+  });
+
+  it('profile form: valida i campi comuni (no email/password)', () => {
+    const errors = validateProfileForm({
+      firstName: 'Mario',
+      lastName: 'Rossi',
+      phone: '+393331234567',
+      city: 'Roma',
+      province: 'RM',
+      birthDate: '2000-01-01',
+      privacyConsent: true,
+    });
+    expect(errors).toEqual({});
+  });
+
+  it('profile form: errori su telefono e privacy', () => {
+    const errors = validateProfileForm({
+      firstName: 'Mario',
+      lastName: 'Rossi',
+      phone: '333',
+      city: 'Roma',
+      province: 'RM',
+      birthDate: '2000-01-01',
+      privacyConsent: false,
+    });
+    expect(errors.phone).toBe('phone_invalid');
     expect(errors.privacyConsent).toBe('required');
   });
 });

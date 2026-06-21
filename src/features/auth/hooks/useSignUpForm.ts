@@ -1,0 +1,196 @@
+import { useCallback, useMemo, useRef, useState } from 'react';
+import type { TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useAuth } from '@/shared/auth/AuthContext';
+import {
+  validateSignUpForm,
+  type SignUpErrors,
+} from '@/shared/auth/validation';
+import { mapAuthError } from '@/shared/auth/authErrors';
+import type { RootStackNavigationProp } from '@/navigation/types';
+
+/**
+ * Logica del form di registrazione: stato, validazione, ref per la navigazione
+ * campo→campo e handler stabili (no arrow inline nei prop JSX). La vista resta pura.
+ */
+export const useSignUpForm = () => {
+  const { t } = useTranslation();
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const { signUp } = useAuth();
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('+39');
+  const [city, setCity] = useState('');
+  const [province, setProvince] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [errors, setErrors] = useState<SignUpErrors>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const lastNameRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
+  const phoneRef = useRef<TextInput>(null);
+  const cityRef = useRef<TextInput>(null);
+  const provinceRef = useRef<TextInput>(null);
+
+  // Pulisce l'errore di un campo mentre l'utente lo corregge.
+  const clearError = useCallback(
+    (key: keyof SignUpErrors): void =>
+      setErrors(prev => (prev[key] ? { ...prev, [key]: undefined } : prev)),
+    []
+  );
+
+  const onChange = useMemo(
+    () => ({
+      firstName: (v: string): void => {
+        setFirstName(v);
+        clearError('firstName');
+      },
+      lastName: (v: string): void => {
+        setLastName(v);
+        clearError('lastName');
+      },
+      email: (v: string): void => {
+        setEmail(v);
+        clearError('email');
+      },
+      password: (v: string): void => {
+        setPassword(v);
+        clearError('password');
+      },
+      phone: (v: string): void => {
+        setPhone(v);
+        clearError('phone');
+      },
+      city: (v: string): void => {
+        setCity(v);
+        clearError('city');
+      },
+      province: (v: string): void => {
+        setProvince(v);
+        clearError('province');
+      },
+      birthDate: (v: string): void => {
+        setBirthDate(v);
+        clearError('birthDate');
+      },
+    }),
+    [clearError]
+  );
+
+  const focusNext = useMemo(
+    () => ({
+      lastName: (): void => lastNameRef.current?.focus(),
+      email: (): void => emailRef.current?.focus(),
+      password: (): void => passwordRef.current?.focus(),
+      phone: (): void => phoneRef.current?.focus(),
+      city: (): void => cityRef.current?.focus(),
+      province: (): void => provinceRef.current?.focus(),
+    }),
+    []
+  );
+
+  const togglePrivacy = useCallback((): void => {
+    setPrivacyConsent(v => !v);
+    clearError('privacyConsent');
+  }, [clearError]);
+  const toggleMarketing = useCallback(
+    (): void => setMarketingConsent(v => !v),
+    []
+  );
+
+  const submit = useCallback(async (): Promise<void> => {
+    setSubmitError(null);
+    const found = validateSignUpForm({
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+      city,
+      province,
+      birthDate,
+      privacyConsent,
+    });
+    setErrors(found);
+    if (Object.keys(found).length > 0) return;
+
+    setLoading(true);
+    const { error } = await signUp(email.trim(), password, {
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
+      phone: phone.trim(),
+      city: city.trim(),
+      province: province.trim(),
+      birth_date: birthDate.trim(),
+      privacy_consent: privacyConsent,
+      marketing_consent: marketingConsent,
+    });
+    setLoading(false);
+    if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+    else setDone(true);
+  }, [
+    firstName,
+    lastName,
+    email,
+    password,
+    phone,
+    city,
+    province,
+    birthDate,
+    privacyConsent,
+    marketingConsent,
+    signUp,
+    t,
+  ]);
+
+  const handleSubmit = useCallback((): void => {
+    void submit();
+  }, [submit]);
+  const goToLogin = useCallback(
+    (): void => navigation.navigate('Login'),
+    [navigation]
+  );
+
+  return {
+    values: {
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+      city,
+      province,
+      birthDate,
+      privacyConsent,
+      marketingConsent,
+    },
+    errors,
+    refs: {
+      lastNameRef,
+      emailRef,
+      passwordRef,
+      phoneRef,
+      cityRef,
+      provinceRef,
+    },
+    onChange,
+    focusNext,
+    togglePrivacy,
+    toggleMarketing,
+    submitError,
+    loading,
+    done,
+    handleSubmit,
+    goToLogin,
+  };
+};

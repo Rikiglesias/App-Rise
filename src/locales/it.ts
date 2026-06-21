@@ -50,6 +50,12 @@ export default {
     },
     signup: {
       title: 'Crea account',
+      sections: {
+        personal: 'Dati personali',
+        account: 'Accesso',
+        contacts: 'Contatti',
+        consents: 'Consensi',
+      },
       firstName: 'Nome',
       lastName: 'Cognome',
       email: 'Email',
@@ -91,7 +97,6 @@ export default {
       completeCta: 'Completa il tuo profilo',
     },
     social: {
-      continueApple: 'Continua con Apple',
       continueGoogle: 'Continua con Google',
       or: 'oppure',
     },
