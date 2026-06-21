@@ -3,7 +3,7 @@ import { StyleSheet, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { PlatformTouchable, PerfectText } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
+import { Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 
@@ -36,7 +36,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
         <PerfectText
           size={15}
           lines={1}
-          color={Colors.primary[600]}
+          color={Colors.primary[500]}
           style={styles.linkText}
         >
           {label}
@@ -55,7 +55,9 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
       style={styles.btnWrap}
     >
       <LinearGradient
-        colors={[Colors.primary[500], Colors.primary[600]]}
+        colors={Colors.gradients.primary}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
         style={[styles.btn, isOff ? styles.btnDisabled : null]}
       >
         {loading ? (
@@ -79,13 +81,14 @@ const createStyles = () =>
   StyleSheet.create({
     btnWrap: {
       borderRadius: scale(12),
-      overflow: 'hidden',
       marginTop: PerfectSpacing.sm,
+      ...Shadows.primary,
     },
     btn: {
       paddingVertical: PerfectSpacing.base,
       alignItems: 'center',
       justifyContent: 'center',
+      borderRadius: scale(12),
     },
     btnDisabled: {
       opacity: 0.6,
@@ -95,6 +98,8 @@ const createStyles = () =>
     },
     link: {
       alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: scale(48),
       paddingVertical: PerfectSpacing.sm,
     },
     linkText: {
