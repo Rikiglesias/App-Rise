@@ -1,4 +1,5 @@
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { TurboModuleRegistry } from 'react-native';
 
 import { logWarn } from '../utils/logger';
 // NB: @react-native-google-signin/google-signin è importato in modo LAZY (dynamic
@@ -21,11 +22,17 @@ type GoogleSigninModule =
 /**
  * Carica `GoogleSignin` SOLO se il modulo nativo è presente nel binario, altrimenti
  * `undefined`. Nei build senza il config plugin google-signin (env senza
- * `EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME`) o su Expo Go il modulo nativo manca e il
- * `require` lancia `TurboModuleRegistry.getEnforcing` → qui viene assorbito così
- * l'app NON crasha al boot e il login Google resta semplicemente inerte.
+ * `EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME`) o su Expo Go il modulo nativo manca.
+ *
+ * Sonda con `TurboModuleRegistry.get` (NON-enforcing: ritorna null invece di
+ * lanciare): se il nativo manca evitiamo del tutto il `require`, che altrimenti
+ * farebbe stampare un Invariant Violation rumoroso (`getEnforcing`) nei log anche
+ * se poi assorbito. Il try/catch resta come rete di sicurezza.
  */
 const loadGoogleSignin = (): GoogleSigninModule | undefined => {
+  if (!TurboModuleRegistry.get('RNGoogleSignin')) {
+    return undefined;
+  }
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
     const mod = require('@react-native-google-signin/google-signin');
