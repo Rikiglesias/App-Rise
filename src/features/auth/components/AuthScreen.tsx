@@ -28,6 +28,8 @@ interface AuthScreenProps {
   centerContent?: boolean;
   /** Dimensione del titolo (default 32). LoginScreen lo vuole più grande. */
   titleSize?: number;
+  /** Centra verticalmente il contenuto (schermate corte senza tab bar, es. login). */
+  verticalCenter?: boolean;
   children: React.ReactNode;
 }
 
@@ -39,6 +41,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   showLogo = true,
   centerContent = false,
   titleSize = 32,
+  verticalCenter = false,
   children,
 }) => {
   const colors = useThemeColors();
@@ -51,7 +54,10 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         style={styles.flex}
       >
         <PlatformScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[
+            styles.content,
+            verticalCenter && styles.contentCentered,
+          ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
@@ -73,7 +79,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               />
             ) : null}
             {eyebrow ? (
-              <PerfectText size={15} lines={1} style={styles.eyebrow}>
+              <PerfectText size={16} lines={1} style={styles.eyebrow}>
                 {eyebrow}
               </PerfectText>
             ) : null}
@@ -114,6 +120,11 @@ const createStyles = (colors: ThemeColors) =>
       paddingTop: PerfectSpacing.lg,
       // Stacco dalla tab bar in basso: i social non restano incollati al fondo.
       paddingBottom: PerfectSpacing.xl,
+    },
+    // Centra verticalmente il blocco quando la schermata è corta e a tutto
+    // schermo (login senza tab bar): niente grande vuoto in fondo.
+    contentCentered: {
+      justifyContent: 'center',
     },
     // Landing: posiziona il gruppo hero+azioni nel terzo superiore (spacer
     // sopra piccolo + sotto grande), coeso, senza vuoto sopra né gap centrale.

@@ -45,7 +45,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
         style={styles.link}
       >
         <PerfectText
-          size={isStrong ? 16 : 15}
+          size={isStrong ? 18 : 15}
           lines={1}
           color={linkColor}
           style={isStrong ? styles.linkTextStrong : styles.linkText}

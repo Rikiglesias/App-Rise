@@ -82,7 +82,8 @@ export const LoginScreen: React.FC = () => {
       showLogo={false}
       eyebrow={t('auth.login.title')}
       title={t('auth.login.welcome')}
-      titleSize={38}
+      titleSize={42}
+      verticalCenter
     >
       <AuthInput
         label={t('auth.login.email')}
