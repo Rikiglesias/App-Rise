@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import {
   StyleSheet,
   View,
+  ActivityIndicator,
   type LayoutChangeEvent,
   type StyleProp,
   type ViewStyle,
@@ -142,8 +143,8 @@ const WorldMapSvgComponent: React.FC<Props> = ({
                 d={shape.d}
                 {...(primary
                   ? {
-                      fill: colors.primary[600],
-                      stroke: colors.primary[800],
+                      fill: colors.primary[500],
+                      stroke: colors.primary[600],
                       strokeWidth: scale(1.2),
                       onPress: createPressHandler(primary),
                       accessibilityLabel:
@@ -160,6 +161,14 @@ const WorldMapSvgComponent: React.FC<Props> = ({
             );
           })}
         </Svg>
+      ) : null}
+
+      {/* Stato vuoto/caricamento: il calcolo dei 177 path è sincrono ma se la
+          geometria non è ancora pronta (o fallisce) evitiamo l'area bianca muta. */}
+      {size.width > 0 && shapes.length === 0 ? (
+        <View style={styles.mapEmpty} pointerEvents="none">
+          <ActivityIndicator color={colors.primary[500]} />
+        </View>
       ) : null}
 
       {/* Fallback a11y + target tap robusto per i poligoni piccoli */}
@@ -206,6 +215,11 @@ const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.neutral[100],
       overflow: 'hidden',
     },
+    mapEmpty: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     legend: {
       position: 'absolute',
       left: 0,
@@ -234,9 +248,9 @@ const createStyles = (colors: ThemeColors) =>
       width: scale(10),
       height: scale(10),
       borderRadius: scale(5),
-      backgroundColor: colors.primary[600],
+      backgroundColor: colors.primary[500],
       borderWidth: scale(1.5),
-      borderColor: colors.primary[800],
+      borderColor: colors.primary[600],
       marginRight: PerfectSpacing.sm,
     },
     chipText: {

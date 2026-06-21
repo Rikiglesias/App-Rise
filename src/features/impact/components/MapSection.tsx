@@ -1,127 +1,127 @@
-import React, { useCallback, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 
+import WorldMapSvg from '@/components/layout/WorldMapSvg';
 import {
   PerfectIcon,
   PerfectText,
   PlatformTouchable,
   PerfectContainer,
-  PerfectImage,
 } from '@/components/ui';
 import { BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { getWindowDimensions, scale } from '@/shared/constants/perfectScale';
-import { IMAGE_DIMENSIONS } from '@/shared/constants/dimensions';
 import { sectionHeaderBackground } from '@/shared/styles';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import type { Location } from '@/shared/types/location';
 
 interface Props {
+  locations: Location[];
   onMapPress: () => void;
 }
 
-// Sezione mappa geografica con header decorativo e immagine interattiva
-export const MapSection: React.FC<Props> = React.memo(({ onMapPress }) => {
-  const { t } = useTranslation();
-  const { isTablet } = useDeviceType();
-  const colors = useThemeColors();
-  const styles = useMemo(() => createStyles(colors), [colors]);
-  const window = getWindowDimensions();
-  const horizontalPadding = PerfectSpacing.base * 2; // as used in section/container
-  const baseContainerWidth = Math.max(
-    0,
-    Math.floor(Math.min(window.width, window.height) - horizontalPadding)
-  );
-  // TABLET: Adatta al 70% della larghezza finestra (coerente con container padre). PHONE: 100% container
-  const containerWidth = isTablet
-    ? Math.round(Math.min(window.width, window.height) * 0.7)
-    : baseContainerWidth;
-  // TABLET: aspect ratio ridotto per meno altezza. PHONE: originale
-  const aspectRatio = isTablet ? 361 / 220 : 361 / 280;
-  const computedHeight = Math.round(containerWidth / aspectRatio);
+// La preview è una vista (non-interattiva): il tap apre la mappa fullscreen.
+const noop = (): void => {
+  /* no-op: i tap sulla preview sono gestiti dal container, non dai paesi */
+};
 
-  const handleMapImagePress = useCallback(() => {
-    onMapPress(); // Apre la mappa completa con tutti i pin
-  }, [onMapPress]);
+// Sezione mappa: anteprima SVG live (theme-aware) che apre la mappa completa.
+export const MapSection: React.FC<Props> = React.memo(
+  ({ locations, onMapPress }) => {
+    const { t } = useTranslation();
+    const { isTablet } = useDeviceType();
+    const colors = useThemeColors();
+    const styles = useMemo(() => createStyles(colors), [colors]);
+    const window = getWindowDimensions();
+    const horizontalPadding = PerfectSpacing.base * 2;
+    const baseContainerWidth = Math.max(
+      0,
+      Math.floor(Math.min(window.width, window.height) - horizontalPadding)
+    );
+    const containerWidth = isTablet
+      ? Math.round(Math.min(window.width, window.height) * 0.7)
+      : baseContainerWidth;
+    const aspectRatio = isTablet ? 361 / 220 : 361 / 280;
+    const computedHeight = Math.round(containerWidth / aspectRatio);
 
-  return (
-    <PerfectContainer
-      style={[styles.mapSection, isTablet ? { paddingHorizontal: 0 } : {}]}
-    >
-      {/* Header GEOGRAFICO con elementi di location */}
-      <PerfectContainer style={styles.mapHeaderContainer}>
-        <PerfectContainer style={styles.mapHeaderBackground}>
-          <PerfectText
-            size={22}
-            lines={1}
-            fontWeight="700"
-            immunity={true}
-            style={styles.mapTitle}
-          >
-            🌍 {t('impact.whereWeOperate')}
-          </PerfectText>
-          <PerfectText
-            size={16}
-            immunity={true}
-            lines={2}
-            style={styles.mapSubtitle}
-          >
-            {t('impact.ourOperationsWorld')}
-          </PerfectText>
-        </PerfectContainer>
-      </PerfectContainer>
-
-      {/* CONTAINER MAPPA CLICCABILE - RIEMPIE TUTTO */}
-      <PlatformTouchable
-        style={[styles.mapImageContainer, { height: computedHeight }]}
-        onPress={handleMapImagePress}
-        activeOpacity={0.85}
+    return (
+      <PerfectContainer
+        style={[styles.mapSection, isTablet ? { paddingHorizontal: 0 } : {}]}
       >
-        <PerfectImage
-          width={containerWidth}
-          height={computedHeight}
-          absoluteDimensions
-          borderRadius={20}
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          source={require('@assets/images/mappa.png')}
-        />
-
-        {/* INDICATORE CLICCABILE */}
-        <PerfectContainer style={styles.mapClickIndicator}>
-          <PerfectText
-            size={12}
-            lines={1}
-            fontWeight="500"
-            immunity={true}
-            style={styles.mapClickText}
-          >
-            {t('impact.tapToExplore')}
-          </PerfectText>
-          <PerfectIcon
-            name="map-search"
-            size={28}
-            {...IconClamps.mapIndicator}
-            color={colors.neutral[600]}
-          />
+        {/* Header geografico */}
+        <PerfectContainer style={styles.mapHeaderContainer}>
+          <PerfectContainer style={styles.mapHeaderBackground}>
+            <PerfectText
+              size={22}
+              lines={1}
+              fontWeight="700"
+              immunity={true}
+              style={styles.mapTitle}
+            >
+              🌍 {t('impact.whereWeOperate')}
+            </PerfectText>
+            <PerfectText
+              size={16}
+              immunity={true}
+              lines={2}
+              style={styles.mapSubtitle}
+            >
+              {t('impact.ourOperationsWorld')}
+            </PerfectText>
+          </PerfectContainer>
         </PerfectContainer>
-      </PlatformTouchable>
-    </PerfectContainer>
-  );
-});
+
+        {/* Anteprima mappa SVG live → apre la fullscreen al tap */}
+        <PlatformTouchable
+          style={[styles.mapImageContainer, { height: computedHeight }]}
+          onPress={onMapPress}
+          activeOpacity={0.85}
+          accessibilityRole="button"
+          accessibilityLabel={t('impact.tapToExplore')}
+        >
+          <View style={styles.mapPreview} pointerEvents="none">
+            <WorldMapSvg
+              locations={locations}
+              onMarkerPress={noop}
+              isFullScreen={false}
+            />
+          </View>
+
+          {/* Indicatore "tocca per esplorare" */}
+          <PerfectContainer style={styles.mapClickIndicator}>
+            <PerfectText
+              size={12}
+              lines={1}
+              fontWeight="500"
+              immunity={true}
+              style={styles.mapClickText}
+            >
+              {t('impact.tapToExplore')}
+            </PerfectText>
+            <PerfectIcon
+              name="map-search"
+              size={28}
+              {...IconClamps.mapIndicator}
+              color={colors.neutral[600]}
+            />
+          </PerfectContainer>
+        </PlatformTouchable>
+      </PerfectContainer>
+    );
+  }
+);
 
 MapSection.displayName = 'MapSection';
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    // Map Section - SENZA CONTAINER GRIGIO
     mapSection: {
       paddingHorizontal: PerfectSpacing.base,
-      marginTop: PerfectSpacing.lg, // spazio tra linea e titolo "Dove Operiamo"
+      marginTop: PerfectSpacing.lg,
     },
-
-    // MAP CONTAINER CLICCABILE - RIDOTTO E CENTRATO
     mapImageContainer: {
       backgroundColor: colors.neutral[0],
       borderRadius: BorderRadius.xl,
@@ -131,10 +131,11 @@ const createStyles = (colors: ThemeColors) =>
       ...Shadows.lg,
       position: 'relative',
       overflow: 'hidden',
-      height: IMAGE_DIMENSIONS.MAP_PREVIEW_HEIGHT,
-      alignSelf: 'center', // Centra la mappa ridotta
+      alignSelf: 'center',
     },
-    // INDICATORE CLICCABILE
+    mapPreview: {
+      ...StyleSheet.absoluteFillObject,
+    },
     mapClickIndicator: {
       position: 'absolute',
       top: PerfectSpacing.sm,
@@ -152,16 +153,13 @@ const createStyles = (colors: ThemeColors) =>
     mapClickText: {
       color: colors.neutral[600],
     },
-
-    // Map Section - GEOGRAFICO
     mapHeaderContainer: {
       alignItems: 'center',
       marginBottom: PerfectSpacing.lg,
     },
-
     mapHeaderBackground: {
       ...sectionHeaderBackground('white', colors),
-      width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
+      width: scale(314),
       alignSelf: 'center',
     },
     mapTitle: {

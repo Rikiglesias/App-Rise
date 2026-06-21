@@ -37,6 +37,7 @@ const ImpactTabScreenComponent: React.FC = () => {
   const insets = useSafeAreaInsets();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  const mapLocations = useMemo(() => convertToMapLocations(), []);
 
   const handleMealsPress = useCallback(() => {
     try {
@@ -85,14 +86,14 @@ const ImpactTabScreenComponent: React.FC = () => {
   const handleMapPress = useCallback(() => {
     try {
       // Apre la mappa fullscreen "Dove operiamo" con i paesi-evento (world map SVG)
-      navigation.navigate('MapModal', { locations: convertToMapLocations() });
+      navigation.navigate('MapModal', { locations: mapLocations });
     } catch (error) {
       logError(
         'Navigation error to MapModal',
         error instanceof Error ? error.message : String(error)
       );
     }
-  }, [navigation]);
+  }, [navigation, mapLocations]);
 
   const scrollContentPadding =
     Math.max(insets.bottom, scale(BASE_PADDING)) +
@@ -138,7 +139,7 @@ const ImpactTabScreenComponent: React.FC = () => {
             <PerfectContainer style={styles.sectionDivider} />
           </PerfectContainer>
 
-          <MapSection onMapPress={handleMapPress} />
+          <MapSection locations={mapLocations} onMapPress={handleMapPress} />
         </PerfectContainer>
       </PlatformScrollView>
     </SafeAreaView>

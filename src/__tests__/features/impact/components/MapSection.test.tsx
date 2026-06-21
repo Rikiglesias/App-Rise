@@ -49,12 +49,15 @@ jest.mock('expo-linear-gradient', () => ({
   LinearGradient: 'LinearGradient',
 }));
 
+// La preview ora incorpora WorldMapSvg: lo stubbiamo per isolare MapSection.
+jest.mock('@/components/layout/WorldMapSvg', () => 'WorldMapSvg');
+
 const mockOnMapPress = jest.fn();
 
 // MapSection è dark-aware (useThemeColors) → richiede il provider del tema.
 const MapSectionWithTheme = (props: { onMapPress: () => void }) => (
   <AllProviders>
-    <MapSection {...props} />
+    <MapSection locations={[]} {...props} />
   </AllProviders>
 );
 
