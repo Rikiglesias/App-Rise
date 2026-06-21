@@ -1,25 +1,30 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, Linking } from 'react-native';
+import { View, Linking } from 'react-native';
 import {
   PerfectIcon,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
   PerfectModal,
+  PlatformScrollView,
 } from '../ui';
 
-import { PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
-import { scale } from '../../shared/constants/perfectScale';
 import { logError } from '../../shared/utils/logger';
+import { createStyles } from './MapLocationModalStyles';
+import { formatStat } from '@/shared/utils/numberFormat';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
-import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import type { MapModalData } from '@/features/impact/data/mapModalData';
 
 interface MapLocationModalProps {
   visible: boolean;
   data: MapModalData | null;
   onClose: () => void;
+}
+
+interface StatCell {
+  value: number;
+  label: string;
 }
 
 const gradientStart = { x: 0, y: 0 };
@@ -47,45 +52,45 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
 
   if (!data) return null;
 
+  // Solo le metriche con label sempre corretta: `beneficiaries` ha semantica
+  // divergente tra location (persone/volontari/paesi) → resta negli achievement,
+  // dove è già contestualizzato. Fix semantica = follow-up sul modello dati.
+  const statCells: StatCell[] = [
+    data.stats.meals !== undefined
+      ? { value: data.stats.meals, label: 'Pasti' }
+      : null,
+    data.stats.kits !== undefined
+      ? { value: data.stats.kits, label: 'Kit' }
+      : null,
+    data.stats.schools !== undefined
+      ? { value: data.stats.schools, label: 'Scuole' }
+      : null,
+  ].filter((c): c is StatCell => c !== null);
+
   return (
-    <PerfectModal visible={visible} onRequestClose={onClose} size="medium">
+    <PerfectModal visible={visible} onRequestClose={onClose} size="large">
       <PerfectContainer style={styles.modalContainer}>
-        {/* Header compatto con gradient */}
         <LinearGradient
-          colors={[
-            colors.primary[600],
-            colors.primary[700],
-            colors.primary[800],
-          ]}
+          colors={[colors.primary[500], colors.primary[600]]}
           start={gradientStart}
           end={gradientEnd}
           style={styles.header}
         >
           <PerfectContainer style={styles.headerContent}>
             <PerfectContainer style={styles.headerLeft}>
-              <PerfectText
-                size={32}
-                lines={1}
-                fontWeight="400"
-                style={styles.flag}
-              >
+              <PerfectText size={32} lines={1} style={styles.flag}>
                 {data.flag}
               </PerfectText>
               <PerfectContainer style={styles.headerTextContainer}>
                 <PerfectText
                   size={20}
                   lines={1}
-                  fontWeight="400"
+                  fontWeight="800"
                   style={styles.title}
                 >
                   {data.title}
                 </PerfectText>
-                <PerfectText
-                  size={14}
-                  lines={1}
-                  fontWeight="400"
-                  style={styles.subtitle}
-                >
+                <PerfectText size={14} lines={1} style={styles.subtitle}>
                   {data.subtitle}
                 </PerfectText>
               </PerfectContainer>
@@ -96,26 +101,143 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               onPress={onClose}
               activeOpacity={0.8}
               accessibilityRole="button"
-              accessibilityLabel="Chiudi mappa"
+              accessibilityLabel="Chiudi"
             >
               <PerfectIcon name="close" size={24} color={colors.accent.white} />
             </PlatformTouchable>
           </PerfectContainer>
+
+          <View style={styles.yearBadge}>
+            <PerfectText
+              size={12}
+              lines={1}
+              fontWeight="700"
+              style={styles.yearText}
+            >
+              {`${data.year}`}
+            </PerfectText>
+          </View>
         </LinearGradient>
 
-        {/* Contenuto semplificato */}
-        <PerfectContainer style={styles.content}>
-          {/* Descrizione reale del paese */}
-          <PerfectText
-            size={16}
-            lines={5}
-            fontWeight="400"
-            style={styles.description}
-          >
+        <PlatformScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
+          {statCells.length > 0 ? (
+            <View style={styles.statGrid}>
+              {statCells.map(s => (
+                <View key={s.label} style={styles.statCell}>
+                  <PerfectText
+                    size={22}
+                    lines={1}
+                    fontWeight="900"
+                    style={styles.statValue}
+                  >
+                    {formatStat(s.value)}
+                  </PerfectText>
+                  <PerfectText
+                    size={13}
+                    lines={1}
+                    fontWeight="600"
+                    style={styles.statLabel}
+                  >
+                    {s.label}
+                  </PerfectText>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
+          <PerfectText size={16} lines={8} style={styles.description}>
             {data.description}
           </PerfectText>
 
-          {/* Call to Action: solo se esiste un link di tracciamento reale */}
+          <View style={styles.infoRow}>
+            <PerfectIcon
+              name="hand-heart"
+              size={20}
+              color={colors.primary[500]}
+              style={styles.infoIcon}
+            />
+            <View style={styles.infoTextWrap}>
+              <PerfectText
+                size={12}
+                lines={1}
+                fontWeight="700"
+                style={styles.infoLabel}
+              >
+                PROGRAMMA
+              </PerfectText>
+              <PerfectText
+                size={15}
+                lines={2}
+                fontWeight="600"
+                style={styles.infoValue}
+              >
+                {data.program}
+              </PerfectText>
+            </View>
+          </View>
+
+          {data.partner ? (
+            <View style={styles.infoRow}>
+              <PerfectIcon
+                name="account-group"
+                size={20}
+                color={colors.primary[500]}
+                style={styles.infoIcon}
+              />
+              <View style={styles.infoTextWrap}>
+                <PerfectText
+                  size={12}
+                  lines={1}
+                  fontWeight="700"
+                  style={styles.infoLabel}
+                >
+                  PARTNER
+                </PerfectText>
+                <PerfectText
+                  size={15}
+                  lines={2}
+                  fontWeight="600"
+                  style={styles.infoValue}
+                >
+                  {data.partner}
+                </PerfectText>
+              </View>
+            </View>
+          ) : null}
+
+          {data.achievements.length > 0 ? (
+            <View style={styles.achievements}>
+              <PerfectText
+                size={12}
+                lines={1}
+                fontWeight="700"
+                style={styles.infoLabel}
+              >
+                RISULTATI
+              </PerfectText>
+              {data.achievements.map(a => (
+                <View key={a} style={styles.achievementRow}>
+                  <PerfectIcon
+                    name="check-circle"
+                    size={18}
+                    color={colors.semantic.success.main}
+                    style={styles.achievementIcon}
+                  />
+                  <PerfectText
+                    size={14}
+                    lines={3}
+                    style={styles.achievementText}
+                  >
+                    {a}
+                  </PerfectText>
+                </View>
+              ))}
+            </View>
+          ) : null}
+
           {trackingUrl ? (
             <PlatformTouchable
               style={styles.ctaButton}
@@ -133,104 +255,17 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               <PerfectText
                 size={16}
                 lines={1}
-                fontWeight="400"
+                fontWeight="700"
                 style={styles.ctaText}
               >
                 Segui il tracciamento
               </PerfectText>
             </PlatformTouchable>
           ) : null}
-        </PerfectContainer>
+        </PlatformScrollView>
       </PerfectContainer>
     </PerfectModal>
   );
 };
-
-const createStyles = (colors: ThemeColors) =>
-  StyleSheet.create({
-    modalContainer: {
-      flex: 1,
-      backgroundColor: colors.neutral[0],
-    },
-
-    // Header compatto
-    header: {
-      paddingTop: PerfectSpacing['3xl'],
-      paddingBottom: PerfectSpacing.lg,
-      paddingHorizontal: PerfectSpacing.base,
-    },
-    headerContent: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    headerLeft: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
-    },
-    flag: {
-      marginRight: PerfectSpacing.md,
-    },
-    headerTextContainer: {
-      flex: 1,
-    },
-    // Testo SU gradient brand (rosso): bianco fisso, leggibile in light e dark.
-    title: {
-      color: colors.accent.white,
-      marginBottom: PerfectSpacing.lg,
-    },
-    subtitle: {
-      color: colors.accent.white,
-      opacity: 0.9,
-    },
-    closeButton: {
-      width: scale(40),
-      height: scale(40),
-      borderRadius: scale(20),
-      // rgba necessario per background semi-trasparente senza rendere opaca l'icona
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
-    // Contenuto semplificato
-    content: {
-      flex: 1,
-      paddingHorizontal: PerfectSpacing.lg,
-      paddingTop: PerfectSpacing.xl,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
-    // Descrizione breve (su superficie neutra → adattiva)
-    description: {
-      color: colors.neutral[700],
-      textAlign: 'center',
-      marginBottom: PerfectSpacing['2xl'],
-      paddingHorizontal: PerfectSpacing.base,
-    },
-
-    // Call to Action button (brand)
-    ctaButton: {
-      backgroundColor: colors.primary[600],
-      paddingVertical: PerfectSpacing.base,
-      paddingHorizontal: PerfectSpacing.xl,
-      borderRadius: BorderRadius.lg,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      ...Shadows.md,
-      minWidth: scale(280),
-    },
-    ctaIcon: {
-      marginRight: PerfectSpacing.sm,
-    },
-    // Testo su bottone brand (rosso): bianco fisso.
-    ctaText: {
-      color: colors.accent.white,
-      textAlign: 'center',
-    },
-  });
 
 export default MapLocationModal;
