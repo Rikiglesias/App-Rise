@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 /**
@@ -64,4 +65,25 @@ const getItem = async (key: string): Promise<string | null> => {
   return parts.join('');
 };
 
-export const authStorage = { getItem, setItem, removeItem };
+// Su web `expo-secure-store` non esiste (modulo nativo): usa `localStorage`. Vale solo
+// per dev/preview web — niente cifratura keychain/keystore, accettabile perché il
+// target di produzione è iOS/Android. Su web non c'è il limite 2048B → nessun chunking.
+const webStorage = {
+  // localStorage è sincrono → ritorno Promise esplicito (no `async` senza `await`)
+  // per rispettare il contratto async dell'adapter Supabase.
+  getItem: (key: string): Promise<string | null> =>
+    Promise.resolve(
+      typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null
+    ),
+  setItem: (key: string, value: string): Promise<void> => {
+    if (typeof localStorage !== 'undefined') localStorage.setItem(key, value);
+    return Promise.resolve();
+  },
+  removeItem: (key: string): Promise<void> => {
+    if (typeof localStorage !== 'undefined') localStorage.removeItem(key);
+    return Promise.resolve();
+  },
+};
+
+export const authStorage =
+  Platform.OS === 'web' ? webStorage : { getItem, setItem, removeItem };
