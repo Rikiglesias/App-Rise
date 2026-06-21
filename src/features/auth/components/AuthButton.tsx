@@ -12,7 +12,7 @@ interface AuthButtonProps {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  variant?: 'primary' | 'link';
+  variant?: 'primary' | 'secondary' | 'link';
 }
 
 export const AuthButton: React.FC<AuthButtonProps> = ({
@@ -38,6 +38,27 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
           lines={1}
           color={Colors.primary[500]}
           style={styles.linkText}
+        >
+          {label}
+        </PerfectText>
+      </PlatformTouchable>
+    );
+  }
+
+  if (variant === 'secondary') {
+    return (
+      <PlatformTouchable
+        onPress={onPress}
+        disabled={disabled}
+        activeOpacity={0.85}
+        accessibilityRole="button"
+        style={[styles.secondaryBtn, disabled ? styles.btnDisabled : null]}
+      >
+        <PerfectText
+          size={16}
+          lines={1}
+          color={Colors.primary[500]}
+          style={styles.secondaryText}
         >
           {label}
         </PerfectText>
@@ -94,6 +115,21 @@ const createStyles = () =>
       opacity: 0.6,
     },
     btnText: {
+      fontWeight: '700',
+    },
+    // Bottone secondario: stessa forma/dimensione del primario ma con bordo
+    // brand (outline). Dà struttura e rende "Registrati" pari ad "Accedi"
+    // invece di un link minuscolo.
+    secondaryBtn: {
+      marginTop: PerfectSpacing.md,
+      borderRadius: scale(12),
+      borderWidth: scale(1.5),
+      borderColor: Colors.primary[500],
+      paddingVertical: PerfectSpacing.base,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    secondaryText: {
       fontWeight: '700',
     },
     link: {

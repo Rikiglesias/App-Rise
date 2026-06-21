@@ -51,16 +51,15 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           {centerContent ? <View style={styles.heroSpacerTop} /> : null}
           <View style={styles.header}>
             {showLogo ? (
-              <View style={styles.logoBadge}>
-                <PerfectImage
-                  width={centerContent ? 76 : 60}
-                  aspectRatio={1}
-                  source={require('@assets/icons/app/logo.png')}
-                  imageStyle={{ resizeMode: 'contain' }}
-                  accessibilityRole="image"
-                  accessibilityLabel="Rise Against Hunger Italia"
-                />
-              </View>
+              <PerfectImage
+                width={centerContent ? 96 : 72}
+                aspectRatio={1}
+                source={require('@assets/icons/app/logo.png')}
+                imageStyle={{ resizeMode: 'contain' }}
+                containerStyle={styles.logo}
+                accessibilityRole="image"
+                accessibilityLabel="Rise Against Hunger Italia"
+              />
             ) : null}
             <PerfectText size={32} lines={2} style={styles.title}>
               {title}
@@ -113,18 +112,8 @@ const createStyles = (colors: ThemeColors) =>
       // full-width (logo "laterale", sottotitolo storto a capo).
       alignItems: 'center',
     },
-    // Badge brand morbido dietro il logo: calore (rosso tenue) + contorno
-    // delicato, così il logo non "galleggia" sul bianco piatto. rgba fisso →
-    // coerente in light e dark.
-    logoBadge: {
-      padding: PerfectSpacing.lg,
-      borderRadius: scale(999),
-      backgroundColor: 'rgba(220, 38, 38, 0.07)',
-      borderWidth: scale(1),
-      borderColor: 'rgba(220, 38, 38, 0.14)',
+    logo: {
       marginBottom: PerfectSpacing.lg,
-      alignItems: 'center',
-      justifyContent: 'center',
     },
     title: {
       color: colors.neutral[900],

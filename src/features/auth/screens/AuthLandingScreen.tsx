@@ -44,7 +44,7 @@ export const AuthLandingScreen: React.FC = () => {
       <AuthButton label={t('auth.landing.login')} onPress={goToLogin} />
       <AuthButton
         label={t('auth.landing.signup')}
-        variant="link"
+        variant="secondary"
         onPress={goToSignUp}
       />
       <SocialButtons onError={handleSocialError} />
