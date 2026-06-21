@@ -42,7 +42,7 @@ export const SignUpScreen: React.FC = () => {
 
   return (
     <AuthScreen title={t('auth.signup.title')}>
-      <AuthSection title={t('auth.signup.sections.personal')}>
+      <AuthSection title={t('auth.signup.sections.personal')} first>
         <AuthInput
           label={t('auth.signup.firstName')}
           value={values.firstName}
