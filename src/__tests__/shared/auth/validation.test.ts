@@ -14,10 +14,12 @@ describe('auth validation', () => {
     expect(validateEmail('nope')).toBe('email_invalid');
   });
 
-  it('password min 8 + lettera + numero', () => {
-    expect(validatePassword('abcd1234')).toBeNull();
+  it('password min 8 + maiuscola + carattere speciale', () => {
+    expect(validatePassword('Abcd123!')).toBeNull();
     expect(validatePassword('short')).toBe('password_weak');
-    expect(validatePassword('12345678')).toBe('password_weak');
+    expect(validatePassword('abcd1234')).toBe('password_weak'); // no maiuscola/speciale
+    expect(validatePassword('Abcd1234')).toBe('password_weak'); // no speciale
+    expect(validatePassword('abcd123!')).toBe('password_weak'); // no maiuscola
   });
 
   it('phone IT E.164', () => {
@@ -40,7 +42,8 @@ describe('auth validation', () => {
       firstName: '',
       lastName: 'Rossi',
       email: 'a@b.it',
-      password: 'abcd1234',
+      password: 'Abcd123!',
+      confirmPassword: 'Abcd123!',
       phone: '+393331234567',
       city: 'Roma',
       province: 'RM',
@@ -56,7 +59,8 @@ describe('auth validation', () => {
       firstName: 'A',
       lastName: 'B',
       email: 'a@b.it',
-      password: 'abcd1234',
+      password: 'Abcd123!',
+      confirmPassword: 'Abcd123!',
       phone: '+393331234567',
       city: 'Roma',
       province: 'RM',

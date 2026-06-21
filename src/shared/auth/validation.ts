@@ -9,9 +9,11 @@ export type FieldError = string | null;
 export const validateEmail = (v: string): FieldError =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? null : 'email_invalid';
 
-/** Min 8 caratteri, almeno una lettera e un numero. */
+/** Min 8 caratteri, almeno una maiuscola e un carattere speciale. */
 export const validatePassword = (v: string): FieldError =>
-  v.length >= 8 && /[a-zA-Z]/.test(v) && /\d/.test(v) ? null : 'password_weak';
+  v.length >= 8 && /[A-Z]/.test(v) && /[^A-Za-z0-9]/.test(v)
+    ? null
+    : 'password_weak';
 
 /** E.164: '+' seguito da 8-15 cifre. La UI pre-compila il prefisso (+39). */
 export const validatePhoneIT = (v: string): FieldError =>
@@ -34,6 +36,8 @@ export interface SignUpInput {
   lastName: string;
   email: string;
   password: string;
+  /** Conferma password: validata in UI (deve coincidere), NON inviata al backend. */
+  confirmPassword: string;
   phone: string;
   city: string;
   province: string;
@@ -51,6 +55,8 @@ export const validateSignUpForm = (input: SignUpInput): SignUpErrors => {
   if (email) e.email = email;
   const pwd = validatePassword(input.password);
   if (pwd) e.password = pwd;
+  else if (input.password !== input.confirmPassword)
+    e.confirmPassword = 'password_mismatch';
   const phone = validatePhoneIT(input.phone);
   if (phone) e.phone = phone;
   if (validateRequired(input.city)) e.city = 'required';

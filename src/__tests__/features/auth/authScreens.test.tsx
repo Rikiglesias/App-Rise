@@ -67,8 +67,8 @@ describe('Auth screens', () => {
     const { getByText, getByLabelText, findByText } = wrap(
       <ResetPasswordScreen />
     );
-    fireEvent.changeText(getByLabelText('Nuova password'), 'abcd1234');
-    fireEvent.changeText(getByLabelText('Conferma password'), 'abcd9999');
+    fireEvent.changeText(getByLabelText('Nuova password'), 'Abcd123!');
+    fireEvent.changeText(getByLabelText('Conferma password'), 'Abcd999!');
     fireEvent.press(getByText('Salva password'));
     expect(await findByText('Le password non coincidono')).toBeTruthy();
   });
@@ -81,8 +81,8 @@ describe('Auth screens', () => {
     const { getByText, getByLabelText, findByText } = wrap(
       <ResetPasswordScreen />
     );
-    fireEvent.changeText(getByLabelText('Nuova password'), 'abcd1234');
-    fireEvent.changeText(getByLabelText('Conferma password'), 'abcd1234');
+    fireEvent.changeText(getByLabelText('Nuova password'), 'Abcd123!');
+    fireEvent.changeText(getByLabelText('Conferma password'), 'Abcd123!');
     fireEvent.press(getByText('Salva password'));
     expect(
       await findByText(
@@ -90,7 +90,7 @@ describe('Auth screens', () => {
       )
     ).toBeTruthy();
     expect(supabase.auth.updateUser).toHaveBeenCalledWith({
-      password: 'abcd1234',
+      password: 'Abcd123!',
     });
   });
 

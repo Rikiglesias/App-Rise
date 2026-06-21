@@ -129,7 +129,7 @@ export const LoginScreen: React.FC = () => {
       />
       <AuthButton
         label={t('auth.login.createAccount')}
-        variant="link"
+        variant="linkStrong"
         onPress={goToSignUp}
       />
       <SocialButtons onError={handleSocialError} />

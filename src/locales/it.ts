@@ -55,6 +55,7 @@ export default {
       lastName: 'Cognome',
       email: 'Email',
       password: 'Password',
+      confirmPassword: 'Conferma password',
       phone: 'Telefono',
       city: 'Città',
       province: 'Provincia',
@@ -149,7 +150,7 @@ export default {
     errors: {
       required: 'Campo obbligatorio',
       email_invalid: 'Email non valida',
-      password_weak: 'Min 8 caratteri, una lettera e un numero',
+      password_weak: 'Min 8 caratteri, una maiuscola e un carattere speciale',
       phone_invalid: 'Telefono non valido (es. +39...)',
       not_adult: 'Devi essere maggiorenne',
       date_invalid: 'Data non valida',

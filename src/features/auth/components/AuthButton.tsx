@@ -12,7 +12,7 @@ interface AuthButtonProps {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'link' | 'linkMuted';
+  variant?: 'primary' | 'secondary' | 'link' | 'linkMuted' | 'linkStrong';
 }
 
 export const AuthButton: React.FC<AuthButtonProps> = ({
@@ -24,12 +24,18 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
 }) => {
   const styles = useMemo(() => createStyles(), []);
 
-  if (variant === 'link' || variant === 'linkMuted') {
-    // link = brand rosso (azione, es. "Crea un account"); linkMuted = grigio
-    // tenue (rimando minore, es. "Password dimenticata?"). Differenziarli per
-    // colore evita che sembrino lo stesso elemento.
+  if (
+    variant === 'link' ||
+    variant === 'linkMuted' ||
+    variant === 'linkStrong'
+  ) {
+    // linkMuted = grigio tenue (rimando minore, es. "Password dimenticata?");
+    // link = brand rosso; linkStrong = brand rosso PIÙ visibile (più grande +
+    // bold, es. "Crea un account"). Differenziarli per colore/peso evita che
+    // sembrino lo stesso elemento o un bottone.
     const linkColor =
       variant === 'linkMuted' ? Colors.neutral[500] : Colors.primary[500];
+    const isStrong = variant === 'linkStrong';
     return (
       <PlatformTouchable
         onPress={onPress}
@@ -39,10 +45,10 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
         style={styles.link}
       >
         <PerfectText
-          size={15}
+          size={isStrong ? 16 : 15}
           lines={1}
           color={linkColor}
-          style={styles.linkText}
+          style={isStrong ? styles.linkTextStrong : styles.linkText}
         >
           {label}
         </PerfectText>
@@ -145,5 +151,8 @@ const createStyles = () =>
     },
     linkText: {
       fontWeight: '600',
+    },
+    linkTextStrong: {
+      fontWeight: '700',
     },
   });

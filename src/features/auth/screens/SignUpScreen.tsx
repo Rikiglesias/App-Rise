@@ -100,6 +100,19 @@ export const SignUpScreen: React.FC = () => {
           autoComplete="new-password"
           textContentType="newPassword"
           returnKeyType="next"
+          onSubmitEditing={focusNext.confirmPassword}
+        />
+        <AuthInput
+          ref={refs.confirmPasswordRef}
+          label={t('auth.signup.confirmPassword')}
+          value={values.confirmPassword}
+          onChangeText={onChange.confirmPassword}
+          error={err(errors.confirmPassword)}
+          secureTextEntry
+          autoCapitalize="none"
+          autoComplete="new-password"
+          textContentType="newPassword"
+          returnKeyType="next"
           onSubmitEditing={focusNext.phone}
         />
       </AuthSection>

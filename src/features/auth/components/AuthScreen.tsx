@@ -73,7 +73,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               />
             ) : null}
             {eyebrow ? (
-              <PerfectText size={13} lines={1} style={styles.eyebrow}>
+              <PerfectText size={15} lines={1} style={styles.eyebrow}>
                 {eyebrow}
               </PerfectText>
             ) : null}
