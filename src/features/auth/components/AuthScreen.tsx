@@ -61,11 +61,16 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 accessibilityLabel="Rise Against Hunger Italia"
               />
             ) : null}
-            <PerfectText size={28} lines={2} style={styles.title}>
+            <PerfectText size={30} lines={2} style={styles.title}>
               {title}
             </PerfectText>
             {subtitle ? (
-              <PerfectText size={16} lines={3} style={styles.subtitle}>
+              <PerfectText
+                size={15}
+                lines={3}
+                style={styles.subtitle}
+                containerWidth={240}
+              >
                 {subtitle}
               </PerfectText>
             ) : null}
@@ -113,14 +118,17 @@ const createStyles = (colors: ThemeColors) =>
     title: {
       color: colors.neutral[900],
       fontWeight: '800',
-      letterSpacing: scale(-0.5),
+      // Tracking stretto come i titoli Home (HomeHeaderStyles) → più curato.
+      letterSpacing: scale(-0.8),
       textAlign: 'center',
     },
     subtitle: {
       color: colors.neutral[600],
-      marginTop: PerfectSpacing.sm,
+      // Più aria sotto il titolo + tracking leggero per leggibilità.
+      marginTop: PerfectSpacing.md,
       textAlign: 'center',
-      // Limita la larghezza: evita l'a-capo sbilanciato (es. "...tuo / impatto").
-      maxWidth: scale(300),
+      letterSpacing: scale(0.2),
+      // L'a-capo bilanciato è gestito da containerWidth sul PerfectText
+      // (evita l'orfano "impatto" su riga isolata).
     },
   });
