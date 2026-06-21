@@ -39,6 +39,7 @@ export const AuthLandingScreen: React.FC = () => {
     <AuthScreen
       title={t('auth.landing.title')}
       subtitle={t('auth.landing.subtitle')}
+      centerContent
     >
       <AuthButton label={t('auth.landing.login')} onPress={goToLogin} />
       <AuthButton
