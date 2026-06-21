@@ -84,6 +84,16 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
   );
   return {
     ...actual,
+    // Il modulo nativo RNGoogleSignin non è registrato in jest, ma il mock JS di
+    // @react-native-google-signin/google-signin sì: facciamo passare la sonda
+    // non-enforcing di loadGoogleSignin (socialAuth) così i test del login Google
+    // raggiungono il mock invece di uscire subito.
+    get: name => {
+      if (name === 'RNGoogleSignin') {
+        return {};
+      }
+      return actual.get(name);
+    },
     getEnforcing: name => {
       if (name === 'DevMenu') {
         return {};
