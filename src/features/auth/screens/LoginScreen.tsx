@@ -120,9 +120,9 @@ export const LoginScreen: React.FC = () => {
         onPress={handleSubmit}
         loading={loading}
       />
-      {/* Due rimandi ravvicinati ma distinti: "Password dimenticata?" è un
-          rimando minore (grigio tenue), "Crea un account" è un'azione brand
-          (rosso). Nessuno dei due è un bottone → non si confondono con Accedi. */}
+      {/* "Password dimenticata?" = rimando minore (link grigio tenue). "Crea un
+          account" = bottone outline (secondary): vuoto col bordo, così è un'azione
+          chiara ma visibilmente diversa da "Accedi" (pieno), non un link minuscolo. */}
       <AuthButton
         label={t('auth.login.forgotPassword')}
         variant="linkMuted"
@@ -130,7 +130,7 @@ export const LoginScreen: React.FC = () => {
       />
       <AuthButton
         label={t('auth.login.createAccount')}
-        variant="linkStrong"
+        variant="secondary"
         onPress={goToSignUp}
       />
       <SocialButtons onError={handleSocialError} />

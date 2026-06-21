@@ -40,7 +40,7 @@ export const AuthSection: React.FC<AuthSectionProps> = ({
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     section: {
-      marginTop: PerfectSpacing.xl,
+      marginTop: PerfectSpacing.base,
     },
     sectionFirst: {
       marginTop: 0,

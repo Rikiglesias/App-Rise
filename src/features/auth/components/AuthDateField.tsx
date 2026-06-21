@@ -66,7 +66,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
 
   return (
     <View style={styles.wrap}>
-      <PerfectText size={14} lines={1} style={styles.label}>
+      <PerfectText size={16} lines={1} style={styles.label}>
         {label}
       </PerfectText>
       <PlatformTouchable
@@ -87,6 +87,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
         <DateTimePicker
           value={pickerDate}
           mode="date"
+          display="spinner"
           maximumDate={new Date()}
           onChange={handleChange}
         />
