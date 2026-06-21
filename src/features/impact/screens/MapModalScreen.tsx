@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import { getModalData } from '../data/mapModalData';
 import type { MapModalData } from '../data/mapModalData';
+import { LOCATIONS_DATA } from '../data/locationsData';
 import {
   PerfectIcon,
   PerfectText,
@@ -16,11 +17,58 @@ import type { Location } from '@/shared/types/location';
 import MapLocationModal from '@/components/layout/MapLocationModal';
 import type { ImpactStackParamList } from '@/navigation/types';
 import { BorderRadius, PerfectSpacing } from '@/shared/constants';
-import { scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
+import {
+  scaleTouch,
+  scaleSpacing,
+  scale,
+} from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
+
+// L'anno vive in LOCATIONS_DATA; le location della mappa condividono lo stesso id.
+const YEAR_BY_ID = new Map<string, number>(
+  LOCATIONS_DATA.map(l => [l.id, l.year])
+);
+
+interface YearChipProps {
+  label: string;
+  value: number | null;
+  active: boolean;
+  onSelect: (year: number | null) => void;
+}
+
+/** Chip di filtro anno (handler stabile, no arrow inline nel prop). */
+const YearChip: React.FC<YearChipProps> = ({
+  label,
+  value,
+  active,
+  onSelect,
+}) => {
+  const colors = useThemeColors();
+  const styles = useMemo(() => createChipStyles(colors), [colors]);
+  const handlePress = useCallback(() => onSelect(value), [onSelect, value]);
+  return (
+    <PlatformTouchable
+      onPress={handlePress}
+      activeOpacity={0.8}
+      accessibilityRole="button"
+      accessibilityState={{ selected: active }}
+      accessibilityLabel={label}
+      style={[styles.chip, active ? styles.chipActive : null]}
+    >
+      <PerfectText
+        size={13}
+        lines={1}
+        fontWeight="700"
+        style={active ? styles.chipTextActive : styles.chipText}
+      >
+        {label}
+      </PerfectText>
+    </PlatformTouchable>
+  );
+};
 
 const MapModalScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -30,10 +78,25 @@ const MapModalScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  // State per il modal della location specifica
   const [locationModalVisible, setLocationModalVisible] = useState(false);
   const [selectedLocationData, setSelectedLocationData] =
     useState<MapModalData | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+
+  // Anni presenti nei dati (mostriamo il filtro solo se >1).
+  const years = useMemo(() => {
+    const set = new Set<number>();
+    (locations ?? []).forEach(l => {
+      const y = YEAR_BY_ID.get(l.id);
+      if (y !== undefined) set.add(y);
+    });
+    return Array.from(set).sort((a, b) => b - a);
+  }, [locations]);
+
+  const filteredLocations = useMemo(() => {
+    if (selectedYear === null) return locations ?? [];
+    return (locations ?? []).filter(l => YEAR_BY_ID.get(l.id) === selectedYear);
+  }, [locations, selectedYear]);
 
   const handleMarkerPress = useCallback((location: Location) => {
     const modalData = getModalData(location.id);
@@ -53,7 +116,6 @@ const MapModalScreen: React.FC = () => {
   }, [navigation]);
 
   if (!locations) {
-    // Handle case where locations are not passed
     return (
       <PerfectContainer style={styles.container}>
         <PerfectText size={16} lines={1} fontWeight="400">
@@ -66,10 +128,11 @@ const MapModalScreen: React.FC = () => {
   return (
     <PerfectContainer style={styles.container}>
       <InteractiveMap
-        locations={locations}
+        locations={filteredLocations}
         onMarkerPress={handleMarkerPress}
         isFullScreen
       />
+
       {/* Header */}
       <PerfectContainer style={styles.header}>
         <PerfectText size={24} lines={1} fontWeight="700" style={styles.title}>
@@ -95,7 +158,28 @@ const MapModalScreen: React.FC = () => {
         </PlatformTouchable>
       </PerfectContainer>
 
-      {/* Modal per le location specifiche */}
+      {/* Filtro per anno (solo se ci sono più anni) */}
+      {years.length > 1 ? (
+        <View style={styles.filterRow}>
+          <YearChip
+            label="Tutti"
+            value={null}
+            active={selectedYear === null}
+            onSelect={setSelectedYear}
+          />
+          {years.map(y => (
+            <YearChip
+              key={y}
+              label={`${y}`}
+              value={y}
+              active={selectedYear === y}
+              onSelect={setSelectedYear}
+            />
+          ))}
+        </View>
+      ) : null}
+
+      {/* Modal della location selezionata */}
       <MapLocationModal
         visible={locationModalVisible}
         data={selectedLocationData}
@@ -104,6 +188,28 @@ const MapModalScreen: React.FC = () => {
     </PerfectContainer>
   );
 };
+
+const createChipStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    chip: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.full,
+      paddingHorizontal: PerfectSpacing.base,
+      paddingVertical: PerfectSpacing.xs,
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+    },
+    chipActive: {
+      backgroundColor: colors.primary[500],
+      borderColor: colors.primary[500],
+    },
+    chipText: {
+      color: colors.neutral[700],
+    },
+    chipTextActive: {
+      color: colors.accent.white,
+    },
+  });
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
@@ -118,10 +224,9 @@ const createStyles = (colors: ThemeColors) =>
       backgroundColor: `${colors.neutral[0]}99`,
       width: scaleTouch(44),
       height: scaleTouch(44),
-      borderRadius: /* scaleFont(22) */ 22,
+      borderRadius: 22,
       justifyContent: 'center',
       alignItems: 'center',
-      // backdropFilter: 'blur(10px)', // For glassmorphism effect if supported
     },
     header: {
       position: 'absolute',
@@ -135,6 +240,16 @@ const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+    },
+    filterRow: {
+      position: 'absolute',
+      top: PerfectSpacing['3xl'] + scaleSpacing(56),
+      left: scaleSpacing(20),
+      right: scaleSpacing(20),
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: PerfectSpacing.sm,
     },
     title: {
       color: colors.neutral[900],
