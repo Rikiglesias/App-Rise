@@ -39,8 +39,9 @@ export default {
       email: 'Email',
       password: 'Password',
       submit: 'Sign in',
+      welcome: 'Welcome',
       forgotPassword: 'Forgot password?',
-      noAccount: "Don't have an account? Sign up",
+      createAccount: 'Create an account',
     },
     signup: {
       title: 'Create account',

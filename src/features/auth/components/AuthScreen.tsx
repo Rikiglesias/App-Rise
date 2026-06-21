@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PlatformScrollView, PerfectText, PerfectImage } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
+import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -11,6 +12,12 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 interface AuthScreenProps {
   title: string;
   subtitle?: string;
+  /**
+   * Occhiello (eyebrow) sopra il titolo: maiuscoletto rosso brand spaziato che
+   * nomina la pagina (es. "AREA DONATORI"). Dà gerarchia all'header e fa capire
+   * a colpo d'occhio dove ci si trova; il titolo sotto porta il tono.
+   */
+  eyebrow?: string;
   /** Mostra il marchio brand in testa (default sì, per identità coerente). */
   showLogo?: boolean;
   /**
@@ -19,6 +26,8 @@ interface AuthScreenProps {
    * usare sui form lunghi: lo spacer spingerebbe i campi fuori dal viewport.
    */
   centerContent?: boolean;
+  /** Dimensione del titolo (default 32). LoginScreen lo vuole più grande. */
+  titleSize?: number;
   children: React.ReactNode;
 }
 
@@ -26,8 +35,10 @@ interface AuthScreenProps {
 export const AuthScreen: React.FC<AuthScreenProps> = ({
   title,
   subtitle,
+  eyebrow,
   showLogo = true,
   centerContent = false,
+  titleSize = 32,
   children,
 }) => {
   const colors = useThemeColors();
@@ -61,7 +72,12 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 accessibilityLabel="Rise Against Hunger Italia"
               />
             ) : null}
-            <PerfectText size={32} lines={2} style={styles.title}>
+            {eyebrow ? (
+              <PerfectText size={13} lines={1} style={styles.eyebrow}>
+                {eyebrow}
+              </PerfectText>
+            ) : null}
+            <PerfectText size={titleSize} lines={2} style={styles.title}>
               {title}
             </PerfectText>
             {subtitle ? (
@@ -95,7 +111,9 @@ const createStyles = (colors: ThemeColors) =>
     content: {
       flexGrow: 1,
       padding: PerfectSpacing.lg,
-      paddingTop: PerfectSpacing.xl,
+      paddingTop: PerfectSpacing.lg,
+      // Stacco dalla tab bar in basso: i social non restano incollati al fondo.
+      paddingBottom: PerfectSpacing.xl,
     },
     // Landing: posiziona il gruppo hero+azioni nel terzo superiore (spacer
     // sopra piccolo + sotto grande), coeso, senza vuoto sopra né gap centrale.
@@ -107,18 +125,28 @@ const createStyles = (colors: ThemeColors) =>
     },
     header: {
       marginBottom: PerfectSpacing.xl,
-      // Logo + titolo + sottotitolo centrati: pattern standard delle schermate
+      // Logo + occhiello + titolo centrati: pattern standard delle schermate
       // auth. Allineati a sinistra apparivano sbilanciati rispetto ai bottoni
-      // full-width (logo "laterale", sottotitolo storto a capo).
+      // full-width (logo "laterale", titolo storto a capo).
       alignItems: 'center',
     },
     logo: {
-      marginBottom: PerfectSpacing.lg,
+      marginBottom: PerfectSpacing.base,
+    },
+    // Occhiello: maiuscoletto rosso brand, spaziato. Nomina la pagina e crea
+    // gerarchia sopra il titolo (così l'header "dice" cos'è questa schermata).
+    eyebrow: {
+      color: Colors.primary[600],
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      letterSpacing: scale(1.5),
+      marginBottom: PerfectSpacing.xs,
     },
     title: {
+      // Titolo scuro (il colore va bene): il calore/identità lo porta
+      // l'occhiello rosso sopra. Tracking stretto come i titoli Home.
       color: colors.neutral[900],
       fontWeight: '800',
-      // Tracking stretto come i titoli Home (HomeHeaderStyles) → più curato.
       letterSpacing: scale(-0.8),
       textAlign: 'center',
     },

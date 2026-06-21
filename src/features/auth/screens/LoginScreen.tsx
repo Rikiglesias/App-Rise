@@ -55,9 +55,8 @@ export const LoginScreen: React.FC = () => {
     setLoading(true);
     const { error } = await signIn(email.trim(), password);
     setLoading(false);
-    // Post-login NON si naviga: questa schermata è il contenuto della tab
-    // Profilo quando unauthenticated; il cambio di status nell'AuthContext la
-    // ri-renderizza verso il profilo da solo.
+    // Post-login non si naviga: il cambio di status nell'AuthContext
+    // ri-renderizza ProfileScreen verso il profilo da solo.
     if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
   }, [email, password, signIn, t]);
 
@@ -79,7 +78,12 @@ export const LoginScreen: React.FC = () => {
   );
 
   return (
-    <AuthScreen title={t('auth.login.title')}>
+    <AuthScreen
+      showLogo={false}
+      eyebrow={t('auth.login.title')}
+      title={t('auth.login.welcome')}
+      titleSize={38}
+    >
       <AuthInput
         label={t('auth.login.email')}
         value={email}
@@ -115,10 +119,18 @@ export const LoginScreen: React.FC = () => {
         onPress={handleSubmit}
         loading={loading}
       />
+      {/* Due rimandi ravvicinati ma distinti: "Password dimenticata?" è un
+          rimando minore (grigio tenue), "Crea un account" è un'azione brand
+          (rosso). Nessuno dei due è un bottone → non si confondono con Accedi. */}
       <AuthButton
         label={t('auth.login.forgotPassword')}
-        variant="link"
+        variant="linkMuted"
         onPress={goToForgot}
+      />
+      <AuthButton
+        label={t('auth.login.createAccount')}
+        variant="link"
+        onPress={goToSignUp}
       />
       <SocialButtons onError={handleSocialError} />
       {socialError ? (
@@ -126,13 +138,6 @@ export const LoginScreen: React.FC = () => {
           {socialError}
         </PerfectText>
       ) : null}
-      {/* CTA registrazione SEMPRE visibile (acquisizione donatori): link
-          compatto in fondo, non bottone, per tenere la pagina senza scroll. */}
-      <AuthButton
-        label={t('auth.login.noAccount')}
-        variant="link"
-        onPress={goToSignUp}
-      />
     </AuthScreen>
   );
 };

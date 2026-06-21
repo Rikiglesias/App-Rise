@@ -93,7 +93,7 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
             layout coerente iOS/Android (Codex P2). */}
         <View style={styles.googleRow}>
           <GoogleGLogo />
-          <PerfectText size={16} lines={1} style={styles.googleText}>
+          <PerfectText size={18} lines={1} style={styles.googleText}>
             {t('auth.social.continueGoogle')}
           </PerfectText>
         </View>

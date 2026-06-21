@@ -12,7 +12,7 @@ interface AuthButtonProps {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'link';
+  variant?: 'primary' | 'secondary' | 'link' | 'linkMuted';
 }
 
 export const AuthButton: React.FC<AuthButtonProps> = ({
@@ -24,7 +24,12 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
 }) => {
   const styles = useMemo(() => createStyles(), []);
 
-  if (variant === 'link') {
+  if (variant === 'link' || variant === 'linkMuted') {
+    // link = brand rosso (azione, es. "Crea un account"); linkMuted = grigio
+    // tenue (rimando minore, es. "Password dimenticata?"). Differenziarli per
+    // colore evita che sembrino lo stesso elemento.
+    const linkColor =
+      variant === 'linkMuted' ? Colors.neutral[500] : Colors.primary[500];
     return (
       <PlatformTouchable
         onPress={onPress}
@@ -36,7 +41,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
         <PerfectText
           size={15}
           lines={1}
-          color={Colors.primary[500]}
+          color={linkColor}
           style={styles.linkText}
         >
           {label}

@@ -39,8 +39,9 @@ export default {
       email: 'Email',
       password: 'Password',
       submit: 'Accedi',
+      welcome: 'Benvenuto',
       forgotPassword: 'Password dimenticata?',
-      noAccount: 'Non hai un account? Registrati',
+      createAccount: 'Crea un account',
     },
     signup: {
       title: 'Crea account',

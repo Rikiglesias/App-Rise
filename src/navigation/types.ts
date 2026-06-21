@@ -29,6 +29,7 @@ export interface RootStackParamList {
   };
   ChiSiamo: undefined;
   Projects: undefined;
+  Profilo: undefined;
   SignUp: undefined;
   CompleteProfile: undefined;
   ProfileEdit: undefined;
@@ -51,7 +52,6 @@ export type BottomTabParamList = {
   ImpactTab: undefined;
   HomeTab: undefined;
   InfoTab: undefined;
-  ProfileTab: undefined;
 };
 
 // Impact Stack Navigator Types

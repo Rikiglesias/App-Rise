@@ -30,6 +30,7 @@ import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
+import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -139,9 +140,14 @@ const AppNavigator: React.FC = () => {
           options={{ headerShown: false }}
         />
 
-        {/* Area donatori (auth). NB: Login non è una Stack.Screen: è il
-            contenuto della tab Profilo quando l'utente è unauthenticated
-            (ProfileScreen). SignUp/ForgotPassword/ResetPassword restano push. */}
+        {/* Area donatori (auth). Profilo è una Stack.Screen aperta dall'avatar
+            nell'header Home: se unauthenticated mostra il login (LoginScreen),
+            altrimenti il profilo. SignUp/ForgotPassword/ResetPassword push. */}
+        <Stack.Screen
+          name="Profilo"
+          component={ProfileScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="SignUp"
           component={SignUpScreen}
