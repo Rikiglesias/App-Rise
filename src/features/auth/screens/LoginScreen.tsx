@@ -79,10 +79,7 @@ export const LoginScreen: React.FC = () => {
   );
 
   return (
-    <AuthScreen
-      title={t('auth.login.title')}
-      subtitle={t('auth.login.subtitle')}
-    >
+    <AuthScreen title={t('auth.login.title')}>
       <AuthInput
         label={t('auth.login.email')}
         value={email}
@@ -123,17 +120,19 @@ export const LoginScreen: React.FC = () => {
         variant="link"
         onPress={goToForgot}
       />
-      <AuthButton
-        label={t('auth.login.signup')}
-        variant="secondary"
-        onPress={goToSignUp}
-      />
       <SocialButtons onError={handleSocialError} />
       {socialError ? (
         <PerfectText size={14} lines={2} style={styles.error}>
           {socialError}
         </PerfectText>
       ) : null}
+      {/* CTA registrazione SEMPRE visibile (acquisizione donatori): link
+          compatto in fondo, non bottone, per tenere la pagina senza scroll. */}
+      <AuthButton
+        label={t('auth.login.noAccount')}
+        variant="link"
+        onPress={goToSignUp}
+      />
     </AuthScreen>
   );
 };

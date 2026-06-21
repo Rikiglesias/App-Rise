@@ -36,12 +36,11 @@ export default {
     },
     login: {
       title: 'Donor Area',
-      subtitle: 'Sign in or sign up to follow your impact',
       email: 'Email',
       password: 'Password',
       submit: 'Sign in',
       forgotPassword: 'Forgot password?',
-      signup: 'Sign up',
+      noAccount: "Don't have an account? Sign up",
     },
     signup: {
       title: 'Create account',

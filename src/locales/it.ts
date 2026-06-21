@@ -36,12 +36,11 @@ export default {
     },
     login: {
       title: 'Area Donatori',
-      subtitle: 'Accedi o registrati per seguire il tuo impatto',
       email: 'Email',
       password: 'Password',
       submit: 'Accedi',
       forgotPassword: 'Password dimenticata?',
-      signup: 'Registrati',
+      noAccount: 'Non hai un account? Registrati',
     },
     signup: {
       title: 'Crea account',
