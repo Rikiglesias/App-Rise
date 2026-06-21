@@ -60,3 +60,30 @@ export const validateSignUpForm = (input: SignUpInput): SignUpErrors => {
   if (!input.privacyConsent) e.privacyConsent = 'required';
   return e;
 };
+
+/** Anagrafica post-social (no email/password): stessa logica di SignUp sui campi comuni. */
+export interface ProfileInput {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  city: string;
+  province: string;
+  birthDate: string;
+  privacyConsent: boolean;
+}
+
+export type ProfileErrors = Partial<Record<keyof ProfileInput, string>>;
+
+export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
+  const e: ProfileErrors = {};
+  if (validateRequired(input.firstName)) e.firstName = 'required';
+  if (validateRequired(input.lastName)) e.lastName = 'required';
+  const phone = validatePhoneIT(input.phone);
+  if (phone) e.phone = phone;
+  if (validateRequired(input.city)) e.city = 'required';
+  if (validateRequired(input.province)) e.province = 'required';
+  const adult = validateAdult(input.birthDate);
+  if (adult) e.birthDate = adult;
+  if (!input.privacyConsent) e.privacyConsent = 'required';
+  return e;
+};

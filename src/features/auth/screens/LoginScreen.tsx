@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { StyleSheet, type TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
@@ -26,6 +26,21 @@ export const LoginScreen: React.FC = () => {
   const [pwdErr, setPwdErr] = useState<string | undefined>();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const passwordRef = useRef<TextInput>(null);
+
+  const onChangeEmail = useCallback((v: string): void => {
+    setEmail(v);
+    setEmailErr(undefined);
+  }, []);
+  const onChangePassword = useCallback((v: string): void => {
+    setPassword(v);
+    setPwdErr(undefined);
+  }, []);
+  const focusPassword = useCallback(
+    (): void => passwordRef.current?.focus(),
+    []
+  );
 
   const onSubmit = useCallback(async (): Promise<void> => {
     setSubmitError(null);
@@ -59,18 +74,27 @@ export const LoginScreen: React.FC = () => {
       <AuthInput
         label={t('auth.login.email')}
         value={email}
-        onChangeText={setEmail}
+        onChangeText={onChangeEmail}
         error={emailErr}
         keyboardType="email-address"
         autoCapitalize="none"
+        autoComplete="email"
+        textContentType="emailAddress"
+        returnKeyType="next"
+        onSubmitEditing={focusPassword}
       />
       <AuthInput
+        ref={passwordRef}
         label={t('auth.login.password')}
         value={password}
-        onChangeText={setPassword}
+        onChangeText={onChangePassword}
         error={pwdErr}
         secureTextEntry
         autoCapitalize="none"
+        autoComplete="current-password"
+        textContentType="password"
+        returnKeyType="done"
+        onSubmitEditing={handleSubmit}
       />
       {submitError ? (
         <PerfectText size={14} lines={2} style={styles.error}>
