@@ -1,13 +1,16 @@
 /* eslint-disable max-lines-per-function */
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render as rtlRender } from '@testing-library/react-native';
 
 import SocialIcon from '../../../components/ui/SocialIcon';
+import { AllProviders } from '../../helpers/testProviders';
 
-describe.skip('SocialIcon - TEMPORANEO SKIP per dependency issue', () => {
-  // Test temporaneamente skippato per problema con @testing-library/react-native
-  // Da fixare dopo aver aumentato il coverage dei componenti critici
+// SocialIcon usa PerfectContainer -> useUniversalTheme, che richiede i provider.
+// Tutti i render passano da AllProviders (UniversalTheme/Theme/Auth).
+const render = (ui: React.ReactElement) =>
+  rtlRender(ui, { wrapper: AllProviders });
 
+describe('SocialIcon', () => {
   describe('Platform Rendering', () => {
     it('should render Instagram icon', () => {
       const { toJSON } = render(
@@ -166,7 +169,8 @@ describe.skip('SocialIcon - TEMPORANEO SKIP per dependency issue', () => {
       expect(tree).toMatchObject({
         type: 'View',
         props: expect.objectContaining({
-          style: expect.any(Array),
+          // SocialIcon applica uno StyleSheet flattenato (oggetto), non un array.
+          style: expect.anything(),
         }),
       });
     });

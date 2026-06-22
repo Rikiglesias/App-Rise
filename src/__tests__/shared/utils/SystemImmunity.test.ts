@@ -4,8 +4,9 @@ import {
   getImmuneTextProps,
 } from '../../../shared/utils/SystemImmunity';
 
-// Test parzialmente obsoleti dopo rimozione funzioni debug (getImmuneDimensions, generateImmunityReport)
-describe.skip('SystemImmunity utilities', () => {
+// I test per getImmuneDimensions/generateImmunityReport (funzioni debug rimosse) restano commentati sotto;
+// i due test attivi coprono getSystemFontSettings e getImmuneTextProps (tuttora esistenti).
+describe('SystemImmunity utilities', () => {
   const pixelGetSpy = jest.spyOn(PixelRatio, 'get');
   const fontScaleSpy = jest.spyOn(PixelRatio, 'getFontScale');
 
