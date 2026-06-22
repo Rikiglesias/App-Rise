@@ -3,6 +3,8 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthCountryField } from '../components/AuthCountryField';
+import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -27,6 +29,7 @@ type Errors = Partial<
     | 'phone'
     | 'city'
     | 'province'
+    | 'country'
     | 'birthDate'
     | 'email',
     string
@@ -52,6 +55,7 @@ export const ProfileEditScreen: React.FC = () => {
   const [phone, setPhone] = useState(profile?.phone ?? '+39');
   const [city, setCity] = useState(profile?.city ?? '');
   const [province, setProvince] = useState(profile?.province ?? '');
+  const [country, setCountry] = useState(profile?.country ?? 'IT');
   const [birthDate, setBirthDate] = useState(profile?.birth_date ?? '');
   const [errors, setErrors] = useState<Errors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -72,8 +76,9 @@ export const ProfileEditScreen: React.FC = () => {
     if (em) e.email = em;
     const p = validatePhoneIT(phone);
     if (p) e.phone = p;
+    if (validateRequired(country)) e.country = 'required';
     if (validateRequired(city)) e.city = 'required';
-    if (validateRequired(province)) e.province = 'required';
+    if (country === 'IT' && validateRequired(province)) e.province = 'required';
     const a = validateAdult(birthDate);
     if (a) e.birthDate = a;
     setErrors(e);
@@ -87,9 +92,13 @@ export const ProfileEditScreen: React.FC = () => {
     if (lastName.trim() !== profile?.last_name)
       changed.last_name = lastName.trim();
     if (phone.trim() !== profile?.phone) changed.phone = phone.trim();
+    if (country.trim() !== (profile?.country ?? 'IT'))
+      changed.country = country.trim();
     if (city.trim() !== profile?.city) changed.city = city.trim();
-    if (province.trim() !== profile?.province)
-      changed.province = province.trim();
+    // Provincia solo italiana: per i paesi esteri si azzera.
+    const nextProvince = country === 'IT' ? province.trim() : '';
+    if (nextProvince !== (profile?.province ?? ''))
+      changed.province = nextProvince;
     if (birthDate.trim() !== profile?.birth_date)
       changed.birth_date = birthDate.trim();
 
@@ -124,6 +133,7 @@ export const ProfileEditScreen: React.FC = () => {
     phone,
     city,
     province,
+    country,
     birthDate,
     profile,
     currentEmail,
@@ -135,6 +145,22 @@ export const ProfileEditScreen: React.FC = () => {
   const handleSubmit = useCallback((): void => {
     void onSubmit();
   }, [onSubmit]);
+
+  const handleSelectCountry = useCallback((code: string): void => {
+    setCountry(code);
+    if (code !== 'IT') setProvince('');
+  }, []);
+  const handleChangeCity = useCallback(
+    (v: string): void => {
+      setCity(v);
+      if (country === 'IT') setProvince('');
+    },
+    [country]
+  );
+  const handleSelectComune = useCallback((c: string, sigla: string): void => {
+    setCity(c);
+    setProvince(sigla);
+  }, []);
 
   return (
     <AuthScreen title={t('auth.edit.title')}>
@@ -170,20 +196,29 @@ export const ProfileEditScreen: React.FC = () => {
         error={err(errors.phone)}
         keyboardType="phone-pad"
       />
-      <AuthInput
+      <AuthCountryField
+        label={t('auth.signup.country')}
+        value={country}
+        onSelect={handleSelectCountry}
+        error={err(errors.country)}
+      />
+      <AuthCityField
         label={t('auth.signup.city')}
         value={city}
-        onChangeText={setCity}
+        country={country}
+        onChangeCity={handleChangeCity}
+        onSelectComune={handleSelectComune}
         error={err(errors.city)}
-        autoCapitalize="words"
       />
-      <AuthInput
-        label={t('auth.signup.province')}
-        value={province}
-        onChangeText={setProvince}
-        error={err(errors.province)}
-        autoCapitalize="characters"
-      />
+      {country === 'IT' ? (
+        <AuthInput
+          label={t('auth.signup.province')}
+          value={province}
+          onChangeText={setProvince}
+          error={err(errors.province)}
+          autoCapitalize="characters"
+        />
+      ) : null}
       <AuthInput
         label={t('auth.signup.birthDate')}
         value={birthDate}

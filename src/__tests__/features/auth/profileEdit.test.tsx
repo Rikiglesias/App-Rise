@@ -76,6 +76,12 @@ describe('ProfileEditScreen', () => {
     expect(getByDisplayValue('+393331234567')).toBeTruthy();
   });
 
+  it('mostra il campo Paese (valore dal profilo)', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ profile }));
+    const { getByText } = wrap(<ProfileEditScreen />);
+    expect(getByText('Paese')).toBeTruthy();
+  });
+
   it('telefono invalido → errore e updateProfile NON chiamato', () => {
     const updateProfile = jest.fn().mockResolvedValue({ error: null });
     mockUseAuth.mockReturnValue(makeAuth({ profile, updateProfile }));

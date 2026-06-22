@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthPhoneField } from '../components/AuthPhoneField';
+import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
@@ -121,6 +122,12 @@ export const SignUpScreen: React.FC = () => {
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.contacts')}>
+        <AuthCountryField
+          label={t('auth.signup.country')}
+          value={values.country}
+          onSelect={onChange.country}
+          error={err(errors.country)}
+        />
         <AuthPhoneField
           label={t('auth.signup.phone')}
           onChangeText={onChange.phone}
@@ -129,18 +136,25 @@ export const SignUpScreen: React.FC = () => {
         <AuthCityField
           label={t('auth.signup.city')}
           value={values.city}
+          country={values.country}
           onChangeCity={onChange.city}
           onSelectComune={form.selectComune}
           error={err(errors.city)}
-          placeholder={t('auth.signup.cityPlaceholder')}
+          placeholder={
+            values.country === 'IT'
+              ? t('auth.signup.cityPlaceholder')
+              : t('auth.signup.cityForeignPlaceholder')
+          }
         />
-        <AuthInput
-          label={t('auth.signup.province')}
-          value={values.province}
-          error={err(errors.province)}
-          editable={false}
-          placeholder={t('auth.signup.provincePlaceholder')}
-        />
+        {values.country === 'IT' ? (
+          <AuthInput
+            label={t('auth.signup.province')}
+            value={values.province}
+            error={err(errors.province)}
+            editable={false}
+            placeholder={t('auth.signup.provincePlaceholder')}
+          />
+        ) : null}
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.consents')}>
