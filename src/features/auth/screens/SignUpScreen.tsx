@@ -126,6 +126,7 @@ export const SignUpScreen: React.FC = () => {
           label={t('auth.signup.phone')}
           onChangeText={onChange.phone}
           country={values.country}
+          onCountryChange={onChange.country}
           error={err(errors.phone)}
         />
         <AuthCountryField

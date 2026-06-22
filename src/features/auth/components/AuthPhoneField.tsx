@@ -28,6 +28,11 @@ interface AuthPhoneFieldProps {
    * Resta comunque modificabile dall'utente nel selettore del campo (override).
    */
   country?: string;
+  /**
+   * Notifica il cambio di paese fatto dall'utente nel selettore prefisso (cca2):
+   * permette al campo Paese di sincronizzarsi (sync bidirezionale prefisso↔paese).
+   */
+  onCountryChange?: (cca2: string) => void;
   error?: string | undefined;
 }
 
@@ -64,6 +69,7 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   label,
   onChangeText,
   country: countryCca2,
+  onCountryChange,
   error,
 }) => {
   const colors = useThemeColors();
@@ -142,6 +148,10 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         onChangeCountry={(c: ICountry): void => {
           setCountry(c);
           emit(number, c);
+          // Sync inverso: aggiorna il campo Paese sotto. Allinea anche il ref così
+          // l'effetto di sync residenza→prefisso non ri-applica lo stesso paese.
+          appliedResidence.current = c.cca2;
+          onCountryChange?.(c.cca2);
         }}
       />
       {error ? (
