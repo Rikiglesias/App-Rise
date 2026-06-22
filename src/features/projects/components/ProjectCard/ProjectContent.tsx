@@ -6,12 +6,14 @@ import { PerfectText, PerfectContainer } from '@/components/ui';
 import { PerfectSpacing, Typography } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 export const ProjectContent: React.FC<ProjectContentProps> = ({
   description,
   impact,
 }) => {
   const colors = useThemeColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     description: {
@@ -58,7 +60,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({
           immunity={true}
           style={styles.impactLabel}
         >
-          Impatto
+          {t('projects.impact')}
         </PerfectText>
         <PerfectText
           size={14}

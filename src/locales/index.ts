@@ -18,9 +18,15 @@ import { I18n } from 'i18n-js';
 import * as Localization from 'expo-localization';
 import it from './it';
 import en from './en';
-import type { SupportedLocale } from './types';
 
-const i18n = new I18n({ it, en });
+// Le traduzioni registrate sono la SSOT delle lingue supportate.
+const translations = { it, en };
+
+// Lingue supportate, derivate dalle traduzioni effettivamente registrate
+// (evita il drift fra tipo dichiarato e lingue realmente caricate in i18n).
+export type SupportedLocale = keyof typeof translations;
+
+const i18n = new I18n(translations);
 
 i18n.defaultLocale = 'en';
 i18n.enableFallback = true;
@@ -59,4 +65,3 @@ export const getCurrentLocale = (): SupportedLocale => {
 export default i18n;
 
 export { it, en };
-export type { SupportedLocale };
