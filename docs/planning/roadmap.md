@@ -1,5 +1,7 @@
 # 🚀 ROADMAP PROSSIMI TASK - PIANO DETTAGLIATO
 
+> ⚠️ **Snapshot storico (gen 2025) — superato.** Descrive task/file/sistemi (design-system, Zustand, deviceResolutionsDatabase, test sicurezza) non più attuali dopo il deep-clean di `src/` (PR #42–#49). Conservato come riferimento storico; per il backlog corrente vedi gli audit datati in `docs/` e `improvements-proposed`.
+
 ## 📊 **STATO ATTUALE PROGETTO**
 
 ### ✅ **Task Critici Completati (7/12) + ZERO PROBLEMI QUALITÀ**

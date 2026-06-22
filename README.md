@@ -12,15 +12,15 @@
 > **ATTENZIONE**: Prima di contribuire, DEVI leggere questi documenti!
 
 1. **[CONTRIBUTING.md](./CONTRIBUTING.md)** ⭐ **START HERE** - Workflow completo per contribuire
-2. **[CODING_STANDARDS.md](./docs/guides/development.md)** 💎 **REGOLE PROGETTO** - Standard codice e best practices
-3. **[CODE_CLEANUP_CHECKLIST.md](./docs/guides/quality-standards.md)** ✅ **PRIMA DI OGNI COMMIT** - Checklist pulizia codice
+2. **[Development Guide](./docs/guides/development.md)** 💎 **REGOLE PROGETTO** - Standard codice e best practices
+3. **[Quality Standards](./docs/guides/quality-standards.md)** ✅ **PRIMA DI OGNI COMMIT** - Checklist pulizia codice
 
 **TL;DR**:
 - ✅ Zero compromessi sulla qualità
 - ✅ Perfect System obbligatorio
 - ✅ TypeScript strict mode
 - ✅ ESLint zero warnings
-- ✅ Ogni file deve seguire [CODE_CLEANUP_CHECKLIST](./docs/guides/quality-standards.md)
+- ✅ Ogni file deve seguire le [Quality Standards](./docs/guides/quality-standards.md)
 
 ---
 
@@ -29,7 +29,7 @@
 ```
 ✅ TypeScript: 0 errori - PERFETTO
 ✅ ESLint: 0 warnings - PERFETTO
-✅ Test: 93.5% passanti (661/707 tests)
+✅ Test: vedi CI
 ✅ Prettier: Formatting perfetto
 ✅ Performance: Ottimizzata
 ✅ Layout: Sistema responsive unificato
@@ -142,21 +142,28 @@ npm run conta-problemi
 ```
 src/
 ├── components/
-│   ├── ui/                 # Sistema Perfetto (PerfectText, PerfectImage, etc.)
-│   ├── domain/             # Componenti business logic
-│   └── layout/             # Layout e navigation
+│   ├── ui/                 # Componenti UI riusabili (PerfectText, PerfectImage, etc.)
+│   └── layout/             # Layout
 ├── features/
 │   ├── home/               # Homepage
 │   ├── actions/            # Azioni e donazioni
 │   ├── impact/             # Impatto e risultati
 │   ├── projects/           # Progetti attivi
-│   └── about/              # Chi siamo
+│   ├── about/              # Chi siamo
+│   ├── social/             # Social media
+│   └── auth/               # Auth donatori (signup, login, profilo, reset password)
 ├── shared/
-│   ├── utils/              # UniversalMillimetricSystem, SystemImmunity
-│   ├── theme/              # UniversalTheme
-│   ├── constants/          # Design tokens
-│   └── hooks/              # Hook personalizzati
-└── navigation/             # Navigation configuration
+│   ├── auth/               # AuthContext, Supabase client, consensi GDPR, social auth
+│   ├── config/             # Configurazione runtime
+│   ├── constants/          # Design tokens e perfectScale (SSOT scaling)
+│   ├── data/               # Dati statici
+│   ├── hooks/              # Hook personalizzati (useTheme, usePerfectTheme)
+│   ├── screens/            # Screen condivise
+│   ├── services/           # Service layer
+│   ├── theme/              # Theme
+│   └── utils/              # SystemImmunity e utility
+├── navigation/             # Navigation configuration
+└── locales/                # Traduzioni (it, en)
 ```
 
 ---
@@ -187,56 +194,27 @@ npm run conta-problemi
 
 ### **🔀 Struttura Branch**
 
-#### **Branch Permanenti**
-- **`master`**: Production - Codice stabile in produzione
-- **`develop`**: Integration - Sviluppo attivo e testing
-- **`release/x.x`**: Release candidates - Preparazione release
+Il repo lavora **direttamente su `master`** — unico branch permanente, protetto da ruleset linear-history (`.github/ruleset.yml`). Non esistono `develop` né `release/*`.
 
-#### **Branch Temporanei**
-- **`feature/nome-feature`**: Nuove funzionalità
-  ```bash
-  git checkout -b feature/new-authentication develop
-  # ... sviluppo ...
-  git push origin feature/new-authentication
-  # Apri PR verso develop
-  ```
+- **`master`**: produzione, protetto. Merge **solo via PR** (squash o rebase, no merge-commit).
+- **Branch di lavoro temporanei** (creati da `master`, PR verso `master`):
+  - `feat/nome` — nuove funzionalità
+  - `fix/nome` — bugfix
+  - `chore/nome` — manutenzione, refactor, CI/CD
 
-- **`fix/nome-bug`**: Bugfix non critici
-  ```bash
-  git checkout -b fix/button-alignment develop
-  ```
-
-- **`hotfix/nome-urgente`**: Fix produzione urgenti
-  ```bash
-  git checkout -b hotfix/critical-crash master
-  # ... fix ...
-  # Merge in master E develop
-  ```
-
-- **`chore/nome-task`**: Manutenzione, refactor, CI/CD
-
-### **🔄 GitFlow Workflow**
-
-```
-1. Feature Development
-   feature/* → develop (PR + CI checks)
-
-2. Release Preparation
-   develop → release/x.x (stabilizzazione + testing)
-
-3. Production Deploy
-   release/x.x → master (tag + deploy automatico)
-
-4. Hotfix Urgente
-   hotfix/* → master (direct merge)
-   hotfix/* → develop (backport)
+```bash
+git checkout master && git pull
+git checkout -b feat/nome-feature
+# ... sviluppo + npm run conta-problemi = 0 ...
+git push -u origin feat/nome-feature
+# Apri PR verso master
 ```
 
-### **✅ Regole PR**
+### **✅ Regole PR** (ruleset `master`)
 
-- ✅ Tutti i check CI devono passare
-- ✅ Code review obbligatorio
-- ✅ Branch aggiornato con base
+- ✅ Tutti i check CI devono passare (typescript / eslint / prettier / tests / visual-diff / build)
+- ✅ 1 approvazione + code owner (`CODEOWNERS`)
+- ✅ Linear history: squash o rebase, no merge-commit
 - ✅ Commit message convenzionali:
   - `feat:` nuove funzionalità
   - `fix:` correzioni bug
@@ -247,10 +225,9 @@ npm run conta-problemi
 
 ### **🚀 CI/CD Triggers**
 
-- **Push** su `master`, `develop` → Full CI/CD
-- **PR** verso `master`, `develop` → Quality checks, tests, visual diff
-- **Commit message `[build]`** → Force build iOS/Android
-- **Commit message `[ota]`** → Deploy OTA update
+- **Push / PR** su `master` → quality checks, test, visual diff
+- **Commit message `[build]`** → build iOS/Android (EAS Build)
+- **Commit message `[ota]`** → deploy OTA update (EAS Update)
 
 ---
 

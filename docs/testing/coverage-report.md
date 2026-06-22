@@ -1,5 +1,7 @@
 # 🏆 TEST COVERAGE FINAL REPORT - SESSIONE COMPLETATA
 
+> ⚠️ **Snapshot storico (ott 2025) — superato.** I file/moduli e i numeri citati non riflettono più lo stato attuale dopo il deep-clean di `src/` (PR #42–#49). Conservato come riferimento storico; per la coverage corrente esegui `npm run test:coverage`.
+
 **Data completamento**: 29 Ottobre 2025  
 **Durata totale**: ~3 ore  
 **Status**: ✅ **COMPLETATO CON SUCCESSO**

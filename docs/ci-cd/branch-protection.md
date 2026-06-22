@@ -1,115 +1,62 @@
-# 🛡️ Branch Protection Rules - Configurazione Raccomandazioni
+# 🛡️ Branch Protection Rules - Configurazione
 
 ## 📋 Configurazione Attuale
 
 ### Branch Protetti
-- ✅ `master` - Protected
-- ✅ `develop` - Protected  
-- ✅ `release/1.0` - Protected
 
-## 🎯 Regole Raccomandate per GitHub Settings
+L'unico branch del repository è `master`, protetto dal ruleset
+`.github/ruleset.yml` (enforcement `active`). I branch `develop` e
+`release/*` **non esistono** e non sono gestiti.
+
+- ✅ `master` - Protected (ruleset attivo)
+
+> Il ruleset include anche il pattern `main` come difesa preventiva, ma quel
+> branch non esiste: il flusso reale usa solo `master`.
+
+## 🎯 Regole Attive su `master`
+
+Allineate a `.github/ruleset.yml`:
 
 ### **`master` (Production)**
 
 #### Required Status Checks
 ```
 ✅ Require status checks to pass before merging
-✅ Require branches to be up to date before merging
+✅ Strict: branch must be up to date before merging
 
-Status checks richiesti:
-- Deadcode Scan
-- 🔍 Quality Checks (typescript, eslint, prettier, tests)
-- test (unit tests)
+Status checks richiesti (da ruleset.yml):
 - 🎯 Visual Diff - Layout Regression Detection
-- build (iOS + Android summary)
+- 🔍 Quality Checks (typescript)
+- 🔍 Quality Checks (eslint)
+- 🔍 Quality Checks (prettier)
+- 🔍 Quality Checks (tests)
+- build
+- test
 ```
 
 #### Pull Request Rules
 ```
 ✅ Require a pull request before merging
-✅ Require approvals: 1
+✅ Require approvals: 1 (required_approving_review_count)
 ✅ Dismiss stale pull request approvals when new commits are pushed
 ✅ Require review from Code Owners (se configurato CODEOWNERS)
+✅ Require last push approval
 ```
 
 #### Additional Restrictions
 ```
-✅ Require conversation resolution before merging
-✅ Require signed commits (opzionale - aumenta sicurezza)
-✅ Require linear history (opzionale - mantiene storia pulita)
-✅ Do not allow bypassing the above settings
+✅ Require linear history (non_fast_forward → blocca rewrite history)
+✅ Conventional commits enforced (commit_message_pattern)
+⚠️ Require signed commits: disattivato (required_signatures.required: false)
 ```
 
 #### Force Push & Deletions
 ```
-❌ Allow force pushes: Nobody
-❌ Allow deletions: Disabled
+❌ Allow force pushes: bloccato (non_fast_forward)
+❌ Allow deletions: bloccato (deletion rule)
 ```
 
----
-
-### **`develop` (Integration)**
-
-#### Required Status Checks
-```
-✅ Require status checks to pass before merging
-✅ Require branches to be up to date before merging
-
-Status checks richiesti:
-- Deadcode Scan
-- 🔍 Quality Checks
-- test
-- 🎯 Visual Diff (opzionale - solo per UI changes)
-```
-
-#### Pull Request Rules
-```
-✅ Require a pull request before merging
-✅ Require approvals: 1 (può essere più permissivo di master)
-✅ Dismiss stale approvals: Yes
-```
-
-#### Additional Restrictions
-```
-✅ Require conversation resolution
-⚠️ Allow force push: Admins only (per rebase quando necessario)
-❌ Allow deletions: Disabled
-```
-
----
-
-### **`release/*` (Release Candidates)**
-
-#### Required Status Checks
-```
-✅ Require status checks to pass before merging
-✅ Require branches to be up to date before merging
-
-Status checks richiesti (TUTTI):
-- Deadcode Scan
-- 🔍 Quality Checks
-- test
-- 🎯 Visual Diff
-- build
-- 📊 Bundle Analysis
-```
-
-#### Pull Request Rules
-```
-✅ Require a pull request before merging
-✅ Require approvals: 2 (più strict per release)
-✅ Require review from Code Owners
-✅ Dismiss stale approvals
-```
-
-#### Additional Restrictions
-```
-✅ Require conversation resolution
-✅ Require signed commits (raccomandato per release)
-✅ Require linear history
-❌ Allow force pushes: Disabled
-❌ Allow deletions: Disabled
-```
+> **Bypass**: solo il repository owner (OrganizationAdmin, `bypass_mode: always`).
 
 ---
 
@@ -140,20 +87,15 @@ tsconfig.json @Rikiglesias
 
 ## 🚀 Implementazione su GitHub
 
-### Passo 1: Configura master
-1. Vai su: https://github.com/Rikiglesias/App-Rise/settings/branches
-2. Clicca su `master` → Edit
-3. Applica tutte le regole sopra indicate
+La protezione è gestita via ruleset versionato (`.github/ruleset.yml`),
+non via Branch Protection classico. Per applicarlo/aggiornarlo:
 
-### Passo 2: Configura develop
-1. Stessa procedura per `develop`
-2. Usa le regole specificate per develop
+### Passo 1: Importa/aggiorna il ruleset
+1. Vai su: https://github.com/Rikiglesias/App-Rise/settings/rules
+2. New ruleset → Import a ruleset → carica `.github/ruleset.yml`
+3. Verifica enforcement `Active` e target `master`
 
-### Passo 3: Configura pattern release/*
-1. Add rule → Branch name pattern: `release/*`
-2. Applica regole release
-
-### Passo 4: Crea CODEOWNERS
+### Passo 2: Crea CODEOWNERS (opzionale)
 1. Crea file `.github/CODEOWNERS`
 2. Aggiungi owners come sopra
 3. Commit e push
@@ -228,9 +170,7 @@ GitHub notificherà automaticamente:
 
 ## 🎯 Checklist Implementazione
 
-- [ ] Configura branch protection per `master`
-- [ ] Configura branch protection per `develop`
-- [ ] Configura pattern protection per `release/*`
+- [ ] Importa/aggiorna il ruleset per `master` (`.github/ruleset.yml`)
 - [ ] Crea file `.github/CODEOWNERS`
 - [ ] Abilita auto-delete head branches
 - [ ] Configura GPG signing (opzionale)
