@@ -1,6 +1,4 @@
 import { Animated } from 'react-native';
-import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import type { BottomTabParamList } from '@/navigation/types';
 
 // Props per HeaderSection
 export interface HeaderSectionProps {
@@ -29,9 +27,4 @@ export interface EntraInAzioneProps {
 export interface ActionCTAButtonsProps {
   onImpactPress: () => void;
   onActionsPress: () => void;
-}
-
-// Props per HomeScreen
-export interface HomeScreenProps {
-  navigation: BottomTabNavigationProp<BottomTabParamList>;
 }
