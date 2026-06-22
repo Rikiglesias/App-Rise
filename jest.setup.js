@@ -1,6 +1,25 @@
 // Mock react-native-gesture-handler BEFORE import to prevent React Native renderer errors
 jest.mock('react-native-gesture-handler', () => {
   const View = require('react-native').View;
+  // Gesture API v2: builder CHAINABLE (.onUpdate().onEnd()... ritornano this), così i
+  // componenti che usano Gesture.Pan()/Pinch() (mappa pinch-zoom, @gorhom interno) non
+  // crashano sotto jest. Estende SOLO il blocco Gesture: gli altri export restano View.
+  const GESTURE_METHODS = [
+    'onBegin', 'onStart', 'onUpdate', 'onChange', 'onEnd', 'onFinalize',
+    'onTouchesDown', 'onTouchesMove', 'onTouchesUp', 'onTouchesCancelled',
+    'enabled', 'minDistance', 'minPointers', 'maxPointers', 'averageTouches',
+    'activeOffsetX', 'activeOffsetY', 'failOffsetX', 'failOffsetY',
+    'shouldCancelWhenOutside', 'simultaneousWithExternalGesture',
+    'requireExternalGestureToFail', 'blocksExternalGesture', 'runOnJS',
+    'withRef', 'withTestId', 'hitSlop', 'scaleTo',
+  ];
+  const makeGesture = () => {
+    const g = {};
+    GESTURE_METHODS.forEach(m => {
+      g[m] = jest.fn(() => g);
+    });
+    return g;
+  };
   return {
     Swipeable: View,
     DrawerLayout: View,
@@ -30,19 +49,58 @@ jest.mock('react-native-gesture-handler', () => {
     Directions: {},
     GestureDetector: View,
     Gesture: {
-      Tap: () => ({}),
-      Pan: () => ({}),
-      Pinch: () => ({}),
-      Rotation: () => ({}),
-      Fling: () => ({}),
-      LongPress: () => ({}),
-      ForceTouch: () => ({}),
-      Native: () => ({}),
-      Race: () => ({}),
-      Simultaneous: () => ({}),
-      Exclusive: () => ({}),
+      Tap: makeGesture,
+      Pan: makeGesture,
+      Pinch: makeGesture,
+      Rotation: makeGesture,
+      Fling: makeGesture,
+      LongPress: makeGesture,
+      ForceTouch: makeGesture,
+      Native: makeGesture,
+      Race: (...gs) => gs[0] || makeGesture(),
+      Simultaneous: (...gs) => gs[0] || makeGesture(),
+      Exclusive: (...gs) => gs[0] || makeGesture(),
     },
     GestureHandlerRootView: View,
+  };
+});
+
+// @gorhom/bottom-sheet: pass-through a View nei test (evita di montare reanimated/RNGH
+// reali sotto jest). useBottomSheetModal stub: present/dismiss no-op. I children del
+// detail renderizzano inline (il contenuto è già null finché non c'è una location).
+jest.mock('@gorhom/bottom-sheet', () => {
+  const React = require('react');
+  const { View, FlatList, ScrollView } = require('react-native');
+  const Pass = ({ children, ...props }) =>
+    React.createElement(View, props, children);
+  // BottomSheet(Modal) sono ref-driven: il mock espone l'API imperativa
+  // (present/dismiss…) come no-op, così `sheetRef.current?.present()` non crasha.
+  const RefBased = React.forwardRef(({ children }, ref) => {
+    React.useImperativeHandle(ref, () => ({
+      present: jest.fn(),
+      dismiss: jest.fn(),
+      close: jest.fn(),
+      expand: jest.fn(),
+      collapse: jest.fn(),
+      snapToIndex: jest.fn(),
+      snapToPosition: jest.fn(),
+      forceClose: jest.fn(),
+    }));
+    return React.createElement(View, null, children);
+  });
+  RefBased.displayName = 'BottomSheetMock';
+  return {
+    __esModule: true,
+    default: RefBased,
+    BottomSheet: RefBased,
+    BottomSheetModal: RefBased,
+    BottomSheetModalProvider: Pass,
+    BottomSheetView: Pass,
+    BottomSheetFlatList: FlatList,
+    BottomSheetScrollView: ScrollView,
+    BottomSheetBackdrop: Pass,
+    BottomSheetHandle: Pass,
+    useBottomSheetModal: () => ({ present: jest.fn(), dismiss: jest.fn() }),
   };
 });
 
@@ -61,6 +119,10 @@ jest.mock('@sentry/react-native', () => ({
 
 // Now safe to import
 import 'react-native-gesture-handler/jestSetup';
+
+// Reanimated 4: setup jest canonico (sostituisce il vecchio mock v2/v3). Rende
+// useSharedValue/useAnimatedStyle/withTiming/withRepeat no-op sicuri nei test.
+require('react-native-reanimated').setUpTests();
 
 // Ensure __DEV__ exists in Jest/CI environment
 // Enable development-mode logging for tests

@@ -1,4 +1,7 @@
-import 'react-native-gesture-handler'; // MUST BE AT THE TOP
+// react-native-gesture-handler DEVE essere il PRIMO import (init side-effect RNGH);
+// l'import nominato carica il modulo e ne esegue i side-effect, in cima al file.
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -18,6 +21,11 @@ import { AuthProvider } from './src/shared/auth/AuthContext';
 
 // Durata minima splash screen (ms)
 const SPLASH_SCREEN_DURATION = 2500;
+
+// Stile root estratto (no inline-style: lint react-native/no-inline-styles).
+// GestureHandlerRootView richiede flex:1 e deve avvolgere l'intero albero
+// (requisito di gesture-handler per GestureDetector + @gorhom/bottom-sheet).
+const ROOT_FLEX = { flex: 1 } as const;
 
 // Crash reporting Sentry. DSN SOLO da env (mai committato): finché EXPO_PUBLIC_SENTRY_DSN
 // non è impostato, enabled=false => init no-op (nessun invio, nessun impatto runtime).
@@ -63,7 +71,12 @@ const Main: React.FC = () => {
 
   return (
     <PaperProvider theme={paperTheme}>
-      <AppNavigator />
+      {/* BottomSheetModalProvider QUI (dentro i provider di tema): il bottom-sheet
+          renderizza il contenuto in un portal → dev'essere sotto ThemeProvider/Paper
+          o useThemeColors crasha nella scheda di dettaglio. */}
+      <BottomSheetModalProvider>
+        <AppNavigator />
+      </BottomSheetModalProvider>
       <StatusBar style={isDark ? 'light' : 'dark'} translucent={true} />
     </PaperProvider>
   );
@@ -83,15 +96,17 @@ const WebApp: React.FC = () => {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <SafeAreaProvider>
-        <ThemeProvider>
-          <AuthProvider>
-            <Main />
-          </AuthProvider>
-        </ThemeProvider>
-      </SafeAreaProvider>
-    </ErrorBoundary>
+    <GestureHandlerRootView style={ROOT_FLEX}>
+      <ErrorBoundary>
+        <SafeAreaProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <Main />
+            </AuthProvider>
+          </ThemeProvider>
+        </SafeAreaProvider>
+      </ErrorBoundary>
+    </GestureHandlerRootView>
   );
 };
 
@@ -285,15 +300,17 @@ const NativeApp: React.FC = () => {
   }
 
   return (
-    <ErrorBoundary>
-      <SafeAreaProvider>
-        <ThemeProvider>
-          <AuthProvider>
-            <Main />
-          </AuthProvider>
-        </ThemeProvider>
-      </SafeAreaProvider>
-    </ErrorBoundary>
+    <GestureHandlerRootView style={ROOT_FLEX}>
+      <ErrorBoundary>
+        <SafeAreaProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <Main />
+            </AuthProvider>
+          </ThemeProvider>
+        </SafeAreaProvider>
+      </ErrorBoundary>
+    </GestureHandlerRootView>
   );
 };
 

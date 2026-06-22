@@ -7,16 +7,14 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import Svg, { Path, Rect, Circle } from 'react-native-svg';
+import Svg, { Path, Rect } from 'react-native-svg';
+import Animated from 'react-native-reanimated';
+import { GestureDetector } from 'react-native-gesture-handler';
 
 import { buildMapGeometry, matchLocationsToCountries } from './worldMapGeo';
-import {
-  PerfectContainer,
-  PerfectText,
-  PlatformTouchable,
-  PlatformScrollView,
-} from '@/components/ui';
-import { BorderRadius, PerfectSpacing, Shadows } from '@/shared/constants';
+import MapPin from './MapPin';
+import MapLegend from './MapLegend';
+import { useMapZoom } from './useMapZoom';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -55,70 +53,18 @@ const CountryPath = React.memo<CountryPathProps>(
 );
 CountryPath.displayName = 'CountryPath';
 
-interface LocationPinProps {
-  x: number;
-  y: number;
-  haloColor: string;
-  pinColor: string;
-  ringColor: string;
-  radius: number;
-  haloRadius: number;
-  ringWidth: number;
-  onPress: () => void;
-  accessibilityLabel: string;
-}
-
-// Pin a livello-città: alone tenue (glow brand) + cerchio pieno col bordo bianco.
-// È il target tap preciso (i dati sono città, non interi paesi). Memoizzato.
-const LocationPin = React.memo<LocationPinProps>(
-  ({
-    x,
-    y,
-    haloColor,
-    pinColor,
-    ringColor,
-    radius,
-    haloRadius,
-    ringWidth,
-    onPress,
-    accessibilityLabel,
-  }) => (
-    <>
-      <Circle
-        cx={x}
-        cy={y}
-        r={haloRadius}
-        fill={haloColor}
-        fillOpacity={0.18}
-      />
-      <Circle
-        cx={x}
-        cy={y}
-        r={radius}
-        fill={pinColor}
-        stroke={ringColor}
-        strokeWidth={ringWidth}
-        onPress={onPress}
-        accessible
-        accessibilityLabel={accessibilityLabel}
-      />
-    </>
-  )
-);
-LocationPin.displayName = 'LocationPin';
-
 /**
  * WorldMapSvg — mappa vettoriale delle DESTINAZIONI, a livello-città.
  *
  * La proiezione si fitta sui paesi-destinazione passati (zoom sul continente
  * attivo, deciso a monte da MapModalScreen). I paesi-destinazione sono una tinta
- * brand tenue (contesto); sopra, un PIN brand a livello-città marca il punto reale
- * (Harare, Bologna…) ed è il target tap → `onMarkerPress`. I vicini grigi fanno da
- * contesto geografico. Stessa Props interface di InteractiveMap: drop-in.
+ * brand tenue (contesto, nell'<Svg>); sopra, un PIN brand pulsante (MapPin, overlay
+ * animato) marca il punto reale (Harare, Bologna…) ed è il target tap → `onMarkerPress`.
  *
- * Tap-only (niente pinch-zoom: hitbox iOS inaffidabile, issue react-native-svg #2809).
- * Una lista di chip dei paesi funge da fallback a11y e da target tap robusto per i
- * pin piccoli, difficili da centrare su mobile.
+ * Pinch-zoom + pan: la trasformazione si applica all'Animated.View wrapper esterno
+ * all'<Svg> (incluso i pin, così restano allineati), via `useMapZoom`. Il livello di
+ * zoom si azzera al cambio continente. Una lista di chip dei paesi resta come fallback
+ * a11y e target tap robusto. Stessa Props interface di InteractiveMap: drop-in.
  */
 const WorldMapSvgComponent: React.FC<Props> = ({
   locations,
@@ -187,63 +133,72 @@ const WorldMapSvgComponent: React.FC<Props> = ({
       );
   }, [geometry, locations]);
 
+  // Pinch-zoom + pan, azzerato quando cambia il continente (set di paesi-focus).
+  const { gesture, animatedStyle } = useMapZoom(focusIds.join(','));
+
   return (
     <View
       style={[styles.container, style]}
       onLayout={handleLayout}
       testID="world-map-svg"
     >
-      {shapes.length > 0 ? (
-        <Svg width={size.width} height={size.height}>
-          <Rect
-            x={0}
-            y={0}
-            width={size.width}
-            height={size.height}
-            fill={colors.neutral[100]}
-          />
-          {shapes.map((shape, index) => {
-            // Alcune feature Natural Earth non hanno id ISO (es. Somaliland, N. Cyprus):
-            // mai attive, ma servono comunque una key univoca e stabile.
-            const isActive = shape.id ? activeByCountryId.has(shape.id) : false;
-            // Il paese-destinazione è una tinta tenue (contesto): il pin sopra
-            // è l'elemento forte e il target tap preciso a livello-città.
-            return (
-              <CountryPath
-                key={shape.id || `country-${index}`}
-                d={shape.d}
-                {...(isActive
-                  ? {
-                      fill: colors.primary[500],
-                      fillOpacity: 0.16,
-                      stroke: colors.primary[500],
-                      strokeWidth: scale(1),
-                    }
-                  : {
-                      fill: colors.neutral[300],
-                      stroke: colors.neutral[100],
-                      strokeWidth: scale(0.5),
-                    })}
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={[styles.zoomLayer, animatedStyle]}>
+          {shapes.length > 0 ? (
+            <Svg width={size.width} height={size.height}>
+              <Rect
+                x={0}
+                y={0}
+                width={size.width}
+                height={size.height}
+                fill={colors.neutral[100]}
               />
-            );
-          })}
+              {shapes.map((shape, index) => {
+                // Alcune feature Natural Earth non hanno id ISO (es. Somaliland,
+                // N. Cyprus): mai attive, ma serve una key univoca e stabile.
+                const isActive = shape.id
+                  ? activeByCountryId.has(shape.id)
+                  : false;
+                // Il paese-destinazione è una tinta tenue (contesto): il pin sopra
+                // è l'elemento forte e il target tap preciso a livello-città.
+                return (
+                  <CountryPath
+                    key={shape.id || `country-${index}`}
+                    d={shape.d}
+                    {...(isActive
+                      ? {
+                          fill: colors.primary[500],
+                          fillOpacity: 0.16,
+                          stroke: colors.primary[500],
+                          strokeWidth: scale(1),
+                        }
+                      : {
+                          fill: colors.neutral[300],
+                          stroke: colors.neutral[100],
+                          strokeWidth: scale(0.5),
+                        })}
+                  />
+                );
+              })}
+            </Svg>
+          ) : null}
+
+          {/* Pin overlay (animati): allineati all'<Svg> e trasformati con esso. */}
           {pins.map(({ location, x, y }) => (
-            <LocationPin
+            <MapPin
               key={location.id}
               x={x}
               y={y}
-              haloColor={colors.primary[500]}
-              haloRadius={scale(15)}
-              pinColor={colors.primary[500]}
+              dotSize={scale(13)}
+              haloSize={scale(40)}
+              color={colors.primary[500]}
               ringColor={colors.neutral[0]}
-              radius={scale(7)}
-              ringWidth={scale(2)}
               onPress={createPressHandler(location)}
               accessibilityLabel={`${location.country}: tocca per i dettagli`}
             />
           ))}
-        </Svg>
-      ) : null}
+        </Animated.View>
+      </GestureDetector>
 
       {/* Stato vuoto/caricamento: il calcolo dei 177 path è sincrono ma se la
           geometria non è ancora pronta (o fallisce) evitiamo l'area bianca muta. */}
@@ -253,39 +208,12 @@ const WorldMapSvgComponent: React.FC<Props> = ({
         </View>
       ) : null}
 
-      {/* Fallback a11y + target tap robusto per i poligoni piccoli */}
-      <View
-        style={[styles.legend, isFullScreen ? styles.legendFullScreen : null]}
-        pointerEvents="box-none"
-      >
-        <PlatformScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.legendContent}
-          accessibilityLabel="Paesi dove operiamo"
-        >
-          {locations.map(location => (
-            <PlatformTouchable
-              key={location.id}
-              style={styles.chip}
-              onPress={createPressHandler(location)}
-              activeOpacity={0.8}
-              accessibilityRole="button"
-              accessibilityLabel={`${location.country}: tocca per i dettagli`}
-            >
-              <PerfectContainer style={styles.chipDot} />
-              <PerfectText
-                size={13}
-                lines={1}
-                fontWeight="600"
-                style={styles.chipText}
-              >
-                {location.country}
-              </PerfectText>
-            </PlatformTouchable>
-          ))}
-        </PlatformScrollView>
-      </View>
+      {/* Fallback a11y + target tap robusto, fuori dal layer di zoom/pan */}
+      <MapLegend
+        locations={locations}
+        onSelect={onMarkerPress}
+        isFullScreen={isFullScreen}
+      />
     </View>
   );
 };
@@ -297,46 +225,14 @@ const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.neutral[100],
       overflow: 'hidden',
     },
+    // Layer trasformato da pinch-zoom/pan: contiene <Svg> + pin overlay.
+    zoomLayer: {
+      ...StyleSheet.absoluteFillObject,
+    },
     mapEmpty: {
       ...StyleSheet.absoluteFillObject,
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    legend: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: PerfectSpacing.base,
-    },
-    legendFullScreen: {
-      bottom: PerfectSpacing['2xl'],
-    },
-    legendContent: {
-      paddingHorizontal: PerfectSpacing.base,
-      gap: PerfectSpacing.sm,
-    },
-    chip: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: colors.neutral[0],
-      borderRadius: BorderRadius.lg,
-      paddingHorizontal: PerfectSpacing.base,
-      paddingVertical: PerfectSpacing.sm,
-      borderWidth: scale(1),
-      borderColor: colors.neutral[200],
-      ...Shadows.sm,
-    },
-    chipDot: {
-      width: scale(10),
-      height: scale(10),
-      borderRadius: scale(5),
-      backgroundColor: colors.primary[500],
-      borderWidth: scale(1.5),
-      borderColor: colors.primary[600],
-      marginRight: PerfectSpacing.sm,
-    },
-    chipText: {
-      color: colors.neutral[800],
     },
   });
 

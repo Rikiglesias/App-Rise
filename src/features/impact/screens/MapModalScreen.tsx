@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { getModalData } from '../data/mapModalData';
 import type { MapModalData } from '../data/mapModalData';
@@ -15,7 +16,7 @@ import {
 
 import InteractiveMap from '@/components/layout/InteractiveMap';
 import type { Continent, Location } from '@/shared/types/location';
-import MapLocationModal from '@/components/layout/MapLocationModal';
+import MapLocationSheet from '@/components/layout/MapLocationSheet';
 import type { ImpactStackParamList } from '@/navigation/types';
 import { BorderRadius, PerfectSpacing } from '@/shared/constants';
 import { scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
@@ -37,7 +38,7 @@ const MapModalScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const [locationModalVisible, setLocationModalVisible] = useState(false);
+  const sheetRef = useRef<BottomSheetModal>(null);
   const [selectedLocationData, setSelectedLocationData] =
     useState<MapModalData | null>(null);
   const [activeContinent, setActiveContinent] = useState<Continent | null>(
@@ -104,12 +105,16 @@ const MapModalScreen: React.FC = () => {
     const modalData = getModalData(location.id);
     if (modalData) {
       setSelectedLocationData(modalData);
-      setLocationModalVisible(true);
+      sheetRef.current?.present();
     }
   }, []);
 
-  const handleLocationModalClose = useCallback(() => {
-    setLocationModalVisible(false);
+  // X in header → chiude il sheet; l'onDismiss di @gorhom azzera poi la selezione.
+  const handleSheetClose = useCallback(() => {
+    sheetRef.current?.dismiss();
+  }, []);
+
+  const handleSheetDismiss = useCallback(() => {
     setSelectedLocationData(null);
   }, []);
 
@@ -202,11 +207,12 @@ const MapModalScreen: React.FC = () => {
         </View>
       ) : null}
 
-      {/* Modal della location selezionata */}
-      <MapLocationModal
-        visible={locationModalVisible}
+      {/* Bottom-sheet dettaglio della destinazione selezionata */}
+      <MapLocationSheet
+        ref={sheetRef}
         data={selectedLocationData}
-        onClose={handleLocationModalClose}
+        onClose={handleSheetClose}
+        onDismiss={handleSheetDismiss}
       />
     </PerfectContainer>
   );

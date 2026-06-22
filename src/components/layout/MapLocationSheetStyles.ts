@@ -4,17 +4,27 @@ import { PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
-/** Stili del modal di dettaglio location (mappa impatto). */
+/** Stili del bottom-sheet di dettaglio destinazione (mappa impatto). */
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    modalContainer: {
-      flex: 1,
+    // Sfondo del sheet (angoli alti arrotondati) + grabber.
+    sheetBackground: {
       backgroundColor: colors.neutral[0],
+      borderTopLeftRadius: BorderRadius.xl,
+      borderTopRightRadius: BorderRadius.xl,
     },
+    handleIndicator: {
+      backgroundColor: colors.neutral[300],
+      width: scale(40),
+      height: scale(4),
+    },
+    // Header gradient brand: primo elemento, angoli alti coerenti col sheet.
     header: {
-      paddingTop: PerfectSpacing['3xl'],
+      paddingTop: PerfectSpacing.base,
       paddingBottom: PerfectSpacing.lg,
       paddingHorizontal: PerfectSpacing.base,
+      borderTopLeftRadius: BorderRadius.xl,
+      borderTopRightRadius: BorderRadius.xl,
     },
     headerContent: {
       flexDirection: 'row',
@@ -61,7 +71,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     content: {
       padding: PerfectSpacing.lg,
-      paddingBottom: PerfectSpacing['2xl'],
+      paddingBottom: PerfectSpacing['3xl'],
     },
     statGrid: {
       flexDirection: 'row',
@@ -131,7 +141,6 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[500],
       flex: 1,
     },
-    // Connettore verticale tra gli step (linea + nessun testo).
     traceConnector: {
       width: scale(2),
       height: PerfectSpacing.base,
