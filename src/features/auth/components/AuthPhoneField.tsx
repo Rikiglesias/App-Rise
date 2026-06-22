@@ -4,7 +4,7 @@ import PhoneInput, {
   type ICountry,
   getCountryByCca2,
 } from 'rn-international-phone-number';
-import type { ICountryCca2 } from 'rn-country-select';
+import type { ICountryCca2, ICountrySelectStyle } from 'rn-country-select';
 
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -23,6 +23,14 @@ interface AuthPhoneFieldProps {
 // Italia in cima al selettore (caso comune: donatori italiani); il resto della
 // lista resta in ordine alfabetico.
 const POPULAR_COUNTRIES: ICountryCca2[] = ['IT'];
+
+// Backdrop trasparente ma CLICCABILE: nessun velo grigio a tutta pagina, ma un
+// tap in qualunque punto fuori dal pop-up lo chiude (oltre alla X). Si ottiene
+// non rimuovendo il backdrop (altrimenti la lib lo disabilita) e sovrascrivendo
+// solo il suo colore di sfondo a 'transparent'.
+const MODAL_STYLES: ICountrySelectStyle = {
+  backdrop: { backgroundColor: 'transparent' },
+};
 
 /**
  * Prefisso internazionale da ICountry: `idd.root` + suffisso quando è unico
@@ -93,11 +101,11 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         phoneInputStyles={phoneStyles}
         popularCountries={POPULAR_COUNTRIES}
         modalType="bottomSheet"
-        initialBottomsheetHeight="65%"
-        minBottomsheetHeight="65%"
-        maxBottomsheetHeight="65%"
+        initialBottomsheetHeight="75%"
+        minBottomsheetHeight="75%"
+        maxBottomsheetHeight="75%"
         showModalAlphabetFilter={false}
-        removedModalBackdrop
+        modalStyles={MODAL_STYLES}
         showModalCloseButton
         onChangePhoneNumber={(num: string): void => {
           setNumber(num);
