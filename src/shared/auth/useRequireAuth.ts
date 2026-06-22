@@ -6,8 +6,8 @@ import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
  * Guard per le schermate post-login (CompleteProfile/ProfileEdit/DeleteAccount):
- * se la sessione risulta NON autenticata, rimanda a Home (dove il tab Profilo mostra
- * la landing di accesso). Non scatta su `loading` (stato transitorio iniziale).
+ * se la sessione risulta NON autenticata, rimanda alla schermata Profilo (Area
+ * Donatori), che mostra la landing di accesso. Non scatta su `loading`.
  * Difesa UX in aggiunta alle RLS server-side e ai check `not_authenticated` delle azioni.
  */
 export const useRequireAuth = (): void => {
@@ -16,7 +16,7 @@ export const useRequireAuth = (): void => {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      navigation.navigate('Home');
+      navigation.navigate('Profilo');
     }
   }, [status, navigation]);
 };

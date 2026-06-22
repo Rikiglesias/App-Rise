@@ -17,6 +17,61 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
   }
   testID="home-screen"
 >
+  <View
+    accessibilityLabel="navigation.profile"
+    accessibilityRole="button"
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "alignItems": "center",
+        "backgroundColor": "#F5F5F5",
+        "borderColor": "#E5E5E5",
+        "borderRadius": 9999,
+        "borderWidth": 1.259318311019904,
+        "height": 50.372732440796156,
+        "justifyContent": "center",
+        "opacity": 1,
+        "position": "absolute",
+        "right": 30.223639464477696,
+        "top": 10.074546488159232,
+        "width": 50.372732440796156,
+        "zIndex": 10,
+      }
+    }
+  >
+    <Text
+      color="#B91C1C"
+      size={22}
+    >
+      account
+    </Text>
+  </View>
   <RCTScrollView
     collapsable={false}
     contentContainerStyle={

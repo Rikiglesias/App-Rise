@@ -24,6 +24,7 @@ export const useSignUpForm = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [phone, setPhone] = useState('+39');
   const [city, setCity] = useState('');
   const [province, setProvince] = useState('');
@@ -38,9 +39,8 @@ export const useSignUpForm = () => {
   const lastNameRef = useRef<TextInput>(null);
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
+  const confirmPasswordRef = useRef<TextInput>(null);
   const phoneRef = useRef<TextInput>(null);
-  const cityRef = useRef<TextInput>(null);
-  const provinceRef = useRef<TextInput>(null);
 
   // Pulisce l'errore di un campo mentre l'utente lo corregge.
   const clearError = useCallback(
@@ -67,16 +67,19 @@ export const useSignUpForm = () => {
         setPassword(v);
         clearError('password');
       },
+      confirmPassword: (v: string): void => {
+        setConfirmPassword(v);
+        clearError('confirmPassword');
+      },
       phone: (v: string): void => {
         setPhone(v);
         clearError('phone');
       },
       city: (v: string): void => {
         setCity(v);
+        // Testo libero: la provincia derivata non è più garantita coerente → azzera.
+        setProvince('');
         clearError('city');
-      },
-      province: (v: string): void => {
-        setProvince(v);
         clearError('province');
       },
       birthDate: (v: string): void => {
@@ -92,11 +95,21 @@ export const useSignUpForm = () => {
       lastName: (): void => lastNameRef.current?.focus(),
       email: (): void => emailRef.current?.focus(),
       password: (): void => passwordRef.current?.focus(),
+      confirmPassword: (): void => confirmPasswordRef.current?.focus(),
       phone: (): void => phoneRef.current?.focus(),
-      city: (): void => cityRef.current?.focus(),
-      province: (): void => provinceRef.current?.focus(),
     }),
     []
+  );
+
+  // Selezione di un comune dall'autocomplete: città + provincia (sigla) coerenti.
+  const selectComune = useCallback(
+    (cityName: string, provinceSigla: string): void => {
+      setCity(cityName);
+      setProvince(provinceSigla);
+      clearError('city');
+      clearError('province');
+    },
+    [clearError]
   );
 
   const togglePrivacy = useCallback((): void => {
@@ -115,6 +128,7 @@ export const useSignUpForm = () => {
       lastName,
       email,
       password,
+      confirmPassword,
       phone,
       city,
       province,
@@ -125,6 +139,7 @@ export const useSignUpForm = () => {
     if (Object.keys(found).length > 0) return;
 
     setLoading(true);
+    // confirmPassword NON viene inviato al backend: serve solo a validare in UI.
     const { error } = await signUp(email.trim(), password, {
       first_name: firstName.trim(),
       last_name: lastName.trim(),
@@ -143,6 +158,7 @@ export const useSignUpForm = () => {
     lastName,
     email,
     password,
+    confirmPassword,
     phone,
     city,
     province,
@@ -156,10 +172,9 @@ export const useSignUpForm = () => {
   const handleSubmit = useCallback((): void => {
     void submit();
   }, [submit]);
-  const goToLogin = useCallback(
-    (): void => navigation.navigate('Login'),
-    [navigation]
-  );
+  // "Ho già un account" / post-signup: torna indietro alla tab Profilo (che
+  // mostra LoginScreen come contenuto). Login non è più una Stack.Screen.
+  const goToLogin = useCallback((): void => navigation.goBack(), [navigation]);
 
   return {
     values: {
@@ -167,6 +182,7 @@ export const useSignUpForm = () => {
       lastName,
       email,
       password,
+      confirmPassword,
       phone,
       city,
       province,
@@ -179,12 +195,12 @@ export const useSignUpForm = () => {
       lastNameRef,
       emailRef,
       passwordRef,
+      confirmPasswordRef,
       phoneRef,
-      cityRef,
-      provinceRef,
     },
     onChange,
     focusNext,
+    selectComune,
     togglePrivacy,
     toggleMarketing,
     submitError,

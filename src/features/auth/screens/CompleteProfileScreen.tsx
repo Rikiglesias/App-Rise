@@ -3,6 +3,8 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthPhoneField } from '../components/AuthPhoneField';
+import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
 import { AuthSection } from '../components/AuthSection';
@@ -11,6 +13,7 @@ import { useProfileForm } from '../hooks/useProfileForm';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { RISE_URLS } from '@/shared/constants/urls';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 
@@ -64,40 +67,25 @@ export const CompleteProfileScreen: React.FC = () => {
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.contacts')}>
-        <AuthInput
-          ref={refs.phoneRef}
+        <AuthPhoneField
           label={t('auth.signup.phone')}
-          value={values.phone}
           onChangeText={onChange.phone}
           error={err(errors.phone)}
-          keyboardType="phone-pad"
-          autoComplete="tel"
-          textContentType="telephoneNumber"
-          returnKeyType="next"
-          onSubmitEditing={focusNext.city}
         />
-        <AuthInput
-          ref={refs.cityRef}
+        <AuthCityField
           label={t('auth.signup.city')}
           value={values.city}
-          onChangeText={onChange.city}
+          onChangeCity={onChange.city}
+          onSelectComune={form.selectComune}
           error={err(errors.city)}
-          autoCapitalize="words"
-          autoComplete="postal-address-locality"
-          textContentType="addressCity"
-          returnKeyType="next"
-          onSubmitEditing={focusNext.province}
+          placeholder={t('auth.signup.cityPlaceholder')}
         />
         <AuthInput
-          ref={refs.provinceRef}
           label={t('auth.signup.province')}
           value={values.province}
-          onChangeText={onChange.province}
           error={err(errors.province)}
-          autoCapitalize="characters"
-          autoComplete="postal-address-region"
-          textContentType="addressState"
-          returnKeyType="done"
+          editable={false}
+          placeholder={t('auth.signup.provincePlaceholder')}
         />
       </AuthSection>
 
@@ -106,6 +94,8 @@ export const CompleteProfileScreen: React.FC = () => {
           checked={values.privacyConsent}
           onToggle={form.togglePrivacy}
           label={t('auth.signup.privacyConsent')}
+          linkText={t('auth.signup.privacyConsentLink')}
+          linkUrl={RISE_URLS.privacyPolicy}
           error={err(errors.privacyConsent)}
         />
       </AuthSection>

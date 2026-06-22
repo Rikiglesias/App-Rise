@@ -21,6 +21,9 @@ export const RISE_URLS = {
   donation: 'https://italy.riseagainsthunger.org/donaora/',
   tracciabilita: 'https://italy.riseagainsthunger.org/chi-siamo/tracciabilita/',
 
+  // Legale
+  privacyPolicy: 'https://italy.riseagainsthunger.org/privacy-policy/',
+
   // Welfare4Charity Platform
   shop: 'https://riseagainsthunger.org.welfare4charity.com/charity/ecommerce',
   giftCards:

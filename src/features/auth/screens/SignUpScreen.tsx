@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthPhoneField } from '../components/AuthPhoneField';
+import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
 import { AuthSection } from '../components/AuthSection';
@@ -11,6 +13,7 @@ import { useSignUpForm } from '../hooks/useSignUpForm';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { RISE_URLS } from '@/shared/constants/urls';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -100,45 +103,43 @@ export const SignUpScreen: React.FC = () => {
           autoComplete="new-password"
           textContentType="newPassword"
           returnKeyType="next"
+          onSubmitEditing={focusNext.confirmPassword}
+        />
+        <AuthInput
+          ref={refs.confirmPasswordRef}
+          label={t('auth.signup.confirmPassword')}
+          value={values.confirmPassword}
+          onChangeText={onChange.confirmPassword}
+          error={err(errors.confirmPassword)}
+          secureTextEntry
+          autoCapitalize="none"
+          autoComplete="new-password"
+          textContentType="newPassword"
+          returnKeyType="next"
           onSubmitEditing={focusNext.phone}
         />
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.contacts')}>
-        <AuthInput
-          ref={refs.phoneRef}
+        <AuthPhoneField
           label={t('auth.signup.phone')}
-          value={values.phone}
           onChangeText={onChange.phone}
           error={err(errors.phone)}
-          keyboardType="phone-pad"
-          autoComplete="tel"
-          textContentType="telephoneNumber"
-          returnKeyType="next"
-          onSubmitEditing={focusNext.city}
         />
-        <AuthInput
-          ref={refs.cityRef}
+        <AuthCityField
           label={t('auth.signup.city')}
           value={values.city}
-          onChangeText={onChange.city}
+          onChangeCity={onChange.city}
+          onSelectComune={form.selectComune}
           error={err(errors.city)}
-          autoCapitalize="words"
-          autoComplete="postal-address-locality"
-          textContentType="addressCity"
-          returnKeyType="next"
-          onSubmitEditing={focusNext.province}
+          placeholder={t('auth.signup.cityPlaceholder')}
         />
         <AuthInput
-          ref={refs.provinceRef}
           label={t('auth.signup.province')}
           value={values.province}
-          onChangeText={onChange.province}
           error={err(errors.province)}
-          autoCapitalize="characters"
-          autoComplete="postal-address-region"
-          textContentType="addressState"
-          returnKeyType="done"
+          editable={false}
+          placeholder={t('auth.signup.provincePlaceholder')}
         />
       </AuthSection>
 
@@ -147,6 +148,8 @@ export const SignUpScreen: React.FC = () => {
           checked={values.privacyConsent}
           onToggle={form.togglePrivacy}
           label={t('auth.signup.privacyConsent')}
+          linkText={t('auth.signup.privacyConsentLink')}
+          linkUrl={RISE_URLS.privacyPolicy}
           error={err(errors.privacyConsent)}
         />
         <AuthConsentCheckbox
@@ -155,6 +158,10 @@ export const SignUpScreen: React.FC = () => {
           label={t('auth.signup.marketingConsent')}
         />
       </AuthSection>
+
+      {/* Stacco i consensi dal CTA "Registrati": senza, i due check risultano
+          appiccicati al bottone. */}
+      <View style={styles.submitGap} />
 
       {form.submitError ? (
         <PerfectText size={14} lines={2} style={styles.error}>
@@ -181,6 +188,10 @@ const createStyles = (colors: ThemeColors) =>
     error: {
       color: Colors.semantic.error.main,
       marginTop: PerfectSpacing.xs,
+    },
+    // Stacco tra l'ultimo consenso e il CTA "Registrati".
+    submitGap: {
+      height: PerfectSpacing.lg,
     },
     doneText: {
       color: colors.neutral[700],

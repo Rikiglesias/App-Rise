@@ -45,10 +45,9 @@ export const ForgotPasswordScreen: React.FC = () => {
     void onSubmit();
   }, [onSubmit]);
 
-  const goToLogin = useCallback(
-    (): void => navigation.navigate('Login'),
-    [navigation]
-  );
+  // Torna indietro alla schermata che ha aperto il recupero (LoginScreen,
+  // contenuto della tab Profilo). Login non è più una Stack.Screen.
+  const goToLogin = useCallback((): void => navigation.goBack(), [navigation]);
 
   return (
     <AuthScreen title={t('auth.forgot.title')}>

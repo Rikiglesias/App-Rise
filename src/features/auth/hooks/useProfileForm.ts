@@ -33,8 +33,6 @@ export const useProfileForm = () => {
 
   const lastNameRef = useRef<TextInput>(null);
   const phoneRef = useRef<TextInput>(null);
-  const cityRef = useRef<TextInput>(null);
-  const provinceRef = useRef<TextInput>(null);
 
   const clearError = useCallback(
     (key: keyof ProfileErrors): void =>
@@ -58,10 +56,9 @@ export const useProfileForm = () => {
       },
       city: (v: string): void => {
         setCity(v);
+        // Testo libero: la provincia derivata non è più garantita coerente → azzera.
+        setProvince('');
         clearError('city');
-      },
-      province: (v: string): void => {
-        setProvince(v);
         clearError('province');
       },
       birthDate: (v: string): void => {
@@ -76,10 +73,19 @@ export const useProfileForm = () => {
     () => ({
       lastName: (): void => lastNameRef.current?.focus(),
       phone: (): void => phoneRef.current?.focus(),
-      city: (): void => cityRef.current?.focus(),
-      province: (): void => provinceRef.current?.focus(),
     }),
     []
+  );
+
+  // Selezione di un comune dall'autocomplete: città + provincia (sigla) coerenti.
+  const selectComune = useCallback(
+    (cityName: string, provinceSigla: string): void => {
+      setCity(cityName);
+      setProvince(provinceSigla);
+      clearError('city');
+      clearError('province');
+    },
+    [clearError]
   );
 
   const togglePrivacy = useCallback((): void => {
@@ -167,9 +173,10 @@ export const useProfileForm = () => {
       privacyConsent,
     },
     errors,
-    refs: { lastNameRef, phoneRef, cityRef, provinceRef },
+    refs: { lastNameRef, phoneRef },
     onChange,
     focusNext,
+    selectComune,
     togglePrivacy,
     submitError,
     loading,

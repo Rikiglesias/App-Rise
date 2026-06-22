@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PlatformScrollView, PerfectText, PerfectImage } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
+import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -11,14 +12,24 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 interface AuthScreenProps {
   title: string;
   subtitle?: string;
+  /**
+   * Occhiello (eyebrow) sopra il titolo: maiuscoletto rosso brand spaziato che
+   * nomina la pagina (es. "AREA DONATORI"). Dà gerarchia all'header e fa capire
+   * a colpo d'occhio dove ci si trova; il titolo sotto porta il tono.
+   */
+  eyebrow?: string;
   /** Mostra il marchio brand in testa (default sì, per identità coerente). */
   showLogo?: boolean;
   /**
-   * Centra verticalmente il contenuto (default no). Usare SOLO su schermate
-   * corte (es. landing): centrare un form lungo lo taglierebbe in cima quando
-   * supera il viewport.
+   * Layout "welcome" della landing (default no): hero in alto + azioni spinte
+   * verso il basso da uno spacer flessibile, senza vuoto sopra il logo. NON
+   * usare sui form lunghi: lo spacer spingerebbe i campi fuori dal viewport.
    */
   centerContent?: boolean;
+  /** Dimensione del titolo (default 32). LoginScreen lo vuole più grande. */
+  titleSize?: number;
+  /** Centra verticalmente il contenuto (schermate corte senza tab bar, es. login). */
+  verticalCenter?: boolean;
   children: React.ReactNode;
 }
 
@@ -26,8 +37,11 @@ interface AuthScreenProps {
 export const AuthScreen: React.FC<AuthScreenProps> = ({
   title,
   subtitle,
+  eyebrow,
   showLogo = true,
   centerContent = false,
+  titleSize = 32,
+  verticalCenter = false,
   children,
 }) => {
   const colors = useThemeColors();
@@ -42,15 +56,20 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         <PlatformScrollView
           contentContainerStyle={[
             styles.content,
-            centerContent && styles.contentCentered,
+            verticalCenter && styles.contentCentered,
           ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.header}>
+          {/* Landing: gruppo hero+azioni COESO nel terzo superiore (spacer
+              sopra piccolo + sotto grande). Niente vuoto sopra il logo né gap
+              centrale; lo spazio residuo resta in fondo come padding naturale
+              sopra la tab bar. Sui form gli spacer non vengono inseriti. */}
+          {centerContent ? <View style={styles.heroSpacerTop} /> : null}
+          <View style={[styles.header, verticalCenter && styles.headerSpaced]}>
             {showLogo ? (
               <PerfectImage
-                width={72}
+                width={centerContent ? 96 : 72}
                 aspectRatio={1}
                 source={require('@assets/icons/app/logo.png')}
                 imageStyle={{ resizeMode: 'contain' }}
@@ -59,16 +78,27 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 accessibilityLabel="Rise Against Hunger Italia"
               />
             ) : null}
-            <PerfectText size={28} lines={2} style={styles.title}>
+            {eyebrow ? (
+              <PerfectText size={20} lines={1} style={styles.eyebrow}>
+                {eyebrow}
+              </PerfectText>
+            ) : null}
+            <PerfectText size={titleSize} lines={2} style={styles.title}>
               {title}
             </PerfectText>
             {subtitle ? (
-              <PerfectText size={16} lines={3} style={styles.subtitle}>
+              <PerfectText
+                size={15}
+                lines={3}
+                style={styles.subtitle}
+                containerWidth={240}
+              >
                 {subtitle}
               </PerfectText>
             ) : null}
           </View>
           {children}
+          {centerContent ? <View style={styles.heroSpacerEnd} /> : null}
         </PlatformScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -87,26 +117,63 @@ const createStyles = (colors: ThemeColors) =>
     content: {
       flexGrow: 1,
       padding: PerfectSpacing.lg,
-      paddingTop: PerfectSpacing.xl,
+      paddingTop: PerfectSpacing.lg,
+      // Stacco dalla tab bar in basso: i social non restano incollati al fondo.
+      paddingBottom: PerfectSpacing.xl,
     },
+    // Centra verticalmente il blocco quando la schermata è corta e a tutto
+    // schermo (login senza tab bar): niente grande vuoto in fondo.
     contentCentered: {
-      // Centra il blocco corto (landing) ed elimina il vuoto in fondo.
-      // Su form lunghi NON va usato: taglierebbe il contenuto sopra il viewport.
       justifyContent: 'center',
+    },
+    // Landing: posiziona il gruppo hero+azioni nel terzo superiore (spacer
+    // sopra piccolo + sotto grande), coeso, senza vuoto sopra né gap centrale.
+    heroSpacerTop: {
+      flex: 0.55,
+    },
+    heroSpacerEnd: {
+      flex: 1.45,
     },
     header: {
       marginBottom: PerfectSpacing.xl,
+      // Logo + occhiello + titolo centrati: pattern standard delle schermate
+      // auth. Allineati a sinistra apparivano sbilanciati rispetto ai bottoni
+      // full-width (logo "laterale", titolo storto a capo).
+      alignItems: 'center',
+    },
+    // Login (verticalCenter): più stacco titolo→primo campo; col contenuto
+    // centrato verticalmente questo alza anche il titolo nel viewport.
+    headerSpaced: {
+      marginBottom: PerfectSpacing['3xl'],
     },
     logo: {
       marginBottom: PerfectSpacing.base,
     },
+    // Occhiello: maiuscoletto rosso brand, spaziato. Stesso rosso primary[500]
+    // del CTA/link (coerenza: non una tonalità diversa dal resto dell'app).
+    eyebrow: {
+      color: Colors.primary[500],
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      letterSpacing: scale(1.5),
+      marginBottom: PerfectSpacing.xs,
+    },
     title: {
+      // Titolo scuro (il colore va bene): il calore/identità lo porta
+      // l'occhiello rosso sopra. Tracking stretto come i titoli Home.
       color: colors.neutral[900],
       fontWeight: '800',
-      letterSpacing: scale(-0.5),
+      letterSpacing: scale(-0.8),
+      textAlign: 'center',
     },
     subtitle: {
-      color: colors.neutral[600],
-      marginTop: PerfectSpacing.sm,
+      // Secondary text: grigio più morbido (non "secco") + line-height arioso;
+      // contrasto AA mantenuto (neutral[500] su sfondo chiaro). A-capo bilanciato
+      // via containerWidth sul PerfectText (niente orfano "impatto").
+      color: colors.neutral[500],
+      marginTop: PerfectSpacing.md,
+      textAlign: 'center',
+      letterSpacing: scale(0.2),
+      lineHeight: scale(21),
     },
   });

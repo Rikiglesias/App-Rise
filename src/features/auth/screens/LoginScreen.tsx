@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { SocialButtons } from '../components/SocialButtons';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -25,6 +26,7 @@ export const LoginScreen: React.FC = () => {
   const [emailErr, setEmailErr] = useState<string | undefined>();
   const [pwdErr, setPwdErr] = useState<string | undefined>();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [socialError, setSocialError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const passwordRef = useRef<TextInput>(null);
@@ -53,9 +55,10 @@ export const LoginScreen: React.FC = () => {
     setLoading(true);
     const { error } = await signIn(email.trim(), password);
     setLoading(false);
+    // Post-login non si naviga: il cambio di status nell'AuthContext
+    // ri-renderizza ProfileScreen verso il profilo da solo.
     if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
-    else navigation.goBack();
-  }, [email, password, signIn, t, navigation]);
+  }, [email, password, signIn, t]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();
@@ -68,9 +71,20 @@ export const LoginScreen: React.FC = () => {
     (): void => navigation.navigate('SignUp'),
     [navigation]
   );
+  const handleSocialError = useCallback(
+    (message: string): void =>
+      setSocialError(t(`auth.errors.${mapAuthError(message)}`)),
+    [t]
+  );
 
   return (
-    <AuthScreen title={t('auth.login.title')}>
+    <AuthScreen
+      showLogo={false}
+      eyebrow={t('auth.login.title')}
+      title={t('auth.login.welcome')}
+      titleSize={38}
+      verticalCenter
+    >
       <AuthInput
         label={t('auth.login.email')}
         value={email}
@@ -106,16 +120,25 @@ export const LoginScreen: React.FC = () => {
         onPress={handleSubmit}
         loading={loading}
       />
+      {/* "Password dimenticata?" = rimando minore (link grigio tenue). "Crea un
+          account" = bottone outline (secondary): vuoto col bordo, così è un'azione
+          chiara ma visibilmente diversa da "Accedi" (pieno), non un link minuscolo. */}
       <AuthButton
         label={t('auth.login.forgotPassword')}
-        variant="link"
+        variant="linkMuted"
         onPress={goToForgot}
       />
       <AuthButton
-        label={t('auth.login.noAccount')}
-        variant="link"
+        label={t('auth.login.createAccount')}
+        variant="secondary"
         onPress={goToSignUp}
       />
+      <SocialButtons onError={handleSocialError} />
+      {socialError ? (
+        <PerfectText size={14} lines={2} style={styles.error}>
+          {socialError}
+        </PerfectText>
+      ) : null}
     </AuthScreen>
   );
 };

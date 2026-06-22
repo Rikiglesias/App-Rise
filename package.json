@@ -85,7 +85,8 @@
     "refactor:check": "npm run filesize:analyze && echo '✅ File size compliance verified'",
     "deadcode": "npx ts-prune -u",
     "deadcode:ci": "npx ts-prune -u -e",
-    "lint": "eslint src/ App.tsx index.ts --ext .ts,.tsx --max-warnings 0"
+    "lint": "eslint src/ App.tsx index.ts --ext .ts,.tsx --max-warnings 0",
+    "gen:comuni": "node scripts/gen-comuni.mjs"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
@@ -124,6 +125,7 @@
     "react-native-screens": "~4.16.0",
     "react-native-svg": "15.15.5",
     "react-native-web": "^0.21.0",
+    "rn-international-phone-number": "^0.14.0",
     "topojson-client": "^3.1.0",
     "world-atlas": "^2.0.2"
   },
@@ -137,6 +139,7 @@
     "@types/topojson-client": "^3.1.5",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "comuni-json": "^1.0.0",
     "eslint": "^8.57.0",
     "eslint-config-expo": "~10.0.0",
     "eslint-plugin-import": "^2.31.0",

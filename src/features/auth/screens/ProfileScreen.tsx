@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
-import { AuthLandingScreen } from './AuthLandingScreen';
+import { LoginScreen } from './LoginScreen';
 import { ReConsentScreen } from './ReConsentScreen';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -80,7 +80,7 @@ export const ProfileScreen: React.FC = () => {
   }
 
   if (status === 'unauthenticated') {
-    return <AuthLandingScreen />;
+    return <LoginScreen />;
   }
 
   if (needsReConsent) {

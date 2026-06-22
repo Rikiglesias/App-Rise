@@ -24,13 +24,13 @@ import SeguiciScreen from '@/features/social/screens/SeguiciScreen';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
-import { LoginScreen } from '@/features/auth/screens/LoginScreen';
 import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
 import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScreen';
 import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
+import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -140,10 +140,12 @@ const AppNavigator: React.FC = () => {
           options={{ headerShown: false }}
         />
 
-        {/* Area donatori (auth) */}
+        {/* Area donatori (auth). Profilo è una Stack.Screen aperta dall'avatar
+            nell'header Home: se unauthenticated mostra il login (LoginScreen),
+            altrimenti il profilo. SignUp/ForgotPassword/ResetPassword push. */}
         <Stack.Screen
-          name="Login"
-          component={LoginScreen}
+          name="Profilo"
+          component={ProfileScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -29,7 +29,8 @@ export const AuthSection: React.FC<AuthSectionProps> = ({
 
   return (
     <View style={[styles.section, first ? styles.sectionFirst : null]}>
-      <PerfectText size={12} lines={1} style={styles.title}>
+      {first ? null : <View style={styles.divider} />}
+      <PerfectText size={15} lines={1} style={styles.title}>
         {title}
       </PerfectText>
       {children}
@@ -40,16 +41,27 @@ export const AuthSection: React.FC<AuthSectionProps> = ({
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     section: {
-      marginTop: PerfectSpacing.lg,
+      marginTop: PerfectSpacing.base,
     },
     sectionFirst: {
       marginTop: 0,
     },
+    // Intestazione di categoria: MAIUSCOLETTO rosso brand spaziato + divider
+    // sopra. Il rosso dà calore/identità; per non confonderlo con un elemento
+    // cliccabile la regola è: SOLO i link sono SOTTOLINEATI (vedi il link privacy).
+    // Quindi rosso non-sottolineato = etichetta, rosso sottolineato = link.
     title: {
-      color: colors.neutral[500],
-      fontWeight: '700',
+      color: colors.primary[500],
+      fontWeight: '800',
       textTransform: 'uppercase',
-      letterSpacing: scale(0.5),
+      letterSpacing: scale(1),
       marginBottom: PerfectSpacing.sm,
+    },
+    // Linea sottile che apre ogni gruppo (tranne il primo): separa le categorie
+    // in modo strutturale, senza ricorrere al colore.
+    divider: {
+      height: scale(1),
+      backgroundColor: colors.neutral[200],
+      marginBottom: PerfectSpacing.base,
     },
   });
