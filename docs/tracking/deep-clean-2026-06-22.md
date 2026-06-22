@@ -84,6 +84,9 @@
 
 ## End-state
 - [x] Audit 360° A-H → questo report.
-- [ ] Fix bounded critical+high regression-safe (tsc/eslint/jest/madge/conta-problemi verdi, coverage ≥0).
-- [ ] Residui non-bounded → `improvements-proposed.md`.
-- [ ] PR su master (rebase+admin, CI verde).
+- [x] Fix bounded critical+high regression-safe → **batch 1** (PR #42 `6bbdd8c`): 6 HIGH + 0 critical.
+- [~] Fix bounded medium/low → **batch 2** (branch `chore/deep-clean-2`, ogni chunk conta-problemi=0):
+  - [x] Bug L10n i18n `aa43c2c` · [x] config (forceConsistentCasing + ts-prune orfano) `d1f43c5` · [x] i18n-types (SupportedLocale runtime + TranslationKeys/types.ts dead) `eff3034` · [x] 3 asset `.backup` orfani.
+  - [ ] Residui delicati (manifest SSOT + environment.ts, dot-path t(), legacy-guard, dup auth, test un-skip, dead-export adversariale) → turno dedicato.
+- [x] Residui non-bounded/policy → `~/todos/improvements-proposed.md` (sezione 2026-06-22, aggiornata).
+- [ ] PR batch 2 su master (rebase+admin, CI verde).
