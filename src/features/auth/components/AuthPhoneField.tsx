@@ -20,9 +20,9 @@ interface AuthPhoneFieldProps {
   error?: string | undefined;
 }
 
-// Paesi in cima alla lista del selettore: evita di scrollare per il caso comune
-// (donatori italiani) e per i vicini più probabili.
-const POPULAR_COUNTRIES: ICountryCca2[] = ['IT', 'DE', 'FR'];
+// Italia in cima al selettore (caso comune: donatori italiani); il resto della
+// lista resta in ordine alfabetico.
+const POPULAR_COUNTRIES: ICountryCca2[] = ['IT'];
 
 /**
  * Prefisso internazionale da ICountry: `idd.root` + suffisso quando è unico
@@ -93,9 +93,9 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         phoneInputStyles={phoneStyles}
         popularCountries={POPULAR_COUNTRIES}
         modalType="bottomSheet"
-        initialBottomsheetHeight="50%"
-        minBottomsheetHeight="50%"
-        maxBottomsheetHeight="50%"
+        initialBottomsheetHeight="65%"
+        minBottomsheetHeight="65%"
+        maxBottomsheetHeight="65%"
         showModalAlphabetFilter={false}
         removedModalBackdrop
         showModalCloseButton
