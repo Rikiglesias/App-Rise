@@ -43,11 +43,13 @@ jest.mock('expo-constants', () => ({
     },
     deviceName: 'Test Device',
     appOwnership: 'expo',
-    // Proprietà deprecate mantenute per compatibilità
-    manifest: {
-      releaseChannel: undefined,
-    },
   },
+}));
+
+// `Updates.channel` è `null` su Expo Go/dev e nei test (nessun canale EAS).
+jest.mock('expo-updates', () => ({
+  __esModule: true,
+  channel: null,
 }));
 
 describe('Environment Configuration', () => {
@@ -121,7 +123,7 @@ describe('Environment Configuration', () => {
 
       expect(info).toHaveProperty('current');
       expect(info).toHaveProperty('isDev');
-      expect(info).toHaveProperty('releaseChannel');
+      expect(info).toHaveProperty('channel');
       expect(info).toHaveProperty('expoVersion');
       expect(info).toHaveProperty('platform');
       expect(info).toHaveProperty('deviceName');

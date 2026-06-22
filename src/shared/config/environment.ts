@@ -5,6 +5,7 @@
  */
 
 import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 
 /**
  * Mappa STATICA delle variabili `EXPO_PUBLIC_*`.
@@ -134,18 +135,11 @@ const getCurrentEnvironment = (): keyof typeof environmentConfigs => {
     return 'development';
   }
 
-  // Controlla release channel per staging (se disponibile)
-  const manifest = Constants.manifest;
-  if (
-    manifest &&
-    typeof manifest === 'object' &&
-    'releaseChannel' in manifest
-  ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const releaseChannel = manifest.releaseChannel;
-    if (releaseChannel === 'staging') {
-      return 'staging';
-    }
+  // Rileva staging via canale EAS Update. `Constants.manifest` (updates
+  // classici) è sempre null da SDK 50; `Updates.channel` è la fonte corrente
+  // (vedi i `channel` nei profili di eas.json).
+  if (Updates.channel === 'staging') {
+    return 'staging';
   }
 
   // Default production
@@ -241,17 +235,10 @@ export const isProduction = (): boolean => env.NODE_ENV === 'production';
 
 // Helper per debugging
 export const getEnvironmentInfo = (): Record<string, unknown> => {
-  const manifest = Constants.manifest;
-  const releaseChannel =
-    manifest && typeof manifest === 'object' && 'releaseChannel' in manifest
-      ? // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        manifest.releaseChannel
-      : undefined;
-
   return {
     current: getCurrentEnvironment(),
     isDev: __DEV__,
-    releaseChannel,
+    channel: Updates.channel ?? undefined,
     expoVersion: Constants.expoConfig?.version,
     platform: Constants.platform,
     deviceName: Constants.deviceName,
