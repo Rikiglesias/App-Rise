@@ -168,6 +168,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             phone: p.phone,
             city: p.city,
             province: p.province,
+            country: p.country,
             birth_date: p.birth_date,
             marketing_consent: p.marketing_consent,
           },

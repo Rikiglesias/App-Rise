@@ -352,6 +352,7 @@ describe('AuthContext — update/signup/consenso', () => {
         phone: '+393331234567',
         city: 'Roma',
         province: 'RM',
+        country: 'IT',
         birth_date: '1990-01-01',
         privacy_consent: true,
         marketing_consent: true,

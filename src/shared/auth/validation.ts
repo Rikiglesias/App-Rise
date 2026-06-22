@@ -41,6 +41,8 @@ export interface SignUpInput {
   phone: string;
   city: string;
   province: string;
+  /** ISO 3166-1 alpha-2. 'IT' richiede la provincia; gli altri paesi no. */
+  country: string;
   birthDate: string;
   privacyConsent: boolean;
 }
@@ -59,8 +61,11 @@ export const validateSignUpForm = (input: SignUpInput): SignUpErrors => {
     e.confirmPassword = 'password_mismatch';
   const phone = validatePhoneIT(input.phone);
   if (phone) e.phone = phone;
+  if (validateRequired(input.country)) e.country = 'required';
   if (validateRequired(input.city)) e.city = 'required';
-  if (validateRequired(input.province)) e.province = 'required';
+  // Provincia obbligatoria solo per l'Italia (concetto amministrativo italiano).
+  if (input.country === 'IT' && validateRequired(input.province))
+    e.province = 'required';
   const adult = validateAdult(input.birthDate);
   if (adult) e.birthDate = adult;
   if (!input.privacyConsent) e.privacyConsent = 'required';
@@ -74,6 +79,8 @@ export interface ProfileInput {
   phone: string;
   city: string;
   province: string;
+  /** ISO 3166-1 alpha-2. 'IT' richiede la provincia; gli altri paesi no. */
+  country: string;
   birthDate: string;
   privacyConsent: boolean;
 }
@@ -86,8 +93,11 @@ export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
   if (validateRequired(input.lastName)) e.lastName = 'required';
   const phone = validatePhoneIT(input.phone);
   if (phone) e.phone = phone;
+  if (validateRequired(input.country)) e.country = 'required';
   if (validateRequired(input.city)) e.city = 'required';
-  if (validateRequired(input.province)) e.province = 'required';
+  // Provincia obbligatoria solo per l'Italia (concetto amministrativo italiano).
+  if (input.country === 'IT' && validateRequired(input.province))
+    e.province = 'required';
   const adult = validateAdult(input.birthDate);
   if (adult) e.birthDate = adult;
   if (!input.privacyConsent) e.privacyConsent = 'required';

@@ -54,6 +54,7 @@ const profile: Profile = {
   phone: '+393331234567',
   city: 'Roma',
   province: 'RM',
+  country: 'IT',
   birth_date: '1990-01-01',
   privacy_consent_at: '2026-01-01T00:00:00.000Z',
   marketing_consent: false,
