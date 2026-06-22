@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
 import { AuthSection } from '../components/AuthSection';
@@ -65,17 +66,10 @@ export const CompleteProfileScreen: React.FC = () => {
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.contacts')}>
-        <AuthInput
-          ref={refs.phoneRef}
+        <AuthPhoneField
           label={t('auth.signup.phone')}
-          value={values.phone}
           onChangeText={onChange.phone}
           error={err(errors.phone)}
-          keyboardType="phone-pad"
-          autoComplete="tel"
-          textContentType="telephoneNumber"
-          returnKeyType="next"
-          onSubmitEditing={focusNext.city}
         />
         <AuthInput
           ref={refs.cityRef}

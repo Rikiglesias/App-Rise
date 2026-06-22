@@ -59,7 +59,7 @@ const fillValidForm = (
     fireEvent.changeText(getByLabelText(label) as never, value);
   set('Nome', 'Mario');
   set('Cognome', 'Rossi');
-  set('Telefono', '+393331234567');
+  set('Telefono', '3331234567');
   set('Città', 'Roma');
   set('Provincia', 'RM');
   // Data di nascita via date picker: apre il campo e conferma (mock → 1990-01-01).
