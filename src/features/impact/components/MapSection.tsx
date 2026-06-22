@@ -57,7 +57,7 @@ export const MapSection: React.FC<Props> = React.memo(
             <PerfectText
               size={22}
               lines={1}
-              fontWeight="700"
+              fontWeight="800"
               immunity={true}
               style={styles.mapTitle}
             >

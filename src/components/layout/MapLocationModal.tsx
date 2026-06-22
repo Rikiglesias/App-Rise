@@ -15,6 +15,7 @@ import { createStyles } from './MapLocationModalStyles';
 import { formatStat } from '@/shared/utils/numberFormat';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { MapModalData } from '@/features/impact/data/mapModalData';
+import type { OriginTrace } from '@/shared/types/location';
 
 interface MapLocationModalProps {
   visible: boolean;
@@ -29,6 +30,16 @@ interface StatCell {
 
 const gradientStart = { x: 0, y: 0 };
 const gradientEnd = { x: 1, y: 1 };
+
+// Icona + didascalia del trasporto verso la destinazione (catena RAH Italia).
+const TRANSPORT_INFO: Record<
+  OriginTrace['transport'],
+  { icon: string; label: string }
+> = {
+  sea: { icon: 'ferry', label: 'Via container marittimo' },
+  truck: { icon: 'truck-delivery', label: 'Via camion (Moldavia/Slovacchia)' },
+  local: { icon: 'hand-heart', label: 'Distribuzione locale alle famiglie' },
+};
 
 const MapLocationModal: React.FC<MapLocationModalProps> = ({
   visible,
@@ -148,9 +159,97 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
             </View>
           ) : null}
 
+          {data.statsNote ? (
+            <PerfectText size={12} lines={4} style={styles.statsNote}>
+              {data.statsNote}
+            </PerfectText>
+          ) : null}
+
           <PerfectText size={16} lines={8} style={styles.description}>
             {data.description}
           </PerfectText>
+
+          {/* Tracciabilità: eventi di origine → hub Bologna → destinazione */}
+          <View style={styles.traceSection}>
+            <View style={styles.traceHeader}>
+              <PerfectIcon
+                name="map-marker-path"
+                size={18}
+                color={colors.primary[500]}
+                style={styles.traceHeaderIcon}
+              />
+              <PerfectText
+                size={12}
+                lines={1}
+                fontWeight="700"
+                style={styles.infoLabel}
+              >
+                TRACCIABILITÀ
+              </PerfectText>
+            </View>
+
+            <View style={styles.traceStep}>
+              <View style={styles.traceStepIcon}>
+                <PerfectIcon
+                  name="map-marker-multiple"
+                  size={20}
+                  color={colors.neutral[600]}
+                />
+              </View>
+              <PerfectText size={14} lines={2} style={styles.traceStepText}>
+                {data.trace.origins.join(', ')}
+              </PerfectText>
+            </View>
+
+            <View style={styles.traceConnector} />
+
+            <View style={styles.traceStep}>
+              <View style={styles.traceStepIcon}>
+                <PerfectIcon
+                  name="warehouse"
+                  size={20}
+                  color={colors.primary[500]}
+                />
+              </View>
+              <PerfectText
+                size={14}
+                lines={1}
+                fontWeight="600"
+                style={styles.traceStepText}
+              >
+                {`Hub ${data.trace.hub}`}
+              </PerfectText>
+            </View>
+
+            <View style={styles.traceConnector} />
+
+            <View style={styles.traceStep}>
+              <View style={styles.traceStepIcon}>
+                <PerfectIcon
+                  name={TRANSPORT_INFO[data.trace.transport].icon}
+                  size={20}
+                  color={colors.primary[500]}
+                />
+              </View>
+              <View style={styles.infoTextWrap}>
+                <PerfectText
+                  size={14}
+                  lines={1}
+                  fontWeight="700"
+                  style={styles.traceStepText}
+                >
+                  {data.title}
+                </PerfectText>
+                <PerfectText
+                  size={12}
+                  lines={2}
+                  style={styles.traceStepCaption}
+                >
+                  {TRANSPORT_INFO[data.trace.transport].label}
+                </PerfectText>
+              </View>
+            </View>
+          </View>
 
           <View style={styles.infoRow}>
             <PerfectIcon

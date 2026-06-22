@@ -27,7 +27,7 @@ describe('WorldMapSvg', () => {
     const { getByText } = renderMap();
     expect(getByText('Italia')).toBeTruthy();
     expect(getByText('Ucraina')).toBeTruthy();
-    expect(getByText('Somalia')).toBeTruthy();
+    expect(getByText('Zimbabwe')).toBeTruthy();
   });
 
   it('chiama onMarkerPress con la location corretta dal fallback', () => {

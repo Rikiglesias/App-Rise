@@ -7,9 +7,9 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import Svg, { Path, Rect } from 'react-native-svg';
+import Svg, { Path, Rect, Circle } from 'react-native-svg';
 
-import { buildCountryShapes, matchLocationsToCountries } from './worldMapGeo';
+import { buildMapGeometry, matchLocationsToCountries } from './worldMapGeo';
 import {
   PerfectContainer,
   PerfectText,
@@ -32,47 +32,93 @@ interface Props {
 interface CountryPathProps {
   d: string;
   fill: string;
+  fillOpacity?: number;
   stroke: string;
   strokeWidth: number;
-  onPress?: () => void;
-  accessibilityLabel?: string;
 }
 
-// Singolo paese. Memoizzato: con 177 path il padre re-renderizza solo i pochi
-// attivi (onPress cambia ref), gli inattivi hanno props stabili e vengono saltati.
+// Singolo paese (sfondo, non interattivo: il tap vive sul pin). Memoizzato: con
+// 177 path il padre re-renderizza solo i pochi con props cambiate (focus/tema).
 const CountryPath = React.memo<CountryPathProps>(
-  ({ d, fill, stroke, strokeWidth, onPress, accessibilityLabel }) => {
+  ({ d, fill, fillOpacity, stroke, strokeWidth }) => {
     if (!d) return null;
     return (
       <Path
         d={d}
         fill={fill}
+        fillOpacity={fillOpacity ?? 1}
         stroke={stroke}
         strokeWidth={strokeWidth}
-        {...(onPress
-          ? {
-              onPress,
-              accessible: true,
-              accessibilityRole: 'button' as const,
-              accessibilityLabel,
-            }
-          : {})}
       />
     );
   }
 );
 CountryPath.displayName = 'CountryPath';
 
+interface LocationPinProps {
+  x: number;
+  y: number;
+  haloColor: string;
+  pinColor: string;
+  ringColor: string;
+  radius: number;
+  haloRadius: number;
+  ringWidth: number;
+  onPress: () => void;
+  accessibilityLabel: string;
+}
+
+// Pin a livello-città: alone tenue (glow brand) + cerchio pieno col bordo bianco.
+// È il target tap preciso (i dati sono città, non interi paesi). Memoizzato.
+const LocationPin = React.memo<LocationPinProps>(
+  ({
+    x,
+    y,
+    haloColor,
+    pinColor,
+    ringColor,
+    radius,
+    haloRadius,
+    ringWidth,
+    onPress,
+    accessibilityLabel,
+  }) => (
+    <>
+      <Circle
+        cx={x}
+        cy={y}
+        r={haloRadius}
+        fill={haloColor}
+        fillOpacity={0.18}
+      />
+      <Circle
+        cx={x}
+        cy={y}
+        r={radius}
+        fill={pinColor}
+        stroke={ringColor}
+        strokeWidth={ringWidth}
+        onPress={onPress}
+        accessible
+        accessibilityLabel={accessibilityLabel}
+      />
+    </>
+  )
+);
+LocationPin.displayName = 'LocationPin';
+
 /**
- * WorldMapSvg — world map vettoriale interattiva (paesi-evento cliccabili).
+ * WorldMapSvg — mappa vettoriale delle DESTINAZIONI, a livello-città.
  *
- * Tutti i paesi sono grigi; quelli con eventi sono colorati col brand e bordo
- * marcato (secondo canale non-cromatico, WCAG 1.4.1) e cliccabili → `onMarkerPress`.
- * Stessa Props interface di InteractiveMap: drop-in in MapModalScreen.
+ * La proiezione si fitta sui paesi-destinazione passati (zoom sul continente
+ * attivo, deciso a monte da MapModalScreen). I paesi-destinazione sono una tinta
+ * brand tenue (contesto); sopra, un PIN brand a livello-città marca il punto reale
+ * (Harare, Bologna…) ed è il target tap → `onMarkerPress`. I vicini grigi fanno da
+ * contesto geografico. Stessa Props interface di InteractiveMap: drop-in.
  *
  * Tap-only (niente pinch-zoom: hitbox iOS inaffidabile, issue react-native-svg #2809).
- * Una lista di chip dei paesi-evento funge da fallback a11y e da target tap robusto
- * per i poligoni piccoli, difficili da centrare su mobile.
+ * Una lista di chip dei paesi funge da fallback a11y e da target tap robusto per i
+ * pin piccoli, difficili da centrare su mobile.
  */
 const WorldMapSvgComponent: React.FC<Props> = ({
   locations,
@@ -94,24 +140,52 @@ const WorldMapSvgComponent: React.FC<Props> = ({
     );
   }, []);
 
-  // geoPath è costoso: ricalcola solo quando cambia il viewport.
-  const shapes = useMemo(
-    () =>
-      size.width > 0 && size.height > 0
-        ? buildCountryShapes(size.width, size.height)
-        : [],
-    [size.width, size.height]
-  );
-
   const activeByCountryId = useMemo(
     () => matchLocationsToCountries(locations),
     [locations]
   );
 
+  // Paesi-destinazione attivi = focus della proiezione: la mappa si fitta su di
+  // essi (zoom sul continente selezionato). Cambia quando il filtro continente/anno
+  // a monte cambia il set di `locations`.
+  const focusIds = useMemo(
+    () => Array.from(activeByCountryId.keys()),
+    [activeByCountryId]
+  );
+
+  // geoPath è costoso: ricalcola geometria (paesi + proiettore di punti) solo al
+  // cambio di viewport o focus.
+  const geometry = useMemo(
+    () =>
+      size.width > 0 && size.height > 0
+        ? buildMapGeometry(size.width, size.height, focusIds)
+        : null,
+    [size.width, size.height, focusIds]
+  );
+
+  const shapes = geometry?.shapes ?? [];
+
   const createPressHandler = useCallback(
     (location: Location) => () => onMarkerPress(location),
     [onMarkerPress]
   );
+
+  // Pin proiettati a livello-città. `project()` può tornare null per coordinate
+  // non proiettabili → escluse dalla mappa (restano raggiungibili dai chip).
+  const pins = useMemo(() => {
+    if (!geometry) return [];
+    return locations
+      .map(location => {
+        const point = geometry.project(
+          location.coordinates.longitude,
+          location.coordinates.latitude
+        );
+        return point ? { location, x: point.x, y: point.y } : null;
+      })
+      .filter(
+        (p): p is { location: Location; x: number; y: number } => p !== null
+      );
+  }, [geometry, locations]);
 
   return (
     <View
@@ -131,26 +205,19 @@ const WorldMapSvgComponent: React.FC<Props> = ({
           {shapes.map((shape, index) => {
             // Alcune feature Natural Earth non hanno id ISO (es. Somaliland, N. Cyprus):
             // mai attive, ma servono comunque una key univoca e stabile.
-            const countryLocations = shape.id
-              ? activeByCountryId.get(shape.id)
-              : undefined;
-            // Tap sul poligono apre la prima location del paese; le altre (stesso
-            // paese) restano raggiungibili dai chip, uno per evento.
-            const primary = countryLocations?.[0];
+            const isActive = shape.id ? activeByCountryId.has(shape.id) : false;
+            // Il paese-destinazione è una tinta tenue (contesto): il pin sopra
+            // è l'elemento forte e il target tap preciso a livello-città.
             return (
               <CountryPath
                 key={shape.id || `country-${index}`}
                 d={shape.d}
-                {...(primary
+                {...(isActive
                   ? {
                       fill: colors.primary[500],
-                      stroke: colors.primary[600],
-                      strokeWidth: scale(1.2),
-                      onPress: createPressHandler(primary),
-                      accessibilityLabel:
-                        countryLocations && countryLocations.length > 1
-                          ? `${primary.country}: ${countryLocations.length} eventi, tocca per i dettagli`
-                          : `${primary.country}: tocca per i dettagli`,
+                      fillOpacity: 0.16,
+                      stroke: colors.primary[500],
+                      strokeWidth: scale(1),
                     }
                   : {
                       fill: colors.neutral[300],
@@ -160,6 +227,21 @@ const WorldMapSvgComponent: React.FC<Props> = ({
               />
             );
           })}
+          {pins.map(({ location, x, y }) => (
+            <LocationPin
+              key={location.id}
+              x={x}
+              y={y}
+              haloColor={colors.primary[500]}
+              haloRadius={scale(15)}
+              pinColor={colors.primary[500]}
+              ringColor={colors.neutral[0]}
+              radius={scale(7)}
+              ringWidth={scale(2)}
+              onPress={createPressHandler(location)}
+              accessibilityLabel={`${location.country}: tocca per i dettagli`}
+            />
+          ))}
         </Svg>
       ) : null}
 

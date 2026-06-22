@@ -87,9 +87,57 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[600],
       marginTop: scale(4),
     },
+    statsNote: {
+      color: colors.neutral[500],
+      fontStyle: 'italic',
+      marginTop: scale(-PerfectSpacing.sm),
+      marginBottom: PerfectSpacing.lg,
+    },
     description: {
       color: colors.neutral[700],
       marginBottom: PerfectSpacing.lg,
+    },
+    // Traccia di tracciabilità origine → hub → destinazione (concept "Ibrido").
+    traceSection: {
+      backgroundColor: colors.neutral[50],
+      borderRadius: scale(16),
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+      padding: PerfectSpacing.base,
+      marginBottom: PerfectSpacing.lg,
+    },
+    traceHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.sm,
+    },
+    traceHeaderIcon: {
+      marginRight: PerfectSpacing.sm,
+    },
+    traceStep: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    traceStepIcon: {
+      width: scale(28),
+      alignItems: 'center',
+      marginRight: PerfectSpacing.sm,
+    },
+    traceStepText: {
+      color: colors.neutral[800],
+      flex: 1,
+    },
+    traceStepCaption: {
+      color: colors.neutral[500],
+      flex: 1,
+    },
+    // Connettore verticale tra gli step (linea + nessun testo).
+    traceConnector: {
+      width: scale(2),
+      height: PerfectSpacing.base,
+      backgroundColor: colors.primary[300],
+      marginLeft: scale(13),
+      marginVertical: scale(2),
     },
     infoRow: {
       flexDirection: 'row',

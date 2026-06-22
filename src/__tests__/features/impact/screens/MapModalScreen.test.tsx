@@ -29,22 +29,37 @@ const renderScreen = () => {
   return utils;
 };
 
-describe('MapModalScreen — tap paese → dettaglio nazione', () => {
-  it('apre il dettaglio della nazione toccata con i dati corretti (getModalData)', () => {
+describe('MapModalScreen — navigazione continenti + tap paese → dettaglio', () => {
+  it('mostra solo le destinazioni del continente attivo (default Africa)', () => {
     const { getByText, queryByText } = renderScreen();
+    // Default = Africa: Zimbabwe visibile, Ucraina (Europa) no.
+    expect(getByText('Zimbabwe')).toBeTruthy();
+    expect(queryByText('Ucraina')).toBeNull();
+    // Passo all'Europa → compaiono le sue destinazioni.
+    fireEvent.press(getByText('Europa'));
+    expect(getByText('Ucraina')).toBeTruthy();
+    expect(queryByText('Zimbabwe')).toBeNull();
+  });
 
+  it('apre il dettaglio della nazione toccata con i dati corretti (getModalData)', () => {
+    const { getByText, getAllByText, queryByText } = renderScreen();
+
+    // Vado in Europa per raggiungere l'Italia (hub).
+    fireEvent.press(getByText('Europa'));
     // Prima del tap: il dettaglio (title = name città) non è montato.
     expect(queryByText('Bologna')).toBeNull();
 
-    // Tap su Italia (chip fallback) → onMarkerPress → modal nazione.
+    // Tap su Italia (chip fallback) → onMarkerPress → modal nazione. La città
+    // compare nel titolo E nella traccia (destinazione): più occorrenze, attese.
     fireEvent.press(getByText('Italia'));
-    expect(getByText('Bologna')).toBeTruthy();
-    expect(getByText(/Sede Europea/i)).toBeTruthy();
+    expect(getAllByText('Bologna').length).toBeGreaterThan(0);
+    expect(getByText(/Hub Europa/i)).toBeTruthy();
   });
 
   it('mostra il dettaglio della nazione giusta per un altro paese', () => {
-    const { getByText } = renderScreen();
+    const { getByText, getAllByText } = renderScreen();
+    fireEvent.press(getByText('Europa'));
     fireEvent.press(getByText('Ucraina'));
-    expect(getByText('Kiev')).toBeTruthy();
+    expect(getAllByText('Kyiv').length).toBeGreaterThan(0);
   });
 });

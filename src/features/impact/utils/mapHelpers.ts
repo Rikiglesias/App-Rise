@@ -2,14 +2,13 @@ import { MAP_LOCATIONS } from '../data/impactData';
 import type { Location } from '@/shared/types/location';
 
 /**
- * Converte le location dal formato impactData al formato InteractiveMap
- * @param locations Array di location dal format impactData
- * @returns Array di location convertite per InteractiveMap
+ * Converte le destinazioni reali (LocationData) nel formato Location usato dalla
+ * mappa. `continent` e `year` viaggiano con la Location per la navigazione per
+ * continente e il filtro anno; `image` resta vuoto (la mappa non mostra foto, i
+ * dati ricchi vivono nel dettaglio via mapModalData).
  */
 export const convertToMapLocations = (): Location[] => {
-  const locations = MAP_LOCATIONS;
-
-  return locations.map(location => {
+  return MAP_LOCATIONS.map(location => {
     const result: Location = {
       id: location.id,
       name: location.name,
@@ -18,14 +17,15 @@ export const convertToMapLocations = (): Location[] => {
         latitude: location.latitude,
         longitude: location.longitude,
       },
-      projects: 1, // Default value
+      projects: 1,
       beneficiaries: `${location.stats.beneficiaries ?? 0}`,
       status: 'active',
       description: location.description,
-      image:
-        'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
+      image: '',
       meals: location.stats.meals ?? 0,
       kits: location.stats.kits ?? 0,
+      continent: location.continent,
+      year: location.year,
     };
 
     if (location.stats.beneficiaries) {

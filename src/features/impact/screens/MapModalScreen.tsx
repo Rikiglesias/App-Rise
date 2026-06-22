@@ -4,72 +4,29 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import { getModalData } from '../data/mapModalData';
 import type { MapModalData } from '../data/mapModalData';
-import { LOCATIONS_DATA } from '../data/locationsData';
+import { ContinentChip, YearChip } from '../components/MapFilterChips';
 import {
   PerfectIcon,
   PerfectText,
   PerfectContainer,
   PlatformTouchable,
+  PlatformScrollView,
 } from '@/components/ui';
 
 import InteractiveMap from '@/components/layout/InteractiveMap';
-import type { Location } from '@/shared/types/location';
+import type { Continent, Location } from '@/shared/types/location';
 import MapLocationModal from '@/components/layout/MapLocationModal';
 import type { ImpactStackParamList } from '@/navigation/types';
 import { BorderRadius, PerfectSpacing } from '@/shared/constants';
-import {
-  scaleTouch,
-  scaleSpacing,
-  scale,
-} from '@/shared/constants/perfectScale';
+import { scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
-// L'anno vive in LOCATIONS_DATA; le location della mappa condividono lo stesso id.
-const YEAR_BY_ID = new Map<string, number>(
-  LOCATIONS_DATA.map(l => [l.id, l.year])
-);
-
-interface YearChipProps {
-  label: string;
-  value: number | null;
-  active: boolean;
-  onSelect: (year: number | null) => void;
-}
-
-/** Chip di filtro anno (handler stabile, no arrow inline nel prop). */
-const YearChip: React.FC<YearChipProps> = ({
-  label,
-  value,
-  active,
-  onSelect,
-}) => {
-  const colors = useThemeColors();
-  const styles = useMemo(() => createChipStyles(colors), [colors]);
-  const handlePress = useCallback(() => onSelect(value), [onSelect, value]);
-  return (
-    <PlatformTouchable
-      onPress={handlePress}
-      activeOpacity={0.8}
-      accessibilityRole="button"
-      accessibilityState={{ selected: active }}
-      accessibilityLabel={label}
-      style={[styles.chip, active ? styles.chipActive : null]}
-    >
-      <PerfectText
-        size={13}
-        lines={1}
-        fontWeight="700"
-        style={active ? styles.chipTextActive : styles.chipText}
-      >
-        {label}
-      </PerfectText>
-    </PlatformTouchable>
-  );
-};
+// Ordine di presentazione dei continenti (i pasti = Africa per primo, è la missione).
+const CONTINENT_ORDER: Continent[] = ['Africa', 'Europa', 'Asia', 'America'];
 
 const MapModalScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -83,22 +40,65 @@ const MapModalScreen: React.FC = () => {
   const [locationModalVisible, setLocationModalVisible] = useState(false);
   const [selectedLocationData, setSelectedLocationData] =
     useState<MapModalData | null>(null);
+  const [activeContinent, setActiveContinent] = useState<Continent | null>(
+    null
+  );
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
-  // Anni presenti nei dati (mostriamo il filtro solo se >1).
-  const years = useMemo(() => {
-    const set = new Set<number>();
+  // Continenti disponibili nei dati, nell'ordine di presentazione.
+  const continents = useMemo(() => {
+    const present = new Set<Continent>();
     (locations ?? []).forEach(l => {
-      const y = YEAR_BY_ID.get(l.id);
-      if (y !== undefined) set.add(y);
+      if (l.continent) present.add(l.continent);
     });
-    return Array.from(set).sort((a, b) => b - a);
+    return CONTINENT_ORDER.filter(c => present.has(c));
   }, [locations]);
 
+  // Default = continente con più destinazioni (tie-break: ordine di presentazione).
+  const defaultContinent = useMemo<Continent | undefined>(() => {
+    const counts = new Map<Continent, number>();
+    (locations ?? []).forEach(l => {
+      if (l.continent)
+        counts.set(l.continent, (counts.get(l.continent) ?? 0) + 1);
+    });
+    let best: Continent | undefined;
+    let bestN = -1;
+    for (const c of continents) {
+      const n = counts.get(c) ?? 0;
+      if (n > bestN) {
+        best = c;
+        bestN = n;
+      }
+    }
+    return best;
+  }, [locations, continents]);
+
+  const continent = activeContinent ?? defaultContinent ?? null;
+
+  const continentLocations = useMemo(
+    () => (locations ?? []).filter(l => l.continent === continent),
+    [locations, continent]
+  );
+
+  // Anni presenti nel continente attivo (filtro mostrato solo se >1).
+  const years = useMemo(() => {
+    const set = new Set<number>();
+    continentLocations.forEach(l => {
+      if (l.year !== undefined) set.add(l.year);
+    });
+    return Array.from(set).sort((a, b) => b - a);
+  }, [continentLocations]);
+
   const filteredLocations = useMemo(() => {
-    if (selectedYear === null) return locations ?? [];
-    return (locations ?? []).filter(l => YEAR_BY_ID.get(l.id) === selectedYear);
-  }, [locations, selectedYear]);
+    if (selectedYear === null) return continentLocations;
+    return continentLocations.filter(l => l.year === selectedYear);
+  }, [continentLocations, selectedYear]);
+
+  // Cambio continente → reset del filtro anno (gli anni dipendono dal continente).
+  const handleSelectContinent = useCallback((next: Continent) => {
+    setActiveContinent(next);
+    setSelectedYear(null);
+  }, []);
 
   const handleMarkerPress = useCallback((location: Location) => {
     const modalData = getModalData(location.id);
@@ -137,7 +137,7 @@ const MapModalScreen: React.FC = () => {
 
       {/* Header */}
       <PerfectContainer style={styles.header}>
-        <PerfectText size={24} lines={1} fontWeight="700" style={styles.title}>
+        <PerfectText size={24} lines={1} fontWeight="800" style={styles.title}>
           {t('impact.interactiveMap')}
         </PerfectText>
         <PerfectText
@@ -160,7 +160,28 @@ const MapModalScreen: React.FC = () => {
         </PlatformTouchable>
       </PerfectContainer>
 
-      {/* Filtro per anno (solo se ci sono più anni) */}
+      {/* Navigazione per continente */}
+      {continents.length > 1 ? (
+        <View style={styles.continentRow}>
+          <PlatformScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.continentRowContent}
+            accessibilityLabel="Continenti"
+          >
+            {continents.map(c => (
+              <ContinentChip
+                key={c}
+                continent={c}
+                active={c === continent}
+                onSelect={handleSelectContinent}
+              />
+            ))}
+          </PlatformScrollView>
+        </View>
+      ) : null}
+
+      {/* Filtro per anno (solo se il continente ha più anni) */}
       {years.length > 1 ? (
         <View style={styles.filterRow}>
           <YearChip
@@ -190,28 +211,6 @@ const MapModalScreen: React.FC = () => {
     </PerfectContainer>
   );
 };
-
-const createChipStyles = (colors: ThemeColors) =>
-  StyleSheet.create({
-    chip: {
-      backgroundColor: colors.neutral[0],
-      borderRadius: BorderRadius.full,
-      paddingHorizontal: PerfectSpacing.base,
-      paddingVertical: PerfectSpacing.xs,
-      borderWidth: scale(1),
-      borderColor: colors.neutral[200],
-    },
-    chipActive: {
-      backgroundColor: colors.primary[500],
-      borderColor: colors.primary[500],
-    },
-    chipText: {
-      color: colors.neutral[700],
-    },
-    chipTextActive: {
-      color: colors.accent.white,
-    },
-  });
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
@@ -243,9 +242,19 @@ const createStyles = (colors: ThemeColors) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    continentRow: {
+      position: 'absolute',
+      top: PerfectSpacing['3xl'] + scaleSpacing(60),
+      left: 0,
+      right: 0,
+    },
+    continentRowContent: {
+      paddingHorizontal: scaleSpacing(20),
+      gap: PerfectSpacing.sm,
+    },
     filterRow: {
       position: 'absolute',
-      top: PerfectSpacing['3xl'] + scaleSpacing(56),
+      top: PerfectSpacing['3xl'] + scaleSpacing(112),
       left: scaleSpacing(20),
       right: scaleSpacing(20),
       flexDirection: 'row',

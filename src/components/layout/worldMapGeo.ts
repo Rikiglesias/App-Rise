@@ -45,21 +45,84 @@ export interface CountryShape {
   d: string;
 }
 
+export interface MapGeometry {
+  /** Path SVG di tutti i paesi, proiettati per il viewport/focus correnti. */
+  shapes: CountryShape[];
+  /** Proietta [lng, lat] in pixel del viewport, o null se non proiettabile. */
+  project: (
+    longitude: number,
+    latitude: number
+  ) => { x: number; y: number } | null;
+}
+
 /**
- * Costruisce i path SVG proiettati per il viewport dato (geoEqualEarth + fitSize).
+ * Proiezione equal-area fittata al viewport, eventualmente ristretta ai
+ * paesi-focus (continente attivo) con margine del ~12%.
+ */
+const buildProjection = (
+  width: number,
+  height: number,
+  focusFeatureIds?: readonly string[]
+) => {
+  const focus: FeatureCollection<Geometry, CountryProps> =
+    focusFeatureIds && focusFeatureIds.length > 0
+      ? {
+          type: 'FeatureCollection',
+          features: collection.features.filter(
+            f => f.id !== undefined && focusFeatureIds.includes(String(f.id))
+          ),
+        }
+      : collection;
+  const pad = Math.min(width, height) * 0.12;
+  return geoEqualEarth().fitExtent(
+    [
+      [pad, pad],
+      [width - pad, height - pad],
+    ],
+    focus
+  );
+};
+
+/**
+ * Costruisce i path SVG proiettati per il viewport dato (geoEqualEarth).
+ *
+ * `focusFeatureIds` (id numerici dei paesi-destinazione del continente attivo):
+ * la proiezione viene FITTATA su quel sottoinsieme (navigazione per continente),
+ * con un margine del ~12% così i paesi-destinazione non toccano i bordi e i vicini
+ * fanno da contesto geografico. Senza focus → fit sull'intera collezione (overview).
  * `geoPath` è costoso: chiamare dentro `useMemo` nel componente, una volta per size.
  */
 export const buildCountryShapes = (
   width: number,
-  height: number
-): CountryShape[] => {
-  const projection = geoEqualEarth().fitSize([width, height], collection);
+  height: number,
+  focusFeatureIds?: readonly string[]
+): CountryShape[] => buildMapGeometry(width, height, focusFeatureIds).shapes;
+
+/**
+ * Geometria completa per il viewport/focus: i path dei paesi E il proiettore di
+ * punti (per i pin a livello-città). Un'unica proiezione condivisa tra paesi e
+ * pin. `geoPath` è costoso: chiamare dentro `useMemo`, una volta per size+focus.
+ */
+export const buildMapGeometry = (
+  width: number,
+  height: number,
+  focusFeatureIds?: readonly string[]
+): MapGeometry => {
+  const projection = buildProjection(width, height, focusFeatureIds);
   const path = geoPath(projection);
-  return collection.features.map(f => ({
+  const shapes = collection.features.map(f => ({
     id: f.id !== undefined ? String(f.id) : '',
     name: f.properties?.name ?? '',
     d: path(f) ?? '',
   }));
+  const project = (
+    longitude: number,
+    latitude: number
+  ): { x: number; y: number } | null => {
+    const point = projection([longitude, latitude]);
+    return point ? { x: point[0], y: point[1] } : null;
+  };
+  return { shapes, project };
 };
 
 /**
