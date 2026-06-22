@@ -4,6 +4,7 @@ import CountrySelect, {
   getCountryByCca2,
   type ICountry,
   type ICountryCca2,
+  type ICountrySelectStyle,
 } from 'rn-country-select';
 
 import { PerfectText, PlatformTouchable } from '@/components/ui';
@@ -27,6 +28,12 @@ interface AuthCountryFieldProps {
 const LANG_KEY: Record<SupportedLocale, 'ita' | 'eng'> = {
   it: 'ita',
   en: 'eng',
+};
+
+// Backdrop trasparente ma cliccabile: identico al selettore prefisso del campo
+// telefono (AuthPhoneField), così i due pop-up sono visivamente lo stesso.
+const BACKDROP_STYLE: ICountrySelectStyle = {
+  backdrop: { backgroundColor: 'transparent' },
 };
 
 const localizedName = (
@@ -79,6 +86,12 @@ export const AuthCountryField: React.FC<AuthCountryFieldProps> = ({
         language={locale}
         popularCountries={['IT']}
         modalType="bottomSheet"
+        initialBottomsheetHeight="75%"
+        minBottomsheetHeight="75%"
+        maxBottomsheetHeight="75%"
+        showAlphabetFilter={false}
+        showCloseButton
+        countrySelectStyle={BACKDROP_STYLE}
         theme={isDark ? 'dark' : 'light'}
         onSelect={(c: ICountry): void => {
           onSelect(c.cca2);

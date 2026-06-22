@@ -1,4 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { View, StyleSheet } from 'react-native';
 import PhoneInput, {
   type ICountry,
@@ -17,6 +23,11 @@ interface AuthPhoneFieldProps {
   label: string;
   /** Riceve la stringa completa "<prefisso> <numero>" (es. "+39 333 1234567"). */
   onChangeText: (fullPhone: string) => void;
+  /**
+   * Paese di residenza (cca2): quando cambia, il prefisso si allinea a quel paese.
+   * Resta comunque modificabile dall'utente nel selettore del campo (override).
+   */
+  country?: string;
   error?: string | undefined;
 }
 
@@ -52,22 +63,39 @@ const buildCallingCode = (c: ICountry | null): string => {
 export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   label,
   onChangeText,
+  country: countryCca2,
   error,
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [number, setNumber] = useState('');
   const [country, setCountry] = useState<ICountry | null>(
-    () => getCountryByCca2('IT') ?? null
+    () => getCountryByCca2(countryCca2 ?? 'IT') ?? null
   );
 
-  const emit = (num: string, c: ICountry | null): void => {
-    const code = buildCallingCode(c);
-    // E.164 senza spazi ("+<cifre>"): è il formato richiesto da validatePhoneIT.
-    // `num` è il numero nazionale formattato dalla libreria → ne prendo le cifre.
-    const digits = num.replace(/\D/g, '');
-    onChangeText(digits ? `${code}${digits}` : '');
-  };
+  const emit = useCallback(
+    (num: string, c: ICountry | null): void => {
+      const code = buildCallingCode(c);
+      // E.164 senza spazi ("+<cifre>"): è il formato richiesto da validatePhoneIT.
+      // `num` è il numero nazionale formattato dalla libreria → ne prendo le cifre.
+      const digits = num.replace(/\D/g, '');
+      onChangeText(digits ? `${code}${digits}` : '');
+    },
+    [onChangeText]
+  );
+
+  // Allinea il prefisso al paese di residenza quando QUESTO cambia (ref-guard:
+  // un cambio prefisso manuale dell'utente resta finché la residenza non cambia di nuovo).
+  const appliedResidence = useRef(countryCca2);
+  useEffect(() => {
+    if (!countryCca2 || countryCca2 === appliedResidence.current) return;
+    appliedResidence.current = countryCca2;
+    const c = getCountryByCca2(countryCca2);
+    if (c) {
+      setCountry(c);
+      emit(number, c);
+    }
+  }, [countryCca2, number, emit]);
 
   // Stili theme-aware per allineare il campo agli altri input (sfondo/bordo/radius
   // del tema): la libreria di default usa un campo bianco fisso, che in dark mode

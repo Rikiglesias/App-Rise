@@ -68,16 +68,17 @@ export const CompleteProfileScreen: React.FC = () => {
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.contacts')}>
+        <AuthPhoneField
+          label={t('auth.signup.phone')}
+          onChangeText={onChange.phone}
+          country={values.country}
+          error={err(errors.phone)}
+        />
         <AuthCountryField
           label={t('auth.signup.country')}
           value={values.country}
           onSelect={onChange.country}
           error={err(errors.country)}
-        />
-        <AuthPhoneField
-          label={t('auth.signup.phone')}
-          onChangeText={onChange.phone}
-          error={err(errors.phone)}
         />
         <AuthCityField
           label={t('auth.signup.city')}
