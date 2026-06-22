@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
 import { Platform, StyleSheet, PixelRatio } from 'react-native';
-import Constants from 'expo-constants';
-import * as Updates from 'expo-updates';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomTabBarProps,
@@ -28,6 +26,7 @@ import {
 import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { getFontScaleUnlockThreshold } from '@/shared/utils/expoExtra';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
@@ -68,14 +67,7 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
 
   const tabContainerStyle = useMemo(() => {
     const radius = scale(32);
-    const extra =
-      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
-        .manifest?.extra;
-    const unlock = (() => {
-      const v = extra?.['fontScaleUnlockThreshold'] as number | undefined;
-      return typeof v === 'number' && isFinite(v) && v > 0 ? v : 1.3;
-    })();
+    const unlock = getFontScaleUnlockThreshold();
     const fontScale = PixelRatio.getFontScale();
     const isHighZoom = fontScale > unlock;
     const baseHeight = scale(95);
@@ -171,22 +163,6 @@ const ICON_MAP: Record<string, string> = {
   InfoTab: 'hand-heart',
 };
 
-// Helper tipizzato per ottenere il threshold
-const getFontScaleThreshold = (): number => {
-  const expoExtra = Constants.expoConfig?.extra as
-    | Record<string, unknown>
-    | undefined;
-  const updatesExtra = (
-    Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }
-  ).manifest?.extra;
-
-  return (
-    (expoExtra?.fontScaleUnlockThreshold as number | undefined) ??
-    (updatesExtra?.fontScaleUnlockThreshold as number | undefined) ??
-    1.3
-  );
-};
-
 const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
   isFocused,
   isCentral,
@@ -197,7 +173,7 @@ const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
 }) => {
   const colors = useThemeColors();
   const fontScale = PixelRatio.getFontScale();
-  const threshold = getFontScaleThreshold();
+  const threshold = getFontScaleUnlockThreshold();
   const isLargeFontScale = fontScale > threshold;
   const tabColors = useMemo(() => {
     switch (routeName) {
