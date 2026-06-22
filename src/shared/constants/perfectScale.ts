@@ -7,13 +7,8 @@
  */
 
 import { Dimensions } from 'react-native';
-import Constants from 'expo-constants';
-import * as Updates from 'expo-updates';
 import { getDisplayZoomFactor } from '../services/displayZoom';
-
-type ExpoExtra = Record<string, unknown> & {
-  features?: Record<string, unknown>;
-};
+import { getExpoExtra } from '../utils/expoExtra';
 
 // REFERENCE: iPhone 15 (device di riferimento)
 export const LOGICAL_REFERENCE = {
@@ -88,10 +83,7 @@ const applyTabletScalingCap = (rawScaleFactor: number): number => {
  */
 const shouldNormalizeDisplayZoom = (): boolean => {
   try {
-    const extra: ExpoExtra | undefined =
-      (Constants.expoConfig?.extra as ExpoExtra | undefined) ??
-      (Updates as unknown as { manifest?: { extra?: ExpoExtra } }).manifest
-        ?.extra;
+    const extra = getExpoExtra();
     const raw =
       extra?.['displayZoomNormalization'] ??
       extra?.features?.['displayZoomNormalization'];

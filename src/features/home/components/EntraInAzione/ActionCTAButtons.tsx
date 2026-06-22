@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, PixelRatio, View } from 'react-native';
-import Constants from 'expo-constants';
-import * as Updates from 'expo-updates';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -16,26 +14,11 @@ import {
 import { BorderRadius, Typography } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { getFontScaleUnlockThreshold } from '@/shared/utils/expoExtra';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
-
-// Helper tipizzato per ottenere il threshold
-const getFontScaleThreshold = (): number => {
-  const expoExtra = Constants.expoConfig?.extra as
-    | Record<string, unknown>
-    | undefined;
-  const updatesExtra = (
-    Updates as unknown as { manifest?: { extra?: Record<string, unknown> } }
-  ).manifest?.extra;
-
-  return (
-    (expoExtra?.fontScaleUnlockThreshold as number | undefined) ??
-    (updatesExtra?.fontScaleUnlockThreshold as number | undefined) ??
-    1.3
-  );
-};
 
 const ActionCTAButtonsComponent: React.FC = () => {
   const { t } = useTranslation();
@@ -46,7 +29,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
     useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
   const fontScale = PixelRatio.getFontScale();
-  const threshold = getFontScaleThreshold();
+  const threshold = getFontScaleUnlockThreshold();
   const isLargeFontScale = fontScale > threshold;
 
   // Memoize conditional styles

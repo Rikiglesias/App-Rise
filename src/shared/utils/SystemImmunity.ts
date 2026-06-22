@@ -17,8 +17,8 @@
  */
 
 import { PixelRatio, Platform } from 'react-native';
-import Constants from 'expo-constants';
-import * as Updates from 'expo-updates';
+
+import { getExpoExtra } from '@/shared/utils/expoExtra';
 
 // ⚖️ CONFIGURAZIONE ACCESSIBILITÀ BILANCIATA
 const IN_JEST =
@@ -26,10 +26,7 @@ const IN_JEST =
 
 const shouldLockText = (): boolean => {
   try {
-    const extra =
-      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
-        .manifest?.extra;
+    const extra = getExpoExtra();
     const rawFromExtra = extra
       ? ((extra['perfectStrictMode'] as unknown) ??
         ((extra['perfect'] as Record<string, unknown> | undefined)?.[
@@ -57,10 +54,7 @@ const shouldLockText = (): boolean => {
 // Legge un valore configurabile per il limite di font scaling
 const getConfiguredMaxFontScale = (): number => {
   try {
-    const extra =
-      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
-        .manifest?.extra;
+    const extra = getExpoExtra();
     const fromExtra = extra?.['maxFontScale'] as unknown;
     if (typeof fromExtra === 'number' && isFinite(fromExtra) && fromExtra > 0) {
       return fromExtra;
@@ -82,10 +76,7 @@ const getConfiguredMaxFontScale = (): number => {
 // Soglia oltre la quale sbloccare lo scaling di sistema (per piccoli aumenti resta identico)
 const getUnlockFontScaleThreshold = (): number => {
   try {
-    const extra =
-      (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ??
-      (Updates as unknown as { manifest?: { extra?: Record<string, unknown> } })
-        .manifest?.extra;
+    const extra = getExpoExtra();
     const fromExtra = extra?.['fontScaleUnlockThreshold'] as unknown;
     if (typeof fromExtra === 'number' && isFinite(fromExtra) && fromExtra > 0) {
       return fromExtra;
