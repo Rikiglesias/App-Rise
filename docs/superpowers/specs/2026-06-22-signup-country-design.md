@@ -14,6 +14,8 @@ Serve permettere a un donatore di **scegliere il paese di provenienza** (non sol
 
 **Città per paesi non-IT = testo libero** (decisione utente, 2026-06-22). L'Italia mantiene l'autocomplete comuni + provincia; gli altri paesi hanno un campo Città a testo libero, senza provincia. Niente API geo, niente dataset città estere, niente costi/dipendenze nuove, nessun dato inviato a terzi (GDPR invariato). Coerente con la filosofia offline-first del dataset comuni.
 
+**Riuso di `rn-country-select` (già dipendenza diretta, `^0.5.2`).** Il progetto include già questa libreria (usata da `AuthPhoneField` via `rn-international-phone-number`). Espone: il componente `CountrySelect` (picker bottomSheet con ricerca, filtro alfabetico, popular-countries, theme light/dark, label a11y) e i lookup `getAllCountries()`, `getCountryByCca2(cca2)`, `getCountriesByName(name, lang)`. Il tipo `ICountry` porta `cca2`, `flag` (emoji), `idd` (prefisso) e `translations` con i **nomi localizzati IT/EN**. Quindi: **niente dataset/JSON/gen-script custom**, niente nomi paese nei locales — si riusa la lib. (zero-A: esiste già → riuso vs reinvento.)
+
 ## Scope
 
 In scope:
@@ -44,31 +46,28 @@ Migration nuova `supabase/migrations/0007_profiles_country.sql`:
 - `ProfileInput`: aggiungere `country: string`.
 - `ProfileEditable` + `PROFILE_EDITABLE_KEYS`: includere `country`.
 
-## Dataset paesi (`src/shared/data/countries.ts` + `countries.json`)
+## Lista paesi — `rn-country-select` (nessun file dati custom)
 
-SSOT offline della lista paesi, generata come i comuni (script `gen:countries`). Forma per voce:
-- `code` — ISO 3166-1 alpha-2 (es. `"IT"`, valore persistito).
-- `nameIt` / `nameEn` — nome localizzato (la lista nomi NON va nei file locales: 250×2 voci li renderebbe ingestibili; il dataset è la SSOT).
-- `dial` — prefisso telefonico E.164 (es. `"+39"`).
-- `flag` — emoji bandiera (derivata dal code, o inclusa).
+I dati paese arrivano dalla libreria già presente. Mapping utile:
+- valore persistito = `cca2` (es. `"IT"`).
+- nome localizzato (display del valore selezionato) = `getCountryByCca2(code)?.translations[langKey]?.common ?? .name.common`, con `langKey` = `'ita'` per locale `it`, `'eng'` per `en`.
+- bandiera = `ICountry.flag` (emoji).
+- picker = componente `CountrySelect` con prop `language` (`'it'`/`'en'`), `popularCountries={['IT']}`, ricerca attiva.
 
-Helper esposti:
-- `getCountries(locale)` → lista ordinata alfabeticamente per nome localizzato. Il valore di default selezionato nel form è IT (non un riordino della lista).
-- `searchCountries(query, locale)` → filtro per nome (prefisso poi sottostringa, come `searchComuni`).
-- `getCountry(code)` → lookup singolo (per dial/flag/nome).
+Nessun `countries.ts`/`countries.json`/`gen:countries`, nessun nome paese nei locales.
 
 ## Componenti
 
-### `AuthCountryField.tsx` (nuovo)
-Dropdown cercabile con lo **stesso pattern inline** di `AuthCityField` (dropdown che spinge il contenuto, niente overlay assoluto → niente clipping nello ScrollView su Android). Mostra bandiera + nome localizzato; alla selezione emette il `code` ISO. Default visualizzato = Italia.
+### `AuthCountryField.tsx` (nuovo) — wrapper su `CountrySelect`
+Riga-campo touchable coerente con gli altri input (label sopra, box bordo/radius/theme come `AuthCityField`): mostra `🇮🇹 Italia` (bandiera + nome localizzato del valore corrente) e una freccia. Al tap apre `CountrySelect` (bottomSheet, stessa UX del selettore paese del campo telefono → coerenza). Alla selezione emette il `cca2` via `onSelect(code)`. Prop: `label`, `value` (cca2), `onSelect(code)`, `error?`. La lingua del picker deriva dal locale corrente (`useTranslation`). Default mostrato = Italia (lo stato `country` parte da `'IT'`).
 
 ### `AuthCityField.tsx` (modifica → country-aware)
 Nuovo prop `country: string`.
 - `country === 'IT'` → comportamento attuale: autocomplete comuni + `onSelectComune(city, provinceSigla)`.
 - altrimenti → `TextInput` libero: niente dropdown, niente provincia; usa solo `onChangeCity`. Placeholder dedicato.
 
-### `AuthPhoneField.tsx` (verifica)
-Nessun cambio strutturale: la pre-compilazione del prefisso al cambio paese avviene nello stato dell'hook (vedi sotto). `validatePhoneIT` (regex `^\+\d{8,15}$`) è già E.164 generico → vale per ogni paese, nessuna modifica di logica (eventuale rinominare in `validatePhone` è cosmetico, deciso in fase piano per minimizzare churn nei test).
+### `AuthPhoneField.tsx` — invariato
+Resta com'è: ha già il **proprio** selettore paese/prefisso indipendente (default IT). NON lo sincronizziamo col paese di residenza: sarebbe accoppiamento + sovrascrittura a sorpresa della scelta dell'utente, ed è fuori dallo scope chiesto. `validatePhoneIT` (regex `^\+\d{8,15}$`) è già E.164 generico → vale per ogni paese, nessuna modifica.
 
 ## Hook form
 
@@ -76,9 +75,8 @@ Nessun cambio strutturale: la pre-compilazione del prefisso al cambio paese avvi
 - Nuovo stato `country` (default `'IT'`).
 - `onChange.country(code)`:
   - aggiorna `country`;
-  - se il nuovo paese ≠ IT → azzera `province` (non applicabile);
-  - se il telefono è vuoto o è ancora il prefisso del paese precedente → pre-compila col `dial` del nuovo paese;
-  - pulisce gli errori di `city`/`province`/`country`.
+  - se il nuovo paese ≠ IT → azzera `province` (non applicabile) e l'eventuale errore provincia;
+  - pulisce l'errore `country`.
 - `selectComune` invariato (usato solo quando IT).
 - `submit`: includere `country` nel payload `signUp`/profilo.
 
@@ -103,7 +101,7 @@ Nessun cambio strutturale: la pre-compilazione del prefisso al cambio paese avvi
 - `auth.signup.country` (label "Paese" / "Country").
 - placeholder ricerca paese e placeholder città estera (es. "La tua città").
 - Riuso di `auth.errors.required` per il campo paese.
-- I nomi dei paesi vivono nel dataset, non nei locales.
+- I nomi dei paesi arrivano da `rn-country-select` (localizzati), non dai locales.
 
 ## Error handling / edge case
 - Paese non selezionato → errore `required` sul campo Paese, submit bloccato.
@@ -113,23 +111,21 @@ Nessun cambio strutturale: la pre-compilazione del prefisso al cambio paese avvi
 
 ## Testing (L1: coverage delta ≥ 0)
 - `validation.test.ts`: country required; province required solo IT; non-IT valido senza provincia.
-- `useSignUpForm.test.tsx`: stato country, reset provincia e pre-compilazione prefisso al cambio paese, payload con country.
+- `useSignUpForm.test.tsx`: stato country, reset provincia al cambio paese (IT→estero), payload con country.
 - `authCityField.test.tsx`: IT mostra dropdown; non-IT è testo libero senza dropdown.
 - `completeProfile.test.tsx`, `profileEdit.test.tsx`: campo paese presente, provincia condizionale.
-- Nuovi: `countries.test.ts` (search/lookup/forma dati), `authCountryField.test.tsx` (selezione, ricerca, default IT).
+- Nuovo: `authCountryField.test.tsx` (mostra valore localizzato, apre il picker, emette cca2 alla selezione). `CountrySelect` mockato nel setup test (è una modale nativa).
 
 ## Architettura / isolamento
-- Dataset `countries` = unità pura testabile in isolamento (come `comuni`).
-- `AuthCountryField` = componente presentazionale con interfaccia chiara (value=code, onSelect).
-- Logica di reset/pre-compilazione concentrata negli hook form (vista pura).
-- Nessuna dipendenza nuova; nessun servizio di rete.
+- `AuthCountryField` = wrapper presentazionale su `CountrySelect`, interfaccia chiara (value=cca2, onSelect(code)).
+- Logica di reset provincia concentrata negli hook form (vista pura).
+- Nessuna dipendenza NUOVA (riuso `rn-country-select` già presente); nessun servizio di rete.
 
 ## Ordine di implementazione (per il piano)
-1. Dataset `countries` + test.
-2. Migration DB (file) — applicazione su prod a parte, con OK.
-3. Tipi + validazione + test validazione.
-4. `AuthCountryField` + test.
-5. `AuthCityField` country-aware + test.
-6. Hook `useSignUpForm`/`useProfileForm` + test.
-7. Schermi (SignUp, CompleteProfile, ProfileEdit, Profile) + i18n.
-8. Verifica L1–L9 + verifica visiva (web preview).
+1. Migration DB (file) — applicazione su prod a parte, con OK.
+2. Tipi + validazione + test validazione.
+3. `AuthCountryField` (wrapper `CountrySelect`) + test.
+4. `AuthCityField` country-aware + test.
+5. Hook `useSignUpForm`/`useProfileForm` + test.
+6. Schermi (SignUp, CompleteProfile, ProfileEdit, Profile) + i18n.
+7. Verifica L1–L9 + verifica visiva (web preview).
