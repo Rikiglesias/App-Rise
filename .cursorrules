@@ -27,7 +27,7 @@ import { SystemImmunity } from '@/shared/utils/SystemImmunity';
   - Zero `Dimensions`, zero breakpoint manuali, zero percentuali hardcoded
   - `npm run pre-modifiche` e `npm run post-modifiche` verdi; `npm run conta-problemi` = 0
 
-Per i dettagli completi, vedi: `docs/DEVELOPMENT_GUIDE.md`, `docs/ARCHITECTURE.md`, `docs/QUALITY_STANDARDS.md`.
+Per i dettagli completi, vedi: `docs/guides/development.md`, `docs/architecture/`, `docs/guides/quality-standards.md`.
 
 ---
 

@@ -215,11 +215,7 @@ module.exports = {
     {
       files: [
         '**/__tests__/**/*.{ts,tsx,js,jsx}',
-        'src/examples/**/*.{ts,tsx,js,jsx}',
-        'src/shared/examples/**/*.{ts,tsx,js,jsx}',
-        'src/shared/screens/TestAutomaticoScreen.tsx',
         'src/shared/screens/DevelopmentScreen.tsx',
-        'src/shared/screens/SimplePlaceholderScreen.tsx',
       ],
       rules: {
         'no-restricted-imports': 'off',
@@ -236,8 +232,7 @@ module.exports = {
     },
     {
       files: [
-        'src/components/domain/HeaderImageSection.tsx',
-        'src/components/domain/HomeHeader/HeaderImageSection.tsx',
+        'src/features/home/components/HomeHeader/HeaderImageSection.tsx',
         'src/features/home/components/HeroImage/index.tsx',
       ],
       rules: {
