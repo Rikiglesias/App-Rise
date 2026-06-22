@@ -1,283 +1,104 @@
-# 🆓 Setup GitHub Actions per Publishing GRATUITO
+# 🤖 CI/CD con GitHub Actions (EAS)
 
-## Vantaggi GitHub Actions
+La pipeline è costruita su **Expo EAS** dentro GitHub Actions. Le build, la firma e i submit
+agli store sono delegati a EAS; i runner GitHub eseguono i quality gate e orchestrano i
+comandi `eas`. Non si usano Fastlane, Gemfile né cartelle native `ios/`/`android/` committate.
 
-- ✅ **100% Gratuito** (2000 min/mese gratis)
-- ✅ **Automazione completa**
-- ✅ **Build su push/tag**
-- ✅ **Integrazione Git nativa**
-- ✅ **Secrets management**
+## 📂 Workflow reali
 
-## 🔧 Setup Completo
+| File | Trigger | Cosa fa |
+| --- | --- | --- |
+| `.github/workflows/optimized-ci-cd.yml` | push/PR su `master`, `workflow_dispatch` | Quality gate + build/submit EAS + OTA automatici |
+| `.github/workflows/ota-deploy.yml` | solo `workflow_dispatch` (manuale) | Deploy OTA on-demand con retry |
 
-### 1. Configurazione Secrets
+> Esistono anche workflow ausiliari (`cache-management.yml`, `deadcode-check.yml`,
+> `edge-functions-test.yml`, `legacy-guard.yml`), non di rilascio.
 
-In GitHub Repository Settings → Secrets:
+## 🔁 `optimized-ci-cd.yml` — pipeline principale
 
-```bash
-# iOS Secrets
-APP_STORE_CONNECT_API_KEY
-APP_STORE_CONNECT_API_KEY_ID
-APP_STORE_CONNECT_ISSUER_ID
-MATCH_PASSWORD
+### Job
 
-# Android Secrets
-GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
-ANDROID_KEYSTORE_FILE
-ANDROID_KEYSTORE_PASSWORD
-ANDROID_KEY_ALIAS
-ANDROID_KEY_PASSWORD
-```
+1. **`detect-changes`** — legge il messaggio di commit (passato via env, mai interpolato in
+   bash per evitare script injection) e i file modificati, e decide cosa eseguire
+   (`should-test`, `should-build`, `build-ios`, `build-android`, `test-scope`).
+2. **`quality-checks`** — matrice `typescript` / `eslint` / `prettier` / `tests`
+   (`tsc --noEmit`, `eslint --max-warnings 0`, `prettier --check`, `jest --coverage`).
+3. **`visual-regression`** — visual diff su matrice di device (iPhone SE/15 Pro, Pixel 8 Pro,
+   Galaxy Tab S9).
+4. **`build-ios` / `build-android`** — `eas build --profile production-store --wait`; su
+   `master` seguono `eas submit --latest` (Android con `continue-on-error`).
+5. **`ota-update`** — pubblica `eas update --branch production` se il commit contiene un tag OTA.
+6. **`bundle-analysis`** — analisi bundle + `npm audit` / `audit-ci`.
+7. **`deployment-summary`** — riepilogo nel job summary e commento su PR.
+8. **`unit-tests` (`test`)** e **`build-summary` (`build`)** — check dedicati esposti come
+   status su PR.
 
-### 2. Workflow iOS Avanzato
+### Trigger via tag nel commit
 
-```yaml
-# .github/workflows/ios-deploy.yml
-name: iOS Build and Deploy
+Il comportamento è guidato da tag nel **messaggio di commit**:
 
-on:
-  push:
-    branches: [main]
-    tags: ['v*']
-  workflow_dispatch:
+| Tag | Effetto |
+| --- | --- |
+| `[build]` | Build iOS **e** Android (`production-store`) |
+| `[build ios]` / `[build-ios]` | Solo iOS |
+| `[build android]` / `[build-android]` | Solo Android |
+| `build:` (prefisso conventional) | Build entrambe le piattaforme |
+| `[ota]` / `[hotfix]` / `hotfix:` | Pubblica un OTA su branch `production` |
 
-jobs:
-  build-ios:
-    runs-on: macos-13
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Cache Pods
-        uses: actions/cache@v3
-        with:
-          path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-
-      - name: Install Pods
-        run: |
-          cd ios
-          pod install
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
-          bundler-cache: true
-          working-directory: ios
-
-      - name: Create App Store Connect API Key
-        run: |
-          mkdir -p ~/.appstoreconnect/private_keys
-          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}.p8
-
-      - name: Build and Upload to App Store
-        run: |
-          cd ios
-          bundle exec fastlane release
-        env:
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: ios-build-logs
-          path: |
-            ios/build/
-            ios/fastlane/report.xml
-```
-
-### 3. Workflow Android Avanzato
-
-```yaml
-# .github/workflows/android-deploy.yml
-name: Android Build and Deploy
-
-on:
-  push:
-    branches: [main]
-    tags: ['v*']
-  workflow_dispatch:
-
-jobs:
-  build-android:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_FILE }}" | base64 --decode > android/app/release.keystore
-
-      - name: Create Google Play Service Account JSON
-        run: |
-          echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" > android/google-play-service-account.json
-
-      - name: Build and Upload to Play Store
-        run: |
-          cd android
-          bundle exec fastlane release
-        env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: android-aab
-          path: android/app/build/outputs/bundle/release/app-release.aab
-```
-
-### 4. Script di Setup Automatico
+`[ota]` e `[build*]` sono mutuamente esclusivi: il job OTA parte solo se **non** sono presenti
+tag di build, così un commit di build non scatena anche un OTA.
 
 ```bash
-#!/bin/bash
-# setup-github-actions.sh
-
-echo "🚀 Setup GitHub Actions per Rise Against Hunger Italia"
-
-# 1. Genera le cartelle necessarie
-mkdir -p .github/workflows
-mkdir -p ios/fastlane
-mkdir -p android/fastlane
-
-# 2. Genera Fastfile semplificati
-cat > ios/fastlane/Fastfile << 'EOF'
-default_platform(:ios)
-
-platform :ios do
-  lane :release do
-    setup_ci
-
-    build_app(
-      workspace: "RiseAgainstHungerItalia.xcworkspace",
-      scheme: "RiseAgainstHungerItalia",
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "org.riseagainsthunger.italia" => "match AppStore org.riseagainsthunger.italia"
-        }
-      }
-    )
-
-    upload_to_app_store(
-      api_key_path: "~/.appstoreconnect/private_keys/AuthKey_#{ENV['APP_STORE_CONNECT_API_KEY_ID']}.p8",
-      api_key: {
-        key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
-        issuer_id: ENV['APP_STORE_CONNECT_ISSUER_ID']
-      },
-      skip_waiting_for_build_processing: true
-    )
-  end
-end
-EOF
-
-cat > android/fastlane/Fastfile << 'EOF'
-default_platform(:android)
-
-platform :android do
-  lane :release do
-    gradle(
-      task: "bundle",
-      build_type: "release",
-      project_dir: "android/"
-    )
-
-    upload_to_play_store(
-      json_key: "google-play-service-account.json",
-      aab: "app/build/outputs/bundle/release/app-release.aab",
-      track: "production"
-    )
-  end
-end
-EOF
-
-echo "✅ Setup completato!"
-echo "📝 Prossimi steps:"
-echo "1. Configura i secrets in GitHub"
-echo "2. Crea certificati iOS"
-echo "3. Genera keystore Android"
-echo "4. Push su GitHub per attivare i workflow"
+git commit -m "feat: schermata impatto [build]"   # → build + submit iOS/Android
+git commit -m "fix: copy donazioni [ota]"           # → OTA su production
 ```
 
-## 💡 **Confronto Finale delle Opzioni**
+`workflow_dispatch` espone anche input manuali: `force_build`, `build_platform`
+(`both`/`ios`/`android`), `force_ota`.
 
-| Aspetto              | Expo EAS   | Fastlane   | GitHub Actions |
-| -------------------- | ---------- | ---------- | -------------- |
-| **Costo annuale**    | $348-1188  | $124       | $124           |
-| **Setup complexity** | ⭐⭐       | ⭐⭐⭐⭐   | ⭐⭐⭐         |
-| **Controllo**        | ⭐⭐       | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐     |
-| **Automazione**      | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐     |
-| **Dipendenze**       | Expo       | Local/CI   | GitHub         |
-| **Build time**       | Medio      | Veloce     | Medio          |
+## 🚀 `ota-deploy.yml` — OTA manuale
 
-## 🎯 **Raccomandazione per Rise Against Hunger**
+Workflow **solo manuale** (`workflow_dispatch`) per pubblicare un update OTA on-demand:
 
-### **OPZIONE MIGLIORE: GitHub Actions**
+- Input: `message` (messaggio custom) e `branch` (`production` / `preview` / `development`).
+- Job `quality-checks`: `tsc --noEmit` bloccante; ESLint, test e `conta-problemi` non
+  bloccano il deploy (`continue-on-error`).
+- Job `deploy-ota`: `eas update --branch <branch> --message <…>` con **retry fino a 3
+  tentativi**.
+- Job `notify-result`: stato finale del deploy.
 
-**Perché:**
+## 🔐 Secrets richiesti
 
-1. **Budget Zero**: Completamente gratuito
-2. **Automazione**: Push → Build → Deploy automatico
-3. **Trasparenza**: Tutto il processo visibile
-4. **Indipendenza**: Nessun vendor lock-in
-5. **Scalabilità**: Cresce con il progetto
+| Secret | Uso |
+| --- | --- |
+| `EXPO_TOKEN` | Autenticazione EAS CLI nei runner (`expo/expo-github-action`) |
+| `APPLE_ID`, `ASC_APP_ID`, `APPLE_TEAM_ID` | Submit iOS (valori store anche in `eas.json`) |
 
-**Setup consigliato:**
+Il service account Google per il submit Android è referenziato da `eas.json`
+(`./google-service-account.json`) e gestito lato credenziali EAS.
+
+## ⚙️ Configurazione runner
+
+- Node: `20.x` (`NODE_VERSION`) — `20.17.0` nel workflow OTA, coerente con
+  `eas.json` → `build.production.node`.
+- Install: `npm ci --prefer-offline --no-audit` (CI principale),
+  `npm ci --legacy-peer-deps` (OTA).
+- EAS CLI: `expo/expo-github-action@v8` con `eas-version: latest`.
+- `concurrency` con `cancel-in-progress: false` per non interrompere build/OTA in corso.
+
+## 🧪 Riprodurre i check in locale
 
 ```bash
-# 1. Mantieni Expo per development
-npx expo start  # per testing rapido
-
-# 2. Usa GitHub Actions per production
-git tag v1.0.0 && git push --tags  # Auto-deploy to stores
+npm run typecheck     # tsc --noEmit
+npm run lint          # eslint --max-warnings 0
+npm run test          # jest
+npm run conta-problemi
 ```
 
-**Timeline:**
+## 🔗 Monitoraggio
 
-- **Setup iniziale**: 1-2 giorni
-- **Deploy automatico**: Ogni push/tag
-- **Costo**: **$0** (vs $350+ Expo)
+Build e update sono visibili su EAS:
+[expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia).
 
-Vuoi che proceda con il setup GitHub Actions o preferisci esplorare un'altra opzione?
+Per i flussi di deploy e i comandi EAS lato sviluppatore vedi
+[docs/guides/deployment.md](../guides/deployment.md).

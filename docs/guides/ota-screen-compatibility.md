@@ -111,11 +111,12 @@ colors={[
 
 ```json
 {
-  "expo-blur": "~13.0.2",
-  "expo-linear-gradient": "~13.0.2",
-  "react-native-reanimated": "~3.10.1"
+  "expo-blur": "~15.0.8",
+  "expo-linear-gradient": "~15.0.8"
 }
 ```
+
+> Le animazioni usano `Animated` dal core di React Native (non react-native-reanimated, che non è una dependency del progetto).
 
 ## 🚀 Performance
 

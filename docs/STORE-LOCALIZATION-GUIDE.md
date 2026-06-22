@@ -81,7 +81,6 @@ Rise Against Hunger Italia è un'organizzazione non profit impegnata nella lotta
 • Interfaccia moderna e intuitiva
 • Aggiornamenti in tempo reale
 • Supporto multilingua (Italiano/Inglese)
-• Modalità scura disponibile
 
 🌟 LA NOSTRA MISSIONE
 Crediamo che la fame sia un problema risolvibile. Ogni pasto conta, ogni donazione fa la differenza. Unisciti a noi nella missione #famezero.
@@ -171,7 +170,6 @@ Rise Against Hunger Italia combatte la fame nel mondo. Con la nostra app puoi:
 • Design moderno e intuitivo
 • Aggiornamenti real-time
 • Multilingua (IT/EN)
-• Dark mode
 
 🌟 LA NOSTRA MISSIONE
 La fame è risolvibile. Ogni pasto conta, ogni donazione fa la differenza.

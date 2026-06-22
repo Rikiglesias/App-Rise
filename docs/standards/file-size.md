@@ -68,9 +68,9 @@ npm run refactor:check    # Verifica compliance
 🏗️ Domain modules:     ≤400 (verde) | 400-800 (giallo) | >800 (rosso)
 
 📂 UI COMPONENT (≤300 verde, ≤500 giallo, >500 rosso)
-  🔴 ActionButtons.tsx: 916 righe (+416 oltre soglia)
-  ✅ Logo.tsx: 45 righe
-  ⚠️ FormattedText.tsx: 568 righe (+68 oltre verde)
+  🔴 OTAUpdateScreen.tsx: 574 righe (+74 oltre soglia giallo)
+  ⚠️ DevelopmentScreen.tsx: 470 righe (+170 oltre verde)
+  ⚠️ BottomTabNavigator.tsx: 390 righe (+90 oltre verde)
 ```
 
 ---
@@ -179,24 +179,20 @@ npm run helper-manuali
 ```
 
 ### **File Monitorati**
-- `ImpactTabScreen.tsx`: 129 righe (soglia 800) – refactor completato, monitoraggio continuo
-- `ActionButtons.tsx`: 31 righe (soglia 500) – legacy wrapper mantenuto solo per compatibilità
-- `HomeHeaderSubComponents.tsx`: rimosso, sostituito dai componenti modulari in `src/components/domain/HomeHeader/`
-- `FormattedText.tsx`: rimosso; utilizzare `PerfectText` come riferimento unico
+
+File UI sopra la soglia verde (≤300), da tenere d'occhio:
+
+- 🔴 `src/shared/OTAUpdateScreen.tsx`: 574 righe (zona rossa, >500) – candidato a split
+- ⚠️ `src/shared/screens/DevelopmentScreen.tsx`: 470 righe (zona gialla, 300–500)
+- ⚠️ `src/navigation/BottomTabNavigator.tsx`: 390 righe (zona gialla, 300–500)
 
 ---
 
 ## 🔄 **AGGIORNAMENTI**
 
-**Data**: 2025-01-07  
 **Versione**: 1.0  
 **Status**: ✅ Implementato e attivo  
 
-**Prossime milestone**:
-- [ ] Refactoring file critici (Q1 2025)
-- [ ] Integration dashboard metriche (Q2 2025)
-- [ ] Automazione split suggestions (Q2 2025)
-
 ---
 
-*📚 Per dettagli implementazione: vedere `.eslintrc.js` e `scripts/file-size-monitor.js`* 
+*📚 Per dettagli implementazione: vedere `.eslintrc.js` e `scripts/file-size-monitor.js`*

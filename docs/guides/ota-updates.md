@@ -107,12 +107,10 @@ codeSigningMetadata: { keyId: 'main', alg: 'rsa-v1_5-sha256' }
 ### Log Sistema
 
 ```typescript
-// In App.tsx
-logger.info('App', '✅ App initialized with OTA Updates enabled');
-
-// In useOTAUpdates.ts
-logger.info('OTA Updates', 'Update available, downloading...');
-logger.info('OTA Updates', 'Update downloaded. It will apply on next app restart.');
+// In App.tsx — la logica OTA vive qui (hook nativo Updates.useUpdates())
+logger.info('App', '🚀 App initialized with SDK 54 - Enhanced OTA Logic');
+logger.info('App', '📥 OTA Download started - animating progress from 0%');
+logger.info('App', '🔄 Triggering reloadAsync...');
 ```
 
 ### Dashboard EAS
@@ -128,17 +126,20 @@ Vai su [expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia/update
 ### app.config.js
 ```javascript
 updates: {
-  fallbackToCacheTimeout: 0,        // Instant TTI
-  checkAutomatically: 'ON_ERROR_RECOVERY', // Check solo su errori
+  fallbackToCacheTimeout: 0,    // Instant TTI
+  checkAutomatically: 'ON_LOAD', // Check automatico ad ogni avvio
   url: 'https://u.expo.dev/[PROJECT_ID]',
 }
 ```
 
-### Hook useOTAUpdates
-- Check silenzioso in background
-- Progress tracking (0-100%)
-- Error handling graceful
-- AppState listener per check su resume
+### Logica OTA (App.tsx)
+La logica OTA vive interamente in `App.tsx` tramite l'hook nativo
+`Updates.useUpdates()` (expo-updates, SDK 54):
+
+- Check automatico ad ogni avvio (`checkAutomatically: 'ON_LOAD'`)
+- Progress tracking (0-100%) con animazione fluida
+- Error handling graceful (`reloadAsync` con fallback su fallimento)
+- Applicazione al prossimo riavvio via `Updates.reloadAsync()`
 
 ### Componente OTAUpdateScreen
 - Design system coherente (Perfect Scale, Colors)

@@ -1,5 +1,7 @@
 # 📊 PIANO COVERAGE TEST - 40% → 55%
 
+> ⚠️ **Snapshot storico (nov 2025) — superato.** I moduli/hook target citati (useResponsive, useFoldableLayout, stores Zustand, ecc.) non esistono più dopo il deep-clean di `src/`. Conservato come riferimento storico.
+
 **Obiettivo**: Aumentare coverage da 40% a 55% in 3 settimane
 **Data Inizio**: 29 Ottobre 2025
 **Target Completamento**: 19 Novembre 2025

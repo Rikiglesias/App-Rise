@@ -1,229 +1,187 @@
 # 🚀 Guida Deployment Rise Against Hunger Italia
 
-## 🎯 Setup Completato
+Il progetto usa **Expo SDK 54 (managed) + EAS** per build, submit e aggiornamenti
+Over-the-Air. Niente Fastlane, niente cartelle native `ios/`/`android/` committate, niente
+keystore gestiti a mano: la firma e il provisioning sono gestiti da EAS.
 
-Il tuo progetto è ora configurato per il **deployment automatico gratuito** su iOS App Store e Google Play Store usando
-GitHub Actions.
+## 🎯 Panoramica
 
-## 📋 Cosa È Stato Configurato
+| Operazione | Strumento | Comando base |
+| --- | --- | --- |
+| Build store (iOS/Android) | EAS Build | `eas build --profile <profile>` |
+| Pubblicazione store | EAS Submit | `eas submit --platform <ios\|android> --latest` |
+| Aggiornamento OTA (JS) | EAS Update | `eas update --branch production` |
 
-### ✅ GitHub Actions Workflows
+La differenza chiave:
 
-- **iOS Deploy**: `.github/workflows/ios-deploy.yml`
-- **Android Deploy**: `.github/workflows/android-deploy.yml`
-- **Trigger**: Push su `main` branch o tag `v*`
+- **EAS Build + Submit** → serve quando cambia il codice nativo (nuova dipendenza con
+  modulo nativo, bump `app.config.js`, nuova versione binaria). Produce un nuovo binario
+  da caricare su App Store / Play Store.
+- **EAS Update (OTA)** → serve quando cambia solo il bundle JS/asset. L'aggiornamento
+  arriva agli utenti al prossimo avvio dell'app, senza passare dagli store.
 
-### ✅ Fastlane Configuration
+## 📦 Profili EAS (`eas.json`)
 
-- **iOS**: `ios/fastlane/Fastfile` + `ios/Gemfile`
-- **Android**: `android/fastlane/Fastfile` + `android/Gemfile`
-- **Automazione**: Build, firma, e upload automatici
+I profili di build sono definiti in `eas.json`. Quelli rilevanti:
 
-### ✅ Deploy Scripts
+| Profilo | Distribuzione | Channel | Note |
+| --- | --- | --- | --- |
+| `development` | internal | development | Dev client (`developmentClient: true`), `autoIncrement` |
+| `preview` | internal | preview | iOS simulator, Android APK — test interni |
+| `preview-device` | internal | preview | Build embedded su device reale (`ios.simulator: false`) |
+| `production` | store | production | APK Android, `NODE_ENV=production`, Node 20.17.0 |
+| `production-store` | store | production | Estende `production`, Android **AAB** (`app-bundle`) per Play Store |
 
-- **setup-deployment.sh**: Script setup completo
-- **deploy-ios.sh**: Deploy iOS locale
-- **deploy-android.sh**: Deploy Android locale
+> Per la pubblicazione sugli store usa **`production-store`**: produce l'AAB richiesto da
+> Google Play e mantiene la config di firma store di `production`.
 
-## 🔑 Prossimi Passi per Publishing
+I dati di submit (Apple ID, `ascAppId`, team, service account Google) sono nella sezione
+`submit` di `eas.json`.
 
-### Step 1: Account Developer
+## 🛠️ Comandi npm
 
-#### 🍎 Apple Developer Account
-
-1. Vai su [developer.apple.com](https://developer.apple.com)
-2. Iscriviti al **Apple Developer Program** ($99/anno)
-3. Crea una nuova app in **App Store Connect**:
-   - Bundle ID: `org.riseagainsthunger.italia`
-   - Nome: "Rise Against Hunger Italia"
-
-#### 🤖 Google Play Developer Account
-
-1. Vai su [play.google.com/console](https://play.google.com/console)
-2. Registrati come sviluppatore ($25 una tantum)
-3. Crea una nuova app:
-   - Package name: `org.riseagainsthunger.italia`
-   - Nome: "Rise Against Hunger Italia"
-
-### Step 2: Certificati e Signing
-
-#### 🍎 iOS Signing
+Gli script in `package.json` avvolgono i comandi EAS:
 
 ```bash
-# Genera App Store Connect API Key
-# 1. Vai su App Store Connect → Users and Access → Keys
-# 2. Crea nuova API Key con ruolo "App Manager"
-# 3. Scarica il file .p8
+# Build
+npm run build:ios          # eas build --platform ios
+npm run build:android      # eas build --platform android
+npm run build:all          # eas build --platform all
+npm run preview            # eas build --profile preview
+
+# Submit agli store
+npm run submit:ios         # eas submit --platform ios
+npm run submit:android     # eas submit --platform android
+npm run submit:all         # eas submit --platform all
+
+# Deploy completo (build + submit) via helper PowerShell
+npm run deploy:ios         # pwsh ./scripts/deploy-ios.ps1
+npm run deploy:android     # pwsh ./scripts/deploy-android.ps1
+
+# OTA Update
+npm run update:production "messaggio"   # eas update --branch production --message
+npm run update:gui                      # pwsh ./scripts/update-ota.ps1 (menu interattivo)
 ```
 
-#### 🤖 Android Signing
+## 🤝 Helper PowerShell
+
+Tre script in `scripts/` semplificano le operazioni ricorrenti:
+
+- **`scripts/deploy-ios.ps1`** — verifica/installa la EAS CLI, fa `eas login` e lancia
+  `eas build --platform ios --profile production-store`.
+- **`scripts/deploy-android.ps1`** — build + submit Android con `production-store`.
+  Parametri: `-Profile <nome>` (default `production-store`), `-SkipSubmit` (solo build),
+  `-SkipBuild` (solo submit dell'ultima build). Verifica il login EAS e il service account
+  Google prima del submit.
+- **`scripts/update-ota.ps1`** — menu interattivo per pubblicare un OTA. Esegue prima
+  `npm run pre-modifiche` (quality gate bloccante), poi `eas update --branch <…>` per
+  development / preview / production / hotfix, oppure `eas update --auto`.
+
+## 🔑 Prerequisiti store (una tantum)
+
+### 🍎 Apple
+
+1. Apple Developer Program ($99/anno) su [developer.apple.com](https://developer.apple.com).
+2. App in App Store Connect con bundle id e nome corretti. L'`ascAppId` è già configurato
+   in `eas.json` (`submit.production.ios`).
+
+### 🤖 Google
+
+1. Account Google Play Console ($25 una tantum) su
+   [play.google.com/console](https://play.google.com/console).
+2. Service account JSON salvato come `./google-service-account.json` (referenziato da
+   `eas.json` → `submit.production.android.serviceAccountKeyPath`).
+
+> Credenziali di firma iOS/Android: gestite da EAS (`eas credentials`). Non serve generare
+> manualmente keystore o provisioning profile.
+
+## 🔄 Flussi di rilascio
+
+### A) Nuovo binario sugli store (CI)
+
+Il flusso automatico passa da GitHub Actions (`.github/workflows/optimized-ci-cd.yml`).
+Aggiungi il tag al messaggio di commit su `master`:
 
 ```bash
-# Genera keystore per signing
-keytool -genkey -v -keystore release.keystore -alias rise-against-hunger -keyalg RSA -keysize 2048 -validity 10000
-
-# Genera Google Play Service Account
-# 1. Vai su Google Cloud Console
-# 2. Crea service account per Google Play
-# 3. Scarica il JSON key
+git commit -m "feat: nuova feature [build]"   # build iOS + Android
+git commit -m "fix: patch iOS [build ios]"     # solo iOS
+git commit -m "fix: patch Android [build android]"  # solo Android
 ```
 
-### Step 3: GitHub Secrets Configuration
+La CI esegue i quality check, poi `eas build --profile production-store --wait` e, su
+`master`, `eas submit --latest`. Dettagli in [docs/ci-cd/github-actions.md](../ci-cd/github-actions.md).
 
-Vai su **GitHub Repository → Settings → Secrets and variables → Actions**
-
-#### iOS Secrets
+### B) Build/submit manuale (locale)
 
 ```bash
-APP_STORE_CONNECT_API_KEY = [contenuto del file .p8 in base64]
-APP_STORE_CONNECT_API_KEY_ID = [ID della API key]
-APP_STORE_CONNECT_ISSUER_ID = [Issuer ID da App Store Connect]
+# Build + submit completo
+npm run deploy:android          # build production-store + submit Play Store
+npm run deploy:ios              # build production-store iOS
+
+# Oppure granulare
+eas build --profile production-store --platform all --wait
+eas submit --platform ios --latest
+eas submit --platform android --latest
 ```
 
-#### Android Secrets
+### C) Aggiornamento OTA (solo JS/asset)
+
+Per modifiche che non toccano il nativo, pubblica un update sul branch EAS `production`:
 
 ```bash
-GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = [contenuto del file JSON]
-ANDROID_KEYSTORE_FILE = [file keystore in base64]
-ANDROID_KEYSTORE_PASSWORD = [password keystore]
-ANDROID_KEY_ALIAS = [alias chiave]
-ANDROID_KEY_PASSWORD = [password chiave]
+# Tramite commit (CI): vedi workflow OTA
+git commit -m "fix: copy aggiornata [ota]"
+
+# Manuale
+npm run update:production "Fix copy schermata donazioni"
+
+# Interattivo
+npm run update:gui
 ```
 
-#### Expo Updates Code Signing (Consigliato)
+L'app legge gli update da `runtimeVersion: { policy: 'appVersion' }` (vedi `app.config.js`):
+un OTA è compatibile solo con i binari che condividono la stessa `version`. Quando cambi
+codice nativo o bumpi la versione, serve un nuovo binario (flusso A/B), non un OTA.
+
+## 🔐 Code Signing degli update (opzionale, consigliato pre-lancio)
+
+EAS Update supporta la firma del manifest. `app.config.js` abilita il code signing solo se
+è presente la variabile `CODE_SIGNING_CERTIFICATE`:
 
 ```bash
-# Genera certificato firmato (non versionarlo)
 npx expo-updates codesigning:generate \
   --key-output-directory ./certs \
   --certificate-output-directory ./certs \
   --certificate-validity-duration-years 10 \
   --certificate-common-name 'Rise Against Hunger Italia'
-
-# Imposta variabili d'ambiente/secrets
-EXPO_UPDATES_CODE_SIGNING_CERTIFICATE=./certs/updates.pem
-EXPO_UPDATES_CODE_SIGNING_KEY_ID=main
-EXPO_UPDATES_CODE_SIGNING_ALGORITHM=rsa-v1_5-sha256
 ```
 
-> Il path del certificato può essere salvato come variabile di ambiente o GitHub secret: l'app lo userà automaticamente se presente.
-> I file generati in `certs/` sono già esclusi dal versionamento (`.gitignore`): conserva la chiave privata in un luogo sicuro e carica il certificato nei secrets CI.
+I file in `certs/` sono esclusi dal versionamento (`.gitignore`): conserva la chiave privata
+in modo sicuro e carica le variabili `CODE_SIGNING_*` nei secrets CI.
 
-### Step 4: Primo Deploy
-
-#### Metodo 1: Tag Release (Automatico)
+## 🩺 Diagnostica
 
 ```bash
-# Crea tag e push
-git add .
-git commit -m "🚀 Ready for first release"
-git tag v1.0.0
-git push origin main --tags
-
-# GitHub Actions farà automaticamente:
-# 1. Build iOS → App Store Connect
-# 2. Build Android → Google Play Console
+npm run doctor              # npx expo-doctor
+eas build:list --limit 5   # ultime build
+eas update:list --branch production --limit 5
 ```
 
-#### Metodo 2: Deploy Locale
+Monitoraggio build/update:
+[expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia](https://expo.dev/accounts/rikiglesias/projects/rise-against-hunger-italia).
 
-```bash
-# Genera progetti native
-npx expo run:ios --no-build-cache --no-install
-npx expo run:android --no-build-cache --no-install
+### Privacy Labels (iOS) e Data Safety (Android)
 
-# Deploy iOS
-./deploy-ios.sh
-
-# Deploy Android
-./deploy-android.sh
-```
-
-## 🔄 Workflow Quotidiano
-
-### Development (Non Cambia!)
-
-```bash
-# Per sviluppo continua a usare Expo
-npx expo start
-
-# Testa con Expo Go come sempre
-```
-
-### Production Releases
-
-```bash
-# Aggiorna versione in app.json
-# Commit changes
-git add .
-git commit -m "✨ Add new features"
-
-# Create release
-git tag v1.0.1
-git push origin main --tags
-
-# GitHub Actions deploy automaticamente! 🚀
-```
-
-## 💰 Costi Finali
-
-| Servizio            | Costo    | Frequenza                 |
-| ------------------- | -------- | ------------------------- |
-| **Apple Developer** | $99      | Annuale                   |
-| **Google Play**     | $25      | Una tantum                |
-| **GitHub Actions**  | $0       | Gratuito (2000 min/mese)  |
-| **Fastlane**        | $0       | Gratuito                  |
-| **Total Year 1**    | **$124** | vs $472-1312 con Expo EAS |
-| **Total Year 2+**   | **$99**  | vs $348-1188 con Expo EAS |
-
-### 💡 Risparmio per Rise Against Hunger
-
-- **Anno 1**: $348-1188 risparmiati
-- **5 anni**: $1740-5320 risparmiati
-- **Budget extra per beneficenza**: 🎯
+- iOS: compila il Privacy Manifest per le SDK terze parti (es. Sentry). Se non tracci utenti,
+  le sezioni restano minime.
+- Android: aggiorna la sezione "Data Safety" su Play Console coerente con i permessi e con il
+  flusso di donazioni esterne (nessun pagamento in-app).
 
 ## 🚨 Troubleshooting
 
-### Build Fails
-
-1. Controlla GitHub Actions logs
-2. Verifica secrets configurati
-3. Controlla certificati scaduti
-
-### iOS Issues
-
-```bash
-# Reset certificati
-cd ios
-bundle exec fastlane match nuke development
-bundle exec fastlane match nuke distribution
-```
-
-### Android Issues
-
-```bash
-# Reset build
-cd android
-./gradlew clean
-```
-
-## 📞 Support
-
-- **GitHub Actions**: [docs.github.com/actions](https://docs.github.com/actions)
-- **Fastlane**: [docs.fastlane.tools](https://docs.fastlane.tools)
-- **Expo**: [docs.expo.dev](https://docs.expo.dev)
-
-## 🎉 Congratulazioni
-
-Hai ora un sistema di deployment **professionale**, **gratuito** e **automatizzato**!
-
-**Development**: Expo (veloce e facile)  
-**Production**: GitHub Actions (gratuito e potente)
-
-🎯 **Perfetto per Rise Against Hunger Italia!**
-
-### Step 3.1: Privacy Labels (iOS) e Data Safety (Android)
-
-- iOS: compila il Privacy Manifest per eventuali SDK terze parti (es. Sentry, Analytics). Se non usi SDK che tracciano utenti, le sezioni restano minime.
-- Android: aggiorna la sezione 'Data Safety' su Play Console coerente con i permessi (Camera, Network State) e con il flusso di donazioni esterne (nessun pagamento in-app).
-
+| Sintomo | Cosa controllare |
+| --- | --- |
+| Build fallita | Log EAS (`eas build:list`), `npm run doctor`, secret `EXPO_TOKEN` in CI |
+| Submit iOS bloccato | `ascAppId`/`appleTeamId` in `eas.json`, processing su App Store Connect |
+| Submit Android skippato | Presenza di `./google-service-account.json` |
+| OTA non arriva agli utenti | `version` del binario = quella dell'update (`runtimeVersion` `appVersion`) |

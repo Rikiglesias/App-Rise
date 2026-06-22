@@ -33,9 +33,9 @@ Per lo **stato corrente** del progetto vedi gli audit datati:
 - [testing/](./testing/) — coverage e strategie di test
 - [planning/](./planning/) — roadmap
 
-## Feature in corso
+## Design storico
 
-- [superpowers/](./superpowers/) — spec e piani della feature donor-auth
+- [superpowers/](./superpowers/) — storico design donor-auth (mergeato): spec e piani
 
 ## Storico
 

@@ -1,48 +1,79 @@
-# 🔐 Sicurezza & ⚡ Performance – Stato Attuale
+# Sicurezza & Performance — Stato Attuale
 
-_Ultimo aggiornamento: 2024-12-24_  
-> Panoramica pratica delle difese in essere e delle azioni consigliate prima del go‑live.
-
----
-
-## ✅ Copertura Attuale
-
-**Trasporto & Rete**
-- iOS `NSAppTransportSecurity` applica TLS ≥ 1.2 e vieta traffico HTTP (`app.config.js:77`).
-- Android blocca cleartext, definisce domini sicuri e pinning SHA‑256 layer enterprise (`android-network-security-config.xml:1`).
-- Richieste API validate da `APISecurityService` con sanitizzazione URL, retry, timeout e rate-limiting (`src/shared/services/apiSecurity.ts:200`). Base URL derivata da `env.API_BASE_URL`.
-
-**Storage & Secrets**
-- Credenziali, token e dati sensibili gestiti via Expo SecureStore con keychain/keystore coerenti con il bundle (`src/shared/services/secureStorage.ts:21`).
-- Nessun secret in repo: EAS/Play/iOS usano file esterni e variabili (`eas.json:71`).
-
-**Aggiornamenti & Build**
-- OTA Expo Updates configurato; se sono presenti le variabili `EXPO_UPDATES_CODE_SIGNING_*` le build firmano automaticamente i pacchetti (`app.config.js:15`, `docs/DEPLOYMENT_GUIDE.md:93`).
-- Metro configurato con minificazione aggressiva, tree shaking e rimozione log (`metro.config.js:29`).
-- Husky + CI bloccano commit/build se lint/ts/test falliscono (`.husky/pre-commit:1`, `.github/workflows/optimized-ci-cd.yml:1`).
-
-**Monitoring & Logging**
-- Logger strutturato con buffer in memoria per crash reports (`src/shared/utils/logger.ts:1`).
-- Error tracking interno con handler globali, breadcrumbs e metriche performance (`src/shared/services/errorTracking.ts:37`).
-
-**Design & UX**
-- Permessi ridotti al minimo (camera, stato rete, internet). Nessun accesso alla posizione né storage legacy (`app.config.js:108`).
-- Componenti platform-aware (blur/touchable/elevation) e layout immune a scaling utente (`src/components/ui`, `src/shared/utils/SystemImmunity.ts`).
+Panoramica pratica delle difese in essere e delle azioni consigliate prima del
+go-live. Descrive ciò che è effettivamente configurato nel repo (Expo SDK 54
+managed + EAS).
 
 ---
 
-## 🛠️ Hardening Consigliato
+## Copertura Attuale
+
+### Trasporto & Rete
+
+- iOS `NSAppTransportSecurity` vieta il traffico arbitrario
+  (`NSAllowsArbitraryLoads: false`) e impone TLS ≥ 1.2 con forward secrecy sui
+  domini `riseagainsthunger.org` (`app.config.js`).
+- Android usa una network security config dedicata: in development
+  `android-network-security-config.xml`, in produzione
+  `android-network-security-config.prod.xml`
+  (`app.config.js`, chiave `android.networkSecurityConfig`). Cleartext bloccato;
+  vedi sotto per il pinning SPKI.
+
+### Storage & Secrets
+
+- La sessione Supabase è salvata via Expo SecureStore (keychain iOS / keystore
+  Android), con un adapter custom che splitta in chunk i valori oltre il limite
+  ~2048 byte (`src/shared/auth/authStorage.ts`). Su web (solo dev/preview) il
+  fallback è `localStorage`, senza cifratura nativa.
+- Nessun secret committato: DSN Sentry, chiavi e token vengono da variabili
+  d'ambiente (`EXPO_PUBLIC_*`, `SENTRY_*`, `EAS`) e non sono nel repo
+  (`App.tsx`, `app.config.js`, `eas.json`).
+
+### Aggiornamenti & Build
+
+- OTA Expo Updates configurato (`app.config.js`, blocco `updates`); se sono
+  presenti le variabili `EXPO_UPDATES_CODE_SIGNING_*` le build firmano i
+  pacchetti OTA (code signing certificate + metadata).
+- Metro usa la config Sentry (`getSentryExpoConfig`) con `inlineRequires`
+  attivo e l'upload automatico delle source map al build EAS quando il plugin
+  Sentry è attivo (`metro.config.js`). Nota: la minificazione è quella di
+  default di Expo/Metro — non c'è un `minifierConfig` custom.
+- Husky + CI bloccano commit/build se TypeScript/ESLint/Prettier/test falliscono
+  (`.husky/pre-commit` esegue `check:strict` + `lint-staged`;
+  `.github/workflows/optimized-ci-cd.yml`).
+
+### Monitoring & Logging
+
+- Logger strutturato con buffer in memoria per i log/crash report
+  (`src/shared/utils/logger.ts`).
+- Crash reporting via Sentry (`@sentry/react-native`): inizializzato in
+  `App.tsx` (`Sentry.init`, attivo solo se `EXPO_PUBLIC_SENTRY_DSN` è presente,
+  altrimenti no-op) e usato nell'`ErrorBoundary` per catturare gli errori di
+  render con il component stack (`src/shared/components/ErrorBoundary.tsx`).
+
+### Design & UX
+
+- Permessi ridotti al minimo: `CAMERA`, `INTERNET`, `ACCESS_NETWORK_STATE`.
+  Nessun accesso a posizione o storage legacy; `AD_ID` esplicitamente bloccato
+  (`app.config.js`, blocco `android.permissions` / `blockedPermissions`).
+- Layout immune al font scaling utente via `SystemImmunity`
+  (`src/shared/utils/SystemImmunity.ts`) e componenti `PerfectText` /
+  `PerfectImage`.
+
+---
+
+## Hardening Consigliato
 
 | Priorità | Attività | Dettagli |
 | --- | --- | --- |
-| Alta | **Firma OTA obbligatoria** | Genera certificato con `npx expo-updates codesigning:generate` e imposta `EXPO_UPDATES_CODE_SIGNING_*`. Verifica un update su canale `preview`. |
-| Alta | **Pin TLS Android (SPKI)** | Aggiorna `android-network-security-config.xml` e `android-network-security-config.prod.xml` con pin SPKI (leaf + backup). Vedi guida sotto. |
-| Media | **Monitor esterno** | Se necessario, integra Sentry/Crashlytics usando il wrapper già predisposto in `errorTracking`. |
-| Media | **Audit periodico permessi** | Mantieni la lista dei permessi Android allineata alle funzionalità reali prima di ogni release. |
+| Alta | Firma OTA obbligatoria | Genera il certificato con `npx expo-updates codesigning:generate` e imposta le `EXPO_UPDATES_CODE_SIGNING_*`. Verifica un update sul canale `preview`. |
+| Alta | Pin TLS Android (SPKI) | Aggiorna `android-network-security-config.xml` e `android-network-security-config.prod.xml` con i pin SPKI (leaf + backup). Vedi guida sotto. |
+| Media | Monitor esterno | Sentry è già integrato (`@sentry/react-native`): basta impostare `EXPO_PUBLIC_SENTRY_DSN` (+ `SENTRY_ORG`/`SENTRY_PROJECT` per il plugin nativo e l'upload source map). |
+| Media | Audit periodico permessi | Mantieni la lista dei permessi Android allineata alle funzionalità reali prima di ogni release. |
 
 ---
 
-## 🔑 Aggiornamento Pin TLS (Android)
+## Aggiornamento Pin TLS (Android)
 
 1. Recupera il certificato del dominio (es. `api.riseagainsthunger.org`):
 
@@ -55,33 +86,39 @@ _Ultimo aggiornamento: 2024-12-24_
    ```
 
 2. Ripeti per un certificato di backup (es. staging o certificato intermedio).
-3. Aggiorna il blocco `<pin-set>` con i nuovi digest (sia in `android-network-security-config.xml` sia in `android-network-security-config.prod.xml`) e, se possibile, estendi la data `expiration`.
-4. Testa l’app:
-   - Produzione: richiesta verso `https://api...` → deve riuscire.
-   - Dominio manomesso/vecchio certificato → la richiesta deve fallire con errore di handshake.
+3. Aggiorna il blocco `<pin-set>` con i nuovi digest (sia in
+   `android-network-security-config.xml` sia in
+   `android-network-security-config.prod.xml`) e, se possibile, estendi la data
+   `expiration`.
+4. Testa l'app:
+   - Produzione: richiesta verso `https://api...` deve riuscire.
+   - Dominio manomesso / vecchio certificato: la richiesta deve fallire con
+     errore di handshake.
 
-> Suggerimento: conserva i pin precedenti finché il nuovo certificato non è in produzione, per evitare lock-out.
-
----
-
-## 📈 Performance
-
-- **Metro & bundling**
-  - Minifier custom, inlineRequires attivato, blocklist test, caching ottimizzato (`metro.config.js:29`).
-- **Rendering**
-  - Componenti critical path (mappe, animazioni) ottimizzati per Android/iOS con props specifiche (`src/components/layout/InteractiveMap.tsx:186`, `src/components/ui/Platform*`).
-- **Monitoring**
-  - `performanceMonitor` traccia interazioni critiche; hook `usePerformanceMonitor` disponibile per componenti custom (`src/shared/hooks/usePerformanceMonitor.ts:1`).
-- **Pipeline**
-  - Workflow `optimized-ci-cd` esegue typecheck, lint, prettier e test in parallelo; `cache-management` mantiene lo stato pulito (`.github/workflows`). 
-
-**Ottimizzazioni future suggerite**
-- Integrare report bundle (`npm run bundle:report`) nel CI su richiesta.
-- Valutare split dinamico per schermate secondarie se la dimensione del bundle dovesse crescere oltre le soglie definite in `docs/FILE_SIZE_STANDARDS.md`.
+> Suggerimento: conserva i pin precedenti finché il nuovo certificato non è in
+> produzione, per evitare lock-out.
 
 ---
 
-## 📝 Checklist Pre‑Release
+## Performance
+
+- Metro & bundling: `inlineRequires` attivo, resolver con alias di percorso,
+  serializer Sentry per le source map (`metro.config.js`).
+- Rendering: i componenti del critical path (mappa, animazioni) sono ottimizzati
+  con props specifiche per piattaforma
+  (`src/components/layout/InteractiveMap.tsx`, `src/components/ui/Platform*`).
+- Pipeline: il workflow `optimized-ci-cd` esegue typecheck, lint, prettier e
+  test in parallelo (`.github/workflows/optimized-ci-cd.yml`).
+
+### Ottimizzazioni future suggerite
+
+- Integrare il report bundle (`npm run bundle:report`) nel CI quando serve.
+- Valutare uno split dinamico per le schermate secondarie se la dimensione del
+  bundle cresce oltre le soglie definite in `docs/standards/file-size.md`.
+
+---
+
+## Checklist Pre-Release
 
 - [ ] Variabili OTA di code signing configurate in ambiente CI/CD.
 - [ ] Pin SPKI Android aggiornati e verificati.
@@ -91,10 +128,6 @@ _Ultimo aggiornamento: 2024-12-24_
 
 ---
 
-**Contatti**  
-Per ulteriori verifiche di sicurezza o performance profiling, coinvolgere il team mobile o gli specialisti IT di Rise Against Hunger Italia.
-
-
-
-
-
+Per il flusso di deploy completo vedi `docs/guides/deployment.md`. Per
+ulteriori verifiche di sicurezza o performance profiling, coinvolgere il team
+mobile o gli specialisti IT di Rise Against Hunger Italia.
