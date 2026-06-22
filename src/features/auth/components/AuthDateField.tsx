@@ -28,6 +28,12 @@ const toISODate = (d: Date): string => {
   return `${d.getFullYear()}-${month}-${day}`;
 };
 
+/** ISO `YYYY-MM-DD` → `GG/MM/AAAA` per la visualizzazione (formato italiano). */
+const toDisplayDate = (iso: string): string => {
+  const [y, m, d] = iso.split('-');
+  return y && m && d ? `${d}/${m}/${y}` : iso;
+};
+
 /**
  * Campo data con date picker nativo (sostituisce l'input testuale AAAA-MM-GG).
  * Espone/riceve sempre una stringa ISO `YYYY-MM-DD`, così resta compatibile con
@@ -70,7 +76,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
         {label}
       </PerfectText>
       <PlatformTouchable
-        onPress={() => setOpen(true)}
+        onPress={() => setOpen(o => !o)}
         accessibilityRole="button"
         accessibilityLabel={label}
         style={[styles.field, error ? styles.fieldError : null]}
@@ -80,7 +86,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
           lines={1}
           style={value ? styles.value : styles.placeholder}
         >
-          {value || placeholder || ''}
+          {value ? toDisplayDate(value) : placeholder || ''}
         </PerfectText>
       </PlatformTouchable>
       {open ? (
@@ -88,6 +94,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
           value={pickerDate}
           mode="date"
           display="spinner"
+          locale="it-IT"
           maximumDate={new Date()}
           onChange={handleChange}
         />

@@ -22,7 +22,7 @@ describe('AuthDateField', () => {
     expect(getByText('Seleziona la data')).toBeTruthy();
   });
 
-  it('mostra il valore ISO già selezionato', () => {
+  it('mostra il valore (ISO) formattato in GG/MM/AAAA', () => {
     const { getByText } = wrap(
       <AuthDateField
         label="Data di nascita"
@@ -31,7 +31,8 @@ describe('AuthDateField', () => {
         placeholder="Seleziona la data"
       />
     );
-    expect(getByText('1985-05-20')).toBeTruthy();
+    // Il valore resta ISO internamente, ma a video è in formato italiano.
+    expect(getByText('20/05/1985')).toBeTruthy();
   });
 
   it('apre il picker e propaga la data ISO selezionata', () => {

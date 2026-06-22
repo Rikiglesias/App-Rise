@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { PerfectText, PerfectIcon, PlatformTouchable } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
@@ -31,12 +32,19 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
         accessibilityState={{ checked }}
         style={styles.row}
       >
-        <PerfectIcon
-          name={checked ? 'checkbox-marked' : 'checkbox-blank-outline'}
-          size={24}
-          color={checked ? colors.primary[500] : colors.neutral[400]}
-        />
-        <PerfectText size={14} lines={3} style={styles.label}>
+        <View style={styles.iconBox}>
+          <PerfectIcon
+            name={checked ? 'checkbox-marked' : 'checkbox-blank-outline'}
+            size={24}
+            color={checked ? colors.primary[500] : colors.neutral[400]}
+          />
+        </View>
+        <PerfectText
+          size={14}
+          lines={3}
+          containerWidth={0}
+          style={styles.label}
+        >
           {label}
         </PerfectText>
       </PlatformTouchable>
@@ -58,6 +66,15 @@ const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       gap: PerfectSpacing.sm,
       marginTop: PerfectSpacing.sm,
+    },
+    // Box fisso 24x24: l'icon-font ha line-height proprio (~41px) col glifo non
+    // centrato; confinarlo a 24 centrato rende l'altezza deterministica e allinea
+    // la checkbox al testo (prima la scritta risultava più in basso).
+    iconBox: {
+      width: scale(24),
+      height: scale(24),
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     label: {
       color: colors.neutral[700],
