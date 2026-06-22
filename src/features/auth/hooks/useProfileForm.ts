@@ -25,6 +25,7 @@ export const useProfileForm = () => {
   const [phone, setPhone] = useState('+39');
   const [city, setCity] = useState('');
   const [province, setProvince] = useState('');
+  const [country, setCountry] = useState('IT');
   const [birthDate, setBirthDate] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [errors, setErrors] = useState<ProfileErrors>({});
@@ -60,6 +61,14 @@ export const useProfileForm = () => {
         setProvince('');
         clearError('city');
         clearError('province');
+      },
+      country: (code: string): void => {
+        setCountry(code);
+        if (code !== 'IT') {
+          setProvince('');
+          clearError('province');
+        }
+        clearError('country');
       },
       birthDate: (v: string): void => {
         setBirthDate(v);
@@ -101,6 +110,7 @@ export const useProfileForm = () => {
       phone,
       city,
       province,
+      country,
       birthDate,
       privacyConsent,
     });
@@ -122,7 +132,9 @@ export const useProfileForm = () => {
       last_name: lastName.trim(),
       phone: phone.trim(),
       city: city.trim(),
-      province: province.trim(),
+      // Provincia solo italiana: null per i paesi esteri (colonna nullable).
+      province: country === 'IT' ? province.trim() : null,
+      country: country.trim(),
       birth_date: birthDate.trim(),
       privacy_consent_at: new Date().toISOString(),
     });
@@ -149,6 +161,7 @@ export const useProfileForm = () => {
     phone,
     city,
     province,
+    country,
     birthDate,
     privacyConsent,
     session,
@@ -169,6 +182,7 @@ export const useProfileForm = () => {
       phone,
       city,
       province,
+      country,
       birthDate,
       privacyConsent,
     },

@@ -8,6 +8,31 @@ import {
   validateProfileForm,
 } from '@/shared/auth/validation';
 
+const baseSignUp = {
+  firstName: 'Mario',
+  lastName: 'Rossi',
+  email: 'a@b.it',
+  password: 'Abcd123!',
+  confirmPassword: 'Abcd123!',
+  phone: '+393331234567',
+  city: 'Roma',
+  province: 'RM',
+  country: 'IT',
+  birthDate: '2000-01-01',
+  privacyConsent: true,
+};
+
+const baseProfile = {
+  firstName: 'Mario',
+  lastName: 'Rossi',
+  phone: '+393331234567',
+  city: 'Roma',
+  province: 'RM',
+  country: 'IT',
+  birthDate: '2000-01-01',
+  privacyConsent: true,
+};
+
 describe('auth validation', () => {
   it('email', () => {
     expect(validateEmail('a@b.it')).toBeNull();
@@ -38,78 +63,66 @@ describe('auth validation', () => {
   });
 
   it('form aggrega errori per campo', () => {
-    const errors = validateSignUpForm({
-      firstName: '',
-      lastName: 'Rossi',
-      email: 'a@b.it',
-      password: 'Abcd123!',
-      confirmPassword: 'Abcd123!',
-      phone: '+393331234567',
-      city: 'Roma',
-      province: 'RM',
-      birthDate: '2000-01-01',
-      privacyConsent: true,
-    });
+    const errors = validateSignUpForm({ ...baseSignUp, firstName: '' });
     expect(errors.firstName).toBe('required');
     expect(errors.lastName).toBeUndefined();
   });
 
   it('privacy consent obbligatorio', () => {
-    const errors = validateSignUpForm({
-      firstName: 'A',
-      lastName: 'B',
-      email: 'a@b.it',
-      password: 'Abcd123!',
-      confirmPassword: 'Abcd123!',
-      phone: '+393331234567',
-      city: 'Roma',
-      province: 'RM',
-      birthDate: '2000-01-01',
-      privacyConsent: false,
-    });
+    const errors = validateSignUpForm({ ...baseSignUp, privacyConsent: false });
     expect(errors.privacyConsent).toBe('required');
   });
 
   it('confirmPassword diversa da password → password_mismatch', () => {
     const errors = validateSignUpForm({
-      firstName: 'A',
-      lastName: 'B',
-      email: 'a@b.it',
-      password: 'Abcd123!',
+      ...baseSignUp,
       confirmPassword: 'Abcd123?',
-      phone: '+393331234567',
-      city: 'Roma',
-      province: 'RM',
-      birthDate: '2000-01-01',
-      privacyConsent: true,
     });
     expect(errors.confirmPassword).toBe('password_mismatch');
   });
 
-  it('profile form: valida i campi comuni (no email/password)', () => {
-    const errors = validateProfileForm({
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      phone: '+393331234567',
-      city: 'Roma',
-      province: 'RM',
-      birthDate: '2000-01-01',
-      privacyConsent: true,
+  it('country mancante → errore required', () => {
+    const errors = validateSignUpForm({ ...baseSignUp, country: '' });
+    expect(errors.country).toBe('required');
+  });
+
+  it('IT senza provincia → errore province', () => {
+    const errors = validateSignUpForm({ ...baseSignUp, province: '' });
+    expect(errors.province).toBe('required');
+  });
+
+  it('estero senza provincia → valido (province non richiesta)', () => {
+    const errors = validateSignUpForm({
+      ...baseSignUp,
+      country: 'FR',
+      province: '',
     });
+    expect(errors.province).toBeUndefined();
+    expect(errors.country).toBeUndefined();
+  });
+
+  it('profile form: valida i campi comuni (no email/password)', () => {
+    const errors = validateProfileForm({ ...baseProfile });
     expect(errors).toEqual({});
   });
 
   it('profile form: errori su telefono e privacy', () => {
     const errors = validateProfileForm({
-      firstName: 'Mario',
-      lastName: 'Rossi',
+      ...baseProfile,
       phone: '333',
-      city: 'Roma',
-      province: 'RM',
-      birthDate: '2000-01-01',
       privacyConsent: false,
     });
     expect(errors.phone).toBe('phone_invalid');
     expect(errors.privacyConsent).toBe('required');
+  });
+
+  it('profile form: estero senza provincia → valido', () => {
+    const errors = validateProfileForm({
+      ...baseProfile,
+      country: 'ES',
+      province: '',
+    });
+    expect(errors.province).toBeUndefined();
+    expect(errors.country).toBeUndefined();
   });
 });

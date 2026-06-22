@@ -96,6 +96,26 @@ describe('CompleteProfileScreen', () => {
     expect(upsert).toHaveBeenCalled();
   });
 
+  it("mostra il campo Paese e l'upsert include country (default IT)", async () => {
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = (
+      supabase.from('profiles') as unknown as { upsert: jest.Mock }
+    ).upsert;
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(getByText('Paese')).toBeTruthy();
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ country: 'IT' })
+    );
+  });
+
   it('S10: upsert NON ri-stampa marketing_consent (preserva la cache del consenso)', async () => {
     mockUseAuth.mockReturnValue(makeAuth());
     const upsert = (

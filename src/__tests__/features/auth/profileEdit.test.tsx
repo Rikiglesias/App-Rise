@@ -54,6 +54,7 @@ const profile: Profile = {
   phone: '+393331234567',
   city: 'Roma',
   province: 'RM',
+  country: 'IT',
   birth_date: '1990-01-01',
   privacy_consent_at: '2026-01-01T00:00:00.000Z',
   marketing_consent: false,
@@ -73,6 +74,12 @@ describe('ProfileEditScreen', () => {
     expect(getByDisplayValue('Rossi')).toBeTruthy();
     expect(getByDisplayValue('old@r.it')).toBeTruthy();
     expect(getByDisplayValue('+393331234567')).toBeTruthy();
+  });
+
+  it('mostra il campo Paese (valore dal profilo)', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ profile }));
+    const { getByText } = wrap(<ProfileEditScreen />);
+    expect(getByText('Paese')).toBeTruthy();
   });
 
   it('telefono invalido → errore e updateProfile NON chiamato', () => {

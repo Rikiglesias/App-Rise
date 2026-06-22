@@ -19,6 +19,11 @@ interface AuthCityFieldProps {
   label: string;
   /** Città corrente (controllata dal form). */
   value: string;
+  /**
+   * Paese corrente (cca2). Solo 'IT' attiva l'autocomplete dei comuni + provincia;
+   * per gli altri paesi il campo è testo libero (le città estere non sono nel dataset).
+   */
+  country: string;
   /** Digitazione libera: il form aggiorna la città e azzera la provincia derivata. */
   onChangeCity: (city: string) => void;
   /** Selezione di un comune dal dropdown: città + sigla provincia insieme. */
@@ -39,6 +44,7 @@ const BLUR_CLOSE_MS = 150;
 export const AuthCityField: React.FC<AuthCityFieldProps> = ({
   label,
   value,
+  country,
   onChangeCity,
   onSelectComune,
   error,
@@ -60,13 +66,19 @@ export const AuthCityField: React.FC<AuthCityFieldProps> = ({
     []
   );
 
-  const suggestions = useMemo<Comune[]>(() => searchComuni(value), [value]);
-  const showDropdown = open && suggestions.length > 0;
+  // Autocomplete comuni SOLO per l'Italia: le città estere non sono nel dataset,
+  // quindi per gli altri paesi il campo resta testo libero (nessun suggerimento).
+  const isItaly = country === 'IT';
+  const suggestions = useMemo<Comune[]>(
+    () => (isItaly ? searchComuni(value) : []),
+    [isItaly, value]
+  );
+  const showDropdown = isItaly && open && suggestions.length > 0;
 
   const handleChange = (text: string): void => {
     justSelected.current = false;
     onChangeCity(text);
-    setOpen(true);
+    if (isItaly) setOpen(true);
   };
 
   const handleSelect = (c: Comune): void => {
@@ -169,6 +181,8 @@ const createStyles = (colors: ThemeColors) =>
     inputRow: {
       flexDirection: 'row',
       alignItems: 'center',
+      // Altezza uniforme a tutti gli altri campi della pagina.
+      minHeight: scale(48),
       backgroundColor: colors.neutral[0],
       borderWidth: scale(1),
       borderColor: colors.neutral[200],

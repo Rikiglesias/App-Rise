@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { View, StyleSheet, ActivityIndicator, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { getCountryByCca2, type ICountryCca2 } from 'rn-country-select';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
@@ -21,7 +22,7 @@ const GRACE_DAYS = 30;
 export const ProfileScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const {
     status,
     session,
@@ -89,6 +90,19 @@ export const ProfileScreen: React.FC = () => {
 
   const fullName = profile ? `${profile.first_name} ${profile.last_name}` : '';
 
+  // Nome paese localizzato dal cca2 (es. 'IT' → 'Italia'/'Italy').
+  const countryName = profile?.country
+    ? (getCountryByCca2(profile.country as ICountryCca2)?.translations?.[
+        locale === 'it' ? 'ita' : 'eng'
+      ]?.common ?? profile.country)
+    : '';
+  // Località: provincia solo se presente (i paesi esteri non l'hanno → niente "()" vuoto).
+  const locationValue = profile
+    ? profile.province
+      ? `${profile.city} (${profile.province})`
+      : profile.city
+    : '';
+
   const scheduledDate = profile?.deletion_requested_at
     ? new Date(
         new Date(profile.deletion_requested_at).getTime() +
@@ -131,7 +145,12 @@ export const ProfileScreen: React.FC = () => {
           />
           <Row
             label={t('auth.profile.location')}
-            value={`${profile.city} (${profile.province})`}
+            value={locationValue}
+            styles={styles}
+          />
+          <Row
+            label={t('auth.profile.country')}
+            value={countryName}
             styles={styles}
           />
           <Row

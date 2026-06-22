@@ -6,7 +6,8 @@ export interface Profile {
   last_name: string;
   phone: string;
   city: string;
-  province: string;
+  province: string; // sigla provincia IT; vuota per paesi esteri
+  country: string; // ISO 3166-1 alpha-2 (es. 'IT')
   birth_date: string; // ISO date (YYYY-MM-DD)
   privacy_consent_at: string; // ISO timestamp
   marketing_consent: boolean;
@@ -31,7 +32,13 @@ export interface ConsentEvent {
 /** Campi del profilo correggibili dall'utente in-app (M5, GDPR Art.16 rettifica). */
 export type ProfileEditable = Pick<
   Profile,
-  'first_name' | 'last_name' | 'phone' | 'city' | 'province' | 'birth_date'
+  | 'first_name'
+  | 'last_name'
+  | 'phone'
+  | 'city'
+  | 'province'
+  | 'country'
+  | 'birth_date'
 >;
 
 /** Whitelist dei campi aggiornabili: previene update di id/created_at/consensi. */
@@ -41,6 +48,7 @@ export const PROFILE_EDITABLE_KEYS: readonly (keyof ProfileEditable)[] = [
   'phone',
   'city',
   'province',
+  'country',
   'birth_date',
 ];
 
@@ -51,6 +59,7 @@ export interface ProfileInput {
   phone: string;
   city: string;
   province: string;
+  country: string;
   birth_date: string;
   privacy_consent: boolean;
   marketing_consent: boolean;

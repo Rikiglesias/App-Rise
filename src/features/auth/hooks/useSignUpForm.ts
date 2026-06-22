@@ -28,6 +28,7 @@ export const useSignUpForm = () => {
   const [phone, setPhone] = useState('+39');
   const [city, setCity] = useState('');
   const [province, setProvince] = useState('');
+  const [country, setCountry] = useState('IT');
   const [birthDate, setBirthDate] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(false);
@@ -82,6 +83,15 @@ export const useSignUpForm = () => {
         clearError('city');
         clearError('province');
       },
+      country: (code: string): void => {
+        setCountry(code);
+        // La provincia è solo italiana: cambiando paese estero non è più applicabile.
+        if (code !== 'IT') {
+          setProvince('');
+          clearError('province');
+        }
+        clearError('country');
+      },
       birthDate: (v: string): void => {
         setBirthDate(v);
         clearError('birthDate');
@@ -132,6 +142,7 @@ export const useSignUpForm = () => {
       phone,
       city,
       province,
+      country,
       birthDate,
       privacyConsent,
     });
@@ -146,6 +157,7 @@ export const useSignUpForm = () => {
       phone: phone.trim(),
       city: city.trim(),
       province: province.trim(),
+      country: country.trim(),
       birth_date: birthDate.trim(),
       privacy_consent: privacyConsent,
       marketing_consent: marketingConsent,
@@ -162,6 +174,7 @@ export const useSignUpForm = () => {
     phone,
     city,
     province,
+    country,
     birthDate,
     privacyConsent,
     marketingConsent,
@@ -186,6 +199,7 @@ export const useSignUpForm = () => {
       phone,
       city,
       province,
+      country,
       birthDate,
       privacyConsent,
       marketingConsent,
