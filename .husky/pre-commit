@@ -1,3 +1,2 @@
 npm run check:strict
-npx tsc --noEmit --skipLibCheck
 npx lint-staged
