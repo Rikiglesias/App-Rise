@@ -150,6 +150,7 @@ export default {
     },
     errors: {
       required: 'Campo obbligatorio',
+      complete_required: 'Completa tutti i campi obbligatori',
       email_invalid: 'Email non valida',
       password_weak: 'Min 8 caratteri, una maiuscola e un carattere speciale',
       phone_invalid: 'Telefono non valido (es. +39...)',

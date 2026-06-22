@@ -75,13 +75,6 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
     [colors]
   );
 
-  // Modal selezione paese: backdrop appena accennato (il default scuriva tutta la
-  // pagina dando l'idea di "schermata intera" invece di un pop-up).
-  const modalStyles = useMemo(
-    () => ({ backdrop: { backgroundColor: 'rgba(0, 0, 0, 0.2)' } }),
-    []
-  );
-
   return (
     <View style={styles.wrap}>
       <PerfectText size={16} lines={1} style={styles.label}>
@@ -93,7 +86,8 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         country={country}
         accessibilityLabelPhoneInput={label}
         phoneInputStyles={phoneStyles}
-        modalStyles={modalStyles}
+        removedModalBackdrop
+        showModalCloseButton
         onChangePhoneNumber={(num: string): void => {
           setNumber(num);
           emit(num, country);

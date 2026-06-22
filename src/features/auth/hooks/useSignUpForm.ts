@@ -130,7 +130,12 @@ export const useSignUpForm = () => {
       privacyConsent,
     });
     setErrors(found);
-    if (Object.keys(found).length > 0) return;
+    if (Object.keys(found).length > 0) {
+      // Avviso riassuntivo sotto il form quando si preme Registrati con campi
+      // obbligatori mancanti/non validi (oltre agli errori per-campo).
+      setSubmitError(t('auth.errors.complete_required'));
+      return;
+    }
 
     setLoading(true);
     // confirmPassword NON viene inviato al backend: serve solo a validare in UI.
