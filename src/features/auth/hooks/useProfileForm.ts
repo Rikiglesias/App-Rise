@@ -99,10 +99,7 @@ export const useProfileForm = () => {
       privacyConsent,
     });
     setErrors(found);
-    if (Object.keys(found).length > 0) {
-      setSubmitError(t('auth.errors.complete_required'));
-      return;
-    }
+    if (Object.keys(found).length > 0) return;
 
     const userId = session?.user.id;
     if (!userId) {

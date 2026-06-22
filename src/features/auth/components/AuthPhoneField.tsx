@@ -4,6 +4,7 @@ import PhoneInput, {
   type ICountry,
   getCountryByCca2,
 } from 'rn-international-phone-number';
+import type { ICountryCca2 } from 'rn-country-select';
 
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -18,6 +19,10 @@ interface AuthPhoneFieldProps {
   onChangeText: (fullPhone: string) => void;
   error?: string | undefined;
 }
+
+// Paesi in cima alla lista del selettore: evita di scrollare per il caso comune
+// (donatori italiani) e per i vicini più probabili.
+const POPULAR_COUNTRIES: ICountryCca2[] = ['IT', 'CH', 'FR', 'DE', 'GB', 'US'];
 
 /**
  * Prefisso internazionale da ICountry: `idd.root` + suffisso quando è unico
@@ -86,6 +91,7 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         country={country}
         accessibilityLabelPhoneInput={label}
         phoneInputStyles={phoneStyles}
+        popularCountries={POPULAR_COUNTRIES}
         removedModalBackdrop
         showModalCloseButton
         onChangePhoneNumber={(num: string): void => {

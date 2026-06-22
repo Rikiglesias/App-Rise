@@ -148,7 +148,6 @@ export default {
     },
     errors: {
       required: 'Required field',
-      complete_required: 'Please complete all required fields',
       email_invalid: 'Invalid email',
       password_weak:
         'Min 8 characters, one uppercase and one special character',
