@@ -30,7 +30,7 @@ export const AuthSection: React.FC<AuthSectionProps> = ({
   return (
     <View style={[styles.section, first ? styles.sectionFirst : null]}>
       {first ? null : <View style={styles.divider} />}
-      <PerfectText size={13} lines={1} style={styles.title}>
+      <PerfectText size={15} lines={1} style={styles.title}>
         {title}
       </PerfectText>
       {children}
@@ -46,13 +46,12 @@ const createStyles = (colors: ThemeColors) =>
     sectionFirst: {
       marginTop: 0,
     },
-    // Intestazione di gruppo = etichetta di categoria: MAIUSCOLETTO scuro e
-    // spaziato, distinto dalle label dei campi (title-case). NIENTE rosso: nel
-    // resto dell'app il rosso brand marca gli elementi interattivi (CTA/link),
-    // quindi un titolo rosso non-cliccabile confonde. La separazione tra gruppi
-    // la dà il divider sopra, non il colore.
+    // Intestazione di categoria: MAIUSCOLETTO rosso brand spaziato + divider
+    // sopra. Il rosso dà calore/identità; per non confonderlo con un elemento
+    // cliccabile la regola è: SOLO i link sono SOTTOLINEATI (vedi il link privacy).
+    // Quindi rosso non-sottolineato = etichetta, rosso sottolineato = link.
     title: {
-      color: colors.neutral[900],
+      color: colors.primary[500],
       fontWeight: '800',
       textTransform: 'uppercase',
       letterSpacing: scale(1),

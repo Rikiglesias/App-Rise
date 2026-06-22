@@ -100,11 +100,13 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[700],
       flex: 1,
     },
-    // Link inline all'informativa: rosso brand + bold = affordance chiara senza
-    // sottolineatura (che su native taglia i descender e includeva lo spazio).
+    // Link inline all'informativa: rosso + bold + SOTTOLINEATO. La sottolineatura
+    // è il discriminante "cliccabile": le categorie sono rosse ma NON sottolineate,
+    // questo link sì. Lo spazio prima è fuori dal Text → non viene sottolineato.
     link: {
       color: colors.primary[500],
       fontWeight: '700',
+      textDecorationLine: 'underline',
     },
     error: {
       color: colors.semantic.error.main,
