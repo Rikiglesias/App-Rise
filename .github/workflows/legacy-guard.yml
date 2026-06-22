@@ -28,29 +28,11 @@ jobs:
       - name: 🚫 Guard forbidden react-native Text/Image imports
         run: |
           set -e
-          echo "Scanning for forbidden Text/Image imports..."
-          # Check for Text imports (excluding tests and PerfectText.tsx)
-          text_matches=$(grep -RIn --exclude-dir=node_modules --exclude-dir=.git -E "import\s*\{[^}]*\bText\b[^}]*\}\s*from\s*['\"]react-native['\"]" src || true)
-          if [ -n "$text_matches" ]; then
-            filtered_text=$(echo "$text_matches" | grep -v "src/components/ui/PerfectText.tsx" | grep -v "src/__tests__/" || true)
-            if [ -n "$filtered_text" ]; then
-              echo "$filtered_text"
-              echo "❌ Found direct Text import from react-native. Use PerfectText."
-              exit 1
-            fi
-          fi
-          
-          # Check for Image imports (excluding tests and PerfectImage.tsx)
-          image_matches=$(grep -RIn --exclude-dir=node_modules --exclude-dir=.git -E "import\s*\{[^}]*\bImage\b[^}]*\}\s*from\s*['\"]react-native['\"]" src || true)
-          if [ -n "$image_matches" ]; then
-            filtered_image=$(echo "$image_matches" | grep -v "src/components/ui/PerfectImage.tsx" | grep -v "src/__tests__/" || true)
-            if [ -n "$filtered_image" ]; then
-              echo "$filtered_image"
-              echo "❌ Found direct Image import from react-native. Use PerfectImage."
-              exit 1
-            fi
-          fi
-          echo "✅ No forbidden Text/Image imports."
+          # Multi-line-aware (il vecchio grep single-line NON catturava gli
+          # import su più righe → bypass). Vedi scripts/check-legacy-imports.js
+          # per il parser e l'allowlist (PerfectText/Image, ErrorBoundary,
+          # OTAUpdateScreen TODO-migrare, __tests__).
+          node scripts/check-legacy-imports.js
 
       - name: 📐 Guard Dimensions.get() usage
         run: |
