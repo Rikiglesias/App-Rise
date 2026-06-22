@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Platform, View, StyleSheet } from 'react-native';
+import { Platform, View, StyleSheet, Modal, Pressable } from 'react-native';
 import DateTimePicker, {
   type DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
@@ -70,6 +70,18 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
     if (date) onChange(toISODate(date));
   };
 
+  // Il rullo (spinner) è condiviso tra il ramo iOS (dentro Modal) e Android (inline).
+  const picker = (
+    <DateTimePicker
+      value={pickerDate}
+      mode="date"
+      display="spinner"
+      locale="it-IT"
+      maximumDate={new Date()}
+      onChange={handleChange}
+    />
+  );
+
   return (
     <View style={styles.wrap}>
       <PerfectText size={16} lines={1} style={styles.label}>
@@ -89,15 +101,24 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
           {value ? toDisplayDate(value) : placeholder || ''}
         </PerfectText>
       </PlatformTouchable>
-      {open ? (
-        <DateTimePicker
-          value={pickerDate}
-          mode="date"
-          display="spinner"
-          locale="it-IT"
-          maximumDate={new Date()}
-          onChange={handleChange}
-        />
+      {open && Platform.OS === 'ios' ? (
+        // iOS: lo spinner è inline → lo mettiamo in un Modal con backdrop, così
+        // un tap in QUALSIASI punto fuori dal rullo lo chiude.
+        <Modal
+          transparent
+          visible
+          animationType="fade"
+          onRequestClose={() => setOpen(false)}
+        >
+          <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
+            <Pressable style={styles.sheet} onPress={() => undefined}>
+              {picker}
+            </Pressable>
+          </Pressable>
+        </Modal>
+      ) : open ? (
+        // Android: il date picker nativo è già un dialog che si chiude da sé.
+        picker
       ) : null}
       {error ? (
         <PerfectText size={13} lines={2} style={styles.error}>
@@ -138,5 +159,16 @@ const createStyles = (colors: ThemeColors) =>
     error: {
       color: Colors.semantic.error.main,
       marginTop: PerfectSpacing.xs,
+    },
+    // Backdrop a tutto schermo: il tap fuori dal rullo chiude il picker (iOS).
+    backdrop: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    },
+    // Foglio in basso che contiene il rullo: il tap qui NON chiude (assorbito).
+    sheet: {
+      backgroundColor: colors.neutral[0],
+      paddingBottom: PerfectSpacing.lg,
     },
   });

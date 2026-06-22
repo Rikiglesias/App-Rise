@@ -11,6 +11,7 @@ import { useSignUpForm } from '../hooks/useSignUpForm';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { RISE_URLS } from '@/shared/constants/urls';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -160,6 +161,8 @@ export const SignUpScreen: React.FC = () => {
           checked={values.privacyConsent}
           onToggle={form.togglePrivacy}
           label={t('auth.signup.privacyConsent')}
+          linkText={t('auth.signup.privacyConsentLink')}
+          linkUrl={RISE_URLS.privacyPolicy}
           error={err(errors.privacyConsent)}
         />
         <AuthConsentCheckbox

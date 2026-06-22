@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, Linking } from 'react-native';
 
 import { PerfectText, PerfectIcon, PlatformTouchable } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
@@ -12,6 +12,10 @@ interface AuthConsentCheckboxProps {
   onToggle: () => void;
   label: string;
   error?: string | undefined;
+  /** Testo cliccabile in coda alla label (es. "privacy policy"): apre `linkUrl`. */
+  linkText?: string;
+  /** URL aperto dal `linkText` (informativa privacy). */
+  linkUrl?: string;
 }
 
 /** Checkbox di consenso condivisa (privacy/marketing) — usata da SignUp e CompleteProfile. */
@@ -20,6 +24,8 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
   onToggle,
   label,
   error,
+  linkText,
+  linkUrl,
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -46,6 +52,18 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
           style={styles.label}
         >
           {label}
+          {linkText && linkUrl ? (
+            <Text
+              style={styles.link}
+              accessibilityRole="link"
+              onPress={() => {
+                void Linking.openURL(linkUrl);
+              }}
+            >
+              {' '}
+              {linkText}
+            </Text>
+          ) : null}
         </PerfectText>
       </PlatformTouchable>
       {error ? (
@@ -79,6 +97,12 @@ const createStyles = (colors: ThemeColors) =>
     label: {
       color: colors.neutral[700],
       flex: 1,
+    },
+    // Link inline all'informativa (rosso brand, sottolineato): apre l'URL.
+    link: {
+      color: colors.primary[500],
+      fontWeight: '600',
+      textDecorationLine: 'underline',
     },
     error: {
       color: colors.semantic.error.main,
