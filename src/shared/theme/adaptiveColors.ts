@@ -41,9 +41,20 @@ const DARK_GLASS: typeof Colors.glass = {
   red: 'rgba(220, 38, 38, 0.18)',
 };
 
+// Palette DARK costruita UNA volta a livello modulo: reference STABILE.
+// Prima veniva creato un nuovo oggetto a ogni chiamata (ad ogni render in dark),
+// invalidando il pattern `useMemo(() => createStyles(colors), [colors])` usato in
+// ~35 componenti → StyleSheet.create rigirava ogni render in dark mode. Stessi
+// valori di prima: zero cambio visivo, solo reference stabile (memo di nuovo efficaci).
+const DARK_COLORS: ThemeColors = {
+  ...Colors,
+  neutral: DARK_NEUTRAL,
+  glass: DARK_GLASS,
+};
+
 /**
  * Ritorna i design tokens adattati al tema.
  * @param isDark true → palette dark (neutral invertiti + glass soft); false → `Colors` esatti.
  */
 export const getAdaptiveColors = (isDark: boolean): ThemeColors =>
-  isDark ? { ...Colors, neutral: DARK_NEUTRAL, glass: DARK_GLASS } : Colors;
+  isDark ? DARK_COLORS : Colors;

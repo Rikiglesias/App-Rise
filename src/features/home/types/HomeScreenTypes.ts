@@ -15,8 +15,3 @@ import type { RootStackParamList } from '@/navigation/types';
 export interface HomeScreenProps {
   navigation: NavigationProp<RootStackParamList>;
 }
-
-// Component types
-export interface EntraInAzioneProps {
-  navigation: NavigationProp<RootStackParamList>;
-}

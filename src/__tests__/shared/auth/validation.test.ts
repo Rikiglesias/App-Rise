@@ -70,6 +70,22 @@ describe('auth validation', () => {
     expect(errors.privacyConsent).toBe('required');
   });
 
+  it('confirmPassword diversa da password → password_mismatch', () => {
+    const errors = validateSignUpForm({
+      firstName: 'A',
+      lastName: 'B',
+      email: 'a@b.it',
+      password: 'Abcd123!',
+      confirmPassword: 'Abcd123?',
+      phone: '+393331234567',
+      city: 'Roma',
+      province: 'RM',
+      birthDate: '2000-01-01',
+      privacyConsent: true,
+    });
+    expect(errors.confirmPassword).toBe('password_mismatch');
+  });
+
   it('profile form: valida i campi comuni (no email/password)', () => {
     const errors = validateProfileForm({
       firstName: 'Mario',
