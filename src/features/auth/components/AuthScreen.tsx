@@ -66,7 +66,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               centrale; lo spazio residuo resta in fondo come padding naturale
               sopra la tab bar. Sui form gli spacer non vengono inseriti. */}
           {centerContent ? <View style={styles.heroSpacerTop} /> : null}
-          <View style={styles.header}>
+          <View style={[styles.header, verticalCenter && styles.headerSpaced]}>
             {showLogo ? (
               <PerfectImage
                 width={centerContent ? 96 : 72}
@@ -140,6 +140,11 @@ const createStyles = (colors: ThemeColors) =>
       // auth. Allineati a sinistra apparivano sbilanciati rispetto ai bottoni
       // full-width (logo "laterale", titolo storto a capo).
       alignItems: 'center',
+    },
+    // Login (verticalCenter): più stacco titolo→primo campo; col contenuto
+    // centrato verticalmente questo alza anche il titolo nel viewport.
+    headerSpaced: {
+      marginBottom: PerfectSpacing['3xl'],
     },
     logo: {
       marginBottom: PerfectSpacing.base,

@@ -53,16 +53,18 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
         >
           {label}
           {linkText && linkUrl ? (
-            <Text
-              style={styles.link}
-              accessibilityRole="link"
-              onPress={() => {
-                void Linking.openURL(linkUrl);
-              }}
-            >
+            <>
               {' '}
-              {linkText}
-            </Text>
+              <Text
+                style={styles.link}
+                accessibilityRole="link"
+                onPress={() => {
+                  void Linking.openURL(linkUrl);
+                }}
+              >
+                {linkText}
+              </Text>
+            </>
           ) : null}
         </PerfectText>
       </PlatformTouchable>
@@ -98,11 +100,11 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[700],
       flex: 1,
     },
-    // Link inline all'informativa (rosso brand, sottolineato): apre l'URL.
+    // Link inline all'informativa: rosso brand + bold = affordance chiara senza
+    // sottolineatura (che su native taglia i descender e includeva lo spazio).
     link: {
       color: colors.primary[500],
-      fontWeight: '600',
-      textDecorationLine: 'underline',
+      fontWeight: '700',
     },
     error: {
       color: colors.semantic.error.main,

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Platform, View, StyleSheet, Modal, Pressable } from 'react-native';
+import { Platform, View, StyleSheet, Pressable } from 'react-native';
 import DateTimePicker, {
   type DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
@@ -70,7 +70,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
     if (date) onChange(toISODate(date));
   };
 
-  // Il rullo (spinner) è condiviso tra il ramo iOS (dentro Modal) e Android (inline).
+  // Il rullo (spinner) compare INLINE sotto il campo (niente pop-up/Modal).
   const picker = (
     <DateTimePicker
       value={pickerDate}
@@ -101,24 +101,18 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
           {value ? toDisplayDate(value) : placeholder || ''}
         </PerfectText>
       </PlatformTouchable>
-      {open && Platform.OS === 'ios' ? (
-        // iOS: lo spinner è inline → lo mettiamo in un Modal con backdrop, così
-        // un tap in QUALSIASI punto fuori dal rullo lo chiude.
-        <Modal
-          transparent
-          visible
-          animationType="fade"
-          onRequestClose={() => setOpen(false)}
-        >
-          <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
-            <Pressable style={styles.sheet} onPress={() => undefined}>
-              {picker}
-            </Pressable>
-          </Pressable>
-        </Modal>
-      ) : open ? (
-        // Android: il date picker nativo è già un dialog che si chiude da sé.
-        picker
+      {open ? (
+        <>
+          {/* Overlay invisibile a tutto schermo: un tap in QUALSIASI punto fuori
+              dal rullo lo chiude. Reso PRIMA del picker → il rullo resta sopra e
+              scorribile, mentre il resto della pagina chiude al tocco. */}
+          <Pressable
+            style={styles.dismissOverlay}
+            onPress={() => setOpen(false)}
+            accessibilityLabel="Chiudi selezione data"
+          />
+          {picker}
+        </>
       ) : null}
       {error ? (
         <PerfectText size={13} lines={2} style={styles.error}>
@@ -160,15 +154,14 @@ const createStyles = (colors: ThemeColors) =>
       color: Colors.semantic.error.main,
       marginTop: PerfectSpacing.xs,
     },
-    // Backdrop a tutto schermo: il tap fuori dal rullo chiude il picker (iOS).
-    backdrop: {
-      flex: 1,
-      justifyContent: 'flex-end',
-      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    },
-    // Foglio in basso che contiene il rullo: il tap qui NON chiude (assorbito).
-    sheet: {
-      backgroundColor: colors.neutral[0],
-      paddingBottom: PerfectSpacing.lg,
+    // Overlay invisibile esteso ben oltre il campo in ogni direzione: copre la
+    // pagina visibile così un tap ovunque (fuori dal rullo) chiude il picker,
+    // senza il look di un pop-up. Il rullo, reso dopo, resta sopra e scorribile.
+    dismissOverlay: {
+      position: 'absolute',
+      top: -1000,
+      left: -1000,
+      right: -1000,
+      bottom: -1000,
     },
   });

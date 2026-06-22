@@ -29,7 +29,8 @@ export const AuthSection: React.FC<AuthSectionProps> = ({
 
   return (
     <View style={[styles.section, first ? styles.sectionFirst : null]}>
-      <PerfectText size={18} lines={1} style={styles.title}>
+      {first ? null : <View style={styles.divider} />}
+      <PerfectText size={13} lines={1} style={styles.title}>
         {title}
       </PerfectText>
       {children}
@@ -45,14 +46,23 @@ const createStyles = (colors: ThemeColors) =>
     sectionFirst: {
       marginTop: 0,
     },
-    // Intestazione di gruppo come vero sotto-titolo: più grande delle label dei
-    // campi (18 > 16) e in rosso brand (primary[500], theme-aware come AuthInput
-    // e AuthConsentCheckbox), così la gerarchia "gruppo > campo" è leggibile e i
-    // gruppi sono riconoscibili a colpo d'occhio.
+    // Intestazione di gruppo = etichetta di categoria: MAIUSCOLETTO scuro e
+    // spaziato, distinto dalle label dei campi (title-case). NIENTE rosso: nel
+    // resto dell'app il rosso brand marca gli elementi interattivi (CTA/link),
+    // quindi un titolo rosso non-cliccabile confonde. La separazione tra gruppi
+    // la dà il divider sopra, non il colore.
     title: {
-      color: colors.primary[500],
-      fontWeight: '700',
-      letterSpacing: scale(-0.3),
+      color: colors.neutral[900],
+      fontWeight: '800',
+      textTransform: 'uppercase',
+      letterSpacing: scale(1),
+      marginBottom: PerfectSpacing.sm,
+    },
+    // Linea sottile che apre ogni gruppo (tranne il primo): separa le categorie
+    // in modo strutturale, senza ricorrere al colore.
+    divider: {
+      height: scale(1),
+      backgroundColor: colors.neutral[200],
       marginBottom: PerfectSpacing.base,
     },
   });
