@@ -113,6 +113,9 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         borderWidth: scale(1),
         borderColor: colors.neutral[200],
         borderRadius: scale(12),
+        // Altezza uniforme a tutti gli altri campi della pagina.
+        minHeight: scale(48),
+        justifyContent: 'center' as const,
       },
       flagContainer: { backgroundColor: 'transparent' as const },
       input: { color: colors.neutral[900] },

@@ -139,7 +139,9 @@ const createStyles = (colors: ThemeColors) =>
       borderColor: colors.neutral[200],
       borderRadius: scale(12),
       paddingHorizontal: PerfectSpacing.base,
-      paddingVertical: PerfectSpacing.sm + scale(2),
+      // Altezza uniforme a tutti gli altri campi della pagina.
+      minHeight: scale(48),
+      justifyContent: 'center',
     },
     fieldError: {
       borderColor: Colors.semantic.error.main,

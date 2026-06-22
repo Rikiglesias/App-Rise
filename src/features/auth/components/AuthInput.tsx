@@ -156,6 +156,8 @@ const createStyles = (colors: ThemeColors) =>
     inputRow: {
       flexDirection: 'row',
       alignItems: 'center',
+      // Altezza uniforme per TUTTI i campi della pagina (input/date/città/paese/tel).
+      minHeight: scale(48),
       backgroundColor: colors.neutral[0],
       borderWidth: scale(1),
       borderColor: colors.neutral[200],
