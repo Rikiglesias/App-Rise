@@ -233,7 +233,7 @@ Come l'hai implementata
 [ ] Props minimali?
 [ ] Hook minimali?
 [ ] Nesting < 4 livelli?
-[ ] File < 200 linee?
+[ ] File entro soglia (UI ≤300, hook/helper ≤200 — vedi docs/standards/file-size.md)?
 [ ] Spacing = props diretti?
 [ ] Colori da Design Tokens?
 [ ] Commit messages semantici?
