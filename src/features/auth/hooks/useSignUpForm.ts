@@ -41,8 +41,6 @@ export const useSignUpForm = () => {
   const passwordRef = useRef<TextInput>(null);
   const confirmPasswordRef = useRef<TextInput>(null);
   const phoneRef = useRef<TextInput>(null);
-  const cityRef = useRef<TextInput>(null);
-  const provinceRef = useRef<TextInput>(null);
 
   // Pulisce l'errore di un campo mentre l'utente lo corregge.
   const clearError = useCallback(
@@ -79,10 +77,9 @@ export const useSignUpForm = () => {
       },
       city: (v: string): void => {
         setCity(v);
+        // Testo libero: la provincia derivata non è più garantita coerente → azzera.
+        setProvince('');
         clearError('city');
-      },
-      province: (v: string): void => {
-        setProvince(v);
         clearError('province');
       },
       birthDate: (v: string): void => {
@@ -100,10 +97,19 @@ export const useSignUpForm = () => {
       password: (): void => passwordRef.current?.focus(),
       confirmPassword: (): void => confirmPasswordRef.current?.focus(),
       phone: (): void => phoneRef.current?.focus(),
-      city: (): void => cityRef.current?.focus(),
-      province: (): void => provinceRef.current?.focus(),
     }),
     []
+  );
+
+  // Selezione di un comune dall'autocomplete: città + provincia (sigla) coerenti.
+  const selectComune = useCallback(
+    (cityName: string, provinceSigla: string): void => {
+      setCity(cityName);
+      setProvince(provinceSigla);
+      clearError('city');
+      clearError('province');
+    },
+    [clearError]
   );
 
   const togglePrivacy = useCallback((): void => {
@@ -191,11 +197,10 @@ export const useSignUpForm = () => {
       passwordRef,
       confirmPasswordRef,
       phoneRef,
-      cityRef,
-      provinceRef,
     },
     onChange,
     focusNext,
+    selectComune,
     togglePrivacy,
     toggleMarketing,
     submitError,

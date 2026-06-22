@@ -20,12 +20,15 @@ import { useTranslation } from '@/shared/hooks/useTranslation';
 interface AuthInputProps {
   label: string;
   value: string;
-  onChangeText: (v: string) => void;
+  /** Opzionale: un campo non modificabile (editable=false) non ne ha bisogno. */
+  onChangeText?: (v: string) => void;
   error?: string | undefined;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   placeholder?: string;
+  /** Campo non modificabile (es. Provincia auto-compilata dalla città). */
+  editable?: boolean;
   /** Abilita l'autofill dei password manager (iOS/Android). */
   autoComplete?: TextInputProps['autoComplete'];
   textContentType?: TextInputProps['textContentType'];
@@ -49,6 +52,7 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
       keyboardType = 'default',
       autoCapitalize = 'sentences',
       placeholder,
+      editable = true,
       autoComplete,
       textContentType,
       returnKeyType,
@@ -77,6 +81,7 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
         <View
           style={[
             styles.inputRow,
+            !editable ? styles.inputRowReadonly : null,
             focused ? styles.inputRowFocused : null,
             error ? styles.inputRowError : null,
           ]}
@@ -86,6 +91,7 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
             style={styles.input}
             value={value}
             onChangeText={onChangeText}
+            editable={editable}
             onFocus={(): void => setFocused(true)}
             onBlur={(): void => setFocused(false)}
             secureTextEntry={secureTextEntry && !revealed}
@@ -155,6 +161,11 @@ const createStyles = (colors: ThemeColors) =>
       borderColor: colors.neutral[200],
       borderRadius: scale(12),
       paddingHorizontal: PerfectSpacing.base,
+    },
+    // Campo non modificabile (Provincia auto-compilata): sfondo attenuato che
+    // comunica "sola lettura", senza il focus/caret di un campo editabile.
+    inputRowReadonly: {
+      backgroundColor: colors.neutral[100],
     },
     inputRowFocused: {
       borderColor: colors.primary[500],

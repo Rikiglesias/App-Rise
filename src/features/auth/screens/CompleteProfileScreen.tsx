@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthPhoneField } from '../components/AuthPhoneField';
+import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
 import { AuthSection } from '../components/AuthSection';
@@ -71,28 +72,20 @@ export const CompleteProfileScreen: React.FC = () => {
           onChangeText={onChange.phone}
           error={err(errors.phone)}
         />
-        <AuthInput
-          ref={refs.cityRef}
+        <AuthCityField
           label={t('auth.signup.city')}
           value={values.city}
-          onChangeText={onChange.city}
+          onChangeCity={onChange.city}
+          onSelectComune={form.selectComune}
           error={err(errors.city)}
-          autoCapitalize="words"
-          autoComplete="postal-address-locality"
-          textContentType="addressCity"
-          returnKeyType="next"
-          onSubmitEditing={focusNext.province}
+          placeholder={t('auth.signup.cityPlaceholder')}
         />
         <AuthInput
-          ref={refs.provinceRef}
           label={t('auth.signup.province')}
           value={values.province}
-          onChangeText={onChange.province}
           error={err(errors.province)}
-          autoCapitalize="characters"
-          autoComplete="postal-address-region"
-          textContentType="addressState"
-          returnKeyType="done"
+          editable={false}
+          placeholder={t('auth.signup.provincePlaceholder')}
         />
       </AuthSection>
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Text, Linking } from 'react-native';
+import { StyleSheet, View, Linking } from 'react-native';
 
 import { PerfectText, PerfectIcon, PlatformTouchable } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
@@ -55,7 +55,10 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
           {linkText && linkUrl ? (
             <>
               {' '}
-              <Text
+              <PerfectText
+                size={14}
+                lines={1}
+                containerWidth={0}
                 style={styles.link}
                 accessibilityRole="link"
                 onPress={() => {
@@ -63,7 +66,7 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
                 }}
               >
                 {linkText}
-              </Text>
+              </PerfectText>
             </>
           ) : null}
         </PerfectText>
