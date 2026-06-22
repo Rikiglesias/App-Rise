@@ -91,9 +91,8 @@ echo $env:OPENAI_API_KEY  # Windows
 ### Rate Limit
 
 ```bash
-# Aspetta 1 minuto e riprova
-# Oppure rallenta requests
-npm run translate -- --target=en --batch-delay=2000
+# Aspetta 1 minuto e riprova (lo script ha già un delay fisso di 1s tra i batch)
+npm run translate -- --target=en
 ```
 
 ---

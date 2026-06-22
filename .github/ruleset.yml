@@ -31,7 +31,6 @@ rules:
       # CI/CD MUST PASS - Zero Tolerance
       required_status_checks:
         - '🎯 Visual Diff - Layout Regression Detection'
-        - '🚨 Layout Regression Detection'
         - '🔍 Quality Checks (typescript)'
         - '🔍 Quality Checks (eslint)'
         - '🔍 Quality Checks (prettier)'

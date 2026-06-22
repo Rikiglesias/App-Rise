@@ -150,21 +150,6 @@ jobs:
           echo "Fetching latest update details for branch: $BRANCH"
           eas update:list --branch "$BRANCH" --limit 1 || true
 
-      - name: 💬 Comment on PR (if applicable)
-        if: github.event_name == 'pull_request' && success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const branch = '${{ github.event.inputs.branch || 'production' }}';
-            const message = '${{ steps.update-msg.outputs.message }}';
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `🚀 **OTA Update Deployed!**\n\n**Branch:** ${branch}\n**Message:** ${message}\n\n✅ Update is now live for all users on runtime version matching this build.`
-            });
-
   # ===================================================================
   # NOTIFY - Notifica risultato deploy
   # ===================================================================

@@ -9,12 +9,9 @@
 # 🔧 CORE SYSTEM FILES - PROTEZIONE CRITICA
 # Sistema Perfetto - Richiede approvazione per qualsiasi modifica
 src/components/ui/Perfect*.tsx @Rikiglesias
-src/shared/utils/UniversalMillimetricSystem.ts @Rikiglesias
 src/shared/utils/SystemImmunity.ts @Rikiglesias
 src/shared/theme/UniversalTheme.tsx @Rikiglesias
 src/shared/constants/designTokens.ts @Rikiglesias
-src/shared/constants/responsiveSystem.ts @Rikiglesias
-src/shared/constants/platformDesignTokens.ts @Rikiglesias
 
 # 🚫 CRITICAL CONFIGURATION - DOPPIA APPROVAZIONE
 # File di configurazione critici
@@ -26,9 +23,6 @@ tsconfig.json @Rikiglesias
 # 🛡️ SECURITY FILES - MASSIMA PROTEZIONE
 # Configurazioni di sicurezza
 android-network-security-config.xml @Rikiglesias
-src/shared/services/secureStorage.ts @Rikiglesias
-src/shared/services/apiSecurity.ts @Rikiglesias
-src/shared/services/errorTracking.ts @Rikiglesias
 
 # 🚀 CI/CD & WORKFLOW
 # GitHub Actions e script di automazione
@@ -41,18 +35,15 @@ src/navigation/ @Rikiglesias
 
 # 🧩 LAYOUT & CARD SYSTEM
 src/components/layout/ @Rikiglesias
-src/components/ui/UnifiedCard/ @Rikiglesias
 
 # 📚 DOCUMENTATION
 # Documentazione tecnica
 docs/ @Rikiglesias
 README.md @Rikiglesias
-SISTEMA_RESPONSIVE_PERFETTO.md @Rikiglesias
 
 # 🧪 TESTING CRITICAL
 # Test files per componenti critici
 src/__tests__/components/ui/Perfect*.test.tsx @Rikiglesias
-src/__tests__/shared/utils/UniversalMillimetricSystem.test.ts @Rikiglesias
 src/__tests__/visual/visual-diff.test.tsx @Rikiglesias
 
 # 🎯 SPECIFIC COMPONENTS

@@ -29,8 +29,7 @@
       "@assets/*": ["./assets/*"],
       "@/navigation/*": ["./src/navigation/*"],
       "@/hooks/*": ["src/shared/hooks/*"],
-      "@/utils/*": ["src/shared/utils/*"],
-      "@/data/*": ["src/data/*"]
+      "@/utils/*": ["src/shared/utils/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "src/types/**/*.d.ts"],

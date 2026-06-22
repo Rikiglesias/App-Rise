@@ -58,7 +58,8 @@ jobs:
           npx ts-prune -u -e > deadcode-report.txt 2>&1 || true
           
           # Count unused exports
-          DEADCODE_COUNT=$(grep -c "used in module" deadcode-report.txt || echo "0")
+          DEADCODE_COUNT=$(grep -c "used in module" deadcode-report.txt || true)
+          DEADCODE_COUNT=${DEADCODE_COUNT:-0}
           echo "deadcode_count=$DEADCODE_COUNT" >> $GITHUB_OUTPUT
           
           # Create summary

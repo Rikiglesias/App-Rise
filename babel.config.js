@@ -27,7 +27,6 @@ module.exports = function (api) {
             '@': './src',
             '@components': './src/components',
             '@shared': './src/shared',
-            '@navigation': './src/navigation',
             '@features': './src/features',
             '@assets': './assets',
           },

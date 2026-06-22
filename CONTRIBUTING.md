@@ -53,9 +53,9 @@ npm run conta-problemi
 ### **2. Creazione Feature/Fix**
 
 ```bash
-# Crea branch da main
-git checkout main
-git pull origin main
+# Crea branch da master
+git checkout master
+git pull origin master
 git checkout -b feat/nome-feature
 
 # Oppure per bug fix
@@ -291,11 +291,11 @@ import { contactStyles } from '../styles';  // Preferisci import diretto
 ```typescript
 // ✅ CORRETTO
 import { PerfectContainer, PerfectText } from '@/components/ui';
-import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
+import { scale } from '@/shared/constants/perfectScale';
 
 <PerfectContainer padding={20} margin={16} borderRadius={12}>
   <PerfectText size={16} lines={2}>Text</PerfectText>
-  <Icon size={scaleDimensionLinear(20)} />
+  <Icon size={scale(20)} />
 </PerfectContainer>
 
 // ❌ VIETATO
@@ -366,8 +366,8 @@ const { scale } = useResponsive();
 size={scale(20)}
 
 // ✅ BENE
-import { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
-size={scaleDimensionLinear(20)}
+import { scale } from '@/shared/constants/perfectScale';
+size={scale(20)}
 ```
 
 ### **Mistake 3: Spacing in style object**

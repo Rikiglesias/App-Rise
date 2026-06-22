@@ -142,7 +142,7 @@ eas whoami
 ### Test 3: Trigger Workflow Manuale
 
 1. Vai su: https://github.com/Rikiglesias/App-Rise/actions
-2. Click su: **🚀 OTA Deploy - Automatic Updates**
+2. Click su: **🚀 OTA Deploy - Manual Only**
 3. Click: **Run workflow**
 4. Seleziona:
    - Branch: `master`
