@@ -22,6 +22,14 @@ export const LOGICAL_REFERENCE = {
   scale: 2,
 } as const;
 
+// Diagonale di riferimento (iPhone 15): √(393² + 852²) ≈ 938.27px.
+// Costante calcolata UNA volta a livello modulo invece che ad ogni chiamata di
+// scale()/scaleWithDimensions() (primitive invocate in modo pervasivo). Valore identico.
+const REFERENCE_DIAGONAL = Math.sqrt(
+  LOGICAL_REFERENCE.width * LOGICAL_REFERENCE.width +
+    LOGICAL_REFERENCE.height * LOGICAL_REFERENCE.height
+);
+
 /**
  * TABLET SCALING CAP
  * Previene scaling eccessivo su iPad mantenendo proporzionalità su phone.
@@ -148,15 +156,8 @@ export const scale = (value: number): number => {
       normWidth * normWidth + normHeight * normHeight
     );
 
-    // Diagonale di riferimento (iPhone 15)
-    const referenceDiagonal = Math.sqrt(
-      LOGICAL_REFERENCE.width * LOGICAL_REFERENCE.width +
-        LOGICAL_REFERENCE.height * LOGICAL_REFERENCE.height
-    );
-    // = √(393² + 852²) = √(154449 + 725904) = √880353 ≈ 938.27px
-
     if (deviceDiagonal > 0) {
-      const rawScaleFactor = deviceDiagonal / referenceDiagonal;
+      const rawScaleFactor = deviceDiagonal / REFERENCE_DIAGONAL;
       const cappedScaleFactor = applyTabletScalingCap(rawScaleFactor);
       return value * cappedScaleFactor;
     }
@@ -203,13 +204,8 @@ export const scaleWithDimensions = (
       normWidth * normWidth + normHeight * normHeight
     );
 
-    const referenceDiagonal = Math.sqrt(
-      LOGICAL_REFERENCE.width * LOGICAL_REFERENCE.width +
-        LOGICAL_REFERENCE.height * LOGICAL_REFERENCE.height
-    );
-
     if (deviceDiagonal > 0) {
-      const rawScaleFactor = deviceDiagonal / referenceDiagonal;
+      const rawScaleFactor = deviceDiagonal / REFERENCE_DIAGONAL;
       const cappedScaleFactor = applyTabletScalingCap(rawScaleFactor);
       return value * cappedScaleFactor;
     }
