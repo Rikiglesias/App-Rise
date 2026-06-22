@@ -18,6 +18,8 @@ interface AuthScreenProps {
    * a colpo d'occhio dove ci si trova; il titolo sotto porta il tono.
    */
   eyebrow?: string;
+  /** Dimensione dell'occhiello (default 20). LoginScreen lo vuole più grande. */
+  eyebrowSize?: number;
   /** Mostra il marchio brand in testa (default sì, per identità coerente). */
   showLogo?: boolean;
   /**
@@ -38,6 +40,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   title,
   subtitle,
   eyebrow,
+  eyebrowSize = 20,
   showLogo = true,
   centerContent = false,
   titleSize = 32,
@@ -79,7 +82,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               />
             ) : null}
             {eyebrow ? (
-              <PerfectText size={20} lines={1} style={styles.eyebrow}>
+              <PerfectText size={eyebrowSize} lines={1} style={styles.eyebrow}>
                 {eyebrow}
               </PerfectText>
             ) : null}
