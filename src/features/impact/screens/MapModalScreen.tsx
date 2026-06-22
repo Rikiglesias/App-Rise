@@ -23,6 +23,7 @@ import {
   scale,
 } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
@@ -74,6 +75,7 @@ const MapModalScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute<MapModalScreenRouteProp>();
   const locations = route.params?.locations;
+  const { t } = useTranslation();
 
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -119,7 +121,7 @@ const MapModalScreen: React.FC = () => {
     return (
       <PerfectContainer style={styles.container}>
         <PerfectText size={16} lines={1} fontWeight="400">
-          Caricamento mappa...
+          {t('impact.loadingMap')}
         </PerfectText>
       </PerfectContainer>
     );
@@ -136,7 +138,7 @@ const MapModalScreen: React.FC = () => {
       {/* Header */}
       <PerfectContainer style={styles.header}>
         <PerfectText size={24} lines={1} fontWeight="700" style={styles.title}>
-          Mappa Interattiva
+          {t('impact.interactiveMap')}
         </PerfectText>
         <PerfectText
           size={16}
@@ -144,7 +146,7 @@ const MapModalScreen: React.FC = () => {
           fontWeight="400"
           style={styles.subtitle}
         >
-          Tocca i pin per maggiori dettagli
+          {t('impact.tapPins')}
         </PerfectText>
 
         <PlatformTouchable
@@ -152,7 +154,7 @@ const MapModalScreen: React.FC = () => {
           onPress={handleClosePress}
           activeOpacity={0.8}
           accessibilityRole="button"
-          accessibilityLabel="Chiudi la mappa"
+          accessibilityLabel={t('impact.closeMap')}
         >
           <PerfectIcon name="close" size={24} color={colors.neutral[0]} />
         </PlatformTouchable>
@@ -162,7 +164,7 @@ const MapModalScreen: React.FC = () => {
       {years.length > 1 ? (
         <View style={styles.filterRow}>
           <YearChip
-            label="Tutti"
+            label={t('impact.allYears')}
             value={null}
             active={selectedYear === null}
             onSelect={setSelectedYear}

@@ -211,6 +211,8 @@ export default {
     loadingMap: 'Loading map...',
     interactiveMap: 'Interactive Map',
     tapPins: 'Tap the pins for more details',
+    closeMap: 'Close map',
+    allYears: 'All',
     // Header
     impactTitle1: 'Our',
     impactTitle2: 'Impact',
