@@ -7,6 +7,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     'src/__tests__/helpers/', // Ignora helper files che non sono test
+    'tests/acceptance/', // Oracoli topic-loop: girano con vitest (dynamic import incompatibile col vm CJS di jest)
   ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
