@@ -161,7 +161,8 @@
     "react-test-renderer": "^19.1.0",
     "sharp": "^0.34.5",
     "ts-prune": "^0.10.3",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vitest": "^4.1.10"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [
