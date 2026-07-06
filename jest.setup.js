@@ -5,13 +5,34 @@ jest.mock('react-native-gesture-handler', () => {
   // componenti che usano Gesture.Pan()/Pinch() (mappa pinch-zoom, @gorhom interno) non
   // crashano sotto jest. Estende SOLO il blocco Gesture: gli altri export restano View.
   const GESTURE_METHODS = [
-    'onBegin', 'onStart', 'onUpdate', 'onChange', 'onEnd', 'onFinalize',
-    'onTouchesDown', 'onTouchesMove', 'onTouchesUp', 'onTouchesCancelled',
-    'enabled', 'minDistance', 'minPointers', 'maxPointers', 'averageTouches',
-    'activeOffsetX', 'activeOffsetY', 'failOffsetX', 'failOffsetY',
-    'shouldCancelWhenOutside', 'simultaneousWithExternalGesture',
-    'requireExternalGestureToFail', 'blocksExternalGesture', 'runOnJS',
-    'withRef', 'withTestId', 'hitSlop', 'scaleTo',
+    'onBegin',
+    'onStart',
+    'onUpdate',
+    'onChange',
+    'onEnd',
+    'onFinalize',
+    'onTouchesDown',
+    'onTouchesMove',
+    'onTouchesUp',
+    'onTouchesCancelled',
+    'enabled',
+    'minDistance',
+    'minPointers',
+    'maxPointers',
+    'averageTouches',
+    'activeOffsetX',
+    'activeOffsetY',
+    'failOffsetX',
+    'failOffsetY',
+    'shouldCancelWhenOutside',
+    'simultaneousWithExternalGesture',
+    'requireExternalGestureToFail',
+    'blocksExternalGesture',
+    'runOnJS',
+    'withRef',
+    'withTestId',
+    'hitSlop',
+    'scaleTo',
   ];
   const makeGesture = () => {
     const g = {};
@@ -351,7 +372,10 @@ jest.mock('@react-native-google-signin/google-signin', () => ({
     configure: jest.fn(),
     hasPlayServices: jest.fn(() => Promise.resolve(true)),
     signIn: jest.fn(() =>
-      Promise.resolve({ type: 'success', data: { idToken: 'google-token-mock' } })
+      Promise.resolve({
+        type: 'success',
+        data: { idToken: 'google-token-mock' },
+      })
     ),
   },
   GoogleSigninButton: 'GoogleSigninButton',

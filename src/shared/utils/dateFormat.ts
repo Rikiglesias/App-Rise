@@ -15,7 +15,10 @@ const INTL_LOCALES: Record<'it' | 'en', string> = {
  * @example formatDateLocalized(new Date(2026, 6, 5), 'en') → "July 5, 2026"
  * @returns stringa vuota se l'input non è una data valida (mai crash)
  */
-export const formatDateLocalized = (date: Date | string, locale: 'it' | 'en'): string => {
+export const formatDateLocalized = (
+  date: Date | string,
+  locale: 'it' | 'en'
+): string => {
   const parsed = date instanceof Date ? date : new Date(date);
   if (isNaN(parsed.getTime())) {
     return '';

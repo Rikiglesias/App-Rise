@@ -11,17 +11,23 @@ const load = () => import('../../src/shared/utils/dateFormat');
 describe('formatDateLocalized', () => {
   it('formatta in italiano (gg mese aaaa)', async () => {
     const { formatDateLocalized } = await load();
-    expect(formatDateLocalized(new Date(2026, 6, 5), 'it')).toBe('5 luglio 2026');
+    expect(formatDateLocalized(new Date(2026, 6, 5), 'it')).toBe(
+      '5 luglio 2026'
+    );
   });
 
   it('formatta in inglese (month gg, aaaa)', async () => {
     const { formatDateLocalized } = await load();
-    expect(formatDateLocalized(new Date(2026, 6, 5), 'en')).toBe('July 5, 2026');
+    expect(formatDateLocalized(new Date(2026, 6, 5), 'en')).toBe(
+      'July 5, 2026'
+    );
   });
 
   it('accetta anche una stringa ISO', async () => {
     const { formatDateLocalized } = await load();
-    expect(formatDateLocalized('2026-01-31T10:00:00Z', 'it')).toBe('31 gennaio 2026');
+    expect(formatDateLocalized('2026-01-31T10:00:00Z', 'it')).toBe(
+      '31 gennaio 2026'
+    );
   });
 
   it('input invalido → stringa vuota, mai crash', async () => {

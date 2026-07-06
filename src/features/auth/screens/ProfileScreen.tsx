@@ -16,7 +16,10 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { RootStackNavigationProp } from '@/navigation/types';
-import { formatDateLocalized, getDeletionScheduledDate } from '@/shared/utils/dateFormat';
+import {
+  formatDateLocalized,
+  getDeletionScheduledDate,
+} from '@/shared/utils/dateFormat';
 
 const GRACE_DAYS = 30;
 
@@ -104,8 +107,13 @@ export const ProfileScreen: React.FC = () => {
       : profile.city
     : '';
 
-  const deletionDate = getDeletionScheduledDate(profile?.deletion_requested_at, GRACE_DAYS);
-  const scheduledDate = deletionDate ? formatDateLocalized(deletionDate, locale) : null;
+  const deletionDate = getDeletionScheduledDate(
+    profile?.deletion_requested_at,
+    GRACE_DAYS
+  );
+  const scheduledDate = deletionDate
+    ? formatDateLocalized(deletionDate, locale)
+    : null;
 
   return (
     <AuthScreen title={t('auth.profile.title')}>
