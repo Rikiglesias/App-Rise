@@ -179,3 +179,7 @@ miglioramenti.json
 
 # Knowledge graph output (graphify)
 graphify-out/
+
+# topic-loop (binding di run + report gate)
+.topic-loop/
+rep/
