@@ -60,15 +60,28 @@ export const configureGoogle = (webClientId: string): void => {
   GoogleSignin.configure({ webClientId });
 };
 
-/** Apple Sign In nativo → identity token (null se annullato/non disponibile). */
+// Apple rigetta con `ERR_REQUEST_CANCELED` quando l'utente chiude lo sheet: è un
+// "null" legittimo (nessun login), NON un errore da propagare. Ogni altro codice
+// (rete, config, non disponibile) va RILANCIATO, così il chiamante mostra un
+// feedback invece di trattare il fallimento come annullamento silenzioso — o, peggio,
+// di lasciare una Promise rigettata non gestita che blocca lo spinner all'infinito.
+const isAppleCancel = (e: unknown): boolean =>
+  (e as { code?: string } | null)?.code === 'ERR_REQUEST_CANCELED';
+
+/** Apple Sign In nativo → identity token (null se annullato; throw su errore reale). */
 export const getAppleIdToken = async (): Promise<string | null> => {
-  const credential = await AppleAuthentication.signInAsync({
-    requestedScopes: [
-      AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-      AppleAuthentication.AppleAuthenticationScope.EMAIL,
-    ],
-  });
-  return credential.identityToken ?? null;
+  try {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+    return credential.identityToken ?? null;
+  } catch (e) {
+    if (isAppleCancel(e)) return null;
+    throw e;
+  }
 };
 
 /** Google Sign In nativo → id-token (null se annullato). v13+: { type, data }. */
@@ -89,8 +102,13 @@ export const getGoogleIdToken = async (): Promise<string | null> => {
  * (signInWithIdToken non espone il refresh-token Apple). Null se annullato.
  */
 export const getAppleAuthCodeForDeletion = async (): Promise<string | null> => {
-  const credential = await AppleAuthentication.signInAsync({
-    requestedScopes: [],
-  });
-  return credential.authorizationCode ?? null;
+  try {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [],
+    });
+    return credential.authorizationCode ?? null;
+  } catch (e) {
+    if (isAppleCancel(e)) return null;
+    throw e;
+  }
 };

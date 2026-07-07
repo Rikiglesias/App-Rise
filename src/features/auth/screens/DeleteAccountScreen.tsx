@@ -37,15 +37,25 @@ export const DeleteAccountScreen: React.FC = () => {
   const runDeleteNow = useCallback(async (): Promise<void> => {
     setError(undefined);
     setLoading(true);
-    let appleAuthCode: string | undefined;
-    if (isApple) {
-      const code = await getAppleAuthCodeForDeletion();
-      appleAuthCode = code ?? undefined;
+    try {
+      let appleAuthCode: string | undefined;
+      if (isApple) {
+        // Re-login Apple richiesto per revocare i token (App Store 5.1.1(v)).
+        // null = l'utente ha annullato lo sheet → NON cancellare l'account
+        // (senza il code la revoca Apple non avverrebbe): esci pulito, il
+        // finally sblocca il bottone. Un errore reale rilancia → catch sotto.
+        const code = await getAppleAuthCodeForDeletion();
+        if (!code) return;
+        appleAuthCode = code;
+      }
+      const { error: err } = await deleteAccountNow(appleAuthCode);
+      if (err) setError(t('auth.delete.error'));
+      // Su successo l'AuthContext porta lo stato a unauthenticated (signOut).
+    } catch {
+      setError(t('auth.delete.error'));
+    } finally {
+      setLoading(false);
     }
-    const { error: err } = await deleteAccountNow(appleAuthCode);
-    setLoading(false);
-    if (err) setError(t('auth.delete.error'));
-    // Su successo l'AuthContext porta lo stato a unauthenticated (signOut).
   }, [isApple, deleteAccountNow, t]);
 
   const runSchedule = useCallback(async (): Promise<void> => {

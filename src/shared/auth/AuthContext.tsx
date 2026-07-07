@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { Platform } from 'react-native';
 import type { Session } from '@supabase/supabase-js';
+import * as Sentry from '@sentry/react-native';
 
 import { supabase } from './supabaseClient';
 import {
@@ -36,8 +37,27 @@ import type {
 } from './types';
 import { PROFILE_EDITABLE_KEYS } from './types';
 import { env } from '@/shared/config/environment';
+import { logWarn } from '@/shared/utils/logger';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
+
+// Telemetria auth: senza questa, login/registrazioni/cancellazioni FALLITE sono
+// invisibili in produzione (l'errore Supabase viene solo mostrato in UI e perso).
+// Emette un breadcrumb Sentry sempre + captureMessage sui fallimenti, così il
+// contesto arriva anche a un crash successivo. MAI PII: nessuna email/password/token,
+// solo l'esito e il messaggio d'errore GoTrue (già generico, es. "Invalid credentials").
+const authTelemetry = (event: string, errorMessage?: string | null): void => {
+  Sentry.addBreadcrumb({
+    category: 'auth',
+    message: event,
+    level: errorMessage ? 'warning' : 'info',
+    ...(errorMessage ? { data: { error: errorMessage } } : {}),
+  });
+  if (errorMessage) {
+    logWarn(`auth ${event} failed`, 'auth', { error: errorMessage });
+    Sentry.captureMessage(`auth.${event}_failed`, 'warning');
+  }
+};
 
 export interface AuthState {
   status: Status;
@@ -146,6 +166,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       email,
       password,
     });
+    authTelemetry('signin', error?.message);
     return { error: error?.message ?? null };
   }, []);
 
@@ -174,6 +195,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           },
         },
       });
+      authTelemetry('signup', error?.message);
       return { error: error?.message ?? null };
     },
     []
@@ -189,11 +211,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: buildResetRedirectTo(),
     });
+    authTelemetry('reset_password', error?.message);
     return { error: error?.message ?? null };
   }, []);
 
   const updatePassword = useCallback(async (newPassword: string) => {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
+    authTelemetry('update_password', error?.message);
     return { error: error?.message ?? null };
   }, []);
 
@@ -226,23 +250,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const signInWithApple = useCallback(async () => {
-    const token = await getAppleIdToken();
-    if (!token) return { error: 'apple_cancelled' };
-    const { error } = await supabase.auth.signInWithIdToken({
-      provider: 'apple',
-      token,
-    });
-    return { error: error?.message ?? null };
+    try {
+      const token = await getAppleIdToken();
+      if (!token) return { error: 'apple_cancelled' };
+      const { error } = await supabase.auth.signInWithIdToken({
+        provider: 'apple',
+        token,
+      });
+      authTelemetry('signin_apple', error?.message);
+      return { error: error?.message ?? null };
+    } catch (e) {
+      // getAppleIdToken rilancia gli errori Apple NON-annullamento: qui li
+      // trasformiamo in un esito gestibile (niente unhandled rejection nel caller).
+      authTelemetry('signin_apple', (e as Error)?.message ?? 'apple_error');
+      return { error: 'apple_error' };
+    }
   }, []);
 
   const signInWithGoogle = useCallback(async () => {
-    const token = await getGoogleIdToken();
-    if (!token) return { error: 'google_cancelled' };
-    const { error } = await supabase.auth.signInWithIdToken({
-      provider: 'google',
-      token,
-    });
-    return { error: error?.message ?? null };
+    try {
+      const token = await getGoogleIdToken();
+      if (!token) return { error: 'google_cancelled' };
+      const { error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token,
+      });
+      authTelemetry('signin_google', error?.message);
+      return { error: error?.message ?? null };
+    } catch (e) {
+      authTelemetry('signin_google', (e as Error)?.message ?? 'google_error');
+      return { error: 'google_error' };
+    }
   }, []);
 
   const refreshProfile = useCallback(async () => {
@@ -273,6 +311,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateEmail = useCallback(async (email: string) => {
     const { error } = await supabase.auth.updateUser({ email });
+    authTelemetry('update_email', error?.message);
     return { error: error?.message ?? null };
   }, []);
 
@@ -281,6 +320,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const { error } = await supabase.functions.invoke('delete-account', {
       body,
     });
+    authTelemetry('delete_account', error?.message);
     if (error) return { error: error.message };
     await supabase.auth.signOut();
     return { error: null };

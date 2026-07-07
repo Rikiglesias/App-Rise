@@ -16,6 +16,22 @@ import { env } from '@/shared/config/environment';
 const supabaseUrl = env.SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseAnonKey = env.SUPABASE_ANON_KEY || 'public-anon-key-placeholder';
 
+// Il fetch di React Native non ha timeout: una rete che apre la connessione ma poi
+// stalla (metro, ascensore, captive portal) lascia le chiamate auth/PostgREST
+// pendenti all'infinito → lo spinner del login gira per sempre e il bottone resta
+// disabilitato, senza modo di annullare. Un AbortController a 15s le fa fallire con
+// un errore di rete gestibile. Se la chiamata porta già un proprio signal (alcune
+// operazioni Supabase lo passano) lo rispettiamo, per non annullarne l'abort nativo.
+const TIMEOUT_MS = 15000;
+const fetchWithTimeout: typeof fetch = (input, init) => {
+  if (init?.signal) return fetch(input, init);
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  return fetch(input, { ...init, signal: controller.signal }).finally(() =>
+    clearTimeout(id)
+  );
+};
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: authStorage,
@@ -23,6 +39,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     detectSessionInUrl: false,
   },
+  global: { fetch: fetchWithTimeout },
 });
 
 AppState.addEventListener('change', state => {
