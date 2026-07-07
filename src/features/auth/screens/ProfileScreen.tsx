@@ -178,7 +178,11 @@ export const ProfileScreen: React.FC = () => {
           variant="link"
         />
       )}
-      <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
+      <AuthButton
+        label={t('auth.profile.logout')}
+        onPress={handleLogout}
+        variant="secondary"
+      />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.consents.title')}
@@ -190,6 +194,8 @@ export const ProfileScreen: React.FC = () => {
         <Switch
           value={profile?.marketing_consent ?? false}
           onValueChange={handleMarketingToggle}
+          trackColor={{ true: Colors.primary[500], false: colors.neutral[300] }}
+          ios_backgroundColor={colors.neutral[300]}
           accessibilityLabel={t('auth.consents.marketing')}
         />
       </View>

@@ -111,7 +111,9 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
       container: {
         backgroundColor: colors.neutral[0],
         borderWidth: scale(1),
-        borderColor: colors.neutral[200],
+        // Bordo rosso in errore come tutti gli altri campi (AuthInput/City/Date):
+        // senza, il telefono è l'unico che segnala l'errore solo col testo sotto.
+        borderColor: error ? Colors.semantic.error.main : colors.neutral[200],
         borderRadius: scale(12),
         // Altezza uniforme a tutti gli altri campi della pagina.
         minHeight: scale(48),
@@ -122,7 +124,7 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
       callingCode: { color: colors.neutral[900] },
       caret: { color: colors.neutral[500] },
     }),
-    [colors]
+    [colors, error]
   );
 
   return (
