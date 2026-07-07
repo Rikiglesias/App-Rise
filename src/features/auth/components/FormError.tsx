@@ -4,8 +4,8 @@ import { View, type StyleProp, type TextStyle } from 'react-native';
 import { PerfectText } from '@/components/ui';
 
 interface FormErrorProps {
-  /** Messaggio d'errore; se assente/null/vuoto non renderizza nulla. */
-  message?: string | null;
+  /** Messaggio d'errore; se assente/null/undefined/vuoto non renderizza nulla. */
+  message?: string | null | undefined;
   size?: number;
   style?: StyleProp<TextStyle>;
 }

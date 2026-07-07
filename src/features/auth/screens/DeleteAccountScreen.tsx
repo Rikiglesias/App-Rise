@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -107,11 +108,7 @@ export const DeleteAccountScreen: React.FC = () => {
         disabled={loading}
       />
 
-      {error ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {error}
-        </PerfectText>
-      ) : null}
+      <FormError message={error} style={styles.error} />
     </AuthScreen>
   );
 };

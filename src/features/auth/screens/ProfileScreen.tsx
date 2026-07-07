@@ -5,6 +5,7 @@ import { getCountryByCca2, type ICountryCca2 } from 'rn-country-select';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { LoginScreen } from './LoginScreen';
 import { ReConsentScreen } from './ReConsentScreen';
 import { PerfectText } from '@/components/ui';
@@ -165,11 +166,7 @@ export const ProfileScreen: React.FC = () => {
             variant="link"
             disabled={deletionBusy}
           />
-          {deletionError ? (
-            <PerfectText size={13} lines={2} style={styles.error}>
-              {deletionError}
-            </PerfectText>
-          ) : null}
+          <FormError message={deletionError} size={13} style={styles.error} />
         </View>
       ) : null}
 
@@ -246,11 +243,7 @@ export const ProfileScreen: React.FC = () => {
       <PerfectText size={13} lines={2} style={styles.hint}>
         {t('auth.consents.marketingHint')}
       </PerfectText>
-      {consentError ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {consentError}
-        </PerfectText>
-      ) : null}
+      <FormError message={consentError} size={13} style={styles.error} />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.privacy.title')}
@@ -261,11 +254,7 @@ export const ProfileScreen: React.FC = () => {
         variant="link"
         disabled={exporting}
       />
-      {exportError ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {exportError}
-        </PerfectText>
-      ) : null}
+      <FormError message={exportError} size={13} style={styles.error} />
       <AuthButton
         label={t('auth.privacy.deleteCta')}
         onPress={handleDelete}

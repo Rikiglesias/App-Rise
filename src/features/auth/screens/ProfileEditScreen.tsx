@@ -6,6 +6,7 @@ import { AuthInput } from '../components/AuthInput';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -228,11 +229,7 @@ export const ProfileEditScreen: React.FC = () => {
         autoCapitalize="none"
       />
 
-      {submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {submitError}
-        </PerfectText>
-      ) : null}
+      <FormError message={submitError} style={styles.error} />
       {pendingEmail ? (
         <PerfectText size={14} lines={3} style={styles.pending}>
           {t('auth.edit.emailPending', { email: pendingEmail })}
