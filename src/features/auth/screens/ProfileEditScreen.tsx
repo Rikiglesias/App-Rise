@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthDateField } from '../components/AuthDateField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
@@ -216,18 +217,17 @@ export const ProfileEditScreen: React.FC = () => {
         <AuthInput
           label={t('auth.signup.province')}
           value={province}
-          onChangeText={setProvince}
           error={err(errors.province)}
-          autoCapitalize="characters"
+          editable={false}
+          placeholder={t('auth.signup.provincePlaceholder')}
         />
       ) : null}
-      <AuthInput
+      <AuthDateField
         label={t('auth.signup.birthDate')}
         value={birthDate}
-        onChangeText={setBirthDate}
+        onChange={setBirthDate}
         error={err(errors.birthDate)}
-        placeholder="2000-01-31"
-        autoCapitalize="none"
+        placeholder={t('auth.signup.birthDatePlaceholder')}
       />
 
       <FormError message={submitError} style={styles.error} />
