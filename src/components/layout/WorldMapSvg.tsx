@@ -13,12 +13,25 @@ import { GestureDetector } from 'react-native-gesture-handler';
 
 import { buildMapGeometry, matchLocationsToCountries } from './worldMapGeo';
 import MapPin from './MapPin';
+import MapLabel from './MapLabel';
 import MapLegend from './MapLegend';
 import { useMapZoom } from './useMapZoom';
 import { scale } from '@/shared/constants/perfectScale';
+import { formatStat } from '@/shared/utils/numberFormat';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import type { Location } from '@/shared/types/location';
+
+// Stat compatta per la label sulla mappa: i pasti sono la metrica-guida della
+// missione (il flusso confeziona→spedisce pasti); i kit come ripiego dove non ci
+// sono pasti. Nessun dato → nessuna stat (solo il nome del Paese).
+const compactStat = (location: Location): string | undefined => {
+  if (location.meals && location.meals > 0)
+    return `${formatStat(location.meals)} pasti`;
+  if (location.kits && location.kits > 0)
+    return `${formatStat(location.kits)} kit`;
+  return undefined;
+};
 
 interface Props {
   locations: Location[];
@@ -99,14 +112,19 @@ const WorldMapSvgComponent: React.FC<Props> = ({
     [activeByCountryId]
   );
 
+  // Fullscreen = vista-continente (2 destinazioni vicine): zoom-out marcato per il
+  // contesto continentale. Preview = 4 destinazioni sparse su 2 continenti: fit
+  // stretto (Europa+Africa croppate), niente mini-mondo con oceani vuoti.
+  const contextZoom = isFullScreen ? 0.62 : 0.9;
+
   // geoPath è costoso: ricalcola geometria (paesi + proiettore di punti) solo al
-  // cambio di viewport o focus.
+  // cambio di viewport, focus o livello di contesto.
   const geometry = useMemo(
     () =>
       size.width > 0 && size.height > 0
-        ? buildMapGeometry(size.width, size.height, focusIds)
+        ? buildMapGeometry(size.width, size.height, focusIds, contextZoom)
         : null,
-    [size.width, size.height, focusIds]
+    [size.width, size.height, focusIds, contextZoom]
   );
 
   const shapes = geometry?.shapes ?? [];
@@ -159,21 +177,23 @@ const WorldMapSvgComponent: React.FC<Props> = ({
                 const isActive = shape.id
                   ? activeByCountryId.has(shape.id)
                   : false;
-                // Il paese-destinazione è una tinta tenue (contesto): il pin sopra
-                // è l'elemento forte e il target tap preciso a livello-città.
+                // Paese-destinazione = "acceso" per contrasto neutro (una tinta più
+                // presente della terra circostante) + hairline rosso brand crisp. Il
+                // rosso resta ACCENTO (bordo + pin + etichetta), non un riempimento
+                // "sangue" muddy: coerente col login (rosso usato con parsimonia).
                 return (
                   <CountryPath
                     key={shape.id || `country-${index}`}
                     d={shape.d}
                     {...(isActive
                       ? {
-                          fill: colors.primary[500],
-                          fillOpacity: 0.16,
+                          fill: colors.neutral[400],
+                          fillOpacity: 1,
                           stroke: colors.primary[500],
-                          strokeWidth: scale(1),
+                          strokeWidth: scale(1.4),
                         }
                       : {
-                          fill: colors.neutral[300],
+                          fill: colors.neutral[200],
                           stroke: colors.neutral[100],
                           strokeWidth: scale(0.5),
                         })}
@@ -183,19 +203,34 @@ const WorldMapSvgComponent: React.FC<Props> = ({
             </Svg>
           ) : null}
 
-          {/* Pin overlay (animati): allineati all'<Svg> e trasformati con esso. */}
+          {/* Pin overlay (animati): allineati all'<Svg> e trasformati con esso.
+              In fullscreen il pin porta anche la label "mission map" (nome Paese +
+              stat): la preview resta pulita coi soli pin (le label crowderebbero i
+              4 pin ravvicinati del mini-mondo). */}
           {pins.map(({ location, x, y }) => (
-            <MapPin
-              key={location.id}
-              x={x}
-              y={y}
-              dotSize={scale(13)}
-              haloSize={scale(40)}
-              color={colors.primary[500]}
-              ringColor={colors.neutral[0]}
-              onPress={createPressHandler(location)}
-              accessibilityLabel={`${location.country}: tocca per i dettagli`}
-            />
+            <React.Fragment key={location.id}>
+              <MapPin
+                x={x}
+                y={y}
+                dotSize={scale(13)}
+                haloSize={scale(40)}
+                color={colors.primary[500]}
+                ringColor={colors.neutral[0]}
+                onPress={createPressHandler(location)}
+                accessibilityLabel={`${location.country}: tocca per i dettagli`}
+              />
+              {isFullScreen ? (
+                <MapLabel
+                  x={x}
+                  y={y}
+                  anchorGap={scale(24)}
+                  country={location.country}
+                  stat={compactStat(location)}
+                  onPress={createPressHandler(location)}
+                  accessibilityLabel={`${location.country}: tocca per i dettagli`}
+                />
+              ) : null}
+            </React.Fragment>
           ))}
         </Animated.View>
       </GestureDetector>

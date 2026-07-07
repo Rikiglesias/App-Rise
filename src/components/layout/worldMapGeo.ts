@@ -13,7 +13,7 @@
  *   hanno solo il nome paese in italiano ("Italia"), il TopoJSON in inglese ("Italy").
  *   Il containment geografico è esatto e indipendente da lingua/spelling.
  */
-import { geoEqualEarth, geoPath, geoContains } from 'd3-geo';
+import { geoEqualEarth, geoPath, geoContains, geoCentroid } from 'd3-geo';
 import { feature } from 'topojson-client';
 import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import type { Topology, GeometryCollection } from 'topojson-specification';
@@ -62,7 +62,8 @@ export interface MapGeometry {
 const buildProjection = (
   width: number,
   height: number,
-  focusFeatureIds?: readonly string[]
+  focusFeatureIds?: readonly string[],
+  contextZoom: number = 0.62
 ) => {
   const focus: FeatureCollection<Geometry, CountryProps> =
     focusFeatureIds && focusFeatureIds.length > 0
@@ -74,13 +75,31 @@ const buildProjection = (
         }
       : collection;
   const pad = Math.min(width, height) * 0.12;
-  return geoEqualEarth().fitExtent(
+  const projection = geoEqualEarth().fitExtent(
     [
       [pad, pad],
       [width - pad, height - pad],
     ],
     focus
   );
+  // Con un focus di destinazioni, `fitExtent` zooma finché riempiono il frame:
+  // 2 paesi lontani (Zimbabwe↕Sudafrica) lasciano un vuoto sbilanciato. Zoomiamo
+  // INDIETRO tenendo il baricentro centrato, così il contesto geografico attorno
+  // equilibra la composizione. `contextZoom` scala l'effetto: più basso = più
+  // contesto (vista-continente fullscreen 0.62); vicino a 1 = fit stretto sulle
+  // destinazioni (preview: Europa+Africa croppate, niente mini-mondo con oceani vuoti).
+  if (focusFeatureIds && focusFeatureIds.length > 0 && contextZoom < 1) {
+    projection.scale(projection.scale() * contextZoom);
+    const projectedCentroid = projection(geoCentroid(focus));
+    if (projectedCentroid) {
+      const [tx, ty] = projection.translate();
+      projection.translate([
+        tx + (width / 2 - projectedCentroid[0]),
+        ty + (height / 2 - projectedCentroid[1]),
+      ]);
+    }
+  }
+  return projection;
 };
 
 /**
@@ -106,9 +125,15 @@ export const buildCountryShapes = (
 export const buildMapGeometry = (
   width: number,
   height: number,
-  focusFeatureIds?: readonly string[]
+  focusFeatureIds?: readonly string[],
+  contextZoom: number = 0.62
 ): MapGeometry => {
-  const projection = buildProjection(width, height, focusFeatureIds);
+  const projection = buildProjection(
+    width,
+    height,
+    focusFeatureIds,
+    contextZoom
+  );
   const path = geoPath(projection);
   const shapes = collection.features.map(f => ({
     id: f.id !== undefined ? String(f.id) : '',
