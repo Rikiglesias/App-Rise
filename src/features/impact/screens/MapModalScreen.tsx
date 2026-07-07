@@ -18,8 +18,12 @@ import InteractiveMap from '@/components/layout/InteractiveMap';
 import type { Continent, Location } from '@/shared/types/location';
 import MapLocationSheet from '@/components/layout/MapLocationSheet';
 import type { ImpactStackParamList } from '@/navigation/types';
-import { BorderRadius, PerfectSpacing } from '@/shared/constants';
-import { scaleTouch, scaleSpacing } from '@/shared/constants/perfectScale';
+import { BorderRadius, PerfectSpacing, Shadows } from '@/shared/constants';
+import {
+  scale,
+  scaleTouch,
+  scaleSpacing,
+} from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -140,19 +144,27 @@ const MapModalScreen: React.FC = () => {
         isFullScreen
       />
 
-      {/* Header */}
+      {/* Header: titolo sopra il sottotitolo (in riga si troncavano a vicenda),
+          X in linea col testo — bordo + fondo pieno per affordance chiara. */}
       <PerfectContainer style={styles.header}>
-        <PerfectText size={24} lines={1} fontWeight="800" style={styles.title}>
-          {t('impact.interactiveMap')}
-        </PerfectText>
-        <PerfectText
-          size={16}
-          lines={1}
-          fontWeight="400"
-          style={styles.subtitle}
-        >
-          {t('impact.tapPins')}
-        </PerfectText>
+        <View style={styles.headerText}>
+          <PerfectText
+            size={20}
+            lines={1}
+            fontWeight="800"
+            style={styles.title}
+          >
+            {t('impact.interactiveMap')}
+          </PerfectText>
+          <PerfectText
+            size={13}
+            lines={1}
+            fontWeight="400"
+            style={styles.subtitle}
+          >
+            {t('impact.tapPins')}
+          </PerfectText>
+        </View>
 
         <PlatformTouchable
           style={styles.closeButton}
@@ -161,7 +173,7 @@ const MapModalScreen: React.FC = () => {
           accessibilityRole="button"
           accessibilityLabel={t('impact.closeMap')}
         >
-          <PerfectIcon name="close" size={24} color={colors.neutral[0]} />
+          <PerfectIcon name="close" size={22} color={colors.neutral[700]} />
         </PlatformTouchable>
       </PerfectContainer>
 
@@ -225,13 +237,12 @@ const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.neutral[100],
     },
     closeButton: {
-      position: 'absolute',
-      top: PerfectSpacing['3xl'],
-      right: scaleSpacing(20),
-      backgroundColor: `${colors.neutral[0]}99`,
-      width: scaleTouch(44),
-      height: scaleTouch(44),
-      borderRadius: 22,
+      backgroundColor: colors.neutral[100],
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+      width: scaleTouch(40),
+      height: scaleTouch(40),
+      borderRadius: scaleTouch(40) / 2,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -239,18 +250,26 @@ const createStyles = (colors: ThemeColors) =>
       position: 'absolute',
       top: PerfectSpacing['3xl'],
       left: scaleSpacing(20),
-      right: PerfectSpacing['3xl'],
-      backgroundColor: `${colors.neutral[0]}99`,
+      right: scaleSpacing(20),
+      backgroundColor: `${colors.neutral[0]}E6`,
       paddingVertical: PerfectSpacing.sm,
-      paddingHorizontal: PerfectSpacing.base,
+      paddingLeft: PerfectSpacing.base,
+      paddingRight: PerfectSpacing.sm,
       borderRadius: BorderRadius.lg,
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      ...Shadows.sm,
+    },
+    headerText: {
+      flex: 1,
+      marginRight: PerfectSpacing.sm,
     },
     continentRow: {
       position: 'absolute',
-      top: PerfectSpacing['3xl'] + scaleSpacing(60),
+      top: PerfectSpacing['3xl'] + scaleSpacing(72),
       left: 0,
       right: 0,
     },
@@ -260,7 +279,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     filterRow: {
       position: 'absolute',
-      top: PerfectSpacing['3xl'] + scaleSpacing(112),
+      top: PerfectSpacing['3xl'] + scaleSpacing(124),
       left: scaleSpacing(20),
       right: scaleSpacing(20),
       flexDirection: 'row',
@@ -270,11 +289,12 @@ const createStyles = (colors: ThemeColors) =>
     },
     title: {
       color: colors.neutral[900],
-      textAlign: 'center',
+      textAlign: 'left',
     },
     subtitle: {
       color: colors.neutral[600],
-      textAlign: 'center',
+      textAlign: 'left',
+      marginTop: scale(1),
     },
   });
 

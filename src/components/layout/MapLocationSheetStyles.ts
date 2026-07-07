@@ -97,6 +97,30 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[600],
       marginTop: scale(4),
     },
+    // Hero a stat singola: stessa "carta" delle stat-cell ma orizzontale e a
+    // tutta larghezza (una card sola centrata leggeva vuota/sparsa).
+    statHero: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.neutral[50],
+      borderRadius: scale(16),
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+      padding: PerfectSpacing.base,
+      marginBottom: PerfectSpacing.lg,
+    },
+    statHeroIcon: {
+      width: scale(48),
+      height: scale(48),
+      borderRadius: scale(24),
+      backgroundColor: colors.neutral[100],
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: PerfectSpacing.base,
+    },
+    statHeroText: {
+      flex: 1,
+    },
     statsNote: {
       color: colors.neutral[500],
       fontStyle: 'italic',

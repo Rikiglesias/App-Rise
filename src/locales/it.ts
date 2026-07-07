@@ -257,6 +257,9 @@ export default {
     whereWeOperate: 'Dove Operiamo',
     ourOperationsWorld: 'Le nostre operazioni nel mondo',
     tapToExplore: 'Tocca per esplorare',
+    mapSummaryDestinations: 'Destinazioni',
+    mapSummaryContinents: 'Continenti',
+    mapSummaryMeals: 'Pasti',
   },
 
   actions: {

@@ -12,6 +12,7 @@ import { BorderRadius, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { getWindowDimensions, scale } from '@/shared/constants/perfectScale';
 import { sectionHeaderBackground } from '@/shared/styles';
+import { formatStat } from '@/shared/utils/numberFormat';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -46,6 +47,21 @@ export const MapSection: React.FC<Props> = React.memo(
       : baseContainerWidth;
     const aspectRatio = isTablet ? 361 / 220 : 361 / 280;
     const computedHeight = Math.round(containerWidth / aspectRatio);
+
+    // Riepilogo missione della preview: la sintesi che la mini-mappa da sola
+    // non comunica (destinazioni sparse su 2 continenti a scala mondo).
+    const summary = useMemo(() => {
+      if (locations.length === 0) return null;
+      const continents = new Set(
+        locations.map(l => l.continent).filter(Boolean)
+      );
+      const totalMeals = locations.reduce((sum, l) => sum + (l.meals ?? 0), 0);
+      return {
+        destinations: locations.length,
+        continents: continents.size,
+        meals: totalMeals,
+      };
+    }, [locations]);
 
     return (
       <PerfectContainer
@@ -114,6 +130,75 @@ export const MapSection: React.FC<Props> = React.memo(
               color={colors.neutral[600]}
             />
           </PerfectContainer>
+
+          {/* Riepilogo missione (destinazioni · continenti · pasti): dà sostanza
+              alla preview; non intercetta il tap che apre la fullscreen. */}
+          {summary ? (
+            <View style={styles.summaryStrip} pointerEvents="none">
+              <View style={styles.summaryItem}>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  fontWeight="800"
+                  immunity={true}
+                  style={styles.summaryValue}
+                >
+                  {`${summary.destinations}`}
+                </PerfectText>
+                <PerfectText
+                  size={10}
+                  lines={1}
+                  fontWeight="600"
+                  immunity={true}
+                  style={styles.summaryLabel}
+                >
+                  {t('impact.mapSummaryDestinations')}
+                </PerfectText>
+              </View>
+              <View style={styles.summaryDivider} />
+              <View style={styles.summaryItem}>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  fontWeight="800"
+                  immunity={true}
+                  style={styles.summaryValue}
+                >
+                  {`${summary.continents}`}
+                </PerfectText>
+                <PerfectText
+                  size={10}
+                  lines={1}
+                  fontWeight="600"
+                  immunity={true}
+                  style={styles.summaryLabel}
+                >
+                  {t('impact.mapSummaryContinents')}
+                </PerfectText>
+              </View>
+              <View style={styles.summaryDivider} />
+              <View style={styles.summaryItem}>
+                <PerfectText
+                  size={16}
+                  lines={1}
+                  fontWeight="800"
+                  immunity={true}
+                  style={styles.summaryMeals}
+                >
+                  {formatStat(summary.meals)}
+                </PerfectText>
+                <PerfectText
+                  size={10}
+                  lines={1}
+                  fontWeight="600"
+                  immunity={true}
+                  style={styles.summaryLabel}
+                >
+                  {t('impact.mapSummaryMeals')}
+                </PerfectText>
+              </View>
+            </View>
+          ) : null}
         </PlatformTouchable>
       </PerfectContainer>
     );
@@ -158,6 +243,44 @@ const createStyles = (colors: ThemeColors) =>
     },
     mapClickText: {
       color: colors.neutral[600],
+    },
+    summaryStrip: {
+      position: 'absolute',
+      left: PerfectSpacing.sm,
+      right: PerfectSpacing.sm,
+      bottom: PerfectSpacing.sm,
+      flexDirection: 'row',
+      alignItems: 'stretch',
+      backgroundColor: colors.neutral[0],
+      borderRadius: BorderRadius.lg,
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+      paddingVertical: PerfectSpacing.sm,
+      ...Shadows.sm,
+    },
+    summaryItem: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    summaryDivider: {
+      width: scale(1),
+      backgroundColor: colors.neutral[200],
+      marginVertical: scale(2),
+    },
+    summaryValue: {
+      color: colors.neutral[900],
+      includeFontPadding: false,
+    },
+    // I pasti sono la metrica-missione: unico accento brand della strip.
+    summaryMeals: {
+      color: colors.primary[600],
+      includeFontPadding: false,
+    },
+    summaryLabel: {
+      color: colors.neutral[600],
+      letterSpacing: scale(0.3),
+      marginTop: scale(1),
     },
     mapHeaderContainer: {
       alignItems: 'center',

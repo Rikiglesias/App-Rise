@@ -151,8 +151,13 @@ const WorldMapSvgComponent: React.FC<Props> = ({
       );
   }, [geometry, locations]);
 
-  // Pinch-zoom + pan, azzerato quando cambia il continente (set di paesi-focus).
-  const { gesture, animatedStyle } = useMapZoom(focusIds.join(','));
+  // Pinch-zoom + pan (clamp ai bordi + pinch focale), azzerato quando cambia il
+  // continente (set di paesi-focus). Il viewport serve per i limiti di pan.
+  const { gesture, animatedStyle } = useMapZoom(
+    focusIds.join(','),
+    size.width,
+    size.height
+  );
 
   return (
     <View
@@ -204,9 +209,10 @@ const WorldMapSvgComponent: React.FC<Props> = ({
           ) : null}
 
           {/* Pin overlay (animati): allineati all'<Svg> e trasformati con esso.
-              In fullscreen il pin porta anche la label "mission map" (nome Paese +
-              stat): la preview resta pulita coi soli pin (le label crowderebbero i
-              4 pin ravvicinati del mini-mondo). */}
+              In fullscreen il pin è un bottone e porta anche la label "mission map"
+              (nome Paese + stat). In preview i pin sono DECORATIVI (niente bottoni
+              noop nell'albero a11y: il tap vive sul container che apre la mappa) e
+              senza label (crowderebbero i 4 pin ravvicinati del mini-mondo). */}
           {pins.map(({ location, x, y }) => (
             <React.Fragment key={location.id}>
               <MapPin
@@ -216,7 +222,9 @@ const WorldMapSvgComponent: React.FC<Props> = ({
                 haloSize={scale(40)}
                 color={colors.primary[500]}
                 ringColor={colors.neutral[0]}
-                onPress={createPressHandler(location)}
+                onPress={
+                  isFullScreen ? createPressHandler(location) : undefined
+                }
                 accessibilityLabel={`${location.country}: tocca per i dettagli`}
               />
               {isFullScreen ? (
@@ -243,12 +251,16 @@ const WorldMapSvgComponent: React.FC<Props> = ({
         </View>
       ) : null}
 
-      {/* Fallback a11y + target tap robusto, fuori dal layer di zoom/pan */}
-      <MapLegend
-        locations={locations}
-        onSelect={onMarkerPress}
-        isFullScreen={isFullScreen}
-      />
+      {/* Fallback a11y + target tap robusto, fuori dal layer di zoom/pan.
+          Solo fullscreen: in preview sarebbero bottoni duplicati senza azione
+          (il riepilogo della preview vive in MapSection). */}
+      {isFullScreen ? (
+        <MapLegend
+          locations={locations}
+          onSelect={onMarkerPress}
+          isFullScreen
+        />
+      ) : null}
     </View>
   );
 };

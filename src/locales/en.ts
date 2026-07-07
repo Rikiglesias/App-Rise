@@ -257,6 +257,9 @@ export default {
     whereWeOperate: 'Where We Operate',
     ourOperationsWorld: 'Our operations worldwide',
     tapToExplore: 'Tap to explore',
+    mapSummaryDestinations: 'Destinations',
+    mapSummaryContinents: 'Continents',
+    mapSummaryMeals: 'Meals',
   },
 
   actions: {

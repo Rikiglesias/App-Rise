@@ -44,8 +44,10 @@ describe('WorldMapSvg', () => {
     );
   });
 
-  it('non crasha prima della misura del viewport (nessun path ancora)', () => {
-    const { getByText } = render(
+  it('preview: nessun bottone duplicato (né legend né label, pin decorativi)', () => {
+    // In preview il tap vive sul container (MapSection): la mappa non deve
+    // esporre bottoni noop nell'albero a11y (né chip legend né label né pin).
+    const utils = render(
       <AllProviders>
         <WorldMapSvg
           locations={convertToMapLocations()}
@@ -53,7 +55,13 @@ describe('WorldMapSvg', () => {
         />
       </AllProviders>
     );
-    // I chip esistono anche senza layout (fuori dal guard shapes>0).
-    expect(getByText('Italia')).toBeTruthy();
+    // Prima della misura: nessun crash, nessun contenuto interattivo.
+    expect(utils.queryAllByRole('button')).toHaveLength(0);
+    // Dopo la misura i pin esistono ma restano decorativi (nessun bottone).
+    fireEvent(utils.getByTestId('world-map-svg'), 'layout', {
+      nativeEvent: { layout: { width: 800, height: 400, x: 0, y: 0 } },
+    });
+    expect(utils.queryByText('Italia')).toBeNull();
+    expect(utils.queryAllByRole('button')).toHaveLength(0);
   });
 });

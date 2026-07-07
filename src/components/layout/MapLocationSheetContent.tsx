@@ -29,6 +29,14 @@ const TRANSPORT_INFO: Record<
   local: { icon: 'hand-heart', label: 'Distribuzione locale alle famiglie' },
 };
 
+// Icona per metrica: usata dall'hero a stat singola (una card sola e vuota
+// leggeva "sparso"; con icona + numero grande diventa una riga intenzionale).
+const STAT_ICONS: Record<string, string> = {
+  Pasti: 'food',
+  Kit: 'package-variant-closed',
+  Scuole: 'school',
+};
+
 interface MapLocationSheetContentProps {
   data: MapModalData;
   onClose: () => void;
@@ -72,6 +80,9 @@ const MapLocationSheetContent: React.FC<MapLocationSheetContentProps> = ({
   ].filter((c): c is StatCell => c !== null);
 
   const transport = TRANSPORT_INFO[data.trace.transport];
+
+  // Una sola metrica → hero row a tutta larghezza invece della card isolata.
+  const soloStat = statCells.length === 1 ? statCells[0] : undefined;
 
   return (
     <>
@@ -128,7 +139,35 @@ const MapLocationSheetContent: React.FC<MapLocationSheetContentProps> = ({
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {statCells.length > 0 ? (
+        {soloStat ? (
+          <View style={styles.statHero}>
+            <View style={styles.statHeroIcon}>
+              <PerfectIcon
+                name={STAT_ICONS[soloStat.label] ?? 'chart-box'}
+                size={26}
+                color={colors.primary[500]}
+              />
+            </View>
+            <View style={styles.statHeroText}>
+              <PerfectText
+                size={26}
+                lines={1}
+                fontWeight="900"
+                style={styles.statValue}
+              >
+                {formatStat(soloStat.value)}
+              </PerfectText>
+              <PerfectText
+                size={13}
+                lines={1}
+                fontWeight="600"
+                style={styles.statLabel}
+              >
+                {soloStat.label}
+              </PerfectText>
+            </View>
+          </View>
+        ) : statCells.length > 0 ? (
           <View style={styles.statGrid}>
             {statCells.map(s => (
               <View key={s.label} style={styles.statCell}>

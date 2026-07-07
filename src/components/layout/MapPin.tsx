@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, Pressable, View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -19,15 +19,20 @@ interface MapPinProps {
   haloSize: number;
   color: string;
   ringColor: string;
-  onPress: () => void;
+  /**
+   * Assente = pin DECORATIVO (preview): nessun bottone, escluso dall'albero
+   * a11y — il tap vive sul container che apre la mappa fullscreen.
+   */
+  onPress?: (() => void) | undefined;
   accessibilityLabel: string;
 }
 
 /**
  * MapPin — pin destinazione a livello-città, come overlay (NON SVG) per animare con
  * reanimated (parità web + evita i bug noti di animatedProps su react-native-svg).
- * Dot pieno brand + bordo bianco (statico) e un alone "radar" che si espande e svanisce
- * in loop → il marker comunica una sede ATTIVA. Posizionato centrato su (x, y).
+ * Gerarchia su 3 strati: glow statico morbido (ancora il pin alla mappa) → alone
+ * "radar" lento che si espande e svanisce (sede ATTIVA, senza durezza) → dot pieno
+ * brand con bordo. Posizionato centrato su (x, y).
  */
 const MapPinComponent: React.FC<MapPinProps> = ({
   x,
@@ -42,9 +47,10 @@ const MapPinComponent: React.FC<MapPinProps> = ({
   const pulse = useSharedValue(0);
 
   useEffect(() => {
-    // Radar: 0→1 in loop (restart, non reverse). Cleanup obbligatorio (no leak UI-thread).
+    // Radar: 0→1 in loop (restart, non reverse), lento e con easing dolce in
+    // uscita → respiro, non lampeggio. Cleanup obbligatorio (no leak UI-thread).
     pulse.value = withRepeat(
-      withTiming(1, { duration: 1900, easing: Easing.out(Easing.ease) }),
+      withTiming(1, { duration: 2600, easing: Easing.inOut(Easing.ease) }),
       -1,
       false
     );
@@ -52,26 +58,14 @@ const MapPinComponent: React.FC<MapPinProps> = ({
   }, [pulse]);
 
   const haloStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: 0.35 + pulse.value * 0.95 }],
-    opacity: 0.35 * (1 - pulse.value),
+    transform: [{ scale: 0.4 + pulse.value * 0.9 }],
+    opacity: 0.26 * (1 - pulse.value),
   }));
 
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      hitSlop={10}
-      style={[
-        styles.wrap,
-        {
-          left: x - haloSize / 2,
-          top: y - haloSize / 2,
-          width: haloSize,
-          height: haloSize,
-        },
-      ]}
-    >
+  const glowSize = dotSize * 2.2;
+
+  const layers = (
+    <>
       <Animated.View
         pointerEvents="none"
         style={[
@@ -85,7 +79,19 @@ const MapPinComponent: React.FC<MapPinProps> = ({
           haloStyle,
         ]}
       />
-      <Animated.View
+      <View
+        pointerEvents="none"
+        style={[
+          styles.glow,
+          {
+            width: glowSize,
+            height: glowSize,
+            borderRadius: glowSize / 2,
+            backgroundColor: color,
+          },
+        ]}
+      />
+      <View
         pointerEvents="none"
         style={[
           styles.dot,
@@ -98,6 +104,38 @@ const MapPinComponent: React.FC<MapPinProps> = ({
           },
         ]}
       />
+    </>
+  );
+
+  const frame = {
+    left: x - haloSize / 2,
+    top: y - haloSize / 2,
+    width: haloSize,
+    height: haloSize,
+  };
+
+  if (!onPress) {
+    return (
+      <View
+        pointerEvents="none"
+        accessible={false}
+        importantForAccessibility="no-hide-descendants"
+        style={[styles.wrap, frame]}
+      >
+        {layers}
+      </View>
+    );
+  }
+
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      hitSlop={10}
+      style={[styles.wrap, frame]}
+    >
+      {layers}
     </Pressable>
   );
 };
@@ -110,6 +148,10 @@ const styles = StyleSheet.create({
   },
   halo: {
     position: 'absolute',
+  },
+  glow: {
+    position: 'absolute',
+    opacity: 0.14,
   },
   dot: {
     borderWidth: 2,
