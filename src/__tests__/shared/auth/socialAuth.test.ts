@@ -48,10 +48,11 @@ describe('socialAuth', () => {
       expect(signInAsyncMock).toHaveBeenCalledTimes(1);
     });
 
-    it('ritorna null se l’identity token manca', async () => {
+    it('successo SENZA identity token (misconfig): rilancia, non lo tratta come annullamento', async () => {
       signInAsyncMock.mockResolvedValueOnce({ identityToken: null });
-      const token = await getAppleIdToken();
-      expect(token).toBeNull();
+      await expect(getAppleIdToken()).rejects.toThrow(
+        'apple_no_identity_token'
+      );
     });
 
     it('annullamento utente (ERR_REQUEST_CANCELED): ritorna null, non rilancia', async () => {
@@ -76,6 +77,14 @@ describe('socialAuth', () => {
       googleSignInMock.mockResolvedValueOnce({ type: 'cancelled' });
       const token = await getGoogleIdToken();
       expect(token).toBeNull();
+    });
+
+    it('successo SENZA id-token (misconfig): rilancia, non lo tratta come annullamento', async () => {
+      googleSignInMock.mockResolvedValueOnce({
+        type: 'success',
+        data: { idToken: null },
+      });
+      await expect(getGoogleIdToken()).rejects.toThrow('google_no_id_token');
     });
 
     it('modulo nativo assente: ritorna null senza chiamare signIn', async () => {

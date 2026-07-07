@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import Svg, { Path } from 'react-native-svg';
@@ -43,23 +43,30 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
   const { signInWithApple, signInWithGoogle } = useAuth();
+  // Serializza i login social: senza, un doppio tap (o Apple mentre Google è in volo)
+  // apre due fogli nativi / due signInWithIdToken concorrenti.
+  const [socialBusy, setSocialBusy] = useState(false);
 
   const onApple = useCallback(() => {
+    if (socialBusy) return;
+    setSocialBusy(true);
     void (async (): Promise<void> => {
       const { error } = await signInWithApple();
       if (error && error !== 'apple_cancelled') onError?.(error);
-    })();
-  }, [signInWithApple, onError]);
+    })().finally(() => setSocialBusy(false));
+  }, [signInWithApple, onError, socialBusy]);
 
   const onGoogle = useCallback(() => {
+    if (socialBusy) return;
+    setSocialBusy(true);
     void (async (): Promise<void> => {
       const { error } = await signInWithGoogle();
       if (error && error !== 'google_cancelled') onError?.(error);
-    })();
-  }, [signInWithGoogle, onError]);
+    })().finally(() => setSocialBusy(false));
+  }, [signInWithGoogle, onError, socialBusy]);
 
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, socialBusy ? styles.busy : null]}>
       <View style={styles.dividerRow}>
         <View style={styles.dividerLine} />
         <PerfectText size={13} lines={1} style={styles.dividerText}>
@@ -82,9 +89,11 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
 
       <PlatformTouchable
         onPress={onGoogle}
+        disabled={socialBusy}
         activeOpacity={0.85}
         accessibilityRole="button"
         accessibilityLabel={t('auth.social.continueGoogle')}
+        accessibilityState={{ disabled: socialBusy, busy: socialBusy }}
         style={styles.googleBtn}
       >
         {/* Figlio singolo styled: su Android PlatformTouchable wrappa i figli
@@ -106,6 +115,10 @@ const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     wrap: {
       marginTop: PerfectSpacing.lg,
+    },
+    // Feedback visivo mentre un login social è in volo (i due bottoni si attenuano).
+    busy: {
+      opacity: 0.6,
     },
     dividerRow: {
       flexDirection: 'row',

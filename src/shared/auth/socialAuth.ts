@@ -68,7 +68,7 @@ export const configureGoogle = (webClientId: string): void => {
 const isAppleCancel = (e: unknown): boolean =>
   (e as { code?: string } | null)?.code === 'ERR_REQUEST_CANCELED';
 
-/** Apple Sign In nativo → identity token (null se annullato; throw su errore reale). */
+/** Apple Sign In nativo → identity token (null SOLO se annullato; throw su errore reale). */
 export const getAppleIdToken = async (): Promise<string | null> => {
   try {
     const credential = await AppleAuthentication.signInAsync({
@@ -77,14 +77,18 @@ export const getAppleIdToken = async (): Promise<string | null> => {
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
     });
-    return credential.identityToken ?? null;
+    // Success SENZA identityToken = misconfigurazione Apple, NON un annullamento:
+    // va fatto emergere come errore. Se restituissimo null il caller lo mappa su
+    // 'apple_cancelled', che la UI sopprime → misconfig silenziosa e invisibile.
+    if (!credential.identityToken) throw new Error('apple_no_identity_token');
+    return credential.identityToken;
   } catch (e) {
     if (isAppleCancel(e)) return null;
     throw e;
   }
 };
 
-/** Google Sign In nativo → id-token (null se annullato). v13+: { type, data }. */
+/** Google Sign In nativo → id-token (null SOLO se annullato/assente; throw su misconfig). v13+: { type, data }. */
 export const getGoogleIdToken = async (): Promise<string | null> => {
   const GoogleSignin = loadGoogleSignin();
   if (!GoogleSignin) {
@@ -93,7 +97,11 @@ export const getGoogleIdToken = async (): Promise<string | null> => {
   }
   await GoogleSignin.hasPlayServices();
   const result = await GoogleSignin.signIn();
-  return result.type === 'success' ? (result.data.idToken ?? null) : null;
+  // type !== 'success' = annullamento utente → null silenzioso (corretto).
+  if (result.type !== 'success') return null;
+  // Success SENZA id-token = misconfig → emergere come errore, non come annullamento.
+  if (!result.data.idToken) throw new Error('google_no_id_token');
+  return result.data.idToken;
 };
 
 /**
