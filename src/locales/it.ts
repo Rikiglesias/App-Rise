@@ -33,6 +33,7 @@ export default {
     a11y: {
       showPassword: 'Mostra password',
       hidePassword: 'Nascondi password',
+      closeDatePicker: 'Chiudi selezione data',
     },
     login: {
       title: 'Area Donatori',

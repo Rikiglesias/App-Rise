@@ -9,6 +9,7 @@ import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface AuthDateFieldProps {
@@ -47,6 +48,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
   placeholder,
 }) => {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [open, setOpen] = useState(false);
 
@@ -109,7 +111,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
           <Pressable
             style={styles.dismissOverlay}
             onPress={() => setOpen(false)}
-            accessibilityLabel="Chiudi selezione data"
+            accessibilityLabel={t('auth.a11y.closeDatePicker')}
           />
           {picker}
         </>

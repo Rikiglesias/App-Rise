@@ -200,7 +200,7 @@ export const ProfileScreen: React.FC = () => {
           />
           <Row
             label={t('auth.profile.birthDate')}
-            value={profile.birth_date}
+            value={formatDateLocalized(profile.birth_date, locale)}
             styles={styles}
           />
         </>
