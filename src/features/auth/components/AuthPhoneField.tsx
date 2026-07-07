@@ -160,9 +160,11 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         }}
       />
       {error ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {error}
-        </PerfectText>
+        <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
+          <PerfectText size={13} lines={2} style={styles.error}>
+            {error}
+          </PerfectText>
+        </View>
       ) : null}
     </View>
   );

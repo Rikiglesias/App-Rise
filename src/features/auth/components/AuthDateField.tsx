@@ -115,9 +115,11 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
         </>
       ) : null}
       {error ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {error}
-        </PerfectText>
+        <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
+          <PerfectText size={13} lines={2} style={styles.error}>
+            {error}
+          </PerfectText>
+        </View>
       ) : null}
     </View>
   );
