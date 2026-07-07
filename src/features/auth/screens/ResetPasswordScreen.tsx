@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -86,11 +87,7 @@ export const ResetPasswordScreen: React.FC = () => {
             secureTextEntry
             autoCapitalize="none"
           />
-          {submitError ? (
-            <PerfectText size={14} lines={2} style={styles.error}>
-              {submitError}
-            </PerfectText>
-          ) : null}
+          <FormError message={submitError} style={styles.error} />
           <AuthButton
             label={t('auth.reset.submit')}
             onPress={handleSubmit}

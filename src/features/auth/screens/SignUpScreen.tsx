@@ -8,6 +8,7 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useSignUpForm } from '../hooks/useSignUpForm';
@@ -179,11 +180,7 @@ export const SignUpScreen: React.FC = () => {
           appiccicati al bottone. */}
       <View style={styles.submitGap} />
 
-      {form.submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {form.submitError}
-        </PerfectText>
-      ) : null}
+      <FormError message={form.submitError} style={styles.error} />
 
       <AuthButton
         label={t('auth.signup.submit')}

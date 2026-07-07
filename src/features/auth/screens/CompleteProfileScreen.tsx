@@ -8,10 +8,10 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useProfileForm } from '../hooks/useProfileForm';
-import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { RISE_URLS } from '@/shared/constants/urls';
@@ -116,11 +116,7 @@ export const CompleteProfileScreen: React.FC = () => {
         />
       </AuthSection>
 
-      {form.submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {form.submitError}
-        </PerfectText>
-      ) : null}
+      <FormError message={form.submitError} style={styles.error} />
 
       <AuthButton
         label={t('auth.completeProfile.submit')}
