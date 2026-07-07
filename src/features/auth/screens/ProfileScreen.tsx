@@ -41,6 +41,12 @@ export const ProfileScreen: React.FC = () => {
 
   const [exportError, setExportError] = useState<string | undefined>();
   const [consentError, setConsentError] = useState<string | undefined>();
+  const [deletionError, setDeletionError] = useState<string | undefined>();
+  // Guardie anti doppio-invio: serializzano le azioni asincrone (toggle consenso,
+  // annulla cancellazione, export) evitando race e doppi share-sheet.
+  const [marketingBusy, setMarketingBusy] = useState(false);
+  const [deletionBusy, setDeletionBusy] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const handleLogout = useCallback((): void => {
     void signOut();
@@ -54,26 +60,41 @@ export const ProfileScreen: React.FC = () => {
     [navigation]
   );
   const handleExport = useCallback((): void => {
+    if (exporting) return;
     setExportError(undefined);
-    void exportData().catch(() =>
-      setExportError(t('auth.privacy.exportError'))
-    );
-  }, [exportData, t]);
+    setExporting(true);
+    void exportData()
+      .catch(() => setExportError(t('auth.privacy.exportError')))
+      .finally(() => setExporting(false));
+  }, [exportData, t, exporting]);
   const handleDelete = useCallback(
     (): void => navigation.navigate('DeleteAccount'),
     [navigation]
   );
   const handleCancelDeletion = useCallback((): void => {
-    void cancelScheduledDeletion();
-  }, [cancelScheduledDeletion]);
+    if (deletionBusy) return;
+    setDeletionError(undefined);
+    setDeletionBusy(true);
+    void cancelScheduledDeletion()
+      .then(r => {
+        // Azione GDPR consequenziale: se l'annullamento fallisce (rete/RLS) l'account
+        // resta programmato per l'eliminazione a +30gg → mostrare l'errore, non ingoiarlo.
+        if (r.error) setDeletionError(t('auth.delete.error'));
+      })
+      .finally(() => setDeletionBusy(false));
+  }, [cancelScheduledDeletion, t, deletionBusy]);
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
+      if (marketingBusy) return;
       setConsentError(undefined);
-      void setMarketingConsent(value).then(r => {
-        if (r.error) setConsentError(t('auth.consents.error'));
-      });
+      setMarketingBusy(true);
+      void setMarketingConsent(value)
+        .then(r => {
+          if (r.error) setConsentError(t('auth.consents.error'));
+        })
+        .finally(() => setMarketingBusy(false));
     },
-    [setMarketingConsent, t]
+    [setMarketingConsent, t, marketingBusy]
   );
 
   if (status === 'loading') {
@@ -126,7 +147,13 @@ export const ProfileScreen: React.FC = () => {
             label={t('auth.delete.bannerCancel')}
             onPress={handleCancelDeletion}
             variant="link"
+            disabled={deletionBusy}
           />
+          {deletionError ? (
+            <PerfectText size={13} lines={2} style={styles.error}>
+              {deletionError}
+            </PerfectText>
+          ) : null}
         </View>
       ) : null}
 
@@ -194,6 +221,7 @@ export const ProfileScreen: React.FC = () => {
         <Switch
           value={profile?.marketing_consent ?? false}
           onValueChange={handleMarketingToggle}
+          disabled={marketingBusy}
           trackColor={{ true: Colors.primary[500], false: colors.neutral[300] }}
           ios_backgroundColor={colors.neutral[300]}
           accessibilityLabel={t('auth.consents.marketing')}
@@ -215,6 +243,7 @@ export const ProfileScreen: React.FC = () => {
         label={t('auth.privacy.exportCta')}
         onPress={handleExport}
         variant="link"
+        disabled={exporting}
       />
       {exportError ? (
         <PerfectText size={13} lines={2} style={styles.error}>
