@@ -53,6 +53,16 @@ describe('socialAuth', () => {
       const token = await getAppleIdToken();
       expect(token).toBeNull();
     });
+
+    it('annullamento utente (ERR_REQUEST_CANCELED): ritorna null, non rilancia', async () => {
+      signInAsyncMock.mockRejectedValueOnce({ code: 'ERR_REQUEST_CANCELED' });
+      await expect(getAppleIdToken()).resolves.toBeNull();
+    });
+
+    it('errore reale (non annullamento): rilancia per farlo emergere', async () => {
+      signInAsyncMock.mockRejectedValueOnce(new Error('apple network fail'));
+      await expect(getAppleIdToken()).rejects.toThrow('apple network fail');
+    });
   });
 
   describe('getGoogleIdToken', () => {
@@ -90,6 +100,11 @@ describe('socialAuth', () => {
       signInAsyncMock.mockResolvedValueOnce({ authorizationCode: null });
       const code = await getAppleAuthCodeForDeletion();
       expect(code).toBeNull();
+    });
+
+    it('annullamento utente durante la cancellazione: ritorna null (→ abort senza eliminare)', async () => {
+      signInAsyncMock.mockRejectedValueOnce({ code: 'ERR_REQUEST_CANCELED' });
+      await expect(getAppleAuthCodeForDeletion()).resolves.toBeNull();
     });
   });
 });

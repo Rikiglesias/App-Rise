@@ -36,16 +36,28 @@ import type {
   ConsentAction,
 } from './types';
 import { PROFILE_EDITABLE_KEYS } from './types';
+import { mapAuthError } from './authErrors';
 import { env } from '@/shared/config/environment';
 import { logWarn } from '@/shared/utils/logger';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
 
+// Fallimenti auth ATTESI e frequenti (password errata, email già registrata, rate
+// limit): NON vanno in captureMessage o inonderebbero Sentry di eventi previsti,
+// bruciando quota e annegando il segnale reale. Il breadcrumb li conserva comunque
+// per il contesto di un crash successivo. mapAuthError li riconosce dal messaggio GoTrue.
+const EXPECTED_AUTH_ERRORS = new Set([
+  'invalid_credentials',
+  'email_not_confirmed',
+  'already_registered',
+  'rate_limited',
+]);
+
 // Telemetria auth: senza questa, login/registrazioni/cancellazioni FALLITE sono
 // invisibili in produzione (l'errore Supabase viene solo mostrato in UI e perso).
-// Emette un breadcrumb Sentry sempre + captureMessage sui fallimenti, così il
-// contesto arriva anche a un crash successivo. MAI PII: nessuna email/password/token,
-// solo l'esito e il messaggio d'errore GoTrue (già generico, es. "Invalid credentials").
+// Breadcrumb Sentry SEMPRE (contesto per un crash successivo) + captureMessage solo
+// sui fallimenti INATTESI. MAI PII: nessuna email/password/token, solo l'esito e il
+// messaggio d'errore GoTrue (già generico, es. "Invalid credentials").
 const authTelemetry = (event: string, errorMessage?: string | null): void => {
   Sentry.addBreadcrumb({
     category: 'auth',
@@ -55,7 +67,9 @@ const authTelemetry = (event: string, errorMessage?: string | null): void => {
   });
   if (errorMessage) {
     logWarn(`auth ${event} failed`, 'auth', { error: errorMessage });
-    Sentry.captureMessage(`auth.${event}_failed`, 'warning');
+    if (!EXPECTED_AUTH_ERRORS.has(mapAuthError(errorMessage))) {
+      Sentry.captureMessage(`auth.${event}_failed`, 'warning');
+    }
   }
 };
 
