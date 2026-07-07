@@ -168,6 +168,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       (_event, nextSession) => {
         setSession(nextSession);
         setStatus(nextSession ? 'authenticated' : 'unauthenticated');
+        // Contesto utente per Sentry: attribuisce i crash post-login all'utente
+        // (solo id, MAI PII) e lo pulisce al logout. Senza, i crash su schermate
+        // riservate arrivano anonimi e non riproducibili.
+        Sentry.setUser(nextSession ? { id: nextSession.user.id } : null);
         if (nextSession) void loadProfile(nextSession.user.id);
         else setProfile(null);
       }
