@@ -58,8 +58,13 @@ create trigger consent_events_stamp_created_at
 -- Scelto SYNC (sovrascrive) invece di GUARD (rifiuta): non rompe mai il flusso legittimo e
 -- tiene marketing_consent una cache sempre coerente, fedele al design (0003:4). Consolidamento
 -- di due 0008 divergenti (login-loop, opzione A): approccio sync + revoke execute.
--- Solo BEFORE UPDATE: l'INSERT (signup email `handle_new_user`, o social da CompleteProfile)
--- semina già marketing_consent + eventuale evento 'marketing' insieme e coerenti (0004:50-55).
+-- Solo BEFORE UPDATE (l'INSERT è già coerente): signup EMAIL → handle_new_user semina
+-- marketing_consent + evento 'marketing' insieme (0004:50-55); social/CompleteProfile →
+-- l'upsert OMETTE marketing_consent (resta default false) senza evento (useProfileForm.ts:129-147)
+-- → sync deriva false, coerente. ⚠️ CONSEGUENZA: qualunque writer che scriva marketing_consent
+-- via UPDATE senza inserire PRIMA l'evento 'marketing' nel ledger lo vede IGNORATO (self-heal).
+-- Vale per app, per l'ETL Access→Supabase (memory access-db-integrazione) e per ogni job
+-- server-side: chi imposta il consenso DEVE scrivere l'evento, non solo la cache.
 -- SECURITY DEFINER (come handle_new_user): deriva dal ledger AUTORITATIVO bypassando la RLS,
 -- così la cache è corretta per QUALSIASI chiamante (utente/service_role/admin), non solo per
 -- chi può leggere consent_events. Nessun SQL dinamico, unico input = new.id, search_path
