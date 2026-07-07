@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthDateField } from '../components/AuthDateField';
+import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
@@ -192,12 +193,13 @@ export const ProfileEditScreen: React.FC = () => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      <AuthInput
+      <AuthPhoneField
         label={t('auth.signup.phone')}
-        value={phone}
         onChangeText={setPhone}
+        country={country}
+        onCountryChange={handleSelectCountry}
         error={err(errors.phone)}
-        keyboardType="phone-pad"
+        initialValue={profile?.phone ?? ''}
       />
       <AuthCountryField
         label={t('auth.signup.country')}

@@ -34,6 +34,12 @@ interface AuthPhoneFieldProps {
    */
   onCountryChange?: (cca2: string) => void;
   error?: string | undefined;
+  /**
+   * Valore iniziale E.164 (es. "+393331234567") per pre-riempire il campo in
+   * modifica profilo. Opzionale: in registrazione si parte vuoti (comportamento
+   * invariato). Non emette onChangeText al mount (non sporca lo stato "dirty").
+   */
+  initialValue?: string;
 }
 
 // Italia in cima al selettore (caso comune: donatori italiani); il resto della
@@ -71,10 +77,21 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   country: countryCca2,
   onCountryChange,
   error,
+  initialValue,
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const [number, setNumber] = useState('');
+  // Pre-fill in modifica: dal valore E.164 esistente togliamo il calling code del
+  // paese di residenza → resta il numero nazionale, che la libreria mostra formattato.
+  const [number, setNumber] = useState(() => {
+    if (!initialValue) return '';
+    const code = buildCallingCode(
+      getCountryByCca2(countryCca2 ?? 'IT') ?? null
+    );
+    return code && initialValue.startsWith(code)
+      ? initialValue.slice(code.length)
+      : initialValue.replace(/^\+/, '');
+  });
   const [country, setCountry] = useState<ICountry | null>(
     () => getCountryByCca2(countryCca2 ?? 'IT') ?? null
   );
