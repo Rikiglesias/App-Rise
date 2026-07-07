@@ -306,11 +306,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const userId = session?.user.id;
       if (!userId) return { error: 'not_authenticated' };
       // Whitelist: solo i campi editabili effettivamente passati (no upsert/no null su campi assenti).
+      // Helper generico su K: correla chiave↔valore per un singolo K (il for-loop
+      // con chiave-unione non compila da quando province è string|null).
       const patch: Partial<ProfileEditable> = {};
-      for (const key of PROFILE_EDITABLE_KEYS) {
+      const copyField = <K extends keyof ProfileEditable>(key: K): void => {
         const v = fields[key];
         if (v !== undefined) patch[key] = v;
-      }
+      };
+      PROFILE_EDITABLE_KEYS.forEach(copyField);
       if (Object.keys(patch).length === 0) return { error: null };
       const { error } = await supabase
         .from('profiles')

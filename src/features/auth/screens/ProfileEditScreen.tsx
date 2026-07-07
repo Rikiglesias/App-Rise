@@ -96,9 +96,10 @@ export const ProfileEditScreen: React.FC = () => {
     if (country.trim() !== (profile?.country ?? 'IT'))
       changed.country = country.trim();
     if (city.trim() !== profile?.city) changed.city = city.trim();
-    // Provincia solo italiana: per i paesi esteri si azzera.
-    const nextProvince = country === 'IT' ? province.trim() : '';
-    if (nextProvince !== (profile?.province ?? ''))
+    // Provincia solo italiana: per i paesi esteri = null (coerente con signup e
+    // useProfileForm; evita due rappresentazioni di "nessuna provincia" '' vs null).
+    const nextProvince = country === 'IT' ? province.trim() : null;
+    if (nextProvince !== (profile?.province ?? null))
       changed.province = nextProvince;
     if (birthDate.trim() !== profile?.birth_date)
       changed.birth_date = birthDate.trim();
