@@ -17,6 +17,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:acceptance": "vitest run",
     "check:strict": "npm run conta-problemi",
     "quality-check:summary": "npm run conta-problemi",
     "analisi-completa": "npm run conta-problemi",
