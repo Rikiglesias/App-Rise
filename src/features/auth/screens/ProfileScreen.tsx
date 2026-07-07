@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View, StyleSheet, ActivityIndicator, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getCountryByCca2, type ICountryCca2 } from 'rn-country-select';
@@ -42,8 +42,12 @@ export const ProfileScreen: React.FC = () => {
   const [exportError, setExportError] = useState<string | undefined>();
   const [consentError, setConsentError] = useState<string | undefined>();
   const [deletionError, setDeletionError] = useState<string | undefined>();
-  // Guardie anti doppio-invio: serializzano le azioni asincrone (toggle consenso,
-  // annulla cancellazione, export) evitando race e doppi share-sheet.
+  // Guardie anti doppio-invio delle azioni asincrone (toggle consenso, annulla
+  // cancellazione, export). Il ref è la guardia SINCRONA (regge due tap nello stesso
+  // frame, prima del re-render); lo state pilota solo il feedback visivo (disabled).
+  const marketingRef = useRef(false);
+  const deletionRef = useRef(false);
+  const exportRef = useRef(false);
   const [marketingBusy, setMarketingBusy] = useState(false);
   const [deletionBusy, setDeletionBusy] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -60,19 +64,24 @@ export const ProfileScreen: React.FC = () => {
     [navigation]
   );
   const handleExport = useCallback((): void => {
-    if (exporting) return;
+    if (exportRef.current) return;
+    exportRef.current = true;
     setExportError(undefined);
     setExporting(true);
     void exportData()
       .catch(() => setExportError(t('auth.privacy.exportError')))
-      .finally(() => setExporting(false));
-  }, [exportData, t, exporting]);
+      .finally(() => {
+        exportRef.current = false;
+        setExporting(false);
+      });
+  }, [exportData, t]);
   const handleDelete = useCallback(
     (): void => navigation.navigate('DeleteAccount'),
     [navigation]
   );
   const handleCancelDeletion = useCallback((): void => {
-    if (deletionBusy) return;
+    if (deletionRef.current) return;
+    deletionRef.current = true;
     setDeletionError(undefined);
     setDeletionBusy(true);
     void cancelScheduledDeletion()
@@ -81,20 +90,27 @@ export const ProfileScreen: React.FC = () => {
         // resta programmato per l'eliminazione a +30gg → mostrare l'errore, non ingoiarlo.
         if (r.error) setDeletionError(t('auth.delete.error'));
       })
-      .finally(() => setDeletionBusy(false));
-  }, [cancelScheduledDeletion, t, deletionBusy]);
+      .finally(() => {
+        deletionRef.current = false;
+        setDeletionBusy(false);
+      });
+  }, [cancelScheduledDeletion, t]);
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
-      if (marketingBusy) return;
+      if (marketingRef.current) return;
+      marketingRef.current = true;
       setConsentError(undefined);
       setMarketingBusy(true);
       void setMarketingConsent(value)
         .then(r => {
           if (r.error) setConsentError(t('auth.consents.error'));
         })
-        .finally(() => setMarketingBusy(false));
+        .finally(() => {
+          marketingRef.current = false;
+          setMarketingBusy(false);
+        });
     },
-    [setMarketingConsent, t, marketingBusy]
+    [setMarketingConsent, t]
   );
 
   if (status === 'loading') {
@@ -208,7 +224,7 @@ export const ProfileScreen: React.FC = () => {
       <AuthButton
         label={t('auth.profile.logout')}
         onPress={handleLogout}
-        variant="secondary"
+        variant="link"
       />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>

@@ -64,6 +64,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
         disabled={disabled}
         activeOpacity={0.85}
         accessibilityRole="button"
+        accessibilityState={{ disabled }}
         style={[styles.secondaryBtn, disabled ? styles.btnDisabled : null]}
       >
         <PerfectText

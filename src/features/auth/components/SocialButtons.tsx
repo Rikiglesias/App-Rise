@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import Svg, { Path } from 'react-native-svg';
@@ -44,26 +44,37 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
   const { t } = useTranslation();
   const { signInWithApple, signInWithGoogle } = useAuth();
   // Serializza i login social: senza, un doppio tap (o Apple mentre Google è in volo)
-  // apre due fogli nativi / due signInWithIdToken concorrenti.
+  // apre due fogli nativi / due signInWithIdToken concorrenti. Il ref è la guardia
+  // SINCRONA (regge due tap nello stesso frame, prima del re-render); lo state pilota
+  // solo il feedback visivo (disabled/dim), utile perché il bottone Apple nativo non
+  // ha una prop `disabled`.
+  const busyRef = useRef(false);
   const [socialBusy, setSocialBusy] = useState(false);
 
-  const onApple = useCallback(() => {
-    if (socialBusy) return;
-    setSocialBusy(true);
-    void (async (): Promise<void> => {
-      const { error } = await signInWithApple();
-      if (error && error !== 'apple_cancelled') onError?.(error);
-    })().finally(() => setSocialBusy(false));
-  }, [signInWithApple, onError, socialBusy]);
+  const runSocial = useCallback(
+    (signIn: () => Promise<{ error: string | null }>, cancelCode: string) => {
+      if (busyRef.current) return;
+      busyRef.current = true;
+      setSocialBusy(true);
+      void (async (): Promise<void> => {
+        const { error } = await signIn();
+        if (error && error !== cancelCode) onError?.(error);
+      })().finally(() => {
+        busyRef.current = false;
+        setSocialBusy(false);
+      });
+    },
+    [onError]
+  );
 
-  const onGoogle = useCallback(() => {
-    if (socialBusy) return;
-    setSocialBusy(true);
-    void (async (): Promise<void> => {
-      const { error } = await signInWithGoogle();
-      if (error && error !== 'google_cancelled') onError?.(error);
-    })().finally(() => setSocialBusy(false));
-  }, [signInWithGoogle, onError, socialBusy]);
+  const onApple = useCallback(
+    () => runSocial(signInWithApple, 'apple_cancelled'),
+    [runSocial, signInWithApple]
+  );
+  const onGoogle = useCallback(
+    () => runSocial(signInWithGoogle, 'google_cancelled'),
+    [runSocial, signInWithGoogle]
+  );
 
   return (
     <View style={[styles.wrap, socialBusy ? styles.busy : null]}>
