@@ -108,9 +108,10 @@ export const CompleteProfileScreen: React.FC = () => {
         ) : null}
       </AuthSection>
 
-      {/* Mail di contatto: SOLO per chi entra con Apple Hide-My-Email (mail auth = relay).
-          Ci serve un indirizzo reale e stabile per ricevute e comunicazioni. */}
-      {form.requireContactEmail ? (
+      {/* Mail di contatto FACOLTATIVA: offerta solo a chi entra con Apple Hide-My-Email
+          (mail auth = relay). Può lasciarla vuota (resta la relay, Apple inoltra) o dare
+          una mail reale se preferisce riceverci lì. */}
+      {form.isRelayEmail ? (
         <AuthSection title={t('auth.completeProfile.contactSection')}>
           {/* containerWidth={0}: disattiva il 70%-centrato automatico di PerfectText
               per i multi-riga → la nota resta allineata a sinistra come i campi. */}

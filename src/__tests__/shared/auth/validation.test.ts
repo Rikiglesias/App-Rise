@@ -32,7 +32,7 @@ const baseProfile = {
   birthDate: '2000-01-01',
   privacyConsent: true,
   contactEmail: '',
-  requireContactEmail: false,
+  isRelayEmail: false,
 };
 
 describe('auth validation', () => {
@@ -137,30 +137,33 @@ describe('auth validation', () => {
     const errors = validateProfileForm({
       ...baseProfile,
       contactEmail: '',
-      requireContactEmail: false,
+      isRelayEmail: false,
     });
     expect(errors.contactEmail).toBeUndefined();
   });
 
-  it('profile form: mail contatto obbligatoria+valida se relay Apple', () => {
-    const missing = validateProfileForm({
+  it('profile form: mail contatto FACOLTATIVA ma valida se compilata (relay Apple)', () => {
+    // Vuota = ok: è facoltativa, resta la relay Apple (che inoltra).
+    const empty = validateProfileForm({
       ...baseProfile,
       contactEmail: '',
-      requireContactEmail: true,
+      isRelayEmail: true,
     });
-    expect(missing.contactEmail).toBe('email_invalid');
+    expect(empty.contactEmail).toBeUndefined();
 
+    // Compilata ma malformata = errore.
     const bad = validateProfileForm({
       ...baseProfile,
       contactEmail: 'non-una-mail',
-      requireContactEmail: true,
+      isRelayEmail: true,
     });
     expect(bad.contactEmail).toBe('email_invalid');
 
+    // Compilata e valida = ok.
     const ok = validateProfileForm({
       ...baseProfile,
       contactEmail: 'vera@dominio.it',
-      requireContactEmail: true,
+      isRelayEmail: true,
     });
     expect(ok.contactEmail).toBeUndefined();
   });

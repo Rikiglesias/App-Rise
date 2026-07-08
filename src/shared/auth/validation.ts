@@ -83,10 +83,10 @@ export interface ProfileInput {
   country: string;
   birthDate: string;
   privacyConsent: boolean;
-  /** Mail di contatto (raccolta SOLO se la mail auth è una relay Apple, vedi requireContactEmail). */
+  /** Mail di contatto FACOLTATIVA (offerta solo se la mail auth è una relay Apple, vedi isRelayEmail). */
   contactEmail: string;
-  /** True quando la mail auth è una relay Apple → contactEmail diventa obbligatoria e validata. */
-  requireContactEmail: boolean;
+  /** True quando la mail auth è una relay Apple → il form OFFRE il campo (facoltativo); validato solo se compilato. */
+  isRelayEmail: boolean;
 }
 
 export type ProfileErrors = Partial<Record<keyof ProfileInput, string>>;
@@ -105,9 +105,9 @@ export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
   const adult = validateAdult(input.birthDate);
   if (adult) e.birthDate = adult;
   if (!input.privacyConsent) e.privacyConsent = 'required';
-  // Mail di contatto obbligatoria e valida SOLO per gli utenti con mail auth relay (Apple):
-  // per gli altri il campo non esiste e non va validato.
-  if (input.requireContactEmail) {
+  // Mail di contatto FACOLTATIVA per gli utenti con mail auth relay (Apple): il campo
+  // esiste solo per loro e va validato SOLO se compilato (vuoto = ok, resta la relay).
+  if (input.isRelayEmail && input.contactEmail.trim().length > 0) {
     const ce = validateEmail(input.contactEmail);
     if (ce) e.contactEmail = ce;
   }

@@ -21,9 +21,9 @@ export const useProfileForm = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { session, refreshProfile } = useAuth();
 
-  // Utente entrato con Apple "Nascondi la mia email" → mail auth = relay: chiediamo una
-  // mail di contatto reale (Apple può smettere di inoltrare e non ne vediamo mai la vera).
-  const requireContactEmail = isApplePrivateRelayEmail(session?.user.email);
+  // Utente entrato con Apple "Nascondi la mia email" → mail auth = relay: OFFRIAMO (non
+  // imponiamo) una mail di contatto reale. Se non la dà, resta la relay (Apple inoltra).
+  const isRelayEmail = isApplePrivateRelayEmail(session?.user.email);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -124,7 +124,7 @@ export const useProfileForm = () => {
       birthDate,
       privacyConsent,
       contactEmail,
-      requireContactEmail,
+      isRelayEmail,
     });
     setErrors(found);
     if (Object.keys(found).length > 0) return;
@@ -148,8 +148,8 @@ export const useProfileForm = () => {
       p_province: country === 'IT' ? province.trim() : null,
       p_country: country.trim(),
       p_birth_date: birthDate.trim(),
-      // Mail di contatto solo per gli utenti relay Apple; '' per gli altri (la RPC fa nullif).
-      p_contact_email: requireContactEmail ? contactEmail.trim() : '',
+      // Mail di contatto solo se un utente relay l'ha compilata; '' altrimenti (RPC → nullif → NULL).
+      p_contact_email: isRelayEmail ? contactEmail.trim() : '',
     });
     setLoading(false);
     if (error) {
@@ -170,7 +170,7 @@ export const useProfileForm = () => {
     birthDate,
     privacyConsent,
     contactEmail,
-    requireContactEmail,
+    isRelayEmail,
     session,
     refreshProfile,
     navigation,
@@ -193,8 +193,8 @@ export const useProfileForm = () => {
       contactEmail,
       privacyConsent,
     },
-    /** True se la mail auth è una relay Apple → il form mostra il campo mail di contatto. */
-    requireContactEmail,
+    /** True se la mail auth è una relay Apple → il form OFFRE il campo mail di contatto (facoltativo). */
+    isRelayEmail,
     errors,
     refs: { lastNameRef, phoneRef },
     onChange,

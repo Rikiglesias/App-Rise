@@ -116,8 +116,8 @@ export default {
       submit: 'Salva e continua',
       contactSection: 'Email di contatto',
       contactNote:
-        'Con l’accesso Apple hai nascosto la tua email. Inseriscine una reale: ci serve per ricevute e comunicazioni.',
-      contactEmail: 'La tua email',
+        'Con l’accesso Apple hai nascosto la tua email: ti scriveremo lì. Se preferisci, aggiungi una mail tua per ricevute e comunicazioni.',
+      contactEmail: 'La tua email (facoltativa)',
     },
     edit: {
       title: 'Modifica profilo',

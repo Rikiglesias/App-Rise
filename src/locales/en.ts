@@ -114,8 +114,8 @@ export default {
       submit: 'Save and continue',
       contactSection: 'Contact email',
       contactNote:
-        'With Apple sign-in you hid your email. Enter a real one: we need it for receipts and communications.',
-      contactEmail: 'Your email',
+        'With Apple sign-in you hid your email: we’ll write to you there. If you prefer, add your own email for receipts and communications.',
+      contactEmail: 'Your email (optional)',
     },
     edit: {
       title: 'Edit profile',

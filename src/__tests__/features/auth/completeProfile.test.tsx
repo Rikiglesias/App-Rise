@@ -115,7 +115,10 @@ describe('CompleteProfileScreen', () => {
       </AllProviders>
     );
     fillValidForm(getByLabelText, getByRole, getByTestId);
-    fireEvent.changeText(getByLabelText('La tua email'), 'vera@dominio.it');
+    fireEvent.changeText(
+      getByLabelText('La tua email (facoltativa)'),
+      'vera@dominio.it'
+    );
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() =>
@@ -126,7 +129,7 @@ describe('CompleteProfileScreen', () => {
     );
   });
 
-  it('mail auth relay Apple senza mail-contatto → errore, niente RPC', async () => {
+  it('mail auth relay Apple: mail-contatto FACOLTATIVA → vuota, submit procede (RPC con contact vuota)', async () => {
     mockUseAuth.mockReturnValue(
       makeAuth({
         session: {
@@ -140,11 +143,15 @@ describe('CompleteProfileScreen', () => {
       </AllProviders>
     );
     fillValidForm(getByLabelText, getByRole, getByTestId);
-    // Lascia vuota la mail di contatto → validazione blocca il submit.
+    // NON compila la mail di contatto: è facoltativa (resta la relay) → il submit procede.
     fireEvent.press(getByText('Salva e continua'));
 
-    await waitFor(() => expect(getByText('Email non valida')).toBeTruthy());
-    expect(rpcMock).not.toHaveBeenCalled();
+    await waitFor(() =>
+      expect(rpcMock).toHaveBeenCalledWith(
+        'complete_social_profile',
+        expect.objectContaining({ p_contact_email: '' })
+      )
+    );
   });
 
   it('mostra il campo Paese e la RPC include country (default IT)', async () => {
