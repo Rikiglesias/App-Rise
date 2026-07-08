@@ -37,6 +37,10 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
       user: { id: 'u1', email: 'm@r.it', identities: [] },
     } as unknown as Session,
     profile: null,
+    // Esito profilo DEFINITIVO: questi test verificano stati risolti (profilo presente
+    // o assente confermato), non la finestra di caricamento. Senza, il guard anti
+    // data-loss di ProfileScreen mostrerebbe lo spinner (review 2026-07-09).
+    profileLoaded: true,
     signIn: jest.fn(),
     signUp: jest.fn(),
     signOut: jest.fn(),
@@ -232,6 +236,19 @@ describe('ProfileScreen (autenticato)', () => {
     const { queryByText, getByText } = wrap(<ProfileScreen />);
     expect(queryByText('Modifica profilo')).toBeNull();
     expect(getByText('Completa il tuo profilo')).toBeTruthy();
+  });
+
+  it('esito profilo NON risolto (profileLoaded=false) → NÉ empty-state NÉ dati (anti data-loss)', () => {
+    // Fetch profilo in volo/fallita: profile=null ma profileLoaded=false. NON deve
+    // mostrare l'empty-state "Completa il tuo profilo" (la cui CTA porta a un form vuoto
+    // che sovrascriverebbe il profilo reale) né i dati — solo lo spinner. Regression net
+    // del guard anti data-loss (review 2026-07-09).
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: null, profileLoaded: false })
+    );
+    const { queryByText } = wrap(<ProfileScreen />);
+    expect(queryByText('Completa il tuo profilo')).toBeNull();
+    expect(queryByText('Modifica profilo')).toBeNull();
   });
 });
 

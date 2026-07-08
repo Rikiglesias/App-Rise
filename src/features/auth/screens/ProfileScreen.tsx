@@ -38,6 +38,7 @@ export const ProfileScreen: React.FC = () => {
     status,
     session,
     profile,
+    profileLoaded,
     signOut,
     cancelScheduledDeletion,
     needsReConsent,
@@ -100,6 +101,21 @@ export const ProfileScreen: React.FC = () => {
 
   if (status === 'unauthenticated') {
     return <LoginScreen />;
+  }
+
+  // Autenticato ma esito profilo NON definitivo (fetch in volo o fallita per rete/RLS:
+  // `profileLoaded` resta false): mostra lo spinner, MAI l'empty-state "completa profilo".
+  // Con un profilo che ESISTE ma non è ancora caricato, l'empty-state porterebbe a un form
+  // vuoto il cui submit (RPC upsert) SOVRASCRIVE il profilo reale (es. contact_email→null,
+  // country→IT). L'empty-state è legittimo solo a esito DEFINITIVO (profileLoaded=true &
+  // profile=null = PGRST116, nessuna riga). Fixa anche il flash empty-state al cold-start.
+  // (review full-branch 2026-07-09, finding correctness)
+  if (status === 'authenticated' && !profileLoaded) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator color={Colors.primary[600]} />
+      </View>
+    );
   }
 
   // Re-consenso SOLO per utenti già stabiliti (con profilo). Un signup social nuovo ha zero

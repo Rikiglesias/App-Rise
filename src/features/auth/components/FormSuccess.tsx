@@ -1,5 +1,10 @@
-import React from 'react';
-import { View, type StyleProp, type TextStyle } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  AccessibilityInfo,
+  View,
+  type StyleProp,
+  type TextStyle,
+} from 'react-native';
 
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -32,6 +37,11 @@ export const FormSuccess: React.FC<FormSuccessProps> = ({
   style,
 }) => {
   const { isDark } = useUniversalTheme();
+  // Annuncio cross-platform: `accessibilityLiveRegion` sotto è Android-only → su iOS
+  // VoiceOver il successo sarebbe muto. Prima dell'early-return (hooks-rules).
+  useEffect(() => {
+    if (message) AccessibilityInfo.announceForAccessibility(message);
+  }, [message]);
   if (!message) return null;
   const color = isDark
     ? Colors.semantic.success.main
