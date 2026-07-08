@@ -98,6 +98,7 @@ export default {
       country: 'Paese',
       birthDate: 'Data di nascita',
       completeCta: 'Completa il tuo profilo',
+      manageTitle: 'Gestione',
     },
     social: {
       continueGoogle: 'Continua con Google',
@@ -122,6 +123,10 @@ export default {
     },
     privacy: {
       title: 'Privacy e dati',
+      subtitle: 'Gestisci ed esporta i tuoi dati',
+      rowSubtitle: 'Esporta i tuoi dati',
+      exportBody:
+        'Scarica una copia dei tuoi dati personali e dei consensi registrati.',
       exportCta: 'Esporta i miei dati',
       exportError: 'Esportazione non riuscita. Riprova.',
       deleteCta: 'Elimina account',
@@ -146,6 +151,9 @@ export default {
     },
     consents: {
       title: 'Consensi',
+      subtitle: 'Scegli quali comunicazioni ricevere',
+      statusOn: 'Attive',
+      statusOff: 'Disattivate',
       marketing: 'Comunicazioni e aggiornamenti',
       marketingHint: 'Puoi attivare o revocare in ogni momento.',
       reconsentTitle: 'Aggiornamento informativa',

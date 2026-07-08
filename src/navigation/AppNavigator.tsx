@@ -31,6 +31,8 @@ import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileSc
 import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
 import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
+import { ConsentsScreen } from '@/features/auth/screens/ConsentsScreen';
+import { PrivacyScreen } from '@/features/auth/screens/PrivacyScreen';
 import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -171,6 +173,16 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen
           name="ProfileEdit"
           component={ProfileEditScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Consents"
+          component={ConsentsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Privacy"
+          component={PrivacyScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

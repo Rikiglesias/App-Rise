@@ -97,6 +97,7 @@ export default {
       country: 'Country',
       birthDate: 'Date of birth',
       completeCta: 'Complete your profile',
+      manageTitle: 'Manage',
     },
     social: {
       continueGoogle: 'Continue with Google',
@@ -121,6 +122,10 @@ export default {
     },
     privacy: {
       title: 'Privacy and data',
+      subtitle: 'Manage and export your data',
+      rowSubtitle: 'Export your data',
+      exportBody:
+        'Download a copy of your personal data and recorded consents.',
       exportCta: 'Export my data',
       exportError: 'Export failed. Please try again.',
       deleteCta: 'Delete account',
@@ -144,6 +149,9 @@ export default {
     },
     consents: {
       title: 'Consents',
+      subtitle: 'Choose which updates you receive',
+      statusOn: 'On',
+      statusOff: 'Off',
       marketing: 'Communications and updates',
       marketingHint: 'You can enable or withdraw at any time.',
       reconsentTitle: 'Privacy policy update',

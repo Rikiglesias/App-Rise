@@ -33,6 +33,8 @@ export interface RootStackParamList {
   SignUp: undefined;
   CompleteProfile: undefined;
   ProfileEdit: undefined;
+  Consents: undefined;
+  Privacy: undefined;
   ForgotPassword: undefined;
   ResetPassword: undefined;
   DeleteAccount: undefined;

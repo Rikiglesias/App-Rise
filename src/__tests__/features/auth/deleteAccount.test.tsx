@@ -6,6 +6,8 @@ import type { Session } from '@supabase/supabase-js';
 import { AllProviders } from '../../helpers/testProviders';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
 import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
+import { ConsentsScreen } from '@/features/auth/screens/ConsentsScreen';
+import { PrivacyScreen } from '@/features/auth/screens/PrivacyScreen';
 import { ReConsentScreen } from '@/features/auth/screens/ReConsentScreen';
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
@@ -153,10 +155,16 @@ describe('DeleteAccountScreen', () => {
 describe('ProfileScreen (autenticato)', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('mostra le CTA esporta dati ed elimina account', () => {
-    mockUseAuth.mockReturnValue(makeAuth());
+  it('mostra il menu Privacy ed Elimina account (con profilo)', () => {
+    // Redesign: export e delete non sono più CTA inline ma voci di menu verso
+    // le sotto-pagine dedicate (Privacy → PrivacyScreen, Elimina → DeleteAccount).
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: { ...profileWithDeletion, deletion_requested_at: null },
+      })
+    );
     const { getByText } = wrap(<ProfileScreen />);
-    expect(getByText('Esporta i miei dati')).toBeTruthy();
+    expect(getByText('Privacy e dati')).toBeTruthy();
     expect(getByText('Elimina account')).toBeTruthy();
   });
 
@@ -166,10 +174,17 @@ describe('ProfileScreen (autenticato)', () => {
     expect(getByText('Annulla eliminazione')).toBeTruthy();
   });
 
-  it('il toggle marketing chiama setMarketingConsent', () => {
+  it('il toggle marketing (sotto-pagina Consensi) chiama setMarketingConsent', () => {
+    // Redesign: il toggle vive nella sotto-pagina Consensi, raggiungibile solo con
+    // un profilo → l'update marketing agisce sempre su una riga reale.
     const setMarketingConsent = jest.fn().mockResolvedValue({ error: null });
-    mockUseAuth.mockReturnValue(makeAuth({ setMarketingConsent }));
-    const { getByRole } = wrap(<ProfileScreen />);
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        setMarketingConsent,
+        profile: { ...profileWithDeletion, deletion_requested_at: null },
+      })
+    );
+    const { getByRole } = wrap(<ConsentsScreen />);
     fireEvent(getByRole('switch'), 'valueChange', true);
     expect(setMarketingConsent).toHaveBeenCalledWith(true);
   });
@@ -216,6 +231,18 @@ describe('ProfileScreen (autenticato)', () => {
     const { queryByText, getByText } = wrap(<ProfileScreen />);
     expect(queryByText('Modifica profilo')).toBeNull();
     expect(getByText('Completa il tuo profilo')).toBeTruthy();
+  });
+});
+
+describe('PrivacyScreen', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it("l'esportazione dati chiama exportData (GDPR Art.20)", async () => {
+    const exportData = jest.fn().mockResolvedValue(undefined);
+    mockUseAuth.mockReturnValue(makeAuth({ exportData }));
+    const { getByText } = wrap(<PrivacyScreen />);
+    fireEvent.press(getByText('Esporta i miei dati'));
+    await waitFor(() => expect(exportData).toHaveBeenCalled());
   });
 });
 
