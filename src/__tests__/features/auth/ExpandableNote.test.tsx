@@ -44,6 +44,18 @@ describe('ExpandableNote', () => {
     expect(queryByText(BODY)).toBeTruthy();
   });
 
+  it('a11y: accessibilityHint arriva al touchable (contratto screen-reader)', () => {
+    const HINT = 'Tocca per i dettagli';
+    const { getByLabelText } = render(
+      <AllProviders>
+        <ExpandableNote question={QUESTION} accessibilityHint={HINT}>
+          <Text>{BODY}</Text>
+        </ExpandableNote>
+      </AllProviders>
+    );
+    expect(getByLabelText(QUESTION).props.accessibilityHint).toBe(HINT);
+  });
+
   it('a11y: accessibilityState.expanded riflette lo stato (contratto screen-reader)', () => {
     const { getByLabelText } = renderNote();
     expect(getByLabelText(QUESTION).props.accessibilityState.expanded).toBe(

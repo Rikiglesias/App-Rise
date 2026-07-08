@@ -125,7 +125,7 @@ export default {
       whyEmailBenefit3:
         'Se disattivi l’email nascosta di Apple, restiamo comunque in contatto',
       whyEmailHonest:
-        'Le ricevute te le inviamo sempre; gli aggiornamenti solo se attivi le comunicazioni nei Consensi, e puoi disattivarle quando vuoi. Per inviare le email ci affidiamo a un servizio di posta esterno. La mail è facoltativa.',
+        'Le ricevute te le inviamo sempre; gli aggiornamenti solo se attivi le comunicazioni in Consensi, dal tuo profilo, e puoi disattivarle quando vuoi. Per inviare le email ci affidiamo a un servizio di posta esterno. La mail è facoltativa.',
     },
     edit: {
       title: 'Modifica profilo',

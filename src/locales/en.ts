@@ -123,7 +123,7 @@ export default {
       whyEmailBenefit3:
         'If you turn off Apple’s hidden email, we can still reach you',
       whyEmailHonest:
-        'We always send receipts; updates only if you turn on communications in Consents, and you can turn them off anytime. To send emails we rely on an external mail service. The email is optional.',
+        'We always send receipts; updates only if you turn on communications in Consents, from your profile, and you can turn them off anytime. To send emails we rely on an external mail service. The email is optional.',
     },
     edit: {
       title: 'Edit profile',
