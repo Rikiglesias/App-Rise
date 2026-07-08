@@ -110,6 +110,10 @@ export default {
       subtitle:
         'Ci servono ancora pochi dati per la tua iscrizione da donatore',
       submit: 'Salva e continua',
+      contactSection: 'Email di contatto',
+      contactNote:
+        'Con l’accesso Apple hai nascosto la tua email. Inseriscine una reale: ci serve per ricevute e comunicazioni.',
+      contactEmail: 'La tua email',
     },
     edit: {
       title: 'Modifica profilo',

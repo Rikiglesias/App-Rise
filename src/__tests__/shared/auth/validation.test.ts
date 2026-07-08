@@ -31,6 +31,8 @@ const baseProfile = {
   country: 'IT',
   birthDate: '2000-01-01',
   privacyConsent: true,
+  contactEmail: '',
+  requireContactEmail: false,
 };
 
 describe('auth validation', () => {
@@ -129,5 +131,37 @@ describe('auth validation', () => {
     });
     expect(errors.province).toBeUndefined();
     expect(errors.country).toBeUndefined();
+  });
+
+  it('profile form: mail contatto ignorata se non richiesta (mail auth reale)', () => {
+    const errors = validateProfileForm({
+      ...baseProfile,
+      contactEmail: '',
+      requireContactEmail: false,
+    });
+    expect(errors.contactEmail).toBeUndefined();
+  });
+
+  it('profile form: mail contatto obbligatoria+valida se relay Apple', () => {
+    const missing = validateProfileForm({
+      ...baseProfile,
+      contactEmail: '',
+      requireContactEmail: true,
+    });
+    expect(missing.contactEmail).toBe('email_invalid');
+
+    const bad = validateProfileForm({
+      ...baseProfile,
+      contactEmail: 'non-una-mail',
+      requireContactEmail: true,
+    });
+    expect(bad.contactEmail).toBe('email_invalid');
+
+    const ok = validateProfileForm({
+      ...baseProfile,
+      contactEmail: 'vera@dominio.it',
+      requireContactEmail: true,
+    });
+    expect(ok.contactEmail).toBeUndefined();
   });
 });

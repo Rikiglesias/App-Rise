@@ -12,16 +12,20 @@ import { FormError } from '../components/FormError';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useProfileForm } from '../hooks/useProfileForm';
+import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { RISE_URLS } from '@/shared/constants/urls';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 
 /** Step post-social: i provider non danno telefono/città/provincia/data nascita. */
 export const CompleteProfileScreen: React.FC = () => {
   useRequireAuth();
-  const styles = useMemo(() => createStyles(), []);
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useProfileForm();
@@ -105,6 +109,26 @@ export const CompleteProfileScreen: React.FC = () => {
         ) : null}
       </AuthSection>
 
+      {/* Mail di contatto: SOLO per chi entra con Apple Hide-My-Email (mail auth = relay).
+          Ci serve un indirizzo reale e stabile per ricevute e comunicazioni. */}
+      {form.requireContactEmail ? (
+        <AuthSection title={t('auth.completeProfile.contactSection')}>
+          <PerfectText size={13} lines={3} style={styles.contactNote}>
+            {t('auth.completeProfile.contactNote')}
+          </PerfectText>
+          <AuthInput
+            label={t('auth.completeProfile.contactEmail')}
+            value={values.contactEmail}
+            onChangeText={onChange.contactEmail}
+            error={err(errors.contactEmail)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
+          />
+        </AuthSection>
+      ) : null}
+
       <AuthSection title={t('auth.signup.sections.consents')}>
         <AuthConsentCheckbox
           checked={values.privacyConsent}
@@ -127,10 +151,14 @@ export const CompleteProfileScreen: React.FC = () => {
   );
 };
 
-const createStyles = () =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     error: {
       color: Colors.semantic.error.main,
       marginTop: PerfectSpacing.xs,
+    },
+    contactNote: {
+      color: colors.neutral[500],
+      marginBottom: PerfectSpacing.sm,
     },
   });

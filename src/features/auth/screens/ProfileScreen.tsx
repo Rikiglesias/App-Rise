@@ -18,6 +18,7 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { usePostAuthRedirect } from '@/shared/auth/usePostAuthRedirect';
+import { isApplePrivateRelayEmail } from '@/shared/auth/appleRelay';
 import type { RootStackNavigationProp } from '@/navigation/types';
 import {
   formatDateLocalized,
@@ -25,10 +26,6 @@ import {
 } from '@/shared/utils/dateFormat';
 
 const GRACE_DAYS = 30;
-// Apple "Hide My Email" fornisce una relay @privaterelay.appleid.com al posto della
-// vera mail: mostrarla grezza nel profilo è confuso (l'utente non la riconosce come
-// sua). La rileviamo per sostituirla con un'etichetta leggibile.
-const APPLE_RELAY_SUFFIX = '@privaterelay.appleid.com';
 
 export const ProfileScreen: React.FC = () => {
   // Nav post-login: al primo accesso qui redirige a Home (profilo completo) o
@@ -141,9 +138,11 @@ export const ProfileScreen: React.FC = () => {
     ? t('auth.consents.statusOn')
     : t('auth.consents.statusOff');
 
+  // Mail mostrata: se la mail auth è una relay Apple, preferisci la mail di contatto
+  // reale (raccolta al completamento); se manca, un'etichetta invece della relay grezza.
   const accountEmail = session?.user.email ?? '';
-  const emailDisplay = accountEmail.endsWith(APPLE_RELAY_SUFFIX)
-    ? t('auth.profile.applePrivateEmail')
+  const emailDisplay = isApplePrivateRelayEmail(accountEmail)
+    ? (profile?.contact_email ?? t('auth.profile.applePrivateEmail'))
     : accountEmail;
 
   return (

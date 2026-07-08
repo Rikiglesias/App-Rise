@@ -108,6 +108,10 @@ export default {
       title: 'Complete your profile',
       subtitle: 'We still need a few details for your donor registration',
       submit: 'Save and continue',
+      contactSection: 'Contact email',
+      contactNote:
+        'With Apple sign-in you hid your email. Enter a real one: we need it for receipts and communications.',
+      contactEmail: 'Your email',
     },
     edit: {
       title: 'Edit profile',

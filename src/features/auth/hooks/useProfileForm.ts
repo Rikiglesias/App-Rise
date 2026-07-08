@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
+import { isApplePrivateRelayEmail } from '@/shared/auth/appleRelay';
 import {
   validateProfileForm,
   type ProfileErrors,
@@ -20,6 +21,10 @@ export const useProfileForm = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { session, refreshProfile } = useAuth();
 
+  // Utente entrato con Apple "Nascondi la mia email" → mail auth = relay: chiediamo una
+  // mail di contatto reale (Apple può smettere di inoltrare e non ne vediamo mai la vera).
+  const requireContactEmail = isApplePrivateRelayEmail(session?.user.email);
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('+39');
@@ -27,6 +32,7 @@ export const useProfileForm = () => {
   const [province, setProvince] = useState('');
   const [country, setCountry] = useState('IT');
   const [birthDate, setBirthDate] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -74,6 +80,10 @@ export const useProfileForm = () => {
         setBirthDate(v);
         clearError('birthDate');
       },
+      contactEmail: (v: string): void => {
+        setContactEmail(v);
+        clearError('contactEmail');
+      },
     }),
     [clearError]
   );
@@ -113,6 +123,8 @@ export const useProfileForm = () => {
       country,
       birthDate,
       privacyConsent,
+      contactEmail,
+      requireContactEmail,
     });
     setErrors(found);
     if (Object.keys(found).length > 0) return;
@@ -136,6 +148,8 @@ export const useProfileForm = () => {
       p_province: country === 'IT' ? province.trim() : null,
       p_country: country.trim(),
       p_birth_date: birthDate.trim(),
+      // Mail di contatto solo per gli utenti relay Apple; '' per gli altri (la RPC fa nullif).
+      p_contact_email: requireContactEmail ? contactEmail.trim() : '',
     });
     setLoading(false);
     if (error) {
@@ -155,6 +169,8 @@ export const useProfileForm = () => {
     country,
     birthDate,
     privacyConsent,
+    contactEmail,
+    requireContactEmail,
     session,
     refreshProfile,
     navigation,
@@ -174,8 +190,11 @@ export const useProfileForm = () => {
       province,
       country,
       birthDate,
+      contactEmail,
       privacyConsent,
     },
+    /** True se la mail auth è una relay Apple → il form mostra il campo mail di contatto. */
+    requireContactEmail,
     errors,
     refs: { lastNameRef, phoneRef },
     onChange,

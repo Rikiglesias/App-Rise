@@ -101,6 +101,52 @@ describe('CompleteProfileScreen', () => {
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('Home'));
   });
 
+  it('mail auth relay Apple: mostra il campo mail-contatto e lo passa alla RPC', async () => {
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        session: {
+          user: { id: 'u1', email: 'xyz@privaterelay.appleid.com' },
+        } as unknown as Session,
+      })
+    );
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(getByLabelText('La tua email'), 'vera@dominio.it');
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() =>
+      expect(rpcMock).toHaveBeenCalledWith(
+        'complete_social_profile',
+        expect.objectContaining({ p_contact_email: 'vera@dominio.it' })
+      )
+    );
+  });
+
+  it('mail auth relay Apple senza mail-contatto → errore, niente RPC', async () => {
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        session: {
+          user: { id: 'u1', email: 'xyz@privaterelay.appleid.com' },
+        } as unknown as Session,
+      })
+    );
+    const { getByText, getByLabelText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    // Lascia vuota la mail di contatto → validazione blocca il submit.
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(getByText('Email non valida')).toBeTruthy());
+    expect(rpcMock).not.toHaveBeenCalled();
+  });
+
   it('mostra il campo Paese e la RPC include country (default IT)', async () => {
     mockUseAuth.mockReturnValue(makeAuth());
     const { getByLabelText, getByText, getByRole, getByTestId } = render(
