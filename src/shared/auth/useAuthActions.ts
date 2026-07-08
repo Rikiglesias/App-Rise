@@ -411,8 +411,14 @@ export const useAuthActions = ({
       setNeedsReConsent(false);
       return;
     }
+    // Guard out-of-order (review round 3, gemello del finding 111 già risolto per il profilo con
+    // activeUserIdRef): al cambio sessione A→B l'effect ri-parte, ma la fetch lenta di A potrebbe
+    // risolvere DOPO quella di B e sovrascrivere needsReConsent con i dati di A. Il cleanup segna
+    // `cancelled` PRIMA del run di B, così la risoluzione tardiva di A viene scartata.
+    let cancelled = false;
     void Promise.all([getConsentHistory(), getLastMaterialPublishedAt()]).then(
       ([history, materialAt]) => {
+        if (cancelled) return;
         // NON gattiamo su errore di fetch (history null O materialAt undefined): preserva lo stato
         // per non forzare NÉ sopprimere il re-consenso su un errore transient — simmetrico sui due
         // rami (review round 2). materialAt null = nessuna versione materiale → isReConsentRequired
@@ -421,6 +427,9 @@ export const useAuthActions = ({
           setNeedsReConsent(isReConsentRequired(history, materialAt));
       }
     );
+    return () => {
+      cancelled = true;
+    };
   }, [status, session, getConsentHistory, getLastMaterialPublishedAt]);
 
   return useMemo(
