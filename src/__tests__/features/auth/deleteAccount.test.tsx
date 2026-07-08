@@ -174,10 +174,25 @@ describe('ProfileScreen (autenticato)', () => {
     expect(setMarketingConsent).toHaveBeenCalledWith(true);
   });
 
-  it('mostra il re-consenso quando needsReConsent è true', () => {
-    mockUseAuth.mockReturnValue(makeAuth({ needsReConsent: true }));
+  it('mostra il re-consenso quando needsReConsent è true e il profilo esiste', () => {
+    // Il gate re-consenso vale SOLO per utenti già stabiliti (con profilo): un social nuovo
+    // senza profilo va a CompleteProfile, non a ReConsentScreen (fix review round 4).
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        needsReConsent: true,
+        profile: { ...profileWithDeletion, deletion_requested_at: null },
+      })
+    );
     const { getByText } = wrap(<ProfileScreen />);
     expect(getByText('Aggiornamento informativa')).toBeTruthy();
+  });
+
+  it('NON mostra il re-consenso a un utente senza profilo (signup social nuovo)', () => {
+    mockUseAuth.mockReturnValue(
+      makeAuth({ needsReConsent: true, profile: null })
+    );
+    const { queryByText } = wrap(<ProfileScreen />);
+    expect(queryByText('Aggiornamento informativa')).toBeNull();
   });
 
   it('mostra "Modifica profilo" e naviga a ProfileEdit quando il profilo esiste', () => {

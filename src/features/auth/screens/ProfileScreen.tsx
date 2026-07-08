@@ -126,7 +126,12 @@ export const ProfileScreen: React.FC = () => {
     return <LoginScreen />;
   }
 
-  if (needsReConsent) {
+  // Re-consenso SOLO per utenti già stabiliti (con profilo). Un signup social nuovo ha zero
+  // consent_events e nessun profilo → needsReConsent sarebbe true, ma mostrargli "l'informativa
+  // è cambiata, ri-accetta" è copy sbagliata (non ha MAI acconsentito) e creerebbe un evento
+  // privacy_notice duplicato oltre a quello della RPC di completamento profilo. Senza profilo
+  // deve andare a CompleteProfile, dove acconsente correttamente (review round 4).
+  if (profile && needsReConsent) {
     return <ReConsentScreen />;
   }
 
