@@ -13,7 +13,7 @@
  *   hanno solo il nome paese in italiano ("Italia"), il TopoJSON in inglese ("Italy").
  *   Il containment geografico è esatto e indipendente da lingua/spelling.
  */
-import { geoEqualEarth, geoPath, geoContains } from 'd3-geo';
+import { geoEqualEarth, geoPath, geoContains, geoCentroid } from 'd3-geo';
 import { feature } from 'topojson-client';
 import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import type { Topology, GeometryCollection } from 'topojson-specification';
@@ -45,21 +45,109 @@ export interface CountryShape {
   d: string;
 }
 
+export interface MapGeometry {
+  /** Path SVG di tutti i paesi, proiettati per il viewport/focus correnti. */
+  shapes: CountryShape[];
+  /** Proietta [lng, lat] in pixel del viewport, o null se non proiettabile. */
+  project: (
+    longitude: number,
+    latitude: number
+  ) => { x: number; y: number } | null;
+}
+
 /**
- * Costruisce i path SVG proiettati per il viewport dato (geoEqualEarth + fitSize).
+ * Proiezione equal-area fittata al viewport, eventualmente ristretta ai
+ * paesi-focus (continente attivo) con margine del ~12%.
+ */
+const buildProjection = (
+  width: number,
+  height: number,
+  focusFeatureIds?: readonly string[],
+  contextZoom: number = 0.62
+) => {
+  const focus: FeatureCollection<Geometry, CountryProps> =
+    focusFeatureIds && focusFeatureIds.length > 0
+      ? {
+          type: 'FeatureCollection',
+          features: collection.features.filter(
+            f => f.id !== undefined && focusFeatureIds.includes(String(f.id))
+          ),
+        }
+      : collection;
+  const pad = Math.min(width, height) * 0.12;
+  const projection = geoEqualEarth().fitExtent(
+    [
+      [pad, pad],
+      [width - pad, height - pad],
+    ],
+    focus
+  );
+  // Con un focus di destinazioni, `fitExtent` zooma finché riempiono il frame:
+  // 2 paesi lontani (Zimbabwe↕Sudafrica) lasciano un vuoto sbilanciato. Zoomiamo
+  // INDIETRO tenendo il baricentro centrato, così il contesto geografico attorno
+  // equilibra la composizione. `contextZoom` scala l'effetto: più basso = più
+  // contesto (vista-continente fullscreen 0.62); vicino a 1 = fit stretto sulle
+  // destinazioni (preview: Europa+Africa croppate, niente mini-mondo con oceani vuoti).
+  if (focusFeatureIds && focusFeatureIds.length > 0 && contextZoom < 1) {
+    projection.scale(projection.scale() * contextZoom);
+    const projectedCentroid = projection(geoCentroid(focus));
+    if (projectedCentroid) {
+      const [tx, ty] = projection.translate();
+      projection.translate([
+        tx + (width / 2 - projectedCentroid[0]),
+        ty + (height / 2 - projectedCentroid[1]),
+      ]);
+    }
+  }
+  return projection;
+};
+
+/**
+ * Costruisce i path SVG proiettati per il viewport dato (geoEqualEarth).
+ *
+ * `focusFeatureIds` (id numerici dei paesi-destinazione del continente attivo):
+ * la proiezione viene FITTATA su quel sottoinsieme (navigazione per continente),
+ * con un margine del ~12% così i paesi-destinazione non toccano i bordi e i vicini
+ * fanno da contesto geografico. Senza focus → fit sull'intera collezione (overview).
  * `geoPath` è costoso: chiamare dentro `useMemo` nel componente, una volta per size.
  */
 export const buildCountryShapes = (
   width: number,
-  height: number
-): CountryShape[] => {
-  const projection = geoEqualEarth().fitSize([width, height], collection);
+  height: number,
+  focusFeatureIds?: readonly string[]
+): CountryShape[] => buildMapGeometry(width, height, focusFeatureIds).shapes;
+
+/**
+ * Geometria completa per il viewport/focus: i path dei paesi E il proiettore di
+ * punti (per i pin a livello-città). Un'unica proiezione condivisa tra paesi e
+ * pin. `geoPath` è costoso: chiamare dentro `useMemo`, una volta per size+focus.
+ */
+export const buildMapGeometry = (
+  width: number,
+  height: number,
+  focusFeatureIds?: readonly string[],
+  contextZoom: number = 0.62
+): MapGeometry => {
+  const projection = buildProjection(
+    width,
+    height,
+    focusFeatureIds,
+    contextZoom
+  );
   const path = geoPath(projection);
-  return collection.features.map(f => ({
+  const shapes = collection.features.map(f => ({
     id: f.id !== undefined ? String(f.id) : '',
     name: f.properties?.name ?? '',
     d: path(f) ?? '',
   }));
+  const project = (
+    longitude: number,
+    latitude: number
+  ): { x: number; y: number } | null => {
+    const point = projection([longitude, latitude]);
+    return point ? { x: point[0], y: point[1] } : null;
+  };
+  return { shapes, project };
 };
 
 /**

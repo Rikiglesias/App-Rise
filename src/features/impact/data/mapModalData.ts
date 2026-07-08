@@ -1,11 +1,14 @@
 import { LOCATIONS_DATA, type LocationData } from './locationsData';
+import type { FlowType, OriginTrace } from '@/shared/types/location';
 
-// Dati dettagliati per i modals della mappa interattiva
+// Dati dettagliati per il dettaglio della mappa (destinazione selezionata).
 export interface MapModalData {
   id: string;
   title: string;
   subtitle: string;
   flag: string;
+  /** Cosa arriva qui (pasti/kit): guida il rendering della traccia. */
+  type: FlowType;
   description: string;
   program: string;
   partner?: string;
@@ -16,50 +19,56 @@ export interface MapModalData {
     beneficiaries?: number;
     schools?: number;
   };
+  /** Provenienza/affidabilità dei numeri (nota sotto le stat). */
+  statsNote?: string;
+  /** Traccia origine→hub→destinazione, mostrata nel dettaglio. */
+  trace: OriginTrace;
   year: number;
-  image?: string;
-  /** URL di tracciamento pasti/evento (opzionale). Non ancora popolato dai dati
-   *  reali (follow-up): finché assente la CTA "saperne di più" resta nascosta. */
+  /** URL di tracciamento ufficiale (opzionale): se assente la CTA resta nascosta. */
   trackingUrl?: string;
 }
 
+/** Sottotitolo per il dettaglio: ruolo reale della destinazione. */
+const subtitleFor = (location: LocationData): string => {
+  if (location.id === 'italy') return `${location.country} · Hub Europa`;
+  if (location.type === 'meals')
+    return `${location.country} · Destinazione pasti`;
+  return `${location.country} · Destinazione kit`;
+};
+
 /**
- * Converte LocationData in formato MapModalData
+ * Converte LocationData nel formato del dettaglio.
  */
 const toModalFormat = (location: LocationData): MapModalData => {
   const result: MapModalData = {
     id: location.id,
     title: location.name,
-    subtitle:
-      location.id === 'italy'
-        ? `${location.country} - Sede Europea`
-        : location.id === 'usa'
-          ? `${location.country} - Sede Globale`
-          : location.id === 'ukraine'
-            ? `${location.country} - Emergenza Umanitaria`
-            : location.country,
+    subtitle: subtitleFor(location),
     flag: location.flag,
+    type: location.type,
     description: location.description,
     program: location.program,
     achievements: location.achievements,
     stats: location.stats,
+    trace: location.trace,
     year: location.year,
   };
 
   if (location.partner) result.partner = location.partner;
-  if (location.image) result.image = location.image;
+  if (location.statsNote) result.statsNote = location.statsNote;
+  if (location.trackingUrl) result.trackingUrl = location.trackingUrl;
 
   return result;
 };
 
 /**
- * Dati modals generati da single source of truth
+ * Dati del dettaglio generati dalla single source of truth.
  */
 export const MAP_MODAL_DATA: Record<string, MapModalData> = Object.fromEntries(
   LOCATIONS_DATA.map(location => [location.id, toModalFormat(location)])
 );
 
-// Funzione per ottenere i dati di un modal specifico
+// Funzione per ottenere i dati di un dettaglio specifico
 export const getModalData = (locationId: string): MapModalData | null => {
   return MAP_MODAL_DATA[locationId] ?? null;
 };

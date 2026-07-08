@@ -37,7 +37,7 @@ exports[`MapSection Component dovrebbe avere il gradient overlay corretto 1`] = 
       }
     >
       <Text
-        fontWeight="700"
+        fontWeight="800"
         immunity={true}
         lines={1}
         size={22}

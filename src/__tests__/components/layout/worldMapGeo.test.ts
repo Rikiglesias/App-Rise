@@ -17,7 +17,9 @@ const asLocations = (): Location[] =>
     beneficiaries: '',
     status: 'active',
     description: d.description,
-    image: d.image ?? '',
+    image: '',
+    continent: d.continent,
+    year: d.year,
   }));
 
 describe('worldMapGeo', () => {
@@ -45,9 +47,9 @@ describe('worldMapGeo', () => {
   });
 
   describe('matchLocationsToCountries', () => {
-    it('associa tutte le 6 location-evento (6 paesi distinti)', () => {
+    it('associa tutte le 4 destinazioni reali (4 paesi distinti)', () => {
       const matched = matchLocationsToCountries(asLocations());
-      expect(matched.size).toBe(6);
+      expect(matched.size).toBe(4);
       const total = Array.from(matched.values()).reduce(
         (n, arr) => n + arr.length,
         0
@@ -67,11 +69,9 @@ describe('worldMapGeo', () => {
         return undefined;
       };
       expect(countryNameFor('italy')).toBe('Italy');
-      expect(countryNameFor('usa')).toBe('United States of America');
       expect(countryNameFor('ukraine')).toBe('Ukraine');
       expect(countryNameFor('zimbabwe')).toBe('Zimbabwe');
       expect(countryNameFor('south-africa')).toBe('South Africa');
-      expect(countryNameFor('somalia')).toBe('Somalia');
     });
 
     it('preserva più location nello stesso paese senza sovrascrivere', () => {

@@ -29,22 +29,40 @@ const renderScreen = () => {
   return utils;
 };
 
-describe('MapModalScreen — tap paese → dettaglio nazione', () => {
-  it('apre il dettaglio della nazione toccata con i dati corretti (getModalData)', () => {
-    const { getByText, queryByText } = renderScreen();
+describe('MapModalScreen — navigazione continenti + tap paese → dettaglio', () => {
+  it('mostra solo le destinazioni del continente attivo (default Africa)', () => {
+    const { getByText, getAllByText, queryByText } = renderScreen();
+    // Default = Africa: Zimbabwe visibile (label + legend), Ucraina (Europa) no.
+    expect(getAllByText('Zimbabwe').length).toBeGreaterThan(0);
+    expect(queryByText('Ucraina')).toBeNull();
+    // Passo all'Europa → compaiono le sue destinazioni.
+    fireEvent.press(getByText('Europa'));
+    expect(getAllByText('Ucraina').length).toBeGreaterThan(0);
+    expect(queryByText('Zimbabwe')).toBeNull();
+  });
 
+  it('apre il dettaglio della nazione toccata con i dati corretti (getModalData)', () => {
+    const { getByText, getAllByText, queryByText } = renderScreen();
+
+    // Vado in Europa per raggiungere l'Italia (hub).
+    fireEvent.press(getByText('Europa'));
     // Prima del tap: il dettaglio (title = name città) non è montato.
     expect(queryByText('Bologna')).toBeNull();
 
-    // Tap su Italia (chip fallback) → onMarkerPress → modal nazione.
-    fireEvent.press(getByText('Italia'));
-    expect(getByText('Bologna')).toBeTruthy();
-    expect(getByText(/Sede Europea/i)).toBeTruthy();
+    // Tap su Italia (fallback legend, ultimo match: label sulla mappa + legend) →
+    // onMarkerPress → modal nazione. La città compare nel titolo E nella traccia
+    // (destinazione): più occorrenze, attese.
+    const italiaMatches = getAllByText('Italia');
+    fireEvent.press(italiaMatches[italiaMatches.length - 1]);
+    expect(getAllByText('Bologna').length).toBeGreaterThan(0);
+    expect(getByText(/Hub Europa/i)).toBeTruthy();
   });
 
   it('mostra il dettaglio della nazione giusta per un altro paese', () => {
-    const { getByText } = renderScreen();
-    fireEvent.press(getByText('Ucraina'));
-    expect(getByText('Kiev')).toBeTruthy();
+    const { getByText, getAllByText } = renderScreen();
+    fireEvent.press(getByText('Europa'));
+    const ucrainaMatches = getAllByText('Ucraina');
+    fireEvent.press(ucrainaMatches[ucrainaMatches.length - 1]);
+    expect(getAllByText('Kyiv').length).toBeGreaterThan(0);
   });
 });

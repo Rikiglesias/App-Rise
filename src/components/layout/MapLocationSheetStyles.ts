@@ -4,17 +4,27 @@ import { PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
-/** Stili del modal di dettaglio location (mappa impatto). */
+/** Stili del bottom-sheet di dettaglio destinazione (mappa impatto). */
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    modalContainer: {
-      flex: 1,
+    // Sfondo del sheet (angoli alti arrotondati) + grabber.
+    sheetBackground: {
       backgroundColor: colors.neutral[0],
+      borderTopLeftRadius: BorderRadius.xl,
+      borderTopRightRadius: BorderRadius.xl,
     },
+    handleIndicator: {
+      backgroundColor: colors.neutral[300],
+      width: scale(40),
+      height: scale(4),
+    },
+    // Header gradient brand: primo elemento, angoli alti coerenti col sheet.
     header: {
-      paddingTop: PerfectSpacing['3xl'],
+      paddingTop: PerfectSpacing.base,
       paddingBottom: PerfectSpacing.lg,
       paddingHorizontal: PerfectSpacing.base,
+      borderTopLeftRadius: BorderRadius.xl,
+      borderTopRightRadius: BorderRadius.xl,
     },
     headerContent: {
       flexDirection: 'row',
@@ -61,7 +71,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     content: {
       padding: PerfectSpacing.lg,
-      paddingBottom: PerfectSpacing['2xl'],
+      paddingBottom: PerfectSpacing['3xl'],
     },
     statGrid: {
       flexDirection: 'row',
@@ -87,9 +97,80 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[600],
       marginTop: scale(4),
     },
+    // Hero a stat singola: stessa "carta" delle stat-cell ma orizzontale e a
+    // tutta larghezza (una card sola centrata leggeva vuota/sparsa).
+    statHero: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.neutral[50],
+      borderRadius: scale(16),
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+      padding: PerfectSpacing.base,
+      marginBottom: PerfectSpacing.lg,
+    },
+    statHeroIcon: {
+      width: scale(48),
+      height: scale(48),
+      borderRadius: scale(24),
+      backgroundColor: colors.neutral[100],
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: PerfectSpacing.base,
+    },
+    statHeroText: {
+      flex: 1,
+    },
+    statsNote: {
+      color: colors.neutral[500],
+      fontStyle: 'italic',
+      marginTop: scale(-PerfectSpacing.sm),
+      marginBottom: PerfectSpacing.lg,
+    },
     description: {
       color: colors.neutral[700],
       marginBottom: PerfectSpacing.lg,
+    },
+    // Traccia di tracciabilità origine → hub → destinazione (concept "Ibrido").
+    traceSection: {
+      backgroundColor: colors.neutral[50],
+      borderRadius: scale(16),
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+      padding: PerfectSpacing.base,
+      marginBottom: PerfectSpacing.lg,
+    },
+    traceHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: PerfectSpacing.sm,
+    },
+    traceHeaderIcon: {
+      marginRight: PerfectSpacing.sm,
+    },
+    traceStep: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    traceStepIcon: {
+      width: scale(28),
+      alignItems: 'center',
+      marginRight: PerfectSpacing.sm,
+    },
+    traceStepText: {
+      color: colors.neutral[800],
+      flex: 1,
+    },
+    traceStepCaption: {
+      color: colors.neutral[500],
+      flex: 1,
+    },
+    traceConnector: {
+      width: scale(2),
+      height: PerfectSpacing.base,
+      backgroundColor: colors.primary[300],
+      marginLeft: scale(13),
+      marginVertical: scale(2),
     },
     infoRow: {
       flexDirection: 'row',
