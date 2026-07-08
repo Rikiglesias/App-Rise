@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 
 import { AllProviders } from '../../helpers/testProviders';
 import { SignUpScreen } from '@/features/auth/screens/SignUpScreen';
@@ -123,6 +123,23 @@ describe('Auth screens', () => {
     fireEvent.changeText(getByLabelText('Password'), 'abcd1234');
     fireEvent.press(getByRole('button', { name: 'Accedi' }));
     expect(await findByText('Email o password non corretti')).toBeTruthy();
+  });
+
+  it('Login: l’email è trimmata prima di signIn (finding 313)', async () => {
+    (supabase.auth.signInWithPassword as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+      error: null,
+    });
+    const { getByRole, getByLabelText } = wrap(<LoginScreen />);
+    fireEvent.changeText(getByLabelText('Email'), '  mario@rossi.it  ');
+    fireEvent.changeText(getByLabelText('Password'), 'abcd1234');
+    fireEvent.press(getByRole('button', { name: 'Accedi' }));
+    await waitFor(() =>
+      expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
+        email: 'mario@rossi.it',
+        password: 'abcd1234',
+      })
+    );
   });
 
   it('Login: errore social (≠ cancelled) mostra un messaggio', async () => {
