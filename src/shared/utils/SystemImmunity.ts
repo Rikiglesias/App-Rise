@@ -73,7 +73,12 @@ const getConfiguredMaxFontScale = (): number => {
   return 2.0;
 };
 
-// Soglia oltre la quale sbloccare lo scaling di sistema (per piccoli aumenti resta identico)
+// Soglia oltre la quale sbloccare lo scaling di sistema. Default 1.0 = onora QUALSIASI
+// ingrandimento font scelto dall'utente (finding 303, WCAG 1.4.4): prima era 1.3, così chi
+// impostava il font fino a +30% non vedeva NULLA ingrandirsi. Il cap resta maxFontSizeMultiplier
+// (MAX_FONT_SCALE), quindi la banda 1.0-1.3 aggiunta produce testi PIÙ PICCOLI di quelli 1.3-2.0
+// già supportati in produzione → nessuno scenario di layout nuovo. Override via env/extra per
+// tornare al comportamento precedente (fontScaleUnlockThreshold).
 const getUnlockFontScaleThreshold = (): number => {
   try {
     const extra = getExpoExtra();
@@ -94,7 +99,7 @@ const getUnlockFontScaleThreshold = (): number => {
   } catch {
     // ignore
   }
-  return 1.3;
+  return 1.0;
 };
 
 const IMMUNITY_CONFIG = {
