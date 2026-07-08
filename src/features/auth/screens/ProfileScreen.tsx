@@ -25,6 +25,10 @@ import {
 } from '@/shared/utils/dateFormat';
 
 const GRACE_DAYS = 30;
+// Apple "Hide My Email" fornisce una relay @privaterelay.appleid.com al posto della
+// vera mail: mostrarla grezza nel profilo è confuso (l'utente non la riconosce come
+// sua). La rileviamo per sostituirla con un'etichetta leggibile.
+const APPLE_RELAY_SUFFIX = '@privaterelay.appleid.com';
 
 export const ProfileScreen: React.FC = () => {
   // Nav post-login: al primo accesso qui redirige a Home (profilo completo) o
@@ -137,6 +141,11 @@ export const ProfileScreen: React.FC = () => {
     ? t('auth.consents.statusOn')
     : t('auth.consents.statusOff');
 
+  const accountEmail = session?.user.email ?? '';
+  const emailDisplay = accountEmail.endsWith(APPLE_RELAY_SUFFIX)
+    ? t('auth.profile.applePrivateEmail')
+    : accountEmail;
+
   return (
     <AuthScreen title={t('auth.profile.title')}>
       {scheduledDate ? (
@@ -161,7 +170,7 @@ export const ProfileScreen: React.FC = () => {
         </PerfectText>
       ) : null}
       <PerfectText size={15} lines={1} style={styles.email}>
-        {session?.user.email ?? ''}
+        {emailDisplay}
       </PerfectText>
 
       {profile ? (

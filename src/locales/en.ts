@@ -98,6 +98,7 @@ export default {
       birthDate: 'Date of birth',
       completeCta: 'Complete your profile',
       manageTitle: 'Manage',
+      applePrivateEmail: 'Private email (Apple)',
     },
     social: {
       continueGoogle: 'Continue with Google',
@@ -105,7 +106,7 @@ export default {
     },
     completeProfile: {
       title: 'Complete your profile',
-      subtitle: 'A few details are missing to complete your registration',
+      subtitle: 'We still need a few details for your donor registration',
       submit: 'Save and continue',
     },
     edit: {

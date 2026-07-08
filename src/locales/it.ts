@@ -99,6 +99,7 @@ export default {
       birthDate: 'Data di nascita',
       completeCta: 'Completa il tuo profilo',
       manageTitle: 'Gestione',
+      applePrivateEmail: 'Email privata (Apple)',
     },
     social: {
       continueGoogle: 'Continua con Google',
@@ -106,7 +107,8 @@ export default {
     },
     completeProfile: {
       title: 'Completa il profilo',
-      subtitle: 'Mancano alcuni dati per completare la registrazione',
+      subtitle:
+        'Ci servono ancora pochi dati per la tua iscrizione da donatore',
       submit: 'Salva e continua',
     },
     edit: {
