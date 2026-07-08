@@ -25,6 +25,7 @@ import type {
 } from './types';
 import { PROFILE_EDITABLE_KEYS } from './types';
 import { authTelemetry } from './authTelemetry';
+import { logWarn } from '@/shared/utils/logger';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -176,6 +177,14 @@ export const useAuthActions = ({
         access_token,
         refresh_token,
       });
+      if (error) {
+        // Token scaduto/già usato o errore di rete: senza questo log il fallimento del
+        // deep link non ha dato per la diagnosi (il ramo !ok è gestito in useAuthDeepLink).
+        logWarn('setSession from deep link failed', 'auth.deeplink', {
+          type: expectedType,
+          error: error.message,
+        });
+      }
       return { ok: !error };
     },
     []
