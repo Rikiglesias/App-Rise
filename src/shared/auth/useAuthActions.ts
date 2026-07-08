@@ -74,6 +74,14 @@ export interface AuthActions {
   getConsentHistory: () => Promise<ConsentEvent[] | null>;
   /** True se l'utente deve ri-accettare l'informativa corrente (cambio materiale). */
   needsReConsent: boolean;
+  /**
+   * True quando la valutazione del re-consenso è stata RISOLTA per la sessione
+   * corrente (history + versione materiale fetchate, o fail-open su errore transient).
+   * `needsReConsent:false` da solo è ambiguo (non-ancora-calcolato vs nessun cambio):
+   * la nav post-login attende questo flag prima di redirigere un profilo completo a
+   * Home, così non scavalca il gate re-consenso GDPR reso inline in ProfileScreen.
+   */
+  reConsentLoaded: boolean;
   /** Registra l'accettazione della versione corrente dell'informativa. */
   acceptCurrentPolicy: () => Promise<{ error: string | null }>;
 }
@@ -99,6 +107,8 @@ export const useAuthActions = ({
   loadProfile,
 }: UseAuthActionsArgs): AuthActions => {
   const [needsReConsent, setNeedsReConsent] = useState(false);
+  // Segna che la valutazione re-consenso della sessione è conclusa (vedi reConsentLoaded).
+  const [reConsentLoaded, setReConsentLoaded] = useState(false);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -352,6 +362,11 @@ export const useAuthActions = ({
     async (enabled: boolean) => {
       const userId = session?.user.id;
       if (!userId) return { error: 'not_authenticated' };
+      // Guard difensivo: senza riga profilo l'update di profiles.marketing_consent
+      // toccherebbe 0 righe → il toggle sembrerebbe riuscito ma si ri-azzererebbe, e
+      // resterebbe un consent_event orfano senza cache coerente. Il toggle vive nella
+      // sotto-pagina Consensi (raggiungibile solo con profilo), questo è il fondo di rete.
+      if (!profile) return { error: 'no_profile' };
       const channel = `${Platform.OS}:profile_toggle`;
       const { error: evErr } = await supabase
         .from('consent_events')
@@ -372,7 +387,7 @@ export const useAuthActions = ({
       await loadProfile(userId);
       return { error: null };
     },
-    [session, loadProfile]
+    [session, profile, loadProfile]
   );
 
   const acceptCurrentPolicy = useCallback(async () => {
@@ -409,6 +424,9 @@ export const useAuthActions = ({
   useEffect(() => {
     if (status !== 'authenticated' || !session?.user.id) {
       setNeedsReConsent(false);
+      // Non autenticato → nessuna valutazione pendente: torna indeterminato così che,
+      // al prossimo login, la nav attenda la RISOLUZIONE fresca (no redirect stale).
+      setReConsentLoaded(false);
       return;
     }
     // Guard out-of-order (review round 3, gemello del finding 111 già risolto per il profilo con
@@ -425,6 +443,9 @@ export const useAuthActions = ({
         // ritorna false correttamente. Il gate viene ri-valutato al prossimo ciclo auth.
         if (history !== null && materialAt !== undefined)
           setNeedsReConsent(isReConsentRequired(history, materialAt));
+        // Valutazione conclusa per questa sessione — anche su errore transient (fail-open,
+        // coerente col non-gate sopra): sblocca la nav post-login (non la fa attendere all'infinito).
+        setReConsentLoaded(true);
       }
     );
     return () => {
@@ -454,6 +475,7 @@ export const useAuthActions = ({
       setMarketingConsent,
       getConsentHistory,
       needsReConsent,
+      reConsentLoaded,
       acceptCurrentPolicy,
     }),
     [
@@ -477,6 +499,7 @@ export const useAuthActions = ({
       setMarketingConsent,
       getConsentHistory,
       needsReConsent,
+      reConsentLoaded,
       acceptCurrentPolicy,
     ]
   );

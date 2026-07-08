@@ -143,7 +143,9 @@ export const useProfileForm = () => {
       return;
     }
     await refreshProfile();
-    navigation.goBack();
+    // Completamento profilo (social 1ª volta) concluso → Home, non indietro alla
+    // schermata Profilo: l'utente entra nell'app (requisito nav post-login).
+    navigation.navigate('Home');
   }, [
     firstName,
     lastName,

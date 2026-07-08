@@ -64,6 +64,28 @@ const getAuth = (): AuthState => {
   return authRef;
 };
 
+// Profilo caricato per i test che esercitano setMarketingConsent: dal redesign il
+// toggle richiede una riga profilo (guard no-op senza profilo → 0 righe aggiornate).
+const PROFILE_U1 = {
+  id: 'u1',
+  first_name: 'Mario',
+  last_name: 'Rossi',
+  phone: '+393331234567',
+  city: 'Roma',
+  province: 'RM',
+  country: 'IT',
+  birth_date: '1990-01-01',
+  privacy_consent_at: '2026-01-01T00:00:00.000Z',
+  marketing_consent: false,
+  deletion_requested_at: null,
+};
+// Fa sì che il loadProfile del bootstrap risolva un profilo reale (single()).
+const loadProfileOnce = (): void => {
+  (
+    supabase.from('profiles') as unknown as { single: jest.Mock }
+  ).single.mockResolvedValueOnce({ data: PROFILE_U1, error: null });
+};
+
 const renderAuth = () =>
   render(
     <AuthProvider>
@@ -155,6 +177,7 @@ describe('AuthContext', () => {
       insert: jest.Mock;
       update: jest.Mock;
     };
+    loadProfileOnce();
     const { getByText } = renderAuth();
     await waitFor(() => getByText('authenticated'));
     await act(async () => {
@@ -212,6 +235,7 @@ describe('AuthContext', () => {
     const updateMock = (
       supabase.from('profiles') as unknown as { update: jest.Mock }
     ).update;
+    loadProfileOnce();
     const { getByText } = renderAuth();
     await waitFor(() => getByText('authenticated'));
     updateMock.mockClear();
@@ -231,6 +255,7 @@ describe('AuthContext', () => {
       supabase.from('profiles') as unknown as { update: jest.Mock }
     ).update().eq as jest.Mock;
     eqUpdate.mockResolvedValueOnce({ error: { message: 'cache-fail' } });
+    loadProfileOnce();
     const { getByText } = renderAuth();
     await waitFor(() => getByText('authenticated'));
     await act(async () => {
@@ -266,6 +291,37 @@ describe('AuthContext', () => {
       const res = await getAuth().acceptCurrentPolicy();
       expect(res.error).toBe('rec-fail');
     });
+  });
+});
+
+describe('AuthContext — setMarketingConsent guard (redesign)', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRef = undefined;
+  });
+
+  it('setMarketingConsent SENZA profilo → no_profile, nessuna scrittura', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    // Nessun loadProfileOnce → il single default ritorna data:null → profilo assente
+    // (social non completato): il guard deve bloccare prima di ogni scrittura.
+    const api = supabase.from('consent_events') as unknown as {
+      insert: jest.Mock;
+    };
+    const updateMock = (
+      supabase.from('profiles') as unknown as { update: jest.Mock }
+    ).update;
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    api.insert.mockClear();
+    updateMock.mockClear();
+    await act(async () => {
+      const res = await getAuth().setMarketingConsent(true);
+      expect(res.error).toBe('no_profile');
+    });
+    expect(api.insert).not.toHaveBeenCalled();
+    expect(updateMock).not.toHaveBeenCalled();
   });
 });
 

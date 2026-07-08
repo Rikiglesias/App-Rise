@@ -8,9 +8,9 @@ import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
 
-const mockGoBack = jest.fn();
+const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: mockGoBack }),
+  useNavigation: () => ({ navigate: mockNavigate, goBack: jest.fn() }),
 }));
 
 jest.mock('@/shared/auth/AuthContext', () => ({
@@ -97,7 +97,8 @@ describe('CompleteProfileScreen', () => {
     );
     // Il consenso è dentro la transazione dell'RPC: nessun secondo round-trip client.
     expect(recordConsent).not.toHaveBeenCalled();
-    await waitFor(() => expect(mockGoBack).toHaveBeenCalled());
+    // Post-completamento (social 1ª volta) → Home, non goBack alla schermata Profilo.
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('Home'));
   });
 
   it('mostra il campo Paese e la RPC include country (default IT)', async () => {
@@ -150,7 +151,7 @@ describe('CompleteProfileScreen', () => {
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() => expect(rpcMock).toHaveBeenCalled());
-    // Atomico: RPC fallita → niente commit parziale, resta sulla schermata (no goBack).
-    expect(mockGoBack).not.toHaveBeenCalled();
+    // Atomico: RPC fallita → niente commit parziale, resta sulla schermata (no nav a Home).
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });
