@@ -18,7 +18,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
 export const useProfileForm = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { session, refreshProfile, recordConsent } = useAuth();
+  const { session, refreshProfile } = useAuth();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -123,33 +123,22 @@ export const useProfileForm = () => {
       return;
     }
     setLoading(true);
-    // S10: upsert dei soli campi anagrafici + privacy_consent_at. NON ri-stampiamo
-    // marketing_consent: la verità sta nel ledger consent_events; riscriverla a `false`
-    // qui azzererebbe un eventuale consenso marketing già concesso.
-    const { error } = await supabase.from('profiles').upsert({
-      id: userId,
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      phone: phone.trim(),
-      city: city.trim(),
+    // Profilo + prova di consenso privacy (GDPR Art.7) in un'unica transazione server-side
+    // (RPC atomica, finding 236/241): elimina lo stato parziale profilo-senza-ledger se un
+    // round-trip falliva. NON si tocca marketing_consent: la verità è nel ledger, riscriverla
+    // qui azzererebbe un consenso marketing già concesso. La versione policy la timbra il server.
+    const { error } = await supabase.rpc('complete_social_profile', {
+      p_first_name: firstName.trim(),
+      p_last_name: lastName.trim(),
+      p_phone: phone.trim(),
+      p_city: city.trim(),
       // Provincia solo italiana: null per i paesi esteri (colonna nullable).
-      province: country === 'IT' ? province.trim() : null,
-      country: country.trim(),
-      birth_date: birthDate.trim(),
-      privacy_consent_at: new Date().toISOString(),
+      p_province: country === 'IT' ? province.trim() : null,
+      p_country: country.trim(),
+      p_birth_date: birthDate.trim(),
     });
-    if (error) {
-      setLoading(false);
-      setSubmitError(t('auth.errors.generic'));
-      return;
-    }
-    // GDPR Art.7: registra il consenso privacy nel ledger (sessione attiva → RLS ok).
-    const { error: consentError } = await recordConsent(
-      'privacy_notice',
-      'granted'
-    );
     setLoading(false);
-    if (consentError) {
+    if (error) {
       setSubmitError(t('auth.errors.generic'));
       return;
     }
@@ -166,7 +155,6 @@ export const useProfileForm = () => {
     privacyConsent,
     session,
     refreshProfile,
-    recordConsent,
     navigation,
     t,
   ]);
