@@ -3,6 +3,8 @@
  * Sostituisce completamente console.* statements per produzione sicura
  */
 
+import * as Sentry from '@sentry/react-native';
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
 interface LogEntry {
@@ -113,6 +115,23 @@ class ProfessionalLogger {
 
     // Salva sempre nel buffer per crash reporting
     this.writeToBuffer(entry);
+
+    // Bridge crash reporting: in produzione error/fatal vanno a Sentry. Il buffer
+    // in-memory non è consumato da alcun path di produzione (getLogs/exportLogs sono
+    // solo nei test), quindi senza questo bridge ogni logger.error/fatal reale sarebbe
+    // perso al kill del processo. No-op se Sentry non è inizializzato (DSN assente).
+    if (
+      this.isProduction &&
+      (entry.level === 'error' || entry.level === 'fatal')
+    ) {
+      Sentry.captureMessage(entry.message, {
+        level: entry.level === 'fatal' ? 'fatal' : 'error',
+        extra: {
+          context: entry.context,
+          data: entry.data,
+        },
+      });
+    }
   }
 
   // API pubblica del logger

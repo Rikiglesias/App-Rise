@@ -80,11 +80,9 @@ export class ErrorBoundary extends Component<Props, State> {
         });
       }
     } catch (reloadError) {
-      logger.error(
-        'ErrorBoundary',
-        'Failed to reload app',
-        reloadError as Error
-      );
+      logger.error('Failed to reload app', 'ErrorBoundary', {
+        error: (reloadError as Error).message,
+      });
       // Reset manuale dello state
       this.setState({
         hasError: false,
