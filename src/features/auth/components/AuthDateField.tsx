@@ -102,6 +102,11 @@ const AuthDateFieldImpl: React.FC<AuthDateFieldProps> = ({
         >
           {value ? toDisplayDate(value) : placeholder || ''}
         </PerfectText>
+        {/* Affordance di apertura picker, coerente col chevron di AuthCountryField:
+            senza, il campo è indistinguibile da un input di sola lettura (finding 278/280/281). */}
+        <PerfectText size={16} lines={1} style={styles.chevron}>
+          {'⌄'}
+        </PerfectText>
       </PlatformTouchable>
       {open ? (
         <>
@@ -148,7 +153,9 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: PerfectSpacing.base,
       // Altezza uniforme a tutti gli altri campi della pagina.
       minHeight: scale(48),
-      justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     fieldError: {
       borderColor: Colors.semantic.error.main,
@@ -161,6 +168,7 @@ const createStyles = (colors: ThemeColors) =>
       // di neutral[400]) e tono coerente col placeholder degli altri campi (finding 273/293).
       color: colors.neutral[500],
     },
+    chevron: { color: colors.neutral[500] },
     error: {
       color: Colors.semantic.error.main,
       marginTop: PerfectSpacing.xs,
