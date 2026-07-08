@@ -67,7 +67,7 @@ export const ConsentsScreen: React.FC = () => {
           accessibilityLabel={t('auth.consents.marketing')}
         />
       </View>
-      <PerfectText size={13} lines={3} style={styles.hint}>
+      <PerfectText size={13} lines={3} containerWidth={0} style={styles.hint}>
         {t('auth.consents.marketingHint')}
       </PerfectText>
       <FormError message={consentError} size={13} style={styles.error} />

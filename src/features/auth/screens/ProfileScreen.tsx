@@ -236,7 +236,12 @@ export const ProfileScreen: React.FC = () => {
           <PerfectText size={20} lines={1} style={styles.emptyTitle}>
             {t('auth.profile.emptyTitle')}
           </PerfectText>
-          <PerfectText size={15} lines={4} style={styles.emptyBody}>
+          <PerfectText
+            size={15}
+            lines={4}
+            containerWidth={0}
+            style={styles.emptyBody}
+          >
             {t('auth.profile.emptyBody')}
           </PerfectText>
           <View style={styles.accountRow}>

@@ -112,7 +112,14 @@ export const CompleteProfileScreen: React.FC = () => {
           Ci serve un indirizzo reale e stabile per ricevute e comunicazioni. */}
       {form.requireContactEmail ? (
         <AuthSection title={t('auth.completeProfile.contactSection')}>
-          <PerfectText size={13} lines={3} style={styles.contactNote}>
+          {/* containerWidth={0}: disattiva il 70%-centrato automatico di PerfectText
+              per i multi-riga → la nota resta allineata a sinistra come i campi. */}
+          <PerfectText
+            size={13}
+            lines={3}
+            containerWidth={0}
+            style={styles.contactNote}
+          >
             {t('auth.completeProfile.contactNote')}
           </PerfectText>
           <AuthInput

@@ -47,7 +47,7 @@ export const PrivacyScreen: React.FC = () => {
       title={t('auth.privacy.title')}
       subtitle={t('auth.privacy.subtitle')}
     >
-      <PerfectText size={15} lines={4} style={styles.body}>
+      <PerfectText size={15} lines={4} containerWidth={0} style={styles.body}>
         {t('auth.privacy.exportBody')}
       </PerfectText>
       <AuthButton
