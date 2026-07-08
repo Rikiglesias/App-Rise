@@ -124,6 +124,7 @@ export const SignUpScreen: React.FC = () => {
 
       <AuthSection title={t('auth.signup.sections.contacts')}>
         <AuthPhoneField
+          ref={refs.phoneRef}
           label={t('auth.signup.phone')}
           onChangeText={onChange.phone}
           country={values.country}
