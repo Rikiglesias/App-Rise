@@ -107,7 +107,8 @@ describe('ProfileEditScreen', () => {
     );
     fireEvent.changeText(getByLabelText('Telefono'), '+393339998877');
     fireEvent.press(getByText('Salva modifiche'));
-    await findByText('Profilo aggiornato.');
+    // FormSuccess antepone un glifo check ✓ al messaggio → match su sottostringa.
+    await findByText(/Profilo aggiornato\./);
     expect(updateProfile).toHaveBeenCalledWith({ phone: '+393339998877' });
     expect(updateEmail).not.toHaveBeenCalled();
   });

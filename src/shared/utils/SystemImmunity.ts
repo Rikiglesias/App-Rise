@@ -73,12 +73,15 @@ const getConfiguredMaxFontScale = (): number => {
   return 2.0;
 };
 
-// Soglia oltre la quale sbloccare lo scaling di sistema. Default 1.0 = onora QUALSIASI
-// ingrandimento font scelto dall'utente (finding 303, WCAG 1.4.4): prima era 1.3, così chi
-// impostava il font fino a +30% non vedeva NULLA ingrandirsi. Il cap resta maxFontSizeMultiplier
-// (MAX_FONT_SCALE), quindi la banda 1.0-1.3 aggiunta produce testi PIÙ PICCOLI di quelli 1.3-2.0
-// già supportati in produzione → nessuno scenario di layout nuovo. Override via env/extra per
-// tornare al comportamento precedente (fontScaleUnlockThreshold).
+// Soglia oltre la quale sbloccare lo scaling di sistema (finding 303, WCAG 1.4.4).
+// DEVE restare ALLINEATA a PerfectText `adaptiveThreshold` (default 1.2): lo scaling
+// (`allowFontScaling`) e il relief anti-troncamento di PerfectText (unclamp righe + width)
+// sono governati da DUE soglie INDIPENDENTI. Se lo scaling parte PRIMA del relief, la banda
+// intermedia scala il testo ma lo tiene clampato a righe/larghezza fisse → OVERFLOW troncato
+// (regressione confermata dalla review avversariale sul tentativo iniziale unlock=1.0). Con
+// unlock=adaptiveThreshold=1.2 la banda che scala (>1.2) coincide con quella che ha il relief
+// → nessun troncamento per costruzione. Prima era 1.3 (chi impostava font 100-130% non vedeva
+// nulla); 1.2 lo migliora senza regressione. Il cap resta MAX_FONT_SCALE. Override via env/extra.
 const getUnlockFontScaleThreshold = (): number => {
   try {
     const extra = getExpoExtra();
@@ -99,7 +102,8 @@ const getUnlockFontScaleThreshold = (): number => {
   } catch {
     // ignore
   }
-  return 1.0;
+  // Allineato a PerfectText adaptiveThreshold (1.2): vedi commento sopra.
+  return 1.2;
 };
 
 const IMMUNITY_CONFIG = {

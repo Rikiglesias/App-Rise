@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, type StyleProp, type TextStyle } from 'react-native';
+import { View, type StyleProp, type TextStyle } from 'react-native';
 
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
+import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 
 interface FormSuccessProps {
   /** Messaggio di conferma; se assente/null/vuoto non renderizza nulla. */
@@ -14,10 +15,15 @@ interface FormSuccessProps {
 
 /**
  * Conferma positiva di form/azione, coerente su tutte le schermate auth (DRY, gemello di
- * FormError, zero-O): testo verde semantic.success + glifo check ✓, avvolto in una
- * live-region "polite" così VoiceOver/TalkBack annunciano l'esito senza interrompere.
- * Standardizza gli stati "riuscito" prima grigi (neutral[700]) e senza affordance,
- * incoerenti tra ForgotPassword/ResetPassword/SignUp e il verde di ProfileEdit (finding 258).
+ * FormError, zero-O): glifo check ✓ come prefisso del testo, in live-region "polite" così
+ * VoiceOver/TalkBack annunciano l'esito senza interrompere. Standardizza gli stati "riuscito"
+ * prima grigi (neutral[700]) e incoerenti (finding 258).
+ *
+ * Il verde è THEME-AWARE per il contrasto (WCAG AA 1.4.3, review): i token `semantic` NON
+ * sono adattati al tema, e `success.main` (#10B981) su sfondo chiaro dà solo ~2.4:1 (sotto
+ * 4.5:1) → in light usiamo `success.dark` (#065F46 ≈ 8:1), in dark `success.main` (≈ 7:1).
+ * Il check è dentro l'unica PerfectText (come FormError): niente riga/box separati che a
+ * font-scale alto si disallineano (review, box a larghezza fissa di PerfectText multilinea).
  */
 export const FormSuccess: React.FC<FormSuccessProps> = ({
   message,
@@ -25,34 +31,16 @@ export const FormSuccess: React.FC<FormSuccessProps> = ({
   lines = 4,
   style,
 }) => {
+  const { isDark } = useUniversalTheme();
   if (!message) return null;
+  const color = isDark
+    ? Colors.semantic.success.main
+    : Colors.semantic.success.dark;
   return (
-    <View style={styles.row} accessibilityLiveRegion="polite">
-      <PerfectText
-        size={size}
-        lines={1}
-        color={Colors.semantic.success.main}
-        style={styles.check}
-      >
-        {'✓'}
+    <View accessibilityLiveRegion="polite">
+      <PerfectText size={size} lines={lines} color={color} style={style}>
+        {`✓ ${message}`}
       </PerfectText>
-      <View style={styles.textWrap}>
-        <PerfectText
-          size={size}
-          lines={lines}
-          containerWidth={0}
-          color={Colors.semantic.success.main}
-          style={style}
-        >
-          {message}
-        </PerfectText>
-      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'flex-start' },
-  check: { marginRight: 6 },
-  textWrap: { flex: 1 },
-});

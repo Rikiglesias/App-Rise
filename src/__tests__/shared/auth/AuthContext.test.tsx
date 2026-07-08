@@ -8,19 +8,23 @@ import { supabase } from '@/shared/auth/supabaseClient';
 
 jest.mock('@/shared/auth/supabaseClient', () => {
   const single = jest.fn(() => Promise.resolve({ data: null, error: null }));
-  // getCurrentPolicy: select('version, is_material').order().limit().maybeSingle()
+  // getLastMaterialPublishedAt: select('published_at').eq('is_material',true).order().limit().maybeSingle()
   const maybeSingle = jest.fn(() =>
     Promise.resolve({
-      data: { version: 'privacy-2026-06-15', is_material: true },
+      data: { published_at: '2026-06-15T00:00:00Z' },
       error: null,
     })
   );
   const limit = jest.fn(() => ({ maybeSingle }));
-  const orderTop = jest.fn(() => ({ limit }));
-  // getConsentHistory: select('*').eq().order() (awaited direttamente)
+  const orderMaterial = jest.fn(() => ({ limit }));
+  // getConsentHistory: select('*').eq('user_id').order() (awaited direttamente; sovrascrivibile
+  // nei test per simulare errori). Catena SEPARATA da quella materiale (eqSelect argument-aware)
+  // così un override di `order` non rompe getLastMaterialPublishedAt (finding 308).
   const order = jest.fn(() => Promise.resolve({ data: [], error: null }));
-  const eqSelect = jest.fn(() => ({ single, order }));
-  const select = jest.fn(() => ({ eq: eqSelect, order: orderTop }));
+  const eqSelect = jest.fn((col?: string) =>
+    col === 'is_material' ? { order: orderMaterial } : { single, order }
+  );
+  const select = jest.fn(() => ({ eq: eqSelect }));
   const eqUpdate = jest.fn(() => Promise.resolve({ error: null }));
   const update = jest.fn(() => ({ eq: eqUpdate }));
   const insert = jest.fn(() => Promise.resolve({ error: null }));

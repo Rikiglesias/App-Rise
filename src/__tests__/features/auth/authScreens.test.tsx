@@ -84,10 +84,9 @@ describe('Auth screens', () => {
     fireEvent.changeText(getByLabelText('Nuova password'), 'Abcd123!');
     fireEvent.changeText(getByLabelText('Conferma password'), 'Abcd123!');
     fireEvent.press(getByText('Salva password'));
+    // FormSuccess antepone un glifo check ✓ al messaggio → match su sottostringa.
     expect(
-      await findByText(
-        'Password aggiornata. Ora puoi accedere con la nuova password.'
-      )
+      await findByText(/Password aggiornata\. Ora puoi accedere/)
     ).toBeTruthy();
     expect(supabase.auth.updateUser).toHaveBeenCalledWith({
       password: 'Abcd123!',
