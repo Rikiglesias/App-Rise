@@ -6,19 +6,16 @@ import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
 import { FormError } from '../components/FormError';
-import { PerfectText } from '@/components/ui';
+import { FormSuccess } from '../components/FormSuccess';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { useThemeColors } from '@/shared/hooks/useThemeColors';
-import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validateEmail } from '@/shared/auth/validation';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const ForgotPasswordScreen: React.FC = () => {
-  const colors = useThemeColors();
-  const styles = useMemo(() => createStyles(colors), [colors]);
+  const styles = useMemo(() => createStyles(), []);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { resetPassword } = useAuth();
@@ -54,9 +51,11 @@ export const ForgotPasswordScreen: React.FC = () => {
     <AuthScreen title={t('auth.forgot.title')}>
       {sent ? (
         <>
-          <PerfectText size={16} lines={4} style={styles.sent}>
-            {t('auth.forgot.sent')}
-          </PerfectText>
+          <FormSuccess
+            message={t('auth.forgot.sent')}
+            lines={4}
+            style={styles.sent}
+          />
           <AuthButton
             label={t('auth.forgot.backToLogin')}
             variant="link"
@@ -92,10 +91,9 @@ export const ForgotPasswordScreen: React.FC = () => {
   );
 };
 
-const createStyles = (colors: ThemeColors) =>
+const createStyles = () =>
   StyleSheet.create({
     sent: {
-      color: colors.neutral[700],
       marginBottom: PerfectSpacing.lg,
     },
     error: {

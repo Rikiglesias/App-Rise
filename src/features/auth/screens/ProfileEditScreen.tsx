@@ -9,6 +9,7 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
 import { FormError } from '../components/FormError';
+import { FormSuccess } from '../components/FormSuccess';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -239,9 +240,13 @@ export const ProfileEditScreen: React.FC = () => {
         </PerfectText>
       ) : null}
       {success ? (
-        <PerfectText size={14} lines={3} style={styles.success}>
-          {emailChanged ? t('auth.edit.emailNotice') : t('auth.edit.success')}
-        </PerfectText>
+        <FormSuccess
+          size={14}
+          lines={3}
+          message={
+            emailChanged ? t('auth.edit.emailNotice') : t('auth.edit.success')
+          }
+        />
       ) : null}
 
       <AuthButton
@@ -261,10 +266,6 @@ const createStyles = (colors: ThemeColors) =>
     },
     error: {
       color: Colors.semantic.error.main,
-      marginTop: PerfectSpacing.xs,
-    },
-    success: {
-      color: Colors.semantic.success.main,
       marginTop: PerfectSpacing.xs,
     },
     pending: {

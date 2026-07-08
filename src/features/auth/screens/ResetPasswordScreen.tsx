@@ -6,11 +6,9 @@ import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
 import { FormError } from '../components/FormError';
-import { PerfectText } from '@/components/ui';
+import { FormSuccess } from '../components/FormSuccess';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
-import { useThemeColors } from '@/shared/hooks/useThemeColors';
-import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validatePassword } from '@/shared/auth/validation';
@@ -22,8 +20,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  * password con `updatePassword`; l'utente resta loggato e torna all'app.
  */
 export const ResetPasswordScreen: React.FC = () => {
-  const colors = useThemeColors();
-  const styles = useMemo(() => createStyles(colors), [colors]);
+  const styles = useMemo(() => createStyles(), []);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { updatePassword } = useAuth();
@@ -67,9 +64,11 @@ export const ResetPasswordScreen: React.FC = () => {
     <AuthScreen title={t('auth.reset.title')}>
       {done ? (
         <>
-          <PerfectText size={16} lines={3} style={styles.sent}>
-            {t('auth.reset.success')}
-          </PerfectText>
+          <FormSuccess
+            message={t('auth.reset.success')}
+            lines={3}
+            style={styles.sent}
+          />
           <AuthButton label={t('auth.reset.continue')} onPress={goHome} />
         </>
       ) : (
@@ -111,10 +110,9 @@ export const ResetPasswordScreen: React.FC = () => {
   );
 };
 
-const createStyles = (colors: ThemeColors) =>
+const createStyles = () =>
   StyleSheet.create({
     sent: {
-      color: colors.neutral[700],
       marginBottom: PerfectSpacing.lg,
     },
     error: {
