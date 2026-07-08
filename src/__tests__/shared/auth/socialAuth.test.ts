@@ -34,6 +34,14 @@ describe('socialAuth', () => {
       });
     });
 
+    it('con iosClientId: lo passa a configure (necessario per il sign-in iOS)', () => {
+      configureGoogle('web-client-id-123', 'ios-client-id-456');
+      expect(googleConfigureMock).toHaveBeenCalledWith({
+        webClientId: 'web-client-id-123',
+        iosClientId: 'ios-client-id-456',
+      });
+    });
+
     it('modulo nativo assente: non chiama configure (login Google disattivato)', () => {
       jest.spyOn(TurboModuleRegistry, 'get').mockReturnValueOnce(null);
       configureGoogle('web-client-id-123');
@@ -48,10 +56,21 @@ describe('socialAuth', () => {
       expect(signInAsyncMock).toHaveBeenCalledTimes(1);
     });
 
-    it('ritorna null se l’identity token manca', async () => {
+    it('successo SENZA identity token (misconfig): rilancia, non lo tratta come annullamento', async () => {
       signInAsyncMock.mockResolvedValueOnce({ identityToken: null });
-      const token = await getAppleIdToken();
-      expect(token).toBeNull();
+      await expect(getAppleIdToken()).rejects.toThrow(
+        'apple_no_identity_token'
+      );
+    });
+
+    it('annullamento utente (ERR_REQUEST_CANCELED): ritorna null, non rilancia', async () => {
+      signInAsyncMock.mockRejectedValueOnce({ code: 'ERR_REQUEST_CANCELED' });
+      await expect(getAppleIdToken()).resolves.toBeNull();
+    });
+
+    it('errore reale (non annullamento): rilancia per farlo emergere', async () => {
+      signInAsyncMock.mockRejectedValueOnce(new Error('apple network fail'));
+      await expect(getAppleIdToken()).rejects.toThrow('apple network fail');
     });
   });
 
@@ -66,6 +85,14 @@ describe('socialAuth', () => {
       googleSignInMock.mockResolvedValueOnce({ type: 'cancelled' });
       const token = await getGoogleIdToken();
       expect(token).toBeNull();
+    });
+
+    it('successo SENZA id-token (misconfig): rilancia, non lo tratta come annullamento', async () => {
+      googleSignInMock.mockResolvedValueOnce({
+        type: 'success',
+        data: { idToken: null },
+      });
+      await expect(getGoogleIdToken()).rejects.toThrow('google_no_id_token');
     });
 
     it('modulo nativo assente: ritorna null senza chiamare signIn', async () => {
@@ -90,6 +117,11 @@ describe('socialAuth', () => {
       signInAsyncMock.mockResolvedValueOnce({ authorizationCode: null });
       const code = await getAppleAuthCodeForDeletion();
       expect(code).toBeNull();
+    });
+
+    it('annullamento utente durante la cancellazione: ritorna null (→ abort senza eliminare)', async () => {
+      signInAsyncMock.mockRejectedValueOnce({ code: 'ERR_REQUEST_CANCELED' });
+      await expect(getAppleAuthCodeForDeletion()).resolves.toBeNull();
     });
   });
 });

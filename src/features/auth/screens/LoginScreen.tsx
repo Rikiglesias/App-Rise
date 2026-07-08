@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { SocialButtons } from '../components/SocialButtons';
-import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -111,11 +111,7 @@ export const LoginScreen: React.FC = () => {
         returnKeyType="done"
         onSubmitEditing={handleSubmit}
       />
-      {submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {submitError}
-        </PerfectText>
-      ) : null}
+      <FormError message={submitError} style={styles.error} />
       <AuthButton
         label={t('auth.login.submit')}
         onPress={handleSubmit}
@@ -135,11 +131,7 @@ export const LoginScreen: React.FC = () => {
         onPress={goToSignUp}
       />
       <SocialButtons onError={handleSocialError} />
-      {socialError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {socialError}
-        </PerfectText>
-      ) : null}
+      <FormError message={socialError} style={styles.error} />
     </AuthScreen>
   );
 };

@@ -97,8 +97,30 @@ export async function handler(req: Request, deps: PurgeDeps = {}): Promise<Respo
   }
 
   let deleted = 0;
+  let skipped = 0;
   const failures: PurgeFailure[] = [];
   for (const row of data ?? []) {
+    // TOCTOU guard: tra la SELECT e ora l'utente può aver annullato la cancellazione
+    // (cancelScheduledDeletion → deletion_requested_at = null). Rileggo lo stato subito
+    // prima del delete e salto se la riga non è più idonea → non si hard-delete chi ha
+    // revocato entro il grace period (GDPR: cancellazione irreversibile contro volontà).
+    const { data: fresh, error: recheckErr } = await admin
+      .from('profiles')
+      .select('id')
+      .eq('id', row.id)
+      .not('deletion_requested_at', 'is', null)
+      .lt('deletion_requested_at', cutoff)
+      .maybeSingle();
+    if (recheckErr) {
+      console.error('[purge-deletions] recheck fallito', row.id, recheckErr.message);
+      failures.push({ id: row.id, message: recheckErr.message });
+      continue;
+    }
+    if (!fresh) {
+      // Annullata o non più oltre il cutoff: skip legittimo, non è un fallimento.
+      skipped++;
+      continue;
+    }
     const { error: delErr } = await admin.auth.admin.deleteUser(row.id);
     if (delErr) {
       console.error('[purge-deletions] delete fallito', row.id, delErr.message);
@@ -112,7 +134,12 @@ export async function handler(req: Request, deps: PurgeDeps = {}): Promise<Respo
   }
 
   return new Response(
-    JSON.stringify({ deleted, scanned: data?.length ?? 0, failed: failures.length }),
+    JSON.stringify({
+      deleted,
+      skipped,
+      scanned: data?.length ?? 0,
+      failed: failures.length,
+    }),
     { headers: { 'Content-Type': 'application/json' } },
   );
 }

@@ -4,6 +4,7 @@ import type { NavigationContainerRefWithCurrent } from '@react-navigation/native
 
 import { useAuth } from './AuthContext';
 import { isRecoveryRedirect, isEmailConfirmRedirect } from './authRedirect';
+import { logWarn } from '@/shared/utils/logger';
 import type { RootStackParamList } from '@/navigation/types';
 
 /**
@@ -32,11 +33,19 @@ export const useAuthDeepLink = (
       void completeRecoveryFromUrl(url).then(({ ok }) => {
         if (ok && navigationRef.isReady()) {
           navigationRef.navigate('ResetPassword');
+        } else if (!ok) {
+          // Link di reset scaduto/già usato o setSession fallito: senza log l'utente
+          // resta in un vicolo cieco silenzioso e non c'è dato per diagnosticare.
+          logWarn('recovery deep link not established', 'auth.deeplink');
         }
       });
     } else if (isEmailConfirmRedirect(url)) {
       handled.current = url;
-      void completeEmailConfirmFromUrl(url);
+      void completeEmailConfirmFromUrl(url).then(({ ok }) => {
+        if (!ok) {
+          logWarn('email-confirm deep link not established', 'auth.deeplink');
+        }
+      });
     }
   }, [
     url,

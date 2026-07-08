@@ -3,9 +3,13 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthDateField } from '../components/AuthDateField';
+import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
+import { FormSuccess } from '../components/FormSuccess';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -95,9 +99,10 @@ export const ProfileEditScreen: React.FC = () => {
     if (country.trim() !== (profile?.country ?? 'IT'))
       changed.country = country.trim();
     if (city.trim() !== profile?.city) changed.city = city.trim();
-    // Provincia solo italiana: per i paesi esteri si azzera.
-    const nextProvince = country === 'IT' ? province.trim() : '';
-    if (nextProvince !== (profile?.province ?? ''))
+    // Provincia solo italiana: per i paesi esteri = null (coerente con signup e
+    // useProfileForm; evita due rappresentazioni di "nessuna provincia" '' vs null).
+    const nextProvince = country === 'IT' ? province.trim() : null;
+    if (nextProvince !== (profile?.province ?? null))
       changed.province = nextProvince;
     if (birthDate.trim() !== profile?.birth_date)
       changed.birth_date = birthDate.trim();
@@ -189,12 +194,13 @@ export const ProfileEditScreen: React.FC = () => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      <AuthInput
+      <AuthPhoneField
         label={t('auth.signup.phone')}
-        value={phone}
         onChangeText={setPhone}
+        country={country}
+        onCountryChange={handleSelectCountry}
         error={err(errors.phone)}
-        keyboardType="phone-pad"
+        initialValue={profile?.phone ?? ''}
       />
       <AuthCountryField
         label={t('auth.signup.country')}
@@ -214,34 +220,33 @@ export const ProfileEditScreen: React.FC = () => {
         <AuthInput
           label={t('auth.signup.province')}
           value={province}
-          onChangeText={setProvince}
           error={err(errors.province)}
-          autoCapitalize="characters"
+          editable={false}
+          placeholder={t('auth.signup.provincePlaceholder')}
         />
       ) : null}
-      <AuthInput
+      <AuthDateField
         label={t('auth.signup.birthDate')}
         value={birthDate}
-        onChangeText={setBirthDate}
+        onChange={setBirthDate}
         error={err(errors.birthDate)}
-        placeholder="2000-01-31"
-        autoCapitalize="none"
+        placeholder={t('auth.signup.birthDatePlaceholder')}
       />
 
-      {submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {submitError}
-        </PerfectText>
-      ) : null}
+      <FormError message={submitError} style={styles.error} />
       {pendingEmail ? (
         <PerfectText size={14} lines={3} style={styles.pending}>
           {t('auth.edit.emailPending', { email: pendingEmail })}
         </PerfectText>
       ) : null}
       {success ? (
-        <PerfectText size={14} lines={3} style={styles.success}>
-          {emailChanged ? t('auth.edit.emailNotice') : t('auth.edit.success')}
-        </PerfectText>
+        <FormSuccess
+          size={14}
+          lines={3}
+          message={
+            emailChanged ? t('auth.edit.emailNotice') : t('auth.edit.success')
+          }
+        />
       ) : null}
 
       <AuthButton
@@ -261,10 +266,6 @@ const createStyles = (colors: ThemeColors) =>
     },
     error: {
       color: Colors.semantic.error.main,
-      marginTop: PerfectSpacing.xs,
-    },
-    success: {
-      color: Colors.semantic.success.main,
       marginTop: PerfectSpacing.xs,
     },
     pending: {

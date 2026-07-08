@@ -5,7 +5,13 @@
  */
 import type { ConsentAction, ConsentEvent, ConsentPurpose } from './types';
 
-/** Versione corrente dell'informativa (allineata al seed di migration 0003). */
+/**
+ * Versione dell'informativa usata come FALLBACK client-side (seed di migration 0003).
+ * NON è più la fonte di verità: il gate di re-consenso legge la versione latest a runtime
+ * da policy_versions (useAuthActions.getLastMaterialPublishedAt, finding 211) e il trigger server
+ * 0011 timbra policy_version = latest su ogni consent_events INSERT, ignorando questo valore.
+ * Resta solo come default di buildConsentInsert (garantisce una FK valida se il trigger no-op).
+ */
 export const CURRENT_POLICY_VERSION = 'privacy-2026-06-15';
 
 /** Base giuridica registrata per ogni evento del ledger. */
@@ -49,24 +55,29 @@ export const deriveMarketingState = (events: ConsentEvent[]): boolean => {
 };
 
 /**
- * Serve re-consenso SOLO quando la versione corrente dell'informativa è un cambio
- * MATERIALE (policy_versions.is_material=true, EDPB §110) e l'utente NON ha un evento
- * 'privacy_notice' granted per quella versione.
+ * Serve re-consenso quando esiste una versione MATERIALE dell'informativa
+ * (policy_versions.is_material=true, EDPB §110) pubblicata DOPO l'ultimo evento
+ * 'privacy_notice' granted dell'utente.
  *
- * `isCurrentMaterial` (default `true` = fail-safe privacy): il chiamante lo deriva da
- * policy_versions.is_material; se la versione NON è materiale (refuso/chiarimento) non
- * si forza mai il re-consenso. Col default `true` il comportamento legacy è invariato.
+ * NON basta guardare la versione latest: una versione materiale (es. v2) può essere
+ * scavalcata da una NON-materiale (es. v3, correzione di un refuso). Un utente che non
+ * ha mai accettato v2 va comunque ri-invitato, anche se la latest (v3) è non-materiale.
+ * Per questo il confronto è temporale, non sul flag della sola latest (fix review 211).
+ *
+ * @param events storia consensi dell'utente
+ * @param lastMaterialPublishedAt `published_at` (ISO) della versione materiale più recente,
+ *   o `null` se non esiste alcuna versione materiale → nessun re-consenso (fail-safe verso
+ *   NON forzare: un errore di fetch collassa qui, coerente col non gattare su errore transient).
  */
 export const isReConsentRequired = (
   events: ConsentEvent[],
-  currentVersion: string = CURRENT_POLICY_VERSION,
-  isCurrentMaterial: boolean = true
+  lastMaterialPublishedAt: string | null
 ): boolean => {
-  if (!isCurrentMaterial) return false;
-  return !events.some(
-    e =>
-      e.purpose === 'privacy_notice' &&
-      e.action === 'granted' &&
-      e.policy_version === currentVersion
-  );
+  if (!lastMaterialPublishedAt) return false;
+  const lastGranted = events
+    .filter(e => e.purpose === 'privacy_notice' && e.action === 'granted')
+    .map(e => e.created_at)
+    .sort((a, b) => b.localeCompare(a))[0];
+  // Mai consenso → re-consenso; oppure ultimo consenso PRIMA dell'ultima versione materiale.
+  return !lastGranted || lastGranted < lastMaterialPublishedAt;
 };

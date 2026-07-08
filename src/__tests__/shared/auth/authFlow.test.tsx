@@ -39,8 +39,25 @@ jest.mock('@/shared/auth/supabaseClient', () => ({
       single: jest.fn(() =>
         Promise.resolve({ data: mockProfile, error: null })
       ),
-      // getConsentHistory (M4): select().eq().order() — nessun evento nel mock.
-      order: jest.fn(() => Promise.resolve({ data: [], error: null })),
+      // order() serve DUE catene: getConsentHistory (select().eq().order(), awaited → [])
+      // e getLastMaterialPublishedAt (select().eq().order().limit().maybeSingle()).
+      // Il risultato è awaitable (Promise) E chainable (.limit).
+      order: jest.fn(() =>
+        Object.assign(Promise.resolve({ data: [], error: null }), {
+          limit: jest.fn(() => ({
+            maybeSingle: jest.fn(() =>
+              Promise.resolve({
+                data: {
+                  version: 'privacy-2026-06-15',
+                  is_material: true,
+                  published_at: '2026-06-15T00:00:00Z',
+                },
+                error: null,
+              })
+            ),
+          })),
+        })
+      ),
     })),
   },
 }));

@@ -9,6 +9,7 @@ import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface AuthDateFieldProps {
@@ -39,7 +40,7 @@ const toDisplayDate = (iso: string): string => {
  * Espone/riceve sempre una stringa ISO `YYYY-MM-DD`, così resta compatibile con
  * la validazione (validateAdult) e con il payload del profilo (birth_date).
  */
-export const AuthDateField: React.FC<AuthDateFieldProps> = ({
+const AuthDateFieldImpl: React.FC<AuthDateFieldProps> = ({
   label,
   value,
   onChange,
@@ -47,6 +48,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
   placeholder,
 }) => {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [open, setOpen] = useState(false);
 
@@ -100,6 +102,11 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
         >
           {value ? toDisplayDate(value) : placeholder || ''}
         </PerfectText>
+        {/* Affordance di apertura picker, coerente col chevron di AuthCountryField:
+            senza, il campo è indistinguibile da un input di sola lettura (finding 278/280/281). */}
+        <PerfectText size={16} lines={1} style={styles.chevron}>
+          {'⌄'}
+        </PerfectText>
       </PlatformTouchable>
       {open ? (
         <>
@@ -109,19 +116,24 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
           <Pressable
             style={styles.dismissOverlay}
             onPress={() => setOpen(false)}
-            accessibilityLabel="Chiudi selezione data"
+            accessibilityLabel={t('auth.a11y.closeDatePicker')}
           />
           {picker}
         </>
       ) : null}
       {error ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {error}
-        </PerfectText>
+        <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
+          <PerfectText size={13} lines={2} style={styles.error}>
+            {error}
+          </PerfectText>
+        </View>
       ) : null}
     </View>
   );
 };
+
+// React.memo: props stabili → niente re-render sui cambi dei campi fratelli (finding 131).
+export const AuthDateField = React.memo(AuthDateFieldImpl);
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
@@ -141,7 +153,9 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: PerfectSpacing.base,
       // Altezza uniforme a tutti gli altri campi della pagina.
       minHeight: scale(48),
-      justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     fieldError: {
       borderColor: Colors.semantic.error.main,
@@ -150,8 +164,11 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[900],
     },
     placeholder: {
-      color: colors.neutral[400],
+      // neutral[500] come AuthInput/AuthCityField: contrasto WCAG AA (~4.7:1 vs ~2.5:1
+      // di neutral[400]) e tono coerente col placeholder degli altri campi (finding 273/293).
+      color: colors.neutral[500],
     },
+    chevron: { color: colors.neutral[500] },
     error: {
       color: Colors.semantic.error.main,
       marginTop: PerfectSpacing.xs,

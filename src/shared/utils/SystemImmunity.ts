@@ -10,7 +10,7 @@
  * ✅ Conformità WCAG 2.1 (Web Content Accessibility Guidelines)
  *
  * COSA LIMITA:
- * ⚠️ Scaling eccessivo (max 1.3x per prevenire layout rotti)
+ * ⚠️ Scaling eccessivo oltre il cap (MAX_FONT_SCALE, default 2.0) per prevenire layout rotti
  * ⚠️ Pixel ratio inconsistente (mantiene riferimento iPhone 15)
  *
  * RISULTATO: App accessibile ma layout stabile
@@ -73,7 +73,15 @@ const getConfiguredMaxFontScale = (): number => {
   return 2.0;
 };
 
-// Soglia oltre la quale sbloccare lo scaling di sistema (per piccoli aumenti resta identico)
+// Soglia oltre la quale sbloccare lo scaling di sistema (finding 303, WCAG 1.4.4).
+// DEVE restare ALLINEATA a PerfectText `adaptiveThreshold` (default 1.2): lo scaling
+// (`allowFontScaling`) e il relief anti-troncamento di PerfectText (unclamp righe + width)
+// sono governati da DUE soglie INDIPENDENTI. Se lo scaling parte PRIMA del relief, la banda
+// intermedia scala il testo ma lo tiene clampato a righe/larghezza fisse → OVERFLOW troncato
+// (regressione confermata dalla review avversariale sul tentativo iniziale unlock=1.0). Con
+// unlock=adaptiveThreshold=1.2 la banda che scala (>1.2) coincide con quella che ha il relief
+// → nessun troncamento per costruzione. Prima era 1.3 (chi impostava font 100-130% non vedeva
+// nulla); 1.2 lo migliora senza regressione. Il cap resta MAX_FONT_SCALE. Override via env/extra.
 const getUnlockFontScaleThreshold = (): number => {
   try {
     const extra = getExpoExtra();
@@ -94,7 +102,8 @@ const getUnlockFontScaleThreshold = (): number => {
   } catch {
     // ignore
   }
-  return 1.3;
+  // Allineato a PerfectText adaptiveThreshold (1.2): vedi commento sopra.
+  return 1.2;
 };
 
 const IMMUNITY_CONFIG = {
@@ -145,8 +154,8 @@ export const getImmuneTextProps = () => {
     // ✅ RISPETTA font scaling sistema (accessibilità)
     allowFontScaling: allowScaling,
 
-    // ⚠️ LIMITA moltiplicatore a 1.3x (stabilità layout)
-    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE, // = 1.3
+    // ⚠️ LIMITA il moltiplicatore al cap (stabilità layout)
+    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE, // default 2.0 (1.0 in Jest)
 
     // Proprietà aggiuntive per stabilità Perfect System
     adjustsFontSizeToFit: false, // Disabilita auto-fit nativo (PerfectText lo gestisce)

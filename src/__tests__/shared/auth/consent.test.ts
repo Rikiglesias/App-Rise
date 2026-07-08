@@ -45,32 +45,56 @@ describe('consent helpers', () => {
     ).toBe(false);
   });
 
-  it('isReConsentRequired: true se manca un privacy_notice granted per la versione corrente', () => {
-    expect(isReConsentRequired([])).toBe(true);
+  it('isReConsentRequired: nessuna versione materiale (null) → mai re-consenso', () => {
+    // materialAt null = nessuna materiale O errore fetch → non forza (fail-safe transient)
+    expect(isReConsentRequired([], null)).toBe(false);
     expect(
-      isReConsentRequired([ev('privacy_notice', 'granted', '2026-01-01')])
+      isReConsentRequired([ev('privacy_notice', 'granted', '2026-01-01')], null)
     ).toBe(false);
+  });
+
+  it('isReConsentRequired: materiale esistente, nessun consenso → true', () => {
+    expect(isReConsentRequired([], '2026-06-15')).toBe(true);
+  });
+
+  it('isReConsentRequired: consenso DOPO la materiale → false; PRIMA → true', () => {
+    const material = '2026-06-15';
+    // consenso successivo alla versione materiale → coperto
     expect(
       isReConsentRequired(
-        [ev('privacy_notice', 'granted', '2026-01-01')],
-        'privacy-2099-01-01'
+        [ev('privacy_notice', 'granted', '2026-07-01')],
+        material
+      )
+    ).toBe(false);
+    // consenso precedente → re-consenso richiesto
+    expect(
+      isReConsentRequired(
+        [ev('privacy_notice', 'granted', '2026-05-01')],
+        material
       )
     ).toBe(true);
   });
 
-  it('isReConsentRequired (S7): isCurrentMaterial=false → mai re-consenso; default true invariato', () => {
-    // cambio NON materiale → nessun re-consenso anche senza eventi
-    expect(isReConsentRequired([], CURRENT_POLICY_VERSION, false)).toBe(false);
-    // materiale + nessun evento → true
-    expect(isReConsentRequired([], CURRENT_POLICY_VERSION, true)).toBe(true);
-    // default (param omesso) resta true (fail-safe privacy)
-    expect(isReConsentRequired([])).toBe(true);
-    // materiale + privacy_notice granted versione corrente → false
+  it('isReConsentRequired (fix multi-version-skip): materiale scavalcata da non-materiale → chi non l’ha accettata è ancora richiesto', () => {
+    // Utente accettò solo v1 (2026-01-01); poi pubblicata v2 MATERIALE (published 2026-06-15),
+    // poi v3 non-materiale. La materiale più recente resta v2: consenso v1 < v2 → re-consenso.
     expect(
       isReConsentRequired(
         [ev('privacy_notice', 'granted', '2026-01-01')],
-        CURRENT_POLICY_VERSION,
-        true
+        '2026-06-15'
+      )
+    ).toBe(true);
+  });
+
+  it('isReConsentRequired: usa l’ULTIMO privacy_notice granted per data', () => {
+    // due consensi: il più recente (2026-07-01) è dopo la materiale → false
+    expect(
+      isReConsentRequired(
+        [
+          ev('privacy_notice', 'granted', '2026-05-01'),
+          ev('privacy_notice', 'granted', '2026-07-01'),
+        ],
+        '2026-06-15'
       )
     ).toBe(false);
   });

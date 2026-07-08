@@ -73,7 +73,9 @@ describe('ProfileEditScreen', () => {
     expect(getByDisplayValue('Mario')).toBeTruthy();
     expect(getByDisplayValue('Rossi')).toBeTruthy();
     expect(getByDisplayValue('old@r.it')).toBeTruthy();
-    expect(getByDisplayValue('+393331234567')).toBeTruthy();
+    // Il telefono ora usa AuthPhoneField (prefisso separato): il numero nazionale
+    // è pre-riempito, il prefisso +39 è mostrato a parte dal selettore.
+    expect(getByDisplayValue('3331234567')).toBeTruthy();
   });
 
   it('mostra il campo Paese (valore dal profilo)', () => {
@@ -105,7 +107,8 @@ describe('ProfileEditScreen', () => {
     );
     fireEvent.changeText(getByLabelText('Telefono'), '+393339998877');
     fireEvent.press(getByText('Salva modifiche'));
-    await findByText('Profilo aggiornato.');
+    // FormSuccess antepone un glifo check ✓ al messaggio → match su sottostringa.
+    await findByText(/Profilo aggiornato\./);
     expect(updateProfile).toHaveBeenCalledWith({ phone: '+393339998877' });
     expect(updateEmail).not.toHaveBeenCalled();
   });

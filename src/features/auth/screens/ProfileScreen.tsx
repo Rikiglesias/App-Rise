@@ -1,10 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View, StyleSheet, ActivityIndicator, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getCountryByCca2, type ICountryCca2 } from 'rn-country-select';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
 import { LoginScreen } from './LoginScreen';
 import { ReConsentScreen } from './ReConsentScreen';
 import { PerfectText } from '@/components/ui';
@@ -41,6 +42,16 @@ export const ProfileScreen: React.FC = () => {
 
   const [exportError, setExportError] = useState<string | undefined>();
   const [consentError, setConsentError] = useState<string | undefined>();
+  const [deletionError, setDeletionError] = useState<string | undefined>();
+  // Guardie anti doppio-invio delle azioni asincrone (toggle consenso, annulla
+  // cancellazione, export). Il ref è la guardia SINCRONA (regge due tap nello stesso
+  // frame, prima del re-render); lo state pilota solo il feedback visivo (disabled).
+  const marketingRef = useRef(false);
+  const deletionRef = useRef(false);
+  const exportRef = useRef(false);
+  const [marketingBusy, setMarketingBusy] = useState(false);
+  const [deletionBusy, setDeletionBusy] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const handleLogout = useCallback((): void => {
     void signOut();
@@ -54,24 +65,51 @@ export const ProfileScreen: React.FC = () => {
     [navigation]
   );
   const handleExport = useCallback((): void => {
+    if (exportRef.current) return;
+    exportRef.current = true;
     setExportError(undefined);
-    void exportData().catch(() =>
-      setExportError(t('auth.privacy.exportError'))
-    );
+    setExporting(true);
+    void exportData()
+      .catch(() => setExportError(t('auth.privacy.exportError')))
+      .finally(() => {
+        exportRef.current = false;
+        setExporting(false);
+      });
   }, [exportData, t]);
   const handleDelete = useCallback(
     (): void => navigation.navigate('DeleteAccount'),
     [navigation]
   );
   const handleCancelDeletion = useCallback((): void => {
-    void cancelScheduledDeletion();
-  }, [cancelScheduledDeletion]);
+    if (deletionRef.current) return;
+    deletionRef.current = true;
+    setDeletionError(undefined);
+    setDeletionBusy(true);
+    void cancelScheduledDeletion()
+      .then(r => {
+        // Azione GDPR consequenziale: se l'annullamento fallisce (rete/RLS) l'account
+        // resta programmato per l'eliminazione a +30gg → mostrare l'errore, non ingoiarlo.
+        if (r.error) setDeletionError(t('auth.delete.error'));
+      })
+      .finally(() => {
+        deletionRef.current = false;
+        setDeletionBusy(false);
+      });
+  }, [cancelScheduledDeletion, t]);
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
+      if (marketingRef.current) return;
+      marketingRef.current = true;
       setConsentError(undefined);
-      void setMarketingConsent(value).then(r => {
-        if (r.error) setConsentError(t('auth.consents.error'));
-      });
+      setMarketingBusy(true);
+      void setMarketingConsent(value)
+        .then(r => {
+          if (r.error) setConsentError(t('auth.consents.error'));
+        })
+        .finally(() => {
+          marketingRef.current = false;
+          setMarketingBusy(false);
+        });
     },
     [setMarketingConsent, t]
   );
@@ -88,7 +126,12 @@ export const ProfileScreen: React.FC = () => {
     return <LoginScreen />;
   }
 
-  if (needsReConsent) {
+  // Re-consenso SOLO per utenti già stabiliti (con profilo). Un signup social nuovo ha zero
+  // consent_events e nessun profilo → needsReConsent sarebbe true, ma mostrargli "l'informativa
+  // è cambiata, ri-accetta" è copy sbagliata (non ha MAI acconsentito) e creerebbe un evento
+  // privacy_notice duplicato oltre a quello della RPC di completamento profilo. Senza profilo
+  // deve andare a CompleteProfile, dove acconsente correttamente (review round 4).
+  if (profile && needsReConsent) {
     return <ReConsentScreen />;
   }
 
@@ -126,7 +169,9 @@ export const ProfileScreen: React.FC = () => {
             label={t('auth.delete.bannerCancel')}
             onPress={handleCancelDeletion}
             variant="link"
+            disabled={deletionBusy}
           />
+          <FormError message={deletionError} size={13} style={styles.error} />
         </View>
       ) : null}
 
@@ -160,7 +205,7 @@ export const ProfileScreen: React.FC = () => {
           />
           <Row
             label={t('auth.profile.birthDate')}
-            value={profile.birth_date}
+            value={formatDateLocalized(profile.birth_date, locale)}
             styles={styles}
           />
         </>
@@ -178,7 +223,11 @@ export const ProfileScreen: React.FC = () => {
           variant="link"
         />
       )}
-      <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
+      <AuthButton
+        label={t('auth.profile.logout')}
+        onPress={handleLogout}
+        variant="link"
+      />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.consents.title')}
@@ -190,17 +239,16 @@ export const ProfileScreen: React.FC = () => {
         <Switch
           value={profile?.marketing_consent ?? false}
           onValueChange={handleMarketingToggle}
+          disabled={marketingBusy}
+          trackColor={{ true: Colors.primary[500], false: colors.neutral[300] }}
+          ios_backgroundColor={colors.neutral[300]}
           accessibilityLabel={t('auth.consents.marketing')}
         />
       </View>
       <PerfectText size={13} lines={2} style={styles.hint}>
         {t('auth.consents.marketingHint')}
       </PerfectText>
-      {consentError ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {consentError}
-        </PerfectText>
-      ) : null}
+      <FormError message={consentError} size={13} style={styles.error} />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.privacy.title')}
@@ -209,12 +257,9 @@ export const ProfileScreen: React.FC = () => {
         label={t('auth.privacy.exportCta')}
         onPress={handleExport}
         variant="link"
+        disabled={exporting}
       />
-      {exportError ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {exportError}
-        </PerfectText>
-      ) : null}
+      <FormError message={exportError} size={13} style={styles.error} />
       <AuthButton
         label={t('auth.privacy.deleteCta')}
         onPress={handleDelete}

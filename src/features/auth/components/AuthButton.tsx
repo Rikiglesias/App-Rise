@@ -15,7 +15,7 @@ interface AuthButtonProps {
   variant?: 'primary' | 'secondary' | 'link' | 'linkMuted' | 'linkStrong';
 }
 
-export const AuthButton: React.FC<AuthButtonProps> = ({
+const AuthButtonImpl: React.FC<AuthButtonProps> = ({
   label,
   onPress,
   loading = false,
@@ -42,7 +42,8 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
         disabled={disabled}
         activeOpacity={0.7}
         accessibilityRole="button"
-        style={styles.link}
+        accessibilityState={{ disabled }}
+        style={[styles.link, disabled ? styles.linkDisabled : null]}
       >
         <PerfectText
           size={isStrong ? 18 : 15}
@@ -63,6 +64,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
         disabled={disabled}
         activeOpacity={0.85}
         accessibilityRole="button"
+        accessibilityState={{ disabled }}
         style={[styles.secondaryBtn, disabled ? styles.btnDisabled : null]}
       >
         <PerfectText
@@ -84,6 +86,8 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
       disabled={isOff}
       activeOpacity={0.85}
       accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled: isOff, busy: loading }}
       style={styles.btnWrap}
     >
       <LinearGradient
@@ -108,6 +112,10 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
     </PlatformTouchable>
   );
 };
+
+// React.memo: le props (label/callback memoizzati negli screen) sono stabili →
+// evita il re-render del bottone quando un campo fratello cambia (finding 131/133).
+export const AuthButton = React.memo(AuthButtonImpl);
 
 const createStyles = () =>
   StyleSheet.create({
@@ -148,6 +156,11 @@ const createStyles = () =>
       justifyContent: 'center',
       minHeight: scale(48),
       paddingVertical: PerfectSpacing.sm,
+    },
+    // Feedback visivo quando un link è inerte (es. "Elimina tra 30 giorni"
+    // durante una cancellazione in volo): senza, resta pienamente colorato.
+    linkDisabled: {
+      opacity: 0.5,
     },
     linkText: {
       fontWeight: '600',

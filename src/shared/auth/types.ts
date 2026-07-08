@@ -6,7 +6,7 @@ export interface Profile {
   last_name: string;
   phone: string;
   city: string;
-  province: string; // sigla provincia IT; vuota per paesi esteri
+  province: string | null; // sigla provincia IT; null per paesi esteri (colonna DB nullable, 0007)
   country: string; // ISO 3166-1 alpha-2 (es. 'IT')
   birth_date: string; // ISO date (YYYY-MM-DD)
   privacy_consent_at: string; // ISO timestamp

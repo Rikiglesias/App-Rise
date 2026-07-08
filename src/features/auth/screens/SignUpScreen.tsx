@@ -8,20 +8,18 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { FormError } from '../components/FormError';
+import { FormSuccess } from '../components/FormSuccess';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useSignUpForm } from '../hooks/useSignUpForm';
-import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { RISE_URLS } from '@/shared/constants/urls';
-import { useThemeColors } from '@/shared/hooks/useThemeColors';
-import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
 export const SignUpScreen: React.FC = () => {
-  const colors = useThemeColors();
-  const styles = useMemo(() => createStyles(colors), [colors]);
+  const styles = useMemo(() => createStyles(), []);
   const { t } = useTranslation();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useSignUpForm();
@@ -32,9 +30,11 @@ export const SignUpScreen: React.FC = () => {
   if (form.done) {
     return (
       <AuthScreen title={t('auth.signup.title')}>
-        <PerfectText size={16} lines={4} style={styles.doneText}>
-          {t('auth.signup.checkEmail')}
-        </PerfectText>
+        <FormSuccess
+          message={t('auth.signup.checkEmail')}
+          lines={4}
+          style={styles.doneText}
+        />
         <AuthButton
           label={t('auth.login.submit')}
           variant="link"
@@ -123,6 +123,7 @@ export const SignUpScreen: React.FC = () => {
 
       <AuthSection title={t('auth.signup.sections.contacts')}>
         <AuthPhoneField
+          ref={refs.phoneRef}
           label={t('auth.signup.phone')}
           onChangeText={onChange.phone}
           country={values.country}
@@ -179,11 +180,7 @@ export const SignUpScreen: React.FC = () => {
           appiccicati al bottone. */}
       <View style={styles.submitGap} />
 
-      {form.submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {form.submitError}
-        </PerfectText>
-      ) : null}
+      <FormError message={form.submitError} style={styles.error} />
 
       <AuthButton
         label={t('auth.signup.submit')}
@@ -199,7 +196,7 @@ export const SignUpScreen: React.FC = () => {
   );
 };
 
-const createStyles = (colors: ThemeColors) =>
+const createStyles = () =>
   StyleSheet.create({
     error: {
       color: Colors.semantic.error.main,
@@ -210,7 +207,6 @@ const createStyles = (colors: ThemeColors) =>
       height: PerfectSpacing.lg,
     },
     doneText: {
-      color: colors.neutral[700],
       marginBottom: PerfectSpacing.lg,
     },
   });

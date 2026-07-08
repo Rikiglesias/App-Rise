@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import Svg, { Path } from 'react-native-svg';
@@ -38,28 +38,46 @@ const GoogleGLogo: React.FC = () => (
 );
 
 /** Bottoni social: Apple nativo (iOS) + Google OAuth brandizzato. */
-export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
+const SocialButtonsImpl: React.FC<SocialButtonsProps> = ({ onError }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
   const { signInWithApple, signInWithGoogle } = useAuth();
+  // Serializza i login social: senza, un doppio tap (o Apple mentre Google è in volo)
+  // apre due fogli nativi / due signInWithIdToken concorrenti. Il ref è la guardia
+  // SINCRONA (regge due tap nello stesso frame, prima del re-render); lo state pilota
+  // solo il feedback visivo (disabled/dim), utile perché il bottone Apple nativo non
+  // ha una prop `disabled`.
+  const busyRef = useRef(false);
+  const [socialBusy, setSocialBusy] = useState(false);
 
-  const onApple = useCallback(() => {
-    void (async (): Promise<void> => {
-      const { error } = await signInWithApple();
-      if (error && error !== 'apple_cancelled') onError?.(error);
-    })();
-  }, [signInWithApple, onError]);
+  const runSocial = useCallback(
+    (signIn: () => Promise<{ error: string | null }>, cancelCode: string) => {
+      if (busyRef.current) return;
+      busyRef.current = true;
+      setSocialBusy(true);
+      void (async (): Promise<void> => {
+        const { error } = await signIn();
+        if (error && error !== cancelCode) onError?.(error);
+      })().finally(() => {
+        busyRef.current = false;
+        setSocialBusy(false);
+      });
+    },
+    [onError]
+  );
 
-  const onGoogle = useCallback(() => {
-    void (async (): Promise<void> => {
-      const { error } = await signInWithGoogle();
-      if (error && error !== 'google_cancelled') onError?.(error);
-    })();
-  }, [signInWithGoogle, onError]);
+  const onApple = useCallback(
+    () => runSocial(signInWithApple, 'apple_cancelled'),
+    [runSocial, signInWithApple]
+  );
+  const onGoogle = useCallback(
+    () => runSocial(signInWithGoogle, 'google_cancelled'),
+    [runSocial, signInWithGoogle]
+  );
 
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, socialBusy ? styles.busy : null]}>
       <View style={styles.dividerRow}>
         <View style={styles.dividerLine} />
         <PerfectText size={13} lines={1} style={styles.dividerText}>
@@ -82,9 +100,11 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
 
       <PlatformTouchable
         onPress={onGoogle}
+        disabled={socialBusy}
         activeOpacity={0.85}
         accessibilityRole="button"
         accessibilityLabel={t('auth.social.continueGoogle')}
+        accessibilityState={{ disabled: socialBusy, busy: socialBusy }}
         style={styles.googleBtn}
       >
         {/* Figlio singolo styled: su Android PlatformTouchable wrappa i figli
@@ -102,10 +122,17 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
   );
 };
 
+// React.memo: onError memoizzato negli screen → evita re-render inutili (finding 131).
+export const SocialButtons = React.memo(SocialButtonsImpl);
+
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     wrap: {
       marginTop: PerfectSpacing.lg,
+    },
+    // Feedback visivo mentre un login social è in volo (i due bottoni si attenuano).
+    busy: {
+      opacity: 0.6,
     },
     dividerRow: {
       flexDirection: 'row',

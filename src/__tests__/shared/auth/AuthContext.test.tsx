@@ -8,8 +8,22 @@ import { supabase } from '@/shared/auth/supabaseClient';
 
 jest.mock('@/shared/auth/supabaseClient', () => {
   const single = jest.fn(() => Promise.resolve({ data: null, error: null }));
+  // getLastMaterialPublishedAt: select('published_at').eq('is_material',true).order().limit().maybeSingle()
+  const maybeSingle = jest.fn(() =>
+    Promise.resolve({
+      data: { published_at: '2026-06-15T00:00:00Z' },
+      error: null,
+    })
+  );
+  const limit = jest.fn(() => ({ maybeSingle }));
+  const orderMaterial = jest.fn(() => ({ limit }));
+  // getConsentHistory: select('*').eq('user_id').order() (awaited direttamente; sovrascrivibile
+  // nei test per simulare errori). Catena SEPARATA da quella materiale (eqSelect argument-aware)
+  // così un override di `order` non rompe getLastMaterialPublishedAt (finding 308).
   const order = jest.fn(() => Promise.resolve({ data: [], error: null }));
-  const eqSelect = jest.fn(() => ({ single, order }));
+  const eqSelect = jest.fn((col?: string) =>
+    col === 'is_material' ? { order: orderMaterial } : { single, order }
+  );
   const select = jest.fn(() => ({ eq: eqSelect }));
   const eqUpdate = jest.fn(() => Promise.resolve({ error: null }));
   const update = jest.fn(() => ({ eq: eqUpdate }));
@@ -415,5 +429,85 @@ describe('AuthContext — update/signup/consenso', () => {
     });
     expect(spy).toHaveBeenCalledTimes(1);
     spy.mockRestore();
+  });
+});
+
+describe('AuthContext — bootstrap & eventi auth', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRef = undefined;
+  });
+
+  it('finding 348: getSession che rigetta non blocca lo spinner (status → unauthenticated)', async () => {
+    (supabase.auth.getSession as jest.Mock).mockRejectedValueOnce(
+      new Error('keychain read failed')
+    );
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+  });
+
+  it('finding 221/333: ricarica il profilo su SIGNED_IN, lo salta su TOKEN_REFRESHED/INITIAL_SESSION', async () => {
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    // Callback registrato in onAuthStateChange (nel mock è no-op: lo invochiamo noi).
+    const cb = (supabase.auth.onAuthStateChange as jest.Mock).mock
+      .calls[0][0] as (event: string, session: unknown) => void;
+    const fromMock = supabase.from as jest.Mock;
+    const sess = { user: { id: 'u1' } };
+
+    // loadProfile chiama from('profiles'); il re-consent effect chiama consent_events/
+    // policy_versions (non profiles) → 'profiles' discrimina se il profilo è ricaricato.
+    fromMock.mockClear();
+    await act(async () => {
+      cb('TOKEN_REFRESHED', sess);
+      await Promise.resolve();
+    });
+    expect(fromMock).not.toHaveBeenCalledWith('profiles');
+
+    fromMock.mockClear();
+    await act(async () => {
+      cb('INITIAL_SESSION', sess);
+      await Promise.resolve();
+    });
+    expect(fromMock).not.toHaveBeenCalledWith('profiles');
+
+    fromMock.mockClear();
+    await act(async () => {
+      cb('SIGNED_IN', sess);
+      await Promise.resolve();
+    });
+    expect(fromMock).toHaveBeenCalledWith('profiles');
+  });
+});
+
+describe('AuthContext — re-consenso (review r2)', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRef = undefined;
+  });
+
+  it('errore fetch policy_versions → gate re-consenso NON forzato/soppresso (skip su undefined)', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    // getLastMaterialPublishedAt legge policy_versions con eq('is_material')→order→limit→maybeSingle.
+    // Su ERRORE deve ritornare undefined (non null) così l'effect PRESERVA lo stato invece di sopprimere.
+    const materialMaybeSingle = (
+      supabase
+        .from('policy_versions')
+        .select('published_at')
+        .eq('is_material', true)
+        .order('published_at', { ascending: false })
+        .limit(1) as unknown as { maybeSingle: jest.Mock }
+    ).maybeSingle;
+    materialMaybeSingle.mockResolvedValueOnce({
+      data: null,
+      error: { message: 'boom' },
+    });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    // materialAt=undefined (errore) → il guard salta setNeedsReConsent → resta il default (false):
+    // non viene forzato da una lettura incompleta della tabella che governa il gate GDPR.
+    expect(getAuth().needsReConsent).toBe(false);
   });
 });

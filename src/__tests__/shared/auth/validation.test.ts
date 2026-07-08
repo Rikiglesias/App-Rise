@@ -57,6 +57,11 @@ describe('auth validation', () => {
     expect(validateAdult('2020-01-01')).toBe('not_adult');
   });
 
+  it('data malformata → date_invalid (finding 313)', () => {
+    expect(validateAdult('not-a-date')).toBe('date_invalid');
+    expect(validateAdult('')).toBe('date_invalid');
+  });
+
   it('required', () => {
     expect(validateRequired('x')).toBeNull();
     expect(validateRequired('  ')).toBe('required');

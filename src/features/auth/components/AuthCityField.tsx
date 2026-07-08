@@ -41,7 +41,7 @@ const BLUR_CLOSE_MS = 150;
  * dentro lo ScrollView del form su Android. Alla selezione di un comune emette
  * città + sigla provincia, così il campo Provincia si auto-compila.
  */
-export const AuthCityField: React.FC<AuthCityFieldProps> = ({
+const AuthCityFieldImpl: React.FC<AuthCityFieldProps> = ({
   label,
   value,
   country,
@@ -167,6 +167,9 @@ export const AuthCityField: React.FC<AuthCityFieldProps> = ({
     </View>
   );
 };
+
+// React.memo: props stabili → niente re-render sui cambi dei campi fratelli (finding 131).
+export const AuthCityField = React.memo(AuthCityFieldImpl);
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({

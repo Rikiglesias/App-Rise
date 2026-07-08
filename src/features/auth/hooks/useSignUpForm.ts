@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
+import type { AuthPhoneFieldHandle } from '../components/AuthPhoneField';
 
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
@@ -41,7 +43,7 @@ export const useSignUpForm = () => {
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const confirmPasswordRef = useRef<TextInput>(null);
-  const phoneRef = useRef<TextInput>(null);
+  const phoneRef = useRef<AuthPhoneFieldHandle>(null);
 
   // Pulisce l'errore di un campo mentre l'utente lo corregge.
   const clearError = useCallback(

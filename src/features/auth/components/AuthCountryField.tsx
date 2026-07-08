@@ -47,7 +47,7 @@ const localizedName = (
  * `CountrySelect` (stessa UX del selettore paese del campo telefono). Persistito
  * il `cca2`. Italia in cima alla lista (caso comune: donatori italiani).
  */
-export const AuthCountryField: React.FC<AuthCountryFieldProps> = ({
+const AuthCountryFieldImpl: React.FC<AuthCountryFieldProps> = ({
   label,
   value,
   onSelect,
@@ -108,6 +108,9 @@ export const AuthCountryField: React.FC<AuthCountryFieldProps> = ({
     </View>
   );
 };
+
+// React.memo: props stabili → niente re-render sui cambi dei campi fratelli (finding 131).
+export const AuthCountryField = React.memo(AuthCountryFieldImpl);
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({

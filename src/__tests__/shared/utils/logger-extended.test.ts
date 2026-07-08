@@ -45,15 +45,18 @@ describe('ProfessionalLogger (extended)', () => {
     expect(buffer).toContain('API');
   });
 
-  it('in production: info is skipped, error is buffered without console', () => {
+  it('in production: info is skipped, error/fatal buffered and bridged to Sentry', () => {
     jest.isolateModules(() => {
       const originalDev = (global as any).__DEV__;
       (global as any).__DEV__ = false;
       // Re-import module under production mode
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const mod = require('../../../shared/utils/logger');
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const Sentry = require('@sentry/react-native');
       const prodLogInfo = mod.logInfo as (msg: string, ctx?: string) => void;
       const prodLogError = mod.logError as (msg: string, ctx?: string) => void;
+      const prodLogFatal = mod.logFatal as (msg: string, ctx?: string) => void;
       const prodLogger = mod.logger as typeof logger;
 
       const infoSpyLocal = jest
@@ -63,16 +66,28 @@ describe('ProfessionalLogger (extended)', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      // Info should be ignored entirely
+      // Info should be ignored entirely — non loggata né inoltrata a Sentry (anti-flood)
       prodLogInfo('hello', 'Prod');
       expect(infoSpyLocal).not.toHaveBeenCalled();
       expect(prodLogger.exportLogsAsString()).toBe('');
+      expect(Sentry.captureMessage).not.toHaveBeenCalled();
 
-      // Error should be buffered but not printed to console
+      // Error should be buffered (not printed) AND bridged to Sentry with level error
       prodLogError('oops', 'Prod');
       expect(errorSpyLocal).not.toHaveBeenCalled();
-      const buffered = prodLogger.exportLogsAsString();
-      expect(buffered).toContain('ERROR');
+      expect(prodLogger.exportLogsAsString()).toContain('ERROR');
+      expect(Sentry.captureMessage).toHaveBeenCalledWith('oops', {
+        level: 'error',
+        extra: { context: 'Prod', data: undefined },
+      });
+
+      // Fatal is bridged with level fatal
+      prodLogFatal('dead', 'Prod');
+      expect(Sentry.captureMessage).toHaveBeenCalledWith('dead', {
+        level: 'fatal',
+        extra: { context: 'Prod', data: undefined },
+      });
+
       (global as any).__DEV__ = originalDev;
     });
   });

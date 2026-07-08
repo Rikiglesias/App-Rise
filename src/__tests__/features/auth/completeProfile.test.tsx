@@ -8,8 +8,9 @@ import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
 
+const mockGoBack = jest.fn();
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
+  useNavigation: () => ({ navigate: jest.fn(), goBack: mockGoBack }),
 }));
 
 jest.mock('@/shared/auth/AuthContext', () => ({
@@ -17,12 +18,15 @@ jest.mock('@/shared/auth/AuthContext', () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+// La creazione profilo social è ora una singola RPC atomica (profilo + consenso Art.7 nella
+// stessa transazione, finding 236/241): niente più .from('profiles').upsert + recordConsent.
 jest.mock('@/shared/auth/supabaseClient', () => {
-  const upsert = jest.fn(() => Promise.resolve({ error: null }));
-  return { supabase: { from: jest.fn(() => ({ upsert })) } };
+  const rpc = jest.fn(() => Promise.resolve({ error: null }));
+  return { supabase: { rpc } };
 });
 
 const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
+const rpcMock = (supabase as unknown as { rpc: jest.Mock }).rpc;
 
 const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
   ({
@@ -73,14 +77,9 @@ const fillValidForm = (
 describe('CompleteProfileScreen', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('al completamento fa upsert profilo e registra il consenso privacy (Art.7)', async () => {
+  it('al completamento chiama la RPC atomica profilo+consenso (Art.7), senza recordConsent client', async () => {
     const recordConsent = jest.fn().mockResolvedValue({ error: null });
     mockUseAuth.mockReturnValue(makeAuth({ recordConsent }));
-    const upsert = (
-      supabase.from('profiles') as unknown as {
-        upsert: jest.Mock;
-      }
-    ).upsert;
 
     const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
@@ -91,16 +90,18 @@ describe('CompleteProfileScreen', () => {
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() =>
-      expect(recordConsent).toHaveBeenCalledWith('privacy_notice', 'granted')
+      expect(rpcMock).toHaveBeenCalledWith(
+        'complete_social_profile',
+        expect.objectContaining({ p_first_name: 'Mario', p_last_name: 'Rossi' })
+      )
     );
-    expect(upsert).toHaveBeenCalled();
+    // Il consenso è dentro la transazione dell'RPC: nessun secondo round-trip client.
+    expect(recordConsent).not.toHaveBeenCalled();
+    await waitFor(() => expect(mockGoBack).toHaveBeenCalled());
   });
 
-  it("mostra il campo Paese e l'upsert include country (default IT)", async () => {
+  it('mostra il campo Paese e la RPC include country (default IT)', async () => {
     mockUseAuth.mockReturnValue(makeAuth());
-    const upsert = (
-      supabase.from('profiles') as unknown as { upsert: jest.Mock }
-    ).upsert;
     const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
@@ -110,17 +111,15 @@ describe('CompleteProfileScreen', () => {
     fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.press(getByText('Salva e continua'));
 
-    await waitFor(() => expect(upsert).toHaveBeenCalled());
-    expect(upsert).toHaveBeenCalledWith(
-      expect.objectContaining({ country: 'IT' })
+    await waitFor(() => expect(rpcMock).toHaveBeenCalled());
+    expect(rpcMock).toHaveBeenCalledWith(
+      'complete_social_profile',
+      expect.objectContaining({ p_country: 'IT' })
     );
   });
 
-  it('S10: upsert NON ri-stampa marketing_consent (preserva la cache del consenso)', async () => {
+  it('S10: la RPC NON riceve marketing_consent (preserva la cache del consenso)', async () => {
     mockUseAuth.mockReturnValue(makeAuth());
-    const upsert = (
-      supabase.from('profiles') as unknown as { upsert: jest.Mock }
-    ).upsert;
     const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
@@ -129,19 +128,19 @@ describe('CompleteProfileScreen', () => {
     fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.press(getByText('Salva e continua'));
 
-    await waitFor(() => expect(upsert).toHaveBeenCalled());
-    expect(upsert).toHaveBeenCalledWith(
+    await waitFor(() => expect(rpcMock).toHaveBeenCalled());
+    const [, payload] = rpcMock.mock.calls[0];
+    expect(payload).toEqual(
       expect.not.objectContaining({ marketing_consent: expect.anything() })
     );
+    expect(payload).toEqual(
+      expect.not.objectContaining({ p_marketing_consent: expect.anything() })
+    );
   });
 
-  it('S10: errore upsert → NON registra il consenso (recordConsent non chiamato)', async () => {
-    const recordConsent = jest.fn().mockResolvedValue({ error: null });
-    mockUseAuth.mockReturnValue(makeAuth({ recordConsent }));
-    const upsert = (
-      supabase.from('profiles') as unknown as { upsert: jest.Mock }
-    ).upsert;
-    upsert.mockResolvedValueOnce({ error: { message: 'boom' } });
+  it('errore RPC → mostra errore e NON naviga via (nessuno stato parziale)', async () => {
+    mockUseAuth.mockReturnValue(makeAuth());
+    rpcMock.mockResolvedValueOnce({ error: { message: 'boom' } });
     const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
@@ -150,7 +149,8 @@ describe('CompleteProfileScreen', () => {
     fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.press(getByText('Salva e continua'));
 
-    await waitFor(() => expect(upsert).toHaveBeenCalled());
-    expect(recordConsent).not.toHaveBeenCalled();
+    await waitFor(() => expect(rpcMock).toHaveBeenCalled());
+    // Atomico: RPC fallita → niente commit parziale, resta sulla schermata (no goBack).
+    expect(mockGoBack).not.toHaveBeenCalled();
   });
 });
