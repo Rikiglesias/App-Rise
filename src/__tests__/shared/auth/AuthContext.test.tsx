@@ -417,3 +417,51 @@ describe('AuthContext — update/signup/consenso', () => {
     spy.mockRestore();
   });
 });
+
+describe('AuthContext — bootstrap & eventi auth', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRef = undefined;
+  });
+
+  it('finding 348: getSession che rigetta non blocca lo spinner (status → unauthenticated)', async () => {
+    (supabase.auth.getSession as jest.Mock).mockRejectedValueOnce(
+      new Error('keychain read failed')
+    );
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+  });
+
+  it('finding 221/333: ricarica il profilo su SIGNED_IN, lo salta su TOKEN_REFRESHED/INITIAL_SESSION', async () => {
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    // Callback registrato in onAuthStateChange (nel mock è no-op: lo invochiamo noi).
+    const cb = (supabase.auth.onAuthStateChange as jest.Mock).mock
+      .calls[0][0] as (event: string, session: unknown) => void;
+    const fromMock = supabase.from as jest.Mock;
+    const sess = { user: { id: 'u1' } };
+
+    // loadProfile chiama from('profiles'); il re-consent effect chiama consent_events/
+    // policy_versions (non profiles) → 'profiles' discrimina se il profilo è ricaricato.
+    fromMock.mockClear();
+    await act(async () => {
+      cb('TOKEN_REFRESHED', sess);
+      await Promise.resolve();
+    });
+    expect(fromMock).not.toHaveBeenCalledWith('profiles');
+
+    fromMock.mockClear();
+    await act(async () => {
+      cb('INITIAL_SESSION', sess);
+      await Promise.resolve();
+    });
+    expect(fromMock).not.toHaveBeenCalledWith('profiles');
+
+    fromMock.mockClear();
+    await act(async () => {
+      cb('SIGNED_IN', sess);
+      await Promise.resolve();
+    });
+    expect(fromMock).toHaveBeenCalledWith('profiles');
+  });
+});
