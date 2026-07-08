@@ -5,7 +5,13 @@
  */
 import type { ConsentAction, ConsentEvent, ConsentPurpose } from './types';
 
-/** Versione corrente dell'informativa (allineata al seed di migration 0003). */
+/**
+ * Versione dell'informativa usata come FALLBACK client-side (seed di migration 0003).
+ * NON è più la fonte di verità: il gate di re-consenso legge la versione latest a runtime
+ * da policy_versions (useAuthActions.getCurrentPolicy, finding 211) e il trigger server
+ * 0011 timbra policy_version = latest su ogni consent_events INSERT, ignorando questo valore.
+ * Resta solo come default di buildConsentInsert (garantisce una FK valida se il trigger no-op).
+ */
 export const CURRENT_POLICY_VERSION = 'privacy-2026-06-15';
 
 /** Base giuridica registrata per ogni evento del ledger. */

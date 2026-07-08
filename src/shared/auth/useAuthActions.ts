@@ -10,11 +10,7 @@ import {
   parseAuthRedirect,
 } from './authRedirect';
 import { exportData as runDataExport } from './dataExport';
-import {
-  buildConsentInsert,
-  isReConsentRequired,
-  CURRENT_POLICY_VERSION,
-} from './consent';
+import { buildConsentInsert, isReConsentRequired } from './consent';
 import type {
   Profile,
   ProfileInput,
@@ -385,17 +381,23 @@ export const useAuthActions = ({
     return res;
   }, [recordConsent]);
 
-  // S7: legge is_material della versione corrente dell'informativa (fail-safe `true`
-  // se assente/errore → in dubbio si richiede il consenso). RLS policy_versions_read
-  // consente la lettura agli utenti autenticati (migration 0003).
-  const getCurrentPolicyIsMaterial = useCallback(async (): Promise<boolean> => {
+  // S7 + finding 211: legge a RUNTIME la versione corrente (ultima pubblicata) e il suo
+  // is_material, invece di una costante compilata che va in drift col DB. Così se
+  // l'associazione pubblica una nuova versione materiale, il gate se ne accorge subito.
+  // RLS policy_versions_read consente la lettura agli autenticati (migration 0003).
+  const getCurrentPolicy = useCallback(async (): Promise<{
+    version: string;
+    isMaterial: boolean;
+  } | null> => {
     const { data, error } = await supabase
       .from('policy_versions')
-      .select('is_material')
-      .eq('version', CURRENT_POLICY_VERSION)
-      .single();
-    if (error || !data) return true;
-    return (data as { is_material: boolean }).is_material;
+      .select('version, is_material')
+      .order('published_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error || !data) return null;
+    const row = data as { version: string; is_material: boolean };
+    return { version: row.version, isMaterial: row.is_material };
   }, []);
 
   // Verifica re-consenso quando l'utente è autenticato (SOLO per cambi materiali policy).
@@ -404,17 +406,18 @@ export const useAuthActions = ({
       setNeedsReConsent(false);
       return;
     }
-    void Promise.all([getConsentHistory(), getCurrentPolicyIsMaterial()]).then(
-      ([history, isMaterial]) => {
-        // Su errore di fetch della history (null) NON gattiamo: evita un falso re-consent
-        // da errore transient (coerente con loadProfile che non azzera su errore).
-        if (history !== null)
+    void Promise.all([getConsentHistory(), getCurrentPolicy()]).then(
+      ([history, policy]) => {
+        // Su errore di fetch (history o policy null) NON gattiamo: evita un falso re-consent
+        // da errore transient (coerente con loadProfile che non azzera su errore). Il gate
+        // viene ri-valutato al prossimo ciclo auth.
+        if (history !== null && policy !== null)
           setNeedsReConsent(
-            isReConsentRequired(history, CURRENT_POLICY_VERSION, isMaterial)
+            isReConsentRequired(history, policy.version, policy.isMaterial)
           );
       }
     );
-  }, [status, session, getConsentHistory, getCurrentPolicyIsMaterial]);
+  }, [status, session, getConsentHistory, getCurrentPolicy]);
 
   return useMemo(
     () => ({

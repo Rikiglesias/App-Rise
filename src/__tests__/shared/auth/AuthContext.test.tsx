@@ -8,9 +8,19 @@ import { supabase } from '@/shared/auth/supabaseClient';
 
 jest.mock('@/shared/auth/supabaseClient', () => {
   const single = jest.fn(() => Promise.resolve({ data: null, error: null }));
+  // getCurrentPolicy: select('version, is_material').order().limit().maybeSingle()
+  const maybeSingle = jest.fn(() =>
+    Promise.resolve({
+      data: { version: 'privacy-2026-06-15', is_material: true },
+      error: null,
+    })
+  );
+  const limit = jest.fn(() => ({ maybeSingle }));
+  const orderTop = jest.fn(() => ({ limit }));
+  // getConsentHistory: select('*').eq().order() (awaited direttamente)
   const order = jest.fn(() => Promise.resolve({ data: [], error: null }));
   const eqSelect = jest.fn(() => ({ single, order }));
-  const select = jest.fn(() => ({ eq: eqSelect }));
+  const select = jest.fn(() => ({ eq: eqSelect, order: orderTop }));
   const eqUpdate = jest.fn(() => Promise.resolve({ error: null }));
   const update = jest.fn(() => ({ eq: eqUpdate }));
   const insert = jest.fn(() => Promise.resolve({ error: null }));
