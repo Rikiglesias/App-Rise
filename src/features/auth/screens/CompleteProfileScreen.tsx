@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
@@ -11,12 +11,15 @@ import { AuthButton } from '../components/AuthButton';
 import { FormError } from '../components/FormError';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
+import { ExpandableNote } from '../components/ExpandableNote';
 import { useProfileForm } from '../hooks/useProfileForm';
-import { PerfectText } from '@/components/ui';
+import { PerfectText, PerfectIcon } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
+import { scale } from '@/shared/constants/perfectScale';
 import { RISE_URLS } from '@/shared/constants/urls';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
@@ -25,8 +28,14 @@ import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 export const CompleteProfileScreen: React.FC = () => {
   useRequireAuth();
   const colors = useThemeColors();
+  const { isDark } = useUniversalTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
+  // Verde THEME-AWARE per il contrasto (WCAG AA 1.4.3, come FormSuccess): success.main
+  // (#10B981) su sfondo chiaro è ~2.4:1 → in light usa success.dark (#065F46 ≈ 8:1).
+  const checkColor = isDark
+    ? Colors.semantic.success.main
+    : Colors.semantic.success.dark;
   const { values, errors, refs, onChange, focusNext, ...form } =
     useProfileForm();
 
@@ -123,6 +132,40 @@ export const CompleteProfileScreen: React.FC = () => {
           >
             {t('auth.completeProfile.contactNote')}
           </PerfectText>
+          {/* Approfondimento facoltativo (collassato): spiega ONESTAMENTE perché
+              una mail di contatto è utile. Benefici reali (verde) + una nota
+              trasparente sull'uso (comunicazioni dell'organizzazione + servizio
+              di posta esterno) — niente promesse false né pressione. */}
+          <ExpandableNote question={t('auth.completeProfile.whyEmailToggle')}>
+            {['whyEmailBenefit1', 'whyEmailBenefit2', 'whyEmailBenefit3'].map(
+              key => (
+                <View key={key} style={styles.whyRow}>
+                  <PerfectIcon
+                    name="check-circle"
+                    size={18}
+                    color={checkColor}
+                    style={styles.whyIcon}
+                  />
+                  <PerfectText
+                    size={13}
+                    lines={2}
+                    containerWidth={0}
+                    style={styles.whyText}
+                  >
+                    {t(`auth.completeProfile.${key}`)}
+                  </PerfectText>
+                </View>
+              )
+            )}
+            <PerfectText
+              size={12}
+              lines={4}
+              containerWidth={0}
+              style={styles.whyHonest}
+            >
+              {t('auth.completeProfile.whyEmailHonest')}
+            </PerfectText>
+          </ExpandableNote>
           <AuthInput
             label={t('auth.completeProfile.contactEmail')}
             value={values.contactEmail}
@@ -167,5 +210,22 @@ const createStyles = (colors: ThemeColors) =>
     contactNote: {
       color: colors.neutral[500],
       marginBottom: PerfectSpacing.sm,
+    },
+    whyRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      marginBottom: PerfectSpacing.xs,
+    },
+    whyIcon: {
+      marginTop: scale(1),
+    },
+    whyText: {
+      flex: 1,
+      marginLeft: PerfectSpacing.sm,
+      color: colors.neutral[700],
+    },
+    whyHonest: {
+      color: colors.neutral[500],
+      marginTop: PerfectSpacing.xs,
     },
   });

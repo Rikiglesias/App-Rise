@@ -154,6 +154,41 @@ describe('CompleteProfileScreen', () => {
     );
   });
 
+  it('accordion "perché lasciare la mail" appare SOLO con relay Apple', () => {
+    // Non-relay (mail reale): nessun accordion mail-contatto.
+    mockUseAuth.mockReturnValue(makeAuth());
+    const nonRelay = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(nonRelay.queryByText(/lasciare/)).toBeNull();
+    nonRelay.unmount();
+
+    // Relay Apple Hide-My-Email: accordion presente.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        session: {
+          user: { id: 'u1', email: 'xyz@privaterelay.appleid.com' },
+        } as unknown as Session,
+      })
+    );
+    const relay = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    const toggle = relay.queryByText(/lasciare/);
+    expect(toggle).toBeTruthy();
+    // Collassato di default: il corpo non è montato. Uso marker UNICI del corpo
+    // ("posta esterno", "donazioni"): "ricevute" comparirebbe anche in contactNote.
+    expect(relay.queryByText(/posta esterno/)).toBeNull();
+    // Tap → espande e monta il corpo con le chiavi i18n reali.
+    fireEvent.press(toggle as never);
+    expect(relay.queryByText(/donazioni/)).toBeTruthy();
+    expect(relay.queryByText(/posta esterno/)).toBeTruthy();
+  });
+
   it('mostra il campo Paese e la RPC include country (default IT)', async () => {
     mockUseAuth.mockReturnValue(makeAuth());
     const { getByLabelText, getByText, getByRole, getByTestId } = render(
