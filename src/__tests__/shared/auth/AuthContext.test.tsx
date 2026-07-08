@@ -479,3 +479,35 @@ describe('AuthContext — bootstrap & eventi auth', () => {
     expect(fromMock).toHaveBeenCalledWith('profiles');
   });
 });
+
+describe('AuthContext — re-consenso (review r2)', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRef = undefined;
+  });
+
+  it('errore fetch policy_versions → gate re-consenso NON forzato/soppresso (skip su undefined)', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    // getLastMaterialPublishedAt legge policy_versions con eq('is_material')→order→limit→maybeSingle.
+    // Su ERRORE deve ritornare undefined (non null) così l'effect PRESERVA lo stato invece di sopprimere.
+    const materialMaybeSingle = (
+      supabase
+        .from('policy_versions')
+        .select('published_at')
+        .eq('is_material', true)
+        .order('published_at', { ascending: false })
+        .limit(1) as unknown as { maybeSingle: jest.Mock }
+    ).maybeSingle;
+    materialMaybeSingle.mockResolvedValueOnce({
+      data: null,
+      error: { message: 'boom' },
+    });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    // materialAt=undefined (errore) → il guard salta setNeedsReConsent → resta il default (false):
+    // non viene forzato da una lettura incompleta della tabella che governa il gate GDPR.
+    expect(getAuth().needsReConsent).toBe(false);
+  });
+});

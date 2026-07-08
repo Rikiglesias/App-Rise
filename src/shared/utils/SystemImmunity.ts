@@ -10,7 +10,7 @@
  * ✅ Conformità WCAG 2.1 (Web Content Accessibility Guidelines)
  *
  * COSA LIMITA:
- * ⚠️ Scaling eccessivo (max 1.3x per prevenire layout rotti)
+ * ⚠️ Scaling eccessivo oltre il cap (MAX_FONT_SCALE, default 2.0) per prevenire layout rotti
  * ⚠️ Pixel ratio inconsistente (mantiene riferimento iPhone 15)
  *
  * RISULTATO: App accessibile ma layout stabile
@@ -154,8 +154,8 @@ export const getImmuneTextProps = () => {
     // ✅ RISPETTA font scaling sistema (accessibilità)
     allowFontScaling: allowScaling,
 
-    // ⚠️ LIMITA moltiplicatore a 1.3x (stabilità layout)
-    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE, // = 1.3
+    // ⚠️ LIMITA il moltiplicatore al cap (stabilità layout)
+    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE, // default 2.0 (1.0 in Jest)
 
     // Proprietà aggiuntive per stabilità Perfect System
     adjustsFontSizeToFit: false, // Disabilita auto-fit nativo (PerfectText lo gestisce)

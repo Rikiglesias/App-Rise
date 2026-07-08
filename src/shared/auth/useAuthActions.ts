@@ -386,8 +386,12 @@ export const useAuthActions = ({
   // Serve la materiale più recente (non la latest assoluta): una versione materiale può essere
   // scavalcata da una non-materiale, e chi non l'ha accettata va comunque ri-invitato.
   // RLS policy_versions_read consente la lettura agli autenticati (migration 0003).
+  // Ritorna: `undefined` su ERRORE di fetch (transient → non gattiamo, come history null);
+  // `null` se NON esiste alcuna versione materiale (0 righe → no re-consenso); altrimenti il
+  // published_at. Distinguere errore da assenza evita di sopprimere un re-consenso dovuto quando
+  // la fetch di policy_versions cade (fail-open asimmetrico, review round 2).
   const getLastMaterialPublishedAt = useCallback(async (): Promise<
-    string | null
+    string | null | undefined
   > => {
     const { data, error } = await supabase
       .from('policy_versions')
@@ -396,7 +400,8 @@ export const useAuthActions = ({
       .order('published_at', { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (error || !data) return null;
+    if (error) return undefined;
+    if (!data) return null;
     return (data as { published_at: string }).published_at;
   }, []);
 
@@ -408,10 +413,11 @@ export const useAuthActions = ({
     }
     void Promise.all([getConsentHistory(), getLastMaterialPublishedAt()]).then(
       ([history, materialAt]) => {
-        // Su errore di fetch della history (null) NON gattiamo: evita un falso re-consent da
-        // errore transient (coerente con loadProfile che non azzera su errore). materialAt null
-        // (nessuna versione materiale O errore fetch) → isReConsentRequired ritorna false.
-        if (history !== null)
+        // NON gattiamo su errore di fetch (history null O materialAt undefined): preserva lo stato
+        // per non forzare NÉ sopprimere il re-consenso su un errore transient — simmetrico sui due
+        // rami (review round 2). materialAt null = nessuna versione materiale → isReConsentRequired
+        // ritorna false correttamente. Il gate viene ri-valutato al prossimo ciclo auth.
+        if (history !== null && materialAt !== undefined)
           setNeedsReConsent(isReConsentRequired(history, materialAt));
       }
     );

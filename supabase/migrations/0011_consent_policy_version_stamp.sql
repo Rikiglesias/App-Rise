@@ -13,7 +13,7 @@
 -- pattern di 0008 fix#1 (created_at) e fix#2 (marketing_consent cache). Ogni evento registra
 -- SEMPRE la versione realmente corrente al momento della scrittura, immune a drift e forgery.
 -- Fix READ (lato app, coordinato): il gate di re-consenso legge la versione latest a runtime
--- da policy_versions invece della costante (useAuthActions.getCurrentPolicy).
+-- da policy_versions invece della costante (useAuthActions.getLastMaterialPublishedAt).
 --
 -- SECURITY DEFINER (come 0008 fix#2 profiles_sync_marketing_consent): deriva la versione
 -- dalla tabella AUTORITATIVA per QUALSIASI chiamante (utente/service_role/handle_new_user-
