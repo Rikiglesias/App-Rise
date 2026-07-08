@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { StyleSheet, type TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
@@ -35,6 +35,7 @@ export const ResetPasswordScreen: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
+  const confirmRef = useRef<TextInput>(null);
 
   const onSubmit = useCallback(async (): Promise<void> => {
     setSubmitError(null);
@@ -54,6 +55,8 @@ export const ResetPasswordScreen: React.FC = () => {
   const handleSubmit = useCallback((): void => {
     void onSubmit();
   }, [onSubmit]);
+
+  const focusConfirm = useCallback((): void => confirmRef.current?.focus(), []);
 
   const goHome = useCallback(
     (): void => navigation.navigate('Home'),
@@ -78,14 +81,23 @@ export const ResetPasswordScreen: React.FC = () => {
             error={pwdErr}
             secureTextEntry
             autoCapitalize="none"
+            autoComplete="new-password"
+            textContentType="newPassword"
+            returnKeyType="next"
+            onSubmitEditing={focusConfirm}
           />
           <AuthInput
+            ref={confirmRef}
             label={t('auth.reset.confirmPassword')}
             value={confirm}
             onChangeText={setConfirm}
             error={confirmErr}
             secureTextEntry
             autoCapitalize="none"
+            autoComplete="new-password"
+            textContentType="newPassword"
+            returnKeyType="done"
+            onSubmitEditing={handleSubmit}
           />
           <FormError message={submitError} style={styles.error} />
           <AuthButton

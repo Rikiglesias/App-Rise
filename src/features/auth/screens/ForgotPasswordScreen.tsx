@@ -72,6 +72,8 @@ export const ForgotPasswordScreen: React.FC = () => {
             error={emailErr}
             keyboardType="email-address"
             autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
           />
           <FormError message={submitError} style={styles.error} />
           <AuthButton

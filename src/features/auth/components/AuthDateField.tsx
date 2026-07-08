@@ -157,7 +157,9 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[900],
     },
     placeholder: {
-      color: colors.neutral[400],
+      // neutral[500] come AuthInput/AuthCityField: contrasto WCAG AA (~4.7:1 vs ~2.5:1
+      // di neutral[400]) e tono coerente col placeholder degli altri campi (finding 273/293).
+      color: colors.neutral[500],
     },
     error: {
       color: Colors.semantic.error.main,
