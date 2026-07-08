@@ -43,4 +43,15 @@ describe('ExpandableNote', () => {
     const { queryByText } = renderNote({ defaultExpanded: true });
     expect(queryByText(BODY)).toBeTruthy();
   });
+
+  it('a11y: accessibilityState.expanded riflette lo stato (contratto screen-reader)', () => {
+    const { getByLabelText } = renderNote();
+    expect(getByLabelText(QUESTION).props.accessibilityState.expanded).toBe(
+      false
+    );
+    fireEvent.press(getByLabelText(QUESTION));
+    expect(getByLabelText(QUESTION).props.accessibilityState.expanded).toBe(
+      true
+    );
+  });
 });

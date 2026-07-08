@@ -117,12 +117,13 @@ export default {
         'With Apple sign-in you hid your email: we’ll write to you there. If you prefer, add your own email for receipts and communications.',
       contactEmail: 'Your email (optional)',
       whyEmailToggle: 'Why leave an email?',
+      whyEmailHint: 'Tap to see the details',
       whyEmailBenefit1: 'We send you the receipts for your donations',
-      whyEmailBenefit2: 'We keep you updated on the projects you support',
+      whyEmailBenefit2: 'You can receive updates on the projects you support',
       whyEmailBenefit3:
         'If you turn off Apple’s hidden email, we can still reach you',
       whyEmailHonest:
-        'We’ll use your email for our organisation’s communications, and we rely on an external mail service to send them. It’s optional and you can unsubscribe anytime.',
+        'We always send receipts; updates only if you turn on communications in Consents, and you can turn them off anytime. To send emails we rely on an external mail service. The email is optional.',
     },
     edit: {
       title: 'Edit profile',

@@ -136,7 +136,10 @@ export const CompleteProfileScreen: React.FC = () => {
               una mail di contatto è utile. Benefici reali (verde) + una nota
               trasparente sull'uso (comunicazioni dell'organizzazione + servizio
               di posta esterno) — niente promesse false né pressione. */}
-          <ExpandableNote question={t('auth.completeProfile.whyEmailToggle')}>
+          <ExpandableNote
+            question={t('auth.completeProfile.whyEmailToggle')}
+            accessibilityHint={t('auth.completeProfile.whyEmailHint')}
+          >
             {['whyEmailBenefit1', 'whyEmailBenefit2', 'whyEmailBenefit3'].map(
               key => (
                 <View key={key} style={styles.whyRow}>
@@ -148,7 +151,7 @@ export const CompleteProfileScreen: React.FC = () => {
                   />
                   <PerfectText
                     size={13}
-                    lines={2}
+                    lines={3}
                     containerWidth={0}
                     style={styles.whyText}
                   >
@@ -159,7 +162,7 @@ export const CompleteProfileScreen: React.FC = () => {
             )}
             <PerfectText
               size={12}
-              lines={4}
+              lines={8}
               containerWidth={0}
               style={styles.whyHonest}
             >

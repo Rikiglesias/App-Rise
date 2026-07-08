@@ -119,12 +119,13 @@ export default {
         'Con l’accesso Apple hai nascosto la tua email: ti scriveremo lì. Se preferisci, aggiungi una mail tua per ricevute e comunicazioni.',
       contactEmail: 'La tua email (facoltativa)',
       whyEmailToggle: 'Perché lasciare un’email?',
+      whyEmailHint: 'Tocca per vedere i dettagli',
       whyEmailBenefit1: 'Ti inviamo le ricevute delle tue donazioni',
-      whyEmailBenefit2: 'Ti teniamo aggiornato sui progetti che sostieni',
+      whyEmailBenefit2: 'Puoi ricevere aggiornamenti sui progetti che sostieni',
       whyEmailBenefit3:
         'Se disattivi l’email nascosta di Apple, restiamo comunque in contatto',
       whyEmailHonest:
-        'Useremo l’email per le comunicazioni della nostra organizzazione e per inviarle ci affidiamo a un servizio di posta esterno. È facoltativa e puoi disiscriverti quando vuoi.',
+        'Le ricevute te le inviamo sempre; gli aggiornamenti solo se attivi le comunicazioni nei Consensi, e puoi disattivarle quando vuoi. Per inviare le email ci affidiamo a un servizio di posta esterno. La mail è facoltativa.',
     },
     edit: {
       title: 'Modifica profilo',

@@ -12,6 +12,8 @@ interface ExpandableNoteProps {
   question: string;
   children: React.ReactNode;
   defaultExpanded?: boolean;
+  /** Hint per screen-reader (es. "Tocca per i dettagli"), come SettingsRow. */
+  accessibilityHint?: string;
 }
 
 /**
@@ -27,6 +29,7 @@ export const ExpandableNote: React.FC<ExpandableNoteProps> = ({
   question,
   children,
   defaultExpanded = false,
+  accessibilityHint,
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -38,6 +41,7 @@ export const ExpandableNote: React.FC<ExpandableNoteProps> = ({
         onPress={() => setExpanded(v => !v)}
         accessibilityRole="button"
         accessibilityLabel={question}
+        accessibilityHint={accessibilityHint}
         accessibilityState={{ expanded }}
         activeOpacity={0.6}
       >
