@@ -34,6 +34,14 @@ describe('socialAuth', () => {
       });
     });
 
+    it('con iosClientId: lo passa a configure (necessario per il sign-in iOS)', () => {
+      configureGoogle('web-client-id-123', 'ios-client-id-456');
+      expect(googleConfigureMock).toHaveBeenCalledWith({
+        webClientId: 'web-client-id-123',
+        iosClientId: 'ios-client-id-456',
+      });
+    });
+
     it('modulo nativo assente: non chiama configure (login Google disattivato)', () => {
       jest.spyOn(TurboModuleRegistry, 'get').mockReturnValueOnce(null);
       configureGoogle('web-client-id-123');

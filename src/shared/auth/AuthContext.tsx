@@ -51,7 +51,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    if (env.GOOGLE_WEB_CLIENT_ID) configureGoogle(env.GOOGLE_WEB_CLIENT_ID);
+    if (env.GOOGLE_WEB_CLIENT_ID)
+      configureGoogle(env.GOOGLE_WEB_CLIENT_ID, env.GOOGLE_IOS_CLIENT_ID);
   }, []);
 
   useEffect(() => {

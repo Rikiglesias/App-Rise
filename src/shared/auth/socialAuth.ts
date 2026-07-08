@@ -47,8 +47,16 @@ const loadGoogleSignin = (): GoogleSigninModule | undefined => {
   }
 };
 
-/** Configura Google sign-in con il web client ID (da chiamare al boot). */
-export const configureGoogle = (webClientId: string): void => {
+/**
+ * Configura Google sign-in (da chiamare al boot). `iosClientId` è necessario su iOS:
+ * il GID SDK nativo lo usa per avviare il sign-in (alternativa a GoogleService-Info.plist).
+ * Senza, `GoogleSignin.signIn()` fallisce su un build iOS con Google attivo. Omesso ('' →
+ * undefined) su Android/dev, dove basta il webClientId.
+ */
+export const configureGoogle = (
+  webClientId: string,
+  iosClientId?: string
+): void => {
   const GoogleSignin = loadGoogleSignin();
   if (!GoogleSignin) {
     logWarn(
@@ -57,7 +65,9 @@ export const configureGoogle = (webClientId: string): void => {
     );
     return;
   }
-  GoogleSignin.configure({ webClientId });
+  GoogleSignin.configure(
+    iosClientId ? { webClientId, iosClientId } : { webClientId }
+  );
 };
 
 // Apple rigetta con `ERR_REQUEST_CANCELED` quando l'utente chiude lo sheet: è un

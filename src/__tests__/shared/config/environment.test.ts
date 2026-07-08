@@ -21,6 +21,7 @@ const baseProd: Env = {
   SUPABASE_URL: 'https://proj.supabase.co',
   SUPABASE_ANON_KEY: 'anon-key',
   GOOGLE_WEB_CLIENT_ID: '',
+  GOOGLE_IOS_CLIENT_ID: '',
   ENABLE_FLIPPER: false,
   ENABLE_PERFORMANCE_MONITORING: false,
   LOG_LEVEL: 'error',
