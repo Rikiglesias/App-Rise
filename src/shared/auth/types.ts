@@ -11,6 +11,10 @@ export interface Profile {
   birth_date: string; // ISO date (YYYY-MM-DD)
   privacy_consent_at: string; // ISO timestamp
   marketing_consent: boolean;
+  // Mail di contatto reale: valorizzata quando l'utente entra con Apple Hide-My-Email
+  // (mail auth = relay @privaterelay.appleid.com) e fornisce un indirizzo vero. NULL per
+  // gli utenti con mail auth già reale (email classica / Google).
+  contact_email: string | null;
   deletion_requested_at: string | null; // M3: NULL=attivo; valorizzato=cancellazione a +30gg
 }
 

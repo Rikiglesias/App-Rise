@@ -69,6 +69,7 @@ const profileWithDeletion: Profile = {
   birth_date: '1990-01-01',
   privacy_consent_at: '2026-01-01T00:00:00.000Z',
   marketing_consent: false,
+  contact_email: null,
   deletion_requested_at: '2026-06-15T00:00:00.000Z',
 };
 
