@@ -38,7 +38,7 @@ const GoogleGLogo: React.FC = () => (
 );
 
 /** Bottoni social: Apple nativo (iOS) + Google OAuth brandizzato. */
-export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
+const SocialButtonsImpl: React.FC<SocialButtonsProps> = ({ onError }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
@@ -121,6 +121,9 @@ export const SocialButtons: React.FC<SocialButtonsProps> = ({ onError }) => {
     </View>
   );
 };
+
+// React.memo: onError memoizzato negli screen → evita re-render inutili (finding 131).
+export const SocialButtons = React.memo(SocialButtonsImpl);
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({

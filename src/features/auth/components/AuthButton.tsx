@@ -15,7 +15,7 @@ interface AuthButtonProps {
   variant?: 'primary' | 'secondary' | 'link' | 'linkMuted' | 'linkStrong';
 }
 
-export const AuthButton: React.FC<AuthButtonProps> = ({
+const AuthButtonImpl: React.FC<AuthButtonProps> = ({
   label,
   onPress,
   loading = false,
@@ -112,6 +112,10 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
     </PlatformTouchable>
   );
 };
+
+// React.memo: le props (label/callback memoizzati negli screen) sono stabili →
+// evita il re-render del bottone quando un campo fratello cambia (finding 131/133).
+export const AuthButton = React.memo(AuthButtonImpl);
 
 const createStyles = () =>
   StyleSheet.create({

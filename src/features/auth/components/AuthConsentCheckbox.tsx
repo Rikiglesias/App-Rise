@@ -19,7 +19,7 @@ interface AuthConsentCheckboxProps {
 }
 
 /** Checkbox di consenso condivisa (privacy/marketing) — usata da SignUp e CompleteProfile. */
-export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
+const AuthConsentCheckboxImpl: React.FC<AuthConsentCheckboxProps> = ({
   checked,
   onToggle,
   label,
@@ -81,6 +81,9 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
     </View>
   );
 };
+
+// React.memo: props stabili → niente re-render sui cambi dei campi fratelli (finding 131).
+export const AuthConsentCheckbox = React.memo(AuthConsentCheckboxImpl);
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({

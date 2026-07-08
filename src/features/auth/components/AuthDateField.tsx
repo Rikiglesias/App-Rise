@@ -40,7 +40,7 @@ const toDisplayDate = (iso: string): string => {
  * Espone/riceve sempre una stringa ISO `YYYY-MM-DD`, così resta compatibile con
  * la validazione (validateAdult) e con il payload del profilo (birth_date).
  */
-export const AuthDateField: React.FC<AuthDateFieldProps> = ({
+const AuthDateFieldImpl: React.FC<AuthDateFieldProps> = ({
   label,
   value,
   onChange,
@@ -126,6 +126,9 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
     </View>
   );
 };
+
+// React.memo: props stabili → niente re-render sui cambi dei campi fratelli (finding 131).
+export const AuthDateField = React.memo(AuthDateFieldImpl);
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({

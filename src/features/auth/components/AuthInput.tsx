@@ -41,7 +41,7 @@ interface AuthInputProps {
  * Input auth condiviso: label + campo + toggle password + errore.
  * `forwardRef` espone il TextInput per la navigazione campo→campo (focus chaining).
  */
-export const AuthInput = forwardRef<TextInput, AuthInputProps>(
+const AuthInputImpl = forwardRef<TextInput, AuthInputProps>(
   (
     {
       label,
@@ -141,7 +141,10 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
   }
 );
 
-AuthInput.displayName = 'AuthInput';
+AuthInputImpl.displayName = 'AuthInput';
+
+// React.memo: props stabili → digitare in un campo non ri-renderizza i fratelli (finding 131).
+export const AuthInput = React.memo(AuthInputImpl);
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({

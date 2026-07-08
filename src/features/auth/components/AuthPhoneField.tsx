@@ -71,7 +71,7 @@ const buildCallingCode = (c: ICountry | null): string => {
  * numero e paese è interno; al form arriva solo la stringa completa col prefisso,
  * coerente col contratto string del campo (come AuthInput).
  */
-export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
+const AuthPhoneFieldImpl: React.FC<AuthPhoneFieldProps> = ({
   label,
   onChangeText,
   country: countryCca2,
@@ -186,6 +186,9 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
     </View>
   );
 };
+
+// React.memo: props stabili → niente re-render sui cambi dei campi fratelli (finding 131).
+export const AuthPhoneField = React.memo(AuthPhoneFieldImpl);
 
 const createStyles = (_colors: ThemeColors) =>
   StyleSheet.create({
