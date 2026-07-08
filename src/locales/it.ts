@@ -100,6 +100,10 @@ export default {
       completeCta: 'Completa il tuo profilo',
       manageTitle: 'Gestione',
       applePrivateEmail: 'Email privata (Apple)',
+      emptyTitle: 'Profilo da completare',
+      emptyBody:
+        'Aggiungi i tuoi dati per completare l’iscrizione da donatore e accedere alla tua area personale.',
+      accountLabel: 'Accesso',
     },
     social: {
       continueGoogle: 'Continua con Google',

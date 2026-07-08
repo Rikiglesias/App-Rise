@@ -162,18 +162,16 @@ export const ProfileScreen: React.FC = () => {
         </View>
       ) : null}
 
-      {/* Blocco identità: nome + email. È l'header dati del profilo. */}
-      {fullName ? (
-        <PerfectText size={22} lines={1} style={styles.name}>
-          {fullName}
-        </PerfectText>
-      ) : null}
-      <PerfectText size={15} lines={1} style={styles.email}>
-        {emailDisplay}
-      </PerfectText>
-
       {profile ? (
         <>
+          {/* Identità: nome + email. È l'header dati del profilo. */}
+          <PerfectText size={22} lines={1} style={styles.name}>
+            {fullName}
+          </PerfectText>
+          <PerfectText size={15} lines={1} style={styles.email}>
+            {emailDisplay}
+          </PerfectText>
+
           {/* Card dati anagrafici (sola lettura). */}
           <View style={styles.dataCard}>
             <DataRow
@@ -231,10 +229,29 @@ export const ProfileScreen: React.FC = () => {
           </SettingsGroup>
         </>
       ) : (
-        <AuthButton
-          label={t('auth.profile.completeCta')}
-          onPress={handleCompleteProfile}
-        />
+        // Stato vuoto (social appena loggato, profilo non ancora completato): niente
+        // dati anagrafici → invece di una schermata quasi vuota, un blocco che spiega
+        // cosa manca, mostra con quale account si è entrati, e invita a completare.
+        <View style={styles.emptyState}>
+          <PerfectText size={20} lines={1} style={styles.emptyTitle}>
+            {t('auth.profile.emptyTitle')}
+          </PerfectText>
+          <PerfectText size={15} lines={4} style={styles.emptyBody}>
+            {t('auth.profile.emptyBody')}
+          </PerfectText>
+          <View style={styles.accountRow}>
+            <PerfectText size={13} lines={1} style={styles.accountLabel}>
+              {t('auth.profile.accountLabel')}
+            </PerfectText>
+            <PerfectText size={15} lines={1} style={styles.accountValue}>
+              {emailDisplay}
+            </PerfectText>
+          </View>
+          <AuthButton
+            label={t('auth.profile.completeCta')}
+            onPress={handleCompleteProfile}
+          />
+        </View>
       )}
 
       <AuthButton
@@ -319,6 +336,38 @@ const createStyles = (colors: ThemeColors) =>
       marginTop: PerfectSpacing.xl,
       marginBottom: PerfectSpacing.sm,
       marginLeft: PerfectSpacing.xs,
+    },
+    emptyState: {
+      marginTop: PerfectSpacing.sm,
+    },
+    emptyTitle: {
+      color: colors.neutral[900],
+      fontWeight: '700',
+      marginBottom: PerfectSpacing.sm,
+    },
+    emptyBody: {
+      color: colors.neutral[500],
+      lineHeight: scale(21),
+      marginBottom: PerfectSpacing.lg,
+    },
+    // Account d'accesso in una card coerente col resto (stessa cornice dei dati/menu),
+    // così la mail non resta una riga grigia orfana.
+    accountRow: {
+      backgroundColor: colors.neutral[0],
+      borderRadius: scale(14),
+      borderWidth: scale(1),
+      borderColor: colors.neutral[200],
+      paddingHorizontal: PerfectSpacing.base,
+      paddingVertical: PerfectSpacing.md,
+      marginBottom: PerfectSpacing.lg,
+    },
+    accountLabel: {
+      color: colors.neutral[500],
+      marginBottom: PerfectSpacing.xs,
+    },
+    accountValue: {
+      color: colors.neutral[900],
+      fontWeight: '600',
     },
     error: {
       color: Colors.semantic.error.main,

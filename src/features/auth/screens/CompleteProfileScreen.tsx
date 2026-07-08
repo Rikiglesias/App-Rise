@@ -34,11 +34,10 @@ export const CompleteProfileScreen: React.FC = () => {
     key ? t(`auth.errors.${key}`) : undefined;
 
   return (
-    <AuthScreen
-      title={t('auth.completeProfile.title')}
-      subtitle={t('auth.completeProfile.subtitle')}
-    >
-      <AuthSection title={t('auth.signup.sections.personal')}>
+    <AuthScreen title={t('auth.completeProfile.title')}>
+      {/* `first`: azzera il divider/margine sopra la prima sezione (come SignUp) —
+          senza, restava una linea vagante sotto il titolo (aspetto "messo lì"). */}
+      <AuthSection title={t('auth.signup.sections.personal')} first>
         <AuthInput
           label={t('auth.signup.firstName')}
           value={values.firstName}

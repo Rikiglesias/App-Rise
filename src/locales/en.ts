@@ -99,6 +99,10 @@ export default {
       completeCta: 'Complete your profile',
       manageTitle: 'Manage',
       applePrivateEmail: 'Private email (Apple)',
+      emptyTitle: 'Profile to complete',
+      emptyBody:
+        'Add your details to complete your donor registration and access your personal area.',
+      accountLabel: 'Signed in as',
     },
     social: {
       continueGoogle: 'Continue with Google',
