@@ -158,7 +158,6 @@ export const useLinkHandler = (
         if (!isSuccess(hapticResult)) {
           // Haptic failure is non-critical, log and continue
           if (__DEV__) {
-            // eslint-disable-next-line no-console
             logWarn(
               'LinkHandler',
               'Haptic feedback failed',

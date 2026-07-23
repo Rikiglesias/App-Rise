@@ -1,3 +1,20 @@
+// Uscite dirette vietate in TUTTO il codice vivo: anche negli override che
+// spengono i ban legacy-UI la guardia sicurezza resta attiva (unica eccezione
+// __tests__). L'allowlist runtime vive solo dentro useLinkHandler.
+const EXIT_IMPORT_PATHS = [
+  {
+    name: 'expo-linking',
+    importNames: ['openURL'],
+    message:
+      'Uscita diretta vietata: salta allowlist domini e error UI. Usa openLink di useLinkHandler.',
+  },
+  {
+    name: 'expo-web-browser',
+    message:
+      'Uscita diretta vietata: salta allowlist domini e error UI. Usa openLink di useLinkHandler.',
+  },
+];
+
 module.exports = {
   extends: [
     'expo',
@@ -139,17 +156,7 @@ module.exports = {
             message:
               'Import diretto vietato. Usa PerfectImage per proporzioni identiche.',
           },
-          {
-            name: 'expo-linking',
-            importNames: ['openURL'],
-            message:
-              'Uscita diretta vietata: salta allowlist domini e error UI. Usa openLink di useLinkHandler.',
-          },
-          {
-            name: 'expo-web-browser',
-            message:
-              'Uscita diretta vietata: salta allowlist domini e error UI. Usa openLink di useLinkHandler.',
-          },
+          ...EXIT_IMPORT_PATHS,
         ],
         patterns: [
           // Legacy responsive system (ban)
@@ -230,30 +237,22 @@ module.exports = {
   // =================== CONFIGURAZIONI SPECIFICHE ===================
   overrides: [
     {
-      files: [
-        '**/__tests__/**/*.{ts,tsx,js,jsx}',
-        'src/shared/screens/DevelopmentScreen.tsx',
-      ],
+      files: ['**/__tests__/**/*.{ts,tsx,js,jsx}'],
       rules: {
         'no-restricted-imports': 'off',
       },
     },
+    // Ban legacy-UI spenti, ma la guardia sicurezza sulle uscite resta attiva.
     {
       files: [
+        'src/shared/screens/DevelopmentScreen.tsx',
         'src/components/ui/PerfectText.tsx',
         'src/components/ui/PerfectImage.tsx',
-      ],
-      rules: {
-        'no-restricted-imports': 'off',
-      },
-    },
-    {
-      files: [
         'src/features/home/components/HomeHeader/HeaderImageSection.tsx',
         'src/features/home/components/HeroImage/index.tsx',
       ],
       rules: {
-        'no-restricted-imports': 'off',
+        'no-restricted-imports': ['error', { paths: EXIT_IMPORT_PATHS }],
       },
     },
     // =================== COMPONENTI REACT NATIVE ===================
