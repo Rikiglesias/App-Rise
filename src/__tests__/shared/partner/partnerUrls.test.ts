@@ -5,13 +5,12 @@ import {
 } from '@/shared/partner/partnerUrls';
 
 describe('buildDonorboxDonationUrl', () => {
-  it('mette il ref in utm_content e preserva show_content=true', () => {
+  it('mette il ref in utm_content sulla pagina di donazione ospitata', () => {
     const url = buildDonorboxDonationUrl('REF123');
-    expect(url).toContain('donorbox.org/embed/dona-ora-rah');
-    expect(url).toContain('show_content=true');
+    expect(url).toContain('donorbox.org/dona-ora-rah');
     expect(url).toContain('utm_content=REF123');
-    // separatore & perché la base ha già ?show_content=true
-    expect(url).toBe(`${DONORBOX_DONATION_URL}&utm_content=REF123`);
+    // separatore ? perché la base non ha query
+    expect(url).toBe(`${DONORBOX_DONATION_URL}?utm_content=REF123`);
   });
 
   it('ref null/undefined → nessun utm_content (donazione ospite, base invariata)', () => {
@@ -48,13 +47,15 @@ describe('buildDonorboxDonationUrl', () => {
     expect(url).toContain('first_name=De%20Rossi');
   });
 
-  it('accetta una base override (futuro swap alla pagina ospitata)', () => {
+  it('accetta una base override con query esistente (embed per iframe, separatore &)', () => {
     const url = buildDonorboxDonationUrl(
       'REF',
       {},
-      'https://donorbox.org/dona-ora-rah'
+      'https://donorbox.org/embed/dona-ora-rah?show_content=true'
     );
-    expect(url).toBe('https://donorbox.org/dona-ora-rah?utm_content=REF');
+    expect(url).toBe(
+      'https://donorbox.org/embed/dona-ora-rah?show_content=true&utm_content=REF'
+    );
   });
 });
 

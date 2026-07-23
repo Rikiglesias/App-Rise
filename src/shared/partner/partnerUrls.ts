@@ -16,14 +16,16 @@
  */
 
 /**
- * URL di donazione Donorbox. Default = EMBED diretto, l'unico su cui prefill e
- * `utm_content` sono stati VERIFICATI (la pagina ospitata donorbox.org/dona-ora-rah
- * è più curata ma renderizza il form via JS: il prefill non è osservabile da una
- * GET, quindi non ancora verificato). Dominio già in allowlist (useLinkHandler).
- * Swap a un solo punto quando la pagina ospitata sarà verificata dal vivo.
+ * URL di donazione Donorbox: la pagina ospitata, verificata dal vivo il 2026-07-24
+ * (browser: prefill first_name/last_name/email/amount applicati sul form; il nostro
+ * `utm_content` conservato nell'URL e propagato agli iframe interni di Donorbox, dove
+ * la donazione viene registrata). Per l'apertura in un browser standalone (useLinkHandler)
+ * è più curata dell'embed, che è pensato per un iframe. Dominio già in allowlist.
+ * Resta da confermare con una donazione reale che `utm_content` torni su
+ * GET /api/v1/donations (leva utente). Per un contesto iframe passare come `base`:
+ * https://donorbox.org/embed/dona-ora-rah?show_content=true
  */
-export const DONORBOX_DONATION_URL =
-  'https://donorbox.org/embed/dona-ora-rah?show_content=true';
+export const DONORBOX_DONATION_URL = 'https://donorbox.org/dona-ora-rah';
 
 /** Nome del parametro Donorbox che trasporta il ref (tracciamento UTM). */
 const DONORBOX_REF_PARAM = 'utm_content';
