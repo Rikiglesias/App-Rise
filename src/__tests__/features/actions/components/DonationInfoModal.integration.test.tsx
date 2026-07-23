@@ -14,12 +14,19 @@ import ActionButtons from '@/features/actions/components/ActionButtons/ActionBut
 jest.mock('@/shared/hooks/useLinkHandler', () => ({
   useLinkHandler: () => ({
     openLink: jest.fn(),
-    openDonationLink: jest.fn(),
-    openEventsLink: jest.fn(),
-    openShopLink: jest.fn(),
-    openGiftCardLink: jest.fn(),
-    openProjectsLink: jest.fn(),
     openTracciabilitaLink: jest.fn(),
+  }),
+}));
+
+// Mock del flusso partner: il test tocca solo la modale "Come donare", non le uscite.
+jest.mock('@/shared/partner/usePartnerExit', () => ({
+  usePartnerExit: () => ({
+    isLoading: null,
+    disclosureVisible: false,
+    openDonation: jest.fn(),
+    openLetsDonationExit: jest.fn(),
+    confirmDisclosure: jest.fn(),
+    cancelDisclosure: jest.fn(),
   }),
 }));
 

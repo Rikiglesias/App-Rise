@@ -17,8 +17,8 @@ export const RISE_URLS = {
   italyMain: 'https://italy.riseagainsthunger.org',
   italyWebsite: 'https://italy.riseagainsthunger.org',
 
-  // Donation & Actions
-  donation: 'https://italy.riseagainsthunger.org/donaora/',
+  // Actions (la donazione NON è qui: parte da Donorbox via usePartnerExit /
+  // partnerUrls.DONORBOX_DONATION_URL, con rise_ref e prefill)
   tracciabilita: 'https://italy.riseagainsthunger.org/chi-siamo/tracciabilita/',
 
   // Legale
