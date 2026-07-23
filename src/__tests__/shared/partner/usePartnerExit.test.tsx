@@ -74,7 +74,7 @@ describe('usePartnerExit', () => {
 
     expect(mockGetOrCreate).toHaveBeenCalledWith('donorbox');
     const [url, key] = mockOpenLink.mock.calls[0];
-    expect(url).toContain('donorbox.org/embed/dona-ora-rah');
+    expect(url).toContain('donorbox.org/dona-ora-rah');
     expect(url).toContain('utm_content=DREF');
     expect(url).toContain('first_name=Mario');
     expect(url).toContain('last_name=Rossi');
