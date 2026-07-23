@@ -167,6 +167,12 @@ module.exports = {
         message:
           'Vietato usare Dimensions.get per layout. Usa PerfectContainer/PerfectImage e il sistema millimetrico.',
       },
+      {
+        object: 'Linking',
+        property: 'openURL',
+        message:
+          'Uscita diretta vietata: salta allowlist domini e error UI. Usa openLink di useLinkHandler (unica eccezione: useLinkHandler.ts).',
+      },
     ],
 
     // =================== PERFORMANCE ===================

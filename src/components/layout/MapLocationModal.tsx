@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useMemo } from 'react';
-import { View, Linking } from 'react-native';
+import { View } from 'react-native';
 import {
   PerfectIcon,
   PlatformTouchable,
@@ -10,9 +10,9 @@ import {
   PlatformScrollView,
 } from '../ui';
 
-import { logError } from '../../shared/utils/logger';
 import { createStyles } from './MapLocationModalStyles';
 import { formatStat } from '@/shared/utils/numberFormat';
+import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { MapModalData } from '@/features/impact/data/mapModalData';
 
@@ -39,16 +39,18 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   const trackingUrl = data?.trackingUrl;
+  const { openLink } = useLinkHandler();
 
+  // openLink applica allowlist domini, retry e Alert d'errore (prima il link
+  // usciva diretto, saltando l'allowlist di produzione).
   const handleCTAPress = useCallback(() => {
     if (!trackingUrl) return;
-    Linking.openURL(trackingUrl).catch(error => {
-      logError(
-        'Impossibile aprire il link di tracciamento',
-        error instanceof Error ? error.message : String(error)
-      );
-    });
-  }, [trackingUrl]);
+    void openLink(
+      trackingUrl,
+      'map-tracking',
+      'Impossibile aprire il link di tracciamento. Riprova più tardi.'
+    );
+  }, [trackingUrl, openLink]);
 
   if (!data) return null;
 

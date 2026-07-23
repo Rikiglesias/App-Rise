@@ -61,7 +61,12 @@ export const useLinkHandler = (
         'italy.riseagainsthunger.org',
         'www.riseagainsthunger.it',
         'riseagainsthunger.org',
+        // Let's Donation (dominio nuovo) + ex Welfare4Charity tenuto per la
+        // transizione: URL vecchi ancora in circolazione fanno 301 sul nuovo.
+        'riseagainsthunger.org.letsdonation.com',
         'riseagainsthunger.org.welfare4charity.com',
+        // Donorbox: pronto per l'apertura diretta dell'embed donazioni (F1.7).
+        'donorbox.org',
         'instagram.com',
         'www.instagram.com',
         'facebook.com',
@@ -71,7 +76,6 @@ export const useLinkHandler = (
         'linkedin.com',
         'www.linkedin.com',
         'maps.google.com',
-        'www.riseagainsthunger.it',
       ]),
     []
   );
@@ -112,6 +116,8 @@ export const useLinkHandler = (
           if (!supported) {
             throw new Error(`URL non supportato: ${url}`);
           }
+          // Unico punto di uscita legittimo: qui l'URL ha già passato l'allowlist.
+          // eslint-disable-next-line no-restricted-properties
           await Linking.openURL(url);
         },
         timeout,

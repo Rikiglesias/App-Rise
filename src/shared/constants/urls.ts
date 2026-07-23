@@ -24,13 +24,14 @@ export const RISE_URLS = {
   // Legale
   privacyPolicy: 'https://italy.riseagainsthunger.org/privacy-policy/',
 
-  // Welfare4Charity Platform
-  shop: 'https://riseagainsthunger.org.welfare4charity.com/charity/ecommerce',
-  giftCards:
-    'https://riseagainsthunger.org.welfare4charity.com/charity/giftcards',
-  events:
-    'https://riseagainsthunger.org.welfare4charity.com/organization/events',
-  projects: 'https://riseagainsthunger.org.welfare4charity.com/org/projects',
+  // Let's Donation Platform (ex Welfare4Charity: 301 verso il dominio nuovo
+  // verificato il 2026-07-23 — stesso path, cambia solo l'host)
+  shop: 'https://riseagainsthunger.org.letsdonation.com/charity/ecommerce',
+  giftCards: 'https://riseagainsthunger.org.letsdonation.com/charity/giftcards',
+  events: 'https://riseagainsthunger.org.letsdonation.com/organization/events',
+  projects: 'https://riseagainsthunger.org.letsdonation.com/org/projects',
+  communityRegister:
+    'https://riseagainsthunger.org.letsdonation.com/register?redirect=https%3A%2F%2Friseagainsthunger.org.letsdonation.com%2Fcharity%2Fecommerce',
 } as const;
 
 // ===================================================================
