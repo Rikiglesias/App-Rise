@@ -4,8 +4,18 @@
 -- (active=false + revoked_at), così le correlazioni passate restano ricostruibili e il ref
 -- è ri-emettibile (rotazione su data breach lato partner).
 -- Design: docs/integrazioni/letsdonation-donorbox-identita.md §5-§8 (PR #56).
+--
+-- RIESEGUIBILE per intero (come 0003/0005): questa migration viene applicata a mano dal
+-- SQL Editor, dove un secondo tentativo — dopo un errore parziale o semplicemente nel
+-- dubbio «l'ho gia' applicata?» — e' uno scenario reale, non teorico. Ogni oggetto usa
+-- `if not exists` o `drop ... if exists` prima del create.
+-- Rollback completo:
+--   drop trigger if exists on_profile_deleted on public.profiles;
+--   drop function if exists public.handle_profile_deletion();
+--   drop table if exists public.partner_ref_tombstones;
+--   drop table if exists public.partner_refs;
 
-create table public.partner_refs (
+create table if not exists public.partner_refs (
   ref uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
   partner text not null check (partner in ('donorbox', 'letsdonation')),
@@ -17,13 +27,13 @@ create table public.partner_refs (
 );
 
 -- Un solo ref attivo per (utente, partner); lo storico revocato non è vincolato.
-create unique index partner_refs_one_active_idx
+create unique index if not exists partner_refs_one_active_idx
   on public.partner_refs (user_id, partner)
   where active;
 
 -- Copre la cascade da profiles (delete where user_id=…) anche sui ref revocati,
 -- che l'indice parziale sopra non indicizza.
-create index partner_refs_user_id_idx
+create index if not exists partner_refs_user_id_idx
   on public.partner_refs (user_id);
 
 alter table public.partner_refs enable row level security;
@@ -46,9 +56,11 @@ grant select, insert on public.partner_refs to authenticated;
 -- Il client legge e crea SOLO i propri ref (il valore lo genera il default server-side).
 -- Niente update/delete client: la revoca è operazione amministrativa (service_role),
 -- la cancellazione passa dalla cascade su profiles.
+drop policy if exists "ref_own_select" on public.partner_refs;
 create policy "ref_own_select" on public.partner_refs
   for select to authenticated
   using ((select auth.uid()) = user_id);
+drop policy if exists "ref_own_insert" on public.partner_refs;
 create policy "ref_own_insert" on public.partner_refs
   for insert to authenticated
   with check ((select auth.uid()) = user_id and active);
@@ -58,7 +70,7 @@ create policy "ref_own_insert" on public.partner_refs
 -- più di chi era. requested_at/confirmed_at tracciano la richiesta al partner e la sua
 -- conferma (valorizzati dal processo di propagazione, non dal trigger).
 -- Nessun check su partner: riceve solo copie storiche, non deve poter rifiutare un delete.
-create table public.partner_ref_tombstones (
+create table if not exists public.partner_ref_tombstones (
   ref uuid primary key,
   partner text not null,
   deleted_at timestamptz not null default now(),
@@ -101,6 +113,7 @@ $$;
 -- Come 0006: niente superficie RPC (il trigger fira comunque senza il grant).
 revoke execute on function public.handle_profile_deletion() from public, anon, authenticated;
 
+drop trigger if exists on_profile_deleted on public.profiles;
 create trigger on_profile_deleted
   before delete on public.profiles
   for each row execute procedure public.handle_profile_deletion();
