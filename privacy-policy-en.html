@@ -16,70 +16,114 @@
         h1 { color: #2c3e50; }
         h2 { color: #34495e; margin-top: 30px; }
         .last-updated { color: #7f8c8d; font-style: italic; }
+        table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
+        th { background: #f4f6f7; }
+        .da-validare { background: #fff3cd; border: 1px dashed #b8860b; padding: 1px 6px; border-radius: 4px; }
     </style>
 </head>
 <body>
     <h1>Privacy Policy</h1>
-    <p class="last-updated">Last updated: November 9, 2025</p>
-    
+    <p class="last-updated">Last updated: 23 July 2026</p>
+    <p><span class="da-validare">INTERNAL DRAFT — to be validated by a privacy lawyer before publication. Highlighted items like this one require confirmation.</span></p>
+
     <h2>1. Introduction</h2>
-    <p>Rise Against Hunger Italia ("we", "our") respects the privacy of our users ("user" or "you"). This Privacy Policy explains how we collect, use, and protect your information when you use our Rise Against Hunger Italia mobile application.</p>
-    
-    <h2>2. Information We Collect</h2>
-    <p><strong>The Rise Against Hunger Italia application is designed to fully respect user privacy and does NOT collect any personal data.</strong></p>
-    
-    <p><strong>Data we DO NOT collect:</strong></p>
+    <p>Rise Against Hunger Italia ("we", "Controller") respects the privacy of its users. This notice, provided under Articles 13 and 14 of Regulation (EU) 2016/679 ("GDPR"), explains which personal data we process through the Rise Against Hunger Italia mobile application, why we process it, who we share it with, and what rights you have.</p>
+
+    <h2>2. What data we process</h2>
+    <p>The app can be browsed <strong>without registration</strong>: informational content (projects, figures, news) is visible to everyone. If you choose to create an account for the donor area, we process the following data.</p>
+    <table>
+        <tr><th>Category</th><th>Data</th><th>When</th></tr>
+        <tr>
+            <td>Account data</td>
+            <td>Email address and password (the latter stored only in irreversibly encrypted form)</td>
+            <td>Registration with email</td>
+        </tr>
+        <tr>
+            <td>Social sign-in</td>
+            <td>Identifier and email address provided by Google or Apple. With Apple you may use "Hide My Email": in that case we receive an anonymous relay address and you may optionally provide a real contact email</td>
+            <td>Sign-in with Google or Apple</td>
+        </tr>
+        <tr>
+            <td>Profile data</td>
+            <td>First name, last name, phone number, city, province, country, date of birth (used to verify adult age)</td>
+            <td>Completion of the donor profile</td>
+        </tr>
+        <tr>
+            <td>Consents</td>
+            <td>Date and version of the accepted notice, marketing consent choice and its changes over time (consent log kept for evidentiary purposes)</td>
+            <td>Registration and later changes</td>
+        </tr>
+        <tr>
+            <td>Technical diagnostics</td>
+            <td>Error and crash reports of the app, associated with the technical identifier of your account (never email, password or profile content)</td>
+            <td>Use of the app</td>
+        </tr>
+    </table>
+    <p>The app does <strong>not</strong> access the device's GPS location, shows <strong>no</strong> advertising, uses <strong>no</strong> advertising identifiers and runs <strong>no</strong> commercial analytics or behavioural tracking. Your sign-in session is stored only on your device, in a protected area.</p>
+
+    <h2>3. Purposes and legal bases</h2>
+    <table>
+        <tr><th>Purpose</th><th>Legal basis (Art. 6 GDPR)</th></tr>
+        <tr><td>Creation and management of the account and donor area</td><td>Performance of a contract or pre-contractual measures (Art. 6.1.b)</td></tr>
+        <tr><td>Promotional communications and updates about the association's activities</td><td>Consent, optional and revocable at any time (Art. 6.1.a)</td></tr>
+        <tr><td>Keeping the consent log</td><td>Legal accountability obligation (Art. 6.1.c and Art. 7)</td></tr>
+        <tr><td>Technical diagnostics and application security</td><td>Legitimate interest in a working, secure service (Art. 6.1.f)</td></tr>
+    </table>
+
+    <h2>4. Recipients and data processors</h2>
+    <p>Data is processed through providers acting on our behalf:</p>
     <ul>
-        <li><strong>Authentication data</strong>: the app does not require registration, login, or user accounts</li>
-        <li><strong>Personal information</strong>: no names, emails, phone numbers, or other identifying information</li>
-        <li><strong>Geolocation data</strong>: no access to device GPS location</li>
-        <li><strong>User preferences</strong>: no storage of settings or customizations on the device</li>
-        <li><strong>Usage data</strong>: no tracking, analytics, or monitoring of in-app activities</li>
-        <li><strong>Advertising identifiers</strong>: the app does not display ads and does not use advertising IDs</li>
-        <li><strong>Cookies or tracking technologies</strong>: no activity tracking</li>
+        <li><strong>Supabase Inc.</strong> — database and authentication. Data resides on servers in the European Union (Frankfurt, Germany). <span class="da-validare">Confirm signature of the DPA with standard contractual clauses.</span></li>
+        <li><strong>Functional Software Inc. (Sentry)</strong> — collection of error reports. <span class="da-validare">Verify the data ingestion region (EU or US) and the DPA.</span></li>
+        <li><strong>Expo (650 Industries Inc.)</strong> — distribution of app updates (see section 8).</li>
+        <li><strong>Service email provider</strong> — sending technical emails (registration confirmation, password recovery). <span class="da-validare">Currently Supabase's built-in service; if switching to a dedicated provider (e.g. Resend), update this entry and the DPA.</span></li>
     </ul>
-    
-    <p><strong>Type of application:</strong></p>
-    <p>Rise Against Hunger Italia is a <strong>purely informational</strong> application that displays static content about the organization's humanitarian projects. All displayed data (number of meals, projects, volunteers) is embedded in the application and does not require any collection of information from users.</p>
-    
-    <h2>3. Over-The-Air (OTA) Updates</h2>
-    <p>The application uses the Expo Updates service to receive automatic application code updates. This process:</p>
+    <p>If you sign in with Google or Apple, those companies process the sign-in data as independent controllers, under their own privacy notices.</p>
+    <p>Data is neither sold nor transferred to third parties for commercial purposes.</p>
+
+    <h2>5. Transfers outside the EU</h2>
+    <p>Account data resides in the European Union. Some providers are US companies: for processing that involves a transfer outside the EU we rely on appropriate safeguards under Chapter V of the GDPR (standard contractual clauses and, where available, certification under the EU-US Data Privacy Framework). <span class="da-validare">List here the individual confirmed transfers after verifying the DPAs (Sentry, email provider).</span></p>
+
+    <h2>6. Data retention</h2>
     <ul>
-        <li><strong>Does not collect personal data</strong>: only downloads updated application code</li>
-        <li><strong>Does not send identifying information</strong>: the device only requests if updates are available</li>
-        <li><strong>Serves exclusively</strong> to provide bug fixes and new features</li>
-        <li><strong>Occurs transparently</strong>: users see a progress screen during download</li>
+        <li><strong>Account and profile data</strong>: for as long as the account remains active. You can delete your account directly from the app, choosing between <strong>immediate deletion</strong> or <strong>deletion scheduled in 30 days</strong> (a grace period during which you can cancel the request); once it expires, profile data is permanently erased.</li>
+        <li><strong>Consent log</strong>: kept after account deletion as evidence of the given consent, for the time needed for defence against claims. <span class="da-validare">Define the exact duration with legal counsel (typically up to 10 years).</span></li>
+        <li><strong>Error reports</strong>: kept for the diagnostics provider's retention period (90 days by default). <span class="da-validare">Confirm the retention configured on Sentry.</span></li>
     </ul>
-    
-    <h2>4. Data Retention Period</h2>
-    <p><strong>Not applicable</strong>: since the application does not collect any personal data, there is no retention period to specify.</p>
-    
-    <h2>5. Third-Party Services</h2>
-    <p>The application uses the following technical services, which <strong>do not collect users' personal data</strong>:</p>
+
+    <h2>7. Your rights (Arts. 15-22 GDPR)</h2>
+    <p>You have the right to access your data, to rectification, erasure, restriction of processing, portability, and to object to processing based on legitimate interest. You may withdraw marketing consent at any time, without affecting the lawfulness of prior processing.</p>
+    <p>Directly from the app you can: <strong>export your data</strong> in a readable format (profile and consent history) and <strong>delete your account</strong> (immediately, or as a scheduled request in 30 days, see section 6). For any other request write to the contacts in section 12: we will reply within 30 days.</p>
+    <p>If you believe the processing infringes the GDPR, you may lodge a complaint with the Italian supervisory authority, Garante per la protezione dei dati personali (<a href="https://www.garanteprivacy.it">www.garanteprivacy.it</a>).</p>
+
+    <h2>8. Over-The-Air (OTA) updates</h2>
+    <p>The app uses the Expo Updates service to receive updates to its own code. The update request transmits only technical information about the installed app version, with no data from your account.</p>
+
+    <h2>9. Donations, shop and events on external platforms</h2>
+    <p>Money donations and solidarity purchases <strong>happen outside the app</strong>, on partner platforms acting as independent controllers:</p>
     <ul>
-        <li><strong>Expo Updates</strong>: service for distributing application updates (no user data transmitted)</li>
-        <li><strong>Static content</strong>: images and texts embedded in the application without connections to external servers during normal use</li>
+        <li><strong>Donorbox</strong> (Rebel Idealist LLC, USA) — donation form embedded in our website. The data you enter in the form (name, email, payment data) is collected by Donorbox under its own privacy notice.</li>
+        <li><strong>Let's Donation</strong> (Let's Donation S.r.l., Bologna, Italy) — solidarity shop, gift cards and events, with a separate registration on their platform, governed by their privacy notice. <span class="da-validare">Qualify the relationship (independent controllers vs joint controllership Art. 26 vs processor Art. 28) with legal counsel.</span></li>
     </ul>
-    <p><strong>Important note</strong>: the application can function completely offline after the first download. It does not require an internet connection to view content, except to receive optional OTA updates.</p>
-    
-    <h2>6. User Rights</h2>
-    <p><strong>Important note</strong>: Since the application does not collect, store, or process personal data, the rights provided by GDPR (access, rectification, deletion, restriction, portability, objection) are not applicable as there is no personal data to manage.</p>
-    <p>For any questions or clarifications about privacy and data processing, users can still contact the Data Controller at: <a href="mailto:info@riseagainsthunger.it">info@riseagainsthunger.it</a></p>
-    
-    <h2>7. Security</h2>
-    <p><strong>Not applicable</strong>: since the application does not collect, store, or transmit personal data, there are no data security measures to implement. The application operates completely locally on the user's device.</p>
-    
-    <h2>8. Changes to This Policy</h2>
-    <p>This Privacy Policy may be updated periodically. Significant changes will be communicated to users through the application or by publication on the website. We recommend regularly consulting this page to verify any updates.</p>
-    
-    <h2>9. Data Controller and Contact</h2>
-    <p><strong>Data Controller:</strong></p>
-    <ul>
-        <li>Rise Against Hunger Italia</li>
-        <li><strong>Email</strong>: <a href="mailto:info@riseagainsthunger.it">info@riseagainsthunger.it</a></li>
-        <li><strong>Website</strong>: <a href="https://italy.riseagainsthunger.org">italy.riseagainsthunger.org</a></li>
-    </ul>
-    <p>Users can contact the Data Controller at the addresses above for any questions or information regarding privacy and data processing.</p>
-    <p><strong>Data Protection Officer (DPO):</strong> not appointed (optional for small organizations).</p>
+    <p>When you open these links, the app takes you to the device browser. <span class="da-validare">If form pre-filling (name/email in the web address) or a donation-source reference code is activated, this section must be updated BEFORE activation, describing the data transmitted.</span></p>
+
+    <h2>10. Security</h2>
+    <p>We adopt appropriate technical and organisational measures: encryption of data in transit and at rest, access rules under which each user can read and modify only their own data (row-level security), passwords stored exclusively in irreversibly encrypted form, session kept in the device's secure storage.</p>
+
+    <h2>11. Minors and automated decision-making</h2>
+    <p>The donor area is restricted to <strong>adults</strong>: the date of birth is used to verify this. The app uses no automated decision-making or profiling.</p>
+
+    <h2>12. Data controller and contacts</h2>
+    <p>
+        Rise Against Hunger Italia<br>
+        Email: <a href="mailto:info@riseagainsthunger.it">info@riseagainsthunger.it</a><br>
+        <span class="da-validare">Certified email (PEC) and registered office address to be added.</span><br>
+        Website: <a href="https://italy.riseagainsthunger.org">https://italy.riseagainsthunger.org</a>
+    </p>
+    <p><strong>Data Protection Officer (DPO):</strong> not appointed. <span class="da-validare">Confirm with legal counsel that appointment is not required (Art. 37 GDPR).</span></p>
+
+    <h2>13. Changes to this notice</h2>
+    <p>This notice may be updated. Substantial changes will be communicated in the app, which will ask for renewed acknowledgement; every accepted version remains tracked in the consent log.</p>
 </body>
 </html>
