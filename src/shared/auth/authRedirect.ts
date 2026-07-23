@@ -6,7 +6,9 @@
  * costruzione del redirectTo e parsing del fragment. Testabili in isolamento.
  */
 
-import * as Linking from 'expo-linking';
+// Import nominato (non namespace): la guardia no-restricted-imports vieta
+// `openURL` da expo-linking e un `* as` importerebbe anche quello.
+import { createURL } from 'expo-linking';
 
 /** Path del deep link di reset (deve combaciare con la route + l'allow-list Supabase). */
 export const RESET_PASSWORD_PATH = 'reset-password';
@@ -16,11 +18,11 @@ export const EMAIL_CONFIRM_PATH = 'confirm-email';
 
 /** Redirect deep-link per il reset: `<scheme>://reset-password`. */
 export const buildResetRedirectTo = (): string =>
-  Linking.createURL(RESET_PASSWORD_PATH);
+  createURL(RESET_PASSWORD_PATH);
 
 /** Redirect deep-link per la conferma email signup: `<scheme>://confirm-email`. */
 export const buildEmailConfirmRedirectTo = (): string =>
-  Linking.createURL(EMAIL_CONFIRM_PATH);
+  createURL(EMAIL_CONFIRM_PATH);
 
 export interface AuthRedirectParams {
   type?: string;

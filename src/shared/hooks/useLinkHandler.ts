@@ -12,6 +12,14 @@ import {
 import { logWarn, logError } from '@/shared/utils/logger';
 import { RISE_URLS, SOCIAL_URLS } from '@/shared/constants/urls';
 
+/**
+ * Schemi senza host, ammessi a prescindere dall'allowlist di domini.
+ * `new URL('tel:051704070').hostname` è '' → l'allowlist li bloccherebbe, ma
+ * solo in produzione (in dev `isUrlAllowed` ritorna sempre true), rendendo il
+ * guasto invisibile durante lo sviluppo.
+ */
+const ALLOWED_SCHEMES = ['tel:', 'mailto:'] as const;
+
 interface UseLinkHandlerOptions {
   defaultErrorMessage?: string;
   loadingDelay?: number;
@@ -83,8 +91,20 @@ export const useLinkHandler = (
   const isUrlAllowed = useCallback(
     (url: string): boolean => {
       if (__DEV__) return true;
+      // Schemi senza host (tel:/mailto:): l'allowlist di domini non li copre
+      // (hostname === '') e li bloccherebbe SOLO in produzione. Sono sicuri:
+      // aprono dialer/client mail con valori costanti definiti nel codice.
+      if (
+        ALLOWED_SCHEMES.some(scheme => url.toLowerCase().startsWith(scheme))
+      ) {
+        return true;
+      }
       try {
         const u = new URL(url);
+        // Solo https per il web: un http: su host in allowlist passerebbe il
+        // check hostname — innocuo con le costanti attuali, buco reale quando
+        // gli URL arriveranno da config remota (F1.5).
+        if (u.protocol !== 'https:') return false;
         return allowedDomains.has(u.hostname.toLowerCase());
       } catch {
         return false;

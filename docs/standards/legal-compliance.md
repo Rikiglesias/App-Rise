@@ -11,7 +11,8 @@ L'app NON è read-only/anonima. Esiste un'area donatori completa con **registraz
 login (email/password + Apple + Google), profilo personale e consensi GDPR**, su backend
 **Supabase**. Questo documento inventaria i dati realmente trattati e i diritti già
 implementati nel codice. Le donazioni monetarie restano gestite da piattaforme esterne
-(`welfare4charity.com`, sito Rise) — l'app **non processa pagamenti**.
+(Donorbox via sito Rise per le donazioni; Let's Donation, `letsdonation.com`
+ex welfare4charity, per shop/gift card/eventi) — l'app **non processa pagamenti**.
 
 ---
 

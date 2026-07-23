@@ -139,6 +139,17 @@ module.exports = {
             message:
               'Import diretto vietato. Usa PerfectImage per proporzioni identiche.',
           },
+          {
+            name: 'expo-linking',
+            importNames: ['openURL'],
+            message:
+              'Uscita diretta vietata: salta allowlist domini e error UI. Usa openLink di useLinkHandler.',
+          },
+          {
+            name: 'expo-web-browser',
+            message:
+              'Uscita diretta vietata: salta allowlist domini e error UI. Usa openLink di useLinkHandler.',
+          },
         ],
         patterns: [
           // Legacy responsive system (ban)
