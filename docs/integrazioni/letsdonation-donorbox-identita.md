@@ -41,7 +41,18 @@ Un solo concetto nuovo: **`rise_ref`** = una stringa casuale di ~16 byte (es. `r
 1. L'utente, già loggato nell'app, tocca **Dona**.
 2. **Guardia Apple.** Se l'email di sessione finisce in `@privaterelay.appleid.com` e `profiles.contact_email` è vuota → si passa da `CompleteProfileScreen`. **Non usciamo mai dall'app con un indirizzo relay**: Apple accetta posta solo da mittenti registrati nel tuo account Developer, quindi le ricevute del fornitore rimbalzerebbero. ⚠️ **Correzione 2026-07-23**: questo documento affermava che la funzione `isApplePrivateRelayEmail()` «esiste già ed è testata (verificato: `src/shared/auth/appleRelay.ts`)». **Falso**: il file non esiste e la stringa `privaterelay` non compare in `src/` (0 match). Va scritta. Stessa verifica su `profiles.contact_email`: **non esiste**, né in `supabase/migrations/` né nel tipo del profilo — la «regola email» richiede quindi anche una migration che aggiunga il campo, non solo codice app.
 3. **Schermata onesta, una volta per utente.** «Le donazioni sono gestite da Donorbox (Stati Uniti) per conto di Rise. Ti portiamo lì con i dati già compilati.» Alla conferma si registra un evento di **informativa**, non di consenso (vedi §7).
-4. L'app genera `rise_ref`, lo salva, e apre il browser di sistema (`WebBrowser.openBrowserAsync`, non una WebView) su `/donaora/` con: `first_name`, `last_name`, `email`, `utm_source=app-rise`, `utm_content=<rise_ref>`.
+4. L'app genera `rise_ref`, lo salva, e apre il browser di sistema (`WebBrowser.openBrowserAsync`, non una WebView) con: `first_name`, `last_name`, `email`, `utm_source=app-rise`, `utm_content=<rise_ref>`.
+
+   ⚠️ **Correzione 2026-07-23 — NON su `/donaora/`.** Il documento diceva di passare i parametri alla pagina WordPress. **Non funziona, verificato:**
+   - l'iframe dentro `/donaora/` ha src **fisso**: `https://donorbox.org/embed/dona-ora-rah?show_content=true` — i parametri della pagina ospitante non entrano;
+   - nessuno script della pagina li travasa: `location.search` / `URLSearchParams` / `getParameterByName` = **0 occorrenze** nei 211 KB di HTML;
+   - le [docs Donorbox](https://donorbox.zendesk.com/hc/en-us/articles/360020559931-How-to-pre-fill-fields-in-the-donation-form) confermano che prefill e UTM vanno sull'**URL Donorbox**, non su quello della pagina che lo incorpora.
+
+   **Destinazione corretta**: la pagina ospitata da Donorbox `https://donorbox.org/dona-ora-rah?...` (HTTP 200, `lang="it"`, title «RAH - Dona ora | Rise Against Hunger Italia»), non l'embed nudo — è già brandizzata e non richiede il contorno WordPress. `donorbox.org` è già in allowlist.
+
+   **Motivo in più per non passare da `/donaora/`**: quella pagina monta **Google Tag Manager** (`GTM-5JBRPXW`) e **HubSpot** (`js.hs-scripts.com/8926509.js`). Nome, cognome ed email nella query string finirebbero nell'URL di pagina che quei tag leggono → dati personali a due destinatari in più, non dichiarati nell'informativa. (Risponde alla domanda aperta «pixel di terzi su `/donaora/`?»: sì, due.)
+
+   **Residuo del criterio 7** (richiede ancora la donazione test da 1 €): che `utm_content` compaia davvero sulla riga della donazione restituita da `GET /api/v1/donations`. La domanda «i parametri sopravvivono all'iframe WordPress?» è invece **chiusa: no** — e non serve provarla, si cambia destinazione.
 5. L'utente dona. **Nessuna registrazione, nessuna password, nessun secondo account.**
 6. Torna nell'app col pulsante «Fine» del browser. Vede: «Grazie, stiamo registrando la tua donazione.» Nessun numero mostrato finché non è verificato.
 7. Un lavoro schedulato interroga l'API Donorbox `GET /api/v1/donations?date_from=<cursore>`, legge `utm_content`, e scrive la donazione **collegata all'utente**.
