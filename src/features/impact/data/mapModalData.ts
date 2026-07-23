@@ -19,7 +19,9 @@ export interface MapModalData {
   year: number;
   image?: string;
   /** URL di tracciamento pasti/evento (opzionale). Non ancora popolato dai dati
-   *  reali (follow-up): finché assente la CTA "saperne di più" resta nascosta. */
+   *  reali (follow-up): finché assente la CTA "saperne di più" resta nascosta.
+   *  VINCOLO: il dominio DEVE stare nell'allowlist di useLinkHandler (https),
+   *  altrimenti il link apre in dev ma è BLOCCATO in produzione. */
   trackingUrl?: string;
 }
 

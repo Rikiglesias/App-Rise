@@ -9,6 +9,7 @@ import type { ButtonData } from '../shared/ActionButtonTypes';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { Colors } from '@/shared/constants';
+import { RISE_URLS } from '@/shared/constants/urls';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
 export interface ActionButtonsData {
@@ -110,7 +111,7 @@ export const useActionButtonsData = (
   // COMMUNITY REGISTRATION HANDLER
   const openCommunityRegistration = useCallback(() => {
     return openLink(
-      'https://riseagainsthunger.org.welfare4charity.com/register?redirect=https%3A%2F%2Friseagainsthunger.org.welfare4charity.com%2Fcharity%2Fecommerce',
+      RISE_URLS.communityRegister,
       'community-registration',
       'Impossibile aprire la pagina di registrazione. Riprova più tardi.'
     );

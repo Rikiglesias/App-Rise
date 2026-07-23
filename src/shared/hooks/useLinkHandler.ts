@@ -12,6 +12,14 @@ import {
 import { logWarn, logError } from '@/shared/utils/logger';
 import { RISE_URLS, SOCIAL_URLS } from '@/shared/constants/urls';
 
+/**
+ * Schemi senza host, ammessi a prescindere dall'allowlist di domini.
+ * `new URL('tel:051704070').hostname` è '' → l'allowlist li bloccherebbe, ma
+ * solo in produzione (in dev `isUrlAllowed` ritorna sempre true), rendendo il
+ * guasto invisibile durante lo sviluppo.
+ */
+const ALLOWED_SCHEMES = ['tel:', 'mailto:'] as const;
+
 interface UseLinkHandlerOptions {
   defaultErrorMessage?: string;
   loadingDelay?: number;
@@ -61,7 +69,12 @@ export const useLinkHandler = (
         'italy.riseagainsthunger.org',
         'www.riseagainsthunger.it',
         'riseagainsthunger.org',
+        // Let's Donation (dominio nuovo) + ex Welfare4Charity tenuto per la
+        // transizione: URL vecchi ancora in circolazione fanno 301 sul nuovo.
+        'riseagainsthunger.org.letsdonation.com',
         'riseagainsthunger.org.welfare4charity.com',
+        // Donorbox: pronto per l'apertura diretta dell'embed donazioni (F1.7).
+        'donorbox.org',
         'instagram.com',
         'www.instagram.com',
         'facebook.com',
@@ -71,7 +84,6 @@ export const useLinkHandler = (
         'linkedin.com',
         'www.linkedin.com',
         'maps.google.com',
-        'www.riseagainsthunger.it',
       ]),
     []
   );
@@ -79,8 +91,20 @@ export const useLinkHandler = (
   const isUrlAllowed = useCallback(
     (url: string): boolean => {
       if (__DEV__) return true;
+      // Schemi senza host (tel:/mailto:): l'allowlist di domini non li copre
+      // (hostname === '') e li bloccherebbe SOLO in produzione. Sono sicuri:
+      // aprono dialer/client mail con valori costanti definiti nel codice.
+      if (
+        ALLOWED_SCHEMES.some(scheme => url.toLowerCase().startsWith(scheme))
+      ) {
+        return true;
+      }
       try {
         const u = new URL(url);
+        // Solo https per il web: un http: su host in allowlist passerebbe il
+        // check hostname — innocuo con le costanti attuali, buco reale quando
+        // gli URL arriveranno da config remota (F1.5).
+        if (u.protocol !== 'https:') return false;
         return allowedDomains.has(u.hostname.toLowerCase());
       } catch {
         return false;
@@ -112,6 +136,8 @@ export const useLinkHandler = (
           if (!supported) {
             throw new Error(`URL non supportato: ${url}`);
           }
+          // Unico punto di uscita legittimo: qui l'URL ha già passato l'allowlist.
+          // eslint-disable-next-line no-restricted-properties
           await Linking.openURL(url);
         },
         timeout,
@@ -132,7 +158,6 @@ export const useLinkHandler = (
         if (!isSuccess(hapticResult)) {
           // Haptic failure is non-critical, log and continue
           if (__DEV__) {
-            // eslint-disable-next-line no-console
             logWarn(
               'LinkHandler',
               'Haptic feedback failed',

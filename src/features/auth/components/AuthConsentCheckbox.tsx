@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Linking } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { PerfectText, PerfectIcon, PlatformTouchable } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
@@ -29,6 +30,9 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  // openLink = allowlist domini + retry + Alert d'errore (prima l'uscita era
+  // diretta: un URL fuori allowlist sarebbe uscito comunque, senza feedback).
+  const { openLink } = useLinkHandler();
 
   return (
     <View>
@@ -62,7 +66,7 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
                 style={styles.link}
                 accessibilityRole="link"
                 onPress={() => {
-                  void Linking.openURL(linkUrl);
+                  void openLink(linkUrl, 'consent-link');
                 }}
               >
                 {linkText}
