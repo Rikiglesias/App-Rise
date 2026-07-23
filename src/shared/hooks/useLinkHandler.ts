@@ -35,11 +35,6 @@ interface UseLinkHandlerReturn {
     loadingKey: string,
     errorMessage?: string
   ) => AsyncResult<void>;
-  openDonationLink: () => AsyncResult<void>;
-  openShopLink: () => AsyncResult<void>;
-  openGiftCardLink: () => AsyncResult<void>;
-  openEventsLink: () => AsyncResult<void>;
-  openProjectsLink: () => AsyncResult<void>;
   openTracciabilitaLink: () => AsyncResult<void>;
   openFacebookLink: () => AsyncResult<void>;
   openInstagramLink: () => AsyncResult<void>;
@@ -208,47 +203,10 @@ export const useLinkHandler = (
     ]
   );
 
-  // Predefined link handlers for common actions
-  const openDonationLink = useCallback(() => {
-    return openLink(
-      RISE_URLS.donation,
-      'donation',
-      'Impossibile aprire il link di donazione. Riprova più tardi.'
-    );
-  }, [openLink]);
-
-  const openShopLink = useCallback(() => {
-    return openLink(
-      RISE_URLS.shop,
-      'shop',
-      'Impossibile aprire il charity shop. Riprova più tardi.'
-    );
-  }, [openLink]);
-
-  const openGiftCardLink = useCallback(() => {
-    return openLink(
-      RISE_URLS.giftCards,
-      'giftcard',
-      'Impossibile aprire le gift card. Riprova più tardi.'
-    );
-  }, [openLink]);
-
-  const openEventsLink = useCallback(() => {
-    return openLink(
-      RISE_URLS.events,
-      'events',
-      'Impossibile aprire il calendario eventi. Riprova più tardi.'
-    );
-  }, [openLink]);
-
-  const openProjectsLink = useCallback(() => {
-    return openLink(
-      RISE_URLS.projects,
-      'projects',
-      'Impossibile aprire la pagina progetti. Riprova più tardi.'
-    );
-  }, [openLink]);
-
+  // Predefined link handlers for common actions.
+  // NB: le uscite verso i partner (donazione/shop/gift card/eventi/progetti) NON
+  // stanno qui: passano da usePartnerExit, che aggancia il rise_ref e mostra la
+  // schermata onesta. Aprirle con un opener diretto salterebbe quell'invariante.
   const openFacebookLink = useCallback(() => {
     return openLink(
       SOCIAL_URLS.facebook,
@@ -300,11 +258,6 @@ export const useLinkHandler = (
   return {
     isLoading,
     openLink,
-    openDonationLink,
-    openShopLink,
-    openGiftCardLink,
-    openEventsLink,
-    openProjectsLink,
     openTracciabilitaLink,
     openFacebookLink,
     openInstagramLink,
