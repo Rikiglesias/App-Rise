@@ -15,6 +15,7 @@ const profile: Profile = {
   privacy_consent_at: '2026-01-01T00:00:00.000Z',
   marketing_consent: true,
   deletion_requested_at: null,
+  contact_email: null,
 };
 
 const account = {

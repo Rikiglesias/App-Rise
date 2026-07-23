@@ -12,6 +12,10 @@ export interface Profile {
   privacy_consent_at: string; // ISO timestamp
   marketing_consent: boolean;
   deletion_requested_at: string | null; // M3: NULL=attivo; valorizzato=cancellazione a +30gg
+  // Email di contatto scelta dall'utente (migration 0009), distinta da auth.email
+  // (che con Apple può essere un Private Relay). Usata per il prefill dei form
+  // partner: regola contact_email ?? auth.email. NULL finché non valorizzata.
+  contact_email: string | null;
 }
 
 /** Consensi (M4, GDPR Art.7) — registro append-only. */

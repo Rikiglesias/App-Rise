@@ -6,6 +6,7 @@
 import React from 'react';
 
 import DonationInfoModal from '../shared/DonationInfoModal';
+import PartnerDisclosureModal from '../shared/PartnerDisclosureModal';
 import type { NewActionButtonsSectionProps } from '../shared/ActionButtonTypes';
 import { useActionButtonsData } from './useActionButtonsData';
 import { ActionButtonsUI } from './ActionButtonsUI';
@@ -40,6 +41,13 @@ const ActionButtonsRefactored: React.FC<NewActionButtonsSectionProps> = ({
       <DonationInfoModal
         visible={data.showInfoModal}
         onClose={data.handleInfoModalClose}
+      />
+
+      {/* Schermata onesta pre-redirect verso Let's Donation (F1.7d) */}
+      <PartnerDisclosureModal
+        visible={data.disclosureVisible}
+        onConfirm={data.confirmDisclosure}
+        onCancel={data.cancelDisclosure}
       />
     </>
   );
