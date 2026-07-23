@@ -28,6 +28,21 @@ create index partner_refs_user_id_idx
 
 alter table public.partner_refs enable row level security;
 
+-- Grant ESPLICITI: una tabella nuova è raggiungibile dal client solo se il ruolo ha il
+-- privilegio SQL, che la RLS poi restringe riga per riga (sono due controlli distinti).
+-- Le tabelle 0001/0003 se lo sono visti concedere dai default privileges del progetto;
+-- scriverlo qui rende la migration indipendente da quella configurazione invece che
+-- ereditarla in silenzio. Idempotente: se il grant c'è già, non cambia nulla.
+-- Il revoke PRIMA del grant non è ridondante: se il progetto ha default privileges
+-- permissivi sulle tabelle nuove (è il caso qui — 0001/0003 non hanno grant espliciti e
+-- funzionano), il client si ritroverebbe UPDATE e DELETE su questa tabella. La RLS li
+-- filtrerebbe comunque a zero righe non avendo policy per essi, ma sarebbe una difesa a
+-- strato singolo che dipende dalla configurazione del progetto invece che dalla migration.
+-- Revocando prima, il privilegio non esiste in NESSUNA configurazione: la revoca di un ref
+-- resta amministrativa (service_role) per costruzione, non per policy mancante.
+revoke all on public.partner_refs from anon, authenticated;
+grant select, insert on public.partner_refs to authenticated;
+
 -- Il client legge e crea SOLO i propri ref (il valore lo genera il default server-side).
 -- Niente update/delete client: la revoca è operazione amministrativa (service_role),
 -- la cancellazione passa dalla cascade su profiles.
@@ -53,6 +68,12 @@ create table public.partner_ref_tombstones (
 
 -- RLS senza policy: accesso solo service_role (che la bypassa). Nessuna superficie client.
 alter table public.partner_ref_tombstones enable row level security;
+
+-- Difesa in profondità: se i default privileges del progetto concedessero automaticamente
+-- sulle tabelle nuove, `authenticated` otterrebbe il privilegio SQL su questa tabella —
+-- la RLS senza policy filtrerebbe comunque ogni riga, ma il privilegio non deve esistere
+-- proprio. Qui non serve MAI a nessun client: è materiale per la propagazione al partner.
+revoke all on public.partner_ref_tombstones from anon, authenticated;
 
 -- Trigger UNICO su profiles: copre ENTRAMBI i percorsi di cancellazione (delete-account
 -- immediata e purge-deletions a 30 giorni — entrambi finiscono in auth.admin.deleteUser

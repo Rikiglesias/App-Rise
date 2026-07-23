@@ -48,7 +48,11 @@ Un solo concetto nuovo: **`rise_ref`** = una stringa casuale di ~16 byte (es. `r
    - nessuno script della pagina li travasa: `location.search` / `URLSearchParams` / `getParameterByName` = **0 occorrenze** nei 211 KB di HTML;
    - le [docs Donorbox](https://donorbox.zendesk.com/hc/en-us/articles/360020559931-How-to-pre-fill-fields-in-the-donation-form) confermano che prefill e UTM vanno sull'**URL Donorbox**, non su quello della pagina che lo incorpora.
 
-   **Destinazione corretta**: la pagina ospitata da Donorbox `https://donorbox.org/dona-ora-rah?...` (HTTP 200, `lang="it"`, title «RAH - Dona ora | Rise Against Hunger Italia»), non l'embed nudo — è già brandizzata e non richiede il contorno WordPress. `donorbox.org` è già in allowlist.
+   **Destinazione corretta**: un URL `donorbox.org` diretto (il dominio è già in allowlist). Due candidati, e la differenza NON è ancora dimostrata:
+   - `https://donorbox.org/embed/dona-ora-rah?...` — **è quello su cui il prefill e `utm_content` sono stati verificati davvero**;
+   - `https://donorbox.org/dona-ora-rah?...` — pagina ospitata e brandizzata (HTTP 200, `lang="it"`, title «RAH - Dona ora | Rise Against Hunger Italia»), migliore per l'utente, ma di essa è stato verificato **solo che risponde**: il form è renderizzato via JavaScript, quindi il prefill lì non è osservabile con una richiesta HTTP semplice.
+
+   ⚠️ Non dare per scontato che il prefill funzioni identico sui due: sono URL diversi. Prima di scegliere la pagina ospitata va aperta in un browser con i parametri e guardato se i campi arrivano compilati — verifica di un minuto, che evita di ripetere esattamente l'errore corretto due paragrafi sopra (dare per «verificato» ciò che è stato provato altrove). Se non fosse confermata, si usa l'embed, che è già provato.
 
    **Motivo in più per non passare da `/donaora/`**: quella pagina monta **Google Tag Manager** (`GTM-5JBRPXW`) e **HubSpot** (`js.hs-scripts.com/8926509.js`). Nome, cognome ed email nella query string finirebbero nell'URL di pagina che quei tag leggono → dati personali a due destinatari in più, non dichiarati nell'informativa. (Risponde alla domanda aperta «pixel di terzi su `/donaora/`?»: sì, due.)
 
