@@ -1,6 +1,7 @@
 # Rise Against Hunger Italia — Brief di integrazione per Let's Donation
 
-> Documento da condividere con Let's Donation S.r.l. (referente tecnico: Fabrizio Palai).
+> Documento da condividere con Let's Donation S.r.l. — consegnato a **Michele Placucci**, che lo
+> gira al team tecnico (referente tecnico: Fabrizio Palai).
 > Obiettivo: collegare gli utenti dell'app Rise Against Hunger Italia alla piattaforma
 > Let's Donation **senza costringerli a una seconda registrazione**, e riconoscere che
 > un ordine/donazione arriva da un nostro utente. Nessun accesso reciproco ai database.
@@ -84,10 +85,19 @@ Richiesta A (query string UTM sull'ordine), un canale separato.
 3. Quali **redirect URI** dobbiamo autorizzare?
 4. Il plugin può usare il **`sub`** come chiave di identità (creazione al primo accesso
    via JIT provisioning, aggancio sul `sub` agli accessi successivi), **non l'email**?
-5. Sul **nostro spazio (tenant)**, «Login con RAH» può diventare l'**unico** metodo di
-   registrazione/accesso — cioè disabilitare la registrazione/login nativi **solo per i
-   nostri utenti/le nostre campagne**, senza toccare gli altri enti? Se **non** è
-   configurabile per-tenant, ditecelo: teniamo il login nativo e ci regoliamo di conseguenza.
+5. Sul **nostro spazio (tenant)**, «Entra con RAH» può essere il **percorso primario** di
+   accesso/registrazione — cioè il pulsante principale e in evidenza, con il form nativo come
+   alternativa secondaria? (È questo che ci serve.) **Domanda in più, non un requisito**: è
+   tecnicamente configurabile per-tenant anche renderlo l'**unico** metodo, senza toccare gli
+   altri enti? Se non è configurabile, nessun problema: teniamo il form nativo e ci regoliamo.
+6. **Il precedente Zucchetti** — ci avete raccontato che con la piattaforma Zucchetti il link
+   è nel loro portale e i dipendenti «arrivano già registrati». Ci interessa molto capire
+   **come** è fatto quel pezzo, perché se esiste già forse si riusa per noi:
+   - è un **single sign-on** (Zucchetti dichiara l'identità dell'utente e voi aprite la
+     sessione: SAML, OIDC, oppure un link firmato con un token)? Se sì, con quale protocollo?
+   - oppure gli account dei dipendenti sono **pre-caricati** su Let's Donation da un flusso
+     dati (anagrafiche/welfare bonus) e l'utente si autentica comunque da voi?
+   - quel meccanismo è riusabile per un ente come noi, o è specifico del canale welfare?
 
 ---
 
