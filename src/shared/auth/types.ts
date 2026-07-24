@@ -43,7 +43,15 @@ export type ProfileEditable = Pick<
   | 'province'
   | 'country'
   | 'birth_date'
->;
+> & {
+  /**
+   * F1.10: email di contatto, rettificabile dagli utenti Apple Private Relay.
+   * Sul path di rettifica è sempre una stringa (a differenza di `Profile`, dove
+   * può essere null): l'utente la valorizza, non la svuota — per "azzerarla"
+   * vale la regola di fallback `contact_email ?? auth.email`.
+   */
+  contact_email: string;
+};
 
 /** Whitelist dei campi aggiornabili: previene update di id/created_at/consensi. */
 export const PROFILE_EDITABLE_KEYS: readonly (keyof ProfileEditable)[] = [
@@ -54,6 +62,7 @@ export const PROFILE_EDITABLE_KEYS: readonly (keyof ProfileEditable)[] = [
   'province',
   'country',
   'birth_date',
+  'contact_email',
 ];
 
 /** Dati raccolti dal form di registrazione (prima della scrittura su DB). */

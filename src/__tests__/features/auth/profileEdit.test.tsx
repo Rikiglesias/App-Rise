@@ -165,4 +165,53 @@ describe('ProfileEditScreen', () => {
     await findByText('Aggiornamento non riuscito. Riprova.');
     expect(updateEmail).not.toHaveBeenCalled();
   });
+
+  // F1.10: la mail di contatto è rettificabile solo dagli account Apple relay.
+  const relayAuth = (over: Partial<AuthState> = {}): AuthState =>
+    makeAuth({
+      profile,
+      session: {
+        user: {
+          id: 'u1',
+          email: 'abc123@privaterelay.appleid.com',
+          identities: [],
+        },
+      } as unknown as Session,
+      ...over,
+    });
+
+  it('F1.10: utente NON relay → nessun campo email di contatto', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ profile })); // email old@r.it
+    const { queryByLabelText } = wrap(<ProfileEditScreen />);
+    expect(queryByLabelText('Email di contatto')).toBeNull();
+  });
+
+  it('F1.10: utente relay → campo presente e salvato in contact_email', async () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(relayAuth({ updateProfile }));
+    const { getByLabelText, getByText, findByText } = wrap(
+      <ProfileEditScreen />
+    );
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'vera@mail.it');
+    fireEvent.press(getByText('Salva modifiche'));
+    await findByText('Profilo aggiornato.');
+    expect(updateProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ contact_email: 'vera@mail.it' })
+    );
+  });
+
+  it('F1.10: utente relay → submit BLOCCATO se svuota la mail di contatto', () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(
+      relayAuth({
+        updateProfile,
+        profile: { ...profile, contact_email: 'vecchia@mail.it' },
+      })
+    );
+    const { getByLabelText, getByText } = wrap(<ProfileEditScreen />);
+    fireEvent.changeText(getByLabelText('Email di contatto'), '');
+    fireEvent.press(getByText('Salva modifiche'));
+    expect(getByText('Campo obbligatorio')).toBeTruthy();
+    expect(updateProfile).not.toHaveBeenCalled();
+  });
 });
