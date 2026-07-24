@@ -214,4 +214,27 @@ describe('ProfileEditScreen', () => {
     expect(getByText('Campo obbligatorio')).toBeTruthy();
     expect(updateProfile).not.toHaveBeenCalled();
   });
+
+  it('F1.10: utente relay → BLOCCATO se la mail di contatto è malformata', () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(relayAuth({ updateProfile }));
+    const { getByLabelText, getByText } = wrap(<ProfileEditScreen />);
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'abc');
+    fireEvent.press(getByText('Salva modifiche'));
+    expect(getByText('Email non valida')).toBeTruthy();
+    expect(updateProfile).not.toHaveBeenCalled();
+  });
+
+  it('F1.10: utente relay → BLOCCATO se la mail di contatto è un altro relay', () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(relayAuth({ updateProfile }));
+    const { getByLabelText, getByText } = wrap(<ProfileEditScreen />);
+    fireEvent.changeText(
+      getByLabelText('Email di contatto'),
+      'altro@privaterelay.appleid.com'
+    );
+    fireEvent.press(getByText('Salva modifiche'));
+    expect(getByText(/non un indirizzo Apple nascosto/)).toBeTruthy();
+    expect(updateProfile).not.toHaveBeenCalled();
+  });
 });

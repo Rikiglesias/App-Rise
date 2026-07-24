@@ -4,6 +4,7 @@ import {
   validatePhoneIT,
   validateAdult,
   validateRequired,
+  validateContactEmail,
   validateSignUpForm,
   validateProfileForm,
 } from '@/shared/auth/validation';
@@ -124,5 +125,42 @@ describe('auth validation', () => {
     });
     expect(errors.province).toBeUndefined();
     expect(errors.country).toBeUndefined();
+  });
+
+  // F1.10 — helper condiviso per la mail di contatto (account Apple relay).
+  it('validateContactEmail: required → email_invalid → relay → ok', () => {
+    expect(validateContactEmail('')).toBe('required');
+    expect(validateContactEmail('   ')).toBe('required');
+    expect(validateContactEmail('abc')).toBe('email_invalid');
+    expect(validateContactEmail('x@privaterelay.appleid.com')).toBe(
+      'contact_email_relay'
+    );
+    expect(validateContactEmail('vera@mail.it')).toBeNull();
+  });
+
+  it('profile form: contact_email richiesto solo se requireContactEmail', () => {
+    // Non richiesto (default): il campo mancante non genera errore.
+    expect(
+      validateProfileForm({ ...baseProfile }).contactEmail
+    ).toBeUndefined();
+    // Richiesto + vuoto → required; + relay → rifiutato; + valido → nessun errore.
+    expect(
+      validateProfileForm({ ...baseProfile, requireContactEmail: true })
+        .contactEmail
+    ).toBe('required');
+    expect(
+      validateProfileForm({
+        ...baseProfile,
+        requireContactEmail: true,
+        contactEmail: 'y@privaterelay.appleid.com',
+      }).contactEmail
+    ).toBe('contact_email_relay');
+    expect(
+      validateProfileForm({
+        ...baseProfile,
+        requireContactEmail: true,
+        contactEmail: 'vera@mail.it',
+      }).contactEmail
+    ).toBeUndefined();
   });
 });

@@ -227,6 +227,22 @@ describe('CompleteProfileScreen — F1.10 email di contatto (Apple relay)', () =
     expect(upsert).not.toHaveBeenCalled();
   });
 
+  it('utente relay: submit BLOCCATO se la mail è di formato invalido', async () => {
+    mockUseAuth.mockReturnValue(makeAuth({ session: relaySession }));
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'abc');
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(getByText('Email non valida')).toBeTruthy());
+    expect(upsert).not.toHaveBeenCalled();
+  });
+
   it('utente relay: submit OK con mail vera → upsert include contact_email', async () => {
     mockUseAuth.mockReturnValue(makeAuth({ session: relaySession }));
     const upsert = getUpsert();
