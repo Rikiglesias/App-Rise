@@ -105,6 +105,8 @@ export default {
       title: 'Complete your profile',
       subtitle: 'A few details are missing to complete your registration',
       submit: 'Save and continue',
+      contactEmail: 'Contact email',
+      contactEmailPlaceholder: 'Where you will receive receipts and updates',
     },
     edit: {
       title: 'Edit profile',
@@ -154,6 +156,7 @@ export default {
     errors: {
       required: 'Required field',
       email_invalid: 'Invalid email',
+      contact_email_relay: 'Enter a real email, not a hidden Apple address',
       password_weak:
         'Min 8 characters, one uppercase and one special character',
       phone_invalid: 'Invalid phone (e.g. +39...)',

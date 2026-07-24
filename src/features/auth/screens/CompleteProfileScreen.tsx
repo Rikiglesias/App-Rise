@@ -103,6 +103,22 @@ export const CompleteProfileScreen: React.FC = () => {
             placeholder={t('auth.signup.provincePlaceholder')}
           />
         ) : null}
+        {/* F1.10: account Apple Private Relay → chiediamo una mail di contatto
+            reale (l'email dell'account è nascosta e non riceve le nostre
+            comunicazioni). Per gli altri account il campo non compare. */}
+        {form.isRelay ? (
+          <AuthInput
+            label={t('auth.completeProfile.contactEmail')}
+            value={values.contactEmail}
+            onChangeText={onChange.contactEmail}
+            error={err(errors.contactEmail)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
+            placeholder={t('auth.completeProfile.contactEmailPlaceholder')}
+          />
+        ) : null}
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.consents')}>

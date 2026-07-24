@@ -1,8 +1,10 @@
 /**
  * Validazione pura dei form di autenticazione donatore (Milestone 1).
- * Nessuna dipendenza esterna: testabile in isolamento.
+ * Nessuna dipendenza da framework/IO: testabile in isolamento (importa solo
+ * helper puri, es. isApplePrivateRelayEmail).
  * Le stringhe ritornate sono CHIAVI i18n (mappate in auth.errors.*).
  */
+import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 
 export type FieldError = string | null;
 
@@ -83,9 +85,34 @@ export interface ProfileInput {
   country: string;
   birthDate: string;
   privacyConsent: boolean;
+  /** F1.10: email di contatto, raccolta solo se `requireContactEmail`. */
+  contactEmail?: string;
+  /**
+   * F1.10: true quando l'email dell'account è un Apple Private Relay → serve
+   * una mail vera dove recapitare le comunicazioni. Fuori da quel caso il campo
+   * non esiste e non va validato.
+   */
+  requireContactEmail?: boolean;
 }
 
-export type ProfileErrors = Partial<Record<keyof ProfileInput, string>>;
+/**
+ * `requireContactEmail` è un flag di controllo, non un campo con errore proprio:
+ * l'unica chiave d'errore aggiuntiva è `contactEmail`.
+ */
+export type ProfileErrors = Partial<
+  Record<
+    | 'firstName'
+    | 'lastName'
+    | 'phone'
+    | 'city'
+    | 'province'
+    | 'country'
+    | 'birthDate'
+    | 'privacyConsent'
+    | 'contactEmail',
+    string
+  >
+>;
 
 export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
   const e: ProfileErrors = {};
@@ -101,5 +128,14 @@ export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
   const adult = validateAdult(input.birthDate);
   if (adult) e.birthDate = adult;
   if (!input.privacyConsent) e.privacyConsent = 'required';
+  // F1.10: email di contatto obbligatoria solo per account Apple Private Relay.
+  // Deve essere una mail VERA: un altro relay è rifiutato (non ci recapita nulla).
+  if (input.requireContactEmail) {
+    const contactEmail = input.contactEmail ?? '';
+    if (validateRequired(contactEmail)) e.contactEmail = 'required';
+    else if (validateEmail(contactEmail)) e.contactEmail = 'email_invalid';
+    else if (isApplePrivateRelayEmail(contactEmail))
+      e.contactEmail = 'contact_email_relay';
+  }
   return e;
 };

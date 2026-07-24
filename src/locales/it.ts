@@ -106,6 +106,8 @@ export default {
       title: 'Completa il profilo',
       subtitle: 'Mancano alcuni dati per completare la registrazione',
       submit: 'Salva e continua',
+      contactEmail: 'Email di contatto',
+      contactEmailPlaceholder: 'Dove riceverai ricevute e comunicazioni',
     },
     edit: {
       title: 'Modifica profilo',
@@ -156,6 +158,8 @@ export default {
     errors: {
       required: 'Campo obbligatorio',
       email_invalid: 'Email non valida',
+      contact_email_relay:
+        'Inserisci un’email reale, non un indirizzo Apple nascosto',
       password_weak: 'Min 8 caratteri, una maiuscola e un carattere speciale',
       phone_invalid: 'Telefono non valido (es. +39...)',
       not_adult: 'Devi essere maggiorenne',

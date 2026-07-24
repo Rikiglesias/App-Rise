@@ -154,3 +154,94 @@ describe('CompleteProfileScreen', () => {
     expect(recordConsent).not.toHaveBeenCalled();
   });
 });
+
+// F1.10: email di contatto obbligatoria SOLO per gli account Apple Private Relay.
+const relaySession = {
+  user: { id: 'u1', email: 'abc123@privaterelay.appleid.com' },
+} as unknown as Session;
+
+const getUpsert = (): jest.Mock =>
+  (supabase.from('profiles') as unknown as { upsert: jest.Mock }).upsert;
+
+describe('CompleteProfileScreen — F1.10 email di contatto (Apple relay)', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it('utente NON relay: il campo non compare e l’upsert NON include contact_email', async () => {
+    mockUseAuth.mockReturnValue(makeAuth()); // email m@r.it (non relay)
+    const upsert = getUpsert();
+    const {
+      getByLabelText,
+      getByText,
+      getByRole,
+      getByTestId,
+      queryByLabelText,
+    } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(queryByLabelText('Email di contatto')).toBeNull();
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.not.objectContaining({ contact_email: expect.anything() })
+    );
+  });
+
+  it('utente relay: il campo compare e il submit è BLOCCATO se vuoto', async () => {
+    mockUseAuth.mockReturnValue(makeAuth({ session: relaySession }));
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(getByLabelText('Email di contatto')).toBeTruthy();
+    fillValidForm(getByLabelText, getByRole, getByTestId); // lascia vuoto il campo relay
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(getByText('Campo obbligatorio')).toBeTruthy());
+    expect(upsert).not.toHaveBeenCalled();
+  });
+
+  it('utente relay: submit BLOCCATO se la mail è un altro indirizzo relay', async () => {
+    mockUseAuth.mockReturnValue(makeAuth({ session: relaySession }));
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(
+      getByLabelText('Email di contatto'),
+      'altro@privaterelay.appleid.com'
+    );
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() =>
+      expect(getByText(/non un indirizzo Apple nascosto/)).toBeTruthy()
+    );
+    expect(upsert).not.toHaveBeenCalled();
+  });
+
+  it('utente relay: submit OK con mail vera → upsert include contact_email', async () => {
+    mockUseAuth.mockReturnValue(makeAuth({ session: relaySession }));
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'vera@mail.it');
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ contact_email: 'vera@mail.it' })
+    );
+  });
+});

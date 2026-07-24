@@ -20,6 +20,7 @@ import {
   validateAdult,
   validateRequired,
 } from '@/shared/auth/validation';
+import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import type { ProfileEditable } from '@/shared/auth/types';
 
 type Errors = Partial<
@@ -31,7 +32,8 @@ type Errors = Partial<
     | 'province'
     | 'country'
     | 'birthDate'
-    | 'email',
+    | 'email'
+    | 'contactEmail',
     string
   >
 >;
@@ -57,6 +59,16 @@ export const ProfileEditScreen: React.FC = () => {
   const [province, setProvince] = useState(profile?.province ?? '');
   const [country, setCountry] = useState(profile?.country ?? 'IT');
   const [birthDate, setBirthDate] = useState(profile?.birth_date ?? '');
+  // F1.10: solo per gli account Apple Private Relay mostriamo e rettifichiamo
+  // la mail di contatto. Il flag deriva dall'email dell'account (session), non
+  // dal campo `email` in editing: un cambio email non-confermato non conta.
+  const isRelay = useMemo(
+    () => isApplePrivateRelayEmail(currentEmail),
+    [currentEmail]
+  );
+  const [contactEmail, setContactEmail] = useState(
+    profile?.contact_email ?? ''
+  );
   const [errors, setErrors] = useState<Errors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -81,6 +93,13 @@ export const ProfileEditScreen: React.FC = () => {
     if (country === 'IT' && validateRequired(province)) e.province = 'required';
     const a = validateAdult(birthDate);
     if (a) e.birthDate = a;
+    // F1.10: mail di contatto obbligatoria e reale per gli account relay.
+    if (isRelay) {
+      if (validateRequired(contactEmail)) e.contactEmail = 'required';
+      else if (validateEmail(contactEmail)) e.contactEmail = 'email_invalid';
+      else if (isApplePrivateRelayEmail(contactEmail))
+        e.contactEmail = 'contact_email_relay';
+    }
     setErrors(e);
     if (Object.keys(e).length > 0) return;
 
@@ -101,6 +120,9 @@ export const ProfileEditScreen: React.FC = () => {
       changed.province = nextProvince;
     if (birthDate.trim() !== profile?.birth_date)
       changed.birth_date = birthDate.trim();
+    // F1.10: la mail di contatto entra nel patch solo se relay e cambiata.
+    if (isRelay && contactEmail.trim() !== (profile?.contact_email ?? ''))
+      changed.contact_email = contactEmail.trim();
 
     if (Object.keys(changed).length > 0) {
       const { error } = await updateProfile(changed);
@@ -135,6 +157,8 @@ export const ProfileEditScreen: React.FC = () => {
     province,
     country,
     birthDate,
+    contactEmail,
+    isRelay,
     profile,
     currentEmail,
     updateProfile,
@@ -227,6 +251,20 @@ export const ProfileEditScreen: React.FC = () => {
         placeholder="2000-01-31"
         autoCapitalize="none"
       />
+      {/* F1.10: rettifica della mail di contatto, solo per account Apple relay. */}
+      {isRelay ? (
+        <AuthInput
+          label={t('auth.completeProfile.contactEmail')}
+          value={contactEmail}
+          onChangeText={setContactEmail}
+          error={err(errors.contactEmail)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          textContentType="emailAddress"
+          placeholder={t('auth.completeProfile.contactEmailPlaceholder')}
+        />
+      ) : null}
 
       {submitError ? (
         <PerfectText size={14} lines={2} style={styles.error}>

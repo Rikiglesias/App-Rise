@@ -9,6 +9,7 @@ import {
   validateProfileForm,
   type ProfileErrors,
 } from '@/shared/auth/validation';
+import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -28,9 +29,18 @@ export const useProfileForm = () => {
   const [country, setCountry] = useState('IT');
   const [birthDate, setBirthDate] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [contactEmail, setContactEmail] = useState('');
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // F1.10: se l'account è un Apple Private Relay, l'email vera è nascosta →
+  // chiediamo una mail di contatto reale per le comunicazioni. Fuori da quel
+  // caso il campo non compare e `contact_email` resta invariato.
+  const isRelay = useMemo(
+    () => isApplePrivateRelayEmail(session?.user.email),
+    [session]
+  );
 
   const lastNameRef = useRef<TextInput>(null);
   const phoneRef = useRef<TextInput>(null);
@@ -74,6 +84,10 @@ export const useProfileForm = () => {
         setBirthDate(v);
         clearError('birthDate');
       },
+      contactEmail: (v: string): void => {
+        setContactEmail(v);
+        clearError('contactEmail');
+      },
     }),
     [clearError]
   );
@@ -113,6 +127,8 @@ export const useProfileForm = () => {
       country,
       birthDate,
       privacyConsent,
+      contactEmail,
+      requireContactEmail: isRelay,
     });
     setErrors(found);
     if (Object.keys(found).length > 0) return;
@@ -137,6 +153,9 @@ export const useProfileForm = () => {
       country: country.trim(),
       birth_date: birthDate.trim(),
       privacy_consent_at: new Date().toISOString(),
+      // F1.10: scriviamo contact_email SOLO per gli account Apple relay (che
+      // l'hanno appena inserita); per gli altri non tocchiamo la colonna.
+      ...(isRelay ? { contact_email: contactEmail.trim() } : {}),
     });
     if (error) {
       setLoading(false);
@@ -164,6 +183,8 @@ export const useProfileForm = () => {
     country,
     birthDate,
     privacyConsent,
+    contactEmail,
+    isRelay,
     session,
     refreshProfile,
     recordConsent,
@@ -185,7 +206,9 @@ export const useProfileForm = () => {
       country,
       birthDate,
       privacyConsent,
+      contactEmail,
     },
+    isRelay,
     errors,
     refs: { lastNameRef, phoneRef },
     onChange,
