@@ -33,6 +33,17 @@ export const validateAdult = (isoDate: string): FieldError => {
 export const validateRequired = (v: string): FieldError =>
   v.trim().length > 0 ? null : 'required';
 
+/**
+ * F1.10 — valida la mail di contatto raccolta per gli account Apple Private Relay:
+ * deve esistere, essere formalmente valida e NON essere un altro alias relay
+ * (che non ci recapiterebbe nulla). SSOT condivisa fra `validateProfileForm`
+ * (completa-profilo) e la rettifica in `ProfileEditScreen` → una sola copia.
+ */
+export const validateContactEmail = (v: string): FieldError =>
+  validateRequired(v) ??
+  validateEmail(v) ??
+  (isApplePrivateRelayEmail(v) ? 'contact_email_relay' : null);
+
 export interface SignUpInput {
   firstName: string;
   lastName: string;
@@ -129,13 +140,9 @@ export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
   if (adult) e.birthDate = adult;
   if (!input.privacyConsent) e.privacyConsent = 'required';
   // F1.10: email di contatto obbligatoria solo per account Apple Private Relay.
-  // Deve essere una mail VERA: un altro relay è rifiutato (non ci recapita nulla).
   if (input.requireContactEmail) {
-    const contactEmail = input.contactEmail ?? '';
-    if (validateRequired(contactEmail)) e.contactEmail = 'required';
-    else if (validateEmail(contactEmail)) e.contactEmail = 'email_invalid';
-    else if (isApplePrivateRelayEmail(contactEmail))
-      e.contactEmail = 'contact_email_relay';
+    const ce = validateContactEmail(input.contactEmail ?? '');
+    if (ce) e.contactEmail = ce;
   }
   return e;
 };

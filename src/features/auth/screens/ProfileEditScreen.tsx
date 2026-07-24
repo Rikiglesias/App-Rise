@@ -19,6 +19,7 @@ import {
   validatePhoneIT,
   validateAdult,
   validateRequired,
+  validateContactEmail,
 } from '@/shared/auth/validation';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import type { ProfileEditable } from '@/shared/auth/types';
@@ -93,12 +94,11 @@ export const ProfileEditScreen: React.FC = () => {
     if (country === 'IT' && validateRequired(province)) e.province = 'required';
     const a = validateAdult(birthDate);
     if (a) e.birthDate = a;
-    // F1.10: mail di contatto obbligatoria e reale per gli account relay.
+    // F1.10: mail di contatto obbligatoria e reale per gli account relay
+    // (stessa validazione del completa-profilo, via helper condiviso).
     if (isRelay) {
-      if (validateRequired(contactEmail)) e.contactEmail = 'required';
-      else if (validateEmail(contactEmail)) e.contactEmail = 'email_invalid';
-      else if (isApplePrivateRelayEmail(contactEmail))
-        e.contactEmail = 'contact_email_relay';
+      const ce = validateContactEmail(contactEmail);
+      if (ce) e.contactEmail = ce;
     }
     setErrors(e);
     if (Object.keys(e).length > 0) return;
