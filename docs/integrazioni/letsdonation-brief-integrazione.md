@@ -64,7 +64,7 @@ siamo noi.
   problema alla radice e fa di RAH la fonte unica dell'identità.
 
 **Dati (claim) che vi trasmettiamo al login**, solo quelli standard OIDC necessari:
-`sub` (id opaco stabile — la chiave di aggancio), `name` (nome e cognome) ed `email`.
+`sub` (id opaco stabile — la chiave di aggancio), `name` (nome e cognome, quando disponibile) ed `email`.
 Niente di più. Il `rise_ref` **non** viaggia sul login: è il codice di attribuzione della
 Richiesta A (query string UTM sull'ordine), un canale separato.
 
