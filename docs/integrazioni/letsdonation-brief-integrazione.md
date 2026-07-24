@@ -88,10 +88,18 @@ Richiesta A (query string UTM sull'ordine), un canale separato.
 5. **Prominenza sul nostro spazio (è la richiesta che conta).** Non vi chiediamo di *togliere*
    la registrazione col form — sappiamo che è parte del sistema e vale per tutti gli enti. Vi
    chiediamo di **invertire l'ordine** sul nostro tenant: «Entra con RAH» come **pulsante
-   principale** e il form nativo dietro un **link secondario** (es. «Non hai un account RAH?
-   Registrati con email»). Oggi sulle vostre pagine il rapporto è l'inverso — «Non sei ancora
-   registrato? Clicca qui» è già un link secondario sotto il form — quindi la struttura per
-   farlo esiste: è una questione di template del tenant, non del sistema di autenticazione.
+   principale**, e il form nativo relegato a link secondario. Oggi sulle vostre pagine il
+   rapporto è l'inverso — «Non sei ancora registrato? Clicca qui» è già un link secondario
+   sotto il form — quindi la struttura per farlo esiste: è una questione di template del
+   tenant, non del sistema di autenticazione.
+   **Punto importante — un pulsante solo, per chi ha già l'account E per chi non l'ha.** Non
+   serve un secondo pulsante «Registrati»: «Entra con RAH» porta alla **nostra** pagina, che
+   gestisce entrambi i casi — se l'utente ha già un account RAH accede, se non l'ha **lo crea
+   lì, da noi** — e poi rientra da voi già autenticato. Funziona come «Accedi con Google»: chi
+   non ha l'account Google lo crea su Google, non sul sito che sta visitando. Quindi il
+   percorso di registrazione **non deve puntare al form nativo**: per noi è essenziale che il
+   nuovo utente nasca nella nostra anagrafica (siamo noi il titolare del rapporto col donatore,
+   e la nostra informativa/i nostri consensi si raccolgono da noi).
    Per l'utente il risultato è: **un solo percorso visibile, nessuna seconda registrazione**.
    *(Se poi fosse configurabile per-tenant renderlo l'unico metodo, per noi sarebbe l'ideale —
    ma non è una precondizione.)*
