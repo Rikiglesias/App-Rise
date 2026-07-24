@@ -56,6 +56,12 @@ siamo noi.
 - **Matching identità**: **mai sull'email**. Alcuni nostri utenti usano "Nascondi la mia
   email" di Apple → l'email è un alias diverso per ogni servizio. L'identità stabile è il
   **`sub`** (identificativo opaco) dell'ID token, che vi diamo insieme al `rise_ref`.
+- **La nostra preferenza: «Login con RAH» come percorso primario di accesso sul nostro
+  spazio.** Se un utente si registrasse prima col vostro form nativo e **poi** con "Login
+  con RAH", si creerebbero **due account non collegabili in modo affidabile**: il matching
+  è sul `sub`, che l'account nativo non ha, e l'email non è una chiave affidabile (alias
+  Apple). Rendere il nostro login l'ingresso principale sul nostro tenant elimina il
+  problema alla radice e fa di RAH la fonte unica dell'identità.
 
 **Dati (claim) che vi trasmettiamo al login**, solo quelli necessari:
 `sub` (id opaco stabile), nome, cognome, **email di contatto reale**, `rise_ref`.
@@ -71,6 +77,12 @@ Niente di più.
 1. Il vostro Joomla può fare da **client OIDC**? Con quale plugin/versione?
 2. Riuscite ad aggiungere un pulsante "Login con RAH" nel flusso di registrazione/checkout?
 3. Quali **redirect URI** dobbiamo autorizzare?
+4. Il plugin può usare il **`sub`** come chiave di identità (creazione al primo accesso
+   via JIT provisioning, aggancio sul `sub` agli accessi successivi), **non l'email**?
+5. Sul **nostro spazio (tenant)**, «Login con RAH» può diventare l'**unico** metodo di
+   registrazione/accesso — cioè disabilitare la registrazione/login nativi **solo per i
+   nostri utenti/le nostre campagne**, senza toccare gli altri enti? Se **non** è
+   configurabile per-tenant, ditecelo: teniamo il login nativo e ci regoliamo di conseguenza.
 
 ---
 
