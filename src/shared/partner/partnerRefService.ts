@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/auth/supabaseClient';
-import { logInfo, logWarn } from '@/shared/utils/logger';
+import { logError, logInfo, logWarn } from '@/shared/utils/logger';
 
 /**
  * Servizio get-or-create del `rise_ref` per la correlazione app→partner
@@ -16,8 +16,12 @@ import { logInfo, logWarn } from '@/shared/utils/logger';
  * - Utente autenticato ma SENZA profilo → l'insert viola la FK
  *   `partner_refs.user_id → profiles(id)` (23503): scenario ATTESO (profilo non
  *   ancora completato), no-op accettato → `null` + log informativo (non un allarme).
- * - Qualunque altro fallimento residuo → `null` + log warn: l'app apre comunque
- *   l'URL senza ref (degrada, non rompe l'uscita verso il partner).
+ * - Race 23505 ma il re-select non vede il ref (altra tx rollbackata / replica-lag)
+ *   → `null` + log informativo: transiente, non un fallimento generico.
+ * - Qualunque altro errore è DAVVERO inatteso (RLS 42501, DB irraggiungibile,
+ *   vincolo nuovo) → `null` + log ERROR: l'app apre comunque l'URL senza ref
+ *   (degrada), ma l'anomalia deve raggiungere i log di produzione (warn/info
+ *   sono scartati in prod, vedi `logger.ts`).
  *
  * NB: le RLS di 0008 restringono select/insert alla propria riga (auth.uid()=user_id),
  * quindi la select non filtra su user_id (lo fa la policy) mentre l'insert DEVE
@@ -70,6 +74,10 @@ export const getOrCreatePartnerRef = async (
   if (error?.code === UNIQUE_VIOLATION) {
     const raced = await selectActiveRef(partner);
     if (raced) return raced;
+    // 23505 ma il re-select non vede il ref: l'altra tx è stata rollbackata oppure
+    // c'è replica-lag → transiente, no-op accettato (non un fallimento generico).
+    logInfo('race 23505 senza ref visibile al re-select', 'partnerRefService');
+    return null;
   }
 
   // 4. Utente autenticato ma senza profilo → FK partner_refs.user_id → profiles(id)
@@ -80,6 +88,9 @@ export const getOrCreatePartnerRef = async (
     return null;
   }
 
-  logWarn('creazione ref fallita', 'partnerRefService', error);
+  // 5. Errore DAVVERO inatteso (RLS 42501, DB irraggiungibile, vincolo nuovo):
+  //    logError così l'anomalia raggiunge i log di produzione (warn/info scartati
+  //    in prod, logger.ts). L'app degrada comunque: apre senza ref.
+  logError('creazione ref fallita (inatteso)', 'partnerRefService', error);
   return null;
 };
