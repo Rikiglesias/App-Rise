@@ -26,8 +26,8 @@ https://letsdonation.com/…?utm_source=rah-app&utm_campaign=<codice-opaco-per-u
 ```
 
 - `utm_campaign` = un **codice opaco per-utente** generato da noi (`rise_ref`). Non è un
-  login e non contiene dati personali leggibili: serve solo a ricondurre a posteriori
-  l'ordine al nostro utente.
+  login ed è uno **pseudonimo** (dato personale pseudonimizzato, cons. 26 GDPR), non un
+  identificativo diretto leggibile: serve solo a ricondurre a posteriori l'ordine al nostro utente.
 - Le vostre landing sono **pagine-categoria** (lo shop, gli eventi…), a 2-3 click dal
   checkout: quindi non basta "salvare il parametro sull'ordine". Serve che li
   **catturiate all'atterraggio (in sessione)** e li **stampiate sull'ordine**, poi
@@ -48,9 +48,9 @@ L'utente arriva su Let's Donation e fa login **con il suo account RAH**, one-tap
 creare un secondo account. Funziona come un "Accedi con Google", ma l'identity provider
 siamo noi.
 
-- **Noi** = OpenID Provider (OIDC). La nostra piattaforma auth (Supabase) espone un
-  server OAuth 2.1 / OpenID Connect standard: `authorization code` + **PKCE**, ID token,
-  endpoint UserInfo, documento di discovery.
+- **Noi** = OpenID Provider (OIDC). La nostra piattaforma auth (Supabase) **esporrà** un
+  server OAuth 2.1 / OpenID Connect standard — lo abilitiamo per l'integrazione:
+  `authorization code` + **PKCE**, ID token, endpoint UserInfo, documento di discovery.
 - **Voi** = client OIDC sul vostro Joomla (esistono plugin OIDC maturi, es.
   miniOrange / OpenID Connect per Joomla). Aggiungete un pulsante "Login con RAH".
 - **Matching identità**: **mai sull'email**. Alcuni nostri utenti usano "Nascondi la mia
@@ -64,7 +64,7 @@ siamo noi.
   problema alla radice e fa di RAH la fonte unica dell'identità.
 
 **Dati (claim) che vi trasmettiamo al login**, solo quelli standard OIDC necessari:
-`sub` (id opaco stabile — la chiave di aggancio), `name` (nome e cognome, quando disponibile) ed `email`.
+`sub` (id opaco stabile — la chiave di aggancio), `name` (claim OIDC standard = **stringa unica** col nome completo, quando disponibile; niente `given_name`/`family_name` separati → lo splittate voi) ed `email`.
 Niente di più. Il `rise_ref` **non** viaggia sul login: è il codice di attribuzione della
 Richiesta A (query string UTM sull'ordine), un canale separato.
 
