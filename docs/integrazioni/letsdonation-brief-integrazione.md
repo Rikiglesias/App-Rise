@@ -55,7 +55,7 @@ siamo noi.
   miniOrange / OpenID Connect per Joomla). Aggiungete un pulsante "Login con RAH".
 - **Matching identità**: **mai sull'email**. Alcuni nostri utenti usano "Nascondi la mia
   email" di Apple → l'email è un alias diverso per ogni servizio. L'identità stabile è il
-  **`sub`** (identificativo opaco) dell'ID token, che vi diamo insieme al `rise_ref`.
+  **`sub`** (identificativo opaco) dell'ID token: è quella la chiave di aggancio.
 - **La nostra preferenza: «Login con RAH» come percorso primario di accesso sul nostro
   spazio.** Se un utente si registrasse prima col vostro form nativo e **poi** con "Login
   con RAH", si creerebbero **due account non collegabili in modo affidabile**: il matching
@@ -63,9 +63,14 @@ siamo noi.
   Apple). Rendere il nostro login l'ingresso principale sul nostro tenant elimina il
   problema alla radice e fa di RAH la fonte unica dell'identità.
 
-**Dati (claim) che vi trasmettiamo al login**, solo quelli necessari:
-`sub` (id opaco stabile), nome, cognome, **email di contatto reale**, `rise_ref`.
-Niente di più.
+**Dati (claim) che vi trasmettiamo al login**, solo quelli standard OIDC necessari:
+`sub` (id opaco stabile — la chiave di aggancio), `name` (nome e cognome) ed `email`.
+Niente di più. Il `rise_ref` **non** viaggia sul login: è il codice di attribuzione della
+Richiesta A (query string UTM sull'ordine), un canale separato.
+
+> Nota sull'email: per gli utenti che usano "Nascondi la mia email" di Apple l'`email` è un
+> alias `@privaterelay.appleid.com` che **inoltra** al loro indirizzo reale (la posta arriva
+> comunque). È lo standard OIDC: vi passiamo l'email dell'account così com'è.
 
 **Cosa vi forniremo per configurare il client** (quando entrambe le parti sono pronte):
 - Discovery URL (`…/.well-known/openid-configuration`)

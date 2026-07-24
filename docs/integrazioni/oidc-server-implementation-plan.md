@@ -4,78 +4,114 @@
 > Donation (LD) senza secondo login. **Non ancora eseguito**: l'accensione dell'OAuth
 > server è un cambio all'auth di **produzione** su una feature **beta** → decisione di
 > Riccardo (leva), da fare **dopo** la risposta del fornitore al brief.
-> Fonti: analisi workflow 5-agenti + premortem (memoria `integrazione-identita-partner.md`),
-> brief `letsdonation-brief-integrazione.md`, docs Supabase OAuth 2.1 Server.
+>
+> **REVISIONE 2026-07-24 (workflow read-only `w45y0hz6y`, verifica alla fonte)** — la
+> precondizione tecnica bloccante è stata sciolta e RIBALTA il §3 di questo piano: i claim
+> custom **non** arrivano al client OIDC. Il piano è stato riscritto di conseguenza.
+> Fonti: `supabase.com/docs/guides/auth/oauth-server` (+ `/token-security`,
+> `/oauth-flows`, `/getting-started`) e `.../auth-hooks/custom-access-token-hook`.
+> Contesto/decisioni: memoria `integrazione-identita-partner.md`; brief
+> `letsdonation-brief-integrazione.md`.
+
+## Finding che riscrive il piano (verificato alla fonte)
+
+**I claim custom NON raggiungono il client OIDC.** Il Custom Access Token Hook modifica solo
+l'**access token**, mai l'**id_token** né lo **UserInfo** — che portano solo i claim OIDC
+STANDARD determinati dagli scope: `sub`, `email`, `email_verified`, `name`, `phone`,
+`picture`. Un client OIDC di terzi (plugin Joomla di LD) legge id_token/UserInfo → **non
+vedrà mai `rise_ref` né un'email "risolta" custom**.
+
+Conseguenze:
+- **`rise_ref` esce dal login OIDC.** Non serviva all'identità (quella è il `sub`): `rise_ref`
+  è il meccanismo di ATTRIBUZIONE UTM sull'ordine (Richiesta A del brief), e lì resta.
+- **L'email a LD = claim `email` standard = `auth.users.email`.** Per gli utenti Apple-hide è
+  l'alias `@privaterelay.appleid.com`, che **inoltra** → la mail arriva, il JIT di HikaShop
+  funziona. L'email "risolta reale" (`contact_email`, F1.10) **non** è consegnabile come claim
+  → residuo dichiarato (l'utente relay compare su LD con l'alias, che inoltra).
+- **Il Custom Access Token Hook NON va costruito** per questo flusso: non raggiunge LD e
+  l'access token non va comunque consegnato a un terzo (vedi sicurezza). Le vecchie
+  «Correzione #1/#4» (email condizionale e hedge-id come claim) **non sono applicabili** via
+  OIDC standard.
 
 ## Precondizioni (gate — NON partire prima)
 
 - [ ] **Fornitore**: LD conferma (a) client OIDC su Joomla (plugin), (b) matching sul `sub`
       non l'email, (c) — preferito — SSO-only per-tenant (domande 4-5 del brief).
+- [ ] **Chiavi di firma ASIMMETRICHE (RS256/ES256)** sul progetto Supabase — prerequisito
+      HARD: l'id_token con HS256 **fallisce**. Migrare le JWT signing keys è un'operazione
+      sull'auth di produzione → **leva**. Verificare prima l'algoritmo attuale del progetto.
 - [ ] **Decisione rischio-beta**: Riccardo accetta l'auth di produzione su Supabase OAuth
-      2.1 Server (beta dal 26/11/2025) — oppure attende la GA. È la leva.
-- [ ] **Field-test claim propagation** (bloccante tecnico): verificare sul campo che i claim
-      custom `rise_ref` e l'email risolta arrivino davvero nell'`id_token`/UserInfo che il
-      client OIDC legge. La doc Supabase conferma il Custom Access Token Hook sull'ACCESS
-      token, NON garantisce la propagazione nell'id_token → **testare prima di impegnarsi**.
+      2.1 Server (beta dal 26/11/2025, GA slittata, prezzo post-GA ignoto) → **leva**.
+- [x] ~~**Field-test claim propagation**~~ **SCIOLTO alla fonte 2026-07-24**: verdetto NO
+      (vedi sopra). Il field-test resta utile solo per confermare che i claim STANDARD
+      (sub, email, name) arrivino correttamente all'id_token dopo l'abilitazione.
 
 ## Passi lato nostro (in ordine)
 
-1. **Abilitare l'OAuth 2.1 / OpenID Provider su Supabase** (dashboard/config del progetto).
-   Reversibile: si disabilita. → è questo lo step-leva (auth di produzione).
-2. **Registrare il client LD**: `client_id` + `client_secret` dedicati, redirect URI che LD
-   ci indica, scope/claim concessi. Il secret è un segreto → env/secret-manager, mai in
-   repo/chat.
-3. **Custom claims** via Custom Access Token Hook (o equivalente):
-   - `sub` = UUID utente Supabase (stabile — già così).
-   - **`email` = email RISOLTA**, NON il campo `contact_email` grezzo (vedi Correzione #1).
-   - `rise_ref` = ref opaco per-utente (dal servizio `getOrCreatePartnerRef`).
-   - `nome`, `cognome` dai claim profilo.
-4. **Consent screen**: Supabase non la ospita → va costruita e mantenuta da noi (pagina web
-   che elenca client + scope, l'utente approva). Superficie di sviluppo + sicurezza.
-5. **Discovery + scope**: esporre `…/.well-known/openid-configuration`; documentare gli
-   scope/claim disponibili per LD.
-6. **Consegnare a LD** i parametri (discovery URL, client_id/secret, scope) e fare un giro
-   di test end-to-end (login → JIT provisioning sul loro MySQL → aggancio sul `sub`).
+1. **Migrare le JWT signing keys ad asimmetriche** (RS256/ES256) — prerequisito per l'id_token.
+   Operazione auth di produzione → leva. Reversibile via rotazione chiavi.
+2. **Abilitare l'OAuth 2.1 / OpenID Provider su Supabase** (Dashboard > Authentication >
+   OAuth Server > Enable, con `authorization_url_path` = path della NOSTRA pagina consent).
+   Reversibile: si disabilita. → step-leva (auth di produzione).
+3. **Costruire la pagina web consent + registrazione** (a nostro carico — Supabase non la
+   ospita). È il pezzo più grande. Stack scelto: **Next.js dedicato su Vercel** sotto
+   sottodominio (es. `id.riseagainsthunger.org`) con `@supabase/supabase-js` + `@supabase/ssr`.
+   Route:
+   - `/consent` — legge `authorization_id`, `supabase.auth.oauth.getAuthorizationDetails()`,
+     mostra client+scope, `approveAuthorization()` / `denyAuthorization()`, redirect.
+   - `/register` — signup DA WEB (Apple/Google/email + 18+ `birth_date` + consenso privacy
+     tracciato + provisioning profilo), per il nuovo utente diretto su LD (SSO-only).
+   - `/auth/callback` — redirect handler; token exchange e `client_secret` SOLO server-side.
+   Leve infra: DNS sottodominio + progetto Vercel + URL nell'allow-list Redirect di Supabase.
+4. **Registrare il client LD**: `client_id` + `client_secret` dedicati (Dashboard > OAuth Apps,
+   o `supabase.auth.admin.oauth.createClient()`), redirect URI che LD indica, scope
+   `openid email profile`. Il secret è un segreto → env/secret-manager, mai in repo/chat.
+   (DCR disabilitata di default; per un client noto = registrazione manuale.)
+5. **Discovery + scope**: `…/.well-known/openid-configuration` (esposto una volta abilitato;
+   NB bug beta: i custom domain non si propagano al discovery). Documentare per LD gli scope
+   e i claim STANDARD disponibili (sub, email, name).
+6. **Consegnare a LD** i parametri (discovery URL, client_id/secret, scope) e giro di test
+   end-to-end (login → JIT sul loro MySQL → aggancio sul `sub`).
 
-## Correzioni ferree (dal premortem avversariale — NON dimenticarle)
+## Sicurezza (gotcha beta — non ignorare)
 
-- **#1 Email condizionale**: l'email-claim = `resolvePrefillEmail(contact_email ?? auth.email)`
-  escludendo l'alias Apple relay (`src/shared/partner/partnerEmail.ts:41-48`). Il campo
-  `contact_email` è NULL per la maggioranza (raccolto solo per gli Apple-relay,
-  `validation.ts:143`). Mandare solo `contact_email` → email nulla per i non-relay → JIT
-  rotto su LD (HikaShop richiede l'email).
-- **#2 Doppio account native-first**: il matching sul `sub` NON deduplica contro un account
-  nativo pre-esistente su LD (che non ha `sub`; l'email è inaffidabile per gli alias Apple).
-  → mitigazione strutturale = SSO-only per-tenant (togliere il signup nativo, domanda 5 del
-  brief). Se LD non può, il duplicato è un residuo da dichiarare.
-- **#3 Consent screen a nostro carico**: non è plug-and-play (passo 4).
-- **#4 Hedge migrazione IdP**: valutare un identificatore utente RAH STABILE come claim
-  custom oltre al `sub` Supabase, così un domani cambiare IdP non rompe i link LD↔RAH.
+- Gli access token OAuth hanno **privilegi PIENI** dell'utente (come i session token) + il
+  `client_id`; gli scope **non** limitano l'accesso al DB → l'autorizzazione dipende
+  INTERAMENTE dalle RLS. **Mai** consegnare a LD un access token per leggere claim custom:
+  darebbe un token full-power sull'utente. LD deve fermarsi a id_token/UserInfo standard.
 
 ## Rollback / reversibilità
 
-- **Server OAuth**: disabilitabile dalla config Supabase → i client smettono di autenticare
-  (LD ricade sul suo login nativo se non è stato tolto). Reversibile.
+- **Chiavi asimmetriche**: rotazione reversibile lato Supabase.
+- **Server OAuth**: disabilitabile dalla config → i client smettono di autenticare. Reversibile.
 - **Client LD**: revocabile (elimina `client_id`/ruota il secret) → blocca solo LD.
-- **SSO-only per-tenant**: se attivato lato LD e va male, LD riattiva il signup nativo. La
-  reversibilità di questo pezzo è **lato loro**, non nostra → da concordare nel DSA.
-- **Punto di non ritorno**: nessuno lato nostro (tutto reversibile). Lato LD, gli account già
-  provisionati via JIT restano nel loro DB (normale, sono loro utenti).
+- **Pagina web / Vercel**: cancellabile; DNS del sottodominio removibile.
+- **SSO-only per-tenant**: la reversibilità di questo pezzo è **lato LD** (riattivano il signup
+  nativo) → da concordare nel DSA.
+- **Punto di non ritorno**: nessuno lato nostro. Lato LD, gli account già provisionati via JIT
+  restano nel loro DB (sono loro utenti).
 
 ## Rischi dichiarati
 
-- **Beta** (medio-alto): possibili breaking change su endpoint/hook/config, nessuno SLA,
-  prezzo post-GA ignoto. Login di produzione di una onlus su feature beta = rischio da
-  accettare esplicitamente.
-- **Accoppiamento di disponibilità** (se SSO-only-UNICO): provider giù → nessuno registra/
-  fa checkout sul contesto RAH di LD. → tenere «Login con RAH» **primario** ma non
-  strettamente unico finché beta, oppure prevedere un fallback.
-- **Dipendenza dal fornitore**: tutto il percorso è gated sul fatto che LD costruisca e
-  configuri il client OIDC (sul `sub`, per-tenant).
+- **Beta** (medio-alto): breaking change possibili su endpoint/hook/config, nessuno SLA,
+  prezzo post-GA ignoto, GA slittata. Login di produzione di una onlus su feature beta =
+  rischio da accettare esplicitamente. Mitigazione: «Login con RAH» primario ma non
+  strettamente unico finché beta.
+- **Nuova superficie web auth-critica** (la pagina consent/registrazione): da mettere in
+  sicurezza (secret solo server-side, TLS, cookie sicuri, allow-list redirect).
+- **Accoppiamento di disponibilità** (se SSO-only-UNICO): provider giù → nessuno registra/fa
+  checkout sul contesto RAH di LD → tenere un fallback finché beta.
+- **Dipendenza dal fornitore**: tutto il percorso è gated sul fatto che LD costruisca il
+  client OIDC (sul `sub`, per-tenant).
 
 ## GDPR
 
-- Due titolari autonomi + Data Sharing Agreement (non Art.26, non Art.28). Liceità = il
-  click dell'utente. Claim minimi (sub, nome, cognome, email risolta, rise_ref). Nessuna
-  pre-creazione bulk. Informativa RAH aggiornata (dipende dal criterio 1 del goal
-  partner-identita). Vedi memoria `gdpr-compliance`.
+- Due titolari autonomi + Data Sharing Agreement (non Art.26, non Art.28). Liceità = il click
+  dell'utente. Claim minimi STANDARD (`sub`, `name`, `email`). Nessuna pre-creazione bulk.
+  Informativa RAH aggiornata (dipende dal criterio 1 del goal partner-identita). Vedi memoria
+  `gdpr-compliance`.
+
+## De-risking osservato
+
+- Al 2026-07-24 tutte le tabelle hanno **0 righe** (pre-lancio) → abilitare l'OAuth server ha
+  blast-radius quasi nullo sugli utenti reali (non ce ne sono ancora).
