@@ -57,7 +57,7 @@ Conseguenze:
    Reversibile: si disabilita. → step-leva (auth di produzione).
 3. **Costruire la pagina web consent + registrazione** (a nostro carico — Supabase non la
    ospita). È il pezzo più grande. Stack: piccola app **Next.js** con `@supabase/supabase-js`
-   + `@supabase/ssr`. **Hosting DA CONFERMARE con Riccardo (2026-07-24)**: `riseagainsthunger.org`
+   e `@supabase/ssr`. **Hosting DA CONFERMARE con Riccardo (2026-07-24)**: `riseagainsthunger.org`
    (incl. `italy.`) è di **Rise Against Hunger USA**, NON di RAH-Italia → NON usabile. Opzione
    consigliata: indirizzo **Vercel gratuito** (`*.vercel.app`) subito, o un dominio proprio di
    RAH-Italia se ne acquisisce uno. Nessuna dipendenza dal dominio dell'org globale.
@@ -71,7 +71,7 @@ Conseguenze:
      sincronizzare `profiles.first_name/last_name → user_metadata.name`; per gli Apple-hide il
      nome può mancare dopo il primo login → verso LD `name` è consegnato «se disponibile».
    Leve infra: progetto Vercel (indirizzo gratuito o dominio nostro — MAI riseagainsthunger.org)
-   + URL nell'allow-list Redirect di Supabase.
+   e l'URL nell'allow-list Redirect di Supabase.
 4. **Registrare il client LD**: `client_id` + `client_secret` dedicati (Dashboard > OAuth Apps,
    o `supabase.auth.admin.oauth.createClient()`), redirect URI che LD indica, scope
    `openid email profile`. Il secret è un segreto → env/secret-manager, mai in repo/chat.
