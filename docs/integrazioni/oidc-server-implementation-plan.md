@@ -25,8 +25,10 @@ Conseguenze:
 - **`rise_ref` esce dal login OIDC.** Non serviva all'identità (quella è il `sub`): `rise_ref`
   è il meccanismo di ATTRIBUZIONE UTM sull'ordine (Richiesta A del brief), e lì resta.
 - **L'email a LD = claim `email` standard = `auth.users.email`.** Per gli utenti Apple-hide è
-  l'alias `@privaterelay.appleid.com`, che **inoltra** → la mail arriva, il JIT di HikaShop
-  funziona. L'email "risolta reale" (`contact_email`, F1.10) **non** è consegnabile come claim
+  l'alias `@privaterelay.appleid.com`, che **inoltra** alla casella reale (Apple recapita).
+  **Assunto, da confermare con LD** (zero-M — è un sistema di terzi): che HikaShop accetti
+  l'alias relay per creare l'account via JIT e non pretenda `email_verified` sull'alias.
+  L'email "risolta reale" (`contact_email`, F1.10) **non** è consegnabile come claim
   → residuo dichiarato (l'utente relay compare su LD con l'alias, che inoltra).
 - **Il Custom Access Token Hook NON va costruito** per questo flusso: non raggiunge LD e
   l'access token non va comunque consegnato a un terzo (vedi sicurezza). Le vecchie
@@ -54,15 +56,22 @@ Conseguenze:
    OAuth Server > Enable, con `authorization_url_path` = path della NOSTRA pagina consent).
    Reversibile: si disabilita. → step-leva (auth di produzione).
 3. **Costruire la pagina web consent + registrazione** (a nostro carico — Supabase non la
-   ospita). È il pezzo più grande. Stack scelto: **Next.js dedicato su Vercel** sotto
-   sottodominio (es. `id.riseagainsthunger.org`) con `@supabase/supabase-js` + `@supabase/ssr`.
+   ospita). È il pezzo più grande. Stack: piccola app **Next.js** con `@supabase/supabase-js`
+   e `@supabase/ssr`. **Hosting DA CONFERMARE con Riccardo (2026-07-24)**: `riseagainsthunger.org`
+   (incl. `italy.`) è di **Rise Against Hunger USA**, NON di RAH-Italia → NON usabile. Opzione
+   consigliata: indirizzo **Vercel gratuito** (`*.vercel.app`) subito, o un dominio proprio di
+   RAH-Italia se ne acquisisce uno. Nessuna dipendenza dal dominio dell'org globale.
    Route:
    - `/consent` — legge `authorization_id`, `supabase.auth.oauth.getAuthorizationDetails()`,
      mostra client+scope, `approveAuthorization()` / `denyAuthorization()`, redirect.
    - `/register` — signup DA WEB (Apple/Google/email + 18+ `birth_date` + consenso privacy
      tracciato + provisioning profilo), per il nuovo utente diretto su LD (SSO-only).
    - `/auth/callback` — redirect handler; token exchange e `client_secret` SOLO server-side.
-   Leve infra: DNS sottodominio + progetto Vercel + URL nell'allow-list Redirect di Supabase.
+   - **NB claim `name`**: viene dai `user_metadata`, non da `profiles` → in fase build
+     sincronizzare `profiles.first_name/last_name → user_metadata.name`; per gli Apple-hide il
+     nome può mancare dopo il primo login → verso LD `name` è consegnato «se disponibile».
+   Leve infra: progetto Vercel (indirizzo gratuito o dominio nostro — MAI riseagainsthunger.org)
+   e l'URL nell'allow-list Redirect di Supabase.
 4. **Registrare il client LD**: `client_id` + `client_secret` dedicati (Dashboard > OAuth Apps,
    o `supabase.auth.admin.oauth.createClient()`), redirect URI che LD indica, scope
    `openid email profile`. Il secret è un segreto → env/secret-manager, mai in repo/chat.
@@ -77,15 +86,21 @@ Conseguenze:
 
 - Gli access token OAuth hanno **privilegi PIENI** dell'utente (come i session token) + il
   `client_id`; gli scope **non** limitano l'accesso al DB → l'autorizzazione dipende
-  INTERAMENTE dalle RLS. **Mai** consegnare a LD un access token per leggere claim custom:
-  darebbe un token full-power sull'utente. LD deve fermarsi a id_token/UserInfo standard.
+  INTERAMENTE dalle RLS. **Precisazione**: nel flusso OIDC standard (authorization code +
+  `client_secret`) il client LD **riceve comunque** l'access token al token-endpoint — è
+  inevitabile, non "glielo diamo o no". Il rischio reale (LD detiene un token full-power
+  sull'utente) va MITIGATO, non negato:
+  - LD deve leggere l'identità dal solo **id_token / UserInfo standard**, senza usare l'access
+    token per chiamare API nostre;
+  - **audit RLS** che ogni utente veda solo le proprie righe (è l'unica barriera);
+  - **TTL corto** sugli access token; rotazione/revoca del client possibile.
 
 ## Rollback / reversibilità
 
 - **Chiavi asimmetriche**: rotazione reversibile lato Supabase.
 - **Server OAuth**: disabilitabile dalla config → i client smettono di autenticare. Reversibile.
 - **Client LD**: revocabile (elimina `client_id`/ruota il secret) → blocca solo LD.
-- **Pagina web / Vercel**: cancellabile; DNS del sottodominio removibile.
+- **Pagina web**: cancellabile (host Vercel o altro); nessun DNS altrui coinvolto.
 - **SSO-only per-tenant**: la reversibilità di questo pezzo è **lato LD** (riattivano il signup
   nativo) → da concordare nel DSA.
 - **Punto di non ritorno**: nessuno lato nostro. Lato LD, gli account già provisionati via JIT
