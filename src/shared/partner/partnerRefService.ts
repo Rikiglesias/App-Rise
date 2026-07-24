@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/auth/supabaseClient';
-import { logWarn } from '@/shared/utils/logger';
+import { logInfo, logWarn } from '@/shared/utils/logger';
 
 /**
  * Servizio get-or-create del `rise_ref` per la correlazione app→partner
@@ -13,8 +13,11 @@ import { logWarn } from '@/shared/utils/logger';
  * - Concorrenza: due chiamate simultanee possono provare a inserire insieme;
  *   l'indice parziale unico `(user_id, partner) where active` fa fallire la seconda
  *   con unique_violation (23505) → si ri-legge il ref appena creato dall'altra.
- * - Qualunque fallimento residuo → `null` + log: l'app apre comunque l'URL senza
- *   ref (degrada, non rompe l'uscita verso il partner).
+ * - Utente autenticato ma SENZA profilo → l'insert viola la FK
+ *   `partner_refs.user_id → profiles(id)` (23503): scenario ATTESO (profilo non
+ *   ancora completato), no-op accettato → `null` + log informativo (non un allarme).
+ * - Qualunque altro fallimento residuo → `null` + log warn: l'app apre comunque
+ *   l'URL senza ref (degrada, non rompe l'uscita verso il partner).
  *
  * NB: le RLS di 0008 restringono select/insert alla propria riga (auth.uid()=user_id),
  * quindi la select non filtra su user_id (lo fa la policy) mentre l'insert DEVE
@@ -24,6 +27,7 @@ import { logWarn } from '@/shared/utils/logger';
 export type PartnerName = 'donorbox' | 'letsdonation';
 
 const UNIQUE_VIOLATION = '23505';
+const FK_VIOLATION = '23503';
 
 const selectActiveRef = async (
   partner: PartnerName
@@ -66,6 +70,14 @@ export const getOrCreatePartnerRef = async (
   if (error?.code === UNIQUE_VIOLATION) {
     const raced = await selectActiveRef(partner);
     if (raced) return raced;
+  }
+
+  // 4. Utente autenticato ma senza profilo → FK partner_refs.user_id → profiles(id)
+  //    violata (23503). Scenario atteso (profilo non completato): no-op accettato,
+  //    il ref resta inattivo finché non c'è un profilo. Non è un allarme.
+  if (error?.code === FK_VIOLATION) {
+    logInfo('ref non creato: utente senza profilo', 'partnerRefService');
+    return null;
   }
 
   logWarn('creazione ref fallita', 'partnerRefService', error);

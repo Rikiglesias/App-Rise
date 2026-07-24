@@ -93,6 +93,15 @@ describe('getOrCreatePartnerRef', () => {
     await expect(getOrCreatePartnerRef('donorbox')).resolves.toBeNull();
   });
 
+  it('utente senza profilo: FK violation 23503 → null, no-op accettato (nessun re-select)', async () => {
+    withSession();
+    maybeSingle.mockResolvedValue({ data: null, error: null });
+    single.mockResolvedValue({ data: null, error: { code: '23503' } });
+    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBeNull();
+    // 23503 non è un race: la select gira una sola volta (lo step iniziale), mai un re-select.
+    expect(maybeSingle).toHaveBeenCalledTimes(1);
+  });
+
   it('errore in select iniziale → prova comunque a creare', async () => {
     withSession();
     maybeSingle.mockResolvedValue({ data: null, error: { code: 'XX' } });
