@@ -85,18 +85,34 @@ Richiesta A (query string UTM sull'ordine), un canale separato.
 3. Quali **redirect URI** dobbiamo autorizzare?
 4. Il plugin può usare il **`sub`** come chiave di identità (creazione al primo accesso
    via JIT provisioning, aggancio sul `sub` agli accessi successivi), **non l'email**?
-5. Sul **nostro spazio (tenant)**, «Entra con RAH» può essere il **percorso primario** di
-   accesso/registrazione — cioè il pulsante principale e in evidenza, con il form nativo come
-   alternativa secondaria? (È questo che ci serve.) **Domanda in più, non un requisito**: è
-   tecnicamente configurabile per-tenant anche renderlo l'**unico** metodo, senza toccare gli
-   altri enti? Se non è configurabile, nessun problema: teniamo il form nativo e ci regoliamo.
+5. **Prominenza sul nostro spazio (è la richiesta che conta).** Non vi chiediamo di *togliere*
+   la registrazione col form — sappiamo che è parte del sistema e vale per tutti gli enti. Vi
+   chiediamo di **invertire l'ordine** sul nostro tenant: «Entra con RAH» come **pulsante
+   principale** e il form nativo dietro un **link secondario** (es. «Non hai un account RAH?
+   Registrati con email»). Oggi sulle vostre pagine il rapporto è l'inverso — «Non sei ancora
+   registrato? Clicca qui» è già un link secondario sotto il form — quindi la struttura per
+   farlo esiste: è una questione di template del tenant, non del sistema di autenticazione.
+   Per l'utente il risultato è: **un solo percorso visibile, nessuna seconda registrazione**.
+   *(Se poi fosse configurabile per-tenant renderlo l'unico metodo, per noi sarebbe l'ideale —
+   ma non è una precondizione.)*
+5-bis. **Collegamento degli account (evita i doppioni senza togliere nulla).** Se una persona
+   ha già un account vostro con l'email X e poi entra con «Login con RAH» portando la stessa
+   email X, il vostro sistema può **collegare** i due account invece di crearne un secondo?
+   È la prassi standard dei login social. Copre tutti i casi tranne gli utenti Apple con
+   «Nascondi la mia email» (lì l'email è un alias, non combacia): per quelli resta l'aggancio
+   sul `sub`.
 6. **Il precedente Zucchetti** — ci avete raccontato che con la piattaforma Zucchetti il link
-   è nel loro portale e i dipendenti «arrivano già registrati». Ci interessa molto capire
-   **come** è fatto quel pezzo, perché se esiste già forse si riusa per noi:
-   - è un **single sign-on** (Zucchetti dichiara l'identità dell'utente e voi aprite la
+   è nel loro portale e i dipendenti «arrivano già registrati». Vorremmo capire **come** è
+   fatto quel pezzo: se esiste già qualcosa di riusabile, risparmiamo lavoro a entrambi.
+   Guardando lo spazio pubblico Zucchetti l'accesso ci sembra con **email e password**, e in
+   registrazione c'è un campo **«Gruppo Aziendale»** — quindi ci chiediamo se «già registrati»
+   significhi che il link **pre-associa l'azienda** (e la registrazione la fa comunque
+   l'utente), oppure se esista anche un **accesso automatico** dal portale aziendale. In
+   concreto:
+   - c'è un **single sign-on** (il partner dichiara l'identità dell'utente e voi aprite la
      sessione: SAML, OIDC, oppure un link firmato con un token)? Se sì, con quale protocollo?
-   - oppure gli account dei dipendenti sono **pre-caricati** su Let's Donation da un flusso
-     dati (anagrafiche/welfare bonus) e l'utente si autentica comunque da voi?
+   - oppure gli account arrivano da un **flusso dati** (anagrafiche/welfare bonus) e/o la
+     registrazione resta manuale con l'azienda pre-selezionata?
    - quel meccanismo è riusabile per un ente come noi, o è specifico del canale welfare?
 
 ---
