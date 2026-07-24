@@ -93,7 +93,10 @@ Conseguenze:
   - LD deve leggere l'identità dal solo **id_token / UserInfo standard**, senza usare l'access
     token per chiamare API nostre;
   - **audit RLS** che ogni utente veda solo le proprie righe (è l'unica barriera);
-  - **TTL corto** sugli access token; rotazione/revoca del client possibile.
+  - **TTL degli access token** il più breve possibile — NB: su Supabase l'expiry del JWT è
+    impostazione a livello di **PROGETTO** (globale, colpisce tutte le sessioni dell'app), non
+    per-client; un TTL distinto per i soli token OAuth è **da verificare**. Resta comunque la
+    rotazione/revoca del client.
 
 ## Rollback / reversibilità
 
