@@ -234,6 +234,18 @@ describe('ProfileScreen (autenticato)', () => {
     expect(getAllByText('Da completare')).toHaveLength(2);
   });
 
+  it('mentre il profilo si sta caricando non compare NESSUNO dei due pulsanti', () => {
+    // `!profile` è vero anche per chi il profilo ce l'ha: senza la guardia comparirebbe
+    // «Completa il tuo profilo» a chi è a posto, e cambierebbe sotto il dito un istante
+    // dopo. Contro-prova: togliendo `!profileLoaded ? null :` questo test cade.
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: null, profileLoaded: false })
+    );
+    const { queryByText } = wrap(<ProfileScreen />);
+    expect(queryByText('Completa il tuo profilo')).toBeNull();
+    expect(queryByText('Modifica profilo')).toBeNull();
+  });
+
   it('P2: profilo estero senza provincia è COMPLETO (non si chiede l’impossibile)', () => {
     // Per i paesi esteri la provincia è null per costruzione: se il gate la
     // pretendesse, quell'utente vedrebbe un sollecito che non può soddisfare.

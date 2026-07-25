@@ -184,7 +184,13 @@ export const ProfileScreen: React.FC = () => {
         </>
       ) : null}
 
-      {!profile || isProfileIncomplete ? (
+      {/* Finché la lettura è in volo non si mostra NESSUNO dei due pulsanti: `!profile`
+          è vero anche per chi il profilo ce l'ha, quindi comparirebbe «Completa il tuo
+          profilo» a chi è già a posto — e mostrare «Modifica profilo» a chi non ne ha
+          uno è l'errore opposto. Un pulsante che cambia sotto il dito è peggio di un
+          pulsante che arriva un istante dopo. Stesso difetto chiuso in
+          `getProfileCompletion`, su una riga diversa: il gemello va cercato. */}
+      {!profileLoaded ? null : !profile || isProfileIncomplete ? (
         <AuthButton
           label={t('auth.profile.completeCta')}
           onPress={handleCompleteProfile}

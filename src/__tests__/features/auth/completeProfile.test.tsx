@@ -169,6 +169,13 @@ describe('CompleteProfileScreen', () => {
     );
     expect(recordConsent).not.toHaveBeenCalled();
   });
+});
+
+// Blocco a sé: la schermata serve a DUE percorsi diversi — la nascita del profilo
+// (sopra) e il completamento di uno che esiste già (qui), che ha regole opposte sul
+// consenso e sull'idratazione. Tenerli insieme sforava anche il limite di righe.
+describe('CompleteProfileScreen — profilo che esiste già', () => {
+  beforeEach(() => jest.clearAllMocks());
 
   it('profilo GIÀ esistente: la casella del consenso NON viene mostrata (non si chiede ciò che non si registra)', () => {
     // Prima la sezione c'era, era obbligatoria per validazione e la spunta veniva
@@ -211,6 +218,34 @@ describe('CompleteProfileScreen', () => {
     expect(
       (getByLabelText('Nome') as { props: { value: string } }).props.value
     ).toBe('Mario');
+    expect(
+      (getByLabelText('Cognome') as { props: { value: string } }).props.value
+    ).toBe('Rossi');
+  });
+
+  it('se il profilo arriva MENTRE la persona scrive, non le cancella quello che ha digitato', () => {
+    // La lettura può tornare dopo il primo render (arrivo diretto, rete lenta): un set
+    // secco sovrascriverebbe il campo sotto le dita. Contro-prova: sostituendo
+    // `prev || v` con un set incondizionato, questo test cade.
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: null, profileLoaded: false })
+    );
+    const { getByLabelText, rerender } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fireEvent.changeText(getByLabelText('Nome'), 'Giovanna');
+    mockUseAuth.mockReturnValue(makeAuth({ profile: existingProfile }));
+    rerender(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(
+      (getByLabelText('Nome') as { props: { value: string } }).props.value
+    ).toBe('Giovanna');
+    // Gli altri campi, che lei non ha toccato, si riempiono comunque dal profilo.
     expect(
       (getByLabelText('Cognome') as { props: { value: string } }).props.value
     ).toBe('Rossi');
