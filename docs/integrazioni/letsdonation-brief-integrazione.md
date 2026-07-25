@@ -76,6 +76,9 @@ Se sbaglia si ritrova un secondo account, senza il suo storico e senza i consens
 raccolto noi — e non capisce perché. Per una persona poco pratica è esattamente il punto in cui
 abbandona. La distinzione fra il vostro sistema e il nostro è nostra, non sua: non deve vederla.
 
+Detto senza giri: **due pulsanti di accesso sulla stessa pagina non hanno ragione di esistere.**
+Non è una questione di quale sia più in evidenza — è che la scelta non dovrebbe nemmeno esserci.
+
 In concreto: dal nostro spazio il form nativo non deve essere raggiungibile come alternativa.
 Sappiamo che è **template del tenant, non sistema di autenticazione** — la struttura per farlo
 esiste già, dato che oggi «Non sei ancora registrato? Clicca qui» è a sua volta un link
@@ -85,9 +88,38 @@ Se c'è un vincolo tecnico che lo impedisce, ci è utile sapere **quale**: se il
 pezzo che possiamo risolvere noi, lo risolviamo noi.
 
 Resta un caso a parte, ed è l'unico: chi ha **già** un account vostro creato col form prima di
-tutto questo. Quelli non si buttano via, si collegano — è il punto qui sotto.
+tutto questo. Quelli non si buttano via, si collegano (§2.4).
 
-### 2.3 Collegare gli account invece di duplicarli
+### 2.3 Forse una parte l'avete già fatta: il caso Zucchetti
+
+Prima di parlare di cose da costruire, una domanda che può cambiare tutto il resto — e che
+mettiamo qui, non in fondo, perché se la risposta è quella che speriamo il lavoro da fare è molto
+meno di quanto sembra.
+
+Ci avete raccontato che con la piattaforma Zucchetti il link sta nel loro portale e i dipendenti
+**«arrivano già registrati»**. Se esiste già un meccanismo che fa entrare una persona nel vostro
+spazio senza che si registri da voi, allora quello che vi stiamo chiedendo **non è una cosa nuova**:
+è la stessa cosa, con noi al posto di Zucchetti. Non vi chiediamo di inventare, vi chiediamo di
+riusare.
+
+Vorremmo quindi capire **come è fatto** quel pezzo. Guardando lo spazio pubblico Zucchetti
+l'accesso ci sembra con email e password, e in registrazione c'è un campo «Gruppo Aziendale»:
+questo ci fa pensare che il link possa **pre-associare l'azienda** lasciando comunque la
+registrazione alla persona. Ma è un'ipotesi nostra, dedotta da fuori, e vorremmo la vostra
+risposta. In concreto:
+
+- esiste un **single sign-on** — il partner dichiara l'identità e voi aprite la sessione (SAML,
+  OIDC, oppure un link firmato con un token)? Se sì, con quale protocollo?
+- oppure gli account arrivano da un **flusso dati** (anagrafiche, welfare bonus) e la
+  registrazione resta manuale con l'azienda pre-selezionata?
+- e in ogni caso: **quel meccanismo è riusabile per un ente come noi**, o è legato al canale
+  welfare?
+
+Se è un single sign-on, è già la risposta alla nostra richiesta e possiamo partire da lì. Se è un
+pre-caricamento di anagrafiche, non ci serve — a noi non serve mandarvi elenchi di persone, serve
+che la singola persona entri con il suo account nostro.
+
+### 2.4 Collegare gli account invece di duplicarli
 
 Se una persona ha già un account vostro con l'email X e poi entra con «Login con RAH» portando la
 stessa email X, il vostro sistema può **collegare** i due account invece di crearne un secondo?
@@ -104,7 +136,7 @@ stessa email X, il vostro sistema può **collegare** i due account invece di cre
 | --- | --- |
 | **Ha un account RAH, non ha un account vostro** | Tocca «Entra con RAH» → la nostra pagina lo riconosce → torna da voi autenticato. Voi create l'utente al primo accesso, agganciato al `sub`. Dal secondo accesso in poi lo ritrovate |
 | **Non ha nessuno dei due** | Tocca «Entra con RAH» → sulla nostra pagina **crea l'account da noi** (con la nostra informativa e i nostri consensi) → torna da voi autenticato, e da lì è il caso sopra |
-| **Ha già un account vostro, con la stessa email** | È il caso in cui serve il **collegamento** (§2.3): altrimenti si ritrova due account e non capisce perché |
+| **Ha già un account vostro, con la stessa email** | È il caso in cui serve il **collegamento** (§2.4): altrimenti si ritrova due account e non capisce perché |
 | **Ha già un account vostro, ma usa «Nascondi la mia email»** | L'alias non combacia con l'email che aveva usato da voi: i due account **non sono collegabili automaticamente**. Restano due. Se avete un «collega il mio account» nel profilo utente, ci risolve anche questo |
 | **Atterra sul nostro spazio da un motore di ricerca**, senza venire dall'app | Con un solo ingresso (§2.2) entra da «Entra con RAH» come tutti, e l'account nasce da noi. È una persona in più che diventa nostra, e con due strade l'avremmo persa |
 | **Si iscrive a Let's Donation da un percorso che non tocca il nostro spazio** | Nasce da voi e per noi resta invisibile. **Lo accettiamo**: non è una persona che stiamo perdendo, è una che non era ancora nostra |
@@ -143,22 +175,26 @@ Nient'altro. Niente telefono, niente indirizzo, niente data di nascita.
 
 ## 5. Cosa ci serve sapere da voi
 
-**Le prime quattro sbloccano il lavoro**, le altre servono per rifinire.
+**La prima è quella che può farci risparmiare più lavoro**, le prime cinque sbloccano il resto, le
+altre servono per rifinire.
 
-1. Il vostro Joomla può fare da **client OIDC**? Con quale plugin e versione?
-2. Il plugin può **mappare il `sub` sull'username** (creazione al primo accesso, aggancio sul
-   `sub` agli accessi successivi), **non sull'email**?
-3. Quali **redirect URI** dobbiamo autorizzare?
-4. **Un solo ingresso** sul nostro tenant (§2.2): la registrazione col form si può non esporre sul
+1. **Il meccanismo Zucchetti** (§2.3): come fanno i dipendenti ad «arrivare già registrati»? È un
+   single sign-on — e con quale protocollo — oppure un pre-caricamento di anagrafiche? Ed è
+   riusabile per noi? *Se è un single sign-on, gran parte di quanto segue è già risolta.*
+2. **Un solo ingresso** sul nostro tenant (§2.2): la registrazione col form si può non esporre sul
    nostro spazio, via template? Se qualcosa lo impedisce, qual è esattamente il pezzo?
-5. **Collegamento degli account** sull'email (§2.3): c'è o si può attivare?
-6. Il vostro sistema accetta un'email alias `@privaterelay.appleid.com` per creare l'account, o
+3. Il vostro Joomla può fare da **client OIDC**? Con quale plugin e versione?
+4. Il plugin può **mappare il `sub` sull'username** (creazione al primo accesso, aggancio sul
+   `sub` agli accessi successivi), **non sull'email**?
+5. Quali **redirect URI** dobbiamo autorizzare?
+6. **Collegamento degli account** sull'email (§2.4): c'è o si può attivare?
+7. Il vostro sistema accetta un'email alias `@privaterelay.appleid.com` per creare l'account, o
    pretende un'email verificata?
-7. L'anagrafica viene aggiornata dai dati del login **a ogni accesso** o solo alla creazione?
-8. Gli account creati per questa via nascono con i consensi marketing a **no**, e in che momento
+8. L'anagrafica viene aggiornata dai dati del login **a ogni accesso** o solo alla creazione?
+9. Gli account creati per questa via nascono con i consensi marketing a **no**, e in che momento
    viene presentata la **vostra** informativa?
-9. Se una persona chiede a noi la cancellazione, esiste un modo per propagarvela?
-10. Quando ci saranno eventi sul nostro spazio, **quali dati** chiede l'iscrizione?
+10. Se una persona chiede a noi la cancellazione, esiste un modo per propagarvela?
+11. Quando ci saranno eventi sul nostro spazio, **quali dati** chiede l'iscrizione?
 
 **Cosa vi forniremo noi**, quando entrambe le parti sono pronte: discovery URL
 (`…/.well-known/openid-configuration`), `client_id` e `client_secret` dedicati a voi, le redirect
@@ -166,26 +202,7 @@ URI da autorizzare, scope e claim disponibili.
 
 ---
 
-## 6. Il precedente Zucchetti — la domanda che può farci risparmiare tutti e due
-
-Ci avete raccontato che con la piattaforma Zucchetti il link sta nel loro portale e i dipendenti
-«arrivano già registrati». Vorremmo capire **come** è fatto quel pezzo: se esiste già qualcosa di
-riusabile, risparmiamo lavoro a entrambi — e a noi eviterebbe la parte più pesante.
-
-Guardando lo spazio pubblico Zucchetti l'accesso ci sembra con email e password, e in
-registrazione c'è un campo «Gruppo Aziendale» — quindi ci chiediamo se «già registrati» significhi
-che il link **pre-associa l'azienda** (e la registrazione la fa comunque la persona), oppure se
-esista anche un **accesso automatico** dal portale aziendale. In concreto:
-
-- c'è un **single sign-on** (il partner dichiara l'identità e voi aprite la sessione: SAML, OIDC,
-  o un link firmato con un token)? Se sì, con quale protocollo?
-- oppure gli account arrivano da un **flusso dati** (anagrafiche, welfare bonus) e la
-  registrazione resta manuale con l'azienda pre-selezionata?
-- quel meccanismo è riusabile per un ente come noi, o è specifico del canale welfare?
-
----
-
-## 7. Inquadramento privacy
+## 6. Inquadramento privacy
 
 - Siamo **due titolari autonomi**: ciascuno resta titolare dei propri trattamenti. Non
   contitolarità (art. 26) e non responsabile del trattamento (art. 28).
@@ -198,7 +215,7 @@ esista anche un **accesso automatico** dal portale aziendale. In concreto:
 
 ---
 
-## 8. In coda: riconoscere che un ordine arriva da noi
+## 7. In coda: riconoscere che un ordine arriva da noi
 
 Non è urgente e non tocca il login. La mettiamo per completezza, perché quando il login funziona
 questa diventa quasi gratis.
