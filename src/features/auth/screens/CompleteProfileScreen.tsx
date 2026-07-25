@@ -103,22 +103,27 @@ export const CompleteProfileScreen: React.FC = () => {
             placeholder={t('auth.signup.provincePlaceholder')}
           />
         ) : null}
-        {/* F1.10: account Apple Private Relay → chiediamo una mail di contatto
-            reale (l'email dell'account è nascosta e non riceve le nostre
-            comunicazioni). Per gli altri account il campo non compare. */}
-        {form.isRelay ? (
-          <AuthInput
-            label={t('auth.completeProfile.contactEmail')}
-            value={values.contactEmail}
-            onChangeText={onChange.contactEmail}
-            error={err(errors.contactEmail)}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            textContentType="emailAddress"
-            placeholder={t('auth.completeProfile.contactEmailPlaceholder')}
-          />
-        ) : null}
+        {/* Mail di contatto SEMPRE richiesta (decisione 2026-07-25): è la mail reale
+            con cui riconosciamo la persona — anche nell'anagrafica importata dal
+            partner, dove un alias Apple non combacerebbe e creerebbe un secondo
+            record — e con cui le scriviamo. Per chi ha già una mail reale arriva
+            precompilata: si vede quale indirizzo useremo, senza doverlo ridigitare.
+            Con un alias il campo parte vuoto e il placeholder dice perché. */}
+        <AuthInput
+          label={t('auth.completeProfile.contactEmail')}
+          value={values.contactEmail}
+          onChangeText={onChange.contactEmail}
+          error={err(errors.contactEmail)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          textContentType="emailAddress"
+          placeholder={t(
+            form.isRelay
+              ? 'auth.completeProfile.contactEmailPlaceholderRelay'
+              : 'auth.completeProfile.contactEmailPlaceholder'
+          )}
+        />
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.consents')}>

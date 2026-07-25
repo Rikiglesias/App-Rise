@@ -59,7 +59,9 @@ const profile: Profile = {
   privacy_consent_at: '2026-01-01T00:00:00.000Z',
   marketing_consent: false,
   deletion_requested_at: null,
-  contact_email: null,
+  // Dal 2026-07-25 la mail di contatto è obbligatoria per TUTTI gli account, non
+  // solo per gli alias Apple: un profilo realistico la ha popolata.
+  contact_email: 'mario@r.it',
 };
 
 const wrap = (ui: React.ReactElement) =>
@@ -180,10 +182,41 @@ describe('ProfileEditScreen', () => {
       ...over,
     });
 
-  it('F1.10: utente NON relay → nessun campo email di contatto', () => {
+  it('utente NON relay → il campo email di contatto C’È (obbligatorio per tutti)', () => {
     mockUseAuth.mockReturnValue(makeAuth({ profile })); // email old@r.it
-    const { queryByLabelText } = wrap(<ProfileEditScreen />);
-    expect(queryByLabelText('Email di contatto')).toBeNull();
+    const { getByLabelText } = wrap(<ProfileEditScreen />);
+    // Un campo obbligatorio che non si vede bloccherebbe il salvataggio senza dire
+    // perché: da quando la mail serve a riconoscere la persona nell'anagrafica
+    // importata dal partner, il campo è visibile a tutti.
+    expect(getByLabelText('Email di contatto')).toBeTruthy();
+  });
+
+  it('utente NON relay → svuotare la mail di contatto BLOCCA il salvataggio', () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(makeAuth({ profile, updateProfile }));
+    const { getByLabelText, getByText } = wrap(<ProfileEditScreen />);
+    fireEvent.changeText(getByLabelText('Email di contatto'), '');
+    fireEvent.press(getByText('Salva modifiche'));
+    // Contro-prova del gemello: se la validazione restasse condizionata al relay,
+    // qui si potrebbe svuotare ciò che alla nascita del profilo è obbligatorio.
+    expect(getByText('Campo obbligatorio')).toBeTruthy();
+    expect(updateProfile).not.toHaveBeenCalled();
+  });
+
+  it('utente NON relay → la mail di contatto modificata viene SALVATA', async () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(makeAuth({ profile, updateProfile }));
+    const { getByLabelText, getByText, findByText } = wrap(
+      <ProfileEditScreen />
+    );
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'nuova@r.it');
+    fireEvent.press(getByText('Salva modifiche'));
+    await findByText('Profilo aggiornato.');
+    // Contro-prova: col vecchio `if (isRelay && …)` la modifica passava la
+    // validazione e NON veniva scritta — in silenzio.
+    expect(updateProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ contact_email: 'nuova@r.it' })
+    );
   });
 
   it('F1.10: utente relay → campo presente e salvato in contact_email', async () => {

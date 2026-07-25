@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -35,13 +35,33 @@ export const useProfileForm = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // F1.10: se l'account è un Apple Private Relay, l'email vera è nascosta →
-  // chiediamo una mail di contatto reale per le comunicazioni. Fuori da quel
-  // caso il campo non compare e `contact_email` resta invariato.
+  // La mail su cui scriviamo alla persona è SEMPRE obbligatoria e sempre visibile
+  // (decisione Riccardo 2026-07-25). Prima si chiedeva solo agli account Apple
+  // Private Relay; il caso che ha cambiato la regola è l'import delle anagrafiche
+  // dal partner: un alias `@privaterelay.appleid.com` non combacia con la mail
+  // dell'anagrafica importata, quindi la stessa persona finisce in DUE record che
+  // non si riconoscono — storico e consensi divisi in due, e una cancellazione su
+  // uno lascia l'altro in piedi. L'alias inoltra, ma muore appena la persona revoca
+  // l'inoltro e non serve a nulla fuori dal canale email.
+  const accountEmail = session?.user.email;
   const isRelay = useMemo(
-    () => isApplePrivateRelayEmail(session?.user.email),
-    [session]
+    () => isApplePrivateRelayEmail(accountEmail),
+    [accountEmail]
   );
+
+  // Se l'account ha già una mail REALE la proponiamo GIÀ SCRITTA: richiederla
+  // sarebbe chiedere due volte la stessa cosa, nel punto in cui la gente abbandona.
+  // Con l'alias Apple il campo parte VUOTO, perché l'alias non è la risposta.
+  // La precompilazione avviene in un effetto e non nell'inizializzatore perché la
+  // sessione (e il profilo) possono arrivare dopo il primo render; e si ferma appena
+  // la persona scrive, per non sovrascriverle sotto le dita quello che ha digitato.
+  const contactEmailTouched = useRef(false);
+  useEffect(() => {
+    if (contactEmailTouched.current) return;
+    const proposed =
+      profile?.contact_email ?? (isRelay ? '' : (accountEmail ?? ''));
+    if (proposed) setContactEmail(proposed);
+  }, [accountEmail, isRelay, profile?.contact_email]);
 
   const lastNameRef = useRef<TextInput>(null);
   const phoneRef = useRef<TextInput>(null);
@@ -86,6 +106,7 @@ export const useProfileForm = () => {
         clearError('birthDate');
       },
       contactEmail: (v: string): void => {
+        contactEmailTouched.current = true;
         setContactEmail(v);
         clearError('contactEmail');
       },
@@ -129,7 +150,9 @@ export const useProfileForm = () => {
       birthDate,
       privacyConsent,
       contactEmail,
-      requireContactEmail: isRelay,
+      // Sempre: la mail reale serve per riconoscere la persona nell'anagrafica
+      // importata dal partner, non solo per scriverle.
+      requireContactEmail: true,
     });
     setErrors(found);
     if (Object.keys(found).length > 0) return;
@@ -162,9 +185,11 @@ export const useProfileForm = () => {
       country: country.trim(),
       birth_date: birthDate.trim(),
       ...(isNewProfile ? { privacy_consent_at: new Date().toISOString() } : {}),
-      // F1.10: scriviamo contact_email SOLO per gli account Apple relay (che
-      // l'hanno appena inserita); per gli altri non tocchiamo la colonna.
-      ...(isRelay ? { contact_email: contactEmail.trim() } : {}),
+      // Scritta SEMPRE: è la mail reale con cui riconosciamo la persona (anche
+      // nell'anagrafica importata dal partner) e con cui le scriviamo. Per gli
+      // account con mail già reale coincide con quella dell'account, e va bene:
+      // averla in colonna significa non dipendere dal provider di accesso.
+      contact_email: contactEmail.trim(),
     });
     if (error) {
       setLoading(false);
@@ -198,7 +223,8 @@ export const useProfileForm = () => {
     birthDate,
     privacyConsent,
     contactEmail,
-    isRelay,
+    // `isRelay` non è più fra le dipendenze: da quando la mail è obbligatoria per
+    // tutti, il submit non lo consulta più (serve solo alla UI per il placeholder).
     session,
     profile,
     refreshProfile,

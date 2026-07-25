@@ -233,27 +233,64 @@ const getUpsert = (): jest.Mock =>
 describe('CompleteProfileScreen — F1.10 email di contatto (Apple relay)', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('utente NON relay: il campo non compare e l’upsert NON include contact_email', async () => {
+  it('utente NON relay: il campo C’È, arriva PRECOMPILATO con la mail dell’account e finisce nell’upsert', async () => {
     mockUseAuth.mockReturnValue(makeAuth()); // email m@r.it (non relay)
     const upsert = getUpsert();
-    const {
-      getByLabelText,
-      getByText,
-      getByRole,
-      getByTestId,
-      queryByLabelText,
-    } = render(
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
       </AllProviders>
     );
-    expect(queryByLabelText('Email di contatto')).toBeNull();
+    // Precompilato: chi ha già una mail reale non deve ridigitarla, e vede quale
+    // indirizzo useremo. Contro-prova: togliendo l'effetto di precompilazione in
+    // useProfileForm questo assert cade (il campo resta vuoto → submit bloccato).
+    expect(getByLabelText('Email di contatto').props.value).toBe('m@r.it');
     fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() => expect(upsert).toHaveBeenCalled());
+    // Scritta SEMPRE, non solo per gli alias: è la mail con cui riconosciamo la
+    // persona nell'anagrafica importata dal partner.
     expect(upsert).toHaveBeenCalledWith(
-      expect.not.objectContaining({ contact_email: expect.anything() })
+      expect.objectContaining({ contact_email: 'm@r.it' })
+    );
+  });
+
+  it('utente NON relay: se SVUOTA la mail precompilata il submit è BLOCCATO', async () => {
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(getByLabelText('Email di contatto'), '');
+    fireEvent.press(getByText('Salva e continua'));
+
+    // Contro-prova di `requireContactEmail: true`: rimettendo `isRelay` al suo posto
+    // questo test cade, perché per un non-relay il campo tornerebbe facoltativo.
+    expect(getByText('Campo obbligatorio')).toBeTruthy();
+    await waitFor(() => expect(upsert).not.toHaveBeenCalled());
+  });
+
+  it('la precompilazione NON sovrascrive quello che la persona ha digitato', async () => {
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'scelta@mia.it');
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.press(getByText('Salva e continua'));
+
+    // Contro-prova del ref `contactEmailTouched`: senza quel flag un re-render con
+    // sessione/profilo aggiornati riscriverebbe il campo sotto le dita della persona.
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ contact_email: 'scelta@mia.it' })
     );
   });
 

@@ -111,6 +111,8 @@ export default {
       submit: 'Salva e continua',
       contactEmail: 'Email di contatto',
       contactEmailPlaceholder: 'Dove riceverai ricevute e comunicazioni',
+      contactEmailPlaceholderRelay:
+        'Scrivi la tua email vera: quella di Apple è nascosta',
     },
     edit: {
       title: 'Modifica profilo',
