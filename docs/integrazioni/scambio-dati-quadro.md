@@ -31,7 +31,7 @@
 commit `3d9a112` (`[ota] v1.2.8`), e nel repository non esiste nessun tag di versione successivo `[V]`.
 
 Tutto il lavoro degli ultimi mesi — il codice di provenienza verso i partner, la precompilazione della
-donazione, il registro dei consensi collegato al profilo, l'email di contatto per chi nasconde la mail,
+donazione, il registro dei consensi collegato al profilo, l'email di contatto chiesta a tutti,
 la schermata di cancellazione dell'account — vive **solo su `master`**. Il commit che introduce il
 codice di provenienza lato app è `9c836e5` del **23 luglio 2026**: otto mesi dopo l'ultimo rilascio `[V]`.
 
@@ -455,7 +455,9 @@ perché senza consenso il profilo non deve nascere. Facoltativi solo telefono e 
 
 **Alleggerire il modulo prima di applicare la modifica al database di produzione. → SCARTATA: c'è un
 ordine obbligato.** La modifica esiste nel codice ma **non è applicata al database vero** — verificato
-il 25/07: sul progetto live risultano applicate solo le migrazioni 0008 e 0009 `[V]`. Il comando che
+il 25/07: il registro delle migrazioni del progetto live **elenca** solo la 0008 e la 0009 `[V]`, ma le
+precedenti (0001-0007) **sono applicate** — sono state eseguite fuori dal registro, e infatti l'app
+funziona. Il fatto verificato, e l'unico che conta qui, è che **la 0010 non è applicata** `[V]`. Il comando che
 rimuove un vincolo è bloccato dalla nostra protezione e va eseguito a mano dal pannello. Se si
 alleggerisce il modulo prima, va in produzione una registrazione che **viola un vincolo e fallisce**.
 
@@ -709,7 +711,7 @@ successivo. Sta in §8.1.
 | Cosa | Chi lo sblocca |
 |---|---|
 | **Pubblicare le due funzioni di cancellazione e programmare quella periodica** — altrimenti il rilascio consegna un pulsante che fallisce (§7) | Noi (pubblicazione) · Riccardo (programmazione dell'esecuzione giornaliera) |
-| **Applicare al database la modifica che rende facoltativi telefono e città** (0010). Verificato: sul live ci sono solo 0008 e 0009. Il comando è bloccato dalla nostra protezione, va eseguito dal pannello. Senza, un modulo alleggerito manda in produzione una registrazione che fallisce | Riccardo, dal pannello |
+| **Applicare al database la modifica che rende facoltativi telefono e città** (0010) **e quella che scrive l'email di contatto alla nascita del profilo** (0011). Verificato: la 0010 non è applicata; il registro elenca solo 0008 e 0009, ma le precedenti ci sono (eseguite fuori dal registro). Il comando è bloccato dalla nostra protezione, va eseguito dal pannello. Senza la 0010, un modulo alleggerito manda in produzione una registrazione che fallisce; senza la 0011, chi si registra con email e password resta senza l'indirizzo con cui lo riconosciamo | Riccardo, dal pannello |
 | **Pubblicare l'informativa riscritta — quattro bersagli**, con la riga nuova nella tabella delle versioni **nella stessa release** che alza il numero di versione nell'app | Noi (testo, rilascio) · consulente (le risposte) · chi ha le chiavi del sito (pubblicazione) |
 | **Estendere l'export dei propri dati** ai codici di provenienza emessi e ai partner a cui sono andati, nella stessa release dell'informativa | Noi |
 | **Ripulire i dati di prova**: quattro consensi marketing e zero consensi all'informativa, con zero profili | Riccardo (sul database) |
