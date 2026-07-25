@@ -490,6 +490,44 @@ describe('AuthContext — stato del consenso a tre valori', () => {
     orderMock.mockResolvedValue({ data: [], error: null });
   });
 
+  it('un refresh del token NON riazzera un consenso già determinato', async () => {
+    // La sessione è un oggetto NUOVO a ogni rinnovo del token, ma l'utente è lo
+    // stesso: se l'effetto dipendesse da quell'identità, uno stato «needed» già
+    // stabilito tornerebbe «unknown» e la schermata di riconsenso sparirebbe —
+    // e se la ri-lettura fallisse, resterebbe spenta per tutta la sessione.
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const onChange = supabase.auth.onAuthStateChange as jest.Mock;
+    const orderMock = (
+      supabase.from('consent_events') as unknown as {
+        select: () => { eq: () => { order: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().order;
+    orderMock.mockResolvedValue({ data: [], error: null });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await waitFor(() => expect(getAuth().consentState).toBe('needed'));
+
+    // Rinnovo del token: stesso utente, oggetto sessione nuovo, e la ri-lettura
+    // dei consensi fallisce proprio in quella finestra.
+    orderMock.mockResolvedValue({ data: null, error: { message: 'boom' } });
+    const listener = onChange.mock.calls[0][0] as (
+      e: string,
+      s: unknown
+    ) => void;
+    await act(async () => {
+      listener('TOKEN_REFRESHED', { user: { id: 'u1' } });
+      await Promise.resolve();
+    });
+
+    expect(getAuth().consentState).toBe('needed');
+    expect(getAuth().needsReConsent).toBe(true);
+    orderMock.mockResolvedValue({ data: [], error: null });
+  });
+
   it('consentState diventa «needed» se manca il consenso alla versione corrente', async () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
       data: { session: { user: { id: 'u1' } } },
