@@ -5,6 +5,10 @@
 > previsto per ogni caso. È il documento da cui si derivano — in un colpo solo — le richieste
 > definitive a LD, il piano di costruzione lato nostro e i residui accettati.
 >
+> **Vista d'insieme su dati e archivi** (chi tiene cosa, cosa attraversa il confine, tutte le opzioni
+> con l'esito e il motivo, e i testi da mandare): `scambio-dati-quadro.md`. Questa matrice resta la
+> fonte degli scenari; quel documento aggrega e non sostituisce.
+>
 > **Perché esiste.** Il brief a LD è stato riscritto sei volte in una notte (PR #71→#76), ogni
 > volta per tappare un buco trovato a valle. Ogni correzione era giusta, ma il perimetro non
 > era mai stato mappato prima. Questo documento viene **prima** del brief: il brief si riscrive
