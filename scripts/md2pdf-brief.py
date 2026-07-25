@@ -83,6 +83,11 @@ STYLES = {
     "td": ParagraphStyle(
         "td", parent=BASE["BodyText"], fontSize=9, leading=12.4, spaceAfter=0,
     ),
+    # Voce di elenco NUMERATO: il numero sta nel testo, quindi serve solo il rientro.
+    "ol": ParagraphStyle(
+        "ol", parent=BASE["BodyText"], fontSize=9.8, leading=14.2, alignment=TA_JUSTIFY,
+        leftIndent=14, spaceAfter=6,
+    ),
 }
 
 # Proporzioni di colonna: la prima colonna delle tabelle di questo brief e' un'etichetta
@@ -91,6 +96,23 @@ COL_RATIOS = {
     2: (0.34, 0.66),
     3: (0.26, 0.37, 0.37),
 }
+
+
+def col_ratios(ncols: int) -> tuple[float, ...]:
+    """Proporzioni per un numero qualsiasi di colonne.
+
+    Oltre le tre colonne non si prova a indovinare la semantica: la prima resta un po' piu'
+    stretta (nelle matrici di `docs/` e' un identificativo tipo «A1», «G3») e il resto si
+    divide in parti uguali. Serve perche' le matrici hanno tabelle da 5-7 colonne e senza
+    fallback finivano tutte a larghezza uguale.
+    """
+    if ncols in COL_RATIOS:
+        return COL_RATIOS[ncols]
+    if ncols <= 1:
+        return (1.0,)
+    prima = 0.10
+    resto = (1.0 - prima) / (ncols - 1)
+    return (prima,) + tuple([resto] * (ncols - 1))
 
 TABLE_STYLE = TableStyle(
     [
@@ -173,13 +195,19 @@ def inline(text: str) -> str:
 
 
 def split_row(line: str) -> list[str]:
-    """`| a | b |` -> ['a', 'b']. Le barre di bordo sono opzionali in markdown."""
-    cells = line.split("|")
+    """`| a | b |` -> ['a', 'b']. Le barre di bordo sono opzionali in markdown.
+
+    La barra ESCAPATA (`\\|`) e' contenuto della cella, non un separatore: senza questa
+    distinzione una sola cella con `Un Pasto in Sospeso \\| Bologna` aggiunge una colonna
+    fantasma a TUTTA la tabella (le colonne si contano col massimo) e lascia il backslash
+    a video nel PDF consegnato.
+    """
+    cells = re.split(r"(?<!\\)\|", line)
     if cells and not cells[0].strip():
         cells = cells[1:]
     if cells and not cells[-1].strip():
         cells = cells[:-1]
-    return [c.strip() for c in cells]
+    return [c.strip().replace("\\|", "|") for c in cells]
 
 
 def build_table(rows: list[str]):
@@ -210,10 +238,12 @@ def build_table(rows: list[str]):
         for i, row in enumerate(parsed)
     ]
 
-    ratios = COL_RATIOS.get(ncols, tuple([1 / ncols] * ncols))
-    widths = [CONTENT_WIDTH * r for r in ratios]
+    widths = [CONTENT_WIDTH * r for r in col_ratios(ncols)]
 
-    table = Table(data, colWidths=widths, repeatRows=1)
+    # splitByRow/splitInRow: nelle matrici una singola riga puo' contenere celle da 200+
+    # caratteri e diventare piu' alta della pagina. Senza il permesso di spezzarla DENTRO,
+    # reportlab non sa dove metterla e la tabella si perde.
+    table = Table(data, colWidths=widths, repeatRows=1, splitByRow=1, splitInRow=1)
     table.setStyle(TABLE_STYLE)
     return table
 
@@ -232,6 +262,9 @@ def build(md_path: Path, pdf_path: Path) -> None:
     para: list = []
     quote: list = []
     table_rows: list = []
+    # Wrapper mutabile: le funzioni di flush sono chiusure, e serve poter cambiare il tipo
+    # di elenco dall'esterno.
+    numerato: list = [False]
 
     def flush_para() -> None:
         if para:
@@ -244,20 +277,42 @@ def build(md_path: Path, pdf_path: Path) -> None:
             quote.clear()
 
     def flush_bullets() -> None:
+        """Chiude il punto elenco aperto.
+
+        Numerato e puntato NON si mescolano: prima l'elenco numerato riceveva sia il pallino
+        (bulletType="bullet") sia il «1.» iniettato nel testo, e nel PDF usciva «• 1. …».
+        Visto dal vivo sul documento di consegna del 2026-07-25, dove i quattro passi erano
+        l'unica lista. Ora la numerazione la fa reportlab (bulletType="1") e il testo resta
+        pulito.
+        """
         if not bullets:
             return
-        story.append(
-            ListFlowable(
-                [ListItem(Paragraph(b, STYLES["body"]), leftIndent=14) for b in bullets],
-                bulletType="bullet",
-                bulletFontName="Helvetica",
-                bulletFontSize=7,
-                start="•",
-                leftIndent=12,
+        if numerato[0]:
+            # Il numero e' quello SCRITTO NEL MARKDOWN, gia' dentro il testo della voce.
+            # Due strade scartate, entrambe provate sul documento di consegna:
+            #   - bulletType="1" (numerazione di reportlab) -> mostrava «1» su tutte le voci;
+            #   - enumerate() qui -> riparte da 1 a ogni voce, perche' una riga vuota fra le
+            #     voci chiude l'elenco e questa funzione viene richiamata per ognuna.
+            # Il numero del documento non puo' sbagliare: e' quello che l'autore ha scritto.
+            for b in bullets:
+                story.append(Paragraph(b, STYLES["ol"]))
+        else:
+            story.append(
+                ListFlowable(
+                    [
+                        ListItem(Paragraph(b, STYLES["body"]), leftIndent=14)
+                        for b in bullets
+                    ],
+                    bulletType="bullet",
+                    bulletFontName="Helvetica",
+                    bulletFontSize=7,
+                    start="•",
+                    leftIndent=12,
+                )
             )
-        )
         story.append(Spacer(1, 3))
         bullets.clear()
+        numerato[0] = False
 
     def flush_table() -> None:
         if not table_rows:
@@ -328,13 +383,20 @@ def build(md_path: Path, pdf_path: Path) -> None:
             flush_para()
             flush_quote()
             flush_table()
+            if numerato[0]:  # si passa da numerato a puntato: sono due elenchi diversi
+                flush_bullets()
             bullets.append(inline(re.sub(r"^\s*[-*] ", "", line)))
         elif re.match(r"^\s*\d+\. ", line):
             flush_para()
             flush_quote()
             flush_table()
+            if bullets and not numerato[0]:  # da puntato a numerato
+                flush_bullets()
+            numerato[0] = True
             num = re.match(r"^\s*(\d+)\. ", line).group(1)
-            bullets.append(f"<b>{num}.</b> " + inline(re.sub(r"^\s*\d+\. ", "", line)))
+            bullets.append(
+                f"<b>{num}.</b>&nbsp; " + inline(re.sub(r"^\s*\d+\. ", "", line))
+            )
         elif bullets and line.startswith(("   ", "\t")):
             # continuazione indentata dell'ultimo punto elenco
             bullets[-1] += " " + inline(line.strip())
