@@ -139,14 +139,18 @@ Se una persona ha già un account vostro con l'email X e poi entra con «Login c
 stessa email X, il vostro sistema può **collegare** i due account invece di crearne un secondo?
 È la prassi standard dei login social.
 
-Due cose che facciamo noi perché il collegamento funzioni davvero:
+Due cose che facciamo noi perché il collegamento funzioni davvero. **Sono il disegno con cui
+partiamo al primo rilascio, non quello che l'app installata fa oggi**:
 
-- **le anagrafiche di chi si è registrato finora le carichiamo dalla nostra parte**, così quelle
-  persone risultano già riconosciute quando entrano col pulsante (e se mancano dati che oggi
-  chiediamo, glieli chiediamo noi al primo accesso);
-- **l'indirizzo che vi arriva è sempre un indirizzo reale e verificato**, anche per chi entra con
+- **le anagrafiche di chi si è registrato finora le sistemiamo dalla nostra parte** — quelle che
+  abbiamo già noi, senza chiedervi elenchi — così quelle persone risultano riconosciute quando
+  entrano col pulsante (e se mancano dati che oggi chiediamo, glieli chiediamo noi al primo
+  accesso). Il lavoro parte quando la nostra informativa aggiornata è pubblicata;
+- **l'indirizzo che vi arriverà è un indirizzo reale e verificato**, anche per chi entra con
   «Nascondi la mia email» di Apple: in quel caso l'indirizzo vero glielo chiediamo noi e lo
-  verifichiamo prima. Serve proprio a non lasciarvi un alias che non combacia con nulla.
+  facciamo verificare, e diventa l'email del suo account da noi. Serve proprio a non lasciarvi un
+  alias che non combacia con nulla. Finché quel pezzo non è online vale quanto scritto al §4:
+  arriva l'email dell'account, che per un utente Apple può essere l'alias che inoltra.
 
 Dal primo accesso in poi, però, l'aggancio stabile è il **`sub`**, non l'indirizzo: una persona
 può cambiare email, e il `sub` no.
@@ -162,7 +166,7 @@ può cambiare email, e il `sub` no.
 | **Ha un account RAH, non ha un account vostro** | Tocca «Entra con RAH» → la nostra pagina lo riconosce → torna da voi autenticato. Voi create l'utente al primo accesso, agganciato al `sub`. Dal secondo accesso in poi lo ritrovate |
 | **Non ha nessuno dei due** | Tocca «Entra con RAH» → sulla nostra pagina **crea l'account da noi** (con la nostra informativa e i nostri consensi) → torna da voi autenticato, e da lì è il caso sopra |
 | **Ha già un account vostro, con la stessa email** | È il caso in cui serve il **collegamento** (§2.4): altrimenti si ritrova due account e non capisce perché |
-| **Ha già un account vostro, ma usa «Nascondi la mia email»** | Non vi mandiamo l'alias: l'indirizzo vero glielo chiediamo noi e lo verifichiamo, quindi il collegamento per email funziona come sopra (§2.4). Se un «collega il mio account» nel profilo utente esiste già dalla vostra, è comunque la rete di sicurezza per i casi limite |
+| **Ha già un account vostro, ma usa «Nascondi la mia email»** | Dal primo rilascio non vi mandiamo l'alias: l'indirizzo vero glielo chiediamo noi e lo facciamo verificare, quindi il collegamento per email funziona come sopra (§2.4). Prima di allora l'alias non combacia e restano due account: se un «collega il mio account» nel profilo utente esiste già dalla vostra, è la rete di sicurezza per quel periodo e per i casi limite |
 | **Atterra sul nostro spazio da un motore di ricerca**, senza venire dall'app | Con un solo ingresso (§2.2) entra da «Entra con RAH» come tutti, e l'account nasce da noi. È una persona in più che diventa nostra, e con due strade l'avremmo persa |
 | **Si iscrive a Let's Donation da un percorso che non tocca il nostro spazio** | Nasce da voi e per noi resta invisibile. **Lo accettiamo**: non è una persona che stiamo perdendo, è una che non era ancora nostra |
 
@@ -189,9 +193,11 @@ client riceve un token con i privilegi dell'utente, quindi l'impegno che chiedia
 nell'accordo è di leggere l'identità **solo** da ID token e UserInfo, senza chiamare le nostre API
 con quel token.
 
-> Sull'email: per chi usa «Nascondi la mia email» di Apple è un alias
-> `@privaterelay.appleid.com` che **inoltra** all'indirizzo vero — la posta arriva comunque. È lo
-> standard OIDC e vi passiamo quello che l'account ha.
+> Sull'email: lo standard consegna l'email **dell'account**. Per chi usa «Nascondi la mia email»
+> di Apple quell'indirizzo è un alias `@privaterelay.appleid.com`, che comunque **inoltra**. Per
+> non lasciarvi un alias che non combacia con nulla, al primo rilascio chiediamo a quelle persone
+> il loro indirizzo vero, lo facciamo verificare e diventa l'email del loro account da noi: da lì
+> quello che vi arriva è l'indirizzo reale (§2.4). Finché quel pezzo non è online, arriva l'alias.
 
 **Chi tiene cosa:**
 
@@ -219,7 +225,8 @@ altre servono per rifinire.
 5. Quali **redirect URI** dobbiamo autorizzare?
 6. **Collegamento degli account** sull'email (§2.4): c'è o si può attivare?
 7. Il vostro sistema accetta un'email alias `@privaterelay.appleid.com` per creare l'account, o
-   pretende un'email verificata?
+   pretende un'email verificata? (Serve per il periodo in cui il pezzo descritto al §2.4 non è
+   ancora online: da lì in avanti l'indirizzo che vi arriva è reale.)
 8. L'anagrafica viene aggiornata dai dati del login **a ogni accesso** o solo alla creazione?
 9. Gli account creati per questa via nascono con i consensi marketing a **no**, e in che momento
    viene presentata la **vostra** informativa?
@@ -260,7 +267,10 @@ URI da autorizzare, scope e claim disponibili.
   dati che già viaggiano verso i partner, non ancora quelli del futuro «Entra con RAH».
 - Serve un **accordo di condivisione dati** fra le due società, che circoscriva quali dati
   passano, per quale finalità e per quanto tempo.
-- Nessuna pre-creazione massiva di account «per conto» dei nostri utenti.
+- Nessuna pre-creazione massiva di account «per conto» di nessuno, in nessuna delle due
+  direzioni: né noi creiamo utenze sul vostro spazio, né vi chiediamo elenchi di persone. Il
+  riordino delle anagrafiche del §2.4 riguarda **i nostri archivi** e non crea account: sono
+  schede, e l'account nasce solo quando è la persona a entrare.
 
 ---
 

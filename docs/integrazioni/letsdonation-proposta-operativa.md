@@ -36,15 +36,18 @@ In pratica servono cinque cose.
 
 4. Nello stesso momento in cui il pulsante va online, il vostro modulo di registrazione su quella
    pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e
-   due, chi arriva sceglie a caso fra due porte e la stessa persona si ritrova con due account.
-   Parlo solo della pagina del nostro spazio: lì è una scelta del template, non del vostro
-   sistema di accesso.
+   due, della stessa persona esistono due schede che si allontanano subito — cambia indirizzo in
+   una e non nell'altra, revoca un consenso da noi e da voi resta, ci chiede di essere cancellata
+   e noi non possiamo farlo su un'anagrafica che non governiamo. Parlo solo della pagina del
+   nostro spazio, dove da quello che vediamo è una scelta del template e non del vostro sistema
+   di accesso: se lì c'è un vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
 
-5. Chi si è registrato da voi fino a oggi non lo perdiamo e non deve rifare niente: quelle
-   anagrafiche le abbiamo tutti e due, e le carichiamo dalla nostra parte, così quando entrano
-   col pulsante sono già riconosciuti. Dalla vostra serve solo che l'account che avete già venga
-   agganciato alla stessa persona invece di crearne un secondo: per chi c'era prima l'aggancio si
-   fa con l'email, da lì in avanti è un codice fisso che vi passiamo noi. Se a qualcuno mancano
-   dei dati che oggi chiediamo, glieli chiediamo noi al primo accesso.
+5. Chi si è registrato da voi fino a oggi non lo perdiamo e non deve rifare niente. Dalla nostra
+   parte sistemiamo le anagrafiche che già abbiamo, senza chiedervi elenchi e senza entrare nei
+   vostri archivi — come voi non entrate nei nostri. Dalla vostra serve solo che l'account che
+   avete già venga agganciato alla stessa persona invece di crearne un secondo: per chi c'era
+   prima l'aggancio si fa con l'email, e dal primo accesso in poi è l'identificativo che il login
+   stesso vi consegna, sempre lo stesso per quella persona. Se a qualcuno mancano dei dati che
+   oggi chiediamo, glieli chiediamo noi al primo accesso.
 
 Riccardo

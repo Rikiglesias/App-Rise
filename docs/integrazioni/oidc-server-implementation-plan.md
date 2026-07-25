@@ -29,8 +29,14 @@ Conseguenze:
   l'alias `@privaterelay.appleid.com`, che **inoltra** alla casella reale (Apple recapita).
   **Assunto, da confermare con LD** (zero-M — è un sistema di terzi): che HikaShop accetti
   l'alias relay per creare l'account via JIT e non pretenda `email_verified` sull'alias.
-  L'email "risolta reale" (`contact_email`, F1.10) **non** è consegnabile come claim
-  → residuo dichiarato (l'utente relay compare su LD con l'alias, che inoltra).
+  L'email "risolta reale" (`contact_email`, F1.10) **non** è consegnabile come claim.
+  **SUPERATO in parte il 2026-07-25 (F-EMAIL.23)**: la via non è consegnare `contact_email`, è
+  **cambiare `auth.users.email`** — l'indirizzo vero raccolto in app diventa la mail dell'account
+  (`updateUser({email})`, conferma di Supabase), quindi il claim `email` porta l'indirizzo reale
+  senza alcuna personalizzazione. Verificato che un rientro con Apple **non** lo riscrive
+  (`createAccountFromExternalIdentity`, ramo `AccountExists`: `UpdateOnly(identity,
+  "identity_data", "last_sign_in_at")`). Residuo che resta: **finché F-EMAIL.23 non è
+  implementata** l'utente relay compare su LD con l'alias, che inoltra.
 - **Il Custom Access Token Hook NON va costruito** per questo flusso: non raggiunge LD e
   l'access token non va comunque consegnato a un terzo (vedi sicurezza). Le vecchie
   «Correzione #1/#4» (email condizionale e hedge-id come claim) **non sono applicabili** via
@@ -72,9 +78,11 @@ Conseguenze:
    - `/register` — signup DA WEB (Apple/Google/email + 18+ `birth_date` + consenso privacy
      tracciato + provisioning profilo), per il nuovo utente diretto su LD (SSO-only).
    - `/auth/callback` — redirect handler; token exchange e `client_secret` SOLO server-side.
-   - **NB claim `name`**: viene dai `user_metadata`, non da `profiles` → in fase build
-     sincronizzare `profiles.first_name/last_name → user_metadata.name`; per gli Apple-hide il
-     nome può mancare dopo il primo login → verso LD `name` è consegnato «se disponibile».
+   - **NB claim `name`**: viene dai `user_metadata`, non da `profiles`. La sincronizzazione
+     `profiles.first_name/last_name → user_metadata.name` **è già fatta (P1, `syncDisplayNameClaim`)**,
+     su tutti e tre i percorsi: non è più lavoro di build. Resta «se disponibile» **solo** per chi
+     non ha ancora un profilo — senza quella chiave il server ripiega sull'email dell'account,
+     quindi a LD arriverebbe l'alias anche come nome.
    Leve infra: progetto Vercel (indirizzo gratuito o dominio nostro — MAI riseagainsthunger.org)
    e l'URL nell'allow-list Redirect di Supabase.
 4. **Registrare il client LD**: `client_id` + `client_secret` dedicati (Dashboard > OAuth Apps,
