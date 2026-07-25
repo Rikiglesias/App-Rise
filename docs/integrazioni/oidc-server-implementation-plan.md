@@ -22,6 +22,7 @@ STANDARD determinati dagli scope: `sub`, `email`, `email_verified`, `name`, `pho
 vedrà mai `rise_ref` né un'email "risolta" custom**.
 
 Conseguenze:
+
 - **`rise_ref` esce dal login OIDC.** Non serviva all'identità (quella è il `sub`): `rise_ref`
   è il meccanismo di ATTRIBUZIONE UTM sull'ordine (Richiesta A del brief), e lì resta.
 - **L'email a LD = claim `email` standard = `auth.users.email`.** Per gli utenti Apple-hide è
@@ -38,7 +39,11 @@ Conseguenze:
 ## Precondizioni (gate — NON partire prima)
 
 - [ ] **Fornitore**: LD conferma (a) client OIDC su Joomla (plugin), (b) matching sul `sub`
-      non l'email, (c) — preferito — SSO-only per-tenant (domande 4-5 del brief).
+      non l'email, (c) **ingresso unico sul nostro tenant**: il modulo di registrazione nativo
+      viene tolto **nello stesso momento** in cui il pulsante va online — le due cose insieme,
+      non una dopo l'altra (invariante **I7**, già concordata in chiamata; confermato da
+      Riccardo 2026-07-25). **Non è una preferenza**: scriverlo come «preferito» è
+      l'ammorbidimento a ledger (`ask-ammorbidito-e-debolezza-consegnata-al-terzo`).
 - [ ] **Chiavi di firma ASIMMETRICHE (RS256/ES256)** sul progetto Supabase — prerequisito
       HARD: l'id_token con HS256 **fallisce**. Migrare le JWT signing keys è un'operazione
       sull'auth di produzione → **leva**. Verificare prima l'algoritmo attuale del progetto.
@@ -104,8 +109,10 @@ Conseguenze:
 - **Server OAuth**: disabilitabile dalla config → i client smettono di autenticare. Reversibile.
 - **Client LD**: revocabile (elimina `client_id`/ruota il secret) → blocca solo LD.
 - **Pagina web**: cancellabile (host Vercel o altro); nessun DNS altrui coinvolto.
-- **SSO-only per-tenant**: la reversibilità di questo pezzo è **lato LD** (riattivano il signup
-  nativo) → da concordare nel DSA.
+- **Ingresso unico per-tenant**: tecnicamente lato LD basta riattivare il modulo nativo, ma
+  **questa contingenza NON si instrada nell'accordo col partner**: scriverla nel DSA equivale a
+  consegnare per iscritto la via d'uscita dalla richiesta (errore a ledger). Resta una nostra
+  nota interna di rischio; verso LD la posizione è una sola: pulsante su e modulo giù insieme.
 - **Punto di non ritorno**: nessuno lato nostro. Lato LD, gli account già provisionati via JIT
   restano nel loro DB (sono loro utenti).
 
@@ -113,12 +120,15 @@ Conseguenze:
 
 - **Beta** (medio-alto): breaking change possibili su endpoint/hook/config, nessuno SLA,
   prezzo post-GA ignoto, GA slittata. Login di produzione di una onlus su feature beta =
-  rischio da accettare esplicitamente. Mitigazione: «Login con RAH» primario ma non
-  strettamente unico finché beta.
+  rischio da accettare esplicitamente. Mitigazione **interna** (mai «teniamo anche il loro
+  modulo»: ricrea la doppia anagrafica, cioè il problema che l'integrazione risolve):
+  presidio del provider, tempi di ripristino dichiarati, e se il rischio non è accettabile si
+  sposta la data di partenza, non si riapre la seconda porta.
 - **Nuova superficie web auth-critica** (la pagina consent/registrazione): da mettere in
   sicurezza (secret solo server-side, TLS, cookie sicuri, allow-list redirect).
-- **Accoppiamento di disponibilità** (se SSO-only-UNICO): provider giù → nessuno registra/fa
-  checkout sul contesto RAH di LD → tenere un fallback finché beta.
+- **Accoppiamento di disponibilità**: provider giù → nessuno registra/fa checkout sul contesto
+  RAH di LD. È lo stesso rischio che corre l'autenticazione della nostra app: si presidia
+  (monitoraggio + ripristino), **non** si compensa riaprendo il modulo nativo di LD.
 - **Dipendenza dal fornitore**: tutto il percorso è gated sul fatto che LD costruisca il
   client OIDC (sul `sub`, per-tenant).
 

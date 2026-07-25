@@ -222,7 +222,7 @@ analisi e non erano nella lista (gli esempi erano un seme, non il perimetro).
 | --- | --- | --- |
 | I1 | **Nuova informativa** (re-consent) | 🔧 sul web serve l'equivalente di `ReConsentScreen`, oggi solo in app |
 | I2 | Migrazione di dominio LD (già successa una volta) | ⚠️ coperto dai 301 + dominio vecchio in allowlist [V] |
-| I3 | **Supabase OAuth esce da beta** con breaking change | ⚠️ rischio dichiarato; mitigazione = form nativo sempre attivo |
+| I3 | **Supabase OAuth esce da beta** con breaking change | ⚠️ rischio dichiarato; mitigazione **interna** = presidio + ripristino, o si sposta la partenza — **mai** riaprire il modulo nativo di LD (ricrea la doppia anagrafica; invariante I7) |
 | I4 | `rise_ref` revocato | 🔧 già previsto (revoca amministrativa, `partner_refs.active`) |
 | I5 | Prezzo post-GA di Supabase OAuth ignoto | 🔑 rischio economico da accettare esplicitamente |
 

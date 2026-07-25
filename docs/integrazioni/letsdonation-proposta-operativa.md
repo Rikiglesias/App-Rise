@@ -34,27 +34,17 @@ In pratica servono cinque cose.
    non ce l'ha, lo crea **da noi** in quel momento — sulla nostra pagina, come si fa con un account
    Google — e torna sulla vostra già riconosciuto.
 
-4. Quando il pulsante funziona, il vostro modulo di registrazione su quella pagina lo potete
-   togliere. Parlo solo della pagina del nostro spazio: lì è una scelta del template, non del
-   vostro sistema di accesso. Le due cose vanno insieme — il modulo si toglie perché il pulsante
-   c'è — così chi arriva ha un solo modo di entrare invece di scegliere a caso fra due e
-   ritrovarsi con un account doppio.
+4. Nello stesso momento in cui il pulsante va online, il vostro modulo di registrazione su quella
+   pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e
+   due, chi arriva sceglie a caso fra due porte e la stessa persona si ritrova con due account.
+   Parlo solo della pagina del nostro spazio: lì è una scelta del template, non del vostro
+   sistema di accesso.
 
-5. Chi da voi ha già un account fatto col modulo, con la stessa email: quello lo collegate al
-   nostro invece di crearne un altro. Per chi c'è già l'email va bene come aggancio; da lì in
-   avanti però l'aggancio è un codice fisso, non l'indirizzo, perché chi usa «Nascondi la mia
-   email» di Apple ne ha uno diverso per ogni sito — ed è l'unico caso che resta fuori.
-
-Prima di andare online aggiorniamo la nostra informativa privacy. Nessuno dei due entra nel
-database dell'altro: al momento dell'accesso vi arrivano quattro cose — un identificativo, il nome
-quando c'è (con «Nascondi la mia email» di Apple può mancare), l'email dell'account e l'indicazione
-che quell'email è verificata — più i dati tecnici che il meccanismo di accesso si scambia da sé. Su
-quelli prendiamo un impegno scritto nell'accordo fra le due società: usarli solo per riconoscere la
-persona. Se dalla vostra parte serve qualcosa di scritto, dimmelo e lo prepariamo noi.
-
-Quando riesci, rispondimi sul punto 1 e mandami il contatto di chi gestisce il sito da voi: al resto
-pensiamo noi.
-
-Se a chi se ne occupa da voi servono i dettagli tecnici, il documento è pronto e glielo mando io.
+5. Chi si è registrato da voi fino a oggi non lo perdiamo e non deve rifare niente: quelle
+   anagrafiche le abbiamo tutti e due, e le carichiamo dalla nostra parte, così quando entrano
+   col pulsante sono già riconosciuti. Dalla vostra serve solo che l'account che avete già venga
+   agganciato alla stessa persona invece di crearne un secondo: per chi c'era prima l'aggancio si
+   fa con l'email, da lì in avanti è un codice fisso che vi passiamo noi. Se a qualcuno mancano
+   dei dati che oggi chiediamo, glieli chiediamo noi al primo accesso.
 
 Riccardo
