@@ -269,10 +269,10 @@ export const ProfileEditScreen: React.FC = () => {
         placeholder="2000-01-31"
         autoCapitalize="none"
       />
-      {/* F1.10: rettifica della mail di contatto, solo per account Apple relay. */}
-      {/* Sempre visibile: è obbligatoria per tutti, e un campo obbligatorio che non
-          si vede blocca il salvataggio senza dire perché. Il placeholder cambia solo
-          per gli alias Apple, dove serve dire che l'indirizzo nascosto non basta. */}
+      {/* Rettifica della mail di contatto. Sempre visibile: è obbligatoria per
+          tutti, e un campo obbligatorio che non si vede blocca il salvataggio senza
+          dire perché. Il placeholder cambia solo per gli alias Apple, dove serve
+          dire che l'indirizzo nascosto non basta. */}
       <AuthInput
         label={t('auth.completeProfile.contactEmail')}
         value={contactEmail}

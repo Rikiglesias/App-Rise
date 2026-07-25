@@ -35,6 +35,10 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
       user: { id: 'u1', email: 'm@r.it', identities: [] },
     } as unknown as Session,
     profile: null,
+    // Lettura del profilo ARRIVATA: senza questo, `getProfileCompletion` risponde
+    // «non lo so ancora» e nessun sollecito compare — che è il comportamento giusto
+    // durante il caricamento, ma non il caso che questi test descrivono.
+    profileLoaded: true,
     signIn: jest.fn(),
     signUp: jest.fn(),
     signOut: jest.fn(),
@@ -68,7 +72,10 @@ const profileWithDeletion: Profile = {
   privacy_consent_at: '2026-01-01T00:00:00.000Z',
   marketing_consent: false,
   deletion_requested_at: '2026-06-15T00:00:00.000Z',
-  contact_email: null,
+  // Un profilo COMPLETO include la mail di contatto: da quando è obbligatoria per
+  // tutti, un profilo che ne è privo ha ancora qualcosa da chiedere (il sollecito
+  // deve vederlo — era il buco per cui un account email/password risultava a posto).
+  contact_email: 'vera@mail.it',
 };
 
 const wrap = (ui: React.ReactElement) =>

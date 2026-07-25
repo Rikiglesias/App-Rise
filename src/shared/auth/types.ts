@@ -19,8 +19,12 @@ export interface Profile {
   marketing_consent: boolean;
   deletion_requested_at: string | null; // M3: NULL=attivo; valorizzato=cancellazione a +30gg
   // Email di contatto scelta dall'utente (migration 0009), distinta da auth.email
-  // (che con Apple può essere un Private Relay). Usata per il prefill dei form
-  // partner: regola contact_email ?? auth.email. NULL finché non valorizzata.
+  // (che con Apple può essere un Private Relay). Raccolta da TUTTI dal 2026-07-25,
+  // non più solo dagli alias: è la chiave con cui riconosciamo la persona
+  // nell'anagrafica importata dal partner. Usata anche per il prefill dei form
+  // partner (regola contact_email ?? auth.email). Resta NULL sui profili nati da
+  // registrazione email/password e su quelli creati prima della regola: quel buco
+  // è tracciato come F-EMAIL.8 e il sollecito lo vede (missingProfileFields).
   contact_email: string | null;
 }
 
@@ -55,10 +59,10 @@ export type ProfileEditable = Pick<
   /** Sigla IT; stringa vuota per i paesi esteri (la schermata azzera così). */
   province: string;
   /**
-   * F1.10: email di contatto, rettificabile dagli utenti Apple Private Relay.
-   * Sul path di rettifica è sempre una stringa (a differenza di `Profile`, dove
-   * può essere null): l'utente la valorizza, non la svuota — per "azzerarla"
-   * vale la regola di fallback `contact_email ?? auth.email`.
+   * Email di contatto, rettificabile da TUTTI (non più solo dagli account Apple
+   * Private Relay). Sul path di rettifica è sempre una stringa (a differenza di
+   * `Profile`, dove può essere null): l'utente la valorizza, non la svuota — per
+   * "azzerarla" vale la regola di fallback `contact_email ?? auth.email`.
    */
   contact_email: string;
 };

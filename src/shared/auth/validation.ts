@@ -34,9 +34,10 @@ export const validateRequired = (v: string): FieldError =>
   v.trim().length > 0 ? null : 'required';
 
 /**
- * F1.10 — valida la mail di contatto raccolta per gli account Apple Private Relay:
- * deve esistere, essere formalmente valida e NON essere un altro alias relay
- * (che non ci recapiterebbe nulla). SSOT condivisa fra `validateProfileForm`
+ * Mail di contatto, obbligatoria per TUTTI dal 2026-07-25 (era solo per gli account
+ * Apple Private Relay): deve esistere, essere formalmente valida e NON essere un
+ * alias relay — che non ci recapiterebbe nulla in modo stabile e non combacia con
+ * l'anagrafica importata dal partner. SSOT condivisa fra `validateProfileForm`
  * (completa-profilo) e la rettifica in `ProfileEditScreen` → una sola copia.
  */
 export const validateContactEmail = (v: string): FieldError =>
@@ -96,18 +97,26 @@ export interface ProfileInput {
   country: string;
   birthDate: string;
   privacyConsent: boolean;
-  /** F1.10: email di contatto, raccolta solo se `requireContactEmail`. */
-  contactEmail?: string;
   /**
-   * F1.10: true quando l'email dell'account è un Apple Private Relay → serve
-   * una mail vera dove recapitare le comunicazioni. Fuori da quel caso il campo
-   * non esiste e non va validato.
+   * Email di contatto: SEMPRE obbligatoria (non più un flag opzionale). È la mail
+   * reale con cui riconosciamo la persona anche nell'anagrafica importata dal
+   * partner; per chi ha già una mail vera arriva precompilata, quindi il costo
+   * per l'utente è zero e non serve una leva per spegnerla.
    */
-  requireContactEmail?: boolean;
+  contactEmail: string;
+  /**
+   * `false` SOLO nel COMPLETAMENTO di un profilo che esiste già: lì il consenso
+   * privacy fu raccolto alla nascita e la ri-accettazione di una versione nuova è
+   * competenza di `ReConsentScreen`. Pretenderlo qui significa mostrare una casella
+   * obbligatoria la cui spunta poi non viene registrata da nessuna parte — un
+   * consenso chiesto e buttato. Default `true` (nascita del profilo): in dubbio si
+   * chiede, mai il contrario.
+   */
+  requirePrivacyConsent?: boolean;
 }
 
 /**
- * `requireContactEmail` è un flag di controllo, non un campo con errore proprio:
+ * `requirePrivacyConsent` è un flag di controllo, non un campo con errore proprio:
  * l'unica chiave d'errore aggiuntiva è `contactEmail`.
  */
 export type ProfileErrors = Partial<
@@ -138,11 +147,15 @@ export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
     e.province = 'required';
   const adult = validateAdult(input.birthDate);
   if (adult) e.birthDate = adult;
-  if (!input.privacyConsent) e.privacyConsent = 'required';
-  // F1.10: email di contatto obbligatoria solo per account Apple Private Relay.
-  if (input.requireContactEmail) {
-    const ce = validateContactEmail(input.contactEmail ?? '');
-    if (ce) e.contactEmail = ce;
-  }
+  // Il consenso si pretende alla NASCITA del profilo. Nel completamento di un
+  // profilo esistente la casella non viene nemmeno mostrata: chiederla e poi non
+  // registrarla è peggio che non chiederla (vedi `requirePrivacyConsent`).
+  if (input.requirePrivacyConsent !== false && !input.privacyConsent)
+    e.privacyConsent = 'required';
+  // Mail di contatto: obbligatoria sempre, senza flag. Il flag di prima aveva un
+  // solo chiamante che gli passava la costante `true`, e blindava nei test un
+  // contratto (default = facoltativa) che il prodotto aveva già abbandonato.
+  const ce = validateContactEmail(input.contactEmail);
+  if (ce) e.contactEmail = ce;
   return e;
 };

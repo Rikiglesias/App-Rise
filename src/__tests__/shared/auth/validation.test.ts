@@ -32,6 +32,8 @@ const baseProfile = {
   country: 'IT',
   birthDate: '2000-01-01',
   privacyConsent: true,
+  // Obbligatoria per tutti dal 2026-07-25: un profilo valido la contiene sempre.
+  contactEmail: 'vera@mail.it',
 };
 
 describe('auth validation', () => {
@@ -138,29 +140,43 @@ describe('auth validation', () => {
     expect(validateContactEmail('vera@mail.it')).toBeNull();
   });
 
-  it('profile form: contact_email richiesto solo se requireContactEmail', () => {
-    // Non richiesto (default): il campo mancante non genera errore.
+  it('profile form: contact_email obbligatoria SEMPRE, senza flag', () => {
+    // Contratto nuovo: non esiste più un modo di renderla facoltativa. Il test di
+    // prima blindava il default «non richiesta», cioè un contratto già abbandonato
+    // dal prodotto: sarebbe rimasto verde anche cancellando la regola.
     expect(
-      validateProfileForm({ ...baseProfile }).contactEmail
-    ).toBeUndefined();
-    // Richiesto + vuoto → required; + relay → rifiutato; + valido → nessun errore.
-    expect(
-      validateProfileForm({ ...baseProfile, requireContactEmail: true })
-        .contactEmail
+      validateProfileForm({ ...baseProfile, contactEmail: '' }).contactEmail
     ).toBe('required');
     expect(
       validateProfileForm({
         ...baseProfile,
-        requireContactEmail: true,
         contactEmail: 'y@privaterelay.appleid.com',
       }).contactEmail
     ).toBe('contact_email_relay');
     expect(
+      validateProfileForm({ ...baseProfile, contactEmail: 'abc' }).contactEmail
+    ).toBe('email_invalid');
+    expect(
+      validateProfileForm({ ...baseProfile }).contactEmail
+    ).toBeUndefined();
+  });
+
+  it('profile form: il consenso privacy si pretende alla NASCITA, non al completamento', () => {
+    // Nascita (default): senza spunta il form è bloccato — è il momento in cui il
+    // consenso viene davvero registrato (privacy_consent_at + evento Art.7).
+    expect(
+      validateProfileForm({ ...baseProfile, privacyConsent: false })
+        .privacyConsent
+    ).toBe('required');
+    // Completamento di un profilo esistente: la casella non viene nemmeno mostrata,
+    // quindi pretenderla bloccherebbe il salvataggio su un campo invisibile —
+    // e la spunta, se data, verrebbe scartata dal submit (consenso chiesto e buttato).
+    expect(
       validateProfileForm({
         ...baseProfile,
-        requireContactEmail: true,
-        contactEmail: 'vera@mail.it',
-      }).contactEmail
+        privacyConsent: false,
+        requirePrivacyConsent: false,
+      }).privacyConsent
     ).toBeUndefined();
   });
 });
