@@ -2,6 +2,7 @@ import {
   buildConsentInsert,
   deriveMarketingState,
   isReConsentRequired,
+  hasGrantedCurrentPolicy,
   CURRENT_POLICY_VERSION,
 } from '@/shared/auth/consent';
 import type {
@@ -73,6 +74,28 @@ describe('consent helpers', () => {
         true
       )
     ).toBe(false);
+  });
+
+  it('hasGrantedCurrentPolicy: positivo ≠ «non serve riaccettare»', () => {
+    // Il caso che distingue le due domande: versione NON materiale e utente che
+    // non ha mai accettato. isReConsentRequired dice false (non bloccare la UI),
+    // ma il consenso non c'è — e su quello si decide se trasmettere a un terzo.
+    expect(isReConsentRequired([], CURRENT_POLICY_VERSION, false)).toBe(false);
+    expect(hasGrantedCurrentPolicy([], CURRENT_POLICY_VERSION)).toBe(false);
+
+    const granted = [ev('privacy_notice', 'granted', CURRENT_POLICY_VERSION)];
+    expect(hasGrantedCurrentPolicy(granted, CURRENT_POLICY_VERSION)).toBe(true);
+
+    // Consenso a una versione VECCHIA non vale per quella corrente. NB: in `ev`
+    // il terzo parametro è la data, non la versione — qui serve un evento con
+    // policy_version esplicitamente diverso.
+    const oldVersion: ConsentEvent = {
+      ...ev('privacy_notice', 'granted', '2026-01-01'),
+      policy_version: 'privacy-2020-01-01',
+    };
+    expect(hasGrantedCurrentPolicy([oldVersion], CURRENT_POLICY_VERSION)).toBe(
+      false
+    );
   });
 
   it('buildConsentInsert costruisce la riga con legal_basis e versione corrente', () => {

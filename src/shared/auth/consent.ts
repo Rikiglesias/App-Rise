@@ -70,3 +70,24 @@ export const isReConsentRequired = (
       e.policy_version === currentVersion
   );
 };
+
+/**
+ * L'utente ha accettato ESPLICITAMENTE la versione corrente dell'informativa?
+ *
+ * Distinta da `isReConsentRequired`, che risponde a «devo BLOCCARE la UI» e per
+ * una versione non-materiale dice `false` a chiunque, anche a chi non ha mai
+ * accettato. Per decidere se trasmettere dati personali a un terzo quella
+ * risposta non basta: serve la presenza POSITIVA del consenso, non l'assenza di
+ * un obbligo di ri-accettazione. Altrimenti l'informativa prometterebbe una cosa
+ * («se non l'hai riaccettata non trasmettiamo») che il codice non mantiene.
+ */
+export const hasGrantedCurrentPolicy = (
+  events: ConsentEvent[],
+  currentVersion: string = CURRENT_POLICY_VERSION
+): boolean =>
+  events.some(
+    e =>
+      e.purpose === 'privacy_notice' &&
+      e.action === 'granted' &&
+      e.policy_version === currentVersion
+  );
