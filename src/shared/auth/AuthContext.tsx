@@ -140,7 +140,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // senza controllare resusciterebbe il profilo dell'utente precedente, che
       // finirebbe nel prefill verso il partner. Si applica solo se la sessione
       // corrente è ancora la stessa che l'ha richiesta.
-      if (sessionUserIdRef.current === userId) setProfile(next);
+      // La guardia vale su ENTRAMBE le uscite: lo stato E il valore restituito.
+      // Proteggere solo `setProfile` lasciava scoperto proprio il percorso che
+      // conta — il prefill dei partner legge il valore di ritorno, non lo stato.
+      if (sessionUserIdRef.current !== userId) return null;
+      setProfile(next);
       return next;
     },
     []

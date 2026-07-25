@@ -431,6 +431,43 @@ describe('AuthContext — stato del consenso a tre valori', () => {
     jest.clearAllMocks();
   });
 
+  it('refreshProfile scarta la risposta se la sessione è cambiata nel frattempo', async () => {
+    // La fetch parte per u1 e risolve DOPO il logout: il profilo dell'utente
+    // precedente non deve tornare indietro a chi lo legge, perché finirebbe nel
+    // prefill verso il partner. Senza la guardia questo test è rosso.
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const onChange = supabase.auth.onAuthStateChange as jest.Mock;
+    const single = (
+      supabase.from('profiles') as unknown as {
+        select: () => { eq: () => { single: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().single;
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+
+    // La prossima fetch, mentre è in volo, vede arrivare il logout.
+    const listener = onChange.mock.calls[0][0] as (
+      e: string,
+      s: unknown
+    ) => void;
+    single.mockImplementationOnce(() => {
+      act(() => listener('SIGNED_OUT', null));
+      return Promise.resolve({
+        data: { id: 'u1', first_name: 'Mario' },
+        error: null,
+      });
+    });
+
+    await act(async () => {
+      await expect(getAuth().refreshProfile()).resolves.toBeNull();
+    });
+    single.mockResolvedValue({ data: null, error: null });
+  });
+
   it('consentState resta «unknown» se la cronologia consensi non si legge', async () => {
     // Il PRODUTTORE dello stato, che nessun test copriva: senza questo, rimettere
     // il fail-open (scrivere 'ok' sul ramo errore) non farebbe diventare rosso nulla.
