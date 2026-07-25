@@ -97,12 +97,19 @@ sviluppo (due email l'ora, reputazione condivisa). Fonte: memoria di progetto
 switch**, insieme al DPA del nuovo fornitore. Da mettere nella lista delle cose da fare al
 lancio, non nella lista del legale.
 
-### S2 — Il pre-riempimento dei moduli e il codice di provenienza (riga 109) ⚠️
+### S2 — Il pre-riempimento dei moduli e il codice di provenienza — ✅ CHIUSO il 2026-07-25
 
-**Questo è l'unico punto che segnala un disallineamento reale, e va corretto prima di
-pubblicare.**
+> **Fatto.** La sezione 9 è stata riscritta al presente in entrambe le lingue: dice ora
+> esattamente che cosa viaggia (verso Donorbox nome, cognome ed email del profilo più il codice
+> di provenienza, solo se hai fatto l'accesso; verso Let's Donation **soltanto** il codice), che
+> cos'è il codice (sigla casuale, non anonima, revocabile su richiesta) e che l'indirizzo resta
+> nella cronologia del browser. Corrette nello stesso passaggio due imprecisioni trovate lì
+> accanto: Donorbox non è più «incorporato nel nostro sito» (da PR #64 l'app apre la pagina
+> Donorbox direttamente) e la sezione 4 ora rimanda alla 9 per i titolari autonomi, che prima
+> non comparivano dove il lettore va a cercarli.
+> **I punti aperti scendono così da 10 a 9.**
 
-Il testo dice: «Se verrà attivato il pre-riempimento dei moduli (nome/email nell'indirizzo web)
+Il testo diceva: «Se verrà attivato il pre-riempimento dei moduli (nome/email nell'indirizzo web)
 o un codice di riconoscimento della provenienza della donazione, questa sezione va aggiornata
 **prima dell'attivazione**».
 
@@ -113,9 +120,7 @@ o un codice di riconoscimento della provenienza della donazione, questa sezione 
 - il codice di provenienza `rise_ref` è **vivo sul database** (migration 0008 e 0009 applicate
   il 2026-07-24) e viaggia su ogni uscita verso i partner.
 
-**Cosa fare**: riscrivere quella sezione al presente — descrivendo quali dati viaggiano, verso
-chi, e che finiscono nella cronologia del browser esterno perché l'app apre il link fuori
-dall'app. Non è materia legale: è allineare il testo a ciò che il software fa già.
+Non era materia legale: era allineare il testo a ciò che il software fa già. Fatto.
 
 ---
 
@@ -124,8 +129,8 @@ dall'app. Non è materia legale: è allineare il testo a ciò che il software fa
 1. **Alla consulente** vanno L1, L2, L3 e la conferma C1. Nient'altro.
 2. **A chi gestisce gli account** (R1-R4): due copie di DPA, due valori dai pannelli di
    controllo, PEC e sede.
-3. **A noi** (S1, S2): S2 **prima** della pubblicazione, perché oggi il testo descrive come
-   futuro qualcosa che è già attivo; S1 al momento del passaggio a Resend.
+3. **A noi**: S2 ✅ **fatto il 2026-07-25**; resta S1, al momento del passaggio a Resend.
 
-Finché il punto S2 non è sistemato, la bozza non è pronta per andare online — e la pubblicazione
-sul sito è il gate che blocca ogni trasmissione di dati ai partner.
+Con S2 chiuso, la bozza non ha più sezioni che descrivono come futuro ciò che è già attivo. Per
+andare online mancano le quattro risposte della consulente e i quattro dati da recuperare — e la
+pubblicazione sul sito resta il gate che blocca ogni trasmissione di dati ai partner.
