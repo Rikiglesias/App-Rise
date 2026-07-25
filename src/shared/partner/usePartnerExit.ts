@@ -59,15 +59,23 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
 
   const openDonation = useCallback(async () => {
     const ref = await getOrCreatePartnerRef('donorbox');
-    const email = resolvePrefillEmail({
-      contactEmail: profile?.contact_email ?? null,
-      authEmail: session?.user?.email ?? null,
-    });
-    const url = buildDonorboxDonationUrl(ref, {
-      firstName: profile?.first_name ?? null,
-      lastName: profile?.last_name ?? null,
-      email,
-    });
+    // Senza profilo NON precompiliamo nulla, nemmeno l'email della sessione.
+    // Il profilo nasce insieme al consenso privacy (trigger 0004 per il signup
+    // email, CompleteProfileScreen dopo l'accesso social): se manca, quella prova
+    // non c'è — e chi entra con Apple/Google ha comunque un'email in sessione.
+    // Trasmetterla a un terzo senza informativa accettata sarebbe un trattamento
+    // senza base documentata, quindi il prefill degrada a vuoto.
+    const prefill = profile
+      ? {
+          firstName: profile.first_name,
+          lastName: profile.last_name,
+          email: resolvePrefillEmail({
+            contactEmail: profile.contact_email ?? null,
+            authEmail: session?.user?.email ?? null,
+          }),
+        }
+      : {};
+    const url = buildDonorboxDonationUrl(ref, prefill);
     await openLink(
       url,
       'donation',
