@@ -94,6 +94,10 @@ Sappiamo che è **template del tenant, non sistema di autenticazione** — la st
 esiste già, dato che oggi «Non sei ancora registrato? Clicca qui» è a sua volta un link
 secondario sotto il form.
 
+**Quando**: le due cose vanno insieme — il modulo si toglie **nello stesso momento** in cui il
+pulsante va online, non dopo un periodo di prova. Ogni giorno in cui convivono produce
+anagrafiche doppie che poi qualcuno deve riconciliare a mano.
+
 Se c'è un vincolo tecnico che lo impedisce, ci è utile sapere **quale**: se il blocco è su un
 pezzo che possiamo risolvere noi, lo risolviamo noi.
 
@@ -133,8 +137,19 @@ che la singola persona entri con il suo account nostro.
 
 Se una persona ha già un account vostro con l'email X e poi entra con «Login con RAH» portando la
 stessa email X, il vostro sistema può **collegare** i due account invece di crearne un secondo?
-È la prassi standard dei login social. Copre tutti i casi tranne chi usa «Nascondi la mia email»
-— lì l'alias non combacia e resta l'aggancio sul `sub`.
+È la prassi standard dei login social.
+
+Due cose che facciamo noi perché il collegamento funzioni davvero:
+
+- **le anagrafiche di chi si è registrato finora le carichiamo dalla nostra parte**, così quelle
+  persone risultano già riconosciute quando entrano col pulsante (e se mancano dati che oggi
+  chiediamo, glieli chiediamo noi al primo accesso);
+- **l'indirizzo che vi arriva è sempre un indirizzo reale e verificato**, anche per chi entra con
+  «Nascondi la mia email» di Apple: in quel caso l'indirizzo vero glielo chiediamo noi e lo
+  verifichiamo prima. Serve proprio a non lasciarvi un alias che non combacia con nulla.
+
+Dal primo accesso in poi, però, l'aggancio stabile è il **`sub`**, non l'indirizzo: una persona
+può cambiare email, e il `sub` no.
 
 ---
 
@@ -147,7 +162,7 @@ stessa email X, il vostro sistema può **collegare** i due account invece di cre
 | **Ha un account RAH, non ha un account vostro** | Tocca «Entra con RAH» → la nostra pagina lo riconosce → torna da voi autenticato. Voi create l'utente al primo accesso, agganciato al `sub`. Dal secondo accesso in poi lo ritrovate |
 | **Non ha nessuno dei due** | Tocca «Entra con RAH» → sulla nostra pagina **crea l'account da noi** (con la nostra informativa e i nostri consensi) → torna da voi autenticato, e da lì è il caso sopra |
 | **Ha già un account vostro, con la stessa email** | È il caso in cui serve il **collegamento** (§2.4): altrimenti si ritrova due account e non capisce perché |
-| **Ha già un account vostro, ma usa «Nascondi la mia email»** | L'alias non combacia con l'email che aveva usato da voi: i due account **non sono collegabili automaticamente**. Restano due. Se avete un «collega il mio account» nel profilo utente, ci risolve anche questo |
+| **Ha già un account vostro, ma usa «Nascondi la mia email»** | Non vi mandiamo l'alias: l'indirizzo vero glielo chiediamo noi e lo verifichiamo, quindi il collegamento per email funziona come sopra (§2.4). Se un «collega il mio account» nel profilo utente esiste già dalla vostra, è comunque la rete di sicurezza per i casi limite |
 | **Atterra sul nostro spazio da un motore di ricerca**, senza venire dall'app | Con un solo ingresso (§2.2) entra da «Entra con RAH» come tutti, e l'account nasce da noi. È una persona in più che diventa nostra, e con due strade l'avremmo persa |
 | **Si iscrive a Let's Donation da un percorso che non tocca il nostro spazio** | Nasce da voi e per noi resta invisibile. **Lo accettiamo**: non è una persona che stiamo perdendo, è una che non era ancora nostra |
 
