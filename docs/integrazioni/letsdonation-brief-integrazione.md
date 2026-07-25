@@ -149,7 +149,8 @@ stessa email X, il vostro sistema può **collegare** i due account invece di cre
 
 **Nessuno dei due entra nel database dell'altro.** Non vi chiediamo credenziali sul vostro database
 e non ve ne diamo sul nostro. L'unico scambio avviene al momento del login, con i dati che il
-protocollo prevede: un identificativo, il nome e l'email, e nient'altro.
+protocollo prevede — un identificativo, il nome e l'email — più i token tecnici dell'accesso, per
+i quali vale l'impegno descritto qui sotto.
 
 **Cosa vi trasmettiamo al login** — solo i claim standard OpenID Connect:
 
