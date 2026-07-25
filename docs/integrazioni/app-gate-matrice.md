@@ -72,10 +72,17 @@ Due numeri diversi che è facile confondere, ed è la confusione che rende sbagl
 | Cosa | Quante voci | Fonte |
 | --- | --- | --- |
 | **Il form** di registrazione chiede | **11** obbligatorie: nome, cognome, email, password, conferma, telefono, paese, città, provincia (solo Italia), data di nascita, consenso | [V] `validateSignUpForm` |
-| **Il database** pretende, dopo la migration 0010 | **4**: nome, cognome, data di nascita, data del consenso (più `country`, che ha un default, e `marketing_consent`, che ha un default) | [V] `0001` + `0007` (country, default `'IT'`) + `0010` (`phone`/`city` nullable) + `0007` (`province` già nullable) |
+| **Il database** pretenderà, **una volta applicata** la migration 0010 | **4**: nome, cognome, data di nascita, data del consenso (più `country`, che ha un default, e `marketing_consent`, che ha un default) | [V] `0001` + `0007` (country, default `'IT'`) + `0010` (`phone`/`city` nullable) + `0007` (`province` già nullable) |
 
-Quindi il profilo può **già oggi** nascere con quattro voci più le credenziali: il resto è una scelta
-del form, non un vincolo tecnico. È esattamente lo spazio che P2 deve occupare.
+Quindi il profilo **potrà** nascere con quattro voci più le credenziali: il resto è una scelta del
+form, non un vincolo tecnico. È esattamente lo spazio che P2 deve occupare.
+
+> ⚠️ **La migration 0010 è in `master` ma NON è applicata al database di produzione** (l'`alter …
+> drop not null` è bloccato dal guard MCP → va eseguita dal SQL Editor del Dashboard; è una leva
+> umana, tracciata nel binding). Finché non lo è, il database pretende ancora **sei** voci: chi
+> legge il «4» qui sopra e alleggerisce il modulo prima dell'apply manda in produzione un signup
+> che **viola il NOT NULL e fallisce**. L'ordine è scritto anche in testa alla migration: prima la
+> migration, poi il form leggero.
 
 **Trappola verificata, da non far scoprire a valle**: nel trigger che crea il profilo, la condizione
 di ingresso è `if v_meta ? 'birth_date'` — la data di nascita non è solo la prova del 18+, è **il
@@ -130,7 +137,7 @@ esiste già ed è di qualcun altro.
 | # | Azione | Oggi | Cosa dovrebbe pretendere | Perché (cosa si perde altrimenti) | Provvedimento | Verifica |
 | --- | --- | --- | --- | --- | --- | --- |
 | G1 | **Donare denaro** (Donorbox) | niente | **niente, mai** | È l'unico canale dove si dona **senza account**: un cancello qui non protegge nulla e costa donazioni. (Non è l'unico che incassa — su LD si dona in denaro ai progetti, §0.1 della matrice sorella — ma è l'unico dove il denaro passa senza registrazione) | ⚠️ nessun cancello, per decisione · 🔧 al più un invito al login **non bloccante** dentro l'avviso pre-uscita (che su questo ramo oggi non c'è: D9 della matrice sorella) | Uscita da ospite: continua a partire, prefill assente [V] `partnerRefService`: `if (!userId) return null` |
-| G2 | **Donare denaro su LD** (progetti) | niente | niente da parte nostra | Il cancello è **loro** (serve un account LD) e con l'invariante I7 quell'account nasce dal nostro accesso: aggiungerne uno nostro prima significa **due cancelli in fila** per la stessa persona | 🔧 il gate vive sulla pagina web del login, non nell'app · 📨 I7 | Percorso reale: un solo modulo da compilare, non due |
+| G2 | **Donare denaro su LD** (progetti) | niente | niente da parte nostra | Il cancello è **loro** — su tutte e quattro le destinazioni LD l'account è necessario [V, §0.2 della matrice sorella] — e con l'invariante I7 quell'account nasce dal nostro accesso: aggiungerne uno nostro prima significa **due cancelli in fila** per la stessa persona | 🔧 il gate vive sulla pagina web del login, non nell'app · 📨 I7 | Percorso reale: un solo modulo da compilare, non due |
 | G3 | **Gift card** | niente | niente da parte nostra | Identico a G2. È anche l'acquisto più impulsivo: due soglie lo uccidono | come G2 | idem |
 | G4 | **Charity shop** (cashback) | niente | niente da parte nostra | Identico, e qui l'ordine non nasce nemmeno su LD (§0.2 matrice sorella) | come G2 | idem |
 | G5 | **Iscrizione a un evento** | niente | **profilo completo**, al momento dell'iscrizione | È l'unico posto dove i dati completi servono davvero (è la ragione della decisione D-a). Senza, l'associazione ha un iscritto di cui non sa nulla | 🔧 richiesta dei campi mancanti **prima dell'uscita verso l'evento**, non prima dell'app · ⚠️ oggi zero eventi attivi sul tenant: il presidio si costruisce quando il flusso esiste | Uscita eventi con profilo parziale → i campi vengono chiesti prima |
