@@ -8,8 +8,8 @@
 > possiamo riconoscere che un ordine o una donazione arriva da una persona nostra.
 > Nessun accesso reciproco ai database, in nessuna direzione.
 >
-> Riscritto il 2026-07-25 a valle della mappatura completa degli scenari
-> (`identita-matrice-scenari.md`): le richieste qui sotto sono quelle definitive.
+> Riscritto il 2026-07-25 a valle di una mappatura completa degli scenari: le richieste qui
+> sotto sono quelle definitive.
 
 ---
 
