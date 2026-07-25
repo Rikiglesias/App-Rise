@@ -169,6 +169,13 @@ describe('CompleteProfileScreen', () => {
     );
     expect(recordConsent).not.toHaveBeenCalled();
   });
+});
+
+// Blocco a sé: la schermata serve a DUE percorsi diversi — la nascita del profilo
+// (sopra) e il completamento di uno che esiste già (qui), che ha regole opposte sul
+// consenso e sull'idratazione. Tenerli insieme sforava anche il limite di righe.
+describe('CompleteProfileScreen — profilo che esiste già', () => {
+  beforeEach(() => jest.clearAllMocks());
 
   it('profilo GIÀ esistente: la casella del consenso NON viene mostrata (non si chiede ciò che non si registra)', () => {
     // Prima la sezione c'era, era obbligatoria per validazione e la spunta veniva
