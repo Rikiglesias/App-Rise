@@ -40,6 +40,16 @@ Guida rapida agli script disponibili per sviluppo, QA e delivery.
 - `npm run setup:git-windows` (autocrlf/safecrlf/filemode)
 - `npm run fix:line-endings` (normalizza EOL + staging)
 
+## Consegna documenti (PDF per destinatari esterni)
+- `python scripts/md2pdf-brief.py <input.md> <output.pdf>`
+  - Converte un documento di `docs/` in un PDF leggibile da un referente non tecnico (nato per il
+    brief di integrazione verso Let's Donation). Rende le **tabelle** markdown come tabelle vere,
+    con intestazione ripetuta se spezzano pagina.
+  - Dipendenza esterna, non in `package.json` perché è uno strumento di consegna e non di build:
+    `pip install reportlab`.
+  - Avvisa su `stderr` se il markdown contiene caratteri che i font base non sanno rendere e che
+    non sono mappati: uscirebbero come glifi sbagliati **senza** far fallire la generazione.
+
 ## Note
 - Gli script sono pensati per integrarsi con la protezione del branch `master` e con i job richiesti dal workflow CI.
   Usa sempre `npm run pre-modifiche` prima di aprire una PR; `npm run post-modifiche` prima del push.
