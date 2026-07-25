@@ -313,7 +313,7 @@ export default {
   partner: {
     disclosureTitle: 'Stai per uscire dall’app',
     disclosureBody:
-      'Shop, gift card ed eventi sono gestiti da Let’s Donation, il nostro partner. Su quella piattaforma ti verrà chiesto di creare un account separato da quello dell’app: è normale, sono due servizi distinti. Proseguendo verrai reindirizzato.',
+      'Shop, gift card, eventi, progetti e registrazione alla community sono gestiti da Let’s Donation, il nostro partner. Su quella piattaforma ti verrà chiesto di creare un account separato da quello dell’app: è normale, sono due servizi distinti. Proseguendo verrai reindirizzato.',
     disclosureContinue: 'Continua',
     disclosureCancel: 'Annulla',
   },

@@ -331,7 +331,9 @@ describe('AuthContext — update/signup/consenso', () => {
     const { getByText } = renderAuth();
     await waitFor(() => getByText('authenticated'));
     await act(async () => {
-      await expect(getAuth().refreshProfile()).resolves.toBeUndefined();
+      // Non lancia (è il punto del test) e su errore restituisce `null`: da quando
+      // refreshProfile ritorna il profilo, «nessun profilo» si legge dal valore.
+      await expect(getAuth().refreshProfile()).resolves.toBeNull();
     });
     // ripristina il default (clearAllMocks NON resetta le implementazioni)
     single.mockResolvedValue({ data: null, error: null });

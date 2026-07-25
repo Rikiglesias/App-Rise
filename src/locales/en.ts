@@ -311,7 +311,7 @@ export default {
   partner: {
     disclosureTitle: 'You’re leaving the app',
     disclosureBody:
-      'Shop, gift cards and events are handled by Let’s Donation, our partner. On that platform you’ll be asked to create a separate account from your app one: that’s expected, they are two distinct services. If you continue, you’ll be redirected.',
+      'Shop, gift cards, events, projects and community registration are handled by Let’s Donation, our partner. On that platform you’ll be asked to create a separate account from your app one: that’s expected, they are two distinct services. If you continue, you’ll be redirected.',
     disclosureContinue: 'Continue',
     disclosureCancel: 'Cancel',
   },
