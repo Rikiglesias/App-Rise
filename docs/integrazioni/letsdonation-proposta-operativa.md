@@ -43,21 +43,17 @@ In pratica servono cinque cose.
    nostro spazio, dove da quello che vediamo è una scelta del template e non del vostro sistema
    di accesso: se lì c'è un vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
 
-5. Chi si è già registrato da voi non lo perdiamo: **non deve rifare la registrazione**, entra una
-   volta con il nostro accesso e ritrova quello che aveva.
+5. Chi si è già registrato da voi non deve rifare la registrazione: entra col nostro pulsante e
+   ritrova quello che aveva. Da voi succedono due cose.
 
-   Perché lo ritrovi, quando entra col nostro pulsante il vostro sistema deve capire che è la
-   stessa persona dell'account che aveva già, e **unire i due invece di crearne uno nuovo**. Il
-   modo più semplice per capirlo è l'email: se è la stessa, è lei. Da lì in avanti l'email non
-   serve più a riconoscerla, perché il nostro accesso vi passa un codice suo, sempre uguale.
+   **Caso normale**: la persona arriva con la stessa email che ha già da voi, e il vostro sistema
+   usa l'account che c'è già invece di aprirne un secondo. Insieme all'email vi arriva anche un
+   codice suo, sempre lo stesso: se il vostro sistema può conservarlo come riferimento, un domani
+   che quella persona cambia indirizzo non le nasce un secondo account.
 
-   C'è un caso in cui l'email non basta: chi entra con «Nascondi la mia email» di Apple vi arriva
-   con un indirizzo di comodo, diverso da quello che aveva da voi. Per quelle persone serve un
-   modo, dentro il loro profilo sul vostro sito, per dire «anche quell'altro account è mio» —
-   altrimenti si ritrovano con due account e perdono lo storico.
-
-   Dalla nostra parte sistemiamo le anagrafiche che già abbiamo, senza entrare nei vostri archivi
-   — come voi non entrate nei nostri. E se a qualcuno mancano dei dati che oggi chiediamo, glieli
-   chiediamo noi al primo accesso.
+   **Caso da prevedere**: chi usa «Nascondi la mia email» di Apple vi arriva con un indirizzo
+   diverso, quindi l'email non basta a riconoscerlo. Ditemi come lo gestisce il vostro sistema: se
+   c'è già un modo per collegare due account dal profilo lo usiamo, altrimenti troviamo insieme la
+   strada più semplice.
 
 Riccardo
