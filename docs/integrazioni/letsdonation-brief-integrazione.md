@@ -1,16 +1,24 @@
 # Rise Against Hunger Italia — Brief di integrazione per Let's Donation
 
-> **Documento tecnico di supporto, NON ancora inviato.** Si consegna **su richiesta** del team
-> tecnico di Let's Donation, tramite Michele Placucci. Quello che si manda adesso è
-> `letsdonation-proposta-operativa.md` (una pagina). Il nome del referente tecnico non è
-> confermato: non va scritto da nessuna parte.
->
+<!-- NOTE INTERNE — NON contenuto del documento.
+     Regola imparata a spese nostre: il convertitore PDF rende i blockquote VERBATIM e salta solo
+     i commenti HTML come questo. Un'intestazione interna scritta con «>» finisce in PRIMA PAGINA
+     dal destinatario. È già successo sulla proposta (PR #101) e questo file aveva lo stesso
+     difetto: il PDF in C:/tmp conteneva questa nota, incluso il nome del referente — dentro la
+     frase che vieta di scriverlo. Tutto ciò che non deve leggere il partner va QUI, mai in «>».
+
+     Stato: documento tecnico di supporto, NON ancora inviato. Si consegna su richiesta del loro
+     team tecnico. Quello che si manda adesso è letsdonation-proposta-operativa.md (una pagina).
+     Il nome del referente tecnico non è confermato: non va scritto da nessuna parte.
+     Quadro d'insieme su dati e archivi: scambio-dati-quadro.md.
+     Riscritto il 2026-07-25 a valle di una mappatura completa degli scenari; intestazione resa
+     invisibile al destinatario il 2026-07-25.
+-->
+
 > **Quello che ci interessa davvero, e in quest'ordine**: come una persona entra nel nostro
 > spazio senza doversi registrare due volte, quali dati passano fra noi e voi, chi tiene cosa,
 > e che percorso fa concretamente. L'attribuzione degli ordini viene dopo: è utile a noi, non
 > è urgente, e sta in fondo.
->
-> Riscritto il 2026-07-25 a valle di una mappatura completa degli scenari.
 
 ---
 
@@ -207,6 +215,20 @@ altre servono per rifinire.
     risultato ma non come dato: senza l'export non sappiamo ricondurlo a chi l'ha fatto.
 13. Sull'impegno di leggere l'identità **solo** da ID token e UserInfo (sez. 4): è una cosa che
     potete confermare per iscritto nell'accordo?
+14. **I campi del vostro form che il login non copre.** La vostra registrazione chiede tre cose che
+    noi non raccogliamo: il **nickname**, la scelta su **come apparire nelle liste pubbliche** (che è
+    obbligatoria e non ha un valore preselezionato) e l'adesione a **community e classifiche**. Con la
+    creazione dell'utente al primo accesso quei valori non arrivano da noi: applicate un default — e
+    quale — oppure li chiedete alla persona una volta entrata? *La scelta di visibilità ci sembra la
+    più delicata: con un default, una persona potrebbe comparire pubblicamente col proprio nome senza
+    averlo scelto.*
+15. **I vostri due consensi marketing** (comunicazioni commerciali del Titolare; comunicazioni degli
+    Enti del Terzo Settore beneficiari delle donazioni): come vengono raccolti per chi entra dal
+    nostro accesso? Non hanno un corrispondente nel nostro archivio, quindi non possiamo trasmetterli
+    — e un consenso non si presume concesso.
+16. **Ci avvisate prima di modifiche al nostro spazio?** L'ingresso unico della domanda 2 vive nel
+    template del nostro tenant, che aggiornate per tutti gli enti: un aggiornamento potrebbe
+    rimettere il form o far sparire il nostro pulsante, e ce ne accorgeremmo tardi.
 
 **Cosa vi forniremo noi**, quando entrambe le parti sono pronte: discovery URL
 (`…/.well-known/openid-configuration`), `client_id` e `client_secret` dedicati a voi, le redirect

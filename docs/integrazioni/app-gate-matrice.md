@@ -5,6 +5,9 @@
 > chiediamo niente — e cosa si perde in ogni ramo. È il lato **nostro** della stessa domanda
 > che `identita-matrice-scenari.md` ha mappato sul lato Let's Donation.
 >
+> **Vista d'insieme su dati e archivi** (chi tiene cosa, cosa attraversa il confine, le opzioni con
+> l'esito e il motivo, i testi da mandare al partner): `scambio-dati-quadro.md`.
+>
 > **Perché esiste.** La matrice precedente ha risposto a «cosa accade a chi passa da noi a LD».
 > Non ha mai risposto a «dove sta il cancello **da noi**»: le sue famiglie A (ingresso), B (stato)
 > e F (device) descrivono l'utente *quando è già uscito*, non la soglia che gli mettiamo davanti.
