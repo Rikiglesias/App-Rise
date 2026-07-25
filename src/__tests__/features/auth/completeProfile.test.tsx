@@ -216,6 +216,34 @@ describe('CompleteProfileScreen', () => {
     ).toBe('Rossi');
   });
 
+  it('se il profilo arriva MENTRE la persona scrive, non le cancella quello che ha digitato', () => {
+    // La lettura può tornare dopo il primo render (arrivo diretto, rete lenta): un set
+    // secco sovrascriverebbe il campo sotto le dita. Contro-prova: sostituendo
+    // `prev || v` con un set incondizionato, questo test cade.
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: null, profileLoaded: false })
+    );
+    const { getByLabelText, rerender } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fireEvent.changeText(getByLabelText('Nome'), 'Giovanna');
+    mockUseAuth.mockReturnValue(makeAuth({ profile: existingProfile }));
+    rerender(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(
+      (getByLabelText('Nome') as { props: { value: string } }).props.value
+    ).toBe('Giovanna');
+    // Gli altri campi, che lei non ha toccato, si riempiono comunque dal profilo.
+    expect(
+      (getByLabelText('Cognome') as { props: { value: string } }).props.value
+    ).toBe('Rossi');
+  });
+
   it('profilo ESTERO: il completamento NON lo italianizza', async () => {
     // Il danno vero dei default: gli altri campi vuoti sono bloccati dalla
     // validazione, `country` no — parte da 'IT', passa il controllo e sovrascrive

@@ -109,18 +109,33 @@ export const useProfileForm = () => {
     // quando la nuova lettura torna): si idrata solo con la riga DI questo utente.
     if (!profile || profile.id !== userId) return;
     hydratedForUser.current = userId;
-    if (profile.first_name) setFirstName(profile.first_name);
-    if (profile.last_name) setLastName(profile.last_name);
+    // `prev || valore`, non un set secco: la lettura del profilo può tornare MENTRE la
+    // persona sta già scrivendo (arrivo diretto, rete lenta), e un set secco le
+    // cancellerebbe sotto le dita quello che ha digitato. Si riempie solo ciò che è
+    // ancora vuoto. È la stessa protezione che il campo della mail ha col suo flag
+    // `contactEmailTouched`, estesa agli altri campi — che ne erano scoperti.
+    const fill =
+      (set: (u: (prev: string) => string) => void) =>
+      (v: string | null): void => {
+        if (v) set(prev => prev || v);
+      };
+    fill(setFirstName)(profile.first_name);
+    fill(setLastName)(profile.last_name);
     // `phone` NON si idrata di proposito: `AuthPhoneField` non è controllato (il
     // numero vive nel suo stato interno e al form arriva solo quello che emette).
     // Scriverlo qui creerebbe un valore che il campo non mostra — e il suo effetto
     // di allineamento del prefisso lo azzererebbe al primo cambio di paese. Residuo
     // dichiarato: chi ha già il numero deve ridigitarlo (attrito, non perdita: la
     // validazione blocca il campo vuoto). Si chiude rendendo il campo controllato.
-    if (profile.city) setCity(profile.city);
-    if (profile.province) setProvince(profile.province);
-    if (profile.country) setCountry(profile.country);
-    if (profile.birth_date) setBirthDate(profile.birth_date);
+    fill(setCity)(profile.city);
+    fill(setProvince)(profile.province);
+    fill(setBirthDate)(profile.birth_date);
+    // `country` parte da 'IT', quindi non è mai «vuoto» e `prev || v` non basterebbe:
+    // qui il valore del profilo deve VINCERE sul default, ed è proprio il caso che
+    // rendeva italiano un profilo francese. Si scrive solo se la persona non ha già
+    // scelto un paese diverso da quello iniziale.
+    if (profile.country)
+      setCountry(prev => (prev === 'IT' ? profile.country : prev));
   }, [profile, userId]);
 
   // Il consenso privacy si chiede solo quando il profilo NASCE. Su un profilo che
