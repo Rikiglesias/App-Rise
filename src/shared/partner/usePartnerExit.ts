@@ -50,7 +50,7 @@ export interface UsePartnerExitReturn {
 }
 
 export const usePartnerExit = (): UsePartnerExitReturn => {
-  const { session, profile } = useAuth();
+  const { session, profile, refreshProfile, needsReConsent } = useAuth();
   const { openLink, isLoading } = useLinkHandler();
   const [disclosureVisible, setDisclosureVisible] = useState(false);
   const [pending, setPending] = useState<PendingExit | null>(null);
@@ -59,29 +59,38 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
 
   const openDonation = useCallback(async () => {
     const ref = await getOrCreatePartnerRef('donorbox');
-    // Senza profilo NON precompiliamo nulla, nemmeno l'email della sessione.
-    // Il profilo nasce insieme al consenso privacy (trigger 0004 per il signup
-    // email, CompleteProfileScreen dopo l'accesso social): se manca, quella prova
-    // non c'è — e chi entra con Apple/Google ha comunque un'email in sessione.
-    // Trasmetterla a un terzo senza informativa accettata sarebbe un trattamento
-    // senza base documentata, quindi il prefill degrada a vuoto.
-    const prefill = profile
-      ? {
-          firstName: profile.first_name,
-          lastName: profile.last_name,
-          email: resolvePrefillEmail({
-            contactEmail: profile.contact_email ?? null,
-            authEmail: session?.user?.email ?? null,
-          }),
-        }
-      : {};
+    // `profile` è null in DUE casi diversi: non esiste, oppure non è ancora
+    // arrivato dalla rete (il caricamento parte al boot). Degradare subito
+    // toglierebbe il prefill a un utente in regola che tocca «Dona» appena apre
+    // l'app, quindi prima ricarichiamo e usiamo il valore FRESCO — non quello
+    // della closure, che è del render precedente.
+    const current =
+      profile ?? (session?.user?.id ? await refreshProfile() : null);
+    // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
+    // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
+    // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
+    // sessione, che finirebbe a un terzo senza base documentata. Con
+    // needsReConsent l'informativa è cambiata in modo sostanziale e non è ancora
+    // stata riaccettata: il consenso c'era, ma non copre la versione corrente.
+    // In entrambi i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
+    const prefill =
+      current && !needsReConsent
+        ? {
+            firstName: current.first_name,
+            lastName: current.last_name,
+            email: resolvePrefillEmail({
+              contactEmail: current.contact_email ?? null,
+              authEmail: session?.user?.email ?? null,
+            }),
+          }
+        : {};
     const url = buildDonorboxDonationUrl(ref, prefill);
     await openLink(
       url,
       'donation',
       'Impossibile aprire il link di donazione. Riprova più tardi.'
     );
-  }, [openLink, profile, session]);
+  }, [openLink, profile, session, refreshProfile, needsReConsent]);
 
   const exitLetsDonation = useCallback(
     async (url: string, loadingKey: string, errorMessage?: string) => {

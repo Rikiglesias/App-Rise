@@ -62,7 +62,8 @@ export interface AuthState {
   completeEmailConfirmFromUrl: (url: string) => Promise<{ ok: boolean }>;
   signInWithApple: () => Promise<{ error: string | null }>;
   signInWithGoogle: () => Promise<{ error: string | null }>;
-  refreshProfile: () => Promise<void>;
+  /** Ricarica il profilo e lo RESTITUISCE (serve a chi deve decidere subito, senza aspettare il re-render). */
+  refreshProfile: () => Promise<Profile | null>;
   /** Aggiorna i campi profilo correggibili (GDPR Art.16). Whitelist: solo i campi passati, mai id/consensi. */
   updateProfile: (
     fields: Partial<ProfileEditable>
@@ -104,20 +105,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [profile, setProfile] = useState<Profile | null>(null);
   const [needsReConsent, setNeedsReConsent] = useState(false);
 
-  const loadProfile = useCallback(async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    if (error) {
-      // PGRST116 = nessuna riga: profilo non ancora creato (es. post-social) → assente.
-      // Altri errori (rete/RLS) → NON azzerare il profilo già caricato (evita flicker/perdita dati UI).
-      if (error.code === 'PGRST116') setProfile(null);
-      return;
-    }
-    setProfile((data as Profile | null) ?? null);
-  }, []);
+  // Ritorna il profilo caricato oltre a metterlo nello stato: chi deve DECIDERE
+  // subito dopo il caricamento (es. il prefill dei partner) non può leggere `profile`
+  // dalla propria closure, che è ancora quella del render precedente.
+  const loadProfile = useCallback(
+    async (userId: string): Promise<Profile | null> => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      if (error) {
+        // PGRST116 = nessuna riga: profilo non ancora creato (es. post-social) → assente.
+        // Altri errori (rete/RLS) → NON azzerare il profilo già caricato (evita flicker/perdita dati UI).
+        if (error.code === 'PGRST116') setProfile(null);
+        return null;
+      }
+      const next = (data as Profile | null) ?? null;
+      setProfile(next);
+      return next;
+    },
+    []
+  );
 
   useEffect(() => {
     if (env.GOOGLE_WEB_CLIENT_ID) configureGoogle(env.GOOGLE_WEB_CLIENT_ID);
@@ -245,8 +254,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { error: error?.message ?? null };
   }, []);
 
-  const refreshProfile = useCallback(async () => {
-    if (session?.user.id) await loadProfile(session.user.id);
+  const refreshProfile = useCallback(async (): Promise<Profile | null> => {
+    if (!session?.user.id) return null;
+    return await loadProfile(session.user.id);
   }, [session, loadProfile]);
 
   const updateProfile = useCallback(
