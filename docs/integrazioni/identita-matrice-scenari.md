@@ -160,6 +160,7 @@ analisi e non erano nella lista (gli esempi erano un seme, non il perimetro).
 | --- | --- | --- | --- | --- | --- |
 | E1 | **Donare** a un progetto su LD | L'app manda «Dona» a Donorbox **e** «Progetti» a LD, dove si dona lo stesso — due canali di denaro non dichiarati [V] | Coerenza: sapere quale canale vogliamo per le donazioni in denaro | 🔑 **decisione di Riccardo**: Donorbox resta il canale unico (e i progetti LD sono solo vetrina) oppure convivono e le donazioni LD vanno riconciliate | — |
 | E2 | **Gift card** | Ordine reale su LD | UTM sull'ordine + export | 📨 Richiesta A, così com'è | Ordine di test con `utm_campaign` → compare nell'export |
+| E2-bis | *(informazione, non proposta)* HikaShop — il motore e-commerce di Joomla — supporta nativamente il **guest checkout** e una **«simplified registration»** che crea l'account e invia le credenziali via email, senza far compilare nulla all'utente [V, doc HikaShop] | — | — | ⚠️ **la decisione «guest = NO» di Riccardo (2026-07-24) resta**, perché nasce dal bisogno dei dati completi, non da un limite tecnico. Registrato qui perché cambia il *costo* di quella scelta, non la scelta | — |
 | E3 | **Charity shop** (cashback) | **Non nasce un ordine su LD**: c'è un'attivazione cashback, l'acquisto è sul merchant, il valore torna dalla rete affiliate con settimane di ritardo [V/A] | Attribuzione dell'**attivazione**, non dell'ordine | 📨 **riformulare la Richiesta A**: l'UTM va agganciato all'evento di attivazione cashback e deve sopravvivere fino alla conferma differita | — |
 | E4 | **Eventi** | Zero eventi attivi [V] | Sapere cosa chiederà l'iscrizione quando ci sarà | 📨 quali dati raccoglie l'iscrizione a un evento e se sono esportabili | — |
 | E5 | **Sfide / community / bacheca** | Funzioni loro, mai mappate [V, home del tenant] | Sapere se generano dati riconducibili a noi | 📨 domanda di perimetro | — |
@@ -228,7 +229,7 @@ Sostituiscono e riorganizzano quelle sparse nel brief attuale. In ordine di valo
 | --- | --- | --- |
 | **R1** | **Cattura UTM all'atterraggio, in sessione**, indipendente dal login, stampata sull'ordine e presente nell'export — *e che sopravviva al giro di login* | G1, G2 |
 | **R2** | Per il **charity shop**: l'aggancio dev'essere sull'**attivazione cashback**, non su un ordine che non esiste, e reggere fino alla conferma differita | E3 |
-| **R3** | **Client OIDC su Joomla** con matching sul **`sub`** (JIT al primo accesso) | B1 |
+| **R3** | **Client OIDC su Joomla** con matching sul **`sub`** (JIT al primo accesso). *Formulare la domanda in modo tecnico preciso*: il plugin più diffuso (miniOrange OAuth Client) documenta JIT provisioning e **attribute mapping con attributi custom** [V], ma **non documenta pubblicamente il matching sul `sub`** [A] → la domanda giusta non è «potete usare il `sub`?» ma «potete **mappare il claim `sub` sull'username Joomla**, così che l'aggancio non dipenda dall'email?» | B1 |
 | **R4** | **Account linking sull'email** per chi ha già un account nativo | B3 |
 | **R5** | **Inversione di prominenza** sul nostro tenant: «Entra con RAH» primario, form nativo secondario — *senza toglierlo* (è anche la nostra via di fuga se il nostro provider è giù) | A1, A3, H1 |
 | **R6** | **Flag «utente proveniente da RAH»** nell'export: per gli utenti federati vale più dell'UTM | G4 |
