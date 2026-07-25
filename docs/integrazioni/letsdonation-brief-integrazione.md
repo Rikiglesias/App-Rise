@@ -159,7 +159,11 @@ protocollo prevede: un identificativo, il nome e l'email, e nient'altro.
 | `name` | Nome completo in **una stringa unica** (niente nome e cognome separati: li dividete voi) |
 | `email` | L'email dell'account, così com'è |
 
-Nient'altro. Niente telefono, niente indirizzo, niente data di nascita.
+Niente telefono, niente indirizzo, niente data di nascita. Sui token tecnici che il protocollo
+scambia durante l'accesso vale il punto **H11** del nostro perimetro: nel flusso standard il vostro
+client riceve un token con i privilegi dell'utente, quindi l'impegno che chiediamo di mettere
+nell'accordo è di leggere l'identità **solo** da ID token e UserInfo, senza chiamare le nostre API
+con quel token.
 
 > Sull'email: per chi usa «Nascondi la mia email» di Apple è un alias
 > `@privaterelay.appleid.com` che **inoltra** all'indirizzo vero — la posta arriva comunque. È lo
@@ -197,6 +201,11 @@ altre servono per rifinire.
    viene presentata la **vostra** informativa?
 10. Se una persona chiede a noi la cancellazione, esiste un modo per propagarvela?
 11. Quando ci saranno eventi sul nostro spazio, **quali dati** chiede l'iscrizione?
+12. Le **donazioni in denaro ai progetti** sul nostro spazio sono esportabili — o inviabili via
+    webhook — con la stessa attribuzione della domanda 1? Oggi quel denaro arriva a noi come
+    risultato ma non come dato: senza l'export non sappiamo ricondurlo a chi l'ha fatto.
+13. Sull'impegno di leggere l'identità **solo** da ID token e UserInfo (sez. 4): è una cosa che
+    potete confermare per iscritto nell'accordo?
 
 **Cosa vi forniremo noi**, quando entrambe le parti sono pronte: discovery URL
 (`…/.well-known/openid-configuration`), `client_id` e `client_secret` dedicati a voi, le redirect
