@@ -39,7 +39,7 @@ Tutto verificato sul codice, non sulla memoria: la fase precedente ha spostato r
 | L'unica soglia è la scheda **Profilo**: se la sessione non è autenticata, al suo posto compare il login | [V] `ProfileScreen` → `if (status === 'unauthenticated') return <LoginScreen />` |
 | Tre schermate post-login (completa profilo, modifica, cancella) rimbalzano su Profilo | [V] `useRequireAuth` in `CompleteProfileScreen` / `ProfileEditScreen` / `DeleteAccountScreen` |
 | `LoginScreen` **e** `ReConsentScreen` sono montati **solo** dentro `ProfileScreen` | [V] grep su `src/`: nessun altro punto di montaggio |
-| Quattro rotte registrate non sono raggiungibili da nessun punto dell'app | [V] `CharityShop`, `CharityGiftCard`, `Calendario`, `Tracciabilita` → schermata «in sviluppo», **zero** chiamate a `navigate` fuori dai test |
+| Quattro rotte registrate non sono raggiungibili da nessun punto dell'app | [V] `CharityShop`, `CharityGiftCard`, `Calendario`, `Tracciabilita` → schermata «in sviluppo», **zero** chiamate a `navigate` fuori dai test; e nemmeno per URL, perché **non esiste alcuna configurazione di linking** (nessun `prefixes`/`linking` sul navigatore: l'unico deep link che naviga porta a `ResetPassword`) |
 
 **La conseguenza che conta**: il gate del **riconsenso** non è debole, è *irraggiungibile* per chi
 non apre il profilo. Non è una svista di questa fase: è la stessa osservazione già registrata il
@@ -145,6 +145,12 @@ esiste già ed è di qualcun altro.
 | G7 | **Vedere i propri dati** (profilo, esportazione, cancellazione) | accesso | accesso | Sono dati personali: senza sessione non c'è niente da mostrare | ✅ già così | — |
 | G8 | **Chiudere l'app dietro un account** (la proposta all'origine di questa fase) | — | **no** | Perderebbe le donazioni da ospite (G1), aggiungerebbe un secondo cancello dove ce n'è già uno (G2-G4, G6), e non servirebbe per il solo caso che lo richiede (G5), che ha un momento più tardo e più efficace | ⚠️ **scartata con evidenza**, non per prudenza: l'unica destinazione che pretende dati è quella con zero flussi attivi oggi | La donazione da ospite parte: `getOrCreatePartnerRef` → `null` e l'uscita procede [V] |
 
+**L'obiezione più forte a G2-G4, e perché non regge.** «Se l'account su LD serve comunque, tanto vale
+chiederlo *dentro l'app*, dove la persona è già connessa». Non funziona: l'uscita apre il **browser
+esterno**, che **non ha la sessione dell'app** (D5) — quindi il login sulla nostra pagina web va
+fatto lì in ogni caso. Un cancello in-app non sostituirebbe quel passaggio: lo **aggiungerebbe**. Il
+modo di togliere il secondo login è la sessione condivisa (D5), non una soglia in più.
+
 ### Famiglia M — Il momento del cancello
 
 Stesso presidio, tre momenti, tre costi. È l'asse che la proposta iniziale non conteneva e che
@@ -180,9 +186,15 @@ attraversano**.
 **Perché C3 è la stessa classe di errore già a ledger**: la migration 0010 e lo stato a quattro
 valori sono la *condizione* del profilo minimo; il commento in testa a `profileCompletion.ts` lo
 dice esplicitamente («*nullable ≠ opzionale per sempre*: senza qualcosa che chieda i campi
-mancanti, "prima o poi" diventa "mai"»). Quel qualcosa è stato scritto e agganciato all'unica
-schermata che l'utente-tipo non apre — la stessa superficie sbagliata di C1. Il meccanismo non è
-sbagliato: è **non collegato**. Va detto così, non come «fatto».
+mancanti, "prima o poi" diventa "mai"»). Quel qualcosa è stato scritto e agganciato a **una sola
+schermata, quella del profilo** — la stessa superficie di C1. Il meccanismo non è sbagliato: è
+**non collegato**. Va detto così, non come «fatto».
+
+Un limite di questa riga, per onestà: che il profilo sia una schermata **poco** visitata è
+**[A]**, non [V] — si apre con un tocco sull'avatar in cima alla home, e **quanti lo facciano non
+lo sappiamo** (è il numero che manca fino a F1.8). Ciò che è verificato è la parte che conta e che
+non dipende dai numeri: **se** una persona non apre il profilo, la richiesta dei dati non la
+raggiunge *mai* — nessun altro punto dell'app la mostra.
 
 ### Famiglia P — Cosa si perde, ramo per ramo
 
