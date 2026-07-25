@@ -23,6 +23,7 @@ import {
 } from './authRedirect';
 import { exportData as runDataExport } from './dataExport';
 import { buildConsentInsert } from './consent';
+import { buildDisplayName, syncDisplayNameClaim } from './displayName';
 import type {
   Profile,
   ProfileInput,
@@ -196,6 +197,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           // al Site URL web e la conferma non rientrerebbe in-app. Allow-list `rahitalia://**`.
           emailRedirectTo: buildEmailConfirmRedirectTo(),
           data: {
+            // Claim OIDC `name` per il login federato dei partner (P1): il server auth
+            // legge SOLO questa chiave e, se manca, ci mette l'email dell'account.
+            // Il trigger ignora le chiavi che non gli servono (0007: legge per nome).
+            name: buildDisplayName(p.first_name, p.last_name),
             first_name: p.first_name,
             last_name: p.last_name,
             phone: p.phone,
@@ -299,7 +304,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         .update(patch)
         .eq('id', userId);
       if (error) return { error: error.message };
-      await loadProfile(userId);
+      const updated = await loadProfile(userId);
+      // Il nome è cambiato → riallinea la sua proiezione su user_metadata.name (P1),
+      // altrimenti il claim OIDC continuerebbe a dire il nome vecchio. Si usa il
+      // profilo APPENA riletto, non la closure: `patch` può contenere solo una delle
+      // due parti e l'altra va presa dal valore fresco.
+      if (patch.first_name !== undefined || patch.last_name !== undefined) {
+        await syncDisplayNameClaim(updated?.first_name, updated?.last_name);
+      }
       return { error: null };
     },
     [session, loadProfile]

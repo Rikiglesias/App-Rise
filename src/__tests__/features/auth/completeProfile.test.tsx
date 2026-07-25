@@ -19,7 +19,10 @@ jest.mock('@/shared/auth/AuthContext', () => ({
 
 jest.mock('@/shared/auth/supabaseClient', () => {
   const upsert = jest.fn(() => Promise.resolve({ error: null }));
-  return { supabase: { from: jest.fn(() => ({ upsert })) } };
+  const updateUser = jest.fn(() => Promise.resolve({ data: {}, error: null }));
+  return {
+    supabase: { from: jest.fn(() => ({ upsert })), auth: { updateUser } },
+  };
 });
 
 const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
@@ -94,6 +97,28 @@ describe('CompleteProfileScreen', () => {
       expect(recordConsent).toHaveBeenCalledWith('privacy_notice', 'granted')
     );
     expect(upsert).toHaveBeenCalled();
+  });
+
+  it('P1: dopo il salvataggio proietta il nome su user_metadata.name', async () => {
+    // Percorso post-social: il provider può non aver dato nessun `name` (Apple con
+    // "Nascondi la mia email" tipicamente no) → senza questa scrittura il claim OIDC
+    // consegnato al partner sarebbe l'EMAIL dell'account, per gli Apple-hide l'alias.
+    mockUseAuth.mockReturnValue(makeAuth());
+    const updateUser = (supabase.auth as unknown as { updateUser: jest.Mock })
+      .updateUser;
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() =>
+      expect(updateUser).toHaveBeenCalledWith({
+        data: { name: 'Mario Rossi' },
+      })
+    );
   });
 
   it("mostra il campo Paese e l'upsert include country (default IT)", async () => {

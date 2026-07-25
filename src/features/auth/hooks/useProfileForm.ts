@@ -10,6 +10,7 @@ import {
   type ProfileErrors,
 } from '@/shared/auth/validation';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
+import { syncDisplayNameClaim } from '@/shared/auth/displayName';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -172,6 +173,10 @@ export const useProfileForm = () => {
       setSubmitError(t('auth.errors.generic'));
       return;
     }
+    // P1: proietta il nome su user_metadata.name, da cui il server auth costruisce il
+    // claim OIDC `name` per i partner. DOPO il consenso (Art.7 ha la priorità: non gli
+    // mettiamo davanti una chiamata di rete in più) e con i valori appena scritti.
+    await syncDisplayNameClaim(firstName, lastName);
     await refreshProfile();
     navigation.goBack();
   }, [

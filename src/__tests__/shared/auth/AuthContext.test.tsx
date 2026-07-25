@@ -277,6 +277,9 @@ describe('AuthContext — update/signup/consenso', () => {
       expect(res.error).toBeNull();
     });
     expect(updateMock).toHaveBeenCalledWith({ phone: '+393331112233' });
+    // Il nome non è cambiato → nessuna scrittura su user_metadata (P1): la sync
+    // scatta SOLO sul nome, non a ogni rettifica.
+    expect(supabase.auth.updateUser).not.toHaveBeenCalled();
     // whitelist: nessun altro campo (es. first_name) finisce nell'update
     expect(updateMock).not.toHaveBeenCalledWith(
       expect.objectContaining({ first_name: expect.anything() })
@@ -299,6 +302,37 @@ describe('AuthContext — update/signup/consenso', () => {
       expect(res.error).toBeNull();
     });
     expect(updateMock).not.toHaveBeenCalled();
+  });
+
+  it('updateProfile riallinea user_metadata.name usando il profilo RILETTO, non il patch', async () => {
+    // Il patch contiene solo il nome: il cognome può arrivare SOLO dalla rilettura.
+    // Se un domani si componesse il claim dai campi del patch, `Rossi` sparirebbe e
+    // il partner riceverebbe un nome mutilato — per questo l'atteso li contiene entrambi.
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const single = (
+      supabase.from('profiles') as unknown as {
+        select: () => { eq: () => { single: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().single;
+    single.mockResolvedValue({
+      data: { id: 'u1', first_name: 'Maria', last_name: 'Rossi' },
+      error: null,
+    });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      const res = await getAuth().updateProfile({ first_name: 'Maria' });
+      expect(res.error).toBeNull();
+    });
+    expect(supabase.auth.updateUser).toHaveBeenCalledWith({
+      data: { name: 'Maria Rossi' },
+    });
+    // ripristina il default (clearAllMocks NON resetta le implementazioni)
+    single.mockResolvedValue({ data: null, error: null });
   });
 
   it('updateEmail chiama auth.updateUser con la nuova email', async () => {
@@ -395,6 +429,9 @@ describe('AuthContext — update/signup/consenso', () => {
             first_name: 'Mario',
             birth_date: '1990-01-01',
             marketing_consent: true,
+            // P1: chiave da cui il server auth costruisce il claim OIDC `name`.
+            // Se manca, il claim consegnato al partner diventa l'email dell'account.
+            name: 'Mario Rossi',
           }),
         }),
       })

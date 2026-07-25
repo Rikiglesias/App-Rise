@@ -15,6 +15,7 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { buildDisplayName } from '@/shared/auth/displayName';
 import type { RootStackNavigationProp } from '@/navigation/types';
 import {
   formatDateLocalized,
@@ -92,7 +93,9 @@ export const ProfileScreen: React.FC = () => {
     return <ReConsentScreen />;
   }
 
-  const fullName = profile ? `${profile.first_name} ${profile.last_name}` : '';
+  // Stessa composizione del claim OIDC `name`: una sola definizione, così UI e
+  // dato consegnato ai partner non possono divergere.
+  const fullName = buildDisplayName(profile?.first_name, profile?.last_name);
 
   // Nome paese localizzato dal cca2 (es. 'IT' → 'Italia'/'Italy').
   const countryName = profile?.country
