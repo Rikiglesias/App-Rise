@@ -211,7 +211,29 @@ def inline(text: str) -> str:
     # corsivo: singolo asterisco non adiacente ad altri asterischi
     text = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"<i>\1</i>", text)
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)  # link -> solo testo
+    _sentinella_residui(text)
     return text
+
+
+# Marcatori che, se sopravvivono alla conversione, il destinatario LEGGE nel PDF.
+# Perche' esiste: le voci di elenco vengono convertite una RIGA per volta (a differenza
+# dei paragrafi, che prima si uniscono), quindi un grassetto che attraversa l'a-capo
+# non viene mai chiuso e i due asterischi finiscono stampati. E' arrivato fino al PDF
+# del partner una volta; la verifica di allora guardava le tabelle e i glifi, non questo.
+# Come la sentinella dei caratteri fuori codifica: SPARA, non avvisa — un avviso su
+# stderr in mezzo all'output non ferma nessuno.
+RESIDUI_MARKDOWN = ("**", "`")
+
+
+def _sentinella_residui(text: str) -> None:
+    trovati = [m for m in RESIDUI_MARKDOWN if m in text]
+    if trovati:
+        raise SystemExit(
+            "SENTINELLA: marcatori markdown non convertiti, finirebbero VISIBILI nel PDF: "
+            f"{trovati}\n  nel testo: {text[:180]}\n"
+            "  Causa tipica: grassetto o codice che attraversa un a-capo dentro una voce "
+            "di elenco. Rimetti l'apertura e la chiusura sulla stessa riga."
+        )
 
 
 def split_row(line: str) -> list[str]:

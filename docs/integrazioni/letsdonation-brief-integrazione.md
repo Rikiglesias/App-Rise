@@ -146,10 +146,10 @@ partiamo al primo rilascio, non quello che l'app installata fa oggi**:
   abbiamo già noi, senza chiedervi elenchi — così quelle persone risultano riconosciute quando
   entrano col pulsante (e se mancano dati che oggi chiediamo, glieli chiediamo noi al primo
   accesso). Il lavoro parte quando la nostra informativa aggiornata è pubblicata;
-- per chi entra con «Nascondi la mia email» di Apple **chiediamo noi l'indirizzo vero e lo
-  facciamo verificare**, e quello diventa l'email del suo account da noi: da lì in avanti è quello
-  che vi arriva. Due limiti da mettere in conto, perché non è istantaneo: **al primo login vi
-  arriva comunque l'alias** (la conferma dell'indirizzo avviene dopo), e l'indirizzo reale vi
+- per chi entra con «Nascondi la mia email» di Apple **chiediamo noi l'indirizzo vero**, e lo
+  facciamo verificare: quello diventa l'email del suo account da noi, e da lì in avanti è quello
+  che vi arriva. Due limiti da mettere in conto, perché non è istantaneo:
+  **al primo login vi arriva comunque l'alias** (la conferma avviene dopo), e l'indirizzo reale vi
   raggiunge solo se aggiornate l'anagrafica dai dati del login a **ogni** accesso (domanda 8). Il
   vostro sistema deve quindi accettare un alias `@privaterelay.appleid.com` **sempre**, non solo
   in una fase iniziale.
@@ -256,6 +256,13 @@ altre servono per rifinire.
     template del nostro tenant, che aggiornate per tutti gli enti: un aggiornamento potrebbe
     rimettere il form o far sparire il nostro pulsante, e ce ne accorgeremmo tardi.
 
+17. **Il limite dei 18 anni vi crea un problema?** La nostra registrazione è riservata ai
+    maggiorenni (lo verifichiamo alla data di nascita), quindi con un solo ingresso chi ha meno di
+    18 anni non può più iscriversi sul nostro spazio: niente gift card, niente iscrizione agli
+    eventi da lì. Non è un vincolo tecnico vostro, è una scelta nostra, ma ricade sulla vostra
+    conversione ed è giusto che lo sappiate prima e non dopo. Se per voi è un problema reale,
+    ditecelo: si ragiona su come gestirlo.
+
 **Cosa vi forniremo noi**, quando entrambe le parti sono pronte: discovery URL
 (`…/.well-known/openid-configuration`), `client_id` e `client_secret` dedicati a voi, le redirect
 URI da autorizzare, scope e claim disponibili.
@@ -267,8 +274,10 @@ URI da autorizzare, scope e claim disponibili.
 - Siamo **due titolari autonomi**: ciascuno resta titolare dei propri trattamenti. Non
   contitolarità (art. 26) e non responsabile del trattamento (art. 28).
 - La liceità della trasmissione poggia sul **click della persona**: è lei che avvia il login. Lo
-  dichiareremo nella nostra informativa **prima di attivare il login**: oggi il documento copre i
-  dati che già viaggiano verso i partner, non ancora quelli del futuro «Entra con RAH».
+  dichiareremo nella nostra informativa **prima di attivare il login**. Detto con precisione: la
+  versione riscritta — che copre sia i dati già diretti ai partner sia quelli dell'«Entra con RAH» —
+  è pronta ma **non è ancora online**; viene pubblicata prima del primo rilascio, ed è per noi un
+  prerequisito, non un adempimento successivo.
 - Serve un **accordo di condivisione dati** fra le due società, che circoscriva quali dati
   passano, per quale finalità e per quanto tempo.
 - Nessuna pre-creazione massiva di account «per conto» di nessuno, in nessuna delle due
@@ -284,7 +293,8 @@ Non è urgente e non tocca il login. La mettiamo per completezza, perché quando
 questa diventa quasi gratis.
 
 Quando apriamo un vostro link aggiungiamo all'indirizzo un **codice opaco generato da noi**, uno
-per persona (oggi l'app lo invia come `rise_ref`; possiamo rinominarlo nei parametri UTM standard
+per persona (nel codice si chiama `rise_ref`; parte col primo rilascio, che non è ancora
+avvenuto — possiamo rinominarlo nei parametri UTM standard
 se per voi è più comodo — è una riga di codice da parte nostra). Serve solo a ricondurre a
 posteriori un ordine alla persona giusta: non è un login e non apre nessuna sessione.
 
