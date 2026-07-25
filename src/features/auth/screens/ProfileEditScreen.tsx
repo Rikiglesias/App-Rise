@@ -107,12 +107,21 @@ export const ProfileEditScreen: React.FC = () => {
     if (country === 'IT' && validateRequired(province)) e.province = 'required';
     const a = validateAdult(birthDate);
     if (a) e.birthDate = a;
-    // Mail di contatto obbligatoria e reale per TUTTI, come al completamento del
-    // profilo: è la mail con cui riconosciamo la persona anche nell'anagrafica
-    // importata dal partner. Gemello del completa-profilo: se qui restasse
-    // condizionata al relay, si potrebbe SVUOTARE in rettifica ciò che alla nascita
-    // è obbligatorio, e il record tornerebbe non agganciabile. Helper condiviso.
-    const ce = validateContactEmail(contactEmail);
+    // Mail di contatto: obbligatoria e reale per chi ce l'ha già, e per chi la sta
+    // scrivendo ora. NON per chi non l'ha mai avuta.
+    // Il motivo è un diritto, non una preferenza: un profilo nato prima che la
+    // regola esistesse ha la colonna vuota, e pretenderla qui bloccherebbe la
+    // rettifica di QUALSIASI dato — anche solo il telefono — finché la persona non
+    // fornisce un'informazione che nessuno le aveva mai chiesto. L'Art.16 non si
+    // subordina a un requisito nato dopo: il campo resta visibile e lo chiede il
+    // sollecito del profilo (`missingProfileFields`), che non blocca nulla.
+    // Chi invece la colonna ce l'ha non può SVUOTARLA: sarebbe perdere la chiave con
+    // cui riconosciamo la persona nell'anagrafica importata dal partner.
+    const hadContactEmail = Boolean(profile?.contact_email?.trim());
+    const ce =
+      hadContactEmail || contactEmail.trim()
+        ? validateContactEmail(contactEmail)
+        : null;
     if (ce) e.contactEmail = ce;
     setErrors(e);
     if (Object.keys(e).length > 0) return;
