@@ -46,10 +46,11 @@ In pratica servono cinque cose.
    email» di Apple ne ha uno diverso per ogni sito — ed è l'unico caso che resta fuori.
 
 Prima di andare online aggiorniamo la nostra informativa privacy. Nessuno dei due entra nel
-database dell'altro: al momento dell'accesso vi arrivano un identificativo, il nome e l'email
-dell'account, più i dati tecnici che il meccanismo di accesso si scambia da sé. Su quelli prendiamo
-un impegno scritto nell'accordo fra le due società: usarli solo per riconoscere la persona. Se dalla
-vostra parte serve qualcosa di scritto, dimmelo e lo prepariamo noi.
+database dell'altro: al momento dell'accesso vi arrivano quattro cose — un identificativo, il nome
+quando c'è (con «Nascondi la mia email» di Apple può mancare), l'email dell'account e l'indicazione
+che quell'email è verificata — più i dati tecnici che il meccanismo di accesso si scambia da sé. Su
+quelli prendiamo un impegno scritto nell'accordo fra le due società: usarli solo per riconoscere la
+persona. Se dalla vostra parte serve qualcosa di scritto, dimmelo e lo prepariamo noi.
 
 Quando riesci, rispondimi sul punto 1 e mandami il contatto di chi gestisce il sito da voi: al resto
 pensiamo noi.
