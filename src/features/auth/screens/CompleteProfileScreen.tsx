@@ -126,16 +126,24 @@ export const CompleteProfileScreen: React.FC = () => {
         />
       </AuthSection>
 
-      <AuthSection title={t('auth.signup.sections.consents')}>
-        <AuthConsentCheckbox
-          checked={values.privacyConsent}
-          onToggle={form.togglePrivacy}
-          label={t('auth.signup.privacyConsent')}
-          linkText={t('auth.signup.privacyConsentLink')}
-          linkUrl={RISE_URLS.privacyPolicy}
-          error={err(errors.privacyConsent)}
-        />
-      </AuthSection>
+      {/* Consensi solo quando il profilo NASCE qui. Su un profilo che esiste già il
+          consenso fu raccolto alla nascita e questa schermata serve solo ad
+          aggiungere i campi mancanti: mostrare la casella significherebbe pretendere
+          una spunta che il salvataggio poi scarta (né `privacy_consent_at` né un
+          evento nel registro Art.7) — un consenso chiesto e buttato. La
+          ri-accettazione di un'informativa cambiata è di `ReConsentScreen`. */}
+      {form.requirePrivacyConsent ? (
+        <AuthSection title={t('auth.signup.sections.consents')}>
+          <AuthConsentCheckbox
+            checked={values.privacyConsent}
+            onToggle={form.togglePrivacy}
+            label={t('auth.signup.privacyConsent')}
+            linkText={t('auth.signup.privacyConsentLink')}
+            linkUrl={RISE_URLS.privacyPolicy}
+            error={err(errors.privacyConsent)}
+          />
+        </AuthSection>
+      ) : null}
 
       {form.submitError ? (
         <PerfectText size={14} lines={2} style={styles.error}>

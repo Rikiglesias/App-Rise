@@ -16,7 +16,9 @@ const base: Profile = {
   privacy_consent_at: '2026-07-01T10:00:00Z',
   marketing_consent: false,
   deletion_requested_at: null,
-  contact_email: null,
+  // Un profilo «pieno» oggi include la mail di contatto: è il campo su cui poggia
+  // il riconoscimento nell'anagrafica importata dal partner.
+  contact_email: 'vera@mail.it',
 };
 
 describe('missingProfileFields', () => {
@@ -28,6 +30,18 @@ describe('missingProfileFields', () => {
     expect(
       missingProfileFields({ ...base, phone: null, city: null, province: null })
     ).toEqual(['phone', 'city', 'province']);
+  });
+
+  it('chiede la mail di contatto quando manca (registrazione email/password)', () => {
+    // Chi si registra con email e password crea un profilo con la colonna vuota:
+    // senza questo campo nell'elenco, quel profilo risultava «completo» e il
+    // sollecito taceva proprio sul dato reso obbligatorio.
+    expect(missingProfileFields({ ...base, contact_email: null })).toEqual([
+      'contact_email',
+    ]);
+    expect(missingProfileFields({ ...base, contact_email: '  ' })).toEqual([
+      'contact_email',
+    ]);
   });
 
   it('tratta la stringa di soli spazi come mancante', () => {

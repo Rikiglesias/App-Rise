@@ -18,8 +18,16 @@ import type { Profile } from './types';
  * Funzioni PURE: nessuna dipendenza, testabili in isolamento.
  */
 
-/** Campi che un profilo deve avere PRIMA O POI, anche se non alla nascita. */
-export type CompletableField = 'phone' | 'city' | 'province';
+/**
+ * Campi che un profilo deve avere PRIMA O POI, anche se non alla nascita.
+ * `contact_email` è qui perché è il campo su cui poggia il riconoscimento della
+ * persona nell'anagrafica importata dal partner: un profilo che ne è privo veniva
+ * classificato «completo» e il sollecito non scattava proprio sul dato appena reso
+ * obbligatorio — il presidio era cieco sul dato che deve difendere. Ne restano
+ * privi tutti i profili nati da registrazione email/password (il form non la
+ * chiede, il trigger non la scrive) e quelli creati prima della regola.
+ */
+export type CompletableField = 'phone' | 'city' | 'province' | 'contact_email';
 
 /**
  * Stato di completezza, a tre valori — non un booleano.
@@ -52,6 +60,7 @@ export const missingProfileFields = (
   if (profile.country === 'IT' && !profile.province?.trim()) {
     missing.push('province');
   }
+  if (!profile.contact_email?.trim()) missing.push('contact_email');
   return missing;
 };
 

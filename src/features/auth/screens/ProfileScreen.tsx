@@ -33,6 +33,7 @@ export const ProfileScreen: React.FC = () => {
     status,
     session,
     profile,
+    profileLoaded,
     signOut,
     exportData,
     cancelScheduledDeletion,
@@ -118,8 +119,11 @@ export const ProfileScreen: React.FC = () => {
     : '';
   // Profilo esistente ma con campi ancora da raccogliere: la CTA deve comparire anche
   // in questo caso, non solo quando il profilo manca del tutto (P2).
+  // `profileLoaded`, non `status`: lo status si alza appena la sessione è nota, cioè
+  // PRIMA che la lettura del profilo torni — passandolo qui lo stato `unknown` non
+  // si verificava mai e «sto ancora leggendo» diventava «non ce l'ha».
   const isProfileIncomplete =
-    getProfileCompletion(profile, status === 'authenticated') === 'incomplete';
+    getProfileCompletion(profile, profileLoaded) === 'incomplete';
 
   const deletionDate = getDeletionScheduledDate(
     profile?.deletion_requested_at,

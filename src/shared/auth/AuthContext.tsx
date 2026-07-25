@@ -43,6 +43,16 @@ export interface AuthState {
   status: Status;
   session: Session | null;
   profile: Profile | null;
+  /**
+   * La lettura del profilo per l'utente corrente è ARRIVATA (con o senza riga).
+   * Serve a distinguere «non c'è» da «non lo so ancora»: `profile === null` dice
+   * entrambe le cose, e `status === 'authenticated'` si alza PRIMA che la fetch
+   * finisca — quindi non è un sostituto (era usato come tale in ProfileScreen, e
+   * rendeva irraggiungibile lo stato `unknown` di `getProfileCompletion`).
+   * Chi decide qualcosa di irreversibile sul profilo (registrare un consenso,
+   * riscrivere `privacy_consent_at`) deve leggere QUESTO, non il solo `profile`.
+   */
+  profileLoaded: boolean;
   signIn: (
     email: string,
     password: string
@@ -112,6 +122,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [status, setStatus] = useState<Status>('loading');
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  // «La risposta è arrivata», non «c'è un profilo». Si alza quando la lettura per
+  // l'utente corrente torna (riga trovata OPPURE assenza confermata da PGRST116) e
+  // si riazzera solo al CAMBIO di utente: un TOKEN_REFRESHED sullo stesso account
+  // non deve far tornare la UI a «non lo so» (trappola già pagata sul consenso).
+  const [profileLoaded, setProfileLoaded] = useState(false);
   // Tre valori, non due. `unknown` è lo stato all'avvio e dopo un errore di rete:
   // serve a chi deve DECIDERE se trasmettere dati a un terzo, perché «non ancora
   // saputo» non è «tutto a posto». La UI continua a leggere il booleano derivato.
@@ -133,7 +148,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (error) {
         // PGRST116 = nessuna riga: profilo non ancora creato (es. post-social) → assente.
         // Altri errori (rete/RLS) → NON azzerare il profilo già caricato (evita flicker/perdita dati UI).
-        if (error.code === 'PGRST116') setProfile(null);
+        // `profileLoaded` segue la stessa distinzione: l'assenza CONFERMATA è una
+        // risposta, un errore di rete no — lì lo stato resta «non lo so».
+        if (error.code === 'PGRST116') {
+          if (sessionUserIdRef.current !== userId) return null;
+          setProfile(null);
+          setProfileLoaded(true);
+        }
         return null;
       }
       const next = (data as Profile | null) ?? null;
@@ -146,6 +167,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // conta — il prefill dei partner legge il valore di ritorno, non lo stato.
       if (sessionUserIdRef.current !== userId) return null;
       setProfile(next);
+      setProfileLoaded(true);
       return next;
     },
     []
@@ -165,7 +187,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const { data: sub } = supabase.auth.onAuthStateChange(
       (_event, nextSession) => {
-        sessionUserIdRef.current = nextSession?.user.id ?? null;
+        const nextUserId = nextSession?.user.id ?? null;
+        // Solo il CAMBIO di utente rende ignoto ciò che sapevamo: su un semplice
+        // rinnovo del token (stesso account) riazzerare farebbe tornare la UI a
+        // «non lo so» a ogni refresh, con i solleciti che spariscono e ricompaiono.
+        if (nextUserId !== sessionUserIdRef.current) setProfileLoaded(false);
+        sessionUserIdRef.current = nextUserId;
         setSession(nextSession);
         setStatus(nextSession ? 'authenticated' : 'unauthenticated');
         if (nextSession) void loadProfile(nextSession.user.id);
@@ -449,6 +476,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       status,
       session,
       profile,
+      profileLoaded,
       signIn,
       signUp,
       signOut,
@@ -477,6 +505,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       status,
       session,
       profile,
+      profileLoaded,
       signIn,
       signUp,
       signOut,

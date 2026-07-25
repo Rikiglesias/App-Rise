@@ -20,7 +20,8 @@ import type { RootStackNavigationProp } from '@/navigation/types';
 export const useProfileForm = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { session, profile, refreshProfile, recordConsent } = useAuth();
+  const { session, profile, profileLoaded, refreshProfile, recordConsent } =
+    useAuth();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -73,6 +74,62 @@ export const useProfileForm = () => {
       profile?.contact_email ?? (isRelay ? '' : (accountEmail ?? ''));
     setContactEmail(proposed);
   }, [accountEmail, isRelay, profile?.contact_email]);
+
+  // I campi già noti arrivano GIÀ SCRITTI dal profilo esistente. Senza questa
+  // proiezione la schermata riparte dai default anche per chi un profilo ce l'ha, e
+  // il danno non è solo l'attrito di ridigitare: `country` parte da `'IT'` e passa la
+  // validazione, quindi il salvataggio ITALIANIZZA in silenzio un profilo estero
+  // (e con esso la provincia). Gli altri campi vuoti sono bloccati dalla validazione,
+  // il paese no — un default che si spaccia per una risposta dell'utente.
+  // Si idrata UNA volta per utente: da lì in poi il form è della persona, e un
+  // re-render (token rinnovato, refresh del profilo) non deve riscriverle sotto le
+  // dita quello che ha appena cambiato.
+  // UN SOLO effetto per le due cose (svuotare al cambio utente, idratare dal
+  // profilo): separarli li metterebbe in corsa fra loro — l'idratazione girerebbe
+  // per prima e scriverebbe nel form del nuovo utente i dati del precedente,
+  // marcandolo come «già idratato» e disinnescando lo svuotamento.
+  const userId = session?.user.id ?? null;
+  const formOwner = useRef<string | null | undefined>(undefined);
+  const hydratedForUser = useRef<string | null>(null);
+  useEffect(() => {
+    if (formOwner.current !== userId) {
+      formOwner.current = userId;
+      hydratedForUser.current = null;
+      setFirstName('');
+      setLastName('');
+      setPhone('+39');
+      setCity('');
+      setProvince('');
+      setCountry('IT');
+      setBirthDate('');
+      setPrivacyConsent(false);
+    }
+    if (hydratedForUser.current === userId) return;
+    // Il profilo nel contesto può essere ancora quello di prima (viene sostituito
+    // quando la nuova lettura torna): si idrata solo con la riga DI questo utente.
+    if (!profile || profile.id !== userId) return;
+    hydratedForUser.current = userId;
+    if (profile.first_name) setFirstName(profile.first_name);
+    if (profile.last_name) setLastName(profile.last_name);
+    // `phone` NON si idrata di proposito: `AuthPhoneField` non è controllato (il
+    // numero vive nel suo stato interno e al form arriva solo quello che emette).
+    // Scriverlo qui creerebbe un valore che il campo non mostra — e il suo effetto
+    // di allineamento del prefisso lo azzererebbe al primo cambio di paese. Residuo
+    // dichiarato: chi ha già il numero deve ridigitarlo (attrito, non perdita: la
+    // validazione blocca il campo vuoto). Si chiude rendendo il campo controllato.
+    if (profile.city) setCity(profile.city);
+    if (profile.province) setProvince(profile.province);
+    if (profile.country) setCountry(profile.country);
+    if (profile.birth_date) setBirthDate(profile.birth_date);
+  }, [profile, userId]);
+
+  // Il consenso privacy si chiede solo quando il profilo NASCE. Su un profilo che
+  // esiste già fu raccolto alla nascita, e la ri-accettazione di una versione nuova
+  // è di `ReConsentScreen`: mostrarlo qui significherebbe pretendere una spunta che
+  // il salvataggio poi butta via (né `privacy_consent_at` né `consent_events`).
+  // Finché non sappiamo se il profilo esiste (`profileLoaded` false) si chiede: in
+  // dubbio si raccoglie un consenso in più, mai uno in meno.
+  const requirePrivacyConsent = !profileLoaded || !profile;
 
   const lastNameRef = useRef<TextInput>(null);
   const phoneRef = useRef<TextInput>(null);
@@ -161,9 +218,7 @@ export const useProfileForm = () => {
       birthDate,
       privacyConsent,
       contactEmail,
-      // Sempre: la mail reale serve per riconoscere la persona nell'anagrafica
-      // importata dal partner, non solo per scriverle.
-      requireContactEmail: true,
+      requirePrivacyConsent,
     });
     setErrors(found);
     if (Object.keys(found).length > 0) return;
@@ -181,7 +236,15 @@ export const useProfileForm = () => {
     // `privacy_consent_at` a `now()` sposterebbe la data di un consenso vecchio e
     // aggiungerebbe al ledger Art.7 un «granted» che non è mai avvenuto in quel
     // momento. Il registro dei consensi è una prova: non si riscrive per comodità.
-    const isNewProfile = !profile;
+    // Se il profilo non è ancora stato letto, lo si legge ORA: da questa risposta
+    // dipende se `privacy_consent_at` viene (ri)scritta e se nel registro Art.7
+    // finisce un «granted». Deciderlo su `profile === null` mentre la lettura è in
+    // volo significa timbrare come nuovo un consenso vecchio.
+    // Limite dichiarato: una lettura fallita per rete è indistinguibile da
+    // «assente» (entrambe tornano null) → in quel caso si ricade sul ramo nascita,
+    // ma con la rete giù anche l'upsert fallisce e non si scrive nulla.
+    const current = profileLoaded ? profile : await refreshProfile();
+    const isNewProfile = !current;
     // S10: upsert dei soli campi anagrafici. NON ri-stampiamo marketing_consent: la
     // verità sta nel ledger consent_events; riscriverla a `false` qui azzererebbe un
     // eventuale consenso marketing già concesso.
@@ -238,6 +301,8 @@ export const useProfileForm = () => {
     // tutti, il submit non lo consulta più (serve solo alla UI per il placeholder).
     session,
     profile,
+    profileLoaded,
+    requirePrivacyConsent,
     refreshProfile,
     recordConsent,
     navigation,
@@ -261,6 +326,8 @@ export const useProfileForm = () => {
       contactEmail,
     },
     isRelay,
+    /** La schermata mostra la sezione consensi solo quando il profilo NASCE qui. */
+    requirePrivacyConsent,
     errors,
     refs: { lastNameRef, phoneRef },
     onChange,

@@ -32,6 +32,10 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
     status: 'authenticated',
     session: { user: { id: 'u1', email: 'm@r.it' } } as unknown as Session,
     profile: null,
+    // Lettura del profilo ARRIVATA (qui: nessuna riga → nascita del profilo). I casi
+    // «profilo esistente» lo passano insieme a `profile`; lasciarlo false significa
+    // «non lo so ancora», che è un caso diverso e ha un test suo.
+    profileLoaded: true,
     signIn: jest.fn(),
     signUp: jest.fn(),
     signOut: jest.fn(),
@@ -56,7 +60,11 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
 const fillValidForm = (
   getByLabelText: (t: string) => unknown,
   getByRole: (r: string) => unknown,
-  getByTestId: (t: string) => unknown
+  getByTestId: (t: string) => unknown,
+  // Sul COMPLETAMENTO di un profilo esistente la casella del consenso non viene
+  // mostrata (fu dato alla nascita): premerla lì farebbe fallire la query, non il
+  // comportamento. Chi testa quel ramo passa `false`.
+  opts: { consent?: boolean } = {}
 ): void => {
   const set = (label: string, value: string): void =>
     fireEvent.changeText(getByLabelText(label) as never, value);
@@ -70,7 +78,22 @@ const fillValidForm = (
   // Data di nascita via date picker: apre il campo e conferma (mock → 1990-01-01).
   fireEvent.press(getByLabelText('Data di nascita') as never);
   fireEvent.press(getByTestId('date-picker') as never);
-  fireEvent.press(getByRole('checkbox') as never); // consenso privacy
+  if (opts.consent !== false) fireEvent.press(getByRole('checkbox') as never);
+};
+
+const existingProfile = {
+  id: 'u1',
+  first_name: 'Mario',
+  last_name: 'Rossi',
+  phone: null,
+  city: null,
+  province: null,
+  country: 'IT',
+  birth_date: '1990-01-01',
+  privacy_consent_at: '2026-06-20T09:00:00Z',
+  marketing_consent: false,
+  deletion_requested_at: null,
+  contact_email: null,
 };
 
 describe('CompleteProfileScreen', () => {
@@ -127,23 +150,7 @@ describe('CompleteProfileScreen', () => {
     // «granted» nel ledger Art.7 sarebbe un evento mai avvenuto in quel momento.
     const recordConsent = jest.fn().mockResolvedValue({ error: null });
     mockUseAuth.mockReturnValue(
-      makeAuth({
-        recordConsent,
-        profile: {
-          id: 'u1',
-          first_name: 'Mario',
-          last_name: 'Rossi',
-          phone: null,
-          city: null,
-          province: null,
-          country: 'IT',
-          birth_date: '1990-01-01',
-          privacy_consent_at: '2026-06-20T09:00:00Z',
-          marketing_consent: false,
-          deletion_requested_at: null,
-          contact_email: null,
-        },
-      })
+      makeAuth({ recordConsent, profile: existingProfile })
     );
     const upsert = (
       supabase.from('profiles') as unknown as { upsert: jest.Mock }
@@ -153,7 +160,7 @@ describe('CompleteProfileScreen', () => {
         <CompleteProfileScreen />
       </AllProviders>
     );
-    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fillValidForm(getByLabelText, getByRole, getByTestId, { consent: false });
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() => expect(upsert).toHaveBeenCalled());
@@ -161,6 +168,91 @@ describe('CompleteProfileScreen', () => {
       expect.not.objectContaining({ privacy_consent_at: expect.anything() })
     );
     expect(recordConsent).not.toHaveBeenCalled();
+  });
+
+  it('profilo GIÀ esistente: la casella del consenso NON viene mostrata (non si chiede ciò che non si registra)', () => {
+    // Prima la sezione c'era, era obbligatoria per validazione e la spunta veniva
+    // scartata dal submit: un consenso chiesto e buttato. Contro-prova: rimettendo
+    // la sezione incondizionata questo test cade.
+    mockUseAuth.mockReturnValue(makeAuth({ profile: existingProfile }));
+    const { queryByRole, queryByText } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(queryByRole('checkbox')).toBeNull();
+    expect(queryByText('Consensi')).toBeNull();
+  });
+
+  it('profilo NON ancora letto: il consenso viene chiesto lo stesso (in dubbio si raccoglie)', () => {
+    // `profile: null` da solo non distingue «non ce l'ha» da «non lo so ancora».
+    // Finché la lettura non è tornata la casella resta: un consenso in più non fa
+    // danno, uno in meno sì.
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: null, profileLoaded: false })
+    );
+    const { getByRole } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    expect(getByRole('checkbox')).toBeTruthy();
+  });
+
+  it('i campi già noti arrivano PRECOMPILATI dal profilo esistente', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ profile: existingProfile }));
+    const { getByLabelText } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    // Senza idratazione la persona ritrova il form vuoto e deve ridigitare nome,
+    // cognome e data di nascita per aggiungere il solo telefono.
+    expect(
+      (getByLabelText('Nome') as { props: { value: string } }).props.value
+    ).toBe('Mario');
+    expect(
+      (getByLabelText('Cognome') as { props: { value: string } }).props.value
+    ).toBe('Rossi');
+  });
+
+  it('profilo ESTERO: il completamento NON lo italianizza', async () => {
+    // Il danno vero dei default: gli altri campi vuoti sono bloccati dalla
+    // validazione, `country` no — parte da 'IT', passa il controllo e sovrascrive
+    // in silenzio il paese reale (e con esso la provincia). Contro-prova: togliendo
+    // l'idratazione l'upsert torna a scrivere 'IT'.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: {
+          ...existingProfile,
+          country: 'FR',
+          city: 'Parigi',
+          phone: '+33123456789',
+        },
+      })
+    );
+    const upsert = (
+      supabase.from('profiles') as unknown as { upsert: jest.Mock }
+    ).upsert;
+    const { getByText, getByLabelText } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    // Il telefono si ridigita: il campo non è controllato e non mostra il valore del
+    // profilo (residuo dichiarato in useProfileForm). Il prefisso segue il paese
+    // idratato, quindi il numero esce con +33 senza che nessuno lo scelga.
+    fireEvent.changeText(getByLabelText('Telefono'), '123456789');
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        country: 'FR',
+        province: null,
+        phone: '+33123456789',
+      })
+    );
   });
 
   it("mostra il campo Paese e l'upsert include country (default IT)", async () => {
