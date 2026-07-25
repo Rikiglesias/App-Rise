@@ -50,7 +50,7 @@ export interface UsePartnerExitReturn {
 }
 
 export const usePartnerExit = (): UsePartnerExitReturn => {
-  const { session, profile, refreshProfile, needsReConsent } = useAuth();
+  const { session, profile, refreshProfile, consentState } = useAuth();
   const { openLink, isLoading } = useLinkHandler();
   const [disclosureVisible, setDisclosureVisible] = useState(false);
   const [pending, setPending] = useState<PendingExit | null>(null);
@@ -69,12 +69,14 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
     // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
     // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
-    // sessione, che finirebbe a un terzo senza base documentata. Con
-    // needsReConsent l'informativa è cambiata in modo sostanziale e non è ancora
-    // stata riaccettata: il consenso c'era, ma non copre la versione corrente.
-    // In entrambi i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
+    // sessione, che finirebbe a un terzo senza base documentata.
+    // Sul consenso serve un `ok` ESPLICITO, non «non risulta da riaccettare»:
+    // all'avvio lo stato è `unknown` finché due query non tornano, ed è proprio la
+    // finestra in cui si tocca «Dona». Leggere `unknown` come «a posto» rimetterebbe
+    // il bug che questa guardia esiste per chiudere, spostato di una variabile.
+    // In tutti i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
     const prefill =
-      current && !needsReConsent
+      current && consentState === 'ok'
         ? {
             firstName: current.first_name,
             lastName: current.last_name,
@@ -90,7 +92,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       'donation',
       'Impossibile aprire il link di donazione. Riprova più tardi.'
     );
-  }, [openLink, profile, session, refreshProfile, needsReConsent]);
+  }, [openLink, profile, session, refreshProfile, consentState]);
 
   const exitLetsDonation = useCallback(
     async (url: string, loadingKey: string, errorMessage?: string) => {

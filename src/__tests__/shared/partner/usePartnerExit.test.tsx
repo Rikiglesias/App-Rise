@@ -40,8 +40,8 @@ const setAuth = (over: {
   contactEmail?: string | null;
   /** Sessione attiva ma profilo assente: accesso social non completato. */
   noProfile?: boolean;
-  /** Informativa cambiata in modo sostanziale e non ancora riaccettata. */
-  needsReConsent?: boolean;
+  /** Stato del consenso: 'unknown' all'avvio, 'needed' se va riaccettato. */
+  consentState?: 'unknown' | 'ok' | 'needed';
   /** Profilo non ancora arrivato dalla rete, ma esistente: lo restituisce refreshProfile. */
   profileArrivesLate?: boolean;
 }) => {
@@ -63,7 +63,8 @@ const setAuth = (over: {
     refreshProfile: jest
       .fn()
       .mockResolvedValue(over.profileArrivesLate ? built : null),
-    needsReConsent: over.needsReConsent ?? false,
+    consentState: over.consentState ?? 'ok',
+    needsReConsent: (over.consentState ?? 'ok') === 'needed',
   });
 };
 
@@ -134,7 +135,29 @@ describe('usePartnerExit', () => {
   it('openDonation: informativa da riaccettare → nessun dato personale', async () => {
     // Il profilo c'è, ma l'informativa è cambiata in modo sostanziale e non è
     // stata riaccettata: il consenso esiste, non copre la versione corrente.
-    setAuth({ userId: 'u1', email: 'mario@gmail.com', needsReConsent: true });
+    setAuth({ userId: 'u1', email: 'mario@gmail.com', consentState: 'needed' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    const [url] = mockOpenLink.mock.calls[0];
+    expect(url).not.toContain('email=');
+    expect(url).not.toContain('first_name=');
+    expect(url).toContain('utm_content=DREF');
+  });
+
+  it('openDonation: consenso non ancora verificato → nessun dato personale', async () => {
+    // All'avvio consentState è 'unknown' finché due query non tornano, ed è
+    // proprio la finestra in cui si tocca «Dona». «Non ancora saputo» non è
+    // «a posto»: finché non c'è un ok esplicito non esce nulla di personale.
+    setAuth({
+      userId: 'u1',
+      email: 'mario@gmail.com',
+      consentState: 'unknown',
+    });
     mockGetOrCreate.mockResolvedValue('DREF');
 
     const { result } = renderHook(() => usePartnerExit());
