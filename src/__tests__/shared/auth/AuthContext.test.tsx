@@ -424,6 +424,53 @@ describe('AuthContext — update/signup/consenso', () => {
     // ripristina il default (clearAllMocks non resetta le implementazioni)
     orderMock.mockResolvedValue({ data: [], error: null });
   });
+});
+
+describe('AuthContext — stato del consenso a tre valori', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('consentState resta «unknown» se la cronologia consensi non si legge', async () => {
+    // Il PRODUTTORE dello stato, che nessun test copriva: senza questo, rimettere
+    // il fail-open (scrivere 'ok' sul ramo errore) non farebbe diventare rosso nulla.
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const orderMock = (
+      supabase.from('consent_events') as unknown as {
+        select: () => { eq: () => { order: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().order;
+    orderMock.mockResolvedValue({ data: null, error: { message: 'boom' } });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await waitFor(() => expect(getAuth().consentState).toBe('unknown'));
+    // Un errore di rete NON deve sbattere l'utente sulla schermata di riconsenso.
+    expect(getAuth().needsReConsent).toBe(false);
+    orderMock.mockResolvedValue({ data: [], error: null });
+  });
+
+  it('consentState diventa «needed» se manca il consenso alla versione corrente', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const orderMock = (
+      supabase.from('consent_events') as unknown as {
+        select: () => { eq: () => { order: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().order;
+    // Cronologia leggibile ma senza privacy_notice per la versione corrente.
+    orderMock.mockResolvedValue({ data: [], error: null });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await waitFor(() => expect(getAuth().consentState).toBe('needed'));
+    expect(getAuth().needsReConsent).toBe(true);
+  });
 
   it("exportData apre il share-sheet quando c'è una sessione", async () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({

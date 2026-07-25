@@ -50,7 +50,8 @@ export interface UsePartnerExitReturn {
 }
 
 export const usePartnerExit = (): UsePartnerExitReturn => {
-  const { session, profile, refreshProfile, consentState } = useAuth();
+  const { session, profile, refreshProfile, consentState, refreshConsent } =
+    useAuth();
   const { openLink, isLoading } = useLinkHandler();
   const [disclosureVisible, setDisclosureVisible] = useState(false);
   const [pending, setPending] = useState<PendingExit | null>(null);
@@ -75,8 +76,14 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     // finestra in cui si tocca «Dona». Leggere `unknown` come «a posto» rimetterebbe
     // il bug che questa guardia esiste per chiudere, spostato di una variabile.
     // In tutti i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
+    // Come per il profilo: 'unknown' può essere solo «non ancora tornato», non
+    // «negato» — si ri-verifica invece di degradare in silenzio chi è in regola.
+    const consent =
+      consentState === 'unknown' && session?.user?.id
+        ? await refreshConsent()
+        : consentState;
     const prefill =
-      current && consentState === 'ok'
+      current && consent === 'ok'
         ? {
             firstName: current.first_name,
             lastName: current.last_name,
@@ -92,7 +99,14 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       'donation',
       'Impossibile aprire il link di donazione. Riprova più tardi.'
     );
-  }, [openLink, profile, session, refreshProfile, consentState]);
+  }, [
+    openLink,
+    profile,
+    session,
+    refreshProfile,
+    consentState,
+    refreshConsent,
+  ]);
 
   const exitLetsDonation = useCallback(
     async (url: string, loadingKey: string, errorMessage?: string) => {

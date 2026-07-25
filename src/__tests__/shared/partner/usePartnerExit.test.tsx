@@ -42,6 +42,8 @@ const setAuth = (over: {
   noProfile?: boolean;
   /** Stato del consenso: 'unknown' all'avvio, 'needed' se va riaccettato. */
   consentState?: 'unknown' | 'ok' | 'needed';
+  /** Esito della ri-verifica quando lo stato di partenza è 'unknown'. */
+  consentAfterRefresh?: 'unknown' | 'ok' | 'needed';
   /** Profilo non ancora arrivato dalla rete, ma esistente: lo restituisce refreshProfile. */
   profileArrivesLate?: boolean;
 }) => {
@@ -64,6 +66,11 @@ const setAuth = (over: {
       .fn()
       .mockResolvedValue(over.profileArrivesLate ? built : null),
     consentState: over.consentState ?? 'ok',
+    // 'unknown' significa «non ancora tornato»: la ri-verifica risolve nell'esito
+    // reale, che nei test è quello dichiarato dal caso (default: mai concesso).
+    refreshConsent: jest
+      .fn()
+      .mockResolvedValue(over.consentAfterRefresh ?? 'unknown'),
     needsReConsent: (over.consentState ?? 'ok') === 'needed',
   });
 };
