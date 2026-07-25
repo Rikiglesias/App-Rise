@@ -68,7 +68,13 @@ Filtrano ogni provvedimento della matrice. Fonte: decisioni vincolanti del bindi
 - **I4** Login **web-first**: mai obbligare a scaricare l'app.
 - **I5** Nessun host su `riseagainsthunger.org` (dominio di Rise Against Hunger USA).
 - **I6** Prima di trasmettere qualunque dato: informativa vera pubblicata (criterio 1 del goal).
-- **I7** Non chiediamo a LD di togliere il form nativo — chiediamo prominenza e collegamento account.
+- **I7** Sul **nostro tenant** la registrazione passa SOLO dal nostro login: era il patto accettato
+  in chiamata (correzione Riccardo 2026-07-25). Non chiediamo a LD di rimuovere il form dalla
+  piattaforma — chiediamo che non sia una strada alternativa nel nostro spazio. Due ragioni non
+  tecniche: anagrafiche doppie che divergono, e un utente che davanti a due login non capisce quale
+  sia il suo. **La nostra continuità di servizio non si negozia con loro**: un'eventuale
+  indisponibilità del nostro provider è una contingenza da gestire in casa, non un argomento da
+  consegnare a un terzo (dirgliela legittima la registrazione parallela e ci indebolisce).
 
 ### 0.5 La domanda-radice
 
@@ -96,7 +102,7 @@ analisi e non erano nella lista (gli esempi erano un seme, non il perimetro).
 | 8 | **Failure modes** | Un login di produzione su una feature beta ha bisogno di una via di fuga sempre aperta |
 | 9 | **Vincoli fissi** | Filtrano ciò che è proponibile |
 | 10 | **Chi fa cosa** | Ogni provvedimento è nostro, loro, o dichiarato scoperto |
-| **11** | **Peso dell'onboarding** | *(nuovo)* Il nostro form di registrazione chiede **11 voci obbligatorie** — nome, cognome, email, password, conferma password, telefono, paese, città, provincia (se Italia), data di nascita, consenso privacy (`validation.ts:65-85`, ricontate sul form reale). Il loro ne chiede una manciata (email, password, paese, consenso privacy). L'attrito è il costo nascosto dell'inversione di prominenza |
+| **11** | **Peso dell'onboarding** | *(nuovo)* Il nostro form di registrazione chiede **11 voci obbligatorie** — nome, cognome, email, password, conferma password, telefono, paese, città, provincia (se Italia), data di nascita, consenso privacy (`validation.ts:65-85`, ricontate sul form reale). Il loro ne chiede una manciata (email, password, paese, consenso privacy). **Con un solo ingresso (I7) questo asse cambia peso**: il nostro form non è più «più pesante dell'alternativa», è il SOLO cancello anche per chi voleva solo una gift card → **P2 diventa bloccante per la richiesta a LD**, non un miglioramento di conversione |
 | **12** | **Tempo e versione** | *(nuovo)* Informativa che cambia, email che cambia, token che scade, dominio che migra |
 | **13** | **Uscita e reversibilità** | *(nuovo)* Cancellazione, revoca, disaccoppiamento: cosa resta dall'altra parte |
 | **14** | **Chi paga il fallimento** | *(nuovo)* Se il flusso si rompe a metà, l'utente perde il carrello o l'iscrizione |
@@ -109,9 +115,9 @@ analisi e non erano nella lista (gli esempi erano un seme, non il perimetro).
 
 | # | Scenario | Oggi | Vogliamo | Provvedimento | Verifica |
 | --- | --- | --- | --- | --- | --- |
-| A1 | Dall'app, utente **loggato**, tocca Gift card / Progetti / Shop | Schermata onesta (una volta) → browser esterno con `?rise_ref=…` → atterra su pagina categoria LD **da sloggato** [V, `usePartnerExit.ts` → `openLetsDonationExit`/`exitLetsDonation`] | Atterra e trova «Entra con RAH» come pulsante principale | 📨 prominenza sul nostro tenant · 🔧 pagina `/consent` | Click reale dall'app → il pulsante è il primo elemento del box di accesso |
+| A1 | Dall'app, utente **loggato**, tocca Gift card / Progetti / Shop | Schermata onesta (una volta) → browser esterno con `?rise_ref=…` → atterra su pagina categoria LD **da sloggato** [V, `usePartnerExit.ts` → `openLetsDonationExit`/`exitLetsDonation`] | Atterra e trova «Entra con RAH» come **unico** modo di entrare | 📨 un solo ingresso sul nostro tenant (I7) · 🔧 pagina `/consent` | Click reale dall'app → nel box di accesso non esiste un secondo percorso di registrazione |
 | A2 | Dall'app, utente **ospite** (non loggato) | `getOrCreatePartnerRef` ritorna `null` → esce senza correlazione [V]. **La schermata onesta però si mostra lo stesso**, anche da ospite: il flag è salvato su una chiave condivisa quando manca l'utente [V, `usePartnerExit.ts` → `openLetsDonationExit` + `disclosureFlag.storageKey`] | Che l'uscita non si blocchi mai, ma che l'utente sappia che accedendo il suo contributo viene riconosciuto | 🔧 l'aggancio esiste già: **aggiungere l'invito al login dentro quella schermata**, non bloccante (decisione di design, non ancora presa) | L'uscita da ospite continua a funzionare con ref assente |
-| A3 | **Diretto su LD** (SEO, loro canali, passaparola) — non passa da noi | Si registra col form nativo → nasce nel loro DB, noi non lo sapremo mai [V] | Che veda «Entra con RAH» primario e scelga di nascere da noi | 📨 prominenza · ⚠️ **residuo strutturale**: chi ignora il pulsante nasce da loro, e va bene così | Nessuna: è il caso che accettiamo |
+| A3 | **Diretto sul nostro spazio LD** (SEO, passaparola) — non passa dall'app | Si registra col form nativo → nasce nel loro DB, noi non lo sapremo mai [V] | Che entri dal nostro login, perché è l'unico ingresso | 📨 un solo ingresso (I7): qui il guadagno è massimo — è la persona che con due strade avremmo perso · ⚠️ residuo ridotto a chi si iscrive a LD **fuori** dal nostro spazio | Registrazione di prova sul nostro tenant: non esiste una seconda via |
 | A4 | **Link condiviso** a un progetto specifico (`/project/…`) da un altro utente | Il visitatore è un terzo: nessun `rise_ref`, nessuna relazione con noi | Attribuzione al progetto, non all'utente | ⚠️ residuo: l'attribuzione per-utente non si applica ai link condivisi | — |
 | A5 | **Email / newsletter** nostra | Nessun `rise_ref`: il ref è per-utente, un invio di massa avrebbe un solo URL | Attribuzione almeno per-campagna | 🔧 `utm_campaign=newsletter-<data>` sui link (non per-utente) · ⚠️ per-utente richiede merge-tag del provider email | Link della newsletter contiene l'UTM di campagna |
 | A6 | **QR a evento fisico** | Stampa statica: un URL uguale per tutti | Attribuzione per-evento | 🔧 `utm_campaign=evento-<slug>` · ⚠️ per-utente impossibile su stampa | — |
@@ -190,11 +196,11 @@ analisi e non erano nella lista (gli esempi erano un seme, non il perimetro).
 
 | # | Scenario | Provvedimento | Verifica |
 | --- | --- | --- | --- |
-| H1 | **OAuth server beta giù** o breaking change | ⚠️/📨 il form nativo **resta** ed è la via di fuga — è la ragione tecnica per cui non chiediamo SSO-only (coerente con I7) | Disabilitare il server in staging → il form nativo funziona ancora |
+| H1 | **OAuth server giù** o breaking change | ⚠️ contingenza **interna**, da gestire in casa: monitoraggio del nostro endpoint + riesposizione temporanea del percorso nativo **su nostra richiesta**, non come strada sempre aperta. NON è un argomento da mettere nel brief: dichiararlo a LD legittima la registrazione parallela e ci indebolisce (I7) | Disabilitare il server in staging → esiste una procedura di riesposizione tracciata, con chi la attiva e in quanto tempo |
 | H2 | Utente **nega** il consenso sulla consent screen | 🔧 `denyAuthorization()` + rientro su LD con errore leggibile · 📨 come lo gestisce il loro plugin | Test del percorso «Nega» |
 | H3 | **Chiavi di firma non asimmetriche** | 🔑 leva bloccante: l'`id_token` con HS256 fallisce; verificare l'algoritmo **prima** di ogni altra cosa | Discovery + decodifica di un id_token di test |
 | H4 | **Conferma email obbligatoria** — con «Confirm email» ON il signup **non restituisce sessione** [**A** — l'affermazione viene dal commento della migration `0004`, che la formula come condizione; il setting reale del progetto **non è stato letto**: verificarlo prima di derivarne scelte], quindi chi si registra dal web per rientrare su LD resta appeso alla mail | 🔧 sul web privilegiare Apple/Google (sessione immediata); per l'email, schermata esplicita «controlla la posta» e ripresa del rientro dopo la conferma | Registrazione email dal web → il rientro su LD non si perde |
-| H5 | **Nostro host giù** (Vercel) | ⚠️ nessun accesso via RAH; il form nativo salva la giornata | — |
+| H5 | **Nostro host giù** (Vercel) | ⚠️ nessun accesso via RAH → stessa contingenza interna di H1 (riesposizione su nostra richiesta), non una strada lasciata aperta per prudenza | — |
 | H6 | LD cambia template e **il pulsante sparisce** | ⚠️ residuo · 🔧 eventuale controllo sintetico periodico sulla pagina di login | — |
 | H7 | **Token scaduto** a metà checkout | Nessun impatto: LD ha la sua sessione dopo il login [A] | — |
 | H8 | **Revoca/rotazione del client secret** | 🔧 procedura scritta: la rotazione disconnette tutti gli utenti federati → concordare la finestra con LD | — |
@@ -234,7 +240,7 @@ Sostituiscono e riorganizzano quelle sparse nel brief attuale. In ordine di valo
 | **R2** | Per il **charity shop**: l'aggancio dev'essere sull'**attivazione cashback**, non su un ordine che non esiste, e reggere fino alla conferma differita | E3 |
 | **R3** | **Client OIDC su Joomla** con matching sul **`sub`** (JIT al primo accesso). *Formulare la domanda in modo tecnico preciso*: il plugin più diffuso (miniOrange OAuth Client) documenta JIT provisioning e **attribute mapping con attributi custom** [V], ma **non documenta pubblicamente il matching sul `sub`** [A] → la domanda giusta non è «potete usare il `sub`?» ma «potete **mappare il claim `sub` sull'username Joomla**, così che l'aggancio non dipenda dall'email?» | B1 |
 | **R4** | **Account linking sull'email** per chi ha già un account nativo | B3 |
-| **R5** | **Inversione di prominenza** sul nostro tenant: «Entra con RAH» primario, form nativo secondario — *senza toglierlo* (è anche la nostra via di fuga se il nostro provider è giù) | A1, A3, H1 |
+| **R5** | **Un solo ingresso sul nostro tenant**: «Entra con RAH» è l'unico percorso di registrazione, il form nativo non esposto come alternativa nel nostro spazio (I7). Era il patto accettato in chiamata; un «lo vedo difficile» non lo annulla. Argomenti: anagrafiche doppie che divergono (indirizzi, consensi, cancellazioni) e un utente che davanti a due login sbaglia e si ritrova un secondo account. **Mai citare la nostra continuità di servizio come motivo per tenerlo** | A1, A3, I7 |
 | **R6** | **Flag «utente proveniente da RAH»** nell'export: per gli utenti federati vale più dell'UTM | G4 |
 | **R7** | Domande di chiarimento: alias Apple accettato dal JIT? `email_verified` richiesto? Anagrafica aggiornata a ogni login o solo al JIT? Marketing a false sul JIT? Informativa LD mostrata all'account JIT? Cancellazione propagabile? Che dati chiede l'iscrizione a un evento? | C2, C3, C4, D4, D5, D7, E4 |
 | **R8** | **Il precedente Zucchetti**: che meccanismo è davvero (già nel brief, resta) | — |
@@ -247,7 +253,7 @@ In ordine di dipendenza. Le prime due non dipendono da nessuna risposta di LD.
 | # | Pezzo | Dipende da |
 | --- | --- | --- |
 | **P1** ✅ | **`user_metadata.name`** — FATTO: scrittura al signup, al completamento profilo post-social e a ogni rettifica del nome. Senza, il claim consegnato a LD non era vuoto ma **era l'email** (per gli Apple-hide, l'alias). Backfill non serviva: 2 soli utenti, di test | Niente. Fatto |
-| **P2** | **Profilo minimo + completamento differito** (decisione D-a). Due pezzi, e il secondo è quello che conta: (a) migration 0010 che rende `phone` e `city` nullable; (b) **meccanismo che chiude il profilo** — stato «profilo incompleto» leggibile, richiesta dei campi mancanti al rientro in app e prima delle azioni che li richiedono davvero (iscrizione evento). Senza (b), «prima o poi» diventa «mai» | D-a presa; indipendente da LD |
+| **P2** 🔴 | **Profilo minimo + completamento differito** (decisione D-a). Due pezzi, e il secondo è quello che conta: (a) migration 0010 che rende `phone` e `city` nullable; (b) **meccanismo che chiude il profilo** — stato «profilo incompleto» leggibile, richiesta dei campi mancanti al rientro in app e prima delle azioni che li richiedono davvero (iscrizione evento). Senza (b), «prima o poi» diventa «mai». **Bloccante per R5**: se il nostro login è l'unica porta, 11 campi obbligatori davanti a una gift card sono l'imbuto che uccide la richiesta stessa | D-a presa; indipendente da LD |
 | **P3** | **Pagina web** (Next.js): `/consent`, `/register` (con 18+ e consenso **prima** dell'insert, profilo e `consent_events` nello stesso atto), `/auth/callback`, rilevamento in-app browser | Hosting (leva) |
 | **P4** | **Chiavi di firma asimmetriche** + abilitazione OAuth server | Leve di Riccardo |
 | **P5** | Registrazione del client LD, discovery, test end-to-end | Risposta LD |
@@ -255,7 +261,8 @@ In ordine di dipendenza. Le prime due non dipendono da nessuna risposta di LD.
 
 ### 3.3 Residui dichiarati — li accettiamo, non li scopriremo dopo
 
-1. Chi arriva su LD **senza passare da noi** e usa il form nativo nasce da loro: non lo sapremo mai (A3).
+1. Chi si iscrive a LD **fuori dal nostro spazio** nasce da loro: non lo sapremo mai. Con I7
+   accolta il residuo si restringe a questo caso — chi atterra sul nostro tenant entra da noi (A3).
 2. Utenti **Apple-hide** con un account nativo preesistente restano **due account** (B4).
 3. LD vede l'**alias** di posta, non l'indirizzo reale (C2).
 4. Gli account LD creati via JIT **restano loro** anche dopo la cancellazione da noi (D7).

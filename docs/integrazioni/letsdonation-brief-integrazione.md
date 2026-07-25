@@ -19,7 +19,9 @@ Quando dall'app mandiamo una persona sul vostro shop, sulle gift card, sugli eve
 progetti, oggi **si registra una seconda volta**. È il problema che vogliamo chiudere.
 
 Non vi chiediamo di cambiare la piattaforma: vi chiediamo di **accettare il nostro login** come
-uno dei modi per entrare, e ci occupiamo noi di tutta la parte di identità.
+il modo in cui una persona entra nel nostro spazio, e ci occupiamo noi di tutta la parte di
+identità. È quanto ci eravamo detti in chiamata: gli account di chi sostiene Rise Against Hunger
+Italia nascono da noi, una volta sola.
 
 ---
 
@@ -56,19 +58,34 @@ Per noi questo è essenziale: siamo noi il titolare del rapporto con chi ci sost
 informativa e i nostri consensi si raccolgono da noi. Quindi il percorso di registrazione **non
 deve puntare al vostro form nativo**.
 
-### 2.2 Il vostro form resta — e ci serve che resti
+### 2.2 Sul nostro spazio, un solo ingresso
 
-Sappiamo che non potete togliere la registrazione col form: è parte del sistema e vale per tutti
-gli enti. **Non ve lo stiamo chiedendo.**
+È il punto su cui ci eravamo già trovati d'accordo in chiamata, e lo confermiamo: sul **nostro
+tenant** l'unico percorso di registrazione è «Entra con RAH». Non due strade in parallelo.
 
-Vi chiediamo una cosa più piccola: che sul **nostro tenant** «Entra con RAH» sia il **pulsante
-principale** e il form nativo un link secondario. Oggi il rapporto è l'inverso — «Non sei ancora
-registrato? Clicca qui» è già un link secondario sotto il form — quindi la struttura per farlo
-esiste: è template del tenant, non sistema di autenticazione.
+Due ragioni, e nessuna delle due è tecnica.
 
-E c'è una ragione tecnica per cui quel form ci fa comodo: il nostro server OIDC si appoggia a una
-funzionalità ancora in beta. Se un giorno fosse indisponibile, il form è la via di fuga che tiene
-aperto il vostro spazio. Non è un ripiego che subiamo, è parte del disegno.
+**Le anagrafiche doppie divergono subito.** Se una persona può iscriversi anche col form, di lei
+esistono due schede: una da voi e una da noi. Cambia indirizzo in una e non nell'altra; revoca un
+consenso da noi e da voi resta; ci chiede la cancellazione e noi non possiamo darle seguito su
+un'anagrafica che non governiamo. Con un solo ingresso la scheda è una, ed è la nostra: siamo noi
+il titolare del rapporto con chi ci sostiene, ed è da noi che si raccolgono informativa e consensi.
+
+**Chi arriva non sa che esistono due database.** Vede due modi di entrare e ne sceglie uno a caso.
+Se sbaglia si ritrova un secondo account, senza il suo storico e senza i consensi che abbiamo
+raccolto noi — e non capisce perché. Per una persona poco pratica è esattamente il punto in cui
+abbandona. La distinzione fra il vostro sistema e il nostro è nostra, non sua: non deve vederla.
+
+In concreto: dal nostro spazio il form nativo non deve essere raggiungibile come alternativa.
+Sappiamo che è **template del tenant, non sistema di autenticazione** — la struttura per farlo
+esiste già, dato che oggi «Non sei ancora registrato? Clicca qui» è a sua volta un link
+secondario sotto il form.
+
+Se c'è un vincolo tecnico che lo impedisce, ci è utile sapere **quale**: se il blocco è su un
+pezzo che possiamo risolvere noi, lo risolviamo noi.
+
+Resta un caso a parte, ed è l'unico: chi ha **già** un account vostro creato col form prima di
+tutto questo. Quelli non si buttano via, si collegano — è il punto qui sotto.
 
 ### 2.3 Collegare gli account invece di duplicarli
 
@@ -81,7 +98,7 @@ stessa email X, il vostro sistema può **collegare** i due account invece di cre
 
 ## 3. Il percorso dell'utente, caso per caso
 
-È la parte che ci interessa vedere chiara prima di costruire. Cinque situazioni reali.
+È la parte che ci interessa vedere chiara prima di costruire. Sei situazioni reali.
 
 | Chi arriva | Cosa succede |
 | --- | --- |
@@ -89,7 +106,8 @@ stessa email X, il vostro sistema può **collegare** i due account invece di cre
 | **Non ha nessuno dei due** | Tocca «Entra con RAH» → sulla nostra pagina **crea l'account da noi** (con la nostra informativa e i nostri consensi) → torna da voi autenticato, e da lì è il caso sopra |
 | **Ha già un account vostro, con la stessa email** | È il caso in cui serve il **collegamento** (§2.3): altrimenti si ritrova due account e non capisce perché |
 | **Ha già un account vostro, ma usa «Nascondi la mia email»** | L'alias non combacia con l'email che aveva usato da voi: i due account **non sono collegabili automaticamente**. Restano due. Se avete un «collega il mio account» nel profilo utente, ci risolve anche questo |
-| **Arriva da voi senza passare da noi** (ricerca, vostri canali) | Usa il form: nasce da voi, e per noi resta invisibile. **Lo accettiamo**: non è una persona che stiamo perdendo, è una che non era ancora nostra |
+| **Atterra sul nostro spazio da un motore di ricerca**, senza venire dall'app | Con un solo ingresso (§2.2) entra da «Entra con RAH» come tutti, e l'account nasce da noi. È una persona in più che diventa nostra, e con due strade l'avremmo persa |
+| **Si iscrive a Let's Donation da un percorso che non tocca il nostro spazio** | Nasce da voi e per noi resta invisibile. **Lo accettiamo**: non è una persona che stiamo perdendo, è una che non era ancora nostra |
 
 ---
 
@@ -131,7 +149,8 @@ Nient'altro. Niente telefono, niente indirizzo, niente data di nascita.
 2. Il plugin può **mappare il `sub` sull'username** (creazione al primo accesso, aggancio sul
    `sub` agli accessi successivi), **non sull'email**?
 3. Quali **redirect URI** dobbiamo autorizzare?
-4. **Inversione di prominenza** sul nostro tenant (§2.2): fattibile via template?
+4. **Un solo ingresso** sul nostro tenant (§2.2): la registrazione col form si può non esporre sul
+   nostro spazio, via template? Se qualcosa lo impedisce, qual è esattamente il pezzo?
 5. **Collegamento degli account** sull'email (§2.3): c'è o si può attivare?
 6. Il vostro sistema accetta un'email alias `@privaterelay.appleid.com` per creare l'account, o
    pretende un'email verificata?
