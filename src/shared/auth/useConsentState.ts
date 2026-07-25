@@ -88,9 +88,17 @@ export const useConsentState = ({
     // Un ospite non ha dato NESSUN consenso: dirgli `ok` sarebbe falso.
     setConsentState('unknown');
     if (status !== 'authenticated' || !userId) return;
+    // Gemello della guardia su loadProfile: la risposta può atterrare quando
+    // l'utente è già un altro (o nessuno). Scriverla comunque dichiarerebbe
+    // «consenso ok» per chi non l'ha mai dato, e il prefill partirebbe con i
+    // suoi dati. Il cleanup invalida la richiesta in volo.
+    let alive = true;
     void evaluateRef.current().then(next => {
-      if (next !== 'unknown') setConsentState(next);
+      if (alive && next !== 'unknown') setConsentState(next);
     });
+    return () => {
+      alive = false;
+    };
   }, [status, userId]);
 
   const markConsentGiven = useCallback(() => setConsentState('ok'), []);
