@@ -136,7 +136,7 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 | Nome, cognome | noi → Donorbox | Parametri di precompilazione del modulo | **Due condizioni insieme:** esiste il profilo **e** risulta positivamente registrato il consenso all'informativa nella versione corrente. Se lo stato del consenso è ignoto (rete, errore), la precompilazione non parte e l'uscita procede vuota | Servizio richiesto dall'interessato, con **riserva dichiarata dalle nostre fonti**: se la finalità è ridurre l'attrito, serve un legittimo interesse documentato o un consenso. Tutta la parte legale è «da far validare» | idem |
 | Email | noi → Donorbox | Parametro di precompilazione | Le condizioni sopra, **più**: se l'indirizzo risolto è un alias Apple «Nascondi la mia email» **non parte affatto**. Regola: email di contatto scelta dall'utente, altrimenti email dell'account | come sopra | idem |
 | Importo suggerito | noi → Donorbox | Parametro di precompilazione | Con l'uscita verso la donazione | — | idem |
-| **Niente in ingresso** da Let's Donation e Donorbox: nessun webhook, nessun import, nessuna lettura | — | — | Nel nostro codice non esiste alcun canale di ritorno da loro. *(Fanno eccezione i fornitori di accesso: da Google e Apple ci arriva identificativo ed email — §2)* | — | `[V]` |
+| **Niente in ingresso AUTOMATICO** da Let's Donation e Donorbox: nessun webhook, nessuna lettura, nessun canale di ritorno nel codice | — | — | Vero sul codice. **Non più vero sul piano operativo (2026-07-25)**: è deciso un **riordino manuale delle anagrafiche storiche** dentro il nostro database, così chi c'era già risulta riconosciuto. Prerequisiti: informativa pubblicata, base giuridica e Art.14 chiariti con la consulente, e la certezza che i consensi raccolti altrove **non** si trasferiscono. *(Fanno eccezione anche i fornitori di accesso: da Google e Apple ci arriva identificativo ed email — §2)* | — | `[C]` sul codice, `[A]` sull'origine dei dati (da chiarire con Riccardo: archivio nostro o export loro) |
 | Che il codice arrivi davvero alla loro applicazione | noi → Let's Donation | — | **Verificato** che lo mandiamo e che il reindirizzamento dal dominio vecchio conserva i parametri. Che il valore raggiunga la loro applicazione **non è dimostrato** (un HTTP 200 prova solo che non viene rifiutato) `[A]`. In ogni caso **nessuno lo raccoglie** | — | `[A]` |
 | Che il codice torni sul record della donazione Donorbox | Donorbox → noi | Loro API | **Non verificato.** Serve una donazione reale da 1 € | — | `[A]` |
 | Flag «avviso già mostrato» | resta sul dispositivo | Memoria locale, chiave separata per utente | Non attraversa nessun confine | — | `[V]` |
@@ -147,7 +147,7 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 |---|---|---|---|---|
 | Identificativo opaco e stabile (`sub`) | noi → LD | Informazione standard nel token di identità e sull'endpoint delle informazioni utente | Quando la persona tocca «Entra con Rise Against Hunger» e approva sulla **nostra** pagina. È la chiave con cui il loro sistema la riconosce agli accessi successivi | `[V]` sul contenuto, `[A]` sul flusso: non esiste |
 | Nome completo, stringa unica (`name`) | noi → LD | idem | Al login, **se disponibile**: per chi entra con Apple nascondendo la mail può mancare dopo il primo accesso. Nome e cognome separati non esistono nello standard: li dividono loro | idem |
-| Email dell'account (`email`) | noi → LD | idem | Al login. Con «Nascondi la mia email» è un alias `@privaterelay.appleid.com` che **inoltra** alla casella vera. L'email di contatto reale che raccogliamo in app **non è trasmissibile** con questo protocollo | idem |
+| Email dell'account (`email`) | noi → LD | idem | Al login. Con «Nascondi la mia email» è un alias `@privaterelay.appleid.com` che **inoltra** alla casella vera. L'email di contatto raccolta in app **non è trasmissibile come informazione a parte** — ma **dal 2026-07-25 la strada è un'altra** (F-EMAIL.23): l'indirizzo vero, una volta verificato, **diventa l'email dell'account**, quindi è questo campo a portarlo. Fino ad allora parte l'alias | idem |
 | Indicatore «email verificata» (`email_verified`) | noi → LD | idem | Al login. Va chiesto che il loro sistema non lo pretenda sull'alias Apple | `[V]` sul dato, `[A]` sul loro comportamento |
 | **Gettone tecnico con i pieni poteri dell'utente** | noi → LD | Scambio standard del protocollo allo sportello dei token | **Inevitabile per costruzione**: non è «glielo diamo o no». Gli scope non lo limitano lato dati; l'autorizzazione dipende interamente dalle nostre regole di riga | `[V]` |
 | Account creato dal loro sistema al primo accesso | effetto lato loro | Creazione al volo | Che il loro negozio accetti un alias Apple per creare l'account **è un assunto** da confermare | `[A]` |
@@ -157,7 +157,8 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 | Export (o webhook) delle donazioni ai progetti sul nostro spazio | LD → noi | Export o webhook | **Richiesta**, conseguenza obbligata della convivenza dei due canali di donazione | `[A]` |
 | Propagazione di una richiesta di cancellazione | noi → LD | **Meccanismo ignoto.** Da noi la struttura dati è pronta (una lapide senza vincoli, che sopravvive alla cancellazione e conserva il minimo: quale codice, presso chi) ma **nessun programma la legge** | Alla cancellazione dell'account | `[V]` che manca |
 | Dati chiesti dall'iscrizione a un evento | noi ↔ LD | Da chiarire | Quando ci saranno eventi: oggi zero | `[A]` |
-| Elenchi di persone in blocco, pre-creazione massiva di account, credenziali sui database | **nessuna** | Esclusi in modo esplicito, in entrambe le direzioni | Mai | `[V]` |
+| Elenchi di persone in blocco **fra le due organizzazioni**, pre-creazione di account sullo spazio dell'altro, credenziali sui database | **nessuna** | Esclusi in modo esplicito, in entrambe le direzioni | Mai | `[V]` |
+| Riordino delle anagrafiche storiche **dentro il nostro archivio** | interno | Caricamento manuale deciso da Riccardo (2026-07-25) | Non è un trasferimento fra le due società e **non crea account**: crea schede, e l'account nasce quando è la persona a entrare. Origine dei dati da chiarire; se venissero da un export del partner sarebbe invece un trasferimento e cambierebbe il quadro giuridico | `[A]` |
 
 ---
 
@@ -664,7 +665,7 @@ registro, non nella copia.**
 | «La cancellazione è definitiva» | La lapide sopravvive **per costruzione**, e il registro dei consensi si conserva come prova | Dichiarare le due eccezioni per nome |
 | «L'accesso unico è attivo» | Nel nostro progetto **non esiste** nessun punto di accesso di quel tipo | «Il server di accesso non è ancora attivo: si accende dopo la vostra conferma, la migrazione delle nostre chiavi di firma e una decisione interna» |
 | «Vi arriva sempre il nome» | Per chi entra con Apple nascondendo la mail può mancare dopo il primo accesso | «Il nome arriva se disponibile: il vostro sistema deve tollerarne l'assenza» |
-| «Vi mandiamo l'email reale» | Con «Nascondi la mia email» è un alias, che però **inoltra** | «È l'email dell'account: per chi usa la funzione Apple è un alias che inoltra — confermateci che il vostro sistema lo accetta» |
+| «Vi mandiamo l'email reale» **oggi** | Con «Nascondi la mia email» è un alias, che però **inoltra**. Diventa vero solo quando F-EMAIL.23 è online (l'indirizzo verificato diventa l'email dell'account) | «Arriva l'email dell'account: oggi per chi usa la funzione Apple è un alias che inoltra — confermateci che il vostro sistema lo accetta. Dal primo rilascio chiediamo a quelle persone l'indirizzo vero, lo facciamo verificare e diventa l'email del loro account: da lì arriva quello» |
 | «I nostri link puntano ancora al dominio vecchio, stiamo migrando» | Falso: nel codice la migrazione è **chiusa**, con un test che fallisce se un indirizzo regredisce. Il residuo vero sono le **versioni già installate** | «Il codice punta già ai vostri nuovi indirizzi; restano le versioni installate sui telefoni, che si appoggiano al vostro reindirizzamento» |
 | «La rotazione della parola d'ordine disconnette tutti gli utenti federati» | Blocca i **nuovi** accessi: le sessioni già aperte sul loro Joomla non decadono da sole | «Interrompe i nuovi accessi finché non aggiornate il valore; le sessioni aperte non decadono» |
 | «Sono tre righe» / qualsiasi stima del loro sforzo | Non conosciamo il loro sistema: una stima scritta da noi ci toglie credibilità | Chiedere se il campo o il webhook esistono già, e **lasciare a loro la stima** |
@@ -759,7 +760,9 @@ successivo. Sta in §8.1.
 - Chi si iscrive a Let's Donation **fuori** dal nostro spazio nasce da loro: non lo sapremo mai.
 - Chi ha un account nativo **e** usa l'alias Apple resta con due account, salvo un «collega il mio
   account» nel loro profilo utente.
-- L'email reale dietro l'alias Apple **non è trasmissibile** con questo protocollo.
+- L'email reale dietro l'alias Apple non è trasmissibile **come informazione a parte**; la via
+  decisa (F-EMAIL.23) è farla diventare l'email dell'account, e finché non è implementata parte
+  l'alias.
 - Dal computer fisso non esiste alcun collegamento diretto all'app.
 - L'attribuzione per singola persona su una newsletter di massa o un codice stampato **non è possibile**.
 - Il gettone tecnico che il partner riceve al login **non si elimina**: si contiene.
@@ -826,10 +829,12 @@ successivo. Sta in §8.1.
 > - `name` — nome completo in una stringa unica; nome e cognome li separate voi. Va trattato come
 >   **opzionale**: per gli utenti Apple con «Nascondi la mia email» può mancare dopo il primo accesso, e
 >   il provisioning non deve fallire in sua assenza.
-> - `email` — è l'email dell'account. Per gli utenti Apple Private Relay è un alias
->   `@privaterelay.appleid.com` che **inoltra** all'indirizzo reale. Confermateci che il provisioning lo
->   accetti e che non pretenda `email_verified` sull'alias; un nostro utente non ancora confermato può
->   presentare `email_verified: false`.
+> - `email` — è l'email dell'account. Per gli utenti Apple Private Relay è, in questa prima fase, un
+>   alias `@privaterelay.appleid.com` che **inoltra** all'indirizzo reale: confermateci che il
+>   provisioning lo accetti e che non pretenda `email_verified` sull'alias (un nostro utente non ancora
+>   confermato può presentare `email_verified: false`). Dal primo rilascio chiediamo a quelle persone
+>   l'indirizzo vero, lo facciamo verificare e diventa l'email del loro account: da quel momento questo
+>   campo porta l'indirizzo reale.
 >
 > **Uso dell'access token.** Nel flusso standard il vostro client riceve al token endpoint un access
 > token con i privilegi dell'utente; gli scope non lo limitano lato dati. Vi chiediamo di leggere

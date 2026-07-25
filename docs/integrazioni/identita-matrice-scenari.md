@@ -150,7 +150,7 @@ analisi e non erano nella lista (gli esempi erano un seme, non il perimetro).
 | # | Scenario | Oggi | Vogliamo | Provvedimento | Verifica |
 | --- | --- | --- | --- | --- | --- |
 | C1 | Email reale (password o Google) | — | Claim `email` reale a LD | Nessuno | — |
-| C2 | **Apple Private Relay** | `contact_email` raccolta in app (F1.10) ma **non trasmissibile** come claim OIDC [V] | Che la posta arrivi comunque | ⚠️ residuo dichiarato: LD vede l'alias, che inoltra alla casella reale · 📨 confermare che il loro JIT accetti un alias `@privaterelay.appleid.com` | Registrazione di test con account Apple-hide |
+| C2 | **Apple Private Relay** | `contact_email` raccolta in app (F1.10) ma **non trasmissibile** come claim a parte [V] | Che a LD arrivi l'indirizzo reale | ✅ **strada decisa 2026-07-25 (F-EMAIL.23)**: l'indirizzo vero, verificato, **diventa l'email dell'account** → il claim `email` lo porta senza personalizzazioni (rientro con Apple non lo riscrive [V]) · ⚠️ finché non è implementata resta l'alias, che inoltra · 📨 confermare che il loro JIT accetti un alias per il periodo di transizione · 🔑 **prerequisito Apple**: dominio mittente registrato fra le «Email Sources», altrimenti Apple blocca la posta verso l'alias e la conferma non arriva | Registrazione di test con account Apple-hide |
 | C3 | **Email cambiata** dopo il primo login | LD resterebbe con la vecchia | Anagrafica LD aggiornata | 📨 chiedere se aggiornano l'anagrafica dai claim a **ogni** login o solo al JIT | — |
 | C4 | LD pretende `email_verified` | Un utente email non confermato ha `email_verified:false` | JIT non deve rifiutarlo | 📨 domanda esplicita al loro tecnico | — |
 | C5 | **Claim `name` assente → ci finisce l'email** | Prima **[A]**, ora **[V] alla fonte**: il claim viene da `user_metadata["name"]` e **solo** da lì (nessun fallback su `full_name`), identico in id_token e UserInfo; se manca, il server ripiega sull'**email dell'account** — per un Apple-hide, l'alias di relay. Nessun utente email/password aveva quella chiave (`signUp` scriveva solo `first_name`/`last_name`) | Nome vero per tutti, mai un'email al posto del nome | ✅ **FATTO (P1)**: `user_metadata.name` scritto al signup, al completamento profilo post-social e a ogni rettifica del nome (`displayName.ts`, `syncDisplayNameClaim`). Backfill non necessario: `auth.users` = 2, entrambi account di test da ripulire prima del lancio [V, query del 2026-07-25] | `select count(*) from auth.users where coalesce(raw_user_meta_data->>'name','') = ''` → 0 per gli account reali |
@@ -272,7 +272,8 @@ In ordine di dipendenza. Le prime due non dipendono da nessuna risposta di LD.
 1. Chi si iscrive a LD **fuori dal nostro spazio** nasce da loro: non lo sapremo mai. Con I7
    accolta il residuo si restringe a questo caso — chi atterra sul nostro tenant entra da noi (A3).
 2. Utenti **Apple-hide** con un account nativo preesistente restano **due account** (B4).
-3. LD vede l'**alias** di posta, non l'indirizzo reale (C2).
+3. LD vede l'**alias** di posta finché F-EMAIL.23 non è implementata; poi vede l'indirizzo reale,
+   perché quello verificato diventa l'email dell'account (C2).
 4. Gli account LD creati via JIT **restano loro** anche dopo la cancellazione da noi (D7).
 5. L'attribuzione **per-utente** è impossibile su QR e newsletter di massa (A5, A6).
 6. Se LD non implementa nulla, **tutto resta com'è** (H10).
