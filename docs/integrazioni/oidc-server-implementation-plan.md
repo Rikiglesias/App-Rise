@@ -91,7 +91,8 @@ Conseguenze:
    (DCR disabilitata di default; per un client noto = registrazione manuale.)
 5. **Discovery + scope**: `…/.well-known/openid-configuration` (esposto una volta abilitato;
    NB bug beta: i custom domain non si propagano al discovery). Documentare per LD gli scope
-   e i claim STANDARD disponibili (sub, email, name).
+   e i claim STANDARD disponibili (`sub`, `email`, `email_verified`, `name`) — **quattro**, non tre:
+   `email_verified` viaggia con lo scope `email` ed è nell'elenco che diamo a LD.
 6. **Consegnare a LD** i parametri (discovery URL, client_id/secret, scope) e giro di test
    end-to-end (login → JIT sul loro MySQL → aggancio sul `sub`).
 
@@ -143,7 +144,8 @@ Conseguenze:
 ## GDPR
 
 - Due titolari autonomi + Data Sharing Agreement (non Art.26, non Art.28). Liceità = il click
-  dell'utente. Claim minimi STANDARD (`sub`, `name`, `email`). Nessuna pre-creazione bulk.
+  dell'utente. Claim minimi STANDARD (`sub`, `name`, `email`, `email_verified`). Nessuna
+  pre-creazione bulk di account sullo spazio dell'altro.
   Informativa RAH aggiornata (dipende dal criterio 1 del goal partner-identita). Vedi memoria
   `gdpr-compliance`.
 

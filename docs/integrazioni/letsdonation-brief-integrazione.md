@@ -146,11 +146,13 @@ partiamo al primo rilascio, non quello che l'app installata fa oggi**:
   abbiamo già noi, senza chiedervi elenchi — così quelle persone risultano riconosciute quando
   entrano col pulsante (e se mancano dati che oggi chiediamo, glieli chiediamo noi al primo
   accesso). Il lavoro parte quando la nostra informativa aggiornata è pubblicata;
-- **l'indirizzo che vi arriverà è un indirizzo reale e verificato**, anche per chi entra con
-  «Nascondi la mia email» di Apple: in quel caso l'indirizzo vero glielo chiediamo noi e lo
-  facciamo verificare, e diventa l'email del suo account da noi. Serve proprio a non lasciarvi un
-  alias che non combacia con nulla. Finché quel pezzo non è online vale quanto scritto al §4:
-  arriva l'email dell'account, che per un utente Apple può essere l'alias che inoltra.
+- per chi entra con «Nascondi la mia email» di Apple **chiediamo noi l'indirizzo vero e lo
+  facciamo verificare**, e quello diventa l'email del suo account da noi: da lì in avanti è quello
+  che vi arriva. Due limiti da mettere in conto, perché non è istantaneo: **al primo login vi
+  arriva comunque l'alias** (la conferma dell'indirizzo avviene dopo), e l'indirizzo reale vi
+  raggiunge solo se aggiornate l'anagrafica dai dati del login a **ogni** accesso (domanda 8). Il
+  vostro sistema deve quindi accettare un alias `@privaterelay.appleid.com` **sempre**, non solo
+  in una fase iniziale.
 
 Dal primo accesso in poi, però, l'aggancio stabile è il **`sub`**, non l'indirizzo: una persona
 può cambiare email, e il `sub` no.
@@ -166,7 +168,7 @@ può cambiare email, e il `sub` no.
 | **Ha un account RAH, non ha un account vostro** | Tocca «Entra con RAH» → la nostra pagina lo riconosce → torna da voi autenticato. Voi create l'utente al primo accesso, agganciato al `sub`. Dal secondo accesso in poi lo ritrovate |
 | **Non ha nessuno dei due** | Tocca «Entra con RAH» → sulla nostra pagina **crea l'account da noi** (con la nostra informativa e i nostri consensi) → torna da voi autenticato, e da lì è il caso sopra |
 | **Ha già un account vostro, con la stessa email** | È il caso in cui serve il **collegamento** (§2.4): altrimenti si ritrova due account e non capisce perché |
-| **Ha già un account vostro, ma usa «Nascondi la mia email»** | Dal primo rilascio non vi mandiamo l'alias: l'indirizzo vero glielo chiediamo noi e lo facciamo verificare, quindi il collegamento per email funziona come sopra (§2.4). Prima di allora l'alias non combacia e restano due account: se un «collega il mio account» nel profilo utente esiste già dalla vostra, è la rete di sicurezza per quel periodo e per i casi limite |
+| **Ha già un account vostro, ma usa «Nascondi la mia email»** | **Al primo login vi arriva comunque l'alias**: l'indirizzo vero glielo chiediamo noi dentro l'app e la conferma non è istantanea, quindi il vostro sistema deve accettare un alias **sempre**, non solo in una fase iniziale. Dopo la conferma l'indirizzo reale diventa l'email del suo account da noi: vi arriva a quel punto, e solo se aggiornate l'anagrafica dai dati del login a **ogni** accesso (domanda 8). Finché non combacia servono due account o un «collega il mio account» dal profilo |
 | **Atterra sul nostro spazio da un motore di ricerca**, senza venire dall'app | Con un solo ingresso (§2.2) entra da «Entra con RAH» come tutti, e l'account nasce da noi. È una persona in più che diventa nostra, e con due strade l'avremmo persa |
 | **Si iscrive a Let's Donation da un percorso che non tocca il nostro spazio** | Nasce da voi e per noi resta invisibile. **Lo accettiamo**: non è una persona che stiamo perdendo, è una che non era ancora nostra |
 
@@ -176,16 +178,18 @@ può cambiare email, e il `sub` no.
 
 **Nessuno dei due entra nel database dell'altro.** Non vi chiediamo credenziali sul vostro database
 e non ve ne diamo sul nostro. L'unico scambio avviene al momento del login, con i dati che il
-protocollo prevede — un identificativo, il nome e l'email — più i token tecnici dell'accesso, per
-i quali vale l'impegno descritto qui sotto.
+protocollo prevede — un identificativo, il nome quando c'è, l'email dell'account e l'indicazione
+che è verificata — più i token tecnici dell'accesso, per i quali vale l'impegno descritto qui
+sotto.
 
 **Cosa vi trasmettiamo al login** — solo i claim standard OpenID Connect:
 
 | Dato | A cosa serve |
 | --- | --- |
 | `sub` | Identificativo opaco e stabile. È **la chiave di aggancio**: non dice nulla sulla persona |
-| `name` | Nome completo in **una stringa unica** (niente nome e cognome separati: li dividete voi) |
+| `name` | Nome completo in **una stringa unica** (niente nome e cognome separati: li dividete voi). Può mancare: il vostro sistema deve tollerarne l'assenza |
 | `email` | L'email dell'account, così com'è |
+| `email_verified` | Indica se quell'indirizzo risulta confermato da noi. Può essere `false`: il provisioning non deve rifiutarlo |
 
 Niente telefono, niente indirizzo, niente data di nascita. Sui token tecnici che il protocollo
 scambia durante l'accesso vale il punto **H11** del nostro perimetro: nel flusso standard il vostro
@@ -225,8 +229,8 @@ altre servono per rifinire.
 5. Quali **redirect URI** dobbiamo autorizzare?
 6. **Collegamento degli account** sull'email (§2.4): c'è o si può attivare?
 7. Il vostro sistema accetta un'email alias `@privaterelay.appleid.com` per creare l'account, o
-   pretende un'email verificata? (Serve per il periodo in cui il pezzo descritto al §2.4 non è
-   ancora online: da lì in avanti l'indirizzo che vi arriva è reale.)
+   pretende un'email verificata? (Deve accettarlo **in modo permanente**: al primo login di un
+   utente Apple l'alias arriva comunque — vedi §2.4.)
 8. L'anagrafica viene aggiornata dai dati del login **a ogni accesso** o solo alla creazione?
 9. Gli account creati per questa via nascono con i consensi marketing a **no**, e in che momento
    viene presentata la **vostra** informativa?

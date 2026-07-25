@@ -60,19 +60,26 @@ export const ProfileEditScreen: React.FC = () => {
   const [province, setProvince] = useState(profile?.province ?? '');
   const [country, setCountry] = useState(profile?.country ?? 'IT');
   const [birthDate, setBirthDate] = useState(profile?.birth_date ?? '');
-  // F1.10: solo per gli account Apple Private Relay mostriamo e rettifichiamo
-  // la mail di contatto. Il flag deriva dall'email dell'account (session), non
-  // dal campo `email` in editing: un cambio email non-confermato non conta.
+  // La mail di contatto si mostra e si rettifica per TUTTI dal 2026-07-25 (era
+  // solo per gli account Apple Private Relay, F1.10). `isRelay` sopravvive per
+  // un solo scopo: scegliere il testo-guida del campo (:279), perché a chi
+  // nasconde la mail va spiegato PERCHE' gliela chiediamo. Il flag deriva
+  // dall'email dell'account (session), non dal campo `email` in editing: un
+  // cambio email non-confermato non conta.
   const isRelay = useMemo(
     () => isApplePrivateRelayEmail(currentEmail),
     [currentEmail]
   );
   // Qui NON si precompila con la mail dell'account, a differenza del completamento
-  // profilo: in questa schermata il campo «Email» dell'account c'è già, e riempire
-  // anche «Email di contatto» con lo stesso indirizzo mostrerebbe due campi identici
-  // uno sopra l'altro — confusione, non aiuto. Chi ha un profilo nato prima di questa
-  // regola la scrive una volta; per i nuovi la colonna arriva già piena dal
-  // completamento profilo.
+  // profilo: in questa schermata il campo «Email» dell'account c'è già, e riempirne
+  // un secondo con lo stesso indirizzo di nostra iniziativa aggiunge un valore che
+  // la persona non ha scritto. Chi ha un profilo nato prima di questa regola la
+  // scrive una volta.
+  // NB (2026-07-25): per i profili nuovi la colonna arriva comunque piena dal
+  // completamento profilo, quindi i due campi possono mostrare lo stesso indirizzo.
+  // Non è il caso peggiore, ma la resa va rivista quando coincidono (F-EMAIL.23
+  // decide la regola: per gli account con mail già reale `contact_email` resta un
+  // recapito, mai la credenziale).
   const [contactEmail, setContactEmail] = useState(
     profile?.contact_email ?? ''
   );
