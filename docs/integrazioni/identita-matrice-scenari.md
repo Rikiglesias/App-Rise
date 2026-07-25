@@ -16,6 +16,10 @@
 > 🔑 leva umana) · *come si verifica*. Ogni affermazione è marcata **[V]** se verificata alla
 > fonte in questa analisi, **[A]** se assunta e ancora da confermare.
 >
+> **Il lato nostro** sta in `app-gate-matrice.md` (fase F-APP-GATE): questo documento descrive
+> la persona *quando è già uscita* verso LD, quello descrive la soglia che le mettiamo davanti
+> nell'app — azione per azione, con il momento in cui il cancello scatta.
+>
 > Stato: prima stesura 2026-07-25. Binding: `~/todos/partner-identita.md` (criterio F3.0).
 
 ---
