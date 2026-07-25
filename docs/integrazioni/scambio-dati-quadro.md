@@ -363,8 +363,10 @@ documentazione ufficiale che finiscono **solo** nel gettone di accesso, mai nel 
 sull'endpoint utente — che è ciò che l'estensione di Joomla legge. Doppio motivo per non costruire quel
 pezzo: non serve, e il gettone di accesso non va consegnato a un terzo per leggere dati. Conseguenze: il
 codice di provenienza **esce dal login** e resta sul canale dell'attribuzione; l'email reale dietro
-l'alias **non è trasmissibile** e diventa un limite dichiarato (l'alias inoltra, quindi la posta
-arriva). *Analisi con evidenza alla fonte, 24/07.*
+l'alias non è trasmissibile **come informazione a parte** (l'alias inoltra, quindi la posta arriva).
+*Analisi con evidenza alla fonte, 24/07.* **Aggiornamento 25/07**: quel limite non è più definitivo —
+la via è far diventare l'indirizzo vero, verificato, **l'email dell'account** (F-EMAIL.23), così è il
+campo standard a portarlo. Resta vero che non si può infilare in un'informazione personalizzata.
 
 **Nome come stringa unica invece di nome e cognome separati. → SCELTA (è la forma standard).**
 Trappola trovata **leggendo il codice sorgente del server di autenticazione, non la documentazione**:
