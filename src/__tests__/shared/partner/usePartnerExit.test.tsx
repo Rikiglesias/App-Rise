@@ -38,18 +38,21 @@ const setAuth = (over: {
   firstName?: string;
   lastName?: string;
   contactEmail?: string | null;
+  /** Sessione attiva ma profilo assente: accesso social non completato. */
+  noProfile?: boolean;
 }) => {
   mockUseAuth.mockReturnValue({
     session: over.userId
       ? { user: { id: over.userId, email: over.email ?? null } }
       : null,
-    profile: over.userId
-      ? {
-          first_name: over.firstName ?? 'Mario',
-          last_name: over.lastName ?? 'Rossi',
-          contact_email: over.contactEmail ?? null,
-        }
-      : null,
+    profile:
+      over.userId && !over.noProfile
+        ? {
+            first_name: over.firstName ?? 'Mario',
+            last_name: over.lastName ?? 'Rossi',
+            contact_email: over.contactEmail ?? null,
+          }
+        : null,
   });
 };
 
@@ -80,6 +83,26 @@ describe('usePartnerExit', () => {
     expect(url).toContain('last_name=Rossi');
     expect(url).toContain('email=mario%40gmail.com');
     expect(key).toBe('donation');
+  });
+
+  it("openDonation: sessione SENZA profilo → nessun dato personale nell'URL", async () => {
+    // Accesso social non completato: l'utente esiste in auth (e ha un'email in
+    // sessione) ma non ha profilo, quindi non c'è prova dell'informativa
+    // accettata. Nulla di suo deve raggiungere il partner.
+    setAuth({ userId: 'u1', email: 'mario@gmail.com', noProfile: true });
+    mockGetOrCreate.mockResolvedValue('DREF');
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    const [url] = mockOpenLink.mock.calls[0];
+    expect(url).not.toContain('email=');
+    expect(url).not.toContain('first_name=');
+    expect(url).not.toContain('last_name=');
+    // L'uscita non si blocca e la correlazione resta: solo i dati personali spariscono.
+    expect(url).toContain('utm_content=DREF');
   });
 
   it('openDonation: email Apple relay NON precompilata', async () => {
