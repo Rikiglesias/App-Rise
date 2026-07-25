@@ -146,6 +146,24 @@ FUORI_WINANSI = {
     "≠": "!=",
     "…": "...",  # puntini di sospensione tipografici
     "‑": "-",    # trattino unificatore
+    # Marcatori usati nelle matrici di `docs/`: sono la colonna «provvedimento», cioe' il
+    # significato della riga. Non mapparli voleva dire glifi sbagliati esattamente dove sta
+    # l'informazione (62 righe in identita-matrice-scenari, 21 in app-gate-matrice).
+    "🔧": "[noi]",
+    "📨": "[a loro]",
+    "⚠": "[!]",
+    "🔑": "[leva]",
+    "✅": "[fatto]",
+    "❌": "[no]",
+    "🔴": "[urgente]",
+    "🟡": "[medio]",
+    "🔵": "[in coda]",
+    "⚪": "[con calma]",
+    "🧭": "[quadro]",
+    "➡": "->",
+    "🎯": "[obiettivo]",
+    "🔝": "[in testa]",
+    "️": "",  # variation selector: accompagna gli emoji, non e' un carattere visibile
 }
 
 
@@ -165,11 +183,13 @@ def avvisa_caratteri_non_mappati(text: str) -> None:
     )
     if ignoti:
         dettaglio = ", ".join(f"U+{ord(c):04X} ({c!r})" for c in ignoti)
-        print(
-            f"ATTENZIONE: {len(ignoti)} carattere(i) non rappresentabile(i) dal font e non "
-            f"mappato(i) -> uscira' un glifo SBAGLIATO: {dettaglio}. "
-            f"Aggiungerlo(i) a FUORI_WINANSI prima di consegnare il PDF.",
-            file=sys.stderr,
+        # FERMA la generazione, non avvisa soltanto: prima usciva «OK ->» con exit 0 e
+        # l'avviso su stderr, quindi il PDF con i glifi sbagliati sembrava buono. Un
+        # controllo che non blocca e' esattamente la classe di bug che doveva impedire.
+        raise SystemExit(
+            f"BLOCCATO: {len(ignoti)} carattere(i) non rappresentabile(i) dal font e non "
+            f"mappato(i) -> uscirebbe un glifo SBAGLIATO: {dettaglio}. "
+            f"Aggiungerlo(i) a FUORI_WINANSI e rigenerare."
         )
 
 
@@ -265,6 +285,7 @@ def build(md_path: Path, pdf_path: Path) -> None:
     # Wrapper mutabile: le funzioni di flush sono chiusure, e serve poter cambiare il tipo
     # di elenco dall'esterno.
     numerato: list = [False]
+    in_comment: list = [False]
 
     def flush_para() -> None:
         if para:
@@ -281,9 +302,8 @@ def build(md_path: Path, pdf_path: Path) -> None:
 
         Numerato e puntato NON si mescolano: prima l'elenco numerato riceveva sia il pallino
         (bulletType="bullet") sia il «1.» iniettato nel testo, e nel PDF usciva «• 1. …».
-        Visto dal vivo sul documento di consegna del 2026-07-25, dove i quattro passi erano
-        l'unica lista. Ora la numerazione la fa reportlab (bulletType="1") e il testo resta
-        pulito.
+        Visto dal vivo sul documento di consegna del 2026-07-25, dove i passi erano l'unica
+        lista. Come si numera davvero: vedi il commento nel ramo `numerato` qui sotto.
         """
         if not bullets:
             return
@@ -334,6 +354,19 @@ def build(md_path: Path, pdf_path: Path) -> None:
 
     for raw in lines:
         line = raw.rstrip()
+
+        # Commento HTML = nota INTERNA, non contenuto: non deve finire nel PDF consegnato.
+        # Senza questo, l'intestazione «documento da mandare a…, non ancora inviato» aggiunta
+        # a un documento in partenza veniva stampata in prima pagina e il destinatario
+        # leggeva le nostre note di lavoro.
+        if in_comment[0]:
+            if "-->" in line:
+                in_comment[0] = False
+            continue
+        if line.lstrip().startswith("<!--"):
+            if "-->" not in line:
+                in_comment[0] = True
+            continue
 
         if line.startswith("```"):
             if in_code:
@@ -397,8 +430,12 @@ def build(md_path: Path, pdf_path: Path) -> None:
             bullets.append(
                 f"<b>{num}.</b>&nbsp; " + inline(re.sub(r"^\s*\d+\. ", "", line))
             )
-        elif bullets and line.startswith(("   ", "\t")):
-            # continuazione indentata dell'ultimo punto elenco
+        elif bullets and line.startswith((" ", "\t")):
+            # Continuazione indentata dell'ultimo punto elenco: QUALUNQUE rientro.
+            # Prima si richiedevano 3 spazi, ma prettier indenta a 2 le continuazioni dei
+            # bullet «- »: quelle cadevano nel ramo paragrafo e la voce usciva spezzata in
+            # due, con la seconda metà a piena larghezza. Non si era visto perche' l'unico
+            # PDF guardato dal vivo aveva voci NUMERATE (continuazione a 3 spazi).
             bullets[-1] += " " + inline(line.strip())
         else:
             flush_quote()
