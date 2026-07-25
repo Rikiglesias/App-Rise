@@ -26,13 +26,24 @@ Sono due integrazioni indipendenti. Si possono fare in ordine: la prima è legge
 
 ## 2. Richiesta A — Riconoscere che un ordine arriva da noi
 
-Quando apriamo un vostro link vi passiamo dei parametri UTM standard in query string:
+Quando apriamo un vostro link aggiungiamo all'indirizzo un **codice opaco generato da noi**, uno
+per persona. Oggi l'app lo invia con il nome `rise_ref`:
+
+```text
+https://…letsdonation.com/…?rise_ref=<codice-opaco-per-utente>
+```
+
+**Siamo pronti a rinominarlo** nei parametri UTM standard, se per voi è più comodo agganciarvi a
+quelli — è una modifica di una riga da parte nostra:
 
 ```text
 https://…letsdonation.com/…?utm_source=rah-app&utm_campaign=<codice-opaco-per-utente>
 ```
 
-`utm_campaign` è un **codice opaco generato da noi**, uno per persona. Non è un login e non
+**Ditecelo voi quale forma preferite**: ci adattiamo alla vostra, così non costruite nulla su
+misura. Il codice è lo stesso in entrambi i casi.
+
+Quel codice è un identificativo per persona. Non è un login e non
 apre nessuna sessione. È uno **pseudonimo** ai sensi del considerando 26 GDPR — non un
 identificativo leggibile — e serve solo a ricondurre l'ordine, a posteriori, alla persona
 giusta.
@@ -62,6 +73,11 @@ affiliate settimane dopo?
 4. Per il **charity shop**: a cosa si aggancia l'attribuzione, visto che l'ordine è del merchant?
 5. **Le donazioni ai progetti** rientrano nello stesso export? Ce lo chiediamo perché abbiamo
    visto che sui nostri progetti si dona già in denaro — sono donazioni che oggi non vediamo.
+6. **Quale forma preferite** per il codice: `rise_ref` (quello che l'app invia oggi) o i
+   parametri UTM standard? Ci adattiamo noi.
+7. Quando sarà attivo il «Login con RAH» (richiesta B), l'export può esporre anche un
+   **indicatore che marca le persone entrate con quel percorso**? Per chi accede così
+   l'attribuzione è certa a prescindere dal codice, e per noi vale più del parametro nell'indirizzo.
 
 ---
 
