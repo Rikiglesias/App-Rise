@@ -43,15 +43,21 @@ In pratica servono cinque cose.
    nostro spazio, dove da quello che vediamo è una scelta del template e non del vostro sistema
    di accesso: se lì c'è un vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
 
-5. Chi si è registrato da voi fino a oggi non lo perdiamo: **non deve rifare la registrazione da
-   voi**, entra una volta con il nostro accesso e ritrova quello che aveva. Dalla nostra parte
-   sistemiamo le anagrafiche che già abbiamo, senza entrare nei vostri archivi — come voi non
-   entrate nei nostri. Dalla vostra serve solo che l'account che avete già venga agganciato alla
-   stessa persona invece di crearne un secondo: per chi c'era prima l'aggancio si fa con l'email,
-   e dal primo accesso in poi è l'identificativo che il login stesso vi consegna, sempre lo stesso
-   per quella persona. Un caso da tenere presente: chi entra con «Nascondi la mia email» di Apple
-   vi arriva con un indirizzo di comodo che non combacia con quello che aveva da voi — per quei
-   pochi serve un «collega il mio account» dal profilo. Se a qualcuno mancano dei dati che oggi
-   chiediamo, glieli chiediamo noi al primo accesso.
+5. Chi si è già registrato da voi non lo perdiamo: **non deve rifare la registrazione**, entra una
+   volta con il nostro accesso e ritrova quello che aveva.
+
+   Perché lo ritrovi, quando entra col nostro pulsante il vostro sistema deve capire che è la
+   stessa persona dell'account che aveva già, e **unire i due invece di crearne uno nuovo**. Il
+   modo più semplice per capirlo è l'email: se è la stessa, è lei. Da lì in avanti l'email non
+   serve più a riconoscerla, perché il nostro accesso vi passa un codice suo, sempre uguale.
+
+   C'è un caso in cui l'email non basta: chi entra con «Nascondi la mia email» di Apple vi arriva
+   con un indirizzo di comodo, diverso da quello che aveva da voi. Per quelle persone serve un
+   modo, dentro il loro profilo sul vostro sito, per dire «anche quell'altro account è mio» —
+   altrimenti si ritrovano con due account e perdono lo storico.
+
+   Dalla nostra parte sistemiamo le anagrafiche che già abbiamo, senza entrare nei vostri archivi
+   — come voi non entrate nei nostri. E se a qualcuno mancano dei dati che oggi chiediamo, glieli
+   chiediamo noi al primo accesso.
 
 Riccardo
