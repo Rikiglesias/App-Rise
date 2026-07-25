@@ -56,11 +56,22 @@ export const useProfileForm = () => {
   // sessione (e il profilo) possono arrivare dopo il primo render; e si ferma appena
   // la persona scrive, per non sovrascriverle sotto le dita quello che ha digitato.
   const contactEmailTouched = useRef(false);
+  const touchedForAccount = useRef<string | undefined>(undefined);
   useEffect(() => {
+    // Il «l'ha digitato la persona» vale per QUELL'account. Se cambia l'utente
+    // (logout+login: questa schermata è in uno stack unico, non separato per
+    // sessione — verificato in AppNavigator), il flag va azzerato: altrimenti il
+    // testo scritto dal precedente resterebbe nel form del nuovo e non verrebbe
+    // ri-precompilato. È la classe di errore che qui ha già morso cinque volte —
+    // un valore che sopravvive al cambio di utente.
+    if (touchedForAccount.current !== accountEmail) {
+      touchedForAccount.current = accountEmail;
+      contactEmailTouched.current = false;
+    }
     if (contactEmailTouched.current) return;
     const proposed =
       profile?.contact_email ?? (isRelay ? '' : (accountEmail ?? ''));
-    if (proposed) setContactEmail(proposed);
+    setContactEmail(proposed);
   }, [accountEmail, isRelay, profile?.contact_email]);
 
   const lastNameRef = useRef<TextInput>(null);

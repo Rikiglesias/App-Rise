@@ -274,6 +274,40 @@ describe('CompleteProfileScreen — F1.10 email di contatto (Apple relay)', () =
     await waitFor(() => expect(upsert).not.toHaveBeenCalled());
   });
 
+  it('se cambia UTENTE, il testo digitato dal precedente non resta nel form del nuovo', () => {
+    mockUseAuth.mockReturnValue(makeAuth()); // primo utente: m@r.it
+    const { getByLabelText, rerender } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fireEvent.changeText(
+      getByLabelText('Email di contatto'),
+      'digitata@dal-primo.it'
+    );
+
+    // Cambio di utente senza smontare la schermata: possibile perché
+    // CompleteProfile vive in uno stack unico, non separato per sessione.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        session: { user: { id: 'u2', email: 'secondo@r.it' } } as never,
+      })
+    );
+    rerender(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+
+    // Contro-prova del reset di `touchedForAccount`: senza quel confronto il flag
+    // «l'ha digitato la persona» resterebbe true per sempre e il nuovo utente
+    // vedrebbe nel campo l'indirizzo scritto dal precedente — un dato personale
+    // che passa da una persona a un'altra.
+    expect(getByLabelText('Email di contatto').props.value).toBe(
+      'secondo@r.it'
+    );
+  });
+
   it('la precompilazione NON sovrascrive quello che la persona ha digitato', async () => {
     mockUseAuth.mockReturnValue(makeAuth());
     const upsert = getUpsert();
