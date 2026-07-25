@@ -116,7 +116,7 @@ perimetro).
 | 1 | **Punto di partenza** | app · sito · QR · newsletter · link condiviso: decide se un cancello è pure *visibile* |
 | 2 | **Dispositivo** | telefono con l'app · telefono senza l'app · desktop: il terzo caso rende il collegamento diretto impossibile per costruzione |
 | 3 | **Stato della persona** | ospite · autenticato senza profilo · profilo parziale · profilo completo · riconsenso dovuto (cinque, non due) |
-| 4 | **Destinazione** | i quattro modelli di transazione della matrice sorella (§0.2): denaro Donorbox · denaro LD · gift card · cashback · evento |
+| 4 | **Destinazione** | i quattro modelli di transazione **LD** della matrice sorella (§0.2) — denaro LD · gift card · cashback · evento — **più Donorbox**, che lì non è una destinazione ma un terzo che riceve dati: cinque rami in tutto |
 | 5 | **Dove nasce l'account** | app · pagina web (da costruire) · form nativo LD |
 | 6 | **Dove si raccoglie il consenso** | e soprattutto: chi lo incontra davvero |
 | 7 | **Continuità di sessione** | l'app e il browser esterno non condividono la sessione |

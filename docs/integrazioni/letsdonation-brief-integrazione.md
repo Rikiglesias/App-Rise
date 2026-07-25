@@ -1,7 +1,9 @@
 # Rise Against Hunger Italia — Brief di integrazione per Let's Donation
 
-> Documento per Let's Donation S.r.l. — consegnato a **Michele Placucci**, che lo gira al team
-> tecnico (referente tecnico: Fabrizio Palai).
+> **Documento tecnico di supporto, NON ancora inviato.** Si consegna **su richiesta** del team
+> tecnico di Let's Donation, tramite Michele Placucci. Quello che si manda adesso è
+> `letsdonation-proposta-operativa.md` (una pagina). Il nome del referente tecnico non è
+> confermato: non va scritto da nessuna parte.
 >
 > **Quello che ci interessa davvero, e in quest'ordine**: come una persona entra nel nostro
 > spazio senza doversi registrare due volte, quali dati passano fra noi e voi, chi tiene cosa,
@@ -145,9 +147,9 @@ stessa email X, il vostro sistema può **collegare** i due account invece di cre
 
 ## 4. Quali dati passano, e chi tiene cosa
 
-**Nessun accesso ai database, in nessuna delle due direzioni.** Non vi chiediamo credenziali sul
-vostro database e non ve ne diamo sul nostro. L'unico scambio avviene al momento del login, con i
-dati che il protocollo prevede.
+**Nessuno dei due entra nel database dell'altro.** Non vi chiediamo credenziali sul vostro database
+e non ve ne diamo sul nostro. L'unico scambio avviene al momento del login, con i dati che il
+protocollo prevede: un identificativo, il nome e l'email, e nient'altro.
 
 **Cosa vi trasmettiamo al login** — solo i claim standard OpenID Connect:
 
