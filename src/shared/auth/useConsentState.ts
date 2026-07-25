@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { supabase } from './supabaseClient';
-import { isReConsentRequired, CURRENT_POLICY_VERSION } from './consent';
+import {
+  isReConsentRequired,
+  hasGrantedCurrentPolicy,
+  CURRENT_POLICY_VERSION,
+} from './consent';
 import type { ConsentEvent } from './types';
 
 /**
@@ -65,9 +69,17 @@ export const useConsentState = ({
     // altrimenti la guardia sui dati verso terzi sarebbe fail-open — in
     // contraddizione con il fail-safe di getCurrentPolicyIsMaterial.
     if (history === null) return 'unknown';
-    return isReConsentRequired(history, CURRENT_POLICY_VERSION, isMaterial)
-      ? 'needed'
-      : 'ok';
+    // Due domande diverse, non una. «Devo bloccare la UI?» dipende da
+    // is_material: per una versione non-materiale non si forza nessuno a
+    // ri-accettare. «Posso trasmettere dati a un terzo?» no: lì serve la
+    // presenza POSITIVA del consenso alla versione corrente, altrimenti chi non
+    // ha mai accettato passerebbe come consenziente e l'informativa
+    // prometterebbe qualcosa che il codice non mantiene.
+    if (isReConsentRequired(history, CURRENT_POLICY_VERSION, isMaterial))
+      return 'needed';
+    return hasGrantedCurrentPolicy(history, CURRENT_POLICY_VERSION)
+      ? 'ok'
+      : 'unknown';
   }, [status, userId, getConsentHistory]);
 
   const refreshConsent = useCallback(async (): Promise<ConsentState> => {

@@ -490,6 +490,37 @@ describe('AuthContext — stato del consenso a tre valori', () => {
     orderMock.mockResolvedValue({ data: [], error: null });
   });
 
+  it('versione non-materiale senza consenso: la UI non blocca, ma NON è «ok»', async () => {
+    // Le due domande divergono proprio qui. `is_material=false` → nessuno viene
+    // costretto a ri-accettare (UI invariata), ma chi non ha mai accettato non
+    // deve risultare consenziente: su quello si decide se trasmettere a un terzo.
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const single = (
+      supabase.from('policy_versions') as unknown as {
+        select: () => { eq: () => { single: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().single;
+    const orderMock = (
+      supabase.from('consent_events') as unknown as {
+        select: () => { eq: () => { order: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().order;
+    single.mockResolvedValue({ data: { is_material: false }, error: null });
+    orderMock.mockResolvedValue({ data: [], error: null }); // nessun consenso
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+
+    await waitFor(() => expect(getAuth().consentState).toBe('unknown'));
+    expect(getAuth().needsReConsent).toBe(false);
+    single.mockResolvedValue({ data: null, error: null });
+  });
+
   it('un refresh del token NON riazzera un consenso già determinato', async () => {
     // La sessione è un oggetto NUOVO a ogni rinnovo del token, ma l'utente è lo
     // stesso: se l'effetto dipendesse da quell'identità, uno stato «needed» già

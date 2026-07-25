@@ -33,6 +33,13 @@ interface PendingExit {
 
 export interface UsePartnerExitReturn {
   isLoading: string | null;
+  /**
+   * Un'uscita è in preparazione. `useLinkHandler.isLoading` si alza solo
+   * all'ULTIMO passo (l'apertura), mentre prima ci sono i viaggi di rete per ref,
+   * profilo e consenso: senza questo, il pulsante resta apparentemente inerte e
+   * ri-toccabile per tutta la pre-flight.
+   */
+  isExiting: boolean;
   /** La schermata onesta è visibile (uscita Let's Donation in attesa di conferma). */
   disclosureVisible: boolean;
   /** Uscita donazione → Donorbox (nessuna schermata onesta). */
@@ -54,54 +61,61 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     useAuth();
   const { openLink, isLoading } = useLinkHandler();
   const [disclosureVisible, setDisclosureVisible] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const [pending, setPending] = useState<PendingExit | null>(null);
 
   const userId = session?.user?.id ?? null;
 
   const openDonation = useCallback(async () => {
-    const ref = await getOrCreatePartnerRef('donorbox');
-    // `profile` è null in DUE casi diversi: non esiste, oppure non è ancora
-    // arrivato dalla rete (il caricamento parte al boot). Degradare subito
-    // toglierebbe il prefill a un utente in regola che tocca «Dona» appena apre
-    // l'app, quindi prima ricarichiamo e usiamo il valore FRESCO — non quello
-    // della closure, che è del render precedente.
-    // Profilo e consenso sono indipendenti: in serie costavano due viaggi di rete
-    // proprio nel caso bersaglio (app appena aperta), sopra a quelli già spesi per
-    // il ref. In parallelo il ritardo prima di aprire il link resta uno.
-    const [current, consent] = await Promise.all([
-      profile ?? (session?.user?.id ? refreshProfile() : Promise.resolve(null)),
-      // 'unknown' può essere solo «non ancora tornato», non «negato»: si
-      // ri-verifica invece di degradare in silenzio chi è in regola.
-      consentState === 'unknown' && session?.user?.id
-        ? refreshConsent()
-        : Promise.resolve(consentState),
-    ]);
-    // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
-    // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
-    // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
-    // sessione, che finirebbe a un terzo senza base documentata.
-    // Sul consenso serve un `ok` ESPLICITO, non «non risulta da riaccettare»:
-    // all'avvio lo stato è `unknown` finché due query non tornano, ed è proprio la
-    // finestra in cui si tocca «Dona». Leggere `unknown` come «a posto» rimetterebbe
-    // il bug che questa guardia esiste per chiudere, spostato di una variabile.
-    // In tutti i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
-    const prefill =
-      current && consent === 'ok'
-        ? {
-            firstName: current.first_name,
-            lastName: current.last_name,
-            email: resolvePrefillEmail({
-              contactEmail: current.contact_email ?? null,
-              authEmail: session?.user?.email ?? null,
-            }),
-          }
-        : {};
-    const url = buildDonorboxDonationUrl(ref, prefill);
-    await openLink(
-      url,
-      'donation',
-      'Impossibile aprire il link di donazione. Riprova più tardi.'
-    );
+    setIsExiting(true);
+    try {
+      const ref = await getOrCreatePartnerRef('donorbox');
+      // `profile` è null in DUE casi diversi: non esiste, oppure non è ancora
+      // arrivato dalla rete (il caricamento parte al boot). Degradare subito
+      // toglierebbe il prefill a un utente in regola che tocca «Dona» appena apre
+      // l'app, quindi prima ricarichiamo e usiamo il valore FRESCO — non quello
+      // della closure, che è del render precedente.
+      // Profilo e consenso sono indipendenti: in serie costavano due viaggi di rete
+      // proprio nel caso bersaglio (app appena aperta), sopra a quelli già spesi per
+      // il ref. In parallelo il ritardo prima di aprire il link resta uno.
+      const [current, consent] = await Promise.all([
+        profile ??
+          (session?.user?.id ? refreshProfile() : Promise.resolve(null)),
+        // 'unknown' può essere solo «non ancora tornato», non «negato»: si
+        // ri-verifica invece di degradare in silenzio chi è in regola.
+        consentState === 'unknown' && session?.user?.id
+          ? refreshConsent()
+          : Promise.resolve(consentState),
+      ]);
+      // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
+      // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
+      // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
+      // sessione, che finirebbe a un terzo senza base documentata.
+      // Sul consenso serve un `ok` ESPLICITO, non «non risulta da riaccettare»:
+      // all'avvio lo stato è `unknown` finché due query non tornano, ed è proprio la
+      // finestra in cui si tocca «Dona». Leggere `unknown` come «a posto» rimetterebbe
+      // il bug che questa guardia esiste per chiudere, spostato di una variabile.
+      // In tutti i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
+      const prefill =
+        current && consent === 'ok'
+          ? {
+              firstName: current.first_name,
+              lastName: current.last_name,
+              email: resolvePrefillEmail({
+                contactEmail: current.contact_email ?? null,
+                authEmail: session?.user?.email ?? null,
+              }),
+            }
+          : {};
+      const url = buildDonorboxDonationUrl(ref, prefill);
+      await openLink(
+        url,
+        'donation',
+        'Impossibile aprire il link di donazione. Riprova più tardi.'
+      );
+    } finally {
+      setIsExiting(false);
+    }
   }, [
     openLink,
     profile,
@@ -113,8 +127,13 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
 
   const exitLetsDonation = useCallback(
     async (url: string, loadingKey: string, errorMessage?: string) => {
-      const ref = await getOrCreatePartnerRef('letsdonation');
-      await openLink(appendRiseRef(url, ref), loadingKey, errorMessage);
+      setIsExiting(true);
+      try {
+        const ref = await getOrCreatePartnerRef('letsdonation');
+        await openLink(appendRiseRef(url, ref), loadingKey, errorMessage);
+      } finally {
+        setIsExiting(false);
+      }
     },
     [openLink]
   );
@@ -149,6 +168,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
 
   return {
     isLoading,
+    isExiting,
     disclosureVisible,
     openDonation,
     openLetsDonationExit,

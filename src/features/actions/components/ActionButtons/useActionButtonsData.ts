@@ -22,6 +22,9 @@ export interface ActionButtonsData {
   // Modal "Come donare" (info categorie)
   showInfoModal: boolean;
 
+  /** Un'uscita è in preparazione: il pulsante va disabilitato finché non parte. */
+  isExiting: boolean;
+
   // Schermata onesta pre-redirect Let's Donation (F1.7d)
   disclosureVisible: boolean;
 
@@ -50,6 +53,7 @@ export const useActionButtonsData = (
   const { openTracciabilitaLink } = useLinkHandler();
   const {
     disclosureVisible,
+    isExiting,
     openDonation,
     openLetsDonationExit,
     confirmDisclosure,
@@ -192,6 +196,7 @@ export const useActionButtonsData = (
     // Modal state
     showInfoModal,
     disclosureVisible,
+    isExiting,
 
     // Handlers
     handleButtonPress,
