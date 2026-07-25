@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { supabase } from './supabaseClient';
 import { isReConsentRequired, CURRENT_POLICY_VERSION } from './consent';
@@ -76,14 +76,22 @@ export const useConsentState = ({
     return next;
   }, [evaluate]);
 
+  // `evaluate` cambia identità a ogni refresh del token (l'oggetto sessione è
+  // nuovo), ma NON è un cambio di utente: tenerlo nelle dipendenze riazzerava a
+  // `unknown` uno stato già determinato, spegnendo il blocco di riconsenso e
+  // togliendo il prefill a chi è in regola. Il ref lo rende leggibile senza
+  // legare l'effetto alla sua identità.
+  const evaluateRef = useRef(evaluate);
+  evaluateRef.current = evaluate;
+
   useEffect(() => {
     // Un ospite non ha dato NESSUN consenso: dirgli `ok` sarebbe falso.
     setConsentState('unknown');
     if (status !== 'authenticated' || !userId) return;
-    void evaluate().then(next => {
+    void evaluateRef.current().then(next => {
       if (next !== 'unknown') setConsentState(next);
     });
-  }, [status, userId, evaluate]);
+  }, [status, userId]);
 
   const markConsentGiven = useCallback(() => setConsentState('ok'), []);
 

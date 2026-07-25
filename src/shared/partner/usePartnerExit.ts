@@ -65,8 +65,17 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     // toglierebbe il prefill a un utente in regola che tocca «Dona» appena apre
     // l'app, quindi prima ricarichiamo e usiamo il valore FRESCO — non quello
     // della closure, che è del render precedente.
-    const current =
-      profile ?? (session?.user?.id ? await refreshProfile() : null);
+    // Profilo e consenso sono indipendenti: in serie costavano due viaggi di rete
+    // proprio nel caso bersaglio (app appena aperta), sopra a quelli già spesi per
+    // il ref. In parallelo il ritardo prima di aprire il link resta uno.
+    const [current, consent] = await Promise.all([
+      profile ?? (session?.user?.id ? refreshProfile() : Promise.resolve(null)),
+      // 'unknown' può essere solo «non ancora tornato», non «negato»: si
+      // ri-verifica invece di degradare in silenzio chi è in regola.
+      consentState === 'unknown' && session?.user?.id
+        ? refreshConsent()
+        : Promise.resolve(consentState),
+    ]);
     // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
     // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
     // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
@@ -76,12 +85,6 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     // finestra in cui si tocca «Dona». Leggere `unknown` come «a posto» rimetterebbe
     // il bug che questa guardia esiste per chiudere, spostato di una variabile.
     // In tutti i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
-    // Come per il profilo: 'unknown' può essere solo «non ancora tornato», non
-    // «negato» — si ri-verifica invece di degradare in silenzio chi è in regola.
-    const consent =
-      consentState === 'unknown' && session?.user?.id
-        ? await refreshConsent()
-        : consentState;
     const prefill =
       current && consent === 'ok'
         ? {

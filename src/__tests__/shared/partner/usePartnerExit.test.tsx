@@ -178,6 +178,27 @@ describe('usePartnerExit', () => {
     expect(url).toContain('utm_content=DREF');
   });
 
+  it('openDonation: consenso ignoto ma ri-verifica OK → prefill presente', async () => {
+    // Il ramo speculare a quello sopra: 'unknown' non significa «negato». Se la
+    // ri-verifica dice ok, chi è in regola NON deve perdere la precompilazione.
+    setAuth({
+      userId: 'u1',
+      email: 'mario@gmail.com',
+      consentState: 'unknown',
+      consentAfterRefresh: 'ok',
+    });
+    mockGetOrCreate.mockResolvedValue('DREF');
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    const [url] = mockOpenLink.mock.calls[0];
+    expect(url).toContain('first_name=Mario');
+    expect(url).toContain('email=mario%40gmail.com');
+  });
+
   it('openDonation: profilo non ancora caricato → lo ricarica, NON degrada', async () => {
     // Regressione da evitare: chi tocca «Dona» appena aperta l'app ha profile
     // ancora null perché la rete non ha risposto, ma è un utente in regola.
