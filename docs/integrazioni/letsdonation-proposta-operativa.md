@@ -30,9 +30,10 @@ In pratica servono cinque cose.
    per chi gestisce il sito.
 
 3. Chi gestisce il vostro sito mette sulla pagina del nostro spazio il pulsante «Entra con Rise
-   Against Hunger». Serve anche a chi vi trova da Google o da un vostro canale: se un account da noi
-   non ce l'ha, lo crea **da noi** in quel momento — sulla nostra pagina, come si fa con un account
-   Google — e torna sulla vostra già riconosciuto.
+   Against Hunger». Il pulsante apre una **nostra pagina web** — funziona anche da computer, non
+   serve avere l'app. Serve anche a chi vi trova da Google o da un vostro canale: se un account da
+   noi non ce l'ha, lo crea **da noi** in quel momento — sulla nostra pagina, come si fa con un
+   account Google — e torna sulla vostra già riconosciuto.
 
 4. Nello stesso momento in cui il pulsante va online, il vostro modulo di registrazione su quella
    pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e
@@ -42,12 +43,15 @@ In pratica servono cinque cose.
    nostro spazio, dove da quello che vediamo è una scelta del template e non del vostro sistema
    di accesso: se lì c'è un vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
 
-5. Chi si è registrato da voi fino a oggi non lo perdiamo e non deve rifare niente. Dalla nostra
-   parte sistemiamo le anagrafiche che già abbiamo, senza chiedervi elenchi e senza entrare nei
-   vostri archivi — come voi non entrate nei nostri. Dalla vostra serve solo che l'account che
-   avete già venga agganciato alla stessa persona invece di crearne un secondo: per chi c'era
-   prima l'aggancio si fa con l'email, e dal primo accesso in poi è l'identificativo che il login
-   stesso vi consegna, sempre lo stesso per quella persona. Se a qualcuno mancano dei dati che
-   oggi chiediamo, glieli chiediamo noi al primo accesso.
+5. Chi si è registrato da voi fino a oggi non lo perdiamo: **non deve rifare la registrazione da
+   voi**, entra una volta con il nostro accesso e ritrova quello che aveva. Dalla nostra parte
+   sistemiamo le anagrafiche che già abbiamo, senza entrare nei vostri archivi — come voi non
+   entrate nei nostri. Dalla vostra serve solo che l'account che avete già venga agganciato alla
+   stessa persona invece di crearne un secondo: per chi c'era prima l'aggancio si fa con l'email,
+   e dal primo accesso in poi è l'identificativo che il login stesso vi consegna, sempre lo stesso
+   per quella persona. Un caso da tenere presente: chi entra con «Nascondi la mia email» di Apple
+   vi arriva con un indirizzo di comodo che non combacia con quello che aveva da voi — per quei
+   pochi serve un «collega il mio account» dal profilo. Se a qualcuno mancano dei dati che oggi
+   chiediamo, glieli chiediamo noi al primo accesso.
 
 Riccardo
