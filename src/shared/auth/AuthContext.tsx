@@ -39,6 +39,9 @@ import { env } from '@/shared/config/environment';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
 
+/** `unknown` = non ancora verificato o verifica fallita. NON equivale a «a posto». */
+export type ConsentState = 'unknown' | 'ok' | 'needed';
+
 export interface AuthState {
   status: Status;
   session: Session | null;
@@ -91,6 +94,13 @@ export interface AuthState {
   getConsentHistory: () => Promise<ConsentEvent[] | null>;
   /** True se l'utente deve ri-accettare l'informativa corrente (cambio materiale). */
   needsReConsent: boolean;
+  /**
+   * Stato del consenso all'informativa corrente, a tre valori.
+   * `unknown` = non ancora verificato (avvio) o verifica fallita: NON è «a posto».
+   * Chi deve decidere se trasmettere dati personali a un terzo deve richiedere `ok`;
+   * la UI di blocco continua a usare `needsReConsent`, che è vero solo su `needed`.
+   */
+  consentState: ConsentState;
   /** Registra l'accettazione della versione corrente dell'informativa. */
   acceptCurrentPolicy: () => Promise<{ error: string | null }>;
 }
@@ -103,11 +113,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [status, setStatus] = useState<Status>('loading');
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [needsReConsent, setNeedsReConsent] = useState(false);
+  // Tre valori, non due. `unknown` è lo stato all'avvio e dopo un errore di rete:
+  // serve a chi deve DECIDERE se trasmettere dati a un terzo, perché «non ancora
+  // saputo» non è «tutto a posto». La UI continua a leggere il booleano derivato.
+  const [consentState, setConsentState] = useState<ConsentState>('unknown');
 
   // Ritorna il profilo caricato oltre a metterlo nello stato: chi deve DECIDERE
   // subito dopo il caricamento (es. il prefill dei partner) non può leggere `profile`
   // dalla propria closure, che è ancora quella del render precedente.
+  // La UI blocca SOLO su 'needed': un 'unknown' non deve sbattere l'utente su una
+  // schermata di riconsenso per un errore di rete (comportamento invariato).
+  const needsReConsent = consentState === 'needed';
+
   const loadProfile = useCallback(
     async (userId: string): Promise<Profile | null> => {
       const { data, error } = await supabase
@@ -397,7 +414,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const acceptCurrentPolicy = useCallback(async () => {
     const res = await recordConsent('privacy_notice', 'granted');
-    if (!res.error) setNeedsReConsent(false);
+    if (!res.error) setConsentState('ok');
     return res;
   }, [recordConsent]);
 
@@ -417,17 +434,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // Verifica re-consenso quando l'utente è autenticato (SOLO per cambi materiali policy).
   useEffect(() => {
     if (status !== 'authenticated' || !session?.user.id) {
-      setNeedsReConsent(false);
+      setConsentState('ok');
       return;
     }
+    setConsentState('unknown');
     void Promise.all([getConsentHistory(), getCurrentPolicyIsMaterial()]).then(
       ([history, isMaterial]) => {
-        // Su errore di fetch della history (null) NON gattiamo: evita un falso re-consent
-        // da errore transient (coerente con loadProfile che non azzera su errore).
-        if (history !== null)
-          setNeedsReConsent(
-            isReConsentRequired(history, CURRENT_POLICY_VERSION, isMaterial)
-          );
+        // Su errore di fetch della history (null) NON gattiamo la UI: evita un falso
+        // re-consent da errore transient (coerente con loadProfile che non azzera su
+        // errore). Lo stato però resta 'unknown', non 'ok': chi deve decidere se
+        // trasmettere dati a un terzo non può leggere «nessun problema» da un errore
+        // di rete — fail-safe coerente con getCurrentPolicyIsMaterial, che in dubbio
+        // richiede il consenso.
+        if (history === null) return;
+        setConsentState(
+          isReConsentRequired(history, CURRENT_POLICY_VERSION, isMaterial)
+            ? 'needed'
+            : 'ok'
+        );
       }
     );
   }, [status, session, getConsentHistory, getCurrentPolicyIsMaterial]);
@@ -457,6 +481,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setMarketingConsent,
       getConsentHistory,
       needsReConsent,
+      consentState,
       acceptCurrentPolicy,
     }),
     [
@@ -483,6 +508,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setMarketingConsent,
       getConsentHistory,
       needsReConsent,
+      consentState,
       acceptCurrentPolicy,
     ]
   );

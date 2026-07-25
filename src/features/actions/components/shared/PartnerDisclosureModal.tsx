@@ -133,7 +133,7 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
             <PerfectText size={22} lines={2} style={styles.title}>
               {t('partner.disclosureTitle')}
             </PerfectText>
-            <PerfectText size={15} lines={8} style={styles.body}>
+            <PerfectText size={15} lines={12} style={styles.body}>
               {t('partner.disclosureBody')}
             </PerfectText>
             <PerfectContainer style={styles.buttonRow}>

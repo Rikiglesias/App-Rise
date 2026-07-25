@@ -316,6 +316,30 @@ describe('AuthContext — update/signup/consenso', () => {
     });
   });
 
+  it('refreshProfile RESTITUISCE il profilo caricato, non solo lo stato', async () => {
+    // Il percorso di successo del valore di ritorno: senza questo test il
+    // comportamento nuovo non è mai esercitato e la firma potrebbe regredire
+    // a void senza che nulla diventi rosso.
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const single = (
+      supabase.from('profiles') as unknown as {
+        select: () => { eq: () => { single: jest.Mock } };
+      }
+    )
+      .select()
+      .eq().single;
+    const row = { id: 'u1', first_name: 'Mario', last_name: 'Rossi' };
+    single.mockResolvedValue({ data: row, error: null });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await act(async () => {
+      await expect(getAuth().refreshProfile()).resolves.toEqual(row);
+    });
+    single.mockResolvedValue({ data: null, error: null });
+  });
+
   it('refreshProfile non lancia se la fetch del profilo fallisce', async () => {
     (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
       data: { session: { user: { id: 'u1' } } },
