@@ -235,6 +235,7 @@ Sostituiscono e riorganizzano quelle sparse nel brief attuale. In ordine di valo
 | **R6** | **Flag «utente proveniente da RAH»** nell'export: per gli utenti federati vale più dell'UTM | G4 |
 | **R7** | Domande di chiarimento: alias Apple accettato dal JIT? `email_verified` richiesto? Anagrafica aggiornata a ogni login o solo al JIT? Marketing a false sul JIT? Informativa LD mostrata all'account JIT? Cancellazione propagabile? Che dati chiede l'iscrizione a un evento? | C2, C3, C4, D4, D5, D7, E4 |
 | **R8** | **Il precedente Zucchetti**: che meccanismo è davvero (già nel brief, resta) | — |
+| **R9** | **Export delle donazioni ai progetti** — conseguenza diretta della decisione D-b: se il denaro può arrivare anche dai progetti LD, dobbiamo poterlo vedere (export o webhook, con l'attribuzione di R1) | E1, D-b |
 
 ### 3.2 Piano di costruzione lato nostro
 
@@ -243,7 +244,7 @@ In ordine di dipendenza. Le prime due non dipendono da nessuna risposta di LD.
 | # | Pezzo | Dipende da |
 | --- | --- | --- |
 | **P1** | **`user_metadata.name`**: backfill + scrittura al signup e all'aggiornamento profilo — senza questo il claim `name` è vuoto per la maggioranza | Niente. Si può fare subito |
-| **P2** | **Migration 0010**: `phone` e `city` nullable, per rendere possibile un profilo web minimo | Decisione di Riccardo su quali campi sono indispensabili subito (B2-bis) |
+| **P2** | **Profilo minimo + completamento differito** (decisione D-a). Due pezzi, e il secondo è quello che conta: (a) migration 0010 che rende `phone` e `city` nullable; (b) **meccanismo che chiude il profilo** — stato «profilo incompleto» leggibile, richiesta dei campi mancanti al rientro in app e prima delle azioni che li richiedono davvero (iscrizione evento). Senza (b), «prima o poi» diventa «mai» | D-a presa; indipendente da LD |
 | **P3** | **Pagina web** (Next.js): `/consent`, `/register` (con 18+ e consenso **prima** dell'insert, profilo e `consent_events` nello stesso atto), `/auth/callback`, rilevamento in-app browser | Hosting (leva) |
 | **P4** | **Chiavi di firma asimmetriche** + abilitazione OAuth server | Leve di Riccardo |
 | **P5** | Registrazione del client LD, discovery, test end-to-end | Risposta LD |
@@ -259,14 +260,14 @@ In ordine di dipendenza. Le prime due non dipendono da nessuna risposta di LD.
 6. Se LD non implementa nulla, **tutto resta com'è** (H10).
 7. Se veniamo dall'app, il primo passaggio sul web **richiede un login**, salvo P3 avanzato (F1).
 
-### 3.4 Le decisioni che servono a Riccardo
+### 3.4 Le decisioni di Riccardo — PRESE il 2026-07-25
 
-| # | Decisione | Perché blocca |
+| # | Decisione | Esito |
 | --- | --- | --- |
-| **D-a** | **Quali campi** chiediamo davvero nella registrazione web (proposta: nome, email, data di nascita per il 18+, consenso — telefono e città dopo, alla prima azione che li richiede) | Da qui esce la migration 0010 e il peso dell'intero flusso (B2-bis) |
-| **D-b** | **Donazioni in denaro**: Donorbox resta il canale unico o convivono con i progetti LD? | Oggi l'app manda a entrambi senza che sia una scelta (E1) |
-| **D-c** | **Hosting** della pagina: Vercel gratuito o dominio proprio RAH-Italia (esiste?) | Blocca P3 e P5 |
-| **D-d** | Accettare l'auth di produzione su una **feature beta** | Blocca P4 |
+| **D-a** | Quali campi nella registrazione web | **«Servono tutti quei dati. Prima o poi.»** → profilo **minimo alla nascita** (nome, email, data di nascita per il 18+, consenso) **+ completamento OBBLIGATORIO differito**. Attenzione al fraintendimento: *nullable ≠ opzionale per sempre* — senza un meccanismo che chiuda il profilo alla prima occasione utile (rientro in app, iscrizione a un evento), quei dati non arriverebbero mai. La migration 0010 è la condizione tecnica, **non** il provvedimento completo |
+| **D-b** | Donazioni in denaro | **Convivono.** «Se si può donare anche lì va bene, è una cosa in più che l'utente può scegliere.» Donorbox resta il canale diretto, i progetti LD sono un'opzione aggiuntiva → **conseguenza obbligata**: serve l'export delle donazioni ai progetti (nuova richiesta **R9**), altrimenti quel denaro resta invisibile a noi |
+| **D-c** | Hosting della pagina | **Indirizzo Vercel gratuito.** Verificato: `riseagainsthungeritalia.it` e `.org` **non esistono** (NXDOMAIN) → RAH-Italia non ha un dominio proprio, e `riseagainsthunger.org` è di Rise USA (Riccardo vuole evitare di dover chiedere loro accesso). Nessun DNS di terzi, spostabile in seguito |
+| **D-d** | Auth di produzione su feature beta | **Si aspetta la risposta di Let's Donation.** Nessuna accensione: né chiavi asimmetriche, né OAuth server, né registrazione client. P4 e P5 restano fermi per scelta, non per dimenticanza |
 
 ---
 
