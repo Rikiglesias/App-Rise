@@ -67,6 +67,12 @@ export const ProfileEditScreen: React.FC = () => {
     () => isApplePrivateRelayEmail(currentEmail),
     [currentEmail]
   );
+  // Qui NON si precompila con la mail dell'account, a differenza del completamento
+  // profilo: in questa schermata il campo «Email» dell'account c'è già, e riempire
+  // anche «Email di contatto» con lo stesso indirizzo mostrerebbe due campi identici
+  // uno sopra l'altro — confusione, non aiuto. Chi ha un profilo nato prima di questa
+  // regola la scrive una volta; per i nuovi la colonna arriva già piena dal
+  // completamento profilo.
   const [contactEmail, setContactEmail] = useState(
     profile?.contact_email ?? ''
   );
@@ -94,12 +100,13 @@ export const ProfileEditScreen: React.FC = () => {
     if (country === 'IT' && validateRequired(province)) e.province = 'required';
     const a = validateAdult(birthDate);
     if (a) e.birthDate = a;
-    // F1.10: mail di contatto obbligatoria e reale per gli account relay
-    // (stessa validazione del completa-profilo, via helper condiviso).
-    if (isRelay) {
-      const ce = validateContactEmail(contactEmail);
-      if (ce) e.contactEmail = ce;
-    }
+    // Mail di contatto obbligatoria e reale per TUTTI, come al completamento del
+    // profilo: è la mail con cui riconosciamo la persona anche nell'anagrafica
+    // importata dal partner. Gemello del completa-profilo: se qui restasse
+    // condizionata al relay, si potrebbe SVUOTARE in rettifica ciò che alla nascita
+    // è obbligatorio, e il record tornerebbe non agganciabile. Helper condiviso.
+    const ce = validateContactEmail(contactEmail);
+    if (ce) e.contactEmail = ce;
     setErrors(e);
     if (Object.keys(e).length > 0) return;
 
@@ -120,8 +127,11 @@ export const ProfileEditScreen: React.FC = () => {
       changed.province = nextProvince;
     if (birthDate.trim() !== profile?.birth_date)
       changed.birth_date = birthDate.trim();
-    // F1.10: la mail di contatto entra nel patch solo se relay e cambiata.
-    if (isRelay && contactEmail.trim() !== (profile?.contact_email ?? ''))
+    // La mail di contatto entra nel patch se è cambiata, per QUALSIASI account:
+    // condizionarla al relay (com'era) significherebbe validarla a tutti e salvarla
+    // solo a qualcuno — la modifica passerebbe il controllo e non verrebbe scritta,
+    // in silenzio.
+    if (contactEmail.trim() !== (profile?.contact_email ?? ''))
       changed.contact_email = contactEmail.trim();
 
     if (Object.keys(changed).length > 0) {
@@ -158,7 +168,8 @@ export const ProfileEditScreen: React.FC = () => {
     country,
     birthDate,
     contactEmail,
-    isRelay,
+    // `isRelay` fuori: la validazione e il patch della mail non lo consultano più
+    // (resta solo per scegliere il placeholder).
     profile,
     currentEmail,
     updateProfile,
@@ -252,19 +263,24 @@ export const ProfileEditScreen: React.FC = () => {
         autoCapitalize="none"
       />
       {/* F1.10: rettifica della mail di contatto, solo per account Apple relay. */}
-      {isRelay ? (
-        <AuthInput
-          label={t('auth.completeProfile.contactEmail')}
-          value={contactEmail}
-          onChangeText={setContactEmail}
-          error={err(errors.contactEmail)}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          textContentType="emailAddress"
-          placeholder={t('auth.completeProfile.contactEmailPlaceholder')}
-        />
-      ) : null}
+      {/* Sempre visibile: è obbligatoria per tutti, e un campo obbligatorio che non
+          si vede blocca il salvataggio senza dire perché. Il placeholder cambia solo
+          per gli alias Apple, dove serve dire che l'indirizzo nascosto non basta. */}
+      <AuthInput
+        label={t('auth.completeProfile.contactEmail')}
+        value={contactEmail}
+        onChangeText={setContactEmail}
+        error={err(errors.contactEmail)}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoComplete="email"
+        textContentType="emailAddress"
+        placeholder={t(
+          isRelay
+            ? 'auth.completeProfile.contactEmailPlaceholderRelay'
+            : 'auth.completeProfile.contactEmailPlaceholder'
+        )}
+      />
 
       {submitError ? (
         <PerfectText size={14} lines={2} style={styles.error}>

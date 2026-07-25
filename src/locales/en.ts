@@ -108,6 +108,8 @@ export default {
       submit: 'Save and continue',
       contactEmail: 'Contact email',
       contactEmailPlaceholder: 'Where you will receive receipts and updates',
+      contactEmailPlaceholderRelay:
+        'Enter your real email: your Apple one is hidden',
     },
     edit: {
       title: 'Edit profile',
