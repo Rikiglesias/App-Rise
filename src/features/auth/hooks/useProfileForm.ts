@@ -20,7 +20,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
 export const useProfileForm = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { session, refreshProfile, recordConsent } = useAuth();
+  const { session, profile, refreshProfile, recordConsent } = useAuth();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -140,9 +140,17 @@ export const useProfileForm = () => {
       return;
     }
     setLoading(true);
-    // S10: upsert dei soli campi anagrafici + privacy_consent_at. NON ri-stampiamo
-    // marketing_consent: la verità sta nel ledger consent_events; riscriverla a `false`
-    // qui azzererebbe un eventuale consenso marketing già concesso.
+    // Due percorsi in una schermata: la NASCITA del profilo (post-social) e il
+    // COMPLETAMENTO di un profilo che esiste già ma ha campi mancanti (P2, profilo
+    // minimo). La differenza non è cosmetica: alla nascita il consenso privacy si
+    // raccoglie e si registra, al completamento **era già stato dato** — riscrivere
+    // `privacy_consent_at` a `now()` sposterebbe la data di un consenso vecchio e
+    // aggiungerebbe al ledger Art.7 un «granted» che non è mai avvenuto in quel
+    // momento. Il registro dei consensi è una prova: non si riscrive per comodità.
+    const isNewProfile = !profile;
+    // S10: upsert dei soli campi anagrafici. NON ri-stampiamo marketing_consent: la
+    // verità sta nel ledger consent_events; riscriverla a `false` qui azzererebbe un
+    // eventuale consenso marketing già concesso.
     const { error } = await supabase.from('profiles').upsert({
       id: userId,
       first_name: firstName.trim(),
@@ -153,7 +161,7 @@ export const useProfileForm = () => {
       province: country === 'IT' ? province.trim() : null,
       country: country.trim(),
       birth_date: birthDate.trim(),
-      privacy_consent_at: new Date().toISOString(),
+      ...(isNewProfile ? { privacy_consent_at: new Date().toISOString() } : {}),
       // F1.10: scriviamo contact_email SOLO per gli account Apple relay (che
       // l'hanno appena inserita); per gli altri non tocchiamo la colonna.
       ...(isRelay ? { contact_email: contactEmail.trim() } : {}),
@@ -163,11 +171,12 @@ export const useProfileForm = () => {
       setSubmitError(t('auth.errors.generic'));
       return;
     }
-    // GDPR Art.7: registra il consenso privacy nel ledger (sessione attiva → RLS ok).
-    const { error: consentError } = await recordConsent(
-      'privacy_notice',
-      'granted'
-    );
+    // GDPR Art.7: il consenso si registra alla NASCITA del profilo (sessione attiva
+    // → RLS ok). Sul completamento no: c'è già, e un secondo «granted» falserebbe il
+    // registro.
+    const { error: consentError } = isNewProfile
+      ? await recordConsent('privacy_notice', 'granted')
+      : { error: null };
     setLoading(false);
     if (consentError) {
       setSubmitError(t('auth.errors.generic'));
@@ -191,6 +200,7 @@ export const useProfileForm = () => {
     contactEmail,
     isRelay,
     session,
+    profile,
     refreshProfile,
     recordConsent,
     navigation,

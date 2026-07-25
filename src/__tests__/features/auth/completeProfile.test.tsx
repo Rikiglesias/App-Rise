@@ -121,6 +121,48 @@ describe('CompleteProfileScreen', () => {
     );
   });
 
+  it('P2: su profilo GIÀ esistente non riscrive privacy_consent_at né registra un secondo consenso', async () => {
+    // Percorso di COMPLETAMENTO (profilo minimo con campi mancanti): il consenso era
+    // già stato dato alla nascita. Riscrivere la data lo sposterebbe e un secondo
+    // «granted» nel ledger Art.7 sarebbe un evento mai avvenuto in quel momento.
+    const recordConsent = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        recordConsent,
+        profile: {
+          id: 'u1',
+          first_name: 'Mario',
+          last_name: 'Rossi',
+          phone: null,
+          city: null,
+          province: null,
+          country: 'IT',
+          birth_date: '1990-01-01',
+          privacy_consent_at: '2026-06-20T09:00:00Z',
+          marketing_consent: false,
+          deletion_requested_at: null,
+          contact_email: null,
+        },
+      })
+    );
+    const upsert = (
+      supabase.from('profiles') as unknown as { upsert: jest.Mock }
+    ).upsert;
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.not.objectContaining({ privacy_consent_at: expect.anything() })
+    );
+    expect(recordConsent).not.toHaveBeenCalled();
+  });
+
   it("mostra il campo Paese e l'upsert include country (default IT)", async () => {
     mockUseAuth.mockReturnValue(makeAuth());
     const upsert = (
