@@ -183,3 +183,7 @@ graphify-out/
 # topic-loop (binding di run + report gate)
 .topic-loop/
 rep/
+
+# Python (script di consegna documenti in scripts/)
+__pycache__/
+*.pyc
