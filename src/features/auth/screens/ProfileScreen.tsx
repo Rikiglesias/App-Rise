@@ -16,6 +16,7 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { buildDisplayName } from '@/shared/auth/displayName';
+import { getProfileCompletion } from '@/shared/auth/profileCompletion';
 import type { RootStackNavigationProp } from '@/navigation/types';
 import {
   formatDateLocalized,
@@ -103,12 +104,22 @@ export const ProfileScreen: React.FC = () => {
         locale === 'it' ? 'ita' : 'eng'
       ]?.common ?? profile.country)
     : '';
+  // Un campo mai valorizzato (profilo minimo, migration 0010) si mostra come «da
+  // completare», non come riga vuota: la riga vuota sembra un difetto dell'app, il
+  // testo dice che manca qualcosa e che si può sistemare.
+  const toComplete = t('auth.profile.toComplete');
   // Località: provincia solo se presente (i paesi esteri non l'hanno → niente "()" vuoto).
   const locationValue = profile
-    ? profile.province
-      ? `${profile.city} (${profile.province})`
-      : profile.city
+    ? profile.city
+      ? profile.province
+        ? `${profile.city} (${profile.province})`
+        : profile.city
+      : toComplete
     : '';
+  // Profilo esistente ma con campi ancora da raccogliere: la CTA deve comparire anche
+  // in questo caso, non solo quando il profilo manca del tutto (P2).
+  const isProfileIncomplete =
+    getProfileCompletion(profile, status === 'authenticated') === 'incomplete';
 
   const deletionDate = getDeletionScheduledDate(
     profile?.deletion_requested_at,
@@ -148,7 +159,7 @@ export const ProfileScreen: React.FC = () => {
         <>
           <Row
             label={t('auth.profile.phone')}
-            value={profile.phone}
+            value={profile.phone ?? toComplete}
             styles={styles}
           />
           <Row
@@ -169,7 +180,7 @@ export const ProfileScreen: React.FC = () => {
         </>
       ) : null}
 
-      {!profile ? (
+      {!profile || isProfileIncomplete ? (
         <AuthButton
           label={t('auth.profile.completeCta')}
           onPress={handleCompleteProfile}

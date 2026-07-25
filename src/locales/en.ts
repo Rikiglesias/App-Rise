@@ -96,6 +96,7 @@ export default {
       country: 'Country',
       birthDate: 'Date of birth',
       completeCta: 'Complete your profile',
+      toComplete: 'To be completed',
     },
     social: {
       continueGoogle: 'Continue with Google',

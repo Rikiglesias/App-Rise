@@ -97,6 +97,9 @@ export default {
       country: 'Paese',
       birthDate: 'Data di nascita',
       completeCta: 'Completa il tuo profilo',
+      // Campo del profilo mai valorizzato (profilo minimo): meglio dire che manca
+      // che lasciare una riga vuota, che sembrerebbe un difetto dell'app.
+      toComplete: 'Da completare',
     },
     social: {
       continueGoogle: 'Continua con Google',

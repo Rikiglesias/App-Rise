@@ -203,6 +203,47 @@ describe('ProfileScreen (autenticato)', () => {
     expect(queryByText('Modifica profilo')).toBeNull();
     expect(getByText('Completa il tuo profilo')).toBeTruthy();
   });
+
+  it('P2: profilo che ESISTE ma con campi mancanti → chiede di completarlo', () => {
+    // È il caso che nasce col profilo minimo (migration 0010) e che prima non
+    // esisteva: il profilo c'è, quindi la vecchia condizione `!profile` mostrava
+    // «Modifica profilo» e i campi mancanti non venivano mai chiesti a nessuno.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: {
+          ...profileWithDeletion,
+          deletion_requested_at: null,
+          phone: null,
+          city: null,
+          province: null,
+        },
+      })
+    );
+    const { queryByText, getByText, getAllByText } = wrap(<ProfileScreen />);
+    expect(getByText('Completa il tuo profilo')).toBeTruthy();
+    expect(queryByText('Modifica profilo')).toBeNull();
+    // I campi mancanti si leggono come «da completare», non come righe vuote:
+    // telefono e località, due righe.
+    expect(getAllByText('Da completare')).toHaveLength(2);
+  });
+
+  it('P2: profilo estero senza provincia è COMPLETO (non si chiede l’impossibile)', () => {
+    // Per i paesi esteri la provincia è null per costruzione: se il gate la
+    // pretendesse, quell'utente vedrebbe un sollecito che non può soddisfare.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: {
+          ...profileWithDeletion,
+          deletion_requested_at: null,
+          country: 'FR',
+          province: null,
+        },
+      })
+    );
+    const { getByText, queryByText } = wrap(<ProfileScreen />);
+    expect(getByText('Modifica profilo')).toBeTruthy();
+    expect(queryByText('Completa il tuo profilo')).toBeNull();
+  });
 });
 
 describe('ReConsentScreen', () => {
