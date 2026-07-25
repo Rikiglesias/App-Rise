@@ -167,8 +167,16 @@ describe('ProfileEditScreen', () => {
     await findByText('Aggiornamento non riuscito. Riprova.');
     expect(updateEmail).not.toHaveBeenCalled();
   });
+});
 
-  // F1.10: la mail di contatto è rettificabile solo dagli account Apple relay.
+// Blocco a sé: la mail di contatto ha una storia sua (raccolta prima solo dagli
+// account Apple relay, poi obbligatoria per tutti) e abbastanza casi da sforare il
+// limite di righe per funzione se restasse nel describe sopra.
+describe('ProfileEditScreen — mail di contatto', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  // Account con "Nascondi la mia email": la mail dell'account è un alias che non
+  // recapita in modo stabile, quindi quella di contatto è l'unico indirizzo vero.
   const relayAuth = (over: Partial<AuthState> = {}): AuthState =>
     makeAuth({
       profile,
@@ -268,6 +276,43 @@ describe('ProfileEditScreen', () => {
     );
     fireEvent.press(getByText('Salva modifiche'));
     expect(getByText(/non un indirizzo Apple nascosto/)).toBeTruthy();
+    expect(updateProfile).not.toHaveBeenCalled();
+  });
+
+  it('profilo nato PRIMA della regola (contact_email null): la rettifica di altri campi NON è bloccata', async () => {
+    // Art.16: correggere i propri dati è un diritto. Pretendere qui una mail che a
+    // quella persona nessuno aveva mai chiesto significava tenerle in ostaggio anche
+    // il solo cambio di telefono. Il campo resta visibile e lo chiede il sollecito
+    // del profilo, che non blocca nulla.
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: { ...profile, contact_email: null }, updateProfile })
+    );
+    const { getByLabelText, getByText, findByText } = wrap(
+      <ProfileEditScreen />
+    );
+    fireEvent.changeText(getByLabelText('Telefono'), '+393339999999');
+    fireEvent.press(getByText('Salva modifiche'));
+    await findByText('Profilo aggiornato.');
+    expect(updateProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ phone: '+393339999999' })
+    );
+    // E non si scrive una stringa vuota nella colonna: chi non l'ha, resta senza.
+    expect(updateProfile).toHaveBeenCalledWith(
+      expect.not.objectContaining({ contact_email: expect.anything() })
+    );
+  });
+
+  it('profilo nato PRIMA della regola: se però la SCRIVE, deve essere valida', () => {
+    // Il permesso vale per il campo lasciato vuoto, non per un valore qualsiasi.
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: { ...profile, contact_email: null }, updateProfile })
+    );
+    const { getByLabelText, getByText } = wrap(<ProfileEditScreen />);
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'abc');
+    fireEvent.press(getByText('Salva modifiche'));
+    expect(getByText('Email non valida')).toBeTruthy();
     expect(updateProfile).not.toHaveBeenCalled();
   });
 });
