@@ -171,7 +171,8 @@ esista anche un **accesso automatico** dal portale aziendale. In concreto:
 - Siamo **due titolari autonomi**: ciascuno resta titolare dei propri trattamenti. Non
   contitolarità (art. 26) e non responsabile del trattamento (art. 28).
 - La liceità della trasmissione poggia sul **click della persona**: è lei che avvia il login. Lo
-  dichiariamo nella nostra informativa.
+  dichiareremo nella nostra informativa **prima di attivare il login**: oggi il documento copre i
+  dati che già viaggiano verso i partner, non ancora quelli del futuro «Entra con RAH».
 - Serve un **accordo di condivisione dati** fra le due società, che circoscriva quali dati
   passano, per quale finalità e per quanto tempo.
 - Nessuna pre-creazione massiva di account «per conto» dei nostri utenti.
