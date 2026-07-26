@@ -111,14 +111,22 @@ boolean:
     elimina profilo e `consent_events`. La revoca dei token Apple (`appleRevoke.ts`)
     è stata rimossa col login social il 2026-07-26: senza provider non c'è token da
     revocare, e la App Store 5.1.1(v) vincola solo chi offre Sign in with Apple.
-    ⚠️ **Questa funzione non è pubblicata su Supabase** (verificato 2026-07-26:
-    zero Edge Function attive sul progetto) → **oggi la cancellazione immediata
-    fallisce**. È un diritto Art.17: va pubblicata prima del rilascio, insieme a
-    `purge-deletions` qui sotto, che ha lo stesso problema.
+    ✅ **Pubblicata il 2026-07-26** (v1 ACTIVE, `verify_jwt = true` come da
+    `supabase/config.toml`). Verificata sull'effetto e non sull'esito del deploy:
+    `POST /functions/v1/delete-account` senza header di autorizzazione risponde
+    `401 UNAUTHORIZED_NO_AUTH_HEADER` — prima rispondeva `404`. La cancellazione
+    immediata funziona.
   - **Programmata a +30 giorni** (grace period recuperabile) — imposta
     `deletion_requested_at`; l'hard-delete a scadenza è eseguito dalla Edge Function
     schedulata `purge-deletions` (Supabase Cron, `GRACE_DAYS = 30`), protetta da
     `x-cron-secret` con confronto a tempo costante, con alert sui fallimenti.
+    ⚠️ **Pubblicata ma non ancora schedulata** (2026-07-26): la funzione risponde
+    (`403 forbidden` prodotto dal suo stesso handler), ma sul progetto **non sono
+    installate `pg_cron`/`pg_net`** e **`CRON_SECRET` non è impostato** → nessuno la
+    invoca, quindi **l'hard-delete a 30 giorni oggi non avviene**. I dati di chi ha
+    chiesto la cancellazione programmata restano oltre il termine dichiarato: va
+    chiuso prima del rilascio. Ordine obbligato: ① segreto ② estensioni ③ job
+    schedulato (creare il job prima del segreto produce solo `403` ricorrenti).
   - Annullabile finché entro il grace period (`cancelScheduledDeletion`).
 
 > ⚠️ DA VERIFICARE CON DPO/LEGALE — periodi di **retention** esatti oltre il grace
