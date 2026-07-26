@@ -70,6 +70,24 @@ persona, che avvia lei il flusso.
 Riferimenti su cui si basa: EDPB 07/2020 e 02/2025. Serve inoltre un accordo di condivisione
 dati fra le due società.
 
+**⚠️ Aggiunta 2026-07-26 — la domanda sopra riguarda UN rapporto, e i rapporti sono due.** Quanto
+scritto qui vale per il **flusso nuovo** («Login con RAH»: noi mandiamo a loro l'identità di chi
+tocca il pulsante). Esiste però un rapporto **già in essere e diverso**: il nostro spazio vive
+*dentro* la loro piattaforma e lì stanno i nostri sostenitori, che dal back office esportiamo noi.
+Per quei dati la qualificazione non è la stessa domanda e non ha la stessa risposta ovvia — se
+Let's Donation tratta quei dati **per conto nostro** è responsabile ex art. 28 e **serve un DPA**,
+che oggi non risulta esistere (nessun atto scritto: `integrazioni/letsdonation-donorbox-identita.md:173`,
+che marca questa come «la posizione peggiore delle tre»).
+
+**Perché conta adesso e non dopo**: da questa risposta dipende se il riordino delle anagrafiche
+storiche è un archivio nostro che rientra oppure un **trasferimento fra titolari**, che farebbe
+scattare l'informativa Art. 14 verso quelle persone. È un prerequisito del primo rilascio
+(`integrazioni/scambio-dati-quadro.md` §8.1), non una rifinitura.
+
+**Cosa serve dalla consulente**: la qualificazione del rapporto attuale, e quale atto va chiesto a
+Let's Donation di conseguenza. **Cosa serve prima, da Riccardo/l'associazione**: sapere quale
+contratto esiste oggi con Let's Donation e averne copia — è un fatto documentale, non un parere.
+
 ---
 
 ## 🟦 I quattro dati da recuperare (non servono al legale)

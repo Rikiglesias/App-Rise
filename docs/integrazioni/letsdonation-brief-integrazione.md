@@ -154,10 +154,13 @@ stessa email X, il vostro sistema può **collegare** i due account invece di cre
 Due cose che facciamo noi perché il collegamento funzioni davvero. **Sono il disegno con cui
 partiamo al primo rilascio, non quello che l'app installata fa oggi**:
 
-- **le anagrafiche di chi si è registrato finora le sistemiamo dalla nostra parte** — quelle che
-  abbiamo già noi, senza chiedervi elenchi — così quelle persone risultano riconosciute quando
-  entrano col pulsante (e se mancano dati che oggi chiediamo, glieli chiediamo noi al primo
-  accesso). Il lavoro parte quando la nostra informativa aggiornata è pubblicata;
+- **le anagrafiche di chi si è registrato finora le sistemiamo dalla nostra parte** — sono i nostri
+  sostenitori e l'elenco ce lo esportiamo da soli, dal back office del nostro spazio: non vi
+  chiediamo di prepararci nulla — così quelle persone risultano riconosciute quando entrano col
+  pulsante (e se mancano dati che oggi chiediamo, glieli chiediamo noi al primo accesso). Atterrano
+  in una tabella separata dai profili: restano **schede**, e l'account nasce solo quando è la
+  persona a entrare. Il lavoro parte quando la nostra informativa aggiornata è pubblicata, e resta
+  legato alla risposta alla domanda 18;
 - **l'indirizzo che vi arriva è sempre reale e verificato.** Da noi si entra solo con email e
   password, e l'indirizzo si conferma cliccando il messaggio che mandiamo: nessun alias, nessuna
   casella mascherata da riconciliare in un secondo momento. Non dovete prevedere nulla di
@@ -225,7 +228,8 @@ con quel token.
 ## 5. Cosa ci serve sapere da voi
 
 **La prima è quella che può farci risparmiare più lavoro**, le prime cinque sbloccano il resto, le
-altre servono per rifinire.
+altre servono per rifinire. **Fa eccezione la 18**: non è una rifinitura, è un documento che ci
+serve comunque, anche se del login non se ne facesse nulla.
 
 1. **Il meccanismo Zucchetti** (§2.3): come fanno i dipendenti ad «arrivare già registrati»? È un
    single sign-on — e con quale protocollo — oppure un pre-caricamento di anagrafiche? Ed è
@@ -272,6 +276,14 @@ altre servono per rifinire.
     conversione ed è giusto che lo sappiate prima e non dopo. Se per voi è un problema reale,
     ditecelo: si ragiona su come gestirlo.
 
+18. **Il rapporto che abbiamo già oggi: come lo qualifica il contratto?** Sul nostro spazio, dentro
+    la vostra piattaforma, ci sono i nostri sostenitori, e dal back office li esportiamo noi. Per
+    quei dati siete **responsabile del trattamento per conto nostro** (art. 28, con un accordo
+    firmato) oppure **titolare autonomo**? Non è una domanda da girare a un legale: si risponde con
+    un documento. Ci serve sapere quale atto esiste fra le due società e poterne avere copia. È
+    indipendente dal «Login con RAH» e va chiusa comunque, perché è la stessa risposta che ci dice
+    come trattare le anagrafiche del §2.4.
+
 **Cosa vi forniremo noi**, quando entrambe le parti sono pronte: discovery URL
 (`…/.well-known/openid-configuration`), `client_id` e `client_secret` dedicati a voi, le redirect
 URI da autorizzare, scope e claim disponibili.
@@ -280,8 +292,15 @@ URI da autorizzare, scope e claim disponibili.
 
 ## 6. Inquadramento privacy
 
-- Siamo **due titolari autonomi**: ciascuno resta titolare dei propri trattamenti. Non
-  contitolarità (art. 26) e non responsabile del trattamento (art. 28).
+- **Per il «Login con RAH» vi proponiamo di restare due titolari autonomi**: ciascuno titolare dei
+  propri trattamenti, con un accordo di condivisione dati a delimitare cosa passa. Non
+  contitolarità (art. 26) e non responsabile del trattamento (art. 28). Lo scriviamo come
+  **proposta e non come cosa già decisa**: la vostra informativa ci dichiara titolari autonomi, ma
+  è una dichiarazione unilaterale, non un accordo fra le parti, e la stiamo facendo verificare.
+- **Il rapporto che abbiamo già oggi è un'altra cosa, e questa riga non lo qualifica.** Il nostro
+  spazio dentro la vostra piattaforma ospita i nostri sostenitori: per quei dati il ruolo di
+  ciascuno dipende da cosa dice il contratto già in essere, e non lo diamo per scontato in nessuna
+  delle due direzioni. È la domanda 18 del §5, ed è indipendente dal login.
 - La liceità della trasmissione poggia sul **click della persona**: è lei che avvia il login. Lo
   dichiareremo nella nostra informativa **prima di attivare il login**. Detto con precisione: la
   versione riscritta — che copre sia i dati già diretti ai partner sia quelli dell'«Entra con RAH» —
