@@ -125,15 +125,17 @@ export const useProfileForm = () => {
       };
     fill(setFirstName)(profile.first_name);
     fill(setLastName)(profile.last_name);
-    // `phone` NON si idrata di proposito: `AuthPhoneField` non è controllato (il
-    // numero vive nel suo stato interno e al form arriva solo quello che emette).
-    // Scriverlo qui creerebbe un valore che il campo non mostra — e il suo effetto
-    // di allineamento del prefisso lo azzererebbe al primo cambio di paese. Residuo
-    // dichiarato: chi ha già il numero deve ridigitarlo (attrito, non perdita: la
-    // validazione blocca il campo vuoto). Si chiude rendendo il campo controllato.
     fill(setCity)(profile.city);
     fill(setProvince)(profile.province);
     fill(setBirthDate)(profile.birth_date);
+    // `phone` parte da '+39', quindi come `country` non è mai «vuoto» e `prev || v`
+    // restituirebbe sempre il default. Si scrive solo se il campo è ancora al valore
+    // iniziale, cioè se la persona non ha già digitato un numero suo.
+    // (Prima non si idratava affatto, perché il campo non mostrava il valore ricevuto:
+    // ora `AuthPhoneField` accetta `value`, quindi chi ha già il numero se lo ritrova
+    // scritto invece di ridigitarlo.)
+    if (profile.phone)
+      setPhone(prev => (prev === '+39' ? (profile.phone as string) : prev));
     // `country` parte da 'IT', quindi non è mai «vuoto» e `prev || v` non basterebbe:
     // qui il valore del profilo deve VINCERE sul default, ed è proprio il caso che
     // rendeva italiano un profilo francese. Si scrive solo se la persona non ha già
