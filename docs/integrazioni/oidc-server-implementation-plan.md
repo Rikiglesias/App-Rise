@@ -143,7 +143,13 @@ Conseguenze:
 
 ## GDPR
 
-- Due titolari autonomi + Data Sharing Agreement (non Art.26, non Art.28). Liceità = il click
+- Due titolari autonomi + Data Sharing Agreement (non Art.26, non Art.28) — **è la nostra
+  posizione PROPOSTA, in conferma legale, non un fatto acquisito**: la loro informativa ci
+  dichiara titolari autonomi unilateralmente, che non è un accordo
+  (`scambio-dati-quadro.md:501-508`). Riguarda **solo questo flusso**: il rapporto già in essere
+  — nostro tenant sulla loro piattaforma — è una qualificazione distinta e aperta (se trattano
+  per conto nostro sono responsabili ex Art.28 e serve un DPA, che non risulta esistere:
+  `letsdonation-donorbox-identita.md:173`). Domanda 18 del brief. Liceità = il click
   dell'utente. Claim minimi STANDARD (`sub`, `name`, `email`, `email_verified`). Nessuna
   pre-creazione bulk di account sullo spazio dell'altro.
   Informativa RAH aggiornata (dipende dal criterio 1 del goal partner-identita). Vedi memoria
