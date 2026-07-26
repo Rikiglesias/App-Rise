@@ -91,7 +91,7 @@ Deno.test('body vecchio con appleAuthCode -> ignorato, cancellazione riuscita', 
   const { deps, deleteUser } = buildDeps({ user: emailUser });
   const res = await handler(
     post(JSON.stringify({ appleAuthCode: 'CODE123' }), { 'Content-Type': 'application/json' }),
-    deps
+    deps,
   );
   assertEquals(res.status, 200);
   assertEquals(await res.json(), { ok: true });
