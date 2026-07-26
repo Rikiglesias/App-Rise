@@ -37,7 +37,7 @@ docker run -d --name pgtest -e POSTGRES_PASSWORD=test postgres:15-alpine
 until docker exec pgtest pg_isready -U postgres; do sleep 2; done
 
 cat tests/<SHIM> \
-    migrations/000*.sql \
+    migrations/0*.sql \
     migrations/<MIGRATION> \
     tests/<TEST> \
   | docker exec -i pgtest psql -U postgres -v ON_ERROR_STOP=1
@@ -45,12 +45,19 @@ cat tests/<SHIM> \
 docker rm -f pgtest
 ```
 
+> ⚠️ Il glob è `migrations/0*.sql`, **non** `migrations/000*.sql` come diceva questa pagina fino al
+> 2026-07-26. Con `000*` le migration dalla `0010` in poi venivano saltate in silenzio: il test girava
+> su uno schema più vecchio del reale e poteva essere verde per il motivo sbagliato.
+
 Coppie disponibili:
 
 | `<MIGRATION>` | `<TEST>` |
 |---|---|
 | `0008_partner_refs.sql` | `0008_partner_refs.test.sql` |
 | `0009_profiles_contact_email.sql` | `0009_profiles_contact_email.test.sql` |
+| `0010_profiles_minimo.sql` | `0010_profiles_minimo.test.sql` |
+| `0011_signup_contact_email.sql` | `0011_signup_contact_email.test.sql` |
+| `0012_legacy_contacts.sql` | `0012_legacy_contacts.test.sql` |
 
 Nota: la migration sotto test compare **due volte** nella pipe (una dentro `migrations/000*.sql`,
 una esplicita in `<MIGRATION>`). È voluto — è il test `T7`, che verifica la rieseguibilità e che la
@@ -67,6 +74,13 @@ sempre l'ultima):
 - **0008**: **14** righe `PASS` — 13 test (`T1, T1b, T2, T3, T4, T5, T6a-T6f, T7`) + esito.
 - **0009**: **9** righe `PASS` — 8 test (`T1, T2, T3, T4, T4b, T5, T6, T7`) + esito. 0009 non
   concede grant, quindi dà lo STESSO esito coi due shim: è la prova che è grant-indipendente.
+- **0010**: **7** righe `PASS` — 6 test + esito.
+- **0011**: **8** righe `PASS` — 7 test (`T1-T7`) + esito.
+- **0012**: **16** righe `PASS` — 15 test (`T1-T15`) + esito. Come 0009 e 0011 non concede grant →
+  stesso esito coi due shim (misurato: 16/16/0 FAIL su entrambi, 2026-07-26).
+
+I conteggi sopra sono ricavati dai file (`grep -c "raise notice 'T"` + la riga di esito), non dalla
+memoria di chi li ha scritti.
 
 Il container va **creato pulito a ogni giro**: la suite inserisce utenti con id fissi, quindi
 rilanciarla sullo stesso database fallisce subito sul setup (chiave duplicata) e stampa zero
