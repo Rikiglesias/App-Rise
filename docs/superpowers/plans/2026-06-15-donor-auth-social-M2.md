@@ -1,5 +1,13 @@
 # Auth Donatori — Milestone 2 (Social: Google + Apple) Implementation Plan
 
+> 🔴 **PIANO SUPERATO — NON ESEGUIRE (2026-07-26).** Google e Apple sono stati **rimossi**
+> dall'app per decisione di Riccardo (PR #120, `master`): l'unico ingresso è email + password.
+> Questo documento resta come **storia** di cosa era stato costruito e perché — utile solo se
+> un domani si decidesse di rifare il login social, e in quel caso va riletto insieme al motivo
+> della rimozione (`~/todos/partner-identita.md`, sezione D-e: il costo stava nei prerequisiti
+> non ancora pagati — dominio Apple «Email Sources», 4 segreti da ruotare, 3 client OAuth).
+> Un agente che eseguisse questi step reintrodurrebbe le due dipendenze appena tolte.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: superpowers:subagent-driven-development o executing-plans. Steps con checkbox `- [ ]`.
 
 **Goal:** Aggiungere login social Google + Apple all'auth donatori (M1), con step "Completa profilo" post-social (i provider non forniscono telefono/città/provincia/data nascita).
