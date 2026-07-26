@@ -8,7 +8,7 @@
 ## Premessa: l'app raccoglie dati personali e gestisce account
 
 L'app NON è read-only/anonima. Esiste un'area donatori completa con **registrazione,
-login (email/password + Apple + Google), profilo personale e consensi GDPR**, su backend
+login (solo email/password dal 2026-07-26), profilo personale e consensi GDPR**, su backend
 **Supabase**. Questo documento inventaria i dati realmente trattati e i diritti già
 implementati nel codice. Le donazioni monetarie restano gestite da piattaforme esterne
 (Donorbox via sito Rise per le donazioni; Let's Donation, `letsdonation.com`
@@ -20,12 +20,14 @@ ex welfare4charity, per shop/gift card/eventi) — l'app **non processa pagament
 
 ### Account e autenticazione (Supabase Auth)
 
-- **Email** — identità dell'account (signup email/password e provider social).
+- **Email** — identità dell'account (registrazione email/password).
 - **Password** — gestita da Supabase Auth, **mai in chiaro lato app**: hashing lato
   server. Vincoli client (`validation.ts`): min 8 caratteri, ≥1 maiuscola, ≥1 speciale.
-- **Provider social** — Apple e Google via `signInWithIdToken` (`socialAuth.ts`). Apple
-  fornisce email; telefono/città/provincia/data nascita NON arrivano dai provider →
-  raccolti nello step "Completa profilo" (`CompleteProfileScreen.tsx`).
+- **Provider social** — ⚠️ **RIMOSSI il 2026-07-26** (commit `6848467`): Apple e Google
+  non sono più un canale di accesso e **nessun dato ci arriva più da loro**; non vanno
+  dichiarati fra i destinatari/origini di un'informativa scritta da oggi in avanti.
+  Restano gli account **nati prima**, che portano l'indirizzo ricevuto allora (per chi
+  usò «Nascondi la mia email», un alias `@privaterelay.appleid.com`).
 - **Sessione** — persistita cifrata sul dispositivo via `expo-secure-store`
   (iOS Keychain / Android Keystore), con chunking >2KB (`authStorage.ts`).
 
@@ -112,10 +114,15 @@ boolean:
     è stata rimossa col login social il 2026-07-26: senza provider non c'è token da
     revocare, e la App Store 5.1.1(v) vincola solo chi offre Sign in with Apple.
     ✅ **Pubblicata il 2026-07-26** (v1 ACTIVE, `verify_jwt = true` come da
-    `supabase/config.toml`). Verificata sull'effetto e non sull'esito del deploy:
-    `POST /functions/v1/delete-account` senza header di autorizzazione risponde
-    `401 UNAUTHORIZED_NO_AUTH_HEADER` — prima rispondeva `404`. La cancellazione
-    immediata funziona.
+    `supabase/config.toml`). `POST /functions/v1/delete-account` senza header di
+    autorizzazione risponde `401 UNAUTHORIZED_NO_AUTH_HEADER` — prima `404`.
+    ⚠️ **Quanto vale questa prova**: dimostra che la funzione esiste ed è
+    raggiungibile, NON che la cancellazione riesca. Quel `401` è del gateway
+    (`verify_jwt = true`), che rifiuta prima di eseguire una riga dell'handler —
+    il 401 dell'handler avrebbe body `{"error":"unauthorized"}` (`index.ts:46`).
+    Il percorso reale (JWT valido → `getUser` → `admin.deleteUser` con
+    service-role) **non è mai stato esercitato** `[A]`: va provato con un account
+    usa-e-getta prima del rilascio. Ack ≠ effetto.
   - **Programmata a +30 giorni** (grace period recuperabile) — imposta
     `deletion_requested_at`; l'hard-delete a scadenza è eseguito dalla Edge Function
     schedulata `purge-deletions` (Supabase Cron, `GRACE_DAYS = 30`), protetta da
@@ -143,8 +150,10 @@ Il link in-app punta a `https://italy.riseagainsthunger.org/privacy-policy/`
 (`urls.ts`), mostrato in fase di consenso (`SignUpScreen`/`CompleteProfileScreen`).
 
 > ⚠️ DA VERIFICARE CON DPO/LEGALE — l'informativa deve coprire TUTTO l'inventario
-> sopra (account, profilo, telefono, data di nascita, consensi, Sentry, provider social
-> Apple/Google e Supabase come responsabili), i diritti e i tempi di conservazione.
+> sopra (account, profilo, telefono, data di nascita, consensi, Sentry e Supabase come
+> responsabili), i diritti e i tempi di conservazione. **Apple/Google NON vanno più
+> inclusi come origine dei dati** (login social rimosso il 2026-07-26): dichiararli
+> descriverebbe un trattamento che non avviene.
 > La versione del testo deve coincidere con `policy_versions` (`privacy-2026-06-15`).
 
 ### GDPR
@@ -156,7 +165,7 @@ Il link in-app punta a `https://italy.riseagainsthunger.org/privacy-policy/`
 > ⚠️ DA VERIFICARE CON DPO/LEGALE — adeguatezza delle basi giuridiche, valutazione
 > di necessità per ciascun campo (es. data di nascita/telefono), eventuale DPIA,
 > nomina del DPO, registro dei trattamenti, e clausole di trasferimento dati verso
-> Supabase/Sentry/Apple/Google.
+> Supabase e Sentry (Apple/Google non più pertinenti dal 2026-07-26).
 
 ### PCI-DSS
 
@@ -211,14 +220,19 @@ piattaforme esterne.
 - [ ] Privacy policy allineata all'inventario dati reale (sopra)
 - [ ] Data safety / privacy nutrition label dichiarano account, contatti, identificativi
 - [x] Eliminazione account in-app (App Store 5.1.1(v)) — `DeleteAccountScreen`
-- [x] Login social Apple presente accanto ad altri provider (Apple 4.8)
+- [n/a] Sign in with Apple accanto ad altri provider (Apple 4.8) — **non dovuto**:
+      dal 2026-07-26 l'app non offre alcun login social, l'ingresso è solo
+      email + password, quindi la linea guida non si applica
 
 ### GDPR (implementazione)
 
 - [x] Consenso tracciato (ledger `consent_events`)
 - [x] Diritto di accesso/portabilità (`dataExport.ts`)
 - [x] Diritto di rettifica (`updateProfile`/`updateEmail`)
-- [x] Diritto di cancellazione (immediata + programmata a 30gg)
+- [ ] Diritto di cancellazione — **immediata**: funzione pubblicata, percorso completo
+      ancora da provare `[A]`; **programmata a 30gg**: NON eseguita finché il cron non
+      è acceso (`pg_cron`/`pg_net` non installate, `CRON_SECRET` assente). Vedi
+      §Cancellazione sopra: la spunta tornerà quando entrambe sono verificate dal vivo
 - [ ] Retention oltre i 30gg definita e documentata — DA VERIFICARE CON DPO/LEGALE
 
 ### Sicurezza

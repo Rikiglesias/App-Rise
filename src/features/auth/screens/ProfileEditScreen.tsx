@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
+import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
@@ -243,12 +244,20 @@ export const ProfileEditScreen: React.FC = () => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      <AuthInput
+      {/* Stesso campo del resto dell'app, con selettore del prefisso: qui era un
+          input nudo in cui il '+39' andava digitato a mano, ed è proprio la
+          schermata il cui scopo è correggere un numero esistente. Il valore
+          arriva già scritto e, se in colonna non è in E.164 (spazi, prefisso
+          assente — atteso dopo l'import delle anagrafiche), il campo lo
+          normalizza invece di far fallire la validazione su un numero che a
+          schermo sembra giusto. */}
+      <AuthPhoneField
         label={t('auth.signup.phone')}
         value={phone}
         onChangeText={setPhone}
+        country={country}
+        onCountryChange={handleSelectCountry}
         error={err(errors.phone)}
-        keyboardType="phone-pad"
       />
       <AuthCountryField
         label={t('auth.signup.country')}

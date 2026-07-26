@@ -85,6 +85,60 @@ describe('AuthPhoneField', () => {
     expect(onChangeText).toHaveBeenLastCalledWith('+393331234567');
   });
 
+  it('un numero SALVATO non cambia prefisso se cambia la residenza', () => {
+    // Il caso che corrompe: numero italiano reale, la persona corregge il Paese in
+    // FR. Riallineare il prefisso lo trasformerebbe in '+333331234567' — 12 cifre,
+    // quindi passa anche `validatePhoneIT` e finisce in tabella senza un errore.
+    // Un numero che arriva dal profilo non si tocca.
+    const onChangeText = jest.fn();
+    const { rerender } = renderField({
+      label: 'Telefono',
+      value: '+393331234567',
+      country: 'IT',
+      onChangeText,
+    });
+    onChangeText.mockClear();
+    rerender(
+      <AllProviders>
+        <AuthPhoneField
+          label="Telefono"
+          value="+393331234567"
+          country="FR"
+          onChangeText={onChangeText}
+        />
+      </AllProviders>
+    );
+    expect(onChangeText).not.toHaveBeenCalled();
+  });
+
+  it('normalizza un numero salvato con gli spazi', () => {
+    // In colonna può esserci '+39 333 1234567'. Senza normalizzare, il campo
+    // mostrerebbe il numero giusto e il form terrebbe una stringa che
+    // `validatePhoneIT` rifiuta: errore su un campo che sembra a posto.
+    const onChangeText = jest.fn();
+    const { getByLabelText } = renderField({
+      label: 'Telefono',
+      value: '+39 333 1234567',
+      onChangeText,
+    });
+    expect(digitsShown(getByLabelText)).toBe('3331234567');
+    expect(onChangeText).toHaveBeenCalledWith('+393331234567');
+  });
+
+  it('normalizza un numero salvato SENZA prefisso', () => {
+    // Caso certo dopo l'import delle anagrafiche: '3331234567' nudo. Si assume il
+    // paese corrente (residenza), perché dal numero non è deducibile.
+    const onChangeText = jest.fn();
+    const { getByLabelText } = renderField({
+      label: 'Telefono',
+      value: '3331234567',
+      country: 'IT',
+      onChangeText,
+    });
+    expect(digitsShown(getByLabelText)).toBe('3331234567');
+    expect(onChangeText).toHaveBeenCalledWith('+393331234567');
+  });
+
   it('il cambio di residenza allinea il prefisso e ri-emette', () => {
     const onChangeText = jest.fn();
     const { getByLabelText, rerender } = renderField({

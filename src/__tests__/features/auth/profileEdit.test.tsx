@@ -74,7 +74,11 @@ describe('ProfileEditScreen', () => {
     expect(getByDisplayValue('Mario')).toBeTruthy();
     expect(getByDisplayValue('Rossi')).toBeTruthy();
     expect(getByDisplayValue('old@r.it')).toBeTruthy();
-    expect(getByDisplayValue('+393331234567')).toBeTruthy();
+    // Il telefono usa ora il campo col selettore del prefisso (come nel resto
+    // dell'app): a schermo compare la sola parte nazionale, il '+39' vive nel
+    // selettore accanto. Ciò che deve restare E.164 è il valore SALVATO, ed è
+    // verificato dal test del submit più sotto.
+    expect(getByDisplayValue('333 123 4567')).toBeTruthy();
   });
 
   it('mostra il campo Paese (valore dal profilo)', () => {

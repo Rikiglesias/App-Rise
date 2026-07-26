@@ -134,8 +134,14 @@ export const useProfileForm = () => {
     // (Prima non si idratava affatto, perché il campo non mostrava il valore ricevuto:
     // ora `AuthPhoneField` accetta `value`, quindi chi ha già il numero se lo ritrova
     // scritto invece di ridigitarlo.)
+    // Anche `''` conta come «non toccato»: il campo telefono notifica una stringa
+    // vuota se la persona lo svuota o ci entra prima che la lettura del profilo
+    // torni, e con la sola guardia su '+39' quel numero non sarebbe più stato
+    // mostrato per tutta la sessione — proprio il difetto che si sta chiudendo.
     if (profile.phone)
-      setPhone(prev => (prev === '+39' ? (profile.phone as string) : prev));
+      setPhone(prev =>
+        prev === '+39' || prev === '' ? (profile.phone as string) : prev
+      );
     // `country` parte da 'IT', quindi non è mai «vuoto» e `prev || v` non basterebbe:
     // qui il valore del profilo deve VINCERE sul default, ed è proprio il caso che
     // rendeva italiano un profilo francese. Si scrive solo se la persona non ha già
