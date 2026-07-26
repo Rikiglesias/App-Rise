@@ -95,10 +95,15 @@ export const useProfileForm = () => {
   const userId = session?.user.id ?? null;
   const formOwner = useRef<string | null | undefined>(undefined);
   const hydratedForUser = useRef<string | null>(null);
+  // Come `contactEmailTouched`, ma per il telefono: si azzera al cambio di utente,
+  // altrimenti quello che ha digitato il precedente bloccherebbe l'idratazione del
+  // successivo (la classe di errore che qui ha già morso più volte).
+  const phoneTouched = useRef(false);
   useEffect(() => {
     if (formOwner.current !== userId) {
       formOwner.current = userId;
       hydratedForUser.current = null;
+      phoneTouched.current = false;
       setFirstName('');
       setLastName('');
       setPhone('+39');
@@ -134,14 +139,14 @@ export const useProfileForm = () => {
     // (Prima non si idratava affatto, perché il campo non mostrava il valore ricevuto:
     // ora `AuthPhoneField` accetta `value`, quindi chi ha già il numero se lo ritrova
     // scritto invece di ridigitarlo.)
-    // Anche `''` conta come «non toccato»: il campo telefono notifica una stringa
-    // vuota se la persona lo svuota o ci entra prima che la lettura del profilo
-    // torni, e con la sola guardia su '+39' quel numero non sarebbe più stato
-    // mostrato per tutta la sessione — proprio il difetto che si sta chiudendo.
-    if (profile.phone)
-      setPhone(prev =>
-        prev === '+39' || prev === '' ? (profile.phone as string) : prev
-      );
+    // «Toccato» è un FLAG esplicito, non si deduce dal valore: il campo telefono
+    // notifica una stringa vuota anche al montaggio, e dedurre da `''` che la
+    // persona non ha scritto nulla ha due facce sbagliate — o si rinuncia a
+    // idratare (numero salvato mai mostrato), o si riscrive sopra a chi ha appena
+    // svuotato il campo per correggerlo. Stessa protezione che ha la mail di
+    // contatto con `contactEmailTouched`.
+    if (profile.phone && !phoneTouched.current)
+      setPhone(profile.phone as string);
     // `country` parte da 'IT', quindi non è mai «vuoto» e `prev || v` non basterebbe:
     // qui il valore del profilo deve VINCERE sul default, ed è proprio il caso che
     // rendeva italiano un profilo francese. Si scrive solo se la persona non ha già
@@ -178,6 +183,10 @@ export const useProfileForm = () => {
         clearError('lastName');
       },
       phone: (v: string): void => {
+        // Solo un cambio NON vuoto conta come «l'ha scritto la persona»: il campo
+        // notifica una stringa vuota anche al montaggio, e prenderla per una
+        // digitazione bloccherebbe l'idratazione del numero salvato.
+        if (v) phoneTouched.current = true;
         setPhone(v);
         clearError('phone');
       },

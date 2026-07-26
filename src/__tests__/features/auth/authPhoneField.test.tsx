@@ -139,6 +139,66 @@ describe('AuthPhoneField', () => {
     expect(onChangeText).toHaveBeenCalledWith('+393331234567');
   });
 
+  // I quattro casi qui sotto erano TUTTI rotti e nessun test li vedeva: sono stati
+  // trovati da un critico avversariale e confermati con una sonda dal vivo. Sono i
+  // rami che il campo attraversa davvero nelle schermate reali.
+
+  it('un valore che è solo il prefisso vale come campo VUOTO', () => {
+    // '+39' è il valore INIZIALE del form (useProfileForm), quindi è il caso più
+    // comune. La libreria non lo riconosce (servono 3 cifre) e lo restituiva
+    // verbatim: da '+39' usciva '+3939', che il form registrava come "numero
+    // digitato" — l'idratazione del numero vero non partiva più e la validazione
+    // falliva su un campo mai toccato.
+    const onChangeText = jest.fn();
+    const { getByLabelText } = renderField({
+      label: 'Telefono',
+      value: '+39',
+      onChangeText,
+    });
+    expect(digitsShown(getByLabelText)).toBe('');
+    expect(onChangeText).not.toHaveBeenCalledWith('+3939');
+  });
+
+  it('al montaggio NON notifica un paese che nessuno ha scelto', () => {
+    // Con `defaultCountry` la libreria notificava «Italia» appena montata: su un
+    // profilo francese quel giro cambiava il campo Paese, faceva comparire la
+    // Provincia obbligatoria e al salvataggio scriveva country 'IT'.
+    const onCountryChange = jest.fn();
+    renderField({
+      label: 'Telefono',
+      country: 'FR',
+      onChangeText: jest.fn(),
+      onCountryChange,
+    });
+    expect(onCountryChange).not.toHaveBeenCalled();
+  });
+
+  it('un numero estero incollato tiene il SUO prefisso, non quello di residenza', () => {
+    // Incollando un numero internazionale la libreria notifica prima il paese e poi
+    // le cifre, nello stesso giro: leggendo il paese dalla closure usciva '+39' con
+    // cifre francesi — 11 cifre, quindi passava anche la validazione e si salvava il
+    // numero di un'altra persona.
+    const onChangeText = jest.fn();
+    const { getByLabelText } = renderField({
+      label: 'Telefono',
+      country: 'IT',
+      onChangeText,
+    });
+    fireEvent.changeText(getByLabelText('Telefono'), '+33123456789');
+    expect(onChangeText).toHaveBeenLastCalledWith('+33123456789');
+  });
+
+  it('normalizza il prefisso scritto come 00 (formato degli archivi)', () => {
+    // '0039 333 1234567' è il formato tipico delle anagrafiche da importare.
+    const onChangeText = jest.fn();
+    renderField({
+      label: 'Telefono',
+      value: '0039 333 1234567',
+      onChangeText,
+    });
+    expect(onChangeText).toHaveBeenCalledWith('+393331234567');
+  });
+
   it('il cambio di residenza allinea il prefisso e ri-emette', () => {
     const onChangeText = jest.fn();
     const { getByLabelText, rerender } = renderField({

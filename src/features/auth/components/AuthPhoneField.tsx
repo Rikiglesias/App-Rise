@@ -99,6 +99,14 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   const [country, setCountry] = useState<ICountry | null>(
     () => getCountryByCca2(countryCca2 ?? 'IT') ?? null
   );
+  // Copia in ref del paese corrente. La libreria può notificare paese e numero nello
+  // STESSO giro (succede incollando un numero internazionale: prima il paese, poi le
+  // cifre): il secondo callback legge `country` dalla closure di quel render, che è
+  // ancora il paese VECCHIO, e comporrebbe cifre francesi con prefisso italiano — 11
+  // cifre, quindi supera anche la validazione e si salverebbe il numero di un'altra
+  // persona. Il ref è l'unico valore che entrambi i callback vedono aggiornato.
+  const countryRef = useRef<ICountry | null>(country);
+  countryRef.current = country;
 
   // Ultimo valore USCITO da qui. Serve a riconoscere l'eco: il form ci rimanda
   // indietro come `value` ciò che gli abbiamo appena emesso, e quel giro non è
@@ -147,9 +155,17 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
     if (isNewValue) {
       // Il paese si deduce dal numero stesso, non dalla residenza: un numero salvato
       // porta con sé il proprio prefisso, ed è più vero della residenza dichiarata.
-      const fromNumber = value ? getCountryByPhoneNumber(value) : undefined;
+      // Un valore che è SOLO il prefisso ('+39') è un campo vuoto, non un numero: è
+      // il valore iniziale con cui il form parte, quindi è il caso più comune di
+      // tutti. Senza questa guardia la libreria non lo riconosce (servono almeno 3
+      // cifre), lo restituisce verbatim, e da '+39' uscirebbe '+3939' — che il form
+      // registrerebbe come "numero digitato", impedendo per sempre l'idratazione di
+      // quello vero e facendo fallire la validazione su un campo mai toccato.
+      const isOnlyCallingCode = /^\+\d{1,3}$/.test(value);
+      const hasNumber = Boolean(value) && !isOnlyCallingCode;
+      const fromNumber = hasNumber ? getCountryByPhoneNumber(value) : undefined;
       const nextCountry = fromNumber ?? country;
-      const national = value ? getNationalPhoneNumber(value) : '';
+      const national = hasNumber ? getNationalPhoneNumber(value) : '';
 
       // Il valore in arrivo NON è per forza in E.164: in colonna può esserci
       // '+39 333 1234567' o '3331234567' senza prefisso — caso certo dopo l'import
@@ -157,10 +173,17 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
       // l'input verbatim (getNationalPhoneNumber.js:26-29): senza normalizzare, il
       // campo mostrerebbe un numero giusto mentre il form tiene una stringa che
       // `validatePhoneIT` rifiuta — errore su un campo che sembra a posto.
-      const digits = national.replace(/\D/g, '');
-      const normalized = digits
-        ? `${buildCallingCode(nextCountry)}${digits}`
-        : '';
+      // Il prefisso internazionale può già essere DENTRO le cifre, scritto alla
+      // vecchia maniera ('0039 333 1234567' — formato comunissimo negli archivi da
+      // importare). Va tolto sia lo '00' sia il prefisso stesso, altrimenti
+      // rimetterglielo davanti produce '+3900393331234567' (16 cifre) o
+      // '+39393331234567' (14): in entrambi i casi la persona vede un errore su un
+      // numero che non ha mai scritto.
+      const callingCode = buildCallingCode(nextCountry);
+      const bare = callingCode.replace('+', '');
+      let digits = national.replace(/\D/g, '').replace(/^00/, '');
+      if (bare && digits.startsWith(bare)) digits = digits.slice(bare.length);
+      const normalized = digits ? `${callingCode}${digits}` : '';
 
       setCountry(nextCountry);
       setNumber(national);
@@ -225,7 +248,13 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
       </PerfectText>
       <PhoneInput
         value={number}
-        defaultCountry="IT"
+        // NIENTE `defaultCountry`: il paese lo passiamo già noi, sempre valorizzato
+        // (l'inizializzatore dello stato risolve 'IT' quando non c'è residenza).
+        // Passandolo, l'effetto di montaggio della libreria notificava comunque
+        // «Italia» al form — e su un profilo francese quel giro cambiava il campo
+        // Paese, faceva comparire la Provincia obbligatoria e al salvataggio
+        // scriveva `country: 'IT'`: l'italianizzazione silenziosa già chiusa
+        // altrove, che rientrava da questa porta.
         country={country}
         accessibilityLabelPhoneInput={label}
         phoneInputStyles={phoneStyles}
@@ -242,16 +271,27 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
           // può tornare a seguire la residenza.
           numberIsFromOutside.current = false;
           setNumber(num);
-          emit(num, country);
+          // `countryRef`, non `country`: incollando un numero internazionale la
+          // libreria notifica prima il paese e poi le cifre, nello stesso giro —
+          // la closure di questo render avrebbe ancora il paese vecchio.
+          emit(num, countryRef.current);
         }}
         onChangeCountry={(c: ICountry): void => {
-          // Scelta esplicita nel selettore: è un'azione dell'utente sul numero.
+          // NB: non è per forza una scelta dal selettore — la libreria chiama questo
+          // callback anche quando riconosce un prefisso nel testo incollato.
           numberIsFromOutside.current = false;
+          countryRef.current = c;
           setCountry(c);
           emit(number, c);
           // Sync inverso: aggiorna il campo Paese sotto. Allinea anche il ref così
           // l'effetto di sync residenza→prefisso non ri-applica lo stesso paese.
-          appliedResidence.current = c.cca2;
+          // Si segna la RESIDENZA come già applicata, non il paese del prefisso: la
+          // residenza non è cambiata: è cambiato il prefisso. Scrivendoci `c.cca2`,
+          // al giro dopo l'effetto vedeva residenza ≠ applicata e "riallineava",
+          // rimettendo il prefisso vecchio sopra il numero appena scritto — con un
+          // numero francese incollato su residenza italiana usciva '+39' + cifre
+          // francesi, che ha 11 cifre e supera pure la validazione.
+          appliedResidence.current = countryCca2;
           onCountryChange?.(c.cca2);
         }}
       />
