@@ -125,6 +125,14 @@ end $$;
 -- `update of email` fira anche quando la colonna è nella lista degli aggiornati
 -- col valore identico: senza la guardia lavoreremmo a ogni update che la sfiora.
 -- ---------------------------------------------------------------------------
+-- Il valore in colonna si mette con maiuscole DIVERSE dalla mail dell'account: se
+-- la guardia `v_cambiata` sparisse, `set email = email` rientrerebbe nel ramo di
+-- riallineo e **normalizzerebbe le maiuscole**, che è l'unico effetto osservabile
+-- della guardia. Senza questa accortezza l'assert sarebbe vacuo — riscriverebbe lo
+-- stesso identico valore e resterebbe verde anche a guardia rimossa.
+update public.profiles set contact_email = 'Nuova@Esempio.IT'
+ where id = '00000000-0000-0000-0000-0000000000e1';
+
 update auth.users
    set raw_user_meta_data = raw_user_meta_data || jsonb_build_object('nota', 'x')
  where id = '00000000-0000-0000-0000-0000000000e1';
@@ -137,10 +145,10 @@ declare v text;
 begin
   select contact_email into v from public.profiles
    where id = '00000000-0000-0000-0000-0000000000e1';
-  if v is distinct from 'nuova@esempio.it' then
-    raise exception 'T4 FAIL: un update innocuo ha cambiato la colonna (ora %)', coalesce(v, '<null>');
+  if v is distinct from 'Nuova@Esempio.IT' then
+    raise exception 'T4 FAIL: un update innocuo ha toccato la colonna (ora %)', coalesce(v, '<null>');
   end if;
-  raise notice 'T4 PASS: update senza cambio di mail = nessun effetto';
+  raise notice 'T4 PASS: update senza cambio di mail = nessun effetto, nemmeno sulle maiuscole';
 end $$;
 
 -- ---------------------------------------------------------------------------
@@ -295,6 +303,77 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
+-- T7b: IL VERSO OPPOSTO — la regressione che questa migration STAVA introducendo
+-- e che T7 da solo non poteva vedere, perché provava solo il verso favorevole
+-- (riga registrata sotto la mail NUOVA). Trovata da un critico avversariale, non
+-- dalla suite: è la classe «rilevatore testato solo sui casi positivi».
+--
+-- Scenario: la persona si registra PRIMA che l'archivio venga caricato (è il caso
+-- per cui esiste il §4 della 0012), quindi la sua riga storica resta NON
+-- rivendicata sotto l'indirizzo con cui si era registrata. Poi cambia indirizzo.
+-- Spostando `contact_email`, l'oblio della 0012 — che cancella su
+-- `old.contact_email` — non raggiungerebbe più quella riga: sopravvivrebbe alla
+-- cancellazione dell'account. Il riaggancio la rivendica, e la porta via la
+-- cascata su `claimed_by`.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000ea',
+  'registrato.prima@esempio.it',
+  jsonb_build_object(
+    'first_name', 'Nadia', 'last_name', 'Riva',
+    'phone', '+393331110010', 'city', 'Como', 'province', 'CO',
+    'country', 'IT', 'birth_date', '1983-03-13'
+  )
+);
+
+-- L'import arriva DOPO la registrazione → la riga nasce non rivendicata.
+insert into public.legacy_contacts (id, email_norm, first_name, last_name, source)
+values ('00000000-0000-0000-0000-0000000000da', 'registrato.prima@esempio.it',
+        'Nadia', 'Riva', 'access');
+
+do $$
+declare v uuid;
+begin
+  select claimed_by into v from public.legacy_contacts
+   where id = '00000000-0000-0000-0000-0000000000da';
+  if v is not null then
+    raise exception 'T7b SETUP FAIL: la riga non doveva risultare rivendicata';
+  end if;
+end $$;
+
+update auth.users set email = 'poi.cambiata@esempio.it'
+ where id = '00000000-0000-0000-0000-0000000000ea';
+
+do $$
+declare v uuid; d timestamptz;
+begin
+  select claimed_by, claimed_at into v, d from public.legacy_contacts
+   where id = '00000000-0000-0000-0000-0000000000da';
+  if v is distinct from '00000000-0000-0000-0000-0000000000ea'::uuid then
+    raise exception 'T7b FAIL: riga storica abbandonata sotto l''indirizzo vecchio (claimed_by = %)',
+      coalesce(v::text, '<null>');
+  end if;
+  if d is null then
+    raise exception 'T7b FAIL: claimed_by valorizzato senza claimed_at (vincolo di coerenza)';
+  end if;
+  raise notice 'T7b PASS: la riga sotto l''indirizzo vecchio viene rivendicata, non abbandonata';
+end $$;
+
+delete from auth.users where id = '00000000-0000-0000-0000-0000000000ea';
+
+do $$
+declare n int;
+begin
+  select count(*) into n from public.legacy_contacts
+   where id = '00000000-0000-0000-0000-0000000000da';
+  if n <> 0 then
+    raise exception 'T7b FAIL: la riga è sopravvissuta alla cancellazione dell''account (Art. 17)';
+  end if;
+  raise notice 'T7b PASS: e la cancellazione dell''account se la porta via';
+end $$;
+
+-- ---------------------------------------------------------------------------
 -- T8: IL ROLLBACK, ESEGUITO. Non basta scriverlo nell'intestazione: la 0012 aveva
 -- un rollback dichiarato che ROMPEVA le registrazioni, e se ne è accorto solo chi
 -- l'ha lanciato. Qui si esegue davvero e si verificano DUE cose: che il riallineo
@@ -339,3 +418,8 @@ begin
   end if;
   raise notice 'T8 PASS: rollback eseguito — effetto tolto, registrazioni intatte';
 end $$;
+
+-- Riga d'esito finale, come tutte le suite sorelle: `tests/README.md` la definisce
+-- come IL criterio di verde quando si esegue una coppia a mano. Mancava, e una
+-- suite verde sarebbe stata letta come rossa.
+select 'ALL TESTS PASS' as esito;

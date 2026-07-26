@@ -54,7 +54,11 @@ for pair in "${PAIRS[@]}"; do
           | docker exec -i "$CONTAINER" psql -U postgres -v ON_ERROR_STOP=1 2>&1)
 
     pass=$(printf '%s' "$log" | grep -c 'PASS' || true)
-    if printf '%s' "$log" | grep -qE 'FAIL|ERROR'; then
+    # `-eq 0` non è ridondante: il verdetto era «il log non contiene FAIL/ERROR»,
+    # quindi un giro che non esegue NIENTE — file mancante nel `cat`, o un errore
+    # Docker che stampa «Error» e non «ERROR» — usciva «verde … 0 PASS» con exit 0.
+    # Una suite che non gira non è una suite che passa.
+    if [ "$pass" -eq 0 ] || printf '%s' "$log" | grep -qE 'FAIL|ERROR'; then
       echo "ROSSO  ${pair} [${shim}] — ${pass} PASS prima del fallimento:"
       printf '%s\n' "$log" | grep -E 'FAIL|ERROR' | head -3
       fallite=$((fallite + 1))

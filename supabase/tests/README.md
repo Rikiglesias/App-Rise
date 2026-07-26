@@ -71,6 +71,7 @@ Coppie disponibili:
 | `0010_profiles_minimo.sql` | `0010_profiles_minimo.test.sql` |
 | `0011_signup_contact_email.sql` | `0011_signup_contact_email.test.sql` |
 | `0012_legacy_contacts.sql` | `0012_legacy_contacts.test.sql` |
+| `0013_contact_email_follows_account.sql` | `0013_contact_email_follows_account.test.sql` |
 
 Nota: la migration sotto test compare **due volte** nella pipe (una dentro `migrations/0*.sql`,
 una esplicita in `<MIGRATION>`). È voluto — è il test `T7`, che verifica la rieseguibilità e che la
@@ -92,6 +93,9 @@ sempre l'ultima):
 - **0011**: **8** righe `PASS` — 7 test (`T1-T7`) + esito.
 - **0012**: **21** righe `PASS` — 20 test (`T1-T20`) + esito. Come 0009 e 0011 non concede grant →
   stesso esito coi due shim (misurato: 21/21, 0 FAIL su entrambi, 2026-07-26).
+- **0013**: **12** righe `PASS` — 9 blocchi (`T1-T8` più `T6b` e `T7b`, di cui `T7b` stampa **due**
+  righe: una per il riaggancio, una per la cancellazione) + esito. Non concede grant → stesso esito
+  coi due shim (misurato: 12/12, 0 FAIL su entrambi, 2026-07-26).
 
 ⚠️ I conteggi sopra sono **misurati eseguendo le suite**, non contati leggendo i sorgenti. Contare i
 `raise notice` nel file dà il numero SBAGLIATO ogni volta che una notice sta dentro un ciclo o un

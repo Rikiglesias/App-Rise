@@ -29,7 +29,10 @@
 -- DAVVERO, cioè a conferma avvenuta, e non dipende da un client che potrebbe non
 -- tornare mai (disinstalla, cambia telefono, conferma dal browser della posta).
 --
--- COSA FA, ESATTAMENTE UNA COSA SOLA: se `contact_email` valeva la mail VECCHIA
+-- COSA FA — due cose, e la seconda è nata da un critico avversariale che ha visto
+-- ciò che io non avevo visto: senza di lei questa migration REGREDIVA la 0012
+-- (dettaglio al suo posto, nel corpo della funzione). ① se `contact_email` valeva
+-- la mail VECCHIA
 -- — cioè era il caso ②, derivato — la porta alla mail nuova. Se la persona aveva
 -- scelto un recapito DIVERSO (caso ①) non lo tocca: è una sua scelta, e il cambio
 -- della credenziale non la revoca. Il confronto è `lower(btrim(...))` su entrambi i
@@ -86,6 +89,7 @@ declare
   -- Un alias di relay non è la mail della persona: non deve entrare in colonna.
   v_nuova_valida boolean := new.email is not null
     and new.email not like '%@privaterelay.appleid.com';
+  v_spostata boolean := false;
 begin
   if not v_cambiata or not v_nuova_valida then
     return new;
@@ -97,11 +101,54 @@ begin
   -- CAMBIO EMAIL stesso: la persona non riuscirebbe più a cambiare indirizzo, per
   -- colpa di una colonna che con l'accesso non c'entra niente. Le maiuscole invece
   -- il vincolo le ammette e si conservano, come fa la 0011 alla nascita.
-  update public.profiles
-     set contact_email = btrim(new.email)
-   where id = new.id
-     and contact_email is not null
-     and lower(btrim(contact_email)) = lower(btrim(old.email));
+  --
+  -- `btrim` chiude l'ISTANZA (gli spazi), non la CLASSE: GoTrue potrebbe accettare
+  -- un indirizzo che quel regex rifiuta comunque (un dominio senza punto, una
+  -- local-part quotata). Se accadesse, il `check_violation` risalirebbe fino
+  -- all'UPDATE su `auth.users` e la persona si troverebbe **impossibilitata a
+  -- cambiare email**, con un errore che parla di una tabella che non ha toccato.
+  -- Fra «la colonna di recapito resta indietro» e «l'accesso non si può più
+  -- cambiare», il primo è incomparabilmente meno grave → best-effort esplicito.
+  begin
+    update public.profiles
+       set contact_email = btrim(new.email)
+     where id = new.id
+       and contact_email is not null
+       and lower(btrim(contact_email)) = lower(btrim(old.email));
+    v_spostata := found;
+  exception when check_violation then
+    return new;
+  end;
+
+  -- ---------------------------------------------------------------------------
+  -- IL PEZZO CHE MANCAVA, e che senza di lui questa migration REGREDIVA la 0012.
+  -- ---------------------------------------------------------------------------
+  -- `purge_legacy_contact` (0012 §4) fa l'oblio delle righe MAI rivendicate usando
+  -- `old.contact_email` al momento della cancellazione. Spostando quella colonna
+  -- sulla mail nuova, la riga storica registrata sotto la mail VECCHIA smetterebbe
+  -- di essere raggiunta: chi si è registrato PRIMA dell'import (il caso per cui il
+  -- §4 della 0012 esiste) e poi cambia indirizzo si lascerebbe dietro una seconda
+  -- copia dei suoi dati che sopravvive alla cancellazione dell'account. Cioè
+  -- esattamente la classe chiusa in `411e0d4`, riaperta in silenzio da noi.
+  --
+  -- Il rimedio NON è cancellare quella riga qui: la persona non ha chiesto niente,
+  -- e quei dati le servono ancora per la precompilazione. È **rivendicarla** —
+  -- l'indirizzo vecchio era suo, la riga è sua — così se ne occupa la cascata su
+  -- `claimed_by` al momento giusto, che è la cancellazione. `claimed_at` si muove
+  -- insieme a `claimed_by` (vincolo `legacy_contacts_claim_coerente`), e
+  -- `claimed_by is null` è la stessa guardia della 0012: non si strappa una riga
+  -- già rivendicata da qualcun altro.
+  --
+  -- Solo se lo spostamento è avvenuto per davvero (`v_spostata`): se la colonna
+  -- portava un recapito SCELTO, l'oblio continua a passare da lì e non c'è niente
+  -- da riagganciare.
+  if v_spostata then
+    update public.legacy_contacts
+       set claimed_by = new.id,
+           claimed_at = now()
+     where email_norm = lower(btrim(old.email))
+       and claimed_by is null;
+  end if;
 
   return new;
 end;

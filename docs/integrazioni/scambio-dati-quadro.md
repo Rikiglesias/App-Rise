@@ -176,7 +176,8 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
    c'è, e un collegamento che tenta di aprirla sarebbe un vicolo cieco.
 3. **Sulla nostra pagina succederà una cosa sola**, a seconda dei casi: se ha già un account nostro
    accede; se non l'ha **lo crea da noi** — nome, data di nascita per la maggiore età, consenso
-   all'informativa, e accesso con Apple, Google o email. È come «Accedi con Google»: chi non ha
+   all'informativa, e accesso con **email e password** (dal 26/07/2026 è l'unico ingresso: Apple e
+   Google sono stati rimossi — vedi §0). È come «Accedi con Google»: chi non ha
    l'account Google lo crea su Google, non sul sito che sta visitando.
 4. **Le mostreremo cosa stiamo per condividere e le chiederemo di approvare.** Se rifiuta, torna sul
    loro sito con un errore leggibile e non parte nulla.
@@ -197,9 +198,11 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 - **Chi ha già un account fatto col loro modulo** e poi entra dal nostro accesso, se nessuno collega i
   due, si ritrova **due account**. Per questo chiediamo il collegamento sull'email. Per chi usa
   «Nascondi la mia email» nemmeno quello basta, perché l'alias non combacia: quel caso resta fuori.
-- **Chi apre il link dentro il browser interno di un social** (Instagram, Facebook) non può accedere con
-  Google: Google rifiuta i browser incorporati. Con un solo ingresso quella persona resterebbe fuori →
-  la nostra pagina deve riconoscere quel contesto e offrire «apri nel browser» più l'accesso con email.
+- **Chi apre il link dentro il browser interno di un social** (Instagram, Facebook): ⚠️ **residuo
+  STORICO, non più attivo dal 26/07/2026.** Il problema era che Google rifiuta i browser incorporati;
+  con email e password come unico ingresso quel rifiuto non ha più soggetto. Resta valido solo se un
+  giorno i social rientrassero: allora la nostra pagina dovrà riconoscere quel contesto e offrire
+  «apri nel browser».
 - **Chi ha meno di diciotto anni.** Il limite è nostro, scritto come vincolo nel nostro database; il
   loro modulo non chiede l'età. Con un solo ingresso il limite si estende anche a gift card ed eventi
   sul loro spazio, dove oggi un minorenne passerebbe. Va detto a loro (tocca la loro conversione) e
@@ -729,7 +732,7 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 | **Pubblicare l'informativa riscritta — quattro bersagli**, con la riga nuova nella tabella delle versioni **nella stessa release** che alza il numero di versione nell'app | Noi (testo, rilascio) · consulente (le risposte) · chi ha le chiavi del sito (pubblicazione) |
 | **Estendere l'export dei propri dati** ai codici di provenienza emessi e ai partner a cui sono andati, nella stessa release dell'informativa | Noi |
 | **Chiudere la base giuridica del riordino delle anagrafiche storiche, e se serve l'informativa Art. 14.** Non è un dettaglio rinviabile a dopo: è la condizione che autorizza il caricamento della riga sotto, e quel caricamento ha un vincolo di ordine rigido. Si chiude insieme alla domanda di fatto su **chi è titolare** di quelle persone sulla piattaforma del partner (domanda 18 del brief: responsabile ex art. 28 con accordo firmato, o titolare autonomo?) | La consulente (base giuridica) · Riccardo / Let's Donation (l'atto che qualifica il rapporto) |
-| **Caricare le anagrafiche storiche PRIMA che comincino le registrazioni vere** (§3.1, vincolo di ordine). Il collegamento scatta solo quando il profilo nasce: chi si registra prima del caricamento resta scollegato dal suo storico e **nessuno se ne accorge**. Il meccanismo esiste ed è provato (18 prove automatiche), ma **la tabella è vuota e la migration `0012` non è ancora applicata al database vivo** — ricontrollato il 26/07/2026: l'elenco si ferma alla `0011` `[V]`. Serve prima la riga qui sopra | Noi (caricamento) · Riccardo (applicazione al database) |
+| **Caricare le anagrafiche storiche PRIMA che comincino le registrazioni vere** (§3.1, vincolo di ordine). Il collegamento scatta solo quando il profilo nasce: chi si registra prima del caricamento resta scollegato dal suo storico e **nessuno se ne accorge**. Il meccanismo esiste ed è provato (**20 prove** per la `0012` + **12** per la `0013`, su due configurazioni di privilegi opposte), ma **la tabella è vuota e le migration `0012` e `0013` non sono ancora applicate al database vivo** — ricontrollato il 26/07/2026: l'elenco si ferma alla `0011` `[V]`. **Vanno applicate INSIEME, e comunque la `0013` non dopo l'import**: è lei a tenere onesta la chiave dell'oblio quando la persona cambia la mail dell'account — senza, una riga storica sopravvive alla cancellazione. Serve prima la riga qui sopra | Noi (caricamento) · Riccardo (applicazione al database) |
 | **Ripulire i dati di prova**: quattro consensi marketing e zero consensi all'informativa, con zero profili | Riccardo (sul database) |
 
 ### 8.2 Cancelli che bloccano la trasmissione dei dati
