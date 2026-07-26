@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
@@ -87,6 +93,25 @@ export const ProfileEditScreen: React.FC = () => {
   const [contactEmail, setContactEmail] = useState(
     profile?.contact_email ?? ''
   );
+  // Il valore iniziale non basta: dal 2026-07-26 la colonna può cambiare SOTTO la
+  // schermata. Il trigger `on_auth_user_email_changed` (migration 0013) riallinea
+  // `contact_email` quando la persona conferma il cambio della mail dell'account, e
+  // `AuthContext` ricarica il profilo. Senza ri-sincronizzare, lo stato locale resta
+  // all'indirizzo VECCHIO: al salvataggio successivo il confronto lo vede «cambiato»
+  // e lo rispedisce, annullando il riallineo — cioè riportando la chiave dell'oblio
+  // su un indirizzo abbandonato, senza nessun errore. Scenario reale: cambio mail →
+  // resto sulla schermata → confermo dalle due caselle → torno e salvo il telefono.
+  // Ci si ferma appena la persona scrive, per non sovrascriverle sotto le dita quello
+  // che ha digitato: stesso pattern (e stessa ragione) di `useProfileForm.ts`.
+  const contactEmailTouched = useRef(false);
+  useEffect(() => {
+    if (contactEmailTouched.current) return;
+    setContactEmail(profile?.contact_email ?? '');
+  }, [profile?.contact_email]);
+  const onChangeContactEmail = useCallback((value: string): void => {
+    contactEmailTouched.current = true;
+    setContactEmail(value);
+  }, []);
   const [errors, setErrors] = useState<Errors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -297,7 +322,7 @@ export const ProfileEditScreen: React.FC = () => {
       <AuthInput
         label={t('auth.completeProfile.contactEmail')}
         value={contactEmail}
-        onChangeText={setContactEmail}
+        onChangeText={onChangeContactEmail}
         error={err(errors.contactEmail)}
         keyboardType="email-address"
         autoCapitalize="none"

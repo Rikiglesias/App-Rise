@@ -64,6 +64,14 @@ values (
   )
 );
 
+-- Riga storica sotto la mail dell'ACCOUNT (non sotto il recapito scelto): è l'esca
+-- che rende non-vacuo il secondo assert di T2. Senza di lei la tabella è vuota a
+-- questo punto della suite e il conteggio farebbe 0 comunque, anche togliendo la
+-- guardia `if v_spostata` dalla migration — cioè l'assert non poteva fallire. Il
+-- difetto è stato trovato dal terzo critico avversariale, non dalla suite.
+insert into public.legacy_contacts (id, email_norm, first_name, source)
+values ('00000000-0000-0000-0000-0000000000d2', 'accesso@esempio.it', 'Anna', 'access');
+
 update auth.users set email = 'accesso-nuovo@esempio.it'
  where id = '00000000-0000-0000-0000-0000000000e2';
 

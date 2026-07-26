@@ -317,4 +317,84 @@ describe('ProfileEditScreen — mail di contatto', () => {
     expect(getByText('Email non valida')).toBeTruthy();
     expect(updateProfile).not.toHaveBeenCalled();
   });
+
+  // --- La colonna può cambiare SOTTO la schermata (migration 0013) -----------
+  // Il trigger `on_auth_user_email_changed` riallinea `contact_email` quando la
+  // persona conferma il cambio della mail dell'account, e AuthContext ricarica il
+  // profilo. Se la schermata non si ri-sincronizza, al salvataggio successivo
+  // rispedisce l'indirizzo vecchio e ANNULLA il riallineo: la chiave con cui la
+  // 0012 cancella le anagrafiche storiche tornerebbe a un indirizzo abbandonato.
+  it('la mail di contatto riallineata dal database NON viene rispedita vecchia', () => {
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: { ...profile, contact_email: 'vecchia@r.it' },
+        updateProfile,
+      })
+    );
+    const { rerender, getByLabelText, getByText } = wrap(<ProfileEditScreen />);
+
+    // Il trigger ha riallineato la colonna e il profilo è stato ricaricato.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: { ...profile, contact_email: 'nuova@r.it' },
+        updateProfile,
+      })
+    );
+    // `wrap` monta i provider: il re-render deve rifarlo, altrimenti il tema sparisce.
+    rerender(
+      <AllProviders>
+        <ProfileEditScreen />
+      </AllProviders>
+    );
+
+    // La persona modifica un ALTRO campo e salva, senza toccare la mail di contatto:
+    // è lo scenario reale (torno sulla schermata e sistemo il telefono).
+    fireEvent.changeText(getByLabelText('Telefono'), '+393339998877');
+    fireEvent.press(getByText('Salva modifiche'));
+
+    // Il patch deve contenere il telefono e NON la mail. Senza la ri-sincronizzazione
+    // lo stato locale resterebbe a 'vecchia@r.it', il confronto la vedrebbe diversa
+    // da 'nuova@r.it' e la rispedirebbe: questo assert è la contro-prova.
+    expect(updateProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ phone: '+393339998877' })
+    );
+    expect(updateProfile).not.toHaveBeenCalledWith(
+      expect.objectContaining({ contact_email: expect.anything() })
+    );
+  });
+
+  it('ma se è la PERSONA a scriverla, il ricarico del profilo non gliela sovrascrive', () => {
+    // Contro-prova del test sopra: la ri-sincronizzazione si ferma appena lei
+    // digita, altrimenti le cancelleremmo sotto le dita quello che ha scritto.
+    const updateProfile = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: { ...profile, contact_email: 'vecchia@r.it' },
+        updateProfile,
+      })
+    );
+    const { rerender, getByLabelText, getByText } = wrap(<ProfileEditScreen />);
+
+    fireEvent.changeText(getByLabelText('Email di contatto'), 'scelta@r.it');
+
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: { ...profile, contact_email: 'nuova@r.it' },
+        updateProfile,
+      })
+    );
+    // `wrap` monta i provider: il re-render deve rifarlo, altrimenti il tema sparisce.
+    rerender(
+      <AllProviders>
+        <ProfileEditScreen />
+      </AllProviders>
+    );
+
+    fireEvent.press(getByText('Salva modifiche'));
+
+    expect(updateProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ contact_email: 'scelta@r.it' })
+    );
+  });
 });
