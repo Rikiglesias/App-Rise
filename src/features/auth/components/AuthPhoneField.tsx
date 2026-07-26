@@ -35,7 +35,13 @@ interface AuthPhoneFieldProps {
    * `value` — il difetto opposto a quello che questa prop chiude.
    */
   value?: string;
-  /** Riceve la stringa completa "<prefisso> <numero>" (es. "+39 333 1234567"). */
+  /**
+   * Riceve il numero in E.164 SENZA spazi (es. "+393331234567"), che è il formato
+   * richiesto da `validatePhoneIT`; stringa vuota se il campo è vuoto. Se `value`
+   * arriva in un formato diverso (spazi, prefisso assente) viene normalizzato e
+   * notificato una volta, così il form non tiene mai una stringa che la validazione
+   * rifiuterebbe mentre il campo ne mostra una corretta.
+   */
   onChangeText: (fullPhone: string) => void;
   /**
    * Paese di residenza (cca2): quando cambia, il prefisso si allinea a quel paese.
@@ -98,6 +104,9 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   // indietro come `value` ciò che gli abbiamo appena emesso, e quel giro non è
   // un'idratazione — ritrattarlo come tale rifarebbe il lavoro a ogni tasto.
   const lastEmitted = useRef('');
+  // Il numero attuale arriva da fuori (profilo) o l'ha digitato la persona qui? Da
+  // questo dipende se il prefisso può essere riscritto: su un numero salvato no.
+  const numberIsFromOutside = useRef(false);
 
   const emit = useCallback(
     (num: string, c: ICountry | null): void => {
@@ -136,31 +145,56 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
     if (!isNewValue && !isNewResidence) return;
 
     if (isNewValue) {
-      // Idratazione: si MOSTRA il valore, non lo si riemette. Emettere qui
-      // significherebbe riscrivere il form con ciò che il form ci ha appena dato.
-      lastEmitted.current = value;
       // Il paese si deduce dal numero stesso, non dalla residenza: un numero salvato
       // porta con sé il proprio prefisso, ed è più vero della residenza dichiarata.
       const fromNumber = value ? getCountryByPhoneNumber(value) : undefined;
-      if (fromNumber) setCountry(fromNumber);
-      setNumber(value ? getNationalPhoneNumber(value) : '');
+      const nextCountry = fromNumber ?? country;
+      const national = value ? getNationalPhoneNumber(value) : '';
+
+      // Il valore in arrivo NON è per forza in E.164: in colonna può esserci
+      // '+39 333 1234567' o '3331234567' senza prefisso — caso certo dopo l'import
+      // delle anagrafiche. La libreria, quando non riconosce il numero, restituisce
+      // l'input verbatim (getNationalPhoneNumber.js:26-29): senza normalizzare, il
+      // campo mostrerebbe un numero giusto mentre il form tiene una stringa che
+      // `validatePhoneIT` rifiuta — errore su un campo che sembra a posto.
+      const digits = national.replace(/\D/g, '');
+      const normalized = digits
+        ? `${buildCallingCode(nextCountry)}${digits}`
+        : '';
+
+      setCountry(nextCountry);
+      setNumber(national);
+      lastEmitted.current = normalized;
+      // Il numero mostrato viene da fuori, non è stato digitato qui: serve al ramo
+      // sotto, che non deve riscriverne il prefisso.
+      numberIsFromOutside.current = true;
       // La residenza in arrivo si segna come già applicata: senza questa riga, al giro
       // successivo l'allineamento del prefisso scatterebbe e riemetterebbe, cambiando
       // il numero che abbiamo appena mostrato.
       if (countryCca2) appliedResidence.current = countryCca2;
+      // Si notifica SOLO se abbiamo dovuto correggere il formato: rimandare indietro
+      // un valore identico a quello ricevuto sarebbe riscrivere il form con ciò che
+      // il form ci ha appena dato.
+      if (normalized !== value) onChangeText(normalized);
       return;
     }
 
-    // Solo la residenza è cambiata (la persona ha scelto un altro paese): il prefisso
-    // la segue. Ref-guard invariata: un cambio prefisso manuale resta finché la
-    // residenza non cambia di nuovo.
+    // Solo la residenza è cambiata (la persona ha scelto un altro paese).
     appliedResidence.current = countryCca2;
-    const c = getCountryByCca2(countryCca2 as string);
+    if (numberIsFromOutside.current) {
+      // Numero che arriva dal profilo: NON si tocca. Riallinearne il prefisso alla
+      // residenza cambierebbe il numero di una persona reale — '+393331234567' con
+      // residenza corretta in FR diventerebbe '+333331234567', che ha 12 cifre e
+      // supera pure `validatePhoneIT`, quindi finirebbe in tabella senza un errore.
+      // Chi vuole cambiare davvero il numero lo modifica, e da lì torna "digitato".
+      return;
+    }
+    const c = countryCca2 ? getCountryByCca2(countryCca2) : undefined;
     if (c) {
       setCountry(c);
       emit(number, c);
     }
-  }, [value, countryCca2, number, emit]);
+  }, [value, countryCca2, country, number, emit, onChangeText]);
 
   // Stili theme-aware per allineare il campo agli altri input (sfondo/bordo/radius
   // del tema): la libreria di default usa un campo bianco fisso, che in dark mode
@@ -204,10 +238,15 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         modalStyles={MODAL_STYLES}
         showModalCloseButton
         onChangePhoneNumber={(num: string): void => {
+          // Da qui in poi il numero è della persona, non del profilo: il prefisso
+          // può tornare a seguire la residenza.
+          numberIsFromOutside.current = false;
           setNumber(num);
           emit(num, country);
         }}
         onChangeCountry={(c: ICountry): void => {
+          // Scelta esplicita nel selettore: è un'azione dell'utente sul numero.
+          numberIsFromOutside.current = false;
           setCountry(c);
           emit(number, c);
           // Sync inverso: aggiorna il campo Paese sotto. Allinea anche il ref così
