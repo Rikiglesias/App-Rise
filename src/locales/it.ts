@@ -101,10 +101,6 @@ export default {
       // che lasciare una riga vuota, che sembrerebbe un difetto dell'app.
       toComplete: 'Da completare',
     },
-    social: {
-      continueGoogle: 'Continua con Google',
-      or: 'oppure',
-    },
     completeProfile: {
       title: 'Completa il profilo',
       subtitle: 'Mancano alcuni dati per completare la registrazione',

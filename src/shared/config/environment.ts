@@ -21,8 +21,6 @@ import * as Updates from 'expo-updates';
 const STATIC_PUBLIC_ENV: Record<string, string | undefined> = {
   EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
   EXPO_PUBLIC_SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
-  EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID:
-    process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
   EXPO_PUBLIC_API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL,
   EXPO_PUBLIC_API_BASE_URL_DEV: process.env.EXPO_PUBLIC_API_BASE_URL_DEV,
   EXPO_PUBLIC_API_BASE_URL_STAGING:
@@ -75,7 +73,6 @@ interface AppEnvironment {
   API_BASE_URL: string;
   SUPABASE_URL: string;
   SUPABASE_ANON_KEY: string;
-  GOOGLE_WEB_CLIENT_ID: string;
   ENABLE_FLIPPER: boolean;
   ENABLE_PERFORMANCE_MONITORING: boolean;
   LOG_LEVEL: 'debug' | 'info' | 'warn' | 'error';
@@ -89,7 +86,6 @@ const environmentConfigs: Record<string, AppEnvironment> = {
     APP_VERSION: '1.0.0-dev',
     SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
     SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
-    GOOGLE_WEB_CLIENT_ID: getEnvVar('EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID') ?? '',
     API_BASE_URL:
       getEnvVar('EXPO_PUBLIC_API_BASE_URL_DEV') ??
       getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
@@ -104,7 +100,6 @@ const environmentConfigs: Record<string, AppEnvironment> = {
     APP_VERSION: '1.0.0-staging',
     SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
     SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
-    GOOGLE_WEB_CLIENT_ID: getEnvVar('EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID') ?? '',
     API_BASE_URL:
       getEnvVar('EXPO_PUBLIC_API_BASE_URL_STAGING') ??
       getEnvVar('EXPO_PUBLIC_API_BASE_URL') ??
@@ -119,7 +114,6 @@ const environmentConfigs: Record<string, AppEnvironment> = {
     APP_VERSION: '1.0.0',
     SUPABASE_URL: getEnvVar('EXPO_PUBLIC_SUPABASE_URL') ?? '',
     SUPABASE_ANON_KEY: getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY') ?? '',
-    GOOGLE_WEB_CLIENT_ID: getEnvVar('EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID') ?? '',
     API_BASE_URL: resolveProductionApiUrl(),
     ENABLE_FLIPPER: false,
     ENABLE_PERFORMANCE_MONITORING: false,

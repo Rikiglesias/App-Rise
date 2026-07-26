@@ -98,10 +98,6 @@ export default {
       completeCta: 'Complete your profile',
       toComplete: 'To be completed',
     },
-    social: {
-      continueGoogle: 'Continue with Google',
-      or: 'or',
-    },
     completeProfile: {
       title: 'Complete your profile',
       subtitle: 'A few details are missing to complete your registration',
