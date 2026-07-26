@@ -664,7 +664,7 @@ registro, non nella copia.**
 | «Ogni nostro account ha la prova del consenso» | Chi entra con Apple o Google crea l'account subito, ma profilo e prova nascono solo se completa il profilo. Sul database: quattro consensi marketing e **zero** consensi all'informativa | Non affermarlo finché il buco non è chiuso |
 | «I nostri dati stanno tutti in Unione Europea» | Solo il database delle persone. Diagnostica, donazioni, distribuzione dell'app e posta sono società statunitensi | «I dati dell'account risiedono in Germania. Alcuni fornitori sono statunitensi e le garanzie sono in definizione con la consulente» |
 | «Alla cancellazione propaghiamo la richiesta al partner» | Esiste solo la struttura dati: **nessun programma la legge** | «Conserviamo il minimo per potervi chiedere la rimozione; il canale va concordato» |
-| «Il pulsante Elimina account funziona» | Chiama una funzione che **non è pubblicata** sul servizio: vedi §7 | Non dirlo, e sistemarlo prima del rilascio |
+| «Elimina account funziona in tutti e due i modi» | La cancellazione **subito** funziona (la funzione è stata pubblicata il 26/07/2026) `[V]`. Quella **fra trenta giorni** no: il programma esiste ma **non lo avvia nessuno**, vedi §7 | «La cancellazione immediata è attiva; quella programmata si accende prima del rilascio» |
 | «Il codice di provenienza si annulla su richiesta» | È promesso nell'informativa, ma **il processo non esiste** e la colonna non è usata da nessuna parte | Costruire il processo, o correggere l'informativa |
 | «La cancellazione è definitiva» | La lapide sopravvive **per costruzione**, e il registro dei consensi si conserva come prova | Dichiarare le due eccezioni per nome |
 | «L'accesso unico è attivo» | Nel nostro progetto **non esiste** nessun punto di accesso di quel tipo | «Il server di accesso non è ancora attivo: si accende dopo la vostra conferma, la migrazione delle nostre chiavi di firma e una decisione interna» |
@@ -683,24 +683,30 @@ registro, non nella copia.**
 
 ## 7. Il problema che il primo rilascio farebbe emergere
 
-**Sul servizio in produzione non è pubblicata nessuna funzione di backend** (`list_edge_functions` sul
-progetto live, 25/07/2026 → elenco vuoto) `[V]`, e nel repository **non esiste nessun processo
-automatico che le pubblichi** `[V]`. Nel codice ce ne sono due, entrambe entrate il 15/06/2026:
-`delete-account` (cancellazione immediata) e `purge-deletions` (cancellazione programmata a trenta
-giorni).
+**Aggiornato il 26/07/2026: metà del problema è chiusa, metà no.**
 
-**Perché oggi non fa danno:** la schermata «Elimina account» è entrata il **15 giugno 2026**, sette mesi
-dopo l'ultimo rilascio → **nella versione che le persone hanno sul telefono quel pulsante non esiste**,
-quindi nessuno può premerlo `[V]`.
+I programmi di cancellazione sono due, entrambi entrati il 15/06/2026: uno cancella **subito**
+(`delete-account`), l'altro cancella **fra trenta giorni** chi lo ha chiesto (`purge-deletions`).
+Fino al 26/07/2026 **nessuno dei due era pubblicato** sul servizio in produzione: il pulsante avrebbe
+chiamato qualcosa che non esisteva.
 
-**Perché al primo rilascio diventa un problema vero:** quel giorno il pulsante compare e chiama una
-funzione che non c'è. La richiesta di cancellazione **fallisce**; il timbro della cancellazione
-programmata resta un dato che nessuno consuma; e la lapide che serve a chiedere la rimozione al partner
-**non si scrive nemmeno**, perché si scrive solo quando la cancellazione avviene davvero. Su un'app
-distribuita, con un'informativa che promette entrambi i percorsi, è una non conformità concreta.
+**Cosa è stato sistemato.** Sono stati pubblicati entrambi `[V]`. Che rispondano davvero non è stato
+dato per buono: sono stati chiamati dall'esterno senza credenziali, e ognuno ha risposto con il proprio
+rifiuto previsto (`401` il primo, `403` il secondo) invece del «non esiste» di prima `[V]`. La
+cancellazione **immediata** quindi funziona.
 
-→ **Pubblicare e programmare le due funzioni è un prerequisito del rilascio**, non un lavoro
-successivo. Sta in §8.1.
+**Cosa NON è ancora sistemato.** Il programma che cancella dopo trenta giorni è pubblicato ma **non lo
+avvia nessuno**: sul servizio non sono installati gli strumenti che lo chiamerebbero a orario, e la sua
+parola d'ordine non è impostata `[V]`. Finché resta così, chi chiede la cancellazione programmata vede
+la richiesta accettata, ma **i suoi dati restano oltre il termine che gli abbiamo promesso** — ed è il
+termine scritto nell'informativa.
+
+**Resta anche un secondo punto**: nel repository **non esiste nessun processo automatico che ripubblichi
+questi programmi** `[V]`. Oggi la pubblicazione è a mano, quindi una correzione al loro codice **non
+arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
+
+→ **Accendere l'esecuzione periodica è un prerequisito del rilascio**, non un lavoro successivo. Sta in
+§8.1.
 
 ---
 
@@ -710,8 +716,9 @@ successivo. Sta in §8.1.
 
 | Cosa | Chi lo sblocca |
 |---|---|
-| **Pubblicare le due funzioni di cancellazione e programmare quella periodica** — altrimenti il rilascio consegna un pulsante che fallisce (§7) | Noi (pubblicazione) · Riccardo (programmazione dell'esecuzione giornaliera) |
-| **Applicare al database la modifica che rende facoltativi telefono e città** (0010) **e quella che scrive l'email di contatto alla nascita del profilo** (0011). Verificato: la 0010 non è applicata; il registro elenca solo 0008 e 0009, ma le precedenti ci sono (eseguite fuori dal registro). Il comando è bloccato dalla nostra protezione, va eseguito dal pannello. Senza la 0010, un modulo alleggerito manda in produzione una registrazione che fallisce; senza la 0011, chi si registra con email e password resta senza l'indirizzo con cui lo riconosciamo | Riccardo, dal pannello |
+| **FATTO il 26/07/2026** — pubblicare le due funzioni di cancellazione `[V]`: entrambe pubblicate e verificate chiamandole dall'esterno (§7) | — |
+| **Accendere l'esecuzione periodica della cancellazione a trenta giorni** — il programma c'è ma non lo avvia nessuno, quindi oggi quei dati restano oltre il termine promesso (§7). Nell'ordine: ① impostare la sua parola d'ordine ② installare gli strumenti che chiamano a orario ③ creare l'appuntamento giornaliero. Invertire ① e ③ produce solo un rifiuto al giorno nei registri | Riccardo (la parola d'ordine è un segreto: la imposta lui) · Noi (il resto) |
+| **FATTE il 26/07/2026** — le due modifiche al database: telefono e città facoltativi (0010) ed email di contatto scritta alla nascita del profilo (0011). Ricontrollato sul database vivo lo stesso giorno: telefono e città risultano facoltativi `[V]` | — |
 | **Pubblicare l'informativa riscritta — quattro bersagli**, con la riga nuova nella tabella delle versioni **nella stessa release** che alza il numero di versione nell'app | Noi (testo, rilascio) · consulente (le risposte) · chi ha le chiavi del sito (pubblicazione) |
 | **Estendere l'export dei propri dati** ai codici di provenienza emessi e ai partner a cui sono andati, nella stessa release dell'informativa | Noi |
 | **Ripulire i dati di prova**: quattro consensi marketing e zero consensi all'informativa, con zero profili | Riccardo (sul database) |
