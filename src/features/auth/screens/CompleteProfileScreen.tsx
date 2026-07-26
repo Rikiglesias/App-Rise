@@ -70,6 +70,10 @@ export const CompleteProfileScreen: React.FC = () => {
       <AuthSection title={t('auth.signup.sections.contacts')}>
         <AuthPhoneField
           label={t('auth.signup.phone')}
+          // Qui il numero può esistere già (profilo incompleto che si sta finendo):
+          // passarlo lo fa VEDERE. In `SignUpScreen` la prop resta assente di
+          // proposito — chi si registra non ha ancora nessun numero da mostrare.
+          value={values.phone}
           onChangeText={onChange.phone}
           country={values.country}
           onCountryChange={onChange.country}

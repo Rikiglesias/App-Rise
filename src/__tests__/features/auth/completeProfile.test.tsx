@@ -272,10 +272,14 @@ describe('CompleteProfileScreen — profilo che esiste già', () => {
         <CompleteProfileScreen />
       </AllProviders>
     );
-    // Il telefono si ridigita: il campo non è controllato e non mostra il valore del
-    // profilo (residuo dichiarato in useProfileForm). Il prefisso segue il paese
-    // idratato, quindi il numero esce con +33 senza che nessuno lo scelga.
-    fireEvent.changeText(getByLabelText('Telefono'), '123456789');
+    // Il telefono NON si ridigita più: il campo riceve il valore del profilo e lo
+    // mostra (F-EMAIL.27). Qui non si tocca la tastiera di proposito — è il punto
+    // del test: il numero deve arrivare all'upsert per sola idratazione.
+    expect(
+      (
+        getByLabelText('Telefono') as { props: { value: string } }
+      ).props.value.replace(/\D/g, '')
+    ).toBe('123456789');
     fireEvent.press(getByText('Salva e continua'));
 
     await waitFor(() => expect(upsert).toHaveBeenCalled());

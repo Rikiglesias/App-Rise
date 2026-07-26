@@ -9,6 +9,8 @@ import { View, StyleSheet } from 'react-native';
 import PhoneInput, {
   type ICountry,
   getCountryByCca2,
+  getCountryByPhoneNumber,
+  getNationalPhoneNumber,
 } from 'rn-international-phone-number';
 import type { ICountryCca2, ICountrySelectStyle } from 'rn-country-select';
 
@@ -21,6 +23,18 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface AuthPhoneFieldProps {
   label: string;
+  /**
+   * Numero già noto, in E.164 ("+393331234567"): serve a MOSTRARE un valore che il
+   * form ha già (profilo esistente, rettifica) invece di farlo ridigitare.
+   *
+   * Passarlo rende il campo CONTROLLATO. Ometterlo lo lascia non-controllato, ed è
+   * un caso vivo, non un residuo: `SignUpScreen` registra una persona nuova, non ha
+   * nessun numero da proporre. La distinzione è fra `undefined` (nessun valore
+   * esterno) e `''` (valore esterno vuoto): trattarli allo stesso modo farebbe
+   * ri-azzerare il campo appena digitato in tutte le schermate che non passano
+   * `value` — il difetto opposto a quello che questa prop chiude.
+   */
+  value?: string;
   /** Riceve la stringa completa "<prefisso> <numero>" (es. "+39 333 1234567"). */
   onChangeText: (fullPhone: string) => void;
   /**
@@ -67,6 +81,7 @@ const buildCallingCode = (c: ICountry | null): string => {
  */
 export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   label,
+  value,
   onChangeText,
   country: countryCca2,
   onCountryChange,
@@ -79,29 +94,73 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
     () => getCountryByCca2(countryCca2 ?? 'IT') ?? null
   );
 
+  // Ultimo valore USCITO da qui. Serve a riconoscere l'eco: il form ci rimanda
+  // indietro come `value` ciò che gli abbiamo appena emesso, e quel giro non è
+  // un'idratazione — ritrattarlo come tale rifarebbe il lavoro a ogni tasto.
+  const lastEmitted = useRef('');
+
   const emit = useCallback(
     (num: string, c: ICountry | null): void => {
       const code = buildCallingCode(c);
       // E.164 senza spazi ("+<cifre>"): è il formato richiesto da validatePhoneIT.
       // `num` è il numero nazionale formattato dalla libreria → ne prendo le cifre.
       const digits = num.replace(/\D/g, '');
-      onChangeText(digits ? `${code}${digits}` : '');
+      const full = digits ? `${code}${digits}` : '';
+      // Non si notifica un valore che non è cambiato. Serve a un caso reale, non
+      // all'eleganza: al montaggio la libreria emette una volta a vuoto, e quella
+      // stringa vuota sposterebbe il form via dal suo valore iniziale ('+39'). Chi
+      // idrata dal profilo scrive solo se il campo è ancora al valore iniziale →
+      // senza questa guardia l'idratazione non scatterebbe più, e chi ha già il
+      // numero tornerebbe a ridigitarlo. Cancellare davvero il campo passa: lì il
+      // valore CAMBIA (da '+39…' a ''), quindi la notifica parte.
+      if (full === lastEmitted.current) return;
+      lastEmitted.current = full;
+      onChangeText(full);
     },
     [onChangeText]
   );
 
-  // Allinea il prefisso al paese di residenza quando QUESTO cambia (ref-guard:
-  // un cambio prefisso manuale dell'utente resta finché la residenza non cambia di nuovo).
+  // UN SOLO effetto per le due sincronizzazioni (valore che arriva da fuori, paese di
+  // residenza che cambia). Separarli li metterebbe in corsa fra loro nel caso che conta
+  // — il profilo che arriva dalla rete porta ENTRAMBI insieme (`country: 'FR'` e
+  // `phone: '+33…'`) — e l'allineamento del prefisso, che riemette, cancellerebbe il
+  // numero appena idratato. È la stessa trappola già pagata in `useProfileForm`.
   const appliedResidence = useRef(countryCca2);
   useEffect(() => {
-    if (!countryCca2 || countryCca2 === appliedResidence.current) return;
+    // `undefined` = questa schermata non passa un valore (campo non controllato):
+    // qui non si idrata mai, altrimenti si azzererebbe ciò che la persona digita.
+    const hasExternalValue = value !== undefined;
+    const isNewValue = hasExternalValue && value !== lastEmitted.current;
+    const isNewResidence =
+      !!countryCca2 && countryCca2 !== appliedResidence.current;
+    if (!isNewValue && !isNewResidence) return;
+
+    if (isNewValue) {
+      // Idratazione: si MOSTRA il valore, non lo si riemette. Emettere qui
+      // significherebbe riscrivere il form con ciò che il form ci ha appena dato.
+      lastEmitted.current = value;
+      // Il paese si deduce dal numero stesso, non dalla residenza: un numero salvato
+      // porta con sé il proprio prefisso, ed è più vero della residenza dichiarata.
+      const fromNumber = value ? getCountryByPhoneNumber(value) : undefined;
+      if (fromNumber) setCountry(fromNumber);
+      setNumber(value ? getNationalPhoneNumber(value) : '');
+      // La residenza in arrivo si segna come già applicata: senza questa riga, al giro
+      // successivo l'allineamento del prefisso scatterebbe e riemetterebbe, cambiando
+      // il numero che abbiamo appena mostrato.
+      if (countryCca2) appliedResidence.current = countryCca2;
+      return;
+    }
+
+    // Solo la residenza è cambiata (la persona ha scelto un altro paese): il prefisso
+    // la segue. Ref-guard invariata: un cambio prefisso manuale resta finché la
+    // residenza non cambia di nuovo.
     appliedResidence.current = countryCca2;
-    const c = getCountryByCca2(countryCca2);
+    const c = getCountryByCca2(countryCca2 as string);
     if (c) {
       setCountry(c);
       emit(number, c);
     }
-  }, [countryCca2, number, emit]);
+  }, [value, countryCca2, number, emit]);
 
   // Stili theme-aware per allineare il campo agli altri input (sfondo/bordo/radius
   // del tema): la libreria di default usa un campo bianco fisso, che in dark mode
