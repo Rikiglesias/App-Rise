@@ -1,5 +1,5 @@
 import { assertEquals } from 'jsr:@std/assert@1';
-import { assertSpyCalls, spy, stub } from 'jsr:@std/testing@1/mock';
+import { assertSpyCalls, spy } from 'jsr:@std/testing@1/mock';
 import { type Deps, handler } from './index.ts';
 
 interface FakeAdmin {
@@ -9,34 +9,17 @@ interface FakeAdmin {
   };
 }
 
-function buildDeps(opts: {
-  user?: unknown;
-  getUserError?: unknown;
-  deleteUserError?: unknown;
-  revokeImpl?: (code: string) => Promise<void>;
-  seq?: string[];
-}) {
+function buildDeps(opts: { user?: unknown; getUserError?: unknown; deleteUserError?: unknown }) {
   const getUser = spy((_jwt: string) =>
     Promise.resolve({ data: { user: opts.user ?? null }, error: opts.getUserError ?? null })
   );
-  const deleteUser = spy((_id: string) => {
-    opts.seq?.push('delete');
-    return Promise.resolve({ error: opts.deleteUserError ?? null });
-  });
+  const deleteUser = spy((_id: string) => Promise.resolve({ error: opts.deleteUserError ?? null }));
   const fake: FakeAdmin = { auth: { getUser, admin: { deleteUser } } };
   const createAdmin = spy(() => fake as unknown as ReturnType<Deps['createAdmin']>);
-  const revokeApple = spy(
-    opts.revokeImpl ??
-      ((_code: string) => {
-        opts.seq?.push('revoke');
-        return Promise.resolve();
-      }),
-  );
-  const deps: Deps = { createAdmin, revokeApple };
-  return { deps, getUser, deleteUser, createAdmin, revokeApple };
+  const deps: Deps = { createAdmin };
+  return { deps, getUser, deleteUser, createAdmin };
 }
 
-const appleUser = { id: 'u1', identities: [{ provider: 'apple' }] };
 const emailUser = { id: 'u2', identities: [{ provider: 'email' }] };
 
 function post(body?: string, headers: Record<string, string> = {}) {
@@ -48,7 +31,7 @@ function post(body?: string, headers: Record<string, string> = {}) {
 }
 
 Deno.test('OPTIONS -> 200 ok + CORS, nessun side-effect', async () => {
-  const { deps, createAdmin, getUser, deleteUser, revokeApple } = buildDeps({});
+  const { deps, createAdmin, getUser, deleteUser } = buildDeps({});
   const res = await handler(new Request('http://x', { method: 'OPTIONS' }), deps);
   assertEquals(res.status, 200);
   assertEquals(await res.text(), 'ok');
@@ -57,7 +40,6 @@ Deno.test('OPTIONS -> 200 ok + CORS, nessun side-effect', async () => {
   assertSpyCalls(createAdmin, 0);
   assertSpyCalls(getUser, 0);
   assertSpyCalls(deleteUser, 0);
-  assertSpyCalls(revokeApple, 0);
 });
 
 Deno.test('GET -> 405 method_not_allowed, nessun client', async () => {
@@ -77,16 +59,13 @@ Deno.test('POST senza Authorization -> 401, nessun client', async () => {
 });
 
 Deno.test('getUser error -> 401, jwt spogliato del Bearer, no delete', async () => {
-  const { deps, getUser, deleteUser, revokeApple } = buildDeps({
-    getUserError: { message: 'invalid jwt' },
-  });
+  const { deps, getUser, deleteUser } = buildDeps({ getUserError: { message: 'invalid jwt' } });
   const res = await handler(post('{}', { 'Content-Type': 'application/json' }), deps);
   assertEquals(res.status, 401);
   assertEquals((await res.json()).error, 'unauthorized');
   assertSpyCalls(getUser, 1);
   assertEquals(getUser.calls[0].args[0], 'tok');
   assertSpyCalls(deleteUser, 0);
-  assertSpyCalls(revokeApple, 0);
 });
 
 Deno.test('getUser user null senza error -> 401, no delete', async () => {
@@ -96,69 +75,51 @@ Deno.test('getUser user null senza error -> 401, no delete', async () => {
   assertSpyCalls(deleteUser, 0);
 });
 
-Deno.test('body assente/non-JSON, non-Apple -> 200 ok, no revoke', async () => {
-  const { deps, deleteUser, revokeApple } = buildDeps({ user: emailUser });
+Deno.test('body assente -> 200 ok, cancella il chiamante', async () => {
+  const { deps, deleteUser } = buildDeps({ user: emailUser });
   const res = await handler(post(undefined), deps);
   assertEquals(res.status, 200);
   assertEquals((await res.json()).ok, true);
-  assertSpyCalls(revokeApple, 0);
   assertSpyCalls(deleteUser, 1);
   assertEquals(deleteUser.calls[0].args[0], 'u2');
 });
 
-Deno.test('Apple + appleAuthCode -> revoke poi delete (200), ordine corretto', async () => {
-  const seq: string[] = [];
-  const { deps, deleteUser, revokeApple } = buildDeps({ user: appleUser, seq });
+// REGRESSIONE della rimozione social: un'app già installata continua a inviare
+// { appleAuthCode }. Il campo non esiste più, ma il diritto all'oblio non può
+// dipendere dall'aver aggiornato l'app → il body va IGNORATO, non rifiutato.
+Deno.test('body vecchio con appleAuthCode -> ignorato, cancellazione riuscita', async () => {
+  const { deps, deleteUser } = buildDeps({ user: emailUser });
   const res = await handler(
     post(JSON.stringify({ appleAuthCode: 'CODE123' }), { 'Content-Type': 'application/json' }),
     deps,
   );
   assertEquals(res.status, 200);
-  assertEquals((await res.json()).ok, true);
-  assertSpyCalls(revokeApple, 1);
-  assertEquals(revokeApple.calls[0].args[0], 'CODE123');
+  assertEquals(await res.json(), { ok: true });
   assertSpyCalls(deleteUser, 1);
-  assertEquals(seq, ['revoke', 'delete']);
+  assertEquals(deleteUser.calls[0].args[0], 'u2');
 });
 
-Deno.test('appleAuthCode non-stringa -> trattato come assente, no revoke', async () => {
-  const { deps, revokeApple, deleteUser } = buildDeps({ user: appleUser });
-  using warn = stub(console, 'warn', () => {});
-  const res = await handler(
-    post(JSON.stringify({ appleAuthCode: 12345 }), { 'Content-Type': 'application/json' }),
-    deps,
-  );
+// Stesso principio con un corpo non parsabile: nessuna lettura del body deve
+// poter far fallire la cancellazione.
+Deno.test('body non-JSON -> ignorato, cancellazione riuscita', async () => {
+  const { deps, deleteUser } = buildDeps({ user: emailUser });
+  const res = await handler(post('non-json{{', { 'Content-Type': 'application/json' }), deps);
   assertEquals(res.status, 200);
-  assertSpyCalls(revokeApple, 0);
+  assertEquals((await res.json()).ok, true);
   assertSpyCalls(deleteUser, 1);
-  assertSpyCalls(warn, 1);
 });
 
-Deno.test('Apple senza appleAuthCode -> warn, salta revoca, delete ok', async () => {
-  const { deps, revokeApple, deleteUser } = buildDeps({ user: appleUser });
-  using warn = stub(console, 'warn', () => {});
+// Un'identità apple residua (account nato prima della rimozione) non è più un
+// caso speciale: si cancella come tutti, senza revoca e senza warning.
+Deno.test('identità apple residua -> nessun ramo speciale, 200', async () => {
+  const { deps, deleteUser } = buildDeps({
+    user: { id: 'u1', identities: [{ provider: 'apple' }] },
+  });
   const res = await handler(post(undefined), deps);
   assertEquals(res.status, 200);
-  assertSpyCalls(revokeApple, 0);
+  assertEquals(await res.json(), { ok: true });
   assertSpyCalls(deleteUser, 1);
-  assertSpyCalls(warn, 1);
-});
-
-Deno.test('revoca Apple che throwa -> log, delete prosegue (200)', async () => {
-  const { deps, revokeApple, deleteUser } = buildDeps({
-    user: appleUser,
-    revokeImpl: (_c: string) => Promise.reject(new Error('apple revoke failed')),
-  });
-  using err = stub(console, 'error', () => {});
-  const res = await handler(
-    post(JSON.stringify({ appleAuthCode: 'X' }), { 'Content-Type': 'application/json' }),
-    deps,
-  );
-  assertEquals(res.status, 200);
-  assertEquals((await res.json()).ok, true);
-  assertSpyCalls(revokeApple, 1);
-  assertSpyCalls(deleteUser, 1);
-  assertSpyCalls(err, 1);
+  assertEquals(deleteUser.calls[0].args[0], 'u1');
 });
 
 Deno.test('deleteUser error -> 500 con delErr.message', async () => {
@@ -172,25 +133,11 @@ Deno.test('deleteUser error -> 500 con delErr.message', async () => {
   assertSpyCalls(deleteUser, 1);
 });
 
-Deno.test('happy path non-Apple (identities undefined) -> 200 { ok: true }', async () => {
-  const { deps, revokeApple, deleteUser } = buildDeps({ user: { id: 'u3' } });
+Deno.test('happy path identities undefined -> 200 { ok: true }', async () => {
+  const { deps, deleteUser } = buildDeps({ user: { id: 'u3' } });
   const res = await handler(post(JSON.stringify({}), { 'Content-Type': 'application/json' }), deps);
   assertEquals(res.status, 200);
   assertEquals(await res.json(), { ok: true });
-  assertSpyCalls(revokeApple, 0);
   assertSpyCalls(deleteUser, 1);
   assertEquals(deleteUser.calls[0].args[0], 'u3');
-});
-
-Deno.test('identities senza apple + authCode -> isApple false, no revoke', async () => {
-  const { deps, revokeApple, deleteUser } = buildDeps({
-    user: { id: 'u4', identities: [{ provider: 'google' }, { provider: 'email' }] },
-  });
-  const res = await handler(
-    post(JSON.stringify({ appleAuthCode: 'Y' }), { 'Content-Type': 'application/json' }),
-    deps,
-  );
-  assertEquals(res.status, 200);
-  assertSpyCalls(revokeApple, 0);
-  assertSpyCalls(deleteUser, 1);
 });

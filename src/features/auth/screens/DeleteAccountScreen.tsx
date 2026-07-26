@@ -12,7 +12,6 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
-import { getAppleAuthCodeForDeletion } from '@/shared/auth/socialAuth';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -25,28 +24,22 @@ export const DeleteAccountScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
-  const { session, deleteAccountNow, scheduleDeletion } = useAuth();
+  const { deleteAccountNow, scheduleDeletion } = useAuth();
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
-  const isApple =
-    session?.user.identities?.some(i => i.provider === 'apple') ?? false;
-
   const runDeleteNow = useCallback(async (): Promise<void> => {
     setError(undefined);
     setLoading(true);
-    let appleAuthCode: string | undefined;
-    if (isApple) {
-      const code = await getAppleAuthCodeForDeletion();
-      appleAuthCode = code ?? undefined;
-    }
-    const { error: err } = await deleteAccountNow(appleAuthCode);
+    // Nessun passaggio intermedio: con il login social rimosso non esiste più il
+    // re-login Apple che serviva a ottenere l'authorizationCode per la revoca.
+    const { error: err } = await deleteAccountNow();
     setLoading(false);
     if (err) setError(t('auth.delete.error'));
     // Su successo l'AuthContext porta lo stato a unauthenticated (signOut).
-  }, [isApple, deleteAccountNow, t]);
+  }, [deleteAccountNow, t]);
 
   const runSchedule = useCallback(async (): Promise<void> => {
     setError(undefined);

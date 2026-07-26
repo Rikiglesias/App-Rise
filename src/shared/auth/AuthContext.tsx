@@ -12,11 +12,6 @@ import type { Session } from '@supabase/supabase-js';
 
 import { supabase } from './supabaseClient';
 import {
-  getAppleIdToken,
-  getGoogleIdToken,
-  configureGoogle,
-} from './socialAuth';
-import {
   buildResetRedirectTo,
   buildEmailConfirmRedirectTo,
   parseAuthRedirect,
@@ -35,7 +30,6 @@ import type {
 import { PROFILE_EDITABLE_KEYS } from './types';
 import { useConsentState } from './useConsentState';
 import type { ConsentState } from './useConsentState';
-import { env } from '@/shared/config/environment';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -70,8 +64,6 @@ export interface AuthState {
   completeRecoveryFromUrl: (url: string) => Promise<{ ok: boolean }>;
   /** Stabilisce la sessione dal deep link di conferma email signup (token nel fragment). */
   completeEmailConfirmFromUrl: (url: string) => Promise<{ ok: boolean }>;
-  signInWithApple: () => Promise<{ error: string | null }>;
-  signInWithGoogle: () => Promise<{ error: string | null }>;
   /** Ricarica il profilo e lo RESTITUISCE (serve a chi deve decidere subito, senza aspettare il re-render). */
   refreshProfile: () => Promise<Profile | null>;
   /** Aggiorna i campi profilo correggibili (GDPR Art.16). Whitelist: solo i campi passati, mai id/consensi. */
@@ -80,10 +72,8 @@ export interface AuthState {
   ) => Promise<{ error: string | null }>;
   /** Cambia l'email dell'account (secure email change Supabase: conferma su vecchia+nuova casella). */
   updateEmail: (email: string) => Promise<{ error: string | null }>;
-  /** Cancellazione immediata via Edge Function (GDPR Art.17). `appleAuthCode`: fresh per la revoca Apple. */
-  deleteAccountNow: (
-    appleAuthCode?: string
-  ) => Promise<{ error: string | null }>;
+  /** Cancellazione immediata via Edge Function (GDPR Art.17). */
+  deleteAccountNow: () => Promise<{ error: string | null }>;
   /** Programma la cancellazione a +30gg (grace period recuperabile). */
   scheduleDeletion: () => Promise<{ error: string | null }>;
   /** Annulla una cancellazione programmata. */
@@ -172,10 +162,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     []
   );
-
-  useEffect(() => {
-    if (env.GOOGLE_WEB_CLIENT_ID) configureGoogle(env.GOOGLE_WEB_CLIENT_ID);
-  }, []);
 
   useEffect(() => {
     void supabase.auth.getSession().then(({ data }) => {
@@ -290,26 +276,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [setSessionFromUrl]
   );
 
-  const signInWithApple = useCallback(async () => {
-    const token = await getAppleIdToken();
-    if (!token) return { error: 'apple_cancelled' };
-    const { error } = await supabase.auth.signInWithIdToken({
-      provider: 'apple',
-      token,
-    });
-    return { error: error?.message ?? null };
-  }, []);
-
-  const signInWithGoogle = useCallback(async () => {
-    const token = await getGoogleIdToken();
-    if (!token) return { error: 'google_cancelled' };
-    const { error } = await supabase.auth.signInWithIdToken({
-      provider: 'google',
-      token,
-    });
-    return { error: error?.message ?? null };
-  }, []);
-
   const refreshProfile = useCallback(async (): Promise<Profile | null> => {
     if (!session?.user.id) return null;
     return await loadProfile(session.user.id);
@@ -349,10 +315,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { error: error?.message ?? null };
   }, []);
 
-  const deleteAccountNow = useCallback(async (appleAuthCode?: string) => {
-    const body = appleAuthCode ? { appleAuthCode } : {};
+  const deleteAccountNow = useCallback(async () => {
     const { error } = await supabase.functions.invoke('delete-account', {
-      body,
+      body: {},
     });
     if (error) return { error: error.message };
     await supabase.auth.signOut();
@@ -484,8 +449,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       updatePassword,
       completeRecoveryFromUrl,
       completeEmailConfirmFromUrl,
-      signInWithApple,
-      signInWithGoogle,
       refreshProfile,
       updateProfile,
       updateEmail,
@@ -513,8 +476,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       updatePassword,
       completeRecoveryFromUrl,
       completeEmailConfirmFromUrl,
-      signInWithApple,
-      signInWithGoogle,
       refreshProfile,
       updateProfile,
       updateEmail,

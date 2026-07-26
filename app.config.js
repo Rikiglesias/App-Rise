@@ -241,24 +241,14 @@ export default withDefaultStrings({
 
     // Plugin richiesti
     plugins: [
-      // Pod Swift di google-signin (AppCheckCore) importa GoogleUtilities/RecaptchaInterop,
-      // pod ObjC senza module map → senza intervento `pod install` falliva (build 9ebcbab1,
-      // log r.482). Fix CocoaPods canonico: `modular_headers` MIRATO sui 2 soli pod ObjC, così
-      // AppCheckCore li importa come static libraries — SENZA `useFrameworks:static` globale,
-      // che invece rompeva i TurboModule nativi della New Arch a runtime (regressione
-      // storica con MapLibre v11, modulo poi rimosso; issue expo/expo #23190).
-      // Verificato: expo-build-properties supporta ios.extraPods[].modular_headers.
-      [
-        'expo-build-properties',
-        {
-          ios: {
-            extraPods: [
-              { name: 'GoogleUtilities', modular_headers: true },
-              { name: 'RecaptchaInterop', modular_headers: true },
-            ],
-          },
-        },
-      ],
+      // NB: qui viveva la patch CocoaPods `modular_headers` su GoogleUtilities e
+      // RecaptchaInterop. Esisteva SOLO perché il pod Swift di google-signin
+      // (AppCheckCore) importava quei due pod ObjC senza module map, e senza la
+      // patch `pod install` falliva. Rimossa insieme a google-signin (2026-07-26):
+      // sparita la libreria, sparita la causa. Se un domani rientrasse una
+      // dipendenza con lo stesso problema, la forma giusta resta questa —
+      // `modular_headers` MIRATO sui singoli pod, MAI `useFrameworks: static`
+      // globale, che rompe i TurboModule della New Architecture a runtime.
       'expo-secure-store',
       'expo-updates',
       'expo-font',
@@ -278,18 +268,10 @@ export default withDefaultStrings({
           },
         },
       ],
-      // Social auth donatori: Apple (nessuna config) + Google (config plugin
-      // condizionale su env; iosUrlScheme = reversed iOS client ID). Senza l'env
-      // il plugin Google è assente → prebuild invariato (pre-OAuth safe).
-      'expo-apple-authentication',
-      ...(process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME
-        ? [
-            [
-              '@react-native-google-signin/google-signin',
-              { iosUrlScheme: process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME },
-            ],
-          ]
-        : []),
+      // Login social rimosso (2026-07-26): niente `expo-apple-authentication` —
+      // che portava con sé la capability "Sign in with Apple" nell'entitlements —
+      // né il plugin google-signin condizionale su EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME.
+      // L'unico ingresso è email + password.
       // Sentry: config plugin per setup nativo + upload source map al build EAS.
       // Attivo SOLO con SENTRY_ORG + SENTRY_PROJECT in env (auth token via SENTRY_AUTH_TOKEN,
       // MAI committato). Senza questi -> plugin assente, prebuild invariato (pre-DSN safe).

@@ -40,10 +40,21 @@ describe('Auth screens', () => {
     expect(getByText('Torna al Login')).toBeTruthy();
   });
 
-  it('Login: schermata unica con titolo "Area Donatori" + bottone social', () => {
+  it('Login: schermata unica con titolo "Area Donatori"', () => {
     const { getByText } = wrap(<LoginScreen />);
     expect(getByText('Area Donatori')).toBeTruthy();
-    expect(getByText('Continua con Google')).toBeTruthy();
+  });
+
+  // REGRESSIONE della rimozione social: la schermata di accesso non deve più
+  // offrire NESSUNA via di terze parti. Il test è scritto sul reso — ciò che la
+  // persona vede — non sull'assenza dell'import: un pulsante rimesso per sbaglio
+  // da qualunque strada farebbe fallire questo assert.
+  it('Login: nessun ingresso social, né Google né Apple', () => {
+    const { queryByText, queryByLabelText } = wrap(<LoginScreen />);
+    expect(queryByText('Continua con Google')).toBeNull();
+    expect(queryByLabelText('Continua con Google')).toBeNull();
+    expect(queryByText('oppure')).toBeNull();
+    expect(queryByText(/Apple/i)).toBeNull();
   });
 
   it('CompleteProfile: render + errori su submit vuoto', () => {
@@ -125,15 +136,8 @@ describe('Auth screens', () => {
     expect(await findByText('Email o password non corretti')).toBeTruthy();
   });
 
-  it('Login: errore social (≠ cancelled) mostra un messaggio', async () => {
-    (supabase.auth.signInWithIdToken as jest.Mock).mockResolvedValueOnce({
-      data: { session: null },
-      error: { message: 'network blip' },
-    });
-    const { getByText, findByText } = wrap(<LoginScreen />);
-    fireEvent.press(getByText('Continua con Google'));
-    expect(
-      await findByText('Si è verificato un errore. Riprova.')
-    ).toBeTruthy();
-  });
+  // Il gemello di questo test copriva l'errore del login social. Con i provider
+  // rimossi l'unica via d'ingresso è email+password, e l'errore generico di rete
+  // su QUELLA via è già coperto dai test qui sopra: non si sostituisce con un
+  // test che non descrive nessun comportamento reale.
 });

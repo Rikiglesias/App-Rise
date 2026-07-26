@@ -20,7 +20,6 @@ const baseProd: Env = {
   API_BASE_URL: 'https://api.example.com',
   SUPABASE_URL: 'https://proj.supabase.co',
   SUPABASE_ANON_KEY: 'anon-key',
-  GOOGLE_WEB_CLIENT_ID: '',
   ENABLE_FLIPPER: false,
   ENABLE_PERFORMANCE_MONITORING: false,
   LOG_LEVEL: 'error',
@@ -196,12 +195,6 @@ describe('Environment Configuration', () => {
           SUPABASE_URL: '',
           SUPABASE_ANON_KEY: '',
         })
-      ).not.toThrow();
-    });
-
-    it('GOOGLE_WEB_CLIENT_ID resta opzionale in production', () => {
-      expect(() =>
-        validateEnvironmentConfig({ ...baseProd, GOOGLE_WEB_CLIENT_ID: '' })
       ).not.toThrow();
     });
   });

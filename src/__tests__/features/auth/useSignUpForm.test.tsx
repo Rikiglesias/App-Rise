@@ -26,8 +26,6 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
     signUp: jest.fn().mockResolvedValue({ error: null }),
     signOut: jest.fn(),
     resetPassword: jest.fn(),
-    signInWithApple: jest.fn(),
-    signInWithGoogle: jest.fn(),
     refreshProfile: jest.fn(),
     updateProfile: jest.fn(),
     updateEmail: jest.fn(),
