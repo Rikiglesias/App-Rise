@@ -942,8 +942,9 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
    schede divergono col tempo.
 9. **Gli account creati per questa via nascono con i consensi marketing a «no»? E in che momento viene
    presentata la vostra informativa?**
-   *Perché ci serve:* siamo due titolari autonomi, quindi la vostra informativa deve comparire nel
-   vostro momento e non può essere assorbita dalla nostra. E i consensi non vanno presunti concessi.
+   *Perché ci serve:* nell'inquadramento che vi proponiamo — due titolari autonomi, ancora da
+   confermare fra le parti — la vostra informativa deve comparire nel vostro momento e non può
+   essere assorbita dalla nostra. E i consensi non vanno presunti concessi.
 10. **Se una persona chiede a noi la cancellazione, esiste un modo per propagarvela?**
     *Perché ci serve:* è un punto in cui oggi non possiamo dare seguito completo a una richiesta di
     cancellazione, e vogliamo chiuderlo.
