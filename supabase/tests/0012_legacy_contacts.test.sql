@@ -509,6 +509,65 @@ begin
   raise notice 'T16 PASS: anche il profilo nato dall''app aggancia il suo storico';
 end $$;
 
+-- ---------------------------------------------------------------------------
+-- T17 (IL PERCORSO REALE DELL'APP): T16 inserisce come superuser, ma l'app scrive
+-- come `authenticated`, con RLS attiva su `profiles` e ZERO privilegi su
+-- `legacy_contacts`. Che il trigger funzioni comunque è la premessa su cui poggia
+-- tutto il meccanismo — `security definer` gira come proprietario della funzione e
+-- quindi supera sia i grant mancanti sia la RLS — e va VERIFICATA, non assunta.
+-- Se questo assert cade, l'aggancio funziona solo nei test e mai nell'app.
+-- ---------------------------------------------------------------------------
+insert into public.legacy_contacts (id, email_norm, phone, city, province, source)
+values ('00000000-0000-0000-0000-0000000000f7', 'comeapp@esempio.it',
+        '+393339990007', 'Trieste', 'TS', 'access');
+
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000e9',
+  'comeapp@esempio.it',
+  jsonb_build_object('name', 'Come L App')   -- niente birth_date → nessun profilo dal trigger
+);
+
+-- Precondizione DICHIARATA, non ambientale: nel progetto reale `authenticated` può
+-- scrivere su `profiles` grazie ai default privileges di Supabase (è ciò che modella
+-- lo shim permissivo); lo shim restrittivo li toglie di proposito, e senza questo
+-- grant il test misurerebbe l'assenza di un permesso su `profiles` invece del
+-- comportamento del trigger. Il grant è scaffolding del test: viene revocato subito
+-- dopo, e non tocca `legacy_contacts` (su cui T11 pretende zero privilegi).
+grant select, insert on public.profiles to authenticated;
+
+set role authenticated;
+set "request.jwt.claim.sub" = '00000000-0000-0000-0000-0000000000e9';
+
+insert into public.profiles
+  (id, first_name, last_name, birth_date, privacy_consent_at, country, contact_email)
+values (
+  '00000000-0000-0000-0000-0000000000e9',
+  'Come', 'LApp', '1986-06-06', now(), 'IT', 'comeapp@esempio.it'
+);
+
+reset role;
+revoke select, insert on public.profiles from authenticated;
+
+do $$
+declare r record;
+begin
+  select p.phone, p.city, l.claimed_by into r
+  from public.profiles p
+  join public.legacy_contacts l on l.id = '00000000-0000-0000-0000-0000000000f7'
+  where p.id = '00000000-0000-0000-0000-0000000000e9';
+
+  if r.claimed_by is distinct from '00000000-0000-0000-0000-0000000000e9'::uuid then
+    raise exception 'T17 FAIL: scrivendo come authenticated la riga NON è stata rivendicata (claimed_by=%)',
+      coalesce(r.claimed_by::text, '<null>');
+  end if;
+  if r.phone is distinct from '+393339990007' or r.city is distinct from 'Trieste' then
+    raise exception 'T17 FAIL: campi non colmati sul percorso authenticated (phone=%, city=%)',
+      coalesce(r.phone, '<null>'), coalesce(r.city, '<null>');
+  end if;
+  raise notice 'T17 PASS: l''aggancio regge anche scrivendo come authenticated';
+end $$;
+
 -- Pulizia: le righe di prova non devono sopravvivere al test. I profili scendono
 -- per cascata (profiles.id references auth.users on delete cascade, 0001), e con
 -- loro le righe storiche rivendicate (claimed_by on delete cascade, 0012).
@@ -519,7 +578,8 @@ delete from auth.users where id in (
   '00000000-0000-0000-0000-0000000000e5',
   '00000000-0000-0000-0000-0000000000e6',
   '00000000-0000-0000-0000-0000000000e7',
-  '00000000-0000-0000-0000-0000000000e8'
+  '00000000-0000-0000-0000-0000000000e8',
+  '00000000-0000-0000-0000-0000000000e9'
 );
 delete from public.legacy_contacts where source = 'access';
 

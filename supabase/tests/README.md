@@ -74,13 +74,16 @@ sempre l'ultima):
 - **0008**: **14** righe `PASS` — 13 test (`T1, T1b, T2, T3, T4, T5, T6a-T6f, T7`) + esito.
 - **0009**: **9** righe `PASS` — 8 test (`T1, T2, T3, T4, T4b, T5, T6, T7`) + esito. 0009 non
   concede grant, quindi dà lo STESSO esito coi due shim: è la prova che è grant-indipendente.
-- **0010**: **7** righe `PASS` — 6 test + esito.
+- **0010**: **9** righe `PASS` — 6 blocchi di test + esito, ma `T3` stampa **dentro un ciclo** (una
+  riga per colonna verificata), quindi le righe sono più dei blocchi.
 - **0011**: **8** righe `PASS` — 7 test (`T1-T7`) + esito.
-- **0012**: **16** righe `PASS` — 15 test (`T1-T15`) + esito. Come 0009 e 0011 non concede grant →
-  stesso esito coi due shim (misurato: 16/16/0 FAIL su entrambi, 2026-07-26).
+- **0012**: **18** righe `PASS` — 17 test (`T1-T17`) + esito. Come 0009 e 0011 non concede grant →
+  stesso esito coi due shim (misurato: 18/18, 0 FAIL su entrambi, 2026-07-26).
 
-I conteggi sopra sono ricavati dai file (`grep -c "raise notice 'T"` + la riga di esito), non dalla
-memoria di chi li ha scritti.
+⚠️ I conteggi sopra sono **misurati eseguendo le suite**, non contati leggendo i sorgenti. Contare i
+`raise notice` nel file dà il numero SBAGLIATO ogni volta che una notice sta dentro un ciclo o un
+ramo condizionale: è già successo con la 0010 (contata 7, in realtà 9). Se un giorno vanno
+riverificati, si rilanciano — non si rileggono.
 
 Il container va **creato pulito a ogni giro**: la suite inserisce utenti con id fissi, quindi
 rilanciarla sullo stesso database fallisce subito sul setup (chiave duplicata) e stampa zero
