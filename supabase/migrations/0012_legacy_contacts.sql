@@ -64,7 +64,18 @@
 --
 -- RIESEGUIBILE: `create table if not exists` + `create or replace function` +
 -- `drop trigger if exists` + `revoke` sono tutti no-op alla seconda esecuzione.
--- Rollback: `drop table public.legacy_contacts cascade;` e riapplicare la 0011.
+-- ROLLBACK — NELL'ORDINE, e NON basta droppare la tabella:
+--   drop trigger if exists on_profile_claim_legacy on public.profiles;
+--   drop function if exists public.claim_legacy_contact();
+--   drop table if exists public.legacy_contacts;
+-- ⚠️ `drop table public.legacy_contacts cascade;` da solo **ROMPE LE REGISTRAZIONI**.
+-- Verificato dal vivo il 2026-07-26: il CASCADE non porta via il trigger, perché il
+-- trigger dipende dalla FUNZIONE, non dalla tabella; e il corpo di una funzione
+-- plpgsql non viene risolto alla creazione ma a ogni esecuzione, quindi il primo
+-- inserimento di un profilo muore con «relation public.legacy_contacts does not
+-- exist» — dentro `handle_new_user`, cioè su ogni nuova iscrizione.
+-- Il rollback si disinstalla dal consumatore verso il produttore, mai al contrario.
+-- `handle_new_user` non va ritoccata: questa migration non la modifica.
 --
 -- ORDINE DI RILASCIO: nessun vincolo. È additiva e retro-compatibile — a tabella
 -- vuota il comportamento del signup è identico a quello di oggi.

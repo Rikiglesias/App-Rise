@@ -72,7 +72,7 @@ Coppie disponibili:
 | `0011_signup_contact_email.sql` | `0011_signup_contact_email.test.sql` |
 | `0012_legacy_contacts.sql` | `0012_legacy_contacts.test.sql` |
 
-Nota: la migration sotto test compare **due volte** nella pipe (una dentro `migrations/000*.sql`,
+Nota: la migration sotto test compare **due volte** nella pipe (una dentro `migrations/0*.sql`,
 una esplicita in `<MIGRATION>`). È voluto — è il test `T7`, che verifica la rieseguibilità e che la
 seconda passata non duplichi oggetti. Chi applica la migration lo fa incollandola a mano nel SQL
 Editor, dove un secondo tentativo è uno scenario concreto.
@@ -90,8 +90,8 @@ sempre l'ultima):
 - **0010**: **9** righe `PASS` — 6 blocchi di test + esito, ma `T3` stampa **dentro un ciclo** (una
   riga per colonna verificata), quindi le righe sono più dei blocchi.
 - **0011**: **8** righe `PASS` — 7 test (`T1-T7`) + esito.
-- **0012**: **18** righe `PASS` — 17 test (`T1-T17`) + esito. Come 0009 e 0011 non concede grant →
-  stesso esito coi due shim (misurato: 18/18, 0 FAIL su entrambi, 2026-07-26).
+- **0012**: **19** righe `PASS` — 18 test (`T1-T18`) + esito. Come 0009 e 0011 non concede grant →
+  stesso esito coi due shim (misurato: 19/19, 0 FAIL su entrambi, 2026-07-26).
 
 ⚠️ I conteggi sopra sono **misurati eseguendo le suite**, non contati leggendo i sorgenti. Contare i
 `raise notice` nel file dà il numero SBAGLIATO ogni volta che una notice sta dentro un ciclo o un
