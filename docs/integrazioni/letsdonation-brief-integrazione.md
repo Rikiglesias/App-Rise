@@ -7,6 +7,16 @@
      difetto: il PDF in C:/tmp conteneva questa nota, incluso il nome del referente — dentro la
      frase che vieta di scriverlo. Tutto ciò che non deve leggere il partner va QUI, mai in «>».
 
+     AGGIORNATO 2026-07-26 — rimozione del login Google/Apple (decisione di Riccardo, PR #120).
+     Sono cadute 4 affermazioni che descrivevano il caso «Nascondi la mia email»: la motivazione
+     dell'aggancio sul `sub` (ora è quella vera e più generale: le persone cambiano indirizzo),
+     l'impegno a raccogliere l'indirizzo reale, la riga della tabella §2.4 e il riquadro sull'email.
+     La domanda 7 NON è stata cancellata ma RISCRITTA sullo stesso tema (email_verified): il
+     numero si conserva perché scambio-dati-quadro.md:4 vieta di rinumerare — altri tracker
+     citano le domande per numero.
+     Attenzione al verso: la rimozione RAFFORZA la proposta (l'indirizzo che arriva al partner è
+     sempre reale e verificato). Se un domani i social rientrassero, quei 4 punti vanno rimessi.
+
      Stato: documento tecnico di supporto, NON ancora inviato. Si consegna su richiesta del loro
      team tecnico. Quello che si manda adesso è letsdonation-proposta-operativa.md (una pagina).
      Il nome del referente tecnico non è confermato: non va scritto da nessuna parte.
@@ -47,9 +57,11 @@ provider siamo noi.
 - **Voi** = client OIDC sul vostro Joomla. Esistono plugin maturi (miniOrange OAuth Client e
   altri) che gestiscono la creazione dell'utente al primo accesso e la mappatura degli attributi.
 
-**L'identità si aggancia sul `sub`, mai sull'email.** Alcune persone usano «Nascondi la mia
-email» di Apple: l'email è un alias diverso per ogni servizio, quindi come chiave è inaffidabile.
-L'identificativo stabile è il **`sub`** dell'ID token.
+**L'identità si aggancia sul `sub`, mai sull'email.** L'indirizzo cambia — la persona passa a una
+casella nuova, o ne usa una diversa da quella con cui si era registrata — e ogni volta che cambia,
+un aggancio basato sull'email crea un secondo account invece di riconoscere il primo.
+L'identificativo stabile è il **`sub`** dell'ID token: non cambia mai, per tutta la vita
+dell'account.
 
 > **La domanda tecnica precisa**, perché sappiamo che è la parte delicata: il vostro plugin
 > permette di **mappare il claim `sub` sull'username Joomla** (o su un attributo di identità
@@ -146,13 +158,10 @@ partiamo al primo rilascio, non quello che l'app installata fa oggi**:
   abbiamo già noi, senza chiedervi elenchi — così quelle persone risultano riconosciute quando
   entrano col pulsante (e se mancano dati che oggi chiediamo, glieli chiediamo noi al primo
   accesso). Il lavoro parte quando la nostra informativa aggiornata è pubblicata;
-- per chi entra con «Nascondi la mia email» di Apple **chiediamo noi l'indirizzo vero**, e lo
-  facciamo verificare: quello diventa l'email del suo account da noi, e da lì in avanti è quello
-  che vi arriva. Due limiti da mettere in conto, perché non è istantaneo:
-  **al primo login vi arriva comunque l'alias** (la conferma avviene dopo), e l'indirizzo reale vi
-  raggiunge solo se aggiornate l'anagrafica dai dati del login a **ogni** accesso (domanda 8). Il
-  vostro sistema deve quindi accettare un alias `@privaterelay.appleid.com` **sempre**, non solo
-  in una fase iniziale.
+- **l'indirizzo che vi arriva è sempre reale e verificato.** Da noi si entra solo con email e
+  password, e l'indirizzo si conferma cliccando il messaggio che mandiamo: nessun alias, nessuna
+  casella mascherata da riconciliare in un secondo momento. Non dovete prevedere nulla di
+  speciale per gli indirizzi anonimizzati dei fornitori di identità.
 
 Dal primo accesso in poi, però, l'aggancio stabile è il **`sub`**, non l'indirizzo: una persona
 può cambiare email, e il `sub` no.
@@ -168,7 +177,7 @@ può cambiare email, e il `sub` no.
 | **Ha un account RAH, non ha un account vostro** | Tocca «Entra con RAH» → la nostra pagina lo riconosce → torna da voi autenticato. Voi create l'utente al primo accesso, agganciato al `sub`. Dal secondo accesso in poi lo ritrovate |
 | **Non ha nessuno dei due** | Tocca «Entra con RAH» → sulla nostra pagina **crea l'account da noi** (con la nostra informativa e i nostri consensi) → torna da voi autenticato, e da lì è il caso sopra |
 | **Ha già un account vostro, con la stessa email** | È il caso in cui serve il **collegamento** (§2.4): altrimenti si ritrova due account e non capisce perché |
-| **Ha già un account vostro, ma usa «Nascondi la mia email»** | **Al primo login vi arriva comunque l'alias**: l'indirizzo vero glielo chiediamo noi dentro l'app e la conferma non è istantanea, quindi il vostro sistema deve accettare un alias **sempre**, non solo in una fase iniziale. Dopo la conferma l'indirizzo reale diventa l'email del suo account da noi: vi arriva a quel punto, e solo se aggiornate l'anagrafica dai dati del login a **ogni** accesso (domanda 8). Finché non combacia servono due account o un «collega il mio account» dal profilo |
+| **Ha già un account vostro, con un indirizzo diverso da quello che usa da noi** | L'email non basta a riconoscerlo e nasce un secondo account. Non è un caso esotico: succede a chi si era registrato da voi anni fa con una casella che oggi non usa più. Serve il **collegamento dal profilo** (§2.4) oppure l'aggancio sul `sub`, che non cambia mai. Se l'anagrafica viene aggiornata dai dati del login a **ogni** accesso (domanda 8), il disallineamento si chiude da solo al primo rientro |
 | **Atterra sul nostro spazio da un motore di ricerca**, senza venire dall'app | Con un solo ingresso (§2.2) entra da «Entra con RAH» come tutti, e l'account nasce da noi. È una persona in più che diventa nostra, e con due strade l'avremmo persa |
 | **Si iscrive a Let's Donation da un percorso che non tocca il nostro spazio** | Nasce da voi e per noi resta invisibile. **Lo accettiamo**: non è una persona che stiamo perdendo, è una che non era ancora nostra |
 
@@ -197,11 +206,11 @@ client riceve un token con i privilegi dell'utente, quindi l'impegno che chiedia
 nell'accordo è di leggere l'identità **solo** da ID token e UserInfo, senza chiamare le nostre API
 con quel token.
 
-> Sull'email: lo standard consegna l'email **dell'account**. Per chi usa «Nascondi la mia email»
-> di Apple quell'indirizzo è un alias `@privaterelay.appleid.com`, che comunque **inoltra**. Per
-> non lasciarvi un alias che non combacia con nulla, al primo rilascio chiediamo a quelle persone
-> il loro indirizzo vero, lo facciamo verificare e diventa l'email del loro account da noi: da lì
-> quello che vi arriva è l'indirizzo reale (§2.4). Finché quel pezzo non è online, arriva l'alias.
+> Sull'email: lo standard consegna l'email **dell'account**. Da noi si entra solo con email e
+> password, e quell'indirizzo la persona lo conferma cliccando il messaggio che le mandiamo →
+> quello che vi arriva è sempre un indirizzo reale e verificato, mai una casella mascherata.
+> Resta il caso di chi da voi ha un indirizzo **diverso** da quello che usa da noi: lì non serve
+> una verifica in più, serve il collegamento dell'account (§2.4) o l'aggancio sul `sub`.
 
 **Chi tiene cosa:**
 
@@ -228,9 +237,9 @@ altre servono per rifinire.
    `sub` agli accessi successivi), **non sull'email**?
 5. Quali **redirect URI** dobbiamo autorizzare?
 6. **Collegamento degli account** sull'email (§2.4): c'è o si può attivare?
-7. Il vostro sistema accetta un'email alias `@privaterelay.appleid.com` per creare l'account, o
-   pretende un'email verificata? (Deve accettarlo **in modo permanente**: al primo login di un
-   utente Apple l'alias arriva comunque — vedi §2.4.)
+7. Per creare l'account **vi basta il claim `email_verified`** che vi mandiamo noi, o il vostro
+   sistema fa comunque partire una sua verifica dell'indirizzo? Se ne fa una sua, la persona
+   riceve due mail di conferma per la stessa registrazione, e la seconda sembra un errore.
 8. L'anagrafica viene aggiornata dai dati del login **a ogni accesso** o solo alla creazione?
 9. Gli account creati per questa via nascono con i consensi marketing a **no**, e in che momento
    viene presentata la **vostra** informativa?

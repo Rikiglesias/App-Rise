@@ -1,7 +1,12 @@
 <!--
 NOTA INTERNA — non compare nel PDF (il convertitore salta i commenti HTML).
-Questo è il documento DA MANDARE a Michele Placucci (Let's Donation); al 2026-07-25 non è
-ancora stato inviato. Il documento tecnico dettagliato è `letsdonation-brief-integrazione.md`:
+Questo è il documento DA MANDARE a Michele Placucci (Let's Donation); al 2026-07-26 non è
+ancora stato inviato (confermato da Riccardo).
+AGGIORNATO 2026-07-26 dopo la rimozione del login Google/Apple: il punto 5 aveva un «caso da
+prevedere» che era interamente il caso Apple «Nascondi la mia email». Con email+password come
+unico ingresso quel caso NON esiste più, e la promessa diventa più forte, non più debole:
+l'indirizzo che arriva a loro è sempre reale e confermato. Se un domani i social rientrassero,
+quel paragrafo va rimesso PRIMA di ripubblicare. Il documento tecnico dettagliato è `letsdonation-brief-integrazione.md`:
 si consegna SU RICHIESTA del loro team tecnico, non adesso. Perimetro degli scenari:
 `identita-matrice-scenari.md` (lato loro) e `app-gate-matrice.md` (lato nostro).
 Tutto ciò che sta FUORI da questo commento lo legge il destinatario: prima di rigenerare il
@@ -46,16 +51,15 @@ In pratica servono cinque cose.
    solo chi ha meno di 18 anni non entra più su quella pagina. Se per voi conta, dimmelo.
 
 5. Chi si è già registrato da voi non deve rifare la registrazione: entra col nostro pulsante e
-   ritrova quello che aveva. Da voi succedono due cose.
+   ritrova quello che aveva. La persona arriva con la stessa email che ha già da voi, e il vostro
+   sistema usa l'account che c'è già invece di aprirne un secondo.
 
-   **Caso normale**: la persona arriva con la stessa email che ha già da voi, e il vostro sistema
-   usa l'account che c'è già invece di aprirne un secondo. Insieme all'email vi arriva anche un
-   codice suo, sempre lo stesso: se il vostro sistema può conservarlo come riferimento, un domani
-   che quella persona cambia indirizzo non le nasce un secondo account.
+   L'indirizzo che vi arriva è sempre un indirizzo vero: da noi si entra con email e password, e
+   quella email la persona la conferma cliccando il messaggio che le mandiamo. Non vi arriveranno
+   indirizzi mascherati.
 
-   **Caso da prevedere**: chi usa «Nascondi la mia email» di Apple vi arriva con un indirizzo
-   diverso, quindi l'email non basta a riconoscerlo. Ditemi come lo gestisce il vostro sistema: se
-   c'è già un modo per collegare due account dal profilo lo usiamo, altrimenti troviamo insieme la
-   strada più semplice.
+   Insieme all'email vi arriva anche un codice suo, sempre lo stesso: se il vostro sistema può
+   conservarlo come riferimento, un domani che quella persona cambia indirizzo non le nasce un
+   secondo account.
 
 Riccardo

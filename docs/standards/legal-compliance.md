@@ -107,8 +107,14 @@ boolean:
   via `updateEmail` (secure email change Supabase, doppia conferma).
 - **Cancellazione (Art.17)** — due modalità (`DeleteAccountScreen.tsx`):
   - **Immediata** — Edge Function `delete-account`: autorizza dal JWT del chiamante
-    (cancella solo sé stesso), `auth.admin.deleteUser`, revoca Apple best-effort
-    (`appleRevoke.ts`), poi `signOut`. Cascade DB elimina profilo e `consent_events`.
+    (cancella solo sé stesso), `auth.admin.deleteUser`, poi `signOut`. Cascade DB
+    elimina profilo e `consent_events`. La revoca dei token Apple (`appleRevoke.ts`)
+    è stata rimossa col login social il 2026-07-26: senza provider non c'è token da
+    revocare, e la App Store 5.1.1(v) vincola solo chi offre Sign in with Apple.
+    ⚠️ **Questa funzione non è pubblicata su Supabase** (verificato 2026-07-26:
+    zero Edge Function attive sul progetto) → **oggi la cancellazione immediata
+    fallisce**. È un diritto Art.17: va pubblicata prima del rilascio, insieme a
+    `purge-deletions` qui sotto, che ha lo stesso problema.
   - **Programmata a +30 giorni** (grace period recuperabile) — imposta
     `deletion_requested_at`; l'hard-delete a scadenza è eseguito dalla Edge Function
     schedulata `purge-deletions` (Supabase Cron, `GRACE_DAYS = 30`), protetta da
