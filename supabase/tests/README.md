@@ -27,7 +27,20 @@ conservava `UPDATE`/`DELETE` sulla tabella (vedi PR #61). Uno shim scritto dalla
 scrive il test tende a contenere le stesse assunzioni del test: girare in due ambienti opposti è
 ciò che rompe il circolo.
 
-## Come si esegue
+## Eseguirle TUTTE (modo consigliato)
+
+```bash
+bash tests/run-all.sh
+```
+
+Esegue ogni coppia migration+test contro **entrambi** gli shim, con container pulito a ogni giro,
+e esce `1` al primo rosso. Usalo sempre quando la migration nuova tocca una superficie **condivisa**
+(un trigger o un constraint su una tabella che anche altre suite scrivono): lì il rischio non è la
+suite nuova, sono le altre. Il 2026-07-26 la `0012` ha aggiunto un trigger su ogni nascita di
+profilo e le suite `0008`-`0011` non erano state rieseguite: andò bene, ma per fortuna verificata
+dopo, non prima.
+
+## Come si esegue una coppia sola
 
 Dalla cartella `supabase/`, con Docker attivo. Sostituire `<SHIM>` con uno dei due file e
 `<MIGRATION>`/`<TEST>` con la coppia migration+test da verificare.
