@@ -1,10 +1,14 @@
 // Edge Function: eliminazione immediata dell'account del chiamante (GDPR Art.17).
 // Autorizza tramite il JWT della sessione: un utente può cancellare SOLO sé stesso.
-// Revoca Apple best-effort (vedi _shared/appleRevoke.ts): non blocca la cancellazione.
 // Runtime: Deno (Supabase Edge Functions).
+//
+// La revoca dei token Apple è stata RIMOSSA insieme al login social (decisione
+// 2026-07-26, «email+password unico ingresso»): senza provider Apple non esiste un
+// token da revocare, e la Apple Review 5.1.1(v) si applica solo a chi offre Sign in
+// with Apple. Se un giorno il provider tornasse, va ripristinata insieme a esso —
+// non è un dettaglio opzionale, è un requisito di pubblicazione.
 
 import { createClient, type SupabaseClient } from 'jsr:@supabase/supabase-js@2';
-import { revokeAppleViaAuthCode } from '../_shared/appleRevoke.ts';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -24,7 +28,6 @@ function json(body: unknown, status: number): Response {
 // il client viene creato SOLO dopo le guard, come nella versione originale.
 export interface Deps {
   createAdmin: () => SupabaseClient;
-  revokeApple: (authCode: string) => Promise<void>;
 }
 
 function defaultAdmin(): SupabaseClient {
@@ -33,7 +36,7 @@ function defaultAdmin(): SupabaseClient {
   });
 }
 
-const DEFAULT_DEPS: Deps = { createAdmin: defaultAdmin, revokeApple: revokeAppleViaAuthCode };
+const DEFAULT_DEPS: Deps = { createAdmin: defaultAdmin };
 
 export async function handler(req: Request, deps: Deps = DEFAULT_DEPS): Promise<Response> {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
@@ -52,28 +55,10 @@ export async function handler(req: Request, deps: Deps = DEFAULT_DEPS): Promise<
   } = await admin.auth.getUser(jwt);
   if (error || !user) return json({ error: 'unauthorized' }, 401);
 
-  // Body opzionale: { appleAuthCode } per la revoca Apple (re-auth al delete).
-  let appleAuthCode: string | undefined;
-  try {
-    const body = await req.json();
-    if (body && typeof body.appleAuthCode === 'string') appleAuthCode = body.appleAuthCode;
-  } catch {
-    // body assente/non-JSON: ok, nessun authCode.
-  }
-
-  // Revoca Apple best-effort: il diritto all'oblio prevale, non blocca mai il delete.
-  const isApple = user.identities?.some((i) => i.provider === 'apple') ?? false;
-  if (isApple) {
-    if (appleAuthCode) {
-      try {
-        await deps.revokeApple(appleAuthCode);
-      } catch (e) {
-        console.error('[delete-account] revoca Apple fallita (continuo con la cancellazione):', e);
-      }
-    } else {
-      console.warn('[delete-account] utente Apple senza appleAuthCode: revoca saltata');
-    }
-  }
+  // Nessun body richiesto: la cancellazione si decide dal solo JWT. Un body
+  // eventualmente inviato da una versione VECCHIA dell'app (che mandava
+  // { appleAuthCode }) viene semplicemente ignorato — non deve far fallire il
+  // diritto all'oblio di chi non ha ancora aggiornato.
 
   const { error: delErr } = await admin.auth.admin.deleteUser(user.id);
   if (delErr) return json({ error: delErr.message }, 500);
