@@ -22,6 +22,7 @@ PAIRS=(
   "0010_profiles_minimo"
   "0011_signup_contact_email"
   "0012_legacy_contacts"
+  "0013_contact_email_follows_account"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
