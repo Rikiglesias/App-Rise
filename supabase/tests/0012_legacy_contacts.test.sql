@@ -669,6 +669,52 @@ end $$;
 delete from public.legacy_contacts where id = '00000000-0000-0000-0000-0000000000f9';
 
 -- ---------------------------------------------------------------------------
+-- T21 (RAMO ① DELL'OBLIO — la sentinella deve stare nel file che POSSIEDE la
+-- funzione): una riga RIVENDICATA sparisce anche quando si cancella il SOLO
+-- profilo. Su quel percorso la cascata su `claimed_by` non passa, perché la riga
+-- di `auth.users` resta: senza il ramo ① di `purge_legacy_contact` i dati storici
+-- della persona sopravvivrebbero alla sua cancellazione.
+-- Perché qui e non altrove: il ramo ① vive in QUESTA migration. Finora l'unico
+-- test che lo presidiava stava nella suite della 0013 (T7d) → svuotandolo, questa
+-- coppia restava verde su entrambi gli shim. In un file che ha già pagato due
+-- regressioni da `create or replace` con rebase del corpo, la sentinella lontana
+-- dalla funzione è una sentinella che non si vede.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000fa',
+  'ramo-uno@esempio.it',
+  jsonb_build_object(
+    'first_name', 'Rita', 'last_name', 'Longo',
+    'phone', '+393339990010', 'city', 'Ancona', 'province', 'AN',
+    'country', 'IT', 'birth_date', '1984-04-04'
+  )
+);
+
+insert into public.legacy_contacts (id, email_norm, first_name, source, claimed_by, claimed_at)
+values ('00000000-0000-0000-0000-0000000000fb', 'archivio-di-rita@esempio.it',
+        'Rita', 'access', '00000000-0000-0000-0000-0000000000fa', now());
+
+-- Solo il profilo: l'utente auth resta, quindi la cascata NON scatta.
+delete from public.profiles where id = '00000000-0000-0000-0000-0000000000fa';
+
+do $$
+declare n int; u int;
+begin
+  select count(*) into u from auth.users
+   where id = '00000000-0000-0000-0000-0000000000fa';
+  if u <> 1 then
+    raise exception 'T21 SETUP FAIL: l''utente auth doveva restare (la cascata non deve entrarci)';
+  end if;
+  select count(*) into n from public.legacy_contacts
+   where id = '00000000-0000-0000-0000-0000000000fb';
+  if n <> 0 then
+    raise exception 'T21 FAIL: riga rivendicata sopravvissuta alla cancellazione del solo profilo (Art. 17)';
+  end if;
+  raise notice 'T21 PASS: il ramo ① copre il percorso own_delete, dove la cascata non passa';
+end $$;
+
+-- ---------------------------------------------------------------------------
 -- T18 (IL ROLLBACK È UNA PROMESSA, QUINDI SI TESTA): la procedura di
 -- disinstallazione scritta nell'intestazione della migration deve lasciare un
 -- database in cui ci si registra ancora.

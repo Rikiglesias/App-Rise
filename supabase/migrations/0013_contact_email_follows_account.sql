@@ -52,15 +52,23 @@
 -- scelto come recapito lo STESSO indirizzo dell'account se lo vede seguire il cambio.
 -- È il comportamento che si aspetterebbe comunque, ed è rettificabile dal profilo.
 --
--- RESIDUO DICHIARATO, non chiuso: la chiave della rivendicazione è un indirizzo che
--- la persona sta ABBANDONANDO, quindi quella riga storica le resta legata. Se un
--- domani quell'indirizzo venisse usato da un'ALTRA persona che si registra, il
--- claim della 0012 troverebbe `claimed_by` già valorizzato e quella non avrebbe la
--- precompilazione. Non lo chiudo qui: la contro-misura (escludere le righe la cui
--- mail è ancora il recapito di qualcun altro) costa una sotto-query su ogni cambio
--- di indirizzo per coprire un caso che richiede il riuso di una casella fra due
--- persone diverse, e sarebbe comunque parziale. Si chiude davvero con la passata di
--- riconciliazione già prevista dalla 0012, dove il caso si vede tutto insieme.
+-- RESIDUO DICHIARATO, non chiuso — e la conseguenza è più grave di come l'avevo
+-- scritta la prima volta (correzione dopo il terzo critico). La chiave della
+-- rivendicazione è un indirizzo che la persona sta ABBANDONANDO, quindi quella riga
+-- storica le resta legata. Caso limite, con una casella riusata o di famiglia:
+-- la riga d'archivio di `a@x.it` riguarda B; A si registra con `a@x.it`, poi cambia
+-- indirizzo → questa funzione rivendica per A la riga di B; quando A cancella
+-- account o profilo, il ramo ① della 0012 **CANCELLA la scheda di B**. Prima di
+-- questa migration sarebbe sopravvissuta, perché non rivendicata e con email diversa
+-- dal `contact_email` di A. Non è solo «B perde la precompilazione»: B perde la riga.
+--
+-- Perché non lo chiudo qui: la contro-misura (non rivendicare se quella mail è
+-- ancora il recapito di un altro profilo) costa una sotto-query su OGNI cambio di
+-- indirizzo, e resta comunque parziale — non copre il caso in cui B non ha ancora un
+-- profilo da noi, che è proprio quello tipico di un archivio storico. Si chiude
+-- davvero con la passata di riconciliazione già prevista dalla 0012, dove le
+-- collisioni di indirizzo si vedono tutte insieme invece che una alla volta.
+-- ⚠️ Chi progetta quella passata deve partire da qui.
 --
 -- PRIVILEGI: come 0006/0008/0011/0012, nessuna superficie RPC — il trigger fira
 -- comunque senza grant. `security definer` + `search_path = ''` per scrivere su
@@ -89,10 +97,12 @@
 -- Verso l'app resta additiva e retro-compatibile: senza di lei tutto funziona come
 -- prima.
 --
--- ⚠️ ROLLBACK DELLA 0012 — va aggiornato di conseguenza: droppare `legacy_contacts`
--- lasciando vivo `on_auth_user_email_changed` significherebbe far morire ogni
--- conferma di cambio email su «relation does not exist». Il trigger di questa
--- migration va tolto PER PRIMO. La nota è replicata nell'intestazione della 0012.
+-- ROLLBACK DELLA 0012 — ordine CONSIGLIATO, non più critico: togliere prima
+-- `on_auth_user_email_changed`, poi il resto. Se ci si dimentica non succede nulla
+-- di grave, perché la guardia `exception when undefined_table` nel corpo assorbe la
+-- tabella mancante (vedi più sotto) — ma restare senza tabella con un trigger che la
+-- cerca a ogni cambio email è comunque disordine, non una scelta. La nota è replicata
+-- nell'intestazione della 0012.
 
 create or replace function public.sync_contact_email_on_email_change()
 returns trigger

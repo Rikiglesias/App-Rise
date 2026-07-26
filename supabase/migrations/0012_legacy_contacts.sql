@@ -15,8 +15,12 @@
 --   2. l'aggancio su `public.profiles`: alla nascita di un profilo si cerca la riga
 --      storica con la stessa email, si riempiono SOLO le colonne che il nuovo profilo
 --      ha lasciato vuote, e la riga si marca come rivendicata.
---   3. l'oblio: alla cancellazione del profilo sparisce sia la riga rivendicata (per
---      cascata) sia quella non rivendicata che porta la stessa email (per trigger).
+--   3. l'oblio: alla cancellazione del profilo spariscono ENTRAMBE — la riga
+--      rivendicata e quella non rivendicata che porta la stessa email — e le porta
+--      via il TRIGGER del §4, non la cascata. (Aggiornato 2026-07-26: prima il ramo
+--      sulle righe rivendicate era affidato alla sola cascata su `claimed_by`, che
+--      però scatta unicamente quando sparisce la riga di `auth.users` e quindi manca
+--      il percorso `own_delete`, dove la persona cancella il solo profilo.)
 --
 -- DOVE VIVE L'AGGANCIO, e perché NON dentro `handle_new_user`. Un profilo può
 -- nascere in DUE modi: dal trigger su `auth.users` (registrazione email/password) e
@@ -58,10 +62,13 @@
 -- in silenzio. La cascata non ha ordini da rispettare. Nota: `legacy_contacts` è la
 -- tavola di STAGING dell'import, non l'archivio contabile (che resta su Access con
 -- la sua retention fiscale) → cancellarla non intacca obblighi di conservazione.
--- ⚠️ La cascata da sola NON basta: copre solo le righe RIVENDICATE. Chi si è
--- registrato prima del caricamento non rivendica nulla, e la sua riga sopravvivrebbe
--- alla cancellazione dell'account — una seconda copia dei suoi dati, più vecchia,
--- invisibile nel suo export. La seconda metà dell'oblio è il §4 in fondo al file.
+-- ⚠️ La cascata da sola NON basta, per DUE motivi. (a) Copre solo le righe
+-- RIVENDICATE: chi si è registrato prima del caricamento non rivendica nulla, e la
+-- sua riga sopravvivrebbe alla cancellazione dell'account — una seconda copia dei
+-- suoi dati, più vecchia, invisibile nel suo export. (b) Anche sulle righe
+-- rivendicate scatta SOLO quando sparisce la riga di `auth.users`, mentre il profilo
+-- si può cancellare da sé (policy `own_delete`, 0001). Per questo il §4 in fondo al
+-- file cancella entrambi i casi, e NON è ridondante rispetto alla cascata.
 --
 -- ⚠️ VINCOLO DI SEQUENZA PER CHI FARÀ L'IMPORT — LEGGERE PRIMA DI CARICARE.
 -- L'aggancio scatta SOLO alla nascita del profilo: il trigger è BEFORE INSERT, non
@@ -223,7 +230,7 @@ create trigger on_profile_claim_legacy
   for each row execute procedure public.claim_legacy_contact();
 
 -- ---------------------------------------------------------------------------
--- 4. L'oblio per le righe MAI rivendicate
+-- 4. L'oblio: righe RIVENDICATE (ramo ①) + righe mai rivendicate (ramo ②)
 -- ---------------------------------------------------------------------------
 -- La cascata su `claimed_by` copre solo chi ha rivendicato la propria riga. Ma
 -- esiste un caso, e non e' raro: chi si e' registrato PRIMA che l'archivio venisse

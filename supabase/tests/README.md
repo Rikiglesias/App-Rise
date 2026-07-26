@@ -92,8 +92,10 @@ sempre l'ultima):
 - **0010**: **9** righe `PASS` — 6 blocchi di test + esito, ma `T3` stampa **dentro un ciclo** (una
   riga per colonna verificata), quindi le righe sono più dei blocchi.
 - **0011**: **8** righe `PASS` — 7 test (`T1-T7`) + esito.
-- **0012**: **21** righe `PASS` — 20 test (`T1-T20`) + esito. Come 0009 e 0011 non concede grant →
-  stesso esito coi due shim (misurato: 21/21, 0 FAIL su entrambi, 2026-07-26).
+- **0012**: **22** righe `PASS` — 21 test (`T1-T21`) + esito. `T21` presidia il ramo ① dell'oblio
+  (riga rivendicata + cancellazione del solo profilo, dove la cascata non passa): sta qui e non
+  nella suite della 0013 perché la funzione vive in questa migration. Come 0009 e 0011 non concede
+  grant → stesso esito coi due shim (misurato: 22/22, 0 FAIL su entrambi, 2026-07-26).
 - **0013**: **15** righe `PASS` — 12 blocchi (`T1-T8` più `T6b`, `T7b`, `T7c`, `T7d`), di cui `T2`
   stampa **due** righe (colonna non toccata · nessuna rivendicazione) e `T7b` altre **due**
   (riaggancio · cancellazione) + esito. Non concede grant → stesso esito coi due shim (misurato:
