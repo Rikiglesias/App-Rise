@@ -66,6 +66,9 @@ export const ProfileEditScreen: React.FC = () => {
   // nasconde la mail va spiegato PERCHE' gliela chiediamo. Il flag deriva
   // dall'email dell'account (session), non dal campo `email` in editing: un
   // cambio email non-confermato non conta.
+  // NB (2026-07-26): con il login Apple rimosso nessun account NUOVO può avere un
+  // alias di relay — questo ramo (e il testo-guida che sceglie) resta raggiungibile
+  // solo dagli account nati prima. Difesa residua, non un caso vivo.
   const isRelay = useMemo(
     () => isApplePrivateRelayEmail(currentEmail),
     [currentEmail]
