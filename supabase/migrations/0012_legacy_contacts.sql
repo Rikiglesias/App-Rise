@@ -9,12 +9,14 @@
 -- avere un account nostro). Serve quindi una tabella di appoggio separata, più il
 -- meccanismo che aggancia il record alla persona QUANDO si registra da sé.
 --
--- COSA FA, in due pezzi:
+-- COSA FA, in tre pezzi:
 --   1. `public.legacy_contacts` — l'archivio importato, con tutti i campi nullable
 --      tranne la chiave di aggancio e la provenienza.
 --   2. l'aggancio su `public.profiles`: alla nascita di un profilo si cerca la riga
 --      storica con la stessa email, si riempiono SOLO le colonne che il nuovo profilo
 --      ha lasciato vuote, e la riga si marca come rivendicata.
+--   3. l'oblio: alla cancellazione del profilo sparisce sia la riga rivendicata (per
+--      cascata) sia quella non rivendicata che porta la stessa email (per trigger).
 --
 -- DOVE VIVE L'AGGANCIO, e perché NON dentro `handle_new_user`. Un profilo può
 -- nascere in DUE modi: dal trigger su `auth.users` (registrazione email/password) e
@@ -56,6 +58,10 @@
 -- in silenzio. La cascata non ha ordini da rispettare. Nota: `legacy_contacts` è la
 -- tavola di STAGING dell'import, non l'archivio contabile (che resta su Access con
 -- la sua retention fiscale) → cancellarla non intacca obblighi di conservazione.
+-- ⚠️ La cascata da sola NON basta: copre solo le righe RIVENDICATE. Chi si è
+-- registrato prima del caricamento non rivendica nulla, e la sua riga sopravvivrebbe
+-- alla cancellazione dell'account — una seconda copia dei suoi dati, più vecchia,
+-- invisibile nel suo export. La seconda metà dell'oblio è il §4 in fondo al file.
 --
 -- ⚠️ VINCOLO DI SEQUENZA PER CHI FARÀ L'IMPORT — LEGGERE PRIMA DI CARICARE.
 -- L'aggancio scatta SOLO alla nascita del profilo: il trigger è BEFORE INSERT, non
@@ -78,9 +84,12 @@
 -- `drop trigger if exists` + `revoke` sono tutti no-op alla seconda esecuzione.
 -- ROLLBACK — NELL'ORDINE, e NON basta droppare la tabella:
 --   drop trigger if exists on_profile_claim_legacy on public.profiles;
+--   drop trigger if exists on_profile_purge_legacy on public.profiles;
 --   drop function if exists public.claim_legacy_contact();
+--   drop function if exists public.purge_legacy_contact();
 --   drop table if exists public.legacy_contacts;
--- ⚠️ `drop table public.legacy_contacts cascade;` da solo **ROMPE LE REGISTRAZIONI**.
+-- ⚠️ `drop table public.legacy_contacts cascade;` da solo **ROMPE LE REGISTRAZIONI**
+-- (e, da quando esiste il trigger di oblio, anche le CANCELLAZIONI di account).
 -- Verificato dal vivo il 2026-07-26: il CASCADE non porta via il trigger, perché il
 -- trigger dipende dalla FUNZIONE, non dalla tabella; e il corpo di una funzione
 -- plpgsql non viene risolto alla creazione ma a ogni esecuzione, quindi il primo
@@ -211,3 +220,53 @@ drop trigger if exists on_profile_claim_legacy on public.profiles;
 create trigger on_profile_claim_legacy
   before insert on public.profiles
   for each row execute procedure public.claim_legacy_contact();
+
+-- ---------------------------------------------------------------------------
+-- 4. L'oblio per le righe MAI rivendicate
+-- ---------------------------------------------------------------------------
+-- La cascata su `claimed_by` copre solo chi ha rivendicato la propria riga. Ma
+-- esiste un caso, e non e' raro: chi si e' registrato PRIMA che l'archivio venisse
+-- caricato. Il suo profilo e' gia' nato, il trigger di aggancio non ripassa, e la
+-- riga storica resta li' con `claimed_by` vuoto. Da quel momento terremmo una
+-- SECONDA copia dei suoi dati, piu' vecchia di quella che ci ha dato lui, che non
+-- compare nel suo export e che sopravviverebbe alla cancellazione del suo account.
+-- Cioe' esattamente il contrario di cio' che l'Art. 17 chiede.
+--
+-- Quindi alla cancellazione si cancella anche per EMAIL, non solo per rivendicazione.
+-- `and claimed_by is null` non e' pleonastico: due account diversi possono dichiarare
+-- la stessa mail di contatto (la colonna non e' unica), e la riga di chi l'ha
+-- legittimamente rivendicata non deve sparire perche' un altro si cancella — quella
+-- la porta via la cascata, al momento giusto.
+--
+-- Trigger separato invece di riscrivere `handle_profile_deletion` (0008): stessa
+-- ragione dell'aggancio — ogni `create or replace` su una funzione esistente obbliga
+-- a rifare il rebase del suo corpo, ed e' gia' costato un giro.
+--
+-- RESIDUO CHE RESTA, dichiarato: se la riga storica porta un indirizzo DIVERSO da
+-- quello con cui la persona si e' registrata, non viene ne' agganciata ne' cancellata.
+-- Non e' risolvibile qui: quella riga, per il database, e' un'altra persona. Si chiude
+-- solo con la passata di riconciliazione, che va progettata insieme all'import.
+create or replace function public.purge_legacy_contact()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_key text := lower(btrim(old.contact_email));
+begin
+  if v_key is not null and v_key <> '' then
+    delete from public.legacy_contacts
+     where email_norm = v_key
+       and claimed_by is null;
+  end if;
+  return old;
+end;
+$$;
+
+revoke execute on function public.purge_legacy_contact() from public, anon, authenticated;
+
+drop trigger if exists on_profile_purge_legacy on public.profiles;
+create trigger on_profile_purge_legacy
+  before delete on public.profiles
+  for each row execute procedure public.purge_legacy_contact();

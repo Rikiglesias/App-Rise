@@ -409,7 +409,9 @@ begin
     has_function_privilege('anon', 'public.handle_new_user()', 'EXECUTE'),
     has_function_privilege('authenticated', 'public.handle_new_user()', 'EXECUTE'),
     has_function_privilege('anon', 'public.claim_legacy_contact()', 'EXECUTE'),
-    has_function_privilege('authenticated', 'public.claim_legacy_contact()', 'EXECUTE')
+    has_function_privilege('authenticated', 'public.claim_legacy_contact()', 'EXECUTE'),
+    has_function_privilege('anon', 'public.purge_legacy_contact()', 'EXECUTE'),
+    has_function_privilege('authenticated', 'public.purge_legacy_contact()', 'EXECUTE')
   ] loop
     if v then
       raise exception 'T14 FAIL: EXECUTE su una funzione del signup è ancora concesso';
@@ -437,10 +439,10 @@ begin
 
   select count(*) into n from pg_trigger
   where tgrelid = 'public.profiles'::regclass
-    and tgname = 'on_profile_claim_legacy'
+    and tgname in ('on_profile_claim_legacy', 'on_profile_purge_legacy')
     and not tgisinternal;
-  if n <> 1 then
-    raise exception 'T15 FAIL: % trigger on_profile_claim_legacy, atteso 1', n;
+  if n <> 2 then
+    raise exception 'T15 FAIL: % trigger legacy su profiles, attesi 2 (aggancio + oblio)', n;
   end if;
 
   select count(*) into n from pg_indexes
@@ -584,6 +586,89 @@ delete from auth.users where id in (
 delete from public.legacy_contacts where source = 'access';
 
 -- ---------------------------------------------------------------------------
+-- T19 (OBLIO SULLE RIGHE MAI RIVENDICATE): chi si è registrato PRIMA che l'archivio
+-- venisse caricato non rivendica nulla — il suo profilo è già nato e il trigger di
+-- aggancio non ripassa. Se cancella l'account, la cascata su `claimed_by` non vede
+-- quella riga: resteremmo con una seconda copia dei suoi dati, più vecchia di quella
+-- che ci ha dato lui, invisibile nel suo export e sopravvissuta alla cancellazione.
+-- Qui si verifica che il trigger di oblio la porti via lo stesso.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000ea',
+  'prima.dell.import@esempio.it',
+  jsonb_build_object(
+    'first_name', 'Prima', 'last_name', 'DellImport',
+    'country', 'IT', 'birth_date', '1979-09-09'
+  )
+);
+
+-- L'archivio arriva DOPO: la riga nasce già orfana, nessuno la rivendicherà mai.
+insert into public.legacy_contacts (id, email_norm, phone, city, source)
+values ('00000000-0000-0000-0000-0000000000f8', 'prima.dell.import@esempio.it',
+        '+393339990008', 'Bari', 'access');
+
+do $$
+declare v uuid;
+begin
+  select claimed_by into v from public.legacy_contacts
+  where id = '00000000-0000-0000-0000-0000000000f8';
+  if v is not null then
+    raise exception 'T19 SETUP FAIL: la riga risulta rivendicata, lo scenario non è quello voluto';
+  end if;
+end $$;
+
+delete from auth.users where id = '00000000-0000-0000-0000-0000000000ea';
+
+do $$
+declare n int;
+begin
+  select count(*) into n from public.legacy_contacts
+  where id = '00000000-0000-0000-0000-0000000000f8';
+  if n <> 0 then
+    raise exception 'T19 FAIL: riga storica NON rivendicata sopravvissuta alla cancellazione dell''account';
+  end if;
+  raise notice 'T19 PASS: l''oblio raggiunge anche le righe mai rivendicate';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T20 (IL CONFINE DELL'OBLIO, e il residuo dichiarato): la cancellazione porta via
+-- solo le righe che corrispondono a QUELLA persona. Due assert opposti:
+--   a) una riga con un'altra email NON viene toccata (altrimenti cancelleremmo i dati
+--      di terzi ogni volta che qualcuno chiude il suo account);
+--   b) ed è esattamente il RESIDUO dichiarato nella migration: se la riga storica
+--      porta un indirizzo diverso da quello di registrazione, non viene né agganciata
+--      né cancellata. Per il database è un'altra persona. Lo chiude solo la
+--      riconciliazione, che va progettata con l'import.
+-- ---------------------------------------------------------------------------
+insert into public.legacy_contacts (id, email_norm, city, source)
+values ('00000000-0000-0000-0000-0000000000f9', 'altra.persona@esempio.it', 'Lecce', 'access');
+
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000eb',
+  'chi.si.cancella@esempio.it',
+  jsonb_build_object(
+    'first_name', 'Chi', 'last_name', 'SiCancella',
+    'country', 'IT', 'birth_date', '1981-01-01'
+  )
+);
+delete from auth.users where id = '00000000-0000-0000-0000-0000000000eb';
+
+do $$
+declare n int;
+begin
+  select count(*) into n from public.legacy_contacts
+  where id = '00000000-0000-0000-0000-0000000000f9' and claimed_by is null;
+  if n <> 1 then
+    raise exception 'T20 FAIL: cancellato un account, è sparita la riga di un''altra persona';
+  end if;
+  raise notice 'T20 PASS: l''oblio non tracima su righe di altri (residuo email-diversa confermato)';
+end $$;
+
+delete from public.legacy_contacts where id = '00000000-0000-0000-0000-0000000000f9';
+
+-- ---------------------------------------------------------------------------
 -- T18 (IL ROLLBACK È UNA PROMESSA, QUINDI SI TESTA): la procedura di
 -- disinstallazione scritta nell'intestazione della migration deve lasciare un
 -- database in cui ci si registra ancora.
@@ -598,9 +683,15 @@ delete from public.legacy_contacts where source = 'access';
 -- Si disinstalla dal consumatore verso il produttore: trigger, funzione, tabella.
 -- ---------------------------------------------------------------------------
 drop trigger if exists on_profile_claim_legacy on public.profiles;
+drop trigger if exists on_profile_purge_legacy on public.profiles;
 drop function if exists public.claim_legacy_contact();
+drop function if exists public.purge_legacy_contact();
 drop table if exists public.legacy_contacts;
 
+-- Si verificano ENTRAMBE le operazioni che i due trigger intercettavano: la nascita
+-- di un profilo E la sua cancellazione. Provare solo l'inserimento lascerebbe passare
+-- un rollback che ha dimenticato il trigger di oblio: l'errore comparirebbe alla
+-- prima cancellazione di account, cioè nel momento peggiore.
 insert into auth.users (id, email, raw_user_meta_data)
 values ('00000000-0000-0000-0000-0000000000ff', 'dopo.rollback@esempio.it',
   jsonb_build_object('first_name', 'Dopo', 'last_name', 'Rollback',
@@ -612,12 +703,22 @@ begin
   select contact_email into v from public.profiles
   where id = '00000000-0000-0000-0000-0000000000ff';
   if v is distinct from 'dopo.rollback@esempio.it' then
-    raise exception 'T18 FAIL: dopo il rollback la registrazione è rotta (contact_email=%)',
+    raise exception 'T18 FAIL: dopo il rollback la REGISTRAZIONE è rotta (contact_email=%)',
       coalesce(v, '<null>');
   end if;
-  raise notice 'T18 PASS: il rollback documentato lascia un database funzionante';
 end $$;
 
 delete from auth.users where id = '00000000-0000-0000-0000-0000000000ff';
+
+do $$
+declare n int;
+begin
+  select count(*) into n from public.profiles
+  where id = '00000000-0000-0000-0000-0000000000ff';
+  if n <> 0 then
+    raise exception 'T18 FAIL: dopo il rollback la CANCELLAZIONE è rotta';
+  end if;
+  raise notice 'T18 PASS: dopo il rollback ci si registra e ci si cancella ancora';
+end $$;
 
 select 'ALL TESTS PASS' as esito;

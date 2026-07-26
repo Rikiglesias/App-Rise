@@ -90,8 +90,8 @@ sempre l'ultima):
 - **0010**: **9** righe `PASS` — 6 blocchi di test + esito, ma `T3` stampa **dentro un ciclo** (una
   riga per colonna verificata), quindi le righe sono più dei blocchi.
 - **0011**: **8** righe `PASS` — 7 test (`T1-T7`) + esito.
-- **0012**: **19** righe `PASS` — 18 test (`T1-T18`) + esito. Come 0009 e 0011 non concede grant →
-  stesso esito coi due shim (misurato: 19/19, 0 FAIL su entrambi, 2026-07-26).
+- **0012**: **21** righe `PASS` — 20 test (`T1-T20`) + esito. Come 0009 e 0011 non concede grant →
+  stesso esito coi due shim (misurato: 21/21, 0 FAIL su entrambi, 2026-07-26).
 
 ⚠️ I conteggi sopra sono **misurati eseguendo le suite**, non contati leggendo i sorgenti. Contare i
 `raise notice` nel file dà il numero SBAGLIATO ogni volta che una notice sta dentro un ciclo o un

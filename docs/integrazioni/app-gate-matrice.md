@@ -80,12 +80,14 @@ Due numeri diversi che è facile confondere, ed è la confusione che rende sbagl
 Quindi il profilo **potrà** nascere con quattro voci più le credenziali: il resto è una scelta del
 form, non un vincolo tecnico. È esattamente lo spazio che P2 deve occupare.
 
-> ⚠️ **La migration 0010 è in `master` ma NON è applicata al database di produzione** (l'`alter …
-> drop not null` è bloccato dal guard MCP → va eseguita dal SQL Editor del Dashboard; è una leva
-> umana, tracciata nel binding). Finché non lo è, il database pretende ancora **sei** voci: chi
-> legge il «4» qui sopra e alleggerisce il modulo prima dell'apply manda in produzione un signup
-> che **viola il NOT NULL e fallisce**. L'ordine è scritto anche in testa alla migration: prima la
-> migration, poi il form leggero.
+> ✅ **La migration 0010 è APPLICATA al database di produzione** dal 26/07/2026 (registrata come
+> `20260726090451`; ricontrollato sul database vivo lo stesso giorno: `phone` e `city` risultano
+> nullable). Il vincolo di ordine che stava scritto qui — «prima la migration, poi il form
+> leggero» — è quindi **soddisfatto**: il modulo si può alleggerire alle **4** voci indicate sopra
+> senza che il signup violi un NOT NULL.
+> *(Fino al 26/07 questo riquadro diceva il contrario, ed è rimasto indietro di qualche ora: chi
+> lo leggeva veniva mandato a rifare una leva umana già fatta, o a rinviare l'alleggerimento del
+> modulo senza motivo. Corretto dopo una verifica alla fonte.)*
 
 **Trappola verificata, da non far scoprire a valle**: nel trigger che crea il profilo, la condizione
 di ingresso è `if v_meta ? 'birth_date'` — la data di nascita non è solo la prova del 18+, è **il
