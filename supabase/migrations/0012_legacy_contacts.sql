@@ -57,6 +57,18 @@
 -- tavola di STAGING dell'import, non l'archivio contabile (che resta su Access con
 -- la sua retention fiscale) → cancellarla non intacca obblighi di conservazione.
 --
+-- ⚠️ VINCOLO DI SEQUENZA PER CHI FARÀ L'IMPORT — LEGGERE PRIMA DI CARICARE.
+-- L'aggancio scatta SOLO alla nascita del profilo: il trigger è BEFORE INSERT, non
+-- ripassa sui profili già esistenti. Quindi chi si registra PRIMA che le anagrafiche
+-- siano caricate non rivendicherà mai la sua riga — il suo profilo è già nato, e
+-- resterà scollegato dal suo storico per sempre, in silenzio.
+-- → **l'import deve precedere le registrazioni vere** (coerente con F-EMAIL.6③:
+--   import dopo l'informativa pubblicata, entrambi prima del primo rilascio).
+-- → se per qualsiasi motivo qualcuno si registrasse nella finestra intermedia,
+--   serve una passata di RICONCILIAZIONE una-tantum che agganci i profili già
+--   esistenti per `email_norm`. Oggi NON esiste: va scritta in quel momento, non
+--   dopo aver scoperto che manca.
+--
 -- RESIDUO DICHIARATO (non risolto qui): le righe MAI rivendicate non hanno una
 -- scadenza. Sono dati personali di persone che non si registreranno mai, e prima o
 -- poi vogliono una retention. Query per contarle:
