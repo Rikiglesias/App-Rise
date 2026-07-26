@@ -44,6 +44,10 @@ export const useProfileForm = () => {
   // non si riconoscono — storico e consensi divisi in due, e una cancellazione su
   // uno lascia l'altro in piedi. L'alias inoltra, ma muore appena la persona revoca
   // l'inoltro e non serve a nulla fuori dal canale email.
+  // NB (2026-07-26): rimosso il login Apple, un alias di relay non può più entrare
+  // da nessuna parte — `isRelay` è oggi una difesa RESIDUA, non un caso vivo. Si
+  // tiene perché costa una riga e copre gli account nati prima della rimozione,
+  // esattamente come la guardia conservata nel trigger della migration 0011.
   const accountEmail = session?.user.email;
   const isRelay = useMemo(
     () => isApplePrivateRelayEmail(accountEmail),
