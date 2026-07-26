@@ -10,7 +10,9 @@
 # Uso, dalla cartella `supabase/`, con Docker attivo:
 #   bash tests/run-all.sh
 #
-# Esce 1 al primo fallimento, stampando quale coppia e quale shim. Ogni giro parte
+# Esegue TUTTE le combinazioni e alla fine esce 1 se almeno una è rossa (non si
+# ferma alla prima: serve il quadro completo, non il primo sintomo). Stampa quale
+# coppia e quale shim ha fallito, man mano. Ogni giro parte
 # da un container PULITO: la suite inserisce righe con id fissi e rilanciarla sullo
 # stesso database fallirebbe sul setup.
 set -uo pipefail

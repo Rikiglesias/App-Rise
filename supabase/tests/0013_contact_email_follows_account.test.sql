@@ -78,6 +78,20 @@ begin
   raise notice 'T2 PASS: il recapito scelto dalla persona non viene toccato';
 end $$;
 
+-- E se lo spostamento non avviene, NIENTE dev'essere rivendicato: il riaggancio è
+-- subordinato a `v_spostata`, e senza questo assert togliere quella condizione
+-- lascerebbe la suite verde.
+do $$
+declare n int;
+begin
+  select count(*) into n from public.legacy_contacts
+   where claimed_by = '00000000-0000-0000-0000-0000000000e2';
+  if n <> 0 then
+    raise exception 'T2 FAIL: rivendicata una riga pur non avendo spostato la colonna (% righe)', n;
+  end if;
+  raise notice 'T2 PASS: nessuna rivendicazione quando il recapito è scelto';
+end $$;
+
 -- ---------------------------------------------------------------------------
 -- T3: colonna VUOTA resta vuota. Un profilo nato prima della 0011 (o da un canale
 -- che non la scrive) non deve essere «completato» di nostra iniziativa: sarebbe un
@@ -371,6 +385,74 @@ begin
     raise exception 'T7b FAIL: la riga è sopravvissuta alla cancellazione dell''account (Art. 17)';
   end if;
   raise notice 'T7b PASS: e la cancellazione dell''account se la porta via';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T7c: NON SI STRAPPA la riga di un altro. La guardia `claimed_by is null` del
+-- riaggancio è l'unica cosa che impedisce, quando due persone hanno avuto la stessa
+-- mail nel tempo, di portarsi via i dati storici di chi l'ha legittimamente
+-- rivendicata. Senza questo assert, togliere quella guardia lascerebbe verde.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000eb',
+  'condivisa@esempio.it',
+  jsonb_build_object(
+    'first_name', 'Primo', 'last_name', 'Utente',
+    'phone', '+393331110011', 'city', 'Pisa', 'province', 'PI',
+    'country', 'IT', 'birth_date', '1981-01-01'
+  )
+);
+
+-- Riga storica già rivendicata dal PRIMO utente.
+insert into public.legacy_contacts (id, email_norm, first_name, source, claimed_by, claimed_at)
+values ('00000000-0000-0000-0000-0000000000db', 'condivisa@esempio.it',
+        'Primo', 'access', '00000000-0000-0000-0000-0000000000eb', now());
+
+-- Un SECONDO utente che oggi ha quella stessa mail come recapito derivato.
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000ec',
+  'condivisa@esempio.it',
+  jsonb_build_object(
+    'first_name', 'Secondo', 'last_name', 'Utente',
+    'phone', '+393331110012', 'city', 'Siena', 'province', 'SI',
+    'country', 'IT', 'birth_date', '1982-02-02'
+  )
+);
+
+update auth.users set email = 'separata@esempio.it'
+ where id = '00000000-0000-0000-0000-0000000000ec';
+
+do $$
+declare v uuid;
+begin
+  select claimed_by into v from public.legacy_contacts
+   where id = '00000000-0000-0000-0000-0000000000db';
+  if v is distinct from '00000000-0000-0000-0000-0000000000eb'::uuid then
+    raise exception 'T7c FAIL: strappata la riga di un altro (claimed_by ora %)',
+      coalesce(v::text, '<null>');
+  end if;
+  raise notice 'T7c PASS: una riga già rivendicata non si strappa';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T7d: l'oblio regge anche sull'ALTRO percorso di cancellazione. T7b cancella da
+-- `auth.users` (cascata); qui si cancella il solo PROFILO, che la policy `own_delete`
+-- della 0001 permette. Senza il ramo «righe rivendicate» in `purge_legacy_contact`
+-- la riga sopravviverebbe: la cascata non passa, perché l'utente auth resta.
+-- ---------------------------------------------------------------------------
+delete from public.profiles where id = '00000000-0000-0000-0000-0000000000eb';
+
+do $$
+declare n int;
+begin
+  select count(*) into n from public.legacy_contacts
+   where id = '00000000-0000-0000-0000-0000000000db';
+  if n <> 0 then
+    raise exception 'T7d FAIL: riga rivendicata sopravvissuta alla cancellazione del solo profilo';
+  end if;
+  raise notice 'T7d PASS: l''oblio copre entrambi i percorsi di cancellazione';
 end $$;
 
 -- ---------------------------------------------------------------------------

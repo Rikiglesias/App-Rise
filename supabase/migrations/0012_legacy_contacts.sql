@@ -83,6 +83,7 @@
 -- RIESEGUIBILE: `create table if not exists` + `create or replace function` +
 -- `drop trigger if exists` + `revoke` sono tutti no-op alla seconda esecuzione.
 -- ROLLBACK — NELL'ORDINE, e NON basta droppare la tabella:
+--   drop trigger if exists on_auth_user_email_changed on auth.users;   -- 0013, PER PRIMO
 --   drop trigger if exists on_profile_claim_legacy on public.profiles;
 --   drop trigger if exists on_profile_purge_legacy on public.profiles;
 --   drop function if exists public.claim_legacy_contact();
@@ -255,6 +256,14 @@ as $$
 declare
   v_key text := lower(btrim(old.contact_email));
 begin
+  -- ① Le righe che questa persona ha RIVENDICATO. La cascata su `claimed_by` le
+  -- porta via solo quando sparisce la riga di `auth.users` — ma il profilo si può
+  -- cancellare da sé (policy `own_delete`, 0001) e su quel percorso la cascata non
+  -- passa: i suoi dati storici sopravvivrebbero alla cancellazione del profilo.
+  -- Dalla 0013 pesa di più, perché lì si rivendica anche al cambio di indirizzo.
+  delete from public.legacy_contacts where claimed_by = old.id;
+
+  -- ② Le righe MAI rivendicate che portano la sua mail di contatto (vedi sopra).
   if v_key is not null and v_key <> '' then
     delete from public.legacy_contacts
      where email_norm = v_key

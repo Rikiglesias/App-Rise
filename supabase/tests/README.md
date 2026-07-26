@@ -34,7 +34,8 @@ bash tests/run-all.sh
 ```
 
 Esegue ogni coppia migration+test contro **entrambi** gli shim, con container pulito a ogni giro,
-e esce `1` al primo rosso. Usalo sempre quando la migration nuova tocca una superficie **condivisa**
+ed esce `1` alla fine se almeno una combinazione è rossa (le esegue tutte: serve il quadro intero,
+non il primo sintomo). Usalo sempre quando la migration nuova tocca una superficie **condivisa**
 (un trigger o un constraint su una tabella che anche altre suite scrivono): lì il rischio non è la
 suite nuova, sono le altre. Il 2026-07-26 la `0012` ha aggiunto un trigger su ogni nascita di
 profilo e le suite `0008`-`0011` non erano state rieseguite: andò bene, ma per fortuna verificata
@@ -93,9 +94,10 @@ sempre l'ultima):
 - **0011**: **8** righe `PASS` — 7 test (`T1-T7`) + esito.
 - **0012**: **21** righe `PASS` — 20 test (`T1-T20`) + esito. Come 0009 e 0011 non concede grant →
   stesso esito coi due shim (misurato: 21/21, 0 FAIL su entrambi, 2026-07-26).
-- **0013**: **12** righe `PASS` — 9 blocchi (`T1-T8` più `T6b` e `T7b`, di cui `T7b` stampa **due**
-  righe: una per il riaggancio, una per la cancellazione) + esito. Non concede grant → stesso esito
-  coi due shim (misurato: 12/12, 0 FAIL su entrambi, 2026-07-26).
+- **0013**: **15** righe `PASS` — 12 blocchi (`T1-T8` più `T6b`, `T7b`, `T7c`, `T7d`), di cui `T2`
+  stampa **due** righe (colonna non toccata · nessuna rivendicazione) e `T7b` altre **due**
+  (riaggancio · cancellazione) + esito. Non concede grant → stesso esito coi due shim (misurato:
+  15/15, 0 FAIL su entrambi, 2026-07-26).
 
 ⚠️ I conteggi sopra sono **misurati eseguendo le suite**, non contati leggendo i sorgenti. Contare i
 `raise notice` nel file dà il numero SBAGLIATO ogni volta che una notice sta dentro un ciclo o un

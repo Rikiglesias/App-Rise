@@ -26,7 +26,7 @@
 Sono le uniche che richiedono davvero un parere. Per ognuna diamo il contesto di fatto, così
 non deve ricostruirlo.
 
-### L1 — Trasferimenti fuori dall'Unione Europea (riga 86)
+### L1 — Trasferimenti fuori dall'Unione Europea (§5 «Trasferimenti extra-UE»)
 
 **Il fatto**: i dati dell'account risiedono in UE — Supabase, region Francoforte (Germania),
 verificata il 2026-07-07. Alcuni fornitori sono però società statunitensi: Sentry (diagnostica
@@ -44,7 +44,7 @@ caso di contestazioni», senza un numero.
 **La domanda**: quale durata indichiamo? La bozza ipotizza dieci anni, ma è un'ipotesi nostra,
 non una scelta motivata.
 
-### L3 — Serve nominare un Responsabile della Protezione dei Dati? (riga 124)
+### L3 — Serve nominare un Responsabile della Protezione dei Dati? (§12 «Titolare del trattamento e contatti»)
 
 **Il fatto**: siamo un'associazione non profit; trattiamo dati di donatori (anagrafica,
 contatti, data di nascita per la maggiore età) e un registro dei consensi. Nessuna categoria
@@ -56,7 +56,7 @@ particolare di dati, nessun monitoraggio sistematico su larga scala allo stato a
 
 ## 🟨 La conferma
 
-### C1 — Come qualifichiamo il rapporto con Let's Donation (riga 107)
+### C1 — Come qualifichiamo il rapporto con Let's Donation (§9 «Donazioni, shop ed eventi su piattaforme esterne»)
 
 **Non è una domanda aperta: è una posizione già presa e argomentata**, serve solo un sì.
 
@@ -92,12 +92,16 @@ contratto esiste oggi con Let's Donation e averne copia — è un fatto document
 
 ## 🟦 I quattro dati da recuperare (non servono al legale)
 
-| # | Cosa serve | Dove si trova | Riga |
+> I riferimenti puntano alla **sezione** dell'informativa, non al numero di riga: i numeri slittano a
+> ogni modifica del file e finivano per indicare il paragrafo sbagliato proprio nel documento che si
+> consegna alla consulente.
+
+| # | Cosa serve | Dove si trova | Dove nell'informativa |
 | --- | --- | --- | --- |
-| **R1** | Copia firmata del **DPA di Supabase** con clausole contrattuali standard | Pannello Supabase, sezione legale/compliance: si accetta e si archivia la copia | 77 |
-| **R2** | **Region di ingestione di Sentry** (UE o USA) + il loro DPA | Pannello Sentry, impostazioni del progetto. NB: già tracciata come azione aperta nel binding del goal | 78 |
-| **R3** | **Retention configurata su Sentry** (il testo dice 90 giorni «per impostazione predefinita») | Pannello Sentry: va confermato il valore reale, non quello di default | 92 |
-| **R4** | **PEC e indirizzo della sede legale** dell'associazione | Dato dell'associazione | 121 |
+| **R1** | Copia firmata del **DPA di Supabase** con clausole contrattuali standard | Pannello Supabase, sezione legale/compliance: si accetta e si archivia la copia | §4 «Destinatari e responsabili del trattamento» |
+| **R2** | **Region di ingestione di Sentry** (UE o USA) + il loro DPA | Pannello Sentry, impostazioni del progetto. NB: già tracciata come azione aperta nel binding del goal | §4 «Destinatari e responsabili del trattamento» |
+| **R3** | **Retention configurata su Sentry** (il testo dice 90 giorni «per impostazione predefinita») | Pannello Sentry: va confermato il valore reale, non quello di default | §6 «Conservazione dei dati» |
+| **R4** | **PEC e indirizzo della sede legale** dell'associazione | Dato dell'associazione | §12 «Titolare del trattamento e contatti» |
 
 ---
 

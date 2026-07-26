@@ -52,6 +52,16 @@
 -- scelto come recapito lo STESSO indirizzo dell'account se lo vede seguire il cambio.
 -- È il comportamento che si aspetterebbe comunque, ed è rettificabile dal profilo.
 --
+-- RESIDUO DICHIARATO, non chiuso: la chiave della rivendicazione è un indirizzo che
+-- la persona sta ABBANDONANDO, quindi quella riga storica le resta legata. Se un
+-- domani quell'indirizzo venisse usato da un'ALTRA persona che si registra, il
+-- claim della 0012 troverebbe `claimed_by` già valorizzato e quella non avrebbe la
+-- precompilazione. Non lo chiudo qui: la contro-misura (escludere le righe la cui
+-- mail è ancora il recapito di qualcun altro) costa una sotto-query su ogni cambio
+-- di indirizzo per coprire un caso che richiede il riuso di una casella fra due
+-- persone diverse, e sarebbe comunque parziale. Si chiude davvero con la passata di
+-- riconciliazione già prevista dalla 0012, dove il caso si vede tutto insieme.
+--
 -- PRIVILEGI: come 0006/0008/0011/0012, nessuna superficie RPC — il trigger fira
 -- comunque senza grant. `security definer` + `search_path = ''` per scrivere su
 -- `public.profiles` scavalcando le regole di riga, che non prevedono un attore di
@@ -70,10 +80,19 @@
 -- Dopo il rollback il comportamento torna esattamente a quello di oggi: la colonna
 -- resta indietro, nessun errore.
 --
--- ORDINE DI RILASCIO: nessun vincolo. Additiva e retro-compatibile; senza di lei il
--- codice attuale continua a funzionare identico. Va però applicata PRIMA o INSIEME
--- al caricamento delle anagrafiche storiche (0012), perché è quella che tiene onesta
--- la chiave dell'oblio.
+-- ORDINE DI RILASCIO — **richiede la 0012 già applicata**, e la frase precedente
+-- («nessun vincolo») era diventata falsa nel momento in cui questa funzione ha
+-- cominciato a scrivere su `legacy_contacts`. Il codice regge comunque a
+-- un'applicazione fuori ordine (la guardia `undefined_table` nel corpo), ma
+-- l'ordine giusto è 0012 → 0013, e vanno comunque applicate insieme: è la 0013 a
+-- tenere onesta la chiave dell'oblio quando la persona cambia indirizzo.
+-- Verso l'app resta additiva e retro-compatibile: senza di lei tutto funziona come
+-- prima.
+--
+-- ⚠️ ROLLBACK DELLA 0012 — va aggiornato di conseguenza: droppare `legacy_contacts`
+-- lasciando vivo `on_auth_user_email_changed` significherebbe far morire ogni
+-- conferma di cambio email su «relation does not exist». Il trigger di questa
+-- migration va tolto PER PRIMO. La nota è replicata nell'intestazione della 0012.
 
 create or replace function public.sync_contact_email_on_email_change()
 returns trigger
@@ -90,6 +109,10 @@ declare
   v_nuova_valida boolean := new.email is not null
     and new.email not like '%@privaterelay.appleid.com';
   v_spostata boolean := false;
+  -- NB: nessuna variabile di tipo `public.legacy_contacts`. Un tipo composito si
+  -- risolve alla COMPILAZIONE della funzione, cioè fuori da qualunque blocco
+  -- EXCEPTION: dichiararlo qui avrebbe fatto fallire il trigger prima che la
+  -- guardia `undefined_table` potesse intervenire, vanificandola.
 begin
   if not v_cambiata or not v_nuova_valida then
     return new;
@@ -142,12 +165,38 @@ begin
   -- Solo se lo spostamento è avvenuto per davvero (`v_spostata`): se la colonna
   -- portava un recapito SCELTO, l'oblio continua a passare da lì e non c'è niente
   -- da riagganciare.
+  -- L'intero blocco è protetto come quello sopra, e per la stessa ragione elevata a
+  -- potenza: `public.legacy_contacts` è una tabella di UN'ALTRA migration. Se questa
+  -- girasse senza la 0012 applicata, o dopo il suo rollback (che droppa la tabella e
+  -- NON droppa questo trigger), ogni conferma di cambio email morirebbe su
+  -- «relation does not exist» — di nuovo la persona bloccata fuori dal proprio
+  -- indirizzo, per una tabella che con l'accesso non c'entra. `undefined_table` è
+  -- l'unica classe inghiottita: tutto il resto deve continuare a fallire rumorosamente.
   if v_spostata then
-    update public.legacy_contacts
-       set claimed_by = new.id,
-           claimed_at = now()
-     where email_norm = lower(btrim(old.email))
-       and claimed_by is null;
+    begin
+      update public.legacy_contacts
+         set claimed_by = new.id,
+             claimed_at = now()
+       where email_norm = lower(btrim(old.email))
+         and claimed_by is null;
+
+      -- Stessa cortesia della 0012 (`claim_legacy_contact`): si riempiono SOLO le
+      -- colonne rimaste vuote. Senza questa parte la rivendicazione qui sarebbe
+      -- PEGGIORE del non farla — toglierebbe la riga dall'insieme non-rivendicato
+      -- su cui lavorerà la passata di riconciliazione, e quella persona perderebbe
+      -- la precompilazione per sempre, in silenzio.
+      if found then
+        update public.profiles p
+           set phone    = coalesce(p.phone,    l.phone),
+               city     = coalesce(p.city,     l.city),
+               province = coalesce(p.province, l.province)
+          from public.legacy_contacts l
+         where p.id = new.id
+           and l.email_norm = lower(btrim(old.email));
+      end if;
+    exception when undefined_table then
+      return new;
+    end;
   end if;
 
   return new;
