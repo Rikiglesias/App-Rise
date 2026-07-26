@@ -342,10 +342,11 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
--- T12 (NON-REGRESSIONE sul replace): il corpo del trigger è ripartito dalla 0011.
--- Se qualcuno lo riscrivesse dalla 0007 o dalla 0004, contact_email e la guardia
--- relay sparirebbero; se dalla 0004, anche country e la provincia estera. Qui si
--- verifica che tutto sia ancora vivo in un colpo solo, su un profilo estero.
+-- T12 (NON-REGRESSIONE): la 0012 NON riscrive `handle_new_user`, e questo test è la
+-- prova che quel corpo è rimasto quello della 0011. Se un domani qualcuno la
+-- riscrivesse ripartendo dalla 0007 o dalla 0004, contact_email e la guardia relay
+-- sparirebbero — e dalla 0004 anche country e la provincia estera. Tutto verificato
+-- in un colpo solo, su un profilo estero.
 -- ---------------------------------------------------------------------------
 insert into auth.users (id, email, raw_user_meta_data)
 values (
@@ -406,10 +407,12 @@ declare v boolean;
 begin
   foreach v in array array[
     has_function_privilege('anon', 'public.handle_new_user()', 'EXECUTE'),
-    has_function_privilege('authenticated', 'public.handle_new_user()', 'EXECUTE')
+    has_function_privilege('authenticated', 'public.handle_new_user()', 'EXECUTE'),
+    has_function_privilege('anon', 'public.claim_legacy_contact()', 'EXECUTE'),
+    has_function_privilege('authenticated', 'public.claim_legacy_contact()', 'EXECUTE')
   ] loop
     if v then
-      raise exception 'T14 FAIL: EXECUTE su handle_new_user è ancora concesso';
+      raise exception 'T14 FAIL: EXECUTE su una funzione del signup è ancora concesso';
     end if;
   end loop;
   raise notice 'T14 PASS: nessun EXECUTE per anon/authenticated';
@@ -432,12 +435,78 @@ begin
     raise exception 'T15 FAIL: % trigger on_auth_user_created, atteso 1', n;
   end if;
 
+  select count(*) into n from pg_trigger
+  where tgrelid = 'public.profiles'::regclass
+    and tgname = 'on_profile_claim_legacy'
+    and not tgisinternal;
+  if n <> 1 then
+    raise exception 'T15 FAIL: % trigger on_profile_claim_legacy, atteso 1', n;
+  end if;
+
   select count(*) into n from pg_indexes
   where schemaname = 'public' and indexname = 'legacy_contacts_claimed_by_idx';
   if n <> 1 then
     raise exception 'T15 FAIL: % indici legacy_contacts_claimed_by_idx, atteso 1', n;
   end if;
   raise notice 'T15 PASS: un solo trigger e un solo indice dopo la riesecuzione';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T16 (IL CASO CHE HA SPOSTATO IL TRIGGER): un profilo può nascere anche
+-- dall'`upsert` dell'app (`useProfileForm.ts:287`), senza passare da
+-- `handle_new_user`. Finché l'aggancio viveva dentro quella funzione, chi arrivava
+-- da qui non vedeva mai il proprio storico — in silenzio, senza errori. Qui si
+-- simula esattamente quel percorso: utente SENZA `birth_date` nei metadati (il
+-- trigger su auth.users non crea nulla), profilo inserito a mano dopo.
+-- ---------------------------------------------------------------------------
+insert into public.legacy_contacts (id, email_norm, phone, city, province, source)
+values ('00000000-0000-0000-0000-0000000000f6', 'daapp@esempio.it',
+        '+393339990006', 'Verona', 'VR', 'access');
+
+insert into auth.users (id, email, raw_user_meta_data)
+values (
+  '00000000-0000-0000-0000-0000000000e8',
+  'daapp@esempio.it',
+  jsonb_build_object('name', 'Nato Dall App')   -- niente birth_date → nessun profilo
+);
+
+do $$
+declare n int;
+begin
+  select count(*) into n from public.profiles
+  where id = '00000000-0000-0000-0000-0000000000e8';
+  if n <> 0 then
+    raise exception 'T16 SETUP FAIL: il profilo esiste già, il percorso simulato non è quello dell''app';
+  end if;
+end $$;
+
+insert into public.profiles
+  (id, first_name, last_name, birth_date, privacy_consent_at, country, contact_email)
+values (
+  '00000000-0000-0000-0000-0000000000e8',
+  'Nato', 'DallApp', '1983-04-04', now(), 'IT', 'daapp@esempio.it'
+);
+
+do $$
+declare r record;
+begin
+  select p.phone, p.city, p.province, l.claimed_by
+    into r
+  from public.profiles p
+  join public.legacy_contacts l on l.id = '00000000-0000-0000-0000-0000000000f6'
+  where p.id = '00000000-0000-0000-0000-0000000000e8';
+
+  if r.claimed_by is distinct from '00000000-0000-0000-0000-0000000000e8'::uuid then
+    raise exception 'T16 FAIL: profilo nato dall''app, riga storica NON rivendicata (claimed_by=%)',
+      coalesce(r.claimed_by::text, '<null>');
+  end if;
+  if r.phone is distinct from '+393339990006'
+     or r.city is distinct from 'Verona'
+     or r.province is distinct from 'VR' then
+    raise exception 'T16 FAIL: campi non colmati sul percorso app (phone=%, city=%, province=%)',
+      coalesce(r.phone, '<null>'), coalesce(r.city, '<null>'), coalesce(r.province, '<null>');
+  end if;
+  raise notice 'T16 PASS: anche il profilo nato dall''app aggancia il suo storico';
 end $$;
 
 -- Pulizia: le righe di prova non devono sopravvivere al test. I profili scendono
@@ -449,7 +518,8 @@ delete from auth.users where id in (
   '00000000-0000-0000-0000-0000000000e3',
   '00000000-0000-0000-0000-0000000000e5',
   '00000000-0000-0000-0000-0000000000e6',
-  '00000000-0000-0000-0000-0000000000e7'
+  '00000000-0000-0000-0000-0000000000e7',
+  '00000000-0000-0000-0000-0000000000e8'
 );
 delete from public.legacy_contacts where source = 'access';
 
