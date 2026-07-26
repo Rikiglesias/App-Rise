@@ -84,16 +84,9 @@ jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => {
   );
   return {
     ...actual,
-    // Il modulo nativo RNGoogleSignin non è registrato in jest, ma il mock JS di
-    // @react-native-google-signin/google-signin sì: facciamo passare la sonda
-    // non-enforcing di loadGoogleSignin (socialAuth) così i test del login Google
-    // raggiungono il mock invece di uscire subito.
-    get: name => {
-      if (name === 'RNGoogleSignin') {
-        return {};
-      }
-      return actual.get(name);
-    },
+    // `get` non è più sovrascritto: serviva solo a far passare la sonda
+    // non-enforcing del caricamento lazy di google-signin, rimosso col login
+    // social. Lo spread di `actual` lo espone già com'è.
     getEnforcing: name => {
       if (name === 'DevMenu') {
         return {};
@@ -272,29 +265,9 @@ jest.mock('expo-blur', () => {
   };
 });
 
-// Mock social auth native modules (no native runtime in Jest)
-jest.mock('expo-apple-authentication', () => ({
-  signInAsync: jest.fn(() =>
-    Promise.resolve({ identityToken: 'apple-token-mock' })
-  ),
-  isAvailableAsync: jest.fn(() => Promise.resolve(true)),
-  AppleAuthenticationScope: { FULL_NAME: 0, EMAIL: 1 },
-  AppleAuthenticationButton: 'AppleAuthenticationButton',
-  AppleAuthenticationButtonType: { SIGN_IN: 0, CONTINUE: 1, SIGN_UP: 2 },
-  AppleAuthenticationButtonStyle: { WHITE: 0, WHITE_OUTLINE: 1, BLACK: 2 },
-}));
-
-jest.mock('@react-native-google-signin/google-signin', () => ({
-  GoogleSignin: {
-    configure: jest.fn(),
-    hasPlayServices: jest.fn(() => Promise.resolve(true)),
-    signIn: jest.fn(() =>
-      Promise.resolve({ type: 'success', data: { idToken: 'google-token-mock' } })
-    ),
-  },
-  GoogleSigninButton: 'GoogleSigninButton',
-  statusCodes: {},
-}));
+// NB: qui vivevano i mock di expo-apple-authentication e google-signin. Rimossi
+// con il login social (2026-07-26): le due librerie non sono più dipendenze del
+// progetto, quindi un jest.mock su di esse fallirebbe a risolvere il modulo.
 
 // Mock @react-native-community/datetimepicker (modulo nativo): nei test renderizza un
 // Pressable che, premuto, conferma una data FISSA valida (1990-01-01, adulto) per

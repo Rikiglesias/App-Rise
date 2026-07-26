@@ -95,14 +95,17 @@ describe('AuthContext', () => {
     expect(supabase.auth.signOut).toHaveBeenCalled();
   });
 
-  it('deleteAccountNow inoltra appleAuthCode alla Edge Function', async () => {
+  // Il gemello di questo test verificava l'inoltro dell'appleAuthCode. Con il
+  // login social rimosso la chiamata non porta più nulla: l'identità del
+  // chiamante sta tutta nel JWT, e il corpo resta vuoto per costruzione.
+  it('deleteAccountNow invoca la Edge Function con corpo vuoto', async () => {
     const { getByText } = renderAuth();
     await waitFor(() => getByText('unauthenticated'));
     await act(async () => {
-      await getAuth().deleteAccountNow('apple-code-123');
+      await getAuth().deleteAccountNow();
     });
     expect(supabase.functions.invoke).toHaveBeenCalledWith('delete-account', {
-      body: { appleAuthCode: 'apple-code-123' },
+      body: {},
     });
   });
 
