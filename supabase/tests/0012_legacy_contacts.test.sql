@@ -583,4 +583,41 @@ delete from auth.users where id in (
 );
 delete from public.legacy_contacts where source = 'access';
 
+-- ---------------------------------------------------------------------------
+-- T18 (IL ROLLBACK È UNA PROMESSA, QUINDI SI TESTA): la procedura di
+-- disinstallazione scritta nell'intestazione della migration deve lasciare un
+-- database in cui ci si registra ancora.
+-- Va per ULTIMO perché smonta gli oggetti che tutti i test precedenti usano.
+--
+-- Perché esiste: la prima versione dell'intestazione diceva
+-- `drop table public.legacy_contacts cascade;` e basta. È FALSO e rompe le
+-- iscrizioni — il CASCADE non porta via il trigger (che dipende dalla FUNZIONE,
+-- non dalla tabella) e il corpo di una funzione plpgsql si risolve a ogni
+-- esecuzione, non alla creazione: il primo profilo inserito muore con «relation
+-- does not exist», dentro `handle_new_user`. Scoperto provandolo, non leggendolo.
+-- Si disinstalla dal consumatore verso il produttore: trigger, funzione, tabella.
+-- ---------------------------------------------------------------------------
+drop trigger if exists on_profile_claim_legacy on public.profiles;
+drop function if exists public.claim_legacy_contact();
+drop table if exists public.legacy_contacts;
+
+insert into auth.users (id, email, raw_user_meta_data)
+values ('00000000-0000-0000-0000-0000000000ff', 'dopo.rollback@esempio.it',
+  jsonb_build_object('first_name', 'Dopo', 'last_name', 'Rollback',
+                     'country', 'IT', 'birth_date', '1990-01-01'));
+
+do $$
+declare v text;
+begin
+  select contact_email into v from public.profiles
+  where id = '00000000-0000-0000-0000-0000000000ff';
+  if v is distinct from 'dopo.rollback@esempio.it' then
+    raise exception 'T18 FAIL: dopo il rollback la registrazione è rotta (contact_email=%)',
+      coalesce(v, '<null>');
+  end if;
+  raise notice 'T18 PASS: il rollback documentato lascia un database funzionante';
+end $$;
+
+delete from auth.users where id = '00000000-0000-0000-0000-0000000000ff';
+
 select 'ALL TESTS PASS' as esito;
