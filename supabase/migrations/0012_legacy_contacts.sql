@@ -12,9 +12,23 @@
 -- COSA FA, in due pezzi:
 --   1. `public.legacy_contacts` — l'archivio importato, con tutti i campi nullable
 --      tranne la chiave di aggancio e la provenienza.
---   2. l'aggancio dentro `handle_new_user`: alla nascita di un profilo si cerca la
---      riga storica con la stessa email, si riempiono SOLO le colonne che il nuovo
---      profilo ha lasciato vuote, e la riga si marca come rivendicata.
+--   2. l'aggancio su `public.profiles`: alla nascita di un profilo si cerca la riga
+--      storica con la stessa email, si riempiono SOLO le colonne che il nuovo profilo
+--      ha lasciato vuote, e la riga si marca come rivendicata.
+--
+-- DOVE VIVE L'AGGANCIO, e perché NON dentro `handle_new_user`. Un profilo può
+-- nascere in DUE modi: dal trigger su `auth.users` (registrazione email/password) e
+-- dall'`upsert` che fa l'app quando si completa il profilo
+-- (`useProfileForm.ts:287` — un upsert crea la riga se non c'è). Mettere l'aggancio
+-- dentro `handle_new_user` ne avrebbe coperto UNO SOLO: chi arriva dal secondo
+-- percorso non avrebbe mai visto il proprio storico, in silenzio e senza errori.
+-- Un trigger BEFORE INSERT su `profiles` è il punto in cui i due percorsi si
+-- incontrano davvero — ed è anche l'unico che non obbliga a riscrivere
+-- `handle_new_user`, cioè a rifare ogni volta il rebase del suo corpo (trappola già
+-- costata un giro con la 0011).
+-- BEFORE e non AFTER: si scrive dentro NEW, senza un secondo UPDATE sulla riga
+-- appena inserita. Solo INSERT e non UPDATE: si rivendica alla nascita: rifarlo a
+-- ogni modifica del profilo sarebbe rumore, non copertura.
 --
 -- I CONSENSI NON SI EREDITANO (Art. 7). La riga storica precompila dei dati; non
 -- porta con sé un consenso. `privacy_consent_at` e `consent_events` restano quelli
@@ -27,10 +41,10 @@
 -- finché nessuno importa righe, la tabella è vuota e il trigger si comporta
 -- esattamente come prima. La decisione blocca l'IMPORT, non questa migration.
 --
--- BASE DI PARTENZA DEL TRIGGER = la versione della 0011, non la 0007 e non la 0004.
--- È la stessa trappola già costata un giro: `contact_email` e la guardia relay sono
--- arrivate con la 0011, `country`/`nullif(province,'')` con la 0007. Ripartire da un
--- corpo vecchio le cancellerebbe in silenzio.
+-- `handle_new_user` NON viene toccata da questa migration. È una scelta: ogni
+-- `create or replace` di quella funzione obbliga a ripartire dal corpo più recente
+-- (0011) e un errore lì cancella in silenzio pezzi arrivati con le migration
+-- precedenti — è successo davvero. Meno volte la si riscrive, meglio è.
 --
 -- L'OBLIO ARRIVA ANCHE QUI. `claimed_by` è `on delete cascade`, non `set null` come
 -- ipotizzato in fase di design: quando la persona cancella l'account, la sua riga
@@ -121,100 +135,56 @@ revoke all on public.legacy_contacts from anon, authenticated;
 -- ---------------------------------------------------------------------------
 -- 3. L'aggancio alla nascita del profilo
 -- ---------------------------------------------------------------------------
-create or replace function public.handle_new_user()
+-- Chiave di ricerca = `contact_email` del profilo. È la colonna che la 0011 e l'app
+-- riempiono su ENTRAMBI i percorsi di nascita, ed è la stessa che il quadro dichiara
+-- come chiave di riconoscimento verso l'anagrafica importata.
+-- La guardia relay è ripetuta anche qui: né la 0011 né l'app scrivono mai un alias
+-- in quella colonna, ma se un giorno ci finisse, un alias non deve poter pescare la
+-- riga storica di nessuno. Costa una riga.
+create or replace function public.claim_legacy_contact()
 returns trigger
 language plpgsql
 security definer
 set search_path = ''
 as $$
 declare
-  v_meta jsonb := new.raw_user_meta_data;
-  v_version text;
-  v_marketing boolean := coalesce((v_meta->>'marketing_consent')::boolean, false);
-  -- La mail dell'account vale come recapito solo se è un indirizzo vero: un alias
-  -- Apple Private Relay non è la mail della persona e non deve finire in colonna.
-  v_account_email text := case
-    when new.email like '%@privaterelay.appleid.com' then null
-    else new.email
-  end;
-  v_contact_email text := coalesce(
-    nullif(v_meta->>'contact_email', ''),
-    v_account_email
-  );
+  v_key text := lower(btrim(new.contact_email));
   v_legacy public.legacy_contacts;
 begin
-  -- Marker del form email: birth_date è sempre presente nel signup email, mai nel social.
-  if v_meta ? 'birth_date' then
-    insert into public.profiles (
-      id, first_name, last_name, phone, city, province, country,
-      birth_date, privacy_consent_at, marketing_consent, contact_email
-    )
-    values (
-      new.id,
-      v_meta->>'first_name',
-      v_meta->>'last_name',
-      v_meta->>'phone',
-      v_meta->>'city',
-      nullif(v_meta->>'province', ''),
-      coalesce(nullif(v_meta->>'country', ''), 'IT'),
-      (v_meta->>'birth_date')::date,
-      now(),
-      v_marketing,
-      v_contact_email
-    );
+  if v_key is null
+     or v_key = ''
+     or v_key like '%@privaterelay.appleid.com' then
+    return new;
+  end if;
 
-    -- Versione informativa = ultima pubblicata (server-trusted, non client-supplied).
-    select version into v_version
-    from public.policy_versions
-    order by published_at desc
-    limit 1;
+  -- `and claimed_by is null` è la guardia che rende l'operazione ripetibile e che
+  -- impedisce di strappare una riga già rivendicata da qualcun altro.
+  update public.legacy_contacts
+     set claimed_by = new.id,
+         claimed_at = now()
+   where email_norm = v_key
+     and claimed_by is null
+  returning * into v_legacy;
 
-    insert into public.consent_events
-      (user_id, purpose, action, policy_version, legal_basis, channel)
-    values
-      (new.id, 'privacy_notice', 'granted', v_version, 'consent', 'signup');
-
-    if v_marketing then
-      insert into public.consent_events
-        (user_id, purpose, action, policy_version, legal_basis, channel)
-      values
-        (new.id, 'marketing', 'granted', v_version, 'consent', 'signup');
-    end if;
-
-    -- Aggancio all'anagrafica storica (F-EMAIL.24).
-    -- `and claimed_by is null` è la guardia che rende l'operazione ripetibile e che
-    -- impedisce di strappare una riga già rivendicata da qualcun altro.
-    if v_contact_email is not null then
-      update public.legacy_contacts
-         set claimed_by = new.id,
-             claimed_at = now()
-       where email_norm = lower(btrim(v_contact_email))
-         and claimed_by is null
-      returning * into v_legacy;
-
-      -- Si riempiono SOLO le colonne rimaste vuote: ciò che la persona ha appena
-      -- scritto nel form vince sempre sull'archivio. Dopo la 0010 le uniche
-      -- nullable che l'archivio può colmare sono queste tre — `birth_date`,
-      -- `first_name`, `last_name` e `country` arrivano obbligatorie dal form, e
-      -- sovrascriverle con un dato vecchio sarebbe una regressione, non un recupero.
-      if v_legacy.id is not null then
-        update public.profiles
-           set phone    = coalesce(phone,    v_legacy.phone),
-               city     = coalesce(city,     v_legacy.city),
-               province = coalesce(province, v_legacy.province)
-         where id = new.id;
-      end if;
-    end if;
+  -- Si riempiono SOLO le colonne rimaste vuote: ciò che la persona ha appena
+  -- scritto nel form vince sempre sull'archivio. Dopo la 0010 le uniche nullable
+  -- che l'archivio può colmare sono queste tre — `first_name`, `last_name`,
+  -- `birth_date` e `country` arrivano obbligatori, e sovrascriverli con un dato
+  -- vecchio sarebbe una regressione, non un recupero.
+  if v_legacy.id is not null then
+    new.phone    := coalesce(new.phone,    v_legacy.phone);
+    new.city     := coalesce(new.city,     v_legacy.city);
+    new.province := coalesce(new.province, v_legacy.province);
   end if;
 
   return new;
 end;
 $$;
 
--- Come 0006/0011: niente superficie RPC (il trigger fira comunque senza il grant).
-revoke execute on function public.handle_new_user() from public, anon, authenticated;
+-- Come 0006/0008/0011: niente superficie RPC (il trigger fira comunque senza grant).
+revoke execute on function public.claim_legacy_contact() from public, anon, authenticated;
 
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+drop trigger if exists on_profile_claim_legacy on public.profiles;
+create trigger on_profile_claim_legacy
+  before insert on public.profiles
+  for each row execute procedure public.claim_legacy_contact();
