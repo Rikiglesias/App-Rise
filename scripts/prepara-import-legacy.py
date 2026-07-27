@@ -272,9 +272,6 @@ def main() -> int:
 
 begin;
 
-insert into public.legacy_contacts
-  (email_norm, first_name, last_name, phone, city, province, country, birth_date, source, raw)
-values
 """
 
     pezzi = []
@@ -315,8 +312,12 @@ commit;
     print(f"Telefoni NON normalizzati (restano solo in `raw`): {len(tel_rifiutati)}")
     print(f"Date di nascita non interpretabili ..............: {len(date_rifiutate)}")
     if prov_ignote:
-        print(f"⚠️  Province senza sigla nota (non tradotte): {sorted(prov_ignote)}")
-        print("    → aggiungerle alla mappa PROVINCE in questo script e rigenerare.")
+        # Niente simboli fuori ASCII in questo avviso: la console Windows usa cp1252 e
+        # un'emoji qui fa morire lo script con UnicodeEncodeError — cioè proprio quando
+        # deve dire che una provincia non è stata tradotta. L'avviso che uccide il
+        # programma invece di avvisare è peggio dell'avviso che manca.
+        print(f"ATTENZIONE: province senza sigla nota, NON tradotte: {sorted(prov_ignote)}")
+        print("    -> aggiungerle alla mappa PROVINCE in questo script e rigenerare.")
     if scartate:
         print()
         print("Motivi degli scarti (primi 10):")
