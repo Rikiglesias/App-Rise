@@ -45,8 +45,6 @@ In pratica servono cinque cose.
    e dall'altra resta quello vecchio. Parlo solo della pagina del nostro spazio, dove da quello che
    vediamo è una scelta del template e non del vostro sistema di accesso: se lì c'è un vincolo
    tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
-   Una conseguenza da sapere subito: da noi ci si registra da maggiorenni, quindi con un ingresso
-   solo chi ha meno di 18 anni non entra più su quella pagina. Se per voi conta, dimmelo.
 
 5. Chi si è già registrato da voi non deve rifare la registrazione: entra col nostro pulsante e
    ritrova quello che aveva. La persona arriva con la stessa email che ha già da voi, e il vostro

@@ -160,8 +160,15 @@ Per chi mette le mani nella configurazione. Se non vi serve, il documento finisc
 | `email` | L'indirizzo dell'account, sempre reale e confermato: da noi si entra solo dopo aver cliccato il messaggio di conferma |
 | `email_verified` | Indica se l'indirizzo risulta confermato. **Può valere `false`**: non deve far rifiutare la creazione dell'account |
 
-**Niente telefono, niente indirizzo, niente data di nascita.** Se vi servono, li chiedete voi al
-primo accesso.
+**Se vi serve altro — telefono, città, provincia — ve lo mandiamo noi nello stesso momento.**
+Non dovete chiedere niente alla persona: sarebbe un modulo in più proprio dove stiamo togliendo
+quello che c'è. Tecnicamente si aggiunge alla lista qui sopra, con i nomi che il protocollo prevede
+già (`phone_number`, `address`, `birthdate`).
+
+Diteci **quali di questi vi servono davvero** e per farci cosa: non li mandiamo tutti per abitudine,
+perché ogni dato in più è un dato in più da custodire per entrambi. Ma quelli che servono al
+servizio arrivano da noi, al primo accesso e a ogni accesso successivo, senza che la persona debba
+scrivere niente due volte.
 
 **Un impegno che vi chiediamo di mettere per iscritto nell'accordo**: leggere l'identità solo dai
 dati dell'accesso (ID token e UserInfo), senza usare quel token per chiamare altre nostre
@@ -176,6 +183,5 @@ qualcuno in pubblico col proprio nome senza che l'abbia scelto.
 **Un limite da conoscere prima**: chi arriva dalla nostra app apre il vostro sito nel browser del
 telefono, che non conosce la sessione dell'app. Al primo giro deve fare l'accesso lì; dopo resta.
 
-**Un vincolo nostro che ricade su di voi**: la nostra registrazione è riservata ai maggiorenni.
-Con un solo ingresso, chi ha meno di 18 anni non potrà più iscriversi sul nostro spazio. È una
-scelta nostra, non un limite vostro, ma tocca i vostri numeri ed è giusto saperlo prima.
+**Sull'età**: stiamo aprendo la registrazione anche ai minorenni, con le tutele che la legge
+prevede per loro. Se sul vostro lato questo comporta qualcosa da sapere o da configurare, ditecelo.
