@@ -156,6 +156,7 @@ FUORI_WINANSI = {
     "✅": "[fatto]",
     "❌": "[no]",
     "🔴": "[urgente]",
+    "🟠": "[presto]",  # fra rosso e giallo: va fatto, ma non e' il primo della fila
     "🟡": "[medio]",
     "🔵": "[in coda]",
     "⚪": "[con calma]",

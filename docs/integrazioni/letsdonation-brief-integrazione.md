@@ -17,8 +17,27 @@
      Attenzione al verso: la rimozione RAFFORZA la proposta (l'indirizzo che arriva al partner è
      sempre reale e verificato). Se un domani i social rientrassero, quei 4 punti vanno rimessi.
 
+     AGGIUNTO 2026-07-27 — §4.1 «Dopo il primo accesso» + domande 19-22 (fase F-SYNC, richiesta di
+     Riccardo). Il brief descriveva solo la NASCITA dell'identità, non il suo ciclo di vita: con due
+     anagrafiche separate ogni evento non propagato è una divergenza silenziosa. La sezione è entrata
+     DENTRO la §4 e le domande in CODA alla §5 proprio per non rinumerare (stesso vincolo di sopra).
+     Il gradino 1 delle tre opzioni è già coperto dalla domanda 8 preesistente: non duplicarlo.
+     Fonti dietro le scelte, per chi le rimette in discussione: l'obbligo di propagare la cancellazione
+     è l'art. 19 GDPR (comunicazione a ogni destinatario), NON l'art. 17(2) che riguarda i dati resi
+     pubblici — è la differenza che rende l'obbligo applicabile al nostro caso. I nomi degli eventi
+     vengono da OpenID RISC 1.0 (Final 2025-09-02, schemas.openid.net/secevent/risc/event-type/).
+     Lato nostro il canale si costruisce con i Database Webhooks Supabase, che girano su pg_net:
+     ⚠️ verificato il 2026-07-27 che pg_net è DISPONIBILE ma NON INSTALLATO sul nostro progetto →
+     abilitarlo è un prerequisito, non una cosa che abbiamo già. Nel documento infatti si scrive
+     «la costruiamo noi», mai «ce l'abbiamo».
+
      Stato: documento tecnico di supporto, NON ancora inviato. Si consegna su richiesta del loro
      team tecnico. Quello che si manda adesso è letsdonation-proposta-operativa.md (una pagina).
+     ⚠️ CONTRADDIZIONE APERTA (rilevata 2026-07-27, da sciogliere con Riccardo): il lastchat #31
+     registra come decisione vincolante «cosa si manda a Michele: i DUE PDF», mentre questa nota e
+     il binding (partner-identita.md, § ZUCCHETTI) dicono che il brief NON si manda adesso perché
+     «troppo lungo e complicato» — parole sue del 25/07. Due fonti contro una. Con l'aggiunta di
+     oggi il brief è ancora più lungo, quindi la domanda conta.
      Il nome del referente tecnico non è confermato: non va scritto da nessuna parte.
      Quadro d'insieme su dati e archivi: scambio-dati-quadro.md.
      Riscritto il 2026-07-25 a valle di una mappatura completa degli scenari; intestazione resa
@@ -223,6 +242,84 @@ con quel token.
   transazioni. Siete titolari del vostro.
 - **Nessuno dei due** entra nei dati dell'altro.
 
+### 4.1 Dopo il primo accesso: che succede quando qualcosa cambia
+
+Tutto quello scritto fin qui riguarda **come una persona entra**. Ma un'anagrafica non sta ferma:
+la gente cambia indirizzo email, cambia idea sulle comunicazioni, e a volte chiede di essere
+cancellata. Da quel momento in poi abbiamo **due schede della stessa persona in due database
+diversi**, e ogni cambiamento che non passa dall'una all'altra le fa divergere **senza che nessuno
+se ne accorga**. È lo stesso problema che il pulsante unico risolve alla nascita, spostato in
+avanti nel tempo.
+
+Questa parte non è un dettaglio da rimandare: contiene l'unico punto in cui **entrambi abbiamo un
+obbligo di legge**, ed è la cancellazione.
+
+**Cosa cambia dalla nostra parte, e cosa ne vedete voi oggi**
+
+| Cosa succede da noi | Cosa vedreste voi oggi | Quanto può aspettare |
+| --- | --- | --- |
+| **La persona chiede la cancellazione dei suoi dati** | Niente. Resterebbe nel vostro database dopo averci chiesto di sparire | 🔴 **Non può aspettare.** È l'unico caso con un obbligo per entrambi (vedi sotto) |
+| Revoca il consenso alle comunicazioni | Niente: continuereste a scriverle | 🔴 Giorni, non mesi. Ogni messaggio in più è un trattamento senza base |
+| Cambia l'indirizzo email | Niente finché non rientra da voi | 🟡 Al prossimo accesso va bene, **se** aggiornate l'anagrafica dai dati del login (domanda 8) |
+| Cambia nome o cognome | Come sopra | 🟡 Al prossimo accesso |
+| Completa il profilo che aveva lasciato a metà | Come sopra | 🟡 Al prossimo accesso |
+| Sospendiamo o blocchiamo un account | Niente: da voi resta attivo | 🟠 Subito, se il motivo è un abuso |
+
+**Cosa cambia dalla vostra parte, e cosa ne sappiamo noi**
+
+| Cosa succede da voi | Cosa ne sappiamo | La domanda vera |
+| --- | --- | --- |
+| La persona cancella l'account **da voi** | Niente | Il codice di provenienza che le avevamo associato resta valido? Lo teniamo o lo buttiamo? |
+| Cambia i consensi raccolti dal **vostro** form (nickname, visibilità nelle liste, community) | Niente: sono campi che noi non abbiamo | Sono vostri e restano vostri — ma se una persona ci chiede «cosa avete su di me», dobbiamo saper dire che quelli stanno da voi |
+| Completa un ordine o una donazione | Niente: oggi il codice viaggia in una direzione sola | Torna indietro qualcosa, o resta così? |
+
+**Situazioni che non sono eventi, ma stati che nascono già disallineati**
+
+- Chi si era registrato da voi **prima** del pulsante, con un indirizzo diverso da quello che usa
+  da noi: sono due schede che non si riconoscono. Si chiude con il collegamento del §2.4, non da solo.
+- Chi ha **meno di 18 anni** ed è già registrato da voi: da noi non può entrare (domanda 17),
+  quindi resta una scheda vostra che il nostro sistema non vedrà mai.
+- Chi ha **perso l'accesso alla propria casella email**: oggi resta bloccato fuori da entrambi i
+  sistemi, perché l'email è la chiave di riconoscimento per tutti e due.
+- Chi dona **da ospite**, senza account: nessun collegamento è possibile, ed è voluto.
+- Una richiesta di **accesso ai propri dati**: chi risponde, e l'elenco che consegniamo comprende
+  anche quello che sta da voi? Oggi la risposta onesta è che ciascuno risponde del proprio.
+
+**Il punto con obbligo di legge, e perché lo mettiamo per primo.** Quando una persona ci chiede la
+cancellazione, la norma non ci chiede solo di cancellare i nostri archivi: l'**art. 19 del GDPR**
+obbliga chi ha comunicato quei dati a informare **ogni destinatario** a cui li ha comunicati, salvo
+che sia impossibile o richieda uno sforzo sproporzionato. Con il «Login con RAH» voi diventate un
+destinatario. Un modo per dirvelo deve esistere — e vale anche nel verso opposto, per i dati che
+avete comunicato voi.
+
+**Come si parlano i due sistemi, in tre gradini.** Non serve fare tutto: ogni gradino ha senso da
+solo, e il primo probabilmente ce l'avete già.
+
+1. **Al prossimo accesso** — costo zero, è già dentro il login. Se a ogni accesso aggiornate
+   l'anagrafica con i dati che arrivano (domanda 8), email e nome si riallineano da soli. Copre
+   quasi tutto **tranne** ciò che non può aspettare che la persona rientri: se ha chiesto di essere
+   cancellata, non rientrerà mai.
+2. **Un indirizzo che ci dite voi, dove mandarvi le poche cose urgenti** — è il gradino che chiude
+   la cancellazione e la revoca dei consensi. Vi mandiamo un messaggio con dentro il codice della
+   persona e cosa è successo; voi rispondete che l'avete ricevuto. Costruiamo noi la parte che
+   invia; a voi serve solo un indirizzo che riceve. **Se dovessimo sceglierne uno solo, è questo.**
+3. **Tutti gli altri eventi**, se un domani vi interessa: stessa strada del gradino 2, con più tipi
+   di messaggio.
+
+**Sulla forma: non ne inventiamo una nostra.** Esiste uno standard che descrive esattamente questi
+eventi — si chiama *OpenID Shared Signals*, e la parte che ci riguarda (*RISC*) è diventata
+definitiva a settembre 2025. Ha già un nome per ciascuna delle cose che ci servono: account
+cancellato (`account-purged`), account disattivato (`account-disabled`), identificativo cambiato
+(`identifier-changed`). Noi useremmo quei nomi. Se per voi è più comodo un messaggio JSON semplice
+concordato fra noi due, per noi va bene lo stesso: l'importante è che il canale esista, non che sia
+elegante. Lo diciamo perché scegliere uno standard già scritto costa meno che discutere un formato,
+e perché se un giorno userete una libreria che lo implementa, funziona senza rifare niente.
+
+**Una cosa che non si sposta con un messaggio: i consensi.** Se una persona revoca un consenso da
+noi, noi possiamo dirvelo; ma un consenso raccolto da voi, sul vostro form, resta vostro e non
+possiamo né trasmetterlo né presumerlo (è già la domanda 15). Il canale serve a **non tenere
+attivo** un trattamento che è stato revocato, non a spostare consensi da un archivio all'altro.
+
 ---
 
 ## 5. Cosa ci serve sapere da voi
@@ -283,6 +380,28 @@ serve comunque, anche se del login non se ne facesse nulla.
     un documento. Ci serve sapere quale atto esiste fra le due società e poterne avere copia. È
     indipendente dal «Login con RAH» e va chiusa comunque, perché è la stessa risposta che ci dice
     come trattare le anagrafiche del §2.4.
+
+**Le quattro qui sotto riguardano il §4.1** — cosa succede *dopo* il primo accesso. La 19 è
+l'unica del gruppo che ha un obbligo di legge dietro; le altre tre servono a capire da dove si
+parte, e una risposta «no, non ce l'abbiamo» è una risposta utile quanto un sì.
+
+19. **Quando una persona chiede la cancellazione dei propri dati, oggi come funziona da voi?** E
+    soprattutto: **c'è un modo per dirvelo da parte nostra?** Se una persona si cancella da noi,
+    l'art. 19 ci chiede di informare i destinatari a cui abbiamo comunicato i suoi dati, e con il
+    login diventate uno di quelli. Ci basterebbe un indirizzo a cui mandare un messaggio con il
+    codice della persona; la parte che invia la costruiamo noi. *Vale anche nel verso opposto: se
+    si cancella da voi, ce lo fate sapere?*
+20. **Supportate già qualche standard per lo scambio di questi eventi** — SCIM, OpenID Shared
+    Signals/RISC — o lo fate con altri partner in un modo vostro? Se esiste già qualcosa ci
+    adattiamo noi. Se non c'è niente, per noi va bene anche il messaggio più semplice possibile:
+    non è una richiesta di costruire un'infrastruttura.
+21. **Il codice di provenienza sull'ordine** (`rise_ref`, §7): se la persona cancella l'account da
+    voi, quel codice resta attaccato agli ordini passati? Ci interessa perché è un dato che
+    riconduce a una persona, e se lei ha chiesto di sparire deve sparire anche dove è riferito.
+22. **La revoca del consenso alle comunicazioni**: se una persona che è entrata dal nostro accesso
+    revoca da noi il consenso a essere contattata, avete un modo per recepirlo? Non parliamo di
+    trasferire consensi — quelli restano di chi li raccoglie (domanda 15) — ma di **fermare** un
+    invio che non ha più base.
 
 **Cosa vi forniremo noi**, quando entrambe le parti sono pronte: discovery URL
 (`…/.well-known/openid-configuration`), `client_id` e `client_secret` dedicati a voi, le redirect
