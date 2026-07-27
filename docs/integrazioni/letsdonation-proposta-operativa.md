@@ -6,8 +6,13 @@ AGGIORNATO 2026-07-26 dopo la rimozione del login Google/Apple: il punto 5 aveva
 prevedere» che era interamente il caso Apple «Nascondi la mia email». Con email+password come
 unico ingresso quel caso NON esiste più, e la promessa diventa più forte, non più debole:
 l'indirizzo che arriva a loro è sempre reale e confermato. Se un domani i social rientrassero,
-quel paragrafo va rimesso PRIMA di ripubblicare. Il documento tecnico dettagliato è `letsdonation-brief-integrazione.md`:
-si consegna SU RICHIESTA del loro team tecnico, non adesso. Perimetro degli scenari:
+quel paragrafo va rimesso PRIMA di ripubblicare.
+AGGIORNATO 2026-07-27 (sera): la scheda tecnica `letsdonation-brief-integrazione.md` si manda
+INSIEME a questa lettera - decisione di Riccardo, «dobbiamo andare entrambe assolutamente». La riga
+precedente diceva «si consegna su richiesta, non adesso» ed era anteriore alla decisione.
+Stessa passata: tolta la parola «istruzioni» dal punto 2 (era la stessa cornice paternalistica per
+cui la scheda tecnica e' stata riscritta) e tolta dal punto 4 la diagnosi su come sia fatto il loro
+sito. Perimetro degli scenari:
 `identita-matrice-scenari.md` (lato loro) e `app-gate-matrice.md` (lato nostro).
 Tutto ciò che sta FUORI da questo commento lo legge il destinatario: prima di rigenerare il
 PDF, rileggere la prima pagina come la leggerebbe lui.
@@ -31,8 +36,8 @@ In pratica servono cinque cose.
    che usate, il documento che vi hanno dato, o il contatto di chi l'ha collegato. Se invece da voi
    funziona in un altro modo, dimmelo e la strada la troviamo insieme.
 
-2. Noi prepariamo il nostro accesso e vi passiamo quello che serve per collegarlo, con le istruzioni
-   per chi gestisce il sito.
+2. Noi prepariamo il nostro accesso e vi passiamo quello che serve per collegarlo, insieme alla
+   scheda tecnica per chi ci mette le mani.
 
 3. Chi gestisce il vostro sito mette sulla pagina del nostro spazio il pulsante «Entra con Rise
    Against Hunger». Il pulsante apre una **nostra pagina web**: funziona anche da computer, senza
@@ -42,13 +47,12 @@ In pratica servono cinque cose.
 4. Nello stesso momento in cui il pulsante va online, il vostro modulo di registrazione su quella
    pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e due,
    della stessa persona nascono due schede che si allontanano subito — cambia indirizzo da una parte
-   e dall'altra resta quello vecchio. Parlo solo della pagina del nostro spazio, dove da quello che
-   vediamo è una scelta del template e non del vostro sistema di accesso: se lì c'è un vincolo
-   tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
+   e dall'altra resta quello vecchio. Parlo solo della pagina del nostro spazio: se lì c'è un
+   vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
 
 5. Chi si è già registrato da voi non deve rifare la registrazione: entra col nostro pulsante e
    ritrova quello che aveva. La persona arriva con la stessa email che ha già da voi, e il vostro
    sistema usa l'account che c'è già invece di aprirne un secondo. L'indirizzo che vi arriva è
-   sempre verificato.
+   sempre reale: da noi si entra solo dopo averlo confermato.
 
 Riccardo
