@@ -46,6 +46,20 @@
 -- account non ce l'hanno, quindi il loro indirizzo non risulterebbe «di qualcun altro» e
 -- resterebbe rubabile. Peggio: darebbe l'impressione di aver chiuso il buco.
 --
+-- RESIDUO DICHIARATO, trovato nella passata finale e non chiuso qui. L'aggancio vive su un
+-- BEFORE INSERT, cioè scatta alla nascita del profilo. Chi si registra con l'indirizzo A
+-- (che nell'archivio non c'è) e in seguito porta l'account sull'indirizzo B (che
+-- nell'archivio C'È) non si aggancia mai: al cambio email la 0013 guarda `old.email`,
+-- cioè copre il caso opposto — la riga registrata sotto l'indirizzo VECCHIO. Non lo
+-- risolvo qui perché estendere la 0013 a cercare anche sotto `new.email` significa far
+-- rivendicare una riga sulla base di un indirizzo che in quel preciso istante è appena
+-- cambiato: va deciso guardando i dati veri, ed è materia della passata di
+-- riconciliazione (0012 §4), dove le collisioni si vedono tutte insieme.
+-- Quante persone tocca, oggi: nessuna (0 profili). Query per contarle dopo l'import:
+--   select count(*) from public.legacy_contacts l
+--    join auth.users u on lower(btrim(u.email)) = l.email_norm
+--   where l.claimed_by is null;
+--
 -- ORDINE DI RILASCIO: dopo la 0014 (sostituisce di nuovo il corpo delle stesse funzioni).
 -- 🔴 **VA APPLICATA PRIMA DEL CARICAMENTO DELLE ANAGRAFICHE**, non prima del rilascio
 -- dell'app: è il caricamento che arma la falla.
