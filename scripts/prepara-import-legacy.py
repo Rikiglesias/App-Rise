@@ -267,8 +267,15 @@ def main() -> int:
 -- registrazioni vere. Chi si registra prima del caricamento e completa il profilo non
 -- si ricollegherà mai da solo al proprio storico (vedi l'avvertenza nella 0012).
 --
--- È RIESEGUIBILE: `on conflict (email_norm) do nothing`. Una seconda esecuzione non
--- duplica nulla e non sovrascrive le righe già rivendicate da qualcuno.
+-- È RIESEGUIBILE **SOLO PRIMA DEL RILASCIO**: `on conflict (email_norm) do nothing` non
+-- duplica nulla e non sovrascrive le righe già rivendicate.
+-- 🔴 DOPO che le persone hanno cominciato a usare l'app, RIESEGUIRLO FA DANNO: chi ha
+-- chiesto la cancellazione ha visto sparire la propria riga d'archivio insieme
+-- all'account (è il §4 della 0012), e questo file la RIMETTEREBBE DENTRO — perché
+-- `on conflict` protegge dai doppioni, non dai ritorni. Il risultato è una persona che
+-- ci aveva chiesto di sparire e che rientra nei nostri archivi senza saperlo.
+-- → una seconda esecuzione va fatta SOLO su un elenco ripulito da chi si è cancellato.
+-- Finché `profiles` è vuoto (verificato: 0 righe al 2026-07-27) il problema non esiste.
 
 begin;
 
