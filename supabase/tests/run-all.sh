@@ -25,6 +25,7 @@ PAIRS=(
   "0011_signup_contact_email"
   "0012_legacy_contacts"
   "0013_contact_email_follows_account"
+  "0014_claim_legacy_campi_vuoti"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 

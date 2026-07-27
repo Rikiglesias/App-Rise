@@ -587,8 +587,11 @@ delete from public.legacy_contacts where source = 'access';
 
 -- ---------------------------------------------------------------------------
 -- T19 (OBLIO SULLE RIGHE MAI RIVENDICATE): chi si è registrato PRIMA che l'archivio
--- venisse caricato non rivendica nulla — il suo profilo è già nato e il trigger di
--- aggancio non ripassa. Se cancella l'account, la cascata su `claimed_by` non vede
+-- venisse caricato non rivendica nulla finché non riapre il profilo — e chi non lo
+-- riapre mai non rivendica mai (il trigger di aggancio ripassa sull'`upsert` dell'app,
+-- ma solo quando quell'upsert avviene: T9 della suite 0014). Qui l'utente non salva
+-- mai il profilo, quindi la riga resta orfana. Se cancella l'account, la cascata su
+-- `claimed_by` non vede
 -- quella riga: resteremmo con una seconda copia dei suoi dati, più vecchia di quella
 -- che ci ha dato lui, invisibile nel suo export e sopravvissuta alla cancellazione.
 -- Qui si verifica che il trigger di oblio la porti via lo stesso.

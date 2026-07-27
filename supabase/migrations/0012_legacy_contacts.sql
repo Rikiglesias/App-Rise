@@ -71,16 +71,28 @@
 -- file cancella entrambi i casi, e NON è ridondante rispetto alla cascata.
 --
 -- ⚠️ VINCOLO DI SEQUENZA PER CHI FARÀ L'IMPORT — LEGGERE PRIMA DI CARICARE.
--- L'aggancio scatta SOLO alla nascita del profilo: il trigger è BEFORE INSERT, non
--- ripassa sui profili già esistenti. Quindi chi si registra PRIMA che le anagrafiche
--- siano caricate non rivendicherà mai la sua riga — il suo profilo è già nato, e
--- resterà scollegato dal suo storico per sempre, in silenzio.
--- → **l'import deve precedere le registrazioni vere** (coerente con F-EMAIL.6③:
---   import dopo l'informativa pubblicata, entrambi prima del primo rilascio).
--- → se per qualsiasi motivo qualcuno si registrasse nella finestra intermedia,
---   serve una passata di RICONCILIAZIONE una-tantum che agganci i profili già
---   esistenti per `email_norm`. Oggi NON esiste: va scritta in quel momento, non
---   dopo aver scoperto che manca.
+-- CORRETTO IL 2026-07-27: la versione precedente di questa nota diceva il falso, e va
+-- riportata per intero perché il ragionamento sbagliato era plausibile — «il trigger è
+-- BEFORE INSERT, quindi non ripassa sui profili già esistenti, quindi chi si registra
+-- prima dell'import resta scollegato dal suo storico per sempre».
+-- La seconda premessa è falsa. L'app non fa `insert`: fa `upsert`
+-- (`useProfileForm.ts:287`), cioè `insert … on conflict (id) do update`. La
+-- documentazione PostgreSQL è esplicita — «*the effects of all per-row BEFORE INSERT
+-- triggers are reflected in `excluded` values*» — i BEFORE INSERT scattano PRIMA che
+-- si sappia se ci sarà conflitto, quindi anche quando la riga finisce in UPDATE.
+-- Provato in T9 della suite 0014, non solo letto.
+-- → CONSEGUENZA VERA, che è migliore: chi si è registrato prima dell'import rivendica
+--   la propria riga **al primo salvataggio del profilo**, da solo, senza bisogno di
+--   alcuna passata di riconciliazione.
+-- → IL VINCOLO RESTA, ma per un motivo più stretto: chi non riapre MAI il profilo non
+--   fa mai un upsert, e quello resta scollegato. Non è più «tutti quelli della
+--   finestra intermedia», sono «quelli che non tornano».
+-- → quindi **l'import deve comunque precedere le registrazioni vere** (coerente con
+--   F-EMAIL.6③: import dopo l'informativa pubblicata, entrambi prima del primo
+--   rilascio) — ma se qualcuno si registrasse nel mezzo, il danno non è irreversibile.
+-- → la passata di RICONCILIAZIONE una-tantum per `email_norm` oggi NON esiste, e
+--   servirebbe solo per quel residuo. Va scritta in quel momento, non dopo aver
+--   scoperto che manca.
 --
 -- RESIDUO DICHIARATO (non risolto qui): le righe MAI rivendicate non hanno una
 -- scadenza. Sono dati personali di persone che non si registreranno mai, e prima o
@@ -234,8 +246,11 @@ create trigger on_profile_claim_legacy
 -- ---------------------------------------------------------------------------
 -- La cascata su `claimed_by` copre solo chi ha rivendicato la propria riga. Ma
 -- esiste un caso, e non e' raro: chi si e' registrato PRIMA che l'archivio venisse
--- caricato. Il suo profilo e' gia' nato, il trigger di aggancio non ripassa, e la
--- riga storica resta li' con `claimed_by` vuoto. Da quel momento terremmo una
+-- caricato **e non ha piu' riaperto il profilo**. Il suo profilo e' gia' nato; il
+-- trigger di aggancio ripassera' al primo salvataggio (l'app fa `upsert`, e i BEFORE
+-- INSERT scattano anche li' — vedi la nota corretta in testa al file), ma finche'
+-- quel salvataggio non arriva la riga storica resta li' con `claimed_by` vuoto, e per
+-- chi non torna mai non arriva affatto. Da quel momento terremmo una
 -- SECONDA copia dei suoi dati, piu' vecchia di quella che ci ha dato lui, che non
 -- compare nel suo export e che sopravviverebbe alla cancellazione del suo account.
 -- Cioe' esattamente il contrario di cio' che l'Art. 17 chiede.
