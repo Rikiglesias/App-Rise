@@ -52,8 +52,22 @@ for pair in "${PAIRS[@]}"; do
     # La migration sotto test compare DUE volte (una nel glob, una esplicita): è il
     # test di rieseguibilità. Il glob è 0*.sql, non 000*.sql — con 000* le migration
     # dalla 0010 in poi verrebbero saltate in silenzio.
+    #
+    # ⚠️ RIPRISTINO DEI CORPI SUPERATI. La 0014 sostituisce il corpo di due funzioni
+    # definite nella 0012 e nella 0013. Riapplicando quelle due per il test di
+    # rieseguibilità si riporta indietro il corpo vecchio, e da lì in poi la loro suite
+    # gira contro codice che in produzione non esisterà più: nessuna combinazione
+    # eserciterebbe mai i test di 0012/0013 contro i corpi NUOVI — cioè proprio la rete
+    # che intercetterebbe un `create or replace` che perde pezzi. Si rimette la 0014 in
+    # coda quando serve. `extra` resta vuoto per tutte le altre coppie.
+    extra=""
+    case "$pair" in
+      0012_legacy_contacts|0013_contact_email_follows_account)
+        extra="migrations/0014_claim_legacy_campi_vuoti.sql" ;;
+    esac
+
     log=$(cat "tests/${shim}.sql" migrations/0*.sql \
-              "migrations/${pair}.sql" "tests/${pair}.test.sql" \
+              "migrations/${pair}.sql" ${extra:+"$extra"} "tests/${pair}.test.sql" \
           | docker exec -i "$CONTAINER" psql -U postgres -v ON_ERROR_STOP=1 2>&1)
 
     pass=$(printf '%s' "$log" | grep -c 'PASS' || true)

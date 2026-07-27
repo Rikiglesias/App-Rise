@@ -322,10 +322,11 @@ end $$;
 -- update`, cioè l'`upsert()` che l'app usa in `useProfileForm.ts:287`.
 -- L'intestazione della 0012 affermava che il trigger BEFORE INSERT «non ripassa
 -- sui profili già esistenti». La documentazione PostgreSQL dice il contrario — «the
--- effects of all per-row BEFORE INSERT triggers are reflected in excluded values» —
--- e la conseguenza è ottima: chi si è registrato PRIMA dell'import rivendica la sua
--- riga al primo salvataggio del profilo, senza bisogno di alcuna riconciliazione.
--- Fissato qui perché è una proprietà su cui ora si ragiona, non un caso di bordo.
+-- effects of all per-row BEFORE INSERT triggers are reflected in excluded values».
+-- ⚠️ Ma questo NON significa «rivendica a ogni salvataggio»: l'upsert è solo di
+-- `CompleteProfileScreen`, cioè del percorso di COMPLETAMENTO. La modifica dei dati
+-- passa da `.update()` e non fa scattare nulla — è T13, ed è il test che dice quanto
+-- vale davvero questa proprietà. Qui si fissa solo il verso positivo.
 -- ---------------------------------------------------------------------------
 insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-000000000118', 'primadellimport@esempio.it');
@@ -449,6 +450,152 @@ begin
     raise exception 'T10 FAIL: provincia italiana (%) scritta su un profilo tedesco', r.province;
   end if;
   raise notice 'T10 PASS: il backfill della 0013 applica le stesse due regole';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T10b (IL RAMO POSITIVO DEL GEMELLO, che T10 da solo non copre): stesso scenario
+-- di T10 ma con un profilo ITALIANO — qui la provincia DEVE essere colmata. Senza
+-- questo test, invertendo la condizione sulla provincia nel backfill della 0013 la
+-- suite resterebbe verde e la funzione utile sparirebbe in silenzio (T10 prova solo
+-- che NON scriva agli stranieri: metà della verità).
+-- ---------------------------------------------------------------------------
+insert into public.legacy_contacts (id, email_norm, phone, city, province, country, source)
+values ('00000000-0000-0000-0000-00000000010b', 'vecchiaitaliana@esempio.it',
+        '+393330000011', 'Firenze', 'FI', 'IT', 'access');
+
+insert into auth.users (id, email) values
+  ('00000000-0000-0000-0000-00000000011a', 'vecchiaitaliana@esempio.it');
+
+insert into public.profiles
+  (id, first_name, last_name, phone, city, province, country, birth_date,
+   privacy_consent_at, contact_email)
+values (
+  '00000000-0000-0000-0000-00000000011a',
+  'Anna', 'Toscana', '', null, null, 'IT', '1981-01-01', now(),
+  'vecchiaitaliana@esempio.it'
+);
+
+update public.legacy_contacts
+   set claimed_by = null, claimed_at = null
+ where id = '00000000-0000-0000-0000-00000000010b';
+
+update public.profiles
+   set phone = '', city = null, province = null
+ where id = '00000000-0000-0000-0000-00000000011a';
+
+update auth.users set email = 'nuovaitaliana@esempio.it'
+ where id = '00000000-0000-0000-0000-00000000011a';
+
+do $$
+declare r record;
+begin
+  select province, city, phone into r from public.profiles
+   where id = '00000000-0000-0000-0000-00000000011a';
+  if r.province is distinct from 'FI' then
+    raise exception 'T10b FAIL: province = %, attesa FI dal backfill della 0013',
+      coalesce(r.province, '<null>');
+  end if;
+  if r.city is distinct from 'Firenze' or r.phone is distinct from '+393330000011' then
+    raise exception 'T10b FAIL: citta''/telefono non colmati (%, %)',
+      coalesce(r.city, '<null>'), coalesce(r.phone, '<null>');
+  end if;
+  raise notice 'T10b PASS: il backfill colma ancora la provincia a un profilo italiano';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T13 (IL CONFINE CHE MANCAVA, e che ha corretto DUE volte l'intestazione della
+-- 0012): l'app ha DUE percorsi di salvataggio del profilo e solo uno fa scattare
+-- l'aggancio.
+--   · completamento profilo → `useProfileForm.ts:287` → `.upsert()`  → SCATTA (T9)
+--   · modifica profilo      → `AuthContext.tsx:295-298` → `.update()` → NON scatta
+-- Qui si fissa il secondo, cioè il caso che rende ancora necessario il vincolo di
+-- ordine sull'import: chi ha il profilo COMPLETO non passa più dal completamento, e
+-- per quanti dati modifichi non rivendicherà mai la sua riga storica.
+-- Se un domani qualcuno spostasse la modifica profilo su un upsert, questo test
+-- diventerebbe rosso — ed è giusto così: quel cambiamento renderebbe obsoleta
+-- l'avvertenza scritta nella 0012 e andrebbe riletta.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email) values
+  ('00000000-0000-0000-0000-00000000011b', 'soloupdate@esempio.it');
+
+insert into public.profiles
+  (id, first_name, last_name, phone, city, province, country, birth_date,
+   privacy_consent_at, contact_email)
+values (
+  '00000000-0000-0000-0000-00000000011b',
+  'Completo', 'Utente', '+393330000012', 'Napoli', 'NA', 'IT', '1977-07-07',
+  now(), 'soloupdate@esempio.it'
+);
+
+-- L'archivio arriva dopo, come in T9.
+insert into public.legacy_contacts (id, email_norm, phone, city, province, country, source)
+values ('00000000-0000-0000-0000-00000000010c', 'soloupdate@esempio.it',
+        '+393330000099', 'Salerno', 'SA', 'IT', 'access');
+
+-- Esattamente ciò che fa `updateProfile`: UPDATE mirato, nessun INSERT.
+update public.profiles
+   set city = 'Caserta'
+ where id = '00000000-0000-0000-0000-00000000011b';
+
+do $$
+declare r record;
+begin
+  select l.claimed_by, p.city into r
+  from public.legacy_contacts l
+  join public.profiles p on p.id = '00000000-0000-0000-0000-00000000011b'
+  where l.id = '00000000-0000-0000-0000-00000000010c';
+
+  if r.claimed_by is not null then
+    raise exception 'T13 FAIL: un UPDATE ha fatto scattare il BEFORE INSERT — allora l''avvertenza della 0012 e'' obsoleta e va riscritta';
+  end if;
+  if r.city <> 'Caserta' then
+    raise exception 'T13 FAIL: l''update non ha scritto (city = %)', r.city;
+  end if;
+  raise notice 'T13 PASS: la modifica profilo non rivendica — il vincolo di ordine resta necessario';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T14 (LA FORMA REALE DEL FILE DA IMPORTARE): l'export del partner non scrive NULL
+-- nelle celle vuote, scrive stringhe VUOTE — nel file del 2026-07-27 il paese manca
+-- su 162 righe di 1352 e la provincia su 1330. Se il lato ARCHIVIO non fosse
+-- insensibile al vuoto come quello del profilo, `coalesce(country,'IT')` su `''` non
+-- varrebbe mai `'IT'` e la provincia non si colmerebbe per NESSUNO; peggio, un
+-- telefono `''` dell'archivio verrebbe scritto sopra un NULL del profilo.
+-- ---------------------------------------------------------------------------
+insert into public.legacy_contacts (id, email_norm, phone, city, province, country, source)
+values ('00000000-0000-0000-0000-00000000010d', 'comeviene@esempio.it',
+        '', 'Trieste', 'TS', '', 'access');
+
+insert into auth.users (id, email) values
+  ('00000000-0000-0000-0000-00000000011c', 'comeviene@esempio.it');
+
+insert into public.profiles
+  (id, first_name, last_name, phone, city, province, country, birth_date,
+   privacy_consent_at, contact_email)
+values (
+  '00000000-0000-0000-0000-00000000011c',
+  'Come', 'Viene', null, null, null, 'IT', '1990-10-10', now(),
+  'comeviene@esempio.it'
+);
+
+do $$
+declare r record;
+begin
+  select phone, city, province into r from public.profiles
+   where id = '00000000-0000-0000-0000-00000000011c';
+
+  if r.phone is not null then
+    raise exception 'T14 FAIL: phone = %, un vuoto dell''archivio e'' stato scritto sopra un NULL',
+      quote_literal(r.phone);
+  end if;
+  if r.city is distinct from 'Trieste' then
+    raise exception 'T14 FAIL: city = %, attesa Trieste', coalesce(r.city, '<null>');
+  end if;
+  if r.province is distinct from 'TS' then
+    raise exception 'T14 FAIL: province = %, attesa TS — il paese vuoto dell''archivio ha bloccato il ramo',
+      coalesce(r.province, '<null>');
+  end if;
+  raise notice 'T14 PASS: le celle vuote del file reale non rompono ne'' sporcano';
 end $$;
 
 -- ---------------------------------------------------------------------------

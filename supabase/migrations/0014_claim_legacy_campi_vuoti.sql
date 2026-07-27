@@ -13,12 +13,20 @@
 -- Ma una stringa VUOTA non è NULL: `coalesce('', 'x')` vale `''`.
 --
 -- Chi manda `''`: qualunque form che invii il campo sempre, anche quando la persona non
--- l'ha compilato. Oggi non capita — `phone` e `city` sono obbligatori in ENTRAMBI i
--- percorsi dell'app (`validation.ts:76-79` per il signup, `:141-144` per il profilo),
--- quindi arrivano pieni e non c'è niente da colmare. Il NULL arriva invece dal percorso
--- di registrazione LEGGERA (il metadato non contiene affatto la chiave → `->>` dà NULL),
--- che è esattamente il caso per cui la 0010 ha reso quelle colonne nullable e per cui la
--- 0012 esiste. Là il meccanismo funziona.
+-- l'ha compilato. Dall'app oggi non capita — `phone` e `city` sono obbligatori in
+-- ENTRAMBI i suoi percorsi (`validation.ts:76-79` per il signup, `:141-144` per il
+-- profilo), quindi arrivano pieni e non c'è niente da colmare.
+-- ⚠️ Il vuoto arriva da DUE parti, e la prima è già qui:
+--   ① **dall'archivio** — l'export del partner non scrive NULL nelle celle vuote, scrive
+--      stringhe VUOTE. Nel file del 2026-07-27 (1352 persone) mancano il paese su 162
+--      righe, la provincia su 1330, il telefono su 456. Questo è REALE OGGI, ed è il
+--      motivo per cui il §1 tratta il vuoto su entrambi i lati e non solo sul profilo.
+--   ② **dal profilo**, quando esisterà la registrazione LEGGERA (il metadato non
+--      conterrà affatto la chiave → `->>` darà NULL). È il percorso per cui la 0010 ha
+--      reso quelle colonne nullable, e per cui la 0012 esiste — ma il pezzo applicativo
+--      **non è ancora stato scritto** (`0010:5-7`). Finché non c'è, dall'app l'unico ramo
+--      davvero esercitato è quello della `province` (`useProfileForm.ts:294` la mette a
+--      NULL per l'estero).
 --
 -- Quindi perché toccarlo. Perché la difesa è asimmetrica e la prossima persona che scrive
 -- un form non lo sa: già dentro la 0011 `province` e `country` passano da `nullif(…, '')`
@@ -108,12 +116,21 @@ begin
   -- L'assegnazione avviene solo se l'archivio ha davvero qualcosa da mettere: senza
   -- quella condizione un `''` in ingresso diventerebbe NULL anche quando non c'è
   -- niente da colmare, cioè cambieremmo un valore per il gusto di normalizzarlo.
+  -- ⚠️ La stessa cecità va tolta da ENTRAMBI i lati, non solo dal profilo. Sul lato
+  -- archivio `is not null` lascerebbe passare una stringa vuota, e allora il rimedio
+  -- scriverebbe `''` sopra un campo del profilo che era NULL: un peggioramento.
+  -- NON è un caso teorico — è la forma REALE del file: nell'export del 2026-07-27
+  -- (1352 persone) il paese è vuoto su 162 righe, la provincia su 1330, il telefono
+  -- su 456. Con `coalesce(v_legacy.country,'IT')` un paese `''` non varrebbe mai
+  -- `'IT'` e la provincia non si colmerebbe MAI per nessuno.
   if v_legacy.id is not null then
-    if nullif(btrim(new.phone), '') is null and v_legacy.phone is not null then
+    if nullif(btrim(new.phone), '') is null
+       and nullif(btrim(v_legacy.phone), '') is not null then
       new.phone := v_legacy.phone;
     end if;
 
-    if nullif(btrim(new.city), '') is null and v_legacy.city is not null then
+    if nullif(btrim(new.city), '') is null
+       and nullif(btrim(v_legacy.city), '') is not null then
       new.city := v_legacy.city;
     end if;
 
@@ -126,10 +143,10 @@ begin
     -- premessa che la fonte primaria non conferma, si scrive nel modo che è corretto in
     -- entrambi i casi: se un giorno `new.country` arrivasse NULL, «paese non detto»
     -- vale «Italia», esattamente come il default della colonna.
-    if coalesce(new.country, 'IT') = 'IT'
-       and coalesce(v_legacy.country, 'IT') = 'IT'
+    if coalesce(nullif(btrim(new.country), ''), 'IT') = 'IT'
+       and coalesce(nullif(btrim(v_legacy.country), ''), 'IT') = 'IT'
        and nullif(btrim(new.province), '') is null
-       and v_legacy.province is not null then
+       and nullif(btrim(v_legacy.province), '') is not null then
       new.province := v_legacy.province;
     end if;
   end if;
@@ -188,16 +205,18 @@ begin
       if found then
         update public.profiles p
            set phone = case
-                 when nullif(btrim(p.phone), '') is null and l.phone is not null
+                 when nullif(btrim(p.phone), '') is null
+                  and nullif(btrim(l.phone), '') is not null
                  then l.phone else p.phone end,
                city = case
-                 when nullif(btrim(p.city), '') is null and l.city is not null
+                 when nullif(btrim(p.city), '') is null
+                  and nullif(btrim(l.city), '') is not null
                  then l.city else p.city end,
                province = case
-                 when p.country = 'IT'
-                  and coalesce(l.country, 'IT') = 'IT'
+                 when coalesce(nullif(btrim(p.country), ''), 'IT') = 'IT'
+                  and coalesce(nullif(btrim(l.country), ''), 'IT') = 'IT'
                   and nullif(btrim(p.province), '') is null
-                  and l.province is not null
+                  and nullif(btrim(l.province), '') is not null
                  then l.province else p.province end
           from public.legacy_contacts l
          where p.id = new.id
@@ -219,8 +238,10 @@ revoke execute on function public.sync_contact_email_on_email_change() from publ
 -- ---------------------------------------------------------------------------
 -- Il critico sosteneva che la precompilazione fosse «codice morto perché l'app manda
 -- stringhe vuote». Il meccanismo è quello descritto in ①, ma la conclusione è sbagliata:
--- l'app manda quei campi PIENI (sono obbligatori nei suoi form), e nel percorso in cui
--- possono mancare — la registrazione leggera — mancano davvero, cioè arrivano NULL.
--- Il codice serviva già; queste righe lo rendono solo insensibile alla forma del vuoto.
+-- l'app manda quei campi PIENI (sono obbligatori nei suoi form), quindi non c'è niente
+-- da colmare, non un buco. Il codice non è morto: è in ATTESA della registrazione
+-- leggera, e nel frattempo il vuoto che deve saper reggere arriva dall'ARCHIVIO, che è
+-- già qui e ne è pieno.
 -- La distinzione conta perché la conclusione del critico («cade il valore della 0012»)
--- avrebbe portato a rimettere in discussione la tabella, che invece è a posto.
+-- avrebbe portato a rimettere in discussione la tabella, che invece è a posto: il valore
+-- della 0012 è l'AGGANCIO (`claimed_by`), che scatta a prescindere dai campi.

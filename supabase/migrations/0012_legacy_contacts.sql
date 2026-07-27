@@ -70,6 +70,15 @@
 -- si può cancellare da sé (policy `own_delete`, 0001). Per questo il §4 in fondo al
 -- file cancella entrambi i casi, e NON è ridondante rispetto alla cascata.
 --
+-- 🔴 IL CORPO DI `claim_legacy_contact` IN QUESTO FILE È SUPERATO (dal 2026-07-27).
+-- La versione buona sta in `0014_claim_legacy_campi_vuoti.sql`. Questo file si dichiara
+-- RIESEGUIBILE ed è vero, ma la riesecuzione è una TRAPPOLA: un `create or replace`
+-- riporta indietro il corpo vecchio **senza un errore**, e si perdono i due fix (campi
+-- vuoti, provincia solo fra italiani). Non è teorico: `supabase/tests/run-all.sh:55-57`
+-- fa esattamente questa sequenza, e la 0009 documenta che un riapply a mano dal SQL
+-- Editor «è uno scenario reale».
+-- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014.
+--
 -- ⚠️ VINCOLO DI SEQUENZA PER CHI FARÀ L'IMPORT — LEGGERE PRIMA DI CARICARE.
 -- CORRETTO IL 2026-07-27: la versione precedente di questa nota diceva il falso, e va
 -- riportata per intero perché il ragionamento sbagliato era plausibile — «il trigger è
@@ -81,12 +90,21 @@
 -- triggers are reflected in `excluded` values*» — i BEFORE INSERT scattano PRIMA che
 -- si sappia se ci sarà conflitto, quindi anche quando la riga finisce in UPDATE.
 -- Provato in T9 della suite 0014, non solo letto.
--- → CONSEGUENZA VERA, che è migliore: chi si è registrato prima dell'import rivendica
---   la propria riga **al primo salvataggio del profilo**, da solo, senza bisogno di
---   alcuna passata di riconciliazione.
--- → IL VINCOLO RESTA, ma per un motivo più stretto: chi non riapre MAI il profilo non
---   fa mai un upsert, e quello resta scollegato. Non è più «tutti quelli della
---   finestra intermedia», sono «quelli che non tornano».
+-- ⚠️ SECONDA CORREZIONE, STESSO GIORNO: anche la prima versione di questa nota era
+-- imprecisa, e in modo pericoloso perché OTTIMISTA. Diceva «rivendica al primo
+-- salvataggio del profilo». Falso: nell'app ci sono DUE percorsi di salvataggio e solo
+-- uno passa per un INSERT.
+--   · `CompleteProfileScreen` → `useProfileForm.ts:287` → `.upsert()` → il trigger
+--     SCATTA. Ma quella schermata si raggiunge solo dal pulsante di `ProfileScreen`,
+--     mostrato **soltanto** a chi ha il profilo incompleto o assente.
+--   · `ProfileEditScreen` → `AuthContext.tsx:295-298` → `.update().eq('id')` → nessun
+--     INSERT, nessun BEFORE INSERT, **nessuna rivendicazione**.
+-- → CONSEGUENZA VERA: si ricollega da solo solo chi ha il profilo INCOMPLETO. Chi ce
+--   l'ha completo — cioè chiunque si sia registrato dall'app, dove il form pretende 11
+--   campi — non rivendicherà mai, per quanti dati modifichi.
+-- → IL VINCOLO RESTA, e quasi forte come nella versione originale, ma ora si sa
+--   ESATTAMENTE chi resta fuori: non «quelli che non tornano», ma «quelli che hanno il
+--   profilo completo». La differenza conta perché è la maggioranza.
 -- → quindi **l'import deve comunque precedere le registrazioni vere** (coerente con
 --   F-EMAIL.6③: import dopo l'informativa pubblicata, entrambi prima del primo
 --   rilascio) — ma se qualcuno si registrasse nel mezzo, il danno non è irreversibile.
@@ -246,11 +264,11 @@ create trigger on_profile_claim_legacy
 -- ---------------------------------------------------------------------------
 -- La cascata su `claimed_by` copre solo chi ha rivendicato la propria riga. Ma
 -- esiste un caso, e non e' raro: chi si e' registrato PRIMA che l'archivio venisse
--- caricato **e non ha piu' riaperto il profilo**. Il suo profilo e' gia' nato; il
--- trigger di aggancio ripassera' al primo salvataggio (l'app fa `upsert`, e i BEFORE
--- INSERT scattano anche li' — vedi la nota corretta in testa al file), ma finche'
--- quel salvataggio non arriva la riga storica resta li' con `claimed_by` vuoto, e per
--- chi non torna mai non arriva affatto. Da quel momento terremmo una
+-- caricato **e ha gia' il profilo completo**. Il suo profilo e' gia' nato; il trigger
+-- di aggancio ripassa solo sul percorso di COMPLETAMENTO (`upsert`), che a lui non e'
+-- piu' proposto — la modifica dei dati passa da `.update()` e non fa scattare nessun
+-- BEFORE INSERT (vedi la nota corretta due volte in testa al file). Quindi la riga
+-- storica resta li' con `claimed_by` vuoto per sempre. Da quel momento terremmo una
 -- SECONDA copia dei suoi dati, piu' vecchia di quella che ci ha dato lui, che non
 -- compare nel suo export e che sopravviverebbe alla cancellazione del suo account.
 -- Cioe' esattamente il contrario di cio' che l'Art. 17 chiede.

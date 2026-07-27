@@ -104,6 +104,11 @@
 -- cerca a ogni cambio email è comunque disordine, non una scelta. La nota è replicata
 -- nell'intestazione della 0012.
 
+-- 🔴 IL CORPO QUI SOTTO È SUPERATO (dal 2026-07-27): la versione buona sta in
+-- `0014_claim_legacy_campi_vuoti.sql`, che rende il backfill insensibile alle celle
+-- vuote e limita la provincia ai soli profili italiani. Un `create or replace` di
+-- questo file riporta indietro quei fix **senza errore**.
+-- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014.
 create or replace function public.sync_contact_email_on_email_change()
 returns trigger
 language plpgsql
