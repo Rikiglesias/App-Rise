@@ -160,15 +160,18 @@ Per chi mette le mani nella configurazione. Se non vi serve, il documento finisc
 | `email` | L'indirizzo dell'account, sempre reale e confermato: da noi si entra solo dopo aver cliccato il messaggio di conferma |
 | `email_verified` | Indica se l'indirizzo risulta confermato. **Può valere `false`**: non deve far rifiutare la creazione dell'account |
 
-**Se vi serve altro — telefono, città, provincia — ve lo mandiamo noi nello stesso momento.**
-Non dovete chiedere niente alla persona: sarebbe un modulo in più proprio dove stiamo togliendo
-quello che c'è. Tecnicamente si aggiunge alla lista qui sopra, con i nomi che il protocollo prevede
-già (`phone_number`, `address`, `birthdate`).
+**Se vi serve altro, ve lo mandiamo noi nello stesso momento — non dovete chiedere niente alla
+persona.** Sarebbe un modulo in più proprio dove stiamo togliendo quello che c'è.
 
-Diteci **quali di questi vi servono davvero** e per farci cosa: non li mandiamo tutti per abitudine,
-perché ogni dato in più è un dato in più da custodire per entrambi. Ma quelli che servono al
-servizio arrivano da noi, al primo accesso e a ogni accesso successivo, senza che la persona debba
-scrivere niente due volte.
+- **Il telefono** si aggiunge subito: è previsto dal protocollo come dato a sé
+  (scope `phone` → claim `phone_number`), e ci basta che lo richiediate.
+- **Città, provincia, data di nascita**: si possono mandare, ma non con un interruttore già pronto
+  — richiedono una configurazione dalla nostra parte. Fattibile; ci prendiamo noi quel lavoro.
+
+Diteci **quali vi servono davvero** e per farci cosa: non li mandiamo tutti per abitudine, perché
+ogni dato in più è un dato in più da custodire per entrambi. Quelli che servono al servizio
+arrivano da noi, al primo accesso e a ogni accesso successivo, senza che la persona scriva niente
+due volte.
 
 **Un impegno che vi chiediamo di mettere per iscritto nell'accordo**: leggere l'identità solo dai
 dati dell'accesso (ID token e UserInfo), senza usare quel token per chiamare altre nostre
