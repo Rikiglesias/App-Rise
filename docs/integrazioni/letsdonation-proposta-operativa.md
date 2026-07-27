@@ -35,26 +35,22 @@ In pratica servono cinque cose.
    per chi gestisce il sito.
 
 3. Chi gestisce il vostro sito mette sulla pagina del nostro spazio il pulsante «Entra con Rise
-   Against Hunger». Il pulsante apre una **nostra pagina web** — funziona anche da computer, non
-   serve avere l'app. Serve anche a chi vi trova da Google o da un vostro canale: se un account da
-   noi non ce l'ha, lo crea **da noi** in quel momento — sulla nostra pagina, come si fa con un
-   account Google — e torna sulla vostra già riconosciuto.
+   Against Hunger». Il pulsante apre una **nostra pagina web**: funziona anche da computer, senza
+   avere l'app. Chi vi trova da Google o da un vostro canale e non ha ancora un account da noi lo
+   crea lì in quel momento — come si fa con un account Google — e torna sulla vostra già riconosciuto.
 
 4. Nello stesso momento in cui il pulsante va online, il vostro modulo di registrazione su quella
-   pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e
-   due, della stessa persona esistono due schede che si allontanano subito — cambia indirizzo in
-   una e non nell'altra, revoca un consenso da noi e da voi resta, ci chiede di essere cancellata
-   e noi non possiamo farlo su un'anagrafica che non governiamo. Parlo solo della pagina del
-   nostro spazio, dove da quello che vediamo è una scelta del template e non del vostro sistema
-   di accesso: se lì c'è un vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
+   pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e due,
+   della stessa persona nascono due schede che si allontanano subito — cambia indirizzo da una parte
+   e dall'altra resta quello vecchio. Parlo solo della pagina del nostro spazio, dove da quello che
+   vediamo è una scelta del template e non del vostro sistema di accesso: se lì c'è un vincolo
+   tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
    Una conseguenza da sapere subito: da noi ci si registra da maggiorenni, quindi con un ingresso
    solo chi ha meno di 18 anni non entra più su quella pagina. Se per voi conta, dimmelo.
 
 5. Chi si è già registrato da voi non deve rifare la registrazione: entra col nostro pulsante e
    ritrova quello che aveva. La persona arriva con la stessa email che ha già da voi, e il vostro
-   sistema usa l'account che c'è già invece di aprirne un secondo.
-
-   L'indirizzo che vi arriva è verificato: da noi si entra con email e password, e quella email la
-   persona la conferma cliccando il messaggio che le mandiamo.
+   sistema usa l'account che c'è già invece di aprirne un secondo. L'indirizzo che vi arriva è
+   sempre verificato.
 
 Riccardo
