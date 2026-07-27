@@ -63,8 +63,22 @@
 -- ORDINE DI RILASCIO: dopo la 0014 (sostituisce di nuovo il corpo delle stesse funzioni).
 -- 🔴 **VA APPLICATA PRIMA DEL CARICAMENTO DELLE ANAGRAFICHE**, non prima del rilascio
 -- dell'app: è il caricamento che arma la falla.
--- RIESEGUIBILE: solo `create or replace function` + `revoke`.
--- ROLLBACK: riapplicare i corpi della 0014. Sconsigliato — riapre le tre strade.
+-- RIESEGUIBILE: sì. `create or replace function` + `revoke` + (§3) `drop trigger if exists`
+-- seguito da `create trigger` — il drop-and-create è idempotente grazie a `if exists`, ma va
+-- nominato: l'enunciato precedente diceva «solo create or replace + revoke» e ometteva che
+-- questo file crea anche un OGGETTO NUOVO sul database.
+-- ROLLBACK: riapplicare i corpi della 0014 **e** togliere gli oggetti nuovi del §3, che la
+-- 0014 non conosce e quindi non rimuoverebbe:
+--   drop trigger if exists on_auth_user_purge_legacy on auth.users;
+--   drop function if exists public.purge_legacy_on_user_delete();
+-- Senza queste due righe il rollback lascia uno stato MISTO (corpi vecchi + trigger nuovo).
+-- Sconsigliato comunque: riapre le tre strade.
+--
+-- APPLICATA AL DB VIVO il 2026-07-27 sera (registro: 20260727232639), dopo la 0014
+-- (20260727232604). Stato al momento dell'apply: 0 profili, 0 righe in legacy_contacts,
+-- 2 utenti — nessun dato reale toccato. Verificato dopo: claim e purge agganciati a
+-- auth.users, trigger on_auth_user_purge_legacy presente, 4 funzioni security definer con
+-- search_path="" e nessun EXECUTE per anon/authenticated.
 
 -- ---------------------------------------------------------------------------
 -- 1. L'aggancio: chiave = indirizzo dell'account

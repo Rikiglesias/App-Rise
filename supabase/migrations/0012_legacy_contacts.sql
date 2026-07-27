@@ -77,7 +77,15 @@
 -- vuoti, provincia solo fra italiani). Non è teorico: `supabase/tests/run-all.sh:55-57`
 -- fa esattamente questa sequenza, e la 0009 documenta che un riapply a mano dal SQL
 -- Editor «è uno scenario reale».
--- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014.
+-- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014 **E POI LA 0015**.
+-- ⚠️ AGGIORNATO 2026-07-27 sera (dopo l'applicazione della 0015 al DB vivo): fermarsi alla
+-- 0014, come diceva la riga qui sopra prima di questa correzione, NON è più solo la perdita
+-- di due fix — **riapre una falla di SICUREZZA**. Il corpo della 0014 aggancia ancora
+-- l'archivio a `contact_email`, che la persona dichiara da sé: chi riapplicasse 0012+0014
+-- senza 0015 rimetterebbe in piedi le tre strade (leggere i dati altrui, rubare la scheda,
+-- cancellarla). Il corpo BUONO di `claim_legacy_contact` e `purge_legacy_contact` è quello
+-- della **0015**; della 0014 resta buono `sync_contact_email_on_email_change`.
+-- Trovato da una verifica avversariale prima dell'apply, non da un errore in produzione.
 --
 -- ⚠️ VINCOLO DI SEQUENZA PER CHI FARÀ L'IMPORT — LEGGERE PRIMA DI CARICARE.
 -- CORRETTO IL 2026-07-27: la versione precedente di questa nota diceva il falso, e va
