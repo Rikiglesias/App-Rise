@@ -54,12 +54,7 @@ In pratica servono cinque cose.
    ritrova quello che aveva. La persona arriva con la stessa email che ha già da voi, e il vostro
    sistema usa l'account che c'è già invece di aprirne un secondo.
 
-   L'indirizzo che vi arriva è sempre un indirizzo vero: da noi si entra con email e password, e
-   quella email la persona la conferma cliccando il messaggio che le mandiamo. Non vi arriveranno
-   indirizzi mascherati.
-
-   Insieme all'email vi arriva anche un codice suo, sempre lo stesso: se il vostro sistema può
-   conservarlo come riferimento, un domani che quella persona cambia indirizzo non le nasce un
-   secondo account.
+   L'indirizzo che vi arriva è verificato: da noi si entra con email e password, e quella email la
+   persona la conferma cliccando il messaggio che le mandiamo.
 
 Riccardo
