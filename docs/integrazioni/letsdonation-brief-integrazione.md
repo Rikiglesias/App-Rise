@@ -169,8 +169,7 @@ serve comunque.
    qualcosa che lo impedisce dalla vostra parte? Se sì, diteci cos'è: è la prima cosa che guardiamo
    insieme.
 3. **Il meccanismo che usate con Zucchetti**: come fanno i loro dipendenti ad arrivare già
-   registrati? Se è già un accesso unico come questo, gran parte del lavoro è fatta e ci basta
-   capire come replicarlo.
+   registrati? Se è già un accesso unico come questo, ci basta capire come replicarlo.
 4. **Il collegamento di un account esistente sull'email**: c'è già, o va previsto?
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi?
