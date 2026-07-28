@@ -69,7 +69,7 @@ In pratica servono cinque cose.
    e dall'altra resta quello vecchio. Parlo solo della pagina del nostro spazio: se lì c'è un
    vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
    Perché una scheda sola basti davvero, serve anche che i dati aggiornati che vi mandiamo a ogni
-   accesso vengano riletti, e non usati soltanto la prima volta: è la settima domanda della scheda.
+   accesso vengano riletti, e non usati soltanto la prima volta: è la quarta domanda della scheda.
 
 5. Chi ha già un account nel nostro spazio non dovrebbe rifare la registrazione: al primo accesso
    col nostro pulsante dovrebbe ritrovare quello, invece di trovarsene uno nuovo e vuoto. Il

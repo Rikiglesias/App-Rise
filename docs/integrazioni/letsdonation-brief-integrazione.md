@@ -107,10 +107,13 @@
 Chi ha già un account Rise Against Hunger Italia entra nel nostro spazio sulla vostra piattaforma
 **senza registrarsi una seconda volta**.
 
-Oggi la stessa persona compila due moduli e finisce in due archivi che non si parlano: cambia
-indirizzo da una parte e dall'altra resta quello vecchio. Il punto d'arrivo è che sul nostro spazio
-resti il solo pulsante «Entra con Rise Against Hunger», e che chi non ha ancora un account da voi
-non compili un secondo modulo: i dati minimi per crearlo — nome e indirizzo — arrivano dall'accesso.
+Oggi sulla pagina del nostro spazio c'è il vostro modulo di registrazione, e chi lo compila apre
+una scheda che con la nostra non ha alcun legame: la stessa persona finisce in due archivi che non
+si parlano, e quando aggiorna i suoi dati da una parte, dall'altra restano quelli vecchi.
+
+Il punto d'arrivo è che su quella pagina ci sia il solo pulsante «Entra con Rise Against Hunger»:
+chi ha già un account da noi entra con quello, e chi non ce l'ha lo crea in quel momento senza
+compilare un secondo modulo — i dati minimi, nome e indirizzo, arrivano dall'accesso.
 
 Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
@@ -121,9 +124,8 @@ Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 Dalla nostra parte spettano a noi l'OpenID Provider e le credenziali client dedicate a voi.
 
 Una condizione riguarda tutti e due: sulla pagina del nostro spazio il pulsante di accesso e il
-modulo di registrazione non possono convivere, e le due cose vanno insieme, non una dopo l'altra.
-Finché restano tutte e due le strade, della stessa persona continuano a nascere due schede. Se lì
-c'è un vincolo che lo impedisce, ce lo dite nella domanda 2.
+modulo di registrazione non possono convivere, e le due cose vanno insieme — il pulsante online e
+il modulo tolto nello stesso momento, non una dopo l'altra.
 
 Prima di aprire a tutti, proponiamo di provare il giro completo con due o tre persone vere.
 
@@ -144,63 +146,50 @@ arriverà dalla nostra parte.
 
 ## 4. Cosa va concordato fra noi
 
-Cinque punti. I primi tre riguardano il modo in cui l'account resta agganciato e allineato nel
-tempo, il quarto è un obbligo che ricade su di noi e ha bisogno di un vostro recapito, il quinto è
-il presupposto con cui dimensioniamo i permessi.
-
-- **Chiave di aggancio: `sub`.** È l'unico identificatore stabile che emettiamo. L'email no: le
-  persone la cambiano. L'email serve una volta sola, al primo aggancio con una scheda che da voi
-  esiste già; da lì in poi la persona resta agganciata al `sub`, anche se cambia indirizzo.
-- **Utenti che da voi esistono già.** Chi ha già un account nel nostro spazio deve ritrovare
-  quello al primo accesso, non trovarsene uno nuovo e vuoto: è l'aggancio sulla stessa email di
-  cui sopra (domanda 4).
-- **I dati restano allineati nel tempo.** L'aggancio tiene fermo *quale* account è, non *cosa*
-  contiene: a ogni accesso vi arrivano i valori aggiornati, e perché una scheda sola serva a
-  qualcosa devono essere quelli a valere, non quelli del primo giorno (domanda 7).
-- **Cancellazioni.** Quando una persona chiede a noi la cancellazione, l'art. 19 del GDPR ci obbliga
-  a comunicarvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare
-  (domanda 5).
+- **La chiave di aggancio è il `sub`, non l'email.** È l'unico identificatore stabile che
+  emettiamo; l'email le persone la cambiano. L'email serve una volta sola, al primo incontro con
+  una scheda che da voi esiste già: da lì in poi la persona resta legata al `sub`.
+- **Una persona, una scheda sola — e aggiornata.** L'aggancio tiene fermo *quale* account è; perché
+  serva a qualcosa devono valere anche i dati che vi arrivano a ogni accesso, non quelli del primo
+  giorno.
+- **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
+  dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
 - **Uso del token.** L'identità si legge dall'ID token e da UserInfo, senza usare il token di
-  accesso verso altre nostre funzioni. È la prassi; la nominiamo perché dalla nostra parte è il
-  presupposto con cui impostiamo i permessi.
+  accesso verso altre nostre funzioni. È la prassi; la nominiamo perché è il presupposto con cui
+  impostiamo i permessi.
 
 ---
 
 ## 5. Cosa ci serve sapere da voi
 
-Sette domande. Le prime due dicono quanto lavoro c'è davvero; la settima è quella da cui dipende il
-risultato; la sesta è indipendente dal resto e ci serve comunque.
+Cinque domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il
+risultato.
 
-1. **Dal vostro lato serve un client OpenID Connect.** Se ne avete già uno attivo con un altro
-   fornitore ci adattiamo a quello. Se non c'è, è la parte da prevedere: diteci cosa comporta
-   dalla vostra parte, così ci regoliamo sui tempi. Un dettaglio che conviene sapere subito: il
-   vostro lato pretende `email_verified: true` per creare l'account? Noi lo emettiamo, ma se è una
-   condizione bloccante preferiamo saperlo ora e non al primo accesso vero.
-2. **Ci serve che sulla pagina del nostro spazio resti solo il pulsante**, dal momento in cui va
-   online: finché restano tutte e due le strade, della stessa persona nascono due schede. C'è
-   qualcosa che lo impedisce dalla vostra parte? Se sì, diteci cos'è: è la prima cosa che guardiamo
-   insieme.
-3. **Il meccanismo che usate con Zucchetti**: come fanno i loro dipendenti ad arrivare già
-   registrati? Se è già un accesso unico come questo, ci basta capire come replicarlo.
-4. **Chi ha già un account nel nostro spazio deve ritrovare quello**, non trovarsene uno nuovo e
-   vuoto: al primo accesso il collegamento passa dalla stessa email. Dalla vostra parte esiste già,
-   o è da prevedere? E gli account valgono per il singolo spazio o per tutta la piattaforma?
-   Un caso che resta fuori, e vorremmo sapere come lo vedete: se una persona da voi è registrata
-   con un indirizzo **diverso** da quello che usa da noi, l'aggancio sull'email non scatta e le si
-   apre una scheda nuova, mentre la sua storia resta in quella vecchia. Esiste dalla vostra parte
-   un modo perché sia lei a collegare i due account dal proprio profilo? Se non c'è, ci basta
-   saperlo: lo diciamo alle persone invece di lasciarlo succedere in silenzio.
+1. **Come funziona il collegamento che avete con Zucchetti?** Ci dicevi che i loro dipendenti
+   arrivano già registrati: se è un accesso unico come quello che proponiamo, per voi è quasi
+   niente da fare e a noi basta sapere come replicarlo — il nome del sistema, il documento che vi
+   hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
+   client OpenID Connect: diteci cosa comporta, così ci regoliamo sui tempi.
+2. **Cosa impedisce, oggi, di lasciare sulla pagina il solo pulsante?** Il modulo va tolto nel
+   momento stesso in cui il pulsante va online. Se c'è un vincolo tecnico che lo blocca, è la prima
+   cosa che guardiamo insieme.
+3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
+   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'indirizzo coincide il collegamento
+   è immediato — dalla vostra parte esiste già, o è da prevedere?
+   Ma non sempre coincide: chi ha donato anni fa può avere lasciato l'indirizzo del lavoro, o un
+   altro che oggi non usa più. **Quel caso va risolto, non solo segnalato**: dalla vostra parte
+   come si fa a ricongiungere due schede quando gli indirizzi sono diversi? Se lo strumento non
+   esiste, mettiamolo fra le cose da prevedere insieme.
+   Serve anche sapere se gli account valgono per il singolo spazio o per tutta la piattaforma.
+4. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
+   aggiornati: ci serve sapere se li usate ogni volta o soltanto la prima, per creare l'account.
+   Se valgono solo alla creazione, chi aggiorna l'indirizzo da noi continua a risultare da voi con
+   quello vecchio, e il problema resta intero.
+   Un dettaglio della stessa famiglia: il vostro lato pretende `email_verified: true` per creare
+   l'account? Noi lo emettiamo, ma se è una condizione bloccante preferiamo saperlo ora.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
-6. **Il rapporto che abbiamo già oggi**: esiste un atto scritto che regola il trattamento dei dati
-   dei nostri sostenitori presenti sulla vostra piattaforma? Se esiste, ci basta averne copia da
-   tenere agli atti. Se non c'è, è un adempimento che spetta a noi e ce ne occupiamo.
-7. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
-   aggiornati. Ci serve sapere se li usate ogni volta, o soltanto la prima per creare l'account.
-   È la domanda da cui dipende il risultato: se valgono solo alla creazione, chi cambia indirizzo
-   da noi continua a risultare da voi con quello vecchio — cioè resta esattamente il problema che
-   stiamo cercando di togliere.
 
 ---
 
@@ -216,8 +205,7 @@ risultato; la sesta è indipendente dal resto e ci serve comunque.
   nome pubblico, la visibilità nelle liste, le comunicazioni degli enti beneficiari): quelli
   continuate a raccoglierli voi, noi non possiamo né trasmetterli né darli per concessi.
 - **Come si qualificano i due trattamenti** lo stiamo chiudendo con chi ci segue sul tema, e qui non
-  lo diamo per deciso: vale sia per questo collegamento sia per il rapporto che abbiamo già oggi.
-  Sul rapporto già in essere vi chiediamo in più un dato di fatto, ed è la domanda 6.
+  lo diamo per deciso.
 
 ---
 
@@ -242,5 +230,7 @@ Ci interessa sapere come vengono impostati - con un valore predefinito, o chiede
 una volta entrata. Ci pesa soprattutto la visibilità, perché è l'unico di questi campi che ha un
 effetto pubblico, e dobbiamo poter scrivere nella nostra informativa cosa succede.
 
-**Un limite da conoscere prima**: chi arriva dalla nostra app apre il vostro sito nel browser del
-telefono, che non conosce la sessione dell'app. Al primo giro l'accesso va rifatto lì; dopo resta.
+**Una cosa da mettere in conto**: quando una persona tocca un link dentro la nostra app, il vostro
+sito si apre nel browser del telefono — che è un programma separato e non sa che lei è già entrata
+nell'app. La prima volta dovrà quindi fare l'accesso lì, con un tocco sul pulsante. Da quella volta
+in poi il browser se la ricorda e non glielo chiede più.
