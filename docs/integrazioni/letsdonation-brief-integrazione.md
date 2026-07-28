@@ -76,8 +76,17 @@
        - `sub` come chiave (standard OIDC);
        - «da noi si entra solo dopo aver confermato l'indirizzo» -> `mailer_autoconfirm=false`
          sul progetto vivo + 0 login social nel codice (Google/Apple rimossi);
-       - nessuno dei due entra nel DB dell'altro; i consensi restano di chi li raccoglie;
-       - il limite del browser che non conosce la sessione dell'app.
+       - nessuno dei due entra nel DB dell'altro; i consensi restano di chi li raccoglie.
+
+     TOLTO IL 2026-07-28 (rilievo Riccardo, «continuo a non capire cosa serve»): il paragrafo sul
+     limite del browser che non conosce la sessione dell'app. Tre motivi, il terzo decisivo:
+       1) non e' ne' un requisito ne' una domanda ne' una condizione -> non fa il lavoro del brief;
+       2) era scritto male (troppe casistiche implicite per chi legge);
+       3) **conteneva un'affermazione FALSA**: «da quella volta in poi il browser se la ricorda» -
+          non regge con altro telefono, altro browser, navigazione in incognito o dati cancellati.
+     Il tema NON e' perso: vive in `app-gate-matrice.md` (D5), `identita-matrice-scenari.md`
+     (righe 122 e 202) e `scambio-dati-quadro.md` (196, 669). Torna quando si progetta la NOSTRA
+     pagina web di accesso, che e' il posto dove quel comportamento conta davvero.
      ----------------------------------------------------------------------------------
 
      Il ragionamento integrale non e' andato perso, sta nei documenti NOSTRI:
@@ -230,7 +239,3 @@ Ci interessa sapere come vengono impostati - con un valore predefinito, o chiede
 una volta entrata. Ci pesa soprattutto la visibilità, perché è l'unico di questi campi che ha un
 effetto pubblico, e dobbiamo poter scrivere nella nostra informativa cosa succede.
 
-**Una cosa da mettere in conto**: quando una persona tocca un link dentro la nostra app, il vostro
-sito si apre nel browser del telefono — che è un programma separato e non sa che lei è già entrata
-nell'app. La prima volta dovrà quindi fare l'accesso lì, con un tocco sul pulsante. Da quella volta
-in poi il browser se la ricorda e non glielo chiede più.
