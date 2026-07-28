@@ -10,6 +10,13 @@ quel paragrafo va rimesso PRIMA di ripubblicare.
 AGGIORNATO 2026-07-27 (sera): la scheda tecnica `letsdonation-brief-integrazione.md` si manda
 INSIEME a questa lettera - decisione di Riccardo, «dobbiamo andare entrambe assolutamente». La riga
 precedente diceva «si consegna su richiesta, non adesso» ed era anteriore alla decisione.
+RIAPERTO 2026-07-28: Riccardo ha rimesso in discussione QUESTA lettera («serve solo il brief per i
+tecnici, a Michele gliel'ho gia' detto»). Controproposta in attesa di risposta: questo testo
+diventa il CORPO DELL'EMAIL e la scheda resta l'unico allegato. Finche' non risponde non si manda
+nulla, e la decisione del 27/07 qui sopra NON e' piu' quella corrente.
+Se si sceglie quella via, verificare che sopravvivano nel testo che resta: l'invariante I7
+(pulsante su e modulo giu' INSIEME, punto 4) e «da noi si entra solo dopo aver confermato
+l'indirizzo» - oggi stanno in ENTRAMBI i documenti.
 Stessa passata: tolta la parola «istruzioni» dal punto 2 (era la stessa cornice paternalistica per
 cui la scheda tecnica e' stata riscritta) e tolta dal punto 4 la diagnosi su come sia fatto il loro
 sito. Perimetro degli scenari:

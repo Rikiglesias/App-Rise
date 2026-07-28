@@ -110,7 +110,7 @@ Chi ha già un account Rise Against Hunger Italia entra nel nostro spazio sulla 
 Oggi la stessa persona compila due moduli e finisce in due archivi che non si parlano: cambia
 indirizzo da una parte e dall'altra resta quello vecchio. Il punto d'arrivo è che sul nostro spazio
 resti il solo pulsante «Entra con Rise Against Hunger», e che chi non ha ancora un account da voi
-non compili un secondo modulo: i dati per crearlo arrivano dall'accesso.
+non compili un secondo modulo: i dati minimi per crearlo — nome e indirizzo — arrivano dall'accesso.
 
 Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
@@ -118,8 +118,7 @@ Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
 ## 2. Come ci dividiamo il lavoro
 
-Dalla nostra parte spettano a noi l'OpenID Provider e le credenziali client dedicate a voi. Il
-collegamento dalla vostra parte lo realizzate con la soluzione che preferite.
+Dalla nostra parte spettano a noi l'OpenID Provider e le credenziali client dedicate a voi.
 
 Una condizione riguarda tutti e due: sulla pagina del nostro spazio il pulsante di accesso e il
 modulo di registrazione non possono convivere, e le due cose vanno insieme, non una dopo l'altra.
@@ -169,8 +168,8 @@ Sei domande. Le prime due dicono quanto lavoro c'è davvero; la sesta è indipen
 serve comunque.
 
 1. **Dal vostro lato serve un client OpenID Connect.** Se ne avete già uno attivo con un altro
-   fornitore ci adattiamo a quello, e per voi è quasi tutto fatto. Se non c'è, è la parte da
-   prevedere: diteci cosa comporta dalla vostra parte, così ci regoliamo sui tempi.
+   fornitore ci adattiamo a quello. Se non c'è, è la parte da prevedere: diteci cosa comporta
+   dalla vostra parte, così ci regoliamo sui tempi.
 2. **Ci serve che sulla pagina del nostro spazio resti solo il pulsante**, dal momento in cui va
    online: finché restano tutte e due le strade, della stessa persona nascono due schede. C'è
    qualcosa che lo impedisce dalla vostra parte? Se sì, diteci cos'è: è la prima cosa che guardiamo
@@ -193,8 +192,10 @@ serve comunque.
 
 ## 6. Privacy
 
-- **Nessuno dei due entra nel database dell'altro.** L'unico scambio avviene durante l'accesso, ed è
-  quello che lo standard prevede.
+- **Nessuno dei due entra nel database dell'altro.** Durante l'accesso passa quello che lo standard
+  prevede. Oltre a quello, dai link che portano dalla nostra app al vostro spazio arriva un codice
+  di provenienza (`rise_ref`), che serve a riconoscere che la persona è arrivata da noi e non dice
+  nulla su chi sia.
 - **I consensi restano di chi li raccoglie.** I vostri moduli chiedono cose che noi non chiediamo (il
   nome pubblico, la visibilità nelle liste, le comunicazioni degli enti beneficiari): quelli
   continuate a raccoglierli voi, noi non possiamo né trasmetterli né darli per concessi.
