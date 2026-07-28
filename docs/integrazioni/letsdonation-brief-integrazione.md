@@ -170,7 +170,9 @@ serve comunque.
    insieme.
 3. **Il meccanismo che usate con Zucchetti**: come fanno i loro dipendenti ad arrivare già
    registrati? Se è già un accesso unico come questo, ci basta capire come replicarlo.
-4. **Il collegamento di un account esistente sull'email**: c'è già, o va previsto?
+4. **Chi ha già un account nel nostro spazio deve ritrovare quello**, non trovarsene uno nuovo e
+   vuoto: al primo accesso il collegamento passa dalla stessa email. Dalla vostra parte esiste già,
+   o è da prevedere? E gli account valgono per il singolo spazio o per tutta la piattaforma?
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi?
 6. **Il rapporto che abbiamo già oggi**: come è regolato il trattamento dei dati dei nostri
