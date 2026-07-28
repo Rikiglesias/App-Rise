@@ -113,8 +113,8 @@ Dalla nostra parte il ruolo è quello di **OpenID Provider**.
 
 ## 2. Come ci dividiamo il lavoro
 
-Dalla nostra parte esponiamo l'OpenID Provider ed emettiamo le credenziali client dedicate a voi.
-Il collegamento dalla vostra parte lo realizzate con la soluzione che preferite.
+Dalla nostra parte spettano a noi l'OpenID Provider e le credenziali client dedicate a voi. Il
+collegamento dalla vostra parte lo realizzate con la soluzione che preferite.
 
 Una condizione riguarda tutti e due: sulla pagina del nostro spazio il pulsante di accesso e il
 modulo di registrazione non possono convivere, e le due cose vanno insieme, non una dopo l'altra.
