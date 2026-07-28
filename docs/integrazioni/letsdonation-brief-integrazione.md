@@ -165,7 +165,8 @@ serve comunque.
 1. **Dal vostro lato serve un client OpenID Connect.** Se ne avete già uno attivo con un altro
    fornitore ci adattiamo a quello, e per voi è quasi tutto fatto. Se non c'è, è la parte da
    prevedere: diteci cosa comporta dalla vostra parte, così ci regoliamo sui tempi.
-2. **Il modulo di registrazione va tolto nello stesso momento in cui il pulsante va online.** C'è
+2. **Ci serve che sulla pagina del nostro spazio resti solo il pulsante**, dal momento in cui va
+   online: finché restano tutte e due le strade, della stessa persona nascono due schede. C'è
    qualcosa che lo impedisce dalla vostra parte? Se sì, diteci cos'è: è la prima cosa che guardiamo
    insieme.
 3. **Il meccanismo che usate con Zucchetti**: come fanno i loro dipendenti ad arrivare già
