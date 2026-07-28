@@ -2,7 +2,10 @@ import {
   missingProfileFields,
   getProfileCompletion,
   isProfileGateBlocked,
+  PROFILE_FIELD_LABELS,
 } from '@/shared/auth/profileCompletion';
+import it_ from '@/locales/it';
+import en from '@/locales/en';
 import type { Profile } from '@/shared/auth/types';
 
 const base: Profile = {
@@ -91,6 +94,52 @@ describe('getProfileCompletion', () => {
 
   it('caricato e pieno = complete', () => {
     expect(getProfileCompletion(base, true)).toBe('complete');
+  });
+});
+
+describe('PROFILE_FIELD_LABELS — ogni campo mancante ha un nome leggibile', () => {
+  it('copre TUTTI i campi che il cancello può pretendere', () => {
+    // Il messaggio «manca ancora …» compare SOLO quando la validazione del form non ha
+    // segnalato nulla: lì la persona non vede campi in rosso e l'elenco è la sua unica
+    // indicazione. Un campo aggiunto a `CompletableField` senza etichetta la
+    // lascerebbe davanti a una richiesta muta — questo test lo impedisce.
+    const everyField = missingProfileFields({
+      phone: null,
+      city: null,
+      province: null,
+      country: 'IT',
+      contact_email: null,
+    });
+    expect(everyField).toEqual(['phone', 'city', 'province', 'contact_email']);
+    everyField.forEach(field => {
+      expect(PROFILE_FIELD_LABELS[field]).toBeTruthy();
+    });
+  });
+
+  it('usa le etichette del form, non stringhe nuove', () => {
+    // La persona deve rileggere la stessa parola che ha davanti nel campo.
+    expect(PROFILE_FIELD_LABELS.phone).toBe('auth.signup.phone');
+    expect(PROFILE_FIELD_LABELS.city).toBe('auth.signup.city');
+    expect(PROFILE_FIELD_LABELS.province).toBe('auth.signup.province');
+    expect(PROFILE_FIELD_LABELS.contact_email).toBe(
+      'auth.completeProfile.contactEmail'
+    );
+  });
+
+  it('le chiavi esistono davvero nelle traduzioni, in italiano e in inglese', () => {
+    // Un'etichetta che punta a una chiave inesistente stamperebbe la chiave grezza
+    // dentro il messaggio: peggio del messaggio generico che stiamo sostituendo.
+    const read = (dict: Record<string, unknown>, path: string): unknown =>
+      path
+        .split('.')
+        .reduce<unknown>(
+          (node, key) => (node as Record<string, unknown>)?.[key],
+          dict
+        );
+    Object.values(PROFILE_FIELD_LABELS).forEach(key => {
+      expect(typeof read(it_ as Record<string, unknown>, key)).toBe('string');
+      expect(typeof read(en as Record<string, unknown>, key)).toBe('string');
+    });
   });
 });
 

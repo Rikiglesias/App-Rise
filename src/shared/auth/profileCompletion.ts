@@ -113,3 +113,17 @@ export const getProfileCompletion = (
  */
 export const isProfileGateBlocked = (completion: ProfileCompletion): boolean =>
   completion === 'absent' || completion === 'incomplete';
+
+/**
+ * Come si chiama, per una persona, ciascun campo mancante. Sta qui accanto all'elenco
+ * dei campi e non nella schermata: chi un domani aggiunge un campo a `CompletableField`
+ * trova il nome da dargli nella riga sotto, invece di scoprire a valle un messaggio che
+ * cita una chiave di traduzione grezza. Le etichette sono quelle già usate dal form, non
+ * copie nuove: la persona rilegge la stessa parola che ha davanti nel campo.
+ */
+export const PROFILE_FIELD_LABELS: Record<CompletableField, string> = {
+  phone: 'auth.signup.phone',
+  city: 'auth.signup.city',
+  province: 'auth.signup.province',
+  contact_email: 'auth.completeProfile.contactEmail',
+};

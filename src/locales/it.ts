@@ -180,7 +180,7 @@ export default {
       // scrivere, perché il contrario significherebbe salvare e ritrovarsi di nuovo la
       // stessa schermata senza sapere perché.
       profileStillIncomplete:
-        'Compila tutti i campi richiesti: senza di essi il profilo resta da completare.',
+        'Manca ancora: {{fields}}. Senza questi dati il profilo resta da completare.',
       generic: 'Si è verificato un errore. Riprova.',
     },
   },

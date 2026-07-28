@@ -9,7 +9,10 @@ import {
   validateProfileForm,
   type ProfileErrors,
 } from '@/shared/auth/validation';
-import { missingProfileFields } from '@/shared/auth/profileCompletion';
+import {
+  missingProfileFields,
+  PROFILE_FIELD_LABELS,
+} from '@/shared/auth/profileCompletion';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import { syncDisplayNameClaim } from '@/shared/auth/displayName';
 import type { RootStackNavigationProp } from '@/navigation/types';
@@ -316,7 +319,18 @@ export const useProfileForm = () => {
     const stillMissing = missingProfileFields(nextProfile);
     if (stillMissing.length > 0) {
       setLoading(false);
-      setSubmitError(t('auth.errors.profileStillIncomplete'));
+      // I campi vanno NOMINATI, non riassunti in «compila tutto»: questo errore compare
+      // solo quando la validazione del form non ha segnalato niente — cioè la persona
+      // non vede nessun campo in rosso e, senza l'elenco, resterebbe davanti a una
+      // richiesta che non sa come soddisfare. È lo stesso principio delle vie d'uscita
+      // dal cancello: mai lasciare qualcuno bloccato senza dirgli cosa fare.
+      setSubmitError(
+        t('auth.errors.profileStillIncomplete', {
+          fields: stillMissing
+            .map(field => t(PROFILE_FIELD_LABELS[field]))
+            .join(', '),
+        })
+      );
       return;
     }
     const { error } = await supabase.from('profiles').upsert(nextProfile);

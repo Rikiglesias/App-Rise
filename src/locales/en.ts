@@ -170,7 +170,7 @@ export default {
       already_registered: 'This email is already registered',
       rate_limited: 'Too many attempts. Please try again shortly.',
       profileStillIncomplete:
-        'Please fill in every required field: without them your profile stays incomplete.',
+        'Still missing: {{fields}}. Without these details your profile stays incomplete.',
       generic: 'An error occurred. Please try again.',
     },
   },
