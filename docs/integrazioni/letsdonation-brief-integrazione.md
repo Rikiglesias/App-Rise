@@ -134,8 +134,8 @@ Prima di aprire a tutti, proponiamo di provare il giro completo con due o tre pe
 Il nostro provider lo mettiamo in piedi per questa integrazione: qui sotto c'è quello che vi
 arriverà dalla nostra parte.
 
-- Il documento di discovery (`.../.well-known/openid-configuration`), che contiene endpoint e
-  chiavi.
+- Il documento di discovery (`.../.well-known/openid-configuration`), che contiene gli endpoint e
+  l'indirizzo delle chiavi.
 - `client_id` e `client_secret` dedicati a voi.
 - L'autorizzazione dei redirect URI che ci indicate.
 - Un riferimento nostro per tutta la messa in opera.
@@ -145,14 +145,15 @@ arriverà dalla nostra parte.
 ## 4. Cosa va concordato fra noi
 
 Quattro punti. I primi due riguardano il modo in cui l'account resta agganciato nel tempo, il terzo
-è un obbligo che ricade su entrambi, il quarto è il presupposto con cui dimensioniamo i permessi.
+è un obbligo che ricade su di noi e ha bisogno di un vostro recapito, il quarto è il presupposto
+con cui dimensioniamo i permessi.
 
 - **Chiave di aggancio: `sub`.** È l'unico identificatore stabile che emettiamo. L'email no: le
   persone la cambiano. L'email serve una volta sola, al primo aggancio con una scheda che da voi
   esiste già; da lì in poi la persona resta agganciata al `sub`, anche se cambia indirizzo.
-- **Utenti che da voi esistono già.** Chi ha già un account da voi deve ritrovare quello al primo
-  accesso, non trovarsene uno nuovo e vuoto: è l'aggancio sulla stessa email di cui sopra
-  (domanda 4).
+- **Utenti che da voi esistono già.** Chi ha già un account nel nostro spazio deve ritrovare
+  quello al primo accesso, non trovarsene uno nuovo e vuoto: è l'aggancio sulla stessa email di
+  cui sopra (domanda 4).
 - **Cancellazioni.** Quando una persona chiede a noi la cancellazione, l'art. 19 del GDPR ci obbliga
   a comunicarvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare
   (domanda 5).
