@@ -9,9 +9,13 @@ import type { RootStackParamList } from '@/navigation/types';
 /**
  * Intercetta i deep link auth con token nel fragment (flusso implicit,
  * `detectSessionInUrl: false`) e stabilisce la sessione:
- * - recovery password → setSession + naviga a "Imposta nuova password";
- * - conferma email signup → setSession (l'utente diventa autenticato e resta su Home,
- *   route iniziale: nessuna navigazione forzata).
+ * - recovery password → setSession + naviga a "Imposta nuova password". Quella rotta
+ *   esiste in ENTRAMBI gli alberi di navigazione, anche in quello del cancello del
+ *   profilo: è l'unico modo in cui chi è bloccato lì può rientrare nel proprio account.
+ * - conferma email signup → setSession, nessuna navigazione forzata. Dove si trova poi
+ *   la persona non lo decide questo hook: diventa autenticata, e se il profilo è
+ *   incompleto il cancello la porta al completamento invece che su Home — è il
+ *   comportamento voluto («appena fa accesso»), non un effetto collaterale.
  *
  * Usa il `navigationRef` del container (non `useNavigation`) perché va montato a
  * livello di AppNavigator, fuori dal singolo navigator. Guard `handled` per non
