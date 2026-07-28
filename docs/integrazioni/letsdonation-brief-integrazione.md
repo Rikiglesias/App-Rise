@@ -162,8 +162,9 @@ Quattro punti. I primi due riguardano il modo in cui l'account resta agganciato 
 Sei domande. Le prime due dicono quanto lavoro c'è davvero; la sesta è indipendente dal resto e ci
 serve comunque.
 
-1. **Il vostro lato può fare da client OpenID Connect?** Se avete già un'integrazione di questo
-   tipo attiva con altri, ci adattiamo a quella.
+1. **Dal vostro lato serve un client OpenID Connect.** Se ne avete già uno attivo con un altro
+   fornitore ci adattiamo a quello, e per voi è quasi tutto fatto. Se non c'è, è la parte da
+   prevedere: diteci cosa comporta dalla vostra parte, così ci regoliamo sui tempi.
 2. **Il modulo di registrazione si può togliere dal nostro spazio?** Se qualcosa lo impedisce,
    diteci cos'è: è la prima cosa che guardiamo insieme.
 3. **Il meccanismo che usate con Zucchetti**: come fanno i loro dipendenti ad arrivare già
