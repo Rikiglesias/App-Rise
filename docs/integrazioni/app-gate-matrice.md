@@ -195,6 +195,18 @@ mancanti, "prima o poi" diventa "mai"»). Quel qualcosa è stato scritto e aggan
 schermata, quella del profilo** — la stessa superficie di C1. Il meccanismo non è sbagliato: è
 **non collegato**. Va detto così, non come «fatto».
 
+> ✅ **C3 CHIUSA il 2026-07-28 (fase F-P7).** Il meccanismo non dipende più dall'apertura del
+> profilo: dopo l'accesso, chi ha dati da dare vede **solo** il completamento, perché è l'albero di
+> navigazione a cambiare (`ProfileGateNavigator` al posto di `MainStackNavigator`) e le rotte
+> dell'app **non esistono** finché il profilo non è completo — verificato leggendo le `routeNames`
+> del navigatore vero, non assunto. Cancello e salvataggio consultano **un solo** predicato
+> (`profileCompletion.ts`), e un test prende la riga che parte verso il database e la giudica con
+> quel predicato: è la difesa contro il ritorno del cancello a chi l'aveva già superato.
+> **C1 (riconsenso) resta aperta**: è la decisione A5, deliberatamente separata — un'informativa
+> nuova non deve bloccare chi ha il profilo a posto.
+> **Resta il residuo F-EMAIL.29** (la scheda profilo non mostra la mail di contatto), che ora pesa
+> meno: chi ha solo quella mancante finisce sul form dove il campo è visibile e spiegato.
+
 Un limite di questa riga, per onestà: che il profilo sia una schermata **poco** visitata è
 **[A]**, non [V] — si apre con un tocco sull'avatar in cima alla home, e **quanti lo facciano non
 lo sappiamo** (è il numero che manca fino a F1.8). Ciò che è verificato è la parte che conta e che
