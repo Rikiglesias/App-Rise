@@ -350,8 +350,12 @@ Zucchetti. *Rilettura di Riccardo, 25/07; verifica indipendente sulle pagine pub
 come chiave è inaffidabile e il confronto fallisce **in silenzio**, il modo peggiore di sbagliare.
 *Analisi con evidenza (forum sviluppatori Apple).*
 
-**Sull'identificativo opaco e stabile del protocollo. → SCELTA.** È stabile e non dice nulla sulla
-persona. Ma la domanda a loro non va posta come «potete usare l'identificativo?», che si presta a un no
+**Sull'identificativo opaco e stabile del protocollo. → SCELTA.** È stabile e non contiene attributi
+della persona — ma la individua in modo permanente, quindi è uno **pseudonimo**, non un dato anonimo
+(cons. 26; stessa qualifica del `rise_ref`, memoria `integrazione-identita-partner`). Nota di
+linguaggio, dopo l'errore del 28/07: «opaco» significa illeggibile da chi non ha la nostra tabella,
+**non** «non riconducibile a una persona» — non usare l'uno per l'altro nei documenti verso terzi.
+Ma la domanda a loro non va posta come «potete usare l'identificativo?», che si presta a un no
 generico: va posta come **«potete mappare quell'identificativo sul nome utente di Joomla, così che
 l'aggancio agli accessi successivi non dipenda dall'email?»**, perché la mappatura dei campi è cosa che
 la loro estensione sa già fare. Dettaglio utile per non farsi rispondere con un link alla

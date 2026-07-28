@@ -214,7 +214,7 @@ serve comunque.
 
 | Campo | Cosa contiene |
 | --- | --- |
-| `sub` | L'identificatore stabile, la chiave di aggancio. Non dice nulla sulla persona |
+| `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene nome né altri suoi dati, ma non è anonimo — è uno pseudonimo, come il `rise_ref` |
 | `name` | Nome e cognome in una sola stringa. Può mancare |
 | `email` | L'indirizzo dell'account. Da noi si accede solo dopo aver confermato l'indirizzo, quindi è sempre reale |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
