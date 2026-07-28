@@ -165,12 +165,14 @@ con cui dimensioniamo i permessi.
 
 ## 5. Cosa ci serve sapere da voi
 
-Sei domande. Le prime due dicono quanto lavoro c'è davvero; la sesta è indipendente dal resto e ci
-serve comunque.
+Sette domande. Le prime due dicono quanto lavoro c'è davvero; la settima è quella da cui dipende il
+risultato; la sesta è indipendente dal resto e ci serve comunque.
 
 1. **Dal vostro lato serve un client OpenID Connect.** Se ne avete già uno attivo con un altro
    fornitore ci adattiamo a quello. Se non c'è, è la parte da prevedere: diteci cosa comporta
-   dalla vostra parte, così ci regoliamo sui tempi.
+   dalla vostra parte, così ci regoliamo sui tempi. Un dettaglio che conviene sapere subito: il
+   vostro lato pretende `email_verified: true` per creare l'account? Noi lo emettiamo, ma se è una
+   condizione bloccante preferiamo saperlo ora e non al primo accesso vero.
 2. **Ci serve che sulla pagina del nostro spazio resti solo il pulsante**, dal momento in cui va
    online: finché restano tutte e due le strade, della stessa persona nascono due schede. C'è
    qualcosa che lo impedisce dalla vostra parte? Se sì, diteci cos'è: è la prima cosa che guardiamo
@@ -183,11 +185,14 @@ serve comunque.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
-6. **Il rapporto che abbiamo già oggi**: come è regolato il trattamento dei dati dei nostri
-   sostenitori che stanno sulla vostra piattaforma? Dobbiamo poter dire se quei dati li trattate
-   per conto nostro o come titolari autonomi, e tenere agli atti il documento che lo stabilisce.
-   Se esiste già, ci basta una copia; se non c'è, è un adempimento che spetta a noi e ci farebbe
-   comodo sistemarlo insieme.
+6. **Il rapporto che abbiamo già oggi**: esiste un atto scritto che regola il trattamento dei dati
+   dei nostri sostenitori presenti sulla vostra piattaforma? Se esiste, ci basta averne copia da
+   tenere agli atti. Se non c'è, è un adempimento che spetta a noi e ce ne occupiamo.
+7. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
+   aggiornati. Ci serve sapere se li usate ogni volta, o soltanto la prima per creare l'account.
+   È la domanda da cui dipende il risultato: se valgono solo alla creazione, chi cambia indirizzo
+   da noi continua a risultare da voi con quello vecchio — cioè resta esattamente il problema che
+   stiamo cercando di togliere.
 
 ---
 
