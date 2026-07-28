@@ -185,6 +185,11 @@ risultato; la sesta è indipendente dal resto e ci serve comunque.
 4. **Chi ha già un account nel nostro spazio deve ritrovare quello**, non trovarsene uno nuovo e
    vuoto: al primo accesso il collegamento passa dalla stessa email. Dalla vostra parte esiste già,
    o è da prevedere? E gli account valgono per il singolo spazio o per tutta la piattaforma?
+   Un caso che resta fuori, e vorremmo sapere come lo vedete: se una persona da voi è registrata
+   con un indirizzo **diverso** da quello che usa da noi, l'aggancio sull'email non scatta e le si
+   apre una scheda nuova, mentre la sua storia resta in quella vecchia. Esiste dalla vostra parte
+   un modo perché sia lei a collegare i due account dal proprio profilo? Se non c'è, ci basta
+   saperlo: lo diciamo alle persone invece di lasciarlo succedere in silenzio.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
