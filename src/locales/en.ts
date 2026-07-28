@@ -106,6 +106,9 @@ export default {
       contactEmailPlaceholder: 'Where you will receive receipts and updates',
       contactEmailPlaceholderRelay:
         'Enter your real email: your Apple one is hidden',
+      gateNotice:
+        'Before you continue, a few of your details are missing. We ask only once: as soon as you save them you are back in the app.',
+      gateExitHint: 'Would you rather do it later?',
     },
     edit: {
       title: 'Edit profile',
@@ -166,6 +169,8 @@ export default {
       email_not_confirmed: 'Email not confirmed yet. Check your inbox.',
       already_registered: 'This email is already registered',
       rate_limited: 'Too many attempts. Please try again shortly.',
+      profileStillIncomplete:
+        'Please fill in every required field: without them your profile stays incomplete.',
       generic: 'An error occurred. Please try again.',
     },
   },

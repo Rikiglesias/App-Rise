@@ -45,13 +45,30 @@ export type ProfileCompletion =
   | 'complete';
 
 /**
+ * Il sottoinsieme di colonne su cui si misura la completezza. Il tipo è un `Pick`, non
+ * `Profile` intero, perché lo stesso predicato deve poter giudicare anche i valori che
+ * si STANNO PER SCRIVERE (il payload dell'upsert non è ancora un profilo: non ha `id`
+ * né i consensi). È questo che rende possibile un solo predicato per il cancello e per
+ * il salvataggio invece di due elenchi di campi che col tempo divergono.
+ */
+export type ProfileCompletionFields = Pick<
+  Profile,
+  'phone' | 'city' | 'province' | 'country' | 'contact_email'
+>;
+
+/**
  * I campi ancora da raccogliere, in ordine di richiesta. Vuoto = niente da chiedere.
  * `province` è dovuta SOLO per l'Italia: per i paesi esteri il trigger scrive `null`
  * per costruzione (migration 0007), quindi pretenderla sarebbe un sollecito
  * impossibile da soddisfare.
+ *
+ * ⚠️ Su `null` ritorna `[]`, che letto da solo si legge «niente da chiedere»: un
+ * utente autenticato SENZA profilo sembrerebbe a posto. Chi deve decidere se
+ * sbarrare la strada non usa questa funzione ma `getProfileCompletion`, che
+ * distingue `absent` da `complete`.
  */
 export const missingProfileFields = (
-  profile: Profile | null | undefined
+  profile: ProfileCompletionFields | null | undefined
 ): CompletableField[] => {
   if (!profile) return [];
   const missing: CompletableField[] = [];
@@ -71,10 +88,28 @@ export const missingProfileFields = (
  * cose e confonderle è ciò che produce solleciti fantasma.
  */
 export const getProfileCompletion = (
-  profile: Profile | null | undefined,
+  profile: ProfileCompletionFields | null | undefined,
   isLoaded: boolean
 ): ProfileCompletion => {
   if (!isLoaded) return 'unknown';
   if (!profile) return 'absent';
   return missingProfileFields(profile).length > 0 ? 'incomplete' : 'complete';
 };
+
+/**
+ * Il cancello sbarra la strada oppure no. UNICA definizione: la usano il navigatore
+ * (per decidere quali schermate esistono) e la schermata di completamento (per
+ * decidere se mostrare la via d'uscita). Due copie di questa condizione sono il modo
+ * sicuro di ritrovarsi, dopo un refactor, con un cancello che blocca e un salvataggio
+ * che non lo apre — la persona ricomincia da capo ogni volta che entra.
+ *
+ * - `absent` BLOCCA: un account senza riga `profiles` non è «a posto», è un profilo
+ *   che non esiste (e `missingProfileFields(null)` da solo direbbe il contrario).
+ * - `unknown` NON blocca: è lo stato all'avvio e **dopo un errore di rete**
+ *   (`AuthContext` alza `profileLoaded` solo sull'assenza CONFERMATA, PGRST116).
+ *   Sbarrare qui significherebbe chiudere fuori dall'app chi ha il profilo completo
+ *   solo perché la rete è andata giù; si lascia passare e si ricontrolla al giro dopo.
+ *   Il cancello raccoglie dati, non è un controllo di sicurezza: le RLS restano.
+ */
+export const isProfileGateBlocked = (completion: ProfileCompletion): boolean =>
+  completion === 'absent' || completion === 'incomplete';

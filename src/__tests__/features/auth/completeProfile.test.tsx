@@ -3,13 +3,22 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import type { Session } from '@supabase/supabase-js';
 
 import { AllProviders } from '../../helpers/testProviders';
+import { fillValidProfileForm } from '../../helpers/profileFormHelpers';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
 
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
+  // `canGoBack` fa parte dell'oggetto navigation vero (`@react-navigation/core`,
+  // types.d.ts:267): il salvataggio lo consulta perché dietro il cancello del profilo
+  // questa schermata è sola nello stack e un «indietro» non esiste. Qui risponde `true`
+  // = il percorso normale, raggiunto dall'area donatori.
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    goBack: jest.fn(),
+    canGoBack: () => true,
+  }),
 }));
 
 jest.mock('@/shared/auth/AuthContext', () => ({
@@ -55,29 +64,10 @@ const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
     ...over,
   }) as AuthState;
 
-const fillValidForm = (
-  getByLabelText: (t: string) => unknown,
-  getByRole: (r: string) => unknown,
-  getByTestId: (t: string) => unknown,
-  // Sul COMPLETAMENTO di un profilo esistente la casella del consenso non viene
-  // mostrata (fu dato alla nascita): premerla lì farebbe fallire la query, non il
-  // comportamento. Chi testa quel ramo passa `false`.
-  opts: { consent?: boolean } = {}
-): void => {
-  const set = (label: string, value: string): void =>
-    fireEvent.changeText(getByLabelText(label) as never, value);
-  set('Nome', 'Mario');
-  set('Cognome', 'Rossi');
-  set('Telefono', '3331234567');
-  // Città via autocomplete: digita e seleziona il primo comune suggerito
-  // (la selezione auto-compila la provincia, qui Roma → RM).
-  set('Città', 'Roma');
-  fireEvent.press(getByTestId('city-option-0') as never);
-  // Data di nascita via date picker: apre il campo e conferma (mock → 1990-01-01).
-  fireEvent.press(getByLabelText('Data di nascita') as never);
-  fireEvent.press(getByTestId('date-picker') as never);
-  if (opts.consent !== false) fireEvent.press(getByRole('checkbox') as never);
-};
+// Compilazione del form: sta in `helpers/profileFormHelpers` perché la usa anche la
+// suite del cancello del profilo, che serve proprio ad accorgersi se i campi richiesti
+// e i campi raccolti smettono di coincidere — con due copie non se ne accorgerebbe.
+const fillValidForm = fillValidProfileForm;
 
 const existingProfile = {
   id: 'u1',
