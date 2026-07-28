@@ -58,21 +58,23 @@ In pratica servono cinque cose.
    scheda tecnica per chi ci mette le mani.
 
 3. Sulla pagina del nostro spazio compare il pulsante «Entra con Rise Against Hunger». L'accesso
-   avverrà su una **pagina web nostra**, che mettiamo in piedi noi: funziona anche da computer,
-   senza avere l'app. Chi vi trova da Google o da un vostro canale e non ha ancora un account da
-   noi lo crea lì in quel momento — come si fa con un account Google — e torna sulla vostra già
-   riconosciuto.
+   avverrà su una **pagina web nostra**, che dobbiamo ancora costruire: servirà a entrare anche da
+   computer, senza avere l'app, e chi non ha ancora un account da noi potrà farlo lì in quel
+   momento, tornando poi sulla vostra pagina già riconosciuto. Te la nomino perché è un pezzo del
+   disegno, non perché sia pronta: quando lo sarà ve lo diciamo.
 
 4. Nello stesso momento in cui il pulsante va online, il vostro modulo di registrazione su quella
    pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e due,
    della stessa persona nascono due schede che si allontanano subito — cambia indirizzo da una parte
    e dall'altra resta quello vecchio. Parlo solo della pagina del nostro spazio: se lì c'è un
    vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
+   Perché una scheda sola basti davvero, serve anche che i dati aggiornati che vi mandiamo a ogni
+   accesso vengano riletti, e non usati soltanto la prima volta: è la settima domanda della scheda.
 
-5. Chi si è già registrato da voi non dovrebbe rifare la registrazione: al primo accesso col nostro
-   pulsante il suo account da voi andrebbe collegato, invece di aprirne un secondo. Il collegamento
-   passa dalla stessa email, che dalla nostra parte è sempre reale: da noi si entra solo dopo
-   averla confermata. Se questo collegamento dalla vostra parte non è già previsto, è la cosa che
-   guardiamo per prima.
+5. Chi ha già un account nel nostro spazio non dovrebbe rifare la registrazione: al primo accesso
+   col nostro pulsante dovrebbe ritrovare quello, invece di trovarsene uno nuovo e vuoto. Il
+   collegamento passa dalla stessa email, che dalla nostra parte è sempre reale: da noi si entra
+   solo dopo averla confermata. Se questo collegamento dalla vostra parte non è già previsto, è la
+   cosa che guardiamo per prima.
 
 Riccardo
