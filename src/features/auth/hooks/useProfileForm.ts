@@ -9,6 +9,7 @@ import {
   validateProfileForm,
   type ProfileErrors,
 } from '@/shared/auth/validation';
+import { missingProfileFields } from '@/shared/auth/profileCompletion';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import { syncDisplayNameClaim } from '@/shared/auth/displayName';
 import type { RootStackNavigationProp } from '@/navigation/types';
@@ -284,7 +285,7 @@ export const useProfileForm = () => {
     // S10: upsert dei soli campi anagrafici. NON ri-stampiamo marketing_consent: la
     // verità sta nel ledger consent_events; riscriverla a `false` qui azzererebbe un
     // eventuale consenso marketing già concesso.
-    const { error } = await supabase.from('profiles').upsert({
+    const nextProfile = {
       id: userId,
       first_name: firstName.trim(),
       last_name: lastName.trim(),
@@ -300,7 +301,25 @@ export const useProfileForm = () => {
       // account con mail già reale coincide con quella dell'account, e va bene:
       // averla in colonna significa non dipendere dal provider di accesso.
       contact_email: contactEmail.trim(),
-    });
+    };
+    // Il cancello del profilo e questo salvataggio giudicano con lo STESSO predicato,
+    // e qui lo si applica a ciò che si sta per SCRIVERE, non a ciò che c'è già. È la
+    // difesa contro il difetto che Riccardo ha nominato per primo — «che ricompaia ogni
+    // volta anche a chi l'aveva già fatto»: se un domani il cancello pretendesse un
+    // campo che questo form non raccoglie, senza questo controllo il salvataggio
+    // riuscirebbe e la persona si ritroverebbe di nuovo davanti al cancello, per
+    // sempre, senza sapere cosa manca. Meglio un errore leggibile PRIMA di scrivere:
+    // il dato non è ancora partito e la schermata resta quella giusta per aggiungerlo.
+    // La validazione del form NON basta a garantirlo: sono due elenchi di campi con due
+    // scopi (forma dei valori vs completezza del profilo), ed è la loro divergenza
+    // silenziosa il bug — per questo il controllo è qui e non solo nei test.
+    const stillMissing = missingProfileFields(nextProfile);
+    if (stillMissing.length > 0) {
+      setLoading(false);
+      setSubmitError(t('auth.errors.profileStillIncomplete'));
+      return;
+    }
+    const { error } = await supabase.from('profiles').upsert(nextProfile);
     if (error) {
       setLoading(false);
       setSubmitError(t('auth.errors.generic'));
@@ -322,7 +341,11 @@ export const useProfileForm = () => {
     // mettiamo davanti una chiamata di rete in più) e con i valori appena scritti.
     await syncDisplayNameClaim(firstName, lastName);
     await refreshProfile();
-    navigation.goBack();
+    // Dietro il cancello questa è l'unica schermata dello stack: non c'è un «indietro»
+    // dove tornare, e l'app riappare da sé appena il profilo risulta completo (le rotte
+    // normali rientrano nell'albero). Chiamare `goBack` a vuoto non romperebbe nulla, ma
+    // dichiarare la condizione dice quale dei due percorsi si sta chiudendo.
+    if (navigation.canGoBack()) navigation.goBack();
   }, [
     firstName,
     lastName,

@@ -1,6 +1,7 @@
 import {
   missingProfileFields,
   getProfileCompletion,
+  isProfileGateBlocked,
 } from '@/shared/auth/profileCompletion';
 import type { Profile } from '@/shared/auth/types';
 
@@ -90,5 +91,49 @@ describe('getProfileCompletion', () => {
 
   it('caricato e pieno = complete', () => {
     expect(getProfileCompletion(base, true)).toBe('complete');
+  });
+});
+
+describe('isProfileGateBlocked — quando il cancello sbarra la strada', () => {
+  it('sbarra a chi ha campi da dare', () => {
+    expect(isProfileGateBlocked('incomplete')).toBe(true);
+  });
+
+  it('sbarra anche a chi il profilo non ce l’ha proprio', () => {
+    // `missingProfileFields(null)` da solo direbbe «niente da chiedere»: è la trappola
+    // che questo stato separato esiste per disinnescare.
+    expect(isProfileGateBlocked('absent')).toBe(true);
+  });
+
+  it('NON sbarra finché il profilo è ignoto (avvio dell’app, o rete caduta)', () => {
+    // `AuthContext` alza `profileLoaded` solo sull'assenza confermata dal server, quindi
+    // un errore di rete resta `unknown`: sbarrare qui chiuderebbe fuori dall'app chi ha
+    // il profilo completo per un guasto che non lo riguarda.
+    expect(isProfileGateBlocked('unknown')).toBe(false);
+  });
+
+  it('NON sbarra al profilo completo', () => {
+    expect(isProfileGateBlocked('complete')).toBe(false);
+  });
+
+  it('accetta anche i valori che si stanno per SCRIVERE, non solo un profilo salvato', () => {
+    // È ciò che permette a cancello e salvataggio di condividere UN predicato: il
+    // payload dell'upsert non è ancora un profilo (non ha id né consensi) e deve poter
+    // essere giudicato prima di partire.
+    const payload = {
+      phone: '+393331234567',
+      city: 'Roma',
+      province: 'RM',
+      country: 'IT',
+      contact_email: 'vera@mail.it',
+    };
+    expect(isProfileGateBlocked(getProfileCompletion(payload, true))).toBe(
+      false
+    );
+    expect(
+      isProfileGateBlocked(
+        getProfileCompletion({ ...payload, phone: null }, true)
+      )
+    ).toBe(true);
   });
 });

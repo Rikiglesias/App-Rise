@@ -109,6 +109,12 @@ export default {
       contactEmailPlaceholder: 'Dove riceverai ricevute e comunicazioni',
       contactEmailPlaceholderRelay:
         'Scrivi la tua email vera: quella di Apple è nascosta',
+      // Testi che compaiono SOLO quando questa schermata è il passaggio obbligato dopo
+      // l'accesso. Dicono tre cose: che è una volta sola, che finisce appena si salva,
+      // e come uscire — chi non trova una via d'uscita disinstalla l'app.
+      gateNotice:
+        'Prima di continuare ci mancano alcuni tuoi dati. Li chiediamo una volta sola: appena li salvi torni all’app.',
+      gateExitHint: 'Preferisci farlo più tardi?',
     },
     edit: {
       title: 'Modifica profilo',
@@ -170,6 +176,11 @@ export default {
       email_not_confirmed: 'Email non ancora confermata. Controlla la posta.',
       already_registered: 'Questa email è già registrata',
       rate_limited: 'Troppi tentativi. Riprova tra poco.',
+      // Salvataggio che non basterebbe a completare il profilo: si mostra PRIMA di
+      // scrivere, perché il contrario significherebbe salvare e ritrovarsi di nuovo la
+      // stessa schermata senza sapere perché.
+      profileStillIncomplete:
+        'Compila tutti i campi richiesti: senza di essi il profilo resta da completare.',
       generic: 'Si è verificato un errore. Riprova.',
     },
   },

@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
@@ -17,14 +18,43 @@ import { PerfectSpacing } from '@/shared/constants';
 import { RISE_URLS } from '@/shared/constants/urls';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
+import { useAuth } from '@/shared/auth/AuthContext';
+import {
+  getProfileCompletion,
+  isProfileGateBlocked,
+} from '@/shared/auth/profileCompletion';
+import type { RootStackNavigationProp } from '@/navigation/types';
 
-/** Step post-social: i provider non danno telefono/città/provincia/data nascita. */
+/**
+ * Schermata dei dati che mancano al profilo. Ha due vite:
+ * - raggiunta dal profilo, è il completamento che la persona ha scelto di fare;
+ * - montata dal cancello (`ProfileGateNavigator`), è il passaggio obbligato dopo
+ *   l'accesso — e allora deve anche offrire una VIA D'USCITA, perché lì l'app non è
+ *   raggiungibile: senza uscita, chi non può o non vuole completare disinstalla.
+ * Quale delle due si sta vivendo lo dice lo STESSO predicato che governa il cancello,
+ * non un parametro di rotta: un parametro può essere passato male da un chiamante, il
+ * predicato no.
+ */
 export const CompleteProfileScreen: React.FC = () => {
   useRequireAuth();
   const styles = useMemo(() => createStyles(), []);
   const { t } = useTranslation();
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const { profile, profileLoaded, signOut } = useAuth();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useProfileForm();
+
+  const gated = isProfileGateBlocked(
+    getProfileCompletion(profile, profileLoaded)
+  );
+
+  const handleLogout = useCallback((): void => {
+    void signOut();
+  }, [signOut]);
+
+  const handleDeleteAccount = useCallback((): void => {
+    navigation.navigate('DeleteAccount');
+  }, [navigation]);
 
   const err = (key?: string): string | undefined =>
     key ? t(`auth.errors.${key}`) : undefined;
@@ -34,6 +64,14 @@ export const CompleteProfileScreen: React.FC = () => {
       title={t('auth.completeProfile.title')}
       subtitle={t('auth.completeProfile.subtitle')}
     >
+      {gated ? (
+        <View style={styles.notice}>
+          <PerfectText size={14} lines={4} style={styles.noticeText}>
+            {t('auth.completeProfile.gateNotice')}
+          </PerfectText>
+        </View>
+      ) : null}
+
       <AuthSection title={t('auth.signup.sections.personal')}>
         <AuthInput
           label={t('auth.signup.firstName')}
@@ -160,6 +198,30 @@ export const CompleteProfileScreen: React.FC = () => {
         onPress={form.handleSubmit}
         loading={form.loading}
       />
+
+      {/* Le vie d'uscita esistono SOLO nel passaggio obbligato: raggiunta dal profilo,
+          questa schermata ha già l'indietro e i comandi dell'area donatori sopra.
+          «Esci» rimette la persona nell'app come ospite (da ospite si può ancora
+          donare); «Elimina account» è per chi scopre di non poter avere un profilo
+          valido — il caso vero è la data di nascita che non passa. Senza queste due, il
+          passaggio obbligato diventa una stanza chiusa. */}
+      {gated ? (
+        <View style={styles.exits}>
+          <PerfectText size={13} lines={2} style={styles.exitHint}>
+            {t('auth.completeProfile.gateExitHint')}
+          </PerfectText>
+          <AuthButton
+            label={t('auth.profile.logout')}
+            onPress={handleLogout}
+            variant="link"
+          />
+          <AuthButton
+            label={t('auth.delete.title')}
+            onPress={handleDeleteAccount}
+            variant="link"
+          />
+        </View>
+      ) : null}
     </AuthScreen>
   );
 };
@@ -169,5 +231,21 @@ const createStyles = () =>
     error: {
       color: Colors.semantic.error.main,
       marginTop: PerfectSpacing.xs,
+    },
+    notice: {
+      backgroundColor: Colors.primary[50],
+      borderRadius: PerfectSpacing.sm,
+      padding: PerfectSpacing.md,
+      marginBottom: PerfectSpacing.md,
+    },
+    noticeText: {
+      color: Colors.primary[700],
+    },
+    exits: {
+      marginTop: PerfectSpacing.lg,
+    },
+    exitHint: {
+      color: Colors.neutral[600],
+      marginBottom: PerfectSpacing.xs,
     },
   });
