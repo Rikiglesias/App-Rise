@@ -174,7 +174,8 @@ serve comunque.
    vuoto: al primo accesso il collegamento passa dalla stessa email. Dalla vostra parte esiste già,
    o è da prevedere? E gli account valgono per il singolo spazio o per tutta la piattaforma?
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
-   arrivano a noi?
+   arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
+   diteci come.
 6. **Il rapporto che abbiamo già oggi**: come è regolato il trattamento dei dati dei nostri
    sostenitori che stanno sulla vostra piattaforma? È una richiesta che arriva da chi ci segue
    sulla privacy: dobbiamo poter dire se quei dati li trattate per conto nostro o come titolari
