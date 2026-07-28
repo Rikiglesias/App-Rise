@@ -188,8 +188,8 @@ serve comunque.
   nome pubblico, la visibilità nelle liste, le comunicazioni degli enti beneficiari): quelli
   continuate a raccoglierli voi, noi non possiamo né trasmetterli né darli per concessi.
 - **Come si qualificano i due trattamenti** lo stiamo chiudendo con chi ci segue sul tema, e qui non
-  lo diamo per deciso. Vale sia per questo collegamento sia per il rapporto che abbiamo già oggi: è
-  la domanda 6.
+  lo diamo per deciso: vale sia per questo collegamento sia per il rapporto che abbiamo già oggi.
+  Sul rapporto già in essere vi chiediamo in più un dato di fatto, ed è la domanda 6.
 
 ---
 
