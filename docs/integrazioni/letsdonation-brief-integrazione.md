@@ -195,8 +195,10 @@ serve comunque.
 
 - **Nessuno dei due entra nel database dell'altro.** Durante l'accesso passa quello che lo standard
   prevede. Oltre a quello, dai link che portano dalla nostra app al vostro spazio arriva un codice
-  di provenienza (`rise_ref`), che serve a riconoscere che la persona è arrivata da noi e non dice
-  nulla su chi sia.
+  di provenienza (`rise_ref`): non contiene nome, indirizzo né altri dati della persona, ma è
+  **stabile**, quindi consente di ricondurre allo stesso sostenitore visite diverse. Per questo va
+  trattato come un dato personale pseudonimizzato, non come un dato anonimo. Solo noi possiamo
+  risalire da quel codice alla persona.
 - **I consensi restano di chi li raccoglie.** I vostri moduli chiedono cose che noi non chiediamo (il
   nome pubblico, la visibilità nelle liste, le comunicazioni degli enti beneficiari): quelli
   continuate a raccoglierli voi, noi non possiamo né trasmetterli né darli per concessi.
