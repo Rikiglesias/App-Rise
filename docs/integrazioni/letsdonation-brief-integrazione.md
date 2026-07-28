@@ -104,8 +104,8 @@ Chi ha già un account Rise Against Hunger Italia entra nel nostro spazio sulla 
 
 Oggi la stessa persona compila due moduli e finisce in due archivi che non si parlano: cambia
 indirizzo da una parte e dall'altra resta quello vecchio. Dopo, sul nostro spazio resta il solo
-pulsante «Entra con Rise Against Hunger»; chi non ha ancora un account da voi se lo vede creare in
-quel momento, con i dati che arrivano dall'accesso.
+pulsante «Entra con Rise Against Hunger», e chi non ha ancora un account da voi non compila un
+secondo modulo: i dati per crearlo arrivano dall'accesso.
 
 Dalla nostra parte il ruolo è quello di **OpenID Provider**.
 
