@@ -14,6 +14,17 @@ Stessa passata: tolta la parola «istruzioni» dal punto 2 (era la stessa cornic
 cui la scheda tecnica e' stata riscritta) e tolta dal punto 4 la diagnosi su come sia fatto il loro
 sito. Perimetro degli scenari:
 `identita-matrice-scenari.md` (lato loro) e `app-gate-matrice.md` (lato nostro).
+AGGIORNATO 2026-07-28: passata di RIDUZIONE AGLI IMPEGNI FERMI (invio fermato da Riccardo).
+Regola: `documenti-verso-partner.md` — il primo contatto chiede capacità, non promette
+architettura. Due righe cambiate, verificate alla fonte:
+  - punto 3: diceva al PRESENTE «il pulsante apre una nostra pagina web». Quella pagina NON
+    esiste (0 next.config/vercel.json/web in repo) e l'hosting non e' nemmeno deciso
+    (`oidc-server-implementation-plan.md:69-74`: «e' il pezzo piu' grande»). Ora e' al futuro.
+  - punto 5: prometteva il COMPORTAMENTO DEL LORO SISTEMA («entra e ritrova quello che aveva»),
+    mentre la scheda tecnica lo CHIEDE come domanda 4. Contraddizione fra i due documenti in
+    uscita, la seconda trovata. Ora e' un requisito piu' una domanda.
+  - RESTA come promessa, ed e' VERIFICATA sul vivo: «da noi si entra solo dopo aver confermato
+    l'indirizzo» -> `mailer_autoconfirm=false` sul progetto + 0 login social nel codice.
 Tutto ciò che sta FUORI da questo commento lo legge il destinatario: prima di rigenerare il
 PDF, rileggere la prima pagina come la leggerebbe lui.
 -->
@@ -39,10 +50,11 @@ In pratica servono cinque cose.
 2. Noi prepariamo il nostro accesso e vi passiamo quello che serve per collegarlo, insieme alla
    scheda tecnica per chi ci mette le mani.
 
-3. Chi gestisce il vostro sito mette sulla pagina del nostro spazio il pulsante «Entra con Rise
-   Against Hunger». Il pulsante apre una **nostra pagina web**: funziona anche da computer, senza
-   avere l'app. Chi vi trova da Google o da un vostro canale e non ha ancora un account da noi lo
-   crea lì in quel momento — come si fa con un account Google — e torna sulla vostra già riconosciuto.
+3. Sulla pagina del nostro spazio compare il pulsante «Entra con Rise Against Hunger». L'accesso
+   avverrà su una **pagina web nostra**, che mettiamo in piedi noi: funziona anche da computer,
+   senza avere l'app. Chi vi trova da Google o da un vostro canale e non ha ancora un account da
+   noi lo crea lì in quel momento — come si fa con un account Google — e torna sulla vostra già
+   riconosciuto.
 
 4. Nello stesso momento in cui il pulsante va online, il vostro modulo di registrazione su quella
    pagina viene tolto. Le due cose vanno insieme, non una dopo l'altra: finché restano tutte e due,
@@ -50,9 +62,10 @@ In pratica servono cinque cose.
    e dall'altra resta quello vecchio. Parlo solo della pagina del nostro spazio: se lì c'è un
    vincolo tecnico, dimmi quale ed è la prima cosa che guardiamo insieme.
 
-5. Chi si è già registrato da voi non deve rifare la registrazione: entra col nostro pulsante e
-   ritrova quello che aveva. La persona arriva con la stessa email che ha già da voi, e il vostro
-   sistema usa l'account che c'è già invece di aprirne un secondo. L'indirizzo che vi arriva è
-   sempre reale: da noi si entra solo dopo averlo confermato.
+5. Chi si è già registrato da voi non dovrebbe rifare la registrazione: al primo accesso col nostro
+   pulsante il suo account da voi andrebbe collegato, invece di aprirne un secondo. Il collegamento
+   passa dalla stessa email, che dalla nostra parte è sempre reale: da noi si entra solo dopo
+   averla confermata. Se questo collegamento dalla vostra parte non è già previsto, è la cosa che
+   guardiamo per prima.
 
 Riccardo

@@ -36,6 +36,50 @@
      Ora la scheda distingue il FATTO (senza conferma non si entra) dal FLAG del provider.
      ----------------------------------------------------------------------------------
 
+     ----------------------------------------------------------------------------------
+     RIDOTTO AGLI IMPEGNI FERMI IL 2026-07-28 - terzo giro e mezzo, invio FERMATO da Riccardo.
+     Regola: memoria `documenti-verso-partner.md` - il primo contatto CHIEDE CAPACITA', non
+     PROMETTE ARCHITETTURA. Ogni riga tolta e' un impegno che potremmo dover ritrattare
+     DAVANTI A LORO. Ogni verdetto e' verificato alla fonte, non a impressione:
+
+       TOLTI (impegni non fermi):
+       - §6 «restiamo due titolari autonomi» -> posizione PROPOSTA in conferma legale, non un
+         fatto (`oidc-server-implementation-plan.md:146-148`). Resta solo la domanda 6, che ora
+         copre ANCHE il rapporto gia' in essere.
+       - scheda dati, «Citta', provincia, data di nascita ... ce ne prendiamo noi il carico»
+         -> REFUTATO dalla nostra stessa verifica del 2026-07-24: i claim custom NON raggiungono
+         il client OIDC (`oidc-server-implementation-plan.md:18-22`). Non era «non fermo»: era
+         una promessa che oggi crediamo IMPOSSIBILE sullo stack scelto.
+       - scheda dati, «Telefono: ci basta che lo richiediate» -> il telefono vive in
+         `public.profiles` (`0001_profiles.sql:8`), NON in `auth.users`: il claim standard
+         `phone_number` non uscirebbe. Sul progetto `phone_autoconfirm=false`, provider Twilio
+         -> servirebbe un percorso di verifica SMS mai costruito. Ora e' una DOMANDA.
+       - «Un impegno che vi chiediamo di mettere per iscritto nell'accordo» -> materia di
+         contratto, non di primo brief. La sostanza tecnica resta come 4o punto di §4.
+       - «Sull'eta': stiamo aprendo la registrazione anche ai minorenni» -> FALSO nel prodotto
+         oggi: `constraint adult` in `0001_profiles.sql:17` e `validateAdult` in
+         `validation.ts:25` (usata a :83 signup e :148 profilo). Deciso != rilasciato.
+       - §2, le righe «Voi: Collegate…» / «Voi: Lasciate li'…» della tabella -> e' il difetto
+         gia' corretto una volta (dire a loro come fare il proprio lavoro), tornato in forma di
+         tabella. La CONDIZIONE vera (pulsante su e modulo giu' INSIEME, invariante I7) resta,
+         come condizione che riguarda entrambi.
+       - cappello, «Come realizzarlo dalla vostra parte lo decidete voi» -> meta-testo, rilievo
+         letterale di Riccardo.
+
+       AL FUTURO, non piu' al presente (esistono sulla carta, non in produzione):
+       - §1 «facciamo da OpenID Provider» -> «il ruolo e' quello di»; §3 dichiara che il
+         provider lo mettiamo in piedi PER questa integrazione. Il piano e' esplicito: «Non
+         ancora eseguito» (`oidc-server-implementation-plan.md:5-6`), e due passi su quattro
+         sono leve di Riccardo (chiavi asimmetriche + abilitazione della beta).
+
+       RESTANO, e sono VERIFICATI:
+       - `sub` come chiave (standard OIDC);
+       - «da noi si entra solo dopo aver confermato l'indirizzo» -> `mailer_autoconfirm=false`
+         sul progetto vivo + 0 login social nel codice (Google/Apple rimossi);
+       - nessuno dei due entra nel DB dell'altro; i consensi restano di chi li raccoglie;
+       - il limite del browser che non conosce la sessione dell'app.
+     ----------------------------------------------------------------------------------
+
      Il ragionamento integrale non e' andato perso, sta nei documenti NOSTRI:
        · scambio-dati-quadro.md ......... chi tiene cosa, cosa passa, prerequisiti, §8.1
        · identita-matrice-scenari.md .... gli scenari lato Let's Donation
@@ -49,8 +93,7 @@
 -->
 
 > Questa scheda descrive **il nostro lato** dell'integrazione: cosa mettiamo a disposizione, cosa
-> va concordato fra noi, cosa ci serve sapere da voi. Come realizzarlo dalla vostra parte lo
-> decidete voi.
+> va concordato fra noi, cosa ci serve sapere da voi.
 
 ---
 
@@ -64,26 +107,28 @@ indirizzo da una parte e dall'altra resta quello vecchio. Dopo, sul nostro spazi
 pulsante «Entra con Rise Against Hunger»; chi non ha ancora un account da voi se lo vede creare in
 quel momento, con i dati che arrivano dall'accesso.
 
-Dalla nostra parte facciamo da **OpenID Provider**.
+Dalla nostra parte il ruolo è quello di **OpenID Provider**.
 
 ---
 
 ## 2. Come ci dividiamo il lavoro
 
-| Chi | Cosa |
-| --- | --- |
-| **Noi** | Esponiamo l'OpenID Provider ed emettiamo le credenziali client dedicate a voi |
-| **Voi** | Collegate il nostro provider alla pagina del nostro spazio da voi, con la soluzione che preferite |
-| **Voi** | Lasciate lì il solo pulsante di accesso, al posto del modulo di registrazione |
-| **Insieme** | Proviamo il giro completo con due o tre persone vere prima di aprire a tutti |
+Dalla nostra parte esponiamo l'OpenID Provider ed emettiamo le credenziali client dedicate a voi.
+Il collegamento dalla vostra parte lo realizzate con la soluzione che preferite.
 
-Sul terzo punto: parliamo solo della pagina del nostro spazio, e le due cose vanno insieme, non
-una dopo l'altra. Finché restano tutte e due le strade, della stessa persona continuano a nascere
-due schede. Se lì c'è un vincolo che lo impedisce, ce lo dite nella domanda 2.
+Una condizione riguarda tutti e due: sulla pagina del nostro spazio il pulsante di accesso e il
+modulo di registrazione non possono convivere, e le due cose vanno insieme, non una dopo l'altra.
+Finché restano tutte e due le strade, della stessa persona continuano a nascere due schede. Se lì
+c'è un vincolo che lo impedisce, ce lo dite nella domanda 2.
+
+Prima di aprire a tutti, proponiamo di provare il giro completo con due o tre persone vere.
 
 ---
 
 ## 3. Cosa mettiamo a disposizione
+
+Il nostro provider lo mettiamo in piedi per questa integrazione: qui sotto c'è quello che vi
+arriverà dalla nostra parte.
 
 - Il documento di discovery (`.../.well-known/openid-configuration`), da cui il vostro lato legge
   endpoint e chiavi.
@@ -95,8 +140,8 @@ due schede. Se lì c'è un vincolo che lo impedisce, ce lo dite nella domanda 2.
 
 ## 4. Cosa va concordato fra noi
 
-Tre punti. I primi due riguardano il modo in cui l'account resta agganciato nel tempo; il terzo è
-un obbligo che ricade su entrambi.
+Quattro punti. I primi due riguardano il modo in cui l'account resta agganciato nel tempo, il terzo
+è un obbligo che ricade su entrambi, il quarto è il presupposto con cui dimensioniamo i permessi.
 
 - **Chiave di aggancio: `sub`.** È l'unico identificatore stabile che emettiamo. L'email no: le
   persone la cambiano.
@@ -106,6 +151,9 @@ un obbligo che ricade su entrambi.
 - **Cancellazioni.** Quando una persona chiede a noi la cancellazione, l'art. 19 del GDPR ci obbliga
   a comunicarvelo. La parte che invia la costruiamo noi: ci serve un recapito a cui scrivere e
   sapere come la trattate dalla vostra parte (domanda 5).
+- **Uso del token.** L'identità si legge dall'ID token e da UserInfo, senza usare il token di
+  accesso verso altre nostre funzioni. È la prassi; la nominiamo perché dalla nostra parte è il
+  presupposto con cui impostiamo i permessi.
 
 ---
 
@@ -133,16 +181,14 @@ serve comunque.
 
 ## 6. Privacy
 
-- Per questo collegamento **restiamo due titolari autonomi**: ciascuno resta responsabile dei propri
-  trattamenti, con un accordo che delimita cosa passa. Lo scriviamo come proposta: la stiamo facendo
-  verificare da chi ci segue sul punto.
 - **Nessuno dei due entra nel database dell'altro.** L'unico scambio avviene durante l'accesso, ed è
   quello che lo standard prevede.
 - **I consensi restano di chi li raccoglie.** I vostri moduli chiedono cose che noi non chiediamo (il
   nome pubblico, la visibilità nelle liste, le comunicazioni degli enti beneficiari): quelli
   continuate a raccoglierli voi, noi non possiamo né trasmetterli né darli per concessi.
-- Il rapporto che abbiamo **già oggi** è un'altra cosa e questa sezione non lo qualifica: è la
-  domanda 6.
+- **Come si qualificano i due trattamenti** lo stiamo chiudendo con chi ci segue sul tema, e qui non
+  lo diamo per deciso. Vale sia per questo collegamento sia per il rapporto che abbiamo già oggi: è
+  la domanda 6.
 
 ---
 
@@ -157,20 +203,9 @@ serve comunque.
 | `email` | L'indirizzo dell'account. Da noi si accede solo dopo aver confermato l'indirizzo, quindi è sempre reale |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
 
-**Altri dati, se vi servono, li mandiamo noi nello stesso momento** - non serve chiederli alla
-persona, sarebbe un modulo in più proprio dove ne stiamo togliendo uno.
-
-- **Telefono**: è previsto dal protocollo come dato a sé (scope `phone`, claim `phone_number`); ci
-  basta che lo richiediate.
-- **Città, provincia, data di nascita**: si possono mandare, ma non sono coperti da uno scope
-  standard - serve una configurazione dalla nostra parte, e ce ne prendiamo noi il carico.
-
-Diteci quali vi servono davvero e per farci cosa: non li mandiamo tutti per abitudine, perché ogni
-dato in più è un dato in più da custodire per entrambi.
-
-**Un impegno che vi chiediamo di mettere per iscritto nell'accordo**: leggere l'identità solo da ID
-token e UserInfo, senza usare quel token verso altre nostre funzioni. È la prassi, ma preferiamo che
-sia scritta.
+**Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
+cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e
+prima di impegnarci guardiamo cosa il protocollo permette di trasportare davvero.
 
 **Sui campi che il vostro modulo chiede e il nostro accesso non copre** (nome pubblico, visibilità
 nelle liste, community): con la creazione automatica dell'account quei valori non arrivano da noi.
@@ -180,6 +215,3 @@ qualcuno in pubblico col proprio nome senza che l'abbia scelto.
 
 **Un limite da conoscere prima**: chi arriva dalla nostra app apre il vostro sito nel browser del
 telefono, che non conosce la sessione dell'app. Al primo giro l'accesso va rifatto lì; dopo resta.
-
-**Sull'età**: stiamo aprendo la registrazione anche ai minorenni, con le tutele che la legge prevede
-per loro. Se sul vostro lato comporta qualcosa da sapere o da configurare, ditecelo.
