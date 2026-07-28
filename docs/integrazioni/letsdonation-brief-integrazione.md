@@ -210,9 +210,9 @@ prima di impegnarci guardiamo cosa il protocollo permette di trasportare davvero
 
 **Sui campi che il vostro modulo chiede e il nostro accesso non copre** (nome pubblico, visibilità
 nelle liste, community): con la creazione automatica dell'account quei valori non arrivano da noi.
-Ci interessa sapere se applicate un valore predefinito o se li chiedete alla persona una volta
-entrata - soprattutto per la visibilità, dove un valore predefinito sbagliato farebbe comparire
-qualcuno in pubblico col proprio nome senza che l'abbia scelto.
+Ci interessa sapere come vengono impostati - con un valore predefinito, o chiedendoli alla persona
+una volta entrata. Ci pesa soprattutto la visibilità, perché è l'unico di questi campi che ha un
+effetto pubblico, e dobbiamo poter scrivere nella nostra informativa cosa succede.
 
 **Un limite da conoscere prima**: chi arriva dalla nostra app apre il vostro sito nel browser del
 telefono, che non conosce la sessione dell'app. Al primo giro l'accesso va rifatto lì; dopo resta.
