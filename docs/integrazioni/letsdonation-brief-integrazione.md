@@ -86,9 +86,14 @@
        · app-gate-matrice.md ............ gli scenari lato nostro
        · ~/todos/partner-identita.md .... le decisioni e il perche' di ciascuna
 
-     Stato: si manda INSIEME alla lettera (decisione di Riccardo, 2026-07-27: «dobbiamo andare
-     entrambe assolutamente»). Prima la lettera, che spiega il perche' in una pagina; questa
-     scheda e' l'allegato tecnico.
+     Stato: RIAPERTO il 2026-07-28. Il 27/07 Riccardo aveva deciso «dobbiamo andare entrambe
+     assolutamente» (lettera + scheda); il 28/07 ha rimesso in discussione la lettera («serve
+     solo il brief per i tecnici, a Michele gliel'ho gia' detto»). Controproposta in attesa di
+     risposta: il testo della lettera diventa il CORPO DELL'EMAIL e questa scheda resta l'unico
+     allegato. Finche' non risponde, non si manda nulla.
+     Se si sceglie quella via, verificare che sopravvivano nel testo che resta: l'invariante I7
+     (pulsante su e modulo giu' INSIEME) e «da noi si entra solo dopo aver confermato
+     l'indirizzo» - oggi stanno in ENTRAMBI i documenti.
      Il nome del referente tecnico non e' confermato: non va scritto da nessuna parte.
 -->
 
@@ -103,11 +108,11 @@ Chi ha già un account Rise Against Hunger Italia entra nel nostro spazio sulla 
 **senza registrarsi una seconda volta**.
 
 Oggi la stessa persona compila due moduli e finisce in due archivi che non si parlano: cambia
-indirizzo da una parte e dall'altra resta quello vecchio. Dopo, sul nostro spazio resta il solo
-pulsante «Entra con Rise Against Hunger», e chi non ha ancora un account da voi non compila un
-secondo modulo: i dati per crearlo arrivano dall'accesso.
+indirizzo da una parte e dall'altra resta quello vecchio. Il punto d'arrivo è che sul nostro spazio
+resti il solo pulsante «Entra con Rise Against Hunger», e che chi non ha ancora un account da voi
+non compili un secondo modulo: i dati per crearlo arrivano dall'accesso.
 
-Dalla nostra parte il ruolo è quello di **OpenID Provider**.
+Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
 ---
 
@@ -130,8 +135,8 @@ Prima di aprire a tutti, proponiamo di provare il giro completo con due o tre pe
 Il nostro provider lo mettiamo in piedi per questa integrazione: qui sotto c'è quello che vi
 arriverà dalla nostra parte.
 
-- Il documento di discovery (`.../.well-known/openid-configuration`), da cui il vostro lato legge
-  endpoint e chiavi.
+- Il documento di discovery (`.../.well-known/openid-configuration`), che contiene endpoint e
+  chiavi.
 - `client_id` e `client_secret` dedicati a voi.
 - L'autorizzazione dei redirect URI che ci indicate.
 - Un riferimento nostro per tutta la messa in opera.
@@ -144,13 +149,14 @@ Quattro punti. I primi due riguardano il modo in cui l'account resta agganciato 
 è un obbligo che ricade su entrambi, il quarto è il presupposto con cui dimensioniamo i permessi.
 
 - **Chiave di aggancio: `sub`.** È l'unico identificatore stabile che emettiamo. L'email no: le
-  persone la cambiano.
-- **Utenti che da voi esistono già.** Al primo accesso vanno collegati all'account esistente sulla
-  stessa email, invece di generarne uno nuovo. Ci serve sapere se il collegamento è disponibile dal
-  vostro lato o se va previsto (domanda 4).
+  persone la cambiano. L'email serve una volta sola, al primo aggancio con una scheda che da voi
+  esiste già; da lì in poi la persona resta agganciata al `sub`, anche se cambia indirizzo.
+- **Utenti che da voi esistono già.** Chi ha già un account da voi deve ritrovare quello al primo
+  accesso, non trovarsene uno nuovo e vuoto: è l'aggancio sulla stessa email di cui sopra
+  (domanda 4).
 - **Cancellazioni.** Quando una persona chiede a noi la cancellazione, l'art. 19 del GDPR ci obbliga
-  a comunicarvelo. La parte che invia la costruiamo noi: ci serve un recapito a cui scrivere e
-  sapere come la trattate dalla vostra parte (domanda 5).
+  a comunicarvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare
+  (domanda 5).
 - **Uso del token.** L'identità si legge dall'ID token e da UserInfo, senza usare il token di
   accesso verso altre nostre funzioni. È la prassi; la nominiamo perché dalla nostra parte è il
   presupposto con cui impostiamo i permessi.
