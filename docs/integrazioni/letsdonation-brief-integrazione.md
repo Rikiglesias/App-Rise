@@ -144,9 +144,9 @@ arriverà dalla nostra parte.
 
 ## 4. Cosa va concordato fra noi
 
-Quattro punti. I primi due riguardano il modo in cui l'account resta agganciato nel tempo, il terzo
-è un obbligo che ricade su di noi e ha bisogno di un vostro recapito, il quarto è il presupposto
-con cui dimensioniamo i permessi.
+Cinque punti. I primi tre riguardano il modo in cui l'account resta agganciato e allineato nel
+tempo, il quarto è un obbligo che ricade su di noi e ha bisogno di un vostro recapito, il quinto è
+il presupposto con cui dimensioniamo i permessi.
 
 - **Chiave di aggancio: `sub`.** È l'unico identificatore stabile che emettiamo. L'email no: le
   persone la cambiano. L'email serve una volta sola, al primo aggancio con una scheda che da voi
@@ -154,6 +154,9 @@ con cui dimensioniamo i permessi.
 - **Utenti che da voi esistono già.** Chi ha già un account nel nostro spazio deve ritrovare
   quello al primo accesso, non trovarsene uno nuovo e vuoto: è l'aggancio sulla stessa email di
   cui sopra (domanda 4).
+- **I dati restano allineati nel tempo.** L'aggancio tiene fermo *quale* account è, non *cosa*
+  contiene: a ogni accesso vi arrivano i valori aggiornati, e perché una scheda sola serva a
+  qualcosa devono essere quelli a valere, non quelli del primo giorno (domanda 7).
 - **Cancellazioni.** Quando una persona chiede a noi la cancellazione, l'art. 19 del GDPR ci obbliga
   a comunicarvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare
   (domanda 5).
