@@ -178,10 +178,10 @@ serve comunque.
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
 6. **Il rapporto che abbiamo già oggi**: come è regolato il trattamento dei dati dei nostri
-   sostenitori che stanno sulla vostra piattaforma? È una richiesta che arriva da chi ci segue
-   sulla privacy: dobbiamo poter dire se quei dati li trattate per conto nostro o come titolari
-   autonomi, e tenere agli atti il documento che lo stabilisce. Se esiste già, ci basta una copia;
-   se non c'è, è un adempimento che spetta a noi e ci farebbe comodo sistemarlo insieme.
+   sostenitori che stanno sulla vostra piattaforma? Dobbiamo poter dire se quei dati li trattate
+   per conto nostro o come titolari autonomi, e tenere agli atti il documento che lo stabilisce.
+   Se esiste già, ci basta una copia; se non c'è, è un adempimento che spetta a noi e ci farebbe
+   comodo sistemarlo insieme.
 
 ---
 
