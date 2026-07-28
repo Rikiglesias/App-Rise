@@ -164,18 +164,19 @@ serve comunque.
 
 1. **Il vostro lato può fare da client OpenID Connect?** Se avete già un'integrazione di questo
    tipo attiva con altri, ci adattiamo a quella.
-2. **Il modulo di registrazione si può togliere dal nostro spazio?** Se qualcosa lo impedisce, qual
-   è esattamente il pezzo che lo impedisce?
+2. **Il modulo di registrazione si può togliere dal nostro spazio?** Se qualcosa lo impedisce,
+   diteci cos'è: è la prima cosa che guardiamo insieme.
 3. **Il meccanismo che usate con Zucchetti**: come fanno i loro dipendenti ad arrivare già
    registrati? Se è già un accesso unico come questo, gran parte del lavoro è fatta e ci basta
    capire come replicarlo.
 4. **Il collegamento di un account esistente sull'email**: c'è già, o va previsto?
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi?
-6. **Che accordo esiste già fra le nostre due società** per i dati dei nostri sostenitori che stanno
-   sulla vostra piattaforma? Ci serve sapere se siete responsabili del trattamento per conto nostro
-   (con un accordo firmato) o titolari autonomi, e poterne avere copia. È indipendente dal resto e
-   va chiusa comunque.
+6. **Il rapporto che abbiamo già oggi**: come è regolato il trattamento dei dati dei nostri
+   sostenitori che stanno sulla vostra piattaforma? È una richiesta che arriva da chi ci segue
+   sulla privacy: dobbiamo poter dire se quei dati li trattate per conto nostro o come titolari
+   autonomi, e tenere agli atti il documento che lo stabilisce. Se esiste già, ci basta una copia;
+   se non c'è, è un adempimento che spetta a noi e ci farebbe comodo sistemarlo insieme.
 
 ---
 
