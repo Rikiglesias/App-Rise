@@ -126,10 +126,18 @@ deliberato — le suite 0008→0015 parlano di persone che stanno usando l'app, 
 confermato — ma ha un prezzo: **chi scrive una suite che tocca la conferma deve scrivere il valore a
 mano**, altrimenti testa il caso opposto e lo vede verde. La 0016 lo dichiara in ogni riga.
 
-⚠️ **Un verde al primo giro non è una prova.** La 0016 è stata validata rompendo apposta le quattro
+⚠️ **Un verde al primo giro non è una prova.** La 0016 è stata validata rompendo apposta le **cinque**
 difese, una per volta, e verificando che ogni versione mutilata morisse sul test previsto (guardia
-del ramo A → `T1`; clausola `WHEN` → `T5`; guardia dell'oblio → `T2`; seconda lettura → `T9b`). Una
-suite che resta verde contro il codice rotto non sta presidiando niente.
+del ramo A → `T1`; clausola `WHEN` → `T5`; guardia dell'oblio → `T2`; seconda lettura → `T9b`;
+guardia del §4 sul cambio email → `T11`). Una suite che resta verde contro il codice rotto non sta
+presidiando niente.
+
+⚠️ **E un test può essere vacuo senza sembrarlo.** `T12` nella prima stesura inseriva la riga
+d'archivio PRIMA del profilo: il ramo A la rivendicava subito, e le sue asserzioni passavano anche
+cancellando l'intero blocco che il test doveva presidiare. L'ha trovato un critico avversariale, non
+la suite. Quando un test verifica un percorso TARDIVO (rivendicazione al cambio email, backfill
+differito), controllare che lo stato di partenza non sia già stato risolto da un percorso PRECEDENTE
+— altrimenti si misura il percorso sbagliato.
 
 ⚠️ I conteggi sopra sono **misurati eseguendo le suite**, non contati leggendo i sorgenti. Contare i
 `raise notice` nel file dà il numero SBAGLIATO ogni volta che una notice sta dentro un ciclo o un

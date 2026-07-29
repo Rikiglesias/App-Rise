@@ -269,9 +269,18 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
--- T8 (CAMBIO EMAIL DOPO LA CONFERMA): Supabase non muove `email` finché la persona non
--- conferma su entrambe le caselle, e `email_confirmed_at` resta valorizzato per tutto il
--- percorso: il ramo nuovo NON deve firare. La 0013 continua a fare il suo (spostare il
+-- T8 (CAMBIO EMAIL DOPO LA CONFERMA). Premessa: Supabase non muove `email` finché la persona
+-- non conferma, e `email_confirmed_at` resta valorizzato per tutto il percorso — quindi il
+-- ramo nuovo NON deve firare.
+-- ⚠️ VERIFICATA SOLO IN PARTE (una fonte): al completamento del cambio `email_confirmed_at`
+-- viene SETTATO, non azzerato. Non ho trovato una fonte che escluda esplicitamente un
+-- azzeramento intermedio → resta il residuo: se GoTrue lo azzerasse durante il flusso, la
+-- guardia `v_vecchia_provata` del §4 farebbe smettere IN SILENZIO ogni cambio indirizzo
+-- legittimo di portarsi dietro la riga d'archivio.
+-- 🔴 Trovato cercando, e vale più della premessa stessa: con `GOTRUE_MAILER_AUTOCONFIRM=true`
+-- il doppio-consenso del cambio email è **silenziosamente disabilitato**
+-- (supabase/auth#2600) — cioè l'indirizzo si sposta SENZA che nessuno lo confermi. È
+-- esattamente lo scenario contro cui il §4 esiste: quella guardia non è teorica. La 0013 continua a fare il suo (spostare il
 -- recapito derivato), e la riga d'archivio registrata sotto l'indirizzo NUOVO resta non
 -- rivendicata — è il residuo dichiarato nella 0015, fissato qui perché non cambi in
 -- silenzio: si chiude nella passata di riconciliazione, non a colpi di trigger.
@@ -438,23 +447,29 @@ end $$;
 -- indirizzo. Senza questo test, T11 sarebbe verde anche avendo semplicemente disattivato
 -- la rivendicazione della 0013 — che è il pezzo senza il quale la 0013 REGREDIVA la 0012.
 -- ---------------------------------------------------------------------------
-insert into public.legacy_contacts (id, email_norm, phone, city, country, source)
-values ('00000000-0000-0000-0000-000000000310', 'primaemail@esempio.it',
-        '+393330000310', 'Como', 'IT', 'access');
-
 insert into auth.users (id, email, email_confirmed_at)
 values ('00000000-0000-0000-0000-000000000322', 'primaemail@esempio.it', now());
 
 -- Profilo creato a mano con `contact_email` = mail dell'account, come fa la 0011 sul
 -- canale email/password: è la condizione perché la 0013 riconosca il recapito DERIVATO.
--- La riga d'archivio arriva dopo, quindi al momento della nascita non c'era niente da
--- agganciare: è proprio il caso per cui la rivendicazione al cambio email esiste.
 insert into public.profiles
   (id, first_name, last_name, phone, city, province, country, birth_date,
    privacy_consent_at, contact_email)
 values ('00000000-0000-0000-0000-000000000322',
         'Prima', 'Email', null, null, null, 'IT', '1982-12-12', now(),
         'primaemail@esempio.it');
+
+-- ⚠️ L'ARCHIVIO ARRIVA **DOPO** IL PROFILO, e l'ordine è il test.
+-- Nella prima stesura questa riga stava PRIMA: l'utente nasce già confermato, quindi il
+-- ramo A la rivendicava all'INSERT del profilo, e al cambio email il §4 trovava
+-- `claimed_by` già valorizzato e non faceva nulla — le tre asserzioni sotto passavano
+-- anche cancellando l'intero blocco `if v_spostata and v_vecchia_provata`. Un test che
+-- resta verde contro il codice che dovrebbe presidiare non presidia niente.
+-- Mettendola qui, al momento della nascita del profilo non c'era niente da agganciare:
+-- l'unica strada che può rivendicarla è la rivendicazione al cambio email, cioè il §4.
+insert into public.legacy_contacts (id, email_norm, phone, city, country, source)
+values ('00000000-0000-0000-0000-000000000310', 'primaemail@esempio.it',
+        '+393330000310', 'Como', 'IT', 'access');
 
 update auth.users set email = 'secondaemail@esempio.it'
  where id = '00000000-0000-0000-0000-000000000322';

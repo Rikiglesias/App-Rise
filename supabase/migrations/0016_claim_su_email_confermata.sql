@@ -119,6 +119,19 @@
 -- verificato all'apply della 0015). Si arma **nell'istante in cui carichiamo le 1352
 -- anagrafiche**. 🔴 VA APPLICATA PRIMA DEL CARICAMENTO, non prima del rilascio dell'app.
 --
+-- ✅ APPLICATA AL DB VIVO il 2026-07-29 (registro: 20260729140217), su autorizzazione
+-- esplicita di Riccardo. Stato al momento dell'apply: 0 profili, 0 righe in
+-- `legacy_contacts`, 2 utenti entrambi già confermati — nessun dato reale toccato.
+-- Verificato DOPO, non per ack: 5 funzioni `security definer` con `search_path=""`, nessuna
+-- eseguibile da `anon`/`authenticated`; 8 trigger tutti `ABILITATO (origin)`; la guardia del
+-- ramo B presente nella definizione del trigger; advisor di sicurezza identici a prima.
+-- ⚠️ La copia registrata in `supabase_migrations.schema_migrations` ha l'INTESTAZIONE
+-- RIDOTTA (il DDL è identico byte per byte, i commenti di testa no): **l'SSOT è questo
+-- file**, non il registro.
+-- 🔴 LIMITE: il comportamento non è mai stato esercitato sul DB vivo — con 0 profili non
+-- scatta nulla. È coperto dalle suite su Postgres usa-e-getta; la prova reale arriva col
+-- primo utente vero.
+--
 -- ORDINE DI RILASCIO: dopo la 0015 (sostituisce di nuovo il corpo delle stesse funzioni).
 -- Richiede 0012 applicata (la tabella), 0011 (il trigger di nascita del profilo) e — per il
 -- §4 — la 0013, di cui questo file diventa il corpo buono.
@@ -356,10 +369,16 @@ declare
   v_key text;
   v_confermata boolean;
 begin
-  -- Protetto come i tre accessi gemelli: era l'unico dei quattro punti che toccano
-  -- `legacy_contacts` rimasto scoperto, e dopo un rollback della 0012 avrebbe fatto fallire
-  -- ogni cancellazione di PROFILO su «relation does not exist» — cioè la persona bloccata
+  -- Protetto come i gemelli: dopo un rollback della 0012 avrebbe fatto fallire ogni
+  -- cancellazione di PROFILO su «relation does not exist» — cioè la persona bloccata
   -- dentro, per una tabella che con il suo profilo non c'entra.
+  -- ⚠️ RESIDUO DICHIARATO, e la prima stesura di questo commento diceva il falso («l'unico
+  -- rimasto scoperto»): **il §1 resta scoperto e non è rimediabile qui**. `claim_legacy_contact`
+  -- dichiara `v_legacy public.legacy_contacts`, un tipo composito che si risolve alla
+  -- COMPILAZIONE della funzione, quindi fuori da qualunque blocco EXCEPTION: senza la 0012
+  -- ogni signup con `birth_date` morirebbe prima che una guardia possa intervenire, e
+  -- nessuno potrebbe più registrarsi. Per chiuderlo davvero il §1 va riscritto con variabili
+  -- scalari come il §2 — lavoro da fare in una migration nuova, non qui.
   begin
     delete from public.legacy_contacts where claimed_by = old.id;
   exception when undefined_table then
