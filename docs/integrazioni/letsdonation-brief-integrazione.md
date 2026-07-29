@@ -89,6 +89,53 @@
      pagina web di accesso, che e' il posto dove quel comportamento conta davvero.
      ----------------------------------------------------------------------------------
 
+     ----------------------------------------------------------------------------------
+     TOLTO IL 2026-07-29 - §6 PRIVACY INTERA (rilievo Riccardo: «togli il punto 6, che non serve,
+     quindi la privacy toglie completamente tutto e basta»). Coerente con la sua posizione del
+     28/07 («se ne occuperanno comunque gli avvocati») e con la decisione gia' registrata in
+     `scambio-dati-quadro.md` (139, 163, 739): la qualificazione giuridica e' materia fra le due
+     societa', FUORI dal brief tecnico. Cosa spariva con la sezione, e dove e' finito:
+       - «Come si qualificano i due trattamenti» -> era gia' un non-detto («non lo diamo per
+         deciso»): esce e basta, e' il tema delegato ai legali;
+       - «I consensi restano di chi li raccoglie» -> la SOSTANZA utile («non possiamo darli per
+         concessi») migra nella domanda 6, dove serve a qualcosa;
+       - il `rise_ref` e la sua natura di pseudonimo -> ESCE DAL BRIEF, ed e' l'unica perdita
+         reale: il codice viaggia GIA' oggi sui link verso di loro (`usePartnerExit.ts:133`,
+         `partnerRefService.ts:52-71`), quindi il documento ora tace su un dato che gli mandiamo.
+         Non e' un buco di coerenza (il brief ridotto parla solo dell'accesso unico: 0 occorrenze
+         di attribuzione/UTM/ordini, verificato con grep), ma se l'attribuzione rientra nello
+         scambio va rimesso. Il testo canonico sopravvive in `scambio-dati-quadro.md:134`.
+       - RIMANDO RIPARATO: la riga `sub` della Scheda dei dati diceva «uno pseudonimo, come il
+         `rise_ref`» - un paragone a una cosa che il documento non nominava piu'. E' la classe
+         di errore gia' vista con la numerazione 7->5 delle domande.
+
+     SPOSTATO nella stessa passata: il blocco «Sui campi che il vostro modulo chiede e il nostro
+     accesso non copre» era in coda alla Scheda dei dati ed e' diventato la DOMANDA 6 di §5.
+     Tre motivi, il terzo e' la prova sul campo:
+       1) e' una domanda sul comportamento del LORO sistema -> la casa e' §5 (criterio: sale in §5
+          cio' che riguarda il loro sistema, resta accanto alla tabella cio' che riguarda i dati
+          che emettiamo NOI - per questo «se vi servono altri dati» NON si e' mosso);
+       2) §5 dichiarava «Cinque domande» mentre di domande ce n'erano sei sparse -> lo stesso
+          difetto gia' corretto due volte («§4 REQUISITO, §5 QUESITO»);
+       3) RICCARDO NON L'HA CAPITA leggendo il PDF, e l'ha letta come «loro chiedono queste cose
+          in piu' e vorrebbero continuare a chiederle» - che e' la formula della §6, non di questo
+          blocco. Due passaggi sullo stesso elenco a due pagine di distanza si contaminano.
+
+     CORRETTI due DIFETTI DI CONTENUTO trovati mentre si spostava (verificati alla fonte, non
+     riscritti a impressione):
+       - i due elenchi NON dicevano la stessa cosa: §6 elencava «le comunicazioni degli enti
+         beneficiari» (che e' un consenso MARKETING, `identita-matrice-scenari.md:179`), la Scheda
+         dati elencava «community» (che e' un campo di PROFILO). Presentati come lo stesso elenco.
+         L'elenco vero e' quello di `scambio-dati-quadro.md:211-213`: nickname · visibilita' nelle
+         liste pubbliche · adesione a community e classifiche.
+       - mancava il FATTO che rende la domanda ineludibile: da loro la visibilita' e'
+         **obbligatoria e senza valore predefinito** (`scambio-dati-quadro.md:872-877`), quindi
+         oggi la sceglie sempre la persona e togliendo il modulo qualcuno deve continuare a
+         chiederla. Senza quel fatto la domanda si legge come una curiosita'.
+     NON si e' scritto «qualunque sia la risposta va bene»: e' la resa travestita da trasparenza
+     che Riccardo ha gia' bocciato sulla domanda 4 («e ci basta saperlo»).
+     ----------------------------------------------------------------------------------
+
      Il ragionamento integrale non e' andato perso, sta nei documenti NOSTRI:
        · scambio-dati-quadro.md ......... chi tiene cosa, cosa passa, prerequisiti, §8.1
        · identita-matrice-scenari.md .... gli scenari lato Let's Donation
@@ -171,7 +218,7 @@ arriverà dalla nostra parte.
 
 ## 5. Cosa ci serve sapere da voi
 
-Cinque domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il
+Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il
 risultato.
 
 1. **Come funziona il collegamento che avete con Zucchetti?** Ci dicevi che i loro dipendenti
@@ -199,22 +246,15 @@ risultato.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
-
----
-
-## 6. Privacy
-
-- **Nessuno dei due entra nel database dell'altro.** Durante l'accesso passa quello che lo standard
-  prevede. Oltre a quello, dai link che portano dalla nostra app al vostro spazio arriva un codice
-  di provenienza (`rise_ref`): non contiene nome, indirizzo né altri dati della persona, ma è
-  **stabile**, quindi consente di ricondurre allo stesso sostenitore visite diverse. Per questo va
-  trattato come un dato personale pseudonimizzato, non come un dato anonimo. Solo noi possiamo
-  risalire da quel codice alla persona.
-- **I consensi restano di chi li raccoglie.** I vostri moduli chiedono cose che noi non chiediamo (il
-  nome pubblico, la visibilità nelle liste, le comunicazioni degli enti beneficiari): quelli
-  continuate a raccoglierli voi, noi non possiamo né trasmetterli né darli per concessi.
-- **Come si qualificano i due trattamenti** lo stiamo chiudendo con chi ci segue sul tema, e qui non
-  lo diamo per deciso.
+6. **I tre campi del vostro modulo che il nostro accesso non copre** — il nickname, la scelta su come
+   apparire nelle liste pubbliche e l'adesione a community e classifiche. Oggi li raccoglie il modulo
+   di registrazione; quando quello non c'è più e l'account nasce dall'accesso, quei valori non
+   arrivano da noi. Come vengono impostati: un valore predefinito, o li chiedete alla persona una
+   volta entrata? La domanda non è teorica per la visibilità, che nel vostro modulo è obbligatoria e
+   senza valore predefinito: oggi la sceglie sempre la persona, e togliendo il modulo qualcuno deve
+   continuare a chiederla. È anche l'unico dei tre con un effetto pubblico — se nascesse già attiva,
+   la persona comparirebbe in una lista senza averlo scelto — e a noi serve saperlo per scriverlo
+   nella nostra informativa.
 
 ---
 
@@ -224,7 +264,7 @@ risultato.
 
 | Campo | Cosa contiene |
 | --- | --- |
-| `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene nome né altri suoi dati, ma non è anonimo — è uno pseudonimo, come il `rise_ref` |
+| `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene nome né altri suoi dati, ma non è anonimo: è uno pseudonimo |
 | `name` | Nome e cognome in una sola stringa. Può mancare |
 | `email` | L'indirizzo dell'account. Da noi si accede solo dopo aver confermato l'indirizzo, quindi è sempre reale |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
@@ -232,10 +272,3 @@ risultato.
 **Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
 cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e
 prima di impegnarci guardiamo cosa il protocollo permette di trasportare davvero.
-
-**Sui campi che il vostro modulo chiede e il nostro accesso non copre** (nome pubblico, visibilità
-nelle liste, community): con la creazione automatica dell'account quei valori non arrivano da noi.
-Ci interessa sapere come vengono impostati - con un valore predefinito, o chiedendoli alla persona
-una volta entrata. Ci pesa soprattutto la visibilità, perché è l'unico di questi campi che ha un
-effetto pubblico, e dobbiamo poter scrivere nella nostra informativa cosa succede.
-

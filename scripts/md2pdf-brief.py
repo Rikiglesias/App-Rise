@@ -35,6 +35,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.platypus import (
+    KeepTogether,
     ListFlowable,
     ListItem,
     Paragraph,
@@ -127,6 +128,10 @@ TABLE_STYLE = TableStyle(
 )
 
 SEPARATOR_ROW = re.compile(r"^\|[\s:|-]+\|$")
+
+# Sopra questo numero di righe (intestazione e separatore inclusi) una tabella e' una matrice
+# di `docs/` e deve poter cambiare pagina; sotto, e' una tabellina di consegna e si tiene unita.
+TABELLA_PICCOLA = 8
 
 # I font base di reportlab (Helvetica & co.) usano WinAnsiEncoding: un carattere fuori da
 # quella codifica NON da' errore, esce come un glifo sbagliato. Scoperto sul brief del
@@ -364,6 +369,17 @@ def build(md_path: Path, pdf_path: Path) -> None:
         if table is None:
             # Non era una tabella: meglio il testo grezzo che perdere il contenuto.
             story.append(Paragraph(inline(" ".join(table_rows)), STYLES["body"]))
+        elif len(table_rows) <= TABELLA_PICCOLA:
+            # Tabella corta -> tutta nella stessa pagina. Senza questo, basta che il testo
+            # sopra si accorci perche' la tabella scivoli a cavallo di due pagine: si ripete
+            # l'intestazione e una cella si taglia a meta' frase. Visto dal vivo il 2026-07-29
+            # sul brief in consegna: togliendo una sezione, la riga «sub» finiva spezzata fra
+            # pagina 2 e 3 («...ma non e' anonimo: e' uno» | «pseudonimo»).
+            # Perche' SOLO le corte: le matrici di `docs/` hanno decine di righe e DEVONO
+            # potersi spezzare, altrimenti non ci starebbero da nessuna parte. Se una tabella
+            # corta fosse comunque piu' alta della pagina, KeepTogether la spezza lo stesso
+            # (ha uno `split()`): degrada al comportamento di prima, non si blocca.
+            story.append(KeepTogether([table, Spacer(1, 7)]))
         else:
             story.append(table)
             story.append(Spacer(1, 7))
