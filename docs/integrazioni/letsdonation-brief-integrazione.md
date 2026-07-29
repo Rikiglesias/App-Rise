@@ -275,18 +275,21 @@ risultato.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
-6. **I tre campi del vostro modulo che il nostro accesso non copre** — il nickname, la scelta su come
-   apparire nelle liste pubbliche e l'adesione a community e classifiche. Oggi li raccoglie il modulo
-   di registrazione; quando sulla pagina del nostro spazio quel modulo non c'è più e l'account nasce
-   dall'accesso, quei valori non arrivano da noi. Come vengono impostati: un valore predefinito, o li
-   chiedete alla persona una volta entrata? La domanda non è teorica per la visibilità, che nel
-   vostro modulo è obbligatoria e senza valore predefinito: oggi la sceglie sempre la persona.
-   Se la strada fosse chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo
-   modulo di registrazione, e la promessa del punto 1 resta in piedi. È anche l'unico dei tre con un
-   effetto pubblico, e a noi serve saperlo per scriverlo nella nostra informativa.
-   Lo stesso vale per i vostri due consensi sulle comunicazioni: nessuno dei due può arrivarvi da
-   noi. Quello sulle comunicazioni degli enti beneficiari da noi non esiste proprio; l'altro esiste,
-   ma vale per le nostre comunicazioni, non per le vostre. Non vanno quindi dati per concessi.
+6. **I tre campi del vostro modulo che il nostro accesso non copre**: il nickname, la scelta su come
+   apparire nelle liste pubbliche e l'adesione a community e classifiche.
+   Oggi li sceglie la persona mentre compila il modulo, e la visibilità in particolare è
+   obbligatoria, senza opzione preselezionata. Quando sulla pagina del nostro spazio quel modulo non
+   c'è più, l'account nasce dall'accesso con i dati che arrivano da noi — nome e indirizzo — e quelle
+   tre scelte non le fa più nessuno: con quale valore nascono, uno deciso da voi o chiesto alla
+   persona dopo il primo ingresso?
+   Ci pesa soprattutto la visibilità, l'unica delle tre con un effetto pubblico: qualunque sia la
+   strada, dobbiamo poter scrivere nella nostra informativa cosa succede. E se la strada fosse
+   chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo modulo, e quello che
+   ci siamo detti al punto 1 resta in piedi.
+   **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione: nessuno dei due vi
+   arriva insieme all'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per
+   le comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» della persona che
+   possiate ereditare da noi.
 
 ---
 
