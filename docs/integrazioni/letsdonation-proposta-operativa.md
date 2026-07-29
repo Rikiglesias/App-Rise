@@ -43,7 +43,7 @@ Regola: `documenti-verso-partner.md` — il primo contatto chiede capacità, non
 architettura. Due righe cambiate, verificate alla fonte:
   - punto 3: diceva al PRESENTE «il pulsante apre una nostra pagina web». Quella pagina NON
     esiste (0 next.config/vercel.json/web in repo) e l'hosting non e' nemmeno deciso
-    (`oidc-server-implementation-plan.md:69-74`: «e' il pezzo piu' grande»). Ora e' al futuro.
+    (`oidc-server-implementation-plan.md:77-78`: «e' il pezzo piu' grande»). Ora e' al futuro.
   - punto 5: prometteva il COMPORTAMENTO DEL LORO SISTEMA («entra e ritrova quello che aveva»),
     mentre la scheda tecnica lo CHIEDE come domanda 4. Contraddizione fra i due documenti in
     uscita, la seconda trovata. Ora e' un requisito piu' una domanda.

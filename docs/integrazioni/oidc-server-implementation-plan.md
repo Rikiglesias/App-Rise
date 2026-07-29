@@ -156,7 +156,11 @@ Conseguenze:
   (`scambio-dati-quadro.md:501-508`). Riguarda **solo questo flusso**: il rapporto già in essere
   — nostro tenant sulla loro piattaforma — è una qualificazione distinta e aperta (se trattano
   per conto nostro sono responsabili ex Art.28 e serve un DPA, che non risulta esistere:
-  `letsdonation-donorbox-identita.md:173`). Domanda 6 del brief. Liceità = il click
+  `letsdonation-donorbox-identita.md:173`). **Fuori dal brief dal 2026-07-28** — materia fra i
+  legali delle due società, non da chiedere al referente tecnico (`scambio-dati-quadro.md:139,163,739`).
+  Diceva «Domanda 6 del brief», ma quella domanda è stata rimossa e oggi il numero 6 indica i tre
+  campi del loro modulo: chi leggeva qui credeva il DPA coperto da una domanda che non parte.
+  Liceità = il click
   dell'utente. Claim minimi STANDARD (`sub`, `name`, `email`, `email_verified`). Nessuna
   pre-creazione bulk di account sullo spazio dell'altro.
   Informativa RAH aggiornata (dipende dal criterio 1 del goal partner-identita). Vedi memoria

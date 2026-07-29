@@ -44,7 +44,7 @@
 
        TOLTI (impegni non fermi):
        - §6 «restiamo due titolari autonomi» -> posizione PROPOSTA in conferma legale, non un
-         fatto (`oidc-server-implementation-plan.md:146-148`). [AGGIORNATO 2026-07-29: la domanda 6
+         fatto (`oidc-server-implementation-plan.md:153-156`). [AGGIORNATO 2026-07-29: la domanda 6
          DI ALLORA, che copriva anche il rapporto gia' in essere, e' stata RIMOSSA il 28/07 - materia
          fra avvocati. Oggi il numero 6 indica i tre campi del loro modulo: non cercarlo li'.]
        - scheda dati, «Citta', provincia, data di nascita ... ce ne prendiamo noi il carico»
@@ -70,8 +70,11 @@
        AL FUTURO, non piu' al presente (esistono sulla carta, non in produzione):
        - §1 «facciamo da OpenID Provider» -> «il ruolo e' quello di»; §3 dichiara che il
          provider lo mettiamo in piedi PER questa integrazione. Il piano e' esplicito: «Non
-         ancora eseguito» (`oidc-server-implementation-plan.md:5-6`), e due passi su quattro
-         sono leve di Riccardo (chiavi asimmetriche + abilitazione della beta).
+         ancora eseguito» (`oidc-server-implementation-plan.md:5-6`).
+         [AGGIORNATO 2026-07-29: qui si diceva «due passi su quattro sono leve di Riccardo
+         (chiavi asimmetriche + abilitazione della beta)». Le CHIAVI SONO GIA' ASIMMETRICHE
+         (ES256, verificato sul progetto vivo) -> quella leva non esiste piu' e il passo 1 e'
+         stato annullato nel piano. Resta UNA leva: accendere il server, oggi spento.]
 
        RESTANO, e sono VERIFICATI:
        - `sub` come chiave (standard OIDC);
@@ -228,6 +231,16 @@
         inoltrata da sola a un tecnico: fuori dal suo paragrafo si legge come «togliete il
         modulo dal sito». Aggiunte tre parole.
 
+     🔑 DECISIONE PENDENTE DI RICCARDO, PORTATA QUI PERCHE' NON SI PERDA: il documento non dice
+     MAI dove ATTERRA chi preme il pulsante (0 occorrenze di «pagina web», «browser», «da
+     computer»). L'accesso avverra' su una NOSTRA PAGINA WEB ancora da costruire, che il piano
+     chiama «il pezzo piu' grande» (`oidc-server-implementation-plan.md:77-78`). Era il punto 3
+     della lettera, e la lettera NON si manda: la nota che lo custodiva vive in
+     `letsdonation-proposta-operativa.md:8-14`, cioe' in un file marcato «NON SI MANDA» che chi
+     genera questo PDF non apre. Percio' la annoto anche qui.
+     Non e' stata aggiunta d'iniziativa: e' una promessa di architettura, la categoria che
+     Riccardo ha fatto togliere. O la mette lui, o resta fuori consapevolmente.
+
      NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico dice «va detto a loro»
      (`scambio-dati-quadro.md:206-210`) ma e' ANTERIORE alla decisione del 27/07 di aprire ai
      minorenni: oggi scrivere «siamo 18+» annuncerebbe al partner un limite che il proprietario
@@ -326,19 +339,19 @@ arriverà dalla nostra parte.
 Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il
 risultato.
 
-1. **Come funziona il collegamento che avete con Zucchetti?** Ci dicevi che i loro dipendenti
-   arrivano già registrati: se è un accesso unico come quello che proponiamo, a noi basta sapere
+1. **Come funziona il collegamento che avete con Zucchetti?** Come ci era stato raccontato, i loro
+   dipendenti arrivano già registrati: se è un accesso unico come quello che proponiamo, a noi basta sapere
    come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
    client OpenID Connect: diteci cosa comporta, così ci regoliamo sui tempi.
 2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo va tolto nel
    momento stesso in cui il pulsante va online. Se c'è un vincolo tecnico che lo blocca, è la prima
    cosa che guardiamo insieme.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
-   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'indirizzo coincide il collegamento
+   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide il collegamento
    è immediato — dalla vostra parte esiste già, o è da prevedere?
-   Ma non sempre coincide: chi ha donato anni fa può avere lasciato l'indirizzo del lavoro, o un
-   altro che oggi non usa più. **Quel caso va risolto, non solo segnalato**: dalla vostra parte
-   come si fa a ricongiungere due schede quando gli indirizzi sono diversi? Se lo strumento non
+   Ma non sempre coincide: chi ha donato anni fa può avere lasciato l'email del lavoro, o un'altra
+   che oggi non usa più. **Quel caso va risolto, non solo segnalato**: dalla vostra parte
+   come si fa a ricongiungere due schede quando le email sono diverse? Se lo strumento non
    esiste, mettiamolo fra le cose da prevedere insieme.
    Serve anche sapere se gli account valgono per il singolo spazio o per tutta la piattaforma.
 4. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
@@ -346,7 +359,8 @@ risultato.
    Se valgono solo alla creazione, chi aggiorna l'indirizzo da noi continua a risultare da voi con
    quello vecchio, e il problema resta intero.
    Un dettaglio della stessa famiglia: il vostro lato pretende `email_verified: true` per creare
-   l'account? Noi lo emettiamo, ma se è una condizione bloccante preferiamo saperlo ora.
+   l'account? Il campo lo emettiamo; se il suo valore è per voi bloccante, ditecelo ora e mettiamolo
+   fra le cose da controllare nel giro di prova.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.

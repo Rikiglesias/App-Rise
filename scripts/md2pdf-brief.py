@@ -398,7 +398,12 @@ def build_table(rows: list[str]):
 
 def build(md_path: Path, pdf_path: Path) -> None:
     sorgente = md_path.read_text(encoding="utf-8")
-    avvisa_caratteri_non_mappati(sorgente)
+    # La sentinella guarda SOLO cio' che finira' nel PDF. Girava sul markdown grezzo, commenti
+    # inclusi, e fermava la consegna per un'emoji che sta in una nota interna e che il
+    # destinatario non vedra' mai: e' gia' successo (🧪 🔑 🔴 sono in FUORI_WINANSI non perche' il
+    # PDF li renda, ma per far ripartire la build). Un blocco che scatta su testo non consegnato
+    # insegna ad aggirarlo, ed e' il modo in cui una sentinella smette di essere creduta.
+    avvisa_caratteri_non_mappati(re.sub(r"<!--.*?-->", "", sorgente, flags=re.S))
     lines = sorgente.splitlines()
     story: list = []
     bullets: list = []
