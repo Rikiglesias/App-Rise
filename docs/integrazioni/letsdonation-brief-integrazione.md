@@ -213,6 +213,21 @@
         di Riccardo: cancellare l'account di prova con l'alias. Fatto quello, la frase forte
         tornerebbe vera e verificata.
 
+     4) 🔴 «`name` PUO' MANCARE» era falso, e il modo in cui e' falso e' peggio dell'assenza: il
+        claim non arriva mai vuoto perche' **il server ripiega sull'indirizzo email** quando la
+        chiave non c'e' - lo dice il nostro stesso piano (`oidc-server-implementation-plan.md:90-92`).
+        Il partner che legge «puo' mancare» prepara un ripiego proprio; invece riceve una stringa
+        PIENA che e' un'email, e la scrive dove va il nome. Su una piattaforma con LISTE PUBBLICHE
+        di donatori - le stesse della domanda 6 - e' un indirizzo email esposto in pubblico.
+        Ora la riga dice cosa succede davvero e chiede di segnalarlo.
+
+     5) La domanda 2 era l'unico punto senza il confine: «lasciare sulla pagina il solo pulsante».
+        Ovunque altrove il documento dice «sulla pagina del NOSTRO SPAZIO», perche' il canonico
+        vieta la formula larga (`scambio-dati-quadro.md:687`: «Il vostro modulo va rimosso dalla
+        piattaforma» - «non e' ottenibile e non e' cio' che chiediamo»). Una domanda viene
+        inoltrata da sola a un tecnico: fuori dal suo paragrafo si legge come «togliete il
+        modulo dal sito». Aggiunte tre parole.
+
      NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico dice «va detto a loro»
      (`scambio-dati-quadro.md:206-210`) ma e' ANTERIORE alla decisione del 27/07 di aprire ai
      minorenni: oggi scrivere «siamo 18+» annuncerebbe al partner un limite che il proprietario
@@ -315,7 +330,7 @@ risultato.
    arrivano già registrati: se è un accesso unico come quello che proponiamo, a noi basta sapere
    come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
    client OpenID Connect: diteci cosa comporta, così ci regoliamo sui tempi.
-2. **Cosa impedisce, oggi, di lasciare sulla pagina il solo pulsante?** Il modulo va tolto nel
+2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo va tolto nel
    momento stesso in cui il pulsante va online. Se c'è un vincolo tecnico che lo blocca, è la prima
    cosa che guardiamo insieme.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
@@ -360,7 +375,7 @@ risultato.
 | Campo | Cosa contiene |
 | --- | --- |
 | `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene nome né altri suoi dati, ma non è anonimo: è uno pseudonimo |
-| `name` | Nome e cognome in una sola stringa. Può mancare |
+| `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo vedete, ditecelo, perché come nome visibile non va |
 | `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
 
