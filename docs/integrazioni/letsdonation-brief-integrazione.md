@@ -345,8 +345,8 @@ arriverà dalla nostra parte.
 Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 
 - **Gli scope da chiedere sono `openid email profile`.** L'indicatore di email verificata viaggia
-  con `email`, il nome e il nickname con `profile`. Il telefono non ve lo mandiamo, quindi `phone`
-  non serve.
+  con `email`, il nome e il nickname con `profile`. Oggi il telefono non ve lo mandiamo, quindi
+  `phone` non serve: se vi servisse, ne parliamo (in fondo alla Scheda dei dati c'è come).
 - **Le chiavi di firma cambiano.** Vanno lette dall'indirizzo che trovate nel discovery, non copiate
   nella vostra configurazione: oggi ce n'è una sola, ma il giorno in cui ruota chi l'ha copiata
   smette di validare i token, e sembrerà un guasto nostro.
