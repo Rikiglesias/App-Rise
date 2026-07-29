@@ -44,8 +44,9 @@
 
        TOLTI (impegni non fermi):
        - §6 «restiamo due titolari autonomi» -> posizione PROPOSTA in conferma legale, non un
-         fatto (`oidc-server-implementation-plan.md:146-148`). Resta solo la domanda 6, che ora
-         copre ANCHE il rapporto gia' in essere.
+         fatto (`oidc-server-implementation-plan.md:146-148`). [AGGIORNATO 2026-07-29: la domanda 6
+         DI ALLORA, che copriva anche il rapporto gia' in essere, e' stata RIMOSSA il 28/07 - materia
+         fra avvocati. Oggi il numero 6 indica i tre campi del loro modulo: non cercarlo li'.]
        - scheda dati, «Citta', provincia, data di nascita ... ce ne prendiamo noi il carico»
          -> REFUTATO dalla nostra stessa verifica del 2026-07-24: i claim custom NON raggiungono
          il client OIDC (`oidc-server-implementation-plan.md:18-22`). Non era «non fermo»: era
@@ -98,7 +99,11 @@
        - «Come si qualificano i due trattamenti» -> era gia' un non-detto («non lo diamo per
          deciso»): esce e basta, e' il tema delegato ai legali;
        - «I consensi restano di chi li raccoglie» -> la SOSTANZA utile («non possiamo darli per
-         concessi») migra nella domanda 6, dove serve a qualcosa;
+         concessi») migra nella domanda 6, dove serve a qualcosa. ⚠️ CORRETTO IL 2026-07-29 dal
+         critico avversariale: alla prima stesura questa riga era FALSA - la migrazione era stata
+         dichiarata qui ma il corpo del brief aveva ZERO occorrenze di «consenso» (grep). Ora la
+         frase c'e' davvero, in coda alla domanda 6. Lezione: una nota che dichiara dove e' finita
+         una cosa va verificata NEL TESTO, non solo nell'intenzione.
        - il `rise_ref` e la sua natura di pseudonimo -> ESCE DAL BRIEF, ed e' l'unica perdita
          reale: il codice viaggia GIA' oggi sui link verso di loro (`usePartnerExit.ts:133`,
          `partnerRefService.ts:52-71`), quindi il documento ora tace su un dato che gli mandiamo.
@@ -134,6 +139,30 @@
          chiederla. Senza quel fatto la domanda si legge come una curiosita'.
      NON si e' scritto «qualunque sia la risposta va bene»: e' la resa travestita da trasparenza
      che Riccardo ha gia' bocciato sulla domanda 4 («e ci basta saperlo»).
+
+     🧪 CRITICO AVVERSARIALE sulla passata del 29/07 - 9 finding, TUTTI fondati, TUTTI applicati
+     (nessun falso positivo, nessun waive). I tre che contano:
+       1) 🔴 REGRESSIONE MIA: la domanda 6 riscritta aveva REINTRODOTTO lo scenario di danno («se
+          nascesse gia' attiva, la persona comparirebbe in una lista senza averlo scelto»). Quella
+          frase era stata tolta DI PROPOSITO il 28/07 con `e59e26a` («e' un avvertimento a non
+          combinare guai»), e il testo che Riccardo mi ha citato NON la conteneva: l'ho rimessa io
+          riscrivendo. Ora tolta di nuovo; resta la sola ragione NOSTRA, quella ratificata.
+          Classe: riscrivere una voce = rischio di resuscitare cio' che una passata precedente
+          aveva deciso di togliere -> prima di riscrivere, `git log -S` sulla frase.
+       2) 🔴 IL QUARTO ELEMENTO MANCAVA: la domanda apriva con «i TRE campi» come lista chiusa, ma
+          `scambio-dati-quadro.md:108-110,123-124` verifica dal vivo che non coperti sono anche i
+          DUE CONSENSI sulle comunicazioni (quello agli enti beneficiari «non esiste da noi»).
+          Aggiunta la frase in coda. Senza, il partner poteva presumerli concessi.
+       3) PERIMETRO: «quando quello non c'e' piu'» era globale; il canonico vieta la formula «il
+          vostro modulo va rimosso dalla piattaforma» (`scambio-dati-quadro.md:687`: non e'
+          ottenibile e non e' cio' che chiediamo). Ora e' «sulla pagina del nostro spazio».
+     Gli altri sei: §1 prometteva «senza compilare un secondo modulo» e la domanda 6 sembrava
+     contraddirlo -> qualificata («una scelta sola dopo l'ingresso, non un secondo modulo») · la
+     nota interna :47-48 rimandava a una «domanda 6» che oggi indica altro · la lettera non nominava
+     il caso degli indirizzi diversi che la scheda dichiara «va risolto» · 2 rimandi stale nella
+     memoria di progetto · la soglia di `md2pdf-brief.py` era giustificata con una premessa FALSA
+     (le matrici NON hanno tutte decine di righe: 8 tabelle su 11 di `app-gate-matrice.md` ne hanno
+     <=8) -> la condizione e' passata dal CONTEGGIO RIGHE all'ALTEZZA REALE misurata.
      ----------------------------------------------------------------------------------
 
      Il ragionamento integrale non e' andato perso, sta nei documenti NOSTRI:
@@ -248,13 +277,14 @@ risultato.
    diteci come.
 6. **I tre campi del vostro modulo che il nostro accesso non copre** — il nickname, la scelta su come
    apparire nelle liste pubbliche e l'adesione a community e classifiche. Oggi li raccoglie il modulo
-   di registrazione; quando quello non c'è più e l'account nasce dall'accesso, quei valori non
-   arrivano da noi. Come vengono impostati: un valore predefinito, o li chiedete alla persona una
-   volta entrata? La domanda non è teorica per la visibilità, che nel vostro modulo è obbligatoria e
-   senza valore predefinito: oggi la sceglie sempre la persona, e togliendo il modulo qualcuno deve
-   continuare a chiederla. È anche l'unico dei tre con un effetto pubblico — se nascesse già attiva,
-   la persona comparirebbe in una lista senza averlo scelto — e a noi serve saperlo per scriverlo
-   nella nostra informativa.
+   di registrazione; quando sulla pagina del nostro spazio quel modulo non c'è più e l'account nasce
+   dall'accesso, quei valori non arrivano da noi. Come vengono impostati: un valore predefinito, o li
+   chiedete alla persona una volta entrata? La domanda non è teorica per la visibilità, che nel
+   vostro modulo è obbligatoria e senza valore predefinito: oggi la sceglie sempre la persona.
+   Parliamo di una scelta sola dopo l'ingresso, non di un secondo modulo. È anche l'unico dei tre con
+   un effetto pubblico, e a noi serve saperlo per scriverlo nella nostra informativa.
+   Lo stesso vale per i vostri due consensi sulle comunicazioni: da noi non hanno un corrispondente,
+   quindi non possiamo trasmetterli e non vanno dati per concessi.
 
 ---
 

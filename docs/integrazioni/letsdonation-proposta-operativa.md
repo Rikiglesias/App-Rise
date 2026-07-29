@@ -75,6 +75,8 @@ In pratica servono cinque cose.
    col nostro pulsante dovrebbe ritrovare quello, invece di trovarsene uno nuovo e vuoto. Il
    collegamento passa dalla stessa email, che dalla nostra parte è sempre reale: da noi si entra
    solo dopo averla confermata. Se questo collegamento dalla vostra parte non è già previsto, è la
-   cosa che guardiamo per prima.
+   cosa che guardiamo per prima. Quando invece l'indirizzo non coincide — chi ha donato anni fa può
+   averne lasciato un altro — serve comunque un modo per ricongiungere le due schede: è la terza
+   domanda della scheda.
 
 Riccardo

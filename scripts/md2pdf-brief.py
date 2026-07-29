@@ -22,7 +22,11 @@ DIFETTI GIA' CORRETTI, in ordine di scoperta:
   - **le tabelle markdown finivano nel PDF come testo con le barre verticali**, riga di
     separazione `| --- |` inclusa (39 barre nel brief del 2026-07-25, due tabelle rovinate,
     fra cui quella tecnica su quali dati passano) -> ora sono tabelle vere, con intestazione
-    ripetuta se spezzano pagina.
+    ripetuta se spezzano pagina;
+  - una tabella che ci starebbe in una pagina veniva comunque spezzata a cavallo di due, con
+    l'intestazione ripetuta e una cella tagliata a meta' frase: bastava che il testo sopra si
+    accorciasse (2026-07-29, brief in consegna, riga «sub»). Ora chi ci sta in una pagina resta
+    unito -- deciso sull'ALTEZZA MISURATA, non sul numero di righe.
 """
 
 import re
@@ -129,9 +133,9 @@ TABLE_STYLE = TableStyle(
 
 SEPARATOR_ROW = re.compile(r"^\|[\s:|-]+\|$")
 
-# Sopra questo numero di righe (intestazione e separatore inclusi) una tabella e' una matrice
-# di `docs/` e deve poter cambiare pagina; sotto, e' una tabellina di consegna e si tiene unita.
-TABELLA_PICCOLA = 8
+# Altezza utile = A4 meno i margini verticali del documento (18 mm + 18 mm), gli stessi passati
+# a SimpleDocTemplate in fondo al file. Serve a sapere se una tabella ci sta in UNA pagina.
+CONTENT_HEIGHT = A4[1] - 36 * mm
 
 # I font base di reportlab (Helvetica & co.) usano WinAnsiEncoding: un carattere fuori da
 # quella codifica NON da' errore, esce come un glifo sbagliato. Scoperto sul brief del
@@ -166,6 +170,7 @@ FUORI_WINANSI = {
     "🔵": "[in coda]",
     "⚪": "[con calma]",
     "🧭": "[quadro]",
+    "🧪": "[verifica]",  # marca i blocchi «critico avversariale» nelle note interne
     "➡": "->",
     "🎯": "[obiettivo]",
     "🔝": "[in testa]",
@@ -256,6 +261,16 @@ def split_row(line: str) -> list[str]:
     if cells and not cells[-1].strip():
         cells = cells[:-1]
     return [c.strip().replace("\\|", "|") for c in cells]
+
+
+def sta_in_una_pagina(table: Table) -> bool:
+    """La tabella ci sta tutta in una pagina vuota?
+
+    Si misura, non si indovina: `wrap()` restituisce l'altezza che il flowable occuperebbe
+    nello spazio dato. reportlab lo richiama comunque durante il build, quindi chiamarlo qui
+    non ha effetti collaterali.
+    """
+    return table.wrap(CONTENT_WIDTH, CONTENT_HEIGHT)[1] <= CONTENT_HEIGHT
 
 
 def build_table(rows: list[str]):
@@ -369,16 +384,17 @@ def build(md_path: Path, pdf_path: Path) -> None:
         if table is None:
             # Non era una tabella: meglio il testo grezzo che perdere il contenuto.
             story.append(Paragraph(inline(" ".join(table_rows)), STYLES["body"]))
-        elif len(table_rows) <= TABELLA_PICCOLA:
-            # Tabella corta -> tutta nella stessa pagina. Senza questo, basta che il testo
-            # sopra si accorci perche' la tabella scivoli a cavallo di due pagine: si ripete
-            # l'intestazione e una cella si taglia a meta' frase. Visto dal vivo il 2026-07-29
-            # sul brief in consegna: togliendo una sezione, la riga «sub» finiva spezzata fra
-            # pagina 2 e 3 («...ma non e' anonimo: e' uno» | «pseudonimo»).
-            # Perche' SOLO le corte: le matrici di `docs/` hanno decine di righe e DEVONO
-            # potersi spezzare, altrimenti non ci starebbero da nessuna parte. Se una tabella
-            # corta fosse comunque piu' alta della pagina, KeepTogether la spezza lo stesso
-            # (ha uno `split()`): degrada al comportamento di prima, non si blocca.
+        elif sta_in_una_pagina(table):
+            # La tabella ci sta INTERA in una pagina -> non lasciarla spezzare. Senza questo
+            # basta che il testo sopra si accorci perche' scivoli a cavallo di due pagine: si
+            # ripete l'intestazione e una cella si taglia a meta' frase. Visto dal vivo il
+            # 2026-07-29 sul brief in consegna: togliendo una sezione, la riga «sub» finiva
+            # spezzata fra pagina 2 e 3 («...ma non e' anonimo: e' uno» | «pseudonimo»).
+            # La condizione e' l'ALTEZZA MISURATA, non il numero di righe: la prima versione
+            # contava le righe («<= 8») dando per scontato che le matrici di `docs/` fossero
+            # tutte lunghe - falso, 8 tabelle su 11 di `app-gate-matrice.md` hanno <= 8 righe
+            # ma celle da ~1500 caratteri, e sarebbero finite in KeepTogether lasciando mezza
+            # pagina bianca. Premessa sbagliata trovata dal critico avversariale.
             story.append(KeepTogether([table, Spacer(1, 7)]))
         else:
             story.append(table)
