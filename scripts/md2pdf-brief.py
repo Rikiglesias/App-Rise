@@ -38,6 +38,7 @@ from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
+from reportlab.pdfgen import canvas
 from reportlab.platypus import (
     KeepTogether,
     ListFlowable,
@@ -283,6 +284,43 @@ def sta_in_una_pagina(table: Table) -> bool:
     non ha effetti collaterali.
     """
     return table.wrap(CONTENT_WIDTH, CONTENT_HEIGHT)[1] <= CONTENT_HEIGHT
+
+
+class CanvasNumerato(canvas.Canvas):
+    """Scrive «2 di 3» in fondo a ogni pagina.
+
+    Un documento che va a un'altra societa' viene stampato, inoltrato e discusso da piu' persone:
+    senza numeri non si puo' dire «guarda in fondo alla due», e un foglio staccato non si sa piu'
+    dove torna. Il TOTALE e' la parte che dice se ne manca uno, ed e' anche il motivo per cui non
+    basta un `onPage`: quante pagine saranno si sa solo alla fine. Quindi le pagine si mettono da
+    parte man mano e si scrivono tutte all'ultimo, quando il totale e' noto — e' il modo con cui
+    reportlab stesso risolve il problema.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._pagine: list[dict] = []
+
+    def showPage(self) -> None:
+        self._pagine.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self) -> None:
+        totale = len(self._pagine)
+        for stato in self._pagine:
+            self.__dict__.update(stato)
+            self._scrivi_numero(totale)
+            super().showPage()
+        super().save()
+
+    def _scrivi_numero(self, totale: int) -> None:
+        self.saveState()
+        self.setFont("Helvetica", 8)
+        self.setFillColor(colors.HexColor("#777777"))
+        self.drawCentredString(
+            A4[0] / 2, MARGINE_VERTICALE / 2, f"{self.getPageNumber()} di {totale}"
+        )
+        self.restoreState()
 
 
 def _altezza(flowable) -> float:
@@ -569,7 +607,7 @@ def build(md_path: Path, pdf_path: Path) -> None:
         bottomMargin=MARGINE_VERTICALE,
         title="Rise Against Hunger Italia - Brief di integrazione",
         author="Rise Against Hunger Italia",
-    ).build(story)
+    ).build(story, canvasmaker=CanvasNumerato)
 
 
 if __name__ == "__main__":
