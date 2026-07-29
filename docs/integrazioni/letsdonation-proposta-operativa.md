@@ -45,7 +45,8 @@ architettura. Due righe cambiate, verificate alla fonte:
     esiste (0 next.config/vercel.json/web in repo) e l'hosting non e' nemmeno deciso
     (`oidc-server-implementation-plan.md:77-78`: «e' il pezzo piu' grande»). Ora e' al futuro.
   - punto 5: prometteva il COMPORTAMENTO DEL LORO SISTEMA («entra e ritrova quello che aveva»),
-    mentre la scheda tecnica lo CHIEDE come domanda 4. Contraddizione fra i due documenti in
+    mentre la scheda tecnica lo CHIEDE come domanda 3 (allora era la 4: la numerazione si e'
+    mossa, ed e' la ragione per cui qui sotto, a :16, il rimando e' scritto col numero di oggi). Contraddizione fra i due documenti in
     uscita, la seconda trovata. Ora e' un requisito piu' una domanda.
   - RESTA come promessa, ed e' VERIFICATA sul vivo: «da noi si entra solo dopo aver confermato
     l'indirizzo» -> `mailer_autoconfirm=false` sul progetto + 0 login social nel codice.

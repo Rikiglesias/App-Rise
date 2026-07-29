@@ -286,6 +286,30 @@ def sta_in_una_pagina(table: Table) -> bool:
     return table.wrap(CONTENT_WIDTH, CONTENT_HEIGHT)[1] <= CONTENT_HEIGHT
 
 
+def _righe_consegnate(sorgente: str) -> list[str]:
+    """Le righe che il destinatario leggera' davvero: fuori le note interne.
+
+    Usa la STESSA regola del renderer (`<!--` a inizio riga apre, `-->` chiude) e non una regex
+    posizionale: due definizioni diverse di «commento» nello stesso file si separano al primo caso
+    storto — un `<!--` a meta' riga verrebbe tolto qui e STAMPATO nel PDF, e la sentinella
+    sarebbe cieca proprio dove serve. Il falso negativo e' la direzione peggiore: un blocco che
+    non scatta non si nota, e cio' che non si nota arriva al partner.
+    """
+    righe: list[str] = []
+    dentro_commento = False
+    for riga in sorgente.splitlines():
+        if dentro_commento:
+            if "-->" in riga:
+                dentro_commento = False
+            continue
+        if riga.lstrip().startswith("<!--"):
+            if "-->" not in riga:
+                dentro_commento = True
+            continue
+        righe.append(riga)
+    return righe
+
+
 class CanvasNumerato(canvas.Canvas):
     """Scrive «2 di 3» in fondo a ogni pagina.
 
@@ -403,7 +427,7 @@ def build(md_path: Path, pdf_path: Path) -> None:
     # destinatario non vedra' mai: e' gia' successo (🧪 🔑 🔴 sono in FUORI_WINANSI non perche' il
     # PDF li renda, ma per far ripartire la build). Un blocco che scatta su testo non consegnato
     # insegna ad aggirarlo, ed e' il modo in cui una sentinella smette di essere creduta.
-    avvisa_caratteri_non_mappati(re.sub(r"<!--.*?-->", "", sorgente, flags=re.S))
+    avvisa_caratteri_non_mappati("\n".join(_righe_consegnate(sorgente)))
     lines = sorgente.splitlines()
     story: list = []
     bullets: list = []

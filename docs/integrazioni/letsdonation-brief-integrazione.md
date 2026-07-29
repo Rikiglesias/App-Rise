@@ -70,11 +70,18 @@
        AL FUTURO, non piu' al presente (esistono sulla carta, non in produzione):
        - §1 «facciamo da OpenID Provider» -> «il ruolo e' quello di»; §3 dichiara che il
          provider lo mettiamo in piedi PER questa integrazione. Il piano e' esplicito: «Non
-         ancora eseguito» (`oidc-server-implementation-plan.md:5-6`).
+         ancora eseguito» (`oidc-server-implementation-plan.md:4-6`).
          [AGGIORNATO 2026-07-29: qui si diceva «due passi su quattro sono leve di Riccardo
          (chiavi asimmetriche + abilitazione della beta)». Le CHIAVI SONO GIA' ASIMMETRICHE
          (ES256, verificato sul progetto vivo) -> quella leva non esiste piu' e il passo 1 e'
-         stato annullato nel piano. Resta UNA leva: accendere il server, oggi spento.]
+         stato annullato nel piano.
+         ⚠️ CORRETTO SUBITO DOPO dal secondo critico: NON scrivere «resta una sola leva,
+         accendere il server». Accendere il server non e' nemmeno eseguibile da solo — il passo 2
+         vuole `authorization_url_path`, cioe' il path della pagina consent CHE NON ESISTE
+         (`oidc-server-implementation-plan.md:76-78`, «il pezzo piu' grande»). Il vero elenco:
+         costruire la pagina consent, poi accendere il server, piu' la decisione rischio-beta
+         (`:59-60`) e le leve infra Vercel + allow-list dei redirect (`:93`). Correggere una
+         premessa stantia con un'altra premessa comoda e' lo stesso errore al contrario.]
 
        RESTANO, e sono VERIFICATI:
        - `sub` come chiave (standard OIDC);
@@ -347,8 +354,8 @@ risultato.
    momento stesso in cui il pulsante va online. Se c'è un vincolo tecnico che lo blocca, è la prima
    cosa che guardiamo insieme.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
-   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide il collegamento
-   è immediato — dalla vostra parte esiste già, o è da prevedere?
+   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide, il caso è il più
+   semplice: dalla vostra parte quel collegamento esiste già, o è da prevedere?
    Ma non sempre coincide: chi ha donato anni fa può avere lasciato l'email del lavoro, o un'altra
    che oggi non usa più. **Quel caso va risolto, non solo segnalato**: dalla vostra parte
    come si fa a ricongiungere due schede quando le email sono diverse? Se lo strumento non
@@ -356,11 +363,12 @@ risultato.
    Serve anche sapere se gli account valgono per il singolo spazio o per tutta la piattaforma.
 4. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
    aggiornati: ci serve sapere se li usate ogni volta o soltanto la prima, per creare l'account.
-   Se valgono solo alla creazione, chi aggiorna l'indirizzo da noi continua a risultare da voi con
-   quello vecchio, e il problema resta intero.
+   Se valgono solo alla creazione, chi aggiorna l'email da noi continua a risultare da voi con
+   quella vecchia, e il problema resta intero.
    Un dettaglio della stessa famiglia: il vostro lato pretende `email_verified: true` per creare
-   l'account? Il campo lo emettiamo; se il suo valore è per voi bloccante, ditecelo ora e mettiamolo
-   fra le cose da controllare nel giro di prova.
+   l'account? Il campo lo emettiamo, e per come è fatto il nostro accesso arriva vero: senza
+   conferma non si entra. Se per voi è una condizione bloccante ditecelo ora, così è fra le prime
+   cose che guardiamo insieme quando proviamo il giro.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
