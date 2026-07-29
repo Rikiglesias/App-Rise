@@ -4,11 +4,16 @@
 -- poter usare partner_refs (grant esplicito) e NON vedere i tombstone (revoke esplicito).
 create schema auth;
 
+-- `email_confirmed_at`: stesso default deliberato del gemello permissivo, stessa
+-- avvertenza — chi testa la conferma scrive il valore a mano, o testa il caso opposto
+-- credendo di aver testato questo. Le due copie vanno tenute allineate: divergere
+-- significherebbe che una combinazione su due esercita un mondo diverso.
 create table auth.users (
   id uuid primary key default gen_random_uuid(),
   raw_user_meta_data jsonb default '{}'::jsonb,
   raw_app_meta_data jsonb default '{}'::jsonb,
-  email text
+  email text,
+  email_confirmed_at timestamptz default now()
 );
 
 create function auth.uid() returns uuid

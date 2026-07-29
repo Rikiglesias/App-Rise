@@ -27,6 +27,7 @@ PAIRS=(
   "0013_contact_email_follows_account"
   "0014_claim_legacy_campi_vuoti"
   "0015_aggancio_su_email_verificata"
+  "0016_claim_su_email_confermata"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
@@ -68,9 +69,13 @@ for pair in "${PAIRS[@]}"; do
     case "$pair" in
       0012_legacy_contacts|0013_contact_email_follows_account)
         extra=(migrations/0014_claim_legacy_campi_vuoti.sql
-               migrations/0015_aggancio_su_email_verificata.sql) ;;
+               migrations/0015_aggancio_su_email_verificata.sql
+               migrations/0016_claim_su_email_confermata.sql) ;;
       0014_claim_legacy_campi_vuoti)
-        extra=(migrations/0015_aggancio_su_email_verificata.sql) ;;
+        extra=(migrations/0015_aggancio_su_email_verificata.sql
+               migrations/0016_claim_su_email_confermata.sql) ;;
+      0015_aggancio_su_email_verificata)
+        extra=(migrations/0016_claim_su_email_confermata.sql) ;;
     esac
 
     log=$(cat "tests/${shim}.sql" migrations/0*.sql \
