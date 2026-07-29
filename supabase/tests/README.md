@@ -100,6 +100,24 @@ sempre l'ultima):
   stampa **due** righe (colonna non toccata · nessuna rivendicazione) e `T7b` altre **due**
   (riaggancio · cancellazione) + esito. Non concede grant → stesso esito coi due shim (misurato:
   15/15, 0 FAIL su entrambi, 2026-07-26).
+- **0014**: **15** righe `PASS` (misurato 15/15 su entrambi gli shim, 2026-07-29).
+- **0015**: **8** righe `PASS` — `T1-T8`, di cui le prime tre sono l'ATTACCO via `contact_email`
+  (misurato 8/8 su entrambi, 2026-07-29).
+- **0016**: **14** righe `PASS` — 12 blocchi (`T1-T12`), di cui `T3` e `T9` stampano **due** righe
+  ciascuno (prima/dopo la conferma · rivendicazione senza profilo, poi backfill alla nascita).
+  `T12` **droppa `legacy_contacts`** per provare davvero la guardia `undefined_table`, quindi deve
+  restare l'ultimo: dopo di lui il database è mutilato e nient'altro può seguire.
+
+⚠️ **`auth.users.email_confirmed_at` negli shim ha un default `now()` che in Supabase NON esiste**
+(là nasce NULL e si valorizza alla conferma, o subito se l'identità viene da un provider OAuth). È
+deliberato — le suite 0008→0015 parlano di persone che stanno usando l'app, cioè che hanno
+confermato — ma ha un prezzo: **chi scrive una suite che tocca la conferma deve scrivere il valore a
+mano**, altrimenti testa il caso opposto e lo vede verde. La 0016 lo dichiara in ogni riga.
+
+⚠️ **Un verde al primo giro non è una prova.** La 0016 è stata validata rompendo apposta le quattro
+difese, una per volta, e verificando che ogni versione mutilata morisse sul test previsto (guardia
+del ramo A → `T1`; clausola `WHEN` → `T5`; guardia dell'oblio → `T2`; seconda lettura → `T9b`). Una
+suite che resta verde contro il codice rotto non sta presidiando niente.
 
 ⚠️ I conteggi sopra sono **misurati eseguendo le suite**, non contati leggendo i sorgenti. Contare i
 `raise notice` nel file dà il numero SBAGLIATO ogni volta che una notice sta dentro un ciclo o un

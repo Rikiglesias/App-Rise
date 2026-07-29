@@ -34,6 +34,15 @@
 -- ha fatto l'accesso — verificato per costruzione, perché da noi si entra solo dopo aver
 -- confermato la mail. Nessuno può dichiararlo: o lo possiede o non entra.
 --
+-- 🔴 QUELLA PREMESSA È VERA PER CHI ENTRA, NON PER LA RIGA DI `auth.users`, che nasce
+-- **prima** della conferma. Chiunque poteva quindi chiamare `signUp` con l'indirizzo di
+-- un altro — richiesta anonima, nessuna sessione, nessun click su nessuna mail — e la
+-- riga d'archivio della vittima veniva rivendicata dal trigger qui sotto. La falla è
+-- chiusa dalla **0016**, che sposta l'aggancio al momento in cui l'indirizzo è provato
+-- (guardia `email_confirmed_at` sul ramo qui + un trigger nuovo alla conferma).
+-- → Chi legge questo file per capire come funziona l'aggancio deve leggere anche la 0016:
+--   il corpo delle funzioni §1 e §2 qui sotto **è superato dal suo**.
+--
 -- COSA SI PERDE, dichiarato. Chi ha nell'archivio un indirizzo DIVERSO da quello con cui
 -- si registra non si aggancia più nemmeno scrivendolo a mano nel profilo. Non è una
 -- perdita reale: quella strada non era un modo legittimo di ricongiungersi, era il buco.
