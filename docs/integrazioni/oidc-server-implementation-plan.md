@@ -29,9 +29,18 @@ vedrà mai `rise_ref` né un'email "risolta" custom**.
 > Conseguenze: ① la Scheda dei dati del brief non poteva dire «solo i campi standard» senza
 > distinguere le due superfici — corretto nel brief il 29/07; ② **qualunque cosa scriviamo nei
 > `user_metadata` diventa consegnabile a LD via UserInfo**, quindi la regola operativa è tenere
-> l'anagrafica in `profiles` e i metadata al minimo (oggi contengono `email`, `email_verified`,
-> `phone_verified`, `sub`, e per Apple anche `custom_claims`, `iss`, `provider_id` — verificato su
-> `auth.users`); ③ la conclusione «`rise_ref` non è consegnabile» **resta valida ma per un'altra
+> l'anagrafica in `profiles` e i metadata al minimo. 🔴🔴 **E OGGI NON È COSÌ — correzione della
+> stessa sera, dal critico avversariale**: `AuthContext.tsx:213-233` (`signUp`) scrive in
+> `options.data`, cioè in `raw_user_meta_data`, **`first_name`, `last_name`, `phone`, `city`,
+> `province`, `country`, `birth_date`, `marketing_consent`**, e nessuno le ripulisce
+> (`handle_new_user` le legge soltanto). ⇒ con lo scope `profile` UserInfo consegnerebbe a LD
+> l'anagrafica completa di chi si registra dall'app. **Precondizione nuova, bloccante prima di
+> accendere il provider**: bonificare `handle_new_user` perché cancelli quelle chiavi dopo l'insert
+> (lasciando `name` e `preferred_username`) → da accorpare alla 0018 di F-MINORI. La versione
+> precedente di questa nota diceva «oggi i metadata contengono solo email/…/provider_id, verificato
+> su `auth.users`»: era un campione di 2 account **nessuno dei quali nato dal form email**, cioè una
+> generalizzazione — il contenuto dei metadata si legge nel punto di SCRITTURA, non contando le
+> chiavi degli account esistenti; ③ la conclusione «`rise_ref` non è consegnabile» **resta valida ma per un'altra
 > ragione**: non perché UserInfo filtri, ma perché `rise_ref` vive in `partner_refs`, non nei
 > metadata. Non riaprire la decisione su quella base.
 

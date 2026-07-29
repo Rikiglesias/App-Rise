@@ -208,8 +208,13 @@
         «nome, cognome ed email» (`scambio-dati-quadro.md:496,634,672`).
 
      3) 🔴 «quindi e' SEMPRE reale» sulla riga `email`: assoluto SMENTITO dal database vivo.
-        Interrogato il 2026-07-29: 2 utenti, **0 mai confermati** (quindi «non si entra prima di
-        aver confermato» e' VERO e verificato) ma **1 dei 2 porta un alias
+        Interrogato il 2026-07-29: 2 utenti. 🔴 **CORREZIONE della notte del 29/07: sono 2 su 2
+        CONFERMATI, non «0 mai confermati» come diceva questa nota** - e l'inferenza che ne
+        seguiva («quindi non si entra prima di aver confermato e' VERO») non seguiva comunque dal
+        numero. La frase resta vera, ma per un'altra prova: l'utente registrato con email ha
+        confermato **59 minuti dopo** la creazione (`email_confirmed_at - created_at = 3540s`),
+        il che dimostra che l'auto-conferma del server e' SPENTA. Il fatto che regge e'
+        l'altro: **1 dei 2 porta un alias
         `@privaterelay.appleid.com`** - un indirizzo che INOLTRA, non quello della persona. Nato
         l'08/07, cioe' PRIMA che i social uscissero dal codice il 26/07. La verifica del 28/07
         aveva guardato il CODICE («0 login social») e ne aveva dedotto il DATABASE: togliere i
@@ -345,8 +350,9 @@ arriverà dalla nostra parte.
 Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 
 - **Gli scope da chiedere sono `openid email profile`.** L'indicatore di email verificata viaggia
-  con `email`, il nome e il nickname con `profile`. Oggi il telefono non ve lo mandiamo, quindi
-  `phone` non serve: se vi servisse, ne parliamo (in fondo alla Scheda dei dati c'è come).
+  con `email`, il nome e il nickname con `profile`. Lo scope `phone` non serve: il numero di
+  telefono non è fra i campi che vi consegniamo (in fondo alla Scheda dei dati c'è come chiederlo,
+  se vi servisse, e cosa contiene oggi la risposta di UserInfo).
 - **Le chiavi di firma cambiano.** Vanno lette dall'indirizzo che trovate nel discovery, non copiate
   nella vostra configurazione: oggi ce n'è una sola, ma il giorno in cui ruota chi l'ha copiata
   smette di validare i token, e sembrerà un guasto nostro.
@@ -370,6 +376,12 @@ Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
   altre nostre funzioni. È la prassi; la nominiamo perché è il presupposto con cui impostiamo i
   permessi. Se preferite leggerla da UserInfo, tenete conto della precisazione in fondo alla Scheda
   dei dati: quella risposta contiene anche un blocco tecnico che nell'ID token non c'è.
+- **Tre comportamenti del flusso, da fissare prima del collaudo.** Primo: se la persona **rifiuta**
+  il consenso sulla nostra pagina, torna da voi senza identità — cosa mostrate in quel caso?
+  Secondo: se due accessi partono insieme per la stessa persona nuova, il vostro lato deve creare
+  **un solo** account: l'aggancio è sul `sub`, che è lo stesso in entrambi. Terzo: il
+  `client_secret` va ruotato ogni tanto — ditecelo se dalla vostra parte comporta un fermo, così lo
+  programmiamo insieme invece di sorprendervi.
 - **Se il nostro accesso non risponde.** Tolto il modulo, per quel tempo su quella pagina non si
   entra e non ci si registra: è la conseguenza di avere una porta sola, e la accettiamo, perché due
   porte ricreano le due anagrafiche che stiamo unendo. Da parte nostra sorvegliamo il servizio e vi
@@ -445,20 +457,28 @@ risultato.
      sia per chi l'ha cancellato dopo — ed è la stessa cosa vista da voi, quindi diteci cosa mostrate
      in quel caso;
    - **è unico da voi?** Da noi no: due persone possono sceglierne uno uguale. Se da voi dev'essere
-     unico, ditecelo prima del collaudo — il vincolo lo aggiungiamo dalla nostra parte. E in quel
-     caso: quando ve ne arriva uno già in uso, cosa fate — rifiutate l'account, lo modificate voi,
-     o lo ignorate? Se l'account non nascesse, la persona resterebbe fuori: è il contrario di quello
-     che stiamo costruendo;
+     unico, possiamo renderlo unico **fra i nostri** — ma questo non esclude la collisione con i
+     nickname di chi si è registrato da voi, che restano fuori dalla nostra portata. Quindi la
+     domanda che conta è la seconda: quando ve ne arriva uno già in uso, cosa fate — rifiutate
+     l'account, lo modificate voi, o lo ignorate? Se l'account non nascesse, la persona resterebbe
+     fuori: è il contrario di quello che stiamo costruendo;
    - **dove lo mostrate, e a chi?** Ci serve per scrivere nella nostra informativa cosa succede al
      dato che vi mandiamo. Notiamo che da voi il nickname è una delle opzioni della visibilità nelle
      liste pubbliche: se qualcuno sceglie di apparire col nickname e il nickname non c'è, cosa
      compare al suo posto?
 
-   **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione dei due campi qui
+   **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione delle due scelte qui
    sopra: nessuno dei due vi
    arriva insieme all'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per
    le comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» della persona che
    possiate ereditare da noi.
+
+   **Un terzo caso, di natura diversa: il Paese.** È obbligatorio nel vostro modulo e noi lo
+   raccogliamo, ma l'accesso **non lo trasporta**: non è fra i campi standard che il protocollo
+   prevede, quindi non è come i due qui sopra («non ce l'abbiamo») ma «ce l'abbiamo e non passa di
+   lì». Con quale valore nasce l'account, e vi serve che ve lo facciamo arrivare in altro modo?
+   Se leggendo trovate altri campi del vostro modulo nella stessa condizione, segnalateceli:
+   l'elenco nasce da quello che vediamo noi della vostra pagina, non dal vostro schema.
 
 ---
 
@@ -475,14 +495,20 @@ ci sono sempre; l'ultimo solo se la persona l'ha compilato:
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
 | `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo alla nostra registrazione**, e vi confermiamo noi il giorno in cui è attivo. Da 2 a 30 caratteri, senza spazi ai bordi; sui caratteri non poniamo vincoli e non filtriamo i contenuti. È **facoltativo**: quando manca non arriva vuoto, semplicemente non c'è — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
 
-**Una precisazione su UserInfo.** La tabella qui sopra vale per l'ID token. La risposta di UserInfo,
-con lo scope `profile`, porta **anche un blocco tecnico** dell'account: oggi l'indirizzo email, gli
-indicatori di conferma e - per chi entra con Apple o Google - l'identificativo che quel servizio ci
-restituisce. Non è una scelta nostra, è come si comporta il server che usiamo, e ve lo diciamo per
-due motivi. Il primo: **lì dentro da noi non finisce anagrafica** - nome, telefono, città e data di
-nascita stanno in un'altra tabella, che il protocollo non tocca, e ci impegniamo a tenerlo così. Il
-secondo: se leggete da UserInfo, prendete i campi della tabella e lasciate stare il resto, senza
-conservarlo. Leggendo dall'ID token la questione non si pone: lì quel blocco non c'è.
+**Una precisazione su UserInfo, e la ragione per cui vi chiediamo di non usarlo.** La tabella qui
+sopra vale per l'**ID token**, ed è quello che vi consigliamo di leggere. La risposta di UserInfo,
+con lo scope `profile`, porta in più un **blocco tecnico** dell'account, e siamo trasparenti su cosa
+c'è dentro **oggi**: oltre all'indirizzo email e agli indicatori di conferma, per chi si è
+registrato dall'app ci sono anche i dati che ha compilato al momento della registrazione - nome e
+cognome separati, telefono, città, provincia, paese, data di nascita e la sua scelta sulle nostre
+comunicazioni. Non è una scelta di disegno: è il modo in cui il server che usiamo costruisce quella
+risposta.
+
+Da qui due cose. **Noi**: stiamo lavorando perché quel blocco resti ai soli campi dell'accesso, e vi
+confermeremo quando sarà fatto. **Voi**: leggete l'identità dall'**ID token**, dove quel blocco non
+esiste e arrivano soltanto i campi della tabella. Se per un vostro vincolo doveste usare UserInfo,
+vi chiediamo di prendere i campi della tabella e di **non conservare il resto**: sono dati che non vi
+stiamo consegnando e che non vi servono.
 
 C'è una seconda differenza fra le due, e riguarda la domanda 4. Nell'ID token i primi quattro campi
 della tabella ci sono **sempre**. Nella risposta di UserInfo, invece, l'indicatore di email

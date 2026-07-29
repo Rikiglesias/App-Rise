@@ -877,12 +877,16 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > - `name` — nome completo in una stringa unica; nome e cognome li separate voi. **Non arriva mai
 >   vuoto**: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo
 >   vedete segnalatecelo, perché come nome visibile non va.
-> - `email` — è l'email dell'account. Per gli utenti Apple Private Relay è, in questa prima fase, un
->   alias `@privaterelay.appleid.com` che **inoltra** all'indirizzo reale: confermateci che il
->   provisioning lo accetti e che non pretenda `email_verified` sull'alias (un nostro utente non ancora
->   confermato può presentare `email_verified: false`). Dal primo rilascio chiediamo a quelle persone
->   l'indirizzo vero, lo facciamo verificare e diventa l'email del loro account: da quel momento questo
->   campo porta l'indirizzo reale.
+> - `email` — è l'email dell'account, **confermata: da noi non si entra prima di averla confermata**.
+>   Resta il caso storico degli account nati con Apple prima del 26/07/2026, dove l'indirizzo è un
+>   alias `@privaterelay.appleid.com` che **inoltra** a quello vero: confermateci che il provisioning
+>   lo accetti. A quelle persone chiediamo l'indirizzo reale, lo facciamo verificare e diventa l'email
+>   del loro account: da quel momento questo campo porta l'indirizzo vero.
+>   ⚠️ **Allineato al brief il 29/07 (era divergente)**: qui si leggeva «un nostro utente non ancora
+>   confermato può presentare `email_verified: false`», cioè il carve-out che il brief ha
+>   deliberatamente NON scritto (nota §«email» del brief) e il contrario di quanto il brief afferma
+>   al partner. Questo §9.2 è materiale IN USCITA verso i loro sviluppatori: quando cambia la
+>   formula nel brief, va cambiata anche qui.
 >
 > **Uso dell'access token.** Nel flusso standard il vostro client riceve al token endpoint un access
 > token con i privilegi dell'utente; gli scope non lo limitano lato dati. Vi chiediamo di leggere
