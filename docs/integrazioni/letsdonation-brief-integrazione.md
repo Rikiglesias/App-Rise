@@ -284,8 +284,8 @@ risultato.
    persona dopo il primo ingresso?
    Ci pesa soprattutto la visibilità, l'unica delle tre con un effetto pubblico: qualunque sia la
    strada, dobbiamo poter scrivere nella nostra informativa cosa succede. E se la strada fosse
-   chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo modulo, e quello che
-   ci siamo detti al punto 1 resta in piedi.
+   chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo modulo di
+   registrazione, che è la cosa che vogliamo evitare a chi entra.
    **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione: nessuno dei due vi
    arriva insieme all'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per
    le comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» della persona che
