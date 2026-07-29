@@ -51,8 +51,15 @@ from reportlab.platypus import (
 
 BASE = getSampleStyleSheet()
 
-# Larghezza utile = A4 meno i margini laterali del documento (20 mm + 20 mm).
-CONTENT_WIDTH = 170 * mm
+# I margini del documento stanno QUI, non nella chiamata a SimpleDocTemplate in fondo: da loro
+# si derivano lo spazio utile in larghezza e in altezza. Prima erano scritti due volte (170 mm
+# «= A4 meno 20+20» da una parte, i 18 mm per lato dall'altra): cambiarne uno lasciava l'altro
+# valore sbagliato in SILENZIO, e da quando la larghezza serve anche a decidere se una tabella
+# sta in una pagina, un margine disallineato spezzerebbe tabelle che invece ci starebbero.
+MARGINE_LATERALE = 20 * mm
+MARGINE_VERTICALE = 18 * mm
+
+CONTENT_WIDTH = A4[0] - 2 * MARGINE_LATERALE
 
 STYLES = {
     "h1": ParagraphStyle(
@@ -133,9 +140,8 @@ TABLE_STYLE = TableStyle(
 
 SEPARATOR_ROW = re.compile(r"^\|[\s:|-]+\|$")
 
-# Altezza utile = A4 meno i margini verticali del documento (18 mm + 18 mm), gli stessi passati
-# a SimpleDocTemplate in fondo al file. Serve a sapere se una tabella ci sta in UNA pagina.
-CONTENT_HEIGHT = A4[1] - 36 * mm
+# Altezza utile: serve a sapere se una tabella ci sta in UNA pagina.
+CONTENT_HEIGHT = A4[1] - 2 * MARGINE_VERTICALE
 
 # I font base di reportlab (Helvetica & co.) usano WinAnsiEncoding: un carattere fuori da
 # quella codifica NON da' errore, esce come un glifo sbagliato. Scoperto sul brief del
@@ -503,10 +509,10 @@ def build(md_path: Path, pdf_path: Path) -> None:
     SimpleDocTemplate(
         str(pdf_path),
         pagesize=A4,
-        leftMargin=20 * mm,
-        rightMargin=20 * mm,
-        topMargin=18 * mm,
-        bottomMargin=18 * mm,
+        leftMargin=MARGINE_LATERALE,
+        rightMargin=MARGINE_LATERALE,
+        topMargin=MARGINE_VERTICALE,
+        bottomMargin=MARGINE_VERTICALE,
         title="Rise Against Hunger Italia - Brief di integrazione",
         author="Rise Against Hunger Italia",
     ).build(story)

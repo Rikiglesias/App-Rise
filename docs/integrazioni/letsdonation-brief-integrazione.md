@@ -281,10 +281,12 @@ risultato.
    dall'accesso, quei valori non arrivano da noi. Come vengono impostati: un valore predefinito, o li
    chiedete alla persona una volta entrata? La domanda non è teorica per la visibilità, che nel
    vostro modulo è obbligatoria e senza valore predefinito: oggi la sceglie sempre la persona.
-   Parliamo di una scelta sola dopo l'ingresso, non di un secondo modulo. È anche l'unico dei tre con
-   un effetto pubblico, e a noi serve saperlo per scriverlo nella nostra informativa.
-   Lo stesso vale per i vostri due consensi sulle comunicazioni: da noi non hanno un corrispondente,
-   quindi non possiamo trasmetterli e non vanno dati per concessi.
+   Se la strada fosse chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo
+   modulo di registrazione, e la promessa del punto 1 resta in piedi. È anche l'unico dei tre con un
+   effetto pubblico, e a noi serve saperlo per scriverlo nella nostra informativa.
+   Lo stesso vale per i vostri due consensi sulle comunicazioni: nessuno dei due può arrivarvi da
+   noi. Quello sulle comunicazioni degli enti beneficiari da noi non esiste proprio; l'altro esiste,
+   ma vale per le nostre comunicazioni, non per le vostre. Non vanno quindi dati per concessi.
 
 ---
 
