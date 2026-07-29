@@ -238,15 +238,19 @@
         inoltrata da sola a un tecnico: fuori dal suo paragrafo si legge come «togliete il
         modulo dal sito». Aggiunte tre parole.
 
-     🔑 DECISIONE PENDENTE DI RICCARDO, PORTATA QUI PERCHE' NON SI PERDA: il documento non dice
-     MAI dove ATTERRA chi preme il pulsante (0 occorrenze di «pagina web», «browser», «da
-     computer»). L'accesso avverra' su una NOSTRA PAGINA WEB ancora da costruire, che il piano
-     chiama «il pezzo piu' grande» (`oidc-server-implementation-plan.md:77-78`). Era il punto 3
-     della lettera, e la lettera NON si manda: la nota che lo custodiva vive in
-     `letsdonation-proposta-operativa.md:8-14`, cioe' in un file marcato «NON SI MANDA» che chi
-     genera questo PDF non apre. Percio' la annoto anche qui.
-     Non e' stata aggiunta d'iniziativa: e' una promessa di architettura, la categoria che
-     Riccardo ha fatto togliere. O la mette lui, o resta fuori consapevolmente.
+     ✅ SCIOLTA DA RICCARDO IL 2026-07-29: la PAGINA WEB NOSTRA ENTRA nel documento. Parole sue:
+     «un bottone deve indirizzare al nostro [sito]. Una pagina di login che dobbiamo creare noi. E
+     la pagina di login deve reindirizzare di nuovo alla loro pagina, pero' gia' loggati».
+     Era rimasta fuori perche' e' una promessa di architettura (la categoria che lui stesso aveva
+     fatto togliere) e la nota che la custodiva viveva in `letsdonation-proposta-operativa.md:8-14`,
+     un file marcato «NON SI MANDA» che chi genera questo PDF non apre. Ora sta in §1, scritta al
+     FUTURO e con la riserva esplicita («non perche' sia gia' pronta»), perche' la pagina non
+     esiste: e' «il pezzo piu' grande» del piano (`oidc-server-implementation-plan.md:77-78`).
+     Nella stessa richiesta, due cose in piu' che sono andate nella domanda 2:
+       · chi arriva da un NOSTRO link deve trovare l'accesso a TUTTO SCHERMO; chi arriva per conto
+         suo, un pulsante. Posta come domanda di fattibilita', non come istruzione;
+       · la VESTE GRAFICA e' loro («anche i colori, tutto quello che vedra' loro»). Detto
+         esplicitamente: e' una concessione che costa nulla e toglie un motivo di attrito.
 
      NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico dice «va detto a loro»
      (`scambio-dati-quadro.md:206-210`) ma e' ANTERIORE alla decisione del 27/07 di aprire ai
@@ -297,6 +301,14 @@ chi ha già un account da noi entra con quello, e chi non ce l'ha lo crea in que
 compilare un secondo modulo — i dati minimi, nome ed email, arrivano dall'accesso.
 
 Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
+
+Dove porta il pulsante: a una **pagina di accesso nostra**, che stiamo costruendo. Lì la persona
+entra con l'account che ha già, oppure lo crea in quel momento se non ce l'ha, e torna sulla vostra
+pagina **già riconosciuta**. Sta da noi perché si possa entrare anche da computer, senza avere la
+nostra app, e perché chi si registra la prima volta lo faccia da noi: è la stessa cosa che succede
+con «Accedi con Google», dove chi non ha l'account lo crea su Google, non sul sito che sta
+visitando. Ve lo diciamo perché è un pezzo del disegno, non perché sia già pronta: quando lo sarà
+ve lo comunichiamo.
 
 ---
 
@@ -351,8 +363,14 @@ risultato.
    come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
    client OpenID Connect: diteci cosa comporta, così ci regoliamo sui tempi.
 2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo va tolto nel
-   momento stesso in cui il pulsante va online. Se c'è un vincolo tecnico che lo blocca, è la prima
+   momento stesso in cui il pulsante va online. Se c'è un vincolo che lo blocca, è la prima
    cosa che guardiamo insieme.
+   Sullo stesso schermo, una cosa che ci sta a cuore: chi arriva su quella pagina passando da un
+   nostro link — dalla nostra app o da altrove — vorremmo trovasse l'accesso **come prima cosa, a tutto schermo**,
+   invece di doverlo cercare; chi ci arriva per conto proprio lo troverebbe come pulsante fra i
+   contenuti. È impostabile dalla vostra parte, e a quali condizioni?
+   **La veste grafica la decidete voi**: colori e forma sono i vostri, a noi interessa solo che
+   l'accesso si veda.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
    ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide, il caso è il più
    semplice: dalla vostra parte l'aggancio fra le due schede esiste già, o è da prevedere?
