@@ -386,8 +386,9 @@ risultato.
 
 1. **Come funziona il collegamento che avete con Zucchetti?** Come ci era stato raccontato, i loro
    dipendenti arrivano già registrati: se è un accesso unico come quello che proponiamo, a noi basta sapere
-   come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
-   client OpenID Connect: diteci cosa comporta, così ci regoliamo sui tempi.
+   come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se
+   invece funziona in un altro modo, dal vostro lato serve un client OpenID Connect: diteci cosa
+   comporta, così ci regoliamo sui tempi.
 2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo va tolto nel
    momento stesso in cui il pulsante va online. Se c'è un vincolo che lo blocca, è la prima
    cosa che guardiamo insieme.
