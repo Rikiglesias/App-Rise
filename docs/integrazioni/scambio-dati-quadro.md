@@ -874,7 +874,9 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > obbligatoria e senza valore predefinito) e l'adesione a community e classifiche. Con la creazione
 > dell'utente al primo accesso quei valori non arrivano da noi: ci serve sapere se applicate un default
 > — e quale — o se li chiedete alla persona una volta entrata. Lo stesso vale per i vostri due consensi
-> marketing, che non hanno un corrispondente da noi e non vanno presunti concessi.
+> marketing: nessuno dei due può arrivarvi da noi — quello sugli enti beneficiari da noi non esiste
+> proprio, l'altro esiste ma vale per le nostre comunicazioni, non per le vostre — e non vanno
+> presunti concessi.
 >
 > **Casi limite da coprire:** se l'utente nega il consenso sulla nostra schermata rientrate con un
 > errore leggibile; il provisioning al primo accesso deve essere idempotente sul `sub` (due schede, due
@@ -995,7 +997,11 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
     Se applicate un default, una persona potrebbe comparire pubblicamente senza averlo scelto.
 20. **I vostri due consensi marketing** (comunicazioni del Titolare, comunicazioni degli enti
     beneficiari): come vengono raccolti per chi entra dal nostro accesso?
-    *Perché ci serve:* non hanno un corrispondente nel nostro archivio, e un consenso non si presume.
+    *Perché ci serve:* nessuno dei due può arrivare da noi — quello sugli enti beneficiari nel nostro
+    archivio non esiste, l'altro esiste (`marketing_consent`) ma vale per le NOSTRE comunicazioni, non
+    per le loro — e un consenso non si presume. ⚠️ Fino al 2026-07-29 questa riga diceva «non hanno un
+    corrispondente nel nostro archivio»: **falso** per il secondo, e contraddiceva la tabella §2.1
+    (:107-108) di questo stesso documento. Gemello corretto in `letsdonation-brief-integrazione.md`.
 21. **Ci avvisate prima di modifiche al nostro spazio?** Il patto sull'ingresso unico vive nel modello
     grafico del tenant, che aggiornate per tutti.
     *Perché ci serve:* un aggiornamento potrebbe rimettere il vostro modulo o far sparire il nostro

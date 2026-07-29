@@ -141,7 +141,13 @@ TABLE_STYLE = TableStyle(
 SEPARATOR_ROW = re.compile(r"^\|[\s:|-]+\|$")
 
 # Altezza utile: serve a sapere se una tabella ci sta in UNA pagina.
-CONTENT_HEIGHT = A4[1] - 2 * MARGINE_VERTICALE
+# I 6 pt per lato sono il padding che il Frame di reportlab aggiunge DA SOLO (default di
+# `Frame.__init__`, non impostato da noi): senza toglierli la misura sovrastima lo spazio e
+# promette «ci sta» a tabelle che poi vengono spezzate. Misurato: a 35 righe wrap() dava 734.0 pt
+# contro 739.8 disponibili in teoria -> predizione «ci sta», realtà 2 pagine; con il padding
+# tolto la soglia è 727.8 e la predizione torna a combaciare (34 righe stanno, 35 no).
+FRAME_PADDING = 6
+CONTENT_HEIGHT = A4[1] - 2 * MARGINE_VERTICALE - 2 * FRAME_PADDING
 
 # I font base di reportlab (Helvetica & co.) usano WinAnsiEncoding: un carattere fuori da
 # quella codifica NON da' errore, esce come un glifo sbagliato. Scoperto sul brief del
@@ -401,7 +407,12 @@ def build(md_path: Path, pdf_path: Path) -> None:
             # tutte lunghe - falso, 8 tabelle su 11 di `app-gate-matrice.md` hanno <= 8 righe
             # ma celle da ~1500 caratteri, e sarebbero finite in KeepTogether lasciando mezza
             # pagina bianca. Premessa sbagliata trovata dal critico avversariale.
-            story.append(KeepTogether([table, Spacer(1, 7)]))
+            # Lo Spacer resta FUORI dal gruppo: dentro, i suoi 7pt si sommavano all'altezza da
+            # tenere unita, mentre la misura qui sopra guarda la sola tabella -> una tabella alta
+            # quasi quanto la pagina passava il test e veniva spezzata lo stesso. Lo spazio dopo
+            # una tabella non ha bisogno di stare nella sua stessa pagina.
+            story.append(KeepTogether([table]))
+            story.append(Spacer(1, 7))
         else:
             story.append(table)
             story.append(Spacer(1, 7))
