@@ -312,7 +312,7 @@ compilare un secondo modulo — i dati minimi, nome ed email, arrivano dall'acce
 
 Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
-Dove porta il pulsante: a una **pagina di accesso nostra**, che stiamo costruendo. Lì la persona
+Dove porta il pulsante: a una **pagina di accesso nostra**, che costruiremo. Lì la persona
 entra con l'account che ha già, oppure lo crea in quel momento se non ce l'ha, e torna sulla vostra
 pagina **già riconosciuta**. Sta da noi perché si possa entrare anche da computer, senza avere la
 nostra app, e perché chi si registra la prima volta lo faccia da noi: è la stessa cosa che succede
@@ -343,7 +343,8 @@ arriverà dalla nostra parte.
   l'indirizzo delle chiavi.
 - `client_id` e `client_secret` dedicati a voi.
 - L'autorizzazione dei redirect URI che ci indicate.
-- **Una seconda coppia di credenziali per il collaudo**, con i vostri indirizzi di prova: il giro con
+- **Una seconda coppia di credenziali per il collaudo**, con le redirect URI del vostro ambiente di
+  prova: il giro con
   le due o tre persone si fa con quelle, non con le credenziali che poi restano in esercizio.
 - Un riferimento nostro per tutta la messa in opera.
 
@@ -352,7 +353,7 @@ Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 - **Gli scope da chiedere sono `openid email profile`.** L'indicatore di email verificata viaggia
   con `email`, il nome e il nickname con `profile`. Lo scope `phone` non serve: il numero di
   telefono non è fra i campi che vi consegniamo (in fondo alla Scheda dei dati c'è come chiederlo,
-  se vi servisse, e cosa contiene oggi la risposta di UserInfo).
+  se vi servisse, e cosa cambia leggendo da UserInfo invece che dall'ID token).
 - **Le chiavi di firma cambiano.** Vanno lette dall'indirizzo che trovate nel discovery, non copiate
   nella vostra configurazione: oggi ce n'è una sola, ma il giorno in cui ruota chi l'ha copiata
   smette di validare i token, e sembrerà un guasto nostro.
@@ -373,9 +374,10 @@ Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 - **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
   dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
 - **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
-  altre nostre funzioni. È la prassi; la nominiamo perché è il presupposto con cui impostiamo i
-  permessi. Se preferite leggerla da UserInfo, tenete conto della precisazione in fondo alla Scheda
-  dei dati: quella risposta contiene anche un blocco tecnico che nell'ID token non c'è.
+  altre nostre funzioni. È la prassi, e ve la chiediamo per iscritto nell'accordo. Se
+  preferite leggerla da UserInfo, tenete
+  conto della precisazione in fondo alla Scheda dei dati: quella risposta contiene anche un blocco
+  che nell'ID token non c'è.
 - **Tre casi del flusso che vale la pena nominare prima del collaudo.** Il **rifiuto**: se la
   persona non dà il consenso sulla nostra pagina, torna da voi senza identità — è un esito normale
   del giro, non un errore nostro. Gli **accessi contemporanei**: se per la stessa persona nuova ne
@@ -393,7 +395,8 @@ Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 
 ## 5. Cosa ci serve sapere da voi
 
-Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il
+Sei domande, più due richieste puntuali segnate nel testo. La prima dice quanto lavoro c'è davvero;
+la quarta è quella da cui dipende il
 risultato.
 
 1. **Come funziona il collegamento che avete con Zucchetti?** Come ci era stato raccontato, i loro
@@ -459,7 +462,8 @@ risultato.
    - **è unico da voi?** Da noi oggi no: due persone possono sceglierne uno uguale. E anche se lo
      rendessimo unico fra i nostri, resterebbe la collisione con i nickname di chi si è registrato
      da voi, che non passano da noi. Quindi la domanda è: quando ve ne arriva uno già in uso, cosa
-     fate — rifiutate l'account, lo modificate voi, o lo ignorate?;
+     fate — lo modificate voi, lo ignorate, o altro? L'unica strada che ci preoccupa e' che l'accesso
+     fallisca: chi entra deve poter entrare, il nickname non vale una registrazione persa;
    - **dove lo mostrate, e a chi?** Ci serve per scrivere nella nostra informativa cosa succede al
      dato che vi mandiamo. Notiamo che da voi il nickname è una delle opzioni della visibilità nelle
      liste pubbliche: se qualcuno sceglie di apparire col nickname e il nickname non c'è, cosa
@@ -472,10 +476,10 @@ risultato.
    possiate ereditare da noi.
 
    **Un terzo caso, di natura diversa: il Paese.** È obbligatorio nel vostro modulo e noi lo
-   raccogliamo, ma l'accesso **non lo trasporta**: il nostro provider emette i dati dell'identità —
-   identificativo, nome, email, nickname — non quelli di residenza. Quindi non è come i due campi
-   elencati all'inizio («non ce l'abbiamo»), è «ce l'abbiamo e non passa di lì». Con quale valore
-   nasce l'account, e vi serve che ve lo facciamo arrivare in altro modo?
+   raccogliamo, ma **non ve lo consegniamo con l'accesso**: nell'ID token arrivano i dati
+   dell'identità — identificativo, nome, email, nickname — e il Paese non è fra questi. Quindi non è
+   come i due campi elencati all'inizio («non ce l'abbiamo»), è «ce l'abbiamo e non passa di lì».
+   Con quale valore nasce l'account, e vi serve che ve lo facciamo arrivare in altro modo?
    Se leggendo trovate altri campi del vostro modulo nella stessa condizione, segnalateceli:
    l'elenco nasce da quello che vediamo noi della vostra pagina, non dal vostro schema.
 
@@ -495,14 +499,15 @@ ci sono sempre; l'ultimo solo se la persona l'ha compilato:
 | `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo alla nostra registrazione**, e vi confermiamo noi il giorno in cui è attivo. Da 2 a 30 caratteri, senza spazi ai bordi; sui caratteri non poniamo vincoli e non filtriamo i contenuti. È **facoltativo**: quando manca non arriva vuoto, semplicemente non c'è — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
 
 **Una precisazione su UserInfo.** La tabella qui sopra descrive l'**ID token**, ed è da lì che vi
-chiediamo di leggere l'identità: contiene i dati della persona che vi elenchiamo, e nient'altro che
-la riguardi. La risposta di UserInfo, con lo scope `profile`, porta in più un **blocco tecnico**
-dell'account, che è il modo in cui il server che usiamo costruisce quella risposta: **prima di
-attivare il servizio lo riduciamo ai soli campi dell'accesso**, e ve lo confermiamo quando è fatto.
-Se per un vostro vincolo doveste leggere da UserInfo invece che dall'ID token, ditecelo ora, così lo
-teniamo presente nel collaudo.
+chiediamo di leggere l'identità: oltre ai campi elencati porta solo dati tecnici del token stesso
+(chi l'ha emesso, quando scade, quando l'account è stato aggiornato l'ultima volta). La risposta di
+UserInfo, con lo scope `profile`, porta in più **un blocco dell'account che non fa parte
+dell'identità**: **prima di attivare il servizio lo riduciamo ai soli campi dell'accesso**, e ve lo
+confermiamo quando è fatto. Se per un vostro vincolo doveste leggere da UserInfo invece che dall'ID
+token, ditecelo ora, così lo teniamo presente nel collaudo.
 
-Una seconda differenza, che riguarda la domanda 4. Nell'ID token l'indicatore di email verificata
+Una seconda differenza, che riguarda la domanda 4. Da noi il caso non si presenta - non si entra
+prima di aver confermato - ma per completezza: nell'ID token l'indicatore di email verificata
 c'è **sempre**, anche quando vale «falso». Nella risposta di UserInfo, invece, quando l'email non è
 confermata quel campo **non compare affatto**. Se il vostro controllo si aspetta un valore e trova
 un campo assente, conviene trattare l'assenza come «non confermata».

@@ -154,7 +154,7 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 | Indicatore «email verificata» (`email_verified`) | noi → LD | idem | Al login. Va chiesto che il loro sistema non lo pretenda sull'alias Apple | `[V]` sul dato, `[A]` sul loro comportamento |
 | **Gettone tecnico con i pieni poteri dell'utente** | noi → LD | Scambio standard del protocollo allo sportello dei token | **Inevitabile per costruzione**: non è «glielo diamo o no». Gli scope non lo limitano lato dati; l'autorizzazione dipende interamente dalle nostre regole di riga | `[V]` |
 | Account creato dal loro sistema al primo accesso | effetto lato loro | Creazione al volo | Che il loro negozio accetti un alias Apple per creare l'account **è un assunto** da confermare | `[A]` |
-| Informazioni personalizzate nel token (codice di provenienza, email reale) | **nessuna** | Escluso: verificato su documentazione ufficiale che le informazioni personalizzate finiscono solo nel gettone di accesso, mai nel token di identità né sull'endpoint utente — quindi non raggiungerebbero il loro sistema | Mai | `[V]` |
+| Informazioni personalizzate nel token (codice di provenienza, email reale) | **nessuna** | Escluso: verificato su documentazione ufficiale che le informazioni personalizzate finiscono solo nel gettone di accesso, mai nel token di identità né sull'endpoint utente — quindi non raggiungerebbero il loro sistema. ⚠️ **Premessa corretta il 29/07 (sorgente GoTrue)**: l'endpoint utente NON filtra — con lo scope `profile` restituisce i `user_metadata` interi. La conclusione regge lo stesso, ma per un'altra ragione: quei dati non stanno nei `user_metadata` | Mai | `[V]` |
 | Campo sorgente catturato all'atterraggio, stampato sull'ordine, presente nell'export | LD → noi | Campo sull'ordine + export o webhook | **Richiesta**, non esistente | `[A]` |
 | Indicatore «persona entrata dal nostro accesso» nell'export | LD → noi | Campo nell'export | **Richiesta.** Per chi entra dal nostro accesso vale più del codice nell'indirizzo: l'attribuzione è certa per costruzione | `[A]` |
 | Export (o webhook) delle donazioni ai progetti sul nostro spazio | LD → noi | Export o webhook | **Richiesta**, conseguenza obbligata della convivenza dei due canali di donazione | `[A]` |
@@ -377,6 +377,8 @@ prometteva il ritrovamento dello storico senza avere il meccanismo per farlo.
 
 **Infilare informazioni personalizzate nel token. → SCARTATA, e ha riscritto il piano.** Verificato su
 documentazione ufficiale che finiscono **solo** nel gettone di accesso, mai nel token di identità né
+⚠️ *(la parte «né sull'endpoint utente» è stata corretta il 29/07: UserInfo non filtra, restituisce i
+`user_metadata` interi. La conclusione regge perché quei dati non stanno lì — vedi §9.2)*
 sull'endpoint utente — che è ciò che l'estensione di Joomla legge. Doppio motivo per non costruire quel
 pezzo: non serve, e il gettone di accesso non va consegnato a un terzo per leggere dati. Conseguenze: il
 codice di provenienza **esce dal login** e resta sul canale dell'attribuzione; l'email reale dietro
