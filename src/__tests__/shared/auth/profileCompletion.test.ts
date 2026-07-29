@@ -23,6 +23,7 @@ const base: Profile = {
   // Un profilo «pieno» oggi include la mail di contatto: è il campo su cui poggia
   // il riconoscimento nell'anagrafica importata dal partner.
   contact_email: 'vera@mail.it',
+  nickname: null,
 };
 
 describe('missingProfileFields', () => {
@@ -175,6 +176,7 @@ describe('isProfileGateBlocked — quando il cancello sbarra la strada', () => {
       province: 'RM',
       country: 'IT',
       contact_email: 'vera@mail.it',
+      nickname: null,
     };
     expect(isProfileGateBlocked(getProfileCompletion(payload, true))).toBe(
       false

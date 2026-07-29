@@ -19,6 +19,7 @@ import {
 import { exportData as runDataExport } from './dataExport';
 import { buildConsentInsert } from './consent';
 import { buildDisplayName, syncDisplayNameClaim } from './displayName';
+import { syncNicknameClaim } from './nickname';
 import type {
   Profile,
   ProfileInput,
@@ -300,9 +301,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         if (v !== undefined) patch[key] = v;
       }
       if (Object.keys(patch).length === 0) return { error: null };
+      // Il nickname VUOTO è legittimo — significa «non ne voglio uno» — ma in colonna
+      // deve andare `null`, non `''`: la stringa vuota viola il CHECK `nickname_forma`
+      // (2-30 caratteri, migration 0017) e farebbe fallire l'INTERA rettifica, non solo
+      // quel campo. È l'unico campo modificabile che l'utente può svuotare, quindi è
+      // anche l'unico che ha bisogno di questa conversione.
+      const payload: Record<string, unknown> = { ...patch };
+      if (payload.nickname === '') payload.nickname = null;
       const { error } = await supabase
         .from('profiles')
-        .update(patch)
+        .update(payload)
         .eq('id', userId);
       if (error) return { error: error.message };
       const updated = await loadProfile(userId);
@@ -312,6 +320,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // due parti e l'altra va presa dal valore fresco.
       if (patch.first_name !== undefined || patch.last_name !== undefined) {
         await syncDisplayNameClaim(updated?.first_name, updated?.last_name);
+      }
+      // Stessa ragione per il nickname (F-NICKNAME): senza questa riga il claim
+      // `preferred_username` resterebbe al valore vecchio, e chi l'ha appena cancellato
+      // continuerebbe a vederlo comparire sul sito del partner.
+      if (patch.nickname !== undefined) {
+        await syncNicknameClaim(updated?.nickname);
       }
       return { error: null };
     },

@@ -82,6 +82,7 @@ const existingProfile = {
   marketing_consent: false,
   deletion_requested_at: null,
   contact_email: null,
+  nickname: null,
 };
 
 describe('CompleteProfileScreen', () => {

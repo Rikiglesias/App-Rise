@@ -26,6 +26,14 @@ export interface Profile {
   // registrazione email/password e su quelli creati prima della regola: quel buco
   // è tracciato come F-EMAIL.8 e il sollecito lo vede (missingProfileFields).
   contact_email: string | null;
+  /**
+   * Nickname per i siti dei partner (claim OIDC `preferred_username`, migration 0017).
+   * FACOLTATIVO per scelta: non serve a noi, nasce per il modulo di Let's Donation, e
+   * obbligarlo allungherebbe un form già lungo. `null` = la persona non l'ha scelto →
+   * il claim non viene emesso affatto (nessun ripiego sull'email, a differenza di
+   * `name`: verificato sul codice del server auth).
+   */
+  nickname: string | null;
 }
 
 /** Consensi (M4, GDPR Art.7) — registro append-only. */

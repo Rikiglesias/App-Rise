@@ -60,6 +60,7 @@ const profile: Profile = {
   // Dal 2026-07-25 la mail di contatto è obbligatoria per TUTTI gli account, non
   // solo per gli alias Apple: un profilo realistico la ha popolata.
   contact_email: 'mario@r.it',
+  nickname: null,
 };
 
 const wrap = (ui: React.ReactElement) =>

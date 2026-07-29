@@ -16,6 +16,7 @@ const profile: Profile = {
   marketing_consent: true,
   deletion_requested_at: null,
   contact_email: null,
+  nickname: null,
 };
 
 const account = {

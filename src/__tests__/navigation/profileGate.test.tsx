@@ -58,6 +58,7 @@ const completeProfile: Profile = {
   marketing_consent: false,
   deletion_requested_at: null,
   contact_email: 'mario@example.it',
+  nickname: null,
 };
 
 const makeAuth = (over: Partial<AuthState>): AuthState =>

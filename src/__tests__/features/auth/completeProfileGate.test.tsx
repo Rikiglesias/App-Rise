@@ -80,6 +80,7 @@ const completeProfile: Profile = {
   marketing_consent: false,
   deletion_requested_at: null,
   contact_email: 'm@r.it',
+  nickname: null,
 };
 
 describe('contro-prova: dopo il salvataggio il profilo è completo', () => {

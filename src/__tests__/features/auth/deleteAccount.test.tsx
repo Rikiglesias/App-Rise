@@ -69,6 +69,7 @@ const profileWithDeletion: Profile = {
   // tutti, un profilo che ne è privo ha ancora qualcosa da chiedere (il sollecito
   // deve vederlo — era il buco per cui un account email/password risultava a posto).
   contact_email: 'vera@mail.it',
+  nickname: null,
 };
 
 const wrap = (ui: React.ReactElement) =>
