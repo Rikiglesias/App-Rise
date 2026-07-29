@@ -397,20 +397,12 @@ def build(md_path: Path, pdf_path: Path) -> None:
             # Non era una tabella: meglio il testo grezzo che perdere il contenuto.
             story.append(Paragraph(inline(" ".join(table_rows)), STYLES["body"]))
         elif sta_in_una_pagina(table):
-            # La tabella ci sta INTERA in una pagina -> non lasciarla spezzare. Senza questo
-            # basta che il testo sopra si accorci perche' scivoli a cavallo di due pagine: si
-            # ripete l'intestazione e una cella si taglia a meta' frase. Visto dal vivo il
-            # 2026-07-29 sul brief in consegna: togliendo una sezione, la riga «sub» finiva
-            # spezzata fra pagina 2 e 3 («...ma non e' anonimo: e' uno» | «pseudonimo»).
-            # La condizione e' l'ALTEZZA MISURATA, non il numero di righe: la prima versione
-            # contava le righe («<= 8») dando per scontato che le matrici di `docs/` fossero
-            # tutte lunghe - falso, 8 tabelle su 11 di `app-gate-matrice.md` hanno <= 8 righe
-            # ma celle da ~1500 caratteri, e sarebbero finite in KeepTogether lasciando mezza
-            # pagina bianca. Premessa sbagliata trovata dal critico avversariale.
-            # Lo Spacer resta FUORI dal gruppo: dentro, i suoi 7pt si sommavano all'altezza da
-            # tenere unita, mentre la misura qui sopra guarda la sola tabella -> una tabella alta
-            # quasi quanto la pagina passava il test e veniva spezzata lo stesso. Lo spazio dopo
-            # una tabella non ha bisogno di stare nella sua stessa pagina.
+            # Una tabella che ci sta in una pagina non deve spezzarsi: altrimenti basta che il
+            # testo sopra si accorci perche' scivoli a cavallo di due, ripetendo l'intestazione e
+            # tagliando una cella a meta' frase (visto sul brief in consegna, riga «sub»).
+            # Lo Spacer resta FUORI dal gruppo: dentro, i suoi 7 pt entrerebbero nell'altezza da
+            # tenere unita, che la misura non conta - e lo spazio dopo una tabella non ha bisogno
+            # di stare nella sua stessa pagina.
             story.append(KeepTogether([table]))
             story.append(Spacer(1, 7))
         else:
