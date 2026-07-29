@@ -65,6 +65,12 @@ export type ProfileEditable = Pick<
    * "azzerarla" vale la regola di fallback `contact_email ?? auth.email`.
    */
   contact_email: string;
+  /**
+   * Nickname: sul path di rettifica è sempre una stringa, e la stringa VUOTA è
+   * significativa — vuol dire «non ne voglio uno» e va scritta come `null` in colonna.
+   * È l'unico campo modificabile che l'utente può legittimamente svuotare.
+   */
+  nickname: string;
 };
 
 /** Whitelist dei campi aggiornabili: previene update di id/created_at/consensi. */
@@ -77,6 +83,7 @@ export const PROFILE_EDITABLE_KEYS: readonly (keyof ProfileEditable)[] = [
   'country',
   'birth_date',
   'contact_email',
+  'nickname',
 ];
 
 /** Dati raccolti dal form di registrazione (prima della scrittura su DB). */
@@ -90,4 +97,10 @@ export interface ProfileInput {
   birth_date: string;
   privacy_consent: boolean;
   marketing_consent: boolean;
+  /**
+   * Facoltativo (migration 0017): assente o stringa vuota = la persona non l'ha
+   * scelto. Opzionale nel tipo perché lo è nel dominio — non per comodità: chi
+   * registra senza nickname è il caso NORMALE, non un chiamante da correggere.
+   */
+  nickname?: string;
 }

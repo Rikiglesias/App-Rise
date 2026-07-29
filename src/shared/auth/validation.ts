@@ -34,6 +34,18 @@ export const validateRequired = (v: string): FieldError =>
   v.trim().length > 0 ? null : 'required';
 
 /**
+ * Nickname per i siti dei partner (claim OIDC `preferred_username`, migration 0017).
+ * FACOLTATIVO: vuoto è valido e significa «non ne voglio uno». Se invece c'è, deve
+ * rispettare la stessa forma del CHECK `nickname_forma` in colonna (2-30 caratteri) —
+ * se le due regole divergono, il trigger scarta in silenzio ciò che il form accetta.
+ */
+export const validateNickname = (v: string): FieldError => {
+  const t = v.trim();
+  if (t.length === 0) return null;
+  return t.length >= 2 && t.length <= 30 ? null : 'nickname_length';
+};
+
+/**
  * Mail di contatto, obbligatoria per TUTTI dal 2026-07-25 (era solo per gli account
  * Apple Private Relay): deve esistere, essere formalmente valida e NON essere un
  * alias relay — che non ci recapiterebbe nulla in modo stabile e non combacia con

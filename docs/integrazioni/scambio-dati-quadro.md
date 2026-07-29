@@ -466,9 +466,15 @@ perché senza consenso il profilo non deve nascere. Facoltativi solo telefono e 
 ordine obbligato.** La modifica esiste nel codice ma **non è applicata al database vero** — verificato
 il 25/07: il registro delle migrazioni del progetto live **elenca** solo la 0008 e la 0009 `[V]`, ma le
 precedenti (0001-0007) **sono applicate** — sono state eseguite fuori dal registro, e infatti l'app
-funziona. Il fatto verificato, e l'unico che conta qui, è che **la 0010 non è applicata** `[V]`. Il comando che
+funziona. Il fatto verificato allora era che **la 0010 non era applicata** `[V, al 25/07]`. Il comando che
 rimuove un vincolo è bloccato dalla nostra protezione e va eseguito a mano dal pannello. Se si
 alleggerisce il modulo prima, va in produzione una registrazione che **viola un vincolo e fallisce**.
+
+> ✅ **Superato il 26/07/2026**: la modifica **è stata applicata** al database di produzione
+> (registro `20260726090451`; ricontrollato sullo schema vivo il 29/07 — telefono, città e provincia
+> risultano facoltativi). L'ordine obbligato descritto qui sopra è stato rispettato ed è quello che
+> ha portato all'apply: il blocco resta come storia della decisione, non come stato attuale.
+> Lo stato attuale è la riga «FATTE il 26/07/2026» più avanti in questo stesso documento.
 
 **Ospitare la pagina di accesso su `riseagainsthunger.org`. → SCARTATA.** Quel dominio è di Rise
 Against Hunger USA. Scelta: un indirizzo gratuito su Vercel, spostabile in seguito. *Verificato il

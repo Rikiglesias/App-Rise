@@ -214,6 +214,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             // legge SOLO questa chiave e, se manca, ci mette l'email dell'account.
             // Il trigger ignora le chiavi che non gli servono (0007: legge per nome).
             name: buildDisplayName(p.first_name, p.last_name),
+            // Claim OIDC `preferred_username` (F-NICKNAME, migration 0017). La chiave
+            // si chiama così e non `nickname` perché è quella che il server auth legge
+            // (verificato su GenerateIDToken e OAuthUserInfo). Facoltativo: se manca si
+            // omette del tutto invece di scrivere '' — il trigger e il server trattano
+            // l'assenza come «nessun nickname», mentre una stringa vuota è rumore.
+            ...(p.nickname?.trim()
+              ? { preferred_username: p.nickname.trim() }
+              : {}),
             first_name: p.first_name,
             last_name: p.last_name,
             phone: p.phone,
