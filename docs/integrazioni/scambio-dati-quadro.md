@@ -676,7 +676,7 @@ registro, non nella copia.**
 | «Elimina account funziona in tutti e due i modi» | Il programma della cancellazione **subito** è pubblicato e risponde `[V]` (26/07/2026), ma il percorso completo — persona reale che preme il pulsante e sparisce dal database — **non è ancora stato provato** `[A]`: serve un account usa-e-getta. Quella **fra trenta giorni** non funziona: il programma esiste ma **non lo avvia nessuno**, vedi §7 | «La cancellazione immediata è pubblicata, la proviamo end-to-end prima del rilascio; quella programmata si accende prima del rilascio» |
 | «Il codice di provenienza si annulla su richiesta» | È promesso nell'informativa, ma **il processo non esiste** e la colonna non è usata da nessuna parte | Costruire il processo, o correggere l'informativa |
 | «La cancellazione è definitiva» | La lapide sopravvive **per costruzione**, e il registro dei consensi si conserva come prova | Dichiarare le due eccezioni per nome |
-| «L'accesso unico è attivo» | Nel nostro progetto **non esiste** nessun punto di accesso di quel tipo | «Il server di accesso non è ancora attivo: si accende dopo la vostra conferma, la migrazione delle nostre chiavi di firma e una decisione interna» |
+| «L'accesso unico è attivo» | Nel nostro progetto **non esiste** nessun punto di accesso di quel tipo | «Il server di accesso non è ancora attivo: si accende dopo la vostra conferma e una decisione interna» ⚠️ *corretto 2026-07-29: qui si nominava anche «la migrazione delle nostre chiavi di firma». **Non esiste più**: le chiavi sono già asimmetriche (ES256) sul progetto vivo. Annunciare al partner un prerequisito che abbiamo già soddisfatto ci fa sembrare più lontani di quanto siamo* |
 | ~~«Vi arriva sempre il nome»~~ **RIALLINEATA 2026-07-29: la riga da non dire è l'ALTRA** | La formula «arriva se disponibile, tollerate l'assenza» era **sbagliata in modo pericoloso**: il campo non arriva mai vuoto, perché **senza la chiave il server ci mette l'indirizzo email dell'account** (`identita-matrice-scenari.md:170`; sincronizzazione viva su `AuthContext.tsx:216,306` e `useProfileForm.ts:356`). Dire «tollerate l'assenza» fa preparare al partner un ripiego per un caso che non capita, e non lo mette in guardia da quello che capita: un'email scritta dove va il nome, sulle loro liste pubbliche | «Il nome non arriva mai vuoto: se non l'avessimo, al suo posto partirebbe l'indirizzo email — segnalatecelo, perché come nome visibile non va» |
 | «Vi mandiamo l'email reale» **oggi** | Vero per chiunque si registri **dal 26/07/2026**: l'accesso è solo con email e password, quindi l'indirizzo dell'account è reale per costruzione. Resta falso per gli account **nati prima con «Nascondi la mia email»**, che portano un alias — il quale però **inoltra** | «Arriva l'email dell'account. Per le persone iscritte prima di luglio 2026 con la funzione Apple può essere un alias che inoltra: confermateci che il vostro sistema lo accetta. A quelle chiediamo l'indirizzo vero e lo sostituiamo» |
 | «I nostri link puntano ancora al dominio vecchio, stiamo migrando» | Falso: nel codice la migrazione è **chiusa**, con un test che fallisce se un indirizzo regredisce. Il residuo vero sono le **versioni già installate** | «Il codice punta già ai vostri nuovi indirizzi; restano le versioni installate sui telefoni, che si appoggiano al vostro reindirizzamento» |
@@ -760,7 +760,7 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 | **Il processo che annulla un codice di provenienza su richiesta**, promesso nell'informativa e inesistente | Riccardo (chi risponde) · noi (il pezzo) |
 | **Il processo che propaga la cancellazione al partner.** Struttura pronta, nessun programma la legge | Noi · Let's Donation (canale) |
 | **La donazione di prova da 1 €** | Riccardo |
-| **Migrare le chiavi di firma ad asimmetriche.** Prerequisito rigido; prima va verificato l'algoritmo attuale | Riccardo (leva) · noi |
+| ~~**Migrare le chiavi di firma ad asimmetriche**~~ **GIÀ FATTO — verificato il 2026-07-29 sul progetto vivo**: il JWKS pubblica una sola chiave `ES256` e la legacy `HS256` è disabilitata. Non è più una leva né un lavoro | — (chiuso) |
 | **Decidere se accettare l'accesso di produzione su una funzione sperimentale**, dopo la risposta del fornitore | Riccardo |
 | **Verificare l'impostazione della conferma email del progetto**: l'affermazione «con la conferma attiva la registrazione non restituisce una sessione» viene da un commento nostro, non dall'impostazione reale | Noi |
 | **Costruire la pagina web di accesso, registrazione e consenso**, incluso il riconoscimento del browser interno dei social con percorso alternativo | Riccardo (leve) · noi |
@@ -839,8 +839,8 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 >
 > Quando entrambe le parti sono pronte, noi faremo da fornitore di identità (OpenID Connect su
 > OAuth 2.1, authorization code + PKCE) e voi da client sul vostro Joomla. **Il nostro server di
-> accesso oggi non è attivo**: si accende dopo la vostra conferma, la migrazione delle nostre chiavi di
-> firma e una decisione interna. A quel punto vi forniremo: discovery URL
+> accesso oggi non è attivo**: si accende dopo la vostra conferma e una decisione interna. A quel
+> punto vi forniremo: discovery URL
 > (`…/.well-known/openid-configuration`), `client_id` e `client_secret` dedicati, gli scope da
 > richiedere (`openid email profile`) e le redirect URI da autorizzare. Il segreto va scambiato per
 > canale sicuro fra tecnici, non su chat.
@@ -854,9 +854,9 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 >   un attributo di identità equivalente), così che il riconoscimento agli accessi successivi non
 >   dipenda dall'email. Nella documentazione pubblica dei plugin più diffusi troviamo il provisioning al
 >   primo accesso e la mappatura degli attributi, non questo dettaglio.
-> - `name` — nome completo in una stringa unica; nome e cognome li separate voi. Va trattato come
->   **opzionale**: per gli utenti Apple con «Nascondi la mia email» può mancare dopo il primo accesso, e
->   il provisioning non deve fallire in sua assenza.
+> - `name` — nome completo in una stringa unica; nome e cognome li separate voi. **Non arriva mai
+>   vuoto**: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo
+>   vedete segnalatecelo, perché come nome visibile non va.
 > - `email` — è l'email dell'account. Per gli utenti Apple Private Relay è, in questa prima fase, un
 >   alias `@privaterelay.appleid.com` che **inoltra** all'indirizzo reale: confermateci che il
 >   provisioning lo accetti e che non pretenda `email_verified` sull'alias (un nostro utente non ancora

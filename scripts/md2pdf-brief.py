@@ -557,6 +557,12 @@ def build(md_path: Path, pdf_path: Path) -> None:
             in_code = not in_code
             continue
         if in_code:
+            # Le stesse sostituzioni che fa `inline()`: senza, una freccia dentro un blocco di
+            # codice usciva come glifo sbagliato E la sentinella taceva, perche' esclude per
+            # costruzione tutto cio' che sta in FUORI_WINANSI. Il falso negativo che il resto del
+            # file e' stato sistemato per evitare, lasciato aperto proprio dove nessuno guarda.
+            for src, dst in FUORI_WINANSI.items():
+                line = line.replace(src, dst)
             code_buf.append(
                 line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             )

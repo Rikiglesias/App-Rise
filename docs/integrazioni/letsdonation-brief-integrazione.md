@@ -355,7 +355,7 @@ risultato.
    cosa che guardiamo insieme.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
    ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide, il caso è il più
-   semplice: dalla vostra parte quel collegamento esiste già, o è da prevedere?
+   semplice: dalla vostra parte l'aggancio fra le due schede esiste già, o è da prevedere?
    Ma non sempre coincide: chi ha donato anni fa può avere lasciato l'email del lavoro, o un'altra
    che oggi non usa più. **Quel caso va risolto, non solo segnalato**: dalla vostra parte
    come si fa a ricongiungere due schede quando le email sono diverse? Se lo strumento non
@@ -366,9 +366,9 @@ risultato.
    Se valgono solo alla creazione, chi aggiorna l'email da noi continua a risultare da voi con
    quella vecchia, e il problema resta intero.
    Un dettaglio della stessa famiglia: il vostro lato pretende `email_verified: true` per creare
-   l'account? Il campo lo emettiamo, e per come è fatto il nostro accesso arriva vero: senza
-   conferma non si entra. Se per voi è una condizione bloccante ditecelo ora, così è fra le prime
-   cose che guardiamo insieme quando proviamo il giro.
+   l'account? Il campo lo emettiamo; la garanzia però non sta nel flag, sta nel fatto che senza
+   conferma da noi non si entra. Se per voi è una condizione bloccante ditecelo ora, così è fra le
+   prime cose che guardiamo insieme quando proviamo il giro.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
