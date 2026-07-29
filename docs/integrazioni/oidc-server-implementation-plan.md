@@ -50,9 +50,12 @@ Conseguenze:
       non una dopo l'altra (invariante **I7**, già concordata in chiamata; confermato da
       Riccardo 2026-07-25). **Non è una preferenza**: scriverlo come «preferito» è
       l'ammorbidimento a ledger (`ask-ammorbidito-e-debolezza-consegnata-al-terzo`).
-- [ ] **Chiavi di firma ASIMMETRICHE (RS256/ES256)** sul progetto Supabase — prerequisito
-      HARD: l'id_token con HS256 **fallisce**. Migrare le JWT signing keys è un'operazione
-      sull'auth di produzione → **leva**. Verificare prima l'algoritmo attuale del progetto.
+- [x] ~~**Chiavi di firma ASIMMETRICHE (RS256/ES256)**~~ **GIÀ SODDISFATTO — verificato sul
+      progetto vivo il 2026-07-29**: il JWKS pubblica **una sola chiave, `ES256`** (`use: sig`,
+      `kid 0f2f465a…`) e la legacy anon key HS256 risulta `disabled: true`. Non c'è nessuna
+      migrazione da fare né nessuna leva da tirare qui: il prerequisito HARD dell'id_token è
+      coperto. Fonte: `GET …/auth/v1/.well-known/jwks.json` + `get_publishable_keys`.
+      Restava scritto come «da verificare» e faceva sembrare il percorso più lungo di quanto è.
 - [ ] **Decisione rischio-beta**: Riccardo accetta l'auth di produzione su Supabase OAuth
       2.1 Server (beta dal 26/11/2025, GA slittata, prezzo post-GA ignoto) → **leva**.
 - [x] ~~**Field-test claim propagation**~~ **SCIOLTO alla fonte 2026-07-24**: verdetto NO
@@ -61,11 +64,15 @@ Conseguenze:
 
 ## Passi lato nostro (in ordine)
 
-1. **Migrare le JWT signing keys ad asimmetriche** (RS256/ES256) — prerequisito per l'id_token.
-   Operazione auth di produzione → leva. Reversibile via rotazione chiavi.
+1. ~~**Migrare le JWT signing keys ad asimmetriche**~~ — **già fatto** (vedi precondizioni:
+   `ES256` sul progetto vivo, verificato 2026-07-29). Il passo non esiste più.
 2. **Abilitare l'OAuth 2.1 / OpenID Provider su Supabase** (Dashboard > Authentication >
    OAuth Server > Enable, con `authorization_url_path` = path della NOSTRA pagina consent).
    Reversibile: si disabilita. → step-leva (auth di produzione).
+   **Stato verificato dal vivo il 2026-07-29: OGGI È SPENTO.** Il documento di discovery
+   risponde `200` (Supabase lo espone comunque, non è indizio di attivazione), ma
+   `GET …/auth/v1/oauth/authorize` torna `404` con `x-sb-error-code: feature_disabled` e
+   `"OAuth server is disabled"`. È il modo per ricontrollare lo stato senza aprire la dashboard.
 3. **Costruire la pagina web consent + registrazione** (a nostro carico — Supabase non la
    ospita). È il pezzo più grande. Stack: piccola app **Next.js** con `@supabase/supabase-js`
    e `@supabase/ssr`. **Hosting DA CONFERMARE con Riccardo (2026-07-24)**: `riseagainsthunger.org`

@@ -285,6 +285,41 @@ def sta_in_una_pagina(table: Table) -> bool:
     return table.wrap(CONTENT_WIDTH, CONTENT_HEIGHT)[1] <= CONTENT_HEIGHT
 
 
+def _altezza(flowable) -> float:
+    """Altezza occupata, spazi verticali dello stile inclusi.
+
+    `wrap()` da solo restituisce il solo blocco di testo: sommare quelli e basta sottostima il
+    gruppo e fa promettere «ci sta» a un insieme che poi non ci sta. Gli spazi contano perche'
+    fra un titolo e il suo cappello ce ne sono una decina di punti.
+    """
+    alto = flowable.wrap(CONTENT_WIDTH, CONTENT_HEIGHT)[1]
+    stile = getattr(flowable, "style", None)
+    return alto + getattr(stile, "spaceBefore", 0) + getattr(stile, "spaceAfter", 0)
+
+
+def _gruppo_col_titolo(table: Table, story: list) -> list:
+    """La tabella piu' il titolo e il cappello che la annunciano, se ci stanno insieme.
+
+    Risale la storia finche' trova testo (al massimo due blocchi: un titolo e una riga di
+    presentazione) e li SPOSTA dentro il gruppo da tenere unito. Se il gruppo non ci sta in una
+    pagina rinuncia al blocco piu' lontano, e alla peggio torna alla sola tabella: meglio un
+    titolo staccato che una tabella spezzata a meta' frase.
+    """
+    coda: list = []
+    i = len(story)
+    while i > 0 and len(coda) < 2 and isinstance(story[i - 1], Paragraph):
+        coda.insert(0, story[i - 1])
+        i -= 1
+
+    altezza_tabella = table.wrap(CONTENT_WIDTH, CONTENT_HEIGHT)[1]
+    while coda:
+        if sum(_altezza(f) for f in coda) + altezza_tabella <= CONTENT_HEIGHT:
+            del story[len(story) - len(coda):]
+            return coda + [table]
+        coda.pop(0)
+    return [table]
+
+
 def build_table(rows: list[str]):
     """Righe markdown grezze -> Table di reportlab, o None se non e' una tabella.
 
@@ -380,7 +415,15 @@ def build(md_path: Path, pdf_path: Path) -> None:
                     ],
                     bulletType="bullet",
                     bulletFontName="Helvetica",
-                    bulletFontSize=7,
+                    # 7 pt su un corpo di 9.8 rendeva un puntino minuscolo appeso in ALTO alla
+                    # prima riga, che a stampa si legge come un apice o uno sporco di
+                    # conversione, non come un pallino di elenco (visto ingrandendo il PDF in
+                    # consegna del 2026-07-29). Il glifo si allinea al testo quando i due corpi
+                    # sono vicini.
+                    bulletFontSize=9,
+                    # Il glifo resta comunque ancorato in cima alla voce, non alla riga: senza
+                    # questo scarto siede all'altezza delle maiuscole invece che a meta' parola.
+                    bulletOffsetY=-2,
                     start="•",
                     leftIndent=12,
                 )
@@ -403,7 +446,15 @@ def build(md_path: Path, pdf_path: Path) -> None:
             # Lo Spacer resta FUORI dal gruppo: dentro, i suoi 7 pt entrerebbero nell'altezza da
             # tenere unita, che la misura non conta - e lo spazio dopo una tabella non ha bisogno
             # di stare nella sua stessa pagina.
-            story.append(KeepTogether([table]))
+            # IL TITOLO VIENE CON LEI. Tenere unita la sola tabella non bastava: sul brief del
+            # 2026-07-29 il titolo «Scheda dei dati» e la riga «Cosa emettiamo a ogni accesso»
+            # restavano in fondo a pagina 2 e la tabella saltava a pagina 3, lasciando due terzi
+            # di pagina bianca fra la promessa e la cosa promessa. Chi legge gira pagina e trova
+            # quattro sigle tecniche senza la frase che dice cosa sono.
+            # Si risale finche' i flowable precedenti sono testo (il titolo e il suo cappello,
+            # non piu' di due) e si misura il gruppo INTERO: se non ci sta, si lascia com'era —
+            # meglio un titolo staccato che una tabella spezzata.
+            story.append(KeepTogether(_gruppo_col_titolo(table, story)))
             story.append(Spacer(1, 7))
         else:
             story.append(table)
