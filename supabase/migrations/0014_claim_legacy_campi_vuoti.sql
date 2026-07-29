@@ -75,8 +75,19 @@
 -- esecuzione. Nessun trigger ricreato: quelli della 0012/0013 puntano alla funzione per
 -- nome e prendono il corpo nuovo senza essere toccati.
 --
--- ROLLBACK: riapplicare i corpi della 0012 (§3) e della 0013 (§2). Non c'è nulla da
--- droppare — questa migration non crea oggetti, ne sostituisce due.
+-- ROLLBACK: riapplicare i corpi della 0012 (§3) e della 0013 (§2), **e subito dopo la 0015
+-- e la 0016**. Non c'è nulla da droppare — questa migration non crea oggetti, ne
+-- sostituisce due.
+--
+-- 🔴 IL CORPO DI `claim_legacy_contact` E `purge_legacy_contact` IN QUESTO FILE È SUPERATO
+-- (aggiunto il 2026-07-29, era l'unico file della catena senza questo avviso). Le versioni
+-- buone stanno nella **0015** (chiave = indirizzo dell'account invece di `contact_email`) e
+-- nella **0016** (l'aggancio avviene solo su un indirizzo PROVATO). Riapplicare questo file
+-- da solo — o eseguire alla lettera il rollback come era scritto qui sopra prima di questa
+-- correzione — non perde due fix: **riapre tre falle di sicurezza in un colpo** (leggere i
+-- dati altrui, rubare la scheda, cancellarla) più il furto usa-e-getta. E lo fa in silenzio,
+-- perché `create or replace` non dà nessun errore quando sostituisce un corpo più recente
+-- con uno più vecchio.
 
 -- ---------------------------------------------------------------------------
 -- 1. `claim_legacy_contact` — corpo della 0012 con le due correzioni

@@ -77,14 +77,21 @@
 -- vuoti, provincia solo fra italiani). Non è teorico: `supabase/tests/run-all.sh:55-57`
 -- fa esattamente questa sequenza, e la 0009 documenta che un riapply a mano dal SQL
 -- Editor «è uno scenario reale».
--- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014 **E POI LA 0015**.
+-- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014, **POI LA 0015 E POI LA 0016**.
 -- ⚠️ AGGIORNATO 2026-07-27 sera (dopo l'applicazione della 0015 al DB vivo): fermarsi alla
 -- 0014, come diceva la riga qui sopra prima di questa correzione, NON è più solo la perdita
 -- di due fix — **riapre una falla di SICUREZZA**. Il corpo della 0014 aggancia ancora
 -- l'archivio a `contact_email`, che la persona dichiara da sé: chi riapplicasse 0012+0014
 -- senza 0015 rimetterebbe in piedi le tre strade (leggere i dati altrui, rubare la scheda,
--- cancellarla). Il corpo BUONO di `claim_legacy_contact` e `purge_legacy_contact` è quello
--- della **0015**; della 0014 resta buono `sync_contact_email_on_email_change`.
+-- cancellarla). ⚠️ **AGGIORNATO ANCORA IL 2026-07-29**: fermarsi alla 0015 è la stessa
+-- trappola un gradino più su — riapre il **furto usa-e-getta** (una `signUp` anonima con
+-- l'indirizzo di un altro rivendica la sua scheda, perché la riga di `auth.users` nasce
+-- prima della conferma). Il corpo BUONO di **tutte e quattro** le funzioni
+-- (`claim_legacy_contact`, `purge_legacy_contact`, `purge_legacy_on_user_delete`,
+-- `sync_contact_email_on_email_change`) è quello della **0016**, che è l'ultima della
+-- catena. Regola generale, per non doverla riscrivere a ogni migration nuova: **si
+-- riapplica sempre fino all'ULTIMA migration che tocca queste funzioni**, mai fino a
+-- quella che era l'ultima quando la nota è stata scritta.
 -- Trovato da una verifica avversariale prima dell'apply, non da un errore in produzione.
 --
 -- ⚠️ VINCOLO DI SEQUENZA PER CHI FARÀ L'IMPORT — LEGGERE PRIMA DI CARICARE.

@@ -73,6 +73,18 @@ Coppie disponibili:
 | `0011_signup_contact_email.sql` | `0011_signup_contact_email.test.sql` |
 | `0012_legacy_contacts.sql` | `0012_legacy_contacts.test.sql` |
 | `0013_contact_email_follows_account.sql` | `0013_contact_email_follows_account.test.sql` |
+| `0014_claim_legacy_campi_vuoti.sql` | `0014_claim_legacy_campi_vuoti.test.sql` |
+| `0015_aggancio_su_email_verificata.sql` | `0015_aggancio_su_email_verificata.test.sql` |
+| `0016_claim_su_email_confermata.sql` | `0016_claim_su_email_confermata.test.sql` |
+
+> 🔴 **Per le coppie da 0012 a 0015 la ricetta qui sopra NON basta.** Riapplicare la migration sotto
+> test (la seconda occorrenza nella pipe, quella che prova la rieseguibilità) riporta indietro il
+> corpo delle funzioni che le migration successive hanno sostituito: la suite girerebbe contro
+> codice che in produzione non esiste più, e sarebbe verde per il motivo sbagliato. Vanno **accodate
+> a mano le migration successive** che toccano quelle funzioni — 0012/0013 → `0014 0015 0016`,
+> 0014 → `0015 0016`, 0015 → `0016`. È esattamente ciò che fa la variabile `extra` in
+> `run-all.sh`: **la via consigliata resta `bash tests/run-all.sh`**, che le accoda da sé; la ricetta
+> a mano serve solo per iterare in fretta su UNA suite mentre la si scrive.
 
 Nota: la migration sotto test compare **due volte** nella pipe (una dentro `migrations/0*.sql`,
 una esplicita in `<MIGRATION>`). È voluto — è il test `T7`, che verifica la rieseguibilità e che la
@@ -103,9 +115,9 @@ sempre l'ultima):
 - **0014**: **15** righe `PASS` (misurato 15/15 su entrambi gli shim, 2026-07-29).
 - **0015**: **8** righe `PASS` — `T1-T8`, di cui le prime tre sono l'ATTACCO via `contact_email`
   (misurato 8/8 su entrambi, 2026-07-29).
-- **0016**: **14** righe `PASS` — 12 blocchi (`T1-T12`), di cui `T3` e `T9` stampano **due** righe
+- **0016**: **16** righe `PASS` — 14 blocchi (`T1-T14`), di cui `T3` e `T9` stampano **due** righe
   ciascuno (prima/dopo la conferma · rivendicazione senza profilo, poi backfill alla nascita).
-  `T12` **droppa `legacy_contacts`** per provare davvero la guardia `undefined_table`, quindi deve
+  `T14` **droppa `legacy_contacts`** per provare davvero la guardia `undefined_table`, quindi deve
   restare l'ultimo: dopo di lui il database è mutilato e nient'altro può seguire.
 
 ⚠️ **`auth.users.email_confirmed_at` negli shim ha un default `now()` che in Supabase NON esiste**

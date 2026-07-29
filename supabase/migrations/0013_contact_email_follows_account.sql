@@ -108,7 +108,12 @@
 -- `0014_claim_legacy_campi_vuoti.sql`, che rende il backfill insensibile alle celle
 -- vuote e limita la provincia ai soli profili italiani. Un `create or replace` di
 -- questo file riporta indietro quei fix **senza errore**.
--- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014.
+-- → SE RIAPPLICHI QUESTO FILE, RIAPPLICA SUBITO DOPO LA 0014, **POI 0015 E 0016**.
+-- ⚠️ AGGIORNATO 2026-07-29: non è più solo una questione di celle vuote. Anche
+-- `sync_contact_email_on_email_change` — la funzione definita QUI — è stata sostituita
+-- dalla **0016**, che le aggiunge la guardia mancante: il blocco di rivendicazione qui
+-- sotto usa come chiave `old.email`, un indirizzo che nessuno verifica sia mai stato
+-- provato. Riapplicare questo file da solo riapre quella porta.
 create or replace function public.sync_contact_email_on_email_change()
 returns trigger
 language plpgsql

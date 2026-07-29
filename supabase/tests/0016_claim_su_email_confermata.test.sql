@@ -392,7 +392,98 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
--- T11 (RIESEGUIBILITÀ E SUPERFICIE): un solo trigger per nome dopo la seconda
+-- T11 (ATTACCO — LA QUARTA PORTA): il furto usa-e-getta con un passo in più. Mallory si
+-- registra con l'indirizzo della vittima e NON conferma (il §1 le impedisce il claim),
+-- poi sposta l'account sul proprio indirizzo: nello spostamento, la 0013 rivendicava la
+-- riga registrata sotto l'indirizzo ABBANDONATO — cioè quello della vittima.
+-- ⚠️ Se qualcuno toglie `v_vecchia_provata` dal §4, questo test diventa rosso. È il suo
+-- unico scopo.
+-- ---------------------------------------------------------------------------
+insert into public.legacy_contacts (id, email_norm, phone, city, country, source)
+values ('00000000-0000-0000-0000-000000000309', 'vittima4@esempio.it',
+        '+393330000309', 'Verona', 'IT', 'access');
+
+insert into auth.users (id, email, email_confirmed_at, raw_user_meta_data)
+values ('00000000-0000-0000-0000-000000000321', 'vittima4@esempio.it', null,
+        jsonb_build_object(
+          'first_name', 'Mallory', 'last_name', 'Quarta',
+          'birth_date', '1991-11-11', 'country', 'IT'));
+
+-- Lo spostamento sul proprio indirizzo. `email_confirmed_at` resta NULL: non ha mai
+-- provato niente.
+update auth.users set email = 'mallory4@esempio.it'
+ where id = '00000000-0000-0000-0000-000000000321';
+
+do $$
+declare r record;
+begin
+  select l.claimed_by, p.phone, p.city into r
+    from public.legacy_contacts l
+    left join public.profiles p on p.id = '00000000-0000-0000-0000-000000000321'
+   where l.id = '00000000-0000-0000-0000-000000000309';
+
+  if r.claimed_by is not null then
+    raise exception 'T11 FAIL — FALLA APERTA: cambiando indirizzo, un account MAI confermato ha rivendicato la riga della vittima (claimed_by = %)', r.claimed_by;
+  end if;
+  if r.phone is not null or r.city is not null then
+    raise exception 'T11 FAIL — FALLA APERTA: i dati della vittima sono finiti nel profilo (tel=%, citta=%)',
+      coalesce(r.phone, '<null>'), coalesce(r.city, '<null>');
+  end if;
+  raise notice 'T11 PASS: il cambio indirizzo non rivendica per conto di chi non ha mai confermato';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T12 (IL CAMBIO EMAIL LEGITTIMO NON È STATO SPENTO): chi l'indirizzo vecchio l'aveva
+-- provato deve continuare a portarsi dietro la propria riga d'archivio quando cambia
+-- indirizzo. Senza questo test, T11 sarebbe verde anche avendo semplicemente disattivato
+-- la rivendicazione della 0013 — che è il pezzo senza il quale la 0013 REGREDIVA la 0012.
+-- ---------------------------------------------------------------------------
+insert into public.legacy_contacts (id, email_norm, phone, city, country, source)
+values ('00000000-0000-0000-0000-000000000310', 'primaemail@esempio.it',
+        '+393330000310', 'Como', 'IT', 'access');
+
+insert into auth.users (id, email, email_confirmed_at)
+values ('00000000-0000-0000-0000-000000000322', 'primaemail@esempio.it', now());
+
+-- Profilo creato a mano con `contact_email` = mail dell'account, come fa la 0011 sul
+-- canale email/password: è la condizione perché la 0013 riconosca il recapito DERIVATO.
+-- La riga d'archivio arriva dopo, quindi al momento della nascita non c'era niente da
+-- agganciare: è proprio il caso per cui la rivendicazione al cambio email esiste.
+insert into public.profiles
+  (id, first_name, last_name, phone, city, province, country, birth_date,
+   privacy_consent_at, contact_email)
+values ('00000000-0000-0000-0000-000000000322',
+        'Prima', 'Email', null, null, null, 'IT', '1982-12-12', now(),
+        'primaemail@esempio.it');
+
+update auth.users set email = 'secondaemail@esempio.it'
+ where id = '00000000-0000-0000-0000-000000000322';
+
+do $$
+declare r record;
+begin
+  select l.claimed_by, p.contact_email, p.phone, p.city into r
+    from public.legacy_contacts l
+    join public.profiles p on p.id = '00000000-0000-0000-0000-000000000322'
+   where l.id = '00000000-0000-0000-0000-000000000310';
+
+  if r.contact_email is distinct from 'secondaemail@esempio.it' then
+    raise exception 'T12 FAIL: il recapito derivato non segue piu'' il cambio indirizzo (contact_email = %)',
+      coalesce(r.contact_email, '<null>');
+  end if;
+  if r.claimed_by is distinct from '00000000-0000-0000-0000-000000000322'::uuid then
+    raise exception 'T12 FAIL: chi aveva PROVATO il vecchio indirizzo non si porta piu'' dietro la sua riga (claimed_by = %)',
+      coalesce(r.claimed_by::text, '<null>');
+  end if;
+  if r.phone is distinct from '+393330000310' or r.city is distinct from 'Como' then
+    raise exception 'T12 FAIL: la riga e'' stata rivendicata ma i dati non sono stati recuperati (tel=%, citta=%)',
+      coalesce(r.phone, '<null>'), coalesce(r.city, '<null>');
+  end if;
+  raise notice 'T12 PASS: la guardia non ha spento il cambio indirizzo legittimo';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T13 (RIESEGUIBILITÀ E SUPERFICIE): un solo trigger per nome dopo la seconda
 -- applicazione, e nessuna funzione raggiungibile dal client.
 -- ---------------------------------------------------------------------------
 do $$
@@ -401,9 +492,10 @@ begin
   select count(*) into n from pg_trigger t
    join pg_class c on c.oid = t.tgrelid
    where not t.tgisinternal and c.relname = 'users'
-     and t.tgname in ('on_auth_user_email_confirmed', 'on_auth_user_purge_legacy');
-  if n <> 2 then
-    raise exception 'T11 FAIL: % trigger su auth.users fra conferma e oblio, attesi 2', n;
+     and t.tgname in ('on_auth_user_email_confirmed', 'on_auth_user_purge_legacy',
+                      'on_auth_user_email_changed', 'on_auth_user_created');
+  if n <> 4 then
+    raise exception 'T13 FAIL: % trigger su auth.users, attesi 4 (conferma, oblio, cambio email, nascita)', n;
   end if;
 
   select count(*) into n from pg_trigger t
@@ -411,20 +503,21 @@ begin
    where not t.tgisinternal and c.relname = 'profiles'
      and t.tgname in ('on_profile_claim_legacy', 'on_profile_purge_legacy');
   if n <> 2 then
-    raise exception 'T11 FAIL: % trigger di aggancio/oblio su profiles, attesi 2', n;
+    raise exception 'T13 FAIL: % trigger di aggancio/oblio su profiles, attesi 2', n;
   end if;
 
   if has_function_privilege('authenticated', 'public.claim_legacy_on_email_confirmed()', 'EXECUTE')
      or has_function_privilege('anon', 'public.claim_legacy_on_email_confirmed()', 'EXECUTE')
      or has_function_privilege('authenticated', 'public.claim_legacy_contact()', 'EXECUTE')
-     or has_function_privilege('authenticated', 'public.purge_legacy_on_user_delete()', 'EXECUTE') then
-    raise exception 'T11 FAIL: superficie RPC aperta dopo il replace';
+     or has_function_privilege('authenticated', 'public.purge_legacy_on_user_delete()', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.sync_contact_email_on_email_change()', 'EXECUTE') then
+    raise exception 'T13 FAIL: superficie RPC aperta dopo il replace';
   end if;
-  raise notice 'T11 PASS: trigger unici, nessuna superficie RPC';
+  raise notice 'T13 PASS: trigger unici, nessuna superficie RPC';
 end $$;
 
 -- ---------------------------------------------------------------------------
--- T12 (LA TABELLA CHE NON C'È — deve restare ULTIMO): se questa migration girasse senza
+-- T14 (LA TABELLA CHE NON C'È — deve restare ULTIMO): se questa migration girasse senza
 -- la 0012, o dopo un suo rollback, la conferma della registrazione morirebbe su
 -- «relation does not exist» e nessuno riuscirebbe più ad attivare il proprio account.
 -- Si prova togliendo la tabella per davvero, non fidandosi del blocco EXCEPTION scritto.
@@ -445,13 +538,13 @@ begin
     update auth.users set email_confirmed_at = now()
      where id = '00000000-0000-0000-0000-000000000320';
   exception when others then
-    raise exception 'T12 FAIL: senza legacy_contacts la conferma dell''account fallisce (%) — nessuno potrebbe piu'' attivarsi', sqlerrm;
+    raise exception 'T14 FAIL: senza legacy_contacts la conferma dell''account fallisce (%) — nessuno potrebbe piu'' attivarsi', sqlerrm;
   end;
 
   if not exists (select 1 from auth.users
                   where id = '00000000-0000-0000-0000-000000000320'
                     and email_confirmed_at is not null) then
-    raise exception 'T12 FAIL: la conferma non ha avuto effetto';
+    raise exception 'T14 FAIL: la conferma non ha avuto effetto';
   end if;
-  raise notice 'T12 PASS: senza la tabella dell''archivio la conferma passa comunque';
+  raise notice 'T14 PASS: senza la tabella dell''archivio la conferma passa comunque';
 end $$;

@@ -38,8 +38,13 @@
 --
 -- IL RIMEDIO, DUE RAMI.
 --   · ramo A — alla nascita del profilo, ma solo se l'indirizzo risulta GIÀ confermato.
---     Copre il social e l'autoconfirm, dove l'indirizzo arriva provato dal provider e
---     `email_confirmed_at` è valorizzato fin dall'INSERT.
+--     Copre l'autoconfirm e, **se** il provider lo consegna già verificato, il social.
+--     ⚠️ ASSUNTO, NON VERIFICATO: che con OAuth `email_confirmed_at` sia valorizzato
+--     nello STESSO insert. GoTrue potrebbe crearlo e confermarlo con un UPDATE separato,
+--     nel qual caso anche il social passerebbe dal ramo B. La cosa non apre nessun buco —
+--     entrambi i rami agganciano — ma chi legge non deve prendere per verificata una
+--     cosa che non lo è. Oggi la domanda è comunque teorica: i login social sono stati
+--     RIMOSSI dal codice dell'app, quindi il ramo A vive solo per l'autoconfirm.
 --   · ramo B — alla conferma: un trigger nuovo su `auth.users` che scatta quando
 --     `email_confirmed_at` passa da NULL a NOT NULL. Qui il profilo esiste già, quindi il
 --     ramo non può riempire `new.*` come fa un BEFORE INSERT: fa un UPDATE su
@@ -57,18 +62,48 @@
 -- via la scheda d'archivio della persona il cui indirizzo era stato usato per
 -- registrarsi. Un lavoro di manutenzione igienica diventerebbe una cancellazione di
 -- dati altrui, silenziosa e in blocco.
--- → Stessa guardia sui due percorsi di oblio. Costo per l'uso legittimo: nessuno, perché
--- per cancellare il proprio profilo dall'app serve una sessione, e per avere una sessione
--- serve aver confermato.
+-- → Stessa guardia sui due percorsi di oblio. Dall'app il costo è nessuno: per cancellare
+-- il proprio profilo serve una sessione, e per avere una sessione serve aver confermato.
+-- ⚠️ MA IL COSTO NON È ZERO IN ASSOLUTO, e scriverlo sarebbe stato falso: chi si registra
+-- col PROPRIO indirizzo, non conferma mai, e poi chiede la cancellazione per altra via
+-- (mail all'associazione, cancellazione da console), non si porta più via la riga
+-- d'archivio registrata sotto quell'indirizzo — resta lì, in silenzio. È una richiesta
+-- Art. 17 da evadere a mano, e la query è questa:
+--   delete from public.legacy_contacts
+--    where email_norm = lower(btrim('<indirizzo della richiesta>'))
+--      and claimed_by is null;
+-- Il compromesso è voluto: fra «una richiesta di cancellazione va evasa a mano» e «una
+-- pulizia degli account non confermati cancella in blocco le schede di terzi», la seconda
+-- è incomparabilmente peggiore — nessuno l'avrebbe chiesta e nessuno se ne accorgerebbe.
+--
+-- IL QUARTO PERCORSO, che la prima stesura dichiarava innocuo SBAGLIANDO (trovato dal
+-- critico avversariale). `sync_contact_email_on_email_change` (0013) rivendica su
+-- `old.email`, cioè l'indirizzo ABBANDONATO, e la giustificazione «vive su un cambio email
+-- già confermato, quindi la chiave è provata» non regge: parla di `new.email`, mentre la
+-- chiave usata è `old.email`, per il quale nessuno controlla se sia mai stato provato.
+-- Oggi non è raggiungibile da un anonimo (per cambiare indirizzo serve una sessione), ma
+-- basterebbe `mailer_autoconfirm`, un invito da console o un `updateUserById` per riaprire
+-- il furto da lì — con la stessa registrazione usa-e-getta, un passo più in là.
+-- → Il §4 di questo file mette la guardia anche là. Un buco a quattro porte non si chiude
+--   chiudendone tre e dichiarando sicura la quarta.
 --
 -- COSA NON CAMBIA, dichiarato per non farlo scoprire a qualcun altro:
 --   · il ramo `claimed_by = old.id` dell'oblio resta senza guardia, ed è giusto: dopo la
 --     0015 quel legame non può più essere stato ottenuto dichiarando l'indirizzo di un
 --     altro, e dopo questa migration nemmeno registrandolo senza provarlo;
---   · `sync_contact_email_on_email_change` (0013) non è toccata. Vive su un cambio email
---     GIÀ confermato — Supabase non muove `email` finché la persona non conferma su
---     entrambe le caselle — quindi la sua chiave è già provata. Il suo residuo su
---     `new.email` resta quello dichiarato là, materia della passata di riconciliazione.
+--   · 🔴 IL PROFILO E IL CONSENSO NASCONO ANCORA PRIMA DELLA PROVA DELL'INDIRIZZO, e
+--     questa migration NON lo tocca. Una `signUp` anonima con l'indirizzo di un altro
+--     continua a creare una riga in `public.profiles` (con nome e data di nascita scelti
+--     dall'attaccante) e una riga in `consent_events` «privacy_notice / granted / signup»
+--     (0011): un consenso che nessuno ha prestato, registrato come se fosse la prova
+--     dell'Art. 7. E siccome `auth.users.email` è unico, quell'indirizzo resta occupato:
+--     la persona vera non può più registrarsi con la propria mail.
+--     È un difetto PREESISTENTE (0011) e di classe diversa — riguarda l'account, non
+--     l'archivio storico — ma va scritto qui perché è il residuo che resta in piedi dopo
+--     aver chiuso il furto della scheda, e nessun test lo copre. La contromisura naturale
+--     è far nascere profilo e consenso alla conferma invece che al signup, oppure una
+--     pulizia programmata degli account mai confermati: decisione di prodotto, non un fix
+--     da infilare in coda a una migration di sicurezza.
 --
 -- COSA SI PERDE. Chi entra col social e ha, per qualunque ragione, l'indirizzo non
 -- confermato dal provider non si aggancia alla nascita del profilo: si aggancerà alla
@@ -85,14 +120,30 @@
 -- anagrafiche**. 🔴 VA APPLICATA PRIMA DEL CARICAMENTO, non prima del rilascio dell'app.
 --
 -- ORDINE DI RILASCIO: dopo la 0015 (sostituisce di nuovo il corpo delle stesse funzioni).
--- Richiede 0012 applicata (la tabella) e 0011 (il trigger di nascita del profilo).
+-- Richiede 0012 applicata (la tabella), 0011 (il trigger di nascita del profilo) e — per il
+-- §4 — la 0013, di cui questo file diventa il corpo buono.
+-- 🔴 **DA QUI IN POI IL CORPO BUONO DI TUTTE E QUATTRO LE FUNZIONI È QUESTO FILE**:
+-- `claim_legacy_contact`, `purge_legacy_contact`, `purge_legacy_on_user_delete`,
+-- `sync_contact_email_on_email_change`. Riapplicare 0012, 0013 o 0014 senza rimettere in
+-- coda 0015 **e 0016** riporta indietro i corpi e riapre il furto: le note in testa a quei
+-- tre file sono state aggiornate, ma se ci si arriva da qui vale lo stesso avvertimento.
 --
 -- RIESEGUIBILE: sì. `create or replace function` + `revoke` + `drop trigger if exists`
 -- seguito da `create trigger`. Come la 0015, questo file crea anche un OGGETTO NUOVO
 -- (`on_auth_user_email_confirmed`): va nominato, perché è ciò che un rollback ingenuo
 -- lascia indietro.
 --
--- ROLLBACK: riapplicare i corpi della 0015 **e** togliere gli oggetti nuovi del §2:
+-- ROLLBACK: riapplicare i corpi della 0015 **più `sync_contact_email_on_email_change` dalla
+-- 0014** (il §4 sostituisce una funzione che la 0015 non conosce, quindi la sola 0015 non la
+-- riporterebbe indietro) e togliere gli oggetti nuovi del §2:
+-- ⚠️ **DALLA 0014, NON DALLA 0013.** La 0013 è dove quella funzione è *definita*, ma la 0014
+-- l'ha già sostituita col fix dei campi vuoti: un rollback che ripesca la 0013 riporta
+-- indietro quel fix in silenzio. Questa riga diceva «0013» fino a poco fa — lo stesso errore
+-- che avevo appena commesso scrivendo il §4, che sarebbe rimasto congelato nelle istruzioni
+-- di rollback. Vale la regola generale: **il corpo buono di una funzione condivisa sta
+-- nell'ULTIMA migration che l'ha toccata**, che si trova con
+-- `grep -l "create or replace function public.<nome>" migrations/*.sql`, non nel file dove
+-- la funzione compare la prima volta.
 --   drop trigger if exists on_auth_user_email_confirmed on auth.users;
 --   drop function if exists public.claim_legacy_on_email_confirmed();
 -- Senza queste due righe resta uno stato MISTO (corpi vecchi + trigger nuovo), e il
@@ -256,8 +307,18 @@ begin
               and nullif(btrim(v_province), '') is not null
              then v_province else p.province end
      where p.id = new.id;
-  exception when undefined_table then
-    return new;
+  exception
+    when undefined_table then
+      return new;
+    -- Stessa ragione del gemello nella 0013: i valori che stiamo scrivendo vengono da un
+    -- archivio importato di qualità ignota (1352 righe). Se un domani su `phone`, `city` o
+    -- `province` comparisse un CHECK, l'errore risalirebbe fino all'UPDATE di `auth.users`
+    -- che ha fatto scattare il trigger — e la persona non riuscirebbe più a CONFERMARE il
+    -- proprio account, per colpa di una colonna che con l'accesso non c'entra. Fra «il
+    -- profilo resta da riempire a mano» e «non ci si può più attivare», il primo è
+    -- incomparabilmente meno grave: best-effort esplicito.
+    when check_violation then
+      return new;
   end;
 
   return new;
@@ -295,7 +356,15 @@ declare
   v_key text;
   v_confermata boolean;
 begin
-  delete from public.legacy_contacts where claimed_by = old.id;
+  -- Protetto come i tre accessi gemelli: era l'unico dei quattro punti che toccano
+  -- `legacy_contacts` rimasto scoperto, e dopo un rollback della 0012 avrebbe fatto fallire
+  -- ogni cancellazione di PROFILO su «relation does not exist» — cioè la persona bloccata
+  -- dentro, per una tabella che con il suo profilo non c'entra.
+  begin
+    delete from public.legacy_contacts where claimed_by = old.id;
+  exception when undefined_table then
+    return old;
+  end;
 
   -- ⚠️ QUI L'EMAIL NON SEMPRE C'È: quando la cancellazione parte da `auth.users`, la riga
   -- dell'utente non è più leggibile da qui e la chiave resta NULL. Non si ripiega su
@@ -354,3 +423,113 @@ drop trigger if exists on_auth_user_purge_legacy on auth.users;
 create trigger on_auth_user_purge_legacy
   before delete on auth.users
   for each row execute procedure public.purge_legacy_on_user_delete();
+
+-- ---------------------------------------------------------------------------
+-- 4. La quarta porta: il cambio email rivendicava su un indirizzo mai provato
+-- ---------------------------------------------------------------------------
+-- `sync_contact_email_on_email_change` (0013) fa due cose al cambio di indirizzo: sposta il
+-- recapito derivato, e RIVENDICA la riga d'archivio registrata sotto `old.email` — perché
+-- «l'indirizzo vecchio era suo, la riga è sua». Quel «era suo» è la stessa premessa non
+-- controllata che questa migration sta chiudendo altrove: nessuno verifica che `old.email`
+-- sia mai stato provato.
+--
+-- LO SCENARIO, un passo più in là della registrazione usa-e-getta: si fa `signUp` con
+-- l'indirizzo della vittima, non si conferma (il §1 impedisce il claim), poi si sposta
+-- l'account sul proprio indirizzo — e nello spostamento la riga della vittima viene
+-- rivendicata da qui. Oggi il passo finale non è raggiungibile da un anonimo, perché
+-- `updateUser({email})` richiede una sessione e la sessione richiede la conferma. Ma la
+-- distanza è UN'IMPOSTAZIONE: `mailer_autoconfirm` acceso, un invito creato da console, un
+-- `updateUserById` fatto da un service_role, e la porta si riapre — senza che nessuno
+-- colleghi la cosa a questa migration, perché il codice sta in un altro file.
+--
+-- Il corpo è quello della 0013 con UNA condizione in più. Non si tocca la 0013: è già
+-- applicata in produzione, e le migration applicate non si riscrivono.
+--
+-- ⚠️ La guardia sta sul ramo della RIVENDICAZIONE, non su quello del recapito: spostare
+-- `contact_email` quando la persona cambia indirizzo è giusto comunque, confermato o no —
+-- quella colonna dice «a cosa scriviamo», non «chi sei», ed è l'unica cosa che tiene onesto
+-- l'oblio per email. Metterla più in alto avrebbe spento anche quello.
+create or replace function public.sync_contact_email_on_email_change()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_cambiata boolean := new.email is distinct from old.email;
+  v_nuova_valida boolean := new.email is not null
+    and new.email not like '%@privaterelay.appleid.com';
+  -- LA CONDIZIONE NUOVA: l'indirizzo che si sta abbandonando era stato provato?
+  v_vecchia_provata boolean := old.email_confirmed_at is not null;
+  v_spostata boolean := false;
+  -- NB: nessuna variabile di tipo `public.legacy_contacts` — un tipo composito si risolve
+  -- alla COMPILAZIONE, fuori da ogni blocco EXCEPTION, e vanificherebbe la guardia sotto.
+begin
+  if not v_cambiata or not v_nuova_valida then
+    return new;
+  end if;
+
+  begin
+    update public.profiles
+       set contact_email = btrim(new.email)
+     where id = new.id
+       and contact_email is not null
+       and lower(btrim(contact_email)) = lower(btrim(old.email));
+    v_spostata := found;
+  exception when check_violation then
+    return new;
+  end;
+
+  -- Identico alla **0014**, salvo `v_vecchia_provata`. Le ragioni per cui questo blocco
+  -- esiste (senza, la 0013 REGREDIVA la 0012 sull'oblio) stanno là e non si ricopiano.
+  -- ⚠️ IL CORPO DA CUI PARTIRE È QUELLO DELLA 0014, NON DELLA 0013: la prima stesura di
+  -- questo §4 ha copiato la 0013, cioè `coalesce(p.phone, l.phone)`, e ha **regredito** il
+  -- fix dei campi vuoti — una cella che nell'archivio è stringa vuota tornava a essere
+  -- letta come piena. Non l'ha preso nessuna verifica di questo file: l'ha preso **T10
+  -- della suite 0014** («phone = , il vuoto non è stato colmato dal backfill») quando è
+  -- girata la batteria completa. È esattamente il motivo per cui la batteria esiste, ed è
+  -- il motivo per cui ogni file di questa catena porta in testa l'avviso sul corpo buono.
+  if v_spostata and v_vecchia_provata then
+    begin
+      update public.legacy_contacts
+         set claimed_by = new.id,
+             claimed_at = now()
+       where email_norm = lower(btrim(old.email))
+         and claimed_by is null;
+
+      if found then
+        update public.profiles p
+           set phone = case
+                 when nullif(btrim(p.phone), '') is null
+                  and nullif(btrim(l.phone), '') is not null
+                 then l.phone else p.phone end,
+               city = case
+                 when nullif(btrim(p.city), '') is null
+                  and nullif(btrim(l.city), '') is not null
+                 then l.city else p.city end,
+               province = case
+                 when coalesce(nullif(btrim(p.country), ''), 'IT') = 'IT'
+                  and coalesce(nullif(btrim(l.country), ''), 'IT') = 'IT'
+                  and nullif(btrim(p.province), '') is null
+                  and nullif(btrim(l.province), '') is not null
+                 then l.province else p.province end
+          from public.legacy_contacts l
+         where p.id = new.id
+           and l.email_norm = lower(btrim(old.email));
+      end if;
+    exception when undefined_table then
+      return new;
+    end;
+  end if;
+
+  return new;
+end;
+$$;
+
+revoke execute on function public.sync_contact_email_on_email_change()
+  from public, anon, authenticated;
+
+drop trigger if exists on_auth_user_email_changed on auth.users;
+create trigger on_auth_user_email_changed
+  after update of email on auth.users
+  for each row execute procedure public.sync_contact_email_on_email_change();

@@ -165,6 +165,67 @@
      <=8) -> la condizione e' passata dal CONTEGGIO RIGHE all'ALTEZZA REALE misurata.
      ----------------------------------------------------------------------------------
 
+     ----------------------------------------------------------------------------------
+     PASSATA DEL 2026-07-29 (sera) - AUDIT 360 PRIMA DELL'INVIO, due correzioni.
+
+     1) 🔴 RECIDIVA, trovata con `git log`: la domanda 1 diceva «per voi e' QUASI NIENTE DA FARE».
+        E' la STIMA DEL LAVORO ALTRUI che Riccardo aveva gia' fatto togliere il 28/07 con
+        `b05169e` («gran parte del lavoro e' fatta» -> via), rientrata la sera stessa in `6c884dd`
+        in forma PIU' assertiva mentre si fondevano le vecchie domande 1 e 3.
+        Viola una regola RATIFICATA: `letsdonation-donorbox-identita.md` § «Tre regole per la
+        conversazione», n.2 - «una stima di sforzo scritta da te su un sistema che non conosci ti
+        toglie credibilita'. Mai "sono tre righe"». E le note qui sopra la elencano gia' come
+        difetto corretto (:20-21). Sta in PRIMA PAGINA, nella domanda che il cappello dichiara
+        portante, e la legge il tecnico che sa se e' vero.
+        Ripristinata ESATTAMENTE la forma lasciata da `b05169e`. Il cappello di §5 («La prima dice
+        quanto lavoro c'e' davvero») regge ancora: dichiara che la domanda RIVELA lo sforzo, non
+        che lo stima.
+        Classe: la stessa gia' a ledger il 29/07 mattina (`riscrittura-resuscita-decisione-
+        precedente`). Il presidio non e' un'altra error-memory: e' `git log -S` sulla frase PRIMA
+        di riscrivere una voce, che infatti l'ha trovata.
+
+     2) «nome e indirizzo» -> «nome ed email», nelle DUE occorrenze (§1 e domanda 6).
+        «Indirizzo» compariva 8 volte in TRE significati: l'email (5), l'URL delle chiavi (1) e
+        questa coppia (2). In un documento sui dati che attraversano il confine, «nome e
+        indirizzo» e' la coppia canonica dell'anagrafica POSTALE - e su una piattaforma che
+        emette ricevute fiscali e' la lettura naturale. La prima occorrenza sta a pagina 1 e la
+        tabella che disambigua a pagina 3. Il canonico non dice mai «nome e indirizzo»: dice
+        «nome, cognome ed email» (`scambio-dati-quadro.md:496,634,672`).
+
+     3) 🔴 «quindi e' SEMPRE reale» sulla riga `email`: assoluto SMENTITO dal database vivo.
+        Interrogato il 2026-07-29: 2 utenti, **0 mai confermati** (quindi «non si entra prima di
+        aver confermato» e' VERO e verificato) ma **1 dei 2 porta un alias
+        `@privaterelay.appleid.com`** - un indirizzo che INOLTRA, non quello della persona. Nato
+        l'08/07, cioe' PRIMA che i social uscissero dal codice il 26/07. La verifica del 28/07
+        aveva guardato il CODICE («0 login social») e ne aveva dedotto il DATABASE: togliere i
+        pulsanti non cancella le identita' gia' nate. E' la classe zero-M, sul dato piu' esposto
+        del documento.
+        NON si e' messo il carve-out che il canonico prescrive (`scambio-dati-quadro.md:681`,
+        «per le persone iscritte prima di luglio 2026 puo' essere un alias»): consegnerebbe al
+        partner una debolezza scritta per DUE ACCOUNT DI PROVA su un progetto pre-lancio con zero
+        utenti reali. Si e' tolta l'INFERENZA e lasciato il FATTO: «L'indirizzo dell'account,
+        confermato: da noi non si entra prima di averlo confermato». Vero al 100%, oggi e dopo il
+        lancio (nessun nuovo account puo' piu' nascere con un alias), e non promette un'identita'
+        fra indirizzo e persona che il matching non deve dare per scontata.
+        Il caso «indirizzo che non coincide» resta comunque coperto: e' il secondo ramo della
+        domanda 3, che lo dichiara «da risolvere, non solo segnalare».
+        🔑 STRADA PIU' PULITA, ma e' una scrittura sul database di produzione e quindi decisione
+        di Riccardo: cancellare l'account di prova con l'alias. Fatto quello, la frase forte
+        tornerebbe vera e verificata.
+
+     NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico dice «va detto a loro»
+     (`scambio-dati-quadro.md:206-210`) ma e' ANTERIORE alla decisione del 27/07 di aprire ai
+     minorenni: oggi scrivere «siamo 18+» annuncerebbe al partner un limite che il proprietario
+     ha deciso di togliere, e scrivere il contrario sarebbe falso nel prodotto (`constraint adult`
+     vivo in `0001_profiles.sql:17`). Entrambi i rami non sono scrivibili -> resta fuori, e va
+     riallineato il canonico, non il brief.
+
+     STATO DELL'INVIO, verificato in questa passata: il provider OIDC e' SPENTO sul progetto vivo
+     (`oauth/authorize` -> `feature_disabled`), ma le chiavi di firma sono GIA' asimmetriche
+     (ES256): il piano le dava «da migrare» ed e' stato corretto. Il documento parla al futuro
+     ovunque, quindi non promette nulla che non regga.
+     ----------------------------------------------------------------------------------
+
      Il ragionamento integrale non e' andato perso, sta nei documenti NOSTRI:
        · scambio-dati-quadro.md ......... chi tiene cosa, cosa passa, prerequisiti, §8.1
        · identita-matrice-scenari.md .... gli scenari lato Let's Donation
@@ -198,7 +259,7 @@ si parlano, e quando aggiorna i suoi dati da una parte, dall'altra restano quell
 
 Il punto d'arrivo è che su quella pagina ci sia il solo pulsante «Entra con Rise Against Hunger»:
 chi ha già un account da noi entra con quello, e chi non ce l'ha lo crea in quel momento senza
-compilare un secondo modulo — i dati minimi, nome e indirizzo, arrivano dall'accesso.
+compilare un secondo modulo — i dati minimi, nome ed email, arrivano dall'accesso.
 
 Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
@@ -251,9 +312,8 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
 risultato.
 
 1. **Come funziona il collegamento che avete con Zucchetti?** Ci dicevi che i loro dipendenti
-   arrivano già registrati: se è un accesso unico come quello che proponiamo, per voi è quasi
-   niente da fare e a noi basta sapere come replicarlo — il nome del sistema, il documento che vi
-   hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
+   arrivano già registrati: se è un accesso unico come quello che proponiamo, a noi basta sapere
+   come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
    client OpenID Connect: diteci cosa comporta, così ci regoliamo sui tempi.
 2. **Cosa impedisce, oggi, di lasciare sulla pagina il solo pulsante?** Il modulo va tolto nel
    momento stesso in cui il pulsante va online. Se c'è un vincolo tecnico che lo blocca, è la prima
@@ -279,7 +339,7 @@ risultato.
    apparire nelle liste pubbliche e l'adesione a community e classifiche.
    Oggi li sceglie la persona mentre compila il modulo, e la visibilità in particolare è
    obbligatoria, senza opzione preselezionata. Quando sulla pagina del nostro spazio quel modulo non
-   c'è più, l'account nasce dall'accesso con i dati che arrivano da noi — nome e indirizzo — e quelle
+   c'è più, l'account nasce dall'accesso con i dati che arrivano da noi — nome ed email — e quelle
    tre scelte non le fa più nessuno: con quale valore nascono, uno deciso da voi o chiesto alla
    persona dopo il primo ingresso?
    Ci pesa soprattutto la visibilità, l'unica delle tre con un effetto pubblico: qualunque sia la
@@ -301,7 +361,7 @@ risultato.
 | --- | --- |
 | `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene nome né altri suoi dati, ma non è anonimo: è uno pseudonimo |
 | `name` | Nome e cognome in una sola stringa. Può mancare |
-| `email` | L'indirizzo dell'account. Da noi si accede solo dopo aver confermato l'indirizzo, quindi è sempre reale |
+| `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
 
 **Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
