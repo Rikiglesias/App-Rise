@@ -21,6 +21,20 @@ STANDARD determinati dagli scope: `sub`, `email`, `email_verified`, `name`, `pho
 `picture`. Un client OIDC di terzi (plugin Joomla di LD) legge id_token/UserInfo → **non
 vedrà mai `rise_ref` né un'email "risolta" custom**.
 
+> 🔴 **CORREZIONE 2026-07-29 — la seconda metà di quel «né UserInfo» è FALSA, letta nel sorgente.**
+> `internal/api/oauthserver/handlers.go`, funzione `OAuthUserInfo`: dopo aver estratto i claim
+> standard, con lo scope `profile` esegue `userInfo["user_metadata"] = user.UserMetaData` — la mappa
+> **intera**. L'`id_token` invece è pulito: `internal/tokens/service.go`, `GenerateIDToken`, assegna
+> solo `Name`, `Picture`, `PreferredUsername`, `UpdatedAt` (verificato nel CORPO, non nel commento).
+> Conseguenze: ① la Scheda dei dati del brief non poteva dire «solo i campi standard» senza
+> distinguere le due superfici — corretto nel brief il 29/07; ② **qualunque cosa scriviamo nei
+> `user_metadata` diventa consegnabile a LD via UserInfo**, quindi la regola operativa è tenere
+> l'anagrafica in `profiles` e i metadata al minimo (oggi contengono `email`, `email_verified`,
+> `phone_verified`, `sub`, e per Apple anche `custom_claims`, `iss`, `provider_id` — verificato su
+> `auth.users`); ③ la conclusione «`rise_ref` non è consegnabile» **resta valida ma per un'altra
+> ragione**: non perché UserInfo filtri, ma perché `rise_ref` vive in `partner_refs`, non nei
+> metadata. Non riaprire la decisione su quella base.
+
 Conseguenze:
 
 - **`rise_ref` esce dal login OIDC.** Non serviva all'identità (quella è il `sub`): `rise_ref`

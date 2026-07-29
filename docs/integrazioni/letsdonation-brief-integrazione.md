@@ -338,7 +338,21 @@ arriverà dalla nostra parte.
   l'indirizzo delle chiavi.
 - `client_id` e `client_secret` dedicati a voi.
 - L'autorizzazione dei redirect URI che ci indicate.
+- **Una seconda coppia di credenziali per il collaudo**, con i vostri indirizzi di prova: il giro con
+  le due o tre persone si fa con quelle, non con le credenziali che poi restano in esercizio.
 - Un riferimento nostro per tutta la messa in opera.
+
+Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
+
+- **Gli scope da chiedere sono `openid email profile`.** L'indicatore di email verificata viaggia
+  con `email`, il nome e il nickname con `profile`. Il telefono non ve lo mandiamo, quindi `phone`
+  non serve.
+- **Le chiavi di firma cambiano.** Vanno lette dall'indirizzo che trovate nel discovery, non copiate
+  nella vostra configurazione: oggi ce n'è una sola, ma il giorno in cui ruota chi l'ha copiata
+  smette di validare i token, e sembrerà un guasto nostro.
+- **Il nostro accesso non ha un endpoint di disconnessione** (`end_session_endpoint`): chi esce da
+  noi non viene disconnesso anche da voi, e la sessione sulla vostra piattaforma resta in mano
+  vostra come oggi. Se per voi è un problema, ditecelo prima di partire.
 
 ---
 
@@ -352,9 +366,16 @@ arriverà dalla nostra parte.
   giorno.
 - **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
   dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
-- **Uso del token.** L'identità si legge dall'ID token e da UserInfo, senza usare il token di
-  accesso verso altre nostre funzioni. È la prassi; la nominiamo perché è il presupposto con cui
-  impostiamo i permessi.
+- **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
+  altre nostre funzioni. È la prassi; la nominiamo perché è il presupposto con cui impostiamo i
+  permessi. Se preferite leggerla da UserInfo, tenete conto della precisazione in fondo alla Scheda
+  dei dati: quella risposta contiene anche un blocco tecnico che nell'ID token non c'è.
+- **Se il nostro accesso non risponde.** Tolto il modulo, per quel tempo su quella pagina non si
+  entra e non ci si registra: è la conseguenza di avere una porta sola, e la accettiamo, perché due
+  porte ricreano le due anagrafiche che stiamo unendo. Da parte nostra sorvegliamo il servizio e vi
+  diamo un recapito per segnalarci un blocco. Quello che chiediamo è di non rimettere il modulo come
+  rimedio: l'accesso torna, mentre gli account nati nel frattempo da un secondo modulo restano
+  scollegati per sempre.
 
 ---
 
@@ -380,6 +401,11 @@ risultato.
    ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide immaginiamo sia
    immediato; il caso che ci interessa è l'altro, perché capiterà spesso: chi ha donato anni fa e
    oggi si registra da noi con un'email diversa da quella che avete in archivio. Come lo gestite?
+   Una condizione, che vale soprattutto per voi: l'aggancio per email tiene solo se quell'indirizzo
+   è **confermato da tutt'e due le parti**. Dalla nostra lo è sempre. Se dalla vostra esistono schede
+   con un indirizzo mai confermato, agganciarle a chi si presenta con lo stesso indirizzo significa
+   consegnare la scheda di una persona a un'altra. Lo segnaliamo perché è un caso che abbiamo appena
+   chiuso dalla nostra parte.
 4. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
    aggiornati: ci serve sapere se li usate ogni volta o soltanto la prima, per creare l'account.
    Se valgono solo alla creazione, chi aggiorna l'email da noi continua a risultare da voi con
@@ -437,8 +463,8 @@ risultato.
 
 ## Scheda dei dati
 
-**Cosa emettiamo a ogni accesso** - solo i campi standard. I primi quattro ci sono sempre; l'ultimo
-solo se la persona l'ha compilato:
+**Cosa emettiamo a ogni accesso** - sono i campi dell'**ID token**, tutti standard. I primi quattro
+ci sono sempre; l'ultimo solo se la persona l'ha compilato:
 
 | Campo | Cosa contiene |
 | --- | --- |
@@ -447,6 +473,15 @@ solo se la persona l'ha compilato:
 | `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
 | `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo alla nostra registrazione**, e vi confermiamo noi il giorno in cui è attivo. Da 2 a 30 caratteri, senza spazi ai bordi; sui caratteri non poniamo vincoli e non filtriamo i contenuti. È **facoltativo**: quando manca non arriva vuoto, semplicemente non c'è — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
+
+**Una precisazione su UserInfo.** La tabella qui sopra vale per l'ID token. La risposta di UserInfo,
+con lo scope `profile`, porta **anche un blocco tecnico** dell'account: oggi l'indirizzo email, gli
+indicatori di conferma e - per chi entra con Apple o Google - l'identificativo che quel servizio ci
+restituisce. Non è una scelta nostra, è come si comporta il server che usiamo, e ve lo diciamo per
+due motivi. Il primo: **lì dentro da noi non finisce anagrafica** - nome, telefono, città e data di
+nascita stanno in un'altra tabella, che il protocollo non tocca, e ci impegniamo a tenerlo così. Il
+secondo: se leggete da UserInfo, prendete i campi della tabella e lasciate stare il resto, senza
+conservarlo. Leggendo dall'ID token la questione non si pone: lì quel blocco non c'è.
 
 **Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
 cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e

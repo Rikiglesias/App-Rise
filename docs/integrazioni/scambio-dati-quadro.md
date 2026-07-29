@@ -858,9 +858,16 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > richiedere (`openid email profile`) e le redirect URI da autorizzare. Il segreto va scambiato per
 > canale sicuro fra tecnici, non su chat.
 >
-> **Claim disponibili:** solo quelli standard determinati dagli scope — `sub`, `email`,
-> `email_verified`, `name`. Claim custom non sono disponibili: non raggiungono `id_token` né UserInfo,
-> quindi non progettate su quel presupposto.
+> **Claim disponibili:** quelli standard determinati dagli scope — `sub`, `email`, `email_verified`,
+> `name`, e `preferred_username` (il nickname, facoltativo). I claim CUSTOM non sono disponibili: il
+> Custom Access Token Hook tocca solo l'access token, quindi non progettate su quel presupposto.
+> ⚠️ **Precisazione 2026-07-29 (letta nel sorgente di GoTrue, non nella doc)**: la frase «non
+> raggiungono né `id_token` né UserInfo» vale per l'`id_token` — verificato in `GenerateIDToken`, che
+> assegna solo `Name`, `Picture`, `PreferredUsername`, `UpdatedAt` — ma **NON per UserInfo**, che con
+> lo scope `profile` aggiunge `user_metadata` **intera** (`OAuthUserInfo` in
+> `internal/api/oauthserver/handlers.go`). Regola che ne discende: **i `user_metadata` sono superficie
+> consegnabile a LD** — l'anagrafica resta in `profiles`, i metadata al minimo. Dettaglio e
+> conseguenze: `oidc-server-implementation-plan.md` § «Finding che riscrive il piano».
 >
 > - `sub` — identificativo opaco e stabile. **È la chiave di matching**: agganciate l'utente sul `sub`,
 >   non sull'email. Richiesta precisa: il plugin deve poter mappare il `sub` sull'username Joomla (o su
@@ -879,8 +886,9 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 >
 > **Uso dell'access token.** Nel flusso standard il vostro client riceve al token endpoint un access
 > token con i privilegi dell'utente; gli scope non lo limitano lato dati. Vi chiediamo di leggere
-> l'identità **esclusivamente** da `id_token` e UserInfo, e di non chiamare le nostre API con quel
-> token. Lo mettiamo nell'accordo.
+> l'identità **esclusivamente** dall'`id_token` (o da UserInfo, prendendo i soli campi elencati e
+> ignorando il blocco `user_metadata`), e di non chiamare le nostre API con quel token. Lo mettiamo
+> nell'accordo.
 >
 > **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede due cose
 > che noi non abbiamo: la scelta su come apparire nelle liste pubbliche (che è
