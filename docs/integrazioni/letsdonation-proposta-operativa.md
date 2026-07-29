@@ -1,6 +1,23 @@
 <!--
-NOTA INTERNA — non compare nel PDF (il convertitore salta i commenti HTML).
-Questo è il documento DA MANDARE a Michele Placucci (Let's Donation); al 2026-07-26 non è
+=====================================================================================
+🛑 NON SI MANDA — DECISIONE DI RICCARDO, 2026-07-29: «la lettera non la manderò».
+Verso Let's Donation parte la SOLA scheda tecnica (`letsdonation-brief-integrazione.md`),
+che rilegge e manda LUI. Il PDF di questa lettera è stato TOLTO da `C:\tmp` perché un
+allegato pronto è un invio per sbaglio; questo file resta per il ragionamento che porta.
+
+⚠️ COSA SI PERDE, se non rientra altrove: il **punto 3** è l'UNICO posto in cui diciamo al
+partner che l'accesso avverrà su una NOSTRA PAGINA WEB ancora da costruire (per entrare
+anche da computer, senza app). Verificato il 2026-07-29: nella scheda ZERO occorrenze di
+«pagina web», «da computer», «browser». Per chi collega l'accesso non è un dettaglio: è
+dove atterra la persona che preme il pulsante. Portato a Riccardo, che decide se farlo
+entrare nella scheda — NON aggiunto d'iniziativa: è una promessa di architettura, la
+categoria che lui stesso aveva fatto togliere (`documenti-verso-partner.md`).
+Gli altri 4 punti sono già coperti dalla scheda: Zucchetti -> domanda 1 · «prepariamo
+l'accesso» -> §3 · modulo tolto insieme -> §2 + domanda 2 · ricongiungimento -> domanda 3.
+=====================================================================================
+
+Storia precedente (resta come contesto):
+Questo era il documento DA MANDARE a Michele Placucci (Let's Donation); al 2026-07-26 non è
 ancora stato inviato (confermato da Riccardo).
 AGGIORNATO 2026-07-26 dopo la rimozione del login Google/Apple: il punto 5 aveva un «caso da
 prevedere» che era interamente il caso Apple «Nascondi la mia email». Con email+password come
