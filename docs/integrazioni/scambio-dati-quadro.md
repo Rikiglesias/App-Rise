@@ -208,9 +208,16 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
   sul loro spazio, dove oggi un minorenne passerebbe. Va detto a loro (tocca la loro conversione) e
   deciso da noi: lo accettiamo, o prevediamo un percorso col consenso di chi ha la responsabilità
   genitoriale?
-- **Tre campi del loro modulo non ce li abbiamo** (nickname, scelta di visibilità pubblica, adesione a
+- **Due campi del loro modulo non ce li abbiamo** (scelta di visibilità pubblica, adesione a
   community e classifiche) e la visibilità è obbligatoria da loro: qualcuno deve chiederla al primo
   ingresso. Vedi §2.1.
+  ✅ **Il nickname è uscito da questo elenco il 2026-07-29** (decisione di Riccardo: «lo stiamo
+  facendo e lo avremo prima che loro possano risponderci»). Lo mandiamo come claim standard
+  `preferred_username` — verificato alla fonte che il server auth lo trasporta su entrambe le facce,
+  senza ripiego sull'email; migration `0017` + `syncNicknameClaim`. È **facoltativo**: se la persona
+  non lo compila il campo non parte affatto.
+  ❓ **Domanda aperta al partner**: da loro il nickname dev'essere **unico**? Da noi non c'è vincolo
+  di unicità e due persone possono sceglierne uno uguale. Entrata nella domanda 6 del brief.
 
 ### Il canale dell'attribuzione — un'altra cosa, non un accesso
 
@@ -875,9 +882,11 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > l'identità **esclusivamente** da `id_token` e UserInfo, e di non chiamare le nostre API con quel
 > token. Lo mettiamo nell'accordo.
 >
-> **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede tre cose
-> che noi non abbiamo: il nickname, la scelta su come apparire nelle liste pubbliche (che è
-> obbligatoria e senza valore predefinito) e l'adesione a community e classifiche. Con la creazione
+> **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede due cose
+> che noi non abbiamo: la scelta su come apparire nelle liste pubbliche (che è
+> obbligatoria e senza valore predefinito) e l'adesione a community e classifiche. Il **nickname**
+> invece ve lo mandiamo, come campo standard dell'accesso e in forma facoltativa — e vi chiediamo se
+> da voi debba essere unico, perché da noi non lo è. Con la creazione
 > dell'utente al primo accesso quei valori non arrivano da noi: ci serve sapere se applicate un default
 > — e quale — o se li chiedete alla persona una volta entrata. Lo stesso vale per i vostri due consensi
 > marketing: nessuno dei due può arrivarvi da noi — quello sugli enti beneficiari da noi non esiste
@@ -997,10 +1006,15 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
     eventi, quali dati chiede l'iscrizione e se sono esportabili.
     *Perché ci serve:* le nostre settantadue ore per notificare all'autorità partono da quando ce lo
     dite voi.
-19. **I tre campi del vostro modulo che il login non copre** (nickname, scelta di visibilità nelle liste
+19. **I due campi del vostro modulo che il login non copre** (scelta di visibilità nelle liste
     pubbliche, adesione a community e classifiche): applicate un default o li chiedete alla persona?
     *Perché ci serve:* la visibilità è obbligatoria nel vostro modulo e non ha un valore predefinito.
     Se applicate un default, una persona potrebbe comparire pubblicamente senza averlo scelto.
+19-bis. **Il nickname dev'essere unico da voi?** Noi ve lo mandiamo (campo standard, facoltativo), ma
+    da noi non c'è vincolo di unicità: due persone possono sceglierne uno uguale.
+    *Perché ci serve:* se per voi è un identificativo pubblico, il duplicato diventa un vostro
+    problema a integrazione fatta — e per noi significherebbe aggiungere un vincolo e la gestione
+    del conflitto nel modulo, lavoro che oggi non è previsto.
 20. **I vostri due consensi marketing** (comunicazioni del Titolare, comunicazioni degli enti
     beneficiari): come vengono raccolti per chi entra dal nostro accesso?
     *Perché ci serve:* nessuno dei due può arrivare da noi — quello sugli enti beneficiari nel nostro

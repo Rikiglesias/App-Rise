@@ -46,7 +46,9 @@
        - §6 «restiamo due titolari autonomi» -> posizione PROPOSTA in conferma legale, non un
          fatto (`oidc-server-implementation-plan.md:153-156`). [AGGIORNATO 2026-07-29: la domanda 6
          DI ALLORA, che copriva anche il rapporto gia' in essere, e' stata RIMOSSA il 28/07 - materia
-         fra avvocati. Oggi il numero 6 indica i tre campi del loro modulo: non cercarlo li'.]
+         fra avvocati. Oggi il numero 6 indica i campi del loro modulo: non cercarlo li'.
+         AGGIORNATO 2026-07-29 sera: erano TRE, ora sono DUE - il nickname lo mandiamo noi
+         (decisione di Riccardo: lo stiamo costruendo e sara' pronto prima della loro risposta).]
        - scheda dati, «Citta', provincia, data di nascita ... ce ne prendiamo noi il carico»
          -> REFUTATO dalla nostra stessa verifica del 2026-07-24: i claim custom NON raggiungono
          il client OIDC (`oidc-server-implementation-plan.md:18-22`). Non era «non fermo»: era
@@ -143,6 +145,9 @@
          dati elencava «community» (che e' un campo di PROFILO). Presentati come lo stesso elenco.
          L'elenco vero e' quello di `scambio-dati-quadro.md:211-213`: nickname · visibilita' nelle
          liste pubbliche · adesione a community e classifiche.
+         [AGGIORNATO 2026-07-29 sera: il NICKNAME e' uscito da questo elenco - lo mandiamo noi come
+         claim `preferred_username` (migration 0017 + syncNicknameClaim, verificato alla fonte che
+         il server auth lo trasporta). Restano DUE: visibilita' e community/classifiche.]
        - mancava il FATTO che rende la domanda ineludibile: da loro la visibilita' e'
          **obbligatoria e senza valore predefinito** (`scambio-dati-quadro.md:872-877`), quindi
          oggi la sceglie sempre la persona e togliendo il modulo qualcuno deve continuare a
@@ -390,14 +395,19 @@ risultato.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
    diteci come.
-6. **I tre campi del vostro modulo che il nostro accesso non copre**: il nickname, la scelta su come
-   apparire nelle liste pubbliche e l'adesione a community e classifiche.
-   Oggi li sceglie la persona mentre compila il modulo, e la visibilità in particolare è
+6. **I due campi del vostro modulo che il nostro accesso non copre**: la scelta su come apparire
+   nelle liste pubbliche e l'adesione a community e classifiche.
+   *Il nickname invece ve lo mandiamo*: lo stiamo aggiungendo al nostro modulo adesso e sarà pronto
+   prima che l'integrazione parta, quindi non progettateci sopra un ripiego. Arriva come campo
+   standard dell'accesso, ed è facoltativo: chi non lo compila non ve lo fa arrivare.
+   **Una domanda su quello**: da voi il nickname deve essere unico? Da noi due persone possono
+   sceglierne uno uguale, e se per voi è un identificativo pubblico ci serve saperlo ora, non dopo.
+   Oggi quelle scelte le fa la persona mentre compila il modulo, e la visibilità in particolare è
    obbligatoria, senza opzione preselezionata. Quando sulla pagina del nostro spazio quel modulo non
-   c'è più, l'account nasce dall'accesso con i dati che arrivano da noi — nome ed email — e quelle
-   tre scelte non le fa più nessuno: con quale valore nascono, uno deciso da voi o chiesto alla
-   persona dopo il primo ingresso?
-   Ci pesa soprattutto la visibilità, l'unica delle tre con un effetto pubblico: qualunque sia la
+   c'è più, l'account nasce dall'accesso con i dati che arrivano da noi — nome, email e nickname — e
+   quelle due scelte non le fa più nessuno: con quale valore nascono, uno deciso da voi o chiesto
+   alla persona dopo il primo ingresso?
+   Ci pesa soprattutto la visibilità, l'unica delle due con un effetto pubblico: qualunque sia la
    strada, dobbiamo poter scrivere nella nostra informativa cosa succede. E se la strada fosse
    chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo modulo di
    registrazione, che è la cosa che vogliamo evitare a chi entra.
@@ -418,6 +428,7 @@ risultato.
 | `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo vedete, ditecelo, perché come nome visibile non va |
 | `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
+| `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo al nostro modulo adesso**, e sarà pronto prima che questa integrazione parta. È **facoltativo**: chi non lo compila non vi fa arrivare il campo — che in quel caso non arriva vuoto, semplicemente non c'è |
 
 **Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
 cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e
