@@ -377,13 +377,9 @@ risultato.
    **La veste grafica la decidete voi**: colori e forma sono i vostri, a noi interessa solo che
    l'accesso si veda.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
-   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide, il caso è il più
-   semplice: dalla vostra parte l'aggancio fra le due schede esiste già, o è da prevedere?
-   Ma non sempre coincide: chi ha donato anni fa può avere lasciato l'email del lavoro, o un'altra
-   che oggi non usa più. **Quel caso va risolto, non solo segnalato**: dalla vostra parte
-   come si fa a ricongiungere due schede quando le email sono diverse? Se lo strumento non
-   esiste, mettiamolo fra le cose da prevedere insieme.
-   Serve anche sapere se gli account valgono per il singolo spazio o per tutta la piattaforma.
+   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide immaginiamo sia
+   immediato; il caso che ci interessa è l'altro, perché capiterà spesso: chi ha donato anni fa e
+   oggi si registra da noi con un'email diversa da quella che avete in archivio. Come lo gestite?
 4. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
    aggiornati: ci serve sapere se li usate ogni volta o soltanto la prima, per creare l'account.
    Se valgono solo alla creazione, chi aggiorna l'email da noi continua a risultare da voi con
