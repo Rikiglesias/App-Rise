@@ -397,21 +397,42 @@ risultato.
    diteci come.
 6. **I due campi del vostro modulo che il nostro accesso non copre**: la scelta su come apparire
    nelle liste pubbliche e l'adesione a community e classifiche.
-   *Il nickname invece ve lo mandiamo*: lo stiamo aggiungendo al nostro modulo adesso e sarà pronto
-   prima che l'integrazione parta, quindi non progettateci sopra un ripiego. Arriva come campo
-   standard dell'accesso, ed è facoltativo: chi non lo compila non ve lo fa arrivare.
-   **Una domanda su quello**: da voi il nickname deve essere unico? Da noi due persone possono
-   sceglierne uno uguale, e se per voi è un identificativo pubblico ci serve saperlo ora, non dopo.
-   Oggi quelle scelte le fa la persona mentre compila il modulo, e la visibilità in particolare è
-   obbligatoria, senza opzione preselezionata. Quando sulla pagina del nostro spazio quel modulo non
-   c'è più, l'account nasce dall'accesso con i dati che arrivano da noi — nome, email e nickname — e
-   quelle due scelte non le fa più nessuno: con quale valore nascono, uno deciso da voi o chiesto
-   alla persona dopo il primo ingresso?
+   Oggi la visibilità e la community le sceglie la persona mentre compila il vostro modulo, e la
+   visibilità in particolare è obbligatoria, senza opzione preselezionata. Quando sulla pagina del
+   nostro spazio quel modulo non c'è più, l'account nasce dall'accesso con i dati che arrivano da noi
+   — nome ed email, più il nickname quando la persona l'ha scelto — e quelle due scelte non le fa
+   più nessuno: con quale valore nascono, uno deciso da voi o chiesto alla persona dopo il primo
+   ingresso?
    Ci pesa soprattutto la visibilità, l'unica delle due con un effetto pubblico: qualunque sia la
    strada, dobbiamo poter scrivere nella nostra informativa cosa succede. E se la strada fosse
    chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo modulo di
    registrazione, che è la cosa che vogliamo evitare a chi entra.
-   **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione: nessuno dei due vi
+
+   **Il nickname invece ve lo mandiamo noi** — lo stiamo aggiungendo alla nostra registrazione, e
+   **vi confermiamo noi il giorno in cui è attivo**. Non è un buco permanente da aggirare, ma non
+   legatelo all'accensione: se il campo non fosse ancora online il giorno dello scambio, l'accesso
+   funziona lo stesso e il nickname arriva dopo.
+   Resta **facoltativo** anche quando sarà attivo, quindi un comportamento per l'assenza vi serve
+   comunque, e ce l'abbiamo presente: **chi si è registrato da noi prima che il campo esistesse non
+   ce l'ha**, e potrebbe non metterlo mai. Per un po' l'assenza sarà la norma, non l'eccezione.
+   Quattro cose che vi servono per accoglierlo:
+   - **la forma**: da 2 a 30 caratteri, senza spazi ai bordi. Sui caratteri non poniamo vincoli e
+     **non filtriamo i contenuti** — se sul vostro sito è testo pubblico, la moderazione è vostra;
+   - **quando manca**, il campo non arriva vuoto: non c'è proprio. Vale sia per chi non l'ha scelto,
+     sia per chi l'ha cancellato dopo — ed è la stessa cosa vista da voi, quindi diteci cosa mostrate
+     in quel caso;
+   - **è unico da voi?** Da noi no: due persone possono sceglierne uno uguale. Se da voi dev'essere
+     unico, ditecelo prima del collaudo — il vincolo lo aggiungiamo dalla nostra parte. E in quel
+     caso: quando ve ne arriva uno già in uso, cosa fate — rifiutate l'account, lo modificate voi,
+     o lo ignorate? Se l'account non nascesse, la persona resterebbe fuori: è il contrario di quello
+     che stiamo costruendo;
+   - **dove lo mostrate, e a chi?** Ci serve per scrivere nella nostra informativa cosa succede al
+     dato che vi mandiamo. Notiamo che da voi il nickname è una delle opzioni della visibilità nelle
+     liste pubbliche: se qualcuno sceglie di apparire col nickname e il nickname non c'è, cosa
+     compare al suo posto?
+
+   **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione dei due campi qui
+   sopra: nessuno dei due vi
    arriva insieme all'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per
    le comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» della persona che
    possiate ereditare da noi.
@@ -420,7 +441,8 @@ risultato.
 
 ## Scheda dei dati
 
-**Cosa emettiamo a ogni accesso** - solo i campi standard:
+**Cosa emettiamo a ogni accesso** - solo i campi standard. I primi quattro ci sono sempre; l'ultimo
+solo se la persona l'ha compilato:
 
 | Campo | Cosa contiene |
 | --- | --- |
@@ -428,7 +450,7 @@ risultato.
 | `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo vedete, ditecelo, perché come nome visibile non va |
 | `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
-| `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo al nostro modulo adesso**, e sarà pronto prima che questa integrazione parta. È **facoltativo**: chi non lo compila non vi fa arrivare il campo — che in quel caso non arriva vuoto, semplicemente non c'è |
+| `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo alla nostra registrazione**, e vi confermiamo noi il giorno in cui è attivo. Da 2 a 30 caratteri, senza spazi ai bordi; sui caratteri non poniamo vincoli e non filtriamo i contenuti. È **facoltativo**: quando manca non arriva vuoto, semplicemente non c'è — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
 
 **Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
 cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e
