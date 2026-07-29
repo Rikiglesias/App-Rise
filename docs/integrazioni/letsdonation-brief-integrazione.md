@@ -483,6 +483,11 @@ nascita stanno in un'altra tabella, che il protocollo non tocca, e ci impegniamo
 secondo: se leggete da UserInfo, prendete i campi della tabella e lasciate stare il resto, senza
 conservarlo. Leggendo dall'ID token la questione non si pone: lì quel blocco non c'è.
 
+C'è una seconda differenza fra le due, e riguarda la domanda 4. Nell'ID token i primi quattro campi
+della tabella ci sono **sempre**. Nella risposta di UserInfo, invece, l'indicatore di email
+verificata **non compare affatto** quando l'email non è confermata, anziché arrivare come «falso»:
+se il vostro controllo si aspetta un valore e trova un campo assente, è un caso da prevedere.
+
 **Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
 cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e
 prima di impegnarci guardiamo cosa il protocollo permette di trasportare davvero.
