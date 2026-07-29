@@ -94,12 +94,13 @@ e **non è ancora stato inviato**.
 ### 2.1 Cosa chiede il loro modulo di registrazione, oggi
 
 Verificato dal vivo sul nostro tenant il 25/07/2026, leggendo la pagina reale `[V]`. Serve perché
-**è la lista di ciò che l'accesso federato deve sostituire** — e tre voci non le abbiamo.
+**è la lista di ciò che l'accesso federato deve sostituire** — e due voci non le abbiamo (erano tre:
+il **nickname** è uscito dall'elenco il 29/07, lo aggiungiamo noi con la `0017`).
 
 | Campo del loro modulo | Obbligatorio | Ce l'abbiamo? |
 |---|---|---|
 | Nome, Cognome | sì | sì |
-| **Nickname** | no | **no** |
+| **Nickname** | no | **in arrivo** — colonna e claim scritti il 29/07 (`0017`, non ancora applicata); manca il campo nel modulo |
 | Paese | sì | sì |
 | Email | sì | sì |
 | Password + conferma (minimo 6 caratteri) | sì | sì, con regole più severe (8 caratteri, maiuscola, speciale) |
@@ -896,7 +897,12 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 >
 > **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede due cose
 > che noi non abbiamo: la scelta su come apparire nelle liste pubbliche (che è
-> obbligatoria e senza valore predefinito) e l'adesione a community e classifiche. Il **nickname**
+> obbligatoria e senza valore predefinito) e l'adesione a community e classifiche.
+> ⚠️ **E un terzo caso, di natura diversa, allineato al brief il 29/07: il Paese.** È obbligatorio
+> nel vostro modulo e noi lo raccogliamo, ma l'accesso non lo trasporta — il nostro provider emette
+> i dati dell'identità (identificativo, nome, email, nickname), non quelli di residenza. Con quale
+> valore nasce l'account, o preferite che ve lo facciamo arrivare in altro modo?
+> Il **nickname**
 > invece ve lo mandiamo, come campo standard dell'accesso e in forma facoltativa — e vi chiediamo se
 > da voi debba essere unico, perché da noi non lo è. Con la creazione
 > dell'utente al primo accesso quei valori non arrivano da noi: ci serve sapere se applicate un default

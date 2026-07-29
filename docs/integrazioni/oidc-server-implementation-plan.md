@@ -26,6 +26,13 @@ vedrà mai `rise_ref` né un'email "risolta" custom**.
 > standard, con lo scope `profile` esegue `userInfo["user_metadata"] = user.UserMetaData` — la mappa
 > **intera**. L'`id_token` invece è pulito: `internal/tokens/service.go`, `GenerateIDToken`, assegna
 > solo `Name`, `Picture`, `PreferredUsername`, `UpdatedAt` (verificato nel CORPO, non nel commento).
+> **Asimmetria su `email_verified`, con la prova** (registrata qui perché due critici di fila l'hanno
+> sospettata inventata, non trovandola scritta da nessuna parte): nell'`id_token` il campo c'è
+> SEMPRE, anche quando è `false`, perché la struct dei claim lo dichiara
+> `EmailVerified bool \`json:"email_verified"\` // not omitempty because it's required by OIDC spec`;
+> in UserInfo invece la mappa è costruita a mano e la chiave è scritta solo dentro
+> `if user.EmailConfirmedAt != nil`, quindi per un utente non confermato **manca**. Stessa cosa per
+> `email`, che nell'id_token ha `omitempty` e in UserInfo è dentro `if email != ""`.
 > Conseguenze: ① la Scheda dei dati del brief non poteva dire «solo i campi standard» senza
 > distinguere le due superfici — corretto nel brief il 29/07; ② **qualunque cosa scriviamo nei
 > `user_metadata` diventa consegnabile a LD via UserInfo**, quindi la regola operativa è tenere
