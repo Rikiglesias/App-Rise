@@ -893,9 +893,14 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 >
 > **Uso dell'access token.** Nel flusso standard il vostro client riceve al token endpoint un access
 > token con i privilegi dell'utente; gli scope non lo limitano lato dati. Vi chiediamo di leggere
-> l'identità **esclusivamente** dall'`id_token` (o da UserInfo, prendendo i soli campi elencati e
-> ignorando il blocco `user_metadata`), e di non chiamare le nostre API con quel token. Lo mettiamo
-> nell'accordo.
+> l'identità **esclusivamente** dall'`id_token`, e di non chiamare le nostre API con quel token. Lo
+> mettiamo nell'accordo. Se per un loro vincolo dovessero leggere da UserInfo, chiediamo che ce lo
+> DICANO, così lo si tiene presente al collaudo.
+> ⚠️ **Formula allineata al brief il 29/07 (3ª versione)**: qui si leggeva «prendendo i soli campi
+> elencati e ignorando il blocco `user_metadata`». Superata: chiedere a un terzo di ignorare dati che
+> gli arrivano non è una misura, è un affidamento — la misura è **ridurre il blocco prima di
+> attivare** (bonifica di `handle_new_user` + backfill, → 0018). Questo §9.2 è materiale IN USCITA:
+> era proprio la regola scritta due paragrafi sopra, e l'avevo mancata io stesso.
 >
 > **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede due cose
 > che noi non abbiamo: la scelta su come apparire nelle liste pubbliche (che è

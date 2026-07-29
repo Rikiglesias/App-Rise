@@ -462,7 +462,7 @@ risultato.
    - **è unico da voi?** Da noi oggi no: due persone possono sceglierne uno uguale. E anche se lo
      rendessimo unico fra i nostri, resterebbe la collisione con i nickname di chi si è registrato
      da voi, che non passano da noi. Quindi la domanda è: quando ve ne arriva uno già in uso, cosa
-     fate — lo modificate voi, lo ignorate, o altro? L'unica strada che ci preoccupa e' che l'accesso
+     fate — lo modificate voi, lo ignorate, o altro? L'unica strada che ci preoccupa è che l'accesso
      fallisca: chi entra deve poter entrare, il nickname non vale una registrazione persa;
    - **dove lo mostrate, e a chi?** Ci serve per scrivere nella nostra informativa cosa succede al
      dato che vi mandiamo. Notiamo che da voi il nickname è una delle opzioni della visibilità nelle
