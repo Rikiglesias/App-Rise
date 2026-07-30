@@ -93,7 +93,6 @@ export const SignUpScreen: React.FC = () => {
           placeholder={t('auth.signup.nicknamePlaceholder')}
           autoCapitalize="none"
           autoComplete="off"
-          returnKeyType="next"
         />
       </AuthSection>
 
