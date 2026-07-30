@@ -32,6 +32,72 @@ export const NICKNAME_MIN = 2;
 export const NICKNAME_MAX = 30;
 
 /**
+ * Chiede al database se un nickname è libero (migration 0018).
+ *
+ * `true` libero · `false` già di qualcun altro · `null` NON VERIFICABILE (rete assente,
+ * errore del server). I tre casi sono distinti apposta: `null` non è «occupato».
+ *
+ * ⚠️ PERCHÉ UNA RPC E NON UNA `select`. Le policy di `profiles` sono `auth.uid() = id`:
+ * una select dal client vedrebbe zero righe in registrazione (chi scrive è `anon`) e solo
+ * la propria in modifica profilo. Risponderebbe «libero» sempre — anche, e soprattutto,
+ * quando è occupato. La funzione `nickname_disponibile` è `security definer` proprio per
+ * questo, e restituisce solo un booleano. Dettaglio nella migration 0018.
+ *
+ * ⚠️ NON SOLLEVA MAI. Questo è un controllo di CORTESIA: serve a dire alla persona che
+ * quel nome è preso, prima che scopra il silenzio. L'integrità la garantiscono l'indice
+ * unico e le due clemenze del trigger (0017), che restano l'unica difesa vera. Se la
+ * rete non c'è, la persona deve poter completare la registrazione lo stesso: si perde
+ * l'avviso, non il servizio. Chi chiama tratta `null` come «non so», mai come «no».
+ */
+export const isNicknameAvailable = async (
+  nickname: string
+): Promise<boolean | null> => {
+  const value = nickname.trim();
+  // Nessun nickname è sempre ammissibile: non si disturba il server per chiederlo.
+  if (value === '') return true;
+  try {
+    const { data, error } = await supabase.rpc('nickname_disponibile', {
+      p_nickname: value,
+    });
+    if (error) {
+      logError('controllo disponibilità nickname fallito', 'nickname', error);
+      return null;
+    }
+    // Difesa sul tipo: la RPC dichiara `returns boolean`, ma un `data` inatteso
+    // (null per una firma cambiata, un oggetto) non deve diventare «occupato» per
+    // via di un cast implicito — diventerebbe un errore mostrato senza motivo.
+    return typeof data === 'boolean' ? data : null;
+  } catch (e) {
+    logError('controllo disponibilità nickname ha lanciato', 'nickname', e);
+    return null;
+  }
+};
+
+/**
+ * Nome dell'indice unico creato dalla 0017. Vive qui perché è l'unico modo che il client
+ * ha per riconoscere UNA collisione di nickname da un guasto qualunque.
+ */
+const INDICE_UNICO = 'profiles_nickname_unico';
+
+/**
+ * Riconosce «il nickname è stato preso da un altro NELL'ISTANTE fra il controllo e il
+ * salvataggio» dal messaggio d'errore della scrittura.
+ *
+ * Perché sul MESSAGGIO e non sul codice `23505`: `updateProfile` restituisce
+ * `{ error: string }`, cioè il solo `error.message` — cambiarne la firma vorrebbe dire
+ * toccare tutti i chiamanti per un caso che si tratta in un punto solo. Il nome
+ * dell'indice, però, compare SEMPRE nel messaggio di Postgres
+ * («duplicate key value violates unique constraint "profiles_nickname_unico"») ed è un
+ * identificatore, quindi non cambia con la lingua del server.
+ *
+ * Il confronto è deliberatamente STRETTO: un `23505` su un altro vincolo non deve
+ * diventare «nickname occupato», perché manderebbe la persona a cambiare un campo che
+ * non c'entra mentre il guasto vero resta nascosto.
+ */
+export const isNicknameConflict = (message: string | null): boolean =>
+  message?.toLowerCase().includes(INDICE_UNICO) ?? false;
+
+/**
  * Riallinea `user_metadata.preferred_username` al nickname del profilo.
  * `updateUser({ data })` FONDE le chiavi passate, quindi non perde `name`/`first_name`/…
  *

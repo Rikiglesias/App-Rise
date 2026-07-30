@@ -67,6 +67,13 @@ export default {
       birthDatePlaceholder: 'Seleziona la data',
       nickname: 'Nickname (facoltativo)',
       nicknamePlaceholder: 'Come farti chiamare sui siti dei nostri partner',
+      // Riscontro sotto il campo mentre si scrive (migration 0018). «Non verificabile»
+      // è un terzo caso, non un errore: se la rete manca si va avanti lo stesso, e
+      // dirlo è più onesto che lasciare il campo muto o fingere che sia libero.
+      nicknameChecking: 'Controllo…',
+      nicknameFree: 'Libero',
+      nicknameUnknown:
+        'Non siamo riusciti a controllare: puoi comunque proseguire',
       privacyConsent: 'Accetto la',
       privacyConsentLink: 'privacy policy',
       marketingConsent: 'Voglio ricevere aggiornamenti (facoltativo)',
@@ -175,6 +182,14 @@ export default {
       // La forma è quella del CHECK `nickname_forma` (migration 0017). Il messaggio
       // dice il limite in cifre: «non valido» lascerebbe la persona a indovinare.
       nickname_length: 'Il nickname deve avere da 2 a 30 caratteri',
+      // Migration 0018. Non dice CHI lo ha preso — sarebbe un dato di un'altra persona.
+      nickname_taken:
+        'Questo nickname è già di qualcun altro: scegline un altro',
+      // La corsa persa: due registrazioni con lo stesso nickname nello stesso istante.
+      // Rarissimo, ma senza questo messaggio l'esito era il silenzio — il difetto che
+      // la fase F-NICKNAME-UX esiste per togliere.
+      nickname_taken_race:
+        'Qualcuno ha scelto questo nickname un attimo prima di te: provane un altro',
       date_invalid: 'Data non valida',
       password_mismatch: 'Le password non coincidono',
       invalid_credentials: 'Email o password non corretti',

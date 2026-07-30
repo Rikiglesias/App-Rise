@@ -29,6 +29,7 @@ PAIRS=(
   "0015_aggancio_su_email_verificata"
   "0016_claim_su_email_confermata"
   "0017_profiles_nickname"
+  "0018_nickname_disponibile"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 

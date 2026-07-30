@@ -67,6 +67,9 @@ export default {
       birthDatePlaceholder: 'Select date',
       nickname: 'Nickname (optional)',
       nicknamePlaceholder: 'How partner sites should call you',
+      nicknameChecking: 'Checking…',
+      nicknameFree: 'Available',
+      nicknameUnknown: "We couldn't check right now: you can carry on",
       privacyConsent: 'I accept the',
       privacyConsentLink: 'privacy policy',
       marketingConsent: 'I want to receive updates (optional)',
@@ -166,6 +169,10 @@ export default {
       phone_invalid: 'Invalid phone (e.g. +39...)',
       not_adult: 'You must be of legal age',
       nickname_length: 'The nickname must be 2 to 30 characters long',
+      nickname_taken:
+        'That nickname already belongs to someone else: pick another',
+      nickname_taken_race:
+        'Someone picked that nickname a moment before you: try another',
       date_invalid: 'Invalid date',
       password_mismatch: 'Passwords do not match',
       invalid_credentials: 'Incorrect email or password',

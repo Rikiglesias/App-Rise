@@ -77,6 +77,7 @@ Coppie disponibili:
 | `0015_aggancio_su_email_verificata.sql` | `0015_aggancio_su_email_verificata.test.sql` |
 | `0016_claim_su_email_confermata.sql` | `0016_claim_su_email_confermata.test.sql` |
 | `0017_profiles_nickname.sql` | `0017_profiles_nickname.test.sql` |
+| `0018_nickname_disponibile.sql` | `0018_nickname_disponibile.test.sql` |
 
 > 🔴 **Per le coppie da 0011 a 0015 la ricetta qui sopra NON basta.** Riapplicare la migration sotto
 > test (la seconda occorrenza nella pipe, quella che prova la rieseguibilità) riporta indietro il
@@ -153,7 +154,16 @@ Dalla 0017 la validazione della suite è **uno script versionato accanto ad essa
 
 ```bash
 bash tests/mutants-0017.sh      # dalla cartella supabase/, con Docker attivo
+bash tests/mutants-0018.sh      # 8 mutanti, tutti uccisi il 2026-07-30
 ```
+
+> 💡 `mutants-0018.sh` ha due differenze utili da riusare. ① Il criterio di morte è una **regex**
+> e non un semplice `Tn FAIL`: il mutante che toglie i `grant` non fa fallire un'asserzione, fa
+> fallire la *chiamata* (`permission denied`), e un criterio che sapesse cercare solo «FAIL» lo
+> dichiarerebbe fuori bersaglio pur essendo morto della morte giusta. ② Un mutante rompe **un'altra
+> migration** (l'indice della 0017) invece della propria: serve a provare `T12`, che presidia
+> l'allineamento fra due regole scritte in due file diversi — una proprietà che non si può
+> falsificare restando dentro un file solo.
 
 Rompe le difese una per volta e pretende che il test previsto diventi rosso; esce 1 se un mutante
 sopravvive. Tre cose valgono per chiunque ne scriva uno nuovo:

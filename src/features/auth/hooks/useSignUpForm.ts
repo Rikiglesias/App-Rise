@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { useNicknameAvailability } from './useNicknameAvailability';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import {
@@ -9,6 +10,7 @@ import {
   type SignUpErrors,
 } from '@/shared/auth/validation';
 import { mapAuthError } from '@/shared/auth/authErrors';
+import { isNicknameAvailable } from '@/shared/auth/nickname';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -36,6 +38,10 @@ export const useSignUpForm = () => {
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [errors, setErrors] = useState<SignUpErrors>({});
+  // Disponibilità del nickname mentre si scrive (migration 0018). Vive QUI e non nella
+  // vista perché il submit deve poterla consultare: è la stessa informazione che si
+  // mostra sotto il campo e che decide se lasciar partire la registrazione.
+  const nicknameCheck = useNicknameAvailability(nickname);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -154,8 +160,33 @@ export const useSignUpForm = () => {
       privacyConsent,
       nickname,
     });
+    // NICKNAME GIÀ PRESO — non si prosegue, e non è in contraddizione con «il nickname
+    // non deve mai impedire una registrazione» (0017): quella regola protegge il
+    // DATABASE dal far cadere l'insert. Qui la persona resta libera di registrarsi in
+    // ogni momento — il campo è facoltativo, basta svuotarlo o cambiarlo. Ciò che si
+    // impedisce è solo di proseguire CREDENDO di aver preso un nome che invece verrebbe
+    // scartato dal trigger, cioè il silenzio che questa fase esiste per togliere.
+    // `unknown` NON blocca: se non siamo riusciti a chiedere, la persona va avanti.
+    if (nicknameCheck === 'taken') {
+      setErrors({ ...found, nickname: 'nickname_taken' });
+      return;
+    }
     setErrors(found);
     if (Object.keys(found).length > 0) return;
+
+    // Ricontrollo appena prima di inviare: fra l'ultima digitazione e il tocco sul
+    // pulsante possono passare secondi, e in quei secondi il nome può essere stato
+    // preso. Non azzera la corsa (fra questa riga e la scrittura resta una finestra di
+    // millisecondi, che il trigger gestisce scartando il valore), ma la riduce da
+    // «quanto ci mette una persona a compilare un modulo» a «quanto ci mette una
+    // richiesta ad andare e tornare».
+    if (nickname.trim() !== '') {
+      const libero = await isNicknameAvailable(nickname);
+      if (libero === false) {
+        setErrors({ ...found, nickname: 'nickname_taken' });
+        return;
+      }
+    }
 
     setLoading(true);
     // confirmPassword NON viene inviato al backend: serve solo a validare in UI.
@@ -191,6 +222,7 @@ export const useSignUpForm = () => {
     privacyConsent,
     marketingConsent,
     nickname,
+    nicknameCheck,
     signUp,
     t,
   ]);
@@ -219,6 +251,8 @@ export const useSignUpForm = () => {
       marketingConsent,
     },
     errors,
+    /** Stato della disponibilità del nickname: la vista lo traduce con `useNicknameHint`. */
+    nicknameCheck,
     refs: {
       lastNameRef,
       emailRef,

@@ -11,6 +11,7 @@ import { AuthButton } from '../components/AuthButton';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useSignUpForm } from '../hooks/useSignUpForm';
+import { useNicknameHint } from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -25,6 +26,10 @@ export const SignUpScreen: React.FC = () => {
   const { t } = useTranslation();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useSignUpForm();
+  // Disponibilità del nickname mentre si scrive (migration 0018): senza, chi ne sceglie
+  // uno già preso si registra e lo trova vuoto, senza che nessuno glielo abbia detto.
+  // Lo stato arriva dal form, che è anche quello che lo consulta prima di inviare.
+  const nicknameHint = useNicknameHint(form.nicknameCheck);
 
   const err = (key?: string): string | undefined =>
     key ? t(`auth.errors.${key}`) : undefined;
@@ -90,6 +95,7 @@ export const SignUpScreen: React.FC = () => {
           value={values.nickname}
           onChangeText={onChange.nickname}
           error={err(errors.nickname)}
+          {...nicknameHint}
           placeholder={t('auth.signup.nicknamePlaceholder')}
           autoCapitalize="none"
           autoComplete="off"

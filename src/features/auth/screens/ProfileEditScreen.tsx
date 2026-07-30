@@ -13,6 +13,10 @@ import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
+import {
+  useNicknameAvailability,
+  useNicknameHint,
+} from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -30,6 +34,7 @@ import {
   validateNickname,
 } from '@/shared/auth/validation';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
+import { isNicknameConflict } from '@/shared/auth/nickname';
 import type { ProfileEditable } from '@/shared/auth/types';
 
 type Errors = Partial<
@@ -74,6 +79,10 @@ export const ProfileEditScreen: React.FC = () => {
   // legittimamente SVUOTARE — `updateProfile` riconverte `'' → null` prima di scrivere,
   // perché la stringa vuota violerebbe il CHECK e farebbe fallire l'INTERA rettifica.
   const [nickname, setNickname] = useState(profile?.nickname ?? '');
+  // Disponibilità mentre si scrive (0018). L'hook non interroga il server finché il
+  // valore resta quello con cui il campo si è aperto: qui il campo nasce PIENO, quindi
+  // senza quella guardia partirebbe una richiesta a ogni apertura della schermata.
+  const nicknameHint = useNicknameHint(useNicknameAvailability(nickname));
   // La mail di contatto si mostra e si rettifica per TUTTI dal 2026-07-25 (era
   // solo per gli account Apple Private Relay, F1.10). `isRelay` sopravvive per
   // un solo scopo: scegliere il testo-guida del campo (:279), perché a chi
@@ -202,6 +211,15 @@ export const ProfileEditScreen: React.FC = () => {
       const { error } = await updateProfile(changed);
       if (error) {
         setLoading(false);
+        // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio,
+        // qualcun altro ha preso lo stesso nickname. È raro, ma il modo peggiore di
+        // gestirlo è l'errore generico «impossibile salvare»: manderebbe la persona a
+        // ricontrollare nome, telefono e città, mentre il campo da cambiare è uno solo
+        // e glielo possiamo dire. Il messaggio va SUL CAMPO, non in fondo alla pagina.
+        if (isNicknameConflict(error)) {
+          setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
+          return;
+        }
         setSubmitError(t('auth.edit.error'));
         return;
       }
@@ -362,6 +380,7 @@ export const ProfileEditScreen: React.FC = () => {
         value={nickname}
         onChangeText={setNickname}
         error={err(errors.nickname)}
+        {...nicknameHint}
         placeholder={t('auth.signup.nicknamePlaceholder')}
         autoCapitalize="none"
         autoComplete="off"

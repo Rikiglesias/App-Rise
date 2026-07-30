@@ -23,6 +23,16 @@ interface AuthInputProps {
   /** Opzionale: un campo non modificabile (editable=false) non ne ha bisogno. */
   onChangeText?: (v: string) => void;
   error?: string | undefined;
+  /**
+   * Riscontro sotto il campo che NON è un errore: «Controllo…», «Libero», «non
+   * verificabile». Nasce per la disponibilità del nickname (migration 0018), dove
+   * l'esito buono e l'esito incerto vanno detti quanto quello cattivo — ma dirli in
+   * rosso, con `error`, farebbe leggere «Libero» come un problema.
+   * L'errore ha la precedenza: quando c'è, il suggerimento non si mostra.
+   */
+  hint?: string | undefined;
+  /** Tono del suggerimento: informativo (default), esito positivo, o incertezza. */
+  hintTone?: 'neutral' | 'positive' | 'warning';
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
@@ -48,6 +58,8 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
       value,
       onChangeText,
       error,
+      hint,
+      hintTone = 'neutral',
       secureTextEntry = false,
       keyboardType = 'default',
       autoCapitalize = 'sentences',
@@ -135,6 +147,14 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
               {error}
             </PerfectText>
           </View>
+        ) : hint ? (
+          // `polite` e non `assertive`: un riscontro che arriva mentre si scrive non
+          // deve interrompere lo screen reader a metà parola, come farebbe un errore.
+          <View accessibilityLiveRegion="polite">
+            <PerfectText size={13} lines={2} style={styles[hintTone]}>
+              {hint}
+            </PerfectText>
+          </View>
         ) : null}
       </View>
     );
@@ -187,6 +207,20 @@ const createStyles = (colors: ThemeColors) =>
     },
     error: {
       color: Colors.semantic.error.main,
+      marginTop: PerfectSpacing.xs,
+    },
+    // I tre toni del suggerimento. Stessa metrica dell'errore, colore diverso: sotto il
+    // campo la posizione è la stessa, quindi a distinguerli deve bastare il colore.
+    neutral: {
+      color: colors.neutral[600],
+      marginTop: PerfectSpacing.xs,
+    },
+    positive: {
+      color: Colors.semantic.success.dark,
+      marginTop: PerfectSpacing.xs,
+    },
+    warning: {
+      color: Colors.semantic.warning.dark,
       marginTop: PerfectSpacing.xs,
     },
   });
