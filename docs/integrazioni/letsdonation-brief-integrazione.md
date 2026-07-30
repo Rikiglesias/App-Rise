@@ -490,13 +490,13 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» che possiate ereditare.
 
    **Un terzo caso, di natura diversa: il Paese.** È obbligatorio nel vostro modulo e noi lo
-   raccogliamo, ma **non viaggia con l'accesso**: nell'ID token arrivano i soli campi dell'identità.
-   Non è come la visibilità e le community, che da noi non esistono proprio: il Paese ce l'abbiamo e
-   non passa di lì. La strada semplice è che **lo chiediate alla persona** dopo il primo ingresso.
-   Se invece vi serve che arrivi da noi **ditecelo**: si può fare, ma tocca la seconda risposta del
-   protocollo, quella che stiamo per ridurre ai soli campi dell'accesso — quindi è una scelta da
-   fare **prima** di attivare. Se trovate altri campi nella stessa condizione segnalateceli:
-   l'elenco nasce da quello che vediamo della vostra pagina, non dal vostro schema.
+   raccogliamo, ma non è fra i campi che l'accesso porta con sé: non è come la visibilità e le
+   community, che da noi non esistono proprio — il Paese ce l'abbiamo, semplicemente non viaggia
+   insieme all'identità. **Se vi serve, ditecelo e ve lo facciamo arrivare**: è la stessa cosa
+   detta per il telefono, e va concordata **prima** di attivare il servizio, perché tocca il modo
+   in cui i dati vi vengono consegnati. Altrimenti la strada semplice è chiederlo alla persona dopo
+   il primo ingresso. Se trovate altri campi nella stessa condizione segnalateceli: l'elenco nasce
+   da quello che vediamo della vostra pagina, non dal vostro schema.
 
 ---
 
