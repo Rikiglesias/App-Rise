@@ -47,6 +47,16 @@ export const useNicknameAvailability = (value: string): NicknameCheck => {
   const [stato, setStato] = useState<NicknameCheck>('idle');
 
   // Valore col quale il campo si è aperto: finché non ci si discosta, niente domande (①).
+  //
+  // ⚠️ SE UN DOMANI IL NICKNAME VENISSE RISINCRONIZZATO DAL PROFILO, questa riga va
+  // cambiata. Oggi `ProfileEditScreen` inizializza il campo una volta sola e non lo
+  // riallinea quando il profilo arriva (a differenza di `contactEmail`, che ha un
+  // `useEffect` + un ref `touched`). Aggiungere lì lo stesso effect farebbe passare il
+  // valore da '' a «Mario» DOPO il primo render: per questo ref sarebbe una digitazione
+  // della persona, e partirebbe una richiesta all'apertura della schermata — cioè
+  // esattamente ciò che la guardia serve a evitare, disattivata in silenzio.
+  // In quel caso il criterio giusto diventa «l'utente ha toccato il campo?» (un ref
+  // `touched` come quello di `contactEmail`), non «il valore è diverso da quello iniziale».
   const iniziale = useRef(value);
   // Numero di sequenza dell'ultima richiesta partita: solo la sua risposta vale (③).
   const ultima = useRef(0);

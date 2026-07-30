@@ -180,15 +180,19 @@ export const useSignUpForm = () => {
     // millisecondi, che il trigger gestisce scartando il valore), ma la riduce da
     // «quanto ci mette una persona a compilare un modulo» a «quanto ci mette una
     // richiesta ad andare e tornare».
+    // `setLoading` PRIMA del ricontrollo, non dopo: quella chiamata va e torna dalla
+    // rete, e senza l'indicatore la persona resta a guardare un pulsante che sembra non
+    // aver ricevuto il tocco — e lo preme di nuovo.
+    setLoading(true);
     if (nickname.trim() !== '') {
       const libero = await isNicknameAvailable(nickname);
       if (libero === false) {
+        setLoading(false);
         setErrors({ ...found, nickname: 'nickname_taken' });
         return;
       }
     }
 
-    setLoading(true);
     // confirmPassword NON viene inviato al backend: serve solo a validare in UI.
     const { error } = await signUp(email.trim(), password, {
       first_name: firstName.trim(),
