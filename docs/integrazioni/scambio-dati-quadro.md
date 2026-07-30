@@ -893,9 +893,14 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 >
 > **Uso dell'access token.** Nel flusso standard il vostro client riceve al token endpoint un access
 > token con i privilegi dell'utente; gli scope non lo limitano lato dati. Vi chiediamo di leggere
-> l'identità **esclusivamente** dall'`id_token`, e di non chiamare le nostre API con quel token. Lo
-> mettiamo nell'accordo. Se per un loro vincolo dovessero leggere da UserInfo, chiediamo che ce lo
+> l'identità **esclusivamente** dall'`id_token`, e di non chiamare le nostre API con quel token: è
+> la prassi. Se per un loro vincolo dovessero leggere da UserInfo, chiediamo che ce lo
 > DICANO, così lo si tiene presente al collaudo.
+> ⚠️ **Allineato al brief il 30/07 (4ª versione)**: qui si leggeva «Lo mettiamo nell'accordo», che
+> era la clausola contrattuale tolta il 28/07 e **rientrata nel brief** con `84c8763` — ripresa da
+> tre lenti indipendenti della review del 30/07 e ri-tolta da entrambi i file. La richiesta NON è
+> stata perduta: vive come **domanda 16 «Sull'accordo»** in questo stesso documento, che è il canale
+> dei legali. Il brief resta primo contatto e non detta clausole.
 > ⚠️ **Formula allineata al brief il 29/07 (3ª versione)**: qui si leggeva «prendendo i soli campi
 > elencati e ignorando il blocco `user_metadata`». Superata: chiedere a un terzo di ignorare dati che
 > gli arrivano non è una misura, è un affidamento — la misura è **ridurre il blocco prima di

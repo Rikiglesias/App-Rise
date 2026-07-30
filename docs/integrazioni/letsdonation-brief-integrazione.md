@@ -59,6 +59,15 @@
          -> servirebbe un percorso di verifica SMS mai costruito. Ora e' una DOMANDA.
        - «Un impegno che vi chiediamo di mettere per iscritto nell'accordo» -> materia di
          contratto, non di primo brief. La sostanza tecnica resta come 4o punto di §4.
+         🔴 **RIENTRATA il 29/07 sera** con `84c8763`, dentro il 4o punto di §4, mentre si
+         riscriveva quel punto per chiudere un ALTRO problema — cioe' esattamente la classe
+         `riscrittura-resuscita-decisione-precedente`, terza occorrenza su questo file.
+         **RI-TOLTA il 30/07** dopo una review a 7 lenti che l'ha ripresa da tre angoli
+         indipendenti. Verificato dopo: nel CORPO la parola «accordo» ha **0 occorrenze**, la
+         sostanza tecnica e' intatta («si legge dall'ID token... e' la prassi»), e la richiesta
+         vive dove le compete: `scambio-dati-quadro.md` § domanda 16 «Sull'accordo», canale dei
+         legali. ⚠️ Lezione: una nota che dichiara una rimozione va VERIFICATA nel testo, non
+         creduta — questa nota e' rimasta vera un giorno e falsa il successivo.
        - «Sull'eta': stiamo aprendo la registrazione anche ai minorenni» -> FALSO nel prodotto
          oggi: `constraint adult` in `0001_profiles.sql:17` e `validateAdult` in
          `validation.ts:25` (usata a :83 signup e :148 profilo). Deciso != rilasciato.
@@ -374,7 +383,7 @@ Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 - **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
   dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
 - **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
-  altre nostre funzioni. È la prassi, e ve la chiediamo per iscritto nell'accordo. Se
+  altre nostre funzioni: è la prassi. Se
   preferite leggerla da UserInfo, tenete
   conto della precisazione in fondo alla Scheda dei dati: quella risposta contiene anche un blocco
   che nell'ID token non c'è.
@@ -499,8 +508,9 @@ ci sono sempre; l'ultimo solo se la persona l'ha compilato:
 | `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo alla nostra registrazione**, e vi confermiamo noi il giorno in cui è attivo. Da 2 a 30 caratteri, senza spazi ai bordi; sui caratteri non poniamo vincoli e non filtriamo i contenuti. È **facoltativo**: quando manca non arriva vuoto, semplicemente non c'è — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
 
 **Una precisazione su UserInfo.** La tabella qui sopra descrive l'**ID token**, ed è da lì che vi
-chiediamo di leggere l'identità: oltre ai campi elencati porta solo dati tecnici del token stesso
-(chi l'ha emesso, quando scade, quando l'account è stato aggiornato l'ultima volta). La risposta di
+chiediamo di leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha
+emesso, quando scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la
+forniscono, l'indirizzo dell'immagine di profilo. La risposta di
 UserInfo, con lo scope `profile`, porta in più **un blocco dell'account che non fa parte
 dell'identità**: **prima di attivare il servizio lo riduciamo ai soli campi dell'accesso**, e ve lo
 confermiamo quando è fatto. Se per un vostro vincolo doveste leggere da UserInfo invece che dall'ID

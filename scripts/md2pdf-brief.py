@@ -101,6 +101,16 @@ STYLES = {
         "ol", parent=BASE["BodyText"], fontSize=9.8, leading=14.2, alignment=TA_JUSTIFY,
         leftIndent=14, spaceAfter=6,
     ),
+    # Capoverso che CONTINUA una voce di elenco numerato dopo una riga vuota. Serve perche' la
+    # riga vuota chiude l'elenco (`flush_all`), quindi la riga rientrata che segue non trova piu'
+    # un bullet aperto e cade nel ramo paragrafo: usciva a leftIndent 0, cioe' 14 punti PIU' A
+    # SINISTRA della voce che continua, leggendosi come un blocco a se'. Trovato sul PDF in
+    # consegna del 2026-07-30 (tre code della domanda 6: nickname, consensi, Paese) insieme al
+    # danno vero: i rimandi interni tipo «i due campi elencati all'inizio» perdevano il bersaglio.
+    "body_ol": ParagraphStyle(
+        "body_ol", parent=BASE["BodyText"], fontSize=9.8, leading=14.2, alignment=TA_JUSTIFY,
+        leftIndent=14, spaceAfter=6,
+    ),
 }
 
 # Proporzioni di colonna: la prima colonna delle tabelle di questo brief e' un'etichetta
@@ -443,11 +453,17 @@ def build(md_path: Path, pdf_path: Path) -> None:
     # di elenco dall'esterno.
     numerato: list = [False]
     in_comment: list = [False]
+    # Il capoverso corrente continua una voce di elenco numerato chiusa da una riga vuota?
+    # Lo decide la PRIMA riga del blocco (vedi il ramo paragrafo in fondo): da sola sa di essere
+    # rientrata, mentre `flush_para` vede solo il testo unito e non piu' l'indentazione.
+    para_rientrato: list = [False]
 
     def flush_para() -> None:
         if para:
-            story.append(Paragraph(inline(" ".join(para)), STYLES["body"]))
+            stile = STYLES["body_ol"] if para_rientrato[0] else STYLES["body"]
+            story.append(Paragraph(inline(" ".join(para)), stile))
             para.clear()
+            para_rientrato[0] = False
 
     def flush_quote() -> None:
         if quote:
@@ -629,6 +645,14 @@ def build(md_path: Path, pdf_path: Path) -> None:
             flush_quote()
             flush_bullets()
             flush_table()
+            # Se il blocco COMINCIA con una riga rientrata di almeno tre spazi, non e' un
+            # capoverso di sezione: e' la continuazione della voce numerata che la riga vuota
+            # precedente ha chiuso. Va allo stesso rientro dell'elenco, non a filo del corpo.
+            # Tre spazi, non due: le continuazioni dei bullet «- » che prettier indenta a due
+            # sono gia' intercettate dal ramo sopra quando l'elenco e' ancora aperto, e per
+            # quelle a elenco chiuso il comportamento resta invariato (nessun caso osservato).
+            if not para and re.match(r"^ {3,}\S", line):
+                para_rientrato[0] = True
             para.append(line)
 
     flush_all()
