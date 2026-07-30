@@ -13,6 +13,11 @@
 #
 # Uso, dalla cartella `supabase/`, con Docker attivo:
 #   bash tests/mutants-0018.sh
+# ⚠️ I `grep` sul log usano una HERE-STRING e non `printf | grep -q`: con `set -o
+# pipefail`, `grep -q` esce al primo match e chiude la pipe, `printf` muore di SIGPIPE
+# (141) e la pipeline restituisce «non trovato» pur avendo trovato — cioè un mutante
+# MORTO viene dichiarato SOPRAVVISSUTO. Si innesca solo con log grandi (uno stack trace
+# basta). Scoperto sulla 0019 il 2026-07-30 e propagato qui.
 set -uo pipefail
 
 CONTAINER=pgtest-mut0018
@@ -51,11 +56,11 @@ run_mutante() {
   log=$(cat "$SHIM" "$WORK"/migrations/0*.sql tests/0018_nickname_disponibile.test.sql \
         | docker exec -i "$CONTAINER" psql -U postgres -v ON_ERROR_STOP=1 2>&1)
 
-  if printf '%s' "$log" | grep -qE "${atteso}"; then
+  if grep -qE "${atteso}" <<< "$log"; then
     echo "✅ ${nome}: UCCISO — «${atteso}»"
     return 0
   fi
-  if printf '%s' "$log" | grep -qE 'FAIL|ERROR'; then
+  if grep -qE 'FAIL|ERROR' <<< "$log"; then
     echo "🟡 ${nome}: rosso, ma FUORI BERSAGLIO (atteso «${atteso}»):"
     printf '%s\n' "$log" | grep -E 'FAIL|ERROR' | head -2
     return 1

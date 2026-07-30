@@ -11,28 +11,53 @@
 #
 # Uso, dalla cartella `supabase/`, con Docker attivo:
 #   bash tests/mutants-0017.sh
+# ⚠️ I `grep` sul log usano una HERE-STRING e non `printf | grep -q`: con `set -o
+# pipefail`, `grep -q` esce al primo match e chiude la pipe, `printf` muore di SIGPIPE
+# (141) e la pipeline restituisce «non trovato» pur avendo trovato — cioè un mutante
+# MORTO viene dichiarato SOPRAVVISSUTO. Si innesca solo con log grandi (uno stack trace
+# basta). Scoperto sulla 0019 il 2026-07-30 e propagato qui.
 set -uo pipefail
 
 CONTAINER=pgtest-mut0017
 SHIM=tests/shim_permissive.sql
-ORIG=migrations/0017_profiles_nickname.sql
+COLONNA=0017_profiles_nickname.sql
+# 🔴 DUE FILE DA MUTARE, NON UNO (2026-07-30). Le difese del nickname vivono in due posti:
+# la COLONNA (CHECK `nickname_forma`, indice unico) sta nella 0017 e li' resta; il CORPO del
+# trigger `handle_new_user` viene invece riscritto per intero da ogni migration successiva che
+# lo tocca — la 0019 lo fa. Mutare la 0017 sul corpo del trigger non ha piu' alcun effetto: la
+# 0019, applicata dopo, rimette il corpo buono, e il mutante risulta «sopravvissuto» pur avendo
+# rotto qualcosa. Successo davvero: SEI mutanti su dieci sono diventati inerti nell'ora in cui
+# la 0019 e' stata scritta, e questo script continuava a dire «10 su 10» fino al giro dopo.
+# Il file non si scrive a mano — si CALCOLA, applicando la regola che questi file gia' ripetono
+# a parole: «il corpo buono di una funzione condivisa sta nell'ULTIMA migration che l'ha
+# toccata». Cosi' la prossima migration che riscrivera' il trigger non rompera' questo script.
+TRIGGER=$(basename "$(grep -l 'create or replace function public.handle_new_user' migrations/*.sql | sort | tail -1)")
 WORK=$(mktemp -d)
 trap 'docker rm -f "$CONTAINER" >/dev/null 2>&1 || true; rm -rf "$WORK"' EXIT
 
 # Ogni mutante: etichetta | test che DEVE morire | espressione sed applicata alla copia
 # della 0017. Le espressioni sono ancorate a testo che esiste davvero nel file: se la
 # migration cambia e un'ancora non matcha più, il controllo qui sotto lo dichiara.
+# `SOLO=M6 bash tests/mutants-0017.sh` esegue un mutante solo (stesso comodo di 0019).
+SOLO="${SOLO:-}"
+
 run_mutante() {
-  local nome="$1" atteso="$2" sedexpr="$3"
+  # 4o argomento: file da mutare. Default = il file che oggi contiene il CORPO del trigger,
+  # calcolato sopra; i mutanti di colonna/indice passano esplicitamente "$COLONNA".
+  local nome="$1" atteso="$2" sedexpr="$3" target="${4:-$TRIGGER}"
+
+  if [ -n "$SOLO" ] && [ "${nome#"$SOLO"}" = "$nome" ]; then
+    return 0
+  fi
 
   rm -rf "$WORK/migrations"
   cp -r migrations "$WORK/migrations"
-  sed -i "$sedexpr" "$WORK/migrations/0017_profiles_nickname.sql"
+  sed -i "$sedexpr" "$WORK/migrations/${target}"
 
   # Guardia anti-mutante-inerte: se il sed non ha cambiato NIENTE, il giro
   # misurerebbe il codice originale e stamperebbe «sopravvissuto» per un motivo
   # sbagliato. È il modo in cui una mutazione mente.
-  if diff -q "$ORIG" "$WORK/migrations/0017_profiles_nickname.sql" >/dev/null; then
+  if diff -q "migrations/${target}" "$WORK/migrations/${target}" >/dev/null; then
     echo "⚠️  ${nome}: MUTAZIONE INERTE — l'ancora del sed non ha matchato niente."
     return 2
   fi
@@ -48,11 +73,11 @@ run_mutante() {
   log=$(cat "$SHIM" "$WORK"/migrations/0*.sql tests/0017_profiles_nickname.test.sql \
         | docker exec -i "$CONTAINER" psql -U postgres -v ON_ERROR_STOP=1 2>&1)
 
-  if printf '%s' "$log" | grep -q "${atteso} FAIL"; then
+  if grep -q "${atteso} FAIL" <<< "$log"; then
     echo "✅ ${nome}: UCCISO da ${atteso}"
     return 0
   fi
-  if printf '%s' "$log" | grep -qE 'FAIL|ERROR'; then
+  if grep -qE 'FAIL|ERROR' <<< "$log"; then
     echo "🟡 ${nome}: rosso, ma NON su ${atteso} (fuori bersaglio):"
     printf '%s\n' "$log" | grep -E 'FAIL|ERROR' | head -2
     return 1
@@ -90,17 +115,17 @@ run_mutante "M3 bordo 2 della clemenza nel trigger" "T2" \
 # M4 — via il CHECK in colonna: la difesa in profondità sparisce e la clemenza del
 #      trigger non presidia più niente.
 run_mutante "M4 CHECK nickname_forma" "T8" \
-  's/^    or (char_length(nickname) between 2 and 30 and nickname = btrim(nickname))$/    or true/' || vivi=$((vivi+1))
+  's/^    or (char_length(nickname) between 2 and 30 and nickname = btrim(nickname))$/    or true/' "$COLONNA" || vivi=$((vivi+1))
 
 # M5 — il bordo superiore del CHECK diventa esclusivo: 30 caratteri, legittimi, vengono
 #      rifiutati. È il modo in cui le due copie della regola iniziano a divergere.
 run_mutante "M5 bordo 30 del CHECK" "T7" \
-  's/between 2 and 30 and nickname = btrim(nickname)/between 2 and 29 and nickname = btrim(nickname)/' || vivi=$((vivi+1))
+  's/between 2 and 30 and nickname = btrim(nickname)/between 2 and 29 and nickname = btrim(nickname)/' "$COLONNA" || vivi=$((vivi+1))
 
 # M6 — il nickname non viene più scritto in colonna: la migration non fa più il suo
 #      lavoro, e tutti i test «non deve rompere» resterebbero verdi.
 run_mutante "M6 scrittura in colonna" "T3" \
-  's/^          v_nickname                                      -- NUOVO (0017)$/          null                                            -- NUOVO (0017)/' || vivi=$((vivi+1))
+  's/^          v_nickname/          null      /' || vivi=$((vivi+1))
 
 # M7 — il corpo riscritto perde la guardia Apple Private Relay: è ESATTAMENTE la classe
 #      di regressione del 2026-07-29 (corpo copiato dalla migration sbagliata).
@@ -119,12 +144,12 @@ run_mutante "M7 guardia relay nel corpo riscritto" "T11" \
 #      scarta comunque, quindi T14 resterebbe verde grazie a una difesa DIVERSA da quella
 #      rotta. A vedere l'indice storto e' la RETTIFICA del profilo, che passa solo dal DB.
 run_mutante "M8 unicita' insensibile alle maiuscole" "T17" \
-  's/on public.profiles (lower(nickname))/on public.profiles (nickname)/' || vivi=$((vivi+1))
+  's/on public.profiles (lower(nickname))/on public.profiles (nickname)/' "$COLONNA" || vivi=$((vivi+1))
 
 # M9 — l'indice non è più unico: la difesa resta solo nella cortesia del trigger, e
 #      chiunque scriva in colonna per un'altra via (rettifica, import, mano umana) duplica.
 run_mutante "M9 indice non piu' unico" "T15" \
-  's/^create unique index if not exists profiles_nickname_unico$/create index if not exists profiles_nickname_unico/' || vivi=$((vivi+1))
+  's/^create unique index if not exists profiles_nickname_unico$/create index if not exists profiles_nickname_unico/' "$COLONNA" || vivi=$((vivi+1))
 
 # M10 — via ENTRAMBE le clemenze sull'unicità: il controllo prima dell'insert e il ciclo
 #       di riprova. Un nickname già preso torna a portarsi giù la registrazione intera —
