@@ -85,6 +85,18 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
       if (error) AccessibilityInfo.announceForAccessibility(error);
     }, [error]);
 
+    // Stessa cosa per il suggerimento, e per la stessa ragione: `accessibilityLiveRegion`
+    // sotto funziona SOLO su Android, quindi senza questa riga chi usa VoiceOver non
+    // saprebbe mai che il nickname scelto è già di qualcun altro. Non si annuncia mentre
+    // l'errore è a schermo (lì il messaggio mostrato è l'altro), e il tono `neutral` —
+    // cioè «Controllo…» — resta muto: annunciare un'attesa a ogni pausa di digitazione
+    // sarebbe rumore, non informazione.
+    useEffect(() => {
+      if (!error && hint && hintTone !== 'neutral') {
+        AccessibilityInfo.announceForAccessibility(hint);
+      }
+    }, [error, hint, hintTone]);
+
     return (
       <View style={styles.wrap}>
         <PerfectText size={16} lines={1} style={styles.label}>

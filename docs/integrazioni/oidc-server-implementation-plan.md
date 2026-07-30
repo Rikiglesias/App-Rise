@@ -43,7 +43,8 @@ vedrà mai `rise_ref` né un'email "risolta" custom**.
 > (`handle_new_user` le legge soltanto). ⇒ con lo scope `profile` UserInfo consegnerebbe a LD
 > l'anagrafica completa di chi si registra dall'app. **Precondizione nuova, bloccante prima di
 > accendere il provider**: bonificare `handle_new_user` perché cancelli quelle chiavi dopo l'insert
-> (lasciando `name` e `preferred_username`) → da accorpare alla 0018 di F-MINORI. La versione
+> (lasciando `name` e `preferred_username`) → da accorpare alla **0019** di F-MINORI (la 0018 è
+> occupata da `0018_nickname_disponibile.sql`, presa il 2026-07-30). La versione
 > precedente di questa nota diceva «oggi i metadata contengono solo email/…/provider_id, verificato
 > su `auth.users`»: era un campione di 2 account **nessuno dei quali nato dal form email**, cioè una
 > generalizzazione — il contenuto dei metadata si legge nel punto di SCRITTURA, non contando le

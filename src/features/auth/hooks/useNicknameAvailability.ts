@@ -82,7 +82,15 @@ export const useNicknameAvailability = (value: string): NicknameCheck => {
       });
     }, ATTESA_MS);
 
-    return () => clearTimeout(timer);
+    return () => {
+      // Si invalida ANCHE la richiesta già partita, non solo il timer che deve ancora
+      // scattare: se la schermata si smonta mentre la risposta è in volo, `clearTimeout`
+      // non la ferma e il `.then` chiamerebbe `setStato` su un componente che non c'è
+      // più. Il contatore è ciò che rende quel ritorno innocuo — senza questa riga la
+      // protezione era scritta nel commento ③ ma non nel codice.
+      ultima.current += 1;
+      clearTimeout(timer);
+    };
   }, [value]);
 
   return stato;
@@ -103,14 +111,23 @@ export interface NicknameHint {
  * SECONDO ciclo di attesa e richieste sullo stesso testo, con due verdetti che possono
  * anche non coincidere.
  *
- * ⚠️ «GIÀ PRESO» È UN AVVISO, NON UN ERRORE BLOCCANTE — e non è una sfumatura di stile.
- * La 0017 stabilisce che **il nickname non deve MAI impedire una registrazione**: per
- * questo il trigger, davanti a una collisione, scarta il valore invece di far fallire
- * l'insert. Trattare qui «già preso» come un errore che blocca il pulsante
- * contraddirebbe quella decisione dal lato opposto — la persona non perderebbe più il
- * nickname in silenzio, perderebbe la registrazione.
- * Quindi: tono di avviso, testo che dice cosa fare, e strada libera. Chi prosegue
- * comunque non resta all'oscuro: se ne accorge la fase ④ (il messaggio a cose fatte).
+ * ⚠️ «GIÀ PRESO» NON SI MOSTRA IN ROSSO, MA IL SALVATAGGIO SÌ SI FERMA — due cose
+ * distinte, ed è bene non confonderle leggendo solo metà della storia.
+ *   · QUI (il riscontro a schermo) il tono è di AVVISO, non di errore: sotto lo stesso
+ *     campo convivono «Controllo…», «Libero» e «non verificabile», e dipingerli col
+ *     rosso dell'errore farebbe leggere «Libero» come un problema.
+ *   · ALTROVE (`useSignUpForm` e il salvataggio di `ProfileEditScreen`) lo stato
+ *     `taken` **ferma davvero** l'invio, e ci sono buone ragioni: proseguire porterebbe
+ *     a perdere il nickname in silenzio (in registrazione lo scarta il trigger) o a
+ *     leggere il messaggio della corsa persa quando la corsa non c'è stata.
+ * Non è in contraddizione con la 0017 («il nickname non deve MAI impedire una
+ * registrazione»): quella regola protegge il DATABASE dal far cadere l'insert, e la
+ * persona resta libera di procedere in ogni momento — il campo è facoltativo, basta
+ * svuotarlo. Ciò che si impedisce è solo di andare avanti CREDENDO di aver preso un nome
+ * che verrebbe buttato via.
+ *
+ * `unknown` invece non ferma niente e non è un errore: dice che non siamo riusciti a
+ * chiedere, e che si può proseguire. Tacere sarebbe peggio — si crederebbe «libero».
  *
  * Anche `unknown` è un avviso e non un errore: dice che non siamo riusciti a chiedere,
  * e che si può proseguire. Tacere sarebbe peggio — la persona crederebbe «libero».

@@ -82,7 +82,12 @@ export const ProfileEditScreen: React.FC = () => {
   // Disponibilità mentre si scrive (0018). L'hook non interroga il server finché il
   // valore resta quello con cui il campo si è aperto: qui il campo nasce PIENO, quindi
   // senza quella guardia partirebbe una richiesta a ogni apertura della schermata.
-  const nicknameHint = useNicknameHint(useNicknameAvailability(nickname));
+  // Lo stato NON va consumato al volo dentro `useNicknameHint`: serve anche al
+  // salvataggio, sotto. Senza, chi ha appena letto «già di qualcun altro» potrebbe
+  // salvare lo stesso e riceverebbe il messaggio della CORSA PERSA («un attimo prima di
+  // te») — falso, perché l'app lo sapeva da secondi.
+  const nicknameCheck = useNicknameAvailability(nickname);
+  const nicknameHint = useNicknameHint(nicknameCheck);
   // La mail di contatto si mostra e si rettifica per TUTTI dal 2026-07-25 (era
   // solo per gli account Apple Private Relay, F1.10). `isRelay` sopravvive per
   // un solo scopo: scegliere il testo-guida del campo (:279), perché a chi
@@ -174,6 +179,11 @@ export const ProfileEditScreen: React.FC = () => {
     // campo l'ha causata.
     const nick = validateNickname(nickname);
     if (nick) e.nickname = nick;
+    // E se sappiamo GIÀ che è di qualcun altro, ci si ferma qui — come fa la
+    // registrazione (`useSignUpForm`). Senza, il salvataggio partirebbe, l'indice lo
+    // respingerebbe e la persona leggerebbe il messaggio della corsa persa («un attimo
+    // prima di te»): falso, perché lo sapevamo da secondi. `unknown` non ferma nessuno.
+    else if (nicknameCheck === 'taken') e.nickname = 'nickname_taken';
     setErrors(e);
     if (Object.keys(e).length > 0) return;
 
@@ -218,6 +228,12 @@ export const ProfileEditScreen: React.FC = () => {
         // e glielo possiamo dire. Il messaggio va SUL CAMPO, non in fondo alla pagina.
         if (isNicknameConflict(error)) {
           setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
+          // E si dice anche che NON È STATO SALVATO NIENTE: `updateProfile` fa un solo
+          // `update` con tutti i campi cambiati, quindi il rifiuto dell'indice porta giù
+          // anche il cognome corretto e il telefono nuovo. Col solo errore sotto il
+          // campo nickname, la persona uscirebbe da qui convinta che il resto sia stato
+          // scritto — e se ne accorgerebbe settimane dopo, o mai.
+          setSubmitError(t('auth.edit.nothingSaved'));
           return;
         }
         setSubmitError(t('auth.edit.error'));
@@ -244,6 +260,11 @@ export const ProfileEditScreen: React.FC = () => {
     firstName,
     lastName,
     nickname,
+    // Senza questa dipendenza il salvataggio leggerebbe lo stato di disponibilità
+    // CONGELATO alla creazione del callback: il blocco su «già preso» guarderebbe un
+    // verdetto vecchio, cioè quasi sempre `idle`. Il linter l'ha preso, ed è il tipo di
+    // difetto che nessun test coglie finché non capita la sequenza giusta.
+    nicknameCheck,
     email,
     phone,
     city,

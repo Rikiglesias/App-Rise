@@ -126,6 +126,7 @@ export default {
       emailPending:
         'Email change pending confirmation: {{email}}. Confirm the link sent to both inboxes to complete it.',
       error: 'Update failed. Please try again.',
+      nothingSaved: 'Nothing was saved: change the nickname and save again.',
     },
     privacy: {
       title: 'Privacy and data',
