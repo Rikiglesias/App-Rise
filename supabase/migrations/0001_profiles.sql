@@ -14,6 +14,10 @@ create table public.profiles (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   -- Età minima 18+ (consenso GDPR semplificato)
+  -- 🔴 SUPERATO dalla migration 0019 (2026-07-30): questo vincolo è stato SOSTITUITO da
+  -- `eta_minima`, soglia 14 anni. La riga resta perché le migration applicate non si
+  -- riscrivono; chi legge solo questo file crederebbe che l'app sia ancora riservata ai
+  -- maggiorenni.
   constraint adult check (birth_date <= (now()::date - interval '18 years'))
 );
 

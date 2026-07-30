@@ -13,8 +13,11 @@
 --
 -- Cosa NON diventa nullable, e perché:
 --   first_name / last_name  → il claim OIDC `name` verso i partner nasce da qui;
---   birth_date              → è la prova del requisito 18+ (validation.ts), non è
---                             un dato anagrafico rinunciabile;
+--   birth_date              → è la prova del requisito di età (validation.ts), non è
+--                             un dato anagrafico rinunciabile. ⚠️ La soglia era 18 quando
+--                             questa riga è stata scritta; dalla 0019 è 14, ma il motivo
+--                             per cui la colonna resta obbligatoria non cambia — ed è
+--                             anche il marcatore che fa nascere il profilo;
 --   country                 → il trigger handle_new_user lo valorizza sempre
 --                             (coalesce → 'IT', migration 0007), quindi il NOT NULL
 --                             non è mai un ostacolo alla nascita del profilo;

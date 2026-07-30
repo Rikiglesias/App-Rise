@@ -30,6 +30,7 @@ PAIRS=(
   "0016_claim_su_email_confermata"
   "0017_profiles_nickname"
   "0018_nickname_disponibile"
+  "0019_eta_minima_e_bonifica_metadata"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
@@ -75,19 +76,30 @@ for pair in "${PAIRS[@]}"; do
     # intercettare un `create or replace` che perde pezzi (successo il 29/07 su un'altra
     # funzione: corpo copiato dalla migration sbagliata, suite della migration nuova
     # tutta verde). Si rimette la 0017 in coda.
+    #
+    # ⚠️ Dal 2026-07-30 sera la 0019 è l'ultima a definire TRE funzioni della catena
+    # (`handle_new_user`, `claim_legacy_contact`, `sync_contact_email_on_email_change`):
+    # va rimessa in coda a OGNI coppia che ne riapplica una versione precedente — comprese
+    # 0016 e 0017, che prima non avevano bisogno di `extra`.
     extra=()
     case "$pair" in
       0011_signup_contact_email)
-        extra=(migrations/0017_profiles_nickname.sql) ;;
+        extra=(migrations/0017_profiles_nickname.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
       0012_legacy_contacts|0013_contact_email_follows_account)
         extra=(migrations/0014_claim_legacy_campi_vuoti.sql
                migrations/0015_aggancio_su_email_verificata.sql
-               migrations/0016_claim_su_email_confermata.sql) ;;
+               migrations/0016_claim_su_email_confermata.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
       0014_claim_legacy_campi_vuoti)
         extra=(migrations/0015_aggancio_su_email_verificata.sql
-               migrations/0016_claim_su_email_confermata.sql) ;;
+               migrations/0016_claim_su_email_confermata.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
       0015_aggancio_su_email_verificata)
-        extra=(migrations/0016_claim_su_email_confermata.sql) ;;
+        extra=(migrations/0016_claim_su_email_confermata.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
+      0016_claim_su_email_confermata|0017_profiles_nickname)
+        extra=(migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
     esac
 
     log=$(cat "tests/${shim}.sql" migrations/0*.sql \
@@ -99,7 +111,16 @@ for pair in "${PAIRS[@]}"; do
     # quindi un giro che non esegue NIENTE — file mancante nel `cat`, o un errore
     # Docker che stampa «Error» e non «ERROR» — usciva «verde … 0 PASS» con exit 0.
     # Una suite che non gira non è una suite che passa.
-    if [ "$pass" -eq 0 ] || printf '%s' "$log" | grep -qE 'FAIL|ERROR'; then
+    #
+    # ⚠️ HERE-STRING, NON `printf '%s' "$log" | grep -qE …` (com'era fino al 2026-07-30):
+    # con `set -o pipefail`, `grep -q` esce al PRIMO match e chiude la pipe, `printf` muore
+    # di SIGPIPE (141) e la pipeline restituisce 141 — che qui si legge «nessun FAIL
+    # trovato», cioè **una suite rossa dichiarata verde**. Si innesca solo con log grandi
+    # abbastanza da non stare nel buffer della pipe: un fallimento verboso (uno stack trace
+    # PL/pgSQL basta) è esattamente il caso in cui il log cresce. Scoperto sui mutanti della
+    # 0019, dove un mutante moriva a mano e risultava «sopravvissuto» qui.
+    # `grep -c` due righe sopra è immune: senza `-q` legge tutto l'input.
+    if [ "$pass" -eq 0 ] || grep -qE 'FAIL|ERROR' <<< "$log"; then
       echo "ROSSO  ${pair} [${shim}] — ${pass} PASS prima del fallimento:"
       printf '%s\n' "$log" | grep -E 'FAIL|ERROR' | head -3
       fallite=$((fallite + 1))
