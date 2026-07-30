@@ -1,3 +1,19 @@
-echo "=== CONTROLLO POST-COMMIT ==="
-npm run quality-check:summary
-echo "✅ Commit verificato!" 
+echo "✅ Commit creato. Qualità già verificata dal pre-commit."
+
+# 2026-07-31 — TOLTA da qui la riesecuzione di `npm run quality-check:summary`.
+#
+# Girava lo STESSO identico `conta-problemi` del pre-commit (typecheck + eslint +
+# markdownlint + prettier + jest completo: 87 suite, 729 test), ma DOPO che il commit era
+# già stato creato. Se avesse trovato qualcosa, il commit sarebbe esistito lo stesso: era
+# tempo pagato senza comprare sicurezza.
+#
+# Costo misurato: 52 secondi a giro (00:35:14 → 00:36:06 del 31/07), quindi ~105 secondi
+# per OGNI commit — anche per un commit di una riga di markdown. Toglierlo dimezza.
+#
+# Se un giorno serve un controllo DOPO il commit, dev'essere qualcosa che il pre-commit non
+# può fare (es. lo stato del branch remoto), non la stessa suite un'altra volta.
+#
+# PASSO SUCCESSIVO, progettato ma NON fatto (vedi ~/todos/improvements-proposed.md): nel
+# pre-commit girare solo i test correlati ai file staged (`--findRelatedTests`) e spostare
+# la suite completa su un `pre-push`. Va provato su un push vero prima di adottarlo: un
+# gate che si crede attivo e non lo è vale meno di nessun gate.
