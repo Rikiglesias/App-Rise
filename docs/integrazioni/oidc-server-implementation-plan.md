@@ -113,7 +113,7 @@ Conseguenze:
    Route:
    - `/consent` — legge `authorization_id`, `supabase.auth.oauth.getAuthorizationDetails()`,
      mostra client+scope, `approveAuthorization()` / `denyAuthorization()`, redirect.
-   - `/register` — signup DA WEB (Apple/Google/email + 18+ `birth_date` + consenso privacy
+   - `/register` — signup DA WEB (Apple/Google/email + età minima 14 su `birth_date` + consenso privacy
      tracciato + provisioning profilo), per il nuovo utente diretto su LD (SSO-only).
    - `/auth/callback` — redirect handler; token exchange e `client_secret` SOLO server-side.
    - **NB claim `name`**: viene dai `user_metadata`, non da `profiles`. La sincronizzazione

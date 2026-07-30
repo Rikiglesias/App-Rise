@@ -90,7 +90,8 @@ form, non un vincolo tecnico. È esattamente lo spazio che P2 deve occupare.
 > modulo senza motivo. Corretto dopo una verifica alla fonte.)*
 
 **Trappola verificata, da non far scoprire a valle**: nel trigger che crea il profilo, la condizione
-di ingresso è `if v_meta ? 'birth_date'` — la data di nascita non è solo la prova del 18+, è **il
+di ingresso è `if v_meta ? 'birth_date'` — la data di nascita non è solo la prova dell'età
+minima (14 anni, migration 0019), è **il
 marcatore che distingue il signup email dal social** [V] `0004_signup_trigger.sql`. Chi
 «alleggerisse» il form togliendo la data di nascita otterrebbe un signup che **non crea alcun
 profilo, in silenzio**. Al contrario, `phone` e `city` si possono smettere di inviare senza toccare

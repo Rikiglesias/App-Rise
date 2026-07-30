@@ -271,12 +271,18 @@
        · la VESTE GRAFICA e' loro («anche i colori, tutto quello che vedra' loro»). Detto
          esplicitamente: e' una concessione che costa nulla e toglie un motivo di attrito.
 
-     NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico dice «va detto a loro»
-     (`scambio-dati-quadro.md:206-210`) ma e' ANTERIORE alla decisione del 27/07 di aprire ai
-     minorenni: oggi scrivere «siamo 18+» annuncerebbe al partner un limite che il proprietario
-     ha deciso di togliere, e scrivere il contrario sarebbe falso nel prodotto (`constraint adult`
-     vivo in `0001_profiles.sql:17`). Entrambi i rami non sono scrivibili -> resta fuori, e va
-     riallineato il canonico, non il brief.
+     NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico diceva «va detto a loro»
+     (`scambio-dati-quadro.md:206-210`) ma era ANTERIORE alla decisione del 27/07 di aprire ai
+     minorenni: scrivere «siamo 18+» avrebbe annunciato al partner un limite che il proprietario
+     aveva deciso di togliere, e scrivere il contrario sarebbe stato falso nel prodotto. Entrambi
+     i rami non erano scrivibili -> restava fuori.
+     AGGIORNAMENTO 30/07/2026: il ramo si e' sbloccato da solo. Il prodotto ORA dice 14 anni
+     (migration 0019: `constraint eta_minima`; app: `MIN_AGE_YEARS`), e il canonico e' stato
+     riallineato. Quindi «dai 14 anni» sarebbe finalmente scrivibile senza mentire.
+     RESTA COMUNQUE FUORI da questa versione: e' una decisione di Riccardo, non una conseguenza
+     tecnica, e il documento e' gia' al limite delle pagine. Da riproporre quando decide.
+     ⚠️ PRECONDIZIONE PRIMA DI SCRIVERLO IN QUALSIASI DOCUMENTO IN USCITA: la 0019 non e'
+     applicata al database vivo (fermo alla 0016) e l'informativa dice ancora un'altra cosa.
 
      STATO DELL'INVIO, verificato in questa passata: il provider OIDC e' SPENTO sul progetto vivo
      (`oauth/authorize` -> `feature_disabled`), ma le chiavi di firma sono GIA' asimmetriche

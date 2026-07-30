@@ -42,8 +42,9 @@ Raccolti nei form di registrazione/profilo (`SignUpScreen.tsx`,
 - **Provincia** (`province`) — sigla IT, obbligatoria solo se `country = 'IT'`
   (nullable dal migration 0007 per donatori esteri).
 - **Paese** (`country`) — ISO 3166-1 alpha-2, default `IT` (migration 0007).
-- **Data di nascita** (`birth_date`) — ISO date; **età minima 18 anni** imposta sia
-  in UI (`validateAdult`) sia dal DB (`constraint adult`, migration 0001).
+- **Data di nascita** (`birth_date`) — ISO date; **età minima 14 anni** imposta sia
+  in UI (`validateMinAge`) sia dal DB (`constraint eta_minima`, migration 0019, che
+  sostituisce il `constraint adult` a 18 anni della 0001).
 - **Timestamp consenso privacy** (`privacy_consent_at`).
 - **Consenso marketing** (`marketing_consent`) — boolean, cache derivata (vedi consensi).
 - **Stato cancellazione** (`deletion_requested_at`) — NULL = attivo;
@@ -158,7 +159,12 @@ Il link in-app punta a `https://italy.riseagainsthunger.org/privacy-policy/`
 
 ### GDPR
 
-- **Età minima 18 anni** imposta in UI e DB (no trattamento di minori per design).
+- **Età minima 14 anni** imposta in UI e DB — soglia italiana per il consenso digitale
+  (art. 8 GDPR + d.lgs. 101/2018, art. 2-quinquies Codice Privacy). Regime unico: sopra i
+  14 acconsente la persona, sotto i 14 non si entra, perché il consenso di chi ha la
+  responsabilità genitoriale andrebbe raccolto e **provato** e non lo raccogliamo.
+  ⚠️ Fino al 30/07/2026 il limite era 18 («no trattamento di minori per design»):
+  **l'informativa deve dire la soglia nuova prima del rilascio**.
 - **Minimizzazione**: i campi raccolti sono finalizzati al rapporto col donatore.
 - **Onere della prova del consenso**: coperto dal ledger `consent_events`.
 
