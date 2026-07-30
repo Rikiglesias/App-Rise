@@ -465,8 +465,8 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    l'account nasce dall'accesso e quelle due scelte non le fa più nessuno: con quale valore nascono,
    uno deciso da voi o chiesto alla persona dopo il primo ingresso? Ci pesa soprattutto la
    visibilità, l'unica con un effetto pubblico: qualunque sia la strada, dobbiamo poter scrivere
-   nella nostra informativa cosa succede. Se la strada fosse chiederlo, una domanda o due dopo
-   l'ingresso — questa e il Paese qui sotto — non sono un secondo modulo di registrazione.
+   nella nostra informativa cosa succede. Se la strada fosse chiederlo, una domanda dopo l'ingresso
+   non è un secondo modulo di registrazione.
 
    **Il nickname invece ve lo mandiamo noi**: da 2 a 30 caratteri, senza spazi ai bordi, nessun
    vincolo sui caratteri. È **facoltativo**, e quando manca non arriva vuoto — non c'è proprio.
