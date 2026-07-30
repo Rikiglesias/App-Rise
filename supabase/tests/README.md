@@ -128,6 +128,14 @@ sempre l'ultima):
   ciascuno (prima/dopo la conferma · rivendicazione senza profilo, poi backfill alla nascita).
   `T14` **droppa `legacy_contacts`** per provare davvero la guardia `undefined_table`, quindi deve
   restare l'ultimo: dopo di lui il database è mutilato e nient'altro può seguire.
+- **0018**: **13** righe `PASS` — un `SETUP` + 12 blocchi (`T1-T12`). Misurato 13/13 su entrambi gli
+  shim, 2026-07-30. I cuori sono `T2` e `T12`. `T2` è l'unico test che può accorgersi se qualcuno
+  toglie `security definer`, perché è l'unico che interroga da `anon` un nickname che ESISTE.
+  `T12` mette la funzione e l'indice della **0017** uno contro l'altro sui dati veri: presidia una
+  proprietà che vive in **due file**, e nessun test interno a un file solo potrebbe falsificarla.
+  ⚠️ Ogni test di comportamento fa `set local role`: la RLS su `profiles` è `enable` e non `force`,
+  quindi il PROPRIETARIO la scavalca — e i test girano come `postgres`. Senza il cambio di ruolo
+  sarebbero rimasti verdi anche contro una funzione a cui era stato tolto `security definer`.
 - **0017**: **13** righe `PASS` — 12 blocchi (`T1-T12`), di cui `T8` ne stampa **due** (il CHECK
   morde sulla lunghezza · e sugli spazi ai bordi). Misurato 13/13 su entrambi gli shim, 2026-07-30.
   Il cuore sono `T1`/`T2`/`T4`/`T5`: la 0017 mette un CHECK su una colonna riempita da un trigger
