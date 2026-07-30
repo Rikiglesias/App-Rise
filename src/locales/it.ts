@@ -65,6 +65,8 @@ export default {
       provincePlaceholder: 'Auto-compilata dalla città',
       birthDate: 'Data di nascita',
       birthDatePlaceholder: 'Seleziona la data',
+      nickname: 'Nickname (facoltativo)',
+      nicknamePlaceholder: 'Come farti chiamare sui siti dei nostri partner',
       privacyConsent: 'Accetto la',
       privacyConsentLink: 'privacy policy',
       marketingConsent: 'Voglio ricevere aggiornamenti (facoltativo)',
@@ -170,6 +172,9 @@ export default {
       password_weak: 'Min 8 caratteri, una maiuscola e un carattere speciale',
       phone_invalid: 'Telefono non valido (es. +39...)',
       not_adult: 'Devi essere maggiorenne',
+      // La forma è quella del CHECK `nickname_forma` (migration 0017). Il messaggio
+      // dice il limite in cifre: «non valido» lascerebbe la persona a indovinare.
+      nickname_length: 'Il nickname deve avere da 2 a 30 caratteri',
       date_invalid: 'Data non valida',
       password_mismatch: 'Le password non coincidono',
       invalid_credentials: 'Email o password non corretti',

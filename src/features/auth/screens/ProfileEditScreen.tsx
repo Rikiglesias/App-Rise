@@ -27,6 +27,7 @@ import {
   validateAdult,
   validateRequired,
   validateContactEmail,
+  validateNickname,
 } from '@/shared/auth/validation';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import type { ProfileEditable } from '@/shared/auth/types';
@@ -41,7 +42,8 @@ type Errors = Partial<
     | 'country'
     | 'birthDate'
     | 'email'
-    | 'contactEmail',
+    | 'contactEmail'
+    | 'nickname',
     string
   >
 >;
@@ -67,6 +69,11 @@ export const ProfileEditScreen: React.FC = () => {
   const [province, setProvince] = useState(profile?.province ?? '');
   const [country, setCountry] = useState(profile?.country ?? 'IT');
   const [birthDate, setBirthDate] = useState(profile?.birth_date ?? '');
+  // Nickname (migration 0017): `null` in colonna significa «non ne ho uno», e nel form
+  // si rappresenta come stringa vuota. È l'unico campo che la persona può
+  // legittimamente SVUOTARE — `updateProfile` riconverte `'' → null` prima di scrivere,
+  // perché la stringa vuota violerebbe il CHECK e farebbe fallire l'INTERA rettifica.
+  const [nickname, setNickname] = useState(profile?.nickname ?? '');
   // La mail di contatto si mostra e si rettifica per TUTTI dal 2026-07-25 (era
   // solo per gli account Apple Private Relay, F1.10). `isRelay` sopravvive per
   // un solo scopo: scegliere il testo-guida del campo (:279), perché a chi
@@ -152,6 +159,12 @@ export const ProfileEditScreen: React.FC = () => {
         ? validateContactEmail(contactEmail)
         : null;
     if (ce) e.contactEmail = ce;
+    // Nickname: vuoto è una risposta valida («non ne voglio uno»); se invece c'è deve
+    // avere la forma del CHECK. Senza questo controllo la rettifica fallirebbe INTERA
+    // per un campo facoltativo, con l'errore generico e nessuna indicazione di quale
+    // campo l'ha causata.
+    const nick = validateNickname(nickname);
+    if (nick) e.nickname = nick;
     setErrors(e);
     if (Object.keys(e).length > 0) return;
 
@@ -178,6 +191,12 @@ export const ProfileEditScreen: React.FC = () => {
     // in silenzio.
     if (contactEmail.trim() !== (profile?.contact_email ?? ''))
       changed.contact_email = contactEmail.trim();
+    // Il confronto è fra valori TRIMMATI da entrambi i lati: `updateProfile` scrive
+    // `trim() || null`, quindi senza il trim qui un nickname a cui la persona ha solo
+    // aggiunto uno spazio entrerebbe nel patch e produrrebbe una scrittura identica a
+    // quella già in colonna.
+    if (nickname.trim() !== (profile?.nickname ?? ''))
+      changed.nickname = nickname.trim();
 
     if (Object.keys(changed).length > 0) {
       const { error } = await updateProfile(changed);
@@ -206,6 +225,7 @@ export const ProfileEditScreen: React.FC = () => {
   }, [
     firstName,
     lastName,
+    nickname,
     email,
     phone,
     city,
@@ -333,6 +353,18 @@ export const ProfileEditScreen: React.FC = () => {
             ? 'auth.completeProfile.contactEmailPlaceholderRelay'
             : 'auth.completeProfile.contactEmailPlaceholder'
         )}
+      />
+      {/* Nickname: qui si può anche TOGLIERE, ed è l'unico campo per cui svuotare è
+          una risposta e non un errore. Chi non l'ha mai scelto lo trova vuoto: è la
+          seconda occasione per chi ha saltato il campo alla registrazione. */}
+      <AuthInput
+        label={t('auth.signup.nickname')}
+        value={nickname}
+        onChangeText={setNickname}
+        error={err(errors.nickname)}
+        placeholder={t('auth.signup.nicknamePlaceholder')}
+        autoCapitalize="none"
+        autoComplete="off"
       />
 
       {submitError ? (

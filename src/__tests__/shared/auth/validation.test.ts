@@ -21,6 +21,9 @@ const baseSignUp = {
   country: 'IT',
   birthDate: '2000-01-01',
   privacyConsent: true,
+  // Vuoto è il caso NORMALE: il nickname è facoltativo e la maggior parte delle
+  // registrazioni non ne avrà uno. La base rappresenta la registrazione tipica.
+  nickname: '',
 };
 
 const baseProfile = {
@@ -69,6 +72,51 @@ describe('auth validation', () => {
     const errors = validateSignUpForm({ ...baseSignUp, firstName: '' });
     expect(errors.firstName).toBe('required');
     expect(errors.lastName).toBeUndefined();
+  });
+
+  // Il nickname è l'unico campo facoltativo del modulo, e la sua forma deve combaciare
+  // col CHECK `nickname_forma` della migration 0017: se il form accetta ciò che il DB
+  // rifiuta, il trigger lo scarta in silenzio e la persona lo trova sparito senza aver
+  // visto nessun errore.
+  it('nickname facoltativo: vuoto non è un errore', () => {
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: '' }).nickname
+    ).toBeUndefined();
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: '   ' }).nickname
+    ).toBeUndefined();
+  });
+
+  it('nickname: la forma è quella del CHECK in colonna (2-30, trimmato)', () => {
+    expect(validateSignUpForm({ ...baseSignUp, nickname: 'x' }).nickname).toBe(
+      'nickname_length'
+    );
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: 'a'.repeat(31) }).nickname
+    ).toBe('nickname_length');
+    // I due bordi ammessi: se una delle due copie della regola si stringe, un valore
+    // legittimo verrebbe respinto dal DB dopo essere passato di qui.
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: 'ab' }).nickname
+    ).toBeUndefined();
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: 'b'.repeat(30) }).nickname
+    ).toBeUndefined();
+    // Gli spazi ai bordi si contano DOPO il trim, come fa il trigger: ' ab ' è un
+    // nickname di 2 caratteri valido, non uno di 4.
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: '  ab  ' }).nickname
+    ).toBeUndefined();
+  });
+
+  it('nickname storto non blocca gli altri campi né viceversa', () => {
+    const errors = validateSignUpForm({
+      ...baseSignUp,
+      nickname: 'x',
+      firstName: '',
+    });
+    expect(errors.nickname).toBe('nickname_length');
+    expect(errors.firstName).toBe('required');
   });
 
   it('privacy consent obbligatorio', () => {

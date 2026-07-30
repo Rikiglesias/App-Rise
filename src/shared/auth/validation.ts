@@ -71,6 +71,12 @@ export interface SignUpInput {
   country: string;
   birthDate: string;
   privacyConsent: boolean;
+  /**
+   * Nickname per i siti dei partner (migration 0017). FACOLTATIVO: la stringa vuota
+   * è la risposta normale, non un campo non compilato. Sta qui e non fra i campi
+   * obbligatori perché non serve a noi — nasce per il modulo del partner.
+   */
+  nickname: string;
 }
 
 export type SignUpErrors = Partial<Record<keyof SignUpInput, string>>;
@@ -95,6 +101,12 @@ export const validateSignUpForm = (input: SignUpInput): SignUpErrors => {
   const adult = validateAdult(input.birthDate);
   if (adult) e.birthDate = adult;
   if (!input.privacyConsent) e.privacyConsent = 'required';
+  // Nickname: facoltativo, ma se c'è deve avere la forma del CHECK `nickname_forma`.
+  // Validarlo QUI non è pignoleria: il trigger della 0017 scarta in silenzio ciò che
+  // non rispetta la forma, quindi senza questo controllo la persona scriverebbe un
+  // nickname, non vedrebbe nessun errore, e lo troverebbe sparito dopo la conferma.
+  const nick = validateNickname(input.nickname);
+  if (nick) e.nickname = nick;
   return e;
 };
 

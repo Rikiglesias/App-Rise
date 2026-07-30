@@ -77,6 +77,24 @@ export const SignUpScreen: React.FC = () => {
           error={err(errors.birthDate)}
           placeholder={t('auth.signup.birthDatePlaceholder')}
         />
+        {/*
+          Nickname: facoltativo, e la label lo dice — un campo in più su un modulo già
+          lungo va giustificato a chi lo legge, non solo a chi lo scrive. Il placeholder
+          spiega a cosa serve: senza, «nickname» in mezzo all'anagrafica è un campo
+          misterioso che la gente salta o compila a caso.
+          Fuori dalla catena di focus, come la data di nascita: chi non lo vuole non
+          deve nemmeno passarci sopra andando avanti col tasto della tastiera.
+        */}
+        <AuthInput
+          label={t('auth.signup.nickname')}
+          value={values.nickname}
+          onChangeText={onChange.nickname}
+          error={err(errors.nickname)}
+          placeholder={t('auth.signup.nicknamePlaceholder')}
+          autoCapitalize="none"
+          autoComplete="off"
+          returnKeyType="next"
+        />
       </AuthSection>
 
       <AuthSection title={t('auth.signup.sections.account')}>

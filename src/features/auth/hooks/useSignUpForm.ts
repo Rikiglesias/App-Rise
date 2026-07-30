@@ -30,6 +30,9 @@ export const useSignUpForm = () => {
   const [province, setProvince] = useState('');
   const [country, setCountry] = useState('IT');
   const [birthDate, setBirthDate] = useState('');
+  // Facoltativo (migration 0017): parte vuoto e vuoto può restare. Serve al modulo del
+  // partner, non a noi — per questo non entra fra i campi che bloccano il submit.
+  const [nickname, setNickname] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [errors, setErrors] = useState<SignUpErrors>({});
@@ -96,6 +99,10 @@ export const useSignUpForm = () => {
         setBirthDate(v);
         clearError('birthDate');
       },
+      nickname: (v: string): void => {
+        setNickname(v);
+        clearError('nickname');
+      },
     }),
     [clearError]
   );
@@ -145,6 +152,7 @@ export const useSignUpForm = () => {
       country,
       birthDate,
       privacyConsent,
+      nickname,
     });
     setErrors(found);
     if (Object.keys(found).length > 0) return;
@@ -161,6 +169,10 @@ export const useSignUpForm = () => {
       birth_date: birthDate.trim(),
       privacy_consent: privacyConsent,
       marketing_consent: marketingConsent,
+      // `signUp` omette del tutto la chiave se il valore è vuoto: il trigger e il
+      // server auth trattano l'assenza come «nessun nickname», mentre una stringa
+      // vuota sarebbe rumore nei metadata — che sono superficie visibile al partner.
+      nickname: nickname.trim(),
     });
     setLoading(false);
     if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
@@ -178,6 +190,7 @@ export const useSignUpForm = () => {
     birthDate,
     privacyConsent,
     marketingConsent,
+    nickname,
     signUp,
     t,
   ]);
@@ -201,6 +214,7 @@ export const useSignUpForm = () => {
       province,
       country,
       birthDate,
+      nickname,
       privacyConsent,
       marketingConsent,
     },

@@ -28,6 +28,7 @@ PAIRS=(
   "0014_claim_legacy_campi_vuoti"
   "0015_aggancio_su_email_verificata"
   "0016_claim_su_email_confermata"
+  "0017_profiles_nickname"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
@@ -65,8 +66,18 @@ for pair in "${PAIRS[@]}"; do
     # ARRAY, non stringa: con due percorsi una stringa unica verrebbe passata a `cat`
     # come UN argomento solo («…0014.sql migrations/0015.sql») e il file non si
     # troverebbe. L'array espande un elemento per argomento.
+    #
+    # ⚠️ Dal 2026-07-30 vale anche per `handle_new_user`: la 0017 ne riscrive il corpo,
+    # quindi è la 0017 l'ultima che la definisce. Riapplicando la 0011 per il suo test di
+    # rieseguibilità si torna al corpo senza nickname, e la suite 0011 girerebbe contro
+    # codice che in produzione non esisterà più — cioè proprio il caso che deve
+    # intercettare un `create or replace` che perde pezzi (successo il 29/07 su un'altra
+    # funzione: corpo copiato dalla migration sbagliata, suite della migration nuova
+    # tutta verde). Si rimette la 0017 in coda.
     extra=()
     case "$pair" in
+      0011_signup_contact_email)
+        extra=(migrations/0017_profiles_nickname.sql) ;;
       0012_legacy_contacts|0013_contact_email_follows_account)
         extra=(migrations/0014_claim_legacy_campi_vuoti.sql
                migrations/0015_aggancio_su_email_verificata.sql
