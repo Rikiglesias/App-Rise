@@ -48,7 +48,8 @@
       "dove_vive_ora": "materia fra legali, fuori dal brief per decisione di Riccardo"
     },
     {
-      "frase": "senza averlo scelto",
+      "frase": "comparirebbe in una lista senza averlo scelto",
+      "_perche_questa_forma_lunga": "la prima stesura metteva solo «senza averlo scelto», ma quella frase compare LEGITTIMAMENTE altrove (scambio-dati-quadro.md:123 e :1042, dove descrive il rischio dal lato loro) ed e' italiano comune: avrebbe bloccato la consegna per niente, e un falso positivo e' il modo in cui un presidio viene aggirato. La forma lunga e' quella davvero rimossa.",
       "tolta_il": "2026-07-28 (e59e26a)",
       "perche": "scenario di danno nella domanda 6: «e' un avvertimento a non combinare guai» rivolto al partner. Resta la sola ragione NOSTRA, quella ratificata",
       "rientrata_il": ["2026-07-29, riscrivendo la domanda 6 (trovata dal critico avversariale)"],
