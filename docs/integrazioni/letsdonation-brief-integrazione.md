@@ -470,7 +470,8 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
 
    **Il nickname invece ve lo mandiamo noi**: da 2 a 30 caratteri, senza spazi ai bordi, nessun
    vincolo sui caratteri. È **facoltativo**, e quando manca non arriva vuoto — non c'è proprio.
-   Per un po' l'assenza sarà la norma, quindi diteci cosa mostrate in quel caso. Tre cose:
+   Molte persone non lo compilano, quindi l'assenza è un caso ordinario e non un errore: diteci
+   cosa mostrate in quel caso. Tre cose:
    - **il contenuto è responsabilità nostra**, perché nasce nella nostra registrazione: non
      applichiamo un filtro automatico, ma se ve ne arriva uno offensivo, o che finge di essere
      qualcun altro, segnalatecelo — lo togliamo dal nostro lato e smette di arrivarvi;
@@ -510,7 +511,7 @@ nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l
 | `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: in mancanza partirebbe l'indirizzo email — se lo vedete ditecelo, come nome visibile non va |
 | `email` | L'indirizzo dell'account, confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
-| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
+| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio — vale sia per chi non l'ha scelto, sia per chi l'ha cancellato dopo |
 
 **Una precisazione su UserInfo.** La tabella descrive l'**ID token**, ed è da lì che vi chiediamo di
 leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha emesso, quando
