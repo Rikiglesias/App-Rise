@@ -718,6 +718,10 @@ def build(md_path: Path, pdf_path: Path) -> None:
                 flush_bullets()
             numerato[0] = True
             num = re.match(r"^\s*(\d+)\. ", line).group(1)
+            # Livello 0 FISSO: l'annidamento e' implementato solo per i punti puntati (nel brief
+            # sono gli unici annidati, sotto la domanda 6). Un elenco NUMERATO annidato uscirebbe
+            # quindi allineato a quelli di primo livello, senza errore e senza avviso: se un
+            # domani serve, il rientro si prende con _livello_bullet(line) come nel ramo sopra.
             bullets.append(
                 (0, f"<b>{num}.</b>&nbsp; " + inline(re.sub(r"^\s*\d+\. ", "", line)))
             )
