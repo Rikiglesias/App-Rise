@@ -299,6 +299,44 @@
      (pulsante su e modulo giu' INSIEME) e «da noi si entra solo dopo aver confermato
      l'indirizzo» - oggi stanno in ENTRAMBI i documenti.
      Il nome del referente tecnico non e' confermato: non va scritto da nessuna parte.
+
+     PASSATA DEL 2026-07-30 - LE RICHIESTE DI RICCARDO, E IL DOCUMENTO DA 5 A 3 PAGINE.
+     Quattro passaggi segnati da lui rileggendo il brief. TRE TOLTI, uno RISCRITTO:
+       1. «Sta da noi perche' si possa entrare anche da computer... come Accedi con Google»
+          -> TOLTO («non e' necessario dirlo»). Giustificava una scelta nostra che il partner
+          non deve approvare. Registrato in frasi-ritirate.json.
+       2. «Il pulsante apre la pagina, non l'applicazione» -> TOLTO («non serve dirlo»).
+          ATTENZIONE: e' l'unico dei quattro che toglie una CONDIZIONE TECNICA VERA. Oggi
+          regge da se' (nessun app-link in app.config.js), ma il giorno in cui ne
+          registrassimo uno il giro da telefono si romperebbe e il partner non saprebbe che
+          era una condizione. Vincolo NOSTRO, tracciato fuori dal brief.
+       3. «L'aggancio per email tiene solo se confermato da tutt'e due le parti» -> TOLTO
+          («non capisco perche' dirlo»). E' il taglio che COSTA DI PIU': era l'unico avviso
+          di sicurezza rivolto a loro (agganciare schede con indirizzo mai confermato =
+          consegnare la scheda di una persona a un'altra, la falla che noi abbiamo chiuso
+          con la 0016). Costo dichiarato a Riccardo in chat PRIMA di eseguire il taglio.
+       4. «Se il nostro accesso non risponde...» -> RISCRITTO, non tolto: la sua obiezione
+          era «non capisco cosa voglia dire», cioe' un problema di scrittura. Il rischio e'
+          reale (rimettere il modulo durante un blocco lascia account scollegati per sempre).
+     Le tre frasi tolte sono ora in frasi-ritirate.json, provate con tre mutanti: rimettendole
+     nel testo consegnato la generazione del PDF si ferma (3 su 3).
+
+     ALTRE MODIFICHE DELLA STESSA PASSATA:
+       - il nickname e' descritto al PRESENTE (Riccardo: «fai finta che sia gia' pronto»).
+         PREREQUISITO REALE: 0017 e 0018 non sono applicate (DB alla 0016) -> vanno applicate
+         PRIMA dell'invio, altrimenti il documento promette un campo che non esiste.
+       - la MODERAZIONE del nickname passa a NOI (era attribuita al partner). Formula vera
+         oggi: nessun filtro automatico, rimozione su segnalazione. Non scrivere mai «lo
+         moderiamo» finche' un filtro non esiste davvero.
+       - il PAESE: non viaggia nell'ID token (GenerateIDToken assegna solo name, picture,
+         preferred_username, updated_at). La prima stesura di questa passata offriva la
+         lettura da UserInfo come seconda strada: RITIRATA dopo il critico avversariale,
+         perche' contraddiceva la promessa - nella stessa pagina - di ridurre UserInfo ai soli
+         campi dell'accesso, e perche' dipende dalla bonifica dei metadata (0019) che non e'
+         ancora decisa. Ora il brief CHIEDE se serve, senza promettere il come.
+       - 5 -> 3 PAGINE: prima il testo asciugato del 19% a contenuto invariato, poi
+         l'impaginazione (margini 20/18 -> 18/15 mm, interlinea 14.2 -> 13.4). Perdita non
+         richiesta e DICHIARATA: e' sparito anche il caso dei due accessi contemporanei.
 -->
 
 ## 1. L'obiettivo
@@ -411,8 +449,8 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    l'account nasce dall'accesso e quelle due scelte non le fa più nessuno: con quale valore nascono,
    uno deciso da voi o chiesto alla persona dopo il primo ingresso? Ci pesa soprattutto la
    visibilità, l'unica con un effetto pubblico: qualunque sia la strada, dobbiamo poter scrivere
-   nella nostra informativa cosa succede. Se la strada fosse chiederlo, basterebbe quella domanda
-   dopo l'ingresso: non sarebbe un secondo modulo.
+   nella nostra informativa cosa succede. Se la strada fosse chiederlo, una domanda o due dopo
+   l'ingresso — questa e il Paese qui sotto — non sono un secondo modulo di registrazione.
 
    **Il nickname invece ve lo mandiamo noi**: da 2 a 30 caratteri, senza spazi ai bordi, nessun
    vincolo sui caratteri. È **facoltativo**, e quando manca non arriva vuoto — non c'è proprio.
@@ -433,13 +471,13 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» che possiate ereditare.
 
    **Un terzo caso, di natura diversa: il Paese.** È obbligatorio nel vostro modulo e noi lo
-   raccogliamo, ma **non viaggia nell'ID token**, che porta i soli campi dell'identità: non è come i
-   due qui sopra («non ce l'abbiamo»), è «ce l'abbiamo e non passa di lì». Due strade, e la scelta è
-   vostra: **lo chiedete alla persona** dopo il primo ingresso; oppure ve lo facciamo trovare
-   **nella risposta di UserInfo**, dove però non è un campo standard e il vostro lato va adattato
-   per leggerlo. Diteci quale vi conviene. Se trovate altri campi del vostro modulo nella stessa
-   condizione, segnalateceli: l'elenco nasce da quello che vediamo della vostra pagina, non dal
-   vostro schema.
+   raccogliamo, ma **non viaggia con l'accesso**: nell'ID token arrivano i soli campi dell'identità.
+   Non è come la visibilità e le community, che da noi non esistono proprio: il Paese ce l'abbiamo e
+   non passa di lì. La strada semplice è che **lo chiediate alla persona** dopo il primo ingresso.
+   Se invece vi serve che arrivi da noi **ditecelo**: si può fare, ma tocca la seconda risposta del
+   protocollo, quella che stiamo per ridurre ai soli campi dell'accesso — quindi è una scelta da
+   fare **prima** di attivare. Se trovate altri campi nella stessa condizione segnalateceli:
+   l'elenco nasce da quello che vediamo della vostra pagina, non dal vostro schema.
 
 ---
 

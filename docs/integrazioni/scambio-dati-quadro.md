@@ -217,8 +217,11 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
   `preferred_username` — verificato alla fonte che il server auth lo trasporta su entrambe le facce,
   senza ripiego sull'email; migration `0017` + `syncNicknameClaim`. È **facoltativo**: se la persona
   non lo compila il campo non parte affatto.
-  ❓ **Domanda aperta al partner**: da loro il nickname dev'essere **unico**? Da noi non c'è vincolo
-  di unicità e due persone possono sceglierne uno uguale. Entrata nella domanda 6 del brief.
+  ❓ **Domanda aperta al partner**: da loro il nickname dev'essere **unico**? ⚠️ **Corretto il
+  30/07**: qui si leggeva «da noi non c'è vincolo di unicità e due persone possono sceglierne uno
+  uguale» — **falso dalla `0017`**, che lo rende unico (`lower()`, indice parziale sui non-null).
+  Da noi **è** unico; quel che resta da sapere è cosa fanno **loro** quando ne arriva uno già in uso
+  da parte loro. Entrata nella domanda 6 del brief.
 
 ### Il canale dell'attribuzione — un'altra cosa, non un accesso
 
@@ -904,7 +907,8 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > ⚠️ **Formula allineata al brief il 29/07 (3ª versione)**: qui si leggeva «prendendo i soli campi
 > elencati e ignorando il blocco `user_metadata`». Superata: chiedere a un terzo di ignorare dati che
 > gli arrivano non è una misura, è un affidamento — la misura è **ridurre il blocco prima di
-> attivare** (bonifica di `handle_new_user` + backfill, → 0018). Questo §9.2 è materiale IN USCITA:
+> attivare** (bonifica di `handle_new_user` + backfill, → **0019**, non 0018: quel numero è stato
+> preso da `0018_nickname_disponibile.sql` il 30/07). Questo §9.2 è materiale IN USCITA:
 > era proprio la regola scritta due paragrafi sopra, e l'avevo mancata io stesso.
 >
 > **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede due cose
@@ -1051,11 +1055,12 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
     pubbliche, adesione a community e classifiche): applicate un default o li chiedete alla persona?
     *Perché ci serve:* la visibilità è obbligatoria nel vostro modulo e non ha un valore predefinito.
     Se applicate un default, una persona potrebbe comparire pubblicamente senza averlo scelto.
-19-bis. **Il nickname dev'essere unico da voi?** Noi ve lo mandiamo (campo standard, facoltativo), ma
-    da noi non c'è vincolo di unicità: due persone possono sceglierne uno uguale.
-    *Perché ci serve:* se per voi è un identificativo pubblico, il duplicato diventa un vostro
-    problema a integrazione fatta — e per noi significherebbe aggiungere un vincolo e la gestione
-    del conflitto nel modulo, lavoro che oggi non è previsto.
+19-bis. **Il nickname dev'essere unico da voi?** Noi ve lo mandiamo (campo standard, facoltativo), e
+    ⚠️ **dal 30/07 da noi è unico** (`0017`: `lower()`, indice parziale sui non-null; chi ne sceglie
+    uno occupato lo sa mentre scrive, `0018`). Qui si leggeva il contrario, e che il vincolo sarebbe
+    stato «lavoro che oggi non è previsto»: **è stato fatto**.
+    *Perché ci serve:* resta la collisione con i nickname nati **da loro**, che non passano da noi —
+    se per loro è un identificativo pubblico, il duplicato è un problema loro a integrazione fatta.
 20. **I vostri due consensi marketing** (comunicazioni del Titolare, comunicazioni degli enti
     beneficiari): come vengono raccolti per chi entra dal nostro accesso?
     *Perché ci serve:* nessuno dei due può arrivare da noi — quello sugli enti beneficiari nel nostro

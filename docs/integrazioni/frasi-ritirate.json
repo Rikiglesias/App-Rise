@@ -59,6 +59,29 @@
       "dove_vive_ora": "sostituita dalla ragione nostra: dobbiamo poter scrivere nella nostra informativa cosa succede"
     },
     {
+      "frase": "Sta da noi perché si possa entrare anche da computer",
+      "_nota_confronto": "il normalizzatore toglie il markdown e i doppi spazi, NON gli accenti: la frase va scritta come sta nel documento, con «perché» accentato.",
+      "tolta_il": "2026-07-30",
+      "perche": "Riccardo, rileggendo il brief: «non e' necessario dirlo». Giustificava una scelta di disegno NOSTRA che il partner non deve approvare, e portava con se' il paragone con l'accesso di Google — che apre il caso degli account social storici, deciso di non consegnare",
+      "rientrata_il": [],
+      "dove_vive_ora": "niente nel brief: la scelta resta, non la sua giustificazione"
+    },
+    {
+      "frase": "non va aperta la nostra app, nemmeno se la persona ce l'ha installata",
+      "_perche_questa_forma_lunga": "«non va aperta la nostra app» da sola e' una sottostringa che il confronto valuta senza conoscere la negazione: bloccherebbe anche una frase futura corretta che dicesse il contrario. Ancorata alla coda della frase davvero rimossa.",
+      "tolta_il": "2026-07-30",
+      "perche": "Riccardo: «non serve dirlo». ATTENZIONE, e' l'unica delle quattro rimozioni che toglie dal testo una CONDIZIONE TECNICA VERA (nessun app-link registrato in app.config.js): toglierla dal documento non la annulla, e se un domani registrassimo quell'indirizzo il giro da telefono si romperebbe senza che il partner sappia che era una condizione",
+      "rientrata_il": [],
+      "dove_vive_ora": "vincolo NOSTRO, tracciato in ~/todos/partner-identita.md e nella memoria di progetto — fuori dal brief"
+    },
+    {
+      "frase": "l'aggancio per email tiene solo se quell'indirizzo è confermato da tutt'e due le parti",
+      "tolta_il": "2026-07-30",
+      "perche": "Riccardo: «non capisco perche' dirlo». E' il taglio che costa di piu': era l'unico avviso di SICUREZZA rivolto a loro — se agganciano schede con un indirizzo mai confermato, consegnano la scheda di una persona a un'altra (la falla che noi abbiamo chiuso con la 0016). Tolto su sua decisione, col costo dichiarato in chat prima di eseguirlo",
+      "rientrata_il": [],
+      "dove_vive_ora": "il rimedio nostro vive nella 0016; verso il partner l'avviso non e' piu' scritto"
+    },
+    {
       "frase": "verificato per costruzione",
       "tolta_il": "2026-07-29",
       "perche": "e' la premessa falsa che ha generato la falla del claim su email non confermata: vera per chi ENTRA, falsa per la RIGA d'archivio. Una frase cosi' non la prende nessun test",

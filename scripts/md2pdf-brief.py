@@ -438,6 +438,24 @@ def build_table(rows: list[str]):
     return table
 
 
+# Quanto rientra ogni livello di annidamento di un elenco, in punti. I punti elenco annidati
+# (i tre sotto la domanda 6 del brief, rientrati di 3 spazi nel markdown) uscivano alla STESSA
+# x di quelli di primo livello: il rientro veniva buttato via dalla re.sub che toglie il «- ».
+# Trovato da un critico indipendente il 2026-07-30, e non visto prima perche' il PDF non era
+# stato ispezionato a occhio (pdftoppm assente sulla macchina).
+PASSO_ANNIDAMENTO = 12
+
+
+def _livello_bullet(line: str) -> int:
+    """Livello di annidamento di un punto elenco, dedotto dal rientro nel markdown.
+
+    Due spazi = un livello (prettier indenta a 2, l'autore a 3: entrambi valgono 1). Il tetto a
+    3 evita che un rientro anomalo spinga la voce fuori dalla colonna di testo.
+    """
+    spazi = len(re.match(r"^([ \t]*)", line).group(1).expandtabs(4))
+    return min(spazi // 2, 3)
+
+
 def _solo_parole(testo: str) -> str:
     """Il testo ridotto alle sue PAROLE: senza marcatori markdown, spazi normalizzati, minuscolo.
 
@@ -553,14 +571,17 @@ def build(md_path: Path, pdf_path: Path) -> None:
             #   - enumerate() qui -> riparte da 1 a ogni voce, perche' una riga vuota fra le
             #     voci chiude l'elenco e questa funzione viene richiamata per ognuna.
             # Il numero del documento non puo' sbagliare: e' quello che l'autore ha scritto.
-            for b in bullets:
+            for _, b in bullets:
                 story.append(Paragraph(b, STYLES["ol"]))
         else:
             story.append(
                 ListFlowable(
                     [
-                        ListItem(Paragraph(b, STYLES["body"]), leftIndent=14)
-                        for b in bullets
+                        ListItem(
+                            Paragraph(b, STYLES["body"]),
+                            leftIndent=14 + liv * PASSO_ANNIDAMENTO,
+                        )
+                        for liv, b in bullets
                     ],
                     bulletType="bullet",
                     bulletFontName="Helvetica",
@@ -688,7 +709,7 @@ def build(md_path: Path, pdf_path: Path) -> None:
             flush_table()
             if numerato[0]:  # si passa da numerato a puntato: sono due elenchi diversi
                 flush_bullets()
-            bullets.append(inline(re.sub(r"^\s*[-*] ", "", line)))
+            bullets.append((_livello_bullet(line), inline(re.sub(r"^\s*[-*] ", "", line))))
         elif re.match(r"^\s*\d+\. ", line):
             flush_para()
             flush_quote()
@@ -698,7 +719,7 @@ def build(md_path: Path, pdf_path: Path) -> None:
             numerato[0] = True
             num = re.match(r"^\s*(\d+)\. ", line).group(1)
             bullets.append(
-                f"<b>{num}.</b>&nbsp; " + inline(re.sub(r"^\s*\d+\. ", "", line))
+                (0, f"<b>{num}.</b>&nbsp; " + inline(re.sub(r"^\s*\d+\. ", "", line)))
             )
         elif bullets and line.startswith((" ", "\t")):
             # Continuazione indentata dell'ultimo punto elenco: QUALUNQUE rientro.
@@ -706,7 +727,7 @@ def build(md_path: Path, pdf_path: Path) -> None:
             # bullet «- »: quelle cadevano nel ramo paragrafo e la voce usciva spezzata in
             # due, con la seconda metà a piena larghezza. Non si era visto perche' l'unico
             # PDF guardato dal vivo aveva voci NUMERATE (continuazione a 3 spazi).
-            bullets[-1] += " " + inline(line.strip())
+            bullets[-1] = (bullets[-1][0], bullets[-1][1] + " " + inline(line.strip()))
         else:
             flush_quote()
             flush_bullets()
