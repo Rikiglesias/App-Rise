@@ -28,7 +28,7 @@ import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import {
   validateEmail,
   validatePhoneIT,
-  validateAdult,
+  validateMinAge,
   validateRequired,
   validateContactEmail,
   validateNickname,
@@ -155,7 +155,7 @@ export const ProfileEditScreen: React.FC = () => {
     if (validateRequired(country)) e.country = 'required';
     if (validateRequired(city)) e.city = 'required';
     if (country === 'IT' && validateRequired(province)) e.province = 'required';
-    const a = validateAdult(birthDate);
+    const a = validateMinAge(birthDate);
     if (a) e.birthDate = a;
     // Mail di contatto: obbligatoria e reale per chi ce l'ha già, e per chi la sta
     // scrivendo ora. NON per chi non l'ha mai avuta.

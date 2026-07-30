@@ -168,7 +168,7 @@ export default {
       password_weak:
         'Min 8 characters, one uppercase and one special character',
       phone_invalid: 'Invalid phone (e.g. +39...)',
-      not_adult: 'You must be of legal age',
+      under_min_age: 'You must be at least 14 years old',
       nickname_length: 'The nickname must be 2 to 30 characters long',
       nickname_taken:
         'That nickname already belongs to someone else: pick another',

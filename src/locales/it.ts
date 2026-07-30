@@ -182,7 +182,10 @@ export default {
         'Inserisci un’email reale, non un indirizzo Apple nascosto',
       password_weak: 'Min 8 caratteri, una maiuscola e un carattere speciale',
       phone_invalid: 'Telefono non valido (es. +39...)',
-      not_adult: 'Devi essere maggiorenne',
+      // La soglia è 14 anni (migration 0019 + `MIN_AGE_YEARS`), non la maggiore età.
+      // Il numero è ripetuto qui perché l'i18n non interpola: a tenerlo allineato alla
+      // costante è un test, non la buona volontà.
+      under_min_age: 'Devi avere almeno 14 anni',
       // La forma è quella del CHECK `nickname_forma` (migration 0017). Il messaggio
       // dice il limite in cifre: «non valido» lascerebbe la persona a indovinare.
       nickname_length: 'Il nickname deve avere da 2 a 30 caratteri',
