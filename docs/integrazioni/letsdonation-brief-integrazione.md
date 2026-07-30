@@ -301,72 +301,52 @@
      Il nome del referente tecnico non e' confermato: non va scritto da nessuna parte.
 -->
 
-> Questa scheda descrive **il nostro lato** dell'integrazione: cosa mettiamo a disposizione, cosa
-> va concordato fra noi, cosa ci serve sapere da voi.
-
----
-
 ## 1. L'obiettivo
 
 Chi ha già un account Rise Against Hunger Italia entra nel nostro spazio sulla vostra piattaforma
-**senza registrarsi una seconda volta**.
+**senza registrarsi una seconda volta**. Oggi su quella pagina c'è il vostro modulo: chi lo compila
+apre una scheda che con la nostra non ha alcun legame, e la stessa persona finisce in due archivi
+che non si parlano — aggiorna i dati da una parte, dall'altra restano quelli vecchi.
 
-Oggi sulla pagina del nostro spazio c'è il vostro modulo di registrazione, e chi lo compila apre
-una scheda che con la nostra non ha alcun legame: la stessa persona finisce in due archivi che non
-si parlano, e quando aggiorna i suoi dati da una parte, dall'altra restano quelli vecchi.
+Il punto d'arrivo è il solo pulsante «Entra con Rise Against Hunger»: chi ha già un account da noi
+entra con quello, chi non ce l'ha lo crea in quel momento senza un secondo modulo — nome ed email
+arrivano dall'accesso. Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
-Il punto d'arrivo è che su quella pagina ci sia il solo pulsante «Entra con Rise Against Hunger»:
-chi ha già un account da noi entra con quello, e chi non ce l'ha lo crea in quel momento senza
-compilare un secondo modulo — i dati minimi, nome ed email, arrivano dall'accesso.
-
-Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
-
-Dove porta il pulsante: a una **pagina di accesso nostra**, che costruiremo. Lì la persona
-entra con l'account che ha già, oppure lo crea in quel momento se non ce l'ha, e torna sulla vostra
-pagina **già riconosciuta**. Sta da noi perché si possa entrare anche da computer, senza avere la
-nostra app, e perché chi si registra la prima volta lo faccia da noi: è la stessa cosa che succede
-con «Accedi con Google», dove chi non ha l'account lo crea su Google, non sul sito che sta
-visitando. Ve lo diciamo perché è un pezzo del disegno, non perché sia già pronta: quando lo sarà
-ve lo comunichiamo.
+Il pulsante porta a una **pagina di accesso nostra**, che costruiremo: lì la persona entra o si
+registra, e torna sulla vostra pagina **già riconosciuta**. Non è ancora pronta: quando lo sarà ve
+lo comunichiamo.
 
 ---
 
 ## 2. Come ci dividiamo il lavoro
 
-Dalla nostra parte spettano a noi l'OpenID Provider e le credenziali client dedicate a voi.
+A noi spettano l'OpenID Provider e le credenziali client dedicate a voi. Una condizione riguarda
+tutti e due: sulla pagina del nostro spazio il pulsante e il modulo di registrazione non possono
+convivere — il pulsante online e il modulo tolto nello stesso momento, non una dopo l'altra. Prima
+di aprire a tutti, proponiamo di provare il giro completo con due o tre persone vere.
 
-Una condizione riguarda tutti e due: sulla pagina del nostro spazio il pulsante di accesso e il
-modulo di registrazione non possono convivere, e le due cose vanno insieme — il pulsante online e
-il modulo tolto nello stesso momento, non una dopo l'altra.
-
-Prima di aprire a tutti, proponiamo di provare il giro completo con due o tre persone vere.
-
-**Sui tempi**: da parte nostra vorremmo arrivarci **il prima possibile**. Non vi mettiamo una data
-davanti prima di sapere cosa comporta dalla vostra: fateci le vostre valutazioni, diteci quanto vi
-serve, e fissiamo insieme il giorno in cui il pulsante va online e il modulo viene tolto.
+**Sui tempi**: vorremmo arrivarci **il prima possibile**, ma non vi mettiamo una data davanti prima
+di sapere cosa comporta dalla vostra: fateci le vostre valutazioni, diteci quanto vi serve, e
+fissiamo insieme il giorno in cui il pulsante va online e il modulo viene tolto.
 
 ---
 
 ## 3. Cosa mettiamo a disposizione
 
-Il nostro provider lo mettiamo in piedi per questa integrazione: qui sotto c'è quello che vi
-arriverà dalla nostra parte.
+Il provider lo mettiamo in piedi per questa integrazione. Vi arriveranno:
 
-- Il documento di discovery (`.../.well-known/openid-configuration`), che contiene gli endpoint e
-  l'indirizzo delle chiavi.
-- `client_id` e `client_secret` dedicati a voi.
-- L'autorizzazione dei redirect URI che ci indicate.
-- **Una seconda coppia di credenziali per il collaudo**, con le redirect URI del vostro ambiente di
-  prova: il giro con
-  le due o tre persone si fa con quelle, non con le credenziali che poi restano in esercizio.
-- Un riferimento nostro per tutta la messa in opera.
+- il documento di discovery (`.../.well-known/openid-configuration`), con gli endpoint e l'indirizzo
+  delle chiavi;
+- `client_id` e `client_secret` dedicati a voi, e l'autorizzazione dei redirect URI che ci indicate;
+- **una seconda coppia di credenziali per il collaudo**, con le redirect URI del vostro ambiente di
+  prova: il giro di prova si fa con quelle, non con quelle di esercizio;
+- un riferimento nostro per tutta la messa in opera.
 
-Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
+Tre cose tecniche, meglio dirle ora che scoprirle al collaudo.
 
 - **Gli scope da chiedere sono `openid email profile`.** L'indicatore di email verificata viaggia
-  con `email`, il nome e il nickname con `profile`. Lo scope `phone` non serve: il numero di
-  telefono non è fra i campi che vi consegniamo (in fondo alla Scheda dei dati c'è come chiederlo,
-  se vi servisse, e cosa cambia leggendo da UserInfo invece che dall'ID token).
+  con `email`, il nome e il nickname con `profile`. Lo scope `phone` non serve: il telefono non è
+  fra i campi che vi consegniamo — se vi servisse, diteci quali dati vi mancano e per farci cosa.
 - **Le chiavi di firma cambiano.** Vanno lette dall'indirizzo che trovate nel discovery, non copiate
   nella vostra configurazione: oggi ce n'è una sola, ma il giorno in cui ruota chi l'ha copiata
   smette di validare i token, e sembrerà un guasto nostro.
@@ -378,132 +358,88 @@ Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 
 ## 4. Cosa va concordato fra noi
 
-- **La chiave di aggancio è il `sub`, non l'email.** È l'unico identificatore stabile che
-  emettiamo; l'email le persone la cambiano. L'email serve una volta sola, al primo incontro con
-  una scheda che da voi esiste già: da lì in poi la persona resta legata al `sub`.
+- **La chiave di aggancio è il `sub`, non l'email.** È l'unico identificatore stabile che emettiamo;
+  l'email le persone la cambiano. Serve una volta sola, al primo incontro con una scheda che da voi
+  esiste già: da lì in poi la persona resta legata al `sub`.
 - **Una persona, una scheda sola — e aggiornata.** L'aggancio tiene fermo *quale* account è; perché
-  serva a qualcosa devono valere anche i dati che vi arrivano a ogni accesso, non quelli del primo
-  giorno.
-- **Il pulsante apre la pagina, non l'applicazione.** Chi lo preme dal vostro sito deve restare nel
-  browser e atterrare sulla nostra pagina di accesso: **non** va aperta la nostra app, nemmeno se la
-  persona ce l'ha installata sul telefono. Per voi è il comportamento normale di un collegamento, e
-  da parte nostra non registriamo quell'indirizzo come apribile dall'app — quindi il caso non si
-  presenta. Ve lo scriviamo perché è una condizione, non un dettaglio: l'app arriverà più avanti, e
-  fino ad allora il giro deve funzionare per intero dentro il browser, anche da telefono.
+  serva devono valere anche i dati che vi arrivano a ogni accesso, non quelli del primo giorno.
 - **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
   dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
 - **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
-  altre nostre funzioni: è la prassi. Se
-  preferite leggerla da UserInfo, tenete
-  conto della precisazione in fondo alla Scheda dei dati: quella risposta contiene anche un blocco
-  che nell'ID token non c'è.
-- **Tre casi del flusso che vale la pena nominare prima del collaudo.** Il **rifiuto**: se la
-  persona non dà il consenso sulla nostra pagina, torna da voi senza identità — è un esito normale
-  del giro, non un errore nostro. Gli **accessi contemporanei**: se per la stessa persona nuova ne
-  partono due insieme, il `sub` che vi arriva è identico in entrambi, ed è quello che permette di
-  riconoscere che si tratta della stessa persona. La **rotazione del `client_secret`**: ogni tanto
-  lo cambiamo, e la programmiamo insieme a voi invece di farvela trovare fatta.
-- **Se il nostro accesso non risponde.** Tolto il modulo, per quel tempo su quella pagina non si
-  entra e non ci si registra: è la conseguenza di avere una porta sola, e la accettiamo, perché due
-  porte ricreano le due anagrafiche che stiamo unendo. Da parte nostra sorvegliamo il servizio e vi
-  diamo un recapito per segnalarci un blocco. Quello che chiediamo è di non rimettere il modulo come
-  rimedio: l'accesso torna, mentre gli account nati nel frattempo da un secondo modulo restano
+  altre nostre funzioni: è la prassi. Se preferite leggerla da UserInfo, tenete conto della
+  precisazione in fondo alla Scheda dei dati: quella risposta contiene anche un blocco che nell'ID
+  token non c'è.
+- **Due casi da nominare prima del collaudo.** Se la persona **non dà il consenso** sulla nostra
+  pagina torna da voi senza identità: è un esito normale, non un errore nostro. E il
+  **`client_secret` ogni tanto lo cambiamo**: la rotazione la programmiamo insieme a voi.
+- **Se il nostro accesso si blocca.** Con una porta sola, per quel tempo su quella pagina non si
+  entra: lo mettiamo in conto, e vi diamo un recapito per segnalarcelo. L'unica cosa da non fare è
+  rimettere il modulo mentre aspettate — il blocco passa, gli account nati da quel modulo restano
   scollegati per sempre.
 
 ---
 
 ## 5. Cosa ci serve sapere da voi
 
-Sei domande, più due richieste puntuali segnate nel testo. La prima dice quanto lavoro c'è davvero;
-la quarta è quella da cui dipende il
-risultato.
+Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il risultato.
 
-1. **Come funziona il collegamento che avete con Zucchetti?** Come ci era stato raccontato, i loro
-   dipendenti arrivano già registrati: se è un accesso unico come quello che proponiamo, a noi basta sapere
-   come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se
-   invece funziona in un altro modo, dal vostro lato serve un client OpenID Connect: diteci cosa
-   comporta, così ci regoliamo sui tempi.
-2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo va tolto nel
-   momento stesso in cui il pulsante va online. Se c'è un vincolo che lo blocca, è la prima
-   cosa che guardiamo insieme.
-   Sullo stesso schermo, una cosa che ci sta a cuore: chi arriva su quella pagina passando da un
-   nostro link — dalla nostra app o da altrove — vorremmo trovasse l'accesso **come prima cosa, a tutto schermo**,
-   invece di doverlo cercare; chi ci arriva per conto proprio lo troverebbe come pulsante fra i
-   contenuti. È impostabile dalla vostra parte, e a quali condizioni?
-   **La veste grafica la decidete voi**: colori e forma sono i vostri, a noi interessa solo che
+1. **Come funziona il collegamento che avete con Zucchetti?** Ci era stato raccontato che i loro
+   dipendenti arrivano già registrati: se è un accesso unico come questo, a noi basta sapere come
+   replicarlo — il nome del sistema, o chi l'ha collegato. Se invece funziona in altro modo, dal
+   vostro lato serve un client OpenID Connect: diteci cosa comporta.
+2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo
+   va tolto nel momento stesso in cui il pulsante va online: se c'è un vincolo che lo blocca, è la
+   prima cosa che guardiamo insieme. Sullo stesso schermo, una cosa che ci sta a cuore: chi arriva da
+   un nostro link vorremmo trovasse l'accesso **come prima cosa, a tutto schermo**, mentre chi ci
+   arriva per conto proprio lo troverebbe come pulsante fra i contenuti. È impostabile dalla vostra
+   parte, e a quali condizioni? **La veste grafica la decidete voi**: a noi interessa solo che
    l'accesso si veda.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
    ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide immaginiamo sia
    immediato; il caso che ci interessa è l'altro, perché capiterà spesso: chi ha donato anni fa e
-   oggi si registra da noi con un'email diversa da quella che avete in archivio. Come lo gestite?
-   Una condizione, che vale soprattutto per voi: l'aggancio per email tiene solo se quell'indirizzo
-   è **confermato da tutt'e due le parti**. Dalla nostra lo è sempre. Se dalla vostra esistono schede
-   con un indirizzo mai confermato, agganciarle a chi si presenta con lo stesso indirizzo significa
-   consegnare la scheda di una persona a un'altra. Lo segnaliamo perché è un caso che abbiamo appena
-   chiuso dalla nostra parte.
+   oggi si registra da noi con un'email diversa da quella che avete in archivio.
 4. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
-   aggiornati: ci serve sapere se li usate ogni volta o soltanto la prima, per creare l'account.
-   Se valgono solo alla creazione, chi aggiorna l'email da noi continua a risultare da voi con
-   quella vecchia, e il problema resta intero.
-   Un dettaglio della stessa famiglia: il vostro lato pretende `email_verified: true` per creare
-   l'account? Il campo lo emettiamo; la garanzia però non sta nel flag, sta nel fatto che senza
-   conferma da noi non si entra. Se per voi è una condizione bloccante ditecelo ora, così è fra le
-   prime cose che guardiamo insieme quando proviamo il giro.
+   aggiornati: ci serve sapere se li usate ogni volta o solo alla creazione dell'account. Se solo
+   alla creazione, chi aggiorna l'email da noi continua a risultare da voi con quella vecchia.
+   Della stessa famiglia: il vostro lato pretende `email_verified: true` per creare l'account? Il
+   campo lo emettiamo, ma se per voi è bloccante ditecelo ora.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
-   arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
-   diteci come.
+   arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, diteci come.
 6. **I due campi del vostro modulo che il nostro accesso non copre**: la scelta su come apparire
-   nelle liste pubbliche e l'adesione a community e classifiche.
-   Oggi la visibilità e la community le sceglie la persona mentre compila il vostro modulo, e la
-   visibilità in particolare è obbligatoria, senza opzione preselezionata. Quando sulla pagina del
-   nostro spazio quel modulo non c'è più, l'account nasce dall'accesso con i dati che arrivano da noi
-   — nome ed email, più il nickname quando la persona l'ha scelto — e quelle due scelte non le fa
-   più nessuno: con quale valore nascono, uno deciso da voi o chiesto alla persona dopo il primo
-   ingresso?
-   Ci pesa soprattutto la visibilità, l'unica delle due con un effetto pubblico: qualunque sia la
-   strada, dobbiamo poter scrivere nella nostra informativa cosa succede. E se la strada fosse
-   chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo modulo di
-   registrazione, che è la cosa che vogliamo evitare a chi entra.
+   nelle liste pubbliche e l'adesione a community e classifiche. Oggi le sceglie la persona sul
+   vostro modulo, e la visibilità è obbligatoria, senza opzione preselezionata. Tolto il modulo,
+   l'account nasce dall'accesso e quelle due scelte non le fa più nessuno: con quale valore nascono,
+   uno deciso da voi o chiesto alla persona dopo il primo ingresso? Ci pesa soprattutto la
+   visibilità, l'unica con un effetto pubblico: qualunque sia la strada, dobbiamo poter scrivere
+   nella nostra informativa cosa succede. Se la strada fosse chiederlo, basterebbe quella domanda
+   dopo l'ingresso: non sarebbe un secondo modulo.
 
-   **Il nickname invece ve lo mandiamo noi** — lo stiamo aggiungendo alla nostra registrazione, e
-   **vi confermiamo noi il giorno in cui è attivo**. Non è un buco permanente da aggirare, ma non
-   legatelo all'accensione: se il campo non fosse ancora online il giorno dello scambio, l'accesso
-   funziona lo stesso e il nickname arriva dopo.
-   Resta **facoltativo** anche quando sarà attivo, quindi un comportamento per l'assenza vi serve
-   comunque, e ce l'abbiamo presente: **chi si è registrato da noi prima che il campo esistesse non
-   ce l'ha**, e potrebbe non metterlo mai. Per un po' l'assenza sarà la norma, non l'eccezione.
-   Quattro cose che vi servono per accoglierlo:
-   - **la forma**: da 2 a 30 caratteri, senza spazi ai bordi. Sui caratteri non poniamo vincoli e
-     **non filtriamo i contenuti** — se sul vostro sito è testo pubblico, la moderazione è vostra;
-   - **quando manca**, il campo non arriva vuoto: non c'è proprio. Vale sia per chi non l'ha scelto,
-     sia per chi l'ha cancellato dopo — ed è la stessa cosa vista da voi, quindi diteci cosa mostrate
-     in quel caso;
-   - **è unico da voi?** Da noi **sì**: due persone non possono avere lo stesso nickname, e due
-     scritture che differiscono solo per una maiuscola valgono come lo stesso nome. Resta però la
-     collisione con i nickname di chi si è registrato **da voi**, che non passano da noi. Quindi la
-     domanda è: quando ve ne arriva uno già in uso, cosa fate — lo modificate voi, lo ignorate, o
-     altro? L'unica strada che ci preoccupa è che l'accesso fallisca: chi entra deve poter entrare,
-     il nickname non vale una registrazione persa. Dalla nostra parte è la regola che seguiamo già:
-     se al momento della registrazione il nome scelto risulta occupato, la persona entra comunque e
-     il nickname resta vuoto, da rimettere quando vuole;
-   - **dove lo mostrate, e a chi?** Ci serve per scrivere nella nostra informativa cosa succede al
-     dato che vi mandiamo. Notiamo che da voi il nickname è una delle opzioni della visibilità nelle
-     liste pubbliche: se qualcuno sceglie di apparire col nickname e il nickname non c'è, cosa
+   **Il nickname invece ve lo mandiamo noi**: da 2 a 30 caratteri, senza spazi ai bordi, nessun
+   vincolo sui caratteri. È **facoltativo**, e quando manca non arriva vuoto — non c'è proprio.
+   Per un po' l'assenza sarà la norma, quindi diteci cosa mostrate in quel caso. Tre cose:
+   - **il contenuto è responsabilità nostra**, perché nasce nella nostra registrazione: non
+     applichiamo un filtro automatico, ma se ve ne arriva uno offensivo, o che finge di essere
+     qualcun altro, segnalatecelo — lo togliamo dal nostro lato e smette di arrivarvi;
+   - **è unico da voi?** Da noi **sì**, e due scritture che differiscono per una sola maiuscola
+     valgono come lo stesso nome. Resta la collisione con i nickname nati da voi, che non passano da
+     noi: quando ve ne arriva uno già in uso, cosa fate? La strada che ci preoccupa è che l'accesso
+     fallisca — il nickname non vale una registrazione persa;
+   - **dove lo mostrate, e a chi?** Ci serve per la nostra informativa. Da voi il nickname è una
+     delle opzioni della visibilità: se qualcuno sceglie di apparire col nickname e non ce l'ha, cosa
      compare al suo posto?
 
-   **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione delle due scelte qui
-   sopra: nessuno dei due vi
-   arriva insieme all'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per
-   le comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» della persona che
-   possiate ereditare da noi.
+   **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione: nessuno dei due vi
+   arriva con l'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per le
+   comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» che possiate ereditare.
 
    **Un terzo caso, di natura diversa: il Paese.** È obbligatorio nel vostro modulo e noi lo
-   raccogliamo, ma **non ve lo consegniamo con l'accesso**: nell'ID token arrivano i dati
-   dell'identità — identificativo, nome, email, nickname — e il Paese non è fra questi. Quindi non è
-   come i due campi elencati all'inizio («non ce l'abbiamo»), è «ce l'abbiamo e non passa di lì».
-   Con quale valore nasce l'account, e vi serve che ve lo facciamo arrivare in altro modo?
-   Se leggendo trovate altri campi del vostro modulo nella stessa condizione, segnalateceli:
-   l'elenco nasce da quello che vediamo noi della vostra pagina, non dal vostro schema.
+   raccogliamo, ma **non viaggia nell'ID token**, che porta i soli campi dell'identità: non è come i
+   due qui sopra («non ce l'abbiamo»), è «ce l'abbiamo e non passa di lì». Due strade, e la scelta è
+   vostra: **lo chiedete alla persona** dopo il primo ingresso; oppure ve lo facciamo trovare
+   **nella risposta di UserInfo**, dove però non è un campo standard e il vostro lato va adattato
+   per leggerlo. Diteci quale vi conviene. Se trovate altri campi del vostro modulo nella stessa
+   condizione, segnalateceli: l'elenco nasce da quello che vediamo della vostra pagina, non dal
+   vostro schema.
 
 ---
 
@@ -514,27 +450,20 @@ nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l
 
 | Campo | Cosa contiene |
 | --- | --- |
-| `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene nome né altri suoi dati, ma non è anonimo: è uno pseudonimo |
-| `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo vedete, ditecelo, perché come nome visibile non va |
+| `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene suoi dati, ma non è anonimo: è uno pseudonimo |
+| `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: in mancanza partirebbe l'indirizzo email — se lo vedete ditecelo, come nome visibile non va |
 | `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
-| `preferred_username` | Il nickname scelto dalla persona. **Lo stiamo aggiungendo alla nostra registrazione**, e vi confermiamo noi il giorno in cui è attivo. Da 2 a 30 caratteri, senza spazi ai bordi; sui caratteri non poniamo vincoli e non filtriamo i contenuti. È **facoltativo**: quando manca non arriva vuoto, semplicemente non c'è — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
+| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio |
 
-**Una precisazione su UserInfo.** La tabella qui sopra descrive l'**ID token**, ed è da lì che vi
-chiediamo di leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha
-emesso, quando scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la
-forniscono, l'indirizzo dell'immagine di profilo. La risposta di
-UserInfo, con lo scope `profile`, porta in più **un blocco dell'account che non fa parte
-dell'identità**: **prima di attivare il servizio lo riduciamo ai soli campi dell'accesso**, e ve lo
-confermiamo quando è fatto. Se per un vostro vincolo doveste leggere da UserInfo invece che dall'ID
-token, ditecelo ora, così lo teniamo presente nel collaudo.
+**Una precisazione su UserInfo.** La tabella descrive l'**ID token**, ed è da lì che vi chiediamo di
+leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha emesso, quando
+scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la forniscono,
+l'indirizzo dell'immagine di profilo. La risposta di UserInfo, con lo scope `profile`, porta in più
+**un blocco dell'account che non fa parte dell'identità**: **prima di attivare il servizio lo
+riduciamo ai soli campi dell'accesso**, e ve lo confermiamo quando è fatto. Se per un vostro vincolo
+doveste leggere da UserInfo, ditecelo ora.
 
-Una seconda differenza, che riguarda la domanda 4. Da noi il caso non si presenta - non si entra
-prima di aver confermato - ma per completezza: nell'ID token l'indicatore di email verificata
-c'è **sempre**, anche quando vale «falso». Nella risposta di UserInfo, invece, quando l'email non è
-confermata quel campo **non compare affatto**. Se il vostro controllo si aspetta un valore e trova
-un campo assente, conviene trattare l'assenza come «non confermata».
-
-**Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
-cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e
-prima di impegnarci guardiamo cosa il protocollo permette di trasportare davvero.
+Una differenza da tenere presente se leggete da UserInfo: lì l'indicatore di email verificata, se
+l'email non è confermata, **non compare affatto**, mentre nell'ID token c'è sempre. Conviene
+trattare l'assenza come «non confermata».

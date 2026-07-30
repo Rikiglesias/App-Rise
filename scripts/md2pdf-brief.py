@@ -58,8 +58,12 @@ BASE = getSampleStyleSheet()
 # «= A4 meno 20+20» da una parte, i 18 mm per lato dall'altra): cambiarne uno lasciava l'altro
 # valore sbagliato in SILENZIO, e da quando la larghezza serve anche a decidere se una tabella
 # sta in una pagina, un margine disallineato spezzerebbe tabelle che invece ci starebbero.
-MARGINE_LATERALE = 20 * mm
-MARGINE_VERTICALE = 18 * mm
+# Ridotti il 2026-07-30 (20/18 -> 18/15 mm) per il vincolo «il brief sta in 3 pagine»: il testo
+# era gia' stato asciugato del 19% e tagliare oltre significava togliere domande al partner, non
+# parole. Restano dentro i margini tipografici correnti per un A4 di testo; sotto questi il
+# documento comincia a leggersi male, e la leggibilita' e' il motivo per cui esiste il PDF.
+MARGINE_LATERALE = 18 * mm
+MARGINE_VERTICALE = 15 * mm
 
 CONTENT_WIDTH = A4[0] - 2 * MARGINE_LATERALE
 
@@ -77,8 +81,8 @@ STYLES = {
         spaceAfter=5, textColor="#333333",
     ),
     "body": ParagraphStyle(
-        "body", parent=BASE["BodyText"], fontSize=9.8, leading=14.2,
-        alignment=TA_JUSTIFY, spaceAfter=6,
+        "body", parent=BASE["BodyText"], fontSize=9.8, leading=13.4,
+        alignment=TA_JUSTIFY, spaceAfter=5,
     ),
     "quote": ParagraphStyle(
         "quote", parent=BASE["BodyText"], fontSize=9.2, leading=13.4, leftIndent=10,
@@ -99,8 +103,8 @@ STYLES = {
     ),
     # Voce di elenco NUMERATO: il numero sta nel testo, quindi serve solo il rientro.
     "ol": ParagraphStyle(
-        "ol", parent=BASE["BodyText"], fontSize=9.8, leading=14.2, alignment=TA_JUSTIFY,
-        leftIndent=14, spaceAfter=6,
+        "ol", parent=BASE["BodyText"], fontSize=9.8, leading=13.4, alignment=TA_JUSTIFY,
+        leftIndent=14, spaceAfter=5,
     ),
     # Capoverso che CONTINUA una voce di elenco numerato dopo una riga vuota. Serve perche' la
     # riga vuota chiude l'elenco (`flush_all`), quindi la riga rientrata che segue non trova piu'
@@ -109,8 +113,8 @@ STYLES = {
     # consegna del 2026-07-30 (tre code della domanda 6: nickname, consensi, Paese) insieme al
     # danno vero: i rimandi interni tipo «i due campi elencati all'inizio» perdevano il bersaglio.
     "body_ol": ParagraphStyle(
-        "body_ol", parent=BASE["BodyText"], fontSize=9.8, leading=14.2, alignment=TA_JUSTIFY,
-        leftIndent=14, spaceAfter=6,
+        "body_ol", parent=BASE["BodyText"], fontSize=9.8, leading=13.4, alignment=TA_JUSTIFY,
+        leftIndent=14, spaceAfter=5,
     ),
 }
 
