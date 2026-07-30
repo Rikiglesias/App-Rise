@@ -334,9 +334,17 @@
          perche' contraddiceva la promessa - nella stessa pagina - di ridurre UserInfo ai soli
          campi dell'accesso, e perche' dipende dalla bonifica dei metadata (0019) che non e'
          ancora decisa. Ora il brief CHIEDE se serve, senza promettere il come.
-       - 5 -> 3 PAGINE: prima il testo asciugato del 19% a contenuto invariato, poi
-         l'impaginazione (margini 20/18 -> 18/15 mm, interlinea 14.2 -> 13.4). Perdita non
-         richiesta e DICHIARATA: e' sparito anche il caso dei due accessi contemporanei.
+       - LE PAGINE, in due tempi: prima il testo asciugato del 19% a contenuto invariato, poi
+         l'impaginazione (margini 20/18 -> 18/15 mm, interlinea 14.2 -> 13.4). Con quel giro il
+         documento stava in 3 pagine, ma erano state sacrificate quattro cose che nessuno aveva
+         chiesto di togliere.
+       - RIAPERTO LA SERA STESSA da Riccardo: «tre pagine e mezza vanno bene comunque, pero' e'
+         importante che ci sia di tutto l'importante». Rientrano quindi: il caso dei DUE ACCESSI
+         CONTEMPORANEI, la regola che seguiamo gia' noi sul nickname occupato, la garanzia dietro
+         email_verified (non e' il flag, e' che senza conferma non si entra) e il perche' non
+         mandiamo dati per abitudine. STATO ATTUALE: 4 pagine, l'ultima di ~80 parole. Chiuderla
+         significa togliere di nuovo esattamente quelle quattro cose: se qualcuno in futuro vuole
+         ricompattare il documento, sappia che quello e' il prezzo, e che e' gia' stato scartato.
 -->
 
 ## 1. L'obiettivo
