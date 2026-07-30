@@ -13,7 +13,8 @@
       "dove_vive_ora": "scambio-dati-quadro.md, domanda 16 «Sull'accordo» (canale dei legali)"
     },
     {
-      "frase": "solo dati tecnici",
+      "frase": "porta solo dati tecnici",
+      "_perche_questa_forma_lunga": "«solo dati tecnici» da sola e' una sottostringa che ignora la negazione: una frase futura corretta («non porta solo dati tecnici, c'e' anche...») verrebbe bloccata a torto. Ancorata al verbo.",
       "tolta_il": "2026-07-30",
       "perche": "assoluto sulla superficie dell'ID token, gia' corretto tre volte in altre formulazioni: il token porta anche picture, che e' un dato della persona. La forma prescritta dal canonico e' APERTA (scambio-dati-quadro.md:683)",
       "rientrata_il": [],
@@ -34,11 +35,13 @@
       "dove_vive_ora": "e' diventata una DOMANDA nel brief, non un'offerta"
     },
     {
-      "frase": "anche ai minorenni",
+      "frase": "aprendo la registrazione anche ai minorenni",
+      "_perche_questa_forma_lunga": "«anche ai minorenni» da sola bloccherebbe anche una frase corretta che dice il contrario («non apriamo anche ai minorenni»): il confronto e' per sottostringa e non conosce la negazione. Ancorata al verbo della frase davvero rimossa.",
       "tolta_il": "2026-07-28",
       "perche": "FALSO nel prodotto di oggi: constraint adult in 0001_profiles.sql:17 e validateAdult in validation.ts. Deciso non vuol dire rilasciato",
       "rientrata_il": [],
-      "dove_vive_ora": "in attesa della fase F-MINORI; se e quando entrera' nel brief, e' una decisione di Riccardo"
+      "dove_vive_ora": "in attesa della fase F-MINORI",
+      "_scadenza_prevista": "Riccardo ha DECISO il 2026-07-30 che i minorenni entrano. La voce resta attiva finche' il PRODOTTO ha ancora il limite a 18 anni (constraint adult + validateAdult): serve a non scriverlo al partner PRIMA che sia vero, che e' l'errore per cui fu tolta. Il giorno in cui la fase F-MINORI e' rilasciata, questa voce va REVOCATA con `revocata_il` — non cancellata."
     },
     {
       "frase": "restiamo due titolari autonomi",

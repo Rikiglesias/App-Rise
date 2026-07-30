@@ -431,6 +431,21 @@ def build_table(rows: list[str]):
     return table
 
 
+def _solo_parole(testo: str) -> str:
+    """Il testo ridotto alle sue PAROLE: senza marcatori markdown, spazi normalizzati, minuscolo.
+
+    Serve al confronto della sentinella, e chiude un falso negativo trovato da un critico
+    indipendente il 2026-07-30: il confronto girava sul markdown GREZZO, quindi una frase ritirata
+    che rientrasse con un grassetto in mezzo — «per iscritto **nell'accordo**», e in questo
+    documento il grassetto è ovunque — non faceva match e passava in silenzio. Un presidio con un
+    falso negativo è peggio di nessun presidio: dice «pulito» e nessuno guarda più.
+    """
+    t = testo
+    t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)   # link: resta il testo
+    t = re.sub(r"[*`_|#>]+", "", t)                   # enfasi, codice, tabelle, titoli, citazioni
+    return " ".join(t.split()).lower()
+
+
 def _sentinella_frasi_ritirate(md_path: Path, consegnato: str) -> None:
     """Ferma la consegna se e' rientrata una frase tolta DI PROPOSITO.
 
@@ -448,10 +463,10 @@ def _sentinella_frasi_ritirate(md_path: Path, consegnato: str) -> None:
     if not registro.exists():
         return
     voci = json.loads(registro.read_text(encoding="utf-8")).get(md_path.name, [])
-    piatto = " ".join(consegnato.split()).lower()
+    piatto = _solo_parole(consegnato)
     trovate = [
         v for v in voci
-        if not v.get("revocata_il") and " ".join(v["frase"].split()).lower() in piatto
+        if not v.get("revocata_il") and _solo_parole(v["frase"]) in piatto
     ]
     if trovate:
         dettaglio = "\n".join(
@@ -502,7 +517,12 @@ def build(md_path: Path, pdf_path: Path) -> None:
             stile = STYLES["body_ol"] if para_rientrato[0] else STYLES["body"]
             story.append(Paragraph(inline(" ".join(para)), stile))
             para.clear()
-            para_rientrato[0] = False
+        # Il reset sta FUORI dall'`if`: dentro, dipendeva dall'invariante non scritta «flag
+        # acceso ⟹ para non vuoto». Oggi vale (il flag si accende solo insieme al primo append),
+        # ma un domani chi svuotasse `para` per un'altra via si ritroverebbe il rientro applicato
+        # al paragrafo SUCCESSIVO — un difetto invisibile in un documento che va a un partner.
+        # Segnalato come fragilità da un critico indipendente, non come bug vivo.
+        para_rientrato[0] = False
 
     def flush_quote() -> None:
         if quote:

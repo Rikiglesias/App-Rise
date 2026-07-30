@@ -496,8 +496,8 @@ risultato.
 
 ## Scheda dei dati
 
-**Cosa emettiamo a ogni accesso** - sono i campi dell'**ID token**, tutti standard. I primi quattro
-ci sono sempre; l'ultimo solo se la persona l'ha compilato:
+**Cosa emettiamo a ogni accesso** - sono i campi dell'**identità**, tutti standard, e viaggiano
+nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l'ha compilato:
 
 | Campo | Cosa contiene |
 | --- | --- |
