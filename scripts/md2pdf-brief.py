@@ -29,6 +29,7 @@ DIFETTI GIA' CORRETTI, in ordine di scoperta:
     unito -- deciso sull'ALTEZZA MISURATA, non sul numero di righe.
 """
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -430,8 +431,46 @@ def build_table(rows: list[str]):
     return table
 
 
+def _sentinella_frasi_ritirate(md_path: Path, consegnato: str) -> None:
+    """Ferma la consegna se e' rientrata una frase tolta DI PROPOSITO.
+
+    Presidia una classe di errore con tre occorrenze sul brief verso Let's Donation, tutte
+    scoperte a valle da una review e mai dall'autore: riscrivere un paragrafo resuscita cio' che
+    una passata precedente aveva deciso di togliere. Il presidio umano («prima di riscrivere una
+    riga, `git log -S` sulla frase») non ha fermato la terza, arrivata fino al PDF in consegna.
+
+    Gira sul solo testo CONSEGNATO, per la ragione gia' imparata in questo file: una sentinella
+    che scatta su testo che il destinatario non vedra' mai insegna ad aggirarla. Le decisioni
+    stanno in `frasi-ritirate.json` accanto al documento, non qui: cambiare idea si fa aggiungendo
+    `revocata_il` alla voce, non spegnendo il controllo.
+    """
+    registro = md_path.parent / "frasi-ritirate.json"
+    if not registro.exists():
+        return
+    voci = json.loads(registro.read_text(encoding="utf-8")).get(md_path.name, [])
+    piatto = " ".join(consegnato.split()).lower()
+    trovate = [
+        v for v in voci
+        if not v.get("revocata_il") and " ".join(v["frase"].split()).lower() in piatto
+    ]
+    if trovate:
+        dettaglio = "\n".join(
+            f"  - «{v['frase']}» — tolta il {v['tolta_il']}: {v['perche']}"
+            + (f"\n    (gia' rientrata: {', '.join(v['rientrata_il'])})" if v.get("rientrata_il") else "")
+            + f"\n    dove vive ora: {v['dove_vive_ora']}"
+            for v in trovate
+        )
+        raise SystemExit(
+            f"SENTINELLA: nel testo consegnato di {md_path.name} sono rientrate "
+            f"{len(trovate)} frasi ritirate di proposito:\n{dettaglio}\n"
+            "  Togliile, oppure — se la decisione e' cambiata — aggiungi \"revocata_il\" alla "
+            f"voce in {registro.name}, col motivo e chi l'ha deciso."
+        )
+
+
 def build(md_path: Path, pdf_path: Path) -> None:
     sorgente = md_path.read_text(encoding="utf-8")
+    _sentinella_frasi_ritirate(md_path, "\n".join(_righe_consegnate(sorgente)))
     # La sentinella guarda SOLO cio' che finira' nel PDF. Girava sul markdown grezzo, commenti
     # inclusi, e fermava la consegna per un'emoji che sta in una nota interna e che il
     # destinatario non vedra' mai: e' gia' successo (🧪 🔑 🔴 sono in FUORI_WINANSI non perche' il
