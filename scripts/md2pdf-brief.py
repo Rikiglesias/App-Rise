@@ -162,6 +162,9 @@ SEPARATOR_ROW = re.compile(r"^\|[\s:|-]+\|$")
 # promette «ci sta» a tabelle che poi vengono spezzate. Misurato: a 35 righe wrap() dava 734.0 pt
 # contro 739.8 disponibili in teoria -> predizione «ci sta», realtà 2 pagine; con il padding
 # tolto la soglia è 727.8 e la predizione torna a combaciare (34 righe stanno, 35 no).
+# NB: quei numeri sono della misura del 2026-07-29, con MARGINE_VERTICALE a 18 mm. Col valore
+# attuale (15 mm) la soglia vale ~744.9 pt: il MECCANISMO regge perche' l'altezza si deriva dalla
+# costante, ma non citare quelle cifre come se fossero quelle di oggi.
 FRAME_PADDING = 6
 CONTENT_HEIGHT = A4[1] - 2 * MARGINE_VERTICALE - 2 * FRAME_PADDING
 

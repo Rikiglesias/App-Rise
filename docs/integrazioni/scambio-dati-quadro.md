@@ -910,13 +910,24 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede due cose
 > che noi non abbiamo: la scelta su come apparire nelle liste pubbliche (che è
 > obbligatoria e senza valore predefinito) e l'adesione a community e classifiche.
-> ⚠️ **E un terzo caso, di natura diversa, allineato al brief il 29/07: il Paese.** È obbligatorio
-> nel vostro modulo e noi lo raccogliamo, ma l'accesso non lo trasporta — il nostro provider emette
-> i dati dell'identità (identificativo, nome, email, nickname), non quelli di residenza. Con quale
-> valore nasce l'account, o preferite che ve lo facciamo arrivare in altro modo?
-> Il **nickname**
-> invece ve lo mandiamo, come campo standard dell'accesso e in forma facoltativa — e vi chiediamo se
-> da voi debba essere unico, perché da noi non lo è. Con la creazione
+> ⚠️ **E un terzo caso, di natura diversa — riscritto il 30/07 (2ª versione): il Paese.** È
+> obbligatorio nel vostro modulo e noi lo raccogliamo, ma **non viaggia nell'`id_token`**, che porta
+> i soli campi dell'identità. La versione precedente si fermava a «preferite che ve lo facciamo
+> arrivare in altro modo?», che scaricava sul partner una domanda a cui la risposta tecnica ce
+> l'avevamo noi: le strade sono **due e solo due**, ① lo chiedono alla persona dopo il primo
+> ingresso, ② passa dalla risposta di **UserInfo**, dove però **non è un campo standard** e il loro
+> client va adattato per leggerlo. ⚠️ La strada ② dipende dalla **bonifica dei metadata** (0019): se
+> `country` viene cancellato insieme al resto dell'anagrafica, la ② muore — vanno decise insieme.
+> Il **nickname** invece ve lo mandiamo, come campo standard dell'accesso e in forma facoltativa.
+> ⚠️ **Corretto il 30/07**: qui si leggeva «vi chiediamo se da voi debba essere unico, **perché da
+> noi non lo è**» — falso dalla `0017`, che ha reso il nickname unico (`lower()`, parziale sui
+> non-null). La domanda al partner resta, ma cambia di segno: da noi **è** unico, e quel che serve
+> sapere è cosa fanno **loro** quando ne arriva uno già in uso da parte loro.
+> 🛡️ **La moderazione del contenuto è NOSTRA** (deciso da Riccardo il 30/07, era scritta come loro):
+> il nickname nasce nella nostra registrazione e vive nel nostro database. Formula da usare nei
+> testi in uscita, ed è vera oggi: **nessun filtro automatico**, rimozione su segnalazione — dopo la
+> quale il nickname smette di essere consegnato. Non scrivere mai «lo moderiamo» finché un filtro
+> non esiste davvero. Con la creazione
 > dell'utente al primo accesso quei valori non arrivano da noi: ci serve sapere se applicate un default
 > — e quale — o se li chiedete alla persona una volta entrata. Lo stesso vale per i vostri due consensi
 > marketing: nessuno dei due può arrivarvi da noi — quello sugli enti beneficiari da noi non esiste
