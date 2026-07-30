@@ -492,11 +492,11 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    **Un terzo caso, di natura diversa: il Paese.** È obbligatorio nel vostro modulo e noi lo
    raccogliamo, ma non è fra i campi che l'accesso porta con sé: non è come la visibilità e le
    community, che da noi non esistono proprio — il Paese ce l'abbiamo, semplicemente non viaggia
-   insieme all'identità. **Se vi serve, ditecelo e ve lo facciamo arrivare**: è la stessa cosa
-   detta per il telefono, e va concordata **prima** di attivare il servizio, perché tocca il modo
-   in cui i dati vi vengono consegnati. Altrimenti la strada semplice è chiederlo alla persona dopo
-   il primo ingresso. Se trovate altri campi nella stessa condizione segnalateceli: l'elenco nasce
-   da quello che vediamo della vostra pagina, non dal vostro schema.
+   insieme all'identità. Non ha quindi senso chiederlo di nuovo alla persona, che l'ha già dato a
+   noi: **se vi serve, ditecelo e ve lo facciamo arrivare** — è la stessa cosa detta per il
+   telefono, e va concordata **prima** di attivare il servizio, perché tocca il modo in cui i dati
+   vi vengono consegnati. Se trovate altri campi nella stessa condizione segnalateceli: l'elenco
+   nasce da quello che vediamo della vostra pagina, non dal vostro schema.
 
 ---
 
