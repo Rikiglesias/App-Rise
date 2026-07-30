@@ -341,6 +341,10 @@ il modulo tolto nello stesso momento, non una dopo l'altra.
 
 Prima di aprire a tutti, proponiamo di provare il giro completo con due o tre persone vere.
 
+**Sui tempi**: da parte nostra vorremmo arrivarci **il prima possibile**. Non vi mettiamo una data
+davanti prima di sapere cosa comporta dalla vostra: fateci le vostre valutazioni, diteci quanto vi
+serve, e fissiamo insieme il giorno in cui il pulsante va online e il modulo viene tolto.
+
 ---
 
 ## 3. Cosa mettiamo a disposizione
@@ -380,6 +384,12 @@ Tre cose della parte tecnica: meglio dirle ora che scoprirle al collaudo.
 - **Una persona, una scheda sola — e aggiornata.** L'aggancio tiene fermo *quale* account è; perché
   serva a qualcosa devono valere anche i dati che vi arrivano a ogni accesso, non quelli del primo
   giorno.
+- **Il pulsante apre la pagina, non l'applicazione.** Chi lo preme dal vostro sito deve restare nel
+  browser e atterrare sulla nostra pagina di accesso: **non** va aperta la nostra app, nemmeno se la
+  persona ce l'ha installata sul telefono. Per voi è il comportamento normale di un collegamento, e
+  da parte nostra non registriamo quell'indirizzo come apribile dall'app — quindi il caso non si
+  presenta. Ve lo scriviamo perché è una condizione, non un dettaglio: l'app arriverà più avanti, e
+  fino ad allora il giro deve funzionare per intero dentro il browser, anche da telefono.
 - **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
   dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
 - **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
@@ -468,11 +478,14 @@ risultato.
    - **quando manca**, il campo non arriva vuoto: non c'è proprio. Vale sia per chi non l'ha scelto,
      sia per chi l'ha cancellato dopo — ed è la stessa cosa vista da voi, quindi diteci cosa mostrate
      in quel caso;
-   - **è unico da voi?** Da noi oggi no: due persone possono sceglierne uno uguale. E anche se lo
-     rendessimo unico fra i nostri, resterebbe la collisione con i nickname di chi si è registrato
-     da voi, che non passano da noi. Quindi la domanda è: quando ve ne arriva uno già in uso, cosa
-     fate — lo modificate voi, lo ignorate, o altro? L'unica strada che ci preoccupa è che l'accesso
-     fallisca: chi entra deve poter entrare, il nickname non vale una registrazione persa;
+   - **è unico da voi?** Da noi **sì**: due persone non possono avere lo stesso nickname, e due
+     scritture che differiscono solo per una maiuscola valgono come lo stesso nome. Resta però la
+     collisione con i nickname di chi si è registrato **da voi**, che non passano da noi. Quindi la
+     domanda è: quando ve ne arriva uno già in uso, cosa fate — lo modificate voi, lo ignorate, o
+     altro? L'unica strada che ci preoccupa è che l'accesso fallisca: chi entra deve poter entrare,
+     il nickname non vale una registrazione persa. Dalla nostra parte è la regola che seguiamo già:
+     se al momento della registrazione il nome scelto risulta occupato, la persona entra comunque e
+     il nickname resta vuoto, da rimettere quando vuole;
    - **dove lo mostrate, e a chi?** Ci serve per scrivere nella nostra informativa cosa succede al
      dato che vi mandiamo. Notiamo che da voi il nickname è una delle opzioni della visibilità nelle
      liste pubbliche: se qualcuno sceglie di apparire col nickname e il nickname non c'è, cosa

@@ -440,3 +440,173 @@ begin
 
   raise notice 'T12 PASS: colonna e vincolo unici, nessuna superficie RPC, trigger unico';
 end $$;
+
+-- ---------------------------------------------------------------------------
+-- T13 (IL CUORE DELL'UNICITÀ — un nickname già preso NON deve uccidere la registrazione).
+-- Decisione di Riccardo del 2026-07-30: il nickname è unico. Ma l'unicità riapre da un'altra
+-- porta il guasto che questa migration esiste per chiudere: se il secondo che sceglie
+-- «RiccardoRAH» venisse respinto dall'indice, a cadere non sarebbe il campo — sarebbe la sua
+-- REGISTRAZIONE, con un errore generico. Qui si pretende il contrario: entra, senza nickname.
+--
+-- ⚠️ L'OCCUPANTE SE LO CREA QUESTO TEST, e verifica di averlo davvero occupato. La prima
+-- stesura si appoggiava al nickname di T3: ma T9, in mezzo, lo TOGLIE per provare che si può
+-- togliere — così al T13 il nome era di nuovo libero e il test falliva per il motivo sbagliato.
+-- Un test che dipende dallo stato lasciato da un altro test è un test che mente, prima o poi.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values ('00000000-0000-0000-0000-000000000420', 'occupante@esempio.it',
+        jsonb_build_object(
+          'first_name', 'Primo', 'last_name', 'Occupante',
+          'birth_date', '1990-09-09', 'country', 'IT',
+          'preferred_username', 'NickConteso'));
+
+do $$
+declare v text;
+begin
+  select nickname into v from public.profiles
+   where id = '00000000-0000-0000-0000-000000000420';
+  if v is distinct from 'NickConteso' then
+    raise exception 'T13 PREMESSA FALLITA: l''occupante non ha il nickname (%), il test che segue non proverebbe niente', coalesce(v,'<null>');
+  end if;
+end $$;
+
+-- L'insert sta dentro una cattura perché il modo in cui questo test muore È l'informazione:
+-- senza, la registrazione respinta esce come `duplicate key value violates unique constraint`
+-- e nel log non compare la parola T13 — un rosso che non dice chi è caduto (già visto il
+-- 2026-07-29 con un mutante che uccideva «fuori bersaglio»).
+do $$
+begin
+  begin
+    insert into auth.users (id, email, raw_user_meta_data)
+    values ('00000000-0000-0000-0000-000000000413', 'secondo@esempio.it',
+            jsonb_build_object(
+              'first_name', 'Secondo', 'last_name', 'Arrivato',
+              'birth_date', '1991-02-02', 'country', 'IT',
+              'preferred_username', 'NickConteso'));
+  exception when others then
+    raise exception 'T13 FAIL — REGISTRAZIONE UCCISA da un nickname gia'' preso (%) — la clemenza sull''unicita'' non c''e'' piu''', sqlerrm;
+  end;
+end $$;
+
+do $$
+declare v text; esiste boolean;
+begin
+  select true, nickname into esiste, v from public.profiles
+   where id = '00000000-0000-0000-0000-000000000413';
+  if esiste is not true then
+    raise exception 'T13 FAIL: la registrazione e'' MORTA per un nickname gia'' preso — e'' il guasto peggiore, non il caso limite';
+  end if;
+  if v is not null then
+    raise exception 'T13 FAIL: il nickname duplicato e'' stato salvato (nickname = %): l''unicita'' non tiene', v;
+  end if;
+  raise notice 'T13 PASS: nickname gia'' preso -> scartato, e la persona si registra comunque';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T14 (MAIUSCOLE E MINUSCOLE SONO LO STESSO NICKNAME). «riccardorah» non è un nickname
+-- nuovo: su un nome che si vede in pubblico, due varianti che differiscono per una maiuscola
+-- sono un invito a farsi passare per un altro. L'indice è su `lower(nickname)`; se il trigger
+-- confrontasse senza `lower()`, questo test resterebbe l'unico a vederlo.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values ('00000000-0000-0000-0000-000000000414', 'terzo@esempio.it',
+        jsonb_build_object(
+          'first_name', 'Terzo', 'last_name', 'Minuscolo',
+          'birth_date', '1992-03-03', 'country', 'IT',
+          'preferred_username', 'nickconteso'));
+
+do $$
+declare v text; esiste boolean;
+begin
+  select true, nickname into esiste, v from public.profiles
+   where id = '00000000-0000-0000-0000-000000000414';
+  if esiste is not true then
+    raise exception 'T14 FAIL: registrazione morta sul duplicato di sole minuscole';
+  end if;
+  if v is not null then
+    raise exception 'T14 FAIL: «%» accettato accanto a «NickConteso»: l''unicita'' guarda le maiuscole', v;
+  end if;
+  raise notice 'T14 PASS: «nickconteso» e «NickConteso» sono lo stesso nickname';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T15 (L'INDICE ESISTE, ED È LUI A DIFENDERE — non solo la cortesia del trigger). Il trigger
+-- può scartare; ma se qualcuno scrive in colonna per un'altra via (rettifica del profilo,
+-- import, mano umana) la difesa deve stare nel DATABASE. Qui si pretende il rifiuto.
+-- ---------------------------------------------------------------------------
+do $$
+declare n int; ok boolean := false;
+begin
+  select count(*) into n from pg_index i
+    join pg_class c on c.oid = i.indexrelid
+   where c.relname = 'profiles_nickname_unico' and i.indisunique and i.indpred is not null;
+  if n <> 1 then
+    raise exception 'T15 FAIL: indice unico parziale profiles_nickname_unico assente (trovati %)', n;
+  end if;
+
+  begin
+    update public.profiles set nickname = 'NickConteso'
+     where id = '00000000-0000-0000-0000-000000000413';
+    ok := false;
+  exception when unique_violation then
+    ok := true;
+  end;
+  if not ok then
+    raise exception 'T15 FAIL: un UPDATE diretto ha potuto duplicare il nickname: la difesa non e'' nel database';
+  end if;
+  raise notice 'T15 PASS: l''indice esiste ed e'' lui a respingere il duplicato scritto a mano';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T16 (CHI NON HA IL NICKNAME NON SI CONTENDE NIENTE). Per un bel po' l'assenza sarà la
+-- norma: se l'indice trattasse i null come valori uguali, il SECONDO senza nickname non
+-- riuscirebbe a registrarsi — cioè quasi tutti.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values ('00000000-0000-0000-0000-000000000415', 'senzanick1@esempio.it',
+        jsonb_build_object('first_name', 'Senza', 'last_name', 'Uno',
+                           'birth_date', '1993-04-04', 'country', 'IT')),
+       ('00000000-0000-0000-0000-000000000416', 'senzanick2@esempio.it',
+        jsonb_build_object('first_name', 'Senza', 'last_name', 'Due',
+                           'birth_date', '1994-05-05', 'country', 'IT'));
+
+do $$
+declare n int;
+begin
+  select count(*) into n from public.profiles
+   where id in ('00000000-0000-0000-0000-000000000415','00000000-0000-0000-0000-000000000416')
+     and nickname is null;
+  if n <> 2 then
+    raise exception 'T16 FAIL: % profili senza nickname su 2 attesi: i null si contendono l''indice', n;
+  end if;
+  raise notice 'T16 PASS: piu'' persone senza nickname convivono';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T17 (LA RETTIFICA DEL PROFILO NON PUÒ RUBARE UN NICKNAME, e nemmeno fallire in silenzio).
+-- Il percorso «modifica profilo» scrive in colonna: qui deve trovare il muro dell'indice, e
+-- il valore precedente deve restare intatto — un update respinto non lascia macerie.
+-- ---------------------------------------------------------------------------
+do $$
+declare v text; respinto boolean := false;
+begin
+  update public.profiles set nickname = 'SoloMio'
+   where id = '00000000-0000-0000-0000-000000000415';
+
+  begin
+    update public.profiles set nickname = 'solomio'
+     where id = '00000000-0000-0000-0000-000000000416';
+  exception when unique_violation then
+    respinto := true;
+  end;
+  if not respinto then
+    raise exception 'T17 FAIL: la rettifica ha rubato un nickname altrui (differiva solo per le maiuscole)';
+  end if;
+
+  select nickname into v from public.profiles
+   where id = '00000000-0000-0000-0000-000000000415';
+  if v is distinct from 'SoloMio' then
+    raise exception 'T17 FAIL: il nickname del primo e'' stato toccato dal tentativo altrui (ora %)', coalesce(v,'<null>');
+  end if;
+  raise notice 'T17 PASS: la rettifica non ruba, e chi ce l''ha non lo perde';
+end $$;

@@ -100,12 +100,37 @@ run_mutante "M5 bordo 30 del CHECK" "T7" \
 # M6 — il nickname non viene più scritto in colonna: la migration non fa più il suo
 #      lavoro, e tutti i test «non deve rompere» resterebbero verdi.
 run_mutante "M6 scrittura in colonna" "T3" \
-  's/^      v_nickname                                          -- NUOVO (0017)$/      null                                                -- NUOVO (0017)/' || vivi=$((vivi+1))
+  's/^          v_nickname                                      -- NUOVO (0017)$/          null                                            -- NUOVO (0017)/' || vivi=$((vivi+1))
 
 # M7 — il corpo riscritto perde la guardia Apple Private Relay: è ESATTAMENTE la classe
 #      di regressione del 2026-07-29 (corpo copiato dalla migration sbagliata).
 run_mutante "M7 guardia relay nel corpo riscritto" "T11" \
   "s/when new.email like '%@privaterelay.appleid.com' then null/when false then null/" || vivi=$((vivi+1))
+
+# --- UNICITÀ (aggiunta del 2026-07-30, decisione di Riccardo «il nickname deve essere unico»)
+
+# M8 — l'unicità smette di ignorare maiuscole e minuscole: «nickconteso» diventa un nome
+#      diverso da «NickConteso» e passa. Si muta l'INDICE, non il confronto nel trigger:
+#      mutare solo il trigger non si vede: l'indice respinge comunque e il ciclo di riprova
+#      trasforma il rifiuto in un nickname vuoto, cioè nello STESSO esito osservabile.
+#      È la difesa in profondità che assorbe il difetto — corretto che sia così, ma va
+#      saputo: per vedere il buco bisogna rompere il livello che decide davvero.
+#      Il bersaglio e' T17, NON T14: al signup il trigger confronta gia' con lower() e
+#      scarta comunque, quindi T14 resterebbe verde grazie a una difesa DIVERSA da quella
+#      rotta. A vedere l'indice storto e' la RETTIFICA del profilo, che passa solo dal DB.
+run_mutante "M8 unicita' insensibile alle maiuscole" "T17" \
+  's/on public.profiles (lower(nickname))/on public.profiles (nickname)/' || vivi=$((vivi+1))
+
+# M9 — l'indice non è più unico: la difesa resta solo nella cortesia del trigger, e
+#      chiunque scriva in colonna per un'altra via (rettifica, import, mano umana) duplica.
+run_mutante "M9 indice non piu' unico" "T15" \
+  's/^create unique index if not exists profiles_nickname_unico$/create index if not exists profiles_nickname_unico/' || vivi=$((vivi+1))
+
+# M10 — via ENTRAMBE le clemenze sull'unicità: il controllo prima dell'insert e il ciclo
+#       di riprova. Un nickname già preso torna a portarsi giù la registrazione intera —
+#       esattamente il guasto che la 0017 esiste per impedire, riaperto dall'unicità.
+run_mutante "M10 clemenza sull'unicita' (entrambi i livelli)" "T13" \
+  's/where lower(nickname) = lower(v_nickname)/where false/; s/if v_vincolo is distinct from .profiles_nickname_unico. or i = 2 then/if true then/' || vivi=$((vivi+1))
 
 echo "----------------------------------------"
 if [ "$vivi" -ne 0 ]; then
