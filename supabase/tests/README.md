@@ -76,15 +76,23 @@ Coppie disponibili:
 | `0014_claim_legacy_campi_vuoti.sql` | `0014_claim_legacy_campi_vuoti.test.sql` |
 | `0015_aggancio_su_email_verificata.sql` | `0015_aggancio_su_email_verificata.test.sql` |
 | `0016_claim_su_email_confermata.sql` | `0016_claim_su_email_confermata.test.sql` |
+| `0017_profiles_nickname.sql` | `0017_profiles_nickname.test.sql` |
 
-> 🔴 **Per le coppie da 0012 a 0015 la ricetta qui sopra NON basta.** Riapplicare la migration sotto
+> 🔴 **Per le coppie da 0011 a 0015 la ricetta qui sopra NON basta.** Riapplicare la migration sotto
 > test (la seconda occorrenza nella pipe, quella che prova la rieseguibilità) riporta indietro il
 > corpo delle funzioni che le migration successive hanno sostituito: la suite girerebbe contro
 > codice che in produzione non esiste più, e sarebbe verde per il motivo sbagliato. Vanno **accodate
 > a mano le migration successive** che toccano quelle funzioni — 0012/0013 → `0014 0015 0016`,
-> 0014 → `0015 0016`, 0015 → `0016`. È esattamente ciò che fa la variabile `extra` in
+> 0014 → `0015 0016`, 0015 → `0016`, e **0011 → `0017`** (la 0017 riscrive `handle_new_user`, di cui
+> la 0011 è l'ultima definizione precedente). È esattamente ciò che fa la variabile `extra` in
 > `run-all.sh`: **la via consigliata resta `bash tests/run-all.sh`**, che le accoda da sé; la ricetta
 > a mano serve solo per iterare in fretta su UNA suite mentre la si scrive.
+>
+> **La regola generale, per la prossima migration**: quando ne scrivi una che fa `create or replace`
+> di una funzione, cerca chi altro la definisce (`grep -l "function public.<nome>" migrations/*.sql`)
+> e accoda la TUA a tutte le coppie precedenti di quell'elenco. Le due funzioni con più definizioni
+> sono `handle_new_user` (0004, 0006, 0007, 0011, **0017**) e `claim_legacy_contact`
+> (0012, 0014, 0015, 0016).
 
 Nota: la migration sotto test compare **due volte** nella pipe (una dentro `migrations/0*.sql`,
 una esplicita in `<MIGRATION>`). È voluto — è il test `T7`, che verifica la rieseguibilità e che la
@@ -119,6 +127,13 @@ sempre l'ultima):
   ciascuno (prima/dopo la conferma · rivendicazione senza profilo, poi backfill alla nascita).
   `T14` **droppa `legacy_contacts`** per provare davvero la guardia `undefined_table`, quindi deve
   restare l'ultimo: dopo di lui il database è mutilato e nient'altro può seguire.
+- **0017**: **13** righe `PASS` — 12 blocchi (`T1-T12`), di cui `T8` ne stampa **due** (il CHECK
+  morde sulla lunghezza · e sugli spazi ai bordi). Misurato 13/13 su entrambi gli shim, 2026-07-30.
+  Il cuore sono `T1`/`T2`/`T4`/`T5`: la 0017 mette un CHECK su una colonna riempita da un trigger
+  con un valore che arriva dal **client**, cioè la configurazione in cui un campo facoltativo e
+  decorativo può far fallire l'INSERT di `profiles` — e quindi la registrazione intera. Quei test
+  presidiano la clemenza del trigger (valore fuori forma → `null`, mai un errore). `T11` verifica
+  che il corpo riscritto di `handle_new_user` non abbia perso i fix di 0011/0013/0014.
 
 ⚠️ **`auth.users.email_confirmed_at` negli shim ha un default `now()` che in Supabase NON esiste**
 (là nasce NULL e si valorizza alla conferma, o subito se l'identità viene da un provider OAuth). È
@@ -131,6 +146,35 @@ difese, una per volta, e verificando che ogni versione mutilata morisse sul test
 del ramo A → `T1`; clausola `WHEN` → `T5`; guardia dell'oblio → `T2`; seconda lettura → `T9b`;
 guardia del §4 sul cambio email → `T11`). Una suite che resta verde contro il codice rotto non sta
 presidiando niente.
+
+### I mutanti si scrivono, non si fanno a mano — `mutants-<NNNN>.sh`
+
+Dalla 0017 la validazione della suite è **uno script versionato accanto ad essa**:
+
+```bash
+bash tests/mutants-0017.sh      # dalla cartella supabase/, con Docker attivo
+```
+
+Rompe le difese una per volta e pretende che il test previsto diventi rosso; esce 1 se un mutante
+sopravvive. Tre cose valgono per chiunque ne scriva uno nuovo:
+
+1. **La cartella `migrations/` viene COPIATA in una directory temporanea** e la mutazione si applica
+   alla copia. Il file vero non viene mai scritto, quindi un restore fallito in silenzio non può
+   lasciare il repo mutato. (È già successo: `~/memory/errors/2026-07-29-restore-della-mutazione-fallito-in-silenzio.md`.)
+2. **Guardia anti-mutante-inerte**: dopo il `sed`, se il file è identico all'originale lo script lo
+   dichiara. Senza, un'ancora che non matcha più produce un giro sul codice SANO che viene letto
+   come «mutante sopravvissuto» — cioè una mutazione che mente.
+3. **Due esiti non-verdi da NON confondere**, e il rimedio è opposto:
+   - **mutante EQUIVALENTE** — il comportamento osservabile non cambia (es. togliere una difesa
+     ridondante, quando una seconda difesa a valle copre lo stesso caso). Nessun test può
+     accorgersene, ed è giusto così → **si sostituisce il mutante**, non si tocca la suite;
+   - **ucciso FUORI BERSAGLIO** — la suite diventa rossa, ma con un errore grezzo di Postgres invece
+     che sul test previsto (tipicamente un vincolo che esplode dentro un `insert` non protetto) →
+     **si ripara il TEST**, avvolgendolo in un blocco che cattura e nomina il fallimento. Un mutante
+     ucciso senza nome non insegna niente a chi legge il log.
+
+   Entrambi si sono presentati alla prima esecuzione di `mutants-0017.sh` (M3 e M5): il commento
+   sopra ciascun mutante nello script dice quale caso era e perché è stato riscritto.
 
 ⚠️ **E un test può essere vacuo senza sembrarlo.** `T12` nella prima stesura inseriva la riga
 d'archivio PRIMA del profilo: il ramo A la rivendicava subito, e le sue asserzioni passavano anche
