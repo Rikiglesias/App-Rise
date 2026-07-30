@@ -62,6 +62,8 @@
 -- database. Era un no-op verificato (il vincolo non esisteva: i CHECK erano `adult` e
 -- `profiles_contact_email_chk`), quindi lo stato finale coincide. La riga resta qui perché
 -- serve alla RIESEGUIBILITÀ: chi riapplica il file a mano la esegue e fa bene.
+-- (Dal 2026-07-31 il guard CHIEDE invece di rifiutare, quindi da qui in avanti una riga
+-- come quella si può eseguire con la conferma dell'utente.)
 --
 alter table public.profiles
   add column if not exists nickname text;

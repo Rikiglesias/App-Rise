@@ -179,28 +179,33 @@
 -- una perdita — sono la copia di ciò che sta in `public.profiles`, che resta intatta.
 
 -- ---------------------------------------------------------------------------------
--- 🔴 STATO DELL'APPLY — 2026-07-31: APPLICATA A METÀ. LEGGERE PRIMA DI TOCCARE QUESTO FILE.
 -- ---------------------------------------------------------------------------------
--- Applicati al database vivo, su autorizzazione esplicita di Riccardo: i §2 (bonifica dei
--- metadata: funzioni, trigger, backfill), §3 e §4. Verificato DOPO, non per ack: 5 trigger su
--- `auth.users` tutti abilitati, il trigger di pulizia ascolta `raw_user_meta_data`, le due
--- funzioni di pulizia non sono chiamabili da `anon`/`authenticated`, il tipo composito è
--- sparito da `claim_legacy_contact`, `check_violation` è presente in
--- `sync_contact_email_on_email_change`. 0 profili, 2 utenti, 0 righe toccate.
+-- ✅ APPLICATA AL DB VIVO il 2026-07-31, su autorizzazione esplicita di Riccardo.
+-- ---------------------------------------------------------------------------------
+-- In DUE tempi, e vale la pena sapere perché: §2, §3 e §4 sono passati subito; il §1 no,
+-- perché contiene le uniche due ELIMINAZIONI e il guard MCP le rifiutava in blocco. Nello
+-- stesso turno il guard è stato cambiato da «rifiuta» a «chiedi» (richiesta di Riccardo:
+-- «è giusto che tu lo blocchi, però devi chiedere a me»), e il §1 è stato eseguito con la
+-- sua conferma — registrato a parte come `0019_eta_minima_vincolo`.
 --
--- 🔴 **IL §1 NON È STATO APPLICATO**: contiene due `alter table ... drop constraint`, e il
--- guard MCP (`~/.claude/hooks/pre-mcp-guard.ps1`) blocca OGNI eliminazione eseguita dall'AI su
--- questo database — è un deny puro, senza canale di conferma. Non è aggirabile e non va
--- aggirato: nascondere quelle istruzioni in un blocco `DO` è esattamente ciò che il guard
--- esiste per impedire (e verrebbe comunque ispezionato).
--- ⇒ **Finché qualcuno non esegue il §1 a mano, il vincolo vivo su `public.profiles` è ancora
--- `adult` (18 anni) e la soglia dei 14 NON è attiva**, benché app, documenti e suite la
--- diano per fatta. Le quattro istruzioni da incollare nel SQL Editor sono quelle del §1 qui
--- sotto, invariate.
--- Come si controlla in un secondo:
---   select conname from pg_constraint where conrelid='public.profiles'::regclass and contype='c';
--- Se compare `eta_minima` (e non `adult`), il §1 è stato eseguito: allora questa nota va
--- aggiornata e il residuo chiuso.
+-- Stato al momento dell'apply: 0 profili, 2 utenti, 0 righe d'archivio. Nessun dato toccato.
+-- VERIFICATO DOPO, non per ack:
+--   · CHECK su `public.profiles` = `eta_minima` (14 anni), `nickname_forma`,
+--     `profiles_contact_email_chk`. **`adult` non esiste più**;
+--   · 5 trigger su `auth.users`, tutti abilitati, e quello di pulizia ascolta
+--     `raw_user_meta_data` (non un altro evento);
+--   · le due funzioni di pulizia NON sono chiamabili da `anon`/`authenticated`;
+--   · `claim_legacy_contact` non dichiara più il tipo composito (fix ②) e
+--     `sync_contact_email_on_email_change` ha `check_violation` (fix ①);
+--   · 0 utenti con anagrafica nei metadata.
+-- ⚠️ ADVISOR: rispetto a prima compaiono DUE warning NUOVI, entrambi voluti —
+-- `nickname_disponibile` è `security definer` ed è chiamabile da `anon`/`authenticated`.
+-- È il motivo per cui la 0018 esiste (le policy di `profiles` farebbero rispondere «libero»
+-- sempre); la funzione restituisce SOLO un booleano, mai righe. Gli altri tre advisor
+-- erano già presenti e non c'entrano con questa migration.
+-- 🔴 LIMITE: il comportamento non è mai stato esercitato con una registrazione VERA (0
+-- profili). In particolare, quale dei due punti di pulizia dei metadata faccia davvero il
+-- lavoro si vede solo al primo utente reale — vedi §2.
 --
 -- ---------------------------------------------------------------------------
 -- 1. Età minima: 14 anni, un solo regime
