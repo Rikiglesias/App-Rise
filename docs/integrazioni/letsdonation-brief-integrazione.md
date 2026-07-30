@@ -384,7 +384,9 @@ Tre cose tecniche, meglio dirle ora che scoprirle al collaudo.
 
 - **Gli scope da chiedere sono `openid email profile`.** L'indicatore di email verificata viaggia
   con `email`, il nome e il nickname con `profile`. Lo scope `phone` non serve: il telefono non è
-  fra i campi che vi consegniamo — se vi servisse, diteci quali dati vi mancano e per farci cosa.
+  fra i campi che vi consegniamo. **Se vi servissero altri dati** — il telefono, per esempio —
+  diteci quali e per farci cosa: non li mandiamo per abitudine, perché ogni dato in più è un dato in
+  più da custodire per entrambi.
 - **Le chiavi di firma cambiano.** Vanno lette dall'indirizzo che trovate nel discovery, non copiate
   nella vostra configurazione: oggi ce n'è una sola, ma il giorno in cui ruota chi l'ha copiata
   smette di validare i token, e sembrerà un guasto nostro.
@@ -407,9 +409,12 @@ Tre cose tecniche, meglio dirle ora che scoprirle al collaudo.
   altre nostre funzioni: è la prassi. Se preferite leggerla da UserInfo, tenete conto della
   precisazione in fondo alla Scheda dei dati: quella risposta contiene anche un blocco che nell'ID
   token non c'è.
-- **Due casi da nominare prima del collaudo.** Se la persona **non dà il consenso** sulla nostra
-  pagina torna da voi senza identità: è un esito normale, non un errore nostro. E il
-  **`client_secret` ogni tanto lo cambiamo**: la rotazione la programmiamo insieme a voi.
+- **Tre casi da nominare prima del collaudo.** Se la persona **non dà il consenso** sulla nostra
+  pagina torna da voi senza identità: è un esito normale, non un errore nostro.
+  Gli **accessi contemporanei**: se per la stessa persona nuova ne partono due insieme, il `sub` è
+  identico in entrambi, ed è quello che permette di riconoscere che si tratta della stessa persona,
+  invece di aprire due schede. E il **`client_secret` ogni tanto lo cambiamo**: la rotazione la
+  programmiamo insieme a voi, invece di farvela trovare fatta.
 - **Se il nostro accesso si blocca.** Con una porta sola, per quel tempo su quella pagina non si
   entra: lo mettiamo in conto, e vi diamo un recapito per segnalarcelo. L'unica cosa da non fare è
   rimettere il modulo mentre aspettate — il blocco passa, gli account nati da quel modulo restano
@@ -423,8 +428,9 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
 
 1. **Come funziona il collegamento che avete con Zucchetti?** Ci era stato raccontato che i loro
    dipendenti arrivano già registrati: se è un accesso unico come questo, a noi basta sapere come
-   replicarlo — il nome del sistema, o chi l'ha collegato. Se invece funziona in altro modo, dal
-   vostro lato serve un client OpenID Connect: diteci cosa comporta.
+   replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece
+   funziona in altro modo, dal vostro lato serve un client OpenID Connect: diteci cosa comporta, così
+   ci regoliamo sui tempi.
 2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo
    va tolto nel momento stesso in cui il pulsante va online: se c'è un vincolo che lo blocca, è la
    prima cosa che guardiamo insieme. Sullo stesso schermo, una cosa che ci sta a cuore: chi arriva da
@@ -440,7 +446,9 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    aggiornati: ci serve sapere se li usate ogni volta o solo alla creazione dell'account. Se solo
    alla creazione, chi aggiorna l'email da noi continua a risultare da voi con quella vecchia.
    Della stessa famiglia: il vostro lato pretende `email_verified: true` per creare l'account? Il
-   campo lo emettiamo, ma se per voi è bloccante ditecelo ora.
+   campo lo emettiamo; la garanzia però non sta nel flag, sta nel fatto che
+   **senza conferma da noi non si entra**. Se per voi è una condizione bloccante ditecelo ora, così
+   è fra le prime cose che guardiamo insieme quando proviamo il giro.
 5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
    arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, diteci come.
 6. **I due campi del vostro modulo che il nostro accesso non copre**: la scelta su come apparire
@@ -461,7 +469,9 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    - **è unico da voi?** Da noi **sì**, e due scritture che differiscono per una sola maiuscola
      valgono come lo stesso nome. Resta la collisione con i nickname nati da voi, che non passano da
      noi: quando ve ne arriva uno già in uso, cosa fate? La strada che ci preoccupa è che l'accesso
-     fallisca — il nickname non vale una registrazione persa;
+     fallisca — il nickname non vale una registrazione persa. È la regola che seguiamo già da noi:
+     se al momento della registrazione il nome scelto risulta occupato, **la persona entra comunque**
+     e il nickname resta vuoto, da rimettere quando vuole;
    - **dove lo mostrate, e a chi?** Ci serve per la nostra informativa. Da voi il nickname è una
      delle opzioni della visibilità: se qualcuno sceglie di apparire col nickname e non ce l'ha, cosa
      compare al suo posto?
@@ -490,9 +500,9 @@ nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l
 | --- | --- |
 | `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene suoi dati, ma non è anonimo: è uno pseudonimo |
 | `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: in mancanza partirebbe l'indirizzo email — se lo vedete ditecelo, come nome visibile non va |
-| `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
+| `email` | L'indirizzo dell'account, confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
-| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio |
+| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio — e manca sia per chi non l'ha scelto, sia per chi si è registrato prima che il campo esistesse, sia per chi l'ha cancellato dopo |
 
 **Una precisazione su UserInfo.** La tabella descrive l'**ID token**, ed è da lì che vi chiediamo di
 leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha emesso, quando
