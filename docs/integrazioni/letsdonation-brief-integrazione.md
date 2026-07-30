@@ -505,7 +505,7 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    nasce da quello che vediamo della vostra pagina, non dal vostro schema.
 
 **A chi rispondere.** Il riferimento per questa integrazione è **Riccardo**, che si raggiunge a
-**rikilola14@gmail.com**: lì arrivano le risposte alle sei domande qui sopra e qualunque
+**albieri.riccardo02@gmail.com**: lì arrivano le risposte alle sei domande qui sopra e qualunque
 chiarimento sul resto del documento.
 
 ---
