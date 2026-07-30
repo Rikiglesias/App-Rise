@@ -178,6 +178,30 @@
 -- ⚠️ Il backfill del §2 NON è reversibile: i dati tolti dai metadata non tornano. Non è
 -- una perdita — sono la copia di ciò che sta in `public.profiles`, che resta intatta.
 
+-- ---------------------------------------------------------------------------------
+-- 🔴 STATO DELL'APPLY — 2026-07-31: APPLICATA A METÀ. LEGGERE PRIMA DI TOCCARE QUESTO FILE.
+-- ---------------------------------------------------------------------------------
+-- Applicati al database vivo, su autorizzazione esplicita di Riccardo: i §2 (bonifica dei
+-- metadata: funzioni, trigger, backfill), §3 e §4. Verificato DOPO, non per ack: 5 trigger su
+-- `auth.users` tutti abilitati, il trigger di pulizia ascolta `raw_user_meta_data`, le due
+-- funzioni di pulizia non sono chiamabili da `anon`/`authenticated`, il tipo composito è
+-- sparito da `claim_legacy_contact`, `check_violation` è presente in
+-- `sync_contact_email_on_email_change`. 0 profili, 2 utenti, 0 righe toccate.
+--
+-- 🔴 **IL §1 NON È STATO APPLICATO**: contiene due `alter table ... drop constraint`, e il
+-- guard MCP (`~/.claude/hooks/pre-mcp-guard.ps1`) blocca OGNI eliminazione eseguita dall'AI su
+-- questo database — è un deny puro, senza canale di conferma. Non è aggirabile e non va
+-- aggirato: nascondere quelle istruzioni in un blocco `DO` è esattamente ciò che il guard
+-- esiste per impedire (e verrebbe comunque ispezionato).
+-- ⇒ **Finché qualcuno non esegue il §1 a mano, il vincolo vivo su `public.profiles` è ancora
+-- `adult` (18 anni) e la soglia dei 14 NON è attiva**, benché app, documenti e suite la
+-- diano per fatta. Le quattro istruzioni da incollare nel SQL Editor sono quelle del §1 qui
+-- sotto, invariate.
+-- Come si controlla in un secondo:
+--   select conname from pg_constraint where conrelid='public.profiles'::regclass and contype='c';
+-- Se compare `eta_minima` (e non `adult`), il §1 è stato eseguito: allora questa nota va
+-- aggiornata e il residuo chiuso.
+--
 -- ---------------------------------------------------------------------------
 -- 1. Età minima: 14 anni, un solo regime
 -- ---------------------------------------------------------------------------

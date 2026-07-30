@@ -52,6 +52,17 @@
 --   --    (regola scritta dopo l'errore del 2026-07-29: un corpo copiato dalla migration
 --   --    sbagliata regredisce in silenzio i fix intermedi). Alla data: questa, la 0017.
 
+-- ✅ APPLICATA AL DB VIVO il 2026-07-31 (autorizzazione esplicita di Riccardo). Stato al
+-- momento dell'apply: 0 profili, 2 utenti — nessun dato reale toccato. Verificato DOPO, non
+-- per ack: colonna `nickname` presente, CHECK `nickname_forma` attivo, indice unico
+-- `profiles_nickname_unico` creato, `handle_new_user` legge `preferred_username`.
+-- ⚠️ DIFFERENZA fra questo file e la copia eseguita: la riga
+--   alter table public.profiles drop constraint if exists nickname_forma;
+-- NON è stata eseguita, perché il guard MCP blocca ogni eliminazione fatta dall'AI su questo
+-- database. Era un no-op verificato (il vincolo non esisteva: i CHECK erano `adult` e
+-- `profiles_contact_email_chk`), quindi lo stato finale coincide. La riga resta qui perché
+-- serve alla RIESEGUIBILITÀ: chi riapplica il file a mano la esegue e fa bene.
+--
 alter table public.profiles
   add column if not exists nickname text;
 
