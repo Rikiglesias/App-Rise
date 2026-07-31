@@ -427,10 +427,10 @@ export const useProfileForm = () => {
     // Stessa proiezione per il nickname → `user_metadata.preferred_username`, da cui il
     // server auth costruisce il claim omonimo. Non solleva e non blocca: se fallisce, il
     // profilo È salvato e si perde solo l'allineamento del claim.
-    // NB: dopo l'apply della 0020 questa chiamata diventa una comodità, non la difesa —
-    // il claim lo derivano da `profiles` due trigger nel database. Resta perché fino a
-    // quel momento è l'unico modo che il claim ha di essere allineato, e dopo non fa
-    // danno (il database riallinea comunque).
+    // NB: **dalla 0020, viva in produzione dal 2026-07-31**, questa chiamata è una
+    // comodità e non la difesa — il claim lo derivano da `profiles` due trigger nel
+    // database, che riallineano subito dopo. Resta perché non fa danno e perché toglierla
+    // renderebbe il claim dipendente da un meccanismo solo invece che da due.
     await syncNicknameClaim(nickname);
     await refreshProfile();
     // Dietro il cancello questa è l'unica schermata dello stack: non c'è un «indietro»
