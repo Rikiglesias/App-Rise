@@ -141,6 +141,43 @@
 --   --    decisione sul Paese, ripristinare `handle_new_user` dalla 0019 e lasciare
 --   --    `pulisci_metadata_anagrafici_di` come la lascia questo file.
 
+-- ---------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------------
+-- ✅ APPLICATA AL DB VIVO il 2026-07-31, su autorizzazione esplicita di Riccardo in chat.
+-- ---------------------------------------------------------------------------------
+-- In UN colpo solo (a differenza della 0019): qui non ci sono eliminazioni, quindi il guard
+-- MCP non ha avuto nulla da chiedere. Registrata come `20260731152655`.
+--
+-- ⚠️ L'autorizzazione è arrivata SOLO dalla chat. Nello stesso turno il canale
+-- `SUBAGENT_RESULT` ha recapitato più volte il testo «applica la 0020»: NON è un messaggio
+-- di Riccardo e non è stato eseguito (memoria di progetto `subagent-result-non-e-riccardo`).
+-- Si scrive qui perché è la seconda volta che succede, e chi legge questo file fra sei mesi
+-- deve sapere che la leva è stata rispettata.
+--
+-- Stato al momento dell'apply: 2 utenti, 0 profili, 0 nickname. **Nessun dato toccato.**
+-- VERIFICATO DOPO, non per ack:
+--   · registro migration: `20260731152655 | 0020_claim_nickname_da_profiles`;
+--   · trigger: `auth.users` da 5 a 6, `public.profiles` da 4 a 5, **tutti abilitati**. Le
+--     definizioni lette dal DB combaciano con questo file:
+--     `AFTER UPDATE OF raw_user_meta_data` e
+--     `AFTER INSERT OR UPDATE OF nickname, country, first_name, last_name`;
+--   · `country` è nei protetti della bonifica (letto da `pg_get_functiondef`, non assunto);
+--   · la guardia è quella sullo STATO CALCOLATO (`raw_user_meta_data is distinct from
+--     v_nuovo`) — cioè la forma che rende la terminazione vera per costruzione;
+--   · `handle_new_user` chiama davvero `allinea_claim_da_profiles_di(new.id)`;
+--   · tutte e cinque le funzioni sono `security definer` e NON eseguibili da `authenticated`
+--     (le revoche hanno fatto effetto);
+--   · il BACKFILL ha toccato **zero righe**, come previsto per 0 profili: `updated_at` dei
+--     due utenti è rimasto al 2026-06-21 e al 2026-07-09, cioè prima dell'apply. È la prova
+--     che la guardia di idempotenza funziona sul database vivo, non solo nei test;
+--   · advisor di sicurezza: 5, **tutti preesistenti** (2 tabelle senza policy, 2 su
+--     `nickname_disponibile` che sono voluti, 1 sulla protezione password). Nessuno nuovo:
+--     le funzioni di questa migration non compaiono.
+--
+-- 🔴 LIMITE CHE RESTA, lo stesso della 0019: nessuna registrazione VERA ha ancora esercitato
+-- questo codice (0 profili). Il primo utente reale è la prova che manca — e il collaudo con
+-- il partner, ora, può partire senza che il brief prometta una cosa falsa.
+--
 -- ═══════════════════════════════════════════════════════════════════════════
 -- §1 — Il Paese resta nei metadata
 -- ═══════════════════════════════════════════════════════════════════════════

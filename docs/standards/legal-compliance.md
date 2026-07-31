@@ -61,8 +61,9 @@ Raccolti nei form di registrazione/profilo (`SignUpScreen.tsx`,
 > - **Claim OIDC, quando il provider si accende**: `name` (nome e cognome in una stringa,
 >   sincronizzato da `syncDisplayNameClaim`), `email`, `email_verified`, `sub`,
 >   `preferred_username`.
->   🔴 **+ `country` (il PAESE di residenza), dalla migration 0020 — scritta il 2026-07-31,
->   NON ancora applicata.** Va contato qui benché non sia un claim standard: UserInfo
+>   🔴 **+ `country` (il PAESE di residenza), dalla migration 0020 — applicata in produzione
+>   il 2026-07-31** (registrata come `20260731152655`, trigger verificati abilitati). Va
+>   contato qui benché non sia un claim standard: UserInfo
 >   consegna i `user_metadata` **interi** a chi ha lo scope `profile`, quindi tutto ciò che
 >   sta lì è materiale trasferito. La 0019 lo aveva tolto insieme al resto dell'anagrafica;
 >   la 0020 lo rimette **per decisione di prodotto di Riccardo** (il modulo del partner lo

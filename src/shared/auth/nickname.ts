@@ -31,8 +31,9 @@ import { logError } from '@/shared/utils/logger';
  * che il brief dà al partner (unico, da 2 a 30 caratteri, se lo togli smette di arrivare)
  * vivono sui vincoli di `public.profiles`, quindi il claim deve nascere da lì.
  * ⇒ il residuo che questo commento dichiarava — «le due copie possono divergere se la
- * sincronizzazione fallisce» — NON è più vero dopo l'apply della 0020: se questa chiamata
- * fallisce, il claim resta comunque allineato al profilo. Fino all'apply, invece, lo è.
+ * sincronizzazione fallisce» — **non è più vero: la 0020 è viva in produzione dal
+ * 2026-07-31** (registrata come `20260731152655`, trigger verificati abilitati). Se questa
+ * chiamata fallisce, il claim resta comunque allineato al profilo.
  */
 
 /** Lunghezza ammessa, allineata al CHECK `nickname_forma` della migration 0017. */

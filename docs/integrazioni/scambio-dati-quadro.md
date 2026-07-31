@@ -949,9 +949,11 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > vincoli non ce ne sono**. Fino alla `0020` bastava una registrazione con un nickname già occupato
 > perché al partner arrivasse quello di **un'altra persona**. La `0020` chiude il buco DERIVANDO il
 > claim da `profiles` (e con esso il Paese, che aveva lo stesso problema al contrario: cambiandolo
-> nel profilo, al partner restava il vecchio). ⚠️ **È scritta e provata ma NON ancora applicata**:
-> finché non lo è, queste tre righe descrivono l'intenzione, non il database vivo — e il vincolo
-> operativo è che l'apply avvenga **prima del collaudo** con le persone vere.
+> nel profilo, al partner restava il vecchio). ✅ **APPLICATA in produzione il 2026-07-31**
+> (registrata come `20260731152655`; i due trigger sono stati letti dal database e sono abilitati,
+> il backfill ha toccato 0 righe perché i profili sono 0). ⇒ da oggi queste tre righe descrivono
+> il database vivo, non un'intenzione, e il vincolo «apply prima del collaudo» è **soddisfatto**.
+> Resta un limite dichiarato: nessuna registrazione VERA ha ancora esercitato questo codice.
 > 🛡️ **La moderazione del contenuto è NOSTRA** (deciso da Riccardo il 30/07, era scritta come loro):
 > il nickname nasce nella nostra registrazione e vive nel nostro database. Formula da usare nei
 > testi in uscita, ed è vera oggi: **nessun filtro automatico**, rimozione su segnalazione — dopo la
