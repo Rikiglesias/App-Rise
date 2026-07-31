@@ -31,6 +31,7 @@ PAIRS=(
   "0017_profiles_nickname"
   "0018_nickname_disponibile"
   "0019_eta_minima_e_bonifica_metadata"
+  "0020_claim_nickname_da_profiles"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
@@ -81,25 +82,42 @@ for pair in "${PAIRS[@]}"; do
     # (`handle_new_user`, `claim_legacy_contact`, `sync_contact_email_on_email_change`):
     # va rimessa in coda a OGNI coppia che ne riapplica una versione precedente — comprese
     # 0016 e 0017, che prima non avevano bisogno di `extra`.
+    #
+    # ⚠️ Dal 2026-07-31 la 0020 è l'ultima a definire `handle_new_user` e
+    # `pulisci_metadata_anagrafici_di`: va in coda a OGNI coppia che ne riapplica una
+    # versione precedente — compresa la 0019, che prima chiudeva la catena. Senza,
+    # quelle suite girerebbero contro un corpo che in produzione non esisterà più.
+    # ⚠️ La 0020 RIBALTA una regola che la 0019 verificava (`country` spariva dai metadata,
+    # ora resta, decisione di Riccardo del 2026-07-31): il T5 della suite 0019 è stato
+    # aggiornato di conseguenza e la chiave si è spostata nel T11 della suite 0020. Se un
+    # domani la 0019 tornasse a girare SENZA la 0020 in coda, quel test andrebbe rimesso
+    # com'era — è il motivo per cui la riga `0019 → 0020` qui sotto non è opzionale.
     extra=()
     case "$pair" in
       0011_signup_contact_email)
         extra=(migrations/0017_profiles_nickname.sql
-               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
       0012_legacy_contacts|0013_contact_email_follows_account)
         extra=(migrations/0014_claim_legacy_campi_vuoti.sql
                migrations/0015_aggancio_su_email_verificata.sql
                migrations/0016_claim_su_email_confermata.sql
-               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
       0014_claim_legacy_campi_vuoti)
         extra=(migrations/0015_aggancio_su_email_verificata.sql
                migrations/0016_claim_su_email_confermata.sql
-               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
       0015_aggancio_su_email_verificata)
         extra=(migrations/0016_claim_su_email_confermata.sql
-               migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
       0016_claim_su_email_confermata|0017_profiles_nickname)
-        extra=(migrations/0019_eta_minima_e_bonifica_metadata.sql) ;;
+        extra=(migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
+      0019_eta_minima_e_bonifica_metadata)
+        extra=(migrations/0020_claim_nickname_da_profiles.sql) ;;
     esac
 
     log=$(cat "tests/${shim}.sql" migrations/0*.sql \

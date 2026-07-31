@@ -943,6 +943,15 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > noi non lo è**» — falso dalla `0017`, che ha reso il nickname unico (`lower()`, parziale sui
 > non-null). La domanda al partner resta, ma cambia di segno: da noi **è** unico, e quel che serve
 > sapere è cosa fanno **loro** quando ne arriva uno già in uso da parte loro.
+> 🔴 **Precisazione del 31/07, che riguarda tutte e tre le promesse sul nickname** (unico, 2-30
+> caratteri, se lo togliamo smette di arrivare): quelle garanzie vivono sui vincoli di
+> `public.profiles`, ma il claim che il partner riceve viene letto dai `user_metadata`, **dove
+> vincoli non ce ne sono**. Fino alla `0020` bastava una registrazione con un nickname già occupato
+> perché al partner arrivasse quello di **un'altra persona**. La `0020` chiude il buco DERIVANDO il
+> claim da `profiles` (e con esso il Paese, che aveva lo stesso problema al contrario: cambiandolo
+> nel profilo, al partner restava il vecchio). ⚠️ **È scritta e provata ma NON ancora applicata**:
+> finché non lo è, queste tre righe descrivono l'intenzione, non il database vivo — e il vincolo
+> operativo è che l'apply avvenga **prima del collaudo** con le persone vere.
 > 🛡️ **La moderazione del contenuto è NOSTRA** (deciso da Riccardo il 30/07, era scritta come loro):
 > il nickname nasce nella nostra registrazione e vive nel nostro database. Formula da usare nei
 > testi in uscita, ed è vera oggi: **nessun filtro automatico**, rimozione su segnalazione — dopo la

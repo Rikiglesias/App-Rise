@@ -132,6 +132,14 @@ end $$;
 -- consegna INTERA a chi ha lo scope `profile`: finché quelle chiavi restano lì, sono
 -- consegnabili a un partner.
 -- (Usa il profilo di T1, già nato.)
+--
+-- ⚠️ `country` NON è più in questo elenco dal 2026-07-31, e non è una svista: la
+-- **migration 0020** lo esclude dalla bonifica per decisione di Riccardo — il modulo del
+-- partner lo chiede come obbligatorio, quindi lo raccoglierebbe comunque e tenerlo fuori
+-- costava loro un campo da richiedere di nuovo. La chiave non è stata persa: è ora
+-- presidiata al rovescio dal **T11 della suite 0020**, che pretende che RESTI. Se un
+-- domani la 0020 venisse tolta, questa riga va rimessa com'era.
+-- (`tests/run-all.sh` mette sempre la 0020 in coda a questa coppia, per questo motivo.)
 -- ---------------------------------------------------------------------------
 do $$
 declare v_rimaste text[];
@@ -141,7 +149,7 @@ begin
          lateral jsonb_object_keys(u.raw_user_meta_data) k
    where u.id = '00000000-0000-0000-0000-000000000601'
      and k in ('first_name','last_name','phone','city','province',
-               'country','birth_date','marketing_consent','contact_email');
+               'birth_date','marketing_consent','contact_email');
 
   if v_rimaste is not null then
     raise exception 'T5 FAIL: l''anagrafica è rimasta nei metadata dopo la registrazione: %', v_rimaste;
@@ -284,11 +292,23 @@ begin
   if v_meta ?| array['first_name','last_name','phone','city','birth_date','marketing_consent'] then
     raise exception 'T10 FAIL: il backfill non ripulisce le righe preesistenti (%)', v_meta;
   end if;
-  if v_meta->>'name' is distinct from 'Nata Prima'
-     or v_meta->>'preferred_username' is distinct from 'anziana' then
-    raise exception 'T10 FAIL: il backfill ha portato via i claim (%)', v_meta;
+  if v_meta->>'name' is distinct from 'Nata Prima' then
+    raise exception 'T10 FAIL: il backfill ha portato via il claim `name` (%)', v_meta;
   end if;
-  raise notice 'T10 PASS: le righe nate prima della migration vengono ripulite, i claim no';
+  -- ⚠️ `preferred_username` NON è più fra i claim che ci si aspetta di ritrovare qui, e
+  -- non è una regressione: dalla **migration 0020** quel claim è DERIVATO da
+  -- `public.profiles`, e questa riga di prova nasce con i trigger disabilitati, quindi un
+  -- profilo non ce l'ha. Appena la pulizia qui sopra tocca i metadata, il presidio della
+  -- 0020 si sveglia e toglie un claim che non ha nulla dietro — che è esattamente il suo
+  -- mestiere (T6 della suite 0020 lo pretende).
+  -- Il test non ha perso copertura: la domanda «il backfill porta via i claim?» resta, ed
+  -- è presidiata da `name`, che nessuno derivà. Se un domani la 0020 venisse tolta, qui va
+  -- rimessa la condizione su `preferred_username` (`tests/run-all.sh` mette sempre la 0020
+  -- in coda a questa coppia, per questo motivo).
+  if v_meta ? 'preferred_username' then
+    raise exception 'T10 FAIL: un claim senza profilo dietro è sopravvissuto al giro dei presidi (%)', v_meta;
+  end if;
+  raise notice 'T10 PASS: le righe preesistenti vengono ripulite, `name` resta, il claim derivato senza profilo no';
 end $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════
@@ -390,12 +410,18 @@ begin
     raise exception 'T12 FAIL: % funzioni di pulizia sono chiamabili dal client', n;
   end if;
 
+  -- ⚠️ SEI, non cinque, dal 2026-07-31: la **migration 0020** aggiunge
+  -- `on_auth_user_metadata_claim_allineamento`, che deriva i claim da `public.profiles`.
+  -- Il numero è scritto a mano di proposito — è un INVENTARIO: se un domani ne comparisse
+  -- uno che nessuno ha deciso, questo test è l'unico posto dove si vedrebbe. Chi aggiunge
+  -- un trigger su `auth.users` aggiorna questa riga E l'elenco nel messaggio, così il
+  -- prossimo che legge sa quali sono i sei attesi.
   select count(*) into n from pg_trigger
    where tgrelid = 'auth.users'::regclass and not tgisinternal;
-  if n <> 5 then
-    raise exception 'T12 FAIL: % trigger su auth.users, attesi 5 (nascita, conferma, cambio email, oblio, pulizia metadata)', n;
+  if n <> 6 then
+    raise exception 'T12 FAIL: % trigger su auth.users, attesi 6 (nascita, conferma, cambio email, oblio, pulizia metadata, allineamento claim)', n;
   end if;
-  raise notice 'T12 PASS: nessuna superficie RPC, cinque trigger su auth.users';
+  raise notice 'T12 PASS: nessuna superficie RPC, sei trigger su auth.users';
 end $$;
 
 -- ---------------------------------------------------------------------------

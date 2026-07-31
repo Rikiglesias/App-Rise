@@ -61,6 +61,14 @@ Raccolti nei form di registrazione/profilo (`SignUpScreen.tsx`,
 > - **Claim OIDC, quando il provider si accende**: `name` (nome e cognome in una stringa,
 >   sincronizzato da `syncDisplayNameClaim`), `email`, `email_verified`, `sub`,
 >   `preferred_username`.
+>   🔴 **+ `country` (il PAESE di residenza), dalla migration 0020 — scritta il 2026-07-31,
+>   NON ancora applicata.** Va contato qui benché non sia un claim standard: UserInfo
+>   consegna i `user_metadata` **interi** a chi ha lo scope `profile`, quindi tutto ciò che
+>   sta lì è materiale trasferito. La 0019 lo aveva tolto insieme al resto dell'anagrafica;
+>   la 0020 lo rimette **per decisione di prodotto di Riccardo** (il modulo del partner lo
+>   chiede come obbligatorio, quindi lo raccoglierebbe comunque, e l'integrazione esiste per
+>   evitare che lo chieda due volte). ⇒ **un campo in più nell'informativa**, e la decisione
+>   è di trasferimento, non tecnica: va detta a chi scrive il testo, non lasciata nel codice.
 > ⚠️ Corretto il 2026-07-31: questa sezione aveva dichiarato il `nickname` «l'unico campo di
 > profilo destinato a uscire verso un terzo». **Falso** — nome, cognome ed email escono già
 > adesso, per un canale che esisteva prima. Un inventario che sottostima i trasferimenti è

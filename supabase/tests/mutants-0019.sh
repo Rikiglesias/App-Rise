@@ -97,6 +97,19 @@ run_mutante() {
 }
 
 M=0019_eta_minima_e_bonifica_metadata.sql
+# 🔴 DAL 2026-07-31 TRE MUTANTI NON MUTANO PIÙ QUESTO FILE, e la ragione va capita prima di
+# «semplificare» rimettendoli su `$M`. La migration **0020** riscrive con `create or
+# replace` due oggetti definiti qui — `handle_new_user` e `pulisci_metadata_anagrafici_di`
+# — e il `cat` di questo script applica TUTTE le migration in ordine. Mutare la 0019
+# significherebbe quindi mutare codice che, tre file dopo, viene sovrascritto: la
+# mutazione sparisce, la suite resta verde, e lo script direbbe «SOPRAVVISSUTO» su una
+# difesa che invece funziona benissimo. Un mutante che misura il file sbagliato è la
+# stessa classe di guasto del mutation test vacuo del 2026-07-30 (registro indicizzato sul
+# nome del file: zero voci, tre falsi verdi).
+# ⇒ REGOLA: il mutante colpisce il file che definisce l'oggetto PER ULTIMO. I test di
+#   riferimento restano quelli della 0019, perché è la 0019 a dover essere presidiata.
+#   Quando una 0021 riscriverà di nuovo quelle funzioni, questa variabile va aggiornata.
+M20=0020_claim_nickname_da_profiles.sql
 vivi=0
 
 # M1 — la soglia torna a 18: è il guasto che la fase esiste per togliere. Lo vede T1, il
@@ -117,17 +130,24 @@ run_mutante "M2 vincolo cancellato, non abbassato" "T2 FAIL" "$M" \
 # M3 — via la pulizia dalla nascita del profilo (PRIMA occorrenza: `handle_new_user`).
 #      Il trigger di aggiornamento resta, quindi T8 continua a passare: a vedere il buco è
 #      solo T5, che guarda i metadata subito dopo la registrazione.
-run_mutante "M3 nessuna pulizia alla nascita" "T5 FAIL" "$M" \
+#      ⚠️ Target `$M20` e non `$M`: dal 2026-07-31 è la 0020 l'ultima a definire
+#      `handle_new_user` (vedi il blocco in testa). Nella 0020 quella riga compare una
+#      volta sola, ma la forma `0,/…/` resta perché costa nulla ed è a prova del giorno in
+#      cui ricomparisse una seconda chiamata.
+run_mutante "M3 nessuna pulizia alla nascita" "T5 FAIL" "$M20" \
   '0,/^  perform public.pulisci_metadata_anagrafici_di(new.id);$/s//  -- mutante M3/' \
   || vivi=$((vivi+1))
 
-# M4 — pulizia TROPPO LARGA: porta via anche `preferred_username`. Non rompe niente di
-#      visibile da qui — il profilo nasce, i metadata sono puliti, T5 è verde — ma il
-#      nickname smetterebbe di arrivare al sito del partner, cioè il motivo per cui i
-#      metadata esistono nel nostro disegno. Lo vede solo T6.
-run_mutante "M4 pulizia che porta via i claim" "T6 FAIL" "$M" \
-  "s/'country', 'birth_date', 'marketing_consent', 'contact_email'/'country', 'birth_date', 'marketing_consent', 'contact_email', 'preferred_username'/" \
-  || vivi=$((vivi+1))
+# M4 — SPOSTATO in `mutants-0020.sh` (N12) il 2026-07-31, e la ragione va letta prima di
+#      rimetterlo qui. Misurava «la pulizia porta via `preferred_username`, e T6 se ne
+#      accorge». Dalla 0020 quel guasto non è più possibile in due modi diversi: il claim
+#      viene RIDERIVATO da `profiles` due righe dopo la pulizia (quindi T6 resterebbe
+#      verde comunque), e le chiavi protette vengono tolte dalla lista a prescindere da
+#      cosa ci si scriva dentro. Misurandolo si è scoperto che, senza quel filtro, la
+#      mutazione non fa fallire un test: manda il database in `stack depth limit
+#      exceeded`, perché i due trigger si rimpallano la stessa chiave all'infinito.
+#      ⇒ il mutante utile oggi non è «togli il claim dalla lista», è «togli il FILTRO»:
+#      vive come N12 nella suite della 0020, dov'è la difesa che presidia.
 
 # M5 — il presidio smette di guardare la colonna giusta. È il trigger che in produzione
 #      farà probabilmente tutto il lavoro (GoTrue riscrive la riga dopo l'INSERT): se
@@ -146,7 +166,8 @@ run_mutante "M5 presidio sull'evento sbagliato" "T8 FAIL" "$M" \
 #      un'asserzione — muore il motore, ed è il modo giusto di morire per questo mutante.
 #      ⚠️ È anche la prova che la guardia NON è cosmetica: senza, la prima registrazione
 #      del mondo reale fallirebbe.
-run_mutante "M6 ricorsione senza guardia" "stack depth limit exceeded" "$M" \
+#      ⚠️ Target `$M20`: è la 0020 l'ultima a definire `pulisci_metadata_anagrafici_di`.
+run_mutante "M6 ricorsione senza guardia" "stack depth limit exceeded" "$M20" \
   's/^     and raw_user_meta_data ?| v_chiavi;$/     ;/' || vivi=$((vivi+1))
 
 # M7 — via `check_violation` dall'exception del §3: si torna esattamente al difetto

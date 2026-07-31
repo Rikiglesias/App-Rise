@@ -194,6 +194,28 @@ sopravvive. Tre cose valgono per chiunque ne scriva uno nuovo:
    Entrambi si sono presentati alla prima esecuzione di `mutants-0017.sh` (M3 e M5): il commento
    sopra ciascun mutante nello script dice quale caso era e perché è stato riscritto.
 
+4. **Il mutante va sul file che definisce l'oggetto PER ULTIMO** (regola nata il 2026-07-31). Il
+   `cat` applica tutte le migration in ordine, quindi mutare una funzione che tre file dopo viene
+   riscritta con `create or replace` significa mutare codice morto: la mutazione sparisce, la suite
+   resta verde, e lo script dichiara «SOPRAVVISSUTO» su una difesa che invece funziona. È successo
+   con `M3`/`M4`/`M6` della 0019 quando la 0020 ha ridefinito `handle_new_user` e
+   `pulisci_metadata_anagrafici_di`: il target è stato spostato, non il criterio.
+
+⚠️ **Un mutante può insegnare qualcosa che nessun test chiedeva.** Il 2026-07-31, tre mutanti della
+0020 scritti per far fallire un'asserzione hanno invece prodotto `stack depth limit exceeded`, e
+dietro c'erano due guasti veri:
+- **due presidi che si contendono la stessa chiave non terminano MAI**, per quante guardie di
+  idempotenza abbiano: ognuno annulla il lavoro dell'altro, quindi ognuno trova sempre qualcosa da
+  fare. La disgiunzione delle loro liste non è ordine, è una condizione di terminazione — e va resa
+  meccanica, non scritta in un commento;
+- **una guardia «per campi» (`->>'x' is distinct from v_x`) è fragile**, mentre confrontare lo stato
+  con il risultato già calcolato (`raw_user_meta_data is distinct from v_nuovo`) rende la
+  terminazione vera *per costruzione*, qualunque cosa faccia il calcolo.
+
+Quando un mutante muore della morte sbagliata, la domanda giusta non è «come lo faccio morire come
+volevo» ma «che cosa mi sta dicendo». In due casi su tre la risposta era un cambiamento nel codice
+di produzione, non nel mutante.
+
 ⚠️ **E un test può essere vacuo senza sembrarlo.** `T12` nella prima stesura inseriva la riga
 d'archivio PRIMA del profilo: il ramo A la rivendicava subito, e le sue asserzioni passavano anche
 cancellando l'intero blocco che il test doveva presidiare. L'ha trovato un critico avversariale, non

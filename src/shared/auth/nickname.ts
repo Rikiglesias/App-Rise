@@ -21,10 +21,18 @@ import { logError } from '@/shared/utils/logger';
  * facoltativo.
  *
  * Come per il nome, `profiles` resta la fonte di verità e il metadato è la sua
- * proiezione, riallineata a ogni scrittura del nickname. Stesso residuo dichiarato:
- * le due copie possono divergere se la sincronizzazione fallisce (rete); non si
- * blocca l'utente per questo — il profilo è salvato, il claim serve a un flusso non
- * ancora attivo — l'anomalia va nei log a ERROR e la scrittura successiva la risana.
+ * proiezione, riallineata a ogni scrittura del nickname.
+ *
+ * ⚠️ DALLA MIGRATION 0020 QUESTA SINCRONIZZAZIONE NON È PIÙ LA DIFESA, è una comodità.
+ * Il claim viene DERIVATO da `profiles` da due trigger nel database, e ciò che scriviamo
+ * qui viene riallineato subito dopo. Il motivo per cui la difesa si è spostata là: i punti
+ * che scrivono `preferred_username` sono quattro, e uno — `PUT /user` chiamato con una
+ * sessione valida — non passa da questo file né da nessun altro nostro. Le tre garanzie
+ * che il brief dà al partner (unico, da 2 a 30 caratteri, se lo togli smette di arrivare)
+ * vivono sui vincoli di `public.profiles`, quindi il claim deve nascere da lì.
+ * ⇒ il residuo che questo commento dichiarava — «le due copie possono divergere se la
+ * sincronizzazione fallisce» — NON è più vero dopo l'apply della 0020: se questa chiamata
+ * fallisce, il claim resta comunque allineato al profilo. Fino all'apply, invece, lo è.
  */
 
 /** Lunghezza ammessa, allineata al CHECK `nickname_forma` della migration 0017. */
