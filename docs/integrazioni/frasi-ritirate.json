@@ -21,6 +21,14 @@
       "dove_vive_ora": "sostituita da «i dati tecnici del token (...) e, per gli accessi che la forniscono, l'indirizzo dell'immagine di profilo»"
     },
     {
+      "frase": "copia grezza di quello che il nostro sistema di accesso tiene",
+      "_perche_questa_forma_lunga": "e' l'ultima delle sei formulazioni con cui si e' provato a DESCRIVERE al partner il contenuto della risposta di UserInfo. Ancorata alla perifrasi, non a «UserInfo», che nel documento serve ancora e legittimamente.",
+      "tolta_il": "2026-07-31",
+      "perche": "RILIEVO LETTERALE DI RICCARDO sul PDF: «sembra molto confuso, non capisco cosa vuol dire». Il paragrafo faceva cinque lavori insieme e tre erano fatti NOSTRI (cosa c'e' nei metadata, che li abbiamo ripuliti, che ci fidiamo poco di UserInfo): al partner non servono per lavorare, e rassicurarlo su un problema che non sa di avere lo mette in allarme — variante attenuata di «consegnare la mappa della falla» (d03dd6e). PIU' IMPORTANTE: descrivere quel contenuto ha prodotto SEI riformulazioni in tre giorni, quattro delle quali con un assoluto falso (l'ultima, «non dati della persona», ritirata lo stesso giorno). Il difetto non e' nelle parole ma nel COMPITO: non si descrive quel contenuto, si dice solo cosa cambia per loro",
+      "rientrata_il": [],
+      "dove_vive_ora": "niente nel brief: resta il solo fatto operativo, «da UserInfo l'indicatore di email verificata non compare quando l'email non e' confermata». Il contenuto reale dei metadata vive in memoria di progetto (integrazione-identita-partner.md), che e' un canale NOSTRO"
+    },
+    {
       "frase": "contrassegni tecnici del nostro provider, non dati della persona",
       "_perche_questa_forma_lunga": "la coda «, non dati della persona» e' la parte che rende la frase falsa; «contrassegni tecnici del nostro provider» da solo e' la formulazione CORRETTA rimasta nel testo (restano l'indirizzo dell'account E alcuni contrassegni tecnici), quindi ancorare li' bloccherebbe il testo giusto.",
       "tolta_il": "2026-07-31",

@@ -459,6 +459,37 @@
           Vale se il bisogno e' «l'app sembra piu' curata», non se e' «il partner mostra un volto».
         Le tre strade vanno tenute distinte quando lui decide: sono tre costi diversi di un ordine
         di grandezza l'uno dall'altro.
+
+     5) 🔴 RILIEVO DI RICCARDO SUL PDF, secondo giro: «sembra molto confuso, non capisco cosa
+        vuol dire» - sulla precisazione di UserInfo che avevo appena riscritto io.
+        AVEVA RAGIONE, e la diagnosi non e' «spiegato male»: quel paragrafo faceva CINQUE lavori
+        insieme, e TRE erano fatti NOSTRI che al partner non servono per lavorare (cosa c'e'
+        dentro la risposta di UserInfo, che l'abbiamo ripulita, che quella strada ce la fidiamo
+        poco). Rassicurare un terzo su un problema che non sa di avere lo mette in allarme: e' la
+        variante attenuata di «consegnare la mappa della falla» (`d03dd6e`).
+        PIU' IMPORTANTE, ed e' il motivo per cui la cura e' TOGLIERE e non riscrivere: descrivere
+        quel contenuto ha prodotto SEI formulazioni in tre giorni, QUATTRO delle quali con un
+        assoluto falso (l'ultima, «non dati della persona», ritirata lo stesso giorno in cui era
+        stata scritta). Il difetto non sta nelle parole: sta nel COMPITO. Ora il paragrafo dice
+        una cosa sola - da UserInfo l'indicatore di email verificata non compare quando l'email
+        non e' confermata - e il resto e' sparito. Voce in `frasi-ritirate.json` ancorata alla
+        perifrasi, non alla parola «UserInfo» (che serve ancora e legittimamente).
+        Allineato anche il rimando in §4, che citava il pezzo tolto.
+
+     6) 🔴 CONFLITTO APERTO FRA CIO' CHE PROMETTIAMO E CIO' CHE IL CODICE FA - trovato dal
+        secondo critico, NON risolto qui perche' il rimedio e' sul DB di produzione (leva di
+        Riccardo). Va saputo da chi rilegge questo documento PRIMA di mandarlo.
+        Sulla collisione del nickname in registrazione, `handle_new_user` fa `v_nickname := null`
+        (`0019:287`): azzera SOLO la variabile che finisce in `public.profiles`. I
+        `raw_user_meta_data` conservano il `preferred_username` CHIESTO, e la 0019 li preserva di
+        proposito (`:355`). ⇒ il claim che arriva al partner porta un nickname che (a) e' di
+        un'altra persona e (b) da noi non esiste. Il brief gli promette il contrario in DUE punti:
+        «la persona entra comunque e il nickname resta vuoto» e «unico da noi». Non e' il caso del
+        client malevolo (gia' tracciato): e' il percorso di REGISTRAZIONE ORDINARIO.
+        Le due frasi NON sono state tolte: sono fra i quattro contenuti che Riccardo ha fatto
+        RIENTRARE il 30/07 sera. La scelta e' sua: o si chiude il buco (trigger che riallinea i
+        metadata da `profiles`) o si tolgono le due promesse. Tracciato in
+        `~/todos/partner-identita.md`. Finche' il documento non parte, il rischio e' zero.
      ----------------------------------------------------------------------------------
 -->
 
@@ -526,8 +557,7 @@ Tre cose tecniche, meglio dirle ora che scoprirle al collaudo.
   esiste già: da lì in poi la persona resta legata al `sub`, e resta **una scheda sola**.
 - **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
   altre nostre funzioni: è la prassi. Se doveste leggerla da UserInfo, tenete conto della
-  precisazione in fondo alla Scheda dei dati: quella risposta porta, accanto all'identità, una copia
-  di quello che il nostro sistema di accesso tiene sull'account.
+  precisazione in fondo alla Scheda dei dati.
 - **Tre casi da nominare prima del collaudo.** Se la persona **non dà il consenso** sulla nostra
   pagina torna da voi senza identità: è un esito normale, non un errore nostro.
   Gli **accessi contemporanei**: se per la stessa persona nuova ne partono due insieme, il `sub` è
@@ -633,13 +663,9 @@ nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l
 **Una precisazione su UserInfo.** La tabella descrive l'**ID token**, ed è da lì che vi chiediamo di
 leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha emesso, quando
 scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la forniscono,
-l'indirizzo dell'immagine di profilo. La risposta di UserInfo, con lo scope `profile`, non porta le
-stesse cose: accanto ai campi dell'identità c'è **una copia grezza di quello che il nostro sistema
-di accesso tiene sull'account**. L'abbiamo già svuotata dell'anagrafica; restano l'indirizzo
-dell'account e alcuni contrassegni tecnici del nostro provider. Resta comunque la strada che non
-vi consigliamo: se un vostro vincolo vi obbligasse a percorrerla, **ditecelo prima del collaudo**,
-perché un campo lì si comporta in modo diverso.
+l'indirizzo dell'immagine di profilo.
 
-**Il campo è l'indicatore di email verificata**: da UserInfo, se l'email non è confermata, **non
-compare affatto**, mentre nell'ID token c'è sempre. Conviene trattare l'assenza come «non
-confermata».
+**Se invece leggete da UserInfo**, un campo si comporta in modo diverso: l'indicatore di email
+verificata, quando l'email non è confermata, lì **non compare affatto**, mentre nell'ID token c'è
+sempre. Conviene trattare l'assenza come «non confermata» — e ditecelo prima del collaudo, così lo
+proviamo insieme.
