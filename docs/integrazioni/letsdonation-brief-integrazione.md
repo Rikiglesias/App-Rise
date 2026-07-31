@@ -46,7 +46,9 @@
        - §6 «restiamo due titolari autonomi» -> posizione PROPOSTA in conferma legale, non un
          fatto (`oidc-server-implementation-plan.md:153-156`). [AGGIORNATO 2026-07-29: la domanda 6
          DI ALLORA, che copriva anche il rapporto gia' in essere, e' stata RIMOSSA il 28/07 - materia
-         fra avvocati. Oggi il numero 6 indica i tre campi del loro modulo: non cercarlo li'.]
+         fra avvocati. Oggi il numero 6 indica i campi del loro modulo: non cercarlo li'.
+         AGGIORNATO 2026-07-29 sera: erano TRE, ora sono DUE - il nickname lo mandiamo noi
+         (decisione di Riccardo: lo stiamo costruendo e sara' pronto prima della loro risposta).]
        - scheda dati, «Citta', provincia, data di nascita ... ce ne prendiamo noi il carico»
          -> REFUTATO dalla nostra stessa verifica del 2026-07-24: i claim custom NON raggiungono
          il client OIDC (`oidc-server-implementation-plan.md:18-22`). Non era «non fermo»: era
@@ -57,6 +59,15 @@
          -> servirebbe un percorso di verifica SMS mai costruito. Ora e' una DOMANDA.
        - «Un impegno che vi chiediamo di mettere per iscritto nell'accordo» -> materia di
          contratto, non di primo brief. La sostanza tecnica resta come 4o punto di §4.
+         🔴 **RIENTRATA il 29/07 sera** con `84c8763`, dentro il 4o punto di §4, mentre si
+         riscriveva quel punto per chiudere un ALTRO problema — cioe' esattamente la classe
+         `riscrittura-resuscita-decisione-precedente`, terza occorrenza su questo file.
+         **RI-TOLTA il 30/07** dopo una review a 7 lenti che l'ha ripresa da tre angoli
+         indipendenti. Verificato dopo: nel CORPO la parola «accordo» ha **0 occorrenze**, la
+         sostanza tecnica e' intatta («si legge dall'ID token... e' la prassi»), e la richiesta
+         vive dove le compete: `scambio-dati-quadro.md` § domanda 16 «Sull'accordo», canale dei
+         legali. ⚠️ Lezione: una nota che dichiara una rimozione va VERIFICATA nel testo, non
+         creduta — questa nota e' rimasta vera un giorno e falsa il successivo.
        - «Sull'eta': stiamo aprendo la registrazione anche ai minorenni» -> FALSO nel prodotto
          oggi: `constraint adult` in `0001_profiles.sql:17` e `validateAdult` in
          `validation.ts:25` (usata a :83 signup e :148 profilo). Deciso != rilasciato.
@@ -143,6 +154,9 @@
          dati elencava «community» (che e' un campo di PROFILO). Presentati come lo stesso elenco.
          L'elenco vero e' quello di `scambio-dati-quadro.md:211-213`: nickname · visibilita' nelle
          liste pubbliche · adesione a community e classifiche.
+         [AGGIORNATO 2026-07-29 sera: il NICKNAME e' uscito da questo elenco - lo mandiamo noi come
+         claim `preferred_username` (migration 0017 + syncNicknameClaim, verificato alla fonte che
+         il server auth lo trasporta). Restano DUE: visibilita' e community/classifiche.]
        - mancava il FATTO che rende la domanda ineludibile: da loro la visibilita' e'
          **obbligatoria e senza valore predefinito** (`scambio-dati-quadro.md:872-877`), quindi
          oggi la sceglie sempre la persona e togliendo il modulo qualcuno deve continuare a
@@ -203,8 +217,13 @@
         «nome, cognome ed email» (`scambio-dati-quadro.md:496,634,672`).
 
      3) 🔴 «quindi e' SEMPRE reale» sulla riga `email`: assoluto SMENTITO dal database vivo.
-        Interrogato il 2026-07-29: 2 utenti, **0 mai confermati** (quindi «non si entra prima di
-        aver confermato» e' VERO e verificato) ma **1 dei 2 porta un alias
+        Interrogato il 2026-07-29: 2 utenti. 🔴 **CORREZIONE della notte del 29/07: sono 2 su 2
+        CONFERMATI, non «0 mai confermati» come diceva questa nota** - e l'inferenza che ne
+        seguiva («quindi non si entra prima di aver confermato e' VERO») non seguiva comunque dal
+        numero. La frase resta vera, ma per un'altra prova: l'utente registrato con email ha
+        confermato **59 minuti dopo** la creazione (`email_confirmed_at - created_at = 3540s`),
+        il che dimostra che l'auto-conferma del server e' SPENTA. Il fatto che regge e'
+        l'altro: **1 dei 2 porta un alias
         `@privaterelay.appleid.com`** - un indirizzo che INOLTRA, non quello della persona. Nato
         l'08/07, cioe' PRIMA che i social uscissero dal codice il 26/07. La verifica del 28/07
         aveva guardato il CODICE («0 login social») e ne aveva dedotto il DATABASE: togliere i
@@ -252,12 +271,22 @@
        · la VESTE GRAFICA e' loro («anche i colori, tutto quello che vedra' loro»). Detto
          esplicitamente: e' una concessione che costa nulla e toglie un motivo di attrito.
 
-     NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico dice «va detto a loro»
-     (`scambio-dati-quadro.md:206-210`) ma e' ANTERIORE alla decisione del 27/07 di aprire ai
-     minorenni: oggi scrivere «siamo 18+» annuncerebbe al partner un limite che il proprietario
-     ha deciso di togliere, e scrivere il contrario sarebbe falso nel prodotto (`constraint adult`
-     vivo in `0001_profiles.sql:17`). Entrambi i rami non sono scrivibili -> resta fuori, e va
-     riallineato il canonico, non il brief.
+     NON toccato, benche' emerso: il silenzio sui MINORENNI. Il canonico diceva «va detto a loro»
+     (`scambio-dati-quadro.md:206-210`) ma era ANTERIORE alla decisione del 27/07 di aprire ai
+     minorenni: scrivere «siamo 18+» avrebbe annunciato al partner un limite che il proprietario
+     aveva deciso di togliere, e scrivere il contrario sarebbe stato falso nel prodotto. Entrambi
+     i rami non erano scrivibili -> restava fuori.
+     AGGIORNAMENTO 30/07/2026: il ramo si e' sbloccato da solo. Il prodotto ORA dice 14 anni
+     (migration 0019: `constraint eta_minima`; app: `MIN_AGE_YEARS`), e il canonico e' stato
+     riallineato. Quindi «dai 14 anni» sarebbe finalmente scrivibile senza mentire.
+     RESTA COMUNQUE FUORI da questa versione: e' una decisione di Riccardo, non una conseguenza
+     tecnica, e il documento e' gia' al limite delle pagine. Da riproporre quando decide.
+     ⚠️ PRECONDIZIONE PRIMA DI SCRIVERLO IN QUALSIASI DOCUMENTO IN USCITA: la 0019 non e'
+     applicata al database vivo (fermo alla 0016) e l'informativa dice ancora un'altra cosa.
+     ✅ SUPERATA IL 2026-07-31 per la meta' tecnica: 0017, 0018 e 0019 sono APPLICATE al database
+     vivo (registro: 0017, 0018, 0019, 0019_eta_minima_e_bonifica_metadata). 🔴 RESTA VERA per
+     l'altra meta': l'INFORMATIVA dice ancora un'altra cosa, e finche' non e' allineata «dai 14
+     anni» non va scritto in un documento in uscita.
 
      STATO DELL'INVIO, verificato in questa passata: il provider OIDC e' SPENTO sul progetto vivo
      (`oauth/authorize` -> `feature_disabled`), ma le chiavi di firma sono GIA' asimmetriche
@@ -280,145 +309,369 @@
      (pulsante su e modulo giu' INSIEME) e «da noi si entra solo dopo aver confermato
      l'indirizzo» - oggi stanno in ENTRAMBI i documenti.
      Il nome del referente tecnico non e' confermato: non va scritto da nessuna parte.
+
+     PASSATA DEL 2026-07-30 - LE RICHIESTE DI RICCARDO, E IL DOCUMENTO DA 5 A 3 PAGINE.
+     Quattro passaggi segnati da lui rileggendo il brief. TRE TOLTI, uno RISCRITTO:
+       1. «Sta da noi perche' si possa entrare anche da computer... come Accedi con Google»
+          -> TOLTO («non e' necessario dirlo»). Giustificava una scelta nostra che il partner
+          non deve approvare. Registrato in frasi-ritirate.json.
+       2. «Il pulsante apre la pagina, non l'applicazione» -> TOLTO («non serve dirlo»).
+          ATTENZIONE: e' l'unico dei quattro che toglie una CONDIZIONE TECNICA VERA. Oggi
+          regge da se' (nessun app-link in app.config.js), ma il giorno in cui ne
+          registrassimo uno il giro da telefono si romperebbe e il partner non saprebbe che
+          era una condizione. Vincolo NOSTRO, tracciato fuori dal brief.
+       3. «L'aggancio per email tiene solo se confermato da tutt'e due le parti» -> TOLTO
+          («non capisco perche' dirlo»). E' il taglio che COSTA DI PIU': era l'unico avviso
+          di sicurezza rivolto a loro (agganciare schede con indirizzo mai confermato =
+          consegnare la scheda di una persona a un'altra, la falla che noi abbiamo chiuso
+          con la 0016). Costo dichiarato a Riccardo in chat PRIMA di eseguire il taglio.
+       4. «Se il nostro accesso non risponde...» -> RISCRITTO, non tolto: la sua obiezione
+          era «non capisco cosa voglia dire», cioe' un problema di scrittura. Il rischio e'
+          reale (rimettere il modulo durante un blocco lascia account scollegati per sempre).
+     Le tre frasi tolte sono ora in frasi-ritirate.json, provate con tre mutanti: rimettendole
+     nel testo consegnato la generazione del PDF si ferma (3 su 3).
+
+     ALTRE MODIFICHE DELLA STESSA PASSATA:
+       - il nickname e' descritto al PRESENTE (Riccardo: «fai finta che sia gia' pronto»).
+         PREREQUISITO REALE: 0017 e 0018 non sono applicate (DB alla 0016) -> vanno applicate
+         PRIMA dell'invio, altrimenti il documento promette un campo che non esiste.
+         ✅ SODDISFATTO IL 2026-07-31: 0017 e 0018 applicate e verificate sul DB vivo (colonna
+         `nickname`, forma, indice unico, funzione `nickname_disponibile` provata). Il campo esiste,
+         il presente del documento e' vero. 🔴 MA vedi il finding del critico del 31/07: il claim
+         `preferred_username` viaggia dai `user_metadata`, che il CLIENT scrive senza guardia
+         server-side -> le garanzie di forma e unicita' scritte al partner non sono ancora imposte
+         sul canale che gliele consegna. Tracciato in ~/todos/partner-identita.md.
+       - la MODERAZIONE del nickname passa a NOI (era attribuita al partner). Formula vera
+         oggi: nessun filtro automatico, rimozione su segnalazione. Non scrivere mai «lo
+         moderiamo» finche' un filtro non esiste davvero.
+       - il PAESE: non viaggia nell'ID token (GenerateIDToken assegna solo name, picture,
+         preferred_username, updated_at). La prima stesura di questa passata offriva la
+         lettura da UserInfo come seconda strada: RITIRATA dopo il critico avversariale,
+         perche' contraddiceva la promessa - nella stessa pagina - di ridurre UserInfo ai soli
+         campi dell'accesso, e perche' dipende dalla bonifica dei metadata (0019) che non e'
+         ancora decisa. Ora il brief CHIEDE se serve, senza promettere il come.
+       - LE PAGINE, in due tempi: prima il testo asciugato del 19% a contenuto invariato, poi
+         l'impaginazione (margini 20/18 -> 18/15 mm, interlinea 14.2 -> 13.4). Con quel giro il
+         documento stava in 3 pagine, ma erano state sacrificate quattro cose che nessuno aveva
+         chiesto di togliere.
+       - RIAPERTO LA SERA STESSA da Riccardo: «tre pagine e mezza vanno bene comunque, pero' e'
+         importante che ci sia di tutto l'importante». Rientrano quindi: il caso dei DUE ACCESSI
+         CONTEMPORANEI, la regola che seguiamo gia' noi sul nickname occupato, la garanzia dietro
+         email_verified (non e' il flag, e' che senza conferma non si entra) e il perche' non
+         mandiamo dati per abitudine. STATO ATTUALE: 4 pagine, l'ultima di ~80 parole. Chiuderla
+         significa togliere di nuovo esattamente quelle quattro cose: se qualcuno in futuro vuole
+         ricompattare il documento, sappia che quello e' il prezzo, e che e' gia' stato scartato.
+
+     ----------------------------------------------------------------------------------
+     PASSATA DEL 2026-07-31 - tre rilievi di Riccardo sul PDF, piu' uno trovato allargando.
+
+     1) 🔴 DUPLICAZIONE CANCELLAZIONI (suo rilievo): il tema stava in §4 come requisito e in §5
+        come domanda 5. Sue parole: «non ha senso scriverlo entrambi... basta metterlo insieme
+        cosi' non ci si perde». UNIFICATE nella domanda 5; il bullet di §4 e' uscito.
+        ⚠️ QUESTA MOSSA RIBALTA UNA DECISIONE SUA DEL 28/07, e va saputo prima di rifarla al
+        contrario: `710081a` aveva stabilito il contratto di forma «§4 dichiara il REQUISITO, §5
+        porta il QUESITO», e `6c884dd` (passata anti-duplicazione voluta da lui) le aveva
+        VALUTATE e TENUTE separate. Perche' il ribaltamento e' comunque giusto: quel fix doveva
+        togliere il quesito dal §4 e ne ha lasciato un pezzo - «serve il canale su cui farla
+        arrivare» E' la domanda 5, scritta due pagine prima. La duplicazione era reale e residua,
+        non un capriccio di lettura.
+        Scelto §5 e non §4 perche' cio' che manca e' una RISPOSTA loro (come le trattate + a quale
+        recapito): e' il criterio canonico stesso («sale in §5 cio' che riguarda il loro sistema»).
+        E perche' cosi' NESSUN numero cambia: 5 resta 5, 6 resta 6, «Sei domande» resta vero, e
+        nessun rimando si rompe - la classe di errore della numerazione 7->5, gia' occorsa qui.
+
+     2) IL GEMELLO CHE NESSUNO AVEVA CHIESTO (perimetro, zero-L): §4 duplicava §5 anche in un
+        SECONDO punto. «Una persona, una scheda sola - **e aggiornata**... devono valere anche i
+        dati che vi arrivano a ogni accesso, non quelli del primo giorno» e' la domanda 4 («il
+        vostro lato lo rilegge?»), dichiarata dal cappello «quella da cui dipende il risultato».
+        Prima lo pretendevamo, due pagine dopo lo chiedevamo come favore. E' la stessa coppia che
+        `710081a` dichiarava di aver disinnescato («il §4 ripeteva il §5 in DUE punti»): sul
+        recapito era rimasto un residuo (punto 1), qui era rimasto tutto.
+        RIMEDIO: i due primi bullet di §4 sono stati FUSI in uno. La coda «e aggiornata» esce da
+        §4 e vive dove chiede una risposta (domanda 4); il requisito «una scheda sola» sopravvive
+        dentro il punto sul `sub`. NON si e' scritto «chi torna ritrova la sua scheda»: sarebbe
+        stata una duplicazione NUOVA della domanda 3, che dice gia' quelle parole.
+        NON toccata la terza coppia possibile, §4 `sub` <-> domanda 3: sono complementari (l'uno
+        fissa la chiave DOPO l'aggancio, l'altra chiede COME si trova la scheda esistente).
+
+     3) 🔴 LA PRECISAZIONE SU USERINFO ERA SCADUTA, e prometteva piu' del vero (suo rilievo: «fino
+        a "ditecelo ora" non ho capito cosa vuol dire, assicurati che sia tutto giusto»).
+        Due difetti distinti, non uno:
+        · SCADUTA - diceva «**prima di attivare il servizio lo riduciamo** ai soli campi
+          dell'accesso, e ve lo confermiamo quando e' fatto»: un impegno al FUTURO su una cosa
+          fatta il 2026-07-31 (migration 0019 applicata al DB vivo). Un impegno che ci obbliga a
+          mandare una conferma per un lavoro gia' concluso.
+        · PIU' AMPIA DEL VERO - «ridotto ai SOLI campi dell'accesso» non e' quello che il codice
+          fa. La 0019 toglie NOVE chiavi e solo quelle (`0019:382-385`); UserInfo continua a
+          consegnare i `user_metadata` INTERI (`OAuthUserInfo`, `handlers.go:716-719`: assegnazione
+          diretta della map, nessuna whitelist). Interrogato il DB vivo il 31/07: restano `email`,
+          `email_verified`, `phone_verified`, `sub` - e sull'unico account Apple storico anche
+          `iss`, `provider_id`, `custom_claims`. Nessuna anagrafica: la bonifica ha funzionato.
+          Ma `phone_verified` e i contrassegni del provider NON sono «campi dell'accesso»: la
+          promessa era da ritrattare davanti a loro.
+        · INCOMPRENSIBILE - «ditecelo ora» non diceva PERCHE'. Ora il nesso c'e': ditecelo prima
+          del collaudo *perche' un campo si comporta in modo diverso*, ed e' quello del capoverso
+          successivo (l'indicatore di email verificata, che da UserInfo sparisce invece di valere
+          «falso»). Il secondo capoverso e' stato agganciato al primo, non lasciato orfano.
+        RISPETTATE le decisioni gia' prese: NON si elencano al partner i campi anagrafici (sarebbe
+        la mappa della falla, `d03dd6e`); NON si riscrive «porta solo dati tecnici» (assoluto rotto
+        quattro volte); la menzione dell'immagine di profilo RESTA con la formula aperta «per gli
+        accessi che la forniscono», senza nominare i provider al presente (`f56d98c`).
+
+     4) IMMAGINE DI PROFILO - domanda nuova di Riccardo («non avevo pensato all'immagine profilo»).
+        ANALIZZATA, NON aggiunta al documento: e' una decisione di prodotto sua, e il brief non
+        promette architettura. I fatti che servono a decidere, tutti verificati alla fonte:
+        · NON ESISTE in nessuno strato del prodotto: 0 colonne DB, 0 bucket Storage (`select
+          count(*) from storage.buckets` = 0 sul progetto vivo), 0 dipendenze picker, 0 scritture
+          di `avatar_url`/`picture`. `git log -S` su tutti i branch: mai esistita, nemmeno prima
+          della rimozione dei social. Oggi l'app mostra un'icona vettoriale (`HomeScreen.tsx:94`).
+        · IL LORO MODULO NON LA CHIEDE: le 11 voci verificate dal vivo il 25/07
+          (`scambio-dati-quadro.md:100-112`) non contengono nessun campo immagine. Non e' un buco
+          da colmare come lo era il nickname.
+        · IL CANALE OIDC E' GIA' PRONTO: `picture` e' claim standard con scope `profile`, e la
+          0019 lo PRESERVA di proposito (`0019:62-64`). Si comporta come `preferred_username`, non
+          come `name`: se manca viene OMESSO, nessun ripiego (`service.go:829-834`).
+        · 🔴 MA NESSUNA VALIDAZIONE DELL'URL, in nessuno dei due sensi: in scrittura
+          `PUT /user` fa un merge grezzo della map (`models/user.go:229-241`), in lettura il claim
+          copia la stringa verbatim. Qualunque cosa scriva il client finisce nel claim - `javascript:`,
+          `data:`, un host arbitrario - e da li' sulle loro pagine pubbliche.
+        · E ROMPE UNA DICHIARAZIONE NOSTRA: `standards/legal-compliance.md:68` dice «Upload di
+          contenuti utente (foto, file) - **assenti**». Aggiungerla obbliga a correggere quel
+          documento e l'informativa, e a cancellare il file dallo Storage alla cancellazione
+          dell'account (oggi `delete-account` non tocca lo Storage, che non esiste).
+        VERDETTO PORTATO A RICCARDO: non aggiungerla ora. Il costo non e' un campo, e' una feature
+        intera (bucket + policy + colonna + picker + resize + sync del claim + moderazione di
+        contenuti VISIVI + informativa), e la moderazione e' di un altro ordine rispetto al
+        nickname: «nessun filtro automatico, rimozione su segnalazione» regge su una parola, non
+        su un'immagine che compare sulle liste pubbliche di un partner.
+        ⚠️ CORREZIONE DEL CRITICO AVVERSARIALE (31/07): l'analisi qui sopra era BINARIA - o la
+        feature intera o niente - e Riccardo aveva chiesto «QUALSIASI aspetto da analizzare per
+        aggiungerla». Esiste una TERZA strada che toglie quasi tutti i costi elencati:
+        · **avatar scelto da un insieme CHIUSO ospitato da noi** (una dozzina di immagini nostre,
+          la persona ne sceglie una, il claim porta uno degli URL fissi). Niente upload => niente
+          contenuto utente => `legal-compliance.md:68` («upload di foto: assenti») resta VERO;
+          niente Storage da cancellare alla cancellazione dell'account; niente moderazione, perche'
+          le immagini sono nostre; e l'URL e' validato PER COSTRUZIONE, il che chiude da solo il
+          rischio principale (nessuna validazione del claim `picture`, ne' in scrittura ne' in
+          lettura). Costo reale: gli asset, una colonna piccola, il sync del claim.
+        · **iniziali generate**: risolvono l'UI (oggi c'e' un'icona uguale per tutti) ma NON il
+          claim - `picture` vuole un URL, e generare l'immagine lato client non ne produce uno.
+          Vale se il bisogno e' «l'app sembra piu' curata», non se e' «il partner mostra un volto».
+        Le tre strade vanno tenute distinte quando lui decide: sono tre costi diversi di un ordine
+        di grandezza l'uno dall'altro.
+
+     5) 🔴 RILIEVO DI RICCARDO SUL PDF, secondo giro: «sembra molto confuso, non capisco cosa
+        vuol dire» - sulla precisazione di UserInfo che avevo appena riscritto io.
+        AVEVA RAGIONE, e la diagnosi non e' «spiegato male»: quel paragrafo faceva CINQUE lavori
+        insieme, e TRE erano fatti NOSTRI che al partner non servono per lavorare (cosa c'e'
+        dentro la risposta di UserInfo, che l'abbiamo ripulita, che quella strada ce la fidiamo
+        poco). Rassicurare un terzo su un problema che non sa di avere lo mette in allarme: e' la
+        variante attenuata di «consegnare la mappa della falla» (`d03dd6e`).
+        PIU' IMPORTANTE, ed e' il motivo per cui la cura e' TOGLIERE e non riscrivere: descrivere
+        quel contenuto ha prodotto SEI formulazioni in tre giorni, QUATTRO delle quali con un
+        assoluto falso (l'ultima, «non dati della persona», ritirata lo stesso giorno in cui era
+        stata scritta). Il difetto non sta nelle parole: sta nel COMPITO. Ora il paragrafo dice
+        una cosa sola - da UserInfo l'indicatore di email verificata non compare quando l'email
+        non e' confermata - e il resto e' sparito. Voce in `frasi-ritirate.json` ancorata alla
+        perifrasi, non alla parola «UserInfo» (che serve ancora e legittimamente).
+        Allineato anche il rimando in §4, che citava il pezzo tolto.
+
+     6) 🔴 CONFLITTO APERTO FRA CIO' CHE PROMETTIAMO E CIO' CHE IL CODICE FA - trovato dal
+        secondo critico, NON risolto qui perche' il rimedio e' sul DB di produzione (leva di
+        Riccardo). Va saputo da chi rilegge questo documento PRIMA di mandarlo.
+        Sulla collisione del nickname in registrazione, `handle_new_user` fa `v_nickname := null`
+        (`0019:287`): azzera SOLO la variabile che finisce in `public.profiles`. I
+        `raw_user_meta_data` conservano il `preferred_username` CHIESTO, e la 0019 li preserva di
+        proposito (`:355`). ⇒ il claim che arriva al partner porta un nickname che (a) e' di
+        un'altra persona e (b) da noi non esiste. Il brief gli promette il contrario in DUE punti:
+        «la persona entra comunque e il nickname resta vuoto» e «unico da noi». Non e' il caso del
+        client malevolo (gia' tracciato): e' il percorso di REGISTRAZIONE ORDINARIO.
+        Le due frasi NON sono state tolte, ma NON hanno lo stesso statuto - distinzione dovuta,
+        perche' chi rilegge prima dell'invio non creda protette da una decisione dell'utente due
+        frasi invece di una: «la persona entra comunque e il nickname resta vuoto» E' uno dei
+        quattro contenuti che Riccardo ha fatto RIENTRARE il 30/07 sera (elenco a :358-361);
+        «unico da noi» NO - e' la specifica del nickname consolidata nella Scheda dei dati.
+        La scelta e' sua: o si chiude il buco (trigger che riallinea i
+        metadata da `profiles`) o si tolgono le due promesse. Tracciato in
+        `~/todos/partner-identita.md`. Finche' il documento non parte, il rischio e' zero.
+     ----------------------------------------------------------------------------------
 -->
-
-> Questa scheda descrive **il nostro lato** dell'integrazione: cosa mettiamo a disposizione, cosa
-> va concordato fra noi, cosa ci serve sapere da voi.
-
----
 
 ## 1. L'obiettivo
 
 Chi ha già un account Rise Against Hunger Italia entra nel nostro spazio sulla vostra piattaforma
-**senza registrarsi una seconda volta**.
+**senza registrarsi una seconda volta**. Oggi su quella pagina c'è il vostro modulo: chi lo compila
+apre una scheda che con la nostra non ha alcun legame, e la stessa persona finisce in due archivi
+che non si parlano — aggiorna i dati da una parte, dall'altra restano quelli vecchi.
 
-Oggi sulla pagina del nostro spazio c'è il vostro modulo di registrazione, e chi lo compila apre
-una scheda che con la nostra non ha alcun legame: la stessa persona finisce in due archivi che non
-si parlano, e quando aggiorna i suoi dati da una parte, dall'altra restano quelli vecchi.
+Il punto d'arrivo è il solo pulsante «Entra con Rise Against Hunger»: chi ha già un account da noi
+entra con quello, chi non ce l'ha lo crea in quel momento senza un secondo modulo — nome ed email
+arrivano dall'accesso. Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
 
-Il punto d'arrivo è che su quella pagina ci sia il solo pulsante «Entra con Rise Against Hunger»:
-chi ha già un account da noi entra con quello, e chi non ce l'ha lo crea in quel momento senza
-compilare un secondo modulo — i dati minimi, nome ed email, arrivano dall'accesso.
-
-Dalla nostra parte mettiamo in piedi il ruolo di **OpenID Provider**.
-
-Dove porta il pulsante: a una **pagina di accesso nostra**, che stiamo costruendo. Lì la persona
-entra con l'account che ha già, oppure lo crea in quel momento se non ce l'ha, e torna sulla vostra
-pagina **già riconosciuta**. Sta da noi perché si possa entrare anche da computer, senza avere la
-nostra app, e perché chi si registra la prima volta lo faccia da noi: è la stessa cosa che succede
-con «Accedi con Google», dove chi non ha l'account lo crea su Google, non sul sito che sta
-visitando. Ve lo diciamo perché è un pezzo del disegno, non perché sia già pronta: quando lo sarà
-ve lo comunichiamo.
+Il pulsante porta a una **pagina di accesso nostra**, che costruiremo: lì la persona entra o si
+registra, e torna sulla vostra pagina **già riconosciuta**. Non è ancora pronta: quando lo sarà ve
+lo comunichiamo.
 
 ---
 
 ## 2. Come ci dividiamo il lavoro
 
-Dalla nostra parte spettano a noi l'OpenID Provider e le credenziali client dedicate a voi.
+A noi spettano l'OpenID Provider e le credenziali client dedicate a voi. Una condizione riguarda
+tutti e due: sulla pagina del nostro spazio il pulsante e il modulo di registrazione non possono
+convivere — il pulsante online e il modulo tolto nello stesso momento, non una dopo l'altra. Prima
+di aprire a tutti, proponiamo di provare il giro completo con due o tre persone vere.
 
-Una condizione riguarda tutti e due: sulla pagina del nostro spazio il pulsante di accesso e il
-modulo di registrazione non possono convivere, e le due cose vanno insieme — il pulsante online e
-il modulo tolto nello stesso momento, non una dopo l'altra.
-
-Prima di aprire a tutti, proponiamo di provare il giro completo con due o tre persone vere.
+**Sui tempi**: vorremmo arrivarci **il prima possibile**, ma non vi mettiamo una data davanti prima
+di sapere cosa comporta dalla vostra: fateci le vostre valutazioni, diteci quanto vi serve, e
+fissiamo insieme il giorno in cui il pulsante va online e il modulo viene tolto.
 
 ---
 
 ## 3. Cosa mettiamo a disposizione
 
-Il nostro provider lo mettiamo in piedi per questa integrazione: qui sotto c'è quello che vi
-arriverà dalla nostra parte.
+Il provider lo mettiamo in piedi per questa integrazione. Vi arriveranno:
 
-- Il documento di discovery (`.../.well-known/openid-configuration`), che contiene gli endpoint e
-  l'indirizzo delle chiavi.
-- `client_id` e `client_secret` dedicati a voi.
-- L'autorizzazione dei redirect URI che ci indicate.
-- Un riferimento nostro per tutta la messa in opera.
+- il documento di discovery (`.../.well-known/openid-configuration`), con gli endpoint e l'indirizzo
+  delle chiavi;
+- `client_id` e `client_secret` dedicati a voi, e l'autorizzazione dei redirect URI che ci indicate;
+- **una seconda coppia di credenziali per il collaudo**, con le redirect URI del vostro ambiente di
+  prova: il giro di prova si fa con quelle, non con quelle di esercizio;
+- un riferimento nostro per tutta la messa in opera.
+
+Tre cose tecniche, meglio dirle ora che scoprirle al collaudo.
+
+- **Gli scope da chiedere sono `openid email profile`.** L'indicatore di email verificata viaggia
+  con `email`, il nome e il nickname con `profile`. Lo scope `phone` non serve: il telefono non è
+  fra i campi che vi consegniamo. **Se vi servissero altri dati** — il telefono, per esempio —
+  diteci quali e per farci cosa: non li mandiamo per abitudine, perché ogni dato in più è un dato in
+  più da custodire per entrambi.
+- **Le chiavi di firma cambiano.** Vanno lette dall'indirizzo che trovate nel discovery, non copiate
+  nella vostra configurazione: oggi ce n'è una sola, ma il giorno in cui ruota chi l'ha copiata
+  smette di validare i token, e sembrerà un guasto nostro.
+- **Il nostro accesso non ha un endpoint di disconnessione** (`end_session_endpoint`): chi esce da
+  noi non viene disconnesso anche da voi, e la sessione sulla vostra piattaforma resta in mano
+  vostra come oggi. Se per voi è un problema, ditecelo prima di partire.
 
 ---
 
 ## 4. Cosa va concordato fra noi
 
-- **La chiave di aggancio è il `sub`, non l'email.** È l'unico identificatore stabile che
-  emettiamo; l'email le persone la cambiano. L'email serve una volta sola, al primo incontro con
-  una scheda che da voi esiste già: da lì in poi la persona resta legata al `sub`.
-- **Una persona, una scheda sola — e aggiornata.** L'aggancio tiene fermo *quale* account è; perché
-  serva a qualcosa devono valere anche i dati che vi arrivano a ogni accesso, non quelli del primo
-  giorno.
-- **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
-  dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
-- **Uso del token.** L'identità si legge dall'ID token e da UserInfo, senza usare il token di
-  accesso verso altre nostre funzioni. È la prassi; la nominiamo perché è il presupposto con cui
-  impostiamo i permessi.
+- **La chiave di aggancio è il `sub`, non l'email.** È l'unico identificatore stabile che emettiamo;
+  l'email le persone la cambiano. Serve una volta sola, al primo incontro con una scheda che da voi
+  esiste già: da lì in poi la persona resta legata al `sub`, e resta **una scheda sola**.
+- **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
+  altre nostre funzioni: è la prassi. Se doveste leggerla da UserInfo, in fondo alla Scheda dei dati
+  c'è la differenza da tenere presente.
+- **Tre casi da nominare prima del collaudo.** Se la persona **non dà il consenso** sulla nostra
+  pagina torna da voi senza identità: è un esito normale, non un errore nostro.
+  Gli **accessi contemporanei**: se per la stessa persona nuova ne partono due insieme, il `sub` è
+  identico in entrambi, ed è quello che permette di riconoscere che si tratta della stessa persona,
+  invece di aprire due schede. E il **`client_secret` ogni tanto lo cambiamo**: la rotazione la
+  programmiamo insieme a voi, invece di farvela trovare fatta.
+- **Se il nostro accesso si blocca.** Con una porta sola, per quel tempo su quella pagina non si
+  entra: lo mettiamo in conto, e vi diamo un recapito per segnalarcelo. L'unica cosa da non fare è
+  rimettere il modulo mentre aspettate — il blocco passa, gli account nati da quel modulo restano
+  scollegati per sempre.
 
 ---
 
 ## 5. Cosa ci serve sapere da voi
 
-Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il
-risultato.
+Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cui dipende il risultato.
 
-1. **Come funziona il collegamento che avete con Zucchetti?** Come ci era stato raccontato, i loro
-   dipendenti arrivano già registrati: se è un accesso unico come quello che proponiamo, a noi basta sapere
-   come replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece funziona in un altro modo, dal vostro lato serve un
-   client OpenID Connect: diteci cosa comporta, così ci regoliamo sui tempi.
-2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo va tolto nel
-   momento stesso in cui il pulsante va online. Se c'è un vincolo che lo blocca, è la prima
-   cosa che guardiamo insieme.
-   Sullo stesso schermo, una cosa che ci sta a cuore: chi arriva su quella pagina passando da un
-   nostro link — dalla nostra app o da altrove — vorremmo trovasse l'accesso **come prima cosa, a tutto schermo**,
-   invece di doverlo cercare; chi ci arriva per conto proprio lo troverebbe come pulsante fra i
-   contenuti. È impostabile dalla vostra parte, e a quali condizioni?
-   **La veste grafica la decidete voi**: colori e forma sono i vostri, a noi interessa solo che
+1. **Come funziona il collegamento che avete con Zucchetti?** Ci era stato raccontato che i loro
+   dipendenti arrivano già registrati: se è un accesso unico come questo, a noi basta sapere come
+   replicarlo — il nome del sistema, il documento che vi hanno dato, o chi l'ha collegato. Se invece
+   funziona in altro modo, dal vostro lato serve un client OpenID Connect: diteci cosa comporta, così
+   ci regoliamo sui tempi.
+2. **Cosa impedisce, oggi, di lasciare sulla pagina del nostro spazio il solo pulsante?** Il modulo
+   va tolto nel momento stesso in cui il pulsante va online: se c'è un vincolo che lo blocca, è la
+   prima cosa che guardiamo insieme. Sullo stesso schermo, una cosa che ci sta a cuore: chi arriva da
+   un nostro link vorremmo trovasse l'accesso **come prima cosa, a tutto schermo**, mentre chi ci
+   arriva per conto proprio lo troverebbe come pulsante fra i contenuti. È impostabile dalla vostra
+   parte, e a quali condizioni? **La veste grafica la decidete voi**: a noi interessa solo che
    l'accesso si veda.
 3. **Come si ricongiungono le due schede di una stessa persona?** Chi da voi ha già un account deve
-   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide, il caso è il più
-   semplice: dalla vostra parte l'aggancio fra le due schede esiste già, o è da prevedere?
-   Ma non sempre coincide: chi ha donato anni fa può avere lasciato l'email del lavoro, o un'altra
-   che oggi non usa più. **Quel caso va risolto, non solo segnalato**: dalla vostra parte
-   come si fa a ricongiungere due schede quando le email sono diverse? Se lo strumento non
-   esiste, mettiamolo fra le cose da prevedere insieme.
-   Serve anche sapere se gli account valgono per il singolo spazio o per tutta la piattaforma.
+   ritrovare quello, non trovarsene uno nuovo e vuoto. Quando l'email coincide immaginiamo sia
+   immediato; il caso che ci interessa è l'altro, perché capiterà spesso: chi ha donato anni fa e
+   oggi si registra da noi con un'email diversa da quella che avete in archivio.
 4. **Quando un dato cambia da noi, il vostro lato lo rilegge?** A ogni accesso vi arrivano i valori
-   aggiornati: ci serve sapere se li usate ogni volta o soltanto la prima, per creare l'account.
-   Se valgono solo alla creazione, chi aggiorna l'email da noi continua a risultare da voi con
-   quella vecchia, e il problema resta intero.
-   Un dettaglio della stessa famiglia: il vostro lato pretende `email_verified: true` per creare
-   l'account? Il campo lo emettiamo; la garanzia però non sta nel flag, sta nel fatto che senza
-   conferma da noi non si entra. Se per voi è una condizione bloccante ditecelo ora, così è fra le
-   prime cose che guardiamo insieme quando proviamo il giro.
-5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
-   arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, tanto meglio:
-   diteci come.
-6. **I tre campi del vostro modulo che il nostro accesso non copre**: il nickname, la scelta su come
-   apparire nelle liste pubbliche e l'adesione a community e classifiche.
-   Oggi li sceglie la persona mentre compila il modulo, e la visibilità in particolare è
-   obbligatoria, senza opzione preselezionata. Quando sulla pagina del nostro spazio quel modulo non
-   c'è più, l'account nasce dall'accesso con i dati che arrivano da noi — nome ed email — e quelle
-   tre scelte non le fa più nessuno: con quale valore nascono, uno deciso da voi o chiesto alla
-   persona dopo il primo ingresso?
-   Ci pesa soprattutto la visibilità, l'unica delle tre con un effetto pubblico: qualunque sia la
-   strada, dobbiamo poter scrivere nella nostra informativa cosa succede. E se la strada fosse
-   chiederlo, basterebbe quella domanda dopo l'ingresso: non sarebbe un secondo modulo di
-   registrazione, che è la cosa che vogliamo evitare a chi entra.
+   aggiornati: ci serve sapere se li usate ogni volta o solo alla creazione dell'account. Se solo
+   alla creazione, chi aggiorna l'email da noi continua a risultare da voi con quella vecchia.
+   Della stessa famiglia: il vostro lato pretende `email_verified: true` per creare l'account? Il
+   campo lo emettiamo sempre — cosa lo garantisce sta nella Scheda dei dati. Se per voi è una
+   condizione bloccante ditecelo ora, così è fra le prime cose che guardiamo insieme quando
+   proviamo il giro.
+5. **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
+   dirvelo: la parte che invia la costruiamo noi, e resta da concordare il canale su cui farla
+   arrivare. Oggi come le trattate, e a quale recapito possiamo comunicarvele? Se il collegamento
+   che mettiamo in piedi copre già anche questo, diteci come.
+6. **I due campi del vostro modulo che il nostro accesso non copre**: la scelta su come apparire
+   nelle liste pubbliche e l'adesione a community e classifiche. Oggi le sceglie la persona sul
+   vostro modulo, e la visibilità è obbligatoria, senza opzione preselezionata. Tolto il modulo,
+   l'account nasce dall'accesso e quelle due scelte non le fa più nessuno: con quale valore nascono,
+   uno deciso da voi o chiesto alla persona dopo il primo ingresso? Ci pesa soprattutto la
+   visibilità, l'unica con un effetto pubblico: qualunque sia la strada, dobbiamo poter scrivere
+   nella nostra informativa cosa succede. Se la strada fosse chiederlo, una domanda dopo l'ingresso
+   non è un secondo modulo di registrazione.
+
+   **Il nickname invece ve lo mandiamo noi**, come campo standard dell'accesso; la forma esatta è
+   nella Scheda dei dati. È **facoltativo**, e quando manca non arriva vuoto — non c'è proprio.
+   Molte persone non lo compilano, quindi l'assenza è un caso ordinario e non un errore: diteci
+   cosa mostrate in quel caso. Tre cose:
+   - **il contenuto è responsabilità nostra**, perché nasce nella nostra registrazione: non
+     applichiamo un filtro automatico, ma se ve ne arriva uno offensivo, o che finge di essere
+     qualcun altro, segnalatecelo — lo togliamo dal nostro lato e smette di arrivarvi;
+   - **è unico da voi?** Da noi **sì**, e due scritture che differiscono per una sola maiuscola
+     valgono come lo stesso nome. Resta la collisione con i nickname nati da voi, che non passano da
+     noi: quando ve ne arriva uno già in uso, cosa fate? La strada che ci preoccupa è che l'accesso
+     fallisca — il nickname non vale una registrazione persa. È la regola che seguiamo già da noi:
+     se al momento della registrazione il nome scelto risulta occupato, **la persona entra comunque**
+     e il nickname resta vuoto, da rimettere quando vuole;
+   - **dove lo mostrate, e a chi?** Ci serve per la nostra informativa. Da voi il nickname è una
+     delle opzioni della visibilità: se qualcuno sceglie di apparire col nickname e non ce l'ha, cosa
+     compare al suo posto?
+
    **I vostri due consensi sulle comunicazioni** stanno nella stessa condizione: nessuno dei due vi
-   arriva insieme all'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per
-   le comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» della persona che
-   possiate ereditare da noi.
+   arriva con l'accesso — quello sugli enti beneficiari da noi non esiste, e il nostro vale per le
+   comunicazioni nostre, non per le vostre. Non essendoci, non c'è un «sì» che possiate ereditare.
+
+   **Un terzo caso, di natura diversa: il Paese.** È obbligatorio nel vostro modulo e noi lo
+   raccogliamo, ma non è fra i campi che l'accesso porta con sé: non è come la visibilità e le
+   community, che da noi non esistono proprio — il Paese ce l'abbiamo, semplicemente non viaggia
+   insieme all'identità. Non ha quindi senso chiederlo di nuovo alla persona, che l'ha già dato a
+   noi: **se vi serve, ditecelo e ve lo facciamo arrivare.** Il come, così sapete cosa comporta dal
+   vostro lato: l'ID token porta una lista fissa di campi standard e il Paese non è fra quelli;
+   la risposta di **UserInfo** invece può portarlo, e lo prepariamo noi — lì però non è un campo
+   standard, quindi il vostro lato va adattato per leggerlo. Va concordato **prima** di attivare il
+   servizio, perché tocca il modo in cui i dati vi vengono consegnati.
+   Se trovate altri campi nella stessa condizione segnalateceli: l'elenco
+   nasce da quello che vediamo della vostra pagina, non dal vostro schema.
+
+**A chi rispondere.** Il riferimento per questa integrazione è **Riccardo**, che si raggiunge a
+**albieri.riccardo02@gmail.com**: lì arrivano le risposte alle sei domande qui sopra e qualunque
+chiarimento sul resto del documento.
 
 ---
 
 ## Scheda dei dati
 
-**Cosa emettiamo a ogni accesso** - solo i campi standard:
+**Cosa emettiamo a ogni accesso** - sono i campi dell'**identità**, tutti standard, e viaggiano
+nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l'ha compilato:
 
 | Campo | Cosa contiene |
 | --- | --- |
-| `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene nome né altri suoi dati, ma non è anonimo: è uno pseudonimo |
-| `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo vedete, ditecelo, perché come nome visibile non va |
-| `email` | L'indirizzo dell'account, confermato: da noi non si entra prima di averlo confermato |
+| `sub` | La chiave di aggancio: individua la persona presso di noi in modo permanente. Non contiene suoi dati, ma non è anonimo: è uno pseudonimo |
+| `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: in mancanza partirebbe l'indirizzo email — se lo vedete ditecelo, come nome visibile non va |
+| `email` | L'indirizzo dell'account, confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
+| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, nessun vincolo sui caratteri, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio — vale sia per chi non l'ha scelto, sia per chi l'ha cancellato dopo |
 
-**Se vi servono altri dati** oltre a questi - il telefono, per esempio - diteci quali e per farci
-cosa. Non li mandiamo per abitudine: ogni dato in più è un dato in più da custodire per entrambi, e
-prima di impegnarci guardiamo cosa il protocollo permette di trasportare davvero.
+**Cosa porta l'ID token oltre alla tabella**: i dati tecnici del token (chi l'ha emesso, quando
+scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la forniscono,
+l'indirizzo dell'immagine di profilo.
+
+**Se leggete da UserInfo invece che dall'ID token**, un campo si comporta in modo diverso: il claim
+`email_verified` lì **non viene emesso** quando l'email non è confermata, mentre nell'ID token c'è
+sempre. Trattate l'assenza come «non confermata» — e ditecelo prima del collaudo, così lo proviamo
+insieme.

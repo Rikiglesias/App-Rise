@@ -29,6 +29,7 @@ DIFETTI GIA' CORRETTI, in ordine di scoperta:
     unito -- deciso sull'ALTEZZA MISURATA, non sul numero di righe.
 """
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -57,8 +58,12 @@ BASE = getSampleStyleSheet()
 # «= A4 meno 20+20» da una parte, i 18 mm per lato dall'altra): cambiarne uno lasciava l'altro
 # valore sbagliato in SILENZIO, e da quando la larghezza serve anche a decidere se una tabella
 # sta in una pagina, un margine disallineato spezzerebbe tabelle che invece ci starebbero.
-MARGINE_LATERALE = 20 * mm
-MARGINE_VERTICALE = 18 * mm
+# Ridotti il 2026-07-30 (20/18 -> 18/15 mm) per il vincolo «il brief sta in 3 pagine»: il testo
+# era gia' stato asciugato del 19% e tagliare oltre significava togliere domande al partner, non
+# parole. Restano dentro i margini tipografici correnti per un A4 di testo; sotto questi il
+# documento comincia a leggersi male, e la leggibilita' e' il motivo per cui esiste il PDF.
+MARGINE_LATERALE = 18 * mm
+MARGINE_VERTICALE = 15 * mm
 
 CONTENT_WIDTH = A4[0] - 2 * MARGINE_LATERALE
 
@@ -76,8 +81,8 @@ STYLES = {
         spaceAfter=5, textColor="#333333",
     ),
     "body": ParagraphStyle(
-        "body", parent=BASE["BodyText"], fontSize=9.8, leading=14.2,
-        alignment=TA_JUSTIFY, spaceAfter=6,
+        "body", parent=BASE["BodyText"], fontSize=9.8, leading=13.4,
+        alignment=TA_JUSTIFY, spaceAfter=5,
     ),
     "quote": ParagraphStyle(
         "quote", parent=BASE["BodyText"], fontSize=9.2, leading=13.4, leftIndent=10,
@@ -98,8 +103,18 @@ STYLES = {
     ),
     # Voce di elenco NUMERATO: il numero sta nel testo, quindi serve solo il rientro.
     "ol": ParagraphStyle(
-        "ol", parent=BASE["BodyText"], fontSize=9.8, leading=14.2, alignment=TA_JUSTIFY,
-        leftIndent=14, spaceAfter=6,
+        "ol", parent=BASE["BodyText"], fontSize=9.8, leading=13.4, alignment=TA_JUSTIFY,
+        leftIndent=14, spaceAfter=5,
+    ),
+    # Capoverso che CONTINUA una voce di elenco numerato dopo una riga vuota. Serve perche' la
+    # riga vuota chiude l'elenco (`flush_all`), quindi la riga rientrata che segue non trova piu'
+    # un bullet aperto e cade nel ramo paragrafo: usciva a leftIndent 0, cioe' 14 punti PIU' A
+    # SINISTRA della voce che continua, leggendosi come un blocco a se'. Trovato sul PDF in
+    # consegna del 2026-07-30 (tre code della domanda 6: nickname, consensi, Paese) insieme al
+    # danno vero: i rimandi interni tipo «i due campi elencati all'inizio» perdevano il bersaglio.
+    "body_ol": ParagraphStyle(
+        "body_ol", parent=BASE["BodyText"], fontSize=9.8, leading=13.4, alignment=TA_JUSTIFY,
+        leftIndent=14, spaceAfter=5,
     ),
 }
 
@@ -147,6 +162,9 @@ SEPARATOR_ROW = re.compile(r"^\|[\s:|-]+\|$")
 # promette «ci sta» a tabelle che poi vengono spezzate. Misurato: a 35 righe wrap() dava 734.0 pt
 # contro 739.8 disponibili in teoria -> predizione «ci sta», realtà 2 pagine; con il padding
 # tolto la soglia è 727.8 e la predizione torna a combaciare (34 righe stanno, 35 no).
+# NB: quei numeri sono della misura del 2026-07-29, con MARGINE_VERTICALE a 18 mm. Col valore
+# attuale (15 mm) la soglia vale ~744.9 pt: il MECCANISMO regge perche' l'altezza si deriva dalla
+# costante, ma non citare quelle cifre come se fossero quelle di oggi.
 FRAME_PADDING = 6
 CONTENT_HEIGHT = A4[1] - 2 * MARGINE_VERTICALE - 2 * FRAME_PADDING
 
@@ -420,8 +438,79 @@ def build_table(rows: list[str]):
     return table
 
 
+# Quanto rientra ogni livello di annidamento di un elenco, in punti. I punti elenco annidati
+# (i tre sotto la domanda 6 del brief, rientrati di 3 spazi nel markdown) uscivano alla STESSA
+# x di quelli di primo livello: il rientro veniva buttato via dalla re.sub che toglie il «- ».
+# Trovato da un critico indipendente il 2026-07-30, e non visto prima perche' il PDF non era
+# stato ispezionato a occhio (pdftoppm assente sulla macchina).
+PASSO_ANNIDAMENTO = 12
+
+
+def _livello_bullet(line: str) -> int:
+    """Livello di annidamento di un punto elenco, dedotto dal rientro nel markdown.
+
+    Due spazi = un livello (prettier indenta a 2, l'autore a 3: entrambi valgono 1). Il tetto a
+    3 evita che un rientro anomalo spinga la voce fuori dalla colonna di testo.
+    """
+    spazi = len(re.match(r"^([ \t]*)", line).group(1).expandtabs(4))
+    return min(spazi // 2, 3)
+
+
+def _solo_parole(testo: str) -> str:
+    """Il testo ridotto alle sue PAROLE: senza marcatori markdown, spazi normalizzati, minuscolo.
+
+    Serve al confronto della sentinella, e chiude un falso negativo trovato da un critico
+    indipendente il 2026-07-30: il confronto girava sul markdown GREZZO, quindi una frase ritirata
+    che rientrasse con un grassetto in mezzo — «per iscritto **nell'accordo**», e in questo
+    documento il grassetto è ovunque — non faceva match e passava in silenzio. Un presidio con un
+    falso negativo è peggio di nessun presidio: dice «pulito» e nessuno guarda più.
+    """
+    t = testo
+    t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)   # link: resta il testo
+    t = re.sub(r"[*`_|#>]+", "", t)                   # enfasi, codice, tabelle, titoli, citazioni
+    return " ".join(t.split()).lower()
+
+
+def _sentinella_frasi_ritirate(md_path: Path, consegnato: str) -> None:
+    """Ferma la consegna se e' rientrata una frase tolta DI PROPOSITO.
+
+    Presidia una classe di errore con tre occorrenze sul brief verso Let's Donation, tutte
+    scoperte a valle da una review e mai dall'autore: riscrivere un paragrafo resuscita cio' che
+    una passata precedente aveva deciso di togliere. Il presidio umano («prima di riscrivere una
+    riga, `git log -S` sulla frase») non ha fermato la terza, arrivata fino al PDF in consegna.
+
+    Gira sul solo testo CONSEGNATO, per la ragione gia' imparata in questo file: una sentinella
+    che scatta su testo che il destinatario non vedra' mai insegna ad aggirarla. Le decisioni
+    stanno in `frasi-ritirate.json` accanto al documento, non qui: cambiare idea si fa aggiungendo
+    `revocata_il` alla voce, non spegnendo il controllo.
+    """
+    registro = md_path.parent / "frasi-ritirate.json"
+    if not registro.exists():
+        return
+    voci = json.loads(registro.read_text(encoding="utf-8")).get(md_path.name, [])
+    piatto = _solo_parole(consegnato)
+    trovate = [
+        v for v in voci
+        if not v.get("revocata_il") and _solo_parole(v["frase"]) in piatto
+    ]
+    if trovate:
+        dettaglio = "\n".join(
+            f"  - «{v['frase']}» — tolta il {v['tolta_il']}: {v['perche']}"
+            + (f"\n    (gia' rientrata: {', '.join(v['rientrata_il'])})" if v.get("rientrata_il") else "")
+            + f"\n    dove vive ora: {v['dove_vive_ora']}"
+            for v in trovate
+        )
+        raise SystemExit(
+            f"SENTINELLA: nel testo consegnato di {md_path.name} sono rientrate "
+            f"{len(trovate)} frasi ritirate di proposito:\n{dettaglio}\n"
+            "  Togliile, oppure — se la decisione e' cambiata — aggiungi \"revocata_il\" alla "
+            f"voce in {registro.name}, col motivo e chi l'ha deciso."
+        )
+
+
 def build(md_path: Path, pdf_path: Path) -> None:
     sorgente = md_path.read_text(encoding="utf-8")
+    _sentinella_frasi_ritirate(md_path, "\n".join(_righe_consegnate(sorgente)))
     # La sentinella guarda SOLO cio' che finira' nel PDF. Girava sul markdown grezzo, commenti
     # inclusi, e fermava la consegna per un'emoji che sta in una nota interna e che il
     # destinatario non vedra' mai: e' gia' successo (🧪 🔑 🔴 sono in FUORI_WINANSI non perche' il
@@ -443,11 +532,22 @@ def build(md_path: Path, pdf_path: Path) -> None:
     # di elenco dall'esterno.
     numerato: list = [False]
     in_comment: list = [False]
+    # Il capoverso corrente continua una voce di elenco numerato chiusa da una riga vuota?
+    # Lo decide la PRIMA riga del blocco (vedi il ramo paragrafo in fondo): da sola sa di essere
+    # rientrata, mentre `flush_para` vede solo il testo unito e non piu' l'indentazione.
+    para_rientrato: list = [False]
 
     def flush_para() -> None:
         if para:
-            story.append(Paragraph(inline(" ".join(para)), STYLES["body"]))
+            stile = STYLES["body_ol"] if para_rientrato[0] else STYLES["body"]
+            story.append(Paragraph(inline(" ".join(para)), stile))
             para.clear()
+        # Il reset sta FUORI dall'`if`: dentro, dipendeva dall'invariante non scritta «flag
+        # acceso ⟹ para non vuoto». Oggi vale (il flag si accende solo insieme al primo append),
+        # ma un domani chi svuotasse `para` per un'altra via si ritroverebbe il rientro applicato
+        # al paragrafo SUCCESSIVO — un difetto invisibile in un documento che va a un partner.
+        # Segnalato come fragilità da un critico indipendente, non come bug vivo.
+        para_rientrato[0] = False
 
     def flush_quote() -> None:
         if quote:
@@ -471,14 +571,17 @@ def build(md_path: Path, pdf_path: Path) -> None:
             #   - enumerate() qui -> riparte da 1 a ogni voce, perche' una riga vuota fra le
             #     voci chiude l'elenco e questa funzione viene richiamata per ognuna.
             # Il numero del documento non puo' sbagliare: e' quello che l'autore ha scritto.
-            for b in bullets:
+            for _, b in bullets:
                 story.append(Paragraph(b, STYLES["ol"]))
         else:
             story.append(
                 ListFlowable(
                     [
-                        ListItem(Paragraph(b, STYLES["body"]), leftIndent=14)
-                        for b in bullets
+                        ListItem(
+                            Paragraph(b, STYLES["body"]),
+                            leftIndent=14 + liv * PASSO_ANNIDAMENTO,
+                        )
+                        for liv, b in bullets
                     ],
                     bulletType="bullet",
                     bulletFontName="Helvetica",
@@ -606,7 +709,7 @@ def build(md_path: Path, pdf_path: Path) -> None:
             flush_table()
             if numerato[0]:  # si passa da numerato a puntato: sono due elenchi diversi
                 flush_bullets()
-            bullets.append(inline(re.sub(r"^\s*[-*] ", "", line)))
+            bullets.append((_livello_bullet(line), inline(re.sub(r"^\s*[-*] ", "", line))))
         elif re.match(r"^\s*\d+\. ", line):
             flush_para()
             flush_quote()
@@ -615,8 +718,12 @@ def build(md_path: Path, pdf_path: Path) -> None:
                 flush_bullets()
             numerato[0] = True
             num = re.match(r"^\s*(\d+)\. ", line).group(1)
+            # Livello 0 FISSO: l'annidamento e' implementato solo per i punti puntati (nel brief
+            # sono gli unici annidati, sotto la domanda 6). Un elenco NUMERATO annidato uscirebbe
+            # quindi allineato a quelli di primo livello, senza errore e senza avviso: se un
+            # domani serve, il rientro si prende con _livello_bullet(line) come nel ramo sopra.
             bullets.append(
-                f"<b>{num}.</b>&nbsp; " + inline(re.sub(r"^\s*\d+\. ", "", line))
+                (0, f"<b>{num}.</b>&nbsp; " + inline(re.sub(r"^\s*\d+\. ", "", line)))
             )
         elif bullets and line.startswith((" ", "\t")):
             # Continuazione indentata dell'ultimo punto elenco: QUALUNQUE rientro.
@@ -624,11 +731,19 @@ def build(md_path: Path, pdf_path: Path) -> None:
             # bullet «- »: quelle cadevano nel ramo paragrafo e la voce usciva spezzata in
             # due, con la seconda metà a piena larghezza. Non si era visto perche' l'unico
             # PDF guardato dal vivo aveva voci NUMERATE (continuazione a 3 spazi).
-            bullets[-1] += " " + inline(line.strip())
+            bullets[-1] = (bullets[-1][0], bullets[-1][1] + " " + inline(line.strip()))
         else:
             flush_quote()
             flush_bullets()
             flush_table()
+            # Se il blocco COMINCIA con una riga rientrata di almeno tre spazi, non e' un
+            # capoverso di sezione: e' la continuazione della voce numerata che la riga vuota
+            # precedente ha chiuso. Va allo stesso rientro dell'elenco, non a filo del corpo.
+            # Tre spazi, non due: le continuazioni dei bullet «- » che prettier indenta a due
+            # sono gia' intercettate dal ramo sopra quando l'elenco e' ancora aperto, e per
+            # quelle a elenco chiuso il comportamento resta invariato (nessun caso osservato).
+            if not para and re.match(r"^ {3,}\S", line):
+                para_rientrato[0] = True
             para.append(line)
 
     flush_all()

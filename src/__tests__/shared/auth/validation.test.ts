@@ -2,12 +2,15 @@ import {
   validateEmail,
   validatePassword,
   validatePhoneIT,
-  validateAdult,
+  validateMinAge,
+  MIN_AGE_YEARS,
   validateRequired,
   validateContactEmail,
   validateSignUpForm,
   validateProfileForm,
 } from '@/shared/auth/validation';
+import it_ from '@/locales/it';
+import en_ from '@/locales/en';
 
 const baseSignUp = {
   firstName: 'Mario',
@@ -21,6 +24,9 @@ const baseSignUp = {
   country: 'IT',
   birthDate: '2000-01-01',
   privacyConsent: true,
+  // Vuoto è il caso NORMALE: il nickname è facoltativo e la maggior parte delle
+  // registrazioni non ne avrà uno. La base rappresenta la registrazione tipica.
+  nickname: '',
 };
 
 const baseProfile = {
@@ -55,9 +61,56 @@ describe('auth validation', () => {
     expect(validatePhoneIT('3331234567')).toBe('phone_invalid');
   });
 
-  it('adult >= 18', () => {
-    expect(validateAdult('2000-01-01')).toBeNull();
-    expect(validateAdult('2020-01-01')).toBe('not_adult');
+  // Le date sono CALCOLATE dalla soglia, non scritte a mano: un '2000-01-01' fisso
+  // continuerebbe a passare anche se qualcuno riportasse la soglia a 18, e il test
+  // misurerebbe soltanto che il tempo passa.
+  const isoDaAnniFa = (anni: number, giorniDiScarto = 0): string => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - anni);
+    d.setDate(d.getDate() + giorniDiScarto);
+    return d.toISOString().slice(0, 10);
+  };
+
+  it(`età minima: ${MIN_AGE_YEARS} anni compiuti`, () => {
+    expect(validateMinAge(isoDaAnniFa(MIN_AGE_YEARS))).toBeNull();
+    expect(validateMinAge(isoDaAnniFa(MIN_AGE_YEARS + 20))).toBeNull();
+  });
+
+  it('sotto la soglia si resta fuori — anche di un giorno', () => {
+    // Il giorno prima di compierli: è il caso che distingue «soglia abbassata» da
+    // «vincolo tolto», e l'unico che se ne accorge.
+    expect(validateMinAge(isoDaAnniFa(MIN_AGE_YEARS, 1))).toBe('under_min_age');
+    expect(validateMinAge(isoDaAnniFa(MIN_AGE_YEARS - 5))).toBe(
+      'under_min_age'
+    );
+  });
+
+  // Il numero della soglia vive in DUE posti — la costante e i due messaggi tradotti,
+  // perché l'i18n non interpola. Questo test è ciò che impedisce loro di divergere: senza,
+  // cambiare `MIN_AGE_YEARS` lascerebbe l'app a dire un'età che non applica più.
+  it('i messaggi tradotti dicono la soglia VERA', () => {
+    expect(it_.auth.errors.under_min_age).toContain(String(MIN_AGE_YEARS));
+    expect(en_.auth.errors.under_min_age).toContain(String(MIN_AGE_YEARS));
+  });
+
+  it('data non valida resta distinguibile da «troppo giovane»', () => {
+    expect(validateMinAge('non-una-data')).toBe('date_invalid');
+  });
+
+  // Il 29 febbraio `setFullYear` trabocca al 1° marzo, mentre Postgres riporta al 28:
+  // un giorno in cui il modulo accetterebbe una data che il CHECK `eta_minima` respinge,
+  // e la registrazione fallirebbe DOPO, con un errore generico. Qui la data di sistema è
+  // fissata a un 29 febbraio per esercitare proprio quel giorno.
+  it('29 febbraio: il taglio coincide con quello del database', () => {
+    jest.useFakeTimers().setSystemTime(new Date('2028-02-29T12:00:00Z'));
+    try {
+      // Postgres: 2028-02-29 - 14 anni = 2014-02-28. Chi è nato il 1° marzo 2014 NON ha
+      // ancora compiuto 14 anni per il database, e non deve averli nemmeno per il modulo.
+      expect(validateMinAge('2014-03-01')).toBe('under_min_age');
+      expect(validateMinAge('2014-02-28')).toBeNull();
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   it('required', () => {
@@ -69,6 +122,51 @@ describe('auth validation', () => {
     const errors = validateSignUpForm({ ...baseSignUp, firstName: '' });
     expect(errors.firstName).toBe('required');
     expect(errors.lastName).toBeUndefined();
+  });
+
+  // Il nickname è l'unico campo facoltativo del modulo, e la sua forma deve combaciare
+  // col CHECK `nickname_forma` della migration 0017: se il form accetta ciò che il DB
+  // rifiuta, il trigger lo scarta in silenzio e la persona lo trova sparito senza aver
+  // visto nessun errore.
+  it('nickname facoltativo: vuoto non è un errore', () => {
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: '' }).nickname
+    ).toBeUndefined();
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: '   ' }).nickname
+    ).toBeUndefined();
+  });
+
+  it('nickname: la forma è quella del CHECK in colonna (2-30, trimmato)', () => {
+    expect(validateSignUpForm({ ...baseSignUp, nickname: 'x' }).nickname).toBe(
+      'nickname_length'
+    );
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: 'a'.repeat(31) }).nickname
+    ).toBe('nickname_length');
+    // I due bordi ammessi: se una delle due copie della regola si stringe, un valore
+    // legittimo verrebbe respinto dal DB dopo essere passato di qui.
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: 'ab' }).nickname
+    ).toBeUndefined();
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: 'b'.repeat(30) }).nickname
+    ).toBeUndefined();
+    // Gli spazi ai bordi si contano DOPO il trim, come fa il trigger: ' ab ' è un
+    // nickname di 2 caratteri valido, non uno di 4.
+    expect(
+      validateSignUpForm({ ...baseSignUp, nickname: '  ab  ' }).nickname
+    ).toBeUndefined();
+  });
+
+  it('nickname storto non blocca gli altri campi né viceversa', () => {
+    const errors = validateSignUpForm({
+      ...baseSignUp,
+      nickname: 'x',
+      firstName: '',
+    });
+    expect(errors.nickname).toBe('nickname_length');
+    expect(errors.firstName).toBe('required');
   });
 
   it('privacy consent obbligatorio', () => {

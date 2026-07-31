@@ -13,6 +13,10 @@ import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
+import {
+  useNicknameAvailability,
+  useNicknameHint,
+} from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -24,11 +28,13 @@ import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import {
   validateEmail,
   validatePhoneIT,
-  validateAdult,
+  validateMinAge,
   validateRequired,
   validateContactEmail,
+  validateNickname,
 } from '@/shared/auth/validation';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
+import { isNicknameConflict } from '@/shared/auth/nickname';
 import type { ProfileEditable } from '@/shared/auth/types';
 
 type Errors = Partial<
@@ -41,7 +47,8 @@ type Errors = Partial<
     | 'country'
     | 'birthDate'
     | 'email'
-    | 'contactEmail',
+    | 'contactEmail'
+    | 'nickname',
     string
   >
 >;
@@ -67,6 +74,20 @@ export const ProfileEditScreen: React.FC = () => {
   const [province, setProvince] = useState(profile?.province ?? '');
   const [country, setCountry] = useState(profile?.country ?? 'IT');
   const [birthDate, setBirthDate] = useState(profile?.birth_date ?? '');
+  // Nickname (migration 0017): `null` in colonna significa «non ne ho uno», e nel form
+  // si rappresenta come stringa vuota. È l'unico campo che la persona può
+  // legittimamente SVUOTARE — `updateProfile` riconverte `'' → null` prima di scrivere,
+  // perché la stringa vuota violerebbe il CHECK e farebbe fallire l'INTERA rettifica.
+  const [nickname, setNickname] = useState(profile?.nickname ?? '');
+  // Disponibilità mentre si scrive (0018). L'hook non interroga il server finché il
+  // valore resta quello con cui il campo si è aperto: qui il campo nasce PIENO, quindi
+  // senza quella guardia partirebbe una richiesta a ogni apertura della schermata.
+  // Lo stato NON va consumato al volo dentro `useNicknameHint`: serve anche al
+  // salvataggio, sotto. Senza, chi ha appena letto «già di qualcun altro» potrebbe
+  // salvare lo stesso e riceverebbe il messaggio della CORSA PERSA («un attimo prima di
+  // te») — falso, perché l'app lo sapeva da secondi.
+  const nicknameCheck = useNicknameAvailability(nickname);
+  const nicknameHint = useNicknameHint(nicknameCheck);
   // La mail di contatto si mostra e si rettifica per TUTTI dal 2026-07-25 (era
   // solo per gli account Apple Private Relay, F1.10). `isRelay` sopravvive per
   // un solo scopo: scegliere il testo-guida del campo (:279), perché a chi
@@ -134,7 +155,7 @@ export const ProfileEditScreen: React.FC = () => {
     if (validateRequired(country)) e.country = 'required';
     if (validateRequired(city)) e.city = 'required';
     if (country === 'IT' && validateRequired(province)) e.province = 'required';
-    const a = validateAdult(birthDate);
+    const a = validateMinAge(birthDate);
     if (a) e.birthDate = a;
     // Mail di contatto: obbligatoria e reale per chi ce l'ha già, e per chi la sta
     // scrivendo ora. NON per chi non l'ha mai avuta.
@@ -152,6 +173,17 @@ export const ProfileEditScreen: React.FC = () => {
         ? validateContactEmail(contactEmail)
         : null;
     if (ce) e.contactEmail = ce;
+    // Nickname: vuoto è una risposta valida («non ne voglio uno»); se invece c'è deve
+    // avere la forma del CHECK. Senza questo controllo la rettifica fallirebbe INTERA
+    // per un campo facoltativo, con l'errore generico e nessuna indicazione di quale
+    // campo l'ha causata.
+    const nick = validateNickname(nickname);
+    if (nick) e.nickname = nick;
+    // E se sappiamo GIÀ che è di qualcun altro, ci si ferma qui — come fa la
+    // registrazione (`useSignUpForm`). Senza, il salvataggio partirebbe, l'indice lo
+    // respingerebbe e la persona leggerebbe il messaggio della corsa persa («un attimo
+    // prima di te»): falso, perché lo sapevamo da secondi. `unknown` non ferma nessuno.
+    else if (nicknameCheck === 'taken') e.nickname = 'nickname_taken';
     setErrors(e);
     if (Object.keys(e).length > 0) return;
 
@@ -178,11 +210,32 @@ export const ProfileEditScreen: React.FC = () => {
     // in silenzio.
     if (contactEmail.trim() !== (profile?.contact_email ?? ''))
       changed.contact_email = contactEmail.trim();
+    // Il confronto è fra valori TRIMMATI da entrambi i lati: `updateProfile` scrive
+    // `trim() || null`, quindi senza il trim qui un nickname a cui la persona ha solo
+    // aggiunto uno spazio entrerebbe nel patch e produrrebbe una scrittura identica a
+    // quella già in colonna.
+    if (nickname.trim() !== (profile?.nickname ?? ''))
+      changed.nickname = nickname.trim();
 
     if (Object.keys(changed).length > 0) {
       const { error } = await updateProfile(changed);
       if (error) {
         setLoading(false);
+        // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio,
+        // qualcun altro ha preso lo stesso nickname. È raro, ma il modo peggiore di
+        // gestirlo è l'errore generico «impossibile salvare»: manderebbe la persona a
+        // ricontrollare nome, telefono e città, mentre il campo da cambiare è uno solo
+        // e glielo possiamo dire. Il messaggio va SUL CAMPO, non in fondo alla pagina.
+        if (isNicknameConflict(error)) {
+          setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
+          // E si dice anche che NON È STATO SALVATO NIENTE: `updateProfile` fa un solo
+          // `update` con tutti i campi cambiati, quindi il rifiuto dell'indice porta giù
+          // anche il cognome corretto e il telefono nuovo. Col solo errore sotto il
+          // campo nickname, la persona uscirebbe da qui convinta che il resto sia stato
+          // scritto — e se ne accorgerebbe settimane dopo, o mai.
+          setSubmitError(t('auth.edit.nothingSaved'));
+          return;
+        }
         setSubmitError(t('auth.edit.error'));
         return;
       }
@@ -206,6 +259,12 @@ export const ProfileEditScreen: React.FC = () => {
   }, [
     firstName,
     lastName,
+    nickname,
+    // Senza questa dipendenza il salvataggio leggerebbe lo stato di disponibilità
+    // CONGELATO alla creazione del callback: il blocco su «già preso» guarderebbe un
+    // verdetto vecchio, cioè quasi sempre `idle`. Il linter l'ha preso, ed è il tipo di
+    // difetto che nessun test coglie finché non capita la sequenza giusta.
+    nicknameCheck,
     email,
     phone,
     city,
@@ -333,6 +392,19 @@ export const ProfileEditScreen: React.FC = () => {
             ? 'auth.completeProfile.contactEmailPlaceholderRelay'
             : 'auth.completeProfile.contactEmailPlaceholder'
         )}
+      />
+      {/* Nickname: qui si può anche TOGLIERE, ed è l'unico campo per cui svuotare è
+          una risposta e non un errore. Chi non l'ha mai scelto lo trova vuoto: è la
+          seconda occasione per chi ha saltato il campo alla registrazione. */}
+      <AuthInput
+        label={t('auth.signup.nickname')}
+        value={nickname}
+        onChangeText={setNickname}
+        error={err(errors.nickname)}
+        {...nicknameHint}
+        placeholder={t('auth.signup.nicknamePlaceholder')}
+        autoCapitalize="none"
+        autoComplete="off"
       />
 
       {submitError ? (

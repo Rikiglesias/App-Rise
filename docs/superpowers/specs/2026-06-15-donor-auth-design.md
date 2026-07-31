@@ -3,6 +3,15 @@
 > Data: 2026-06-15 · Progetto: App Rise (Rise Against Hunger Italia) · Branch: da creare `feat/donor-auth`
 > Stato: design approvato (brainstorming), in attesa di revisione spec prima del piano.
 
+> 🔴 **DOCUMENTO STORICO SU UN PUNTO: l'età minima qui scritta (18+, righe 34, 56, 76) NON è
+> più quella del prodotto.** Dal 2026-07-30 la soglia è **14 anni** (migration 0019,
+> `constraint eta_minima`; app: `MIN_AGE_YEARS` in `validation.ts`), regime unico, decisione
+> di Riccardo. Le righe restano perché questo file è la fonte storica del vincolo — «semplifica
+> il consenso GDPR» era una scorciatoia tecnica mai discussa come scelta di prodotto — ma chi
+> legge questa spec per sapere com'è fatta l'app oggi deve andare alla 0019 e a
+> `docs/standards/legal-compliance.md`. Il resto del documento non è stato riverificato: non
+> darlo per attuale su nessun altro punto senza controllare alla fonte.
+
 ## Context
 L'app è oggi **100% statica, senza backend** (`src/shared/config/environment.ts:22-24` lo dichiara esplicitamente: `getApiUrl`/`API_BASE_URL` sono placeholder mai usati). Si vuole introdurre un'**area donatori** autenticata. Poiché l'area completa (storico donazioni, ricevute fiscali, profilo) è ampia, viene **decomposta**: questo spec copre **solo la Fase 1 = Autenticazione** (registrazione, login, sessione, profilo base, logout, eliminazione account). Donazioni e ricevute saranno sotto-progetti successivi, ciascuno con il proprio ciclo spec → plan → implementazione.
 
@@ -54,6 +63,11 @@ Tabella `public.profiles` (1:1 con `auth.users`):
 - RLS come unica barriera dati (anon key pubblica per design).
 - Consenso privacy esplicito e tracciato (`privacy_consent_at`), necessario per registrarsi. **Consenso marketing: resta FACOLTATIVO (opt-in libero) — per GDPR non può essere reso obbligatorio né condizione del servizio.** Telefono = dato di contatto (base giuridica: esecuzione servizio/eventi).
 - **Minori**: **età minima 18+** — registrazione riservata a maggiorenni; validazione su `birth_date` con messaggio chiaro se < 18. Semplifica il consenso GDPR.
+  > 🔴 **SUPERATO il 2026-07-30 (migration 0019): la soglia è 14 anni.** Questa riga è la
+  > fonte storica del vincolo — «semplifica il consenso GDPR» era una scorciatoia tecnica,
+  > mai discussa come scelta di prodotto, e per tre mesi ha escluso i minorenni da
+  > un'associazione che vive di volontari. Resta scritta perché è la traccia di come è
+  > nata; non descrive più il prodotto.
 - Data minimization: nessun GPS; location = città/provincia.
 - Diritto all'oblio: funzione elimina-account completa.
 

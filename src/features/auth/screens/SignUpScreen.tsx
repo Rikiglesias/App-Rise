@@ -11,6 +11,7 @@ import { AuthButton } from '../components/AuthButton';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useSignUpForm } from '../hooks/useSignUpForm';
+import { useNicknameHint } from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -25,6 +26,10 @@ export const SignUpScreen: React.FC = () => {
   const { t } = useTranslation();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useSignUpForm();
+  // Disponibilità del nickname mentre si scrive (migration 0018): senza, chi ne sceglie
+  // uno già preso si registra e lo trova vuoto, senza che nessuno glielo abbia detto.
+  // Lo stato arriva dal form, che è anche quello che lo consulta prima di inviare.
+  const nicknameHint = useNicknameHint(form.nicknameCheck);
 
   const err = (key?: string): string | undefined =>
     key ? t(`auth.errors.${key}`) : undefined;
@@ -76,6 +81,24 @@ export const SignUpScreen: React.FC = () => {
           onChange={onChange.birthDate}
           error={err(errors.birthDate)}
           placeholder={t('auth.signup.birthDatePlaceholder')}
+        />
+        {/*
+          Nickname: facoltativo, e la label lo dice — un campo in più su un modulo già
+          lungo va giustificato a chi lo legge, non solo a chi lo scrive. Il placeholder
+          spiega a cosa serve: senza, «nickname» in mezzo all'anagrafica è un campo
+          misterioso che la gente salta o compila a caso.
+          Fuori dalla catena di focus, come la data di nascita: chi non lo vuole non
+          deve nemmeno passarci sopra andando avanti col tasto della tastiera.
+        */}
+        <AuthInput
+          label={t('auth.signup.nickname')}
+          value={values.nickname}
+          onChangeText={onChange.nickname}
+          error={err(errors.nickname)}
+          {...nicknameHint}
+          placeholder={t('auth.signup.nicknamePlaceholder')}
+          autoCapitalize="none"
+          autoComplete="off"
         />
       </AuthSection>
 

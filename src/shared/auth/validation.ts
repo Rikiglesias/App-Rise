@@ -21,13 +21,34 @@ export const validatePassword = (v: string): FieldError =>
 export const validatePhoneIT = (v: string): FieldError =>
   /^\+\d{8,15}$/.test(v.trim()) ? null : 'phone_invalid';
 
-/** Età minima 18 anni alla data odierna. */
-export const validateAdult = (isoDate: string): FieldError => {
+/**
+ * Età minima per registrarsi. **14 anni**, non 18: è la soglia italiana per il consenso
+ * digitale (art. 8 GDPR, che fissa 16 e lascia scendere fino a 13; l'Italia ha recepito a
+ * 14 col d.lgs. 101/2018). Regime unico, deciso il 2026-07-30: sopra la soglia acconsente
+ * la persona, sotto non si entra — perché il consenso di chi ha la responsabilità
+ * genitoriale andrebbe raccolto e PROVATO, e non lo raccogliamo.
+ *
+ * Deve restare allineata al vincolo `eta_minima` della migration 0019: se le due regole
+ * divergono, il modulo accetta una data che il database respinge, e la persona vede
+ * fallire la registrazione con un errore che non le dice niente.
+ */
+export const MIN_AGE_YEARS = 14;
+
+/** Età minima alla data odierna (vedi `MIN_AGE_YEARS`). */
+export const validateMinAge = (isoDate: string): FieldError => {
   const d = new Date(isoDate);
   if (Number.isNaN(d.getTime())) return 'date_invalid';
   const cutoff = new Date();
-  cutoff.setFullYear(cutoff.getFullYear() - 18);
-  return d <= cutoff ? null : 'not_adult';
+  const giorno = cutoff.getDate();
+  cutoff.setFullYear(cutoff.getFullYear() - MIN_AGE_YEARS);
+  // Il 29 febbraio: `setFullYear` su un anno non bisestile TRABOCCA al 1° marzo, mentre
+  // Postgres (`- interval '14 years'`) riporta al 28. Un giorno di scarto in cui il modulo
+  // accetterebbe una data che il CHECK respinge — la registrazione fallirebbe dopo, con un
+  // errore generico. `setDate(0)` riporta all'ultimo giorno del mese precedente, cioè alla
+  // stessa data che sceglie il database. Difetto preesistente, non introdotto dai 14 anni:
+  // valeva identico con la soglia a 18.
+  if (cutoff.getDate() !== giorno) cutoff.setDate(0);
+  return d <= cutoff ? null : 'under_min_age';
 };
 
 export const validateRequired = (v: string): FieldError =>
@@ -71,6 +92,12 @@ export interface SignUpInput {
   country: string;
   birthDate: string;
   privacyConsent: boolean;
+  /**
+   * Nickname per i siti dei partner (migration 0017). FACOLTATIVO: la stringa vuota
+   * è la risposta normale, non un campo non compilato. Sta qui e non fra i campi
+   * obbligatori perché non serve a noi — nasce per il modulo del partner.
+   */
+  nickname: string;
 }
 
 export type SignUpErrors = Partial<Record<keyof SignUpInput, string>>;
@@ -92,9 +119,15 @@ export const validateSignUpForm = (input: SignUpInput): SignUpErrors => {
   // Provincia obbligatoria solo per l'Italia (concetto amministrativo italiano).
   if (input.country === 'IT' && validateRequired(input.province))
     e.province = 'required';
-  const adult = validateAdult(input.birthDate);
-  if (adult) e.birthDate = adult;
+  const eta = validateMinAge(input.birthDate);
+  if (eta) e.birthDate = eta;
   if (!input.privacyConsent) e.privacyConsent = 'required';
+  // Nickname: facoltativo, ma se c'è deve avere la forma del CHECK `nickname_forma`.
+  // Validarlo QUI non è pignoleria: il trigger della 0017 scarta in silenzio ciò che
+  // non rispetta la forma, quindi senza questo controllo la persona scriverebbe un
+  // nickname, non vedrebbe nessun errore, e lo troverebbe sparito dopo la conferma.
+  const nick = validateNickname(input.nickname);
+  if (nick) e.nickname = nick;
   return e;
 };
 
@@ -157,8 +190,8 @@ export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
   // Provincia obbligatoria solo per l'Italia (concetto amministrativo italiano).
   if (input.country === 'IT' && validateRequired(input.province))
     e.province = 'required';
-  const adult = validateAdult(input.birthDate);
-  if (adult) e.birthDate = adult;
+  const eta = validateMinAge(input.birthDate);
+  if (eta) e.birthDate = eta;
   // Il consenso si pretende alla NASCITA del profilo. Nel completamento di un
   // profilo esistente la casella non viene nemmeno mostrata: chiederla e poi non
   // registrarla è peggio che non chiederla (vedi `requirePrivacyConsent`).

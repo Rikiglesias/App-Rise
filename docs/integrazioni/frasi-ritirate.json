@@ -1,0 +1,108 @@
+{
+  "_perche_esiste": "Frasi che sono state TOLTE DI PROPOSITO da un documento in uscita e che non devono rientrare. Non e' una lista di stile: ogni voce e' una decisione presa, con la sua data e la sua ragione. La classe di errore che presidia e' 'riscrivere un paragrafo resuscita cio' che una passata precedente aveva deciso di togliere': tre occorrenze sul brief verso Let's Donation (28/07 lo scenario di danno, 29/07 le due falsita' rientrate nelle frasi correttive, 29/07 la clausola contrattuale), tutte trovate a valle da una review e non dall'autore. Il presidio umano era 'prima di riscrivere una riga, git log -S sulla frase': non ha fermato la terza.",
+  "_come_funziona": "scripts/md2pdf-brief.py chiama _sentinella_frasi_ritirate() sul solo testo CONSEGNATO (le note interne sono escluse: una sentinella che scatta su testo che il destinatario non vedra' mai insegna ad aggirarla). Se una frase e' presente, la generazione del PDF SI FERMA: non esiste PDF da mandare senza passare da qui.",
+  "_come_si_cambia_idea": "Se una frase deve tornare perche' la decisione e' cambiata, si aggiunge \"revocata_il\" alla sua voce con il motivo e chi l'ha deciso. La sentinella la salta. Cancellare la voce, o commentare la chiamata, e' il modo in cui questo presidio smette di essere creduto.",
+  "_confronto": "normalizzato: maiuscole/minuscole indifferenti e ogni sequenza di spazi/a-capo vale come un singolo spazio, perche' nel markdown le frasi si spezzano a fine riga.",
+
+  "letsdonation-brief-integrazione.md": [
+    {
+      "frase": "per iscritto nell'accordo",
+      "tolta_il": "2026-07-28",
+      "perche": "materia di contratto, non di primo brief: nomina un accordo che non esiste e manda un brief tecnico all'ufficio legale del destinatario",
+      "rientrata_il": ["2026-07-29 (84c8763), riscrivendo il punto per un altro fix"],
+      "dove_vive_ora": "scambio-dati-quadro.md, domanda 16 «Sull'accordo» (canale dei legali)"
+    },
+    {
+      "frase": "porta solo dati tecnici",
+      "_perche_questa_forma_lunga": "«solo dati tecnici» da sola e' una sottostringa che ignora la negazione: una frase futura corretta («non porta solo dati tecnici, c'e' anche...») verrebbe bloccata a torto. Ancorata al verbo.",
+      "tolta_il": "2026-07-30",
+      "perche": "assoluto sulla superficie dell'ID token, gia' corretto tre volte in altre formulazioni: il token porta anche picture, che e' un dato della persona. La forma prescritta dal canonico e' APERTA (scambio-dati-quadro.md:683)",
+      "rientrata_il": [],
+      "dove_vive_ora": "sostituita da «i dati tecnici del token (...) e, per gli accessi che la forniscono, l'indirizzo dell'immagine di profilo»"
+    },
+    {
+      "frase": "copia grezza di quello che il nostro sistema di accesso tiene",
+      "_perche_questa_forma_lunga": "e' l'ultima delle sei formulazioni con cui si e' provato a DESCRIVERE al partner il contenuto della risposta di UserInfo. Ancorata alla perifrasi, non a «UserInfo», che nel documento serve ancora e legittimamente.",
+      "tolta_il": "2026-07-31",
+      "perche": "RILIEVO LETTERALE DI RICCARDO sul PDF: «sembra molto confuso, non capisco cosa vuol dire». Il paragrafo faceva cinque lavori insieme e tre erano fatti NOSTRI (cosa c'e' nei metadata, che li abbiamo ripuliti, che ci fidiamo poco di UserInfo): al partner non servono per lavorare, e rassicurarlo su un problema che non sa di avere lo mette in allarme — variante attenuata di «consegnare la mappa della falla» (d03dd6e). PIU' IMPORTANTE: descrivere quel contenuto ha prodotto SEI riformulazioni in tre giorni, quattro delle quali con un assoluto falso (l'ultima, «non dati della persona», ritirata lo stesso giorno). Il difetto non e' nelle parole ma nel COMPITO: non si descrive quel contenuto, si dice solo cosa cambia per loro",
+      "rientrata_il": [],
+      "dove_vive_ora": "niente nel brief: resta il solo fatto operativo, «da UserInfo l'indicatore di email verificata non compare quando l'email non e' confermata». Il contenuto reale dei metadata vive in memoria di progetto (integrazione-identita-partner.md), che e' un canale NOSTRO"
+    },
+    {
+      "frase": "contrassegni tecnici del nostro provider, non dati della persona",
+      "_perche_questa_forma_lunga": "la coda «, non dati della persona» e' la parte che rende la frase falsa. NB (aggiornato lo stesso giorno): quando questa voce e' nata, «contrassegni tecnici del nostro provider» era la formulazione corretta rimasta nel testo e ancorare li' l'avrebbe bloccata; poche ore dopo l'INTERO capoverso e' stato tolto (vedi la voce «copia grezza...»), quindi oggi quel rischio non c'e' piu' - ma l'ancoraggio resta giusto per il caso in cui la descrizione rientri.",
+      "tolta_il": "2026-07-31",
+      "perche": "e' la QUINTA riformazione dello stesso assoluto sulla superficie consegnata (la 4a fu «porta solo dati tecnici», ritirata il 30/07). E' falsa alla fonte: la 0019 toglie nove chiavi e solo quelle (0019:382-385), e la migration stessa lo dichiara a :66-69 («email resta nei metadata... UserInfo continuera' a consegnarla»). Sul DB vivo restano email, email_verified, phone_verified, sub, e su un account Apple anche custom_claims.is_private_email, che rivela che l'indirizzo e' un alias. L'email E' un dato della persona: scriverne il contrario a un partner e' un impegno da ritrattare",
+      "rientrata_il": [],
+      "dove_vive_ora": "NIENTE nel brief: la frase sostitutiva («restano l'indirizzo dell'account e alcuni contrassegni tecnici») e' vissuta poche ore, poi il capoverso intero e' stato tolto il 2026-07-31 su rilievo di Riccardo. Il contenuto reale dei metadata vive solo in memoria di progetto (integrazione-identita-partner.md), che e' un canale NOSTRO"
+    },
+    {
+      "frase": "ce ne prendiamo noi il carico",
+      "tolta_il": "2026-07-28",
+      "perche": "promessa creduta IMPOSSIBILE sullo stack scelto: i claim custom non raggiungono il client OIDC (oidc-server-implementation-plan.md:18-22)",
+      "rientrata_il": [],
+      "dove_vive_ora": "niente: la promessa non si puo' mantenere"
+    },
+    {
+      "frase": "ci basta che lo richiediate",
+      "tolta_il": "2026-07-28",
+      "perche": "il telefono vive in public.profiles, non in auth.users: il claim standard non uscirebbe, e servirebbe un percorso di verifica SMS mai costruito",
+      "rientrata_il": [],
+      "dove_vive_ora": "e' diventata una DOMANDA nel brief, non un'offerta"
+    },
+    {
+      "frase": "aprendo la registrazione anche ai minorenni",
+      "_perche_questa_forma_lunga": "«anche ai minorenni» da sola bloccherebbe anche una frase corretta che dice il contrario («non apriamo anche ai minorenni»): il confronto e' per sottostringa e non conosce la negazione. Ancorata al verbo della frase davvero rimossa.",
+      "tolta_il": "2026-07-28",
+      "perche": "FALSO nel prodotto di oggi: constraint adult in 0001_profiles.sql:17 e validateAdult in validation.ts. Deciso non vuol dire rilasciato",
+      "rientrata_il": [],
+      "dove_vive_ora": "in attesa della fase F-MINORI",
+      "_scadenza_prevista": "Riccardo ha DECISO il 2026-07-30 che i minorenni entrano. La voce resta attiva finche' il PRODOTTO ha ancora il limite a 18 anni (constraint adult + validateAdult): serve a non scriverlo al partner PRIMA che sia vero, che e' l'errore per cui fu tolta. Il giorno in cui la fase F-MINORI e' rilasciata, questa voce va REVOCATA con `revocata_il` — non cancellata."
+    },
+    {
+      "frase": "restiamo due titolari autonomi",
+      "tolta_il": "2026-07-28",
+      "perche": "posizione PROPOSTA in conferma legale, non un fatto: dichiararla al partner la darebbe per concordata",
+      "rientrata_il": [],
+      "dove_vive_ora": "materia fra legali, fuori dal brief per decisione di Riccardo"
+    },
+    {
+      "frase": "comparirebbe in una lista senza averlo scelto",
+      "_perche_questa_forma_lunga": "la prima stesura metteva solo «senza averlo scelto», ma quella frase compare LEGITTIMAMENTE altrove (scambio-dati-quadro.md:123 e :1042, dove descrive il rischio dal lato loro) ed e' italiano comune: avrebbe bloccato la consegna per niente, e un falso positivo e' il modo in cui un presidio viene aggirato. La forma lunga e' quella davvero rimossa.",
+      "tolta_il": "2026-07-28 (e59e26a)",
+      "perche": "scenario di danno nella domanda 6: «e' un avvertimento a non combinare guai» rivolto al partner. Resta la sola ragione NOSTRA, quella ratificata",
+      "rientrata_il": ["2026-07-29, riscrivendo la domanda 6 (trovata dal critico avversariale)"],
+      "dove_vive_ora": "sostituita dalla ragione nostra: dobbiamo poter scrivere nella nostra informativa cosa succede"
+    },
+    {
+      "frase": "Sta da noi perché si possa entrare anche da computer",
+      "_nota_confronto": "il normalizzatore toglie il markdown e i doppi spazi, NON gli accenti: la frase va scritta come sta nel documento, con «perché» accentato.",
+      "tolta_il": "2026-07-30",
+      "perche": "Riccardo, rileggendo il brief: «non e' necessario dirlo». Giustificava una scelta di disegno NOSTRA che il partner non deve approvare, e portava con se' il paragone con l'accesso di Google — che apre il caso degli account social storici, deciso di non consegnare",
+      "rientrata_il": [],
+      "dove_vive_ora": "niente nel brief: la scelta resta, non la sua giustificazione"
+    },
+    {
+      "frase": "non va aperta la nostra app, nemmeno se la persona ce l'ha installata",
+      "_perche_questa_forma_lunga": "«non va aperta la nostra app» da sola e' una sottostringa che il confronto valuta senza conoscere la negazione: bloccherebbe anche una frase futura corretta che dicesse il contrario. Ancorata alla coda della frase davvero rimossa.",
+      "tolta_il": "2026-07-30",
+      "perche": "Riccardo: «non serve dirlo». ATTENZIONE, e' l'unica delle quattro rimozioni che toglie dal testo una CONDIZIONE TECNICA VERA (nessun app-link registrato in app.config.js): toglierla dal documento non la annulla, e se un domani registrassimo quell'indirizzo il giro da telefono si romperebbe senza che il partner sappia che era una condizione",
+      "rientrata_il": [],
+      "dove_vive_ora": "vincolo NOSTRO, tracciato in ~/todos/partner-identita.md e nella memoria di progetto — fuori dal brief"
+    },
+    {
+      "frase": "l'aggancio per email tiene solo se quell'indirizzo è confermato da tutt'e due le parti",
+      "tolta_il": "2026-07-30",
+      "perche": "Riccardo: «non capisco perche' dirlo». E' il taglio che costa di piu': era l'unico avviso di SICUREZZA rivolto a loro — se agganciano schede con un indirizzo mai confermato, consegnano la scheda di una persona a un'altra (la falla che noi abbiamo chiuso con la 0016). Tolto su sua decisione, col costo dichiarato in chat prima di eseguirlo",
+      "rientrata_il": [],
+      "dove_vive_ora": "il rimedio nostro vive nella 0016; verso il partner l'avviso non e' piu' scritto"
+    },
+    {
+      "frase": "verificato per costruzione",
+      "tolta_il": "2026-07-29",
+      "perche": "e' la premessa falsa che ha generato la falla del claim su email non confermata: vera per chi ENTRA, falsa per la RIGA d'archivio. Una frase cosi' non la prende nessun test",
+      "rientrata_il": [],
+      "dove_vive_ora": "sostituita dal FATTO senza l'inferenza: «L'indirizzo dell'account, confermato»"
+    }
+  ]
+}

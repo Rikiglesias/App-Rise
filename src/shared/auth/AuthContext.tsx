@@ -307,7 +307,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // quel campo. È l'unico campo modificabile che l'utente può svuotare, quindi è
       // anche l'unico che ha bisogno di questa conversione.
       const payload: Record<string, unknown> = { ...patch };
-      if (payload.nickname === '') payload.nickname = null;
+      if (typeof payload.nickname === 'string') {
+        // Due normalizzazioni, e servono ENTRAMBE perché il CHECK `nickname_forma`
+        // pretende sia la lunghezza sia l'assenza di spazi ai bordi:
+        //   ' ab ' → 'ab'  (senza trim, `nickname = btrim(nickname)` è falso)
+        //   ''     → null  ('' non è null e non è lungo 2-30)
+        // In entrambi i casi la violazione non riguarderebbe solo il nickname: farebbe
+        // fallire l'INTERO update, quindi anche la correzione del cognome fatta insieme.
+        payload.nickname = payload.nickname.trim() || null;
+      }
       const { error } = await supabase
         .from('profiles')
         .update(payload)

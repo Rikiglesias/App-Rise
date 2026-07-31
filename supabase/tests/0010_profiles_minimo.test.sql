@@ -8,7 +8,7 @@
 -- devono cedere continuino a rifiutare il null, e che il completamento successivo
 -- funzioni.
 
--- T1: phone e city sono nullable; i campi che reggono l'identità e il 18+ NON lo sono.
+-- T1: phone e city sono nullable; i campi che reggono l'identità e l'età minima NON lo sono.
 -- L'asse negativo è la metà che conta: una 0010 troppo generosa (che liberasse anche
 -- first_name o birth_date) passerebbe un test scritto solo in positivo.
 do $$

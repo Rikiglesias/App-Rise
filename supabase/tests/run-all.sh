@@ -28,6 +28,10 @@ PAIRS=(
   "0014_claim_legacy_campi_vuoti"
   "0015_aggancio_su_email_verificata"
   "0016_claim_su_email_confermata"
+  "0017_profiles_nickname"
+  "0018_nickname_disponibile"
+  "0019_eta_minima_e_bonifica_metadata"
+  "0020_claim_nickname_da_profiles"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
@@ -65,17 +69,55 @@ for pair in "${PAIRS[@]}"; do
     # ARRAY, non stringa: con due percorsi una stringa unica verrebbe passata a `cat`
     # come UN argomento solo («…0014.sql migrations/0015.sql») e il file non si
     # troverebbe. L'array espande un elemento per argomento.
+    #
+    # ⚠️ Dal 2026-07-30 vale anche per `handle_new_user`: la 0017 ne riscrive il corpo,
+    # quindi è la 0017 l'ultima che la definisce. Riapplicando la 0011 per il suo test di
+    # rieseguibilità si torna al corpo senza nickname, e la suite 0011 girerebbe contro
+    # codice che in produzione non esisterà più — cioè proprio il caso che deve
+    # intercettare un `create or replace` che perde pezzi (successo il 29/07 su un'altra
+    # funzione: corpo copiato dalla migration sbagliata, suite della migration nuova
+    # tutta verde). Si rimette la 0017 in coda.
+    #
+    # ⚠️ Dal 2026-07-30 sera la 0019 è l'ultima a definire TRE funzioni della catena
+    # (`handle_new_user`, `claim_legacy_contact`, `sync_contact_email_on_email_change`):
+    # va rimessa in coda a OGNI coppia che ne riapplica una versione precedente — comprese
+    # 0016 e 0017, che prima non avevano bisogno di `extra`.
+    #
+    # ⚠️ Dal 2026-07-31 la 0020 è l'ultima a definire `handle_new_user` e
+    # `pulisci_metadata_anagrafici_di`: va in coda a OGNI coppia che ne riapplica una
+    # versione precedente — compresa la 0019, che prima chiudeva la catena. Senza,
+    # quelle suite girerebbero contro un corpo che in produzione non esisterà più.
+    # ⚠️ La 0020 RIBALTA una regola che la 0019 verificava (`country` spariva dai metadata,
+    # ora resta, decisione di Riccardo del 2026-07-31): il T5 della suite 0019 è stato
+    # aggiornato di conseguenza e la chiave si è spostata nel T11 della suite 0020. Se un
+    # domani la 0019 tornasse a girare SENZA la 0020 in coda, quel test andrebbe rimesso
+    # com'era — è il motivo per cui la riga `0019 → 0020` qui sotto non è opzionale.
     extra=()
     case "$pair" in
+      0011_signup_contact_email)
+        extra=(migrations/0017_profiles_nickname.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
       0012_legacy_contacts|0013_contact_email_follows_account)
         extra=(migrations/0014_claim_legacy_campi_vuoti.sql
                migrations/0015_aggancio_su_email_verificata.sql
-               migrations/0016_claim_su_email_confermata.sql) ;;
+               migrations/0016_claim_su_email_confermata.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
       0014_claim_legacy_campi_vuoti)
         extra=(migrations/0015_aggancio_su_email_verificata.sql
-               migrations/0016_claim_su_email_confermata.sql) ;;
+               migrations/0016_claim_su_email_confermata.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
       0015_aggancio_su_email_verificata)
-        extra=(migrations/0016_claim_su_email_confermata.sql) ;;
+        extra=(migrations/0016_claim_su_email_confermata.sql
+               migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
+      0016_claim_su_email_confermata|0017_profiles_nickname)
+        extra=(migrations/0019_eta_minima_e_bonifica_metadata.sql
+               migrations/0020_claim_nickname_da_profiles.sql) ;;
+      0019_eta_minima_e_bonifica_metadata)
+        extra=(migrations/0020_claim_nickname_da_profiles.sql) ;;
     esac
 
     log=$(cat "tests/${shim}.sql" migrations/0*.sql \
@@ -87,7 +129,16 @@ for pair in "${PAIRS[@]}"; do
     # quindi un giro che non esegue NIENTE — file mancante nel `cat`, o un errore
     # Docker che stampa «Error» e non «ERROR» — usciva «verde … 0 PASS» con exit 0.
     # Una suite che non gira non è una suite che passa.
-    if [ "$pass" -eq 0 ] || printf '%s' "$log" | grep -qE 'FAIL|ERROR'; then
+    #
+    # ⚠️ HERE-STRING, NON `printf '%s' "$log" | grep -qE …` (com'era fino al 2026-07-30):
+    # con `set -o pipefail`, `grep -q` esce al PRIMO match e chiude la pipe, `printf` muore
+    # di SIGPIPE (141) e la pipeline restituisce 141 — che qui si legge «nessun FAIL
+    # trovato», cioè **una suite rossa dichiarata verde**. Si innesca solo con log grandi
+    # abbastanza da non stare nel buffer della pipe: un fallimento verboso (uno stack trace
+    # PL/pgSQL basta) è esattamente il caso in cui il log cresce. Scoperto sui mutanti della
+    # 0019, dove un mutante moriva a mano e risultava «sopravvissuto» qui.
+    # `grep -c` due righe sopra è immune: senza `-q` legge tutto l'input.
+    if [ "$pass" -eq 0 ] || grep -qE 'FAIL|ERROR' <<< "$log"; then
       echo "ROSSO  ${pair} [${shim}] — ${pass} PASS prima del fallimento:"
       printf '%s\n' "$log" | grep -E 'FAIL|ERROR' | head -3
       fallite=$((fallite + 1))

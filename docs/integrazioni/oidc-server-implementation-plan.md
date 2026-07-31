@@ -21,6 +21,37 @@ STANDARD determinati dagli scope: `sub`, `email`, `email_verified`, `name`, `pho
 `picture`. Un client OIDC di terzi (plugin Joomla di LD) legge id_token/UserInfo → **non
 vedrà mai `rise_ref` né un'email "risolta" custom**.
 
+> 🔴 **CORREZIONE 2026-07-29 — la seconda metà di quel «né UserInfo» è FALSA, letta nel sorgente.**
+> `internal/api/oauthserver/handlers.go`, funzione `OAuthUserInfo`: dopo aver estratto i claim
+> standard, con lo scope `profile` esegue `userInfo["user_metadata"] = user.UserMetaData` — la mappa
+> **intera**. L'`id_token` invece è pulito: `internal/tokens/service.go`, `GenerateIDToken`, assegna
+> solo `Name`, `Picture`, `PreferredUsername`, `UpdatedAt` (verificato nel CORPO, non nel commento).
+> **Asimmetria su `email_verified`, con la prova** (registrata qui perché due critici di fila l'hanno
+> sospettata inventata, non trovandola scritta da nessuna parte): nell'`id_token` il campo c'è
+> SEMPRE, anche quando è `false`, perché la struct dei claim lo dichiara
+> `EmailVerified bool \`json:"email_verified"\` // not omitempty because it's required by OIDC spec`;
+> in UserInfo invece la mappa è costruita a mano e la chiave è scritta solo dentro
+> `if user.EmailConfirmedAt != nil`, quindi per un utente non confermato **manca**. Stessa cosa per
+> `email`, che nell'id_token ha `omitempty` e in UserInfo è dentro `if email != ""`.
+> Conseguenze: ① la Scheda dei dati del brief non poteva dire «solo i campi standard» senza
+> distinguere le due superfici — corretto nel brief il 29/07; ② **qualunque cosa scriviamo nei
+> `user_metadata` diventa consegnabile a LD via UserInfo**, quindi la regola operativa è tenere
+> l'anagrafica in `profiles` e i metadata al minimo. 🔴🔴 **E OGGI NON È COSÌ — correzione della
+> stessa sera, dal critico avversariale**: `AuthContext.tsx:213-233` (`signUp`) scrive in
+> `options.data`, cioè in `raw_user_meta_data`, **`first_name`, `last_name`, `phone`, `city`,
+> `province`, `country`, `birth_date`, `marketing_consent`**, e nessuno le ripulisce
+> (`handle_new_user` le legge soltanto). ⇒ con lo scope `profile` UserInfo consegnerebbe a LD
+> l'anagrafica completa di chi si registra dall'app. **Precondizione nuova, bloccante prima di
+> accendere il provider**: bonificare `handle_new_user` perché cancelli quelle chiavi dopo l'insert
+> (lasciando `name` e `preferred_username`) → da accorpare alla **0019** di F-MINORI (la 0018 è
+> occupata da `0018_nickname_disponibile.sql`, presa il 2026-07-30). La versione
+> precedente di questa nota diceva «oggi i metadata contengono solo email/…/provider_id, verificato
+> su `auth.users`»: era un campione di 2 account **nessuno dei quali nato dal form email**, cioè una
+> generalizzazione — il contenuto dei metadata si legge nel punto di SCRITTURA, non contando le
+> chiavi degli account esistenti; ③ la conclusione «`rise_ref` non è consegnabile» **resta valida ma per un'altra
+> ragione**: non perché UserInfo filtri, ma perché `rise_ref` vive in `partner_refs`, non nei
+> metadata. Non riaprire la decisione su quella base.
+
 Conseguenze:
 
 - **`rise_ref` esce dal login OIDC.** Non serviva all'identità (quella è il `sub`): `rise_ref`
@@ -82,7 +113,7 @@ Conseguenze:
    Route:
    - `/consent` — legge `authorization_id`, `supabase.auth.oauth.getAuthorizationDetails()`,
      mostra client+scope, `approveAuthorization()` / `denyAuthorization()`, redirect.
-   - `/register` — signup DA WEB (Apple/Google/email + 18+ `birth_date` + consenso privacy
+   - `/register` — signup DA WEB (Apple/Google/email + età minima 14 su `birth_date` + consenso privacy
      tracciato + provisioning profilo), per il nuovo utente diretto su LD (SSO-only).
    - `/auth/callback` — redirect handler; token exchange e `client_secret` SOLO server-side.
    - **NB claim `name`**: viene dai `user_metadata`, non da `profiles`. La sincronizzazione

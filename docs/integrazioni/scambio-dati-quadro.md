@@ -81,7 +81,7 @@ e **non è ancora stato inviato**.
 
 | Archivio | Proprietario | Cosa contiene | Cosa l'altra parte può vedere |
 |---|---|---|---|
-| **Supabase — nostro backend** (Germania, Francoforte, region verificata 07/07/2026 `[V]`) | Rise Against Hunger Italia, **titolare del trattamento**; Supabase è responsabile | Account (`auth.users`: l'email vive qui, non in `profiles`) · anagrafica `profiles`: nome, cognome, data di nascita col controllo dei 18 anni, telefono, città, provincia, paese, email di contatto alternativa, data del consenso privacy, consenso marketing, data di richiesta cancellazione · registro dei consensi `consent_events` (sola aggiunta) · versioni dell'informativa `policy_versions` · codici di provenienza `partner_refs` · lapidi di cancellazione `partner_ref_tombstones` | **Nessun accesso diretto.** Ogni tabella **con dati personali** è leggibile solo alla riga del proprio utente; la tabella delle lapidi non è raggiungibile da nessun client; l'elenco delle versioni dell'informativa (nessun dato personale) è leggibile per intero da qualunque utente autenticato `[V]`. **Eccezione dichiarata:** con l'accesso federato attivo, nel giro standard del protocollo il loro sistema riceve un gettone con i pieni poteri dell'utente, che gli scope non limitano — l'unica barriera sono le nostre regole di riga. Mitigazioni: impegno contrattuale a leggere l'identità solo dal token di identità `[da sottoscrivere]`, verifica riga per riga delle regole `[da fare]`, durata breve del gettone — ma su Supabase la scadenza è **impostazione di progetto**, valida per tutte le sessioni: un valore dedicato ai soli token del partner è `[A]` da verificare |
+| **Supabase — nostro backend** (Germania, Francoforte, region verificata 07/07/2026 `[V]`) | Rise Against Hunger Italia, **titolare del trattamento**; Supabase è responsabile | Account (`auth.users`: l'email vive qui, non in `profiles`) · anagrafica `profiles`: nome, cognome, data di nascita col controllo dell'età minima (14 anni), telefono, città, provincia, paese, email di contatto alternativa, data del consenso privacy, consenso marketing, data di richiesta cancellazione · registro dei consensi `consent_events` (sola aggiunta) · versioni dell'informativa `policy_versions` · codici di provenienza `partner_refs` · lapidi di cancellazione `partner_ref_tombstones` | **Nessun accesso diretto.** Ogni tabella **con dati personali** è leggibile solo alla riga del proprio utente; la tabella delle lapidi non è raggiungibile da nessun client; l'elenco delle versioni dell'informativa (nessun dato personale) è leggibile per intero da qualunque utente autenticato `[V]`. **Eccezione dichiarata:** con l'accesso federato attivo, nel giro standard del protocollo il loro sistema riceve un gettone con i pieni poteri dell'utente, che gli scope non limitano — l'unica barriera sono le nostre regole di riga. Mitigazioni: impegno contrattuale a leggere l'identità solo dal token di identità `[da sottoscrivere]`, verifica riga per riga delle regole `[da fare]`, durata breve del gettone — ma su Supabase la scadenza è **impostazione di progetto**, valida per tutte le sessioni: un valore dedicato ai soli token del partner è `[A]` da verificare |
 | **Let's Donation — Joomla** (motore e-commerce presumibilmente HikaShop `[A]`, da confermare con loro), installazione multi-inquilino | Let's Donation S.r.l., Bologna, P.IVA 03188581205 (partner Zucchetti). **Titolare autonomo** | Account nativi creati col loro modulo — campi verificati dal vivo sul nostro tenant il 25/07, elenco completo in §2.1 `[V]` · ordini di gift card · donazioni in denaro ai progetti (sul progetto «Un Pasto in Sospeso \| Bologna»: 47 donazioni, 259,10 € `[V]`) · attivazioni cashback dello shop — lì **da loro non nasce alcun ordine**, l'acquisto è su un negozio terzo `[V]` · iscrizioni a eventi (oggi **zero eventi attivi** sul nostro spazio `[V]`) · in futuro gli account creati al primo accesso federato | **Nessun accesso al loro database, in nessuna direzione.** Ciò che ci serve passa da canali espliciti: campo sorgente sull'ordine, export, webhook, conferme scritte. La loro installazione è condivisa fra molti enti — loro parlano di oltre mille `[A]`; verificata è la multi-inquilinità (tenant diversi rispondono sullo stesso indirizzo di rete), non il numero. Motore: **MySQL**, riferito a voce da loro, coerente con l'impronta Joomla/PHP `[A]`; la dicitura «SQL Server» in alcune nostre tabelle vecchie è un residuo già corretto alla fonte, non una divergenza aperta. Irrilevante finché non si apre nessun database, e da non citare mai a loro |
 | **Donorbox** (società statunitense) | Donorbox. Titolare autonomo | Le donazioni fatte dalla pagina ospitata da loro, con nome, cognome, email e importo che precompiliamo noi, più il nostro codice nel campo di campagna | Nessun accesso al nostro database. Noi possiamo leggere le donazioni via loro API (fase successiva, ~17 $/mese `[A]`, da confermare sul piano attivo). Che il nostro codice torni sul record della donazione **non è verificato**: serve una donazione reale da 1 € `[A]` |
 | **Access (`.accdb`) sul server Windows dell'associazione** | L'associazione. **Resta il master anagrafico interno** | Anagrafica donatori/soci storica. Lo **schema reale è ignoto**: è il bloccante numero uno di quel lavoro `[V]` | **Nessun accesso dei partner, in nessuna forma.** Non è esposto a internet e non lo sarà. Flusso a senso unico, dal nostro cloud verso Access, con un programma che gira **sul server** (il cloud non può scrivere in un file Access locale). Deve portare anche consensi e richieste di cancellazione. Stato: **deciso e progettato, non costruito**, in pausa dal 17/07 `[V]` |
@@ -94,12 +94,13 @@ e **non è ancora stato inviato**.
 ### 2.1 Cosa chiede il loro modulo di registrazione, oggi
 
 Verificato dal vivo sul nostro tenant il 25/07/2026, leggendo la pagina reale `[V]`. Serve perché
-**è la lista di ciò che l'accesso federato deve sostituire** — e tre voci non le abbiamo.
+**è la lista di ciò che l'accesso federato deve sostituire** — e due voci non le abbiamo (erano tre:
+il **nickname** è uscito dall'elenco il 29/07, lo aggiungiamo noi con la `0017`).
 
 | Campo del loro modulo | Obbligatorio | Ce l'abbiamo? |
 |---|---|---|
 | Nome, Cognome | sì | sì |
-| **Nickname** | no | **no** |
+| **Nickname** | no | **in arrivo** — colonna e claim scritti il 29/07 (`0017`, non ancora applicata); manca il campo nel modulo |
 | Paese | sì | sì |
 | Email | sì | sì |
 | Password + conferma (minimo 6 caratteri) | sì | sì, con regole più severe (8 caratteri, maiuscola, speciale) |
@@ -153,7 +154,7 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 | Indicatore «email verificata» (`email_verified`) | noi → LD | idem | Al login. Va chiesto che il loro sistema non lo pretenda sull'alias Apple | `[V]` sul dato, `[A]` sul loro comportamento |
 | **Gettone tecnico con i pieni poteri dell'utente** | noi → LD | Scambio standard del protocollo allo sportello dei token | **Inevitabile per costruzione**: non è «glielo diamo o no». Gli scope non lo limitano lato dati; l'autorizzazione dipende interamente dalle nostre regole di riga | `[V]` |
 | Account creato dal loro sistema al primo accesso | effetto lato loro | Creazione al volo | Che il loro negozio accetti un alias Apple per creare l'account **è un assunto** da confermare | `[A]` |
-| Informazioni personalizzate nel token (codice di provenienza, email reale) | **nessuna** | Escluso: verificato su documentazione ufficiale che le informazioni personalizzate finiscono solo nel gettone di accesso, mai nel token di identità né sull'endpoint utente — quindi non raggiungerebbero il loro sistema | Mai | `[V]` |
+| Informazioni personalizzate nel token (codice di provenienza, email reale) | **nessuna** | Escluso: verificato su documentazione ufficiale che le informazioni personalizzate finiscono solo nel gettone di accesso, mai nel token di identità né sull'endpoint utente — quindi non raggiungerebbero il loro sistema. ⚠️ **Premessa corretta il 29/07 (sorgente GoTrue)**: l'endpoint utente NON filtra — con lo scope `profile` restituisce i `user_metadata` interi. La conclusione regge lo stesso, ma per un'altra ragione: quei dati non stanno nei `user_metadata` | Mai | `[V]` |
 | Campo sorgente catturato all'atterraggio, stampato sull'ordine, presente nell'export | LD → noi | Campo sull'ordine + export o webhook | **Richiesta**, non esistente | `[A]` |
 | Indicatore «persona entrata dal nostro accesso» nell'export | LD → noi | Campo nell'export | **Richiesta.** Per chi entra dal nostro accesso vale più del codice nell'indirizzo: l'attribuzione è certa per costruzione | `[A]` |
 | Export (o webhook) delle donazioni ai progetti sul nostro spazio | LD → noi | Export o webhook | **Richiesta**, conseguenza obbligata della convivenza dei due canali di donazione | `[A]` |
@@ -208,9 +209,19 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
   sul loro spazio, dove oggi un minorenne passerebbe. Va detto a loro (tocca la loro conversione) e
   deciso da noi: lo accettiamo, o prevediamo un percorso col consenso di chi ha la responsabilità
   genitoriale?
-- **Tre campi del loro modulo non ce li abbiamo** (nickname, scelta di visibilità pubblica, adesione a
+- **Due campi del loro modulo non ce li abbiamo** (scelta di visibilità pubblica, adesione a
   community e classifiche) e la visibilità è obbligatoria da loro: qualcuno deve chiederla al primo
   ingresso. Vedi §2.1.
+  ✅ **Il nickname è uscito da questo elenco il 2026-07-29** (decisione di Riccardo: «lo stiamo
+  facendo e lo avremo prima che loro possano risponderci»). Lo mandiamo come claim standard
+  `preferred_username` — verificato alla fonte che il server auth lo trasporta su entrambe le facce,
+  senza ripiego sull'email; migration `0017` + `syncNicknameClaim`. È **facoltativo**: se la persona
+  non lo compila il campo non parte affatto.
+  ❓ **Domanda aperta al partner**: da loro il nickname dev'essere **unico**? ⚠️ **Corretto il
+  30/07**: qui si leggeva «da noi non c'è vincolo di unicità e due persone possono sceglierne uno
+  uguale» — **falso dalla `0017`**, che lo rende unico (`lower()`, indice parziale sui non-null).
+  Da noi **è** unico; quel che resta da sapere è cosa fanno **loro** quando ne arriva uno già in uso
+  da parte loro. Entrata nella domanda 6 del brief.
 
 ### Il canale dell'attribuzione — un'altra cosa, non un accesso
 
@@ -369,6 +380,8 @@ prometteva il ritrovamento dello storico senza avere il meccanismo per farlo.
 
 **Infilare informazioni personalizzate nel token. → SCARTATA, e ha riscritto il piano.** Verificato su
 documentazione ufficiale che finiscono **solo** nel gettone di accesso, mai nel token di identità né
+⚠️ *(la parte «né sull'endpoint utente» è stata corretta il 29/07: UserInfo non filtra, restituisce i
+`user_metadata` interi. La conclusione regge perché quei dati non stanno lì — vedi §9.2)*
 sull'endpoint utente — che è ciò che l'estensione di Joomla legge. Doppio motivo per non costruire quel
 pezzo: non serve, e il gettone di accesso non va consegnato a un terzo per leggere dati. Conseguenze: il
 codice di provenienza **esce dal login** e resta sul canale dell'attribuzione; l'email reale dietro
@@ -457,7 +470,7 @@ o poi» diventa «mai». *Deciso da Riccardo, 25/07.*
 
 **Rendere facoltativi anche cognome, data di nascita, paese, data del consenso. → SCARTATA, per quattro
 motivi diversi.** Il cognome no, perché il nome che consegniamo ai partner nasce da lì. La data di
-nascita no, perché è la prova dei 18 anni — e c'è una **trappola verificata**: è anche il segnale che fa
+nascita no, perché è la prova dell'età minima (14 anni dalla migration 0019, prima 18) — e c'è una **trappola verificata**: è anche il segnale che fa
 scattare la creazione del profilo, quindi togliendola dal modulo il profilo **non nascerebbe affatto,
 in silenzio**. Il paese no, perché viene sempre valorizzato in automatico. La data del consenso no,
 perché senza consenso il profilo non deve nascere. Facoltativi solo telefono e città.
@@ -670,7 +683,7 @@ registro, non nella copia.**
 | Non dire | Perché è falso o dannoso | Dire invece |
 |---|---|---|
 | «Oggi vi mandiamo il codice di provenienza» | Non è in nessuna versione pubblicata: l'app installata è di novembre 2025. Se cercano il parametro nei log non trovano nulla | «È pronto e partirà col primo rilascio» |
-| «Nei dati non entra nessuno dei due» / «un identificativo, il nome e l'email, e nient'altro» | Nel giro standard il loro sistema riceve un gettone con i pieni poteri dell'utente: gli scope non lo limitano. L'assoluto è già stato corretto **tre volte** | «Nessuno dei due entra nel database dell'altro. Al momento dell'accesso vi arrivano quattro informazioni **più i dati tecnici che il protocollo scambia**: su quelli chiediamo l'impegno scritto di leggere l'identità solo dal token di identità» |
+| «Nei dati non entra nessuno dei due» / «un identificativo, il nome e l'email, e nient'altro» | Nel giro standard il loro sistema riceve un gettone con i pieni poteri dell'utente: gli scope non lo limitano. L'assoluto è già stato corretto **tre volte** | «Nessuno dei due entra nel database dell'altro. Al momento dell'accesso vi arrivano quattro informazioni **più i dati tecnici che il protocollo scambia**: su quelli, l'identità si legge dal token di identità e non si usa il gettone verso altre nostre funzioni: è la prassi» ⚠️ **allineato il 30/07**: qui si leggeva «chiediamo l'impegno scritto», cioè la formula ritirata dal brief lo stesso giorno. Una tabella che dice COSA DIRE e prescrive una frase ritirata è il motore della recidiva: chi la segue la reintroduce. L'impegno scritto resta materia della domanda 16, non del brief |
 | «Tre informazioni» | Con gli scope richiesti sono **quattro**: identificativo, email, indicatore di email verificata, nome | «Quattro informazioni, più i dati tecnici del protocollo» |
 | «E quando apre il vostro spazio è già dentro» | La sessione dell'app non passa al browser esterno: al primo giro l'accesso va rifatto | «Entra con quello, senza compilare una seconda registrazione» |
 | «Ritrova il suo storico invece di farsi un secondo account» | Senza collegamento degli account chi ha già un profilo nativo se ne ritrova un secondo; con l'alias Apple il collegamento automatico **non è possibile** | Trasformarlo in richiesta: «potete collegare i due account?» — e dichiarare il caso che resta fuori |
@@ -851,9 +864,16 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > richiedere (`openid email profile`) e le redirect URI da autorizzare. Il segreto va scambiato per
 > canale sicuro fra tecnici, non su chat.
 >
-> **Claim disponibili:** solo quelli standard determinati dagli scope — `sub`, `email`,
-> `email_verified`, `name`. Claim custom non sono disponibili: non raggiungono `id_token` né UserInfo,
-> quindi non progettate su quel presupposto.
+> **Claim disponibili:** quelli standard determinati dagli scope — `sub`, `email`, `email_verified`,
+> `name`, e `preferred_username` (il nickname, facoltativo). I claim CUSTOM non sono disponibili: il
+> Custom Access Token Hook tocca solo l'access token, quindi non progettate su quel presupposto.
+> ⚠️ **Precisazione 2026-07-29 (letta nel sorgente di GoTrue, non nella doc)**: la frase «non
+> raggiungono né `id_token` né UserInfo» vale per l'`id_token` — verificato in `GenerateIDToken`, che
+> assegna solo `Name`, `Picture`, `PreferredUsername`, `UpdatedAt` — ma **NON per UserInfo**, che con
+> lo scope `profile` aggiunge `user_metadata` **intera** (`OAuthUserInfo` in
+> `internal/api/oauthserver/handlers.go`). Regola che ne discende: **i `user_metadata` sono superficie
+> consegnabile a LD** — l'anagrafica resta in `profiles`, i metadata al minimo. Dettaglio e
+> conseguenze: `oidc-server-implementation-plan.md` § «Finding che riscrive il piano».
 >
 > - `sub` — identificativo opaco e stabile. **È la chiave di matching**: agganciate l'utente sul `sub`,
 >   non sull'email. Richiesta precisa: il plugin deve poter mappare il `sub` sull'username Joomla (o su
@@ -863,21 +883,80 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > - `name` — nome completo in una stringa unica; nome e cognome li separate voi. **Non arriva mai
 >   vuoto**: se il nostro sistema non l'avesse, al suo posto partirebbe l'indirizzo email — se lo
 >   vedete segnalatecelo, perché come nome visibile non va.
-> - `email` — è l'email dell'account. Per gli utenti Apple Private Relay è, in questa prima fase, un
->   alias `@privaterelay.appleid.com` che **inoltra** all'indirizzo reale: confermateci che il
->   provisioning lo accetti e che non pretenda `email_verified` sull'alias (un nostro utente non ancora
->   confermato può presentare `email_verified: false`). Dal primo rilascio chiediamo a quelle persone
->   l'indirizzo vero, lo facciamo verificare e diventa l'email del loro account: da quel momento questo
->   campo porta l'indirizzo reale.
+> - `email` — è l'email dell'account, **confermata: da noi non si entra prima di averla confermata**.
+>   Resta il caso storico degli account nati con Apple prima del 26/07/2026, dove l'indirizzo è un
+>   alias `@privaterelay.appleid.com` che **inoltra** a quello vero: confermateci che il provisioning
+>   lo accetti. A quelle persone chiediamo l'indirizzo reale, lo facciamo verificare e diventa l'email
+>   del loro account: da quel momento questo campo porta l'indirizzo vero.
+>   ⚠️ **Allineato al brief il 29/07 (era divergente)**: qui si leggeva «un nostro utente non ancora
+>   confermato può presentare `email_verified: false`», cioè il carve-out che il brief ha
+>   deliberatamente NON scritto (nota §«email» del brief) e il contrario di quanto il brief afferma
+>   al partner. Questo §9.2 è materiale IN USCITA verso i loro sviluppatori: quando cambia la
+>   formula nel brief, va cambiata anche qui.
 >
 > **Uso dell'access token.** Nel flusso standard il vostro client riceve al token endpoint un access
 > token con i privilegi dell'utente; gli scope non lo limitano lato dati. Vi chiediamo di leggere
-> l'identità **esclusivamente** da `id_token` e UserInfo, e di non chiamare le nostre API con quel
-> token. Lo mettiamo nell'accordo.
+> l'identità **esclusivamente** dall'`id_token`, e di non chiamare le nostre API con quel token: è
+> la prassi. Se per un loro vincolo dovessero leggere da UserInfo, chiediamo che ce lo
+> DICANO, così lo si tiene presente al collaudo.
+> ⚠️ **Allineato al brief il 30/07 (4ª versione)**: qui si leggeva «Lo mettiamo nell'accordo», che
+> era la clausola contrattuale tolta il 28/07 e **rientrata nel brief** con `84c8763` — ripresa da
+> tre lenti indipendenti della review del 30/07 e ri-tolta da entrambi i file. La richiesta NON è
+> stata perduta: vive come **domanda 16 «Sull'accordo»** in questo stesso documento, che è il canale
+> dei legali. Il brief resta primo contatto e non detta clausole.
+> ⚠️ **Formula allineata al brief il 29/07 (3ª versione)**: qui si leggeva «prendendo i soli campi
+> elencati e ignorando il blocco `user_metadata`». Superata: chiedere a un terzo di ignorare dati che
+> gli arrivano non è una misura, è un affidamento — la misura è **ridurre il blocco prima di
+> attivare** (bonifica di `handle_new_user` + backfill, → **0019**, non 0018: quel numero è stato
+> preso da `0018_nickname_disponibile.sql` il 30/07). Questo §9.2 è materiale IN USCITA:
+> era proprio la regola scritta due paragrafi sopra, e l'avevo mancata io stesso.
 >
-> **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede tre cose
-> che noi non abbiamo: il nickname, la scelta su come apparire nelle liste pubbliche (che è
-> obbligatoria e senza valore predefinito) e l'adesione a community e classifiche. Con la creazione
+> **Campi del vostro modulo che il login non copre.** Il vostro form di registrazione chiede due cose
+> che noi non abbiamo: la scelta su come apparire nelle liste pubbliche (che è
+> obbligatoria e senza valore predefinito) e l'adesione a community e classifiche.
+> ⚠️ **E un terzo caso, di natura diversa — riscritto il 30/07 (2ª versione): il Paese.** È
+> obbligatorio nel vostro modulo e noi lo raccogliamo, ma **non viaggia nell'`id_token`**, che porta
+> i soli campi dell'identità. La versione precedente si fermava a «preferite che ve lo facciamo
+> arrivare in altro modo?», che scaricava sul partner una domanda a cui la risposta tecnica ce
+> l'avevamo noi: le strade sono **due e solo due**, ① lo chiedono alla persona dopo il primo
+> ingresso, ② passa dalla risposta di **UserInfo**, dove però **non è un campo standard** e il loro
+> client va adattato per leggerlo. ⚠️ La strada ② dipende dalla **bonifica dei metadata** (0019): se
+> `country` viene cancellato insieme al resto dell'anagrafica, la ② muore — vanno decise insieme.
+> 🔴 **ESITO, 2026-07-31: la ② È MORTA.** La 0019 è stata applicata al database vivo e `country` è
+> fra le nove chiavi che cancella (`0019_eta_minima_e_bonifica_metadata.sql:382-385`), quindi da
+> UserInfo il Paese non esce più. Restava una strada su due, e la ① («lo chiedono alla persona dopo
+> il primo ingresso») il brief la esclude esplicitamente («non ha senso chiederlo di nuovo alla
+> persona, che l'ha già dato a noi» — parole di Riccardo del 30/07). ⇒ **oggi il brief promette «se
+> vi serve, ditecelo e ve lo facciamo arrivare» senza avere più un canale già pronto.** Non è
+> impossibile — il dato ce l'abbiamo in `profiles` e la frase stessa dice che il come «va concordato
+> prima di attivare il servizio» — ma una terza strada va scelta.
+> ✅ **DECISA DA RICCARDO IL 2026-07-31: si RIANIMA la ②.** `country` torna nei `user_metadata`,
+> escluso dalla bonifica con la prossima migration. Scelta contro le alternative: la consegna fuori
+> dal token (export o chiamata dedicata) è un canale nuovo da costruire, settimane; chiederlo alla
+> persona da loro è già stato escluso («l'ha già dato a noi»). Argomento decisivo: **il Paese è
+> obbligatorio nel LORO modulo**, quindi lo raccolgono comunque — non stiamo consegnando un dato in
+> più rispetto a ciò che già hanno, stiamo evitando che lo chiedano due volte alla stessa persona.
+> Costo per loro: in UserInfo non è un campo standard, il client va adattato — **detto nel brief**,
+> §5 domanda 6, insieme al motivo per cui l'ID token non può portarlo.
+> Il **nickname** invece ve lo mandiamo, come campo standard dell'accesso e in forma facoltativa.
+> ⚠️ **Corretto il 30/07**: qui si leggeva «vi chiediamo se da voi debba essere unico, **perché da
+> noi non lo è**» — falso dalla `0017`, che ha reso il nickname unico (`lower()`, parziale sui
+> non-null). La domanda al partner resta, ma cambia di segno: da noi **è** unico, e quel che serve
+> sapere è cosa fanno **loro** quando ne arriva uno già in uso da parte loro.
+> 🔴 **Precisazione del 31/07, che riguarda tutte e tre le promesse sul nickname** (unico, 2-30
+> caratteri, se lo togliamo smette di arrivare): quelle garanzie vivono sui vincoli di
+> `public.profiles`, ma il claim che il partner riceve viene letto dai `user_metadata`, **dove
+> vincoli non ce ne sono**. Fino alla `0020` bastava una registrazione con un nickname già occupato
+> perché al partner arrivasse quello di **un'altra persona**. La `0020` chiude il buco DERIVANDO il
+> claim da `profiles` (e con esso il Paese, che aveva lo stesso problema al contrario: cambiandolo
+> nel profilo, al partner restava il vecchio). ⚠️ **È scritta e provata ma NON ancora applicata**:
+> finché non lo è, queste tre righe descrivono l'intenzione, non il database vivo — e il vincolo
+> operativo è che l'apply avvenga **prima del collaudo** con le persone vere.
+> 🛡️ **La moderazione del contenuto è NOSTRA** (deciso da Riccardo il 30/07, era scritta come loro):
+> il nickname nasce nella nostra registrazione e vive nel nostro database. Formula da usare nei
+> testi in uscita, ed è vera oggi: **nessun filtro automatico**, rimozione su segnalazione — dopo la
+> quale il nickname smette di essere consegnato. Non scrivere mai «lo moderiamo» finché un filtro
+> non esiste davvero. Con la creazione
 > dell'utente al primo accesso quei valori non arrivano da noi: ci serve sapere se applicate un default
 > — e quale — o se li chiedete alla persona una volta entrata. Lo stesso vale per i vostri due consensi
 > marketing: nessuno dei due può arrivarvi da noi — quello sugli enti beneficiari da noi non esiste
@@ -997,10 +1076,16 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
     eventi, quali dati chiede l'iscrizione e se sono esportabili.
     *Perché ci serve:* le nostre settantadue ore per notificare all'autorità partono da quando ce lo
     dite voi.
-19. **I tre campi del vostro modulo che il login non copre** (nickname, scelta di visibilità nelle liste
+19. **I due campi del vostro modulo che il login non copre** (scelta di visibilità nelle liste
     pubbliche, adesione a community e classifiche): applicate un default o li chiedete alla persona?
     *Perché ci serve:* la visibilità è obbligatoria nel vostro modulo e non ha un valore predefinito.
     Se applicate un default, una persona potrebbe comparire pubblicamente senza averlo scelto.
+19-bis. **Il nickname dev'essere unico da voi?** Noi ve lo mandiamo (campo standard, facoltativo), e
+    ⚠️ **dal 30/07 da noi è unico** (`0017`: `lower()`, indice parziale sui non-null; chi ne sceglie
+    uno occupato lo sa mentre scrive, `0018`). Qui si leggeva il contrario, e che il vincolo sarebbe
+    stato «lavoro che oggi non è previsto»: **è stato fatto**.
+    *Perché ci serve:* resta la collisione con i nickname nati **da loro**, che non passano da noi —
+    se per loro è un identificativo pubblico, il duplicato è un problema loro a integrazione fatta.
 20. **I vostri due consensi marketing** (comunicazioni del Titolare, comunicazioni degli enti
     beneficiari): come vengono raccolti per chi entra dal nostro accesso?
     *Perché ci serve:* nessuno dei due può arrivare da noi — quello sugli enti beneficiari nel nostro

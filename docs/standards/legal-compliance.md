@@ -42,8 +42,37 @@ Raccolti nei form di registrazione/profilo (`SignUpScreen.tsx`,
 - **Provincia** (`province`) — sigla IT, obbligatoria solo se `country = 'IT'`
   (nullable dal migration 0007 per donatori esteri).
 - **Paese** (`country`) — ISO 3166-1 alpha-2, default `IT` (migration 0007).
-- **Data di nascita** (`birth_date`) — ISO date; **età minima 18 anni** imposta sia
-  in UI (`validateAdult`) sia dal DB (`constraint adult`, migration 0001).
+- **Data di nascita** (`birth_date`) — ISO date; **età minima 14 anni** imposta sia
+  in UI (`validateMinAge`) sia dal DB (`constraint eta_minima`, migration 0019, che
+  sostituisce il `constraint adult` a 18 anni della 0001).
+- **Nickname** (`nickname`, migration 0017) — **facoltativo**, 2-30 caratteri, unico
+  (indice `profiles_nickname_unico` su `lower()`). Destinato a uscire verso un terzo come
+  claim OIDC `preferred_username`, dove può comparire in **liste pubbliche di donatori**.
+- **Email di contatto** (`contact_email`, migration 0009; significato riallineato dalla
+  0013) — facoltativa, distinta dall'indirizzo dell'account. **Esce già oggi**: è la chiave
+  scelta per il prefill delle donazioni (`contact_email ?? auth.email`).
+
+> 🔴 **CAMPI CHE ESCONO VERSO TERZI — due canali distinti, uno già attivo.** Da tenere
+> insieme quando si scrive l'informativa, perché è la parte che si sottostima più facilmente:
+> - **Prefill degli URL di donazione, ATTIVO OGGI**: `first_name`, `last_name` ed `email`
+>   viaggiano come parametri nell'indirizzo verso Donorbox
+>   (`partnerUrls.ts` → `buildDonorboxDonationUrl`, chiamato da `usePartnerExit.ts`).
+>   Coerente con `scambio-dati-quadro.md:691`, che lo registra da tempo.
+> - **Claim OIDC, quando il provider si accende**: `name` (nome e cognome in una stringa,
+>   sincronizzato da `syncDisplayNameClaim`), `email`, `email_verified`, `sub`,
+>   `preferred_username`.
+>   🔴 **+ `country` (il PAESE di residenza), dalla migration 0020 — scritta il 2026-07-31,
+>   NON ancora applicata.** Va contato qui benché non sia un claim standard: UserInfo
+>   consegna i `user_metadata` **interi** a chi ha lo scope `profile`, quindi tutto ciò che
+>   sta lì è materiale trasferito. La 0019 lo aveva tolto insieme al resto dell'anagrafica;
+>   la 0020 lo rimette **per decisione di prodotto di Riccardo** (il modulo del partner lo
+>   chiede come obbligatorio, quindi lo raccoglierebbe comunque, e l'integrazione esiste per
+>   evitare che lo chieda due volte). ⇒ **un campo in più nell'informativa**, e la decisione
+>   è di trasferimento, non tecnica: va detta a chi scrive il testo, non lasciata nel codice.
+> ⚠️ Corretto il 2026-07-31: questa sezione aveva dichiarato il `nickname` «l'unico campo di
+> profilo destinato a uscire verso un terzo». **Falso** — nome, cognome ed email escono già
+> adesso, per un canale che esisteva prima. Un inventario che sottostima i trasferimenti è
+> esattamente ciò su cui poggia l'informativa.
 - **Timestamp consenso privacy** (`privacy_consent_at`).
 - **Consenso marketing** (`marketing_consent`) — boolean, cache derivata (vedi consensi).
 - **Stato cancellazione** (`deletion_requested_at`) — NULL = attivo;
@@ -150,15 +179,26 @@ Il link in-app punta a `https://italy.riseagainsthunger.org/privacy-policy/`
 (`urls.ts`), mostrato in fase di consenso (`SignUpScreen`/`CompleteProfileScreen`).
 
 > ⚠️ DA VERIFICARE CON DPO/LEGALE — l'informativa deve coprire TUTTO l'inventario
-> sopra (account, profilo, telefono, data di nascita, consensi, Sentry e Supabase come
-> responsabili), i diritti e i tempi di conservazione. **Apple/Google NON vanno più
+> sopra (account, profilo, telefono, data di nascita, **nickname**, **email di contatto**,
+> consensi, Sentry e Supabase come
+> responsabili), i diritti e i tempi di conservazione. 🔴 **Due voci aggiunte il 2026-07-31**
+> (`nickname` dalla 0017, `contact_email` dalla 0009): erano nel database e **non**
+> nell'inventario, quindi l'informativa non le copriva. Il `nickname` è il caso che pesa —
+> è destinato a **uscire verso Let's Donation** e a comparire in liste pubbliche.
+> 🔴 **La soglia dei 14 anni** (0019, applicata il 2026-07-31) va detta nell'informativa
+> **prima del rilascio**: oggi dice un'altra cosa. **Apple/Google NON vanno più
 > inclusi come origine dei dati** (login social rimosso il 2026-07-26): dichiararli
 > descriverebbe un trattamento che non avviene.
 > La versione del testo deve coincidere con `policy_versions` (`privacy-2026-06-15`).
 
 ### GDPR
 
-- **Età minima 18 anni** imposta in UI e DB (no trattamento di minori per design).
+- **Età minima 14 anni** imposta in UI e DB — soglia italiana per il consenso digitale
+  (art. 8 GDPR + d.lgs. 101/2018, art. 2-quinquies Codice Privacy). Regime unico: sopra i
+  14 acconsente la persona, sotto i 14 non si entra, perché il consenso di chi ha la
+  responsabilità genitoriale andrebbe raccolto e **provato** e non lo raccogliamo.
+  ⚠️ Fino al 30/07/2026 il limite era 18 («no trattamento di minori per design»):
+  **l'informativa deve dire la soglia nuova prima del rilascio**.
 - **Minimizzazione**: i campi raccolti sono finalizzati al rapporto col donatore.
 - **Onere della prova del consenso**: coperto dal ledger `consent_events`.
 

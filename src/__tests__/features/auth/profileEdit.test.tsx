@@ -399,3 +399,89 @@ describe('ProfileEditScreen — mail di contatto', () => {
     );
   });
 });
+
+// ───────────────────────────────────────────────────────────────────────────
+// LA CORSA PERSA (migration 0018, fase F-NICKNAME-UX ④).
+// Fra il controllo di disponibilità e il salvataggio qualcun altro può aver preso lo
+// stesso nickname: l'indice unico respinge l'update. Prima di questi test l'esito era
+// l'errore generico «Aggiornamento non riuscito», che manda a ricontrollare nome,
+// telefono e città mentre il campo da cambiare è uno solo.
+// (In un `describe` proprio: il blocco precedente aveva già raggiunto il limite di
+// righe per funzione, e questi test parlano comunque di un'altra cosa.)
+// ───────────────────────────────────────────────────────────────────────────
+describe('ProfileEditScreen — collisione sul nickname', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it('collisione sul nickname → messaggio SUL CAMPO, non errore generico', async () => {
+    // Il messaggio è quello vero di Postgres: contiene il nome dell'indice, che è ciò
+    // che `isNicknameConflict` cerca per distinguerlo da qualunque altro guasto.
+    const updateProfile = jest.fn().mockResolvedValue({
+      error:
+        'duplicate key value violates unique constraint "profiles_nickname_unico"',
+    });
+    mockUseAuth.mockReturnValue(makeAuth({ profile, updateProfile }));
+    const { getByLabelText, getByText, findByText, queryByText } = wrap(
+      <ProfileEditScreen />
+    );
+
+    fireEvent.changeText(getByLabelText('Nickname (facoltativo)'), 'Conteso');
+    fireEvent.press(getByText('Salva modifiche'));
+
+    expect(
+      await findByText(
+        'Qualcuno ha scelto questo nickname un attimo prima di te: provane un altro'
+      )
+    ).toBeTruthy();
+    // E NON l'errore generico: se comparisse quello, il messaggio preciso sarebbe
+    // sepolto e la persona non saprebbe quale campo cambiare.
+    expect(queryByText('Aggiornamento non riuscito. Riprova.')).toBeNull();
+  });
+
+  it('collisione → dice anche che NON è stato salvato NIENTE', async () => {
+    // `updateProfile` fa un solo `update` con tutti i campi cambiati: il rifiuto
+    // dell'indice porta giù anche il cognome corretto insieme al nickname. Senza questo
+    // avviso si esce dalla schermata credendo che il resto sia stato scritto.
+    const updateProfile = jest.fn().mockResolvedValue({
+      error:
+        'duplicate key value violates unique constraint "profiles_nickname_unico"',
+    });
+    mockUseAuth.mockReturnValue(makeAuth({ profile, updateProfile }));
+    const { getByLabelText, getByText, findByText } = wrap(
+      <ProfileEditScreen />
+    );
+
+    fireEvent.changeText(getByLabelText('Cognome'), 'Bianchi');
+    fireEvent.changeText(getByLabelText('Nickname (facoltativo)'), 'Conteso');
+    fireEvent.press(getByText('Salva modifiche'));
+
+    expect(
+      await findByText(
+        'Nessuna modifica è stata salvata: cambia il nickname e salva di nuovo.'
+      )
+    ).toBeTruthy();
+  });
+
+  it('un altro errore di unicità NON diventa «nickname occupato»', async () => {
+    // Il riconoscimento è stretto di proposito: un 23505 su un altro vincolo manderebbe
+    // la persona a cambiare il nickname mentre il guasto vero resta nascosto.
+    const updateProfile = jest.fn().mockResolvedValue({
+      error: 'duplicate key value violates unique constraint "profiles_pkey"',
+    });
+    mockUseAuth.mockReturnValue(makeAuth({ profile, updateProfile }));
+    const { getByLabelText, getByText, findByText, queryByText } = wrap(
+      <ProfileEditScreen />
+    );
+
+    fireEvent.changeText(getByLabelText('Nickname (facoltativo)'), 'Qualsiasi');
+    fireEvent.press(getByText('Salva modifiche'));
+
+    expect(
+      await findByText('Aggiornamento non riuscito. Riprova.')
+    ).toBeTruthy();
+    expect(
+      queryByText(
+        'Qualcuno ha scelto questo nickname un attimo prima di te: provane un altro'
+      )
+    ).toBeNull();
+  });
+});

@@ -37,7 +37,7 @@ const toDisplayDate = (iso: string): string => {
 /**
  * Campo data con date picker nativo (sostituisce l'input testuale AAAA-MM-GG).
  * Espone/riceve sempre una stringa ISO `YYYY-MM-DD`, così resta compatibile con
- * la validazione (validateAdult) e con il payload del profilo (birth_date).
+ * la validazione (validateMinAge) e con il payload del profilo (birth_date).
  */
 export const AuthDateField: React.FC<AuthDateFieldProps> = ({
   label,
@@ -50,8 +50,9 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [open, setOpen] = useState(false);
 
-  // Data iniziale del picker: il valore valido corrente, altrimenti 18 anni fa
-  // (default sensato per i donatori, riduce lo scroll).
+  // Data iniziale del picker: il valore valido corrente, altrimenti 18 anni fa.
+  // NON è la soglia (quella è 14, `MIN_AGE_YEARS`): è solo il punto da cui parte il rullo,
+  // scelto sull'età TIPICA di chi dona per ridurre lo scroll. Chi ha 15 anni scorre un po'.
   const pickerDate = useMemo(() => {
     const parsed = new Date(value);
     if (value && !Number.isNaN(parsed.getTime())) return parsed;
