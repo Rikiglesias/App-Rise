@@ -351,6 +351,90 @@
          mandiamo dati per abitudine. STATO ATTUALE: 4 pagine, l'ultima di ~80 parole. Chiuderla
          significa togliere di nuovo esattamente quelle quattro cose: se qualcuno in futuro vuole
          ricompattare il documento, sappia che quello e' il prezzo, e che e' gia' stato scartato.
+
+     ----------------------------------------------------------------------------------
+     PASSATA DEL 2026-07-31 - tre rilievi di Riccardo sul PDF, piu' uno trovato allargando.
+
+     1) 🔴 DUPLICAZIONE CANCELLAZIONI (suo rilievo): il tema stava in §4 come requisito e in §5
+        come domanda 5. Sue parole: «non ha senso scriverlo entrambi... basta metterlo insieme
+        cosi' non ci si perde». UNIFICATE nella domanda 5; il bullet di §4 e' uscito.
+        ⚠️ QUESTA MOSSA RIBALTA UNA DECISIONE SUA DEL 28/07, e va saputo prima di rifarla al
+        contrario: `710081a` aveva stabilito il contratto di forma «§4 dichiara il REQUISITO, §5
+        porta il QUESITO», e `6c884dd` (passata anti-duplicazione voluta da lui) le aveva
+        VALUTATE e TENUTE separate. Perche' il ribaltamento e' comunque giusto: quel fix doveva
+        togliere il quesito dal §4 e ne ha lasciato un pezzo - «serve il canale su cui farla
+        arrivare» E' la domanda 5, scritta due pagine prima. La duplicazione era reale e residua,
+        non un capriccio di lettura.
+        Scelto §5 e non §4 perche' cio' che manca e' una RISPOSTA loro (come le trattate + a quale
+        recapito): e' il criterio canonico stesso («sale in §5 cio' che riguarda il loro sistema»).
+        E perche' cosi' NESSUN numero cambia: 5 resta 5, 6 resta 6, «Sei domande» resta vero, e
+        nessun rimando si rompe - la classe di errore della numerazione 7->5, gia' occorsa qui.
+
+     2) IL GEMELLO CHE NESSUNO AVEVA CHIESTO (perimetro, zero-L): §4 duplicava §5 anche in un
+        SECONDO punto. «Una persona, una scheda sola - **e aggiornata**... devono valere anche i
+        dati che vi arrivano a ogni accesso, non quelli del primo giorno» e' la domanda 4 («il
+        vostro lato lo rilegge?»), dichiarata dal cappello «quella da cui dipende il risultato».
+        Prima lo pretendevamo, due pagine dopo lo chiedevamo come favore. E' la stessa coppia che
+        `710081a` dichiarava di aver disinnescato («il §4 ripeteva il §5 in DUE punti»): sul
+        recapito era rimasto un residuo (punto 1), qui era rimasto tutto.
+        RIMEDIO: i due primi bullet di §4 sono stati FUSI in uno. La coda «e aggiornata» esce da
+        §4 e vive dove chiede una risposta (domanda 4); il requisito «una scheda sola» sopravvive
+        dentro il punto sul `sub`. NON si e' scritto «chi torna ritrova la sua scheda»: sarebbe
+        stata una duplicazione NUOVA della domanda 3, che dice gia' quelle parole.
+        NON toccata la terza coppia possibile, §4 `sub` <-> domanda 3: sono complementari (l'uno
+        fissa la chiave DOPO l'aggancio, l'altra chiede COME si trova la scheda esistente).
+
+     3) 🔴 LA PRECISAZIONE SU USERINFO ERA SCADUTA, e prometteva piu' del vero (suo rilievo: «fino
+        a "ditecelo ora" non ho capito cosa vuol dire, assicurati che sia tutto giusto»).
+        Due difetti distinti, non uno:
+        · SCADUTA - diceva «**prima di attivare il servizio lo riduciamo** ai soli campi
+          dell'accesso, e ve lo confermiamo quando e' fatto»: un impegno al FUTURO su una cosa
+          fatta il 2026-07-31 (migration 0019 applicata al DB vivo). Un impegno che ci obbliga a
+          mandare una conferma per un lavoro gia' concluso.
+        · PIU' AMPIA DEL VERO - «ridotto ai SOLI campi dell'accesso» non e' quello che il codice
+          fa. La 0019 toglie NOVE chiavi e solo quelle (`0019:382-385`); UserInfo continua a
+          consegnare i `user_metadata` INTERI (`OAuthUserInfo`, `handlers.go:716-719`: assegnazione
+          diretta della map, nessuna whitelist). Interrogato il DB vivo il 31/07: restano `email`,
+          `email_verified`, `phone_verified`, `sub` - e sull'unico account Apple storico anche
+          `iss`, `provider_id`, `custom_claims`. Nessuna anagrafica: la bonifica ha funzionato.
+          Ma `phone_verified` e i contrassegni del provider NON sono «campi dell'accesso»: la
+          promessa era da ritrattare davanti a loro.
+        · INCOMPRENSIBILE - «ditecelo ora» non diceva PERCHE'. Ora il nesso c'e': ditecelo prima
+          del collaudo *perche' un campo si comporta in modo diverso*, ed e' quello del capoverso
+          successivo (l'indicatore di email verificata, che da UserInfo sparisce invece di valere
+          «falso»). Il secondo capoverso e' stato agganciato al primo, non lasciato orfano.
+        RISPETTATE le decisioni gia' prese: NON si elencano al partner i campi anagrafici (sarebbe
+        la mappa della falla, `d03dd6e`); NON si riscrive «porta solo dati tecnici» (assoluto rotto
+        quattro volte); la menzione dell'immagine di profilo RESTA con la formula aperta «per gli
+        accessi che la forniscono», senza nominare i provider al presente (`f56d98c`).
+
+     4) IMMAGINE DI PROFILO - domanda nuova di Riccardo («non avevo pensato all'immagine profilo»).
+        ANALIZZATA, NON aggiunta al documento: e' una decisione di prodotto sua, e il brief non
+        promette architettura. I fatti che servono a decidere, tutti verificati alla fonte:
+        · NON ESISTE in nessuno strato del prodotto: 0 colonne DB, 0 bucket Storage (`select
+          count(*) from storage.buckets` = 0 sul progetto vivo), 0 dipendenze picker, 0 scritture
+          di `avatar_url`/`picture`. `git log -S` su tutti i branch: mai esistita, nemmeno prima
+          della rimozione dei social. Oggi l'app mostra un'icona vettoriale (`HomeScreen.tsx:94`).
+        · IL LORO MODULO NON LA CHIEDE: le 11 voci verificate dal vivo il 25/07
+          (`scambio-dati-quadro.md:100-112`) non contengono nessun campo immagine. Non e' un buco
+          da colmare come lo era il nickname.
+        · IL CANALE OIDC E' GIA' PRONTO: `picture` e' claim standard con scope `profile`, e la
+          0019 lo PRESERVA di proposito (`0019:62-64`). Si comporta come `preferred_username`, non
+          come `name`: se manca viene OMESSO, nessun ripiego (`service.go:829-834`).
+        · 🔴 MA NESSUNA VALIDAZIONE DELL'URL, in nessuno dei due sensi: in scrittura
+          `PUT /user` fa un merge grezzo della map (`models/user.go:229-241`), in lettura il claim
+          copia la stringa verbatim. Qualunque cosa scriva il client finisce nel claim - `javascript:`,
+          `data:`, un host arbitrario - e da li' sulle loro pagine pubbliche.
+        · E ROMPE UNA DICHIARAZIONE NOSTRA: `standards/legal-compliance.md:68` dice «Upload di
+          contenuti utente (foto, file) - **assenti**». Aggiungerla obbliga a correggere quel
+          documento e l'informativa, e a cancellare il file dallo Storage alla cancellazione
+          dell'account (oggi `delete-account` non tocca lo Storage, che non esiste).
+        VERDETTO PORTATO A RICCARDO: non aggiungerla ora. Il costo non e' un campo, e' una feature
+        intera (bucket + policy + colonna + picker + resize + sync del claim + moderazione di
+        contenuti VISIVI + informativa), e la moderazione e' di un altro ordine rispetto al
+        nickname: «nessun filtro automatico, rimozione su segnalazione» regge su una parola, non
+        su un'immagine che compare sulle liste pubbliche di un partner.
+     ----------------------------------------------------------------------------------
 -->
 
 ## 1. L'obiettivo
@@ -414,15 +498,11 @@ Tre cose tecniche, meglio dirle ora che scoprirle al collaudo.
 
 - **La chiave di aggancio è il `sub`, non l'email.** È l'unico identificatore stabile che emettiamo;
   l'email le persone la cambiano. Serve una volta sola, al primo incontro con una scheda che da voi
-  esiste già: da lì in poi la persona resta legata al `sub`.
-- **Una persona, una scheda sola — e aggiornata.** L'aggancio tiene fermo *quale* account è; perché
-  serva devono valere anche i dati che vi arrivano a ogni accesso, non quelli del primo giorno.
-- **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
-  dirvelo. La parte che invia la costruiamo noi; serve il canale su cui farla arrivare.
+  esiste già: da lì in poi la persona resta legata al `sub`, e resta **una scheda sola**.
 - **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
-  altre nostre funzioni: è la prassi. Se preferite leggerla da UserInfo, tenete conto della
-  precisazione in fondo alla Scheda dei dati: quella risposta contiene anche un blocco che nell'ID
-  token non c'è.
+  altre nostre funzioni: è la prassi. Se doveste leggerla da UserInfo, tenete conto della
+  precisazione in fondo alla Scheda dei dati: quella risposta porta, accanto all'identità, una copia
+  di quello che il nostro sistema di accesso tiene sull'account.
 - **Tre casi da nominare prima del collaudo.** Se la persona **non dà il consenso** sulla nostra
   pagina torna da voi senza identità: è un esito normale, non un errore nostro.
   Gli **accessi contemporanei**: se per la stessa persona nuova ne partono due insieme, il `sub` è
@@ -463,8 +543,10 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    campo lo emettiamo; la garanzia però non sta nel flag, sta nel fatto che
    **senza conferma da noi non si entra**. Se per voi è una condizione bloccante ditecelo ora, così
    è fra le prime cose che guardiamo insieme quando proviamo il giro.
-5. **Le cancellazioni**: oggi come le trattate, e a quale recapito possiamo comunicarvi quelle che
-   arrivano a noi? Se il collegamento che mettiamo in piedi copre già anche questo, diteci come.
+5. **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
+   dirvelo: la parte che invia la costruiamo noi, e resta da concordare il canale su cui farla
+   arrivare. Oggi come le trattate, e a quale recapito possiamo comunicarvele? Se il collegamento
+   che mettiamo in piedi copre già anche questo, diteci come.
 6. **I due campi del vostro modulo che il nostro accesso non copre**: la scelta su come apparire
    nelle liste pubbliche e l'adesione a community e classifiche. Oggi le sceglie la persona sul
    vostro modulo, e la visibilità è obbligatoria, senza opzione preselezionata. Tolto il modulo,
@@ -526,11 +608,13 @@ nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l
 **Una precisazione su UserInfo.** La tabella descrive l'**ID token**, ed è da lì che vi chiediamo di
 leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha emesso, quando
 scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la forniscono,
-l'indirizzo dell'immagine di profilo. La risposta di UserInfo, con lo scope `profile`, porta in più
-**un blocco dell'account che non fa parte dell'identità**: **prima di attivare il servizio lo
-riduciamo ai soli campi dell'accesso**, e ve lo confermiamo quando è fatto. Se per un vostro vincolo
-doveste leggere da UserInfo, ditecelo ora.
+l'indirizzo dell'immagine di profilo. La risposta di UserInfo, con lo scope `profile`, non porta le
+stesse cose: accanto ai campi dell'identità c'è **una copia grezza di quello che il nostro sistema
+di accesso tiene sull'account**. L'abbiamo già svuotata dei dati del profilo — quel che resta sono
+contrassegni tecnici del nostro provider, non dati della persona. Resta comunque la strada che non
+vi consigliamo: se un vostro vincolo vi obbligasse a percorrerla, **ditecelo prima del collaudo**,
+perché un campo lì si comporta in modo diverso.
 
-Una differenza da tenere presente se leggete da UserInfo: lì l'indicatore di email verificata, se
-l'email non è confermata, **non compare affatto**, mentre nell'ID token c'è sempre. Conviene
-trattare l'assenza come «non confermata».
+**Il campo è l'indicatore di email verificata**: da UserInfo, se l'email non è confermata, **non
+compare affatto**, mentre nell'ID token c'è sempre. Conviene trattare l'assenza come «non
+confermata».
