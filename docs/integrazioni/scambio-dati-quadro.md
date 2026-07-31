@@ -100,7 +100,7 @@ il **nickname** è uscito dall'elenco il 29/07, lo aggiungiamo noi con la `0017`
 | Campo del loro modulo | Obbligatorio | Ce l'abbiamo? |
 |---|---|---|
 | Nome, Cognome | sì | sì |
-| **Nickname** | no | **in arrivo** — colonna e claim scritti il 29/07 (`0017`, non ancora applicata); manca il campo nel modulo |
+| **Nickname** | no | **sì, completo dal 31/07** — colonna e claim vivi in produzione (`0017`/`0018` applicate, claim derivato da `profiles` con la `0020`); il campo c'è in **tutte e tre** le schermate: registrazione, completamento dopo un accesso social e modifica profilo |
 | Paese | sì | sì |
 | Email | sì | sì |
 | Password + conferma (minimo 6 caratteri) | sì | sì, con regole più severe (8 caratteri, maiuscola, speciale) |
