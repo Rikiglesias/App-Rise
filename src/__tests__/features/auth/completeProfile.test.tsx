@@ -537,7 +537,14 @@ describe('CompleteProfileScreen — F1.10 email di contatto (Apple relay)', () =
 const getRpc = (): jest.Mock => (supabase as unknown as { rpc: jest.Mock }).rpc;
 
 describe('CompleteProfileScreen — nickname', () => {
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    // ⚠️ `clearAllMocks` azzera le CHIAMATE, non le IMPLEMENTAZIONI: un
+    // `mockResolvedValue({data:false})` impostato da un test sopravvive a quelli dopo, che
+    // si ritrovano il nickname «occupato» senza averlo chiesto — e falliscono per un motivo
+    // che non c'entra con ciò che verificano. Il default va ristabilito qui, esplicito.
+    getRpc().mockResolvedValue({ data: true, error: null });
+  });
 
   it('il nickname scelto qui arriva in colonna', async () => {
     mockUseAuth.mockReturnValue(makeAuth());
@@ -616,6 +623,43 @@ describe('CompleteProfileScreen — nickname', () => {
 
     await waitFor(() => expect(getByText(/già di qualcun altro/)).toBeTruthy());
     expect(upsert).not.toHaveBeenCalled();
+  });
+
+  it('dopo il salvataggio il nickname viaggia verso il claim del partner', async () => {
+    // `preferred_username` è la chiave da cui il server auth costruisce il claim OIDC.
+    // (Dalla migration 0020 il claim lo deriva il database: questa resta la strada per
+    // tenerlo allineato, e non fa danno.)
+    mockUseAuth.mockReturnValue(makeAuth());
+    const updateUser = (supabase.auth as unknown as { updateUser: jest.Mock })
+      .updateUser;
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(
+      getByLabelText('Nickname (facoltativo)'),
+      'mariorossi'
+    );
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() =>
+      expect(updateUser).toHaveBeenCalledWith({
+        data: { preferred_username: 'mariorossi' },
+      })
+    );
+  });
+});
+
+// Blocco a sé come già fatto per i due percorsi della schermata: questi quattro casi sono
+// quelli in cui il campo NON è una scatola vuota da riempire — il valore c'è già, o arriva
+// da un altro utente, o viene tolto. Tenerli insieme ai casi base sforava il limite di
+// righe per blocco, ed è la stessa ragione per cui il file è già diviso più sopra.
+describe('CompleteProfileScreen — nickname, quando il valore c’è già', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    getRpc().mockResolvedValue({ data: true, error: null });
   });
 
   it('IL PROPRIO nickname, arrivato dal profilo, non viene chiesto al server né blocca il salvataggio', async () => {
@@ -702,13 +746,96 @@ describe('CompleteProfileScreen — nickname', () => {
     expect(getByText(/Nessuna modifica è stata salvata/)).toBeTruthy();
   });
 
-  it('dopo il salvataggio il nickname viaggia verso il claim del partner', async () => {
-    // `preferred_username` è la chiave da cui il server auth costruisce il claim OIDC.
-    // (Dalla migration 0020 il claim lo deriva il database: questa resta la strada per
-    // tenerlo allineato fino a quel momento, e innocua dopo.)
+  it('chi SVUOTA il proprio nickname lo perde davvero: in colonna arriva `null`', async () => {
+    // Il test del campo mai compilato non copre questo: lì il valore parte vuoto e resta
+    // vuoto. Qui il campo nasce PIENO (idratato dal profilo) e la persona lo cancella —
+    // che è l'unico modo che ha di dire «non ne voglio più uno». Se l'idratazione
+    // decidesse dal valore invece che dal flag «toccato», il profilo glielo rimetterebbe
+    // dentro e il salvataggio riscriverebbe in colonna il nickname che aveva appena tolto.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: { ...existingProfile, nickname: 'mario' },
+        profileLoaded: true,
+      })
+    );
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    await waitFor(() =>
+      expect(
+        (
+          getByLabelText('Nickname (facoltativo)') as {
+            props: { value: string };
+          }
+        ).props.value
+      ).toBe('mario')
+    );
+    fireEvent.changeText(getByLabelText('Nickname (facoltativo)'), '');
+    fillValidForm(getByLabelText, getByRole, getByTestId, { consent: false });
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ nickname: null })
+    );
+  });
+
+  it('se cambia UTENTE, il nickname del precedente non viene chiesto al server per il nuovo', async () => {
+    // Il flag «toccato» che sopravvive a chi l'ha prodotto è la classe di errore che in
+    // questo file ha già morso più volte. Senza il suo azzeramento al cambio utente, il
+    // campo del nuovo resterebbe non idratato E partirebbe una domanda al server sul
+    // nickname di un'ALTRA persona, con «Libero» o «già preso» mostrati su un valore che
+    // questo utente non ha mai scritto.
+    const primo = makeAuth({
+      profile: { ...existingProfile, nickname: 'mario' },
+      profileLoaded: true,
+    });
+    mockUseAuth.mockReturnValue(primo);
+    const { getByLabelText, rerender } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    // Il primo utente tocca il campo: da qui in poi il controllo può partire per LUI.
+    fireEvent.changeText(getByLabelText('Nickname (facoltativo)'), 'mariobis');
+    getRpc().mockClear();
+
+    // Cambio di utente: sessione e profilo di un altro.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        session: {
+          user: { id: 'u2', email: 'due@r.it' },
+        } as unknown as Session,
+        profile: { ...existingProfile, id: 'u2', nickname: 'giulia' },
+        profileLoaded: true,
+      })
+    );
+    rerender(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    // Oltre l'attesa del campo (450 ms): se il flag fosse sopravvissuto, la domanda al
+    // server sarebbe già partita.
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 700));
+    });
+    expect(getRpc()).not.toHaveBeenCalled();
+  });
+
+  it('il nickname TOCCATO viene ricontrollato al volo: se è appena stato preso, non si scrive', async () => {
+    // Il ricontrollo fresco prima di scrivere (gemello di `useSignUpForm.ts:187`) copre la
+    // finestra fra la digitazione e il salvataggio: chi compila in fretta preme Salva mentre
+    // lo stato è ancora «sto controllando», e senza questa domanda l'indice unico
+    // respingerebbe l'upsert facendo leggere «un attimo prima di te» — falso, perché la
+    // domanda non era mai stata fatta. Il caso opposto (nickname NON toccato) è il test qui
+    // sopra: lì la domanda non si fa proprio.
     mockUseAuth.mockReturnValue(makeAuth());
-    const updateUser = (supabase.auth as unknown as { updateUser: jest.Mock })
-      .updateUser;
+    const upsert = getUpsert();
+    getRpc().mockResolvedValue({ data: false, error: null });
     const { getByLabelText, getByText, getByRole, getByTestId } = render(
       <AllProviders>
         <CompleteProfileScreen />
@@ -717,14 +844,11 @@ describe('CompleteProfileScreen — nickname', () => {
     fillValidForm(getByLabelText, getByRole, getByTestId);
     fireEvent.changeText(
       getByLabelText('Nickname (facoltativo)'),
-      'mariorossi'
+      'appenapreso'
     );
     fireEvent.press(getByText('Salva e continua'));
 
-    await waitFor(() =>
-      expect(updateUser).toHaveBeenCalledWith({
-        data: { preferred_username: 'mariorossi' },
-      })
-    );
+    await waitFor(() => expect(getByText(/già di qualcun altro/)).toBeTruthy());
+    expect(upsert).not.toHaveBeenCalled();
   });
 });

@@ -212,6 +212,19 @@ dietro c'erano due guasti veri:
   con il risultato già calcolato (`raw_user_meta_data is distinct from v_nuovo`) rende la
   terminazione vera *per costruzione*, qualunque cosa faccia il calcolo.
 
+🔬 **E c'è una classe di difetti che i mutanti NON trovano: quelli a cui nessuno ha pensato.** Il
+2026-07-31 un critico avversariale ha trovato, sulla 0020 già applicata in produzione, che
+`auth.users.raw_user_meta_data` è **nullable senza default**: con i metadata NULL l'intero calcolo
+di `v_nuovo` collassa a NULL, la guardia `is distinct from` diventa falsa (NULL non è distinto da
+NULL) e la derivazione **non scrive niente, senza errore né warning** — per quell'utente `name`
+non viene mai derivato e il server auth ci mette l'EMAIL. Nessun mutante poteva scovarlo: i mutanti
+rompono ciò che i test già guardano, e nessun test guardava il NULL. ⇒ chiuso dalla **0021**
+(`coalesce`) e presidiato dal **T16**, che è rosso senza di essa.
+⚠️ La prima controprova di quel T16 fu FALSA: la 0021 era stata «esclusa» con `grep -v "0021"`, che
+toglie le RIGHE contenenti la stringa e non il FILE — il corpo entrava lo stesso e il test passava.
+Per escludere una migration da un giro serve la lista dei file (`ls migrations/0*.sql | grep -v`),
+non un filtro sul testo che ci scorre dentro.
+
 Quando un mutante muore della morte sbagliata, la domanda giusta non è «come lo faccio morire come
 volevo» ma «che cosa mi sta dicendo». In due casi su tre la risposta era un cambiamento nel codice
 di produzione, non nel mutante.

@@ -20,11 +20,24 @@ import { logError } from '@/shared/utils/logger';
  * proiezione, riallineata a OGNI scrittura del nome (registrazione, completamento
  * profilo post-social, rettifica Art.16).
  *
- * Residuo dichiarato: le due copie possono divergere se la sincronizzazione fallisce
- * (rete). Non blocchiamo l'operazione dell'utente per questo — il profilo è salvato e
- * il claim serve a un flusso non ancora attivo — ma l'anomalia va nei log a livello
- * ERROR (warn/info sono scartati in produzione, vedi `logger.ts`) e la scrittura
- * successiva del nome la risana.
+ * ⚠️ DALLA MIGRATION 0020 — viva in produzione dal 2026-07-31 — QUESTA SINCRONIZZAZIONE
+ * NON È PIÙ LA DIFESA, è una comodità. Il claim `name` viene DERIVATO da `profiles` da un
+ * trigger che ascolta `first_name` e `last_name`, quindi il residuo che questo commento
+ * dichiarava — «le due copie possono divergere se la sincronizzazione fallisce» — non è
+ * più vero: se questa chiamata fallisce, il claim resta comunque allineato al profilo.
+ * (Gemello di `nickname.ts:26`, dove la stessa nota è scritta per `preferred_username`.)
+ *
+ * 🔴 CAMBIARE `buildDisplayName` QUI SIGNIFICA CAMBIARE ANCHE L'SQL. La composizione del
+ * claim è ripetuta dentro `allinea_claim_da_profiles_di`
+ * (`supabase/migrations/0020_claim_nickname_da_profiles.sql`, la `concat_ws` con i
+ * `nullif(btrim(...))`): la migration cita questo file, ma il rimando all'indietro mancava
+ * — cioè chi tocca questa funzione non aveva modo di sapere che l'SQL deve seguirlo. Se le
+ * due regole divergono, il claim consegnato al partner cambia a ogni scrittura, alternando
+ * le due versioni del nome.
+ *
+ * Resta vero il resto: non blocchiamo l'operazione dell'utente se la proiezione fallisce, e
+ * l'anomalia va nei log a livello ERROR (warn/info sono scartati in produzione, vedi
+ * `logger.ts`).
  */
 
 /**

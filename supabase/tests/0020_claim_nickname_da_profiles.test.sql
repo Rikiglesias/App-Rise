@@ -541,6 +541,46 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
+-- T16 (0021): METADATA NULL. `auth.users.raw_user_meta_data` è nullable e senza default
+-- (verificato su `pg_attribute` del database vivo il 2026-07-31). Con la sola 0020 una
+-- riga NULL faceva collassare a NULL l'intero calcolo di `v_nuovo`, la guardia
+-- `is distinct from` diventava falsa (NULL non è distinto da NULL) e la derivazione taceva
+-- **senza errore**: per quell'utente `name` non veniva mai scritto, e il server auth ci
+-- mette l'EMAIL dell'account — cioè la fuga che la 0020 esiste per chiudere.
+-- Trovato da un critico avversariale, non da un test: nessuno aveva pensato al NULL.
+-- Questo test è ROSSO sulla sola 0020 e verde con la 0021.
+-- ---------------------------------------------------------------------------
+insert into auth.users (id, email, raw_user_meta_data)
+values ('00000000-0000-0000-0000-000000000731', 'nulli@test.it', null);
+
+insert into public.profiles (id, first_name, last_name, phone, city, province,
+                             country, birth_date, privacy_consent_at, nickname)
+values ('00000000-0000-0000-0000-000000000731', 'Vuoto', 'Metadata', '+390000000731',
+        'Roma', 'RM', 'IT', '1990-01-01', now(), 'metadatanulli');
+
+do $$
+declare v jsonb;
+begin
+  select raw_user_meta_data into v from auth.users
+   where id = '00000000-0000-0000-0000-000000000731';
+
+  if v is null then
+    raise exception 'T16 FAIL: metadata ancora NULL — la derivazione ha taciuto invece di scrivere';
+  end if;
+  if v->>'preferred_username' is distinct from 'metadatanulli' then
+    raise exception 'T16 FAIL: nickname non derivato su metadata NULL, trovato %', coalesce(v->>'preferred_username', '<assente>');
+  end if;
+  -- Il claim che conta di più: senza, al partner arriverebbe l'email.
+  if v->>'name' is distinct from 'Vuoto Metadata' then
+    raise exception 'T16 FAIL: `name` non derivato su metadata NULL, trovato %', coalesce(v->>'name', '<assente>');
+  end if;
+  if v->>'country' is distinct from 'IT' then
+    raise exception 'T16 FAIL: `country` non derivato su metadata NULL, trovato %', coalesce(v->>'country', '<assente>');
+  end if;
+  raise notice 'T16 PASS: con i metadata NULL i tre claim vengono derivati lo stesso';
+end $$;
+
+-- ---------------------------------------------------------------------------
 -- T15: SUPERFICIE. Le funzioni di questa migration scrivono su `auth.users` e sono
 -- `security definer`: esposte a `anon` o `authenticated`, sarebbero un modo per far
 -- scrivere il database a chiunque abbia la chiave pubblica. I `revoke` ci sono, ma un
