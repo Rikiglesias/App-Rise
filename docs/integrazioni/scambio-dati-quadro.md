@@ -929,9 +929,15 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > persona, che l'ha già dato a noi» — parole di Riccardo del 30/07). ⇒ **oggi il brief promette «se
 > vi serve, ditecelo e ve lo facciamo arrivare» senza avere più un canale già pronto.** Non è
 > impossibile — il dato ce l'abbiamo in `profiles` e la frase stessa dice che il come «va concordato
-> prima di attivare il servizio» — ma una terza strada va scelta (consegna fuori dal token: export,
-> chiamata dedicata, o rimettere `country` nei metadata con una migration che lo escluda dalla
-> bonifica). **Decisione di Riccardo**: la frase è sua, non si riscrive senza di lui.
+> prima di attivare il servizio» — ma una terza strada va scelta.
+> ✅ **DECISA DA RICCARDO IL 2026-07-31: si RIANIMA la ②.** `country` torna nei `user_metadata`,
+> escluso dalla bonifica con la prossima migration. Scelta contro le alternative: la consegna fuori
+> dal token (export o chiamata dedicata) è un canale nuovo da costruire, settimane; chiederlo alla
+> persona da loro è già stato escluso («l'ha già dato a noi»). Argomento decisivo: **il Paese è
+> obbligatorio nel LORO modulo**, quindi lo raccolgono comunque — non stiamo consegnando un dato in
+> più rispetto a ciò che già hanno, stiamo evitando che lo chiedano due volte alla stessa persona.
+> Costo per loro: in UserInfo non è un campo standard, il client va adattato — **detto nel brief**,
+> §5 domanda 6, insieme al motivo per cui l'ID token non può portarlo.
 > Il **nickname** invece ve lo mandiamo, come campo standard dell'accesso e in forma facoltativa.
 > ⚠️ **Corretto il 30/07**: qui si leggeva «vi chiediamo se da voi debba essere unico, **perché da
 > noi non lo è**» — falso dalla `0017`, che ha reso il nickname unico (`lower()`, parziale sui

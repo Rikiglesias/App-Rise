@@ -640,9 +640,12 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    raccogliamo, ma non è fra i campi che l'accesso porta con sé: non è come la visibilità e le
    community, che da noi non esistono proprio — il Paese ce l'abbiamo, semplicemente non viaggia
    insieme all'identità. Non ha quindi senso chiederlo di nuovo alla persona, che l'ha già dato a
-   noi: **se vi serve, ditecelo e ve lo facciamo arrivare** — è la stessa cosa detta per il
-   telefono, e va concordata **prima** di attivare il servizio, perché tocca il modo in cui i dati
-   vi vengono consegnati. Se trovate altri campi nella stessa condizione segnalateceli: l'elenco
+   noi: **se vi serve, ditecelo e ve lo facciamo arrivare.** Il come, così sapete cosa comporta dal
+   vostro lato: l'ID token porta una lista fissa di campi standard e il Paese non è fra quelli;
+   la risposta di **UserInfo** invece può portarlo, e lo prepariamo noi — lì però non è un campo
+   standard, quindi il vostro lato va adattato per leggerlo. Va concordato **prima** di attivare il
+   servizio, perché tocca il modo in cui i dati vi vengono consegnati.
+   Se trovate altri campi nella stessa condizione segnalateceli: l'elenco
    nasce da quello che vediamo della vostra pagina, non dal vostro schema.
 
 **A chi rispondere.** Il riferimento per questa integrazione è **Riccardo**, che si raggiunge a
