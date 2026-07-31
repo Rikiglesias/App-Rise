@@ -30,11 +30,11 @@
     },
     {
       "frase": "contrassegni tecnici del nostro provider, non dati della persona",
-      "_perche_questa_forma_lunga": "la coda «, non dati della persona» e' la parte che rende la frase falsa; «contrassegni tecnici del nostro provider» da solo e' la formulazione CORRETTA rimasta nel testo (restano l'indirizzo dell'account E alcuni contrassegni tecnici), quindi ancorare li' bloccherebbe il testo giusto.",
+      "_perche_questa_forma_lunga": "la coda «, non dati della persona» e' la parte che rende la frase falsa. NB (aggiornato lo stesso giorno): quando questa voce e' nata, «contrassegni tecnici del nostro provider» era la formulazione corretta rimasta nel testo e ancorare li' l'avrebbe bloccata; poche ore dopo l'INTERO capoverso e' stato tolto (vedi la voce «copia grezza...»), quindi oggi quel rischio non c'e' piu' - ma l'ancoraggio resta giusto per il caso in cui la descrizione rientri.",
       "tolta_il": "2026-07-31",
       "perche": "e' la QUINTA riformazione dello stesso assoluto sulla superficie consegnata (la 4a fu «porta solo dati tecnici», ritirata il 30/07). E' falsa alla fonte: la 0019 toglie nove chiavi e solo quelle (0019:382-385), e la migration stessa lo dichiara a :66-69 («email resta nei metadata... UserInfo continuera' a consegnarla»). Sul DB vivo restano email, email_verified, phone_verified, sub, e su un account Apple anche custom_claims.is_private_email, che rivela che l'indirizzo e' un alias. L'email E' un dato della persona: scriverne il contrario a un partner e' un impegno da ritrattare",
       "rientrata_il": [],
-      "dove_vive_ora": "sostituita dal fatto senza assoluto: «restano l'indirizzo dell'account e alcuni contrassegni tecnici del nostro provider»"
+      "dove_vive_ora": "NIENTE nel brief: la frase sostitutiva («restano l'indirizzo dell'account e alcuni contrassegni tecnici») e' vissuta poche ore, poi il capoverso intero e' stato tolto il 2026-07-31 su rilievo di Riccardo. Il contenuto reale dei metadata vive solo in memoria di progetto (integrazione-identita-partner.md), che e' un canale NOSTRO"
     },
     {
       "frase": "ce ne prendiamo noi il carico",

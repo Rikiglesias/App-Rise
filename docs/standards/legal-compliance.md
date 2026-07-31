@@ -46,12 +46,25 @@ Raccolti nei form di registrazione/profilo (`SignUpScreen.tsx`,
   in UI (`validateMinAge`) sia dal DB (`constraint eta_minima`, migration 0019, che
   sostituisce il `constraint adult` a 18 anni della 0001).
 - **Nickname** (`nickname`, migration 0017) — **facoltativo**, 2-30 caratteri, unico
-  (indice `profiles_nickname_unico` su `lower()`). ⚠️ **È l'unico campo di profilo
-  destinato a uscire verso un terzo**: viaggia come claim OIDC `preferred_username`
-  verso Let's Donation, dove può comparire in liste pubbliche di donatori. Va nominato
-  nell'informativa **con questa destinazione**, non solo come campo interno.
+  (indice `profiles_nickname_unico` su `lower()`). Destinato a uscire verso un terzo come
+  claim OIDC `preferred_username`, dove può comparire in **liste pubbliche di donatori**.
 - **Email di contatto** (`contact_email`, migration 0009; significato riallineato dalla
-  0013) — facoltativa, distinta dall'indirizzo dell'account.
+  0013) — facoltativa, distinta dall'indirizzo dell'account. **Esce già oggi**: è la chiave
+  scelta per il prefill delle donazioni (`contact_email ?? auth.email`).
+
+> 🔴 **CAMPI CHE ESCONO VERSO TERZI — due canali distinti, uno già attivo.** Da tenere
+> insieme quando si scrive l'informativa, perché è la parte che si sottostima più facilmente:
+> - **Prefill degli URL di donazione, ATTIVO OGGI**: `first_name`, `last_name` ed `email`
+>   viaggiano come parametri nell'indirizzo verso Donorbox
+>   (`partnerUrls.ts` → `buildDonorboxDonationUrl`, chiamato da `usePartnerExit.ts`).
+>   Coerente con `scambio-dati-quadro.md:691`, che lo registra da tempo.
+> - **Claim OIDC, quando il provider si accende**: `name` (nome e cognome in una stringa,
+>   sincronizzato da `syncDisplayNameClaim`), `email`, `email_verified`, `sub`,
+>   `preferred_username`.
+> ⚠️ Corretto il 2026-07-31: questa sezione aveva dichiarato il `nickname` «l'unico campo di
+> profilo destinato a uscire verso un terzo». **Falso** — nome, cognome ed email escono già
+> adesso, per un canale che esisteva prima. Un inventario che sottostima i trasferimenti è
+> esattamente ciò su cui poggia l'informativa.
 - **Timestamp consenso privacy** (`privacy_consent_at`).
 - **Consenso marketing** (`marketing_consent`) — boolean, cache derivata (vedi consensi).
 - **Stato cancellazione** (`deletion_requested_at`) — NULL = attivo;

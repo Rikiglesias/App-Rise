@@ -486,8 +486,12 @@
         un'altra persona e (b) da noi non esiste. Il brief gli promette il contrario in DUE punti:
         «la persona entra comunque e il nickname resta vuoto» e «unico da noi». Non e' il caso del
         client malevolo (gia' tracciato): e' il percorso di REGISTRAZIONE ORDINARIO.
-        Le due frasi NON sono state tolte: sono fra i quattro contenuti che Riccardo ha fatto
-        RIENTRARE il 30/07 sera. La scelta e' sua: o si chiude il buco (trigger che riallinea i
+        Le due frasi NON sono state tolte, ma NON hanno lo stesso statuto - distinzione dovuta,
+        perche' chi rilegge prima dell'invio non creda protette da una decisione dell'utente due
+        frasi invece di una: «la persona entra comunque e il nickname resta vuoto» E' uno dei
+        quattro contenuti che Riccardo ha fatto RIENTRARE il 30/07 sera (elenco a :358-361);
+        «unico da noi» NO - e' la specifica del nickname consolidata nella Scheda dei dati.
+        La scelta e' sua: o si chiude il buco (trigger che riallinea i
         metadata da `profiles`) o si tolgono le due promesse. Tracciato in
         `~/todos/partner-identita.md`. Finche' il documento non parte, il rischio e' zero.
      ----------------------------------------------------------------------------------
@@ -556,8 +560,8 @@ Tre cose tecniche, meglio dirle ora che scoprirle al collaudo.
   l'email le persone la cambiano. Serve una volta sola, al primo incontro con una scheda che da voi
   esiste già: da lì in poi la persona resta legata al `sub`, e resta **una scheda sola**.
 - **Uso del token.** L'identità si legge dall'**ID token**, senza usare il token di accesso verso
-  altre nostre funzioni: è la prassi. Se doveste leggerla da UserInfo, tenete conto della
-  precisazione in fondo alla Scheda dei dati.
+  altre nostre funzioni: è la prassi. Se doveste leggerla da UserInfo, in fondo alla Scheda dei dati
+  c'è la differenza da tenere presente.
 - **Tre casi da nominare prima del collaudo.** Se la persona **non dà il consenso** sulla nostra
   pagina torna da voi senza identità: è un esito normale, non un errore nostro.
   Gli **accessi contemporanei**: se per la stessa persona nuova ne partono due insieme, il `sub` è
@@ -660,12 +664,11 @@ nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
 | `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, nessun vincolo sui caratteri, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio — vale sia per chi non l'ha scelto, sia per chi l'ha cancellato dopo |
 
-**Una precisazione su UserInfo.** La tabella descrive l'**ID token**, ed è da lì che vi chiediamo di
-leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha emesso, quando
+**Cosa porta l'ID token oltre alla tabella**: i dati tecnici del token (chi l'ha emesso, quando
 scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la forniscono,
 l'indirizzo dell'immagine di profilo.
 
-**Se invece leggete da UserInfo**, un campo si comporta in modo diverso: l'indicatore di email
-verificata, quando l'email non è confermata, lì **non compare affatto**, mentre nell'ID token c'è
-sempre. Conviene trattare l'assenza come «non confermata» — e ditecelo prima del collaudo, così lo
-proviamo insieme.
+**Se leggete da UserInfo invece che dall'ID token**, un campo si comporta in modo diverso: il claim
+`email_verified` lì **non viene emesso** quando l'email non è confermata, mentre nell'ID token c'è
+sempre. Trattate l'assenza come «non confermata» — e ditecelo prima del collaudo, così lo proviamo
+insieme.
