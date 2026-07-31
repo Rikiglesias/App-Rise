@@ -97,27 +97,40 @@ for pair in "${PAIRS[@]}"; do
       0011_signup_contact_email)
         extra=(migrations/0017_profiles_nickname.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
-               migrations/0020_claim_nickname_da_profiles.sql) ;;
+               migrations/0020_claim_nickname_da_profiles.sql
+               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
       0012_legacy_contacts|0013_contact_email_follows_account)
         extra=(migrations/0014_claim_legacy_campi_vuoti.sql
                migrations/0015_aggancio_su_email_verificata.sql
                migrations/0016_claim_su_email_confermata.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
-               migrations/0020_claim_nickname_da_profiles.sql) ;;
+               migrations/0020_claim_nickname_da_profiles.sql
+               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
       0014_claim_legacy_campi_vuoti)
         extra=(migrations/0015_aggancio_su_email_verificata.sql
                migrations/0016_claim_su_email_confermata.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
-               migrations/0020_claim_nickname_da_profiles.sql) ;;
+               migrations/0020_claim_nickname_da_profiles.sql
+               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
       0015_aggancio_su_email_verificata)
         extra=(migrations/0016_claim_su_email_confermata.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
-               migrations/0020_claim_nickname_da_profiles.sql) ;;
+               migrations/0020_claim_nickname_da_profiles.sql
+               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
       0016_claim_su_email_confermata|0017_profiles_nickname)
         extra=(migrations/0019_eta_minima_e_bonifica_metadata.sql
-               migrations/0020_claim_nickname_da_profiles.sql) ;;
+               migrations/0020_claim_nickname_da_profiles.sql
+               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
       0019_eta_minima_e_bonifica_metadata)
-        extra=(migrations/0020_claim_nickname_da_profiles.sql) ;;
+        extra=(migrations/0020_claim_nickname_da_profiles.sql
+               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
+      # ⚠️ Dal 2026-07-31 la 0021 è l'ultima a definire `allinea_claim_da_profiles_di`
+      # (aggiunge il `coalesce` sui metadata NULL): va in coda anche alla coppia della 0020,
+      # che altrimenti riapplicherebbe il corpo SENZA il coalesce e lascerebbe rosso il suo
+      # T16. Stessa regola per cui la 0020 sta in coda alla 0019: comanda chi definisce per
+      # ULTIMO, non chi ha il numero del test che stai leggendo.
+      0020_claim_nickname_da_profiles)
+        extra=(migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
     esac
 
     log=$(cat "tests/${shim}.sql" migrations/0*.sql \

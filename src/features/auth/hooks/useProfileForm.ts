@@ -16,7 +16,11 @@ import {
 } from '@/shared/auth/profileCompletion';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import { syncDisplayNameClaim } from '@/shared/auth/displayName';
-import { isNicknameConflict, syncNicknameClaim } from '@/shared/auth/nickname';
+import {
+  isNicknameAvailable,
+  isNicknameConflict,
+  syncNicknameClaim,
+} from '@/shared/auth/nickname';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -133,9 +137,13 @@ export const useProfileForm = () => {
       formOwner.current = userId;
       hydratedForUser.current = null;
       phoneTouched.current = false;
-      // Stessa ragione del telefono: se il flag sopravvivesse al cambio di utente, il
-      // nickname del nuovo non verrebbe idratato (verrebbe scambiato per una scelta del
-      // precedente) — la classe di errore che qui ha già morso più volte.
+      // Il flag non sopravvive al cambio di utente. La conseguenza vera è duplice, e vale
+      // la pena scriverla giusta: il campo del nuovo utente resterebbe non-idratato (il
+      // ramo qui sotto consulta il flag), e per di più il controllo di disponibilità
+      // partirebbe subito, chiedendo al server il nickname di un'ALTRA persona e mostrando
+      // «Libero» o «già preso» su un valore che questo utente non ha mai scritto.
+      // È la classe di errore che in questo file ha già morso più volte: un valore — o un
+      // flag — che sopravvive a chi l'ha prodotto.
       nicknameTouched.current = false;
       setFirstName('');
       setLastName('');
@@ -167,12 +175,19 @@ export const useProfileForm = () => {
     fill(setCity)(profile.city);
     fill(setProvince)(profile.province);
     fill(setBirthDate)(profile.birth_date);
-    // Chi arriva qui col profilo già nato (completamento di campi mancanti) può avere
-    // un nickname: si ritrova scritto quello che è suo, invece di un campo vuoto che
-    // sembra un invito a sceglierne uno nuovo. `fill` non sovrascrive ciò che la
-    // persona ha già digitato, e sul nickname importa il doppio: qui l'unico modo di
-    // dire «non ne voglio» è lasciarlo vuoto.
-    fill(setNickname)(profile.nickname);
+    // Chi arriva qui col profilo già nato (completamento di campi mancanti) può avere un
+    // nickname: si ritrova scritto quello che è suo, invece di un campo vuoto che sembra un
+    // invito a sceglierne uno nuovo.
+    // ⚠️ QUI SERVE IL FLAG, non `fill`, ed è la stessa ragione del telefono qui sotto:
+    // `fill` decide dal VALORE (`prev || v`), e per questo campo la stringa vuota è una
+    // RISPOSTA («non ne voglio uno»), non un «non ha ancora scritto». Con `fill`, se la
+    // lettura del profilo torna mentre la persona sta usando il modulo — arrivo diretto,
+    // rete lenta: caso reale, ha già un test per il campo Nome — a chi avesse digitato un
+    // nickname e poi l'avesse cancellato il profilo glielo rimetterebbe dentro, e il
+    // salvataggio lo riscriverebbe in colonna. Il flag distingue le due cose.
+    if (profile.nickname && !nicknameTouched.current) {
+      setNickname(prev => prev || (profile.nickname as string));
+    }
     // `phone` parte da '+39', quindi come `country` non è mai «vuoto» e `prev || v`
     // restituirebbe sempre il default. Si scrive solo se il campo è ancora al valore
     // iniziale, cioè se la persona non ha già digitato un numero suo.
@@ -374,6 +389,30 @@ export const useProfileForm = () => {
     // La validazione del form NON basta a garantirlo: sono due elenchi di campi con due
     // scopi (forma dei valori vs completezza del profilo), ed è la loro divergenza
     // silenziosa il bug — per questo il controllo è qui e non solo nei test.
+    // RICONTROLLO FRESCO, come fa la registrazione (`useSignUpForm.ts:187-194`) e per lo
+    // stesso motivo: il verdetto che il form ha in mano arriva dopo 450 ms di attesa più il
+    // tempo di rete, quindi chi compila in fretta preme Salva mentre lo stato è ancora
+    // «sto controllando» — e il blocco poco sopra, che guarda solo `taken`, lo lascia
+    // passare. Senza questa domanda l'upsert parte, l'indice unico lo respinge e la persona
+    // legge «un attimo prima di te»: un messaggio FALSO (la corsa non c'è stata, l'app non
+    // aveva ancora chiesto) pagato con la perdita dell'INTERO modulo appena compilato.
+    // `null` = non verificabile e non ferma nessuno: resta il caso in cui la corsa persa è
+    // vera, ed è quello che il messaggio racconta bene.
+    // ⚠️ SOLO SE L'HA SCRITTO LA PERSONA, e questa riga è costata un test rosso: senza il
+    // flag, chi arriva col PROPRIO nickname già in colonna e non lo tocca si vede chiedere
+    // al server «è libero?» su un valore che è suo — la risposta è «occupato», vera e
+    // inutile, e il salvataggio si blocca addosso a chi non ha cambiato niente. È lo stesso
+    // guasto che il flag `toccato` chiude nel controllo mentre si scrive, ripresentato nel
+    // punto del salvataggio. Il gemello `useSignUpForm` non ha il problema perché in
+    // registrazione un nickname già proprio non esiste.
+    if (nicknameTouched.current && nickname.trim() !== '') {
+      const libero = await isNicknameAvailable(nickname);
+      if (libero === false) {
+        setLoading(false);
+        setErrors({ ...found, nickname: 'nickname_taken' });
+        return;
+      }
+    }
     const stillMissing = missingProfileFields(nextProfile);
     if (stillMissing.length > 0) {
       setLoading(false);
@@ -415,8 +454,8 @@ export const useProfileForm = () => {
     const { error: consentError } = isNewProfile
       ? await recordConsent('privacy_notice', 'granted')
       : { error: null };
-    setLoading(false);
     if (consentError) {
+      setLoading(false);
       setSubmitError(t('auth.errors.generic'));
       return;
     }
@@ -433,6 +472,17 @@ export const useProfileForm = () => {
     // renderebbe il claim dipendente da un meccanismo solo invece che da due.
     await syncNicknameClaim(nickname);
     await refreshProfile();
+    // 🔴 IL BOTTONE RESTA SPENTO FINO A QUI, e non è pignoleria sull'attesa.
+    // Prima `setLoading(false)` stava subito dopo il consenso, cioè PRIMA di tre chiamate
+    // di rete e della navigazione: il bottone si riabilitava mentre la schermata era ancora
+    // aperta, e un secondo tocco rientrava in `submit` con `profile` ancora `null` — perché
+    // `refreshProfile` non era tornato. Risultato: `isNewProfile` di nuovo vero, quindi un
+    // SECONDO «granted» nel registro Art.7 e `privacy_consent_at` spostato a adesso. Cioè
+    // esattamente il falso nel registro dei consensi che il commento più sopra dichiara
+    // inaccettabile — un consenso che risulta dato in un momento in cui non è avvenuto.
+    // Difetto PREESISTENTE, non introdotto qui: `syncNicknameClaim` ne ha solo allargato la
+    // finestra di una chiamata, ed è per questo che è saltato fuori adesso.
+    setLoading(false);
     // Dietro il cancello questa è l'unica schermata dello stack: non c'è un «indietro»
     // dove tornare, e l'app riappare da sé appena il profilo risulta completo (le rotte
     // normali rientrano nell'albero). Chiamare `goBack` a vuoto non romperebbe nulla, ma
