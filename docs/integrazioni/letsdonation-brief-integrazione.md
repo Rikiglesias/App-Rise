@@ -283,6 +283,10 @@
      tecnica, e il documento e' gia' al limite delle pagine. Da riproporre quando decide.
      ⚠️ PRECONDIZIONE PRIMA DI SCRIVERLO IN QUALSIASI DOCUMENTO IN USCITA: la 0019 non e'
      applicata al database vivo (fermo alla 0016) e l'informativa dice ancora un'altra cosa.
+     ✅ SUPERATA IL 2026-07-31 per la meta' tecnica: 0017, 0018 e 0019 sono APPLICATE al database
+     vivo (registro: 0017, 0018, 0019, 0019_eta_minima_e_bonifica_metadata). 🔴 RESTA VERA per
+     l'altra meta': l'INFORMATIVA dice ancora un'altra cosa, e finche' non e' allineata «dai 14
+     anni» non va scritto in un documento in uscita.
 
      STATO DELL'INVIO, verificato in questa passata: il provider OIDC e' SPENTO sul progetto vivo
      (`oauth/authorize` -> `feature_disabled`), ma le chiavi di firma sono GIA' asimmetriche
@@ -331,6 +335,12 @@
        - il nickname e' descritto al PRESENTE (Riccardo: «fai finta che sia gia' pronto»).
          PREREQUISITO REALE: 0017 e 0018 non sono applicate (DB alla 0016) -> vanno applicate
          PRIMA dell'invio, altrimenti il documento promette un campo che non esiste.
+         ✅ SODDISFATTO IL 2026-07-31: 0017 e 0018 applicate e verificate sul DB vivo (colonna
+         `nickname`, forma, indice unico, funzione `nickname_disponibile` provata). Il campo esiste,
+         il presente del documento e' vero. 🔴 MA vedi il finding del critico del 31/07: il claim
+         `preferred_username` viaggia dai `user_metadata`, che il CLIENT scrive senza guardia
+         server-side -> le garanzie di forma e unicita' scritte al partner non sono ancora imposte
+         sul canale che gliele consegna. Tracciato in ~/todos/partner-identita.md.
        - la MODERAZIONE del nickname passa a NOI (era attribuita al partner). Formula vera
          oggi: nessun filtro automatico, rimozione su segnalazione. Non scrivere mai «lo
          moderiamo» finche' un filtro non esiste davvero.
@@ -434,6 +444,21 @@
         contenuti VISIVI + informativa), e la moderazione e' di un altro ordine rispetto al
         nickname: «nessun filtro automatico, rimozione su segnalazione» regge su una parola, non
         su un'immagine che compare sulle liste pubbliche di un partner.
+        ⚠️ CORREZIONE DEL CRITICO AVVERSARIALE (31/07): l'analisi qui sopra era BINARIA - o la
+        feature intera o niente - e Riccardo aveva chiesto «QUALSIASI aspetto da analizzare per
+        aggiungerla». Esiste una TERZA strada che toglie quasi tutti i costi elencati:
+        · **avatar scelto da un insieme CHIUSO ospitato da noi** (una dozzina di immagini nostre,
+          la persona ne sceglie una, il claim porta uno degli URL fissi). Niente upload => niente
+          contenuto utente => `legal-compliance.md:68` («upload di foto: assenti») resta VERO;
+          niente Storage da cancellare alla cancellazione dell'account; niente moderazione, perche'
+          le immagini sono nostre; e l'URL e' validato PER COSTRUZIONE, il che chiude da solo il
+          rischio principale (nessuna validazione del claim `picture`, ne' in scrittura ne' in
+          lettura). Costo reale: gli asset, una colonna piccola, il sync del claim.
+        · **iniziali generate**: risolvono l'UI (oggi c'e' un'icona uguale per tutti) ma NON il
+          claim - `picture` vuole un URL, e generare l'immagine lato client non ne produce uno.
+          Vale se il bisogno e' «l'app sembra piu' curata», non se e' «il partner mostra un volto».
+        Le tre strade vanno tenute distinte quando lui decide: sono tre costi diversi di un ordine
+        di grandezza l'uno dall'altro.
      ----------------------------------------------------------------------------------
 -->
 
@@ -540,9 +565,9 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    aggiornati: ci serve sapere se li usate ogni volta o solo alla creazione dell'account. Se solo
    alla creazione, chi aggiorna l'email da noi continua a risultare da voi con quella vecchia.
    Della stessa famiglia: il vostro lato pretende `email_verified: true` per creare l'account? Il
-   campo lo emettiamo; la garanzia però non sta nel flag, sta nel fatto che
-   **senza conferma da noi non si entra**. Se per voi è una condizione bloccante ditecelo ora, così
-   è fra le prime cose che guardiamo insieme quando proviamo il giro.
+   campo lo emettiamo sempre — cosa lo garantisce sta nella Scheda dei dati. Se per voi è una
+   condizione bloccante ditecelo ora, così è fra le prime cose che guardiamo insieme quando
+   proviamo il giro.
 5. **Le cancellazioni.** Quando una persona chiede a noi di sparire, l'art. 19 del GDPR ci obbliga a
    dirvelo: la parte che invia la costruiamo noi, e resta da concordare il canale su cui farla
    arrivare. Oggi come le trattate, e a quale recapito possiamo comunicarvele? Se il collegamento
@@ -556,8 +581,8 @@ Sei domande. La prima dice quanto lavoro c'è davvero; la quarta è quella da cu
    nella nostra informativa cosa succede. Se la strada fosse chiederlo, una domanda dopo l'ingresso
    non è un secondo modulo di registrazione.
 
-   **Il nickname invece ve lo mandiamo noi**: da 2 a 30 caratteri, senza spazi ai bordi, nessun
-   vincolo sui caratteri. È **facoltativo**, e quando manca non arriva vuoto — non c'è proprio.
+   **Il nickname invece ve lo mandiamo noi**, come campo standard dell'accesso; la forma esatta è
+   nella Scheda dei dati. È **facoltativo**, e quando manca non arriva vuoto — non c'è proprio.
    Molte persone non lo compilano, quindi l'assenza è un caso ordinario e non un errore: diteci
    cosa mostrate in quel caso. Tre cose:
    - **il contenuto è responsabilità nostra**, perché nasce nella nostra registrazione: non
@@ -603,15 +628,15 @@ nell'**ID token**. I primi quattro ci sono sempre; l'ultimo solo se la persona l
 | `name` | Nome e cognome in una sola stringa. Non arriva mai vuoto: in mancanza partirebbe l'indirizzo email — se lo vedete ditecelo, come nome visibile non va |
 | `email` | L'indirizzo dell'account, confermato |
 | `email_verified` | Il flag del nostro provider. La garanzia non poggia su questo, ma sul fatto che senza conferma non si entra |
-| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio — vale sia per chi non l'ha scelto, sia per chi l'ha cancellato dopo |
+| `preferred_username` | Il nickname scelto dalla persona: da 2 a 30 caratteri, senza spazi ai bordi, nessun vincolo sui caratteri, unico da noi. È **facoltativo**, e quando manca non arriva vuoto: non c'è proprio — vale sia per chi non l'ha scelto, sia per chi l'ha cancellato dopo |
 
 **Una precisazione su UserInfo.** La tabella descrive l'**ID token**, ed è da lì che vi chiediamo di
 leggere l'identità: oltre ai campi elencati porta i dati tecnici del token (chi l'ha emesso, quando
 scade, quando l'account è stato aggiornato l'ultima volta) e, per gli accessi che la forniscono,
 l'indirizzo dell'immagine di profilo. La risposta di UserInfo, con lo scope `profile`, non porta le
 stesse cose: accanto ai campi dell'identità c'è **una copia grezza di quello che il nostro sistema
-di accesso tiene sull'account**. L'abbiamo già svuotata dei dati del profilo — quel che resta sono
-contrassegni tecnici del nostro provider, non dati della persona. Resta comunque la strada che non
+di accesso tiene sull'account**. L'abbiamo già svuotata dell'anagrafica; restano l'indirizzo
+dell'account e alcuni contrassegni tecnici del nostro provider. Resta comunque la strada che non
 vi consigliamo: se un vostro vincolo vi obbligasse a percorrerla, **ditecelo prima del collaudo**,
 perché un campo lì si comporta in modo diverso.
 

@@ -922,6 +922,16 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 > ingresso, ② passa dalla risposta di **UserInfo**, dove però **non è un campo standard** e il loro
 > client va adattato per leggerlo. ⚠️ La strada ② dipende dalla **bonifica dei metadata** (0019): se
 > `country` viene cancellato insieme al resto dell'anagrafica, la ② muore — vanno decise insieme.
+> 🔴 **ESITO, 2026-07-31: la ② È MORTA.** La 0019 è stata applicata al database vivo e `country` è
+> fra le nove chiavi che cancella (`0019_eta_minima_e_bonifica_metadata.sql:382-385`), quindi da
+> UserInfo il Paese non esce più. Restava una strada su due, e la ① («lo chiedono alla persona dopo
+> il primo ingresso») il brief la esclude esplicitamente («non ha senso chiederlo di nuovo alla
+> persona, che l'ha già dato a noi» — parole di Riccardo del 30/07). ⇒ **oggi il brief promette «se
+> vi serve, ditecelo e ve lo facciamo arrivare» senza avere più un canale già pronto.** Non è
+> impossibile — il dato ce l'abbiamo in `profiles` e la frase stessa dice che il come «va concordato
+> prima di attivare il servizio» — ma una terza strada va scelta (consegna fuori dal token: export,
+> chiamata dedicata, o rimettere `country` nei metadata con una migration che lo escluda dalla
+> bonifica). **Decisione di Riccardo**: la frase è sua, non si riscrive senza di lui.
 > Il **nickname** invece ve lo mandiamo, come campo standard dell'accesso e in forma facoltativa.
 > ⚠️ **Corretto il 30/07**: qui si leggeva «vi chiediamo se da voi debba essere unico, **perché da
 > noi non lo è**» — falso dalla `0017`, che ha reso il nickname unico (`lower()`, parziale sui

@@ -21,6 +21,14 @@
       "dove_vive_ora": "sostituita da «i dati tecnici del token (...) e, per gli accessi che la forniscono, l'indirizzo dell'immagine di profilo»"
     },
     {
+      "frase": "contrassegni tecnici del nostro provider, non dati della persona",
+      "_perche_questa_forma_lunga": "la coda «, non dati della persona» e' la parte che rende la frase falsa; «contrassegni tecnici del nostro provider» da solo e' la formulazione CORRETTA rimasta nel testo (restano l'indirizzo dell'account E alcuni contrassegni tecnici), quindi ancorare li' bloccherebbe il testo giusto.",
+      "tolta_il": "2026-07-31",
+      "perche": "e' la QUINTA riformazione dello stesso assoluto sulla superficie consegnata (la 4a fu «porta solo dati tecnici», ritirata il 30/07). E' falsa alla fonte: la 0019 toglie nove chiavi e solo quelle (0019:382-385), e la migration stessa lo dichiara a :66-69 («email resta nei metadata... UserInfo continuera' a consegnarla»). Sul DB vivo restano email, email_verified, phone_verified, sub, e su un account Apple anche custom_claims.is_private_email, che rivela che l'indirizzo e' un alias. L'email E' un dato della persona: scriverne il contrario a un partner e' un impegno da ritrattare",
+      "rientrata_il": [],
+      "dove_vive_ora": "sostituita dal fatto senza assoluto: «restano l'indirizzo dell'account e alcuni contrassegni tecnici del nostro provider»"
+    },
+    {
       "frase": "ce ne prendiamo noi il carico",
       "tolta_il": "2026-07-28",
       "perche": "promessa creduta IMPOSSIBILE sullo stack scelto: i claim custom non raggiungono il client OIDC (oidc-server-implementation-plan.md:18-22)",
