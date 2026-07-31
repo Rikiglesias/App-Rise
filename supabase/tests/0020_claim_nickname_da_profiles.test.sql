@@ -500,6 +500,47 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
+-- T14b 🔴 `name` SCRITTO A MANO da chi HA un profilo torna quello di `profiles`.
+-- È lo stesso buco del nickname su un claim diverso: `displayName.ts:55` scrive `name` via
+-- updateUser, e `PUT /user` fa lo stesso senza passare dall'app. Senza derivazione, chi
+-- vuole può comparire sulle liste del partner con un nome che non è il suo.
+-- ---------------------------------------------------------------------------
+update auth.users
+   set raw_user_meta_data = raw_user_meta_data
+       || jsonb_build_object('name', 'Banca Fasulla SPA')
+ where id = '00000000-0000-0000-0000-000000000701';
+
+do $$
+declare v_nome text;
+begin
+  select raw_user_meta_data->>'name' into v_nome from auth.users
+   where id = '00000000-0000-0000-0000-000000000701';
+  if v_nome is distinct from 'Primo Arrivato' then
+    raise exception 'T14b FAIL: un `name` scritto fuori da `profiles` è sopravvissuto (vale %)', coalesce(v_nome, '<assente>');
+  end if;
+  raise notice 'T14b PASS: un `name` scritto fuori da `profiles` torna quello del profilo';
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- T14c: il cognome cambia in `profiles` → il claim `name` si ricompone. Serve a provare
+-- che il trigger ascolta ENTRAMBE le colonne del nome: ascoltando solo `first_name`,
+-- questo test resterebbe rosso mentre tutti gli altri passano.
+-- ---------------------------------------------------------------------------
+update public.profiles set last_name = 'Ripartito'
+ where id = '00000000-0000-0000-0000-000000000701';
+
+do $$
+declare v_nome text;
+begin
+  select raw_user_meta_data->>'name' into v_nome from auth.users
+   where id = '00000000-0000-0000-0000-000000000701';
+  if v_nome is distinct from 'Primo Ripartito' then
+    raise exception 'T14c FAIL: cambiato il cognome, il claim `name` è rimasto % ', coalesce(v_nome, '<assente>');
+  end if;
+  raise notice 'T14c PASS: il claim `name` si ricompone quando cambia una delle due colonne';
+end $$;
+
+-- ---------------------------------------------------------------------------
 -- T15: SUPERFICIE. Le funzioni di questa migration scrivono su `auth.users` e sono
 -- `security definer`: esposte a `anon` o `authenticated`, sarebbero un modo per far
 -- scrivere il database a chiunque abbia la chiave pubblica. I `revoke` ci sono, ma un

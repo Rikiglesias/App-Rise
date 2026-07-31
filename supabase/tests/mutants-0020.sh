@@ -93,7 +93,7 @@ vivi=0
 #      nessun mutante che lo presidia. Questa versione esce PRIMA dell'update, che rompe
 #      la difesa senza toccare la coerenza fra guardia e azione.
 run_mutante "N1 non tocca i metadata se manca il nickname" "T2 FAIL" "$M" \
-  "s/^  select p.nickname, nullif(btrim(p.country), '')\$/  if true then return; end if;\n  select p.nickname, nullif(btrim(p.country), '')/" \
+  's/^  select p.nickname,$/  if true then return; end if;\n  select p.nickname,/' \
   || vivi=$((vivi+1))
 
 # N2 — via la guardia dal WHERE. È il mutante che prova che la guardia NON è cosmetica:
@@ -114,15 +114,27 @@ run_mutante "N3 nessun presidio sui metadata" "T5 FAIL" "$M" \
 #      dopo il login social, che scrive `profiles` e non sincronizza il nickname. Tutto il
 #      resto resta verde: lo vedono T7 e T8.
 run_mutante "N4 il claim non segue profiles" "T7 FAIL" "$M" \
-  's/^  after insert or update of nickname, country on public.profiles$/  after insert or update of city on public.profiles/' \
+  's/^  after insert or update of nickname, country, first_name, last_name on public.profiles$/  after insert or update of city on public.profiles/' \
   || vivi=$((vivi+1))
 
-# N5 — l'allineamento non viene chiamato alla nascita. In produzione il trigger della
-#      faccia B probabilmente coprirebbe lo stesso (GoTrue riscrive la riga dopo l'INSERT),
-#      ma qui gira Postgres nudo: è l'unico modo per sapere se quel punto è ancora vivo.
-#      Stessa logica con cui la 0019 tiene separati T5 e T8.
-run_mutante "N5 nessun allineamento alla nascita" "T2 FAIL" "$M" \
-  's/^  perform public.allinea_claim_da_profiles_di(new.id);$/  -- mutante N5/' \
+# N5 — l'allineamento non viene chiamato alla nascita.
+#      ⚠️ IL BERSAGLIO È T6, NON T2, e la differenza dice CHI copre davvero cosa — misurato
+#      il 2026-07-31, non dedotto. Per chi un profilo ce l'ha (T2: nickname occupato) la
+#      faccia A scatta sull'insert in `profiles` e riallinea lo stesso, quindi T2 resta
+#      verde. A scoprirsi è l'utente del login SOCIAL (T6): non passa dal ramo
+#      `birth_date`, nessun profilo nasce, nessuna faccia A si sveglia — e un
+#      `preferred_username` scritto dal provider resterebbe nei metadata per sempre.
+#      ⇒ questa chiamata esiste per loro. Il commento in migration lo dice con le stesse
+#      parole: se un domani sembrasse codice in più, è questo mutante la risposta.
+#      ⚠️ IL RANGE NON È DECORATIVO: la chiamata `perform … allinea_claim_da_profiles_di
+#      (new.id);` compare TRE volte, identica — una per faccia più questa. Un sed globale
+#      le spegnerebbe tutte e misurerebbe «nessun allineamento da nessuna parte», che è il
+#      guasto di N3+N4+N5 insieme e non dice quale dei tre punti presidia cosa. Il range
+#      parte dalla chiamata alla pulizia, che nel file esiste solo dentro
+#      `handle_new_user`, e isola quindi la terza occorrenza. Stessa cautela dell'M3 della
+#      0019, per la stessa ragione.
+run_mutante "N5 nessun allineamento alla nascita" "T6 FAIL" "$M" \
+  '/perform public.pulisci_metadata_anagrafici_di(new.id);/,$ s/^  perform public.allinea_claim_da_profiles_di(new.id);$/  -- mutante N5/' \
   || vivi=$((vivi+1))
 
 # N6 — RIMOSSO il 2026-07-31, dopo averlo misurato: SOPRAVVIVEVA, e non per una lacuna
@@ -141,7 +153,7 @@ run_mutante "N5 nessun allineamento alla nascita" "T2 FAIL" "$M" \
 #      a pretendere il valore di `profiles`. Qui invece si spegne la LETTURA, così azione
 #      e guardia restano coerenti e a fallire è il test giusto.
 run_mutante "N7 la derivazione non legge profiles" "T1 FAIL" "$M" \
-  "s/^  select p.nickname, nullif(btrim(p.country), '')\$/  select null::text, nullif(btrim(p.country), '')/" \
+  's/^  select p.nickname,$/  select null::text,/' \
   || vivi=$((vivi+1))
 
 # N8 — il trigger della faccia A smette di ascoltare `country`: la derivazione continua a
@@ -149,7 +161,7 @@ run_mutante "N7 la derivazione non legge profiles" "T1 FAIL" "$M" \
 #      subdolo dei due lati, perché il valore resta giusto alla nascita e a ogni modifica
 #      del nickname — diverge solo per chi cambia il SOLO Paese. Lo vede T13.
 run_mutante "N8 il Paese non sveglia la derivazione" "T13 FAIL" "$M" \
-  's/^  after insert or update of nickname, country on public.profiles$/  after insert or update of nickname on public.profiles/' \
+  's/^  after insert or update of nickname, country, first_name, last_name on public.profiles$/  after insert or update of nickname, first_name, last_name on public.profiles/' \
   || vivi=$((vivi+1))
 
 # N8b — l'altro lato dello stesso campo: il trigger scatta ma la derivazione non LEGGE più
@@ -157,7 +169,7 @@ run_mutante "N8 il Paese non sveglia la derivazione" "T13 FAIL" "$M" \
 #       N8b sono i due punti che il commento in migration segnala come «da cambiare
 #       INSIEME»: un mutante solo non proverebbe che servono entrambi.
 run_mutante "N8b la derivazione non legge il Paese" "T11 FAIL" "$M" \
-  "s/^  select p.nickname, nullif(btrim(p.country), '')\$/  select p.nickname, null::text/" \
+  "s/^         nullif(btrim(p.country), ''),\$/         null::text,/" \
   || vivi=$((vivi+1))
 
 # N9 — via la seconda condizione della guardia, quella che distingue «chiave assente» da
@@ -178,13 +190,15 @@ run_mutante "N9 la chiave null resta" "T2 FAIL|T10 FAIL" "$M" \
 #       fatto effetto: legge una riga che non c'è ancora e cancella il claim di tutti. È
 #       l'errore di ordine, gemello di quello che la 0019 presidia con il suo T7. Lo vede
 #       T1, che è l'unico a pretendere un claim PRESENTE dopo una registrazione normale.
-#       ⚠️ LA PRIMA STESURA SOPRAVVIVEVA, e per un difetto del mutante, non del codice:
-#       AGGIUNGEVA la chiamata prima dell'`if` senza togliere quella in coda, che rimetteva
-#       tutto a posto. Un mutante che non rompe niente non prova niente. Ora la SPOSTA
-#       davvero — due sostituzioni: spegne quella in coda e ne mette una prima.
-run_mutante "N10 allineamento prima dell'insert" "T1 FAIL" "$M" \
-  "s/^  perform public.allinea_claim_da_profiles_di(new.id);\$/  -- mutante N10/; s/^  if v_meta ? .birth_date. then\$/  perform public.allinea_claim_da_profiles_di(new.id);\n  if v_meta ? 'birth_date' then/" \
-  || vivi=$((vivi+1))
+# N10 — RIMOSSO il 2026-07-31, dopo due misurazioni. Voleva provare che l'ordine conta:
+#       spostare l'allineamento PRIMA dell'insert in `profiles` gli farebbe leggere una
+#       riga che non c'è ancora. La prima stesura sopravviveva per un difetto suo
+#       (aggiungeva invece di spostare); corretta quella, **sopravvive lo stesso** — e
+#       questa volta ha ragione il codice: il trigger della faccia A scatta sull'insert in
+#       `profiles` e riallinea subito dopo, quindi l'ordine non è più una difesa.
+#       Mutante EQUIVALENTE (README, punto 3) → si toglie, non si adatta la suite.
+#       Ciò che resta vero — la chiamata alla nascita serve agli utenti SENZA profilo — è
+#       presidiato da N5, che lo misura per la via giusta.
 
 # N11 — via il filtro dei claim protetti, e `name` finisce nella bonifica. È il più
 #       pericoloso dei due esiti possibili: `name` NON viene riderivato da nessuno, e se
@@ -194,9 +208,13 @@ run_mutante "N10 allineamento prima dell'insert" "T1 FAIL" "$M" \
 #       ⚠️ DUE sostituzioni in un sed solo: togliere il filtro senza sporcare la lista non
 #       cambierebbe alcun comportamento (il filtro è una difesa in profondità: a liste
 #       disgiunte non fa niente), e il mutante misurerebbe il nulla.
-run_mutante "N11 niente filtro, \`name\` nella bonifica" "T14 FAIL" "$M" \
-  "s/^   where not (k = any (v_protetti));\$/   ;/; s/    'birth_date', 'marketing_consent', 'contact_email'/    'birth_date', 'marketing_consent', 'contact_email', 'name'/" \
-  || vivi=$((vivi+1))
+# ⚠️ RIMOSSO nella stessa sessione in cui era nato, dopo averlo misurato. Fino a quando
+#    `name` era solo PROTETTO, toglierlo dal filtro lo faceva sparire dai metadata e T14 lo
+#    vedeva. Da quando `name` è anche DERIVATO (la derivazione lo riscrive), la stessa
+#    mutazione non fa più sparire nulla: innesca la contesa fra i due presidi, cioè muore
+#    di `stack depth limit exceeded` esattamente come N12 — misurando due volte la stessa
+#    cosa. Il caso che presidiava («`name` sparisce ⇒ il server ripiega sull'email») è ora
+#    coperto da N13, che lo produce per la via giusta.
 
 # N12 — stesso filtro, altra chiave: `preferred_username` nella bonifica. Qui l'esito NON
 #       è un claim perduto ma una RICORSIONE — la pulizia lo toglie, l'allineamento lo
@@ -207,6 +225,30 @@ run_mutante "N11 niente filtro, \`name\` nella bonifica" "T14 FAIL" "$M" \
 #       banale «T6 FAIL»), ed è il motivo per cui il filtro esiste.
 run_mutante "N12 niente filtro, ricorsione fra i due presidi" "stack depth limit exceeded" "$M" \
   "s/^   where not (k = any (v_protetti));\$/   ;/; s/    'birth_date', 'marketing_consent', 'contact_email'/    'birth_date', 'marketing_consent', 'contact_email', 'preferred_username'/" \
+  || vivi=$((vivi+1))
+
+# N13 — `name` viene CANCELLATO anche quando il profilo non c'è: il ramo che lo protegge
+#       sparisce e la chiave finisce a JSON null. È il guasto PIÙ pericoloso dell'intera
+#       migration, perché non si vede da nessuna parte: il server auth non omette il claim
+#       `name`, ci mette l'EMAIL dell'account come ripiego — e per un utente Apple che
+#       nasconde la mail, al partner arriva il suo alias privaterelay al posto del nome.
+#       Lo vede solo T14, sull'utente social senza profilo.
+run_mutante "N13 \`name\` cancellato senza profilo" "T14 FAIL" "$M" \
+  's/case when v_nome is null then/case when false then/' || vivi=$((vivi+1))
+
+# N14 — `name` non viene derivato affatto: si torna al buco che questa migration chiude,
+#       cioè un claim che chiunque abbia una sessione può scrivere a piacere e che arriva
+#       al partner così com'è. T14 resta VERDE (il claim non viene toccato, ed è ciò che
+#       quel test pretende): a vederlo sono T14b e T14c.
+run_mutante "N14 \`name\` non derivato da profiles" "T14b FAIL" "$M" \
+  "s/else jsonb_build_object('name', v_nome) end/else '{}'::jsonb end/" \
+  || vivi=$((vivi+1))
+
+# N15 — il trigger ascolta il nome ma non il cognome: il claim si ricompone quando cambia
+#       `first_name` e resta indietro quando cambia solo `last_name`. Guasto parziale e
+#       quindi difficile da notare a occhio. Lo vede solo T14c.
+run_mutante "N15 il cognome non sveglia la derivazione" "T14c FAIL" "$M" \
+  's/^  after insert or update of nickname, country, first_name, last_name on public.profiles$/  after insert or update of nickname, country, first_name on public.profiles/' \
   || vivi=$((vivi+1))
 
 echo "----------------------------------------"

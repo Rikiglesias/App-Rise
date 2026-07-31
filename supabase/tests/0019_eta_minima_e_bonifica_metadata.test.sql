@@ -248,10 +248,18 @@ begin
   select raw_user_meta_data into v_meta from auth.users
    where id = '00000000-0000-0000-0000-000000000601';
 
-  if v_meta->>'name' is distinct from 'Nome Nuovo' then
-    raise exception 'T9 FAIL: un aggiornamento del solo claim `name` non è andato a buon fine (%)', v_meta;
+  -- ⚠️ IL VALORE ATTESO È CAMBIATO con la **migration 0020**, e il test resta pieno.
+  -- Prima si pretendeva di ritrovare `Nome Nuovo`: `name` era una copia che il client
+  -- scriveva e nessuno controllava. Dalla 0020 `name` è DERIVATO da `profiles`, quindi un
+  -- valore scritto a mano viene riportato a quello del profilo — ed è il punto: il T14b
+  -- della suite 0020 pretende esattamente questo, perché senza, chiunque abbia una
+  -- sessione potrebbe comparire sulle liste del partner con un nome non suo.
+  -- Ciò che questo test presidia — «aggiornare i claim NON innesca ricorsione» — è
+  -- intatto: se la catena di trigger non terminasse, qui non arriveremmo affatto.
+  if v_meta->>'name' is distinct from 'Quattordici Esatto' then
+    raise exception 'T9 FAIL: dopo un aggiornamento del solo claim `name` il valore non è quello derivato da `profiles` (%)', v_meta;
   end if;
-  raise notice 'T9 PASS: aggiornare i claim non innesca ricorsione né perde il valore';
+  raise notice 'T9 PASS: aggiornare i claim non innesca ricorsione, e `name` torna quello del profilo';
 end $$;
 
 -- ---------------------------------------------------------------------------

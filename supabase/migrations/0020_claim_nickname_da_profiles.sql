@@ -249,10 +249,24 @@ declare
   -- entrambi al partner non deve arrivare nulla.
   v_nickname text;
   v_country  text;
+  -- ⚠️ `name` NON si comporta come gli altri due, e la differenza è di sicurezza, non di
+  -- stile. Se la chiave manca, il server auth NON omette il claim: ci mette l'EMAIL
+  -- dell'account come ripiego (verificato alla fonte il 2026-07-29, e documentato in
+  -- `displayName.ts`). Per un utente «Accedi con Apple» che nasconde la mail, al partner
+  -- arriverebbe l'alias `@privaterelay.appleid.com` al posto del nome.
+  -- ⇒ `name` si SOVRASCRIVE quando abbiamo un nome vero, ma non si CANCELLA mai. Chi ha un
+  -- profilo non può più scavalcarlo; chi non ce l'ha (login social prima del
+  -- completamento) si tiene quello del provider, che è meglio di un'email.
+  -- Composizione identica a `buildDisplayName` (`displayName.ts:37`): se le due regole
+  -- divergono, il claim balla a ogni scrittura — cambiarle INSIEME.
+  v_nome     text;
   v_nuovo    jsonb;
 begin
-  select p.nickname, nullif(btrim(p.country), '')
-    into v_nickname, v_country
+  select p.nickname,
+         nullif(btrim(p.country), ''),
+         nullif(btrim(concat_ws(' ', nullif(btrim(p.first_name), ''),
+                                     nullif(btrim(p.last_name),  ''))), '')
+    into v_nickname, v_country, v_nome
     from public.profiles p
    where p.id = p_user_id;
 
@@ -261,10 +275,14 @@ begin
   -- valore assente non lasci una chiave a JSON null — che `->>` renderebbe
   -- indistinguibile dall'assenza, e che resterebbe lì per sempre nella superficie che
   -- UserInfo consegna intera.
+  -- `name` è fuori da quel meccanismo di proposito (vedi il DECLARE): non compare fra le
+  -- chiavi tolte, e viene aggiunto solo quando c'è un nome vero da scrivere.
   select (u.raw_user_meta_data - 'preferred_username' - 'country')
          || jsonb_strip_nulls(jsonb_build_object(
               'preferred_username', v_nickname,
               'country',            v_country))
+         || case when v_nome is null then '{}'::jsonb
+                 else jsonb_build_object('name', v_nome) end
     into v_nuovo
     from auth.users u
    where u.id = p_user_id;
@@ -302,8 +320,12 @@ revoke execute on function public.allinea_claim_da_profiles_di(uuid)
 -- Copre il completamento del profilo dopo il login social (`useProfileForm.ts:336`, che
 -- sincronizza solo il nome), il CAMBIO DEL PAESE da «modifica profilo»
 -- (`ProfileEditScreen.tsx:198`, che non sincronizza niente) e qualunque modifica futura,
--- compresa una fatta in SQL a mano. `update of nickname, country` restringe il fuoco alle
--- colonne giuste: senza, il trigger scatterebbe a ogni scrittura su `profiles`.
+-- compresa una fatta in SQL a mano. `update of <colonne>` restringe il fuoco a quelle che
+-- alimentano un claim: senza, il trigger scatterebbe a ogni scrittura su `profiles`.
+-- Sono quattro perché i claim derivati sono tre: `nickname` → `preferred_username`,
+-- `country` → `country`, e **`first_name` + `last_name` → `name`** (che si compone da due
+-- colonne, quindi vanno ascoltate entrambe: chi cambia il solo cognome deve far ricalcolare
+-- il nome intero).
 -- ⚠️ Le colonne elencate qui e le chiavi derivate nel §2a sono LO STESSO INSIEME visto da
 -- due lati. Aggiungerne una di là senza aggiungerla di qua dà il guasto silenzioso: il
 -- valore si allinea alla nascita e alla prima modifica di un'ALTRA colonna, mai quando
@@ -326,7 +348,7 @@ revoke execute on function public.allinea_claim_da_profiles()
 
 drop trigger if exists on_profile_claim_allineamento on public.profiles;
 create trigger on_profile_claim_allineamento
-  after insert or update of nickname, country on public.profiles
+  after insert or update of nickname, country, first_name, last_name on public.profiles
   for each row
   execute procedure public.allinea_claim_da_profiles();
 
@@ -378,12 +400,17 @@ create trigger on_auth_user_metadata_claim_allineamento
 -- nascita c'è stato un INSERT. Se nessuno riscrive i metadata dopo di noi, senza questa
 -- riga il nickname scartato dalla clemenza resterebbe nei metadata fino alla prima
 -- modifica del profilo — cioè, per chi non ne fa nessuna, per sempre.
--- ⚠️ E nemmeno la faccia A la rende superflua, benché l'insert in `profiles` qui sotto la
--- faccia scattare: la riga NON è ridondante, ed è un fatto MISURATO, non dedotto — il
--- mutante N5 la spegne e la suite diventa rossa su T2. Se un domani sembrasse codice in
--- più da togliere, è quel mutante la risposta.
--- ⚠️ Va DOPO l'insert in `profiles`, non prima: legge la colonna che quell'insert scrive.
--- È lo stesso ordine che la 0019 documenta per la pulizia, e il test T4 lo presidia.
+-- ⚠️ CHI COPRE DAVVERO, e non è quello che sembra. La faccia A scatta sull'insert in
+-- `profiles`, quindi per chi UN PROFILO CE L'HA questa riga è ridondante. Serve per chi
+-- **non ce l'ha**: il login social non passa dal ramo `birth_date` qui sotto, quindi
+-- nessun profilo nasce e nessuna faccia A si sveglia — ma un `preferred_username` scritto
+-- dal provider è già nei metadata, e senza questa riga resterebbe lì, cioè un claim che
+-- non nasce da `profiles`. Fatto MISURATO, non dedotto: il mutante N5 la spegne e a
+-- diventare rosso è **T6** (l'utente social senza profilo), non T2.
+-- ⚠️ Va DOPO l'insert in `profiles`, perché legge la colonna che quell'insert scrive.
+-- L'ordine è comunque la scelta giusta, ma NON è più l'unica difesa: misurando i mutanti
+-- il 2026-07-31 si è visto che spostare questa riga prima dell'insert non rompe nulla —
+-- il trigger della faccia A scatta sull'insert in `profiles` e riallinea subito dopo.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql

@@ -130,12 +130,20 @@ run_mutante "M2 vincolo cancellato, non abbassato" "T2 FAIL" "$M" \
 # M3 — via la pulizia dalla nascita del profilo (PRIMA occorrenza: `handle_new_user`).
 #      Il trigger di aggiornamento resta, quindi T8 continua a passare: a vedere il buco è
 #      solo T5, che guarda i metadata subito dopo la registrazione.
-#      ⚠️ Target `$M20` e non `$M`: dal 2026-07-31 è la 0020 l'ultima a definire
-#      `handle_new_user` (vedi il blocco in testa). Nella 0020 quella riga compare una
-#      volta sola, ma la forma `0,/…/` resta perché costa nulla ed è a prova del giorno in
-#      cui ricomparisse una seconda chiamata.
-run_mutante "M3 nessuna pulizia alla nascita" "T5 FAIL" "$M20" \
-  '0,/^  perform public.pulisci_metadata_anagrafici_di(new.id);$/s//  -- mutante M3/' \
+#      ⚠️ Target `$M20`: dal 2026-07-31 è la 0020 l'ultima a definire sia `handle_new_user`
+#      sia `pulisci_metadata_anagrafici_di` (vedi il blocco in testa).
+#      ⚠️ LA MUTAZIONE È CAMBIATA, ed è un fatto sul sistema, non un aggiustamento. Prima
+#      spegneva la CHIAMATA alla pulizia dentro `handle_new_user` e T5 diventava rosso.
+#      Misurata di nuovo dopo la 0020: **sopravvive**. Il motivo è che la derivazione dei
+#      claim, girando subito dopo, aggiunge `name` ai metadata → quell'UPDATE sveglia il
+#      trigger di pulizia della 0019 → l'anagrafica sparisce lo stesso. Cioè la chiamata
+#      alla nascita è diventata RIDONDANTE, e un mutante che toglie una difesa ridondata è
+#      «equivalente»: nessun test può accorgersene, ed è giusto così (README, punto 3).
+#      ⇒ si sostituisce il mutante, non si tocca la suite: ora si rende INERTE la funzione
+#      di pulizia, che è la difesa vera — entrambe le vie passano di lì. `0,/…/` prende la
+#      prima delle due `update auth.users` del file, che è quella della pulizia.
+run_mutante "M3 la pulizia non fa nulla" "T5 FAIL" "$M20" \
+  '0,/^  update auth.users$/s//  return;\n  update auth.users/' \
   || vivi=$((vivi+1))
 
 # M4 — SPOSTATO in `mutants-0020.sh` (N12) il 2026-07-31, e la ragione va letta prima di
