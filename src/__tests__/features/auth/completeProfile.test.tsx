@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import type { Session } from '@supabase/supabase-js';
 
 import { AllProviders } from '../../helpers/testProviders';
@@ -29,8 +29,14 @@ jest.mock('@/shared/auth/AuthContext', () => ({
 jest.mock('@/shared/auth/supabaseClient', () => {
   const upsert = jest.fn(() => Promise.resolve({ error: null }));
   const updateUser = jest.fn(() => Promise.resolve({ data: {}, error: null }));
+  // `rpc` è la funzione `nickname_disponibile` (migration 0018), interrogata dal campo
+  // nickname mentre si scrive. Default `true` = libero: i test che vogliono il caso
+  // «occupato» lo ridefiniscono. Senza questa voce l'errore sarebbe silenzioso — la
+  // chiamata verrebbe inghiottita dal try/catch e ogni verdetto diventerebbe «non so»,
+  // cioè un controllo che nei test non controlla niente.
+  const rpc = jest.fn(() => Promise.resolve({ data: true, error: null }));
   return {
-    supabase: { from: jest.fn(() => ({ upsert })), auth: { updateUser } },
+    supabase: { from: jest.fn(() => ({ upsert })), auth: { updateUser }, rpc },
   };
 });
 
@@ -516,6 +522,209 @@ describe('CompleteProfileScreen — F1.10 email di contatto (Apple relay)', () =
     await waitFor(() => expect(upsert).toHaveBeenCalled());
     expect(upsert).toHaveBeenCalledWith(
       expect.objectContaining({ contact_email: 'vera@mail.it' })
+    );
+  });
+});
+
+/**
+ * F-NICKNAME-SOCIAL: il nickname si sceglie ANCHE qui.
+ *
+ * Perché conta: questa e la registrazione email/password sono le due schermate in cui un
+ * profilo NASCE. Finché il campo esisteva solo nella seconda, chi entrava con un accesso
+ * social non se lo vedeva proporre mai — stessa destinazione, due domande diverse a
+ * seconda della porta da cui si è entrati.
+ */
+const getRpc = (): jest.Mock => (supabase as unknown as { rpc: jest.Mock }).rpc;
+
+describe('CompleteProfileScreen — nickname', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it('il nickname scelto qui arriva in colonna', async () => {
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(
+      getByLabelText('Nickname (facoltativo)'),
+      'mariorossi'
+    );
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ nickname: 'mariorossi' })
+    );
+  });
+
+  it('campo lasciato vuoto → si scrive `null`, MAI la stringa vuota', async () => {
+    // La colonna ha il CHECK `nickname_forma` (2-30 caratteri): una stringa vuota lo
+    // violerebbe e il rifiuto porterebbe giù l'INTERO upsert — cioè anche i campi
+    // obbligatori appena compilati. `null` è il modo in cui la colonna dice «non ne ho».
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ nickname: null })
+    );
+  });
+
+  it('forma sbagliata → errore sul campo e NIENTE viene scritto', async () => {
+    // Senza questo controllo il trigger scarterebbe il valore in silenzio: la persona
+    // scriverebbe un nickname, non vedrebbe nessun errore, e non lo troverebbe più.
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = getUpsert();
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(getByLabelText('Nickname (facoltativo)'), 'a');
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(getByText(/da 2 a 30 caratteri/)).toBeTruthy());
+    expect(upsert).not.toHaveBeenCalled();
+  });
+
+  it('nickname già di qualcun altro → il salvataggio si ferma PRIMA di partire', async () => {
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = getUpsert();
+    getRpc().mockResolvedValue({ data: false, error: null });
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(getByLabelText('Nickname (facoltativo)'), 'occupato');
+    // Il verdetto arriva dopo l'attesa del campo (450 ms): si aspetta quello, non un
+    // tempo a caso — è la risposta del server a decidere, non il cronometro.
+    await waitFor(() => expect(getRpc()).toHaveBeenCalled(), { timeout: 3000 });
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(getByText(/già di qualcun altro/)).toBeTruthy());
+    expect(upsert).not.toHaveBeenCalled();
+  });
+
+  it('IL PROPRIO nickname, arrivato dal profilo, non viene chiesto al server né blocca il salvataggio', async () => {
+    // 🔴 IL DIFETTO CHE QUESTO TEST TIENE CHIUSO, previsto per iscritto in
+    // `useNicknameAvailability.ts:51-59` prima che esistesse questo form.
+    // Il campo nasce vuoto e viene riempito dal profilo DOPO il primo render: per il
+    // controllo di disponibilità quel cambiamento è indistinguibile da una digitazione,
+    // quindi parte una domanda al server su un nickname che è GIÀ SUO. La risposta è
+    // «occupato» — vera e inutile — e il salvataggio si blocca addosso a chi non ha
+    // toccato niente, sul campo che non voleva nemmeno cambiare.
+    // La difesa non è «non chiedere quando la risposta è occupato» (sarebbe cieca sul
+    // caso vero): è che una scrittura NOSTRA non è una digitazione della persona.
+    mockUseAuth.mockReturnValue(
+      makeAuth({
+        profile: { ...existingProfile, nickname: 'mario' },
+        profileLoaded: true,
+      })
+    );
+    const upsert = getUpsert();
+    getRpc().mockResolvedValue({ data: false, error: null });
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    // Il campo si è riempito da solo col nickname della persona.
+    await waitFor(() =>
+      expect(
+        (
+          getByLabelText('Nickname (facoltativo)') as {
+            props: { value: string };
+          }
+        ).props.value
+      ).toBe('mario')
+    );
+    // ⚠️ SI ASPETTA OLTRE L'ATTESA DEL CAMPO (450 ms), e non è pignoleria: senza,
+    // «il server non è stato interrogato» sarebbe vero solo perché la domanda non ha
+    // ancora avuto il tempo di partire — un verde che non guarda niente. Con questa
+    // attesa, se la difesa non ci fosse la richiesta sarebbe già partita.
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 700));
+    });
+    expect(getRpc()).not.toHaveBeenCalled();
+    fillValidForm(getByLabelText, getByRole, getByTestId, { consent: false });
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() => expect(upsert).toHaveBeenCalled());
+    // Nessuna domanda al server: il valore non l'ha scritto la persona.
+    expect(getRpc()).not.toHaveBeenCalled();
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ nickname: 'mario' })
+    );
+  });
+
+  it('la corsa persa dice QUALE campo cambiare e che non è stato salvato niente', async () => {
+    // Fra il controllo e il salvataggio qualcun altro ha preso lo stesso nickname.
+    // L'errore generico manderebbe la persona a ricontrollare nome, telefono e città
+    // mentre il campo da cambiare è uno solo.
+    mockUseAuth.mockReturnValue(makeAuth());
+    const upsert = getUpsert();
+    upsert.mockResolvedValueOnce({
+      error: {
+        message:
+          'duplicate key value violates unique constraint "profiles_nickname_unico"',
+      },
+    });
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(
+      getByLabelText('Nickname (facoltativo)'),
+      'contesissimo'
+    );
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() =>
+      expect(getByText(/un attimo prima di te/)).toBeTruthy()
+    );
+    // E che il resto del modulo NON è stato scritto: l'upsert è uno solo, quindi il
+    // rifiuto dell'indice porta giù anche i campi corretti.
+    expect(getByText(/Nessuna modifica è stata salvata/)).toBeTruthy();
+  });
+
+  it('dopo il salvataggio il nickname viaggia verso il claim del partner', async () => {
+    // `preferred_username` è la chiave da cui il server auth costruisce il claim OIDC.
+    // (Dalla migration 0020 il claim lo deriva il database: questa resta la strada per
+    // tenerlo allineato fino a quel momento, e innocua dopo.)
+    mockUseAuth.mockReturnValue(makeAuth());
+    const updateUser = (supabase.auth as unknown as { updateUser: jest.Mock })
+      .updateUser;
+    const { getByLabelText, getByText, getByRole, getByTestId } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+    fillValidForm(getByLabelText, getByRole, getByTestId);
+    fireEvent.changeText(
+      getByLabelText('Nickname (facoltativo)'),
+      'mariorossi'
+    );
+    fireEvent.press(getByText('Salva e continua'));
+
+    await waitFor(() =>
+      expect(updateUser).toHaveBeenCalledWith({
+        data: { preferred_username: 'mariorossi' },
+      })
     );
   });
 });

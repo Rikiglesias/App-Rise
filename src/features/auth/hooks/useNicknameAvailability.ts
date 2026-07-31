@@ -43,20 +43,26 @@ const ATTESA_MS = 450;
  *    contatore protegge dallo smontaggio della schermata, dove un `setState` tardivo
  *    scriverebbe nel vuoto.
  */
-export const useNicknameAvailability = (value: string): NicknameCheck => {
+export const useNicknameAvailability = (
+  value: string,
+  /**
+   * «La persona ha toccato il campo?», per i form che RIEMPIONO il campo da soli.
+   *
+   * ⚠️ IL CASO PREVISTO QUI SOTTO È DIVENTATO REALE (2026-07-31, completamento profilo
+   * post-social). Dove il campo viene idratato dal profilo, il valore passa da `''` al
+   * nickname della persona DOPO il primo render: per il confronto col valore iniziale
+   * quella è una digitazione, quindi parte una domanda al server su un nickname che è
+   * GIÀ SUO. La risposta — «occupato» — è vera e inutile, e blocca il salvataggio di
+   * chi non ha toccato niente. Riprodotto da un test prima di essere corretto.
+   * Chi idrata il campo passa quindi un flag ESPLICITO; chi non lo passa mantiene il
+   * criterio di prima (registrazione e modifica profilo, dove il campo non si riempie
+   * mai da solo).
+   */
+  toccato?: boolean
+): NicknameCheck => {
   const [stato, setStato] = useState<NicknameCheck>('idle');
 
   // Valore col quale il campo si è aperto: finché non ci si discosta, niente domande (①).
-  //
-  // ⚠️ SE UN DOMANI IL NICKNAME VENISSE RISINCRONIZZATO DAL PROFILO, questa riga va
-  // cambiata. Oggi `ProfileEditScreen` inizializza il campo una volta sola e non lo
-  // riallinea quando il profilo arriva (a differenza di `contactEmail`, che ha un
-  // `useEffect` + un ref `touched`). Aggiungere lì lo stesso effect farebbe passare il
-  // valore da '' a «Mario» DOPO il primo render: per questo ref sarebbe una digitazione
-  // della persona, e partirebbe una richiesta all'apertura della schermata — cioè
-  // esattamente ciò che la guardia serve a evitare, disattivata in silenzio.
-  // In quel caso il criterio giusto diventa «l'utente ha toccato il campo?» (un ref
-  // `touched` come quello di `contactEmail`), non «il valore è diverso da quello iniziale».
   const iniziale = useRef(value);
   // Numero di sequenza dell'ultima richiesta partita: solo la sua risposta vale (③).
   const ultima = useRef(0);
@@ -64,7 +70,13 @@ export const useNicknameAvailability = (value: string): NicknameCheck => {
   useEffect(() => {
     const v = value.trim();
 
-    if (v === iniziale.current.trim() || v === '' || validateNickname(value)) {
+    // Chi passa il flag decide con QUELLO; per gli altri il criterio resta «è ancora il
+    // valore con cui il campo si è aperto?». Sono due modi di rispondere alla stessa
+    // domanda — «questo valore l'ha scritto la persona?» — e il secondo sbaglia solo
+    // dove il form scrive nel campo per conto suo.
+    const nonToccato =
+      toccato === undefined ? v === iniziale.current.trim() : !toccato;
+    if (nonToccato || v === '' || validateNickname(value)) {
       // Si invalida anche l'eventuale richiesta in volo: il suo verdetto non riguarda
       // più ciò che c'è scritto adesso.
       ultima.current += 1;
@@ -91,7 +103,7 @@ export const useNicknameAvailability = (value: string): NicknameCheck => {
       ultima.current += 1;
       clearTimeout(timer);
     };
-  }, [value]);
+  }, [value, toccato]);
 
   return stato;
 };

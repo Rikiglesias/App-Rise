@@ -12,6 +12,7 @@ import { AuthButton } from '../components/AuthButton';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useProfileForm } from '../hooks/useProfileForm';
+import { useNicknameHint } from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -43,6 +44,10 @@ export const CompleteProfileScreen: React.FC = () => {
   const { profile, profileLoaded, signOut } = useAuth();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useProfileForm();
+  // Disponibilità del nickname mentre si scrive (0018): senza, chi ne sceglie uno già
+  // preso salverebbe e lo troverebbe vuoto, senza che nessuno glielo abbia detto. Lo
+  // stato arriva dal form, che è anche quello che lo consulta prima di salvare.
+  const nicknameHint = useNicknameHint(form.nicknameCheck);
 
   const gated = isProfileGateBlocked(
     getProfileCompletion(profile, profileLoaded)
@@ -102,6 +107,26 @@ export const CompleteProfileScreen: React.FC = () => {
           onChange={onChange.birthDate}
           error={err(errors.birthDate)}
           placeholder={t('auth.signup.birthDatePlaceholder')}
+        />
+        {/*
+          Nickname: stessa posizione e stesse regole del modulo di registrazione — è
+          l'altra schermata in cui un profilo NASCE, e chiedere cose diverse a seconda
+          di come si è entrati (email o accesso social) è una differenza che nessuno
+          saprebbe spiegare a chi la subisce. Facoltativo, e la label lo dice; il
+          placeholder spiega a cosa serve, perché «nickname» in mezzo all'anagrafica è
+          altrimenti un campo misterioso.
+          Fuori dalla catena di focus, come la data di nascita: chi non lo vuole non
+          deve passarci sopra andando avanti col tasto della tastiera.
+        */}
+        <AuthInput
+          label={t('auth.signup.nickname')}
+          value={values.nickname}
+          onChangeText={onChange.nickname}
+          error={err(errors.nickname)}
+          {...nicknameHint}
+          placeholder={t('auth.signup.nicknamePlaceholder')}
+          autoCapitalize="none"
+          autoComplete="off"
         />
       </AuthSection>
 
