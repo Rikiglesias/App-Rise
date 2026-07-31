@@ -150,6 +150,15 @@ export interface ProfileInput {
    */
   contactEmail: string;
   /**
+   * Nickname per i siti dei partner (migration 0017). FACOLTATIVO, come nella
+   * registrazione email/password: la stringa vuota è la risposta normale.
+   * Sta qui perché i due percorsi di NASCITA del profilo devono chiedere le stesse
+   * cose: finché il campo esisteva solo nel modulo email/password, chi entrava con un
+   * accesso social non se lo vedeva proporre mai e poteva scoprirlo solo in Modifica
+   * profilo — un'asimmetria fra due strade che portano allo stesso posto.
+   */
+  nickname: string;
+  /**
    * `false` SOLO nel COMPLETAMENTO di un profilo che esiste già: lì il consenso
    * privacy fu raccolto alla nascita e la ri-accettazione di una versione nuova è
    * competenza di `ReConsentScreen`. Pretenderlo qui significa mostrare una casella
@@ -162,7 +171,7 @@ export interface ProfileInput {
 
 /**
  * `requirePrivacyConsent` è un flag di controllo, non un campo con errore proprio:
- * l'unica chiave d'errore aggiuntiva è `contactEmail`.
+ * le chiavi d'errore aggiuntive sono `contactEmail` e `nickname`.
  */
 export type ProfileErrors = Partial<
   Record<
@@ -174,7 +183,8 @@ export type ProfileErrors = Partial<
     | 'country'
     | 'birthDate'
     | 'privacyConsent'
-    | 'contactEmail',
+    | 'contactEmail'
+    | 'nickname',
     string
   >
 >;
@@ -202,5 +212,14 @@ export const validateProfileForm = (input: ProfileInput): ProfileErrors => {
   // contratto (default = facoltativa) che il prodotto aveva già abbandonato.
   const ce = validateContactEmail(input.contactEmail);
   if (ce) e.contactEmail = ce;
+  // Nickname: facoltativo, ma se c'è deve avere la forma del CHECK `nickname_forma`.
+  // Stessa ragione della registrazione (`validateSignUpForm`): il trigger scarta in
+  // silenzio ciò che non rispetta la forma, quindi senza questo controllo la persona
+  // scriverebbe un nickname, non vedrebbe nessun errore, e lo troverebbe sparito dopo
+  // il salvataggio. Qui il danno sarebbe anche peggiore che in registrazione: il
+  // profilo NASCE in questa schermata, e la persona non ha una conferma via mail dopo
+  // cui ricontrollare.
+  const nick = validateNickname(input.nickname);
+  if (nick) e.nickname = nick;
   return e;
 };

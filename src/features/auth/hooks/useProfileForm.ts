@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { useNicknameAvailability } from './useNicknameAvailability';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
@@ -15,6 +16,7 @@ import {
 } from '@/shared/auth/profileCompletion';
 import { isApplePrivateRelayEmail } from '@/shared/partner/partnerEmail';
 import { syncDisplayNameClaim } from '@/shared/auth/displayName';
+import { isNicknameConflict, syncNicknameClaim } from '@/shared/auth/nickname';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -36,6 +38,29 @@ export const useProfileForm = () => {
   const [birthDate, setBirthDate] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [contactEmail, setContactEmail] = useState('');
+  // Nickname (0017): facoltativo, e `null` in colonna significa «non ne ho uno» — nel
+  // form si rappresenta come stringa vuota, riconvertita in `null` prima di scrivere
+  // (la stringa vuota violerebbe il CHECK `nickname_forma` e farebbe fallire l'INTERO
+  // salvataggio, cioè anche i campi obbligatori appena compilati).
+  // Il campo vive QUI e non solo nella registrazione email/password perché questa è
+  // l'altra schermata in cui un profilo NASCE: senza, chi entra con un accesso social
+  // non se lo vedrebbe proporre mai.
+  const [nickname, setNickname] = useState('');
+  // «Toccato» è un FLAG esplicito, come per il telefono e la mail di contatto: qui il
+  // campo si riempie DA SOLO col nickname del profilo, e senza il flag quella scrittura
+  // verrebbe scambiata per una digitazione — con una domanda al server su un nickname
+  // che è già suo, la risposta «occupato» e il salvataggio bloccato addosso a chi non ha
+  // toccato niente. Il caso era previsto per iscritto nell'hook prima che esistesse
+  // questo campo, ed è coperto da un test che lo riproduce.
+  const nicknameTouched = useRef(false);
+  // Disponibilità mentre si scrive (0018). Lo stato NON si consuma al volo nella vista:
+  // serve anche al salvataggio, che si ferma su «già preso» — altrimenti chi ha appena
+  // letto quell'avviso salverebbe lo stesso e riceverebbe il messaggio della CORSA PERSA
+  // («un attimo prima di te»), falso perché l'app lo sapeva da secondi.
+  const nicknameCheck = useNicknameAvailability(
+    nickname,
+    nicknameTouched.current
+  );
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -108,6 +133,10 @@ export const useProfileForm = () => {
       formOwner.current = userId;
       hydratedForUser.current = null;
       phoneTouched.current = false;
+      // Stessa ragione del telefono: se il flag sopravvivesse al cambio di utente, il
+      // nickname del nuovo non verrebbe idratato (verrebbe scambiato per una scelta del
+      // precedente) — la classe di errore che qui ha già morso più volte.
+      nicknameTouched.current = false;
       setFirstName('');
       setLastName('');
       setPhone('+39');
@@ -116,6 +145,7 @@ export const useProfileForm = () => {
       setCountry('IT');
       setBirthDate('');
       setPrivacyConsent(false);
+      setNickname('');
     }
     if (hydratedForUser.current === userId) return;
     // Il profilo nel contesto può essere ancora quello di prima (viene sostituito
@@ -137,6 +167,12 @@ export const useProfileForm = () => {
     fill(setCity)(profile.city);
     fill(setProvince)(profile.province);
     fill(setBirthDate)(profile.birth_date);
+    // Chi arriva qui col profilo già nato (completamento di campi mancanti) può avere
+    // un nickname: si ritrova scritto quello che è suo, invece di un campo vuoto che
+    // sembra un invito a sceglierne uno nuovo. `fill` non sovrascrive ciò che la
+    // persona ha già digitato, e sul nickname importa il doppio: qui l'unico modo di
+    // dire «non ne voglio» è lasciarlo vuoto.
+    fill(setNickname)(profile.nickname);
     // `phone` parte da '+39', quindi come `country` non è mai «vuoto» e `prev || v`
     // restituirebbe sempre il default. Si scrive solo se il campo è ancora al valore
     // iniziale, cioè se la persona non ha già digitato un numero suo.
@@ -218,6 +254,14 @@ export const useProfileForm = () => {
         setContactEmail(v);
         clearError('contactEmail');
       },
+      nickname: (v: string): void => {
+        // Da qui in poi il campo è della persona: il controllo di disponibilità può
+        // partire. Anche svuotarlo è una sua scelta, quindi il flag si alza comunque —
+        // a differenza del telefono, dove la stringa vuota arriva anche dal montaggio.
+        nicknameTouched.current = true;
+        setNickname(v);
+        clearError('nickname');
+      },
     }),
     [clearError]
   );
@@ -258,8 +302,17 @@ export const useProfileForm = () => {
       birthDate,
       privacyConsent,
       contactEmail,
+      nickname,
       requirePrivacyConsent,
     });
+    // Se sappiamo GIÀ che il nickname è di qualcun altro ci si ferma qui, come fa la
+    // registrazione (`useSignUpForm`): senza, il salvataggio partirebbe, l'indice unico
+    // lo respingerebbe e la persona leggerebbe il messaggio della corsa persa — falso.
+    // `unknown` (rete assente) non ferma nessuno: il controllo è una cortesia, non la
+    // difesa, che resta l'indice unico della 0017.
+    if (!found.nickname && nicknameCheck === 'taken') {
+      found.nickname = 'nickname_taken';
+    }
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
@@ -304,6 +357,11 @@ export const useProfileForm = () => {
       // account con mail già reale coincide con quella dell'account, e va bene:
       // averla in colonna significa non dipendere dal provider di accesso.
       contact_email: contactEmail.trim(),
+      // `'' → null`: la colonna ha il CHECK `nickname_forma` (2-30 caratteri), che una
+      // stringa vuota violerebbe — e il rifiuto porterebbe giù l'INTERO upsert, cioè
+      // anche i campi obbligatori. `null` è il modo in cui la colonna dice «non ne ho
+      // uno», ed è la risposta normale per chi il campo lo salta.
+      nickname: nickname.trim() || null,
     };
     // Il cancello del profilo e questo salvataggio giudicano con lo STESSO predicato,
     // e qui lo si applica a ciò che si sta per SCRIVERE, non a ciò che c'è già. È la
@@ -336,6 +394,18 @@ export const useProfileForm = () => {
     const { error } = await supabase.from('profiles').upsert(nextProfile);
     if (error) {
       setLoading(false);
+      // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio qualcun
+      // altro ha preso lo stesso nickname. È raro, ma l'errore generico manderebbe la
+      // persona a ricontrollare nome, telefono e città mentre il campo da cambiare è
+      // uno solo — e glielo possiamo dire. Il messaggio va SUL CAMPO.
+      if (isNicknameConflict(error.message)) {
+        setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
+        // E si dice anche che NON È STATO SALVATO NIENTE: l'upsert è uno solo, quindi
+        // il rifiuto dell'indice porta giù tutto il resto del modulo. Senza, la persona
+        // uscirebbe da qui convinta che i suoi dati siano stati scritti.
+        setSubmitError(t('auth.edit.nothingSaved'));
+        return;
+      }
       setSubmitError(t('auth.errors.generic'));
       return;
     }
@@ -354,6 +424,14 @@ export const useProfileForm = () => {
     // claim OIDC `name` per i partner. DOPO il consenso (Art.7 ha la priorità: non gli
     // mettiamo davanti una chiamata di rete in più) e con i valori appena scritti.
     await syncDisplayNameClaim(firstName, lastName);
+    // Stessa proiezione per il nickname → `user_metadata.preferred_username`, da cui il
+    // server auth costruisce il claim omonimo. Non solleva e non blocca: se fallisce, il
+    // profilo È salvato e si perde solo l'allineamento del claim.
+    // NB: dopo l'apply della 0020 questa chiamata diventa una comodità, non la difesa —
+    // il claim lo derivano da `profiles` due trigger nel database. Resta perché fino a
+    // quel momento è l'unico modo che il claim ha di essere allineato, e dopo non fa
+    // danno (il database riallinea comunque).
+    await syncNicknameClaim(nickname);
     await refreshProfile();
     // Dietro il cancello questa è l'unica schermata dello stack: non c'è un «indietro»
     // dove tornare, e l'app riappare da sé appena il profilo risulta completo (le rotte
@@ -370,6 +448,12 @@ export const useProfileForm = () => {
     birthDate,
     privacyConsent,
     contactEmail,
+    nickname,
+    // Senza questa dipendenza il salvataggio leggerebbe lo stato di disponibilità
+    // CONGELATO alla creazione del callback (quasi sempre `idle`), e il blocco su «già
+    // preso» guarderebbe un verdetto vecchio. È il difetto che nel gemello
+    // `ProfileEditScreen` ha preso il linter, non un test.
+    nicknameCheck,
     // `isRelay` non è più fra le dipendenze: da quando la mail è obbligatoria per
     // tutti, il submit non lo consulta più (serve solo alla UI per il placeholder).
     session,
@@ -397,7 +481,10 @@ export const useProfileForm = () => {
       birthDate,
       privacyConsent,
       contactEmail,
+      nickname,
     },
+    /** Stato della disponibilità del nickname: la vista lo traduce con `useNicknameHint`. */
+    nicknameCheck,
     isRelay,
     /** La schermata mostra la sezione consensi solo quando il profilo NASCE qui. */
     requirePrivacyConsent,

@@ -40,6 +40,8 @@ const baseProfile = {
   privacyConsent: true,
   // Obbligatoria per tutti dal 2026-07-25: un profilo valido la contiene sempre.
   contactEmail: 'vera@mail.it',
+  // Facoltativo: il vuoto è la risposta normale, quindi è il default del caso base.
+  nickname: '',
 };
 
 describe('auth validation', () => {
