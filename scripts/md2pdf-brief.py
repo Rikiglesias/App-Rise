@@ -367,7 +367,10 @@ SINTASSI_OBSIDIAN = (
      "esce il richiamo fra parentesi e la nota resta orfana in fondo"),
     ("ancora di blocco  ^nome", re.compile(r"(?:^|\s)\^[A-Za-z0-9][\w-]*\s*$"),
      "esce un accento circonflesso e una parola senza senso a fine riga"),
-    ("formula  $...$", re.compile(r"\$\$|\$[^\s$][^$\n]*\$"),
+    # Il dollaro seguito da una cifra e' un IMPORTO, non una formula: in un documento di
+    # raccolta fondi due importi sulla stessa riga («da $50 a $500») facevano scattare il
+    # blocco. Verificato il 2026-08-07: falso positivo reale, non teorico.
+    ("formula  $...$", re.compile(r"\$\$|\$(?!\d)[^\s$][^$\n]*\$"),
      "escono i simboli di dollaro e la formula in codice sorgente"),
 )
 
