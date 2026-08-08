@@ -26,7 +26,13 @@ DIFETTI GIA' CORRETTI, in ordine di scoperta:
   - una tabella che ci starebbe in una pagina veniva comunque spezzata a cavallo di due, con
     l'intestazione ripetuta e una cella tagliata a meta' frase: bastava che il testo sopra si
     accorciasse (2026-07-29, brief in consegna, riga «sub»). Ora chi ci sta in una pagina resta
-    unito -- deciso sull'ALTEZZA MISURATA, non sul numero di righe.
+    unito -- deciso sull'ALTEZZA MISURATA, non sul numero di righe;
+  - le sintassi che esistono solo in Obsidian (riquadri `> [!nota]`, evidenziato `==...==`,
+    rimandi `[[...]]`, contenuti incorporati `![[...]]`) uscivano LETTERALI, e soprattutto un
+    commento `%%...%%` -- che qui e' una nota INTERNA -- sarebbe stato STAMPATO nel documento
+    letto da un terzo, perche' a differenza del commento HTML nessuno lo toglieva (2026-08-07)
+    -> ora `_sentinella_sintassi_obsidian` le cerca nel testo consegnato e FERMA la generazione
+    elencando riga per riga.
 """
 
 import json
@@ -304,18 +310,21 @@ def sta_in_una_pagina(table: Table) -> bool:
     return table.wrap(CONTENT_WIDTH, CONTENT_HEIGHT)[1] <= CONTENT_HEIGHT
 
 
-def _righe_consegnate(sorgente: str) -> list[str]:
-    """Le righe che il destinatario leggera' davvero: fuori le note interne.
+def _righe_consegnate_numerate(sorgente: str) -> list[tuple[int, str]]:
+    """Le righe che il destinatario leggera' davvero, col loro numero nel file sorgente.
 
     Usa la STESSA regola del renderer (`<!--` a inizio riga apre, `-->` chiude) e non una regex
     posizionale: due definizioni diverse di «commento» nello stesso file si separano al primo caso
     storto — un `<!--` a meta' riga verrebbe tolto qui e STAMPATO nel PDF, e la sentinella
     sarebbe cieca proprio dove serve. Il falso negativo e' la direzione peggiore: un blocco che
     non scatta non si nota, e cio' che non si nota arriva al partner.
+
+    Il numero serve alle sentinelle che devono dire DOVE correggere: dopo il filtro le righe
+    scalano, e un elenco che cita numeri sbagliati manda chi corregge sulla riga di un altro.
     """
-    righe: list[str] = []
+    righe: list[tuple[int, str]] = []
     dentro_commento = False
-    for riga in sorgente.splitlines():
+    for numero, riga in enumerate(sorgente.splitlines(), start=1):
         if dentro_commento:
             if "-->" in riga:
                 dentro_commento = False
@@ -324,8 +333,104 @@ def _righe_consegnate(sorgente: str) -> list[str]:
             if "-->" not in riga:
                 dentro_commento = True
             continue
-        righe.append(riga)
+        righe.append((numero, riga))
     return righe
+
+
+def _righe_consegnate(sorgente: str) -> list[str]:
+    """Le sole righe consegnate, senza numeri. Una riga sola sopra la funzione numerata:
+    la regola di «cosa e' consegnato» resta scritta in UN posto solo."""
+    return [riga for _, riga in _righe_consegnate_numerate(sorgente)]
+
+
+# Sintassi che esistono SOLO in Obsidian: il renderer di questo file non le conosce, quindi non
+# le converte e non da' errore — finiscono LETTERALI nel PDF che legge un terzo. La piu' grave e'
+# il commento fra doppi simboli di percentuale: e' una nota INTERNA, e a differenza del commento
+# HTML (che `_righe_consegnate` toglie) verrebbe STAMPATA.
+# Ogni voce: (nome leggibile, come si riconosce, cosa esce nel PDF se passa).
+SINTASSI_OBSIDIAN = (
+    ("commento  %%...%%", re.compile(r"%%"),
+     "e' una NOTA INTERNA: viene stampata, segni di percentuale compresi"),
+    ("evidenziato  ==...==", re.compile(r"==[^=\n]+=="),
+     "escono i quattro segni di uguale, l'evidenziazione no"),
+    ("contenuto incorporato  ![[...]]", re.compile(r"!\[\["),
+     "il contenuto richiamato NON c'e': esce solo il nome del file fra parentesi"),
+    ("rimando interno  [[...]]", re.compile(r"(?<!!)\[\["),
+     "escono le parentesi doppie e un nome di file che il destinatario non ha"),
+    ("riquadro  > [!tipo]", re.compile(r"^\s*>\s*\[!"),
+     "esce una citazione che comincia con «[!nota]», senza riquadro"),
+    ("casella da spuntare  - [ ]", re.compile(r"^\s*[-*]\s+\[[ xX]\]\s"),
+     "escono le parentesi quadre al posto della casella"),
+    ("etichetta  #parola", re.compile(r"(?<![\w#`(/])#[A-Za-z][\w/-]*"),
+     "esce il cancelletto: per chi legge e' un refuso, non un'etichetta"),
+    ("nota a pie' di pagina  [^1]", re.compile(r"\[\^"),
+     "esce il richiamo fra parentesi e la nota resta orfana in fondo"),
+    ("ancora di blocco  ^nome", re.compile(r"(?:^|\s)\^[A-Za-z0-9][\w-]*\s*$"),
+     "esce un accento circonflesso e una parola senza senso a fine riga"),
+    # Il dollaro seguito da una cifra e' un IMPORTO, non una formula: in un documento di
+    # raccolta fondi due importi sulla stessa riga («da $50 a $500») facevano scattare il
+    # blocco. Verificato il 2026-08-07: falso positivo reale, non teorico.
+    ("formula  $...$", re.compile(r"\$\$|\$(?!\d)[^\s$][^$\n]*\$"),
+     "escono i simboli di dollaro e la formula in codice sorgente"),
+)
+
+# Blocchi di codice che Obsidian disegna e questo generatore no: restano righe di codice inerte.
+FENCE_SOLO_OBSIDIAN = re.compile(r"^\s*```\s*(mermaid|dataview|dataviewjs|query)\b", re.IGNORECASE)
+
+
+def _sentinella_sintassi_obsidian(md_path: Path, righe: list[tuple[int, str]]) -> None:
+    """Ferma la generazione se nel testo CONSEGNATO c'e' sintassi che solo Obsidian capisce.
+
+    Perche' blocca invece di avvisare: la lezione di questo file, arrivata alla terza occorrenza,
+    e' che un presidio scritto in prosa non ferma nessuno e un avviso su stderr passa inosservato
+    in mezzo all'output. Le due sentinelle sopra sparano per lo stesso motivo.
+
+    Gira sulle sole righe consegnate, come le altre: bloccare per una sintassi che sta in una nota
+    interna insegnerebbe ad aggirare il controllo.
+
+    Dentro i blocchi di codice non guarda: li' il testo e' mostrato APPOSTA cosi' com'e'. Il
+    blocco stesso invece si controlla, perche' un diagramma che Obsidian disegna qui esce come
+    codice sorgente.
+    """
+    trovati: list[tuple[int, str, str, str]] = []
+
+    if righe and righe[0][1].strip() == "---":
+        trovati.append((
+            righe[0][0], "intestazione di proprieta' (--- in testa al file)",
+            "le proprieta' (titolo, etichette, stato) vengono stampate come testo del documento",
+            righe[0][1].strip(),
+        ))
+
+    in_code = False
+    for numero, riga in righe:
+        apre_o_chiude = riga.lstrip().startswith("```")
+        if apre_o_chiude and not in_code and FENCE_SOLO_OBSIDIAN.search(riga):
+            trovati.append((
+                numero, "blocco che solo Obsidian disegna",
+                "esce il codice sorgente del diagramma, non il disegno", riga.strip(),
+            ))
+        if apre_o_chiude:
+            in_code = not in_code
+            continue
+        if in_code:
+            continue
+        for nome, rx, danno in SINTASSI_OBSIDIAN:
+            if rx.search(riga):
+                trovati.append((numero, nome, danno, riga.strip()))
+
+    if not trovati:
+        return
+    dettaglio = "\n".join(
+        f"  riga {n}: {nome} -> {danno}\n    {testo[:150]}"
+        for n, nome, danno, testo in trovati
+    )
+    raise SystemExit(
+        f"SENTINELLA: in {md_path.name} ci sono {len(trovati)} punti con sintassi di Obsidian "
+        f"nel testo CONSEGNATO. Uscirebbero letterali nel PDF che legge il destinatario:\n"
+        f"{dettaglio}\n"
+        "  Riscrivili in markdown normale. Se erano note interne, spostale in un commento "
+        "HTML (<!-- ... -->): quello non viene consegnato."
+    )
 
 
 class CanvasNumerato(canvas.Canvas):
@@ -510,13 +615,19 @@ def _sentinella_frasi_ritirate(md_path: Path, consegnato: str) -> None:
 
 def build(md_path: Path, pdf_path: Path) -> None:
     sorgente = md_path.read_text(encoding="utf-8")
-    _sentinella_frasi_ritirate(md_path, "\n".join(_righe_consegnate(sorgente)))
+    numerate = _righe_consegnate_numerate(sorgente)
+    consegnato = "\n".join(riga for _, riga in numerate)
+    # Per PRIMA la sintassi di Obsidian: una nota interna fra doppi percentuali resta nel testo
+    # consegnato, quindi le sue emoji farebbero sparare la sentinella dei caratteri e chi legge
+    # l'errore andrebbe a cercare un glifo invece della nota interna, che e' il guaio grosso.
+    _sentinella_sintassi_obsidian(md_path, numerate)
+    _sentinella_frasi_ritirate(md_path, consegnato)
     # La sentinella guarda SOLO cio' che finira' nel PDF. Girava sul markdown grezzo, commenti
     # inclusi, e fermava la consegna per un'emoji che sta in una nota interna e che il
     # destinatario non vedra' mai: e' gia' successo (🧪 🔑 🔴 sono in FUORI_WINANSI non perche' il
     # PDF li renda, ma per far ripartire la build). Un blocco che scatta su testo non consegnato
     # insegna ad aggirarlo, ed e' il modo in cui una sentinella smette di essere creduta.
-    avvisa_caratteri_non_mappati("\n".join(_righe_consegnate(sorgente)))
+    avvisa_caratteri_non_mappati(consegnato)
     lines = sorgente.splitlines()
     story: list = []
     bullets: list = []
