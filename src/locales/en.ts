@@ -168,6 +168,7 @@ export default {
       reconsentTitle: 'Privacy policy update',
       reconsentBody:
         'We have updated our privacy policy. Please read and accept to continue.',
+      reconsentRead: 'Read the privacy notice',
       reconsentAccept: 'Accept',
       error: 'Operation failed. Please try again.',
     },

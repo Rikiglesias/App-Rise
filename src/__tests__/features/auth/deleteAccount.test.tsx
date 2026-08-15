@@ -11,6 +11,12 @@ import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import type { Profile } from '@/shared/auth/types';
 import itLocale from '@/locales/it';
+import { RISE_URLS } from '@/shared/constants/urls';
+
+const mockOpenLink = jest.fn().mockResolvedValue({ ok: true });
+jest.mock('@/shared/hooks/useLinkHandler', () => ({
+  useLinkHandler: () => ({ openLink: mockOpenLink, isLoading: null }),
+}));
 
 jest.mock('@react-navigation/native', () => {
   const navigate = jest.fn();
@@ -315,5 +321,17 @@ describe('ReConsentScreen', () => {
     const { getByText } = wrap(<ReConsentScreen />);
     fireEvent.press(getByText('Accetto'));
     expect(acceptCurrentPolicy).toHaveBeenCalled();
+  });
+
+  // La schermata chiede «leggila e accetta»: senza un modo di leggerla l'unica
+  // strada era accettare alla cieca, cioè un consenso non informato (Art.7).
+  it('offre di LEGGERE l’informativa, e la apre davvero', () => {
+    mockUseAuth.mockReturnValue(makeAuth());
+    const { getByText } = wrap(<ReConsentScreen />);
+    fireEvent.press(getByText('Leggi l’informativa'));
+    expect(mockOpenLink).toHaveBeenCalledWith(
+      RISE_URLS.privacyPolicy,
+      'reconsent-privacy'
+    );
   });
 });

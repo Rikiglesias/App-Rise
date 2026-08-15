@@ -181,6 +181,7 @@ export default {
       reconsentTitle: 'Aggiornamento informativa',
       reconsentBody:
         'Abbiamo aggiornato l’informativa privacy. Leggila e accetta per continuare.',
+      reconsentRead: 'Leggi l’informativa',
       reconsentAccept: 'Accetto',
       error: 'Operazione non riuscita. Riprova.',
     },
