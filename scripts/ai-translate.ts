@@ -5,11 +5,11 @@
 /**
  * AI Translation Script
  * Traduce i18n files usando GPT-4 con comprensione contestuale
- * 
+ *
  * USO:
  * npx ts-node scripts/ai-translate.ts --target=en
  * npx ts-node scripts/ai-translate.ts --target=en,es,fr --review
- * 
+ *
  * FEATURES:
  * - Comprensione contestuale (GPT-4 capisce "Dona" button vs "dona" verbo)
  * - Mantiene formattazione (line breaks, emoji, variabili)
@@ -231,7 +231,10 @@ Do NOT include explanations or additional text.`;
     let score = 1.0;
 
     // Check: line breaks preservati
-    if ((source.match(/\\n/g) || []).length !== (translation.match(/\\n/g) || []).length) {
+    if (
+      (source.match(/\\n/g) || []).length !==
+      (translation.match(/\\n/g) || []).length
+    ) {
       score -= 0.3;
     }
 
@@ -280,7 +283,9 @@ class TranslationPipeline {
     );
     const sourceTranslations = await this.loadTranslations(sourceFile);
 
-    console.log(`✅ Loaded ${Object.keys(sourceTranslations).length} source keys from ${this.config.sourceLocale}.ts\n`);
+    console.log(
+      `✅ Loaded ${Object.keys(sourceTranslations).length} source keys from ${this.config.sourceLocale}.ts\n`
+    );
 
     // 2. Translate to each target locale
     for (const targetLocale of this.config.targetLocales) {
@@ -308,9 +313,7 @@ class TranslationPipeline {
   /**
    * Load translations file
    */
-  private loadTranslations(
-    filePath: string
-  ): Record<string, any> {
+  private loadTranslations(filePath: string): Record<string, any> {
     const content = fs.readFileSync(filePath, 'utf-8');
 
     // Extract default export object
@@ -380,7 +383,10 @@ class TranslationPipeline {
   private async translateToLocale(
     sourceTranslations: Record<string, any>,
     targetLocale: string
-  ): Promise<{ translations: Record<string, string>; results: TranslationResult[] }> {
+  ): Promise<{
+    translations: Record<string, string>;
+    results: TranslationResult[];
+  }> {
     const flat = this.flattenObject(sourceTranslations);
     const requests: TranslationRequest[] = [];
 

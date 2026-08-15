@@ -11,4 +11,3 @@ const child = spawn('npx', ['expo', 'start', '-c'], {
   env: { ...process.env, ...env },
 });
 child.on('exit', code => process.exit(code || 0));
-

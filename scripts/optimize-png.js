@@ -1,20 +1,19 @@
 /**
  * PNG Optimizer per Build Android
- * 
+ *
  * Rimuove profili colore e metadati da PNG che causano errori AAPT:
  * "Android resource compilation failed"
- * 
+ *
  * Usa sharp per processare i file PNG in modo sicuro.
  */
 
-const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
+const sharp = require('sharp');
+
 // Cartelle da processare
-const ASSET_DIRS = [
-  path.join(__dirname, '..', 'assets'),
-];
+const ASSET_DIRS = [path.join(__dirname, '..', 'assets')];
 
 async function optimizePNG(filePath) {
   try {

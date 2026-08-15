@@ -8,7 +8,11 @@ async function run(cmd, args, env = {}) {
       shell: process.platform === 'win32',
       env: { ...process.env, ...env },
     });
-    child.on('exit', code => (code === 0 ? resolve() : reject(new Error(`${cmd} exited with code ${code}`))));
+    child.on('exit', code =>
+      code === 0
+        ? resolve()
+        : reject(new Error(`${cmd} exited with code ${code}`))
+    );
   });
 }
 
@@ -17,11 +21,16 @@ async function run(cmd, args, env = {}) {
     const env = {
       EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION: 'true',
     };
-    await run('npx', ['eas', 'build', '-p', 'ios', '--profile', 'development'], env);
+    await run(
+      'npx',
+      ['eas', 'build', '-p', 'ios', '--profile', 'development'],
+      env
+    );
   } catch (err) {
     console.error('\n[ios:build:dev] Failed:', err.message);
-    console.error('Assicurati di aver fatto eas login e di avere accesso Apple.');
+    console.error(
+      'Assicurati di aver fatto eas login e di avere accesso Apple.'
+    );
     process.exit(1);
   }
 })();
-

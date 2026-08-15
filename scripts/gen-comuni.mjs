@@ -22,7 +22,7 @@ const src = join(here, '..', 'node_modules', 'comuni-json', 'comuni.json');
 const out = join(here, '..', 'src', 'shared', 'data', 'comuni-min.json');
 
 const comuni = JSON.parse(readFileSync(src, 'utf8'));
-const min = comuni.map((c) => ({ n: c.nome, s: c.sigla, p: c.provincia.nome }));
+const min = comuni.map(c => ({ n: c.nome, s: c.sigla, p: c.provincia.nome }));
 
 // Il dataset è già ordinato alfabeticamente per nome a monte; lo riconfermiamo
 // per stabilità a prescindere dall'ordine della sorgente.
