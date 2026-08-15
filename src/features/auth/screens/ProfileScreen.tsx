@@ -80,9 +80,22 @@ export const ProfileScreen: React.FC = () => {
     (): void => navigation.navigate('DeleteAccount'),
     [navigation]
   );
+  // Stesso metro di «Esci»: se l'annullamento non riesce, la cancellazione resta
+  // programmata e il banner sparirebbe comunque al primo ricaricamento del
+  // profilo — la persona resterebbe convinta di aver fermato la cancellazione del
+  // proprio account mentre non l'ha fermata. Il `.catch` copre il rigetto della
+  // promessa, non solo l'errore restituito.
+  const [deletionCancelError, setDeletionCancelError] = useState<
+    string | undefined
+  >();
   const handleCancelDeletion = useCallback((): void => {
-    void cancelScheduledDeletion();
-  }, [cancelScheduledDeletion]);
+    setDeletionCancelError(undefined);
+    void cancelScheduledDeletion()
+      .then(({ error }) => {
+        if (error) setDeletionCancelError(t('auth.delete.error'));
+      })
+      .catch(() => setDeletionCancelError(t('auth.delete.error')));
+  }, [cancelScheduledDeletion, t]);
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
       setConsentError(undefined);
@@ -159,6 +172,13 @@ export const ProfileScreen: React.FC = () => {
             onPress={handleCancelDeletion}
             variant="link"
           />
+          {deletionCancelError ? (
+            <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
+              <PerfectText size={13} lines={2} style={styles.bannerError}>
+                {deletionCancelError}
+              </PerfectText>
+            </View>
+          ) : null}
         </View>
       ) : null}
 
@@ -299,6 +319,10 @@ const createStyles = (colors: ThemeColors) =>
     bannerText: {
       color: colors.neutral[900],
       fontWeight: '600',
+    },
+    bannerError: {
+      color: Colors.semantic.error.main,
+      marginTop: PerfectSpacing.xs,
     },
     name: {
       color: colors.neutral[900],
