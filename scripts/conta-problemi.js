@@ -27,6 +27,36 @@ const SEQUENZE_ANSI = /\u001b\[[0-9;]*m/g;
 const leggiOutput = error =>
   `${error.stdout ?? ''}${error.stderr ?? ''}`.replace(SEQUENZE_ANSI, '');
 
+/**
+ * Opzioni comuni a ogni comando lanciato qui.
+ *
+ * `maxBuffer` esplicito perché il default di execSync è 1 MiB e oltre quella soglia
+ * l'output viene TRONCATO IN SILENZIO. Non è teorico: prima di questa correzione lo
+ * script contava 7565 rilievi markdownlint dove il comando lanciato a mano sullo
+ * stesso perimetro ne produceva 24.533 — 7565 righe stanno appunto attorno al MiB,
+ * cioè era il tetto del buffer, non il numero vero. Su Jest sarebbe peggio: la riga
+ * «Tests: N failed» sta in CODA all'output, quindi verrebbe tagliata proprio quando i
+ * test falliti sono tanti, e il conteggio ripiegherebbe su 1 qualunque sia la realtà.
+ */
+const OPZIONI_ESEC = { stdio: 'pipe', maxBuffer: 32 * 1024 * 1024 };
+
+/**
+ * Un comando FALLITO deve contare almeno un problema.
+ *
+ * Ogni blocco cerca un marcatore nel testo (`error TS`, `MD0`, `[warn]`). Se il
+ * comando fallisce per un motivo che quel marcatore non descrive — un file di
+ * configurazione malformato, un crash dello strumento, un percorso inesistente — il
+ * conteggio uscirebbe 0 e lo script chiuderebbe con «STATO: PERFETTO» ed exit 0:
+ * esattamente la classe di bugia che questo script esiste per non dire.
+ */
+const almenoUno = (conteggio, nome) => {
+  if (conteggio > 0) return conteggio;
+  console.log(
+    `   ⚠️ ${nome} è fallito senza righe riconoscibili: conto 1 problema.`
+  );
+  return 1;
+};
+
 console.log('🚨 CONTEGGIO RIGOROSO - ZERO TOLLERANZA\n');
 console.log('='.repeat(60));
 
@@ -42,58 +72,58 @@ let prettierErrors = 0;
 // 1. Conta errori TypeScript
 console.log('\n🔥 ERRORI TYPESCRIPT:');
 try {
-  execSync('npx tsc --noEmit --skipLibCheck', { stdio: 'pipe' });
+  execSync('npx tsc --noEmit --skipLibCheck', OPZIONI_ESEC);
   console.log('✅ Nessun errore TypeScript!');
 } catch (error) {
   const output = leggiOutput(error);
   const lines = output.split('\n').filter(line => line.includes('error TS'));
-  typescriptErrors = lines.length;
+  typescriptErrors = almenoUno(lines.length, 'TypeScript');
   console.log(`❌ ${typescriptErrors} errori TypeScript trovati`);
   criticalErrors += typescriptErrors;
 }
 
-// 2. Conta problemi ESLint (formato compact) - ZERO TOLLERANZA REALE
+// 2. Conta problemi ESLint - ZERO TOLLERANZA REALE
+//
+// Formato JSON e non `compact`, perché i conteggi arrivano come NUMERI
+// (`errorCount`/`warningCount`) invece di essere dedotti da una stringa. La versione
+// precedente cercava `',Error -'` (senza spazio) e `' error '` minuscolo, mentre il
+// formatter compact stampa `<file>: line 3, col 7, Error - messaggio (regola)`:
+// nessuno dei due filtri agganciava mai nulla. Il risultato era doppiamente sbagliato
+// — un errore vero finiva sotto «WARNINGS BLOCCANTI» con «ESLint: 0» fra gli errori
+// critici, e se ESLint andava in crash ogni riga dello stack che contenesse `.ts`
+// veniva contata come un problema di lint.
 console.log('\n⚠️ PROBLEMI ESLINT:');
 try {
   execSync(
-    'npx eslint "**/*.{ts,tsx}" --ignore-pattern "node_modules/**" --ignore-pattern ".expo/**" --ignore-pattern "android/**" --ignore-pattern "ios/**" --ignore-pattern "coverage/**" --format compact --max-warnings 0',
-    {
-      stdio: 'pipe',
-      encoding: 'utf8',
-    }
+    'npx eslint "**/*.{ts,tsx}" --ignore-pattern "node_modules/**" --ignore-pattern ".expo/**" --ignore-pattern "android/**" --ignore-pattern "ios/**" --ignore-pattern "coverage/**" --format json --max-warnings 0',
+    { ...OPZIONI_ESEC, encoding: 'utf8' }
   );
   console.log('✅ Nessun problema ESLint!');
 } catch (error) {
   const output = leggiOutput(error);
 
-  // Parse output ESLint per contare errori e warnings
-  const lines = output.split('\n').filter(line => line.trim());
-
-  // Conta righe con errori/warnings (formato: file:line:col: severity message)
-  eslintErrors = lines.filter(
-    line => line.includes(' error ') || line.includes(',Error -')
-  ).length;
-
-  eslintWarnings = lines.filter(
-    line => line.includes(' warning ') || line.includes(',Warning -')
-  ).length;
-
-  // Se non riesce a parsare, cerca nel summary finale
-  if (eslintErrors === 0 && eslintWarnings === 0) {
-    const summaryMatch = output.match(
-      /✖ (\d+) problems? \((\d+) errors?, (\d+) warnings?\)/
-    );
-    if (summaryMatch) {
-      eslintErrors = parseInt(summaryMatch[2]) || 0;
-      eslintWarnings = parseInt(summaryMatch[3]) || 0;
-    } else {
-      // Fallback: se c'è output ma non riusciamo a parsare, assumiamo che ci siano problemi
-      const problemLines = lines.filter(
-        line =>
-          line.includes('.tsx') || line.includes('.ts') || line.includes('.js')
-      ).length;
-      eslintWarnings = problemLines > 0 ? problemLines : 1;
+  // Il JSON e' un array di risultati per file: si sommano i conteggi dichiarati da
+  // ESLint stesso. Se il parse fallisce, ESLint non ha prodotto un report — e' andato
+  // in errore per altro (configurazione, percorso, crash): allora conta 1, perche' il
+  // comando e' comunque fallito e tacere sarebbe la bugia che questo script evita.
+  const inizio = output.indexOf('[');
+  let risultati = null;
+  if (inizio >= 0) {
+    try {
+      risultati = JSON.parse(output.slice(inizio, output.lastIndexOf(']') + 1));
+    } catch {
+      risultati = null;
     }
+  }
+
+  if (Array.isArray(risultati)) {
+    eslintErrors = risultati.reduce((n, f) => n + (f.errorCount || 0), 0);
+    eslintWarnings = risultati.reduce((n, f) => n + (f.warningCount || 0), 0);
+    if (eslintErrors === 0 && eslintWarnings === 0) {
+      eslintErrors = almenoUno(0, 'ESLint');
+    }
+  } else {
+    eslintErrors = almenoUno(0, 'ESLint');
   }
 
   if (eslintErrors > 0) {
@@ -122,15 +152,13 @@ console.log('\n📝 MARKDOWNLINT:');
 try {
   execSync(
     'npx markdownlint "**/*.md" --ignore "**/node_modules/**" --ignore "docs/**" --ignore "graphify-out/**"',
-    {
-      stdio: 'pipe',
-    }
+    OPZIONI_ESEC
   );
   console.log('✅ Nessun problema Markdownlint!');
 } catch (error) {
   const output = leggiOutput(error);
   const lines = output.split('\n').filter(line => line.includes('MD0'));
-  markdownlintErrors = lines.length;
+  markdownlintErrors = almenoUno(lines.length, 'Markdownlint');
   console.log(
     `❌ ${markdownlintErrors} errori Markdownlint trovati (BLOCCANTI)`
   );
@@ -142,7 +170,7 @@ console.log('\n🎨 PRETTIER:');
 try {
   execSync(
     'npx prettier --check . --ignore-path .gitignore --ignore-path .prettierignore',
-    { stdio: 'pipe' }
+    OPZIONI_ESEC
   );
   console.log('✅ Nessun problema Prettier!');
 } catch (error) {
@@ -156,7 +184,7 @@ try {
       line =>
         line.includes('[warn]') && !line.includes('Code style issues found')
     );
-  prettierErrors = lines.length;
+  prettierErrors = almenoUno(lines.length, 'Prettier');
   console.log(`❌ ${prettierErrors} errori Prettier trovati (BLOCCANTI)`);
   criticalErrors += prettierErrors;
 }
@@ -164,7 +192,7 @@ try {
 // 5. Conta test Jest falliti
 console.log('\n🧪 TEST JEST:');
 try {
-  execSync('npm test -- --passWithNoTests --silent', { stdio: 'pipe' });
+  execSync('npm test -- --passWithNoTests --silent', OPZIONI_ESEC);
   console.log('✅ Tutti i test Jest passano!');
 } catch (error) {
   const output = leggiOutput(error);
