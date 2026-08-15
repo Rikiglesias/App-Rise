@@ -21,15 +21,14 @@ function buildAdmin(opts: {
   const from = spy((_table: string) => ({ select }));
   const deleteUser = spy((id: string) => {
     opts.seq?.push(id);
-    const err =
-      opts.deleteResults && id in opts.deleteResults
-        ? opts.deleteResults[id]
-        : (opts.deleteDefault ?? null);
+    const err = opts.deleteResults && id in opts.deleteResults
+      ? opts.deleteResults[id]
+      : (opts.deleteDefault ?? null);
     return Promise.resolve({ error: err });
   });
   const fake = { from, auth: { admin: { deleteUser } } };
   const adminFactory = spy(
-    () => fake as unknown as ReturnType<NonNullable<PurgeDeps['adminFactory']>>
+    () => fake as unknown as ReturnType<NonNullable<PurgeDeps['adminFactory']>>,
   );
   return { adminFactory, from, select, not, lt, deleteUser };
 }
@@ -56,7 +55,7 @@ Deno.test(
     assertEquals(await res.text(), 'forbidden');
     assertSpyCalls(adminFactory, 0);
     assertSpyCalls(alert, 0);
-  }
+  },
 );
 
 Deno.test('header x-cron-secret mancante -> 403', async () => {
@@ -85,7 +84,7 @@ Deno.test(
     assertEquals(await timingSafeCompare('ax', 'bx'), false);
     assertEquals(await timingSafeCompare('abc', 'abcd'), false);
     assertEquals(await timingSafeCompare('s3cr3t', 's3cr3t'), true);
-  }
+  },
 );
 
 Deno.test(
@@ -97,7 +96,7 @@ Deno.test(
     assertEquals(res.status, 200);
     assertSpyCalls(adminFactory, 1);
     setCron(null);
-  }
+  },
 );
 
 Deno.test(
@@ -115,10 +114,10 @@ Deno.test(
     assertSpyCalls(alert, 1);
     assertEquals(
       (alert.calls[0].args[0] as { reason: string }).reason,
-      'query_failed'
+      'query_failed',
     );
     setCron(null);
-  }
+  },
 );
 
 Deno.test(
@@ -135,7 +134,7 @@ Deno.test(
     assertSpyCalls(deleteUser, 0);
     assertSpyCalls(alert, 0);
     setCron(null);
-  }
+  },
 );
 
 Deno.test(
@@ -155,7 +154,7 @@ Deno.test(
     assertEquals(seq, ['u1', 'u2', 'u3']);
     assertSpyCalls(alert, 0);
     setCron(null);
-  }
+  },
 );
 
 Deno.test(
@@ -184,7 +183,7 @@ Deno.test(
     assertEquals(info.failed, 1);
     assertEquals(info.failures[0].id, 'u2');
     setCron(null);
-  }
+  },
 );
 
 Deno.test('cutoff 30 giorni corretto (filtro temporale)', async () => {
@@ -203,7 +202,7 @@ Deno.test('cutoff 30 giorni corretto (filtro temporale)', async () => {
   assertEquals(lt.calls[0].args[0], 'deletion_requested_at');
   assertEquals(
     lt.calls[0].args[1],
-    new Date(T - 30 * 24 * 60 * 60 * 1000).toISOString()
+    new Date(T - 30 * 24 * 60 * 60 * 1000).toISOString(),
   );
   setCron(null);
 });

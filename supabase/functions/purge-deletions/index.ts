@@ -15,7 +15,7 @@ const enc = new TextEncoder();
 // canonica Deno (no Buffer-only di node:crypto, che ha avuto bug in Deno).
 export async function timingSafeCompare(
   a: string,
-  b: string
+  b: string,
 ): Promise<boolean> {
   const [ha, hb] = await Promise.all([
     crypto.subtle.digest('SHA-256', enc.encode(a)),
@@ -70,13 +70,13 @@ function defaultAdmin(): SupabaseClient {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     {
       auth: { autoRefreshToken: false, persistSession: false },
-    }
+    },
   );
 }
 
 export async function handler(
   req: Request,
-  deps: PurgeDeps = {}
+  deps: PurgeDeps = {},
 ): Promise<Response> {
   const adminFactory = deps.adminFactory ?? defaultAdmin;
   const alert = deps.alert ?? defaultAlert;
@@ -93,7 +93,7 @@ export async function handler(
   const admin = adminFactory();
 
   const cutoff = new Date(
-    now() - GRACE_DAYS * 24 * 60 * 60 * 1000
+    now() - GRACE_DAYS * 24 * 60 * 60 * 1000,
   ).toISOString();
   const { data, error } = await admin
     .from('profiles')
@@ -133,8 +133,8 @@ export async function handler(
       scanned: data?.length ?? 0,
       failed: failures.length,
     }),
-    { headers: { 'Content-Type': 'application/json' } }
+    { headers: { 'Content-Type': 'application/json' } },
   );
 }
 
-Deno.serve(req => handler(req));
+Deno.serve((req) => handler(req));
