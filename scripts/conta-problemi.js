@@ -9,6 +9,24 @@
 
 const { execSync } = require('child_process');
 
+/**
+ * Legge l'output di un comando fallito, da ENTRAMBI i canali e senza colori.
+ *
+ * Perché serve: gli strumenti qui sotto non scrivono tutti nello stesso posto —
+ * `tsc` ed ESLint riportano su stdout, `markdownlint`, Prettier e Jest su stderr.
+ * `execSync` con `stdio: 'pipe'` popola SEMPRE entrambi i campi, anche quando uno
+ * è vuoto, e un Buffer vuoto è truthy: il vecchio `error.stdout ? … : error.stderr`
+ * non raggiungeva MAI il secondo ramo, quindi i tre controlli che scrivono su stderr
+ * contavano zero problemi qualunque fosse la realtà — e lo script chiudeva con
+ * «STATO: PERFETTO» mentre 23 file fallivano Prettier (misurato il 2026-08-15).
+ *
+ * I codici colore vanno tolti perché i marcatori cercati più sotto (`[warn]`) nel
+ * testo reale sono spezzati dalle sequenze ANSI: `[` + ESC[33m + `warn` + ESC[39m + `]`.
+ */
+const SEQUENZE_ANSI = /\u001b\[[0-9;]*m/g;
+const leggiOutput = error =>
+  `${error.stdout ?? ''}${error.stderr ?? ''}`.replace(SEQUENZE_ANSI, '');
+
 console.log('🚨 CONTEGGIO RIGOROSO - ZERO TOLLERANZA\n');
 console.log('='.repeat(60));
 
@@ -27,9 +45,7 @@ try {
   execSync('npx tsc --noEmit --skipLibCheck', { stdio: 'pipe' });
   console.log('✅ Nessun errore TypeScript!');
 } catch (error) {
-  const output = error.stdout
-    ? error.stdout.toString()
-    : error.stderr.toString();
+  const output = leggiOutput(error);
   const lines = output.split('\n').filter(line => line.includes('error TS'));
   typescriptErrors = lines.length;
   console.log(`❌ ${typescriptErrors} errori TypeScript trovati`);
@@ -48,16 +64,10 @@ try {
   );
   console.log('✅ Nessun problema ESLint!');
 } catch (error) {
-  // const eslintOutput = error.stdout
-  //   ? error.stdout.toString()
-  //   : error.stderr.toString();
+  const output = leggiOutput(error);
 
   // Parse output ESLint per contare errori e warnings
-  const lines = (
-    error.stdout ? error.stdout.toString() : error.stderr.toString()
-  )
-    .split('\n')
-    .filter(line => line.trim());
+  const lines = output.split('\n').filter(line => line.trim());
 
   // Conta righe con errori/warnings (formato: file:line:col: severity message)
   eslintErrors = lines.filter(
@@ -70,9 +80,9 @@ try {
 
   // Se non riesce a parsare, cerca nel summary finale
   if (eslintErrors === 0 && eslintWarnings === 0) {
-    const summaryMatch = (
-      error.stdout ? error.stdout.toString() : error.stderr.toString()
-    ).match(/✖ (\d+) problems? \((\d+) errors?, (\d+) warnings?\)/);
+    const summaryMatch = output.match(
+      /✖ (\d+) problems? \((\d+) errors?, (\d+) warnings?\)/
+    );
     if (summaryMatch) {
       eslintErrors = parseInt(summaryMatch[2]) || 0;
       eslintWarnings = parseInt(summaryMatch[3]) || 0;
@@ -100,16 +110,25 @@ try {
 }
 
 // 3. Conta errori Markdownlint (esclude docs/ per evitare warning su documentazione)
+//
+// Gli `--ignore` vogliono il glob RICORSIVO, e per due motivi distinti misurati il
+// 2026-08-15: `--ignore node_modules` non esclude il CONTENUTO della cartella, e
+// soprattutto non esiste una sola cartella di dipendenze — c'è anche
+// `ExpoGoInstaller/node_modules`, che nessun pattern ancorato alla radice raggiunge.
+// Con la forma vecchia il conteggio era 24.533 righe di errori appartenenti a
+// librerie di terzi; con `**/node_modules/**` scende a 454, tutte di file nostri.
+// `graphify-out/` è escluso perché è output rigenerabile del grafo, non documentazione.
 console.log('\n📝 MARKDOWNLINT:');
 try {
-  execSync('npx markdownlint "**/*.md" --ignore node_modules --ignore docs', {
-    stdio: 'pipe',
-  });
+  execSync(
+    'npx markdownlint "**/*.md" --ignore "**/node_modules/**" --ignore "docs/**" --ignore "graphify-out/**"',
+    {
+      stdio: 'pipe',
+    }
+  );
   console.log('✅ Nessun problema Markdownlint!');
 } catch (error) {
-  const output = error.stdout
-    ? error.stdout.toString()
-    : error.stderr.toString();
+  const output = leggiOutput(error);
   const lines = output.split('\n').filter(line => line.includes('MD0'));
   markdownlintErrors = lines.length;
   console.log(
@@ -127,10 +146,16 @@ try {
   );
   console.log('✅ Nessun problema Prettier!');
 } catch (error) {
-  const output = error.stdout
-    ? error.stdout.toString()
-    : error.stderr.toString();
-  const lines = output.split('\n').filter(line => line.includes('[warn]'));
+  const output = leggiOutput(error);
+  // Prettier marca con `[warn]` sia ogni file non formattato sia la riga di riepilogo
+  // finale («Code style issues found in the above file(s)…»). Contarle tutte darebbe
+  // sempre un file in più del vero: il riepilogo va escluso.
+  const lines = output
+    .split('\n')
+    .filter(
+      line =>
+        line.includes('[warn]') && !line.includes('Code style issues found')
+    );
   prettierErrors = lines.length;
   console.log(`❌ ${prettierErrors} errori Prettier trovati (BLOCCANTI)`);
   criticalErrors += prettierErrors;
@@ -142,13 +167,16 @@ try {
   execSync('npm test -- --passWithNoTests --silent', { stdio: 'pipe' });
   console.log('✅ Tutti i test Jest passano!');
 } catch (error) {
-  const output = error.stdout
-    ? error.stdout.toString()
-    : error.stderr.toString();
+  const output = leggiOutput(error);
 
-  // Parse output per contare i test falliti
-  const failedMatch = output.match(/(\d+) failed/);
-  jestFailures = failedMatch ? parseInt(failedMatch[1]) : 1;
+  // Parse output per contare i test falliti.
+  // Si ancora alla riga «Tests:» e non al primo «N failed» del testo: il riepilogo di
+  // Jest apre con «Test Suites: 1 failed, …» e un match libero prenderebbe quello,
+  // riportando il numero di SUITE fallite al posto dei test.
+  // Se il riepilogo manca (crash prima di scriverlo) resta 1: fallire in modo
+  // rumoroso è corretto, perché qui il comando è comunque uscito con errore.
+  const failedMatch = output.match(/^Tests:.*?(\d+) failed/m);
+  jestFailures = failedMatch ? parseInt(failedMatch[1], 10) : 1;
 
   console.log(`❌ ${jestFailures} test Jest falliti (BLOCCANTI)`);
   console.log('📄 Dettagli errori visibili in VS Code Problems tab');
