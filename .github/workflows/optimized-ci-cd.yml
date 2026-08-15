@@ -180,7 +180,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        check: [typescript, eslint, prettier, tests]
+        check: [typescript, eslint, prettier, tests, acceptance]
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -214,6 +214,14 @@ jobs:
             "tests")
               echo "🧪 Unit Tests"
               npm test -- --coverage --watchAll=false --maxWorkers=2
+              ;;
+            # La suite di accettazione esisteva da tempo e non girava in nessuna
+            # pipeline: una suite che nessuno esegue è come non averla, e questa
+            # costa 6 test in meno di un secondo. Sta in un ramo suo perché usa
+            # vitest e non jest: mescolarli nello stesso comando confonde gli esiti.
+            "acceptance")
+              echo "✅ Acceptance Tests (vitest)"
+              npm run test:acceptance
               ;;
           esac
 
