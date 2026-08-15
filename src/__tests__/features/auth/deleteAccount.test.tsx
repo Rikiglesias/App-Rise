@@ -221,6 +221,35 @@ describe('ProfileScreen (autenticato)', () => {
     expect(getByText('Annulla eliminazione')).toBeTruthy();
   });
 
+  // Se l'annullamento fallisce in silenzio la cancellazione resta programmata, ma
+  // la persona esce di lì convinta di averla fermata: sul proprio account è la
+  // stessa classe di bugia già corretta su «Esci».
+  it('annulla eliminazione fallito → lo dice, non tace', async () => {
+    const cancelScheduledDeletion = jest
+      .fn()
+      .mockResolvedValue({ error: 'network' });
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: profileWithDeletion, cancelScheduledDeletion })
+    );
+    const { getByText, findByText } = wrap(<ProfileScreen />);
+    fireEvent.press(getByText('Annulla eliminazione'));
+    expect(await findByText('Operazione non riuscita. Riprova.')).toBeTruthy();
+  });
+
+  // La promessa può RIGETTARE, non solo tornare `{error}`: senza il `.catch` non
+  // comparirebbe nulla e resterebbe una promessa rifiutata a vuoto.
+  it('annulla eliminazione che RIGETTA → lo dice comunque', async () => {
+    const cancelScheduledDeletion = jest
+      .fn()
+      .mockRejectedValue(new Error('boom'));
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: profileWithDeletion, cancelScheduledDeletion })
+    );
+    const { getByText, findByText } = wrap(<ProfileScreen />);
+    fireEvent.press(getByText('Annulla eliminazione'));
+    expect(await findByText('Operazione non riuscita. Riprova.')).toBeTruthy();
+  });
+
   it('il toggle marketing chiama setMarketingConsent', () => {
     const setMarketingConsent = jest.fn().mockResolvedValue({ error: null });
     mockUseAuth.mockReturnValue(makeAuth({ setMarketingConsent }));
