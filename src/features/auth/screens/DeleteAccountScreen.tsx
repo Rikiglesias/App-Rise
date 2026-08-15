@@ -12,12 +12,18 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
+import { CANCELLAZIONE_PROGRAMMATA_ATTIVA } from '@/shared/auth/deletionPolicy';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
  * Eliminazione account (GDPR Art.17 + App Store 5.1.1(v)).
- * Doppia conferma (azione + Alert nativo). Due modelli a scelta dell'utente:
- * immediato o programmato a +30gg (grace period recuperabile).
+ * Doppia conferma (azione + Alert nativo).
+ *
+ * Erano previsti due modelli — immediato o programmato a +30gg — ma il secondo
+ * è offerto solo se qualcuno esegue davvero l'eliminazione differita: vedi
+ * `CANCELLAZIONE_PROGRAMMATA_ATTIVA` in `shared/auth/deletionPolicy.ts`, che
+ * spiega perché oggi è spenta e cosa serve per riaccenderla. Il diritto alla
+ * cancellazione resta servito da «Elimina subito», che cancella davvero.
  */
 export const DeleteAccountScreen: React.FC = () => {
   useRequireAuth();
@@ -90,15 +96,19 @@ export const DeleteAccountScreen: React.FC = () => {
         loading={loading}
       />
 
-      <PerfectText size={13} lines={3} style={styles.hint}>
-        {t('auth.delete.scheduledHint')}
-      </PerfectText>
-      <AuthButton
-        label={t('auth.delete.scheduled')}
-        onPress={confirmSchedule}
-        variant="link"
-        disabled={loading}
-      />
+      {CANCELLAZIONE_PROGRAMMATA_ATTIVA ? (
+        <>
+          <PerfectText size={13} lines={3} style={styles.hint}>
+            {t('auth.delete.scheduledHint')}
+          </PerfectText>
+          <AuthButton
+            label={t('auth.delete.scheduled')}
+            onPress={confirmSchedule}
+            variant="link"
+            disabled={loading}
+          />
+        </>
+      ) : null}
 
       {error ? (
         <PerfectText size={14} lines={2} style={styles.error}>

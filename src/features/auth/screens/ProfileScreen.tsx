@@ -22,8 +22,7 @@ import {
   formatDateLocalized,
   getDeletionScheduledDate,
 } from '@/shared/utils/dateFormat';
-
-const GRACE_DAYS = 30;
+import { GRACE_DAYS } from '@/shared/auth/deletionPolicy';
 
 export const ProfileScreen: React.FC = () => {
   const colors = useThemeColors();

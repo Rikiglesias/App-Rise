@@ -144,8 +144,10 @@ export default {
         'This action is irreversible: your personal data will be permanently deleted.',
       now: 'Delete now',
       scheduled: 'Delete in 30 days',
+      // "Disabled" was untrue: nothing suspends the account during the 30 days,
+      // which are a change-your-mind window in which everything keeps working.
       scheduledHint:
-        'Account disabled and recoverable for 30 days, then permanently deleted.',
+        'You have 30 days to change your mind: your account stays usable and you can cancel at any time. After 30 days it is permanently deleted.',
       confirmNow: 'Your account and all data will be deleted now. Confirm?',
       confirmScheduled:
         'Your account will be deleted in 30 days. You can cancel by signing in again. Confirm?',
