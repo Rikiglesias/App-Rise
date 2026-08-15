@@ -13,7 +13,10 @@ const enc = new TextEncoder();
 // (sempre 32 byte) → niente early-exit né leak della lunghezza del segreto, e
 // timingSafeEqual non lancia su input di lunghezza diversa. È la primitiva
 // canonica Deno (no Buffer-only di node:crypto, che ha avuto bug in Deno).
-export async function timingSafeCompare(a: string, b: string): Promise<boolean> {
+export async function timingSafeCompare(
+  a: string,
+  b: string
+): Promise<boolean> {
   const [ha, hb] = await Promise.all([
     crypto.subtle.digest('SHA-256', enc.encode(a)),
     crypto.subtle.digest('SHA-256', enc.encode(b)),
@@ -28,7 +31,11 @@ export interface PurgeFailure {
 
 export interface PurgeDeps {
   adminFactory?: () => SupabaseClient;
-  alert?: (info: { reason: string; failed: number; failures: PurgeFailure[] }) => Promise<void>;
+  alert?: (info: {
+    reason: string;
+    failed: number;
+    failures: PurgeFailure[];
+  }) => Promise<void>;
   now?: () => number;
 }
 
@@ -58,12 +65,19 @@ async function defaultAlert(info: {
 }
 
 function defaultAdmin(): SupabaseClient {
-  return createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
+  return createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    {
+      auth: { autoRefreshToken: false, persistSession: false },
+    }
+  );
 }
 
-export async function handler(req: Request, deps: PurgeDeps = {}): Promise<Response> {
+export async function handler(
+  req: Request,
+  deps: PurgeDeps = {}
+): Promise<Response> {
   const adminFactory = deps.adminFactory ?? defaultAdmin;
   const alert = deps.alert ?? defaultAlert;
   const now = deps.now ?? Date.now;
@@ -78,7 +92,9 @@ export async function handler(req: Request, deps: PurgeDeps = {}): Promise<Respo
 
   const admin = adminFactory();
 
-  const cutoff = new Date(now() - GRACE_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const cutoff = new Date(
+    now() - GRACE_DAYS * 24 * 60 * 60 * 1000
+  ).toISOString();
   const { data, error } = await admin
     .from('profiles')
     .select('id')
@@ -112,9 +128,13 @@ export async function handler(req: Request, deps: PurgeDeps = {}): Promise<Respo
   }
 
   return new Response(
-    JSON.stringify({ deleted, scanned: data?.length ?? 0, failed: failures.length }),
-    { headers: { 'Content-Type': 'application/json' } },
+    JSON.stringify({
+      deleted,
+      scanned: data?.length ?? 0,
+      failed: failures.length,
+    }),
+    { headers: { 'Content-Type': 'application/json' } }
   );
 }
 
-Deno.serve((req) => handler(req));
+Deno.serve(req => handler(req));

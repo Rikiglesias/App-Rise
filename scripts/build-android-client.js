@@ -8,7 +8,11 @@ function run(cmd, args, env = {}) {
       shell: process.platform === 'win32',
       env: { ...process.env, ...env },
     });
-    child.on('exit', code => (code === 0 ? resolve() : reject(new Error(`${cmd} exited with code ${code}`))));
+    child.on('exit', code =>
+      code === 0
+        ? resolve()
+        : reject(new Error(`${cmd} exited with code ${code}`))
+    );
   });
 }
 
@@ -20,4 +24,3 @@ function run(cmd, args, env = {}) {
     process.exit(1);
   }
 })();
-

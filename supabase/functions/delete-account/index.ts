@@ -31,14 +31,21 @@ export interface Deps {
 }
 
 function defaultAdmin(): SupabaseClient {
-  return createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
+  return createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    {
+      auth: { autoRefreshToken: false, persistSession: false },
+    }
+  );
 }
 
 const DEFAULT_DEPS: Deps = { createAdmin: defaultAdmin };
 
-export async function handler(req: Request, deps: Deps = DEFAULT_DEPS): Promise<Response> {
+export async function handler(
+  req: Request,
+  deps: Deps = DEFAULT_DEPS
+): Promise<Response> {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
@@ -66,4 +73,4 @@ export async function handler(req: Request, deps: Deps = DEFAULT_DEPS): Promise<
   return json({ ok: true }, 200);
 }
 
-Deno.serve((req) => handler(req));
+Deno.serve(req => handler(req));
