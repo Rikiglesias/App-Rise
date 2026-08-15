@@ -10,8 +10,22 @@ import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileSc
 import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
 import { supabase } from '@/shared/auth/supabaseClient';
 
+// Il navigator finto deve esporre anche `getState` e `canGoBack`, perché il pulsante
+// «Continua» di ResetPasswordScreen decide dove andare CHIEDENDO al navigator quali
+// rotte esistono: la schermata è montata in due alberi diversi (quello principale, che
+// ha `Home`, e il cancello del profilo, che non ce l'ha) e non può presumere in quale
+// dei due si trova. Un mock con il solo `navigate` non permetterebbe di distinguerli.
+const mockNavigate = jest.fn();
+const mockCanGoBack = jest.fn(() => false);
+const mockNavState: { routeNames: string[] } = { routeNames: ['Home'] };
+
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
+  useNavigation: () => ({
+    navigate: mockNavigate,
+    goBack: jest.fn(),
+    canGoBack: mockCanGoBack,
+    getState: () => mockNavState,
+  }),
 }));
 
 const wrap = (ui: React.ReactElement) =>
@@ -103,6 +117,54 @@ describe('Auth screens', () => {
     expect(supabase.auth.updateUser).toHaveBeenCalledWith({
       password: 'Abcd123!',
     });
+  });
+
+  // I due test seguenti coprono il pulsante finale «Continua», che prima puntava
+  // sempre a `Home`: nell'albero del cancello quella rotta non esiste e i due alberi
+  // non hanno un navigator padre, quindi il tocco non veniva gestito da nessuno e la
+  // persona restava ferma con la password nuova in mano — proprio nello scenario per
+  // cui `ResetPassword` è stata messa nel cancello (il link di recupero da fuori).
+  const cambiaPasswordConSuccesso = async (
+    ui: ReturnType<typeof wrap>
+  ): Promise<void> => {
+    (supabase.auth.updateUser as jest.Mock).mockResolvedValueOnce({
+      data: { user: { id: 'u1' } },
+      error: null,
+    });
+    fireEvent.changeText(ui.getByLabelText('Nuova password'), 'Abcd123!');
+    fireEvent.changeText(ui.getByLabelText('Conferma password'), 'Abcd123!');
+    fireEvent.press(ui.getByText('Salva password'));
+    await ui.findByText(
+      'Password aggiornata. Ora puoi accedere con la nuova password.'
+    );
+  };
+
+  it('ResetPassword: «Continua» torna alla home quando quella rotta esiste', async () => {
+    mockNavigate.mockClear();
+    mockNavState.routeNames = ['Home', 'ResetPassword', 'Profile'];
+
+    const ui = wrap(<ResetPasswordScreen />);
+    await cambiaPasswordConSuccesso(ui);
+    fireEvent.press(ui.getByText('Continua'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('Home');
+  });
+
+  it('ResetPassword: dietro il cancello «Continua» porta al completamento del profilo, non a una rotta inesistente', async () => {
+    mockNavigate.mockClear();
+    // Le tre rotte del cancello, esattamente come le monta ProfileGateNavigator.
+    mockNavState.routeNames = [
+      'CompleteProfile',
+      'DeleteAccount',
+      'ResetPassword',
+    ];
+
+    const ui = wrap(<ResetPasswordScreen />);
+    await cambiaPasswordConSuccesso(ui);
+    fireEvent.press(ui.getByText('Continua'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('CompleteProfile');
+    expect(mockNavigate).not.toHaveBeenCalledWith('Home');
   });
 
   it('ForgotPassword: su errore mostra l’errore e NON il messaggio di invio', async () => {
