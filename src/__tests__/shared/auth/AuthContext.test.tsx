@@ -635,4 +635,31 @@ describe('AuthContext — stato del consenso a tre valori', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     spy.mockRestore();
   });
+
+  // Art.20: se la lettura del profilo non è tornata, `profile` vale `null` esattamente
+  // come quando il profilo non esiste. Esportare in quello stato consegnava un file che
+  // dice «di te non risulta nulla» a una persona che i dati ce li ha — e lo dichiarava
+  // riuscito. Meglio un errore visibile (`handleExport` lo mostra) che un export monco.
+  it('Art.20: profilo non letto (errore di rete) → NON esporta e segnala', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: {
+        session: { user: { id: 'u1', email: 'm@r.it', identities: [] } },
+      },
+    });
+    // Errore diverso da PGRST116: non è «il profilo non c'è», è «non lo so»,
+    // quindi `profileLoaded` resta false.
+    const single = (supabase.from as jest.Mock)().single as jest.Mock;
+    single.mockResolvedValueOnce({
+      data: null,
+      error: { code: 'PGRST301', message: 'network down' },
+    });
+    const spy = jest
+      .spyOn(Share, 'share')
+      .mockResolvedValue({ action: 'sharedAction' } as never);
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('authenticated'));
+    await expect(getAuth().exportData()).rejects.toThrow('profile_unavailable');
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
 });

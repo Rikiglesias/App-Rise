@@ -446,6 +446,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const exportData = useCallback(async () => {
     const user = session?.user;
     if (!user) return;
+    // Stesso metro della cronologia consensi, applicato al profilo: `profile`
+    // vale `null` sia quando il profilo non esiste davvero sia quando la sua
+    // lettura non è ancora tornata o è fallita (rete/RLS), e le due cose non si
+    // distinguono guardando solo quel valore. `profileLoaded` le separa —
+    // diventa vero solo sull'assenza CONFERMATA (vedi `loadProfile`).
+    // Senza questa guardia l'export di portabilità poteva consegnare
+    // `"profile": null` dichiarandosi riuscito: la persona si ritrovava un file
+    // che dice che di lei non risulta nulla, mentre i suoi dati ci sono. Un
+    // Art.20 incompleto e silenzioso è peggio di un errore visibile.
+    if (!profileLoaded) throw new Error('profile_unavailable');
     const consentHistory = await getConsentHistory();
     // Su errore di fetch (null) interrompiamo: meglio segnalare l'errore (lo cattura
     // handleExport) che esportare un GDPR Art.20 con cronologia consensi incompleta.
@@ -460,7 +470,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       profile,
       consentHistory
     );
-  }, [session, profile, getConsentHistory]);
+  }, [session, profile, profileLoaded, getConsentHistory]);
 
   const recordConsent = useCallback(
     async (purpose: ConsentPurpose, action: ConsentAction) => {
