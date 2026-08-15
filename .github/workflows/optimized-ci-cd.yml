@@ -39,7 +39,7 @@ env:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false  # Non cancellare OTA in progress
+  cancel-in-progress: false # Non cancellare OTA in progress
 
 jobs:
   # ===================================================================
@@ -531,13 +531,12 @@ jobs:
   deployment-summary:
     name: 📊 Deployment Summary
     runs-on: ubuntu-latest
-    needs:
-      [
+    needs: [
         detect-changes,
         quality-checks,
         visual-regression,
-        build-ios,       # ✅ Riabilitato con tag [build]
-        build-android,   # ✅ Riabilitato con tag [build]
+        build-ios, # ✅ Riabilitato con tag [build]
+        build-android, # ✅ Riabilitato con tag [build]
         ota-update,
         bundle-analysis,
       ]
@@ -575,7 +574,7 @@ jobs:
           else
             echo "🍎 iOS: ❌ Failed" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [[ "${{ needs.build-android.result }}" == "success" ]]; then
             echo "🤖 Android: ✅ Build completata" >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ needs.build-android.result }}" == "skipped" ]]; then

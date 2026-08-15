@@ -24,4 +24,9 @@ yarn.lock
 
 # File generati automaticamente
 eslint-*.json
-*.backup 
+*.backup
+
+# Dati generati da script e minificati di proposito: riformattarli li espande
+# in migliaia di righe senza alcun guadagno, e il prossimo `node scripts/gen-comuni.mjs`
+# li riscriverebbe comunque su una riga sola.
+src/shared/data/comuni-min.json

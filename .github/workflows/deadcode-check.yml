@@ -53,21 +53,21 @@ jobs:
         continue-on-error: true
         run: |
           echo "🔍 Running ts-prune to detect unused exports..."
-          
+
           # Run ts-prune and save output
           npx ts-prune -u -e > deadcode-report.txt 2>&1 || true
-          
+
           # Count unused exports
           DEADCODE_COUNT=$(grep -c "used in module" deadcode-report.txt || true)
           DEADCODE_COUNT=${DEADCODE_COUNT:-0}
           echo "deadcode_count=$DEADCODE_COUNT" >> $GITHUB_OUTPUT
-          
+
           # Create summary
           echo "## 🧹 Deadcode Analysis Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Total unused exports found:** $DEADCODE_COUNT" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "$DEADCODE_COUNT" -eq 0 ]; then
             echo "✅ No deadcode detected! Clean codebase." >> $GITHUB_STEP_SUMMARY
             echo "status=clean" >> $GITHUB_OUTPUT
@@ -81,13 +81,13 @@ jobs:
             echo "🔴 High deadcode detected ($DEADCODE_COUNT exports)" >> $GITHUB_STEP_SUMMARY
             echo "status=high" >> $GITHUB_OUTPUT
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📋 Top Unused Exports" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           head -20 deadcode-report.txt >> $GITHUB_STEP_SUMMARY || true
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          
+
           # Check threshold if enabled
           THRESHOLD=${{ github.event.inputs.threshold || 50 }}
           if [[ "${{ github.event.inputs.fail_on_threshold }}" == "true" ]] && [ "$DEADCODE_COUNT" -gt "$THRESHOLD" ]; then
@@ -111,11 +111,11 @@ jobs:
             const fs = require('fs');
             const deadcodeCount = '${{ steps.deadcode-scan.outputs.deadcode_count }}';
             const status = '${{ steps.deadcode-scan.outputs.status }}';
-            
+
             let emoji = '✅';
             let statusText = 'Clean';
             let color = '🟢';
-            
+
             if (status === 'minimal') {
               emoji = '🟢';
               statusText = 'Minimal';
@@ -128,7 +128,7 @@ jobs:
               statusText = 'High';
               color = '🔴';
             }
-            
+
             // Read top 10 entries from report
             let topIssues = '';
             try {
@@ -142,7 +142,7 @@ jobs:
             } catch (e) {
               console.log('Could not read report file');
             }
-            
+
             const body = '## 🧹 Deadcode Scan Results\n\n' +
               emoji + ' **Status:** ' + statusText + '\n' +
               '**Unused exports found:** ' + deadcodeCount + '\n\n' +
@@ -150,7 +150,7 @@ jobs:
               topIssues + '\n\n' +
               '💡 **Tip:** Run `npm run deadcode` locally to see the full report.\n' +
               '📊 Full report available in workflow artifacts.';
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

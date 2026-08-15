@@ -1,8 +1,8 @@
 const { withStringsXml } = require('@expo/config-plugins');
 
 // Plugin per garantire che le stringhe critiche (come il nome app) esistano nel locale di default
-const withDefaultStrings = (config) => {
-  return withStringsXml(config, (config) => {
+const withDefaultStrings = config => {
+  return withStringsXml(config, config => {
     if (!config.modResults.resources) {
       config.modResults.resources = {};
     }
@@ -16,7 +16,7 @@ const withDefaultStrings = (config) => {
     // Definisci le stringhe che devono essere presenti nel default (values/strings.xml)
     const defaultStrings = [
       { name: 'CFBundleDisplayName', value: appName },
-      { name: 'app_name', value: appName }
+      { name: 'app_name', value: appName },
     ];
 
     defaultStrings.forEach(({ name, value }) => {
@@ -75,7 +75,7 @@ export default withDefaultStrings({
     icon: './assets/icons/app/app-icon.png',
     userInterfaceStyle: 'light',
     primaryColor: '#DC2626',
-    
+
     // Configurazione lingue supportate
     locales: {
       it: './locales/it.json',

@@ -33,5 +33,13 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "src/types/**/*.d.ts"],
-  "exclude": ["node_modules", ".expo", "web-build", "android", "ios", "supabase", "**/*.js"]
+  "exclude": [
+    "node_modules",
+    ".expo",
+    "web-build",
+    "android",
+    "ios",
+    "supabase",
+    "**/*.js"
+  ]
 }
