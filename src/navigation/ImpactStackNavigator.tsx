@@ -30,12 +30,6 @@ const ImpactStackNavigator: React.FC = () => {
         name="Partners"
         component={WrappedDevelopmentScreen}
       />
-      {/* Modal per schermate in sviluppo */}
-      <ImpactStack.Screen
-        name="DevelopmentModal"
-        component={WrappedDevelopmentScreen}
-        options={{ presentation: 'modal' }}
-      />
       <ImpactStack.Screen
         name="MapModal"
         component={MapModalScreen}
