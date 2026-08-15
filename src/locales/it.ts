@@ -156,8 +156,10 @@ export default {
         'Questa azione è irreversibile: i tuoi dati personali verranno eliminati definitivamente.',
       now: 'Elimina subito',
       scheduled: 'Elimina tra 30 giorni',
+      // «Disattivato» era falso: nessuna regola sospende l'account nei 30 giorni,
+      // che restano un periodo di ripensamento in cui tutto continua a funzionare.
       scheduledHint:
-        'Account disattivato e recuperabile per 30 giorni, poi eliminato definitivamente.',
+        'Hai 30 giorni per ripensarci: l’account resta utilizzabile e puoi annullare quando vuoi. Passati i 30 giorni viene eliminato definitivamente.',
       confirmNow:
         'L’account e tutti i dati saranno eliminati subito. Confermi?',
       confirmScheduled:

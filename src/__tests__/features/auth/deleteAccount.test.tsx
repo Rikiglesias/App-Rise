@@ -10,6 +10,7 @@ import { ReConsentScreen } from '@/features/auth/screens/ReConsentScreen';
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import type { Profile } from '@/shared/auth/types';
+import itLocale from '@/locales/it';
 
 jest.mock('@react-navigation/native', () => {
   const navigate = jest.fn();
@@ -20,6 +21,25 @@ jest.mock('@/shared/auth/AuthContext', () => ({
   useAuth: jest.fn(),
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
+
+// La cancellazione differita è offerta solo se qualcuno la esegue davvero
+// (`CANCELLAZIONE_PROGRAMMATA_ATTIVA`). Qui la costante è esposta da un getter
+// perché servono ENTRAMBI gli stati: quello di oggi — spento, e che non deve
+// promettere nulla — e quello di destinazione, che va tenuto in vita e verde
+// mentre è spento, altrimenti il giorno in cui si riaccende si scopre rotto.
+let mockCancellazioneProgrammataAttiva = false;
+jest.mock('@/shared/auth/deletionPolicy', () => {
+  const reale = jest.requireActual('@/shared/auth/deletionPolicy');
+  return {
+    // Esplicito: Babel definisce `__esModule` come NON enumerabile, quindi uno
+    // spread di `requireActual` lo perde e l'interop dei named import salta.
+    __esModule: true,
+    GRACE_DAYS: reale.GRACE_DAYS,
+    get CANCELLAZIONE_PROGRAMMATA_ATTIVA() {
+      return mockCancellazioneProgrammataAttiva;
+    },
+  };
+});
 
 const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
 
@@ -76,13 +96,45 @@ const wrap = (ui: React.ReactElement) =>
   render(<AllProviders>{ui}</AllProviders>);
 
 describe('DeleteAccountScreen', () => {
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockCancellazioneProgrammataAttiva = false;
+  });
 
-  it('mostra le due opzioni di eliminazione', () => {
+  // Nessuno esegue l'eliminazione differita (`pg_cron` non è installato in
+  // produzione, verificato il 2026-08-15), quindi l'opzione non va offerta: chi
+  // la sceglieva restava nel database per sempre credendo di essersi cancellato.
+  it('finché nessuno la esegue, la cancellazione a 30 giorni NON è offerta', () => {
     mockUseAuth.mockReturnValue(makeAuth());
-    const { getByText } = wrap(<DeleteAccountScreen />);
+    const { getByText, queryByText } = wrap(<DeleteAccountScreen />);
     expect(getByText('Elimina subito')).toBeTruthy();
-    expect(getByText('Elimina tra 30 giorni')).toBeTruthy();
+    expect(queryByText('Elimina tra 30 giorni')).toBeNull();
+    // Non sparisce solo il pulsante: sparisce la frase che fa la promessa. Il
+    // testo si prende dal dizionario e non si ricopia a mano, altrimenti il
+    // giorno che qualcuno lo riscrive questo `queryByText` cerca una stringa che
+    // non esiste più e passa sempre, senza controllare nulla.
+    expect(queryByText(itLocale.auth.delete.scheduledHint)).toBeNull();
+  });
+
+  // Il ramo spento va tenuto VIVO: senza questo test marcirebbe in silenzio e si
+  // scoprirebbe rotto il giorno in cui la leva viene tirata.
+  it('riaccesa la leva, l’opzione torna e programma davvero la cancellazione', async () => {
+    mockCancellazioneProgrammataAttiva = true;
+    const scheduleDeletion = jest.fn().mockResolvedValue({ error: null });
+    mockUseAuth.mockReturnValue(makeAuth({ scheduleDeletion }));
+    const alertSpy = jest
+      .spyOn(Alert, 'alert')
+      .mockImplementation((_title, _msg, buttons) => {
+        const confirm = (buttons as { text?: string; onPress?: () => void }[])
+          ?.length
+          ? (buttons as { text?: string; onPress?: () => void }[])[1]
+          : undefined;
+        confirm?.onPress?.();
+      });
+    const { getByText } = wrap(<DeleteAccountScreen />);
+    fireEvent.press(getByText('Elimina tra 30 giorni'));
+    await waitFor(() => expect(scheduleDeletion).toHaveBeenCalled());
+    alertSpy.mockRestore();
   });
 
   it('senza conferma dell’Alert NON elimina (doppia conferma)', () => {
