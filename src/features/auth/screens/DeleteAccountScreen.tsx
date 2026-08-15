@@ -35,10 +35,20 @@ export const DeleteAccountScreen: React.FC = () => {
     setLoading(true);
     // Nessun passaggio intermedio: con il login social rimosso non esiste più il
     // re-login Apple che serviva a ottenere l'authorizationCode per la revoca.
-    const { error: err } = await deleteAccountNow();
+    const { error: err, sessioneAncoraSulDispositivo } =
+      await deleteAccountNow();
     setLoading(false);
-    if (err) setError(t('auth.delete.error'));
+    if (err) {
+      setError(t('auth.delete.error'));
+      return;
+    }
     // Su successo l'AuthContext porta lo stato a unauthenticated (signOut).
+    // Ma quel signOut può fallire lasciando la sessione sul telefono, mentre i dati
+    // sul server sono già stati eliminati: senza questo avviso l'app resterebbe
+    // all'apparenza connessa a un account che non esiste più, e la persona non
+    // avrebbe modo di capire perché. Non è un errore della cancellazione — infatti
+    // il messaggio è diverso da quello di fallimento.
+    if (sessioneAncoraSulDispositivo) setError(t('auth.delete.sessionResidua'));
   }, [deleteAccountNow, t]);
 
   const runSchedule = useCallback(async (): Promise<void> => {

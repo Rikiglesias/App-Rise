@@ -67,7 +67,7 @@ const makeAuth = (over: Partial<AuthState>): AuthState =>
     session: { user: { id: 'u1', email: 'mario@example.it' } } as Session,
     profile: null,
     profileLoaded: false,
-    signOut: jest.fn(),
+    signOut: jest.fn().mockResolvedValue({ error: null }),
     needsReConsent: false,
     ...over,
   }) as AuthState;
