@@ -101,6 +101,9 @@ export default {
     profile: {
       title: 'Il mio profilo',
       logout: 'Esci',
+      // Detto solo quando l'uscita NON è riuscita: su un telefono condiviso
+      // «sono uscito» non può restare un'affermazione falsa e silenziosa.
+      logoutError: 'Non sei uscito: controlla la connessione e riprova.',
       phone: 'Telefono',
       location: 'Località',
       country: 'Paese',

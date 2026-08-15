@@ -49,7 +49,11 @@ jest.mock('@/shared/auth/supabaseClient', () => {
 });
 
 const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
-const signOut = jest.fn();
+// Il contratto vero di `signOut` restituisce `{ error }`: la schermata lo legge per
+// dire alla persona quando l'uscita NON è riuscita. Un `jest.fn()` nudo tornerebbe
+// `undefined` e farebbe fallire il componente sul `.then`, cioè il mock mentirebbe
+// sul contratto invece di verificarlo.
+const signOut = jest.fn().mockResolvedValue({ error: null });
 
 const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
   ({
@@ -185,6 +189,27 @@ describe('vie d’uscita dal cancello', () => {
     );
     fireEvent.press(getByText('Esci'));
     expect(signOut).toHaveBeenCalled();
+  });
+
+  it('«Esci» che fallisce lo DICE: la persona non resta a credere di essere uscita', async () => {
+    // Dietro il cancello «Esci» è una delle DUE sole vie d'uscita: se fallisce in
+    // silenzio la persona resta chiusa dentro senza sapere perché. Il caso vero è la
+    // rete assente, o un token già scaduto (supabase/auth-js#540).
+    signOut.mockResolvedValueOnce({ error: 'network' });
+    mockUseAuth.mockReturnValue(
+      makeAuth({ profile: null, profileLoaded: true })
+    );
+    const { getByText, findByText } = render(
+      <AllProviders>
+        <CompleteProfileScreen />
+      </AllProviders>
+    );
+
+    fireEvent.press(getByText('Esci'));
+
+    expect(
+      await findByText('Non sei uscito: controlla la connessione e riprova.')
+    ).toBeTruthy();
   });
 
   it('«Elimina account» porta alla schermata di cancellazione', () => {

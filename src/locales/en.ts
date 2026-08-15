@@ -96,6 +96,10 @@ export default {
     profile: {
       title: 'My profile',
       logout: 'Sign out',
+      // Shown only when signing out did NOT succeed: on a shared phone
+      // "I signed out" must never stay a silent falsehood.
+      logoutError:
+        "You're still signed in: check your connection and try again.",
       phone: 'Phone',
       location: 'Location',
       country: 'Country',

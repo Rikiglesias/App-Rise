@@ -44,10 +44,18 @@ export const ProfileScreen: React.FC = () => {
 
   const [exportError, setExportError] = useState<string | undefined>();
   const [consentError, setConsentError] = useState<string | undefined>();
+  const [logoutError, setLogoutError] = useState<string | undefined>();
 
+  // Se l'uscita fallisce la persona RESTA dentro l'account: tacere qui significa
+  // lasciarle credere di essere uscita, che su un telefono condiviso è la bugia
+  // peggiore che l'app possa dire. Quando riesce, non si mostra nulla: la schermata
+  // sparisce da sé perché l'albero di navigazione cambia.
   const handleLogout = useCallback((): void => {
-    void signOut();
-  }, [signOut]);
+    setLogoutError(undefined);
+    void signOut().then(({ error }) => {
+      if (error) setLogoutError(t('auth.profile.logoutError'));
+    });
+  }, [signOut, t]);
   const handleCompleteProfile = useCallback(
     (): void => navigation.navigate('CompleteProfile'),
     [navigation]
@@ -203,6 +211,11 @@ export const ProfileScreen: React.FC = () => {
         />
       )}
       <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
+      {logoutError ? (
+        <PerfectText size={13} lines={2} style={styles.error}>
+          {logoutError}
+        </PerfectText>
+      ) : null}
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.consents.title')}
