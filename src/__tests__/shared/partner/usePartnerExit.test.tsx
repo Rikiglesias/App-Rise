@@ -86,6 +86,20 @@ beforeEach(() => {
   mockMarkSeen.mockResolvedValue(undefined);
 });
 
+/**
+ * Quando il prefill porta dati personali, «Dona» non apre più subito: mostra
+ * l'avviso che dice quali dati finirebbero nell'indirizzo. Questo helper fa il
+ * gesto della persona sull'avviso — `conDati: false` = «continua senza i miei dati».
+ */
+const confermaAvvisoDonorbox = async (
+  result: { current: ReturnType<typeof usePartnerExit> },
+  conDati = true
+) => {
+  await act(async () => {
+    await result.current.confirmDonorboxDisclosure(conDati);
+  });
+};
+
 describe('usePartnerExit', () => {
   it('openDonation → Donorbox con ref in utm_content e prefill anagrafico', async () => {
     setAuth({ userId: 'u1', email: 'mario@gmail.com' });
@@ -95,6 +109,10 @@ describe('usePartnerExit', () => {
     await act(async () => {
       await result.current.openDonation();
     });
+    // Il prefill ha dati personali → prima l'avviso, poi l'uscita.
+    expect(result.current.donorboxDisclosureVisible).toBe(true);
+    expect(mockOpenLink).not.toHaveBeenCalled();
+    await confermaAvvisoDonorbox(result);
 
     expect(mockGetOrCreate).toHaveBeenCalledWith('donorbox');
     const [url, key] = mockOpenLink.mock.calls[0];
@@ -195,6 +213,8 @@ describe('usePartnerExit', () => {
     await act(async () => {
       await result.current.openDonation();
     });
+    // Prefill con dati personali → l'avviso precede l'uscita.
+    await confermaAvvisoDonorbox(result);
 
     const [url] = mockOpenLink.mock.calls[0];
     expect(url).toContain('first_name=Mario');
@@ -215,6 +235,8 @@ describe('usePartnerExit', () => {
     await act(async () => {
       await result.current.openDonation();
     });
+    // Prefill con dati personali → l'avviso precede l'uscita.
+    await confermaAvvisoDonorbox(result);
 
     const [url] = mockOpenLink.mock.calls[0];
     expect(url).toContain('first_name=Mario');
@@ -229,6 +251,8 @@ describe('usePartnerExit', () => {
     await act(async () => {
       await result.current.openDonation();
     });
+    // Prefill con dati personali → l'avviso precede l'uscita.
+    await confermaAvvisoDonorbox(result);
 
     const [url] = mockOpenLink.mock.calls[0];
     expect(url).not.toContain('email=');
@@ -333,8 +357,12 @@ describe('usePartnerExit — doppio tocco', () => {
       ]);
     });
 
-    expect(mockOpenLink).toHaveBeenCalledTimes(1);
+    // Con il prefill l'uscita si ferma sull'avviso: il segno che il secondo tocco
+    // è stato ignorato è che la pre-flight è stata fatta UNA volta sola.
     expect(mockGetOrCreate).toHaveBeenCalledTimes(1);
+    expect(mockOpenLink).not.toHaveBeenCalled();
+    await confermaAvvisoDonorbox(result);
+    expect(mockOpenLink).toHaveBeenCalledTimes(1);
   });
 
   it('due tocchi ravvicinati su un’uscita Let’s Donation → una sola uscita', async () => {
@@ -351,5 +379,108 @@ describe('usePartnerExit — doppio tocco', () => {
     });
 
     expect(mockOpenLink).toHaveBeenCalledTimes(1);
+  });
+});
+
+// L'avviso stava sul canale che manda MENO (Let's Donation: solo un codice
+// anonimo) e mancava su quello che manda nome, cognome ed email dentro
+// l'indirizzo — dove un indirizzo resta in cronologia e nei log di chi lo riceve.
+describe('usePartnerExit — avviso prima di Donorbox', () => {
+  it('con dati personali: avverte e NON esce finché non si sceglie', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    expect(result.current.donorboxDisclosureVisible).toBe(true);
+    expect(mockOpenLink).not.toHaveBeenCalled();
+  });
+
+  it('«continua senza i miei dati»: esce col ref ma senza anagrafica', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+    await confermaAvvisoDonorbox(result, false);
+
+    const [url] = mockOpenLink.mock.calls[0];
+    expect(url).not.toContain('first_name=');
+    expect(url).not.toContain('last_name=');
+    expect(url).not.toContain('email=');
+    // La donazione resta correlata: si rinuncia ai dati, non alla donazione.
+    expect(url).toContain('utm_content=DREF');
+  });
+
+  it('senza dati personali NON avverte: non c’è nulla da dichiarare', async () => {
+    // Consenso da riaccettare ⇒ prefill vuoto ⇒ nell'indirizzo non finisce nulla
+    // di personale, quindi l'uscita resta immediata com'era prima.
+    setAuth({ userId: 'u1', email: 'mario@gmail.com', consentState: 'needed' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    expect(result.current.donorboxDisclosureVisible).toBe(false);
+    expect(mockOpenLink).toHaveBeenCalledTimes(1);
+  });
+
+  it('annullare NON lo marca come letto: chi non sceglie deve rivederlo', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+    act(() => {
+      result.current.cancelDonorboxDisclosure();
+    });
+
+    expect(result.current.donorboxDisclosureVisible).toBe(false);
+    expect(mockOpenLink).not.toHaveBeenCalled();
+    expect(mockMarkSeen).not.toHaveBeenCalled();
+  });
+
+  it('già visto: va dritto, senza rimostrarlo', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(true);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    expect(result.current.donorboxDisclosureVisible).toBe(false);
+    const [url] = mockOpenLink.mock.calls[0];
+    expect(url).toContain('first_name=Mario');
+  });
+
+  it('il flag è per CANALE: quello di Let’s Donation non vale per Donorbox', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+    await confermaAvvisoDonorbox(result);
+
+    // Marcato sul canale donorbox, non su quello storico: chi ha già visto
+    // l'avviso di Let's Donation deve comunque vedere questo, che dice altro.
+    expect(mockMarkSeen).toHaveBeenCalledWith('u1', 'donorbox');
   });
 });

@@ -19,15 +19,28 @@ import { logWarn } from '@/shared/utils/logger';
  * al massimo l'avviso si rimostra (informativo, innocuo), mai soppresso per errore.
  */
 
-const KEY_PREFIX = 'partner_disclosure_seen_v1';
+/**
+ * I due canali hanno avvisi DIVERSI e quindi flag diversi: chi ha già visto quello
+ * di Let's Donation non deve saltarsi quello di Donorbox, che dice un'altra cosa
+ * (quali dati personali finiscono nell'indirizzo).
+ */
+export type CanaleAvviso = 'letsdonation' | 'donorbox';
 
-const storageKey = (userId?: string | null): string =>
-  userId ? `${KEY_PREFIX}_${userId}` : KEY_PREFIX;
+// La chiave di Let's Donation resta ESATTAMENTE quella di prima: cambiarla
+// rimostrerebbe l'avviso a chi l'ha già visto e proseguito.
+const KEY_PREFIX = 'partner_disclosure_seen_v1';
+const KEY_PREFIX_DONORBOX = 'donorbox_disclosure_seen_v1';
+
+const storageKey = (userId?: string | null, canale?: CanaleAvviso): string => {
+  const prefix = canale === 'donorbox' ? KEY_PREFIX_DONORBOX : KEY_PREFIX;
+  return userId ? `${prefix}_${userId}` : prefix;
+};
 
 export const hasSeenPartnerDisclosure = async (
-  userId?: string | null
+  userId?: string | null,
+  canale: CanaleAvviso = 'letsdonation'
 ): Promise<boolean> => {
-  const key = storageKey(userId);
+  const key = storageKey(userId, canale);
   if (Platform.OS === 'web') {
     return typeof localStorage !== 'undefined'
       ? localStorage.getItem(key) === '1'
@@ -43,9 +56,10 @@ export const hasSeenPartnerDisclosure = async (
 };
 
 export const markPartnerDisclosureSeen = async (
-  userId?: string | null
+  userId?: string | null,
+  canale: CanaleAvviso = 'letsdonation'
 ): Promise<void> => {
-  const key = storageKey(userId);
+  const key = storageKey(userId, canale);
   if (Platform.OS === 'web') {
     if (typeof localStorage !== 'undefined') localStorage.setItem(key, '1');
     return;

@@ -19,17 +19,32 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
- * Schermata onesta pre-redirect verso Let's Donation (goal partner-identita, F1.7d).
- * Avverte che shop/gift card/eventi sono su una piattaforma partner dove serve un
- * account separato — trasparenza (Art.13/14), NON un consenso: mostrata UNA volta
- * per utente (il flag lo gestisce usePartnerExit). "Continua" prosegue l'uscita
- * (col rise_ref), "Annulla" la ferma.
+ * Schermata onesta pre-redirect verso un partner (goal partner-identita, F1.7d).
+ * Trasparenza (Art.13/14), NON un consenso: mostrata UNA volta per utente (il flag
+ * lo gestisce usePartnerExit). "Continua" prosegue l'uscita, "Annulla" la ferma.
+ *
+ * Due varianti, perché i due canali non trasmettono le stesse cose:
+ * - `letsdonation` — esce col solo `rise_ref`, un codice che non dice chi sei.
+ *   L'avviso parla dell'account separato da creare sulla piattaforma partner.
+ * - `donorbox` — l'indirizzo porta NOME, COGNOME ed EMAIL come parametri, e un
+ *   indirizzo finisce nella cronologia del browser e nei log di chi lo riceve.
+ *   Qui l'avviso deve dire *quali* dati partono, e offrire di proseguire senza:
+ *   la precompilazione è una comodità, non un pedaggio per poter donare.
+ *   Era il canale SENZA avviso, mentre l'altro — che manda meno — ce l'aveva.
  */
 
 interface PartnerDisclosureModalProps {
   visible: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  /** Default `letsdonation`: la variante storica, per non cambiarne il comportamento. */
+  variant?: 'letsdonation' | 'donorbox';
+  /**
+   * Prosegue SENZA i dati personali nell'indirizzo. Passato solo dalla variante
+   * `donorbox` e solo quando ci sono davvero dati da omettere: se manca, la
+   * terza scelta non compare.
+   */
+  onConfirmWithoutData?: () => void;
 }
 
 const createStyles = (colors: ThemeColors) =>
@@ -90,17 +105,37 @@ const createStyles = (colors: ThemeColors) =>
       fontWeight: Typography.weights.bold,
       color: colors.neutral[0],
     },
+    withoutDataButton: {
+      marginTop: PerfectSpacing.base,
+      alignItems: 'center',
+    },
+    withoutDataText: {
+      fontWeight: Typography.weights.medium,
+      color: colors.primary[600],
+      textAlign: 'center',
+      textDecorationLine: 'underline',
+    },
   });
 
 const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
   visible,
   onConfirm,
   onCancel,
+  variant = 'letsdonation',
+  onConfirmWithoutData,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   const { t } = useTranslation();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
+
+  const isDonorbox = variant === 'donorbox';
+  const titleKey = isDonorbox
+    ? 'partner.donorboxDisclosureTitle'
+    : 'partner.disclosureTitle';
+  const bodyKey = isDonorbox
+    ? 'partner.donorboxDisclosureBody'
+    : 'partner.disclosureBody';
 
   const handleConfirm = useCallback(async () => {
     await triggerHaptic('medium');
@@ -111,6 +146,11 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
     await triggerHaptic('light');
     onCancel();
   }, [onCancel, triggerHaptic]);
+
+  const handleConfirmWithoutData = useCallback(async () => {
+    await triggerHaptic('light');
+    onConfirmWithoutData?.();
+  }, [onConfirmWithoutData, triggerHaptic]);
 
   return (
     <Modal
@@ -131,10 +171,10 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
             testID="partner-disclosure-content"
           >
             <PerfectText size={22} lines={2} style={styles.title}>
-              {t('partner.disclosureTitle')}
+              {t(titleKey)}
             </PerfectText>
             <PerfectText size={15} lines={12} style={styles.body}>
-              {t('partner.disclosureBody')}
+              {t(bodyKey)}
             </PerfectText>
             <PerfectContainer style={styles.buttonRow}>
               <PlatformTouchable
@@ -160,6 +200,22 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
                 </PerfectText>
               </PlatformTouchable>
             </PerfectContainer>
+            {/* Sotto la riga dei due pulsanti e non dentro: tre bersagli affiancati
+                in un riquadro stretto diventano tutti piccoli, e questo è il testo
+                più lungo dei tre. Compare solo se c'è davvero qualcosa da omettere. */}
+            {onConfirmWithoutData ? (
+              <PlatformTouchable
+                style={styles.withoutDataButton}
+                onPress={handleConfirmWithoutData}
+                accessibilityRole="button"
+                accessibilityLabel={t('partner.donorboxContinueWithoutData')}
+                testID="partner-disclosure-without-data"
+              >
+                <PerfectText size={14} lines={2} style={styles.withoutDataText}>
+                  {t('partner.donorboxContinueWithoutData')}
+                </PerfectText>
+              </PlatformTouchable>
+            ) : null}
           </PerfectContainer>
         </PlatformTouchable>
       </PlatformTouchable>

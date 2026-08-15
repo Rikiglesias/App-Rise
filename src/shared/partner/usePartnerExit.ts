@@ -15,11 +15,18 @@ import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
  * Unico punto in cui il rise_ref viene creato e agganciato all'URL, così i bottoni
  * restano dichiarativi (useActionButtonsData).
  *
- * Due flussi:
+ * Due flussi, ognuno col proprio avviso perché non trasmettono le stesse cose:
  * - Donazione → Donorbox (ospite, nessuna doppia registrazione): ref in utm_content
- *   + prefill anagrafico. Nessuna schermata onesta.
+ *   + prefill anagrafico. Quando il prefill porta davvero dati personali (nome,
+ *   cognome, email finiscono NELL'INDIRIZZO), un avviso lo dice prima di uscire e
+ *   offre di proseguire senza: la precompilazione è una comodità, non un pedaggio.
+ *   Senza dati da dichiarare l'uscita resta immediata.
  * - Shop/gift card/eventi/progetti/community → Let's Donation (doppia registrazione):
- *   schermata onesta UNA VOLTA per utente, poi ref in rise_ref su OGNI uscita.
+ *   esce col solo `rise_ref`, un codice che non dice chi sei; la sua schermata onesta
+ *   parla dell'account separato. UNA VOLTA per utente, poi ref su OGNI uscita.
+ *
+ * I due flag «già visto» sono SEPARATI: gli avvisi dicono cose diverse, quindi aver
+ * letto l'uno non vale per l'altro.
  *
  * Il ref è best-effort: se manca (ospite, o errore DB) l'URL parte comunque senza
  * correlazione — l'uscita non si blocca mai per colpa del ref.
@@ -49,6 +56,15 @@ export interface UsePartnerExitReturn {
   isExiting: boolean;
   /** La schermata onesta è visibile (uscita Let's Donation in attesa di conferma). */
   disclosureVisible: boolean;
+  /**
+   * L'avviso pre-donazione è visibile: l'indirizzo Donorbox porterebbe nome,
+   * cognome ed email, e la persona deve saperlo prima che parta.
+   */
+  donorboxDisclosureVisible: boolean;
+  /** Scelta sull'avviso pre-donazione: con la precompilazione, o senza. */
+  confirmDonorboxDisclosure: (conDati: boolean) => Promise<void>;
+  /** Chiude l'avviso pre-donazione senza uscire (e senza marcarlo come letto). */
+  cancelDonorboxDisclosure: () => void;
   /** Uscita donazione → Donorbox (nessuna schermata onesta). */
   openDonation: () => Promise<void>;
   /** Uscita Let's Donation: mostra la schermata onesta la prima volta, poi va dritto. */
@@ -79,6 +95,16 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
   // seconda volta. La guardia sta qui, nell'hook che conosce lo stato, e non
   // nella UI: così vale per ogni chiamante senza doverla ricordare a ognuno.
   const uscitaInCorso = useRef(false);
+
+  // Avviso pre-uscita verso Donorbox: i due indirizzi (con e senza i dati) sono
+  // già pronti quando l'avviso compare, così la scelta apre subito senza rifare
+  // i viaggi di rete che li hanno costruiti.
+  const [donorboxDisclosureVisible, setDonorboxDisclosureVisible] =
+    useState(false);
+  const [pendingDonation, setPendingDonation] = useState<{
+    conDati: string;
+    senzaDati: string;
+  } | null>(null);
 
   const userId = session?.user?.id ?? null;
 
@@ -125,6 +151,28 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
               }),
             }
           : {};
+      // Se nell'indirizzo finiscono dati personali, la persona lo sa PRIMA che
+      // parta: nome, cognome ed email viaggiano come parametri, e un indirizzo
+      // resta nella cronologia del browser e nei log di chi lo riceve. Finora
+      // l'avviso stava sull'ALTRO canale, che manda solo un codice anonimo.
+      // Niente dati (ospite, consenso non ok, profilo assente) → nessun avviso:
+      // non c'è nulla da dichiarare e l'uscita resta immediata com'era.
+      const haDatiPersonali = Boolean(
+        prefill.firstName || prefill.lastName || prefill.email
+      );
+      if (
+        haDatiPersonali &&
+        !(await hasSeenPartnerDisclosure(userId, 'donorbox'))
+      ) {
+        // Entrambi gli indirizzi si preparano ORA, mentre il prefill è in mano:
+        // la scelta della persona non deve far ripartire i viaggi di rete.
+        setPendingDonation({
+          conDati: buildDonorboxDonationUrl(ref, prefill),
+          senzaDati: buildDonorboxDonationUrl(ref, {}),
+        });
+        setDonorboxDisclosureVisible(true);
+        return;
+      }
       const url = buildDonorboxDonationUrl(ref, prefill);
       await openLink(
         url,
@@ -136,6 +184,10 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       setIsExiting(false);
     }
   }, [
+    // `userId` serve al flag «avviso già visto», che è scopato per persona: senza
+    // di lui la closure resterebbe legata all'utente di prima e, dopo un cambio
+    // account sullo stesso telefono, leggerebbe il flag di qualcun altro.
+    userId,
     openLink,
     profile,
     session,
@@ -143,6 +195,35 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     consentState,
     refreshConsent,
   ]);
+
+  /**
+   * La persona ha scelto: `conDati` true prosegue con la precompilazione, false
+   * apre lo stesso indirizzo senza nome, cognome ed email.
+   *
+   * L'avviso si marca come visto in ENTRAMBI i casi — è trasparenza (Art.13),
+   * non un consenso da riraccogliere ogni volta — ma NON se la persona annulla:
+   * chi chiude senza scegliere non l'ha letto, e deve rivederlo.
+   */
+  const confirmDonorboxDisclosure = useCallback(
+    async (conDati: boolean) => {
+      const scelto = pendingDonation;
+      setDonorboxDisclosureVisible(false);
+      setPendingDonation(null);
+      if (!scelto) return;
+      await markPartnerDisclosureSeen(userId, 'donorbox');
+      await openLink(
+        conDati ? scelto.conDati : scelto.senzaDati,
+        'donation',
+        'Impossibile aprire il link di donazione. Riprova più tardi.'
+      );
+    },
+    [pendingDonation, userId, openLink]
+  );
+
+  const cancelDonorboxDisclosure = useCallback((): void => {
+    setDonorboxDisclosureVisible(false);
+    setPendingDonation(null);
+  }, []);
 
   const exitLetsDonation = useCallback(
     async (url: string, loadingKey: string, errorMessage?: string) => {
@@ -194,9 +275,12 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     isLoading,
     isExiting,
     disclosureVisible,
+    donorboxDisclosureVisible,
     openDonation,
     openLetsDonationExit,
     confirmDisclosure,
     cancelDisclosure,
+    confirmDonorboxDisclosure,
+    cancelDonorboxDisclosure,
   };
 };
