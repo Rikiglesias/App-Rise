@@ -22,12 +22,20 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   // Configurazione per evitare che Jest rimanga appeso
   testTimeout: 10000,
+  // Soglie a RIDOSSO della copertura reale, non 30-40 punti sotto.
+  // Misurato il 2026-08-15: statements 76.86 · branches 67.43 · functions 67.29 ·
+  // lines 78.36. Con i valori precedenti (25/35/40/40) si poteva DIMEZZARE la
+  // copertura e il gate restava verde: una soglia così lontana dal vero non
+  // protegge da niente, dà solo l'impressione di farlo.
+  // Il margine di ~2 punti sotto il valore misurato assorbe le fluttuazioni
+  // normali senza lasciar passare una regressione vera. Vanno rialzate quando la
+  // copertura sale: una soglia si insegue, non si imposta una volta sola.
   coverageThreshold: {
     global: {
-      branches: 25,
-      functions: 35,
-      lines: 40,
-      statements: 40,
+      branches: 65,
+      functions: 65,
+      lines: 76,
+      statements: 74,
     },
   },
   // Module name mapping per alias TypeScript
