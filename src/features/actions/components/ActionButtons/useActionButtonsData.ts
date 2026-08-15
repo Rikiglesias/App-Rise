@@ -22,7 +22,11 @@ export interface ActionButtonsData {
   // Modal "Come donare" (info categorie)
   showInfoModal: boolean;
 
-  /** Un'uscita è in preparazione: il pulsante va disabilitato finché non parte. */
+  /**
+   * Un'uscita è in preparazione. Nessun componente lo legge ancora: il doppio
+   * tocco è già impedito dentro `usePartnerExit`, questo serve a MOSTRARE
+   * l'attesa e va collegato ai pulsanti guardando l'app dal vivo.
+   */
   isExiting: boolean;
 
   // Schermata onesta pre-redirect Let's Donation (F1.7d)

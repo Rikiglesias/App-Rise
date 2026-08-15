@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { getOrCreatePartnerRef } from './partnerRefService';
 import { resolvePrefillEmail } from './partnerEmail';
@@ -36,8 +36,15 @@ export interface UsePartnerExitReturn {
   /**
    * Un'uscita è in preparazione. `useLinkHandler.isLoading` si alza solo
    * all'ULTIMO passo (l'apertura), mentre prima ci sono i viaggi di rete per ref,
-   * profilo e consenso: senza questo, il pulsante resta apparentemente inerte e
-   * ri-toccabile per tutta la pre-flight.
+   * profilo e consenso: senza questo, il pulsante resta apparentemente inerte
+   * per tutta la pre-flight.
+   *
+   * ⚠️ Serve a MOSTRARE l'attesa, non a impedire il doppio tocco: quello è
+   * chiuso dentro l'hook da una guardia su ref (uno `useState` si aggiorna al
+   * render dopo, troppo tardi per due tocchi nello stesso tick). Oggi nessun
+   * componente lo legge, quindi il riscontro visivo al tocco ancora manca —
+   * collegarlo significa passare la proprietà fino ai singoli pulsanti, ed è da
+   * fare quando l'app si guarda dal vivo, non a occhi chiusi da qui.
    */
   isExiting: boolean;
   /** La schermata onesta è visibile (uscita Let's Donation in attesa di conferma). */
@@ -64,9 +71,20 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
   const [isExiting, setIsExiting] = useState(false);
   const [pending, setPending] = useState<PendingExit | null>(null);
 
+  // Un'uscita alla volta. Serve un ref e NON `isExiting`: lo stato si aggiorna al
+  // render successivo, quindi due tocchi ravvicinati nello stesso tick lo
+  // leggerebbero entrambi `false` e partirebbero tutti e due. Prima di questa
+  // guardia il pulsante restava ri-toccabile per l'intera pre-flight (tre viaggi
+  // di rete: ref, profilo, consenso) e il secondo tocco apriva il browser una
+  // seconda volta. La guardia sta qui, nell'hook che conosce lo stato, e non
+  // nella UI: così vale per ogni chiamante senza doverla ricordare a ognuno.
+  const uscitaInCorso = useRef(false);
+
   const userId = session?.user?.id ?? null;
 
   const openDonation = useCallback(async () => {
+    if (uscitaInCorso.current) return;
+    uscitaInCorso.current = true;
     setIsExiting(true);
     try {
       const ref = await getOrCreatePartnerRef('donorbox');
@@ -114,6 +132,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         'Impossibile aprire il link di donazione. Riprova più tardi.'
       );
     } finally {
+      uscitaInCorso.current = false;
       setIsExiting(false);
     }
   }, [
@@ -127,11 +146,16 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
 
   const exitLetsDonation = useCallback(
     async (url: string, loadingKey: string, errorMessage?: string) => {
+      // Stessa guardia dell'uscita donazione: è l'altro pulsante che apre un
+      // partner dopo un viaggio di rete, quindi ha lo stesso doppio tocco.
+      if (uscitaInCorso.current) return;
+      uscitaInCorso.current = true;
       setIsExiting(true);
       try {
         const ref = await getOrCreatePartnerRef('letsdonation');
         await openLink(appendRiseRef(url, ref), loadingKey, errorMessage);
       } finally {
+        uscitaInCorso.current = false;
         setIsExiting(false);
       }
     },

@@ -75,16 +75,18 @@ const setAuth = (over: {
   });
 };
 
-describe('usePartnerExit', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockUseLinkHandler.mockReturnValue({
-      openLink: mockOpenLink,
-      isLoading: null,
-    });
-    mockMarkSeen.mockResolvedValue(undefined);
+// Setup comune ai blocchi qui sotto: sta al livello del file perché i casi sono
+// divisi in due `describe` (il primo aveva superato il tetto di righe per funzione).
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockUseLinkHandler.mockReturnValue({
+    openLink: mockOpenLink,
+    isLoading: null,
   });
+  mockMarkSeen.mockResolvedValue(undefined);
+});
 
+describe('usePartnerExit', () => {
   it('openDonation → Donorbox con ref in utm_content e prefill anagrafico', async () => {
     setAuth({ userId: 'u1', email: 'mario@gmail.com' });
     mockGetOrCreate.mockResolvedValue('DREF');
@@ -311,5 +313,43 @@ describe('usePartnerExit', () => {
 
     expect(result.current.disclosureVisible).toBe(false);
     expect(mockOpenLink).not.toHaveBeenCalled();
+  });
+});
+
+// Il pulsante resta toccabile per tutta la pre-flight (ref, profilo, consenso:
+// tre viaggi di rete), quindi due tocchi ravvicinati sono uno scenario reale e
+// aprivano il browser due volte. I due tocchi partono SENZA attendere il primo —
+// è il caso che conta: aspettarlo proverebbe una cosa diversa.
+describe('usePartnerExit — doppio tocco', () => {
+  it('due tocchi ravvicinati su «Dona» → una sola uscita', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await Promise.all([
+        result.current.openDonation(),
+        result.current.openDonation(),
+      ]);
+    });
+
+    expect(mockOpenLink).toHaveBeenCalledTimes(1);
+    expect(mockGetOrCreate).toHaveBeenCalledTimes(1);
+  });
+
+  it('due tocchi ravvicinati su un’uscita Let’s Donation → una sola uscita', async () => {
+    setAuth({ userId: 'u1', email: 'a@b.it' });
+    mockHasSeen.mockResolvedValue(true);
+    mockGetOrCreate.mockResolvedValue('LREF');
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await Promise.all([
+        result.current.openLetsDonationExit(SHOP_URL, 'shop'),
+        result.current.openLetsDonationExit(SHOP_URL, 'shop'),
+      ]);
+    });
+
+    expect(mockOpenLink).toHaveBeenCalledTimes(1);
   });
 });
