@@ -5,7 +5,7 @@ import { type Deps, handler } from './index.ts';
 interface FakeAdmin {
   auth: {
     getUser: (
-      jwt: string
+      jwt: string,
     ) => Promise<{ data: { user: unknown }; error: unknown }>;
     admin: { deleteUser: (id: string) => Promise<{ error: unknown }> };
   };
@@ -22,12 +22,10 @@ function buildDeps(opts: {
       error: opts.getUserError ?? null,
     })
   );
-  const deleteUser = spy((_id: string) =>
-    Promise.resolve({ error: opts.deleteUserError ?? null })
-  );
+  const deleteUser = spy((_id: string) => Promise.resolve({ error: opts.deleteUserError ?? null }));
   const fake: FakeAdmin = { auth: { getUser, admin: { deleteUser } } };
   const createAdmin = spy(
-    () => fake as unknown as ReturnType<Deps['createAdmin']>
+    () => fake as unknown as ReturnType<Deps['createAdmin']>,
   );
   const deps: Deps = { createAdmin };
   return { deps, getUser, deleteUser, createAdmin };
@@ -47,14 +45,14 @@ Deno.test('OPTIONS -> 200 ok + CORS, nessun side-effect', async () => {
   const { deps, createAdmin, getUser, deleteUser } = buildDeps({});
   const res = await handler(
     new Request('http://x', { method: 'OPTIONS' }),
-    deps
+    deps,
   );
   assertEquals(res.status, 200);
   assertEquals(await res.text(), 'ok');
   assertEquals(res.headers.get('Access-Control-Allow-Origin'), '*');
   assertEquals(
     res.headers.get('Access-Control-Allow-Methods'),
-    'POST, OPTIONS'
+    'POST, OPTIONS',
   );
   assertSpyCalls(createAdmin, 0);
   assertSpyCalls(getUser, 0);
@@ -85,21 +83,21 @@ Deno.test(
     });
     const res = await handler(
       post('{}', { 'Content-Type': 'application/json' }),
-      deps
+      deps,
     );
     assertEquals(res.status, 401);
     assertEquals((await res.json()).error, 'unauthorized');
     assertSpyCalls(getUser, 1);
     assertEquals(getUser.calls[0].args[0], 'tok');
     assertSpyCalls(deleteUser, 0);
-  }
+  },
 );
 
 Deno.test('getUser user null senza error -> 401, no delete', async () => {
   const { deps, deleteUser } = buildDeps({ user: null });
   const res = await handler(
     post('{}', { 'Content-Type': 'application/json' }),
-    deps
+    deps,
   );
   assertEquals(res.status, 401);
   assertSpyCalls(deleteUser, 0);
@@ -125,13 +123,13 @@ Deno.test(
       post(JSON.stringify({ appleAuthCode: 'CODE123' }), {
         'Content-Type': 'application/json',
       }),
-      deps
+      deps,
     );
     assertEquals(res.status, 200);
     assertEquals(await res.json(), { ok: true });
     assertSpyCalls(deleteUser, 1);
     assertEquals(deleteUser.calls[0].args[0], 'u2');
-  }
+  },
 );
 
 // Stesso principio con un corpo non parsabile: nessuna lettura del body deve
@@ -140,7 +138,7 @@ Deno.test('body non-JSON -> ignorato, cancellazione riuscita', async () => {
   const { deps, deleteUser } = buildDeps({ user: emailUser });
   const res = await handler(
     post('non-json{{', { 'Content-Type': 'application/json' }),
-    deps
+    deps,
   );
   assertEquals(res.status, 200);
   assertEquals((await res.json()).ok, true);
@@ -175,7 +173,7 @@ Deno.test('happy path identities undefined -> 200 { ok: true }', async () => {
   const { deps, deleteUser } = buildDeps({ user: { id: 'u3' } });
   const res = await handler(
     post(JSON.stringify({}), { 'Content-Type': 'application/json' }),
-    deps
+    deps,
   );
   assertEquals(res.status, 200);
   assertEquals(await res.json(), { ok: true });

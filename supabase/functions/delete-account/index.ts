@@ -36,7 +36,7 @@ function defaultAdmin(): SupabaseClient {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     {
       auth: { autoRefreshToken: false, persistSession: false },
-    }
+    },
   );
 }
 
@@ -44,7 +44,7 @@ const DEFAULT_DEPS: Deps = { createAdmin: defaultAdmin };
 
 export async function handler(
   req: Request,
-  deps: Deps = DEFAULT_DEPS
+  deps: Deps = DEFAULT_DEPS,
 ): Promise<Response> {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
@@ -73,4 +73,4 @@ export async function handler(
   return json({ ok: true }, 200);
 }
 
-Deno.serve(req => handler(req));
+Deno.serve((req) => handler(req));

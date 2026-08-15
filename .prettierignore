@@ -30,3 +30,9 @@ eslint-*.json
 # in migliaia di righe senza alcun guadagno, e il prossimo `node scripts/gen-comuni.mjs`
 # li riscriverebbe comunque su una riga sola.
 src/shared/data/comuni-min.json
+# Supabase Edge Functions: dominio Deno, non Node. Il loro formattatore è `deno fmt`
+# (config in supabase/functions/deno.json: singleQuote + lineWidth 100) e la CI
+# `.github/workflows/edge-functions-test.yml` lo verifica con `deno fmt --check`.
+# Passarci Prettier sopra fa litigare i due formattatori: è già successo il 2026-08-15,
+# la CI ha respinto la PR #136 con «Found 4 not formatted files in 5 files».
+supabase/functions/
