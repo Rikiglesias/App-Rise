@@ -10,10 +10,21 @@
  * ✅ Conformità WCAG 2.1 (Web Content Accessibility Guidelines)
  *
  * COSA LIMITA:
- * ⚠️ Scaling eccessivo (max 1.3x per prevenire layout rotti)
+ * ⚠️ Scaling eccessivo: il tetto è `MAX_FONT_SCALE`, che di default vale **2.0**
+ *    (non 1.3, come diceva questa riga fino al 2026-08-15 — due numeri diversi
+ *    nello stesso file, e questo era quello sbagliato).
  * ⚠️ Pixel ratio inconsistente (mantiene riferimento iPhone 15)
  *
- * RISULTATO: App accessibile ma layout stabile
+ * ⚠️ ATTENZIONE, comportamento non ovvio: `getImmuneTextProps` accende lo scaling
+ * solo QUANDO l'ingrandimento di sistema SUPERA `fontScaleUnlockThreshold` (default
+ * 1.3). Sotto quella soglia il testo resta identico: chi imposta 1.1x o 1.2x —
+ * l'ingrandimento più comune — non vede alcun cambiamento. È una scelta esplicita
+ * (vedi il commento sulla soglia), non un difetto accidentale, ma convive male con
+ * il «RISPETTA font scaling utente» dichiarato qui sopra e con WCAG 1.4.4, che
+ * chiede testo ridimensionabile fino al 200%. Cambiarla tocca OGNI schermata:
+ * va decisa guardando l'app dal vivo, non da qui.
+ *
+ * RISULTATO: App accessibile SOPRA la soglia, layout stabile sotto.
  */
 
 import { PixelRatio, Platform } from 'react-native';
@@ -145,8 +156,11 @@ export const getImmuneTextProps = () => {
     // ✅ RISPETTA font scaling sistema (accessibilità)
     allowFontScaling: allowScaling,
 
-    // ⚠️ LIMITA moltiplicatore a 1.3x (stabilità layout)
-    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE, // = 1.3
+    // ⚠️ Tetto al moltiplicatore, per la stabilità del layout. NON è 1.3: il
+    // default di `MAX_FONT_SCALE` è 2.0 (`getConfiguredMaxFontScale`), e si
+    // configura da `extra.maxFontScale` o da `EXPO_PUBLIC_MAX_FONT_SCALE`.
+    // 1.3 è l'ALTRA soglia — quella sotto cui lo scaling non si accende affatto.
+    maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE,
 
     // Proprietà aggiuntive per stabilità Perfect System
     adjustsFontSizeToFit: false, // Disabilita auto-fit nativo (PerfectText lo gestisce)
