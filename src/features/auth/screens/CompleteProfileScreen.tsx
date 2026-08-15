@@ -58,11 +58,17 @@ export const CompleteProfileScreen: React.FC = () => {
   // Qui «Esci» è una delle DUE sole vie d'uscita dal passaggio obbligato: se fallisce
   // in silenzio la persona resta chiusa dentro senza sapere perché, e l'unico gesto che
   // le resta è disinstallare l'app. L'errore va detto.
+  // Il `.catch` non è ridondante: la sessione vive in SecureStore spezzata in blocchi
+  // e un errore di quello storage fa RIGETTARE la promessa invece di tornare `{error}`.
+  // Qui pesa il doppio: senza messaggio la persona resta chiusa nel passaggio
+  // obbligato senza sapere perché.
   const handleLogout = useCallback((): void => {
     setLogoutError(undefined);
-    void signOut().then(({ error }) => {
-      if (error) setLogoutError(t('auth.profile.logoutError'));
-    });
+    void signOut()
+      .then(({ error }) => {
+        if (error) setLogoutError(t('auth.profile.logoutError'));
+      })
+      .catch(() => setLogoutError(t('auth.profile.logoutError')));
   }, [signOut, t]);
 
   const handleDeleteAccount = useCallback((): void => {

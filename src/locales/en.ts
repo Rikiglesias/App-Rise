@@ -154,6 +154,10 @@ export default {
       banner: 'Deletion scheduled for',
       bannerCancel: 'Cancel deletion',
       error: 'Operation failed. Please try again.',
+      // The data really was deleted: only the sign-out on this phone is missing,
+      // so the wording must not suggest the deletion failed.
+      sessionResidua:
+        'Account deleted. We could not close the session on this phone: please sign out manually from your profile.',
     },
     consents: {
       title: 'Consents',

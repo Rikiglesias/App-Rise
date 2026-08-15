@@ -50,11 +50,18 @@ export const ProfileScreen: React.FC = () => {
   // lasciarle credere di essere uscita, che su un telefono condiviso è la bugia
   // peggiore che l'app possa dire. Quando riesce, non si mostra nulla: la schermata
   // sparisce da sé perché l'albero di navigazione cambia.
+  // Il `.catch` non è ridondante: la sessione vive in SecureStore spezzata in blocchi
+  // (`supabaseClient.ts` → `authStorage`), e un errore di quello storage fa RIGETTARE
+  // la promessa invece di tornare `{error}`. Senza questo ramo non comparirebbe nessun
+  // messaggio e resterebbe una promessa rifiutata a vuoto — cioè esattamente il caso
+  // che questo fix esiste per eliminare, ricreato un livello più in là.
   const handleLogout = useCallback((): void => {
     setLogoutError(undefined);
-    void signOut().then(({ error }) => {
-      if (error) setLogoutError(t('auth.profile.logoutError'));
-    });
+    void signOut()
+      .then(({ error }) => {
+        if (error) setLogoutError(t('auth.profile.logoutError'));
+      })
+      .catch(() => setLogoutError(t('auth.profile.logoutError')));
   }, [signOut, t]);
   const handleCompleteProfile = useCallback(
     (): void => navigation.navigate('CompleteProfile'),

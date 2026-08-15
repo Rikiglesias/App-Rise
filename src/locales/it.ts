@@ -167,6 +167,10 @@ export default {
       banner: 'Eliminazione programmata il',
       bannerCancel: 'Annulla eliminazione',
       error: 'Operazione non riuscita. Riprova.',
+      // I dati sono stati cancellati davvero: qui manca solo l'uscita sul telefono,
+      // quindi il testo NON deve far credere che la cancellazione sia fallita.
+      sessionResidua:
+        'Account eliminato. Non siamo riusciti a chiudere la sessione su questo telefono: esci a mano dal profilo.',
     },
     consents: {
       title: 'Consensi',

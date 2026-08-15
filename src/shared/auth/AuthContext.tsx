@@ -79,7 +79,17 @@ export interface AuthState {
   /** Cambia l'email dell'account (secure email change Supabase: conferma su vecchia+nuova casella). */
   updateEmail: (email: string) => Promise<{ error: string | null }>;
   /** Cancellazione immediata via Edge Function (GDPR Art.17). */
-  deleteAccountNow: () => Promise<{ error: string | null }>;
+  /**
+   * Cancella l'account adesso. `error` riguarda la CANCELLAZIONE; se resta null ma
+   * `sessioneAncoraSulDispositivo` è vero, i dati sono stati eliminati davvero e il
+   * telefono non è però riuscito a dimenticare la sessione (vedi il corpo della
+   * funzione): il chiamante deve dirlo, altrimenti l'app sembra ancora connessa a un
+   * account che non esiste più.
+   */
+  deleteAccountNow: () => Promise<{
+    error: string | null;
+    sessioneAncoraSulDispositivo?: boolean;
+  }>;
   /** Programma la cancellazione a +30gg (grace period recuperabile). */
   scheduleDeletion: () => Promise<{ error: string | null }>;
   /** Annulla una cancellazione programmata. */
@@ -367,13 +377,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       body: {},
     });
     if (error) return { error: error.message };
+
     // Uscita LOCALE, non globale: l'account a questo punto non esiste più, e il
     // signOut globale chiede al server di revocare le sessioni di un utente
     // cancellato — chiamata che fallisce lasciando la sessione sul dispositivo
-    // (supabase/auth#1550). La cancellazione è già riuscita: qui serve solo che il
-    // telefono si dimentichi la sessione, e `local` lo fa senza dipendere dal server.
-    await supabase.auth.signOut({ scope: 'local' });
-    return { error: null };
+    // (supabase/auth#1550).
+    //
+    // Ma `local` NON evita la rete: nella libreria installata (@supabase/auth-js,
+    // GoTrueClient.js:3337-3352) anche lo scope locale chiama `admin.signOut`, e se
+    // l'errore non è 401/403/404 — per esempio la rete che cade subito dopo la
+    // cancellazione riuscita — la funzione ritorna l'errore SALTANDO
+    // `_removeSession()`. Il risultato sarebbe la sessione di un account che non
+    // esiste più lasciata sul telefono, mentre qui si risponde «tutto a posto».
+    // Per questo l'esito si LEGGE e si riporta: `error` resta null perché la
+    // cancellazione è davvero riuscita — dire il contrario allarmerebbe per un dato
+    // ormai eliminato — ma `sessioneAncoraSulDispositivo` dice al chiamante che il
+    // telefono non ha dimenticato la sessione, così può portare fuori la persona
+    // invece di lasciarla in un'app che sembra ancora connessa a un account che non
+    // esiste più. Ritentare la stessa chiamata non servirebbe: se è caduta la rete
+    // cadrebbe di nuovo, e toccare a mano la chiave interna dello storage legherebbe
+    // il nostro codice a un dettaglio non documentato della libreria.
+    const { error: erroreUscita } = await supabase.auth.signOut({
+      scope: 'local',
+    });
+    return { error: null, sessioneAncoraSulDispositivo: Boolean(erroreUscita) };
   }, []);
 
   const scheduleDeletion = useCallback(async () => {
