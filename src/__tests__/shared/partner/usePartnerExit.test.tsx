@@ -7,6 +7,8 @@ import { getOrCreatePartnerRef } from '@/shared/partner/partnerRefService';
 import {
   hasSeenPartnerDisclosure,
   markPartnerDisclosureSeen,
+  hasOptedOutOfPrefill,
+  setPrefillOptOut,
 } from '@/shared/partner/disclosureFlag';
 
 // Auth, link handler, service e flag mockati; partnerUrls/partnerEmail restano REALI
@@ -21,6 +23,8 @@ jest.mock('@/shared/partner/partnerRefService', () => ({
 jest.mock('@/shared/partner/disclosureFlag', () => ({
   hasSeenPartnerDisclosure: jest.fn(),
   markPartnerDisclosureSeen: jest.fn(),
+  hasOptedOutOfPrefill: jest.fn(),
+  setPrefillOptOut: jest.fn(),
 }));
 
 const mockUseAuth = useAuth as jest.Mock;
@@ -28,6 +32,8 @@ const mockUseLinkHandler = useLinkHandler as jest.Mock;
 const mockGetOrCreate = getOrCreatePartnerRef as jest.Mock;
 const mockHasSeen = hasSeenPartnerDisclosure as jest.Mock;
 const mockMarkSeen = markPartnerDisclosureSeen as jest.Mock;
+const mockHasOptedOut = hasOptedOutOfPrefill as jest.Mock;
+const mockSetOptOut = setPrefillOptOut as jest.Mock;
 const mockOpenLink = jest.fn();
 
 const SHOP_URL = 'https://x.letsdonation.com/charity/ecommerce';
@@ -84,6 +90,9 @@ beforeEach(() => {
     isLoading: null,
   });
   mockMarkSeen.mockResolvedValue(undefined);
+  // Default: nessuna rinuncia registrata. I casi che la esercitano lo dicono.
+  mockHasOptedOut.mockResolvedValue(false);
+  mockSetOptOut.mockResolvedValue(undefined);
 });
 
 /**
@@ -482,5 +491,98 @@ describe('usePartnerExit — avviso prima di Donorbox', () => {
     // Marcato sul canale donorbox, non su quello storico: chi ha già visto
     // l'avviso di Let's Donation deve comunque vedere questo, che dice altro.
     expect(mockMarkSeen).toHaveBeenCalledWith('u1', 'donorbox');
+  });
+});
+
+// I due difetti che il critico ha trovato nel lavoro appena fatto: la rinuncia
+// valeva una volta sola, e il flag «già visto» veniva controllato senza guardare
+// il canale. Entrambi rendevano vero il contrario di ciò che l'avviso prometteva.
+describe('usePartnerExit — la rinuncia ai dati deve RESTARE', () => {
+  it('«senza i miei dati» registra la scelta, non solo quella volta', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+    await confermaAvvisoDonorbox(result, false);
+
+    expect(mockSetOptOut).toHaveBeenCalledWith('u1', true);
+  });
+
+  it('chi ha rinunciato non rivede i propri dati partire', async () => {
+    // La volta DOPO: l'avviso è già visto e non ricompare — ed è proprio per
+    // questo che senza la memoria della scelta i dati sarebbero ripartiti in
+    // silenzio, cioè il contrario di quanto la persona aveva chiesto.
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(true);
+    mockHasOptedOut.mockResolvedValue(true);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    const [url] = mockOpenLink.mock.calls[0];
+    expect(url).not.toContain('first_name=');
+    expect(url).not.toContain('last_name=');
+    expect(url).not.toContain('email=');
+    expect(url).toContain('utm_content=DREF');
+  });
+
+  it('ripensarci: scegliere «continua» azzera la rinuncia', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+    await confermaAvvisoDonorbox(result, true);
+
+    expect(mockSetOptOut).toHaveBeenCalledWith('u1', false);
+  });
+
+  it('il flag si LEGGE per canale, non solo si scrive', async () => {
+    // Il test precedente controllava solo la scrittura: togliendo 'donorbox' dalla
+    // LETTURA restava verde, ma chi aveva già confermato un'uscita Let's Donation
+    // non vedeva l'avviso e i suoi dati partivano senza dichiarazione.
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockImplementation(
+      (_u: string, canale?: string) => canale === 'letsdonation'
+    );
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    expect(mockHasSeen).toHaveBeenCalledWith('u1', 'donorbox');
+    expect(result.current.donorboxDisclosureVisible).toBe(true);
+    expect(mockOpenLink).not.toHaveBeenCalled();
+  });
+
+  it('due tocchi su «Continua» → una sola apertura', async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+    await act(async () => {
+      await Promise.all([
+        result.current.confirmDonorboxDisclosure(true),
+        result.current.confirmDonorboxDisclosure(true),
+      ]);
+    });
+
+    expect(mockOpenLink).toHaveBeenCalledTimes(1);
   });
 });

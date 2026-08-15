@@ -41,9 +41,23 @@ export const DeleteAccountScreen: React.FC = () => {
     setLoading(true);
     // Nessun passaggio intermedio: con il login social rimosso non esiste più il
     // re-login Apple che serviva a ottenere l'authorizationCode per la revoca.
-    const { error: err, sessioneAncoraSulDispositivo } =
-      await deleteAccountNow();
-    setLoading(false);
+    //
+    // `try/finally`: questa promessa può RIGETTARE, non solo tornare `{error}` —
+    // la sessione vive in SecureStore e un errore di quello storage fa rilanciare
+    // la libreria (stesso motivo per cui ProfileScreen ha un `.catch` sull'uscita).
+    // Senza il `finally`, `setLoading(false)` non sarebbe mai arrivato: rotella che
+    // gira all'infinito, nessun messaggio, e per giunta DOPO che l'account è già
+    // stato cancellato.
+    let esito: Awaited<ReturnType<typeof deleteAccountNow>> | null = null;
+    try {
+      esito = await deleteAccountNow();
+    } catch {
+      setError(t('auth.delete.error'));
+      return;
+    } finally {
+      setLoading(false);
+    }
+    const { error: err, sessioneAncoraSulDispositivo } = esito;
     if (err) {
       setError(t('auth.delete.error'));
       return;
@@ -60,8 +74,17 @@ export const DeleteAccountScreen: React.FC = () => {
   const runSchedule = useCallback(async (): Promise<void> => {
     setError(undefined);
     setLoading(true);
-    const { error: err } = await scheduleDeletion();
-    setLoading(false);
+    // Stesso motivo del gemello qui sopra: se la promessa rigetta, senza il
+    // `finally` la rotella resterebbe a girare senza dire niente.
+    let err: string | null = null;
+    try {
+      ({ error: err } = await scheduleDeletion());
+    } catch {
+      setError(t('auth.delete.error'));
+      return;
+    } finally {
+      setLoading(false);
+    }
     if (err) setError(t('auth.delete.error'));
     else navigation.goBack();
   }, [scheduleDeletion, navigation, t]);

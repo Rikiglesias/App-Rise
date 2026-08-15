@@ -92,7 +92,51 @@ describe('AuthContext', () => {
     expect(supabase.functions.invoke).toHaveBeenCalledWith('delete-account', {
       body: {},
     });
-    expect(supabase.auth.signOut).toHaveBeenCalled();
+    // Lo SCOPE è il punto, non il fatto che signOut sia stato chiamato: `global`
+    // chiederebbe al server di revocare le sessioni di un account che non esiste
+    // più (supabase/auth#1550), lasciando la sessione sul telefono. Senza questo
+    // assert, togliere `{ scope: 'local' }` lasciava la suite verde.
+    expect(supabase.auth.signOut).toHaveBeenCalledWith({ scope: 'local' });
+  });
+});
+
+// Blocco fratello: il primo `describe` aveva superato il tetto di righe per
+// funzione. Qui stanno le prove dei due fix che nessun test proteggeva.
+describe('AuthContext — uscita e sessione residua', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRef = undefined;
+  });
+
+  // Il fix «Esci usciva da TUTTI i dispositivi» non era protetto da nulla: l'unico
+  // controllo era che signOut fosse stato chiamato, e la stringa `scope` non
+  // compariva in tutta la cartella dei test. Chi esce dal telefono non si aspetta
+  // di cadere fuori anche dal tablet.
+  it('signOut esce da QUESTO dispositivo, non da tutti', async () => {
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    await act(async () => {
+      await getAuth().signOut();
+    });
+    expect(supabase.auth.signOut).toHaveBeenCalledWith({ scope: 'local' });
+  });
+
+  // Il ramo `sessioneAncoraSulDispositivo`: i dati sono stati cancellati davvero,
+  // ma il telefono non ha dimenticato la sessione. Senza questo test, sostituire il
+  // valore con `false` lasciava tutto verde e l'app tornava a dichiarare «tutto a
+  // posto» mostrando un account che non esiste più.
+  it('cancellazione riuscita ma uscita fallita → lo segnala al chiamante', async () => {
+    (supabase.auth.signOut as jest.Mock).mockResolvedValueOnce({
+      error: { message: 'network down' },
+    });
+    const { getByText } = renderAuth();
+    await waitFor(() => getByText('unauthenticated'));
+    await act(async () => {
+      const res = await getAuth().deleteAccountNow();
+      // `error` resta null: la cancellazione È riuscita, allarmare sarebbe falso.
+      expect(res.error).toBeNull();
+      expect(res.sessioneAncoraSulDispositivo).toBe(true);
+    });
   });
 
   // Il gemello di questo test verificava l'inoltro dell'appleAuthCode. Con il

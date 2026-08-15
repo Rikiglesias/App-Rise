@@ -40,9 +40,11 @@ interface PartnerDisclosureModalProps {
   /** Default `letsdonation`: la variante storica, per non cambiarne il comportamento. */
   variant?: 'letsdonation' | 'donorbox';
   /**
-   * Prosegue SENZA i dati personali nell'indirizzo. Passato solo dalla variante
-   * `donorbox` e solo quando ci sono davvero dati da omettere: se manca, la
-   * terza scelta non compare.
+   * Prosegue SENZA i dati personali nell'indirizzo. Lo passa la variante
+   * `donorbox`; che ci siano davvero dati da omettere lo garantisce la
+   * VISIBILITÀ del riquadro, perché `donorboxDisclosureVisible` si alza solo
+   * quando il prefill non è vuoto (`usePartnerExit`). Se il prop manca, la terza
+   * scelta non compare — ed è così che resta fuori dalla variante Let's Donation.
    */
   onConfirmWithoutData?: () => void;
 }
