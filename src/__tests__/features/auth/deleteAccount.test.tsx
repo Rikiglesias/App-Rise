@@ -101,10 +101,18 @@ const profileWithDeletion: Profile = {
 const wrap = (ui: React.ReactElement) =>
   render(<AllProviders>{ui}</AllProviders>);
 
+// A livello di FILE e non dentro il primo `describe`: la variabile è di modulo, e
+// azzerandola solo lì i blocchi successivi ereditavano il valore lasciato
+// dall'ultimo test precedente. Oggi regge per ordine di esecuzione, ma basterebbe
+// un `test.only`, `--randomize` o un test nuovo in coda per farli girare con la
+// leva ACCESA senza che nulla diventi rosso.
+beforeEach(() => {
+  mockCancellazioneProgrammataAttiva = false;
+});
+
 describe('DeleteAccountScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockCancellazioneProgrammataAttiva = false;
   });
 
   // Nessuno esegue l'eliminazione differita (`pg_cron` non è installato in
@@ -215,7 +223,11 @@ describe('ProfileScreen (autenticato)', () => {
     expect(getByText('Elimina account')).toBeTruthy();
   });
 
+  // Il banner esiste solo se la cancellazione differita è offerta: dietro la stessa
+  // costante del pulsante, altrimenti resterebbe l'ultima riga dell'app a dire
+  // «eliminazione programmata il <data>» per una cancellazione che nessuno esegue.
   it('mostra il banner di cancellazione programmata con annulla', () => {
+    mockCancellazioneProgrammataAttiva = true;
     mockUseAuth.mockReturnValue(makeAuth({ profile: profileWithDeletion }));
     const { getByText } = wrap(<ProfileScreen />);
     expect(getByText('Annulla eliminazione')).toBeTruthy();
@@ -225,6 +237,7 @@ describe('ProfileScreen (autenticato)', () => {
   // la persona esce di lì convinta di averla fermata: sul proprio account è la
   // stessa classe di bugia già corretta su «Esci».
   it('annulla eliminazione fallito → lo dice, non tace', async () => {
+    mockCancellazioneProgrammataAttiva = true;
     const cancelScheduledDeletion = jest
       .fn()
       .mockResolvedValue({ error: 'network' });
@@ -239,6 +252,7 @@ describe('ProfileScreen (autenticato)', () => {
   // La promessa può RIGETTARE, non solo tornare `{error}`: senza il `.catch` non
   // comparirebbe nulla e resterebbe una promessa rifiutata a vuoto.
   it('annulla eliminazione che RIGETTA → lo dice comunque', async () => {
+    mockCancellazioneProgrammataAttiva = true;
     const cancelScheduledDeletion = jest
       .fn()
       .mockRejectedValue(new Error('boom'));
@@ -248,6 +262,16 @@ describe('ProfileScreen (autenticato)', () => {
     const { getByText, findByText } = wrap(<ProfileScreen />);
     fireEvent.press(getByText('Annulla eliminazione'));
     expect(await findByText('Operazione non riuscita. Riprova.')).toBeTruthy();
+  });
+
+  // Il contrario del test qui sopra, ed è quello che protegge la promessa: con la
+  // leva spenta nessuna riga dell'app deve annunciare un'eliminazione programmata
+  // che non avverrà — nemmeno a chi ha una richiesta rimasta da prima.
+  it('leva spenta: nessun banner, nemmeno con una richiesta pendente', () => {
+    mockUseAuth.mockReturnValue(makeAuth({ profile: profileWithDeletion }));
+    const { queryByText } = wrap(<ProfileScreen />);
+    expect(queryByText('Annulla eliminazione')).toBeNull();
+    expect(queryByText(/Eliminazione programmata/)).toBeNull();
   });
 
   it('il toggle marketing chiama setMarketingConsent', () => {

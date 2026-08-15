@@ -40,10 +40,18 @@ export const ReConsentScreen: React.FC = () => {
   const handleAccept = useCallback((): void => {
     setError(undefined);
     setLoading(true);
-    void acceptCurrentPolicy().then(r => {
-      setLoading(false);
-      if (r.error) setError(t('auth.consents.error'));
-    });
+    // Il `.catch` non è ridondante: la promessa può RIGETTARE, e questa schermata
+    // è il cancello dell'intera area donatori — senza di esso «Accetto» resterebbe
+    // a girare per sempre, senza messaggio e senza alcuna via d'uscita.
+    void acceptCurrentPolicy()
+      .then(r => {
+        setLoading(false);
+        if (r.error) setError(t('auth.consents.error'));
+      })
+      .catch(() => {
+        setLoading(false);
+        setError(t('auth.consents.error'));
+      });
   }, [acceptCurrentPolicy, t]);
 
   return (

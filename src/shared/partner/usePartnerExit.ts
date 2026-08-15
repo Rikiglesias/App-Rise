@@ -6,6 +6,8 @@ import { buildDonorboxDonationUrl, appendRiseRef } from './partnerUrls';
 import {
   hasSeenPartnerDisclosure,
   markPartnerDisclosureSeen,
+  hasOptedOutOfPrefill,
+  setPrefillOptOut,
 } from './disclosureFlag';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
@@ -140,8 +142,14 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       // finestra in cui si tocca «Dona». Leggere `unknown` come «a posto» rimetterebbe
       // il bug che questa guardia esiste per chiudere, spostato di una variabile.
       // In tutti i casi il prefill degrada a vuoto; l'uscita non si blocca mai.
+      // Chi ha già chiesto di non mandare i propri dati non deve richiederlo ogni
+      // volta: la sua scelta è una preferenza, e qui viene onorata PRIMA di
+      // costruire il prefill. Senza questa lettura la rinuncia valeva una volta
+      // sola e alla donazione dopo i dati ripartivano — per giunta in silenzio,
+      // perché l'avviso risultava ormai «già visto».
+      const haRinunciatoAlPrefill = await hasOptedOutOfPrefill(userId);
       const prefill =
-        current && consent === 'ok'
+        current && consent === 'ok' && !haRinunciatoAlPrefill
           ? {
               firstName: current.first_name,
               lastName: current.last_name,
@@ -206,16 +214,29 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
    */
   const confirmDonorboxDisclosure = useCallback(
     async (conDati: boolean) => {
+      // Stessa guardia delle altre due uscite: anche questo è un pulsante che
+      // apre il browser, e senza di essa due tocchi nello stesso tick leggono la
+      // stessa closure con `pendingDonation` ancora pieno e aprono due volte.
+      if (uscitaInCorso.current) return;
+      uscitaInCorso.current = true;
       const scelto = pendingDonation;
       setDonorboxDisclosureVisible(false);
       setPendingDonation(null);
-      if (!scelto) return;
-      await markPartnerDisclosureSeen(userId, 'donorbox');
-      await openLink(
-        conDati ? scelto.conDati : scelto.senzaDati,
-        'donation',
-        'Impossibile aprire il link di donazione. Riprova più tardi.'
-      );
+      try {
+        if (!scelto) return;
+        // La scelta si RICORDA: «senza i miei dati» è una preferenza, non un
+        // gesto valido per una volta sola. Scegliendo di mandarli si azzera una
+        // eventuale rinuncia precedente, così la porta resta aperta nei due sensi.
+        await setPrefillOptOut(userId, !conDati);
+        await markPartnerDisclosureSeen(userId, 'donorbox');
+        await openLink(
+          conDati ? scelto.conDati : scelto.senzaDati,
+          'donation',
+          'Impossibile aprire il link di donazione. Riprova più tardi.'
+        );
+      } finally {
+        uscitaInCorso.current = false;
+      }
     },
     [pendingDonation, userId, openLink]
   );

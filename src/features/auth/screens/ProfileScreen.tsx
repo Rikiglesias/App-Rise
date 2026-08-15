@@ -22,7 +22,10 @@ import {
   formatDateLocalized,
   getDeletionScheduledDate,
 } from '@/shared/utils/dateFormat';
-import { GRACE_DAYS } from '@/shared/auth/deletionPolicy';
+import {
+  GRACE_DAYS,
+  CANCELLAZIONE_PROGRAMMATA_ATTIVA,
+} from '@/shared/auth/deletionPolicy';
 
 export const ProfileScreen: React.FC = () => {
   const colors = useThemeColors();
@@ -99,9 +102,14 @@ export const ProfileScreen: React.FC = () => {
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
       setConsentError(undefined);
-      void setMarketingConsent(value).then(r => {
-        if (r.error) setConsentError(t('auth.consents.error'));
-      });
+      // Gemello degli altri due handler di questa schermata: anche qui la promessa
+      // può rigettare, e un consenso che non si è salvato deve dirlo — chi tocca
+      // l'interruttore resterebbe altrimenti convinto di averlo cambiato.
+      void setMarketingConsent(value)
+        .then(r => {
+          if (r.error) setConsentError(t('auth.consents.error'));
+        })
+        .catch(() => setConsentError(t('auth.consents.error')));
     },
     [setMarketingConsent, t]
   );
@@ -162,7 +170,12 @@ export const ProfileScreen: React.FC = () => {
 
   return (
     <AuthScreen title={t('auth.profile.title')}>
-      {scheduledDate ? (
+      {/* Anche il banner sta dietro la costante, non solo il pulsante che avvia la
+          programmazione: finché nessuno esegue l'eliminazione differita, questa è
+          l'ultima riga dell'app che continuerebbe a dire «eliminazione programmata
+          il <data>» — cioè la frase falsa che la costante è nata per togliere, e per
+          giunta con una data che nel frattempo è passata. */}
+      {CANCELLAZIONE_PROGRAMMATA_ATTIVA && scheduledDate ? (
         <View style={styles.banner}>
           <PerfectText size={14} lines={2} style={styles.bannerText}>
             {`${t('auth.delete.banner')} ${scheduledDate}`}
