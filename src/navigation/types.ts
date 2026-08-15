@@ -62,7 +62,6 @@ export type ImpactStackParamList = {
   Partners: undefined;
   Meals: undefined;
   Kits: undefined;
-  DevelopmentModal: undefined;
   MapModal: { locations: Location[] };
 };
 
