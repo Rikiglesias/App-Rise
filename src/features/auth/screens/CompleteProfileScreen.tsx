@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -53,9 +53,17 @@ export const CompleteProfileScreen: React.FC = () => {
     getProfileCompletion(profile, profileLoaded)
   );
 
+  const [logoutError, setLogoutError] = useState<string | undefined>();
+
+  // Qui «Esci» è una delle DUE sole vie d'uscita dal passaggio obbligato: se fallisce
+  // in silenzio la persona resta chiusa dentro senza sapere perché, e l'unico gesto che
+  // le resta è disinstallare l'app. L'errore va detto.
   const handleLogout = useCallback((): void => {
-    void signOut();
-  }, [signOut]);
+    setLogoutError(undefined);
+    void signOut().then(({ error }) => {
+      if (error) setLogoutError(t('auth.profile.logoutError'));
+    });
+  }, [signOut, t]);
 
   const handleDeleteAccount = useCallback((): void => {
     navigation.navigate('DeleteAccount');
@@ -240,6 +248,11 @@ export const CompleteProfileScreen: React.FC = () => {
             onPress={handleLogout}
             variant="link"
           />
+          {logoutError ? (
+            <PerfectText size={13} lines={2} style={styles.error}>
+              {logoutError}
+            </PerfectText>
+          ) : null}
           <AuthButton
             label={t('auth.delete.title')}
             onPress={handleDeleteAccount}

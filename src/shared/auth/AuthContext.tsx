@@ -57,7 +57,12 @@ export interface AuthState {
     password: string,
     profile: ProfileInput
   ) => Promise<{ error: string | null }>;
-  signOut: () => Promise<void>;
+  /**
+   * Esce dall'account SU QUESTO DISPOSITIVO. Restituisce l'errore invece di
+   * ingoiarlo: «sono uscito» è un'affermazione che l'app fa alla persona, e su un
+   * telefono prestato o condiviso non può essere falsa.
+   */
+  signOut: () => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   /** Imposta la nuova password (post deep link di recovery, sessione già attiva). */
   updatePassword: (newPassword: string) => Promise<{ error: string | null }>;
@@ -239,8 +244,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     []
   );
 
-  const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
+  const signOut = useCallback(async (): Promise<{ error: string | null }> => {
+    // `scope: 'local'` e non il default `global`: la documentazione della libreria
+    // installata (@supabase/auth-js, GoTrueClient.d.ts:1977-1982) è esplicita —
+    // il default disconnette la persona da OGNI dispositivo su cui ha fatto accesso,
+    // e «usually what apps want on a "Sign out" button» è il solo dispositivo corrente.
+    // Chi esce dal proprio telefono non si aspetta di cadere fuori dal tablet di casa.
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
+    if (!error) return { error: null };
+
+    // Se anche l'uscita locale fallisce, la sessione resta sul dispositivo: qui NON si
+    // può tacere. L'errore risale al chiamante, che lo dice alla persona invece di
+    // lasciarla convinta di essere uscita (caso reale: rete assente, o token già
+    // scaduto — vedi supabase/auth-js#540, dove il signOut fallisce e la sessione resta).
+    return { error: error.message };
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {
@@ -350,7 +367,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       body: {},
     });
     if (error) return { error: error.message };
-    await supabase.auth.signOut();
+    // Uscita LOCALE, non globale: l'account a questo punto non esiste più, e il
+    // signOut globale chiede al server di revocare le sessioni di un utente
+    // cancellato — chiamata che fallisce lasciando la sessione sul dispositivo
+    // (supabase/auth#1550). La cancellazione è già riuscita: qui serve solo che il
+    // telefono si dimentichi la sessione, e `local` lo fa senza dipendere dal server.
+    await supabase.auth.signOut({ scope: 'local' });
     return { error: null };
   }, []);
 

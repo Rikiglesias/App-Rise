@@ -54,10 +54,34 @@ export const ResetPasswordScreen: React.FC = () => {
     void onSubmit();
   }, [onSubmit]);
 
-  const goHome = useCallback(
-    (): void => navigation.navigate('Home'),
-    [navigation]
-  );
+  /**
+   * Dove porta «Continua» dopo che la password è stata cambiata.
+   *
+   * Questa schermata è montata in DUE alberi: `MainStackNavigator`, dove `Home`
+   * esiste, e `ProfileGateNavigator`, che monta soltanto CompleteProfile,
+   * DeleteAccount e ResetPassword. I due alberi sono alternativi e non hanno un
+   * navigator padre (`AppNavigator` monta l'uno o l'altro), quindi da dentro il
+   * cancello un `navigate('Home')` non veniva gestito da nessuno e il pulsante
+   * restava inerte — proprio nel caso per cui la rotta è stata messa nel cancello:
+   * il link di recupero che arriva da fuori. La persona aveva la password nuova e
+   * restava ferma finché non chiudeva l'app a mano.
+   *
+   * Si interroga il navigator su quali rotte esistono davvero, invece di presumere
+   * l'albero: così la schermata resta valida se un domani viene montata altrove.
+   */
+  const goAvanti = useCallback((): void => {
+    const rotteDisponibili = navigation.getState()?.routeNames ?? [];
+
+    if (rotteDisponibili.includes('Home')) {
+      navigation.navigate('Home');
+      return;
+    }
+    if (rotteDisponibili.includes('CompleteProfile')) {
+      navigation.navigate('CompleteProfile');
+      return;
+    }
+    if (navigation.canGoBack()) navigation.goBack();
+  }, [navigation]);
 
   return (
     <AuthScreen title={t('auth.reset.title')}>
@@ -66,7 +90,7 @@ export const ResetPasswordScreen: React.FC = () => {
           <PerfectText size={16} lines={3} style={styles.sent}>
             {t('auth.reset.success')}
           </PerfectText>
-          <AuthButton label={t('auth.reset.continue')} onPress={goHome} />
+          <AuthButton label={t('auth.reset.continue')} onPress={goAvanti} />
         </>
       ) : (
         <>
