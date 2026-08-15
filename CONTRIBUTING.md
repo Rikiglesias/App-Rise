@@ -63,6 +63,7 @@ git checkout -b fix/nome-bug
 ```
 
 **Naming branches**:
+
 - `feat/` - Nuova feature
 - `fix/` - Bug fix
 - `refactor/` - Refactoring
@@ -73,7 +74,7 @@ git checkout -b fix/nome-bug
 
 ### **3. Sviluppo**
 
-#### **Durante lo sviluppo**:
+#### **Durante lo sviluppo**
 
 ```bash
 # Verifica errori frequentemente
@@ -84,14 +85,14 @@ npm run lint
 npm run pre-modifiche
 ```
 
-#### **Per OGNI file che modifichi**:
+#### **Per OGNI file che modifichi**
 
 1. ✅ Apri [CODE_CLEANUP_CHECKLIST.md](./docs/guides/quality-standards.md)
 2. ✅ Segui checklist punto per punto
 3. ✅ Applica [CODING_STANDARDS.md](./docs/guides/development.md)
 4. ✅ Verifica visivamente l'app
 
-#### **Rules of Thumb**:
+#### **Rules of Thumb**
 
 ```typescript
 // ✅ SEMPRE
@@ -110,12 +111,14 @@ const handlePress = () => {};  // Inline function
 ### **4. Pre-Commit Checklist**
 
 **AUTOMATICO** (Husky verifica):
+
 - ✅ ESLint passa (zero warnings)
 - ✅ TypeScript compila
 - ✅ Prettier formatta
 - ✅ Tests passano
 
 **MANUALE** (TUA responsabilità):
+
 - ✅ [Code Cleanup Checklist](./docs/guides/quality-standards.md) completa
 - ✅ Zero `console.log()` left
 - ✅ Zero codice commentato
@@ -145,7 +148,8 @@ git commit -m "feat(contact): add contact card with haptic feedback"
 ```
 
 **Commit Message Format**:
-```
+
+```text
 type(scope): description
 
 [optional body]
@@ -154,6 +158,7 @@ type(scope): description
 ```
 
 **Types**:
+
 - `feat`: Nuova feature
 - `fix`: Bug fix
 - `refactor`: Refactoring
@@ -163,6 +168,7 @@ type(scope): description
 - `chore`: Maintenance
 
 **Examples**:
+
 ```bash
 feat(navigation): add back button to contact screen
 fix(perfect-system): resolve spacing on iPad
@@ -182,14 +188,16 @@ git push origin feat/nome-feature
 # Template PR si auto-popola
 ```
 
-#### **PR Requirements**:
+#### **PR Requirements**
 
 **Titolo**: Stesso format del commit message
-```
+
+```text
 feat(contact): add contact card component
 ```
 
 **Description**:
+
 ```markdown
 ## What
 Breve descrizione della modifica
@@ -222,7 +230,7 @@ Come l'hai implementata
 
 ### **7. Code Review**
 
-#### **Come Reviewer**:
+#### **Come Reviewer**
 
 **DEVI verificare** (usa [CODING_STANDARDS.md](./docs/guides/development.md)):
 
@@ -242,10 +250,12 @@ Come l'hai implementata
 ```
 
 **Approval Criteria**:
+
 - ✅ TUTTI i check passano → APPROVE
 - ❌ ANCHE UNO fallisce → REQUEST CHANGES
 
 **Commenti**:
+
 - ✅ Costruttivi
 - ✅ Riferimenti a docs ([CODING_STANDARDS.md](./docs/guides/development.md))
 - ✅ Esempi concreti
@@ -255,6 +265,7 @@ Come l'hai implementata
 ### **8. Merge**
 
 **Dopo approval**:
+
 ```bash
 # Squash and merge (preferito)
 # Mantiene history pulita
@@ -350,6 +361,7 @@ export const Component = ({ data, onPress, unused }) => {
 ## 🚨 COMMON MISTAKES
 
 ### **Mistake 1: Import non consolidati**
+
 ```typescript
 // ❌ MALE
 import { PerfectText } from '@/components/ui/PerfectText';
@@ -360,6 +372,7 @@ import { PerfectText, PerfectContainer } from '@/components/ui';
 ```
 
 ### **Mistake 2: Hook ridondanti**
+
 ```typescript
 // ❌ MALE
 const { scale } = useResponsive();
@@ -371,6 +384,7 @@ size={scale(20)}
 ```
 
 ### **Mistake 3: Spacing in style object**
+
 ```typescript
 // ❌ MALE
 <PerfectContainer style={{ padding: 20, margin: 16 }}>
@@ -380,6 +394,7 @@ size={scale(20)}
 ```
 
 ### **Mistake 4: Props non usati**
+
 ```typescript
 // ❌ MALE
 const Component = ({ data, animations: _animations, onPress }) => {
@@ -396,12 +411,14 @@ const Component = ({ data, onPress }) => {
 
 ## 🎓 LEARNING RESOURCES
 
-### **Esempi di Codice Perfetto**:
+### **Esempi di Codice Perfetto**
+
 1. `src/features/about/components/ChiSiamoSection.tsx` - Perfect cleanup
 2. `src/features/about/components/ContactSection.tsx` - Perfect System al 100%
 3. `src/components/ui/PerfectContainer.tsx` - Component architecture
 
-### **Anti-patterns da Evitare**:
+### **Anti-patterns da Evitare**
+
 1. ❌ Deep nesting (> 4 livelli)
 2. ❌ Magic numbers (usa Design Tokens)
 3. ❌ Inline styles con dimensioni
@@ -413,12 +430,14 @@ const Component = ({ data, onPress }) => {
 ## 📞 HELP & SUPPORT
 
 ### **Stuck?**
+
 1. Leggi [CODING_STANDARDS.md](./docs/guides/development.md)
 2. Usa [CODE_CLEANUP_CHECKLIST.md](./docs/guides/quality-standards.md)
 3. Esamina esempi esistenti
 4. Chiedi in PR draft
 
 ### **Found a Bug in Standards?**
+
 1. Apri issue con label `docs`
 2. Proponi fix
 3. Discuti con team
@@ -429,7 +448,7 @@ const Component = ({ data, onPress }) => {
 
 **Prima di aprire PR**:
 
-```
+```text
 [ ] Ho letto CODING_STANDARDS.md
 [ ] Ho seguito CODE_CLEANUP_CHECKLIST.md
 [ ] npm run conta-problemi = 0 problemi
@@ -446,4 +465,4 @@ const Component = ({ data, onPress }) => {
 
 **💎 QUALITY IS NOT NEGOTIABLE - GRAZIE PER CONTRIBUIRE CON ECCELLENZA!**
 
-*Rise Against Hunger Italia - Combattiamo la fame con codice di qualità*
+## Rise Against Hunger Italia

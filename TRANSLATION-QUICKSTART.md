@@ -20,7 +20,7 @@ $env:OPENAI_API_KEY="sk-proj-TUA-CHIAVE-QUI"
 export OPENAI_API_KEY=sk-proj-TUA-CHIAVE-QUI
 ```
 
-### 3. Traduci!
+### 3. Traduci
 
 ```bash
 # Inglese
@@ -105,7 +105,7 @@ Vedi: `docs/i18n/AI-TRANSLATION-GUIDE.md`
 
 ## ✨ Esempio Output
 
-```
+```text
 🌍 AI Translation Pipeline Started
 
 ✅ Loaded 120 source keys from it.ts
@@ -120,4 +120,4 @@ Vedi: `docs/i18n/AI-TRANSLATION-GUIDE.md`
 🎉 Translation complete!
 ```
 
-**Fatto! Ora hai l'app in più lingue! 🎉**
+## Fatto: ora hai l'app in più lingue 🎉
