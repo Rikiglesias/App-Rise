@@ -5,11 +5,13 @@ Sistema multi-lingua per Rise Against Hunger Italia.
 ## 📱 Funzionamento
 
 ### iOS
+
 1. Utente cambia lingua: `Settings → General → Language & Region → iPhone Language`
 2. App rileva automaticamente lingua di sistema
 3. Traduzioni aggiornate al prossimo avvio
 
 ### Android
+
 1. Utente cambia lingua: `Impostazioni → Sistema → Lingua e input → Lingua`
 2. App rileva automaticamente lingua di sistema
 3. Traduzioni aggiornate al prossimo avvio
@@ -73,7 +75,7 @@ setLocale('en');
 
 ## 📂 Struttura File
 
-```
+```text
 src/locales/
 ├── index.ts          # Configurazione i18n principale
 ├── types.ts          # TypeScript types
@@ -84,7 +86,7 @@ src/locales/
 
 ## ➕ Aggiungere Nuove Traduzioni
 
-### 1. Aggiungi chiave in `it.ts`:
+### 1. Aggiungi chiave in `it.ts`
 
 ```typescript
 export default {
@@ -96,7 +98,7 @@ export default {
 };
 ```
 
-### 2. Aggiungi stessa chiave in `en.ts`:
+### 2. Aggiungi stessa chiave in `en.ts`
 
 ```typescript
 export default {
@@ -108,7 +110,7 @@ export default {
 };
 ```
 
-### 3. Usa nel componente:
+### 3. Usa nel componente
 
 ```tsx
 const { t } = useTranslation();
@@ -189,7 +191,7 @@ npm run update:production "Aggiunto supporto lingua spagnola"
 
 ## 🔍 Debugging
 
-### Vedere lingua rilevata:
+### Vedere lingua rilevata
 
 ```tsx
 import * as Localization from 'expo-localization';
@@ -199,7 +201,7 @@ console.log('Lingua sistema:', locales[0].languageCode);
 console.log('Tutte lingue:', locales);
 ```
 
-### Forzare lingua in dev:
+### Forzare lingua in dev
 
 ```tsx
 // In App.tsx (solo per testing)
@@ -226,6 +228,7 @@ useEffect(() => {
 ### Da Tradurre
 
 Se trovi testi hardcoded:
+
 1. Aggiungi chiave in `it.ts` e `en.ts`
 2. Sostituisci con `t('chiave')`
 3. Commit e push

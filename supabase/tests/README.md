@@ -204,6 +204,7 @@ sopravvive. Tre cose valgono per chiunque ne scriva uno nuovo:
 ⚠️ **Un mutante può insegnare qualcosa che nessun test chiedeva.** Il 2026-07-31, tre mutanti della
 0020 scritti per far fallire un'asserzione hanno invece prodotto `stack depth limit exceeded`, e
 dietro c'erano due guasti veri:
+
 - **due presidi che si contendono la stessa chiave non terminano MAI**, per quante guardie di
   idempotenza abbiano: ognuno annulla il lavoro dell'altro, quindi ognuno trova sempre qualcosa da
   fare. La disgiunzione delle loro liste non è ordine, è una condizione di terminazione — e va resa
