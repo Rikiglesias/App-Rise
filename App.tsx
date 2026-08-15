@@ -106,13 +106,17 @@ const NativeApp: React.FC = () => {
 
   const [showOtaScreen, setShowOtaScreen] = useState(false);
   const [visualProgress, setVisualProgress] = useState(0);
-  
+
   // Refs per gestire lo stato asincrono senza causare re-render inutili durante l'animazione
   const downloadStartTimeRef = useRef<number | null>(null);
-  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null
+  );
   // Ref dedicato all'animazione di completamento: NON condiviso con il download,
   // così ogni effetto cancella solo il proprio timer (evita interferenze cross-effect).
-  const completionIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const completionIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null
+  );
   // Timeout del reload, cancellabile nel cleanup per non lasciare timer pendenti.
   const reloadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isReloadingRef = useRef(false);
@@ -149,27 +153,34 @@ const NativeApp: React.FC = () => {
       setShowOtaScreen(true);
       setVisualProgress(0);
       downloadStartTimeRef.current = Date.now();
-      
-      logger.info('App', '📥 OTA Download started - animating progress from 0%');
-      
+
+      logger.info(
+        'App',
+        '📥 OTA Download started - animating progress from 0%'
+      );
+
       // Avvia animazione fluida GARANTITA da 0 a 90%
       progressIntervalRef.current = setInterval(() => {
         setVisualProgress(prev => {
           // Calcola progresso basato su tempo per GARANTIRE animazione visibile
-          const elapsed = Date.now() - (downloadStartTimeRef.current || Date.now());
-          const timeProgress = Math.min((elapsed / MIN_ANIMATION_TIME) * 90, 90);
-          
+          const elapsed =
+            Date.now() - (downloadStartTimeRef.current || Date.now());
+          const timeProgress = Math.min(
+            (elapsed / MIN_ANIMATION_TIME) * 90,
+            90
+          );
+
           // Prendi il massimo tra progresso temporale e reale (se disponibile)
           const realProgress = (downloadProgress || 0) * 100;
           let target = Math.max(timeProgress, realProgress);
-          
+
           // Cap al 90% finché non è pending (NON 95%, così c'è spazio per salto finale)
           target = Math.min(target, 90);
 
           // Movimento fluido verso il target - step piccolo per animazione smooth
           const diff = target - prev;
           const step = Math.max(diff * 0.15, 0.3); // ✨ Step più graduale
-          
+
           return Math.min(prev + step, target);
         });
       }, 50);
@@ -192,7 +203,7 @@ const NativeApp: React.FC = () => {
         clearInterval(progressIntervalRef.current);
         progressIntervalRef.current = null;
       }
-      
+
       logger.info('App', '⚡ Update ready - animating smoothly to 100%');
 
       // ✨ NUOVA animazione smooth da current progress a 100% (ref dedicato)
@@ -264,7 +275,12 @@ const NativeApp: React.FC = () => {
 
   // Se non sta scaricando e non c'è update pending, assicurati che lo schermo sia nascosto
   useEffect(() => {
-    if (!isDownloading && !isUpdatePending && showOtaScreen && !isReloadingRef.current) {
+    if (
+      !isDownloading &&
+      !isUpdatePending &&
+      showOtaScreen &&
+      !isReloadingRef.current
+    ) {
       // Safety check: se per qualche motivo lo stato si blocca
       const timeout = setTimeout(() => {
         setShowOtaScreen(false);
