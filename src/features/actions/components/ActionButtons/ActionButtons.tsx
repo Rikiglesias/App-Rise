@@ -49,6 +49,18 @@ const ActionButtonsRefactored: React.FC<NewActionButtonsSectionProps> = ({
         onConfirm={data.confirmDisclosure}
         onCancel={data.cancelDisclosure}
       />
+
+      {/* Avviso pre-donazione: l'indirizzo Donorbox porta nome, cognome ed email.
+          È l'altro canale, con un altro testo e un'altra scelta — non lo stesso
+          riquadro riusato: quello di sopra parla dell'account separato da creare,
+          questo dei dati che partono. */}
+      <PartnerDisclosureModal
+        variant="donorbox"
+        visible={data.donorboxDisclosureVisible}
+        onConfirm={() => void data.confirmDonorboxDisclosure(true)}
+        onConfirmWithoutData={() => void data.confirmDonorboxDisclosure(false)}
+        onCancel={data.cancelDonorboxDisclosure}
+      />
     </>
   );
 };

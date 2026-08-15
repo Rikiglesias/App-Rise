@@ -32,6 +32,13 @@ export interface ActionButtonsData {
   // Schermata onesta pre-redirect Let's Donation (F1.7d)
   disclosureVisible: boolean;
 
+  /**
+   * Avviso pre-donazione: l'indirizzo Donorbox porterebbe nome, cognome ed email.
+   * Canale diverso e avviso diverso da quello di Let's Donation, che esce col solo
+   * codice anonimo — per questo sono due stati distinti e non uno riusato.
+   */
+  donorboxDisclosureVisible: boolean;
+
   // Handlers
   handleButtonPress: (button: ButtonData) => Promise<void>;
   handleInfoPress: () => Promise<void>;
@@ -39,12 +46,15 @@ export interface ActionButtonsData {
   openCommunityRegistration: () => void;
   confirmDisclosure: () => Promise<void>;
   cancelDisclosure: () => void;
+  confirmDonorboxDisclosure: (conDati: boolean) => Promise<void>;
+  cancelDonorboxDisclosure: () => void;
 }
 
 /**
  * Hook che centralizza tutta la logica business dei bottoni.
  * Le uscite verso i partner passano da usePartnerExit (goal partner-identita, F1.7):
- * - "Dona" → Donorbox con rise_ref + prefill (nessuna schermata onesta, è ospite).
+ * - "Dona" → Donorbox con rise_ref + prefill, preceduto dal proprio avviso quando i
+ *   dati personali finirebbero davvero nell'indirizzo (nome, cognome, email).
  * - shop/gift card/progetti/eventi/community → Let's Donation con rise_ref e schermata
  *   onesta una volta per utente (doppia registrazione).
  * - "Tracciabilità" resta un link al sito Rise (non è un partner) → useLinkHandler.
@@ -57,11 +67,14 @@ export const useActionButtonsData = (
   const { openTracciabilitaLink } = useLinkHandler();
   const {
     disclosureVisible,
+    donorboxDisclosureVisible,
     isExiting,
     openDonation,
     openLetsDonationExit,
     confirmDisclosure,
     cancelDisclosure,
+    confirmDonorboxDisclosure,
+    cancelDonorboxDisclosure,
   } = usePartnerExit();
 
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -200,6 +213,7 @@ export const useActionButtonsData = (
     // Modal state
     showInfoModal,
     disclosureVisible,
+    donorboxDisclosureVisible,
     isExiting,
 
     // Handlers
@@ -209,5 +223,7 @@ export const useActionButtonsData = (
     openCommunityRegistration,
     confirmDisclosure,
     cancelDisclosure,
+    confirmDonorboxDisclosure,
+    cancelDonorboxDisclosure,
   };
 };

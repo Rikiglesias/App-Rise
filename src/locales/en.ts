@@ -335,6 +335,10 @@ export default {
   },
 
   partner: {
+    donorboxDisclosureTitle: 'You are about to leave the app',
+    donorboxDisclosureBody:
+      'Donations are handled by Donorbox, our partner. So you do not have to retype everything, the address we are about to open carries your first name, last name and email, so the form comes pre-filled. An address does stay in your browser history, though: if you prefer, you can carry on without them and fill the form in yourself.',
+    donorboxContinueWithoutData: 'Continue without my details',
     disclosureTitle: 'You’re leaving the app',
     disclosureBody:
       'Shop, gift cards, events, projects and community registration are handled by Let’s Donation, our partner. On that platform you’ll be asked to create a separate account from your app one: that’s expected, they are two distinct services. If you continue, you’ll be redirected.',
