@@ -93,9 +93,11 @@ def main() -> int:
     testo = SORGENTE.read_text(encoding="utf-8")
     m = carica(testo, "vero")
     falliti: list[str] = []
+    eseguiti = 0
 
     print("PARTE 1 - casi che DEVONO bloccare")
     for nome, righe in DEVE_BLOCCARE:
+        eseguiti += 1
         if blocca(m, righe):
             print(f"  ok   {nome}")
         else:
@@ -104,6 +106,7 @@ def main() -> int:
 
     print("PARTE 1-bis - casi che NON devono bloccare")
     for nome, righe in NON_DEVE_BLOCCARE:
+        eseguiti += 1
         if blocca(m, righe):
             print(f"  FAIL {nome}: ha bloccato, doveva passare")
             falliti.append(nome)
@@ -114,8 +117,12 @@ def main() -> int:
     for doc in DOCUMENTI_REALI:
         percorso = RADICE / doc
         if not percorso.exists():
-            print(f"  --   {doc} (assente, saltato)")
+            # NON si salta: la PARTE 2 e' quella che conta, e un documento rinominato o spostato
+            # renderebbe il test verde su meno controlli di quanti ne dichiara.
+            print(f"  FAIL {doc} non esiste piu': aggiorna DOCUMENTI_REALI o ripristina il file")
+            falliti.append(doc)
             continue
+        eseguiti += 1
         numerate = m._righe_consegnate_numerate(percorso.read_text(encoding="utf-8"))
         try:
             m._sentinella_documento_non_finito(percorso, numerate)
@@ -144,6 +151,7 @@ def main() -> int:
             except SystemExit as errore:
                 return "blocca" if "non era finito" in str(errore) else "blocca-per-altro"
 
+        eseguiti += 1
         con = esito(testo, "collegata")
         senza = esito(testo.replace(riga_chiamata, "", 1), "scollegata")
         if con == "blocca" and senza == "nasce":
@@ -158,8 +166,7 @@ def main() -> int:
     if falliti:
         print(f"FAIL: test-sentinella-documento-non-finito ({len(falliti)}): {', '.join(falliti[:5])}")
         return 1
-    totale = len(DEVE_BLOCCARE) + len(NON_DEVE_BLOCCARE) + len(DOCUMENTI_REALI) + 1
-    print(f"PASS: test-sentinella-documento-non-finito ({totale} controlli)")
+    print(f"PASS: test-sentinella-documento-non-finito ({eseguiti} controlli eseguiti)")
     return 0
 
 
