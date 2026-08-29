@@ -377,6 +377,41 @@ SINTASSI_OBSIDIAN = (
 # Blocchi di codice che Obsidian disegna e questo generatore no: restano righe di codice inerte.
 FENCE_SOLO_OBSIDIAN = re.compile(r"^\s*```\s*(mermaid|dataview|dataviewjs|query)\b", re.IGNORECASE)
 
+# Un documento verso un terzo non deve nascere se dentro c'e' la prova che non era finito (un
+# segnaposto mai riempito) o con che cosa e' stato scritto (un residuo di assistente).
+# E' la CLASSE, non l'istanza: il commit 803decd ha curato le note interne, cioe' UN modo in cui
+# il contesto di scrittura arriva al destinatario. Questi sono gli altri due.
+# NB: i commenti HTML NON stanno qui - `_righe_consegnate` li toglie gia', e ridefinire in questo
+# punto che cos'e' un «commento» creerebbe due verita' sullo stesso concetto.
+SEGNAPOSTO_NON_RIEMPITO = (
+    ("marcatore di lavoro non finito",
+     re.compile(r"\b(TODO|FIXME|DA COMPLETARE|DA DECIDERE|XXX)\b", re.IGNORECASE),
+     "dice al destinatario che il documento e' stato mandato prima di essere finito"),
+    ("campo modello mai sostituito",
+     re.compile(r"<(?:data|nome|azienda|cifra|importo|referente|da definire)>", re.IGNORECASE),
+     "un campo del modello e' rimasto al posto del valore vero"),
+    # NON «una quadra qualsiasi»: quella regola l'ho provata sui documenti veri e dava 28 falsi
+    # positivi su `app-gate-matrice.md`, che usa [V] e [A] come notazione DICHIARATA nel testo
+    # («ogni affermazione e' [V] se verificata, [A] se assunta»). Il segnale non e' la parentesi:
+    # e' la parentesi che CHIEDE di essere riempita. Vuota, con soli puntini, o con una parola
+    # d'attesa dentro.
+    ("parentesi quadra da riempire",
+     re.compile(r"\[\s*(?:|\.{2,}|_{2,}|"
+                r"(?:da\s+(?:inserire|definire|completare|decidere|confermare)|"
+                r"inserire|tbd|placeholder|segnaposto|nome|data|cifra|importo)"
+                r"[^\]\[]{0,30})\](?!\()", re.IGNORECASE),
+     "una quadra che chiede ancora di essere riempita"),
+)
+
+RESIDUI_DELLO_STRUMENTO = (
+    ("marcatore di citazione di un assistente",
+     re.compile(r"(citeturn|oaicite|contentReference)", re.IGNORECASE),
+     "e' la prova di un copia-incolla da un assistente, e resta visibile"),
+    ("parametro di provenienza nell'URL",
+     re.compile(r"[?&](?:utm_source=(?:chatgpt|openai|copilot|claude)|referrer=grok)", re.IGNORECASE),
+     "il link porta scritto da dove e' stato preso"),
+)
+
 
 def _sentinella_sintassi_obsidian(md_path: Path, righe: list[tuple[int, str]]) -> None:
     """Ferma la generazione se nel testo CONSEGNATO c'e' sintassi che solo Obsidian capisce.
@@ -576,6 +611,63 @@ def _solo_parole(testo: str) -> str:
     return " ".join(t.split()).lower()
 
 
+def _sentinella_documento_non_finito(md_path: Path, righe: list[tuple[int, str]]) -> None:
+    """Ferma la generazione se nel testo CONSEGNATO c'e' un segnaposto mai riempito o un
+    residuo dello strumento con cui il documento e' stato scritto.
+
+    Perche' BLOCCA invece di avvisare: e' la lezione di questo file, arrivata alla terza
+    occorrenza - un presidio in prosa non ferma nessuno e un avviso su stderr passa inosservato.
+    E qui pesa piu' che altrove: il brief e' gia' partito verso il partner il 2026-07-31, quindi
+    da allora ogni correzione non e' un commit da rifare ma un erratum verso un terzo.
+
+    Gira sulle sole righe CONSEGNATE e salta i blocchi di codice, come le altre: dentro un blocco
+    un `TODO` o una quadra vuota sono l'esempio che si vuole mostrare, e bloccare li' insegnerebbe
+    ad aggirare il controllo.
+
+    Assorbita il 2026-08-21 dalla skill `humanizer` (P33 segnaposto, P34 marcatori di citazione,
+    P35 parametri di provenienza), voce 9/12 del goal catalogo-skill.
+    """
+    trovati: list[tuple[int, str, str, str]] = []
+    in_code = False
+    for numero, riga in righe:
+        if riga.lstrip().startswith("```"):
+            in_code = not in_code
+            continue
+        if in_code:
+            continue
+        # La casella di spunta e' markdown legittimo; i rimandi [[...]] li segnala gia' la
+        # sentinella di Obsidian. Tolti prima del controllo per non dare due errori sulla
+        # stessa riga, che manderebbe a caccia del sintomo sbagliato.
+        ripulita = re.sub(r"^\s*[-*]\s*\[[ xX]\]", "", riga)
+        ripulita = re.sub(r"\[\[[^\]]*\]\]", "", ripulita)
+        # Il codice INLINE si salta come i blocchi, e per lo stesso motivo: li' dentro il testo
+        # e' mostrato apposta com'e'. Trovato provando sui documenti veri - in
+        # `identita-matrice-scenari.md` la specifica dice `utm_campaign=newsletter-<data>`, dove
+        # <data> e' un segnaposto VOLUTO che descrive la forma del link, non un campo dimenticato.
+        ripulita = re.sub(r"`[^`]*`", "", ripulita)
+        for nome, rx, danno in SEGNAPOSTO_NON_RIEMPITO:
+            if rx.search(ripulita):
+                trovati.append((numero, nome, danno, riga.strip()))
+        for nome, rx, danno in RESIDUI_DELLO_STRUMENTO:
+            if rx.search(riga):
+                trovati.append((numero, nome, danno, riga.strip()))
+
+    if not trovati:
+        return
+    dettaglio = "\n".join(
+        f"  riga {n}: {nome} -> {danno}\n    {testo[:150]}"
+        for n, nome, danno, testo in trovati
+    )
+    raise SystemExit(
+        f"SENTINELLA: in {md_path.name} ci sono {len(trovati)} punti che dicono al destinatario "
+        f"che il documento non era finito, o con che cosa e' stato scritto:\n{dettaglio}\n"
+        "  Riempi il segnaposto o togli il residuo. Se e' un esempio da mostrare mettilo in un "
+        "blocco di codice; se e' una nota interna mettila in un commento HTML (<!-- ... -->), "
+        "che non viene consegnato. La deroga si scrive nel registro col motivo, mai spegnendo "
+        "il controllo."
+    )
+
+
 def _sentinella_frasi_ritirate(md_path: Path, consegnato: str) -> None:
     """Ferma la consegna se e' rientrata una frase tolta DI PROPOSITO.
 
@@ -621,6 +713,9 @@ def build(md_path: Path, pdf_path: Path) -> None:
     # consegnato, quindi le sue emoji farebbero sparare la sentinella dei caratteri e chi legge
     # l'errore andrebbe a cercare un glifo invece della nota interna, che e' il guaio grosso.
     _sentinella_sintassi_obsidian(md_path, numerate)
+    # Dopo la sintassi di Obsidian e prima delle frasi ritirate: un rimando [[...]] e' gia' stato
+    # segnalato sopra, e questa lo ignora apposta per non dare due errori sulla stessa riga.
+    _sentinella_documento_non_finito(md_path, numerate)
     _sentinella_frasi_ritirate(md_path, consegnato)
     # La sentinella guarda SOLO cio' che finira' nel PDF. Girava sul markdown grezzo, commenti
     # inclusi, e fermava la consegna per un'emoji che sta in una nota interna e che il
