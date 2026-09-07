@@ -510,10 +510,14 @@ ri-accettazione non è un consenso.* *Cinque giri di revisione avversariale, 25/
 consenso: registrarla creerebbe un consenso non revocabile e condizionato al servizio — invalido — e
 sporcherebbe il registro dei consensi veri, che è un archivio a sola aggiunta.
 
-**Estendere quella schermata all'uscita verso Donorbox. → APERTA, decide Riccardo.** La situazione è
-l'opposto di come dovrebbe essere: la schermata si mostra **solo** sul ramo Let's Donation, dove viaggia
-un codice; l'uscita verso Donorbox, che trasmette nome, cognome ed email, **va dritta al browser senza
-mostrare nulla**. Nel frattempo l'informativa deve dire il vero: la schermata è annunciata solo per
+**Estendere quella schermata all'uscita verso Donorbox. → ~~APERTA~~ CHIUSA, fatta il 2026-08-15** (commit
+`28b5272`, poi `a09544a`). Quando questa riga fu scritta la situazione era l'opposto di come dovrebbe
+essere: la schermata si mostrava **solo** sul ramo Let's Donation, dove viaggia un codice; l'uscita verso
+Donorbox, che trasmette nome, cognome ed email, andava dritta al browser senza mostrare nulla. **Oggi non
+è più così**: l'avviso esiste su entrambi i rami, con flag «già visto» separati, e su Donorbox compare
+quando il prefill porta davvero dati personali, offrendo di **proseguire senza**. La rinuncia è
+**persistente per persona** (`donorbox_prefill_optout_v1`): prima durava una sola donazione, e chi si era
+protetto veniva riscoperto dalla volta dopo. Nel frattempo l'informativa deve dire il vero: la schermata è annunciata solo per
 Let's Donation.
 
 **Propagare la cancellazione con una lapide senza vincoli e un solo innesco. → SCELTA per la struttura,
@@ -688,11 +692,11 @@ registro, non nella copia.**
 | «E quando apre il vostro spazio è già dentro» | La sessione dell'app non passa al browser esterno: al primo giro l'accesso va rifatto | «Entra con quello, senza compilare una seconda registrazione» |
 | «Ritrova il suo storico invece di farsi un secondo account» | Senza collegamento degli account chi ha già un profilo nativo se ne ritrova un secondo; con l'alias Apple il collegamento automatico **non è possibile** | Trasformarlo in richiesta: «potete collegare i due account?» — e dichiarare il caso che resta fuori |
 | «Il codice di provenienza è anonimo» | È casuale ma **non anonimo**: resta riconducibile alla persona, quindi è dato personale | «Identificativo opaco, non contiene nome né email, non apre sessioni: resta comunque un dato personale» |
-| «L'app avvisa prima di ogni uscita verso un partner» | È l'opposto del vero: la schermata è solo sul ramo Let's Donation; l'uscita verso Donorbox, che manda nome, cognome ed email, non mostra nulla | Nell'informativa dire il vero |
+| ~~«L'app avvisa prima di ogni uscita verso un partner»~~ ⚠️ **VOCE SUPERATA il 2026-08-15, non più un divieto** | Quando questa riga fu scritta era l'opposto del vero. Oggi i flussi sono **due, ognuno col proprio avviso** (`usePartnerExit.ts:21-31`, flag «già visto» separati in `disclosureFlag.ts:22-26`): sul ramo Donorbox l'avviso compare quando il prefill porta davvero dati personali, e offre di **proseguire senza**. Commit `28b5272` + `a09544a` | La frase si può dire, con una precisazione che il canonico non conosceva: l'avviso su Donorbox compare **quando c'è davvero qualcosa da dichiarare** — da ospite, senza consenso o senza profilo l'uscita resta immediata perché non parte nessun dato. **In più**: la rinuncia alla precompilazione **si ricorda** (`donorbox_prefill_optout_v1`, per persona) — è un fatto nuovo **da mettere nell'informativa** |
 | «Ogni nostro account ha la prova del consenso» | Valeva per chi entrava con Apple o Google: l'account nasceva subito, profilo e prova solo al completamento. **Con i due sistemi rimossi (26/07/2026) il caso non può più nascere**: chi si registra con email e password crea profilo e prova nella stessa operazione. Resta il passato: sul database quattro consensi marketing e **zero** consensi all'informativa | Non affermarlo per gli account vecchi finché non sono sistemati |
 | «I nostri dati stanno tutti in Unione Europea» | Solo il database delle persone. Diagnostica, donazioni, distribuzione dell'app e posta sono società statunitensi | «I dati dell'account risiedono in Germania. Alcuni fornitori sono statunitensi e le garanzie sono in definizione con la consulente» |
 | «Alla cancellazione propaghiamo la richiesta al partner» | Esiste solo la struttura dati: **nessun programma la legge** | «Conserviamo il minimo per potervi chiedere la rimozione; il canale va concordato» |
-| «Elimina account funziona in tutti e due i modi» | Il programma della cancellazione **subito** è pubblicato e risponde `[V]` (26/07/2026), ma il percorso completo — persona reale che preme il pulsante e sparisce dal database — **non è ancora stato provato** `[A]`: serve un account usa-e-getta. Quella **fra trenta giorni** non funziona: il programma esiste ma **non lo avvia nessuno**, vedi §7 | «La cancellazione immediata è pubblicata, la proviamo end-to-end prima del rilascio; quella programmata si accende prima del rilascio» |
+| «Elimina account funziona in tutti e due i modi» ⚠️ **motivo cambiato il 2026-08-15** | Resta da non dire, ma **per una ragione diversa**: non perché la seconda strada sia rotta, ma perché **non esiste più nell'app**. Dal commit `8142ee4` l'opzione «fra trenta giorni» non è offerta (`CANCELLAZIONE_PROGRAMMATA_ATTIVA = false`, `deletionPolicy.ts:42`). Quella **subito** è pubblicata e risponde `[V]` (26/07/2026), ma il percorso completo — persona reale che preme il pulsante e sparisce dal database — **non è ancora stato provato** `[A]`: serve un account usa-e-getta, e con **0 profili** sul database nessuno l'ha mai esercitato | ⚠️ **la vecchia frase suggerita non va più detta** («quella programmata si accende prima del rilascio»: non è più un prerequisito). Oggi: «L'app offre **una sola** strada di cancellazione, immediata ed effettiva. La programmata è stata ritirata finché non c'è un automatismo che la esegua» |
 | «Il codice di provenienza si annulla su richiesta» | È promesso nell'informativa, ma **il processo non esiste** e la colonna non è usata da nessuna parte | Costruire il processo, o correggere l'informativa |
 | «La cancellazione è definitiva» | La lapide sopravvive **per costruzione**, e il registro dei consensi si conserva come prova | Dichiarare le due eccezioni per nome |
 | «L'accesso unico è attivo» | Nel nostro progetto **non esiste** nessun punto di accesso di quel tipo | «Il server di accesso non è ancora attivo: si accende dopo la vostra conferma e una decisione interna» ⚠️ *corretto 2026-07-29: qui si nominava anche «la migrazione delle nostre chiavi di firma». **Non esiste più**: le chiavi sono già asimmetriche (ES256) sul progetto vivo. Annunciare al partner un prerequisito che abbiamo già soddisfatto ci fa sembrare più lontani di quanto siamo* |
@@ -738,8 +742,17 @@ termine scritto nell'informativa.
 questi programmi** `[V]`. Oggi la pubblicazione è a mano, quindi una correzione al loro codice **non
 arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 
-→ **Accendere l'esecuzione periodica è un prerequisito del rilascio**, non un lavoro successivo. Sta in
-§8.1.
+→ ~~**Accendere l'esecuzione periodica è un prerequisito del rilascio**, non un lavoro successivo.~~
+⚠️ **SUPERATO il 2026-08-15** (commit `8142ee4`): il rischio che lo rendeva un prerequisito — dati che
+restano oltre il termine promesso — è stato chiuso **togliendo la promessa**. L'opzione «Elimina fra 30
+giorni» **non è più offerta** finché nessuno la esegue, dietro `CANCELLAZIONE_PROGRAMMATA_ATTIVA`, che
+oggi vale `false` (`src/shared/auth/deletionPolicy.ts:42`). Il diritto resta servito da «Elimina subito»,
+che passa da `delete-account` e cancella davvero. Accendere l'esecuzione periodica resta possibile (§8.1,
+servono `CRON_SECRET` e uno schedulatore: `pg_cron` non è installato in produzione) ma **non è più un
+prerequisito del rilascio**.
+
+→ **In call, la risposta corretta oggi è**: l'app offre **una sola** strada di cancellazione, immediata ed
+effettiva; la programmata è ritirata finché non c'è chi la esegua.
 
 ---
 
@@ -750,7 +763,7 @@ arriva in produzione da sola**: chi la fa deve ricordarsi di pubblicarla.
 | Cosa | Chi lo sblocca |
 |---|---|
 | **FATTO il 26/07/2026** — pubblicare le due funzioni di cancellazione `[V]`: entrambe pubblicate e verificate chiamandole dall'esterno (§7) | — |
-| **Accendere l'esecuzione periodica della cancellazione a trenta giorni** — il programma c'è ma non lo avvia nessuno, quindi oggi quei dati restano oltre il termine promesso (§7). Nell'ordine: ① impostare la sua parola d'ordine ② installare gli strumenti che chiamano a orario ③ creare l'appuntamento giornaliero. Invertire ① e ③ produce solo un rifiuto al giorno nei registri | Riccardo (la parola d'ordine è un segreto: la imposta lui) · Noi (il resto) |
+| ~~**Accendere l'esecuzione periodica della cancellazione a trenta giorni**~~ ⚠️ **NON È PIÙ UN PREREQUISITO dal 2026-08-15** (commit `8142ee4`): l'opzione è stata **ritirata dall'app**, quindi nessun dato resta oltre un termine promesso — la promessa non viene più fatta. Resta un lavoro **possibile**, non bloccante. Se un giorno si riaccende, l'ordine è: ① impostare la sua parola d'ordine ② installare gli strumenti che chiamano a orario (`pg_cron` **non è installato** in produzione, verificato) ③ creare l'appuntamento giornaliero. Invertire ① e ③ produce solo un rifiuto al giorno nei registri | Riccardo (la parola d'ordine è un segreto: la imposta lui) · Noi (il resto) |
 | **FATTE il 26/07/2026** — le due modifiche al database: telefono e città facoltativi (0010) ed email di contatto scritta alla nascita del profilo (0011). Ricontrollato sul database vivo lo stesso giorno: telefono e città risultano facoltativi `[V]` | — |
 | **Pubblicare l'informativa riscritta — quattro bersagli**, con la riga nuova nella tabella delle versioni **nella stessa release** che alza il numero di versione nell'app | Noi (testo, rilascio) · consulente (le risposte) · chi ha le chiavi del sito (pubblicazione) |
 | **Estendere l'export dei propri dati** ai codici di provenienza emessi e ai partner a cui sono andati, nella stessa release dell'informativa | Noi |
