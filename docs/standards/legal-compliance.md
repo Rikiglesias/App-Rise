@@ -137,7 +137,18 @@ boolean:
 - **Rettifica (Art.16)** — `updateProfile` (AuthContext) con whitelist
   `PROFILE_EDITABLE_KEYS` (mai `id`/consensi); `ProfileEditScreen.tsx`. Cambio email
   via `updateEmail` (secure email change Supabase, doppia conferma).
-- **Cancellazione (Art.17)** — due modalità (`DeleteAccountScreen.tsx`):
+- **Cancellazione (Art.17)** — due modalità (`DeleteAccountScreen.tsx`).
+  🔴 **Limite emerso dalla call con Let's Donation del 2026-09-08, da tenere presente quando
+  l'integrazione sarà attiva**: quanto segue vale per **il nostro archivio**. Dal lato del partner
+  la cancellazione **non esiste** — «non abbiamo la funzione di blacklist, quindi di oblio»
+  (`00:18:48`): l'unica azione possibile è l'**anonimizzazione** (nome e cognome → `xxxxxxx`,
+  l'attività resta per non perdere le statistiche sulle donazioni). Loro stessi dichiarano che
+  «se capiterà una volta sola sapremo chi è» (`00:26:43`), cioè la re-identificazione per
+  esclusione resta possibile. ⇒ **Una richiesta di cancellazione non produrrà lo stesso effetto
+  sui due lati**, e questo va detto nell'informativa e sottoposto al legale prima del rilascio
+  dell'integrazione (vincolo posto da Riccardo in call: «devo sentire prima gli avvocati se ci
+  deve essere o no per legge la cancellazione», `00:25:36`). Dettaglio del meccanismo:
+  `docs/integrazioni/scambio-dati-quadro.md`, riga «Propagazione di una richiesta di cancellazione».
   - **Immediata** — Edge Function `delete-account`: autorizza dal JWT del chiamante
     (cancella solo sé stesso), `auth.admin.deleteUser`, poi `signOut`. Cascade DB
     elimina profilo e `consent_events`. La revoca dei token Apple (`appleRevoke.ts`)
