@@ -187,3 +187,6 @@ rep/
 # Python (script di consegna documenti in scripts/)
 __pycache__/
 *.pyc
+
+# Stato locale della CLI di semgrep (login, guardian.yml): mai in git
+.semgrep/
