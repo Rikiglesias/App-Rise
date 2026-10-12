@@ -50,7 +50,8 @@ export const StatCard: React.FC<StatCardProps> = ({
         onPress={onPress}
         activeOpacity={0.9}
         disabled={!pressable}
-        accessibilityRole="button"
+        // Una card che non si tocca non va annunciata come pulsante dal lettore di schermo.
+        accessibilityRole={pressable ? 'button' : undefined}
         accessibilityState={{ disabled: !pressable }}
       >
         {withGradientBorder ? (

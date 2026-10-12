@@ -39,50 +39,6 @@ const ImpactTabScreenComponent: React.FC = () => {
   const styles = useMemo(() => createStyles(colors), [colors]);
   const mapLocations = useMemo(() => convertToMapLocations(), []);
 
-  const handleMealsPress = useCallback(() => {
-    try {
-      navigation.navigate('Meals');
-    } catch (error) {
-      logError(
-        'Navigation error to Meals screen',
-        error instanceof Error ? error.message : String(error)
-      );
-    }
-  }, [navigation]);
-
-  const handleKitsPress = useCallback(() => {
-    try {
-      navigation.navigate('Kits');
-    } catch (error) {
-      logError(
-        'Navigation error to Kits screen',
-        error instanceof Error ? error.message : String(error)
-      );
-    }
-  }, [navigation]);
-
-  const handleVolunteersPress = useCallback(() => {
-    try {
-      navigation.navigate('Volunteers');
-    } catch (error) {
-      logError(
-        'Navigation error to Volunteers screen',
-        error instanceof Error ? error.message : String(error)
-      );
-    }
-  }, [navigation]);
-
-  const handlePartnersPress = useCallback(() => {
-    try {
-      navigation.navigate('Partners');
-    } catch (error) {
-      logError(
-        'Navigation error to Partners screen',
-        error instanceof Error ? error.message : String(error)
-      );
-    }
-  }, [navigation]);
-
   const handleMapPress = useCallback(() => {
     try {
       // Apre la mappa fullscreen "Dove operiamo" con i paesi-evento (world map SVG)
@@ -107,7 +63,6 @@ const ImpactTabScreenComponent: React.FC = () => {
       accessibilityLabel="Schermata Impatto"
       testID="impact-tab-screen"
     >
-      {/* Nessun modal locale: si usa schermata esistente "In Fase di Sviluppo" */}
       <PlatformScrollView
         contentContainerStyle={{
           paddingBottom: scrollContentPadding,
@@ -117,10 +72,7 @@ const ImpactTabScreenComponent: React.FC = () => {
         <PerfectContainer style={isTablet ? styles.tabletContainer : {}}>
           <ImpactHeader />
 
-          <TotalMealsSection
-            onMealsPress={handleMealsPress}
-            onKitsPress={handleKitsPress}
-          />
+          <TotalMealsSection />
 
           <Results2024Section />
 
@@ -129,10 +81,7 @@ const ImpactTabScreenComponent: React.FC = () => {
             <PerfectContainer style={styles.sectionDivider} />
           </PerfectContainer>
 
-          <CommunitySection
-            onVolunteersPress={handleVolunteersPress}
-            onPartnersPress={handlePartnersPress}
-          />
+          <CommunitySection />
 
           {/* Linea divisoria tra Community e Mappa */}
           <PerfectContainer style={styles.sectionDividerContainer}>

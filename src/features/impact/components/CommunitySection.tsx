@@ -11,18 +11,11 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
-interface Props {
-  onVolunteersPress: () => void;
-  onPartnersPress: () => void;
-}
-
 /**
- * Sezione community con volontari e partner, header decorativo e card interattive
+ * Sezione community con volontari e partner e header decorativo.
+ * Card solo numeri, senza tocco: vedi TotalMealsSection.
  */
-export const CommunitySection: React.FC<Props> = ({
-  onVolunteersPress,
-  onPartnersPress,
-}) => {
+export const CommunitySection: React.FC = () => {
   const { t } = useTranslation();
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
@@ -69,7 +62,8 @@ export const CommunitySection: React.FC<Props> = ({
             colors.gradients.success[0],
             colors.gradients.success[2],
           ]}
-          onPress={onVolunteersPress}
+          pressable={false}
+          showChevron={false}
         />
         <StatCard
           icon="handshake"
@@ -81,7 +75,8 @@ export const CommunitySection: React.FC<Props> = ({
             colors.gradients.purple[0],
             colors.gradients.purple[2],
           ]}
-          onPress={onPartnersPress}
+          pressable={false}
+          showChevron={false}
         />
       </PerfectContainer>
     </PerfectContainer>

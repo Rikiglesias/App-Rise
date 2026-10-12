@@ -12,18 +12,12 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
-interface Props {
-  onMealsPress: () => void;
-  onKitsPress: () => void;
-}
-
 /**
- * Sezione dei numeri totali con header decorativo e card interattive
+ * Sezione dei numeri totali con header decorativo.
+ * Le card sono solo numeri: le schede di dettaglio non esistono ancora e il tocco
+ * apriva la schermata "In fase di sviluppo", da non mostrare nella versione store.
  */
-export const TotalMealsSection: React.FC<Props> = ({
-  onMealsPress,
-  onKitsPress,
-}) => {
+export const TotalMealsSection: React.FC = () => {
   const { t } = useTranslation();
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
@@ -72,7 +66,8 @@ export const TotalMealsSection: React.FC<Props> = ({
           label={t('impact.totalMealsLabel')}
           subtitle={t('impact.totalMealsSubtitle2')}
           gradientColors={[colors.primary[600], colors.primary[800]]}
-          onPress={onMealsPress}
+          pressable={false}
+          showChevron={false}
         />
         <StatCard
           icon="package-variant"
@@ -81,7 +76,8 @@ export const TotalMealsSection: React.FC<Props> = ({
           label={t('impact.totalKits')}
           subtitle={t('impact.totalKitsSubtitle')}
           gradientColors={[colors.neutral[700], colors.neutral[900]]}
-          onPress={onKitsPress}
+          pressable={false}
+          showChevron={false}
         />
       </PerfectContainer>
     </PerfectContainer>
