@@ -72,3 +72,24 @@ export const isEmailConfirmRedirect = (url: string): boolean => {
     p.type === 'signup' && Boolean(p.access_token) && Boolean(p.refresh_token)
   );
 };
+
+/** Quale link auth è tornato indietro con un errore. */
+export type AuthLinkErrorKind = 'reset' | 'confirm';
+
+/**
+ * Link scaduto, già usato o rifiutato: Supabase rientra nell'app sullo stesso
+ * redirect ma con `error_code` nel fragment al posto dei token
+ * (es. `rahitalia://reset-password#error=access_denied&error_code=otp_expired`).
+ * Prima questo URL non combaciava con nessun ramo e la persona restava senza
+ * spiegazioni. Ritorna quale dei due flussi è fallito, o `null`.
+ */
+export const getAuthLinkError = (url: string): AuthLinkErrorKind | null => {
+  if (!parseAuthRedirect(url).error_code) return null;
+  const [beforeFragment = ''] = url.split('#');
+  const [beforeQuery = ''] = beforeFragment.split('?');
+  const path = beforeQuery.replace(/\/+$/, '');
+  const lastSegment = path.slice(path.lastIndexOf('/') + 1);
+  if (lastSegment === RESET_PASSWORD_PATH) return 'reset';
+  if (lastSegment === EMAIL_CONFIRM_PATH) return 'confirm';
+  return null;
+};

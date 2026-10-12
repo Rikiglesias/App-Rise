@@ -93,6 +93,15 @@ export default {
       success: 'Password updated. You can now sign in with your new password.',
       continue: 'Continue',
     },
+    // Email link opened after it expired or was already used: Supabase returns
+    // to the app with an error instead of tokens, and nothing used to happen.
+    linkExpired: {
+      title: 'Link expired',
+      reset:
+        'This password reset link has expired or was already used. Request a new one with “Forgot password?” on the sign-in screen.',
+      confirm:
+        'This confirmation link has expired or was already used. If you already confirmed your email, just sign in. Otherwise write to info@riseagainsthunger.it and we will help you complete your registration.',
+    },
     profile: {
       title: 'My profile',
       logout: 'Sign out',

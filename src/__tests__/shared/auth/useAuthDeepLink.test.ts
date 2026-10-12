@@ -1,8 +1,10 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 
 import type { RootStackParamList } from '@/navigation/types';
 import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
+import { changeLanguage, getCurrentLocale } from '@/locales';
 
 // URL deep link iniettato da expo-linking (controllato per-test).
 let mockUrl: string | null = null;
@@ -126,5 +128,75 @@ describe('useAuthDeepLink', () => {
     rerender({ ref: nav2.ref });
 
     expect(mockCompleteRecovery).toHaveBeenCalledTimes(1);
+  });
+
+  // Link dell'email aperto dopo la scadenza (o già usato): Supabase rientra con
+  // `error_code` nel fragment al posto dei token. Prima nessun ramo combaciava e la
+  // persona vedeva l'app aprirsi senza spiegazioni.
+  describe('link scaduto', () => {
+    const EXPIRED_RESET_URL =
+      'rahitalia://reset-password#error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid+or+has+expired';
+    const EXPIRED_CONFIRM_URL =
+      'rahitalia://confirm-email#error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid+or+has+expired';
+    let alertSpy: jest.SpyInstance;
+    let localeBefore: ReturnType<typeof getCurrentLocale>;
+
+    beforeEach(() => {
+      localeBefore = getCurrentLocale();
+      alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      changeLanguage(localeBefore);
+      alertSpy.mockRestore();
+    });
+
+    it('link scaduto (it): reset password mostra il messaggio tradotto con l’invito a chiederne uno nuovo', () => {
+      changeLanguage('it');
+      mockUrl = EXPIRED_RESET_URL;
+      const nav = makeNavRef(true);
+      renderHook(() => useAuthDeepLink(nav.ref));
+
+      expect(alertSpy).toHaveBeenCalledTimes(1);
+      const [title, message] = alertSpy.mock.calls[0];
+      expect(title).toBe('Link scaduto');
+      expect(message).toContain('Password dimenticata?');
+      expect(mockCompleteRecovery).not.toHaveBeenCalled();
+      expect(nav.navigate).not.toHaveBeenCalled();
+    });
+
+    it('link scaduto (en): reset password mostra il messaggio inglese', () => {
+      changeLanguage('en');
+      mockUrl = EXPIRED_RESET_URL;
+      const nav = makeNavRef(true);
+      renderHook(() => useAuthDeepLink(nav.ref));
+
+      expect(alertSpy).toHaveBeenCalledTimes(1);
+      const [title, message] = alertSpy.mock.calls[0];
+      expect(title).toBe('Link expired');
+      expect(message).toContain('Forgot password?');
+    });
+
+    it('link scaduto (it): conferma email mostra il messaggio di conferma, non quello del reset', () => {
+      changeLanguage('it');
+      mockUrl = EXPIRED_CONFIRM_URL;
+      const nav = makeNavRef(true);
+      renderHook(() => useAuthDeepLink(nav.ref));
+
+      expect(alertSpy).toHaveBeenCalledTimes(1);
+      const [, message] = alertSpy.mock.calls[0];
+      expect(message).toContain('conferma');
+      expect(message).not.toContain('Password dimenticata?');
+      expect(mockCompleteEmailConfirm).not.toHaveBeenCalled();
+    });
+
+    it('link scaduto: lo stesso URL non ripete l’avviso a ogni render', () => {
+      mockUrl = EXPIRED_RESET_URL;
+      const nav = makeNavRef(true);
+      const { rerender } = renderHook(() => useAuthDeepLink(nav.ref));
+      rerender({});
+
+      expect(alertSpy).toHaveBeenCalledTimes(1);
+    });
   });
 });

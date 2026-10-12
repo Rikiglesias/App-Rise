@@ -1,10 +1,16 @@
 import { useEffect, useRef } from 'react';
+import { Alert } from 'react-native';
 import { useURL } from 'expo-linking';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 
 import { useAuth } from './AuthContext';
-import { isRecoveryRedirect, isEmailConfirmRedirect } from './authRedirect';
+import {
+  isRecoveryRedirect,
+  isEmailConfirmRedirect,
+  getAuthLinkError,
+} from './authRedirect';
 import type { RootStackParamList } from '@/navigation/types';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 /**
  * Intercetta i deep link auth con token nel fragment (flusso implicit,
@@ -16,6 +22,8 @@ import type { RootStackParamList } from '@/navigation/types';
  *   la persona non lo decide questo hook: diventa autenticata, e se il profilo è
  *   incompleto il cancello la porta al completamento invece che su Home — è il
  *   comportamento voluto («appena fa accesso»), non un effetto collaterale.
+ * - link scaduto o già usato (`error_code` nel fragment) → avviso tradotto che dice
+ *   come chiederne uno nuovo: senza, l'app si apriva e non succedeva nulla.
  *
  * Usa il `navigationRef` del container (non `useNavigation`) perché va montato a
  * livello di AppNavigator, fuori dal singolo navigator. Guard `handled` per non
@@ -26,12 +34,20 @@ export const useAuthDeepLink = (
 ): void => {
   const url = useURL();
   const { completeRecoveryFromUrl, completeEmailConfirmFromUrl } = useAuth();
+  const { t } = useTranslation();
   const handled = useRef<string | null>(null);
 
   useEffect(() => {
     if (!url || handled.current === url) return;
 
-    if (isRecoveryRedirect(url)) {
+    const linkError = getAuthLinkError(url);
+    if (linkError) {
+      handled.current = url;
+      Alert.alert(
+        t('auth.linkExpired.title'),
+        t(`auth.linkExpired.${linkError}`)
+      );
+    } else if (isRecoveryRedirect(url)) {
       handled.current = url;
       void completeRecoveryFromUrl(url).then(({ ok }) => {
         if (ok && navigationRef.isReady()) {
@@ -47,5 +63,6 @@ export const useAuthDeepLink = (
     completeRecoveryFromUrl,
     completeEmailConfirmFromUrl,
     navigationRef,
+    t,
   ]);
 };

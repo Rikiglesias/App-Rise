@@ -98,6 +98,15 @@ export default {
       success: 'Password aggiornata. Ora puoi accedere con la nuova password.',
       continue: 'Continua',
     },
+    // Link dell'email aperto quando era già scaduto o usato: Supabase rientra
+    // nell'app con un errore al posto dei token, e prima non succedeva nulla.
+    linkExpired: {
+      title: 'Link scaduto',
+      reset:
+        'Il link per reimpostare la password è scaduto o è già stato usato. Chiedine uno nuovo con «Password dimenticata?» nella schermata di accesso.',
+      confirm:
+        'Il link di conferma è scaduto o è già stato usato. Se hai già confermato l’email, accedi pure. Altrimenti scrivici a info@riseagainsthunger.it e ti aiutiamo a completare la registrazione.',
+    },
     profile: {
       title: 'Il mio profilo',
       logout: 'Esci',
