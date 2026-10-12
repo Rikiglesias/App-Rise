@@ -66,7 +66,10 @@ export default withDefaultStrings({
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
-    version: '1.2.9',
+    // 1.3.0: prima versione per Google Play (pacchetto nuovo). Il runtime OTA segue la
+    // versione (`runtimeVersion.policy: appVersion`), quindi resta separato dalla 1.2.9
+    // già negli store, che ha moduli nativi diversi.
+    version: '1.3.0',
     // Custom URL scheme per i deep link auth (es. reset password: rahitalia://reset-password).
     // Expo prebuild configura iOS CFBundleURLTypes + Android intent-filter. La stessa URL va
     // aggiunta all'allow-list Redirect URLs del progetto Supabase.
@@ -158,8 +161,8 @@ export default withDefaultStrings({
       icon: './assets/icons/app/app-icon.png',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
-        NSCameraUsageDescription:
-          'Questa app utilizza la fotocamera per scansionare QR code per donazioni e eventi.',
+        // Nessuna NSCameraUsageDescription: l'app non usa la fotocamera (nessun modulo
+        // che la apra), e dichiararla farebbe chiedere ai revisori a cosa serve.
         CFBundleLocalizations: ['it', 'en'], // Lingue supportate nelle Settings iOS
         CFBundleDevelopmentRegion: 'it', // Lingua di default
         NSAppTransportSecurity: {
@@ -197,9 +200,9 @@ export default withDefaultStrings({
       // Mappa: MapLibre + MapTiler (style via EXPO_PUBLIC_MAPTILER_KEY a runtime),
       // nessuna API key Google nativa richiesta.
       icon: './assets/icons/app/app-icon.png',
-      // Permessi specifici con giustificazione
+      // Permessi specifici con giustificazione. Niente CAMERA: nessuna funzione la usa,
+      // e un permesso dichiarato senza uso va giustificato nel modulo di Play Console.
       permissions: [
-        'CAMERA', // QR code scanning per donazioni
         'INTERNET', // Comunicazione API
         'ACCESS_NETWORK_STATE', // Monitoraggio stato rete
         // Nota: com.google.android.gms.permission.AD_ID non necessario
@@ -209,23 +212,16 @@ export default withDefaultStrings({
       blockedPermissions: [
         'com.google.android.gms.permission.AD_ID', // App non usa advertising
       ],
-      // Configurazioni sicurezza enterprise
-      networkSecurityConfig:
-        (process.env.APP_ENV ?? process.env.NODE_ENV) === 'development'
-          ? './android-network-security-config.xml'
-          : './android-network-security-config.prod.xml',
       // Configurazioni build production
       allowBackup: false, // Sicurezza: no backup automatici
       requestLegacyExternalStorage: false, // Scoped storage Android 10+
       // Configurazioni Google Play Store
       playStoreUrl:
         'https://play.google.com/store/apps/details?id=org.riseagainsthunger.italia',
-      // Configurazioni performance
-      compileSdkVersion: 34,
-      targetSdkVersion: 34,
-      minSdkVersion: 21, // Android 5.0+ (95% coverage)
-      // Configurazioni proguard per obfuscation
-      proguardFiles: ['proguard-android-optimize.txt'],
+      // Livelli API: decide l'SDK di Expo (54: compile e target 36, min 24). Le chiavi
+      // compileSdkVersion/targetSdkVersion/minSdkVersion/proguardFiles/networkSecurityConfig
+      // che stavano qui non sono configurazione Expo e non venivano applicate: tolte il
+      // 2026-10-12. Se servisse cambiarli, si usa il plugin `expo-build-properties`.
       // Configurazioni splash screen Android 12+
       splash: {
         backgroundColor: '#FFFFFF',

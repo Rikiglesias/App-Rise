@@ -13,11 +13,12 @@ managed + EAS).
 - iOS `NSAppTransportSecurity` vieta il traffico arbitrario
   (`NSAllowsArbitraryLoads: false`) e impone TLS ≥ 1.2 con forward secrecy sui
   domini `riseagainsthunger.org` (`app.config.js`).
-- Android usa una network security config dedicata: in development
-  `android-network-security-config.xml`, in produzione
-  `android-network-security-config.prod.xml`
-  (`app.config.js`, chiave `android.networkSecurityConfig`). Cleartext bloccato;
-  vedi sotto per il pinning SPKI.
+- Android: traffico in chiaro bloccato di default dal sistema (target SDK 36, quindi
+  ben oltre la soglia 28). Nessuna network security config personalizzata e nessun
+  pinning dei certificati: i due XML e la chiave `android.networkSecurityConfig`
+  non sono configurazione Expo, non venivano applicati e sono stati rimossi il
+  2026-10-12 (goal `android-play`, decisione 5: un pinning su host dietro Cloudflare
+  romperebbe l'app alla rotazione del certificato).
 
 ### Storage & Secrets
 
@@ -67,7 +68,7 @@ managed + EAS).
 | Priorità | Attività | Dettagli |
 | --- | --- | --- |
 | Alta | Firma OTA obbligatoria | Genera il certificato con `npx expo-updates codesigning:generate` e imposta le `EXPO_UPDATES_CODE_SIGNING_*`. Verifica un update sul canale `preview`. |
-| Alta | Pin TLS Android (SPKI) | Aggiorna `android-network-security-config.xml` e `android-network-security-config.prod.xml` con i pin SPKI (leaf + backup). Vedi guida sotto. |
+| Bassa | Pin TLS Android (SPKI) | Non attivo per scelta (2026-10-12): host dietro Cloudflare, rischio di app rotta alla rotazione del certificato. Se un giorno servisse, va applicato da un plugin nativo vero, con pin di backup e scadenza. |
 | Media | Monitor esterno | Sentry è già integrato (`@sentry/react-native`): basta impostare `EXPO_PUBLIC_SENTRY_DSN` (+ `SENTRY_ORG`/`SENTRY_PROJECT` per il plugin nativo e l'upload source map). |
 | Media | Audit periodico permessi | Mantieni la lista dei permessi Android allineata alle funzionalità reali prima di ogni release. |
 
@@ -75,30 +76,8 @@ managed + EAS).
 
 ## Aggiornamento Pin TLS (Android)
 
-1. Recupera il certificato del dominio (es. `api.riseagainsthunger.org`):
-
-   ```bash
-   echo | openssl s_client -servername api.riseagainsthunger.org -connect api.riseagainsthunger.org:443 2>/dev/null \
-     | openssl x509 -pubkey -noout \
-     | openssl pkey -pubin -outform DER \
-     | openssl dgst -sha256 -binary \
-     | openssl enc -base64
-   ```
-
-2. Ripeti per un certificato di backup (es. staging o certificato intermedio).
-3. Aggiorna il blocco `<pin-set>` con i nuovi digest (sia in
-   `android-network-security-config.xml` sia in
-   `android-network-security-config.prod.xml`) e, se possibile, estendi la data
-   `expiration`.
-4. Testa l'app:
-   - Produzione: richiesta verso `https://api...` deve riuscire.
-   - Dominio manomesso / vecchio certificato: la richiesta deve fallire con
-     errore di handshake.
-
-> Suggerimento: conserva i pin precedenti finché il nuovo certificato non è in
-> produzione, per evitare lock-out.
-
----
+Procedura ritirata il 2026-10-12: il pinning non è attivo (vedi «Trasporto» sopra).
+Lo storico della vecchia procedura è in `git log -p` di questo file.
 
 ## Performance
 

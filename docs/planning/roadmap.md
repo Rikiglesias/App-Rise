@@ -14,7 +14,7 @@
 - ⚡ Implementare selettori memoizzati negli store Zustand
 - 🔒 Creare test completi per apiSecurity.ts (validazione, rate limiting, headers)
 - 🔒 **COMPLETATO:** Creare test completi per secureStorage.ts (51 test, copertura 100%)
-- 🔒 **COMPLETATO:** Aggiornare android-network-security-config.xml con SSL pinning reali
+- 🔒 ~~Aggiornare android-network-security-config.xml con SSL pinning reali~~ — superato il 2026-10-12: non veniva applicato, file rimossi, pinning non attivo per scelta
 - 🧪 **COMPLETATO:** Implementare test di sicurezza per validazione input (75 test)
 - 🧪 **COMPLETATO:** Creare test di penetrazione per servizi API (16 test OWASP Top 10)
 
@@ -46,6 +46,9 @@
 ---
 
 #### ✅ **2. SICUREZZA: SSL Pinning Android** (COMPLETATO)
+
+> ⚠️ Superato il 2026-10-12: quei pin non sono mai stati applicati (`android.networkSecurityConfig`
+> non è una chiave Expo); file rimossi, pinning non attivo per scelta (goal `android-play`).
 **ID Task:** 38 | **Status:** ✅ COMPLETED | **Categoria:** Sicurezza
 
 **Risultati Raggiunti:**
@@ -62,7 +65,7 @@
 - ✅ Configurazione separata per development
 - ✅ Hardening completo contro MITM attacks
 
-**File Aggiornato:** `android-network-security-config.xml`
+**File Aggiornato:** `android-network-security-config.xml` (rimosso il 2026-10-12: non veniva applicato)
 
 ---
 

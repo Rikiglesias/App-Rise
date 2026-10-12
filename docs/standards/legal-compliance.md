@@ -234,15 +234,12 @@ piattaforme esterne.
 
 ### Trasporto
 
-- **Certificate pinning** Android — `android-network-security-config.xml`: `pin-set`
-  per `riseagainsthunger.org` e `italy.riseagainsthunger.org` (scadenza pin 2030-06-04),
-  `cleartextTrafficPermitted="false"` sui domini di produzione.
-- **No cleartext** di default (`base-config`), eccezione solo per host di
-  sviluppo locale (localhost, 10.0.2.2, exp.direct).
+- **Certificate pinning** Android: non attivo. La configurazione XML citata qui prima non
+  veniva applicata (chiave non riconosciuta da Expo) ed è stata rimossa il 2026-10-12.
+- **No cleartext**: bloccato di default da Android per le app con target SDK ≥ 28 (oggi 36).
 
 > ⚠️ DA VERIFICARE — equivalente iOS (App Transport Security / NSAppTransportSecurity)
-> in `app.config.js`/Info.plist e copertura del pinning verso l'endpoint Supabase
-> (`*.supabase.co`), oggi NON incluso nel pin-set.
+> in `app.config.js`/Info.plist.
 
 ### Storage locale
 
@@ -289,8 +286,8 @@ piattaforme esterne.
 
 ### Sicurezza
 
-- [x] Certificate pinning Android (domini Rise)
-- [ ] Pinning/ATS iOS verificati; pinning endpoint Supabase valutato
+- [ ] Certificate pinning Android: non attivo per scelta (2026-10-12, host dietro Cloudflare)
+- [ ] ATS iOS verificato
 - [x] Secure storage iOS/Android (Keychain/Keystore)
 - [x] RLS attiva su tutte le tabelle dati
 - [x] Crash monitoring (Sentry, DSN da env)

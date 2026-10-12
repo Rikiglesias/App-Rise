@@ -22,7 +22,6 @@ tsconfig.json @Rikiglesias
 
 # 🛡️ SECURITY FILES - MASSIMA PROTEZIONE
 # Configurazioni di sicurezza
-android-network-security-config.xml @Rikiglesias
 
 # 🚀 CI/CD & WORKFLOW
 # GitHub Actions e script di automazione

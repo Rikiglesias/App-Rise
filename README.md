@@ -58,8 +58,7 @@ progetti di sviluppo agricolo e programmi di nutrizione scolastica.
 
 ### **🛡️ Sicurezza Enterprise**
 
-- 🔒 **Network Security**: Android Network Security Config
-- 🔐 **Certificate Pinning**: SSL/TLS protection
+- 🔒 **Network Security**: solo HTTPS (traffico in chiaro bloccato dal sistema)
 - 🛡️ **Data Protection**: GDPR compliant
 - 🔑 **Secure Storage**: Expo SecureStore
 - 📊 **Error Tracking**: Monitoraggio automatico
