@@ -9,9 +9,19 @@ import { criteri as ambiente } from './verifica-android-play/ambiente.mjs';
 import { criteri as app } from './verifica-android-play/app.mjs';
 import { criteri as binario } from './verifica-android-play/binario.mjs';
 import { criteri as visivo } from './verifica-android-play/visivo.mjs';
+import { criteri as documenti } from './verifica-android-play/documenti.mjs';
+import { criteri as rilascio } from './verifica-android-play/documenti-rilascio.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
 
-const CRITERI = { ...config, ...ambiente, ...app, ...binario, ...visivo };
+const CRITERI = {
+  ...config,
+  ...ambiente,
+  ...app,
+  ...binario,
+  ...visivo,
+  ...documenti,
+  ...rilascio,
+};
 const ATTESI = [
   'C1',
   'C2',
