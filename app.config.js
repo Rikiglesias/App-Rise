@@ -187,10 +187,12 @@ export default withDefaultStrings({
     // Configurazioni sicurezza Android - Enterprise Grade
     android: {
       displayName: 'RAH Italia',
+      // Icona adattiva: il simbolo dentro il cerchio sicuro e la sua maschera per le icone a
+      // tema. Si rigenerano da logo.png con `node scripts/genera-icona-adattiva.mjs`.
       adaptiveIcon: {
-        foregroundImage: './assets/icons/app/app-icon.png',
+        foregroundImage: './assets/icons/app/adaptive-foreground.png',
         backgroundColor: '#FFFFFF',
-        monochromeImage: './assets/icons/app/app-icon.png',
+        monochromeImage: './assets/icons/app/adaptive-monochrome.png',
       },
       package: process.env.ANDROID_PACKAGE || 'org.riseagainsthunger.italia',
       // versionCode removed - managed by EAS remote (appVersionSource: "remote" in eas.json)
