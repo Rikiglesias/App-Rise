@@ -45,7 +45,7 @@
 
 ---
 
-#### ✅ **2. SICUREZZA: SSL Pinning Android** (COMPLETATO)
+#### ~~✅ **2. SICUREZZA: SSL Pinning Android** (COMPLETATO)~~ — superato il 2026-10-12
 
 > ⚠️ Superato il 2026-10-12: quei pin non sono mai stati applicati (`android.networkSecurityConfig`
 > non è una chiave Expo); file rimossi, pinning non attivo per scelta (goal `android-play`).
@@ -496,7 +496,7 @@ Ottimizzare il tree shaking delle dipendenze per eliminare codice non utilizzato
 
 **✅ Sprint 1 COMPLETATO - Sicurezza Critica (4 task):**
 - ✅ Task 37: Test secureStorage.ts (51 test) - 8 ore
-- ✅ Task 38: SSL pinning Android (pin reali) - 6 ore
+- ✅ Task 38: SSL pinning Android (pin reali) - 6 ore — superato il 2026-10-12: mai applicato, file rimossi
 - ✅ Task 39: Test validazione input (75 test) - 8 ore
 - ✅ Task 40: Test penetrazione API (16 test OWASP) - 5 ore
 
@@ -545,7 +545,7 @@ Ottimizzare il tree shaking delle dipendenze per eliminare codice non utilizzato
 
 ### **Sicurezza:**
 - ✅ **COMPLETATO:** Zero vulnerabilità critiche
-- ✅ **COMPLETATO:** SSL pinning implementato
+- ~~✅ **COMPLETATO:** SSL pinning implementato~~ — superato il 2026-10-12: pinning non attivo per scelta
 - ✅ **COMPLETATO:** Input validation 100%
 - ✅ **COMPLETATO:** Penetration test passed
 - ✅ **COMPLETATO:** 91 test di sicurezza enterprise

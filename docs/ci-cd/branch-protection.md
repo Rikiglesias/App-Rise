@@ -78,9 +78,6 @@ Crea file `.github/CODEOWNERS`:
 *.config.* @Rikiglesias
 package.json @Rikiglesias
 tsconfig.json @Rikiglesias
-
-# Security & sensitive files
-/android/app/src/main/res/xml/network_security_config.xml @Rikiglesias
 ```
 
 ---
