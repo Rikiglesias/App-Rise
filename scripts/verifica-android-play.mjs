@@ -13,6 +13,7 @@ import { criteri as documenti } from './verifica-android-play/documenti.mjs';
 import { criteri as rilascio } from './verifica-android-play/documenti-rilascio.mjs';
 import { criteri as cancellazione } from './verifica-android-play/documenti-cancellazione.mjs';
 import { criteri as informativa } from './verifica-android-play/documenti-informativa.mjs';
+import { criteri as play } from './verifica-android-play/documenti-play.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
 
 const CRITERI = {
@@ -25,6 +26,7 @@ const CRITERI = {
   ...rilascio,
   ...cancellazione,
   ...informativa,
+  ...play,
 };
 const ATTESI = [
   'C1',

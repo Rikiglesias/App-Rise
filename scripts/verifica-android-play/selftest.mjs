@@ -20,12 +20,14 @@ import { FIXTURE_VISIVO } from './selftest-visivo.mjs';
 import { FIXTURE_DOCUMENTI } from './selftest-documenti.mjs';
 import { FIXTURE_CANCELLAZIONE } from './selftest-cancellazione.mjs';
 import { FIXTURE_INFORMATIVA } from './selftest-informativa.mjs';
+import { FIXTURE_PLAY } from './selftest-play.mjs';
 
 export const FIXTURE = {
   ...FIXTURE_VISIVO,
   ...FIXTURE_DOCUMENTI,
   ...FIXTURE_CANCELLAZIONE,
   ...FIXTURE_INFORMATIVA,
+  ...FIXTURE_PLAY,
   C1: {
     neg: [
       cfg({ package: 'it.creareunapp.editor.android63da226b447a7' }),

@@ -1,4 +1,4 @@
-// Fixture del selftest (C22) per i documenti: C13-C15, C17, C19, C20.
+// Fixture del selftest (C22) per i documenti: C15, C19, C20.
 import { ATTORI_C20, SEZIONI_C19 } from './documenti-rilascio.mjs';
 
 const campi = (extra = {}) => ({
