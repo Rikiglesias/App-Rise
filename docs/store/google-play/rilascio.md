@@ -185,11 +185,15 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
    verificato (la sede USA ha messo i tag). Se no: **Invia richiesta di verifica** dalla stessa pagina.
 3. **Telefoni**: in «Dettagli account» verificare il numero di telefono di contatto con il codice via SMS.
 4. **Tipo di account**: in «Dettagli account» deve esserci «Organizzazione». Se c'è «Personale» ⇒ ramo del § 7.
-5. **Service account** (solo per l'invio con `eas submit`; senza, si carica a mano, § 2): in «Utenti e autorizzazioni»
-   c'è già un service account per i caricamenti. Controllare di chi è il progetto Google Cloud che lo contiene e che
-   abbia solo i permessi di rilascio. Poi Google Cloud Console → IAM → Service account → **Chiavi** →
-   **Aggiungi chiave** → JSON, e caricare il file su expo.dev → Credentials → Android → `org.riseagainsthunger.italia` → Service
-   credentials. Mai mandarlo per mail o metterlo nel repository.
+5. **Service account** (un utente automatico che carica versioni dell'app senza password; serve solo per l'invio con
+   `eas submit`, senza si carica a mano, § 2). In «Utenti e autorizzazioni» ce n'è già uno. **Prima di ogni altra
+   cosa** si stabilisce di chi è il progetto Google Cloud che lo contiene («Chi fa cosa» → Riccardo, punto 8): chi ha
+   accesso a quel progetto può crearsi una chiave e caricare versioni a nome dell'associazione.
+   - Progetto dell'associazione (o di Riccardo, che lo gestisce per lei): lasciare al service account solo i permessi di
+     rilascio su questa app (niente amministratore, niente «tutte le app»).
+   - Proprietario non riconosciuto: **rimuovere** il service account da «Utenti e autorizzazioni» e caricare a mano.
+   La chiave si carica solo su expo.dev → Credentials → Android → `org.riseagainsthunger.italia` → Service
+   credentials. Mai mandarla per mail, in chat o nel repository.
 
 ### Alberto (presidente, legale rappresentante)
 
@@ -217,6 +221,12 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
    - Kosovo, Russia, Bielorussia: tenerli fra i paesi se Play Console li offre, o toglierli.
    - Codice di provenienza: per quanto tempo conservarlo (oggi senza scadenza: serve una migration).
    - Sentry: quando riaccenderlo (dopo il lancio, con progetto UE e informativa aggiornata).
+8. **Service account dei caricamenti**: su questo PC c'è il file di una sua chiave (creato l'08/11/2025), quindi il
+   progetto Google Cloud che lo contiene è raggiungibile dal tuo account Google. In Google Cloud Console, con il tuo
+   account: aprire quel progetto → IAM e amministrazione → **IAM** (chi sono i proprietari) → **Service account** →
+   **Chiavi** (quante chiavi attive ci sono). Tenere solo le persone dell'associazione e solo la chiave che si usa;
+   le altre si **eliminano** da lì. Il file sul PC: caricarlo su expo.dev (vedi Simone, punto 5) e poi cancellarlo,
+   oppure eliminare la chiave in Google Cloud se l'invio automatico non serve.
 
 ### Sede USA (Rick, Kevin)
 
