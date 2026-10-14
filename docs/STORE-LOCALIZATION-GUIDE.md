@@ -114,81 +114,12 @@ Carica screenshot in italiano per:
 
 ---
 
-## 🤖 Google Play Console (Android) - SETUP MANUALE NECESSARIO
+## 🤖 Google Play (Android)
 
-### Passo 1: Accedi a Google Play Console
-1. Vai su: https://play.google.com/console
-2. Accedi con il tuo account Google developer
-3. Seleziona l'app **"RAH Italia"**
-
-### Passo 2: Aggiungi Lingua Italiana
-1. Nel menu laterale, vai su **"Crescita" → "Scheda dello Store" → "Scheda dello Store principale"**
-2. In alto, clicca **"Aggiungi lingua"**
-3. Seleziona **"Italiano (Italia)"**
-4. Clicca **"Aggiungi"**
-
-### Passo 3: Compila i Campi in Italiano
-
-**Nome app (massimo 30 caratteri):**
-```
-RAH Italia
-```
-
-**Descrizione breve (massimo 80 caratteri):**
-```
-Lotta contro la fame. Dona, fai volontariato e scopri il nostro impatto.
-```
-
-**Descrizione completa (massimo 4000 caratteri):**
-```
-🌍 UNISCITI ALLA MISSIONE #FAMEZERO
-
-Rise Against Hunger Italia combatte la fame nel mondo. Con la nostra app puoi:
-
-✅ SCOPRI IL NOSTRO IMPATTO
-• Pasti distribuiti in tempo reale
-• Progetti in Italia, Ucraina, Mozambico
-• Storie delle persone che aiutiamo
-
-❤️ DONA IN SICUREZZA
-• Donazioni immediate e tracciabili
-• Supporta progetti specifici
-• Visualizza l'impatto delle tue donazioni
-
-📊 I NOSTRI NUMERI
-• 3+ milioni di pasti distribuiti
-• 100+ kit igienici forniti
-• 500+ volontari attivi
-• Progetti in 3 paesi
-
-🤝 DIVENTA VOLONTARIO
-• Eventi di confezionamento pasti
-• Community attiva
-• Fai la differenza
-
-📱 CARATTERISTICHE
-• Design moderno e intuitivo
-• Aggiornamenti real-time
-• Multilingua (IT/EN)
-
-🌟 LA NOSTRA MISSIONE
-La fame è risolvibile. Ogni pasto conta, ogni donazione fa la differenza.
-
-📞 CONTATTI
-Web: italy.riseagainsthunger.org
-Email: info@riseagainsthunger.it
-Social: @RAHItalia
-
-Scarica ora e inizia a fare la differenza!
-```
-
-### Passo 4: Grafica dello Store
-1. **Icona dell'app**: Caricata automaticamente dalla build
-2. **Immagine in evidenza**: 1024x500px (crea un banner)
-3. **Screenshot**: 
-   - Minimo 2, massimo 8
-   - Phone: 1080x1920px o superiore
-   - Tablet: 1200x1920px (opzionale)
+Le istruzioni Android stanno in [google-play/rilascio.md](./store/google-play/rilascio.md)
+(runbook della scheda nuova `org.riseagainsthunger.italia`); i testi della scheda IT/EN in
+[google-play/scheda.md](./store/google-play/scheda.md). I testi Android che stavano qui erano
+della vecchia app e non valgono più.
 
 ---
 
@@ -201,10 +132,7 @@ Dopo aver pubblicato la localizzazione:
 3. Gli utenti con iPhone in italiano vedranno la descrizione in italiano
 
 ### Android (Google Play)
-Dopo aver pubblicato:
-1. Vai sulla pagina dell'app su Google Play
-2. Gli utenti vedranno automaticamente la lingua corrispondente al loro dispositivo
-3. Nella sezione "Informazioni aggiuntive" apparirà "Lingue: Italiano, Inglese"
+Vedi [google-play/rilascio.md](./store/google-play/rilascio.md).
 
 ---
 
@@ -229,9 +157,7 @@ Dopo aver pubblicato:
 - [ ] App Store Connect: Aggiunta localizzazione italiana
 - [ ] App Store Connect: Compilati tutti i campi in italiano
 - [ ] App Store Connect: Caricate screenshot in italiano (opzionale)
-- [ ] Google Play: Aggiunta lingua italiana
-- [ ] Google Play: Compilati tutti i campi in italiano
-- [ ] Google Play: Caricate grafiche in italiano (opzionale)
+- [ ] Google Play: passi di [google-play/rilascio.md](./store/google-play/rilascio.md)
 - [ ] Verificato che "Lingue: Italiano, Inglese" appaia negli store
 
 ---

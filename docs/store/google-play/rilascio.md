@@ -1,0 +1,253 @@
+# Google Play — rilascio di App Rise (scheda nuova)
+
+App nuova `org.riseagainsthunger.italia` («Rise Against Hunger Italia»), versione 1.3.0, account sviluppatore
+dell'associazione (tipo **Organizzazione**, letto in Play Console il 01/10). Sostituisce la vecchia app 1.0 pubblicata
+da OpenClick (Creareunapp), che si ritira solo dopo.
+
+Ordine deciso da Riccardo il 12/10: **prima pubblichiamo la nuova, poi avvisiamo le persone di scaricarla, solo dopo
+OpenClick toglie la vecchia.** Chi fa cosa: § «Chi fa cosa» in fondo. Testi della scheda: `scheda.md`. Risposte ai
+moduli: `play-console-risposte.md`. Controllo automatico di questa pagina:
+`node scripts/verifica-android-play.mjs C19 C20`.
+
+I menu di Play Console cambiano nome ogni tanto: i percorsi qui sotto sono quelli delle guide Google lette a ottobre
+2026.
+
+## 1. Creare l'app in Play Console
+
+- Chi: Simone (proprietario) o chi ha il permesso di amministratore.
+- Play Console → **Tutte le app** → **Crea app**. Campi: `play-console-risposte.md` § «Creazione app».
+- Prima di creare: account non più limitato (D-U-N-S, sito, telefoni: «Chi fa cosa» → Simone).
+
+## 2. Primo invio su test interno
+
+La build si fa con il profilo `production-store` (AAB firmato con la chiave di caricamento custodita da EAS).
+
+```bash
+cd "C:/Users/albie/Desktop/Programmi/RAH/App Rise"
+npx eas build --platform android --profile production-store --non-interactive --no-wait
+npx eas build:list --platform android --limit 1
+```
+
+Invio, due strade:
+
+- **Con EAS** (serve la chiave del service account, «Chi fa cosa» → Simone):
+  `npx eas submit --platform android --profile production-store --id <ID-DELLA-BUILD>`.
+  `eas.json` manda la build sulla traccia `internal` con `releaseStatus: draft`: la release resta in **bozza** e si
+  completa a mano in Play Console. Expo: «If this is your app's first submission, the default `eas submit` command
+  works out of the box» (docs.expo.dev/submit/android).
+- **A mano**: scaricare il file `.aab` da expo.dev (pagina della build) → Play Console → **Test** → **Test interno** →
+  **Crea nuova release** → caricare il file.
+
+Al primo caricamento Play Console propone la **firma dell'app da parte di Google**: accettare. La chiave di EAS diventa
+la chiave di caricamento. Poi: aggiungere i tester interni (lista email) → **Rivedi release** → **Avvia
+l'implementazione**.
+
+## 3. Scheda e moduli
+
+- Testi IT/EN: `scheda.md` (Crescita → Scheda dello Store principale; lingua predefinita italiano, poi inglese).
+- Grafica: icona 512×512 e grafica in evidenza 1024×500 in `docs/store/google-play/grafica/`, screenshot
+  1080×1920 in `docs/store/google-play/screenshot/` (it, en).
+- Moduli di **Norme e programmi → Contenuti app**: incollare le risposte di `play-console-risposte.md`, sezione per
+  sezione. La sezione «Accesso all'app» chiede le credenziali dell'account demo («Chi fa cosa» → Riccardo).
+
+## 4. Rapporto pre-lancio
+
+Google lo genera da solo quando si carica un app bundle (answer/9842757): prova l'app su telefoni veri e segnala
+crash, problemi di accessibilità e di sicurezza. Per fargli vedere l'area personale servono le **credenziali**
+dell'account demo: Testa e rilascia → Test → Report pre-lancio → Impostazioni → «Credenziali dell'account di test» →
+**Fornisci credenziali**. Le credenziali si scrivono solo in
+Play Console, mai nel repository. Prima di andare in produzione: zero crash nel rapporto, avvisi letti uno per uno.
+
+## 5. Prima produzione al 100 %
+
+- Produzione → **Crea nuova release** → **Aggiungi dalla libreria** la stessa build già provata sul test interno.
+- Paesi: `play-console-risposte.md` § «Paesi».
+- La prima pubblicazione va al **100 %**: il rilascio graduale «può essere utilizzato soltanto per gli aggiornamenti
+  delle app e non per la loro prima pubblicazione» (support.google.com/googleplay/android-developer/answer/6346149).
+- **Invia per la revisione**. La revisione di un'app nuova può richiedere diversi giorni.
+
+## 6. Rilascio graduale degli aggiornamenti
+
+Dalla versione successiva alla prima: Produzione → nuova release → percentuale iniziale (proposta: 20 %), poi 50 % e
+100 % se Android vitals resta sotto le soglie (§ 11).
+
+- Aumentare: scheda **Release** → **Gestisci implementazione** → **Aggiorna implementazione** → nuova percentuale →
+  **Conferma aggiornamento**.
+- Fermarlo: **Gestisci implementazione** → **Interrompi implementazione**. Fonte answer/6346149: «nessun altro utente
+  riceverà la versione», chi l'ha già ricevuta la tiene. Per tornare indietro si pubblica una versione nuova con
+  `versionCode` più alto (Play non installa versioni precedenti).
+
+## 7. Account personale: ramo del test chiuso
+
+Il nostro account è di tipo Organizzazione, quindi questo passo **non** serve. Vale solo se Play Console mostra in
+Dashboard «Richiedi per la produzione» (segno che l'account è trattato come personale): Google chiede per gli «account
+personali creati dopo il 13 novembre 2023» un test chiuso con «un minimo di 12 tester, attivi ininterrottamente per
+almeno 14 giorni» (answer/14151465). Poi Dashboard → **Richiedi per la produzione**. In quel caso: Simone verifica il
+tipo di account («Chi fa cosa» → Simone) prima di reclutare i 12 tester.
+
+## 8. Gate prima dell'invio a Play
+
+Prima di **Invia per la revisione** le pagine pubbliche devono mostrare il testo del repository. Il marcatore è la riga
+«Ultimo aggiornamento» / «Last updated» di ogni file. Comando (Git Bash, dalla radice del repo; gli URL delle due pagine
+di cancellazione li dà la sede USA):
+
+```bash
+cd "C:/Users/albie/Desktop/Programmi/RAH/App Rise"
+controlla() {
+  marcatore=$(grep -o 'class="last-updated">[^<]*' "$1" | sed 's/.*>//')
+  if curl -fsSL "$2" | grep -qF "$marcatore"; then echo "OK      $2"; else echo "DIVERSA $2 (atteso: $marcatore)"; fi
+}
+controlla privacy-policy.html https://italy.riseagainsthunger.org/privacy-policy/
+controlla docs/store/google-play/web/elimina-account.html "<URL-ELIMINA-ACCOUNT>"
+controlla docs/store/google-play/web/delete-account.html "<URL-DELETE-ACCOUNT>"
+```
+
+Tre righe `OK` ⇒ si invia. Una riga `DIVERSA` ⇒ la pagina pubblicata è vecchia: non inviare, scrivere alla sede USA.
+L'URL della pagina di cancellazione va anche in Sicurezza dei dati (`play-console-risposte.md`).
+
+## 9. Aggiornamenti OTA
+
+Gli aggiornamenti del solo JavaScript arrivano senza passare dallo store, ma solo alle installazioni con la stessa
+versione nativa (`runtimeVersion: appVersion` ⇒ runtime `1.3.0`). Per Android si pubblica **solo** Android:
+
+```bash
+cd "C:/Users/albie/Desktop/Programmi/RAH/App Rise"
+npx eas update --branch production --platform android --message "<cosa cambia>"
+```
+
+Rollback (l'aggiornamento appena pubblicato è sbagliato): rimette in onda quello precedente o, se non c'è, quello
+contenuto nella build.
+
+```bash
+npx eas update:rollback <ID-DEL-GRUPPO> --platform android --message "rollback: <motivo>"
+```
+
+Una modifica nativa (permessi, librerie native, `app.config.js` lato Android) non passa mai via OTA: serve una build
+nuova e un invio a Play.
+
+## 10. Divieti
+
+- **Niente `npm run update:production`** finché la 1.3.0 non è negli store su entrambe le piattaforme: lo script
+  pubblica per tutte le piattaforme insieme.
+- **Niente submit né OTA iOS** (`submit:ios`, `submit:all`, `--platform ios`, `--platform all`) finché iOS non è
+  verificato a parte: la 1.2.9 iOS negli store ha moduli nativi diversi.
+- Niente invio a Play con il gate del § 8 non tutto `OK`.
+
+## 11. Android vitals nelle prime 2 settimane
+
+Ogni giorno per le prime 2 settimane: Play Console → **Monitora e migliora** → **Android vitals** → Panoramica.
+Soglie di Google (answer/9844486): arresti anomali percepiti ≥ 1,09 % degli utenti giornalieri, ANR percepiti ≥ 0,47 %
+(≥ 8 % su un singolo modello di telefono). Sopra soglia l'app «è probabile che sia meno rilevabile su Google Play».
+Un crash nuovo ⇒ fermare il rilascio graduale (§ 6) se ce n'è uno in corso, aprire il dettaglio dello stack, correggere.
+I crash arrivano qui anche senza Sentry (spento al lancio).
+
+## 12. Recensioni
+
+Play Console → **Valutazioni e recensioni** → **Recensioni**. Rispondere entro due giorni lavorativi, in pubblico, nella
+lingua della recensione, senza dati personali; un problema tecnico ⇒ invito a scrivere a `info@riseagainsthunger.it`.
+Chi ha ancora la vecchia app e recensisce questa: rispondere con il testo del § 14.
+
+## 13. Note per la revisione
+
+Play Console non ha un campo libero per le note al revisore: le istruzioni si leggono in **Contenuti app → Accesso
+all'app → Altre istruzioni** (answer/9859455). Testo da aggiungere lì, dopo le istruzioni di accesso:
+
+> Questa app è la nuova app ufficiale di Rise Against Hunger Italia, pubblicata dall'associazione con il proprio
+> account. Sostituisce la versione precedente, realizzata e pubblicata per nostro conto dal fornitore OpenClick
+> (Creareunapp) con identificativo `it.creareunapp.editor.android63da226b447a7`: il fornitore la ritirerà su nostra
+> richiesta scritta dopo il lancio di questa.
+
+Se Google contesta un'imitazione del marchio o un doppione: ricorso dalla notifica di Play Console allegando la PEC
+inviata a OpenClick («Chi fa cosa» → Alberto).
+
+## 14. Avviso agli utenti della 1.0
+
+Si manda dopo che la nuova è in produzione e prima del ritiro della vecchia. Testo per social, newsletter e sito:
+
+> **La nostra app è cambiata.** Su Google Play trovi la nuova app «Rise Against Hunger Italia»: <LINK-SCHEDA-PLAY>.
+> La vecchia app smetterà di funzionare il <DATA-RITIRO>. Tieni solo la nuova e disinstalla la vecchia.
+> Per l'area personale serve un account nuovo: i dati della vecchia app non passano alla nuova.
+
+Il link della scheda è `https://play.google.com/store/apps/details?id=org.riseagainsthunger.italia`. La data di ritiro
+è quella comunicata a OpenClick via PEC (almeno 7 giorni dopo l'avviso).
+
+## Chi fa cosa
+
+In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in questo file, in mail o in chat.
+
+### Simone (proprietario dell'account Play)
+
+1. **D-U-N-S**: fotografare in Play Console «Account sviluppatore → Informazioni personali → Dati dell'organizzazione»
+   (nome, indirizzo, D-U-N-S) e «Visualizza profilo pagamenti»; mandare le foto a Riccardo. La richiesta di correzione
+   a CRIBIS D&B (partner D&B per l'Italia, `dunsnumber@cribisdnb.com`) la prepara Claude con quei dati. Non modificare
+   nome, indirizzo o D-U-N-S direttamente in Play Console.
+2. **Verifica del sito**: in «Dettagli account» il sito `https://italy.riseagainsthunger.org/` deve risultare
+   verificato (la sede USA ha messo i tag). Se no: **Invia richiesta di verifica** dalla stessa pagina.
+3. **Telefoni**: in «Dettagli account» verificare il numero di telefono di contatto con il codice via SMS.
+4. **Tipo di account**: in «Dettagli account» deve esserci «Organizzazione». Se c'è «Personale» ⇒ ramo del § 7.
+5. **Service account** (solo per l'invio con `eas submit`; senza, si carica a mano, § 2): in «Utenti e autorizzazioni»
+   c'è già un service account per i caricamenti. Controllare di chi è il progetto Google Cloud che lo contiene e che
+   abbia solo i permessi di rilascio. Poi Google Cloud Console → IAM → Service account → **Chiavi** →
+   **Aggiungi chiave** → JSON, e caricare il file su expo.dev → Credentials → Android → `org.riseagainsthunger.italia` → Service
+   credentials. Mai mandarlo per mail o metterlo nel repository.
+
+### Alberto (presidente, legale rappresentante)
+
+1. **PEC a OpenClick** dalla PEC dell'associazione: testo pronto nella mail di Riccardo al team (versione del 12/10,
+   «dismissione concordata»), con due campi tra [ ] da completare. Si manda quando Riccardo dà il via.
+2. **Status fiscale** per la regola 3.2 di Google («tax exempt donations»): confermare a Riccardo che le donazioni
+   all'associazione sono esenti (ONLUS/ETS) e con quale qualifica.
+3. **Dati dell'informativa**: PEC e sede legale da scrivere in `privacy-policy.html`.
+
+### Riccardo
+
+1. **Mandare la mail al team** (bozza in Gmail del 13/10, destinatari Alberto, Simone, Angelica).
+2. **Build senza upload** (facoltativo, sblocca le build quando la rete è lenta): expo.dev → impostazioni utente →
+   collegare l'account GitHub che vede il repository. Poi Claude lancia la build da GitHub.
+3. **SMTP**: Supabase → Authentication → Emails → SMTP Settings con Resend; DKIM, SPF e DMARC sul dominio. Senza,
+   le email di conferma e recupero non arrivano agli utenti esterni.
+4. **Site URL e redirect**: Supabase → Authentication → URL Configuration: Site URL del sito (non `localhost`);
+   Redirect URLs `rahitalia://reset-password` e `rahitalia://**`.
+5. **Account demo** per i revisori: registrarsi dall'app con una casella vera dell'associazione (mai un'email
+   inventata: i rimbalzi bloccano l'invio), confermare l'email, compilare il profilo con dati di prova. Credenziali solo
+   in Play Console (Accesso all'app e Rapporto pre-lancio).
+6. **Numeri d'impatto**: i numeri ufficiali (Annual Report) per la schermata Impatto, da dare a Claude.
+7. **Decisioni aperte**:
+   - Gift card di Let's Donation: tenere il pulsante o toglierlo prima del lancio (le regole di Google non le trattano).
+   - Kosovo, Russia, Bielorussia: tenerli fra i paesi se Play Console li offre, o toglierli.
+   - Codice di provenienza: per quanto tempo conservarlo (oggi senza scadenza: serve una migration).
+   - Sentry: quando riaccenderlo (dopo il lancio, con progetto UE e informativa aggiornata).
+
+### Sede USA (Rick, Kevin)
+
+Cosa devono fare: pubblicare l'informativa aggiornata su `/privacy-policy/` e le due pagine di cancellazione, poi
+darci gli indirizzi (vanno nel gate del § 8 e in Sicurezza dei dati). Si chiede dopo il sì della consulente
+sull'informativa. Testo da mandare (inglese), con i tre file in allegato:
+
+> Hi Rick and Kevin,
+> we are about to publish the new Rise Against Hunger Italia app on Google Play. Google requires two public pages on
+> our site, and we need your help on site 10 (italy.riseagainsthunger.org):
+>
+> 1. Replace the content of `/privacy-policy/` with the attached `privacy-policy.html` (Italian).
+> 2. Publish two new pages with the attached `elimina-account.html` (Italian) and `delete-account.html` (English),
+>    for example at `/elimina-account/` and `/delete-account/`.
+>
+> Please reply with the final URLs: we have to enter them in Play Console. Nothing else on the network changes.
+> Thank you!
+
+### OpenClick (via PEC)
+
+Con la PEC di Alberto si chiede: tenere pubblicata la vecchia app finché non la avvisiamo; ritirarla e disattivarla
+alla data che comunichiamo via PEC almeno 7 giorni prima, con conferma scritta; non ripubblicarla e non usare più nome,
+logo e contenuti. Il ritiro si chiede solo dopo il lancio della nuova e l'avviso agli utenti (§ 14).
+
+### Consulente
+
+Validare l'informativa (`privacy-policy.html` e `privacy-policy-en.html`): i punti marcati «da validare» nel testo
+(base giuridica del precompilato verso Donorbox, conservazione del registro dei consensi, tempi di Expo, durata del
+codice di provenienza). Solo dopo il suo sì la sede USA pubblica le pagine.
+
+### Comunicazione (Angelica)
+
+Mandare l'avviso del § 14 su social, newsletter e sito quando la nuova app è in produzione. Ripeterlo una settimana
+prima della data di ritiro della vecchia.
