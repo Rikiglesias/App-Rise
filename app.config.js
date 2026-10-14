@@ -178,6 +178,14 @@ export default {
       // Dichiarazione Google Play per Android 13+
       blockedPermissions: [
         'com.google.android.gms.permission.AD_ID', // App non usa advertising
+        // Dal template di Expo, nessun uso nel release (misurati sull'AAB 1.3.0 vc 19):
+        'android.permission.SYSTEM_ALERT_WINDOW', // serve solo agli overlay di debug
+        'android.permission.READ_EXTERNAL_STORAGE', // l'app non legge file del telefono
+        'android.permission.WRITE_EXTERNAL_STORAGE',
+        // Da androidx.biometric di expo-secure-store: servono solo con
+        // `requireAuthentication`, che l'app non usa.
+        'android.permission.USE_BIOMETRIC',
+        'android.permission.USE_FINGERPRINT',
       ],
       // Configurazioni build production
       allowBackup: false, // Sicurezza: no backup automatici
@@ -214,6 +222,8 @@ export default {
       // globale, che rompe i TurboModule della New Architecture a runtime.
       'expo-secure-store',
       'expo-updates',
+      // Build per gli store senza expo-dev-client (motivo nel file).
+      './plugins/escludi-dev-client.js',
       'expo-font',
       'expo-localization',
       // SDK 54: lo splash si configura QUI (config plugin), non più via la chiave
