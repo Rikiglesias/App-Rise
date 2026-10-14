@@ -1,6 +1,6 @@
 // Costruttori delle fixture del selftest (C22): dati sintetici, nessun accesso al disco.
 import { PACKAGE, SUPABASE_REF } from './comune.mjs';
-import { allineamentiLoad } from './binario.mjs';
+import { infoElf } from './aab.mjs';
 
 export const jwt = payload =>
   ['{"alg":"HS256"}', JSON.stringify(payload), 'firma']
@@ -43,12 +43,13 @@ export const eas = (production = {}, submitAndroid = {}) => ({
   },
 });
 
-/** ELF64 minimo con un solo segmento PT_LOAD allineato a `align`. */
-export const elf64 = align => {
+/** ELF64 minimo con un solo segmento PT_LOAD allineato a `align` (e_machine 183 = AArch64). */
+export const elf64 = (align, macchina = 183) => {
   const b = Buffer.alloc(0x40 + 0x38);
   b.writeUInt32BE(0x7f454c46, 0);
   b[4] = 2;
   b[5] = 1;
+  b.writeUInt16LE(macchina, 0x12);
   b.writeBigUInt64LE(0x40n, 0x20);
   b.writeUInt16LE(0x38, 0x36);
   b.writeUInt16LE(1, 0x38);
@@ -56,19 +57,45 @@ export const elf64 = align => {
   b.writeBigUInt64LE(BigInt(align), 0x40 + 0x30);
   return b;
 };
-export const MANIFEST = `<manifest package="${PACKAGE}" android:versionName="1.3.0"><uses-sdk android:targetSdkVersion="36"/>
-<uses-permission android:name="android.permission.INTERNET"/></manifest>`;
-export const binario = (extra = {}) => ({
-  manifest: MANIFEST,
-  so: [
-    {
-      nome: 'base/lib/arm64-v8a/libx.so',
-      allineamenti: allineamentiLoad(elf64(16384)),
-    },
-  ],
-  bundle: `"${SUPABASE_REF}.supabase.co" "https://sentry.io"`,
-  ...extra,
+export const libreria = (nome, align = 16384, macchina = 183) => ({
+  nome,
+  ...infoElf(elf64(align, macchina)),
 });
+export const MANIFEST = `<manifest package="${PACKAGE}" android:versionName="1.3.0"><uses-sdk android:targetSdkVersion="36"/>
+<uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.VIBRATE"/>
+<application><activity android:exported="true" android:name="${PACKAGE}.MainActivity"/>
+<provider android:exported="false" android:name="expo.modules.filesystem.FileSystemFileProvider"/></application></manifest>`;
+// AAB minimo che passa C11: le mutazioni di una sola cosa in selftest.mjs provano un ramo ciascuna.
+export const binario = (extra = {}) => {
+  const so = [
+    libreria('base/lib/arm64-v8a/libx.so', 16384, 183),
+    libreria('base/lib/x86_64/libx.so', 16384, 62),
+    // 32 bit a 4 KB: fuori dal requisito Google (vale «on 64-bit devices»), non deve far fallire.
+    libreria('base/lib/armeabi-v7a/libx.so', 4096, 40),
+  ];
+  return {
+    manifest: MANIFEST,
+    config: {
+      optimizations: {
+        uncompressNativeLibraries: {
+          enabled: true,
+          alignment: 'PAGE_ALIGNMENT_16K',
+        },
+      },
+    },
+    voci: [
+      'BundleConfig.pb',
+      'BUNDLE-METADATA/x',
+      'META-INF/MANIFEST.MF',
+      'base/manifest/AndroidManifest.xml',
+      'base/assets/index.android.bundle',
+      ...so.map(s => s.nome),
+    ],
+    so,
+    bundle: `"${SUPABASE_REF}.supabase.co" "https://sentry.io"`,
+    ...extra,
+  };
+};
 export const EAS_OK = {
   status: 'FINISHED',
   platform: 'ANDROID',

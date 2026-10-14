@@ -2,7 +2,6 @@
 // deve dare FAIL; le fixture POSITIVE (dove costano poco) devono dare PASS, così un controllo
 // che fallisce sempre non passa il selftest.
 import { PACKAGE, SUPABASE_REF } from './comune.mjs';
-import { allineamentiLoad } from './binario.mjs';
 import {
   jwt,
   URL_OK,
@@ -21,6 +20,7 @@ import { FIXTURE_DOCUMENTI } from './selftest-documenti.mjs';
 import { FIXTURE_CANCELLAZIONE } from './selftest-cancellazione.mjs';
 import { FIXTURE_INFORMATIVA } from './selftest-informativa.mjs';
 import { FIXTURE_PLAY } from './selftest-play.mjs';
+import { FIXTURE_AAB } from './selftest-aab.mjs';
 
 export const FIXTURE = {
   ...FIXTURE_VISIVO,
@@ -28,6 +28,7 @@ export const FIXTURE = {
   ...FIXTURE_CANCELLAZIONE,
   ...FIXTURE_INFORMATIVA,
   ...FIXTURE_PLAY,
+  ...FIXTURE_AAB,
   C1: {
     neg: [
       cfg({ package: 'it.creareunapp.editor.android63da226b447a7' }),
@@ -224,24 +225,5 @@ export const FIXTURE = {
       build({ dumpErrore: '<node text="Errore di rete"/>' }),
     ],
     pos: [build()],
-  },
-  C11: {
-    neg: [
-      binario({
-        so: [
-          {
-            nome: 'base/lib/arm64-v8a/liby.so',
-            allineamenti: allineamentiLoad(elf64(4096)),
-          },
-        ],
-      }),
-      binario({ manifest: MANIFEST.replace('INTERNET', 'CAMERA') }),
-      binario({ manifest: MANIFEST.replace('INTERNET', 'READ_CONTACTS') }),
-      binario({
-        bundle: `"${SUPABASE_REF}.supabase.co" "https://0123456789abcdef0123456789abcdef@o1.ingest.sentry.io/42"`,
-      }),
-      binario({ bundle: '"altro.supabase.co"' }),
-    ],
-    pos: [binario()],
   },
 };
