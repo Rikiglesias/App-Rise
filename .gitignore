@@ -98,8 +98,10 @@ coverage/
 .vscode/settings.json
 .idea/
 
-# Claude Code (impostazioni personali, non condivise)
-.claude/settings.local.json
+# Claude Code e Codex (impostazioni personali di questa macchina, non condivise).
+# Cartelle intere: senza, il caricamento di `eas build` da locale le include nell'archivio.
+.claude/
+.codex/
 
 # Bundle analysis reports (temporary)
 bundle-analysis-report.json
