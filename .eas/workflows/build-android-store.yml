@@ -1,0 +1,16 @@
+# Build Android per Google Play (profilo production-store), lanciata a mano.
+# Con `--ref` EAS prende il codice da GitHub: niente upload dal PC, utile quando la rete
+# in uscita è lenta. Uso, dalla radice del repo:
+#   npx eas workflow:run .eas/workflows/build-android-store.yml --ref <branch-o-commit>
+name: Build Android store
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build_android:
+    name: Build Android (production-store)
+    type: build
+    params:
+      platform: android
+      profile: production-store

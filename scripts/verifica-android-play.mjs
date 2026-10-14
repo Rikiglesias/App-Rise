@@ -11,6 +11,8 @@ import { criteri as binario } from './verifica-android-play/binario.mjs';
 import { criteri as visivo } from './verifica-android-play/visivo.mjs';
 import { criteri as documenti } from './verifica-android-play/documenti.mjs';
 import { criteri as rilascio } from './verifica-android-play/documenti-rilascio.mjs';
+import { criteri as cancellazione } from './verifica-android-play/documenti-cancellazione.mjs';
+import { criteri as informativa } from './verifica-android-play/documenti-informativa.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
 
 const CRITERI = {
@@ -21,6 +23,8 @@ const CRITERI = {
   ...visivo,
   ...documenti,
   ...rilascio,
+  ...cancellazione,
+  ...informativa,
 };
 const ATTESI = [
   'C1',
