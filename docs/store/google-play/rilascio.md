@@ -157,6 +157,12 @@ all'app → Altre istruzioni** (answer/9859455). Testo da aggiungere lì, dopo l
 > (Creareunapp) con identificativo `it.creareunapp.editor.android63da226b447a7`: il fornitore la ritirerà su nostra
 > richiesta scritta dopo il lancio di questa.
 
+In più, prima dell'invio in revisione, il modulo **«Provide advance notice to the Google Play App Review team»**
+(support.google.com/googleplay/android-developer/contact/adv_note): Google accetta preavvisi solo nei casi che elenca,
+fra cui lo stato di ente benefico e il permesso d'uso di proprietà intellettuale di terzi, e avverte che fuori da quei
+casi può non rispondere. Qui vale come ente benefico: stesso testo della nota sopra, con la prova dello stato non profit
+che Alberto indica per la risposta 3.2 sulle donazioni («Chi fa cosa»).
+
 Se Google contesta un'imitazione del marchio o un doppione: ricorso dalla notifica di Play Console allegando la PEC
 inviata a OpenClick («Chi fa cosa» → Alberto).
 
