@@ -1,5 +1,6 @@
 {
-  "CFBundleDisplayName": "RAH Italia",
-  "CFBundleName": "RAH Italia",
-  "NSCameraUsageDescription": "Questa app utilizza la fotocamera per scansionare QR code per donazioni e eventi."
+  "ios": {
+    "CFBundleDisplayName": "RAH Italia",
+    "CFBundleName": "RAH Italia"
+  }
 }

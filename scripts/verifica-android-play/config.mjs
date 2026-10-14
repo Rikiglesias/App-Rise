@@ -54,13 +54,27 @@ export const criteri = {
     },
   },
   C2: {
-    leggi: () => configExpo(),
+    // Anche i file `locales` (testi tradotti di Info.plist) possono portare la stringa
+    // della fotocamera: si leggono insieme alla config.
+    leggi: () => {
+      const c = configExpo();
+      const locali = Object.entries(c.locales ?? {}).map(([lingua, v]) => ({
+        lingua,
+        dati: typeof v === 'string' ? JSON.parse(leggi(percorso(v))) : v,
+      }));
+      return { ...c, locali };
+    },
     verifica(cfg) {
       const permessi = cfg.android?.permissions ?? [];
       if (permessi.some(p => /(^|\.)CAMERA$/.test(p)))
         return 'CAMERA ancora tra i permessi Android';
       if (cfg.ios?.infoPlist?.NSCameraUsageDescription)
         return 'NSCameraUsageDescription ancora presente';
+      const conCamera = (cfg.locali ?? []).find(({ dati }) =>
+        [dati, dati?.ios, dati?.android].some(o => o?.NSCameraUsageDescription)
+      );
+      if (conCamera)
+        return `NSCameraUsageDescription ancora nel file locales «${conCamera.lingua}»`;
       if (
         !(cfg.android?.blockedPermissions ?? []).includes(
           'com.google.android.gms.permission.AD_ID'

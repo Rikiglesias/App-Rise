@@ -1,41 +1,3 @@
-const { withStringsXml } = require('@expo/config-plugins');
-
-// Plugin per garantire che le stringhe critiche (come il nome app) esistano nel locale di default
-const withDefaultStrings = config => {
-  return withStringsXml(config, config => {
-    if (!config.modResults.resources) {
-      config.modResults.resources = {};
-    }
-    if (!config.modResults.resources.string) {
-      config.modResults.resources.string = [];
-    }
-
-    const strings = config.modResults.resources.string;
-    const appName = config.name || 'RAH Italia'; // Fallback sicuro
-
-    // Definisci le stringhe che devono essere presenti nel default (values/strings.xml)
-    const defaultStrings = [
-      { name: 'CFBundleDisplayName', value: appName },
-      { name: 'app_name', value: appName },
-    ];
-
-    defaultStrings.forEach(({ name, value }) => {
-      const existingIndex = strings.findIndex(s => s.$.name === name);
-      const stringItem = { $: { name }, _: value };
-
-      if (existingIndex > -1) {
-        // Aggiorna esistente
-        strings[existingIndex] = stringItem;
-      } else {
-        // Aggiungi nuova
-        strings.push(stringItem);
-      }
-    });
-
-    return config;
-  });
-};
-
 const CODE_SIGNING_CERTIFICATE =
   process.env.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE ??
   process.env.EXPO_PUBLIC_UPDATES_CODE_SIGNING_CERTIFICATE;
@@ -62,7 +24,7 @@ const updatesConfig =
       }
     : baseUpdatesConfig;
 
-export default withDefaultStrings({
+export default {
   expo: {
     name: 'RAH Italia',
     slug: 'rise-against-hunger-italia',
@@ -79,7 +41,10 @@ export default withDefaultStrings({
     userInterfaceStyle: 'light',
     primaryColor: '#DC2626',
 
-    // Configurazione lingue supportate
+    // Nome dell'app tradotto. Dall'SDK 54 questi file finiscono anche nelle stringhe
+    // Android (`values-b+<lingua>/strings.xml`): le chiavi iOS stanno sotto `ios`,
+    // altrimenti il lint della build release le rifiuta (ExtraTranslation) e la build
+    // fallisce. Su Android il nome viene già da `name` qui sotto.
     locales: {
       it: './locales/it.json',
       en: './locales/en.json',
@@ -293,4 +258,4 @@ export default withDefaultStrings({
     // Runtime version per aggiornamenti: unificata su appVersion
     runtimeVersion: { policy: 'appVersion' },
   },
-});
+};

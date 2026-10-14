@@ -34,8 +34,40 @@ export const FIXTURE = {
       cfg({ permissions: ['android.permission.CAMERA'] }),
       cfg({}, { infoPlist: { NSCameraUsageDescription: 'foto' } }),
       cfg({ blockedPermissions: [] }),
+      cfg(
+        {},
+        {},
+        {
+          locali: [
+            { lingua: 'it', dati: { NSCameraUsageDescription: 'foto' } },
+          ],
+        }
+      ),
+      cfg(
+        {},
+        {},
+        {
+          locali: [
+            {
+              lingua: 'en',
+              dati: { ios: { NSCameraUsageDescription: 'photo' } },
+            },
+          ],
+        }
+      ),
     ],
-    pos: [cfg()],
+    pos: [
+      cfg(),
+      cfg(
+        {},
+        {},
+        {
+          locali: [
+            { lingua: 'it', dati: { ios: { CFBundleName: 'RAH Italia' } } },
+          ],
+        }
+      ),
+    ],
   },
   C3: {
     neg: [
