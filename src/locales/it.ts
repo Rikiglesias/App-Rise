@@ -4,6 +4,26 @@
  */
 
 export default {
+  accessibility: {
+    closeModal: 'Chiudi modale',
+    openContact: 'Apri {{title}}',
+    organizationStory: "Mostra la storia dell'organizzazione",
+    closeDonationInfo: 'Chiudi informazioni donazioni',
+    closeDatePicker: 'Chiudi selezione data',
+    followSocial: 'Seguici su {{name}}: {{handle}}',
+    project: 'Progetto {{title}} in {{location}}',
+    projectStatusActive: 'In Corso',
+    projectStatusCompleted: 'Completato',
+    projectStatusUpcoming: 'Prossimo',
+    impactScreen: 'Schermata Impatto',
+    impactScroll: 'Scroll impatto e statistiche',
+    impact2024Screen: 'Schermata Impatto 2024',
+    impactStat: '{{label}}: {{number}}. {{description}}',
+    organizationLogo: 'Logo Rise Against Hunger',
+    heroImage: 'Immagine Rise Against Hunger',
+    unnamedCategory: 'Categoria senza nome',
+  },
+
   common: {
     appName: 'Rise Against Hunger Italia',
     loading: 'Caricamento...',
@@ -19,6 +39,55 @@ export default {
     next: 'Avanti',
     finish: 'Termina',
     skip: 'Salta',
+  },
+
+  links: {
+    errors: {
+      default: 'Impossibile aprire il link. Riprova più tardi.',
+      social: 'Impossibile aprire {{platform}}. Riprova più tardi.',
+      website: 'Impossibile aprire il sito web. Riprova più tardi.',
+      tracking:
+        'Impossibile aprire la pagina di tracciamento. Riprova più tardi.',
+      map: 'Impossibile aprire la mappa.',
+      phone: 'Impossibile aprire il dialer.',
+      email: "Impossibile aprire l'app email.",
+      donation: 'Impossibile aprire il link di donazione. Riprova più tardi.',
+      shop: 'Impossibile aprire il charity shop. Riprova più tardi.',
+      giftCards: 'Impossibile aprire le gift card. Riprova più tardi.',
+      projects: 'Impossibile aprire la pagina progetti. Riprova più tardi.',
+      events: 'Impossibile aprire il calendario eventi. Riprova più tardi.',
+      registration:
+        'Impossibile aprire la pagina di registrazione. Riprova più tardi.',
+    },
+  },
+
+  mapDetails: {
+    countryLabel: '{{country}}: tocca per i dettagli',
+    countryEventsLabel: '{{country}}: {{count}} eventi, tocca per i dettagli',
+    countriesLabel: 'Paesi dove operiamo',
+    meals: 'Pasti',
+    kits: 'Kit',
+    schools: 'Scuole',
+    program: 'PROGRAMMA',
+    partner: 'PARTNER',
+    achievements: 'RISULTATI',
+    trackingLabel: 'Apri il tracciamento di {{location}}',
+    followTracking: 'Segui il tracciamento',
+  },
+
+  errorBoundary: {
+    title: 'Qualcosa è andato storto',
+    subtitle: "L'app ha riscontrato un errore imprevisto",
+    genericMessage: "Ricarica l'app e riprova.",
+    technicalTitle: 'Errore Tecnico:',
+    unknownError: 'Errore sconosciuto',
+    stackTrace: 'Stack trace (solo sviluppo):',
+    componentStack: 'Stack dei componenti:',
+    reload: '🔄 Ricarica App',
+    ignore: 'Ignora errore (solo sviluppo)',
+    support: 'Se il problema persiste, contatta il supporto tecnico',
+    loadingTitle: 'Errore di caricamento',
+    loadingMessage: 'Impossibile caricare la schermata. Riprova.',
   },
 
   navigation: {
@@ -156,6 +225,7 @@ export default {
     privacy: {
       title: 'Privacy e dati',
       exportCta: 'Esporta i miei dati',
+      exportTitle: 'I miei dati — Rise Against Hunger',
       exportError: 'Esportazione non riuscita. Riprova.',
       deleteCta: 'Elimina account',
     },

@@ -38,7 +38,7 @@ const Impatto2024ScreenComponent: React.FC<Props> = ({
     <SafeAreaView
       style={styles.container}
       edges={['top', 'bottom']}
-      accessibilityLabel="Schermata Impatto 2024"
+      accessibilityLabel={t('accessibility.impact2024Screen')}
       testID="impatto2024-screen"
     >
       <PlatformScrollView>

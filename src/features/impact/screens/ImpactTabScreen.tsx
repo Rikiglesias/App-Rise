@@ -20,6 +20,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@shared/constants/perfectScale';
 import { logError } from '@/shared/utils/logger';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 // Constants for padding calculations
@@ -32,6 +33,7 @@ const EXTRA_PADDING = 24;
  * Ridotto da 1141 a ~150 righe (87% riduzione) per eccellenza architetturale
  */
 const ImpactTabScreenComponent: React.FC = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation<ImpactNavigationProp>();
   const { isTablet } = useDeviceType();
   const insets = useSafeAreaInsets();
@@ -60,14 +62,14 @@ const ImpactTabScreenComponent: React.FC = () => {
     <SafeAreaView
       style={styles.container}
       edges={['bottom']}
-      accessibilityLabel="Schermata Impatto"
+      accessibilityLabel={t('accessibility.impactScreen')}
       testID="impact-tab-screen"
     >
       <PlatformScrollView
         contentContainerStyle={{
           paddingBottom: scrollContentPadding,
         }}
-        accessibilityLabel="Scroll impatto e statistiche"
+        accessibilityLabel={t('accessibility.impactScroll')}
       >
         <PerfectContainer style={isTablet ? styles.tabletContainer : {}}>
           <ImpactHeader />

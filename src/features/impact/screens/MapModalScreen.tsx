@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getModalData } from '../data/mapModalData';
 import type { MapModalData } from '../data/mapModalData';
@@ -76,6 +78,13 @@ const MapModalScreen: React.FC = () => {
   const route = useRoute<MapModalScreenRouteProp>();
   const locations = route.params?.locations;
   const { t } = useTranslation();
+  const tabBarHeight = useBottomTabBarHeight();
+  const insets = useSafeAreaInsets();
+  const safeContentStyle = {
+    paddingBottom: Math.max(tabBarHeight, insets.bottom),
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+  };
 
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -119,7 +128,7 @@ const MapModalScreen: React.FC = () => {
 
   if (!locations) {
     return (
-      <PerfectContainer style={styles.container}>
+      <PerfectContainer style={[styles.container, safeContentStyle]}>
         <PerfectText size={16} lines={1} fontWeight="400">
           {t('impact.loadingMap')}
         </PerfectText>
@@ -128,7 +137,10 @@ const MapModalScreen: React.FC = () => {
   }
 
   return (
-    <PerfectContainer style={styles.container}>
+    <PerfectContainer
+      style={[styles.container, safeContentStyle]}
+      testID="map-safe-content"
+    >
       <InteractiveMap
         locations={filteredLocations}
         onMarkerPress={handleMarkerPress}
@@ -136,7 +148,16 @@ const MapModalScreen: React.FC = () => {
       />
 
       {/* Header */}
-      <PerfectContainer style={styles.header}>
+      <PerfectContainer
+        style={[
+          styles.header,
+          {
+            top: insets.top + PerfectSpacing['3xl'],
+            left: insets.left + scaleSpacing(20),
+            right: insets.right + PerfectSpacing['3xl'],
+          },
+        ]}
+      >
         <PerfectText size={24} lines={1} fontWeight="700" style={styles.title}>
           {t('impact.interactiveMap')}
         </PerfectText>
@@ -156,13 +177,22 @@ const MapModalScreen: React.FC = () => {
           accessibilityRole="button"
           accessibilityLabel={t('impact.closeMap')}
         >
-          <PerfectIcon name="close" size={24} color={colors.neutral[0]} />
+          <PerfectIcon name="close" size={24} color={colors.neutral[900]} />
         </PlatformTouchable>
       </PerfectContainer>
 
       {/* Filtro per anno (solo se ci sono più anni) */}
       {years.length > 1 ? (
-        <View style={styles.filterRow}>
+        <View
+          style={[
+            styles.filterRow,
+            {
+              top: insets.top + PerfectSpacing['3xl'] + scaleSpacing(56),
+              left: insets.left + scaleSpacing(20),
+              right: insets.right + scaleSpacing(20),
+            },
+          ]}
+        >
           <YearChip
             label={t('impact.allYears')}
             value={null}
@@ -223,7 +253,7 @@ const createStyles = (colors: ThemeColors) =>
       position: 'absolute',
       top: PerfectSpacing['3xl'],
       right: scaleSpacing(20),
-      backgroundColor: `${colors.neutral[0]}99`,
+      backgroundColor: colors.neutral[0],
       width: scaleTouch(44),
       height: scaleTouch(44),
       borderRadius: 22,

@@ -1,5 +1,6 @@
 import type { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import type { LocalizedText } from '../utils/localizedText';
 import type { ImpactStackParamList } from '@/navigation/types';
 
 export type ImpactNavigationProp = StackNavigationProp<
@@ -9,9 +10,9 @@ export type ImpactNavigationProp = StackNavigationProp<
 
 export interface ImpactStory {
   id: string;
-  title: string;
-  location: string;
-  text: string;
+  title: LocalizedText;
+  location: LocalizedText;
+  text: LocalizedText;
   image: string;
   category: 'meals' | 'kits' | 'social';
   year: number;
@@ -19,10 +20,10 @@ export interface ImpactStory {
 
 export interface ImpactMilestone {
   id: string;
-  title: string;
-  value: string;
+  title: LocalizedText;
+  value: LocalizedText;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  description: string;
+  description: LocalizedText;
 }
 
 export interface ImpactDataType {

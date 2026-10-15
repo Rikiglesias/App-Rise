@@ -27,7 +27,11 @@ export const StatCard: React.FC<StatCardProps> = React.memo(({ data }) => {
   return (
     <PerfectContainer
       style={styles.statCard}
-      accessibilityLabel={`${label}: ${data.number}. ${description}`}
+      accessibilityLabel={t('accessibility.impactStat', {
+        label,
+        number: data.number,
+        description,
+      })}
       accessibilityRole="text"
     >
       <PerfectText size={28} lines={1} fontWeight="400" style={styles.statIcon}>

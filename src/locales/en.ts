@@ -4,6 +4,26 @@
  */
 
 export default {
+  accessibility: {
+    closeModal: 'Close dialog',
+    openContact: 'Open {{title}}',
+    organizationStory: "Show the organization's history",
+    closeDonationInfo: 'Close donation information',
+    closeDatePicker: 'Close date picker',
+    followSocial: 'Follow us on {{name}}: {{handle}}',
+    project: 'Project {{title}} in {{location}}',
+    projectStatusActive: 'In Progress',
+    projectStatusCompleted: 'Completed',
+    projectStatusUpcoming: 'Upcoming',
+    impactScreen: 'Impact screen',
+    impactScroll: 'Scroll impact and statistics',
+    impact2024Screen: 'Impact 2024 screen',
+    impactStat: '{{label}}: {{number}}. {{description}}',
+    organizationLogo: 'Rise Against Hunger logo',
+    heroImage: 'Rise Against Hunger image',
+    unnamedCategory: 'Unnamed category',
+  },
+
   common: {
     appName: 'Rise Against Hunger Italy',
     loading: 'Loading...',
@@ -19,6 +39,54 @@ export default {
     next: 'Next',
     finish: 'Finish',
     skip: 'Skip',
+  },
+
+  links: {
+    errors: {
+      default: 'Unable to open the link. Please try again later.',
+      social: 'Unable to open {{platform}}. Please try again later.',
+      website: 'Unable to open the website. Please try again later.',
+      tracking: 'Unable to open the tracking page. Please try again later.',
+      map: 'Unable to open the map.',
+      phone: 'Unable to open the phone app.',
+      email: 'Unable to open the email app.',
+      donation: 'Unable to open the donation link. Please try again later.',
+      shop: 'Unable to open the charity shop. Please try again later.',
+      giftCards: 'Unable to open gift cards. Please try again later.',
+      projects: 'Unable to open the projects page. Please try again later.',
+      events: 'Unable to open the events calendar. Please try again later.',
+      registration:
+        'Unable to open the registration page. Please try again later.',
+    },
+  },
+
+  mapDetails: {
+    countryLabel: '{{country}}: tap for details',
+    countryEventsLabel: '{{country}}: {{count}} events, tap for details',
+    countriesLabel: 'Countries where we work',
+    meals: 'Meals',
+    kits: 'Kits',
+    schools: 'Schools',
+    program: 'PROGRAM',
+    partner: 'PARTNER',
+    achievements: 'RESULTS',
+    trackingLabel: 'Open tracking for {{location}}',
+    followTracking: 'Track deliveries',
+  },
+
+  errorBoundary: {
+    title: 'Something went wrong',
+    subtitle: 'The app encountered an unexpected error',
+    genericMessage: 'Please reload the app and try again.',
+    technicalTitle: 'Technical error:',
+    unknownError: 'Unknown error',
+    stackTrace: 'Stack trace (development only):',
+    componentStack: 'Component stack:',
+    reload: '🔄 Reload app',
+    ignore: 'Ignore error (development only)',
+    support: 'If the problem persists, contact technical support',
+    loadingTitle: 'Loading error',
+    loadingMessage: 'Unable to load this screen. Please try again.',
   },
 
   navigation: {
@@ -144,6 +212,7 @@ export default {
     privacy: {
       title: 'Privacy and data',
       exportCta: 'Export my data',
+      exportTitle: 'My data — Rise Against Hunger',
       exportError: 'Export failed. Please try again.',
       deleteCta: 'Delete account',
     },

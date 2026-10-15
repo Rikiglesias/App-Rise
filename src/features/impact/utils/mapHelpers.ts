@@ -1,4 +1,5 @@
 import { MAP_LOCATIONS } from '../data/impactData';
+import { resolveLocalizedText } from './localizedText';
 import type { Location } from '@/shared/types/location';
 
 /**
@@ -13,7 +14,7 @@ export const convertToMapLocations = (): Location[] => {
     const result: Location = {
       id: location.id,
       name: location.name,
-      country: location.country,
+      country: resolveLocalizedText(location.country),
       coordinates: {
         latitude: location.latitude,
         longitude: location.longitude,
@@ -21,7 +22,7 @@ export const convertToMapLocations = (): Location[] => {
       projects: 1, // Default value
       beneficiaries: `${location.stats.beneficiaries ?? 0}`,
       status: 'active',
-      description: location.description,
+      description: resolveLocalizedText(location.description),
       image:
         'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
       meals: location.stats.meals ?? 0,

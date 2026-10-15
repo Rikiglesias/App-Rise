@@ -1,3 +1,5 @@
+import { resolveLocalizedText } from '../utils/localizedText';
+import type { LocalizedText } from '../utils/localizedText';
 import { LOCATIONS_DATA, type LocationData } from './locationsData';
 
 // Dati dettagliati per i modals della mappa interattiva
@@ -25,21 +27,34 @@ export interface MapModalData {
   trackingUrl?: string;
 }
 
+type LocalizedMapModalData = Omit<
+  MapModalData,
+  'subtitle' | 'description' | 'program' | 'achievements'
+> &
+  Pick<LocationData, 'description' | 'program' | 'achievements'> & {
+    subtitle: LocalizedText;
+  };
+
+const SUBTITLE_SUFFIXES: Record<string, LocalizedText> = {
+  italy: { it: 'Sede Europea', en: 'European Office' },
+  usa: { it: 'Sede Globale', en: 'Global Headquarters' },
+  ukraine: { it: 'Emergenza Umanitaria', en: 'Humanitarian Emergency' },
+};
+
 /**
- * Converte LocationData in formato MapModalData
+ * Mantiene entrambe le lingue fino all'apertura della scheda.
  */
-const toModalFormat = (location: LocationData): MapModalData => {
-  const result: MapModalData = {
+const toModalFormat = (location: LocationData): LocalizedMapModalData => {
+  const suffix = SUBTITLE_SUFFIXES[location.id];
+  const result: LocalizedMapModalData = {
     id: location.id,
     title: location.name,
-    subtitle:
-      location.id === 'italy'
-        ? `${location.country} - Sede Europea`
-        : location.id === 'usa'
-          ? `${location.country} - Sede Globale`
-          : location.id === 'ukraine'
-            ? `${location.country} - Emergenza Umanitaria`
-            : location.country,
+    subtitle: suffix
+      ? {
+          it: `${location.country.it} - ${suffix.it}`,
+          en: `${location.country.en} - ${suffix.en}`,
+        }
+      : location.country,
     flag: location.flag,
     description: location.description,
     program: location.program,
@@ -57,13 +72,26 @@ const toModalFormat = (location: LocationData): MapModalData => {
 /**
  * Dati modals generati da single source of truth
  */
-export const MAP_MODAL_DATA: Record<string, MapModalData> = Object.fromEntries(
-  LOCATIONS_DATA.map(location => [location.id, toModalFormat(location)])
-);
+export const MAP_MODAL_DATA: Record<string, LocalizedMapModalData> =
+  Object.fromEntries(
+    LOCATIONS_DATA.map(location => [location.id, toModalFormat(location)])
+  );
 
 // Funzione per ottenere i dati di un modal specifico
 export const getModalData = (locationId: string): MapModalData | null => {
-  return MAP_MODAL_DATA[locationId] ?? null;
+  if (!Object.prototype.hasOwnProperty.call(MAP_MODAL_DATA, locationId)) {
+    return null;
+  }
+  const data = MAP_MODAL_DATA[locationId];
+  if (!data) return null;
+
+  return {
+    ...data,
+    subtitle: resolveLocalizedText(data.subtitle),
+    description: resolveLocalizedText(data.description),
+    program: resolveLocalizedText(data.program),
+    achievements: data.achievements.map(resolveLocalizedText),
+  };
 };
 
 // Re-export formatter da shared/utils per compatibilità
