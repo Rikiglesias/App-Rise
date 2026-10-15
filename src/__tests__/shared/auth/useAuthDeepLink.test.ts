@@ -190,6 +190,17 @@ describe('useAuthDeepLink', () => {
       expect(mockCompleteEmailConfirm).not.toHaveBeenCalled();
     });
 
+    it('link scaduto: URL troncato al primo & (senza error_code) non mostra l’avviso', () => {
+      // È ciò che arriverebbe se la shell spezzasse l'URL sul primo «&»: l'avviso a schermo
+      // sul dispositivo (C8 del goal android-play) prova quindi che il fragment è arrivato intero.
+      mockUrl = 'rahitalia://reset-password#error=access_denied';
+      const nav = makeNavRef(true);
+      renderHook(() => useAuthDeepLink(nav.ref));
+
+      expect(alertSpy).not.toHaveBeenCalled();
+      expect(mockCompleteRecovery).not.toHaveBeenCalled();
+    });
+
     it('link scaduto: lo stesso URL non ripete l’avviso a ogni render', () => {
       mockUrl = EXPIRED_RESET_URL;
       const nav = makeNavRef(true);
