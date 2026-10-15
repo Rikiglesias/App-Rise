@@ -9,10 +9,12 @@ import {
 } from '@/components/ui';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 export const AnimatedContact: React.FC<AnimatedContactProps> = ({
   contact,
 }) => {
+  const { t } = useTranslation();
   const { triggerHaptic } = useHapticFeedback();
   const colors = useThemeColors();
   const animatedContactStyles = useMemo(
@@ -32,7 +34,9 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
         onPress={handlePress}
         activeOpacity={0.8}
         accessibilityRole="button"
-        accessibilityLabel={`Apri ${contact.title}`}
+        accessibilityLabel={t('accessibility.openContact', {
+          title: contact.title,
+        })}
       >
         <PerfectContainer style={animatedContactStyles.contactCard}>
           <PerfectContainer style={animatedContactStyles.contactContent}>

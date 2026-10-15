@@ -19,6 +19,7 @@ import {
 import { BorderRadius, PerfectSpacing, Shadows } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import type { Location } from '@/shared/types/location';
 
@@ -80,6 +81,7 @@ const WorldMapSvgComponent: React.FC<Props> = ({
   style,
   isFullScreen = false,
 }) => {
+  const { t } = useTranslation();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [size, setSize] = useState<{ width: number; height: number }>({
@@ -149,8 +151,13 @@ const WorldMapSvgComponent: React.FC<Props> = ({
                       onPress: createPressHandler(primary),
                       accessibilityLabel:
                         countryLocations && countryLocations.length > 1
-                          ? `${primary.country}: ${countryLocations.length} eventi, tocca per i dettagli`
-                          : `${primary.country}: tocca per i dettagli`,
+                          ? t('mapDetails.countryEventsLabel', {
+                              country: primary.country,
+                              count: countryLocations.length,
+                            })
+                          : t('mapDetails.countryLabel', {
+                              country: primary.country,
+                            }),
                     }
                   : {
                       fill: colors.neutral[300],
@@ -180,7 +187,7 @@ const WorldMapSvgComponent: React.FC<Props> = ({
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.legendContent}
-          accessibilityLabel="Paesi dove operiamo"
+          accessibilityLabel={t('mapDetails.countriesLabel')}
         >
           {locations.map(location => (
             <PlatformTouchable
@@ -189,7 +196,9 @@ const WorldMapSvgComponent: React.FC<Props> = ({
               onPress={createPressHandler(location)}
               activeOpacity={0.8}
               accessibilityRole="button"
-              accessibilityLabel={`${location.country}: tocca per i dettagli`}
+              accessibilityLabel={t('mapDetails.countryLabel', {
+                country: location.country,
+              })}
             >
               <PerfectContainer style={styles.chipDot} />
               <PerfectText

@@ -127,7 +127,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
           onPress={handleClose}
           activeOpacity={0.7}
           accessibilityRole="button"
-          accessibilityLabel="Chiudi informazioni donazioni"
+          accessibilityLabel={t('accessibility.closeDonationInfo')}
           testID="donation-modal-close"
         >
           <PerfectIcon name="close" size={22} color={colors.neutral[0]} />

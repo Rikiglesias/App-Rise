@@ -6,11 +6,13 @@ import { PerfectText } from '@/components/ui/PerfectText';
 import { PerfectContainer } from '@/components/ui/PerfectContainer';
 import { BorderRadius, PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 export const ProjectProgress: React.FC<ProjectProgressProps> = ({
   progress,
   statusColor,
 }) => {
+  const { t } = useTranslation();
   const colors = useThemeColors();
 
   // Clamp [0,100]: un progress fuori range romperebbe la width della barra
@@ -48,7 +50,7 @@ export const ProjectProgress: React.FC<ProjectProgressProps> = ({
         fontWeight="400"
         style={styles.progressLabel}
       >
-        Progresso: {clampedProgress}%
+        {t('projects.progress')}: {clampedProgress}%
       </PerfectText>
       <PerfectContainer style={styles.progressBar}>
         <PerfectContainer style={styles.progressFill} />

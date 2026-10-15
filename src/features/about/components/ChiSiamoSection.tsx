@@ -50,7 +50,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             onPress={handleInfoPress}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel="Mostra la storia dell'organizzazione"
+            accessibilityLabel={t('accessibility.organizationStory')}
             style={chiSiamoSectionStyles.titleClickableContainer}
           >
             <PerfectText

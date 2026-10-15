@@ -6,6 +6,7 @@ import { PerfectImage } from '@/components/ui/PerfectImage';
 import { Colors, PerfectSpacing, Shadows } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface ResponsiveSpacing {
   containerPadding: number;
@@ -65,6 +66,7 @@ export interface ModernSmartTitleProps {
 
 export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform }) => {
+    const { t } = useTranslation();
     const colors = useThemeColors();
     const responsiveSpacing = useMemo<ResponsiveSpacing>(
       () => ({
@@ -163,7 +165,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
                   height={responsiveSpacing.logoSize}
                   source={require('@assets/icons/app/splash-screen.png')}
                   accessibilityRole="image"
-                  accessibilityLabel="Logo Rise Against Hunger"
+                  accessibilityLabel={t('accessibility.organizationLogo')}
                 />
                 <PerfectContainer style={styles.separatorLine} />
               </PerfectContainer>

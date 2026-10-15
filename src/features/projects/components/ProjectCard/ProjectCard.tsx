@@ -12,6 +12,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useAnimatedPress } from '@/shared/hooks/useAnimatedPress';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 // ===================================================================
 // HELPER FUNCTIONS
@@ -32,14 +33,17 @@ const getStatusColor = (
   }
 };
 
-const getStatusText = (status: ProjectStatus): string => {
+const getStatusText = (
+  status: ProjectStatus,
+  t: ReturnType<typeof useTranslation>['t']
+): string => {
   switch (status) {
     case 'active':
-      return 'In Corso';
+      return t('accessibility.projectStatusActive');
     case 'completed':
-      return 'Completato';
+      return t('accessibility.projectStatusCompleted');
     case 'upcoming':
-      return 'Prossimo';
+      return t('accessibility.projectStatusUpcoming');
     default:
       return '';
   }
@@ -57,11 +61,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   progress,
   onPress,
 }) => {
+  const { t } = useTranslation();
   const colors = useThemeColors();
   const { animatedStyle, handlePressIn, handlePressOut } = useAnimatedPress();
 
   const statusColor = getStatusColor(status, colors);
-  const statusText = getStatusText(status);
+  const statusText = getStatusText(status, t);
   const isDisabled = !onPress;
 
   const styles = StyleSheet.create({
@@ -92,7 +97,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         onPress={onPress}
         disabled={isDisabled}
         accessibilityRole="button"
-        accessibilityLabel={`Progetto ${title} in ${location}`}
+        accessibilityLabel={t('accessibility.project', { title, location })}
       >
         <Surface style={styles.surface}>
           <PerfectContainer style={styles.content}>

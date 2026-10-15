@@ -20,6 +20,7 @@ import { PerfectContainer } from './PerfectContainer';
 import { PlatformScrollView, PlatformTouchable } from './PlatformComponents';
 import { scale } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
   /** Contenuto modal */
@@ -110,6 +111,7 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
   outlineColor,
   ...modalProps
 }) => {
+  const { t } = useTranslation();
   const { dimensions, presentationStyle, isTablet } = useModalBehavior(size);
   const colors = useThemeColors();
   const { height } = useWindowDimensions();
@@ -135,7 +137,7 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
           onPress={modalProps.onRequestClose}
           activeOpacity={1}
           accessibilityRole="button"
-          accessibilityLabel="Chiudi modale"
+          accessibilityLabel={t('accessibility.closeModal')}
         >
           <PerfectContainer style={StyleSheet.absoluteFillObject} />
         </PlatformTouchable>

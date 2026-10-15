@@ -14,6 +14,7 @@ import { createStyles } from './MapLocationModalStyles';
 import { formatStat } from '@/shared/utils/numberFormat';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { MapModalData } from '@/features/impact/data/mapModalData';
 
 interface MapLocationModalProps {
@@ -35,6 +36,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   data,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
@@ -45,12 +47,8 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   // usciva diretto, saltando l'allowlist di produzione).
   const handleCTAPress = useCallback(() => {
     if (!trackingUrl) return;
-    void openLink(
-      trackingUrl,
-      'map-tracking',
-      'Impossibile aprire il link di tracciamento. Riprova più tardi.'
-    );
-  }, [trackingUrl, openLink]);
+    void openLink(trackingUrl, 'map-tracking', t('links.errors.tracking'));
+  }, [trackingUrl, openLink, t]);
 
   if (!data) return null;
 
@@ -59,13 +57,13 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   // dove è già contestualizzato. Fix semantica = follow-up sul modello dati.
   const statCells: StatCell[] = [
     data.stats.meals !== undefined
-      ? { value: data.stats.meals, label: 'Pasti' }
+      ? { value: data.stats.meals, label: t('mapDetails.meals') }
       : null,
     data.stats.kits !== undefined
-      ? { value: data.stats.kits, label: 'Kit' }
+      ? { value: data.stats.kits, label: t('mapDetails.kits') }
       : null,
     data.stats.schools !== undefined
-      ? { value: data.stats.schools, label: 'Scuole' }
+      ? { value: data.stats.schools, label: t('mapDetails.schools') }
       : null,
   ].filter((c): c is StatCell => c !== null);
 
@@ -103,7 +101,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               onPress={onClose}
               activeOpacity={0.8}
               accessibilityRole="button"
-              accessibilityLabel="Chiudi"
+              accessibilityLabel={t('common.close')}
             >
               <PerfectIcon name="close" size={24} color={colors.accent.white} />
             </PlatformTouchable>
@@ -168,7 +166,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
                 fontWeight="700"
                 style={styles.infoLabel}
               >
-                PROGRAMMA
+                {t('mapDetails.program')}
               </PerfectText>
               <PerfectText
                 size={15}
@@ -196,7 +194,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
                   fontWeight="700"
                   style={styles.infoLabel}
                 >
-                  PARTNER
+                  {t('mapDetails.partner')}
                 </PerfectText>
                 <PerfectText
                   size={15}
@@ -218,7 +216,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
                 fontWeight="700"
                 style={styles.infoLabel}
               >
-                RISULTATI
+                {t('mapDetails.achievements')}
               </PerfectText>
               {data.achievements.map(a => (
                 <View key={a} style={styles.achievementRow}>
@@ -246,7 +244,9 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
               activeOpacity={0.8}
               onPress={handleCTAPress}
               accessibilityRole="link"
-              accessibilityLabel={`Apri il tracciamento di ${data.title}`}
+              accessibilityLabel={t('mapDetails.trackingLabel', {
+                location: data.title,
+              })}
             >
               <PerfectIcon
                 name="open-in-new"
@@ -260,7 +260,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
                 fontWeight="700"
                 style={styles.ctaText}
               >
-                Segui il tracciamento
+                {t('mapDetails.followTracking')}
               </PerfectText>
             </PlatformTouchable>
           ) : null}

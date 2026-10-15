@@ -58,36 +58,36 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   const handleLocationPress = useCallback(async () => {
     const address = 'Via dei Fornaciai, 17, 40129 Bologna, BO, Italia';
     const url = `https://maps.google.com/?q=${encodeURIComponent(address)}`;
-    const result = await openLink(url, 'maps', 'Impossibile aprire la mappa.');
+    const result = await openLink(url, 'maps', t('links.errors.map'));
 
     if (!isSuccess(result) && __DEV__) {
       logWarn('ChiSiamoScreen', 'Failed to open maps', result.error);
     }
-  }, [openLink]);
+  }, [openLink, t]);
 
   const handlePhonePress = useCallback(async () => {
     const result = await openLink(
       'tel:051704070',
       'phone',
-      'Impossibile aprire il dialer.'
+      t('links.errors.phone')
     );
 
     if (!isSuccess(result) && __DEV__) {
       logWarn('ChiSiamoScreen', 'Failed to open dialer', result.error);
     }
-  }, [openLink]);
+  }, [openLink, t]);
 
   const handleEmailPress = useCallback(async () => {
     const result = await openLink(
       'mailto:info@riseagainsthunger.it',
       'email',
-      "Impossibile aprire l'app email."
+      t('links.errors.email')
     );
 
     if (!isSuccess(result) && __DEV__) {
       logWarn('ChiSiamoScreen', 'Failed to open email', result.error);
     }
-  }, [openLink]);
+  }, [openLink, t]);
 
   const handleShowStoria = useCallback(() => {
     setIsStoriaModalVisible(true);

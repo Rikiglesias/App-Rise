@@ -50,7 +50,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               style={modalStyles.closeButton}
               activeOpacity={0.8}
               accessibilityRole="button"
-              accessibilityLabel="Chiudi modal"
+              accessibilityLabel={t('accessibility.closeModal')}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               testID="storia-modal-close"
             >

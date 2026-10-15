@@ -11,6 +11,7 @@ import { PerfectImage } from '@/components/ui/PerfectImage';
 import { type HeaderImageSectionProps } from '@/features/home/types/HomeHeaderTypes';
 import { BorderRadius } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 const localStyles = StyleSheet.create({
   animatedContainer: {
@@ -30,6 +31,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
     gradientOpacity,
     styles,
   }) => {
+    const { t } = useTranslation();
     const animatedStyle = useMemo(
       () => ({
         opacity: imageAnim,
@@ -47,7 +49,7 @@ export const HeaderImageSection: React.FC<HeaderImageSectionProps> = React.memo(
         <Animated.View
           style={[localStyles.animatedContainer, animatedStyle]}
           accessibilityRole="image"
-          accessibilityLabel="Hero Rise Against Hunger"
+          accessibilityLabel={t('accessibility.heroImage')}
         >
           <PerfectImage
             width={393}

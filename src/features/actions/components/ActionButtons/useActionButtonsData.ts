@@ -95,11 +95,7 @@ export const useActionButtonsData = (
         icon: 'shopping',
         gradient: Colors.gradients.shop,
         onPress: () =>
-          openLetsDonationExit(
-            RISE_URLS.shop,
-            'shop',
-            'Impossibile aprire il charity shop. Riprova più tardi.'
-          ),
+          openLetsDonationExit(RISE_URLS.shop, 'shop', t('links.errors.shop')),
       },
       {
         id: 'gift-card',
@@ -110,7 +106,7 @@ export const useActionButtonsData = (
           openLetsDonationExit(
             RISE_URLS.giftCards,
             'giftcard',
-            'Impossibile aprire le gift card. Riprova più tardi.'
+            t('links.errors.giftCards')
           ),
       },
     ],
@@ -129,7 +125,7 @@ export const useActionButtonsData = (
           openLetsDonationExit(
             RISE_URLS.projects,
             'projects',
-            'Impossibile aprire la pagina progetti. Riprova più tardi.'
+            t('links.errors.projects')
           ),
       },
       {
@@ -148,7 +144,7 @@ export const useActionButtonsData = (
           openLetsDonationExit(
             RISE_URLS.events,
             'events',
-            'Impossibile aprire il calendario eventi. Riprova più tardi.'
+            t('links.errors.events')
           ),
       },
     ],
@@ -160,9 +156,9 @@ export const useActionButtonsData = (
     void openLetsDonationExit(
       RISE_URLS.communityRegister,
       'community-registration',
-      'Impossibile aprire la pagina di registrazione. Riprova più tardi.'
+      t('links.errors.registration')
     );
-  }, [openLetsDonationExit]);
+  }, [openLetsDonationExit, t]);
 
   // COMMUNITY BUTTONS DATA
   const communityButtons = useMemo(

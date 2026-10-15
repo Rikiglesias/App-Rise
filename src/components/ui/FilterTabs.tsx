@@ -11,6 +11,7 @@ import {
 import { getPerfectShadow } from '../../shared/constants/perfectShadow';
 import { scale } from '../../shared/constants/perfectScale';
 import { useThemeColors } from '../../shared/hooks/useThemeColors';
+import { useTranslation } from '../../shared/hooks/useTranslation';
 import type { ThemeColors } from '../../shared/theme/adaptiveColors';
 import { PerfectText } from './PerfectText';
 import { PerfectContainer } from './PerfectContainer';
@@ -110,67 +111,70 @@ interface TabItemProps {
 }
 
 const TabItem: React.FC<TabItemProps> = React.memo(
-  ({ tab, isActive, onPress, showCounts, styles }) => (
-    <PerfectContainer style={styles.tabContainer}>
-      <TouchableRipple
-        onPress={onPress}
-        borderless
-        rippleColor="transparent"
-        style={[styles.tab, isActive ? styles.activeTab : styles.inactiveTab]}
-        accessible
-        accessibilityRole="tab"
-        accessibilityLabel={tab.label || 'Categoria senza nome'}
-        accessibilityState={{
-          selected: isActive,
-        }}
-      >
-        <PerfectContainer style={styles.tabContent}>
-          {tab.icon && (
+  ({ tab, isActive, onPress, showCounts, styles }) => {
+    const { t } = useTranslation();
+    return (
+      <PerfectContainer style={styles.tabContainer}>
+        <TouchableRipple
+          onPress={onPress}
+          borderless
+          rippleColor="transparent"
+          style={[styles.tab, isActive ? styles.activeTab : styles.inactiveTab]}
+          accessible
+          accessibilityRole="tab"
+          accessibilityLabel={tab.label || t('accessibility.unnamedCategory')}
+          accessibilityState={{
+            selected: isActive,
+          }}
+        >
+          <PerfectContainer style={styles.tabContent}>
+            {tab.icon && (
+              <PerfectText
+                size={14}
+                lines={1}
+                fontWeight="400"
+                variant="compact"
+                style={[
+                  styles.tabIcon,
+                  isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
+                ]}
+              >
+                {tab.icon}
+              </PerfectText>
+            )}
+
             <PerfectText
               size={14}
               lines={1}
               fontWeight="400"
               variant="compact"
               style={[
-                styles.tabIcon,
+                styles.tabLabel,
                 isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
               ]}
             >
-              {tab.icon}
+              {tab.label}
             </PerfectText>
-          )}
 
-          <PerfectText
-            size={14}
-            lines={1}
-            fontWeight="400"
-            variant="compact"
-            style={[
-              styles.tabLabel,
-              isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
-            ]}
-          >
-            {tab.label}
-          </PerfectText>
-
-          {showCounts && tab.count !== undefined && (
-            <PerfectText
-              size={12}
-              lines={1}
-              fontWeight="400"
-              variant="compact"
-              style={[
-                styles.tabCount,
-                isActive ? styles.activeTabCount : styles.inactiveTabCount,
-              ]}
-            >
-              {tab.count}
-            </PerfectText>
-          )}
-        </PerfectContainer>
-      </TouchableRipple>
-    </PerfectContainer>
-  )
+            {showCounts && tab.count !== undefined && (
+              <PerfectText
+                size={12}
+                lines={1}
+                fontWeight="400"
+                variant="compact"
+                style={[
+                  styles.tabCount,
+                  isActive ? styles.activeTabCount : styles.inactiveTabCount,
+                ]}
+              >
+                {tab.count}
+              </PerfectText>
+            )}
+          </PerfectContainer>
+        </TouchableRipple>
+      </PerfectContainer>
+    );
+  }
 );
 
 TabItem.displayName = 'TabItem';
