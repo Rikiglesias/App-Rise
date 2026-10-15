@@ -6,6 +6,7 @@
 import { Share } from 'react-native';
 
 import type { Profile, ConsentEvent } from './types';
+import i18n from '@/locales';
 
 export interface ExportAccount {
   id: string;
@@ -41,7 +42,7 @@ export const exportData = async (
 ): Promise<void> => {
   const payload = buildExportPayload(account, profile, consentHistory);
   await Share.share({
-    title: 'I miei dati — Rise Against Hunger',
+    title: i18n.t('auth.privacy.exportTitle'),
     message: JSON.stringify(payload, null, 2),
   });
 };

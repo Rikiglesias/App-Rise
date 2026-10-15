@@ -38,11 +38,13 @@ interface OTAUpdateScreenProps {
 // Traduzioni localizzate
 const translations = {
   it: {
+    logo: 'Logo Rise Against Hunger Italia',
     message: "Stiamo aggiornando l'app",
     subMessage: 'Grazie della pazienza, ci vorranno solo pochi secondi',
     complete: 'Aggiornamento completato!',
   },
   en: {
+    logo: 'Rise Against Hunger Italia logo',
     message: 'Updating the app',
     subMessage: 'Thank you for your patience, just a few seconds',
     complete: 'Update complete!',
@@ -336,7 +338,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
               aspectRatio={1}
               borderRadius={63}
               shadow={false}
-              accessibilityLabel="Logo Rise Against Hunger Italia"
+              accessibilityLabel={t.logo}
             />
           </View>
         </Animated.View>

@@ -11,6 +11,7 @@ import {
 } from '@/shared/utils/result';
 import { logWarn, logError } from '@/shared/utils/logger';
 import { RISE_URLS, SOCIAL_URLS } from '@/shared/constants/urls';
+import i18n from '@/locales';
 
 /**
  * Schemi senza host, ammessi a prescindere dall'allowlist di domini.
@@ -47,7 +48,7 @@ export const useLinkHandler = (
   options: UseLinkHandlerOptions = {}
 ): UseLinkHandlerReturn => {
   const {
-    defaultErrorMessage = 'Impossibile aprire il link. Riprova più tardi.',
+    defaultErrorMessage,
     loadingDelay = 0, // AZZERATO: apertura istantanea dei link
     enableHaptics = true,
     timeout = 10000,
@@ -175,7 +176,12 @@ export const useLinkHandler = (
 
         if (!isSuccess(linkResult)) {
           // Show user-friendly error
-          Alert.alert('Errore', errorMessage ?? defaultErrorMessage);
+          Alert.alert(
+            i18n.t('common.error'),
+            errorMessage ??
+              defaultErrorMessage ??
+              i18n.t('links.errors.default')
+          );
 
           // Log detailed error for debugging
           if (__DEV__) {
@@ -211,7 +217,7 @@ export const useLinkHandler = (
     return openLink(
       SOCIAL_URLS.facebook,
       'facebook',
-      'Impossibile aprire Facebook. Riprova più tardi.'
+      i18n.t('links.errors.social', { platform: 'Facebook' })
     );
   }, [openLink]);
 
@@ -219,7 +225,7 @@ export const useLinkHandler = (
     return openLink(
       SOCIAL_URLS.instagram,
       'instagram',
-      'Impossibile aprire Instagram. Riprova più tardi.'
+      i18n.t('links.errors.social', { platform: 'Instagram' })
     );
   }, [openLink]);
 
@@ -227,7 +233,7 @@ export const useLinkHandler = (
     return openLink(
       SOCIAL_URLS.youtube,
       'youtube',
-      'Impossibile aprire YouTube. Riprova più tardi.'
+      i18n.t('links.errors.social', { platform: 'YouTube' })
     );
   }, [openLink]);
 
@@ -235,7 +241,7 @@ export const useLinkHandler = (
     return openLink(
       SOCIAL_URLS.linkedin,
       'linkedin',
-      'Impossibile aprire LinkedIn. Riprova più tardi.'
+      i18n.t('links.errors.social', { platform: 'LinkedIn' })
     );
   }, [openLink]);
 
@@ -243,7 +249,7 @@ export const useLinkHandler = (
     return openLink(
       RISE_URLS.italyWebsite,
       'website',
-      'Impossibile aprire il sito web. Riprova più tardi.'
+      i18n.t('links.errors.website')
     );
   }, [openLink]);
 
@@ -251,7 +257,7 @@ export const useLinkHandler = (
     return openLink(
       RISE_URLS.tracciabilita,
       'tracciabilita',
-      'Impossibile aprire la pagina tracciabilità. Riprova più tardi.'
+      i18n.t('links.errors.tracking')
     );
   }, [openLink]);
 

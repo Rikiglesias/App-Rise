@@ -9,6 +9,7 @@ import {
 import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 export interface SocialPlatform {
@@ -30,6 +31,7 @@ interface SocialCardProps {
 
 export const SocialCard: React.FC<SocialCardProps> = React.memo(
   ({ platform }) => {
+    const { t } = useTranslation();
     const colors = useThemeColors();
     const styles = useMemo(() => createStyles(colors), [colors]);
 
@@ -45,7 +47,10 @@ export const SocialCard: React.FC<SocialCardProps> = React.memo(
             onPress={platform.onPress}
             style={styles.touchableArea}
             accessibilityRole="button"
-            accessibilityLabel={`Seguici su ${platform.name}: ${platform.handle}`}
+            accessibilityLabel={t('accessibility.followSocial', {
+              name: platform.name,
+              handle: platform.handle,
+            })}
             accessibilityHint={platform.description}
             testID={`social-card-${platform.id}`}
           >

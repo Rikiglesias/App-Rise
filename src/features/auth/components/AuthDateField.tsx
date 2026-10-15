@@ -9,6 +9,7 @@ import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface AuthDateFieldProps {
@@ -46,6 +47,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
   error,
   placeholder,
 }) => {
+  const { t, locale } = useTranslation();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [open, setOpen] = useState(false);
@@ -77,7 +79,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
       value={pickerDate}
       mode="date"
       display="spinner"
-      locale="it-IT"
+      locale={locale === 'it' ? 'it-IT' : 'en-GB'}
       maximumDate={new Date()}
       onChange={handleChange}
     />
@@ -110,7 +112,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
           <Pressable
             style={styles.dismissOverlay}
             onPress={() => setOpen(false)}
-            accessibilityLabel="Chiudi selezione data"
+            accessibilityLabel={t('accessibility.closeDatePicker')}
           />
           {picker}
         </>

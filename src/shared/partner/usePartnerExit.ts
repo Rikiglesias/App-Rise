@@ -11,6 +11,7 @@ import {
 } from './disclosureFlag';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
+import i18n from '@/locales';
 
 /**
  * Orchestrazione delle uscite verso i partner (goal partner-identita, F1.7).
@@ -182,11 +183,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         return;
       }
       const url = buildDonorboxDonationUrl(ref, prefill);
-      await openLink(
-        url,
-        'donation',
-        'Impossibile aprire il link di donazione. Riprova più tardi.'
-      );
+      await openLink(url, 'donation', i18n.t('links.errors.donation'));
     } finally {
       uscitaInCorso.current = false;
       setIsExiting(false);
@@ -232,7 +229,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         await openLink(
           conDati ? scelto.conDati : scelto.senzaDati,
           'donation',
-          'Impossibile aprire il link di donazione. Riprova più tardi.'
+          i18n.t('links.errors.donation')
         );
       } finally {
         uscitaInCorso.current = false;

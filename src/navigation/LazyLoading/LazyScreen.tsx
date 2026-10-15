@@ -12,6 +12,7 @@ import { scale } from '@/shared/constants/perfectScale';
 import { logger } from '@/shared/utils/logger';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface LazyScreenProps {
   children: React.ReactNode;
@@ -39,6 +40,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
   error,
   retry,
 }) => {
+  const { t } = useTranslation();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   return (
@@ -50,7 +52,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
         style={styles.errorTitle}
         immunity={true}
       >
-        Errore di caricamento
+        {t('errorBoundary.loadingTitle')}
       </PerfectText>
       <PerfectText
         size={14}
@@ -59,7 +61,9 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
         style={styles.errorMessage}
         immunity={true}
       >
-        {error.message || 'Impossibile caricare la schermata'}
+        {__DEV__ && error.message
+          ? error.message
+          : t('errorBoundary.loadingMessage')}
       </PerfectText>
       <PerfectContainer style={styles.retryButton}>
         <PerfectText
@@ -70,7 +74,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
           immunity={true}
           onPress={retry}
         >
-          Riprova
+          {t('common.retry')}
         </PerfectText>
       </PerfectContainer>
     </PerfectContainer>

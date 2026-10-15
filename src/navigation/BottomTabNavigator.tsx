@@ -1,9 +1,21 @@
-import React, { useMemo } from 'react';
-import { Platform, StyleSheet, PixelRatio } from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  Platform,
+  StyleSheet,
+  PixelRatio,
+  type LayoutChangeEvent,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomTabBarProps,
   createBottomTabNavigator,
+  BottomTabBarHeightCallbackContext,
 } from '@react-navigation/bottom-tabs';
 import * as Haptics from 'expo-haptics';
 
@@ -64,6 +76,18 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { isDark } = useUniversalTheme();
+  const onHeightChange = useContext(BottomTabBarHeightCallbackContext);
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+  const bottomOffset = Math.max(insets.bottom, PerfectSpacing.base);
+  const handleLayout = useCallback((event: LayoutChangeEvent) => {
+    setMeasuredHeight(event.nativeEvent.layout.height);
+  }, []);
+
+  // Il navigator deve conoscere tutto lo spazio occupato dalla barra flottante,
+  // inclusa la distanza dal bordo sicuro, anche dopo rotazione/zoom.
+  useLayoutEffect(() => {
+    if (measuredHeight > 0) onHeightChange?.(measuredHeight + bottomOffset);
+  }, [measuredHeight, bottomOffset, onHeightChange]);
 
   const tabContainerStyle = useMemo(() => {
     const radius = scale(32);
@@ -75,7 +99,7 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
     return [
       styles.tabBarContainer,
       {
-        bottom: Math.max(insets.bottom, PerfectSpacing.base),
+        bottom: bottomOffset,
         height: isHighZoom ? highZoomHeight : baseHeight,
         left: PerfectSpacing.lg,
         right: PerfectSpacing.lg,
@@ -83,7 +107,7 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
         overflow: 'hidden' as const,
       },
     ];
-  }, [insets.bottom]);
+  }, [bottomOffset]);
 
   const blurBackground = isDark
     ? Platform.select({
@@ -98,7 +122,11 @@ const AdvancedTabBarComponent: React.FC<BottomTabBarProps> = ({
       });
 
   return (
-    <PerfectContainer style={tabContainerStyle}>
+    <PerfectContainer
+      style={tabContainerStyle}
+      onLayout={handleLayout}
+      testID="bottom-tab-bar"
+    >
       <PlatformBlur
         intensity={90}
         tint={isDark ? 'dark' : 'light'}

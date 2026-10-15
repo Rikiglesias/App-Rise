@@ -15,6 +15,7 @@ import {
 import * as Updates from 'expo-updates';
 import * as Sentry from '@sentry/react-native';
 import { logger } from '@/shared/utils/logger';
+import i18n from '@/locales';
 
 interface Props {
   children: ReactNode;
@@ -105,24 +106,33 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Header */}
             <View style={styles.header}>
               <Text style={styles.emoji}>⚠️</Text>
-              <Text style={styles.title}>Qualcosa è andato storto</Text>
+              <Text style={styles.title}>{i18n.t('errorBoundary.title')}</Text>
               <Text style={styles.subtitle}>
-                L&apos;app ha riscontrato un errore imprevisto
+                {i18n.t('errorBoundary.subtitle')}
               </Text>
             </View>
 
             {/* Error Info */}
             <View style={styles.errorBox}>
-              <Text style={styles.errorTitle}>Errore Tecnico:</Text>
+              {__DEV__ && (
+                <Text style={styles.errorTitle}>
+                  {i18n.t('errorBoundary.technicalTitle')}
+                </Text>
+              )}
               <Text style={styles.errorMessage}>
-                {this.state.error.message || 'Unknown error'}
+                {__DEV__
+                  ? this.state.error.message ||
+                    i18n.t('errorBoundary.unknownError')
+                  : i18n.t('errorBoundary.genericMessage')}
               </Text>
             </View>
 
             {/* Stack Trace (collapsible in produzione) */}
             {__DEV__ && this.state.error.stack && (
               <View style={styles.stackBox}>
-                <Text style={styles.stackTitle}>Stack Trace (dev only):</Text>
+                <Text style={styles.stackTitle}>
+                  {i18n.t('errorBoundary.stackTrace')}
+                </Text>
                 <Text style={styles.stackText}>{this.state.error.stack}</Text>
               </View>
             )}
@@ -130,7 +140,9 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Component Stack */}
             {__DEV__ && this.state.errorInfo?.componentStack && (
               <View style={styles.stackBox}>
-                <Text style={styles.stackTitle}>Component Stack:</Text>
+                <Text style={styles.stackTitle}>
+                  {i18n.t('errorBoundary.componentStack')}
+                </Text>
                 <Text style={styles.stackText}>
                   {this.state.errorInfo.componentStack}
                 </Text>
@@ -144,7 +156,9 @@ export class ErrorBoundary extends Component<Props, State> {
                 onPress={this.handleReload}
                 activeOpacity={0.8}
               >
-                <Text style={styles.buttonPrimaryText}>🔄 Ricarica App</Text>
+                <Text style={styles.buttonPrimaryText}>
+                  {i18n.t('errorBoundary.reload')}
+                </Text>
               </TouchableOpacity>
 
               {__DEV__ && (
@@ -160,7 +174,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   activeOpacity={0.8}
                 >
                   <Text style={styles.buttonSecondaryText}>
-                    Ignora Errore (dev only)
+                    {i18n.t('errorBoundary.ignore')}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -169,7 +183,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Footer Info */}
             <View style={styles.footer}>
               <Text style={styles.footerText}>
-                Se il problema persiste, contatta il supporto tecnico
+                {i18n.t('errorBoundary.support')}
               </Text>
               <Text style={styles.footerVersion}>
                 {/* Version displayed in footer */}
