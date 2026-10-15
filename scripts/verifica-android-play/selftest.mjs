@@ -21,6 +21,7 @@ import { FIXTURE_CANCELLAZIONE } from './selftest-cancellazione.mjs';
 import { FIXTURE_INFORMATIVA } from './selftest-informativa.mjs';
 import { FIXTURE_PLAY } from './selftest-play.mjs';
 import { FIXTURE_AAB } from './selftest-aab.mjs';
+import { FIXTURE_LINK } from './selftest-link.mjs';
 
 export const FIXTURE = {
   ...FIXTURE_VISIVO,
@@ -29,6 +30,7 @@ export const FIXTURE = {
   ...FIXTURE_INFORMATIVA,
   ...FIXTURE_PLAY,
   ...FIXTURE_AAB,
+  ...FIXTURE_LINK,
   C1: {
     neg: [
       cfg({ package: 'it.creareunapp.editor.android63da226b447a7' }),
@@ -181,36 +183,6 @@ export const FIXTURE = {
       {
         rotte: ['Beneficiaries'],
         file: [{ nome: 'src/a.tsx', testo: "navigate('Impact')" }],
-      },
-    ],
-  },
-  C8: {
-    neg: [
-      {
-        png: ['link-scaduto-it.png'],
-        dump: {},
-        log: null,
-        attesi: { it: ['a'], en: ['b'] },
-      },
-      {
-        png: [],
-        dump: { it: '<node text="altro"/>', en: '<node text="b"/>' },
-        log: 'x',
-        attesi: { it: ['a'], en: ['b'] },
-      },
-      {
-        png: [],
-        dump: { it: '<node text="a"/>', en: '<node text="b"/>' },
-        log: `${PACKAGE} error_code=otp_disabled`,
-        attesi: { it: ['a'], en: ['b'] },
-      },
-    ],
-    pos: [
-      {
-        png: [],
-        dump: { it: '<node text="a"/>', en: '<node text="b"/>' },
-        log: `${PACKAGE} rahitalia://reset-password#error_code=otp_expired`,
-        attesi: { it: ['a'], en: ['b'] },
       },
     ],
   },

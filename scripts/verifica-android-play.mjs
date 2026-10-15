@@ -9,6 +9,7 @@ import { criteri as ambiente } from './verifica-android-play/ambiente.mjs';
 import { criteri as app } from './verifica-android-play/app.mjs';
 import { criteri as binario } from './verifica-android-play/binario.mjs';
 import { criteri as aab } from './verifica-android-play/aab.mjs';
+import { criteri as link } from './verifica-android-play/link.mjs';
 import { criteri as visivo } from './verifica-android-play/visivo.mjs';
 import { criteri as documenti } from './verifica-android-play/documenti.mjs';
 import { criteri as rilascio } from './verifica-android-play/documenti-rilascio.mjs';
@@ -23,6 +24,7 @@ const CRITERI = {
   ...app,
   ...binario,
   ...aab,
+  ...link,
   ...visivo,
   ...documenti,
   ...rilascio,

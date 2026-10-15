@@ -1,16 +1,5 @@
-// C7-C8: comportamento dell'app (contratto del goal android-play).
-import { join } from 'node:path';
-import {
-  PACKAGE,
-  VERIFICA_DIR,
-  elencaFile,
-  esiste,
-  leggi,
-  normalizzaSpazi,
-  percorso,
-  rel,
-  testiDump,
-} from './comune.mjs';
+// C7: comportamento dell'app (contratto del goal android-play). C8 sta in link.mjs.
+import { elencaFile, leggi, percorso, rel } from './comune.mjs';
 
 // I valori di traduzione non sono rotte: `volunteersLabel: 'Volunteers'` è un'etichetta.
 const ESCLUSI_ROTTE = [
@@ -85,53 +74,5 @@ export const criteri = {
     nota: ({ rotte, esclusi }) =>
       `rotte registrate ma irraggiungibili: ${rotte.join(', ')}; ` +
       `esclusi dalla ricerca: ${[...new Set(esclusi.map(e => e.motivo))].join('; ')} (${esclusi.length} file)`,
-  },
-  C8: {
-    leggi() {
-      const f = nome => join(VERIFICA_DIR, nome);
-      const opz = p => (esiste(p) ? leggi(p) : null);
-      return {
-        png: ['link-scaduto-it.png', 'link-scaduto-en.png'].filter(
-          n => !esiste(f(n))
-        ),
-        dump: {
-          it: opz(f('link-scaduto-it.xml')),
-          en: opz(f('link-scaduto-en.xml')),
-        },
-        log: opz(f('link-scaduto.log')),
-        attesi: Object.fromEntries(
-          ['it', 'en'].map(l => {
-            const src = leggi(percorso('src', 'locales', `${l}.ts`));
-            return [
-              l,
-              [
-                testoTraduzione(src, 'auth.linkExpired.title'),
-                testoTraduzione(src, 'auth.linkExpired.reset'),
-              ],
-            ];
-          })
-        ),
-      };
-    },
-    verifica({ png, dump, log, attesi }) {
-      if (png.length) return `mancano gli screenshot: ${png.join(', ')}`;
-      for (const lingua of ['it', 'en']) {
-        if (attesi[lingua].some(t => !t))
-          return `testo auth.linkExpired non trovato in src/locales/${lingua}.ts`;
-        if (!dump[lingua])
-          return `manca link-scaduto-${lingua}.xml (uiautomator dump)`;
-        const visti = testiDump(dump[lingua]).map(normalizzaSpazi);
-        const mancante = attesi[lingua].find(
-          t => !visti.includes(normalizzaSpazi(t))
-        );
-        if (mancante)
-          return `${lingua}: a schermo manca «${mancante.slice(0, 50)}…»`;
-      }
-      if (!log) return 'manca link-scaduto.log (logcat con l’intent ricevuto)';
-      if (!/error_code=otp_expired/.test(log))
-        return 'il log non contiene error_code=otp_expired';
-      if (!log.includes(PACKAGE)) return `il log non nomina ${PACKAGE}`;
-      return null;
-    },
   },
 };
