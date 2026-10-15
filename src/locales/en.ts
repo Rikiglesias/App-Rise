@@ -200,6 +200,7 @@ export default {
       email_not_confirmed: 'Email not confirmed yet. Check your inbox.',
       already_registered: 'This email is already registered',
       rate_limited: 'Too many attempts. Please try again shortly.',
+      network: 'No connection. Check your internet and try again.',
       profileStillIncomplete:
         'Still missing: {{fields}}. Without these details your profile stays incomplete.',
       generic: 'An error occurred. Please try again.',

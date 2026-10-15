@@ -222,6 +222,7 @@ export default {
       email_not_confirmed: 'Email non ancora confermata. Controlla la posta.',
       already_registered: 'Questa email è già registrata',
       rate_limited: 'Troppi tentativi. Riprova tra poco.',
+      network: 'Nessuna connessione. Controlla internet e riprova.',
       // Salvataggio che non basterebbe a completare il profilo: si mostra PRIMA di
       // scrivere, perché il contrario significherebbe salvare e ritrovarsi di nuovo la
       // stessa schermata senza sapere perché.

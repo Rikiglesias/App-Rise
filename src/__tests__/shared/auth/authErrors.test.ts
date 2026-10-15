@@ -25,6 +25,16 @@ describe('mapAuthError', () => {
     expect(mapAuthError('Email rate limit exceeded')).toBe('rate_limited');
   });
 
+  it('fetch senza rete (React Native e browser) → network', () => {
+    expect(mapAuthError('Network request failed')).toBe('network');
+    expect(mapAuthError('Network request timed out')).toBe('network');
+    expect(mapAuthError('Failed to fetch')).toBe('network');
+    expect(mapAuthError('Load failed')).toBe('network');
+    expect(
+      mapAuthError('NetworkError when attempting to fetch resource.')
+    ).toBe('network');
+  });
+
   it('messaggio sconosciuto → generic', () => {
     expect(mapAuthError('Some unexpected network blip')).toBe('generic');
   });

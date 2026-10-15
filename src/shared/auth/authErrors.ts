@@ -18,5 +18,16 @@ export const mapAuthError = (message: string | null | undefined): string => {
   if (m.includes('rate limit') || m.includes('too many requests')) {
     return 'rate_limited';
   }
+  // fetch fallita senza risposta (supabase-js la rilancia col messaggio originale):
+  // React Native, Chrome, Safari, Firefox.
+  if (
+    m.includes('network request failed') ||
+    m.includes('network request timed out') ||
+    m.includes('failed to fetch') ||
+    m === 'load failed' ||
+    m.includes('networkerror when attempting to fetch')
+  ) {
+    return 'network';
+  }
   return 'generic';
 };
