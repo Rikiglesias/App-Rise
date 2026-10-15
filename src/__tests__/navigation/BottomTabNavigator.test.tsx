@@ -1,5 +1,8 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
+import { act, render, fireEvent, waitFor } from '@testing-library/react-native';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
 
@@ -134,6 +137,29 @@ describe('BottomTabNavigator', () => {
       await waitFor(() => {
         expect(getByTestId('impact-screen')).toBeTruthy();
       });
+    });
+
+    it('indietro: dalla Home esce, da un altro tab torna alla Home', async () => {
+      const ref = createNavigationContainerRef();
+      const { getByLabelText, getByTestId } = render(
+        <AllProviders>
+          <NavigationContainer ref={ref}>
+            <BottomTabNavigator />
+          </NavigationContainer>
+        </AllProviders>
+      );
+
+      // Home è la destinazione iniziale: «indietro» deve uscire dall'app.
+      await waitFor(() => expect(ref.isReady()).toBe(true));
+      expect(ref.canGoBack()).toBe(false);
+
+      fireEvent.press(getByLabelText(/Impatto/i));
+      await waitFor(() => expect(getByTestId('impact-screen')).toBeTruthy());
+      expect(ref.canGoBack()).toBe(true);
+
+      act(() => ref.goBack());
+      await waitFor(() => expect(getByTestId('home-screen')).toBeTruthy());
+      expect(ref.canGoBack()).toBe(false);
     });
 
     it('should navigate to Contribute tab when pressed', async () => {

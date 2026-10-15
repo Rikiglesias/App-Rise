@@ -282,6 +282,9 @@ const BottomTabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       initialRouteName="HomeTab"
+      // Indietro: da Impatto/Azioni torna alla Home, dalla Home esce (principi di navigazione
+      // Android). Il default di React Navigation 7 è 'firstRoute' = Impatto, il tab a sinistra.
+      backBehavior="initialRoute"
       screenOptions={{
         headerShown: false,
         lazy: true, // Lazy loading: migliora cold start; preloading mirato se serve
