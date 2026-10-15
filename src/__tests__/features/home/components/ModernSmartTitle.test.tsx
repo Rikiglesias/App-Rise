@@ -2,6 +2,7 @@ import React from 'react';
 import { Animated } from 'react-native';
 import { render, screen } from '@testing-library/react-native';
 import { ModernSmartTitle } from '@/features/home/components/ModernSmartTitle';
+import i18n from '@/locales';
 
 // Mock useTheme
 jest.mock('@/shared/hooks/useTheme', () => ({
@@ -27,7 +28,16 @@ jest.mock('@/shared/theme/UniversalTheme', () => ({
 }));
 
 describe('ModernSmartTitle', () => {
-  it('renderizza titolo e logo', () => {
+  const previousLocale = i18n.locale;
+  afterEach(() => {
+    i18n.locale = previousLocale;
+  });
+
+  it.each([
+    ['it', 'Logo Rise Against Hunger'],
+    ['en', 'Rise Against Hunger logo'],
+  ])('renderizza titolo e logo in %s', (locale, label) => {
+    i18n.locale = locale;
     const anim = new Animated.Value(1);
     render(
       <ModernSmartTitle
@@ -42,6 +52,6 @@ describe('ModernSmartTitle', () => {
     expect(screen.getByText(/Rise Against/i)).toBeTruthy();
     expect(screen.getByText(/Hunger/i)).toBeTruthy();
     expect(screen.getByText(/Italia/i)).toBeTruthy();
-    expect(screen.getByLabelText('Logo Rise Against Hunger')).toBeTruthy();
+    expect(screen.getByLabelText(label)).toBeTruthy();
   });
 });

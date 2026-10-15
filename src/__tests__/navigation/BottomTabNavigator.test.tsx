@@ -8,6 +8,7 @@ import React from 'react';
 
 import BottomTabNavigator from '../../navigation/BottomTabNavigator';
 import { AllProviders } from '../helpers/testProviders';
+import { PerfectSpacing } from '@/shared/constants';
 
 // Mock Haptics
 jest.mock('expo-haptics');
@@ -33,10 +34,12 @@ jest.mock('../../shared/hooks/useTranslation', () => ({
 // Mock Screens
 jest.mock('../../features/home/screens/HomeScreen', () => {
   const { View, Text } = require('react-native');
+  const { useBottomTabBarHeight } = require('@react-navigation/bottom-tabs');
   return function HomeScreen() {
     return (
       <View testID="home-screen">
         <Text>Home Screen</Text>
+        <Text testID="measured-tab-height">{useBottomTabBarHeight()}</Text>
       </View>
     );
   };
@@ -90,17 +93,56 @@ jest.mock('../../components/ui', () => ({
   },
 }));
 
-describe('BottomTabNavigator', () => {
-  const renderNavigator = () => {
-    return render(
+const renderNavigator = () => {
+  return render(
+    <AllProviders>
+      <NavigationContainer>
+        <BottomTabNavigator />
+      </NavigationContainer>
+    </AllProviders>
+  );
+};
+
+it('pubblica altezza misurata e offset sicuro dopo layout e rotazione', () => {
+  const safeInsets = jest
+    .spyOn(
+      jest.requireMock<typeof import('react-native-safe-area-context')>(
+        'react-native-safe-area-context'
+      ),
+      'useSafeAreaInsets'
+    )
+    .mockReturnValue({ top: 0, bottom: 0, left: 0, right: 0 });
+  try {
+    const { getByTestId, rerender } = renderNavigator();
+    fireEvent(getByTestId('bottom-tab-bar'), 'layout', {
+      nativeEvent: { layout: { width: 350, height: 95, x: 0, y: 0 } },
+    });
+    expect(getByTestId('measured-tab-height').props.children).toBe(
+      95 + PerfectSpacing.base
+    );
+    fireEvent(getByTestId('bottom-tab-bar'), 'layout', {
+      nativeEvent: { layout: { width: 900, height: 136, x: 0, y: 0 } },
+    });
+    expect(getByTestId('measured-tab-height').props.children).toBe(
+      136 + PerfectSpacing.base
+    );
+    safeInsets.mockReturnValue({ top: 0, bottom: 34, left: 0, right: 0 });
+    rerender(
       <AllProviders>
         <NavigationContainer>
           <BottomTabNavigator />
         </NavigationContainer>
       </AllProviders>
     );
-  };
+    expect(getByTestId('measured-tab-height').props.children).toBe(
+      136 + Math.max(34, PerfectSpacing.base)
+    );
+  } finally {
+    safeInsets.mockRestore();
+  }
+});
 
+describe('BottomTabNavigator', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react-native';
 import { ProjectCard } from '../../features/projects/components/ProjectCard';
 import type { ProjectCardProps } from '../../features/projects/components/ProjectCard/types';
 import { AllProviders } from '../helpers/testProviders';
+import i18n from '@/locales';
 
 const mockProject: ProjectCardProps = {
   title: 'Test Project',
@@ -23,7 +24,30 @@ const ProjectCardWithTheme = (props: ProjectCardProps) => (
 describe('ProjectCard', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    i18n.locale = 'it';
   });
+
+  afterEach(() => {
+    i18n.locale = 'it';
+  });
+
+  it.each([
+    ['active', 'In Progress'],
+    ['completed', 'Completed'],
+    ['upcoming', 'Upcoming'],
+  ] as const)(
+    'translates the %s status, progress and label in English',
+    (status, label) => {
+      i18n.locale = 'en';
+      render(<ProjectCardWithTheme {...mockProject} status={status} />);
+
+      expect(
+        screen.getByLabelText('Project Test Project in Test Location')
+      ).toBeTruthy();
+      expect(screen.getByText(label)).toBeTruthy();
+      expect(screen.getByText('Progress: 75%')).toBeTruthy();
+    }
+  );
 
   it('renders project information correctly', () => {
     render(<ProjectCardWithTheme {...mockProject} />);

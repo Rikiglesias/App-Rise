@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react-native';
 import { AllProviders } from '../../../helpers/testProviders';
 import { SocialCard } from '@/features/social/components/SocialCard';
 import type { SocialPlatform } from '@/features/social/components/SocialCard';
+import i18n from '@/locales';
 
 // Mock delle dipendenze - approccio semplificato
 jest.mock('react-native', () => ({
@@ -143,6 +144,21 @@ const SocialCardWithTheme = (props: { platform: SocialPlatform }) => (
 describe('SocialCard', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    i18n.locale = 'it';
+  });
+
+  it('announces the translated follow action and supplied hint in English', () => {
+    i18n.locale = 'en';
+    render(<SocialCardWithTheme platform={mockSocialPlatform} />);
+
+    const card = screen.getByTestId('social-card-instagram');
+    expect(card.props.accessibilityLabel).toBe(
+      'Follow us on Instagram: @test_handle'
+    );
+    expect(card.props.accessibilityHint).toBe('Test description for Instagram');
   });
 
   it('renders social platform information correctly', () => {

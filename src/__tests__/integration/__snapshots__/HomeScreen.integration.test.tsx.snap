@@ -306,7 +306,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               }
             >
               <View
-                accessibilityLabel="Hero Rise Against Hunger"
+                accessibilityLabel="Immagine Rise Against Hunger"
                 accessibilityRole="image"
                 collapsable={false}
                 style={

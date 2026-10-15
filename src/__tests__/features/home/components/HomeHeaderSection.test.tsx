@@ -19,6 +19,6 @@ describe('HomeHeaderSection', () => {
     renderWithProviders(<HomeHeaderSection scrollY={scrollY} />, render);
     expect(screen.getByText(/Rise Against/i)).toBeTruthy();
     expect(screen.getByText(/Italia/i)).toBeTruthy();
-    expect(screen.getByLabelText('Hero Rise Against Hunger')).toBeTruthy();
+    expect(screen.getByLabelText('Immagine Rise Against Hunger')).toBeTruthy();
   });
 });

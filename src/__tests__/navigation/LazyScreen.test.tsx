@@ -1,8 +1,10 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { render } from '@testing-library/react-native';
+import { Text, View, type ViewProps } from 'react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 
 import { LazyScreen } from '../../navigation/LazyLoading/LazyScreen';
+import { changeLanguage, getCurrentLocale } from '@/locales';
+import { UniversalThemeProvider } from '@/shared/theme/UniversalTheme';
 
 // Mock logger to avoid console noise
 jest.mock('../../shared/utils/logger', () => ({
@@ -13,6 +15,13 @@ jest.mock('../../shared/utils/logger', () => ({
 
 // Mock PerfectText
 jest.mock('../../components/ui', () => ({
+  PerfectContainer: ({
+    children,
+    ...props
+  }: React.PropsWithChildren<ViewProps>) => {
+    const { View: RNView } = require('react-native');
+    return <RNView {...props}>{children}</RNView>;
+  },
   PerfectText: ({ children, onPress, ...props }: any) => {
     const { Text: RNText, TouchableOpacity } = require('react-native');
     if (onPress) {
@@ -95,8 +104,74 @@ describe('LazyScreen', () => {
     });
   });
 
-  // Note: ErrorBoundary tests skipped - React testing limitations
-  // ErrorBoundary works in production but is difficult to test properly
+  describe('errori di caricamento tradotti', () => {
+    const runtime = globalThis as typeof globalThis & { __DEV__: boolean };
+    const originalDev = runtime.__DEV__;
+    const originalLocale = getCurrentLocale();
+    let consoleSpy: jest.SpyInstance;
+    let shouldThrow: boolean;
+    const BrokenScreen = () => {
+      if (shouldThrow) throw new Error('Private loading detail');
+      return <Text>Recovered screen</Text>;
+    };
+    beforeEach(() => {
+      shouldThrow = true;
+      consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+    });
+    afterEach(() => {
+      runtime.__DEV__ = originalDev;
+      changeLanguage(originalLocale);
+      consoleSpy.mockRestore();
+    });
+    it.each([
+      [
+        'it',
+        'Errore di caricamento',
+        'Impossibile caricare la schermata. Riprova.',
+        'Riprova',
+      ],
+      [
+        'en',
+        'Loading error',
+        'Unable to load this screen. Please try again.',
+        'Retry',
+      ],
+    ] as const)(
+      'in produzione usa %s, nasconde il messaggio tecnico e consente retry',
+      (locale, title, message, retry) => {
+        runtime.__DEV__ = false;
+        changeLanguage(locale);
+        const { getByText, queryByText } = render(
+          <UniversalThemeProvider>
+            <LazyScreen>
+              <BrokenScreen />
+            </LazyScreen>
+          </UniversalThemeProvider>
+        );
+        expect(getByText(title)).toBeTruthy();
+        expect(getByText(message)).toBeTruthy();
+        expect(queryByText('Private loading detail')).toBeNull();
+        shouldThrow = false;
+        fireEvent.press(getByText(retry));
+        expect(getByText('Recovered screen')).toBeTruthy();
+      }
+    );
+    it('in sviluppo conserva il dettaglio tecnico', () => {
+      runtime.__DEV__ = true;
+      changeLanguage('en');
+      const { getByText } = render(
+        <UniversalThemeProvider>
+          <LazyScreen>
+            <BrokenScreen />
+          </LazyScreen>
+        </UniversalThemeProvider>
+      );
+      expect(getByText('Private loading detail')).toBeTruthy();
+      expect(getByText('Loading error')).toBeTruthy();
+    });
+  });
 
   describe('Suspense Integration', () => {
     it('should wrap children in Suspense', () => {

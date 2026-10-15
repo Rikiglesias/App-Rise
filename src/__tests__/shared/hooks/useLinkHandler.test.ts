@@ -3,6 +3,7 @@ import { Alert, Linking } from 'react-native';
 
 import { useLinkHandler } from '../../../shared/hooks/useLinkHandler';
 import { RISE_URLS, SOCIAL_URLS } from '../../../shared/constants/urls';
+import { changeLanguage, getCurrentLocale } from '@/locales';
 
 // Mock dependencies
 jest.mock('@react-navigation/native', () => ({
@@ -46,6 +47,57 @@ describe('useLinkHandler', () => {
 
     expect(result.current).toHaveProperty('openLink');
     expect(result.current).toHaveProperty('openWebsiteLink');
+  });
+});
+
+describe('useLinkHandler — errori localizzati', () => {
+  const originalLocale = getCurrentLocale();
+  let alertSpy: jest.SpyInstance;
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (Linking.canOpenURL as jest.Mock).mockResolvedValue(false);
+    alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => undefined);
+  });
+  afterEach(() => {
+    changeLanguage(originalLocale);
+    (Linking.canOpenURL as jest.Mock).mockResolvedValue(true);
+    alertSpy.mockRestore();
+  });
+  it.each([
+    ['it', 'Errore', 'Impossibile aprire il link. Riprova più tardi.'],
+    ['en', 'Error', 'Unable to open the link. Please try again later.'],
+  ] as const)(
+    'legge la lingua %s al fallimento anche dopo la creazione dell’hook',
+    async (locale, title, message) => {
+      const { result } = renderHook(() =>
+        useLinkHandler({ enableHaptics: false })
+      );
+      changeLanguage(locale);
+      await act(async () => {
+        await result.current.openLink(RISE_URLS.italyWebsite, 'test');
+      });
+      expect(alertSpy).toHaveBeenCalledWith(title, message);
+    }
+  );
+  it.each([
+    ['openFacebookLink', 'Unable to open Facebook. Please try again later.'],
+    ['openInstagramLink', 'Unable to open Instagram. Please try again later.'],
+    ['openYouTubeLink', 'Unable to open YouTube. Please try again later.'],
+    ['openLinkedInLink', 'Unable to open LinkedIn. Please try again later.'],
+    ['openWebsiteLink', 'Unable to open the website. Please try again later.'],
+    [
+      'openTracciabilitaLink',
+      'Unable to open the tracking page. Please try again later.',
+    ],
+  ] as const)('traduce %s in inglese', async (method, message) => {
+    changeLanguage('en');
+    const { result } = renderHook(() =>
+      useLinkHandler({ enableHaptics: false })
+    );
+    await act(async () => {
+      await result.current[method]();
+    });
+    expect(alertSpy).toHaveBeenCalledWith('Error', message);
   });
 });
 

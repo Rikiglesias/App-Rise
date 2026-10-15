@@ -12,6 +12,14 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
+// Asset identifiers must be stable even when node_modules is a worktree junction.
+jest.mock('@assets/icons/app/splash-screen.png', () => ({
+  testUri: '../../../assets/icons/app/splash-screen.png',
+}));
+jest.mock('@assets/images/hero-banner.png', () => ({
+  testUri: '../../../assets/images/hero-banner.png',
+}));
+
 // Mock ThemeProvider
 jest.mock('@/shared/hooks/useTheme', () => ({
   useTheme: () => ({
@@ -43,6 +51,8 @@ jest.mock('@/shared/hooks/useTranslation', () => ({
     t: (key: string) => {
       // Mock traduzioni italiane per i test
       const translations: Record<string, string> = {
+        'accessibility.organizationLogo': 'Logo Rise Against Hunger',
+        'accessibility.heroImage': 'Immagine Rise Against Hunger',
         'home.screenLabel': 'Schermata Home',
         'home.actionTitle': '⚡ Entra in Azione',
         'home.actionMainText':

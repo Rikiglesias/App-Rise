@@ -35,6 +35,21 @@ jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
 });
 
 describe('ChiSiamoSection', () => {
+  afterEach(() => {
+    i18n.locale = 'it';
+  });
+
+  it('announces the organization history in English', () => {
+    i18n.locale = 'en';
+    const onInfoPress = jest.fn();
+    const { getByLabelText } = renderWithTheme(
+      <ChiSiamoSection onInfoPress={onInfoPress} />
+    );
+
+    fireEvent.press(getByLabelText("Show the organization's history"));
+    expect(onInfoPress).toHaveBeenCalledTimes(1);
+  });
+
   it('calls onInfoPress when header button is pressed', () => {
     const onInfoPress = jest.fn();
     const { getByLabelText } = renderWithTheme(
@@ -61,6 +76,29 @@ describe('ChiSiamoSection', () => {
 });
 
 describe('AnimatedContact', () => {
+  afterEach(() => {
+    i18n.locale = 'it';
+  });
+
+  it('announces the translated contact action in English', () => {
+    i18n.locale = 'en';
+    const onPress = jest.fn();
+    const { getByLabelText } = renderWithTheme(
+      <AnimatedContact
+        contact={{
+          id: 'location',
+          title: 'Location',
+          subtitle: 'Via dei Fornaciai, 17',
+          icon: 'map-marker',
+          onPress,
+        }}
+      />
+    );
+
+    fireEvent.press(getByLabelText('Open Location'));
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
   it('triggers contact action on press', () => {
     const onPress = jest.fn();
     const contact: ContactData = {

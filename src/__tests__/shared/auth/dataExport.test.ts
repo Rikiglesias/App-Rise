@@ -2,6 +2,7 @@ import { Share } from 'react-native';
 
 import { buildExportPayload, exportData } from '@/shared/auth/dataExport';
 import type { Profile, ConsentEvent } from '@/shared/auth/types';
+import { changeLanguage, getCurrentLocale } from '@/locales';
 
 const profile: Profile = {
   id: 'u1',
@@ -27,6 +28,26 @@ const account = {
 };
 
 describe('dataExport', () => {
+  it.each([
+    ['it', 'I miei dati — Rise Against Hunger'],
+    ['en', 'My data — Rise Against Hunger'],
+  ] as const)(
+    'traduce il titolo del foglio di condivisione in %s',
+    async (locale, title) => {
+      const originalLocale = getCurrentLocale();
+      const spy = jest
+        .spyOn(Share, 'share')
+        .mockResolvedValue({ action: 'sharedAction' });
+      try {
+        changeLanguage(locale);
+        await exportData(account, profile);
+        expect(spy).toHaveBeenCalledWith(expect.objectContaining({ title }));
+      } finally {
+        changeLanguage(originalLocale);
+        spy.mockRestore();
+      }
+    }
+  );
   it('buildExportPayload include account, profilo e timestamp', () => {
     const payload = buildExportPayload(account, profile);
     expect(payload.account.email).toBe('mario@rossi.it');

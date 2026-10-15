@@ -4,6 +4,7 @@ import {
   COUNTRY_FEATURES,
 } from '@/components/layout/worldMapGeo';
 import { LOCATIONS_DATA } from '@/features/impact/data/locationsData';
+import { resolveLocalizedText } from '@/features/impact/utils/localizedText';
 import type { Location } from '@/shared/types/location';
 
 // LocationData (flat lat/lng) → Location (coordinates nested), come a runtime.
@@ -11,12 +12,12 @@ const asLocations = (): Location[] =>
   LOCATIONS_DATA.map(d => ({
     id: d.id,
     name: d.name,
-    country: d.country,
+    country: resolveLocalizedText(d.country),
     coordinates: { latitude: d.latitude, longitude: d.longitude },
     projects: 0,
     beneficiaries: '',
     status: 'active',
-    description: d.description,
+    description: resolveLocalizedText(d.description),
     image: d.image ?? '',
   }));
 
