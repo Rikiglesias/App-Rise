@@ -16,6 +16,7 @@ import {
   PerfectIcon,
 } from '@/components';
 import { PerfectSpacing } from '@/shared/constants';
+import { RISE_CONTACTS } from '@/shared/constants/urls';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
@@ -56,36 +57,40 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
   );
 
   const handleLocationPress = useCallback(async () => {
-    const address = 'Via dei Fornaciai, 17, 40129 Bologna, BO, Italia';
+    const address = RISE_CONTACTS.address;
     const url = `https://maps.google.com/?q=${encodeURIComponent(address)}`;
-    const result = await openLink(url, 'maps', t('links.errors.map'));
+    const result = await openLink(
+      url,
+      'maps',
+      t('links.errors.map', { address })
+    );
 
     if (!isSuccess(result) && __DEV__) {
-      logWarn('ChiSiamoScreen', 'Failed to open maps', result.error);
+      logWarn('Failed to open maps', 'ChiSiamoScreen', result.error);
     }
   }, [openLink, t]);
 
   const handlePhonePress = useCallback(async () => {
     const result = await openLink(
-      'tel:051704070',
+      `tel:${RISE_CONTACTS.phone}`,
       'phone',
-      t('links.errors.phone')
+      t('links.errors.phone', { phone: RISE_CONTACTS.phoneDisplay })
     );
 
     if (!isSuccess(result) && __DEV__) {
-      logWarn('ChiSiamoScreen', 'Failed to open dialer', result.error);
+      logWarn('Failed to open dialer', 'ChiSiamoScreen', result.error);
     }
   }, [openLink, t]);
 
   const handleEmailPress = useCallback(async () => {
     const result = await openLink(
-      'mailto:info@riseagainsthunger.it',
+      `mailto:${RISE_CONTACTS.email}`,
       'email',
-      t('links.errors.email')
+      t('links.errors.email', { email: RISE_CONTACTS.email })
     );
 
     if (!isSuccess(result) && __DEV__) {
-      logWarn('ChiSiamoScreen', 'Failed to open email', result.error);
+      logWarn('Failed to open email', 'ChiSiamoScreen', result.error);
     }
   }, [openLink, t]);
 
@@ -106,21 +111,21 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
     {
       id: 'location',
       title: t('about.locationTitle'),
-      subtitle: 'Via dei Fornaciai, 17 - Bologna',
+      subtitle: RISE_CONTACTS.addressDisplay,
       icon: 'map-marker',
       onPress: handleLocationPress,
     },
     {
       id: 'phone',
       title: t('about.phoneTitle'),
-      subtitle: '051 704070',
+      subtitle: RISE_CONTACTS.phoneDisplay,
       icon: 'phone',
       onPress: handlePhonePress,
     },
     {
       id: 'email',
       title: t('about.emailTitle'),
-      subtitle: 'info@riseagainsthunger.it',
+      subtitle: RISE_CONTACTS.email,
       icon: 'email',
       onPress: handleEmailPress,
     },

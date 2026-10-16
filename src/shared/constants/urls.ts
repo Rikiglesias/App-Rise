@@ -12,6 +12,14 @@
 // RISE AGAINST HUNGER WEBSITES
 // ===================================================================
 
+export const RISE_CONTACTS = {
+  phone: '051704070',
+  phoneDisplay: '051 704070',
+  email: 'info@riseagainsthunger.it',
+  address: 'Via dei Fornaciai, 17, 40129 Bologna, BO, Italia',
+  addressDisplay: 'Via dei Fornaciai, 17 - Bologna',
+} as const;
+
 export const RISE_URLS = {
   // Main websites
   italyMain: 'https://italy.riseagainsthunger.org',

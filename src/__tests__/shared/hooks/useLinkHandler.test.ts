@@ -55,12 +55,14 @@ describe('useLinkHandler — errori localizzati', () => {
   let alertSpy: jest.SpyInstance;
   beforeEach(() => {
     jest.clearAllMocks();
-    (Linking.canOpenURL as jest.Mock).mockResolvedValue(false);
+    (Linking.openURL as jest.Mock).mockRejectedValue(
+      new Error('No matching app')
+    );
     alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => undefined);
   });
   afterEach(() => {
     changeLanguage(originalLocale);
-    (Linking.canOpenURL as jest.Mock).mockResolvedValue(true);
+    (Linking.openURL as jest.Mock).mockResolvedValue(undefined);
     alertSpy.mockRestore();
   });
   it.each([

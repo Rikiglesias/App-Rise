@@ -128,10 +128,8 @@ export const useLinkHandler = (
           if (!isUrlAllowed(url)) {
             throw new Error(`Dominio non consentito: ${url}`);
           }
-          const supported = await Linking.canOpenURL(url);
-          if (!supported) {
-            throw new Error(`URL non supportato: ${url}`);
-          }
+          // L'apertura diretta non dipende dalla visibilità dei pacchetti Android.
+          // Un'app assente rigetta qui e viene gestita dal Result e dall'avviso.
           // Unico punto di uscita legittimo: qui l'URL ha già passato l'allowlist.
           // eslint-disable-next-line no-restricted-properties
           await Linking.openURL(url);
@@ -155,8 +153,8 @@ export const useLinkHandler = (
           // Haptic failure is non-critical, log and continue
           if (__DEV__) {
             logWarn(
-              'LinkHandler',
               'Haptic feedback failed',
+              'LinkHandler',
               hapticResult.error
             );
           }
@@ -186,8 +184,8 @@ export const useLinkHandler = (
           // Log detailed error for debugging
           if (__DEV__) {
             logError(
-              'LinkHandler',
               `Failed to open URL: ${url}`,
+              'LinkHandler',
               linkResult.error
             );
           }
