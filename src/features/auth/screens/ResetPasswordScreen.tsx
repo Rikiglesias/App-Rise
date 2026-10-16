@@ -13,6 +13,7 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validatePassword } from '@/shared/auth/validation';
+import { mapAuthError } from '@/shared/auth/authErrors';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -44,10 +45,15 @@ export const ResetPasswordScreen: React.FC = () => {
     if (p || mismatch) return;
 
     setLoading(true);
-    const { error } = await updatePassword(password);
-    setLoading(false);
-    if (error) setSubmitError(t('auth.errors.generic'));
-    else setDone(true);
+    try {
+      const { error } = await updatePassword(password);
+      if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      else setDone(true);
+    } catch (error) {
+      setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+    } finally {
+      setLoading(false);
+    }
   }, [password, confirm, updatePassword, t]);
 
   const handleSubmit = useCallback((): void => {

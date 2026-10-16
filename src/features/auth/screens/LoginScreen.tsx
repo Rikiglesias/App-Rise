@@ -51,11 +51,16 @@ export const LoginScreen: React.FC = () => {
     if (e || p) return;
 
     setLoading(true);
-    const { error } = await signIn(email.trim(), password);
-    setLoading(false);
-    // Post-login non si naviga: il cambio di status nell'AuthContext
-    // ri-renderizza ProfileScreen verso il profilo da solo.
-    if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+    try {
+      const { error } = await signIn(email.trim(), password);
+      // Post-login non si naviga: il cambio di status nell'AuthContext
+      // ri-renderizza ProfileScreen verso il profilo da solo.
+      if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+    } catch (error) {
+      setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+    } finally {
+      setLoading(false);
+    }
   }, [email, password, signIn, t]);
 
   const handleSubmit = useCallback((): void => {

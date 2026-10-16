@@ -184,34 +184,38 @@ export const useSignUpForm = () => {
     // rete, e senza l'indicatore la persona resta a guardare un pulsante che sembra non
     // aver ricevuto il tocco — e lo preme di nuovo.
     setLoading(true);
-    if (nickname.trim() !== '') {
-      const libero = await isNicknameAvailable(nickname);
-      if (libero === false) {
-        setLoading(false);
-        setErrors({ ...found, nickname: 'nickname_taken' });
-        return;
+    try {
+      if (nickname.trim() !== '') {
+        const libero = await isNicknameAvailable(nickname);
+        if (libero === false) {
+          setErrors({ ...found, nickname: 'nickname_taken' });
+          return;
+        }
       }
-    }
 
-    // confirmPassword NON viene inviato al backend: serve solo a validare in UI.
-    const { error } = await signUp(email.trim(), password, {
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      phone: phone.trim(),
-      city: city.trim(),
-      province: province.trim(),
-      country: country.trim(),
-      birth_date: birthDate.trim(),
-      privacy_consent: privacyConsent,
-      marketing_consent: marketingConsent,
-      // `signUp` omette del tutto la chiave se il valore è vuoto: il trigger e il
-      // server auth trattano l'assenza come «nessun nickname», mentre una stringa
-      // vuota sarebbe rumore nei metadata — che sono superficie visibile al partner.
-      nickname: nickname.trim(),
-    });
-    setLoading(false);
-    if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
-    else setDone(true);
+      // confirmPassword NON viene inviato al backend: serve solo a validare in UI.
+      const { error } = await signUp(email.trim(), password, {
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone: phone.trim(),
+        city: city.trim(),
+        province: province.trim(),
+        country: country.trim(),
+        birth_date: birthDate.trim(),
+        privacy_consent: privacyConsent,
+        marketing_consent: marketingConsent,
+        // `signUp` omette del tutto la chiave se il valore è vuoto: il trigger e il
+        // server auth trattano l'assenza come «nessun nickname», mentre una stringa
+        // vuota sarebbe rumore nei metadata — che sono superficie visibile al partner.
+        nickname: nickname.trim(),
+      });
+      if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      else setDone(true);
+    } catch (error) {
+      setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+    } finally {
+      setLoading(false);
+    }
   }, [
     firstName,
     lastName,

@@ -7,8 +7,8 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { Platform } from 'react-native';
-import type { Session } from '@supabase/supabase-js';
+import { Alert, Platform } from 'react-native';
+import type { AuthError, Session } from '@supabase/supabase-js';
 
 import { supabase } from './supabaseClient';
 import {
@@ -31,6 +31,7 @@ import type {
 import { PROFILE_EDITABLE_KEYS } from './types';
 import { useConsentState } from './useConsentState';
 import type { ConsentState } from './useConsentState';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 type Status = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -122,9 +123,17 @@ export interface AuthState {
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
+const passwordErrorMessage = (error: AuthError | null): string | null => {
+  const code = error?.code;
+  return code === 'same_password' || code === 'weak_password'
+    ? code
+    : (error?.message ?? null);
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<Status>('loading');
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -180,15 +189,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   useEffect(() => {
-    void supabase.auth.getSession().then(({ data }) => {
-      sessionUserIdRef.current = data.session?.user.id ?? null;
-      setSession(data.session);
-      setStatus(data.session ? 'authenticated' : 'unauthenticated');
-      if (data.session) void loadProfile(data.session.user.id);
-    });
+    let active = true;
+    let receivedAuthEvent = false;
+    void supabase.auth
+      .getSession()
+      .then(({ data, error }) => {
+        if (!active || receivedAuthEvent) return;
+        if (error) throw error;
+        sessionUserIdRef.current = data.session?.user.id ?? null;
+        setSession(data.session);
+        setStatus(data.session ? 'authenticated' : 'unauthenticated');
+        if (data.session) void loadProfile(data.session.user.id);
+      })
+      .catch(() => {
+        if (!active || receivedAuthEvent) return;
+        setStatus('unauthenticated');
+        Alert.alert(t('auth.login.title'), t('auth.errors.session_unreadable'));
+      });
 
     const { data: sub } = supabase.auth.onAuthStateChange(
       (_event, nextSession) => {
+        if (!active) return;
+        if (_event === 'INITIAL_SESSION' && receivedAuthEvent) return;
+        // INITIAL_SESSION(null) arriva anche se lo storage ha fallito: non deve
+        // nascondere l'errore della lettura, a differenza di un vero cambio auth.
+        if (_event !== 'INITIAL_SESSION' || nextSession)
+          receivedAuthEvent = true;
         const nextUserId = nextSession?.user.id ?? null;
         // Solo il CAMBIO di utente rende ignoto ciò che sapevamo: su un semplice
         // rinnovo del token (stesso account) riazzerare farebbe tornare la UI a
@@ -201,8 +227,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         else setProfile(null);
       }
     );
-    return () => sub.subscription.unsubscribe();
-  }, [loadProfile]);
+    return () => {
+      active = false;
+      sessionUserIdRef.current = null;
+      sub.subscription.unsubscribe();
+    };
+  }, [loadProfile, t]);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -281,7 +311,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updatePassword = useCallback(async (newPassword: string) => {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
-    return { error: error?.message ?? null };
+    return { error: passwordErrorMessage(error) };
   }, []);
 
   // Stabilisce la sessione dai token nel fragment di un redirect auth, ma solo se il

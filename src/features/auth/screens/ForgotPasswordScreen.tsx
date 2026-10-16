@@ -13,6 +13,7 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validateEmail } from '@/shared/auth/validation';
+import { mapAuthError } from '@/shared/auth/authErrors';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const ForgotPasswordScreen: React.FC = () => {
@@ -34,11 +35,22 @@ export const ForgotPasswordScreen: React.FC = () => {
     setEmailErr(e ? t(`auth.errors.${e}`) : undefined);
     if (e) return;
     setLoading(true);
-    const { error } = await resetPassword(email.trim());
-    setLoading(false);
-    // NON mostrare "inviata" su errore reale (rate-limit/rete): false-positive fix.
-    if (error) setSubmitError(t('auth.forgot.error'));
-    else setSent(true);
+    try {
+      const { error } = await resetPassword(email.trim());
+      if (error) throw error;
+      setSent(true);
+    } catch (error) {
+      const errorKey = mapAuthError(error);
+      setSubmitError(
+        t(
+          errorKey === 'generic'
+            ? 'auth.forgot.error'
+            : `auth.errors.${errorKey}`
+        )
+      );
+    } finally {
+      setLoading(false);
+    }
   }, [email, resetPassword, t]);
 
   const handleSubmit = useCallback((): void => {
