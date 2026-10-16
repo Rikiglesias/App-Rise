@@ -3,15 +3,6 @@ import { render, screen } from '@testing-library/react-native';
 import { AllProviders } from '../../../helpers/testProviders';
 import { HeaderSection } from '@/features/social/components/HeaderSection';
 
-// Mock dei moduli necessari
-jest.mock('@/shared/hooks', () => ({
-  useResponsive: () => ({
-    scale: (value: number) => value,
-    width: 375,
-    height: 812,
-  }),
-}));
-
 // Mock delle icone
 jest.mock(
   '@expo/vector-icons/MaterialCommunityIcons',
