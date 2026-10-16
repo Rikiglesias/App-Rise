@@ -1,0 +1,17 @@
+{
+  "criterio": "C36",
+  "base": "fbefa98",
+  "titoli": [
+    "moduli account: larghezza massima 560 dp su tablet",
+    "moduli account: data nel formato della lingua",
+    "moduli account: suggerimenti per i gestori di password"
+  ],
+  "esitiAllaBase": {
+    "moduli account: larghezza massima 560 dp su tablet": "failed",
+    "moduli account: data nel formato della lingua": "failed",
+    "moduli account: suggerimenti per i gestori di password": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/accountForms.test.tsx": "9085b79e16680923b847d771057f412749d9ab5ad9b18de9569823aeefe98c19"
+  }
+}

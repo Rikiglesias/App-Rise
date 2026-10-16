@@ -1,0 +1,23 @@
+{
+  "criterio": "C31",
+  "base": "fbefa98",
+  "titoli": [
+    "indietro visibile: Registrazione",
+    "indietro visibile: Password dimenticata",
+    "indietro visibile: Reimposta password dallo stack",
+    "indietro visibile: Modifica profilo",
+    "indietro visibile: assente alla radice della scheda Profilo",
+    "indietro visibile: assente nel cancello del profilo"
+  ],
+  "esitiAllaBase": {
+    "indietro visibile: Registrazione": "failed",
+    "indietro visibile: Password dimenticata": "failed",
+    "indietro visibile: Reimposta password dallo stack": "failed",
+    "indietro visibile: Modifica profilo": "failed",
+    "indietro visibile: assente alla radice della scheda Profilo": "failed",
+    "indietro visibile: assente nel cancello del profilo": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/navigation/accountNavigation.test.tsx": "6eb499cdd0064f1e8bdf3a137a578957d3405a6346ca50592e6086cc7f3ebaf8"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "criterio": "C30",
+  "base": "fbefa98",
+  "titoli": [
+    "scheda Profilo: ospite vede Accesso",
+    "scheda Profilo: collegato vede Profilo",
+    "scheda Profilo: Home senza icona profilo",
+    "scheda Profilo: ri-consenso all'avvio",
+    "scheda Profilo: dal ri-consenso si può uscire dall'account"
+  ],
+  "esitiAllaBase": {
+    "scheda Profilo: ospite vede Accesso": "failed",
+    "scheda Profilo: collegato vede Profilo": "failed",
+    "scheda Profilo: Home senza icona profilo": "failed",
+    "scheda Profilo: ri-consenso all'avvio": "failed",
+    "scheda Profilo: dal ri-consenso si può uscire dall'account": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/navigation/accountNavigation.test.tsx": "6eb499cdd0064f1e8bdf3a137a578957d3405a6346ca50592e6086cc7f3ebaf8"
+  }
+}
