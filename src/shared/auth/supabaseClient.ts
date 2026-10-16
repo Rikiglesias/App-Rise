@@ -3,6 +3,7 @@ import { AppState } from 'react-native';
 
 import { authStorage } from './authStorage';
 import { env } from '@/shared/config/environment';
+import { fetchWithTimeout } from '@/shared/utils/fetchWithTimeout';
 
 /**
  * Client Supabase per l'app donatori.
@@ -17,6 +18,7 @@ const supabaseUrl = env.SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseAnonKey = env.SUPABASE_ANON_KEY || 'public-anon-key-placeholder';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  global: { fetch: fetchWithTimeout },
   auth: {
     storage: authStorage,
     autoRefreshToken: true,

@@ -47,9 +47,9 @@ export default {
       social: 'Unable to open {{platform}}. Please try again later.',
       website: 'Unable to open the website. Please try again later.',
       tracking: 'Unable to open the tracking page. Please try again later.',
-      map: 'Unable to open the map.',
-      phone: 'Unable to open the phone app.',
-      email: 'Unable to open the email app.',
+      map: 'Unable to open the map. Search for this address: {{address}}.',
+      phone: 'Unable to open the phone app. Call {{phone}}.',
+      email: 'Unable to open the email app. Write to {{email}}.',
       donation: 'Unable to open the donation link. Please try again later.',
       shop: 'Unable to open the charity shop. Please try again later.',
       giftCards: 'Unable to open gift cards. Please try again later.',
@@ -84,7 +84,7 @@ export default {
     componentStack: 'Component stack:',
     reload: '🔄 Reload app',
     ignore: 'Ignore error (development only)',
-    support: 'If the problem persists, contact technical support',
+    support: 'If the problem persists, write to info@riseagainsthunger.it.',
     loadingTitle: 'Loading error',
     loadingMessage: 'Unable to load this screen. Please try again.',
   },
@@ -98,6 +98,12 @@ export default {
   },
 
   auth: {
+    phoneField: {
+      placeholder: 'Enter your phone number',
+      numberHint: 'Enter the number without the international calling code',
+      choosePrefix: 'Choose the international calling code',
+      prefixHint: 'Opens the list of countries and calling codes',
+    },
     a11y: {
       showPassword: 'Show password',
       hidePassword: 'Hide password',
@@ -270,6 +276,10 @@ export default {
       already_registered: 'This email is already registered',
       rate_limited: 'Too many attempts. Please try again shortly.',
       network: 'No connection. Check your internet and try again.',
+      session_unreadable: 'Unable to read the saved session. Sign in again.',
+      same_password: 'Choose a password different from your current one.',
+      weak_password:
+        'This password is not secure enough. Choose a stronger one.',
       profileStillIncomplete:
         'Still missing: {{fields}}. Without these details your profile stays incomplete.',
       generic: 'An error occurred. Please try again.',
@@ -513,6 +523,12 @@ export default {
   },
 
   updates: {
+    logo: 'Rise Against Hunger Italia logo',
+    message: 'Updating the app',
+    subMessage: 'Thank you for your patience, just a few seconds',
+    complete: 'Update complete!',
+    progressLabel: 'Update progress',
+    progressPercent: '{{progress}}%',
     checking: 'Checking for updates...',
     downloading: 'Downloading update...',
     upToDate: 'App up to date',

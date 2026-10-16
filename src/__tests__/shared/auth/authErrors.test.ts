@@ -1,4 +1,15 @@
 import { mapAuthError } from '@/shared/auth/authErrors';
+import i18n from '@/locales';
+
+it('timeout di rete: messaggio come nessuna connessione', () => {
+  for (const locale of ['it', 'en']) {
+    for (const error of ['Aborted', 'AbortError: Aborted']) {
+      expect(i18n.t(`auth.errors.${mapAuthError(error)}`, { locale })).toBe(
+        i18n.t('auth.errors.network', { locale })
+      );
+    }
+  }
+});
 
 describe('mapAuthError', () => {
   it('null/undefined/empty → generic', () => {

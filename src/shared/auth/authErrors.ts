@@ -3,9 +3,33 @@
  * `auth.errors.*`, così la UI mostra un messaggio azionabile invece del generico.
  * Fallback sicuro: 'generic'. Funzione pura, testabile in isolamento.
  */
-export const mapAuthError = (message: string | null | undefined): string => {
-  if (!message) return 'generic';
+export const mapAuthError = (error: unknown): string => {
+  const details =
+    typeof error === 'object' && error !== null ? error : undefined;
+  const code = details && 'code' in details ? details.code : undefined;
+  const name = details && 'name' in details ? details.name : undefined;
+  const message =
+    typeof error === 'string'
+      ? error
+      : details && 'message' in details && typeof details.message === 'string'
+        ? details.message
+        : '';
   const m = message.toLowerCase();
+  if (name === 'AbortError' || m === 'aborted' || m.includes('aborterror')) {
+    return 'network';
+  }
+  if (
+    code === 'same_password' ||
+    m === 'same_password' ||
+    m.includes('should be different from the old password')
+  )
+    return 'same_password';
+  if (
+    code === 'weak_password' ||
+    m === 'weak_password' ||
+    m.includes('weak password')
+  )
+    return 'weak_password';
   if (m.includes('invalid login credentials')) return 'invalid_credentials';
   if (m.includes('email not confirmed')) return 'email_not_confirmed';
   if (

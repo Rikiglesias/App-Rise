@@ -1,11 +1,21 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { act, cleanup, render } from '@testing-library/react-native';
 import {
   NavigationContainer,
   createNavigationContainerRef,
 } from '@react-navigation/native';
 
 import ProfileGateNavigator from '@/navigation/ProfileGateNavigator';
+
+beforeEach(() => jest.useFakeTimers());
+afterEach(() => {
+  // Il navigator reale avvia animazioni con setTimeout(0): nessun callback deve
+  // sopravvivere all'ambiente Jest che ha caricato React Native.
+  act(() => jest.runOnlyPendingTimers());
+  cleanup();
+  jest.clearAllTimers();
+  jest.useRealTimers();
+});
 
 /**
  * Cosa esiste DAVVERO mentre il cancello è chiuso.

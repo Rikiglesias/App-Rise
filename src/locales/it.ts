@@ -48,9 +48,9 @@ export default {
       website: 'Impossibile aprire il sito web. Riprova più tardi.',
       tracking:
         'Impossibile aprire la pagina di tracciamento. Riprova più tardi.',
-      map: 'Impossibile aprire la mappa.',
-      phone: 'Impossibile aprire il dialer.',
-      email: "Impossibile aprire l'app email.",
+      map: 'Impossibile aprire la mappa. Cerca questo indirizzo: {{address}}.',
+      phone: 'Impossibile aprire il telefono. Chiama il numero {{phone}}.',
+      email: "Impossibile aprire l'app email. Scrivi a {{email}}.",
       donation: 'Impossibile aprire il link di donazione. Riprova più tardi.',
       shop: 'Impossibile aprire il charity shop. Riprova più tardi.',
       giftCards: 'Impossibile aprire le gift card. Riprova più tardi.',
@@ -85,7 +85,7 @@ export default {
     componentStack: 'Stack dei componenti:',
     reload: '🔄 Ricarica App',
     ignore: 'Ignora errore (solo sviluppo)',
-    support: 'Se il problema persiste, contatta il supporto tecnico',
+    support: 'Se il problema persiste, scrivi a info@riseagainsthunger.it.',
     loadingTitle: 'Errore di caricamento',
     loadingMessage: 'Impossibile caricare la schermata. Riprova.',
   },
@@ -99,6 +99,12 @@ export default {
   },
 
   auth: {
+    phoneField: {
+      placeholder: 'Inserisci il numero di telefono',
+      numberHint: 'Inserisci il numero senza il prefisso internazionale',
+      choosePrefix: 'Scegli il prefisso internazionale',
+      prefixHint: 'Apre la lista dei paesi e dei prefissi',
+    },
     a11y: {
       showPassword: 'Mostra password',
       hidePassword: 'Nascondi password',
@@ -293,6 +299,11 @@ export default {
       already_registered: 'Questa email è già registrata',
       rate_limited: 'Troppi tentativi. Riprova tra poco.',
       network: 'Nessuna connessione. Controlla internet e riprova.',
+      session_unreadable:
+        'Impossibile leggere la sessione salvata. Accedi di nuovo.',
+      same_password: 'Scegli una password diversa da quella attuale.',
+      weak_password:
+        'Questa password non è abbastanza sicura. Scegline una più forte.',
       // Salvataggio che non basterebbe a completare il profilo: si mostra PRIMA di
       // scrivere, perché il contrario significherebbe salvare e ritrovarsi di nuovo la
       // stessa schermata senza sapere perché.
@@ -541,6 +552,12 @@ export default {
   },
 
   updates: {
+    logo: 'Logo Rise Against Hunger Italia',
+    message: 'Stiamo aggiornando l’app',
+    subMessage: 'Grazie della pazienza, ci vorranno solo pochi secondi',
+    complete: 'Aggiornamento completato!',
+    progressLabel: 'Avanzamento aggiornamento',
+    progressPercent: '{{progress}}%',
     checking: 'Controllo aggiornamenti...',
     downloading: 'Scaricamento aggiornamento...',
     upToDate: 'App aggiornata',
