@@ -16,7 +16,9 @@ import {
 } from '@/shared/auth/profileCompletion';
 import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
 
-const AppNavigator: React.FC = () => {
+const AppNavigator: React.FC<{ onReady?: (() => void) | undefined }> = ({
+  onReady,
+}) => {
   // Deep link auth (recovery password + conferma email signup): stabilisce la sessione.
   const navigationRef = useNavigationContainerRef<RootStackParamList>();
   useAuthDeepLink(navigationRef);
@@ -35,7 +37,7 @@ const AppNavigator: React.FC = () => {
     isProfileGateBlocked(getProfileCompletion(profile, profileLoaded));
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} {...(onReady ? { onReady } : {})}>
       {gateBlocked ? <ProfileGateNavigator /> : <MainStackNavigator />}
     </NavigationContainer>
   );

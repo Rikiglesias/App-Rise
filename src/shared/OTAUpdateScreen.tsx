@@ -7,18 +7,20 @@
  * Best practices: Progress sempre visibile, messaging chiaro, no heavy animations
  */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   View,
-  Text,
+  ActivityIndicator,
   StyleSheet,
   Animated,
   Easing,
-  useColorScheme,
 } from 'react-native';
-import { getLocales } from 'expo-localization';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle } from 'react-native-svg';
+import i18n from '@/locales';
+import { PerfectContainer } from '@/components/ui/PerfectContainer';
+import { PerfectText } from '@/components/ui/PerfectText';
+import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale, scaleText } from '@/shared/constants/perfectScale';
@@ -35,50 +37,9 @@ interface OTAUpdateScreenProps {
   message?: string;
 }
 
-// Traduzioni localizzate
-const translations = {
-  it: {
-    logo: 'Logo Rise Against Hunger Italia',
-    message: "Stiamo aggiornando l'app",
-    subMessage: 'Grazie della pazienza, ci vorranno solo pochi secondi',
-    complete: 'Aggiornamento completato!',
-  },
-  en: {
-    logo: 'Rise Against Hunger Italia logo',
-    message: 'Updating the app',
-    subMessage: 'Thank you for your patience, just a few seconds',
-    complete: 'Update complete!',
-  },
-};
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
-  progress = 0,
-}) => {
-  // Tema dark-aware: OTAUpdateScreen è renderizzato in early-return PRIMA dei
-  // provider (App.tsx), quindi NON può usare useThemeColors()/context. Legge il
-  // color scheme direttamente da React Native (robusto in fase di boot/OTA).
-  const isDark = useColorScheme() === 'dark';
-  const colors = useMemo(() => getAdaptiveColors(isDark), [isDark]);
-  const styles = useMemo(() => createStyles(colors), [colors]);
-
-  // Rileva lingua dispositivo con fallback sicuro
-  const deviceLanguage = React.useMemo(() => {
-    try {
-      return getLocales()[0]?.languageCode || 'en';
-    } catch (_e) {
-      return 'en';
-    }
-  }, []);
-
-  const isItalian = deviceLanguage === 'it';
-  const t = isItalian ? translations.it : translations.en;
-
-  // Safe progress clamping
-  const safeProgress = React.useMemo(() => {
-    const val = Number(progress) || 0;
-    return Math.min(Math.max(val, 0), 100);
-  }, [progress]);
-
+const useOtaAnimations = (safeProgress: number) => {
   // Animazioni elite
   const progressAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -88,11 +49,10 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   const completeFadeAnim = useRef(new Animated.Value(0)).current;
   const shimmerAnim = useRef(new Animated.Value(0)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
-  const [displayProgress, setDisplayProgress] = useState(0);
 
   // Fade in iniziale + logo bounce
   useEffect(() => {
-    Animated.parallel([
+    const animation = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 500,
@@ -105,7 +65,9 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
         tension: 40,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    animation.start();
+    return () => animation.stop();
   }, [fadeAnim, logoScaleAnim]);
 
   // Shimmer continuo sulla progress bar
@@ -176,75 +138,89 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
     return undefined;
   }, [safeProgress, logoBreathAnim]);
 
-  // Pulse subtile per percentuale + effetto completamento
   useEffect(() => {
-    if (safeProgress > 0 && safeProgress < 100) {
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.08,
-          duration: 150,
-          easing: Easing.out(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 150,
-          easing: Easing.in(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-
-    // Animazione completamento
-    if (safeProgress >= 100) {
-      Animated.parallel([
-        Animated.spring(pulseAnim, {
-          toValue: 1.15,
-          friction: 6,
-          useNativeDriver: true,
-        }),
-        Animated.timing(completeFadeAnim, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
+    if (safeProgress <= 0) return undefined;
+    const animation =
+      safeProgress >= 100
+        ? Animated.parallel([
+            Animated.spring(pulseAnim, {
+              toValue: 1.15,
+              friction: 6,
+              useNativeDriver: true,
+            }),
+            Animated.timing(completeFadeAnim, {
+              toValue: 1,
+              duration: 400,
+              useNativeDriver: true,
+            }),
+          ])
+        : Animated.sequence([
+            Animated.timing(pulseAnim, {
+              toValue: 1.08,
+              duration: 150,
+              easing: Easing.out(Easing.ease),
+              useNativeDriver: true,
+            }),
+            Animated.timing(pulseAnim, {
+              toValue: 1,
+              duration: 150,
+              easing: Easing.in(Easing.ease),
+              useNativeDriver: true,
+            }),
+          ]);
+    animation.start();
+    return () => animation.stop();
   }, [safeProgress, pulseAnim, completeFadeAnim]);
 
-  // Animazione progresso ultra-smooth + counter animato
+  // Solo la barra interpola: il testo mostra subito il progresso nativo.
   useEffect(() => {
-    Animated.timing(progressAnim, {
+    const animation = Animated.timing(progressAnim, {
       toValue: safeProgress,
       duration: 400,
-      easing: Easing.bezier(0.25, 0.1, 0.25, 1), // Cubic bezier premium
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1),
       useNativeDriver: false,
-    }).start();
+    });
+    animation.start();
+    return () => animation.stop();
+  }, [safeProgress, progressAnim]);
 
-    // Counter animato per percentuale
-    const start = displayProgress;
-    const end = Math.round(safeProgress);
-    const duration = 300;
-    const startTime = Date.now();
+  return {
+    progressAnim,
+    fadeAnim,
+    pulseAnim,
+    logoScaleAnim,
+    logoBreathAnim,
+    completeFadeAnim,
+    shimmerAnim,
+    glowAnim,
+  };
+};
 
-    const animate = () => {
-      const now = Date.now();
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = Easing.out(Easing.ease)(progress);
-      const current = Math.round(start + (end - start) * eased);
+export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
+  progress = 0,
+}) => {
+  const { isDark } = useUniversalTheme();
+  const colors = useMemo(() => getAdaptiveColors(isDark), [isDark]);
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
-      setDisplayProgress(current);
+  // Safe progress clamping
+  const safeProgress = React.useMemo(() => {
+    const val = Number.isFinite(progress) ? progress : 0;
+    return Math.min(Math.max(val, 0), 100);
+  }, [progress]);
 
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-
-    if (start !== end) {
-      animate();
-    }
-  }, [safeProgress, progressAnim, displayProgress]);
+  const displayProgress = Math.round(safeProgress);
+  const isIndeterminate = displayProgress <= 0;
+  const {
+    progressAnim,
+    fadeAnim,
+    pulseAnim,
+    logoScaleAnim,
+    logoBreathAnim,
+    completeFadeAnim,
+    shimmerAnim,
+    glowAnim,
+  } = useOtaAnimations(safeProgress);
 
   // Calcola larghezza barra
   const progressWidth = progressAnim.interpolate({
@@ -258,7 +234,6 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   const RING_STROKE = scale(6);
   const RADIUS = (RING_SIZE - RING_STROKE) / 2;
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-  const AnimatedCircle = Animated.createAnimatedComponent(Circle);
   const ringDashoffset = progressAnim.interpolate({
     inputRange: [0, 100],
     outputRange: [CIRCUMFERENCE, 0],
@@ -276,7 +251,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   ) as readonly [string, string, ...string[]];
 
   return (
-    <View style={styles.container}>
+    <PerfectContainer preset="page" padding={0} style={styles.container}>
       {/* Gradient background premium - più ricco */}
       <LinearGradient
         colors={bgGradient}
@@ -338,7 +313,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
               aspectRatio={1}
               borderRadius={63}
               shadow={false}
-              accessibilityLabel={t.logo}
+              accessibilityLabel={i18n.t('updates.logo')}
             />
           </View>
         </Animated.View>
@@ -346,8 +321,24 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
         {/* Messaggio principale - Hero */}
         {!isComplete ? (
           <View style={styles.messageContainer}>
-            <Text style={styles.mainMessage}>{t.message}</Text>
-            <Text style={styles.subMessage}>{t.subMessage}</Text>
+            <PerfectText
+              size={24}
+              lines={2}
+              containerWidth={0}
+              immunity
+              style={styles.mainMessage}
+            >
+              {i18n.t('updates.message')}
+            </PerfectText>
+            <PerfectText
+              size={15}
+              lines={3}
+              containerWidth={0}
+              immunity
+              style={styles.subMessage}
+            >
+              {i18n.t('updates.subMessage')}
+            </PerfectText>
           </View>
         ) : (
           <Animated.View
@@ -368,73 +359,111 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
                 },
               ]}
             >
-              <Text style={styles.checkmark}>✓</Text>
+              <PerfectText
+                size={38}
+                lines={1}
+                immunity
+                style={styles.checkmark}
+                accessible={false}
+              >
+                ✓
+              </PerfectText>
             </Animated.View>
-            <Text style={styles.completeMessage}>{t.complete}</Text>
+            <PerfectText
+              size={22}
+              lines={2}
+              containerWidth={0}
+              immunity
+              style={styles.completeMessage}
+            >
+              {i18n.t('updates.complete')}
+            </PerfectText>
           </Animated.View>
         )}
 
         {/* Progress bar compatta con percentuale inline */}
         {!isComplete && (
-          <View style={styles.progressContainer}>
-            {/* Barra */}
-            <View style={styles.progressTrack}>
-              <Animated.View
-                style={[
-                  styles.progressFill,
-                  {
-                    width: progressWidth,
-                  },
-                ]}
-              >
-                <LinearGradient
-                  colors={[
-                    Colors.primary[400],
-                    Colors.primary[500],
-                    Colors.primary[600],
-                  ]}
-                  locations={[0, 0.5, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={StyleSheet.absoluteFillObject}
-                />
-                {/* Shimmer overlay */}
-                <Animated.View
-                  style={[
-                    styles.shimmerOverlay,
-                    {
-                      opacity: shimmerAnim.interpolate({
-                        inputRange: [0, 0.5, 1],
-                        outputRange: [0.3, 0.6, 0.3],
-                      }),
-                      transform: [
+          <View
+            style={styles.progressContainer}
+            accessible
+            accessibilityRole="progressbar"
+            accessibilityLabel={i18n.t('updates.progressLabel')}
+            accessibilityValue={
+              isIndeterminate
+                ? { text: i18n.t('updates.downloading') }
+                : { min: 0, max: 100, now: displayProgress }
+            }
+          >
+            {isIndeterminate ? (
+              <ActivityIndicator
+                size="large"
+                color={Colors.primary[500]}
+                accessibilityLabel={i18n.t('updates.downloading')}
+              />
+            ) : (
+              <>
+                {/* Barra */}
+                <View style={styles.progressTrack}>
+                  <Animated.View
+                    style={[
+                      styles.progressFill,
+                      {
+                        width: progressWidth,
+                      },
+                    ]}
+                  >
+                    <LinearGradient
+                      colors={[
+                        Colors.primary[400],
+                        Colors.primary[500],
+                        Colors.primary[600],
+                      ]}
+                      locations={[0, 0.5, 1]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={StyleSheet.absoluteFillObject}
+                    />
+                    {/* Shimmer overlay */}
+                    <Animated.View
+                      style={[
+                        styles.shimmerOverlay,
                         {
-                          translateX: shimmerAnim.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [-100, 300],
+                          opacity: shimmerAnim.interpolate({
+                            inputRange: [0, 0.5, 1],
+                            outputRange: [0.3, 0.6, 0.3],
                           }),
+                          transform: [
+                            {
+                              translateX: shimmerAnim.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [-100, 300],
+                              }),
+                            },
+                          ],
                         },
-                      ],
-                    },
-                  ]}
-                />
-              </Animated.View>
-            </View>
-            {/* Percentuale piccola sotto */}
-            <Animated.Text
-              style={[
-                styles.percentage,
-                {
-                  transform: [{ scale: pulseAnim }],
-                },
-              ]}
-            >
-              {displayProgress}%
-            </Animated.Text>
+                      ]}
+                    />
+                  </Animated.View>
+                </View>
+                {/* Percentuale piccola sotto */}
+                <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+                  <PerfectText
+                    size={18}
+                    lines={1}
+                    immunity
+                    style={styles.percentage}
+                  >
+                    {i18n.t('updates.progressPercent', {
+                      progress: displayProgress,
+                    })}
+                  </PerfectText>
+                </Animated.View>
+              </>
+            )}
           </View>
         )}
       </Animated.View>
-    </View>
+    </PerfectContainer>
   );
 };
 
