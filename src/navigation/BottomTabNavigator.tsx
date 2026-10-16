@@ -47,8 +47,16 @@ import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 // Direct imports (no lazy loading to avoid spinner)
 import { ContributeTabScreen } from '@/features/actions';
 import HomeScreen from '@/features/home/screens/HomeScreen';
+import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
+import { AuthBackDisabledContext } from '@/features/auth/components/AuthBackButton';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
+
+const ProfileTab: React.FC = () => (
+  <AuthBackDisabledContext.Provider value={true}>
+    <ProfileScreen />
+  </AuthBackDisabledContext.Provider>
+);
 
 // =================================================================
 // 🎯 TYPES
@@ -189,6 +197,7 @@ const ICON_MAP: Record<string, string> = {
   ImpactTab: 'chart-line',
   HomeTab: 'home',
   InfoTab: 'hand-heart',
+  ProfileTab: 'account',
 };
 
 const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
@@ -339,6 +348,11 @@ const BottomTabNavigator: React.FC = () => {
         options={{
           tabBarAccessibilityLabel: t('navigation.actions'),
         }}
+      />
+      <Tab.Screen
+        name="ProfileTab"
+        component={ProfileTab}
+        options={{ tabBarAccessibilityLabel: t('navigation.profile') }}
       />
     </Tab.Navigator>
   );

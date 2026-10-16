@@ -6,12 +6,14 @@ import type { RootStackParamList } from './types';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
 import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
+import { ReConsentScreen } from '@/features/auth/screens/ReConsentScreen';
+import { AuthBackDisabledContext } from '@/features/auth/components/AuthBackButton';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 /**
- * L'albero che sostituisce l'app quando un utente autenticato ha il profilo da
- * completare (decisione A4 di Riccardo: non un sollecito che si può ignorare, ma un
+ * L'albero che sostituisce l'app quando un utente autenticato deve riaccettare
+ * l'informativa o completare il profilo (decisione A4: non un sollecito, ma un
  * passaggio obbligato al primo accesso — serve soprattutto a chi era già iscritto).
  *
  * Perché SOSTITUIRE l'albero invece di navigare a forza sulla schermata: le rotte che
@@ -20,7 +22,8 @@ const Stack = createStackNavigator<RootStackParamList>();
  * la schermata si chiude semplicemente tornando indietro.
  *
  * Le tre rotte sono il minimo perché nessuno resti in trappola:
- * - `CompleteProfile` è la via normale: si danno i dati e il cancello si apre.
+ * - `ReConsent` ha precedenza; dopo l'accettazione resta `CompleteProfile` solo
+ *   se mancano dati. Quando entrambi sono soddisfatti si riapre l'app.
  * - `DeleteAccount` è la via d'uscita di chi non può o non vuole completare — il caso
  *   concreto è chi, inserendo la data di nascita, scopre di non poter avere un profilo
  *   valido: senza questa rotta gli resterebbe solo disinstallare l'app.
@@ -31,27 +34,41 @@ const Stack = createStackNavigator<RootStackParamList>();
  * Il logout non è una rotta: è un pulsante dentro la schermata. Uscendo, la sessione
  * cade, il cancello non ha più ragione di esistere e l'app intera torna disponibile.
  */
-export const ProfileGateNavigator: React.FC = () => (
-  <Stack.Navigator
-    initialRouteName="CompleteProfile"
-    screenOptions={stackScreenOptions}
-  >
-    <Stack.Screen
-      name="CompleteProfile"
-      component={CompleteProfileScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="DeleteAccount"
-      component={DeleteAccountScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="ResetPassword"
-      component={ResetPasswordScreen}
-      options={{ headerShown: false }}
-    />
-  </Stack.Navigator>
-);
+export const ProfileGateNavigator: React.FC<{ needsReConsent?: boolean }> = ({
+  needsReConsent = false,
+}) => {
+  return (
+    <AuthBackDisabledContext.Provider value={true}>
+      <Stack.Navigator
+        initialRouteName={needsReConsent ? 'ReConsent' : 'CompleteProfile'}
+        screenOptions={{ ...stackScreenOptions, gestureEnabled: false }}
+      >
+        {needsReConsent ? (
+          <Stack.Screen
+            name="ReConsent"
+            component={ReConsentScreen}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="CompleteProfile"
+            component={CompleteProfileScreen}
+            options={{ headerShown: false }}
+          />
+        )}
+        <Stack.Screen
+          name="DeleteAccount"
+          component={DeleteAccountScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPasswordScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </AuthBackDisabledContext.Provider>
+  );
+};
 
 export default ProfileGateNavigator;

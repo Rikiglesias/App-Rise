@@ -260,6 +260,7 @@ export default {
         'Account eliminato. Non siamo riusciti a chiudere la sessione su questo telefono: esci a mano dal profilo.',
     },
     consents: {
+      signOut: "Esci dall'account",
       title: 'Consensi',
       marketing: 'Comunicazioni e aggiornamenti',
       marketingHint: 'Puoi attivare o revocare in ogni momento.',

@@ -5,11 +5,6 @@ import ts from 'typescript';
 // Eccezioni esatte (file + attributo + espressione), mai parole o file interi.
 const properNames = [
   {
-    file: 'features/auth/components/AuthScreen.tsx',
-    attribute: 'accessibilityLabel',
-    expression: '"Rise Against Hunger Italia"', // Nome legale dell'organizzazione.
-  },
-  {
     file: 'features/auth/components/AuthCityField.tsx',
     attribute: 'accessibilityLabel',
     expression: '`${c.nome} (${c.sigla})`', // Toponimo e sigla ufficiale del comune.
@@ -156,10 +151,10 @@ describe('i18n hardcoded strings guard', () => {
     ).toEqual([]);
     expect(
       findHardcodedStrings(
-        properNames[0].file,
+        'features/auth/components/AuthScreen.tsx',
         '<Image accessibilityLabel="Rise Against Hunger Italia" />'
       )
-    ).toEqual([]);
+    ).toHaveLength(1);
     expect(
       findHardcodedStrings(
         'fixture.tsx',
@@ -168,13 +163,13 @@ describe('i18n hardcoded strings guard', () => {
     ).toHaveLength(1);
     expect(
       findHardcodedStrings(
-        properNames[0].file,
+        'features/auth/components/AuthScreen.tsx',
         '<Image accessibilityHint="Rise Against Hunger Italia" />'
       )
     ).toHaveLength(1);
     expect(
       findHardcodedStrings(
-        properNames[1].file,
+        properNames[0].file,
         '<Button accessibilityLabel={`${c.nome} (${c.sigla})`} />'
       )
     ).toEqual([]);

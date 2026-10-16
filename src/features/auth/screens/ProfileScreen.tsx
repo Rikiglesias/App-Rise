@@ -225,7 +225,14 @@ export const ProfileScreen: React.FC = () => {
           />
           <Row
             label={t('auth.profile.birthDate')}
-            value={profile.birth_date}
+            value={
+              profile.birth_date
+                ? formatDateLocalized(
+                    `${profile.birth_date}T00:00:00`,
+                    locale
+                  ) || toComplete
+                : toComplete
+            }
             styles={styles}
           />
         </>

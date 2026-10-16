@@ -15,7 +15,7 @@ import { RISE_URLS } from '@/shared/constants/urls';
 
 /**
  * Re-consenso al cambio materiale dell'informativa (GDPR Art.7, EDPB §110).
- * Mostrato inline come gate dell'area donatori quando `needsReConsent` è true.
+ * Mostrato nel cancello all'avvio quando `needsReConsent` è true.
  *
  * La schermata chiede «leggila e accetta»: il modo di leggerla deve esserci
  * davvero, altrimenti l'unica strada praticabile è accettare alla cieca — e un
@@ -27,11 +27,24 @@ export const ReConsentScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
-  const { acceptCurrentPolicy } = useAuth();
+  const { acceptCurrentPolicy, signOut } = useAuth();
   const { openLink, isLoading } = useLinkHandler();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [logoutError, setLogoutError] = useState<string | undefined>();
+
+  const handleLogout = useCallback((): void => {
+    setLogoutError(undefined);
+    setLogoutLoading(true);
+    void signOut()
+      .then(result => {
+        if (result.error) setLogoutError(t('auth.profile.logoutError'));
+      })
+      .catch(() => setLogoutError(t('auth.profile.logoutError')))
+      .finally(() => setLogoutLoading(false));
+  }, [signOut, t]);
 
   const handleReadPolicy = useCallback((): void => {
     void openLink(RISE_URLS.privacyPolicy, 'reconsent-privacy');
@@ -73,10 +86,22 @@ export const ReConsentScreen: React.FC = () => {
         label={t('auth.consents.reconsentAccept')}
         onPress={handleAccept}
         loading={loading}
+        disabled={logoutLoading}
       />
       {error ? (
         <PerfectText size={14} lines={2} style={styles.error}>
           {error}
+        </PerfectText>
+      ) : null}
+      <AuthButton
+        label={t('auth.consents.signOut')}
+        onPress={handleLogout}
+        loading={logoutLoading}
+        disabled={loading}
+      />
+      {logoutError ? (
+        <PerfectText size={14} lines={2} style={styles.error}>
+          {logoutError}
         </PerfectText>
       ) : null}
     </AuthScreen>

@@ -19,7 +19,6 @@ import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
-import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -111,14 +110,7 @@ export const MainStackNavigator: React.FC = () => (
       options={{ headerShown: false }}
     />
 
-    {/* Area donatori (auth). Profilo è una Stack.Screen aperta dall'avatar
-        nell'header Home: se unauthenticated mostra il login (LoginScreen),
-        altrimenti il profilo. SignUp/ForgotPassword/ResetPassword push. */}
-    <Stack.Screen
-      name="Profilo"
-      component={ProfileScreen}
-      options={{ headerShown: false }}
-    />
+    {/* I moduli si aprono sopra la scheda Profilo: indietro torna alla scheda. */}
     <Stack.Screen
       name="SignUp"
       component={SignUpScreen}

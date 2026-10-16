@@ -1,9 +1,10 @@
 import type { StackNavigationProp } from '@react-navigation/stack';
+import type { NavigatorScreenParams } from '@react-navigation/native';
 
 import type { Location } from '@/shared/types/location';
 
 export interface RootStackParamList {
-  Home: undefined;
+  Home: NavigatorScreenParams<BottomTabParamList> | undefined;
   Progetti: undefined;
   Impatto2024: undefined;
   CharityShop: {
@@ -29,7 +30,7 @@ export interface RootStackParamList {
   };
   ChiSiamo: undefined;
   Projects: undefined;
-  Profilo: undefined;
+  ReConsent: undefined;
   SignUp: undefined;
   CompleteProfile: undefined;
   ProfileEdit: undefined;
@@ -52,6 +53,7 @@ export type BottomTabParamList = {
   ImpactTab: undefined;
   HomeTab: undefined;
   InfoTab: undefined;
+  ProfileTab: undefined;
 };
 
 // Impact Stack Navigator Types

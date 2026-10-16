@@ -16,7 +16,9 @@ export const useRequireAuth = (): void => {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      navigation.navigate('Profilo');
+      // `popTo`, non `navigate`: in React Navigation 7 `navigate` aggiunge un'altra Home
+      // sopra il modulo privato invece di tornare a quella che c'è già.
+      navigation.popTo('Home', { screen: 'ProfileTab' });
     }
   }, [status, navigation]);
 };

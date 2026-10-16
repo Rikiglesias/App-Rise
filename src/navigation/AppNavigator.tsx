@@ -2,7 +2,8 @@ import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { BackHandler } from 'react-native';
 
 import 'react-native-gesture-handler';
 
@@ -23,7 +24,7 @@ const AppNavigator: React.FC<{ onReady?: (() => void) | undefined }> = ({
   const navigationRef = useNavigationContainerRef<RootStackParamList>();
   useAuthDeepLink(navigationRef);
 
-  const { status, profile, profileLoaded } = useAuth();
+  const { status, profile, profileLoaded, needsReConsent } = useAuth();
   // Il cancello del profilo (A4): chi ha già fatto l'accesso e non ha finito di dare i
   // propri dati vede SOLO il passaggio di completamento, al posto dell'app.
   // `status === 'authenticated'` è la metà che protegge gli OSPITI: da ospite si dona
@@ -34,11 +35,39 @@ const AppNavigator: React.FC<{ onReady?: (() => void) | undefined }> = ({
   // pretendere un campo che il salvataggio non scrive e la persona non uscirebbe più.
   const gateBlocked =
     status === 'authenticated' &&
-    isProfileGateBlocked(getProfileCompletion(profile, profileLoaded));
+    (needsReConsent ||
+      isProfileGateBlocked(getProfileCompletion(profile, profileLoaded)));
+
+  const wasGateBlocked = useRef(gateBlocked);
+  useEffect(() => {
+    const leavingGate = wasGateBlocked.current && !gateBlocked;
+    wasGateBlocked.current = gateBlocked;
+    // I due stack condividono ResetPassword/DeleteAccount: uscendo dal cancello
+    // non se ne deve reidratare la cronologia. In ingresso invece si preserva il
+    // recupero già aperto da un link, che viene gestito una volta sola.
+    if (leavingGate && navigationRef.isReady()) {
+      navigationRef.resetRoot({ index: 0, routes: [{ name: 'Home' }] });
+    }
+  }, [gateBlocked, navigationRef]);
+
+  useEffect(() => {
+    if (!gateBlocked) return;
+    // L'effetto del padre segue quello di NavigationContainer: su Android questo
+    // listener viene chiamato per primo anche se l'app parte già nel cancello.
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true
+    );
+    return () => subscription.remove();
+  }, [gateBlocked]);
 
   return (
     <NavigationContainer ref={navigationRef} {...(onReady ? { onReady } : {})}>
-      {gateBlocked ? <ProfileGateNavigator /> : <MainStackNavigator />}
+      {gateBlocked ? (
+        <ProfileGateNavigator needsReConsent={needsReConsent} />
+      ) : (
+        <MainStackNavigator />
+      )}
     </NavigationContainer>
   );
 };

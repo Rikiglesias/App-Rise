@@ -246,6 +246,7 @@ export default {
         'Account deleted. We could not close the session on this phone: please sign out manually from your profile.',
     },
     consents: {
+      signOut: 'Sign out of your account',
       title: 'Consents',
       marketing: 'Communications and updates',
       marketingHint: 'You can enable or withdraw at any time.',
