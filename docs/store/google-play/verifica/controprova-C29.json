@@ -1,0 +1,13 @@
+{
+  "criterio": "C29",
+  "base": "fbefa98",
+  "titoli": [
+    "logger: argomenti di error nell'ordine giusto"
+  ],
+  "esitiAllaBase": {
+    "logger: argomenti di error nell'ordine giusto": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/components/ErrorBoundary.test.tsx": "4371cf56c2acc2547e5ae1d92568379b5ced8c58674e0df449d20db37616077e"
+  }
+}

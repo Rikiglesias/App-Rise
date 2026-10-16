@@ -1,0 +1,17 @@
+{
+  "criterio": "C27",
+  "base": "fbefa98",
+  "titoli": [
+    "aggiornamento OTA: dentro la finestra ricarica subito",
+    "aggiornamento OTA: fuori dalla finestra aspetta il prossimo avvio",
+    "aggiornamento OTA: avanzamento visibile"
+  ],
+  "esitiAllaBase": {
+    "aggiornamento OTA: dentro la finestra ricarica subito": "failed",
+    "aggiornamento OTA: fuori dalla finestra aspetta il prossimo avvio": "failed",
+    "aggiornamento OTA: avanzamento visibile": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/App.test.tsx": "2b088b8aad49b5395239738deaf81dbba4adc7add80175a9985c1b1d362661c7"
+  }
+}

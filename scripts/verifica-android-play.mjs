@@ -2,6 +2,7 @@
 // Verifica in sola lettura i criteri del contratto del goal android-play
 // (binding ~/todos/android-play.md, § Contratto negoziato). Uso, dalla radice del repo:
 //   node scripts/verifica-android-play.mjs C1 [C2 ...]   oppure   all   oppure   --selftest
+//   node scripts/verifica-android-play.mjs --controprova C23 [C24 ...]   (registra la controprova)
 // Ogni criterio stampa «Cn PASS» o «Cn FAIL <motivo>»; exit 1 se almeno un FAIL.
 // C9 non è qui: il suo VERIFY è `npm run conta-problemi`.
 import { criteri as config } from './verifica-android-play/config.mjs';
@@ -16,6 +17,11 @@ import { criteri as rilascio } from './verifica-android-play/documenti-rilascio.
 import { criteri as cancellazione } from './verifica-android-play/documenti-cancellazione.mjs';
 import { criteri as informativa } from './verifica-android-play/documenti-informativa.mjs';
 import { criteri as play } from './verifica-android-play/documenti-play.mjs';
+import {
+  DEFINIZIONI as DEFINIZIONI_CODICE,
+  criteri as codice,
+} from './verifica-android-play/codice.mjs';
+import { registraControprove } from './verifica-android-play/titoli-jest.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
 
 const CRITERI = {
@@ -31,6 +37,7 @@ const CRITERI = {
   ...cancellazione,
   ...informativa,
   ...play,
+  ...codice,
 };
 const ATTESI = [
   'C1',
@@ -53,6 +60,12 @@ const ATTESI = [
   'C19',
   'C20',
   'C21',
+  'C23',
+  'C24',
+  'C25',
+  'C27',
+  'C28',
+  'C29',
 ];
 
 const esito = async (fn, input) => {
@@ -123,10 +136,32 @@ const verifica = async ids => {
   return falliti === 0;
 };
 
+// Solo i titoli non di guardia entrano nella controprova (regole comuni R10).
+const controprova = ids => {
+  const ignoti = ids.filter(id => !DEFINIZIONI_CODICE[id]);
+  if (ignoti.length || ids.length === 0) {
+    console.log(
+      `controprova: criteri senza titoli Jest: ${ignoti.join(', ') || '(nessuno indicato)'}`
+    );
+    return false;
+  }
+  for (const r of registraControprove(
+    ids.map(id => ({ id, titoli: DEFINIZIONI_CODICE[id].titoli }))
+  )) {
+    const esiti = Object.values(r.esitiAllaBase);
+    console.log(
+      `${r.criterio} controprova: ${esiti.filter(e => e !== 'passed').length}/${esiti.length} titoli rossi o assenti alla base`
+    );
+  }
+  return true;
+};
+
 const argomenti = process.argv.slice(2);
 const ok = argomenti.includes('--selftest')
   ? await selftest()
-  : await verifica(
-      argomenti.length === 0 || argomenti.includes('all') ? ATTESI : argomenti
-    );
+  : argomenti.includes('--controprova')
+    ? controprova(argomenti.filter(a => a !== '--controprova'))
+    : await verifica(
+        argomenti.length === 0 || argomenti.includes('all') ? ATTESI : argomenti
+      );
 process.exit(ok ? 0 : 1);

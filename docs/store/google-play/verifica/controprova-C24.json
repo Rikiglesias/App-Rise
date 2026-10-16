@@ -1,0 +1,20 @@
+{
+  "criterio": "C24",
+  "base": "fbefa98",
+  "titoli": [
+    "timeout di rete: richiesta senza risposta fallisce entro 15 s",
+    "timeout di rete: Accesso esce dal caricamento",
+    "timeout di rete: Dona esce dal caricamento",
+    "timeout di rete: messaggio come nessuna connessione"
+  ],
+  "esitiAllaBase": {
+    "timeout di rete: richiesta senza risposta fallisce entro 15 s": "failed",
+    "timeout di rete: Accesso esce dal caricamento": "failed",
+    "timeout di rete: Dona esce dal caricamento": "failed",
+    "timeout di rete: messaggio come nessuna connessione": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/authErrors.test.ts": "e26f816e9e52448ad47be0eb82836388fb3cf99f2876e1ef103d704bf77e7f0f",
+    "src/__tests__/shared/auth/networkTimeout.test.tsx": "1794aa4b488a112672c5fa2b6c8d590737ab878cecf17513f308034d2db6dd63"
+  }
+}

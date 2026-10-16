@@ -22,8 +22,10 @@ import { FIXTURE_INFORMATIVA } from './selftest-informativa.mjs';
 import { FIXTURE_PLAY } from './selftest-play.mjs';
 import { FIXTURE_AAB } from './selftest-aab.mjs';
 import { FIXTURE_LINK } from './selftest-link.mjs';
+import { FIXTURE_CODICE } from './selftest-codice.mjs';
 
 export const FIXTURE = {
+  ...FIXTURE_CODICE,
   ...FIXTURE_VISIVO,
   ...FIXTURE_DOCUMENTI,
   ...FIXTURE_CANCELLAZIONE,

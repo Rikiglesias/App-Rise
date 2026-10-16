@@ -1,0 +1,15 @@
+{
+  "criterio": "C28",
+  "base": "fbefa98",
+  "titoli": [
+    "prefisso nella lingua dell'app: it",
+    "prefisso nella lingua dell'app: en"
+  ],
+  "esitiAllaBase": {
+    "prefisso nella lingua dell'app: it": "failed",
+    "prefisso nella lingua dell'app: en": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/phoneLanguage.test.tsx": "4bc4c566b7f392a011bf58aab4c07ce615465ed3016208f0378ac3191f1de3a5"
+  }
+}

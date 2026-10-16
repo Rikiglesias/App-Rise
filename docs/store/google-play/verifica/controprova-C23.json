@@ -1,0 +1,17 @@
+{
+  "criterio": "C23",
+  "base": "fbefa98",
+  "titoli": [
+    "link esterni senza canOpenURL: telefono",
+    "link esterni senza canOpenURL: email",
+    "link esterni senza canOpenURL: rifiuto mostra il contatto"
+  ],
+  "esitiAllaBase": {
+    "link esterni senza canOpenURL: telefono": "failed",
+    "link esterni senza canOpenURL: email": "failed",
+    "link esterni senza canOpenURL: rifiuto mostra il contatto": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/shared/hooks/useLinkHandler.external.test.tsx": "aaa4cdd61fdf5a83ab7a79d1af0db611e61c38a0a6860ce171fbf3db25ced680"
+  }
+}
