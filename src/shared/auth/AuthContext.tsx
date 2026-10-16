@@ -14,8 +14,9 @@ import { supabase } from './supabaseClient';
 import {
   buildResetRedirectTo,
   buildEmailConfirmRedirectTo,
-  parseAuthRedirect,
+  buildEmailChangeRedirectTo,
 } from './authRedirect';
+import { exchangeAuthLink } from './authLinkExchange';
 import { exportData as runDataExport } from './dataExport';
 import { buildConsentInsert } from './consent';
 import { buildDisplayName, syncDisplayNameClaim } from './displayName';
@@ -67,9 +68,9 @@ export interface AuthState {
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   /** Imposta la nuova password (post deep link di recovery, sessione già attiva). */
   updatePassword: (newPassword: string) => Promise<{ error: string | null }>;
-  /** Stabilisce la sessione dal deep link di recovery (token nel fragment). */
+  /** Scambia il codice PKCE del deep link di recovery. */
   completeRecoveryFromUrl: (url: string) => Promise<{ ok: boolean }>;
-  /** Stabilisce la sessione dal deep link di conferma email signup (token nel fragment). */
+  /** Scambia il codice PKCE di conferma iscrizione o cambio email. */
   completeEmailConfirmFromUrl: (url: string) => Promise<{ ok: boolean }>;
   /** Ricarica il profilo e lo RESTITUISCE (serve a chi deve decidere subito, senza aspettare il re-render). */
   refreshProfile: () => Promise<Profile | null>;
@@ -251,9 +252,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         email,
         password,
         options: {
-          // Deep link che riporta nell'app dopo la conferma email (flusso implicit,
-          // token nel fragment → gestiti da useAuthDeepLink). Senza, il link punterebbe
-          // al Site URL web e la conferma non rientrerebbe in-app. Allow-list `rahitalia://**`.
+          // Il codice PKCE rientra nell'app ed è scambiato da useAuthDeepLink.
           emailRedirectTo: buildEmailConfirmRedirectTo(),
           data: {
             // Claim OIDC `name` per il login federato dei partner (P1): il server auth
@@ -314,32 +313,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return { error: passwordErrorMessage(error) };
   }, []);
 
-  // Stabilisce la sessione dai token nel fragment di un redirect auth, ma solo se il
-  // `type` combacia con quello atteso (recovery vs signup): evita che un deep link di un
-  // flusso venga consumato dall'altro. Condiviso da recovery e conferma email (DRY).
-  const setSessionFromUrl = useCallback(
-    async (url: string, expectedType: 'recovery' | 'signup') => {
-      const { type, access_token, refresh_token } = parseAuthRedirect(url);
-      if (type !== expectedType || !access_token || !refresh_token) {
-        return { ok: false };
-      }
-      const { error } = await supabase.auth.setSession({
-        access_token,
-        refresh_token,
-      });
-      return { ok: !error };
-    },
+  const completeRecoveryFromUrl = useCallback(
+    (url: string) => exchangeAuthLink(url, 'reset'),
     []
   );
 
-  const completeRecoveryFromUrl = useCallback(
-    (url: string) => setSessionFromUrl(url, 'recovery'),
-    [setSessionFromUrl]
-  );
-
   const completeEmailConfirmFromUrl = useCallback(
-    (url: string) => setSessionFromUrl(url, 'signup'),
-    [setSessionFromUrl]
+    (url: string) => exchangeAuthLink(url, 'confirm'),
+    []
   );
 
   const refreshProfile = useCallback(async (): Promise<Profile | null> => {
@@ -398,7 +379,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const updateEmail = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.updateUser({ email });
+    const { error } = await supabase.auth.updateUser(
+      { email },
+      { emailRedirectTo: buildEmailChangeRedirectTo() }
+    );
     return { error: error?.message ?? null };
   }, []);
 

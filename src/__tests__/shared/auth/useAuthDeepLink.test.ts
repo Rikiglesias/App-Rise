@@ -10,9 +10,10 @@ import { changeLanguage, getCurrentLocale } from '@/locales';
 let mockUrl: string | null = null;
 jest.mock('expo-linking', () => ({
   useURL: () => mockUrl,
+  createURL: (path: string) => `rahitalia://${path}`,
 }));
 
-// AuthContext mockato: il flusso di setSession è coperto da authRecovery.test;
+// AuthContext mockato: lo scambio PKCE è coperto da authRecovery.test;
 // qui isoliamo l'orchestrazione dell'hook (detection URL -> handler + nav).
 const mockCompleteRecovery = jest.fn();
 const mockCompleteEmailConfirm = jest.fn();
@@ -23,10 +24,8 @@ jest.mock('@/shared/auth/AuthContext', () => ({
   }),
 }));
 
-const RECOVERY_URL =
-  'rahitalia://reset-password#access_token=AAA&refresh_token=BBB&type=recovery';
-const CONFIRM_URL =
-  'rahitalia://confirm-email#access_token=AAA&refresh_token=BBB&type=signup';
+const RECOVERY_URL = 'rahitalia://reset-password?code=AAA';
+const CONFIRM_URL = 'rahitalia://confirm-email?code=BBB';
 
 interface MockNavRef {
   ref: NavigationContainerRefWithCurrent<RootStackParamList>;
@@ -40,6 +39,7 @@ const makeNavRef = (ready = true): MockNavRef => {
   const ref = {
     navigate,
     isReady,
+    addListener: jest.fn(() => jest.fn()),
   } as unknown as NavigationContainerRefWithCurrent<RootStackParamList>;
   return { ref, navigate, isReady };
 };

@@ -8,26 +8,15 @@ import {
   isRecoveryRedirect,
   isEmailConfirmRedirect,
   getAuthLinkError,
+  getLinkType,
 } from './authRedirect';
 import type { RootStackParamList } from '@/navigation/types';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
 /**
- * Intercetta i deep link auth con token nel fragment (flusso implicit,
- * `detectSessionInUrl: false`) e stabilisce la sessione:
- * - recovery password → setSession + naviga a "Imposta nuova password". Quella rotta
- *   esiste in ENTRAMBI gli alberi di navigazione, anche in quello del cancello del
- *   profilo: è l'unico modo in cui chi è bloccato lì può rientrare nel proprio account.
- * - conferma email signup → setSession, nessuna navigazione forzata. Dove si trova poi
- *   la persona non lo decide questo hook: diventa autenticata, e se il profilo è
- *   incompleto il cancello la porta al completamento invece che su Home — è il
- *   comportamento voluto («appena fa accesso»), non un effetto collaterale.
- * - link scaduto o già usato (`error_code` nel fragment) → avviso tradotto che dice
- *   come chiederne uno nuovo: senza, l'app si apriva e non succedeva nulla.
- *
- * Usa il `navigationRef` del container (non `useNavigation`) perché va montato a
- * livello di AppNavigator, fuori dal singolo navigator. Guard `handled` per non
- * ri-processare lo stesso URL (evita navigazioni/sessioni doppie su re-render).
+ * Scambia i link PKCE una volta e mostra l'esito nella lingua dell'app.
+ * Il recupero resta pendente fino a ready/state del container: ResetPassword è
+ * disponibile anche nello stack del cancello profilo. Nessun token dall'URL.
  */
 export const useAuthDeepLink = (
   navigationRef: NavigationContainerRefWithCurrent<RootStackParamList>
@@ -36,33 +25,83 @@ export const useAuthDeepLink = (
   const { completeRecoveryFromUrl, completeEmailConfirmFromUrl } = useAuth();
   const { t } = useTranslation();
   const handled = useRef<string | null>(null);
+  const active = useRef(false);
+  const request = useRef(0);
+  const pendingReset = useRef(false);
+  const currentNavigation = useRef(navigationRef);
+  currentNavigation.current = navigationRef;
 
   useEffect(() => {
-    if (!url || handled.current === url) return;
+    active.current = true;
+    return () => {
+      active.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const navigateWhenReady = () => {
+      if (!pendingReset.current || !navigationRef.isReady()) return;
+      pendingReset.current = false;
+      navigationRef.navigate('ResetPassword');
+    };
+    const removeReady = navigationRef.addListener('ready', navigateWhenReady);
+    const removeState = navigationRef.addListener('state', navigateWhenReady);
+    navigateWhenReady();
+    return () => {
+      removeReady();
+      removeState();
+    };
+  }, [navigationRef]);
+
+  useEffect(() => {
+    if (handled.current === url) return;
+    handled.current = url;
+    const currentRequest = ++request.current;
+    pendingReset.current = false;
+    if (!url) return;
 
     const linkError = getAuthLinkError(url);
     if (linkError) {
-      handled.current = url;
       Alert.alert(
         t('auth.linkExpired.title'),
         t(`auth.linkExpired.${linkError}`)
       );
-    } else if (isRecoveryRedirect(url)) {
-      handled.current = url;
-      void completeRecoveryFromUrl(url).then(({ ok }) => {
-        if (ok && navigationRef.isReady()) {
-          navigationRef.navigate('ResetPassword');
-        }
-      });
-    } else if (isEmailConfirmRedirect(url)) {
-      handled.current = url;
-      void completeEmailConfirmFromUrl(url);
+      return;
     }
-  }, [
-    url,
-    completeRecoveryFromUrl,
-    completeEmailConfirmFromUrl,
-    navigationRef,
-    t,
-  ]);
+    const recovery = isRecoveryRedirect(url);
+    if (!recovery && !isEmailConfirmRedirect(url)) return;
+    const kind = getLinkType(url);
+    const isCurrent = () =>
+      active.current && request.current === currentRequest;
+    const showResult = (ok: boolean) => {
+      if (!isCurrent()) return;
+      if (recovery) {
+        if (!ok) {
+          Alert.alert(t('auth.linkFailed.title'), t('auth.linkFailed.reset'));
+          return;
+        }
+        pendingReset.current = true;
+        const navigation = currentNavigation.current;
+        if (navigation.isReady()) {
+          pendingReset.current = false;
+          navigation.navigate('ResetPassword');
+        }
+        return;
+      }
+      const prefix = kind === 'emailChange' ? 'emailUpdated' : 'emailConfirmed';
+      // Il server verifica l'email prima del redirect, anche se il dispositivo
+      // ha perso il verificatore o un secondo invio l'ha sostituito.
+      Alert.alert(
+        t(`auth.${prefix}.title`),
+        t(`auth.${prefix}.${ok ? 'message' : 'signIn'}`)
+      );
+    };
+    const complete = recovery
+      ? completeRecoveryFromUrl
+      : completeEmailConfirmFromUrl;
+    void complete(url).then(
+      ({ ok }) => showResult(ok),
+      () => showResult(false)
+    );
+  }, [url, completeRecoveryFromUrl, completeEmailConfirmFromUrl, t]);
 };

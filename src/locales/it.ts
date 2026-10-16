@@ -181,6 +181,24 @@ export default {
         'Il link per reimpostare la password è scaduto o è già stato usato. Chiedine uno nuovo con «Password dimenticata?» nella schermata di accesso.',
       confirm:
         'Il link di conferma è scaduto o è già stato usato. Se hai già confermato l’email, accedi pure. Altrimenti scrivici a info@riseagainsthunger.it e ti aiutiamo a completare la registrazione.',
+      emailChange:
+        'Il link per cambiare email è scaduto o è già stato usato. Controlla il tuo indirizzo nel profilo e, se non è aggiornato, richiedi di nuovo il cambio email.',
+    },
+    linkFailed: {
+      title: 'Link di accesso non riuscito',
+      reset:
+        'Non è stato possibile aprire il recupero password. Chiedi un nuovo link con «Password dimenticata?» e apri l’ultima email sullo stesso dispositivo da cui l’hai richiesto.',
+    },
+    emailConfirmed: {
+      title: 'Email confermata',
+      message: 'La tua email è stata confermata.',
+      signIn: 'La tua email è stata confermata. Accedi con email e password.',
+    },
+    emailUpdated: {
+      title: 'Email aggiornata',
+      message: 'Il tuo indirizzo email è stato aggiornato.',
+      signIn:
+        'Il tuo indirizzo email è stato aggiornato. Accedi con il nuovo indirizzo e la tua password.',
     },
     profile: {
       title: 'Il mio profilo',

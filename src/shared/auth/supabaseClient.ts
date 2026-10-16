@@ -20,6 +20,7 @@ const supabaseAnonKey = env.SUPABASE_ANON_KEY || 'public-anon-key-placeholder';
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   global: { fetch: fetchWithTimeout },
   auth: {
+    flowType: 'pkce',
     storage: authStorage,
     autoRefreshToken: true,
     persistSession: true,

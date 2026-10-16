@@ -392,9 +392,10 @@ describe('AuthContext — update/signup/consenso', () => {
       const res = await getAuth().updateEmail('new@r.it');
       expect(res.error).toBeNull();
     });
-    expect(supabase.auth.updateUser).toHaveBeenCalledWith({
-      email: 'new@r.it',
-    });
+    expect(supabase.auth.updateUser).toHaveBeenCalledWith(
+      { email: 'new@r.it' },
+      { emailRedirectTo: 'rahitalia://confirm-email-change' }
+    );
   });
 
   it('refreshProfile RESTITUISCE il profilo caricato, non solo lo stato', async () => {

@@ -6,6 +6,24 @@ import { AuthProvider, useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
 
+jest.mock('@/shared/auth/supabaseClient', () => ({
+  supabase: {
+    auth: {
+      getSession: jest.fn().mockResolvedValue({ data: { session: null } }),
+      onAuthStateChange: jest.fn(() => ({
+        data: { subscription: { unsubscribe: jest.fn() } },
+      })),
+      resetPasswordForEmail: jest.fn().mockResolvedValue({ error: null }),
+      updateUser: jest.fn().mockResolvedValue({ error: null }),
+      exchangeCodeForSession: jest.fn().mockResolvedValue({
+        data: { session: { user: { id: 'u1' } } },
+        error: null,
+      }),
+      setSession: jest.fn(),
+    },
+  },
+}));
+
 let authRef: AuthState | undefined;
 const Capture: React.FC = () => {
   authRef = useAuth();
@@ -79,14 +97,12 @@ describe('AuthContext — recovery password', () => {
     await waitFor(() => getByText('unauthenticated'));
     await act(async () => {
       const res = await getAuth().completeRecoveryFromUrl(
-        'rahitalia://reset-password#access_token=AAA&refresh_token=BBB&type=recovery'
+        'rahitalia://reset-password?code=AAA'
       );
       expect(res.ok).toBe(true);
     });
-    expect(supabase.auth.setSession).toHaveBeenCalledWith({
-      access_token: 'AAA',
-      refresh_token: 'BBB',
-    });
+    expect(supabase.auth.exchangeCodeForSession).toHaveBeenCalledWith('AAA');
+    expect(supabase.auth.setSession).not.toHaveBeenCalled();
   });
 
   it('completeRecoveryFromUrl ignora URL non-recovery (ok:false, no setSession)', async () => {
@@ -99,6 +115,16 @@ describe('AuthContext — recovery password', () => {
       expect(res.ok).toBe(false);
     });
     expect(supabase.auth.setSession).not.toHaveBeenCalled();
+    expect(supabase.auth.exchangeCodeForSession).not.toHaveBeenCalled();
+    await act(async () => {
+      expect(
+        (
+          await getAuth().completeRecoveryFromUrl(
+            'rahitalia://reset-password?code=positivo'
+          )
+        ).ok
+      ).toBe(true);
+    });
   });
 
   it('completeEmailConfirmFromUrl stabilisce la sessione su URL di conferma (type=signup)', async () => {
@@ -106,14 +132,12 @@ describe('AuthContext — recovery password', () => {
     await waitFor(() => getByText('unauthenticated'));
     await act(async () => {
       const res = await getAuth().completeEmailConfirmFromUrl(
-        'rahitalia://confirm-email#access_token=AAA&refresh_token=BBB&type=signup'
+        'rahitalia://confirm-email?code=BBB&type=signup'
       );
       expect(res.ok).toBe(true);
     });
-    expect(supabase.auth.setSession).toHaveBeenCalledWith({
-      access_token: 'AAA',
-      refresh_token: 'BBB',
-    });
+    expect(supabase.auth.exchangeCodeForSession).toHaveBeenCalledWith('BBB');
+    expect(supabase.auth.setSession).not.toHaveBeenCalled();
   });
 
   it('completeEmailConfirmFromUrl ignora un URL di recovery (no cross-flusso)', async () => {
@@ -121,10 +145,20 @@ describe('AuthContext — recovery password', () => {
     await waitFor(() => getByText('unauthenticated'));
     await act(async () => {
       const res = await getAuth().completeEmailConfirmFromUrl(
-        'rahitalia://confirm-email#access_token=AAA&refresh_token=BBB&type=recovery'
+        'rahitalia://confirm-email?code=AAA&type=recovery'
       );
       expect(res.ok).toBe(false);
     });
     expect(supabase.auth.setSession).not.toHaveBeenCalled();
+    expect(supabase.auth.exchangeCodeForSession).not.toHaveBeenCalled();
+    await act(async () => {
+      expect(
+        (
+          await getAuth().completeEmailConfirmFromUrl(
+            'rahitalia://confirm-email?code=positivo'
+          )
+        ).ok
+      ).toBe(true);
+    });
   });
 });

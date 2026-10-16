@@ -175,6 +175,25 @@ export default {
         'This password reset link has expired or was already used. Request a new one with “Forgot password?” on the sign-in screen.',
       confirm:
         'This confirmation link has expired or was already used. If you already confirmed your email, just sign in. Otherwise write to info@riseagainsthunger.it and we will help you complete your registration.',
+      emailChange:
+        'This email change link has expired or was already used. Check your address in your profile and, if it has not changed, request the email change again.',
+    },
+    linkFailed: {
+      title: 'Sign-in link failed',
+      reset:
+        'Password recovery could not be opened. Request a new link with “Forgot password?” and open the latest email on the same device you requested it from.',
+    },
+    emailConfirmed: {
+      title: 'Email confirmed',
+      message: 'Your email has been confirmed.',
+      signIn:
+        'Your email has been confirmed. Sign in with your email and password.',
+    },
+    emailUpdated: {
+      title: 'Email updated',
+      message: 'Your email address has been updated.',
+      signIn:
+        'Your email address has been updated. Sign in with your new address and password.',
     },
     profile: {
       title: 'My profile',

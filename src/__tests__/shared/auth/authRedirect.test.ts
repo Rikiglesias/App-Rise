@@ -36,23 +36,21 @@ describe('authRedirect.parseAuthRedirect', () => {
 });
 
 describe('authRedirect.isRecoveryRedirect', () => {
-  it('true solo se type=recovery con entrambi i token', () => {
-    expect(
-      isRecoveryRedirect('app://r#type=recovery&access_token=A&refresh_token=B')
-    ).toBe(true);
+  it('true per codice PKCE sul percorso di recovery', () => {
+    expect(isRecoveryRedirect('rahitalia://reset-password?code=A')).toBe(true);
   });
 
-  it('false se manca un token', () => {
-    expect(isRecoveryRedirect('app://r#type=recovery&access_token=A')).toBe(
-      false
-    );
+  it('false per i vecchi token impliciti', () => {
+    expect(
+      isRecoveryRedirect(
+        'rahitalia://reset-password#type=recovery&access_token=A&refresh_token=B'
+      )
+    ).toBe(false);
   });
 
   it('false se il type non è recovery (es. magic link)', () => {
     expect(
-      isRecoveryRedirect(
-        'app://r#type=magiclink&access_token=A&refresh_token=B'
-      )
+      isRecoveryRedirect('rahitalia://reset-password?code=A&type=magiclink')
     ).toBe(false);
   });
 });
@@ -65,25 +63,23 @@ describe('authRedirect.buildResetRedirectTo', () => {
 });
 
 describe('authRedirect.isEmailConfirmRedirect', () => {
-  it('true solo se type=signup con entrambi i token', () => {
-    expect(
-      isEmailConfirmRedirect(
-        'app://c#type=signup&access_token=A&refresh_token=B'
-      )
-    ).toBe(true);
+  it('true per codice PKCE sul percorso di conferma', () => {
+    expect(isEmailConfirmRedirect('rahitalia://confirm-email?code=A')).toBe(
+      true
+    );
   });
 
-  it('false se manca un token', () => {
-    expect(isEmailConfirmRedirect('app://c#type=signup&access_token=A')).toBe(
-      false
-    );
+  it('false per i vecchi token impliciti', () => {
+    expect(
+      isEmailConfirmRedirect(
+        'rahitalia://confirm-email#type=signup&access_token=A&refresh_token=B'
+      )
+    ).toBe(false);
   });
 
   it('false se il type è recovery (non confonde i due flussi)', () => {
     expect(
-      isEmailConfirmRedirect(
-        'app://c#type=recovery&access_token=A&refresh_token=B'
-      )
+      isEmailConfirmRedirect('rahitalia://confirm-email?code=A&type=recovery')
     ).toBe(false);
   });
 });
