@@ -5,8 +5,8 @@ import { COMMENTI_FALSI_C29, DEFINIZIONI, EMAIL_CONTATTO } from './codice.mjs';
 const FILE = 'src/__tests__/x.test.ts';
 
 /** Ingresso verde per un criterio: ogni titolo passato su HEAD, rosso alla base, sha coerenti. */
-export const verde = (id, statico = null) => {
-  const { titoli, guardie = [] } = DEFINIZIONI[id];
+export const verde = (id, statico = null, definizioni = DEFINIZIONI) => {
+  const { titoli, guardie = [] } = definizioni[id];
   return {
     jest: [...titoli, ...guardie].map(t => ({
       nome: t,
@@ -27,9 +27,13 @@ export const verde = (id, statico = null) => {
 };
 
 /** Le mutazioni che ogni criterio a titoli deve rifiutare. */
-export const negativiComuni = (id, statico = null) => {
-  const ok = verde(id, statico);
-  const [primo] = DEFINIZIONI[id].titoli;
+export const negativiComuni = (
+  id,
+  statico = null,
+  definizioni = DEFINIZIONI
+) => {
+  const ok = verde(id, statico, definizioni);
+  const [primo] = definizioni[id].titoli;
   return [
     { ...ok, jest: ok.jest.slice(1) }, // un titolo manca
     {

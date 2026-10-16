@@ -21,8 +21,14 @@ import {
   DEFINIZIONI as DEFINIZIONI_CODICE,
   criteri as codice,
 } from './verifica-android-play/codice.mjs';
+import {
+  DEFINIZIONI_LOGIN,
+  criteri as login,
+} from './verifica-android-play/login.mjs';
 import { registraControprove } from './verifica-android-play/titoli-jest.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
+
+const DEFINIZIONI_TITOLI = { ...DEFINIZIONI_CODICE, ...DEFINIZIONI_LOGIN };
 
 const CRITERI = {
   ...config,
@@ -38,6 +44,7 @@ const CRITERI = {
   ...informativa,
   ...play,
   ...codice,
+  ...login,
 };
 const ATTESI = [
   'C1',
@@ -63,9 +70,19 @@ const ATTESI = [
   'C23',
   'C24',
   'C25',
+  'C26',
   'C27',
   'C28',
   'C29',
+  'C30',
+  'C31',
+  'C32',
+  'C33',
+  'C34',
+  'C35',
+  'C36',
+  'C53',
+  'C55',
 ];
 
 const esito = async (fn, input) => {
@@ -138,7 +155,7 @@ const verifica = async ids => {
 
 // Solo i titoli non di guardia entrano nella controprova (regole comuni R10).
 const controprova = ids => {
-  const ignoti = ids.filter(id => !DEFINIZIONI_CODICE[id]);
+  const ignoti = ids.filter(id => !DEFINIZIONI_TITOLI[id]);
   if (ignoti.length || ids.length === 0) {
     console.log(
       `controprova: criteri senza titoli Jest: ${ignoti.join(', ') || '(nessuno indicato)'}`
@@ -146,7 +163,7 @@ const controprova = ids => {
     return false;
   }
   for (const r of registraControprove(
-    ids.map(id => ({ id, titoli: DEFINIZIONI_CODICE[id].titoli }))
+    ids.map(id => ({ id, titoli: DEFINIZIONI_TITOLI[id].titoli }))
   )) {
     const esiti = Object.values(r.esitiAllaBase);
     console.log(
