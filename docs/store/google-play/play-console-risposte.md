@@ -40,8 +40,8 @@ Testi della scheda: `scheda.md`. Grafica (icona 512, grafica in evidenza, screen
 - Risposta: «Tutte le funzionalità o alcune sono limitate».
 - Istruzioni per i revisori (da incollare):
   «L'app si usa senza account: Home, Impatto, Contribuisci e Chi siamo sono aperti a tutti. L'area personale
-  (Profilo) richiede l'accesso: toccare l'icona del profilo in alto a destra nella Home e accedere con le credenziali
-  qui sotto.»
+  (Profilo) richiede l'accesso: toccare la quarta scheda «Profilo» («Profile» in inglese) nella barra in basso e
+  accedere con le credenziali qui sotto.»
 - Credenziali: l'account demo lo crea Riccardo («Chi fa cosa» → Riccardo, account demo). Le credenziali si scrivono
   solo in Play Console, mai in questo repository.
 

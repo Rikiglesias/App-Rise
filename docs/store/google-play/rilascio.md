@@ -238,7 +238,13 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
 
 Cosa devono fare: pubblicare l'informativa aggiornata su `/privacy-policy/` e le due pagine di cancellazione, poi
 darci gli indirizzi (vanno nel gate del § 8 e in Sicurezza dei dati). Si chiede dopo il sì della consulente
-sull'informativa. Testo da mandare (inglese), con i tre file in allegato:
+sull'informativa.
+
+Se le pagine `web/elimina-account.html` e `web/delete-account.html` sono già state consegnate alla sede USA,
+Riccardo deve mandare le versioni aggiornate e chiedere di sostituire quelle precedenti, anche se già pubblicate:
+le istruzioni devono portare alla quarta scheda «Profilo» / «Profile» nella barra in basso.
+
+Testo da mandare (inglese), con i tre file in allegato:
 
 > Hi Rick and Kevin,
 > we are about to publish the new Rise Against Hunger Italia app on Google Play. Google requires two public pages on
@@ -247,6 +253,8 @@ sull'informativa. Testo da mandare (inglese), con i tre file in allegato:
 > 1. Replace the content of `/privacy-policy/` with the attached `privacy-policy.html` (Italian).
 > 2. Publish two new pages with the attached `elimina-account.html` (Italian) and `delete-account.html` (English),
 >    for example at `/elimina-account/` and `/delete-account/`.
+>    If you already received or published these pages, replace the previous versions with the updated attachments:
+>    the instructions now direct users to the fourth tab, Profile, in the bottom bar.
 >
 > Please reply with the final URLs: we have to enter them in Play Console. Nothing else on the network changes.
 > Thank you!
