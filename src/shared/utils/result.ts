@@ -292,11 +292,11 @@ export const logResult = <T, E>(
     const prefix = context ? `[${context}]` : '[Result]';
 
     if (result.success) {
-      logDebug('ResultPattern', `${prefix} Success`, result.data);
+      logDebug(`${prefix} Success`, 'ResultPattern', result.data);
     } else {
       logError(
-        'ResultPattern',
         `${prefix} Error`,
+        'ResultPattern',
         result.error instanceof Error
           ? result.error
           : new Error(String(result.error))

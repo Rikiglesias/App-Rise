@@ -22,7 +22,7 @@ describe('Logger - Log Level Methods', () => {
     const context = 'TestContext';
     const message = 'Info message';
 
-    logger.info(context, message);
+    logger.info(message, context);
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
@@ -31,7 +31,7 @@ describe('Logger - Log Level Methods', () => {
     const context = 'TestContext';
     const message = 'Warning message';
 
-    logger.warn(context, message);
+    logger.warn(message, context);
 
     expect(mockConsole.warn).toHaveBeenCalled();
   });
@@ -40,41 +40,42 @@ describe('Logger - Log Level Methods', () => {
     const context = 'TestContext';
     const message = 'Error message';
 
-    logger.error(context, message);
+    logger.error(message, context);
 
     expect(mockConsole.error).toHaveBeenCalled();
+    expect(logger.getLogs().at(-1)).toMatchObject({ message, context });
   });
 });
 
 describe('Logger - Message Formatting', () => {
   it('should handle simple context and message', () => {
-    logger.info('SimpleContext', 'Simple message');
+    logger.info('Simple message', 'SimpleContext');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle empty context', () => {
-    logger.info('', 'Message with empty context');
+    logger.info('Message with empty context', '');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle empty message', () => {
-    logger.info('Context', '');
+    logger.info('', 'Context');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle long context strings', () => {
     const longContext = 'VeryLongContextName'.repeat(10);
-    logger.info(longContext, 'Test message');
+    logger.info('Test message', longContext);
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle long messages', () => {
     const longMessage = 'Very long message content. '.repeat(50);
-    logger.info('Context', longMessage);
+    logger.info(longMessage, 'Context');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
@@ -83,33 +84,33 @@ describe('Logger - Message Formatting', () => {
 describe('Logger - Error Object Handling', () => {
   it('should handle error object with info', () => {
     const error = new Error('Test error');
-    logger.info('ErrorContext', 'Error occurred', error);
+    logger.info('Error occurred', 'ErrorContext', error);
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle error object with warn', () => {
     const error = new Error('Test error');
-    logger.warn('ErrorContext', 'Error occurred', error);
+    logger.warn('Error occurred', 'ErrorContext', error);
 
     expect(mockConsole.warn).toHaveBeenCalled();
   });
 
   it('should handle error object with error', () => {
     const error = new Error('Test error');
-    logger.error('ErrorContext', 'Error occurred', error);
+    logger.error('Error occurred', 'ErrorContext', error);
 
     expect(mockConsole.error).toHaveBeenCalled();
   });
 
   it('should handle null error object', () => {
-    logger.error('Context', 'Message', null);
+    logger.error('Message', 'Context', null);
 
     expect(mockConsole.error).toHaveBeenCalled();
   });
 
   it('should handle undefined error object', () => {
-    logger.error('Context', 'Message', undefined);
+    logger.error('Message', 'Context', undefined);
 
     expect(mockConsole.error).toHaveBeenCalled();
   });
@@ -117,21 +118,21 @@ describe('Logger - Error Object Handling', () => {
 
 describe('Logger - Special Characters and Formats', () => {
   it('should handle unicode characters', () => {
-    logger.info('🎯 Context', 'Message with emoji 🚀');
+    logger.info('Message with emoji 🚀', '🎯 Context');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle JSON-like strings', () => {
     const jsonMessage = JSON.stringify({ key: 'value', number: 42 });
-    logger.info('JSONContext', jsonMessage);
+    logger.info(jsonMessage, 'JSONContext');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle newlines in messages', () => {
     const multiLineMessage = 'Line 1\nLine 2\nLine 3';
-    logger.info('MultiLineContext', multiLineMessage);
+    logger.info(multiLineMessage, 'MultiLineContext');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
@@ -139,7 +140,7 @@ describe('Logger - Special Characters and Formats', () => {
   it('should handle quotes and special chars', () => {
     const specialMessage =
       'Message with "quotes" and \\backslashes\\ and [brackets]';
-    logger.info('SpecialContext', specialMessage);
+    logger.info(specialMessage, 'SpecialContext');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
@@ -148,16 +149,16 @@ describe('Logger - Special Characters and Formats', () => {
 describe('Logger - Performance and Edge Cases', () => {
   it('should handle rapid consecutive calls', () => {
     for (let i = 0; i < 10; i++) {
-      logger.info('RapidContext', `Message ${i}`);
+      logger.info(`Message ${i}`, 'RapidContext');
     }
 
     expect(mockConsole.info).toHaveBeenCalledTimes(10);
   });
 
   it('should handle mixed log level calls', () => {
-    logger.info('Mixed', 'Info');
-    logger.warn('Mixed', 'Warn');
-    logger.error('Mixed', 'Error');
+    logger.info('Info', 'Mixed');
+    logger.warn('Warn', 'Mixed');
+    logger.error('Error', 'Mixed');
 
     expect(mockConsole.info).toHaveBeenCalledTimes(1);
     expect(mockConsole.warn).toHaveBeenCalledTimes(1);
@@ -165,13 +166,13 @@ describe('Logger - Performance and Edge Cases', () => {
   });
 
   it('should handle numeric context values', () => {
-    logger.info('123', 'Numeric context');
+    logger.info('Numeric context', '123');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle boolean conversion in messages', () => {
-    logger.info('BooleanTest', `Value: ${true}, Other: ${false}`);
+    logger.info(`Value: ${true}, Other: ${false}`, 'BooleanTest');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
@@ -179,25 +180,25 @@ describe('Logger - Performance and Edge Cases', () => {
 
 describe('Logger - Context Variations', () => {
   it('should handle component-style contexts', () => {
-    logger.info('MyComponent', 'Component mounted');
+    logger.info('Component mounted', 'MyComponent');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle service-style contexts', () => {
-    logger.info('AuthService', 'User authenticated');
+    logger.info('User authenticated', 'AuthService');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle hook-style contexts', () => {
-    logger.info('useTheme', 'Theme changed to dark');
+    logger.info('Theme changed to dark', 'useTheme');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle store-style contexts', () => {
-    logger.info('AppStore', 'Loading state updated');
+    logger.info('Loading state updated', 'AppStore');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
@@ -205,32 +206,32 @@ describe('Logger - Context Variations', () => {
 
 describe('Logger - Real-world Usage Patterns', () => {
   it('should handle API request logging', () => {
-    logger.info('API', 'GET /users - 200 OK');
+    logger.info('GET /users - 200 OK', 'API');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle authentication logging', () => {
-    logger.info('Auth', 'User login successful');
+    logger.info('User login successful', 'Auth');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });
 
   it('should handle warning scenarios', () => {
-    logger.warn('ValidationService', 'Input validation warning');
+    logger.warn('Input validation warning', 'ValidationService');
 
     expect(mockConsole.warn).toHaveBeenCalled();
   });
 
   it('should handle error scenarios', () => {
     const networkError = new Error('Network timeout');
-    logger.error('NetworkService', 'Request failed', networkError);
+    logger.error('Request failed', 'NetworkService', networkError);
 
     expect(mockConsole.error).toHaveBeenCalled();
   });
 
   it('should handle state notifications', () => {
-    logger.info('State', 'App state changed from loading to ready');
+    logger.info('App state changed from loading to ready', 'State');
 
     expect(mockConsole.info).toHaveBeenCalled();
   });

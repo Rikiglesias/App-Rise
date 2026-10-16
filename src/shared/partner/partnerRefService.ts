@@ -20,8 +20,8 @@ import { logError, logInfo, logWarn } from '@/shared/utils/logger';
  *   → `null` + log informativo: transiente, non un fallimento generico.
  * - Qualunque altro errore è DAVVERO inatteso (RLS 42501, DB irraggiungibile,
  *   vincolo nuovo) → `null` + log ERROR: l'app apre comunque l'URL senza ref
- *   (degrada), ma l'anomalia deve raggiungere i log di produzione (warn/info
- *   sono scartati in prod, vedi `logger.ts`).
+ *   (degrada). In produzione l'errore resta solo nel buffer RAM locale, senza
+ *   invio né persistenza; warn/info sono scartati (vedi `logger.ts`).
  *
  * NB: le RLS di 0008 restringono select/insert alla propria riga (auth.uid()=user_id),
  * quindi la select non filtra su user_id (lo fa la policy) mentre l'insert DEVE
@@ -89,8 +89,8 @@ export const getOrCreatePartnerRef = async (
   }
 
   // 5. Errore DAVVERO inatteso (RLS 42501, DB irraggiungibile, vincolo nuovo):
-  //    logError così l'anomalia raggiunge i log di produzione (warn/info scartati
-  //    in prod, logger.ts). L'app degrada comunque: apre senza ref.
+  //    logError conserva l'anomalia nel buffer RAM locale (warn/info scartati
+  //    in prod, logger.ts), senza inviarla. L'app apre comunque senza ref.
   logError('creazione ref fallita (inatteso)', 'partnerRefService', error);
   return null;
 };

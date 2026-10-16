@@ -36,7 +36,7 @@ export const useTranslation = (): UseTranslationReturn => {
         return i18n.t(key, params);
       } catch (error) {
         // Fallback in caso di chiave mancante
-        logger.warn('i18n', `Translation key not found: ${key}`);
+        logger.warn(`Translation key not found: ${key}`, 'i18n');
         return key;
       }
     },

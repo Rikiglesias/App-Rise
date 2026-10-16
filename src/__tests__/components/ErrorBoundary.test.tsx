@@ -5,8 +5,10 @@
 
 import React from 'react';
 import { Text } from 'react-native';
-import { render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
+import * as Updates from 'expo-updates';
 import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
+import { logger } from '@/shared/utils/logger';
 import { changeLanguage, getCurrentLocale } from '@/locales';
 
 // Componente che genera errore per testing
@@ -68,6 +70,49 @@ describe('ErrorBoundary', () => {
 
     expect(getByText('🔄 Ricarica App')).toBeTruthy();
   });
+
+  it("logger: argomenti di error nell'ordine giusto", async () => {
+    const reloadError = new Error('Reload failed');
+    jest.mocked(Updates.reloadAsync).mockRejectedValueOnce(reloadError);
+    const logSpy = jest.spyOn(logger, 'error');
+    const { getByText } = render(
+      <ErrorBoundary>
+        <ThrowError shouldThrow />
+      </ErrorBoundary>
+    );
+    await act(async () => {
+      fireEvent.press(getByText('🔄 Ricarica App'));
+      await Promise.resolve();
+    });
+    expect(logSpy).toHaveBeenCalledWith(
+      'Failed to reload app',
+      'ErrorBoundary',
+      reloadError
+    );
+    expect(logger.getLogs()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          message: 'Failed to reload app',
+          context: 'ErrorBoundary',
+          data: reloadError,
+        }),
+      ])
+    );
+    logSpy.mockRestore();
+  });
+
+  it.each(['it', 'en'] as const)(
+    'il supporto mostra l’email dell’associazione in %s',
+    locale => {
+      changeLanguage(locale);
+      const { getByText } = render(
+        <ErrorBoundary>
+          <ThrowError shouldThrow />
+        </ErrorBoundary>
+      );
+      expect(getByText(/info@riseagainsthunger\.it/)).toBeTruthy();
+    }
+  );
 
   it.each([
     [

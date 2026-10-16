@@ -46,10 +46,7 @@ const ImpactTabScreenComponent: React.FC = () => {
       // Apre la mappa fullscreen "Dove operiamo" con i paesi-evento (world map SVG)
       navigation.navigate('MapModal', { locations: mapLocations });
     } catch (error) {
-      logError(
-        'Navigation error to MapModal',
-        error instanceof Error ? error.message : String(error)
-      );
+      logError('Navigation error to MapModal', 'ImpactTabScreen', error);
     }
   }, [navigation, mapLocations]);
 

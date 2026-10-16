@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // Log dell'errore per telemetria
+    // Buffer locale in memoria; il logger non invia né persiste i dati.
     logger.error('Uncaught error in component tree', 'ErrorBoundary', {
       error: error.message,
       stack: error.stack,
@@ -82,8 +82,8 @@ export class ErrorBoundary extends Component<Props, State> {
       }
     } catch (reloadError) {
       logger.error(
-        'ErrorBoundary',
         'Failed to reload app',
+        'ErrorBoundary',
         reloadError as Error
       );
       // Reset manuale dello state

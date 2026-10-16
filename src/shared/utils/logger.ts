@@ -1,6 +1,7 @@
 /**
- * Sistema di logging professionale per Rise Against Hunger Italia
- * Sostituisce completamente console.* statements per produzione sicura
+ * Logger locale per Rise Against Hunger Italia.
+ * In sviluppo scrive sulla console; in produzione conserva solo error/fatal
+ * in un buffer RAM limitato. Nessuna persistenza né invio remoto.
  */
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
@@ -111,7 +112,7 @@ class ProfessionalLogger {
       }
     }
 
-    // Salva sempre nel buffer per crash reporting
+    // Conserva in RAM solo i livelli abilitati; il buffer sparisce al riavvio.
     this.writeToBuffer(entry);
   }
 
@@ -176,7 +177,7 @@ class ProfessionalLogger {
     );
   }
 
-  // Metodi per debugging e crash reporting
+  // Lettura del buffer locale, senza invio remoto
   getLogs(): LogEntry[] {
     return [...this.logBuffer];
   }
@@ -189,7 +190,7 @@ class ProfessionalLogger {
     this.logBuffer.length = 0;
   }
 
-  // Metodo per export logs per crash reporting
+  // Serializzazione locale dei log, senza persistenza né invio
   exportLogsAsString(): string {
     return this.logBuffer.map(entry => this.formatLogMessage(entry)).join('\n');
   }

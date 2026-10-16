@@ -25,7 +25,7 @@ export const useSocialPlatforms = () => {
         try {
           await fn();
         } catch (error) {
-          logWarn('SocialPlatforms', 'open link failed', error);
+          logWarn('open link failed', 'SocialPlatforms', error);
         }
       };
     },

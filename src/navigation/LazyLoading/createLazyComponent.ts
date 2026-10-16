@@ -91,7 +91,7 @@ export const createLazyComponent = (
     // Preload in background dopo un breve delay
     setTimeout(() => {
       void cachedImportFn().catch(error => {
-        logger.warn('LazyComponent', `Preload failed for ${name}`, { error });
+        logger.warn(`Preload failed for ${name}`, 'LazyComponent', { error });
       });
     }, 100);
   }
