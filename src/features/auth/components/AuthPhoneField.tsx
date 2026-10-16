@@ -20,6 +20,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 interface AuthPhoneFieldProps {
   label: string;
@@ -94,6 +95,7 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   error,
 }) => {
   const colors = useThemeColors();
+  const { locale, t } = useTranslation();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [number, setNumber] = useState('');
   const [country, setCountry] = useState<ICountry | null>(
@@ -247,6 +249,8 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         {label}
       </PerfectText>
       <PhoneInput
+        language={locale === 'it' ? 'ita' : 'eng'}
+        placeholder={t('auth.phoneField.placeholder')}
         value={number}
         // NIENTE `defaultCountry`: il paese lo passiamo già noi, sempre valorizzato
         // (l'inizializzatore dello stato risolve 'IT' quando non c'è residenza).
@@ -257,6 +261,9 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         // altrove, che rientrava da questa porta.
         country={country}
         accessibilityLabelPhoneInput={label}
+        accessibilityHintPhoneInput={t('auth.phoneField.numberHint')}
+        accessibilityLabelCountriesButton={t('auth.phoneField.choosePrefix')}
+        accessibilityHintCountriesButton={t('auth.phoneField.prefixHint')}
         phoneInputStyles={phoneStyles}
         popularCountries={POPULAR_COUNTRIES}
         modalType="bottomSheet"
