@@ -1,8 +1,6 @@
 import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Platform, type ViewProps, type ViewStyle } from 'react-native';
-import { PerfectContainer } from './PerfectContainer';
+import { Platform, type ViewProps } from 'react-native';
 
 interface PlatformBlurProps extends ViewProps {
   intensity?: number;
@@ -11,9 +9,8 @@ interface PlatformBlurProps extends ViewProps {
 }
 
 /**
- * Smart Blur che usa:
- * - iOS: BlurView nativo (mantiene effetto esistente)
- * - Android: Gradient ottimizzato (performance migliore)
+ * iOS: blur nativo. Android: ripiego semitrasparente di expo-blur SDK 54
+ * (experimentalBlurMethod resta al default `none`, senza blur sperimentale).
  */
 export const PlatformBlur: React.FC<PlatformBlurProps> = ({
   children,
@@ -23,59 +20,21 @@ export const PlatformBlur: React.FC<PlatformBlurProps> = ({
   backgroundColor,
   ...props
 }) => {
-  // Usa BlurView nativo anche su Android per parità visiva.
-  // Su Android limitiamo leggermente l'intensità per performance.
+  // Mantiene l'intensità esistente anche per il ripiego Android.
   const effectiveIntensity =
     Platform.OS === 'android' ? Math.min(intensity, 75) : intensity;
 
-  // Fallback minimale in caso di problemi di runtime
-  const fallback = (
-    <PerfectContainer style={style as ViewStyle} {...props}>
-      <LinearGradient
-        colors={[
-          // rgba necessario per fallback gradient blur semi-trasparente
-          backgroundColor ??
-            (tint === 'dark'
-              ? 'rgba(0, 0, 0, 0.7)'
-              : 'rgba(255, 255, 255, 0.9)'),
-          backgroundColor ??
-            (tint === 'dark'
-              ? 'rgba(0, 0, 0, 0.7)'
-              : 'rgba(255, 255, 255, 0.9)'),
-        ]}
-        style={gradientStyle}
-      />
+  const combinedStyle = backgroundColor ? [style, { backgroundColor }] : style;
+  return (
+    <BlurView
+      intensity={effectiveIntensity}
+      tint={tint}
+      style={combinedStyle}
+      {...props}
+    >
       {children}
-    </PerfectContainer>
+    </BlurView>
   );
-
-  try {
-    const combinedStyle = backgroundColor
-      ? [style, { backgroundColor }]
-      : style;
-
-    return (
-      <BlurView
-        intensity={effectiveIntensity}
-        tint={tint}
-        style={combinedStyle}
-        {...props}
-      >
-        {children}
-      </BlurView>
-    );
-  } catch {
-    return fallback;
-  }
-};
-
-// Styles
-const gradientStyle = {
-  position: 'absolute' as const,
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
 };
 
 export default PlatformBlur;

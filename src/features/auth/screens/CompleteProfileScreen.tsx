@@ -207,12 +207,9 @@ export const CompleteProfileScreen: React.FC = () => {
         />
       </AuthSection>
 
-      {/* Consensi solo quando il profilo NASCE qui. Su un profilo che esiste già il
-          consenso fu raccolto alla nascita e questa schermata serve solo ad
-          aggiungere i campi mancanti: mostrare la casella significherebbe pretendere
-          una spunta che il salvataggio poi scarta (né `privacy_consent_at` né un
-          evento nel registro Art.7) — un consenso chiesto e buttato. La
-          ri-accettazione di un'informativa cambiata è di `ReConsentScreen`. */}
+      {/* Il form richiede il consenso se il profilo manca o non è ancora caricato.
+          Per un profilo esistente già letto, qui si completano solo i campi:
+          la ri-accettazione di un'informativa cambiata è di ReConsentScreen. */}
       {form.requirePrivacyConsent ? (
         <AuthSection title={t('auth.signup.sections.consents')}>
           <AuthConsentCheckbox
@@ -239,7 +236,7 @@ export const CompleteProfileScreen: React.FC = () => {
       />
 
       {/* Le vie d'uscita esistono SOLO nel passaggio obbligato: raggiunta dal profilo,
-          questa schermata ha già l'indietro e i comandi dell'area donatori sopra.
+          questa schermata sta nello stack e se ne esce col tasto o il gesto indietro.
           «Esci» rimette la persona nell'app come ospite (da ospite si può ancora
           donare); «Elimina account» è per chi scopre di non poter avere un profilo
           valido — il caso vero è la data di nascita che non passa. Senza queste due, il

@@ -536,7 +536,7 @@ export const useProfileForm = () => {
     /** Stato della disponibilità del nickname: la vista lo traduce con `useNicknameHint`. */
     nicknameCheck,
     isRelay,
-    /** La schermata mostra la sezione consensi solo quando il profilo NASCE qui. */
+    /** Sezione consensi: profilo assente o non ancora caricato (in dubbio si chiede). */
     requirePrivacyConsent,
     errors,
     refs: { lastNameRef, phoneRef },
