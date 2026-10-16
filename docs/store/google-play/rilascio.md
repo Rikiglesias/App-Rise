@@ -217,7 +217,23 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
 3. **SMTP**: Supabase → Authentication → Emails → SMTP Settings con Resend; DKIM, SPF e DMARC sul dominio. Senza,
    le email di conferma e recupero non arrivano agli utenti esterni.
 4. **Site URL e redirect**: Supabase → Authentication → URL Configuration: Site URL del sito (non `localhost`);
-   Redirect URLs `rahitalia://reset-password` e `rahitalia://**`.
+   In **Additional Redirect URLs** inserire tutti i redirect usati dal codice:
+   `rahitalia://reset-password`, `rahitalia://confirm-email`, `rahitalia://confirm-email-change`.
+   Controllare **sempre i modelli mail**, anche se erano già configurati: Supabase → Authentication → Emails →
+   Templates, in ogni modello con un link di accesso (Confirm signup, Reset password, Change email, Magic Link,
+   Invite user), il link deve usare `{{ .ConfirmationURL }}`. Non costruire link con token o con il solo
+   `{{ .RedirectTo }}`: la verifica deve passare dal server prima del redirect PKCE all'app.
+   Se manca, sostituire il collegamento con questo testo HTML:
+
+   ```html
+   <p>Conferma la richiesta e torna all'app Rise Against Hunger Italia:</p>
+   <p><a href="{{ .ConfirmationURL }}">Conferma e apri l'app</a></p>
+   ```
+
+   Provare conferma iscrizione, recupero password e cambio email su telefono: richiedere il link dall'app,
+   chiuderla, riaprirla dal link sullo **stesso dispositivo**. Il verificatore PKCE resta nello storage cifrato;
+   dopo un secondo invio usare l'ultima email. Confermare entrambe le caselle nel cambio email sicuro.
+   Verificare anche link scaduto e scambio fallito: l'app deve spiegare come proseguire.
 5. **Account demo** per i revisori: registrarsi dall'app con una casella vera dell'associazione (mai un'email
    inventata: i rimbalzi bloccano l'invio), confermare l'email, compilare il profilo con dati di prova. Credenziali solo
    in Play Console (Accesso all'app e Rapporto pre-lancio).
