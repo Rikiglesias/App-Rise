@@ -22,6 +22,7 @@ const mockNavState: { routeNames: string[] } = { routeNames: ['Home'] };
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: mockNavigate,
+    popTo: jest.fn(),
     goBack: jest.fn(),
     canGoBack: mockCanGoBack,
     getState: () => mockNavState,
@@ -164,6 +165,16 @@ describe('Auth screens', () => {
     fireEvent.press(ui.getByText('Continua'));
 
     expect(mockNavigate).toHaveBeenCalledWith('CompleteProfile');
+    expect(mockNavigate).not.toHaveBeenCalledWith('Home');
+  });
+
+  it('ResetPassword: «Continua» torna al ri-consenso quando il cancello lo richiede', async () => {
+    mockNavigate.mockClear();
+    mockNavState.routeNames = ['ReConsent', 'DeleteAccount', 'ResetPassword'];
+    const ui = wrap(<ResetPasswordScreen />);
+    await cambiaPasswordConSuccesso(ui);
+    fireEvent.press(ui.getByText('Continua'));
+    expect(mockNavigate).toHaveBeenCalledWith('ReConsent');
     expect(mockNavigate).not.toHaveBeenCalledWith('Home');
   });
 

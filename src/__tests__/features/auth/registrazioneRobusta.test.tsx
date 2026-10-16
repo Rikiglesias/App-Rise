@@ -6,7 +6,11 @@ import { supabase } from '@/shared/auth/supabaseClient';
 import i18n from '@/locales';
 
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ goBack: jest.fn(), navigate: jest.fn() }),
+  useNavigation: () => ({
+    goBack: jest.fn(),
+    navigate: jest.fn(),
+    canGoBack: () => false,
+  }),
 }));
 
 // Termina il caricamento e conserva i dati per riprovare.

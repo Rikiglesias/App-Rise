@@ -327,6 +327,8 @@ export const ProfileEditScreen: React.FC = () => {
         error={err(errors.email)}
         keyboardType="email-address"
         autoCapitalize="none"
+        autoComplete="email"
+        textContentType="emailAddress"
       />
       {/* Stesso campo del resto dell'app, con selettore del prefisso: qui era un
           input nudo in cui il '+39' andava digitato a mano, ed è proprio la

@@ -20,7 +20,13 @@ jest.mock('@/shared/hooks/useLinkHandler', () => ({
 
 jest.mock('@react-navigation/native', () => {
   const navigate = jest.fn();
-  return { useNavigation: () => ({ navigate, goBack: jest.fn() }) };
+  return {
+    useNavigation: () => ({
+      navigate,
+      goBack: jest.fn(),
+      canGoBack: () => false,
+    }),
+  };
 });
 
 jest.mock('@/shared/auth/AuthContext', () => ({

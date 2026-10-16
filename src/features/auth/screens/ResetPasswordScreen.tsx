@@ -64,8 +64,8 @@ export const ResetPasswordScreen: React.FC = () => {
    * Dove porta «Continua» dopo che la password è stata cambiata.
    *
    * Questa schermata è montata in DUE alberi: `MainStackNavigator`, dove `Home`
-   * esiste, e `ProfileGateNavigator`, che monta soltanto CompleteProfile,
-   * DeleteAccount e ResetPassword. I due alberi sono alternativi e non hanno un
+   * esiste, e `ProfileGateNavigator`, che monta ReConsent oppure CompleteProfile,
+   * oltre a DeleteAccount e ResetPassword. I due alberi sono alternativi e non hanno un
    * navigator padre (`AppNavigator` monta l'uno o l'altro), quindi da dentro il
    * cancello un `navigate('Home')` non veniva gestito da nessuno e il pulsante
    * restava inerte — proprio nel caso per cui la rotta è stata messa nel cancello:
@@ -80,6 +80,10 @@ export const ResetPasswordScreen: React.FC = () => {
 
     if (rotteDisponibili.includes('Home')) {
       navigation.navigate('Home');
+      return;
+    }
+    if (rotteDisponibili.includes('ReConsent')) {
+      navigation.navigate('ReConsent');
       return;
     }
     if (rotteDisponibili.includes('CompleteProfile')) {
@@ -107,6 +111,8 @@ export const ResetPasswordScreen: React.FC = () => {
             error={pwdErr}
             secureTextEntry
             autoCapitalize="none"
+            autoComplete="new-password"
+            textContentType="newPassword"
           />
           <AuthInput
             label={t('auth.reset.confirmPassword')}
@@ -115,6 +121,8 @@ export const ResetPasswordScreen: React.FC = () => {
             error={confirmErr}
             secureTextEntry
             autoCapitalize="none"
+            autoComplete="new-password"
+            textContentType="newPassword"
           />
           {submitError ? (
             <PerfectText size={14} lines={2} style={styles.error}>

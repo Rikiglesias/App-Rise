@@ -89,6 +89,8 @@ export const DeleteAccountScreen: React.FC = () => {
     else navigation.goBack();
   }, [scheduleDeletion, navigation, t]);
 
+  const goBack = useCallback((): void => navigation.goBack(), [navigation]);
+
   const confirmNow = useCallback((): void => {
     Alert.alert(t('auth.delete.title'), t('auth.delete.confirmNow'), [
       { text: t('auth.delete.cancel'), style: 'cancel' },
@@ -131,6 +133,18 @@ export const DeleteAccountScreen: React.FC = () => {
             disabled={loading}
           />
         </>
+      ) : null}
+
+      {/* Nel cancello del profilo non ci sono né il pulsante indietro né l'indietro di
+          sistema (C31): senza questa uscita chi apre la schermata per sbaglio resterebbe
+          bloccato fino alla chiusura dell'app. */}
+      {navigation.canGoBack() ? (
+        <AuthButton
+          label={t('auth.delete.cancel')}
+          onPress={goBack}
+          variant="link"
+          disabled={loading}
+        />
       ) : null}
 
       {error ? (

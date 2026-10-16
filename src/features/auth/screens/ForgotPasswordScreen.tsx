@@ -83,6 +83,8 @@ export const ForgotPasswordScreen: React.FC = () => {
             error={emailErr}
             keyboardType="email-address"
             autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
           />
           {submitError ? (
             <PerfectText size={14} lines={2} style={styles.error}>

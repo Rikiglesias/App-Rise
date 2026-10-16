@@ -1,8 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { StyleSheet, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { PlatformScrollView, PerfectText, PerfectImage } from '@/components/ui';
+import { AuthBackButton } from './AuthBackButton';
+import {
+  PlatformScrollView,
+  PerfectText,
+  PerfectImage,
+  PerfectContainer,
+} from '@/components/ui';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import { PerfectSpacing } from '@/shared/constants';
 import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
@@ -49,59 +58,78 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  const { isTablet } = useDeviceType();
+  const { t } = useTranslation();
+  const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
 
   return (
     <SafeAreaView style={styles.container}>
+      <AuthBackButton />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.flex}
       >
         <PlatformScrollView
           contentContainerStyle={[
-            styles.content,
-            verticalCenter && styles.contentCentered,
+            styles.scrollContent,
+            { paddingBottom: tabBarHeight },
           ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Landing: gruppo hero+azioni COESO nel terzo superiore (spacer
+          <PerfectContainer
+            testID="auth-content"
+            style={[
+              styles.content,
+              ...(isTablet ? [styles.tabletContent] : []),
+              ...(verticalCenter ? [styles.contentCentered] : []),
+            ]}
+          >
+            {/* Landing: gruppo hero+azioni COESO nel terzo superiore (spacer
               sopra piccolo + sotto grande). Niente vuoto sopra il logo né gap
               centrale; lo spazio residuo resta in fondo come padding naturale
               sopra la tab bar. Sui form gli spacer non vengono inseriti. */}
-          {centerContent ? <View style={styles.heroSpacerTop} /> : null}
-          <View style={[styles.header, verticalCenter && styles.headerSpaced]}>
-            {showLogo ? (
-              <PerfectImage
-                width={centerContent ? 96 : 72}
-                aspectRatio={1}
-                source={require('@assets/icons/app/logo.png')}
-                imageStyle={{ resizeMode: 'contain' }}
-                containerStyle={styles.logo}
-                accessibilityRole="image"
-                accessibilityLabel="Rise Against Hunger Italia"
-              />
-            ) : null}
-            {eyebrow ? (
-              <PerfectText size={eyebrowSize} lines={1} style={styles.eyebrow}>
-                {eyebrow}
+            {centerContent ? <View style={styles.heroSpacerTop} /> : null}
+            <View
+              style={[styles.header, verticalCenter && styles.headerSpaced]}
+            >
+              {showLogo ? (
+                <PerfectImage
+                  width={centerContent ? 96 : 72}
+                  aspectRatio={1}
+                  source={require('@assets/icons/app/logo.png')}
+                  imageStyle={{ resizeMode: 'contain' }}
+                  containerStyle={styles.logo}
+                  accessibilityRole="image"
+                  accessibilityLabel={t('common.appName')}
+                />
+              ) : null}
+              {eyebrow ? (
+                <PerfectText
+                  size={eyebrowSize}
+                  lines={1}
+                  style={styles.eyebrow}
+                >
+                  {eyebrow}
+                </PerfectText>
+              ) : null}
+              <PerfectText size={titleSize} lines={2} style={styles.title}>
+                {title}
               </PerfectText>
-            ) : null}
-            <PerfectText size={titleSize} lines={2} style={styles.title}>
-              {title}
-            </PerfectText>
-            {subtitle ? (
-              <PerfectText
-                size={15}
-                lines={3}
-                style={styles.subtitle}
-                containerWidth={240}
-              >
-                {subtitle}
-              </PerfectText>
-            ) : null}
-          </View>
-          {children}
-          {centerContent ? <View style={styles.heroSpacerEnd} /> : null}
+              {subtitle ? (
+                <PerfectText
+                  size={15}
+                  lines={3}
+                  style={styles.subtitle}
+                  containerWidth={240}
+                >
+                  {subtitle}
+                </PerfectText>
+              ) : null}
+            </View>
+            {children}
+            {centerContent ? <View style={styles.heroSpacerEnd} /> : null}
+          </PerfectContainer>
         </PlatformScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -117,12 +145,20 @@ const createStyles = (colors: ThemeColors) =>
     flex: {
       flex: 1,
     },
+    scrollContent: {
+      flexGrow: 1,
+    },
     content: {
       flexGrow: 1,
+      width: '100%',
       padding: PerfectSpacing.lg,
       paddingTop: PerfectSpacing.lg,
       // Stacco dalla tab bar in basso: i social non restano incollati al fondo.
       paddingBottom: PerfectSpacing.xl,
+    },
+    tabletContent: {
+      maxWidth: 560,
+      alignSelf: 'center',
     },
     // Centra verticalmente il blocco quando la schermata è corta e a tutto
     // schermo (login senza tab bar): niente grande vuoto in fondo.

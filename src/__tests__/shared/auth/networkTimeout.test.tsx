@@ -36,7 +36,11 @@ jest.mock('@/shared/config/environment', () => ({
   },
 }));
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    goBack: jest.fn(),
+    canGoBack: () => false,
+  }),
 }));
 
 const originalFetch = global.fetch;

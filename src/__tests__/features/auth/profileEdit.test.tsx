@@ -9,7 +9,11 @@ import type { AuthState } from '@/shared/auth/AuthContext';
 import type { Profile } from '@/shared/auth/types';
 
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    goBack: jest.fn(),
+    canGoBack: () => false,
+  }),
 }));
 
 jest.mock('@/shared/auth/AuthContext', () => ({
