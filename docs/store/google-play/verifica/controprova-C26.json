@@ -1,0 +1,21 @@
+{
+  "criterio": "C26",
+  "base": "fbefa98",
+  "titoli": [
+    "link di accesso fallito: recupero con errore chiede un nuovo link",
+    "link di accesso fallito: conferma con scambio fallito dice email confermata, accedi",
+    "link di accesso fallito: verificatore assente dopo un secondo invio",
+    "link di accesso: avvio a freddo apre Reimposta password quando la navigazione è pronta",
+    "link di accesso: conferma riuscita mostra un messaggio"
+  ],
+  "esitiAllaBase": {
+    "link di accesso fallito: recupero con errore chiede un nuovo link": "failed",
+    "link di accesso fallito: conferma con scambio fallito dice email confermata, accedi": "failed",
+    "link di accesso fallito: verificatore assente dopo un secondo invio": "failed",
+    "link di accesso: avvio a freddo apre Reimposta password quando la navigazione è pronta": "failed",
+    "link di accesso: conferma riuscita mostra un messaggio": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/authLinkFlow.test.tsx": "c2729da480f46bd043cee054d29629beb679d5a68005f48333c1dbac29011084"
+  }
+}

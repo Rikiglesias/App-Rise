@@ -1,0 +1,15 @@
+{
+  "criterio": "C53",
+  "base": "fbefa98",
+  "titoli": [
+    "cambio email: redirect all'app",
+    "cambio email: conferma mostra email aggiornata"
+  ],
+  "esitiAllaBase": {
+    "cambio email: redirect all'app": "failed",
+    "cambio email: conferma mostra email aggiornata": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/authLinkFlow.test.tsx": "c2729da480f46bd043cee054d29629beb679d5a68005f48333c1dbac29011084"
+  }
+}

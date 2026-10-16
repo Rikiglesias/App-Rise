@@ -22,8 +22,8 @@
     "accesso robusto: weak_password": "failed"
   },
   "fileTest": {
-    "src/__tests__/features/auth/accessoRobusto.test.tsx": "99c89d93fa2c442db1afa5606f0275d446f9f868fddd28c1031b8965863b11c8",
-    "src/__tests__/features/auth/registrazioneRobusta.test.tsx": "a18d0d3c95841ba9155c86f4d869bd0bc37cebb2270787d97da0ff0ec1bb13d5",
+    "src/__tests__/features/auth/accessoRobusto.test.tsx": "b07e8651c4c91b633217362f8ba64756d8489350d93fb5999786a6da3c7e51a4",
+    "src/__tests__/features/auth/registrazioneRobusta.test.tsx": "249564280681a6988e7eaaf9cbe7ad9a29bfcd69921070fb442998c16863ef80",
     "src/__tests__/shared/auth/authStartupRobusto.test.tsx": "6e8e537f3e9bf122f1b2cebe0ca5aa6a4fd03be631e0094b167fece467c2c54c"
   }
 }

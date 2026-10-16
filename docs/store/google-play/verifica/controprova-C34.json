@@ -1,0 +1,15 @@
+{
+  "criterio": "C34",
+  "base": "fbefa98",
+  "titoli": [
+    "PKCE: il link con code apre la sessione",
+    "PKCE: il link con token nel fragment non apre sessioni"
+  ],
+  "esitiAllaBase": {
+    "PKCE: il link con code apre la sessione": "failed",
+    "PKCE: il link con token nel fragment non apre sessioni": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/authLinkFlow.test.tsx": "c2729da480f46bd043cee054d29629beb679d5a68005f48333c1dbac29011084"
+  }
+}
