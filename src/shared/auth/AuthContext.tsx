@@ -13,13 +13,14 @@ import type { AuthError, Session } from '@supabase/supabase-js';
 import { supabase } from './supabaseClient';
 import {
   buildResetRedirectTo,
-  buildEmailConfirmRedirectTo,
   buildEmailChangeRedirectTo,
 } from './authRedirect';
 import { exchangeAuthLink } from './authLinkExchange';
+import { mapAuthError } from './authErrors';
+import { useEmailConfirmation } from './useEmailConfirmation';
 import { exportData as runDataExport } from './dataExport';
 import { buildConsentInsert } from './consent';
-import { buildDisplayName, syncDisplayNameClaim } from './displayName';
+import { syncDisplayNameClaim } from './displayName';
 import { syncNicknameClaim } from './nickname';
 import type {
   Profile,
@@ -50,6 +51,12 @@ export interface AuthState {
    * riscrivere `privacy_consent_at`) deve leggere QUESTO, non il solo `profile`.
    */
   profileLoaded: boolean;
+  /** Chiave del mappatore: null su lettura riuscita, anche se il profilo è assente. */
+  profileError: string | null;
+  confirmationRetryAt: Readonly<Record<string, number>>;
+  resendConfirmation: (
+    email: string
+  ) => Promise<{ error: AuthError | string | null }>;
   signIn: (
     email: string,
     password: string
@@ -73,7 +80,9 @@ export interface AuthState {
   /** Scambia il codice PKCE di conferma iscrizione o cambio email. */
   completeEmailConfirmFromUrl: (url: string) => Promise<{ ok: boolean }>;
   /** Ricarica il profilo e lo RESTITUISCE (serve a chi deve decidere subito, senza aspettare il re-render). */
-  refreshProfile: () => Promise<Profile | null>;
+  refreshProfile: (options?: {
+    throwOnError?: boolean;
+  }) => Promise<Profile | null>;
   /** Aggiorna i campi profilo correggibili (GDPR Art.16). Whitelist: solo i campi passati, mai id/consensi. */
   updateProfile: (
     fields: Partial<ProfileEditable>
@@ -143,6 +152,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // si riazzera solo al CAMBIO di utente: un TOKEN_REFRESHED sullo stesso account
   // non deve far tornare la UI a «non lo so» (trappola già pagata sul consenso).
   const [profileLoaded, setProfileLoaded] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const { signUp, resendConfirmation, confirmationRetryAt } =
+    useEmailConfirmation();
   // Tre valori, non due. `unknown` è lo stato all'avvio e dopo un errore di rete:
   // serve a chi deve DECIDERE se trasmettere dati a un terzo, perché «non ancora
   // saputo» non è «tutto a posto». La UI continua a leggere il booleano derivato.
@@ -155,36 +167,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // subito dopo il caricamento (es. il prefill dei partner) non può leggere `profile`
   // dalla propria closure, che è ancora quella del render precedente.
   const loadProfile = useCallback(
-    async (userId: string): Promise<Profile | null> => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      if (error) {
-        // PGRST116 = nessuna riga: profilo non ancora creato (es. post-social) → assente.
-        // Altri errori (rete/RLS) → NON azzerare il profilo già caricato (evita flicker/perdita dati UI).
-        // `profileLoaded` segue la stessa distinzione: l'assenza CONFERMATA è una
-        // risposta, un errore di rete no — lì lo stato resta «non lo so».
-        if (error.code === 'PGRST116') {
-          if (sessionUserIdRef.current !== userId) return null;
-          setProfile(null);
-          setProfileLoaded(true);
+    async (userId: string, throwOnError = false): Promise<Profile | null> => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+        if (error) {
+          // PGRST116 = nessuna riga: profilo non ancora creato (es. post-social) → assente.
+          // Altri errori (rete/RLS) → NON azzerare il profilo già caricato (evita flicker/perdita dati UI).
+          // `profileLoaded` segue la stessa distinzione: l'assenza CONFERMATA è una
+          // risposta, un errore di rete no — lì lo stato resta «non lo so».
+          if (error.code === 'PGRST116') {
+            if (sessionUserIdRef.current !== userId) return null;
+            setProfile(null);
+            setProfileLoaded(true);
+          }
+          if (error.code !== 'PGRST116') throw error;
+          setProfileError(null);
+          return null;
         }
+        const next = (data as Profile | null) ?? null;
+        // La risposta può arrivare DOPO un logout o un cambio account: scriverla
+        // senza controllare resusciterebbe il profilo dell'utente precedente, che
+        // finirebbe nel prefill verso il partner. Si applica solo se la sessione
+        // corrente è ancora la stessa che l'ha richiesta.
+        // La guardia vale su ENTRAMBE le uscite: lo stato E il valore restituito.
+        // Proteggere solo `setProfile` lasciava scoperto proprio il percorso che
+        // conta — il prefill dei partner legge il valore di ritorno, non lo stato.
+        if (sessionUserIdRef.current !== userId) return null;
+        setProfile(next);
+        setProfileLoaded(true);
+        setProfileError(null);
+        return next;
+      } catch (error) {
+        if (sessionUserIdRef.current !== userId) return null;
+        setProfileError(mapAuthError(error));
+        if (throwOnError) throw error;
         return null;
       }
-      const next = (data as Profile | null) ?? null;
-      // La risposta può arrivare DOPO un logout o un cambio account: scriverla
-      // senza controllare resusciterebbe il profilo dell'utente precedente, che
-      // finirebbe nel prefill verso il partner. Si applica solo se la sessione
-      // corrente è ancora la stessa che l'ha richiesta.
-      // La guardia vale su ENTRAMBE le uscite: lo stato E il valore restituito.
-      // Proteggere solo `setProfile` lasciava scoperto proprio il percorso che
-      // conta — il prefill dei partner legge il valore di ritorno, non lo stato.
-      if (sessionUserIdRef.current !== userId) return null;
-      setProfile(next);
-      setProfileLoaded(true);
-      return next;
     },
     []
   );
@@ -220,7 +242,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         // Solo il CAMBIO di utente rende ignoto ciò che sapevamo: su un semplice
         // rinnovo del token (stesso account) riazzerare farebbe tornare la UI a
         // «non lo so» a ogni refresh, con i solleciti che spariscono e ricompaiono.
-        if (nextUserId !== sessionUserIdRef.current) setProfileLoaded(false);
+        if (nextUserId !== sessionUserIdRef.current) {
+          setProfileLoaded(false);
+          setProfileError(null);
+        }
         sessionUserIdRef.current = nextUserId;
         setSession(nextSession);
         setStatus(nextSession ? 'authenticated' : 'unauthenticated');
@@ -242,46 +267,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
     return { error: error?.message ?? null };
   }, []);
-
-  const signUp = useCallback(
-    async (email: string, password: string, p: ProfileInput) => {
-      // Profilo + consensi iniziali creati SERVER-SIDE dal trigger handle_new_user
-      // (migration 0004) leggendo options.data: con "Confirm email" ON non c'è sessione
-      // attiva qui, quindi un insert client-side verrebbe bloccato da RLS (auth.uid() null).
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          // Il codice PKCE rientra nell'app ed è scambiato da useAuthDeepLink.
-          emailRedirectTo: buildEmailConfirmRedirectTo(),
-          data: {
-            // Claim OIDC `name` per il login federato dei partner (P1): il server auth
-            // legge SOLO questa chiave e, se manca, ci mette l'email dell'account.
-            // Il trigger ignora le chiavi che non gli servono (0007: legge per nome).
-            name: buildDisplayName(p.first_name, p.last_name),
-            // Claim OIDC `preferred_username` (F-NICKNAME, migration 0017). La chiave
-            // si chiama così e non `nickname` perché è quella che il server auth legge
-            // (verificato su GenerateIDToken e OAuthUserInfo). Facoltativo: se manca si
-            // omette del tutto invece di scrivere '' — il trigger e il server trattano
-            // l'assenza come «nessun nickname», mentre una stringa vuota è rumore.
-            ...(p.nickname?.trim()
-              ? { preferred_username: p.nickname.trim() }
-              : {}),
-            first_name: p.first_name,
-            last_name: p.last_name,
-            phone: p.phone,
-            city: p.city,
-            province: p.province,
-            country: p.country,
-            birth_date: p.birth_date,
-            marketing_consent: p.marketing_consent,
-          },
-        },
-      });
-      return { error: error?.message ?? null };
-    },
-    []
-  );
 
   const signOut = useCallback(async (): Promise<{ error: string | null }> => {
     // `scope: 'local'` e non il default `global`: la documentazione della libreria
@@ -323,10 +308,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     []
   );
 
-  const refreshProfile = useCallback(async (): Promise<Profile | null> => {
-    if (!session?.user.id) return null;
-    return await loadProfile(session.user.id);
-  }, [session, loadProfile]);
+  const refreshProfile = useCallback(
+    async (options?: { throwOnError?: boolean }): Promise<Profile | null> => {
+      if (!session?.user.id) return null;
+      return await loadProfile(session.user.id, options?.throwOnError);
+    },
+    [session, loadProfile]
+  );
 
   const updateProfile = useCallback(
     async (fields: Partial<ProfileEditable>) => {
@@ -359,7 +347,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         .update(payload)
         .eq('id', userId);
       if (error) return { error: error.message };
-      const updated = await loadProfile(userId);
+      const updated = await loadProfile(userId, true);
       // Il nome è cambiato → riallinea la sua proiezione su user_metadata.name (P1),
       // altrimenti il claim OIDC continuerebbe a dire il nome vecchio. Si usa il
       // profilo APPENA riletto, non la closure: `patch` può contenere solo una delle
@@ -425,7 +413,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       .update({ deletion_requested_at: new Date().toISOString() })
       .eq('id', userId);
     if (error) return { error: error.message };
-    await loadProfile(userId);
+    await loadProfile(userId, true);
     return { error: null };
   }, [session, loadProfile]);
 
@@ -437,25 +425,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       .update({ deletion_requested_at: null })
       .eq('id', userId);
     if (error) return { error: error.message };
-    await loadProfile(userId);
+    await loadProfile(userId, true);
     return { error: null };
   }, [session, loadProfile]);
 
-  const getConsentHistory = useCallback(async (): Promise<
-    ConsentEvent[] | null
-  > => {
-    const userId = session?.user.id;
-    if (!userId) return [];
-    const { data, error } = await supabase
-      .from('consent_events')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-    // null = errore di fetch (rete/RLS): distinto da "nessun evento" ([]), per non
-    // attivare un falso re-consent né esportare una cronologia vuota su errore transient.
-    if (error) return null;
-    return (data as ConsentEvent[] | null) ?? [];
-  }, [session]);
+  const getConsentHistory = useCallback(
+    async (options?: {
+      throwOnError?: boolean;
+    }): Promise<ConsentEvent[] | null> => {
+      const userId = session?.user.id;
+      if (!userId) return [];
+      try {
+        const { data, error } = await supabase
+          .from('consent_events')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false });
+        // null = errore di fetch (rete/RLS): distinto da "nessun evento" ([]), per non
+        // attivare un falso re-consent né esportare una cronologia vuota su errore transient.
+        if (error) throw error;
+        return (data as ConsentEvent[] | null) ?? [];
+      } catch (error) {
+        if (options?.throwOnError) throw error;
+        return null;
+      }
+    },
+    [session]
+  );
 
   const exportData = useCallback(async () => {
     const user = session?.user;
@@ -470,7 +466,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // che dice che di lei non risulta nulla, mentre i suoi dati ci sono. Un
     // Art.20 incompleto e silenzioso è peggio di un errore visibile.
     if (!profileLoaded) throw new Error('profile_unavailable');
-    const consentHistory = await getConsentHistory();
+    const consentHistory = await getConsentHistory({ throwOnError: true });
     // Su errore di fetch (null) interrompiamo: meglio segnalare l'errore (lo cattura
     // handleExport) che esportare un GDPR Art.20 con cronologia consensi incompleta.
     if (consentHistory === null) throw new Error('consent_history_unavailable');
@@ -520,7 +516,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         .update({ marketing_consent: enabled })
         .eq('id', userId);
       if (cacheErr) return { error: cacheErr.message };
-      await loadProfile(userId);
+      await loadProfile(userId, true);
       return { error: null };
     },
     [session, loadProfile]
@@ -545,6 +541,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       session,
       profile,
       profileLoaded,
+      profileError,
+      confirmationRetryAt,
+      resendConfirmation,
       signIn,
       signUp,
       signOut,
@@ -572,6 +571,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       session,
       profile,
       profileLoaded,
+      profileError,
+      confirmationRetryAt,
+      resendConfirmation,
       signIn,
       signUp,
       signOut,

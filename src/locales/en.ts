@@ -98,6 +98,11 @@ export default {
   },
 
   auth: {
+    resend: {
+      submit: 'Resend confirmation',
+      sent: 'Request sent. Check your email inbox, including spam.',
+      wait: 'You can request another email in {{seconds}} s.',
+    },
     phoneField: {
       placeholder: 'Enter your phone number',
       numberHint: 'Enter the number without the international calling code',
@@ -174,7 +179,7 @@ export default {
       reset:
         'This password reset link has expired or was already used. Request a new one with “Forgot password?” on the sign-in screen.',
       confirm:
-        'This confirmation link has expired or was already used. If you already confirmed your email, just sign in. Otherwise write to info@riseagainsthunger.it and we will help you complete your registration.',
+        'This confirmation link has expired or was already used. If you already confirmed your email, just sign in. Otherwise open Profile and try signing in: below the “Email not confirmed yet” message, choose “Resend confirmation”.',
       emailChange:
         'This email change link has expired or was already used. Check your address in your profile and, if it has not changed, request the email change again.',
     },

@@ -3,6 +3,7 @@ import type { TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { useNicknameAvailability } from './useNicknameAvailability';
+import { useAuthError } from './useAuthError';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
@@ -66,7 +67,12 @@ export const useProfileForm = () => {
     nicknameTouched.current
   );
   const [errors, setErrors] = useState<ProfileErrors>({});
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    error: submitError,
+    setError: setSubmitError,
+    reportError,
+    offline,
+  } = useAuthError();
   const [loading, setLoading] = useState(false);
 
   // La mail su cui scriviamo alla persona è SEMPRE obbligatoria e sempre visibile
@@ -348,146 +354,150 @@ export const useProfileForm = () => {
     // dipende se `privacy_consent_at` viene (ri)scritta e se nel registro Art.7
     // finisce un «granted». Deciderlo su `profile === null` mentre la lettura è in
     // volo significa timbrare come nuovo un consenso vecchio.
-    // Limite dichiarato: una lettura fallita per rete è indistinguibile da
-    // «assente» (entrambe tornano null) → in quel caso si ricade sul ramo nascita,
-    // ma con la rete giù anche l'upsert fallisce e non si scrive nulla.
-    const current = profileLoaded ? profile : await refreshProfile();
-    const isNewProfile = !current;
-    // S10: upsert dei soli campi anagrafici. NON ri-stampiamo marketing_consent: la
-    // verità sta nel ledger consent_events; riscriverla a `false` qui azzererebbe un
-    // eventuale consenso marketing già concesso.
-    const nextProfile = {
-      id: userId,
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      phone: phone.trim(),
-      city: city.trim(),
-      // Provincia solo italiana: null per i paesi esteri (colonna nullable).
-      province: country === 'IT' ? province.trim() : null,
-      country: country.trim(),
-      birth_date: birthDate.trim(),
-      ...(isNewProfile ? { privacy_consent_at: new Date().toISOString() } : {}),
-      // Scritta SEMPRE: è la mail reale con cui riconosciamo la persona (anche
-      // nell'anagrafica importata dal partner) e con cui le scriviamo. Per gli
-      // account con mail già reale coincide con quella dell'account, e va bene:
-      // averla in colonna significa non dipendere dal provider di accesso.
-      contact_email: contactEmail.trim(),
-      // `'' → null`: la colonna ha il CHECK `nickname_forma` (2-30 caratteri), che una
-      // stringa vuota violerebbe — e il rifiuto porterebbe giù l'INTERO upsert, cioè
-      // anche i campi obbligatori. `null` è il modo in cui la colonna dice «non ne ho
-      // uno», ed è la risposta normale per chi il campo lo salta.
-      nickname: nickname.trim() || null,
-    };
-    // Il cancello del profilo e questo salvataggio giudicano con lo STESSO predicato,
-    // e qui lo si applica a ciò che si sta per SCRIVERE, non a ciò che c'è già. È la
-    // difesa contro il difetto che Riccardo ha nominato per primo — «che ricompaia ogni
-    // volta anche a chi l'aveva già fatto»: se un domani il cancello pretendesse un
-    // campo che questo form non raccoglie, senza questo controllo il salvataggio
-    // riuscirebbe e la persona si ritroverebbe di nuovo davanti al cancello, per
-    // sempre, senza sapere cosa manca. Meglio un errore leggibile PRIMA di scrivere:
-    // il dato non è ancora partito e la schermata resta quella giusta per aggiungerlo.
-    // La validazione del form NON basta a garantirlo: sono due elenchi di campi con due
-    // scopi (forma dei valori vs completezza del profilo), ed è la loro divergenza
-    // silenziosa il bug — per questo il controllo è qui e non solo nei test.
-    // RICONTROLLO FRESCO, come fa la registrazione (`useSignUpForm.ts:187-194`) e per lo
-    // stesso motivo: il verdetto che il form ha in mano arriva dopo 450 ms di attesa più il
-    // tempo di rete, quindi chi compila in fretta preme Salva mentre lo stato è ancora
-    // «sto controllando» — e il blocco poco sopra, che guarda solo `taken`, lo lascia
-    // passare. Senza questa domanda l'upsert parte, l'indice unico lo respinge e la persona
-    // legge «un attimo prima di te»: un messaggio FALSO (la corsa non c'è stata, l'app non
-    // aveva ancora chiesto) pagato con la perdita dell'INTERO modulo appena compilato.
-    // `null` = non verificabile e non ferma nessuno: resta il caso in cui la corsa persa è
-    // vera, ed è quello che il messaggio racconta bene.
-    // ⚠️ SOLO SE L'HA SCRITTO LA PERSONA, e questa riga è costata un test rosso: senza il
-    // flag, chi arriva col PROPRIO nickname già in colonna e non lo tocca si vede chiedere
-    // al server «è libero?» su un valore che è suo — la risposta è «occupato», vera e
-    // inutile, e il salvataggio si blocca addosso a chi non ha cambiato niente. È lo stesso
-    // guasto che il flag `toccato` chiude nel controllo mentre si scrive, ripresentato nel
-    // punto del salvataggio. Il gemello `useSignUpForm` non ha il problema perché in
-    // registrazione un nickname già proprio non esiste.
-    if (nicknameTouched.current && nickname.trim() !== '') {
-      const libero = await isNicknameAvailable(nickname);
-      if (libero === false) {
-        setLoading(false);
-        setErrors({ ...found, nickname: 'nickname_taken' });
+    // Una lettura fallita deve fermare il salvataggio: non equivale a un profilo
+    // assente e non autorizza a registrare un nuovo consenso.
+    try {
+      const current = profileLoaded
+        ? profile
+        : await refreshProfile({ throwOnError: true });
+      const isNewProfile = !current;
+      // S10: upsert dei soli campi anagrafici. NON ri-stampiamo marketing_consent: la
+      // verità sta nel ledger consent_events; riscriverla a `false` qui azzererebbe un
+      // eventuale consenso marketing già concesso.
+      const nextProfile = {
+        id: userId,
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone: phone.trim(),
+        city: city.trim(),
+        // Provincia solo italiana: null per i paesi esteri (colonna nullable).
+        province: country === 'IT' ? province.trim() : null,
+        country: country.trim(),
+        birth_date: birthDate.trim(),
+        ...(isNewProfile
+          ? { privacy_consent_at: new Date().toISOString() }
+          : {}),
+        // Scritta SEMPRE: è la mail reale con cui riconosciamo la persona (anche
+        // nell'anagrafica importata dal partner) e con cui le scriviamo. Per gli
+        // account con mail già reale coincide con quella dell'account, e va bene:
+        // averla in colonna significa non dipendere dal provider di accesso.
+        contact_email: contactEmail.trim(),
+        // `'' → null`: la colonna ha il CHECK `nickname_forma` (2-30 caratteri), che una
+        // stringa vuota violerebbe — e il rifiuto porterebbe giù l'INTERO upsert, cioè
+        // anche i campi obbligatori. `null` è il modo in cui la colonna dice «non ne ho
+        // uno», ed è la risposta normale per chi il campo lo salta.
+        nickname: nickname.trim() || null,
+      };
+      // Il cancello del profilo e questo salvataggio giudicano con lo STESSO predicato,
+      // e qui lo si applica a ciò che si sta per SCRIVERE, non a ciò che c'è già. È la
+      // difesa contro il difetto che Riccardo ha nominato per primo — «che ricompaia ogni
+      // volta anche a chi l'aveva già fatto»: se un domani il cancello pretendesse un
+      // campo che questo form non raccoglie, senza questo controllo il salvataggio
+      // riuscirebbe e la persona si ritroverebbe di nuovo davanti al cancello, per
+      // sempre, senza sapere cosa manca. Meglio un errore leggibile PRIMA di scrivere:
+      // il dato non è ancora partito e la schermata resta quella giusta per aggiungerlo.
+      // La validazione del form NON basta a garantirlo: sono due elenchi di campi con due
+      // scopi (forma dei valori vs completezza del profilo), ed è la loro divergenza
+      // silenziosa il bug — per questo il controllo è qui e non solo nei test.
+      // RICONTROLLO FRESCO, come fa la registrazione (`useSignUpForm.ts:187-194`) e per lo
+      // stesso motivo: il verdetto che il form ha in mano arriva dopo 450 ms di attesa più il
+      // tempo di rete, quindi chi compila in fretta preme Salva mentre lo stato è ancora
+      // «sto controllando» — e il blocco poco sopra, che guarda solo `taken`, lo lascia
+      // passare. Senza questa domanda l'upsert parte, l'indice unico lo respinge e la persona
+      // legge «un attimo prima di te»: un messaggio FALSO (la corsa non c'è stata, l'app non
+      // aveva ancora chiesto) pagato con la perdita dell'INTERO modulo appena compilato.
+      // `null` = non verificabile e non ferma nessuno: resta il caso in cui la corsa persa è
+      // vera, ed è quello che il messaggio racconta bene.
+      // ⚠️ SOLO SE L'HA SCRITTO LA PERSONA, e questa riga è costata un test rosso: senza il
+      // flag, chi arriva col PROPRIO nickname già in colonna e non lo tocca si vede chiedere
+      // al server «è libero?» su un valore che è suo — la risposta è «occupato», vera e
+      // inutile, e il salvataggio si blocca addosso a chi non ha cambiato niente. È lo stesso
+      // guasto che il flag `toccato` chiude nel controllo mentre si scrive, ripresentato nel
+      // punto del salvataggio. Il gemello `useSignUpForm` non ha il problema perché in
+      // registrazione un nickname già proprio non esiste.
+      if (nicknameTouched.current && nickname.trim() !== '') {
+        const libero = await isNicknameAvailable(nickname);
+        if (libero === false) {
+          setErrors({ ...found, nickname: 'nickname_taken' });
+          return;
+        }
+      }
+      const stillMissing = missingProfileFields(nextProfile);
+      if (stillMissing.length > 0) {
+        // I campi vanno NOMINATI, non riassunti in «compila tutto»: questo errore compare
+        // solo quando la validazione del form non ha segnalato niente — cioè la persona
+        // non vede nessun campo in rosso e, senza l'elenco, resterebbe davanti a una
+        // richiesta che non sa come soddisfare. È lo stesso principio delle vie d'uscita
+        // dal cancello: mai lasciare qualcuno bloccato senza dirgli cosa fare.
+        setSubmitError(
+          t('auth.errors.profileStillIncomplete', {
+            fields: stillMissing
+              .map(field => t(PROFILE_FIELD_LABELS[field]))
+              .join(', '),
+          })
+        );
         return;
       }
-    }
-    const stillMissing = missingProfileFields(nextProfile);
-    if (stillMissing.length > 0) {
-      setLoading(false);
-      // I campi vanno NOMINATI, non riassunti in «compila tutto»: questo errore compare
-      // solo quando la validazione del form non ha segnalato niente — cioè la persona
-      // non vede nessun campo in rosso e, senza l'elenco, resterebbe davanti a una
-      // richiesta che non sa come soddisfare. È lo stesso principio delle vie d'uscita
-      // dal cancello: mai lasciare qualcuno bloccato senza dirgli cosa fare.
-      setSubmitError(
-        t('auth.errors.profileStillIncomplete', {
-          fields: stillMissing
-            .map(field => t(PROFILE_FIELD_LABELS[field]))
-            .join(', '),
-        })
-      );
-      return;
-    }
-    const { error } = await supabase.from('profiles').upsert(nextProfile);
-    if (error) {
-      setLoading(false);
-      // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio qualcun
-      // altro ha preso lo stesso nickname. È raro, ma l'errore generico manderebbe la
-      // persona a ricontrollare nome, telefono e città mentre il campo da cambiare è
-      // uno solo — e glielo possiamo dire. Il messaggio va SUL CAMPO.
-      if (isNicknameConflict(error.message)) {
-        setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
-        // E si dice anche che NON È STATO SALVATO NIENTE: l'upsert è uno solo, quindi
-        // il rifiuto dell'indice porta giù tutto il resto del modulo. Senza, la persona
-        // uscirebbe da qui convinta che i suoi dati siano stati scritti.
-        setSubmitError(t('auth.edit.nothingSaved'));
+      const { error } = await supabase.from('profiles').upsert(nextProfile);
+      if (error) {
+        // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio qualcun
+        // altro ha preso lo stesso nickname. È raro, ma l'errore generico manderebbe la
+        // persona a ricontrollare nome, telefono e città mentre il campo da cambiare è
+        // uno solo — e glielo possiamo dire. Il messaggio va SUL CAMPO.
+        if (isNicknameConflict(error.message)) {
+          setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
+          // E si dice anche che NON È STATO SALVATO NIENTE: l'upsert è uno solo, quindi
+          // il rifiuto dell'indice porta giù tutto il resto del modulo. Senza, la persona
+          // uscirebbe da qui convinta che i suoi dati siano stati scritti.
+          setSubmitError(t('auth.edit.nothingSaved'));
+          return;
+        }
+        reportError(error);
         return;
       }
-      setSubmitError(t('auth.errors.generic'));
-      return;
-    }
-    // GDPR Art.7: il consenso si registra alla NASCITA del profilo (sessione attiva
-    // → RLS ok). Sul completamento no: c'è già, e un secondo «granted» falserebbe il
-    // registro.
-    const { error: consentError } = isNewProfile
-      ? await recordConsent('privacy_notice', 'granted')
-      : { error: null };
-    if (consentError) {
+      // GDPR Art.7: il consenso si registra alla NASCITA del profilo (sessione attiva
+      // → RLS ok). Sul completamento no: c'è già, e un secondo «granted» falserebbe il
+      // registro.
+      const { error: consentError } = isNewProfile
+        ? await recordConsent('privacy_notice', 'granted')
+        : { error: null };
+      if (consentError) {
+        reportError(consentError);
+        return;
+      }
+      // P1: proietta il nome su user_metadata.name, da cui il server auth costruisce il
+      // claim OIDC `name` per i partner. DOPO il consenso (Art.7 ha la priorità: non gli
+      // mettiamo davanti una chiamata di rete in più) e con i valori appena scritti.
+      await syncDisplayNameClaim(firstName, lastName);
+      // Stessa proiezione per il nickname → `user_metadata.preferred_username`, da cui il
+      // server auth costruisce il claim omonimo. Non solleva e non blocca: se fallisce, il
+      // profilo È salvato e si perde solo l'allineamento del claim.
+      // NB: **dalla 0020, viva in produzione dal 2026-07-31**, questa chiamata è una
+      // comodità e non la difesa — il claim lo derivano da `profiles` due trigger nel
+      // database, che riallineano subito dopo. Resta perché non fa danno e perché toglierla
+      // renderebbe il claim dipendente da un meccanismo solo invece che da due.
+      await syncNicknameClaim(nickname);
+      await refreshProfile({ throwOnError: true });
+      // 🔴 IL BOTTONE RESTA SPENTO FINO A QUI, e non è pignoleria sull'attesa.
+      // Prima `setLoading(false)` stava subito dopo il consenso, cioè PRIMA di tre chiamate
+      // di rete e della navigazione: il bottone si riabilitava mentre la schermata era ancora
+      // aperta, e un secondo tocco rientrava in `submit` con `profile` ancora `null` — perché
+      // `refreshProfile` non era tornato. Risultato: `isNewProfile` di nuovo vero, quindi un
+      // SECONDO «granted» nel registro Art.7 e `privacy_consent_at` spostato a adesso. Cioè
+      // esattamente il falso nel registro dei consensi che il commento più sopra dichiara
+      // inaccettabile — un consenso che risulta dato in un momento in cui non è avvenuto.
+      // Difetto PREESISTENTE, non introdotto qui: `syncNicknameClaim` ne ha solo allargato la
+      // finestra di una chiamata, ed è per questo che è saltato fuori adesso.
+      // Dietro il cancello questa è l'unica schermata dello stack: non c'è un «indietro»
+      // dove tornare, e l'app riappare da sé appena il profilo risulta completo (le rotte
+      // normali rientrano nell'albero). Chiamare `goBack` a vuoto non romperebbe nulla, ma
+      // dichiarare la condizione dice quale dei due percorsi si sta chiudendo.
+      if (navigation.canGoBack()) navigation.goBack();
+    } catch (error) {
+      reportError(error);
+    } finally {
       setLoading(false);
-      setSubmitError(t('auth.errors.generic'));
-      return;
     }
-    // P1: proietta il nome su user_metadata.name, da cui il server auth costruisce il
-    // claim OIDC `name` per i partner. DOPO il consenso (Art.7 ha la priorità: non gli
-    // mettiamo davanti una chiamata di rete in più) e con i valori appena scritti.
-    await syncDisplayNameClaim(firstName, lastName);
-    // Stessa proiezione per il nickname → `user_metadata.preferred_username`, da cui il
-    // server auth costruisce il claim omonimo. Non solleva e non blocca: se fallisce, il
-    // profilo È salvato e si perde solo l'allineamento del claim.
-    // NB: **dalla 0020, viva in produzione dal 2026-07-31**, questa chiamata è una
-    // comodità e non la difesa — il claim lo derivano da `profiles` due trigger nel
-    // database, che riallineano subito dopo. Resta perché non fa danno e perché toglierla
-    // renderebbe il claim dipendente da un meccanismo solo invece che da due.
-    await syncNicknameClaim(nickname);
-    await refreshProfile();
-    // 🔴 IL BOTTONE RESTA SPENTO FINO A QUI, e non è pignoleria sull'attesa.
-    // Prima `setLoading(false)` stava subito dopo il consenso, cioè PRIMA di tre chiamate
-    // di rete e della navigazione: il bottone si riabilitava mentre la schermata era ancora
-    // aperta, e un secondo tocco rientrava in `submit` con `profile` ancora `null` — perché
-    // `refreshProfile` non era tornato. Risultato: `isNewProfile` di nuovo vero, quindi un
-    // SECONDO «granted» nel registro Art.7 e `privacy_consent_at` spostato a adesso. Cioè
-    // esattamente il falso nel registro dei consensi che il commento più sopra dichiara
-    // inaccettabile — un consenso che risulta dato in un momento in cui non è avvenuto.
-    // Difetto PREESISTENTE, non introdotto qui: `syncNicknameClaim` ne ha solo allargato la
-    // finestra di una chiamata, ed è per questo che è saltato fuori adesso.
-    setLoading(false);
-    // Dietro il cancello questa è l'unica schermata dello stack: non c'è un «indietro»
-    // dove tornare, e l'app riappare da sé appena il profilo risulta completo (le rotte
-    // normali rientrano nell'albero). Chiamare `goBack` a vuoto non romperebbe nulla, ma
-    // dichiarare la condizione dice quale dei due percorsi si sta chiudendo.
-    if (navigation.canGoBack()) navigation.goBack();
   }, [
     firstName,
     lastName,
@@ -513,12 +523,18 @@ export const useProfileForm = () => {
     refreshProfile,
     recordConsent,
     navigation,
+    reportError,
+    setSubmitError,
     t,
   ]);
 
   const handleSubmit = useCallback((): void => {
     void submit();
   }, [submit]);
+
+  const clearSubmitError = useCallback((): void => {
+    setSubmitError(null);
+  }, [setSubmitError]);
 
   return {
     values: {
@@ -545,7 +561,9 @@ export const useProfileForm = () => {
     selectComune,
     togglePrivacy,
     submitError,
+    offline,
     loading,
     handleSubmit,
+    clearSubmitError,
   };
 };

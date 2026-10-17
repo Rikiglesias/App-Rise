@@ -3,13 +3,12 @@ import type { TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { useNicknameAvailability } from './useNicknameAvailability';
-import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useAuthError } from './useAuthError';
 import { useAuth } from '@/shared/auth/AuthContext';
 import {
   validateSignUpForm,
   type SignUpErrors,
 } from '@/shared/auth/validation';
-import { mapAuthError } from '@/shared/auth/authErrors';
 import { isNicknameAvailable } from '@/shared/auth/nickname';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
@@ -18,7 +17,6 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  * campo→campo e handler stabili (no arrow inline nei prop JSX). La vista resta pura.
  */
 export const useSignUpForm = () => {
-  const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { signUp } = useAuth();
 
@@ -42,7 +40,12 @@ export const useSignUpForm = () => {
   // vista perché il submit deve poterla consultare: è la stessa informazione che si
   // mostra sotto il campo e che decide se lasciar partire la registrazione.
   const nicknameCheck = useNicknameAvailability(nickname);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    error: submitError,
+    setError: setSubmitError,
+    reportError,
+    offline,
+  } = useAuthError();
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -209,10 +212,10 @@ export const useSignUpForm = () => {
         // vuota sarebbe rumore nei metadata — che sono superficie visibile al partner.
         nickname: nickname.trim(),
       });
-      if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      if (error) reportError(error);
       else setDone(true);
     } catch (error) {
-      setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      reportError(error);
     } finally {
       setLoading(false);
     }
@@ -232,7 +235,8 @@ export const useSignUpForm = () => {
     nickname,
     nicknameCheck,
     signUp,
-    t,
+    setSubmitError,
+    reportError,
   ]);
 
   const handleSubmit = useCallback((): void => {
@@ -274,6 +278,7 @@ export const useSignUpForm = () => {
     togglePrivacy,
     toggleMarketing,
     submitError,
+    offline,
     loading,
     done,
     handleSubmit,

@@ -31,7 +31,8 @@ export const mapAuthError = (error: unknown): string => {
   )
     return 'weak_password';
   if (m.includes('invalid login credentials')) return 'invalid_credentials';
-  if (m.includes('email not confirmed')) return 'email_not_confirmed';
+  if (code === 'email_not_confirmed' || m.includes('email not confirmed'))
+    return 'email_not_confirmed';
   if (
     m.includes('already registered') ||
     m.includes('already been registered') ||
@@ -39,12 +40,19 @@ export const mapAuthError = (error: unknown): string => {
   ) {
     return 'already_registered';
   }
-  if (m.includes('rate limit') || m.includes('too many requests')) {
+  if (
+    code === 'over_email_send_rate_limit' ||
+    code === 'over_request_rate_limit' ||
+    m.includes('rate limit') ||
+    m.includes('too many requests')
+  ) {
     return 'rate_limited';
   }
   // fetch fallita senza risposta (supabase-js la rilancia col messaggio originale):
   // React Native, Chrome, Safari, Firefox.
   if (
+    name === 'FunctionsFetchError' ||
+    m === 'failed to send a request to the edge function' ||
     m.includes('network request failed') ||
     m.includes('network request timed out') ||
     m.includes('failed to fetch') ||

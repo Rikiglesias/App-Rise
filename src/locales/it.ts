@@ -99,6 +99,11 @@ export default {
   },
 
   auth: {
+    resend: {
+      submit: 'Invia di nuovo la conferma',
+      sent: 'Richiesta inviata. Controlla la tua casella email, anche nello spam.',
+      wait: 'Puoi chiedere un nuovo invio tra {{seconds}} s.',
+    },
     phoneField: {
       placeholder: 'Inserisci il numero di telefono',
       numberHint: 'Inserisci il numero senza il prefisso internazionale',
@@ -180,7 +185,7 @@ export default {
       reset:
         'Il link per reimpostare la password è scaduto o è già stato usato. Chiedine uno nuovo con «Password dimenticata?» nella schermata di accesso.',
       confirm:
-        'Il link di conferma è scaduto o è già stato usato. Se hai già confermato l’email, accedi pure. Altrimenti scrivici a info@riseagainsthunger.it e ti aiutiamo a completare la registrazione.',
+        'Il link di conferma è scaduto o è già stato usato. Se hai già confermato l’email, accedi pure. Altrimenti apri Profilo e prova ad accedere: sotto l’avviso «Email non ancora confermata» puoi scegliere «Invia di nuovo la conferma».',
       emailChange:
         'Il link per cambiare email è scaduto o è già stato usato. Controlla il tuo indirizzo nel profilo e, se non è aggiornato, richiedi di nuovo il cambio email.',
     },
