@@ -7,6 +7,7 @@ import { useAuthError } from './useAuthError';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { supabase } from '@/shared/auth/supabaseClient';
+import { registraEsitoAccount } from '@/shared/auth/registraErroreAccount';
 import {
   validateProfileForm,
   type ProfileErrors,
@@ -72,7 +73,7 @@ export const useProfileForm = () => {
     setError: setSubmitError,
     reportError,
     offline,
-  } = useAuthError();
+  } = useAuthError('auth.errors.generic', 'CompletaProfilo');
   const [loading, setLoading] = useState(false);
 
   // La mail su cui scriviamo alla persona è SEMPRE obbligatoria e sempre visibile
@@ -438,7 +439,9 @@ export const useProfileForm = () => {
         );
         return;
       }
-      const { error } = await supabase.from('profiles').upsert(nextProfile);
+      const { error } = await registraEsitoAccount('CompletaProfilo', () =>
+        supabase.from('profiles').upsert(nextProfile)
+      );
       if (error) {
         // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio qualcun
         // altro ha preso lo stesso nickname. È raro, ma l'errore generico manderebbe la

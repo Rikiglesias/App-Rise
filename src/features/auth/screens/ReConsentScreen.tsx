@@ -34,7 +34,8 @@ export const ReConsentScreen: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const { error, setError, reportError, offline } = useAuthError(
-    'auth.consents.error'
+    'auth.consents.error',
+    'RiConsenso'
   );
   const [logoutLoading, setLogoutLoading] = useState(false);
   const {
