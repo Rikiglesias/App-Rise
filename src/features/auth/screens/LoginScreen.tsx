@@ -5,13 +5,15 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { ConfirmationResend } from '../components/ConfirmationResend';
+import { AuthRetry } from '../components/AuthRetry';
+import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validateEmail, validateRequired } from '@/shared/auth/validation';
-import { mapAuthError } from '@/shared/auth/authErrors';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const LoginScreen: React.FC = () => {
@@ -24,7 +26,14 @@ export const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailErr, setEmailErr] = useState<string | undefined>();
   const [pwdErr, setPwdErr] = useState<string | undefined>();
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    error: submitError,
+    setError: setSubmitError,
+    reportError,
+    offline,
+    errorKey,
+  } = useAuthError();
+  const [confirmationEmail, setConfirmationEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
   const passwordRef = useRef<TextInput>(null);
@@ -51,17 +60,18 @@ export const LoginScreen: React.FC = () => {
     if (e || p) return;
 
     setLoading(true);
+    setConfirmationEmail(email.trim());
     try {
       const { error } = await signIn(email.trim(), password);
       // Post-login non si naviga: il cambio di status nell'AuthContext
       // ri-renderizza ProfileScreen verso il profilo da solo.
-      if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      if (error) reportError(error);
     } catch (error) {
-      setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      reportError(error);
     } finally {
       setLoading(false);
     }
-  }, [email, password, signIn, t]);
+  }, [email, password, signIn, t, setSubmitError, reportError]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();
@@ -118,6 +128,11 @@ export const LoginScreen: React.FC = () => {
         onPress={handleSubmit}
         loading={loading}
       />
+      <AuthRetry visible={offline} onPress={handleSubmit} loading={loading} />
+      {errorKey === 'email_not_confirmed' &&
+      confirmationEmail === email.trim() ? (
+        <ConfirmationResend key={confirmationEmail} email={confirmationEmail} />
+      ) : null}
       {/* "Password dimenticata?" = rimando minore (link grigio tenue). "Crea un
           account" = bottone outline (secondary): vuoto col bordo, così è un'azione
           chiara ma visibilmente diversa da "Accedi" (pieno), non un link minuscolo. */}

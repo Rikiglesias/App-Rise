@@ -13,6 +13,8 @@ import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
+import { AuthRetry } from '../components/AuthRetry';
+import { useAuthError } from '../hooks/useAuthError';
 import {
   useNicknameAvailability,
   useNicknameHint,
@@ -59,7 +61,14 @@ export const ProfileEditScreen: React.FC = () => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
-  const { profile, session, updateProfile, updateEmail } = useAuth();
+  const {
+    profile,
+    profileError,
+    refreshProfile,
+    session,
+    updateProfile,
+    updateEmail,
+  } = useAuth();
 
   const currentEmail = session?.user.email ?? '';
   // S8: secure email change → Supabase popola user.new_email finché il cambio non è
@@ -86,7 +95,10 @@ export const ProfileEditScreen: React.FC = () => {
   // salvataggio, sotto. Senza, chi ha appena letto «già di qualcun altro» potrebbe
   // salvare lo stesso e riceverebbe il messaggio della CORSA PERSA («un attimo prima di
   // te») — falso, perché l'app lo sapeva da secondi.
-  const nicknameCheck = useNicknameAvailability(nickname);
+  const nicknameCheck = useNicknameAvailability(
+    nickname,
+    nickname.trim() !== (profile?.nickname ?? '')
+  );
   const nicknameHint = useNicknameHint(nicknameCheck);
   // La mail di contatto si mostra e si rettifica per TUTTI dal 2026-07-25 (era
   // solo per gli account Apple Private Relay, F1.10). `isRelay` sopravvive per
@@ -134,7 +146,12 @@ export const ProfileEditScreen: React.FC = () => {
     setContactEmail(value);
   }, []);
   const [errors, setErrors] = useState<Errors>({});
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    error: submitError,
+    setError: setSubmitError,
+    reportError,
+    offline,
+  } = useAuthError('auth.edit.error');
   const [success, setSuccess] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -145,6 +162,20 @@ export const ProfileEditScreen: React.FC = () => {
   const onSubmit = useCallback(async (): Promise<void> => {
     setSubmitError(null);
     setSuccess(false);
+    // Dopo un write riuscito la rilettura può fallire: recupera prima la fonte,
+    // così nickname già proprio e cambio email pendente restano distinguibili.
+    let currentProfile = profile;
+    if (profileError) {
+      setLoading(true);
+      try {
+        currentProfile = await refreshProfile({ throwOnError: true });
+      } catch (error) {
+        reportError(error);
+        return;
+      } finally {
+        setLoading(false);
+      }
+    }
     const e: Errors = {};
     if (validateRequired(firstName)) e.firstName = 'required';
     if (validateRequired(lastName)) e.lastName = 'required';
@@ -167,7 +198,7 @@ export const ProfileEditScreen: React.FC = () => {
     // sollecito del profilo (`missingProfileFields`), che non blocca nulla.
     // Chi invece la colonna ce l'ha non può SVUOTARLA: sarebbe perdere la chiave con
     // cui riconosciamo la persona nell'anagrafica importata dal partner.
-    const hadContactEmail = Boolean(profile?.contact_email?.trim());
+    const hadContactEmail = Boolean(currentProfile?.contact_email?.trim());
     const ce =
       hadContactEmail || contactEmail.trim()
         ? validateContactEmail(contactEmail)
@@ -183,79 +214,86 @@ export const ProfileEditScreen: React.FC = () => {
     // registrazione (`useSignUpForm`). Senza, il salvataggio partirebbe, l'indice lo
     // respingerebbe e la persona leggerebbe il messaggio della corsa persa («un attimo
     // prima di te»): falso, perché lo sapevamo da secondi. `unknown` non ferma nessuno.
-    else if (nicknameCheck === 'taken') e.nickname = 'nickname_taken';
+    else if (
+      nicknameCheck === 'taken' &&
+      nickname.trim() !== (currentProfile?.nickname ?? '')
+    )
+      e.nickname = 'nickname_taken';
     setErrors(e);
     if (Object.keys(e).length > 0) return;
 
     setLoading(true);
     // Solo i campi effettivamente cambiati (whitelist a valle in updateProfile).
     const changed: Partial<ProfileEditable> = {};
-    if (firstName.trim() !== profile?.first_name)
+    if (firstName.trim() !== currentProfile?.first_name)
       changed.first_name = firstName.trim();
-    if (lastName.trim() !== profile?.last_name)
+    if (lastName.trim() !== currentProfile?.last_name)
       changed.last_name = lastName.trim();
-    if (phone.trim() !== profile?.phone) changed.phone = phone.trim();
-    if (country.trim() !== (profile?.country ?? 'IT'))
+    if (phone.trim() !== currentProfile?.phone) changed.phone = phone.trim();
+    if (country.trim() !== (currentProfile?.country ?? 'IT'))
       changed.country = country.trim();
-    if (city.trim() !== profile?.city) changed.city = city.trim();
+    if (city.trim() !== currentProfile?.city) changed.city = city.trim();
     // Provincia solo italiana: per i paesi esteri si azzera.
     const nextProvince = country === 'IT' ? province.trim() : '';
-    if (nextProvince !== (profile?.province ?? ''))
+    if (nextProvince !== (currentProfile?.province ?? ''))
       changed.province = nextProvince;
-    if (birthDate.trim() !== profile?.birth_date)
+    if (birthDate.trim() !== currentProfile?.birth_date)
       changed.birth_date = birthDate.trim();
     // La mail di contatto entra nel patch se è cambiata, per QUALSIASI account:
     // condizionarla al relay (com'era) significherebbe validarla a tutti e salvarla
     // solo a qualcuno — la modifica passerebbe il controllo e non verrebbe scritta,
     // in silenzio.
-    if (contactEmail.trim() !== (profile?.contact_email ?? ''))
+    if (contactEmail.trim() !== (currentProfile?.contact_email ?? ''))
       changed.contact_email = contactEmail.trim();
     // Il confronto è fra valori TRIMMATI da entrambi i lati: `updateProfile` scrive
     // `trim() || null`, quindi senza il trim qui un nickname a cui la persona ha solo
     // aggiunto uno spazio entrerebbe nel patch e produrrebbe una scrittura identica a
     // quella già in colonna.
-    if (nickname.trim() !== (profile?.nickname ?? ''))
+    if (nickname.trim() !== (currentProfile?.nickname ?? ''))
       changed.nickname = nickname.trim();
 
-    if (Object.keys(changed).length > 0) {
-      const { error } = await updateProfile(changed);
-      if (error) {
-        setLoading(false);
-        // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio,
-        // qualcun altro ha preso lo stesso nickname. È raro, ma il modo peggiore di
-        // gestirlo è l'errore generico «impossibile salvare»: manderebbe la persona a
-        // ricontrollare nome, telefono e città, mentre il campo da cambiare è uno solo
-        // e glielo possiamo dire. Il messaggio va SUL CAMPO, non in fondo alla pagina.
-        if (isNicknameConflict(error)) {
-          setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
-          // E si dice anche che NON È STATO SALVATO NIENTE: `updateProfile` fa un solo
-          // `update` con tutti i campi cambiati, quindi il rifiuto dell'indice porta giù
-          // anche il cognome corretto e il telefono nuovo. Col solo errore sotto il
-          // campo nickname, la persona uscirebbe da qui convinta che il resto sia stato
-          // scritto — e se ne accorgerebbe settimane dopo, o mai.
-          setSubmitError(t('auth.edit.nothingSaved'));
+    try {
+      if (Object.keys(changed).length > 0) {
+        const { error } = await updateProfile(changed);
+        if (error) {
+          // LA CORSA PERSA: fra il controllo di disponibilità e questo salvataggio,
+          // qualcun altro ha preso lo stesso nickname. È raro, ma il modo peggiore di
+          // gestirlo è l'errore generico «impossibile salvare»: manderebbe la persona a
+          // ricontrollare nome, telefono e città, mentre il campo da cambiare è uno solo
+          // e glielo possiamo dire. Il messaggio va SUL CAMPO, non in fondo alla pagina.
+          if (isNicknameConflict(error)) {
+            setErrors(prev => ({ ...prev, nickname: 'nickname_taken_race' }));
+            // E si dice anche che NON È STATO SALVATO NIENTE: `updateProfile` fa un solo
+            // `update` con tutti i campi cambiati, quindi il rifiuto dell'indice porta giù
+            // anche il cognome corretto e il telefono nuovo. Col solo errore sotto il
+            // campo nickname, la persona uscirebbe da qui convinta che il resto sia stato
+            // scritto — e se ne accorgerebbe settimane dopo, o mai.
+            setSubmitError(t('auth.edit.nothingSaved'));
+            return;
+          }
+          reportError(error);
           return;
         }
-        setSubmitError(t('auth.edit.error'));
-        return;
       }
-    }
 
-    const nextEmail = email.trim();
-    let didChangeEmail = false;
-    if (nextEmail !== currentEmail) {
-      const { error } = await updateEmail(nextEmail);
-      if (error) {
-        setLoading(false);
-        setSubmitError(t('auth.edit.error'));
-        return;
+      const nextEmail = email.trim();
+      let didChangeEmail = false;
+      if (nextEmail !== currentEmail) {
+        const { error } = await updateEmail(nextEmail);
+        if (error) {
+          reportError(error);
+          return;
+        }
+        didChangeEmail = true;
       }
-      didChangeEmail = true;
-    }
 
-    setLoading(false);
-    setEmailChanged(didChangeEmail);
-    setSuccess(true);
+      setEmailChanged(didChangeEmail);
+      setSuccess(true);
+    } catch (error) {
+      reportError(error);
+    } finally {
+      setLoading(false);
+    }
   }, [
     firstName,
     lastName,
@@ -275,9 +313,13 @@ export const ProfileEditScreen: React.FC = () => {
     // `isRelay` fuori: la validazione e il patch della mail non lo consultano più
     // (resta solo per scegliere il placeholder).
     profile,
+    profileError,
+    refreshProfile,
     currentEmail,
     updateProfile,
     updateEmail,
+    reportError,
+    setSubmitError,
     t,
   ]);
 
@@ -430,6 +472,7 @@ export const ProfileEditScreen: React.FC = () => {
         onPress={handleSubmit}
         loading={loading}
       />
+      <AuthRetry visible={offline} onPress={handleSubmit} loading={loading} />
     </AuthScreen>
   );
 };

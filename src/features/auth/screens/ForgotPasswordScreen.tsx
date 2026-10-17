@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { AuthRetry } from '../components/AuthRetry';
+import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -13,7 +15,6 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validateEmail } from '@/shared/auth/validation';
-import { mapAuthError } from '@/shared/auth/authErrors';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const ForgotPasswordScreen: React.FC = () => {
@@ -27,7 +28,12 @@ export const ForgotPasswordScreen: React.FC = () => {
   const [emailErr, setEmailErr] = useState<string | undefined>();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    error: submitError,
+    setError: setSubmitError,
+    reportError,
+    offline,
+  } = useAuthError('auth.forgot.error');
 
   const onSubmit = useCallback(async (): Promise<void> => {
     setSubmitError(null);
@@ -40,18 +46,11 @@ export const ForgotPasswordScreen: React.FC = () => {
       if (error) throw error;
       setSent(true);
     } catch (error) {
-      const errorKey = mapAuthError(error);
-      setSubmitError(
-        t(
-          errorKey === 'generic'
-            ? 'auth.forgot.error'
-            : `auth.errors.${errorKey}`
-        )
-      );
+      reportError(error);
     } finally {
       setLoading(false);
     }
-  }, [email, resetPassword, t]);
+  }, [email, resetPassword, t, setSubmitError, reportError]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();
@@ -93,6 +92,11 @@ export const ForgotPasswordScreen: React.FC = () => {
           ) : null}
           <AuthButton
             label={t('auth.forgot.submit')}
+            onPress={handleSubmit}
+            loading={loading}
+          />
+          <AuthRetry
+            visible={offline}
             onPress={handleSubmit}
             loading={loading}
           />

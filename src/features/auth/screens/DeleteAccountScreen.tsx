@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { AuthRetry } from '../components/AuthRetry';
+import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -34,10 +36,13 @@ export const DeleteAccountScreen: React.FC = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | undefined>();
+  const { error, setError, reportError, offline } =
+    useAuthError('auth.delete.error');
+  const [retryAction, setRetryAction] = useState<'now' | 'scheduled'>('now');
 
   const runDeleteNow = useCallback(async (): Promise<void> => {
     setError(undefined);
+    setRetryAction('now');
     setLoading(true);
     // Nessun passaggio intermedio: con il login social rimosso non esiste più il
     // re-login Apple che serviva a ottenere l'authorizationCode per la revoca.
@@ -51,15 +56,15 @@ export const DeleteAccountScreen: React.FC = () => {
     let esito: Awaited<ReturnType<typeof deleteAccountNow>> | null = null;
     try {
       esito = await deleteAccountNow();
-    } catch {
-      setError(t('auth.delete.error'));
+    } catch (error) {
+      reportError(error);
       return;
     } finally {
       setLoading(false);
     }
     const { error: err, sessioneAncoraSulDispositivo } = esito;
     if (err) {
-      setError(t('auth.delete.error'));
+      reportError(err);
       return;
     }
     // Su successo l'AuthContext porta lo stato a unauthenticated (signOut).
@@ -69,25 +74,26 @@ export const DeleteAccountScreen: React.FC = () => {
     // avrebbe modo di capire perché. Non è un errore della cancellazione — infatti
     // il messaggio è diverso da quello di fallimento.
     if (sessioneAncoraSulDispositivo) setError(t('auth.delete.sessionResidua'));
-  }, [deleteAccountNow, t]);
+  }, [deleteAccountNow, reportError, setError, t]);
 
   const runSchedule = useCallback(async (): Promise<void> => {
     setError(undefined);
+    setRetryAction('scheduled');
     setLoading(true);
     // Stesso motivo del gemello qui sopra: se la promessa rigetta, senza il
     // `finally` la rotella resterebbe a girare senza dire niente.
     let err: string | null = null;
     try {
       ({ error: err } = await scheduleDeletion());
-    } catch {
-      setError(t('auth.delete.error'));
+    } catch (error) {
+      reportError(error);
       return;
     } finally {
       setLoading(false);
     }
-    if (err) setError(t('auth.delete.error'));
+    if (err) reportError(err);
     else navigation.goBack();
-  }, [scheduleDeletion, navigation, t]);
+  }, [scheduleDeletion, navigation, reportError, setError]);
 
   const goBack = useCallback((): void => navigation.goBack(), [navigation]);
 
@@ -152,6 +158,11 @@ export const DeleteAccountScreen: React.FC = () => {
           {error}
         </PerfectText>
       ) : null}
+      <AuthRetry
+        visible={offline}
+        onPress={retryAction === 'now' ? confirmNow : confirmSchedule}
+        loading={loading}
+      />
     </AuthScreen>
   );
 };

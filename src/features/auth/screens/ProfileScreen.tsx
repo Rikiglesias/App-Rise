@@ -5,6 +5,8 @@ import { getCountryByCca2, type ICountryCca2 } from 'rn-country-select';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { AuthRetry } from '../components/AuthRetry';
+import { useAuthError } from '../hooks/useAuthError';
 import { LoginScreen } from './LoginScreen';
 import { ReConsentScreen } from './ReConsentScreen';
 import { PerfectText } from '@/components/ui';
@@ -36,6 +38,8 @@ export const ProfileScreen: React.FC = () => {
     session,
     profile,
     profileLoaded,
+    profileError,
+    refreshProfile,
     signOut,
     exportData,
     cancelScheduledDeletion,
@@ -44,9 +48,25 @@ export const ProfileScreen: React.FC = () => {
   } = useAuth();
   const navigation = useNavigation<RootStackNavigationProp>();
 
-  const [exportError, setExportError] = useState<string | undefined>();
-  const [consentError, setConsentError] = useState<string | undefined>();
-  const [logoutError, setLogoutError] = useState<string | undefined>();
+  const {
+    error: exportError,
+    setError: setExportError,
+    reportError: reportExport,
+    offline: exportOffline,
+  } = useAuthError('auth.privacy.exportError');
+  const {
+    error: consentError,
+    setError: setConsentError,
+    reportError: reportConsent,
+    offline: consentOffline,
+  } = useAuthError('auth.consents.error');
+  const {
+    error: logoutError,
+    setError: setLogoutError,
+    reportError: reportLogout,
+    offline: logoutOffline,
+  } = useAuthError('auth.profile.logoutError');
+  const [reloading, setReloading] = useState(false);
 
   // Se l'uscita fallisce la persona RESTA dentro l'account: tacere qui significa
   // lasciarle credere di essere uscita, che su un telefono condiviso è la bugia
@@ -61,10 +81,10 @@ export const ProfileScreen: React.FC = () => {
     setLogoutError(undefined);
     void signOut()
       .then(({ error }) => {
-        if (error) setLogoutError(t('auth.profile.logoutError'));
+        if (error) reportLogout(error);
       })
-      .catch(() => setLogoutError(t('auth.profile.logoutError')));
-  }, [signOut, t]);
+      .catch(reportLogout);
+  }, [signOut, setLogoutError, reportLogout]);
   const handleCompleteProfile = useCallback(
     (): void => navigation.navigate('CompleteProfile'),
     [navigation]
@@ -75,10 +95,8 @@ export const ProfileScreen: React.FC = () => {
   );
   const handleExport = useCallback((): void => {
     setExportError(undefined);
-    void exportData().catch(() =>
-      setExportError(t('auth.privacy.exportError'))
-    );
-  }, [exportData, t]);
+    void exportData().catch(reportExport);
+  }, [exportData, setExportError, reportExport]);
   const handleDelete = useCallback(
     (): void => navigation.navigate('DeleteAccount'),
     [navigation]
@@ -88,17 +106,20 @@ export const ProfileScreen: React.FC = () => {
   // profilo — la persona resterebbe convinta di aver fermato la cancellazione del
   // proprio account mentre non l'ha fermata. Il `.catch` copre il rigetto della
   // promessa, non solo l'errore restituito.
-  const [deletionCancelError, setDeletionCancelError] = useState<
-    string | undefined
-  >();
+  const {
+    error: deletionCancelError,
+    setError: setDeletionCancelError,
+    reportError: reportCancel,
+    offline: cancelOffline,
+  } = useAuthError('auth.delete.error');
   const handleCancelDeletion = useCallback((): void => {
     setDeletionCancelError(undefined);
     void cancelScheduledDeletion()
       .then(({ error }) => {
-        if (error) setDeletionCancelError(t('auth.delete.error'));
+        if (error) reportCancel(error);
       })
-      .catch(() => setDeletionCancelError(t('auth.delete.error')));
-  }, [cancelScheduledDeletion, t]);
+      .catch(reportCancel);
+  }, [cancelScheduledDeletion, setDeletionCancelError, reportCancel]);
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
       setConsentError(undefined);
@@ -107,12 +128,29 @@ export const ProfileScreen: React.FC = () => {
       // l'interruttore resterebbe altrimenti convinto di averlo cambiato.
       void setMarketingConsent(value)
         .then(r => {
-          if (r.error) setConsentError(t('auth.consents.error'));
+          if (r.error) reportConsent(r.error);
         })
-        .catch(() => setConsentError(t('auth.consents.error')));
+        .catch(reportConsent);
     },
-    [setMarketingConsent, t]
+    [setMarketingConsent, setConsentError, reportConsent]
   );
+
+  const handleReload = useCallback((): void => {
+    if (reloading) return;
+    setReloading(true);
+    setExportError(null);
+    setConsentError(null);
+    setLogoutError(null);
+    setDeletionCancelError(null);
+    void refreshProfile().finally(() => setReloading(false));
+  }, [
+    refreshProfile,
+    reloading,
+    setExportError,
+    setConsentError,
+    setLogoutError,
+    setDeletionCancelError,
+  ]);
 
   if (status === 'loading') {
     return (
@@ -170,6 +208,22 @@ export const ProfileScreen: React.FC = () => {
 
   return (
     <AuthScreen title={t('auth.profile.title')}>
+      {profileError ? (
+        <PerfectText size={14} lines={3} immunity style={styles.error}>
+          {t(`auth.errors.${profileError}`)}
+        </PerfectText>
+      ) : null}
+      <AuthRetry
+        visible={
+          profileError === 'network' ||
+          exportOffline ||
+          consentOffline ||
+          logoutOffline ||
+          cancelOffline
+        }
+        onPress={handleReload}
+        loading={reloading}
+      />
       {/* Anche il banner sta dietro la costante, non solo il pulsante che avvia la
           programmazione: finché nessuno esegue l'eliminazione differita, questa è
           l'ultima riga dell'app che continuerebbe a dire «eliminazione programmata

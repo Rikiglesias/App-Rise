@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { AuthRetry } from '../components/AuthRetry';
+import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -13,7 +15,6 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { validatePassword } from '@/shared/auth/validation';
-import { mapAuthError } from '@/shared/auth/authErrors';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 /**
@@ -32,7 +33,12 @@ export const ResetPasswordScreen: React.FC = () => {
   const [confirm, setConfirm] = useState('');
   const [pwdErr, setPwdErr] = useState<string | undefined>();
   const [confirmErr, setConfirmErr] = useState<string | undefined>();
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    error: submitError,
+    setError: setSubmitError,
+    reportError,
+    offline,
+  } = useAuthError();
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -47,14 +53,14 @@ export const ResetPasswordScreen: React.FC = () => {
     setLoading(true);
     try {
       const { error } = await updatePassword(password);
-      if (error) setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      if (error) reportError(error);
       else setDone(true);
     } catch (error) {
-      setSubmitError(t(`auth.errors.${mapAuthError(error)}`));
+      reportError(error);
     } finally {
       setLoading(false);
     }
-  }, [password, confirm, updatePassword, t]);
+  }, [password, confirm, updatePassword, t, setSubmitError, reportError]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();
@@ -131,6 +137,11 @@ export const ResetPasswordScreen: React.FC = () => {
           ) : null}
           <AuthButton
             label={t('auth.reset.submit')}
+            onPress={handleSubmit}
+            loading={loading}
+          />
+          <AuthRetry
+            visible={offline}
             onPress={handleSubmit}
             loading={loading}
           />

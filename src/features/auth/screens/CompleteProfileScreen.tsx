@@ -9,9 +9,11 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { AuthRetry } from '../components/AuthRetry';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useProfileForm } from '../hooks/useProfileForm';
+import { useAuthError } from '../hooks/useAuthError';
 import { useNicknameHint } from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
@@ -41,7 +43,8 @@ export const CompleteProfileScreen: React.FC = () => {
   const styles = useMemo(() => createStyles(), []);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { profile, profileLoaded, signOut } = useAuth();
+  const { profile, profileLoaded, profileError, refreshProfile, signOut } =
+    useAuth();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useProfileForm();
   // Disponibilità del nickname mentre si scrive (0018): senza, chi ne sceglie uno già
@@ -53,7 +56,34 @@ export const CompleteProfileScreen: React.FC = () => {
     getProfileCompletion(profile, profileLoaded)
   );
 
-  const [logoutError, setLogoutError] = useState<string | undefined>();
+  const {
+    error: logoutError,
+    setError: setLogoutError,
+    reportError: reportLogoutError,
+    offline: logoutOffline,
+  } = useAuthError('auth.profile.logoutError');
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const {
+    error: profileReadError,
+    setError: setProfileReadError,
+    reportError: reportProfileReadError,
+  } = useAuthError();
+  const { clearSubmitError } = form;
+
+  const handleProfileRetry = useCallback((): void => {
+    clearSubmitError();
+    setProfileReadError(null);
+    setProfileLoading(true);
+    void refreshProfile({ throwOnError: true })
+      .catch(reportProfileReadError)
+      .finally(() => setProfileLoading(false));
+  }, [
+    clearSubmitError,
+    refreshProfile,
+    reportProfileReadError,
+    setProfileReadError,
+  ]);
 
   // Qui «Esci» è una delle DUE sole vie d'uscita dal passaggio obbligato: se fallisce
   // in silenzio la persona resta chiusa dentro senza sapere perché, e l'unico gesto che
@@ -64,12 +94,14 @@ export const CompleteProfileScreen: React.FC = () => {
   // obbligato senza sapere perché.
   const handleLogout = useCallback((): void => {
     setLogoutError(undefined);
+    setLogoutLoading(true);
     void signOut()
       .then(({ error }) => {
-        if (error) setLogoutError(t('auth.profile.logoutError'));
+        if (error) reportLogoutError(error);
       })
-      .catch(() => setLogoutError(t('auth.profile.logoutError')));
-  }, [signOut, t]);
+      .catch(reportLogoutError)
+      .finally(() => setLogoutLoading(false));
+  }, [signOut, reportLogoutError, setLogoutError]);
 
   const handleDeleteAccount = useCallback((): void => {
     navigation.navigate('DeleteAccount');
@@ -89,6 +121,20 @@ export const CompleteProfileScreen: React.FC = () => {
             {t('auth.completeProfile.gateNotice')}
           </PerfectText>
         </View>
+      ) : null}
+
+      {profileError || profileReadError ? (
+        <>
+          <PerfectText size={14} lines={2} style={styles.error}>
+            {profileReadError ?? t(`auth.errors.${profileError}`)}
+          </PerfectText>
+          <AuthRetry
+            visible
+            onPress={handleProfileRetry}
+            loading={profileLoading}
+            disabled={logoutLoading || form.loading}
+          />
+        </>
       ) : null}
 
       <AuthSection title={t('auth.signup.sections.personal')}>
@@ -223,7 +269,7 @@ export const CompleteProfileScreen: React.FC = () => {
         </AuthSection>
       ) : null}
 
-      {form.submitError ? (
+      {form.submitError && !profileError ? (
         <PerfectText size={14} lines={2} style={styles.error}>
           {form.submitError}
         </PerfectText>
@@ -233,6 +279,13 @@ export const CompleteProfileScreen: React.FC = () => {
         label={t('auth.completeProfile.submit')}
         onPress={form.handleSubmit}
         loading={form.loading}
+        disabled={logoutLoading || profileLoading || Boolean(profileError)}
+      />
+      <AuthRetry
+        visible={form.offline && !profileError}
+        onPress={form.handleSubmit}
+        loading={form.loading}
+        disabled={logoutLoading || profileLoading}
       />
 
       {/* Le vie d'uscita esistono SOLO nel passaggio obbligato: raggiunta dal profilo,
@@ -250,12 +303,20 @@ export const CompleteProfileScreen: React.FC = () => {
             label={t('auth.profile.logout')}
             onPress={handleLogout}
             variant="link"
+            loading={logoutLoading}
+            disabled={form.loading || profileLoading || logoutLoading}
           />
           {logoutError ? (
             <PerfectText size={13} lines={2} style={styles.error}>
               {logoutError}
             </PerfectText>
           ) : null}
+          <AuthRetry
+            visible={logoutOffline}
+            onPress={handleLogout}
+            loading={logoutLoading}
+            disabled={form.loading || profileLoading || logoutLoading}
+          />
           <AuthButton
             label={t('auth.delete.title')}
             onPress={handleDeleteAccount}

@@ -3,6 +3,8 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { AuthRetry } from '../components/AuthRetry';
+import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
@@ -31,20 +33,27 @@ export const ReConsentScreen: React.FC = () => {
   const { openLink, isLoading } = useLinkHandler();
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | undefined>();
+  const { error, setError, reportError, offline } = useAuthError(
+    'auth.consents.error'
+  );
   const [logoutLoading, setLogoutLoading] = useState(false);
-  const [logoutError, setLogoutError] = useState<string | undefined>();
+  const {
+    error: logoutError,
+    setError: setLogoutError,
+    reportError: reportLogoutError,
+    offline: logoutOffline,
+  } = useAuthError('auth.profile.logoutError');
 
   const handleLogout = useCallback((): void => {
     setLogoutError(undefined);
     setLogoutLoading(true);
     void signOut()
       .then(result => {
-        if (result.error) setLogoutError(t('auth.profile.logoutError'));
+        if (result.error) reportLogoutError(result.error);
       })
-      .catch(() => setLogoutError(t('auth.profile.logoutError')))
+      .catch(reportLogoutError)
       .finally(() => setLogoutLoading(false));
-  }, [signOut, t]);
+  }, [signOut, setLogoutError, reportLogoutError]);
 
   const handleReadPolicy = useCallback((): void => {
     void openLink(RISE_URLS.privacyPolicy, 'reconsent-privacy');
@@ -58,14 +67,11 @@ export const ReConsentScreen: React.FC = () => {
     // a girare per sempre, senza messaggio e senza alcuna via d'uscita.
     void acceptCurrentPolicy()
       .then(r => {
-        setLoading(false);
-        if (r.error) setError(t('auth.consents.error'));
+        if (r.error) reportError(r.error);
       })
-      .catch(() => {
-        setLoading(false);
-        setError(t('auth.consents.error'));
-      });
-  }, [acceptCurrentPolicy, t]);
+      .catch(reportError)
+      .finally(() => setLoading(false));
+  }, [acceptCurrentPolicy, reportError, setError]);
 
   return (
     <AuthScreen title={t('auth.consents.reconsentTitle')}>
@@ -93,6 +99,12 @@ export const ReConsentScreen: React.FC = () => {
           {error}
         </PerfectText>
       ) : null}
+      <AuthRetry
+        visible={offline}
+        onPress={handleAccept}
+        loading={loading}
+        disabled={logoutLoading}
+      />
       <AuthButton
         label={t('auth.consents.signOut')}
         onPress={handleLogout}
@@ -104,6 +116,12 @@ export const ReConsentScreen: React.FC = () => {
           {logoutError}
         </PerfectText>
       ) : null}
+      <AuthRetry
+        visible={logoutOffline}
+        onPress={handleLogout}
+        loading={logoutLoading}
+        disabled={loading}
+      />
     </AuthScreen>
   );
 };

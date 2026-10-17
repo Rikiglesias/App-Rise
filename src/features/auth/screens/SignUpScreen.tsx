@@ -8,6 +8,8 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { ConfirmationResend } from '../components/ConfirmationResend';
+import { AuthRetry } from '../components/AuthRetry';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useSignUpForm } from '../hooks/useSignUpForm';
@@ -40,6 +42,7 @@ export const SignUpScreen: React.FC = () => {
         <PerfectText size={16} lines={4} style={styles.doneText}>
           {t('auth.signup.checkEmail')}
         </PerfectText>
+        <ConfirmationResend email={values.email.trim()} />
         <AuthButton
           label={t('auth.login.submit')}
           variant="link"
@@ -210,6 +213,11 @@ export const SignUpScreen: React.FC = () => {
 
       <AuthButton
         label={t('auth.signup.submit')}
+        onPress={form.handleSubmit}
+        loading={form.loading}
+      />
+      <AuthRetry
+        visible={form.offline}
         onPress={form.handleSubmit}
         loading={form.loading}
       />
