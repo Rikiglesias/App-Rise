@@ -1,0 +1,28 @@
+{
+  "criterio": "C33",
+  "base": "fbefa98",
+  "titoli": [
+    "account offline: Accesso",
+    "account offline: Registrazione",
+    "account offline: Password dimenticata",
+    "account offline: Reimposta password",
+    "account offline: Profilo",
+    "account offline: Modifica profilo",
+    "account offline: Elimina account",
+    "account offline: Ri-consenso"
+  ],
+  "esitiAllaBase": {
+    "account offline: Accesso": "failed",
+    "account offline: Registrazione": "failed",
+    "account offline: Password dimenticata": "failed",
+    "account offline: Reimposta password": "failed",
+    "account offline: Profilo": "failed",
+    "account offline: Modifica profilo": "failed",
+    "account offline: Elimina account": "failed",
+    "account offline: Ri-consenso": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/accountOfflineActions.test.tsx": "17a0822892a6d070cab4fb8a1aa5ce41fa1113e42b4dcd0b1ba250a9715fb81e",
+    "src/__tests__/features/auth/accountOfflineEntry.test.tsx": "74281390e5c5f973a6fef1a46aa68dc74a88cd465bfbc0cb82f83bb7cf2ecf7a"
+  }
+}

@@ -6,6 +6,7 @@ import {
   jwt,
   URL_OK,
   ANON,
+  PUBLISHABLE,
   ambiente,
   cfg,
   eas,
@@ -147,25 +148,66 @@ export const FIXTURE = {
         EXPO_PUBLIC_SUPABASE_ANON_KEY: '********',
       }),
       ambiente({ EXPO_PUBLIC_SUPABASE_URL: URL_OK }),
+      // JWT legacy (chiavi disattivate dal 06/07/2026), anche se uguale a preview e con la sonda che direbbe 200
+      ambiente(
+        {
+          EXPO_PUBLIC_SUPABASE_URL: URL_OK,
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: ANON,
+        },
+        { status: 200 },
+        ANON
+      ),
+      ambiente(
+        {
+          EXPO_PUBLIC_SUPABASE_URL: URL_OK,
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: jwt({ role: 'anon', ref: 'altro' }),
+        },
+        { status: 200 },
+        jwt({ role: 'anon', ref: 'altro' })
+      ),
+      ambiente(
+        {
+          EXPO_PUBLIC_SUPABASE_URL: URL_OK,
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
+        },
+        { status: 401 }
+      ),
+      ambiente(
+        {
+          EXPO_PUBLIC_SUPABASE_URL: URL_OK,
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
+        },
+        { errore: 'rete' }
+      ),
+      ambiente(
+        {
+          EXPO_PUBLIC_SUPABASE_URL: URL_OK,
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
+        },
+        { errore: 'timeout' }
+      ),
+      ambiente(
+        {
+          EXPO_PUBLIC_SUPABASE_URL: URL_OK,
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
+        },
+        null
+      ),
       ambiente({
         EXPO_PUBLIC_SUPABASE_URL: URL_OK,
-        EXPO_PUBLIC_SUPABASE_ANON_KEY: jwt({ role: 'anon', ref: 'altro' }),
-      }),
-      ambiente({
-        EXPO_PUBLIC_SUPABASE_URL: URL_OK,
-        EXPO_PUBLIC_SUPABASE_ANON_KEY: ANON,
+        EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
         EXPO_PUBLIC_SENTRY_DSN: 'x',
       }),
       ambiente({
         EXPO_PUBLIC_SUPABASE_URL: URL_OK,
-        EXPO_PUBLIC_SUPABASE_ANON_KEY: ANON,
+        EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
         APP_ENV: 'development',
       }),
     ],
     pos: [
       ambiente({
         EXPO_PUBLIC_SUPABASE_URL: URL_OK,
-        EXPO_PUBLIC_SUPABASE_ANON_KEY: ANON,
+        EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
       }),
     ],
   },

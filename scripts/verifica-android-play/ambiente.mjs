@@ -44,13 +44,40 @@ const payloadJwt = token => {
   }
 };
 
+/**
+ * La chiave apre davvero una richiesta? GET di sola lettura su `/auth/v1/settings` (R16-R17): la forma della chiave
+ * non basta, una JWT `anon` ben fatta riceve 401 da quando le chiavi legacy sono disattivate (06/07/2026).
+ * Restituisce solo lo stato HTTP o il tipo di guasto, mai la chiave né il corpo.
+ */
+export const sondaChiave = async (url, chiave, fetchFn = fetch) => {
+  try {
+    const res = await fetchFn(`${url}/auth/v1/settings`, {
+      headers: { apikey: chiave },
+      signal: AbortSignal.timeout(10_000),
+    });
+    return { status: res.status };
+  } catch (err) {
+    const nome = err instanceof Error ? err.name : '';
+    return {
+      errore:
+        nome === 'TimeoutError' || nome === 'AbortError' ? 'timeout' : 'rete',
+    };
+  }
+};
+
 export const criteri = {
   C6: {
-    leggi: () => ({
-      production: leggiAmbiente('production'),
-      preview: leggiAmbiente('preview'),
-    }),
-    verifica({ production, preview }) {
+    async leggi() {
+      const production = leggiAmbiente('production');
+      const url = production.EXPO_PUBLIC_SUPABASE_URL;
+      const chiave = production.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+      return {
+        production,
+        preview: leggiAmbiente('preview'),
+        sonda: url && chiave ? await sondaChiave(url, chiave) : null,
+      };
+    },
+    verifica({ production, preview, sonda }) {
       for (const nome of NOMI_SUPABASE) {
         const v = production[nome];
         if (v === undefined) return `${nome} assente in production`;
@@ -73,13 +100,15 @@ export const criteri = {
       const chiave = production.EXPO_PUBLIC_SUPABASE_ANON_KEY;
       if (chiave.startsWith('sb_secret_'))
         return 'la chiave è SEGRETA (sb_secret_): mai in un bundle';
-      if (!chiave.startsWith('sb_publishable_')) {
-        const p = payloadJwt(chiave);
-        if (!p) return 'la chiave non è né un JWT né sb_publishable_';
-        if (p.role !== 'anon') return `JWT con role = ${p.role}, atteso anon`;
-        if (p.ref !== SUPABASE_REF)
-          return 'JWT di un altro progetto (ref diverso)';
-      }
+      if (!chiave.startsWith('sb_publishable_'))
+        return payloadJwt(chiave)
+          ? 'la chiave è una JWT legacy: le chiavi legacy del progetto sono disattivate, serve sb_publishable_'
+          : 'la chiave non è sb_publishable_';
+      if (!sonda) return 'sonda della chiave non eseguita';
+      if (sonda.errore)
+        return `sonda della chiave fallita (${sonda.errore}) su /auth/v1/settings`;
+      if (sonda.status !== 200)
+        return `la chiave non apre /auth/v1/settings: HTTP ${sonda.status}, atteso 200`;
       const vietata = VIETATE.find(n => n in production);
       if (vietata) return `${vietata} presente in production`;
       if (production.APP_ENV === 'development')

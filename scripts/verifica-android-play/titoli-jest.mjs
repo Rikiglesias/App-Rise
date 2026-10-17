@@ -23,7 +23,7 @@ import {
   leggi,
   percorso,
   rel,
-  sha256File,
+  sha256,
 } from './comune.mjs';
 
 /** Commit su cui i test nuovi DEVONO fallire: lo stato prima del lavoro R8-R10. */
@@ -32,12 +32,17 @@ export const BASE_CONTROPROVA = 'fbefa98';
 /** Esegue l'intera suite in `cwd` e restituisce le asserzioni { nome, titolo, stato, file }; null se illeggibile. */
 export const eseguiSuite = (cwd = ROOT) => {
   // Node diretto, senza shell: con `shell: true` su Windows gli argomenti con spazi e apici si spezzano.
+  // Worker al 25 %: col default (core - 1 = 31 qui) la suite esaurisce la memoria virtuale (17/10, due arresti).
   const jest = join(cwd, 'node_modules', 'jest', 'bin', 'jest.js');
-  const r = spawnSync(process.execPath, [jest, '--json', '--silent'], {
-    cwd,
-    encoding: 'utf8',
-    maxBuffer: 256 * 1024 * 1024,
-  });
+  const r = spawnSync(
+    process.execPath,
+    [jest, '--json', '--silent', '--maxWorkers=25%'],
+    {
+      cwd,
+      encoding: 'utf8',
+      maxBuffer: 256 * 1024 * 1024,
+    }
+  );
   try {
     const j = JSON.parse(r.stdout);
     return j.testResults.flatMap(t =>
@@ -88,9 +93,13 @@ export const fileControprova = id =>
 export const leggiControprova = id =>
   esiste(fileControprova(id)) ? JSON.parse(leggi(fileControprova(id))) : null;
 
+// Sha del testo con gli a capo LF: `.gitattributes` (eol=lf) riscrive al checkout un file salvato CRLF,
+// e lo sha del disco non coinciderebbe più con quello registrato a contenuto identico (17/10, C32 C33).
+const shaTesto = p => sha256(leggi(p).replace(/\r\n/g, '\n'));
+
 export const shaFile = files =>
   Object.fromEntries(
-    files.map(f => [f, esiste(percorso(f)) ? sha256File(percorso(f)) : null])
+    files.map(f => [f, esiste(percorso(f)) ? shaTesto(percorso(f)) : null])
   );
 
 /**

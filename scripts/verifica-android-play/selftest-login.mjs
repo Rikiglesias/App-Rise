@@ -1,6 +1,7 @@
 // C22 per i criteri di F8 (login): stesse mutazioni dei criteri a titoli di F7, più le fixture degli statici.
 // Ogni fixture negativa è il positivo con UNA mutazione.
 import { DEFINIZIONI_LOGIN } from './login.mjs';
+import { TEST_C35 } from './funzioni-edge.mjs';
 import { negativiComuni, verde } from './selftest-codice.mjs';
 
 const v = (id, statico = null) => verde(id, statico, DEFINIZIONI_LOGIN);
@@ -17,33 +18,29 @@ const C34_OK = {
     'Modelli mail: {{ .ConfirmationURL }} · Additional Redirect URLs: rahitalia://reset-password, rahitalia://auth/callback',
 };
 
-const funzioneOk = () => ({
-  file: ['supabase/functions/x/index.ts'],
+// R17: la chiave legacy è vietata ovunque in supabase/functions/, verify_jwt = false su entrambe, test per funzione.
+const CONFIG_OK =
+  '# chiavi di firma ES256: il controllo vero è auth.getUser nel codice\n[functions.delete-account]\nverify_jwt = false\n\n[functions.purge-deletions]\nverify_jwt = false\n';
+const casiOk = nomi => nomi.map(nome => ({ nome, verde: true }));
+const funzioneOk = f => ({
+  file: [`supabase/functions/${f}/index.ts`],
   nuova: true,
-  legacy: [
-    {
-      nome: 'supabase/functions/x/index.ts',
-      riga: 12,
-      contesto:
-        '// ripiego documentato\nDeno.env.get("SUPABASE_SERVICE_ROLE_KEY")',
-    },
-  ],
-  deno: {
-    exit: 0,
-    casi: [
-      { nome: 'chiave da SUPABASE_SECRET_KEYS', verde: true },
-      { nome: 'token assente → 401', verde: true },
-    ],
-    coda: '',
-  },
+  deno: { exit: 0, casi: casiOk(TEST_C35[f]), coda: '' },
 });
-const c35 = (mut = {}) => ({
+const c35 = (mutPurge = {}, radice = {}) => ({
   statico: {
-    'delete-account': funzioneOk(),
-    'purge-deletions': { ...funzioneOk(), ...mut },
+    legacy: [],
+    config: CONFIG_OK,
+    funzioni: {
+      'delete-account': funzioneOk('delete-account'),
+      'purge-deletions': { ...funzioneOk('purge-deletions'), ...mutPurge },
+    },
+    ...radice,
   },
 });
-const denoCon = casi => ({ deno: { ...funzioneOk().deno, casi } });
+const denoCon = casi => ({
+  deno: { ...funzioneOk('purge-deletions').deno, casi },
+});
 
 const INTESTAZIONE =
   '| Tipo (Play Console) | Campi | Raccolto | Condiviso | Facoltativo | Finalità |\n| --- | --- | --- | --- | --- | --- |';
@@ -147,35 +144,59 @@ export const FIXTURE_LOGIN = {
       { statico: null },
       c35({ file: [] }),
       c35({ nuova: false }),
-      c35({ legacy: [...funzioneOk().legacy, ...funzioneOk().legacy] }),
-      c35({
-        legacy: [
-          {
-            nome: 'i.ts',
-            riga: 3,
-            contesto: 'Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")',
-          },
-        ],
-      }),
+      c35(
+        {},
+        { legacy: [{ nome: 'supabase/functions/x/index_test.ts', riga: 3 }] }
+      ),
+      c35({}, { config: null }),
+      c35(
+        {},
+        {
+          config: CONFIG_OK.replace(
+            'verify_jwt = false\n\n',
+            'verify_jwt = true\n\n'
+          ),
+        }
+      ),
+      c35(
+        {},
+        {
+          config: CONFIG_OK.replace(
+            '[functions.purge-deletions]\nverify_jwt = false\n',
+            ''
+          ),
+        }
+      ),
+      c35(
+        {},
+        { config: `# la piattaforma DEVE validare il JWT\n${CONFIG_OK}` }
+      ),
       c35({ deno: { errore: 'deno: non trovato' } }),
       c35({ deno: { exit: 1, casi: null, coda: 'boom' } }),
       c35(denoCon([])),
-      c35(denoCon([{ nome: 'token assente → 401', verde: true }])),
+      c35(denoCon(casiOk(TEST_C35['purge-deletions'].slice(1)))),
       c35(
-        denoCon([
-          { nome: 'chiave da SUPABASE_SECRET_KEYS', verde: false },
-          { nome: 'token assente → 401', verde: true },
-        ])
+        denoCon(
+          TEST_C35['purge-deletions'].map((nome, i) => ({
+            nome,
+            verde: i !== 0,
+          }))
+        )
       ),
       c35(
-        denoCon([
-          { nome: 'chiave da SUPABASE_SECRET_KEYS', verde: true },
-          { nome: 'token assente -> 401', verde: true },
-        ])
+        denoCon(
+          casiOk([
+            'chiave da SUPABASE_SECRET_KEYS',
+            'chiave assente -> 500',
+            'segreto cron assente → 403',
+          ])
+        )
       ),
-      c35({ deno: { ...funzioneOk().deno, exit: 1 } }),
+      // il test di delete-account non basta a purge-deletions: nomi per funzione
+      c35(denoCon(casiOk(TEST_C35['delete-account']))),
+      c35({ deno: { ...funzioneOk('purge-deletions').deno, exit: 1 } }),
     ],
-    pos: [c35(), c35({ legacy: [] })],
+    pos: [c35()],
   },
   C55: {
     neg: [

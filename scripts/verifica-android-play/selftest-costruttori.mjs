@@ -8,12 +8,18 @@ export const jwt = payload =>
     .join('.');
 export const URL_OK = `https://${SUPABASE_REF}.supabase.co`;
 export const ANON = jwt({ role: 'anon', ref: SUPABASE_REF });
-export const ambiente = production => ({
+export const PUBLISHABLE = 'sb_publishable_fixture';
+export const ambiente = (
+  production,
+  sonda = { status: 200 },
+  chiavePreview = PUBLISHABLE
+) => ({
   production,
   preview: {
     EXPO_PUBLIC_SUPABASE_URL: URL_OK,
-    EXPO_PUBLIC_SUPABASE_ANON_KEY: ANON,
+    EXPO_PUBLIC_SUPABASE_ANON_KEY: chiavePreview,
   },
+  sonda,
 });
 export const cfg = (android = {}, ios = {}, extra = {}) => ({
   version: '1.3.0',

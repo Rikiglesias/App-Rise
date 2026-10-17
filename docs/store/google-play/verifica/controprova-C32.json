@@ -1,0 +1,19 @@
+{
+  "criterio": "C32",
+  "base": "fbefa98",
+  "titoli": [
+    "rinvio conferma: dopo la registrazione",
+    "rinvio conferma: su email non confermata",
+    "rinvio conferma: attesa di 60 s",
+    "rinvio conferma: limite del server tradotto"
+  ],
+  "esitiAllaBase": {
+    "rinvio conferma: dopo la registrazione": "failed",
+    "rinvio conferma: su email non confermata": "failed",
+    "rinvio conferma: attesa di 60 s": "failed",
+    "rinvio conferma: limite del server tradotto": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/confirmationResend.test.tsx": "cd04bcb471dc1323a77348d6ed38225029fd6265d6f3830b4cf571f18bcc4eff"
+  }
+}
