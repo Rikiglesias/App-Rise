@@ -209,24 +209,33 @@ export const esitoControprova = (titoli, registro, shaAttuali) => {
  */
 export const criterioConTitoli = (
   id,
-  { titoli, guardie = [], statico } = {}
+  { titoli, guardie = [], statico } = {},
+  lettori = { leggiControprova, suite, shaFile }
 ) => ({
   titoli,
   guardie,
-  leggi() {
-    const registro = leggiControprova(id);
+  async leggi() {
+    const registro = await lettori.leggiControprova(id);
+    const jest = await lettori.suite();
     return {
-      jest: suite(),
+      jest,
       controprova: registro,
-      shaAttuali: shaFile(Object.keys(registro?.fileTest ?? {})),
-      statico: statico ? statico.leggi() : null,
+      shaAttuali: await lettori.shaFile(Object.keys(registro?.fileTest ?? {})),
+      statico: statico
+        ? await statico.leggi({ jest, titoli: [...titoli, ...guardie] })
+        : null,
     };
   },
-  verifica({ jest, controprova, shaAttuali, statico: datiStatici }) {
+  async verifica({ jest, controprova, shaAttuali, statico: datiStatici }) {
     const motivi = [
       esitoTitoli([...titoli, ...guardie], jest),
       esitoControprova(titoli, controprova, shaAttuali ?? {}),
-      statico ? statico.verifica(datiStatici) : '',
+      statico
+        ? await statico.verifica(datiStatici, {
+            jest,
+            titoli: [...titoli, ...guardie],
+          })
+        : '',
     ].filter(Boolean);
     return motivi.join(' · ');
   },

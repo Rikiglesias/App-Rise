@@ -25,10 +25,14 @@ import { FIXTURE_AAB } from './selftest-aab.mjs';
 import { FIXTURE_LINK } from './selftest-link.mjs';
 import { FIXTURE_CODICE } from './selftest-codice.mjs';
 import { FIXTURE_LOGIN } from './selftest-login.mjs';
+import { FIXTURE_PAGINE } from './selftest-pagine.mjs';
+import { FIXTURE_DISPOSITIVI } from './selftest-dispositivi.mjs';
 
 export const FIXTURE = {
   ...FIXTURE_CODICE,
   ...FIXTURE_LOGIN,
+  ...FIXTURE_PAGINE,
+  ...FIXTURE_DISPOSITIVI,
   ...FIXTURE_VISIVO,
   ...FIXTURE_DOCUMENTI,
   ...FIXTURE_CANCELLAZIONE,
@@ -209,27 +213,6 @@ export const FIXTURE = {
         EXPO_PUBLIC_SUPABASE_URL: URL_OK,
         EXPO_PUBLIC_SUPABASE_ANON_KEY: PUBLISHABLE,
       }),
-    ],
-  },
-  C7: {
-    neg: [
-      {
-        rotte: ['Beneficiaries'],
-        file: [
-          { nome: 'src/a.tsx', testo: "navigation.navigate('Beneficiaries')" },
-        ],
-      },
-      {
-        rotte: ['Kits'],
-        file: [{ nome: 'src/b.ts', testo: "linking: { screen: 'Kits' }" }],
-      },
-      { rotte: [], file: [] },
-    ],
-    pos: [
-      {
-        rotte: ['Beneficiaries'],
-        file: [{ nome: 'src/a.tsx', testo: "navigate('Impact')" }],
-      },
     ],
   },
   C10: {

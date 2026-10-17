@@ -7,7 +7,6 @@
 // C9 non è qui: il suo VERIFY è `npm run conta-problemi`.
 import { criteri as config } from './verifica-android-play/config.mjs';
 import { criteri as ambiente } from './verifica-android-play/ambiente.mjs';
-import { criteri as app } from './verifica-android-play/app.mjs';
 import { criteri as binario } from './verifica-android-play/binario.mjs';
 import { criteri as aab } from './verifica-android-play/aab.mjs';
 import { criteri as link } from './verifica-android-play/link.mjs';
@@ -18,6 +17,18 @@ import { criteri as cancellazione } from './verifica-android-play/documenti-canc
 import { criteri as informativa } from './verifica-android-play/documenti-informativa.mjs';
 import { criteri as play } from './verifica-android-play/documenti-play.mjs';
 import {
+  criteri as pagine,
+  DEFINIZIONI_PAGINE,
+} from './verifica-android-play/pagine.mjs';
+import {
+  criteri as dispositivi,
+  DEFINIZIONI_DISPOSITIVI,
+} from './verifica-android-play/dispositivi.mjs';
+import {
+  criteri as contenuti,
+  DEFINIZIONI_CONTENUTI,
+} from './verifica-android-play/contenuti.mjs';
+import {
   DEFINIZIONI as DEFINIZIONI_CODICE,
   criteri as codice,
 } from './verifica-android-play/codice.mjs';
@@ -27,13 +38,19 @@ import {
 } from './verifica-android-play/login.mjs';
 import { registraControprove } from './verifica-android-play/titoli-jest.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
+import { selftestLettori } from './verifica-android-play/selftest-titoli.mjs';
 
-const DEFINIZIONI_TITOLI = { ...DEFINIZIONI_CODICE, ...DEFINIZIONI_LOGIN };
+const DEFINIZIONI_TITOLI = {
+  ...DEFINIZIONI_CODICE,
+  ...DEFINIZIONI_LOGIN,
+  ...DEFINIZIONI_PAGINE,
+  ...DEFINIZIONI_DISPOSITIVI,
+  ...DEFINIZIONI_CONTENUTI,
+};
 
 const CRITERI = {
   ...config,
   ...ambiente,
-  ...app,
   ...binario,
   ...aab,
   ...link,
@@ -45,6 +62,9 @@ const CRITERI = {
   ...play,
   ...codice,
   ...login,
+  ...pagine,
+  ...dispositivi,
+  ...contenuti,
 };
 const ATTESI = [
   'C1',
@@ -81,7 +101,23 @@ const ATTESI = [
   'C34',
   'C35',
   'C36',
+  'C37',
+  'C38',
+  'C39',
+  'C40',
+  'C41',
+  'C42',
+  'C43',
+  'C44',
+  'C45',
+  'C46',
+  'C48',
+  'C49',
+  'C50',
+  'C51',
+  'C52',
   'C53',
+  'C54',
   'C55',
 ];
 
@@ -96,6 +132,11 @@ const esito = async (fn, input) => {
 const selftest = async () => {
   let coperti = 0;
   let sbagli = 0;
+  const erroreLettori = await esito(selftestLettori);
+  if (erroreLettori) {
+    console.log(`selftest lettori FAIL ${erroreLettori}`);
+    sbagli++;
+  } else console.log('selftest lettori sync/async e località: PASS');
   for (const id of ATTESI) {
     const c = CRITERI[id];
     const f = FIXTURE[id];
