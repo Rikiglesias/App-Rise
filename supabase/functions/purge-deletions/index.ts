@@ -30,7 +30,7 @@ export interface PurgeFailure {
 }
 
 export interface PurgeDeps {
-  adminFactory?: () => SupabaseClient;
+  adminFactory?: () => SupabaseClient | null;
   alert?: (info: {
     reason: string;
     failed: number;
@@ -64,10 +64,34 @@ async function defaultAlert(info: {
   }
 }
 
-function defaultAdmin(): SupabaseClient {
+function readAdminKey(): string | null {
+  if (!Deno.env.has('SUPABASE_SECRET_KEYS')) {
+    console.error('[purge-deletions] SUPABASE_SECRET_KEYS: variabile assente');
+    return null;
+  }
+  let keys: unknown;
+  try {
+    keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS')!);
+  } catch {
+    console.error('[purge-deletions] SUPABASE_SECRET_KEYS: JSON non valido');
+    return null;
+  }
+  if (
+    typeof keys !== 'object' || keys === null || Array.isArray(keys) ||
+    !('default' in keys) || typeof keys.default !== 'string' || !keys.default.trim()
+  ) {
+    console.error('[purge-deletions] SUPABASE_SECRET_KEYS: default assente o non valida');
+    return null;
+  }
+  return keys.default;
+}
+
+function defaultAdmin(): SupabaseClient | null {
+  const key = readAdminKey();
+  if (!key) return null;
   return createClient(
     Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    key,
     {
       auth: { autoRefreshToken: false, persistSession: false },
     },
@@ -91,6 +115,12 @@ export async function handler(
   }
 
   const admin = adminFactory();
+  if (!admin) {
+    return new Response(JSON.stringify({ error: 'server_misconfigured' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   const cutoff = new Date(
     now() - GRACE_DAYS * 24 * 60 * 60 * 1000,

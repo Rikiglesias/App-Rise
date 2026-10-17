@@ -67,7 +67,7 @@ Deno.test('GET -> 405 method_not_allowed, nessun client', async () => {
   assertSpyCalls(createAdmin, 0);
 });
 
-Deno.test('POST senza Authorization -> 401, nessun client', async () => {
+Deno.test('token assente → 401', async () => {
   const { deps, createAdmin } = buildDeps({});
   const res = await handler(new Request('http://x', { method: 'POST' }), deps);
   assertEquals(res.status, 401);
@@ -76,7 +76,7 @@ Deno.test('POST senza Authorization -> 401, nessun client', async () => {
 });
 
 Deno.test(
-  'getUser error -> 401, jwt spogliato del Bearer, no delete',
+  'token non valido → 401',
   async () => {
     const { deps, getUser, deleteUser } = buildDeps({
       getUserError: { message: 'invalid jwt' },
@@ -86,7 +86,7 @@ Deno.test(
       deps,
     );
     assertEquals(res.status, 401);
-    assertEquals((await res.json()).error, 'unauthorized');
+    assertEquals(await res.json(), { error: 'unauthorized' });
     assertSpyCalls(getUser, 1);
     assertEquals(getUser.calls[0].args[0], 'tok');
     assertSpyCalls(deleteUser, 0);

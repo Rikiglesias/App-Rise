@@ -40,14 +40,21 @@ function req(secret?: string) {
 }
 
 function setCron(v: string | null) {
+  const previous = Deno.env.get('CRON_SECRET');
   if (v === null) Deno.env.delete('CRON_SECRET');
   else Deno.env.set('CRON_SECRET', v);
+  return {
+    [Symbol.dispose]() {
+      if (previous === undefined) Deno.env.delete('CRON_SECRET');
+      else Deno.env.set('CRON_SECRET', previous);
+    },
+  };
 }
 
 Deno.test(
-  'CRON_SECRET env mancante -> 403, nessun client, nessun alert',
+  'segreto cron assente → 403',
   async () => {
-    setCron(null);
+    using _cron = setCron(null);
     const { adminFactory } = buildAdmin({});
     const alert = spy((_i: unknown) => Promise.resolve());
     const res = await handler(req('whatever'), { adminFactory, alert });
@@ -59,21 +66,19 @@ Deno.test(
 );
 
 Deno.test('header x-cron-secret mancante -> 403', async () => {
-  setCron('s3cr3t');
+  using _cron = setCron('s3cr3t');
   const { adminFactory } = buildAdmin({});
   const res = await handler(req(undefined), { adminFactory });
   assertEquals(res.status, 403);
   assertSpyCalls(adminFactory, 0);
-  setCron(null);
 });
 
 Deno.test('secret sbagliato -> 403, nessun client', async () => {
-  setCron('s3cr3t-corretto-lungo');
+  using _cron = setCron('s3cr3t-corretto-lungo');
   const { adminFactory } = buildAdmin({});
   const res = await handler(req('valore-errato'), { adminFactory });
   assertEquals(res.status, 403);
   assertSpyCalls(adminFactory, 0);
-  setCron(null);
 });
 
 Deno.test(
@@ -90,19 +95,18 @@ Deno.test(
 Deno.test(
   'secret giusto -> 200, client creato (no falso negativo)',
   async () => {
-    setCron('ok');
+    using _cron = setCron('ok');
     const { adminFactory } = buildAdmin({ query: { data: [], error: null } });
     const res = await handler(req('ok'), { adminFactory });
     assertEquals(res.status, 200);
     assertSpyCalls(adminFactory, 1);
-    setCron(null);
   },
 );
 
 Deno.test(
   'query error -> 500 + alert query_failed, nessun delete',
   async () => {
-    setCron('ok');
+    using _cron = setCron('ok');
     const { adminFactory, deleteUser } = buildAdmin({
       query: { data: null, error: { message: 'boom-db' } },
     });
@@ -116,14 +120,13 @@ Deno.test(
       (alert.calls[0].args[0] as { reason: string }).reason,
       'query_failed',
     );
-    setCron(null);
   },
 );
 
 Deno.test(
   'nessuna riga -> deleted 0 scanned 0 failed 0, no alert',
   async () => {
-    setCron('ok');
+    using _cron = setCron('ok');
     const { adminFactory, deleteUser } = buildAdmin({
       query: { data: [], error: null },
     });
@@ -133,14 +136,13 @@ Deno.test(
     assertEquals(await res.json(), { deleted: 0, scanned: 0, failed: 0 });
     assertSpyCalls(deleteUser, 0);
     assertSpyCalls(alert, 0);
-    setCron(null);
   },
 );
 
 Deno.test(
   'righe multiple tutte ok -> deleted == scanned, no alert',
   async () => {
-    setCron('ok');
+    using _cron = setCron('ok');
     const seq: string[] = [];
     const { adminFactory, deleteUser } = buildAdmin({
       query: { data: [{ id: 'u1' }, { id: 'u2' }, { id: 'u3' }], error: null },
@@ -153,14 +155,13 @@ Deno.test(
     assertSpyCalls(deleteUser, 3);
     assertEquals(seq, ['u1', 'u2', 'u3']);
     assertSpyCalls(alert, 0);
-    setCron(null);
   },
 );
 
 Deno.test(
   'alcuni delete falliti -> deleted parziale + alert delete_failed (S9)',
   async () => {
-    setCron('ok');
+    using _cron = setCron('ok');
     const { adminFactory, deleteUser } = buildAdmin({
       query: { data: [{ id: 'u1' }, { id: 'u2' }, { id: 'u3' }], error: null },
       deleteResults: { u1: null, u2: { message: 'auth-fail-u2' }, u3: null },
@@ -182,12 +183,11 @@ Deno.test(
     assertEquals(info.reason, 'delete_failed');
     assertEquals(info.failed, 1);
     assertEquals(info.failures[0].id, 'u2');
-    setCron(null);
   },
 );
 
 Deno.test('cutoff 30 giorni corretto (filtro temporale)', async () => {
-  setCron('ok');
+  using _cron = setCron('ok');
   const { adminFactory, from, select, not, lt } = buildAdmin({
     query: { data: [], error: null },
   });
@@ -204,5 +204,4 @@ Deno.test('cutoff 30 giorni corretto (filtro temporale)', async () => {
     lt.calls[0].args[1],
     new Date(T - 30 * 24 * 60 * 60 * 1000).toISOString(),
   );
-  setCron(null);
 });

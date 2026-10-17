@@ -24,16 +24,40 @@ function json(body: unknown, status: number): Response {
 }
 
 // Seam di dependency-injection: i default replicano 1:1 il comportamento di produzione,
-// i test iniettano fake (nessuna rete, nessun client reale). createAdmin è lazy →
+// i test possono iniettare fake o simulare fetch sul client reale. createAdmin è lazy →
 // il client viene creato SOLO dopo le guard, come nella versione originale.
 export interface Deps {
-  createAdmin: () => SupabaseClient;
+  createAdmin: () => SupabaseClient | null;
 }
 
-function defaultAdmin(): SupabaseClient {
+function readAdminKey(): string | null {
+  if (!Deno.env.has('SUPABASE_SECRET_KEYS')) {
+    console.error('[delete-account] SUPABASE_SECRET_KEYS: variabile assente');
+    return null;
+  }
+  let keys: unknown;
+  try {
+    keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS')!);
+  } catch {
+    console.error('[delete-account] SUPABASE_SECRET_KEYS: JSON non valido');
+    return null;
+  }
+  if (
+    typeof keys !== 'object' || keys === null || Array.isArray(keys) ||
+    !('default' in keys) || typeof keys.default !== 'string' || !keys.default.trim()
+  ) {
+    console.error('[delete-account] SUPABASE_SECRET_KEYS: default assente o non valida');
+    return null;
+  }
+  return keys.default;
+}
+
+function defaultAdmin(): SupabaseClient | null {
+  const key = readAdminKey();
+  if (!key) return null;
   return createClient(
     Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    key,
     {
       auth: { autoRefreshToken: false, persistSession: false },
     },
@@ -53,6 +77,7 @@ export async function handler(
   if (!authHeader) return json({ error: 'unauthorized' }, 401);
 
   const admin = deps.createAdmin();
+  if (!admin) return json({ error: 'server_misconfigured' }, 500);
 
   // Identifica il chiamante dal SUO jwt (cancella solo sé stesso).
   const jwt = authHeader.replace('Bearer ', '');
