@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import * as Updates from 'expo-updates';
 import * as Sentry from '@sentry/react-native';
-import { logger } from '@/shared/utils/logger';
+import { logger, logError } from '@/shared/utils/logger';
 import i18n from '@/locales';
 
 interface Props {
@@ -47,7 +47,8 @@ export class ErrorBoundary extends Component<Props, State> {
 
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Buffer locale in memoria; il logger non invia né persiste i dati.
-    logger.error('Uncaught error in component tree', 'ErrorBoundary', {
+    logError('Uncaught error in component tree', 'ErrorBoundary', {
+      name: error.name,
       error: error.message,
       stack: error.stack,
       componentStack: errorInfo.componentStack,

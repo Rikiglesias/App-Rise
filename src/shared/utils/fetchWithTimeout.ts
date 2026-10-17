@@ -1,4 +1,25 @@
+import { logError } from './logger';
+
 const NETWORK_TIMEOUT_MS = 15_000;
+
+/** Solo la famiglia dell'endpoint: host, percorso restante e query non entrano nei log. */
+const endpointFamily = (input: Parameters<typeof fetch>[0]): string => {
+  try {
+    const url =
+      typeof input === 'string'
+        ? input
+        : input instanceof URL
+          ? input.href
+          : input.url;
+    return (
+      new URL(url).pathname.match(
+        /^\/(auth|rest|functions|storage)\/v1(?:\/|$)/
+      )?.[1] ?? '-'
+    );
+  } catch {
+    return '-';
+  }
+};
 
 const aborted = (): Error => {
   const error = new Error('Aborted');
@@ -26,6 +47,10 @@ export const fetchWithTimeout: typeof fetch = async (input, init) => {
     controller.abort();
   };
   const timer = setTimeout(() => {
+    logError('timeout', 'rete', {
+      name: 'AbortError',
+      code: endpointFamily(input),
+    });
     cancelRequest(aborted());
     controller.abort();
   }, NETWORK_TIMEOUT_MS);

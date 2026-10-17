@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+import { registraErroreAccount } from './registraErroreAccount';
 import {
   isRecoveryRedirect,
   isEmailConfirmRedirect,
@@ -18,8 +19,15 @@ export const exchangeAuthLink = async (
   if (!accepted || !code) return { ok: false };
   try {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) registraErroreAccount(error, 'LinkAccesso');
+    else if (!data.session)
+      registraErroreAccount(
+        { name: 'AuthSessionMissingError', code: 'missing_session' },
+        'LinkAccesso'
+      );
     return { ok: !error && Boolean(data.session) };
-  } catch {
+  } catch (error) {
+    registraErroreAccount(error, 'LinkAccesso');
     // Anche storage/rete possono rigettare: il chiamante mostra l'esito tradotto.
     return { ok: false };
   }

@@ -61,6 +61,33 @@ export default {
     },
   },
 
+  support: {
+    reportProblem: 'Segnala un problema',
+    reportSubject: 'App Rise: segnalazione di un problema',
+    invitation: 'Descrivi il problema e cosa stavi facendo:',
+    diagnostics: 'Diagnosi tecnica',
+    version: 'Versione app',
+    update: 'Aggiornamento',
+    development: 'sviluppo',
+    embedded: 'embedded',
+    runtime: 'Runtime',
+    channel: 'Canale',
+    emergencyLaunch: 'Avvio di emergenza',
+    yes: 'sì',
+    no: 'no',
+    platform: 'Piattaforma',
+    systemVersion: 'Versione sistema',
+    manufacturer: 'Produttore',
+    model: 'Modello',
+    release: 'Release sistema',
+    language: 'Lingua',
+    fontScale: 'Scala del testo',
+    window: 'Finestra',
+    errors:
+      'Errori recenti (ora UTC · contesto · nome · codice · stato · chiave)',
+    noErrors: 'nessun errore registrato',
+  },
+
   mapDetails: {
     countryLabel: '{{country}}: tocca per i dettagli',
     countryEventsLabel: '{{country}}: {{count}} eventi, tocca per i dettagli',

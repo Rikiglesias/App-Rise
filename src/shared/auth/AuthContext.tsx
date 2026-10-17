@@ -11,12 +11,18 @@ import { Alert, Platform } from 'react-native';
 import type { AuthError, Session } from '@supabase/supabase-js';
 
 import { supabase } from './supabaseClient';
-import {
-  buildResetRedirectTo,
-  buildEmailChangeRedirectTo,
-} from './authRedirect';
 import { exchangeAuthLink } from './authLinkExchange';
-import { mapAuthError } from './authErrors';
+import {
+  registraErroreAccount,
+  registraEsitoAccount,
+} from './registraErroreAccount';
+import {
+  signIn,
+  resetPassword,
+  updatePassword,
+  updateEmail,
+  deleteAccountNow,
+} from './accountActions';
 import { useEmailConfirmation } from './useEmailConfirmation';
 import { exportData as runDataExport } from './dataExport';
 import { buildConsentInsert } from './consent';
@@ -133,13 +139,6 @@ export interface AuthState {
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
-const passwordErrorMessage = (error: AuthError | null): string | null => {
-  const code = error?.code;
-  return code === 'same_password' || code === 'weak_password'
-    ? code
-    : (error?.message ?? null);
-};
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -203,7 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         return next;
       } catch (error) {
         if (sessionUserIdRef.current !== userId) return null;
-        setProfileError(mapAuthError(error));
+        setProfileError(registraErroreAccount(error, 'Profilo'));
         if (throwOnError) throw error;
         return null;
       }
@@ -260,14 +259,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, [loadProfile, t]);
 
-  const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error: error?.message ?? null };
-  }, []);
-
   const signOut = useCallback(async (): Promise<{ error: string | null }> => {
     // `scope: 'local'` e non il default `global`: la documentazione della libreria
     // installata (@supabase/auth-js, GoTrueClient.d.ts:1977-1982) è esplicita —
@@ -282,20 +273,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // lasciarla convinta di essere uscita (caso reale: rete assente, o token già
     // scaduto — vedi supabase/auth-js#540, dove il signOut fallisce e la sessione resta).
     return { error: error.message };
-  }, []);
-
-  const resetPassword = useCallback(async (email: string) => {
-    // redirectTo: deep link che riporta nell'app (allow-list Supabase). Senza,
-    // il link punterebbe al Site URL web e il reset non si completerebbe in-app.
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: buildResetRedirectTo(),
-    });
-    return { error: error?.message ?? null };
-  }, []);
-
-  const updatePassword = useCallback(async (newPassword: string) => {
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    return { error: passwordErrorMessage(error) };
   }, []);
 
   const completeRecoveryFromUrl = useCallback(
@@ -365,45 +342,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     [session, loadProfile]
   );
-
-  const updateEmail = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.updateUser(
-      { email },
-      { emailRedirectTo: buildEmailChangeRedirectTo() }
-    );
-    return { error: error?.message ?? null };
-  }, []);
-
-  const deleteAccountNow = useCallback(async () => {
-    const { error } = await supabase.functions.invoke('delete-account', {
-      body: {},
-    });
-    if (error) return { error: error.message };
-
-    // Uscita LOCALE, non globale: l'account a questo punto non esiste più, e il
-    // signOut globale chiede al server di revocare le sessioni di un utente
-    // cancellato — chiamata che fallisce lasciando la sessione sul dispositivo
-    // (supabase/auth#1550).
-    //
-    // Ma `local` NON evita la rete: nella libreria installata (@supabase/auth-js,
-    // GoTrueClient.js:3337-3352) anche lo scope locale chiama `admin.signOut`, e se
-    // l'errore non è 401/403/404 — per esempio la rete che cade subito dopo la
-    // cancellazione riuscita — la funzione ritorna l'errore SALTANDO
-    // `_removeSession()`. Il risultato sarebbe la sessione di un account che non
-    // esiste più lasciata sul telefono, mentre qui si risponde «tutto a posto».
-    // Per questo l'esito si LEGGE e si riporta: `error` resta null perché la
-    // cancellazione è davvero riuscita — dire il contrario allarmerebbe per un dato
-    // ormai eliminato — ma `sessioneAncoraSulDispositivo` dice al chiamante che il
-    // telefono non ha dimenticato la sessione, così può portare fuori la persona
-    // invece di lasciarla in un'app che sembra ancora connessa a un account che non
-    // esiste più. Ritentare la stessa chiamata non servirebbe: se è caduta la rete
-    // cadrebbe di nuovo, e toccare a mano la chiave interna dello storage legherebbe
-    // il nostro codice a un dettaglio non documentato della libreria.
-    const { error: erroreUscita } = await supabase.auth.signOut({
-      scope: 'local',
-    });
-    return { error: null, sessioneAncoraSulDispositivo: Boolean(erroreUscita) };
-  }, []);
 
   const scheduleDeletion = useCallback(async () => {
     const userId = session?.user.id;
@@ -487,9 +425,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const userId = session?.user.id;
       if (!userId) return { error: 'not_authenticated' };
       const channel = `${Platform.OS}:profile`;
-      const { error } = await supabase
-        .from('consent_events')
-        .insert(buildConsentInsert(userId, purpose, action, channel));
+      const { error } = await registraEsitoAccount('RiConsenso', () =>
+        supabase
+          .from('consent_events')
+          .insert(buildConsentInsert(userId, purpose, action, channel))
+      );
       return { error: error?.message ?? null };
     },
     [session]
@@ -574,17 +514,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       profileError,
       confirmationRetryAt,
       resendConfirmation,
-      signIn,
       signUp,
       signOut,
-      resetPassword,
-      updatePassword,
       completeRecoveryFromUrl,
       completeEmailConfirmFromUrl,
       refreshProfile,
       updateProfile,
-      updateEmail,
-      deleteAccountNow,
       scheduleDeletion,
       cancelScheduledDeletion,
       exportData,

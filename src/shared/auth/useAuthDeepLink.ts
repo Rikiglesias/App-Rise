@@ -4,11 +4,13 @@ import { useURL } from 'expo-linking';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 
 import { useAuth } from './AuthContext';
+import { registraErroreAccount } from './registraErroreAccount';
 import {
   isRecoveryRedirect,
   isEmailConfirmRedirect,
   getAuthLinkError,
   getLinkType,
+  parseAuthRedirect,
 } from './authRedirect';
 import type { RootStackParamList } from '@/navigation/types';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -62,6 +64,10 @@ export const useAuthDeepLink = (
 
     const linkError = getAuthLinkError(url);
     if (linkError) {
+      registraErroreAccount(
+        { name: 'AuthApiError', code: parseAuthRedirect(url).error_code },
+        'LinkAccesso'
+      );
       Alert.alert(
         t('auth.linkExpired.title'),
         t(`auth.linkExpired.${linkError}`)
