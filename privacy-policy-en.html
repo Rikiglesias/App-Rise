@@ -51,7 +51,7 @@
   </head>
   <body>
     <h1>Privacy Policy</h1>
-    <p class="last-updated">Last updated: 14 October 2026</p>
+    <p class="last-updated">Last updated: 18 October 2026</p>
     <p>
       <span class="da-validare"
         >INTERNAL DRAFT — to be validated by a privacy lawyer before
@@ -139,9 +139,10 @@
       The app does <strong>not</strong> access your device's location, does
       <strong>not</strong> show ads, does <strong>not</strong> use advertising
       identifiers, does <strong>not</strong> use analytics or behavioural
-      tracking tools and does <strong>not</strong> send error reports to
-      external services. Your sign-in session is stored only on your device, in
-      a protected area; some preferences (for example whether you have already
+      tracking tools and does <strong>not</strong> automatically send error
+      reports to external services. You can choose to send us a report as
+      described below. Your sign-in session is stored only on your device, in a
+      protected area; some preferences (for example whether you have already
       seen a notice) also stay only on your device.
     </p>
     <p>
@@ -149,6 +150,57 @@
       and crash statistics according to your device settings and its own privacy
       policy; we only receive them in aggregate form.
     </p>
+
+    <section id="segnalazione-problemi">
+      <h3>2.1 Problem reports</h3>
+      <p>
+        «Report a problem» prepares an email only if you choose to tap it. You
+        can read and edit the text before sending it, or cancel. If no email app
+        opens, «Share the text» lets you pick another app and the recipient.
+        Nothing is sent automatically and you can use the app without ever
+        reporting a problem.
+      </p>
+      <p>
+        The diagnostics contain the app version and update, runtime, channel and
+        whether it was an emergency launch; operating system and version, device
+        manufacturer and model; language, text scale and window size. They
+        include at most the last 10 errors: UTC time, app branch, error name and
+        code, status and key of the translated message, filtered to exclude
+        personal data. They do not include raw error messages, stack traces,
+        account identifier, email, phone number, tokens, URLs, serial number or
+        device fingerprint. The errors come from the app's temporary in-memory
+        buffer: it is not a persistent archive and is lost when the app
+        restarts.
+      </p>
+      <p>
+        If you send the email, Rise Against Hunger Italia receives the
+        diagnostics, the text you add and your sender address at
+        <a href="mailto:info@riseagainsthunger.it">info@riseagainsthunger.it</a
+        >, a mailbox run on <strong>Google Workspace</strong>. Please do not add
+        passwords, sensitive data or other unnecessary data. The report is used
+        to answer your request and fix the problem; it is not automatically
+        linked to your profile in the app. The email service involves transfers
+        outside the EU, including to the United States; see section 5. TLS for
+        the email depends on the sender's email provider and cannot be
+        guaranteed by the app.
+      </p>
+      <p>
+        <strong>Legal basis:</strong>
+        <span class="da-validare"
+          >to be validated — the consultant must define the legal basis under
+          Art. 6 GDPR for handling reports.</span
+        >
+      </p>
+      <p>
+        <strong>Retention:</strong> the email stays in the support mailbox even
+        if you delete your app account; you can ask us to delete it by writing
+        to us.
+        <span class="da-validare"
+          >to be validated — the consultant must set how long reports are kept
+          and the deletion criteria.</span
+        >
+      </p>
+    </section>
 
     <h2>3. Purposes and legal bases</h2>
     <table>
@@ -186,9 +238,21 @@
       </tr>
     </table>
 
+    <p>
+      For the purpose and legal basis of problem reports see
+      <a href="#segnalazione-problemi">section 2.1</a>.
+    </p>
+
     <h2>4. Recipients and data processors</h2>
     <p>Data is processed through providers acting on our behalf:</p>
     <ul>
+      <li>
+        <strong>Google Workspace</strong> — runs the info@riseagainsthunger.it
+        mailbox that receives voluntary problem reports (<a
+          href="#segnalazione-problemi"
+          >section 2.1</a
+        >).
+      </li>
       <li>
         <strong>Supabase Inc.</strong> — database and authentication. Data is
         stored on servers in the European Union (Frankfurt, Germany).
@@ -232,6 +296,10 @@
     </p>
     <ul>
       <li>
+        problem reports you choose to send, the email text and the sender
+        address, through <strong>Google Workspace</strong>;
+      </li>
+      <li>
         the installation identifier and IP address, to <strong>Expo</strong>, to
         download app updates;
       </li>
@@ -273,6 +341,12 @@
         to delete what they linked to it. On its own it cannot identify you; it
         currently has no automatic expiry.
         <span class="da-validare">Set a retention period.</span>
+      </li>
+      <li>
+        <strong>Problem reports</strong>: they stay in the support mailbox after
+        the account is deleted. How long and the deletion criteria are to be
+        validated, as stated in
+        <a href="#segnalazione-problemi">section 2.1</a>.
       </li>
       <li>
         <strong>Technical logs</strong>: automatically deleted by the provider

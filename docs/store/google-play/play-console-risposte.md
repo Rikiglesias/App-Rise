@@ -94,7 +94,7 @@ nell'app con consenso.
 | Domanda | Risposta |
 | --- | --- |
 | L'app raccoglie o condivide dati utente dei tipi richiesti? | Sì |
-| Tutti i dati sono criptati in transito? | Sì (HTTPS verso Supabase ed Expo) |
+| Tutti i dati sono criptati in transito? | Sì (solo HTTPS nelle comunicazioni dell'app; per la mail vedi motivazione sotto) |
 | Metodi di creazione dell'account | Nome utente e password (email e password) |
 | URL per la richiesta di eliminazione dell'account | Pagina `elimina-account.html` pubblicata dalla sede USA (indirizzo definitivo: «Chi fa cosa» → Sede USA) |
 | Si possono chiedere di eliminare alcuni dati senza eliminare l'account? | No: dall'app si elimina l'account intero; per altro si scrive a `info@riseagainsthunger.it` |
@@ -112,11 +112,48 @@ Ogni campo inviato al profilo da `useSignUpForm.ts` è nella colonna «Campi».
 | Informazioni personali → Numero di telefono | `phone` | Sì | No | Sì: l'app si usa senza account | Gestione dell'account |
 | Informazioni personali → Altre informazioni | `birth_date`, `privacy_consent`, `marketing_consent` | Sì | No | Sì: l'app si usa senza account | Prevenzione di frodi, sicurezza e conformità (età minima 14, registro dei consensi) |
 | ID dispositivo o altri ID | identificativo casuale dell'installazione per gli aggiornamenti (Expo, `EAS-Client-ID`) | Sì | No (Expo è un fornitore) | No: lo manda ogni avvio | Funzionalità dell'app |
+| Informazioni e prestazioni dell'app → Diagnostica | versione, aggiornamento, sistema e dispositivo, lingua, scala del testo, finestra e ultimi codici d'errore filtrati | Sì | No | Sì (solo se la persona invia la mail) | Analisi |
+| Informazioni e prestazioni dell'app → Arresti anomali | riga dell'arresto registrata dalla schermata d'errore: ora UTC, ramo `ErrorBoundary`, nome dell'errore (senza messaggio né stack) | Sì | No | Sì (solo se la persona invia la mail) | Analisi |
 
-Non raccolti: posizione, informazioni finanziarie, salute e fitness, messaggi, foto e video, audio, file e
-documenti, calendario, contatti, attività nelle app, navigazione web, informazioni e prestazioni dell'app (nessun
-servizio di segnalazione errori), altri ID dispositivo. La password non è un tipo di dato di Play Console: rientra nel
-metodo «Nome utente e password».
+Non raccolti: posizione, informazioni finanziarie, salute e fitness, Messaggi → Email (motivazione sotto), SMS/MMS,
+altri messaggi in-app, foto e video, audio, file e documenti, calendario, contatti, attività nelle app,
+navigazione web, Informazioni e prestazioni dell'app → Altri dati sulle prestazioni (motivazione sotto),
+altri ID dispositivo. La password non è un tipo di dato di Play Console: rientra nel metodo
+«Nome utente e password».
+
+### Segnala un problema: diagnostica, email e cifratura (motivazioni)
+
+- **Diagnostica — Raccolto Sì, facoltativo, Analisi.** Il rapporto usa il buffer temporaneo già presente sul
+  dispositivo: nessun registro remoto, nessuna persistenza e nessun invio automatico. La raccolta avviene solo
+  quando la persona invia la mail. La finalità è capire e correggere i malfunzionamenti: Google definisce
+  «Analisi» come «Used to collect data about how users use the app or how it performs»
+  ([answer/10787469, finalità dei dati](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en)).
+- **Arresti anomali — Raccolto Sì, facoltativo, Analisi.** Google li definisce «Crash log data from your app. For
+  example, the number of times your app has crashed, stack traces» (stessa pagina). Quando un errore ferma
+  l'interfaccia, `ErrorBoundary` registra l'arresto nel buffer e la sua schermata offre «Segnala un problema»: la
+  mail porta quella riga (ora, ramo `ErrorBoundary`, nome dell'errore), mai messaggio, stack o componente. Il
+  ricaricamento dell'app azzera il buffer; se non è disponibile o fallisce, la schermata si ripristina senza
+  riavvio e la riga può comparire in una segnalazione fatta da un'altra schermata.
+  Stesse condizioni della diagnostica: nulla parte senza la mail scritta dalla persona.
+- **Altri dati sulle prestazioni — non raccolti.** Google li definisce «Any other app performance data not listed
+  here»: ogni campo del rapporto rientra già in Diagnostica («any technical diagnostics») o in Arresti anomali.
+- **Condiviso No.** Per Google il passaggio all’app di posta sul telefono è condivisione, anche senza invio
+  fuori dal dispositivo. Si applica l'eccezione per l'azione avviata dalla persona: tocca «Segnala un problema»,
+  vede il testo prima di inviarlo e può modificarlo o annullare. Se l'apertura della posta fallisce, «Condividi
+  il testo» richiede una nuova scelta esplicita di app e destinatario. La casella dell'associazione è gestita
+  da Google Workspace, fornitore che tratta la posta per nostro conto.
+- **Messaggi → Email — non raccolti.** L'app non legge la casella di posta, i messaggi ricevuti o inviati,
+  l'oggetto o gli allegati dell'utente: prepara un rapporto tecnico e lo affida all'app di posta scelta.
+  La diagnosi è dichiarata sopra; il testo libero che la persona aggiunge e l'indirizzo del mittente arrivano
+  all'associazione tramite il servizio di posta, fuori dall'app. Questo trattamento è descritto nelle
+  informative, sezione «Segnalazione di problemi»; non è raccolta della casella email da parte dell'app.
+- **Criptati in transito: Sì.** L'app usa solo HTTPS per comunicare con i propri servizi. La guida Google
+  ammette questa risposta quando l'utente trasferisce i dati a un servizio esterno con regole di cifratura
+  proprie, purché il tragitto fra dispositivo e server dell'app sia protetto. Residuo: il TLS della mail
+  dipende dal fornitore di posta di chi scrive; l'app non può garantirlo.
+
+Fonte per condivisione, eccezioni e cifratura:
+[answer/10787469, raccolta, condivisione e sicurezza](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en).
 
 ### Condivisione verso Donorbox e Let's Donation (motivazione)
 
