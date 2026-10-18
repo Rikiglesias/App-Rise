@@ -1,0 +1,49 @@
+{
+  "criterio": "C55",
+  "base": "fbefa98",
+  "titoli": [
+    "segnala un problema: corpo con versione e codici",
+    "segnala un problema: nessun dato personale",
+    "segnala un problema: errore registrato da Accesso",
+    "segnala un problema: errore registrato da Registrazione",
+    "segnala un problema: errore registrato da Password dimenticata",
+    "segnala un problema: errore registrato da Reimposta password",
+    "segnala un problema: errore registrato da Cambio email",
+    "segnala un problema: errore registrato da Link di accesso",
+    "segnala un problema: errore registrato da Elimina account",
+    "segnala un problema: timeout di rete nel buffer",
+    "segnala un problema: mailto codificato",
+    "segnala un problema: rifiuto mostra l'indirizzo e Condividi",
+    "segnala un problema: dall'ospite",
+    "segnala un problema: da collegato",
+    "segnala un problema: dal cancello del profilo",
+    "segnala un problema: dalla schermata d'errore",
+    "segnala un problema: area toccabile ≥ 48 dp"
+  ],
+  "esitiAllaBase": {
+    "segnala un problema: corpo con versione e codici": "assente",
+    "segnala un problema: nessun dato personale": "assente",
+    "segnala un problema: errore registrato da Accesso": "failed",
+    "segnala un problema: errore registrato da Registrazione": "failed",
+    "segnala un problema: errore registrato da Password dimenticata": "failed",
+    "segnala un problema: errore registrato da Reimposta password": "failed",
+    "segnala un problema: errore registrato da Cambio email": "failed",
+    "segnala un problema: errore registrato da Link di accesso": "failed",
+    "segnala un problema: errore registrato da Elimina account": "failed",
+    "segnala un problema: timeout di rete nel buffer": "assente",
+    "segnala un problema: mailto codificato": "assente",
+    "segnala un problema: rifiuto mostra l'indirizzo e Condividi": "assente",
+    "segnala un problema: dall'ospite": "failed",
+    "segnala un problema: da collegato": "failed",
+    "segnala un problema: dal cancello del profilo": "failed",
+    "segnala un problema: dalla schermata d'errore": "failed",
+    "segnala un problema: area toccabile ≥ 48 dp": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/components/problemReportControl.test.tsx": "d7886fc44960162c17bd2084d4af649ee0a1cb99daa3da8d187de3ad25fe9208",
+    "src/__tests__/components/problemReportMounts.test.tsx": "68e345da3af67c82e7acd7c1019cf804de7040a8b342025111165bcbeded72f0",
+    "src/__tests__/shared/auth/problemReportAccount.test.tsx": "63f2ba1ec19b0128f8d851c2f5d5ccfbe9b34432bf1b37a15aaeffab2c118c6e",
+    "src/__tests__/shared/auth/problemReportRuntime.test.tsx": "ac99414cf5c8c867626c30497f4bab1f0941333e000c0bd11d73e9dc0900f112",
+    "src/__tests__/shared/utils/problemReport.test.ts": "ffe221108e86bde8eaa264410cc13ab1da54c69308769ef6eb39ea8e3fdc1525"
+  }
+}
