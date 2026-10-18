@@ -10,7 +10,7 @@ import { convertToMapLocations } from '../utils/mapHelpers';
 import {
   ImpactHeader,
   TotalMealsSection,
-  Results2024Section,
+  AnnualResultsSection,
   CommunitySection,
   MapSection,
 } from '../components';
@@ -73,7 +73,7 @@ const ImpactTabScreenComponent: React.FC = () => {
 
           <TotalMealsSection />
 
-          <Results2024Section />
+          <AnnualResultsSection />
 
           {/* Linea divisoria tra Dal 2012 e Community */}
           <PerfectContainer style={styles.sectionDividerContainer}>

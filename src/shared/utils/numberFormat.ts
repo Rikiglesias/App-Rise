@@ -4,11 +4,12 @@
  */
 
 /**
- * Formatta un numero secondo lo standard italiano
+ * Formatta un numero con i separatori della lingua indicata (italiano se non indicata)
  * @example formatNumber(1234567) → "1.234.567"
+ * @example formatNumber(1234567, 'en') → "1,234,567"
  */
-export const formatNumber = (num: number): string => {
-  return new Intl.NumberFormat('it-IT').format(num);
+export const formatNumber = (num: number, locale = 'it-IT'): string => {
+  return new Intl.NumberFormat(locale).format(num);
 };
 
 /**

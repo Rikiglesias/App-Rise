@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { IMPACT_DATA } from '../data/impactData';
 import { StatCard } from './StatCard';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -10,15 +11,16 @@ import { scale } from '@/shared/constants/perfectScale';
 import { sectionHeaderBackground } from '@/shared/styles';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { formatNumber } from '@/shared/utils/numberFormat';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
- * Sezione dei numeri totali con header decorativo.
+ * Sezione dei numeri dalla nascita di RAH Italia (IMPACT_DATA), con header decorativo.
  * Le card sono solo numeri: le schede di dettaglio non esistono ancora e il tocco
  * apriva la schermata "In fase di sviluppo", da non mostrare nella versione store.
  */
 export const TotalMealsSection: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -62,7 +64,7 @@ export const TotalMealsSection: React.FC = () => {
         <StatCard
           icon="food-apple"
           iconColor={colors.primary[600]}
-          value="15.8M"
+          value={formatNumber(IMPACT_DATA.mealsProducedLifetime, locale)}
           label={t('impact.totalMealsLabel')}
           subtitle={t('impact.totalMealsSubtitle2')}
           gradientColors={[colors.primary[600], colors.primary[800]]}
@@ -72,7 +74,7 @@ export const TotalMealsSection: React.FC = () => {
         <StatCard
           icon="package-variant"
           iconColor={colors.neutral[800]}
-          value="142K"
+          value={formatNumber(IMPACT_DATA.kitsProducedLifetime, locale)}
           label={t('impact.totalKits')}
           subtitle={t('impact.totalKitsSubtitle')}
           gradientColors={[colors.neutral[700], colors.neutral[900]]}

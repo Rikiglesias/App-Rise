@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { IMPACT_DATA } from '../data/impactData';
 import { StatCard } from './StatCard';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
@@ -9,13 +10,15 @@ import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { formatNumber } from '@/shared/utils/numberFormat';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
- * Sezione dei risultati 2024 con header decorativo e statistiche annuali
+ * Sezione dei risultati dell'anno di IMPACT_DATA (resultsYear), con header decorativo.
  */
-export const Results2024Section: React.FC = () => {
-  const { t } = useTranslation();
+export const AnnualResultsSection: React.FC = () => {
+  const { t, locale } = useTranslation();
+  const year = IMPACT_DATA.resultsYear;
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -23,53 +26,53 @@ export const Results2024Section: React.FC = () => {
   return (
     <PerfectContainer
       style={[
-        styles.record2024Section,
+        styles.annualResultsSection,
         isTablet ? { paddingHorizontal: 0 } : {},
       ]}
     >
       {/* Header DRAMATICALLY ENHANCED */}
-      <PerfectContainer style={styles.results2024HeaderContainer}>
-        <PerfectContainer style={styles.results2024HeaderBackground}>
+      <PerfectContainer style={styles.annualResultsHeaderContainer}>
+        <PerfectContainer style={styles.annualResultsHeaderBackground}>
           <PerfectText
             size={24}
             lines={1}
             fontWeight="700"
             immunity={true}
-            style={styles.results2024Title}
+            style={styles.annualResultsTitle}
           >
-            {t('impact.resultsAchieved')}
+            {t('impact.resultsAchieved', { year })}
           </PerfectText>
           <PerfectText
             size={16}
             lines={2}
             fontWeight="500"
             immunity={true}
-            style={styles.results2024Subtitle}
+            style={styles.annualResultsSubtitle}
           >
             {t('impact.description')}
           </PerfectText>
         </PerfectContainer>
       </PerfectContainer>
 
-      {/* Cards informative senza "superato" */}
-      <PerfectContainer style={styles.record2024Grid}>
+      {/* Pasti prodotti nell'anno e vite impattate da quei pasti */}
+      <PerfectContainer style={styles.annualResultsGrid}>
         <StatCard
           icon="food-apple"
           iconColor={colors.primary[600]}
-          value="3.14M"
+          value={formatNumber(IMPACT_DATA.mealsProduced, locale)}
           label={t('impact.mealsPackagedLabel')}
-          subtitle={t('impact.mealsPackagedSubtitle')}
+          subtitle={t('impact.mealsPackagedSubtitle', { year })}
           gradientColors={[colors.primary[500], colors.primary[700]]}
           pressable={false}
           showChevron={false}
           withGradientBorder={false}
         />
         <StatCard
-          icon="package-variant"
+          icon="account-heart"
           iconColor={colors.neutral[800]}
-          value="16.3K"
-          label={t('impact.kitsPackaged')}
-          subtitle={t('impact.kitsPackagedSubtitle')}
+          value={formatNumber(IMPACT_DATA.livesImpactedMeals, locale)}
+          label={t('impact.livesImpactedLabel')}
+          subtitle={t('impact.livesImpactedSubtitle', { year })}
           gradientColors={[colors.neutral[600], colors.neutral[800]]}
           pressable={false}
           showChevron={false}
@@ -82,33 +85,33 @@ export const Results2024Section: React.FC = () => {
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    // Record 2024 Section - INGRANDITA
-    record2024Section: {
+    // Risultati dell'anno - INGRANDITA
+    annualResultsSection: {
       paddingHorizontal: PerfectSpacing.base,
       marginTop: PerfectSpacing.lg,
       marginBottom: PerfectSpacing.xl,
     },
-    record2024Grid: {
+    annualResultsGrid: {
       flexDirection: 'row',
       gap: PerfectSpacing.base,
     },
 
-    // Results 2024 Section - DRAMATICALLY ENHANCED
-    results2024HeaderContainer: {
+    // Header dei risultati dell'anno
+    annualResultsHeaderContainer: {
       alignItems: 'center',
       marginBottom: PerfectSpacing.lg,
     },
-    results2024HeaderBackground: {
+    annualResultsHeaderBackground: {
       ...sectionHeaderBackground('white', colors),
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15)
       alignSelf: 'center',
     },
-    results2024Title: {
+    annualResultsTitle: {
       color: colors.neutral[900],
       textAlign: 'center',
       letterSpacing: 0,
     },
-    results2024Subtitle: {
+    annualResultsSubtitle: {
       color: colors.neutral[700],
       textAlign: 'center',
       marginTop: PerfectSpacing.sm,

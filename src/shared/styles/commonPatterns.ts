@@ -13,7 +13,7 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
  * Pattern per header di sezione con background
- * Usato in: Impact (TotalMeals, Results2024, Map, Community),
+ * Usato in: Impact (TotalMeals, AnnualResults, Map, Community),
  * Actions (Contribute), Social (Header)
  *
  * @param colors token dark-aware (`useThemeColors()`); default `Colors` (light statico)

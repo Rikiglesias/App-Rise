@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { IMPACT_DATA } from '../data/impactData';
 import { StatCard } from './StatCard';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
@@ -9,14 +10,16 @@ import { useTranslation } from '@/shared/hooks/useTranslation';
 import { sectionHeaderBackground } from '@/shared/styles';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { formatNumber } from '@/shared/utils/numberFormat';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /**
- * Sezione community con volontari e partner e header decorativo.
+ * Sezione community: volontari dell'anno e associazioni partner (IMPACT_DATA), con header decorativo.
  * Card solo numeri, senza tocco: vedi TotalMealsSection.
  */
 export const CommunitySection: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const year = IMPACT_DATA.resultsYear;
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -55,9 +58,9 @@ export const CommunitySection: React.FC = () => {
         <StatCard
           icon="account-group"
           iconColor={colors.semantic.success.main}
-          value="13.323"
-          label={t('impact.volunteers2024')}
-          subtitle={t('impact.volunteersActive')}
+          value={formatNumber(IMPACT_DATA.volunteers, locale)}
+          label={t('impact.volunteersLabel')}
+          subtitle={t('impact.volunteersInvolvedIn', { year })}
           gradientColors={[
             colors.gradients.success[0],
             colors.gradients.success[2],
@@ -68,9 +71,9 @@ export const CommunitySection: React.FC = () => {
         <StatCard
           icon="handshake"
           iconColor={colors.gradients.purple[0]}
-          value="150+"
-          label={t('impact.partnersActive')}
-          subtitle={t('impact.partnersCollaboration')}
+          value={formatNumber(IMPACT_DATA.partnerAssociations.length, locale)}
+          label={t('impact.partnerAssociationsLabel')}
+          subtitle={t('impact.partnerAssociationsSubtitle', { year })}
           gradientColors={[
             colors.gradients.purple[0],
             colors.gradients.purple[2],

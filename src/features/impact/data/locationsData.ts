@@ -119,10 +119,10 @@ export const LOCATIONS_DATA: LocationData[] = [
     latitude: 44.4949,
     longitude: 11.3426,
     flag: '🇮🇹',
-    // NB: questi totali nazionali DUPLICANO IMPACT_DATA (mealsProduced/kitPackages/
-    // volunteers in ../data/impactData.ts). Tenere allineati a ogni report annuale.
-    // SSOT unica non applicata: impactData importa già questo file (deriverebbe un
-    // ciclo) e 'beneficiaries' qui riusa il valore volunteers (semantica divergente).
+    // NB: i numeri dell'Italia qui sotto vengono ancora dall'Annual Report 2024 e NON sono
+    // allineati a IMPACT_DATA (../data/impactData.ts, Annual Report 2025). Si rifanno in
+    // C39 (lotto F9-3): lì `stats` dell'Italia tiene solo `meals` e `kits`, volontari e
+    // vite stanno in IMPACT_DATA. Oggi 'beneficiaries' riusa i volontari del 2024.
     stats: {
       meals: 3136968,
       kits: 16321,
