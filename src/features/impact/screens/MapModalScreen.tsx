@@ -32,7 +32,7 @@ type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
 // L'anno vive in LOCATIONS_DATA; le location della mappa condividono lo stesso id.
 const YEAR_BY_ID = new Map<string, number>(
-  LOCATIONS_DATA.map(l => [l.id, l.year])
+  LOCATIONS_DATA.map(l => [l.id, l.anno])
 );
 
 interface YearChipProps {

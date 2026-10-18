@@ -7,11 +7,13 @@ import type { LocalizedText } from '../utils/localizedText';
 
 export interface LocationData {
   id: string;
-  name: string;
+  /** Città di riferimento sulla mappa (sede o progetto): non è un dato d'impatto */
+  name: LocalizedText;
   country: LocalizedText;
   latitude: number;
   longitude: number;
   flag: string;
+  /** Solo numeri dell'Annual Report di `fonte` scritti accanto al paese */
   stats: {
     meals?: number;
     kits?: number;
@@ -22,230 +24,175 @@ export interface LocationData {
   program: LocalizedText;
   partner?: string;
   achievements: LocalizedText[];
-  year: number;
+  /** Anno dell'Annual Report di `fonte` */
+  anno: number;
+  /** URL dell'Annual Report da cui vengono numeri e testi */
+  fonte: string;
 }
 
 /**
- * SINGLE SOURCE OF TRUTH - Tutte le location geografiche
- * Dati reali 2024 da Rise Against Hunger Italia Annual Report
+ * SINGLE SOURCE OF TRUTH - Tutte le location geografiche.
+ * Numeri e testi dall'Annual Report di Rise Against Hunger Italia (`fonte`, p. 5, 9-11, 16):
+ * pasti distribuiti per paese, kit distribuiti per area, programmi Meals e kit packing.
  */
 export const LOCATIONS_DATA: LocationData[] = [
   {
     id: 'zimbabwe',
-    name: 'Gokwe North',
+    name: { it: 'Gokwe North', en: 'Gokwe North' },
     country: { it: 'Zimbabwe', en: 'Zimbabwe' },
     latitude: -18.2871,
     longitude: 28.9378,
     flag: '🇿🇼',
     stats: {
-      meals: 850000,
-      beneficiaries: 3200,
-      schools: 5,
+      meals: 1775088,
     },
     description: {
-      it: 'Il programma "Planting Seeds for Strong Communities" ha trasformato la vita di migliaia di studenti in Zimbabwe, aumentando la frequenza scolastica del 35% attraverso giardini scolastici autosufficienti.',
-      en: 'The "Planting Seeds for Strong Communities" program has transformed the lives of thousands of students in Zimbabwe, increasing school attendance by 35% through self-sufficient school gardens.',
+      it: 'Con il programma Meals portiamo un supporto immediato alla sicurezza alimentare nelle scuole dello Zimbabwe, insieme ai partner locali. Un pasto a scuola incoraggia le famiglie a mandare i bambini a scuola.',
+      en: 'Through the Meals programme we bring immediate food security support to schools in Zimbabwe, together with local partners. A meal at school encourages families to send their children to school.',
     },
-    program: {
-      it: 'Meal Packing + Agricoltura Sostenibile',
-      en: 'Meal Packing + Sustainable Agriculture',
-    },
-    partner: 'ADRA Zimbabwe',
+    program: { it: 'Meals: pasti nelle scuole', en: 'Meals: school meals' },
     achievements: [
       {
-        it: 'Aumento del 35% della frequenza scolastica',
-        en: '35% increase in school attendance',
+        it: 'Pasti distribuiti nelle scuole grazie ai partner locali',
+        en: 'Meals distributed in schools through local partners',
       },
       {
-        it: 'Pasti serviti 5 volte a settimana',
-        en: 'Meals served 5 times a week',
+        it: 'Sostegno alla scolarizzazione di bambini e bambine',
+        en: 'Support for the schooling of boys and girls',
       },
       {
-        it: 'Giardini scolastici autosufficienti',
-        en: 'Self-sufficient school gardens',
-      },
-      {
-        it: '32% delle famiglie ora soddisfa i propri bisogni alimentari',
-        en: '32% of families now meet their own food needs',
+        it: 'Stesse opportunità di apprendimento per tutti',
+        en: 'Equal learning opportunities for all',
       },
     ],
-    year: 2024,
+    anno: 2025,
+    fonte:
+      'https://riseagainsthunger.org/wp-content/uploads/media/Annual-report-2025-ITA_DEF-1.pdf',
   },
   {
     id: 'south-africa',
-    name: 'Johannesburg',
-    country: { it: 'Sud Africa', en: 'South Africa' },
+    name: { it: 'Johannesburg', en: 'Johannesburg' },
+    country: { it: 'Sudafrica', en: 'South Africa' },
     latitude: -26.2041,
     longitude: 28.0473,
     flag: '🇿🇦',
     stats: {
-      meals: 57400000,
-      beneficiaries: 3600000,
+      meals: 570240,
     },
     description: {
-      it: 'La sede regionale africana coordina progetti in tutto il continente, supportando centri per lo sviluppo della prima infanzia e iniziative di agricoltura sostenibile.',
-      en: 'The African regional office coordinates projects across the continent, supporting early childhood development centres and sustainable agriculture initiatives.',
+      it: 'Con il programma Meals portiamo pasti nelle scuole del Sudafrica, lavorando con i nostri partner per promuovere un cambiamento sostenibile di lungo periodo.',
+      en: 'Through the Meals programme we bring meals to schools in South Africa, working with our partners to promote sustainable, long-term change.',
     },
-    program: {
-      it: 'Early Childhood Development + Farming',
-      en: 'Early Childhood Development + Farming',
-    },
+    program: { it: 'Meals: pasti nelle scuole', en: 'Meals: school meals' },
     achievements: [
       {
-        it: '57,4M+ pasti confezionati nel 2023',
-        en: '57.4M+ meals packed in 2023',
-      },
-      { it: '3,6M+ vite impattate', en: '3.6M+ lives impacted' },
-      {
-        it: 'Centri per sviluppo prima infanzia',
-        en: 'Early childhood development centres',
+        it: 'Pasti distribuiti nelle scuole grazie ai partner locali',
+        en: 'Meals distributed in schools through local partners',
       },
       {
-        it: 'Progetti di agricoltura sostenibile',
-        en: 'Sustainable agriculture projects',
+        it: 'Cambiamento sostenibile di lungo periodo',
+        en: 'Sustainable, long-term change',
       },
     ],
-    year: 2023,
+    anno: 2025,
+    fonte:
+      'https://riseagainsthunger.org/wp-content/uploads/media/Annual-report-2025-ITA_DEF-1.pdf',
   },
   {
     id: 'italy',
-    name: 'Bologna',
+    name: { it: 'Bologna', en: 'Bologna' },
     country: { it: 'Italia', en: 'Italy' },
     latitude: 44.4949,
     longitude: 11.3426,
     flag: '🇮🇹',
-    // NB: i numeri dell'Italia qui sotto vengono ancora dall'Annual Report 2024 e NON sono
-    // allineati a IMPACT_DATA (../data/impactData.ts, Annual Report 2025). Si rifanno in
-    // C39 (lotto F9-3): lì `stats` dell'Italia tiene solo `meals` e `kits`, volontari e
-    // vite stanno in IMPACT_DATA. Oggi 'beneficiaries' riusa i volontari del 2024.
+    // Volontari e vite dell'Italia stanno in IMPACT_DATA: qui solo i kit distribuiti in Italia.
     stats: {
-      meals: 3136968,
-      kits: 16321,
-      beneficiaries: 13323,
+      kits: 5833,
     },
     description: {
-      it: 'La sede italiana coordina tutte le attività europee, gestendo il progetto "Pasto Sospeso" per le emergenze locali e organizzando eventi di confezionamento con migliaia di volontari.',
-      en: 'The Italian office coordinates all European activities, managing the "Pasto Sospeso" project for local emergencies and organising packing events with thousands of volunteers.',
+      it: 'La sede di Rise Against Hunger Italia è a Bologna. Con il kit packing aiutiamo anche persone in difficoltà nel nostro territorio, insieme a una rete di associazioni partner, e con la campagna "Un pasto in sospeso" confezioniamo e distribuiamo cibo per famiglie in difficoltà.',
+      en: 'Rise Against Hunger Italia is based in Bologna. Through kit packing we also help people in need in our own area, together with a network of partner associations, and with the "Un pasto in sospeso" campaign we pack and distribute food for families in need.',
     },
     program: {
-      it: 'Kit Packing + Pasto Sospeso',
-      en: 'Kit Packing + Pasto Sospeso',
+      it: 'Kit packing + Un pasto in sospeso',
+      en: 'Kit packing + Un pasto in sospeso',
     },
     achievements: [
       {
-        it: '3.136.968 pasti confezionati nel 2024',
-        en: '3,136,968 meals packed in 2024',
+        it: 'Kit alimentari per persone in difficoltà nel nostro territorio',
+        en: 'Food kits for people in need in our own area',
       },
-      { it: '16.321 kit prodotti', en: '16,321 kits produced' },
-      { it: '13.323 volontari coinvolti', en: '13,323 volunteers involved' },
       {
-        it: 'Referente per tutta Europa',
-        en: 'Contact point for all of Europe',
+        it: 'Rete di associazioni partner',
+        en: 'Network of partner associations',
+      },
+      {
+        it: 'Eventi di confezionamento con volontari, aziende e associazioni',
+        en: 'Packing events with volunteers, companies and associations',
       },
     ],
-    year: 2024,
+    anno: 2025,
+    fonte:
+      'https://riseagainsthunger.org/wp-content/uploads/media/Annual-report-2025-ITA_DEF-1.pdf',
   },
   {
     id: 'usa',
-    name: 'Raleigh',
+    name: { it: 'Raleigh', en: 'Raleigh' },
     country: { it: 'Stati Uniti', en: 'United States' },
     latitude: 35.7796,
     longitude: -78.6382,
     flag: '🇺🇸',
-    stats: {
-      meals: 365000000,
-      beneficiaries: 74,
-    },
+    stats: {},
     description: {
-      it: 'Dal 1998, la sede globale coordina le operazioni in 74 paesi del mondo, avendo distribuito oltre 365 milioni di pasti nella lotta globale contro la fame.',
-      en: 'Since 1998, the global headquarters has coordinated operations in 74 countries worldwide, distributing over 365 million meals in the global fight against hunger.',
+      it: "Rise Against Hunger è nata negli Stati Uniti con il nome di Stop Hunger Now. Oggi è un'organizzazione internazionale con sede in diversi paesi, guidata dalla visione di un mondo senza fame.",
+      en: 'Rise Against Hunger began in the United States under the name Stop Hunger Now. Today it is an international organisation based in several countries, guided by the vision of a world without hunger.',
     },
-    program: { it: 'Coordinamento Globale', en: 'Global Coordination' },
+    program: { it: 'Coordinamento globale', en: 'Global coordination' },
     achievements: [
       {
-        it: '365+ milioni di pasti distribuiti dal 2005',
-        en: '365+ million meals distributed since 2005',
+        it: 'Il movimento è nato negli Stati Uniti',
+        en: 'The movement began in the United States',
       },
       {
-        it: 'Presente in 74 paesi nel mondo',
-        en: 'Present in 74 countries worldwide',
-      },
-      {
-        it: '25+ anni di storia nella lotta alla fame',
-        en: '25+ years of fighting hunger',
-      },
-      {
-        it: 'Sede globale del movimento',
-        en: 'Global headquarters of the movement',
+        it: 'Sedi in diversi paesi del mondo',
+        en: 'Offices in several countries worldwide',
       },
     ],
-    year: 2024,
+    anno: 2025,
+    fonte:
+      'https://riseagainsthunger.org/wp-content/uploads/media/Annual-report-2025-ITA_DEF-1.pdf',
   },
   {
     id: 'ukraine',
-    name: 'Kiev',
+    name: { it: 'Kiev', en: 'Kyiv' },
     country: { it: 'Ucraina', en: 'Ukraine' },
     latitude: 50.4501,
     longitude: 30.5234,
     flag: '🇺🇦',
     stats: {
-      meals: 250000,
-      kits: 5000,
-      beneficiaries: 15000,
+      meals: 52272,
+      kits: 4100,
     },
     description: {
-      it: 'La risposta di emergenza per il conflitto in Ucraina ha permesso di supportare migliaia di famiglie sfollate attraverso kit alimentari e partnership con organizzazioni locali.',
-      en: 'The emergency response to the conflict in Ukraine has supported thousands of displaced families through food kits and partnerships with local organisations.',
+      it: "La nostra azione si concentra soprattutto sull'Ucraina e sui territori vicini coinvolti nella guerra, come la Moldavia o la Slovacchia: i kit aiutano le persone nelle aree più colpite, come Odessa, Kharkiv e Zaporizhzhia.",
+      en: 'Our work focuses above all on Ukraine and on neighbouring areas affected by the war, such as Moldova and Slovakia: the kits help people in the hardest-hit areas, such as Odesa, Kharkiv and Zaporizhzhia.',
     },
-    program: { it: 'Emergenza Umanitaria', en: 'Humanitarian Emergency' },
+    program: {
+      it: 'Kit packing per le emergenze',
+      en: 'Kit packing for emergencies',
+    },
     achievements: [
       {
-        it: 'Supporto alle famiglie sfollate',
-        en: 'Support for displaced families',
-      },
-      { it: 'Kit alimentari di emergenza', en: 'Emergency food kits' },
-      {
-        it: 'Partnership con organizzazioni locali',
-        en: 'Partnerships with local organisations',
-      },
-      { it: 'Risposta rapida alla crisi', en: 'Rapid crisis response' },
-    ],
-    year: 2024,
-  },
-  {
-    id: 'somalia',
-    name: 'Mogadiscio',
-    country: { it: 'Somalia', en: 'Somalia' },
-    latitude: 2.0469,
-    longitude: 45.3182,
-    flag: '🇸🇴',
-    stats: {
-      meals: 180000,
-      beneficiaries: 8500,
-    },
-    description: {
-      it: 'I programmi di alimentazione scolastica stanno combattendo la malnutrizione infantile e aumentando la frequenza scolastica nelle comunità più vulnerabili.',
-      en: 'School feeding programs are tackling child malnutrition and increasing school attendance in the most vulnerable communities.',
-    },
-    program: { it: 'School Feeding Program', en: 'School Feeding Program' },
-    achievements: [
-      {
-        it: 'Alimentazione nelle scuole primarie',
-        en: 'Meals in primary schools',
+        it: 'Kit alimentari nelle aree più colpite dalla guerra',
+        en: 'Food kits in the areas hardest hit by the war',
       },
       {
-        it: 'Riduzione della malnutrizione infantile',
-        en: 'Reduced child malnutrition',
-      },
-      {
-        it: 'Aumento della frequenza scolastica',
-        en: 'Increased school attendance',
-      },
-      {
-        it: 'Supporto alle comunità vulnerabili',
-        en: 'Support for vulnerable communities',
+        it: 'Aiuti anche nei territori vicini',
+        en: 'Aid in neighbouring areas too',
       },
     ],
-    year: 2024,
+    anno: 2025,
+    fonte:
+      'https://riseagainsthunger.org/wp-content/uploads/media/Annual-report-2025-ITA_DEF-1.pdf',
   },
 ];

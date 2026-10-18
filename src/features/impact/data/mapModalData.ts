@@ -28,9 +28,10 @@ export interface MapModalData {
 
 type LocalizedMapModalData = Omit<
   MapModalData,
-  'subtitle' | 'description' | 'program' | 'achievements'
+  'title' | 'subtitle' | 'description' | 'program' | 'achievements'
 > &
   Pick<LocationData, 'description' | 'program' | 'achievements'> & {
+    title: LocalizedText;
     subtitle: LocalizedText;
   };
 
@@ -59,7 +60,7 @@ const toModalFormat = (location: LocationData): LocalizedMapModalData => {
     program: location.program,
     achievements: location.achievements,
     stats: location.stats,
-    year: location.year,
+    year: location.anno,
   };
 
   if (location.partner) result.partner = location.partner;
@@ -85,6 +86,7 @@ export const getModalData = (locationId: string): MapModalData | null => {
 
   return {
     ...data,
+    title: resolveLocalizedText(data.title),
     subtitle: resolveLocalizedText(data.subtitle),
     description: resolveLocalizedText(data.description),
     program: resolveLocalizedText(data.program),

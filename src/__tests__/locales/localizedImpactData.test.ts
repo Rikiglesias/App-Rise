@@ -35,20 +35,20 @@ describe('contenuti impact bilingui', () => {
       const english = getModalData(location.id);
 
       expect(italian).toMatchObject({
-        title: location.name,
+        title: location.name.it,
         description: location.description.it,
         program: location.program.it,
         achievements: location.achievements.map(text => text.it),
         stats: location.stats,
-        year: location.year,
+        year: location.anno,
       });
       expect(english).toMatchObject({
-        title: location.name,
+        title: location.name.en,
         description: location.description.en,
         program: location.program.en,
         achievements: location.achievements.map(text => text.en),
         stats: location.stats,
-        year: location.year,
+        year: location.anno,
       });
       expect(italian?.subtitle).toContain(location.country.it);
       expect(english?.subtitle).toContain(location.country.en);
@@ -87,11 +87,10 @@ describe('contenuti impact bilingui', () => {
 
     expect(italian.map(location => location.country)).toEqual([
       'Zimbabwe',
-      'Sud Africa',
+      'Sudafrica',
       'Italia',
       'Stati Uniti',
       'Ucraina',
-      'Somalia',
     ]);
     expect(english.map(location => location.country)).toEqual([
       'Zimbabwe',
@@ -99,7 +98,6 @@ describe('contenuti impact bilingui', () => {
       'Italy',
       'United States',
       'Ukraine',
-      'Somalia',
     ]);
     expect(english.map(location => location.coordinates)).toEqual(
       italian.map(location => location.coordinates)
@@ -127,12 +125,11 @@ describe('contenuti impact bilingui', () => {
 
   it('preserva i valori numerici delle località', () => {
     expect(LOCATIONS_DATA.map(location => location.stats)).toEqual([
-      { meals: 850000, beneficiaries: 3200, schools: 5 },
-      { meals: 57400000, beneficiaries: 3600000 },
-      { meals: 3136968, kits: 16321, beneficiaries: 13323 },
-      { meals: 365000000, beneficiaries: 74 },
-      { meals: 250000, kits: 5000, beneficiaries: 15000 },
-      { meals: 180000, beneficiaries: 8500 },
+      { meals: 1775088 },
+      { meals: 570240 },
+      { kits: 5833 },
+      {},
+      { meals: 52272, kits: 4100 },
     ]);
   });
 });

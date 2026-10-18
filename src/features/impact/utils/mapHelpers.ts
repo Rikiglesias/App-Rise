@@ -13,7 +13,7 @@ export const convertToMapLocations = (): Location[] => {
   return locations.map(location => {
     const result: Location = {
       id: location.id,
-      name: location.name,
+      name: resolveLocalizedText(location.name),
       country: resolveLocalizedText(location.country),
       coordinates: {
         latitude: location.latitude,

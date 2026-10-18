@@ -11,7 +11,7 @@ import type { Location } from '@/shared/types/location';
 const asLocations = (): Location[] =>
   LOCATIONS_DATA.map(d => ({
     id: d.id,
-    name: d.name,
+    name: resolveLocalizedText(d.name),
     country: resolveLocalizedText(d.country),
     coordinates: { latitude: d.latitude, longitude: d.longitude },
     projects: 0,
@@ -45,9 +45,9 @@ describe('worldMapGeo', () => {
   });
 
   describe('matchLocationsToCountries', () => {
-    it('associa tutte le 6 location-evento (6 paesi distinti)', () => {
+    it('associa tutte le 5 location-evento (5 paesi distinti)', () => {
       const matched = matchLocationsToCountries(asLocations());
-      expect(matched.size).toBe(6);
+      expect(matched.size).toBe(5);
       const total = Array.from(matched.values()).reduce(
         (n, arr) => n + arr.length,
         0
@@ -71,7 +71,6 @@ describe('worldMapGeo', () => {
       expect(countryNameFor('ukraine')).toBe('Ukraine');
       expect(countryNameFor('zimbabwe')).toBe('Zimbabwe');
       expect(countryNameFor('south-africa')).toBe('South Africa');
-      expect(countryNameFor('somalia')).toBe('Somalia');
     });
 
     it('preserva più location nello stesso paese senza sovrascrivere', () => {

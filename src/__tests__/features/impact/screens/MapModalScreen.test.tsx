@@ -66,7 +66,6 @@ describe('MapModalScreen — tap paese → dettaglio nazione', () => {
     const { getByText, getAllByLabelText, queryByText } = renderScreen();
     fireEvent.press(getByText('Italy'));
     expect(getByText('Italy - European Office')).toBeTruthy();
-    expect(getByText('Meals')).toBeTruthy();
     expect(getByText('Kits')).toBeTruthy();
     expect(getByText('PROGRAM')).toBeTruthy();
     expect(getByText('RESULTS')).toBeTruthy();
