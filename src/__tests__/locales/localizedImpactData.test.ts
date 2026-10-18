@@ -1,5 +1,4 @@
 import { changeLanguage, getCurrentLocale } from '@/locales';
-import { IMPACT_DATA } from '@/features/impact/data/impactData';
 import { LOCATIONS_DATA } from '@/features/impact/data/locationsData';
 import { getModalData } from '@/features/impact/data/mapModalData';
 import { resolveLocalizedText } from '@/features/impact/utils/localizedText';
@@ -110,23 +109,13 @@ describe('contenuti impact bilingui', () => {
     );
   });
 
-  it('fornisce testi it/en non vuoti per località, storie e milestone', () => {
+  it('fornisce testi it/en non vuoti per le località', () => {
     const texts: LocalizedText[] = [
       ...LOCATIONS_DATA.flatMap(location => [
         location.country,
         location.description,
         location.program,
         ...location.achievements,
-      ]),
-      ...IMPACT_DATA.stories.flatMap(story => [
-        story.title,
-        story.location,
-        story.text,
-      ]),
-      ...IMPACT_DATA.milestones.flatMap(milestone => [
-        milestone.title,
-        milestone.value,
-        milestone.description,
       ]),
     ];
     for (const text of texts) {
@@ -136,7 +125,7 @@ describe('contenuti impact bilingui', () => {
     }
   });
 
-  it('preserva i valori numerici delle località e delle milestone', () => {
+  it('preserva i valori numerici delle località', () => {
     expect(LOCATIONS_DATA.map(location => location.stats)).toEqual([
       { meals: 850000, beneficiaries: 3200, schools: 5 },
       { meals: 57400000, beneficiaries: 3600000 },
@@ -144,17 +133,6 @@ describe('contenuti impact bilingui', () => {
       { meals: 365000000, beneficiaries: 74 },
       { meals: 250000, kits: 5000, beneficiaries: 15000 },
       { meals: 180000, beneficiaries: 8500 },
-    ]);
-    changeLanguage('en');
-    expect(
-      IMPACT_DATA.milestones.map(milestone =>
-        resolveLocalizedText(milestone.value)
-      )
-    ).toEqual([
-      '50,000+ Meals',
-      '60,000+ Meals',
-      '1,000 Meals + 1.51M Viewers',
-      '€420,370 Raised',
     ]);
   });
 });

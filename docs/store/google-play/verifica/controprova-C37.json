@@ -1,0 +1,15 @@
+{
+  "criterio": "C37",
+  "base": "fbefa98",
+  "titoli": [
+    "numeri d'impatto: le 6 StatCard mostrano IMPACT_DATA in it",
+    "numeri d'impatto: le 6 StatCard mostrano IMPACT_DATA in en"
+  ],
+  "esitiAllaBase": {
+    "numeri d'impatto: le 6 StatCard mostrano IMPACT_DATA in it": "failed",
+    "numeri d'impatto: le 6 StatCard mostrano IMPACT_DATA in en": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/impact/impactNumbers.test.tsx": "44d99c2c40f9be4f94e2474b681a5fc73080a20692a4ecc6a6453ec4888e1d62"
+  }
+}

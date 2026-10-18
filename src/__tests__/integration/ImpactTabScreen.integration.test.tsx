@@ -41,11 +41,11 @@ jest.mock('@/features/impact/components', () => ({
       </View>
     );
   },
-  Results2024Section: () => {
+  AnnualResultsSection: () => {
     const { View, Text } = require('react-native');
     return (
       <View>
-        <Text>Risultati 2024</Text>
+        <Text>Risultati annuali</Text>
       </View>
     );
   },
@@ -164,7 +164,7 @@ describe('ImpactTabScreen - Integration Test', () => {
     });
   });
 
-  it('dovrebbe mostrare la sezione risultati 2024', async () => {
+  it("dovrebbe mostrare la sezione dei risultati dell'anno", async () => {
     renderWithProviders(
       <NavigationContainer>
         <ImpactTabScreen />
@@ -173,7 +173,7 @@ describe('ImpactTabScreen - Integration Test', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Risultati 2024/i)).toBeTruthy();
+      expect(screen.getByText(/Risultati annuali/i)).toBeTruthy();
     });
   });
 
