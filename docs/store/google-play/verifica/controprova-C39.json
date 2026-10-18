@@ -1,0 +1,13 @@
+{
+  "criterio": "C39",
+  "base": "fbefa98",
+  "titoli": [
+    "dati località: in inglese Kyiv"
+  ],
+  "esitiAllaBase": {
+    "dati località: in inglese Kyiv": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/impact/screens/mapLocalitaLingua.test.tsx": "1d9b37e852817af6a1148ab9b3d038c4440c18e5772179f333ae170791dc4de8"
+  }
+}
