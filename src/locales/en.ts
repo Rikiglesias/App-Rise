@@ -548,17 +548,6 @@ export default {
     linkedinDescription: 'Opportunities and partnerships',
   },
 
-  development: {
-    title: '🚧 Under Development',
-    subtitle: 'This section will be available soon',
-    whatWeArePreparing: 'What we are preparing',
-    description:
-      'Our team is working hard to bring you innovative new features and an even better user experience.',
-    improvedDesign: 'Improved design',
-    newFeatures: 'New features',
-    optimizedPerformance: 'Optimized performance',
-  },
-
   about: {
     title: 'About Us',
     description: 'Organization fighting world hunger',

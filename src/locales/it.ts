@@ -576,17 +576,6 @@ export default {
     linkedinDescription: 'Opportunità e partnership',
   },
 
-  development: {
-    title: '🚧 In Fase di Sviluppo',
-    subtitle: 'Questa sezione sarà presto disponibile',
-    whatWeArePreparing: 'Cosa stiamo preparando',
-    description:
-      "Il nostro team sta lavorando duramente per portarti nuove funzionalità innovative e un'esperienza utente ancora migliore.",
-    improvedDesign: 'Design migliorato',
-    newFeatures: 'Nuove funzionalità',
-    optimizedPerformance: 'Performance ottimizzate',
-  },
-
   about: {
     title: 'Chi Siamo',
     description: 'Organizzazione contro la fame nel mondo',

@@ -14,11 +14,6 @@ jest.mock('../../features/social/screens/SeguiciScreen', () => ({
   default: () => null,
 }));
 
-jest.mock('../../navigation/LazyLoading', () => ({
-  WrappedProjectsScreen: () => null,
-  WrappedDevelopmentScreen: () => null,
-}));
-
 jest.mock('../../navigation/BottomTabNavigator', () => ({
   __esModule: true,
   default: () => null,

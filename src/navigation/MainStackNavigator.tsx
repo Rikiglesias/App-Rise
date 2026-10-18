@@ -1,9 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
-// Lazy Screens (keep lazy for less critical screens)
-import { WrappedProjectsScreen, WrappedDevelopmentScreen } from './LazyLoading';
-
 import BottomTabNavigator from './BottomTabNavigator';
 import { stackScreenOptions } from './stackScreenOptions';
 import type { RootStackParamList } from './types';
@@ -38,60 +35,9 @@ export const MainStackNavigator: React.FC = () => (
 
     {/* Stack Screens for detailed views */}
     <Stack.Screen
-      name="Progetti"
-      component={WrappedProjectsScreen}
-      options={{
-        title: 'I Nostri Progetti',
-        headerShown: false,
-      }}
-    />
-
-    <Stack.Screen
-      name="CharityShop"
-      component={WrappedDevelopmentScreen}
-      options={{
-        title: 'Charity Shop',
-      }}
-      initialParams={{
-        title: 'Charity Shop',
-        subtitle: 'Acquisti che aiutano, stesso prezzo',
-      }}
-    />
-
-    <Stack.Screen
-      name="CharityGiftCard"
-      component={WrappedDevelopmentScreen}
-      options={{ title: 'Gift Cards' }}
-      initialParams={{
-        title: 'Gift Cards',
-        subtitle: 'Per te o regalo, donazione automatica',
-      }}
-    />
-
-    <Stack.Screen
-      name="Calendario"
-      component={WrappedDevelopmentScreen}
-      options={{ title: 'Eventi & Calendario' }}
-      initialParams={{
-        title: 'Calendario',
-        subtitle: 'Eventi e appuntamenti',
-      }}
-    />
-
-    <Stack.Screen
       name="Seguici"
       component={SeguiciScreen}
       options={{ headerShown: false }}
-    />
-
-    <Stack.Screen
-      name="Tracciabilita"
-      component={WrappedDevelopmentScreen}
-      options={{ title: 'Impatto Trasparente' }}
-      initialParams={{
-        title: 'Tracciabilità',
-        subtitle: "Segui l'impatto delle donazioni",
-      }}
     />
 
     <Stack.Screen

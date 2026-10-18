@@ -5,30 +5,8 @@ import type { Location } from '@/shared/types/location';
 
 export interface RootStackParamList {
   Home: NavigatorScreenParams<BottomTabParamList> | undefined;
-  Progetti: undefined;
-  CharityShop: {
-    title: string;
-    subtitle?: string;
-    description?: string;
-  };
-  CharityGiftCard: {
-    title: string;
-    subtitle?: string;
-    description?: string;
-  };
-  Calendario: {
-    title: string;
-    subtitle?: string;
-    description?: string;
-  };
   Seguici: undefined;
-  Tracciabilita: {
-    title: string;
-    subtitle?: string;
-    description?: string;
-  };
   ChiSiamo: undefined;
-  Projects: undefined;
   ReConsent: undefined;
   SignUp: undefined;
   CompleteProfile: undefined;

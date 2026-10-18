@@ -34,11 +34,6 @@ jest.mock('@/features/home/components/EntraInAzione', () => ({
 }));
 jest.mock('@/features/about/screens/ChiSiamoScreen', () => () => null);
 jest.mock('@/features/social/screens/SeguiciScreen', () => () => null);
-jest.mock('@/navigation/LazyLoading', () => ({
-  WrappedImpatto2024Screen: () => null,
-  WrappedProjectsScreen: () => null,
-  WrappedDevelopmentScreen: () => null,
-}));
 
 const mockUseAuth = jest.mocked(useAuth);
 const fullProfile = {
