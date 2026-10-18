@@ -17,6 +17,7 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
 import { buildDisplayName } from '@/shared/auth/displayName';
 import { getProfileCompletion } from '@/shared/auth/profileCompletion';
 import type { RootStackNavigationProp } from '@/navigation/types';
@@ -58,6 +59,7 @@ export const ProfileScreen: React.FC = () => {
     error: consentError,
     setError: setConsentError,
     reportError: reportConsent,
+    showError: showConsent,
     offline: consentOffline,
   } = useAuthError('auth.consents.error');
   const {
@@ -105,11 +107,14 @@ export const ProfileScreen: React.FC = () => {
   // programmata e il banner sparirebbe comunque al primo ricaricamento del
   // profilo — la persona resterebbe convinta di aver fermato la cancellazione del
   // proprio account mentre non l'ha fermata. Il `.catch` copre il rigetto della
-  // promessa, non solo l'errore restituito.
+  // promessa, non solo l'errore restituito. Il rigetto arriva solo dal rilancio di
+  // `loadProfile`, che l'ha già registrato col ramo «Profilo»: qui si mostra e basta
+  // (stesso schema di `runSchedule` in DeleteAccountScreen).
   const {
     error: deletionCancelError,
     setError: setDeletionCancelError,
     reportError: reportCancel,
+    showError: showCancel,
     offline: cancelOffline,
   } = useAuthError('auth.delete.error');
   const handleCancelDeletion = useCallback((): void => {
@@ -118,21 +123,27 @@ export const ProfileScreen: React.FC = () => {
       .then(({ error }) => {
         if (error) reportCancel(error);
       })
-      .catch(reportCancel);
-  }, [cancelScheduledDeletion, setDeletionCancelError, reportCancel]);
+      .catch(showCancel);
+  }, [
+    cancelScheduledDeletion,
+    setDeletionCancelError,
+    reportCancel,
+    showCancel,
+  ]);
   const handleMarketingToggle = useCallback(
     (value: boolean): void => {
       setConsentError(undefined);
       // Gemello degli altri due handler di questa schermata: anche qui la promessa
       // può rigettare, e un consenso che non si è salvato deve dirlo — chi tocca
-      // l'interruttore resterebbe altrimenti convinto di averlo cambiato.
+      // l'interruttore resterebbe altrimenti convinto di averlo cambiato. Come
+      // sopra, il rigetto viene dal rilancio di `loadProfile`, già registrato.
       void setMarketingConsent(value)
         .then(r => {
           if (r.error) reportConsent(r.error);
         })
-        .catch(reportConsent);
+        .catch(showConsent);
     },
-    [setMarketingConsent, setConsentError, reportConsent]
+    [setMarketingConsent, setConsentError, reportConsent, showConsent]
   );
 
   const handleReload = useCallback((): void => {
@@ -357,6 +368,7 @@ export const ProfileScreen: React.FC = () => {
         onPress={handleDelete}
         variant="link"
       />
+      <SegnalaProblema />
     </AuthScreen>
   );
 };

@@ -1,6 +1,9 @@
 import { useCallback, useState } from 'react';
 
-import { registraErroreAccount } from '@/shared/auth/registraErroreAccount';
+import {
+  chiaveErroreAccount,
+  registraErroreAccount,
+} from '@/shared/auth/registraErroreAccount';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
 /** Messaggio e azione di recupero derivano dallo stesso mappatore. */
@@ -15,19 +18,30 @@ export const useAuthError = (
     setMessage(message ?? null);
     setErrorKey(null);
   }, []);
-  const reportError = useCallback(
-    (cause: unknown): void => {
-      const key = registraErroreAccount(cause, ramo);
+  const show = useCallback(
+    (key: string): void => {
       setErrorKey(key);
       setMessage(t(key === 'generic' ? fallback : `auth.errors.${key}`));
     },
-    [fallback, ramo, t]
+    [fallback, t]
+  );
+  // Per gli errori che NESSUNO ha ancora registrato (es. esportazione, uscita).
+  const reportError = useCallback(
+    (cause: unknown): void => show(registraErroreAccount(cause, ramo)),
+    [ramo, show]
+  );
+  // Per gli errori che la fonte ha già registrato col suo ramo (registraEsitoAccount
+  // e il rilancio di loadProfile): un'altra riga sarebbe un doppione nel rapporto.
+  const showError = useCallback(
+    (cause: unknown): void => show(chiaveErroreAccount(cause)),
+    [show]
   );
   return {
     error,
     errorKey,
     setError,
     reportError,
+    showError,
     offline: errorKey === 'network',
   };
 };

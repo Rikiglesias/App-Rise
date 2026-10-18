@@ -36,7 +36,7 @@ export const DeleteAccountScreen: React.FC = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const [loading, setLoading] = useState(false);
-  const { error, setError, reportError, offline } =
+  const { error, setError, reportError, showError, offline } =
     useAuthError('auth.delete.error');
   const [retryAction, setRetryAction] = useState<'now' | 'scheduled'>('now');
 
@@ -57,14 +57,14 @@ export const DeleteAccountScreen: React.FC = () => {
     try {
       esito = await deleteAccountNow();
     } catch (error) {
-      reportError(error);
+      showError(error);
       return;
     } finally {
       setLoading(false);
     }
     const { error: err, sessioneAncoraSulDispositivo } = esito;
     if (err) {
-      reportError(err);
+      showError(err);
       return;
     }
     // Su successo l'AuthContext porta lo stato a unauthenticated (signOut).
@@ -74,7 +74,7 @@ export const DeleteAccountScreen: React.FC = () => {
     // avrebbe modo di capire perché. Non è un errore della cancellazione — infatti
     // il messaggio è diverso da quello di fallimento.
     if (sessioneAncoraSulDispositivo) setError(t('auth.delete.sessionResidua'));
-  }, [deleteAccountNow, reportError, setError, t]);
+  }, [deleteAccountNow, showError, setError, t]);
 
   const runSchedule = useCallback(async (): Promise<void> => {
     setError(undefined);
@@ -86,14 +86,14 @@ export const DeleteAccountScreen: React.FC = () => {
     try {
       ({ error: err } = await scheduleDeletion());
     } catch (error) {
-      reportError(error);
+      showError(error);
       return;
     } finally {
       setLoading(false);
     }
     if (err) reportError(err);
     else navigation.goBack();
-  }, [scheduleDeletion, navigation, reportError, setError]);
+  }, [scheduleDeletion, navigation, reportError, showError, setError]);
 
   const goBack = useCallback((): void => navigation.goBack(), [navigation]);
 

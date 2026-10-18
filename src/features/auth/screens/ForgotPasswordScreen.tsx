@@ -31,7 +31,7 @@ export const ForgotPasswordScreen: React.FC = () => {
   const {
     error: submitError,
     setError: setSubmitError,
-    reportError,
+    showError,
     offline,
   } = useAuthError('auth.forgot.error');
 
@@ -46,11 +46,11 @@ export const ForgotPasswordScreen: React.FC = () => {
       if (error) throw error;
       setSent(true);
     } catch (error) {
-      reportError(error);
+      showError(error);
     } finally {
       setLoading(false);
     }
-  }, [email, resetPassword, t, setSubmitError, reportError]);
+  }, [email, resetPassword, t, setSubmitError, showError]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();

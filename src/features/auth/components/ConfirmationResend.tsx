@@ -11,7 +11,7 @@ import { useTranslation } from '@/shared/hooks/useTranslation';
 export const ConfirmationResend: React.FC<{ email: string }> = ({ email }) => {
   const { t } = useTranslation();
   const { resendConfirmation, confirmationRetryAt } = useAuth();
-  const { error, setError, reportError, offline } = useAuthError();
+  const { error, setError, showError, offline } = useAuthError();
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [now, setNow] = useState(Date.now);
@@ -38,16 +38,16 @@ export const ConfirmationResend: React.FC<{ email: string }> = ({ email }) => {
     setError(null);
     void resendConfirmation(email)
       .then(result => {
-        if (result.error) reportError(result.error);
+        if (result.error) showError(result.error);
         else setSent(true);
       })
-      .catch(reportError)
+      .catch(showError)
       .finally(() => {
         busy.current = false;
         setLoading(false);
         setNow(Date.now());
       });
-  }, [email, until, resendConfirmation, setError, reportError]);
+  }, [email, until, resendConfirmation, setError, showError]);
 
   return (
     <>

@@ -14,6 +14,7 @@ import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { RISE_URLS } from '@/shared/constants/urls';
+import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
 
 /**
  * Re-consenso al cambio materiale dell'informativa (GDPR Art.7, EDPB §110).
@@ -33,7 +34,7 @@ export const ReConsentScreen: React.FC = () => {
   const { openLink, isLoading } = useLinkHandler();
 
   const [loading, setLoading] = useState(false);
-  const { error, setError, reportError, offline } = useAuthError(
+  const { error, setError, showError, offline } = useAuthError(
     'auth.consents.error',
     'RiConsenso'
   );
@@ -68,11 +69,11 @@ export const ReConsentScreen: React.FC = () => {
     // a girare per sempre, senza messaggio e senza alcuna via d'uscita.
     void acceptCurrentPolicy()
       .then(r => {
-        if (r.error) reportError(r.error);
+        if (r.error) showError(r.error);
       })
-      .catch(reportError)
+      .catch(showError)
       .finally(() => setLoading(false));
-  }, [acceptCurrentPolicy, reportError, setError]);
+  }, [acceptCurrentPolicy, showError, setError]);
 
   return (
     <AuthScreen title={t('auth.consents.reconsentTitle')}>
@@ -123,6 +124,7 @@ export const ReConsentScreen: React.FC = () => {
         loading={logoutLoading}
         disabled={loading}
       />
+      <SegnalaProblema />
     </AuthScreen>
   );
 };

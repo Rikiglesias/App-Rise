@@ -43,7 +43,7 @@ export const useSignUpForm = () => {
   const {
     error: submitError,
     setError: setSubmitError,
-    reportError,
+    showError,
     offline,
   } = useAuthError();
   const [loading, setLoading] = useState(false);
@@ -212,10 +212,10 @@ export const useSignUpForm = () => {
         // vuota sarebbe rumore nei metadata — che sono superficie visibile al partner.
         nickname: nickname.trim(),
       });
-      if (error) reportError(error);
+      if (error) showError(error);
       else setDone(true);
     } catch (error) {
-      reportError(error);
+      showError(error);
     } finally {
       setLoading(false);
     }
@@ -236,7 +236,7 @@ export const useSignUpForm = () => {
     nicknameCheck,
     signUp,
     setSubmitError,
-    reportError,
+    showError,
   ]);
 
   const handleSubmit = useCallback((): void => {

@@ -3,9 +3,18 @@ import it from '@/locales/it';
 import { sanitizeProblemError } from '@/shared/utils/buildProblemReport';
 import { logError } from '@/shared/utils/logger';
 
+/**
+ * Chiave della UI SENZA registrare: per gli errori che la fonte (`registraEsitoAccount`)
+ * ha già messo nel buffer. Registrarli di nuovo dalla schermata darebbe due righe per
+ * lo stesso errore in un rapporto che ne tiene 10. Nessuna deduplica per identità:
+ * una libreria può restituire la stessa istanza a chiamate diverse.
+ */
+export const chiaveErroreAccount = (error: unknown): string =>
+  mapAuthError(error);
+
 /** Registra solo codici consentiti e restituisce la chiave usata dalla UI. */
 export const registraErroreAccount = (error: unknown, ramo: string): string => {
-  const chiave = mapAuthError(error);
+  const chiave = chiaveErroreAccount(error);
   const details = typeof error === 'object' && error !== null ? error : {};
   const data = sanitizeProblemError(
     {

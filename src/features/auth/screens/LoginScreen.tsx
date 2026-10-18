@@ -13,6 +13,7 @@ import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
 import { validateEmail, validateRequired } from '@/shared/auth/validation';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
@@ -29,7 +30,7 @@ export const LoginScreen: React.FC = () => {
   const {
     error: submitError,
     setError: setSubmitError,
-    reportError,
+    showError,
     offline,
     errorKey,
   } = useAuthError();
@@ -65,13 +66,13 @@ export const LoginScreen: React.FC = () => {
       const { error } = await signIn(email.trim(), password);
       // Post-login non si naviga: il cambio di status nell'AuthContext
       // ri-renderizza ProfileScreen verso il profilo da solo.
-      if (error) reportError(error);
+      if (error) showError(error);
     } catch (error) {
-      reportError(error);
+      showError(error);
     } finally {
       setLoading(false);
     }
-  }, [email, password, signIn, t, setSubmitError, reportError]);
+  }, [email, password, signIn, t, setSubmitError, showError]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();
@@ -146,6 +147,7 @@ export const LoginScreen: React.FC = () => {
         variant="secondary"
         onPress={goToSignUp}
       />
+      <SegnalaProblema />
     </AuthScreen>
   );
 };

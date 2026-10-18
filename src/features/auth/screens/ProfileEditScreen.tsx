@@ -150,6 +150,7 @@ export const ProfileEditScreen: React.FC = () => {
     error: submitError,
     setError: setSubmitError,
     reportError,
+    showError,
     offline,
   } = useAuthError('auth.edit.error');
   const [success, setSuccess] = useState(false);
@@ -170,7 +171,7 @@ export const ProfileEditScreen: React.FC = () => {
       try {
         currentProfile = await refreshProfile({ throwOnError: true });
       } catch (error) {
-        reportError(error);
+        showError(error);
         return;
       } finally {
         setLoading(false);
@@ -281,7 +282,7 @@ export const ProfileEditScreen: React.FC = () => {
       if (nextEmail !== currentEmail) {
         const { error } = await updateEmail(nextEmail);
         if (error) {
-          reportError(error);
+          showError(error);
           return;
         }
         didChangeEmail = true;
@@ -290,7 +291,7 @@ export const ProfileEditScreen: React.FC = () => {
       setEmailChanged(didChangeEmail);
       setSuccess(true);
     } catch (error) {
-      reportError(error);
+      showError(error);
     } finally {
       setLoading(false);
     }
@@ -319,6 +320,7 @@ export const ProfileEditScreen: React.FC = () => {
     updateProfile,
     updateEmail,
     reportError,
+    showError,
     setSubmitError,
     t,
   ]);

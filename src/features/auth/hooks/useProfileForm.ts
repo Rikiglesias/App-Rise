@@ -71,7 +71,7 @@ export const useProfileForm = () => {
   const {
     error: submitError,
     setError: setSubmitError,
-    reportError,
+    showError,
     offline,
   } = useAuthError('auth.errors.generic', 'CompletaProfilo');
   const [loading, setLoading] = useState(false);
@@ -455,7 +455,7 @@ export const useProfileForm = () => {
           setSubmitError(t('auth.edit.nothingSaved'));
           return;
         }
-        reportError(error);
+        showError(error);
         return;
       }
       // GDPR Art.7: il consenso si registra alla NASCITA del profilo (sessione attiva
@@ -465,7 +465,7 @@ export const useProfileForm = () => {
         ? await recordConsent('privacy_notice', 'granted')
         : { error: null };
       if (consentError) {
-        reportError(consentError);
+        showError(consentError);
         return;
       }
       // P1: proietta il nome su user_metadata.name, da cui il server auth costruisce il
@@ -497,7 +497,7 @@ export const useProfileForm = () => {
       // dichiarare la condizione dice quale dei due percorsi si sta chiudendo.
       if (navigation.canGoBack()) navigation.goBack();
     } catch (error) {
-      reportError(error);
+      showError(error);
     } finally {
       setLoading(false);
     }
@@ -526,7 +526,7 @@ export const useProfileForm = () => {
     refreshProfile,
     recordConsent,
     navigation,
-    reportError,
+    showError,
     setSubmitError,
     t,
   ]);

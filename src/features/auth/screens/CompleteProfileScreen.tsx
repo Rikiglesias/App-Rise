@@ -22,6 +22,7 @@ import { RISE_URLS } from '@/shared/constants/urls';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
 import {
   getProfileCompletion,
   isProfileGateBlocked,
@@ -67,7 +68,7 @@ export const CompleteProfileScreen: React.FC = () => {
   const {
     error: profileReadError,
     setError: setProfileReadError,
-    reportError: reportProfileReadError,
+    showError: showProfileReadError,
   } = useAuthError();
   const { clearSubmitError } = form;
 
@@ -76,12 +77,12 @@ export const CompleteProfileScreen: React.FC = () => {
     setProfileReadError(null);
     setProfileLoading(true);
     void refreshProfile({ throwOnError: true })
-      .catch(reportProfileReadError)
+      .catch(showProfileReadError)
       .finally(() => setProfileLoading(false));
   }, [
     clearSubmitError,
     refreshProfile,
-    reportProfileReadError,
+    showProfileReadError,
     setProfileReadError,
   ]);
 
@@ -324,6 +325,7 @@ export const CompleteProfileScreen: React.FC = () => {
           />
         </View>
       ) : null}
+      <SegnalaProblema />
     </AuthScreen>
   );
 };

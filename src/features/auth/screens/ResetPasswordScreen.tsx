@@ -36,7 +36,7 @@ export const ResetPasswordScreen: React.FC = () => {
   const {
     error: submitError,
     setError: setSubmitError,
-    reportError,
+    showError,
     offline,
   } = useAuthError();
   const [done, setDone] = useState(false);
@@ -53,14 +53,14 @@ export const ResetPasswordScreen: React.FC = () => {
     setLoading(true);
     try {
       const { error } = await updatePassword(password);
-      if (error) reportError(error);
+      if (error) showError(error);
       else setDone(true);
     } catch (error) {
-      reportError(error);
+      showError(error);
     } finally {
       setLoading(false);
     }
-  }, [password, confirm, updatePassword, t, setSubmitError, reportError]);
+  }, [password, confirm, updatePassword, t, setSubmitError, showError]);
 
   const handleSubmit = useCallback((): void => {
     void onSubmit();
