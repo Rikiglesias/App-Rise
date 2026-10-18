@@ -10,11 +10,13 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
 import * as Sentry from '@sentry/react-native';
 import { logger, logError } from '@/shared/utils/logger';
+import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
 import i18n from '@/locales';
 
 interface Props {
@@ -99,99 +101,106 @@ export class ErrorBoundary extends Component<Props, State> {
   override render(): ReactNode {
     if (this.state.hasError && this.state.error) {
       return (
-        <SafeAreaView style={styles.container}>
-          <ScrollView
-            style={styles.scrollView}
-            contentContainerStyle={styles.content}
-          >
-            {/* Header */}
-            <View style={styles.header}>
-              <Text style={styles.emoji}>⚠️</Text>
-              <Text style={styles.title}>{i18n.t('errorBoundary.title')}</Text>
-              <Text style={styles.subtitle}>
-                {i18n.t('errorBoundary.subtitle')}
-              </Text>
-            </View>
-
-            {/* Error Info */}
-            <View style={styles.errorBox}>
-              {__DEV__ && (
-                <Text style={styles.errorTitle}>
-                  {i18n.t('errorBoundary.technicalTitle')}
+        // Il provider di App.tsx sta DENTRO il confine: sul web SafeAreaView
+        // senza provider lancia, e la schermata d'errore andrebbe a sua volta in crash.
+        <SafeAreaProvider>
+          <SafeAreaView style={styles.container}>
+            <ScrollView
+              style={styles.scrollView}
+              contentContainerStyle={styles.content}
+            >
+              {/* Header */}
+              <View style={styles.header}>
+                <Text style={styles.emoji}>⚠️</Text>
+                <Text style={styles.title}>
+                  {i18n.t('errorBoundary.title')}
                 </Text>
+                <Text style={styles.subtitle}>
+                  {i18n.t('errorBoundary.subtitle')}
+                </Text>
+              </View>
+
+              {/* Error Info */}
+              <View style={styles.errorBox}>
+                {__DEV__ && (
+                  <Text style={styles.errorTitle}>
+                    {i18n.t('errorBoundary.technicalTitle')}
+                  </Text>
+                )}
+                <Text style={styles.errorMessage}>
+                  {__DEV__
+                    ? this.state.error.message ||
+                      i18n.t('errorBoundary.unknownError')
+                    : i18n.t('errorBoundary.genericMessage')}
+                </Text>
+              </View>
+
+              {/* Stack Trace (collapsible in produzione) */}
+              {__DEV__ && this.state.error.stack && (
+                <View style={styles.stackBox}>
+                  <Text style={styles.stackTitle}>
+                    {i18n.t('errorBoundary.stackTrace')}
+                  </Text>
+                  <Text style={styles.stackText}>{this.state.error.stack}</Text>
+                </View>
               )}
-              <Text style={styles.errorMessage}>
-                {__DEV__
-                  ? this.state.error.message ||
-                    i18n.t('errorBoundary.unknownError')
-                  : i18n.t('errorBoundary.genericMessage')}
-              </Text>
-            </View>
 
-            {/* Stack Trace (collapsible in produzione) */}
-            {__DEV__ && this.state.error.stack && (
-              <View style={styles.stackBox}>
-                <Text style={styles.stackTitle}>
-                  {i18n.t('errorBoundary.stackTrace')}
-                </Text>
-                <Text style={styles.stackText}>{this.state.error.stack}</Text>
-              </View>
-            )}
+              {/* Component Stack */}
+              {__DEV__ && this.state.errorInfo?.componentStack && (
+                <View style={styles.stackBox}>
+                  <Text style={styles.stackTitle}>
+                    {i18n.t('errorBoundary.componentStack')}
+                  </Text>
+                  <Text style={styles.stackText}>
+                    {this.state.errorInfo.componentStack}
+                  </Text>
+                </View>
+              )}
 
-            {/* Component Stack */}
-            {__DEV__ && this.state.errorInfo?.componentStack && (
-              <View style={styles.stackBox}>
-                <Text style={styles.stackTitle}>
-                  {i18n.t('errorBoundary.componentStack')}
-                </Text>
-                <Text style={styles.stackText}>
-                  {this.state.errorInfo.componentStack}
-                </Text>
-              </View>
-            )}
-
-            {/* Actions */}
-            <View style={styles.actions}>
-              <TouchableOpacity
-                style={styles.buttonPrimary}
-                onPress={this.handleReload}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.buttonPrimaryText}>
-                  {i18n.t('errorBoundary.reload')}
-                </Text>
-              </TouchableOpacity>
-
-              {__DEV__ && (
+              {/* Actions */}
+              <View style={styles.actions}>
                 <TouchableOpacity
-                  style={styles.buttonSecondary}
-                  onPress={() => {
-                    this.setState({
-                      hasError: false,
-                      error: null,
-                      errorInfo: null,
-                    });
-                  }}
+                  style={styles.buttonPrimary}
+                  onPress={this.handleReload}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.buttonSecondaryText}>
-                    {i18n.t('errorBoundary.ignore')}
+                  <Text style={styles.buttonPrimaryText}>
+                    {i18n.t('errorBoundary.reload')}
                   </Text>
                 </TouchableOpacity>
-              )}
-            </View>
 
-            {/* Footer Info */}
-            <View style={styles.footer}>
-              <Text style={styles.footerText}>
-                {i18n.t('errorBoundary.support')}
-              </Text>
-              <Text style={styles.footerVersion}>
-                {/* Version displayed in footer */}
-              </Text>
-            </View>
-          </ScrollView>
-        </SafeAreaView>
+                {__DEV__ && (
+                  <TouchableOpacity
+                    style={styles.buttonSecondary}
+                    onPress={() => {
+                      this.setState({
+                        hasError: false,
+                        error: null,
+                        errorInfo: null,
+                      });
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.buttonSecondaryText}>
+                      {i18n.t('errorBoundary.ignore')}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              {/* Footer Info */}
+              <View style={styles.footer}>
+                <Text style={styles.footerText}>
+                  {i18n.t('errorBoundary.support')}
+                </Text>
+                <SegnalaProblema />
+                <Text style={styles.footerVersion}>
+                  {`${i18n.t('support.version')}: ${Constants.expoConfig?.version ?? '?'}`}
+                </Text>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+        </SafeAreaProvider>
       );
     }
 
@@ -199,6 +208,8 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 }
 
+// C55: ogni testo e pulsante ha contrasto ≥ 4,5:1 sul proprio sfondo (controllato
+// da un test che legge i colori renderizzati, non questi numeri).
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -248,7 +259,7 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     fontSize: 14,
-    color: '#DC2626',
+    color: '#B91C1C',
     fontFamily: 'monospace',
     lineHeight: 20,
   },
@@ -314,13 +325,14 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: '#4B5563',
     textAlign: 'center',
     marginBottom: 8,
   },
   footerVersion: {
+    marginTop: 8,
     fontSize: 11,
-    color: '#D1D5DB',
+    color: '#6B7280',
     fontFamily: 'monospace',
   },
 });

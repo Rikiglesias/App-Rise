@@ -86,6 +86,8 @@ export default {
     errors:
       'Errori recenti (ora UTC · contesto · nome · codice · stato · chiave)',
     noErrors: 'nessun errore registrato',
+    shareText: 'Condividi il testo',
+    shareError: 'Impossibile condividere il testo. Riprova.',
   },
 
   mapDetails: {

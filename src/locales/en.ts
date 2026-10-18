@@ -84,6 +84,8 @@ export default {
     window: 'Window',
     errors: 'Recent errors (UTC time · context · name · code · status · key)',
     noErrors: 'no recorded errors',
+    shareText: 'Share the text',
+    shareError: "Couldn't share the text. Please try again.",
   },
 
   mapDetails: {

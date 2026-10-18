@@ -165,6 +165,10 @@ export const useUniversalTheme = (): ThemeContextType => {
   return context;
 };
 
+/** Come useUniversalTheme, ma fuori dal provider restituisce undefined invece di lanciare. */
+export const useOptionalUniversalTheme = (): ThemeContextType | undefined =>
+  useContext(ThemeContext);
+
 // 📱 THEME STATUS COMPONENT - REMOVED
 // HTML elements like <div> cause crashes in React Native production builds
 // If needed for debugging, use React Native View component instead
