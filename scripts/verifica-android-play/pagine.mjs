@@ -11,6 +11,7 @@ import {
 } from './fonti-ar.mjs';
 import { BASE_CONTROPROVA, criterioConTitoli } from './titoli-jest.mjs';
 import { staticoC39 } from './localita.mjs';
+import { verificaCardVite } from './card-vite.mjs';
 
 const ESCLUSI_TEST = /[\\/](__tests__|__mocks__)[\\/]|\.(test|spec)\.tsx?$/;
 const sorgenti = (dir = 'src', filtro = () => true) =>
@@ -41,6 +42,9 @@ export const ROTTE_VIVE_C7 = [
   'MapModal',
   'Seguici',
 ];
+// Test protetto da C30 C31 che F9-2 tocca solo nel mock di LazyLoading (C7, R20): impronta in card-vite.mjs.
+export const TEST_PROTETTO_C7 =
+  'src/__tests__/navigation/accountNavigation.test.tsx';
 // «11.100» fra «DATI MEALS» e la riga di «24.562.744»: blocco dei dati 2025 nell'estratto di C37.
 export const anno2025DelleVite = estratto => {
   const da = estratto.indexOf('DATI MEALS');
@@ -58,21 +62,34 @@ export const staticoC7 = {
     );
     const tipi =
       tutti.find(f => f.nome === 'src/navigation/types.ts')?.testo ?? null;
-    const it = leggi(percorso('src', 'locales', 'it.ts'));
+    const oggetto = letteraleDi(
+      leggi(percorso(DIR_IMPATTO, 'data', 'impactData.ts')),
+      'IMPACT_DATA'
+    );
+    const annoRisultati = /\bresultsYear\s*:\s*(\d+)/.exec(oggetto ?? '');
     return {
       file: tutti.filter(f => !f.nome.startsWith('src/locales/')),
       nomiFile: tutti.map(f => f.nome),
       navigatori,
       tipi,
-      viteIt: [
-        ...it.matchAll(
-          /:\s*(['"`])((?:(?!\1).)*vite impattate(?:(?!\1).)*)\1/gi
+      card: {
+        impatto: tutti.filter(
+          f =>
+            f.nome.startsWith(`${DIR_IMPATTO}/`) &&
+            f.nome.endsWith('.tsx') &&
+            senzaTest(f)
         ),
-      ].map(m => m[2]),
-      anno2025: anno2025DelleVite(await estrattoFonte(AR2025_URL)),
+        it: leggi(percorso('src', 'locales', 'it.ts')),
+        en: leggi(percorso('src', 'locales', 'en.ts')),
+        resultsYear: annoRisultati ? Number(annoRisultati[1]) : null,
+        anno2025: anno2025DelleVite(await estrattoFonte(AR2025_URL)),
+        testProtetto: esiste(percorso(TEST_PROTETTO_C7))
+          ? leggi(percorso(TEST_PROTETTO_C7))
+          : null,
+      },
     };
   },
-  verifica({ file, nomiFile, navigatori, tipi, viteIt, anno2025 }) {
+  verifica({ file, nomiFile, navigatori, tipi, card }) {
     if (!navigatori?.length)
       return 'nessun *Navigator.tsx in src/navigation (lettore rotto?)';
     if (tipi == null) return 'src/navigation/types.ts assente';
@@ -108,14 +125,7 @@ export const staticoC7 = {
     );
     if (mancanti.length)
       return `rotte vive non trovate: ${mancanti.join(', ')} (lettore rotto?)`;
-    if (!viteIt?.length)
-      return 'nessuna etichetta con «vite impattate» in it.ts';
-    const conAnno = viteIt.some(v => v.includes('2025'));
-    if (anno2025 && !conAnno)
-      return "l'estratto ha 11.100 nel blocco 2025 ma l'etichetta delle vite non porta il 2025";
-    if (!anno2025 && conAnno)
-      return "etichetta delle vite con il 2025 senza 11.100 nel blocco 2025 dell'estratto";
-    return '';
+    return verificaCardVite(card ?? {});
   },
 };
 

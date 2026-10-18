@@ -4,6 +4,7 @@ import { AR2025_URL } from './fonti-ar.mjs';
 import { DEFINIZIONI_PAGINE, ROTTE_VIVE_C7, VISIONE_IT } from './pagine.mjs';
 import { negativiComuni, verde } from './selftest-codice.mjs';
 import { FIXTURE_C39 } from './selftest-localita.mjs';
+import { CARD_NEG, CARD_OK, CARD_POS } from './selftest-card-vite.mjs';
 
 const v = (id, statico = null) => verde(id, statico, DEFINIZIONI_PAGINE);
 const n = (id, statico = null) =>
@@ -22,8 +23,7 @@ const C7_OK = {
   nomiFile: ['src/features/impact/components/StatCards.tsx'],
   navigatori: [NAV],
   tipi: 'export type ImpactStackParamList = { Meals: undefined };',
-  viteIt: ['Vite impattate nel 2025'],
-  anno2025: true,
+  card: CARD_OK,
 };
 const c7 = mut => v('C7', { ...C7_OK, ...mut });
 const conFile = testo => c7({ file: [...C7_OK.file, f('src/x.tsx', testo)] });
@@ -105,11 +105,12 @@ export const FIXTURE_PAGINE = {
           f(NAV.nome, NAV.testo.replace('name="Seguici"', 'name="Altro"')),
         ],
       }),
-      c7({ viteIt: [] }),
-      c7({ viteIt: ['Vite impattate'] }),
-      c7({ anno2025: false }),
+      ...CARD_NEG.map(m => c7({ card: { ...CARD_OK, ...m } })),
     ],
-    pos: [v('C7', C7_OK), c7({ anno2025: false, viteIt: ['Vite impattate'] })],
+    pos: [
+      v('C7', C7_OK),
+      ...CARD_POS.map(m => c7({ card: { ...CARD_OK, ...m } })),
+    ],
   },
   C37: {
     neg: [
