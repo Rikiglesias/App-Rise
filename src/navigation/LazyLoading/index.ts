@@ -8,15 +8,10 @@ export { LazyScreen } from './LazyScreen';
 export { createLazyComponent } from './createLazyComponent';
 
 // Lazy components (raw)
-export {
-  LazyProjectsScreen,
-  LazyImpatto2024Screen,
-  LazyDevelopmentScreen,
-} from './LazyComponents';
+export { LazyProjectsScreen, LazyDevelopmentScreen } from './LazyComponents';
 
 // Wrapped components (ready to use)
 export {
   WrappedProjectsScreen,
-  WrappedImpatto2024Screen,
   WrappedDevelopmentScreen,
 } from './LazyComponents';

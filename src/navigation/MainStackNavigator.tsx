@@ -2,11 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 // Lazy Screens (keep lazy for less critical screens)
-import {
-  WrappedImpatto2024Screen,
-  WrappedProjectsScreen,
-  WrappedDevelopmentScreen,
-} from './LazyLoading';
+import { WrappedProjectsScreen, WrappedDevelopmentScreen } from './LazyLoading';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import { stackScreenOptions } from './stackScreenOptions';
@@ -48,12 +44,6 @@ export const MainStackNavigator: React.FC = () => (
         title: 'I Nostri Progetti',
         headerShown: false,
       }}
-    />
-
-    <Stack.Screen
-      name="Impatto2024"
-      options={{ title: 'Impatto 2024' }}
-      component={WrappedImpatto2024Screen}
     />
 
     <Stack.Screen

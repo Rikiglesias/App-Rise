@@ -6,7 +6,6 @@ import type { Location } from '@/shared/types/location';
 export interface RootStackParamList {
   Home: NavigatorScreenParams<BottomTabParamList> | undefined;
   Progetti: undefined;
-  Impatto2024: undefined;
   CharityShop: {
     title: string;
     subtitle?: string;

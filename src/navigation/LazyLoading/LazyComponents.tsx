@@ -27,19 +27,6 @@ export const LazyProjectsScreen = createLazyComponent(
 );
 
 /**
- * IMPATTO 2024 SCREEN
- */
-export const LazyImpatto2024Screen = createLazyComponent(
-  () => import('../../features/impact/screens/Impatto2024Screen'),
-  {
-    name: 'Impatto2024Screen',
-    preload: false,
-    timeout: 6000,
-    retryAttempts: 2,
-  }
-);
-
-/**
  * DEVELOPMENT SCREEN (Work in Progress)
  */
 export const LazyDevelopmentScreen = createLazyComponent(
@@ -75,5 +62,4 @@ const withLazyScreen = <T extends object>(
 
 // Export dei componenti wrappati
 export const WrappedProjectsScreen = withLazyScreen(LazyProjectsScreen);
-export const WrappedImpatto2024Screen = withLazyScreen(LazyImpatto2024Screen);
 export const WrappedDevelopmentScreen = withLazyScreen(LazyDevelopmentScreen);

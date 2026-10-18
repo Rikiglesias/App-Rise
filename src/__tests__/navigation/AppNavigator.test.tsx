@@ -15,7 +15,6 @@ jest.mock('../../features/social/screens/SeguiciScreen', () => ({
 }));
 
 jest.mock('../../navigation/LazyLoading', () => ({
-  WrappedImpatto2024Screen: () => null,
   WrappedProjectsScreen: () => null,
   WrappedDevelopmentScreen: () => null,
 }));

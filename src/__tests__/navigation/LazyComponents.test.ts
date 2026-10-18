@@ -11,7 +11,6 @@ describe('LazyComponents', () => {
     it('should export all lazy components as valid React components', () => {
       const components = [
         LazyComponents.LazyProjectsScreen,
-        LazyComponents.LazyImpatto2024Screen,
         LazyComponents.LazyDevelopmentScreen,
       ];
 
@@ -27,7 +26,6 @@ describe('LazyComponents', () => {
     it('should export all wrapped components as valid React components', () => {
       const wrappedComponents = [
         LazyComponents.WrappedProjectsScreen,
-        LazyComponents.WrappedImpatto2024Screen,
         LazyComponents.WrappedDevelopmentScreen,
       ];
 
@@ -45,10 +43,8 @@ describe('LazyComponents', () => {
 
       expect(exportedKeys).toEqual([
         'LazyDevelopmentScreen',
-        'LazyImpatto2024Screen',
         'LazyProjectsScreen',
         'WrappedDevelopmentScreen',
-        'WrappedImpatto2024Screen',
         'WrappedProjectsScreen',
       ]);
     });
@@ -65,7 +61,7 @@ describe('LazyComponents', () => {
         expect(['function', 'object']).toContain(typeof value);
       });
 
-      expect(lazyExports.length).toBe(3);
+      expect(lazyExports.length).toBe(2);
     });
 
     it('all Wrapped* exports should be valid React components', () => {
@@ -77,7 +73,7 @@ describe('LazyComponents', () => {
         expect(['function', 'object']).toContain(typeof value);
       });
 
-      expect(wrappedExports.length).toBe(3);
+      expect(wrappedExports.length).toBe(2);
     });
   });
 });
