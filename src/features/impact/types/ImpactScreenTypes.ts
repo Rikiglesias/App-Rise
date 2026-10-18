@@ -21,6 +21,22 @@ export interface ImpactDataType {
   livesImpactedMeals: number;
   volunteers: number;
 
+  // Pasti distribuiti, per paese
+  mealsDistributed: number;
+  mealsByCountry: { zimbabwe: number; southAfrica: number; ukraine: number };
+
+  // Kit e pasti che garantiscono
+  kitsProduced: number;
+  kitsDistributed: number;
+  kitsByArea: { italy: number; ukraine: number; europe: number };
+  mealsGuaranteedByKits: number;
+  livesImpactedKits: number;
+  mealsPerKit: number;
+
+  // Altri totali dalla nascita
+  mealsGuaranteedByKitsLifetime: number;
+  livesImpactedLifetime: number;
+
   // Associazioni partner, come le elenca il report
   partnerAssociations: readonly string[];
 }

@@ -435,6 +435,59 @@ export default {
     whereWeOperate: 'Dove Operiamo',
     ourOperationsWorld: 'Le nostre operazioni nel mondo',
     tapToExplore: 'Tocca per esplorare',
+    // Pagine di dettaglio (Annual Report 2025): numeri da IMPACT_DATA, anni per interpolazione
+    details: {
+      inYear: 'Nel {{year}}',
+      sinceStart: 'Dalla nascita di Rise Against Hunger Italia',
+      meals: {
+        title: 'Pasti',
+        intro:
+          'Durante gli eventi di confezionamento i partecipanti assemblano in buste riso, soia, lenticchie e vitamine. Le scatole partono dai magazzini di Rise Against Hunger e i pasti vengono distribuiti nelle scuole grazie ai partner locali: per prepararli basta aggiungere acqua bollente e mescolare.',
+        schools:
+          "Il programma sostiene la scolarizzazione: un pasto a scuola incoraggia le famiglie a mandare i bambini a scuola, garantisce loro il diritto all'educazione e offre a bambini e bambine le stesse opportunità.",
+        distributedLabel: 'Pasti distribuiti',
+        byCountry: 'Pasti distribuiti nel {{year}}',
+        zimbabwe: 'Zimbabwe',
+        southAfrica: 'Sudafrica',
+        ukraine: 'Ucraina',
+      },
+      kits: {
+        title: 'Kit alimentari',
+        intro:
+          'Il programma di kit packing è nato durante la pandemia di Covid-19 per rispondere alle emergenze. Oggi aiuta persone in difficoltà a causa di guerre e crisi umanitarie e anche nel nostro territorio.',
+        content:
+          "Ogni kit contiene cibi facili da cucinare, l'equivalente di circa {{meals}} pasti, ed è facile da trasportare anche dove è difficile arrivare.",
+        producedLabel: 'Kit prodotti',
+        distributedLabel: 'Kit distribuiti',
+        guaranteedLabel: 'Pasti garantiti',
+        guaranteedSubtitle: 'Con i kit distribuiti nel {{year}}',
+        byArea: 'Kit distribuiti nel {{year}}',
+        italy: 'Italia',
+        ukraine: 'Ucraina',
+        europe: 'Europa',
+        livesSubtitle: 'Con i kit del {{year}}',
+      },
+      volunteers: {
+        title: 'Volontari',
+        intro:
+          'Il coinvolgimento delle persone è il cuore della nostra azione: attraverso il confezionamento dei pasti, migliaia di persone partecipano ogni anno al cambiamento nel mondo.',
+        together:
+          'Individui, associazioni e aziende confezionano insieme pasti e kit alimentari, anche in eventi aperti a tutti.',
+      },
+      partners: {
+        title: 'Associazioni partner',
+        intro:
+          'Collaboriamo con partner e attori locali per affrontare le sfide della sicurezza alimentare e della nutrizione con competenza e dignità.',
+        network:
+          "Nelle emergenze una solida rete di partner locali ci aiuta a garantire un'efficace distribuzione del cibo.",
+        listTitle: 'Le associazioni con cui collaboriamo',
+      },
+      beneficiaries: {
+        title: 'Vite raggiunte',
+        intro:
+          "Dove c'è estrema povertà, distribuire pasti nutrienti è fondamentale per la salute e il benessere di bambini e bambine che altrimenti non avrebbero un pasto giornaliero garantito.",
+      },
+    },
   },
 
   actions: {

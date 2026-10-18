@@ -409,6 +409,59 @@ export default {
     whereWeOperate: 'Where We Operate',
     ourOperationsWorld: 'Our operations worldwide',
     tapToExplore: 'Tap to explore',
+    // Detail pages (Annual Report 2025): numbers from IMPACT_DATA, years by interpolation
+    details: {
+      inYear: 'In {{year}}',
+      sinceStart: 'Since Rise Against Hunger Italia began',
+      meals: {
+        title: 'Meals',
+        intro:
+          'At packaging events, participants assemble rice, soy, lentils and vitamins into bags. The boxes leave the Rise Against Hunger warehouses and local partners distribute the meals in schools: to prepare them, just add boiling water and stir.',
+        schools:
+          'The programme supports school attendance: a meal at school encourages families to send their children to school, secures their right to education and gives boys and girls the same opportunities.',
+        distributedLabel: 'Meals distributed',
+        byCountry: 'Meals distributed in {{year}}',
+        zimbabwe: 'Zimbabwe',
+        southAfrica: 'South Africa',
+        ukraine: 'Ukraine',
+      },
+      kits: {
+        title: 'Food kits',
+        intro:
+          'The kit packing programme began during the Covid-19 pandemic to respond to emergencies. Today it helps people struggling because of wars and humanitarian crises, and also here at home.',
+        content:
+          'Each kit holds easy-to-cook food, the equivalent of about {{meals}} meals, and is easy to carry even where it is hard to reach.',
+        producedLabel: 'Kits produced',
+        distributedLabel: 'Kits distributed',
+        guaranteedLabel: 'Meals provided',
+        guaranteedSubtitle: 'Through kits distributed in {{year}}',
+        byArea: 'Kits distributed in {{year}}',
+        italy: 'Italy',
+        ukraine: 'Ukraine',
+        europe: 'Europe',
+        livesSubtitle: 'Through {{year}} kits',
+      },
+      volunteers: {
+        title: 'Volunteers',
+        intro:
+          'Involving people is the heart of what we do: by packaging meals, thousands of people take part every year in changing the world.',
+        together:
+          'Individuals, associations and companies package meals and food kits together, including at events open to everyone.',
+      },
+      partners: {
+        title: 'Partner organizations',
+        intro:
+          'We work with local partners and organizations to tackle the challenges of food security and nutrition with skill and dignity.',
+        network:
+          'In emergencies, a strong network of local partners helps us distribute food effectively.',
+        listTitle: 'The organizations we work with',
+      },
+      beneficiaries: {
+        title: 'Lives reached',
+        intro:
+          'Where there is extreme poverty, distributing nutritious meals is essential for the health and well-being of boys and girls who would otherwise not have a guaranteed daily meal.',
+      },
+    },
   },
 
   actions: {

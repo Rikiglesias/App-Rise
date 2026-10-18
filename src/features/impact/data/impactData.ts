@@ -19,6 +19,24 @@ export const IMPACT_DATA: ImpactDataType = {
   livesImpactedMeals: 11100, // «vite impattate» dai pasti prodotti nell'anno
   volunteers: 10414, // «volontari coinvolti»
 
+  // Pasti distribuiti nell'anno e per paese (AR 2025, p. 9 e p. 16): la somma dei paesi
+  // è il totale distribuito.
+  mealsDistributed: 2397600, // «meals distribuiti»
+  mealsByCountry: { zimbabwe: 1775088, southAfrica: 570240, ukraine: 52272 },
+
+  // Kit dell'anno (AR 2025, p. 10 e p. 16): i pasti garantiti valgono per i kit
+  // distribuiti (429.080 = 40 × 10.727), le vite sono quelle della pagina del kit packing.
+  kitsProduced: 10427, // «kit prodotti»
+  kitsDistributed: 10727, // «kit distribuiti»
+  kitsByArea: { italy: 5833, ukraine: 4100, europe: 794 }, // p. 16, «EU» = 794 (p. 14)
+  mealsGuaranteedByKits: 429080, // «pasti garantiti»
+  livesImpactedKits: 33618, // «vite impattate», p. 10
+  mealsPerKit: 40, // «l'equivalente di circa 40 pasti», p. 10
+
+  // Dalla nascita di RAH Italia, oltre ai due totali in testa (AR 2025, p. 16)
+  mealsGuaranteedByKitsLifetime: 3300680, // «pasti garantiti dalla nascita»
+  livesImpactedLifetime: 114407, // «vite impattate» dai pasti dalla nascita
+
   // «Associazioni partner» (AR 2025, p. 17): il report le elenca senza contarle,
   // il numero mostrato è la lunghezza dell'elenco.
   partnerAssociations: [
