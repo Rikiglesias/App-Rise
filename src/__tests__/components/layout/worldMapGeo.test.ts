@@ -18,7 +18,6 @@ const asLocations = (): Location[] =>
     beneficiaries: '',
     status: 'active',
     description: resolveLocalizedText(d.description),
-    image: d.image ?? '',
   }));
 
 describe('worldMapGeo', () => {
@@ -89,7 +88,6 @@ describe('worldMapGeo', () => {
         beneficiaries: '',
         status: 'active',
         description: '',
-        image: '',
       });
       const matched = matchLocationsToCountries([
         mk('italy-bologna', 44.4949, 11.3426),

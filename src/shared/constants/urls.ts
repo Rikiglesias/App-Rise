@@ -59,42 +59,8 @@ export const SOCIAL_URLS = {
 } as const;
 
 // ===================================================================
-// IMAGE CDN URLS (Unsplash)
-// ===================================================================
-
-export const IMAGE_URLS = {
-  // Africa / Zimbabwe
-  zimbabwe:
-    'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-
-  // South Africa
-  southAfrica:
-    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-
-  // Italy
-  italy:
-    'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-
-  // USA
-  usa: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-
-  // Ukraine
-  ukraine:
-    'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-
-  // Food/Community
-  foodCommunity:
-    'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-
-  // Volunteers
-  volunteers:
-    'https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
-} as const;
-
-// ===================================================================
 // TYPE EXPORTS
 // ===================================================================
 
 export type RiseUrl = keyof typeof RISE_URLS;
 export type SocialUrl = keyof typeof SOCIAL_URLS;
-export type ImageUrl = keyof typeof IMAGE_URLS;

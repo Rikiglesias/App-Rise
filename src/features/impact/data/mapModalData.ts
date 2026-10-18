@@ -19,7 +19,6 @@ export interface MapModalData {
     schools?: number;
   };
   year: number;
-  image?: string;
   /** URL di tracciamento pasti/evento (opzionale). Non ancora popolato dai dati
    *  reali (follow-up): finché assente la CTA "saperne di più" resta nascosta.
    *  VINCOLO: il dominio DEVE stare nell'allowlist di useLinkHandler (https),
@@ -64,7 +63,6 @@ const toModalFormat = (location: LocationData): LocalizedMapModalData => {
   };
 
   if (location.partner) result.partner = location.partner;
-  if (location.image) result.image = location.image;
 
   return result;
 };

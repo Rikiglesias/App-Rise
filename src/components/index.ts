@@ -3,7 +3,7 @@
 // ===================================================================
 
 // Layout Components - Explicit exports
-export { SectionContainer, ProjectDetailModal, InteractiveMap } from './layout';
+export { SectionContainer, InteractiveMap } from './layout';
 
 // UI Components - Explicit exports
 export {

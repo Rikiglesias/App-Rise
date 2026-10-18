@@ -23,8 +23,6 @@ export const convertToMapLocations = (): Location[] => {
       beneficiaries: `${location.stats.beneficiaries ?? 0}`,
       status: 'active',
       description: resolveLocalizedText(location.description),
-      image:
-        'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
       meals: location.stats.meals ?? 0,
       kits: location.stats.kits ?? 0,
     };

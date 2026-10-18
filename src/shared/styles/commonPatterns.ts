@@ -51,7 +51,6 @@ export const decorativeSeparator = (
 
 /**
  * Shadow custom per card progetti
- * Usato in: Projects (ProjectsScreenStyles, ProjectCard)
  */
 export const projectCardShadow: ViewStyle = {
   shadowColor: Colors.neutral[900],

@@ -23,7 +23,6 @@ export interface LocationData {
   partner?: string;
   achievements: LocalizedText[];
   year: number;
-  image?: string;
 }
 
 /**
@@ -71,8 +70,6 @@ export const LOCATIONS_DATA: LocationData[] = [
       },
     ],
     year: 2024,
-    image:
-      'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
   },
   {
     id: 'south-africa',
@@ -109,8 +106,6 @@ export const LOCATIONS_DATA: LocationData[] = [
       },
     ],
     year: 2023,
-    image:
-      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
   },
   {
     id: 'italy',
@@ -149,8 +144,6 @@ export const LOCATIONS_DATA: LocationData[] = [
       },
     ],
     year: 2024,
-    image:
-      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
   },
   {
     id: 'usa',
@@ -187,8 +180,6 @@ export const LOCATIONS_DATA: LocationData[] = [
       },
     ],
     year: 2024,
-    image:
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
   },
   {
     id: 'ukraine',
@@ -220,8 +211,6 @@ export const LOCATIONS_DATA: LocationData[] = [
       { it: 'Risposta rapida alla crisi', en: 'Rapid crisis response' },
     ],
     year: 2024,
-    image:
-      'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
   },
   {
     id: 'somalia',
@@ -258,7 +247,5 @@ export const LOCATIONS_DATA: LocationData[] = [
       },
     ],
     year: 2024,
-    image:
-      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
   },
 ];
