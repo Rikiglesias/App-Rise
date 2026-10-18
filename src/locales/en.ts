@@ -460,6 +460,8 @@ export default {
         title: 'Lives reached',
         intro:
           'Where there is extreme poverty, distributing nutritious meals is essential for the health and well-being of boys and girls who would otherwise not have a guaranteed daily meal.',
+        lifetimeSubtitle:
+          'Through meals, since Rise Against Hunger Italia began',
       },
     },
   },

@@ -32,7 +32,7 @@ const BeneficiariesScreen: React.FC = () => {
           key: 'lifetime',
           value: numero(IMPACT_DATA.livesImpactedLifetime),
           label: t('impact.livesImpactedLabel'),
-          subtitle: t('impact.details.sinceStart'),
+          subtitle: t('impact.details.beneficiaries.lifetimeSubtitle'),
         },
       ]}
     />

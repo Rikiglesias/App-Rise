@@ -1,5 +1,6 @@
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -53,6 +54,9 @@ export const ImpactDetailLayout: React.FC<ImpactDetailLayoutProps> = ({
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const goBack = useCallback(() => navigation.goBack(), [navigation]);
+  // La barra delle schede è flottante: comunica la sua altezza (zoom compreso) e il fondo
+  // della pagina deve restarne fuori. Fuori dal navigatore a schede (test) vale 0.
+  const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
@@ -62,23 +66,34 @@ export const ImpactDetailLayout: React.FC<ImpactDetailLayoutProps> = ({
         accessibilityRole="button"
         accessibilityLabel={t('common.back')}
       >
-        <PerfectIcon name="arrow-left" size={24} color={colors.neutral[900]} />
-        <PerfectText size={16} lines={1} immunity={true}>
-          {t('common.back')}
-        </PerfectText>
+        {/* Un figlio solo: su Android PlatformTouchable avvolge più figli in una colonna */}
+        <PerfectContainer style={styles.backRow}>
+          <PerfectIcon
+            name="arrow-left"
+            size={24}
+            color={colors.neutral[900]}
+          />
+          <PerfectText size={16} lines={1} immunity={true}>
+            {t('common.back')}
+          </PerfectText>
+        </PerfectContainer>
       </PlatformTouchable>
 
       <PlatformScrollView
+        testID="impact-detail-scroll"
         contentContainerStyle={[
           styles.content,
+          { paddingBottom: tabBarHeight + PerfectSpacing.xl },
           isTablet ? styles.tabletContent : null,
         ]}
       >
+        {/* containerWidth={0}: senza, PerfectText multilinea si stringe al 70% e si centra */}
         <PerfectText
           size={28}
           lines={2}
           fontWeight="800"
           immunity={true}
+          containerWidth={0}
           accessibilityRole="header"
           style={styles.title}
         >
@@ -91,6 +106,7 @@ export const ImpactDetailLayout: React.FC<ImpactDetailLayoutProps> = ({
             size={16}
             lines={10}
             immunity={true}
+            containerWidth={0}
             style={styles.paragraph}
           >
             {paragraph}
@@ -112,7 +128,13 @@ export const ImpactDetailLayout: React.FC<ImpactDetailLayoutProps> = ({
             >
               {stat.value}
             </PerfectText>
-            <PerfectText size={16} lines={2} fontWeight="700" immunity={true}>
+            <PerfectText
+              size={16}
+              lines={2}
+              fontWeight="700"
+              immunity={true}
+              containerWidth={0}
+            >
               {stat.label}
             </PerfectText>
             {stat.subtitle ? (
@@ -120,6 +142,7 @@ export const ImpactDetailLayout: React.FC<ImpactDetailLayoutProps> = ({
                 size={14}
                 lines={2}
                 immunity={true}
+                containerWidth={0}
                 color={colors.neutral[700]}
               >
                 {stat.subtitle}
@@ -135,6 +158,7 @@ export const ImpactDetailLayout: React.FC<ImpactDetailLayoutProps> = ({
               lines={2}
               fontWeight="700"
               immunity={true}
+              containerWidth={0}
               accessibilityRole="header"
             >
               {listTitle}
@@ -145,6 +169,7 @@ export const ImpactDetailLayout: React.FC<ImpactDetailLayoutProps> = ({
                 size={16}
                 lines={2}
                 immunity={true}
+                containerWidth={0}
                 style={styles.listItem}
               >
                 {`• ${item}`}
@@ -167,14 +192,16 @@ const createStyles = (colors: ThemeColors) =>
       minWidth: 48,
       minHeight: 48,
       alignSelf: 'flex-start',
+      justifyContent: 'center',
+      marginHorizontal: PerfectSpacing.base,
+    },
+    backRow: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: PerfectSpacing.xs,
-      marginHorizontal: PerfectSpacing.base,
     },
     content: {
       paddingHorizontal: PerfectSpacing.base,
-      paddingBottom: PerfectSpacing.xl,
       gap: PerfectSpacing.base,
     },
     tabletContent: {

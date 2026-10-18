@@ -486,6 +486,8 @@ export default {
         title: 'Vite raggiunte',
         intro:
           "Dove c'è estrema povertà, distribuire pasti nutrienti è fondamentale per la salute e il benessere di bambini e bambine che altrimenti non avrebbero un pasto giornaliero garantito.",
+        lifetimeSubtitle:
+          'Con i pasti, dalla nascita di Rise Against Hunger Italia',
       },
     },
   },
