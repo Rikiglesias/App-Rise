@@ -1,0 +1,23 @@
+{
+  "criterio": "C7",
+  "base": "fbefa98",
+  "titoli": [
+    "StatCard aprono il dettaglio: pasti dalla nascita",
+    "StatCard aprono il dettaglio: kit dalla nascita",
+    "StatCard aprono il dettaglio: volontari 2025",
+    "StatCard aprono il dettaglio: associazioni partner",
+    "StatCard aprono il dettaglio: pasti 2025",
+    "StatCard aprono il dettaglio: vite raggiunte 2025"
+  ],
+  "esitiAllaBase": {
+    "StatCard aprono il dettaglio: pasti dalla nascita": "failed",
+    "StatCard aprono il dettaglio: kit dalla nascita": "failed",
+    "StatCard aprono il dettaglio: volontari 2025": "failed",
+    "StatCard aprono il dettaglio: associazioni partner": "failed",
+    "StatCard aprono il dettaglio: pasti 2025": "failed",
+    "StatCard aprono il dettaglio: vite raggiunte 2025": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/impact/screens/ImpactTabScreen.statcard.test.tsx": "eed8a081d4fa26038dd99d4c8e4f833968281ce7cfcdf43e4e0d116429448891"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "criterio": "C38",
+  "base": "fbefa98",
+  "titoli": [
+    "pagine di dettaglio: Meals si apre e torna indietro",
+    "pagine di dettaglio: Kits si apre e torna indietro",
+    "pagine di dettaglio: Volunteers si apre e torna indietro",
+    "pagine di dettaglio: Partners si apre e torna indietro",
+    "pagine di dettaglio: Beneficiaries si apre e torna indietro"
+  ],
+  "esitiAllaBase": {
+    "pagine di dettaglio: Meals si apre e torna indietro": "assente",
+    "pagine di dettaglio: Kits si apre e torna indietro": "assente",
+    "pagine di dettaglio: Volunteers si apre e torna indietro": "assente",
+    "pagine di dettaglio: Partners si apre e torna indietro": "assente",
+    "pagine di dettaglio: Beneficiaries si apre e torna indietro": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/features/impact/screens/impactDetailPages.test.tsx": "f25e4655b4e09f22189dab53342daa3c67f6fec607eabb07c78caee6f7bbd2a6"
+  }
+}
