@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -13,14 +14,15 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { formatNumber } from '@/shared/utils/numberFormat';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import type { ImpactStackNavigationProp } from '@/navigation/types';
 
 /**
  * Sezione dei numeri dalla nascita di RAH Italia (IMPACT_DATA), con header decorativo.
- * Le card sono solo numeri: le schede di dettaglio non esistono ancora e il tocco
- * apriva la schermata "In fase di sviluppo", da non mostrare nella versione store.
+ * Ogni card apre la sua pagina di dettaglio nello stack di Impatto.
  */
 export const TotalMealsSection: React.FC = () => {
   const { t, locale } = useTranslation();
+  const navigation = useNavigation<ImpactStackNavigationProp>();
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -68,8 +70,7 @@ export const TotalMealsSection: React.FC = () => {
           label={t('impact.totalMealsLabel')}
           subtitle={t('impact.totalMealsSubtitle2')}
           gradientColors={[colors.primary[600], colors.primary[800]]}
-          pressable={false}
-          showChevron={false}
+          onPress={() => navigation.navigate('Meals')}
         />
         <StatCard
           icon="package-variant"
@@ -78,8 +79,7 @@ export const TotalMealsSection: React.FC = () => {
           label={t('impact.totalKits')}
           subtitle={t('impact.totalKitsSubtitle')}
           gradientColors={[colors.neutral[700], colors.neutral[900]]}
-          pressable={false}
-          showChevron={false}
+          onPress={() => navigation.navigate('Kits')}
         />
       </PerfectContainer>
     </PerfectContainer>

@@ -1,10 +1,9 @@
 /**
- * Le StatCard di Impatto non devono aprire schermate segnaposto.
+ * Le 6 StatCard di Impatto aprono la loro pagina di dettaglio (C7 del contratto android-play).
  *
- * Le quattro card che navigavano (pasti, kit, volontari, partner) portavano alla
- * schermata «In fase di sviluppo»: nella versione per gli store un revisore Google
- * la leggerebbe come funzione rotta. Ora sono solo numeri. Le due card dei
- * risultati annuali erano già non premibili: il test le preme comunque tutte.
+ * Ogni card, toccata come la tocca una persona (sul suo testo), chiama una sola volta
+ * `navigate` verso la sua rotta; la guardia controlla che non ci siano card in più né
+ * destinazioni diverse da quelle del contratto.
  */
 import React from 'react';
 import {
@@ -15,11 +14,9 @@ import {
 } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AllProviders } from '@/__tests__/helpers/testProviders';
 import ImpactTabScreen from '@/features/impact/screens/ImpactTabScreen';
-import { CommunitySection } from '@/features/impact/components/CommunitySection';
-import { TotalMealsSection } from '@/features/impact/components/TotalMealsSection';
-import { ThemeProvider } from '@/shared/hooks/useTheme';
-import { UniversalThemeProvider } from '@/shared/theme/UniversalTheme';
+import { changeLanguage } from '@/locales';
 
 const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({
@@ -31,7 +28,7 @@ jest.mock('expo-linear-gradient', () => ({
   LinearGradient: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-// La mappa non c'entra con le card e porta con sé l'SVG del mondo.
+// La mappa non contiene StatCard e porta con sé l'SVG del mondo.
 jest.mock('@/features/impact/components/MapSection', () => ({
   MapSection: () => null,
 }));
@@ -41,60 +38,72 @@ const initialMetrics = {
   insets: { top: 0, left: 0, right: 0, bottom: 0 },
 };
 
-const renderWithSafeArea = (ui: React.ReactElement) =>
+// Le etichette attese sono quelle italiane: la lingua si fissa prima di montare.
+const montaImpatto = () => {
+  changeLanguage('it');
   render(
     <SafeAreaProvider initialMetrics={initialMetrics}>
-      <UniversalThemeProvider>
-        <ThemeProvider>{ui}</ThemeProvider>
-      </UniversalThemeProvider>
+      <AllProviders>
+        <ImpactTabScreen />
+      </AllProviders>
     </SafeAreaProvider>
   );
-
-// Si preme ogni testo DENTRO la card: il tocco risale fino al pulsante della card,
-// come il dito di una persona (premere il contenitore esterno non proverebbe nulla).
-const pressAllStatCards = (): number => {
-  const cards = screen.getAllByTestId('stat-card');
-  cards.forEach(card => {
-    within(card)
-      .queryAllByText(/[a-z0-9]/i)
-      .forEach(node => fireEvent.press(node));
-  });
-  return cards.length;
 };
 
-describe('StatCard senza segnaposto', () => {
+// Etichetta del contratto → testo della card in italiano → rotta attesa.
+const CARD = [
+  { nome: 'pasti dalla nascita', etichetta: 'Pasti Totali', rotta: 'Meals' },
+  { nome: 'kit dalla nascita', etichetta: 'Kit Totali', rotta: 'Kits' },
+  { nome: 'volontari 2025', etichetta: 'Volontari', rotta: 'Volunteers' },
+  {
+    nome: 'associazioni partner',
+    etichetta: 'Associazioni',
+    rotta: 'Partners',
+  },
+  { nome: 'pasti 2025', etichetta: 'Pasti Confezionati', rotta: 'Meals' },
+  {
+    nome: 'vite raggiunte 2025',
+    etichetta: 'Vite Impattate',
+    rotta: 'Beneficiaries',
+  },
+] as const;
+
+const cardCon = (etichetta: string) => {
+  const sue = screen
+    .getAllByTestId('stat-card')
+    .filter(card => within(card).queryByText(etichetta) !== null);
+  expect({ etichetta, card: sue.length }).toEqual({ etichetta, card: 1 });
+  return sue[0];
+};
+
+describe('StatCard di Impatto', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
   });
 
-  it('le sezioni Numeri e Community hanno esattamente le 4 card che navigavano, e nessuna naviga più', () => {
-    renderWithSafeArea(
-      <>
-        <TotalMealsSection />
-        <CommunitySection />
-      </>
-    );
+  it.each(CARD)(
+    'StatCard aprono il dettaglio: $nome',
+    ({ etichetta, rotta }) => {
+      montaImpatto();
+      fireEvent.press(within(cardCon(etichetta)).getByText(etichetta));
+      expect(mockNavigate.mock.calls).toEqual([[rotta]]);
+    }
+  );
 
-    expect(pressAllStatCards()).toBe(4);
-    expect(mockNavigate).not.toHaveBeenCalled();
+  it('StatCard aprono il dettaglio: nessuna StatCard in più', () => {
+    montaImpatto();
+    const cards = screen.getAllByTestId('stat-card');
+    expect(cards).toHaveLength(CARD.length);
+    cards.forEach(card => {
+      fireEvent.press(within(card).getAllByText(/[a-z]/i)[0]);
+    });
+    expect(mockNavigate.mock.calls.map(([rotta]) => rotta).sort()).toEqual(
+      CARD.map(c => c.rotta).sort()
+    );
   });
 
-  it('su tutta la schermata Impatto nessuna StatCard apre una schermata', () => {
-    renderWithSafeArea(<ImpactTabScreen />);
-
-    // 2 Numeri + 2 Risultati annuali + 2 Community
-    expect(pressAllStatCards()).toBe(6);
-    expect(mockNavigate).not.toHaveBeenCalled();
-  });
-
-  it('le card non premibili non si annunciano come pulsanti', () => {
-    renderWithSafeArea(
-      <>
-        <TotalMealsSection />
-        <CommunitySection />
-      </>
-    );
-
-    expect(screen.queryAllByRole('button')).toHaveLength(0);
+  it('le card che aprono una pagina si annunciano come pulsanti', () => {
+    montaImpatto();
+    expect(screen.getAllByRole('button')).toHaveLength(CARD.length);
   });
 });

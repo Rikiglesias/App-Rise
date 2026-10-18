@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -12,13 +13,15 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { formatNumber } from '@/shared/utils/numberFormat';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import type { ImpactStackNavigationProp } from '@/navigation/types';
 
 /**
  * Sezione community: volontari dell'anno e associazioni partner (IMPACT_DATA), con header decorativo.
- * Card solo numeri, senza tocco: vedi TotalMealsSection.
+ * Ogni card apre la sua pagina di dettaglio nello stack di Impatto.
  */
 export const CommunitySection: React.FC = () => {
   const { t, locale } = useTranslation();
+  const navigation = useNavigation<ImpactStackNavigationProp>();
   const year = IMPACT_DATA.resultsYear;
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
@@ -65,8 +68,7 @@ export const CommunitySection: React.FC = () => {
             colors.gradients.success[0],
             colors.gradients.success[2],
           ]}
-          pressable={false}
-          showChevron={false}
+          onPress={() => navigation.navigate('Volunteers')}
         />
         <StatCard
           icon="handshake"
@@ -78,8 +80,7 @@ export const CommunitySection: React.FC = () => {
             colors.gradients.purple[0],
             colors.gradients.purple[2],
           ]}
-          pressable={false}
-          showChevron={false}
+          onPress={() => navigation.navigate('Partners')}
         />
       </PerfectContainer>
     </PerfectContainer>

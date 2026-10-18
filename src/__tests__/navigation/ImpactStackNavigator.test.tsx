@@ -14,11 +14,6 @@ jest.mock('../../features/impact/screens/MapModalScreen', () => ({
   default: () => null,
 }));
 
-jest.mock('../../navigation/LazyLoading', () => ({
-  WrappedSimplePlaceholderScreen: () => null,
-  WrappedDevelopmentScreen: () => null,
-}));
-
 describe('ImpactStackNavigator', () => {
   const renderNavigator = () => {
     return render(

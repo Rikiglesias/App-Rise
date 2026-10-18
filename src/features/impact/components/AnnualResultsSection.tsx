@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -12,12 +13,14 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { formatNumber } from '@/shared/utils/numberFormat';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import type { ImpactStackNavigationProp } from '@/navigation/types';
 
 /**
  * Sezione dei risultati dell'anno di IMPACT_DATA (resultsYear), con header decorativo.
  */
 export const AnnualResultsSection: React.FC = () => {
   const { t, locale } = useTranslation();
+  const navigation = useNavigation<ImpactStackNavigationProp>();
   const year = IMPACT_DATA.resultsYear;
   const { isTablet } = useDeviceType();
   const colors = useThemeColors();
@@ -63,8 +66,7 @@ export const AnnualResultsSection: React.FC = () => {
           label={t('impact.mealsPackagedLabel')}
           subtitle={t('impact.mealsPackagedSubtitle', { year })}
           gradientColors={[colors.primary[500], colors.primary[700]]}
-          pressable={false}
-          showChevron={false}
+          onPress={() => navigation.navigate('Meals')}
           withGradientBorder={false}
         />
         <StatCard
@@ -74,8 +76,7 @@ export const AnnualResultsSection: React.FC = () => {
           label={t('impact.livesImpactedLabel')}
           subtitle={t('impact.livesImpactedSubtitle', { year })}
           gradientColors={[colors.neutral[600], colors.neutral[800]]}
-          pressable={false}
-          showChevron={false}
+          onPress={() => navigation.navigate('Beneficiaries')}
           withGradientBorder={false}
         />
       </PerfectContainer>
