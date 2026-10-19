@@ -1,9 +1,11 @@
 import React from 'react';
 import {
   Platform,
+  StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
+  ViewStyle,
 } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 
@@ -11,6 +13,41 @@ interface PlatformTouchableProps extends TouchableOpacityProps {
   rippleColor?: string;
   borderless?: boolean;
 }
+
+// Su iOS i figli li dispone TouchableOpacity; su Android e web i figli multipli
+// passano per un View interno (TouchableRipple ne accetta uno solo). Il View
+// prende dallo stile del pulsante impaginazione e padding: senza, i figli vanno
+// in colonna e quelli in posizione assoluta si misurano dentro il padding.
+const CHILD_LAYOUT_KEYS = new Set<string>([
+  'flexDirection',
+  'alignItems',
+  'justifyContent',
+  'flexWrap',
+  'gap',
+  'rowGap',
+  'columnGap',
+]);
+
+const isPaddingKey = (key: string) => key.startsWith('padding');
+
+const splitStyleForChildren = (style: TouchableOpacityProps['style']) => {
+  const flat: ViewStyle = StyleSheet.flatten(style) ?? {};
+  const moved = Object.entries(flat).filter(
+    ([key]) => CHILD_LAYOUT_KEYS.has(key) || isPaddingKey(key)
+  );
+  const paddingReset = Object.fromEntries(
+    moved.filter(([key]) => isPaddingKey(key)).map(([key]) => [key, 0])
+  ) as ViewStyle;
+  return {
+    touchable: [style, paddingReset],
+    // Il View riempie il pulsante: centratura e spaziatura valgono sull'intera area.
+    children: {
+      flexGrow: 1,
+      alignSelf: 'stretch',
+      ...(Object.fromEntries(moved) as ViewStyle),
+    } satisfies ViewStyle,
+  };
+};
 
 /**
  * Smart Touchable che usa:
@@ -50,9 +87,15 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
 
   // Android: usa TouchableRipple nativo per Material Design
   // TouchableRipple richiede esattamente un singolo figlio React
-  // Wrappa automaticamente i children multipli in un View
-  const wrappedChildren =
-    React.Children.count(children) > 1 ? <View>{children}</View> : children;
+  // Wrappa automaticamente i children multipli in un View che eredita
+  // impaginazione e padding del pulsante
+  const split =
+    React.Children.count(children) > 1 ? splitStyleForChildren(style) : null;
+  const wrappedChildren = split ? (
+    <View style={split.children}>{children}</View>
+  ) : (
+    children
+  );
 
   // Inoltra a TouchableRipple i prop a11y/interazione che il ramo iOS passa via
   // {...props} ma che qui si perdevano (bug a11y su Android). Spread CONDIZIONALE:
@@ -80,7 +123,7 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
   return (
     <TouchableRipple
       onPress={onPress ?? handleEmptyPress}
-      style={style}
+      style={split ? split.touchable : style}
       rippleColor={rippleColor}
       borderless={borderless}
       disabled={disabled}

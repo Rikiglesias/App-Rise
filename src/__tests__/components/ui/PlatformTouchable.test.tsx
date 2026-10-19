@@ -1,7 +1,9 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import PlatformTouchable from '../../../components/ui/PlatformTouchable';
+
+type RenderedNode = ReturnType<ReturnType<typeof render>['getByText']>;
 
 describe('PlatformTouchable - Rendering', () => {
   const mockOnPress = jest.fn();
@@ -123,5 +125,89 @@ describe('PlatformTouchable - Edge Cases', () => {
     expect(() => {
       render(<PlatformTouchable />);
     }).not.toThrow();
+  });
+});
+
+describe('PlatformTouchable - Android, più figli', () => {
+  const descriptor = Object.getOwnPropertyDescriptor(Platform, 'OS');
+
+  beforeAll(() => {
+    Object.defineProperty(Platform, 'OS', {
+      configurable: true,
+      get: () => 'android',
+    });
+  });
+
+  afterAll(() => {
+    if (descriptor) Object.defineProperty(Platform, 'OS', descriptor);
+  });
+
+  // Primo View sopra il nodo: per un figlio, il contenitore che il ramo Android
+  // aggiunge; per il contenitore, il pulsante.
+  const hostViewAbove = (node: RenderedNode) => {
+    let current = node.parent;
+    while (current && current.type !== 'View') current = current.parent;
+    return current;
+  };
+  const containerStyleOf = (node: RenderedNode) =>
+    StyleSheet.flatten(hostViewAbove(node)?.props.style) ?? {};
+
+  it('dispone icona e testo come chiede lo stile del pulsante', () => {
+    const { getByText } = render(
+      <PlatformTouchable
+        onPress={jest.fn()}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
+      >
+        <Text>Icona</Text>
+        <Text>Indietro</Text>
+      </PlatformTouchable>
+    );
+
+    expect(containerStyleOf(getByText('Icona'))).toMatchObject({
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    });
+  });
+
+  it('porta il padding nel contenitore, così i figli assoluti si misurano dal bordo come su iOS', () => {
+    const { getByText } = render(
+      <PlatformTouchable
+        onPress={jest.fn()}
+        style={[{ padding: 12 }, { paddingHorizontal: 24 }]}
+      >
+        <Text>Titolo</Text>
+        <Text style={{ position: 'absolute', top: 8, right: 12 }}>↗</Text>
+      </PlatformTouchable>
+    );
+
+    const container = hostViewAbove(getByText('Titolo'));
+    expect(StyleSheet.flatten(container?.props.style)).toMatchObject({
+      padding: 12,
+      paddingHorizontal: 24,
+    });
+    const touchable = container && hostViewAbove(container);
+    expect(StyleSheet.flatten(touchable?.props.style)).toMatchObject({
+      padding: 0,
+      paddingHorizontal: 0,
+    });
+  });
+
+  it("riempie il pulsante, così centratura e spaziatura valgono sull'intera area", () => {
+    const { getByText } = render(
+      <PlatformTouchable
+        onPress={jest.fn()}
+        style={{ justifyContent: 'space-between', flexDirection: 'row' }}
+      >
+        <Text>Sinistra</Text>
+        <Text>Destra</Text>
+      </PlatformTouchable>
+    );
+
+    expect(containerStyleOf(getByText('Destra'))).toMatchObject({
+      flexGrow: 1,
+      alignSelf: 'stretch',
+      justifyContent: 'space-between',
+    });
   });
 });
