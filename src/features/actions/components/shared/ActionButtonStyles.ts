@@ -178,7 +178,7 @@ export const createActionButtonStyles = (colors: ThemeColors): ButtonStyles => {
       justifyContent: 'center',
     },
     singleButtonContainer: {
-      flex: 0,
+      // Niente `flex: 0`: sul web diventa base 0% e annulla la larghezza.
       width: scale(314), // Perfect System: 80% di 393px (iPhone 15), scala su tutti device
     },
     // CONTAINER BACKGROUND ESPLORA
