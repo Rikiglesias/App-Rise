@@ -64,51 +64,150 @@ const C55_OK = {
 const conRiga = riga => ({ ...C55_OK, risposte: tabella(riga) });
 
 const DOC = 'docs/store/google-play';
-const docC30 = (mut = {}) =>
-  Object.entries({
-    'play-console-risposte.md':
-      'toccare la quarta scheda «Profilo» nella barra in basso',
-    'web/elimina-account.html':
-      'tocca la quarta scheda <strong>Profilo</strong>',
-    'web/delete-account.html': 'tap the fourth tab, <strong>Profile</strong>',
-    'rilascio.md':
-      'sostituire le pagine web/elimina-account.html e web/delete-account.html già consegnate',
-    ...mut,
-  })
-    .filter(([, testo]) => testo != null)
-    .map(([n, testo]) => ({ nome: `${DOC}/${n}`, testo }));
-const C30_OK = { file: docC30(), etichetta: { it: 'Profilo', en: 'Profile' } };
-const c30 = mut => ({ ...C30_OK, file: docC30(mut) });
+// C30 (R21-R23): dati come li produce staticoC30.leggi(); ogni negativa cambia UNA cosa.
+const PLAY_OK =
+  "\n- Istruzioni: toccare l'icona della persona in alto a destra («Area Donatori», «Donor Area» in inglese).\n";
+const PASSI_IT =
+  "<li>Tocca l'icona della persona in alto a destra: <strong>Area Donatori</strong> o <strong>Il mio profilo</strong>.</li>";
+const PASSI_EN =
+  '<li>Tap the person icon at the top right: <strong>Donor Area</strong> or <strong>My profile</strong>.</li>';
+const RUNBOOK_OK =
+  'sostituire le pagine web/elimina-account.html e web/delete-account.html già consegnate';
+const RADICI_OK = [
+  'src/features/home/screens/HomeScreen.tsx',
+  'src/features/impact/screens/ImpactTabScreen.tsx',
+  'src/features/actions/screens/ContributeTabScreen.tsx',
+].map(nome => ({ nome, edges: ["'bottom'"], insetsTop: false }));
+const locale = (ospite, collegato) => ({
+  ospite,
+  collegato,
+  home: 'Home',
+  profilo: null,
+});
+const C30_OK = {
+  importaIntestazione: ['src/navigation/BottomTabNavigator.tsx'],
+  testID: ['src/navigation/TabHeader.tsx'],
+  schedaProfilo: [],
+  schedaAzioni: ['src/navigation/BottomTabNavigator.tsx'],
+  radici: RADICI_OK,
+  locali: {
+    it: locale('Area Donatori', 'Il mio profilo'),
+    en: locale('Donor Area', 'My profile'),
+  },
+  file: [
+    { nome: `${DOC}/play-console-risposte.md`, testo: PLAY_OK },
+    { nome: `${DOC}/web/elimina-account.html`, testo: PASSI_IT },
+    { nome: `${DOC}/web/delete-account.html`, testo: PASSI_EN },
+    { nome: `${DOC}/rilascio.md`, testo: RUNBOOK_OK },
+  ],
+  accessoPlay: PLAY_OK,
+  passi: { it: PASSI_IT, en: PASSI_EN },
+  runbook: RUNBOOK_OK,
+};
+const c30 = mut => ({ ...C30_OK, ...mut });
+const radice = (i, mut) => ({
+  radici: RADICI_OK.map((r, j) => (j === i ? { ...r, ...mut } : r)),
+});
+const conDoc = testo => ({
+  file: [...C30_OK.file, { nome: `${DOC}/scheda.md`, testo }],
+});
+const localeIt = mut => ({
+  locali: { ...C30_OK.locali, it: { ...C30_OK.locali.it, ...mut } },
+});
+const senza = (testo, pezzo) => testo.replace(pezzo, '');
 
 export const FIXTURE_LOGIN = {
   C30: {
     neg: [
       ...n('C30', C30_OK),
-      v('C30', { ...C30_OK, etichetta: { it: 'Profilo', en: null } }),
-      v('C30', { ...C30_OK, file: [] }),
-      v('C30', c30({ 'scheda.md': "Tocca l'icona del profilo" })),
+      // codice: lettore rotto, scheda Profilo, intestazione montata altrove, testID altrove
+      v('C30', c30({ schedaAzioni: [] })),
+      v('C30', c30({ schedaProfilo: ['src/navigation/types.ts'] })),
+      v('C30', c30({ importaIntestazione: [] })),
       v(
         'C30',
         c30({
-          'web/delete-account.html': 'tap the Profile icon at the top right',
+          importaIntestazione: [
+            'src/features/home/screens/HomeScreen.tsx',
+            'src/navigation/BottomTabNavigator.tsx',
+          ],
         })
       ),
-      v('C30', c30({ 'play-console-risposte.md': 'icona in alto a destra' })),
-      v('C30', c30({ 'web/elimina-account.html': null })),
       v(
         'C30',
         c30({
-          'web/delete-account.html':
-            'tap the fourth tab, <strong>Profilo</strong>',
+          testID: [
+            'src/features/home/screens/HomeScreen.tsx',
+            'src/navigation/TabHeader.tsx',
+          ],
         })
       ),
-      v('C30', c30({ 'rilascio.md': null })),
+      // inset superiore: edges illeggibili, 'top' negli edges, insets.top, radice mancante
+      v('C30', c30(radice(1, { edges: [] }))),
+      v('C30', c30(radice(0, { edges: ["'top', 'bottom'"] }))),
+      v('C30', c30(radice(2, { insetsTop: true }))),
+      v('C30', c30({ radici: RADICI_OK.slice(1) })),
+      // traduzioni: lettore rotto, navigation.profile rimasta, etichetta mancante
+      v('C30', c30(localeIt({ home: null }))),
+      v('C30', c30(localeIt({ profilo: 'Profilo' }))),
+      v('C30', c30(localeIt({ ospite: null }))),
+      // documenti: nessuno, frasi della vecchia scheda (anche dentro tag e virgolette)
+      v('C30', c30({ file: [] })),
+      v('C30', c30(conDoc('la scheda <strong>Profilo</strong>'))),
+      v('C30', c30(conDoc('tocca la quarta scheda'))),
+      v('C30', c30(conDoc('apri la 4ª scheda'))),
+      v('C30', c30(conDoc('the **fourth tab**'))),
+      v('C30', c30(conDoc('nella barra\n  in basso'))),
+      v('C30', c30(conDoc('in the bottom bar'))),
+      v('C30', c30(conDoc('the <strong>Profile</strong> tab'))),
+      // sezione dei revisori: assente o senza etichette e posizione
+      v('C30', c30({ accessoPlay: null })),
+      v('C30', c30({ accessoPlay: senza(PLAY_OK, '«Area Donatori»') })),
+      v('C30', c30({ accessoPlay: senza(PLAY_OK, '«Donor Area»') })),
+      v('C30', c30({ accessoPlay: senza(PLAY_OK, 'in alto a destra') })),
+      // passi delle pagine di cancellazione
+      v('C30', c30({ passi: { ...C30_OK.passi, it: null } })),
       v(
         'C30',
-        c30({ 'rilascio.md': 'mandare le pagine web/elimina-account.html' })
+        c30({
+          passi: {
+            ...C30_OK.passi,
+            it: senza(PASSI_IT, '<strong>Area Donatori</strong>'),
+          },
+        })
       ),
+      v(
+        'C30',
+        c30({
+          passi: {
+            ...C30_OK.passi,
+            it: senza(PASSI_IT, '<strong>Il mio profilo</strong>'),
+          },
+        })
+      ),
+      v(
+        'C30',
+        c30({
+          passi: { ...C30_OK.passi, it: senza(PASSI_IT, 'in alto a destra') },
+        })
+      ),
+      v(
+        'C30',
+        c30({ passi: { ...C30_OK.passi, it: senza(PASSI_IT, 'icona') } })
+      ),
+      v(
+        'C30',
+        c30({ passi: { ...C30_OK.passi, en: senza(PASSI_EN, 'top right') } })
+      ),
+      // runbook (C20)
+      v('C30', c30({ runbook: null })),
+      v('C30', c30({ runbook: 'mandare le pagine web/elimina-account.html' })),
     ],
-    pos: [v('C30', C30_OK)],
+    pos: [
+      v('C30', C30_OK),
+      // «in alto a destra» e «barra» altrove non sono vecchie istruzioni
+      v('C30', c30(conDoc('la barra delle schede ha Impatto, Home e Azioni'))),
+    ],
   },
   C26: soloTitoli('C26'),
   C31: soloTitoli('C31'),

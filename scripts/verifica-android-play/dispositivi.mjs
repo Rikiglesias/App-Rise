@@ -83,12 +83,13 @@ const CONTROLLI_C43 = [
   'StatCard',
   "pulsanti dell'account",
 ];
+// R21-R23: la scheda Profilo non c'è più; entra l'intestazione delle schede (margine destro ≥ inset).
 const ROTAZIONE_C54 = [
   'barra delle schede',
+  'intestazione delle schede',
   'Home',
   'Impatto',
   'Azioni',
-  'Profilo',
   'MapModalScreen',
   'PerfectModal',
   "schermate dell'account",

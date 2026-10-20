@@ -258,7 +258,8 @@ sull'informativa.
 
 Se le pagine `web/elimina-account.html` e `web/delete-account.html` sono già state consegnate alla sede USA,
 Riccardo deve mandare le versioni aggiornate e chiedere di sostituire quelle precedenti, anche se già pubblicate:
-le istruzioni devono portare alla quarta scheda «Profilo» / «Profile» nella barra in basso.
+le istruzioni devono portare all'icona della persona in alto a destra («Area Donatori» / «Il mio profilo»; in inglese
+«Donor Area» / «My profile»).
 
 Testo da mandare (inglese), con i tre file in allegato:
 
@@ -270,7 +271,7 @@ Testo da mandare (inglese), con i tre file in allegato:
 > 2. Publish two new pages with the attached `elimina-account.html` (Italian) and `delete-account.html` (English),
 >    for example at `/elimina-account/` and `/delete-account/`.
 >    If you already received or published these pages, replace the previous versions with the updated attachments:
->    the instructions now direct users to the fourth tab, Profile, in the bottom bar.
+>    the instructions now direct users to the person icon at the top right of the app (Donor Area / My profile).
 >
 > Please reply with the final URLs: we have to enter them in Play Console. Nothing else on the network changes.
 > Thank you!

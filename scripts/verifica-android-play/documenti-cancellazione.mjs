@@ -66,7 +66,7 @@ export const leggiSezioni = html => {
   return sezioni;
 };
 
-const caricaLocale = file => {
+export const caricaLocale = file => {
   const { outputText } = ts.transpileModule(leggi(percorso(file)), {
     compilerOptions: { module: ts.ModuleKind.CommonJS },
   });
@@ -78,8 +78,10 @@ const caricaLocale = file => {
 
 const etichette = lingua => {
   const l = caricaLocale(`src/locales/${lingua}.ts`);
+  // R22: l'ingresso è il pulsante account dell'intestazione, con i titoli delle pagine che apre.
   return [
-    l.navigation.profile,
+    l.auth.login.title,
+    l.auth.profile.title,
     l.auth.privacy.title,
     l.auth.privacy.deleteCta,
     l.auth.delete.now,

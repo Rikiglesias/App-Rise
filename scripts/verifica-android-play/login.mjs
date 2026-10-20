@@ -1,6 +1,6 @@
 // C26, C30-C36, C53, C55 (fase F8 «login» del contratto android-play, R8-R14): titoli Jest + controlli statici.
 import { elencaFile, esiste, leggi, percorso, rel } from './comune.mjs';
-import { testoTraduzione } from './app.mjs';
+import { staticoC30 } from './account.mjs';
 import { staticoC35 } from './funzioni-edge.mjs';
 import { RAMI_C55, staticoC55 } from './segnala-problema.mjs';
 import { criterioConTitoli } from './titoli-jest.mjs';
@@ -16,73 +16,6 @@ const sorgentiApp = () =>
   ).map(p => ({ nome: rel(p), testo: leggi(p) }));
 
 const leggiSeEsiste = p => (esiste(percorso(p)) ? leggi(percorso(p)) : null);
-
-// --- C30 ---------------------------------------------------------------------------------------------
-// Le istruzioni per Google e per la sede USA devono portare alla 4ª scheda con l'etichetta vera di src/locales.
-const DOC_PLAY = 'docs/store/google-play';
-export const FRASI_VIETATE_C30 = [
-  'icona del profilo',
-  'profile icon',
-  'in alto a destra',
-  'top right',
-];
-const ISTRUZIONI_C30 = [
-  ['play-console-risposte.md', 'it'],
-  ['web/elimina-account.html', 'it'],
-  ['web/delete-account.html', 'en'],
-];
-
-export const staticoC30 = {
-  leggi() {
-    const file = elencaFile(percorso(DOC_PLAY), p =>
-      /\.(md|html)$/.test(p)
-    ).map(p => ({ nome: rel(p), testo: leggi(p) }));
-    return {
-      file,
-      etichetta: {
-        it: testoTraduzione(
-          leggi(percorso('src', 'locales', 'it.ts')),
-          'navigation.profile'
-        ),
-        en: testoTraduzione(
-          leggi(percorso('src', 'locales', 'en.ts')),
-          'navigation.profile'
-        ),
-      },
-    };
-  },
-  verifica({ file, etichetta }) {
-    if (!etichetta?.it || !etichetta?.en)
-      return 'navigation.profile assente in it.ts o en.ts';
-    if (!file?.length)
-      return `nessun documento in ${DOC_PLAY} (lettore rotto?)`;
-    const vietate = file.flatMap(f =>
-      FRASI_VIETATE_C30.filter(fr => f.testo.toLowerCase().includes(fr)).map(
-        fr => `${f.nome}: «${fr}»`
-      )
-    );
-    if (vietate.length)
-      return `istruzioni con il vecchio ingresso: ${vietate.join(', ')}`;
-    const testo = n =>
-      file.find(f => f.nome === `${DOC_PLAY}/${n}`)?.testo ?? null;
-    for (const [n, lingua] of ISTRUZIONI_C30) {
-      const t = testo(n);
-      const et = etichetta[lingua];
-      if (t == null) return `${DOC_PLAY}/${n} assente`;
-      if (!t.includes(`<strong>${et}</strong>`) && !t.includes(`«${et}»`))
-        return `${n} non porta alla scheda «${et}»`;
-    }
-    const runbook = testo('rilascio.md');
-    if (runbook == null) return `${DOC_PLAY}/rilascio.md assente`;
-    if (
-      !/sostitu/i.test(runbook) ||
-      !runbook.includes('web/elimina-account.html') ||
-      !runbook.includes('web/delete-account.html')
-    )
-      return "rilascio.md (C20) senza l'istruzione di sostituire le pagine web/ già consegnate";
-    return '';
-  },
-};
 
 // --- C34 ---------------------------------------------------------------------------------------------
 // I redirect si leggono dalle costanti `*_PATH` di authRedirect.ts: un percorso nuovo entra da solo nel controllo.
@@ -133,13 +66,17 @@ export const staticoC34 = {
 
 export const DEFINIZIONI_LOGIN = {
   C30: {
+    // R21-R23: account in alto a destra, fuori dalla barra.
     titoli: [
-      'scheda Profilo: ospite vede Accesso',
-      'scheda Profilo: collegato vede Profilo',
-      'scheda Profilo: Home senza icona profilo',
-      "scheda Profilo: ri-consenso all'avvio",
-      "scheda Profilo: dal ri-consenso si può uscire dall'account",
+      'account in alto: ospite vede Accesso',
+      'account in alto: collegato vede Profilo',
+      'account in alto: assente nelle pagine interne',
+      "account in alto: inset superiore solo nell'intestazione",
+      'account in alto: icona leggibile in chiaro e in scuro',
+      "account in alto: ri-consenso all'avvio",
+      "account in alto: dal ri-consenso si può uscire dall'account",
     ],
+    guardie: ['account in alto: tre schede nella barra'],
     statico: staticoC30,
   },
   C26: {
@@ -157,8 +94,12 @@ export const DEFINIZIONI_LOGIN = {
       'indietro visibile: Password dimenticata',
       'indietro visibile: Reimposta password dallo stack',
       'indietro visibile: Modifica profilo',
-      'indietro visibile: assente alla radice della scheda Profilo',
+      'indietro visibile: Accesso',
+      'indietro visibile: Profilo',
       'indietro visibile: assente nel cancello del profilo',
+    ],
+    guardie: [
+      'elimina account: dal cancello del profilo Annulla torna indietro',
     ],
   },
   C32: {

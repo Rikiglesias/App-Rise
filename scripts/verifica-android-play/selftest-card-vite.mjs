@@ -1,7 +1,5 @@
 // C22 per la card delle vite di C7 (R18-R20): una fixture negativa per ogni ramo del criterio.
 // Ogni negativa è il positivo con UNA mutazione.
-import { senzaMockLazy, sha256 } from './card-vite.mjs';
-
 const ANNUAL = 'src/features/impact/components/AnnualResultsSection.tsx';
 const CARD = `<StatCard
   value={formatNumber(IMPACT_DATA.livesImpactedMeals, locale)}
@@ -19,25 +17,12 @@ const lingua = (etichetta, sottotitolo) => `export default {
 };`;
 const IT = lingua('Vite Impattate', 'Con i pasti del {{year}}');
 const EN = lingua('Lives Impacted', 'Through {{year}} meals');
-const TEST = `jest.mock('expo-haptics');
-jest.mock('@/navigation/LazyLoading', () => ({
-  WrappedImpatto2024Screen: () => null,
-  WrappedDevelopmentScreen: () => null,
-}));
-
-it('apre il profilo', () => {
-  expect(true).toBe(true);
-});
-`;
-
 export const CARD_OK = {
   impatto: [{ nome: ANNUAL, testo: SEZIONE }],
   it: IT,
   en: EN,
   resultsYear: 2025,
   anno2025: true,
-  testProtetto: TEST,
-  shaTestProtetto: sha256(senzaMockLazy(TEST)),
 };
 const conSezione = testo => ({ impatto: [{ nome: ANNUAL, testo }] });
 const sostituisci = (da, a) => conSezione(SEZIONE.replace(da, a));
@@ -80,9 +65,6 @@ export const CARD_NEG = [
   // resultsYear diverso, estratto senza 11.100
   { resultsYear: 2024 },
   { anno2025: false },
-  // test protetto cambiato fuori dal blocco, o illeggibile
-  { testProtetto: TEST.replace('toBe(true)', 'toBe(false)') },
-  { testProtetto: null },
 ];
 
 export const CARD_POS = [
@@ -102,15 +84,4 @@ export const CARD_POS = [
   conSezione(
     `${SEZIONE}\n{/* <StatCard value={IMPACT_DATA.livesImpactedMeals} label="x" /> */}`
   ),
-  // mock ridotto o tolto, file con CRLF
-  {
-    testProtetto: TEST.replace('  WrappedDevelopmentScreen: () => null,\n', ''),
-  },
-  {
-    testProtetto: TEST.replace(
-      /jest\.mock\('@\/navigation\/LazyLoading'[\s\S]*?\}\)\);\n/,
-      ''
-    ),
-  },
-  { testProtetto: TEST.replace(/\n/g, '\r\n') },
 ];

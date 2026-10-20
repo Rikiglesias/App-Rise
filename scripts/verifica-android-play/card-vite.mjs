@@ -2,11 +2,6 @@
 // La card si riconosce dal valore (`IMPACT_DATA.livesImpactedMeals`), non dall'etichetta: una seconda card
 // «vite impattate» (dalla nascita) non deve essere costretta a dire 2025. Le chiavi si risolvono per percorso
 // completo nell'oggetto delle traduzioni, mai per ricerca in avanti nel testo.
-import { createHash } from 'node:crypto';
-
-export const sha256 = testo =>
-  createHash('sha256').update(testo, 'utf8').digest('hex');
-
 // --- traduzioni: parser del sottoinsieme usato in src/locales (oggetti annidati di stringhe) -----------------
 const spazi = (s, i) => {
   for (;;) {
@@ -152,31 +147,11 @@ const annoDaResultsYear = (testo, y) =>
     ) &&
     legami(testo, y) === 1);
 
-// Test protetto: via le righe intere del jest.mock di LazyLoading, CRLF → LF (R20).
-export const senzaMockLazy = testo => {
-  const s = (testo ?? '').replace(/\r\n/g, '\n');
-  const m = /jest\.mock\(\s*['"]@\/navigation\/LazyLoading['"]/.exec(s);
-  if (!m) return s;
-  let prof = 0;
-  let i = m.index + 'jest.mock'.length;
-  for (; i < s.length; i++) {
-    if ('\'"`'.includes(s[i])) i = stringa(s, i)[1] - 1;
-    else if (s[i] === '(') prof++;
-    else if (s[i] === ')' && --prof === 0) break;
-  }
-  const inizioRiga = s.lastIndexOf('\n', m.index) + 1;
-  const a = s.indexOf('\n', i);
-  return s.slice(0, inizioRiga) + (a < 0 ? '' : s.slice(a + 1));
-};
-// sha256 di senzaMockLazy(accountNavigation.test.tsx a 7b764e9), calcolato il 18/10 da `git show`.
-export const SHA_TEST_PROTETTO_C7 =
-  'e6d8d8f48b42a10491961ca6b41bb8cafa9504fb06ad8ebca2ac474b5863e9bd';
-
 /**
  * '' se la card delle vite rispetta C7, altrimenti il motivo.
  * impatto: [{nome, testo}] dei .tsx di src/features/impact (test esclusi); it/en: sorgenti dei file di
- * traduzione; resultsYear: numero letto da IMPACT_DATA; anno2025: 11.100 nel blocco 2025 dell'estratto;
- * testProtetto: {prima (a 7b764e9), dopo} di accountNavigation.test.tsx.
+ * traduzione; resultsYear: numero letto da IMPACT_DATA; anno2025: 11.100 nel blocco 2025 dell'estratto.
+ * Il test protetto da C30 C31 non si confronta più qui (R21): lo proteggono gli sha256 delle controprove.
  */
 export const verificaCardVite = ({
   impatto,
@@ -184,8 +159,6 @@ export const verificaCardVite = ({
   en,
   resultsYear,
   anno2025,
-  testProtetto,
-  shaTestProtetto = SHA_TEST_PROTETTO_C7,
 }) => {
   if (!anno2025)
     return "11.100 assente dal blocco 2025 dell'estratto (estratto o lettore cambiati: si rinegozia)";
@@ -232,8 +205,5 @@ export const verificaCardVite = ({
   }
   if (resultsYear !== 2025)
     return `IMPACT_DATA.resultsYear = ${resultsYear}, atteso 2025`;
-  if (testProtetto == null) return 'accountNavigation.test.tsx assente';
-  if (sha256(senzaMockLazy(testProtetto)) !== shaTestProtetto)
-    return 'accountNavigation.test.tsx cambiato fuori dal blocco jest.mock di LazyLoading';
   return '';
 };

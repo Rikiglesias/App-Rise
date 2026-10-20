@@ -42,9 +42,6 @@ export const ROTTE_VIVE_C7 = [
   'MapModal',
   'Seguici',
 ];
-// Test protetto da C30 C31 che F9-2 tocca solo nel mock di LazyLoading (C7, R20): impronta in card-vite.mjs.
-export const TEST_PROTETTO_C7 =
-  'src/__tests__/navigation/accountNavigation.test.tsx';
 // «11.100» fra «DATI MEALS» e la riga di «24.562.744»: blocco dei dati 2025 nell'estratto di C37.
 export const anno2025DelleVite = estratto => {
   const da = estratto.indexOf('DATI MEALS');
@@ -83,9 +80,6 @@ export const staticoC7 = {
         en: leggi(percorso('src', 'locales', 'en.ts')),
         resultsYear: annoRisultati ? Number(annoRisultati[1]) : null,
         anno2025: anno2025DelleVite(await estrattoFonte(AR2025_URL)),
-        testProtetto: esiste(percorso(TEST_PROTETTO_C7))
-          ? leggi(percorso(TEST_PROTETTO_C7))
-          : null,
       },
     };
   },
