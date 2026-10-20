@@ -6,7 +6,8 @@
     "indietro visibile: Password dimenticata",
     "indietro visibile: Reimposta password dallo stack",
     "indietro visibile: Modifica profilo",
-    "indietro visibile: assente alla radice della scheda Profilo",
+    "indietro visibile: Accesso",
+    "indietro visibile: Profilo",
     "indietro visibile: assente nel cancello del profilo"
   ],
   "esitiAllaBase": {
@@ -14,10 +15,11 @@
     "indietro visibile: Password dimenticata": "failed",
     "indietro visibile: Reimposta password dallo stack": "failed",
     "indietro visibile: Modifica profilo": "failed",
-    "indietro visibile: assente alla radice della scheda Profilo": "failed",
+    "indietro visibile: Accesso": "failed",
+    "indietro visibile: Profilo": "failed",
     "indietro visibile: assente nel cancello del profilo": "failed"
   },
   "fileTest": {
-    "src/__tests__/navigation/accountNavigation.test.tsx": "e6d8d8f48b42a10491961ca6b41bb8cafa9504fb06ad8ebca2ac474b5863e9bd"
+    "src/__tests__/navigation/accountNavigation.test.tsx": "da1363b0c5610221aa5db838aa7f14b0668b3eded3471fc7e068582f78bcbb26"
   }
 }

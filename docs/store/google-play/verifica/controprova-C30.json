@@ -2,20 +2,25 @@
   "criterio": "C30",
   "base": "fbefa98",
   "titoli": [
-    "scheda Profilo: ospite vede Accesso",
-    "scheda Profilo: collegato vede Profilo",
-    "scheda Profilo: Home senza icona profilo",
-    "scheda Profilo: ri-consenso all'avvio",
-    "scheda Profilo: dal ri-consenso si può uscire dall'account"
+    "account in alto: ospite vede Accesso",
+    "account in alto: collegato vede Profilo",
+    "account in alto: assente nelle pagine interne",
+    "account in alto: inset superiore solo nell'intestazione",
+    "account in alto: icona leggibile in chiaro e in scuro",
+    "account in alto: ri-consenso all'avvio",
+    "account in alto: dal ri-consenso si può uscire dall'account"
   ],
   "esitiAllaBase": {
-    "scheda Profilo: ospite vede Accesso": "failed",
-    "scheda Profilo: collegato vede Profilo": "failed",
-    "scheda Profilo: Home senza icona profilo": "failed",
-    "scheda Profilo: ri-consenso all'avvio": "failed",
-    "scheda Profilo: dal ri-consenso si può uscire dall'account": "failed"
+    "account in alto: ospite vede Accesso": "failed",
+    "account in alto: collegato vede Profilo": "failed",
+    "account in alto: assente nelle pagine interne": "assente",
+    "account in alto: inset superiore solo nell'intestazione": "assente",
+    "account in alto: icona leggibile in chiaro e in scuro": "assente",
+    "account in alto: ri-consenso all'avvio": "failed",
+    "account in alto: dal ri-consenso si può uscire dall'account": "failed"
   },
   "fileTest": {
-    "src/__tests__/navigation/accountNavigation.test.tsx": "e6d8d8f48b42a10491961ca6b41bb8cafa9504fb06ad8ebca2ac474b5863e9bd"
+    "src/__tests__/navigation/TabHeader.test.tsx": "a42a8e4b2a0e83e026ac8d0ed8a96d02d0646ad4abe2c2deed514c8ba92774b6",
+    "src/__tests__/navigation/accountNavigation.test.tsx": "da1363b0c5610221aa5db838aa7f14b0668b3eded3471fc7e068582f78bcbb26"
   }
 }
