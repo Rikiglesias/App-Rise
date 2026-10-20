@@ -120,7 +120,6 @@ export default {
     impact: 'Impact',
     actions: 'Actions',
     about: 'About Us',
-    profile: 'Profile',
   },
 
   auth: {

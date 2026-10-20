@@ -49,7 +49,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
   return (
     <SafeAreaView
       style={styles.container}
-      edges={['top', 'bottom']}
+      edges={['bottom']}
       accessibilityLabel={t('home.screenLabel')}
       testID="home-screen"
     >

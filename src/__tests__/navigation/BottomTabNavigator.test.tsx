@@ -21,7 +21,6 @@ jest.mock('../../shared/hooks/useTranslation', () => ({
         'navigation.impact': 'Impatto',
         'navigation.home': 'Home',
         'navigation.actions': 'Azioni',
-        'navigation.profile': 'Profilo',
       };
       return translations[key] || key;
     },
@@ -154,14 +153,15 @@ describe('BottomTabNavigator', () => {
       expect(getByTestId('home-screen')).toBeTruthy();
     });
 
-    it('should render all four tabs', () => {
-      const { getByLabelText } = renderNavigator();
+    it('should render the three tabs', () => {
+      const { getByLabelText, queryByLabelText } = renderNavigator();
 
       // Check for Italian tab accessibility labels
       expect(getByLabelText(/Impatto/i)).toBeTruthy();
       expect(getByLabelText(/Home/i)).toBeTruthy();
       expect(getByLabelText(/Azioni/i)).toBeTruthy();
-      expect(getByLabelText(/Profilo/i)).toBeTruthy();
+      // L'account sta nell'intestazione, non nella barra.
+      expect(queryByLabelText(/Profilo/i)).toBeNull();
     });
 
     it('should show Home tab as active by default', () => {

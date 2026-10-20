@@ -14,13 +14,19 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomTabBarProps,
+  type BottomTabHeaderProps,
   createBottomTabNavigator,
   BottomTabBarHeightCallbackContext,
 } from '@react-navigation/bottom-tabs';
+import {
+  getFocusedRouteNameFromRoute,
+  type RouteProp,
+} from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 
 import type { BottomTabParamList } from './types';
 import ImpactStackNavigator from './ImpactStackNavigator';
+import { TabHeader } from './TabHeader';
 import {
   PerfectIcon,
   PlatformBlur,
@@ -47,16 +53,8 @@ import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 // Direct imports (no lazy loading to avoid spinner)
 import { ContributeTabScreen } from '@/features/actions';
 import HomeScreen from '@/features/home/screens/HomeScreen';
-import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
-import { AuthBackDisabledContext } from '@/features/auth/components/AuthBackButton';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
-
-const ProfileTab: React.FC = () => (
-  <AuthBackDisabledContext.Provider value={true}>
-    <ProfileScreen />
-  </AuthBackDisabledContext.Provider>
-);
 
 // =================================================================
 // 🎯 TYPES
@@ -197,7 +195,6 @@ const ICON_MAP: Record<string, string> = {
   ImpactTab: 'chart-line',
   HomeTab: 'home',
   InfoTab: 'hand-heart',
-  ProfileTab: 'account',
 };
 
 const AdvancedTabButtonComponent: React.FC<TabButtonProps> = ({
@@ -313,8 +310,18 @@ const renderTabBar = (props: BottomTabBarProps) => (
   <AdvancedTabBar {...props} />
 );
 
+const renderTabHeader = (props: BottomTabHeaderProps) => (
+  <TabHeader {...props} />
+);
+
+// L'intestazione con l'account sta sulla radice di Impatto, non sulle sue pagine interne
+// (dettagli e mappa hanno il loro «Indietro» e applicano da sé l'inset superiore).
+const isImpactRoot = (route: RouteProp<BottomTabParamList, 'ImpactTab'>) =>
+  (getFocusedRouteNameFromRoute(route) ?? 'Impact') === 'Impact';
+
 const BottomTabNavigator: React.FC = () => {
   const { t } = useTranslation();
+  const colors = useThemeColors();
 
   return (
     <Tab.Navigator
@@ -323,7 +330,8 @@ const BottomTabNavigator: React.FC = () => {
       // Android). Il default di React Navigation 7 è 'firstRoute' = Impatto, il tab a sinistra.
       backBehavior="initialRoute"
       screenOptions={{
-        headerShown: false,
+        // Intestazione opaca col colore di fondo della radice su cui sta (headerStyle).
+        header: renderTabHeader,
         lazy: true, // Lazy loading: migliora cold start; preloading mirato se serve
       }}
       tabBar={renderTabBar}
@@ -331,15 +339,18 @@ const BottomTabNavigator: React.FC = () => {
       <Tab.Screen
         name="ImpactTab"
         component={ImpactStackNavigator}
-        options={{
+        options={({ route }) => ({
           tabBarAccessibilityLabel: t('navigation.impact'),
-        }}
+          headerShown: isImpactRoot(route),
+          headerStyle: { backgroundColor: colors.neutral[50] },
+        })}
       />
       <Tab.Screen
         name="HomeTab"
         component={HomeScreen}
         options={{
           tabBarAccessibilityLabel: t('navigation.home'),
+          headerStyle: { backgroundColor: colors.neutral[0] },
         }}
       />
       <Tab.Screen
@@ -347,12 +358,8 @@ const BottomTabNavigator: React.FC = () => {
         component={ContributeTabScreen}
         options={{
           tabBarAccessibilityLabel: t('navigation.actions'),
+          headerStyle: { backgroundColor: colors.neutral[50] },
         }}
-      />
-      <Tab.Screen
-        name="ProfileTab"
-        component={ProfileTab}
-        options={{ tabBarAccessibilityLabel: t('navigation.profile') }}
       />
     </Tab.Navigator>
   );

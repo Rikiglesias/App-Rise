@@ -122,7 +122,6 @@ export default {
     impact: 'Impatto',
     actions: 'Azioni',
     about: 'Chi Siamo',
-    profile: 'Profilo',
   },
 
   auth: {

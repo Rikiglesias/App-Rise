@@ -11,6 +11,7 @@ import { ForgotPasswordScreen } from '@/features/auth/screens/ForgotPasswordScre
 import { ResetPasswordScreen } from '@/features/auth/screens/ResetPasswordScreen';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { ProfileEditScreen } from '@/features/auth/screens/ProfileEditScreen';
+import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -46,7 +47,15 @@ export const MainStackNavigator: React.FC = () => (
       options={{ headerShown: false }}
     />
 
-    {/* I moduli si aprono sopra la scheda Profilo: indietro torna alla scheda. */}
+    {/* Ingresso all'account dall'intestazione delle schede (TabHeader): Accesso per
+        l'ospite, Profilo per chi è collegato. Pagina sopra le schede, con «Indietro». */}
+    <Stack.Screen
+      name="Account"
+      component={ProfileScreen}
+      options={{ headerShown: false }}
+    />
+
+    {/* I moduli si aprono sopra la pagina Account: indietro torna lì. */}
     <Stack.Screen
       name="SignUp"
       component={SignUpScreen}

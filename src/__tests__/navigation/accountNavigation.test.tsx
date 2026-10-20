@@ -1,12 +1,6 @@
 import React from 'react';
 import { BackHandler, StyleSheet } from 'react-native';
-import {
-  act,
-  cleanup,
-  fireEvent,
-  render,
-  within,
-} from '@testing-library/react-native';
+import { act, cleanup, fireEvent, render } from '@testing-library/react-native';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 
 import { AllProviders } from '../helpers/testProviders';
@@ -24,14 +18,11 @@ jest.mock('@/shared/auth/useAuthDeepLink', () => ({
   useAuthDeepLink: jest.fn(),
 }));
 jest.mock('expo-haptics');
+// Le 3 radici delle schede sono vuote: il pulsante account può arrivare solo
+// dall'intestazione montata dal navigatore delle schede (C30).
 jest.mock('@/navigation/ImpactStackNavigator', () => () => null);
 jest.mock('@/features/actions', () => ({ ContributeTabScreen: () => null }));
-jest.mock('@/features/home/components/HomeHeaderSection', () => ({
-  HomeHeaderSection: () => null,
-}));
-jest.mock('@/features/home/components/EntraInAzione', () => ({
-  EntraInAzione: () => null,
-}));
+jest.mock('@/features/home/screens/HomeScreen', () => () => null);
 jest.mock('@/features/about/screens/ChiSiamoScreen', () => () => null);
 jest.mock('@/features/social/screens/SeguiciScreen', () => () => null);
 
@@ -112,70 +103,91 @@ const signIn = () => {
     profileLoaded: true,
   };
 };
-const openProfile = (ui: ReturnType<typeof mount>) => {
-  fireEvent.press(
-    ui.getByRole('button', { name: i18n.t('navigation.profile') })
-  );
-  settle();
-  expect(nav.getCurrentRoute()?.name).toBe('ProfileTab');
-};
-
-it('scheda Profilo: ospite vede Accesso', () => {
-  for (const locale of ['it', 'en']) {
-    i18n.locale = locale;
-    const ui = mount();
-    const tabs = nav.getRootState().routes[0]?.state;
-    expect(tabs?.routeNames).toEqual([
-      'ImpactTab',
-      'HomeTab',
-      'InfoTab',
-      'ProfileTab',
-    ]);
-    openProfile(ui);
-    expect(ui.getByText(i18n.t('auth.login.title'))).toBeTruthy();
-    fireEvent.press(ui.getByText(i18n.t('auth.login.createAccount')));
-    settle();
-    expect(nav.getCurrentRoute()?.name).toBe('SignUp');
-    ui.unmount();
-  }
-});
-
-it('scheda Profilo: collegato vede Profilo', () => {
-  signIn();
-  const ui = mount();
-  openProfile(ui);
-  expect(ui.getByText('Mario Rossi')).toBeTruthy();
-  fireEvent.press(ui.getByText(i18n.t('auth.edit.title')));
-  settle();
-  expect(nav.getCurrentRoute()?.name).toBe('ProfileEdit');
-  // Sessione scaduta durante la modifica: nessun modulo privato nella cronologia.
-  auth = { ...auth, status: 'unauthenticated', profile: null };
+const rerender = (ui: ReturnType<typeof mount>) => {
   ui.rerender(
     <AllProviders>
       <AppNavigator />
     </AllProviders>
   );
   settle();
-  expect(nav.getCurrentRoute()?.name).toBe('ProfileTab');
+};
+const accountButton = (ui: ReturnType<typeof mount>) =>
+  ui.getByTestId('account-header-button');
+const openAccount = (ui: ReturnType<typeof mount>) => {
+  fireEvent.press(accountButton(ui));
+  settle();
+  expect(nav.getCurrentRoute()?.name).toBe('Account');
+};
+const rootRoutes = () => nav.getRootState().routes.map(route => route.name);
+const expectTouchArea = (
+  button: ReturnType<ReturnType<typeof mount>['getByTestId']>
+) => {
+  const style = StyleSheet.flatten(button.props.style);
+  expect(style.minHeight).toBeGreaterThanOrEqual(48);
+  expect(style.minWidth).toBeGreaterThanOrEqual(48);
+};
+
+it('account in alto: tre schede nella barra', () => {
+  mount();
+  expect(nav.getRootState().routes[0]?.state?.routeNames).toEqual([
+    'ImpactTab',
+    'HomeTab',
+    'InfoTab',
+  ]);
+});
+
+it('account in alto: ospite vede Accesso', () => {
+  for (const locale of ['it', 'en']) {
+    i18n.locale = locale;
+    for (const tab of ['ImpactTab', 'HomeTab', 'InfoTab'] as const) {
+      const ui = mount();
+      act(() => nav.navigate('Home', { screen: tab }));
+      settle();
+      expect(nav.getCurrentRoute()?.name).toBe(tab);
+      expect(accountButton(ui).props.accessibilityLabel).toBe(
+        i18n.t('auth.login.title')
+      );
+      openAccount(ui);
+      expect(ui.getByText(i18n.t('auth.login.title'))).toBeTruthy();
+      fireEvent.press(ui.getByText(i18n.t('auth.login.createAccount')));
+      settle();
+      expect(nav.getCurrentRoute()?.name).toBe('SignUp');
+      ui.unmount();
+    }
+  }
+});
+
+it('account in alto: collegato vede Profilo', () => {
+  const ui = mount();
+  openAccount(ui);
   expect(ui.getByText(i18n.t('auth.login.title'))).toBeTruthy();
-  expect(nav.getRootState().routes.map(route => route.name)).toEqual(['Home']);
+  // Accesso dalla pagina Account con il profilo completo: il Profilo compare lì.
+  signIn();
+  rerender(ui);
+  expect(nav.getCurrentRoute()?.name).toBe('Account');
+  expect(ui.getByText('Mario Rossi')).toBeTruthy();
+  expect(rootRoutes()).toEqual(['Home', 'Account']);
+  systemBack();
+  expect(nav.getCurrentRoute()?.name).toBe('HomeTab');
+  expect(accountButton(ui).props.accessibilityLabel).toBe(
+    i18n.t('auth.profile.title')
+  );
+  openAccount(ui);
+  fireEvent.press(ui.getByText(i18n.t('auth.edit.title')));
+  settle();
+  expect(nav.getCurrentRoute()?.name).toBe('ProfileEdit');
+  // Sessione scaduta durante la modifica: nessun modulo privato nella cronologia.
+  auth = { ...auth, status: 'unauthenticated', profile: null };
+  rerender(ui);
+  expect(nav.getCurrentRoute()?.name).toBe('Account');
+  expect(ui.getByText(i18n.t('auth.login.title'))).toBeTruthy();
+  expect(rootRoutes()).toEqual(['Home', 'Account']);
   systemBack();
   expect(nav.getCurrentRoute()?.name).toBe('HomeTab');
   expect(nav.canGoBack()).toBe(false);
 });
 
-it('scheda Profilo: Home senza icona profilo', () => {
-  const ui = mount();
-  const home = ui.getByTestId('home-screen');
-  expect(
-    within(home).queryByRole('button', { name: i18n.t('navigation.profile') })
-  ).toBeNull();
-  // Positivo: l'ingresso esiste davvero nella barra e apre il login.
-  openProfile(ui);
-  expect(ui.getByText(i18n.t('auth.login.title'))).toBeTruthy();
-});
-
-it("scheda Profilo: ri-consenso all'avvio", () => {
+it("account in alto: ri-consenso all'avvio", () => {
   signIn();
   auth.needsReConsent = true;
   const ui = mount();
@@ -201,7 +213,7 @@ it("scheda Profilo: ri-consenso all'avvio", () => {
   expect(ui.getByTestId('bottom-tab-bar')).toBeTruthy();
 });
 
-it("scheda Profilo: dal ri-consenso si può uscire dall'account", async () => {
+it("account in alto: dal ri-consenso si può uscire dall'account", async () => {
   signIn();
   auth.needsReConsent = true;
   auth.signOut = jest.fn().mockImplementation(() => {
@@ -243,7 +255,7 @@ it("scheda Profilo: dal ri-consenso si può uscire dall'account", async () => {
   );
   expect(ui.getByTestId('bottom-tab-bar')).toBeTruthy();
   expect(ui.queryByText(i18n.t('auth.consents.reconsentTitle'))).toBeNull();
-  openProfile(ui);
+  openAccount(ui);
   expect(ui.getByText(i18n.t('auth.login.title'))).toBeTruthy();
 });
 
@@ -259,23 +271,18 @@ it.each([
   }
   const backLabel = i18n.t('common.back');
   const ui = mount();
-  openProfile(ui);
+  openAccount(ui);
   act(() => nav.navigate(route));
   settle();
   const back = ui.getByRole('button', { name: backLabel });
-  expect(StyleSheet.flatten(back.props.style).minHeight).toBeGreaterThanOrEqual(
-    48
-  );
-  expect(StyleSheet.flatten(back.props.style).minWidth).toBeGreaterThanOrEqual(
-    48
-  );
+  expectTouchArea(back);
   fireEvent.press(back);
   settle();
-  expect(nav.getCurrentRoute()?.name).toBe('ProfileTab');
+  expect(nav.getCurrentRoute()?.name).toBe('Account');
   act(() => nav.navigate(route));
   settle();
   systemBack();
-  expect(nav.getCurrentRoute()?.name).toBe('ProfileTab');
+  expect(nav.getCurrentRoute()?.name).toBe('Account');
   if (route === 'ResetPassword') {
     act(() => nav.navigate('ResetPassword'));
     settle();
@@ -294,20 +301,42 @@ it.each([
   }
 });
 
-it('indietro visibile: assente alla radice della scheda Profilo', () => {
+// Accesso e Profilo si aprono sopra le schede: l'indietro riporta alla scheda di
+// partenza, che qui NON è la Home (un ritorno fisso alla Home sarebbe sbagliato).
+it('indietro visibile: Accesso', () => {
   const ui = mount();
-  openProfile(ui);
-  expect(ui.queryByRole('button', { name: 'Indietro' })).toBeNull();
-  act(() => nav.navigate('SignUp'));
+  act(() => nav.navigate('Home', { screen: 'InfoTab' }));
   settle();
-  expect(ui.getByRole('button', { name: 'Indietro' })).toBeTruthy();
+  openAccount(ui);
+  expect(ui.getByText(i18n.t('auth.login.title'))).toBeTruthy();
+  const back = ui.getByRole('button', { name: i18n.t('common.back') });
+  expectTouchArea(back);
+  fireEvent.press(back);
+  settle();
+  expect(nav.getCurrentRoute()?.name).toBe('InfoTab');
+  openAccount(ui);
   systemBack();
-  expect(nav.getCurrentRoute()?.name).toBe('ProfileTab');
+  expect(nav.getCurrentRoute()?.name).toBe('InfoTab');
+});
+
+it('indietro visibile: Profilo', () => {
+  signIn();
+  const ui = mount();
+  act(() => nav.navigate('Home', { screen: 'ImpactTab' }));
+  settle();
+  openAccount(ui);
+  expect(ui.getByText('Mario Rossi')).toBeTruthy();
+  fireEvent.press(ui.getByRole('button', { name: i18n.t('common.back') }));
+  settle();
+  expect(nav.getCurrentRoute()?.name).toBe('ImpactTab');
+  openAccount(ui);
+  systemBack();
+  expect(nav.getCurrentRoute()?.name).toBe('ImpactTab');
 });
 
 it('indietro visibile: assente nel cancello del profilo', () => {
   const ui = mount();
-  openProfile(ui);
+  openAccount(ui);
   act(() => nav.navigate('SignUp'));
   settle();
   expect(ui.getByRole('button', { name: 'Indietro' })).toBeTruthy();

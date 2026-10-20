@@ -7,6 +7,7 @@ export interface RootStackParamList {
   Home: NavigatorScreenParams<BottomTabParamList> | undefined;
   Seguici: undefined;
   ChiSiamo: undefined;
+  Account: undefined;
   ReConsent: undefined;
   SignUp: undefined;
   CompleteProfile: undefined;
@@ -27,10 +28,9 @@ export type RootStackNavigationProp = StackNavigationProp<
 
 // Bottom Tab Navigator Types
 export type BottomTabParamList = {
-  ImpactTab: undefined;
+  ImpactTab: NavigatorScreenParams<ImpactStackParamList> | undefined;
   HomeTab: undefined;
   InfoTab: undefined;
-  ProfileTab: undefined;
 };
 
 // Impact Stack Navigator Types

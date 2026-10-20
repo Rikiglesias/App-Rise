@@ -8,7 +8,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
-// Radice della scheda e cancello non espongono il ritorno dei moduli nello stack.
+// Il cancello del profilo non espone il ritorno dei moduli nello stack.
 export const AuthBackDisabledContext = createContext(false);
 
 export const AuthBackButton: React.FC = () => {
