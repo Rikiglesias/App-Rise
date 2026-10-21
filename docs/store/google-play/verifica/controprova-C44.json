@@ -1,0 +1,16 @@
+{
+  "criterio": "C44",
+  "base": "fbefa98",
+  "titoli": [
+    "barra delle schede: cresce col testo",
+    "barra delle schede: spazio sotto i contenuti = altezza vera"
+  ],
+  "esitiAllaBase": {
+    "barra delle schede: cresce col testo": "assente",
+    "barra delle schede: spazio sotto i contenuti = altezza vera": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/navigation/BottomTabNavigator.test.tsx": "52a5912d375e9dee306dcf3dd0923bf9d828599cb293f1307108119ea68cc14b",
+    "src/__tests__/navigation/tabBarSpace.test.tsx": "cffb46d941f10a04442d25aaeae140b2ab7687fd09b9fcd10907f49b446d3694"
+  }
+}
