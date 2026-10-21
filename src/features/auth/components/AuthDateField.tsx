@@ -11,6 +11,7 @@ import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface AuthDateFieldProps {
   label: string;
@@ -143,7 +144,7 @@ const createStyles = (colors: ThemeColors) =>
       borderRadius: scale(12),
       paddingHorizontal: PerfectSpacing.base,
       // Altezza uniforme a tutti gli altri campi della pagina.
-      minHeight: scale(48),
+      ...minimumTouchTarget(scale(48)),
       justifyContent: 'center',
     },
     fieldError: {

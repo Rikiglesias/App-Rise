@@ -11,6 +11,7 @@ import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 export interface SocialPlatform {
   readonly id: string;
@@ -139,6 +140,7 @@ const createStyles = (colors: ThemeColors) => ({
   },
   touchableArea: {
     width: '100%' as const,
+    ...minimumTouchTarget(),
   },
   socialCardContent: {
     flexDirection: 'row' as const,

@@ -6,6 +6,7 @@ import { PlatformTouchable, PerfectText } from '@/components/ui';
 import { Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface AuthButtonProps {
   label: string;
@@ -111,12 +112,16 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
 
 const createStyles = () =>
   StyleSheet.create({
+    // Il minimo sta sia sul pulsante sia sul gradiente: il tocco e il disegno
+    // restano della stessa altezza anche sui telefoni piccoli.
     btnWrap: {
+      ...minimumTouchTarget(),
       borderRadius: scale(12),
       marginTop: PerfectSpacing.sm,
       ...Shadows.primary,
     },
     btn: {
+      ...minimumTouchTarget(),
       paddingVertical: PerfectSpacing.base,
       alignItems: 'center',
       justifyContent: 'center',
@@ -132,6 +137,7 @@ const createStyles = () =>
     // brand (outline). Dà struttura e rende "Registrati" pari ad "Accedi"
     // invece di un link minuscolo.
     secondaryBtn: {
+      ...minimumTouchTarget(),
       marginTop: PerfectSpacing.md,
       borderRadius: scale(12),
       borderWidth: scale(1.5),
@@ -146,7 +152,7 @@ const createStyles = () =>
     link: {
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: scale(48),
+      ...minimumTouchTarget(scale(48)),
       paddingVertical: PerfectSpacing.sm,
     },
     linkText: {

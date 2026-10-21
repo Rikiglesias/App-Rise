@@ -21,6 +21,7 @@ import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface AuthPhoneFieldProps {
   label: string;
@@ -232,7 +233,7 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         borderColor: colors.neutral[200],
         borderRadius: scale(12),
         // Altezza uniforme a tutti gli altri campi della pagina.
-        minHeight: scale(48),
+        ...minimumTouchTarget(scale(48)),
         justifyContent: 'center' as const,
       },
       flagContainer: { backgroundColor: 'transparent' as const },

@@ -15,6 +15,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { getTextInputScaleProps } from '@/shared/utils/SystemImmunity';
 import { scaleText } from '@/shared/utils/textScale';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -140,12 +141,6 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
               accessibilityLabel={t(
                 revealed ? 'auth.a11y.hidePassword' : 'auth.a11y.showPassword'
               )}
-              hitSlop={{
-                top: scale(8),
-                bottom: scale(8),
-                left: scale(8),
-                right: scale(8),
-              }}
               style={styles.toggle}
             >
               <PerfectIcon
@@ -191,8 +186,9 @@ const createStyles = (colors: ThemeColors) =>
     inputRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      // Altezza uniforme per TUTTI i campi della pagina (input/date/città/paese/tel).
-      minHeight: scale(48),
+      // Altezza uniforme per TUTTI i campi della pagina (input/date/città/paese/tel):
+      // mai sotto i 48 dp, anche dove scale() la ridurrebbe (telefoni piccoli).
+      ...minimumTouchTarget(scale(48)),
       backgroundColor: colors.neutral[0],
       borderWidth: scale(1),
       borderColor: colors.neutral[200],
@@ -216,9 +212,11 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.neutral[900],
       fontSize: scaleText(16),
     },
+    // L'occhio resta sul bordo destro; il tocco si allarga verso il testo fino a 48 dp.
     toggle: {
-      paddingLeft: PerfectSpacing.sm,
-      paddingVertical: PerfectSpacing.xs,
+      ...minimumTouchTarget(),
+      alignItems: 'flex-end',
+      justifyContent: 'center',
     },
     error: {
       color: Colors.semantic.error.main,

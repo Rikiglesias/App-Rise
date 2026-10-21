@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { PerfectSpacing, Typography } from '@/shared/constants';
 import { scale, scaleTouch } from '@/shared/constants/perfectScale';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 /**
  * Stili per la sezione contatti (dark-aware via factory).
@@ -56,6 +57,7 @@ export const createAnimatedContactStyles = (colors: ThemeColors) =>
     },
 
     contactTouchable: {
+      ...minimumTouchTarget(),
       borderRadius: scale(16),
       overflow: 'hidden',
     },

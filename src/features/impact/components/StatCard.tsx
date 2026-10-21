@@ -13,6 +13,7 @@ import { PerfectSpacing, IconClamps } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface StatCardProps {
   icon: string;
@@ -48,6 +49,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     <PerfectContainer style={styles.card} testID="stat-card">
       <PlatformTouchable
         onPress={onPress}
+        style={styles.touchable}
         activeOpacity={0.9}
         disabled={!pressable}
         // Una card che non si tocca non va annunciata come pulsante dal lettore di schermo.
@@ -145,6 +147,9 @@ const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     card: {
       flex: 1,
+    },
+    touchable: {
+      ...minimumTouchTarget(),
     },
     gradientContainer: {
       borderRadius: BorderRadius.xl,

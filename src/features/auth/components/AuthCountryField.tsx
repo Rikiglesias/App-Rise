@@ -16,6 +16,7 @@ import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { SupportedLocale } from '@/locales';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface AuthCountryFieldProps {
   label: string;
@@ -122,7 +123,7 @@ const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       justifyContent: 'space-between',
       // Altezza uniforme a tutti gli altri campi della pagina.
-      minHeight: scale(48),
+      ...minimumTouchTarget(scale(48)),
       backgroundColor: colors.neutral[0],
       borderWidth: scale(1),
       borderColor: colors.neutral[200],

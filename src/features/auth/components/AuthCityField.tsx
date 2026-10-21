@@ -13,6 +13,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { getTextInputScaleProps } from '@/shared/utils/SystemImmunity';
 import { scaleText } from '@/shared/utils/textScale';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { searchComuni, type Comune } from '@/shared/data/comuni';
@@ -185,7 +186,7 @@ const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       alignItems: 'center',
       // Altezza uniforme a tutti gli altri campi della pagina.
-      minHeight: scale(48),
+      ...minimumTouchTarget(scale(48)),
       backgroundColor: colors.neutral[0],
       borderWidth: scale(1),
       borderColor: colors.neutral[200],
@@ -215,6 +216,8 @@ const createStyles = (colors: ThemeColors) =>
       overflow: 'hidden',
     },
     option: {
+      ...minimumTouchTarget(),
+      justifyContent: 'center',
       paddingHorizontal: PerfectSpacing.base,
       paddingVertical: PerfectSpacing.sm + scale(2),
     },

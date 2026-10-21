@@ -10,6 +10,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 /**
  * Intestazione comune alle radici delle schede: porta in alto a destra l'ingresso
@@ -75,8 +76,7 @@ const styles = StyleSheet.create({
     paddingBottom: PerfectSpacing.xs,
   },
   button: {
-    minWidth: 48,
-    minHeight: 48,
+    ...minimumTouchTarget(),
     alignItems: 'center',
     justifyContent: 'center',
   },

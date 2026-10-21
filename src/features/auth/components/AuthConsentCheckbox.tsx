@@ -7,6 +7,7 @@ import { scale } from '@/shared/constants/perfectScale';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface AuthConsentCheckboxProps {
   checked: boolean;
@@ -89,6 +90,7 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     row: {
+      ...minimumTouchTarget(),
       flexDirection: 'row',
       alignItems: 'center',
       gap: PerfectSpacing.sm,
