@@ -22,6 +22,11 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   // Configurazione per evitare che Jest rimanga appeso
   testTimeout: 10000,
+  // Senza tetto Jest apre un worker per core meno uno: 31 sul PC di sviluppo, e
+  // con altre sessioni aperte il sistema ha fermato il gate per memoria esaurita
+  // (17/10 due volte, 21/10). Un quarto dei core basta; la CI passa già
+  // --maxWorkers=2 da riga di comando, che vince su questo valore.
+  maxWorkers: '25%',
   // Soglie a RIDOSSO della copertura reale, non 30-40 punti sotto.
   // Misurato il 2026-08-15: statements 76.86 · branches 67.43 · functions 67.29 ·
   // lines 78.36. Con i valori precedenti (25/35/40/40) si poteva DIMEZZARE la
