@@ -28,7 +28,7 @@ export const AuthBackButton: React.FC = () => {
       accessibilityLabel={t('common.back')}
     >
       <PerfectIcon name="arrow-left" size={24} color={colors.text} />
-      <PerfectText size={16} lines={1} immunity color="auto">
+      <PerfectText size={16} lines={1} immunity color={colors.text}>
         {t('common.back')}
       </PerfectText>
     </PlatformTouchable>
