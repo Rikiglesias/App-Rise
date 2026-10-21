@@ -137,6 +137,8 @@ const ChiSiamoScreen: React.FC<ChiSiamoScreenProps> = ({ navigation }) => {
       <PlatformTouchable
         onPress={handleBackPress}
         style={dynamicStyles.backButton}
+        accessibilityRole="button"
+        accessibilityLabel={t('common.back')}
       >
         <PerfectIcon name="arrow-left" size={24} color={colors.neutral[900]} />
       </PlatformTouchable>

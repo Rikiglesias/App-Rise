@@ -21,6 +21,7 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { RootStackParamList } from '@/navigation/types';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 
 type SeguiciScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -37,6 +38,7 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
   const { triggerHaptic } = useHapticFeedback();
   const { socialPlatforms } = useSocialPlatforms();
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const mainStyles = useMemo(() => createMainStyles(colors), [colors]);
   const aboutMainStyles = useMemo(
     () => createAboutMainStyles(colors),
@@ -71,6 +73,8 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
       <PlatformTouchable
         onPress={handleBackPress}
         style={dynamicStyles.backButton}
+        accessibilityRole="button"
+        accessibilityLabel={t('common.back')}
       >
         <PerfectIcon name="arrow-left" size={24} color={colors.neutral[900]} />
       </PlatformTouchable>

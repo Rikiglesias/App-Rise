@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Modal, ScrollView, View, StyleSheet } from 'react-native';
 
 import type { StoriaModalProps } from '../types';
-import { createModalStyles } from '../styles/modalStyles';
+import { createModalStyles, STORIA_CLOSE_SIZE } from '../styles/modalStyles';
 import {
   PlatformTouchable,
   PerfectText,
@@ -13,6 +13,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 
 export const StoriaModal: React.FC<StoriaModalProps> = ({
   visible,
@@ -51,7 +52,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
               activeOpacity={0.8}
               accessibilityRole="button"
               accessibilityLabel={t('accessibility.closeModal')}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              hitSlop={touchTargetHitSlop(STORIA_CLOSE_SIZE)}
               testID="storia-modal-close"
             >
               <PerfectIcon name="close" color={colors.neutral[0]} />

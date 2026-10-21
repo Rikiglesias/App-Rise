@@ -17,6 +17,7 @@ import { getPerfectShadow } from '@/shared/constants/perfectShadow';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface TabBarButtonProps {
   isFocused: boolean;
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: PerfectSpacing.sm,
     width: '100%',
-    minHeight: scale(80),
+    ...minimumTouchTarget(scale(80)),
   },
   touchableContent: {
     alignItems: 'center',

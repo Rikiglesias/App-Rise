@@ -6,6 +6,9 @@ import { scale } from '@/shared/constants/perfectScale';
 import { circularCloseButton } from '@/shared/styles';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
+/** Lato del pulsante tondo di chiusura: il tocco arriva a 48 dp con `touchTargetHitSlop`. */
+export const STORIA_CLOSE_SIZE = 32;
+
 /**
  * Stili per i modal della sezione About
  * Ottimizzati per contenuto lungo e scrolling - SISTEMA COERENTE
@@ -84,7 +87,7 @@ export const createModalStyles = (colors: ThemeColors) =>
       right: PerfectSpacing.md,
       zIndex: 9999,
       elevation: 10,
-      ...circularCloseButton(32, colors.neutral[900]),
+      ...circularCloseButton(STORIA_CLOSE_SIZE, colors.neutral[900]),
     },
 
     storyContainer: {

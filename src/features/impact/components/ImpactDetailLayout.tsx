@@ -18,6 +18,7 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 export interface ImpactDetailStat {
   readonly key: string;
@@ -189,8 +190,7 @@ const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.neutral[0],
     },
     back: {
-      minWidth: 48,
-      minHeight: 48,
+      ...minimumTouchTarget(),
       alignSelf: 'flex-start',
       justifyContent: 'center',
       marginHorizontal: PerfectSpacing.base,

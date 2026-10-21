@@ -4,6 +4,7 @@ import { PerfectSpacing, BorderRadius } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { decorativeSeparator } from '@/shared/styles';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 /**
  * Stili principali per la sezione About
@@ -21,6 +22,10 @@ export const createMainStyles = (colors: ThemeColors) =>
       top: PerfectSpacing['2xl'],
       left: PerfectSpacing.base,
       padding: PerfectSpacing.sm,
+      // La misura viene dal contenuto: il minimo la tiene a 48 dp anche sui telefoni piccoli.
+      ...minimumTouchTarget(),
+      alignItems: 'center',
+      justifyContent: 'center',
       borderRadius: BorderRadius.full,
       backgroundColor: colors.neutral[0],
       borderWidth: scale(1),

@@ -12,6 +12,7 @@ import {
 
 import { createStyles } from './MapLocationModalStyles';
 import { formatStat } from '@/shared/utils/numberFormat';
+import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -98,6 +99,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
 
             <PlatformTouchable
               style={styles.closeButton}
+              hitSlop={touchTargetHitSlop(styles.closeButton.width)}
               onPress={onClose}
               activeOpacity={0.8}
               accessibilityRole="button"

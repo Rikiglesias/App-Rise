@@ -22,6 +22,7 @@ import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 
 interface DonationInfoModalProps {
   visible: boolean;
@@ -124,6 +125,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
       <PerfectContainer style={modalStyles.modalHeader}>
         <PlatformTouchable
           style={modalStyles.closeButton}
+          hitSlop={touchTargetHitSlop(modalStyles.closeButton.width)}
           onPress={handleClose}
           activeOpacity={0.7}
           accessibilityRole="button"

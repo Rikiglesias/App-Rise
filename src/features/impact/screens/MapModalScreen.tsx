@@ -27,6 +27,7 @@ import {
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
@@ -172,6 +173,7 @@ const MapModalScreen: React.FC = () => {
 
         <PlatformTouchable
           style={styles.closeButton}
+          hitSlop={touchTargetHitSlop(styles.closeButton.width)}
           onPress={handleClosePress}
           activeOpacity={0.8}
           accessibilityRole="button"
