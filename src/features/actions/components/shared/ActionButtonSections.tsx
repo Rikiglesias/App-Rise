@@ -5,6 +5,7 @@ import type {
   ExploreButtonsSectionProps,
   CommunityButtonsSectionProps,
 } from './ActionButtonTypes';
+import { INFO_BTN_SIZE } from './ActionButtonStyles';
 import {
   getExploreIconColor,
   getCommunityIconColor,
@@ -12,6 +13,7 @@ import {
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { Colors } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 // No direct scaling here: PerfectIcon scales its size internally.
 import {
   PlatformTouchable,
@@ -93,7 +95,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
             accessibilityRole="button"
             accessibilityLabel={t('actions.donateInfoAccessibilityLabel')}
             testID="donate-info-button"
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            hitSlop={touchTargetHitSlop(INFO_BTN_SIZE)}
           >
             <PerfectIcon
               name="information"

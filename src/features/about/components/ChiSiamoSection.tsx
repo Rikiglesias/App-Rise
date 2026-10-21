@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 
 import type { ChiSiamoSectionProps } from '../types';
-import { createChiSiamoSectionStyles } from '../styles/chiSiamoStyles';
+import {
+  CHI_SIAMO_INFO_SIZE,
+  createChiSiamoSectionStyles,
+} from '../styles/chiSiamoStyles';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import {
   PerfectIcon,
@@ -13,6 +16,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 
 export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
   onInfoPress,
@@ -75,6 +79,7 @@ export const ChiSiamoSection: React.FC<ChiSiamoSectionProps> = ({
             accessibilityRole="button"
             accessibilityLabel={t('about.accessibilityLabel')}
             style={chiSiamoSectionStyles.infoIconImproved}
+            hitSlop={touchTargetHitSlop(CHI_SIAMO_INFO_SIZE)}
           >
             <PerfectIcon
               name="information"

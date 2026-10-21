@@ -22,6 +22,7 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import type { Location } from '@/shared/types/location';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface Props {
   locations: Location[];
@@ -192,7 +193,7 @@ const WorldMapSvgComponent: React.FC<Props> = ({
           {locations.map(location => (
             <PlatformTouchable
               key={location.id}
-              style={styles.chip}
+              style={styles.chipTouch}
               onPress={createPressHandler(location)}
               activeOpacity={0.8}
               accessibilityRole="button"
@@ -200,15 +201,17 @@ const WorldMapSvgComponent: React.FC<Props> = ({
                 country: location.country,
               })}
             >
-              <PerfectContainer style={styles.chipDot} />
-              <PerfectText
-                size={13}
-                lines={1}
-                fontWeight="600"
-                style={styles.chipText}
-              >
-                {location.country}
-              </PerfectText>
+              <PerfectContainer style={styles.chip}>
+                <PerfectContainer style={styles.chipDot} />
+                <PerfectText
+                  size={13}
+                  lines={1}
+                  fontWeight="600"
+                  style={styles.chipText}
+                >
+                  {location.country}
+                </PerfectText>
+              </PerfectContainer>
             </PlatformTouchable>
           ))}
         </PlatformScrollView>
@@ -241,6 +244,12 @@ const createStyles = (colors: ThemeColors) =>
     legendContent: {
       paddingHorizontal: PerfectSpacing.base,
       gap: PerfectSpacing.sm,
+    },
+    // Il chip resta com'è; il tocco arriva a 48 dp (C43). Un hitSlop qui non
+    // servirebbe: lo scroll orizzontale taglia il tocco fuori dai suoi bordi.
+    chipTouch: {
+      ...minimumTouchTarget(),
+      justifyContent: 'center',
     },
     chip: {
       flexDirection: 'row',

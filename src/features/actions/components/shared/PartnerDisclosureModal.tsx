@@ -17,6 +17,7 @@ import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 /**
  * Schermata onesta pre-redirect verso un partner (goal partner-identita, F1.7d).
@@ -86,6 +87,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     button: {
       flex: 1,
+      ...minimumTouchTarget(),
       paddingVertical: PerfectSpacing.base,
       borderRadius: BorderRadius.lg,
       alignItems: 'center',
@@ -107,9 +109,12 @@ const createStyles = (colors: ThemeColors) =>
       fontWeight: Typography.weights.bold,
       color: colors.neutral[0],
     },
+    // È un pulsante a sé, non un link dentro una frase: anche lui a 48 dp (C43).
     withoutDataButton: {
       marginTop: PerfectSpacing.base,
+      ...minimumTouchTarget(),
       alignItems: 'center',
+      justifyContent: 'center',
     },
     withoutDataText: {
       fontWeight: Typography.weights.medium,

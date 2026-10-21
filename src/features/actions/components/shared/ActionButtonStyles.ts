@@ -10,7 +10,8 @@ import {
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 // Info button container size centralized via Perfect Scale helpers
-const INFO_BTN_SIZE = scaleBadge(28, { min: 22, max: 32 });
+// (esportata: l'hitSlop del pulsante si calcola da questa misura, C43).
+export const INFO_BTN_SIZE = scaleBadge(28, { min: 22, max: 32 });
 const INFO_BORDER = scaleClamp(2, 1, 2);
 
 export const createActionButtonStyles = (colors: ThemeColors): ButtonStyles => {

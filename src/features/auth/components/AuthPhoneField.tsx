@@ -236,8 +236,13 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
         ...minimumTouchTarget(scale(48)),
         justifyContent: 'center' as const,
       },
-      flagContainer: { backgroundColor: 'transparent' as const },
-      input: { color: colors.neutral[900] },
+      // La libreria dà a prefisso e numero `height: '100%'` di un contenitore
+      // senza altezza fissa: restavano 47 e 37 dp. Il minimo va su di loro (C43).
+      flagContainer: {
+        backgroundColor: 'transparent' as const,
+        ...minimumTouchTarget(),
+      },
+      input: { color: colors.neutral[900], ...minimumTouchTarget() },
       callingCode: { color: colors.neutral[900] },
       caret: { color: colors.neutral[500] },
     }),

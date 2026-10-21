@@ -199,8 +199,12 @@ const createStyles = (colors: ThemeColors) =>
     inputRowError: {
       borderColor: Colors.semantic.error.main,
     },
+    // Come in AuthInput: il fuoco su tutti i 48 dp del riquadro (C43).
     input: {
       flex: 1,
+      ...minimumTouchTarget(),
+      alignSelf: 'stretch',
+      textAlignVertical: 'center',
       paddingVertical: PerfectSpacing.sm,
       color: colors.neutral[900],
       fontSize: scaleText(16),

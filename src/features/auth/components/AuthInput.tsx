@@ -206,8 +206,13 @@ const createStyles = (colors: ThemeColors) =>
     inputRowError: {
       borderColor: Colors.semantic.error.main,
     },
+    // Il campo riempie il riquadro: il fuoco si prende su tutti i 48 dp, non
+    // solo sull'altezza del testo (C43). Il bordo del riquadro sta fuori.
     input: {
       flex: 1,
+      ...minimumTouchTarget(),
+      alignSelf: 'stretch',
+      textAlignVertical: 'center',
       paddingVertical: PerfectSpacing.sm,
       color: colors.neutral[900],
       fontSize: scaleText(16),

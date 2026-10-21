@@ -4,6 +4,9 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
+/** Lato del pulsante «i»: l'hitSlop che lo porta a 48 dp si calcola da qui (C43). */
+export const CHI_SIAMO_INFO_SIZE = scale(32);
+
 /**
  * Stili per la sezione Chi Siamo (dark-aware via factory)
  * Design coordinato con la pagina azioni per consistenza.
@@ -57,8 +60,8 @@ export const createChiSiamoSectionStyles = (colors: ThemeColors) =>
       right: scale(8),
       top: '30%',
       transform: [{ translateY: scale(-14) }],
-      width: scale(32),
-      height: scale(32),
+      width: CHI_SIAMO_INFO_SIZE,
+      height: CHI_SIAMO_INFO_SIZE,
       borderRadius: 999,
       backgroundColor: colors.neutral[0],
       borderWidth: 2,
