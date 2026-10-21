@@ -7,6 +7,10 @@ import i18n from '@/locales';
 
 // Mock delle dipendenze - approccio semplificato
 jest.mock('react-native', () => ({
+  // useTranslation rilegge la lingua al ritorno in primo piano (C46).
+  AppState: {
+    addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+  },
   Alert: {
     alert: jest.fn(),
   },

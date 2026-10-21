@@ -1,6 +1,7 @@
 import { resolveLocalizedText } from '../utils/localizedText';
 import type { LocalizedText } from '../utils/localizedText';
 import { LOCATIONS_DATA, type LocationData } from './locationsData';
+import type { SupportedLocale } from '@/locales';
 
 // Dati dettagliati per i modals della mappa interattiva
 export interface MapModalData {
@@ -76,8 +77,12 @@ export const MAP_MODAL_DATA: Record<string, LocalizedMapModalData> =
     LOCATIONS_DATA.map(location => [location.id, toModalFormat(location)])
   );
 
-// Funzione per ottenere i dati di un modal specifico
-export const getModalData = (locationId: string): MapModalData | null => {
+// Funzione per ottenere i dati di un modal specifico, nella lingua indicata
+// (di norma quella corrente)
+export const getModalData = (
+  locationId: string,
+  locale?: SupportedLocale
+): MapModalData | null => {
   if (!Object.prototype.hasOwnProperty.call(MAP_MODAL_DATA, locationId)) {
     return null;
   }
@@ -86,11 +91,13 @@ export const getModalData = (locationId: string): MapModalData | null => {
 
   return {
     ...data,
-    title: resolveLocalizedText(data.title),
-    subtitle: resolveLocalizedText(data.subtitle),
-    description: resolveLocalizedText(data.description),
-    program: resolveLocalizedText(data.program),
-    achievements: data.achievements.map(resolveLocalizedText),
+    title: resolveLocalizedText(data.title, locale),
+    subtitle: resolveLocalizedText(data.subtitle, locale),
+    description: resolveLocalizedText(data.description, locale),
+    program: resolveLocalizedText(data.program, locale),
+    achievements: data.achievements.map(text =>
+      resolveLocalizedText(text, locale)
+    ),
   };
 };
 

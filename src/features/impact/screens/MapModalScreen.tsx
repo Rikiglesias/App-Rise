@@ -5,8 +5,8 @@ import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getModalData } from '../data/mapModalData';
-import type { MapModalData } from '../data/mapModalData';
 import { LOCATIONS_DATA } from '../data/locationsData';
+import { convertToMapLocations } from '../utils/mapHelpers';
 import {
   PerfectIcon,
   PerfectText,
@@ -77,8 +77,17 @@ const YearChip: React.FC<YearChipProps> = ({
 const MapModalScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute<MapModalScreenRouteProp>();
-  const locations = route.params?.locations;
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  // La rotta porta i nomi nella lingua del momento in cui la mappa è stata aperta: si
+  // ritraducono per id, così un cambio di lingua al ritorno in primo piano (C46) vale anche qui.
+  const routeLocations = route.params?.locations;
+  const locations = useMemo(() => {
+    if (!routeLocations) return undefined;
+    const translated = new Map(
+      convertToMapLocations(locale).map(l => [l.id, l])
+    );
+    return routeLocations.map(l => translated.get(l.id) ?? l);
+  }, [routeLocations, locale]);
   // Lo spazio della barra solo dove la barra c'è (C45): fuori dalle schede il
   // contesto manca e vale 0, dove `useBottomTabBarHeight` lancerebbe.
   const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
@@ -93,8 +102,15 @@ const MapModalScreen: React.FC = () => {
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   const [locationModalVisible, setLocationModalVisible] = useState(false);
-  const [selectedLocationData, setSelectedLocationData] =
-    useState<MapModalData | null>(null);
+  // Si tiene l'id della località scelta, non i suoi testi: la scheda segue la lingua.
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
+    null
+  );
+  const selectedLocationData = useMemo(
+    () =>
+      selectedLocationId ? getModalData(selectedLocationId, locale) : null,
+    [selectedLocationId, locale]
+  );
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
   // Anni presenti nei dati (mostriamo il filtro solo se >1).
@@ -113,16 +129,15 @@ const MapModalScreen: React.FC = () => {
   }, [locations, selectedYear]);
 
   const handleMarkerPress = useCallback((location: Location) => {
-    const modalData = getModalData(location.id);
-    if (modalData) {
-      setSelectedLocationData(modalData);
+    if (getModalData(location.id)) {
+      setSelectedLocationId(location.id);
       setLocationModalVisible(true);
     }
   }, []);
 
   const handleLocationModalClose = useCallback(() => {
     setLocationModalVisible(false);
-    setSelectedLocationData(null);
+    setSelectedLocationId(null);
   }, []);
 
   const handleClosePress = useCallback(() => {

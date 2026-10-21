@@ -14,7 +14,9 @@ Sistema multi-lingua per Rise Against Hunger Italia.
 
 1. Utente cambia lingua: `Impostazioni → Sistema → Lingua e input → Lingua`
 2. App rileva automaticamente lingua di sistema
-3. Traduzioni aggiornate al prossimo avvio
+3. Traduzioni aggiornate al ritorno nell'app, senza riavvio: Android cambia lingua con l'app aperta,
+   e `useTranslation` la rilegge quando l'app torna in primo piano (`AppState` → `active`).
+   Le schermate già aperte si ridisegnano da sole, numeri compresi.
 
 ## 🎯 Lingue Supportate
 
@@ -72,6 +74,8 @@ const { setLocale } = useTranslation();
 // Forza cambio a inglese
 setLocale('en');
 ```
+
+La scelta manuale vale finché l'app non torna in primo piano: lì vince di nuovo la lingua del telefono.
 
 ## 📂 Struttura File
 

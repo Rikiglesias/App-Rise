@@ -26,14 +26,15 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
  * Ridotto da 1141 a ~150 righe (87% riduzione) per eccellenza architetturale
  */
 const ImpactTabScreenComponent: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const navigation = useNavigation<ImpactNavigationProp>();
   const { isTablet } = useDeviceType();
   // Altezza vera della barra flottante (scala del testo e bordo sicuro compresi); 0 fuori dal navigatore.
   const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const mapLocations = useMemo(() => convertToMapLocations(), []);
+  // Nomi nella lingua dell'app: si rifanno se cambia al ritorno in primo piano (C46).
+  const mapLocations = useMemo(() => convertToMapLocations(locale), [locale]);
 
   const handleMapPress = useCallback(() => {
     try {

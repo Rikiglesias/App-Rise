@@ -56,6 +56,13 @@ export const changeLanguage = (locale: SupportedLocale) => {
   i18n.locale = locale;
 };
 
+// Rilegge la lingua del telefono. Su Android si cambia dalle Impostazioni senza
+// riavviare l'app: `useTranslation` la richiama a ogni ritorno in primo piano.
+// Il setter di i18n-js avvisa gli iscritti (`i18n.onChange`) solo se cambia davvero.
+export const syncDeviceLocale = () => {
+  i18n.locale = getDeviceLocale();
+};
+
 // Funzione per ottenere lingua corrente
 export const getCurrentLocale = (): SupportedLocale => {
   return i18n.locale as SupportedLocale;
