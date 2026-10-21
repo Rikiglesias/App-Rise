@@ -88,13 +88,14 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
   // Android: usa TouchableRipple nativo per Material Design
   // TouchableRipple richiede esattamente un singolo figlio React
   // Wrappa automaticamente i children multipli in un View che eredita
-  // impaginazione e padding del pulsante
+  // impaginazione e padding del pulsante. Anche nessun figlio va avvolto
+  // (lo sfondo che chiude una modale): `React.Children.only` lancerebbe.
   const split =
     React.Children.count(children) > 1 ? splitStyleForChildren(style) : null;
-  const wrappedChildren = split ? (
-    <View style={split.children}>{children}</View>
-  ) : (
+  const wrappedChildren = React.isValidElement(children) ? (
     children
+  ) : (
+    <View style={split?.children}>{children}</View>
   );
 
   // Inoltra a TouchableRipple i prop a11y/interazione che il ramo iOS passa via

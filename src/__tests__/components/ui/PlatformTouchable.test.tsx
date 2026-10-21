@@ -210,4 +210,15 @@ describe('PlatformTouchable - Android, più figli', () => {
       justifyContent: 'space-between',
     });
   });
+
+  // Lo sfondo che chiude la modale di «La nostra storia» non ha figli: TouchableRipple
+  // chiama React.Children.only, che senza un elemento lancia e porta alla schermata d'errore.
+  it('senza figli non lancia e resta toccabile', () => {
+    const onPress = jest.fn();
+    const { getByTestId } = render(
+      <PlatformTouchable onPress={onPress} testID="sfondo" />
+    );
+    fireEvent.press(getByTestId('sfondo'));
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
 });
