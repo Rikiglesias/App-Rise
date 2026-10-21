@@ -15,6 +15,7 @@ import {
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useReduceMotion } from '@/shared/hooks/useReduceMotion';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -145,6 +146,7 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { height } = useWindowDimensions();
   const bodyMaxHeight = modalBodyMaxHeight(height, BODY_SHARE_WITH_BUTTONS);
+  const reduceMotion = useReduceMotion();
 
   const isDonorbox = variant === 'donorbox';
   const titleKey = isDonorbox
@@ -173,7 +175,7 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
     <Modal
       visible={visible}
       transparent={true}
-      animationType="fade"
+      animationType={reduceMotion ? 'none' : 'fade'}
       onRequestClose={handleCancel}
       statusBarTranslucent
     >

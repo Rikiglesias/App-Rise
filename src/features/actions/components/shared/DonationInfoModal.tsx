@@ -20,6 +20,7 @@ import {
   scaleSpacing,
 } from '@/shared/constants/perfectScale';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useReduceMotion } from '@/shared/hooks/useReduceMotion';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -213,6 +214,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
   const { t } = useTranslation();
   const colors = useThemeColors();
   const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
+  const reduceMotion = useReduceMotion();
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -223,7 +225,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
     <Modal
       visible={visible}
       transparent={true}
-      animationType="fade"
+      animationType={reduceMotion ? 'none' : 'fade'}
       onRequestClose={handleClose}
       statusBarTranslucent
     >

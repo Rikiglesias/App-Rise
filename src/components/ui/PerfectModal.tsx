@@ -20,6 +20,7 @@ import { PerfectContainer } from './PerfectContainer';
 import { PlatformScrollView, PlatformTouchable } from './PlatformComponents';
 import { scale } from '@/shared/constants';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useReduceMotion } from '@/shared/hooks/useReduceMotion';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
@@ -122,13 +123,15 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
       : Math.max(0, Math.floor(height - scale(32)));
 
   const needsBackdrop = size !== 'fullscreen' && !isTablet;
+  // «Riduci animazioni» vince anche su un'animazione chiesta dal chiamante.
+  const reduceMotion = useReduceMotion();
 
   return (
     <Modal
       {...modalProps}
       presentationStyle={presentationStyle}
       transparent={needsBackdrop}
-      animationType={modalProps.animationType || 'fade'}
+      animationType={reduceMotion ? 'none' : modalProps.animationType || 'fade'}
       statusBarTranslucent
     >
       {/* Backdrop unificato per modal non-fullscreen su phone */}

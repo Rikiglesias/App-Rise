@@ -1,7 +1,9 @@
 import type { StackNavigationOptions } from '@react-navigation/stack';
+import { useMemo } from 'react';
 
 import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
+import { useReduceMotion } from '@/shared/hooks/useReduceMotion';
 
 /**
  * Aspetto dell'header, condiviso da TUTTI gli stack dell'app.
@@ -24,4 +26,19 @@ export const stackScreenOptions: StackNavigationOptions = {
     fontWeight: '700',
     letterSpacing: scale(0.5),
   },
+};
+
+/**
+ * Le opzioni sopra più la transizione spenta con «Riduci animazioni» (C46): lo stack
+ * JavaScript anima con `Animated`, che il telefono non spegne da solo.
+ */
+export const useStackScreenOptions = (): StackNavigationOptions => {
+  const reduceMotion = useReduceMotion();
+  return useMemo(
+    () =>
+      reduceMotion
+        ? { ...stackScreenOptions, animation: 'none' }
+        : stackScreenOptions,
+    [reduceMotion]
+  );
 };

@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 import BottomTabNavigator from './BottomTabNavigator';
-import { stackScreenOptions } from './stackScreenOptions';
+import { useStackScreenOptions } from './stackScreenOptions';
 import type { RootStackParamList } from './types';
 import SeguiciScreen from '@/features/social/screens/SeguiciScreen';
 import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
@@ -24,7 +24,10 @@ const Stack = createStackNavigator<RootStackParamList>();
  * le rotte di qui, mentre il cancello è chiuso, non esistono affatto nell'albero.
  */
 export const MainStackNavigator: React.FC = () => (
-  <Stack.Navigator initialRouteName="Home" screenOptions={stackScreenOptions}>
+  <Stack.Navigator
+    initialRouteName="Home"
+    screenOptions={useStackScreenOptions()}
+  >
     {/* Main App with Bottom Tabs */}
     <Stack.Screen
       name="Home"

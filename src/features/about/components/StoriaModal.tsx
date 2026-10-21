@@ -12,6 +12,7 @@ import {
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
+import { useReduceMotion } from '@/shared/hooks/useReduceMotion';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 
@@ -23,6 +24,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
   const { triggerHaptic } = useHapticFeedback();
   const colors = useThemeColors();
   const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
+  const reduceMotion = useReduceMotion();
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -33,7 +35,7 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
     <Modal
       visible={visible}
       transparent={true}
-      animationType="fade"
+      animationType={reduceMotion ? 'none' : 'fade'}
       onRequestClose={handleClose}
       statusBarTranslucent
     >

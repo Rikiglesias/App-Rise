@@ -5,6 +5,10 @@ import { PerfectContainer, PerfectText } from '@/components/ui';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 import { Colors, PerfectSpacing, Shadows } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import {
+  motionDuration,
+  useReduceMotion,
+} from '@/shared/hooks/useReduceMotion';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
@@ -87,11 +91,13 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
     );
 
     const mainTitleDelay = useRef(new Animated.Value(0)).current;
+    const reduceMotion = useReduceMotion();
 
     useEffect(() => {
+      // Con «Riduci animazioni» il titolo compare subito (durata 0).
       const titleAnimation = Animated.timing(mainTitleDelay, {
         toValue: 1,
-        duration: 800,
+        duration: motionDuration(800, reduceMotion),
         useNativeDriver: true,
       });
 
@@ -100,7 +106,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
       return () => {
         titleAnimation.stop();
       };
-    }, [mainTitleDelay]);
+    }, [mainTitleDelay, reduceMotion]);
 
     return (
       <PerfectContainer style={styles.container}>

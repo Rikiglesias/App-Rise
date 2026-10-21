@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
-import { stackScreenOptions } from './stackScreenOptions';
+import { useStackScreenOptions } from './stackScreenOptions';
 import type { RootStackParamList } from './types';
 import { CompleteProfileScreen } from '@/features/auth/screens/CompleteProfileScreen';
 import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen';
@@ -37,11 +37,12 @@ const Stack = createStackNavigator<RootStackParamList>();
 export const ProfileGateNavigator: React.FC<{ needsReConsent?: boolean }> = ({
   needsReConsent = false,
 }) => {
+  const screenOptions = useStackScreenOptions();
   return (
     <AuthBackDisabledContext.Provider value={true}>
       <Stack.Navigator
         initialRouteName={needsReConsent ? 'ReConsent' : 'CompleteProfile'}
-        screenOptions={{ ...stackScreenOptions, gestureEnabled: false }}
+        screenOptions={{ ...screenOptions, gestureEnabled: false }}
       >
         {needsReConsent ? (
           <Stack.Screen
