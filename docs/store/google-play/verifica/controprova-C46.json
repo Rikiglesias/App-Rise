@@ -1,0 +1,18 @@
+{
+  "criterio": "C46",
+  "base": "fbefa98",
+  "titoli": [
+    "riduci animazioni: animazioni a durata 0",
+    "lingua al ritorno: schermata già montata passa all'inglese",
+    "lingua al ritorno: numeri nella nuova lingua"
+  ],
+  "esitiAllaBase": {
+    "riduci animazioni: animazioni a durata 0": "assente",
+    "lingua al ritorno: schermata già montata passa all'inglese": "failed",
+    "lingua al ritorno: numeri nella nuova lingua": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/shared/linguaAlRitorno.test.tsx": "6dbae4cd2ae13865a802c2c4f045dc04e1ecf38e51d0c0d7ae10cf1fa5d06fcc",
+    "src/__tests__/shared/riduciAnimazioni.test.tsx": "0f889f1e106b17ab2213c248c5b756ede378ade24d5516dac8b52a7ae7c43758"
+  }
+}
