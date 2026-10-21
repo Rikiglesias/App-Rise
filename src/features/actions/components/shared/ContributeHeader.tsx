@@ -28,7 +28,8 @@ const NewActionsHeader: React.FC<NewActionsHeaderProps> = ({ animations }) => {
         headerContainer: {
           alignSelf: 'stretch',
           width: '100%',
-          paddingTop: PerfectSpacing['5xl'] + scale(12),
+          // Sopra c'è l'intestazione delle schede (TabHeader), che applica già l'inset superiore.
+          paddingTop: PerfectSpacing.lg,
           paddingHorizontal: PerfectSpacing.base,
           paddingBottom: PerfectSpacing.lg,
           alignItems: 'center',
