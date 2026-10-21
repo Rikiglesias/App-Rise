@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getModalData } from '../data/mapModalData';
@@ -79,7 +79,9 @@ const MapModalScreen: React.FC = () => {
   const route = useRoute<MapModalScreenRouteProp>();
   const locations = route.params?.locations;
   const { t } = useTranslation();
-  const tabBarHeight = useBottomTabBarHeight();
+  // Lo spazio della barra solo dove la barra c'è (C45): fuori dalle schede il
+  // contesto manca e vale 0, dove `useBottomTabBarHeight` lancerebbe.
+  const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
   const insets = useSafeAreaInsets();
   const safeContentStyle = {
     paddingBottom: Math.max(tabBarHeight, insets.bottom),

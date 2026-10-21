@@ -19,6 +19,7 @@ import {
 import { PerfectContainer } from './PerfectContainer';
 import { PlatformScrollView, PlatformTouchable } from './PlatformComponents';
 import { scale } from '@/shared/constants';
+import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 
@@ -51,24 +52,24 @@ interface PerfectModalProps extends Omit<ModalProps, 'children'> {
  * Calcola comportamento responsive del modal
  */
 const useModalBehavior = (size: PerfectModalProps['size']) => {
-  const { width } = useWindowDimensions();
-  const isTablet = width >= 768; // iPad e superiori
-  const isPhablet = width >= 600 && width < 768; // Device grandi
+  // Tablet dal lato corto (C45): una soglia sulla larghezza trattava da tablet
+  // un telefono girato in orizzontale, e da telefono un tablet piccolo.
+  const { isTablet } = useDeviceType();
 
   // 📐 DIMENSIONI RESPONSIVE
   const modalSizes = {
     small: {
-      width: isTablet ? '50%' : isPhablet ? '70%' : '85%',
+      width: isTablet ? '50%' : '85%',
       maxWidth: isTablet ? 500 : undefined,
       height: 'auto' as const,
     },
     medium: {
-      width: isTablet ? '70%' : isPhablet ? '85%' : '90%',
+      width: isTablet ? '70%' : '90%',
       maxWidth: isTablet ? 700 : undefined,
       height: 'auto' as const,
     },
     large: {
-      width: isTablet ? '85%' : isPhablet ? '95%' : '95%',
+      width: isTablet ? '85%' : '95%',
       maxWidth: isTablet ? 900 : undefined,
       height: 'auto' as const,
     },
