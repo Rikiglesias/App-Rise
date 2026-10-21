@@ -101,7 +101,7 @@ export const LOGICAL_REFERENCE = { width: 393, height: 852, scale: 2 } as const;
 | Funzione                            | Scopo                                                        |
 | ----------------------------------- | ----------------------------------------------------------- |
 | `scale(value)`                      | Scaling proporzionale alla diagonale (con cap tablet)       |
-| `scaleText(value)`                  | Font size — `scale()` puro per wrapping identico            |
+| `scaleText(value)`                  | Font size — `scale()`, mai sotto 12 dp (`textScale.ts`)     |
 | `scaleSpacing(value)`               | Padding/margin — cap a `1.5x` su tablet (`large`)           |
 | `scaleTouch(value)`                 | Touch target — minimo `44px` su device piccoli (`small`)    |
 | `scaleWithDimensions(value, w, h)`  | Come `scale()`, ma con dimensioni gia note (hook/test)      |
@@ -125,8 +125,8 @@ iPad Mini  ≈ 1.15x (cap, era 1.36x)   iPad Pro 12.9" ≈ 1.20x (cap, era 1.82x
 
 In `src/components/ui/` esistono componenti che consumano `perfectScale`:
 
-- `PerfectText` — font scalato via `scaleText`, righe esatte, immunita ai
-  setting utente (`SystemImmunity`).
+- `PerfectText` — font scalato con `textFontSize` (minimo 12 dp) sulla finestra
+  di adesso; la scala di sistema vale da 1,0 col tetto 2,0 (`SystemImmunity`).
 - `PerfectContainer` (+ `PageContainer`, `PerfectSection`, `ModalContainer`,
   `HeaderContainer`, `FooterContainer`) — padding/spacing scalati.
 - `PerfectImage` (+ `HeroImage`, `CardImage`, `ThumbnailImage`, `AvatarImage`,

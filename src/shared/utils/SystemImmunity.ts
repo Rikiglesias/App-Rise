@@ -11,25 +11,18 @@
  *
  * COSA LIMITA:
  * ⚠️ Scaling eccessivo: il tetto è `MAX_FONT_SCALE`, che di default vale **2.0**
- *    (non 1.3, come diceva questa riga fino al 2026-08-15 — due numeri diversi
- *    nello stesso file, e questo era quello sbagliato).
+ *    (`MAX_FONT_SCALE` di `textScale.ts`).
  * ⚠️ Pixel ratio inconsistente (mantiene riferimento iPhone 15)
  *
- * ⚠️ ATTENZIONE, comportamento non ovvio: `getImmuneTextProps` accende lo scaling
- * solo QUANDO l'ingrandimento di sistema SUPERA `fontScaleUnlockThreshold` (default
- * 1.3). Sotto quella soglia il testo resta identico: chi imposta 1.1x o 1.2x —
- * l'ingrandimento più comune — non vede alcun cambiamento. È una scelta esplicita
- * (vedi il commento sulla soglia), non un difetto accidentale, ma convive male con
- * il «RISPETTA font scaling utente» dichiarato qui sopra e con WCAG 1.4.4, che
- * chiede testo ridimensionabile fino al 200%. Cambiarla tocca OGNI schermata:
- * va decisa guardando l'app dal vivo, non da qui.
- *
- * RISULTATO: App accessibile SOPRA la soglia, layout stabile sotto.
+ * Lo scaling di sistema vale dal primo passo sopra 1,0: fino al 21/10/2026 si
+ * accendeva solo oltre 1,3 e chi sceglieva 1,1 o 1,2 non vedeva alcun
+ * cambiamento (zona morta, contro WCAG 1.4.4; decisione del 15/10, C42).
  */
 
 import { PixelRatio, Platform } from 'react-native';
 
 import { getExpoExtra } from '@/shared/utils/expoExtra';
+import { MAX_FONT_SCALE } from '@/shared/utils/textScale';
 
 // ⚖️ CONFIGURAZIONE ACCESSIBILITÀ BILANCIATA
 const IN_JEST =
@@ -81,31 +74,7 @@ const getConfiguredMaxFontScale = (): number => {
   } catch {
     // ignore parsing errors
   }
-  return 2.0;
-};
-
-// Soglia oltre la quale sbloccare lo scaling di sistema (per piccoli aumenti resta identico)
-const getUnlockFontScaleThreshold = (): number => {
-  try {
-    const extra = getExpoExtra();
-    const fromExtra = extra?.['fontScaleUnlockThreshold'] as unknown;
-    if (typeof fromExtra === 'number' && isFinite(fromExtra) && fromExtra > 0) {
-      return fromExtra;
-    }
-    const env = (
-      globalThis as unknown as {
-        process?: { env?: Record<string, string | undefined> };
-      }
-    ).process?.env;
-    const rawEnv =
-      env?.EXPO_PUBLIC_FONT_SCALE_UNLOCK_THRESHOLD ??
-      env?.FONT_SCALE_UNLOCK_THRESHOLD;
-    const parsed = rawEnv ? Number(rawEnv) : NaN;
-    if (Number.isFinite(parsed) && parsed > 0) return parsed;
-  } catch {
-    // ignore
-  }
-  return 1.3;
+  return MAX_FONT_SCALE;
 };
 
 const IMMUNITY_CONFIG = {
@@ -148,18 +117,12 @@ export const getSystemFontSettings = () => {
 
 // ⚖️ APPLICA ACCESSIBILITÀ BILANCIATA AI PROPS TEXT
 export const getImmuneTextProps = () => {
-  const sysFontScale = PixelRatio.getFontScale();
-  const unlockThreshold = getUnlockFontScaleThreshold();
-  const allowScaling =
-    !IMMUNITY_CONFIG.BLOCK_FONT_SCALING && sysFontScale > unlockThreshold;
   return {
-    // ✅ RISPETTA font scaling sistema (accessibilità)
-    allowFontScaling: allowScaling,
+    // ✅ RISPETTA font scaling sistema (accessibilità), senza soglia
+    allowFontScaling: !IMMUNITY_CONFIG.BLOCK_FONT_SCALING,
 
-    // ⚠️ Tetto al moltiplicatore, per la stabilità del layout. NON è 1.3: il
-    // default di `MAX_FONT_SCALE` è 2.0 (`getConfiguredMaxFontScale`), e si
-    // configura da `extra.maxFontScale` o da `EXPO_PUBLIC_MAX_FONT_SCALE`.
-    // 1.3 è l'ALTRA soglia — quella sotto cui lo scaling non si accende affatto.
+    // ⚠️ Tetto al moltiplicatore, per la stabilità del layout: default 2.0,
+    // configurabile da `extra.maxFontScale` o da `EXPO_PUBLIC_MAX_FONT_SCALE`.
     maxFontSizeMultiplier: IMMUNITY_CONFIG.MAX_FONT_SCALE,
 
     // Proprietà aggiuntive per stabilità Perfect System
@@ -182,3 +145,10 @@ export const getImmuneTextProps = () => {
     }),
   };
 };
+
+// Campi di testo: seguono la scala di sistema con lo stesso tetto dei testi.
+// Senza `maxFontSizeMultiplier` un TextInput non ha tetto (default di React Native).
+export const getTextInputScaleProps = () => ({
+  allowFontScaling: true,
+  maxFontSizeMultiplier: getConfiguredMaxFontScale(),
+});

@@ -11,6 +11,8 @@ import { PerfectText, PlatformTouchable } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { getTextInputScaleProps } from '@/shared/utils/SystemImmunity';
+import { scaleText } from '@/shared/utils/textScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { searchComuni, type Comune } from '@/shared/data/comuni';
@@ -118,6 +120,7 @@ export const AuthCityField: React.FC<AuthCityFieldProps> = ({
         ]}
       >
         <TextInput
+          {...getTextInputScaleProps()}
           style={styles.input}
           value={value}
           onChangeText={handleChange}
@@ -199,7 +202,7 @@ const createStyles = (colors: ThemeColors) =>
       flex: 1,
       paddingVertical: PerfectSpacing.sm,
       color: colors.neutral[900],
-      fontSize: scale(16),
+      fontSize: scaleText(16),
     },
     // Dropdown inline: card sotto il campo, scostata di poco. Spinge il contenuto
     // del form (niente overlay assoluto → niente clipping nello ScrollView).

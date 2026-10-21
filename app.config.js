@@ -82,7 +82,8 @@ export default {
           process.env.EXPO_PUBLIC_PERFECT_STRICT_MODE ??
             process.env.PERFECT_STRICT_MODE
         ).toLowerCase() === 'true',
-      // Soglia oltre la quale sbloccare il font scaling di sistema (es. 1.3)
+      // Soglia di «testo molto grande» per la disposizione di tab bar e CTA (es. 1.3);
+      // lo scaling del testo vale comunque da 1.0 (src/shared/utils/textScale.ts)
       fontScaleUnlockThreshold: (() => {
         const raw =
           process.env.EXPO_PUBLIC_FONT_SCALE_UNLOCK_THRESHOLD ??

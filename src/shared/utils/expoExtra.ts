@@ -27,9 +27,9 @@ export const getExpoExtra = (): ExpoExtra | undefined =>
   (Updates as unknown as { manifest?: { extra?: ExpoExtra } }).manifest?.extra;
 
 /**
- * Soglia di font scale oltre la quale lo scaling di sistema viene sbloccato.
+ * Soglia di «testo molto grande» (scala di sistema) oltre la quale tab bar e CTA
+ * cambiano disposizione. Non accende lo scaling del testo, che vale da 1,0 (`textScale.ts`).
  * Letta da `extra.fontScaleUnlockThreshold` (numero finito > 0), default `1.3`.
- * Usata dal layout della tab bar e dei CTA per adattarsi a font ingranditi.
  */
 export const getFontScaleUnlockThreshold = (): number => {
   const value = getExpoExtra()?.['fontScaleUnlockThreshold'];

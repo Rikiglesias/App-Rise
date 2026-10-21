@@ -316,35 +316,6 @@ export const scaleSpacing = (value: number): number => {
 };
 
 /**
- * SCALE TEXT - Per dimensioni testo proporzionali
- *
- * Usa scale() PURO senza limiti per garantire:
- * - Wrapping identico su tutti i dispositivi
- * - Proporzionalità perfetta font/container
- * - Consistenza visiva assoluta
- *
- * NOTA IMPORTANTE:
- * - SystemImmunity già limita fontScale utente a 1.3x (maxFontSizeMultiplier)
- * - Questo è SUFFICIENTE per accessibilità e protezione layout
- * - NO limiti device-specific = wrapping uniforme garantito
- *
- * QUANDO USARE:
- * - Automatico in PerfectText
- * - Font size custom (quando non usi PerfectText)
- * - Line height basato su font size
- *
- * @param value - Valore font size (base iPhone 15)
- * @returns Valore scalato proporzionalmente (scale puro)
- *
- * @example
- * fontSize: scaleText(14)  // iPhone SE: 11.6px, iPhone 15: 14px, iPad: 19.1px
- */
-export const scaleText = (value: number): number => {
-  // Scale puro - proporzionalità perfetta per wrapping identico
-  return scale(value);
-};
-
-/**
  * Clamp helpers (centralizzati) – per coerenza cross-device
  *
  * - clamp: utility di base

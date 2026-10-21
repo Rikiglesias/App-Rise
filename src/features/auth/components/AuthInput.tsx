@@ -13,6 +13,8 @@ import { PerfectText, PerfectIcon, PlatformTouchable } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { getTextInputScaleProps } from '@/shared/utils/SystemImmunity';
+import { scaleText } from '@/shared/utils/textScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -111,6 +113,7 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
           ]}
         >
           <TextInput
+            {...getTextInputScaleProps()}
             ref={ref}
             style={styles.input}
             value={value}
@@ -211,7 +214,7 @@ const createStyles = (colors: ThemeColors) =>
       flex: 1,
       paddingVertical: PerfectSpacing.sm,
       color: colors.neutral[900],
-      fontSize: scale(16),
+      fontSize: scaleText(16),
     },
     toggle: {
       paddingLeft: PerfectSpacing.sm,

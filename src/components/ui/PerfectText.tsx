@@ -20,14 +20,12 @@ import {
   StyleSheet,
   StyleProp,
   PixelRatio,
+  useWindowDimensions,
 } from 'react-native';
-import {
-  scale,
-  scaleText,
-  LOGICAL_REFERENCE,
-} from '../../shared/constants/perfectScale';
+import { scale, LOGICAL_REFERENCE } from '../../shared/constants/perfectScale';
 import { Typography } from '../../shared/constants/designTokens';
 import { getImmuneTextProps } from '../../shared/utils/SystemImmunity';
+import { textFontSize } from '../../shared/utils/textScale';
 import { useThemeColors } from '../../shared/hooks/useThemeColors';
 
 export interface PerfectTextProps
@@ -40,7 +38,7 @@ export interface PerfectTextProps
 
   /** Varianti di comportamento per adattività */
   variant?: 'content' | 'compact';
-  /** Soglia fontScale oltre la quale i testi content si espandono (no tagli) */
+  /** Soglia fontScale oltre la quale i testi content si espandono (no tagli); default: appena il testo è ingrandito */
   adaptiveThreshold?: number;
 
   /** Larghezza container (default: 90% screen width) */
@@ -88,7 +86,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   size,
   lines,
   variant = 'content',
-  adaptiveThreshold = 1.2,
+  adaptiveThreshold = 1,
   containerWidth,
   fontWeight = 'normal',
   color,
@@ -101,8 +99,9 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   const colors = useThemeColors();
   // Default colore testo dark-aware: in light === neutral[900] (zero regressione)
   const resolvedColor = color ?? colors.neutral[900];
-  // Usa scaleText() che ora è scale() puro - proporzionalità perfetta sempre
-  const finalScaledFontSize = useMemo(() => scaleText(size), [size]);
+  // Proporzionale allo schermo di adesso (segue rotazione e ridimensionamento), mai sotto 12 dp
+  const window = useWindowDimensions();
+  const finalScaledFontSize = textFontSize(size, window);
   const immuneProps = getImmuneTextProps();
   const allowsScale = immuneProps.allowFontScaling !== false;
   const fontScale = PixelRatio.getFontScale();

@@ -12,7 +12,7 @@ import { Pressable, Share, StyleSheet, Text, View } from 'react-native';
 import type { PressableStateCallbackType } from 'react-native';
 
 import { RISE_CONTACTS } from '@/shared/constants/urls';
-import { scaleText } from '@/shared/constants/perfectScale';
+import { scaleText } from '@/shared/utils/textScale';
 import { getImmuneTextProps } from '@/shared/utils/SystemImmunity';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useTranslation } from '@/shared/hooks/useTranslation';

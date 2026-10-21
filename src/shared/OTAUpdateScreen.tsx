@@ -23,7 +23,8 @@ import { PerfectText } from '@/components/ui/PerfectText';
 import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 import { PerfectImage } from '@/components/ui/PerfectImage';
 import { Colors } from '@/shared/constants/designTokens';
-import { scale, scaleText } from '@/shared/constants/perfectScale';
+import { scale } from '@/shared/constants/perfectScale';
+import { scaleText } from '@/shared/utils/textScale';
 import { PerfectSpacing } from '@/shared/constants/perfectSpacing';
 import {
   getAdaptiveColors,

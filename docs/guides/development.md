@@ -73,7 +73,8 @@ Gli alias sono definiti in `babel.config.js`:
 | `@assets`     | `./assets`         |
 
 ```typescript
-import { scale, scaleText } from '@/shared/constants/perfectScale';
+import { scale } from '@/shared/constants/perfectScale';
+import { scaleText } from '@/shared/utils/textScale';
 import { PerfectText, PerfectContainer } from '@/components/ui';
 import { usePerfectTheme } from '@/shared/hooks/usePerfectTheme';
 ```
@@ -91,13 +92,13 @@ La SSOT dello scaling e `src/shared/constants/perfectScale.ts`. Lo scaling e
 ```typescript
 import {
   scale,
-  scaleText,
   scaleSpacing,
   scaleTouch,
   LOGICAL_REFERENCE,
 } from '@/shared/constants/perfectScale';
+import { scaleText } from '@/shared/utils/textScale';
 
-const fontSize = scaleText(16); // font: scale puro (wrapping identico)
+const fontSize = scaleText(16); // font: scale(), mai sotto 12 dp
 const padding = scaleSpacing(16); // padding: cap 1.5x su tablet
 const btnHeight = scaleTouch(44); // touch: minimo 44px su device piccoli
 const cardW = scale(LOGICAL_REFERENCE.width * 0.9); // larghezza generica
@@ -106,7 +107,7 @@ const cardW = scale(LOGICAL_REFERENCE.width * 0.9); // larghezza generica
 | Funzione        | Quando usarla                                          |
 | --------------- | ------------------------------------------------------ |
 | `scale`         | Dimensioni generiche (width/height/radius)             |
-| `scaleText`     | Font size e line-height                                |
+| `scaleText`     | Font size e line-height (minimo 12 dp, `textScale.ts`) |
 | `scaleSpacing`  | Padding/margin/gap                                     |
 | `scaleTouch`    | Altezza/larghezza di elementi interattivi (button)     |
 
@@ -271,8 +272,8 @@ deve regredire sui moduli toccati.
 ### Layout diverso tra dispositivi
 
 Non leggere `Dimensions.get('window')` nei componenti per derivare font/spacing.
-Usa le primitive `scale`, `scaleText`, `scaleSpacing`, `scaleTouch` di
-`perfectScale`.
+Usa le primitive `scale`, `scaleSpacing`, `scaleTouch` di `perfectScale` e
+`scaleText` di `textScale`.
 
 ```typescript
 // Evita
