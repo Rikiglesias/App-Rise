@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, Modal } from 'react-native';
+import { StyleSheet, Modal, useWindowDimensions } from 'react-native';
 
 import {
   PerfectIcon,
+  PlatformScrollView,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
@@ -23,6 +24,10 @@ import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
+import {
+  BODY_SHARE_CLOSE_ONLY,
+  modalBodyMaxHeight,
+} from '@/shared/utils/modalBodyMaxHeight';
 
 interface DonationInfoModalProps {
   visible: boolean;
@@ -92,6 +97,9 @@ const createModalStyles = (colors: ThemeColors) =>
       marginTop: PerfectSpacing.sm,
       alignSelf: 'center',
     },
+    bodyScroll: {
+      flexGrow: 0,
+    },
     modalSectionTitle: {
       fontWeight: Typography.weights.black,
       color: colors.neutral[900],
@@ -117,6 +125,8 @@ const createModalStyles = (colors: ThemeColors) =>
 const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
   const colors = useThemeColors();
   const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
+  const { height } = useWindowDimensions();
+  const bodyMaxHeight = modalBodyMaxHeight(height, BODY_SHARE_CLOSE_ONLY);
   return (
     <PerfectContainer
       style={modalStyles.modalContent}
@@ -148,30 +158,49 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
         <PerfectContainer style={modalStyles.titleUnderline} />
       </PerfectContainer>
 
-      <PerfectText size={15} lines={5} style={modalStyles.modalText}>
-        <PerfectText size={15} lines={1} style={modalStyles.modalSectionTitle}>
-          {t('actions.donationMonetary')}
-        </PerfectText>{' '}
-        {t('actions.donationMonetaryText')}
-      </PerfectText>
+      {/* Il corpo scorre, titolo e «chiudi» no: col testo grande su un
+          telefono piccolo nulla resta fuori dallo schermo (C41). */}
+      <PlatformScrollView
+        style={[modalStyles.bodyScroll, { maxHeight: bodyMaxHeight }]}
+        testID="donation-modal-body"
+      >
+        <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+          <PerfectText
+            size={15}
+            lines={1}
+            style={modalStyles.modalSectionTitle}
+          >
+            {t('actions.donationMonetary')}
+          </PerfectText>{' '}
+          {t('actions.donationMonetaryText')}
+        </PerfectText>
 
-      <PerfectText size={15} lines={5} style={modalStyles.modalText}>
-        <PerfectText size={15} lines={1} style={modalStyles.modalSectionTitle}>
-          {t('actions.donationShopping')}
-        </PerfectText>{' '}
-        {t('actions.donationShoppingText')}
-      </PerfectText>
+        <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+          <PerfectText
+            size={15}
+            lines={1}
+            style={modalStyles.modalSectionTitle}
+          >
+            {t('actions.donationShopping')}
+          </PerfectText>{' '}
+          {t('actions.donationShoppingText')}
+        </PerfectText>
 
-      <PerfectText size={15} lines={5} style={modalStyles.modalText}>
-        <PerfectText size={15} lines={1} style={modalStyles.modalSectionTitle}>
-          {t('actions.donationGiftCard')}
-        </PerfectText>{' '}
-        {t('actions.donationGiftCardText')}
-      </PerfectText>
+        <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+          <PerfectText
+            size={15}
+            lines={1}
+            style={modalStyles.modalSectionTitle}
+          >
+            {t('actions.donationGiftCard')}
+          </PerfectText>{' '}
+          {t('actions.donationGiftCardText')}
+        </PerfectText>
 
-      <PerfectText size={14} lines={3} style={modalStyles.highlightText}>
-        {t('actions.donationEvents')}
-      </PerfectText>
+        <PerfectText size={14} lines={3} style={modalStyles.highlightText}>
+          {t('actions.donationEvents')}
+        </PerfectText>
+      </PlatformScrollView>
     </PerfectContainer>
   );
 };

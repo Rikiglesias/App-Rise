@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, Modal } from 'react-native';
+import { StyleSheet, Modal, useWindowDimensions } from 'react-native';
 
 import {
+  PlatformScrollView,
   PlatformTouchable,
   PerfectText,
   PerfectContainer,
@@ -18,6 +19,10 @@ import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
+import {
+  BODY_SHARE_WITH_BUTTONS,
+  modalBodyMaxHeight,
+} from '@/shared/utils/modalBodyMaxHeight';
 
 /**
  * Schermata onesta pre-redirect verso un partner (goal partner-identita, F1.7d).
@@ -76,10 +81,13 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: PerfectSpacing.base,
       letterSpacing: scale(-0.6),
     },
+    bodyScroll: {
+      flexGrow: 0,
+      marginBottom: PerfectSpacing.lg,
+    },
     body: {
       fontWeight: Typography.weights.medium,
       color: colors.neutral[900],
-      marginBottom: PerfectSpacing.lg,
     },
     buttonRow: {
       flexDirection: 'row',
@@ -135,6 +143,8 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
   const { t } = useTranslation();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  const { height } = useWindowDimensions();
+  const bodyMaxHeight = modalBodyMaxHeight(height, BODY_SHARE_WITH_BUTTONS);
 
   const isDonorbox = variant === 'donorbox';
   const titleKey = isDonorbox
@@ -180,9 +190,16 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
             <PerfectText size={22} lines={2} style={styles.title}>
               {t(titleKey)}
             </PerfectText>
-            <PerfectText size={15} lines={12} style={styles.body}>
-              {t(bodyKey)}
-            </PerfectText>
+            {/* Il corpo scorre, titolo e pulsanti no: col testo grande su un
+                telefono piccolo i pulsanti restano a portata (C41). */}
+            <PlatformScrollView
+              style={[styles.bodyScroll, { maxHeight: bodyMaxHeight }]}
+              testID="partner-disclosure-body"
+            >
+              <PerfectText size={15} lines={12} style={styles.body}>
+                {t(bodyKey)}
+              </PerfectText>
+            </PlatformScrollView>
             <PerfectContainer style={styles.buttonRow}>
               <PlatformTouchable
                 style={[styles.button, styles.cancelButton]}
