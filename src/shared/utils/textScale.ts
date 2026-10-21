@@ -18,6 +18,9 @@ export const MIN_TEXT_SIZE = 12;
 /** Tetto del moltiplicatore di sistema, anche sui campi di testo (`maxFontSizeMultiplier`). */
 export const MAX_FONT_SCALE = 2;
 
+/** Interlinea di PerfectText, in rapporto alla dimensione del carattere. */
+export const LINE_HEIGHT_RATIO = 1.2;
+
 export interface WindowSize {
   width: number;
   height: number;

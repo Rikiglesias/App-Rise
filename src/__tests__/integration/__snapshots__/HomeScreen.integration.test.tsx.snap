@@ -5,7 +5,8 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
   accessibilityLabel="Schermata Home"
   edges={
     [
-      "bottom",
+      "left",
+      "right",
     ]
   }
   style={
@@ -20,7 +21,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
     collapsable={false}
     contentContainerStyle={
       {
-        "paddingBottom": 130.96910434607,
+        "paddingBottom": 30.223639464477696,
       }
     }
     onScroll={[MockFunction]}

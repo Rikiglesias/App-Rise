@@ -5,10 +5,17 @@ import {
 import { act, render, fireEvent, waitFor } from '@testing-library/react-native';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
+import { Dimensions, PixelRatio, StyleSheet } from 'react-native';
 
 import BottomTabNavigator from '../../navigation/BottomTabNavigator';
+import {
+  TAB_BAR_BASE_HEIGHT,
+  tabBarHeight,
+  tabLabelLineHeight,
+} from '../../navigation/tabBarLayout';
 import { AllProviders } from '../helpers/testProviders';
 import { PerfectSpacing } from '@/shared/constants';
+import { scaleWithDimensions } from '@/shared/constants/perfectScale';
 
 // Mock Haptics
 jest.mock('expo-haptics');
@@ -139,6 +146,60 @@ it('pubblica altezza misurata e offset sicuro dopo layout e rotazione', () => {
     );
   } finally {
     safeInsets.mockRestore();
+  }
+});
+
+// C44: la barra cresce di quanto cresce la riga dell'etichetta, dal primo passo sopra 1,0 al tetto.
+it('barra delle schede: cresce col testo', () => {
+  const passi = [1, 1.1, 1.3, 1.5, 2];
+  const finestre = [
+    { width: 360, height: 640 },
+    { width: 320, height: 568 },
+    { width: 393, height: 852 },
+  ];
+  for (const finestra of finestre) {
+    const altezze = passi.map(s => tabBarHeight(s, finestra));
+    expect(altezze[0]).toBeCloseTo(
+      scaleWithDimensions(TAB_BAR_BASE_HEIGHT, finestra.width, finestra.height),
+      6
+    );
+    for (let i = 1; i < altezze.length; i++) {
+      expect(altezze[i]).toBeGreaterThan(altezze[i - 1] as number);
+    }
+    // Il margine attorno all'etichetta non si consuma: la barra cresce quanto la riga.
+    const riga = tabLabelLineHeight(finestra);
+    passi.forEach((s, i) => {
+      expect((altezze[i] as number) - (altezze[0] as number)).toBeCloseTo(
+        riga * (s - 1),
+        6
+      );
+    });
+    expect(tabBarHeight(3, finestra)).toBeCloseTo(tabBarHeight(2, finestra), 6);
+  }
+
+  // La barra disegnata usa la stessa funzione con la scala di sistema di adesso.
+  const fontScale = jest.spyOn(PixelRatio, 'getFontScale');
+  try {
+    const finestra = Dimensions.get('window');
+    const disegnata = (s: number) => {
+      fontScale.mockReturnValue(s);
+      const ui = renderNavigator();
+      const altezza = StyleSheet.flatten(
+        ui.getByTestId('bottom-tab-bar').props.style
+      ).height as number;
+      ui.unmount();
+      return altezza;
+    };
+    const a1 = disegnata(1);
+    const a13 = disegnata(1.3);
+    const a2 = disegnata(2);
+    expect(a1).toBeCloseTo(tabBarHeight(1, finestra), 6);
+    expect(a13).toBeCloseTo(tabBarHeight(1.3, finestra), 6);
+    expect(a2).toBeCloseTo(tabBarHeight(2, finestra), 6);
+    expect(a13).toBeGreaterThan(a1);
+    expect(a2).toBeGreaterThan(a13);
+  } finally {
+    fontScale.mockRestore();
   }
 });
 
@@ -334,7 +395,7 @@ describe('BottomTabNavigator', () => {
   });
 
   describe('Tab Bar Component Memoization', () => {
-    it('should memoize AdvancedTabBar component', () => {
+    it('should memoize TabBar component', () => {
       // Component uses React.memo to prevent unnecessary re-renders
       const { rerender } = renderNavigator();
 

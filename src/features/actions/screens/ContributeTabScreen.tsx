@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ContributeTabScreenProps } from '../ContributeScreenTypes';
 import {
   ActionButtons,
@@ -12,6 +10,7 @@ import {
   useNewActionsAnimations,
 } from '../components';
 import { PlatformScrollView, PerfectContainer } from '@/components/ui';
+import { PerfectSpacing } from '@/shared/constants';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 
@@ -20,7 +19,8 @@ const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
 }) => {
   const animations = useNewActionsAnimations();
   const { isTablet } = useDeviceType();
-  const insets = useSafeAreaInsets();
+  // Altezza vera della barra flottante (scala del testo e bordo sicuro compresi); 0 fuori dal navigatore.
+  const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
   const colors = useThemeColors();
 
   const styles = StyleSheet.create({
@@ -29,8 +29,7 @@ const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
       backgroundColor: colors.neutral[50],
     },
     scrollContent: {
-      // Padding inferiore coerente con altezza bottom bar custom + safe-area
-      paddingBottom: Math.max(insets.bottom, 16) + 95 + 24,
+      paddingBottom: tabBarHeight + PerfectSpacing.lg,
     },
     tabletContainer: {
       width: '70%',
@@ -40,7 +39,7 @@ const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
       <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         <PerfectContainer style={isTablet ? styles.tabletContainer : {}}>
           <ContributeHeader animations={animations} />

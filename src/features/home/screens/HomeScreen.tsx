@@ -1,9 +1,7 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useContext, useRef, useMemo } from 'react';
 import { StyleSheet, Animated } from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type { HomeScreenProps } from '../types/HomeScreenTypes';
 import { EntraInAzione } from '../components/EntraInAzione';
@@ -14,18 +12,17 @@ import { useThemeColors } from '@shared/hooks/useThemeColors';
 import { useTranslation } from '@shared/hooks/useTranslation';
 import { useDeviceType } from '@shared/hooks/useDeviceType';
 import { PerfectSpacing } from '@shared/constants';
-import { scale } from '@shared/constants/perfectScale';
 
 const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
   const { t } = useTranslation();
   const colors = useThemeColors();
   const { isTablet } = useDeviceType();
-  const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  const basePadding = PerfectSpacing.lg;
-  const navHeight = scale(80);
-  const bottomPadding = basePadding + navHeight + insets.bottom;
+  // La barra delle schede è flottante e pubblica la sua altezza vera (scala del testo e bordo
+  // sicuro compresi): il fondo dei contenuti ne resta fuori. Fuori dal navigatore (test) vale 0.
+  const bottomPadding =
+    (useContext(BottomTabBarHeightContext) ?? 0) + PerfectSpacing.lg;
 
   const styles = useMemo(
     () =>
@@ -49,7 +46,7 @@ const HomeScreenComponent: React.FC<HomeScreenProps> = () => {
   return (
     <SafeAreaView
       style={styles.container}
-      edges={['bottom']}
+      edges={['left', 'right']}
       accessibilityLabel={t('home.screenLabel')}
       testID="home-screen"
     >

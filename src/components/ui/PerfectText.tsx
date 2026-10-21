@@ -25,7 +25,7 @@ import {
 import { scale, LOGICAL_REFERENCE } from '../../shared/constants/perfectScale';
 import { Typography } from '../../shared/constants/designTokens';
 import { getImmuneTextProps } from '../../shared/utils/SystemImmunity';
-import { textFontSize } from '../../shared/utils/textScale';
+import { LINE_HEIGHT_RATIO, textFontSize } from '../../shared/utils/textScale';
 import { useThemeColors } from '../../shared/hooks/useThemeColors';
 
 export interface PerfectTextProps
@@ -36,8 +36,11 @@ export interface PerfectTextProps
   /** Numero ESATTO di righe (sempre rispettato) */
   lines: number;
 
-  /** Varianti di comportamento per adattività */
-  variant?: 'content' | 'compact';
+  /**
+   * Varianti di comportamento per adattività. `fit`: una riga sola che segue la scala
+   * di sistema e si restringe solo quando non entra in larghezza (mai tagliata).
+   */
+  variant?: 'content' | 'compact' | 'fit';
   /** Soglia fontScale oltre la quale i testi content si espandono (no tagli); default: appena il testo è ingrandito */
   adaptiveThreshold?: number;
 
@@ -74,7 +77,8 @@ export interface PerfectTextProps
   immunity?: boolean;
 }
 
-const LINE_HEIGHT_RATIO = 1.2;
+// Variante `fit`: fino a metà della dimensione richiesta, prima di non entrare
+const FIT_MINIMUM_SCALE = 0.5;
 
 // Font mapping rimosso - ora usa font di sistema
 
@@ -152,7 +156,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
   // Adattività: per variant 'content' e fontScale alto -> nessun taglio
   const effectiveLines = useMemo(() => {
-    if (variant === 'compact') return 1;
+    if (variant === 'compact' || variant === 'fit') return 1;
     if (allowsScale && fontScale > adaptiveThreshold) return undefined; // lascia andare a capo
     return lines;
   }, [variant, allowsScale, fontScale, adaptiveThreshold, lines]);
@@ -187,6 +191,11 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
       : baseStyle;
   }, [style, finalScaledFontSize, resolvedColor, textAlign, fontWeight]);
 
+  const fitProps =
+    variant === 'fit'
+      ? { adjustsFontSizeToFit: true, minimumFontScale: FIT_MINIMUM_SCALE }
+      : undefined;
+
   // Se width è necessario (manuale o automatico) → usa wrapper con width fissa
   // Altrimenti → Text diretto che si adatta al contenuto (flex/row friendly)
   if (enhancedReferenceWidth && targetWidth) {
@@ -195,6 +204,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
         <Text
           {...immuneProps}
           {...props}
+          {...fitProps}
           numberOfLines={effectiveLines}
           ellipsizeMode={finalEllipsizeMode}
           style={resolvedStyle}
@@ -210,6 +220,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     <Text
       {...immuneProps}
       {...props}
+      {...fitProps}
       numberOfLines={effectiveLines}
       ellipsizeMode={finalEllipsizeMode}
       style={resolvedStyle}

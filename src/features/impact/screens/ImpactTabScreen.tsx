@@ -1,10 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ImpactNavigationProp } from '../types/ImpactScreenTypes';
 import { convertToMapLocations } from '../utils/mapHelpers';
 import {
@@ -23,11 +21,6 @@ import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
-// Constants for padding calculations
-const BASE_PADDING = 16;
-const TAB_BAR_HEIGHT = 95;
-const EXTRA_PADDING = 24;
-
 /**
  * Screen principale dell'impatto con architettura modulare
  * Ridotto da 1141 a ~150 righe (87% riduzione) per eccellenza architetturale
@@ -36,7 +29,8 @@ const ImpactTabScreenComponent: React.FC = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<ImpactNavigationProp>();
   const { isTablet } = useDeviceType();
-  const insets = useSafeAreaInsets();
+  // Altezza vera della barra flottante (scala del testo e bordo sicuro compresi); 0 fuori dal navigatore.
+  const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const mapLocations = useMemo(() => convertToMapLocations(), []);
@@ -50,15 +44,12 @@ const ImpactTabScreenComponent: React.FC = () => {
     }
   }, [navigation, mapLocations]);
 
-  const scrollContentPadding =
-    Math.max(insets.bottom, scale(BASE_PADDING)) +
-    scale(TAB_BAR_HEIGHT) +
-    scale(EXTRA_PADDING);
+  const scrollContentPadding = tabBarHeight + PerfectSpacing.lg;
 
   return (
     <SafeAreaView
       style={styles.container}
-      edges={['bottom']}
+      edges={['left', 'right']}
       accessibilityLabel={t('accessibility.impactScreen')}
       testID="impact-tab-screen"
     >
