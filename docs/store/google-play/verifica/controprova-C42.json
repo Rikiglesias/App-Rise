@@ -1,0 +1,17 @@
+{
+  "criterio": "C42",
+  "base": "fbefa98",
+  "titoli": [
+    "scala del testo: minimo 12 dp",
+    "scala del testo: nessuna zona morta",
+    "scala del testo: tetto 2,0 anche sui campi"
+  ],
+  "esitiAllaBase": {
+    "scala del testo: minimo 12 dp": "assente",
+    "scala del testo: nessuna zona morta": "assente",
+    "scala del testo: tetto 2,0 anche sui campi": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/shared/utils/textScale.test.tsx": "73489b8b85227ba2ae56d450dcae6f1966dea037c412de66b0207be3208c5c88"
+  }
+}
