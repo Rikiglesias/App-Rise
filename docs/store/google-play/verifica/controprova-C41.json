@@ -1,0 +1,15 @@
+{
+  "criterio": "C41",
+  "base": "fbefa98",
+  "titoli": [
+    "finestre scorrevoli: uscita dall'app",
+    "finestre scorrevoli: info donazioni"
+  ],
+  "esitiAllaBase": {
+    "finestre scorrevoli: uscita dall'app": "assente",
+    "finestre scorrevoli: info donazioni": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/components/scrollableModals.test.tsx": "2a21ade54974646cd1621a9fbb5f38f0635a3689a9188ff903720bcb0ace05c5"
+  }
+}

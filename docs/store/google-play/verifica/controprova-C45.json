@@ -1,0 +1,15 @@
+{
+  "criterio": "C45",
+  "base": "fbefa98",
+  "titoli": [
+    "modali e mappa: PerfectModal usa il tipo di dispositivo",
+    "modali e mappa: spazio della barra solo dove c'è"
+  ],
+  "esitiAllaBase": {
+    "modali e mappa: PerfectModal usa il tipo di dispositivo": "assente",
+    "modali e mappa: spazio della barra solo dove c'è": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/components/modalsAndMap.test.tsx": "dfc6628e229f65ac4055ef54f7909d8fba38fc64c73c9fde09e1914d21e4d835"
+  }
+}
