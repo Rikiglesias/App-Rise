@@ -1,0 +1,28 @@
+{
+  "criterio": "C43",
+  "base": "fbefa98",
+  "titoli": [
+    "aree toccabili: minimo 48 dp",
+    "aree toccabili: schede",
+    "aree toccabili: indietro",
+    "aree toccabili: chiudi",
+    "aree toccabili: contatti",
+    "aree toccabili: social",
+    "aree toccabili: StatCard",
+    "aree toccabili: pulsanti dell'account"
+  ],
+  "esitiAllaBase": {
+    "aree toccabili: minimo 48 dp": "assente",
+    "aree toccabili: schede": "assente",
+    "aree toccabili: indietro": "assente",
+    "aree toccabili: chiudi": "assente",
+    "aree toccabili: contatti": "assente",
+    "aree toccabili: social": "assente",
+    "aree toccabili: StatCard": "assente",
+    "aree toccabili: pulsanti dell'account": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/components/touchTargets.content.test.tsx": "40c3f7f6ee9fe387bcd307eb2c446742563e25f601dcc5b9beeb8fe1d82069fa",
+    "src/__tests__/components/touchTargets.navigation.test.tsx": "5378932f66452f4cecc46a33d5bd96ed1342e1472c13e2bc9266c4c40f541cfe"
+  }
+}
