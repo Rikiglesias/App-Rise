@@ -1,0 +1,29 @@
+{
+  "criterio": "C54",
+  "base": "fbefa98",
+  "titoli": [
+    "rotazione: barra delle schede si ridisegna con le nuove dimensioni",
+    "rotazione: intestazione delle schede si ridisegna con le nuove dimensioni",
+    "rotazione: Home si ridisegna con le nuove dimensioni",
+    "rotazione: Impatto si ridisegna con le nuove dimensioni",
+    "rotazione: Azioni si ridisegna con le nuove dimensioni",
+    "rotazione: MapModalScreen si ridisegna con le nuove dimensioni",
+    "rotazione: PerfectModal si ridisegna con le nuove dimensioni",
+    "rotazione: schermate dell'account si ridisegna con le nuove dimensioni"
+  ],
+  "esitiAllaBase": {
+    "rotazione: barra delle schede si ridisegna con le nuove dimensioni": "assente",
+    "rotazione: intestazione delle schede si ridisegna con le nuove dimensioni": "assente",
+    "rotazione: Home si ridisegna con le nuove dimensioni": "assente",
+    "rotazione: Impatto si ridisegna con le nuove dimensioni": "assente",
+    "rotazione: Azioni si ridisegna con le nuove dimensioni": "assente",
+    "rotazione: MapModalScreen si ridisegna con le nuove dimensioni": "assente",
+    "rotazione: PerfectModal si ridisegna con le nuove dimensioni": "assente",
+    "rotazione: schermate dell'account si ridisegna con le nuove dimensioni": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/components/rotazione.modali.test.tsx": "27f06fa34145709c746f6644d837bce85ba380ae40b84995ad05e2116de83d4c",
+    "src/__tests__/navigation/TabHeader.test.tsx": "a42a8e4b2a0e83e026ac8d0ed8a96d02d0646ad4abe2c2deed514c8ba92774b6",
+    "src/__tests__/navigation/rotazione.test.tsx": "62cefd492bb0d387917a0329a82e358c9354b3ef8f94c686122a5c6c28631f98"
+  }
+}
