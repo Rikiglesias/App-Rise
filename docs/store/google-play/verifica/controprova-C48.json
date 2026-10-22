@@ -1,0 +1,17 @@
+{
+  "criterio": "C48",
+  "base": "fbefa98",
+  "titoli": [
+    "social coerenti: Instagram",
+    "social coerenti: Facebook",
+    "social coerenti: YouTube in Seguici"
+  ],
+  "esitiAllaBase": {
+    "social coerenti: Instagram": "failed",
+    "social coerenti: Facebook": "failed",
+    "social coerenti: YouTube in Seguici": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/social/socialCoerenti.test.tsx": "74f067ede3a6a5707efa40623020c2661c4d03307d2eba229de1e2fd164242c3"
+  }
+}
