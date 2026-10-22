@@ -267,7 +267,7 @@ export default {
     privacy: {
       title: 'Privacy and data',
       exportCta: 'Export my data',
-      exportTitle: 'My data — Rise Against Hunger',
+      exportTitle: 'My data — Rise Against Hunger Italia ETS',
       exportError: 'Export failed. Please try again.',
       deleteCta: 'Delete account',
     },

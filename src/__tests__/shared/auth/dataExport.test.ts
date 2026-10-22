@@ -29,8 +29,8 @@ const account = {
 
 describe('dataExport', () => {
   it.each([
-    ['it', 'I miei dati — Rise Against Hunger'],
-    ['en', 'My data — Rise Against Hunger'],
+    ['it', 'I miei dati — Rise Against Hunger Italia ETS'],
+    ['en', 'My data — Rise Against Hunger Italia ETS'],
   ] as const)(
     'traduce il titolo del foglio di condivisione in %s',
     async (locale, title) => {

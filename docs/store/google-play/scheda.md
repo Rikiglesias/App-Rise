@@ -26,7 +26,7 @@ Scopri il nostro impatto contro la fame, dona e trova eventi di volontariato.
 
 ### Descrizione completa
 
-Rise Against Hunger Italia lavora per eliminare la fame nel mondo con il confezionamento e la distribuzione di pasti, grazie all'aiuto dei volontari. Questa è l'app ufficiale dell'associazione.
+Rise Against Hunger Italia ETS lavora per eliminare la fame nel mondo con il confezionamento e la distribuzione di pasti, grazie all'aiuto dei volontari. Questa è l'app ufficiale dell'associazione.
 
 Cosa puoi fare con l'app:
 
@@ -62,7 +62,7 @@ See our impact against hunger, donate and find volunteer meal-packing events.
 
 ### Full description
 
-Rise Against Hunger Italia works to end hunger worldwide by packaging and distributing meals, with the help of volunteers. This is the association's official app.
+Rise Against Hunger Italia ETS works to end hunger worldwide by packaging and distributing meals, with the help of volunteers. This is the association's official app.
 
 What you can do with the app:
 

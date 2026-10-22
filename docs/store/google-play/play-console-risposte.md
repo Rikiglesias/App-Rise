@@ -1,7 +1,8 @@
 # Play Console — risposte campo per campo
 
 App nuova `org.riseagainsthunger.italia` («Rise Against Hunger Italia»). Le risposte si incollano in Play Console
-dall'account dell'associazione; chi fa cosa e in che ordine sta in `rilascio.md` § «Chi fa cosa».
+dall'account dell'associazione Rise Against Hunger Italia ETS (C.F. 91349460377); chi fa cosa e in che ordine sta
+in `rilascio.md` § «Chi fa cosa».
 Controllo automatico: `node scripts/verifica-android-play.mjs C17`.
 
 Ogni risposta descrive l'app così com'è nella versione 1.3.0. Se cambia il codice (dati raccolti, partner, login),

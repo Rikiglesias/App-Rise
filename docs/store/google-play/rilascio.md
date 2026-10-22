@@ -152,7 +152,7 @@ Chi ha ancora la vecchia app e recensisce questa: rispondere con il testo del §
 Play Console non ha un campo libero per le note al revisore: le istruzioni si leggono in **Contenuti app → Accesso
 all'app → Altre istruzioni** (answer/9859455). Testo da aggiungere lì, dopo le istruzioni di accesso:
 
-> Questa app è la nuova app ufficiale di Rise Against Hunger Italia, pubblicata dall'associazione con il proprio
+> Questa app è la nuova app ufficiale di Rise Against Hunger Italia ETS, pubblicata dall'associazione con il proprio
 > account. Sostituisce la versione precedente, realizzata e pubblicata per nostro conto dal fornitore OpenClick
 > (Creareunapp) con identificativo `it.creareunapp.editor.android63da226b447a7`: il fornitore la ritirerà su nostra
 > richiesta scritta dopo il lancio di questa.
@@ -206,7 +206,7 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
 1. **PEC a OpenClick** dalla PEC dell'associazione: testo pronto nella mail di Riccardo al team (versione del 12/10,
    «dismissione concordata»), con due campi tra [ ] da completare. Si manda quando Riccardo dà il via.
 2. **Status fiscale** per la regola 3.2 di Google («tax exempt donations»): confermare a Riccardo che le donazioni
-   all'associazione sono esenti (ONLUS/ETS) e con quale qualifica.
+   a Rise Against Hunger Italia ETS sono esenti e con quale qualifica.
 3. **Dati dell'informativa**: PEC e sede legale da scrivere in `privacy-policy.html`.
 
 ### Riccardo
