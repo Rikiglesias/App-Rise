@@ -227,6 +227,8 @@ export default {
       './plugins/escludi-dev-client.js',
       // Pieghevole aperto o finestra ridimensionata senza riavvio (motivo nel file).
       './plugins/finestra-senza-riavvio.js',
+      // Prova di possesso della chiave per la verifica dello sviluppatore Android (motivo nel file).
+      './plugins/registrazione-pacchetto.js',
       'expo-font',
       'expo-localization',
       // SDK 54: lo splash si configura QUI (config plugin), non più via la chiave
