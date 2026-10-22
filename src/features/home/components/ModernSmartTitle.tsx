@@ -11,6 +11,7 @@ import {
 } from '@/shared/hooks/useReduceMotion';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useWindowStyles } from '@/shared/hooks/useWindowStyles';
 
 interface ResponsiveSpacing {
   containerPadding: number;
@@ -21,6 +22,16 @@ interface ResponsiveSpacing {
   separatorMaxWidth: number;
   stackSpacing: number;
 }
+
+const createResponsiveSpacing = (): ResponsiveSpacing => ({
+  containerPadding: scale(10),
+  separatorTopMargin: scale(20),
+  separatorBottomMargin: scale(10),
+  logoSize: 53,
+  separatorLineWidth: scale(104),
+  separatorMaxWidth: scale(320),
+  stackSpacing: scale(4),
+});
 
 const createModernTitleStyles = (spacing: ResponsiveSpacing) =>
   StyleSheet.create({
@@ -72,18 +83,7 @@ export const ModernSmartTitle: React.FC<ModernSmartTitleProps> = React.memo(
   ({ titleAnim, titleOpacity, titleTransform }) => {
     const { t } = useTranslation();
     const colors = useThemeColors();
-    const responsiveSpacing = useMemo<ResponsiveSpacing>(
-      () => ({
-        containerPadding: scale(10),
-        separatorTopMargin: scale(20),
-        separatorBottomMargin: scale(10),
-        logoSize: 53,
-        separatorLineWidth: scale(104),
-        separatorMaxWidth: scale(320),
-        stackSpacing: scale(4),
-      }),
-      []
-    );
+    const responsiveSpacing = useWindowStyles(createResponsiveSpacing);
 
     const styles = useMemo(
       () => createModernTitleStyles(responsiveSpacing),

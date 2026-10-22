@@ -73,10 +73,8 @@ const TabBarButtonComponent: React.FC<TabBarButtonProps> = ({
   }, [routeName, isFocused, colors]);
 
   const iconName = useMemo(() => ICON_MAP[routeName] ?? 'circle', [routeName]);
-  const iconSize = useMemo(
-    () => (isCentral ? scale(32) : scale(26)),
-    [isCentral]
-  );
+  // A ogni disegno: `scale()` legge la finestra di adesso (C54).
+  const iconSize = isCentral ? scale(32) : scale(26);
 
   return (
     <PerfectContainer style={styles.buttonContainer}>

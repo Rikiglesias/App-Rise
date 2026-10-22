@@ -39,7 +39,11 @@ const ContributeTabScreenComponent: React.FC<ContributeTabScreenProps> = ({
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['left', 'right']}
+      testID="contribute-tab-screen"
+    >
       <PlatformScrollView contentContainerStyle={styles.scrollContent}>
         <PerfectContainer style={isTablet ? styles.tabletContainer : {}}>
           <ContributeHeader animations={animations} />

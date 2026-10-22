@@ -20,17 +20,15 @@ import { buildProblemMailto } from '@/shared/utils/buildProblemMailto';
 import { useProblemReport } from '@/shared/utils/collectProblemReport';
 import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 import { isSuccess } from '@/shared/utils/result';
-import { getAdaptiveColors } from '@/shared/theme/adaptiveColors';
+import { useAdaptiveColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useOptionalUniversalTheme } from '@/shared/theme/UniversalTheme';
 
 export const SegnalaProblema: React.FC = () => {
   const { t } = useTranslation();
   const isDark = useOptionalUniversalTheme()?.isDark ?? false;
-  const styles = useMemo(
-    () => createStyles(getAdaptiveColors(isDark)),
-    [isDark]
-  );
+  const colors = useAdaptiveColors(isDark);
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { openLink } = useLinkHandler();
   const readReport = useProblemReport();
   const inFlight = useRef(false);

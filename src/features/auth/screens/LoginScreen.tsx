@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { StyleSheet, type TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,13 +12,14 @@ import { PerfectText } from '@/components/ui';
 import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useWindowStyles } from '@/shared/hooks/useWindowStyles';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
 import { validateEmail, validateRequired } from '@/shared/auth/validation';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const LoginScreen: React.FC = () => {
-  const styles = useMemo(() => createStyles(), []);
+  const styles = useWindowStyles(createStyles);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { signIn } = useAuth();

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -20,6 +20,7 @@ import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { RISE_URLS } from '@/shared/constants/urls';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { useWindowStyles } from '@/shared/hooks/useWindowStyles';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
@@ -41,7 +42,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  */
 export const CompleteProfileScreen: React.FC = () => {
   useRequireAuth();
-  const styles = useMemo(() => createStyles(), []);
+  const styles = useWindowStyles(createStyles);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { profile, profileLoaded, profileError, refreshProfile, signOut } =

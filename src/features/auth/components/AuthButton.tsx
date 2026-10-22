@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -6,6 +6,7 @@ import { PlatformTouchable, PerfectText } from '@/components/ui';
 import { Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useWindowStyles } from '@/shared/hooks/useWindowStyles';
 import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 interface AuthButtonProps {
@@ -23,7 +24,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
   disabled = false,
   variant = 'primary',
 }) => {
-  const styles = useMemo(() => createStyles(), []);
+  const styles = useWindowStyles(createStyles);
 
   if (
     variant === 'link' ||

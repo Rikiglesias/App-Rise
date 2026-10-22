@@ -21,10 +21,8 @@ import { scale } from '@/shared/constants/perfectScale';
 import { scaleText } from '@/shared/utils/textScale';
 import { PerfectSpacing } from '@/shared/constants/perfectSpacing';
 import { useOtaAnimations } from '@/shared/useOtaAnimations';
-import {
-  getAdaptiveColors,
-  type ThemeColors,
-} from '@/shared/theme/adaptiveColors';
+import { useAdaptiveColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 interface OTAUpdateScreenProps {
   isChecking: boolean;
@@ -39,7 +37,7 @@ export const OTAUpdateScreen: React.FC<OTAUpdateScreenProps> = ({
   progress = 0,
 }) => {
   const { isDark } = useUniversalTheme();
-  const colors = useMemo(() => getAdaptiveColors(isDark), [isDark]);
+  const colors = useAdaptiveColors(isDark);
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   // Safe progress clamping
