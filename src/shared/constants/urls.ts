@@ -46,16 +46,13 @@ export const RISE_URLS = {
 // SOCIAL MEDIA LINKS
 // ===================================================================
 
+// Gli stessi account collegati dal sito ufficiale italy.riseagainsthunger.org
+// (riletto il 22/10/2026; il canale YouTube si intitola «Rise Against Hunger Italia ETS»).
 export const SOCIAL_URLS = {
-  facebook: 'https://www.facebook.com/RAHItalia/',
-  instagram: 'https://www.instagram.com/riseagainsthunger_italia/',
-  youtube: 'https://www.youtube.com/@RiseAgainstHungerItalia',
+  facebook: 'https://www.facebook.com/RiseAgainstHungerItalia',
+  instagram: 'https://www.instagram.com/riseagainsthungeritalia/',
+  youtube: 'https://www.youtube.com/@riseagainsthungeritaliaonl3843',
   linkedin: 'https://www.linkedin.com/company/rise-against-hunger-italia/',
-
-  // Alternative formats (senza www)
-  instagramShort: 'https://instagram.com/riseagainsthungeritalia',
-  facebookShort: 'https://facebook.com/RiseAgainstHungerItalia',
-  linkedinShort: 'https://linkedin.com/company/rise-against-hunger-italia',
 } as const;
 
 // ===================================================================

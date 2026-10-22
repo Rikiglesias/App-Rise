@@ -545,6 +545,8 @@ export default {
     instagramDescription: 'Photos and stories from missions',
     facebookName: 'Facebook',
     facebookDescription: 'Community and local events',
+    youtubeName: 'YouTube',
+    youtubeDescription: 'Videos of our activities',
     linkedinName: 'LinkedIn',
     linkedinDescription: 'Opportunities and partnerships',
   },

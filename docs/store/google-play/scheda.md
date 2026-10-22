@@ -40,7 +40,7 @@ Partecipare
 Il calendario degli eventi di confezionamento, i progetti da sostenere e lo shop solidale sono sulle pagine di Let's Donation, nostro partner. L'app ti porta alla pagina giusta e la prima volta ti avvisa che stai uscendo. Let's Donation ha un proprio account, separato da quello dell'app.
 
 Conoscerci
-Chi siamo, la pagina del nostro sito sulla tracciabilità degli aiuti e i nostri canali: sito, Instagram, Facebook e LinkedIn.
+Chi siamo, la pagina del nostro sito sulla tracciabilità degli aiuti e i nostri canali: sito, Instagram, Facebook, YouTube e LinkedIn.
 
 Il tuo profilo
 Puoi usare l'app anche senza registrarti. Con un account (email e password) gestisci il tuo profilo, esporti i tuoi dati ed elimini l'account direttamente dall'app.
@@ -76,7 +76,7 @@ Get involved
 The meal-packing event calendar, projects to support and the charity shop are on the pages of our partner Let's Donation. The app takes you to the right page and, the first time, tells you that you are leaving the app. Let's Donation has its own account, separate from the app's.
 
 Get to know us
-Who we are, the page on our website about how aid is tracked, and our channels: website, Instagram, Facebook and LinkedIn.
+Who we are, the page on our website about how aid is tracked, and our channels: website, Instagram, Facebook, YouTube and LinkedIn.
 
 Your profile
 You can use the app without signing up. With an account (email and password) you manage your profile, export your data and delete your account directly in the app.

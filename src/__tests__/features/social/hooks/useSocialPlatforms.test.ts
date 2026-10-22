@@ -72,7 +72,7 @@ describe('useSocialPlatforms', () => {
   it('returns social platforms data correctly', () => {
     const { result } = renderHook(() => useSocialPlatforms());
 
-    expect(result.current.socialPlatforms).toHaveLength(4);
+    expect(result.current.socialPlatforms).toHaveLength(5);
   });
 
   it('contains all expected social platforms', () => {
@@ -83,8 +83,9 @@ describe('useSocialPlatforms', () => {
     expect(platformIds).toContain('website');
     expect(platformIds).toContain('instagram');
     expect(platformIds).toContain('facebook');
+    expect(platformIds).toContain('youtube');
     expect(platformIds).toContain('linkedin');
-    expect(platforms).toHaveLength(4);
+    expect(platforms).toHaveLength(5);
   });
 
   it('each platform has required properties', () => {

@@ -4,11 +4,16 @@ import { Colors } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { logWarn } from '@/shared/utils/logger';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
+import { SOCIAL_URLS } from '@/shared/constants/urls';
 
 // Raster fallback still available if needed
 // import instagramIcon from '@assets/icons/social/instagram.png';
 // import linkedinIcon from '@assets/icons/social/linkedin.png';
 // import facebookIcon from '@assets/icons/social/facebook.png';
+
+/** «@nome» preso dall'indirizzo che il tocco apre: il nome mostrato non può divergere dal link. */
+const handleFromUrl = (url: string): string =>
+  `@${url.split('/').filter(Boolean).pop() ?? ''}`;
 
 export const useSocialPlatforms = () => {
   const { t } = useTranslation();
@@ -16,6 +21,7 @@ export const useSocialPlatforms = () => {
     openWebsiteLink,
     openInstagramLink,
     openFacebookLink,
+    openYouTubeLink,
     openLinkedInLink,
   } = useLinkHandler();
 
@@ -46,7 +52,7 @@ export const useSocialPlatforms = () => {
     {
       id: 'instagram',
       name: t('social.instagramName'),
-      handle: '@riseagainsthungeritalia',
+      handle: handleFromUrl(SOCIAL_URLS.instagram),
       description: t('social.instagramDescription'),
       // Use crisp vector icon instead of raster PNG
       iconName: 'instagram',
@@ -56,12 +62,22 @@ export const useSocialPlatforms = () => {
     {
       id: 'facebook',
       name: t('social.facebookName'),
-      handle: '@RiseAgainstHungerItalia',
+      handle: handleFromUrl(SOCIAL_URLS.facebook),
       description: t('social.facebookDescription'),
       // Use crisp vector icon instead of raster PNG
       iconName: 'facebook',
       gradient: Colors.gradients.facebook,
       onPress: wrap(openFacebookLink),
+    },
+    {
+      id: 'youtube',
+      name: t('social.youtubeName'),
+      // Titolo del canale a SOCIAL_URLS.youtube: l'handle generato da YouTube non è leggibile.
+      handle: 'Rise Against Hunger Italia ETS',
+      description: t('social.youtubeDescription'),
+      iconName: 'youtube',
+      gradient: Colors.gradients.youtube,
+      onPress: wrap(openYouTubeLink),
     },
     {
       id: 'linkedin',

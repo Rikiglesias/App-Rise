@@ -113,6 +113,7 @@ export const Colors = {
     website: ['#6B7280', '#9CA3AF', '#D1D5DB'] as const, // Gray gradient
     instagram: ['#E1306C', '#F56040', '#FCAF45'] as const, // Instagram gradient
     facebook: ['#1877F2', '#42A5F5', '#64B5F6'] as const, // Facebook blue gradient
+    youtube: ['#FF0000', '#FF4E45', '#FF8A80'] as const, // YouTube red gradient
     linkedin: ['#0077B5', '#00A0DC', '#40E0D0'] as const, // LinkedIn blue gradient
   },
 
