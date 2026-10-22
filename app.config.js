@@ -225,6 +225,8 @@ export default {
       'expo-updates',
       // Build per gli store senza expo-dev-client (motivo nel file).
       './plugins/escludi-dev-client.js',
+      // Pieghevole aperto o finestra ridimensionata senza riavvio (motivo nel file).
+      './plugins/finestra-senza-riavvio.js',
       'expo-font',
       'expo-localization',
       // SDK 54: lo splash si configura QUI (config plugin), non più via la chiave

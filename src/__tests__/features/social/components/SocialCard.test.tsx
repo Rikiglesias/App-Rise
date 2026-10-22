@@ -42,6 +42,13 @@ jest.mock('react-native', () => ({
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
   },
+  // PerfectContainer e PlatformIcon seguono la finestra (C54).
+  useWindowDimensions: jest.fn(() => ({
+    width: 390,
+    height: 844,
+    scale: 3,
+    fontScale: 1,
+  })),
   View: 'View',
   Image: 'Image',
   Appearance: {
