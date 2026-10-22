@@ -34,7 +34,7 @@ Testi della scheda: `scheda.md`. Grafica (icona 512, grafica in evidenza, screen
 
 `https://italy.riseagainsthunger.org/privacy-policy/` — lo stesso indirizzo che l'app apre
 (`src/shared/constants/urls.ts:25`). La pagina deve mostrare il testo di `privacy-policy.html` aggiornato
-(la pubblica la sede USA dopo il sì della consulente: «Chi fa cosa» → Sede USA, Consulente).
+(la pubblica la sede USA dopo il sì dell'avvocato dell'associazione: «Chi fa cosa» → Sede USA, Consulente).
 
 ## Accesso all'app
 
@@ -195,7 +195,7 @@ fatturazione di Google Play **non** si deve usare).
 
 | Cosa fa l'app | Regola | Esito |
 | --- | --- | --- |
-| Pulsante «Dona» → pagina Donorbox nel browser | 3.2: «tax exempt donations» | Ammesso, a condizione che le donazioni all'associazione siano esenti: lo conferma Alberto («Chi fa cosa» → Alberto) |
+| Pulsante «Dona» → pagina Donorbox nel browser | 3.2: «tax exempt donations» | Ammesso: le donazioni vanno a un ente del Terzo settore iscritto al RUNTS (repertorio 172977, dal 28/05/2026). La regola non chiede documenti; se un revisore chiede una prova, si manda la scheda del registro |
 | Shop solidale di Let's Donation (prodotti fisici) | 3.1: «purchase or rental of physical goods» | Ammesso |
 | Eventi di confezionamento su Let's Donation | 3.1: «purchase of physical services» | Ammesso |
 | Gift card di Let's Donation | Non trattate esplicitamente | Decisione aperta di Riccardo: tenere il pulsante o toglierlo prima del lancio («Chi fa cosa» → Riccardo, decisioni aperte) |

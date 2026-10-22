@@ -105,6 +105,10 @@ controlla docs/store/google-play/web/delete-account.html "<URL-DELETE-ACCOUNT>"
 Tre righe `OK` ⇒ si invia. Una riga `DIVERSA` ⇒ la pagina pubblicata è vecchia: non inviare, scrivere alla sede USA.
 L'URL della pagina di cancellazione va anche in Sicurezza dei dati (`play-console-risposte.md`).
 
+Prima dell'invio si controllano a mano anche due cose: la PEC a OpenClick è partita e la sua ricevuta di consegna è
+salvata (serve per un eventuale ricorso, § 13); nella Panoramica di Play Console non c'è più l'avviso «Nome del
+pacchetto non registrato» (verifica dello sviluppatore Android, APK di prova caricato il 22/10).
+
 ## 9. Aggiornamenti OTA
 
 Gli aggiornamenti del solo JavaScript arrivano senza passare dallo store, ma solo alle installazioni con la stessa
@@ -161,21 +165,29 @@ In più, prima dell'invio in revisione, il modulo **«Provide advance notice to 
 (support.google.com/googleplay/android-developer/contact/adv_note): Google accetta preavvisi solo nei casi che elenca,
 fra cui lo stato di ente benefico e il permesso d'uso di proprietà intellettuale di terzi, e avverte che fuori da quei
 casi può non rispondere. Qui vale come ente benefico: stesso testo della nota sopra, con la prova dello stato non profit
-che Alberto indica per la risposta 3.2 sulle donazioni («Chi fa cosa»).
+allegata: la scheda dell'associazione nel RUNTS (Registro unico nazionale del Terzo settore, repertorio 172977, iscritta
+il 28/05/2026).
 
 Se Google contesta un'imitazione del marchio o un doppione: ricorso dalla notifica di Play Console allegando la PEC
 inviata a OpenClick («Chi fa cosa» → Alberto).
 
 ## 14. Avviso agli utenti della 1.0
 
-Si manda dopo che la nuova è in produzione e prima del ritiro della vecchia. Testo per social, newsletter e sito:
+Si manda dopo che la nuova è in produzione e prima del ritiro della vecchia, e si ripete una settimana prima della data
+di ritiro. Testo per social, newsletter e sito:
 
-> **La nostra app è cambiata.** Su Google Play trovi la nuova app «Rise Against Hunger Italia»: <LINK-SCHEDA-PLAY>.
-> La vecchia app smetterà di funzionare il <DATA-RITIRO>. Tieni solo la nuova e disinstalla la vecchia.
-> Per l'area personale serve un account nuovo: i dati della vecchia app non passano alla nuova.
+> **La nostra app è cambiata.** Se usi l'app su un telefono Android, su Google Play trovi la nuova app «Rise Against
+> Hunger Italia»: <LINK-SCHEDA-PLAY>. Per qualche settimana su Google Play ne troverai due con lo stesso nome: quella
+> giusta è al link. Dal <DATA-RITIRO> la vecchia app verrà tolta da Google Play e smetterà di funzionare: una volta
+> installata la nuova, puoi disinstallarla.
 
-Il link della scheda è `https://play.google.com/store/apps/details?id=org.riseagainsthunger.italia`. La data di ritiro
-è quella comunicata a OpenClick via PEC (almeno 7 giorni dopo l'avviso).
+Su iPhone non cambia niente: l'app è la stessa, quindi il testo parla solo di Android. La vecchia app non aveva un
+account per gli utenti: non c'è niente da trasferire, e l'avviso non deve dire il contrario.
+
+Il link della scheda è `https://play.google.com/store/apps/details?id=org.riseagainsthunger.italia`. La
+<DATA-RITIRO> cade almeno 7 giorni dopo la seconda PEC a OpenClick (quella che comunica la data, punto 2 della prima
+PEC). Conviene fissarla almeno due settimane dopo il primo avviso, così fra il primo e la ripetizione passa una
+settimana.
 
 ## Chi fa cosa
 
@@ -183,14 +195,16 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
 
 ### Simone (proprietario dell'account Play)
 
-1. **D-U-N-S**: fotografare in Play Console «Account sviluppatore → Informazioni personali → Dati dell'organizzazione»
-   (nome, indirizzo, D-U-N-S) e «Visualizza profilo pagamenti»; mandare le foto a Riccardo. La richiesta di correzione
-   a CRIBIS D&B (partner D&B per l'Italia, `dunsnumber@cribisdnb.com`) la prepara Claude con quei dati. Non modificare
+1. **D-U-N-S** — fatto il 22/10: D&B ha chiuso la correzione (caso 34943597, «Rise Against Hunger Italia ETS», via
+   dei Fornaciai 17, Bologna) e Simone ha confermato «Rivedi aggiornamento»; la verifica dell'organizzazione è chiusa.
+   Se Play Console chiedesse di nuovo i dati dell'organizzazione: fotografare «Account sviluppatore → Informazioni
+   personali → Dati dell'organizzazione» e «Visualizza profilo pagamenti» e mandare le foto a Riccardo. Non modificare
    nome, indirizzo o D-U-N-S direttamente in Play Console.
 2. **Verifica del sito**: in «Dettagli account» il sito `https://italy.riseagainsthunger.org/` deve risultare
-   verificato (la sede USA ha messo i tag). Se no: **Invia richiesta di verifica** dalla stessa pagina.
-3. **Telefoni**: in «Dettagli account» verificare il numero di telefono di contatto con il codice via SMS.
-4. **Tipo di account**: in «Dettagli account» deve esserci «Organizzazione». Se c'è «Personale» ⇒ ramo del § 7.
+   verificato (la sede USA ha messo i tag; le mail di Google dell'08/10 e del 12/10 non lo segnalavano più). Se no:
+   **Invia richiesta di verifica** dalla stessa pagina.
+3. **Telefoni** — fatto: il numero di telefono di contatto è verificato con il codice via SMS (confermato il 22/10).
+4. **Tipo di account** — fatto: «Organizzazione» (letto il 01/10). Se un giorno comparisse «Personale» ⇒ ramo del § 7.
 5. **Service account** (un utente automatico che carica versioni dell'app senza password; serve solo per l'invio con
    `eas submit`, senza si carica a mano, § 2). In «Utenti e autorizzazioni» ce n'è già uno. **Prima di ogni altra
    cosa** si stabilisce di chi è il progetto Google Cloud che lo contiene («Chi fa cosa» → Riccardo, punto 8): chi ha
@@ -200,18 +214,26 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
    - Proprietario non riconosciuto: **rimuovere** il service account da «Utenti e autorizzazioni» e caricare a mano.
    La chiave si carica solo su expo.dev → Credentials → Android → `org.riseagainsthunger.italia` → Service
    credentials. Mai mandarla per mail, in chat o nel repository.
+6. **Posta di Creareunapp**: controllare, anche nello spam, se Creareunapp o OpenClick hanno risposto alla mail del
+   24/09 e girare a Riccardo tutto ciò che arriva da loro.
 
 ### Alberto (presidente, legale rappresentante)
 
-1. **PEC a OpenClick** dalla PEC dell'associazione: testo pronto nella mail di Riccardo al team (versione del 12/10,
-   «dismissione concordata»), con due campi tra [ ] da completare. Si manda quando Riccardo dà il via.
-2. **Status fiscale** per la regola 3.2 di Google («tax exempt donations»): confermare a Riccardo che le donazioni
-   a Rise Against Hunger Italia ETS sono esenti e con quale qualifica.
-3. **Dati dell'informativa**: PEC e sede legale da scrivere in `privacy-policy.html`.
+1. **PEC a OpenClick** dalla PEC dell'associazione, con Riccardo in copia: testo in fondo alla mail di Riccardo al team
+   del 22/10 («Nuova app Android e chiusura con Creareunapp»). Si manda quando Riccardo dà il via, cioè dopo la risposta
+   di Simone (punto 6) e dopo il controllo dell'indirizzo PEC di OpenClick sul registro INI-PEC.
+2. **Seconda PEC** a OpenClick con la data di ritiro, almeno 7 giorni prima (punto 2 della prima PEC): si manda dopo il
+   primo avviso agli utenti (§ 14); data e testo li prepara Riccardo.
+3. **Dati dell'informativa**: la sede legale è quella del RUNTS (via dei Fornaciai 17, Bologna); quale PEC scrivere in
+   `privacy-policy.html` (quella registrata al RUNTS o un'altra dell'ente) lo conferma l'associazione.
+
+Lo status non profit non va più chiesto: l'associazione è iscritta al RUNTS (repertorio 172977, dal 28/05/2026) e la
+scheda del registro è la prova da allegare al preavviso del § 13.
 
 ### Riccardo
 
-1. **Mandare la mail al team** (bozza in Gmail del 13/10, destinatari Alberto, Simone, Angelica).
+1. **Mandare la mail al team** (bozza in Gmail aggiornata il 22/10, «Nuova app Android e chiusura con Creareunapp»;
+   destinatari Alberto, Simone, Angelica).
 2. **Build senza upload** (facoltativo, sblocca le build quando la rete è lenta): expo.dev → impostazioni utente →
    collegare l'account GitHub che vede il repository. Poi Claude lancia la build da GitHub.
 3. **SMTP**: Supabase → Authentication → Emails → SMTP Settings con Resend; DKIM, SPF e DMARC sul dominio. Senza,
@@ -243,17 +265,21 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
    - Kosovo, Russia, Bielorussia: tenerli fra i paesi se Play Console li offre, o toglierli.
    - Codice di provenienza: per quanto tempo conservarlo (oggi senza scadenza: serve una migration).
    - Sentry: quando riaccenderlo (dopo il lancio, con progetto UE e informativa aggiornata).
+   - Informativa: chi la manda all'avvocato e chi chiede alla sede USA di pubblicarla. È il passo che decide i tempi:
+     senza le pagine pubblicate il gate del § 8 non passa.
 8. **Service account dei caricamenti**: su questo PC c'è il file di una sua chiave (creato l'08/11/2025), quindi il
    progetto Google Cloud che lo contiene è raggiungibile dal tuo account Google. In Google Cloud Console, con il tuo
    account: aprire quel progetto → IAM e amministrazione → **IAM** (chi sono i proprietari) → **Service account** →
    **Chiavi** (quante chiavi attive ci sono). Tenere solo le persone dell'associazione e solo la chiave che si usa;
    le altre si **eliminano** da lì. Il file sul PC: caricarlo su expo.dev (vedi Simone, punto 5) e poi cancellarlo,
    oppure eliminare la chiave in Google Cloud se l'invio automatico non serve.
+9. **Dopo il ritiro della vecchia app**: controllare che la sua pagina su Google Play non offra più «Installa» (o dia
+   404) e che OpenClick abbia confermato per iscritto la cancellazione dei dati (punto 4 della PEC).
 
 ### Sede USA (Rick, Kevin)
 
 Cosa devono fare: pubblicare l'informativa aggiornata su `/privacy-policy/` e le due pagine di cancellazione, poi
-darci gli indirizzi (vanno nel gate del § 8 e in Sicurezza dei dati). Si chiede dopo il sì della consulente
+darci gli indirizzi (vanno nel gate del § 8 e in Sicurezza dei dati). Si chiede dopo il sì dell'avvocato
 sull'informativa.
 
 Se le pagine `web/elimina-account.html` e `web/delete-account.html` sono già state consegnate alla sede USA,
@@ -282,13 +308,16 @@ Con la PEC di Alberto si chiede: tenere pubblicata la vecchia app finché non la
 alla data che comunichiamo via PEC almeno 7 giorni prima, con conferma scritta; non ripubblicarla e non usare più nome,
 logo e contenuti. Il ritiro si chiede solo dopo il lancio della nuova e l'avviso agli utenti (§ 14).
 
-### Consulente
+### Consulente (avvocato dell'associazione)
 
 Validare l'informativa (`privacy-policy.html` e `privacy-policy-en.html`): i punti marcati «da validare» nel testo
 (base giuridica del precompilato verso Donorbox, conservazione del registro dei consensi, tempi di Expo, durata del
-codice di provenienza). Solo dopo il suo sì la sede USA pubblica le pagine.
+codice di provenienza). Solo dopo il suo sì la sede USA pubblica le pagine. Chi gliela manda: decisione aperta di
+Riccardo (punto 7).
 
 ### Comunicazione (Angelica)
 
 Mandare l'avviso del § 14 su social, newsletter e sito quando la nuova app è in produzione. Ripeterlo una settimana
-prima della data di ritiro della vecchia.
+prima della data di ritiro della vecchia. Da guardare insieme a Simone quando la nuova è online: se dal pannello di
+Creareunapp si può mettere un avviso con il link dentro la vecchia app, senza ripubblicarla (aggiungere, mai
+cancellare: la vecchia deve restare su Google Play fino alla data di ritiro).
