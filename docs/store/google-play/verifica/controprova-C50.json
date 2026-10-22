@@ -1,0 +1,21 @@
+{
+  "criterio": "C50",
+  "base": "fbefa98",
+  "titoli": [
+    "contrasto: errore in tema scuro",
+    "contrasto: Dona e aiuta",
+    "contrasto: etichetta della scheda Azioni",
+    "contrasto: segnaposto della data in chiaro",
+    "contrasto: segnaposto della data in scuro"
+  ],
+  "esitiAllaBase": {
+    "contrasto: errore in tema scuro": "assente",
+    "contrasto: Dona e aiuta": "assente",
+    "contrasto: etichetta della scheda Azioni": "assente",
+    "contrasto: segnaposto della data in chiaro": "assente",
+    "contrasto: segnaposto della data in scuro": "assente"
+  },
+  "fileTest": {
+    "src/__tests__/shared/theme/contrasto.test.tsx": "7a4fd4d00fe3747ac2dfbda64ce5283420f779b2dee8d4c3ee8a6674bc354235"
+  }
+}
