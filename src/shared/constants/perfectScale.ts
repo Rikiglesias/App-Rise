@@ -7,102 +7,31 @@
  */
 
 import { Dimensions } from 'react-native';
-import { getDisplayZoomFactor } from '../services/displayZoom';
-import { getExpoExtra } from '../utils/expoExtra';
+import { scaleFactor } from './scaleFactor';
 
-// REFERENCE: iPhone 15 (device di riferimento)
-export const LOGICAL_REFERENCE = {
-  width: 393,
-  height: 852,
-  scale: 2,
-} as const;
-
-// Diagonale di riferimento (iPhone 15): √(393² + 852²) ≈ 938.27px.
-// Costante calcolata UNA volta a livello modulo invece che ad ogni chiamata di
-// scale()/scaleWithDimensions() (primitive invocate in modo pervasivo). Valore identico.
-const REFERENCE_DIAGONAL = Math.sqrt(
-  LOGICAL_REFERENCE.width * LOGICAL_REFERENCE.width +
-    LOGICAL_REFERENCE.height * LOGICAL_REFERENCE.height
-);
+export { LOGICAL_REFERENCE } from './scaleFactor';
 
 /**
- * TABLET SCALING CAP
- * Previene scaling eccessivo su iPad mantenendo proporzionalità su phone.
+ * SCALE WITH CUSTOM DIMENSIONS - Per hook e casi speciali
  *
- * PROBLEMA: Scaling basato su diagonale causa ingigantimento su tablet:
- * - iPad Mini: 1.36x (troppo grande)
- * - iPad Pro 12.9": 1.82x (MOLTO troppo grande)
+ * Usa questa funzione quando hai già le dimensioni (es. da useResponsiveDimensions)
+ * invece di leggerle nuovamente da Dimensions.get().
  *
- * SOLUZIONE: Dopo threshold 1.1x, applica cap progressivo:
- * - iPhone: 0.83x-1.07x → nessun cap (comportamento identico)
- * - iPad Mini: 1.36x → ~1.18x (ridotto)
- * - iPad Pro: 1.82x → ~1.30x (ridotto)
+ * QUANDO USARE:
+ * - In componenti con useResponsiveDimensions() hook
+ * - Quando vuoi evitare multiple letture di Dimensions
+ * - Per testing con dimensioni mockate
  *
- * MATEMATICA: Interpolazione logaritmica per transizione smooth
+ * @param value - Valore da scalare
+ * @param width - Larghezza schermo
+ * @param height - Altezza schermo
+ * @returns Valore scalato
  */
-const TABLET_SCALING_CONFIG = {
-  /** Threshold oltre il quale inizia il cap (nessun phone lo supera) */
-  threshold: 1.1,
-  /** Cap massimo per tablet più grandi */
-  maxScale: 1.3,
-  /** Fattore di easing per transizione smooth (più alto = più aggressivo) */
-  easingFactor: 0.3,
-} as const;
-
-/**
- * Applica cap progressivo allo scaling factor per tablet.
- * Phone rimangono inalterati (< threshold).
- *
- * Formula: threshold + (raw - threshold) * easingFactor
- * Questo crea una curva che rallenta la crescita dopo il threshold.
- *
- * @param rawScaleFactor - Fattore di scaling grezzo dalla diagonale
- * @returns Fattore con cap applicato se necessario
- */
-const applyTabletScalingCap = (rawScaleFactor: number): number => {
-  const { threshold, maxScale, easingFactor } = TABLET_SCALING_CONFIG;
-
-  // Phone e device normali: nessun cap
-  if (rawScaleFactor <= threshold) {
-    return rawScaleFactor;
-  }
-
-  // Tablet: applica cap progressivo con easing
-  const excess = rawScaleFactor - threshold;
-  const cappedExcess = excess * easingFactor;
-  const result = threshold + cappedExcess;
-
-  // Assicura che non superi mai il maxScale
-  return Math.min(result, maxScale);
-};
-
-/**
- * Feature flag: abilita normalizzazione Display Zoom.
- * Usa env EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION === 'true'.
- * Default: disabilitato per rollout sicuro.
- */
-const shouldNormalizeDisplayZoom = (): boolean => {
-  try {
-    const extra = getExpoExtra();
-    const raw =
-      extra?.['displayZoomNormalization'] ??
-      extra?.features?.['displayZoomNormalization'];
-    if (raw !== undefined) {
-      return raw === true || String(raw).toLowerCase() === 'true';
-    }
-    const env = (
-      globalThis as unknown as {
-        process?: { env?: Record<string, string | undefined> };
-      }
-    ).process?.env;
-    const rawEnv =
-      env?.EXPO_PUBLIC_ENABLE_DISPLAY_ZOOM_NORMALIZATION ??
-      env?.ENABLE_DISPLAY_ZOOM_NORMALIZATION;
-    return String(rawEnv).toLowerCase() === 'true';
-  } catch {
-    return false;
-  }
-};
+export const scaleWithDimensions = (
+  value: number,
+  width: number,
+  height: number
+): number => value * scaleFactor(width, height);
 
 /**
  * SCALE - Scaling basato su DIAGONALE dello schermo
@@ -131,80 +60,11 @@ export const scale = (value: number): number => {
   try {
     // eslint-disable-next-line no-restricted-properties
     const { width, height } = Dimensions.get('window');
-
-    // Normalizza sempre a portrait orientation
-    const baseWidth = Math.min(width, height);
-    const baseHeight = Math.max(width, height);
-
-    // Opzionale: normalizzazione Display Zoom (feature flag via env)
-    const normalize = shouldNormalizeDisplayZoom();
-    const zoomFactor = normalize ? getDisplayZoomFactor() : 1.0;
-    const normWidth = baseWidth * zoomFactor;
-    const normHeight = baseHeight * zoomFactor;
-
-    // Calcola diagonale usando Teorema di Pitagora
-    // Questo rappresenta la "grandezza percepita" dello schermo
-    const deviceDiagonal = Math.sqrt(
-      normWidth * normWidth + normHeight * normHeight
-    );
-
-    if (deviceDiagonal > 0) {
-      const rawScaleFactor = deviceDiagonal / REFERENCE_DIAGONAL;
-      const cappedScaleFactor = applyTabletScalingCap(rawScaleFactor);
-      return value * cappedScaleFactor;
-    }
+    return scaleWithDimensions(value, width, height);
   } catch {
     // Fallback se Dimensions non disponibile
+    return value;
   }
-  return value;
-};
-
-/**
- * SCALE WITH CUSTOM DIMENSIONS - Per hook e casi speciali
- *
- * Usa questa funzione quando hai già le dimensioni (es. da useResponsiveDimensions)
- * invece di leggerle nuovamente da Dimensions.get().
- *
- * QUANDO USARE:
- * - In componenti con useResponsiveDimensions() hook
- * - Quando vuoi evitare multiple letture di Dimensions
- * - Per testing con dimensioni mockate
- *
- * @param value - Valore da scalare
- * @param width - Larghezza schermo
- * @param height - Altezza schermo
- * @returns Valore scalato
- */
-export const scaleWithDimensions = (
-  value: number,
-  width: number,
-  height: number
-): number => {
-  try {
-    // Normalizza a portrait
-    const baseWidth = Math.min(width, height);
-    const baseHeight = Math.max(width, height);
-
-    // Opzionale: normalizzazione Display Zoom (feature flag via env)
-    const normalize = shouldNormalizeDisplayZoom();
-    const zoomFactor = normalize ? getDisplayZoomFactor() : 1.0;
-    const normWidth = baseWidth * zoomFactor;
-    const normHeight = baseHeight * zoomFactor;
-
-    // Calcola diagonale
-    const deviceDiagonal = Math.sqrt(
-      normWidth * normWidth + normHeight * normHeight
-    );
-
-    if (deviceDiagonal > 0) {
-      const rawScaleFactor = deviceDiagonal / REFERENCE_DIAGONAL;
-      const cappedScaleFactor = applyTabletScalingCap(rawScaleFactor);
-      return value * cappedScaleFactor;
-    }
-  } catch {
-    // Fallback
-  }
-  return value;
 };
 
 /**
@@ -242,14 +102,6 @@ export const getDeviceType = (): 'small' | 'normal' | 'large' => {
   const { width, height } = Dimensions.get('window');
   return classifyDeviceType(Math.min(width, height));
 };
-
-// Export statici per uso diretto
-// ⚠️ DEPRECATO: Queste costanti sono calcolate 1 SOLA VOLTA all'avvio app
-// NON si aggiornano con rotazione o resize!
-// Usa getDeviceType() dinamico se hai bisogno di logica condizionale aggiornata
-export const DEVICE_TYPE = getDeviceType();
-export const IS_SMALL_DEVICE = DEVICE_TYPE === 'small';
-export const IS_LARGE_DEVICE = DEVICE_TYPE === 'large';
 
 /**
  * SCALE TOUCH - Per touch targets accessibili
