@@ -3,7 +3,7 @@
  * ≥ 600 dp. Senza `smallestScreenSize` in `configChanges`, aprire un pieghevole o ridimensionare la
  * finestra ricrea l'attività e l'app riparte dalla Home (AAB 23baf998: `configChanges=0x27b4`, senza).
  */
-import appConfig from '../../../../app.config';
+import { configApp } from '../../helpers/configApp';
 
 const plugin = require('../../../../plugins/finestra-senza-riavvio') as {
   (config: Record<string, unknown>): {
@@ -66,7 +66,7 @@ it("finestra senza riavvio: il plugin scrive l'attività principale", async () =
 });
 
 it('finestra senza riavvio: il plugin è nella configurazione', () => {
-  expect(appConfig.expo.plugins).toContain(
+  expect(configApp().expo.plugins).toContain(
     './plugins/finestra-senza-riavvio.js'
   );
 });

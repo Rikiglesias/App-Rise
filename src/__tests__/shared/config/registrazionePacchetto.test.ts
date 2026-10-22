@@ -7,7 +7,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-import appConfig from '../../../../app.config';
+import { configApp } from '../../helpers/configApp';
 
 type ModConfig = {
   modRequest: { platformProjectRoot: string };
@@ -48,7 +48,7 @@ it('registrazione pacchetto: il plugin scrive lo snippet negli asset', async () 
 });
 
 it('registrazione pacchetto: il plugin è nella configurazione', () => {
-  expect(appConfig.expo.plugins).toContain(
+  expect(configApp().expo.plugins).toContain(
     './plugins/registrazione-pacchetto.js'
   );
 });
