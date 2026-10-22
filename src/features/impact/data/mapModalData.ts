@@ -100,6 +100,3 @@ export const getModalData = (
     ),
   };
 };
-
-// Re-export formatter da shared/utils per compatibilità
-export { formatStat } from '@/shared/utils/numberFormat';

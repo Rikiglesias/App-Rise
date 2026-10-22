@@ -11,7 +11,7 @@ import {
 } from '../ui';
 
 import { createStyles } from './MapLocationModalStyles';
-import { formatStat } from '@/shared/utils/numberFormat';
+import { formatNumber } from '@/shared/utils/numberFormat';
 import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -37,7 +37,7 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
   data,
   onClose,
 }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
@@ -129,13 +129,15 @@ const MapLocationModal: React.FC<MapLocationModalProps> = ({
             <View style={styles.statGrid}>
               {statCells.map(s => (
                 <View key={s.label} style={styles.statCell}>
+                  {/* Numero intero nella lingua dell'app: `fit` lo restringe se non entra, mai tagliato. */}
                   <PerfectText
                     size={22}
                     lines={1}
+                    variant="fit"
                     fontWeight="900"
                     style={styles.statValue}
                   >
-                    {formatStat(s.value)}
+                    {formatNumber(s.value, locale)}
                   </PerfectText>
                   <PerfectText
                     size={13}
