@@ -26,7 +26,7 @@ Scopri il nostro impatto contro la fame, dona e trova eventi di volontariato.
 
 ### Descrizione completa
 
-Rise Against Hunger Italia ETS lavora per eliminare la fame nel mondo con il confezionamento e la distribuzione di pasti, grazie all'aiuto dei volontari. Questa è l'app ufficiale dell'associazione.
+Rise Against Hunger Italia lavora per eliminare la fame nel mondo con il confezionamento e la distribuzione di pasti, grazie all'aiuto dei volontari. Questa è l'app ufficiale dell'associazione.
 
 Cosa puoi fare con l'app:
 
@@ -62,7 +62,7 @@ See our impact against hunger, donate and find volunteer meal-packing events.
 
 ### Full description
 
-Rise Against Hunger Italia ETS works to end hunger worldwide by packaging and distributing meals, with the help of volunteers. This is the association's official app.
+Rise Against Hunger Italia works to end hunger worldwide by packaging and distributing meals, with the help of volunteers. This is the association's official app.
 
 What you can do with the app:
 
@@ -85,3 +85,11 @@ The app is available in Italian and English.
 
 Contact: info@riseagainsthunger.it
 Website: italy.riseagainsthunger.org
+
+## Sviluppatore (non è un testo della scheda)
+
+Nome sviluppatore pubblico, nelle impostazioni dell'account sviluppatore di Play Console:
+**Rise Against Hunger Italia ETS**, il nome legale. È lo stesso delle pagine di cancellazione
+(`web/elimina-account.html`, `web/delete-account.html`), che secondo Google devono riportare il nome dell'app o dello sviluppatore come appare
+sulla scheda (answer/13327111). Nei testi qui sopra resta il nome commerciale, senza la sigla: la norma sui metadati
+vieta le parole tutte maiuscole (answer/9898842).
