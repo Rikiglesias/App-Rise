@@ -22,7 +22,10 @@ import {
   PixelRatio,
   useWindowDimensions,
 } from 'react-native';
-import { scale, LOGICAL_REFERENCE } from '../../shared/constants/perfectScale';
+import {
+  scaleWithDimensions,
+  LOGICAL_REFERENCE,
+} from '../../shared/constants/perfectScale';
 import { Typography } from '../../shared/constants/designTokens';
 import { getImmuneTextProps } from '../../shared/utils/SystemImmunity';
 import { LINE_HEIGHT_RATIO, textFontSize } from '../../shared/utils/textScale';
@@ -147,9 +150,17 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     adaptiveThreshold,
     lines,
   ]);
+  // Sulla finestra di adesso, come il carattere: segue pieghevole e rotazione (C54).
   const targetWidth = useMemo(
-    () => (enhancedReferenceWidth ? scale(enhancedReferenceWidth) : undefined),
-    [enhancedReferenceWidth]
+    () =>
+      enhancedReferenceWidth
+        ? scaleWithDimensions(
+            enhancedReferenceWidth,
+            window.width,
+            window.height
+          )
+        : undefined,
+    [enhancedReferenceWidth, window]
   );
 
   // (già calcolati sopra)

@@ -9,7 +9,14 @@
  */
 
 import React from 'react';
-import { Image, ImageProps, View, ImageStyle, ViewStyle } from 'react-native';
+import {
+  Image,
+  ImageProps,
+  View,
+  ImageStyle,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native';
 import { scale } from '../../shared/constants/perfectScale';
 import { getPerfectShadow } from '../../shared/constants/perfectShadow';
 
@@ -99,6 +106,9 @@ export const PerfectImage: React.FC<PerfectImageProps> = ({
   absoluteDimensions = false,
   ...imageProps
 }) => {
+  // Iscritto alla finestra: le misure qui sotto (`scale*`) leggono quella di adesso, anche quando
+  // il genitore è memorizzato e non si ridisegna (C54 del contratto android-play).
+  useWindowDimensions();
   // Risolvi preset o valori custom (runtime)
   const config = preset ? getImagePreset(preset) : null;
 

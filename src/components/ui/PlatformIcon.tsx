@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { scale, scaleClamp } from '@/shared/constants/perfectScale';
 
@@ -34,6 +34,9 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   minSize,
   maxSize,
 }) => {
+  // Iscritto alla finestra: le misure qui sotto (`scale*`) leggono quella di adesso, anche quando
+  // il genitore è memorizzato e non si ridisegna (C54 del contratto android-play).
+  useWindowDimensions();
   // SCALA size usando Perfect Scale con clamp opzionale (px assoluti)
   const scaledSize =
     typeof minSize === 'number' || typeof maxSize === 'number'
