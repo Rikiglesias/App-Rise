@@ -5,7 +5,6 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 
 import { PerfectText, PlatformTouchable } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -148,16 +147,17 @@ const createStyles = (colors: ThemeColors) =>
       justifyContent: 'center',
     },
     fieldError: {
-      borderColor: Colors.semantic.error.main,
+      borderColor: colors.semantic.error.main,
     },
     value: {
       color: colors.neutral[900],
     },
+    // Come il segnaposto degli altri campi (AuthInput): 4,5:1 anche in scuro (C50).
     placeholder: {
-      color: colors.neutral[400],
+      color: colors.neutral[500],
     },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
     // Overlay invisibile esteso ben oltre il campo in ogni direzione: copre la

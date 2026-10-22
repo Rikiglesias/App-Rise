@@ -147,12 +147,12 @@ const ActionCTAButtonsComponent: React.FC = () => {
             <PerfectIcon
               name="hand-heart"
               size={30}
-              color={colors.semantic.success.main}
+              color={colors.semantic.success.text}
             />
             <PerfectText
               size={22}
               lines={2}
-              color={colors.semantic.success.main}
+              color={colors.semantic.success.text}
               textAlign="center"
               style={styles.buttonTitle}
               testID="cta-donate-label"
@@ -167,7 +167,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
                 <PerfectText
                   size={18}
                   lines={1}
-                  color={colors.semantic.success.main}
+                  color={colors.semantic.success.text}
                   textAlign="center"
                   style={styles.buttonSubtext}
                   testID="cta-donate-sub"
@@ -178,7 +178,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
                   name="arrow-right"
                   size={20}
                   {...IconClamps.chevron}
-                  color={colors.semantic.success.main}
+                  color={colors.semantic.success.text}
                 />
               </PerfectContainer>
             </PerfectContainer>

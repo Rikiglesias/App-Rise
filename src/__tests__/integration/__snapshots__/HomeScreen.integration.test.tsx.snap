@@ -696,13 +696,13 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                   }
                 >
                   <Text
-                    color="#10B981"
+                    color="#047857"
                     size={30}
                   >
                     hand-heart
                   </Text>
                   <Text
-                    color="#10B981"
+                    color="#047857"
                     lines={2}
                     size={22}
                     style={
@@ -752,7 +752,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                       }
                     >
                       <Text
-                        color="#10B981"
+                        color="#047857"
                         lines={1}
                         size={18}
                         style={
@@ -766,7 +766,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                         Supporta
                       </Text>
                       <Text
-                        color="#10B981"
+                        color="#047857"
                         maxSize={24}
                         minSize={18}
                         size={20}

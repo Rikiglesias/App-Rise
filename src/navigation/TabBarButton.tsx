@@ -59,7 +59,7 @@ const TabBarButtonComponent: React.FC<TabBarButtonProps> = ({
           backgroundColor: colors.semantic.success.main,
           shadowColor: colors.semantic.success.main,
           iconColor: Colors.accent.white, // icona bianca fissa su cerchio brand
-          labelColor: colors.semantic.success.main,
+          labelColor: colors.semantic.success.text, // da testo: 4,5:1 sulla barra (C50)
         };
       case 'HomeTab':
       default:

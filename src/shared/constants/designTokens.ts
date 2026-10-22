@@ -75,6 +75,7 @@ export const Colors = {
       light: '#D1FAE5',
       main: '#10B981',
       dark: '#065F46',
+      text: '#047857', // come testo: 5,5:1 sul bianco (main 2,5:1)
     },
     warning: {
       light: '#FEF3C7',
@@ -85,6 +86,7 @@ export const Colors = {
       light: '#FEE2E2',
       main: '#DC2626',
       dark: '#B91C1C',
+      text: '#DC2626', // come testo; nel tema scuro lo schiarisce adaptiveColors
     },
     info: {
       light: '#DBEAFE',

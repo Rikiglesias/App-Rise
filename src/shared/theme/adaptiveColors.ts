@@ -5,7 +5,8 @@
  * - in LIGHT ritorna ESATTAMENTE `Colors` (stessa reference) → zero regressione visiva.
  * - in DARK inverte la scala `neutral` per luminosità (sfondi chiari→scuri, testi
  *   scuri→chiari) e ammorbidisce il `glass`; il BRAND (primary/gradients/semantic)
- *   resta invariato (il rosso Rise è leggibile anche su superfici scure).
+ *   resta invariato, tranne i colori `semantic.*.text`, schiariti perché da testo
+ *   arrivino a 4,5:1 sui fondi scuri (C50 del contratto android-play).
  *
  * I valori dark della scala neutral sono allineati a UNIVERSAL_COLORS.dark
  * (primary #0C0C0E, card #2C2C2E, text #F5F5F5) per coerenza con PerfectContainer.
@@ -25,7 +26,7 @@ const DARK_NEUTRAL: typeof Colors.neutral = {
   200: '#2C2C2E', // light #E5E5E5 — card / bordi chiari
   300: '#3A3A3D', // light #D4D4D4
   400: '#52525B', // light #A3A3A3
-  500: '#737373', // light #737373 — mid, invariato
+  500: '#8E8E93', // light #737373 — testo terziario e segnaposto: ≥ 5:1 sui fondi 0-100
   600: '#A1A1AA', // light #525252 — testo secondario
   700: '#D4D4D4', // light #404040 — testo
   800: '#E5E5E5', // light #262626
@@ -50,6 +51,12 @@ const DARK_COLORS: ThemeColors = {
   ...Colors,
   neutral: DARK_NEUTRAL,
   glass: DARK_GLASS,
+  // Da testo sui fondi scuri: errore 6,5:1 su neutral[50] (il rosso pieno 3,7:1), verde 7:1.
+  semantic: {
+    ...Colors.semantic,
+    error: { ...Colors.semantic.error, text: '#F87171' },
+    success: { ...Colors.semantic.success, text: Colors.semantic.success.main },
+  },
 };
 
 /**

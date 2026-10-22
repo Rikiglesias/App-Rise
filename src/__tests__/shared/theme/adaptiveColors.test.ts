@@ -17,8 +17,8 @@ describe('getAdaptiveColors — design tokens dark-aware', () => {
     expect(dark.neutral[0]).toBe('#0C0C0E');
     expect(Colors.neutral[900]).toBe('#171717');
     expect(dark.neutral[900]).toBe('#F5F5F5');
-    // mid-scale resta neutro identico
-    expect(dark.neutral[500]).toBe(Colors.neutral[500]);
+    // Il grigio medio fa da testo terziario e segnaposto: in scuro è più chiaro (C50).
+    expect(dark.neutral[500]).toBe('#8E8E93');
   });
 
   it('dark: brand invariato (il rosso Rise resta su scuro)', () => {
@@ -26,7 +26,17 @@ describe('getAdaptiveColors — design tokens dark-aware', () => {
     expect(dark.primary).toEqual(Colors.primary);
     expect(dark.primary[500]).toBe('#DC2626');
     expect(dark.gradients).toEqual(Colors.gradients);
-    expect(dark.semantic).toEqual(Colors.semantic);
+    expect(dark.semantic.error.main).toBe(Colors.semantic.error.main);
+    expect(dark.semantic.success.main).toBe(Colors.semantic.success.main);
+    expect(dark.semantic.warning).toEqual(Colors.semantic.warning);
+    expect(dark.semantic.info).toEqual(Colors.semantic.info);
+  });
+
+  it('dark: i colori semantici da testo cambiano per stare sul fondo scuro', () => {
+    const dark = getAdaptiveColors(true);
+    expect(dark.semantic.error.text).toBe('#F87171');
+    expect(dark.semantic.success.text).toBe(Colors.semantic.success.main);
+    expect(Colors.semantic.success.text).toBe('#047857');
   });
 
   it('dark: nessun ruolo neutral perso (stesse chiavi di Colors)', () => {

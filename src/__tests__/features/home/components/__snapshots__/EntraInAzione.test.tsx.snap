@@ -440,7 +440,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
           }
         >
           <MaterialCommunityIcons
-            color="#10B981"
+            color="#047857"
             name="hand-heart"
             size={37.77954933059712}
           />
@@ -461,7 +461,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
               numberOfLines={2}
               style={
                 {
-                  "color": "#10B981",
+                  "color": "#047857",
                   "fontFamily": "System",
                   "fontSize": 27.70500284243789,
                   "fontWeight": "700",
@@ -518,7 +518,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 numberOfLines={1}
                 style={
                   {
-                    "color": "#10B981",
+                    "color": "#047857",
                     "fontFamily": "System",
                     "fontSize": 22.66772959835827,
                     "fontWeight": "700",
@@ -534,7 +534,7 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
                 Supporta
               </Text>
               <MaterialCommunityIcons
-                color="#10B981"
+                color="#047857"
                 name="arrow-right"
                 size={24}
               />
