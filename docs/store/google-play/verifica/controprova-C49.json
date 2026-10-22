@@ -1,0 +1,13 @@
+{
+  "criterio": "C49",
+  "base": "fbefa98",
+  "titoli": [
+    "numeri nella lingua: en"
+  ],
+  "esitiAllaBase": {
+    "numeri nella lingua: en": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/shared/utils/numeriNellaLingua.test.tsx": "a777aeb9c71d4bbf32b4b1049d0421eee8303b6e80954980f4afd44de937d76c"
+  }
+}
