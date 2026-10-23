@@ -16,6 +16,6 @@
     "contrasto: segnaposto della data in scuro": "assente"
   },
   "fileTest": {
-    "src/__tests__/shared/theme/contrasto.test.tsx": "7a4fd4d00fe3747ac2dfbda64ce5283420f779b2dee8d4c3ee8a6674bc354235"
+    "src/__tests__/shared/theme/contrasto.test.tsx": "1e60021e7e14ba775a59ed5e0d10b9353ec588024e4df5f5283745ec0d30f06a"
   }
 }

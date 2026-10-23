@@ -1,0 +1,18 @@
+{
+  "criterio": "C51",
+  "base": "fbefa98",
+  "titoli": [
+    "icone con etichetta: sentinella verde",
+    "icone con etichetta: la fixture senza etichetta fa fallire",
+    "icone con etichetta: StatCard non annunciata disattivata"
+  ],
+  "esitiAllaBase": {
+    "icone con etichetta: sentinella verde": "assente",
+    "icone con etichetta: la fixture senza etichetta fa fallire": "assente",
+    "icone con etichetta: StatCard non annunciata disattivata": "failed"
+  },
+  "fileTest": {
+    "src/__tests__/features/impact/screens/ImpactTabScreen.statcard.test.tsx": "4387d94943947920e1a73e7909f2bf95d5267f6ebe14e62ec3363c9d98963e8e",
+    "src/__tests__/locales/hardcodedStrings.test.ts": "f69577420e77925165cf1327c77b186ba4bbb8e4e09e2dc93e12fe842e622ded"
+  }
+}
