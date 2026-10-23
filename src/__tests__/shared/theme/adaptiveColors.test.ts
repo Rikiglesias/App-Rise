@@ -28,7 +28,7 @@ describe('getAdaptiveColors — design tokens dark-aware', () => {
     expect(dark.gradients).toEqual(Colors.gradients);
     expect(dark.semantic.error.main).toBe(Colors.semantic.error.main);
     expect(dark.semantic.success.main).toBe(Colors.semantic.success.main);
-    expect(dark.semantic.warning).toEqual(Colors.semantic.warning);
+    expect(dark.semantic.warning.main).toBe(Colors.semantic.warning.main);
     expect(dark.semantic.info).toEqual(Colors.semantic.info);
   });
 
@@ -37,6 +37,8 @@ describe('getAdaptiveColors — design tokens dark-aware', () => {
     expect(dark.semantic.error.text).toBe('#F87171');
     expect(dark.semantic.success.text).toBe(Colors.semantic.success.main);
     expect(Colors.semantic.success.text).toBe('#047857');
+    expect(dark.semantic.warning.text).toBe(Colors.semantic.warning.main);
+    expect(Colors.semantic.warning.text).toBe('#92400E');
   });
 
   it('dark: nessun ruolo neutral perso (stesse chiavi di Colors)', () => {

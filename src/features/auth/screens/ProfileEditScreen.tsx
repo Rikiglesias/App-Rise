@@ -20,7 +20,6 @@ import {
   useNicknameHint,
 } from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -486,11 +485,11 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: PerfectSpacing.lg,
     },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
     success: {
-      color: Colors.semantic.success.main,
+      color: colors.semantic.success.text,
       marginTop: PerfectSpacing.xs,
     },
     pending: {

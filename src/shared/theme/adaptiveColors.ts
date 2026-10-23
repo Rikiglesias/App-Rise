@@ -51,11 +51,12 @@ const DARK_COLORS: ThemeColors = {
   ...Colors,
   neutral: DARK_NEUTRAL,
   glass: DARK_GLASS,
-  // Da testo sui fondi scuri: errore 6,5:1 su neutral[50] (il rosso pieno 3,7:1), verde 7:1.
+  // Da testo sui fondi scuri: errore 6,5:1 su neutral[50] (il rosso pieno 3,7:1), verde 7:1, arancio 8,4:1.
   semantic: {
     ...Colors.semantic,
     error: { ...Colors.semantic.error, text: '#F87171' },
     success: { ...Colors.semantic.success, text: Colors.semantic.success.main },
+    warning: { ...Colors.semantic.warning, text: Colors.semantic.warning.main },
   },
 };
 

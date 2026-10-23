@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -20,7 +20,8 @@ import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { RISE_URLS } from '@/shared/constants/urls';
 import { useTranslation } from '@/shared/hooks/useTranslation';
-import { useWindowStyles } from '@/shared/hooks/useWindowStyles';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
@@ -42,7 +43,8 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  */
 export const CompleteProfileScreen: React.FC = () => {
   useRequireAuth();
-  const styles = useWindowStyles(createStyles);
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { profile, profileLoaded, profileError, refreshProfile, signOut } =
@@ -331,10 +333,10 @@ export const CompleteProfileScreen: React.FC = () => {
   );
 };
 
-const createStyles = () =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
     notice: {
@@ -350,7 +352,7 @@ const createStyles = () =>
       marginTop: PerfectSpacing.lg,
     },
     exitHint: {
-      color: Colors.neutral[600],
+      color: colors.neutral[600],
       marginBottom: PerfectSpacing.xs,
     },
   });

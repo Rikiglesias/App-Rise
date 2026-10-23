@@ -15,7 +15,6 @@ import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
 import { useSignUpForm } from '../hooks/useSignUpForm';
 import { useNicknameHint } from '../hooks/useNicknameAvailability';
 import { PerfectText } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { RISE_URLS } from '@/shared/constants/urls';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -233,7 +232,7 @@ export const SignUpScreen: React.FC = () => {
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
     // Stacco tra l'ultimo consenso e il CTA "Registrati".

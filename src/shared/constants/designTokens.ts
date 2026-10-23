@@ -81,6 +81,7 @@ export const Colors = {
       light: '#FEF3C7',
       main: '#F59E0B',
       dark: '#92400E',
+      text: '#92400E', // come testo: 7:1 sul bianco; nel tema scuro lo schiarisce adaptiveColors
     },
     error: {
       light: '#FEE2E2',

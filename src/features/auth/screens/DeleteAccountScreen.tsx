@@ -7,7 +7,6 @@ import { AuthButton } from '../components/AuthButton';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -179,7 +178,7 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: PerfectSpacing.xs,
     },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.base,
     },
   });

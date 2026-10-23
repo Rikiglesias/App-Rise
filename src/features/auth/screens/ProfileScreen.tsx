@@ -407,7 +407,7 @@ const createStyles = (colors: ThemeColors) =>
       fontWeight: '600',
     },
     bannerError: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
     name: {
@@ -447,7 +447,7 @@ const createStyles = (colors: ThemeColors) =>
       marginTop: PerfectSpacing.xs,
     },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
   });

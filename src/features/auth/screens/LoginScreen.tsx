@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, type TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,17 +9,18 @@ import { ConfirmationResend } from '../components/ConfirmationResend';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
-import { useWindowStyles } from '@/shared/hooks/useWindowStyles';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
+import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { SegnalaProblema } from '@/shared/components/SegnalaProblema';
 import { validateEmail, validateRequired } from '@/shared/auth/validation';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
 export const LoginScreen: React.FC = () => {
-  const styles = useWindowStyles(createStyles);
+  const colors = useThemeColors();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { signIn } = useAuth();
@@ -153,10 +154,10 @@ export const LoginScreen: React.FC = () => {
   );
 };
 
-const createStyles = () =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
   });
