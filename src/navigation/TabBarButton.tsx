@@ -67,7 +67,7 @@ const TabBarButtonComponent: React.FC<TabBarButtonProps> = ({
           backgroundColor: isFocused ? colors.neutral[500] : colors.neutral[0],
           shadowColor: colors.neutral[500],
           iconColor: isFocused ? Colors.accent.white : colors.neutral[700],
-          labelColor: colors.neutral[500],
+          labelColor: colors.neutral[600],
         };
     }
   }, [routeName, isFocused, colors]);
