@@ -15,7 +15,6 @@ import PhoneInput, {
 import type { ICountryCca2, ICountrySelectStyle } from 'rn-country-select';
 
 import { PerfectText } from '@/components/ui';
-import { Colors } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -317,18 +316,18 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   );
 };
 
-const createStyles = (_colors: ThemeColors) =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     wrap: {
       marginBottom: PerfectSpacing.base,
     },
     label: {
-      color: _colors.neutral[700],
+      color: colors.neutral[700],
       fontWeight: '600',
       marginBottom: PerfectSpacing.xs,
     },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
   });

@@ -1,9 +1,12 @@
 // C50 (contratto android-play): il testo ha contrasto WCAG ≥ 4,5:1 sul suo fondo, in chiaro e in scuro.
 // Il rapporto si calcola dai colori resi dai componenti; 4,5 è la soglia di WCAG 2.x per il testo normale.
+import { readdirSync, readFileSync, statSync } from 'fs';
+import { join } from 'path';
 import React from 'react';
 import { render } from '@testing-library/react-native';
 
 import { coloreDi, contrasto } from '@/__tests__/helpers/contrasto';
+import { AuthConsentCheckbox } from '@/features/auth/components/AuthConsentCheckbox';
 import { AuthDateField } from '@/features/auth/components/AuthDateField';
 import { ActionCTAButtons } from '@/features/home/components/EntraInAzione/ActionCTAButtons';
 import { TabBarButton } from '@/navigation/TabBarButton';
@@ -114,5 +117,69 @@ describe('contrasto del testo', () => {
 
   it('contrasto: testo primario e secondario in scuro', () => {
     for (const r of testoSulFondo('dark')) expect(r).toBeGreaterThanOrEqual(AA);
+  });
+});
+
+// Gemelli di C50: un colore semantico pieno (main/dark/light) usato come testo resta sotto 4,5:1 in uno dei
+// due temi; il testo usa `semantic.*.text`, che il tema scuro schiarisce. Bordi, fondi e icone restano fuori.
+const TESTO_SEMANTICO_PIENO =
+  /(?<![A-Za-z])color:\s*[Cc]olors\.semantic\.\w+\.(main|dark|light)\b/;
+
+const fileDi = (cartella: string): string[] =>
+  readdirSync(cartella).flatMap(nome => {
+    const percorso = join(cartella, nome);
+    if (statSync(percorso).isDirectory())
+      return nome === '__tests__' ? [] : fileDi(percorso);
+    return /\.tsx?$/.test(nome) ? [percorso] : [];
+  });
+
+describe('colori semantici usati come testo', () => {
+  it('contrasto: i colori semantici da testo sui fondi delle schermate', () => {
+    for (const tema of TEMI) {
+      const c = colori(tema);
+      // `neutral[100]` in chiaro resta fuori: il rosso lì è 4,43:1 e la scelta del rosso è di Riccardo.
+      for (const tono of ['error', 'success', 'warning'] as const)
+        for (const fondo of [c.neutral[0], c.neutral[50]])
+          expect(
+            contrasto(c.semantic[tono].text, fondo)
+          ).toBeGreaterThanOrEqual(AA);
+    }
+  });
+
+  it('contrasto: casella del consenso non spuntata', () => {
+    // WCAG 1.4.11: il contorno di un controllo chiede 3:1 sul fondo (neutral[400] era 2,5:1).
+    for (const tema of TEMI) {
+      const ui = conTema(
+        tema,
+        <AuthConsentCheckbox
+          checked={false}
+          onToggle={() => undefined}
+          label="Accetto"
+        />
+      );
+      const [icona] = ui.UNSAFE_getAllByProps({
+        name: 'checkbox-blank-outline',
+      });
+      for (const fondo of [colori(tema).neutral[0], colori(tema).neutral[50]])
+        expect(
+          contrasto(String(icona?.props.color), fondo)
+        ).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('contrasto: nessun testo col colore semantico pieno', () => {
+    // Positivo: lo schema riconosce il caso da vietare e lascia stare i bordi.
+    expect(
+      TESTO_SEMANTICO_PIENO.test('color: Colors.semantic.error.main,')
+    ).toBe(true);
+    expect(
+      TESTO_SEMANTICO_PIENO.test('borderColor: Colors.semantic.error.main,')
+    ).toBe(false);
+    const sorgenti = fileDi(join(__dirname, '../../..'));
+    // Positivo: il lettore vede i file dell'app (altrimenti il controllo passerebbe a vuoto).
+    expect(sorgenti.some(f => f.endsWith('AuthInput.tsx'))).toBe(true);
+    expect(
+      sorgenti.filter(f => TESTO_SEMANTICO_PIENO.test(readFileSync(f, 'utf8')))
+    ).toEqual([]);
   });
 });

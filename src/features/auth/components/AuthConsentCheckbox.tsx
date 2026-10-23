@@ -47,7 +47,7 @@ export const AuthConsentCheckbox: React.FC<AuthConsentCheckboxProps> = ({
           <PerfectIcon
             name={checked ? 'checkbox-marked' : 'checkbox-blank-outline'}
             size={24}
-            color={checked ? colors.primary[500] : colors.neutral[400]}
+            color={checked ? colors.primary[500] : colors.neutral[500]}
           />
         </View>
         <PerfectText
@@ -118,7 +118,7 @@ const createStyles = (colors: ThemeColors) =>
       textDecorationLine: 'underline',
     },
     error: {
-      color: colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
   });

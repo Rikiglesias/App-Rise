@@ -133,5 +133,5 @@ const createStyles = (colors: ThemeColors) =>
     inputRowError: { borderColor: Colors.semantic.error.main },
     valueText: { color: colors.neutral[900] },
     chevron: { color: colors.neutral[500] },
-    error: { color: Colors.semantic.error.main, marginTop: PerfectSpacing.xs },
+    error: { color: colors.semantic.error.text, marginTop: PerfectSpacing.xs },
   });

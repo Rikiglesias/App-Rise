@@ -237,7 +237,7 @@ const createStyles = (colors: ThemeColors) =>
       marginTop: scale(1),
     },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
   });

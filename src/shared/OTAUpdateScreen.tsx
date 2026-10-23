@@ -412,7 +412,7 @@ const createStyles = (colors: ThemeColors) =>
     completeMessage: {
       fontSize: scaleText(22),
       fontWeight: '700',
-      color: Colors.semantic.success.main,
+      color: colors.semantic.success.text,
       textAlign: 'center',
       marginTop: PerfectSpacing.md,
       letterSpacing: scale(-0.4),
@@ -436,7 +436,7 @@ const createStyles = (colors: ThemeColors) =>
     checkmark: {
       fontSize: scaleText(38),
       fontWeight: '700',
-      color: Colors.semantic.success.main,
+      color: Colors.semantic.success.text,
       textAlign: 'center',
     },
   });

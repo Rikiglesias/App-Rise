@@ -224,7 +224,7 @@ const createStyles = (colors: ThemeColors) =>
       justifyContent: 'center',
     },
     error: {
-      color: Colors.semantic.error.main,
+      color: colors.semantic.error.text,
       marginTop: PerfectSpacing.xs,
     },
     // I tre toni del suggerimento. Stessa metrica dell'errore, colore diverso: sotto il
@@ -234,11 +234,11 @@ const createStyles = (colors: ThemeColors) =>
       marginTop: PerfectSpacing.xs,
     },
     positive: {
-      color: Colors.semantic.success.dark,
+      color: colors.semantic.success.text,
       marginTop: PerfectSpacing.xs,
     },
     warning: {
-      color: Colors.semantic.warning.dark,
+      color: colors.semantic.warning.text,
       marginTop: PerfectSpacing.xs,
     },
   });
