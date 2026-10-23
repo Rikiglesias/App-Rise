@@ -26,4 +26,7 @@ Fonte unica: `CLAUDE.md` importa questo file e non aggiunge regole.
   si fanno solo col sì di Riccardo.
 - Commit in italiano nella forma `tipo(ambito): frase`, come in `git log`.
   Il branch `master` è regolato da `.github/ruleset.yml`.
+- Nei messaggi di commit e nei titoli delle PR niente `[build]`, `[build-ios]`, `[build-android]`, `[ota]`,
+  `[hotfix]` né `hotfix:` all'inizio, se Riccardo non ha detto sì: su `master` e `develop` fanno partire
+  build EAS o un aggiornamento OTA in produzione (`.github/workflows/optimized-ci-cd.yml`).
 - Approfondimenti: `CONTRIBUTING.md`, `docs/guides/development.md`, `docs/guides/quality-standards.md`.
