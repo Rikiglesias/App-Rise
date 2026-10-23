@@ -16,6 +16,7 @@ import type { ICountryCca2, ICountrySelectStyle } from 'rn-country-select';
 
 import { PerfectText } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
+import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
@@ -65,8 +66,11 @@ const POPULAR_COUNTRIES: ICountryCca2[] = ['IT'];
 // tap in qualunque punto fuori dal pop-up lo chiude (oltre alla X). Si ottiene
 // non rimuovendo il backdrop (altrimenti la lib lo disabilita) e sovrascrivendo
 // solo il suo colore di sfondo a 'transparent'.
+// Il prefisso delle righe: la libreria usa nero al 50% sul fondo fisso #F3F3F3 delle righe
+// (3,9:1); il grigio da testo lo porta a 7:1. Le righe restano chiare in ogni tema della lib.
 const MODAL_STYLES: ICountrySelectStyle = {
   backdrop: { backgroundColor: 'transparent' },
+  callingCode: { color: Colors.neutral[600] },
 };
 
 /**
@@ -256,6 +260,10 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
       <PhoneInput
         language={locale === 'it' ? 'ita' : 'eng'}
         placeholder={t('auth.phoneField.placeholder')}
+        // Senza colore la libreria usa #AAAAAA (2,3:1 sul bianco) e la ricerca del
+        // prefisso nero al 50% (3,9:1): stesso grigio dei segnaposto degli altri campi.
+        phoneInputPlaceholderTextColor={colors.neutral[500]}
+        modalSearchInputPlaceholderTextColor={colors.neutral[500]}
         value={number}
         // NIENTE `defaultCountry`: il paese lo passiamo già noi, sempre valorizzato
         // (l'inizializzatore dello stato risolve 'IT' quando non c'è residenza).
