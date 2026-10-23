@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import ts from 'typescript';
 
+import { iconeSenzaEtichetta } from '@/__tests__/helpers/iconeSenzaEtichetta';
+
 // Eccezioni esatte (file + attributo + espressione), mai parole o file interi.
 const properNames = [
   {
@@ -172,6 +174,47 @@ describe('i18n hardcoded strings guard', () => {
         properNames[0].file,
         '<Button accessibilityLabel={`${c.nome} (${c.sigla})`} />'
       )
+    ).toEqual([]);
+  });
+});
+
+// C51: un controllo toccabile con la sola icona ha un'etichetta per il lettore di schermo.
+describe('icone toccabili con etichetta', () => {
+  const root = path.resolve(__dirname, '../..');
+  const inTutta = (opzioni = {}) =>
+    sourceFiles(root)
+      .filter(file => file.endsWith('.tsx'))
+      .flatMap(file =>
+        iconeSenzaEtichetta(
+          path.relative(root, file).replace(/\\/g, '/'),
+          fs.readFileSync(file, 'utf8'),
+          opzioni
+        )
+      );
+
+  it('icone con etichetta: sentinella verde', () => {
+    // Positivo: senza guardare l'etichetta vede le icone toccabili dell'app, altrimenti passerebbe a vuoto.
+    expect(inTutta({ ancheConEtichetta: true }).length).toBeGreaterThan(0);
+    expect(inTutta()).toEqual([]);
+  });
+
+  it('icone con etichetta: la fixture senza etichetta fa fallire', () => {
+    const icona = '<PerfectIcon name="close" />';
+    const conTocco = (attributi: string, figli: string) =>
+      iconeSenzaEtichetta(
+        'fixture.tsx',
+        `<PlatformTouchable onPress={chiudi}${attributi}>${figli}</PlatformTouchable>`
+      );
+    expect(conTocco('', icona)).toHaveLength(1);
+    expect(
+      iconeSenzaEtichetta('fixture.tsx', '<PerfectIcon onPress={chiudi} />')
+    ).toHaveLength(1);
+    // Guardie: con l'etichetta, o con un testo visibile accanto all'icona, passa.
+    expect(conTocco(" accessibilityLabel={t('common.close')}", icona)).toEqual(
+      []
+    );
+    expect(
+      conTocco('', `${icona}<PerfectText>{t('common.close')}</PerfectText>`)
     ).toEqual([]);
   });
 });

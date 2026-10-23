@@ -45,100 +45,94 @@ export const StatCard: React.FC<StatCardProps> = ({
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  const contenuto = withGradientBorder ? (
+    <LinearGradient colors={gradientColors} style={styles.gradientContainer}>
+      <PerfectContainer style={styles.cardContent}>
+        <PerfectIcon
+          name={icon}
+          size={28}
+          color={iconColor}
+          style={styles.icon}
+        />
+        <PerfectText
+          size={22}
+          lines={1}
+          fontWeight="900"
+          style={styles.value}
+          testID="stat-card-value"
+        >
+          {value}
+        </PerfectText>
+        <PerfectText
+          size={16}
+          lines={1}
+          fontWeight="700"
+          style={styles.label}
+          testID="stat-card-label"
+        >
+          {label}
+        </PerfectText>
+        <PerfectText size={14} lines={1} style={styles.subtitle}>
+          {subtitle}
+        </PerfectText>
+        {showChevron ? (
+          <PerfectIcon
+            name="chevron-right"
+            size={20}
+            {...IconClamps.chevron}
+            color={colors.neutral[400]}
+            style={styles.chevron}
+          />
+        ) : null}
+      </PerfectContainer>
+    </LinearGradient>
+  ) : (
+    <PerfectContainer style={styles.cardContentPlain}>
+      <PerfectIcon
+        name={icon}
+        size={28}
+        color={iconColor}
+        style={styles.icon}
+      />
+      <PerfectText size={22} lines={1} fontWeight="900" style={styles.value}>
+        {value}
+      </PerfectText>
+      <PerfectText size={16} lines={1} fontWeight="700" style={styles.label}>
+        {label}
+      </PerfectText>
+      <PerfectText size={14} lines={1} style={styles.subtitle}>
+        {subtitle}
+      </PerfectText>
+      {showChevron ? (
+        <PerfectIcon
+          name="chevron-right"
+          size={20}
+          {...IconClamps.chevron}
+          color={colors.neutral[400]}
+          style={styles.chevron}
+        />
+      ) : null}
+    </PerfectContainer>
+  );
+
   return (
     <PerfectContainer style={styles.card} testID="stat-card">
-      <PlatformTouchable
-        onPress={onPress}
-        style={styles.touchable}
-        activeOpacity={0.9}
-        disabled={!pressable}
-        // Una card che non si tocca non va annunciata come pulsante dal lettore di schermo.
-        accessibilityRole={pressable ? 'button' : undefined}
-        accessibilityState={{ disabled: !pressable }}
-      >
-        {withGradientBorder ? (
-          <LinearGradient
-            colors={gradientColors}
-            style={styles.gradientContainer}
-          >
-            <PerfectContainer style={styles.cardContent}>
-              <PerfectIcon
-                name={icon}
-                size={28}
-                color={iconColor}
-                style={styles.icon}
-              />
-              <PerfectText
-                size={22}
-                lines={1}
-                fontWeight="900"
-                style={styles.value}
-                testID="stat-card-value"
-              >
-                {value}
-              </PerfectText>
-              <PerfectText
-                size={16}
-                lines={1}
-                fontWeight="700"
-                style={styles.label}
-                testID="stat-card-label"
-              >
-                {label}
-              </PerfectText>
-              <PerfectText size={14} lines={1} style={styles.subtitle}>
-                {subtitle}
-              </PerfectText>
-              {showChevron ? (
-                <PerfectIcon
-                  name="chevron-right"
-                  size={20}
-                  {...IconClamps.chevron}
-                  color={colors.neutral[400]}
-                  style={styles.chevron}
-                />
-              ) : null}
-            </PerfectContainer>
-          </LinearGradient>
-        ) : (
-          <PerfectContainer style={styles.cardContentPlain}>
-            <PerfectIcon
-              name={icon}
-              size={28}
-              color={iconColor}
-              style={styles.icon}
-            />
-            <PerfectText
-              size={22}
-              lines={1}
-              fontWeight="900"
-              style={styles.value}
-            >
-              {value}
-            </PerfectText>
-            <PerfectText
-              size={16}
-              lines={1}
-              fontWeight="700"
-              style={styles.label}
-            >
-              {label}
-            </PerfectText>
-            <PerfectText size={14} lines={1} style={styles.subtitle}>
-              {subtitle}
-            </PerfectText>
-            {showChevron ? (
-              <PerfectIcon
-                name="chevron-right"
-                size={20}
-                {...IconClamps.chevron}
-                color={colors.neutral[400]}
-                style={styles.chevron}
-              />
-            ) : null}
-          </PerfectContainer>
-        )}
-      </PlatformTouchable>
+      {pressable ? (
+        <PlatformTouchable
+          onPress={onPress}
+          style={styles.touchable}
+          activeOpacity={0.9}
+          accessibilityRole="button"
+        >
+          {contenuto}
+        </PlatformTouchable>
+      ) : (
+        // Una card che non si tocca è un contenuto: niente ruolo di pulsante né stato «disattivato»
+        // (C51); il lettore di schermo la legge come un blocco unico.
+        <PerfectContainer style={styles.touchable} accessible>
+          {contenuto}
+        </PerfectContainer>
+      )}
     </PerfectContainer>
   );
 };
