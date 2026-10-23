@@ -6,6 +6,7 @@ import { PlatformTouchable, PerfectText } from '@/components/ui';
 import { Colors, Shadows } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
+import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useWindowStyles } from '@/shared/hooks/useWindowStyles';
 import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
@@ -25,6 +26,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
   variant = 'primary',
 }) => {
   const styles = useWindowStyles(createStyles);
+  const colors = useThemeColors();
 
   if (
     variant === 'link' ||
@@ -34,9 +36,10 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
     // linkMuted = grigio tenue (rimando minore, es. "Password dimenticata?");
     // link = brand rosso; linkStrong = brand rosso PIÙ visibile (più grande +
     // bold, es. "Crea un account"). Differenziarli per colore/peso evita che
-    // sembrino lo stesso elemento o un bottone.
+    // sembrino lo stesso elemento o un bottone. Il grigio segue il tema: quello fisso del
+    // chiaro (#737373) in scuro scende a ~3,8:1.
     const linkColor =
-      variant === 'linkMuted' ? Colors.neutral[500] : Colors.primary[500];
+      variant === 'linkMuted' ? colors.neutral[500] : Colors.primary[500];
     const isStrong = variant === 'linkStrong';
     return (
       <PlatformTouchable
