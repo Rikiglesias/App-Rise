@@ -104,9 +104,11 @@ jobs:
 
       - name: 📝 Generate Update Message
         id: update-msg
+        env:
+          MESSAGE: ${{ github.event.inputs.message }}
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            MSG="${{ github.event.inputs.message }}"
+            MSG="$MESSAGE"
           else
             # Estrai messaggio commit più recente
             COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1)
@@ -122,10 +124,10 @@ jobs:
 
       - name: 🚀 Publish OTA Update
         id: publish
+        env:
+          BRANCH: ${{ github.event.inputs.branch || 'production' }}
+          MESSAGE: ${{ steps.update-msg.outputs.message }}
         run: |
-          BRANCH="${{ github.event.inputs.branch || 'production' }}"
-          MESSAGE="${{ steps.update-msg.outputs.message }}"
-
           echo "Publishing OTA update to branch: $BRANCH"
           echo "Message: $MESSAGE"
 
@@ -145,8 +147,9 @@ jobs:
 
       - name: 📊 Get Update Details
         if: success()
+        env:
+          BRANCH: ${{ github.event.inputs.branch || 'production' }}
         run: |
-          BRANCH="${{ github.event.inputs.branch || 'production' }}"
           echo "Fetching latest update details for branch: $BRANCH"
           eas update:list --branch "$BRANCH" --limit 1 || true
 

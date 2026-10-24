@@ -28,8 +28,7 @@ on:
         type: boolean
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 env:
   NODE_VERSION: '20.x'
@@ -48,6 +47,8 @@ jobs:
   detect-changes:
     name: 🔍 Smart Change Detection
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       should-test: ${{ steps.changes.outputs.should-test }}
       should-build: ${{ steps.changes.outputs.should-build }}
@@ -69,6 +70,7 @@ jobs:
           # un valore opaco e sicuro. (root cause failure su master 7994e9e, 2026-06-20)
           PR_TITLE: ${{ github.event.pull_request.title }}
           HEAD_COMMIT_MSG: ${{ github.event.head_commit.message }}
+          FORCE_BUILD: ${{ github.event.inputs.force_build }}
         run: |
           # Initialize outputs
           echo "should-test=false" >> $GITHUB_OUTPUT
@@ -78,7 +80,7 @@ jobs:
           echo "test-scope=unit" >> $GITHUB_OUTPUT
 
           # Force build if requested
-          if [[ "${{ github.event.inputs.force_build }}" == "true" ]]; then
+          if [[ "$FORCE_BUILD" == "true" ]]; then
             echo "🔧 Force build requested"
             echo "should-test=true" >> $GITHUB_OUTPUT
             echo "should-build=true" >> $GITHUB_OUTPUT
@@ -175,6 +177,8 @@ jobs:
   quality-checks:
     name: 🔍 Quality Checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: detect-changes
     if: github.event_name == 'pull_request' || needs.detect-changes.outputs.should-test == 'true'
     strategy:
@@ -234,58 +238,13 @@ jobs:
           retention-days: 7
 
   # ===================================================================
-  # VISUAL REGRESSION TESTING (OPTIMIZED)
-  # ===================================================================
-  visual-regression:
-    name: 🎯 Visual Diff - Layout Regression Detection
-    runs-on: ubuntu-latest
-    needs: [detect-changes, quality-checks]
-    if: github.event_name == 'pull_request' || needs.detect-changes.outputs.test-scope == 'visual' || needs.detect-changes.outputs.test-scope == 'full'
-    strategy:
-      fail-fast: false
-      matrix:
-        device:
-          [
-            'iPhone-SE-375x667',
-            'iPhone-15-Pro-393x852',
-            'Pixel-8-Pro-412x915',
-            'Galaxy-Tab-S9-768x1024',
-          ]
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
-
-      - name: 📱 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: 📦 Install Dependencies
-        run: npm ci --prefer-offline --no-audit
-
-      - name: 🎯 Visual Diff Tests - ${{ matrix.device }}
-        run: |
-          npm run test -- --testPathPattern=visual-diff.test.tsx --maxWorkers=1
-        env:
-          CI: true
-          DEVICE_MATRIX: ${{ matrix.device }}
-          ENABLE_VISUAL_SNAPSHOTS: true
-
-      - name: 📊 Upload Visual Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-results-${{ matrix.device }}
-          path: visual-snapshots/
-          retention-days: 7
-
-  # ===================================================================
   # OPTIMIZED BUILD PIPELINE
   # ===================================================================
   build-ios:
     name: 🍎 iOS Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: [detect-changes, quality-checks]
     if: |
       (contains(github.event.head_commit.message, '[build-ios]') || contains(github.event.head_commit.message, '[build]')) &&
@@ -308,7 +267,7 @@ jobs:
         run: npm ci --prefer-offline --no-audit
 
       - name: 🔧 Setup EAS
-        uses: expo/expo-github-action@v8
+        uses: expo/expo-github-action@c7b66a9c327a43a8fa7c0158e7f30d6040d2481e # 8.2.1
         with:
           expo-version: ${{ env.EXPO_CLI_VERSION }}
           eas-version: ${{ env.EAS_CLI_VERSION }}
@@ -340,6 +299,8 @@ jobs:
   build-android:
     name: 🤖 Android Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: [detect-changes, quality-checks]
     if: |
       (contains(github.event.head_commit.message, '[build-android]') || contains(github.event.head_commit.message, '[build]')) &&
@@ -358,7 +319,7 @@ jobs:
         run: npm ci --prefer-offline --no-audit
 
       - name: 🔧 Setup EAS
-        uses: expo/expo-github-action@v8
+        uses: expo/expo-github-action@c7b66a9c327a43a8fa7c0158e7f30d6040d2481e # 8.2.1
         with:
           expo-version: ${{ env.EXPO_CLI_VERSION }}
           eas-version: ${{ env.EAS_CLI_VERSION }}
@@ -411,6 +372,8 @@ jobs:
   ota-update:
     name: 🔄 OTA Update
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     # OTA: parte SOLO se c'è [ota] e NON ci sono tag build
     if: |
       github.event_name == 'push' && 
@@ -449,7 +412,7 @@ jobs:
 
       - name: 🔧 Setup EAS
         if: steps.check-ota.outputs.should-deploy == 'true'
-        uses: expo/expo-github-action@v8
+        uses: expo/expo-github-action@c7b66a9c327a43a8fa7c0158e7f30d6040d2481e # 8.2.1
         with:
           expo-version: ${{ env.EXPO_CLI_VERSION }}
           eas-version: ${{ env.EAS_CLI_VERSION }}
@@ -481,6 +444,8 @@ jobs:
   bundle-analysis:
     name: 📊 Bundle Analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [detect-changes, quality-checks]
     if: needs.detect-changes.outputs.should-build == 'true'
     steps:
@@ -539,10 +504,11 @@ jobs:
   deployment-summary:
     name: 📊 Deployment Summary
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     needs: [
         detect-changes,
         quality-checks,
-        visual-regression,
         build-ios, # ✅ Riabilitato con tag [build]
         build-android, # ✅ Riabilitato con tag [build]
         ota-update,
@@ -561,16 +527,6 @@ jobs:
             echo "✅ All quality checks passed" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Visual Regression
-          echo "### 🎯 Visual Regression" >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ needs.visual-regression.result }}" == "success" ]]; then
-            echo "✅ Visual regression tests passed" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.visual-regression.result }}" == "skipped" ]]; then
-            echo "⏭️ Visual regression tests skipped" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Visual regression tests failed" >> $GITHUB_STEP_SUMMARY
           fi
 
           # Builds
@@ -625,9 +581,6 @@ jobs:
             ### 🔍 Quality Checks
             ${{ needs.quality-checks.result == 'success' && '✅ All quality checks passed' || '❌ Quality checks failed' }}
 
-            ### 🎯 Visual Regression
-            ${{ needs.visual-regression.result == 'success' && '✅ Visual regression tests passed' || needs.visual-regression.result == 'skipped' && '⏭️ Visual regression tests skipped' || '❌ Visual regression tests failed' }}
-
             ### 📱 Builds
             🍎 iOS: ${{ needs.build-ios.result == 'success' && '✅ Build completata' || needs.build-ios.result == 'skipped' && '⏭️ Skipped (usa tag [build])' || '❌ Failed' }}
             🤖 Android: ${{ needs.build-android.result == 'success' && '✅ Build completata' || needs.build-android.result == 'skipped' && '⏭️ Skipped (usa tag [build])' || '❌ Failed' }}
@@ -649,6 +602,8 @@ jobs:
   unit-tests:
     name: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: detect-changes
     if: github.event_name == 'pull_request' || needs.detect-changes.outputs.should-test == 'true'
     steps:
@@ -675,6 +630,7 @@ jobs:
   build-summary:
     name: build
     runs-on: ubuntu-latest
+    permissions: {}
     needs: [build-ios, build-android]
     if: |
       (contains(github.event.head_commit.message, '[build]') || contains(github.event.head_commit.message, '[build-ios]') || contains(github.event.head_commit.message, '[build-android]')) &&

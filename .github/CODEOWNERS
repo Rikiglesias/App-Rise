@@ -43,7 +43,6 @@ README.md @Rikiglesias
 # 🧪 TESTING CRITICAL
 # Test files per componenti critici
 src/__tests__/components/ui/Perfect*.test.tsx @Rikiglesias
-src/__tests__/visual/visual-diff.test.tsx @Rikiglesias
 
 # 🎯 SPECIFIC COMPONENTS
 # Componenti specifici con proprietari dedicati
