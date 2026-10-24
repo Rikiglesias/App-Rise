@@ -1,0 +1,16 @@
+{
+  "criterio": "C72",
+  "base": "63352bc",
+  "titoli": [
+    "elimina account: uscita che rigetta = sessione residua, non errore"
+  ],
+  "esitiAllaBase": {
+    "elimina account: uscita che rigetta = sessione residua, non errore": "failed"
+  },
+  "motiviAllaBase": {
+    "elimina account: uscita che rigetta = sessione residua, non errore": "Error: Unable to find an element with text: Account eliminato. Non siamo riusciti a chiudere la sessione su questo telefono: esci a mano dal profilo."
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/deleteAccount.test.tsx": "e36247f0d290f6e9e6d47d3a4511656a9ddc474a23eabce149386928d0edc448"
+  }
+}

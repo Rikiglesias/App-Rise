@@ -79,12 +79,18 @@ export const deleteAccountNow = async () => {
   // esiste più. Ritentare la stessa chiamata non servirebbe: se è caduta la rete
   // cadrebbe di nuovo, e toccare a mano la chiave interna dello storage legherebbe
   // il nostro codice a un dettaglio non documentato della libreria.
-  const { error: erroreUscita } = await registraEsitoAccount(
-    'EliminaAccount',
-    () =>
-      supabase.auth.signOut({
-        scope: 'local',
-      })
-  );
-  return { error: null, sessioneAncoraSulDispositivo: Boolean(erroreUscita) };
+  try {
+    const { error: erroreUscita } = await registraEsitoAccount(
+      'EliminaAccount',
+      () =>
+        supabase.auth.signOut({
+          scope: 'local',
+        })
+    );
+    return { error: null, sessioneAncoraSulDispositivo: Boolean(erroreUscita) };
+  } catch {
+    // Anche un rigetto riguarda solo l'uscita: la cancellazione è già riuscita.
+    // registraEsitoAccount ha già registrato l'errore senza dettagli sensibili.
+    return { error: null, sessioneAncoraSulDispositivo: true };
+  }
 };

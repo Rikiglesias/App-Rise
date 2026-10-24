@@ -104,16 +104,19 @@ Deno.test(
 );
 
 Deno.test(
-  'query error -> 500 + alert query_failed, nessun delete',
+  'purge-deletions: errore senza dettagli interni',
   async () => {
     using _cron = setCron('ok');
     const { adminFactory, deleteUser } = buildAdmin({
       query: { data: null, error: { message: 'boom-db' } },
     });
     const alert = spy((_i: unknown) => Promise.resolve());
+    using log = spy(console, 'error');
     const res = await handler(req('ok'), { adminFactory, alert });
     assertEquals(res.status, 500);
-    assertEquals((await res.json()).error, 'boom-db');
+    assertEquals(await res.json(), { error: 'query_failed' });
+    assertSpyCalls(log, 1);
+    assertEquals(log.calls[0].args, ['[purge-deletions] query fallita', 'boom-db']);
     assertSpyCalls(deleteUser, 0);
     assertSpyCalls(alert, 1);
     assertEquals(

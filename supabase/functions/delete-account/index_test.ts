@@ -158,15 +158,18 @@ Deno.test('identità apple residua -> nessun ramo speciale, 200', async () => {
   assertEquals(deleteUser.calls[0].args[0], 'u1');
 });
 
-Deno.test('deleteUser error -> 500 con delErr.message', async () => {
+Deno.test('delete-account: errore senza dettagli interni', async () => {
   const { deps, deleteUser } = buildDeps({
     user: emailUser,
     deleteUserError: { message: 'db down' },
   });
+  using log = spy(console, 'error');
   const res = await handler(post(undefined), deps);
   assertEquals(res.status, 500);
-  assertEquals((await res.json()).error, 'db down');
+  assertEquals(await res.json(), { error: 'delete_failed' });
   assertSpyCalls(deleteUser, 1);
+  assertSpyCalls(log, 1);
+  assertEquals(log.calls[0].args, ['[delete-account] delete fallito', 'db down']);
 });
 
 Deno.test('happy path identities undefined -> 200 { ok: true }', async () => {

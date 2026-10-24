@@ -1,0 +1,16 @@
+{
+  "criterio": "C84",
+  "base": "63352bc",
+  "titoli": [
+    "consensi: risposta del vecchio account scartata"
+  ],
+  "esitiAllaBase": {
+    "consensi: risposta del vecchio account scartata": "failed"
+  },
+  "motiviAllaBase": {
+    "consensi: risposta del vecchio account scartata": "Error: expect(received).toBe(expected) // Object.is equality"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/useConsentState.test.tsx": "de22b3f314ce4674136a8a0a4476b96988ef7ef58825a056d796b4056ecadb18"
+  }
+}

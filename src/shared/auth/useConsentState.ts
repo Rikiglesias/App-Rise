@@ -58,6 +58,10 @@ export const useConsentState = ({
   getConsentHistory,
 }: UseConsentStateArgs): UseConsentStateReturn => {
   const [consentState, setConsentState] = useState<ConsentState>('unknown');
+  const activeAccount = useRef<{
+    status: Status;
+    userId: string | null;
+  } | null>(null);
 
   const evaluate = useCallback(async (): Promise<ConsentState> => {
     if (status !== 'authenticated' || !userId) return 'unknown';
@@ -83,10 +87,15 @@ export const useConsentState = ({
   }, [status, userId, getConsentHistory]);
 
   const refreshConsent = useCallback(async (): Promise<ConsentState> => {
+    const account = activeAccount.current;
+    if (!account || account.status !== status || account.userId !== userId)
+      return 'unknown';
     const next = await evaluate();
+    // Invalida anche A -> B -> A e non consegna un vecchio `ok` al chiamante.
+    if (activeAccount.current !== account) return 'unknown';
     if (next !== 'unknown') setConsentState(next);
     return next;
-  }, [evaluate]);
+  }, [evaluate, status, userId]);
 
   // `evaluate` cambia identità a ogni refresh del token (l'oggetto sessione è
   // nuovo), ma NON è un cambio di utente: tenerlo nelle dipendenze riazzerava a
@@ -97,19 +106,22 @@ export const useConsentState = ({
   evaluateRef.current = evaluate;
 
   useEffect(() => {
+    const account = { status, userId };
+    activeAccount.current = account;
     // Un ospite non ha dato NESSUN consenso: dirgli `ok` sarebbe falso.
     setConsentState('unknown');
-    if (status !== 'authenticated' || !userId) return;
     // Gemello della guardia su loadProfile: la risposta può atterrare quando
     // l'utente è già un altro (o nessuno). Scriverla comunque dichiarerebbe
     // «consenso ok» per chi non l'ha mai dato, e il prefill partirebbe con i
-    // suoi dati. Il cleanup invalida la richiesta in volo.
-    let alive = true;
-    void evaluateRef.current().then(next => {
-      if (alive && next !== 'unknown') setConsentState(next);
-    });
+    // suoi dati. Il cleanup invalida sia la lettura automatica sia i refresh.
+    if (status === 'authenticated' && userId) {
+      void evaluateRef.current().then(next => {
+        if (activeAccount.current === account && next !== 'unknown')
+          setConsentState(next);
+      });
+    }
     return () => {
-      alive = false;
+      activeAccount.current = null;
     };
   }, [status, userId]);
 

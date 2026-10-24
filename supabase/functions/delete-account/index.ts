@@ -93,7 +93,10 @@ export async function handler(
   // diritto all'oblio di chi non ha ancora aggiornato.
 
   const { error: delErr } = await admin.auth.admin.deleteUser(user.id);
-  if (delErr) return json({ error: delErr.message }, 500);
+  if (delErr) {
+    console.error('[delete-account] delete fallito', delErr.message);
+    return json({ error: 'delete_failed' }, 500);
+  }
 
   return json({ ok: true }, 200);
 }

@@ -8,12 +8,22 @@ import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen
 import { ProfileScreen } from '@/features/auth/screens/ProfileScreen';
 import { ReConsentScreen } from '@/features/auth/screens/ReConsentScreen';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { deleteAccountNow } from '@/shared/auth/accountActions';
+import { supabase } from '@/shared/auth/supabaseClient';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import type { Profile } from '@/shared/auth/types';
 import itLocale from '@/locales/it';
 import { RISE_URLS } from '@/shared/constants/urls';
 
 const mockOpenLink = jest.fn().mockResolvedValue({ ok: true });
+jest.mock('@/shared/auth/supabaseClient', () => ({
+  supabase: {
+    auth: { signOut: jest.fn().mockResolvedValue({ error: null }) },
+    functions: {
+      invoke: jest.fn().mockResolvedValue({ data: { ok: true }, error: null }),
+    },
+  },
+}));
 jest.mock('@/shared/hooks/useLinkHandler', () => ({
   useLinkHandler: () => ({ openLink: mockOpenLink, isLoading: null }),
 }));
@@ -114,6 +124,41 @@ const wrap = (ui: React.ReactElement) =>
 // leva ACCESA senza che nulla diventi rosso.
 beforeEach(() => {
   mockCancellazioneProgrammataAttiva = false;
+});
+
+it('elimina account: uscita che rigetta = sessione residua, non errore', async () => {
+  jest.clearAllMocks();
+  (supabase.auth.signOut as jest.Mock).mockRejectedValueOnce(
+    new Error('SecureStore unavailable')
+  );
+  const elimina = jest.fn(deleteAccountNow);
+  mockUseAuth.mockReturnValue(makeAuth({ deleteAccountNow: elimina }));
+  const alertSpy = jest
+    .spyOn(Alert, 'alert')
+    .mockImplementation((_title, _message, buttons) => {
+      buttons?.find(button => button.style === 'destructive')?.onPress?.();
+    });
+  try {
+    const { getByText, findByText, queryByText } = wrap(
+      <DeleteAccountScreen />
+    );
+    fireEvent.press(getByText(itLocale.auth.delete.now));
+    expect(await findByText(itLocale.auth.delete.sessionResidua)).toBeTruthy();
+    expect(queryByText(itLocale.auth.delete.error)).toBeNull();
+    expect(queryByText(itLocale.auth.errors.generic)).toBeNull();
+    expect(queryByText('auth.delete.sessionResidua')).toBeNull();
+    expect(supabase.functions.invoke).toHaveBeenCalledWith('delete-account', {
+      body: {},
+    });
+    expect(supabase.auth.signOut).toHaveBeenCalledWith({ scope: 'local' });
+    expect(elimina).toHaveBeenCalledTimes(1);
+    await expect(elimina.mock.results[0]?.value).resolves.toEqual({
+      error: null,
+      sessioneAncoraSulDispositivo: true,
+    });
+  } finally {
+    alertSpy.mockRestore();
+  }
 });
 
 describe('DeleteAccountScreen', () => {

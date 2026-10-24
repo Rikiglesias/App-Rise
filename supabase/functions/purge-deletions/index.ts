@@ -131,12 +131,13 @@ export async function handler(
     .not('deletion_requested_at', 'is', null)
     .lt('deletion_requested_at', cutoff);
   if (error) {
+    console.error('[purge-deletions] query fallita', error.message);
     await alert({
       reason: 'query_failed',
       failed: 0,
       failures: [{ id: '-', message: error.message }],
     });
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'query_failed' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
