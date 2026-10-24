@@ -1,0 +1,19 @@
+{
+  "criterio": "C74",
+  "base": "63352bc",
+  "titoli": [
+    "modale partner: scheda entro la finestra a 600×300",
+    "info donazioni: scheda entro la finestra a 600×300"
+  ],
+  "esitiAllaBase": {
+    "modale partner: scheda entro la finestra a 600×300": "failed",
+    "info donazioni: scheda entro la finestra a 600×300": "failed"
+  },
+  "motiviAllaBase": {
+    "modale partner: scheda entro la finestra a 600×300": "Error: expect(received).toEqual(expected) // deep equality",
+    "info donazioni: scheda entro la finestra a 600×300": "Error: expect(received).toEqual(expected) // deep equality"
+  },
+  "fileTest": {
+    "src/__tests__/components/schedaEntroFinestra.test.tsx": "00eaf25007f86e0eaf04a06c54f310e2d7332fc2860ecbb6558b0604c8fb8394"
+  }
+}

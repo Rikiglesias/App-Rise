@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, Modal, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   PerfectIcon,
@@ -28,7 +29,11 @@ import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
 import {
   BODY_SHARE_CLOSE_ONLY,
   modalBodyMaxHeight,
+  modalCardMaxHeight,
 } from '@/shared/utils/modalBodyMaxHeight';
+
+/** Margine fra la scheda e gli inset, sopra e sotto. */
+const CARD_MARGIN = PerfectSpacing.sm;
 
 interface DonationInfoModalProps {
   visible: boolean;
@@ -57,7 +62,6 @@ const createModalStyles = (colors: ThemeColors) =>
       padding: PerfectSpacing.lg,
       ...Shadows.lg,
       width: '99%',
-      maxHeight: '98%',
     },
     modalHeader: {
       flexDirection: 'row',
@@ -100,6 +104,7 @@ const createModalStyles = (colors: ThemeColors) =>
     },
     bodyScroll: {
       flexGrow: 0,
+      flexShrink: 1,
     },
     modalSectionTitle: {
       fontWeight: Typography.weights.black,
@@ -128,9 +133,12 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
   const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
   const { height } = useWindowDimensions();
   const bodyMaxHeight = modalBodyMaxHeight(height, BODY_SHARE_CLOSE_ONLY);
+  // Mai più alta dello spazio fra gli inset: prima `98%` superava la finestra in orizzontale (C74).
+  const insets = useSafeAreaInsets();
+  const cardMaxHeight = modalCardMaxHeight(height, insets, CARD_MARGIN);
   return (
     <PerfectContainer
-      style={modalStyles.modalContent}
+      style={[modalStyles.modalContent, { maxHeight: cardMaxHeight }]}
       testID="donation-modal-content"
     >
       <PerfectContainer style={modalStyles.modalHeader}>
@@ -215,6 +223,11 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
   const colors = useThemeColors();
   const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
   const reduceMotion = useReduceMotion();
+  const insets = useSafeAreaInsets();
+  const overlayInsets = {
+    paddingTop: insets.top + CARD_MARGIN,
+    paddingBottom: insets.bottom + CARD_MARGIN,
+  };
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -230,7 +243,7 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
       statusBarTranslucent
     >
       <PlatformTouchable
-        style={modalStyles.modalOverlay}
+        style={[modalStyles.modalOverlay, overlayInsets]}
         onPress={handleClose}
         activeOpacity={1}
       >

@@ -14,3 +14,18 @@ export const modalBodyMaxHeight = (
   windowHeight: number,
   share: number
 ): number => Math.floor(Math.max(0, windowHeight) * share);
+
+/**
+ * C74: la scheda intera non supera la finestra, nemmeno in orizzontale (600×300): altezza massima =
+ * finestra − inset sopra e sotto − il margine dell'overlay su entrambi i lati. Dentro, il corpo
+ * (`flexShrink: 1`) cede per primo; titolo e pulsanti restano fuori dallo ScrollView.
+ */
+export const modalCardMaxHeight = (
+  windowHeight: number,
+  insets: { top: number; bottom: number },
+  margin: number
+): number =>
+  Math.max(
+    0,
+    Math.floor(windowHeight - insets.top - insets.bottom - 2 * margin)
+  );

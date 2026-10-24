@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { PerfectSpacing, BorderRadius, Shadows } from '../../shared/constants';
 import { scale } from '../../shared/constants/perfectScale';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 
 /** Stili del modal di dettaglio location (mappa impatto). */
@@ -48,10 +49,12 @@ export const createStyles = (colors: ThemeColors) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
+    // Velo scuro, non `glass.medium`: il bianco sul velo chiaro composto su primary[500] dava 3,8:1,
+    // e su quel velo nessun colore di testo arriva a 4,5:1 su entrambi gli estremi del gradiente (C57).
     yearBadge: {
       alignSelf: 'flex-start',
       marginTop: PerfectSpacing.md,
-      backgroundColor: colors.glass.medium,
+      backgroundColor: colors.glass.dark,
       paddingHorizontal: PerfectSpacing.sm,
       paddingVertical: scale(4),
       borderRadius: BorderRadius.full,
@@ -129,6 +132,7 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
     },
     ctaButton: {
+      ...minimumTouchTarget(),
       backgroundColor: colors.primary[500],
       paddingVertical: PerfectSpacing.base,
       paddingHorizontal: PerfectSpacing.xl,

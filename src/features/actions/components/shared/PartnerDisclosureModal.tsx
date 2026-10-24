@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, Modal, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   PlatformScrollView,
@@ -23,6 +24,7 @@ import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 import {
   BODY_SHARE_WITH_BUTTONS,
   modalBodyMaxHeight,
+  modalCardMaxHeight,
 } from '@/shared/utils/modalBodyMaxHeight';
 
 /**
@@ -84,6 +86,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     bodyScroll: {
       flexGrow: 0,
+      flexShrink: 1,
       marginBottom: PerfectSpacing.lg,
     },
     body: {
@@ -146,6 +149,13 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { height } = useWindowDimensions();
   const bodyMaxHeight = modalBodyMaxHeight(height, BODY_SHARE_WITH_BUTTONS);
+  // In orizzontale la scheda resta fra gli inset: centrata nello spazio libero e mai più alta (C74).
+  const insets = useSafeAreaInsets();
+  const cardMaxHeight = modalCardMaxHeight(height, insets, PerfectSpacing.lg);
+  const overlayInsets = {
+    paddingTop: insets.top + PerfectSpacing.lg,
+    paddingBottom: insets.bottom + PerfectSpacing.lg,
+  };
   const reduceMotion = useReduceMotion();
 
   const isDonorbox = variant === 'donorbox';
@@ -180,13 +190,13 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
       statusBarTranslucent
     >
       <PlatformTouchable
-        style={styles.overlay}
+        style={[styles.overlay, overlayInsets]}
         onPress={handleCancel}
         activeOpacity={1}
       >
         <PlatformTouchable activeOpacity={1}>
           <PerfectContainer
-            style={styles.content}
+            style={[styles.content, { maxHeight: cardMaxHeight }]}
             testID="partner-disclosure-content"
           >
             <PerfectText size={22} lines={2} style={styles.title}>

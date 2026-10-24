@@ -1,0 +1,19 @@
+{
+  "criterio": "C57",
+  "base": "63352bc",
+  "titoli": [
+    "contrasto: anno nella scheda del paese",
+    "scheda del paese: Segui il tracciamento ≥ 48 dp"
+  ],
+  "esitiAllaBase": {
+    "contrasto: anno nella scheda del paese": "failed",
+    "scheda del paese: Segui il tracciamento ≥ 48 dp": "failed"
+  },
+  "motiviAllaBase": {
+    "contrasto: anno nella scheda del paese": "Error: expect(received).toBeGreaterThanOrEqual(expected)",
+    "scheda del paese: Segui il tracciamento ≥ 48 dp": "Error: expect(received).toEqual(expected) // deep equality"
+  },
+  "fileTest": {
+    "src/__tests__/components/schedaPaese.test.tsx": "19d8d59fddf5305ae7dce35db31baafc0552e188e7f221b29195936204a38f0e"
+  }
+}
