@@ -36,6 +36,15 @@ import {
   DEFINIZIONI_LOGIN,
   criteri as login,
 } from './verifica-android-play/login.mjs';
+import {
+  DEFINIZIONI_F13,
+  criteri as f13,
+} from './verifica-android-play/f13.mjs';
+import { C59 } from './verifica-android-play/f13-dipendenze.mjs';
+import { C60 } from './verifica-android-play/f13-funzioni.mjs';
+import { C78 } from './verifica-android-play/f13-workflow.mjs';
+import { C79 } from './verifica-android-play/f13-database.mjs';
+import { C83 } from './verifica-android-play/f13-rilievi.mjs';
 import { registraControprove } from './verifica-android-play/titoli-jest.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
 import { selftestLettori } from './verifica-android-play/selftest-titoli.mjs';
@@ -46,6 +55,7 @@ const DEFINIZIONI_TITOLI = {
   ...DEFINIZIONI_PAGINE,
   ...DEFINIZIONI_DISPOSITIVI,
   ...DEFINIZIONI_CONTENUTI,
+  ...DEFINIZIONI_F13,
 };
 
 const CRITERI = {
@@ -65,6 +75,12 @@ const CRITERI = {
   ...pagine,
   ...dispositivi,
   ...contenuti,
+  ...f13,
+  C59,
+  C60,
+  C78,
+  C79,
+  C83,
 };
 const ATTESI = [
   'C1',
@@ -119,6 +135,8 @@ const ATTESI = [
   'C53',
   'C54',
   'C55',
+  // R24-R26 (F13): da C56 a C84, tutti.
+  ...Array.from({ length: 29 }, (_, i) => `C${56 + i}`),
 ];
 
 const esito = async (fn, input) => {
@@ -204,11 +222,15 @@ const controprova = ids => {
     return false;
   }
   for (const r of registraControprove(
-    ids.map(id => ({ id, titoli: DEFINIZIONI_TITOLI[id].titoli }))
+    ids.map(id => ({
+      id,
+      titoli: DEFINIZIONI_TITOLI[id].titoli,
+      base: DEFINIZIONI_TITOLI[id].base,
+    }))
   )) {
     const esiti = Object.values(r.esitiAllaBase);
     console.log(
-      `${r.criterio} controprova: ${esiti.filter(e => e !== 'passed').length}/${esiti.length} titoli rossi o assenti alla base`
+      `${r.criterio} controprova su ${r.base}: ${esiti.filter(e => e !== 'passed').length}/${esiti.length} titoli rossi o assenti alla base`
     );
   }
   return true;
