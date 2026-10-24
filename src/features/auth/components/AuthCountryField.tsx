@@ -72,6 +72,7 @@ export const AuthCountryField: React.FC<AuthCountryFieldProps> = ({
         onPress={(): void => setOpen(true)}
         accessibilityRole="button"
         accessibilityLabel={label}
+        accessibilityValue={{ text: localizedName(current, locale) }}
         style={[styles.inputRow, error ? styles.inputRowError : null]}
       >
         <PerfectText size={16} lines={1} style={styles.valueText}>
@@ -131,7 +132,7 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: PerfectSpacing.base,
     },
     inputRowError: { borderColor: Colors.semantic.error.main },
-    valueText: { color: colors.neutral[900] },
-    chevron: { color: colors.neutral[500] },
+    valueText: { color: colors.neutral[900], flex: 1, flexShrink: 1 },
+    chevron: { color: colors.neutral[500], flexShrink: 0 },
     error: { color: colors.semantic.error.text, marginTop: PerfectSpacing.xs },
   });

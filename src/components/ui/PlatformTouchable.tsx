@@ -109,6 +109,9 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
     ...(props.accessibilityLabel !== undefined && {
       accessibilityLabel: props.accessibilityLabel,
     }),
+    ...(props.accessibilityValue !== undefined && {
+      accessibilityValue: props.accessibilityValue,
+    }),
     ...(props.accessibilityHint !== undefined && {
       accessibilityHint: props.accessibilityHint,
     }),

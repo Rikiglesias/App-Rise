@@ -94,6 +94,7 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
         onPress={() => setOpen(o => !o)}
         accessibilityRole="button"
         accessibilityLabel={label}
+        accessibilityValue={{ text: value ? toDisplayDate(value) : '' }}
         style={[styles.field, error ? styles.fieldError : null]}
       >
         <PerfectText

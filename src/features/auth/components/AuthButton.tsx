@@ -27,6 +27,8 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
 }) => {
   const styles = useWindowStyles(createStyles);
   const colors = useThemeColors();
+  const isOff = disabled || loading;
+  const accessibilityState = { disabled: isOff, busy: loading };
 
   if (
     variant === 'link' ||
@@ -44,19 +46,25 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
     return (
       <PlatformTouchable
         onPress={onPress}
-        disabled={disabled}
+        disabled={isOff}
         activeOpacity={0.7}
         accessibilityRole="button"
+        accessibilityLabel={label}
+        accessibilityState={accessibilityState}
         style={styles.link}
       >
-        <PerfectText
-          size={isStrong ? 18 : 15}
-          lines={1}
-          color={linkColor}
-          style={isStrong ? styles.linkTextStrong : styles.linkText}
-        >
-          {label}
-        </PerfectText>
+        {loading ? (
+          <ActivityIndicator color={linkColor} />
+        ) : (
+          <PerfectText
+            size={isStrong ? 18 : 15}
+            lines={1}
+            color={linkColor}
+            style={isStrong ? styles.linkTextStrong : styles.linkText}
+          >
+            {label}
+          </PerfectText>
+        )}
       </PlatformTouchable>
     );
   }
@@ -65,30 +73,37 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
     return (
       <PlatformTouchable
         onPress={onPress}
-        disabled={disabled}
+        disabled={isOff}
         activeOpacity={0.85}
         accessibilityRole="button"
-        style={[styles.secondaryBtn, disabled ? styles.btnDisabled : null]}
+        accessibilityLabel={label}
+        accessibilityState={accessibilityState}
+        style={[styles.secondaryBtn, isOff ? styles.btnDisabled : null]}
       >
-        <PerfectText
-          size={16}
-          lines={1}
-          color={Colors.primary[500]}
-          style={styles.secondaryText}
-        >
-          {label}
-        </PerfectText>
+        {loading ? (
+          <ActivityIndicator color={Colors.primary[500]} />
+        ) : (
+          <PerfectText
+            size={16}
+            lines={1}
+            color={Colors.primary[500]}
+            style={styles.secondaryText}
+          >
+            {label}
+          </PerfectText>
+        )}
       </PlatformTouchable>
     );
   }
 
-  const isOff = disabled || loading;
   return (
     <PlatformTouchable
       onPress={onPress}
       disabled={isOff}
       activeOpacity={0.85}
       accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={accessibilityState}
       style={styles.btnWrap}
     >
       <LinearGradient

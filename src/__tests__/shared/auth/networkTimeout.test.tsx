@@ -93,7 +93,10 @@ it('timeout di rete: Accesso esce dal caricamento', async () => {
   fireEvent.press(screen.getByRole('button', { name: 'Accedi' }));
   await act(() => Promise.resolve());
   expect(transport).toHaveBeenCalled();
-  expect(screen.queryByRole('button', { name: 'Accedi' })).toBeNull();
+  // In caricamento il pulsante tiene il nome e lo annuncia occupato (C64).
+  const inCaricamento = screen.getByRole('button', { name: 'Accedi' });
+  expect(inCaricamento).toBeBusy();
+  expect(inCaricamento).toBeDisabled();
   await act(async () => {
     await jest.advanceTimersByTimeAsync(15000);
   });

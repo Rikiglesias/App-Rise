@@ -1,0 +1,16 @@
+{
+  "criterio": "C66",
+  "base": "63352bc",
+  "titoli": [
+    "campo paese: nome lungo non spinge fuori il simbolo"
+  ],
+  "esitiAllaBase": {
+    "campo paese: nome lungo non spinge fuori il simbolo": "failed"
+  },
+  "motiviAllaBase": {
+    "campo paese: nome lungo non spinge fuori il simbolo": "Error: expect(received).toMatchObject(expected)"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/lettoreSchermoModuli.test.tsx": "78eb6ef2d15f24e2c9476aa5876f9f1cc9754488b871d38bd60d3250221b1248"
+  }
+}

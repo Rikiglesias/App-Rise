@@ -1,0 +1,25 @@
+{
+  "criterio": "C64",
+  "base": "63352bc",
+  "titoli": [
+    "lettore di schermo: Paese con il valore",
+    "lettore di schermo: data con il valore",
+    "lettore di schermo: pulsante in caricamento con nome e busy",
+    "link in caricamento: attesa visibile e tocco ignorato"
+  ],
+  "esitiAllaBase": {
+    "lettore di schermo: Paese con il valore": "failed",
+    "lettore di schermo: data con il valore": "failed",
+    "lettore di schermo: pulsante in caricamento con nome e busy": "failed",
+    "link in caricamento: attesa visibile e tocco ignorato": "failed"
+  },
+  "motiviAllaBase": {
+    "lettore di schermo: Paese con il valore": "Error: expect(received).toContain(expected) // indexOf",
+    "lettore di schermo: data con il valore": "Error: expect(received).toContain(expected) // indexOf",
+    "lettore di schermo: pulsante in caricamento con nome e busy": "Error: expect(received).toBe(expected) // Object.is equality",
+    "link in caricamento: attesa visibile e tocco ignorato": "Error: expect(received).toHaveLength(expected)"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/lettoreSchermoModuli.test.tsx": "78eb6ef2d15f24e2c9476aa5876f9f1cc9754488b871d38bd60d3250221b1248"
+  }
+}
