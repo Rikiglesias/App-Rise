@@ -30,11 +30,13 @@ import { FIXTURE_DISPOSITIVI } from './selftest-dispositivi.mjs';
 import { FIXTURE_F13 } from './selftest-f13.mjs';
 import { FIXTURE_F13_ESTERNI } from './selftest-f13-esterni.mjs';
 import { FIXTURE_F13_TESTI } from './selftest-f13-testi.mjs';
+import { FIXTURE_F13_WORKFLOW } from './selftest-f13-workflow.mjs';
 
 export const FIXTURE = {
   ...FIXTURE_F13,
   ...FIXTURE_F13_ESTERNI,
   ...FIXTURE_F13_TESTI,
+  ...FIXTURE_F13_WORKFLOW,
   ...FIXTURE_CODICE,
   ...FIXTURE_LOGIN,
   ...FIXTURE_PAGINE,

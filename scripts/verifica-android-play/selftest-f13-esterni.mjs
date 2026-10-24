@@ -1,12 +1,11 @@
-// C22 per i criteri R24-R26 che leggono rete, Deno, Docker o file fuori dal repo (C59 C60 C78 C79 C83):
+// C22 per i criteri R24-R26 che leggono rete, Deno, Docker o file fuori dal repo (C59 C60 C79 C83; C78 in
+// selftest-f13-workflow.mjs):
 // la verifica è pura, qui riceve dati sintetici. Ogni fixture negativa è il positivo con UNA mutazione.
-import YAML from 'yaml';
 import { TEST_C60 } from './f13-funzioni.mjs';
-import { CI_C78, OTA_C78 } from './f13-workflow.mjs';
 import { CASI_C79, MUTANTI_MINIMI_C79 } from './f13-database.mjs';
 import { DIFETTI_C83, REVISORI_C83 } from './f13-rilievi.mjs';
 
-const casi = (ok, mutazioni, positivi = []) => ({
+export const casi = (ok, mutazioni, positivi = []) => ({
   neg: mutazioni.map(m => ({ ...ok, ...m })),
   pos: [ok, ...positivi.map(m => ({ ...ok, ...m }))],
 });
@@ -45,57 +44,6 @@ const C60_OK = {
 const sorgente60 = t => ({
   sorgenti: { ...C60_OK.sorgenti, 'delete-account': t },
 });
-
-// --- C78 ---
-const SHA = 'a'.repeat(40);
-const CI = `on:
-  push:
-    branches: [master]
-permissions: {}
-jobs:
-  build-android:
-    if: github.ref == 'refs/heads/master'
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: expo/expo-github-action@${SHA} # v8.2.1
-      - run: echo "$MSG"
-        env:
-          MSG: \${{ github.event.inputs.message }}
-  notify:
-    permissions:
-      pull-requests: write
-    steps:
-      - uses: actions/github-script@v7
-`;
-const OTA = `on:
-  workflow_dispatch:
-    inputs:
-      message:
-        type: string
-jobs:
-  deploy-ota:
-    if: github.event_name == 'workflow_dispatch'
-    permissions:
-      contents: read
-    steps:
-      - run: echo ok
-`;
-const wf = (nome, testo) => {
-  try {
-    return { nome, testo, doc: YAML.parse(testo), errore: null };
-  } catch (e) {
-    return { nome, testo, doc: null, errore: e.message };
-  }
-};
-const C78_OK = {
-  file: [wf(CI_C78, CI), wf(OTA_C78, OTA)],
-  tag: { 'expo/expo-github-action': { 'v8.2.1': ['b'.repeat(40), SHA] } },
-  base: { [CI_C78]: YAML.parse(CI), [OTA_C78]: YAML.parse(OTA) },
-  actionlint: null,
-};
-const ci78 = testo => ({ file: [wf(CI_C78, testo), wf(OTA_C78, OTA)] });
 
 // --- C79 ---
 const C79_OK = {
@@ -209,30 +157,6 @@ export const FIXTURE_F13_ESTERNI = {
         "console.error(delErr.message);\nreturn json({ error: 'delete_failed' }, 500);"
       ),
     ]
-  ),
-  C78: casi(
-    C78_OK,
-    [
-      { file: [] },
-      ci78(CI.replace(`@${SHA} # v8.2.1`, '@v8')),
-      ci78(CI.replace(' # v8.2.1', '')),
-      ci78(CI.replace('v8.2.1', 'v8.2.0')),
-      {
-        tag: {
-          'expo/expo-github-action': { errore: 'git ls-remote exit 128' },
-        },
-      },
-      ci78(
-        CI.replace('echo "$MSG"', 'echo "${{ github.event.inputs.message }}"')
-      ),
-      ci78(CI.replace('    permissions:\n      contents: read\n', '')),
-      ci78(CI.replace('actions/github-script@v7', 'actions/checkout@v4')),
-      ci78(CI.replace('branches: [master]', 'branches: [master, develop]')),
-      ci78(CI.replace("github.ref == 'refs/heads/master'", 'always()')),
-      ci78(`${CI}\n  rotto: [`),
-      { actionlint: { exit: 1, uscita: 'errore' } },
-    ],
-    [{ actionlint: { exit: 0, uscita: '' } }]
   ),
   C79: casi(C79_OK, [
     { migration: null },

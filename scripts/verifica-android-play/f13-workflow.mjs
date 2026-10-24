@@ -1,5 +1,6 @@
 // C78 (R24-R25, catena di fornitura e CI di F13): workflow GitHub con le azioni di terzi fissate a SHA
-// verificati contro il tag, input di `workflow_dispatch` passati via `env`, permessi per job nel workflow di
+// verificati contro il tag, input di `workflow_dispatch` passati via `env` (anche di seconda mano, attraverso
+// le uscite di passi e job), permessi per job nel workflow di
 // build, trigger e condizioni di build/OTA identici a BASE_R24.
 import { spawnSync } from 'node:child_process';
 import YAML from 'yaml';
@@ -45,6 +46,61 @@ export const inputNeiRun = (nome, doc) =>
       .filter(s => typeof s?.run === 'string' && INPUT_IN_RUN.test(s.run))
       .map(s => `${nome} job ${job}, passo «${s.name ?? s.run.slice(0, 30)}»`)
   );
+
+const espressioni = testo =>
+  [...JSON.stringify(testo ?? '').matchAll(/\$\{\{(.*?)\}\}/g)].map(m => m[1]);
+const portaInput = (testo, passi, uscite) =>
+  espressioni(testo).some(
+    e =>
+      /\b(?:github\.event\.inputs|inputs)\./.test(e) ||
+      [...e.matchAll(/\bsteps\.([\w-]+)\.outputs\b/g)].some(m =>
+        passi.has(m[1])
+      ) ||
+      [...e.matchAll(/\bneeds\.([\w-]+)\.outputs\.([\w-]+)/g)].some(m =>
+        uscite.has(`${m[1]}.${m[2]}`)
+      )
+  );
+// Script di un passo: il `run:` e lo `script:` di actions/github-script (codice anche lui).
+const script = s =>
+  [
+    s?.run,
+    /actions\/github-script/.test(s?.uses ?? '') ? s?.with?.script : null,
+  ].filter(t => typeof t === 'string');
+
+/**
+ * Uscite che portano un input di seconda mano dentro uno script (`ota-deploy.yml:127`): un passo che legge
+ * un input (da `run`, `env`, `with`, o dall'`env` del job e del workflow) contamina le sue `outputs`, che
+ * contaminano i passi dopo e le `outputs` del job lette con `needs`. Si itera fino a punto fisso.
+ */
+export const usciteDaInputNeiRun = (nome, doc) => {
+  const jobs = Object.entries(doc?.jobs ?? {});
+  const passi = new Map(jobs.map(([id]) => [id, new Set()]));
+  const uscite = new Set();
+  for (let giro = 0, prima = -1; giro <= jobs.length; giro++) {
+    const ora =
+      uscite.size + [...passi.values()].reduce((n, p) => n + p.size, 0);
+    if (ora === prima) break;
+    prima = ora;
+    for (const [id, j] of jobs) {
+      const mie = passi.get(id);
+      for (const s of j?.steps ?? [])
+        if (
+          s?.id &&
+          portaInput([s.run, s.env, s.with, j.env, doc.env], mie, uscite)
+        )
+          mie.add(String(s.id));
+      for (const [u, espr] of Object.entries(j?.outputs ?? {}))
+        if (portaInput(espr, mie, uscite)) uscite.add(`${id}.${u}`);
+    }
+  }
+  return jobs.flatMap(([id, j]) =>
+    (j?.steps ?? [])
+      .filter(s => script(s).some(t => portaInput(t, passi.get(id), uscite)))
+      .map(
+        s => `${nome} job ${id}, passo «${s.name ?? script(s)[0].slice(0, 30)}»`
+      )
+  );
+};
 
 const scrivono = permessi =>
   permessi === 'write-all' ||
@@ -149,6 +205,9 @@ export const C78 = {
       const [primo] = inputNeiRun(f.nome, f.doc);
       if (primo)
         return `input interpolato dentro run (va passato via env): ${primo}`;
+      const [derivata] = usciteDaInputNeiRun(f.nome, f.doc);
+      if (derivata)
+        return `input di seconda mano (uscita di un passo o di un job) dentro uno script, va passato via env: ${derivata}`;
     }
     const ci = file.find(f => f.nome === CI_C78)?.doc;
     if (!ci) return `${CI_C78} assente`;
