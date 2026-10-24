@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
@@ -40,8 +41,10 @@ export const ResetPasswordScreen: React.FC = () => {
   } = useAuthError();
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitAttempt, setSubmitAttempt] = useState(0);
 
   const onSubmit = useCallback(async (): Promise<void> => {
+    setSubmitAttempt(attempt => attempt + 1);
     setSubmitError(null);
     const p = validatePassword(password);
     setPwdErr(p ? t(`auth.errors.${p}`) : undefined);
@@ -130,9 +133,11 @@ export const ResetPasswordScreen: React.FC = () => {
             textContentType="newPassword"
           />
           {submitError ? (
-            <PerfectText size={14} lines={2} style={styles.error}>
-              {submitError}
-            </PerfectText>
+            <AuthSubmitError
+              message={submitError}
+              attempt={submitAttempt}
+              style={styles.error}
+            />
           ) : null}
           <AuthButton
             label={t('auth.reset.submit')}

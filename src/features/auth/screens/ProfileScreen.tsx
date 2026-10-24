@@ -5,6 +5,7 @@ import { getCountryByCca2, type ICountryCca2 } from 'rn-country-select';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
 import { LoginScreen } from './LoginScreen';
@@ -69,6 +70,10 @@ export const ProfileScreen: React.FC = () => {
     offline: logoutOffline,
   } = useAuthError('auth.profile.logoutError');
   const [reloading, setReloading] = useState(false);
+  const [logoutAttempt, setLogoutAttempt] = useState(0);
+  const [exportAttempt, setExportAttempt] = useState(0);
+  const [cancelAttempt, setCancelAttempt] = useState(0);
+  const [consentAttempt, setConsentAttempt] = useState(0);
 
   // Se l'uscita fallisce la persona RESTA dentro l'account: tacere qui significa
   // lasciarle credere di essere uscita, che su un telefono condiviso è la bugia
@@ -83,9 +88,15 @@ export const ProfileScreen: React.FC = () => {
     setLogoutError(undefined);
     void signOut()
       .then(({ error }) => {
-        if (error) reportLogout(error);
+        if (error) {
+          setLogoutAttempt(attempt => attempt + 1);
+          reportLogout(error);
+        }
       })
-      .catch(reportLogout);
+      .catch(error => {
+        setLogoutAttempt(attempt => attempt + 1);
+        reportLogout(error);
+      });
   }, [signOut, setLogoutError, reportLogout]);
   const handleCompleteProfile = useCallback(
     (): void => navigation.navigate('CompleteProfile'),
@@ -97,7 +108,10 @@ export const ProfileScreen: React.FC = () => {
   );
   const handleExport = useCallback((): void => {
     setExportError(undefined);
-    void exportData().catch(reportExport);
+    void exportData().catch(error => {
+      setExportAttempt(attempt => attempt + 1);
+      reportExport(error);
+    });
   }, [exportData, setExportError, reportExport]);
   const handleDelete = useCallback(
     (): void => navigation.navigate('DeleteAccount'),
@@ -121,9 +135,15 @@ export const ProfileScreen: React.FC = () => {
     setDeletionCancelError(undefined);
     void cancelScheduledDeletion()
       .then(({ error }) => {
-        if (error) reportCancel(error);
+        if (error) {
+          setCancelAttempt(attempt => attempt + 1);
+          reportCancel(error);
+        }
       })
-      .catch(showCancel);
+      .catch(error => {
+        setCancelAttempt(attempt => attempt + 1);
+        showCancel(error);
+      });
   }, [
     cancelScheduledDeletion,
     setDeletionCancelError,
@@ -139,9 +159,15 @@ export const ProfileScreen: React.FC = () => {
       // sopra, il rigetto viene dal rilancio di `loadProfile`, già registrato.
       void setMarketingConsent(value)
         .then(r => {
-          if (r.error) reportConsent(r.error);
+          if (r.error) {
+            setConsentAttempt(attempt => attempt + 1);
+            reportConsent(r.error);
+          }
         })
-        .catch(showConsent);
+        .catch(error => {
+          setConsentAttempt(attempt => attempt + 1);
+          showConsent(error);
+        });
     },
     [setMarketingConsent, setConsentError, reportConsent, showConsent]
   );
@@ -250,13 +276,12 @@ export const ProfileScreen: React.FC = () => {
             onPress={handleCancelDeletion}
             variant="link"
           />
-          {deletionCancelError ? (
-            <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
-              <PerfectText size={13} lines={2} style={styles.bannerError}>
-                {deletionCancelError}
-              </PerfectText>
-            </View>
-          ) : null}
+          <AuthSubmitError
+            message={deletionCancelError}
+            attempt={cancelAttempt}
+            size={13}
+            style={styles.bannerError}
+          />
         </View>
       ) : null}
 
@@ -322,11 +347,12 @@ export const ProfileScreen: React.FC = () => {
         />
       )}
       <AuthButton label={t('auth.profile.logout')} onPress={handleLogout} />
-      {logoutError ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {logoutError}
-        </PerfectText>
-      ) : null}
+      <AuthSubmitError
+        message={logoutError}
+        attempt={logoutAttempt}
+        size={13}
+        style={styles.error}
+      />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.consents.title')}
@@ -344,11 +370,12 @@ export const ProfileScreen: React.FC = () => {
       <PerfectText size={13} lines={2} style={styles.hint}>
         {t('auth.consents.marketingHint')}
       </PerfectText>
-      {consentError ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {consentError}
-        </PerfectText>
-      ) : null}
+      <AuthSubmitError
+        message={consentError}
+        attempt={consentAttempt}
+        size={13}
+        style={styles.error}
+      />
 
       <PerfectText size={15} lines={1} style={styles.sectionTitle}>
         {t('auth.privacy.title')}
@@ -358,11 +385,12 @@ export const ProfileScreen: React.FC = () => {
         onPress={handleExport}
         variant="link"
       />
-      {exportError ? (
-        <PerfectText size={13} lines={2} style={styles.error}>
-          {exportError}
-        </PerfectText>
-      ) : null}
+      <AuthSubmitError
+        message={exportError}
+        attempt={exportAttempt}
+        size={13}
+        style={styles.error}
+      />
       <AuthButton
         label={t('auth.privacy.deleteCta')}
         onPress={handleDelete}

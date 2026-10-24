@@ -262,6 +262,10 @@ export default {
       emailPending:
         'Email change pending confirmation: {{email}}. Confirm the link sent to both inboxes to complete it.',
       error: 'Update failed. Please try again.',
+      partialSave:
+        'Your profile details were saved, but your email address has not changed. Try changing your email again.',
+      partialSaveReason:
+        'Your profile details were saved, but your email address has not changed. {{reason}}',
       nothingSaved: 'Nothing was saved: change the nickname and save again.',
     },
     privacy: {

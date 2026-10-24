@@ -9,6 +9,7 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { AuthSection } from '../components/AuthSection';
 import { AuthConsentCheckbox } from '../components/AuthConsentCheckbox';
@@ -51,6 +52,13 @@ export const CompleteProfileScreen: React.FC = () => {
     useAuth();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useProfileForm();
+  const [submitAttempt, setSubmitAttempt] = useState(0);
+  const [logoutAttempt, setLogoutAttempt] = useState(0);
+  const { handleSubmit: submit } = form;
+  const handleSubmit = useCallback((): void => {
+    setSubmitAttempt(attempt => attempt + 1);
+    submit();
+  }, [submit]);
   // Disponibilità del nickname mentre si scrive (0018): senza, chi ne sceglie uno già
   // preso salverebbe e lo troverebbe vuoto, senza che nessuno glielo abbia detto. Lo
   // stato arriva dal form, che è anche quello che lo consulta prima di salvare.
@@ -97,6 +105,7 @@ export const CompleteProfileScreen: React.FC = () => {
   // Qui pesa il doppio: senza messaggio la persona resta chiusa nel passaggio
   // obbligato senza sapere perché.
   const handleLogout = useCallback((): void => {
+    setLogoutAttempt(attempt => attempt + 1);
     setLogoutError(undefined);
     setLogoutLoading(true);
     void signOut()
@@ -274,20 +283,22 @@ export const CompleteProfileScreen: React.FC = () => {
       ) : null}
 
       {form.submitError && !profileError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {form.submitError}
-        </PerfectText>
+        <AuthSubmitError
+          message={form.submitError}
+          attempt={submitAttempt}
+          style={styles.error}
+        />
       ) : null}
 
       <AuthButton
         label={t('auth.completeProfile.submit')}
-        onPress={form.handleSubmit}
+        onPress={handleSubmit}
         loading={form.loading}
         disabled={logoutLoading || profileLoading || Boolean(profileError)}
       />
       <AuthRetry
         visible={form.offline && !profileError}
-        onPress={form.handleSubmit}
+        onPress={handleSubmit}
         loading={form.loading}
         disabled={logoutLoading || profileLoading}
       />
@@ -311,9 +322,12 @@ export const CompleteProfileScreen: React.FC = () => {
             disabled={form.loading || profileLoading || logoutLoading}
           />
           {logoutError ? (
-            <PerfectText size={13} lines={2} style={styles.error}>
-              {logoutError}
-            </PerfectText>
+            <AuthSubmitError
+              message={logoutError}
+              attempt={logoutAttempt}
+              size={13}
+              style={styles.error}
+            />
           ) : null}
           <AuthRetry
             visible={logoutOffline}

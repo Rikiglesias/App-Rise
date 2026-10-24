@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import { useAuthError } from '../hooks/useAuthError';
 import { AuthButton } from './AuthButton';
+import { AuthSubmitError } from './AuthSubmitError';
 import { PerfectText } from '@/components/ui';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -13,6 +14,7 @@ export const ConfirmationResend: React.FC<{ email: string }> = ({ email }) => {
   const { resendConfirmation, confirmationRetryAt } = useAuth();
   const { error, setError, showError, offline } = useAuthError();
   const [loading, setLoading] = useState(false);
+  const [submitAttempt, setSubmitAttempt] = useState(0);
   const [sent, setSent] = useState(false);
   const [now, setNow] = useState(Date.now);
   const busy = useRef(false);
@@ -33,6 +35,7 @@ export const ConfirmationResend: React.FC<{ email: string }> = ({ email }) => {
   const handleResend = useCallback((): void => {
     if (busy.current || Date.now() < until) return;
     busy.current = true;
+    setSubmitAttempt(attempt => attempt + 1);
     setLoading(true);
     setSent(false);
     setError(null);
@@ -62,10 +65,12 @@ export const ConfirmationResend: React.FC<{ email: string }> = ({ email }) => {
           {t('auth.resend.wait', { seconds })}
         </PerfectText>
       ) : null}
-      {error || sent ? (
+      {error ? (
+        <AuthSubmitError message={error} attempt={submitAttempt} />
+      ) : sent ? (
         <View accessibilityLiveRegion="polite">
           <PerfectText size={14} lines={3} immunity>
-            {error ?? t('auth.resend.sent')}
+            {t('auth.resend.sent')}
           </PerfectText>
         </View>
       ) : null}

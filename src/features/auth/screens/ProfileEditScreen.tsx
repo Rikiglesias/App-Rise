@@ -13,6 +13,7 @@ import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
 import {
@@ -147,6 +148,7 @@ export const ProfileEditScreen: React.FC = () => {
   const [errors, setErrors] = useState<Errors>({});
   const {
     error: submitError,
+    errorKey: submitErrorKey,
     setError: setSubmitError,
     reportError,
     showError,
@@ -155,11 +157,15 @@ export const ProfileEditScreen: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitAttempt, setSubmitAttempt] = useState(0);
+  const [profileSaved, setProfileSaved] = useState(false);
 
   const err = (key?: string): string | undefined =>
     key ? t(`auth.errors.${key}`) : undefined;
 
   const onSubmit = useCallback(async (): Promise<void> => {
+    setSubmitAttempt(attempt => attempt + 1);
+    setProfileSaved(false);
     setSubmitError(null);
     setSuccess(false);
     // Dopo un write riuscito la rilettura può fallire: recupera prima la fonte,
@@ -274,6 +280,7 @@ export const ProfileEditScreen: React.FC = () => {
           reportError(error);
           return;
         }
+        setProfileSaved(true);
       }
 
       const nextEmail = email.trim();
@@ -453,9 +460,19 @@ export const ProfileEditScreen: React.FC = () => {
       />
 
       {submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {submitError}
-        </PerfectText>
+        <AuthSubmitError
+          message={
+            // Profilo salvato, email no (C70): col motivo dell'email quando è specifico
+            // (già registrata, troppi tentativi, rete), altrimenti l'invito a riprovare.
+            profileSaved
+              ? submitErrorKey && submitErrorKey !== 'generic'
+                ? t('auth.edit.partialSaveReason', { reason: submitError })
+                : t('auth.edit.partialSave')
+              : submitError
+          }
+          attempt={submitAttempt}
+          style={styles.error}
+        />
       ) : null}
       {pendingEmail ? (
         <PerfectText size={14} lines={3} style={styles.pending}>

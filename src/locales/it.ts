@@ -272,6 +272,10 @@ export default {
       emailPending:
         'Cambio email in attesa di conferma: {{email}}. Conferma il link inviato a entrambe le caselle per completarlo.',
       error: 'Aggiornamento non riuscito. Riprova.',
+      partialSave:
+        'I dati del profilo sono stati salvati, ma l’email non è cambiata. Riprova il cambio email.',
+      partialSaveReason:
+        'I dati del profilo sono stati salvati, ma l’email non è cambiata. {{reason}}',
       // Il salvataggio è UNO solo per tutti i campi: se l'indice respinge il nickname,
       // cade anche il resto. Dirlo evita che si esca da qui credendo il contrario.
       nothingSaved:

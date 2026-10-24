@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
@@ -35,11 +36,13 @@ export const DeleteAccountScreen: React.FC = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const [loading, setLoading] = useState(false);
+  const [submitAttempt, setSubmitAttempt] = useState(0);
   const { error, setError, reportError, showError, offline } =
     useAuthError('auth.delete.error');
   const [retryAction, setRetryAction] = useState<'now' | 'scheduled'>('now');
 
   const runDeleteNow = useCallback(async (): Promise<void> => {
+    setSubmitAttempt(attempt => attempt + 1);
     setError(undefined);
     setRetryAction('now');
     setLoading(true);
@@ -76,6 +79,7 @@ export const DeleteAccountScreen: React.FC = () => {
   }, [deleteAccountNow, showError, setError, t]);
 
   const runSchedule = useCallback(async (): Promise<void> => {
+    setSubmitAttempt(attempt => attempt + 1);
     setError(undefined);
     setRetryAction('scheduled');
     setLoading(true);
@@ -153,9 +157,11 @@ export const DeleteAccountScreen: React.FC = () => {
       ) : null}
 
       {error ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {error}
-        </PerfectText>
+        <AuthSubmitError
+          message={error}
+          attempt={submitAttempt}
+          style={styles.error}
+        />
       ) : null}
       <AuthRetry
         visible={offline}

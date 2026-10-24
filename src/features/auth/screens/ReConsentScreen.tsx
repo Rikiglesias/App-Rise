@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
 import { PerfectText } from '@/components/ui';
@@ -33,6 +34,8 @@ export const ReConsentScreen: React.FC = () => {
   const { openLink, isLoading } = useLinkHandler();
 
   const [loading, setLoading] = useState(false);
+  const [submitAttempt, setSubmitAttempt] = useState(0);
+  const [logoutAttempt, setLogoutAttempt] = useState(0);
   const { error, setError, showError, offline } = useAuthError(
     'auth.consents.error',
     'RiConsenso'
@@ -46,6 +49,7 @@ export const ReConsentScreen: React.FC = () => {
   } = useAuthError('auth.profile.logoutError');
 
   const handleLogout = useCallback((): void => {
+    setLogoutAttempt(attempt => attempt + 1);
     setLogoutError(undefined);
     setLogoutLoading(true);
     void signOut()
@@ -61,6 +65,7 @@ export const ReConsentScreen: React.FC = () => {
   }, [openLink]);
 
   const handleAccept = useCallback((): void => {
+    setSubmitAttempt(attempt => attempt + 1);
     setError(undefined);
     setLoading(true);
     // Il `.catch` non è ridondante: la promessa può RIGETTARE, e questa schermata
@@ -96,9 +101,11 @@ export const ReConsentScreen: React.FC = () => {
         disabled={logoutLoading}
       />
       {error ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {error}
-        </PerfectText>
+        <AuthSubmitError
+          message={error}
+          attempt={submitAttempt}
+          style={styles.error}
+        />
       ) : null}
       <AuthRetry
         visible={offline}
@@ -113,9 +120,11 @@ export const ReConsentScreen: React.FC = () => {
         disabled={loading}
       />
       {logoutError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {logoutError}
-        </PerfectText>
+        <AuthSubmitError
+          message={logoutError}
+          attempt={logoutAttempt}
+          style={styles.error}
+        />
       ) : null}
       <AuthRetry
         visible={logoutOffline}

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { AuthScreen } from '../components/AuthScreen';
@@ -8,6 +8,7 @@ import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
 import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { ConfirmationResend } from '../components/ConfirmationResend';
 import { AuthRetry } from '../components/AuthRetry';
 import { AuthSection } from '../components/AuthSection';
@@ -27,6 +28,12 @@ export const SignUpScreen: React.FC = () => {
   const { t } = useTranslation();
   const { values, errors, refs, onChange, focusNext, ...form } =
     useSignUpForm();
+  const [submitAttempt, setSubmitAttempt] = useState(0);
+  const { handleSubmit: submit } = form;
+  const handleSubmit = useCallback((): void => {
+    setSubmitAttempt(attempt => attempt + 1);
+    submit();
+  }, [submit]);
   // Disponibilità del nickname mentre si scrive (migration 0018): senza, chi ne sceglie
   // uno già preso si registra e lo trova vuoto, senza che nessuno glielo abbia detto.
   // Lo stato arriva dal form, che è anche quello che lo consulta prima di inviare.
@@ -205,19 +212,21 @@ export const SignUpScreen: React.FC = () => {
       <View style={styles.submitGap} />
 
       {form.submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {form.submitError}
-        </PerfectText>
+        <AuthSubmitError
+          message={form.submitError}
+          attempt={submitAttempt}
+          style={styles.error}
+        />
       ) : null}
 
       <AuthButton
         label={t('auth.signup.submit')}
-        onPress={form.handleSubmit}
+        onPress={handleSubmit}
         loading={form.loading}
       />
       <AuthRetry
         visible={form.offline}
-        onPress={form.handleSubmit}
+        onPress={handleSubmit}
         loading={form.loading}
       />
       <AuthButton

@@ -5,10 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthScreen } from '../components/AuthScreen';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
+import { AuthSubmitError } from '../components/AuthSubmitError';
 import { ConfirmationResend } from '../components/ConfirmationResend';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
-import { PerfectText } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -38,6 +38,7 @@ export const LoginScreen: React.FC = () => {
   } = useAuthError();
   const [confirmationEmail, setConfirmationEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [submitAttempt, setSubmitAttempt] = useState(0);
 
   const passwordRef = useRef<TextInput>(null);
 
@@ -55,6 +56,7 @@ export const LoginScreen: React.FC = () => {
   );
 
   const onSubmit = useCallback(async (): Promise<void> => {
+    setSubmitAttempt(attempt => attempt + 1);
     setSubmitError(null);
     const e = validateEmail(email);
     const p = validateRequired(password);
@@ -122,9 +124,11 @@ export const LoginScreen: React.FC = () => {
         onSubmitEditing={handleSubmit}
       />
       {submitError ? (
-        <PerfectText size={14} lines={2} style={styles.error}>
-          {submitError}
-        </PerfectText>
+        <AuthSubmitError
+          message={submitError}
+          attempt={submitAttempt}
+          style={styles.error}
+        />
       ) : null}
       <AuthButton
         label={t('auth.login.submit')}
