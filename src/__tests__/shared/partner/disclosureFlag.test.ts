@@ -4,15 +4,19 @@
  * Platform.OS = 'ios', quindi le funzioni prendono il ramo SecureStore.
  */
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 import {
   hasSeenPartnerDisclosure,
   markPartnerDisclosureSeen,
+  hasOptedOutOfPrefill,
+  setPrefillOptOut,
 } from '@/shared/partner/disclosureFlag';
 
 jest.mock('expo-secure-store', () => ({
   getItemAsync: jest.fn(),
   setItemAsync: jest.fn(),
+  deleteItemAsync: jest.fn(),
 }));
 
 const mockGet = SecureStore.getItemAsync as jest.Mock;
@@ -64,5 +68,61 @@ describe('disclosureFlag (path nativo SecureStore)', () => {
   it('mark inghiotte gli errori di scrittura senza propagare', async () => {
     mockSet.mockRejectedValue(new Error('keychain unavailable'));
     await expect(markPartnerDisclosureSeen('user-1')).resolves.toBeUndefined();
+  });
+});
+
+describe('disclosureFlag — errori della rinuncia', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('una lettura nativa fallita protegge i dati anche se l avviso era visto', async () => {
+    mockGet.mockRejectedValue(new Error('keychain unavailable'));
+    await expect(hasOptedOutOfPrefill('user-1')).resolves.toBe(true);
+  });
+
+  it('una scrittura nativa fallita propaga l errore al chiamante', async () => {
+    const error = new Error('keychain unavailable');
+    mockSet.mockRejectedValue(error);
+    await expect(setPrefillOptOut('user-1', true)).rejects.toBe(error);
+  });
+
+  it('la lettura web fallita protegge i dati', async () => {
+    jest.replaceProperty(Platform, 'OS', 'web');
+    const descriptor = Object.getOwnPropertyDescriptor(
+      globalThis,
+      'localStorage'
+    );
+    Object.defineProperty(globalThis, 'localStorage', {
+      configurable: true,
+      get: () => {
+        throw new Error('storage denied');
+      },
+    });
+    try {
+      await expect(hasOptedOutOfPrefill('user-1')).resolves.toBe(true);
+    } finally {
+      if (descriptor)
+        Object.defineProperty(globalThis, 'localStorage', descriptor);
+      else Reflect.deleteProperty(globalThis, 'localStorage');
+    }
+  });
+
+  it('senza storage web protegge i dati e non dichiara salvata la scelta', async () => {
+    jest.replaceProperty(Platform, 'OS', 'web');
+    const descriptor = Object.getOwnPropertyDescriptor(
+      globalThis,
+      'localStorage'
+    );
+    Object.defineProperty(globalThis, 'localStorage', {
+      configurable: true,
+      value: undefined,
+    });
+    try {
+      await expect(hasOptedOutOfPrefill('user-1')).resolves.toBe(true);
+      await expect(setPrefillOptOut('user-1', true)).rejects.toThrow();
+    } finally {
+      if (descriptor)
+        Object.defineProperty(globalThis, 'localStorage', descriptor);
+      else Reflect.deleteProperty(globalThis, 'localStorage');
+    }
   });
 });

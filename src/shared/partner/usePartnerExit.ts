@@ -205,9 +205,9 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
    * La persona ha scelto: `conDati` true prosegue con la precompilazione, false
    * apre lo stesso indirizzo senza nome, cognome ed email.
    *
-   * L'avviso si marca come visto in ENTRAMBI i casi — è trasparenza (Art.13),
-   * non un consenso da riraccogliere ogni volta — ma NON se la persona annulla:
-   * chi chiude senza scegliere non l'ha letto, e deve rivederlo.
+   * L'avviso si marca come visto solo se la scelta è stata salvata. Una rinuncia
+   * non salvata vale comunque per questa uscita, e l'avviso ricompare al prossimo
+   * giro. Annullare non lo marca visto.
    */
   const confirmDonorboxDisclosure = useCallback(
     async (conDati: boolean) => {
@@ -224,8 +224,11 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         // La scelta si RICORDA: «senza i miei dati» è una preferenza, non un
         // gesto valido per una volta sola. Scegliendo di mandarli si azzera una
         // eventuale rinuncia precedente, così la porta resta aperta nei due sensi.
-        await setPrefillOptOut(userId, !conDati);
-        await markPartnerDisclosureSeen(userId, 'donorbox');
+        const sceltaSalvata = await setPrefillOptOut(userId, !conDati).then(
+          () => true,
+          () => false
+        );
+        if (sceltaSalvata) await markPartnerDisclosureSeen(userId, 'donorbox');
         await openLink(
           conDati ? scelto.conDati : scelto.senzaDati,
           'donation',

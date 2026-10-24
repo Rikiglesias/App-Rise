@@ -64,10 +64,9 @@ export const hasSeenPartnerDisclosure = async (
  * più un avviso, perché ormai era «già visto». Chi si era protetto una volta
  * veniva scoperto per sempre dalla volta dopo.
  *
- * Fail-open come la lettura del flag: se lo storage non risponde si risponde
- * «nessuna rinuncia». Qui il fail-open è però il lato MENO protettivo, ed è
- * accettabile solo perché in quel caso l'avviso ricompare e la scelta si può
- * rifare — non perché sia innocuo.
+ * Se la lettura fallisce, si esce senza dati (lato protettivo). Se la scrittura
+ * fallisce, l'errore arriva al chiamante: quell'uscita rispetta la rinuncia e
+ * l'avviso NON viene marcato visto, così la scelta si richiede al prossimo giro.
  */
 const KEY_PREFIX_PREFILL_OPTOUT = 'donorbox_prefill_optout_v1';
 
@@ -78,16 +77,16 @@ export const hasOptedOutOfPrefill = async (
   userId?: string | null
 ): Promise<boolean> => {
   const key = optOutKey(userId);
-  if (Platform.OS === 'web') {
-    return typeof localStorage !== 'undefined'
-      ? localStorage.getItem(key) === '1'
-      : false;
-  }
   try {
+    if (Platform.OS === 'web') {
+      return typeof localStorage !== 'undefined'
+        ? localStorage.getItem(key) === '1'
+        : true;
+    }
     return (await SecureStore.getItemAsync(key)) === '1';
   } catch (error) {
     if (__DEV__) logWarn('lettura opt-out fallita', 'disclosureFlag', error);
-    return false;
+    return true;
   }
 };
 
@@ -96,18 +95,20 @@ export const setPrefillOptOut = async (
   optOut: boolean
 ): Promise<void> => {
   const key = optOutKey(userId);
-  if (Platform.OS === 'web') {
-    if (typeof localStorage !== 'undefined') {
+  try {
+    if (Platform.OS === 'web') {
+      if (typeof localStorage === 'undefined') {
+        throw new Error('prefill_storage_unavailable');
+      }
       if (optOut) localStorage.setItem(key, '1');
       else localStorage.removeItem(key);
+      return;
     }
-    return;
-  }
-  try {
     if (optOut) await SecureStore.setItemAsync(key, '1');
     else await SecureStore.deleteItemAsync(key);
   } catch (error) {
     if (__DEV__) logWarn('scrittura opt-out fallita', 'disclosureFlag', error);
+    throw error;
   }
 };
 

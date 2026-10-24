@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react-native';
+import * as SecureStore from 'expo-secure-store';
 
 import { usePartnerExit } from '@/shared/partner/usePartnerExit';
 import { useAuth } from '@/shared/auth/AuthContext';
@@ -25,6 +26,11 @@ jest.mock('@/shared/partner/disclosureFlag', () => ({
   markPartnerDisclosureSeen: jest.fn(),
   hasOptedOutOfPrefill: jest.fn(),
   setPrefillOptOut: jest.fn(),
+}));
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn(),
+  setItemAsync: jest.fn(),
+  deleteItemAsync: jest.fn(),
 }));
 
 const mockUseAuth = useAuth as jest.Mock;
@@ -584,5 +590,114 @@ describe('usePartnerExit — la rinuncia ai dati deve RESTARE', () => {
     });
 
     expect(mockOpenLink).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('usePartnerExit — persistenza reale della rinuncia', () => {
+  const flags = jest.requireActual<
+    typeof import('@/shared/partner/disclosureFlag')
+  >('@/shared/partner/disclosureFlag');
+  const storage = new Map<string, string>();
+  const withoutData = 'https://donorbox.org/dona-ora-rah?utm_content=DREF';
+
+  beforeEach(() => {
+    storage.clear();
+    jest
+      .mocked(SecureStore.getItemAsync)
+      .mockImplementation(key => Promise.resolve(storage.get(key) ?? null));
+    jest.mocked(SecureStore.setItemAsync).mockImplementation((key, value) => {
+      storage.set(key, value);
+      return Promise.resolve();
+    });
+    jest.mocked(SecureStore.deleteItemAsync).mockImplementation(key => {
+      storage.delete(key);
+      return Promise.resolve();
+    });
+    mockHasSeen.mockImplementation(flags.hasSeenPartnerDisclosure);
+    mockMarkSeen.mockImplementation(flags.markPartnerDisclosureSeen);
+    mockHasOptedOut.mockImplementation(flags.hasOptedOutOfPrefill);
+    mockSetOptOut.mockImplementation(flags.setPrefillOptOut);
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('DREF');
+  });
+
+  it('donorbox: rinuncia non salvata, avviso di nuovo e niente dati', async () => {
+    const first = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await first.result.current.openDonation();
+    });
+    expect(first.result.current.donorboxDisclosureVisible).toBe(true);
+    jest
+      .mocked(SecureStore.setItemAsync)
+      .mockRejectedValueOnce(new Error('keychain unavailable'));
+
+    await confermaAvvisoDonorbox(first.result, false);
+
+    expect(mockOpenLink).toHaveBeenCalledWith(
+      withoutData,
+      'donation',
+      expect.any(String)
+    );
+    expect(mockMarkSeen).not.toHaveBeenCalled();
+    expect(await flags.hasSeenPartnerDisclosure('u1', 'donorbox')).toBe(false);
+    first.unmount();
+    mockOpenLink.mockClear();
+    const next = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await next.result.current.openDonation();
+    });
+    expect(next.result.current.donorboxDisclosureVisible).toBe(true);
+    expect(mockOpenLink).not.toHaveBeenCalled();
+  });
+
+  it('donorbox: rinuncia illeggibile, niente dati', async () => {
+    await flags.markPartnerDisclosureSeen('u1', 'donorbox');
+    jest.mocked(SecureStore.getItemAsync).mockImplementation(key => {
+      if (key === 'donorbox_prefill_optout_v1_u1')
+        return Promise.reject(new Error('keychain unavailable'));
+      return Promise.resolve(storage.get(key) ?? null);
+    });
+    const { result } = renderHook(() => usePartnerExit());
+
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    expect(mockOpenLink).toHaveBeenCalledWith(
+      withoutData,
+      'donation',
+      expect.any(String)
+    );
+    expect(result.current.donorboxDisclosureVisible).toBe(false);
+  });
+
+  it('donorbox: rinuncia salvata, niente dati', async () => {
+    const first = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await first.result.current.openDonation();
+    });
+    await confermaAvvisoDonorbox(first.result, false);
+    expect(mockOpenLink).toHaveBeenCalledWith(
+      withoutData,
+      'donation',
+      expect.any(String)
+    );
+    expect(await flags.hasOptedOutOfPrefill('u1')).toBe(true);
+    expect(await flags.hasSeenPartnerDisclosure('u1', 'donorbox')).toBe(true);
+    first.unmount();
+    mockOpenLink.mockClear();
+    const next = renderHook(() => usePartnerExit());
+
+    await act(async () => {
+      await next.result.current.openDonation();
+    });
+
+    expect(next.result.current.donorboxDisclosureVisible).toBe(false);
+    expect(mockOpenLink).toHaveBeenCalledTimes(1);
+    expect(mockOpenLink).toHaveBeenCalledWith(
+      withoutData,
+      'donation',
+      expect.any(String)
+    );
   });
 });

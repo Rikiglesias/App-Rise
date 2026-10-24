@@ -1,0 +1,22 @@
+{
+  "criterio": "C62",
+  "base": "63352bc",
+  "titoli": [
+    "export: contiene i riferimenti partner",
+    "export: senza riferimenti la sezione è vuota, non assente",
+    "export: lettura dei riferimenti fallita → errore, non sezione vuota"
+  ],
+  "esitiAllaBase": {
+    "export: contiene i riferimenti partner": "failed",
+    "export: senza riferimenti la sezione è vuota, non assente": "failed",
+    "export: lettura dei riferimenti fallita → errore, non sezione vuota": "failed"
+  },
+  "motiviAllaBase": {
+    "export: contiene i riferimenti partner": "Error: expect(received).toEqual(expected) // deep equality",
+    "export: senza riferimenti la sezione è vuota, non assente": "Error: expect(received).toHaveProperty(path, value)",
+    "export: lettura dei riferimenti fallita → errore, non sezione vuota": "Error: expect(received).rejects.toBe()"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/dataExport.test.ts": "f655e633d3b6e60484ebe9f1797a0fafb8a39124f5c7557f3d2512abb913f56a"
+  }
+}

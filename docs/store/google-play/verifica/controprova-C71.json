@@ -1,0 +1,19 @@
+{
+  "criterio": "C71",
+  "base": "63352bc",
+  "titoli": [
+    "donorbox: rinuncia non salvata, avviso di nuovo e niente dati",
+    "donorbox: rinuncia illeggibile, niente dati"
+  ],
+  "esitiAllaBase": {
+    "donorbox: rinuncia non salvata, avviso di nuovo e niente dati": "failed",
+    "donorbox: rinuncia illeggibile, niente dati": "failed"
+  },
+  "motiviAllaBase": {
+    "donorbox: rinuncia non salvata, avviso di nuovo e niente dati": "Error: expect(jest.fn()).not.toHaveBeenCalled()",
+    "donorbox: rinuncia illeggibile, niente dati": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)"
+  },
+  "fileTest": {
+    "src/__tests__/shared/partner/usePartnerExit.test.tsx": "9159ada9d678a510da654214e2c0fad6cbd148309a95204e90313cc2eeaa395b"
+  }
+}
