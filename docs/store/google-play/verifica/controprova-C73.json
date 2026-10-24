@@ -1,0 +1,19 @@
+{
+  "criterio": "C73",
+  "base": "63352bc",
+  "titoli": [
+    "OTA all'avvio: oltre il tempo massimo l'app è usabile",
+    "OTA all'avvio: download finito dopo il tempo massimo non ricarica"
+  ],
+  "esitiAllaBase": {
+    "OTA all'avvio: oltre il tempo massimo l'app è usabile": "failed",
+    "OTA all'avvio: download finito dopo il tempo massimo non ricarica": "failed"
+  },
+  "motiviAllaBase": {
+    "OTA all'avvio: oltre il tempo massimo l'app è usabile": "Error: expect(received).toBeNull()",
+    "OTA all'avvio: download finito dopo il tempo massimo non ricarica": "Error: expect(jest.fn()).not.toHaveBeenCalled()"
+  },
+  "fileTest": {
+    "src/__tests__/otaAttesaMassima.test.tsx": "bf08af591fd9966659cfdfd6f75147324a4ddea64424c94d2cf8c80a1662c8be"
+  }
+}

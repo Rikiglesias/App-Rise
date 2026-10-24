@@ -20,6 +20,10 @@ import { shouldReloadOtaAtStartup } from './src/shared/utils/otaStartupPolicy';
 // Durata minima splash screen (ms)
 const SPLASH_SCREEN_DURATION = 2500;
 
+// Tetto della schermata d'attesa OTA che blocca l'app all'avvio (C73): scaduto, l'app torna
+// usabile e il bundle scaricato dopo vale dal prossimo avvio a freddo, mai ricaricato sotto le dita.
+const OTA_ATTESA_MASSIMA_MS = 30_000;
+
 // Crash reporting Sentry. DSN SOLO da env (mai committato): finché EXPO_PUBLIC_SENTRY_DSN
 // non è impostato, enabled=false => init no-op (nessun invio, nessun impatto runtime).
 // NB: il modulo nativo Sentry richiede un dev build / prebuild (NON funziona in Expo Go).
@@ -108,6 +112,8 @@ const NativeApp: React.FC = () => {
   const wasDownloadingRef = useRef(false);
   const reloadAttemptedRef = useRef(false);
   const mountedRef = useRef(false);
+  const otaWaitStartRef = useRef<number | null>(null);
+  const otaWaitExpiredRef = useRef(false);
   // La decisione segue l'inizio del download, non il momento in cui finisce.
   const [reloadDuringStartup, setReloadDuringStartup] = useState<
     boolean | null
@@ -149,6 +155,7 @@ const NativeApp: React.FC = () => {
       currentPolicy = shouldReloadOtaAtStartup({
         navigationReady: navigationReadyRef.current,
         elapsedSinceStartupMs: Date.now() - startupTimeRef.current,
+        attesaScaduta: otaWaitExpiredRef.current,
       });
       setReloadDuringStartup(currentPolicy);
     }
@@ -170,6 +177,29 @@ const NativeApp: React.FC = () => {
     reloadDuringStartup === true &&
     (isDownloading || isUpdatePending) &&
     !reloadFailed;
+
+  // Il tempo conta dalla prima comparsa della schermata: anche due download di fila non la
+  // tengono oltre il tetto. Scaduto, la decisione passa a «niente ricarica fino al prossimo avvio».
+  useEffect(() => {
+    if (!showOtaScreen) return;
+    otaWaitStartRef.current ??= Date.now();
+    const remaining =
+      OTA_ATTESA_MASSIMA_MS - (Date.now() - otaWaitStartRef.current);
+    const timer = setTimeout(
+      () => {
+        otaWaitExpiredRef.current = true;
+        setReloadDuringStartup(
+          shouldReloadOtaAtStartup({
+            navigationReady: navigationReadyRef.current,
+            elapsedSinceStartupMs: Date.now() - startupTimeRef.current,
+            attesaScaduta: true,
+          })
+        );
+      },
+      Math.max(0, remaining)
+    );
+    return () => clearTimeout(timer);
+  }, [showOtaScreen]);
 
   return (
     <ErrorBoundary>

@@ -20,4 +20,22 @@ describe('Politica OTA all’inizio del download', () => {
       ).toBe(expected);
     }
   );
+
+  // C73: scaduta l'attesa massima non si ricarica più, nemmeno dentro la finestra.
+  it.each([
+    [false, 0],
+    [true, 0],
+    [true, 5000],
+  ])(
+    'attesa scaduta, navigazione pronta=%s, trascorsi=%s ms: nessun reload',
+    (navigationReady, elapsedSinceStartupMs) => {
+      expect(
+        shouldReloadOtaAtStartup({
+          navigationReady,
+          elapsedSinceStartupMs,
+          attesaScaduta: true,
+        })
+      ).toBe(false);
+    }
+  );
 });
