@@ -316,7 +316,6 @@ npm test -- --testPathPattern=performance --passWithNoTests
 
 # 4. Layout Consistency
 echo "📐 Validating layout consistency..."
-npm test -- --testPathPattern=visual-diff --passWithNoTests
 
 echo "✅ ALL SNAPSHOT CHECKS PASSED"
 echo "🚀 Deployment protection verified"

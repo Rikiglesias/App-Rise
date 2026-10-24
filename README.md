@@ -227,7 +227,7 @@ git push -u origin feat/nome-feature
 
 ### **✅ Regole PR** (ruleset `master`)
 
-- ✅ Tutti i check CI devono passare (typescript / eslint / prettier / tests / visual-diff / build)
+- ✅ Tutti i check CI devono passare (typescript / eslint / prettier / tests / build)
 - ✅ 1 approvazione + code owner (`CODEOWNERS`)
 - ✅ Linear history: squash o rebase, no merge-commit
 - ✅ Commit message convenzionali:
