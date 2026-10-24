@@ -3,26 +3,25 @@
 
 ## ⚡ TL;DR (versione corta da usare ogni giorno)
 
-- **Usa SEMPRE**: `PerfectText`, `PerfectImage`, `PerfectContainer`, `useUniversalTheme`, `SystemImmunity`, `responsiveSystem` (`scaleFont`, `scaleSpacing`, `scaleDimensionLinear`).
-- **Vietato**: `FormattedText`, `ResponsiveBox/ResponsiveImage`, `useResponsive*`, `Dimensions.get(...)` per layout/scaling, breakpoint manuali, `allowFontScaling=true`.
-- **PerfectText**: `size` obbligatorio; `lines` quando servono righe esatte; `immunity={true}` sempre. Per wrap identico su tutti i device, usa `containerWidth` riferito a iPhone 15.
+- **Usa SEMPRE**: `PerfectText`, `PerfectImage`, `PerfectContainer`, `useUniversalTheme`, `scale`, `scaleSpacing`, `scaleTouch` (import qui sotto).
+- **Vietato**: `FormattedText`, `ResponsiveBox/ResponsiveImage`, `useResponsive*`, `Dimensions.get(...)` per layout/scaling, breakpoint manuali, `allowFontScaling={false}` (spegnerebbe la grandezza del testo scelta dalla persona: resta accesa per scelta, criterio C42).
+- **PerfectText**: `size` obbligatorio; `lines` quando servono righe esatte. Per wrap identico su tutti i device, usa `containerWidth` riferito a iPhone 15.
 - **PerfectImage**: usa `preset` (`hero|card|thumbnail|avatar|banner`).
 - **PerfectContainer**: usa `preset` (`page|card|section|modal|header|footer`); `theme="auto"` di default; niente layout manuali.
-- **Dark Mode**: un solo toggle globale (`useUniversalTheme`); testi con `color="auto"` quando serve.
-- **Immunità**: `immunity={true}` nei PerfectText; niente gestioni manuali di scaling/accessibilità.
+- **Tema**: l'app è forzata in chiaro (`userInterfaceStyle: 'light'`, criterio C82); niente chiamate a `setTheme`/`toggleTheme` finché il tema scuro non ha i suoi contrasti.
+- **Scala del testo**: la calcola `PerfectText` (dimensione proporzionale allo schermo e tetto alla scala di sistema); la prop `immunity` non fa niente e non serve.
 - **Import corretti**:
 ```ts
 import {
   PerfectText, PerfectImage, PerfectContainer,
-  PageContainer, CardContainer, SectionContainer, ModalContainer,
-  useUniversalTheme
+  PageContainer, ModalContainer,
 } from '@/components/ui';
-import responsiveSystem, { scaleFont, scaleSpacing, scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
-import { SystemImmunity } from '@/shared/utils/SystemImmunity';
+import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
+import { scale, scaleSpacing, scaleTouch } from '@/shared/constants/perfectScale';
 ```
 - **Checklist rapida**:
   - PerfectText/PerfectImage/PerfectContainer usati ovunque
-  - `size/lines/immunity` corretti nei testi
+  - `size` e `lines` corretti nei testi
   - `theme="auto"` e `color="auto"` quando servono
   - Zero `Dimensions`, zero breakpoint manuali, zero percentuali hardcoded
   - `npm run pre-modifiche` e `npm run post-modifiche` verdi; `npm run conta-problemi` = 0
@@ -45,7 +44,7 @@ Per i dettagli completi, vedi: `docs/guides/development.md`, `docs/architecture/
 // const { width, height } = Dimensions.get('window');
 // <FormattedText fontSize={32} fixedLines={2}>
 // <ResponsiveBox preset="card">
-// <Text allowFontScaling={true}>
+// <Text allowFontScaling={false}>   (spegne la grandezza del testo scelta dalla persona, C42)
 
 // ✅ PERFECT SYSTEM (pattern corretti)
 import { PerfectText, PerfectImage, PerfectContainer } from '@/components/ui';
@@ -60,21 +59,17 @@ import { PerfectText, PerfectImage, PerfectContainer } from '@/components/ui';
 ```ts
 import {
   PerfectText, PerfectImage, PerfectContainer,
-  PerfectTitle, PerfectSubtitle, PerfectBody,
-  HeroImage, CardImage, ThumbnailImage, AvatarImage, BannerImage,
-  PageContainer, CardContainer, SectionContainer, ModalContainer,
-  useUniversalTheme
+  PageContainer, ModalContainer,
 } from '@/components/ui';
-
-import responsiveSystem, { scaleFont, scaleSpacing, scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
-import { SystemImmunity } from '@/shared/utils/SystemImmunity';
+import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
+import { scale, scaleSpacing, scaleTouch } from '@/shared/constants/perfectScale';
 ```
 
 ---
 
 ## 📋 Checklist pre‑commit (rigorosa)
 ```text
-[] Perfect* ovunque | [] size/lines/immunity | [] theme="auto"/color="auto"
+[] Perfect* ovunque | [] size/lines | [] theme="auto"/color="auto"
 [] Niente Dimensions/breakpoint/percentuali | [] Conta‑problemi = 0 | [] Post‑modifiche OK
 ```
 
@@ -140,7 +135,7 @@ features/[name]/
 
 ## 📌 Addendum – Sistema Millimetrico (Android parity + wrap identico)
 
-- PerfectText: per wrap identici su tutti i device, aggiungi `containerWidth` (riferito a iPhone 15, 393) scalato con `scaleDimensionLinear`.
+- PerfectText: per wrap identici su tutti i device, aggiungi `containerWidth` (riferito a iPhone 15, 393) scalato con `scale`.
 ```tsx
 <PerfectText size={22} lines={2} containerWidth={140}>Dona e{`\n`}Aiuta</PerfectText>
 ```
@@ -148,8 +143,7 @@ features/[name]/
   - `includeFontPadding = false`, `textBreakStrategy = 'simple'`, `ellipsizeMode = 'clip'`
 - Accesso sicuro a LOGICAL_REFERENCE:
 ```ts
-import responsiveSystem, { scaleDimensionLinear } from '@/shared/constants/responsiveSystem';
-const referenceWidth = responsiveSystem?.LOGICAL_REFERENCE?.width ?? 393;
-const ninetyPercent = scaleDimensionLinear(referenceWidth * 0.9);
+import { LOGICAL_REFERENCE, scale } from '@/shared/constants/perfectScale';
+const ninetyPercent = scale(LOGICAL_REFERENCE.width * 0.9);
 ```
 - Immagini header: preferisci `PerfectImage preset='hero'` (16:9). Se necessario, usa `resizeMode='contain'` con altezza scalata.
