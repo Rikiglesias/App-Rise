@@ -178,8 +178,8 @@ di ritiro. Testo per social, newsletter e sito:
 
 > **La nostra app è cambiata.** Se usi l'app su un telefono Android, su Google Play trovi la nuova app «Rise Against
 > Hunger Italia»: <LINK-SCHEDA-PLAY>. Per qualche settimana su Google Play ne troverai due con lo stesso nome: quella
-> giusta è al link. Dal <DATA-RITIRO> la vecchia app verrà tolta da Google Play e smetterà di funzionare: una volta
-> installata la nuova, puoi disinstallarla.
+> giusta è al link. Dal <DATA-RITIRO> la vecchia app verrà tolta da Google Play e non riceverà più aggiornamenti: una
+> volta installata la nuova, puoi disinstallarla.
 
 Su iPhone non cambia niente: l'app è la stessa, quindi il testo parla solo di Android. La vecchia app non aveva un
 account per gli utenti: non c'è niente da trasferire, e l'avviso non deve dire il contrario.
@@ -261,7 +261,8 @@ scheda del registro è la prova da allegare al preavviso del § 13.
    in Play Console (Accesso all'app e Rapporto pre-lancio).
 6. **Numeri d'impatto**: i numeri ufficiali (Annual Report) per la schermata Impatto, da dare a Claude.
 7. **Decisioni aperte**:
-   - Gift card di Let's Donation: tenere il pulsante o toglierlo prima del lancio (le regole di Google non le trattano).
+   - Gift card di Let's Donation: tenere il pulsante o toglierlo prima del lancio. Le regole di Google le ammettono
+     senza la fatturazione di Play (answer/10281818, `play-console-risposte.md`): la scelta è solo nostra.
    - Kosovo, Russia, Bielorussia: tenerli fra i paesi se Play Console li offre, o toglierli.
    - Codice di provenienza: per quanto tempo conservarlo (oggi senza scadenza: serve una migration).
    - Sentry: quando riaccenderlo (dopo il lancio, con progetto UE e informativa aggiornata).

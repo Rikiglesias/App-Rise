@@ -274,14 +274,15 @@ export default {
     delete: {
       title: 'Delete account',
       warning:
-        'This action is irreversible: your personal data will be permanently deleted.',
+        'This action is irreversible: the data of your app account will be permanently deleted. Data you left on Let’s Donation and Donorbox stays there: to delete it, write to them or to us.',
       now: 'Delete now',
       scheduled: 'Delete in 30 days',
       // "Disabled" was untrue: nothing suspends the account during the 30 days,
       // which are a change-your-mind window in which everything keeps working.
       scheduledHint:
         'You have 30 days to change your mind: your account stays usable and you can cancel at any time. After 30 days it is permanently deleted.',
-      confirmNow: 'Your account and all data will be deleted now. Confirm?',
+      confirmNow:
+        'Your app account and its data will be deleted now; data on Let’s Donation and Donorbox stays. Confirm?',
       confirmScheduled:
         'Your account will be deleted in 30 days. You can cancel by signing in again. Confirm?',
       confirm: 'Yes, proceed',
@@ -518,7 +519,7 @@ export default {
     donorboxContinueWithoutData: 'Continue without my details',
     disclosureTitle: 'You’re leaving the app',
     disclosureBody:
-      'Shop, gift cards, events, projects and community registration are handled by Let’s Donation, our partner. On that platform you’ll be asked to create a separate account from your app one: that’s expected, they are two distinct services. If you continue, you’ll be redirected.',
+      'Shop, gift cards, events, projects and community registration are handled by Let’s Donation, our partner. That platform has its own account, separate from your app one: if you don’t have one yet, it will ask you to create it. If you continue, you’ll be redirected.',
     disclosureContinue: 'Continue',
     disclosureCancel: 'Cancel',
   },

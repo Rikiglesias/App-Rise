@@ -287,7 +287,7 @@ export default {
     delete: {
       title: 'Elimina account',
       warning:
-        'Questa azione è irreversibile: i tuoi dati personali verranno eliminati definitivamente.',
+        'Questa azione è irreversibile: i dati del tuo account dell’app verranno eliminati definitivamente. I dati lasciati su Let’s Donation e Donorbox restano: per cancellarli scrivi a loro o a noi.',
       now: 'Elimina subito',
       scheduled: 'Elimina tra 30 giorni',
       // «Disattivato» era falso: nessuna regola sospende l'account nei 30 giorni,
@@ -295,7 +295,7 @@ export default {
       scheduledHint:
         'Hai 30 giorni per ripensarci: l’account resta utilizzabile e puoi annullare quando vuoi. Passati i 30 giorni viene eliminato definitivamente.',
       confirmNow:
-        'L’account e tutti i dati saranno eliminati subito. Confermi?',
+        'L’account dell’app e i suoi dati saranno eliminati subito; i dati su Let’s Donation e Donorbox restano. Confermi?',
       confirmScheduled:
         'L’account sarà eliminato tra 30 giorni. Potrai annullare accedendo di nuovo. Confermi?',
       confirm: 'Sì, procedi',
@@ -545,7 +545,7 @@ export default {
     donorboxContinueWithoutData: 'Continua senza i miei dati',
     disclosureTitle: 'Stai per uscire dall’app',
     disclosureBody:
-      'Shop, gift card, eventi, progetti e registrazione alla community sono gestiti da Let’s Donation, il nostro partner. Su quella piattaforma ti verrà chiesto di creare un account separato da quello dell’app: è normale, sono due servizi distinti. Proseguendo verrai reindirizzato.',
+      'Shop, gift card, eventi, progetti e registrazione alla community sono gestiti da Let’s Donation, il nostro partner. Quella piattaforma ha un account distinto da quello dell’app: se non ce l’hai, ti chiederà di crearlo. Proseguendo verrai reindirizzato.',
     disclosureContinue: 'Continua',
     disclosureCancel: 'Annulla',
   },
