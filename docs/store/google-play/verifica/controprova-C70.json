@@ -1,0 +1,16 @@
+{
+  "criterio": "C70",
+  "base": "63352bc",
+  "titoli": [
+    "salvataggio parziale: dice cosa è salvato"
+  ],
+  "esitiAllaBase": {
+    "salvataggio parziale: dice cosa è salvato": "failed"
+  },
+  "motiviAllaBase": {
+    "salvataggio parziale: dice cosa è salvato": "Error: Unable to find an element with text: I dati del profilo sono stati salvati, ma l’email non è cambiata. Riprova il cambio email."
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/salvataggioParziale.test.tsx": "85153fc428b83dcced91a48e55397bad236a04cdef0b5546a9decd5eb46ce3f3"
+  }
+}

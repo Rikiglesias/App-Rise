@@ -1,0 +1,46 @@
+{
+  "criterio": "C65",
+  "base": "63352bc",
+  "titoli": [
+    "errore d'invio annunciato: Accesso",
+    "errore d'invio annunciato: Registrazione",
+    "errore d'invio annunciato: Password dimenticata",
+    "errore d'invio annunciato: Reimposta password",
+    "errore d'invio annunciato: Completa profilo",
+    "errore d'invio annunciato: Modifica profilo",
+    "errore d'invio annunciato: Elimina account",
+    "errore d'invio annunciato: Ri-consenso",
+    "errore d'invio annunciato: Profilo",
+    "errore d'invio annunciato: Reinvio conferma",
+    "errore d'invio annunciato: stesso errore due volte, due annunci"
+  ],
+  "esitiAllaBase": {
+    "errore d'invio annunciato: Accesso": "failed",
+    "errore d'invio annunciato: Registrazione": "failed",
+    "errore d'invio annunciato: Password dimenticata": "failed",
+    "errore d'invio annunciato: Reimposta password": "failed",
+    "errore d'invio annunciato: Completa profilo": "failed",
+    "errore d'invio annunciato: Modifica profilo": "failed",
+    "errore d'invio annunciato: Elimina account": "failed",
+    "errore d'invio annunciato: Ri-consenso": "failed",
+    "errore d'invio annunciato: Profilo": "failed",
+    "errore d'invio annunciato: Reinvio conferma": "failed",
+    "errore d'invio annunciato: stesso errore due volte, due annunci": "failed"
+  },
+  "motiviAllaBase": {
+    "errore d'invio annunciato: Accesso": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Registrazione": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Password dimenticata": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Reimposta password": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Completa profilo": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Modifica profilo": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Elimina account": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Ri-consenso": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Profilo": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: Reinvio conferma": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "errore d'invio annunciato: stesso errore due volte, due annunci": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/erroreInvioAnnunciato.test.tsx": "8de7248f89009448e5b15b408d13c9557b876347010cb0f5bd7f92cb1af03ddd"
+  }
+}
