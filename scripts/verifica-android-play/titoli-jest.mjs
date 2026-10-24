@@ -29,7 +29,17 @@ import {
 /** Commit su cui i test nuovi DEVONO fallire: lo stato prima del lavoro R8-R10. */
 export const BASE_CONTROPROVA = 'fbefa98';
 
-/** Esegue l'intera suite in `cwd` e restituisce le asserzioni { nome, titolo, stato, file }; null se illeggibile. */
+/** Base dei criteri R24-R26 (C56-C84): lo stato prima delle correzioni di F13. */
+export const BASE_R24 = '63352bc';
+
+// Regola della controprova R25: alla base il test deve arrivare al codice di quella base e fallire su
+// un'asserzione. Un titolo assente (file che non si carica) o uno di questi messaggi dice invece che il
+// test non ha trovato il suo punto d'ingresso: è FAIL della controprova, non un rosso.
+export const PUNTO_INGRESSO_MANCANTE =
+  /Cannot find module|is not a function|is not a constructor|Element type is invalid|is not defined|does not provide an export/;
+const rigorosa = base => base === BASE_R24;
+
+/** Esegue l'intera suite in `cwd` e restituisce le asserzioni { nome, titolo, stato, file, motivo }; null se illeggibile. */
 export const eseguiSuite = (cwd = ROOT) => {
   // Node diretto, senza shell: con `shell: true` su Windows gli argomenti con spazi e apici si spezzano.
   // Worker al 25 %: col default (core - 1 = 31 qui) la suite esaurisce la memoria virtuale (17/10, due arresti).
@@ -51,6 +61,9 @@ export const eseguiSuite = (cwd = ROOT) => {
         titolo: a.title,
         stato: a.status,
         file: rel(t.name),
+        motivo: String(a.failureMessages?.[0] ?? '')
+          .split(/\r?\n/)[0]
+          .slice(0, 200),
       }))
     );
   } catch {
@@ -103,8 +116,9 @@ export const shaFile = files =>
   );
 
 /**
- * Esegue la suite in un worktree temporaneo a BASE_CONTROPROVA con i file di test di HEAD copiati dentro
- * e salva l'esito per ogni titolo (passed | failed | assente).
+ * Esegue la suite in un worktree temporaneo alla base di ogni criterio (BASE_CONTROPROVA se non ne
+ * dichiara una) con i file di test di HEAD copiati dentro e salva l'esito per ogni titolo
+ * (passed | failed | assente).
  */
 export const registraControprove = criteri => {
   const oggi = suite();
@@ -115,12 +129,22 @@ export const registraControprove = criteri => {
   }
   const perCriterio = criteri.map(c => ({
     ...c,
+    base: c.base ?? BASE_CONTROPROVA,
     fileTest: fileDeiTitoli(c.titoli, oggi),
   }));
+  return [...new Set(perCriterio.map(c => c.base))].flatMap(commit =>
+    registraSuBase(
+      commit,
+      perCriterio.filter(c => c.base === commit)
+    )
+  );
+};
+
+const registraSuBase = (commit, perCriterio) => {
   const tutti = [...new Set(perCriterio.flatMap(c => c.fileTest))];
   const dir = mkdtempSync(join(tmpdir(), 'controprova-'));
   try {
-    esegui('git', ['worktree', 'add', '--detach', dir, BASE_CONTROPROVA]);
+    esegui('git', ['worktree', 'add', '--detach', dir, commit]);
     symlinkSync(
       percorso('node_modules'),
       join(dir, 'node_modules'),
@@ -131,7 +155,7 @@ export const registraControprove = criteri => {
       cpSync(percorso(f), join(dir, f));
     }
     const base = eseguiSuite(dir);
-    if (!base) throw new Error('suite illeggibile nel worktree della base');
+    if (!base) throw new Error(`suite illeggibile nel worktree di ${commit}`);
     return perCriterio.map(({ id, titoli, fileTest }) => {
       const esitiAllaBase = Object.fromEntries(
         titoli.map(t => {
@@ -143,11 +167,22 @@ export const registraControprove = criteri => {
           ];
         })
       );
+      // Per la regola R25 serve sapere PERCHÉ un titolo è rosso alla base.
+      const motiviAllaBase = Object.fromEntries(
+        titoli
+          .filter(t => esitiAllaBase[t] === 'failed')
+          .map(t => [
+            t,
+            base.find(r => corrisponde(r, t) && r.stato !== 'passed')?.motivo ??
+              '',
+          ])
+      );
       const registro = {
         criterio: id,
-        base: BASE_CONTROPROVA,
+        base: commit,
         titoli,
         esitiAllaBase,
+        ...(rigorosa(commit) ? { motiviAllaBase } : {}),
         fileTest: shaFile(fileTest),
       };
       writeFileSync(
@@ -184,10 +219,15 @@ export const staccaJunction = nm => {
 };
 
 /** Motivo di FAIL della controprova registrata (solo titoli non di guardia), o ''. */
-export const esitoControprova = (titoli, registro, shaAttuali) => {
+export const esitoControprova = (
+  titoli,
+  registro,
+  shaAttuali,
+  base = BASE_CONTROPROVA
+) => {
   if (!registro) return 'controprova mancante';
-  if (registro.base !== BASE_CONTROPROVA)
-    return `controprova su ${registro.base}, attesa ${BASE_CONTROPROVA}`;
+  if (registro.base !== base)
+    return `controprova su ${registro.base}, attesa ${base}`;
   if (titoli.length === 0)
     return 'nessun titolo da controprovare (servono titoli non di guardia)';
   const esiti = registro.esitiAllaBase ?? {};
@@ -195,6 +235,17 @@ export const esitoControprova = (titoli, registro, shaAttuali) => {
   if (senza.length) return `controprova senza «${senza.join('», «')}»`;
   const verdi = titoli.filter(t => esiti[t] === 'passed');
   if (verdi.length) return `già verdi alla base: «${verdi.join('», «')}»`;
+  if (rigorosa(base)) {
+    const assenti = titoli.filter(t => esiti[t] === 'assente');
+    if (assenti.length)
+      return `assenti alla base ${base}, il test deve passare da un punto d'ingresso che esiste lì: «${assenti.join('», «')}»`;
+    const motivi = registro.motiviAllaBase ?? {};
+    const ingresso = titoli.find(
+      t => !motivi[t] || PUNTO_INGRESSO_MANCANTE.test(motivi[t])
+    );
+    if (ingresso)
+      return `«${ingresso}» rosso alla base senza un'asserzione fallita (${motivi[ingresso] || 'motivo non registrato'})`;
+  }
   const file = Object.keys(registro.fileTest ?? {});
   if (file.length === 0) return 'controprova senza file di test';
   for (const f of file)
@@ -209,11 +260,12 @@ export const esitoControprova = (titoli, registro, shaAttuali) => {
  */
 export const criterioConTitoli = (
   id,
-  { titoli, guardie = [], statico } = {},
+  { titoli, guardie = [], statico, base = BASE_CONTROPROVA } = {},
   lettori = { leggiControprova, suite, shaFile }
 ) => ({
   titoli,
   guardie,
+  base,
   async leggi() {
     const registro = await lettori.leggiControprova(id);
     const jest = await lettori.suite();
@@ -229,7 +281,7 @@ export const criterioConTitoli = (
   async verifica({ jest, controprova, shaAttuali, statico: datiStatici }) {
     const motivi = [
       esitoTitoli([...titoli, ...guardie], jest),
-      esitoControprova(titoli, controprova, shaAttuali ?? {}),
+      esitoControprova(titoli, controprova, shaAttuali ?? {}, base),
       statico
         ? await statico.verifica(datiStatici, {
             jest,

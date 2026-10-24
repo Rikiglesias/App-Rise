@@ -81,7 +81,8 @@ export const casiJunit = xml =>
     }
   );
 
-const denoTest = nome => {
+/** `deno test` di una funzione in `cwd` (la cartella delle funzioni del repo, o una sua copia per C60). */
+export const denoTest = (nome, cwd = percorso('supabase', 'functions')) => {
   const dir = mkdtempSync(join(tmpdir(), 'c35-'));
   const junit = join(dir, 'junit.xml');
   try {
@@ -96,7 +97,7 @@ const denoTest = nome => {
         nome,
       ],
       {
-        cwd: percorso('supabase', 'functions'),
+        cwd,
         encoding: 'utf8',
         shell: process.platform === 'win32',
       }
