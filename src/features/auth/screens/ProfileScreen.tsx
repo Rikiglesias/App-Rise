@@ -296,7 +296,15 @@ export const ProfileScreen: React.FC = () => {
         value={session?.user.email ?? ''}
         styles={styles}
       />
-      {profile ? (
+      {/* Finché la lettura è in volo, un'attesa al posto di dati e pulsanti del profilo (C75). */}
+      {!profileLoaded ? (
+        <ActivityIndicator
+          color={Colors.primary[600]}
+          accessibilityLabel={t('common.loading')}
+          style={styles.wait}
+        />
+      ) : null}
+      {profileLoaded && profile ? (
         <>
           <Row
             label={t('auth.profile.phone')}
@@ -361,11 +369,20 @@ export const ProfileScreen: React.FC = () => {
         <PerfectText size={15} lines={2} style={styles.toggleLabel}>
           {t('auth.consents.marketing')}
         </PerfectText>
-        <Switch
-          value={profile?.marketing_consent ?? false}
-          onValueChange={handleMarketingToggle}
-          accessibilityLabel={t('auth.consents.marketing')}
-        />
+        {/* Senza profilo il valore non si conosce: un «spento» mostrato qui sembrerebbe la
+            scelta della persona, e toccarlo scriverebbe un consenso a caso (C75). */}
+        {profileLoaded ? (
+          <Switch
+            value={profile?.marketing_consent ?? false}
+            onValueChange={handleMarketingToggle}
+            accessibilityLabel={t('auth.consents.marketing')}
+          />
+        ) : (
+          <ActivityIndicator
+            color={Colors.primary[600]}
+            accessibilityLabel={t('common.loading')}
+          />
+        )}
       </View>
       <PerfectText size={13} lines={2} style={styles.hint}>
         {t('auth.consents.marketingHint')}
@@ -423,6 +440,9 @@ const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.neutral[50],
+    },
+    wait: {
+      marginVertical: PerfectSpacing.lg,
     },
     banner: {
       backgroundColor: colors.neutral[100],

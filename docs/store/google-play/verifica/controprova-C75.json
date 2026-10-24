@@ -1,0 +1,19 @@
+{
+  "criterio": "C75",
+  "base": "63352bc",
+  "titoli": [
+    "profilo: attesa visibile finché il profilo non arriva",
+    "consenso marketing: fermo finché il profilo non arriva"
+  ],
+  "esitiAllaBase": {
+    "profilo: attesa visibile finché il profilo non arriva": "failed",
+    "consenso marketing: fermo finché il profilo non arriva": "failed"
+  },
+  "motiviAllaBase": {
+    "profilo: attesa visibile finché il profilo non arriva": "Error: expect(received).toBe(expected) // Object.is equality",
+    "consenso marketing: fermo finché il profilo non arriva": "Error: expect(received).not.toBe(expected) // Object.is equality"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/profiloInCaricamento.test.tsx": "d7ce73c77ced558e704adcc5773886152b780fc2c559ed2b7128789e6a5f7f88"
+  }
+}
