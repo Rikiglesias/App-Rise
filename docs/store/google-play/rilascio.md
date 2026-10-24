@@ -276,6 +276,28 @@ scheda del registro è la prova da allegare al preavviso del § 13.
    oppure eliminare la chiave in Google Cloud se l'invio automatico non serve.
 9. **Dopo il ritiro della vecchia app**: controllare che la sua pagina su Google Play non offra più «Installa» (o dia
    404) e che OpenClick abbia confermato per iscritto la cancellazione dei dati (punto 4 della PEC).
+10. **Migration 0022 (consensi e oblio) sul database di produzione**, solo con il tuo sì. Ordine: prima le 0017-0021
+    (oggi in produzione arrivano alla 0020; la 0021 aspetta il tuo «sì 0021»), poi la 0022. Come primo passo, PRIMA
+    di toccare il database, questa query di sola lettura nel SQL Editor di Supabase, e il numero si riporta a Claude:
+
+    ```sql
+    select count(*) as profili_discordanti
+    from public.profiles p
+    where p.marketing_consent is distinct from coalesce((
+      select e.action = 'granted'
+      from public.consent_events e
+      where e.user_id = p.id and e.purpose = 'marketing'
+      order by e.created_at desc,
+               coalesce((to_jsonb(e)->>'server_order')::bigint, 0) desc,
+               e.id desc
+      limit 1
+    ), false);
+    ```
+
+    Se il numero non è 0: dopo la 0022 quei profili si riallineano all'ultimo evento al primo salvataggio, quindi si
+    decide PRIMA come trattarli (nessuna correzione automatica). Poi si applica per intero
+    `supabase/migrations/0022_consensi_server_e_oblio.sql` nel SQL Editor. Fra app e database non serve un ordine di
+    rilascio: l'app oggi scrive sul profilo lo stesso valore dell'evento.
 
 ### Sede USA (Rick, Kevin)
 

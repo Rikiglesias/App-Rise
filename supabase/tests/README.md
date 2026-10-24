@@ -78,6 +78,7 @@ Coppie disponibili:
 | `0016_claim_su_email_confermata.sql` | `0016_claim_su_email_confermata.test.sql` |
 | `0017_profiles_nickname.sql` | `0017_profiles_nickname.test.sql` |
 | `0018_nickname_disponibile.sql` | `0018_nickname_disponibile.test.sql` |
+| `0022_consensi_server_e_oblio.sql` | `0022_consensi_server_e_oblio.test.sql` (C79; mutanti: `bash tests/mutants-0022.sh`) |
 
 > 🔴 **Per le coppie da 0011 a 0015 la ricetta qui sopra NON basta.** Riapplicare la migration sotto
 > test (la seconda occorrenza nella pipe, quella che prova la rieseguibilità) riporta indietro il

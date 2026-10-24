@@ -32,6 +32,7 @@ PAIRS=(
   "0018_nickname_disponibile"
   "0019_eta_minima_e_bonifica_metadata"
   "0020_claim_nickname_da_profiles"
+  "0022_consensi_server_e_oblio"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
@@ -92,38 +93,47 @@ for pair in "${PAIRS[@]}"; do
     # aggiornato di conseguenza e la chiave si è spostata nel T11 della suite 0020. Se un
     # domani la 0019 tornasse a girare SENZA la 0020 in coda, quel test andrebbe rimesso
     # com'era — è il motivo per cui la riga `0019 → 0020` qui sotto non è opzionale.
+    # La 0022 ridefinisce sync_contact_email_on_email_change (0013/0014/0016/0019)
+    # e i purge (0012/0015/0016): chi riapplica quei corpi, anche tramite extra,
+    # deve chiudere con 0022. La coppia 0020 riapplica solo 0021: non li tocca.
     extra=()
     case "$pair" in
       0011_signup_contact_email)
         extra=(migrations/0017_profiles_nickname.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
                migrations/0020_claim_nickname_da_profiles.sql
-               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
+               migrations/0021_claim_da_profiles_metadata_nulli.sql
+               migrations/0022_consensi_server_e_oblio.sql) ;;
       0012_legacy_contacts|0013_contact_email_follows_account)
         extra=(migrations/0014_claim_legacy_campi_vuoti.sql
                migrations/0015_aggancio_su_email_verificata.sql
                migrations/0016_claim_su_email_confermata.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
                migrations/0020_claim_nickname_da_profiles.sql
-               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
+               migrations/0021_claim_da_profiles_metadata_nulli.sql
+               migrations/0022_consensi_server_e_oblio.sql) ;;
       0014_claim_legacy_campi_vuoti)
         extra=(migrations/0015_aggancio_su_email_verificata.sql
                migrations/0016_claim_su_email_confermata.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
                migrations/0020_claim_nickname_da_profiles.sql
-               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
+               migrations/0021_claim_da_profiles_metadata_nulli.sql
+               migrations/0022_consensi_server_e_oblio.sql) ;;
       0015_aggancio_su_email_verificata)
         extra=(migrations/0016_claim_su_email_confermata.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
                migrations/0020_claim_nickname_da_profiles.sql
-               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
+               migrations/0021_claim_da_profiles_metadata_nulli.sql
+               migrations/0022_consensi_server_e_oblio.sql) ;;
       0016_claim_su_email_confermata|0017_profiles_nickname)
         extra=(migrations/0019_eta_minima_e_bonifica_metadata.sql
                migrations/0020_claim_nickname_da_profiles.sql
-               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
+               migrations/0021_claim_da_profiles_metadata_nulli.sql
+               migrations/0022_consensi_server_e_oblio.sql) ;;
       0019_eta_minima_e_bonifica_metadata)
         extra=(migrations/0020_claim_nickname_da_profiles.sql
-               migrations/0021_claim_da_profiles_metadata_nulli.sql) ;;
+               migrations/0021_claim_da_profiles_metadata_nulli.sql
+               migrations/0022_consensi_server_e_oblio.sql) ;;
       # ⚠️ Dal 2026-07-31 la 0021 è l'ultima a definire `allinea_claim_da_profiles_di`
       # (aggiunge il `coalesce` sui metadata NULL): va in coda anche alla coppia della 0020,
       # che altrimenti riapplicherebbe il corpo SENZA il coalesce e lascerebbe rosso il suo
