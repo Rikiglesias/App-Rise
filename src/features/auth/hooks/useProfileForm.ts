@@ -164,8 +164,8 @@ export const useProfileForm = () => {
       setNickname('');
     }
     if (hydratedForUser.current === userId) return;
-    // Il profilo nel contesto può essere ancora quello di prima (viene sostituito
-    // quando la nuova lettura torna): si idrata solo con la riga DI questo utente.
+    // Il contesto toglie il profilo al cambio di utente, ma qui si controlla lo
+    // stesso: si idrata solo con la riga DI questo utente, mai con una qualsiasi.
     if (!profile || profile.id !== userId) return;
     hydratedForUser.current = userId;
     // `prev || valore`, non un set secco: la lettura del profilo può tornare MENTRE la

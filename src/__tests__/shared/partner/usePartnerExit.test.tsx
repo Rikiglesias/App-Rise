@@ -58,10 +58,13 @@ const setAuth = (over: {
   consentAfterRefresh?: 'unknown' | 'ok' | 'needed';
   /** Profilo non ancora arrivato dalla rete, ma esistente: lo restituisce refreshProfile. */
   profileArrivesLate?: boolean;
+  /** Di chi è il profilo in stato, se non di chi è collegato (cambio account). */
+  profileOwnerId?: string;
 }) => {
   const built =
     over.userId && !over.noProfile
       ? {
+          id: over.profileOwnerId ?? over.userId,
           first_name: over.firstName ?? 'Mario',
           last_name: over.lastName ?? 'Rossi',
           contact_email: over.contactEmail ?? null,
@@ -699,5 +702,52 @@ describe('usePartnerExit — persistenza reale della rinuncia', () => {
       'donation',
       expect.any(String)
     );
+  });
+});
+
+// Un link di un'altra persona aperto sullo stesso telefono cambia l'account senza
+// logout. Qui nome ed email partono verso un terzo accanto al riferimento della
+// sessione: devono essere della stessa persona, o non partire.
+describe('usePartnerExit — cambio account sullo stesso telefono', () => {
+  it('profilo rimasto da un altro account → i suoi dati NON partono', async () => {
+    setAuth({ userId: 'u2', email: 'anna@gmail.com', profileOwnerId: 'u1' });
+    mockGetOrCreate.mockResolvedValue('REF-U2');
+
+    const { result } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+
+    // Il profilo in mano non è di u2: si chiede quello vero invece di usarlo.
+    expect(
+      mockUseAuth.mock.results[0]?.value.refreshProfile
+    ).toHaveBeenCalled();
+    const [url] = mockOpenLink.mock.calls[0];
+    expect(url).toContain('utm_content=REF-U2');
+    expect(url).not.toContain('Mario');
+    expect(url).not.toContain('Rossi');
+    expect(url).not.toContain('email=');
+  });
+
+  it("l'avviso preparato per un account non vale per quello che subentra", async () => {
+    setAuth({ userId: 'u1', email: 'mario@gmail.com' });
+    mockGetOrCreate.mockResolvedValue('REF-U1');
+    mockHasSeen.mockResolvedValue(false);
+
+    const { result, rerender } = renderHook(() => usePartnerExit());
+    await act(async () => {
+      await result.current.openDonation();
+    });
+    expect(result.current.donorboxDisclosureVisible).toBe(true);
+
+    // Con l'avviso a schermo arriva la sessione di un'altra persona.
+    setAuth({ userId: 'u2', email: 'anna@gmail.com', profileOwnerId: 'u2' });
+    rerender({});
+
+    expect(result.current.donorboxDisclosureVisible).toBe(false);
+    await confermaAvvisoDonorbox(result);
+    expect(mockOpenLink).not.toHaveBeenCalled();
+    expect(mockSetOptOut).not.toHaveBeenCalled();
+    expect(mockMarkSeen).not.toHaveBeenCalled();
   });
 });

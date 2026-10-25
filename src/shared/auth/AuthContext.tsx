@@ -241,7 +241,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         // Solo il CAMBIO di utente rende ignoto ciò che sapevamo: su un semplice
         // rinnovo del token (stesso account) riazzerare farebbe tornare la UI a
         // «non lo so» a ogni refresh, con i solleciti che spariscono e ricompaiono.
+        // Il profilo va via INSIEME: un link di B aperto con A collegato cambia la
+        // sessione senza logout, e fino all'arrivo del profilo di B (o per sempre,
+        // se quella lettura fallisce) i dati di A resterebbero accanto alla sessione
+        // di B — il prefill verso Donorbox li manderebbe col riferimento di B.
         if (nextUserId !== sessionUserIdRef.current) {
+          setProfile(null);
           setProfileLoaded(false);
           setProfileError(null);
         }

@@ -708,3 +708,79 @@ describe('AuthContext — stato del consenso a tre valori', () => {
     spy.mockRestore();
   });
 });
+
+// Un link di conferma o di recupero di B, aperto mentre è collegato A, cambia la
+// sessione senza passare dal logout. Fino all'arrivo del profilo di B lo stato non
+// può tenere quello di A: il prefill verso Donorbox lo leggerebbe accanto al
+// riferimento di B, e se la lettura di B fallisce resterebbe lì per sempre.
+describe('AuthContext — cambio account sullo stesso telefono', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('il profilo di A sparisce al passaggio a B, anche se quello di B non arriva', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const onChange = supabase.auth.onAuthStateChange as jest.Mock;
+    const single = (supabase.from as jest.Mock)().single as jest.Mock;
+    single.mockResolvedValueOnce({
+      data: { id: 'u1', first_name: 'Mario' },
+      error: null,
+    });
+    const { getByText } = renderAuth();
+    await waitFor(() => expect(getAuth().profile?.id).toBe('u1'));
+    getByText('authenticated');
+
+    // La lettura del profilo di B cade per la rete: non è «B non ha profilo».
+    single.mockResolvedValueOnce({
+      data: null,
+      error: { code: 'PGRST301', message: 'network down' },
+    });
+    const listener = onChange.mock.calls[0][0] as (
+      e: string,
+      s: unknown
+    ) => void;
+    await act(async () => {
+      listener('SIGNED_IN', { user: { id: 'u2' } });
+      await Promise.resolve();
+    });
+
+    expect(getAuth().session?.user.id).toBe('u2');
+    expect(getAuth().profile).toBeNull();
+    expect(getAuth().profileLoaded).toBe(false);
+    single.mockResolvedValue({ data: null, error: null });
+  });
+
+  it('un rinnovo del token sullo STESSO account non toglie il profilo', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+      data: { session: { user: { id: 'u1' } } },
+    });
+    const onChange = supabase.auth.onAuthStateChange as jest.Mock;
+    const single = (supabase.from as jest.Mock)().single as jest.Mock;
+    single.mockResolvedValueOnce({
+      data: { id: 'u1', first_name: 'Mario' },
+      error: null,
+    });
+    renderAuth();
+    await waitFor(() => expect(getAuth().profile?.id).toBe('u1'));
+
+    // La ri-lettura dopo il rinnovo fallisce: il profilo già noto resta.
+    single.mockResolvedValueOnce({
+      data: null,
+      error: { code: 'PGRST301', message: 'network down' },
+    });
+    const listener = onChange.mock.calls[0][0] as (
+      e: string,
+      s: unknown
+    ) => void;
+    await act(async () => {
+      listener('TOKEN_REFRESHED', { user: { id: 'u1' } });
+      await Promise.resolve();
+    });
+
+    expect(getAuth().profile?.id).toBe('u1');
+    expect(getAuth().profileLoaded).toBe(true);
+    single.mockResolvedValue({ data: null, error: null });
+  });
+});

@@ -104,9 +104,13 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
   // i viaggi di rete che li hanno costruiti.
   const [donorboxDisclosureVisible, setDonorboxDisclosureVisible] =
     useState(false);
+  // `perUtente` = chi li ha preparati: dentro ci sono i SUOI dati e il SUO
+  // riferimento. Se nel frattempo l'account cambia (un link di un'altra persona
+  // aperto con l'avviso ancora a schermo), quell'avviso non è più di chi guarda.
   const [pendingDonation, setPendingDonation] = useState<{
     conDati: string;
     senzaDati: string;
+    perUtente: string | null;
   } | null>(null);
 
   const userId = session?.user?.id ?? null;
@@ -125,8 +129,12 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       // Profilo e consenso sono indipendenti: in serie costavano due viaggi di rete
       // proprio nel caso bersaglio (app appena aperta), sopra a quelli già spesi per
       // il ref. In parallelo il ritardo prima di aprire il link resta uno.
+      // Il profilo in mano vale solo se è di chi è collegato ADESSO: qui nome ed
+      // email partono verso un terzo accanto al riferimento di questa sessione, e
+      // un profilo rimasto da un altro account li mescolerebbe.
+      const profiloDiQuestoUtente = profile?.id === userId ? profile : null;
       const [current, consent] = await Promise.all([
-        profile ??
+        profiloDiQuestoUtente ??
           (session?.user?.id ? refreshProfile() : Promise.resolve(null)),
         // 'unknown' può essere solo «non ancora tornato», non «negato»: si
         // ri-verifica invece di degradare in silenzio chi è in regola.
@@ -178,6 +186,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         setPendingDonation({
           conDati: buildDonorboxDonationUrl(ref, prefill),
           senzaDati: buildDonorboxDonationUrl(ref, {}),
+          perUtente: userId,
         });
         setDonorboxDisclosureVisible(true);
         return;
@@ -220,7 +229,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       setDonorboxDisclosureVisible(false);
       setPendingDonation(null);
       try {
-        if (!scelto) return;
+        if (!scelto || scelto.perUtente !== userId) return;
         // La scelta si RICORDA: «senza i miei dati» è una preferenza, non un
         // gesto valido per una volta sola. Scegliendo di mandarli si azzera una
         // eventuale rinuncia precedente, così la porta resta aperta nei due sensi.
@@ -296,7 +305,8 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     isLoading,
     isExiting,
     disclosureVisible,
-    donorboxDisclosureVisible,
+    donorboxDisclosureVisible:
+      donorboxDisclosureVisible && pendingDonation?.perUtente === userId,
     openDonation,
     openLetsDonationExit,
     confirmDisclosure,
