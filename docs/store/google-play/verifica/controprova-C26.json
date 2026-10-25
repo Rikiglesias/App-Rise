@@ -16,6 +16,6 @@
     "link di accesso: conferma riuscita mostra un messaggio": "failed"
   },
   "fileTest": {
-    "src/__tests__/shared/auth/authLinkFlow.test.tsx": "c2729da480f46bd043cee054d29629beb679d5a68005f48333c1dbac29011084"
+    "src/__tests__/shared/auth/authLinkFlow.test.tsx": "9b0425529cdad2b3c5b8374a8b79ed9cef76923cb19772f7c4164f77c6b7f80f"
   }
 }

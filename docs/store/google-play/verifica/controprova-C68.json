@@ -14,6 +14,6 @@
     "secondo link di recupero: una sola Reimposta password in pila": "Error: expect(received).toHaveLength(expected)"
   },
   "fileTest": {
-    "src/__tests__/navigation/resetPasswordHistory.test.tsx": "deca159b61fb978b8e981bae344266fd240de23d80463ff70072bf71549c4853"
+    "src/__tests__/navigation/resetPasswordHistory.test.tsx": "268b9ebeb363afa31bb913f133a1aae4f485717a94c9fd432fd324a5b35f41d0"
   }
 }

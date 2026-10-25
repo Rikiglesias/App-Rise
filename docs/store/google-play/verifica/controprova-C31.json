@@ -20,6 +20,6 @@
     "indietro visibile: assente nel cancello del profilo": "failed"
   },
   "fileTest": {
-    "src/__tests__/navigation/accountNavigation.test.tsx": "da1363b0c5610221aa5db838aa7f14b0668b3eded3471fc7e068582f78bcbb26"
+    "src/__tests__/navigation/accountNavigation.test.tsx": "066f9e22210c2bf079947d2bf43b79e5bfead88899d7e6fcfb72e61aeb14e722"
   }
 }
