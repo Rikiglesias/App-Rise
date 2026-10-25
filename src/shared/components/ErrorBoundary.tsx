@@ -30,6 +30,8 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
+  private reloading = false;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -71,11 +73,14 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   handleReload = async (): Promise<void> => {
+    if (this.reloading) return;
+    this.reloading = true;
     try {
       // Prova a ricaricare l'app con Updates se disponibile
       if (typeof Updates?.reloadAsync === 'function') {
         await Updates.reloadAsync();
       } else {
+        this.reloading = false;
         // Fallback: reset dello state
         this.setState({
           hasError: false,
@@ -84,6 +89,7 @@ export class ErrorBoundary extends Component<Props, State> {
         });
       }
     } catch (reloadError) {
+      this.reloading = false;
       logger.error(
         'Failed to reload app',
         'ErrorBoundary',

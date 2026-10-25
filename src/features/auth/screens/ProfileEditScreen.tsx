@@ -157,6 +157,7 @@ export const ProfileEditScreen: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   const [submitAttempt, setSubmitAttempt] = useState(0);
   const [profileSaved, setProfileSaved] = useState(false);
 
@@ -332,7 +333,11 @@ export const ProfileEditScreen: React.FC = () => {
   ]);
 
   const handleSubmit = useCallback((): void => {
-    void onSubmit();
+    if (submitting.current) return;
+    submitting.current = true;
+    void onSubmit().finally(() => {
+      submitting.current = false;
+    });
   }, [onSubmit]);
 
   const handleSelectCountry = useCallback((code: string): void => {
@@ -457,6 +462,8 @@ export const ProfileEditScreen: React.FC = () => {
         placeholder={t('auth.signup.nicknamePlaceholder')}
         autoCapitalize="none"
         autoComplete="off"
+        returnKeyType="done"
+        onSubmitEditing={handleSubmit}
       />
 
       {submitError ? (

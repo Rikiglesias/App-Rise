@@ -258,6 +258,8 @@ export const CompleteProfileScreen: React.FC = () => {
           autoCapitalize="none"
           autoComplete="email"
           textContentType="emailAddress"
+          returnKeyType="done"
+          onSubmitEditing={handleSubmit}
           placeholder={t(
             form.isRelay
               ? 'auth.completeProfile.contactEmailPlaceholderRelay'

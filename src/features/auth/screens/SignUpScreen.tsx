@@ -173,6 +173,8 @@ export const SignUpScreen: React.FC = () => {
           country={values.country}
           onChangeCity={onChange.city}
           onSelectComune={form.selectComune}
+          returnKeyType="done"
+          onSubmitEditing={handleSubmit}
           error={err(errors.city)}
           placeholder={
             values.country === 'IT'

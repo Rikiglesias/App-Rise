@@ -1,0 +1,35 @@
+{
+  "criterio": "C67",
+  "base": "63352bc",
+  "titoli": [
+    "doppio invio: Accesso chiama una volta sola e si libera dopo l'errore",
+    "doppio invio: Registrazione chiama una volta sola e si libera dopo l'errore",
+    "doppio invio: Password dimenticata chiama una volta sola e si libera dopo l'errore",
+    "doppio invio: Reimposta password chiama una volta sola e si libera dopo l'errore",
+    "doppio invio: Modifica profilo chiama una volta sola e si libera dopo l'errore",
+    "doppio invio: Completa profilo chiama una volta sola e si libera dopo l'errore",
+    "riavvio: un tocco solo"
+  ],
+  "esitiAllaBase": {
+    "doppio invio: Accesso chiama una volta sola e si libera dopo l'errore": "failed",
+    "doppio invio: Registrazione chiama una volta sola e si libera dopo l'errore": "failed",
+    "doppio invio: Password dimenticata chiama una volta sola e si libera dopo l'errore": "failed",
+    "doppio invio: Reimposta password chiama una volta sola e si libera dopo l'errore": "failed",
+    "doppio invio: Modifica profilo chiama una volta sola e si libera dopo l'errore": "failed",
+    "doppio invio: Completa profilo chiama una volta sola e si libera dopo l'errore": "failed",
+    "riavvio: un tocco solo": "failed"
+  },
+  "motiviAllaBase": {
+    "doppio invio: Accesso chiama una volta sola e si libera dopo l'errore": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "doppio invio: Registrazione chiama una volta sola e si libera dopo l'errore": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "doppio invio: Password dimenticata chiama una volta sola e si libera dopo l'errore": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "doppio invio: Reimposta password chiama una volta sola e si libera dopo l'errore": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "doppio invio: Modifica profilo chiama una volta sola e si libera dopo l'errore": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "doppio invio: Completa profilo chiama una volta sola e si libera dopo l'errore": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "riavvio: un tocco solo": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)"
+  },
+  "fileTest": {
+    "src/__tests__/components/errorBoundaryRiavvio.test.tsx": "f90d842ad254b9565e7239a4f153865c77ce62f89450d72d4ab8e5d7e70942b7",
+    "src/__tests__/features/auth/doppioInvio.test.tsx": "25e679aabe3c8bca9a8ac0091e767d62b571022339c95fbf6f804c9dfc14c732"
+  }
+}

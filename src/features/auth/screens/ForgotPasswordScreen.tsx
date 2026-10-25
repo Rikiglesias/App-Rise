@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -28,6 +28,7 @@ export const ForgotPasswordScreen: React.FC = () => {
   const [emailErr, setEmailErr] = useState<string | undefined>();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   const [submitAttempt, setSubmitAttempt] = useState(0);
   const {
     error: submitError,
@@ -55,7 +56,11 @@ export const ForgotPasswordScreen: React.FC = () => {
   }, [email, resetPassword, t, setSubmitError, showError]);
 
   const handleSubmit = useCallback((): void => {
-    void onSubmit();
+    if (submitting.current) return;
+    submitting.current = true;
+    void onSubmit().finally(() => {
+      submitting.current = false;
+    });
   }, [onSubmit]);
 
   // Torna indietro alla schermata che ha aperto il recupero (LoginScreen,
@@ -86,6 +91,8 @@ export const ForgotPasswordScreen: React.FC = () => {
             autoCapitalize="none"
             autoComplete="email"
             textContentType="emailAddress"
+            returnKeyType="done"
+            onSubmitEditing={handleSubmit}
           />
           {submitError ? (
             <AuthSubmitError

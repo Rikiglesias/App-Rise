@@ -38,6 +38,7 @@ export const LoginScreen: React.FC = () => {
   } = useAuthError();
   const [confirmationEmail, setConfirmationEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   const [submitAttempt, setSubmitAttempt] = useState(0);
 
   const passwordRef = useRef<TextInput>(null);
@@ -79,7 +80,11 @@ export const LoginScreen: React.FC = () => {
   }, [email, password, signIn, t, setSubmitError, showError]);
 
   const handleSubmit = useCallback((): void => {
-    void onSubmit();
+    if (submitting.current) return;
+    submitting.current = true;
+    void onSubmit().finally(() => {
+      submitting.current = false;
+    });
   }, [onSubmit]);
   const goToForgot = useCallback(
     (): void => navigation.navigate('ForgotPassword'),

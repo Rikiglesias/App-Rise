@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -41,6 +41,7 @@ export const ResetPasswordScreen: React.FC = () => {
   } = useAuthError();
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   const [submitAttempt, setSubmitAttempt] = useState(0);
 
   const onSubmit = useCallback(async (): Promise<void> => {
@@ -65,7 +66,11 @@ export const ResetPasswordScreen: React.FC = () => {
   }, [password, confirm, updatePassword, t, setSubmitError, showError]);
 
   const handleSubmit = useCallback((): void => {
-    void onSubmit();
+    if (submitting.current) return;
+    submitting.current = true;
+    void onSubmit().finally(() => {
+      submitting.current = false;
+    });
   }, [onSubmit]);
 
   /**
@@ -131,6 +136,8 @@ export const ResetPasswordScreen: React.FC = () => {
             autoCapitalize="none"
             autoComplete="new-password"
             textContentType="newPassword"
+            returnKeyType="done"
+            onSubmitEditing={handleSubmit}
           />
           {submitError ? (
             <AuthSubmitError

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Keyboard,
   type LayoutChangeEvent,
+  type ReturnKeyTypeOptions,
 } from 'react-native';
 
 import { PerfectText, PlatformTouchable } from '@/components/ui';
@@ -33,6 +34,8 @@ interface AuthCityFieldProps {
   onSelectComune: (city: string, provinceSigla: string) => void;
   error?: string | undefined;
   placeholder?: string;
+  returnKeyType?: ReturnKeyTypeOptions;
+  onSubmitEditing?: () => void;
 }
 
 /** Chiude il dropdown poco dopo il blur, lasciando registrare l'eventuale tap su un'opzione. */
@@ -52,6 +55,8 @@ export const AuthCityField: React.FC<AuthCityFieldProps> = ({
   onSelectComune,
   error,
   placeholder,
+  returnKeyType,
+  onSubmitEditing,
 }) => {
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -130,6 +135,8 @@ export const AuthCityField: React.FC<AuthCityFieldProps> = ({
           autoCapitalize="words"
           autoComplete="postal-address-locality"
           textContentType="addressCity"
+          returnKeyType={returnKeyType}
+          onSubmitEditing={onSubmitEditing}
           placeholder={placeholder}
           placeholderTextColor={colors.neutral[500]}
           accessibilityLabel={label}

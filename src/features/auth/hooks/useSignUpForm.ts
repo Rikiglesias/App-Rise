@@ -47,6 +47,7 @@ export const useSignUpForm = () => {
     offline,
   } = useAuthError();
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   const [done, setDone] = useState(false);
 
   const lastNameRef = useRef<TextInput>(null);
@@ -240,7 +241,11 @@ export const useSignUpForm = () => {
   ]);
 
   const handleSubmit = useCallback((): void => {
-    void submit();
+    if (submitting.current) return;
+    submitting.current = true;
+    void submit().finally(() => {
+      submitting.current = false;
+    });
   }, [submit]);
   // "Ho già un account" / post-signup: torna indietro alla tab Profilo (che
   // mostra LoginScreen come contenuto). Login non è più una Stack.Screen.

@@ -75,6 +75,7 @@ export const useProfileForm = () => {
     offline,
   } = useAuthError('auth.errors.generic', 'CompletaProfilo');
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
 
   // La mail su cui scriviamo alla persona è SEMPRE obbligatoria e sempre visibile
   // (decisione Riccardo 2026-07-25). Prima si chiedeva solo agli account Apple
@@ -532,7 +533,11 @@ export const useProfileForm = () => {
   ]);
 
   const handleSubmit = useCallback((): void => {
-    void submit();
+    if (submitting.current) return;
+    submitting.current = true;
+    void submit().finally(() => {
+      submitting.current = false;
+    });
   }, [submit]);
 
   const clearSubmitError = useCallback((): void => {
