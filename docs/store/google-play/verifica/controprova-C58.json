@@ -1,0 +1,22 @@
+{
+  "criterio": "C58",
+  "base": "63352bc",
+  "titoli": [
+    "testo multiriga: mai più largo del contenitore",
+    "testo multiriga: in una riga con un'icona accanto si restringe",
+    "testo multiriga: containerWidth 0 resta spento a scala 2"
+  ],
+  "esitiAllaBase": {
+    "testo multiriga: mai più largo del contenitore": "failed",
+    "testo multiriga: in una riga con un'icona accanto si restringe": "failed",
+    "testo multiriga: containerWidth 0 resta spento a scala 2": "failed"
+  },
+  "motiviAllaBase": {
+    "testo multiriga: mai più largo del contenitore": "Error: expect(received).toBeLessThanOrEqual(expected)",
+    "testo multiriga: in una riga con un'icona accanto si restringe": "Error: expect(received).toBeLessThanOrEqual(expected)",
+    "testo multiriga: containerWidth 0 resta spento a scala 2": "Error: expect(received).toBe(expected) // Object.is equality"
+  },
+  "fileTest": {
+    "src/__tests__/components/ui/testoMultiriga.test.tsx": "39144696d6cf4d0ae10b09f1ee1d5b09042333f8d98c8c108355a99dfad03fd1"
+  }
+}

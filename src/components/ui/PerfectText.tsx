@@ -134,6 +134,8 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
   // Adattività: se non c'è referenceWidth ma serve allargare per font grande
   const enhancedReferenceWidth = useMemo(() => {
     if (referenceWidth) return referenceWidth;
+    // containerWidth={0} spegne la larghezza anche col testo ingrandito (C58)
+    if (containerWidth === 0) return undefined;
     if (variant === 'content' && allowsScale && fontScale > adaptiveThreshold) {
       // Per zoom alti: non restringere i titoli single-line (lines===1)
       // per evitare a capo precoce. Per testi realmente multilinea,
@@ -144,6 +146,7 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
     return undefined;
   }, [
     referenceWidth,
+    containerWidth,
     variant,
     allowsScale,
     fontScale,
@@ -207,11 +210,19 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
       ? { adjustsFontSizeToFit: true, minimumFontScale: FIT_MINIMUM_SCALE }
       : undefined;
 
-  // Se width è necessario (manuale o automatico) → usa wrapper con width fissa
+  // Se width è necessario (manuale o automatico) → wrapper largo al massimo targetWidth,
+  // mai più del contenitore e che cede accanto a un'icona (C58)
   // Altrimenti → Text diretto che si adatta al contenuto (flex/row friendly)
   if (enhancedReferenceWidth && targetWidth) {
     return (
-      <View style={{ width: targetWidth, alignSelf: 'center' }}>
+      <View
+        style={{
+          width: '100%',
+          maxWidth: targetWidth,
+          flexShrink: 1,
+          alignSelf: 'center',
+        }}
+      >
         <Text
           {...immuneProps}
           {...props}
