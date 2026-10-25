@@ -109,6 +109,19 @@ Prima dell'invio si controllano a mano anche due cose: la PEC a OpenClick è par
 salvata (serve per un eventuale ricorso, § 13); nella Panoramica di Play Console non c'è più l'avviso «Nome del
 pacchetto non registrato» (verifica dello sviluppatore Android, APK di prova caricato il 22/10).
 
+Dipendenze (C59, 25/10): `npm audit --omit=dev` non ha più avvisi sui pacchetti che entrano nell'app (`lodash`
+4.18.1; `query-string` e `decode-uri-component` spariti con `@react-navigation/core` 7.24, che non li usa più; `uuid`
+sparito con `xcode` 4, portato da `@expo/config-plugins` 54.0.6 e usato solo dal prebuild iOS). Correzioni solo
+dentro i range già dichiarati, `package.json` invariato. Restano 8 avvisi, che nascono tutti da tre pacchetti usati
+solo per costruire l'app: nelle source map di `expo export --platform android` `postcss`, `node-forge` e `image-size`
+hanno 0 file (`lodash` 201, `expo-updates/build` 8: la sonda li vede). `expo`, `@expo/cli`, `@expo/metro-config`,
+`expo-updates` e `@expo/code-signing-certificates` sono segnalati solo perché dipendono da quei tre.
+`postcss` è fissato a `~8.4.32` da `@expo/metro-config` e anche l'ultima 8.4 ha l'avviso: si chiude solo con `expo`
+58, salto di SDK fuori da questo rilascio. `node-forge` non ha nessuna versione corretta pubblicata (l'ultima, 1.4.0,
+è dentro l'avviso) e lo usano solo gli script di firma in `expo-updates/cli`; npm propone di tornare a `expo-updates`
+0.11 (oggi 29.x), non applicabile. `image-size` arriva da Metro, che chiede la 1.x, e la correzione esiste solo nella
+2.x. Si riguardano al prossimo aggiornamento di SDK.
+
 ## 9. Aggiornamenti OTA
 
 Gli aggiornamenti del solo JavaScript arrivano senza passare dallo store, ma solo alle installazioni con la stessa

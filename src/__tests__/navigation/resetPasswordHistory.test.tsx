@@ -104,7 +104,11 @@ const mount = async () => {
   await settle();
   return ui;
 };
-const routes = () => nav.getRootState().routes.map(route => route.name);
+const routes = () => {
+  const state = nav.getRootState();
+  if (!state) throw new Error('navigazione non ancora pronta');
+  return state.routes.map(route => route.name);
+};
 const openLink = async (url: string) => {
   act(() => mockListeners.forEach(listener => listener({ url })));
   await settle();

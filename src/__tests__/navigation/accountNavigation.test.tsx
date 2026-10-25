@@ -118,7 +118,11 @@ const openAccount = (ui: ReturnType<typeof mount>) => {
   settle();
   expect(nav.getCurrentRoute()?.name).toBe('Account');
 };
-const rootRoutes = () => nav.getRootState().routes.map(route => route.name);
+const rootRoutes = () => {
+  const state = nav.getRootState();
+  if (!state) throw new Error('navigazione non ancora pronta');
+  return state.routes.map(route => route.name);
+};
 const expectTouchArea = (
   button: ReturnType<ReturnType<typeof mount>['getByTestId']>
 ) => {
@@ -129,7 +133,7 @@ const expectTouchArea = (
 
 it('account in alto: tre schede nella barra', () => {
   mount();
-  expect(nav.getRootState().routes[0]?.state?.routeNames).toEqual([
+  expect(nav.getRootState()?.routes[0]?.state?.routeNames).toEqual([
     'ImpactTab',
     'HomeTab',
     'InfoTab',
