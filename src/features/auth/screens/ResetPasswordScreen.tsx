@@ -92,15 +92,15 @@ export const ResetPasswordScreen: React.FC = () => {
     const rotteDisponibili = navigation.getState()?.routeNames ?? [];
 
     if (rotteDisponibili.includes('Home')) {
-      navigation.navigate('Home');
+      navigation.popTo('Home');
       return;
     }
     if (rotteDisponibili.includes('ReConsent')) {
-      navigation.navigate('ReConsent');
+      navigation.popTo('ReConsent');
       return;
     }
     if (rotteDisponibili.includes('CompleteProfile')) {
-      navigation.navigate('CompleteProfile');
+      navigation.popTo('CompleteProfile');
       return;
     }
     if (navigation.canGoBack()) navigation.goBack();

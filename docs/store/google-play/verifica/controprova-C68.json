@@ -1,0 +1,19 @@
+{
+  "criterio": "C68",
+  "base": "63352bc",
+  "titoli": [
+    "reset concluso: indietro non torna al reset",
+    "secondo link di recupero: una sola Reimposta password in pila"
+  ],
+  "esitiAllaBase": {
+    "reset concluso: indietro non torna al reset": "failed",
+    "secondo link di recupero: una sola Reimposta password in pila": "failed"
+  },
+  "motiviAllaBase": {
+    "reset concluso: indietro non torna al reset": "Error: expect(received).not.toContain(expected) // indexOf",
+    "secondo link di recupero: una sola Reimposta password in pila": "Error: expect(received).toHaveLength(expected)"
+  },
+  "fileTest": {
+    "src/__tests__/navigation/resetPasswordHistory.test.tsx": "deca159b61fb978b8e981bae344266fd240de23d80463ff70072bf71549c4853"
+  }
+}

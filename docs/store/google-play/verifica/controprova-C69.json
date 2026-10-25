@@ -1,0 +1,16 @@
+{
+  "criterio": "C69",
+  "base": "63352bc",
+  "titoli": [
+    "link di recupero fallito: la riapertura avvisa"
+  ],
+  "esitiAllaBase": {
+    "link di recupero fallito: la riapertura avvisa": "failed"
+  },
+  "motiviAllaBase": {
+    "link di recupero fallito: la riapertura avvisa": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/authLinkReopening.test.ts": "db84ff849a6a084983d65618363819d2942c1e21cfda98ac8bc2e5f06e4fcc00"
+  }
+}

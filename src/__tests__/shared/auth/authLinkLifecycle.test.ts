@@ -6,9 +6,16 @@ import { useAuthDeepLink } from '@/shared/auth/useAuthDeepLink';
 import { changeLanguage, getCurrentLocale } from '@/locales';
 
 let mockUrl: string | null;
+const mockUrlListeners = new Set<(event: { url: string }) => void>();
 const mockComplete = jest.fn();
 jest.mock('expo-linking', () => ({
-  useURL: () => mockUrl,
+  getInitialURL: jest.fn(() => Promise.resolve(mockUrl)),
+  addEventListener: jest.fn(
+    (_type: string, listener: (event: { url: string }) => void) => {
+      mockUrlListeners.add(listener);
+      return { remove: () => mockUrlListeners.delete(listener) };
+    }
+  ),
   createURL: (path: string) => `rahitalia://${path}`,
 }));
 jest.mock('@/shared/auth/AuthContext', () => ({
@@ -18,7 +25,13 @@ jest.mock('@/shared/auth/AuthContext', () => ({
   }),
 }));
 
-const mount = (ready = true) => {
+const emitUrl = async (url: string) => {
+  await act(async () => {
+    mockUrlListeners.forEach(listener => listener({ url }));
+    await Promise.resolve();
+  });
+};
+const mount = async (ready = true) => {
   const listeners = new Map<string, () => void>();
   const nav = {
     isReady: jest.fn(() => ready),
@@ -33,12 +46,14 @@ const mount = (ready = true) => {
       nav as unknown as NavigationContainerRefWithCurrent<RootStackParamList>
     )
   );
+  await act(() => Promise.resolve());
   return { ...hook, nav, listeners };
 };
 let alert: jest.SpyInstance;
 let locale: ReturnType<typeof getCurrentLocale>;
 beforeEach(() => {
   mockUrl = 'rahitalia://reset-password?code=first';
+  mockUrlListeners.clear();
   mockComplete.mockReset().mockResolvedValue({ ok: true });
   locale = getCurrentLocale();
   changeLanguage('en');
@@ -50,12 +65,14 @@ afterEach(() => {
 });
 
 it('link PKCE: lo stato pronto consegna una sola navigazione e rimuove i listener', async () => {
-  const { nav, listeners, unmount } = mount(false);
+  const { nav, listeners, unmount } = await mount(false);
   await act(() => Promise.resolve());
   expect(nav.navigate).not.toHaveBeenCalled();
   nav.isReady.mockReturnValue(true);
   act(() => listeners.get('state')?.());
-  expect(nav.navigate).toHaveBeenCalledWith('ResetPassword');
+  expect(nav.navigate).toHaveBeenCalledWith('ResetPassword', undefined, {
+    pop: true,
+  });
   act(() => listeners.get('ready')?.());
   expect(nav.navigate).toHaveBeenCalledTimes(1);
   unmount();
@@ -69,9 +86,9 @@ it('link PKCE: un nuovo link invalida il recupero precedente ancora in volo', as
       resolve = done;
     })
   );
-  const { nav, rerender } = mount();
+  const { nav } = await mount();
   mockUrl = 'rahitalia://confirm-email?code=second';
-  rerender({});
+  await emitUrl(mockUrl);
   await waitFor(() =>
     expect(alert).toHaveBeenCalledWith(
       'Email confirmed',
@@ -84,15 +101,17 @@ it('link PKCE: un nuovo link invalida il recupero precedente ancora in volo', as
   });
   expect(nav.navigate).not.toHaveBeenCalled();
   mockUrl = 'rahitalia://reset-password?code=third';
-  rerender({});
+  await emitUrl(mockUrl);
   await waitFor(() =>
-    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword')
+    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword', undefined, {
+      pop: true,
+    })
   );
 });
 
 it('link PKCE: dopo unmount non mostra esiti tardivi', async () => {
   let resolve: (value: { ok: boolean }) => void = () => undefined;
-  const positive = mount();
+  const positive = await mount();
   await waitFor(() => expect(positive.nav.navigate).toHaveBeenCalledTimes(1));
   positive.unmount();
   mockComplete.mockReturnValueOnce(
@@ -100,7 +119,7 @@ it('link PKCE: dopo unmount non mostra esiti tardivi', async () => {
       resolve = done;
     })
   );
-  const pending = mount();
+  const pending = await mount();
   pending.unmount();
   await act(async () => {
     resolve({ ok: false });
@@ -112,7 +131,7 @@ it('link PKCE: dopo unmount non mostra esiti tardivi', async () => {
 
 it('link PKCE: eccezioni e cambio email fallito hanno testi inglesi azionabili', async () => {
   mockComplete.mockRejectedValueOnce(new Error('offline'));
-  const { nav, rerender } = mount();
+  const { nav } = await mount();
   await waitFor(() =>
     expect(alert).toHaveBeenCalledWith(
       'Sign-in link failed',
@@ -122,7 +141,7 @@ it('link PKCE: eccezioni e cambio email fallito hanno testi inglesi azionabili',
   expect(nav.navigate).not.toHaveBeenCalled();
   mockComplete.mockResolvedValueOnce({ ok: false });
   mockUrl = 'rahitalia://confirm-email-change?code=confirmed';
-  rerender({});
+  await emitUrl(mockUrl);
   await waitFor(() =>
     expect(alert).toHaveBeenCalledWith(
       'Email updated',
@@ -130,8 +149,10 @@ it('link PKCE: eccezioni e cambio email fallito hanno testi inglesi azionabili',
     )
   );
   mockUrl = 'rahitalia://reset-password?code=positive';
-  rerender({});
+  await emitUrl(mockUrl);
   await waitFor(() =>
-    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword')
+    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword', undefined, {
+      pop: true,
+    })
   );
 });

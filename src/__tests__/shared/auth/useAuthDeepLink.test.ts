@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react-native';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 
@@ -8,8 +8,15 @@ import { changeLanguage, getCurrentLocale } from '@/locales';
 
 // URL deep link iniettato da expo-linking (controllato per-test).
 let mockUrl: string | null = null;
+const mockUrlListeners = new Set<(event: { url: string }) => void>();
 jest.mock('expo-linking', () => ({
-  useURL: () => mockUrl,
+  getInitialURL: jest.fn(() => Promise.resolve(mockUrl)),
+  addEventListener: jest.fn(
+    (_type: string, listener: (event: { url: string }) => void) => {
+      mockUrlListeners.add(listener);
+      return { remove: () => mockUrlListeners.delete(listener) };
+    }
+  ),
   createURL: (path: string) => `rahitalia://${path}`,
 }));
 
@@ -44,17 +51,26 @@ const makeNavRef = (ready = true): MockNavRef => {
   return { ref, navigate, isReady };
 };
 
+const mount = async (
+  ref: NavigationContainerRefWithCurrent<RootStackParamList>
+) => {
+  const hook = renderHook(() => useAuthDeepLink(ref));
+  await act(() => Promise.resolve());
+  return hook;
+};
+
 describe('useAuthDeepLink', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockUrl = null;
+    mockUrlListeners.clear();
     mockCompleteRecovery.mockResolvedValue({ ok: true });
     mockCompleteEmailConfirm.mockResolvedValue({ ok: true });
   });
 
-  it('senza URL non processa nulla', () => {
+  it('senza URL non processa nulla', async () => {
     const nav = makeNavRef();
-    renderHook(() => useAuthDeepLink(nav.ref));
+    await mount(nav.ref);
     expect(mockCompleteRecovery).not.toHaveBeenCalled();
     expect(mockCompleteEmailConfirm).not.toHaveBeenCalled();
   });
@@ -62,11 +78,13 @@ describe('useAuthDeepLink', () => {
   it('URL di recovery: chiama completeRecoveryFromUrl e naviga a ResetPassword', async () => {
     mockUrl = RECOVERY_URL;
     const nav = makeNavRef(true);
-    renderHook(() => useAuthDeepLink(nav.ref));
+    await mount(nav.ref);
 
     expect(mockCompleteRecovery).toHaveBeenCalledWith(RECOVERY_URL);
     await waitFor(() =>
-      expect(nav.navigate).toHaveBeenCalledWith('ResetPassword')
+      expect(nav.navigate).toHaveBeenCalledWith('ResetPassword', undefined, {
+        pop: true,
+      })
     );
     expect(mockCompleteEmailConfirm).not.toHaveBeenCalled();
   });
@@ -75,7 +93,7 @@ describe('useAuthDeepLink', () => {
     mockUrl = RECOVERY_URL;
     mockCompleteRecovery.mockResolvedValueOnce({ ok: false });
     const nav = makeNavRef(true);
-    renderHook(() => useAuthDeepLink(nav.ref));
+    await mount(nav.ref);
 
     await waitFor(() => expect(mockCompleteRecovery).toHaveBeenCalled());
     expect(nav.navigate).not.toHaveBeenCalled();
@@ -84,7 +102,7 @@ describe('useAuthDeepLink', () => {
   it('recovery con navigationRef non pronto: nessuna navigazione', async () => {
     mockUrl = RECOVERY_URL;
     const nav = makeNavRef(false);
-    renderHook(() => useAuthDeepLink(nav.ref));
+    await mount(nav.ref);
 
     await waitFor(() => expect(mockCompleteRecovery).toHaveBeenCalled());
     expect(nav.navigate).not.toHaveBeenCalled();
@@ -93,7 +111,7 @@ describe('useAuthDeepLink', () => {
   it('URL di conferma email: chiama completeEmailConfirmFromUrl senza navigare', async () => {
     mockUrl = CONFIRM_URL;
     const nav = makeNavRef(true);
-    renderHook(() => useAuthDeepLink(nav.ref));
+    await mount(nav.ref);
 
     expect(mockCompleteEmailConfirm).toHaveBeenCalledWith(CONFIRM_URL);
     await waitFor(() => expect(mockCompleteEmailConfirm).toHaveBeenCalled());
@@ -101,10 +119,10 @@ describe('useAuthDeepLink', () => {
     expect(mockCompleteRecovery).not.toHaveBeenCalled();
   });
 
-  it('URL non-auth: nessun handler invocato', () => {
+  it('URL non-auth: nessun handler invocato', async () => {
     mockUrl = 'rahitalia://home';
     const nav = makeNavRef(true);
-    renderHook(() => useAuthDeepLink(nav.ref));
+    await mount(nav.ref);
 
     expect(mockCompleteRecovery).not.toHaveBeenCalled();
     expect(mockCompleteEmailConfirm).not.toHaveBeenCalled();
@@ -119,6 +137,7 @@ describe('useAuthDeepLink', () => {
     >(({ ref }) => useAuthDeepLink(ref), {
       initialProps: { ref: nav1.ref },
     });
+    await act(() => Promise.resolve());
 
     await waitFor(() => expect(mockCompleteRecovery).toHaveBeenCalledTimes(1));
 
@@ -151,11 +170,11 @@ describe('useAuthDeepLink', () => {
       alertSpy.mockRestore();
     });
 
-    it('link scaduto (it): reset password mostra il messaggio tradotto con l’invito a chiederne uno nuovo', () => {
+    it('link scaduto (it): reset password mostra il messaggio tradotto con l’invito a chiederne uno nuovo', async () => {
       changeLanguage('it');
       mockUrl = EXPIRED_RESET_URL;
       const nav = makeNavRef(true);
-      renderHook(() => useAuthDeepLink(nav.ref));
+      await mount(nav.ref);
 
       expect(alertSpy).toHaveBeenCalledTimes(1);
       const [title, message] = alertSpy.mock.calls[0];
@@ -165,11 +184,11 @@ describe('useAuthDeepLink', () => {
       expect(nav.navigate).not.toHaveBeenCalled();
     });
 
-    it('link scaduto (en): reset password mostra il messaggio inglese', () => {
+    it('link scaduto (en): reset password mostra il messaggio inglese', async () => {
       changeLanguage('en');
       mockUrl = EXPIRED_RESET_URL;
       const nav = makeNavRef(true);
-      renderHook(() => useAuthDeepLink(nav.ref));
+      await mount(nav.ref);
 
       expect(alertSpy).toHaveBeenCalledTimes(1);
       const [title, message] = alertSpy.mock.calls[0];
@@ -177,11 +196,11 @@ describe('useAuthDeepLink', () => {
       expect(message).toContain('Forgot password?');
     });
 
-    it('link scaduto (it): conferma email mostra il messaggio di conferma, non quello del reset', () => {
+    it('link scaduto (it): conferma email mostra il messaggio di conferma, non quello del reset', async () => {
       changeLanguage('it');
       mockUrl = EXPIRED_CONFIRM_URL;
       const nav = makeNavRef(true);
-      renderHook(() => useAuthDeepLink(nav.ref));
+      await mount(nav.ref);
 
       expect(alertSpy).toHaveBeenCalledTimes(1);
       const [, message] = alertSpy.mock.calls[0];
@@ -190,21 +209,21 @@ describe('useAuthDeepLink', () => {
       expect(mockCompleteEmailConfirm).not.toHaveBeenCalled();
     });
 
-    it('link scaduto: URL troncato al primo & (senza error_code) non mostra l’avviso', () => {
+    it('link scaduto: URL troncato al primo & (senza error_code) non mostra l’avviso', async () => {
       // È ciò che arriverebbe se la shell spezzasse l'URL sul primo «&»: l'avviso a schermo
       // sul dispositivo (C8 del goal android-play) prova quindi che il fragment è arrivato intero.
       mockUrl = 'rahitalia://reset-password#error=access_denied';
       const nav = makeNavRef(true);
-      renderHook(() => useAuthDeepLink(nav.ref));
+      await mount(nav.ref);
 
       expect(alertSpy).not.toHaveBeenCalled();
       expect(mockCompleteRecovery).not.toHaveBeenCalled();
     });
 
-    it('link scaduto: lo stesso URL non ripete l’avviso a ogni render', () => {
+    it('link scaduto: lo stesso URL non ripete l’avviso a ogni render', async () => {
       mockUrl = EXPIRED_RESET_URL;
       const nav = makeNavRef(true);
-      const { rerender } = renderHook(() => useAuthDeepLink(nav.ref));
+      const { rerender } = await mount(nav.ref);
       rerender({});
 
       expect(alertSpy).toHaveBeenCalledTimes(1);

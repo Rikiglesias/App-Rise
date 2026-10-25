@@ -10,11 +10,18 @@ import type { RootStackParamList } from '@/navigation/types';
 import { changeLanguage, getCurrentLocale } from '@/locales';
 
 let mockUrl: string | null = null;
+const mockUrlListeners = new Set<(event: { url: string }) => void>();
 let mockAuthEvent: ((event: string, session: Session) => void) | undefined;
 const mockSession = { user: { id: 'b1-user', email: 'new@example.org' } };
 jest.mock('expo-linking', () => ({
   createURL: (path: string) => `rahitalia://${path}`,
-  useURL: () => mockUrl,
+  getInitialURL: jest.fn(() => Promise.resolve(mockUrl)),
+  addEventListener: jest.fn(
+    (_type: string, listener: (event: { url: string }) => void) => {
+      mockUrlListeners.add(listener);
+      return { remove: () => mockUrlListeners.delete(listener) };
+    }
+  ),
 }));
 jest.mock('@/shared/auth/supabaseClient', () => ({
   supabase: {
@@ -57,16 +64,23 @@ const makeNavigation = (ready = true) => {
     listeners,
   };
 };
-const mount = (nav = makeNavigation()) => ({
-  ...renderHook(
+const emitUrl = async (url: string) => {
+  await act(async () => {
+    mockUrlListeners.forEach(listener => listener({ url }));
+    await Promise.resolve();
+  });
+};
+const mount = async (nav = makeNavigation()) => {
+  const hook = renderHook(
     () => {
       useAuthDeepLink(nav.ref);
       return useAuth();
     },
     { wrapper: AuthProvider }
-  ),
-  nav,
-});
+  );
+  await act(() => Promise.resolve());
+  return { ...hook, nav };
+};
 
 describe('Link auth B1', () => {
   let alert: jest.SpyInstance;
@@ -74,6 +88,7 @@ describe('Link auth B1', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockUrl = null;
+    mockUrlListeners.clear();
     mockAuthEvent = undefined;
     previousLocale = getCurrentLocale();
     changeLanguage('it');
@@ -94,10 +109,12 @@ describe('Link auth B1', () => {
   // C34: hook e provider reali; il mock rappresenta solo la risposta del server.
   it('PKCE: il link con code apre la sessione', async () => {
     mockUrl = 'rahitalia://reset-password?code=codice-valido';
-    const { result, nav } = mount();
+    const { result, nav } = await mount();
     await waitFor(() => expect(result.current.status).toBe('authenticated'));
     expect(exchange).toHaveBeenCalledWith('codice-valido');
-    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword');
+    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword', undefined, {
+      pop: true,
+    });
     expect(supabase.auth.setSession).not.toHaveBeenCalled();
   });
 
@@ -105,13 +122,13 @@ describe('Link auth B1', () => {
   it('PKCE: il link con token nel fragment non apre sessioni', async () => {
     mockUrl =
       'rahitalia://reset-password#type=recovery&access_token=A&refresh_token=B';
-    const { result, nav, rerender } = mount();
+    const { result, nav } = await mount();
     await waitFor(() => expect(result.current.status).toBe('unauthenticated'));
     expect(supabase.auth.setSession).not.toHaveBeenCalled();
     expect(exchange).not.toHaveBeenCalled();
     expect(nav.navigate).not.toHaveBeenCalled();
     mockUrl = 'rahitalia://reset-password?code=positivo';
-    rerender({});
+    await emitUrl(mockUrl);
     await waitFor(() => expect(result.current.status).toBe('authenticated'));
     expect(exchange).toHaveBeenCalledWith('positivo');
   });
@@ -119,7 +136,7 @@ describe('Link auth B1', () => {
   // C26: error_code in query e fragment, senza tentare lo scambio.
   it('link di accesso fallito: recupero con errore chiede un nuovo link', async () => {
     mockUrl = 'rahitalia://reset-password?error_code=otp_expired';
-    const { rerender } = mount();
+    await mount();
     await waitFor(() =>
       expect(alert).toHaveBeenCalledWith(
         'Link scaduto',
@@ -128,7 +145,7 @@ describe('Link auth B1', () => {
     );
     expect(exchange).not.toHaveBeenCalled();
     mockUrl = 'rahitalia://reset-password#error_code=otp_expired';
-    rerender({});
+    await emitUrl(mockUrl);
     await waitFor(() => expect(alert).toHaveBeenCalledTimes(2));
     expect(alert).toHaveBeenNthCalledWith(
       2,
@@ -137,7 +154,7 @@ describe('Link auth B1', () => {
     );
     expect(exchange).not.toHaveBeenCalled();
     mockUrl = 'rahitalia://reset-password?code=positivo';
-    rerender({});
+    await emitUrl(mockUrl);
     await waitFor(() => expect(exchange).toHaveBeenCalledWith('positivo'));
   });
 
@@ -147,7 +164,7 @@ describe('Link auth B1', () => {
       error: { code: 'bad_code_verifier' },
     });
     mockUrl = 'rahitalia://confirm-email?code=confermata';
-    const { result } = mount();
+    const { result } = await mount();
     await waitFor(() =>
       expect(alert).toHaveBeenCalledWith(
         'Email confermata',
@@ -164,7 +181,7 @@ describe('Link auth B1', () => {
       error: { code: 'pkce_code_verifier_not_found' },
     });
     mockUrl = 'rahitalia://reset-password?code=primo-invio';
-    const { nav, rerender } = mount();
+    const { nav } = await mount();
     await waitFor(() =>
       expect(alert).toHaveBeenCalledWith(
         'Link di accesso non riuscito',
@@ -174,21 +191,25 @@ describe('Link auth B1', () => {
     expect(exchange).toHaveBeenCalledWith('primo-invio');
     expect(nav.navigate).not.toHaveBeenCalled();
     mockUrl = 'rahitalia://reset-password?code=nuovo-invio';
-    rerender({});
+    await emitUrl(mockUrl);
     await waitFor(() =>
-      expect(nav.navigate).toHaveBeenCalledWith('ResetPassword')
+      expect(nav.navigate).toHaveBeenCalledWith('ResetPassword', undefined, {
+        pop: true,
+      })
     );
   });
 
   it('link di accesso: avvio a freddo apre Reimposta password quando la navigazione è pronta', async () => {
     mockUrl = 'rahitalia://reset-password?code=avvio';
     const nav = makeNavigation(false);
-    const { result, unmount } = mount(nav);
+    const { result, unmount } = await mount(nav);
     await waitFor(() => expect(result.current.status).toBe('authenticated'));
     expect(nav.navigate).not.toHaveBeenCalled();
     nav.isReady.mockReturnValue(true);
     act(() => nav.listeners.get('ready')?.());
-    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword');
+    expect(nav.navigate).toHaveBeenCalledWith('ResetPassword', undefined, {
+      pop: true,
+    });
     act(() => nav.listeners.get('state')?.());
     expect(nav.navigate).toHaveBeenCalledTimes(1);
     unmount();
@@ -197,7 +218,7 @@ describe('Link auth B1', () => {
 
   it('link di accesso: conferma riuscita mostra un messaggio', async () => {
     mockUrl = 'rahitalia://confirm-email?code=conferma';
-    const { nav } = mount();
+    const { nav } = await mount();
     await waitFor(() =>
       expect(alert).toHaveBeenCalledWith(
         'Email confermata',
@@ -209,7 +230,7 @@ describe('Link auth B1', () => {
   });
 
   it("cambio email: redirect all'app", async () => {
-    const { result } = mount();
+    const { result } = await mount();
     await act(async () => {
       await result.current.updateEmail('new@example.org');
     });
@@ -222,7 +243,7 @@ describe('Link auth B1', () => {
   // PKCE non garantisce type nel redirect: il percorso distingue il cambio email.
   it('cambio email: conferma mostra email aggiornata', async () => {
     mockUrl = 'rahitalia://confirm-email-change?code=cambio';
-    const { rerender } = mount();
+    await mount();
     await waitFor(() =>
       expect(alert).toHaveBeenCalledWith(
         'Email aggiornata',
@@ -232,7 +253,7 @@ describe('Link auth B1', () => {
     expect(exchange).toHaveBeenCalledWith('cambio');
     alert.mockClear();
     mockUrl = 'rahitalia://confirm-email?code=cambio-tipo&type=email_change';
-    rerender({});
+    await emitUrl(mockUrl);
     await waitFor(() => expect(exchange).toHaveBeenCalledWith('cambio-tipo'));
     await waitFor(() =>
       expect(alert).toHaveBeenCalledWith(

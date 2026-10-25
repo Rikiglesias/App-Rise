@@ -16,13 +16,15 @@ import { supabase } from '@/shared/auth/supabaseClient';
 // ha `Home`, e il cancello del profilo, che non ce l'ha) e non può presumere in quale
 // dei due si trova. Un mock con il solo `navigate` non permetterebbe di distinguerli.
 const mockNavigate = jest.fn();
+// C68: «Continua» torna alla rotta già in pila con popTo, non ne impila una nuova.
+const mockPopTo = jest.fn();
 const mockCanGoBack = jest.fn(() => false);
 const mockNavState: { routeNames: string[] } = { routeNames: ['Home'] };
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: mockNavigate,
-    popTo: jest.fn(),
+    popTo: mockPopTo,
     goBack: jest.fn(),
     canGoBack: mockCanGoBack,
     getState: () => mockNavState,
@@ -142,17 +144,19 @@ describe('Auth screens', () => {
 
   it('ResetPassword: «Continua» torna alla home quando quella rotta esiste', async () => {
     mockNavigate.mockClear();
+    mockPopTo.mockClear();
     mockNavState.routeNames = ['Home', 'ResetPassword', 'Profile'];
 
     const ui = wrap(<ResetPasswordScreen />);
     await cambiaPasswordConSuccesso(ui);
     fireEvent.press(ui.getByText('Continua'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('Home');
+    expect(mockPopTo).toHaveBeenCalledWith('Home');
   });
 
   it('ResetPassword: dietro il cancello «Continua» porta al completamento del profilo, non a una rotta inesistente', async () => {
     mockNavigate.mockClear();
+    mockPopTo.mockClear();
     // Le tre rotte del cancello, esattamente come le monta ProfileGateNavigator.
     mockNavState.routeNames = [
       'CompleteProfile',
@@ -164,18 +168,19 @@ describe('Auth screens', () => {
     await cambiaPasswordConSuccesso(ui);
     fireEvent.press(ui.getByText('Continua'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('CompleteProfile');
-    expect(mockNavigate).not.toHaveBeenCalledWith('Home');
+    expect(mockPopTo).toHaveBeenCalledWith('CompleteProfile');
+    expect(mockPopTo).not.toHaveBeenCalledWith('Home');
   });
 
   it('ResetPassword: «Continua» torna al ri-consenso quando il cancello lo richiede', async () => {
     mockNavigate.mockClear();
+    mockPopTo.mockClear();
     mockNavState.routeNames = ['ReConsent', 'DeleteAccount', 'ResetPassword'];
     const ui = wrap(<ResetPasswordScreen />);
     await cambiaPasswordConSuccesso(ui);
     fireEvent.press(ui.getByText('Continua'));
-    expect(mockNavigate).toHaveBeenCalledWith('ReConsent');
-    expect(mockNavigate).not.toHaveBeenCalledWith('Home');
+    expect(mockPopTo).toHaveBeenCalledWith('ReConsent');
+    expect(mockPopTo).not.toHaveBeenCalledWith('Home');
   });
 
   it('ForgotPassword: su errore mostra l’errore e NON il messaggio di invio', async () => {
