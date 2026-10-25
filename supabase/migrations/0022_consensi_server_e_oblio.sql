@@ -65,10 +65,13 @@ create trigger on_consent_stamp_server before insert on public.consent_events
 drop trigger if exists on_consent_marketing_sync on public.consent_events;
 create trigger on_consent_marketing_sync after insert on public.consent_events
   for each row when (new.purpose = 'marketing') execute function public.allinea_marketing_da_evento();
--- UPDATE, non INSERT: alla registrazione il profilo precede gli eventi (0019).
 -- Ogni UPDATE, anche solo city: una cache ereditata discordante va riallineata.
+-- Anche INSERT: la persona può cancellare il proprio profilo (own_delete) e
+-- ricrearlo col sì, mentre il registro, legato ad auth.users, dice ancora «no».
+-- Alla registrazione il profilo precede gli eventi (0019): nasce false e l'evento
+-- «granted» che segue lo riporta a true con l'UPDATE qui sopra.
 drop trigger if exists on_profile_marketing_guard on public.profiles;
-create trigger on_profile_marketing_guard before update on public.profiles
+create trigger on_profile_marketing_guard before insert or update on public.profiles
   for each row execute function public.proteggi_marketing_profilo();
 
 -- B8: la 0013 T2 vieta il CLAIM quando il recapito è scelto (B diverso da A).

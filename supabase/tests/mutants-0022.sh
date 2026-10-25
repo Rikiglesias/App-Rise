@@ -104,14 +104,16 @@ run_mutante() {
 
 run_mutante 'M1 created_at dal client' 'T1.*FAIL' \
   's/new.created_at := now();/new.created_at := new.created_at;/' || vivi=$((vivi+1))
-# T2 fallisce anche col BEFORE UPDATE presente: la richiesta app è invalida,
-# quindi la sua sotto-transazione non può mascherare l'assenza del sync.
-run_mutante 'M2 aggiornamento profilo tolto' 'T2.*FAIL' \
+# Cade già T0: con la protezione anche su INSERT il profilo nasce false, e
+# senza il sync l'evento «granted» della registrazione non lo riporta a true.
+# (T2 cadrebbe comunque: la richiesta app è invalida, quindi la sua
+# sotto-transazione non può mascherare l'assenza del sync.)
+run_mutante 'M2 aggiornamento profilo tolto' 'T0.*FAIL' \
   's/where p.id = new.user_id/where false and p.id = new.user_id/' || vivi=$((vivi+1))
 run_mutante 'M3 IS DISTINCT FROM tolto' 'T6.*FAIL' \
   's/and p.marketing_consent is distinct from v_marketing;/and true;/' || vivi=$((vivi+1))
 run_mutante 'M4 BEFORE UPDATE tolto' 'T3.*FAIL' \
-  '/^create trigger on_profile_marketing_guard before update/,+1d' || vivi=$((vivi+1))
+  '/^create trigger on_profile_marketing_guard before insert or update/,+1d' || vivi=$((vivi+1))
 run_mutante 'M5 nessun evento non torna false' 'T4.*FAIL' \
   's/), false);/), new.marketing_consent);/' || vivi=$((vivi+1))
 run_mutante 'M6 B8 legame oblio tolto' 'T7 B8.*FAIL' \
@@ -120,6 +122,8 @@ run_mutante 'M7 ordine server ignorato a parita di timestamp' 'T9.*FAIL' \
   's/, e.server_order desc//g' || vivi=$((vivi+1))
 run_mutante 'M8 B8 vecchia email non verificata' 'T11.*FAIL' \
   's/if v_vecchia_provata and nullif/if nullif/' || vivi=$((vivi+1))
+run_mutante 'M9 profilo ricreato senza protezione' 'T16.*FAIL' \
+  's/before insert or update on public.profiles/before update on public.profiles/' || vivi=$((vivi+1))
 
 if [ "$vivi" -ne 0 ] || [ "$eseguiti" -eq 0 ]; then
   echo "$vivi mutanti NON uccisi; $eseguiti selezionati"

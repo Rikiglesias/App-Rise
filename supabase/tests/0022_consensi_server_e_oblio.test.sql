@@ -2,7 +2,8 @@
 -- tutte le migration e 0022 ripetuta. Solo Postgres Docker, entrambi gli shim.
 -- I GRANT qui sotto sono fixture: lo shim restrittivo non modella i privilegi
 -- dell'app sulle tabelle 0001/0003. La migration NON concede questi permessi.
-grant select, update on public.profiles to authenticated;
+-- insert e delete come su Supabase, dove decidono le policy own_insert/own_delete (T16).
+grant select, insert, update, delete on public.profiles to authenticated;
 grant select, insert on public.consent_events to authenticated;
 
 create function pg_temp.verifica(ok boolean, messaggio text) returns void
@@ -80,7 +81,7 @@ begin
 end $$;
 
 -- Nessun evento marketing, anche se esistono eventi privacy: profilo ereditato
--- incoerente creato con INSERT (il contratto protegge BEFORE UPDATE, non INSERT).
+-- incoerente creato con INSERT (lo crea il superutente, come un dato storico).
 insert into auth.users (id, email, email_confirmed_at) values
   ('00000000-0000-0000-0000-000000002203', 'c79-no-event@example.test', now());
 insert into public.profiles (id, first_name, last_name, birth_date, privacy_consent_at, marketing_consent)
@@ -272,5 +273,30 @@ delete from public.profiles where id = '00000000-0000-0000-0000-000000002207';
 delete from auth.users where id = '00000000-0000-0000-0000-000000002207';
 select pg_temp.verifica((select claimed_by = '00000000-0000-0000-0000-000000002208'::uuid and oblio_user_id is null
   from public.legacy_contacts where source = 'c79-reused'), 'T15 B8 scheda rivendicata da un altro preservata');
+
+-- T16: chi cancella il proprio profilo e lo ricrea col sì non si riscrive il
+-- consenso marketing. Il registro dipende da auth.users e sopravvive al profilo:
+-- dice «revocato», e il profilo nuovo deve dire lo stesso.
+insert into auth.users (id, email, email_confirmed_at) values
+  ('00000000-0000-0000-0000-000000002209', 'c79-ricrea@example.test', now());
+do $$
+begin
+  perform set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000002209', true);
+  set local role authenticated;
+  insert into public.profiles (id, first_name, last_name, birth_date, privacy_consent_at, marketing_consent)
+  values ('00000000-0000-0000-0000-000000002209', 'Ricrea', 'Profilo', '1990-01-01', now(), false);
+  insert into public.consent_events (user_id, purpose, action, policy_version, legal_basis, channel)
+  values ('00000000-0000-0000-0000-000000002209', 'marketing', 'granted', 'privacy-2026-06-15', 'consent', 'c79-ricrea-si');
+  insert into public.consent_events (user_id, purpose, action, policy_version, legal_basis, channel)
+  values ('00000000-0000-0000-0000-000000002209', 'marketing', 'withdrawn', 'privacy-2026-06-15', 'consent', 'c79-ricrea-no');
+  delete from public.profiles where id = '00000000-0000-0000-0000-000000002209';
+  insert into public.profiles (id, first_name, last_name, birth_date, privacy_consent_at, marketing_consent)
+  values ('00000000-0000-0000-0000-000000002209', 'Ricrea', 'Profilo', '1990-01-01', now(), true);
+  reset role;
+  perform pg_temp.verifica((select marketing_consent = false from public.profiles
+    where id = '00000000-0000-0000-0000-000000002209')
+    and exists (select 1 from public.consent_events where channel = 'c79-ricrea-no'),
+    'T16 profilo ricreato dal client: vale il registro');
+end $$;
 
 do $$ begin raise notice 'ALL TESTS PASS 0022'; end $$;
