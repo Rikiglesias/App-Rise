@@ -435,3 +435,16 @@ RN.Animated.event = jest.fn(() => jest.fn());
 
 // Ensure createAnimatedComponent works
 RN.Animated.createAnimatedComponent = OriginalAnimated.createAnimatedComponent;
+
+// Il requestAnimationFrame finto di react-native/jest/setup.js chiama jest.now()
+// dentro un setTimeout reale: un'animazione (per esempio dello stack) ancora in
+// corso a fine file scatta ad ambiente chiuso e, con i file in serie, Jest esce
+// con 1 anche a test verdi. Dopo l'ultimo test del file i frame non partono più.
+let fileConcluso = false;
+afterAll(() => {
+  fileConcluso = true;
+});
+global.requestAnimationFrame = callback =>
+  setTimeout(() => {
+    if (!fileConcluso) callback(jest.now());
+  }, 0);
