@@ -1,0 +1,25 @@
+{
+  "criterio": "C56",
+  "base": "63352bc",
+  "titoli": [
+    "mappa: intestazione in colonna",
+    "mappa: chiusura fuori dai testi e ≥ 48 dp",
+    "mappa: filtro sotto l'intestazione nello stesso contenitore",
+    "mappa: sottotitolo senza pin in it e en"
+  ],
+  "esitiAllaBase": {
+    "mappa: intestazione in colonna": "failed",
+    "mappa: chiusura fuori dai testi e ≥ 48 dp": "failed",
+    "mappa: filtro sotto l'intestazione nello stesso contenitore": "failed",
+    "mappa: sottotitolo senza pin in it e en": "failed"
+  },
+  "motiviAllaBase": {
+    "mappa: intestazione in colonna": "Error: expect(received).not.toBe(expected) // Object.is equality",
+    "mappa: chiusura fuori dai testi e ≥ 48 dp": "Error: expect(received).not.toContain(expected) // indexOf",
+    "mappa: filtro sotto l'intestazione nello stesso contenitore": "Error: expect(received).not.toBe(expected) // Object.is equality",
+    "mappa: sottotitolo senza pin in it e en": "Error: expect(received).toBeNull()"
+  },
+  "fileTest": {
+    "src/__tests__/features/impact/screens/mappaIntestazione.test.tsx": "e8964c3ca2732febd530b5ead3063f13ff3c9f7329aa10e9c4cde3ce86b79e31"
+  }
+}

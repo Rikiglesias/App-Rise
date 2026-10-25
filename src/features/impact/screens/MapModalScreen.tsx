@@ -27,7 +27,7 @@ import {
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
-import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
+import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
 type MapModalScreenRouteProp = RouteProp<ImpactStackParamList, 'MapModal'>;
 
@@ -165,70 +165,71 @@ const MapModalScreen: React.FC = () => {
         isFullScreen
       />
 
-      {/* Header */}
-      <PerfectContainer
+      {/* Intestazione e filtro in una colonna: il filtro segue l'altezza vera dei testi (C56) */}
+      <View
         style={[
-          styles.header,
+          styles.overlay,
           {
             top: insets.top + PerfectSpacing['3xl'],
             left: insets.left + scaleSpacing(20),
-            right: insets.right + PerfectSpacing['3xl'],
+            right: insets.right + scaleSpacing(20),
           },
         ]}
       >
-        <PerfectText size={24} lines={1} fontWeight="700" style={styles.title}>
-          {t('impact.interactiveMap')}
-        </PerfectText>
-        <PerfectText
-          size={16}
-          lines={1}
-          fontWeight="400"
-          style={styles.subtitle}
-        >
-          {t('impact.tapPins')}
-        </PerfectText>
+        <View style={styles.header}>
+          <View style={styles.headerText}>
+            <PerfectText
+              size={24}
+              lines={2}
+              containerWidth={0}
+              fontWeight="700"
+              style={styles.title}
+            >
+              {t('impact.interactiveMap')}
+            </PerfectText>
+            <PerfectText
+              size={16}
+              lines={3}
+              containerWidth={0}
+              fontWeight="400"
+              style={styles.subtitle}
+            >
+              {t('impact.tapCountries')}
+            </PerfectText>
+          </View>
 
-        <PlatformTouchable
-          style={styles.closeButton}
-          hitSlop={touchTargetHitSlop(styles.closeButton.width)}
-          onPress={handleClosePress}
-          activeOpacity={0.8}
-          accessibilityRole="button"
-          accessibilityLabel={t('impact.closeMap')}
-        >
-          <PerfectIcon name="close" size={24} color={colors.neutral[900]} />
-        </PlatformTouchable>
-      </PerfectContainer>
+          <PlatformTouchable
+            style={styles.closeButton}
+            onPress={handleClosePress}
+            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityLabel={t('impact.closeMap')}
+          >
+            <PerfectIcon name="close" size={24} color={colors.neutral[900]} />
+          </PlatformTouchable>
+        </View>
 
-      {/* Filtro per anno (solo se ci sono più anni) */}
-      {years.length > 1 ? (
-        <View
-          style={[
-            styles.filterRow,
-            {
-              top: insets.top + PerfectSpacing['3xl'] + scaleSpacing(56),
-              left: insets.left + scaleSpacing(20),
-              right: insets.right + scaleSpacing(20),
-            },
-          ]}
-        >
-          <YearChip
-            label={t('impact.allYears')}
-            value={null}
-            active={selectedYear === null}
-            onSelect={setSelectedYear}
-          />
-          {years.map(y => (
+        {/* Filtro per anno (solo se ci sono più anni) */}
+        {years.length > 1 ? (
+          <View style={styles.filterRow}>
             <YearChip
-              key={y}
-              label={`${y}`}
-              value={y}
-              active={selectedYear === y}
+              label={t('impact.allYears')}
+              value={null}
+              active={selectedYear === null}
               onSelect={setSelectedYear}
             />
-          ))}
-        </View>
-      ) : null}
+            {years.map(y => (
+              <YearChip
+                key={y}
+                label={`${y}`}
+                value={y}
+                active={selectedYear === y}
+                onSelect={setSelectedYear}
+              />
+            ))}
+          </View>
+        ) : null}
+      </View>
 
       {/* Modal della location selezionata */}
       <MapLocationModal
@@ -268,35 +269,32 @@ const createStyles = (colors: ThemeColors) =>
       flex: 1,
       backgroundColor: colors.neutral[100],
     },
+    // Il tondo segue l'area minima di C43: mai sotto 48 dp, senza hitSlop.
     closeButton: {
-      position: 'absolute',
-      top: PerfectSpacing['3xl'],
-      right: scaleSpacing(20),
       backgroundColor: colors.neutral[0],
-      width: scaleTouch(44),
-      height: scaleTouch(44),
-      borderRadius: 22,
+      ...minimumTouchTarget(scaleTouch(44)),
+      borderRadius: BorderRadius.full,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    header: {
+    overlay: {
       position: 'absolute',
-      top: PerfectSpacing['3xl'],
-      left: scaleSpacing(20),
-      right: PerfectSpacing['3xl'],
+      gap: PerfectSpacing.sm,
+    },
+    header: {
       backgroundColor: `${colors.neutral[0]}99`,
       paddingVertical: PerfectSpacing.sm,
       paddingHorizontal: PerfectSpacing.base,
       borderRadius: BorderRadius.lg,
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
+      gap: PerfectSpacing.sm,
+    },
+    headerText: {
+      flex: 1,
+      flexShrink: 1,
     },
     filterRow: {
-      position: 'absolute',
-      top: PerfectSpacing['3xl'] + scaleSpacing(56),
-      left: scaleSpacing(20),
-      right: scaleSpacing(20),
       flexDirection: 'row',
       flexWrap: 'wrap',
       alignItems: 'center',

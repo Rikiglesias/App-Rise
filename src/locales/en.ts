@@ -385,7 +385,7 @@ export default {
     // Map Modal
     loadingMap: 'Loading map...',
     interactiveMap: 'Interactive Map',
-    tapPins: 'Tap the pins for more details',
+    tapCountries: 'Tap a country for more details',
     closeMap: 'Close map',
     allYears: 'All',
     // Header

@@ -410,7 +410,7 @@ export default {
     // Map Modal
     loadingMap: 'Caricamento mappa...',
     interactiveMap: 'Mappa Interattiva',
-    tapPins: 'Tocca i pin per maggiori dettagli',
+    tapCountries: 'Tocca un paese per maggiori dettagli',
     closeMap: 'Chiudi la mappa',
     allYears: 'Tutti',
     // Header
