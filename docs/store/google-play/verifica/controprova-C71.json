@@ -14,6 +14,6 @@
     "donorbox: rinuncia illeggibile, niente dati": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)"
   },
   "fileTest": {
-    "src/__tests__/shared/partner/usePartnerExit.test.tsx": "9159ada9d678a510da654214e2c0fad6cbd148309a95204e90313cc2eeaa395b"
+    "src/__tests__/shared/partner/usePartnerExit.test.tsx": "70296037b208ec783391b4612ddcbaf96140b077c6217e442de7c72aabe4b66f"
   }
 }

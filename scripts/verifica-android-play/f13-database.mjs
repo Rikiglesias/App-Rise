@@ -25,7 +25,11 @@ const SQL_REGOLE = [
     'created_at deciso dal server con now()',
   ],
   [/is\s+distinct\s+from/i, 'aggiornamento solo se IS DISTINCT FROM'],
-  [/before\s+update[\s\S]{0,200}profiles/i, 'BEFORE UPDATE su profiles'],
+  // `before insert or update` vale: il BEFORE UPDATE c'è ancora (giro 2 abc-4, f5f2256).
+  [
+    /before\s+(?:insert\s+or\s+)?update[\s\S]{0,200}profiles/i,
+    'BEFORE UPDATE su profiles',
+  ],
 ];
 
 const unoChe = (dir, re) =>
