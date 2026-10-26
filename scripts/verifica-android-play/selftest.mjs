@@ -31,8 +31,14 @@ import { FIXTURE_F13 } from './selftest-f13.mjs';
 import { FIXTURE_F13_ESTERNI } from './selftest-f13-esterni.mjs';
 import { FIXTURE_F13_TESTI } from './selftest-f13-testi.mjs';
 import { FIXTURE_F13_WORKFLOW } from './selftest-f13-workflow.mjs';
+import { FIXTURE_F13_R27 } from './selftest-f13-r27.mjs';
+import { FIXTURE_F13_R27_TESTI } from './selftest-f13-r27-testi.mjs';
+import { FIXTURE_F13_R27_PUBBLICI } from './selftest-f13-r27-pubblici.mjs';
 
 export const FIXTURE = {
+  ...FIXTURE_F13_R27,
+  ...FIXTURE_F13_R27_TESTI,
+  ...FIXTURE_F13_R27_PUBBLICI,
   ...FIXTURE_F13,
   ...FIXTURE_F13_ESTERNI,
   ...FIXTURE_F13_TESTI,

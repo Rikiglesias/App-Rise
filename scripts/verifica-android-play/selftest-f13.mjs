@@ -1,7 +1,7 @@
 // C22 per i criteri R24-R26 a titoli Jest (f13.mjs) e per C81: ogni fixture negativa è il positivo con UNA
 // mutazione. Gli statici ricevono testi veri, così il selftest prova anche i lettori (regex e parser).
 // I criteri solo statici (C61 C63 C76 C77 C80 C82) stanno in selftest-f13-testi.mjs.
-import { DEFINIZIONI_F13, GUARDIE_C81 } from './f13.mjs';
+import { DEFINIZIONI_F13, GUARDIE_C81, LOCALI_C72 } from './f13.mjs';
 import { FILE_C65, tempiOta } from './f13-statici.mjs';
 import { negativiComuni, verde } from './selftest-codice.mjs';
 
@@ -63,22 +63,38 @@ const ok81 = GUARDIE_C81.map(t => ({
   file: 'x',
 }));
 
+// --- C72 (emendato R28-R29) ---
+const [IT_C72, EN_C72] = Object.keys(LOCALI_C72);
+const C72_OK = {
+  testi: {
+    [IT_C72]:
+      "accountEliminato: 'Account eliminato. Ora usi l’app da ospite.',",
+    [EN_C72]: "accountDeleted: 'Account deleted. You are now a guest.',",
+  },
+};
+
 export const FIXTURE_F13 = {
   ...Object.fromEntries(
-    [
-      'C57',
-      'C62',
-      'C64',
-      'C66',
-      'C67',
-      'C69',
-      'C70',
-      'C72',
-      'C74',
-      'C75',
-      'C84',
-    ].map(id => [id, soloTitoli(id)])
+    ['C57', 'C62', 'C64', 'C66', 'C67', 'C69', 'C70', 'C74', 'C75', 'C84'].map(
+      id => [id, soloTitoli(id)]
+    )
   ),
+  C72: conStatico('C72', C72_OK, [
+    { testi: { ...C72_OK.testi, [IT_C72]: null } },
+    {
+      testi: {
+        ...C72_OK.testi,
+        [IT_C72]:
+          "sessionResidua:\n  'Account eliminato: esci a  mano dal profilo.',",
+      },
+    },
+    {
+      testi: {
+        ...C72_OK.testi,
+        [EN_C72]: "sessionResidua: 'Please sign out manually.',",
+      },
+    },
+  ]),
   C56: conStatico('C56', C56_OK, [
     { testo: null },
     { testo: `${C56_OK.testo}\nconst x = scaleSpacing(56);` },

@@ -1,6 +1,6 @@
 // C19-C20: runbook di rilascio docs/store/google-play/rilascio.md (contratto del goal android-play).
 // Il runbook ha sezioni `## ` fisse; ognuna deve contenere i suoi elementi obbligatori.
-import { esiste, leggi, percorso } from './comune.mjs';
+import { esiste, leggi, normalizzaSpazi, percorso } from './comune.mjs';
 
 const RUNBOOK = percorso('docs', 'store', 'google-play', 'rilascio.md');
 const GUIDA_STORE = percorso('docs', 'STORE-LOCALIZATION-GUIDE.md');
@@ -82,6 +82,13 @@ export const controllaSezioni = (elenco, trovate, dove) => {
   return null;
 };
 
+// Emendato R28-R29: chi importa o ricrea profili in Supabase scrive anche il registro, e la scelta sul
+// `recordConsent` fallito dopo l'upsert è dichiarata.
+export const FRASI_C20 = [
+  'scrive anche gli eventi `marketing`',
+  "un `recordConsent` fallito dopo l'upsert lascia `false`",
+];
+
 const chiFaCosa = md => {
   const s = sezioni(md, 2).find(x => x.titolo.includes('Chi fa cosa'));
   return s ? sezioni(s.testo, 3) : null;
@@ -112,7 +119,14 @@ export const criteri = {
       if (!runbook) return 'manca docs/store/google-play/rilascio.md';
       const attori = chiFaCosa(runbook);
       if (!attori) return 'rilascio.md: manca la sezione «Chi fa cosa»';
-      return controllaSezioni(ATTORI_C20, attori, 'Chi fa cosa');
+      const motivo = controllaSezioni(ATTORI_C20, attori, 'Chi fa cosa');
+      if (motivo) return motivo;
+      const sezione = sezioni(runbook, 2).find(x =>
+        x.titolo.includes('Chi fa cosa')
+      );
+      const testo = normalizzaSpazi(sezione.testo).replace(/[’‘]/g, "'");
+      const manca = FRASI_C20.find(f => !testo.includes(f));
+      return manca ? `Chi fa cosa: manca «${manca}»` : null;
     },
   },
 };

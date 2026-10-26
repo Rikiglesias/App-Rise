@@ -57,6 +57,31 @@ export const staticoC71 = {
   },
 };
 
+// C72 emendato R28-R29 (insieme a C98): dopo la cancellazione riuscita con uscita fallita l'app è ospite,
+// quindi nessun testo chiede più di uscire a mano.
+export const LOCALI_C72 = {
+  'src/locales/it.ts': 'esci a mano',
+  'src/locales/en.ts': 'sign out manually',
+};
+export const staticoC72 = {
+  leggi: () => ({
+    testi: Object.fromEntries(
+      Object.keys(LOCALI_C72).map(f => [
+        f,
+        esiste(percorso(f)) ? leggi(percorso(f)) : null,
+      ])
+    ),
+  }),
+  verifica({ testi }) {
+    for (const [f, frase] of Object.entries(LOCALI_C72)) {
+      if (testi?.[f] == null) return `${f} assente`;
+      if (normalizzaSpazi(testi[f]).toLowerCase().includes(frase))
+        return `${f}: dice ancora «${frase}»`;
+    }
+    return '';
+  },
+};
+
 const schermate = (prima, dopo, nomi) => nomi.map(n => `${prima}${n}${dopo}`);
 
 // --- definizioni a titoli --------------------------------------------------------------------------
@@ -154,6 +179,7 @@ export const DEFINIZIONI_F13 = Object.fromEntries(
       titoli: [
         'elimina account: uscita che rigetta = sessione residua, non errore',
       ],
+      statico: staticoC72,
     },
     C73: {
       titoli: [

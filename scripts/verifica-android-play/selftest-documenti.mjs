@@ -1,5 +1,5 @@
 // Fixture del selftest (C22) per i documenti: C15, C19, C20.
-import { ATTORI_C20, SEZIONI_C19 } from './documenti-rilascio.mjs';
+import { ATTORI_C20, FRASI_C20, SEZIONI_C19 } from './documenti-rilascio.mjs';
 
 const campi = (extra = {}) => ({
   titolo: 'Rise Against Hunger Italia',
@@ -51,7 +51,8 @@ const blocco = (livello, [titolo, ...el]) =>
 const runbookOk = () =>
   SEZIONI_C19.map(s => blocco(2, s)).join('\n') +
   '\n## Chi fa cosa\n' +
-  ATTORI_C20.map(a => blocco(3, a)).join('\n');
+  ATTORI_C20.map(a => blocco(3, a)).join('\n') +
+  `\nChi ricrea profili ${FRASI_C20[0]}; scelta:\n${FRASI_C20[1]}.\n`;
 
 export const FIXTURE_DOCUMENTI = {
   C15: {
@@ -89,6 +90,14 @@ export const FIXTURE_DOCUMENTI = {
       { runbook: runbookOk().replace('## Chi fa cosa', '## Altro') },
       { runbook: runbookOk().replace('### Sede USA', '### Altri') },
       { runbook: runbookOk().replace('rahitalia://', '') },
+      // R28-R29: le due frasi su eventi `marketing` e recordConsent fallito.
+      ...FRASI_C20.map(f => ({ runbook: runbookOk().replace(f, 'altro') })),
+      {
+        runbook: runbookOk().replace(
+          'scrive anche gli eventi `marketing`',
+          'scrive anche gli eventi marketing'
+        ),
+      },
     ],
     pos: [{ runbook: runbookOk() }],
   },

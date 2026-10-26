@@ -43,8 +43,12 @@ import {
 import { C59 } from './verifica-android-play/f13-dipendenze.mjs';
 import { C60 } from './verifica-android-play/f13-funzioni.mjs';
 import { C78 } from './verifica-android-play/f13-workflow.mjs';
-import { C79 } from './verifica-android-play/f13-database.mjs';
+import { C79, C86 } from './verifica-android-play/f13-database.mjs';
 import { C83 } from './verifica-android-play/f13-rilievi.mjs';
+import {
+  DEFINIZIONI_R27,
+  criteri as r27,
+} from './verifica-android-play/f13-r27.mjs';
 import { registraControprove } from './verifica-android-play/controprova-registra.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
 import { selftestLettori } from './verifica-android-play/selftest-titoli.mjs';
@@ -56,6 +60,7 @@ const DEFINIZIONI_TITOLI = {
   ...DEFINIZIONI_DISPOSITIVI,
   ...DEFINIZIONI_CONTENUTI,
   ...DEFINIZIONI_F13,
+  ...DEFINIZIONI_R27,
 };
 
 const CRITERI = {
@@ -81,6 +86,8 @@ const CRITERI = {
   C78,
   C79,
   C83,
+  ...r27,
+  C86,
 };
 const ATTESI = [
   'C1',
@@ -137,6 +144,8 @@ const ATTESI = [
   'C55',
   // R24-R26 (F13): da C56 a C84, tutti.
   ...Array.from({ length: 29 }, (_, i) => `C${56 + i}`),
+  // R27-R29: da C85 a C99, tutti.
+  ...Array.from({ length: 15 }, (_, i) => `C${85 + i}`),
 ];
 
 const esito = async (fn, input) => {

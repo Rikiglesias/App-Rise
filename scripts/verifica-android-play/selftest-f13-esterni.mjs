@@ -47,7 +47,7 @@ const sorgente60 = t => ({
 
 // --- C79 ---
 const TRIGGER_C79 = 'create trigger t before update on public.profiles';
-const C79_OK = {
+export const C79_OK = {
   migration: '0022_consensi.sql',
   sql: `created_at timestamptz not null default now(); … where marketing_consent is distinct from …; ${TRIGGER_C79}`,
   suite: '0022_consensi.test.sql',

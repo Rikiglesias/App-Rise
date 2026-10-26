@@ -78,79 +78,112 @@ const lanciaBash = script => {
   };
 };
 
+let datiDelProcesso;
 export const C79 = {
   nota: () => 'batteria SQL completa in Docker: circa 7 minuti',
-  leggi() {
-    const migration = unoChe(
-      percorso('supabase', 'migrations'),
-      /^0022_.*\.sql$/
-    );
-    const suite = unoChe(percorso('supabase', 'tests'), /^0022_.*\.test\.sql$/);
-    const testo = (...p) =>
-      esiste(percorso(...p)) ? leggi(percorso(...p)) : null;
-    const docker =
-      spawnSync('docker', ['info'], { encoding: 'utf8' }).status === 0;
-    return {
-      migration,
-      sql: migration && testo('supabase', 'migrations', migration),
-      suite,
-      testoSuite: suite && testo('supabase', 'tests', suite),
-      runAll: testo('supabase', 'tests', 'run-all.sh'),
-      mutanti: testo(MUTANTI_C79),
-      runbook: testo(RUNBOOK_C79),
-      docker,
-      // Sette minuti di Docker solo se c'è qualcosa da provare.
-      batteria:
-        docker && migration && suite ? lanciaBash('tests/run-all.sh') : null,
-      mutazioni:
-        docker && migration && esiste(percorso(MUTANTI_C79))
-          ? lanciaBash('tests/mutants-0022.sh')
-          : null,
-    };
-  },
+  // Letta una volta per processo: C86 usa la stessa batteria.
+  leggi: () => (datiDelProcesso ??= leggiBatteria()),
+  verifica: i => verificaC79(i),
+};
+
+const leggiBatteria = () => {
+  const migration = unoChe(
+    percorso('supabase', 'migrations'),
+    /^0022_.*\.sql$/
+  );
+  const suite = unoChe(percorso('supabase', 'tests'), /^0022_.*\.test\.sql$/);
+  const testo = (...p) =>
+    esiste(percorso(...p)) ? leggi(percorso(...p)) : null;
+  const docker =
+    spawnSync('docker', ['info'], { encoding: 'utf8' }).status === 0;
+  return {
+    migration,
+    sql: migration && testo('supabase', 'migrations', migration),
+    suite,
+    testoSuite: suite && testo('supabase', 'tests', suite),
+    runAll: testo('supabase', 'tests', 'run-all.sh'),
+    mutanti: testo(MUTANTI_C79),
+    runbook: testo(RUNBOOK_C79),
+    docker,
+    // Sette minuti di Docker solo se c'è qualcosa da provare.
+    batteria:
+      docker && migration && suite ? lanciaBash('tests/run-all.sh') : null,
+    mutazioni:
+      docker && migration && esiste(percorso(MUTANTI_C79))
+        ? lanciaBash('tests/mutants-0022.sh')
+        : null,
+  };
+};
+
+const verificaC79 = i => {
+  if (!i.migration) return 'migration 0022 assente in supabase/migrations';
+  const sql = senzaCommentiSql(i.sql ?? '');
+  for (const [re, cosa] of SQL_REGOLE)
+    if (!re.test(sql)) return `${i.migration}: manca ${cosa}`;
+  if (!i.suite) return 'suite 0022_*.test.sql assente in supabase/tests';
+  const nome = i.suite.replace(/\.test\.sql$/, '');
+  if (!new RegExp(`"${nome}"`).test(i.runAll ?? ''))
+    return `${nome} non è fra le coppie di run-all.sh`;
+  const caso = CASI_C79.find(
+    c => !(i.testoSuite ?? '').toLowerCase().includes(c)
+  );
+  if (caso) return `la suite ${i.suite} non nomina il caso «${caso}»`;
+  const n = (i.mutanti?.match(/^\s*run_mutante\s/gm) ?? []).length;
+  if (n < MUTANTI_MINIMI_C79)
+    return `${MUTANTI_C79}: ${n} mutanti, almeno ${MUTANTI_MINIMI_C79} (uno per regola)`;
+  const rb = i.runbook ?? '';
+  const at = rb.indexOf('0022');
+  if (at < 0) return `${RUNBOOK_C79} non dice come applicare la 0022`;
+  if (!rb.slice(Math.max(0, at - 600), at + 600).includes('0021'))
+    return `${RUNBOOK_C79}: la 0022 non è messa dopo le 0017-0021`;
+  const query = rb.search(
+    /select\s+count\([^)]*\)[\s\S]{0,400}marketing_consent/i
+  );
+  if (query < 0)
+    return `${RUNBOOK_C79}: manca la query di sola lettura sui marketing_consent discordanti`;
+  const applica = rb.search(
+    /(applic|db push)[^\n]{0,80}0022|0022[^\n]{0,80}(applic|db push)/i
+  );
+  if (applica >= 0 && query > applica)
+    return `${RUNBOOK_C79}: la query di controllo viene dopo l'applicazione della 0022`;
+  if (!i.docker) return 'Docker non attivo: la batteria SQL non gira';
+  if (i.batteria?.exit !== 0)
+    return `run-all.sh exit ${i.batteria?.exit}: ${(i.batteria?.uscita.match(/ROSSO[^\n]*/) ?? [''])[0]}`;
+  const verdi = (
+    i.batteria.uscita.match(new RegExp(`verde\\s+${nome}\\b`, 'g')) ?? []
+  ).length;
+  if (verdi < 2) return `${nome} verde su ${verdi} shim, attesi 2`;
+  if (
+    i.mutazioni?.exit !== 0 ||
+    !/tutti i mutanti uccisi/.test(i.mutazioni?.uscita ?? '')
+  )
+    return `mutants-0022.sh: mutanti sopravvissuti (exit ${i.mutazioni?.exit})`;
+  return '';
+};
+
+// --- C86 (R27, giro 2 abc-4; correzione PRIMA del criterio, f5f2256) ---------------------------------
+// La protezione di marketing_consent scatta anche sull'INSERT: T16 (profilo cancellato e ricreato dal client
+// col sì mentre l'ultimo evento è «withdrawn» → resta false) nella suite, M9 (solo BEFORE UPDATE) ucciso da
+// T16 su entrambi gli shim, e C79 vero.
+const PROTEZIONE_C86 = /before\s+insert\s+or\s+update[\s\S]{0,200}profiles/i;
+const MUTANTE_C86 = /run_mutante\s+['"]M9 [^'"]*['"]\s+['"]T16\.\*FAIL['"]/;
+const UCCISO_C86 = /^M9 [^\n]*\[[^\]]+\]: UCCISO dal test previsto/gm;
+
+export const C86 = {
+  nota: () =>
+    'stessa batteria SQL di C79 (circa 7 minuti, una volta per processo)',
+  leggi: () => C79.leggi(),
   verifica(i) {
-    if (!i.migration) return 'migration 0022 assente in supabase/migrations';
-    const sql = senzaCommentiSql(i.sql ?? '');
-    for (const [re, cosa] of SQL_REGOLE)
-      if (!re.test(sql)) return `${i.migration}: manca ${cosa}`;
-    if (!i.suite) return 'suite 0022_*.test.sql assente in supabase/tests';
-    const nome = i.suite.replace(/\.test\.sql$/, '');
-    if (!new RegExp(`"${nome}"`).test(i.runAll ?? ''))
-      return `${nome} non è fra le coppie di run-all.sh`;
-    const caso = CASI_C79.find(
-      c => !(i.testoSuite ?? '').toLowerCase().includes(c)
-    );
-    if (caso) return `la suite ${i.suite} non nomina il caso «${caso}»`;
-    const n = (i.mutanti?.match(/^\s*run_mutante\s/gm) ?? []).length;
-    if (n < MUTANTI_MINIMI_C79)
-      return `${MUTANTI_C79}: ${n} mutanti, almeno ${MUTANTI_MINIMI_C79} (uno per regola)`;
-    const rb = i.runbook ?? '';
-    const at = rb.indexOf('0022');
-    if (at < 0) return `${RUNBOOK_C79} non dice come applicare la 0022`;
-    if (!rb.slice(Math.max(0, at - 600), at + 600).includes('0021'))
-      return `${RUNBOOK_C79}: la 0022 non è messa dopo le 0017-0021`;
-    const query = rb.search(
-      /select\s+count\([^)]*\)[\s\S]{0,400}marketing_consent/i
-    );
-    if (query < 0)
-      return `${RUNBOOK_C79}: manca la query di sola lettura sui marketing_consent discordanti`;
-    const applica = rb.search(
-      /(applic|db push)[^\n]{0,80}0022|0022[^\n]{0,80}(applic|db push)/i
-    );
-    if (applica >= 0 && query > applica)
-      return `${RUNBOOK_C79}: la query di controllo viene dopo l'applicazione della 0022`;
-    if (!i.docker) return 'Docker non attivo: la batteria SQL non gira';
-    if (i.batteria?.exit !== 0)
-      return `run-all.sh exit ${i.batteria?.exit}: ${(i.batteria?.uscita.match(/ROSSO[^\n]*/) ?? [''])[0]}`;
-    const verdi = (
-      i.batteria.uscita.match(new RegExp(`verde\\s+${nome}\\b`, 'g')) ?? []
-    ).length;
-    if (verdi < 2) return `${nome} verde su ${verdi} shim, attesi 2`;
-    if (
-      i.mutazioni?.exit !== 0 ||
-      !/tutti i mutanti uccisi/.test(i.mutazioni?.uscita ?? '')
-    )
-      return `mutants-0022.sh: mutanti sopravvissuti (exit ${i.mutazioni?.exit})`;
+    if (!PROTEZIONE_C86.test(senzaCommentiSql(i.sql ?? '')))
+      return `${i.migration ?? '0022'}: la protezione non scatta before insert or update su profiles`;
+    if (!/['"]T16 /.test(i.testoSuite ?? ''))
+      return `la suite ${i.suite ?? '0022'} non ha il caso T16`;
+    if (!MUTANTE_C86.test(i.mutanti ?? ''))
+      return `${MUTANTI_C79}: manca M9 atteso ucciso da T16`;
+    const motivo = verificaC79(i);
+    if (motivo) return `C79 non vero: ${motivo}`;
+    const uccisi = (i.mutazioni?.uscita.match(UCCISO_C86) ?? []).length;
+    if (uccisi < 2) return `M9 ucciso da T16 su ${uccisi} shim, attesi 2`;
     return '';
   },
 };
