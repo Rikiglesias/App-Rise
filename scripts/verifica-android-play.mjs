@@ -45,7 +45,7 @@ import { C60 } from './verifica-android-play/f13-funzioni.mjs';
 import { C78 } from './verifica-android-play/f13-workflow.mjs';
 import { C79 } from './verifica-android-play/f13-database.mjs';
 import { C83 } from './verifica-android-play/f13-rilievi.mjs';
-import { registraControprove } from './verifica-android-play/titoli-jest.mjs';
+import { registraControprove } from './verifica-android-play/controprova-registra.mjs';
 import { FIXTURE } from './verifica-android-play/selftest.mjs';
 import { selftestLettori } from './verifica-android-play/selftest-titoli.mjs';
 

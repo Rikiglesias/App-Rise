@@ -5,7 +5,8 @@ import { mkdtempSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { ROOT, esegui, esiste, leggi, percorso } from './comune.mjs';
-import { BASE_R24, staccaJunction } from './titoli-jest.mjs';
+import { BASE_R24 } from './titoli-jest.mjs';
+import { staccaJunction } from './controprova-registra.mjs';
 
 // Pacchetti che entrano nel bundle dell'app (P2 di F13): zero avvisi ammessi.
 export const NEL_BUNDLE_C59 = [

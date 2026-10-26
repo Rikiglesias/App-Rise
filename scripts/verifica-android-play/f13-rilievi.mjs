@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
-import { esegui, esiste, leggi, percorso } from './comune.mjs';
+import { ROOT, esegui, esiste, leggi, percorso } from './comune.mjs';
 
 export const ESITI_C83 = join(homedir(), 'todos', 'android-play-f13');
 export const RILIEVI_C83 = 'docs/store/google-play/verifica/rilievi-f13.md';
@@ -22,6 +22,8 @@ export const REVISORI_C83 = {
 export const DIFETTI_C83 = ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'];
 // Il secondo giro scrive file `giro2-<perimetro>-esito.md`: il revisore è `giro2-<perimetro>`.
 const SECONDO_GIRO = /^giro2-(.+)-esito\.md$/;
+// R29: anche i documenti che R27-R29 correggono; `verifica/` escluso per nome, perché il commit che scrive lo
+// sha in rilievi-f13.md (o l'indice f13/) altrimenti lo sposterebbe.
 const SORVEGLIATI = [
   'src',
   'supabase',
@@ -29,7 +31,20 @@ const SORVEGLIATI = [
   'eas.json',
   'package.json',
   'package-lock.json',
+  'docs/store/google-play/play-console-risposte.md',
+  'docs/store/google-play/rilascio.md',
+  'docs/store/google-play/web/',
+  'privacy-policy.html',
+  'privacy-policy-en.html',
+  'docs/integrazioni/scambio-dati-quadro.md',
+  'docs/informativa-punti-aperti.md',
+  ':(exclude)docs/store/google-play/verifica/',
 ];
+/** Ultimo commit che tocca i file sorvegliati: lo sha su cui deve girare il giro dei revisori. */
+export const ultimoCommitSorvegliato = (cwd = ROOT) =>
+  esegui('git', ['log', '-1', '--format=%H', '--', ...SORVEGLIATI], {
+    cwd,
+  }).trim();
 const DESTINAZIONE = /\bC\d+\b|residuo|fuori contratto/i;
 const FUORI_DAL_REPO =
   /[A-Za-z]:[\\/]|\/Users\/|~\/|AppData|(^|[\s(])\/c\/|\.claude|memory\//i;
@@ -73,13 +88,7 @@ export const C83 = {
     rilievi: esiste(percorso(RILIEVI_C83))
       ? leggi(percorso(RILIEVI_C83))
       : null,
-    ultimoCommit: esegui('git', [
-      'log',
-      '-1',
-      '--format=%H',
-      '--',
-      ...SORVEGLIATI,
-    ]).trim(),
+    ultimoCommit: ultimoCommitSorvegliato(),
   }),
   nota: i =>
     i.esiti

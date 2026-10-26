@@ -46,9 +46,10 @@ const sorgente60 = t => ({
 });
 
 // --- C79 ---
+const TRIGGER_C79 = 'create trigger t before update on public.profiles';
 const C79_OK = {
   migration: '0022_consensi.sql',
-  sql: 'created_at timestamptz not null default now(); … where marketing_consent is distinct from …; create trigger t before update on public.profiles',
+  sql: `created_at timestamptz not null default now(); … where marketing_consent is distinct from …; ${TRIGGER_C79}`,
   suite: '0022_consensi.test.sql',
   testoSuite: CASI_C79.join('\n'),
   runAll: '  "0022_consensi"',
@@ -158,31 +159,56 @@ export const FIXTURE_F13_ESTERNI = {
       ),
     ]
   ),
-  C79: casi(C79_OK, [
-    { migration: null },
-    { sql: C79_OK.sql.replace('now()', "'2026-01-01'") },
-    { sql: C79_OK.sql.replace('is distinct from', '<>') },
-    { suite: null },
-    { runAll: '"0020_claim"' },
-    { testoSuite: CASI_C79.slice(1).join('\n') },
-    { mutanti: C79_OK.mutanti.split('\n').slice(1).join('\n') },
-    { runbook: 'Nulla da applicare.' },
-    { runbook: 'Applica la 0022.' },
-    { runbook: 'Dopo le 0017-0021 applica la 0022.' },
-    {
-      runbook:
-        'Dopo le 0017-0021 applica la 0022. Poi: select count(*) from profiles where marketing_consent …',
-    },
-    { docker: false },
-    { batteria: { exit: 1, uscita: 'ROSSO  0019 [shim_restrictive]' } },
-    {
-      batteria: {
-        exit: 0,
-        uscita: 'verde  0022_consensi [shim_permissive] — 9 PASS',
+  C79: casi(
+    C79_OK,
+    [
+      { migration: null },
+      { sql: C79_OK.sql.replace('now()', "'2026-01-01'") },
+      { sql: C79_OK.sql.replace('is distinct from', '<>') },
+      // R28: un commento con before update non basta (riga e blocco), né con is distinct from.
+      {
+        sql: C79_OK.sql.replace(
+          TRIGGER_C79,
+          '-- un trigger before update su profiles'
+        ),
       },
-    },
-    { mutazioni: { exit: 1, uscita: '1 mutanti NON uccisi' } },
-  ]),
+      { sql: C79_OK.sql.replace(TRIGGER_C79, `/* ${TRIGGER_C79} */`) },
+      {
+        sql: `${C79_OK.sql.replace('is distinct from', '<>')}\n-- solo se is distinct from`,
+      },
+      { suite: null },
+      { runAll: '"0020_claim"' },
+      { testoSuite: CASI_C79.slice(1).join('\n') },
+      { mutanti: C79_OK.mutanti.split('\n').slice(1).join('\n') },
+      { runbook: 'Nulla da applicare.' },
+      { runbook: 'Applica la 0022.' },
+      { runbook: 'Dopo le 0017-0021 applica la 0022.' },
+      {
+        runbook:
+          'Dopo le 0017-0021 applica la 0022. Poi: select count(*) from profiles where marketing_consent …',
+      },
+      { docker: false },
+      { batteria: { exit: 1, uscita: 'ROSSO  0019 [shim_restrictive]' } },
+      {
+        batteria: {
+          exit: 0,
+          uscita: 'verde  0022_consensi [shim_permissive] — 9 PASS',
+        },
+      },
+      { mutazioni: { exit: 1, uscita: '1 mutanti NON uccisi' } },
+    ],
+    [
+      // `before insert or update` vale; un `--` dentro una stringa non apre un commento.
+      { sql: C79_OK.sql.replace('before update', 'before insert or update') },
+      {
+        sql: C79_OK.sql.replace(
+          'create trigger',
+          "select '--x'; create trigger"
+        ),
+      },
+      { sql: `${C79_OK.sql} -- riallinea il consenso` },
+    ]
+  ),
   C83: casi(
     C83_OK,
     [

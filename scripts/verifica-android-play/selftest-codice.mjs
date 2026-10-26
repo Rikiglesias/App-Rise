@@ -1,8 +1,9 @@
 // C22 per i criteri a titoli Jest (R8-R10): ogni fixture negativa è il positivo con UNA mutazione.
-import { BASE_CONTROPROVA, BASE_R24 } from './titoli-jest.mjs';
+import { BASE_CONTROPROVA, BASE_R27, rigorosa } from './titoli-jest.mjs';
 import { COMMENTI_FALSI_C29, DEFINIZIONI, EMAIL_CONTATTO } from './codice.mjs';
 
 const FILE = 'src/__tests__/x.test.ts';
+const COMMIT = 'c'.repeat(40);
 
 /** Ingresso verde per un criterio: ogni titolo passato su HEAD, rosso alla base, sha coerenti. */
 export const verde = (id, statico = null, definizioni = DEFINIZIONI) => {
@@ -19,7 +20,7 @@ export const verde = (id, statico = null, definizioni = DEFINIZIONI) => {
       base,
       titoli,
       esitiAllaBase: Object.fromEntries(titoli.map(t => [t, 'failed'])),
-      ...(base === BASE_R24
+      ...(rigorosa(base)
         ? {
             motiviAllaBase: Object.fromEntries(
               titoli.map(t => [t, 'Error: expect(received).toBe(expected)'])
@@ -27,8 +28,14 @@ export const verde = (id, statico = null, definizioni = DEFINIZIONI) => {
           }
         : {}),
       fileTest: { [FILE]: 'aa' },
+      ...(base === BASE_R27 ? { commitFileTest: COMMIT } : {}),
     },
     shaAttuali: { [FILE]: 'aa' },
+    storia: {
+      precedente: null,
+      commitPrecedente: null,
+      commitNoto: base === BASE_R27 ? true : null,
+    },
     statico,
   };
 };
@@ -68,7 +75,28 @@ export const negativiComuni = (
     },
     { ...ok, controprova: { ...ok.controprova, base: 'deadbee' } },
     { ...ok, shaAttuali: { [FILE]: 'bb' } }, // test cambiato dopo la controprova
-    ...(ok.controprova.base === BASE_R24
+    {
+      ...ok,
+      controprova: {
+        ...ok.controprova,
+        esitiAllaBase: { ...ok.controprova.esitiAllaBase, [primo]: 'assente' },
+      },
+      storia: {
+        ...ok.storia,
+        precedente: { ...ok.controprova, esitiAllaBase: { [primo]: 'failed' } },
+        commitPrecedente: 'abc1234',
+      },
+    }, // R29: controprova rifatta, un titolo rosso diventato assente
+    ...(ok.controprova.base === BASE_R27
+      ? [
+          {
+            ...ok,
+            controprova: { ...ok.controprova, commitFileTest: undefined },
+          }, // R29: senza il commit dei file di test
+          { ...ok, storia: { ...ok.storia, commitNoto: false } }, // commit fuori dalla storia di HEAD
+        ]
+      : []),
+    ...(rigorosa(ok.controprova.base)
       ? [
           {
             ...ok,

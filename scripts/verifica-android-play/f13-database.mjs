@@ -32,6 +32,32 @@ const SQL_REGOLE = [
   ],
 ];
 
+/**
+ * Il SQL senza commenti `--…` e `/*…*\/` (R28: una regola citata in un commento non conta). Le stringhe fra
+ * apici singoli (con `''` dentro) restano intere; i corpi `$$…$$` si leggono come codice, così anche i
+ * commenti nelle funzioni spariscono.
+ */
+export const senzaCommentiSql = sql => {
+  let fuori = '';
+  for (let i = 0; i < sql.length; ) {
+    if (sql[i] === "'") {
+      let j = i + 1;
+      while (j < sql.length && !(sql[j] === "'" && sql[j + 1] !== "'"))
+        j += sql[j] === "'" ? 2 : 1;
+      fuori += sql.slice(i, j + 1);
+      i = j + 1;
+    } else if (sql.startsWith('--', i)) {
+      const a = sql.indexOf('\n', i);
+      i = a < 0 ? sql.length : a;
+    } else if (sql.startsWith('/*', i)) {
+      const a = sql.indexOf('*/', i + 2);
+      fuori += ' ';
+      i = a < 0 ? sql.length : a + 2;
+    } else fuori += sql[i++];
+  }
+  return fuori;
+};
+
 const unoChe = (dir, re) =>
   existsSync(dir) ? (readdirSync(dir).find(f => re.test(f)) ?? null) : null;
 // Bash di Git per Windows: quello in PATH può essere il bash di WSL, che non vede Docker Desktop allo stesso modo.
@@ -84,8 +110,9 @@ export const C79 = {
   },
   verifica(i) {
     if (!i.migration) return 'migration 0022 assente in supabase/migrations';
+    const sql = senzaCommentiSql(i.sql ?? '');
     for (const [re, cosa] of SQL_REGOLE)
-      if (!re.test(i.sql ?? '')) return `${i.migration}: manca ${cosa}`;
+      if (!re.test(sql)) return `${i.migration}: manca ${cosa}`;
     if (!i.suite) return 'suite 0022_*.test.sql assente in supabase/tests';
     const nome = i.suite.replace(/\.test\.sql$/, '');
     if (!new RegExp(`"${nome}"`).test(i.runAll ?? ''))

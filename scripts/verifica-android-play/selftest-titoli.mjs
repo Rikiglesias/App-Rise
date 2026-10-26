@@ -1,6 +1,13 @@
 // Prove offline della catena leggi/verifica: nessuna suite Jest, fonte remota o scrittura.
 import assert from 'node:assert/strict';
-import { criterioConTitoli } from './titoli-jest.mjs';
+import {
+  BASE_CONTROPROVA,
+  BASE_R27,
+  criterioConTitoli,
+  esitoControprova,
+} from './titoli-jest.mjs';
+import { regressioneControprova } from './controprova-storia.mjs';
+import { selftestSorvegliati } from './selftest-sorvegliati.mjs';
 import { DEFINIZIONI_PAGINE } from './pagine.mjs';
 import { verde } from './selftest-codice.mjs';
 import { selftestLettoreLocalita } from './selftest-localita.mjs';
@@ -12,6 +19,7 @@ export const selftestLettori = async () => {
     leggiControprova: () => ok.controprova,
     suite: () => ok.jest,
     shaFile: () => ok.shaAttuali,
+    storiaControprova: () => ok.storia,
   };
   const verifica = dati => (dati.valore === 42 ? '' : 'dato non risolto');
   for (const leggi of [() => ({ valore: 42 }), async () => ({ valore: 42 })]) {
@@ -85,4 +93,48 @@ export const selftestLettori = async () => {
       'AsyncFunction'
     );
   selftestLettoreLocalita();
+  selftestStoria();
+  selftestSorvegliati();
+};
+
+// Regola R27-R29 delle controprove: base 13fa640 rigorosa, esito alla base conservato quando si rifà.
+const selftestStoria = () => {
+  const r27 = verde('p', null, { p: { titoli: ['t'], base: BASE_R27 } });
+  assert.match(
+    esitoControprova(
+      ['t'],
+      { ...r27.controprova, esitiAllaBase: { t: 'assente' } },
+      r27.shaAttuali,
+      BASE_R27
+    ),
+    /assenti alla base 13fa640/,
+    'titolo assente alla base 13fa640 → FAIL'
+  );
+  const vecchio = { base: BASE_CONTROPROVA, esitiAllaBase: { t: 'failed' } };
+  const nuovo = esiti => ({ base: BASE_CONTROPROVA, esitiAllaBase: esiti });
+  assert.equal(regressioneControprova(vecchio, nuovo({ t: 'failed' })), '');
+  assert.match(
+    regressioneControprova(vecchio, nuovo({ t: 'assente' })),
+    /assente/,
+    'un failed che diventa assente su una base non rigorosa → FAIL'
+  );
+  assert.match(
+    regressioneControprova(vecchio, nuovo({ t: 'passed' })),
+    /failed/,
+    'un failed che diventa verde → FAIL'
+  );
+  assert.equal(
+    regressioneControprova(
+      { ...vecchio, esitiAllaBase: { t: 'assente' } },
+      nuovo({ t: 'assente' })
+    ),
+    '',
+    'assente che resta assente su una base non rigorosa: ammesso'
+  );
+  assert.equal(
+    regressioneControprova(vecchio, nuovo({ altro: 'failed' })),
+    '',
+    'titolo tolto dal criterio: niente confronto'
+  );
+  assert.equal(regressioneControprova(null, nuovo({ t: 'passed' })), '');
 };
