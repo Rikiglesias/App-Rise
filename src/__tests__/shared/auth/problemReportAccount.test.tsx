@@ -27,11 +27,16 @@ const failure = {
 const exchange = jest.fn();
 const invoke = jest.fn();
 const resend = jest.fn();
+// Elimina account riconcilia ogni errore con `getUser` (C89): qui l'account c'è
+// ancora, quindi l'esito resta l'errore della chiamata, come per gli altri rami.
+const getUser = jest.fn();
 type Branch = {
   title: string;
   context: string;
   sdk: jest.Mock;
   run: (auth: AuthState) => Promise<unknown>;
+  /** Il rigetto non risale: si riconcilia come un errore (C89). */
+  rigettoRiconciliato?: true;
 };
 const branches: Branch[] = [
   {
@@ -76,12 +81,18 @@ const branches: Branch[] = [
     context: 'EliminaAccount',
     sdk: invoke,
     run: auth => auth.deleteAccountNow(),
+    rigettoRiconciliato: true,
   },
 ];
 
 beforeEach(() => {
   jest.clearAllMocks();
-  Object.assign(supabase.auth, { exchangeCodeForSession: exchange, resend });
+  Object.assign(supabase.auth, {
+    exchangeCodeForSession: exchange,
+    resend,
+    getUser,
+  });
+  getUser.mockResolvedValue({ data: { user: { id: 'u-c55' } }, error: null });
   Object.assign(supabase, { functions: { invoke } });
   logger.clearLogs();
 });
@@ -138,7 +149,8 @@ it.each(branches)(
       if (branch.context === 'LinkAccesso') {
         expect(result).toEqual({ ok: false });
         expect(thrown).toBeUndefined();
-      } else if (mode === 'rejected') expect(thrown).toBe(failure);
+      } else if (mode === 'rejected' && !branch.rigettoRiconciliato)
+        expect(thrown).toBe(failure);
       else expect(result).toEqual({ error: failure.message });
       ui.unmount();
     }

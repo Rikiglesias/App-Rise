@@ -8,9 +8,10 @@
     "elimina account: uscita che rigetta = sessione residua, non errore": "failed"
   },
   "motiviAllaBase": {
-    "elimina account: uscita che rigetta = sessione residua, non errore": "Error: Unable to find an element with text: Account eliminato. Non siamo riusciti a chiudere la sessione su questo telefono: esci a mano dal profilo."
+    "elimina account: uscita che rigetta = sessione residua, non errore": "Error: expect(received).toBe(expected) // Object.is equality"
   },
   "fileTest": {
-    "src/__tests__/features/auth/deleteAccount.test.tsx": "e36247f0d290f6e9e6d47d3a4511656a9ddc474a23eabce149386928d0edc448"
-  }
+    "src/__tests__/features/auth/deleteAccount.test.tsx": "58889b3db8c4244070a2969976c65d5b11f4286639ac839dd40be15abaed0f24"
+  },
+  "commitFileTest": "b3ed40fbf5415f39a4898750163a629eb79fc9b8"
 }

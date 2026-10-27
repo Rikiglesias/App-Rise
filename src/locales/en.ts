@@ -294,10 +294,13 @@ export default {
       banner: 'Deletion scheduled for',
       bannerCancel: 'Cancel deletion',
       error: 'Operation failed. Please try again.',
-      // The data really was deleted: only the sign-out on this phone is missing,
-      // so the wording must not suggest the deletion failed.
-      sessionResidua:
-        'Account deleted. We could not close the session on this phone: please sign out manually from your profile.',
+      // Shown as a guest, even when the sign-out on this phone failed: the app leaves
+      // the account on its own (AuthContext), so the text asks nothing more of anyone.
+      done: 'Account deleted: your app account data has been erased.',
+      // The call failed and the server could not tell either whether the account
+      // still exists: say how to find out, without promising either outcome.
+      esitoIncerto:
+        'We could not find out whether your account was deleted. When you are back online, open Account: if you are still signed in, tap “Delete account” again and we will confirm it. If you are signed out, the account may have been deleted or the session may have expired: to know for sure, write to info@riseagainsthunger.it.',
     },
     consents: {
       signOut: 'Sign out of your account',

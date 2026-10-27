@@ -307,10 +307,13 @@ export default {
       banner: 'Eliminazione programmata il',
       bannerCancel: 'Annulla eliminazione',
       error: 'Operazione non riuscita. Riprova.',
-      // I dati sono stati cancellati davvero: qui manca solo l'uscita sul telefono,
-      // quindi il testo NON deve far credere che la cancellazione sia fallita.
-      sessionResidua:
-        'Account eliminato. Non siamo riusciti a chiudere la sessione su questo telefono: esci a mano dal profilo.',
+      // Mostrato da ospite, anche quando l'uscita sul telefono è fallita: l'app esce
+      // da sola (AuthContext), quindi non si chiede più di uscire a mano.
+      done: 'Account eliminato: i dati del tuo account dell’app sono stati cancellati.',
+      // La chiamata è fallita e nemmeno il server ha potuto dire se l'account c'è
+      // ancora: si dice come scoprirlo, senza promettere né l'uno né l'altro esito.
+      esitoIncerto:
+        'Non siamo riusciti a sapere se l’account è stato eliminato. Quando sei di nuovo in rete apri Account: se risulti ancora collegato, premi di nuovo «Elimina account» e te lo confermiamo. Se risulti uscito, l’account può essere stato eliminato oppure la sessione può essere scaduta: per saperlo con certezza scrivi a info@riseagainsthunger.it.',
     },
     consents: {
       signOut: "Esci dall'account",

@@ -97,15 +97,15 @@ export interface AuthState {
   updateEmail: (email: string) => Promise<{ error: string | null }>;
   /** Cancellazione immediata via Edge Function (GDPR Art.17). */
   /**
-   * Cancella l'account adesso. `error` riguarda la CANCELLAZIONE; se resta null ma
-   * `sessioneAncoraSulDispositivo` è vero, i dati sono stati eliminati davvero e il
-   * telefono non è però riuscito a dimenticare la sessione (vedi il corpo della
-   * funzione): il chiamante deve dirlo, altrimenti l'app sembra ancora connessa a un
-   * account che non esiste più.
+   * Cancella l'account adesso. `error` riguarda la CANCELLAZIONE, con `esitoIncerto`
+   * se nemmeno il server ha potuto dire se l'account esiste ancora. Se resta null,
+   * l'account è eliminato e l'app è ospite anche quando la libreria non è riuscita a
+   * chiudere la sessione (`sessioneAncoraSulDispositivo` vero).
    */
   deleteAccountNow: () => Promise<{
     error: string | null;
     sessioneAncoraSulDispositivo?: boolean;
+    esitoIncerto?: boolean;
   }>;
   /** Programma la cancellazione a +30gg (grace period recuperabile). */
   scheduleDeletion: () => Promise<{ error: string | null }>;
@@ -161,6 +161,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // è ancora pertinente. Un ref, non uno stato: deve essere leggibile senza che il
   // valore resti congelato nella closure di una callback partita prima.
   const sessionUserIdRef = useRef<string | null>(null);
+  // L'account cancellato in QUESTO avvio. Se la libreria non ha chiuso la sessione e
+  // nemmeno lo storage l'ha lasciata togliere, il client continua ad averla e un suo
+  // rinnovo la riproporrebbe: da qui in poi vale come nessuna sessione.
+  const eliminatoRef = useRef<string | null>(null);
 
   // Ritorna il profilo caricato oltre a metterlo nello stato: chi deve DECIDERE
   // subito dopo il caricamento (es. il prefill dei partner) non può leggere `profile`
@@ -230,8 +234,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
     const { data: sub } = supabase.auth.onAuthStateChange(
-      (_event, nextSession) => {
+      (_event, sessioneRicevuta) => {
         if (!active) return;
+        const nextSession =
+          sessioneRicevuta?.user.id === eliminatoRef.current
+            ? null
+            : sessioneRicevuta;
         if (_event === 'INITIAL_SESSION' && receivedAuthEvent) return;
         // INITIAL_SESSION(null) arriva anche se lo storage ha fallito: non deve
         // nascondere l'errore della lettura, a differenza di un vero cambio auth.
@@ -278,6 +286,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // lasciarla convinta di essere uscita (caso reale: rete assente, o token già
     // scaduto — vedi supabase/auth-js#540, dove il signOut fallisce e la sessione resta).
     return { error: error.message };
+  }, []);
+
+  const eliminaAccountOra = useCallback(async () => {
+    const utente = sessionUserIdRef.current;
+    const esito = await deleteAccountNow();
+    if (esito.error === null && utente !== null) {
+      eliminatoRef.current = utente;
+      // Uscita locale fallita: nessun SIGNED_OUT arriverà, e senza questo passaggio
+      // l'app resterebbe connessa, con i dati a schermo, a un account che non esiste più.
+      if (esito.sessioneAncoraSulDispositivo) {
+        sessionUserIdRef.current = null;
+        setSession(null);
+        setProfile(null);
+        setProfileLoaded(false);
+        setProfileError(null);
+        setStatus('unauthenticated');
+      }
+    }
+    return esito;
   }, []);
 
   const completeRecoveryFromUrl = useCallback(
@@ -499,7 +526,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       refreshProfile,
       updateProfile,
       updateEmail,
-      deleteAccountNow,
+      deleteAccountNow: eliminaAccountOra,
       scheduleDeletion,
       cancelScheduledDeletion,
       exportData,
@@ -525,6 +552,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       completeEmailConfirmFromUrl,
       refreshProfile,
       updateProfile,
+      eliminaAccountOra,
       scheduleDeletion,
       cancelScheduledDeletion,
       exportData,

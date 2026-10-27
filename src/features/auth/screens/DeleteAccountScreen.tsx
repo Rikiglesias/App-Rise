@@ -14,6 +14,7 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
+import { useLegataAllUtente } from '@/shared/auth/useLegataAllUtente';
 import { CANCELLAZIONE_PROGRAMMATA_ATTIVA } from '@/shared/auth/deletionPolicy';
 import type { RootStackNavigationProp } from '@/navigation/types';
 
@@ -29,6 +30,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  */
 export const DeleteAccountScreen: React.FC = () => {
   useRequireAuth();
+  const legata = useLegataAllUtente();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
@@ -42,6 +44,9 @@ export const DeleteAccountScreen: React.FC = () => {
   const [retryAction, setRetryAction] = useState<'now' | 'scheduled'>('now');
 
   const runDeleteNow = useCallback(async (): Promise<void> => {
+    // Una conferma rimasta aperta mentre è arrivata la sessione di un altro account
+    // cancellerebbe quello: la schermata è di chi l'ha aperta (C97).
+    if (!legata()) return;
     setSubmitAttempt(attempt => attempt + 1);
     setError(undefined);
     setRetryAction('now');
@@ -64,21 +69,24 @@ export const DeleteAccountScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-    const { error: err, sessioneAncoraSulDispositivo } = esito;
+    // Gli esiti finali sono Alert e non testi della schermata: a cancellazione
+    // riuscita l'app torna ospite (anche quando l'uscita locale fallisce, vedi
+    // AuthContext) e la schermata si chiude; con l'esito incerto può essere già
+    // diventata ospite per conto suo. Un testo qui non lo vedrebbe nessuno.
+    const { error: err, esitoIncerto } = esito;
+    if (esitoIncerto)
+      Alert.alert(t('auth.delete.title'), t('auth.delete.esitoIncerto'));
+    // Anche con l'esito incerto si mostra perché la chiamata è fallita: con la rete
+    // assente compare «Riprova», e riprovare è proprio la cosa da fare.
     if (err) {
       showError(err);
       return;
     }
-    // Su successo l'AuthContext porta lo stato a unauthenticated (signOut).
-    // Ma quel signOut può fallire lasciando la sessione sul telefono, mentre i dati
-    // sul server sono già stati eliminati: senza questo avviso l'app resterebbe
-    // all'apparenza connessa a un account che non esiste più, e la persona non
-    // avrebbe modo di capire perché. Non è un errore della cancellazione — infatti
-    // il messaggio è diverso da quello di fallimento.
-    if (sessioneAncoraSulDispositivo) setError(t('auth.delete.sessionResidua'));
-  }, [deleteAccountNow, showError, setError, t]);
+    Alert.alert(t('auth.delete.title'), t('auth.delete.done'));
+  }, [deleteAccountNow, legata, showError, setError, t]);
 
   const runSchedule = useCallback(async (): Promise<void> => {
+    if (!legata()) return;
     setSubmitAttempt(attempt => attempt + 1);
     setError(undefined);
     setRetryAction('scheduled');
@@ -96,7 +104,7 @@ export const DeleteAccountScreen: React.FC = () => {
     }
     if (err) reportError(err);
     else navigation.goBack();
-  }, [scheduleDeletion, navigation, reportError, showError, setError]);
+  }, [scheduleDeletion, navigation, legata, reportError, showError, setError]);
 
   const goBack = useCallback((): void => navigation.goBack(), [navigation]);
 

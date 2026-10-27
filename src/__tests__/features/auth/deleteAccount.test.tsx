@@ -17,6 +17,7 @@ import { RISE_URLS } from '@/shared/constants/urls';
 
 const mockOpenLink = jest.fn().mockResolvedValue({ ok: true });
 jest.mock('@/shared/auth/supabaseClient', () => ({
+  rimuoviSessioneSalvata: jest.fn(() => Promise.resolve()),
   supabase: {
     auth: { signOut: jest.fn().mockResolvedValue({ error: null }) },
     functions: {
@@ -139,14 +140,18 @@ it('elimina account: uscita che rigetta = sessione residua, non errore', async (
       buttons?.find(button => button.style === 'destructive')?.onPress?.();
     });
   try {
-    const { getByText, findByText, queryByText } = wrap(
-      <DeleteAccountScreen />
-    );
+    const { getByText, queryByText } = wrap(<DeleteAccountScreen />);
     fireEvent.press(getByText(itLocale.auth.delete.now));
-    expect(await findByText(itLocale.auth.delete.sessionResidua)).toBeTruthy();
+    // L'avviso è un Alert e non un testo della schermata: dopo la cancellazione
+    // l'app torna ospite e la schermata si chiude (C98), un testo lì non lo vedrebbe
+    // nessuno. Dice che l'account è eliminato, senza chiedere di uscire a mano.
+    const avviso = (itLocale.auth.delete as Record<string, unknown>).done;
+    expect(typeof avviso).toBe('string');
+    await waitFor(() =>
+      expect(alertSpy).toHaveBeenCalledWith(itLocale.auth.delete.title, avviso)
+    );
     expect(queryByText(itLocale.auth.delete.error)).toBeNull();
     expect(queryByText(itLocale.auth.errors.generic)).toBeNull();
-    expect(queryByText('auth.delete.sessionResidua')).toBeNull();
     expect(supabase.functions.invoke).toHaveBeenCalledWith('delete-account', {
       body: {},
     });
