@@ -5,6 +5,7 @@ import { BASE_R27, criterioConTitoli } from './titoli-jest.mjs';
 import { staticoC93, staticoC94, staticoC98 } from './f13-r27-codice.mjs';
 import { staticoC91, staticoC92, staticoC96 } from './f13-r27-testi.mjs';
 import { staticoC99 } from './f13-r27-pubblici.mjs';
+import { staticoC89 } from './f13-r27-cancellazione.mjs';
 
 const CAMPI_C93 = [
   'AuthInput',
@@ -44,14 +45,20 @@ export const DEFINIZIONI_R27 = Object.fromEntries(
         "reset nel cancello col link di un altro account che ha anche lui il cancello: Annulla va alla radice del cancello dell'account collegato",
       ],
     },
+    // Le guardie la controprova non le registra: provate a mano alla base 13fa640 (Log R33 del binding).
     C89: {
       titoli: [
         'cancellazione: errore ma account già eliminato → riuscita e uscita',
         'cancellazione: errore e account presente → errore (riconciliazione chiamata)',
-        'cancellazione: errore e verifica impossibile → esito incerto con cosa fare',
+        'cancellazione: 504 e verifica impossibile → connessione interrotta e Riprova',
         'cancellazione: secondo tentativo dopo una riuscita → riuscita',
         'cancellazione: la chiamata rigetta → riconciliata come un errore',
       ],
+      guardie: [
+        'cancellazione: senza rete e verifica impossibile → Nessuna connessione e Riprova, nessun avviso',
+        'cancellazione: schermata chiusa prima della risposta → nessun avviso',
+      ],
+      statico: staticoC89,
     },
     C90: {
       titoli: [

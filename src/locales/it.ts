@@ -310,10 +310,6 @@ export default {
       // Mostrato da ospite, anche quando l'uscita sul telefono è fallita: l'app esce
       // da sola (AuthContext), quindi non si chiede più di uscire a mano.
       done: 'Account eliminato: i dati del tuo account dell’app sono stati cancellati.',
-      // La chiamata è fallita e nemmeno il server ha potuto dire se l'account c'è
-      // ancora: si dice come scoprirlo, senza promettere né l'uno né l'altro esito.
-      esitoIncerto:
-        'Non siamo riusciti a sapere se l’account è stato eliminato. Quando sei di nuovo in rete apri Account: se risulti ancora collegato, premi di nuovo «Elimina account» e te lo confermiamo. Se risulti uscito, l’account può essere stato eliminato oppure la sessione può essere scaduta: per saperlo con certezza scrivi a info@riseagainsthunger.it.',
     },
     consents: {
       signOut: "Esci dall'account",
@@ -356,6 +352,11 @@ export default {
       already_registered: 'Questa email è già registrata',
       rate_limited: 'Troppi tentativi. Riprova tra poco.',
       network: 'Nessuna connessione. Controlla internet e riprova.',
+      // Eliminazione dell'account: la chiamata è fallita e nemmeno il server ha potuto
+      // dire se l'account c'è ancora. Vero in entrambi i casi: riprovare conferma
+      // l'eliminazione già avvenuta oppure la completa.
+      delete_interrupted:
+        'Connessione interrotta: riprova per completare l’eliminazione.',
       session_unreadable:
         'Impossibile leggere la sessione salvata. Accedi di nuovo.',
       same_password: 'Scegli una password diversa da quella attuale.',

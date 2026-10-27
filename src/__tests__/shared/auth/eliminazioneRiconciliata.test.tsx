@@ -8,7 +8,7 @@ import { DeleteAccountScreen } from '@/features/auth/screens/DeleteAccountScreen
 import { useAuth } from '@/shared/auth/AuthContext';
 import type { AuthState } from '@/shared/auth/AuthContext';
 import { deleteAccountNow } from '@/shared/auth/accountActions';
-import { supabase } from '@/shared/auth/supabaseClient';
+import { rimuoviSessioneSalvata, supabase } from '@/shared/auth/supabaseClient';
 import itLocale from '@/locales/it';
 
 // La risposta di `delete-account` può perdersi DOPO che la cancellazione è riuscita
@@ -68,11 +68,50 @@ const verificaImpossibile = {
     status: 0,
   },
 };
+const erroreDiRete = {
+  data: null,
+  error: {
+    name: 'FunctionsFetchError',
+    message: 'Failed to send a request to the Edge Function',
+  },
+};
 
 beforeEach(() => {
   jest.clearAllMocks();
+  // Alla base 13fa640 `getUser` non viene chiamato: una risposta non consumata
+  // passerebbe al caso dopo.
+  invoke.mockReset();
+  getUser.mockReset();
   signOut.mockResolvedValue({ error: null });
 });
+
+/** Schermata con il vero `deleteAccountNow` dietro una spia, conferma già premuta. */
+const confermaDallaSchermata = () => {
+  const elimina = jest.fn(deleteAccountNow);
+  (useAuth as jest.Mock).mockReturnValue({
+    status: 'authenticated',
+    session: { user: { id: 'u1', email: 'm@r.it' } } as unknown as Session,
+    deleteAccountNow: elimina,
+    scheduleDeletion: jest.fn(),
+  } as Partial<AuthState>);
+  const alertSpy = jest
+    .spyOn(Alert, 'alert')
+    .mockImplementation((_titolo, _testo, pulsanti) => {
+      pulsanti?.find(b => b.style === 'destructive')?.onPress?.();
+    });
+  const vista = render(
+    <AllProviders>
+      <DeleteAccountScreen />
+    </AllProviders>
+  );
+  fireEvent.press(vista.getByText(itLocale.auth.delete.now));
+  return { vista, alertSpy, elimina };
+};
+
+const nessunaUscita = () => {
+  expect(signOut).not.toHaveBeenCalled();
+  expect(rimuoviSessioneSalvata).not.toHaveBeenCalled();
+};
 
 it('cancellazione: errore ma account già eliminato → riuscita e uscita', async () => {
   invoke.mockResolvedValueOnce(erroreFunzione(500));
@@ -95,46 +134,23 @@ it('cancellazione: errore e account presente → errore (riconciliazione chiamat
   expect(signOut).not.toHaveBeenCalled();
 });
 
-it('cancellazione: errore e verifica impossibile → esito incerto con cosa fare', async () => {
-  // La risposta arriva quando la schermata non c'è più (l'app può essere già
-  // diventata ospite): il messaggio deve arrivare lo stesso.
-  let rispondi: (valore: unknown) => void = () => undefined;
-  invoke.mockReturnValueOnce(
-    new Promise(resolve => {
-      rispondi = resolve;
-    })
-  );
+it('cancellazione: 504 e verifica impossibile → connessione interrotta e Riprova', async () => {
+  // Né la funzione né il server dicono se l'account c'è ancora: il testo neutro è
+  // vero in entrambi i casi, e Riprova completa o conferma l'eliminazione.
+  invoke.mockResolvedValueOnce(erroreFunzione(504));
   getUser.mockResolvedValueOnce(verificaImpossibile);
-  (useAuth as jest.Mock).mockReturnValue({
-    status: 'authenticated',
-    session: { user: { id: 'u1', email: 'm@r.it' } } as unknown as Session,
-    deleteAccountNow,
-    scheduleDeletion: jest.fn(),
-  } as Partial<AuthState>);
-  const alertSpy = jest
-    .spyOn(Alert, 'alert')
-    .mockImplementation((_titolo, _testo, pulsanti) => {
-      pulsanti?.find(b => b.style === 'destructive')?.onPress?.();
-    });
+  const { vista, alertSpy, elimina } = confermaDallaSchermata();
   try {
-    const { getByText, unmount } = render(
-      <AllProviders>
-        <DeleteAccountScreen />
-      </AllProviders>
-    );
-    fireEvent.press(getByText(itLocale.auth.delete.now));
-    unmount();
-    await act(async () => {
-      rispondi(erroreFunzione(504));
-      await new Promise(r => setTimeout(r, 0));
-    });
-
-    const testo = (itLocale.auth.delete as Record<string, unknown>)
-      .esitoIncerto;
+    const testo = (itLocale.auth.errors as Record<string, unknown>)
+      .delete_interrupted;
     expect(typeof testo).toBe('string');
-    expect(testo).not.toBe(itLocale.auth.delete.error);
-    expect(alertSpy).toHaveBeenCalledWith(itLocale.auth.delete.title, testo);
-    expect(signOut).not.toHaveBeenCalled();
+    expect(await vista.findByText(testo as string)).toBeTruthy();
+    expect(vista.getByText(itLocale.common.retry)).toBeTruthy();
+    expect(alertSpy).toHaveBeenCalledTimes(1);
+    nessunaUscita();
+    await expect(elimina.mock.results[0]?.value).resolves.toEqual({
+      error: 'delete_interrupted',
+    });
   } finally {
     alertSpy.mockRestore();
   }
@@ -158,4 +174,45 @@ it('cancellazione: la chiamata rigetta → riconciliata come un errore', async (
 
   await expect(deleteAccountNow()).resolves.toEqual({ error: 'boom' });
   expect(getUser).toHaveBeenCalledTimes(1);
+});
+
+// Guardie: verdi alla base 13fa640, dove l'errore della chiamata arrivava così
+// com'era alla schermata e nessun avviso si aggiungeva.
+it('cancellazione: senza rete e verifica impossibile → Nessuna connessione e Riprova, nessun avviso', async () => {
+  invoke.mockResolvedValueOnce(erroreDiRete);
+  getUser.mockResolvedValueOnce(verificaImpossibile);
+  const { vista, alertSpy, elimina } = confermaDallaSchermata();
+  try {
+    expect(await vista.findByText(itLocale.auth.errors.network)).toBeTruthy();
+    expect(vista.getByText(itLocale.common.retry)).toBeTruthy();
+    expect(alertSpy).toHaveBeenCalledTimes(1);
+    nessunaUscita();
+    await expect(elimina.mock.results[0]?.value).resolves.toEqual({
+      error: 'Failed to send a request to the Edge Function',
+    });
+  } finally {
+    alertSpy.mockRestore();
+  }
+});
+
+it('cancellazione: schermata chiusa prima della risposta → nessun avviso', async () => {
+  let rispondi: (valore: unknown) => void = () => undefined;
+  invoke.mockReturnValueOnce(
+    new Promise(resolve => {
+      rispondi = resolve;
+    })
+  );
+  getUser.mockResolvedValueOnce(verificaImpossibile);
+  const { vista, alertSpy } = confermaDallaSchermata();
+  try {
+    vista.unmount();
+    await act(async () => {
+      rispondi(erroreFunzione(504));
+      await new Promise(r => setTimeout(r, 0));
+    });
+    expect(alertSpy).toHaveBeenCalledTimes(1);
+    nessunaUscita();
+  } finally {
+    alertSpy.mockRestore();
+  }
 });

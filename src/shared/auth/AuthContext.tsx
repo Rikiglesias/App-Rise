@@ -97,15 +97,15 @@ export interface AuthState {
   updateEmail: (email: string) => Promise<{ error: string | null }>;
   /** Cancellazione immediata via Edge Function (GDPR Art.17). */
   /**
-   * Cancella l'account adesso. `error` riguarda la CANCELLAZIONE, con `esitoIncerto`
-   * se nemmeno il server ha potuto dire se l'account esiste ancora. Se resta null,
-   * l'account è eliminato e l'app è ospite anche quando la libreria non è riuscita a
-   * chiudere la sessione (`sessioneAncoraSulDispositivo` vero).
+   * Cancella l'account adesso. `error` riguarda la CANCELLAZIONE: vale
+   * `delete_interrupted` quando nemmeno il server ha potuto dire se l'account esiste
+   * ancora (e la rete non c'entra), e allora sessione e stato restano come sono. Se
+   * resta null, l'account è eliminato e l'app è ospite anche quando la libreria non è
+   * riuscita a chiudere la sessione (`sessioneAncoraSulDispositivo` vero).
    */
   deleteAccountNow: () => Promise<{
     error: string | null;
     sessioneAncoraSulDispositivo?: boolean;
-    esitoIncerto?: boolean;
   }>;
   /** Programma la cancellazione a +30gg (grace period recuperabile). */
   scheduleDeletion: () => Promise<{ error: string | null }>;

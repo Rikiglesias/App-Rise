@@ -39,7 +39,7 @@ export const DeleteAccountScreen: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [submitAttempt, setSubmitAttempt] = useState(0);
-  const { error, setError, reportError, showError, offline } =
+  const { error, errorKey, setError, reportError, showError, offline } =
     useAuthError('auth.delete.error');
   const [retryAction, setRetryAction] = useState<'now' | 'scheduled'>('now');
 
@@ -69,15 +69,11 @@ export const DeleteAccountScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
-    // Gli esiti finali sono Alert e non testi della schermata: a cancellazione
-    // riuscita l'app torna ospite (anche quando l'uscita locale fallisce, vedi
-    // AuthContext) e la schermata si chiude; con l'esito incerto può essere già
-    // diventata ospite per conto suo. Un testo qui non lo vedrebbe nessuno.
-    const { error: err, esitoIncerto } = esito;
-    if (esitoIncerto)
-      Alert.alert(t('auth.delete.title'), t('auth.delete.esitoIncerto'));
-    // Anche con l'esito incerto si mostra perché la chiamata è fallita: con la rete
-    // assente compare «Riprova», e riprovare è proprio la cosa da fare.
+    // La riuscita è un Alert e non un testo della schermata: l'app torna ospite
+    // (anche quando l'uscita locale fallisce, vedi AuthContext) e la schermata si
+    // chiude. Gli errori restano testi: con la rete assente o la verifica impossibile
+    // (`delete_interrupted`) compare «Riprova», e riprovare completa o conferma.
+    const { error: err } = esito;
     if (err) {
       showError(err);
       return;
@@ -172,7 +168,7 @@ export const DeleteAccountScreen: React.FC = () => {
         />
       ) : null}
       <AuthRetry
-        visible={offline}
+        visible={offline || errorKey === 'delete_interrupted'}
         onPress={retryAction === 'now' ? confirmNow : confirmSchedule}
         loading={loading}
       />

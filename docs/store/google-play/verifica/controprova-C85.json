@@ -20,9 +20,9 @@
     "sessione già di B mentre il render è ancora di A: nessun link si apre": "Error: expect(jest.fn()).not.toHaveBeenCalled()"
   },
   "fileTest": {
-    "src/__tests__/shared/auth/AuthContext.test.tsx": "3cffec23c84bb1547d1c8b7bd4703d2dafc9739e559b6c9fa8efb232cbc2f2a5",
+    "src/__tests__/shared/auth/AuthContext.test.tsx": "86443013dfcaf0e4e1f7de83d9c826eaa9082b214d1f61aac2c29d266f1fca38",
     "src/__tests__/shared/partner/partnerSessioneCambiata.test.tsx": "e97c2fe0f760ee42e3e1cda0f22960e3b9f39ff96368cfcdee7949f6fa48bed6",
     "src/__tests__/shared/partner/usePartnerExit.test.tsx": "fc0ac45190772ef8c74526a22ae05fa3865150f55a54cbd24b6256a119bcfd1e"
   },
-  "commitFileTest": "b3ed40fbf5415f39a4898750163a629eb79fc9b8"
+  "commitFileTest": "bd9cc2302531a662dad2ed06f564d06717faccb7"
 }

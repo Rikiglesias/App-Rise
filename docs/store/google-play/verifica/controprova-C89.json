@@ -4,26 +4,26 @@
   "titoli": [
     "cancellazione: errore ma account già eliminato → riuscita e uscita",
     "cancellazione: errore e account presente → errore (riconciliazione chiamata)",
-    "cancellazione: errore e verifica impossibile → esito incerto con cosa fare",
+    "cancellazione: 504 e verifica impossibile → connessione interrotta e Riprova",
     "cancellazione: secondo tentativo dopo una riuscita → riuscita",
     "cancellazione: la chiamata rigetta → riconciliata come un errore"
   ],
   "esitiAllaBase": {
     "cancellazione: errore ma account già eliminato → riuscita e uscita": "failed",
     "cancellazione: errore e account presente → errore (riconciliazione chiamata)": "failed",
-    "cancellazione: errore e verifica impossibile → esito incerto con cosa fare": "failed",
+    "cancellazione: 504 e verifica impossibile → connessione interrotta e Riprova": "failed",
     "cancellazione: secondo tentativo dopo una riuscita → riuscita": "failed",
     "cancellazione: la chiamata rigetta → riconciliata come un errore": "failed"
   },
   "motiviAllaBase": {
     "cancellazione: errore ma account già eliminato → riuscita e uscita": "Error: expect(received).toBeNull()",
     "cancellazione: errore e account presente → errore (riconciliazione chiamata)": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
-    "cancellazione: errore e verifica impossibile → esito incerto con cosa fare": "Error: expect(received).toBe(expected) // Object.is equality",
+    "cancellazione: 504 e verifica impossibile → connessione interrotta e Riprova": "Error: expect(received).toBe(expected) // Object.is equality",
     "cancellazione: secondo tentativo dopo una riuscita → riuscita": "Error: expect(received).toBeNull()",
     "cancellazione: la chiamata rigetta → riconciliata come un errore": "Error: expect(received).resolves.toEqual()"
   },
   "fileTest": {
-    "src/__tests__/shared/auth/eliminazioneRiconciliata.test.tsx": "06590d0d97d7367984c33a3900eb073fb67c8e6522c13a774a5fba6d21d8a39a"
+    "src/__tests__/shared/auth/eliminazioneRiconciliata.test.tsx": "1fc423c798ed98612fed43df771d1b3fa7832a6a318cd95da2fd1d86f67ee132"
   },
-  "commitFileTest": "b3ed40fbf5415f39a4898750163a629eb79fc9b8"
+  "commitFileTest": "bd9cc2302531a662dad2ed06f564d06717faccb7"
 }

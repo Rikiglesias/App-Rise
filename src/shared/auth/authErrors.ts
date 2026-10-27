@@ -30,6 +30,9 @@ export const mapAuthError = (error: unknown): string => {
     m.includes('weak password')
   )
     return 'weak_password';
+  // Codice di `deleteAccountNow`: chiamata fallita senza che il server sapesse dire
+  // se l'account esiste ancora (vedi accountActions.ts).
+  if (m === 'delete_interrupted') return 'delete_interrupted';
   if (m.includes('invalid login credentials')) return 'invalid_credentials';
   if (code === 'email_not_confirmed' || m.includes('email not confirmed'))
     return 'email_not_confirmed';

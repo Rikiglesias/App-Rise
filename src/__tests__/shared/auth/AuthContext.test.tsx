@@ -212,6 +212,14 @@ describe('AuthContext — uscita e sessione residua', () => {
       data: null,
       error: { message: 'boom' },
     });
+    // C89: l'errore si riconcilia con `getUser`; qui il server dice che l'account
+    // c'è ancora, quindi resta l'errore originale.
+    Object.assign(supabase.auth, {
+      getUser: jest.fn().mockResolvedValueOnce({
+        data: { user: { id: 'u1' } },
+        error: null,
+      }),
+    });
     await act(async () => {
       const res = await getAuth().deleteAccountNow();
       expect(res.error).toBe('boom');

@@ -6,6 +6,7 @@ import {
   buildEmailChangeRedirectTo,
 } from './authRedirect';
 import {
+  chiaveErroreAccount,
   registraErroreAccount,
   registraEsitoAccount,
 } from './registraErroreAccount';
@@ -63,7 +64,7 @@ const messaggioDi = (error: unknown): string =>
     ? error.message
     : String(error);
 
-type EsitoVerifica = 'eliminato' | 'presente' | 'incerto';
+type EsitoVerifica = 'eliminato' | 'presente' | 'impossibile';
 
 /**
  * Una chiamata a `delete-account` fallita non dice che la cancellazione è fallita: la
@@ -71,28 +72,29 @@ type EsitoVerifica = 'eliminato' | 'presente' | 'incerto';
  * del proxy), e un secondo tentativo risponde 401 perché l'utente non c'è più. Lo si
  * chiede al server: `user_not_found` = account eliminato; utente restituito = ancora
  * presente; qualunque altro esito (rete, sessione mancante, rinnovo del token fallito)
- * = non si sa, e lo si dice invece di tirare a indovinare.
+ * = verifica impossibile.
  */
 const verificaAccount = async (): Promise<EsitoVerifica> => {
   try {
     const { data, error } = await supabase.auth.getUser();
     if (error?.code === 'user_not_found') return 'eliminato';
     if (!error && data.user) return 'presente';
-    return 'incerto';
+    return 'impossibile';
   } catch {
-    return 'incerto';
+    return 'impossibile';
   }
 };
 
 /**
- * `esitoIncerto` accompagna un `error`, non lo sostituisce: chi non lo legge vede
- * comunque un errore e non crede a una riuscita, e la schermata può dire sia
- * «non sappiamo» sia perché la chiamata è fallita (rete assente → Riprova).
+ * Con la verifica impossibile non si dice «eliminato» né «non riuscito»: nessuno dei
+ * due è sicuro. Senza rete resta l'errore originale («Nessuna connessione» + Riprova);
+ * altrimenti `delete_interrupted`, il testo neutro che chiede di riprovare: il nuovo
+ * tentativo riconcilia (401 → `user_not_found` → riuscita) oppure elimina. Si guarda la
+ * stringa e non l'oggetto perché è la stringa che arriva alla schermata.
  */
 export const deleteAccountNow = async (): Promise<{
   error: string | null;
   sessioneAncoraSulDispositivo?: boolean;
-  esitoIncerto?: boolean;
 }> => {
   let errore: string | null = null;
   try {
@@ -110,7 +112,13 @@ export const deleteAccountNow = async (): Promise<{
   if (errore !== null) {
     const verifica = await verificaAccount();
     if (verifica === 'presente') return { error: errore };
-    if (verifica === 'incerto') return { error: errore, esitoIncerto: true };
+    if (verifica === 'impossibile')
+      return {
+        error:
+          chiaveErroreAccount(errore) === 'network'
+            ? errore
+            : 'delete_interrupted',
+      };
   }
 
   // Uscita LOCALE, non globale: l'account a questo punto non esiste più, e il

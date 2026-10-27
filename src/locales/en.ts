@@ -297,10 +297,6 @@ export default {
       // Shown as a guest, even when the sign-out on this phone failed: the app leaves
       // the account on its own (AuthContext), so the text asks nothing more of anyone.
       done: 'Account deleted: your app account data has been erased.',
-      // The call failed and the server could not tell either whether the account
-      // still exists: say how to find out, without promising either outcome.
-      esitoIncerto:
-        'We could not find out whether your account was deleted. When you are back online, open Account: if you are still signed in, tap “Delete account” again and we will confirm it. If you are signed out, the account may have been deleted or the session may have expired: to know for sure, write to info@riseagainsthunger.it.',
     },
     consents: {
       signOut: 'Sign out of your account',
@@ -334,6 +330,11 @@ export default {
       already_registered: 'This email is already registered',
       rate_limited: 'Too many attempts. Please try again shortly.',
       network: 'No connection. Check your internet and try again.',
+      // Account deletion: the call failed and the server could not tell either whether
+      // the account still exists. True either way: trying again confirms the deletion
+      // that already happened or completes it.
+      delete_interrupted:
+        'Connection interrupted: try again to complete the deletion.',
       session_unreadable: 'Unable to read the saved session. Sign in again.',
       same_password: 'Choose a password different from your current one.',
       weak_password:

@@ -4,6 +4,11 @@
 import { DEFINIZIONI_R27 } from './f13-r27.mjs';
 import { CAMPI_C93, ESENTI_C94, SFONDI_C94 } from './f13-r27-codice.mjs';
 import { negativiComuni, verde } from './selftest-codice.mjs';
+import {
+  MUTAZIONI_C89,
+  OK_C89,
+  POSITIVI_C89,
+} from './selftest-f13-r27-cancellazione.mjs';
 
 const v = (id, statico = null) => verde(id, statico, DEFINIZIONI_R27);
 const n = (id, statico = null) => negativiComuni(id, statico, DEFINIZIONI_R27);
@@ -64,11 +69,9 @@ const client = riga =>
 
 export const FIXTURE_F13_R27 = {
   ...Object.fromEntries(
-    ['C85', 'C87', 'C88', 'C89', 'C90', 'C95', 'C97'].map(id => [
-      id,
-      soloTitoli(id),
-    ])
+    ['C85', 'C87', 'C88', 'C90', 'C95', 'C97'].map(id => [id, soloTitoli(id)])
   ),
+  C89: conStatico('C89', OK_C89, MUTAZIONI_C89, POSITIVI_C89),
   C93: conStatico('C93', campi(), [
     campi({ [CAMPI_C93.AuthPhoneField]: null }),
     // ramo dell'errore con la live region (AuthInput oggi, :154-155)
