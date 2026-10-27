@@ -103,12 +103,15 @@ export const DEFINIZIONI_R27 = Object.fromEntries(
         'elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella',
       ],
     },
-    // Il quarto titolo è guardia solo se è verde alla base (criterio): si decide sulla controprova.
+    // Il quarto titolo è guardia perché la controprova del 27/10 lo ha trovato verde alla base
+    // (il profilo non è mai stato salvato sul telefono): lo dice il criterio.
     C98: {
       titoli: [
         "cancellazione riuscita e uscita fallita: l'app torna ospite",
         "cancellazione riuscita e uscita fallita: la sessione si toglie dallo storage dell'app",
         "rimozione dallo storage fallita: l'app resta ospite in questo avvio",
+      ],
+      guardie: [
         'riavvio senza rete dopo cancellazione: nessun dato del profilo',
       ],
       statico: staticoC98,

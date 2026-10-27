@@ -1,0 +1,24 @@
+{
+  "criterio": "C98",
+  "base": "13fa640",
+  "titoli": [
+    "cancellazione riuscita e uscita fallita: l'app torna ospite",
+    "cancellazione riuscita e uscita fallita: la sessione si toglie dallo storage dell'app",
+    "rimozione dallo storage fallita: l'app resta ospite in questo avvio"
+  ],
+  "esitiAllaBase": {
+    "cancellazione riuscita e uscita fallita: l'app torna ospite": "failed",
+    "cancellazione riuscita e uscita fallita: la sessione si toglie dallo storage dell'app": "failed",
+    "rimozione dallo storage fallita: l'app resta ospite in questo avvio": "failed"
+  },
+  "motiviAllaBase": {
+    "cancellazione riuscita e uscita fallita: l'app torna ospite": "Error: Unable to find an element with text: unauthenticated|-|-",
+    "cancellazione riuscita e uscita fallita: la sessione si toglie dallo storage dell'app": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)",
+    "rimozione dallo storage fallita: l'app resta ospite in questo avvio": "Error: Unable to find an element with text: unauthenticated|-|-"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/eliminazioneOspite.test.tsx": "e69550ed5848dd37d5502af5cbf6a5aea5556af2a5492f059ca5dab3fa1095d2",
+    "src/__tests__/shared/auth/sessioneToltaDalloStorage.test.ts": "104f7eeb8dfc5aa9924d9c5a6d87cd00c284c45a5361f5460c331cfdacb0cf3d"
+  },
+  "commitFileTest": "b3ed40fbf5415f39a4898750163a629eb79fc9b8"
+}

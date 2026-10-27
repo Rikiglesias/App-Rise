@@ -27,6 +27,7 @@ import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useRequireAuth } from '@/shared/auth/useRequireAuth';
+import { useLegataAllUtente } from '@/shared/auth/useLegataAllUtente';
 import {
   validateEmail,
   validatePhoneIT,
@@ -58,6 +59,7 @@ type Errors = Partial<
 /** Rettifica dei dati personali in-app (GDPR Art.16): campi profilo + cambio email. */
 export const ProfileEditScreen: React.FC = () => {
   useRequireAuth();
+  const legata = useLegataAllUtente();
   const colors = useThemeColors();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { t } = useTranslation();
@@ -165,6 +167,9 @@ export const ProfileEditScreen: React.FC = () => {
     key ? t(`auth.errors.${key}`) : undefined;
 
   const onSubmit = useCallback(async (): Promise<void> => {
+    // Il modulo ha i dati dell'account con cui la schermata si è aperta: con la
+    // sessione di un altro account non si scrive niente (C97).
+    if (!legata()) return;
     setSubmitAttempt(attempt => attempt + 1);
     setProfileSaved(false);
     setSubmitError(null);
@@ -329,6 +334,7 @@ export const ProfileEditScreen: React.FC = () => {
     reportError,
     showError,
     setSubmitError,
+    legata,
     t,
   ]);
 

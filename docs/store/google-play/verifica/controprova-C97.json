@@ -1,0 +1,23 @@
+{
+  "criterio": "C97",
+  "base": "13fa640",
+  "titoli": [
+    "modifica profilo: al cambio di account i dati del precedente non si salvano sul nuovo",
+    "elimina account: al cambio di account la schermata si chiude e non cancella",
+    "elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella"
+  ],
+  "esitiAllaBase": {
+    "modifica profilo: al cambio di account i dati del precedente non si salvano sul nuovo": "failed",
+    "elimina account: al cambio di account la schermata si chiude e non cancella": "failed",
+    "elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella": "failed"
+  },
+  "motiviAllaBase": {
+    "modifica profilo: al cambio di account i dati del precedente non si salvano sul nuovo": "Error: expect(jest.fn()).not.toHaveBeenCalled()",
+    "elimina account: al cambio di account la schermata si chiude e non cancella": "Error: expect(jest.fn()).not.toHaveBeenCalled()",
+    "elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella": "Error: expect(jest.fn()).not.toHaveBeenCalled()"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/schermateLegateAllUtente.test.tsx": "cbb0a41a21df80e0bcdbd912d8a241e17ce4c7e817cde4c062b0050eb4553714"
+  },
+  "commitFileTest": "b3ed40fbf5415f39a4898750163a629eb79fc9b8"
+}
