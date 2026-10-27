@@ -49,13 +49,25 @@ const selectActiveRef = async (
   return data?.ref ?? null;
 };
 
-export const getOrCreatePartnerRef = async (
-  partner: PartnerName
-): Promise<string | null> => {
+/** Chi è collegato ADESSO nel client: può essere già cambiato prima del render. */
+export const utenteDellaSessione = async (): Promise<string | null> => {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  const userId = session?.user?.id;
+  return session?.user?.id ?? null;
+};
+
+/**
+ * `utenteAtteso` è l'utente del render che prepara l'uscita. Se la sessione del
+ * client è già di un altro (link di B aperto con A collegato), un ref di B finirebbe
+ * accanto ai dati di A: si restituisce null e il chiamante non apre niente.
+ */
+export const getOrCreatePartnerRef = async (
+  partner: PartnerName,
+  utenteAtteso: string | null
+): Promise<string | null> => {
+  const userId = await utenteDellaSessione();
+  if (userId !== utenteAtteso) return null;
   if (!userId) return null; // ospite: nessuna correlazione
 
   // 1. Ref attivo già esistente?

@@ -1,0 +1,28 @@
+{
+  "criterio": "C85",
+  "base": "13fa640",
+  "titoli": [
+    "il profilo di A sparisce al passaggio a B, anche se quello di B non arriva",
+    "profilo rimasto da un altro account → i suoi dati NON partono",
+    "l'avviso preparato per un account non vale per quello che subentra",
+    "sessione già di B mentre il render è ancora di A: nessun link si apre"
+  ],
+  "esitiAllaBase": {
+    "il profilo di A sparisce al passaggio a B, anche se quello di B non arriva": "failed",
+    "profilo rimasto da un altro account → i suoi dati NON partono": "failed",
+    "l'avviso preparato per un account non vale per quello che subentra": "failed",
+    "sessione già di B mentre il render è ancora di A: nessun link si apre": "failed"
+  },
+  "motiviAllaBase": {
+    "il profilo di A sparisce al passaggio a B, anche se quello di B non arriva": "Error: expect(received).toBeNull()",
+    "profilo rimasto da un altro account → i suoi dati NON partono": "Error: expect(jest.fn()).toHaveBeenCalled()",
+    "l'avviso preparato per un account non vale per quello che subentra": "Error: expect(received).toBe(expected) // Object.is equality",
+    "sessione già di B mentre il render è ancora di A: nessun link si apre": "Error: expect(jest.fn()).not.toHaveBeenCalled()"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/AuthContext.test.tsx": "3cffec23c84bb1547d1c8b7bd4703d2dafc9739e559b6c9fa8efb232cbc2f2a5",
+    "src/__tests__/shared/partner/partnerSessioneCambiata.test.tsx": "e97c2fe0f760ee42e3e1cda0f22960e3b9f39ff96368cfcdee7949f6fa48bed6",
+    "src/__tests__/shared/partner/usePartnerExit.test.tsx": "fc0ac45190772ef8c74526a22ae05fa3865150f55a54cbd24b6256a119bcfd1e"
+  },
+  "commitFileTest": "b3ed40fbf5415f39a4898750163a629eb79fc9b8"
+}

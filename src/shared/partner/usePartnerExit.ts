@@ -1,6 +1,9 @@
 import { useCallback, useRef, useState } from 'react';
 
-import { getOrCreatePartnerRef } from './partnerRefService';
+import {
+  getOrCreatePartnerRef,
+  utenteDellaSessione,
+} from './partnerRefService';
 import { resolvePrefillEmail } from './partnerEmail';
 import { buildDonorboxDonationUrl, appendRiseRef } from './partnerUrls';
 import {
@@ -120,7 +123,11 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     uscitaInCorso.current = true;
     setIsExiting(true);
     try {
-      const ref = await getOrCreatePartnerRef('donorbox');
+      const ref = await getOrCreatePartnerRef('donorbox', userId);
+      // Sessione del client già di un altro account mentre questo render è ancora
+      // del precedente: profilo e ref non sarebbero della stessa persona. Non si apre
+      // niente; il tocco successivo, col render nuovo, parte con l'account giusto.
+      if (ref === null && (await utenteDellaSessione()) !== userId) return;
       // `profile` è null in DUE casi diversi: non esiste, oppure non è ancora
       // arrivato dalla rete (il caricamento parte al boot). Degradare subito
       // toglierebbe il prefill a un utente in regola che tocca «Dona» appena apre
@@ -263,14 +270,16 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       uscitaInCorso.current = true;
       setIsExiting(true);
       try {
-        const ref = await getOrCreatePartnerRef('letsdonation');
+        const ref = await getOrCreatePartnerRef('letsdonation', userId);
+        // Stessa guardia dell'uscita donazione: sessione già di un altro account.
+        if (ref === null && (await utenteDellaSessione()) !== userId) return;
         await openLink(appendRiseRef(url, ref), loadingKey, errorMessage);
       } finally {
         uscitaInCorso.current = false;
         setIsExiting(false);
       }
     },
-    [openLink]
+    [openLink, userId]
   );
 
   const openLetsDonationExit = useCallback(

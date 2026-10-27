@@ -20,6 +20,17 @@ jest.mock('@/shared/hooks/useLinkHandler', () => ({
 }));
 jest.mock('@/shared/partner/partnerRefService', () => ({
   getOrCreatePartnerRef: jest.fn(),
+  // Qui la sessione del client è sempre quella del render: il cambio di account
+  // fra i due sta in partnerSessioneCambiata.test.tsx, col servizio vero.
+  utenteDellaSessione: jest.fn(() =>
+    Promise.resolve(
+      jest
+        .requireMock<{
+          useAuth: () => { session: { user: { id: string } } | null };
+        }>('@/shared/auth/AuthContext')
+        .useAuth().session?.user.id ?? null
+    )
+  ),
 }));
 jest.mock('@/shared/partner/disclosureFlag', () => ({
   hasSeenPartnerDisclosure: jest.fn(),
@@ -132,7 +143,7 @@ describe('usePartnerExit', () => {
     expect(mockOpenLink).not.toHaveBeenCalled();
     await confermaAvvisoDonorbox(result);
 
-    expect(mockGetOrCreate).toHaveBeenCalledWith('donorbox');
+    expect(mockGetOrCreate).toHaveBeenCalledWith('donorbox', 'u1');
     const [url, key] = mockOpenLink.mock.calls[0];
     expect(url).toContain('donorbox.org/dona-ora-rah');
     expect(url).toContain('utm_content=DREF');
@@ -316,7 +327,7 @@ describe('usePartnerExit', () => {
     });
 
     expect(result.current.disclosureVisible).toBe(false);
-    expect(mockGetOrCreate).toHaveBeenCalledWith('letsdonation');
+    expect(mockGetOrCreate).toHaveBeenCalledWith('letsdonation', 'u1');
     const [url, key] = mockOpenLink.mock.calls[0];
     expect(url).toBe(`${SHOP_URL}?rise_ref=LREF`);
     expect(key).toBe('shop');

@@ -66,14 +66,16 @@ describe('getOrCreatePartnerRef', () => {
 
   it('ospite (nessuna sessione) → null, nessuna query al DB', async () => {
     getSession.mockResolvedValue({ data: { session: null } });
-    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBeNull();
+    await expect(getOrCreatePartnerRef('donorbox', null)).resolves.toBeNull();
     expect(mockedSupabase.from).not.toHaveBeenCalled();
   });
 
   it('ritorna il ref attivo esistente senza inserire', async () => {
     withSession();
     maybeSingle.mockResolvedValue({ data: { ref: 'EXISTING' }, error: null });
-    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBe('EXISTING');
+    await expect(getOrCreatePartnerRef('donorbox', 'user-1')).resolves.toBe(
+      'EXISTING'
+    );
     expect(insert).not.toHaveBeenCalled();
   });
 
@@ -81,7 +83,7 @@ describe('getOrCreatePartnerRef', () => {
     withSession();
     maybeSingle.mockResolvedValue({ data: null, error: null });
     single.mockResolvedValue({ data: { ref: 'NEW-REF' }, error: null });
-    await expect(getOrCreatePartnerRef('letsdonation')).resolves.toBe(
+    await expect(getOrCreatePartnerRef('letsdonation', 'user-1')).resolves.toBe(
       'NEW-REF'
     );
     expect(insert).toHaveBeenCalledWith({
@@ -96,7 +98,9 @@ describe('getOrCreatePartnerRef', () => {
       .mockResolvedValueOnce({ data: null, error: null }) // 1a select: niente
       .mockResolvedValueOnce({ data: { ref: 'RACED' }, error: null }); // re-select
     single.mockResolvedValue({ data: null, error: { code: '23505' } });
-    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBe('RACED');
+    await expect(getOrCreatePartnerRef('donorbox', 'user-1')).resolves.toBe(
+      'RACED'
+    );
     // race risolta felicemente: nessun errore inatteso deve finire nei log.
     expect(mockLogError).not.toHaveBeenCalled();
   });
@@ -107,7 +111,9 @@ describe('getOrCreatePartnerRef', () => {
       .mockResolvedValueOnce({ data: null, error: null }) // 1a select: niente
       .mockResolvedValueOnce({ data: null, error: null }); // re-select: ancora niente
     single.mockResolvedValue({ data: null, error: { code: '23505' } });
-    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBeNull();
+    await expect(
+      getOrCreatePartnerRef('donorbox', 'user-1')
+    ).resolves.toBeNull();
     expect(maybeSingle).toHaveBeenCalledTimes(2);
     expect(mockLogInfo).toHaveBeenCalledWith(
       'race 23505 senza ref visibile al re-select',
@@ -120,7 +126,9 @@ describe('getOrCreatePartnerRef', () => {
     withSession();
     maybeSingle.mockResolvedValue({ data: null, error: null });
     single.mockResolvedValue({ data: null, error: { code: '42501' } });
-    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBeNull();
+    await expect(
+      getOrCreatePartnerRef('donorbox', 'user-1')
+    ).resolves.toBeNull();
     expect(mockLogError).toHaveBeenCalledWith(
       'creazione ref fallita (inatteso)',
       'partnerRefService',
@@ -133,7 +141,9 @@ describe('getOrCreatePartnerRef', () => {
     withSession();
     maybeSingle.mockResolvedValue({ data: null, error: null });
     single.mockResolvedValue({ data: null, error: { code: '23503' } });
-    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBeNull();
+    await expect(
+      getOrCreatePartnerRef('donorbox', 'user-1')
+    ).resolves.toBeNull();
     // 23503 non è un race: la select gira una sola volta (lo step iniziale), mai un re-select.
     expect(maybeSingle).toHaveBeenCalledTimes(1);
     // il DELTA del fix: 23503 → logInfo (atteso), MAI il logError dell'inatteso.
@@ -149,7 +159,7 @@ describe('getOrCreatePartnerRef', () => {
     withSession();
     maybeSingle.mockResolvedValue({ data: null, error: { code: 'XX' } });
     single.mockResolvedValue({ data: { ref: 'NEW-AFTER-ERR' }, error: null });
-    await expect(getOrCreatePartnerRef('donorbox')).resolves.toBe(
+    await expect(getOrCreatePartnerRef('donorbox', 'user-1')).resolves.toBe(
       'NEW-AFTER-ERR'
     );
   });
