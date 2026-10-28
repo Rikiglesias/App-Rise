@@ -9,6 +9,7 @@ import { AuthSubmitError } from '../components/AuthSubmitError';
 import { ConfirmationResend } from '../components/ConfirmationResend';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
+import { announceBlockingMessage } from '../utils/announceFieldError';
 import { PerfectSpacing } from '@/shared/constants';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -61,9 +62,11 @@ export const LoginScreen: React.FC = () => {
     setSubmitError(null);
     const e = validateEmail(email);
     const p = validateRequired(password);
-    setEmailErr(e ? t(`auth.errors.${e}`) : undefined);
-    setPwdErr(p ? t(`auth.errors.${p}`) : undefined);
-    if (e || p) return;
+    const emailMsg = e ? t(`auth.errors.${e}`) : undefined;
+    const pwdMsg = p ? t(`auth.errors.${p}`) : undefined;
+    setEmailErr(emailMsg);
+    setPwdErr(pwdMsg);
+    if (announceBlockingMessage([emailMsg, pwdMsg])) return;
 
     setLoading(true);
     setConfirmationEmail(email.trim());

@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 
+import { announceBlockingError } from '../utils/announceFieldError';
 import { useAuthError } from './useAuthError';
 import type { NicknameCheck } from './useNicknameAvailability';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -163,7 +164,7 @@ export const useProfileEditSubmit = ({
     )
       e.nickname = 'nickname_taken';
     setErrors(e);
-    if (Object.keys(e).length > 0) return;
+    if (announceBlockingError(e, 'profileEdit', t)) return;
 
     setLoading(true);
     // Solo i campi effettivamente cambiati (whitelist a valle in updateProfile).

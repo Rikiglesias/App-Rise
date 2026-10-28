@@ -83,17 +83,14 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
     const [focused, setFocused] = useState(false);
     const toggleReveal = (): void => setRevealed(v => !v);
 
-    // Annuncia l'errore allo screen reader quando compare (iOS + Android).
-    useEffect(() => {
-      if (error) AccessibilityInfo.announceForAccessibility(error);
-    }, [error]);
-
-    // Stessa cosa per il suggerimento, e per la stessa ragione: `accessibilityLiveRegion`
-    // sotto funziona SOLO su Android, quindi senza questa riga chi usa VoiceOver non
-    // saprebbe mai che il nickname scelto è già di qualcun altro. Non si annuncia mentre
-    // l'errore è a schermo (lì il messaggio mostrato è l'altro), e il tono `neutral` —
-    // cioè «Controllo…» — resta muto: annunciare un'attesa a ogni pausa di digitazione
-    // sarebbe rumore, non informazione.
+    // L'errore NON si annuncia da qui: lo annuncia il modulo all'invio, uno solo e il primo
+    // nell'ordine dei campi (`announceFieldError.ts`, C93). Il suggerimento invece arriva
+    // mentre si scrive, senza invio, e si annuncia qui: è l'unico modo perché chi usa
+    // VoiceOver sappia che il nickname scelto è già di qualcun altro. Niente live region
+    // sotto, perché TalkBack lo leggerebbe due volte. Non si annuncia mentre l'errore è a
+    // schermo (lì il messaggio mostrato è l'altro), e il tono `neutral`, cioè
+    // «Controllo…», resta muto: annunciare un'attesa a ogni pausa di digitazione sarebbe
+    // rumore, non informazione.
     useEffect(() => {
       if (!error && hint && hintTone !== 'neutral') {
         AccessibilityInfo.announceForAccessibility(hint);
@@ -152,15 +149,13 @@ export const AuthInput = forwardRef<TextInput, AuthInputProps>(
           ) : null}
         </View>
         {error ? (
-          <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
+          <View accessibilityRole="alert">
             <PerfectText size={13} lines={2} style={styles.error}>
               {error}
             </PerfectText>
           </View>
         ) : hint ? (
-          // `polite` e non `assertive`: un riscontro che arriva mentre si scrive non
-          // deve interrompere lo screen reader a metà parola, come farebbe un errore.
-          <View accessibilityLiveRegion="polite">
+          <View>
             <PerfectText size={13} lines={2} style={styles[hintTone]}>
               {hint}
             </PerfectText>

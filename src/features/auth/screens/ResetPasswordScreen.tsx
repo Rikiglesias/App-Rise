@@ -8,6 +8,7 @@ import { AuthButton } from '../components/AuthButton';
 import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
+import { announceBlockingMessage } from '../utils/announceFieldError';
 import { PerfectText } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -48,10 +49,12 @@ export const ResetPasswordScreen: React.FC = () => {
     setSubmitAttempt(attempt => attempt + 1);
     setSubmitError(null);
     const p = validatePassword(password);
-    setPwdErr(p ? t(`auth.errors.${p}`) : undefined);
-    const mismatch = password !== confirm;
-    setConfirmErr(mismatch ? t('auth.errors.password_mismatch') : undefined);
-    if (p || mismatch) return;
+    const pwdMsg = p ? t(`auth.errors.${p}`) : undefined;
+    const confirmMsg =
+      password !== confirm ? t('auth.errors.password_mismatch') : undefined;
+    setPwdErr(pwdMsg);
+    setConfirmErr(confirmMsg);
+    if (announceBlockingMessage([pwdMsg, confirmMsg])) return;
 
     setLoading(true);
     try {

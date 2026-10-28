@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { announceBlockingError } from '../utils/announceFieldError';
 import { useNicknameAvailability } from './useNicknameAvailability';
 import { useAuthError } from './useAuthError';
 import { useTranslation } from '@/shared/hooks/useTranslation';
@@ -337,7 +338,7 @@ export const useProfileForm = () => {
       found.nickname = 'nickname_taken';
     }
     setErrors(found);
-    if (Object.keys(found).length > 0) return;
+    if (announceBlockingError(found, 'completeProfile', t)) return;
 
     const userId = session?.user.id;
     if (!userId) {
@@ -420,7 +421,9 @@ export const useProfileForm = () => {
       if (nicknameTouched.current && nickname.trim() !== '') {
         const libero = await isNicknameAvailable(nickname);
         if (libero === false) {
-          setErrors({ ...found, nickname: 'nickname_taken' });
+          const taken = { ...found, nickname: 'nickname_taken' };
+          setErrors(taken);
+          announceBlockingError(taken, 'completeProfile', t);
           return;
         }
       }

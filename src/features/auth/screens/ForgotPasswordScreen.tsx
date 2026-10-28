@@ -8,6 +8,7 @@ import { AuthButton } from '../components/AuthButton';
 import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
+import { announceBlockingMessage } from '../utils/announceFieldError';
 import { PerfectText } from '@/components/ui';
 import { PerfectSpacing } from '@/shared/constants';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
@@ -41,8 +42,9 @@ export const ForgotPasswordScreen: React.FC = () => {
     setSubmitAttempt(attempt => attempt + 1);
     setSubmitError(null);
     const e = validateEmail(email);
-    setEmailErr(e ? t(`auth.errors.${e}`) : undefined);
-    if (e) return;
+    const emailMsg = e ? t(`auth.errors.${e}`) : undefined;
+    setEmailErr(emailMsg);
+    if (announceBlockingMessage([emailMsg])) return;
     setLoading(true);
     try {
       const { error } = await resetPassword(email.trim());

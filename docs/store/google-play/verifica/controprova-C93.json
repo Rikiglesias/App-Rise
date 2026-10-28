@@ -1,0 +1,41 @@
+{
+  "criterio": "C93",
+  "base": "13fa640",
+  "titoli": [
+    "errore di campo annunciato all'invio: AuthInput",
+    "errore di campo annunciato all'invio: AuthPhoneField",
+    "errore di campo annunciato all'invio: AuthDateField",
+    "errore di campo annunciato all'invio: AuthCountryField",
+    "errore di campo annunciato all'invio: AuthCityField",
+    "errore di campo annunciato all'invio: AuthConsentCheckbox",
+    "errore di campo: stesso errore due volte, due annunci",
+    "più errori: si annuncia il primo nell'ordine del modulo",
+    "suggerimento nickname annunciato una volta, senza live region"
+  ],
+  "esitiAllaBase": {
+    "errore di campo annunciato all'invio: AuthInput": "failed",
+    "errore di campo annunciato all'invio: AuthPhoneField": "failed",
+    "errore di campo annunciato all'invio: AuthDateField": "failed",
+    "errore di campo annunciato all'invio: AuthCountryField": "failed",
+    "errore di campo annunciato all'invio: AuthCityField": "failed",
+    "errore di campo annunciato all'invio: AuthConsentCheckbox": "failed",
+    "errore di campo: stesso errore due volte, due annunci": "failed",
+    "più errori: si annuncia il primo nell'ordine del modulo": "failed",
+    "suggerimento nickname annunciato una volta, senza live region": "failed"
+  },
+  "motiviAllaBase": {
+    "errore di campo annunciato all'invio: AuthInput": "Error: expect(received).toBeUndefined()",
+    "errore di campo annunciato all'invio: AuthPhoneField": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "errore di campo annunciato all'invio: AuthDateField": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "errore di campo annunciato all'invio: AuthCountryField": "Error: expect(received).toEqual(expected) // deep equality",
+    "errore di campo annunciato all'invio: AuthCityField": "Error: expect(received).toBeUndefined()",
+    "errore di campo annunciato all'invio: AuthConsentCheckbox": "Error: expect(received).toBeUndefined()",
+    "errore di campo: stesso errore due volte, due annunci": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "più errori: si annuncia il primo nell'ordine del modulo": "Error: expect(received).toBeUndefined()",
+    "suggerimento nickname annunciato una volta, senza live region": "Error: expect(received).toBeUndefined()"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/erroreCampoAnnunciato.test.tsx": "596ad9fc0d4589e28650f9bd238315b28ade76c22e3bdc96e4eae8b952e0cb9c"
+  },
+  "commitFileTest": "152a9c21f8cece64cb8110c759094971bef0895f"
+}

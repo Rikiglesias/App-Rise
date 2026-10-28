@@ -2,9 +2,11 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { announceBlockingError } from '../utils/announceFieldError';
 import { useNicknameAvailability } from './useNicknameAvailability';
 import { useAuthError } from './useAuthError';
 import { useAuth } from '@/shared/auth/AuthContext';
+import { useTranslation } from '@/shared/hooks/useTranslation';
 import {
   validateSignUpForm,
   type SignUpErrors,
@@ -19,6 +21,7 @@ import type { RootStackNavigationProp } from '@/navigation/types';
 export const useSignUpForm = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { signUp } = useAuth();
+  const { t } = useTranslation();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -171,12 +174,9 @@ export const useSignUpForm = () => {
     // impedisce è solo di proseguire CREDENDO di aver preso un nome che invece verrebbe
     // scartato dal trigger, cioè il silenzio che questa fase esiste per togliere.
     // `unknown` NON blocca: se non siamo riusciti a chiedere, la persona va avanti.
-    if (nicknameCheck === 'taken') {
-      setErrors({ ...found, nickname: 'nickname_taken' });
-      return;
-    }
+    if (nicknameCheck === 'taken') found.nickname = 'nickname_taken';
     setErrors(found);
-    if (Object.keys(found).length > 0) return;
+    if (announceBlockingError(found, 'signUp', t)) return;
 
     // Ricontrollo appena prima di inviare: fra l'ultima digitazione e il tocco sul
     // pulsante possono passare secondi, e in quei secondi il nome può essere stato
@@ -192,7 +192,9 @@ export const useSignUpForm = () => {
       if (nickname.trim() !== '') {
         const libero = await isNicknameAvailable(nickname);
         if (libero === false) {
-          setErrors({ ...found, nickname: 'nickname_taken' });
+          const taken = { ...found, nickname: 'nickname_taken' };
+          setErrors(taken);
+          announceBlockingError(taken, 'signUp', t);
           return;
         }
       }
@@ -238,6 +240,7 @@ export const useSignUpForm = () => {
     signUp,
     setSubmitError,
     showError,
+    t,
   ]);
 
   const handleSubmit = useCallback((): void => {

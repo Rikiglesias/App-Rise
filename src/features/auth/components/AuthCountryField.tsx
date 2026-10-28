@@ -101,7 +101,7 @@ export const AuthCountryField: React.FC<AuthCountryFieldProps> = ({
         }}
       />
       {error ? (
-        <View accessibilityLiveRegion="assertive" accessibilityRole="alert">
+        <View accessibilityRole="alert">
           <PerfectText size={13} lines={2} style={styles.error}>
             {error}
           </PerfectText>

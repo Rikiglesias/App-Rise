@@ -102,8 +102,11 @@ export const AuthPhoneField: React.FC<AuthPhoneFieldProps> = ({
   const { locale, t } = useTranslation();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [number, setNumber] = useState('');
+  // `||` e non `??`: un profilo col paese vuoto ('') lasciava il prefisso senza paese, la
+  // libreria sceglieva il suo predefinito (Brasile) e lo notificava, e il modulo salvava
+  // `BR` come residenza senza che nessuno l'avesse scelto.
   const [country, setCountry] = useState<ICountry | null>(
-    () => getCountryByCca2(countryCca2 ?? 'IT') ?? null
+    () => getCountryByCca2(countryCca2 || 'IT') ?? null
   );
   // Copia in ref del paese corrente. La libreria può notificare paese e numero nello
   // STESSO giro (succede incollando un numero internazionale: prima il paese, poi le
