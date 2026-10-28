@@ -100,9 +100,15 @@ controlla() {
 controlla privacy-policy.html https://italy.riseagainsthunger.org/privacy-policy/
 controlla docs/store/google-play/web/elimina-account.html "<URL-ELIMINA-ACCOUNT>"
 controlla docs/store/google-play/web/delete-account.html "<URL-DELETE-ACCOUNT>"
+for u in https://italy.riseagainsthunger.org/privacy-policy/ "<URL-ELIMINA-ACCOUNT>" "<URL-DELETE-ACCOUNT>"; do
+  if curl -fsSL "$u" | grep -q 'da-validare'; then echo "BOZZA   $u"; fi
+done
 ```
 
-Tre righe `OK` ⇒ si invia. Una riga `DIVERSA` ⇒ la pagina pubblicata è vecchia: non inviare, scrivere alla sede USA.
+Tre righe `OK` e nessuna `BOZZA` ⇒ si invia. Una riga `DIVERSA` ⇒ la pagina pubblicata è vecchia: non inviare,
+scrivere alla sede USA. Una riga `BOZZA` ⇒ nella pagina pubblicata resta il marcatore `da-validare` (i punti per la
+consulente e la PEC, oggi in `privacy-policy.html` e `privacy-policy-en.html`): non inviare finché la consulente non
+ha validato e la PEC non è scritta (leva PEC: Alberto, punto 3).
 L'URL della pagina di cancellazione va anche in Sicurezza dei dati (`play-console-risposte.md`).
 
 Prima dell'invio si controllano a mano anche due cose: la PEC a OpenClick è partita e la sua ricevuta di consegna è
@@ -238,7 +244,9 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
 2. **Seconda PEC** a OpenClick con la data di ritiro, almeno 7 giorni prima (punto 2 della prima PEC): si manda dopo il
    primo avviso agli utenti (§ 14); data e testo li prepara Riccardo.
 3. **Dati dell'informativa**: la sede legale è quella del RUNTS (via dei Fornaciai 17, Bologna); quale PEC scrivere in
-   `privacy-policy.html` (quella registrata al RUNTS o un'altra dell'ente) lo conferma l'associazione.
+   `privacy-policy.html` (quella registrata al RUNTS o un'altra dell'ente) lo conferma l'associazione. Proposta: la PEC
+   del RUNTS, `posta@pec.shnitalia.it`; con la conferma si sostituisce il segnaposto «PEC da inserire» nelle due
+   informative.
 
 Lo status non profit non va più chiesto: l'associazione è iscritta al RUNTS (repertorio 172977, dal 28/05/2026) e la
 scheda del registro è la prova da allegare al preavviso del § 13.
@@ -311,6 +319,14 @@ scheda del registro è la prova da allegare al preavviso del § 13.
     decide PRIMA come trattarli (nessuna correzione automatica). Poi si applica per intero
     `supabase/migrations/0022_consensi_server_e_oblio.sql` nel SQL Editor. Fra app e database non serve un ordine di
     rilascio: l'app oggi scrive sul profilo lo stesso valore dell'evento.
+11. **Richieste di cancellazione da inoltrare ai partner**, ogni settimana dopo il lancio. Quando un account si
+    elimina, la tabella `partner_ref_tombstones` tiene quale codice aveva la persona presso quale partner; nessun
+    programma la legge. Nel SQL Editor di Supabase (sola lettura):
+    `select partner, ref, deleted_at from public.partner_ref_tombstones where requested_at is null order by deleted_at;`
+    Per ogni riga si scrive al partner (Let's Donation o Donorbox) chiedendo di cancellare i dati legati a quel codice,
+    **entro un mese** dalla cancellazione (lo promettono le pagine di cancellazione, § 5); stesso tempo per le
+    richieste che arrivano per email a `info@riseagainsthunger.it`. Segnare la data della richiesta (`requested_at`)
+    e quella della conferma (`confirmed_at`) è una scrittura sul database: solo col tuo sì, quando si decide chi la fa.
 
 ### Sede USA (Rick, Kevin)
 
