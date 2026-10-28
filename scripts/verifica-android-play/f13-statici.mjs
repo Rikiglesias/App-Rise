@@ -135,6 +135,11 @@ export const FILE_C65 = {
   Profilo: `${SCHERMATE}/ProfileScreen.tsx`,
   'Reinvio conferma': 'src/features/auth/components/ConfirmationResend.tsx',
 };
+// R35: componenti che mostrano l'errore d'invio PER quelle schermate (il rinvio della conferma e il banner
+// del cambio email). Fuori da FILE_C65 perché le sue chiavi generano i titoli (f13.mjs), questi no.
+export const COMPONENTI_C65 = [
+  'src/features/auth/components/EmailResendControl.tsx',
+];
 // Errore d'invio = variabile che finisce in Error/error. Esclusi gli errori di LETTURA del profilo
 // (`profileError`, `profileReadError`): arrivano col caricamento, non da un invio della persona.
 const ERRORE_INVIO = /\b(?!profile)[A-Za-z_.]*?[Ee]rror\b/;
@@ -162,11 +167,14 @@ export const erroriMostrati = testo => {
 export const staticoC65 = {
   leggi: () => ({
     file: Object.fromEntries(
-      Object.values(FILE_C65).map(f => [f, leggiSeEsiste(f)])
+      [...Object.values(FILE_C65), ...COMPONENTI_C65].map(f => [
+        f,
+        leggiSeEsiste(f),
+      ])
     ),
   }),
   verifica({ file }) {
-    for (const f of Object.values(FILE_C65)) {
+    for (const f of [...Object.values(FILE_C65), ...COMPONENTI_C65]) {
       if (file?.[f] == null) return `${f} assente`;
       const [riga] = erroriMostrati(file[f]);
       if (riga)

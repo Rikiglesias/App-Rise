@@ -12,10 +12,14 @@ import { AuthInput } from '../components/AuthInput';
 import { AuthPhoneField } from '../components/AuthPhoneField';
 import { AuthCountryField } from '../components/AuthCountryField';
 import { AuthCityField } from '../components/AuthCityField';
+import { AuthDateField } from '../components/AuthDateField';
 import { AuthButton } from '../components/AuthButton';
+import { EmailChangePending } from '../components/EmailChangePending';
 import { AuthSubmitError } from '../components/AuthSubmitError';
 import { AuthRetry } from '../components/AuthRetry';
 import { useAuthError } from '../hooks/useAuthError';
+import { useAccountEmailField } from '../hooks/useAccountEmailField';
+import { useEmailChangeResend } from '../hooks/useEmailChangeResend';
 import {
   useNicknameAvailability,
   useNicknameHint,
@@ -79,7 +83,14 @@ export const ProfileEditScreen: React.FC = () => {
   const pendingEmail = session?.user.new_email ?? null;
   const [firstName, setFirstName] = useState(profile?.first_name ?? '');
   const [lastName, setLastName] = useState(profile?.last_name ?? '');
-  const [email, setEmail] = useState(currentEmail);
+  const { email, onChangeEmail, emailDaCambiare, segnaSalvato } =
+    useAccountEmailField(currentEmail, pendingEmail);
+  // Qui e non nel banner: l'attesa parte anche dal «Salva» che chiede il cambio (C87).
+  const {
+    until: attesaRinvio,
+    resend: rimandaLink,
+    avviaAttesa,
+  } = useEmailChangeResend(currentEmail);
   const [phone, setPhone] = useState(profile?.phone ?? '+39');
   const [city, setCity] = useState(profile?.city ?? '');
   const [province, setProvince] = useState(profile?.province ?? '');
@@ -289,17 +300,20 @@ export const ProfileEditScreen: React.FC = () => {
         setProfileSaved(true);
       }
 
-      const nextEmail = email.trim();
+      // Né l'indirizzo attuale né quello già in attesa (C87): rimandarlo cambierebbe i link.
+      const nextEmail = emailDaCambiare();
       let didChangeEmail = false;
-      if (nextEmail !== currentEmail) {
+      if (nextEmail !== null) {
         const { error } = await updateEmail(nextEmail);
         if (error) {
           showError(error);
           return;
         }
         didChangeEmail = true;
+        avviaAttesa();
       }
 
+      segnaSalvato();
       setEmailChanged(didChangeEmail);
       setSuccess(true);
     } catch (error) {
@@ -317,6 +331,9 @@ export const ProfileEditScreen: React.FC = () => {
     // difetto che nessun test coglie finché non capita la sequenza giusta.
     nicknameCheck,
     email,
+    emailDaCambiare,
+    segnaSalvato,
+    avviaAttesa,
     phone,
     city,
     province,
@@ -328,7 +345,6 @@ export const ProfileEditScreen: React.FC = () => {
     profile,
     profileError,
     refreshProfile,
-    currentEmail,
     updateProfile,
     updateEmail,
     reportError,
@@ -384,7 +400,7 @@ export const ProfileEditScreen: React.FC = () => {
       <AuthInput
         label={t('auth.edit.email')}
         value={email}
-        onChangeText={setEmail}
+        onChangeText={onChangeEmail}
         error={err(errors.email)}
         keyboardType="email-address"
         autoCapitalize="none"
@@ -429,13 +445,14 @@ export const ProfileEditScreen: React.FC = () => {
           autoCapitalize="characters"
         />
       ) : null}
-      <AuthInput
+      {/* Selettore come in registrazione e in Completa profilo (C95): col testo libero
+          `01/02/2000` diventava il 2 gennaio. */}
+      <AuthDateField
         label={t('auth.signup.birthDate')}
         value={birthDate}
-        onChangeText={setBirthDate}
+        onChange={setBirthDate}
         error={err(errors.birthDate)}
-        placeholder="2000-01-31"
-        autoCapitalize="none"
+        placeholder={t('auth.signup.birthDatePlaceholder')}
       />
       {/* Rettifica della mail di contatto. Sempre visibile: è obbligatoria per
           tutti, e un campo obbligatorio che non si vede blocca il salvataggio senza
@@ -488,9 +505,11 @@ export const ProfileEditScreen: React.FC = () => {
         />
       ) : null}
       {pendingEmail ? (
-        <PerfectText size={14} lines={3} style={styles.pending}>
-          {t('auth.edit.emailPending', { email: pendingEmail })}
-        </PerfectText>
+        <EmailChangePending
+          pendingEmail={pendingEmail}
+          until={attesaRinvio}
+          resend={rimandaLink}
+        />
       ) : null}
       {success ? (
         <PerfectText size={14} lines={3} style={styles.success}>
@@ -520,10 +539,6 @@ const createStyles = (colors: ThemeColors) =>
     },
     success: {
       color: colors.semantic.success.text,
-      marginTop: PerfectSpacing.xs,
-    },
-    pending: {
-      color: colors.neutral[600],
       marginTop: PerfectSpacing.xs,
     },
   });

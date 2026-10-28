@@ -271,6 +271,10 @@ export default {
         'Per cambiare email, conferma il link inviato a entrambe le caselle (vecchia e nuova).',
       emailPending:
         'Cambio email in attesa di conferma: {{email}}. Conferma il link inviato a entrambe le caselle per completarlo.',
+      resendLink: 'Rimanda il link',
+      // Il server sostituisce i link e azzera la conferma già fatta su una casella.
+      resendSent:
+        'Link rimandato a entrambe le caselle. Usa quelli dell’ultima mail: i precedenti non valgono più e una conferma già fatta va ripetuta.',
       error: 'Aggiornamento non riuscito. Riprova.',
       partialSave:
         'I dati del profilo sono stati salvati, ma l’email non è cambiata. Riprova il cambio email.',

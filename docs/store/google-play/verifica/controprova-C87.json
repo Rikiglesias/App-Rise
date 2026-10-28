@@ -1,0 +1,35 @@
+{
+  "criterio": "C87",
+  "base": "13fa640",
+  "titoli": [
+    "profilo: cambio email già in attesa non si rimanda salvando altro",
+    "profilo: confermata la nuova email, il campo segue l'account e Salva non chiama updateEmail",
+    "profilo: email in attesa scritta con le maiuscole, salvare altro non la rimanda",
+    "profilo: Rimanda il link chiama resend email_change con l'email dell'account",
+    "profilo: Rimanda il link troppo presto → errore annunciato con l'attesa",
+    "profilo: Rimanda il link, doppio tocco → una sola richiesta",
+    "profilo: dopo il salvataggio della nuova email Rimanda il link aspetta"
+  ],
+  "esitiAllaBase": {
+    "profilo: cambio email già in attesa non si rimanda salvando altro": "failed",
+    "profilo: confermata la nuova email, il campo segue l'account e Salva non chiama updateEmail": "failed",
+    "profilo: email in attesa scritta con le maiuscole, salvare altro non la rimanda": "failed",
+    "profilo: Rimanda il link chiama resend email_change con l'email dell'account": "failed",
+    "profilo: Rimanda il link troppo presto → errore annunciato con l'attesa": "failed",
+    "profilo: Rimanda il link, doppio tocco → una sola richiesta": "failed",
+    "profilo: dopo il salvataggio della nuova email Rimanda il link aspetta": "failed"
+  },
+  "motiviAllaBase": {
+    "profilo: cambio email già in attesa non si rimanda salvando altro": "Error: expect(jest.fn()).not.toHaveBeenCalled()",
+    "profilo: confermata la nuova email, il campo segue l'account e Salva non chiama updateEmail": "Error: expect(received).not.toBeNull()",
+    "profilo: email in attesa scritta con le maiuscole, salvare altro non la rimanda": "Error: expect(jest.fn()).not.toHaveBeenCalled()",
+    "profilo: Rimanda il link chiama resend email_change con l'email dell'account": "Error: expect(received).not.toBeNull()",
+    "profilo: Rimanda il link troppo presto → errore annunciato con l'attesa": "Error: expect(received).not.toBeNull()",
+    "profilo: Rimanda il link, doppio tocco → una sola richiesta": "Error: expect(received).not.toBeNull()",
+    "profilo: dopo il salvataggio della nuova email Rimanda il link aspetta": "Error: expect(received).not.toBeNull()"
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/profiloEmailInAttesa.test.tsx": "fcc6b9960f8ed4b4616a669d5fa63ccd0c9cd7b871b825b0aec24948fa84a744"
+  },
+  "commitFileTest": "4f282ee0b07142dc947f633f4e6fe4ed0e8104ed"
+}

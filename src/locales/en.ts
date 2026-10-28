@@ -261,6 +261,9 @@ export default {
         'To change your email, confirm the link sent to both inboxes (old and new).',
       emailPending:
         'Email change pending confirmation: {{email}}. Confirm the link sent to both inboxes to complete it.',
+      resendLink: 'Resend the link',
+      resendSent:
+        'Link sent again to both inboxes. Use the ones in the latest email: the earlier ones no longer work and a confirmation already made must be repeated.',
       error: 'Update failed. Please try again.',
       partialSave:
         'Your profile details were saved, but your email address has not changed. Try changing your email again.',

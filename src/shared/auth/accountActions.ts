@@ -56,6 +56,24 @@ export const updateEmail = async (email: string) => {
   return { error: error?.message ?? null };
 };
 
+/**
+ * Rimanda il link di un cambio email in attesa (C87). `email` è l'indirizzo ATTUALE
+ * dell'account: il server cerca l'utente con quello e manda il link a quello nuovo
+ * (`supabase/auth` `internal/api/resend.go`); con l'indirizzo in attesa risponderebbe
+ * 200 senza mandare nulla. L'errore torna intero: il codice
+ * `over_email_send_rate_limit` dice «troppo presto», il messaggio no.
+ */
+export const resendEmailChange = async (email: string) => {
+  const { error } = await registraEsitoAccount('RinvioCambioEmail', () =>
+    supabase.auth.resend({
+      type: 'email_change',
+      email,
+      options: { emailRedirectTo: buildEmailChangeRedirectTo() },
+    })
+  );
+  return { error };
+};
+
 const messaggioDi = (error: unknown): string =>
   typeof error === 'object' &&
   error !== null &&

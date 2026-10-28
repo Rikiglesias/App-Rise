@@ -2,7 +2,7 @@
 // mutazione. Gli statici ricevono testi veri, così il selftest prova anche i lettori (regex e parser).
 // I criteri solo statici (C61 C63 C76 C77 C80 C82) stanno in selftest-f13-testi.mjs.
 import { DEFINIZIONI_F13, GUARDIE_C81, LOCALI_C72 } from './f13.mjs';
-import { FILE_C65, tempiOta } from './f13-statici.mjs';
+import { COMPONENTI_C65, FILE_C65, tempiOta } from './f13-statici.mjs';
 import { negativiComuni, verde } from './selftest-codice.mjs';
 
 const v = (id, statico = null) => verde(id, statico, DEFINIZIONI_F13);
@@ -38,11 +38,14 @@ const C58_OK = {
 const SUBMIT = '<AuthSubmitError message={submitError} />';
 const schermate = (mut = {}) => ({
   file: {
-    ...Object.fromEntries(Object.values(FILE_C65).map(f => [f, SUBMIT])),
+    ...Object.fromEntries(
+      [...Object.values(FILE_C65), ...COMPONENTI_C65].map(f => [f, SUBMIT])
+    ),
     ...mut,
   },
 });
 const [LOGIN] = Object.values(FILE_C65);
+const [RINVIO] = COMPONENTI_C65;
 
 // --- C73 ---
 const OTA =
@@ -124,6 +127,10 @@ export const FIXTURE_F13 = {
       schermate({
         [LOGIN]:
           "<PerfectText>\n  {error ?? t('auth.resend.sent')}\n</PerfectText>",
+      }),
+      schermate({ [RINVIO]: null }),
+      schermate({
+        [RINVIO]: '<PerfectText size={14}>\n  {error}\n</PerfectText>',
       }),
     ],
     [
