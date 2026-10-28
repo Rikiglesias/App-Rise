@@ -112,12 +112,14 @@ it('timeout di rete: Dona esce dal caricamento', async () => {
   jest
     .spyOn(supabase.auth, 'getSession')
     .mockResolvedValue({ data: { session }, error: null });
+  // Consenso `ok`: senza, il codice non si chiede (C91) e le due richieste che qui
+  // restano senza risposta non partirebbero.
   jest.spyOn(Auth, 'useAuth').mockReturnValue({
     session,
     profile: null,
-    consentState: 'unknown',
+    consentState: 'ok',
     refreshProfile: jest.fn().mockResolvedValue(null),
-    refreshConsent: jest.fn().mockResolvedValue('unknown'),
+    refreshConsent: jest.fn().mockResolvedValue('ok'),
   } as unknown as ReturnType<typeof Auth.useAuth>);
   const open = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined);
   const { result } = renderHook(() => usePartnerExit());

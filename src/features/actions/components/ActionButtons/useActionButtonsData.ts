@@ -35,7 +35,7 @@ export interface ActionButtonsData {
   /**
    * Avviso pre-donazione: l'indirizzo Donorbox porterebbe nome, cognome ed email.
    * Canale diverso e avviso diverso da quello di Let's Donation, che esce col solo
-   * codice anonimo — per questo sono due stati distinti e non uno riusato.
+   * codice collegato all'account — per questo sono due stati distinti e non uno riusato.
    */
   donorboxDisclosureVisible: boolean;
 

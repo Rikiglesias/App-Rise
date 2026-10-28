@@ -202,7 +202,8 @@ describe('usePartnerExit', () => {
     const [url] = mockOpenLink.mock.calls[0];
     expect(url).not.toContain('email=');
     expect(url).not.toContain('first_name=');
-    expect(url).toContain('utm_content=DREF');
+    // Nemmeno il codice: parte solo col consenso `ok` (C91).
+    expect(url).not.toContain('utm_content');
   });
 
   it('openDonation: consenso non ancora verificato → nessun dato personale', async () => {
@@ -224,7 +225,8 @@ describe('usePartnerExit', () => {
     const [url] = mockOpenLink.mock.calls[0];
     expect(url).not.toContain('email=');
     expect(url).not.toContain('first_name=');
-    expect(url).toContain('utm_content=DREF');
+    // Nemmeno il codice: parte solo col consenso `ok` (C91).
+    expect(url).not.toContain('utm_content');
   });
 
   it('openDonation: consenso ignoto ma ri-verifica OK → prefill presente', async () => {

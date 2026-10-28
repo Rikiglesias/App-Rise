@@ -41,7 +41,7 @@ describe('disclosureFlag (path nativo SecureStore)', () => {
     mockSet.mockResolvedValue(undefined);
     await markPartnerDisclosureSeen('user-42');
     expect(mockSet).toHaveBeenCalledWith(
-      'partner_disclosure_seen_v1_user-42',
+      'partner_disclosure_seen_v2_user-42',
       '1'
     );
   });
@@ -49,15 +49,15 @@ describe('disclosureFlag (path nativo SecureStore)', () => {
   it('senza userId usa la chiave condivisa (ospite)', async () => {
     mockGet.mockResolvedValue(null);
     await hasSeenPartnerDisclosure();
-    expect(mockGet).toHaveBeenCalledWith('partner_disclosure_seen_v1');
+    expect(mockGet).toHaveBeenCalledWith('partner_disclosure_seen_v2');
   });
 
   it('chiavi distinte per utenti distinti (il flag di uno non copre l altro)', async () => {
     mockGet.mockResolvedValue(null);
     await hasSeenPartnerDisclosure('a');
     await hasSeenPartnerDisclosure('b');
-    expect(mockGet).toHaveBeenNthCalledWith(1, 'partner_disclosure_seen_v1_a');
-    expect(mockGet).toHaveBeenNthCalledWith(2, 'partner_disclosure_seen_v1_b');
+    expect(mockGet).toHaveBeenNthCalledWith(1, 'partner_disclosure_seen_v2_a');
+    expect(mockGet).toHaveBeenNthCalledWith(2, 'partner_disclosure_seen_v2_b');
   });
 
   it('fail-open in lettura: errore storage → false (mostra l avviso)', async () => {

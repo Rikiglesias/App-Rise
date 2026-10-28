@@ -33,8 +33,9 @@ import {
  * lo gestisce usePartnerExit). "Continua" prosegue l'uscita, "Annulla" la ferma.
  *
  * Due varianti, perché i due canali non trasmettono le stesse cose:
- * - `letsdonation` — esce col solo `rise_ref`, un codice che non dice chi sei.
- *   L'avviso parla dell'account separato da creare sulla piattaforma partner.
+ * - `letsdonation` — esce col solo `rise_ref`, un codice collegato all'account che
+ *   non contiene nome né email (solo col consenso, C91). L'avviso parla dell'account
+ *   separato da creare sulla piattaforma partner e del codice (C92).
  * - `donorbox` — l'indirizzo porta NOME, COGNOME ed EMAIL come parametri, e un
  *   indirizzo finisce nella cronologia del browser e nei log di chi lo riceve.
  *   Qui l'avviso deve dire *quali* dati partono, e offrire di proseguire senza:
@@ -208,7 +209,10 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
               style={[styles.bodyScroll, { maxHeight: bodyMaxHeight }]}
               testID="partner-disclosure-body"
             >
-              <PerfectText size={15} lines={12} style={styles.body}>
+              {/* Righe abbondanti: i testi nominano anche il codice (C92) e lo
+                  ScrollView sopra tiene i pulsanti a portata, quindi tagliare
+                  qui nasconderebbe proprio quella frase. */}
+              <PerfectText size={15} lines={24} style={styles.body}>
                 {t(bodyKey)}
               </PerfectText>
             </PlatformScrollView>

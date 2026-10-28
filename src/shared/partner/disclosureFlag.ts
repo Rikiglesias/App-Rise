@@ -8,7 +8,7 @@ import { logWarn } from '@/shared/utils/logger';
  *
  * La schermata che avverte della doppia registrazione su Let's Donation si mostra
  * UNA VOLTA PER UTENTE: dopo che l'ha vista e ha proseguito, le uscite successive
- * vanno dritte (il ref viene comunque propagato ogni volta, quello è altrove).
+ * vanno dritte (se e quando parte il codice lo decide `usePartnerExit.ts`).
  *
  * Persistenza: SecureStore su iOS/Android, localStorage in dev/preview web (il
  * target di produzione è mobile). La chiave è scopata per utente così il flag di
@@ -26,10 +26,11 @@ import { logWarn } from '@/shared/utils/logger';
  */
 export type CanaleAvviso = 'letsdonation' | 'donorbox';
 
-// La chiave di Let's Donation resta ESATTAMENTE quella di prima: cambiarla
-// rimostrerebbe l'avviso a chi l'ha già visto e proseguito.
-const KEY_PREFIX = 'partner_disclosure_seen_v1';
-const KEY_PREFIX_DONORBOX = 'donorbox_disclosure_seen_v1';
+// `_v2` dal 28/10 (C92): gli avvisi ora nominano il codice collegato all'account, e
+// chi aveva letto il testo vecchio deve rivedere quello nuovo. Una nuova versione del
+// testo che cambia ciò che si dichiara → nuovo suffisso.
+const KEY_PREFIX = 'partner_disclosure_seen_v2';
+const KEY_PREFIX_DONORBOX = 'donorbox_disclosure_seen_v2';
 
 const storageKey = (userId?: string | null, canale?: CanaleAvviso): string => {
   const prefix = canale === 'donorbox' ? KEY_PREFIX_DONORBOX : KEY_PREFIX;

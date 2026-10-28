@@ -13,6 +13,7 @@ import {
   setPrefillOptOut,
 } from './disclosureFlag';
 import { useAuth } from '@/shared/auth/AuthContext';
+import type { ConsentState } from '@/shared/auth/useConsentState';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import i18n from '@/locales';
 
@@ -28,14 +29,20 @@ import i18n from '@/locales';
  *   offre di proseguire senza: la precompilazione è una comodità, non un pedaggio.
  *   Senza dati da dichiarare l'uscita resta immediata.
  * - Shop/gift card/eventi/progetti/community → Let's Donation (doppia registrazione):
- *   esce col solo `rise_ref`, un codice che non dice chi sei; la sua schermata onesta
- *   parla dell'account separato. UNA VOLTA per utente, poi ref su OGNI uscita.
+ *   esce col solo `rise_ref`, un codice collegato all'account che non contiene nome né
+ *   email; la sua schermata onesta parla dell'account separato e del codice. UNA VOLTA
+ *   per utente.
  *
  * I due flag «già visto» sono SEPARATI: gli avvisi dicono cose diverse, quindi aver
  * letto l'uno non vale per l'altro.
  *
- * Il ref è best-effort: se manca (ospite, o errore DB) l'URL parte comunque senza
- * correlazione — l'uscita non si blocca mai per colpa del ref.
+ * Il codice, sui due canali, parte solo con il consenso all'informativa `ok` (C91):
+ * `unknown` si ri-verifica prima di aprire, ogni altro esito apre l'indirizzo senza
+ * codice e senza crearlo. «Continua senza i miei dati» toglie nome ed email, non il
+ * codice.
+ *
+ * Il ref è best-effort: se manca (ospite, consenso non `ok`, o errore DB) l'URL parte
+ * comunque senza correlazione — l'uscita non si blocca mai per colpa del ref.
  */
 
 interface PendingExit {
@@ -118,16 +125,21 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
 
   const userId = session?.user?.id ?? null;
 
+  // 'unknown' può essere solo «non ancora tornato», non «negato»: si ri-verifica
+  // invece di degradare in silenzio chi è in regola. Ospite: niente da verificare.
+  const consensoVerificato = useCallback(
+    (): Promise<ConsentState> =>
+      consentState === 'unknown' && userId
+        ? refreshConsent()
+        : Promise.resolve(consentState),
+    [consentState, userId, refreshConsent]
+  );
+
   const openDonation = useCallback(async () => {
     if (uscitaInCorso.current) return;
     uscitaInCorso.current = true;
     setIsExiting(true);
     try {
-      const ref = await getOrCreatePartnerRef('donorbox', userId);
-      // Sessione del client già di un altro account mentre questo render è ancora
-      // del precedente: profilo e ref non sarebbero della stessa persona. Non si apre
-      // niente; il tocco successivo, col render nuovo, parte con l'account giusto.
-      if (ref === null && (await utenteDellaSessione()) !== userId) return;
       // `profile` è null in DUE casi diversi: non esiste, oppure non è ancora
       // arrivato dalla rete (il caricamento parte al boot). Degradare subito
       // toglierebbe il prefill a un utente in regola che tocca «Dona» appena apre
@@ -143,12 +155,17 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       const [current, consent] = await Promise.all([
         profiloDiQuestoUtente ??
           (session?.user?.id ? refreshProfile() : Promise.resolve(null)),
-        // 'unknown' può essere solo «non ancora tornato», non «negato»: si
-        // ri-verifica invece di degradare in silenzio chi è in regola.
-        consentState === 'unknown' && session?.user?.id
-          ? refreshConsent()
-          : Promise.resolve(consentState),
+        consensoVerificato(),
       ]);
+      // Il codice si crea e parte solo col consenso `ok` (C91), come il prefill.
+      const ref =
+        consent === 'ok'
+          ? await getOrCreatePartnerRef('donorbox', userId)
+          : null;
+      // Sessione del client già di un altro account mentre questo render è ancora
+      // del precedente: profilo e ref non sarebbero della stessa persona. Non si apre
+      // niente; il tocco successivo, col render nuovo, parte con l'account giusto.
+      if (ref === null && (await utenteDellaSessione()) !== userId) return;
       // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
       // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
       // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
@@ -178,7 +195,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       // Se nell'indirizzo finiscono dati personali, la persona lo sa PRIMA che
       // parta: nome, cognome ed email viaggiano come parametri, e un indirizzo
       // resta nella cronologia del browser e nei log di chi lo riceve. Finora
-      // l'avviso stava sull'ALTRO canale, che manda solo un codice anonimo.
+      // l'avviso stava sull'ALTRO canale, che non manda dati anagrafici.
       // Niente dati (ospite, consenso non ok, profilo assente) → nessun avviso:
       // non c'è nulla da dichiarare e l'uscita resta immediata com'era.
       const haDatiPersonali = Boolean(
@@ -213,8 +230,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     profile,
     session,
     refreshProfile,
-    consentState,
-    refreshConsent,
+    consensoVerificato,
   ]);
 
   /**
@@ -270,7 +286,11 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       uscitaInCorso.current = true;
       setIsExiting(true);
       try {
-        const ref = await getOrCreatePartnerRef('letsdonation', userId);
+        // Stessa regola dell'uscita donazione (C91): codice solo col consenso `ok`.
+        const ref =
+          (await consensoVerificato()) === 'ok'
+            ? await getOrCreatePartnerRef('letsdonation', userId)
+            : null;
         // Stessa guardia dell'uscita donazione: sessione già di un altro account.
         if (ref === null && (await utenteDellaSessione()) !== userId) return;
         await openLink(appendRiseRef(url, ref), loadingKey, errorMessage);
@@ -279,7 +299,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         setIsExiting(false);
       }
     },
-    [openLink, userId]
+    [openLink, userId, consensoVerificato]
   );
 
   const openLetsDonationExit = useCallback(

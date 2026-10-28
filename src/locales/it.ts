@@ -553,11 +553,11 @@ export default {
   partner: {
     donorboxDisclosureTitle: 'Stai per uscire dall’app',
     donorboxDisclosureBody:
-      'Le donazioni sono gestite da Donorbox, il nostro partner. Per non farti riscrivere tutto, nell’indirizzo che stiamo per aprire mettiamo il tuo nome, il tuo cognome e la tua email, così il modulo risulta già compilato. Un indirizzo però resta nella cronologia del browser: se preferisci, puoi proseguire senza e compilare a mano.',
+      'Le donazioni sono gestite da Donorbox, il nostro partner. Per non farti riscrivere tutto, nell’indirizzo che stiamo per aprire mettiamo il tuo nome, il tuo cognome e la tua email, così il modulo risulta già compilato. Un indirizzo però resta nella cronologia del browser: se preferisci, puoi proseguire senza e compilare a mano. Nell’indirizzo c’è anche un codice collegato al tuo account, senza nome né email: ci serve per sapere che arrivi dall’app, e resta anche se continui senza i tuoi dati.',
     donorboxContinueWithoutData: 'Continua senza i miei dati',
     disclosureTitle: 'Stai per uscire dall’app',
     disclosureBody:
-      'Shop, gift card, eventi, progetti e registrazione alla community sono gestiti da Let’s Donation, il nostro partner. Quella piattaforma ha un account distinto da quello dell’app: se non ce l’hai, ti chiederà di crearlo. Proseguendo verrai reindirizzato.',
+      'Shop, gift card, eventi, progetti e registrazione alla community sono gestiti da Let’s Donation, il nostro partner. Quella piattaforma ha un account distinto da quello dell’app: se non ce l’hai, ti chiederà di crearlo. Se hai fatto l’accesso, nell’indirizzo c’è anche un codice collegato al tuo account, senza nome né email: serve per sapere che arrivi dall’app. Proseguendo verrai reindirizzato.',
     disclosureContinue: 'Continua',
     disclosureCancel: 'Annulla',
   },
