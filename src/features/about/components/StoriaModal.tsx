@@ -40,10 +40,13 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
       statusBarTranslucent
     >
       <View style={modalStyles.overlay}>
+        {/* C94: lo sfondo chiude al tocco ma non è un controllo per lo screen reader (la X ha il nome). */}
         <PlatformTouchable
           style={StyleSheet.absoluteFill}
           onPress={handleClose}
           activeOpacity={1}
+          accessible={false}
+          focusable={false}
         />
         <View style={modalStyles.modalContainer} pointerEvents="box-none">
           <View style={modalStyles.modalCard} pointerEvents="auto">

@@ -119,6 +119,7 @@ export const PlatformTouchable: React.FC<PlatformTouchableProps> = ({
       accessibilityState: props.accessibilityState,
     }),
     ...(props.accessible !== undefined && { accessible: props.accessible }),
+    ...(props.focusable !== undefined && { focusable: props.focusable }),
     ...(props.hitSlop !== undefined && { hitSlop: props.hitSlop }),
     ...(props.testID !== undefined && { testID: props.testID }),
     ...(props.onLongPress !== undefined && { onLongPress: props.onLongPress }),

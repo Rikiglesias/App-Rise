@@ -242,12 +242,19 @@ const DonationInfoModalMigrated: React.FC<DonationInfoModalProps> = ({
       onRequestClose={handleClose}
       statusBarTranslucent
     >
+      {/* C94: sfondo e toccabile interno non sono controlli per lo screen reader; la scheda resta raggiungibile. */}
       <PlatformTouchable
         style={[modalStyles.modalOverlay, overlayInsets]}
         onPress={handleClose}
         activeOpacity={1}
+        accessible={false}
+        focusable={false}
       >
-        <PlatformTouchable activeOpacity={1}>
+        <PlatformTouchable
+          activeOpacity={1}
+          accessible={false}
+          focusable={false}
+        >
           <ModalContent handleClose={handleClose} t={t} />
         </PlatformTouchable>
       </PlatformTouchable>

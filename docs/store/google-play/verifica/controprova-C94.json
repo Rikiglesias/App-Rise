@@ -1,0 +1,23 @@
+{
+  "criterio": "C94",
+  "base": "13fa640",
+  "titoli": [
+    "sfondo non è un controllo senza nome: Storia",
+    "sfondo non è un controllo senza nome: Come Donare",
+    "sfondo non è un controllo senza nome: avviso partner"
+  ],
+  "esitiAllaBase": {
+    "sfondo non è un controllo senza nome: Storia": "failed",
+    "sfondo non è un controllo senza nome: Come Donare": "failed",
+    "sfondo non è un controllo senza nome: avviso partner": "failed"
+  },
+  "motiviAllaBase": {
+    "sfondo non è un controllo senza nome: Storia": "Error: expect(received).toEqual(expected) // deep equality",
+    "sfondo non è un controllo senza nome: Come Donare": "Error: expect(received).toEqual(expected) // deep equality",
+    "sfondo non è un controllo senza nome: avviso partner": "Error: expect(received).toEqual(expected) // deep equality"
+  },
+  "fileTest": {
+    "src/__tests__/components/sfondiNonControlli.test.tsx": "1bbded27a1e70dea367c439a79fba696704c4bff4dee601a1f4f812baf02d330"
+  },
+  "commitFileTest": "df182d48369cd67da861cc3c042bd551855f8e19"
+}

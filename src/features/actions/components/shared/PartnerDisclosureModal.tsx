@@ -190,12 +190,19 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
       onRequestClose={handleCancel}
       statusBarTranslucent
     >
+      {/* C94: sfondo e toccabile interno non sono controlli per lo screen reader; la scheda resta raggiungibile. */}
       <PlatformTouchable
         style={[styles.overlay, overlayInsets]}
         onPress={handleCancel}
         activeOpacity={1}
+        accessible={false}
+        focusable={false}
       >
-        <PlatformTouchable activeOpacity={1}>
+        <PlatformTouchable
+          activeOpacity={1}
+          accessible={false}
+          focusable={false}
+        >
           <PerfectContainer
             style={[styles.content, { maxHeight: cardMaxHeight }]}
             testID="partner-disclosure-content"
