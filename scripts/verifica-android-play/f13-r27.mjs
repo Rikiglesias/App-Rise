@@ -35,8 +35,10 @@ export const DEFINIZIONI_R27 = Object.fromEntries(
         'profilo: cambio email già in attesa non si rimanda salvando altro',
         "profilo: confermata la nuova email, il campo segue l'account e Salva non chiama updateEmail",
         'profilo: email in attesa scritta con le maiuscole, salvare altro non la rimanda',
-        "profilo: Rimanda il link chiama resend email_change con l'email in attesa",
+        "profilo: Rimanda il link chiama resend email_change con l'email dell'account",
         "profilo: Rimanda il link troppo presto → errore annunciato con l'attesa",
+        'profilo: Rimanda il link, doppio tocco → una sola richiesta',
+        'profilo: dopo il salvataggio della nuova email Rimanda il link aspetta',
       ],
     },
     C88: {
@@ -99,9 +101,14 @@ export const DEFINIZIONI_R27 = Object.fromEntries(
       titoli: SFONDI_C94.map(s => `sfondo non è un controllo senza nome: ${s}`),
       statico: staticoC94,
     },
+    // R34: la guardia era rossa alla base 13fa640 (là il campo è testo libero): è un titolo.
     C95: {
-      titoli: ['profilo: data di nascita col selettore'],
-      guardie: ['profilo: data illeggibile → selettore vuoto, nessun crash'],
+      titoli: [
+        'profilo: data di nascita col selettore',
+        'profilo: data illeggibile → selettore vuoto, nessun crash',
+        'profilo: data illeggibile mai toccata → Salva si ferma con Data non valida',
+        'profilo: il selettore si apre sul giorno salvato anche a ovest di Greenwich',
+      ],
     },
     C97: {
       titoli: [

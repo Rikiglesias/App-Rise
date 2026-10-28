@@ -1,0 +1,26 @@
+{
+  "criterio": "C95",
+  "base": "13fa640",
+  "titoli": [
+    "profilo: data di nascita col selettore",
+    "profilo: data illeggibile → selettore vuoto, nessun crash",
+    "profilo: data illeggibile mai toccata → Salva si ferma con Data non valida",
+    "profilo: il selettore si apre sul giorno salvato anche a ovest di Greenwich"
+  ],
+  "esitiAllaBase": {
+    "profilo: data di nascita col selettore": "failed",
+    "profilo: data illeggibile → selettore vuoto, nessun crash": "failed",
+    "profilo: data illeggibile mai toccata → Salva si ferma con Data non valida": "failed",
+    "profilo: il selettore si apre sul giorno salvato anche a ovest di Greenwich": "failed"
+  },
+  "motiviAllaBase": {
+    "profilo: data di nascita col selettore": "Error: expect(received).toBeNull()",
+    "profilo: data illeggibile → selettore vuoto, nessun crash": "Error: expect(received).toBe(expected) // Object.is equality",
+    "profilo: data illeggibile mai toccata → Salva si ferma con Data non valida": "Error: Unable to find an element with text: Data non valida",
+    "profilo: il selettore si apre sul giorno salvato anche a ovest di Greenwich": "Error: No instances found with node type: \"DateTimePicker\""
+  },
+  "fileTest": {
+    "src/__tests__/features/auth/profiloDataSelettore.test.tsx": "4a4b9ee8a6df46de377107c9354d5107297724f3fac62318119fde6583f585d7"
+  },
+  "commitFileTest": "4f282ee0b07142dc947f633f4e6fe4ed0e8104ed"
+}

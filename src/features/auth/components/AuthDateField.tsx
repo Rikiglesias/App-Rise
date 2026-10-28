@@ -9,6 +9,7 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { leggiDataIso } from '@/shared/auth/validation';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
 import { minimumTouchTarget } from '@/shared/utils/minimumTouchTarget';
 
@@ -52,16 +53,21 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [open, setOpen] = useState(false);
 
-  // Data iniziale del picker: il valore valido corrente, altrimenti 18 anni fa.
+  // Un valore che non è un giorno `AAAA-MM-GG` esistente si mostra come vuoto (C95): in
+  // «Modifica profilo» il campo si apre già pieno, e una data letta a modo suo (`01/02/2000`
+  // → 2 gennaio) sembrerebbe giusta.
+  const leggibile = leggiDataIso(value);
+  // Data iniziale del picker: il valore leggibile, altrimenti 18 anni fa.
   // NON è la soglia (quella è 14, `MIN_AGE_YEARS`): è solo il punto da cui parte il rullo,
   // scelto sull'età TIPICA di chi dona per ridurre lo scroll. Chi ha 15 anni scorre un po'.
   const pickerDate = useMemo(() => {
-    const parsed = new Date(value);
-    if (value && !Number.isNaN(parsed.getTime())) return parsed;
+    const parsed = leggiDataIso(value);
+    if (parsed) return parsed;
     const fallback = new Date();
     fallback.setFullYear(fallback.getFullYear() - 18);
     return fallback;
   }, [value]);
+  const mostrata = leggibile ? toDisplayDate(value) : '';
 
   const handleChange = (event: DateTimePickerEvent, date?: Date): void => {
     // Android chiude il dialog da sé; iOS lo mantiene inline finché non lo togliamo.
@@ -94,15 +100,15 @@ export const AuthDateField: React.FC<AuthDateFieldProps> = ({
         onPress={() => setOpen(o => !o)}
         accessibilityRole="button"
         accessibilityLabel={label}
-        accessibilityValue={{ text: value ? toDisplayDate(value) : '' }}
+        accessibilityValue={{ text: mostrata }}
         style={[styles.field, error ? styles.fieldError : null]}
       >
         <PerfectText
           size={16}
           lines={1}
-          style={value ? styles.value : styles.placeholder}
+          style={mostrata ? styles.value : styles.placeholder}
         >
-          {value ? toDisplayDate(value) : placeholder || ''}
+          {mostrata || placeholder || ''}
         </PerfectText>
       </PlatformTouchable>
       {open ? (

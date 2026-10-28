@@ -34,10 +34,29 @@ export const validatePhoneIT = (v: string): FieldError =>
  */
 export const MIN_AGE_YEARS = 14;
 
+/**
+ * `AAAA-MM-GG` di un giorno che esiste → quel giorno a mezzanotte LOCALE; altrimenti null.
+ * Non `new Date(iso)`: è la mezzanotte UTC, che a ovest di Greenwich cade il giorno prima, e
+ * accetta `2000-02-30` (diventa il 1° marzo) e `01/02/2000` (il 2 gennaio). Unico controllo
+ * per il campo data e per la validazione (C95).
+ */
+export const leggiDataIso = (value: string | null | undefined): Date | null => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value ?? '');
+  if (!m) return null;
+  const [anno, mese, giorno] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const d = new Date(anno, mese - 1, giorno);
+  return d.getFullYear() === anno &&
+    d.getMonth() === mese - 1 &&
+    d.getDate() === giorno
+    ? d
+    : null;
+};
+
 /** Età minima alla data odierna (vedi `MIN_AGE_YEARS`). */
 export const validateMinAge = (isoDate: string): FieldError => {
+  if (!leggiDataIso(isoDate)) return 'date_invalid';
+  // Il calcolo resta sulla mezzanotte UTC, come il `current_date` del CHECK in colonna.
   const d = new Date(isoDate);
-  if (Number.isNaN(d.getTime())) return 'date_invalid';
   const cutoff = new Date();
   const giorno = cutoff.getDate();
   cutoff.setFullYear(cutoff.getFullYear() - MIN_AGE_YEARS);
