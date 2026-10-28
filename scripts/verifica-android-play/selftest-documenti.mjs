@@ -1,5 +1,10 @@
 // Fixture del selftest (C22) per i documenti: C15, C19, C20.
-import { ATTORI_C20, FRASI_C20, SEZIONI_C19 } from './documenti-rilascio.mjs';
+import {
+  ATTORI_C20,
+  FRASI_C20,
+  SEZIONI_C19,
+  VOCI_R25_C20,
+} from './documenti-rilascio.mjs';
 
 const campi = (extra = {}) => ({
   titolo: 'Rise Against Hunger Italia',
@@ -39,6 +44,20 @@ const ESEMPI = new Map([
   ['/ritir/i', 'ritiro'],
   ['/informativa/i', 'informativa'],
   ['/avviso/i', 'avviso'],
+  ['/\\bCron\\b/', 'Cron'],
+  ['/base giuridica del `rise_ref`/i', 'base giuridica del `rise_ref`'],
+  ['/informativ/i', 'informativa'],
+  ['/sola lettura/i', 'sola lettura'],
+  ['/base giuridica/i', 'base giuridica'],
+  ['/revoca/i', 'revoca'],
+  ['/cancellazion/i', 'cancellazione'],
+  ['/Supabase Pro/i', 'Supabase Pro'],
+  ['/backup/i', 'backup'],
+  ['/rettific/i', 'rettifica'],
+  ['/brief/i', 'brief'],
+  ['/migrazione/i', 'migrazione'],
+  ['/iscritt/i', 'iscritti'],
+  ['/collaud/i', 'collaudo'],
 ]);
 const esempio = el => {
   if (typeof el === 'string') return el;
@@ -48,11 +67,16 @@ const esempio = el => {
 };
 const blocco = (livello, [titolo, ...el]) =>
   `${'#'.repeat(livello)} ${titolo}\n${el.map(esempio).join(' ')}\n`;
+// R25: una voce d'elenco per ciascuna voce del Fuori contratto, con le sue parole e l'innesco.
+const voceR25 = ([, ...el]) => `- ${el.map(esempio).join(' ')} Innesco: prova.`;
+const VOCE_BRIEF = voceR25(VOCI_R25_C20.find(([n]) => n.includes('brief')));
 const runbookOk = () =>
   SEZIONI_C19.map(s => blocco(2, s)).join('\n') +
   '\n## Chi fa cosa\n' +
   ATTORI_C20.map(a => blocco(3, a)).join('\n') +
-  `\nChi ricrea profili ${FRASI_C20[0]}; scelta:\n${FRASI_C20[1]}.\n`;
+  `\nChi ricrea profili ${FRASI_C20[0]}; scelta:\n${FRASI_C20[1]}.\n\n` +
+  VOCI_R25_C20.map(voceR25).join('\n') +
+  '\n';
 
 export const FIXTURE_DOCUMENTI = {
   C15: {
@@ -77,6 +101,12 @@ export const FIXTURE_DOCUMENTI = {
       { runbook: runbookOk().replace('## Divieti', '## Altro'), guida: null },
       { runbook: runbookOk().replace('6346149', ''), guida: null },
       { runbook: runbookOk(), guida: 'guida senza rimando' },
+      // R25: chiave pubblica dell'app e base giuridica del rise_ref nel gate.
+      { runbook: runbookOk().replace('sb_publishable_', ''), guida: null },
+      {
+        runbook: runbookOk().replace('base giuridica del `rise_ref`', 'base'),
+        guida: null,
+      },
     ],
     pos: [
       {
@@ -97,6 +127,17 @@ export const FIXTURE_DOCUMENTI = {
           'scrive anche gli eventi `marketing`',
           'scrive anche gli eventi marketing'
         ),
+      },
+      // R25: voce assente, voce senza innesco, voce fuori da un elenco.
+      { runbook: runbookOk().replace(VOCE_BRIEF, '') },
+      {
+        runbook: runbookOk().replace(
+          VOCE_BRIEF,
+          VOCE_BRIEF.replace('Innesco:', 'Quando:')
+        ),
+      },
+      {
+        runbook: runbookOk().replace(VOCE_BRIEF, `\n${VOCE_BRIEF.slice(2)}`),
       },
     ],
     pos: [{ runbook: runbookOk() }],

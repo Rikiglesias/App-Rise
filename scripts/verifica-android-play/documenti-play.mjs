@@ -2,7 +2,7 @@
 // Ogni modulo è una sezione `## ` fissa con i suoi elementi obbligatori; ogni campo che l'app
 // manda al profilo compare in Sicurezza dei dati; ogni punto aperto ha un responsabile fra
 // quelli di «Chi fa cosa» del runbook (C20 controlla che il runbook li abbia tutti).
-import { esiste, leggi, percorso } from './comune.mjs';
+import { esiste, leggi, percorso, voci } from './comune.mjs';
 import { leggiScheda } from './documenti.mjs';
 import { campiSignUp } from './documenti-cancellazione.mjs';
 import {
@@ -46,24 +46,6 @@ export const SEZIONI_C17 = [
 const NOMI = ATTORI_C20.map(([nome]) => nome);
 const INCERTEZZA =
   /da verificare|da decidere|da confermare|da validare|decisione aperta|decisioni aperte|a condizione|in attesa di/i;
-
-/** Voci del markdown: titolo, riga di tabella, punto d'elenco o paragrafo (righe di seguito unite). */
-export const voci = md => {
-  const out = [];
-  let aperta = false;
-  for (const riga of md.split('\n')) {
-    if (!riga.trim()) {
-      aperta = false;
-      continue;
-    }
-    if (aperta && !/^\s*(?:[-*|#]|\d+\.)/.test(riga))
-      out[out.length - 1] += ` ${riga.trim()}`;
-    else out.push(riga.trim());
-    // Un titolo non continua sulla riga dopo.
-    aperta = !riga.startsWith('#');
-  }
-  return out;
-};
 
 /** Responsabili citati come «Chi fa cosa» → Nome[, Nome] (le aggiunte minuscole sono note). */
 const riferimenti = voce =>

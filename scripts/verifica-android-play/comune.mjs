@@ -131,6 +131,24 @@ export const testiDump = xml => {
 
 export const normalizzaSpazi = s => s.replace(/\s+/g, ' ').trim();
 
+/** Voci del markdown: titolo, riga di tabella, punto d'elenco o paragrafo (righe di seguito unite). */
+export const voci = md => {
+  const out = [];
+  let aperta = false;
+  for (const riga of md.split('\n')) {
+    if (!riga.trim()) {
+      aperta = false;
+      continue;
+    }
+    if (aperta && !/^\s*(?:[-*|#]|\d+\.)/.test(riga))
+      out[out.length - 1] += ` ${riga.trim()}`;
+    else out.push(riga.trim());
+    // Un titolo non continua sulla riga dopo.
+    aperta = !riga.startsWith('#');
+  }
+  return out;
+};
+
 /** Righe `wm size` / `wm density` di un log: atteso senza override. */
 export const controllaSchermo = (log, dimensioneAttesa) => {
   const size = log.match(/Physical size:\s*(\d+x\d+)/);

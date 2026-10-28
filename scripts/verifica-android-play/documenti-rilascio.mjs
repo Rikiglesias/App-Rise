@@ -1,6 +1,6 @@
 // C19-C20: runbook di rilascio docs/store/google-play/rilascio.md (contratto del goal android-play).
 // Il runbook ha sezioni `## ` fisse; ognuna deve contenere i suoi elementi obbligatori.
-import { esiste, leggi, normalizzaSpazi, percorso } from './comune.mjs';
+import { esiste, leggi, normalizzaSpazi, percorso, voci } from './comune.mjs';
 
 const RUNBOOK = percorso('docs', 'store', 'google-play', 'rilascio.md');
 const GUIDA_STORE = percorso('docs', 'STORE-LOCALIZATION-GUIDE.md');
@@ -20,6 +20,18 @@ export const SEZIONI_C19 = [
     'privacy',
     /elimina-account|delete-account/,
     /marcatore/i,
+    // Emendato R25: deploy delle funzioni Edge dal commit consegnato e sonda di delete-account (C35, C60),
+    // Cron senza chiavi legacy, chiave pubblica dell'app (anche sulla 1.2.9 iOS), base giuridica del rise_ref (G5).
+    'git log -1',
+    'functions deploy delete-account',
+    'functions deploy purge-deletions',
+    'Authorization: Bearer x',
+    '{"error":"unauthorized"} 401',
+    /\bCron\b/,
+    'eyJ',
+    'sb_publishable_',
+    '1.2.9',
+    /base giuridica del `rise_ref`/i,
   ],
   [
     'Aggiornamenti OTA',
@@ -89,6 +101,45 @@ export const FRASI_C20 = [
   "un `recordConsent` fallito dopo l'upsert lascia `false`",
 ];
 
+// Emendato R25: una voce per ciascuna voce «Da R24/R25» del Fuori contratto. Ogni voce è UN punto d'elenco di
+// «Chi fa cosa» che contiene le sue parole e «Innesco:» (quando farla), non parole sparse nella sezione.
+export const VOCI_R25_C20 = [
+  ["PEC nell'informativa", 'PEC', /informativ/i],
+  ['migration 0022', '0022', '0017-0021', /sola lettura/i],
+  ["profilo Let's Donation «Onlus» → «ETS»", 'Onlus', 'ETS', "Let's Donation"],
+  [
+    'G3 G5 G8',
+    'DPA',
+    /base giuridica/i,
+    'rise_ref',
+    /revoca/i,
+    /cancellazion/i,
+  ],
+  ['piano Supabase Pro', /Supabase Pro/i, /backup/i],
+  ['rettifica del brief del 31/07', /rettific/i, /brief/i, '31/07'],
+  [
+    'migrazione degli iscritti e collaudo',
+    /migrazione/i,
+    /iscritt/i,
+    /collaud/i,
+    'rise_ref',
+  ],
+];
+
+const PUNTO_ELENCO = /^(?:[-*]|\d+\.)\s/;
+
+/** Prima voce R25 mancante o senza «Innesco:» fra i punti d'elenco di un testo. */
+export const controllaVociR25 = testo => {
+  const punti = voci(testo).filter(v => PUNTO_ELENCO.test(v));
+  for (const [nome, ...elementi] of VOCI_R25_C20) {
+    const candidati = punti.filter(p => elementi.every(el => contiene(p, el)));
+    if (!candidati.length) return `manca la voce «${nome}»`;
+    if (!candidati.some(p => p.includes('Innesco:')))
+      return `voce «${nome}» senza «Innesco:»`;
+  }
+  return null;
+};
+
 const chiFaCosa = md => {
   const s = sezioni(md, 2).find(x => x.titolo.includes('Chi fa cosa'));
   return s ? sezioni(s.testo, 3) : null;
@@ -126,7 +177,9 @@ export const criteri = {
       );
       const testo = normalizzaSpazi(sezione.testo).replace(/[’‘]/g, "'");
       const manca = FRASI_C20.find(f => !testo.includes(f));
-      return manca ? `Chi fa cosa: manca «${manca}»` : null;
+      if (manca) return `Chi fa cosa: manca «${manca}»`;
+      const voce = controllaVociR25(sezione.testo.replace(/[’‘]/g, "'"));
+      return voce ? `Chi fa cosa: ${voce}` : null;
     },
   },
 };
