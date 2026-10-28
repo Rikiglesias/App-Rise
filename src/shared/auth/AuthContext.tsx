@@ -165,25 +165,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // nemmeno lo storage l'ha lasciata togliere, il client continua ad averla e un suo
   // rinnovo la riproporrebbe: da qui in poi vale come nessuna sessione.
   const eliminatoRef = useRef<string | null>(null);
+  // Numero dell'ultima lettura del profilo partita. Due letture dello stesso utente
+  // (avvio e refresh, o due refresh) possono tornare in ordine inverso: la più vecchia
+  // non deve scrivere sopra la più nuova, né con una riga, né con «nessuna riga», né con
+  // un errore (C90). Vale anche al cambio di utente, dove la guardia sotto c'era già.
+  const ultimaLetturaRef = useRef(0);
 
   // Ritorna il profilo caricato oltre a metterlo nello stato: chi deve DECIDERE
   // subito dopo il caricamento (es. il prefill dei partner) non può leggere `profile`
   // dalla propria closure, che è ancora quella del render precedente.
   const loadProfile = useCallback(
     async (userId: string, throwOnError = false): Promise<Profile | null> => {
+      const lettura = ++ultimaLetturaRef.current;
+      // Superata = partita prima di un'altra, o per un utente che non è più quello
+      // collegato. Allora non tocca lo stato e restituisce null, come al cambio di
+      // utente: chi decide sul valore restituito (prefill dei partner) non manda dati.
+      const superata = (): boolean =>
+        lettura !== ultimaLetturaRef.current ||
+        sessionUserIdRef.current !== userId;
       try {
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', userId)
           .single();
+        if (superata()) return null;
         if (error) {
           // PGRST116 = nessuna riga: profilo non ancora creato (es. post-social) → assente.
           // Altri errori (rete/RLS) → NON azzerare il profilo già caricato (evita flicker/perdita dati UI).
           // `profileLoaded` segue la stessa distinzione: l'assenza CONFERMATA è una
           // risposta, un errore di rete no — lì lo stato resta «non lo so».
           if (error.code === 'PGRST116') {
-            if (sessionUserIdRef.current !== userId) return null;
             setProfile(null);
             setProfileLoaded(true);
           }
@@ -196,16 +208,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         // senza controllare resusciterebbe il profilo dell'utente precedente, che
         // finirebbe nel prefill verso il partner. Si applica solo se la sessione
         // corrente è ancora la stessa che l'ha richiesta.
-        // La guardia vale su ENTRAMBE le uscite: lo stato E il valore restituito.
-        // Proteggere solo `setProfile` lasciava scoperto proprio il percorso che
-        // conta — il prefill dei partner legge il valore di ritorno, non lo stato.
-        if (sessionUserIdRef.current !== userId) return null;
+        // La guardia (`superata`, sopra) vale su ENTRAMBE le uscite: lo stato E il
+        // valore restituito. Proteggere solo `setProfile` lasciava scoperto proprio il
+        // percorso che conta — il prefill dei partner legge il valore di ritorno.
         setProfile(next);
         setProfileLoaded(true);
         setProfileError(null);
         return next;
       } catch (error) {
-        if (sessionUserIdRef.current !== userId) return null;
+        if (superata()) return null;
         setProfileError(registraErroreAccount(error, 'Profilo'));
         if (throwOnError) throw error;
         return null;

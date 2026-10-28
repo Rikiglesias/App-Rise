@@ -125,7 +125,14 @@ export const useConsentState = ({
     };
   }, [status, userId]);
 
-  const markConsentGiven = useCallback(() => setConsentState('ok'), []);
+  // Una lettura partita PRIMA dell'accettazione porta la storia di prima: se tornasse
+  // dopo riaprirebbe il cancello a chi ha appena accettato (C90). Il gettone nuovo,
+  // stesso account, la rende superata come un cambio di utente (letture e refresh).
+  const markConsentGiven = useCallback(() => {
+    if (activeAccount.current)
+      activeAccount.current = { ...activeAccount.current };
+    setConsentState('ok');
+  }, []);
 
   return {
     consentState,

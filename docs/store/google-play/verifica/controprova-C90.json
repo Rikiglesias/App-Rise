@@ -1,0 +1,30 @@
+{
+  "criterio": "C90",
+  "base": "13fa640",
+  "titoli": [
+    "profilo: una risposta vecchia arrivata dopo una nuova non sovrascrive",
+    "profilo: un \"nessun profilo\" vecchio dopo uno nuovo non toglie il profilo",
+    "profilo: un errore vecchio dopo un successo non mostra errore",
+    "profilo: la risposta vecchia restituisce null",
+    "consensi: una lettura partita prima dell'accettazione non riapre il cancello"
+  ],
+  "esitiAllaBase": {
+    "profilo: una risposta vecchia arrivata dopo una nuova non sovrascrive": "failed",
+    "profilo: un \"nessun profilo\" vecchio dopo uno nuovo non toglie il profilo": "failed",
+    "profilo: un errore vecchio dopo un successo non mostra errore": "failed",
+    "profilo: la risposta vecchia restituisce null": "failed",
+    "consensi: una lettura partita prima dell'accettazione non riapre il cancello": "failed"
+  },
+  "motiviAllaBase": {
+    "profilo: una risposta vecchia arrivata dopo una nuova non sovrascrive": "Error: expect(received).toBe(expected) // Object.is equality",
+    "profilo: un \"nessun profilo\" vecchio dopo uno nuovo non toglie il profilo": "Error: expect(received).toBe(expected) // Object.is equality",
+    "profilo: un errore vecchio dopo un successo non mostra errore": "Error: expect(received).toBeNull()",
+    "profilo: la risposta vecchia restituisce null": "Error: expect(received).resolves.toBeNull()",
+    "consensi: una lettura partita prima dell'accettazione non riapre il cancello": "Error: expect(received).toBe(expected) // Object.is equality"
+  },
+  "fileTest": {
+    "src/__tests__/shared/auth/consensiLetturaSuperata.test.tsx": "25210cfc644c1b0d671b7bac519328ec079e2e261811b0eb90bb9b9dbf9bea77",
+    "src/__tests__/shared/auth/profiloRisposteFuoriOrdine.test.tsx": "85b6b6483b11b220bea20c5287d70def1d4a9a233a98c8ef048a5a0ff7812625"
+  },
+  "commitFileTest": "4f282ee0b07142dc947f633f4e6fe4ed0e8104ed"
+}
