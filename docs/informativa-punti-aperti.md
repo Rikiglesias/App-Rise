@@ -37,12 +37,14 @@ per ciascun fornitore (clausole contrattuali standard, Data Privacy Framework, e
 
 ### L2 — Per quanto conserviamo il registro dei consensi (riga 91)
 
-**Il fatto**: conserviamo il registro anche dopo la cancellazione dell'account, come prova
-dell'avvenuto consenso (art. 7.1). Oggi il testo dice «per il tempo necessario alla difesa in
-caso di contestazioni», senza un numero.
+**Il fatto** (corretto il 28/10): il registro dei consensi si cancella insieme all'account
+(`consent_events.user_id` con `on delete cascade`, `supabase/migrations/0003_consent_log.sql:16`),
+e l'informativa lo dice già (§6 «Conservazione dei dati»: «cancellato insieme all'account»). Qui
+prima si leggeva il contrario. Dopo la cancellazione, quindi, non resta una prova dell'avvenuto
+consenso (art. 7.1).
 
-**La domanda**: quale durata indichiamo? La bozza ipotizza dieci anni, ma è un'ipotesi nostra,
-non una scelta motivata.
+**La domanda**: va bene così, o serve conservare una prova minima del consenso dopo la
+cancellazione, e per quanto? Se serve, cambiano il database e l'informativa, non solo il testo.
 
 ### L3 — Serve nominare un Responsabile della Protezione dei Dati? (§12 «Titolare del trattamento e contatti»)
 

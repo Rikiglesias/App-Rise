@@ -132,8 +132,8 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 
 | Dato | Direzione | Meccanismo | A quale condizione parte | Base giuridica | Qualif. |
 |---|---|---|---|---|---|
-| Codice di provenienza (`rise_ref`: sigla casuale generata dal nostro database, una per persona e per partner) | noi → Let's Donation | Parametro nell'indirizzo (`rise_ref=…`) aggiunto al link prima di aprire il browser | A **ogni** uscita verso shop, gift card, progetti, eventi, registrazione community. Solo se la persona ha fatto l'accesso **e** ha un profilo; per l'ospite il link parte identico, senza codice. Alla prima uscita c'è una schermata informativa: se annulla, non esce nulla | Non dichiarata nel codice; la liceità poggia sul gesto della persona che avvia il passaggio. Il codice **resta un dato personale** (pseudonimo, non anonimo) | `[V]` sul codice, **non pubblicato** |
-| Lo stesso codice, riga distinta | noi → Donorbox | Parametro `utm_content` sull'indirizzo della pagina di donazione ospitata | A ogni tocco di «Dona». Se il codice manca, il parametro non viene aggiunto | come sopra | idem |
+| Codice di provenienza (`rise_ref`: sigla casuale generata dal nostro database, una per persona e per partner) | noi → Let's Donation | Parametro nell'indirizzo (`rise_ref=…`) aggiunto al link prima di aprire il browser | A ogni uscita verso shop, gift card, progetti, eventi, registrazione community, **solo con il consenso** all'informativa in vigore registrato (se lo stato è ancora ignoto si ri-verifica prima di aprire), e solo se la persona ha fatto l'accesso **e** ha un profilo. Altrimenti (ospite, consenso non registrato) il link parte identico, senza codice. Alla prima uscita c'è una schermata informativa che nomina il codice: se annulla, non esce nulla | Non dichiarata nel codice; la liceità poggia sul gesto della persona che avvia il passaggio. Il codice **resta un dato personale** (pseudonimo, non anonimo) | `[V]` sul codice, **non pubblicato** |
+| Lo stesso codice, riga distinta | noi → Donorbox | Parametro `utm_content` sull'indirizzo della pagina di donazione ospitata | A ogni tocco di «Dona», **solo con il consenso** all'informativa in vigore registrato, come la precompilazione (riga sotto). Se il codice manca, il parametro non viene aggiunto. «Continua senza i miei dati» toglie nome ed email, non il codice | come sopra | idem |
 | Nome, cognome | noi → Donorbox | Parametri di precompilazione del modulo | **Due condizioni insieme:** esiste il profilo **e** risulta positivamente registrato il consenso all'informativa nella versione corrente. Se lo stato del consenso è ignoto (rete, errore), la precompilazione non parte e l'uscita procede vuota | Servizio richiesto dall'interessato, con **riserva dichiarata dalle nostre fonti**: se la finalità è ridurre l'attrito, serve un legittimo interesse documentato o un consenso. Tutta la parte legale è «da far validare» | idem |
 | Email | noi → Donorbox | Parametro di precompilazione | Le condizioni sopra, **più**: se l'indirizzo risolto è un alias Apple «Nascondi la mia email» **non parte affatto**. Regola: email di contatto scelta dall'utente, altrimenti email dell'account | come sopra | idem |
 | Importo suggerito | noi → Donorbox | Parametro di precompilazione | Con l'uscita verso la donazione | — | idem |
@@ -490,9 +490,11 @@ alleggerisce il modulo prima, va in produzione una registrazione che **viola un 
 > Lo stato attuale è la riga «FATTE il 26/07/2026» più avanti in questo stesso documento.
 
 **Ospitare la pagina di accesso su `riseagainsthunger.org`. → SCARTATA.** Quel dominio è di Rise
-Against Hunger USA. Scelta: un indirizzo gratuito su Vercel, spostabile in seguito. *Verificato il
-25/07 che i due indirizzi italiani dell'associazione non esistono (nessuna risposta dai nomi di
-dominio), quindi un dominio proprio non c'è: la voce «da confermare» altrove è superata.*
+Against Hunger USA. Scelta: un indirizzo gratuito su Vercel, spostabile in seguito. *Il 25/07 si
+erano controllati solo `riseagainsthungeritalia.it` e `.org`, che non esistono. **Corretto il 28/10**:
+`riseagainsthunger.it` esiste (registrato nel 2016, DNS su DNS Made Easy; in http rimanda a
+`italy.riseagainsthunger.org`), quindi un dominio italiano c'è; chi lo gestisce e se si può usare per la
+pagina di accesso resta da chiedere.*
 
 ### 5.5 Consensi, informativa, diritti delle persone
 
@@ -509,6 +511,11 @@ ri-accettazione non è un consenso.* *Cinque giri di revisione avversariale, 25/
 **Registrare la schermata informativa pre-uscita come un consenso. → SCARTATA.** È trasparenza, non
 consenso: registrarla creerebbe un consenso non revocabile e condizionato al servizio — invalido — e
 sporcherebbe il registro dei consensi veri, che è un archivio a sola aggiunta.
+
+**I codici di provenienza nei dati che la persona si scarica. → FATTO.**
+«Esporta i miei dati» contiene i riferimenti partner (`partner_refs`: partner, codice, data) accanto
+ad account, profilo e storico dei consensi (`src/shared/auth/dataExport.ts`, `ExportPayload`): chi
+chiede i propri dati vede anche i codici che lo collegano ai partner.
 
 **Estendere quella schermata all'uscita verso Donorbox. → ~~APERTA~~ CHIUSA, fatta il 2026-08-15** (commit
 `28b5272`, poi `a09544a`). Quando questa riga fu scritta la situazione era l'opposto di come dovrebbe

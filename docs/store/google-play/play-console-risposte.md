@@ -160,12 +160,16 @@ Fonte per condivisione, eccezioni e cifratura:
 
 - **Donorbox — nome, cognome, email: non dichiarati come condivisi.** Prima del primo invio l'app mostra un avviso
   («Stai per uscire dall'app»: nome, cognome ed email nell'indirizzo; scelta «Continua senza i miei dati»,
-  `src/locales/it.ts:372-375`) e lo fa solo se l'utente ha un account, un profilo e il consenso all'informativa
-  in vigore (`src/shared/partner/usePartnerExit.ts:151-173`). È il caso dell'eccezione di answer/10787469:
-  trasferimento su azione avviata dall'utente (tocco su «Dona») dopo avviso in evidenza e consenso.
+  `partner.donorboxDisclosureBody` in `src/locales/it.ts`) e lo fa solo se l'utente ha un account, un profilo e
+  il consenso all'informativa in vigore (`openDonation` in `src/shared/partner/usePartnerExit.ts`). È il caso
+  dell'eccezione di answer/10787469: trasferimento su azione avviata dall'utente (tocco su «Dona») dopo avviso in
+  evidenza e consenso.
 - **Codice di provenienza → Donorbox (`utm_content`) e Let's Donation (`rise_ref`): dichiarato come condiviso**
-  (`src/shared/partner/partnerUrls.ts:68-87`). Gli avvisi non lo nominano, quindi l'utente non può aspettarsi il
-  trasferimento: l'eccezione non si applica. Se in futuro gli avvisi lo spiegheranno, si potrà rivalutare.
+  (`buildDonorboxDonationUrl` e `appendRiseRef` in `src/shared/partner/partnerUrls.ts`).
+  Dal 28/10 gli avvisi nominano il codice («un codice collegato al tuo account», `partner.disclosureBody` e
+  `partner.donorboxDisclosureBody`), e il codice parte solo con il consenso all'informativa registrato.
+  Resta dichiarato come condiviso: l'avviso di Let's Donation si vede una volta sola e quello di Donorbox non si
+  vede da chi ha scelto di continuare senza i propri dati, quindi non ogni passaggio è preceduto da un avviso.
 - **Let's Donation — nessun dato anagrafico**: riceve solo il codice di provenienza.
 
 ## Funzionalità finanziarie
