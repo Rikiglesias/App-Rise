@@ -44,7 +44,10 @@ export const FILE_C52 = [
   'src/locales/en.ts',
 ];
 // «ONLUS» ammesso solo in queste frasi di contesto storico: una frase nuova entra con il suo motivo.
-export const ONLUS_STORICO = [];
+export const ONLUS_STORICO = [
+  // rilascio.md, Riccardo 12 (voce R25 di C20, G2): nomina la denominazione vecchia da correggere su Let's Donation.
+  'è ancora intestato «Onlus»',
+];
 const frasiOnlus = testo =>
   testo
     .split(/\r?\n/)

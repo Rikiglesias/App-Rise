@@ -372,8 +372,7 @@ scheda del registro è la prova da allegare al preavviso del § 13.
 12. **Nome dell'associazione su Let's Donation**: il nostro profilo su Let's Donation è ancora intestato «Onlus», mentre
     app e informative dicono «ETS» come il RUNTS. Si corregge nel back office di Let's Donation (chi ha l'accesso) o lo
     si chiede a loro. Testo pronto: «Buongiorno, dal 28/05/2026 l'associazione è iscritta al RUNTS come Rise Against
-    Hunger Italia ETS (repertorio 172977). Potete aggiornare la denominazione del nostro profilo, oggi ancora "Onlus"?
-    Grazie». Innesco: prima dell'invio a Play (§ 8), perché chi passa dall'app a Let's Donation vedrebbe due nomi.
+    Hunger Italia ETS (repertorio 172977). Potete aggiornare la denominazione del nostro profilo con questa? Grazie». Innesco: prima dell'invio a Play (§ 8), perché chi passa dall'app a Let's Donation vedrebbe due nomi.
 13. **Piano Supabase Pro**: l'organizzazione «Rise Against Hunger» è sul piano free (letto il 28/10): gli account veri
     non hanno backup automatici, la protezione dalle password trapelate è spenta e il progetto va in pausa dopo una
     settimana senza uso. Pro costa da 25 $/mese e tiene un backup al giorno per 7 giorni. Il 24/10 hai chiesto di
