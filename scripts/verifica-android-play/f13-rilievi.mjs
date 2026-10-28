@@ -1,6 +1,9 @@
-// C83 (R25, U4 «controlla più volte»): ogni riga delle tabelle dei revisori di F13 e ogni difetto D1-D7 ha
-// una destinazione (un Cn, un residuo dichiarato o il Fuori contratto) in rilievi-f13.md; l'indice nel repo
-// porta solo le righe delle tabelle; il secondo giro dei revisori è fatto sull'ultimo commit del codice.
+// C83 (R25, U4 «controlla più volte»; emendato R28-R29): ogni riga delle tabelle dei revisori di F13, del secondo
+// giro e delle revisioni del delta, e ogni difetto D1-D7, ha una destinazione (un Cn, un residuo dichiarato o il
+// Fuori contratto) in rilievi-f13.md; ogni riga destinata a un Cn cita un titolo o un'azione che il verificatore
+// esporta per quel Cn; l'indice nel repo porta solo le righe delle tabelle; i log delle revisioni del delta
+// dichiarano il CODEX_HOME pulito e non leggono note private; le chiusure del giro 2 sono riverificate; la
+// revisione del delta è fatta sull'ultimo commit del codice.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
@@ -20,8 +23,12 @@ export const REVISORI_C83 = {
   architettura: 'codex-arch',
 };
 export const DIFETTI_C83 = ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'];
-// Il secondo giro scrive file `giro2-<perimetro>-esito.md`: il revisore è `giro2-<perimetro>`.
+// Il secondo giro scrive `giro2-<perimetro>-esito.md`; la revisione del delta `delta<N>-<perimetro>-esito.md`;
+// la verifica delle chiusure `verifica-delta<N>-<perimetro>-esito.md` (R28: ognuno con la sua regex).
 const SECONDO_GIRO = /^giro2-(.+)-esito\.md$/;
+const DELTA = /^(delta\d+)-(.+)-esito\.md$/;
+const CHIUSURE = /^verifica-delta\d*-(.+)-esito\.md$/;
+const LOG_DELTA = /^(?:verifica-)?delta\d+-.+\.log$/;
 // R29: anche i documenti che R27-R29 correggono; `verifica/` escluso per nome, perché il commit che scrive lo
 // sha in rilievi-f13.md (o l'indice f13/) altrimenti lo sposterebbe.
 const SORVEGLIATI = [
@@ -40,7 +47,7 @@ const SORVEGLIATI = [
   'docs/informativa-punti-aperti.md',
   ':(exclude)docs/store/google-play/verifica/',
 ];
-/** Ultimo commit che tocca i file sorvegliati: lo sha su cui deve girare il giro dei revisori. */
+/** Ultimo commit che tocca i file sorvegliati: lo sha su cui deve girare la revisione. */
 export const ultimoCommitSorvegliato = (cwd = ROOT) =>
   esegui('git', ['log', '-1', '--format=%H', '--', ...SORVEGLIATI], {
     cwd,
@@ -48,6 +55,9 @@ export const ultimoCommitSorvegliato = (cwd = ROOT) =>
 const DESTINAZIONE = /\bC\d+\b|residuo|fuori contratto/i;
 const FUORI_DAL_REPO =
   /[A-Za-z]:[\\/]|\/Users\/|~\/|AppData|(^|[\s(])\/c\/|\.claude|memory\//i;
+// Una lettura di note private in un comando del log: cartella con separatore accanto, o argomento nudo.
+const LETTURA_VIETATA =
+  /[\\/](?:todos|memory|memories)\b|\b(?:todos|memory|memories)[\\/]|(?:^|\s)(?:todos|memory|memories)(?:\s|$)|\.claude\b|\.codex[\\/]+memories/i;
 
 const separatore = r => /^\|\s*:?-{3,}/.test(r.trim());
 /** Righe di dati delle tabelle markdown: niente intestazioni (la riga sopra un separatore) né separatori. */
@@ -77,24 +87,70 @@ const chiaveEsito = f => {
   const r = Object.entries(REVISORI_C83).find(([, n]) => f === `${n}-esito.md`);
   if (r) return r[0];
   const g = SECONDO_GIRO.exec(f);
-  return g ? `giro2-${g[1]}` : null;
+  if (g) return `giro2-${g[1]}`;
+  const d = DELTA.exec(f);
+  return d ? `${d[1]}-${d[2]}` : null;
 };
 const chiaveIndice = f => chiaveEsito(f.replace(/\.md$/, '-esito.md'));
 
-export const C83 = {
+/** Motivo di FAIL di un log di revisione del delta, o ''. */
+export const controllaLog = (nome, testo) => {
+  const r = String(testo ?? '').split(/\r?\n/);
+  if (!/^CODEX_HOME=\S/.test(r[0] ?? '') || !/CODEX_HOME/.test(r[1] ?? ''))
+    return `${nome}: in testa mancano il CODEX_HOME usato e il suo elenco di file`;
+  const i = r.findIndex(
+    (x, k) => k > 0 && r[k - 1].trim() === 'exec' && LETTURA_VIETATA.test(x)
+  );
+  return i >= 0
+    ? `${nome}:${i + 1} legge note private (todos, memory, .claude)`
+    : '';
+};
+
+/** Motivo di FAIL della prova di una riga destinata a uno o più Cn, o ''. */
+const controllaProva = (c, testi) => {
+  for (const id of c[2].match(/\bC\d+\b/g) ?? []) {
+    const voci = testi[id] ?? [];
+    if (!voci.length) return `${id} non esporta titoli né azioni`;
+    if (!voci.some(t => (c[3] ?? '').includes(t)))
+      return `la prova non è un titolo o un'azione di ${id}`;
+  }
+  return '';
+};
+
+/** Motivo di FAIL delle chiusure: una riga per ogni rilievo del giro 2 dichiarato corretto, nessuna smentita. */
+const controllaChiusure = (mappa, chiusure) => {
+  const attese = {};
+  for (const c of mappa)
+    if (c[0].startsWith('giro2-') && /\bcorrett/i.test(c[2] ?? ''))
+      attese[c[0].slice(6)] = (attese[c[0].slice(6)] ?? 0) + 1;
+  for (const [p, n] of Object.entries(attese)) {
+    const righe = righeTabella(chiusure[p]);
+    if (righe.length !== n)
+      return `chiusure di ${p}: ${righe.length} righe, i rilievi del giro 2 dichiarati corretti sono ${n}`;
+    const smentita = righe.find(r => /\bNON CORRETTO\b/i.test(r));
+    if (smentita) return `chiusure di ${p}: ${smentita.slice(0, 80)}`;
+  }
+  return '';
+};
+
+/** C83 con i testi citabili per criterio (`testiDeiCriteri`, iniettati per non importare il registro). */
+export const creaC83 = (testi = {}) => ({
   leggi: () => ({
     esiti: leggiCartella(ESITI_C83, chiaveEsito),
+    chiusure: leggiCartella(ESITI_C83, f => CHIUSURE.exec(f)?.[1] ?? null),
+    log: leggiCartella(ESITI_C83, f => (LOG_DELTA.test(f) ? f : null)),
     indice: leggiCartella(percorso(INDICE_C83), chiaveIndice) ?? {},
     rilievi: esiste(percorso(RILIEVI_C83))
       ? leggi(percorso(RILIEVI_C83))
       : null,
     ultimoCommit: ultimoCommitSorvegliato(),
+    testi,
   }),
   nota: i =>
     i.esiti
       ? `righe contate sugli esiti in ${ESITI_C83}`
       : "righe contate sull'indice del repo",
-  verifica({ esiti, indice, rilievi, ultimoCommit }) {
+  verifica({ esiti, chiusure, log, indice, rilievi, ultimoCommit, testi: t }) {
     if (rilievi == null) return `${RILIEVI_C83} assente`;
     const fonte = esiti ?? indice;
     for (const k of Object.keys(REVISORI_C83))
@@ -102,6 +158,8 @@ export const C83 = {
         return `esito del revisore ${k} assente (${esiti ? ESITI_C83 : INDICE_C83})`;
     if (!Object.keys(fonte).some(k => k.startsWith('giro2-')))
       return 'secondo giro dei revisori non fatto (nessun esito giro2-*)';
+    if (!Object.keys(fonte).some(k => /^delta\d+-/.test(k)))
+      return 'revisione del delta non fatta (nessun esito delta<N>-*)';
     for (const [k, testo] of Object.entries(indice)) {
       const altro = String(testo)
         .split(/\r?\n/)
@@ -116,13 +174,22 @@ export const C83 = {
       if (fuori >= 0)
         return `${INDICE_C83}/${k}: riga ${fuori + 1} con un percorso fuori dal repo`;
     }
+    for (const [nome, testo] of Object.entries(log ?? {})) {
+      const motivo = controllaLog(nome, testo);
+      if (motivo) return motivo;
+    }
     const mappa = righeTabella(rilievi).map(celle);
+    for (const c of mappa) {
+      if (/da correggere/i.test(c[2] ?? ''))
+        return `${RILIEVI_C83}: riga ${c[1]} di ${c[0]} chiede ancora codice`;
+      const motivo = DESTINAZIONE.test(c[2] ?? '')
+        ? controllaProva(c, t ?? {})
+        : '';
+      if (motivo) return `${RILIEVI_C83}: riga ${c[1]} di ${c[0]}: ${motivo}`;
+    }
     const destinazione = (rev, n) =>
       mappa.find(
-        c =>
-          c[0] === rev &&
-          c[1] === String(n) &&
-          DESTINAZIONE.test(c.slice(2).join(' '))
+        c => c[0] === rev && c[1] === String(n) && DESTINAZIONE.test(c[2] ?? '')
       );
     for (const [k, testo] of Object.entries(fonte)) {
       const righe = righeTabella(testo).length;
@@ -135,10 +202,17 @@ export const C83 = {
     for (const d of DIFETTI_C83)
       if (!destinazione('difetti', d))
         return `${RILIEVI_C83}: difetto ${d} senza destinazione`;
-    const sha = /secondo giro[^\n]*?\b([0-9a-f]{7,40})\b/i.exec(rilievi)?.[1];
-    if (!sha) return `${RILIEVI_C83} non scrive lo sha del secondo giro`;
+    if (chiusure) {
+      const motivo = controllaChiusure(mappa, chiusure);
+      if (motivo) return motivo;
+    }
+    const sha = /revisione del delta[^\n]*?\b([0-9a-f]{7,40})\b/i.exec(
+      rilievi
+    )?.[1];
+    if (!sha)
+      return `${RILIEVI_C83} non scrive lo sha della revisione del delta`;
     if (!ultimoCommit.startsWith(sha))
-      return `secondo giro su ${sha}, ma l'ultimo commit del codice è ${ultimoCommit.slice(0, 7)}`;
+      return `revisione del delta su ${sha}, ma l'ultimo commit del codice è ${ultimoCommit.slice(0, 7)}`;
     return '';
   },
-};
+});

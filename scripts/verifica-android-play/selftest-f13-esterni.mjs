@@ -71,21 +71,33 @@ export const C79_OK = {
 // --- C83 ---
 const TAB =
   '| gravità | file:riga | destinazione |\n|---|---|---|\n| ALTA | src/a.ts:1 | C64 |';
-const chiavi = [...Object.keys(REVISORI_C83), 'giro2-a'];
+const chiavi = [...Object.keys(REVISORI_C83), 'giro2-a', 'delta1-a'];
 const tutte = testo => Object.fromEntries(chiavi.map(k => [k, testo]));
 const RILIEVI = [
-  '| revisore | n | destinazione |',
-  '|---|---|---|',
-  ...chiavi.map(k => `| ${k} | 1 | C64 |`),
-  ...DIFETTI_C83.map(d => `| difetti | ${d} | C81 |`),
+  '| revisore | n | destinazione | prova | nota |',
+  '|---|---|---|---|---|',
+  ...chiavi.map(k =>
+    k === 'giro2-a'
+      ? `| ${k} | 1 | C64, corretto | «lettore di schermo: data con il valore» | |`
+      : `| ${k} | 1 | C64 | «lettore di schermo: data con il valore» | |`
+  ),
+  ...DIFETTI_C83.map(d => `| difetti | ${d} | C81 | «contrasto: x» | |`),
   '',
-  'Secondo giro su abc1234.',
+  'Revisione del delta su abc1234 (da f1fefda).',
 ].join('\n');
+const LOG =
+  'CODEX_HOME=C:\\tmp\\h\nfile in CODEX_HOME: auth.json\nexec\nrg -n x src';
 const C83_OK = {
   esiti: tutte(`# esito\n${TAB}`),
+  chiusure: { a: `| n | verdetto |\n|---|---|\n| 1 | CORRETTO |` },
+  log: { 'delta1-a.log': LOG },
   indice: tutte(TAB),
   rilievi: RILIEVI,
   ultimoCommit: `abc1234${'f'.repeat(33)}`,
+  testi: {
+    C64: ['lettore di schermo: data con il valore'],
+    C81: ['contrasto: x'],
+  },
 };
 const senza = k =>
   Object.fromEntries(Object.entries(C83_OK.esiti).filter(([x]) => x !== k));
@@ -224,10 +236,35 @@ export const FIXTURE_F13_ESTERNI = {
       },
       { rilievi: RILIEVI.replace('| G | 1 | C64 |', '| G | 1 | da vedere |') },
       { rilievi: RILIEVI.replace('| difetti | D7 | C81 |', '') },
-      { rilievi: RILIEVI.replace('Secondo giro su abc1234.', '') },
+      {
+        rilievi: RILIEVI.replace(
+          'Revisione del delta su abc1234',
+          'Su abc1234'
+        ),
+      },
       { ultimoCommit: 'def5678'.padEnd(40, '0') },
       { esiti: { ...C83_OK.esiti, E: `${TAB}\n| BASSA | src/b.ts:2 | C70 |` } },
+      // R28-R29: revisione del delta, log, prova citata, chiusure.
+      { esiti: senza('delta1-a') },
+      { log: { 'delta1-a.log': LOG.replace(/^CODEX_HOME=.*\n/, '') } },
+      { log: { 'delta1-a.log': `${LOG}\nexec\nGet-Content ~/todos/x.md` } },
+      { log: { 'delta1-a.log': `${LOG}\nexec\ncat ../.claude/settings.json` } },
+      { log: { 'verifica-delta1-a.log': `${LOG}\nexec\nrg -n x memory/a.md` } },
+      { testi: { ...C83_OK.testi, C64: ['altro titolo'] } },
+      { testi: { C81: C83_OK.testi.C81 } },
+      {
+        rilievi: RILIEVI.replace(
+          '| D | 1 | C64 |',
+          '| D | 1 | C64 da correggere |'
+        ),
+      },
+      { chiusure: { a: '| n | verdetto |\n|---|---|' } },
+      { chiusure: { a: '| n | verdetto |\n|---|---|\n| 1 | NON CORRETTO |' } },
     ],
-    [{ esiti: null }]
+    [
+      { esiti: null },
+      { chiusure: null, log: null },
+      { log: { 'delta1-a.log': `${LOG}\nexec\nrg -n "memory" src` } },
+    ]
   ),
 };

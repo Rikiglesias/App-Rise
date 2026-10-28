@@ -38,13 +38,15 @@ import {
 } from './verifica-android-play/login.mjs';
 import {
   DEFINIZIONI_F13,
+  GUARDIE_C81,
   criteri as f13,
 } from './verifica-android-play/f13.mjs';
 import { C59 } from './verifica-android-play/f13-dipendenze.mjs';
 import { C60 } from './verifica-android-play/f13-funzioni.mjs';
 import { C78 } from './verifica-android-play/f13-workflow.mjs';
-import { C79, C86 } from './verifica-android-play/f13-database.mjs';
-import { C83 } from './verifica-android-play/f13-rilievi.mjs';
+import { C79, C86, CASI_C79 } from './verifica-android-play/f13-database.mjs';
+import { creaC83 } from './verifica-android-play/f13-rilievi.mjs';
+import { testiDeiCriteri } from './verifica-android-play/testi-criteri.mjs';
 import {
   DEFINIZIONI_R27,
   criteri as r27,
@@ -62,6 +64,10 @@ const DEFINIZIONI_TITOLI = {
   ...DEFINIZIONI_F13,
   ...DEFINIZIONI_R27,
 };
+// C83 R29: una riga di rilievi-f13.md destinata a un Cn cita uno di questi testi.
+const C83 = creaC83(
+  testiDeiCriteri(DEFINIZIONI_TITOLI, { C79: CASI_C79, C81: GUARDIE_C81 })
+);
 
 const CRITERI = {
   ...config,
