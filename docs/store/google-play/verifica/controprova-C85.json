@@ -22,7 +22,7 @@
   "fileTest": {
     "src/__tests__/shared/auth/AuthContext.test.tsx": "86443013dfcaf0e4e1f7de83d9c826eaa9082b214d1f61aac2c29d266f1fca38",
     "src/__tests__/shared/partner/partnerSessioneCambiata.test.tsx": "e97c2fe0f760ee42e3e1cda0f22960e3b9f39ff96368cfcdee7949f6fa48bed6",
-    "src/__tests__/shared/partner/usePartnerExit.test.tsx": "fc0ac45190772ef8c74526a22ae05fa3865150f55a54cbd24b6256a119bcfd1e"
+    "src/__tests__/shared/partner/usePartnerExit.test.tsx": "3905b7f8ec2884354d52cfdfcd19f1ff642306df9c0fba06bd6f559c20b3b621"
   },
-  "commitFileTest": "bd9cc2302531a662dad2ed06f564d06717faccb7"
+  "commitFileTest": "d1dd3c4f40e3dfa8e052af4efeec05b0c53eb2d3"
 }

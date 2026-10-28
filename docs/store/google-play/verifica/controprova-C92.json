@@ -1,0 +1,17 @@
+{
+  "criterio": "C92",
+  "base": "13fa640",
+  "titoli": [
+    "avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio"
+  ],
+  "esitiAllaBase": {
+    "avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio": "failed"
+  },
+  "motiviAllaBase": {
+    "avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio": "Error: expect(received).toBe(expected) // Object.is equality"
+  },
+  "fileTest": {
+    "src/__tests__/shared/partner/avvisoPartnerTestoNuovo.test.tsx": "3b3870aa9ed73282d6fd172057b9aafe916ae7497f69a513c47607baee6a5438"
+  },
+  "commitFileTest": "d1dd3c4f40e3dfa8e052af4efeec05b0c53eb2d3"
+}

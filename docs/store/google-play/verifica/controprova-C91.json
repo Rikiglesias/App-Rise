@@ -1,0 +1,23 @@
+{
+  "criterio": "C91",
+  "base": "13fa640",
+  "titoli": [
+    "Let's Donation: consenso non verificato → nessun codice",
+    "Let's Donation: consenso ignoto ma ri-verifica OK → codice presente (ri-verifica chiamata)",
+    "Donorbox: consenso non verificato → nessun utm_content"
+  ],
+  "esitiAllaBase": {
+    "Let's Donation: consenso non verificato → nessun codice": "failed",
+    "Let's Donation: consenso ignoto ma ri-verifica OK → codice presente (ri-verifica chiamata)": "failed",
+    "Donorbox: consenso non verificato → nessun utm_content": "failed"
+  },
+  "motiviAllaBase": {
+    "Let's Donation: consenso non verificato → nessun codice": "Error: expect(received).toBe(expected) // Object.is equality",
+    "Let's Donation: consenso ignoto ma ri-verifica OK → codice presente (ri-verifica chiamata)": "Error: expect(jest.fn()).toHaveBeenCalledTimes(expected)",
+    "Donorbox: consenso non verificato → nessun utm_content": "Error: expect(received).not.toContain(expected) // indexOf"
+  },
+  "fileTest": {
+    "src/__tests__/shared/partner/codicePartnerSoloColConsenso.test.tsx": "9736e598fa4d541f1a35d5d71f1b45bd50e1f643c550277bc68baa80dc816321"
+  },
+  "commitFileTest": "d1dd3c4f40e3dfa8e052af4efeec05b0c53eb2d3"
+}
