@@ -34,8 +34,10 @@ import { FIXTURE_F13_WORKFLOW } from './selftest-f13-workflow.mjs';
 import { FIXTURE_F13_R27 } from './selftest-f13-r27.mjs';
 import { FIXTURE_F13_R27_TESTI } from './selftest-f13-r27-testi.mjs';
 import { FIXTURE_F13_R27_PUBBLICI } from './selftest-f13-r27-pubblici.mjs';
+import { FIXTURE_MATRICE } from './selftest-matrice.mjs';
 
 export const FIXTURE = {
+  ...FIXTURE_MATRICE,
   ...FIXTURE_F13_R27,
   ...FIXTURE_F13_R27_TESTI,
   ...FIXTURE_F13_R27_PUBBLICI,

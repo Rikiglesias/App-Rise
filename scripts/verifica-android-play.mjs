@@ -41,6 +41,7 @@ import {
   GUARDIE_C81,
   criteri as f13,
 } from './verifica-android-play/f13.mjs';
+import { C47 } from './verifica-android-play/matrice.mjs';
 import { C59 } from './verifica-android-play/f13-dipendenze.mjs';
 import { C60 } from './verifica-android-play/f13-funzioni.mjs';
 import { C78 } from './verifica-android-play/f13-workflow.mjs';
@@ -87,6 +88,7 @@ const CRITERI = {
   ...dispositivi,
   ...contenuti,
   ...f13,
+  C47,
   C59,
   C60,
   C78,
@@ -140,6 +142,7 @@ const ATTESI = [
   'C44',
   'C45',
   'C46',
+  'C47',
   'C48',
   'C49',
   'C50',

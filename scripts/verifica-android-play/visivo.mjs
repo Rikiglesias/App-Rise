@@ -36,7 +36,7 @@ const inVerifica = re =>
 const leggiOpz = p => (esiste(p) ? leggi(p) : null);
 
 /** Legge visivo-<Cn>.txt e gli hash attuali delle immagini che dichiara. */
-const leggiVerdetto = cn => {
+export const leggiVerdetto = cn => {
   const testo = leggiOpz(join(VERIFICA_DIR, `visivo-${cn}.txt`));
   if (!testo) return null;
   const testa = testo.split(/^---$/m)[0];
