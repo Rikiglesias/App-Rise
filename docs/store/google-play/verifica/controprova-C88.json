@@ -1,0 +1,20 @@
+{
+  "criterio": "C88",
+  "base": "13fa640",
+  "titoli": [
+    "reset nel cancello: Annulla torna al passaggio obbligatorio",
+    "reset nel cancello col link di un altro account che ha anche lui il cancello: Annulla va alla radice del cancello dell'account collegato"
+  ],
+  "esitiAllaBase": {
+    "reset nel cancello: Annulla torna al passaggio obbligatorio": "failed",
+    "reset nel cancello col link di un altro account che ha anche lui il cancello: Annulla va alla radice del cancello dell'account collegato": "failed"
+  },
+  "motiviAllaBase": {
+    "reset nel cancello: Annulla torna al passaggio obbligatorio": "Error: expect(received).not.toBeNull()",
+    "reset nel cancello col link di un altro account che ha anche lui il cancello: Annulla va alla radice del cancello dell'account collegato": "Error: expect(received).not.toBeNull()"
+  },
+  "fileTest": {
+    "src/__tests__/navigation/resetNelCancello.test.tsx": "a0f3aaf51437b5a6dc166366d779b80b9a21dfb5b6d2b38d836d90535e373231"
+  },
+  "commitFileTest": "ae7d3ad6ccd57306f75e8a3969a2d2003efe8cbd"
+}

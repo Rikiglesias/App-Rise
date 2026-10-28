@@ -1,8 +1,15 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AuthScreen } from '../components/AuthScreen';
+import { AuthBackDisabledContext } from '../components/AuthBackButton';
 import { AuthInput } from '../components/AuthInput';
 import { AuthButton } from '../components/AuthButton';
 import { AuthSubmitError } from '../components/AuthSubmitError';
@@ -29,6 +36,7 @@ export const ResetPasswordScreen: React.FC = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<RootStackNavigationProp>();
   const { updatePassword } = useAuth();
+  const inCancello = useContext(AuthBackDisabledContext);
 
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -77,7 +85,9 @@ export const ResetPasswordScreen: React.FC = () => {
   }, [onSubmit]);
 
   /**
-   * Dove porta «Continua» dopo che la password è stata cambiata.
+   * Dove porta «Continua» dopo che la password è stata cambiata, e «Annulla» prima,
+   * dentro il cancello (C88): lì indietro e tasto di sistema sono spenti (C31), e senza
+   * «Annulla» chi apre il link e non vuole cambiare la password resta fermo qui.
    *
    * Questa schermata è montata in DUE alberi: `MainStackNavigator`, dove `Home`
    * esiste, e `ProfileGateNavigator`, che monta ReConsent oppure CompleteProfile,
@@ -89,7 +99,9 @@ export const ResetPasswordScreen: React.FC = () => {
    * restava ferma finché non chiudeva l'app a mano.
    *
    * Si interroga il navigator su quali rotte esistono davvero, invece di presumere
-   * l'albero: così la schermata resta valida se un domani viene montata altrove.
+   * l'albero: così la schermata resta valida se un domani viene montata altrove. Vale
+   * anche quando il link è di un altro account: il cancello si rimonta con le rotte
+   * della sessione attiva, e `popTo` aggiunge la radice se non è nella cronologia.
    */
   const goAvanti = useCallback((): void => {
     const rotteDisponibili = navigation.getState()?.routeNames ?? [];
@@ -159,6 +171,13 @@ export const ResetPasswordScreen: React.FC = () => {
             onPress={handleSubmit}
             loading={loading}
           />
+          {inCancello ? (
+            <AuthButton
+              label={t('common.cancel')}
+              onPress={goAvanti}
+              variant="link"
+            />
+          ) : null}
         </>
       )}
     </AuthScreen>
