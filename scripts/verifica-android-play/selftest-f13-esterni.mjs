@@ -86,7 +86,7 @@ const RILIEVI = [
   'Revisione del delta su abc1234 (da f1fefda).',
 ].join('\n');
 const LOG =
-  'CODEX_HOME=C:\\tmp\\h\nfile in CODEX_HOME: auth.json\nexec\nrg -n x src';
+  'CODEX_HOME=C:\\tmp\\h\nfile in CODEX_HOME: auth.json\nexec\nrg -n x src\n succeeded in 12ms:';
 const C83_OK = {
   esiti: tutte(`# esito\n${TAB}`),
   chiusure: { a: `| n | verdetto |\n|---|---|\n| 1 | CORRETTO |` },
@@ -250,6 +250,13 @@ export const FIXTURE_F13_ESTERNI = {
       { log: { 'delta1-a.log': `${LOG}\nexec\nGet-Content ~/todos/x.md` } },
       { log: { 'delta1-a.log': `${LOG}\nexec\ncat ../.claude/settings.json` } },
       { log: { 'verifica-delta1-a.log': `${LOG}\nexec\nrg -n x memory/a.md` } },
+      // Revisore cieco: un comando rifiutato dalla sandbox, o nessun comando riuscito.
+      {
+        log: {
+          'delta1-a.log': `${LOG}\nERROR exec_command failed: Rejected("rg -n x src rejected: blocked by policy")`,
+        },
+      },
+      { log: { 'verifica-delta1-a.log': LOG.replace(/\n succeeded.*$/, '') } },
       { testi: { ...C83_OK.testi, C64: ['altro titolo'] } },
       { testi: { C81: C83_OK.testi.C81 } },
       {

@@ -58,6 +58,10 @@ const FUORI_DAL_REPO =
 // Una lettura di note private in un comando del log: cartella con separatore accanto, o argomento nudo.
 const LETTURA_VIETATA =
   /[\\/](?:todos|memory|memories)\b|\b(?:todos|memory|memories)[\\/]|(?:^|\s)(?:todos|memory|memories)(?:\s|$)|\.claude\b|\.codex[\\/]+memories/i;
+// Revisore cieco (delta 1 del 29/10: home senza `[windows] sandbox`, 13 `EXIT 0` senza un file letto): un comando
+// rifiutato dalla sandbox, o nessun comando riuscito, e l'esito parla solo del testo incollato.
+const RIFIUTATO = /rejected: blocked by policy/i;
+const RIUSCITO = /^ ?succeeded in \d+ms:$/;
 
 const separatore = r => /^\|\s*:?-{3,}/.test(r.trim());
 /** Righe di dati delle tabelle markdown: niente intestazioni (la riga sopra un separatore) né separatori. */
@@ -98,6 +102,11 @@ export const controllaLog = (nome, testo) => {
   const r = String(testo ?? '').split(/\r?\n/);
   if (!/^CODEX_HOME=\S/.test(r[0] ?? '') || !/CODEX_HOME/.test(r[1] ?? ''))
     return `${nome}: in testa mancano il CODEX_HOME usato e il suo elenco di file`;
+  const rifiutato = r.findIndex(x => RIFIUTATO.test(x));
+  if (rifiutato >= 0)
+    return `${nome}:${rifiutato + 1} comando rifiutato dalla sandbox: il revisore non ha letto il codice`;
+  if (!r.some(x => RIUSCITO.test(x)))
+    return `${nome}: nessun comando riuscito, il revisore non ha letto il codice`;
   const i = r.findIndex(
     (x, k) => k > 0 && r[k - 1].trim() === 'exec' && LETTURA_VIETATA.test(x)
   );
