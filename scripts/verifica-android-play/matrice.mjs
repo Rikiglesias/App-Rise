@@ -6,7 +6,7 @@
 //                                             (Pixel_8), `Night mode: yes` (variante scura)
 //   matrice-chiama-scrivi-<api>.log           logcat del tocco su «Chiama» e «Scrivi» di Chi siamo; se nessuna
 //                                             app gestisce il link, dump `matrice-chiama-scrivi-<api>-<tel|mailto>.xml`
-//   c47-<n>-<azione>*.{png,xml,log}           le azioni nominate (nomi in testi-criteri.mjs)
+//   matrice-<avd>-azione<N>-<nome>*.{png,xml,log}  le 6 azioni nominate R28-R29 (nomi in testi-criteri.mjs)
 //   visivo-C47.txt                            verdetto del critico su TUTTE le immagini (nulla tagliato, coperto,
 //                                             sovrapposto o fuori schermo; pulsante account sulle 3 radici)
 import { readdirSync } from 'node:fs';
@@ -61,13 +61,38 @@ export const MATRICE_C47 = {
   },
 };
 const API_C47 = ['29', '36'];
-const [CHIUDI, HOME_2, TASTIERA, MAPPA_2, DIVISO] = AZIONI_C47;
+const AVD_API = { 29: 'phone_small_29', 36: 'pixel_8' };
+const [CHIUDI, HOME_2, TASTIERA, MAPPA_2, FINESTRA, SFONDI] = AZIONI_C47;
 const MODALE_DONARE = ['Come Donare', 'How to Donate'];
 const INVIO_REGISTRAZIONE = ['Registrati', 'Sign up'];
+const PICCOLO_2 = { ...PICCOLO, scala: '2.0' };
+/** Azione 6 (C94): finestra → segno nel dump che è davvero aperta (titolo o testID). */
+const FINESTRE_SFONDI = {
+  storia: ['La Nostra Storia', 'Our Story'],
+  'come-donare': MODALE_DONARE,
+  'avviso-partner': ['partner-disclosure-content'],
+};
 
 const riga = (log, chiave) =>
   new RegExp(`^${chiave}:\\s*(.+?)\\s*$`, 'm').exec(log ?? '')?.[1] ?? null;
 const contiene = (testi, voci) => voci.some(v => testi.includes(v));
+/** Nodi di un dump di uiautomator, nell'ordine del documento. */
+export const nodiDump = xml =>
+  [...(xml ?? '').matchAll(/<node\b[^>]*>/g)].map(([n]) => {
+    const att = k => new RegExp(`\\s${k}="([^"]*)"`).exec(n)?.[1] ?? '';
+    const [x1 = 0, y1 = 0, x2 = 0, y2 = 0] = (
+      att('bounds').match(/\d+/g) ?? []
+    ).map(Number);
+    return {
+      classe: att('class'),
+      vuoto: !att('text') && !att('content-desc'),
+      fuoco: att('focused') === 'true',
+      cliccabile: att('clickable') === 'true',
+      area: Math.max(0, x2 - x1) * Math.max(0, y2 - y1),
+    };
+  });
+const senzaImmagine = (immagini, nome) =>
+  immagini.includes(nome) ? '' : `manca l'immagine ${nome}`;
 
 /** Motivo di FAIL del log di una variante della matrice (o di un'azione), o ''. */
 export const controllaLogVariante = (nome, log, a) => {
@@ -104,65 +129,119 @@ const controllaChiamaScrivi = file => {
   return '';
 };
 
-const controllaAzioni = (file, immagini) => {
+// (1) tocco sulla X di Come Donare su API 29 e 36 → dump senza la finestra.
+const controllaChiudi = (file, immagini) => {
   for (const api of API_C47) {
-    const dump = file[`${CHIUDI}-${api}.xml`];
-    if (!dump) return `manca ${CHIUDI}-${api}.xml (dump dopo il tocco sulla X)`;
+    const nome = `matrice-${AVD_API[api]}-${CHIUDI}`;
+    const dump = file[`${nome}.xml`];
+    if (!dump)
+      return `manca ${nome}.xml (dump dopo il tocco sulla X, API ${api})`;
     const testi = testiDump(dump);
-    if (!testi.length) return `${CHIUDI}-${api}.xml: dump vuoto`;
+    if (!testi.length) return `${nome}.xml: dump vuoto`;
     if (contiene(testi, MODALE_DONARE))
-      return `${CHIUDI}-${api}.xml: la finestra «Come Donare» è ancora aperta`;
+      return `${nome}.xml: la finestra «Come Donare» è ancora aperta`;
+    const foto = senzaImmagine(immagini, `${nome}.png`);
+    if (foto) return foto;
   }
+  return '';
+};
+// (2) Home scorsa fino a «Risultati» e «Supporta» a scala 2,0 su Phone_Small_29.
+const controllaHome2 = (file, immagini) => {
+  const nome = `matrice-phone_small_29-${HOME_2}`;
   const home = Object.entries(file)
-    .filter(([n]) => n.startsWith(`${HOME_2}-`) && n.endsWith('.xml'))
+    .filter(([n]) => n.startsWith(`${nome}-`) && n.endsWith('.xml'))
     .flatMap(([, x]) => testiDump(x));
   if (
     !contiene(home, ['Risultati', 'Results']) ||
     !contiene(home, ['Supporta', 'Support'])
   )
-    return `${HOME_2}-*.xml: la Home a scala 2,0 non arriva a «Risultati» e «Supporta»`;
-  const log2 = controllaLogVariante(`${HOME_2}.log`, file[`${HOME_2}.log`], {
-    ...PICCOLO,
-    scala: '2.0',
-  });
-  if (log2) return log2;
-  const tastiera = file[`${TASTIERA}.xml`];
-  if (!tastiera || !contiene(testiDump(tastiera), INVIO_REGISTRAZIONE))
-    return `${TASTIERA}.xml: il pulsante d'invio non è raggiungibile con la tastiera aperta`;
-  if (!/mInputShown=true/.test(file[`${TASTIERA}.log`] ?? ''))
-    return `${TASTIERA}.log: tastiera non aperta (manca mInputShown=true)`;
-  for (const avd of ['pixel_8', 'phone_small_29']) {
-    const log = controllaLogVariante(
-      `${MAPPA_2}-${avd}.log`,
-      file[`${MAPPA_2}-${avd}.log`],
-      { ...(avd === 'pixel_8' ? PIXEL_8 : PICCOLO), scala: '2.0' }
-    );
-    if (log) return log;
-  }
-  const diviso = file[`${DIVISO}.log`] ?? '';
-  if (!/^metodo:\s*(schermo diviso|wm size a metà altezza)\s*$/m.test(diviso))
-    return `${DIVISO}.log: manca «metodo: schermo diviso» o «metodo: wm size a metà altezza»`;
-  const avvii = [...diviso.matchAll(/^boot_id:\s*(\S+)/gm)].map(m => m[1]);
-  if (avvii.length < 2 || new Set(avvii).size !== 1)
-    return `${DIVISO}.log: servono due boot_id uguali (prima e dopo, senza riavvio)`;
-  const attese = [
-    `${HOME_2}-`,
-    `${TASTIERA}.png`,
-    `${MAPPA_2}-pixel_8.png`,
-    `${MAPPA_2}-phone_small_29.png`,
-    `${DIVISO}-home.png`,
-    `${DIVISO}-accesso.png`,
-  ];
-  const manca = attese.find(a => !immagini.some(i => i.startsWith(a)));
-  return manca
-    ? `manca l'immagine ${manca}${manca.endsWith('-') ? '*.png' : ''}`
-    : '';
+    return `${nome}-*.xml: la Home a scala 2,0 non arriva a «Risultati» e «Supporta»`;
+  if (!immagini.some(i => i.startsWith(`${nome}-`)))
+    return `manca l'immagine ${nome}-*.png`;
+  return controllaLogVariante(`${nome}.log`, file[`${nome}.log`], PICCOLO_2);
 };
+// (3) Registrazione a scala 2,0 su Phone_Small_29, fuoco sull'ultimo campo e tastiera aperta → invio raggiungibile.
+const controllaTastiera = (file, immagini) => {
+  const nome = `matrice-phone_small_29-${TASTIERA}`;
+  const dump = file[`${nome}.xml`];
+  if (!dump || !contiene(testiDump(dump), INVIO_REGISTRAZIONE))
+    return `${nome}.xml: il pulsante d'invio non è raggiungibile con la tastiera aperta`;
+  const campi = nodiDump(dump).filter(
+    n => n.classe === 'android.widget.EditText'
+  );
+  if (!campi.at(-1)?.fuoco)
+    return `${nome}.xml: il fuoco non è sull'ultimo campo`;
+  const log = file[`${nome}.log`];
+  if (!/mInputShown=true/.test(log ?? ''))
+    return `${nome}.log: tastiera non aperta (manca mInputShown=true)`;
+  return (
+    controllaLogVariante(`${nome}.log`, log, PICCOLO_2) ||
+    senzaImmagine(immagini, `${nome}.png`)
+  );
+};
+// (4) MapLocationModal con la scheda più lunga a scala 2,0 su Pixel_8 e Phone_Small_29 (il resto lo giudica il critico).
+const controllaMappa2 = (file, immagini) => {
+  for (const [avd, schermo] of [
+    ['pixel_8', PIXEL_8],
+    ['phone_small_29', PICCOLO],
+  ]) {
+    const nome = `matrice-${avd}-${MAPPA_2}`;
+    const errore =
+      controllaLogVariante(`${nome}.log`, file[`${nome}.log`], {
+        ...schermo,
+        scala: '2.0',
+      }) || senzaImmagine(immagini, `${nome}.png`);
+    if (errore) return errore;
+  }
+  return '';
+};
+// (5) Pixel_8 con la finestra piccola, poi ingrandita SENZA riavvio → Home.
+const controllaFinestra = (file, immagini) => {
+  const nome = `matrice-pixel_8-${FINESTRA}`;
+  const log = file[`${nome}.log`] ?? '';
+  if (!/^metodo:\s*(schermo diviso|wm size ridotto)\s*$/m.test(log))
+    return `${nome}.log: manca «metodo: schermo diviso» o «metodo: wm size ridotto»`;
+  const avvii = [...log.matchAll(/^boot_id:\s*(\S+)/gm)].map(m => m[1]);
+  if (avvii.length < 2 || new Set(avvii).size !== 1)
+    return `${nome}.log: servono due boot_id uguali (piccola e ingrandita, senza riavvio)`;
+  if (log.slice(log.lastIndexOf('Physical size')).includes('Override size'))
+    return `${nome}.log: l'ultimo \`wm size\` ha ancora l'override (finestra non ingrandita)`;
+  const manca = ['piccola', 'ingrandita'].find(
+    s => !immagini.includes(`${nome}-${s}.png`)
+  );
+  return manca ? `manca l'immagine ${nome}-${manca}.png` : '';
+};
+// (6) C94: Storia, Come Donare e avviso partner aperti → nessun nodo cliccabile vuoto grande come lo schermo.
+const controllaSfondi = (file, immagini) => {
+  for (const [finestra, segni] of Object.entries(FINESTRE_SFONDI)) {
+    const coda = `-${SFONDI}-${finestra}.xml`;
+    const nome = Object.keys(file).find(
+      n => n.startsWith('matrice-') && n.endsWith(coda)
+    );
+    if (!nome) return `manca matrice-<avd>${coda}`;
+    if (!segni.some(s => file[nome].includes(s)))
+      return `${nome}: la finestra non è aperta nel dump`;
+    const nodi = nodiDump(file[nome]);
+    const schermo = Math.max(0, ...nodi.map(n => n.area));
+    if (nodi.some(n => n.cliccabile && n.vuoto && n.area >= 0.9 * schermo))
+      return `${nome}: nodo cliccabile senza testo né descrizione grande come lo schermo`;
+    const foto = senzaImmagine(immagini, nome.replace(/\.xml$/, '.png'));
+    if (foto) return foto;
+  }
+  return '';
+};
+const controllaAzioni = (file, immagini) =>
+  controllaChiudi(file, immagini) ||
+  controllaHome2(file, immagini) ||
+  controllaTastiera(file, immagini) ||
+  controllaMappa2(file, immagini) ||
+  controllaFinestra(file, immagini) ||
+  controllaSfondi(file, immagini);
 
 export const C47 = {
   leggi() {
     const nomi = esiste(VERIFICA_DIR)
-      ? readdirSync(VERIFICA_DIR).filter(n => /^(matrice-|c47-)/.test(n))
+      ? readdirSync(VERIFICA_DIR).filter(n => n.startsWith('matrice-'))
       : [];
     return {
       file: Object.fromEntries(

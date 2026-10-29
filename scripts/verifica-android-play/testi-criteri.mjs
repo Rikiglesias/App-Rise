@@ -2,13 +2,14 @@
 // titoli e le guardie Jest del criterio, le azioni nominate di C47 (nomi dei file di prova), i casi SQL di C79 e
 // C86, le guardie di C81 e, per i criteri solo statici, le frasi del controllo copiate dal testo del contratto.
 
-// C47 emendato R28: un file di prova (dump o schermata) per ogni azione nominata; la matrice di base resta C47.
+// C47 emendato R28-R29: le 6 azioni nominate, file `matrice-<avd>-azione<N>-<nome>`; la matrice di base resta C47.
 export const AZIONI_C47 = [
-  'c47-1-chiudi-come-donare',
-  'c47-2-home-scala-2',
-  'c47-3-registrazione-tastiera',
-  'c47-4-scheda-mappa-scala-2',
-  'c47-5-schermo-diviso',
+  'azione1-chiudi-come-donare',
+  'azione2-home-scala-2',
+  'azione3-registrazione-tastiera',
+  'azione4-scheda-mappa',
+  'azione5-finestra',
+  'azione6-sfondi',
   'matrice dispositivi',
 ];
 

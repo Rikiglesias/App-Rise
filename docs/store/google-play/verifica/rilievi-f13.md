@@ -125,16 +125,16 @@ nominate.
 | giro2-abc | 5 | residuo R24: purge spento | — | si chiude prima di accendere il purge (`deletionPolicy.ts:42`) |
 | giro2-abc | 6 | residuo R24: purge spento | — | si chiude prima di accendere il purge (`deletionPolicy.ts:42`) |
 | giro2-d | 1 | C93, corretto | «errore di campo annunciato all'invio: AuthInput» |  |
-| giro2-d | 2 | C47 | «c47-1-chiudi-come-donare» | il ritaglio del tocco non c'è (`TouchTargetHelper.kt:202`) |
-| giro2-d | 3 | C47 | «c47-2-home-scala-2» | classe del testo multiriga |
+| giro2-d | 2 | C47 | «azione1-chiudi-come-donare» | il ritaglio del tocco non c'è (`TouchTargetHelper.kt:202`) |
+| giro2-d | 3 | C47 | «azione2-home-scala-2» | classe del testo multiriga |
 | giro2-d | 4 | C95, corretto | «profilo: data di nascita col selettore» |  |
 | giro2-d | 5 | residuo: smentito | — | `hitSlop` dentro i limiti (`YogaLayoutableShadowNode.cpp:776`) |
 | giro2-d | 6 | residuo: icona bianca accanto all'etichetta visibile | — | WCAG 1.4.11 non scatta; colore in app-rise-v2 |
 | giro2-d | 7 | C94, corretto | «sfondo non è un controllo senza nome: Come Donare» | classe: tutti gli sfondi |
-| giro2-e | 1 | C47 | «c47-5-schermo-diviso» | R28 punto 20 |
+| giro2-e | 1 | C47 | «azione5-finestra» | R28 punto 20 |
 | giro2-e | 2 | residuo R24: spazi congelati e immagine hero | — | app-rise-v2 F0-bis |
-| giro2-e | 3 | C47 | «c47-3-registrazione-tastiera» |  |
-| giro2-e | 4 | C47 | «c47-4-scheda-mappa-scala-2» |  |
+| giro2-e | 3 | C47 | «azione3-registrazione-tastiera» |  |
+| giro2-e | 4 | C47 | «azione4-scheda-mappa» |  |
 | giro2-f1 | 1 | C87, corretto | «profilo: cambio email già in attesa non si rimanda salvando altro» |  |
 | giro2-f1 | 2 | C87, corretto | «profilo: confermata la nuova email, il campo segue l'account e Salva non chiama updateEmail» |  |
 | giro2-f1 | 3 | residuo R24: bozza del profilo persa | — | la permanenza nel modulo è smentita: la guardia torna ad Account |
@@ -212,4 +212,4 @@ nominate.
 | difetti | D4 | C56 | «mappa: intestazione in colonna» |  |
 | difetti | D5 | C57 | «contrasto: anno nella scheda del paese» |  |
 | difetti | D6 | C58 | «testo multiriga: in una riga con un'icona accanto si restringe» |  |
-| difetti | D7 | C58 + C47 | «testo multiriga: mai più largo del contenitore»; «c47-2-home-scala-2» | da ricontrollare sulla build |
+| difetti | D7 | C58 + C47 | «testo multiriga: mai più largo del contenitore»; «azione2-home-scala-2» | da ricontrollare sulla build |
