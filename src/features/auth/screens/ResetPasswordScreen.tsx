@@ -176,6 +176,9 @@ export const ResetPasswordScreen: React.FC = () => {
               label={t('common.cancel')}
               onPress={goAvanti}
               variant="link"
+              // Con la password nuova già in volo, uscire non la ferma: cambierebbe
+              // dopo un «Annulla» creduto riuscito.
+              disabled={loading}
             />
           ) : null}
         </>

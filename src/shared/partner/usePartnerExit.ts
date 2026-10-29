@@ -165,7 +165,9 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       // Sessione del client già di un altro account mentre questo render è ancora
       // del precedente: profilo e ref non sarebbero della stessa persona. Non si apre
       // niente; il tocco successivo, col render nuovo, parte con l'account giusto.
-      if (ref === null && (await utenteDellaSessione()) !== userId) return;
+      // Si chiede DOPO il ref anche quando c'è: il servizio controlla prima della
+      // lettura, e la sessione può cambiare mentre la lettura è in rete.
+      if ((await utenteDellaSessione()) !== userId) return;
       // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
       // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
       // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
@@ -291,8 +293,9 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
           (await consensoVerificato()) === 'ok'
             ? await getOrCreatePartnerRef('letsdonation', userId)
             : null;
-        // Stessa guardia dell'uscita donazione: sessione già di un altro account.
-        if (ref === null && (await utenteDellaSessione()) !== userId) return;
+        // Stessa guardia dell'uscita donazione: sessione già di un altro account,
+        // chiesta dopo il ref anche quando c'è.
+        if ((await utenteDellaSessione()) !== userId) return;
         await openLink(appendRiseRef(url, ref), loadingKey, errorMessage);
       } finally {
         uscitaInCorso.current = false;

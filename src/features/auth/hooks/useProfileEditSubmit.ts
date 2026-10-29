@@ -113,6 +113,9 @@ export const useProfileEditSubmit = ({
       setLoading(true);
       try {
         currentProfile = await refreshProfile({ throwOnError: true });
+        // `null` è anche «lettura superata» (C90): confrontare con un profilo assente
+        // perderebbe in silenzio i cambi verso i valori predefiniti (paese «IT»).
+        if (!currentProfile) throw new Error('profile_unavailable');
       } catch (error) {
         showError(error);
         return;
@@ -166,6 +169,9 @@ export const useProfileEditSubmit = ({
     setErrors(e);
     if (announceBlockingError(e, 'profileEdit', t)) return;
 
+    // Prima di ogni scrittura, non solo all'avvio: la rilettura e i controlli qui sopra
+    // e il salvataggio del profilo sono viaggi di rete in cui può entrare un altro account.
+    if (!legata()) return;
     setLoading(true);
     // Solo i campi effettivamente cambiati (whitelist a valle in updateProfile).
     const changed: Partial<ProfileEditable> = {};
@@ -224,6 +230,7 @@ export const useProfileEditSubmit = ({
       // Né l'indirizzo attuale né quello già in attesa (C87): rimandarlo cambierebbe i link.
       const nextEmail = emailDaCambiare();
       let didChangeEmail = false;
+      if (!legata()) return;
       if (nextEmail !== null) {
         const { error } = await updateEmail(nextEmail);
         if (error) {
