@@ -557,7 +557,7 @@ export default {
     donorboxContinueWithoutData: 'Continua senza i miei dati',
     disclosureTitle: 'Stai per uscire dall’app',
     disclosureBody:
-      'Shop, gift card, eventi, progetti e registrazione alla community sono gestiti da Let’s Donation, il nostro partner. Quella piattaforma ha un account distinto da quello dell’app: se non ce l’hai, ti chiederà di crearlo. Se hai fatto l’accesso, nell’indirizzo c’è anche un codice collegato al tuo account, senza nome né email: serve per sapere che arrivi dall’app. Proseguendo verrai reindirizzato.',
+      'Shop, gift card, eventi, progetti e registrazione alla community sono gestiti da Let’s Donation, il nostro partner. Quella piattaforma ha un account distinto da quello dell’app: se non ce l’hai, ti chiederà di crearlo. Se hai fatto l’accesso, nell’indirizzo può esserci anche un codice collegato al tuo account, senza nome né email: serve per sapere che arrivi dall’app. Proseguendo verrai reindirizzato.',
     disclosureContinue: 'Continua',
     disclosureCancel: 'Annulla',
   },

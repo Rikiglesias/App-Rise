@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { AccessibilityInfo, Platform, View } from 'react-native';
 
 import { useAuthError } from '../hooks/useAuthError';
 import { AuthButton } from './AuthButton';
@@ -56,8 +56,14 @@ export const EmailResendControl: React.FC<EmailResendControlProps> = ({
     setError(null);
     void resend()
       .then(result => {
-        if (result.error) showError(result.error);
-        else setSent(true);
+        if (result.error) {
+          showError(result.error);
+          return;
+        }
+        setSent(true);
+        // Su Android lo legge la live region del messaggio, che su iOS non esiste.
+        if (Platform.OS === 'ios')
+          AccessibilityInfo.announceForAccessibility(sentText);
       })
       .catch(showError)
       .finally(() => {
@@ -65,7 +71,7 @@ export const EmailResendControl: React.FC<EmailResendControlProps> = ({
         setLoading(false);
         setNow(Date.now());
       });
-  }, [until, resend, setError, showError]);
+  }, [until, resend, sentText, setError, showError]);
 
   return (
     <>
@@ -84,7 +90,7 @@ export const EmailResendControl: React.FC<EmailResendControlProps> = ({
         <AuthSubmitError message={error} attempt={submitAttempt} />
       ) : sent ? (
         <View accessibilityLiveRegion="polite">
-          <PerfectText size={14} lines={3} immunity>
+          <PerfectText size={14} lines={0} immunity>
             {sentText}
           </PerfectText>
         </View>

@@ -15,10 +15,13 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  * obbligatorio nel cancello del profilo — chiedendo al navigatore quali rotte
  * esistono, come `goAvanti` in `ResetPasswordScreen`. Restituisce la domanda da fare
  * PRIMA di scrivere o cancellare: una callback partita prima del cambio ha ancora in
- * mano il render vecchio, e solo il ref sa chi è collegato adesso.
+ * mano il render vecchio, e solo il ref sa chi è collegato adesso. Smontata la schermata
+ * nemmeno il ref si aggiorna più (entrare in un altro account può chiudere il cancello
+ * con una conferma aperta o un salvataggio in rete): lì lo si chiede ad AuthContext, che
+ * resta montato, così chi esce mentre salva non perde il resto del salvataggio.
  */
 export const useLegataAllUtente = (): (() => boolean) => {
-  const { session } = useAuth();
+  const { session, utenteCollegato } = useAuth();
   const navigation = useNavigation<RootStackNavigationProp>();
   const userId = session?.user.id ?? null;
   // Il primo utente NON nullo: se la schermata montasse prima che la sessione sia
@@ -26,6 +29,14 @@ export const useLegataAllUtente = (): (() => boolean) => {
   const proprietario = useRef(userId);
   const attuale = useRef(userId);
   const uscita = useRef(false);
+  const smontata = useRef(false);
+
+  useEffect(() => {
+    smontata.current = false;
+    return () => {
+      smontata.current = true;
+    };
+  }, []);
 
   useEffect(() => {
     attuale.current = userId;
@@ -41,9 +52,8 @@ export const useLegataAllUtente = (): (() => boolean) => {
     else if (navigation.canGoBack()) navigation.goBack();
   }, [userId, navigation]);
 
-  return useCallback(
-    () =>
-      proprietario.current !== null && attuale.current === proprietario.current,
-    []
-  );
+  return useCallback(() => {
+    const collegato = smontata.current ? utenteCollegato() : attuale.current;
+    return proprietario.current !== null && collegato === proprietario.current;
+  }, [utenteCollegato]);
 };

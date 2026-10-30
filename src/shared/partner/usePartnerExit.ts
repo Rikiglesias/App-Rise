@@ -162,12 +162,6 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         consent === 'ok'
           ? await getOrCreatePartnerRef('donorbox', userId)
           : null;
-      // Sessione del client già di un altro account mentre questo render è ancora
-      // del precedente: profilo e ref non sarebbero della stessa persona. Non si apre
-      // niente; il tocco successivo, col render nuovo, parte con l'account giusto.
-      // Si chiede DOPO il ref anche quando c'è: il servizio controlla prima della
-      // lettura, e la sessione può cambiare mentre la lettura è in rete.
-      if ((await utenteDellaSessione()) !== userId) return;
       // Due condizioni, non una. Senza PROFILO manca la prova del consenso (nasce
       // insieme al profilo: trigger 0004 per il signup email, «Completa profilo»
       // dopo l'accesso social) e chi entra con Apple/Google ha comunque un'email in
@@ -183,8 +177,8 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       // sola e alla donazione dopo i dati ripartivano — per giunta in silenzio,
       // perché l'avviso risultava ormai «già visto».
       const haRinunciatoAlPrefill = await hasOptedOutOfPrefill(userId);
-      const prefill =
-        current && consent === 'ok' && !haRinunciatoAlPrefill
+      const prefillCompleto =
+        current && consent === 'ok'
           ? {
               firstName: current.first_name,
               lastName: current.last_name,
@@ -194,23 +188,35 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
               }),
             }
           : {};
+      const prefill = haRinunciatoAlPrefill ? {} : prefillCompleto;
       // Se nell'indirizzo finiscono dati personali, la persona lo sa PRIMA che
       // parta: nome, cognome ed email viaggiano come parametri, e un indirizzo
       // resta nella cronologia del browser e nei log di chi lo riceve. Finora
       // l'avviso stava sull'ALTRO canale, che non manda dati anagrafici.
+      // Chi ha rinunciato al prefill non manda i dati ma il codice sì (C91), e l'avviso è
+      // l'unico posto che glielo dice: se il codice c'è, l'avviso resta anche per lui.
       // Niente dati (ospite, consenso non ok, profilo assente) → nessun avviso:
       // non c'è nulla da dichiarare e l'uscita resta immediata com'era.
       const haDatiPersonali = Boolean(
-        prefill.firstName || prefill.lastName || prefill.email
+        prefillCompleto.firstName ||
+          prefillCompleto.lastName ||
+          prefillCompleto.email
       );
-      if (
+      const daAvvisare =
         haDatiPersonali &&
-        !(await hasSeenPartnerDisclosure(userId, 'donorbox'))
-      ) {
+        (!haRinunciatoAlPrefill || Boolean(ref)) &&
+        !(await hasSeenPartnerDisclosure(userId, 'donorbox'));
+      // Sessione del client già di un altro account mentre questo render è ancora
+      // del precedente: profilo e ref non sarebbero della stessa persona. Non si apre
+      // niente; il tocco successivo, col render nuovo, parte con l'account giusto.
+      // Si chiede per ULTIMA, dopo la rete e lo storage: il servizio controlla prima
+      // della lettura, e la sessione può cambiare in ognuna di queste attese.
+      if ((await utenteDellaSessione()) !== userId) return;
+      if (daAvvisare) {
         // Entrambi gli indirizzi si preparano ORA, mentre il prefill è in mano:
         // la scelta della persona non deve far ripartire i viaggi di rete.
         setPendingDonation({
-          conDati: buildDonorboxDonationUrl(ref, prefill),
+          conDati: buildDonorboxDonationUrl(ref, prefillCompleto),
           senzaDati: buildDonorboxDonationUrl(ref, {}),
           perUtente: userId,
         });
@@ -263,6 +269,9 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
           () => false
         );
         if (sceltaSalvata) await markPartnerDisclosureSeen(userId, 'donorbox');
+        // Le due attese qui sopra sono storage, non render: l'indirizzo preparato porta
+        // i dati di chi ha scelto, e può essere già entrato un altro account.
+        if ((await utenteDellaSessione()) !== userId) return;
         await openLink(
           conDati ? scelto.conDati : scelto.senzaDati,
           'donation',

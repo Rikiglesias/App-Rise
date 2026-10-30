@@ -135,6 +135,8 @@ export interface AuthState {
   refreshConsent: () => Promise<ConsentState>;
   /** Registra l'accettazione della versione corrente dell'informativa. */
   acceptCurrentPolicy: () => Promise<{ error: string | null }>;
+  /** Chi è collegato ADESSO, per chi non riceve più render (una schermata smontata). */
+  utenteCollegato: () => string | null;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -176,6 +178,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // dalla propria closure, che è ancora quella del render precedente.
   const loadProfile = useCallback(
     async (userId: string, throwOnError = false): Promise<Profile | null> => {
+      // Rilettura per chi è già uscito (salvataggio finito dopo l'ingresso di un altro):
+      // contata, scarterebbe la lettura di chi è collegato ora, lasciandolo senza profilo
+      // né errore.
+      if (sessionUserIdRef.current !== userId) return null;
       const lettura = ++ultimaLetturaRef.current;
       // Superata = partita prima di un'altra, o per un utente che non è più quello
       // collegato. Allora non tocca lo stato e restituisce null, come al cambio di
@@ -513,10 +519,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
   const acceptCurrentPolicy = useCallback(async () => {
+    const utente = session?.user.id;
     const res = await recordConsent('privacy_notice', 'granted');
-    if (!res.error) markConsentGiven();
+    // Vale per chi ha accettato: se intanto è entrato un altro account, il suo stato lo
+    // dice la sua lettura, che il gettone di markConsentGiven scarterebbe pure.
+    if (!res.error && sessionUserIdRef.current === utente) markConsentGiven();
     return res;
-  }, [recordConsent, markConsentGiven]);
+  }, [session, recordConsent, markConsentGiven]);
+
+  const utenteCollegato = useCallback(() => sessionUserIdRef.current, []);
 
   const value = useMemo(
     () => ({
@@ -548,6 +559,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       consentState,
       refreshConsent,
       acceptCurrentPolicy,
+      utenteCollegato,
     }),
     [
       status,
@@ -574,6 +586,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       consentState,
       refreshConsent,
       acceptCurrentPolicy,
+      utenteCollegato,
     ]
   );
 
