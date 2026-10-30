@@ -568,11 +568,9 @@ conferma dell'inquadramento con Let's Donation.
 
 **I diritti diversi dalla cancellazione.** Le richieste delle persone (accesso, rettifica,
 cancellazione, revoca) hanno **trenta giorni** per la risposta, e la cancellazione deve raggiungere
-**tutte** le copie: il nostro database, Access e le copie di sicurezza. Due lacune concrete:
+**tutte** le copie: il nostro database, Access e le copie di sicurezza. Una lacuna concreta (l'export
+dei propri dati è chiuso: contiene anche i riferimenti partner, vedi sopra):
 
-- **L'export dei propri dati è incompleto**: restituisce account, profilo e storico dei consensi, ma
-  **non i codici di provenienza emessi né a quale partner sono andati**, che l'informativa dichiara fra
-  i dati trattati `[V]`. Va esteso nella stessa release in cui l'informativa va online.
 - **La revoca di un codice di provenienza è promessa e non esiste**: l'informativa dice alla persona che
   può chiederne l'annullamento, e nel programma la colonna che lo segnerebbe **non è usata da nessuna
   parte** (zero occorrenze) `[V]`. Serve: chi riceve la richiesta, come si annulla, e cosa si risponde

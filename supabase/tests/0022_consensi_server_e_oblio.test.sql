@@ -81,13 +81,19 @@ begin
 end $$;
 
 -- Nessun evento marketing, anche se esistono eventi privacy: profilo ereditato
--- incoerente creato con INSERT (lo crea il superutente, come un dato storico).
+-- incoerente creato con INSERT (lo crea il superutente, come un dato storico). Un dato storico è
+-- nato prima di on_profile_marketing_guard, che oggi lo correggerebbe già qui: i trigger si
+-- spengono solo per questa riga, così l'UPDATE sotto prova davvero il riallineamento.
 insert into auth.users (id, email, email_confirmed_at) values
   ('00000000-0000-0000-0000-000000002203', 'c79-no-event@example.test', now());
+set session_replication_role = replica;
 insert into public.profiles (id, first_name, last_name, birth_date, privacy_consent_at, marketing_consent)
 values ('00000000-0000-0000-0000-000000002203', 'Senza', 'Evento', '1990-01-01', now(), true);
+set session_replication_role = default;
 insert into public.consent_events (user_id, purpose, action, policy_version, legal_basis, channel)
 values ('00000000-0000-0000-0000-000000002203', 'privacy_notice', 'granted', 'privacy-2026-06-15', 'consent', 'c79-no-event');
+select pg_temp.verifica((select marketing_consent from public.profiles
+  where id = '00000000-0000-0000-0000-000000002203'), 'T4 preparazione: il dato storico parte discordante');
 do $$
 begin
   perform set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000002203', true);
