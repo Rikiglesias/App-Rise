@@ -33,7 +33,7 @@ Testi della scheda: `scheda.md`. Grafica (icona 512, grafica in evidenza, screen
 ## URL delle norme sulla privacy
 
 `https://italy.riseagainsthunger.org/privacy-policy/` — lo stesso indirizzo che l'app apre
-(`src/shared/constants/urls.ts:25`). La pagina deve mostrare il testo di `privacy-policy.html` aggiornato
+(`src/shared/constants/urls.ts:33`). La pagina deve mostrare il testo di `privacy-policy.html` aggiornato
 (la pubblica la sede USA dopo il sì dell'avvocato dell'associazione: «Chi fa cosa» → Sede USA, Consulente).
 
 ## Accesso all'app
