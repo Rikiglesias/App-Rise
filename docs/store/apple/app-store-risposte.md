@@ -144,8 +144,8 @@ contenuti dell'utente, identificativi, diagnostica, altri dati. **Dati non colle
 
 - 🔴 **Server acceso per tutta la revisione.** Il database è sul piano gratuito di Supabase, che si ferma da solo
   quando resta inattivo: il 30/10 era `INACTIVE`, il 31/10 `ACTIVE_HEALTHY` dopo la riattivazione. Prima
-  dell'invio e ogni giorno della revisione si controlla lo stato; la soluzione stabile è il piano a pagamento
-  (decisione con costi, di Riccardo).
+  dell'invio e ogni giorno della revisione si controlla lo stato. Deciso da Riccardo il 31/10: piani a pagamento di
+  Supabase ed Expo all'avvio dell'app. La revisione viene prima dell'avvio, quindi fino ad allora il controllo resta.
 - **Contatto**: chi segue la pubblicazione, come per Play (`../google-play/rilascio.md` § «Chi fa cosa»).
 
 ## Login e account
