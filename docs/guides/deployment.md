@@ -59,7 +59,7 @@ npm run deploy:ios         # pwsh ./scripts/deploy-ios.ps1
 npm run deploy:android     # pwsh ./scripts/deploy-android.ps1
 
 # OTA Update
-npm run update:production "messaggio"   # eas update --branch production --message
+npm run update:production "messaggio"   # eas update --branch production --environment production --message
 npm run update:gui                      # pwsh ./scripts/update-ota.ps1 (menu interattivo)
 ```
 

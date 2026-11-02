@@ -98,14 +98,15 @@ controlla() {
   if curl -fsSL "$2" | grep -qF "$marcatore"; then echo "OK      $2"; else echo "DIVERSA $2 (atteso: $marcatore)"; fi
 }
 controlla privacy-policy.html https://italy.riseagainsthunger.org/privacy-policy/
+controlla privacy-policy-en.html https://italy.riseagainsthunger.org/privacy-policy-en/
 controlla docs/store/google-play/web/elimina-account.html "<URL-ELIMINA-ACCOUNT>"
 controlla docs/store/google-play/web/delete-account.html "<URL-DELETE-ACCOUNT>"
-for u in https://italy.riseagainsthunger.org/privacy-policy/ "<URL-ELIMINA-ACCOUNT>" "<URL-DELETE-ACCOUNT>"; do
+for u in https://italy.riseagainsthunger.org/privacy-policy/ https://italy.riseagainsthunger.org/privacy-policy-en/ "<URL-ELIMINA-ACCOUNT>" "<URL-DELETE-ACCOUNT>"; do
   if curl -fsSL "$u" | grep -q 'da-validare'; then echo "BOZZA   $u"; fi
 done
 ```
 
-Tre righe `OK` e nessuna `BOZZA` ⇒ si invia. Una riga `DIVERSA` ⇒ la pagina pubblicata è vecchia: non inviare,
+Quattro righe `OK` e nessuna `BOZZA` ⇒ si invia. Una riga `DIVERSA` ⇒ la pagina pubblicata è vecchia: non inviare,
 scrivere alla sede USA. Una riga `BOZZA` ⇒ nella pagina pubblicata resta il marcatore `da-validare` (i punti per la
 consulente e la PEC, oggi in `privacy-policy.html` e `privacy-policy-en.html`): non inviare finché la consulente non
 ha validato e la PEC non è scritta (leva PEC: Alberto, punto 3).
@@ -142,6 +143,12 @@ Altri tre controlli prima dell'invio:
   un accesso di prova dall'iPhone; se non entra, dirlo a Claude prima di mandare l'avviso.
 - **Base giuridica del `rise_ref` approvata dall'avvocato** (Consulente, punto 1): senza il suo sì non si invia,
   perché dal primo giorno l'app manda il codice ai partner (a chi ha accettato l'informativa).
+- **Versione del consenso uguale all'informativa pubblicata.** `CURRENT_POLICY_VERSION`
+  (`src/shared/auth/consent.ts:9`) e `policy_versions` dicono ancora `privacy-2026-06-15`, l'informativa dice 28 ottobre
+  2026 e la data cambierà con la validazione: il registro dei consensi indicherebbe un testo diverso da quello mostrato.
+  Quando il testo è definitivo, in quest'ordine: riga nuova in `policy_versions` col testo archiviato in `body` (SQL in
+  produzione, serve il sì di Riccardo), poi la costante con lo stesso valore, nel commit della build. L'ordine conta:
+  `consent_events` ha una chiave esterna su `policy_versions`, e una costante senza riga farebbe fallire i consensi.
 
 Dipendenze (C59, 25/10): `npm audit --omit=dev` non ha più avvisi sui pacchetti che entrano nell'app (`lodash`
 4.18.1; `query-string` e `decode-uri-component` spariti con `@react-navigation/core` 7.24, che non li usa più; `uuid`
@@ -154,7 +161,9 @@ hanno 0 file (`lodash` 201, `expo-updates/build` 8: la sonda li vede). `expo`, `
 58, salto di SDK fuori da questo rilascio. `node-forge` non ha nessuna versione corretta pubblicata (l'ultima, 1.4.0,
 è dentro l'avviso) e lo usano solo gli script di firma in `expo-updates/cli`; npm propone di tornare a `expo-updates`
 0.11 (oggi 29.x), non applicabile. `image-size` arriva da Metro, che chiede la 1.x, e la correzione esiste solo nella
-2.x. Si riguardano al prossimo aggiornamento di SDK.
+2.x. Si riguardano al prossimo aggiornamento di SDK. Il 02/11 `npm audit --omit=dev` dà 35 voci (3 alte, 24 moderate, 8
+basse), tutte indirette: alle tre radici qui sopra si sono aggiunte `glob`, `minimatch` e `deepmerge`. Prima dell'invio
+si ripete su questi tre la sonda sulle source map della build.
 
 ## 9. Aggiornamenti OTA
 
@@ -163,8 +172,11 @@ versione nativa (`runtimeVersion: appVersion` ⇒ runtime `1.3.0`). Per Android 
 
 ```bash
 cd "C:/Users/albie/Desktop/Programmi/RAH/App Rise"
-npx eas update --branch production --platform android --message "<cosa cambia>"
+npx eas update --branch production --environment production --platform android --message "<cosa cambia>"
 ```
+
+`--environment production` prende le variabili da Expo, le stesse della build: senza, l'aggiornamento userebbe il `.env` del
+PC, e da GitHub uscirebbe senza variabili e l'app andrebbe in errore all'avvio.
 
 Rollback (l'aggiornamento appena pubblicato è sbagliato): rimette in onda quello precedente o, se non c'è, quello
 contenuto nella build.
@@ -179,7 +191,8 @@ nuova e un invio a Play.
 ## 10. Divieti
 
 - **Niente `npm run update:production`** finché la 1.3.0 non è negli store su entrambe le piattaforme: lo script
-  pubblica per tutte le piattaforme insieme.
+  pubblica per tutte le piattaforme insieme. Stesso divieto per il workflow `ota-deploy` di GitHub e per il tag `[ota]`
+  nei commit: pubblicano anche loro per tutte le piattaforme, e il workflow non permette di sceglierne una.
 - **Niente submit né OTA iOS** (`submit:ios`, `submit:all`, `--platform ios`, `--platform all`) finché iOS non è
   verificato a parte: la 1.2.9 iOS negli store ha moduli nativi diversi.
 - Niente invio a Play con il gate del § 8 non tutto `OK`.
@@ -310,7 +323,8 @@ scheda del registro è la prova da allegare al preavviso del § 13.
 5. **Account demo** per i revisori: registrarsi dall'app con una casella vera dell'associazione (mai un'email
    inventata: i rimbalzi bloccano l'invio), confermare l'email, compilare il profilo con dati di prova. Credenziali solo
    in Play Console (Accesso all'app e Rapporto pre-lancio).
-6. **Numeri d'impatto**: i numeri ufficiali (Annual Report) per la schermata Impatto, da dare a Claude.
+6. **Numeri d'impatto**: chiuso, nessuna azione. Vengono dall'Annual Report 2025, con la pagina del PDF accanto a ogni
+   numero (`src/features/impact/data/impactData.ts`).
 7. **Decisioni aperte** (già prese il 24/10: la gift card di Let's Donation **resta**, e Google la ammette senza la
    fatturazione di Play, answer/10281818; 0021 e 0022 **sì**, con un backup prima, punto 10):
    - Kosovo, Russia, Bielorussia: tenerli fra i paesi se Play Console li offre, o toglierli.
@@ -328,6 +342,9 @@ scheda del registro è la prova da allegare al preavviso del § 13.
    404) e che OpenClick abbia confermato per iscritto la cancellazione dei dati (punto 4 della PEC).
 10. **Migration 0022 (consensi e oblio) sul database di produzione**: il sì per la 0021 e la 0022 l'hai dato il 24/10,
     «con backup prima». Ordine: prima le 0017-0021 (in produzione si arriva alla 0020, letto il 28/10), poi la 0022.
+    Subito dopo va la **0023** (privilegi minimi, scritta il 02/11): toglie ad `anon` ogni accesso diretto alle tabelle,
+    lascia agli utenti solo ciò che l'app usa e mette limiti di lunghezza ai campi. Non è compresa nel sì del 24/10:
+    serve un sì a parte.
     Innesco: quando Claude conferma che i test della 0022 sono verdi sul database di prova e c'è il backup del giorno
     (con il piano Pro, punto 13, è automatico; sul piano free va fatto a mano e contiene dati personali: mai su GitHub).
     Come primo passo, PRIMA di toccare il database, questa query di sola lettura nel SQL Editor di Supabase, e il
@@ -409,15 +426,16 @@ Riccardo deve mandare le versioni aggiornate e chiedere di sostituire quelle pre
 le istruzioni devono portare all'icona della persona in alto a destra («Area Donatori» / «Il mio profilo»; in inglese
 «Donor Area» / «My profile»).
 
-Testo da mandare (inglese), con i tre file in allegato:
+Testo da mandare (inglese), con i quattro file in allegato:
 
 > Hi Rick and Kevin,
 > we are about to publish the new Rise Against Hunger Italia app on Google Play. Google requires two public pages on
 > our site, and we need your help on site 10 (italy.riseagainsthunger.org):
 >
 > 1. Replace the content of `/privacy-policy/` with the attached `privacy-policy.html` (Italian).
-> 2. Publish two new pages with the attached `elimina-account.html` (Italian) and `delete-account.html` (English),
->    for example at `/elimina-account/` and `/delete-account/`.
+> 2. Publish three new pages at exactly these paths, because the pages link to each other: `/privacy-policy-en/`
+>    (attached `privacy-policy-en.html`, English), `/elimina-account/` (`elimina-account.html`, Italian) and
+>    `/delete-account/` (`delete-account.html`, English).
 >    If you already received or published these pages, replace the previous versions with the updated attachments:
 >    the instructions now direct users to the person icon at the top right of the app (Donor Area / My profile).
 >
@@ -445,6 +463,9 @@ Riccardo (punto 7).
    noi ai partner, entro un mese, di cancellare i dati legati al codice; Let's Donation ha detto che da loro esiste solo
    l'anonimizzazione. Basta così?». Innesco: insieme all'informativa (Riccardo, punto 7); la base giuridica del codice
    è anche nel gate del § 8.
+2. **Termini d'uso e licenze**. Testo pronto: «L'app ha gli account ma nessun documento di termini d'uso: servono, o
+   bastano informativa e statuto? Le librerie open source dell'app chiedono di riportare i loro avvisi di licenza: basta
+   una pagina sul sito o devono stare dentro l'app?». Innesco: insieme all'informativa (Riccardo, punto 7).
 
 ### Comunicazione (Angelica)
 

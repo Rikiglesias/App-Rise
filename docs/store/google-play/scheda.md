@@ -31,7 +31,7 @@ Rise Against Hunger Italia lavora per eliminare la fame nel mondo con il confezi
 Cosa puoi fare con l'app:
 
 Scoprire il nostro impatto
-I risultati del 2024 (pasti confezionati, kit prodotti, volontari coinvolti), i numeri complessivi degli anni e una mappa dei luoghi in cui operiamo.
+I risultati del 2025 (pasti confezionati, kit prodotti, volontari coinvolti), i numeri complessivi degli anni e una mappa dei luoghi in cui operiamo.
 
 Donare
 Il pulsante Dona apre nel browser la pagina di donazione di Donorbox, il partner che gestisce i pagamenti: la donazione avviene lì, fuori dall'app. Se hai un account, puoi scegliere se precompilare il modulo con nome ed email.
@@ -67,7 +67,7 @@ Rise Against Hunger Italia works to end hunger worldwide by packaging and distri
 What you can do with the app:
 
 See our impact
-Our 2024 results (meals packaged, kits produced, volunteers involved), our overall figures over the years and a map of the places where we work.
+Our 2025 results (meals packaged, kits produced, volunteers involved), our overall figures over the years and a map of the places where we work.
 
 Donate
 The Donate button opens the Donorbox donation page in your browser. Donorbox is the partner that handles payments: your donation is made there, outside the app. If you have an account, you can choose whether to prefill the form with your name and email.

@@ -33,6 +33,7 @@ PAIRS=(
   "0019_eta_minima_e_bonifica_metadata"
   "0020_claim_nickname_da_profiles"
   "0022_consensi_server_e_oblio"
+  "0023_privilegi_minimi"
 )
 SHIMS=("shim_permissive" "shim_restrictive")
 
@@ -96,8 +97,12 @@ for pair in "${PAIRS[@]}"; do
     # La 0022 ridefinisce sync_contact_email_on_email_change (0013/0014/0016/0019)
     # e i purge (0012/0015/0016): chi riapplica quei corpi, anche tramite extra,
     # deve chiudere con 0022. La coppia 0020 riapplica solo 0021: non li tocca.
+    # La 0023 restringe il grant su partner_refs che la 0008 concede: chi riapplica la
+    # 0008 deve chiudere con la 0023, o la sua suite girerebbe con un privilegio in più.
     extra=()
     case "$pair" in
+      0008_partner_refs)
+        extra=(migrations/0023_privilegi_minimi.sql) ;;
       0011_signup_contact_email)
         extra=(migrations/0017_profiles_nickname.sql
                migrations/0019_eta_minima_e_bonifica_metadata.sql
