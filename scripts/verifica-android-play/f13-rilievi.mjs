@@ -58,6 +58,12 @@ const FUORI_DAL_REPO =
 // Una lettura di note private in un comando del log: cartella con separatore accanto, o argomento nudo.
 const LETTURA_VIETATA =
   /[\\/](?:todos|memory|memories)\b|\b(?:todos|memory|memories)[\\/]|(?:^|\s)(?:todos|memory|memories)(?:\s|$)|\.claude\b|\.codex[\\/]+memories/i;
+// `rg -g '!**/todos/**'` esclude quella cartella, non la legge (delta1-arch.log:3373). Nel log l'apice è riscritto
+// come '"'. Si toglie solo l'argomento dell'esclusione: il resto della riga resta sotto controllo.
+const ESCLUSIONE_RG = /(?:^|\s)(?:-g|--glob)[=\s]+(?:'"'|["'])?!\S+/g;
+// Dove finisce un comando nel log: l'esito, o la voce successiva di Codex.
+const FINE_COMANDO =
+  /^ ?(?:succeeded in \d+ms:|exited -?\d+ in \d+ms:)$|^(?:codex|thinking)$/;
 // Revisore cieco (delta 1 del 29/10: home senza `[windows] sandbox`, 13 `EXIT 0` senza un file letto): un comando
 // rifiutato dalla sandbox, o nessun comando riuscito, e l'esito parla solo del testo incollato.
 const RIFIUTATO = /rejected: blocked by policy/i;
@@ -97,6 +103,18 @@ const chiaveEsito = f => {
 };
 const chiaveIndice = f => chiaveEsito(f.replace(/\.md$/, '-esito.md'));
 
+/** Indici delle righe di comando di un log: 22 comandi su 288 del delta 1 stanno su più righe. */
+const righeDiComando = righe => {
+  const indici = [];
+  let dentro = false;
+  righe.forEach((x, i) => {
+    if (x.trim() === 'exec') dentro = true;
+    else if (FINE_COMANDO.test(x)) dentro = false;
+    else if (dentro) indici.push(i);
+  });
+  return indici;
+};
+
 /** Motivo di FAIL di un log di revisione del delta, o ''. */
 export const controllaLog = (nome, testo) => {
   const r = String(testo ?? '').split(/\r?\n/);
@@ -107,12 +125,12 @@ export const controllaLog = (nome, testo) => {
     return `${nome}:${rifiutato + 1} comando rifiutato dalla sandbox: il revisore non ha letto il codice`;
   if (!r.some(x => RIUSCITO.test(x)))
     return `${nome}: nessun comando riuscito, il revisore non ha letto il codice`;
-  const i = r.findIndex(
-    (x, k) => k > 0 && r[k - 1].trim() === 'exec' && LETTURA_VIETATA.test(x)
+  const i = righeDiComando(r).find(k =>
+    LETTURA_VIETATA.test(r[k].replace(ESCLUSIONE_RG, ' '))
   );
-  return i >= 0
-    ? `${nome}:${i + 1} legge note private (todos, memory, .claude)`
-    : '';
+  return i === undefined
+    ? ''
+    : `${nome}:${i + 1} legge note private (todos, memory, .claude)`;
 };
 
 /** Motivo di FAIL della prova di una riga destinata a uno o più Cn, o ''. */

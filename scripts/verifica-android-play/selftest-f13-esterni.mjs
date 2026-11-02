@@ -87,6 +87,9 @@ const RILIEVI = [
 ].join('\n');
 const LOG =
   'CODEX_HOME=C:\\tmp\\h\nfile in CODEX_HOME: auth.json\nexec\nrg -n x src\n succeeded in 12ms:';
+const logCon = comando => ({
+  log: { 'delta1-a.log': `${LOG}\nexec\n${comando}` },
+});
 const C83_OK = {
   esiti: tutte(`# esito\n${TAB}`),
   chiusure: { a: `| n | verdetto |\n|---|---|\n| 1 | CORRETTO |` },
@@ -250,6 +253,11 @@ export const FIXTURE_F13_ESTERNI = {
       { log: { 'delta1-a.log': `${LOG}\nexec\nGet-Content ~/todos/x.md` } },
       { log: { 'delta1-a.log': `${LOG}\nexec\ncat ../.claude/settings.json` } },
       { log: { 'verifica-delta1-a.log': `${LOG}\nexec\nrg -n x memory/a.md` } },
+      // Un filtro che include quelle cartelle, o un'esclusione accanto a una lettura vera, resta una lettura.
+      logCon(`rg -n x -g '**/todos/**'`),
+      logCon(`rg -n x ~/todos -g '!**/memory/**'`),
+      // Comando su più righe (22 su 288 nel delta 1): la lettura può stare dopo la prima.
+      logCon('pwsh -Command "rg -n x src;\nGet-Content ~/todos/x.md"'),
       // Revisore cieco: un comando rifiutato dalla sandbox, o nessun comando riuscito.
       {
         log: {
@@ -272,6 +280,12 @@ export const FIXTURE_F13_ESTERNI = {
       { esiti: null },
       { chiusure: null, log: null },
       { log: { 'delta1-a.log': `${LOG}\nexec\nrg -n "memory" src` } },
+      // `rg -g '!…'` esclude, non legge: nel log l'apice è riscritto come '"' (delta1-arch.log:3373).
+      logCon(
+        `rg --files src -g '"'!**/todos/**'"' --glob '!**/.claude/**' -g "!**/memory/**" --glob=!**/memories/**`
+      ),
+      // L'uscita di un comando non è una lettura: il controllo finisce all'esito.
+      logCon('rg -n x src\n succeeded in 3ms:\n~/todos/x.md: nel commento'),
     ]
   ),
 };
