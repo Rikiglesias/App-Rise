@@ -10,7 +10,7 @@ keystore gestiti a mano: la firma e il provisioning sono gestiti da EAS.
 | --- | --- | --- |
 | Build store (iOS/Android) | EAS Build | `eas build --profile <profile>` |
 | Pubblicazione store | EAS Submit | `eas submit --platform <ios\|android> --latest` |
-| Aggiornamento OTA (JS) | EAS Update | `eas update --branch production` |
+| Aggiornamento OTA (JS) | EAS Update | `eas update --branch production --environment production` |
 
 La differenza chiave:
 
@@ -74,8 +74,8 @@ Tre script in `scripts/` semplificano le operazioni ricorrenti:
   `-SkipBuild` (solo submit dell'ultima build). Verifica il login EAS e il service account
   Google prima del submit.
 - **`scripts/update-ota.ps1`** — menu interattivo per pubblicare un OTA. Esegue prima
-  `npm run pre-modifiche` (quality gate bloccante), poi `eas update --branch <…>` per
-  development / preview / production / hotfix, oppure `eas update --auto`.
+  `npm run pre-modifiche` (quality gate bloccante), poi `eas update --branch <…> --environment <…>`
+  per development / preview / production / hotfix, oppure `eas update --auto`.
 
 ## 🔑 Prerequisiti store (una tantum)
 

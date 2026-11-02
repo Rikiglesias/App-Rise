@@ -423,7 +423,7 @@ jobs:
         run: |
           echo "🔄 Deploying OTA Update..."
           COMMIT_MSG=$(git log -1 --pretty=%B)
-          eas update --branch production --message "$COMMIT_MSG" --non-interactive
+          eas update --branch production --environment production --message "$COMMIT_MSG" --non-interactive
           echo "✅ OTA Update deployed successfully"
 
       - name: 💬 Comment on commit

@@ -24,20 +24,20 @@ Puoi attivare manualmente il workflow da:
 Prima di pubblicare, esegue controlli di qualità:
 
 ```bash
-✅ TypeScript Check  → npx tsc --noEmit (BLOCCA se errori)
-⚠️ ESLint Check     → npx eslint (warning, non blocca)
-⚠️ Tests            → npm test (warning, non blocca)
-📊 Conta Problemi   → npm run conta-problemi (info)
+✅ Conta Problemi   → npm run conta-problemi (BLOCCA se errori)
 ```
 
-**Nota:** Solo TypeScript check è bloccante. Lint e test producono warning ma non fermano il deploy.
+**Nota:** è lo stesso gate del pre-commit (tipi, ESLint, markdownlint, Prettier, Jest): se è rosso non si pubblica.
 
 ### 2️⃣ Deploy OTA (🚀)
 Pubblica l'update su Expo:
 
 ```bash
-eas update --branch production --message "..."
+eas update --branch production --environment production --message "..."
 ```
+
+`--environment` è indispensabile: in CI non ci sono `.env` e `eas-cli` non si ferma se manca, quindi il pacchetto uscirebbe
+senza `EXPO_PUBLIC_*` e l'app andrebbe in errore all'avvio.
 
 **Features:**
 - ✅ Retry automatico (3 tentativi)

@@ -16,6 +16,10 @@ on:
           - warm-up
           - analyze
 
+permissions:
+  contents: read
+  actions: write # cancellare le cache vecchie
+
 env:
   NODE_VERSION: '20.x'
   CACHE_VERSION: 'v2'

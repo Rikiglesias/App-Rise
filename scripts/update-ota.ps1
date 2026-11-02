@@ -95,16 +95,16 @@ if (Confirm-Update $updateType $updateMessage) {
     
     switch ($updateType) {
         "development" { 
-            & npx eas update --branch development --message $updateMessage
+            & npx eas update --branch development --environment development --message $updateMessage
         }
-        "preview" { 
-            & npx eas update --branch preview --message $updateMessage
+        "preview" {
+            & npx eas update --branch preview --environment preview --message $updateMessage
         }
-        "production" { 
-            & npx eas update --branch production --message $updateMessage
+        "production" {
+            & npx eas update --branch production --environment production --message $updateMessage
         }
-        "hotfix" { 
-            & npx eas update --branch production --message $updateMessage
+        "hotfix" {
+            & npx eas update --branch production --environment production --message $updateMessage
         }
         "auto" { 
             & npx eas update --auto --message $updateMessage

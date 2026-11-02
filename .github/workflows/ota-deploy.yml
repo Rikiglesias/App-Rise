@@ -19,11 +19,9 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
 
 env:
   NODE_VERSION: '20.17.0'
-  EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
 # Previene deploy OTA simultanei
 concurrency:
@@ -37,7 +35,7 @@ jobs:
   quality-checks:
     name: ✅ Quality Checks
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
 
     steps:
       - name: 📥 Checkout
@@ -52,21 +50,9 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: 🔍 TypeScript Check
-        run: npx tsc --noEmit
-        continue-on-error: false
-
-      - name: 🧹 ESLint Check
-        run: npx eslint . --ext .ts,.tsx --max-warnings 0
-        continue-on-error: true # Non blocca deploy per warnings
-
-      - name: 🧪 Run Tests
-        run: npm test -- --passWithNoTests
-        continue-on-error: true # Tests non bloccano deploy
-
+      # Stesso gate del pre-commit (tipi, ESLint, markdownlint, Prettier, Jest): rosso = niente pubblicazione.
       - name: 📊 Conta Problemi
-        run: npm run conta-problemi || true
-        continue-on-error: true
+        run: npm run conta-problemi
 
   # ===================================================================
   # OTA DEPLOY - Pubblica update su Expo
@@ -98,6 +84,8 @@ jobs:
           npm install -g expo-cli@latest
 
       - name: 🔐 Authenticate with Expo
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
           echo "Authenticating with Expo..."
           eas whoami || echo "Not authenticated yet"
@@ -125,15 +113,18 @@ jobs:
       - name: 🚀 Publish OTA Update
         id: publish
         env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           BRANCH: ${{ github.event.inputs.branch || 'production' }}
           MESSAGE: ${{ steps.update-msg.outputs.message }}
         run: |
           echo "Publishing OTA update to branch: $BRANCH"
           echo "Message: $MESSAGE"
 
-          # Pubblica update con retry su fallimento
+          # Pubblica update con retry su fallimento.
+          # --environment: senza, in CI eas-cli non si ferma e il pacchetto esce senza EXPO_PUBLIC_*
+          # (nessun .env tracciato): l'app andrebbe in errore all'avvio. I rami EAS hanno lo stesso nome degli ambienti.
           for i in {1..3}; do
-            if eas update --branch "$BRANCH" --message "$MESSAGE" --non-interactive; then
+            if eas update --branch "$BRANCH" --environment "$BRANCH" --message "$MESSAGE" --non-interactive; then
               echo "✅ OTA update published successfully on attempt $i"
               exit 0
             else
@@ -148,6 +139,7 @@ jobs:
       - name: 📊 Get Update Details
         if: success()
         env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           BRANCH: ${{ github.event.inputs.branch || 'production' }}
         run: |
           echo "Fetching latest update details for branch: $BRANCH"

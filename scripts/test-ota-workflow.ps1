@@ -99,7 +99,7 @@ Write-Host ""
 Write-Host "🚀 Publishing OTA update..." -ForegroundColor Cyan
 
 try {
-    eas update --branch $Branch --message $Message --non-interactive
+    eas update --branch $Branch --environment $Branch --message $Message --non-interactive
     
     if ($LASTEXITCODE -eq 0) {
         Write-Host ""
