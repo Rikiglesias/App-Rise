@@ -57,6 +57,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         <PerfectText
           size={22}
           lines={1}
+          variant="fit"
           fontWeight="900"
           style={styles.value}
           testID="stat-card-value"
@@ -94,7 +95,13 @@ export const StatCard: React.FC<StatCardProps> = ({
         color={iconColor}
         style={styles.icon}
       />
-      <PerfectText size={22} lines={1} fontWeight="900" style={styles.value}>
+      <PerfectText
+        size={22}
+        lines={1}
+        variant="fit"
+        fontWeight="900"
+        style={styles.value}
+      >
         {value}
       </PerfectText>
       <PerfectText size={16} lines={1} fontWeight="700" style={styles.label}>
