@@ -7,14 +7,16 @@ nulla, in quelli stretti il testo non esce più dai bordi.
 
 Elenco generato dalla sonda `scripts/verifica-android-play/conta-multiriga.py` il 25/10 sul commit `39e420c` e
 riallineato il 28/10 su `f932f0b` (C87: il rinvio di `ConfirmationResend` è passato in `EmailResendControl`, banner
-nuovo `EmailChangePending`): `python scripts/verifica-android-play/conta-multiriga.py .` stampa
-«totale 50 in 30 file; positivo noto D6 visto: True». Il verificatore di C58 confronta questa tabella con
+nuovo `EmailChangePending`) e il 2/11 su `afd3912` (da `515d57a` il messaggio di rinvio riuscito di
+`EmailResendControl` non ha più un limite di righe, quindi non è più un punto dell'elenco):
+`python scripts/verifica-android-play/conta-multiriga.py .` stampa
+«totale 49 in 30 file; positivo noto D6 visto: True». Il verificatore di C58 confronta questa tabella con
 l'uscita della sonda: se un file manca o il numero dei punti cambia, il criterio fallisce.
 
 La prova visiva si fa solo sulle schermate della matrice C47. Ogni altra riga è un residuo dichiarato: il codice
 è lo stesso, ma nessuno lo ha fotografato.
 
-Totale: 50 punti (22 sulle schermate di C47, 28 residuo non fotografato).
+Totale: 49 punti (22 sulle schermate di C47, 27 residuo non fotografato).
 
 | Punti | File | Dove si vede |
 | --- | --- | --- |
@@ -39,7 +41,7 @@ Totale: 50 punti (22 sulle schermate di C47, 28 residuo non fotografato).
 | 1 | `src/features/auth/components/AuthDateField.tsx` | residuo non fotografato: testo d'errore |
 | 1 | `src/features/auth/components/AuthPhoneField.tsx` | residuo non fotografato: testo d'errore |
 | 1 | `src/features/auth/screens/SignUpScreen.tsx` | residuo non fotografato: messaggio dopo l'invio della registrazione |
-| 2 | `src/features/auth/components/EmailResendControl.tsx` | residuo non fotografato: reinvio della conferma dopo la registrazione e rinvio del cambio email in Modifica profilo (C87) |
+| 1 | `src/features/auth/components/EmailResendControl.tsx` | residuo non fotografato: attesa prima del reinvio, dopo la registrazione e nel cambio email in Modifica profilo (C87) |
 | 1 | `src/features/auth/components/EmailChangePending.tsx` | residuo non fotografato: Modifica profilo con un cambio email in attesa (C87) |
 | 1 | `src/features/auth/screens/ForgotPasswordScreen.tsx` | residuo non fotografato: messaggio dopo l'invio |
 | 1 | `src/features/auth/screens/ResetPasswordScreen.tsx` | residuo non fotografato: messaggio a password cambiata |
