@@ -11,6 +11,7 @@ import {
   PerfectContainer,
 } from '@/components/ui';
 import { useDeviceType } from '@/shared/hooks/useDeviceType';
+import { useTastieraAperta } from '@/shared/hooks/useTastieraAperta';
 import { useTranslation } from '@/shared/hooks/useTranslation';
 import { PerfectSpacing } from '@/shared/constants';
 import { Colors } from '@/shared/constants/designTokens';
@@ -61,12 +62,17 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   const { isTablet } = useDeviceType();
   const { t } = useTranslation();
   const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
+  const tastieraAperta = useTastieraAperta();
 
   return (
     <SafeAreaView style={styles.container}>
       <AuthBackButton />
+      {/* Da bordo a bordo la finestra non si ridimensiona: senza `behavior` il campo
+          resta sotto la tastiera. Su Android `keyboardDidHide` riporta l'altezza dell'area
+          visibile, non il fondo: da attiva la vista lascerebbe una fascia vuota. */}
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior="padding"
+        enabled={Platform.OS === 'ios' || tastieraAperta}
         style={styles.flex}
       >
         <PlatformScrollView
