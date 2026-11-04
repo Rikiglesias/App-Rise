@@ -70,12 +70,45 @@ describe('getOrCreatePartnerRef', () => {
     expect(mockedSupabase.from).not.toHaveBeenCalled();
   });
 
-  // Giro 2 del delta (abc-2): la riga non la sceglie la sessione del momento.
-  it("riferimento partner: la lettura è legata all'account controllato", async () => {
-    withSession();
-    maybeSingle.mockResolvedValue({ data: { ref: 'EXISTING' }, error: null });
-    await getOrCreatePartnerRef('donorbox', 'user-1');
-    expect(builder.eq).toHaveBeenCalledWith('user_id', 'user-1');
+  // Giro 2 del delta (abc-2). Database simulato come la RLS: si vede solo la riga di chi è
+  // collegato quando la query parte, e un filtro su `user_id` diverso non trova niente.
+  // La sessione diventa di B subito dopo il controllo su A: il codice di B non deve uscire.
+  it('riferimento partner: entrato B dopo il controllo su A, il codice di B non esce', async () => {
+    let collegatoNelDb = 'A';
+    let filtroUtente: string | undefined;
+    getSession.mockImplementationOnce(() => {
+      const risposta = { data: { session: { user: { id: 'A' } } } };
+      collegatoNelDb = 'B'; // il link di B cambia la sessione appena dopo il controllo
+      return Promise.resolve(risposta);
+    });
+    mockedSupabase.from.mockImplementation(() => {
+      filtroUtente = undefined;
+      return builder;
+    });
+    builder.eq.mockImplementation((colonna: string, valore: string) => {
+      if (colonna === 'user_id') filtroUtente = valore;
+      return builder;
+    });
+    maybeSingle.mockImplementationOnce(() =>
+      Promise.resolve(
+        filtroUtente !== undefined && filtroUtente !== collegatoNelDb
+          ? { data: null, error: null }
+          : { data: { ref: `REF-${collegatoNelDb}` }, error: null }
+      )
+    );
+    // L'inserimento per A con la sessione di B lo respinge la RLS.
+    single.mockResolvedValueOnce({ data: null, error: { code: '42501' } });
+
+    const ref = await getOrCreatePartnerRef('donorbox', 'A');
+
+    // Rimette il builder e scarta le risposte non consumate: se il codice sbaglia strada,
+    // non devono finire nel test successivo e far cadere anche lui.
+    mockedSupabase.from.mockImplementation(() => builder);
+    builder.eq.mockImplementation(() => builder);
+    maybeSingle.mockReset();
+    single.mockReset();
+    expect(ref).not.toBe('REF-B');
+    expect(ref).toBeNull();
   });
 
   it('ritorna il ref attivo esistente senza inserire', async () => {
