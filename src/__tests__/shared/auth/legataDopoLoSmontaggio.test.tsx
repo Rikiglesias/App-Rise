@@ -53,3 +53,12 @@ it('guardia: schermata montata e account del render, vale', () => {
   const { result } = apri();
   expect(result.current()).toBe(true);
 });
+
+// Giro 2 del delta (abc-1, f1-1, arch-1): la risposta di un salvataggio o di una conferma
+// può arrivare dopo che è entrato B ma prima del nuovo render, quando i ref del render
+// dicono ancora A. Anche da montata la guardia deve chiedere chi è collegato ADESSO.
+it('guardia: schermata montata, già collegato B e nessun nuovo render, non vale', () => {
+  const { result } = apri();
+  collegato = 'B';
+  expect(result.current()).toBe(false);
+});

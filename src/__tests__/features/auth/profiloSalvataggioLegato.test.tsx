@@ -48,8 +48,16 @@ const profiloDi = (id: string, nome: string): Profile => ({
 const updateProfile = jest.fn();
 const updateEmail = jest.fn();
 const refreshProfile = jest.fn();
-const statoDi = (id: string, extra: Partial<AuthState> = {}) =>
+// Chi è collegato ADESSO, come il ref di AuthContext aggiornato dentro l'evento di auth:
+// può cambiare prima che la schermata riceva il render nuovo.
+let collegato: string | null = null;
+const statoDi = (id: string, extra: Partial<AuthState> = {}) => {
+  collegato = id;
+  return statoConSessione(id, extra);
+};
+const statoConSessione = (id: string, extra: Partial<AuthState>) =>
   ({
+    utenteCollegato: () => collegato,
     status: 'authenticated',
     session: { user: { id, email: `${id}@account.test` } } as Session,
     profile: profiloDi(id, id === 'A' ? 'Anna' : 'Bruno'),
@@ -93,6 +101,26 @@ it("modifica profilo: sessione di B arrivata mentre il profilo di A si salva, l'
   await act(async () => {
     finisci({ error: null });
     // Lascia girare la continuazione del salvataggio dopo `updateProfile`.
+    await Promise.resolve();
+  });
+  expect(updateEmail).not.toHaveBeenCalled();
+});
+
+// Giro 2 del delta (f1-1, arch-1): la risposta del salvataggio arriva dopo che è entrato B
+// ma PRIMA che la schermata riceva il render nuovo. La guardia non deve credere al render.
+it("modifica profilo: B entrato e schermata non ancora ridisegnata, l'email non si chiede sull'account B", async () => {
+  let finisci!: (r: { error: null }) => void;
+  updateProfile.mockReturnValue(new Promise(r => (finisci = r)));
+  jest.mocked(useAuth).mockReturnValue(statoDi('A'));
+  const ui = apri();
+  fireEvent.changeText(ui.getByLabelText('Nome'), 'Annalisa');
+  fireEvent.changeText(ui.getByLabelText('Email'), 'nuova-a@account.test');
+  fireEvent.press(ui.getByRole('button', { name: 'Salva modifiche' }));
+  expect(updateProfile).toHaveBeenCalledTimes(1);
+
+  collegato = 'B';
+  await act(async () => {
+    finisci({ error: null });
     await Promise.resolve();
   });
   expect(updateEmail).not.toHaveBeenCalled();

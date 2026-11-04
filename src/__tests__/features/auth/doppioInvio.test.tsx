@@ -140,6 +140,7 @@ const prepare = (item: (typeof cases)[number]) => {
   request.mockReset().mockImplementation(() => first.promise);
   jest.mocked(useAuth).mockReturnValue({
     status: 'authenticated',
+    utenteCollegato: () => 'u1',
     session: { user: { id: 'u1', email: 'mario@example.test' } } as Session,
     profile: item.action === 'updateProfile' ? profile : null,
     profileLoaded: true,

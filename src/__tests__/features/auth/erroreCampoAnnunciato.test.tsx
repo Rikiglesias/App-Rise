@@ -78,6 +78,7 @@ beforeEach(() => {
   mockRpc.mockReset().mockResolvedValue({ data: true, error: null });
   auth = {
     status: 'authenticated',
+    utenteCollegato: () => 'u1',
     session: {
       user: { id: 'u1', email: 'mario@example.test', identities: [] },
     } as unknown as Session,

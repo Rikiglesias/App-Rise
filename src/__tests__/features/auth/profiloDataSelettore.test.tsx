@@ -43,6 +43,7 @@ let updateProfile: jest.Mock;
 const montaCon = (birthDate: string) => {
   jest.mocked(useAuth).mockReturnValue({
     status: 'authenticated',
+    utenteCollegato: () => 'u1',
     session: {
       user: { id: 'u1', email: 'mario@r.it', identities: [] },
     } as unknown as Session,

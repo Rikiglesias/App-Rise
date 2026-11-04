@@ -14,11 +14,13 @@ import type { RootStackNavigationProp } from '@/navigation/types';
  * Al cambio si esce alla radice dell'albero ATTIVO — `Account` nell'app, il passaggio
  * obbligatorio nel cancello del profilo — chiedendo al navigatore quali rotte
  * esistono, come `goAvanti` in `ResetPasswordScreen`. Restituisce la domanda da fare
- * PRIMA di scrivere o cancellare: una callback partita prima del cambio ha ancora in
- * mano il render vecchio, e solo il ref sa chi è collegato adesso. Smontata la schermata
- * nemmeno il ref si aggiorna più (entrare in un altro account può chiudere il cancello
- * con una conferma aperta o un salvataggio in rete): lì lo si chiede ad AuthContext, che
- * resta montato, così chi esce mentre salva non perde il resto del salvataggio.
+ * PRIMA di scrivere o cancellare, e la risposta la dà sempre AuthContext, che aggiorna
+ * chi è collegato dentro l'evento di auth: una callback partita prima del cambio ha in
+ * mano il render vecchio, e un ref copiato in un effetto resterebbe ad A fino al render
+ * successivo — la risposta di un salvataggio arrivata in mezzo agirebbe su B (giro 2
+ * del delta). AuthContext resta montato anche quando questa schermata non c'è più
+ * (entrare in un altro account può chiudere il cancello con una conferma aperta o un
+ * salvataggio in rete), così chi esce mentre salva non perde il resto del salvataggio.
  */
 export const useLegataAllUtente = (): (() => boolean) => {
   const { session, utenteCollegato } = useAuth();
@@ -27,19 +29,9 @@ export const useLegataAllUtente = (): (() => boolean) => {
   // Il primo utente NON nullo: se la schermata montasse prima che la sessione sia
   // letta, fissare `null` renderebbe Salva ed Elimina inerti per sempre.
   const proprietario = useRef(userId);
-  const attuale = useRef(userId);
   const uscita = useRef(false);
-  const smontata = useRef(false);
 
   useEffect(() => {
-    smontata.current = false;
-    return () => {
-      smontata.current = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    attuale.current = userId;
     proprietario.current ??= userId;
     if (userId === null || userId === proprietario.current || uscita.current)
       return;
@@ -52,8 +44,10 @@ export const useLegataAllUtente = (): (() => boolean) => {
     else if (navigation.canGoBack()) navigation.goBack();
   }, [userId, navigation]);
 
-  return useCallback(() => {
-    const collegato = smontata.current ? utenteCollegato() : attuale.current;
-    return proprietario.current !== null && collegato === proprietario.current;
-  }, [utenteCollegato]);
+  return useCallback(
+    () =>
+      proprietario.current !== null &&
+      utenteCollegato() === proprietario.current,
+    [utenteCollegato]
+  );
 };

@@ -33,6 +33,7 @@ beforeEach(() => {
     .mockImplementation(() => undefined);
   jest.mocked(useAuth).mockReturnValue({
     status: 'authenticated',
+    utenteCollegato: () => 'u1',
     session: {
       user: { id: 'u1', email: 'old@example.test', identities: [] },
     } as unknown as Session,

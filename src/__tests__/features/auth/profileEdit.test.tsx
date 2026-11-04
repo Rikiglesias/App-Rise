@@ -26,6 +26,7 @@ const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
 const makeAuth = (over: Partial<AuthState> = {}): AuthState =>
   ({
     status: 'authenticated',
+    utenteCollegato: () => 'u1',
     session: {
       user: { id: 'u1', email: 'old@r.it', identities: [] },
     } as unknown as Session,

@@ -53,7 +53,18 @@ const profilo = (id: string, nome: string): Profile => ({
   nickname: null,
 });
 
-const makeAuth = (over: Partial<AuthState>): AuthState =>
+// Come in AuthContext: UNA funzione stabile che legge chi è collegato adesso (la guardia
+// la chiede sempre). Ogni stato simulato aggiorna il valore, non la funzione: una conferma
+// rimasta aperta dal render di A deve vedere B.
+let collegatoOra: string | null = null;
+const utenteCollegato = () => collegatoOra;
+
+const makeAuth = (over: Partial<AuthState>): AuthState => {
+  collegatoOra = over.session?.user.id ?? null;
+  return statoAuth(over);
+};
+
+const statoAuth = (over: Partial<AuthState>): AuthState =>
   ({
     status: 'authenticated',
     profileLoaded: true,
@@ -64,6 +75,7 @@ const makeAuth = (over: Partial<AuthState>): AuthState =>
     deleteAccountNow: jest.fn().mockResolvedValue({ error: null }),
     scheduleDeletion: jest.fn().mockResolvedValue({ error: null }),
     needsReConsent: false,
+    utenteCollegato,
     ...over,
   }) as AuthState;
 
@@ -139,6 +151,21 @@ it('elimina account: al cambio di account la schermata si chiude e non cancella'
 
   expect(deleteAccountNow).not.toHaveBeenCalled();
   expect(mockPopTo).toHaveBeenCalledWith('Account');
+});
+
+// Giro 2 del delta (abc-1, BLOCCA): B è entrato ma la schermata non ha ancora ricevuto il
+// render nuovo quando A preme la conferma rimasta aperta. Cancellare qui cancellerebbe B.
+it('elimina account: B entrato e schermata non ancora ridisegnata, la conferma di A non cancella', async () => {
+  mockRotte = ['Home', 'Account', 'ProfileEdit', 'DeleteAccount'];
+  const deleteAccountNow = jest.fn().mockResolvedValue({ error: null });
+  mockUseAuth.mockReturnValue(comeA({ deleteAccountNow }));
+  const { getByText } = render(conProvider(<DeleteAccountScreen />));
+  fireEvent.press(getByText(itLocale.auth.delete.now));
+
+  collegatoOra = 'B';
+  await premiConfermaRimastaAperta();
+
+  expect(deleteAccountNow).not.toHaveBeenCalled();
 });
 
 it('elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella', async () => {

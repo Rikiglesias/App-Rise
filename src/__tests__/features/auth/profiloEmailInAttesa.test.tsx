@@ -54,6 +54,7 @@ let updateProfile: jest.Mock;
 let updateEmail: jest.Mock;
 const authCon = (session: Session): AuthState =>
   ({
+    utenteCollegato: () => session.user.id,
     status: 'authenticated',
     session,
     profile,

@@ -90,6 +90,7 @@ const confermaDallaSchermata = () => {
   const elimina = jest.fn(deleteAccountNow);
   (useAuth as jest.Mock).mockReturnValue({
     status: 'authenticated',
+    utenteCollegato: () => 'u1',
     session: { user: { id: 'u1', email: 'm@r.it' } } as unknown as Session,
     deleteAccountNow: elimina,
     scheduleDeletion: jest.fn(),

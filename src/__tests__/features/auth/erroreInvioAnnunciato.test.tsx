@@ -77,6 +77,7 @@ beforeEach(() => {
     .mockImplementation(() => undefined);
   auth = {
     status: 'authenticated',
+    utenteCollegato: () => 'u1',
     session: {
       user: { id: 'u1', email: 'mario@example.test', identities: [] },
     } as unknown as Session,
