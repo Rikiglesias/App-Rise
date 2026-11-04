@@ -31,7 +31,8 @@ jest.mock('@/shared/auth/supabaseClient', () => {
   );
   const eqActive = jest.fn(() => ({ maybeSingle }));
   const eqPartner = jest.fn(() => ({ eq: eqActive }));
-  const select = jest.fn(() => ({ eq: eqPartner }));
+  const eqUtente = jest.fn(() => ({ eq: eqPartner }));
+  const select = jest.fn(() => ({ eq: eqUtente }));
   return {
     supabase: {
       auth: { getSession: jest.fn() },

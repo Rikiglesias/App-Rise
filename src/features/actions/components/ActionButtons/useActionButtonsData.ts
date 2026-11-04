@@ -38,6 +38,8 @@ export interface ActionButtonsData {
    * codice collegato all'account — per questo sono due stati distinti e non uno riusato.
    */
   donorboxDisclosureVisible: boolean;
+  /** Parte solo il codice: l'avviso usa il testo del solo codice, senza «senza i miei dati». */
+  donorboxSoloCodice: boolean;
 
   // Handlers
   handleButtonPress: (button: ButtonData) => Promise<void>;
@@ -68,6 +70,7 @@ export const useActionButtonsData = (
   const {
     disclosureVisible,
     donorboxDisclosureVisible,
+    donorboxSoloCodice,
     isExiting,
     openDonation,
     openLetsDonationExit,
@@ -210,6 +213,7 @@ export const useActionButtonsData = (
     showInfoModal,
     disclosureVisible,
     donorboxDisclosureVisible,
+    donorboxSoloCodice,
     isExiting,
 
     // Handlers

@@ -57,8 +57,14 @@ const ActionButtonsRefactored: React.FC<NewActionButtonsSectionProps> = ({
       <PartnerDisclosureModal
         variant="donorbox"
         visible={data.donorboxDisclosureVisible}
+        soloCodice={data.donorboxSoloCodice}
         onConfirm={() => void data.confirmDonorboxDisclosure(true)}
-        onConfirmWithoutData={() => void data.confirmDonorboxDisclosure(false)}
+        {...(data.donorboxSoloCodice
+          ? {}
+          : {
+              onConfirmWithoutData: () =>
+                void data.confirmDonorboxDisclosure(false),
+            })}
         onCancel={data.cancelDonorboxDisclosure}
       />
     </>

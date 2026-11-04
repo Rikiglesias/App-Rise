@@ -70,6 +70,14 @@ describe('getOrCreatePartnerRef', () => {
     expect(mockedSupabase.from).not.toHaveBeenCalled();
   });
 
+  // Giro 2 del delta (abc-2): la riga non la sceglie la sessione del momento.
+  it("riferimento partner: la lettura è legata all'account controllato", async () => {
+    withSession();
+    maybeSingle.mockResolvedValue({ data: { ref: 'EXISTING' }, error: null });
+    await getOrCreatePartnerRef('donorbox', 'user-1');
+    expect(builder.eq).toHaveBeenCalledWith('user_id', 'user-1');
+  });
+
   it('ritorna il ref attivo esistente senza inserire', async () => {
     withSession();
     maybeSingle.mockResolvedValue({ data: { ref: 'EXISTING' }, error: null });

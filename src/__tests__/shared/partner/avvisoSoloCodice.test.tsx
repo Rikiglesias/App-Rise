@@ -92,3 +92,28 @@ it('avviso Donorbox: rinuncia e nessun codice, niente da dichiarare e si apre su
   expect(result.current.donorboxDisclosureVisible).toBe(false);
   expect(mockOpenLink).toHaveBeenCalledTimes(1);
 });
+
+// Giro 2 del delta (abc-3, f2-3, g-1, arch-4): profilo non arrivato (lettura fallita o
+// superata), consenso `ok` e codice disponibile. Parte SOLO il codice: l'avviso compare
+// lo stesso, con il testo del solo codice e senza la scelta «senza i miei dati».
+it('avviso Donorbox: profilo non arrivato e codice pronto, avviso del solo codice prima di uscire', async () => {
+  jest.mocked(hasOptedOutOfPrefill).mockResolvedValue(false);
+  (useAuth as jest.Mock).mockReturnValue({
+    session: { user: { id: 'A', email: 'a@r.it' } },
+    profile: null,
+    refreshProfile: jest.fn().mockResolvedValue(null),
+    consentState: 'ok',
+    refreshConsent: jest.fn().mockResolvedValue('ok'),
+    needsReConsent: false,
+  });
+  const { result } = await apriConRinuncia();
+  expect(result.current.donorboxDisclosureVisible).toBe(true);
+  expect(result.current.donorboxSoloCodice).toBe(true);
+  expect(mockOpenLink).not.toHaveBeenCalled();
+  await act(async () => {
+    await result.current.confirmDonorboxDisclosure(true);
+  });
+  const indirizzo = String(mockOpenLink.mock.calls[0]?.[0]);
+  expect(indirizzo).toContain('utm_content=REF-A');
+  expect(indirizzo).not.toContain('email=');
+});

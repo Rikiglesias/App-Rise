@@ -164,6 +164,12 @@ describe('usePartnerExit', () => {
     await act(async () => {
       await result.current.openDonation();
     });
+    // Parte il solo codice: prima l'avviso del codice (giro 2 del delta, abc-3), poi l'uscita.
+    expect(mockOpenLink).not.toHaveBeenCalled();
+    expect(result.current.donorboxSoloCodice).toBe(true);
+    await act(async () => {
+      await result.current.confirmDonorboxDisclosure(true);
+    });
 
     const [url] = mockOpenLink.mock.calls[0];
     expect(url).not.toContain('email=');
@@ -735,6 +741,11 @@ describe('usePartnerExit — cambio account sullo stesso telefono', () => {
     expect(
       mockUseAuth.mock.results[0]?.value.refreshProfile
     ).toHaveBeenCalled();
+    // Senza profilo di u2 parte il solo codice: prima l'avviso del codice, poi l'uscita.
+    expect(mockOpenLink).not.toHaveBeenCalled();
+    await act(async () => {
+      await result.current.confirmDonorboxDisclosure(true);
+    });
     const [url] = mockOpenLink.mock.calls[0];
     expect(url).toContain('utm_content=REF-U2');
     expect(url).not.toContain('Mario');

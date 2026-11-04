@@ -554,6 +554,8 @@ export default {
     donorboxDisclosureTitle: 'Stai per uscire dall’app',
     donorboxDisclosureBody:
       'Le donazioni sono gestite da Donorbox, il nostro partner. Per non farti riscrivere tutto, nell’indirizzo che stiamo per aprire mettiamo il tuo nome, il tuo cognome e la tua email, così il modulo risulta già compilato. Un indirizzo però resta nella cronologia del browser: se preferisci, puoi proseguire senza e compilare a mano. Nell’indirizzo c’è anche un codice collegato al tuo account, senza nome né email: ci serve per sapere che arrivi dall’app, e resta anche se continui senza i tuoi dati.',
+    donorboxDisclosureBodySoloCodice:
+      'Le donazioni sono gestite da Donorbox, il nostro partner. Nell’indirizzo che stiamo per aprire c’è un codice collegato al tuo account, senza nome né email: ci serve per sapere che arrivi dall’app.',
     donorboxContinueWithoutData: 'Continua senza i miei dati',
     disclosureTitle: 'Stai per uscire dall’app',
     disclosureBody:

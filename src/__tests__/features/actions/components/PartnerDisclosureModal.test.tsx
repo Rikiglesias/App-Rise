@@ -54,4 +54,23 @@ describe('PartnerDisclosureModal', () => {
     await flush();
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
+
+  // Giro 2 del delta (abc-3): parte solo il codice, il testo non promette nome ed email.
+  it('avviso Donorbox del solo codice: testo del codice e nessuna scelta «senza i miei dati»', () => {
+    renderWithProviders(
+      <PartnerDisclosureModal
+        visible
+        variant="donorbox"
+        soloCodice
+        onConfirm={jest.fn()}
+        onCancel={jest.fn()}
+      />,
+      render
+    );
+    expect(
+      screen.getByText(/c’è un codice collegato al tuo account/)
+    ).toBeTruthy();
+    expect(screen.queryByText(/il tuo nome, il tuo cognome/)).toBeNull();
+    expect(screen.queryByTestId('partner-disclosure-without-data')).toBeNull();
+  });
 });

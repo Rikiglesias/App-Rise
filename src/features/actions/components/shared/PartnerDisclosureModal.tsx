@@ -57,6 +57,11 @@ interface PartnerDisclosureModalProps {
    * scelta non compare — ed è così che resta fuori dalla variante Let's Donation.
    */
   onConfirmWithoutData?: () => void;
+  /**
+   * Variante `donorbox` quando nell'indirizzo parte SOLO il codice collegato all'account
+   * (nessun dato anagrafico in mano): il testo non deve promettere nome ed email.
+   */
+  soloCodice?: boolean;
 }
 
 const createStyles = (colors: ThemeColors) =>
@@ -143,6 +148,7 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
   onCancel,
   variant = 'letsdonation',
   onConfirmWithoutData,
+  soloCodice = false,
 }) => {
   const { triggerHaptic } = useHapticFeedback();
   const { t } = useTranslation();
@@ -164,7 +170,9 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
     ? 'partner.donorboxDisclosureTitle'
     : 'partner.disclosureTitle';
   const bodyKey = isDonorbox
-    ? 'partner.donorboxDisclosureBody'
+    ? soloCodice
+      ? 'partner.donorboxDisclosureBodySoloCodice'
+      : 'partner.donorboxDisclosureBody'
     : 'partner.disclosureBody';
 
   const handleConfirm = useCallback(async () => {

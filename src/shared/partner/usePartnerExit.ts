@@ -74,6 +74,8 @@ export interface UsePartnerExitReturn {
    * cognome ed email, e la persona deve saperlo prima che parta.
    */
   donorboxDisclosureVisible: boolean;
+  /** Parte SOLO il codice (nessun dato anagrafico in mano): testo del solo codice, senza la terza scelta. */
+  donorboxSoloCodice: boolean;
   /** Scelta sull'avviso pre-donazione: con la precompilazione, o senza. */
   confirmDonorboxDisclosure: (conDati: boolean) => Promise<void>;
   /** Chiude l'avviso pre-donazione senza uscire (e senza marcarlo come letto). */
@@ -121,6 +123,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     conDati: string;
     senzaDati: string;
     perUtente: string | null;
+    soloCodice: boolean;
   } | null>(null);
 
   const userId = session?.user?.id ?? null;
@@ -202,10 +205,14 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
           prefillCompleto.lastName ||
           prefillCompleto.email
       );
+      // Anche SENZA dati anagrafici in mano (profilo non arrivato: lettura fallita o
+      // superata) il codice può partire: l'avviso lo dichiara lo stesso, col testo del
+      // solo codice (giro 2 del delta, abc-3).
+      const parteQualcosa = haDatiPersonali
+        ? !haRinunciatoAlPrefill || Boolean(ref)
+        : Boolean(ref);
       const daAvvisare =
-        haDatiPersonali &&
-        (!haRinunciatoAlPrefill || Boolean(ref)) &&
-        !(await hasSeenPartnerDisclosure(userId, 'donorbox'));
+        parteQualcosa && !(await hasSeenPartnerDisclosure(userId, 'donorbox'));
       // Sessione del client già di un altro account mentre questo render è ancora
       // del precedente: profilo e ref non sarebbero della stessa persona. Non si apre
       // niente; il tocco successivo, col render nuovo, parte con l'account giusto.
@@ -219,6 +226,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
           conDati: buildDonorboxDonationUrl(ref, prefillCompleto),
           senzaDati: buildDonorboxDonationUrl(ref, {}),
           perUtente: userId,
+          soloCodice: !haDatiPersonali,
         });
         setDonorboxDisclosureVisible(true);
         return;
@@ -348,6 +356,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
     disclosureVisible,
     donorboxDisclosureVisible:
       donorboxDisclosureVisible && pendingDonation?.perUtente === userId,
+    donorboxSoloCodice: pendingDonation?.soloCodice ?? false,
     openDonation,
     openLetsDonationExit,
     confirmDisclosure,

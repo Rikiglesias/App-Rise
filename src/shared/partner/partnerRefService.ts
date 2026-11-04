@@ -33,12 +33,17 @@ export type PartnerName = 'donorbox' | 'letsdonation';
 const UNIQUE_VIOLATION = '23505';
 const FK_VIOLATION = '23503';
 
+// Il filtro su `user_id` lega la lettura all'account controllato: senza, la riga la
+// sceglie la sessione del momento (RLS). Se fra il controllo e la lettura entra B e poi
+// torna A, il riferimento di B partirebbe accanto ai dati di A (giro 2 del delta, abc-2).
 const selectActiveRef = async (
-  partner: PartnerName
+  partner: PartnerName,
+  userId: string
 ): Promise<string | null> => {
   const { data, error } = await supabase
     .from('partner_refs')
     .select('ref')
+    .eq('user_id', userId)
     .eq('partner', partner)
     .eq('active', true)
     .maybeSingle();
@@ -71,7 +76,7 @@ export const getOrCreatePartnerRef = async (
   if (!userId) return null; // ospite: nessuna correlazione
 
   // 1. Ref attivo già esistente?
-  const existing = await selectActiveRef(partner);
+  const existing = await selectActiveRef(partner, userId);
   if (existing) return existing;
 
   // 2. Crea un nuovo ref (il default server-side genera il valore).
@@ -84,7 +89,7 @@ export const getOrCreatePartnerRef = async (
 
   // 3. Un'altra chiamata ha inserito nel frattempo → ri-leggi il suo ref.
   if (error?.code === UNIQUE_VIOLATION) {
-    const raced = await selectActiveRef(partner);
+    const raced = await selectActiveRef(partner, userId);
     if (raced) return raced;
     // 23505 ma il re-select non vede il ref: l'altra tx è stata rollbackata oppure
     // c'è replica-lag → transiente, no-op accettato (non un fallimento generico).
