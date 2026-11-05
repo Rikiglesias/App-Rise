@@ -54,18 +54,37 @@ const selectActiveRef = async (
   return data?.ref ?? null;
 };
 
+/**
+ * La sessione del client non si è potuta leggere: rinnovo del token fallito per un
+ * momento, storage illeggibile. NON è un cambio di account — la persona è ancora
+ * collegata — e chi esce verso un partner deve dirglielo invece di fermarsi in
+ * silenzio (giro 2 del delta, f2-2).
+ */
+export class SessioneNonVerificata extends Error {
+  constructor() {
+    super('sessione_non_verificata');
+    this.name = 'SessioneNonVerificata';
+  }
+}
+
 /** Chi è collegato ADESSO nel client: può essere già cambiato prima del render. */
 export const utenteDellaSessione = async (): Promise<string | null> => {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  return session?.user?.id ?? null;
+  let letta: Awaited<ReturnType<typeof supabase.auth.getSession>>;
+  try {
+    letta = await supabase.auth.getSession();
+  } catch {
+    throw new SessioneNonVerificata();
+  }
+  // Con un errore, «nessuna sessione» non vuol dire «nessuno collegato».
+  if (letta.error) throw new SessioneNonVerificata();
+  return letta.data.session?.user?.id ?? null;
 };
 
 /**
  * `utenteAtteso` è l'utente del render che prepara l'uscita. Se la sessione del
  * client è già di un altro (link di B aperto con A collegato), un ref di B finirebbe
- * accanto ai dati di A: si restituisce null e il chiamante non apre niente.
+ * accanto ai dati di A: si restituisce null e il chiamante non apre niente. Con la
+ * sessione non leggibile lancia `SessioneNonVerificata`: il chiamante lo dice alla persona.
  */
 export const getOrCreatePartnerRef = async (
   partner: PartnerName,

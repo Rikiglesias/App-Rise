@@ -1,7 +1,9 @@
 import { useCallback, useRef, useState } from 'react';
+import { Alert } from 'react-native';
 
 import {
   getOrCreatePartnerRef,
+  SessioneNonVerificata,
   utenteDellaSessione,
 } from './partnerRefService';
 import { resolvePrefillEmail } from './partnerEmail';
@@ -93,6 +95,15 @@ export interface UsePartnerExitReturn {
   /** L'utente annulla la schermata onesta → nessuna uscita. */
   cancelDisclosure: () => void;
 }
+
+/**
+ * Sessione non leggibile (f2-2): la persona lo vede invece di un tocco che non fa
+ * niente, e il tocco successivo riprova. Ogni altro errore risale come prima.
+ */
+const avvisaSeAccountNonVerificato = (errore: unknown): void => {
+  if (!(errore instanceof SessioneNonVerificata)) throw errore;
+  Alert.alert(i18n.t('common.error'), i18n.t('partner.sessioneNonVerificata'));
+};
 
 export const usePartnerExit = (): UsePartnerExitReturn => {
   const { session, profile, refreshProfile, consentState, refreshConsent } =
@@ -233,6 +244,8 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       }
       const url = buildDonorboxDonationUrl(ref, prefill);
       await openLink(url, 'donation', i18n.t('links.errors.donation'));
+    } catch (errore) {
+      avvisaSeAccountNonVerificato(errore);
     } finally {
       uscitaInCorso.current = false;
       setIsExiting(false);
@@ -292,6 +305,8 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
           'donation',
           i18n.t('links.errors.donation')
         );
+      } catch (errore) {
+        avvisaSeAccountNonVerificato(errore);
       } finally {
         uscitaInCorso.current = false;
       }
@@ -321,6 +336,8 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
         // chiesta dopo il ref anche quando c'è.
         if ((await utenteDellaSessione()) !== userId) return;
         await openLink(appendRiseRef(url, ref), loadingKey, errorMessage);
+      } catch (errore) {
+        avvisaSeAccountNonVerificato(errore);
       } finally {
         uscitaInCorso.current = false;
         setIsExiting(false);

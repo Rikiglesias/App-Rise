@@ -530,6 +530,8 @@ export default {
     donorboxDisclosureBodySoloCodice:
       'Donations are handled by Donorbox, our partner. The address we are about to open carries a code linked to your account, without your name or email: we use it to know you came from the app.',
     donorboxContinueWithoutData: 'Continue without my details',
+    sessioneNonVerificata:
+      'We can’t verify your account right now. Check your connection and try again.',
     disclosureTitle: 'You’re leaving the app',
     disclosureBody:
       'Shop, gift cards, events, projects and community registration are handled by Let’s Donation, our partner. That platform has its own account, separate from your app one: if you don’t have one yet, it will ask you to create it. If you are signed in, the address may also carry a code linked to your account, without your name or email: it is used to know you came from the app. If you continue, you’ll be redirected.',
