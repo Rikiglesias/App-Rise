@@ -112,9 +112,10 @@ consulente e la PEC, oggi in `privacy-policy.html` e `privacy-policy-en.html`): 
 ha validato e la PEC non è scritta (leva PEC: Alberto, punto 3).
 L'URL della pagina di cancellazione va anche in Sicurezza dei dati (`play-console-risposte.md`).
 
-Prima dell'invio si controllano a mano anche due cose: la PEC a OpenClick è partita e la sua ricevuta di consegna è
-salvata (serve per un eventuale ricorso, § 13); nella Panoramica di Play Console non c'è più l'avviso «Nome del
-pacchetto non registrato» (verifica dello sviluppatore Android, APK di prova caricato il 22/10).
+Prima dell'invio si controllano a mano anche due cose: la ricevuta di consegna della PEC a OpenClick è salvata (serve
+per un eventuale ricorso, § 13; la PEC è partita il 4/11, vedi «Chi fa cosa» → Alberto, punto 1); nella Panoramica
+di Play Console non c'è più l'avviso «Nome del pacchetto non registrato» (verifica dello sviluppatore Android, APK di
+prova caricato il 22/10).
 
 Funzioni Edge: prima dell'invio si pubblicano le due funzioni col codice del commit della build consegnata a Play
 (Riccardo; la prima volta serve `npx supabase login`, che apre il browser). Comando (Git Bash, dalla radice del repo):
@@ -274,14 +275,16 @@ In ordine: prima ciò che sblocca il resto. Nessuna password o chiave va mai in 
    - Proprietario non riconosciuto: **rimuovere** il service account da «Utenti e autorizzazioni» e caricare a mano.
    La chiave si carica solo su expo.dev → Credentials → Android → `org.riseagainsthunger.italia` → Service
    credentials. Mai mandarla per mail, in chat o nel repository.
-6. **Posta di Creareunapp**: controllare, anche nello spam, se Creareunapp o OpenClick hanno risposto alla mail del
-   24/09 e girare a Riccardo tutto ciò che arriva da loro.
+6. **Posta di Creareunapp**: controllare, anche nello spam, se Creareunapp o OpenClick rispondono alla mail del 24/09
+   o alla PEC del 4/11 e girare a Riccardo tutto ciò che arriva da loro (al 1/11 nessuna risposta).
 
 ### Alberto (presidente, legale rappresentante)
 
-1. **PEC a OpenClick** dalla PEC dell'associazione, con Riccardo in copia: testo in fondo alla mail di Riccardo al team
-   del 22/10 («Nuova app Android e chiusura con Creareunapp»). Si manda quando Riccardo dà il via, cioè dopo la risposta
-   di Simone (punto 6) e dopo il controllo dell'indirizzo PEC di OpenClick sul registro INI-PEC.
+1. **PEC a OpenClick**: partita il 4/11 alle 12:16 dalla PEC dell'associazione (`posta@pec.shnitalia.it`, inviata
+   da Chiara) a `openclick@pec-societa.it`, con Creareunapp e Riccardo in copia; testo in fondo alla mail di Riccardo al
+   team del 22/10 («Nuova app Android e chiusura con Creareunapp»). La copia a `info@openclick.it` non è stata
+   recapitata (avviso di Chiara del 4/11): conta la consegna all'indirizzo PEC. Resta da salvare la ricevuta di
+   avvenuta consegna per `openclick@pec-societa.it`, che sta nella casella PEC dell'associazione (gate del § 8).
 2. **Seconda PEC** a OpenClick con la data di ritiro, almeno 7 giorni prima (punto 2 della prima PEC): si manda dopo il
    primo avviso agli utenti (§ 14); data e testo li prepara Riccardo.
 3. **Dati dell'informativa**: la sede legale è quella del RUNTS (via dei Fornaciai 17, Bologna); quale PEC scrivere in
@@ -459,10 +462,13 @@ Riccardo (punto 7).
    pronto: «1) Con Let's Donation oggi non c'è nessun atto scritto: per i sostenitori che stanno nel nostro spazio sulla
    loro piattaforma siamo titolari autonomi o serve un accordo sul trattamento (DPA, art. 28 GDPR)? 2) L'app manda a
    Let's Donation e a Donorbox un codice di provenienza (`rise_ref`), solo a chi ha accettato l'informativa: su quale
-   base giuridica, da scrivere nella tabella del § 3? 3) Revoca del codice e cancellazione dell'account: oggi chiediamo
-   noi ai partner, entro un mese, di cancellare i dati legati al codice; Let's Donation ha detto che da loro esiste solo
-   l'anonimizzazione. Basta così?». Innesco: insieme all'informativa (Riccardo, punto 7); la base giuridica del codice
-   è anche nel gate del § 8.
+   base giuridica, da scrivere nella tabella del § 3? 3) Cancellazione dell'account e revoca del codice: quando un
+   account si elimina chiediamo noi ai partner, entro un mese, di cancellare i dati legati al codice; Let's Donation ha
+   detto che da loro esiste solo l'anonimizzazione. La revoca del solo codice, con l'account che resta attivo,
+   l'informativa la promette ("Puoi chiederci di annullarlo") ma è ancora da attivare: oggi nessuno riceve la richiesta
+   né la esegue, e le uscite successive portano lo stesso codice. Basta così, o finché la revoca non c'è va tolta
+   dall'informativa?». Innesco: insieme all'informativa (Riccardo, punto 7); la base giuridica del codice è anche nel
+   gate del § 8.
 2. **Termini d'uso e licenze**. Testo pronto: «L'app ha gli account ma nessun documento di termini d'uso: servono, o
    bastano informativa e statuto? Le librerie open source dell'app chiedono di riportare i loro avvisi di licenza: basta
    una pagina sul sito o devono stare dentro l'app?». Innesco: insieme all'informativa (Riccardo, punto 7).
