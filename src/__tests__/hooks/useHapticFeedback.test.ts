@@ -1,9 +1,10 @@
 import { renderHook } from '@testing-library/react-native';
+import * as Haptics from 'expo-haptics';
 import { Platform } from 'react-native';
 
 import { useHapticFeedback } from '../../shared/hooks/useHapticFeedback';
 
-// Mock Platform esplicitamente
+// Platform.OS pilotato dal test: il hook vibra solo su iOS e Android.
 const mockPlatform = {
   OS: 'ios',
 };
@@ -13,11 +14,10 @@ Object.defineProperty(Platform, 'OS', {
   configurable: true,
 });
 
-// Mock expo-haptics
-const mockImpactAsync = jest.fn().mockResolvedValue(undefined);
-
+// I mock stanno DENTRO la factory: `jest.mock` sale sopra gli import, e una costante
+// definita fuori lì non è ancora inizializzata (era il motivo del vecchio `it.skip`).
 jest.mock('expo-haptics', () => ({
-  impactAsync: mockImpactAsync,
+  impactAsync: jest.fn().mockResolvedValue(undefined),
   notificationAsync: jest.fn().mockResolvedValue(undefined),
   selectionAsync: jest.fn().mockResolvedValue(undefined),
   ImpactFeedbackStyle: {
@@ -32,23 +32,62 @@ jest.mock('expo-haptics', () => ({
   },
 }));
 
+const impactAsync = Haptics.impactAsync as jest.Mock;
+const notificationAsync = Haptics.notificationAsync as jest.Mock;
+const selectionAsync = Haptics.selectionAsync as jest.Mock;
+const tutte = [impactAsync, notificationAsync, selectionAsync];
+
 describe('useHapticFeedback', () => {
   beforeEach(() => {
-    void jest.clearAllMocks();
+    jest.clearAllMocks();
     mockPlatform.OS = 'ios';
   });
 
-  it('should work on iOS platform', () => {
-    expect(Platform.OS).toBe('ios');
-  });
+  it.each([
+    ['light', impactAsync, ['LIGHT_VALUE']],
+    ['heavy', impactAsync, ['HEAVY_VALUE']],
+    ['success', notificationAsync, ['SUCCESS_VALUE']],
+    ['error', notificationAsync, ['ERROR_VALUE']],
+    ['selection', selectionAsync, []],
+  ] as const)(
+    '%s fa partire la sua vibrazione e nessun’altra',
+    async (tipo, fn, args) => {
+      const { result } = renderHook(() => useHapticFeedback());
 
-  it.skip('should call triggerHaptic and execute haptic', async () => {
+      await result.current.triggerHaptic(tipo);
+
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(fn).toHaveBeenCalledWith(...args);
+      for (const altra of tutte)
+        if (altra !== fn) expect(altra).not.toHaveBeenCalled();
+    }
+  );
+
+  it('vibra anche su Android', async () => {
+    mockPlatform.OS = 'android';
     const { result } = renderHook(() => useHapticFeedback());
 
-    // Test triggerHaptic directly
-    await result.current.triggerHaptic('light');
+    await result.current.lightTap();
 
-    // Should have called impactAsync with Light value
-    expect(mockImpactAsync).toHaveBeenCalledWith('LIGHT_VALUE');
+    expect(impactAsync).toHaveBeenCalledWith('LIGHT_VALUE');
+  });
+
+  it('sul web non chiama nessuna vibrazione', async () => {
+    mockPlatform.OS = 'web';
+    const { result } = renderHook(() => useHapticFeedback());
+
+    await result.current.triggerHaptic('heavy');
+
+    for (const fn of tutte) expect(fn).not.toHaveBeenCalled();
+  });
+
+  it('un dispositivo senza vibrazione non fa fallire il tocco', async () => {
+    impactAsync.mockRejectedValueOnce(new Error('non supportato'));
+    const { result } = renderHook(() => useHapticFeedback());
+
+    await expect(
+      result.current.triggerHaptic('light')
+    ).resolves.toBeUndefined();
+    expect(impactAsync).toHaveBeenCalledTimes(1);
   });
 });

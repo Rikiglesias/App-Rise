@@ -8,7 +8,6 @@ jest.mock('expo-haptics', () => ({
 /* eslint-disable import/first */
 // Imports must come after jest.mock() calls - required by Jest
 import { renderHook, act } from '@testing-library/react-native';
-import { Linking, Alert } from 'react-native';
 import { useSocialPlatforms } from '@/features/social/useSocialPlatforms';
 import { logWarn } from '@/shared/utils/logger';
 import i18n from '@/locales';
@@ -60,8 +59,17 @@ jest.mock('@/shared/utils/logger', () => ({
 
 // Mock delle icone - gestite automaticamente da Jest
 
-const mockLinking = Linking as jest.Mocked<typeof Linking>;
-const mockAlert = Alert as jest.Mocked<typeof Alert>;
+const mockLinkHandler = {
+  openWebsiteLink: jest.fn(),
+  openInstagramLink: jest.fn(),
+  openFacebookLink: jest.fn(),
+  openYouTubeLink: jest.fn(),
+  openLinkedInLink: jest.fn(),
+};
+jest.mock('@/shared/hooks/useLinkHandler', () => ({
+  useLinkHandler: () => mockLinkHandler,
+}));
+
 const mockLogWarn = logWarn as jest.MockedFunction<typeof logWarn>;
 
 describe('useSocialPlatforms', () => {
@@ -104,77 +112,55 @@ describe('useSocialPlatforms', () => {
   });
 });
 
+// Apertura dei link: qui si prova solo ciò che questo hook decide — quale apertura parte da
+// ogni scheda e che un errore non esca dal tocco. Indirizzi, allowlist e avviso quando il link
+// non si apre sono di `useLinkHandler` e stanno nei suoi test (`useLinkHandler.test.ts`).
 describe('useSocialPlatforms - Link Opening', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    for (const fn of Object.values(mockLinkHandler))
+      fn.mockResolvedValue(undefined);
   });
 
-  describe('openSocialLink functionality', () => {
-    // TODO: Questi test andrebbero rifatti per testare solo useSocialPlatforms, non useLinkHandler
-    it.skip('opens URL when supported', async () => {
-      mockLinking.canOpenURL.mockResolvedValue(true);
-      mockLinking.openURL.mockResolvedValue(true);
-
+  it.each([
+    ['website', 'openWebsiteLink'],
+    ['instagram', 'openInstagramLink'],
+    ['facebook', 'openFacebookLink'],
+    ['youtube', 'openYouTubeLink'],
+    ['linkedin', 'openLinkedInLink'],
+  ] as const)(
+    'la scheda %s apre solo il suo link (%s)',
+    async (id, apertura) => {
       const { result } = renderHook(() => useSocialPlatforms());
-      const instagramPlatform = result.current.socialPlatforms.find(
-        p => p.id === 'instagram'
-      );
+      const scheda = result.current.socialPlatforms.find(p => p.id === id);
 
       await act(async () => {
-        await instagramPlatform?.onPress();
+        await scheda?.onPress();
       });
 
-      expect(mockLinking.canOpenURL).toHaveBeenCalledWith(
-        'https://instagram.com/riseagainsthungeritalia'
-      );
-      expect(mockLinking.openURL).toHaveBeenCalledWith(
-        'https://instagram.com/riseagainsthungeritalia'
-      );
+      expect(mockLinkHandler[apertura]).toHaveBeenCalledTimes(1);
+      for (const [nome, fn] of Object.entries(mockLinkHandler))
+        if (nome !== apertura) expect(fn).not.toHaveBeenCalled();
+    }
+  );
+
+  it("un'apertura che fallisce non esce dal tocco e resta nel log", async () => {
+    const error = new Error('Network error');
+    mockLinkHandler.openInstagramLink.mockRejectedValue(error);
+    const { result } = renderHook(() => useSocialPlatforms());
+    const instagram = result.current.socialPlatforms.find(
+      p => p.id === 'instagram'
+    );
+
+    await act(async () => {
+      await expect(instagram?.onPress()).resolves.toBeUndefined();
     });
 
-    it.skip('shows alert when URL is not supported', async () => {
-      mockLinking.canOpenURL.mockResolvedValue(false);
-
-      const { result } = renderHook(() => useSocialPlatforms());
-      const instagramPlatform = result.current.socialPlatforms.find(
-        p => p.id === 'instagram'
-      );
-
-      await act(async () => {
-        await instagramPlatform?.onPress();
-      });
-
-      expect(mockAlert.alert).toHaveBeenCalledWith(
-        'Errore',
-        "Non è possibile aprire Instagram. Assicurati di avere l'app installata.",
-        [{ text: 'OK' }]
-      );
-    });
-
-    it.skip('handles errors and logs warnings', async () => {
-      const error = new Error('Network error');
-      mockLinking.canOpenURL.mockRejectedValue(error);
-
-      const { result } = renderHook(() => useSocialPlatforms());
-      const instagramPlatform = result.current.socialPlatforms.find(
-        p => p.id === 'instagram'
-      );
-
-      await act(async () => {
-        await instagramPlatform?.onPress();
-      });
-
-      expect(mockLogWarn).toHaveBeenCalledWith(
-        'SocialPlatforms',
-        'open link failed',
-        error
-      );
-      expect(mockAlert.alert).toHaveBeenCalledWith(
-        'Errore',
-        "Si è verificato un errore nell'apertura di Instagram.",
-        [{ text: 'OK' }]
-      );
-    });
+    expect(mockLogWarn).toHaveBeenCalledWith(
+      'open link failed',
+      'SocialPlatforms',
+      error
+    );
   });
 });
 
