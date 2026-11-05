@@ -240,6 +240,23 @@ export const creaC83 = (testi = {}) => ({
       return `${RILIEVI_C83} non scrive lo sha della revisione del delta`;
     if (!ultimoCommit.startsWith(sha))
       return `revisione del delta su ${sha}, ma l'ultimo commit del codice è ${ultimoCommit.slice(0, 7)}`;
+    // Lo sha scritto nei rilievi deve essere quello di una revisione girata davvero: `lancia-delta.sh` scrive la copia
+    // (`git archive <sha>`) in testa a ogni log. Senza questo controllo bastava scrivere lo sha nuovo (5/11).
+    if (log) {
+      const copie = Object.entries(log)
+        .filter(
+          ([nome]) => /^delta\d+-/.test(nome) && !/-prova\.log$/.test(nome)
+        )
+        .map(
+          ([, testo]) =>
+            /git archive ([0-9a-f]{7,40})/.exec(
+              String(testo).split(/\r?\n/, 4).join('\n')
+            )?.[1]
+        )
+        .filter(Boolean);
+      if (!copie.some(h => h.startsWith(sha) || sha.startsWith(h)))
+        return `nessun log delta<N>-* ha la copia su ${sha}: la revisione su quello sha non risulta girata`;
+    }
     return '';
   },
 });

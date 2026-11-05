@@ -86,7 +86,9 @@ const RILIEVI = [
   'Revisione del delta su abc1234 (da f1fefda).',
 ].join('\n');
 const LOG =
-  'CODEX_HOME=C:\\tmp\\h\nfile in CODEX_HOME: auth.json\nexec\nrg -n x src\n succeeded in 12ms:';
+  'CODEX_HOME=C:\\tmp\\h\nfile in CODEX_HOME: auth.json\ncopia: C:\\tmp\\c (git archive abc1234), modello x\n' +
+  'exec\nrg -n x src\n succeeded in 12ms:';
+const LOG_ALTRO_SHA = LOG.replace('git archive abc1234', 'git archive def5678');
 const logCon = comando => ({
   log: { 'delta1-a.log': `${LOG}\nexec\n${comando}` },
 });
@@ -265,6 +267,16 @@ export const FIXTURE_F13_ESTERNI = {
         },
       },
       { log: { 'verifica-delta1-a.log': LOG.replace(/\n succeeded.*$/, '') } },
+      // Lo sha dei rilievi deve venire da una revisione girata: né un log su un altro sha, né la sola prova a vuoto
+      // o la sola verifica delle chiusure su quello sha (5/11).
+      { log: { 'delta1-a.log': LOG_ALTRO_SHA } },
+      {
+        log: {
+          'delta1-a.log': LOG_ALTRO_SHA,
+          'delta1-prova.log': LOG,
+          'verifica-delta1-a.log': LOG,
+        },
+      },
       { testi: { ...C83_OK.testi, C64: ['altro titolo'] } },
       { testi: { C81: C83_OK.testi.C81 } },
       {
