@@ -198,7 +198,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       // l'avviso stava sull'ALTRO canale, che non manda dati anagrafici.
       // Chi ha rinunciato al prefill non manda i dati ma il codice sì (C91), e l'avviso è
       // l'unico posto che glielo dice: se il codice c'è, l'avviso resta anche per lui.
-      // Niente dati (ospite, consenso non ok, profilo assente) → nessun avviso:
+      // Niente dati e niente codice (ospite, consenso non ok) → nessun avviso:
       // non c'è nulla da dichiarare e l'uscita resta immediata com'era.
       const haDatiPersonali = Boolean(
         prefillCompleto.firstName ||
@@ -255,7 +255,7 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
    *
    * L'avviso si marca come visto solo se la scelta è stata salvata. Una rinuncia
    * non salvata vale comunque per questa uscita, e l'avviso ricompare al prossimo
-   * giro. Annullare non lo marca visto.
+   * giro. Annullare non lo marca visto, e nemmeno confermare quello del solo codice.
    */
   const confirmDonorboxDisclosure = useCallback(
     async (conDati: boolean) => {
@@ -269,19 +269,26 @@ export const usePartnerExit = (): UsePartnerExitReturn => {
       setPendingDonation(null);
       try {
         if (!scelto || scelto.perUtente !== userId) return;
-        // La scelta si RICORDA: «senza i miei dati» è una preferenza, non un
-        // gesto valido per una volta sola. Scegliendo di mandarli si azzera una
-        // eventuale rinuncia precedente, così la porta resta aperta nei due sensi.
-        const sceltaSalvata = await setPrefillOptOut(userId, !conDati).then(
-          () => true,
-          () => false
-        );
-        if (sceltaSalvata) await markPartnerDisclosureSeen(userId, 'donorbox');
-        // Le due attese qui sopra sono storage, non render: l'indirizzo preparato porta
+        // L'avviso del SOLO codice non nomina nome ed email e non offre una scelta sui
+        // dati: confermarlo non vale come lettura dell'avviso completo e non tocca una
+        // rinuncia già salvata. Si apre e basta; alla prima uscita coi dati compare
+        // l'avviso completo (giro 2 del delta, regressione della correzione di abc-3).
+        if (!scelto.soloCodice) {
+          // La scelta si RICORDA: «senza i miei dati» è una preferenza, non un
+          // gesto valido per una volta sola. Scegliendo di mandarli si azzera una
+          // eventuale rinuncia precedente, così la porta resta aperta nei due sensi.
+          const sceltaSalvata = await setPrefillOptOut(userId, !conDati).then(
+            () => true,
+            () => false
+          );
+          if (sceltaSalvata)
+            await markPartnerDisclosureSeen(userId, 'donorbox');
+        }
+        // Le attese qui sopra sono storage, non render: l'indirizzo preparato porta
         // i dati di chi ha scelto, e può essere già entrato un altro account.
         if ((await utenteDellaSessione()) !== userId) return;
         await openLink(
-          conDati ? scelto.conDati : scelto.senzaDati,
+          conDati && !scelto.soloCodice ? scelto.conDati : scelto.senzaDati,
           'donation',
           i18n.t('links.errors.donation')
         );
