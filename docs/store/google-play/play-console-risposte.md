@@ -168,8 +168,9 @@ Fonte per condivisione, eccezioni e cifratura:
   (`buildDonorboxDonationUrl` e `appendRiseRef` in `src/shared/partner/partnerUrls.ts`).
   Dal 28/10 gli avvisi nominano il codice («un codice collegato al tuo account», `partner.disclosureBody` e
   `partner.donorboxDisclosureBody`), e il codice parte solo con il consenso all'informativa registrato.
-  Resta dichiarato come condiviso: l'avviso di Let's Donation si vede una volta sola e quello di Donorbox non si
-  vede da chi ha scelto di continuare senza i propri dati, quindi non ogni passaggio è preceduto da un avviso.
+  Resta dichiarato come condiviso: ogni avviso compare alla prima uscita della persona (quello di Donorbox anche a
+  chi continua senza i propri dati e quando parte il solo codice) e poi non più, quindi le uscite successive non
+  sono precedute da un avviso.
 - **Let's Donation — nessun dato anagrafico**: riceve solo il codice di provenienza.
 
 ## Funzionalità finanziarie

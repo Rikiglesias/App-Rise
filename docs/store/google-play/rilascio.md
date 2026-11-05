@@ -102,7 +102,7 @@ controlla privacy-policy-en.html https://italy.riseagainsthunger.org/privacy-pol
 controlla docs/store/google-play/web/elimina-account.html "<URL-ELIMINA-ACCOUNT>"
 controlla docs/store/google-play/web/delete-account.html "<URL-DELETE-ACCOUNT>"
 for u in https://italy.riseagainsthunger.org/privacy-policy/ https://italy.riseagainsthunger.org/privacy-policy-en/ "<URL-ELIMINA-ACCOUNT>" "<URL-DELETE-ACCOUNT>"; do
-  if curl -fsSL "$u" | grep -q 'da-validare'; then echo "BOZZA   $u"; fi
+  if curl -fsSL "$u" | grep -qE 'class="[^"]*da-validare'; then echo "BOZZA   $u"; fi
 done
 ```
 
