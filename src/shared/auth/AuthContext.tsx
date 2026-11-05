@@ -307,12 +307,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const eliminaAccountOra = useCallback(async () => {
     const utente = sessionUserIdRef.current;
-    const esito = await deleteAccountNow();
+    const esito = await deleteAccountNow(utente);
     if (esito.error === null && utente !== null) {
       eliminatoRef.current = utente;
       // Uscita locale fallita: nessun SIGNED_OUT arriverà, e senza questo passaggio
       // l'app resterebbe connessa, con i dati a schermo, a un account che non esiste più.
-      if (esito.sessioneAncoraSulDispositivo) {
+      // Solo se lo stato è ancora di chi è stato eliminato: se nell'attesa è entrato un
+      // altro account, è suo e non si azzera (giro 2 del delta, f2-1).
+      if (
+        esito.sessioneAncoraSulDispositivo &&
+        sessionUserIdRef.current === utente
+      ) {
         sessionUserIdRef.current = null;
         setSession(null);
         setProfile(null);

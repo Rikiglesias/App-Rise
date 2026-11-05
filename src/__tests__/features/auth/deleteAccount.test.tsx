@@ -133,7 +133,7 @@ it('elimina account: uscita che rigetta = sessione residua, non errore', async (
   (supabase.auth.signOut as jest.Mock).mockRejectedValueOnce(
     new Error('SecureStore unavailable')
   );
-  const elimina = jest.fn(deleteAccountNow);
+  const elimina = jest.fn(() => deleteAccountNow('u1'));
   mockUseAuth.mockReturnValue(makeAuth({ deleteAccountNow: elimina }));
   const alertSpy = jest
     .spyOn(Alert, 'alert')

@@ -90,16 +90,41 @@ type EsitoVerifica = 'eliminato' | 'presente' | 'impossibile';
  * del proxy), e un secondo tentativo risponde 401 perché l'utente non c'è più. Lo si
  * chiede al server: `user_not_found` = account eliminato; utente restituito = ancora
  * presente; qualunque altro esito (rete, sessione mancante, rinnovo del token fallito)
- * = verifica impossibile.
+ * = verifica impossibile. La risposta parla di chi è collegato ADESSO: se nell'attesa è
+ * entrato un altro account, «presente» sarebbe lui, e per quello da eliminare la
+ * verifica è impossibile (giro 2 del delta, f2-1).
  */
-const verificaAccount = async (): Promise<EsitoVerifica> => {
+const verificaAccount = async (
+  utenteAtteso: string | null
+): Promise<EsitoVerifica> => {
   try {
     const { data, error } = await supabase.auth.getUser();
     if (error?.code === 'user_not_found') return 'eliminato';
-    if (!error && data.user) return 'presente';
+    if (!error && data.user)
+      return utenteAtteso === null || data.user.id === utenteAtteso
+        ? 'presente'
+        : 'impossibile';
     return 'impossibile';
   } catch {
     return 'impossibile';
+  }
+};
+
+/**
+ * Vero solo se sul client c'è la sessione di un ALTRO account rispetto a quello da
+ * eliminare. Nessuna sessione, o lettura fallita, non conta come «altro»: la sessione
+ * rimasta sarebbe quella dell'account eliminato, da chiudere come prima.
+ */
+const eEntratoUnAltro = async (
+  utenteAtteso: string | null
+): Promise<boolean> => {
+  if (utenteAtteso === null) return false;
+  try {
+    const { data } = await supabase.auth.getSession();
+    const ora = data.session?.user.id ?? null;
+    return ora !== null && ora !== utenteAtteso;
+  } catch {
+    return false;
   }
 };
 
@@ -110,7 +135,10 @@ const verificaAccount = async (): Promise<EsitoVerifica> => {
  * tentativo riconcilia (401 → `user_not_found` → riuscita) oppure elimina. Si guarda la
  * stringa e non l'oggetto perché è la stringa che arriva alla schermata.
  */
-export const deleteAccountNow = async (): Promise<{
+export const deleteAccountNow = async (
+  /** Chi era collegato quando la cancellazione è partita: esito e pulizia sono suoi. */
+  utenteAtteso: string | null
+): Promise<{
   error: string | null;
   sessioneAncoraSulDispositivo?: boolean;
 }> => {
@@ -128,7 +156,7 @@ export const deleteAccountNow = async (): Promise<{
     errore = messaggioDi(error);
   }
   if (errore !== null) {
-    const verifica = await verificaAccount();
+    const verifica = await verificaAccount(utenteAtteso);
     if (verifica === 'presente') return { error: errore };
     if (verifica === 'impossibile')
       return {
@@ -138,6 +166,13 @@ export const deleteAccountNow = async (): Promise<{
             : 'delete_interrupted',
       };
   }
+
+  // L'account è eliminato. Uscita e pulizia dello storage valgono solo se la sessione
+  // sul telefono è ancora sua: se nell'attesa è entrato un altro account (link di B),
+  // chiuderebbero B (giro 2 del delta, f2-1). Lo stato dell'app è di B: niente da
+  // riallineare.
+  if (await eEntratoUnAltro(utenteAtteso))
+    return { error: null, sessioneAncoraSulDispositivo: false };
 
   // Uscita LOCALE, non globale: l'account a questo punto non esiste più, e il
   // signOut globale chiede al server di revocare le sessioni di un utente
@@ -173,6 +208,10 @@ export const deleteAccountNow = async (): Promise<{
     uscitaFallita = true;
   }
   if (uscitaFallita) {
+    // L'uscita è passata dalla rete: nell'attesa può essere entrato un altro account,
+    // e lo storage ora conterrebbe la sua sessione.
+    if (await eEntratoUnAltro(utenteAtteso))
+      return { error: null, sessioneAncoraSulDispositivo: false };
     try {
       await rimuoviSessioneSalvata();
     } catch (error) {

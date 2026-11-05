@@ -87,7 +87,7 @@ beforeEach(() => {
 
 /** Schermata con il vero `deleteAccountNow` dietro una spia, conferma già premuta. */
 const confermaDallaSchermata = () => {
-  const elimina = jest.fn(deleteAccountNow);
+  const elimina = jest.fn(() => deleteAccountNow('u1'));
   (useAuth as jest.Mock).mockReturnValue({
     status: 'authenticated',
     utenteCollegato: () => 'u1',
@@ -118,7 +118,7 @@ it('cancellazione: errore ma account già eliminato → riuscita e uscita', asyn
   invoke.mockResolvedValueOnce(erroreFunzione(500));
   getUser.mockResolvedValueOnce(utenteEliminato);
 
-  const esito = await deleteAccountNow();
+  const esito = await deleteAccountNow('u1');
 
   expect(esito.error).toBeNull();
   expect(signOut).toHaveBeenCalledWith({ scope: 'local' });
@@ -128,7 +128,7 @@ it('cancellazione: errore e account presente → errore (riconciliazione chiamat
   invoke.mockResolvedValueOnce(erroreFunzione(500));
   getUser.mockResolvedValueOnce(utentePresente);
 
-  const esito = await deleteAccountNow();
+  const esito = await deleteAccountNow('u1');
 
   expect(getUser).toHaveBeenCalledTimes(1);
   expect(esito.error).toBe('Edge Function returned a non-2xx status code');
@@ -163,7 +163,7 @@ it('cancellazione: secondo tentativo dopo una riuscita → riuscita', async () =
   invoke.mockResolvedValueOnce(erroreFunzione(401));
   getUser.mockResolvedValueOnce(utenteEliminato);
 
-  const esito = await deleteAccountNow();
+  const esito = await deleteAccountNow('u1');
 
   expect(esito.error).toBeNull();
   expect(signOut).toHaveBeenCalledWith({ scope: 'local' });
@@ -173,7 +173,7 @@ it('cancellazione: la chiamata rigetta → riconciliata come un errore', async (
   invoke.mockRejectedValueOnce(new Error('boom'));
   getUser.mockResolvedValueOnce(utentePresente);
 
-  await expect(deleteAccountNow()).resolves.toEqual({ error: 'boom' });
+  await expect(deleteAccountNow('u1')).resolves.toEqual({ error: 'boom' });
   expect(getUser).toHaveBeenCalledTimes(1);
 });
 

@@ -38,7 +38,7 @@ it("cancellazione riuscita e uscita fallita: la sessione si toglie dallo storage
   ).storageKey;
 
   try {
-    const esito = await deleteAccountNow();
+    const esito = await deleteAccountNow('u1');
 
     expect(esito.error).toBeNull();
     expect(chiaveDellaLibreria).toMatch(/^sb-.+-auth-token$/);
