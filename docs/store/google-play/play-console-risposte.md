@@ -170,9 +170,10 @@ Fonte per condivisione, eccezioni e cifratura:
   `partner.donorboxDisclosureBody`), e il codice parte solo con il consenso all'informativa registrato.
   Resta dichiarato come condiviso: ogni avviso completo compare alla prima uscita della persona (quello di Donorbox
   anche a chi continua senza i propri dati) e poi non più, quindi le uscite successive non sono precedute da un
-  avviso. L'avviso di Donorbox del solo codice (profilo non ancora completo) non si memorizza: ricompare a ogni
-  uscita finché il profilo manca, poi compare quello completo (`confirmDonorboxDisclosure` in
-  `src/shared/partner/usePartnerExit.ts`).
+  avviso. L'avviso di Donorbox del solo codice (profilo non disponibile) compare a ogni uscita col solo codice
+  finché la persona non ha visto quello completo, e confermarlo non vale come lettura di quello completo; chi l'ha
+  già visto esce col solo codice senza avviso, come per le altre uscite successive (`daAvvisare` e
+  `confirmDonorboxDisclosure` in `src/shared/partner/usePartnerExit.ts`).
 - **Let's Donation — nessun dato anagrafico**: riceve solo il codice di provenienza.
 
 ## Funzionalità finanziarie
