@@ -239,7 +239,14 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
                 accessibilityLabel={t('partner.disclosureCancel')}
                 testID="partner-disclosure-cancel"
               >
-                <PerfectText size={15} lines={1} style={styles.cancelText}>
+                {/* Una riga che si restringe invece di spezzarsi: a scala 2,0 «Continue» non
+                    entra in metà riga e Android lo tagliava in «Continu» + «e» (F12, vc25). */}
+                <PerfectText
+                  size={15}
+                  lines={1}
+                  variant="fit"
+                  style={styles.cancelText}
+                >
                   {t('partner.disclosureCancel')}
                 </PerfectText>
               </PlatformTouchable>
@@ -250,7 +257,12 @@ const PartnerDisclosureModal: React.FC<PartnerDisclosureModalProps> = ({
                 accessibilityLabel={t('partner.disclosureContinue')}
                 testID="partner-disclosure-confirm"
               >
-                <PerfectText size={15} lines={1} style={styles.confirmText}>
+                <PerfectText
+                  size={15}
+                  lines={1}
+                  variant="fit"
+                  style={styles.confirmText}
+                >
                   {t('partner.disclosureContinue')}
                 </PerfectText>
               </PlatformTouchable>

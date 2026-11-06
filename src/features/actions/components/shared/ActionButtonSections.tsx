@@ -80,7 +80,7 @@ export const DonateButtonsSection: React.FC<DonateButtonsSectionProps> = ({
             </PerfectText>
             <PerfectText
               size={16}
-              lines={1}
+              lines={2}
               immunity={true}
               testID="donate-subtitle"
               style={styles.donateInlineSubtitle}
@@ -192,7 +192,7 @@ export const ExploreButtonsSection: React.FC<ExploreButtonsSectionProps> = ({
           </PerfectText>
           <PerfectText
             size={14}
-            lines={1}
+            lines={2}
             immunity={true}
             style={styles.exploreSubtitle}
           >
@@ -290,7 +290,7 @@ export const CommunityButtonsSection: React.FC<
           </PerfectText>
           <PerfectText
             size={15}
-            lines={1}
+            lines={2}
             immunity={true}
             style={styles.communitySubtitle}
           >

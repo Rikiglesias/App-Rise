@@ -45,8 +45,12 @@ interface ModalContentProps {
   t: (key: string) => string;
 }
 
-const createModalStyles = (colors: ThemeColors) =>
-  StyleSheet.create({
+const createModalStyles = (colors: ThemeColors) => {
+  // La X è in posizione assoluta e sporge sopra l'intestazione: senza un'altezza propria
+  // l'intestazione è alta 0 e il titolo parte dove la X copre ancora la sua «e» (F12, vc25).
+  const closeSize = scaleTouch(36);
+  const closeTop = scaleSpacing(-10);
+  return StyleSheet.create({
     modalOverlay: {
       flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -68,14 +72,15 @@ const createModalStyles = (colors: ThemeColors) =>
       justifyContent: 'flex-end',
       alignItems: 'center',
       marginBottom: PerfectSpacing.sm,
+      minHeight: closeSize + closeTop,
       position: 'relative',
     },
     closeButton: {
       position: 'absolute',
-      top: scaleSpacing(-10),
+      top: closeTop,
       right: scaleSpacing(-6),
-      width: scaleTouch(36),
-      height: scaleTouch(36),
+      width: closeSize,
+      height: closeSize,
       borderRadius: scale(18),
       backgroundColor: colors.neutral[900],
       justifyContent: 'center',
@@ -127,6 +132,7 @@ const createModalStyles = (colors: ThemeColors) =>
       letterSpacing: scale(-0.3),
     },
   });
+};
 
 const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
   const colors = useThemeColors();
@@ -141,7 +147,10 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
       style={[modalStyles.modalContent, { maxHeight: cardMaxHeight }]}
       testID="donation-modal-content"
     >
-      <PerfectContainer style={modalStyles.modalHeader}>
+      <PerfectContainer
+        style={modalStyles.modalHeader}
+        testID="donation-modal-header"
+      >
         <PlatformTouchable
           style={modalStyles.closeButton}
           hitSlop={touchTargetHitSlop(modalStyles.closeButton.width)}
@@ -173,7 +182,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
         style={[modalStyles.bodyScroll, { maxHeight: bodyMaxHeight }]}
         testID="donation-modal-body"
       >
-        <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+        <PerfectText size={15} lines={0} style={modalStyles.modalText}>
           <PerfectText
             size={15}
             lines={1}
@@ -184,7 +193,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
           {t('actions.donationMonetaryText')}
         </PerfectText>
 
-        <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+        <PerfectText size={15} lines={0} style={modalStyles.modalText}>
           <PerfectText
             size={15}
             lines={1}
@@ -195,7 +204,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ handleClose, t }) => {
           {t('actions.donationShoppingText')}
         </PerfectText>
 
-        <PerfectText size={15} lines={5} style={modalStyles.modalText}>
+        <PerfectText size={15} lines={0} style={modalStyles.modalText}>
           <PerfectText
             size={15}
             lines={1}
