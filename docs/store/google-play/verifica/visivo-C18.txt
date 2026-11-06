@@ -1,0 +1,16 @@
+agente: a138f228a1a320072
+criterio: C18
+verdetto: PASS
+sha256 da4e1f280e19675bfaa5cb9c8dd2a4517724d37dc5f7981acd6ef84baede77d2 launcher-colori.png
+sha256 9c0a312b0cedad6ad7a7e3cfa02a0ea18ad547f9757f0f07b60616be866bf9c5 launcher-icone-a-tema.png
+---
+verdetto: PASS
+
+launcher-icone-a-tema.png: l'icona «RAH Italia» ha lo stesso trattamento delle icone di sistema vicine (Play Store, Gmail, Photos, YouTube, Telefono, Messaggi, Chrome). Il cerchio è lilla chiaro, il disegno è blu scuro, la tinta è identica e la forma è ritagliata a cerchio come le altre. Android sta quindi usando davvero il livello monocromatico: l'icona non è rimasta a colori. Il disegno è in un solo colore e si riconosce bene. Si leggono la goccia con la mezzaluna chiara dentro, le due foglie, il libro aperto con le righe delle pagine e la sottile linea chiara che divide le due metà. Non c'è nessuna macchia piena. Il logo è centrato: a occhio il suo centro coincide con quello del cerchio entro 2-3 px. Il ritaglio circolare non taglia niente e i bordi sono puliti, senza aloni. L'etichetta «RAH Italia» è intera.
+
+launcher-colori.png: con le icone a tema spente, l'icona mostra il primo piano a colori (metà nera, metà rossa, goccia nera con mezzaluna bianca) su un cerchio bianco. È lo stesso fondo bianco delle icone Google accanto e corrisponde al file sorgente adaptive-foreground.png. Il logo è centrato e intero. Sul bordo del cerchio non si vede nessun anello grigio, nessuna frangia e nessun residuo di trasparenza. Logo e cerchio hanno le stesse dimensioni della versione a tema, quindi i due livelli usano la stessa geometria. L'etichetta è intera.
+
+Rilievi minori
+- Il logo è più alto dei simboli accanto. Le misure sono stime fatte sulla schermata ridotta (scala 1,2), con un margine di ±3 px. In altezza il logo occupa circa l'83% del diametro del cerchio (circa 110 px su 132). I simboli vicini restano tra il 43% e il 73% (Gmail circa 43% in altezza, YouTube circa 73% in larghezza). La punta della goccia resta a circa 8-10 px dal bordo, contro i 18 px e più delle altre icone. Dal sorgente (goccia a y≈212 su 1024) la punta sta a circa 31,6 dp dal centro. È dentro la zona sicura di 33 dp di raggio, quindi nessuna forma di ritaglio del launcher la taglia. Il margine però è stretto (circa 1,4 dp). Siccome il logo è stretto (circa 53% del diametro in larghezza), il peso visivo resta simile a quello delle altre icone. Per questo non lo considero un difetto. Se si vuole un aspetto più uniforme con le icone di sistema a tema, conviene rimpicciolire il logo del 10-15% sia nel primo piano sia nel monocromatico.
+- Le righe delle pagine del libro sono dettagli sottili. A questa dimensione si leggono ancora. Dove l'icona viene mostrata più piccola (griglia più fitta, schermata delle app recenti, scorciatoie) rischiano di diventare disturbo. Si potrebbe valutare una versione con meno righe solo per il monocromatico.
+- Non ho potuto confrontare direttamente il sorgente adaptive-monochrome.png: in anteprima appare tutto bianco, perché è un disegno bianco su sfondo trasparente mostrato su fondo bianco. La corrispondenza della forma l'ho verificata solo attraverso l'icona a tema che si vede nella schermata.
