@@ -24,6 +24,10 @@ Fonte unica: `CLAUDE.md` importa questo file e non aggiunge regole.
   La web preview è solo una bozza: alcuni moduli nativi (per esempio `expo-secure-store`) mancano e le misure cambiano.
 - Database e utenti sono veri: migration remote, SQL che scrive, `npm run update:production` e `submit:*`
   si fanno solo col sì di Riccardo.
+- Finché esiste il progetto Supabase di test per Let's Donation (`app-rise-test-ld`), una migration applicata
+  in produzione va applicata anche lì con `scripts/progetto-test-ld/applica-migration.mjs` (prima `--prova`;
+  comando e token nell'intestazione dello script).
+  Quando il progetto si cancella, questa riga si toglie.
 - Commit in italiano nella forma `tipo(ambito): frase`, come in `git log`.
   Il branch `master` è regolato da `.github/ruleset.yml`.
 - Nei messaggi di commit e nei titoli delle PR niente `[build]`, `[build-ios]`, `[build-android]`, `[ota]`,
