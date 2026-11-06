@@ -1,0 +1,127 @@
+:root {
+  color-scheme: light dark;
+  --sfondo: #f6f4ef;
+  --scheda: #ffffff;
+  --testo: #1d1d1b;
+  --tenue: #5b5b57;
+  --primario: #c8102e;
+  --bordo: #d9d6cf;
+  --avviso: #9b1c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sfondo: #151514;
+    --scheda: #1f1f1d;
+    --testo: #f2f0ea;
+    --tenue: #b5b2aa;
+    --bordo: #3a3935;
+    --avviso: #ff8a8a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--sfondo);
+  color: var(--testo);
+  font:
+    16px/1.5 system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  display: grid;
+  place-items: start center;
+  padding: 24px 16px;
+}
+
+.scheda {
+  width: 100%;
+  max-width: 420px;
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.banda {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--tenue);
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 22px;
+}
+
+label {
+  display: block;
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+input:not([type='checkbox']) {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+}
+
+.spunta {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--primario);
+  background: var(--primario);
+  color: #fff;
+  min-height: 44px;
+}
+
+button.secondario {
+  background: transparent;
+  color: var(--testo);
+  border-color: var(--bordo);
+}
+
+button.link {
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 0;
+  color: var(--primario);
+  text-decoration: underline;
+}
+
+.pulsanti {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.avviso {
+  color: var(--avviso);
+  min-height: 1em;
+}
+
+.nota {
+  font-size: 13px;
+  color: var(--tenue);
+}

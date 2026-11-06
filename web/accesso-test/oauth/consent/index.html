@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Accedi con Rise — ambiente di test</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+    <script src="/config.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2/dist/umd/supabase.js"
+      integrity="sha384-nD3dwv4+ZqdYnmZKe/249ImlV04om7xTCcsoSeQYI+RO+XlKPoqAWaJR1M5SJH9p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/consenso.js" defer></script>
+  </head>
+  <body>
+    <main class="scheda">
+      <p class="banda">
+        Ambiente di test — account di prova, nessun dato reale
+      </p>
+      <h1>Accedi con Rise</h1>
+
+      <section id="carica"><p>Un momento…</p></section>
+
+      <section id="errore" hidden>
+        <p id="errore-testo" role="alert"></p>
+      </section>
+
+      <section id="accedi" hidden>
+        <form id="form-accedi">
+          <label
+            >Email
+            <input id="accedi-email" type="email" autocomplete="email" required
+          /></label>
+          <label
+            >Password
+            <input
+              id="accedi-password"
+              type="password"
+              autocomplete="current-password"
+              required
+          /></label>
+          <p id="accedi-errore" class="avviso" role="alert"></p>
+          <button type="submit">Accedi</button>
+        </form>
+        <p>
+          Non hai un account?
+          <button id="vai-registrati" type="button" class="link">
+            Registrati
+          </button>
+        </p>
+      </section>
+
+      <section id="registrati" hidden>
+        <form id="form-registrati">
+          <label
+            >Nome <input id="reg-nome" autocomplete="given-name" required
+          /></label>
+          <label
+            >Cognome
+            <input id="reg-cognome" autocomplete="family-name" required
+          /></label>
+          <label
+            >Nickname (facoltativo) <input id="reg-nickname" autocomplete="off"
+          /></label>
+          <label
+            >Data di nascita <input id="reg-nascita" type="date" required
+          /></label>
+          <label
+            >Email
+            <input id="reg-email" type="email" autocomplete="email" required
+          /></label>
+          <label
+            >Password (almeno 8 caratteri)
+            <input
+              id="reg-password"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required
+          /></label>
+          <label class="spunta"
+            ><input id="reg-privacy" type="checkbox" /> Ho letto l’informativa
+            privacy di Rise</label
+          >
+          <label class="spunta"
+            ><input id="reg-marketing" type="checkbox" /> Voglio ricevere
+            notizie da Rise (facoltativo)</label
+          >
+          <p id="reg-errore" class="avviso" role="alert"></p>
+          <button type="submit">Crea l’account</button>
+        </form>
+        <p>
+          Hai già un account?
+          <button id="vai-accedi" type="button" class="link">Accedi</button>
+        </p>
+      </section>
+
+      <section id="consenso" hidden>
+        <p>
+          <strong id="partner"></strong> chiede di accedere con il tuo account
+          Rise e di ricevere:
+        </p>
+        <ul id="dati"></ul>
+        <p class="nota">
+          Rise passa questi dati solo se approvi. Puoi cambiarli in qualunque
+          momento dal tuo profilo Rise: il partner li riceve aggiornati al
+          prossimo accesso.
+        </p>
+        <div class="pulsanti">
+          <button id="approva" type="button">Approva e continua</button>
+          <button id="rifiuta" type="button" class="secondario">Non ora</button>
+        </div>
+        <p class="nota">
+          Sei <span id="chi"></span>.
+          <button id="esci" type="button" class="link">Non sei tu?</button>
+        </p>
+      </section>
+
+      <section id="attendi" hidden>
+        <p>Ti riporto al sito del partner…</p>
+      </section>
+    </main>
+  </body>
+</html>
