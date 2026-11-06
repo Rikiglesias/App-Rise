@@ -27,6 +27,12 @@ import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { useUniversalTheme } from '@/shared/theme/UniversalTheme';
 
+/** Fondo pieno della barra su Android: gli stessi colori di prima, senza trasparenza. */
+const ANDROID_BAR_BACKGROUND = {
+  light: '#FFFFFF',
+  dark: 'rgb(20, 20, 22)',
+} as const;
+
 const TabBarComponent: React.FC<BottomTabBarProps> = ({
   state,
   descriptors,
@@ -54,12 +60,10 @@ const TabBarComponent: React.FC<BottomTabBarProps> = ({
   const blurBackground = isDark
     ? Platform.select({
         ios: 'rgba(28, 28, 30, 0.55)',
-        android: 'rgba(20, 20, 22, 0.97)',
         default: 'rgba(20, 20, 22, 0.97)',
       })
     : Platform.select({
         ios: 'rgba(255, 255, 255, 0.35)',
-        android: 'rgba(255, 255, 255, 0.97)',
         default: 'rgba(255, 255, 255, 0.97)',
       });
 
@@ -69,12 +73,30 @@ const TabBarComponent: React.FC<BottomTabBarProps> = ({
       onLayout={handleLayout}
       testID="bottom-tab-bar"
     >
-      <PlatformBlur
-        intensity={90}
-        tint={isDark ? 'dark' : 'light'}
-        backgroundColor={blurBackground}
-        style={styles.blurView}
-      />
+      {Platform.OS === 'android' ? (
+        // Su Android expo-blur senza metodo sperimentale è solo un velo semitrasparente (doc Expo
+        // SDK 54): dietro «Impact» e «Home» si leggevano le voci che scorrevano sotto (F12, vc25).
+        // Fondo pieno, nessuna sfocatura.
+        <PerfectContainer
+          style={[
+            styles.blurView,
+            {
+              backgroundColor: isDark
+                ? ANDROID_BAR_BACKGROUND.dark
+                : ANDROID_BAR_BACKGROUND.light,
+            },
+          ]}
+          testID="tab-bar-fondo"
+        />
+      ) : (
+        <PlatformBlur
+          intensity={90}
+          tint={isDark ? 'dark' : 'light'}
+          backgroundColor={blurBackground}
+          style={styles.blurView}
+          testID="tab-bar-fondo"
+        />
+      )}
       <PerfectContainer style={styles.tabBarContent}>
         {state.routes.map((route, index: number) => {
           const descriptor = descriptors[route.key];

@@ -45,20 +45,28 @@ const TabBarButtonComponent: React.FC<TabBarButtonProps> = ({
   routeName,
 }) => {
   const colors = useThemeColors();
+  // Ogni scheda come Home: attiva = cerchio pieno del suo colore con icona bianca; non attiva =
+  // cerchio chiaro con l'icona del suo colore. Prima Impact e Actions erano sempre piene, e da
+  // Impatto o da Azioni non si capiva quale scheda fosse aperta (F12, vc25).
   const tabColors = useMemo(() => {
     switch (routeName) {
       case 'ImpactTab':
         return {
-          backgroundColor: colors.primary[500],
+          backgroundColor: isFocused ? colors.primary[500] : colors.neutral[0],
           shadowColor: colors.primary[500],
-          iconColor: Colors.accent.white, // icona bianca fissa su cerchio brand
+          iconColor: isFocused ? Colors.accent.white : colors.primary[500],
           labelColor: colors.primary[500],
         };
       case 'InfoTab':
         return {
-          backgroundColor: colors.semantic.success.main,
+          backgroundColor: isFocused
+            ? colors.semantic.success.main
+            : colors.neutral[0],
           shadowColor: colors.semantic.success.main,
-          iconColor: Colors.accent.white, // icona bianca fissa su cerchio brand
+          // Non attiva: il verde da testo, perché il verde pieno sul chiaro è 2,5:1 (sotto il 3:1).
+          iconColor: isFocused
+            ? Colors.accent.white
+            : colors.semantic.success.text,
           labelColor: colors.semantic.success.text, // da testo: 4,5:1 sulla barra (C50)
         };
       case 'HomeTab':
@@ -90,6 +98,7 @@ const TabBarButtonComponent: React.FC<TabBarButtonProps> = ({
       >
         <PerfectContainer style={styles.touchableContent}>
           <PerfectContainer
+            testID={`tab-icon-${routeName}`}
             style={[
               isCentral ? styles.centralIconContainer : styles.iconContainer,
               {
