@@ -57,6 +57,11 @@ it('cancellazione di A con B entrato nell’attesa: l’app resta su B, non torn
   act(() => ascolta('SIGNED_IN', sessioneDi('A')));
   await waitFor(() => getByText('authenticated'));
 
+  // Al via la sessione è di A, col suo token: la cancellazione parte con quello.
+  (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({
+    data: { session: { ...sessioneDi('A'), access_token: 'token-A' } },
+    error: null,
+  });
   (supabase.functions.invoke as jest.Mock).mockImplementationOnce(() => {
     ascolta('SIGNED_IN', sessioneDi('B'));
     return Promise.resolve({ data: { ok: true }, error: null });

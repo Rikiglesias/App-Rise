@@ -1,4 +1,4 @@
-import type { AuthError } from '@supabase/supabase-js';
+import type { AuthError, Session } from '@supabase/supabase-js';
 
 import { deleteAccountNow } from '@/shared/auth/accountActions';
 import { supabase } from '@/shared/auth/supabaseClient';
@@ -33,6 +33,13 @@ it("cancellazione riuscita e uscita fallita: la sessione si toglie dallo storage
   // L'avvio del client legge e può ripulire lo storage per conto suo: si parte dopo.
   await supabase.auth.getSession();
   (authStorage.removeItem as jest.Mock).mockClear();
+  // Sessione di chi elimina: la cancellazione parte solo col suo token.
+  const sessione = jest.spyOn(supabase.auth, 'getSession').mockResolvedValue({
+    data: {
+      session: { user: { id: 'u1' }, access_token: 'token-u1' } as Session,
+    },
+    error: null,
+  });
   const chiaveDellaLibreria = (
     supabase.auth as unknown as { storageKey: string }
   ).storageKey;
@@ -46,5 +53,6 @@ it("cancellazione riuscita e uscita fallita: la sessione si toglie dallo storage
   } finally {
     invoke.mockRestore();
     signOut.mockRestore();
+    sessione.mockRestore();
   }
 });

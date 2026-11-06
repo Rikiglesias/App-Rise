@@ -94,14 +94,14 @@ type EsitoVerifica = 'eliminato' | 'presente' | 'impossibile';
  * della chiamata: il server risponde sull'utente del token (`sub`), non su chi è
  * collegato ADESSO. Senza quel token, se nell'attesa entrasse un altro account già
  * eliminato altrove, il suo `user_not_found` dichiarerebbe eliminato quello sbagliato
- * (giro 2 del delta, f2-1; revisione delle correzioni, rilievo 2). Token non catturato
- * = esito non attribuibile = verifica impossibile.
+ * (giro 2 del delta, f2-1; revisione delle correzioni, rilievo 2). Senza quel token la
+ * cancellazione non parte nemmeno (`deleteAccountNow`), quindi qui manca solo quando
+ * non si sa chi elimina (`utenteAtteso` null).
  */
 const verificaAccount = async (
   utenteAtteso: string | null,
   tokenAtteso: string | null
 ): Promise<EsitoVerifica> => {
-  if (utenteAtteso !== null && tokenAtteso === null) return 'impossibile';
   try {
     const { data, error } = tokenAtteso
       ? await supabase.auth.getUser(tokenAtteso)
@@ -120,7 +120,7 @@ const verificaAccount = async (
 /**
  * Il token d'accesso di chi è da eliminare, letto PRIMA della chiamata: dopo, nella
  * sessione potrebbe esserci un altro account. Null se la sessione è di un altro o non
- * si legge: la verifica allora non potrà attribuire l'esito.
+ * si legge: allora la cancellazione non parte.
  */
 const tokenDi = async (utenteAtteso: string | null): Promise<string | null> => {
   if (utenteAtteso === null) return null;
@@ -169,10 +169,21 @@ export const deleteAccountNow = async (
 }> => {
   let errore: string | null = null;
   const tokenAtteso = await tokenDi(utenteAtteso);
+  // Il server cancella l'utente del JWT che riceve (`delete-account`), e senza un
+  // Authorization esplicito la libreria mette quello della sessione di ADESSO, che dopo
+  // l'attesa qui sopra può essere di un altro account entrato da un link. Quindi la
+  // chiamata porta il token di chi ha chiesto la cancellazione, e senza quel token
+  // (sessione già di un altro, o illeggibile) non si cancella nessuno: testo neutro,
+  // si riprova (revisione delle correzioni, giro 4, rilievo 1).
+  if (utenteAtteso !== null && tokenAtteso === null)
+    return { error: 'delete_interrupted' };
   try {
     const { error } = await registraEsitoAccount('EliminaAccount', () =>
       supabase.functions.invoke('delete-account', {
         body: {},
+        ...(tokenAtteso
+          ? { headers: { Authorization: `Bearer ${tokenAtteso}` } }
+          : {}),
       })
     );
     if (error) errore = error.message;

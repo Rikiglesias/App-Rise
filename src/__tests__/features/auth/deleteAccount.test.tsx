@@ -19,7 +19,14 @@ const mockOpenLink = jest.fn().mockResolvedValue({ ok: true });
 jest.mock('@/shared/auth/supabaseClient', () => ({
   rimuoviSessioneSalvata: jest.fn(() => Promise.resolve()),
   supabase: {
-    auth: { signOut: jest.fn().mockResolvedValue({ error: null }) },
+    auth: {
+      // La sessione di chi elimina: la cancellazione parte col suo token.
+      getSession: jest.fn().mockResolvedValue({
+        data: { session: { user: { id: 'u1' }, access_token: 'token-u1' } },
+        error: null,
+      }),
+      signOut: jest.fn().mockResolvedValue({ error: null }),
+    },
     functions: {
       invoke: jest.fn().mockResolvedValue({ data: { ok: true }, error: null }),
     },
@@ -153,8 +160,10 @@ it('elimina account: uscita che rigetta = sessione residua, non errore', async (
     );
     expect(queryByText(itLocale.auth.delete.error)).toBeNull();
     expect(queryByText(itLocale.auth.errors.generic)).toBeNull();
+    // Col token di chi elimina: il server cancella l'utente del JWT ricevuto.
     expect(supabase.functions.invoke).toHaveBeenCalledWith('delete-account', {
       body: {},
+      headers: { Authorization: 'Bearer token-u1' },
     });
     expect(supabase.auth.signOut).toHaveBeenCalledWith({ scope: 'local' });
     expect(elimina).toHaveBeenCalledTimes(1);

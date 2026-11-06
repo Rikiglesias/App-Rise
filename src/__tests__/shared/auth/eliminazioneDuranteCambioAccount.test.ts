@@ -11,6 +11,11 @@ const mockStato: Stato = { sessione: null, salvata: null };
 // Il server: gli account che non esistono più. Il token d'accesso di X è «token-X», e
 // `getUser(token)` risponde sull'utente del token, come `GET /user` col JWT.
 const mockEliminati = new Set<string>();
+type MockOpzioni = { headers?: { Authorization?: string } };
+const mockChiChiama = (opzioni?: MockOpzioni): string | null => {
+  const auth = opzioni?.headers?.Authorization;
+  return auth ? auth.replace(/^Bearer token-/, '') : mockStato.sessione;
+};
 const mockEsito = {
   invoke: null as { message: string } | null,
   uscita: null as { message: string } | null,
@@ -60,9 +65,13 @@ jest.mock('@/shared/auth/supabaseClient', () => ({
     },
     functions: {
       // Durante l'attesa della cancellazione di A entra B (link di B aperto sul telefono).
-      invoke: jest.fn(() => {
+      // Il server cancella l'utente del JWT ricevuto: quello dell'Authorization esplicito,
+      // altrimenti quello della sessione al momento della chiamata.
+      invoke: jest.fn((_nome: string, opzioni?: MockOpzioni) => {
+        const chi = mockChiChiama(opzioni);
         mockStato.sessione = 'B';
         mockStato.salvata = 'B';
+        if (!mockEsito.invoke && chi) mockEliminati.add(chi);
         return Promise.resolve({ data: null, error: mockEsito.invoke });
       }),
     },
@@ -80,6 +89,8 @@ beforeEach(() => {
   mockEsito.invoke = null;
   mockEsito.uscita = null;
   mockEliminati.clear();
+  // Le chiamate registrate dalle spie non passano da un caso all'altro.
+  jest.clearAllMocks();
 });
 
 it('cancellazione di A riuscita mentre entra B: B resta collegato e salvato', async () => {
@@ -92,10 +103,49 @@ it('cancellazione di A riuscita mentre entra B: B resta collegato e salvato', as
 });
 
 it('chiamata fallita senza cancellare A mentre entra B: A è ancora presente, si dice «non riuscito»', async () => {
-  mockEsito.invoke = { message: 'Failed to fetch' };
+  // Errore NON di rete: con la rete l'errore originale tornerebbe comunque, e il test
+  // non distinguerebbe la verifica giusta da quella sbagliata (giro 4, rilievo 3).
+  mockEsito.invoke = {
+    message: 'Edge Function returned a non-2xx status code',
+  };
   const esito = await deleteAccountNow('A');
   // La verifica chiede col token di A: il server risponde su A, non su B che è collegato.
-  expect(esito.error).toBe('Failed to fetch');
+  const client = jest.requireMock('@/shared/auth/supabaseClient') as {
+    supabase: { auth: { getUser: jest.Mock } };
+  };
+  expect(client.supabase.auth.getUser).toHaveBeenCalledWith('token-A');
+  expect(esito.error).toBe('Edge Function returned a non-2xx status code');
+  expect(mockStato.sessione).toBe('B');
+});
+
+// Giro 4, rilievo 1: B entra DOPO la lettura del token di A e PRIMA della chiamata. Il
+// server cancella l'utente del JWT: senza il token di A esplicito cancellerebbe B.
+it('B entra fra la lettura del token di A e la chiamata: il server cancella A, non B', async () => {
+  const client = jest.requireMock('@/shared/auth/supabaseClient') as {
+    supabase: {
+      auth: { getSession: jest.Mock };
+      functions: { invoke: jest.Mock };
+    };
+  };
+  client.supabase.auth.getSession.mockImplementationOnce(() => {
+    const letta = {
+      data: { session: { user: { id: 'A' }, access_token: 'token-A' } },
+      error: null,
+    };
+    mockStato.sessione = 'B';
+    mockStato.salvata = 'B';
+    return Promise.resolve(letta);
+  });
+  const esito = await deleteAccountNow('A');
+  expect(client.supabase.functions.invoke).toHaveBeenCalledWith(
+    'delete-account',
+    expect.objectContaining({
+      headers: { Authorization: 'Bearer token-A' },
+    })
+  );
+  expect(mockEliminati.has('A')).toBe(true);
+  expect(mockEliminati.has('B')).toBe(false);
+  expect(esito.error).toBeNull();
   expect(mockStato.sessione).toBe('B');
 });
 
@@ -132,18 +182,19 @@ it('cancellazione di A fallita mentre entra B già eliminato altrove: A NON risu
   expect(mockStato.sessione).toBe('B');
 });
 
-it('token di A non leggibile prima della chiamata: esito non attribuibile, testo neutro', async () => {
+it('token di A non leggibile prima della chiamata: non si cancella nessuno, testo neutro', async () => {
   const client = jest.requireMock('@/shared/auth/supabaseClient') as {
-    supabase: { auth: { getSession: jest.Mock } };
+    supabase: {
+      auth: { getSession: jest.Mock };
+      functions: { invoke: jest.Mock };
+    };
   };
   client.supabase.auth.getSession.mockRejectedValueOnce(
     new Error('SecureStore unavailable')
   );
-  mockEliminati.add('B');
-  mockEsito.invoke = {
-    message: 'Edge Function returned a non-2xx status code',
-  };
   const esito = await deleteAccountNow('A');
+  expect(client.supabase.functions.invoke).not.toHaveBeenCalled();
+  expect(mockEliminati.size).toBe(0);
   expect(esito.error).toBe('delete_interrupted');
 });
 
