@@ -36,3 +36,6 @@ src/shared/data/comuni-min.json
 # Passarci Prettier sopra fa litigare i due formattatori: è già successo il 2026-08-15,
 # la CI ha respinto la PR #136 con «Found 4 not formatted files in 5 files».
 supabase/functions/
+
+# Collegamento Vercel generato dalla CLI (web/accesso-test, goal ld-ambiente-test)
+.vercel/

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Il mio accesso Rise — test</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+    <script src="/config.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2/dist/umd/supabase.js"
+      integrity="sha384-nD3dwv4+ZqdYnmZKe/249ImlV04om7xTCcsoSeQYI+RO+XlKPoqAWaJR1M5SJH9p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/assets/account.js" defer></script>
+  </head>
+  <body>
+    <main class="scheda">
+      <p class="banda">
+        Ambiente di test — account di prova, nessun dato reale
+      </p>
+      <h1>Il mio accesso Rise</h1>
+
+      <section id="carica"><p>Un momento…</p></section>
+
+      <section id="errore" hidden>
+        <p id="errore-testo" role="alert"></p>
+      </section>
+
+      <section id="accedi" hidden>
+        <form id="form-accedi">
+          <label
+            >Email
+            <input id="accedi-email" type="email" autocomplete="email" required
+          /></label>
+          <label
+            >Password
+            <input
+              id="accedi-password"
+              type="password"
+              autocomplete="current-password"
+              required
+          /></label>
+          <p id="accedi-errore" class="avviso" role="alert"></p>
+          <button type="submit">Accedi</button>
+        </form>
+      </section>
+
+      <section id="profilo" hidden>
+        <p>Sei <strong id="chi"></strong>.</p>
+        <h2>Partner a cui hai dato il consenso</h2>
+        <ul id="consensi"></ul>
+        <p id="consensi-esito" class="nota" role="status"></p>
+        <div class="pulsanti">
+          <button id="esci" type="button" class="secondario">Esci</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
