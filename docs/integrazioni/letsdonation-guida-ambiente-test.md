@@ -1,8 +1,8 @@
 # Login unico Rise — guida all'ambiente di test
 
 Per il tecnico di Let's Donation. Descrive l'ambiente di **test**: un progetto separato dalla produzione, con
-account di prova e nessun dato reale. Tutto quello che segue è stato provato da noi con un client di prova il
-6 novembre 2026; dove una cosa non è stata provata, è scritto.
+account di prova e nessun dato reale. Tutto quello che segue è stato provato da noi il 6 novembre 2026 con due
+client di prova, uno pubblico e uno riservato come sarà il vostro; dove una cosa non è stata provata, è scritto.
 
 ## Indirizzi
 
@@ -25,7 +25,10 @@ Conviene leggere gli indirizzi dalla discovery, non scriverli a mano.
    consenso; dalla volta dopo torna subito da voi.
 4. Ritorno al vostro indirizzo con `code` e `state`. Il `code` vale **una volta sola**.
 5. Scambio del codice allo sportello Token. Il vostro client sarà di tipo **riservato**: autenticazione
-   `client_secret_basic` (credenziali in Basic auth), che è il valore predefinito.
+   `client_secret_basic` (credenziali in Basic auth), che è il valore predefinito. Il metodo deve essere quello
+   registrato: senza credenziali il server risponde «client is registered for 'client_secret_basic' but 'none' was
+   used». Se la vostra libreria manda le credenziali nel corpo (`client_secret_post`), ditecelo prima: si può
+   registrare il client così (previsto dalla documentazione di Supabase, non provato da noi).
 6. `id_token` firmato **ES256**: verificate firma sulla JWKS (`kid` nell'intestazione), `iss`, `aud` = vostro
    `client_id`, `nonce`, `exp`.
 
@@ -52,6 +55,10 @@ Nome e cognome separati, data di nascita e telefono **non** arrivano.
 
 - **Indirizzo di ritorno**: va registrato da noi **prima**, ed è confrontato carattere per carattere (niente
   caratteri jolly). Ci servono quelli esatti: ambiente locale e, più avanti, produzione.
+- **Errori dello sportello Token**: non sono nel formato standard OAuth. Arrivano con HTTP `400` anche per credenziali
+  sbagliate, con i campi `error_code` (per esempio `invalid_credentials`) e `msg` (per esempio «invalid client
+  credentials») al posto di `error` ed `error_description`: se la vostra libreria legge solo questi ultimi, aggiungete
+  i primi.
 - **Logout**: il server non offre un logout unico (`end_session_endpoint` non c'è). La sessione da voi la chiudete voi.
 - **Rifare la prova del consenso**: su `https://rise-accesso-test.vercel.app/account` la persona vede i partner a cui
   ha dato il consenso e può ritirarlo; al login successivo la schermata ricompare. Lì c'è anche «Esci», per cambiare
