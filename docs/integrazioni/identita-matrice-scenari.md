@@ -245,8 +245,9 @@ analisi e non erano nella lista (gli esempi erano un seme, non il perimetro).
 ### Famiglia J — Vincoli fissi (filtro, non scenari)
 
 LD è multi-tenant con oltre 1.000 enti (nessuna personalizzazione per noi che non valga per
-tutti) · Supabase OAuth Server è in **beta** · RAH-Italia **non ha un dominio proprio** [A, in
-attesa di conferma] · `riseagainsthunger.org` è di Rise USA · l'**informativa in produzione è
+tutti) · Supabase OAuth Server è in **beta** · RAH-Italia ha `riseagainsthunger.it` (corretto il
+7/11/2026: qui si diceva «non ha un dominio proprio»; esiste dal 2016, vedi D-c), da chiarire chi lo
+gestisce [A] · `riseagainsthunger.org` è di Rise USA · l'**informativa in produzione è
 falsa** finché non si pubblica la nuova (gate a monte di tutto) · i claim OIDC sono solo quelli
 standard (`sub`, `name`, `email`) · nessuna pre-creazione massiva di account.
 
@@ -290,8 +291,8 @@ In ordine di dipendenza. Le prime due non dipendono da nessuna risposta di LD.
 2. Chi da LD ha un account con un **indirizzo diverso** da quello che usa da noi resta con **due
    account** (B4). Fino al 2026-07-26 la causa principale erano gli utenti Apple-hide; rimossi i
    social, resta il caso ordinario di chi ha cambiato casella. Residuo piu' raro, non chiuso.
-3. LD vede l'**alias** di posta finché F-EMAIL.23 non è implementata; poi vede l'indirizzo reale,
-   perché quello verificato diventa l'email dell'account (C2).
+3. LD vede l'**alias** di posta solo per gli account Apple nati prima del 26/07/2026; per tutti gli
+   altri l'email dell'account è quella vera, digitata e confermata (C2, superata: F-EMAIL.23 caduta).
 4. Gli account LD creati via JIT **restano loro** anche dopo la cancellazione da noi (D7).
 5. L'attribuzione **per-utente** è impossibile su QR e newsletter di massa (A5, A6).
 6. Se LD non implementa nulla, **tutto resta com'è** (H10).

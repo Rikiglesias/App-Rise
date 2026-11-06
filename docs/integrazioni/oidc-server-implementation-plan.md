@@ -68,6 +68,9 @@ Conseguenze:
   (`createAccountFromExternalIdentity`, ramo `AccountExists`: `UpdateOnly(identity,
   "identity_data", "last_sign_in_at")`). Residuo che resta: **finché F-EMAIL.23 non è
   implementata** l'utente relay compare su LD con l'alias, che inoltra.
+  **SUPERATO del tutto il 2026-07-26**: F-EMAIL.23 è caduta con la rimozione di Apple e Google
+  (`identita-matrice-scenari.md` C2). Senza login Apple l'email dell'account è quella digitata e
+  confermata; l'alias resta solo sugli account Apple nati prima.
 - **Il Custom Access Token Hook NON va costruito** per questo flusso: non raggiunge LD e
   l'access token non va comunque consegnato a un terzo (vedi sicurezza). Le vecchie
   «Correzione #1/#4» (email condizionale e hedge-id come claim) **non sono applicabili** via

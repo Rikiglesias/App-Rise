@@ -150,7 +150,7 @@ di cui quello agli enti beneficiari non ha nessun corrispondente da noi. → **r
 |---|---|---|---|---|
 | Identificativo opaco e stabile (`sub`) | noi → LD | Informazione standard nel token di identità e sull'endpoint delle informazioni utente | Quando la persona tocca «Entra con Rise Against Hunger» e approva sulla **nostra** pagina. È la chiave con cui il loro sistema la riconosce agli accessi successivi | `[V]` sul contenuto, `[A]` sul flusso: non esiste |
 | Nome completo, stringa unica (`name`) | noi → LD | idem | Al login. **Non arriva mai vuoto** (corretto 2026-07-29: qui si diceva «se disponibile»): quando la chiave manca, il server ripiega sull'**indirizzo email** dell'account — quindi il rischio non è l'assenza, è un'email finita dove va il nome. Nome e cognome separati non esistono nello standard: li dividono loro | idem |
-| Email dell'account (`email`) | noi → LD | idem | Al login. Con «Nascondi la mia email» è un alias `@privaterelay.appleid.com` che **inoltra** alla casella vera. L'email di contatto raccolta in app **non è trasmissibile come informazione a parte** — ma **dal 2026-07-25 la strada è un'altra** (F-EMAIL.23): l'indirizzo vero, una volta verificato, **diventa l'email dell'account**, quindi è questo campo a portarlo. Fino ad allora parte l'alias | idem |
+| Email dell'account (`email`) | noi → LD | idem | Al login. **Dal 26/07/2026 è l'indirizzo che la persona ha digitato e confermato**: si entra solo con email e password, quindi è reale per costruzione. Solo gli account Apple **nati prima** con «Nascondi la mia email» portano un alias `@privaterelay.appleid.com`, che **inoltra** alla casella vera. ⚠️ **Superato il 26/07/2026** quanto si scriveva qui il 25/07 (F-EMAIL.23: l'indirizzo vero, verificato, che diventava l'email dell'account): è caduta con la rimozione di Apple e Google, vedi `identita-matrice-scenari.md` C2 | idem |
 | Indicatore «email verificata» (`email_verified`) | noi → LD | idem | Al login. Va chiesto che il loro sistema non lo pretenda sull'alias Apple | `[V]` sul dato, `[A]` sul loro comportamento |
 | **Gettone tecnico con i pieni poteri dell'utente** | noi → LD | Scambio standard del protocollo allo sportello dei token | **Inevitabile per costruzione**: non è «glielo diamo o no». Gli scope non lo limitano lato dati; l'autorizzazione dipende interamente dalle nostre regole di riga | `[V]` |
 | Account creato dal loro sistema al primo accesso | effetto lato loro | Creazione al volo | Che il loro negozio accetti un alias Apple per creare l'account **è un assunto** da confermare | `[A]` |
@@ -389,6 +389,9 @@ l'alias non è trasmissibile **come informazione a parte** (l'alias inoltra, qui
 *Analisi con evidenza alla fonte, 24/07.* **Aggiornamento 25/07**: quel limite non è più definitivo —
 la via è far diventare l'indirizzo vero, verificato, **l'email dell'account** (F-EMAIL.23), così è il
 campo standard a portarlo. Resta vero che non si può infilare in un'informazione personalizzata.
+**Superato il 26/07**: F-EMAIL.23 è caduta con la rimozione di Apple e Google. Senza login Apple nessun
+account nuovo nasce con un alias e l'email dell'account è già quella vera; l'alias resta solo sugli
+account Apple nati prima (`identita-matrice-scenari.md` C2).
 
 **Nome come stringa unica invece di nome e cognome separati. → SCELTA (è la forma standard).**
 Trappola trovata **leggendo il codice sorgente del server di autenticazione, non la documentazione**:
@@ -825,9 +828,10 @@ effettiva; la programmata è ritirata finché non c'è chi la esegua.
 - Chi si iscrive a Let's Donation **fuori** dal nostro spazio nasce da loro: non lo sapremo mai.
 - Chi ha un account nativo **e** usa l'alias Apple resta con due account, salvo un «collega il mio
   account» nel loro profilo utente.
-- L'email reale dietro l'alias Apple non è trasmissibile **come informazione a parte**; la via
-  decisa (F-EMAIL.23) è farla diventare l'email dell'account, e finché non è implementata parte
-  l'alias.
+- Per gli account Apple **nati prima del 26/07/2026** con «Nascondi la mia email» parte l'alias, che
+  inoltra; l'email reale non è trasmissibile **come informazione a parte**. La via decisa il 25/07
+  (F-EMAIL.23, farla diventare l'email dell'account) è caduta con la rimozione di Apple: per gli
+  account nuovi il problema non esiste.
 - Dal computer fisso non esiste alcun collegamento diretto all'app.
 - L'attribuzione per singola persona su una newsletter di massa o un codice stampato **non è possibile**.
 - Il gettone tecnico che il partner riceve al login **non si elimina**: si contiene.
