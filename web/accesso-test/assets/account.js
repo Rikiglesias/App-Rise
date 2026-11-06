@@ -1,6 +1,7 @@
 /*
  * Pagina /account del login unico Rise — ambiente di TEST (goal ld-ambiente-test).
  * Serve al tecnico del partner per ripetere le prove:
+ *   - «I miei dati», email, eliminazione: in miei-dati.js (le scritture dell'app);
  *   - «Esci»: cambiare utente di prova (se il consenso c'è già, /oauth/consent rimanda
  *     subito al partner con l'utente della sessione, senza mostrare nulla);
  *   - «Revoca»: ritirare il consenso dato a un partner, per rivedere la schermata di
@@ -12,6 +13,7 @@
 
   var cfg = window.RISE_ACCESSO_CONFIG || {};
   var client = null;
+  var utente = null;
 
   function $(id) {
     return document.getElementById(id);
@@ -28,11 +30,29 @@
     mostra('errore');
   }
 
+  // Dopo «Esci» o l'eliminazione: la password dell'utente precedente non resta nel campo.
+  function tornaAlLogin(nota) {
+    utente = null;
+    $('accedi-password').value = '';
+    $('accedi-nota').textContent = nota;
+    mostra('accedi');
+  }
+
+  function conErrori(fn) {
+    return function (ev) {
+      fn(ev).catch(function (e) {
+        errore('Qualcosa non ha funzionato: ' + e.message);
+      });
+    };
+  }
+
   async function avvia() {
     mostra('carica');
     var u = await client.auth.getUser();
     if (u.error || !u.data.user) return mostra('accedi');
-    $('chi').textContent = u.data.user.email || '';
+    utente = u.data.user;
+    $('chi').textContent = utente.email || '';
+    await window.RiseMieiDati.carica();
     await caricaConsensi();
     mostra('profilo');
   }
@@ -84,6 +104,7 @@
   async function accedi(ev) {
     ev.preventDefault();
     $('accedi-errore').textContent = '';
+    $('accedi-nota').textContent = '';
     var res = await client.auth.signInWithPassword({
       email: $('accedi-email').value.trim(),
       password: $('accedi-password').value,
@@ -95,20 +116,43 @@
           : res.error.message;
       return;
     }
-    avvia();
+    await avvia();
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    if (!window.supabase || !cfg.url || !cfg.publishableKey) {
+    if (
+      !window.supabase ||
+      !window.RiseMieiDati ||
+      !cfg.url ||
+      !cfg.publishableKey
+    ) {
       return errore('Pagina non configurata (manca config.js).');
     }
     client = window.supabase.createClient(cfg.url, cfg.publishableKey, {
       auth: { persistSession: true, autoRefreshToken: true },
     });
-    $('form-accedi').addEventListener('submit', accedi);
+    window.RiseMieiDati.collega({
+      client: client,
+      url: cfg.url,
+      $: $,
+      conErrori: conErrori,
+      utente: function () {
+        return utente;
+      },
+      quandoCambiaUtente: function (u) {
+        utente = u;
+        $('chi').textContent = u.email || '';
+      },
+      quandoEliminato: function () {
+        tornaAlLogin(
+          'Account eliminato. Da qui non si entra più con quella email.'
+        );
+      },
+    });
+    $('form-accedi').addEventListener('submit', conErrori(accedi));
     $('esci').addEventListener('click', async function () {
       await client.auth.signOut();
-      mostra('accedi');
+      tornaAlLogin('');
     });
     avvia().catch(function (e) {
       errore('Qualcosa non ha funzionato: ' + e.message);

@@ -46,10 +46,10 @@ Se la persona tocca «Non ora», tornate con `error=access_denied`.
 | `name` | id_token, UserInfo | Nome e cognome in una sola stringa. Se manca, il server mette l'email |
 | `preferred_username` | id_token, UserInfo | Il nickname. **Assente** se la persona non l'ha scelto (account ld02) |
 | `updated_at`, `auth_time` | id_token | Date in secondi Unix |
-| `user_metadata` | solo UserInfo | Oggetto con i dati del profilo, tra cui `country` (codice paese, per esempio `IT`) |
+| `user_metadata` | solo UserInfo | Oggetto con i dati del profilo, tra cui `country` (codice paese, per esempio `IT`). Contiene anche una chiave `email` che **resta quella della registrazione** dopo un cambio email: per l'email usate sempre il campo `email` |
 
-I dati vi arrivano **a ogni accesso**: se la persona cambia nome o nickname da noi, li ricevete aggiornati al login
-successivo. Non c'è un invio da parte nostra nel frattempo. Senza aspettare un nuovo login potete usare il refresh
+I dati vi arrivano **a ogni accesso**: se la persona cambia nome, nickname o email da noi, li ricevete aggiornati al
+login successivo, sempre con lo stesso `sub`. Non c'è un invio da parte nostra nel frattempo. Senza aspettare un nuovo login potete usare il refresh
 token: il rinnovo dà un nuovo access token (non un nuovo `id_token`) e con quello UserInfo restituisce i dati
 aggiornati. Il refresh token cambia a ogni rinnovo: conservate sempre l'ultimo.
 
@@ -71,8 +71,24 @@ Nome e cognome separati, data di nascita e telefono **non** arrivano.
   account di prova.
 - **Server in beta**: il servizio di login di Supabase che usiamo è ancora in beta e può cambiare. L'ambiente di test
   serve anche a vederlo per tempo.
-- **Email**: nel test la posta in uscita è limitata (poche mail all'ora). Le prove che mandano mail, come il cambio
-  email, vanno fatte con calma e una alla volta.
+- **Email**: nel test non parte nessuna mail: la registrazione non chiede conferma e il cambio email è immediato.
+
+## Simulare i cambi
+
+Su `https://rise-accesso-test.vercel.app/account`, entrando con un account di prova, la persona cambia i **suoi** dati
+come farà nell'app. Poi rifate il login dal vostro sito e guardate cosa arriva.
+
+- **I miei dati**: nome, cognome, nickname. Il nickname vuoto lo toglie: `preferred_username` non arriva più. Il
+  nickname è unico senza distinguere maiuscole e minuscole: se è già di un altro account il cambio è rifiutato.
+- **Email dell'account**: nel test il cambio vale subito; nell'app vale solo dopo la conferma dal link che la persona
+  riceve per email. Un'email già usata da un altro account è rifiutata. Dopo il cambio si entra con l'email nuova e la
+  stessa password.
+- **Elimina l'account**: l'account sparisce subito, con profilo e consensi; da quel momento il login con quell'email
+  non riesce. Da parte nostra non vi arriva nessun avviso. Cosa succede ai vostri token già emessi (rinnovo, UserInfo)
+  non l'abbiamo ancora provato: è il caso dell'account `+ld09`. Se vi serve di nuovo, lo ricreiamo noi.
+
+Tutto questo l'abbiamo provato il 6 novembre con gli account di prova, controllando ogni volta con un login nuovo cosa
+riceveva il client.
 
 ## Account di prova
 
@@ -86,11 +102,11 @@ sola.
 | `+ld02` | Senza nickname: `preferred_username` non arriva |
 | `+ld03` | Inseritelo voi nel vostro test come **già iscritto a Rise** (aggancio) |
 | `+ld04` | Inseritelo voi nel vostro test come iscritto a **un'altra organizzazione** |
-| `+ld05` | Cambio email |
-| `+ld06` | Cambio di nome, cognome e nickname; poi nickname tolto |
+| `+ld05` | Cambio email (da `/account`) |
+| `+ld06` | Cambio di nome, cognome e nickname; poi nickname tolto (da `/account`) |
 | `+ld07` | Rifiuta il consenso («Non ora») |
 | `+ld08` | Di riserva, per un caso in più che vi serva |
-| `+ld09` | Cancellazione dell'account durante il test |
+| `+ld09` | Cancellazione dell'account durante il test (da `/account`) |
 | `+ld10` | Paese estero (`country` = `CH` in `user_metadata`) |
 
 ## Cosa ci serve da voi

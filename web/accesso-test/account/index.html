@@ -12,6 +12,7 @@
       integrity="sha384-nD3dwv4+ZqdYnmZKe/249ImlV04om7xTCcsoSeQYI+RO+XlKPoqAWaJR1M5SJH9p"
       crossorigin="anonymous"
     ></script>
+    <script src="/assets/miei-dati.js" defer></script>
     <script src="/assets/account.js" defer></script>
   </head>
   <body>
@@ -28,6 +29,7 @@
       </section>
 
       <section id="accedi" hidden>
+        <p id="accedi-nota" class="nota" role="status"></p>
         <form id="form-accedi">
           <label
             >Email
@@ -48,6 +50,61 @@
 
       <section id="profilo" hidden>
         <p>Sei <strong id="chi"></strong>.</p>
+
+        <h2>I miei dati</h2>
+        <p class="nota">
+          Il partner riceve i dati nuovi al prossimo accesso con Rise.
+        </p>
+        <form id="form-dati">
+          <label
+            >Nome <input id="dati-nome" autocomplete="given-name" required
+          /></label>
+          <label
+            >Cognome
+            <input id="dati-cognome" autocomplete="family-name" required
+          /></label>
+          <label
+            >Nickname (facoltativo: lascialo vuoto per toglierlo)
+            <input id="dati-nickname" autocomplete="nickname" maxlength="30"
+          /></label>
+          <p id="dati-esito" class="nota" role="status"></p>
+          <button type="submit">Salva i dati</button>
+        </form>
+
+        <h2>Email dell'account</h2>
+        <form id="form-email">
+          <label
+            >Nuova email
+            <input id="email-nuova" type="email" autocomplete="email" required
+          /></label>
+          <p class="nota">
+            In questo ambiente di test il cambio è immediato. Nell'app la
+            persona lo conferma dal link che riceve per email.
+          </p>
+          <p id="email-esito" class="nota" role="status"></p>
+          <button type="submit">Cambia email</button>
+        </form>
+
+        <h2>Elimina l'account</h2>
+        <p class="nota">
+          Cancella l'account di prova e il suo profilo. Non si torna indietro.
+        </p>
+        <div class="pulsanti">
+          <button id="elimina" type="button" class="secondario">
+            Elimina il mio account
+          </button>
+        </div>
+        <div id="elimina-conferma" hidden>
+          <p>Sicuro? L'account viene cancellato subito.</p>
+          <div class="pulsanti">
+            <button id="elimina-si" type="button">Sì, elimina</button>
+            <button id="elimina-no" type="button" class="secondario">
+              Annulla
+            </button>
+          </div>
+        </div>
+        <p id="elimina-esito" class="avviso" role="alert"></p>
+
         <h2>Partner a cui hai dato il consenso</h2>
         <ul id="consensi"></ul>
         <p id="consensi-esito" class="nota" role="status"></p>
