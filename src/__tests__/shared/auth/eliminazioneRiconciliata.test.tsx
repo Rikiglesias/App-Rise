@@ -18,6 +18,11 @@ jest.mock('@/shared/auth/supabaseClient', () => ({
   rimuoviSessioneSalvata: jest.fn(() => Promise.resolve()),
   supabase: {
     auth: {
+      // La sessione di chi elimina: la riconciliazione chiede col suo token.
+      getSession: jest.fn().mockResolvedValue({
+        data: { session: { user: { id: 'u1' }, access_token: 'token-u1' } },
+        error: null,
+      }),
       getUser: jest.fn(),
       signOut: jest.fn().mockResolvedValue({ error: null }),
     },
@@ -131,6 +136,8 @@ it('cancellazione: errore e account presente → errore (riconciliazione chiamat
   const esito = await deleteAccountNow('u1');
 
   expect(getUser).toHaveBeenCalledTimes(1);
+  // Col token di chi elimina: il server risponde su di lui, non su chi è collegato ora.
+  expect(getUser).toHaveBeenCalledWith('token-u1');
   expect(esito.error).toBe('Edge Function returned a non-2xx status code');
   expect(signOut).not.toHaveBeenCalled();
 });

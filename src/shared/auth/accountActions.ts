@@ -90,15 +90,22 @@ type EsitoVerifica = 'eliminato' | 'presente' | 'impossibile';
  * del proxy), e un secondo tentativo risponde 401 perché l'utente non c'è più. Lo si
  * chiede al server: `user_not_found` = account eliminato; utente restituito = ancora
  * presente; qualunque altro esito (rete, sessione mancante, rinnovo del token fallito)
- * = verifica impossibile. La risposta parla di chi è collegato ADESSO: se nell'attesa è
- * entrato un altro account, «presente» sarebbe lui, e per quello da eliminare la
- * verifica è impossibile (giro 2 del delta, f2-1).
+ * = verifica impossibile. Si chiede col token di chi è da eliminare, catturato prima
+ * della chiamata: il server risponde sull'utente del token (`sub`), non su chi è
+ * collegato ADESSO. Senza quel token, se nell'attesa entrasse un altro account già
+ * eliminato altrove, il suo `user_not_found` dichiarerebbe eliminato quello sbagliato
+ * (giro 2 del delta, f2-1; revisione delle correzioni, rilievo 2). Token non catturato
+ * = esito non attribuibile = verifica impossibile.
  */
 const verificaAccount = async (
-  utenteAtteso: string | null
+  utenteAtteso: string | null,
+  tokenAtteso: string | null
 ): Promise<EsitoVerifica> => {
+  if (utenteAtteso !== null && tokenAtteso === null) return 'impossibile';
   try {
-    const { data, error } = await supabase.auth.getUser();
+    const { data, error } = tokenAtteso
+      ? await supabase.auth.getUser(tokenAtteso)
+      : await supabase.auth.getUser();
     if (error?.code === 'user_not_found') return 'eliminato';
     if (!error && data.user)
       return utenteAtteso === null || data.user.id === utenteAtteso
@@ -107,6 +114,24 @@ const verificaAccount = async (
     return 'impossibile';
   } catch {
     return 'impossibile';
+  }
+};
+
+/**
+ * Il token d'accesso di chi è da eliminare, letto PRIMA della chiamata: dopo, nella
+ * sessione potrebbe esserci un altro account. Null se la sessione è di un altro o non
+ * si legge: la verifica allora non potrà attribuire l'esito.
+ */
+const tokenDi = async (utenteAtteso: string | null): Promise<string | null> => {
+  if (utenteAtteso === null) return null;
+  try {
+    const { data } = await supabase.auth.getSession();
+    const sessione = data.session;
+    return sessione && sessione.user.id === utenteAtteso
+      ? sessione.access_token
+      : null;
+  } catch {
+    return null;
   }
 };
 
@@ -143,6 +168,7 @@ export const deleteAccountNow = async (
   sessioneAncoraSulDispositivo?: boolean;
 }> => {
   let errore: string | null = null;
+  const tokenAtteso = await tokenDi(utenteAtteso);
   try {
     const { error } = await registraEsitoAccount('EliminaAccount', () =>
       supabase.functions.invoke('delete-account', {
@@ -156,7 +182,7 @@ export const deleteAccountNow = async (
     errore = messaggioDi(error);
   }
   if (errore !== null) {
-    const verifica = await verificaAccount(utenteAtteso);
+    const verifica = await verificaAccount(utenteAtteso, tokenAtteso);
     if (verifica === 'presente') return { error: errore };
     if (verifica === 'impossibile')
       return {
