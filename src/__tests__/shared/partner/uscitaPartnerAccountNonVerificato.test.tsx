@@ -11,6 +11,8 @@ import { useAuth } from '@/shared/auth/AuthContext';
 import { useLinkHandler } from '@/shared/hooks/useLinkHandler';
 import { supabase } from '@/shared/auth/supabaseClient';
 import i18n from '@/locales';
+import itLocale from '@/locales/it';
+import enLocale from '@/locales/en';
 
 jest.mock('@/shared/auth/AuthContext', () => ({ useAuth: jest.fn() }));
 jest.mock('@/shared/hooks/useLinkHandler', () => ({
@@ -68,12 +70,19 @@ beforeEach(() => {
   });
 });
 
-// La lingua dei test è quella attiva: si confronta con la sua traduzione. Una chiave
-// mancante tornerebbe uguale a sé stessa, e il primo test lo esclude.
+// La lingua dei test è quella attiva: si confronta con la sua traduzione.
 const messaggio = i18n.t('partner.sessioneNonVerificata');
 
-it('il messaggio esiste nella lingua attiva', () => {
-  expect(messaggio).not.toBe('partner.sessioneNonVerificata');
+// Nei dizionari, non attraverso `i18n.t`: col fallback attivo una chiave italiana
+// mancante uscirebbe in inglese e il test passerebbe lo stesso (revisione, rilievo 6).
+it('il messaggio c’è in italiano e in inglese, ed è diverso nelle due lingue', () => {
+  const it_ = itLocale.partner.sessioneNonVerificata;
+  const en_ = enLocale.partner.sessioneNonVerificata;
+  expect(typeof it_).toBe('string');
+  expect(typeof en_).toBe('string');
+  expect(it_.trim()).not.toBe('');
+  expect(en_.trim()).not.toBe('');
+  expect(it_).not.toBe(en_);
 });
 
 it('Dona con l’account non verificabile: niente uscita in silenzio, compare il messaggio', async () => {
@@ -112,6 +121,10 @@ it('il tocco dopo, col rinnovo riuscito, esce davvero col codice di A', async ()
   await act(async () => {
     await result.current.openLetsDonationExit(SHOP, 'shop');
   });
+  // Primo tocco: niente uscita e il messaggio (revisione, rilievo 4: senza queste due
+  // righe il test passava anche alla base, dove il primo tocco taceva).
+  expect(mockOpenLink).not.toHaveBeenCalled();
+  expect(Alert.alert).toHaveBeenCalledWith(expect.any(String), messaggio);
   (supabase.auth.getSession as jest.Mock).mockResolvedValue(collegataA);
   await act(async () => {
     await result.current.openLetsDonationExit(SHOP, 'shop');
