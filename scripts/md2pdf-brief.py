@@ -76,15 +76,15 @@ CONTENT_WIDTH = A4[0] - 2 * MARGINE_LATERALE
 STYLES = {
     "h1": ParagraphStyle(
         "h1", parent=BASE["Heading1"], fontSize=17, leading=21, spaceAfter=10,
-        textColor="#1a1a1a",
+        textColor="#1a1a1a", keepWithNext=1,
     ),
     "h2": ParagraphStyle(
         "h2", parent=BASE["Heading2"], fontSize=13.5, leading=17, spaceBefore=14,
-        spaceAfter=7, textColor="#8a2020",
+        spaceAfter=7, textColor="#8a2020", keepWithNext=1,
     ),
     "h3": ParagraphStyle(
         "h3", parent=BASE["Heading3"], fontSize=11.5, leading=15, spaceBefore=10,
-        spaceAfter=5, textColor="#333333",
+        spaceAfter=5, textColor="#333333", keepWithNext=1,
     ),
     "body": ParagraphStyle(
         "body", parent=BASE["BodyText"], fontSize=9.8, leading=13.4,
