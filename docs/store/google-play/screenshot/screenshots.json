@@ -1,0 +1,62 @@
+{
+  "d0dbc17bb500a121ef0335813638d02ea1756cef717ea9c783c423c16eb0ce76": {
+    "file": "it/01-home.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "8a92d831afe1e46687497e995d8b22b7220840f1d2d9834497c818332a5b5767": {
+    "file": "it/02-impatto.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "63d6998a0b64ac5abee0b742c55ab552eeab9ea57c71f9dda0b084c8f50d2d39": {
+    "file": "it/03-mappa.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "020fad2559996c671c5b54ca252762cf32567c96ffa874846d29718e26b463cd": {
+    "file": "it/04-azioni.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "22267ad2cfe11f8f6478d2eb6b84b291bde796d602268a8c5dd7312b70f8e0ef": {
+    "file": "it/05-chi-siamo.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "59d0538a6835c8ae2ef62e3dfb7be33d5e5febca3e1edbf005801812b70479cb": {
+    "file": "en/01-home.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "44e0387071eb448ff50dafd72816d06ee0fb70d0c2df96a73ac016527cba15b1": {
+    "file": "en/02-impatto.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "d224a0e269443e398edeeae22c9ee80e99b25bfbdf0937483a912ca50f9873c7": {
+    "file": "en/03-mappa.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "f99ab74042cca0345aca81be8549880791156b164de8c3539b73d5891b918855": {
+    "file": "en/04-azioni.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  },
+  "543b94f1241a8954fe2cd2428d31a600606eaf6ea2b7854d29fe863f1b86fefa": {
+    "file": "en/05-chi-siamo.png",
+    "build": "e4087f74-5d97-4a5c-b8b7-2e00dd3f8361",
+    "dispositivo": "Phone_1080x1920_36 (API 36, 1080x1920, 420 dpi)",
+    "account": "pubblico"
+  }
+}
