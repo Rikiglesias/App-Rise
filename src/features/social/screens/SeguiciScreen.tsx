@@ -79,9 +79,14 @@ const SeguiciScreen: React.FC<Props> = ({ navigation }) => {
         <PerfectIcon name="arrow-left" size={24} color={colors.neutral[900]} />
       </PlatformTouchable>
 
+      {/* Come in Chi siamo: il fondo somma la barra dei pulsanti di Android (F12, vc25). */}
       <PlatformScrollView
         contentContainerStyle={[
           mainStyles.contentContainer,
+          {
+            paddingBottom:
+              mainStyles.contentContainer.paddingBottom + insets.bottom,
+          },
           isTablet ? { paddingHorizontal: 0 } : {},
         ]}
       >

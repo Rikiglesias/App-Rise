@@ -184,9 +184,12 @@ const WorldMapSvgComponent: React.FC<Props> = ({
         style={[styles.legend, isFullScreen ? styles.legendFullScreen : null]}
         pointerEvents="box-none"
       >
+        {/* Il bordo dove la riga continua sfuma (Android): senza, «United Sta» sembrava un
+            taglio e non una riga che scorre (F12, vc25). Su iOS la prop non fa nulla. */}
         <PlatformScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
+          fadingEdgeLength={scale(32)}
           contentContainerStyle={styles.legendContent}
           accessibilityLabel={t('mapDetails.countriesLabel')}
         >

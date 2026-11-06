@@ -6,7 +6,6 @@ import { IMPACT_DATA } from '../data/impactData';
 import { StatCard } from './StatCard';
 import { PerfectContainer, PerfectText } from '@/components/ui';
 import { useTranslation } from '@/shared/hooks/useTranslation';
-import { BorderRadius } from '@/shared/constants/designTokens';
 import { PerfectSpacing } from '@/shared/constants';
 import { scale } from '@/shared/constants/perfectScale';
 import { sectionHeaderBackground } from '@/shared/styles';
@@ -34,11 +33,8 @@ export const TotalMealsSection: React.FC = () => {
         isTablet ? { paddingHorizontal: 0 } : {},
       ]}
     >
-      {/* Linea divisoria tra header e sezione Dal 2012 */}
-      <PerfectContainer style={styles.titleSeparatorContainer}>
-        <PerfectContainer style={styles.titleSeparator} />
-      </PerfectContainer>
-
+      {/* Nessuna barra sopra: l'intestazione di Impatto è già una scheda col bordo, e la barra
+          da 4 dp restava sola in ~115 dp di vuoto, come un'immagine non caricata (F12, vc25). */}
       {/* Header POTENZIATO con decorazioni eleganti */}
       <PerfectContainer style={styles.numbersHeaderContainer}>
         <PerfectContainer style={styles.numbersHeaderBackground}>
@@ -88,23 +84,6 @@ export const TotalMealsSection: React.FC = () => {
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    // Header Divider - IDENTICA ALLA PRIMA LINEA PAGINA AZIONI
-    titleSeparator: {
-      height: scale(4),
-      backgroundColor: colors.neutral[200],
-      width: scale(314), // Perfect System: 80% di 393px (iPhone 15), identico a HeaderDivider
-      marginVertical: PerfectSpacing.sm,
-      borderRadius: BorderRadius.sm,
-      alignSelf: 'center',
-    },
-    // Container divisorio - allineato a pagina Azioni (HeaderDivider)
-    titleSeparatorContainer: {
-      paddingHorizontal: 0,
-      paddingTop: PerfectSpacing.lg,
-      paddingBottom: PerfectSpacing.xl,
-      alignItems: 'center',
-    },
-
     // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
     totalMealsSection: {
       paddingHorizontal: PerfectSpacing.base,
@@ -119,7 +98,7 @@ const createStyles = (colors: ThemeColors) =>
     // Total Meals Section - SPAZIATURE IDENTICHE PAGINA AZIONI
     numbersHeaderContainer: {
       alignItems: 'center',
-      marginTop: PerfectSpacing.sm, // Spacing ridotto per avvicinare alla linea
+      marginTop: PerfectSpacing.sm,
       marginBottom: PerfectSpacing['2xl'], // ULTERIORMENTE AUMENTATO: spazio ottimale tra titolo e bottoni IDENTICO PAGINA AZIONI
     },
     numbersHeaderBackground: {
