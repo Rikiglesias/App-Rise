@@ -6,7 +6,8 @@
  *   authorization code + PKCE → pagina di consenso nostra → scambio del codice →
  *   firma dell'id_token verificata sulla JWKS → UserInfo.
  *
- * Uso (solo progetto di TEST; il secret si passa per variabile d'ambiente, mai come argomento):
+ * Uso (solo progetto di TEST; il secret si passa per variabile d'ambiente, mai come argomento;
+ * senza OIDC_CLIENT_SECRET il client è PUBBLICO: solo PKCE, client_id nel corpo):
  *   SUPABASE_URL=https://<ref>.supabase.co OIDC_CLIENT_ID=… OIDC_CLIENT_SECRET=… \
  *     node scripts/prova-oidc-partner.mjs
  * Poi si apre nel browser l'indirizzo stampato. Il client va registrato con l'indirizzo di
@@ -22,8 +23,8 @@ const clientSecret = process.env.OIDC_CLIENT_SECRET;
 const porta = Number(process.env.PORTA || 8787);
 const ritorno = `http://127.0.0.1:${porta}/callback`;
 
-if (!base || !clientId || !clientSecret) {
-  console.error('Mancano SUPABASE_URL, OIDC_CLIENT_ID o OIDC_CLIENT_SECRET.');
+if (!base || !clientId) {
+  console.error('Mancano SUPABASE_URL o OIDC_CLIENT_ID.');
   process.exit(1);
 }
 
@@ -86,15 +87,36 @@ async function verificaIdToken(idToken) {
   return { claims, errori };
 }
 
+// Un partner deve ricevere UN solo ritorno: due ritorni con lo stesso codice vogliono dire che la
+// pagina di consenso naviga due volte, e il secondo scambio fallisce (invalid_grant) davanti
+// all'utente. Il server resta in ascolto ATTESA_MS dopo il primo per accorgersene.
+const ATTESA_MS = 3000;
+let ritorni = 0;
+let esitoPrimo = null;
+
 const server = createServer(async (req, res) => {
   const q = new URL(req.url, ritorno).searchParams;
   if (!req.url.startsWith('/callback')) return res.writeHead(404).end();
+  ritorni += 1;
+  if (ritorni > 1) {
+    res
+      .writeHead(409, { 'content-type': 'text/plain; charset=utf-8' })
+      .end('ritorno doppio');
+    console.log(
+      `KO: ritorno ricevuto ${ritorni} volte (la pagina di consenso naviga più di una volta)`
+    );
+    return;
+  }
   const chiudi = (codice, testo) => {
     res.writeHead(200, { 'content-type': 'text/plain; charset=utf-8' });
     res.end(testo);
-    server.close();
     console.log(testo);
-    process.exitCode = codice;
+    esitoPrimo = codice;
+    setTimeout(() => {
+      server.close();
+      process.exitCode = ritorni > 1 ? 1 : esitoPrimo;
+      if (ritorni > 1) console.log('ESITO FINALE: KO per ritorno doppio');
+    }, ATTESA_MS);
   };
   if (q.get('error')) return chiudi(1, `Rifiutato: ${q.get('error')}`);
   if (q.get('state') !== state)
@@ -104,9 +126,15 @@ const server = createServer(async (req, res) => {
       method: 'POST',
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
-        authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+        // Riservato: client_secret_basic (come farà LD). Pubblico: nessuna autenticazione.
+        ...(clientSecret
+          ? {
+              authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+            }
+          : {}),
       },
       body: new URLSearchParams({
+        ...(clientSecret ? {} : { client_id: clientId }),
         grant_type: 'authorization_code',
         code: q.get('code') || '',
         redirect_uri: ritorno,

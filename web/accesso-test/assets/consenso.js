@@ -116,9 +116,14 @@
 
   async function decidi(approva) {
     mostra('attendi');
+    // Senza skipBrowserRedirect supabase-js naviga DA SOLO al redirect_url (auth-js 2.108.2,
+    // GoTrueClient _approveAuthorization/_denyAuthorization) e poi navigheremmo anche noi: il
+    // partner riceverebbe due ritorni con lo stesso codice, e il secondo scambio fallisce con
+    // invalid_grant (visto nel giro del 6/11). Una sola navigazione: la nostra, che controlla lo schema.
+    var opzioni = { skipBrowserRedirect: true };
     var res = approva
-      ? await client.auth.oauth.approveAuthorization(authorizationId)
-      : await client.auth.oauth.denyAuthorization(authorizationId);
+      ? await client.auth.oauth.approveAuthorization(authorizationId, opzioni)
+      : await client.auth.oauth.denyAuthorization(authorizationId, opzioni);
     if (res.error || !res.data) return errore(messaggio(res.error));
     vaiA(res.data.redirect_url);
   }
