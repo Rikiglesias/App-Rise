@@ -6,7 +6,7 @@ una voce del Fuori contratto. Le righe sono numerate come le conta il verificato
 intestazioni escluse). Nella cartella `f13/` ci sono le stesse righe senza il testo dei revisori: gravità, `file:riga`
 del repo e destinazione.
 
-Revisione del delta su `a6b2394` (da `f1fefda`): è lo sha che il verificatore confronta con l'ultimo commit del codice.
+Revisione del delta su `b807ddd` (da `f1fefda`): è lo sha che il verificatore confronta con l'ultimo commit del codice.
 
 ## Come sono stati fatti i giri
 
@@ -18,11 +18,38 @@ Revisione del delta su `a6b2394` (da `f1fefda`): è lo sha che il verificatore c
   il giudizio di Claude, riga per riga.
 - **Delta** (emendamento R28): Codex in una copia del repo con `CODEX_HOME` pulito (dentro solo `auth.json`: niente
   memorie, niente AGENTS globali, niente MCP), modello ed effort passati con `-c`. Ogni prompt contiene il diff
-  `f1fefda..a6b2394` del perimetro e i file che importano quelli cambiati. Le fonti di Let's Donation sono copiate
-  nella copia: trascrizione e riassunto della call, preventivo, brief inviato e tre note nostre. In testa a ogni log
-  ci sono la `CODEX_HOME` usata e il suo elenco di file. La copia viene cancellata a fine giro.
-- **Chiusure**: un verificatore Codex in sola lettura per perimetro rilegge su `a6b2394` ogni rilievo del giro 2
-  dichiarato corretto (`verifica-delta*-esito.md`, una riga per rilievo).
+  `f1fefda..<sha del giro>` del perimetro e i file che importano quelli cambiati. Le fonti di Let's Donation sono
+  copiate nella copia: trascrizione e riassunto della call, preventivo, brief inviato e tre note nostre. In testa a
+  ogni log ci sono la `CODEX_HOME` usata e il suo elenco di file. La copia viene cancellata a fine giro.
+  Due giri validi: il primo il 30/10 su `9ec314f`, il secondo il 4/11 su `9b84388`. Un primo tentativo del 29/10 è
+  nullo: i revisori non hanno letto nessun file, e i suoi esiti sono fuori da questa mappa.
+- **Revisione delle correzioni** (`delta3-fix`, `delta4-fix`, `delta5-fix`): le correzioni del secondo giro toccano
+  la cancellazione dell'account e i dati che partono verso i partner, quindi chi le ha scritte non le certifica. Un
+  solo revisore Codex per giro, con le stesse regole del delta; ogni giro rilegge le correzioni del precedente:
+  `delta3-fix` su `9b84388..e00f18c` (5/11), `delta4-fix` su `e00f18c..10a0d2e` e `delta5-fix` su
+  `10a0d2e..b807ddd` (6/11). L'ultimo non ha trovato nulla di bloccante: i suoi tre rilievi minori restano residui
+  dichiarati (un'altra correzione avrebbe chiesto un altro giro). Le righe hanno una destinazione come le altre.
+- **Chiusure**: un verificatore Codex in sola lettura per perimetro rilegge ogni rilievo del giro 2 dichiarato
+  corretto (`verifica-delta*-esito.md`, una riga per rilievo).
+
+## Decisioni di Riccardo
+
+Il contratto ammette al massimo due giri del delta: ciò che resta aperto dopo il secondo è una decisione di Riccardo.
+Nella mappa queste righe sono «fuori contratto: decisione di Riccardo», col motivo nella nota. Le chiusure trovate
+corrette solo in parte sono queste tre:
+
+- **Cancellazione che il server completa dopo la verifica** (chiusura A-B-C 3, C89): se alla verifica l'account
+  esiste ancora e sparisce subito dopo, l'app non esce da sola (`accountActions.ts`, secondo il verificatore). Da
+  decidere: tenere così, perché serve che il server finisca nei pochi secondi fra la verifica e la risposta, oppure
+  aggiungere un secondo controllo.
+- **Salvataggio del profilo e lettura partita prima** (chiusura architettura 7, C90): fra due letture vince la più
+  recente; una lettura partita prima di un salvataggio può ancora arrivare fra il salvataggio e la rilettura che lo
+  segue (`AuthContext.tsx`, secondo il verificatore). Da decidere: tenere così, perché la rilettura rimette il dato
+  giusto, oppure invalidare le letture all'inizio del salvataggio.
+- **Revoca del codice e inoltro ai partner** (chiusura G 5, C99, insieme alla riga G 2 del secondo giro): l'inoltro
+  manuale entro un mese è scritto (`rilascio.md`, § «Chi fa cosa»); mancano la procedura di revoca del solo codice
+  con l'account attivo, chi assegna i riscontri dei partner e cosa vuol dire l'anonimizzazione di Let's Donation. Il
+  testo per la consulente lo dice già (§ «Consulente», punto 1).
 
 Per i criteri senza titoli Jest, la «prova» è l'azione che il controllo statico verifica. Sono le frasi di
 `scripts/verifica-android-play/testi-criteri.mjs`, copiate dal testo del contratto; per C47 sono i file delle azioni
@@ -206,6 +233,56 @@ nominate.
 | giro2-arch | 52 | residuo: app-rise-v2 F0-bis | — | architettura per la crescita, non difetto di rilascio |
 | giro2-arch | 53 | residuo: app-rise-v2 F0-bis | — | architettura per la crescita, non difetto di rilascio |
 | giro2-arch | 54 | residuo: app-rise-v2 F0-bis | — | architettura per la crescita, non difetto di rilascio |
+| delta1-abc | 1 | C97, corretto | «elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella» | guardia valida dopo lo smontaggio, 515d57a: `legataDopoLoSmontaggio.test.tsx`, `azioniDopoLoSmontaggio.test.tsx` |
+| delta1-abc | 2 | C90, corretto | «consensi: una lettura partita prima dell'accettazione non riapre il cancello» | accettazione legata a chi l'ha data, 515d57a: `consensoDiAltroAccount.test.tsx` |
+| delta1-abc | 3 | C85, corretto | «sessione già di B mentre il render è ancora di A: nessun link si apre» | controllo della sessione dopo l'ultima attesa, 515d57a: `partnerSessioneCambiataDopoLoStorage.test.tsx` |
+| delta1-abc | 4 | C79, corretto | «nessun evento `marketing` → `false`» | T4 riparte da un dato davvero discordante, ef52875: fixture a trigger spenti, poi riallineamento |
+| delta1-arch | 1 | C90, corretto | «consensi: una lettura partita prima dell'accettazione non riapre il cancello» | accettazione legata a chi l'ha data, 515d57a: `consensoDiAltroAccount.test.tsx` |
+| delta1-arch | 2 | C97, corretto | «elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella» | guardia valida dopo lo smontaggio, 515d57a: `legataDopoLoSmontaggio.test.tsx`, `azioniDopoLoSmontaggio.test.tsx` |
+| delta1-arch | 3 | C85, corretto | «sessione già di B mentre il render è ancora di A: nessun link si apre» | controllo della sessione dopo l'ultima attesa, 515d57a: `partnerSessioneCambiataDopoLoStorage.test.tsx` |
+| delta1-arch | 4 | residuo: cancellazione di A riuscita mentre entra B, poi corretto in 6fc41d4 (U5 del delta 2) | — | solo l'account eliminato esce: `eliminazioneDuranteCambioAccount.test.ts` |
+| delta1-arch | 5 | C79, corretto | «nessun evento `marketing` → `false`» | T4 riparte da un dato davvero discordante, ef52875: fixture a trigger spenti, poi riallineamento |
+| delta1-d | 1 | C87, corretto | «profilo: Rimanda il link chiama resend email_change con l'email dell'account» | messaggio senza limite di righe, 515d57a: `rinvioEmailTestoIntero.test.tsx` |
+| delta1-d | 2 | C87, corretto | «profilo: Rimanda il link chiama resend email_change con l'email dell'account» | annuncio su iOS, 515d57a: `rinvioEmailAnnunciato.test.tsx` |
+| delta1-f1 | 1 | C97, corretto | «elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella» | guardia valida dopo lo smontaggio, 515d57a: `legataDopoLoSmontaggio.test.tsx`, `azioniDopoLoSmontaggio.test.tsx` |
+| delta1-f1 | 2 | C90, corretto | «profilo: una risposta vecchia arrivata dopo una nuova non sovrascrive» | lettura di chi è uscito fuori dal contatore, 515d57a: `profiloDiAltroUtente.test.tsx` |
+| delta1-f2 | 1 | C97, corretto | «elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella» | guardia valida dopo lo smontaggio, 515d57a: `legataDopoLoSmontaggio.test.tsx`, `azioniDopoLoSmontaggio.test.tsx` |
+| delta1-f2 | 2 | C90, corretto | «consensi: una lettura partita prima dell'accettazione non riapre il cancello» | accettazione legata a chi l'ha data, 515d57a: `consensoDiAltroAccount.test.tsx` |
+| delta1-f2 | 3 | C92, corretto | «avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio» | avviso anche per chi ha rinunciato ai dati, se il codice parte, 515d57a: `avvisoSoloCodice.test.tsx` |
+| delta1-g | 1 | C90, corretto | «consensi: una lettura partita prima dell'accettazione non riapre il cancello» | accettazione legata a chi l'ha data, 515d57a: `consensoDiAltroAccount.test.tsx` |
+| delta1-g | 2 | C85, corretto | «sessione già di B mentre il render è ancora di A: nessun link si apre» | controllo della sessione dopo l'ultima attesa, 515d57a: `partnerSessioneCambiataDopoLoStorage.test.tsx` |
+| delta1-g | 3 | C92, corretto | «avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio» | frase condizionale it/en, 515d57a: restringe ciò che si dichiara, stessa chiave `_v2` |
+| delta2-abc | 1 | C97, corretto in 74b7c42 | «elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella» | guardia che legge sempre chi è collegato adesso, 74b7c42: `schermateLegateAllUtente.test.tsx`, `profiloSalvataggioLegato.test.tsx` |
+| delta2-abc | 2 | C85, corretto in ef8d27f | «sessione già di B mentre il render è ancora di A: nessun link si apre» | lettura del codice filtrata su `user_id`, ef8d27f + a63d43b: `partnerRefService.test.ts` (sessione che passa a B dopo il controllo) |
+| delta2-abc | 3 | C92, corretto in ef8d27f + e7a0248 | «avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio» | avviso anche col solo codice, che non segna visto né cancella la rinuncia, ef8d27f + e7a0248: `avvisoSoloCodice.test.tsx`, `avvisoSoloCodiceNonConsuma.test.tsx` |
+| delta2-arch | 1 | C97, corretto in 74b7c42 | «elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella» | guardia che legge sempre chi è collegato adesso, 74b7c42: `schermateLegateAllUtente.test.tsx`, `profiloSalvataggioLegato.test.tsx` |
+| delta2-arch | 2 | C98, corretto in 6fc41d4 | «cancellazione riuscita e uscita fallita: l'app torna ospite» | solo l'account eliminato esce e si pulisce, 6fc41d4: `eliminazioneDuranteCambioAccount.test.ts`, `eliminazioneStatoDiB.test.tsx` |
+| delta2-arch | 3 | fuori contratto: decisione di Riccardo: account eliminato che rientra da `getSession` al cambio lingua | — | solo dopo un doppio guasto (uscita fallita e pulizia fallita) |
+| delta2-arch | 4 | C92, corretto in ef8d27f + e7a0248 | «avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio» | avviso anche col solo codice, che non segna visto né cancella la rinuncia, ef8d27f + e7a0248: `avvisoSoloCodice.test.tsx`, `avvisoSoloCodiceNonConsuma.test.tsx` |
+| delta2-arch | 5 | C47 + fuori contratto: decisione di Riccardo: `fit` dei numeri riduce il testo ingrandito | «azione2-home-scala-2» | prova sul nativo in F12 con scala 2,0, poi decisione |
+| delta2-f1 | 1 | C97, corretto in 74b7c42 | «elimina account nel cancello: al cambio di account si torna al passaggio obbligatorio e non si cancella» | guardia che legge sempre chi è collegato adesso, 74b7c42: `schermateLegateAllUtente.test.tsx`, `profiloSalvataggioLegato.test.tsx` |
+| delta2-f1 | 2 | fuori contratto: decisione di Riccardo: `popTo('Account')` chiude anche il recupero aperto dal link di B | — | raro: serve il link di recupero di B aperto mentre A modifica il profilo; B riapre il link |
+| delta2-f2 | 1 | C98, corretto in 6fc41d4 | «cancellazione riuscita e uscita fallita: l'app torna ospite» | solo l'account eliminato esce e si pulisce, 6fc41d4: `eliminazioneDuranteCambioAccount.test.ts`, `eliminazioneStatoDiB.test.tsx` |
+| delta2-f2 | 2 | C85, corretto in 25b1aca | «sessione già di B mentre il render è ancora di A: nessun link si apre» | errore di `getSession` ≠ cambio account, messaggio it/en: `uscitaPartnerAccountNonVerificato.test.tsx` |
+| delta2-f2 | 3 | C92, corretto in ef8d27f + e7a0248 | «avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio» | avviso anche col solo codice, che non segna visto né cancella la rinuncia, ef8d27f + e7a0248: `avvisoSoloCodice.test.tsx`, `avvisoSoloCodiceNonConsuma.test.tsx` |
+| delta2-f2 | 4 | fuori contratto: decisione di Riccardo: rinvio email con 429, la libreria butta il verificatore PKCE | — | dentro supabase-js: il rinvio si rifà dopo l'attesa |
+| delta2-g | 1 | C92, corretto in ef8d27f + e7a0248 | «avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio» | avviso anche col solo codice, che non segna visto né cancella la rinuncia, ef8d27f + e7a0248: `avvisoSoloCodice.test.tsx`, `avvisoSoloCodiceNonConsuma.test.tsx` |
+| delta2-g | 2 | C99, testo per la consulente corretto in e00f18c + fuori contratto: decisione di Riccardo (procedura di revoca con account attivo, G8) | «Richieste di cancellazione da inoltrare» | revoca del solo codice «ancora da attivare»: oggi nessuno la riceve, le uscite portano lo stesso codice |
+| delta2-g | 3 | C92, corretto in 9a448e1 | «avviso partner: testo nuovo mostrato anche a chi aveva visto il vecchio» | motivazione di `play-console-risposte.md` riscritta: il codice di Donorbox parte anche senza nome ed email, dopo l'avviso |
+| delta2-g | 4 | C99, corretto in 9a448e1 | «da-validare» | il gate cerca la classe `da-validare`, non il selettore CSS |
+| delta3-fix | 1 | fuori contratto: decisione di Riccardo: B entra fra la lettura della sessione e l'uscita dopo la cancellazione di A | — | finestra di pochi passaggi: la coda interna di auth-js serializza le operazioni; renderle indivisibili chiede il lock privato della libreria; effetto peggiore: B esce e rientra, nessun dato esposto |
+| delta3-fix | 2 | residuo dichiarato (correzione con test nuovo, fuori dai titoli del contratto congelato): corretto in 3d3a9c1 | «cancellazione di A fallita mentre entra B già eliminato altrove: A NON risulta eliminato» | classe di C89 e C98; verifica con `getUser(token di A)`: `eliminazioneDuranteCambioAccount.test.ts`, `eliminazioneRiconciliata.test.tsx` |
+| delta3-fix | 3 | residuo dichiarato (testo di un documento, nessun titolo del contratto lo prova): corretto in 10a0d2e | testo riletto dopo la correzione | classe di C92; `play-console-risposte.md`: l'avviso del solo codice ricompare finché manca il profilo |
+| delta3-fix | 4 | residuo dichiarato (correzione con test nuovo, fuori dai titoli del contratto congelato): corretto in 10a0d2e | «il tocco dopo, col rinnovo riuscito, esce davvero col codice di A» | classe di C85; primo tocco controllato; il caso senza cambio account marcato come controllo positivo |
+| delta3-fix | 5 | residuo dichiarato (correzione con test nuovo, fuori dai titoli del contratto congelato): corretto in 10a0d2e | «parte il solo codice: nell’avviso Donorbox non c’è «Continua senza i miei dati»» | classe di C92; `ActionButtonsAvvisoSoloCodice.test.tsx`, modale vera + controllo positivo |
+| delta3-fix | 6 | residuo dichiarato (correzione con test nuovo, fuori dai titoli del contratto congelato): corretto in 10a0d2e | «il messaggio c’è in italiano e in inglese, ed è diverso nelle due lingue» | classe di C85; dizionari letti senza fallback |
+| delta4-fix | 1 | residuo dichiarato (correzione con test nuovo, fuori dai titoli del contratto congelato): corretto in 0960a38 | «B entra fra la lettura del token di A e la chiamata: il server cancella A, non B» | classe di C89; `invoke` col token di A esplicito, senza token non parte (functions-js 2.108.2: header della chiamata in testa) |
+| delta4-fix | 2 | residuo dichiarato (testo di un documento, nessun titolo del contratto lo prova): corretto in b807ddd | testo riletto dopo la correzione | classe di C92; `play-console-risposte.md`: l'avviso del solo codice compare finché quello completo non è stato visto |
+| delta4-fix | 3 | residuo dichiarato (correzione con test nuovo, fuori dai titoli del contratto congelato): corretto in 0960a38 | «chiamata fallita senza cancellare A mentre entra B: A è ancora presente, si dice «non riuscito»» | classe di C89; errore non di rete + `getUser('token-A')`; spie azzerate |
+| delta4-fix | 4 | residuo dichiarato, nessuna correzione: commit di soli test, il codice provato è lo stesso in e00f18c e 10a0d2e | — | la prova che distinguono è il mutante sul codice che proteggono (giro 3, uno per test) |
+| delta5-fix | 1 | residuo: diagnostica persa quando il token di A non si legge (SecureStore rigetta o sessione già di B) | — | la cancellazione non parte e la persona riprova: nessun danno; manca solo la causa nel rapporto (`accountActions.ts:178` esce prima di `registraEsitoAccount`); innesco: primo aggiornamento dopo l'invio |
+| delta5-fix | 2 | residuo: testo di `play-console-risposte.md:174` dice «visto», il codice vuole «confermato e salvato» | — | il comportamento vero è più prudente del testo (l'avviso compare più spesso, non meno: `usePartnerExit.ts:293-301`); innesco: primo aggiornamento dopo l'invio, insieme al rilievo 1 |
+| delta5-fix | 3 | residuo dichiarato, nessuna correzione: i 3 test aggiornati in 0960a38 coprono comportamenti di prima | — | il vincolo nuovo lo provano `eliminazioneDuranteCambioAccount.test.ts:123,185` e `deleteAccount.test.tsx:164`, riconosciuti dal revisore stesso; mutanti 3/3 nel giro 4 |
 | difetti | D1 | C81 | «contrasto: «Home» sull’ombra del pulsante centrale (attiva: true)» |  |
 | difetti | D2 | C81 | «contrasto: segnaposto in light» |  |
 | difetti | D3 | C81 | «contrasto: prefisso nella lista dei paesi» |  |
