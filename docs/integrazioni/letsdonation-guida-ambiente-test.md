@@ -19,8 +19,10 @@ Conviene leggere gli indirizzi dalla discovery, non scriverli a mano.
 
 ## Il giro
 
-1. Authorization Code con PKCE (`code_challenge_method=S256`), `response_type=code`.
-2. Scope: `openid email profile`. La discovery offre anche `offline_access` (refresh token): non l'abbiamo provato.
+1. Authorization Code con PKCE (`code_challenge_method=S256`), `response_type=code`. **PKCE è obbligatorio** anche per
+   il client riservato: senza, il server rifiuta subito con «PKCE flow requires both code_challenge and
+   code_challenge_method». Molte librerie lato server lo tengono spento di default: va acceso.
+2. Scope: `openid email profile`. Non serve chiedere `offline_access`: il refresh token arriva comunque.
 3. La persona accede (o si registra) sulla **nostra** pagina e approva. Al primo accesso vede la schermata di
    consenso; dalla volta dopo torna subito da voi.
 4. Ritorno al vostro indirizzo con `code` e `state`. Il `code` vale **una volta sola**.
@@ -47,7 +49,11 @@ Se la persona tocca «Non ora», tornate con `error=access_denied`.
 | `user_metadata` | solo UserInfo | Oggetto con i dati del profilo, tra cui `country` (codice paese, per esempio `IT`) |
 
 I dati vi arrivano **a ogni accesso**: se la persona cambia nome o nickname da noi, li ricevete aggiornati al login
-successivo. Non c'è un invio da parte nostra nel frattempo.
+successivo. Non c'è un invio da parte nostra nel frattempo. Senza aspettare un nuovo login potete usare il refresh
+token: il rinnovo dà un nuovo access token (non un nuovo `id_token`) e con quello UserInfo restituisce i dati
+aggiornati. Il refresh token cambia a ogni rinnovo: conservate sempre l'ultimo.
+
+L'unico dato sì/no è `email_verified`, ed è sempre `true`: senza conferma dell'email da noi non si entra.
 
 Nome e cognome separati, data di nascita e telefono **non** arrivano.
 
@@ -83,14 +89,12 @@ sola.
 | `+ld05` | Cambio email |
 | `+ld06` | Cambio di nome, cognome e nickname; poi nickname tolto |
 | `+ld07` | Rifiuta il consenso («Non ora») |
-| `+ld08` | Persona tra 14 e 17 anni (l'età non vi arriva) |
+| `+ld08` | Di riserva, per un caso in più che vi serva |
 | `+ld09` | Cancellazione dell'account durante il test |
 | `+ld10` | Paese estero (`country` = `CH` in `user_metadata`) |
 
 ## Cosa ci serve da voi
 
-1. Gli indirizzi di ritorno esatti.
-2. Quando parlate di «flag» del nickname, cosa intendete esattamente?
-3. Vi serve il refresh token (`offline_access`)?
-4. Avete limiti d'età, per esempio sulle gift card? L'età non è tra i dati che vi passiamo.
-5. Quando pensate di fare le prove, così teniamo d'occhio i limiti di frequenza.
+1. Gli indirizzi di ritorno esatti: quello del vostro ambiente locale e, quando li avrete, collaudo e produzione.
+2. Come la vostra libreria manda il segreto allo sportello Token: in Basic auth (il predefinito) o nel corpo della
+   richiesta (`client_secret_post`). Registriamo il client di conseguenza.
