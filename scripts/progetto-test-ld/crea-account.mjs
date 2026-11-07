@@ -9,7 +9,7 @@
 // Un account che esiste già non viene toccato (lo script si può rilanciare).
 
 import { randomBytes } from 'node:crypto';
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -27,77 +27,18 @@ if (!utente || !dominio) {
 }
 const CASELLA = n => `${utente}+ld${String(n).padStart(2, '0')}@${dominio}`;
 
-// Matrice del binding ~/todos/ld-ambiente-test.md § F3d. Persone inventate.
+// Matrice del binding ~/todos/ld-ambiente-test.md § F3d. Persone inventate. Fonte UNICA,
+// letta anche dalla pagina /account per «Riporta ai valori di partenza» (ripristino.js).
 const adulto = '1990-04-12';
-const MATRICE = [
-  {
-    n: 1,
-    caso: 'completo, email assente da LD',
-    first_name: 'Anna',
-    last_name: 'Prova',
-    nickname: 'anna_prova01',
-  },
-  { n: 2, caso: 'senza nickname', first_name: 'Bruno', last_name: 'Prova' },
-  {
-    n: 3,
-    caso: 'LD la inserisce come già iscritta Rise',
-    first_name: 'Carla',
-    last_name: 'Prova',
-    nickname: 'carla_prova03',
-  },
-  {
-    n: 4,
-    caso: 'LD la inserisce come iscritta a un’altra organizzazione',
-    first_name: 'Dario',
-    last_name: 'Prova',
-    nickname: 'dario_prova04',
-  },
-  {
-    n: 5,
-    caso: 'cambio email',
-    first_name: 'Elena',
-    last_name: 'Prova',
-    nickname: 'elena_prova05',
-  },
-  {
-    n: 6,
-    caso: 'cambio nome, cognome, nickname e nickname tolto',
-    first_name: 'Fabio',
-    last_name: 'Prova',
-    nickname: 'fabio_prova06',
-  },
-  {
-    n: 7,
-    caso: 'rifiuta il consenso («Non ora»)',
-    first_name: 'Giulia',
-    last_name: 'Prova',
-    nickname: 'giulia_prova07',
-  },
-  {
-    n: 8,
-    caso: 'età 14-17',
-    first_name: 'Luca',
-    last_name: 'Prova',
-    nickname: 'luca_prova08',
-    birth_date: '2010-06-01',
-  },
-  {
-    n: 9,
-    caso: 'cancellazione account durante il test',
-    first_name: 'Marta',
-    last_name: 'Prova',
-    nickname: 'marta_prova09',
-  },
-  {
-    n: 10,
-    caso: 'paese estero',
-    first_name: 'Nadia',
-    last_name: 'Prova',
-    nickname: 'nadia_prova10',
-    country: 'CH',
-    marketing: true,
-  },
-];
+const MATRICE = JSON.parse(
+  readFileSync(
+    new URL(
+      '../../web/accesso-test/assets/account-di-prova.json',
+      import.meta.url
+    ),
+    'utf8'
+  )
+);
 
 function argomento(nome) {
   const i = process.argv.indexOf(nome);

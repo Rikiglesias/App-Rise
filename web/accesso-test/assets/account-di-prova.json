@@ -1,0 +1,74 @@
+[
+  {
+    "n": 1,
+    "caso": "completo, email assente da LD",
+    "first_name": "Anna",
+    "last_name": "Prova",
+    "nickname": "anna_prova01"
+  },
+  {
+    "n": 2,
+    "caso": "senza nickname",
+    "first_name": "Bruno",
+    "last_name": "Prova"
+  },
+  {
+    "n": 3,
+    "caso": "LD la inserisce come già iscritta Rise",
+    "first_name": "Carla",
+    "last_name": "Prova",
+    "nickname": "carla_prova03"
+  },
+  {
+    "n": 4,
+    "caso": "LD la inserisce come iscritta a un’altra organizzazione",
+    "first_name": "Dario",
+    "last_name": "Prova",
+    "nickname": "dario_prova04"
+  },
+  {
+    "n": 5,
+    "caso": "cambio email",
+    "first_name": "Elena",
+    "last_name": "Prova",
+    "nickname": "elena_prova05"
+  },
+  {
+    "n": 6,
+    "caso": "cambio nome, cognome, nickname e nickname tolto",
+    "first_name": "Fabio",
+    "last_name": "Prova",
+    "nickname": "fabio_prova06"
+  },
+  {
+    "n": 7,
+    "caso": "rifiuta il consenso («Non ora»)",
+    "first_name": "Giulia",
+    "last_name": "Prova",
+    "nickname": "giulia_prova07"
+  },
+  {
+    "n": 8,
+    "caso": "età 14-17",
+    "first_name": "Luca",
+    "last_name": "Prova",
+    "nickname": "luca_prova08",
+    "birth_date": "2010-06-01"
+  },
+  {
+    "n": 9,
+    "caso": "cancellazione account durante il test",
+    "first_name": "Marta",
+    "last_name": "Prova",
+    "nickname": "marta_prova09"
+  },
+  {
+    "n": 10,
+    "caso": "paese estero",
+    "first_name": "Nadia",
+    "last_name": "Prova",
+    "nickname": "nadia_prova10",
+    "country": "CH",
+    "marketing": true
+  }
+]

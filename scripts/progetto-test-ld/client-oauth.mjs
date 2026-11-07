@@ -2,6 +2,7 @@
 //
 //   secret-vault.ps1 run -Names SUPABASE_ACCESS_TOKEN node scripts/progetto-test-ld/client-oauth.mjs
 //   secret-vault.ps1 run -Names SUPABASE_ACCESS_TOKEN node scripts/progetto-test-ld/client-oauth.mjs --crea-prova
+//   secret-vault.ps1 run -Names SUPABASE_ACCESS_TOKEN node scripts/progetto-test-ld/client-oauth.mjs --crea-strumenti
 //   secret-vault.ps1 run -Names SUPABASE_ACCESS_TOKEN node scripts/progetto-test-ld/client-oauth.mjs --crea-riservato "<nome>" <uri> [<uri>…] --segreto-in <file fuori dal repo>
 //
 // La chiave segreta del progetto serve all'API di amministrazione: la legge qui dentro dalla
@@ -26,6 +27,20 @@ const AUTH = `https://${REF_TEST}.supabase.co/auth/v1`;
 const CLIENT_PROVA = {
   client_name: 'Prova Rise',
   redirect_uris: ['http://127.0.0.1:8787/callback'],
+  client_type: 'public',
+};
+
+// Client per il partner, da usare SUBITO con strumenti standard, prima che il suo client
+// abbia indirizzi registrati: pubblico (PKCE, nessun segreto da consegnare), ritorno sugli
+// indirizzi fissi di OIDC Debugger e di Postman (app desktop e «Authorize using browser»,
+// docs Postman «OAuth 2.0»). Solo sul progetto di test: in produzione mai ritorni di terzi.
+const CLIENT_STRUMENTI = {
+  client_name: 'Strumenti di prova (OIDC Debugger, Postman)',
+  redirect_uris: [
+    'https://oidcdebugger.com/debug',
+    'https://oauth.pstmn.io/v1/callback',
+    'https://oauth.pstmn.io/v1/browser-callback',
+  ],
   client_type: 'public',
 };
 
@@ -172,42 +187,40 @@ if (process.argv.includes('--crea-riservato')) {
   await creaRiservato(chiave, clienti);
   process.exit(0);
 }
-if (!process.argv.includes('--crea-prova')) process.exit(0);
-// Stesso client = stesso nome o stessi indirizzi di ritorno: si allinea il nome, non se ne crea un altro.
-const esistente = clienti.find(
-  c =>
-    c.client_name === CLIENT_PROVA.client_name ||
-    uguali(c.redirect_uris ?? [], CLIENT_PROVA.redirect_uris)
-);
-if (esistente) {
-  if (esistente.client_name === CLIENT_PROVA.client_name) {
-    console.log(`«${CLIENT_PROVA.client_name}» esiste già: niente da fare.`);
-    process.exit(0);
-  }
-  const allineato = await admin(
-    chiave,
-    `/oauth/clients/${esistente.client_id}`,
-    {
-      method: 'PUT',
-      body: JSON.stringify({ client_name: CLIENT_PROVA.client_name }),
-    }
+// Client pubblico definito qui sopra. Stesso client = stesso nome o stessi indirizzi di
+// ritorno: si allinea il nome, non se ne crea un altro.
+async function creaFisso(chiave, clienti, definizione) {
+  const esistente = clienti.find(
+    c =>
+      c.client_name === definizione.client_name ||
+      uguali(c.redirect_uris ?? [], definizione.redirect_uris)
   );
-  if (!allineato.ok) {
+  if (esistente?.client_name === definizione.client_name) {
+    console.log(`«${definizione.client_name}» esiste già: niente da fare.`);
+    return;
+  }
+  const risposta = esistente
+    ? await admin(chiave, `/oauth/clients/${esistente.client_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ client_name: definizione.client_name }),
+      })
+    : await admin(chiave, '/oauth/clients', {
+        method: 'POST',
+        body: JSON.stringify(definizione),
+      });
+  if (!risposta.ok) {
     console.error(
-      `Allineamento rifiutato: HTTP ${allineato.status}`,
-      allineato.dati
+      `${esistente ? 'Allineamento' : 'Creazione'} rifiutata: HTTP ${risposta.status}`,
+      risposta.dati
     );
     process.exit(1);
   }
-  console.log(`Allineato: ${pubblico(allineato.dati)}`);
-  process.exit(0);
+  console.log(
+    `${esistente ? 'Allineato' : 'Creato'}: ${pubblico(risposta.dati)}`
+  );
 }
-const creato = await admin(chiave, '/oauth/clients', {
-  method: 'POST',
-  body: JSON.stringify(CLIENT_PROVA),
-});
-if (!creato.ok) {
-  console.error(`Creazione rifiutata: HTTP ${creato.status}`, creato.dati);
-  process.exit(1);
-}
-console.log(`Creato: ${pubblico(creato.dati)}`);
+
+if (process.argv.includes('--crea-prova'))
+  await creaFisso(chiave, clienti, CLIENT_PROVA);
+else if (process.argv.includes('--crea-strumenti'))
+  await creaFisso(chiave, clienti, CLIENT_STRUMENTI);

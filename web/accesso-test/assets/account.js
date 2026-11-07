@@ -53,6 +53,7 @@
     utente = u.data.user;
     $('chi').textContent = utente.email || '';
     await window.RiseMieiDati.carica();
+    await window.RiseRipristino.carica();
     await caricaConsensi();
     mostra('profilo');
   }
@@ -123,6 +124,7 @@
     if (
       !window.supabase ||
       !window.RiseMieiDati ||
+      !window.RiseRipristino ||
       !cfg.url ||
       !cfg.publishableKey
     ) {
@@ -146,6 +148,19 @@
       quandoEliminato: function () {
         tornaAlLogin(
           'Account eliminato. Da qui non si entra più con quella email.'
+        );
+      },
+    });
+    window.RiseRipristino.collega({
+      client: client,
+      $: $,
+      conErrori: conErrori,
+      utente: function () {
+        return utente;
+      },
+      quandoRipristinato: function () {
+        tornaAlLogin(
+          'Account riportato ai valori di partenza: consensi ritirati, sessioni chiuse ovunque.'
         );
       },
     });

@@ -13,6 +13,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="/assets/miei-dati.js" defer></script>
+    <script src="/assets/ripristino.js" defer></script>
     <script src="/assets/account.js" defer></script>
   </head>
   <body>
@@ -108,6 +109,23 @@
         <h2>Partner a cui hai dato il consenso</h2>
         <ul id="consensi"></ul>
         <p id="consensi-esito" class="nota" role="status"></p>
+
+        <div id="ripristino" hidden>
+          <h2>Riporta ai valori di partenza</h2>
+          <p class="nota">
+            Per rifare le prove da capo: rimette nome, cognome, nickname, paese
+            ed email di questo account di prova come all'inizio, ritira i
+            consensi ai partner e chiude tutte le sessioni, anche quelle del
+            partner.
+          </p>
+          <div class="pulsanti">
+            <button id="ripristina" type="button" class="secondario">
+              Riporta ai valori di partenza
+            </button>
+          </div>
+          <p id="ripristino-esito" class="nota" role="status"></p>
+        </div>
+
         <div class="pulsanti">
           <button id="esci" type="button" class="secondario">Esci</button>
         </div>

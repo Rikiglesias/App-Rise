@@ -285,5 +285,9 @@
     $('elimina-si').addEventListener('click', ctx.conErrori(elimina));
   }
 
-  window.RiseMieiDati = { collega: collega, carica: carica };
+  window.RiseMieiDati = {
+    collega: collega,
+    carica: carica,
+    chiamaFunzione: chiamaFunzione, // usata anche da ripristino.js
+  };
 })();
