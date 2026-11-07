@@ -87,9 +87,11 @@ const ActionCTAButtonsComponent: React.FC = () => {
               size={30}
               color={colors.primary[500]}
             />
+            {/* F14-ponte: le due righe della traduzione si restringono, mai «Discove / r» */}
             <PerfectText
               size={22}
               lines={2}
+              variant="fit"
               color={colors.primary[500]}
               textAlign="center"
               style={styles.buttonTitle}
@@ -152,6 +154,7 @@ const ActionCTAButtonsComponent: React.FC = () => {
             <PerfectText
               size={22}
               lines={2}
+              variant="fit"
               color={colors.semantic.success.text}
               textAlign="center"
               style={styles.buttonTitle}

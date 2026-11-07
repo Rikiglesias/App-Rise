@@ -40,8 +40,9 @@ export interface PerfectTextProps
   lines: number;
 
   /**
-   * Varianti di comportamento per adattività. `fit`: una riga sola che segue la scala
-   * di sistema e si restringe solo quando non entra in larghezza (mai tagliata).
+   * Varianti di comportamento per adattività. `fit`: al più `lines` righe (di solito 1) che
+   * seguono la scala di sistema e si restringono solo quando non entrano, mai tagliate né con
+   * una parola spezzata a metà: una parola spezzata aggiunge una riga, e il testo si restringe.
    */
   variant?: 'content' | 'compact' | 'fit';
   /** Soglia fontScale oltre la quale i testi content si espandono (no tagli); default: appena il testo è ingrandito */
@@ -170,7 +171,9 @@ export const PerfectText: React.FC<PerfectTextProps> = ({
 
   // Adattività: per variant 'content' e fontScale alto -> nessun taglio
   const effectiveLines = useMemo(() => {
-    if (variant === 'compact' || variant === 'fit') return 1;
+    if (variant === 'compact') return 1;
+    // `fit`: le righe chieste, non di più (F14-ponte: «Discove / r» a scala 2 sul Pixel 8)
+    if (variant === 'fit') return lines;
     if (allowsScale && fontScale > adaptiveThreshold) return undefined; // lascia andare a capo
     return lines;
   }, [variant, allowsScale, fontScale, adaptiveThreshold, lines]);

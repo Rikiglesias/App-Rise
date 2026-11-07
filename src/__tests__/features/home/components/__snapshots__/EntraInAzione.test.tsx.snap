@@ -267,11 +267,11 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
             }
           >
             <Text
-              adjustsFontSizeToFit={false}
+              adjustsFontSizeToFit={true}
               allowFontScaling={false}
               lineBreakMode="clip"
               maxFontSizeMultiplier={1}
-              minimumFontScale={1}
+              minimumFontScale={0.5}
               numberOfLines={2}
               style={
                 {
@@ -461,11 +461,11 @@ exports[`EntraInAzione Component dovrebbe avere gli stili corretti per i gradien
             }
           >
             <Text
-              adjustsFontSizeToFit={false}
+              adjustsFontSizeToFit={true}
               allowFontScaling={false}
               lineBreakMode="clip"
               maxFontSizeMultiplier={1}
-              minimumFontScale={1}
+              minimumFontScale={0.5}
               numberOfLines={2}
               style={
                 {

@@ -536,6 +536,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     }
                     testID="cta-impact-label"
                     textAlign="center"
+                    variant="fit"
                   >
                     Scopri Impatto
                   </Text>
@@ -712,6 +713,7 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
                     }
                     testID="cta-donate-label"
                     textAlign="center"
+                    variant="fit"
                   >
                     Dona e Aiuta
                   </Text>

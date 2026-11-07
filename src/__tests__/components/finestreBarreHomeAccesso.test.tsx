@@ -3,13 +3,15 @@
  * barra di stato e sotto i tre pulsanti (finestre `statusBarTranslucent` che non contavano le barre);
  * in Home l'immagine usciva dal suo riquadro e «⚡ Take Action» copriva gli obiettivi 10 e 17
  * (altezza fissata all'avvio, immagine che segue la finestra di adesso); all'accesso «Welcome» a testo
- * grande diventava «Welco / me» (colonna del 70 % sul titolo).
+ * grande diventava «Welco / me» (colonna del 70 % sul titolo). Prova nativa del 7/11: in fondo alla Home,
+ * a scala 2 sul Pixel 8, «Discover» diventava «Discove / r» (stessa classe, fuori dalla mappa degli 11).
  */
 import React from 'react';
 import {
   Animated,
   Dimensions,
   Image,
+  PixelRatio,
   StyleSheet,
   Text,
   type TextStyle,
@@ -20,7 +22,9 @@ import { act, cleanup, render } from '@testing-library/react-native';
 import { impostaFinestra, ripristinaFinestra } from '../helpers/cambioFinestra';
 import { PerfectModal } from '@/components/ui/PerfectModal';
 import { StoriaModal } from '@/features/about/components/StoriaModal';
+import ChiSiamoScreen from '@/features/about/screens/ChiSiamoScreen';
 import { AuthScreen } from '@/features/auth/components/AuthScreen';
+import { ActionCTAButtons } from '@/features/home/components/EntraInAzione/ActionCTAButtons';
 import { HeaderImageSection } from '@/features/home/components/HomeHeader/HeaderImageSection';
 import { useHomeHeaderStyles } from '@/features/home/hooks/useHomeHeaderStyles';
 import i18n, { changeLanguage, getCurrentLocale } from '@/locales';
@@ -28,7 +32,11 @@ import { UniversalThemeProvider as Tema } from '@/shared/theme/UniversalTheme';
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual<object>('@react-navigation/native'),
-  useNavigation: () => ({ goBack: jest.fn(), canGoBack: () => true }),
+  useNavigation: () => ({
+    goBack: jest.fn(),
+    canGoBack: () => true,
+    navigate: jest.fn(),
+  }),
 }));
 
 type Nodo = ReturnType<typeof render>['UNSAFE_root'];
@@ -196,5 +204,52 @@ describe('F14-ponte lotto D', () => {
       siRestringe: testo.props.adjustsFontSizeToFit === true,
       colonna: sopra ? stile(sopra).maxWidth : undefined,
     }).toEqual({ siRestringe: false, colonna: undefined });
+  });
+
+  it.each(['it', 'en'] as const)(
+    'Home (%s): a testo grande i pulsanti in fondo restano nelle righe della traduzione e si restringono',
+    async lingua => {
+      changeLanguage(lingua);
+      jest.spyOn(PixelRatio, 'getFontScale').mockReturnValue(2);
+      const ui = await monta(
+        <Tema>
+          <ActionCTAButtons />
+        </Tema>
+      );
+      const pulsanti = ['cta-impact-label', 'cta-donate-label'].map(id => {
+        const testo = ui.getByTestId(id);
+        const righeTraduzione = String(testo.props.children).split('\n').length;
+        return {
+          id,
+          siRestringe: testo.props.adjustsFontSizeToFit === true,
+          righeInPiu: (testo.props.numberOfLines ?? Infinity) - righeTraduzione,
+        };
+      });
+      // Una parola spezzata aggiunge una riga: con le righe fissate il testo si restringe invece di spezzarla.
+      expect(pulsanti).toEqual([
+        { id: 'cta-impact-label', siRestringe: true, righeInPiu: 0 },
+        { id: 'cta-donate-label', siRestringe: true, righeInPiu: 0 },
+      ]);
+    }
+  );
+
+  it('Chi siamo: a testo grande l’email sta su una riga e si restringe, l’indirizzo va a capo fra le parole', async () => {
+    jest.spyOn(PixelRatio, 'getFontScale').mockReturnValue(2);
+    const ui = await monta(
+      <Tema>
+        <ChiSiamoScreen
+          navigation={{ goBack: jest.fn(), navigate: jest.fn() } as never}
+        />
+      </Tema>
+    );
+    const email = ui.getByText(/@/);
+    const indirizzo = ui.getByText(/Bologna/);
+    expect({
+      email: [
+        email.props.adjustsFontSizeToFit === true,
+        email.props.numberOfLines,
+      ],
+      indirizzo: indirizzo.props.adjustsFontSizeToFit === true,
+    }).toEqual({ email: [true, 1], indirizzo: false });
   });
 });

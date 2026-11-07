@@ -10,6 +10,7 @@ import {
 import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { isSingleWord } from '@/shared/utils/singleWord';
 
 export const AnimatedContact: React.FC<AnimatedContactProps> = ({
   contact,
@@ -56,9 +57,11 @@ export const AnimatedContact: React.FC<AnimatedContactProps> = ({
               >
                 {contact.title}
               </PerfectText>
+              {/* F14-ponte: un'email è una parola sola, a testo grande si restringe invece di spezzarsi */}
               <PerfectText
                 size={16}
-                lines={2}
+                lines={isSingleWord(contact.subtitle) ? 1 : 2}
+                variant={isSingleWord(contact.subtitle) ? 'fit' : 'content'}
                 containerWidth={0}
                 style={animatedContactStyles.contactButtonSubtitle}
               >

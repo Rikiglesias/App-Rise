@@ -18,6 +18,7 @@ import { Colors } from '@/shared/constants/designTokens';
 import { scale } from '@/shared/constants/perfectScale';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import type { ThemeColors } from '@/shared/theme/adaptiveColors';
+import { isSingleWord } from '@/shared/utils/singleWord';
 
 interface AuthScreenProps {
   title: string;
@@ -44,9 +45,6 @@ interface AuthScreenProps {
   verticalCenter?: boolean;
   children: React.ReactNode;
 }
-
-/** Una parola sola non può andare a capo senza spezzarsi («Welcome», «Benvenuto»). */
-const isSingleWord = (text: string): boolean => !/\s/.test(text.trim());
 
 /** Layout condiviso delle schermate auth: safe area + scroll + tastiera + hero brand. */
 export const AuthScreen: React.FC<AuthScreenProps> = ({
@@ -126,7 +124,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                   larghezza, e una parola sola si restringe (al più a metà) invece di spezzarsi. */}
               <PerfectText
                 size={titleSize}
-                lines={2}
+                lines={isSingleWord(title) ? 1 : 2}
                 containerWidth={0}
                 variant={isSingleWord(title) ? 'fit' : 'content'}
                 style={styles.title}
