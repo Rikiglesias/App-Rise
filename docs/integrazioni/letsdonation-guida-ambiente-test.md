@@ -2,8 +2,8 @@
 
 Per il tecnico di Let's Donation. Descrive l'ambiente di **test**: un progetto separato dalla produzione, con
 account di prova (nomi inventati, caselle email nostre di prova) e nessun dato di donatori. Tutto quello che segue
-è stato provato da noi il 6 e il 7 novembre 2026 con due client di prova, uno pubblico e uno riservato; dove una
-cosa non è stata provata, è scritto.
+è stato provato da noi il 6 e il 7 novembre 2026 con client di prova pubblici e riservati; dove una cosa non è
+stata provata, è scritto.
 
 ## Indirizzi
 
@@ -93,12 +93,16 @@ come farà nell'app. Poi rifate il login dal vostro sito e guardate cosa arriva.
   non l'abbiamo ancora provato: è il caso dell'account `+ld09`. Se vi serve di nuovo, lo ricreiamo noi. Non è l'oblio
   presso di voi: la cancellazione dei dati da voi passa dalla vostra API, che resta il passo successivo come detto
   nella call.
+- **Riporta ai valori di partenza**: per rifare le prove da capo senza chiederci niente. Rimette nome, cognome,
+  nickname, paese ed email dell'account di prova come erano all'inizio, ritira tutti i consensi e chiude
+  tutte le sessioni, comprese quelle aperte dal partner: dopo, il refresh token del partner non vale più (provato
+  col client pubblico di prova: `refresh_token_not_found`). Non vale per un account eliminato.
 
 ## Account di prova
 
 Caselle nostre, nomi inventati. Qui c'è solo la parte che distingue gli account (`+ld01` … `+ld10`): gli
-indirizzi completi e le password ve li mandiamo a parte, insieme al `client_secret`, con un link che si apre una volta
-sola.
+indirizzi completi e le password ve li mandiamo a parte, con un link che si apre una volta sola, così potete provare
+subito col client pubblico; il `client_secret` del vostro client arriva allo stesso modo, quando lo registriamo.
 
 | Account | Caso da provare |
 |---|---|
@@ -112,6 +116,29 @@ sola.
 | `+ld08` | Di riserva, per un caso in più che vi serva |
 | `+ld09` | Cancellazione dell'account durante il test (da `/account`) |
 | `+ld10` | Paese estero (`country` = `CH` in `user_metadata`) |
+
+## Provare subito, senza il vostro client
+
+Mentre registriamo il vostro client potete già fare il giro con un client **pubblico** di prova (PKCE, nessun
+segreto), che accetta come ritorno solo gli indirizzi di due strumenti standard.
+
+| Cosa | Valore |
+| --- | --- |
+| `client_id` | `ed9d2123-4d59-491b-88cd-b7ae9b93dbb0` |
+| Ritorni registrati | `https://oidcdebugger.com/debug`, `https://oauth.pstmn.io/v1/callback`, `https://oauth.pstmn.io/v1/browser-callback` |
+
+- **OIDC Debugger** (`https://oidcdebugger.com`): Authorize URI = l'indirizzo di autorizzazione qui sopra; Redirect
+  URI lasciato `https://oidcdebugger.com/debug`; Client ID qui sopra; Scope `openid email profile`; Response type
+  `code`; «Use PKCE?» con SHA-256 e Token URI = l'endpoint token; Response mode `query`. Dopo accesso e consenso lo
+  strumento scambia il codice nel browser e mostra `id_token`, access token e refresh token. Provato da noi il 7/11.
+- **Postman**: OAuth 2.0, Grant type «Authorization Code (With PKCE)», Callback URL
+  `https://oauth.pstmn.io/v1/callback` (o `…/browser-callback` con «Authorize using browser»), Auth URL e Access
+  Token URL qui sopra, Client ID qui sopra, Client Secret vuoto, Code Challenge Method SHA-256, Scope
+  `openid email profile`, Client Authentication «Send client credentials in body». Abbiamo provato che il server
+  accetta il ritorno di Postman e che lo scambio del codice con PKCE riesce; Postman stesso non l'abbiamo usato.
+- Il consenso a questo client compare su `/account` col nome «Strumenti di prova (OIDC Debugger, Postman)».
+- È un client di sola prova, solo in questo ambiente: il vostro sarà riservato (vedi «Il giro»), e in produzione non
+  ci sono ritorni verso siti di terzi.
 
 ## Cosa ci serve da voi
 
