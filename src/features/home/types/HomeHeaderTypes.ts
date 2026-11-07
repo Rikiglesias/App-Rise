@@ -11,12 +11,6 @@ export const ADVANCED_CONFIG = {
     paddingHorizontal: PerfectSpacing.base,
     minHeight: scale(120),
   },
-  imageSection: {
-    // Altezza scalata proporzionalmente (aspect ratio 1567/1131 dell'immagine)
-    // Base: 393px x 1.386 = 544px su iPhone 15
-    // Scala automaticamente su tutti i device mantenendo proporzioni
-    height: scale(544),
-  },
   typography: {
     // Valori di fallback non usati negli stili (si usano TypographyTokens)
     title: 32,

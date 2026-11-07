@@ -1,5 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
-import { Modal, ScrollView, View, StyleSheet } from 'react-native';
+import {
+  Modal,
+  ScrollView,
+  View,
+  StyleSheet,
+  useWindowDimensions,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { StoriaModalProps } from '../types';
 import { createModalStyles, STORIA_CLOSE_SIZE } from '../styles/modalStyles';
@@ -15,6 +22,10 @@ import { useHapticFeedback } from '@/shared/hooks/useHapticFeedback';
 import { useReduceMotion } from '@/shared/hooks/useReduceMotion';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { touchTargetHitSlop } from '@/shared/utils/minimumTouchTarget';
+import { modalCardMaxHeight } from '@/shared/utils/modalBodyMaxHeight';
+
+/** Quota della finestra che la scheda occupa al massimo, come prima del ponte. */
+const STORIA_HEIGHT_SHARE = 0.85;
 
 export const StoriaModal: React.FC<StoriaModalProps> = ({
   visible,
@@ -25,6 +36,18 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
   const colors = useThemeColors();
   const modalStyles = useMemo(() => createModalStyles(colors), [colors]);
   const reduceMotion = useReduceMotion();
+  const { height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  // F14-ponte 6b: con `statusBarTranslucent` l'85 % era della finestra intera, barre comprese: in
+  // orizzontale la scheda finiva sotto. Ora resta fra le barre, e non supera l'85 % di prima.
+  const overlayInsets = {
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+  };
+  const cardMaxHeight = Math.min(
+    Math.floor(height * STORIA_HEIGHT_SHARE),
+    modalCardMaxHeight(height, insets, PerfectSpacing.lg)
+  );
 
   const handleClose = useCallback(async () => {
     await triggerHaptic('light');
@@ -39,7 +62,10 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
       onRequestClose={handleClose}
       statusBarTranslucent
     >
-      <View style={modalStyles.overlay}>
+      <View
+        style={[modalStyles.overlay, overlayInsets]}
+        testID="storia-modal-overlay"
+      >
         {/* C94: lo sfondo chiude al tocco ma non è un controllo per lo screen reader (la X ha il nome). */}
         <PlatformTouchable
           style={StyleSheet.absoluteFill}
@@ -48,7 +74,11 @@ export const StoriaModal: React.FC<StoriaModalProps> = ({
           accessible={false}
           focusable={false}
         />
-        <View style={modalStyles.modalContainer} pointerEvents="box-none">
+        <View
+          style={[modalStyles.modalContainer, { maxHeight: cardMaxHeight }]}
+          pointerEvents="box-none"
+          testID="storia-modal-container"
+        >
           <View style={modalStyles.modalCard} pointerEvents="auto">
             {/* Close button fisso */}
             <PlatformTouchable

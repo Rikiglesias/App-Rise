@@ -45,6 +45,9 @@ interface AuthScreenProps {
   children: React.ReactNode;
 }
 
+/** Una parola sola non può andare a capo senza spezzarsi («Welcome», «Benvenuto»). */
+const isSingleWord = (text: string): boolean => !/\s/.test(text.trim());
+
 /** Layout condiviso delle schermate auth: safe area + scroll + tastiera + hero brand. */
 export const AuthScreen: React.FC<AuthScreenProps> = ({
   title,
@@ -119,7 +122,15 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                   {eyebrow}
                 </PerfectText>
               ) : null}
-              <PerfectText size={titleSize} lines={2} style={styles.title}>
+              {/* F14-ponte 3: la colonna del 70 % spezzava «Welco/me» a testo grande. Tutta la
+                  larghezza, e una parola sola si restringe (al più a metà) invece di spezzarsi. */}
+              <PerfectText
+                size={titleSize}
+                lines={2}
+                containerWidth={0}
+                variant={isSingleWord(title) ? 'fit' : 'content'}
+                style={styles.title}
+              >
                 {title}
               </PerfectText>
               {subtitle ? (

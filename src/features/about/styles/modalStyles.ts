@@ -42,9 +42,9 @@ export const createModalStyles = (colors: ThemeColors) =>
       backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
 
+    // L'altezza massima la calcola StoriaModal: fra le barre di sistema (F14-ponte 6b).
     modalContainer: {
       width: '90%',
-      maxHeight: '85%',
     },
 
     modalCard: {

@@ -241,7 +241,6 @@ exports[`HomeScreen - Integration Test dovrebbe avere gradient background 1`] = 
               style={
                 {
                   "alignItems": "center",
-                  "height": 685.0691611948278,
                   "justifyContent": "flex-start",
                   "marginBottom": 10.074546488159232,
                   "marginTop": -40.29818595263693,

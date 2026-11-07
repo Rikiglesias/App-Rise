@@ -15,6 +15,7 @@ import {
   useWindowDimensions,
   type DimensionValue,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PerfectContainer } from './PerfectContainer';
 import { PlatformScrollView, PlatformTouchable } from './PlatformComponents';
@@ -23,6 +24,7 @@ import { useDeviceType } from '@/shared/hooks/useDeviceType';
 import { useReduceMotion } from '@/shared/hooks/useReduceMotion';
 import { useThemeColors } from '@/shared/hooks/useThemeColors';
 import { useTranslation } from '@/shared/hooks/useTranslation';
+import { modalCardMaxHeight } from '@/shared/utils/modalBodyMaxHeight';
 
 interface PerfectModalProps extends Omit<ModalProps, 'children'> {
   /** Contenuto modal */
@@ -117,10 +119,13 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
   const { dimensions, presentationStyle, isTablet } = useModalBehavior(size);
   const colors = useThemeColors();
   const { height } = useWindowDimensions();
+  // La finestra è `statusBarTranslucent`: senza gli inset la scheda finiva sotto la barra di stato
+  // e sotto i tre pulsanti (F14-ponte 6a). Stesso schema di DonationInfoModal e PartnerDisclosureModal.
+  const insets = useSafeAreaInsets();
   const safeMaxHeight =
     size === 'fullscreen'
       ? undefined
-      : Math.max(0, Math.floor(height - scale(32)));
+      : modalCardMaxHeight(height, insets, scale(16));
 
   const needsBackdrop = size !== 'fullscreen' && !isTablet;
   // «Riduci animazioni» vince anche su un'animazione chiesta dal chiamante.
@@ -152,12 +157,16 @@ export const PerfectModal: React.FC<PerfectModalProps> = ({
         pointerEvents="box-none"
         style={[
           styles.modalWrapper,
-          ...(size === 'fullscreen' ? [styles.fullscreen] : []),
+          ...(size === 'fullscreen'
+            ? [styles.fullscreen]
+            : [{ paddingTop: insets.top, paddingBottom: insets.bottom }]),
         ]}
+        testID="perfect-modal-wrapper"
       >
         <PerfectContainer
           padding={padding}
           borderRadius={size === 'fullscreen' ? 0 : borderRadius}
+          testID="perfect-modal-card"
           style={[
             {
               width: dimensions.width as DimensionValue,

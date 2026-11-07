@@ -56,8 +56,9 @@ export const createTextStyles = (colors: ReturnType<typeof useThemeColors>) =>
 
 export const createImageStyles = () =>
   StyleSheet.create({
+    // Niente altezza fissata all'avvio: la decide l'immagine, che segue la finestra di adesso.
+    // Un'altezza congelata lasciava uscire l'immagine sotto «Take Action» (F14-ponte 9).
     imageSection: {
-      height: ADVANCED_CONFIG.imageSection.height * 1.0,
       width: '100%',
       alignItems: 'center',
       justifyContent: 'flex-start',
