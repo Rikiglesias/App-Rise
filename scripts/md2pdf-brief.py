@@ -961,9 +961,23 @@ def build(md_path: Path, pdf_path: Path) -> None:
         rightMargin=MARGINE_LATERALE,
         topMargin=MARGINE_VERTICALE,
         bottomMargin=MARGINE_VERTICALE,
-        title="Rise Against Hunger Italia - Brief di integrazione",
+        title=_titolo_del_documento(consegnato),
         author="Rise Against Hunger Italia",
     ).build(story, canvasmaker=CanvasNumerato)
+
+
+def _titolo_del_documento(consegnato: str) -> str:
+    """Il titolo nei metadati del PDF e' il primo titolo `#` del testo consegnato.
+
+    Era fisso a «Brief di integrazione» per tutti i documenti: la guida all'ambiente di test
+    sarebbe arrivata al partner col nome del brief che aveva gia' ricevuto il 31/07, ed e' il nome
+    che il lettore PDF mostra nella scheda. Senza un titolo `#` resta quello di prima.
+    """
+    for riga in consegnato.splitlines():
+        titolo = re.sub(r"[*`]", "", riga[2:]).strip() if riga.startswith("# ") else ""
+        if titolo:
+            return titolo
+    return "Rise Against Hunger Italia - Brief di integrazione"
 
 
 if __name__ == "__main__":

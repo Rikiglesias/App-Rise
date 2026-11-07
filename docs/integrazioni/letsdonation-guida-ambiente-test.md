@@ -1,8 +1,9 @@
 # Login unico Rise — guida all'ambiente di test
 
 Per il tecnico di Let's Donation. Descrive l'ambiente di **test**: un progetto separato dalla produzione, con
-account di prova e nessun dato reale. Tutto quello che segue è stato provato da noi il 6 novembre 2026 con due
-client di prova, uno pubblico e uno riservato come sarà il vostro; dove una cosa non è stata provata, è scritto.
+account di prova (nomi inventati, caselle email nostre di prova) e nessun dato di donatori. Tutto quello che segue
+è stato provato da noi il 6 e il 7 novembre 2026 con due client di prova, uno pubblico e uno riservato; dove una
+cosa non è stata provata, è scritto.
 
 ## Indirizzi
 
@@ -24,9 +25,11 @@ Conviene leggere gli indirizzi dalla discovery, non scriverli a mano.
    code_challenge_method». Molte librerie lato server lo tengono spento di default: va acceso.
 2. Scope: `openid email profile`. Non serve chiedere `offline_access`: il refresh token arriva comunque.
 3. La persona accede (o si registra) sulla **nostra** pagina e approva. Al primo accesso vede la schermata di
-   consenso; dalla volta dopo torna subito da voi.
-4. Ritorno al vostro indirizzo con `code` e `state`. Il `code` vale **una volta sola**.
-5. Scambio del codice allo sportello Token. Il vostro client sarà di tipo **riservato**: autenticazione
+   consenso; dalla volta dopo, se ha ancora la sessione Rise aperta, torna subito da voi, altrimenti prima accede.
+4. Ritorno al vostro indirizzo con `code` e `state`: controllate che `state` sia quello che avete mandato. Il
+   `code` vale **una volta sola**.
+5. Scambio del codice all'endpoint token, insieme al `code_verifier` del PKCE; il `client_secret` resta sul vostro
+   server. Il vostro client sarà di tipo **riservato**: autenticazione
    `client_secret_basic` (credenziali in Basic auth), che è il valore predefinito. Il metodo deve essere quello
    registrato: senza credenziali il server risponde «client is registered for 'client_secret_basic' but 'none' was
    used». Se la vostra libreria manda le credenziali nel corpo (`client_secret_post`), ditecelo prima: si può
@@ -43,25 +46,27 @@ Se la persona tocca «Non ora», tornate con `error=access_denied`.
 | `sub` | id_token, UserInfo | Identificativo fisso della persona. **Agganciate l'utente su questo**, non sull'email: l'email può cambiare |
 | `email` | id_token, UserInfo | Email dell'account |
 | `email_verified` | id_token, UserInfo | `true` per gli account di prova |
-| `name` | id_token, UserInfo | Nome e cognome in una sola stringa. Se manca, il server mette l'email |
+| `name` | id_token, UserInfo | Nome e cognome in una sola stringa. Se manca, il server mette l'email: se al posto del nome vedete un indirizzo, ditecelo e non mostratelo come nome |
 | `preferred_username` | id_token, UserInfo | Il nickname. **Assente** se la persona non l'ha scelto (account ld02) |
 | `updated_at`, `auth_time` | id_token | Date in secondi Unix |
-| `user_metadata` | solo UserInfo | Oggetto con i dati del profilo, tra cui `country` (codice paese, per esempio `IT`). Contiene anche una chiave `email` che **resta quella della registrazione** dopo un cambio email: per l'email usate sempre il campo `email` |
+| `user_metadata` | solo UserInfo | Oggetto con queste chiavi: `country` (codice paese, per esempio `IT`), `name`, `preferred_username`, `sub`, `email`, `email_verified`, `phone_verified`. La chiave `email` **resta quella della registrazione** dopo un cambio email: per l'email usate sempre il campo `email` di primo livello. Se usare `country` al posto del paese che avete già, lo concordiamo |
 
 I dati vi arrivano **a ogni accesso**: se la persona cambia nome, nickname o email da noi, li ricevete aggiornati al
 login successivo, sempre con lo stesso `sub`. Non c'è un invio da parte nostra nel frattempo. Senza aspettare un nuovo login potete usare il refresh
 token: il rinnovo dà un nuovo access token (non un nuovo `id_token`) e con quello UserInfo restituisce i dati
 aggiornati. Il refresh token cambia a ogni rinnovo: conservate sempre l'ultimo.
 
-L'unico dato sì/no è `email_verified`, ed è sempre `true`: senza conferma dell'email da noi non si entra.
+`email_verified` è sempre `true`: in produzione senza conferma dell'email da noi non si entra. **Nel test la
+conferma è spenta** (vedi «Email» qui sotto), quindi qui `true` non dimostra che la casella sia stata verificata.
+`phone_verified` è sempre `false`: il telefono non lo raccogliamo.
 
 Nome e cognome separati, data di nascita e telefono **non** arrivano.
 
 ## Cose da sapere
 
 - **Indirizzo di ritorno**: va registrato da noi **prima**, ed è confrontato carattere per carattere (niente
-  caratteri jolly). Ci servono quelli esatti: ambiente locale e, più avanti, produzione.
-- **Errori dello sportello Token**: non sono nel formato standard OAuth. Arrivano con HTTP `400` anche per credenziali
+  caratteri jolly). Ci servono quelli esatti: ambiente locale e, più avanti, collaudo.
+- **Errori dell'endpoint token**: non sono nel formato standard OAuth. Arrivano con HTTP `400` anche per credenziali
   sbagliate, con i campi `error_code` (per esempio `invalid_credentials`) e `msg` (per esempio «invalid client
   credentials») al posto di `error` ed `error_description`: se la vostra libreria legge solo questi ultimi, aggiungete
   i primi.
@@ -80,15 +85,14 @@ come farà nell'app. Poi rifate il login dal vostro sito e guardate cosa arriva.
 
 - **I miei dati**: nome, cognome, nickname. Il nickname vuoto lo toglie: `preferred_username` non arriva più. Il
   nickname è unico senza distinguere maiuscole e minuscole: se è già di un altro account il cambio è rifiutato.
-- **Email dell'account**: nel test il cambio vale subito; nell'app vale solo dopo la conferma dal link che la persona
-  riceve per email. Un'email già usata da un altro account è rifiutata. Dopo il cambio si entra con l'email nuova e la
+- **Email dell'account**: nel test il cambio vale subito, senza verificare la nuova casella; nell'app vale solo dopo la
+  conferma dal link che la persona riceve per email. Un'email già usata da un altro account è rifiutata. Dopo il cambio si entra con l'email nuova e la
   stessa password.
 - **Elimina l'account**: l'account sparisce subito, con profilo e consensi; da quel momento il login con quell'email
   non riesce. Da parte nostra non vi arriva nessun avviso. Cosa succede ai vostri token già emessi (rinnovo, UserInfo)
-  non l'abbiamo ancora provato: è il caso dell'account `+ld09`. Se vi serve di nuovo, lo ricreiamo noi.
-
-Tutto questo l'abbiamo provato il 6 novembre con gli account di prova, controllando ogni volta con un login nuovo cosa
-riceveva il client.
+  non l'abbiamo ancora provato: è il caso dell'account `+ld09`. Se vi serve di nuovo, lo ricreiamo noi. Non è l'oblio
+  presso di voi: la cancellazione dei dati da voi passa dalla vostra API, che resta il passo successivo come detto
+  nella call.
 
 ## Account di prova
 
@@ -98,10 +102,10 @@ sola.
 
 | Account | Caso da provare |
 |---|---|
-| `+ld01` | Completo, email che da voi non esiste (primo accesso) |
+| `+ld01` | Completo; email da non inserire nel vostro test (primo accesso) |
 | `+ld02` | Senza nickname: `preferred_username` non arriva |
-| `+ld03` | Inseritelo voi nel vostro test come **già iscritto a Rise** (aggancio) |
-| `+ld04` | Inseritelo voi nel vostro test come iscritto a **un'altra organizzazione** |
+| `+ld03` | Create voi, nel vostro test, una scheda con questa email **nello spazio Rise** (aggancio) |
+| `+ld04` | Create voi, nel vostro test, una scheda con questa email **in un'altra organizzazione** |
 | `+ld05` | Cambio email (da `/account`) |
 | `+ld06` | Cambio di nome, cognome e nickname; poi nickname tolto (da `/account`) |
 | `+ld07` | Rifiuta il consenso («Non ora») |
@@ -111,6 +115,8 @@ sola.
 
 ## Cosa ci serve da voi
 
-1. Gli indirizzi di ritorno esatti: quello del vostro ambiente locale e, quando li avrete, collaudo e produzione.
-2. Come la vostra libreria manda il segreto allo sportello Token: in Basic auth (il predefinito) o nel corpo della
-   richiesta (`client_secret_post`). Registriamo il client di conseguenza.
+1. Gli indirizzi di ritorno esatti del vostro ambiente locale e, quando ci sarà, del vostro collaudo. Per la
+   produzione il client sarà un altro, con credenziali sue, come scritto nel documento di luglio.
+2. Come la vostra libreria si autentica all'endpoint token: `client_secret_basic` (credenziali in Basic auth, quello
+   che abbiamo provato) o `client_secret_post` (nel corpo della richiesta: previsto dalla documentazione, lo
+   proviamo prima di confermarvelo). Registriamo il client di conseguenza.
